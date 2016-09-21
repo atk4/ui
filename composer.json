@@ -21,7 +21,7 @@
         "codeclimate/php-test-reporter": "*"
     },
     "autoload": {
-        "psr-4": {"atk4\\data\\":"src/"}
+        "psr-4": {"atk4\\ui\\":"src/"}
     },
     "autoload-dev": {
         "psr-4": {
