@@ -1,0 +1,31 @@
+{
+    "name": "atk4/ui",
+    "type": "library",
+    "description": "Agile UI - User Interface Component Library",
+    "keywords": ["framework", "ui", "web", "form", "widget", "render", "gadget", "button", "grid", "crud"],
+    "homepage": "https://github.com/atk4/ui",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Romans Malinovskis",
+            "email": "romans@agiletoolkit.org",
+            "homepage": "https://nearly.guru/"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "atk4/data": "~1.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.*",
+        "codeclimate/php-test-reporter": "*"
+    },
+    "autoload": {
+        "psr-4": {"atk4\\data\\":"src/"}
+    },
+    "autoload-dev": {
+        "psr-4": {
+          "atk4\\ui\\tests\\":"tests/"
+        }
+    }
+}
