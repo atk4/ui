@@ -33,7 +33,7 @@ Agile UI is a refactor of the core functionality of Agile Toolkit:
 
 - Can be used in any framework
 - Has minimum dependencies
-- Makes extensive use of Symantic UI and jQuery
+- Makes extensive use of Semantic UI and jQuery
 - Works out of the box
 
 Once Aglie UI is finished it will be re-integrated into next verison of Agile Toolkit.
@@ -55,7 +55,7 @@ $cr->add($b, ['spot' => 'toolbar']);
 
  ![crud2](docs/crud2.png)
 
-There are over 20 base widgets based around Symantic UI and hundreds of more widgets are available through add-ons.
+There are over 20 base widgets based around Semantic UI and hundreds of more widgets are available through add-ons.
 
 ## Agile Data Integration
 
