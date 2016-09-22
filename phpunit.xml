@@ -1,0 +1,25 @@
+<phpunit colors="true" bootstrap="vendor/autoload.php" printerClass="atk4\core\PHPUnit_AgileResultPrinter">
+    <php>
+        <var name="DB_DSN" value="sqlite::memory:" />
+        <var name="DB_USER" value="travis" />
+        <var name="DB_PASSWD" value="" />
+        <var name="DB_DBNAME" value="dsql_test" />
+    </php>
+    <filter>
+        <blacklist>
+            <directory suffix=".php">./vendor</directory>
+        </blacklist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+    <testsuites>
+        <testsuite name="tests">
+            <directory>tests</directory>
+            <exclude>tests/smbo/lib</exclude>
+        </testsuite>
+    </testsuites>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
+</phpunit>
