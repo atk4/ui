@@ -38,7 +38,7 @@ Agile UI is a refactor of the core functionality of Agile Toolkit:
 
 Once Aglie UI is finished it will be re-integrated into next verison of Agile Toolkit.
 
-## Renter Tree Concept
+## Rented Tree Concept
 
 Agile Toolkit pioneered Render View Tree concept in 2011 and it's a fundamental principle of Agile UI framework today.  
 
