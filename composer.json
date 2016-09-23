@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "atk4/data": "~1.0.0",
+        "atk4/data": "dev-develop",
         "facebook/webdriver": "^1.1"
     },
     "require-dev": {
