@@ -1,11 +1,13 @@
 # Agile UI
 
-**PHP Framework for building consistent Web User Interfaces.**
+**PHP library for building consistent Web User Interfaces.**
 
-Many developers today have acknowledged that use of CSS framework is pretty essential to rapid development. Agile UI takes it to the next level and integrates CSS framework elements with a server-side classes. Now you don't even need to touch your CSS or HTML anymore, all you need is:
+Many developers today have acknowledged that use of CSS framework is pretty essential to rapid development. Agile UI takes it to the next level and integrates CSS framework elements with a server-side PHP classes. 
+
+As a PHP developer, you get flexible and extensive UI out of the box that's built around popular CSS framework(s). Here is how you can use Agile UI in ANY framework / PHP application:
 
 ``` php
-$cr = new CRUD('templates/crud.html');
+$cr = new \atk4\ui\CRUD();
 $cr->setModel(new Client($db));
 
 $cr->render();
@@ -23,29 +25,71 @@ Without extra effort on your side, this table will:
 - Contain Edit/Delete buttons
 - Edit will bring up a pop-up with editing form
 
-The code will keep running and handle call-backs by passing extra GET arguments to the base URL, which enables usage of AJAX and reloading inside View elements.
+The produced UI will be capable of reloading itself, opening dialog windows and will be using your current CSS styling.
+
+## Standart UI Components and Extensions
+
+You get access to a wide range of default UI Views: CRUD, Grid, Form, List, Menu, Button, Card, Table, Tree etc.
+
+Agile UI comes bundled with the basic UI components but it makes it very simple for developers to create their own UI views. All the Views in Agile UI follow patterns:
+
+-   They will produce code using correct CSS framework.
+-   If possible, they will compose themselves from basic UI components (buttons, grids)
+-   They will automatically adapt for your data structure.
+-   Any 3rd party UI View is customisable.
+
+To summarize, each view gives you out-of-the-box experience and can be used like this:
+
+``` php
+$view = \any\possible\View();
+$view->setModel($any_model);
+
+$existing_view->add($view, 'title_bar');
+```
+
+Agile UI will take care of the rest, JS bindings, events, rendering, ID fields, call-backs URLs.
+
+## Security and Performance
+
+When dealing with 3rd party add-ons the major concerns of developers will always be performance and security. Performance is addressed by use of "[Agile Data](http://git.io/ad)" - data access framework, that is specifically designed for efficient access to SQL and NoSQL capabilities and packed with many enterprise-level features.
+
+The security is addressed with "[Secure Enclave](http://www.agiletoolkit.org/data/extensions)", which is a special model proxying technique. It prevends 3rd party code from only accessing data you allow them:
+
+```php
+$user = new User($db);
+$user_orders = $user->load(123)->ref('Order');
+
+$third_party_view->setModel($user_order);
+```
+
+
+
+The `$third_party_view` will have read/write/creade/delete access to Orders that belong to user 123, and not any other entity.
 
 ## Based on Agile Toolkit Concepts
 
 Tens of thousands of developers have already used Agile Toolkit 4.3 or earlier, which today is one of the [most popular PHP UI Frameworks](https://www.google.co.uk/search?q=php+ui+framework&ie=UTF-8&oe=UTF-8&gfe_rd=cr&ei=Na7iV8mbN8GBaK7Ju7AD). Unfortunatelly the current verison of Agile Toolkit does not play well with other frameworks or applications. 
 
-Agile UI is a refactor of the core functionality of Agile Toolkit:
+Agile UI is a refactor of the core functionality of Agile Toolkit, designed to address the following problems:
 
-- Can be used in any framework
-- Has minimum dependencies
-- Makes extensive use of Semantic UI and jQuery
-- Works out of the box
+- Can be used in any framework.
+- Has minimum dependencies.
+- Full documentation and test-code coverage.
+- Makes extensive use of Semantic UI and jQuery.
+- Improved performance, memory management and security.
 
-Once Aglie UI is finished it will be re-integrated into next verison of Agile Toolkit.
+Once Aglie UI is finished, it will be available in "Agile Toolkit 4.4", but also as a plugin into other popular PHP platforms - Wordpress, Drupal, Magento, Laravel, Yii.
+
+As a developer you will get the benefit of accessing unified UI library regardless of which PHP framework you are using.
 
 ## Render Tree Concept
 
-Agile Toolkit pioneered Render View Tree concept in 2011 and it's a fundamental principle of Agile UI framework today.  
+Agile Toolkit pioneered Render View Tree concept in 2011 and it's a fundamental principle of Agile UI framework today. It allows composing one view from another creating infinite posibilities. Here is a snippet demonstrating how to add a interactive Button inside a standard CRUD View:
 
 ``` php
 $b = new Button(['Hello', 'icon' => 'bell']);
 $b->on('click', $b->dialog('Hello', function($page){
-     $page->add(new View('hello.html'));
+     $page->add(new View('hello.jade'));
      $page->add(new Button('Close'))
            ->js()->univ()->closeDialog();
 }));
@@ -55,36 +99,27 @@ $cr->add($b, ['spot' => 'toolbar']);
 
  ![crud2](docs/crud2.png)
 
-There are over 20 base widgets based around Semantic UI and hundreds of more widgets are available through add-ons.
-
-## Agile Data Integration
-
-[Agile Data](https://git.io/ad) is a Database Abstraction Framework. It is a more flexible and modern way to define your business logic and interact with SQL or NoSQL database. Agile UI is built on top of Agile Data, which means that views and wigets such as CRUD, Forms, etc will be able to interact with your database in a very controlled way.
-
-- You have extreme control over which tables/collections are accessible to Views
-- You decide what conditions apply and what hooks to execute
-- You can map columns, work with custom types
-- Implement advanced patterns: audit, ggregates, RestAPI proxying and many more
-- Make use of Secure Enclave - mechanism that Applies advanced ACL on data access
+We strive to create an extensive set of UI Views as well as educate 3rd party component developers to keep their components flexible and configurable. 
 
 ## Installation
 
-Agile UI can be used in any framework to enhance their UI capabilities:
+To start using Agile UI in your project:
 
 ```
 composer require atk4/ui
+ln -sf path/to/public/ui ../../atk4/ui/public/ui
 ```
 
-You will also need [Semantic UI](http://semantic-ui.com/introduction/getting-started.html), so make sure it's installed and properly loaded.
+Depending on the framework/application platform that you are using, there might be an easier way to install Agile UI.
 
 ## Current Status
 
-Agile UI is currently in the **planning stage**. This project is mainly a REFACTOR from http://github.com/atk4/atk4, so we will progress quickly.
+Agile UI is currently in the **early development stage**. Our development process is open to anyone and we welcome any curious person in our Gitter chat:
 
 [![Gitter](https://img.shields.io/gitter/room/atk4/atk4.svg?maxAge=2592000)](https://gitter.im/atk4/atk4?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![License](https://poser.pugx.org/atk4/ui/license)](https://packagist.org/packages/atk4/ui)
 
 
 
-## Roadmap and Participating
+## Roadmap
 
-You are welcome to take part in our refactor project and help us re-shape the future  
+We will announce road-map soon.
