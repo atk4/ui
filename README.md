@@ -31,27 +31,42 @@ The produced UI will be capable of reloading itself, opening dialog windows and 
 
 You get access to a wide range of default UI Views: CRUD, Grid, Form, List, Menu, Button, Card, Table, Tree etc.
 
-Agile UI comes bundled with the basic UI components but it makes it very simple for developers to create their own UI views. All the Views in Agile UI follow patterns:
+Agile UI comes bundled with the basic UI components but it makes it very simple for developers to create their own UI views, such as this Login form:
+
+ ![login](docs/login.png)
+
+
+
+All the Views in Agile UI follow patterns:
 
 -   They will produce code using correct CSS framework.
--   If possible, they will compose themselves from basic UI components (buttons, grids)
+-   All views are interractive, and work out of the box.
+-   Where possible, views will re-use basic elements (Button, Form)
 -   They will automatically adapt for your data structure.
--   Any 3rd party UI View is customisable.
+-   You can always tweak template or structure of any view.
 
 To summarize, each view gives you out-of-the-box experience and can be used like this:
 
 ``` php
-$view = \any\possible\View();
-$view->setModel($any_model);
+$user = new User($db);
+$user->addCondition('is_disabled', false);
 
-$existing_view->add($view, 'title_bar');
+$view = new \someone\vendor\LogInform();
+$view->enable3rdParty('facebook,twitter');
+$view->setModel($user, 'email', 'password');
+$view->onSubmit(function($m) {
+  // your own authenticate and redirect
+});
+
+$layout = new \atk4\ui\Layout\Centered();
+$layout->add($view);
 ```
 
-Agile UI will take care of the rest, JS bindings, events, rendering, ID fields, call-backs URLs.
+Agile UI will take care of the rest, JS bindings, events, rendering, validation, error display, ID fields, call-backs URLs, configuration files and more.
 
 ## Security and Performance
 
-When dealing with 3rd party add-ons the major concerns of developers will always be performance and security. Performance is addressed by use of "[Agile Data](http://git.io/ad)" - data access framework, that is specifically designed for efficient access to SQL and NoSQL capabilities and packed with many enterprise-level features.
+When dealing with 3rd party add-ons two major concerns are always performance and security. Performance is addressed by use of "[Agile Data](http://git.io/ad)" - data access framework, that is specifically designed for efficient access to SQL and NoSQL capabilities and packed with many enterprise-level features.
 
 The security is addressed with "[Secure Enclave](http://www.agiletoolkit.org/data/extensions)", which is a special model proxying technique. It prevends 3rd party code from only accessing data you allow them:
 
@@ -59,12 +74,12 @@ The security is addressed with "[Secure Enclave](http://www.agiletoolkit.org/dat
 $user = new User($db);
 $user_orders = $user->load(123)->ref('Order');
 
-$third_party_view->setModel($user_order);
+$third_party_view->setModel(new Enclave($user_order), 'read,delete');
 ```
 
 
 
-The `$third_party_view` will have read/write/creade/delete access to Orders that belong to user 123, and not any other entity.
+The `$third_party_view` will have "read" and "delete" access to Orders that belong to user 123, and not any other entity or operation.
 
 ## Based on Agile Toolkit Concepts
 
