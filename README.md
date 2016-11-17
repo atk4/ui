@@ -2,9 +2,30 @@
 
 **PHP library for building consistent Web User Interfaces.**
 
-Many developers today have acknowledged that use of CSS framework is pretty essential to rapid development. Agile UI takes it to the next level and integrates CSS framework elements with a server-side PHP classes. 
+*"As a full-stack PHP developer I love writing code. But when dealing with Web Apps I am forced to also work with HTML and CSS. I wish there would be an easy-to-use UI that could just work out of the box."*  -- Anonymous Coder.
 
-As a PHP developer, you get flexible and extensive UI out of the box that's built around popular CSS framework(s). Here is how you can use Agile UI in ANY framework / PHP application:
+Developers rejoice!! If you use Bootstrap or Sematnic UI - why bother copy-pasting those HTML snippets from template to template? 
+
+Agile UI brings all the core UI components to life though a simple object oriented interface that can work easily and natively inside any PHP application or framework.
+
+## Features of Agile UI
+
+-   Extensive library of UI elements - Grid, Form, Card, CRUD, Menu and many more.
+-   Uses Semantic UI or Bootstrap CSS frameworks and fully responsive.
+-   Works with any database schema, SQL or NoSQL.
+-   Integration with JavaScript frameworks such as jQuery.
+-   No page reloads. AJAX and Dynamic Dialogs.
+-   Use your own tempalte, or create composite UI views.
+
+## How to use Agile UI
+
+Agile UI lets you to build apps with only the basic PHP knowledge. If you are already using a framework or an application, you can incorporate Agile UI on some of your pages. You have several choices:
+
+-   Full page render - Agile UI will produce all of the HTML on your page
+-   Layout render - Best for composite UI that would fit into your existing HTML.
+-   View render - Render individual UI component (Form, Button or Menu)
+
+The code below consists of 3 parts: Building the UI objects. Rendering. Outputting.
 
 ``` php
 $cr = new \atk4\ui\CRUD();
@@ -17,69 +38,66 @@ $html = $m->getHTML();
 $js = $m->getJS();
 ```
 
- The above code will result in an interractive table like this:![crud](docs/crud.png)
+ The above code will place the following interactive element on one of your pages:![crud](docs/crud.png)
 
-Without extra effort on your side, this table will:
+The above CRUD view will be fully interractive, respond to button-clicks, reload itself, use pagination and dialogs without any additional code or mark-up.
 
-- Have pagination if required
-- Contain Edit/Delete buttons
-- Edit will bring up a pop-up with editing form
+### Data Access
 
-The produced UI will be capable of reloading itself, opening dialog windows and will be using your current CSS styling.
+Agile UI uses database access abstraction framework [Agile Data](http://git.io/ad), which is compatible with SQL and NoSQL data-sources. For the above code to work you would have to define a "Client" class and initialize database connection.
+
+### Output
+
+Agile Data objects produces 3 types of output:
+
+-   HTML output - place it where you would like your UI objects to appear.
+-   JavaScript output - `<script>` blocks that are needed to support the UI and initialize bindings.
+-   Immediate output - provides direct output for AJAX requests, responding to user actions.
+
+### Layouts
+
+You can use a professional app layout, that comes with some pre-initialized objects such as Menus, Panels and toolbars:
+
+![layouts](docs/layouts.png)
+
+``` php
+$ui = new \atk4\ui\Layout();
+
+$ui->menu->addItem(['Logout', 'icon'=>'exit']);
+
+$form = new \atk\ui\Form($ui);
+$form->setModel(new Order($db));
+
+$form->onSubmit(function($form){ 
+  $form->save();
+});
+
+$layout->run();
+```
+
+When you execute "run()" method, Agile UI assumes that no other HTML output will be provided and will simply output itself wrapped inside a boilerplate HTML.
 
 ## Standart UI Components and Extensions
 
-You get access to a wide range of default UI Views: CRUD, Grid, Form, List, Menu, Button, Card, Table, Tree etc.
+Agile UI comes integrates with "3rd party extension" library where other developers can share "Views" that they have created. The extension library is designed to help you sit down with your client and browse through available widgets and re-use some of the code rather than re-writing those every time. 
 
-Agile UI comes bundled with the basic UI components but it makes it very simple for developers to create their own UI views, such as this Login form:
+Here is an example View for a "Login Form", sample 3rd party extension:
 
  ![login](docs/login.png)
 
+All the Views (including 3rd party ones) follow these patterns:
 
-
-All the Views in Agile UI follow patterns:
-
--   They will produce code using correct CSS framework.
--   All views are interractive, and work out of the box.
--   Where possible, views will re-use basic elements (Button, Form)
--   They will automatically adapt for your data structure.
--   You can always tweak template or structure of any view.
-
-To summarize, each view gives you out-of-the-box experience and can be used like this:
-
-``` php
-$user = new User($db);
-$user->addCondition('is_disabled', false);
-
-$view = new \someone\vendor\LogInform();
-$view->enable3rdParty('facebook,twitter');
-$view->setModel($user, 'email', 'password');
-$view->onSubmit(function($m) {
-  // your own authenticate and redirect
-});
-
-$layout = new \atk4\ui\Layout\Centered();
-$layout->add($view);
-```
-
-Agile UI will take care of the rest, JS bindings, events, rendering, validation, error display, ID fields, call-backs URLs, configuration files and more.
+-   Produce correct HTML code that fits into the style of your app.
+-   Fully interractive out of the box.
+-   Always re-use basic elements elements (Button, Forms)
+-   Will work with your database (SQL or NoSQL)
+-   You tweak or replace any template, or insert more views such as extra buttons etc.
 
 ## Security and Performance
 
-When dealing with 3rd party add-ons two major concerns are always performance and security. Performance is addressed by use of "[Agile Data](http://git.io/ad)" - data access framework, that is specifically designed for efficient access to SQL and NoSQL capabilities and packed with many enterprise-level features.
+When using 3rd party code, product owners have two major concerns: performance and security.
 
-The security is addressed with "[Secure Enclave](http://www.agiletoolkit.org/data/extensions)", which is a special model proxying technique. It prevends 3rd party code from only accessing data you allow them:
-
-```php
-$user = new User($db);
-$user_orders = $user->load(123)->ref('Order');
-
-$third_party_view->setModel(new Enclave($user_order), 'read,delete');
-```
-
-
-
-The `$third_party_view` will have "read" and "delete" access to Orders that belong to user 123, and not any other entity or operation.
+Agile Data addresses both through the use of "[Agile Data](http://git.io/ad)" - data access framework. To further improve security, there is a special extension that will enable ACL on per-object level for your domain model data.
 
 ## Based on Agile Toolkit Concepts
 
@@ -122,7 +140,6 @@ To start using Agile UI in your project:
 
 ```
 composer require atk4/ui
-ln -sf path/to/public/ui ../../atk4/ui/public/ui
 ```
 
 Depending on the framework/application platform that you are using, there might be an easier way to install Agile UI.
@@ -137,4 +154,14 @@ Agile UI is currently in the **early development stage**. Our development proces
 
 ## Roadmap
 
-We will announce road-map soon.
+| Version | Features                                 |
+| ------- | ---------------------------------------- |
+| 0.1     | Bootstrap the test-suite, continious integration and UI-testing. |
+| 0.2     | Implement template engine and a static "View". |
+| 0.3     | Implement JavaScript mechanics, integrate RequireJS, jQuery and Semantic UI |
+| 0.4     | Implement URL mechanics and reloading    |
+| 0.5     | Implement standard set of UI elements - Button, Menu, Label, etc. |
+| 0.6     | Implement Form                           |
+| 0.7     | Implement Grid                           |
+| 0.8     | Implement CRUD                           |
+| 0.9     | Implement real-time code execution (for consoles, progress-bars, spinners) |
