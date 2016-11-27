@@ -23,7 +23,11 @@ class View {
     public $model;
 
     function __construct($template = null) {
-        $this->template = $template;
+
+        if ($template) {
+            $this->template = new Template();
+            $this->template->load($template);
+        }
     }
 
     function render() {

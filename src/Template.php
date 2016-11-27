@@ -477,8 +477,8 @@ class Template implements \ArrayAccess
     public function load($template_file)
     {
         $this->template_file = $template_file;
-        $this->loadTemplateFromString(readfile($template_file));
-        $this->source = 'Loaded from file: '.$template_name;
+        $this->loadTemplateFromString(file_get_contents($template_file));
+        $this->source = 'Loaded from file: '.$template_file;
 
         return $this;
     }
