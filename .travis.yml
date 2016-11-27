@@ -4,6 +4,7 @@ php:
     - '5.5'
     - '5.6'
     - '7.0'
+    - '7.1'
 
 #services:
 #    - mysql
@@ -14,10 +15,12 @@ before_script:
 
 after_script:
     - echo $TRAVIS_PHP_VERSION
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter; fi
 
 script:
-    - phpunit
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then NC="--no-coverage"; fi
+    - ./vendor/phpunit/phpunit/phpunit $NC
+
 
 cache:
   directories:
