@@ -35,7 +35,7 @@ file: ``atk4-test.php`` and opening it inside your browser. You should see
 The first line builds a server-side UI object and the second line renders
 and outputs it to your browser using HTML/JavaScript/CSS.
 
-[image]
+[image with atk logo]
 
 In Agile Toolkit implementation details are abstracted and simplified with
 the goal to make building Web User Interface fun.
@@ -47,7 +47,7 @@ Introducing a Tree View
 We will be looking into using a Tree view. This components is handy to
 building UI depicting folder structure, multi-level outlines or menus:
 
-[image]
+.. image:: images/folders.png
 
 In Agile Toolkit Views can be loosely arranged into the following 4 groups:
 
@@ -160,7 +160,7 @@ Other Views can extend Tree. This example uses a more advanced "Menu" view::
 
 The above code will produce the following Menu:
 
-[image]
+.. image:: images/menu.png
 
 Tree in a Composite View
 ------------------------
@@ -191,6 +191,8 @@ produce consistent UI for your web applications.
 By learning about other Views and understanding how they can be used as a part
 of a Layout to provide your Web Application with responsive UI can save you
 a lot of time and effort.
+
+.. image:: images/layout.png
 
 My next code builds out an entire part of your web application. Be sure to 
 create a folder "myfiles"::
