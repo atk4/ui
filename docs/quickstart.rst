@@ -206,6 +206,8 @@ create a folder "myfiles"::
 
 
     $ui = new ui\Segment();
+    $menu = $ui->add('new ui\Menu('position'=>'top'));
+    $dropdown = $menu->addItem(new ui\Menu(['icon'=>'wrench']));
 
     $dropdown->addItem('New Folder');
     $dropdown->addItem('Upload File');
