@@ -91,12 +91,10 @@ class Template implements \ArrayAccess
      */
     public function exception($message = 'Undefined Exception', $type = null, $code = null)
     {
-        $o = $this->owner ? $this->owner->__toString() : 'none';
-
-        return parent::exception($message, $type, $code)
-            ->addMoreInfo('owner', $o)
-            ->addMoreInfo('template', $this->template_source)
-            ;
+        return new \atk4\core\Exception([$message, 
+            'template'=>$this->template_source,
+            'type'=>$type
+        ], $code);
     }
 
     // }}}
@@ -193,7 +191,7 @@ class Template implements \ArrayAccess
         if (!$ref) {
             if (!isset($this->tags[$tag])) {
                 throw $this->exception('Tag not found in Template')
-                    ->setTag($tag);
+                    ->addMoreInfo('tag', $tag);
             }
             $template = $this->tags[$tag];
 
@@ -274,6 +272,11 @@ class Template implements \ArrayAccess
         if (!$tag) {
             return $this;
         }
+
+        if(is_object($tag)) {
+            $tag = $tag->get();
+        }
+
         if (is_array($tag)) {
             if (is_null($value)) {
                 foreach ($tag as $s => $v) {
@@ -459,7 +462,9 @@ class Template implements \ArrayAccess
             return clone $this;
         }
 
-        $n = $this->newInstance();
+
+        $cl = get_class($this);
+        $n = new $cl();
         $n->template = unserialize(serialize(array('_top#1' => $this->get($tag))));
         $n->rebuildTags();
         $n->source = 'Clone ('.$tag.') of '.$this->source;
@@ -477,8 +482,8 @@ class Template implements \ArrayAccess
     public function load($template_file)
     {
         $this->template_file = $template_file;
-        $this->loadTemplateFromString(readfile($template_file));
-        $this->source = 'Loaded from file: '.$template_name;
+        $this->loadTemplateFromString(file_get_contents($template_file));
+        $this->source = 'Loaded from file: '.$template_file;
 
         return $this;
     }
