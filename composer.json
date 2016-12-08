@@ -22,7 +22,7 @@
         "facebook/webdriver": "^1.1",
         "phpunit/phpunit-selenium": ">=1.2",
         "fzaninotto/faker": "*",
-        "atk4/core": "~1.1.6",
+        "atk4/core": "~1.1.8",
         "semantic/ui": "*",
         "codeclimate/php-test-reporter": "*"
     },
