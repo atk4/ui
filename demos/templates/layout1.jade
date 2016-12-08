@@ -7,58 +7,218 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0')
     // Site Properties
     title Rainas homepage
-    link(rel='stylesheet', type='text/css', href='semantic/semantic.min.css')
-    script(src='jquery/jquery-3.1.0.min.js')
-    script(src='semantic/semantic.min.js')
+    link(rel='stylesheet', type='text/css', href='http://semantic-ui.com/dist/semantic.css')
+    script(src='https://code.jquery.com/jquery-3.1.1.js')
+    script(src='http://semantic-ui.com/dist/semantic.js')
     style(type='text/css').
       @media (min-height: 320px) {
-      .ui.footer.form-page { /* Increased specificity for SO snippet priority */
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      }
+        .ui.footer.form-page { /* Increased specificity for SO snippet priority */
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        .main.segment {
+            margin-top: 3em;
+        }
       }
   body
-    .wrapper
-      .ui.inverted.menu
-       .ui.container
+    .ui.inverted.fixed.horizontal.menu
         a.header.item(href='#')
-          img.logo(src='assets/images/logo.png')
-          |         Project Name
-        a.item(href='#') Home
+          | SMBO Reports
         .ui.simple.dropdown.item
-          | Dropdown 
+          | Sales 
           i.dropdown.icon
           .menu
-            a.item(href='#') Link Item
-            a.item(href='#') Link Item
-            .divider
-            .header Header Item
+            a.item(href='#') Profit & Loss
             .item
               i.dropdown.icon
-              |             Sub Menu
+              |             Clients
               .menu
-                a.item(href='#') Link Item
-                a.item(href='#') Link Item
-            a.item(href='#') Link Item
+                a.item(href='#') Collector
+                a.item(href='#') Debtors
+            .item
+              i.dropdown.icon
+              | Till
+              .menu
+                a.item(href='#') Cash-up list
+            .item
+              i.dropdown.icon
+              |             Analysis
+              .menu
+                a.item(href='#') Sales Analysis
+                a.item(href='#') Sales Breakdown
+            .divider
+            .header Accountant Reports
+            a.item(href='#') Aged Debtors
+            a.item(href='#') Debtor Control Report
+            a.item(href='#') Lodgement Analysis
 
-      .ui.main.text.container
-       form.ui.large.form.container
-        .ui.segment
+        .ui.simple.dropdown.item
+          | Purchases 
+          i.dropdown.icon
+          .menu
+            a.item(href='#') Profit & Loss
+            a.item(href='#') Stock
+            .item
+              i.dropdown.icon
+              | Suppliers
+              .menu
+                a.item(href='#') Creditors
+            .item
+              i.dropdown.icon
+              | Analysis
+              .menu
+                a.item(href='#') Purchase Analysis
+                a.item(href='#') Purchase Breakdown
+            .divider
+            .header Accountant Reports
+            a.item(href='#') Aged Debtors Report
+            a.item(href='#') Lodgement Analysis
+
+        .ui.simple.dropdown.item
+          | Ledger
+          i.dropdown.icon
+          .menu
+            a.item(href='#') At a glance
+            a.item(href='#') Profit & Loss
+            a.item(href='#') Balance Sheet
+            a.item(href='#') General Ledger
+            a.item(href='#').active Nominal Activity
+            a.item(href='#') Simple Trial Balance
+            .item
+              i.dropdown.icon
+              | Other Reports
+              .menu
+                a.item(href='#') Trial Balance D/D
+                a.item(href='#') Sales Breakdown
+            .divider
+            .header Accountant Reports
+            a.item(href='#') Opening Balances
+            a.item(href='#') YTD Report
+
+        .ui.simple.dropdown.item
+          | VAT
+          i.dropdown.icon
+          .menu
+            a.item(href='#') VAT Reconciliation
+            a.item(href='#') Intrastat
+            a.item(href='#') ARTD
+            a.item(href='#') VAT3
+            a.item(href='#') VAT Control
+            a.item(href='#') VAT Errors
+
+    .ui.main.basic.segment
+       h3 Nominal Acitivity Report
+
+       .ui.small.form.segment
+        .inline.fields
+          .field
+            .ui.labeled.icon.top.left.pointing.dropdown.button.my-dropdown
+                i.calendar.icon
+                span.text This Year
+                .menu
+                    .header Date Presets
+                    .item.active This Year
+                    .item Accounting Year
+                    .item Last Year
+                    .item Last Accounting Year
+          script.
+              $(function(){ 
+                $('.my-dropdown').dropdown();
+              });
+
+          .field
+            .ui.labeled.icon.top.left.pointing.dropdown.button.my-dropdown
+                i.tag.icon
+                span.text No Job
+                .menu
+                    .header Job Selection
+                    .item Limerick
+                    .item Dublin 29
           .field
             .ui.left.icon.input
-              i.user.icon
-              input(type='text', name='email', placeholder='E-mail address')
+              i.calendar.icon
+              input(type='text', name='email', placeholder='From')
           .field
             .ui.left.icon.input
-              i.lock.icon
-              input(type='password', name='password', placeholder='Password')
-          .ui.fluid.large.teal.submit.button Login
+              i.calendar.icon
+              input(type='text', name='email', placeholder='To')
+
+          .field
+            .ui.checkbox
+              input(type='checkbox', name='suppress0')
+              label Suppress 0s
+
+          .field
+            .ui.checkbox
+              input(type='checkbox', name='suppress0')
+              label Show Descriptions
+
+        .ui.teal.submit.button
+              i.search.icon
+              | Preview
+
+        a.ui.teal.submit.button(href="https://apps.zoomcharts.com/spreadsheet-analytics/#load=")
+              i.pie.graph.icon
+              | Analyse
+
+        .ui.teal.submit.buttons
+              .ui.button Save As..
+              .ui.floating.pointing.dropdown.icon.button.my-dropdown
+                  i.dropdown.icon
+                  .menu
+                      .item
+                          i.file.excel.outline.icon 
+                          | Excel
+                      .item
+                          i.table.icon
+                          | CSV
+                      .item
+                          i.file.pdf.outline.icon
+                          | PDF
+
+       h4 Ungrouped transaction list
+
+       {Report}
+       table.ui.very.compact.small.table
+          thead
+            tr
+              th Date
+              th Nominal
+              th Contact
+              th Ref
+              th Job
+              th Type
+              th Debit
+              th Credit
+          tbody
+            {rows}{row}
+            tr
+              td {date}08/12/1980{/}
+              td {nominal}Sales:Wholesale:Munster{/}
+              td {contact}Tipperary Toppers{/}
+              td {ref_no}3377046{/}
+              td {job}Great Gifts Joseph Greensmith{/}
+              td {type}invoice{/}
+              td €{debit}1,056.91{/}
+              td €{credit}0.00{/}
+            {/row}{/rows}
+          tfoot
+            tr
+              th(colspan=6).right.aligned Closing balance after {count}29{/} records:
+              th €1,056.91
+              th €0.00
+            tr
+              th(colspan=6).right.aligned Total for {nominal}Sales:Limerick{/nominal}:
+              th €1,056.91
+              th €0.00
+       {/Report}
 
 
-    .ui.inverted.vertical.footer.segment.form-page
-      .ui.container
-        | Travel Match 2015. All Rights Reserved
+
+
+    //.ui.inverted.vertical.footer.segment.form-page
+          //| &nbps;Travel Match 2015. All Rights Reserved
 
 
 

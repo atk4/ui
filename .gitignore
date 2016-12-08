@@ -2,3 +2,7 @@
 /public/semantic
 /public/jquery
 /vendor
+docs/build
+/composer.lock
+/build
+.DS_Store
