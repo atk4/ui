@@ -7,12 +7,21 @@ class App {
         init as _init;
     }
 
+    public $title = 'Agile UI - Untitled Application';
+
+    public $layout = null; // the top-most view object
+
     public $template_dir = null;
 
     public $skin = 'semantic-ui';
 
     public function __construct($defaults = [])
     {
+        if (is_string($defaults)) {
+            $defaults = ['title'=>$defaults];
+
+        }
+
         if (!is_array($defaults)) {
             throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
         }
@@ -23,6 +32,24 @@ class App {
                 $this->$key = $val;
             }
         }
+    }
+
+    function setLayout(\atk4\ui\Layout $layout)
+    {
+        $this->html = new View(['template'=>'html.html']);
+        $this->layout = $this->html->add($layout);
+        return $this;
+    }
+
+    function add()
+    {
+        return call_user_func_array([$this->layout, 'add'], func_get_args());
+    }
+
+    function run()
+    {
+        $this->html->set('title', $this->title);
+        echo $this->html->render();
     }
 
     function init() {

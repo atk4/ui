@@ -32,9 +32,11 @@ class View {
 
 
     /**
-     * This is a default class of the UI selement, supplied last in the class.
+     * Enables UI keyword for Semantic UI indicating that this is a
+     * UI element. If you set this variable value to string, it will
+     * be appended at the end of the element class.
      */
-    public $_class = false;
+    public $ui = false;
 
     /**
      * List of classes that needs to be added
@@ -237,8 +239,10 @@ class View {
             $this->template->append('class', join(' ', $this->class));
         }
 
-        if ($this->_class) {
-            $this->template->set('_class', $this->_class);
+        if ($this->ui) {
+            if (is_string($this->ui)) {
+                $this->template->set('_class', $this->ui);
+            }
         } else {
             $this->template->tryDel('_ui');
         }

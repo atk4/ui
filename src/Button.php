@@ -2,7 +2,7 @@
 namespace atk4\ui;
 
 class Button extends View {
-    public $_class = 'button';
+    public $ui = 'button';
 
     public $icon = null;
 
