@@ -2,12 +2,14 @@
 
 **Web UI Component library.**
 
-All developers understand and agree with DRY (Don't Repeat Yourself) principle, yet web developers continue to do that over and over again. Every time you create that new Twig template with the snippets of the bootstrap code you keep copying it over and over.
+All developers understand and agree with DRY (Don't Repeat Yourself) principle, yet web developers continue to copy snippets of HTML code no their Template files.
 
-Component libraries are designed to create Views (aka widgets) that can render themselves into HTML. However it's not a simple tasks as there are 3 major challenges for authors of component frameworks:
+Component libraries such as Agile UI are designed to create Views (aka widgets) that can render themselves into HTML with purpose of providing consisteng UI.
+
+There are 3 major requiremetns that Component Library must address in order to be viable:
 
 -   Data access mechanics. 
-    -   View need reliable way to access data in your database.
+    -   View need a reliable way to access data in your database.
     -   Use of SQL queries or ORM would require developer to provide "glue".
     -   Data Source should be abstracted.
 -   Logic-less HTML template engine.
@@ -33,6 +35,8 @@ $cl = $v->add(new \atk4\ui\CRUD())->setModel(new Payment($db));
 
 echo $cr->render();
 ```
+
+Should be placed inside a `<body>` of a page that has Semantic UI included. For full page output, see next example.
 
 ![crud](docs/crud.png)
 
