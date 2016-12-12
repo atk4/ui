@@ -4,7 +4,7 @@
 
 PHP object-oriented implementation for an interractive Web User Interface, that will work out-of-the-box in your app.
 
-Install with `composer require atk4/ui`, running this code:
+Install with `composer require atk4/ui`. Next, run this code:
 
 ``` php
 require'vendor/loader.php';
@@ -18,7 +18,7 @@ $form->addSubmit();
 echo $form->render();
 ```
 
-This will provide you with a "Form View" object, capable of rendering HTML markup for Semantic UI CSS framework. The only other thing you need to do is to include Semantic UI:
+This will provide you with a "Form View" object, capable of rendering HTML markup for Semantic UI CSS framework. To use in your app, you need to include jQuery and Semantic UI:
 
 ```html
 <link rel="stylesheet" type="text/css" href="http://semantic-ui.com/dist/semantic.css">
@@ -39,7 +39,7 @@ Agile UI however, comes with many unique features, such as:
 
 ## Component Architectural Design
 
-Many frameworks rely on "views" that consist of logic-infused HTML templates (or even use PHP as template). Agile UI takes logic out of the template entirely and moves it into View - PHP classes extending from `\atk4\UI\View`. Templates become view-specific and not page-specific of action-specific:
+Many frameworks rely on "views" that consist of logic-infused HTML templates (or even use PHP as template). Agile UI takes logic out of the template entirely and moves it into View - PHP classes extending from `\atk4\UI\View`. Templates become view-specific and not page-specific or action-specific:
 
 ``` php
 $ui = new \atk4\UI\Columns();
@@ -133,7 +133,7 @@ Then use it as a template for a View:
 $card = new \atk4\ui\View(['template'=>'card.html']);
 ```
 
-The "id" tag will be supplied by Agile UI automatically, but the rest of the tags can be set through a model:
+The "{$_id}" tag will be supplied by Agile UI automatically, but the rest of the tags can be set through a model:
 
 ``` php
 $user = new User($db);
