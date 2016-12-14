@@ -3,7 +3,8 @@
 namespace atk4\ui;
 
 /**
- * Implements a generic view. Can be used and will produce a single DIV.
+ * Implements a most core view, which all of the other components descend
+ * form. 
  */
 class View {
 
@@ -19,6 +20,9 @@ class View {
     /**
      * When you call render() this will be populated with JavaScript
      * chains.
+     *
+     * @private! but must remain public so that child views could interact
+     * with parent's $js.
      */
     public $js;
 
@@ -248,7 +252,7 @@ class View {
         }
     }
 
-    function render() {
+    final function render() {
 
         $this->renderView();
 
@@ -265,7 +269,7 @@ class View {
 
     function getHTML()
     {
-        return $this->output;
+        return $this->template->render();
     }
 
     function getJS()

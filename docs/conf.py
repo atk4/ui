@@ -54,7 +54,7 @@ copyright = u'2016, Agile Toolkit'
 # built documents.
 #
 # The short X.Y version.
-version = '0.2'
+version = '0.3'
 # The full version, including alpha/beta/rc tags.
 #release = '0.2.1'
 
