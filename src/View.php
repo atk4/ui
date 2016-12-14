@@ -252,7 +252,7 @@ class View {
         }
     }
 
-    final function render() {
+    function render() {
 
         $this->renderView();
 
