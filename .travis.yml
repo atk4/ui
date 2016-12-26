@@ -19,8 +19,7 @@ after_script:
 
 script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then NC="--no-coverage"; fi
-    - wait_for_port 8888
-    - wget -O - http://localhost:8888/demos/buttons2.php 
+    - wget -O - http://localhost:8888/demos/button2.php 
     - ./vendor/phpunit/phpunit/phpunit $NC
 
 
