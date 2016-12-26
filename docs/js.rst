@@ -205,13 +205,13 @@ Load this js dependency on your page, then you can use the following chain::
         $heights[] = $left_box->js()->height();
     }
 
-    $right_box_container->js(true)->height(new jsExpression('sum([])', [$heights]));
+    $right_box_container->js(true)->height(new jsExpression('mySum([])', [$heights]));
 
 This will map into the following JavaScript code:
 
 .. code-block:: js
 
-    $('#right_container_id').height(sum([
+    $('#right_container_id').height(mySum([
         $('#left_box1').height(), $('#left_box2').height(), $('#left_box3').height() // etc
     ]));
 
