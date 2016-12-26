@@ -6,6 +6,9 @@ class Button extends View {
 
     public $icon = null;
 
+    /**
+     * $icon property will end up a button icon.
+     */
     function renderView() {
         if ($this->icon) {
 
@@ -24,6 +27,9 @@ class Button extends View {
         parent::renderView();
     }
 
+    /**
+     * By Default buttons should have something written on them, e.g. "Button"
+     */
     function recursiveRender() {
         parent::recursiveRender();
         if(!$this->template->get('Content')) {
