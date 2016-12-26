@@ -1,5 +1,7 @@
 <?php
 
+// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+
 namespace atk4\ui;
 
 /**
@@ -16,6 +18,9 @@ class View {
     }
     use \atk4\core\TrackableTrait;
     use \atk4\core\AppScopeTrait;
+
+    // {{{ Properties of the class
+
 
     /**
      * When you call render() this will be populated with JavaScript
@@ -64,6 +69,14 @@ class View {
      */
     public $content = null;
 
+    // }}}
+
+    // {{{ Setting Things up
+
+    /**
+     * May accept properties of a class, but if property is not defined, it will
+     * be used as a HTML class instead
+     */
     function __construct($defaults = []) {
 
         if (is_string($defaults)) {
@@ -78,6 +91,25 @@ class View {
         $this->setProperties($defaults);
     }
 
+
+    /**
+     * Associate this view with a model. Do not place any logic in this class, instead take it
+     * to renderView()
+     *
+     * Do not try to create your own "Model" implementation, instead you must be looking for
+     * your own "Persistence" implementation.
+     */
+    function setModel(\atk4\data\Model $m) {
+        $this->model = $m;
+        return $m;
+    }
+
+
+    /**
+     * Called from __consruct() and set() to initialize teh properties.
+     *
+     * TODO: move into trait, because this is used often
+     */
     function setProperties($properties) {
         if(isset($properties[0])) {
             $this->content = $properties[0];
@@ -96,6 +128,9 @@ class View {
         }
     }
 
+    /**
+     * TODO: move into trait because it's used so often
+     */
     function setProperty($key, $val) {
 
         if(is_numeric($key)) {
@@ -118,6 +153,14 @@ class View {
         ]);
     }
 
+    // }}}
+
+    // {{{ Default init() method and add() logic
+
+    /**
+     * Called when view becomes part of render tree. You can override it but avoid
+     * placing any "heavy processing" here.
+     */
     function init() {
         $this->_init();
         if(!$this->app) {
@@ -128,34 +171,6 @@ class View {
             $this->template = $this->app->loadTemplate($this->template);
         }
     }
-
-
-    /**
-     * Add CSS class to element. Previously added classes are not affected.
-     * Multiple CSS classes can also be added if passed as space separated
-     * string or array of class names.
-     *
-     * @param string|array $class CSS class name or array of class names
-     *
-     * @return $this
-     */
-    public function addClass($class)
-    {
-        if (is_array($class)) {
-            $class = implode(' ', $class);
-        }
-
-        $this->class = array_merge($this->class, explode(' ', $class));
-
-
-        return $this;
-    }
-
-    public function removeClass($remove_class) {
-        $remove_class = explode(' ', $remove_class);
-        $this->class = array_diff($this->class, $remove_class);
-    }
-
 
     /**
      * For the absence of the application, we would add a very
@@ -186,6 +201,15 @@ class View {
         return $object;
     }
 
+    // }}}
+
+
+    // {{{ Manipulating classes and view properties
+
+    /**
+     * Override this method without compatibility with parrent, if you wish
+     * to set your own things your own way for your view.
+     */
     function set($arg1 = [], $arg2 = null) {
         if (is_string($arg1) && !is_null($arg2)) {
 
@@ -209,8 +233,6 @@ class View {
         }
 
         if (is_array($arg1)) {
-
-
             $this->setProperties($arg1);
             return $this;
         }
@@ -223,6 +245,69 @@ class View {
         return $this;
     }
 
+    /**
+     * Add CSS class to element. Previously added classes are not affected.
+     * Multiple CSS classes can also be added if passed as space separated
+     * string or array of class names.
+     *
+     * @param string|array $class CSS class name or array of class names
+     *
+     * @return $this
+     */
+    public function addClass($class)
+    {
+        if (is_array($class)) {
+            $class = implode(' ', $class);
+        }
+
+        $this->class = array_merge($this->class, explode(' ', $class));
+
+
+        return $this;
+    }
+
+    /**
+     * Remove one or several CSS classes from the element.
+     *
+     * @param string|array $class CSS class name or array of class names
+     *
+     * @return $this
+     */
+    public function removeClass($remove_class) {
+        $remove_class = explode(' ', $remove_class);
+        $this->class = array_diff($this->class, $remove_class);
+    }
+
+    // }}}
+
+    // {{{ Rendering
+
+    /**
+     * View-specific rendering stuff. Feel free to replace this method with
+     * your own. View::renderView contanis some logic that integrates with
+     * semanticUI.
+     *
+     * NOTE: maybe in the future, SemanticUI-related stuff needs to go into
+     * a separate class.
+     */
+    function renderView() {
+        if ($this->class) {
+            $this->template->append('class', join(' ', $this->class));
+        }
+
+        if ($this->ui) {
+            if (is_string($this->ui)) {
+                $this->template->set('_class', $this->ui);
+            }
+        } else {
+            $this->template->tryDel('_ui');
+        }
+    }
+
+    /**
+     * Recursively render all children, placing their
+     * output in our template.
+     */
     function recursiveRender() {
         foreach($this->elements as $view) {
             if (!$view instanceof View) { 
@@ -238,20 +323,10 @@ class View {
 
     }
 
-    function renderView() {
-        if ($this->class) {
-            $this->template->append('class', join(' ', $this->class));
-        }
-
-        if ($this->ui) {
-            if (is_string($this->ui)) {
-                $this->template->set('_class', $this->ui);
-            }
-        } else {
-            $this->template->tryDel('_ui');
-        }
-    }
-
+    /**
+     * This method is for those cases when developer want to simply render his
+     * view and grab HTML himself.
+     */
     function render() {
 
         $this->renderView();
@@ -263,18 +338,21 @@ class View {
             $this->template->render();
     }
 
-    function setModel($m) {
-        $this->model = $m;
-    }
-
+    /**
+     * TODO: refactor
+     */
     function getHTML()
     {
         return $this->template->render();
     }
 
+    /**
+     * TODO: refactor
+     */
     function getJS()
     {
         return '';
     }
 
+    // }}}
 }
