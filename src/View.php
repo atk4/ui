@@ -8,7 +8,7 @@ namespace atk4\ui;
  * Implements a most core view, which all of the other components descend
  * form. 
  */
-class View {
+class View implements jsExpressionable {
 
     use \atk4\core\ContainerTrait {
         add as _add;
@@ -21,7 +21,6 @@ class View {
 
     // {{{ Properties of the class
 
-
     /**
      * When you call render() this will be populated with JavaScript
      * chains.
@@ -29,7 +28,7 @@ class View {
      * @private! but must remain public so that child views could interact
      * with parent's $js.
      */
-    public $js;
+    public $_js_actions = [];
 
     public $model;
 
@@ -46,6 +45,11 @@ class View {
      * be appended at the end of the element class.
      */
     public $ui = false;
+
+    /**
+     * ID of the element, that's unique and is used in JS operations
+     */
+    public $id = null;
 
     /**
      * List of classes that needs to be added
@@ -78,7 +82,6 @@ class View {
      * be used as a HTML class instead
      */
     function __construct($defaults = []) {
-
         if (is_string($defaults)) {
             $this->content = $defaults;
             return;
@@ -162,7 +165,18 @@ class View {
      * placing any "heavy processing" here.
      */
     function init() {
+        if (!$this->name) {
+            if (!$this->id) {
+                $this->id = $this->name = 'atk';
+            } else {
+                $this->name = $this->id;
+            }
+        } elseif (!$this->id) {
+            $this->id = $this->name;
+        }
+
         $this->_init();
+
         if(!$this->app) {
             $this->initDefaultApp();
         }
@@ -262,7 +276,6 @@ class View {
 
         $this->class = array_merge($this->class, explode(' ', $class));
 
-
         return $this;
     }
 
@@ -302,6 +315,10 @@ class View {
         } else {
             $this->template->tryDel('_ui');
         }
+
+        if ($this->id) {
+            $this->template->trySet('_id', $this->id);
+        }
     }
 
     /**
@@ -314,7 +331,11 @@ class View {
                 continue;
             }
 
-            $this->template->appendHTML($view->region, $view->render());
+            $this->template->appendHTML($view->region, $view->getHTML());
+
+            if ($view->_js_actions) {
+                $this->_js_actions = array_merge_recursive($this->_js_actions, $view->_js_actions);
+            }
         }
 
         if ($this->content) {
@@ -328,6 +349,9 @@ class View {
      * view and grab HTML himself.
      */
     function render() {
+        if (!$this->_initialized) {
+            $this->init();
+        }
 
         $this->renderView();
 
@@ -339,19 +363,254 @@ class View {
     }
 
     /**
-     * TODO: refactor
+     * Created for recursive rendering or when you want to only get HTML of this object (not javascript)
      */
     function getHTML()
     {
+        if (!$this->_initialized) {
+            $this->init();
+        }
+
+        $this->renderView();
+
+        $this->recursiveRender();
+        
         return $this->template->render();
     }
+
+    // }}}
+
+    // {{{ JavaScript integration
+
+
+    /**
+     * Views in Agile UI can assign javascript actions to themselves. This
+     * is done by calling $view->js() method which returns instance of jsChain
+     * object that is initialized to the object itself. Normally this chain
+     * will map into $('#object_id') and calling additional methods will map
+     * into additional calls.
+     *
+     * Action can represent javascript event, such as "click" or "mouseenter".
+     * If you specify action = true, then the event will ALWAYS be executed on
+     * documentReady. It will also be executed if respective view is being reloaded
+     * by js()->reload()
+     *
+     * (Do not make mistake by specifying "true" instead of true)
+     *
+     * action = false will still return jsChain but will not bind it.
+     * You can bind it by passing object into on() method.
+     *
+     * 1. Calling with arguments:
+     *
+     * $view->js();                   // technically does nothing
+     * $a = $view->js()->hide();      // creates chain for hiding $view but does not
+     *                                // bind to event yet.
+     *
+     * 2. Binding existing chains
+     * $img->on('mouseenter', $a);    // binds previously defined chain to event on
+     *                                // event of $img.
+     *
+     * Produced code: $('#img_id').on('mouseenter', function(ev){ ev.preventDefault();
+     *    $('view1').hide(); });
+     *
+     * 3. $button->on('click',$form->js()->submit());
+     *                                // clicking button will result in form submit
+     *
+     * 4. $view->js(true)->find('.current')->text($text);
+     *
+     * Will convert calls to jQuery chain into JavaScript string:
+     *  $('#view').find('.current').text('abc');    // The $text will be json-encoded
+     *                                              // to avoid JS injection.
+     *
+     * Documentation:
+     *
+     * @link http://agile-ui.readthedocs.io/en/latest/js.html
+     *
+     * @param string|bool|null          $when     Event when chain will be executed
+     * @param array|jQuery_Chain|string $code     JavaScript chain(s) or code
+     * @param string                    $instance Obsolete
+     *
+     * @return jQuery_Chain
+     */
+    public function js($when = null)
+    {
+        $chain = new jQuery($this);
+
+        // Substitute $when to make it better work as a array key
+        if ($when === true) {
+            $when = 'always';
+        }
+
+        if ($when === false || $when === null) {
+            return $chain;
+        }
+
+        if (!isset($this->_js_actions[$when])) {
+            $this->_js_actions[$when] = [];
+        }
+
+        $this->_js_actions[$when][] = $chain;
+
+        return $chain;
+    }
+
+    /**
+     * Views in Agile Toolkit can assign javascript actions to themselves. This
+     * is done by calling $view->js() or $view->on().
+     *
+     * on() method is similar to jQuery on() method.
+     *
+     * on(event, [selector,] action)
+     *
+     * Method on() also returns a chain, that will correspond affected element.
+     * Here are some ways to use on();
+     *
+     * $button->on('click', $view->js()->hide());
+     *
+     *   // clicking on button will make the $view dissapear
+     *
+     * $view->on('click', 'a[data=clickable]')->parent()->hide();
+     *
+     *   // clicking on <a class="clickable"> will make it's parent dissapear
+     *
+     * Finally, it's also possible to use PHP closure as an action:
+     *
+     * $view->on('click', 'a', function($js, $data){ 
+     *   if (!$data['clickable']) {
+     *      return new jsExpression('alert([])', ['This record is not clickable'])
+     *   }
+     *   return $js->parent()->hide(); 
+     * });
+     *
+     * For more information on how this works, see documentation:
+     *
+     * @link http://agile-ui.readthedocs.io/en/latest/js.html
+     */
+    public function on($event, $selector = null, $js = null)
+    {
+        // second argument may be omitted
+        if (!is_string($selector) && is_null($js)) {
+            $js = $selector;
+            $selector = null;
+        }
+
+        $actions = [];
+
+        // will be returned from this method, so you can chain more stuff on it
+        $actions[] = $this_js = new jQuery(new jsExpression('this'));
+
+        if (is_callable($js)) {
+            // if callable $js is passed, then execute ajaxec()
+            //
+            throw new Exception('VirtualPage is not yet implemented');
+
+            $url = '.virtualpage->getURL..';
+            $actions[] = (new jsUniv(new jsExpression('this')))->ajaxec($url, true);
+
+            /*
+            $p = $this->add('VirtualPage');
+
+            $p->set(function ($p) use ($js) {
+                // $js is an actual callable
+                $js2 = $p->js()->_selectorRegion();
+
+                $js3 = call_user_func($js, $js2, $_POST);
+
+                // If method returns something, execute that instead
+                if ($js3) {
+                    $p->js(null, $js3)->execute();
+                } else {
+                    $js2->execute();
+                }
+            });
+
+            $js = $this->js()->_selectorThis()->univ()->ajaxec($p->getURL(), true);
+             */
+        } elseif($js) {
+            // otherwise include
+            $actions[] = $js;
+        }
+
+        $actions['preventDefault']=true;
+        $actions['stopPropagation']=true;
+
+        $action = new jsFunction($actions);
+
+
+
+        if ($selector) {
+            $js = $this->js(true)->on($event, $selector, $action);
+        }else{
+            $js = $this->js(true)->on($event, $action);
+        }
+
+        return $this_js;
+
+        /*
+        if ($js) {
+            $ret_js = $this->js(null, $js)->_selectorThis();
+        } else {
+            $ret_js = $this->js()->_selectorThis();
+        }
+
+        $on_chain = $this->js(true);
+        $fired = false;
+
+        $this->app->jui->addHook(
+            'pre-getJS',
+            function ($app) use ($event, $selector, $ret_js, $on_chain, &$fired) {
+                if ($fired) {
+                    return;
+                }
+                $fired = true;
+
+                $on_chain->on($event, $selector, $ret_js->_enclose(null, true));
+            }
+        );
+
+        return $ret_js;
+         */
+    }
+
+    public function jsRender()
+    {
+        if (!$this->_initialized) {
+            throw new Exception('Render tree must be initialized before materializing jsChains.');
+        }
+        return json_encode('#'.$this->id);
+    }
+
 
     /**
      * TODO: refactor
      */
     function getJS()
     {
-        return '';
+        $actions = [];
+
+        foreach($this->_js_actions as $event=>$event_actions){
+            foreach($event_actions as $action) {
+                // wrap into callback
+                if($event !== 'always') {
+                    $action = (new jQuery($action->_constructor_arguments[0]))->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
+                }
+
+                $actions[] = $action;
+            }
+        }
+
+        if(!$actions) {
+            return '';
+        }
+
+        $actions['indent'] = '';
+
+
+        $ready = new jsFunction($actions);
+
+        return "<script>\n".
+            (new jQuery($ready))->jsRender().
+            "</script>";
     }
 
     // }}}
