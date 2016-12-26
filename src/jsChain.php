@@ -12,7 +12,7 @@ namespace atk4\ui;
  *
  * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping.
  */
-class jsMapper implements jsExpressionable {
+class jsChain implements jsExpressionable {
 
     /**
      * Name of the include file where this library is implemented.

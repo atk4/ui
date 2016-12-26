@@ -24,7 +24,7 @@ namespace atk4\ui;
  * @method jQuery_Chain spinner()
  * @method jQuery_Chain tabs()
  */
-class jUniv extends jsMapper {
+class jUniv extends jsChain {
     public $_include = 'univ.min.js';
     public $_version = '2.0.0';
     //public $_integrity = 'sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=';

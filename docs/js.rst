@@ -43,9 +43,9 @@ JavaScript Chain Building
 -------------------------
 
 .. php:namespace: atk4\\ui
-.. php:class:: jsMapper
+.. php:class:: jsChain
 
-    Base class jsMapper can be extended by other classes such as jQuery to provide transparent
+    Base class jsChain can be extended by other classes such as jQuery to provide transparent
     mappers for any JavaScript framework.
 
 Chain is a PHP object that represents one or several actions that are to be executed on the 

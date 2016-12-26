@@ -40,7 +40,7 @@ namespace atk4\ui;
  * Extensions by Univ
  * @method jUniv univ()
  */
-class jQuery extends jsMapper {
+class jQuery extends jsChain {
     public $_include = 'jquery.min.js';
     public $_version = '3.1.1';
     public $_integrity = 'sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=';

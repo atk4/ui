@@ -4,7 +4,7 @@ namespace atk4\ui\tests;
 
 use \atk4\ui\jQuery;
 use \atk4\ui\jsExpression;
-use \atk4\ui\jsMapper;
+use \atk4\ui\jsChain;
 use \atk4\ui\jsFunction;
 
 class jsTest extends \atk4\core\PHPUnit_AgileTestCase
@@ -40,14 +40,14 @@ class jsTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testChain1()
     {
-        $c = new jsMapper('$myInput');
+        $c = new jsChain('$myInput');
         $c->getTextInRange('start', 'end');
         $this->assertEquals('$myInput.getTextInRange("start","end")', $c->jsRender());
     }
 
     public function testChain2()
     {
-        $c = new jsMapper('$myInput');
+        $c = new jsChain('$myInput');
         $c->getTextInRange(new jsExpression('getStart()'), 'end');
         $this->assertEquals('$myInput.getTextInRange(getStart(),"end")', $c->jsRender());
     }
