@@ -7,10 +7,22 @@ namespace atk4\ui;
  */
 class jsExpression implements jsExpressionable
 {
+    /**
+     * @var string
+     */
     public $template = null;
 
+    /**
+     * @var array
+     */
     public $args = [];
 
+    /**
+     * Constructor.
+     *
+     * @param string $template
+     * @param array  $args
+     */
     public function __construct($template = '', $args = [])
     {
         $this->template = $template;
@@ -19,21 +31,21 @@ class jsExpression implements jsExpressionable
 
     /**
      * Converts this arbitrary JavaScript expression into string.
+     *
+     * @return string
      */
     public function jsRender()
     {
-        $nameless_count = 0;
+        $namelessCount = 0;
 
         $res = preg_replace_callback(
             '/\[[a-z0-9_]*\]|{[a-z0-9_]*}/',
-            function ($matches) use (&$nameless_count) {
+            function ($matches) use (&$namelessCount) {
                 $identifier = substr($matches[0], 1, -1);
 
                 // Allow template to contain []
                 if ($identifier === '') {
-                    $identifier = $nameless_count++;
-
-                    // use rendering only with named tags
+                    $identifier = $namelessCount++;
                 }
 
                 if (!isset($this->args[$identifier])) {

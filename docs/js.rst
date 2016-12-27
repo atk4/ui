@@ -30,11 +30,19 @@ with:
 
 .. code-block:: js
 
+<<<<<<< HEAD
     $('#the-box-id).dropdown();
 
 the initialization should somehow embedded inside your own DropDown view. Of course you can hide
 piece of JavaScript inside your custom HTML template, but that's a anti-pattern with Agile UI that
 tries to steamline all the UI.
+=======
+    $('#the-box-id').dropdown();
+
+the initialization should somehow be embedded inside your own DropDown view. Of course you can hide
+piece of JavaScript inside your custom HTML template, but that is a anti-pattern with Agile UI that
+tries to streamline all the UI.
+>>>>>>> develop
 
 
 Agile UI relies on two important mechanics that makes JavaScript interaction simple.
@@ -55,7 +63,7 @@ client side::
 
     $chain->dropdown();
 
-The calls to the chain are stored in the object and can be converted into JavaScript by calling `jsRender`
+The calls to the chain are stored in the object and can be converted into JavaScript by calling :php:meth:`jsChain::jsRender()`
 
 .. php:method:: jsRender()
 
@@ -70,20 +78,20 @@ will output:
 
 .. code-block:: js
 
-    $('#the-box-id).dropdown();
+    $('#the-box-id').dropdown();
 
 View to JS integration
 ----------------------
 
 We are not building JavaScript code just for the excercise. Our whole point is ability to link that code
-between actual views. All views support JavaScript binging through two methods: "js" and "on".
+between actual views. All views support JavaScript binding through two methods: :php:meth:`View::js()` and :php:meth:`View::on()`.
 
 .. php:class:: View
 .. php:method:: js([$event])
 
     Return chain corresponding to the view.
 
-.. php:method:: on(String $event, [,String selector], $callback = null)
+.. php:method:: on(String $event, [String selector], $callback = null)
 
     Returns chain that will be automatically executed if $event occurs. If $callback is specified, it
     will also be executed on event.
@@ -95,7 +103,6 @@ Calling $button->js() you will get a new jQuery chain object that you can intera
 Just on it's own chain will not do anything, so you can use "on" method to bind the action::
 
     $button->on('click', $chain);
-
 
 Mechanics of Chains and Binding form a powerful concept, but to make it as powerful as possible, we
 have implemented a lot of ways for you to be expressive in the PHP.
@@ -110,9 +117,9 @@ So if you want button to hide itself when clicked, this simple syntax can be use
 
     $button->js('click')->hide();
 
-More commonly you'll want to execute chains onReadyCheck::
+More commonly you will want to execute chains onDocumentReady::
 
-    $dropdown_field ->js(true)->dropdown();
+    $dropdown_field->js(true)->dropdown();
 
 
 jsExpressionable and jsExpression
@@ -130,7 +137,7 @@ jsExpressionable and jsExpression
 .. php:class:: jsExpression
 .. php:method:: __construct(template, args)
 
-    Returns object that renders into template by substituting args into it
+    Returns object that renders into template by substituting args into it.
 
 This interface can be implemented by the object and would mean that this object can be mapped into
 a safe JavaScript code. Any other variables will be passed to `json_encode` when they are parts of
@@ -141,13 +148,13 @@ Compare next two examples::
     echo (new jQuery('document'))->find('h1')->hide()->jsRender();
 
     // produces $('document').find('h1').hide();
-    // does not hide anything!
+    // does not hide anything because document is streated as string selector!
 
     $expr = new jsExpression('document');
     echo (new jQuery($expr))->find('h1')->hide()->jsRender();
 
     // produces $(document).find('h1').hide();
-    // works correrctly!!
+    // works correctly!!
 
 Template of jsExpression
 ------------------------
@@ -163,7 +170,7 @@ boxes on the left::
 
     $right_box_container->js(true)->height( $sum );
 
-It's important that you remember that height of an element is a browser-side property and you
+It is important that you remember that height of an element is a browser-side property and you
 must operate with it in your browser by passing expressions into chain.
 
 
@@ -172,16 +179,16 @@ The template language for jsExpression is super-simple:
  - [] will be mapped to next argument in the argument array
  - [foo] will be mapped to named argument in argument array
 
-So the following two lines are identical::
+So the following three lines are identical::
 
     $sum = new jsExpression('[]+[]', [$h1, $h2]);
-
+    $sum = new jsExpression('[0]+[1]', [0=>$h1, 1=>$h2]);
     $sum = new jsExpression('[a]+[b]', ['a'=>$h1, 'b'=>$h2]);
 
 .. important:: 
 
     We have specifically selected a very simple tag format as a reminder to you not to write
-    any code as part of jsExpression. You must ont use jsExpression() for anything complex.
+    any code as part of jsExpression. You must not use jsExpression() for anything complex.
 
 
 Writing JavaScript code
@@ -191,21 +198,21 @@ Open a new file `test.js` and type:
 
 .. code-block:: js
 
-    function mySum(a) {
-        return a.reduce(function(a, b){ 
+    function mySum(arr) {
+        return arr.reduce(function(a, b) { 
             return a+b;
         }, 0);
     }
 
-Load this js dependency on your page, then you can use the following chain::
+When load this js dependency on your page, then you can use the following chain::
 
     $heights = [];
 
-    foreach ($left_box_container->elements as $left_box) {
+    foreach ($left_container->elements as $left_box) {
         $heights[] = $left_box->js()->height();
     }
 
-    $right_box_container->js(true)->height(new jsExpression('mySum([])', [$heights]));
+    $right_container->js(true)->height(new jsExpression('mySum([])', [$heights]));
 
 This will map into the following JavaScript code:
 
@@ -215,5 +222,5 @@ This will map into the following JavaScript code:
         $('#left_box1').height(), $('#left_box2').height(), $('#left_box3').height() // etc
     ]));
 
-You can further simplify JavaScript code yourself but keep the JavaScript logic inside the `.js` files
+You can further simplify JavaScript code yourself, but keep the JavaScript logic inside the `.js` files
 and leave PHP only for binding.

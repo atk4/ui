@@ -52,11 +52,11 @@ class jQuery extends jsChain
      * @argument $selector
      * @argument $context
      */
-    public function __construct(...$constructor_args)
+    public function __construct(...$constructorArgs)
     {
         parent::__construct();
 
-        $this->_constructor_arguments = $constructor_args;
+        $this->_constructor_arguments = $constructorArgs;
     }
 
     public function univ()

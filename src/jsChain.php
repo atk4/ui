@@ -16,21 +16,29 @@ class jsChain implements jsExpressionable
 {
     /**
      * Name of the include file where this library is implemented.
+     *
+     * @var string
      */
     public $_include = null;
 
     /**
      * Default version to use.
+     *
+     * @var string
      */
     public $_version = null;
 
     /**
      * Integrity code of default version of this library.
+     *
+     * @var string
      */
     public $_integrity = null;
 
     /**
      * Set this to the object of your library. Most libraries prefer '$', although you might want to use 'jQuery' or 'new google.maps.Map';.
+     *
+     * @var string
      */
     public $_library = '$';
 
@@ -42,6 +50,8 @@ class jsChain implements jsExpressionable
      * If arguments are specified they are passed to constructor initializer:
      *
      * $('foo', 'bar').hello();
+     *
+     * @var array
      */
     public $_constructor_arguments = [];
 
@@ -58,11 +68,15 @@ class jsChain implements jsExpressionable
      * will map into:
      *
      * $.foo().bar(1).baz.test({abc: 123]);
+     *
+     * @var array
      */
     public $_chain = [];
 
     /**
      * Override a library when executing constructor. For instance if you wish to use jQuery3 instead of jQuery.
+     *
+     * @param string $library
      */
     public function __construct($library = null)
     {
@@ -120,6 +134,13 @@ class jsChain implements jsExpressionable
         return $this->__call($name, $args);
     }
 
+    /**
+     * Renders JS chain arguments.
+     *
+     * @param array $args
+     *
+     * @return string
+     */
     private function _renderArgs($args = [])
     {
         return '('.
@@ -135,6 +156,8 @@ class jsChain implements jsExpressionable
 
     /**
      * Produce String representing this JavaScript extension.
+     *
+     * @return string
      */
     public function jsRender()
     {

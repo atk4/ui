@@ -7,16 +7,27 @@ namespace atk4\ui;
  */
 class jsFunction implements jsExpressionable
 {
+    /** @var array Array of arguments */
     public $fx_args;
 
+    /** @var array Array of statements */
     public $fx_statements = [];
 
+    /** @var boolean add preventDefault(event) */
     public $preventDefault = false;
 
+    /** @var boolean add stopPropagation(event) */
     public $stopPropagation = false;
 
+    /** @var string Array of statements */
     public $indent = '  ';
 
+    /**
+     * Constructor.
+     *
+     * @param array $args
+     * @param array $statements
+     */
     public function __construct($args = [], $statements = null)
     {
         if ($statements === null) {
@@ -39,6 +50,11 @@ class jsFunction implements jsExpressionable
         }
     }
 
+    /**
+     * Render function/expression.
+     *
+     * @return string
+     */
     public function jsRender()
     {
         $pre = '';
