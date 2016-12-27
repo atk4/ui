@@ -3,16 +3,15 @@
 namespace atk4\ui;
 
 /**
- * Implements structure for js closure
+ * Implements structure for js closure.
  */
-class jsFunction implements jsExpressionable {
-
+class jsFunction implements jsExpressionable
+{
     public $fx_args;
 
     public $fx_statements;
 
-
-    function __construct($args = [], $statements = [])
+    public function __construct($args = [], $statements = [])
     {
         $this->fx_args = $args;
         $this->fx_statements = $statements;
@@ -23,9 +22,10 @@ class jsFunction implements jsExpressionable {
         if ($args === null) {
             return [];
         }
-        return 
-            array_map(function($arg){
-                if($arg instanceof jsExpressionable) {
+
+        return
+            array_map(function ($arg) {
+                if ($arg instanceof jsExpressionable) {
                     return $arg->jsRender();
                 }
 
@@ -33,9 +33,10 @@ class jsFunction implements jsExpressionable {
             }, $args);
     }
 
-    function jsRender() {
-        return 'function('.join(',',$this->_renderArgs($this->fx_args)).") {\n".
-            join(";\n", $this->_renderArgs($this->fx_statements)).";\n".
-            "}";
+    public function jsRender()
+    {
+        return 'function('.implode(',', $this->_renderArgs($this->fx_args)).") {\n".
+            implode(";\n", $this->_renderArgs($this->fx_statements)).";\n".
+            '}';
     }
 }

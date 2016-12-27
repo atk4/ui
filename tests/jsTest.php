@@ -2,10 +2,10 @@
 
 namespace atk4\ui\tests;
 
-use \atk4\ui\jQuery;
-use \atk4\ui\jsExpression;
-use \atk4\ui\jsChain;
-use \atk4\ui\jsFunction;
+use atk4\ui\jQuery;
+use atk4\ui\jsChain;
+use atk4\ui\jsExpression;
+use atk4\ui\jsFunction;
 
 class jsTest extends \atk4\core\PHPUnit_AgileTestCase
 {
@@ -14,24 +14,23 @@ class jsTest extends \atk4\core\PHPUnit_AgileTestCase
      */
     public function testBasicExpressions()
     {
-
         $this->assertEquals('2+2', (new jsExpression('2+2'))->jsRender());
-        $this->assertEquals('3+4', (new jsExpression('[]+[]', [3,4]))->jsRender());
+        $this->assertEquals('3+4', (new jsExpression('[]+[]', [3, 4]))->jsRender());
     }
 
     public function testNestedExpressions()
     {
         $this->assertEquals(
-            '10-(2+3)', 
+            '10-(2+3)',
             (
                 new jsExpression(
-                    '[]-[]', 
+                    '[]-[]',
                     [
                         10,
                         new jsExpression(
                             '[a]+[b]',
-                            ['a'=>2, 'b'=>3]
-                        )
+                            ['a'=> 2, 'b'=>3]
+                        ),
                     ]
                 )
             )->jsRender()
@@ -70,13 +69,13 @@ class jsTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testComplex1()
     {
-        // binding that maintains same height on 
+        // binding that maintains same height on
         $b1 = new jQuery('.box1');
         $b2 = new jQuery('.box2');
 
         $doc = new jQuery(new jsExpression('document'));
         $fx = $doc->ready(new jsFunction(null, [
-            $b1->height($b2->height())
+            $b1->height($b2->height()),
         ]));
 
         $this->assertEquals('$(document).ready(function() {
@@ -84,4 +83,3 @@ $(".box1").height($(".box2").height());
 })', $fx->jsRender());
     }
 }
-
