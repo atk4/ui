@@ -114,7 +114,7 @@ class View implements jsExpressionable
      *
      * TODO: move into trait, because this is used often
      */
-    public function setProperties($properties)
+    protected function setProperties($properties)
     {
         if (isset($properties[0])) {
             $this->content = $properties[0];
@@ -136,7 +136,7 @@ class View implements jsExpressionable
     /**
      * TODO: move into trait because it's used so often.
      */
-    public function setProperty($key, $val)
+    protected function setProperty($key, $val)
     {
         if (is_numeric($key)) {
             $key = $val;
@@ -195,7 +195,7 @@ class View implements jsExpressionable
      * For the absence of the application, we would add a very
      * simple one.
      */
-    public function initDefaultApp()
+    protected function initDefaultApp()
     {
         $this->app = new \atk4\ui\App(['skin'=>$this->skin]);
         $this->app->init();
