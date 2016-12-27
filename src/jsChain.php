@@ -12,31 +12,30 @@ namespace atk4\ui;
  *
  * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping.
  */
-class jsChain implements jsExpressionable {
-
+class jsChain implements jsExpressionable
+{
     /**
      * Name of the include file where this library is implemented.
      */
     public $_include = null;
 
     /**
-     * Default version to use
+     * Default version to use.
      */
     public $_version = null;
 
     /**
-     * Integrity code of default version of this library
+     * Integrity code of default version of this library.
      */
     public $_integrity = null;
 
     /**
-     * Set this to the object of your library. Most libraries prefer '$', although you might want to use 'jQuery' or 'new google.maps.Map';
+     * Set this to the object of your library. Most libraries prefer '$', although you might want to use 'jQuery' or 'new google.maps.Map';.
      */
     public $_library = '$';
 
-
     /**
-     * This will represent constructor argument. If no arguments are set, then the library will be executed like this:
+     * This will represent constructor argument. If no arguments are set, then the library will be executed like this:.
      *
      * $.hello();
      *
@@ -45,7 +44,6 @@ class jsChain implements jsExpressionable {
      * $('foo', 'bar').hello();
      */
     public $_constructor_arguments = [];
-
 
     /**
      * Call chain. All calls to this mapper will be recorded here. Property traversal
@@ -63,36 +61,37 @@ class jsChain implements jsExpressionable {
      */
     public $_chain = [];
 
-
     /**
      * Override a library when executing constructor. For instance if you wish to use jQuery3 instead of jQuery.
      */
-    function __construct($library = null) {
-        if($library) {
+    public function __construct($library = null)
+    {
+        if ($library) {
             $this->_library = $library;
         }
     }
 
-
     /**
-     * Records all calls to this chain returning itself every time
+     * Records all calls to this chain returning itself every time.
      *
      * @param string $name
-     * @param mixed $args
+     * @param mixed  $args
      *
      * @return $this
      */
-    public function __call($name, $args) {
+    public function __call($name, $args)
+    {
         $this->_chain[] = [$name, $args];
+
         return $this;
     }
 
     /**
-     * Allows you to use syntax like this
+     * Allows you to use syntax like this.
      *
      * $js->offset()->top
      *
-     * that maps into 
+     * that maps into
      *
      * $.offset()->top
      *
@@ -103,15 +102,15 @@ class jsChain implements jsExpressionable {
     public function __get($property)
     {
         $this->_chain[] = $property;
+
         return $this;
     }
 
-
     /**
-     * Convert reserved words or used methods into js calls, such as "_fn('class')" or "_fn('_fn')"
+     * Convert reserved words or used methods into js calls, such as "_fn('class')" or "_fn('_fn')".
      *
      * @param string $name
-     * @param array $args
+     * @param array  $args
      *
      * @return $this
      */
@@ -124,8 +123,8 @@ class jsChain implements jsExpressionable {
     private function _renderArgs($args = [])
     {
         return '('.
-            join(',', array_map(function($arg){
-                if($arg instanceof jsExpressionable) {
+            implode(',', array_map(function ($arg) {
+                if ($arg instanceof jsExpressionable) {
                     return $arg->jsRender();
                 }
 
@@ -134,22 +133,20 @@ class jsChain implements jsExpressionable {
             ')';
     }
 
-
     /**
-     * Produce String representing this JavaScript extension
+     * Produce String representing this JavaScript extension.
      */
-    function jsRender()
+    public function jsRender()
     {
         $ret = '';
 
         // start with constructor
-        $ret.= $this->_library;
+        $ret .= $this->_library;
 
         // next perhaps we have arguments
         if ($this->_constructor_arguments) {
             $ret .= $this->_renderArgs($this->_constructor_arguments);
         }
-        
 
         // next we do same with the calls
         foreach ($this->_chain as $chain) {

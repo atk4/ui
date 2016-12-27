@@ -2,9 +2,8 @@
 
 namespace atk4\ui\tests;
 
-use \atk4\ui\View;
-use \atk4\ui\Button;
-use \atk4\ui\Buttons;
+use atk4\ui\Button;
+use atk4\ui\Buttons;
 
 class jsIntegrationTest extends \atk4\core\PHPUnit_AgileTestCase
 {
@@ -28,7 +27,7 @@ class jsIntegrationTest extends \atk4\core\PHPUnit_AgileTestCase
     }
 
     /**
-     * make sure that chain is crated correctly
+     * make sure that chain is crated correctly.
      */
     public function testBasicChain1()
     {
@@ -40,7 +39,7 @@ class jsIntegrationTest extends \atk4\core\PHPUnit_AgileTestCase
     }
 
     /**
-     * make sure that onReady chains are included in output
+     * make sure that onReady chains are included in output.
      */
     public function testBasicChain2()
     {
@@ -55,7 +54,7 @@ $(function() {
     }
 
     /**
-     * make sure that js('event') chains are included in output with appropriate callback
+     * make sure that js('event') chains are included in output with appropriate callback.
      */
     public function testBasicChain3()
     {
@@ -74,7 +73,7 @@ $(function() {
     }
 
     /**
-     * make sure that on('event', js) chains are included in output
+     * make sure that on('event', js) chains are included in output.
      */
     public function testBasicChain4()
     {

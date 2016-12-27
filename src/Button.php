@@ -11,9 +11,9 @@ class Button extends View
     /**
      * $icon property will end up a button icon.
      */
-    function renderView() {
+    public function renderView()
+    {
         if ($this->icon && !is_object($this->icon)) {
-
             $this->icon = $this->add(new Icon($this->icon), 'Content');
 
             if ($this->content) {

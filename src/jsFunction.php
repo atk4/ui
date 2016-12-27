@@ -3,10 +3,10 @@
 namespace atk4\ui;
 
 /**
- * Implements structure for js closure
+ * Implements structure for js closure.
  */
-class jsFunction implements jsExpressionable {
-
+class jsFunction implements jsExpressionable
+{
     public $fx_args;
 
     public $fx_statements = [];
@@ -17,7 +17,7 @@ class jsFunction implements jsExpressionable {
 
     public $indent = '  ';
 
-    function __construct($args = [], $statements = null)
+    public function __construct($args = [], $statements = null)
     {
         if ($statements === null) {
             $statements = $args;
@@ -30,7 +30,7 @@ class jsFunction implements jsExpressionable {
             throw new Exception(['$statements is not array', 'statements'=>$statements]);
         }
 
-        foreach($statements as $key=>$value) {
+        foreach ($statements as $key=>$value) {
             if (is_numeric($key)) {
                 $this->fx_statements[] = $value;
             } else {
@@ -39,24 +39,23 @@ class jsFunction implements jsExpressionable {
         }
     }
 
-    function jsRender() {
-
-        $pre = "";
+    public function jsRender()
+    {
+        $pre = '';
 
         if ($this->preventDefault) {
             $this->fx_args = ['event'];
-            $pre .= "\n".$this->indent."  event.preventDefault();";
+            $pre .= "\n".$this->indent.'  event.preventDefault();';
         }
 
         if ($this->stopPropagation) {
             $this->fx_args = ['event'];
-            $pre .= "\n".$this->indent."  event.stopPropagation();";
+            $pre .= "\n".$this->indent.'  event.stopPropagation();';
         }
 
-        $output = 'function('.join(',',$this->fx_args).') {';
+        $output = 'function('.implode(',', $this->fx_args).') {';
         $output .= $pre;
-        foreach($this->fx_statements as $statement) {
-
+        foreach ($this->fx_statements as $statement) {
             if (!$statement) {
                 // null passed
                 continue;
@@ -70,13 +69,13 @@ class jsFunction implements jsExpressionable {
             if ($statement instanceof jsExpressionable) {
                 $statement = $statement->jsRender();
             } else {
-                throw new Exception(["Incorrect statement for jsFunction.", 'statement'=>$statement]);
+                throw new Exception(['Incorrect statement for jsFunction.', 'statement'=>$statement]);
             }
 
-            $output .= "\n".$this->indent."  ".$statement.";";
+            $output .= "\n".$this->indent.'  '.$statement.';';
         }
-            
-        $output .= "\n".$this->indent."}";
+
+        $output .= "\n".$this->indent.'}';
 
         return $output;
     }

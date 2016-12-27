@@ -11,7 +11,8 @@ class Text extends View
         return $this->content;
     }
 
-    function getHTML() {
+    public function getHTML()
+    {
         return $this->content;
     }
 }

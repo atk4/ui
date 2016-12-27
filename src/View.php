@@ -8,7 +8,8 @@ namespace atk4\ui;
  * Implements a most core view, which all of the other components descend
  * form.
  */
-class View implements jsExpressionable {
+class View implements jsExpressionable
+{
     use \atk4\core\ContainerTrait {
         add as _add;
     }
@@ -45,12 +46,12 @@ class View implements jsExpressionable {
     public $ui = false;
 
     /**
-     * ID of the element, that's unique and is used in JS operations
+     * ID of the element, that's unique and is used in JS operations.
      */
     public $id = null;
 
     /**
-     * List of classes that needs to be added
+     * List of classes that needs to be added.
      */
     public $class = [];
 
@@ -79,7 +80,8 @@ class View implements jsExpressionable {
      * May accept properties of a class, but if property is not defined, it will
      * be used as a HTML class instead.
      */
-    function __construct($defaults = []) {
+    public function __construct($defaults = [])
+    {
         if (is_string($defaults)) {
             $this->content = $defaults;
 
@@ -166,7 +168,8 @@ class View implements jsExpressionable {
      * Called when view becomes part of render tree. You can override it but avoid
      * placing any "heavy processing" here.
      */
-    function init() {
+    public function init()
+    {
         if (!$this->name) {
             if (!$this->id) {
                 $this->id = $this->name = 'atk';
@@ -179,7 +182,7 @@ class View implements jsExpressionable {
 
         $this->_init();
 
-        if(!$this->app) {
+        if (!$this->app) {
             $this->initDefaultApp();
         }
 
@@ -358,7 +361,8 @@ class View implements jsExpressionable {
      * This method is for those cases when developer want to simply render his
      * view and grab HTML himself.
      */
-    function render() {
+    public function render()
+    {
         if (!$this->_initialized) {
             $this->init();
         }
@@ -373,7 +377,7 @@ class View implements jsExpressionable {
     }
 
     /**
-     * Created for recursive rendering or when you want to only get HTML of this object (not javascript)
+     * Created for recursive rendering or when you want to only get HTML of this object (not javascript).
      */
     public function getHTML()
     {
@@ -384,14 +388,13 @@ class View implements jsExpressionable {
         $this->renderView();
 
         $this->recursiveRender();
-        
+
         return $this->template->render();
     }
 
     // }}}
 
     // {{{ JavaScript integration
-
 
     /**
      * Views in Agile UI can assign javascript actions to themselves. This
@@ -485,11 +488,11 @@ class View implements jsExpressionable {
      *
      * Finally, it's also possible to use PHP closure as an action:
      *
-     * $view->on('click', 'a', function($js, $data){ 
+     * $view->on('click', 'a', function($js, $data){
      *   if (!$data['clickable']) {
      *      return new jsExpression('alert([])', ['This record is not clickable'])
      *   }
-     *   return $js->parent()->hide(); 
+     *   return $js->parent()->hide();
      * });
      *
      * For more information on how this works, see documentation:
@@ -513,7 +516,6 @@ class View implements jsExpressionable {
             // if callable $js is passed, then execute ajaxec()
             //
             throw new Exception('VirtualPage is not yet implemented');
-
             $url = '.virtualpage->getURL..';
             $actions[] = (new jsUniv(new jsExpression('this')))->ajaxec($url, true);
 
@@ -536,21 +538,19 @@ class View implements jsExpressionable {
 
             $js = $this->js()->_selectorThis()->univ()->ajaxec($p->getURL(), true);
              */
-        } elseif($js) {
+        } elseif ($js) {
             // otherwise include
             $actions[] = $js;
         }
 
-        $actions['preventDefault']=true;
-        $actions['stopPropagation']=true;
+        $actions['preventDefault'] = true;
+        $actions['stopPropagation'] = true;
 
         $action = new jsFunction($actions);
 
-
-
         if ($selector) {
             $js = $this->js(true)->on($event, $selector, $action);
-        }else{
+        } else {
             $js = $this->js(true)->on($event, $action);
         }
 
@@ -587,9 +587,9 @@ class View implements jsExpressionable {
         if (!$this->_initialized) {
             throw new Exception('Render tree must be initialized before materializing jsChains.');
         }
+
         return json_encode('#'.$this->id);
     }
-
 
     /**
      * TODO: refactor.
@@ -598,10 +598,10 @@ class View implements jsExpressionable {
     {
         $actions = [];
 
-        foreach($this->_js_actions as $event=>$event_actions){
-            foreach($event_actions as $action) {
+        foreach ($this->_js_actions as $event=>$event_actions) {
+            foreach ($event_actions as $action) {
                 // wrap into callback
-                if($event !== 'always') {
+                if ($event !== 'always') {
                     $action = (new jQuery($action->_constructor_arguments[0]))->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
                 }
 
@@ -609,18 +609,17 @@ class View implements jsExpressionable {
             }
         }
 
-        if(!$actions) {
+        if (!$actions) {
             return '';
         }
 
         $actions['indent'] = '';
 
-
         $ready = new jsFunction($actions);
 
         return "<script>\n".
             (new jQuery($ready))->jsRender().
-            "</script>";
+            '</script>';
     }
 
     // }}}

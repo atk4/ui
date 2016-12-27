@@ -1,36 +1,36 @@
 <?php
+
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 
-
-class SeleniumTest extends \PHPUnit_Framework_TestCase {
-
+class SeleniumTest extends \PHPUnit_Framework_TestCase
+{
     protected $user_id;
     protected $security_key;
 
-    public function setUp() {
-
-        if(!$this->user_id) {
+    public function setUp()
+    {
+        if (!$this->user_id) {
             $this->markTestIncomplete('BROWSERSTACK_USER is not set');
         }
 
         $this->user_id = $_ENV['BROWSERSTACK_USER'];
 
-
         $this->security_key = $_ENV['BROWSERSTACK_ACCESSKEY'];
-        $this->url = "https://" . $this->user_id . ":" . $this->security_key . "@hub-cloud.browserstack.com/wd/hub";
+        $this->url = 'https://'.$this->user_id.':'.$this->security_key.'@hub-cloud.browserstack.com/wd/hub';
         $this->demos = $_ENV['URL'];
     }
-    public function testJS() {
 
-        $caps = array(
-            "browser" => "IE",
-            "browser_version" => "9.0",
-            "os" => "Windows",
-            "os_version" => "7",
-            "browserstack.debug" => "true"
-        );
-        $caps['browserstack.local'] = "true";
+    public function testJS()
+    {
+        $caps = [
+            'browser'            => 'IE',
+            'browser_version'    => '9.0',
+            'os'                 => 'Windows',
+            'os_version'         => '7',
+            'browserstack.debug' => 'true',
+        ];
+        $caps['browserstack.local'] = 'true';
         $web_driver = RemoteWebDriver::create(
             $this->url,
             $caps

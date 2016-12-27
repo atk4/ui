@@ -3,7 +3,8 @@
 namespace atk4\ui;
 
 /**
- * Various helper functions for Agile UI
+ * Various helper functions for Agile UI.
+ *
  * @method jQuery_Chain ajaxec()
  * @method jQuery_Chain successMessage()
  * @method jQuery_Chain errorMessage()
@@ -24,13 +25,15 @@ namespace atk4\ui;
  * @method jQuery_Chain spinner()
  * @method jQuery_Chain tabs()
  */
-class jUniv extends jsChain {
+class jUniv extends jsChain
+{
     public $_include = 'univ.min.js';
     public $_version = '2.0.0';
     //public $_integrity = 'sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=';
     public $_library = '$.univ()';
 
-    function univ() {
-        return new jUniv($this);
+    public function univ()
+    {
+        return new self($this);
     }
 }

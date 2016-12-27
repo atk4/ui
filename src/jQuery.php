@@ -3,7 +3,8 @@
 namespace atk4\ui;
 
 /**
- * Implements mapper for jQuery library
+ * Implements mapper for jQuery library.
+ *
  * @method jQuery append()
  * @method jQuery appendTo()
  * @method jQuery bind()
@@ -40,7 +41,8 @@ namespace atk4\ui;
  * Extensions by Univ
  * @method jUniv univ()
  */
-class jQuery extends jsChain {
+class jQuery extends jsChain
+{
     public $_include = 'jquery.min.js';
     public $_version = '3.1.1';
     public $_integrity = 'sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=';
@@ -50,15 +52,15 @@ class jQuery extends jsChain {
      * @argument $selector
      * @argument $context
      */
-    function __construct(... $constructor_args)
+    public function __construct(...$constructor_args)
     {
         parent::__construct();
 
         $this->_constructor_arguments = $constructor_args;
     }
 
-
-    function univ() {
+    public function univ()
+    {
         return new jUniv($this);
     }
 }

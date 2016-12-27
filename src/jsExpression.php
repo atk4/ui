@@ -5,22 +5,22 @@ namespace atk4\ui;
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
-class jsExpression implements jsExpressionable {
-
+class jsExpression implements jsExpressionable
+{
     public $template = null;
 
     public $args = [];
 
-    function __construct($template = '', $args = [])
+    public function __construct($template = '', $args = [])
     {
         $this->template = $template;
         $this->args = $args;
     }
 
     /**
-     * Converts this arbitrary JavaScript expression into string
+     * Converts this arbitrary JavaScript expression into string.
      */
-    function jsRender()
+    public function jsRender()
     {
         $nameless_count = 0;
 
@@ -39,8 +39,8 @@ class jsExpression implements jsExpressionable {
                 if (!isset($this->args[$identifier])) {
                     throw new Exception([
                         'Tag not defined in template for jsExpression',
-                        'tag'=>$identifier,
-                        'template'=>$this->template
+                        'tag'     => $identifier,
+                        'template'=> $this->template,
                     ]);
                 }
 
@@ -53,11 +53,12 @@ class jsExpression implements jsExpressionable {
                 } else {
                     $value = json_encode($value);
                 }
+
                 return $value;
             },
             $this->template
         );
+
         return trim($res);
     }
-
 }
