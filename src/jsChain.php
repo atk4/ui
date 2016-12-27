@@ -24,7 +24,7 @@ class jsChain implements jsExpressionable
     /**
      * Default version to use.
      *
-     * @var  string
+     * @var string
      */
     public $_version = null;
 
