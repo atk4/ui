@@ -13,7 +13,8 @@ engines:
     - 6f1741a30df682d3e9df65fac222b482  # allow js() method to be 2-character long
     - 8eca4c1426fc1508652d90a30744e7fd  # allow on() method to be 2-character long
     - 8eca4c1426fc1508652d90a30744e7fd  # allow $id property to be 2-character long
-    - 
+    - 5ea59add5ab787828057bd726957dc99  # allow $id property to be 2-character lond
+    - 908ad3f93985ff14c44615cee6966c72  # View have a lot of public methods. Deal with it.
     checks:
       CleanCode/ElseExpression:
         enabled: false      # gives many incorrect suggestions
