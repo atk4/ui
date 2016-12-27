@@ -341,7 +341,6 @@ class View implements jsExpressionable {
         if ($this->content) {
             $this->template->append('Content', $this->content);
         }
-
     }
 
     /**

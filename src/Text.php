@@ -7,4 +7,8 @@ class Text extends View {
     function render() {
         return $this->content;
     }
+
+    function getHTML() {
+        return $this->content;
+    }
 }

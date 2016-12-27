@@ -9,13 +9,20 @@ class SeleniumTest extends \PHPUnit_Framework_TestCase {
     protected $security_key;
 
     public function setUp() {
-        var_dump($_ENV);
+
+        if(!$this->user_id) {
+            $this->markTestIncomplete('BROWSERSTACK_USER is not set');
+        }
+
         $this->user_id = $_ENV['BROWSERSTACK_USER'];
+
+
         $this->security_key = $_ENV['BROWSERSTACK_ACCESSKEY'];
         $this->url = "https://" . $this->user_id . ":" . $this->security_key . "@hub-cloud.browserstack.com/wd/hub";
+        $this->demos = $_ENV['URL'];
     }
-
     public function testJS() {
+
         $caps = array(
             "browser" => "IE",
             "browser_version" => "9.0",
@@ -28,7 +35,7 @@ class SeleniumTest extends \PHPUnit_Framework_TestCase {
             $this->url,
             $caps
         );
-        $web_driver->get("http://localhost:8888/demos/button2.php");
+        $web_driver->get($this->demos.'/button2.php');
 
         $this->assertFalse($web_driver->executeScript("return $('#b1').is(':visible')"));
 
