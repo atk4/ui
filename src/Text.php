@@ -1,10 +1,13 @@
 <?php
+
 namespace atk4\ui;
 
-class Text extends View {
+class Text extends View
+{
     public $template = false;
 
-    function render() {
+    public function render()
+    {
         return $this->content;
     }
 
