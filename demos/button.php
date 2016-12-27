@@ -1,28 +1,21 @@
 <?php
 /**
- * Demonstrates how to use layouts
+ * Demonstrates how to use layouts.
  */
-
-require'../vendor/autoload.php';
+require '../vendor/autoload.php';
 use \atk4\ui\Button;
 use \atk4\ui\Buttons;
-use \atk4\ui\Label;
-use \atk4\ui\Icon;
-use \atk4\ui\View;
-use \atk4\ui\Template;
 use \atk4\ui\H2;
-
-
-
+use \atk4\ui\Icon;
+use \atk4\ui\Label;
+use \atk4\ui\Template;
+use \atk4\ui\View;
 
 try {
-
     $layout = new \atk4\ui\Layout\App(['template'=>'./templates/layout2.html']);
-
 
     $layout->add(new H2('Basic Button'));
     $layout->add(new Button())->set('Click me');
-
 
     $layout->add(new H2('Properties'));
 
@@ -65,7 +58,7 @@ try {
     $layout->add(new H2('Icon Bar'));
     $bar = new Buttons('blue big');
     $bar->add(new Button(['icon'=>'file']));
-    $bar->add(new Button(['icon'=>['save','yellow']]));
+    $bar->add(new Button(['icon'=>['save', 'yellow']]));
     $bar->add(new Button(['icon'=>'upload', 'disabled'=>true]));
     $layout->add($bar);
 
@@ -74,8 +67,6 @@ try {
     $forks->add(new Button(['Forks', 'blue']))->add(new Icon('fork'));
     $forks->add(new Label(['1,048', 'basic blue left pointing']));
     $layout->add($forks);
-
-
 
     $layout->add(new H2('Custom Template'));
     $view = new View(['template'=>new Template('Hello, {$tag1}, my name is {$tag2}')]);
@@ -86,11 +77,9 @@ try {
     $layout->add($view);
 
     echo $layout->render();
+} catch (\atk4\core\Exception $e) {
+    var_dump($e->getMessage());
 
-}catch(\atk4\core\Exception $e){ 
-    var_Dump($e->getMessage());
-
-    var_Dump($e->getParams());
+    var_dump($e->getParams());
     throw $e;
 }
-

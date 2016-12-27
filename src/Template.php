@@ -1,8 +1,9 @@
 <?php
+
 // vim:ts=4:sw=4:et:fdm=marker:fdl=0
 /**
  * This class is a lightweight template engine. It's based around operating with
- * chunks of HTML code and the main aims are:
+ * chunks of HTML code and the main aims are:.
  *
  *  - completely remove any logic from templates
  *  - speed up template parsing and manipulation speed
@@ -33,7 +34,7 @@ class Template implements \ArrayAccess
      *
      * @var array
      */
-    public $tags = array();
+    public $tags = [];
 
     /**
      * This is a parsed contents of the template organized inside an array. This
@@ -41,7 +42,7 @@ class Template implements \ArrayAccess
      *
      * @var array
      */
-    public $template = array();
+    public $template = [];
 
     /**
      * Contains information about where the template was loaded from.
@@ -65,12 +66,12 @@ class Template implements \ArrayAccess
     // {{{ Core methods - initialization
 
     // Template creation, interface functions
-    function __construct($template = null) {
+    public function __construct($template = null)
+    {
         if (!is_null($template)) {
             $this->loadTemplateFromString($template);
         }
     }
-
 
     public function __clone()
     {
@@ -80,6 +81,7 @@ class Template implements \ArrayAccess
         unset($this->tags);
         $this->rebuildTags();
     }
+
     /**
      * Returns relevant exception class. Use this method with "throw".
      *
@@ -91,9 +93,9 @@ class Template implements \ArrayAccess
      */
     public function exception($message = 'Undefined Exception', $type = null, $code = null)
     {
-        return new \atk4\core\Exception([$message, 
-            'template'=>$this->template_source,
-            'type'=>$type
+        return new \atk4\core\Exception([$message,
+            'template'=> $this->template_source,
+            'type'    => $type,
         ], $code);
     }
 
@@ -143,8 +145,7 @@ class Template implements \ArrayAccess
         if (!isset($this->tags[$tag])) {
             throw $this->exception('Tag not found in Template')
                 ->addMoreInfo('tag', $tag)
-                ->addMoreInfo('tags', implode(', ', array_keys($this->tags)))
-                ;
+                ->addMoreInfo('tags', implode(', ', array_keys($this->tags)));
         }
         $template = reset($this->tags[$tag]);
 
@@ -168,9 +169,9 @@ class Template implements \ArrayAccess
     {
         if (is_array($tag)) {
             // TODO: test
-            $res = array();
+            $res = [];
             foreach ($tag as $t) {
-                $template = array();
+                $template = [];
                 $this->getTagRefList($t, $te);
 
                 foreach ($template as &$tpl) {
@@ -201,7 +202,7 @@ class Template implements \ArrayAccess
             throw $this->exception('Tag not found in Template')
                 ->setTag($tag);
         }
-        $template = array(&$this->tags[$tag][$ref - 1]);
+        $template = [&$this->tags[$tag][$ref - 1]];
 
         return true;
     }
@@ -221,7 +222,7 @@ class Template implements \ArrayAccess
     }
 
     /**
-     * Re-create tag indexes from scratch for the whole template
+     * Re-create tag indexes from scratch for the whole template.
      */
     public function rebuildTags()
     {
@@ -231,7 +232,7 @@ class Template implements \ArrayAccess
     }
 
     /**
-     * Add tags from a specified region
+     * Add tags from a specified region.
      */
     protected function rebuildTagsRegion(&$template)
     {
@@ -248,7 +249,7 @@ class Template implements \ArrayAccess
             }
         }
     }
-    
+
     // }}}
 
     // {{{ Manipulating contents of tags
@@ -273,7 +274,7 @@ class Template implements \ArrayAccess
             return $this;
         }
 
-        if(is_object($tag)) {
+        if (is_object($tag)) {
             $tag = $tag->get();
         }
 
@@ -360,14 +361,13 @@ class Template implements \ArrayAccess
         return $this->append($tag, $value, false);
     }
 
-
     /**
      * Get value of the tag. Note that this may contain an array
      * if tag contains a structure.
      */
     public function get($tag)
     {
-        $template = array();
+        $template = [];
         $this->getTagRef($tag, $template);
 
         return $template;
@@ -416,24 +416,28 @@ class Template implements \ArrayAccess
     {
         return $this->hasTag($name);
     }
+
     public function offsetGet($name)
     {
         return $this->get($name);
     }
+
     public function offsetSet($name, $val)
     {
         $this->set($name, $val);
     }
+
     public function offsetUnset($name)
     {
         $this->del($name, null);
     }
+
     // }}}
 
     // {{{ Template Manipulations
-    
+
     /**
-     * Executes call-back for each matching tag in the template
+     * Executes call-back for each matching tag in the template.
      */
     public function eachTag($tag, $callable)
     {
@@ -444,10 +448,10 @@ class Template implements \ArrayAccess
         if ($this->getTagRefList($tag, $template)) {
             foreach ($template as $key => $templ) {
                 $ref = $tag.'#'.($key + 1);
-                $this->tags[$tag][$key] = array(call_user_func($callable, $this->recursiveRender($templ), $ref));
+                $this->tags[$tag][$key] = [call_user_func($callable, $this->recursiveRender($templ), $ref)];
             }
         } else {
-            $this->tags[$tag][0] = array(call_user_func($callable, $this->recursiveRender($template), $tag));
+            $this->tags[$tag][0] = [call_user_func($callable, $this->recursiveRender($template), $tag)];
         }
 
         return $this;
@@ -462,10 +466,9 @@ class Template implements \ArrayAccess
             return clone $this;
         }
 
-
         $cl = get_class($this);
         $n = new $cl();
-        $n->template = unserialize(serialize(array('_top#1' => $this->get($tag))));
+        $n->template = unserialize(serialize(['_top#1' => $this->get($tag)]));
         $n->rebuildTags();
         $n->source = 'Clone ('.$tag.') of '.$this->source;
 
@@ -477,15 +480,15 @@ class Template implements \ArrayAccess
     // {{{ Template Loading
 
     /**
-     * Loads template from a specified file
+     * Loads template from a specified file.
      */
     public function load($template_file)
     {
         $this->template_file = $template_file;
-        if(!is_readable($template_file)) {
+        if (!is_readable($template_file)) {
             throw new Exception([
                 'Unable to read template from file',
-                'file'=>$template_file
+                'file'=> $template_file,
             ]);
         }
         $this->loadTemplateFromString(file_get_contents($template_file));
@@ -505,11 +508,11 @@ class Template implements \ArrayAccess
     {
         $this->template_source = $str;
         $this->source = 'string';
-        $this->template = $this->tags = array();
+        $this->template = $this->tags = [];
         if (!$str) {
             return;
         }
-        $this->tag_cnt = array();
+        $this->tag_cnt = [];
 
         /* First expand self-closing tags {$tag} -> {tag}{/tag} */
         $str = preg_replace('/{\$([\w]+)}/', '{\1}{/\1}', $str);
@@ -523,17 +526,19 @@ class Template implements \ArrayAccess
 
     // {{{ Template Parsing Engine
 
-    private $tag_cnt = array();
+    private $tag_cnt = [];
+
     protected function regTag($tag)
     {
         if (!isset($this->tag_cnt[$tag])) {
             $this->tag_cnt[$tag] = 0;
         }
+
         return $tag.'#'.(++$this->tag_cnt[$tag]);
     }
 
     /**
-     * Recursively find nested tags inside a string, converting them to array
+     * Recursively find nested tags inside a string, converting them to array.
      */
     protected function parseTemplateRecursive(&$input, &$template)
     {
@@ -577,7 +582,7 @@ class Template implements \ArrayAccess
     }
 
     /**
-     * Deploys parse recursion
+     * Deploys parse recursion.
      */
     protected function parseTemplate($str)
     {
@@ -586,7 +591,7 @@ class Template implements \ArrayAccess
         $input = preg_split($tag, $str, -1, PREG_SPLIT_DELIM_CAPTURE);
 
         list(, $prefix) = each($input);
-        $this->template = array($prefix);
+        $this->template = [$prefix];
 
         $this->parseTemplateRecursive($input, $this->template);
     }
@@ -610,7 +615,7 @@ class Template implements \ArrayAccess
 
     /**
      * Walk through the template array collecting the values
-     * and returning them as a string
+     * and returning them as a string.
      */
     protected function recursiveRender(&$template)
     {
@@ -625,11 +630,12 @@ class Template implements \ArrayAccess
 
         return $output;
     }
+
     // }}}
 
     // {{{ Debugging functions
 
-    /**
+    /*
      * Returns HTML-formatted code with all tags
      *
     public function _getDumpTags(&$template)
@@ -648,7 +654,7 @@ class Template implements \ArrayAccess
     }
     /*** TO BE REFACTORED ***/
 
-    /**
+    /*
      * Output all tags
      *
     public function dumpTags()
