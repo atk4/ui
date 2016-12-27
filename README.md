@@ -1,5 +1,11 @@
 # Agile UI
 
+[![Build Status](https://travis-ci.org/atk4/ui.png?branch=develop)](https://travis-ci.org/atk4/ui)
+[![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
+[![StyleCI](https://styleci.io/repos/68417565/shield)](https://styleci.io/repos/68417565)
+[![Test Coverage](https://codeclimate.com/github/atk4/ui/badges/coverage.svg)](https://codeclimate.com/github/atk4/ui/coverage)
+[![Version](https://badge.fury.io/gh/atk4%2Fui.svg)](https://packagist.org/packages/atk4/ui)
+
 **Web UI Component library.**
 
 PHP object-oriented implementation for an interractive Web User Interface, that will work out-of-the-box in your app.
