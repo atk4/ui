@@ -66,7 +66,7 @@ $db = new \atk4\data\Persistence::connect($dsn);
 $model = new User($db);
 
 $form = new \atk4\ui\Form();
-$form->setModel($db);
+$form->setModel($model);
 
 echo $form->render(); // populated
 ```
@@ -74,14 +74,17 @@ echo $form->render(); // populated
 It's very important that your View classes only implement UI logic, while Domain logic will still reside inside the Model class:
 
 ``` php
-class User extends \atk4\data\Model {
+class User extends \atk4\data\Model
+{
   public $table = 'user';
-  function init() {
+  public function init()
+  {
     parent::init();
-    $this->addField('name', ['mandatory'=>true, 'caption'=>'Full Name']);
-    $this->addField('joined', ['type'=>'date']);
+    $this->addField('name', ['mandatory' => true, 'caption' => 'Full Name']);
+    $this->addField('joined', ['type' => 'date']);
   }
-  function sendWelcomeEmail() {
+  public function sendWelcomeEmail()
+  {
     ...
   }
 }
@@ -102,13 +105,14 @@ Semantic UI offers wide range of customization through classes. Agile UI does no
 you can use the following code in Agile UI:
 
 ``` php
-$v = new \atk4\ui\View(['ui'=>'segment', 'inverted']);
+// @todo Something is wrong with parameters here!
+$v = new \atk4\ui\View(['ui' => 'segment', 'inverted']);
 $v->add(new \atk4\ui\Button(['Orange', 'inverted orange']));
 ```
 
 ### Custom Templates
 
-Agile UI does not try to eliminate your ability to write HTML and in many cases having a template is better and more efficient way. Let's implement a "User Card" View using our own custom markup. Create file `card.html`:
+Agile UI does not try to eliminate your ability to write HTML and in many cases having a HTML template is better and more efficient way than using default ones. Let's implement a "User Card" View using our own custom markup. Create file `card.html`:
 
 ``` html
 <div id="{$_id}" class="ui card">
@@ -136,7 +140,7 @@ Agile UI does not try to eliminate your ability to write HTML and in many cases 
 Then use it as a template for a View:
 
 ``` php
-$card = new \atk4\ui\View(['template'=>'card.html']);
+$card = new \atk4\ui\View(['template' => 'card.html']);
 ```
 
 The "{$_id}" tag will be supplied by Agile UI automatically, but the rest of the tags can be set through a model:
@@ -147,7 +151,7 @@ $user->load(123); // ID of the person
 $card->setModel($user);
 ```
 
-Templates can also be used for a form. In fact we can use that same "card.html" as a form layout:
+Templates can also be used for a form. In fact we can use that same `card.html` template as a form layout:
 
 ```php
 $form = new \atk4\UI\Form();
@@ -155,7 +159,7 @@ $form->setLayout('card.html');
 $form->setModel($user);
 ```
 
-Finally - templates are extremely useful with Lister class for producting non-tabular repeating HTML markup.
+Finally - templates are extremely useful with `Lister` class for producing non-tabular repeating HTML markup.
 
 ## Full Page Render
 
@@ -166,13 +170,13 @@ $app = new \atk4\ui\App('Hello World');
 $app->setLayout(new \atk4\ui\Layout\Centered());
 
 $app->layout->add($card);
-$app->layout->add(new \atk4\ui\View(['ui'=>'divider']));
+$app->layout->add(new \atk4\ui\View(['ui' => 'divider']));
 $app->layout->add($form);
 
 $app->run();
 ```
 
-This will take care of the HTML boilerplate JS/CSS includes and everything else.
+This will take care of the HTML boilerplate, JS/CSS includes and everything else.
 
 ## Factory
 
@@ -189,7 +193,7 @@ $b2 = $view->add('Button', 'Button 2');
 $bb = $view->add('BigButton');
 ```
 
-Re-routing can be used to replaced standard UI elements with a different classes. If you rather prefer to rely on "use" and hinting in your IDE, then use this syntax instead:
+Re-routing can be used to replace standard UI elements with a different classes. If you rather prefer to rely on "use" and hinting in your IDE, then use this syntax instead:
 
 ``` php
 use \atk4\ui\View;
@@ -205,7 +209,7 @@ $app->add($view);
 $view->add([$b1, $b2, $bb]);
 ```
 
-It does not matter matter in which order you add the elements, as long as all of the views become part of the same Render Tree.
+It does not matter in which order you add the elements, as long as all of the views become part of the same Render Tree.
 
 ## Events
 
@@ -223,7 +227,7 @@ Method calls to "toggle" and "hide" translate into jQuery chain systax:
 
 ``` javascript
 $('b1').on('click', function(){ $('b1').toggle('active'); });
-$('b2').on('click', function(){ $('b1').hide('slow'); });
+$('b2').on('hover', function(){ $('b1').hide('slow'); });
 ```
 
 ## Server-Side Events
@@ -231,16 +235,16 @@ $('b2').on('click', function(){ $('b1').hide('slow'); });
 All the Views you initialize have a unique identifier in the render tree. This makes it possible for events to communicate with the PHP logic:
 
 ``` php
-$b1 = $view->add('Button', 'Rand: '.rand(1,100));
+$b1 = $view->add('Button', 'Rand: '.rand(1, 100));
 $b2 = $view->add('Button', 'Button 2');
 
 $b1->on('click')->reload(); // reload view dynamically
-$b2->on('click', function($b){
+$b2->on('click', function($b) {
   return $b->js()->text(rand(101, 200));
 });
 ```
 
-Eeach button now implements a call-back handler that works reliably, transparently and does not confilct with multiple Button instances on te same page.
+Each button now implements a call-back handler that works reliably, transparently and does not conflict with multiple Button instances on the same page.
 
 ## Virtual Pages
 
@@ -251,7 +255,7 @@ $b1 = $view->add('Button', 'Click to Open Dialog');
 
 $b1->add('VirtualPage')->bindEvent()->set(function($page) {
   $page->add('LoremIpsum');
-});;
+});
 ```
 
 ## Advanced Component Features
@@ -259,12 +263,12 @@ $b1->add('VirtualPage')->bindEvent()->set(function($page) {
 With all of the advanced features available for the components, they can implement a higher level of view logic abstraction. Form submit handler is used for dynamic form submissions:
 
 ``` php
-$form->onSubmit(function($js){
+$form->onSubmit(function($js) {
   return $js->hide('slow');
 });
 ```
 
-Similarly a 'CRUD' view relies on 'Form' and 'Grid' views to create a fully-interractive CRUD experience:
+Similarly a 'CRUD' view relies on 'Form' and 'Grid' views to create a fully-interactive CRUD experience:
 
 ``` php
 $view->add('CRUD')->setModel('User');
@@ -276,7 +280,7 @@ Producing the following:
 
 ## More Features
 
-There are many other features, which I wanted to mentioned briefly:
+There are many other features, which I wanted to mention briefly:
 
 -   Integration with RequireJS for dynamic JS includes
 -   Debug support
