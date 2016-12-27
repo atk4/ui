@@ -56,7 +56,7 @@ class jQuery extends jsChain
     {
         parent::__construct();
 
-        $this->_constructor_arguments = $constructorArgs;
+        $this->_constructorArguments = $constructorArgs;
     }
 
     public function univ()
