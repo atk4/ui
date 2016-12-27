@@ -13,10 +13,10 @@ class jsFunction implements jsExpressionable
     /** @var array Array of statements */
     public $fx_statements = [];
 
-    /** @var boolean add preventDefault(event) */
+    /** @var bool add preventDefault(event) */
     public $preventDefault = false;
 
-    /** @var boolean add stopPropagation(event) */
+    /** @var bool add stopPropagation(event) */
     public $stopPropagation = false;
 
     /** @var string Array of statements */
