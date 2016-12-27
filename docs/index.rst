@@ -12,6 +12,7 @@ Contents:
     core
     template
     view
+    js
     base-components
     layouts
     building-components
