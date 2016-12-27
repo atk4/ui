@@ -10,6 +10,10 @@ engines:
   phpmd:
     enabled: true
     exclude_fingerprints:
+    - 6f1741a30df682d3e9df65fac222b482  # allow js() method to be 2-character long
+    - 8eca4c1426fc1508652d90a30744e7fd  # allow on() method to be 2-character long
+    - 8eca4c1426fc1508652d90a30744e7fd  # allow $id property to be 2-character long
+    - 
     checks:
       CleanCode/ElseExpression:
         enabled: false      # gives many incorrect suggestions
@@ -19,6 +23,8 @@ engines:
         enabled: false      # becasue we use _xx for private properties (that must remain public)
       Controversial/CamelCaseMethodName:
         enabled: false      # methods start with _xx for private methods (that must remain public)
+      Design/WeightedMethodCount:
+        enabled: false      # because we solve complex task, our classes may be complex
   radon:
     enabled: true
 ratings:

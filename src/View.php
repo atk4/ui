@@ -499,21 +499,21 @@ class View implements jsExpressionable
      *
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
      */
-    public function on($event, $selector = null, $js = null)
+    public function on($event, $selector = null, $action = null)
     {
         // second argument may be omitted
-        if (!is_string($selector) && is_null($js)) {
-            $js = $selector;
+        if (!is_string($selector) && is_null($action)) {
+            $action = $selector;
             $selector = null;
         }
 
         $actions = [];
 
         // will be returned from this method, so you can chain more stuff on it
-        $actions[] = $this_js = new jQuery(new jsExpression('this'));
+        $actions[] = $thisAction = new jQuery(new jsExpression('this'));
 
-        if (is_callable($js)) {
-            // if callable $js is passed, then execute ajaxec()
+        if (is_callable($action)) {
+            // if callable $action is passed, then execute ajaxec()
             //
             throw new Exception('VirtualPage is not yet implemented');
             $url = '.virtualpage->getURL..';
@@ -522,11 +522,11 @@ class View implements jsExpressionable
             /*
             $p = $this->add('VirtualPage');
 
-            $p->set(function ($p) use ($js) {
-                // $js is an actual callable
+            $p->set(function ($p) use ($action) {
+                // $action is an actual callable
                 $js2 = $p->js()->_selectorRegion();
 
-                $js3 = call_user_func($js, $js2, $_POST);
+                $js3 = call_user_func($action, $js2, $_POST);
 
                 // If method returns something, execute that instead
                 if ($js3) {
@@ -536,11 +536,11 @@ class View implements jsExpressionable
                 }
             });
 
-            $js = $this->js()->_selectorThis()->univ()->ajaxec($p->getURL(), true);
+            $action = $this->js()->_selectorThis()->univ()->ajaxec($p->getURL(), true);
              */
-        } elseif ($js) {
+        } elseif ($action) {
             // otherwise include
-            $actions[] = $js;
+            $actions[] = $action;
         }
 
         $actions['preventDefault'] = true;
@@ -549,12 +549,12 @@ class View implements jsExpressionable
         $action = new jsFunction($actions);
 
         if ($selector) {
-            $js = $this->js(true)->on($event, $selector, $action);
+            $this->js(true)->on($event, $selector, $action);
         } else {
-            $js = $this->js(true)->on($event, $action);
+            $this->js(true)->on($event, $action);
         }
 
-        return $this_js;
+        return $thisAction;
 
         /*
         if ($js) {
@@ -598,8 +598,8 @@ class View implements jsExpressionable
     {
         $actions = [];
 
-        foreach ($this->_js_actions as $event=>$event_actions) {
-            foreach ($event_actions as $action) {
+        foreach ($this->_js_actions as $event=>$eventActions) {
+            foreach ($eventActions as $action) {
                 // wrap into callback
                 if ($event !== 'always') {
                     $action = (new jQuery($action->_constructor_arguments[0]))->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
