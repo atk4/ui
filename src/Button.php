@@ -1,7 +1,9 @@
 <?php
+
 namespace atk4\ui;
 
-class Button extends View {
+class Button extends View
+{
     public $ui = 'button';
 
     public $icon = null;
@@ -9,9 +11,9 @@ class Button extends View {
     /**
      * $icon property will end up a button icon.
      */
-    function renderView() {
+    public function renderView()
+    {
         if ($this->icon) {
-
             $this->add(new Icon($this->icon), 'Content');
 
             if ($this->content) {
@@ -28,11 +30,12 @@ class Button extends View {
     }
 
     /**
-     * By Default buttons should have something written on them, e.g. "Button"
+     * By Default buttons should have something written on them, e.g. "Button".
      */
-    function recursiveRender() {
+    public function recursiveRender()
+    {
         parent::recursiveRender();
-        if(!$this->template->get('Content')) {
+        if (!$this->template->get('Content')) {
             $this->template->set('Content', 'Button');
         }
     }

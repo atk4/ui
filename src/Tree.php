@@ -2,14 +2,14 @@
 
 namespace atk4\ui;
 
-class Tree extends View {
-
+class Tree extends View
+{
     public $item_template = null;
     public $children_ref = 'Children';
     public $is_folder = null;
     public $template_file = 'tree.html';
 
-    function init()
+    public function init()
     {
         parent::init();
 
@@ -20,27 +20,25 @@ class Tree extends View {
         $this->template->tryDel('Item');
     }
 
-
-    function renderSubTree(\atk4\data\Model $model)
+    public function renderSubTree(\atk4\data\Model $model)
     {
         $output = '';
         $item = clone $this->item_template;
-        foreach($this->model as $row) {
-
+        foreach ($this->model as $row) {
             $item->set($row);
 
             // true, false or null if unsure
-            $folder = $this->is_folder === false ? false : 
+            $folder = $this->is_folder === false ? false :
                 ($this->is_folder ? $this->model[$this->is_folder] : null);
 
             $sub_output = null;
 
-            if ($folder===true || $folder ===null) {
+            if ($folder === true || $folder === null) {
                 $sub_output = $this->renderSubTree($this->model->ref($this->children_ref));
 
                 // Not sure if this was a sub-folder, so would have to check
                 if ($folder === null) {
-                    $folder = (boolean)$sub_output;
+                    $folder = (bool) $sub_output;
                 }
             }
 
@@ -49,10 +47,11 @@ class Tree extends View {
 
             $output .= $item->render();
         }
+
         return $output;
     }
 
-    function render()
+    public function render()
     {
         $this->output = $this->renderSubTree($this->model);
     }
