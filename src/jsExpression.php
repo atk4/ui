@@ -7,10 +7,22 @@ namespace atk4\ui;
  */
 class jsExpression implements jsExpressionable
 {
+    /**
+     * @var string
+     */
     public $template = null;
 
+    /**
+     * @var array
+     */
     public $args = [];
 
+    /**
+     * Constructor.
+     *
+     * @param string $template
+     * @param array  $args
+     */
     public function __construct($template = '', $args = [])
     {
         $this->template = $template;
@@ -19,6 +31,8 @@ class jsExpression implements jsExpressionable
 
     /**
      * Converts this arbitrary JavaScript expression into string.
+     *
+     * @return string
      */
     public function jsRender()
     {
