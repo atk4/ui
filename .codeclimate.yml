@@ -1,0 +1,26 @@
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        php:
+          mass_threshold: 50
+  fixme:
+    enabled: true
+  phpmd:
+    enabled: true
+    exclude_fingerprints:
+    checks:
+      Controversial/CamelCaseClassName:
+        enabled: false
+      Controversial/CamelCasePropertyName:
+        enabled: false
+  radon:
+    enabled: true
+ratings:
+  paths:
+  - "src/**"
+exclude_paths:
+- "docs/**"
+- "tests/**"
+- "vendor/**"

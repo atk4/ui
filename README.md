@@ -304,7 +304,7 @@ Agile UI is currently in the **early development stage**. Our development proces
 | ---------- | ---------------------------------------- |
 | 0.1 [done] | Bootstrap the test-suite, continious integration and UI-testing. |
 | 0.2 [done] | Implement template engine and a static "View". |
-| 0.3        | Implement JavaScript mechanics, integrate RequireJS, jQuery and Semantic UI |
+| 0.3 [done] | Implement JavaScript mechanics, integrate RequireJS, jQuery and Semantic UI |
 | 0.4        | Implement URL mechanics and reloading    |
 | 0.5        | Implement standard set of UI elements - Button, Menu, Label, etc. |
 | 0.6        | Implement Form                           |
