@@ -2,16 +2,16 @@
 
 namespace atk4\ui;
 
-class Lister extends View {
-
-    public $t_row    = null;
+class Lister extends View
+{
+    public $t_row = null;
     public $t_totals = null;
 
     public $template = null;
 
     public function render()
     {
-        $this->t_row    = $this->template->cloneRegion('row');
+        $this->t_row = $this->template->cloneRegion('row');
         //$this->t_totals = isset($this->template['totals']) ? $this->template->cloneRegion('totals') : null;
 
         $this->template->del('rows');
@@ -23,5 +23,4 @@ class Lister extends View {
 
         return $this->template->render();
     }
-
 }

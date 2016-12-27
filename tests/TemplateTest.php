@@ -14,5 +14,4 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals('hello, bar', $t->render());
     }
-
 }
