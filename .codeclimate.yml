@@ -12,9 +12,11 @@ engines:
     exclude_fingerprints:
     checks:
       Controversial/CamelCaseClassName:
-        enabled: false
+        enabled: false      # because jQuery.php and similar class names
       Controversial/CamelCasePropertyName:
-        enabled: false
+        enabled: false      # becasue we use _xx for private properties (that must remain public)
+      Controversial/CamelCaseMethodName:
+        enabled: false      # methods start with _xx for private methods (that must remain public)
   radon:
     enabled: true
 ratings:

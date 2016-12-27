@@ -22,16 +22,16 @@ class jsExpression implements jsExpressionable
      */
     public function jsRender()
     {
-        $nameless_count = 0;
+        $namelessCount = 0;
 
         $res = preg_replace_callback(
             '/\[[a-z0-9_]*\]|{[a-z0-9_]*}/',
-            function ($matches) use (&$nameless_count) {
+            function ($matches) use (&$namelessCount) {
                 $identifier = substr($matches[0], 1, -1);
 
                 // Allow template to contain []
                 if ($identifier === '') {
-                    $identifier = $nameless_count++;
+                    $identifier = $namelessCount++;
 
                     // use rendering only with named tags
                 }
