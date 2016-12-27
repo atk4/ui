@@ -10,7 +10,10 @@ engines:
   phpmd:
     enabled: true
     exclude_fingerprints:
+
     - a4c08f53519e5bb95ea18cf329d5e0cd # because code will look much less readable
+    - 430e46e0b4d075838c908c874b1f0060
+    - c8934a72264251fe4b37ab76af3644f5
     checks:
       Controversial/CamelCaseClassName:
         enabled: false      # because jQuery.php and similar class names
