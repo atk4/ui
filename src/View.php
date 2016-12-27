@@ -602,7 +602,7 @@ class View implements jsExpressionable
             foreach ($eventActions as $action) {
                 // wrap into callback
                 if ($event !== 'always') {
-                    $action = (new jQuery($action->_constructorArguments[0]))->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
+                    $action = (new jQuery($action->_constructorArgs[0]))->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
                 }
 
                 $actions[] = $action;
