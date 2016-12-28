@@ -109,7 +109,7 @@ class jsExpression implements jsExpressionable
                 $s = '['.implode(',', $a2).']';
             }
         } elseif (is_string($arg)) {
-            $s = "'".$this->_safe_js_string($arg)."'";
+            $s = '"'.$this->_safe_js_string($arg).'"';
         } elseif (is_bool($arg)) {
             $s = json_encode($arg);
         } elseif (is_numeric($arg)) {
