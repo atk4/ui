@@ -11,12 +11,12 @@ use \atk4\ui\Template;
 try {
     $layout = new \atk4\ui\Layout\App(['template'=>'./templates/layout2.html']);
 
-    $layout->js(true, new \atk4\ui\jsExpression("$.fn.api.settings.successTest = function(response) {
+    $layout->js(true, new \atk4\ui\jsExpression('$.fn.api.settings.successTest = function(response) {
   if(response && response.eval) {
      var result = function(){ eval(response.eval); }.call(this.obj);
   }
   return false;
-}"));
+}'));
 
     $layout->add(new H2('Basic Button'));
 
@@ -29,8 +29,9 @@ try {
     $layout->add(new H2('Callbacks'));
 
     $b = $layout->add(new Button(['id'=>'b3']))->set('Callback Test');
-    $b->on('click', function($b){ return $b->text(rand(1,20));});
-
+    $b->on('click', function ($b) {
+        return $b->text(rand(1, 20));
+    });
 
     echo $layout->render();
 } catch (\atk4\core\Exception $e) {

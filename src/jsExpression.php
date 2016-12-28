@@ -84,12 +84,13 @@ class jsExpression implements jsExpressionable
         if (is_object($arg)) {
             if ($arg instanceof jsExpressionable) {
                 $r = $arg->jsRender();
+
                 return $r;
             } else {
                 throw new Exception(['Not sure how to represent this object in JSON', 'obj'=>$arg]);
             }
         } elseif (is_array($arg)) {
-            $a2 = array();
+            $a2 = [];
             // is array associative? (hash)
             $assoc = $arg != array_values($arg);
 
@@ -117,7 +118,7 @@ class jsExpression implements jsExpressionable
         } elseif (is_null($arg)) {
             $s = json_encode($arg);
         } else {
-            throw new Exception(['Unable to json_encode value - unknown type','arg'=>var_export($arg, true)]);
+            throw new Exception(['Unable to json_encode value - unknown type', 'arg'=>var_export($arg, true)]);
         }
 
         return $s;
@@ -151,6 +152,4 @@ class jsExpression implements jsExpressionable
 
         return $ret;
     }
-
-
 }

@@ -563,17 +563,17 @@ class View implements jsExpressionable
             // create callback, that will include event as part of the full name
             $this->_add($cb = new Callback(), ['desired_name'=>$event]);
 
-            $cb->set(function() use($action) {
+            $cb->set(function () use ($action) {
                 $chain = new jQuery(new jsExpression('this'));
                 $response = $result = call_user_func($action, $chain);
 
-                if($response === $chain) {
+                if ($response === $chain) {
                     $response = null;
                 }
 
                 $actions = [];
 
-                if ($chain->_chain){
+                if ($chain->_chain) {
                     $actions[] = $chain;
                 }
 
@@ -583,7 +583,7 @@ class View implements jsExpressionable
 
                 foreach ($response as $r) {
                     if (is_string($r)) {
-                        $actions[] = new jsExpression("alert([])", [r]);
+                        $actions[] = new jsExpression('alert([])', [r]);
                     } elseif ($r instanceof jsExpressionable) {
                         $actions[] = $r;
                     } elseif ($r === null) {
@@ -593,8 +593,9 @@ class View implements jsExpressionable
                     }
                 }
 
-
-                $ajaxec = join(";\n", array_map(function(jQuery $r){ return $r->jsRender(); }, $actions));
+                $ajaxec = implode(";\n", array_map(function (jQuery $r) {
+                    return $r->jsRender();
+                }, $actions));
 
                 echo json_encode(['success'=>true, 'message'=>'Hello World', 'eval'=>$ajaxec]);
                 exit;
