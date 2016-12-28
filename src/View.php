@@ -83,6 +83,7 @@ class View implements jsExpressionable
      * be used as a HTML class instead.
      *
      * @param array $defaults
+     *
      * @throws Exception
      */
     public function __construct($defaults = [])
@@ -108,6 +109,7 @@ class View implements jsExpressionable
      * your own "Persistence" implementation.
      *
      * @param \atk4\data\Model $m
+     *
      * @return \atk4\data\Model
      */
     public function setModel(\atk4\data\Model $m)
@@ -215,6 +217,7 @@ class View implements jsExpressionable
      *
      * @param $object View New object to add
      * @param string $region
+     *
      * @return View
      */
     public function add($object, $region = 'Content')
@@ -449,9 +452,9 @@ class View implements jsExpressionable
      *
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string|bool|null          $when     Event when chain will be executed
+     * @param string|bool|null    $when     Event when chain will be executed
      * @param array|jQuery|string $code     JavaScript chain(s) or code
-     * @param string                    $instance Obsolete
+     * @param string              $instance Obsolete
      *
      * @return jQuery
      */

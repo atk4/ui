@@ -25,9 +25,10 @@ class jsFunction implements jsExpressionable
     /**
      * Constructor.
      *
-     * @throws Exception
      * @param array $args
      * @param array $statements
+     *
+     * @throws Exception
      */
     public function __construct($args = [], $statements = null)
     {
@@ -55,6 +56,7 @@ class jsFunction implements jsExpressionable
      * Render function/expression.
      *
      * @throws Exception
+     *
      * @return string
      */
     public function jsRender()
