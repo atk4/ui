@@ -115,6 +115,7 @@ class View implements jsExpressionable
      * your own "Persistence" implementation.
      *
      * @param Model $m
+     *
      * @return Model
      */
     public function setModel(Model $m)
@@ -128,6 +129,7 @@ class View implements jsExpressionable
      * Called from __consruct() and set() to initialize teh properties.
      *
      * TODO: move into trait, because this is used often
+     *
      * @param $properties
      */
     protected function setProperties($properties)
@@ -151,8 +153,10 @@ class View implements jsExpressionable
 
     /**
      * TODO: move into trait because it's used so often.
+     *
      * @param $key
      * @param $val
+     *
      * @throws Exception
      */
     protected function setProperty($key, $val)
@@ -257,11 +261,12 @@ class View implements jsExpressionable
      * Override this method without compatibility with parrent, if you wish
      * to set your own things your own way for your view.
      *
-     * @param array $arg1
+     * @param array       $arg1
      * @param string|null $arg2
      *
-     * @return $this
      * @throws Exception
+     *
+     * @return $this
      */
     public function set($arg1 = [], $arg2 = null)
     {
@@ -324,6 +329,7 @@ class View implements jsExpressionable
      * Remove one or several CSS classes from the element.
      *
      * @param $remove_class
+     *
      * @internal param array|string $class CSS class name or array of class names
      */
     public function removeClass($remove_class)
@@ -468,7 +474,7 @@ class View implements jsExpressionable
      *
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string|bool|null          $when     Event when chain will be executed
+     * @param string|bool|null $when Event when chain will be executed
      *
      * @return jQuery
      */
@@ -526,12 +532,13 @@ class View implements jsExpressionable
      *
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string $event JavaScript event
-     * @param string $selector Optional jQuery-style selector
-     * @param jsChain|callable $action code to execute
+     * @param string           $event    JavaScript event
+     * @param string           $selector Optional jQuery-style selector
+     * @param jsChain|callable $action   code to execute
+     *
+     * @throws Exception
      *
      * @return jQuery
-     * @throws Exception
      */
     public function on($event, $selector = null, $action = null)
     {
