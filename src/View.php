@@ -459,7 +459,7 @@ class View implements jsExpressionable
      *                                // event of $img.
      *
      * Produced code: $('#img_id').on('mouseenter', function(ev){ ev.preventDefault();
-     *    $('view1').hide(); });
+     *    $('#view1').hide(); });
      *
      * 3. $button->on('click',$form->js()->submit());
      *                                // clicking button will result in form submit

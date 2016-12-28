@@ -30,19 +30,11 @@ with:
 
 .. code-block:: js
 
-<<<<<<< HEAD
-    $('#the-box-id).dropdown();
-
-the initialization should somehow embedded inside your own DropDown view. Of course you can hide
-piece of JavaScript inside your custom HTML template, but that's a anti-pattern with Agile UI that
-tries to steamline all the UI.
-=======
     $('#the-box-id').dropdown();
 
 the initialization should somehow be embedded inside your own DropDown view. Of course you can hide
 piece of JavaScript inside your custom HTML template, but that is a anti-pattern with Agile UI that
 tries to streamline all the UI.
->>>>>>> develop
 
 
 Agile UI relies on two important mechanics that makes JavaScript interaction simple.
