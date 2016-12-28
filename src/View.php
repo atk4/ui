@@ -4,20 +4,26 @@
 
 namespace atk4\ui;
 
+use atk4\core\AppScopeTrait;
+use atk4\core\ContainerTrait;
+use atk4\core\InitializerTrait;
+use atk4\core\TrackableTrait;
+use atk4\data\Model;
+
 /**
  * Implements a most core view, which all of the other components descend
  * form.
  */
 class View implements jsExpressionable
 {
-    use \atk4\core\ContainerTrait {
+    use ContainerTrait {
         add as _add;
     }
-    use \atk4\core\InitializerTrait {
+    use InitializerTrait {
         init as _init;
     }
-    use \atk4\core\TrackableTrait;
-    use \atk4\core\AppScopeTrait;
+    use TrackableTrait;
+    use AppScopeTrait;
 
     // {{{ Properties of the class
 
@@ -108,11 +114,10 @@ class View implements jsExpressionable
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
      *
-     * @param \atk4\data\Model $m
-     *
-     * @return \atk4\data\Model
+     * @param Model $m
+     * @return Model
      */
-    public function setModel(\atk4\data\Model $m)
+    public function setModel(Model $m)
     {
         $this->model = $m;
 
@@ -123,6 +128,7 @@ class View implements jsExpressionable
      * Called from __consruct() and set() to initialize teh properties.
      *
      * TODO: move into trait, because this is used often
+     * @param $properties
      */
     protected function setProperties($properties)
     {
@@ -145,6 +151,9 @@ class View implements jsExpressionable
 
     /**
      * TODO: move into trait because it's used so often.
+     * @param $key
+     * @param $val
+     * @throws Exception
      */
     protected function setProperty($key, $val)
     {
@@ -247,6 +256,12 @@ class View implements jsExpressionable
     /**
      * Override this method without compatibility with parrent, if you wish
      * to set your own things your own way for your view.
+     *
+     * @param array $arg1
+     * @param string|null $arg2
+     *
+     * @return $this
+     * @throws Exception
      */
     public function set($arg1 = [], $arg2 = null)
     {
@@ -308,7 +323,8 @@ class View implements jsExpressionable
     /**
      * Remove one or several CSS classes from the element.
      *
-     * @param string|array $class CSS class name or array of class names
+     * @param $remove_class
+     * @internal param array|string $class CSS class name or array of class names
      */
     public function removeClass($remove_class)
     {
@@ -452,9 +468,7 @@ class View implements jsExpressionable
      *
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string|bool|null    $when     Event when chain will be executed
-     * @param array|jQuery|string $code     JavaScript chain(s) or code
-     * @param string              $instance Obsolete
+     * @param string|bool|null          $when     Event when chain will be executed
      *
      * @return jQuery
      */
@@ -511,6 +525,13 @@ class View implements jsExpressionable
      * For more information on how this works, see documentation:
      *
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
+     *
+     * @param string $event JavaScript event
+     * @param string $selector Optional jQuery-style selector
+     * @param jsChain|callable $action code to execute
+     *
+     * @return jQuery
+     * @throws Exception
      */
     public function on($event, $selector = null, $action = null)
     {
@@ -615,7 +636,8 @@ class View implements jsExpressionable
             foreach ($eventActions as $action) {
                 // wrap into callback
                 if ($event !== 'always') {
-                    $action = (new jQuery($action->_constructorArgs[0]))->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
+                    $action = (new jQuery($action->_constructorArgs[0]))
+                        ->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
                 }
 
                 $actions[] = $action;
