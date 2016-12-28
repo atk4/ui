@@ -37,9 +37,6 @@ namespace atk4\ui;
  * @method jQuery form()
  * @method jQuery api()
  * @method jQuery visibility()
- *
- * Extensions by Univ
- * @method jUniv univ()
  */
 class jQuery extends jsChain
 {

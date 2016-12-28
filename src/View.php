@@ -64,6 +64,8 @@ class View implements jsExpressionable
      * Path to template. If you don't specify full path
      * by starting with '/' then will be prepended by
      * default template path.
+     *
+     * @var Template
      */
     public $template = 'element.html';
 
@@ -79,6 +81,9 @@ class View implements jsExpressionable
     /**
      * May accept properties of a class, but if property is not defined, it will
      * be used as a HTML class instead.
+     *
+     * @param array $defaults
+     * @throws Exception
      */
     public function __construct($defaults = [])
     {
@@ -101,6 +106,9 @@ class View implements jsExpressionable
      *
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
+     *
+     * @param \atk4\data\Model $m
+     * @return \atk4\data\Model
      */
     public function setModel(\atk4\data\Model $m)
     {
@@ -197,13 +205,17 @@ class View implements jsExpressionable
      */
     protected function initDefaultApp()
     {
-        $this->app = new \atk4\ui\App(['skin'=>$this->skin]);
+        $this->app = new App(['skin'=>$this->skin]);
         $this->app->init();
     }
 
     /**
      * In addition to adding a child object, set up it's template
      * and associate it's output with the region in our template.
+     *
+     * @param $object View New object to add
+     * @param string $region
+     * @return View
      */
     public function add($object, $region = 'Content')
     {
@@ -211,6 +223,8 @@ class View implements jsExpressionable
             $this->init();
             //$this->initDefaultApp();
         }
+
+        /** @var View $object */
         $object = $this->_add($object);
 
         $object->region = $region;
@@ -266,8 +280,6 @@ class View implements jsExpressionable
             'Not sure what to do with argument',
             'arg1'=> $arg1,
         ]);
-
-        return $this;
     }
 
     /**
@@ -294,8 +306,6 @@ class View implements jsExpressionable
      * Remove one or several CSS classes from the element.
      *
      * @param string|array $class CSS class name or array of class names
-     *
-     * @return $this
      */
     public function removeClass($remove_class)
     {
@@ -440,10 +450,10 @@ class View implements jsExpressionable
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
      *
      * @param string|bool|null          $when     Event when chain will be executed
-     * @param array|jQuery_Chain|string $code     JavaScript chain(s) or code
+     * @param array|jQuery|string $code     JavaScript chain(s) or code
      * @param string                    $instance Obsolete
      *
-     * @return jQuery_Chain
+     * @return jQuery
      */
     public function js($when = null)
     {
@@ -516,7 +526,7 @@ class View implements jsExpressionable
             // if callable $action is passed, then execute ajaxec()
             //
             throw new Exception('VirtualPage is not yet implemented');
-            $url = '.virtualpage->getURL..';
+            /*$url = '.virtualpage->getURL..';
             $actions[] = (new jsUniv(new jsExpression('this')))->ajaxec($url, true);
 
             /*
