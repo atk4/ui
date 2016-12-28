@@ -12,7 +12,7 @@ namespace atk4\ui;
  *
  * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping.
  */
-class jsChain implements jsExpressionable
+class jsChain extends jsExpression
 {
     /**
      * Name of the include file where this library is implemented.
@@ -149,7 +149,7 @@ class jsChain implements jsExpressionable
                     return $arg->jsRender();
                 }
 
-                return json_encode($arg);
+                return $this->_json_encode($arg);
             }, $args)).
             ')';
     }

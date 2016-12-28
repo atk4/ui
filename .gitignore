@@ -1,5 +1,6 @@
 /config.codekit
 /phpunit.xml
+/.idea
 /public/semantic
 /public/jquery
 /vendor

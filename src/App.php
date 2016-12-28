@@ -70,4 +70,27 @@ class App
 
         return $template;
     }
+
+    /**
+     * Build a URL that application can use for call-backs
+     *
+     * @param array $args List of new GET arguments
+     *
+     * @return string
+     */
+    public function url($args = [])
+    {
+        $url = $_SERVER["REQUEST_URI"];
+        $query = parse_url($url, PHP_URL_QUERY);
+
+        $args = http_build_query($args);
+
+        if ($query) {
+            $url .= '&'.$args;
+        } else {
+            $url .= '?'.$args;
+        }
+
+        return $url;
+    }
 }

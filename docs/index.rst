@@ -13,6 +13,7 @@ Contents:
     template
     view
     js
+    callbacks
     base-components
     layouts
     building-components

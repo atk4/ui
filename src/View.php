@@ -478,7 +478,7 @@ class View implements jsExpressionable
      *
      * @return jQuery
      */
-    public function js($when = null)
+    public function js($when = null, $extra = null)
     {
         $chain = new jQuery($this);
 
@@ -496,6 +496,10 @@ class View implements jsExpressionable
         }
 
         $this->_js_actions[$when][] = $chain;
+
+        if ($extra) {
+            $this->_js_actions[$when][] = $extra;
+        }
 
         return $chain;
     }
@@ -555,8 +559,50 @@ class View implements jsExpressionable
 
         if (is_callable($action)) {
             // if callable $action is passed, then execute ajaxec()
-            //
-            throw new Exception('VirtualPage is not yet implemented');
+
+            // create callback, that will include event as part of the full name
+            $this->_add($cb = new Callback(), ['desired_name'=>$event]);
+
+            $cb->set(function() use($action) {
+                $chain = new jQuery(new jsExpression('this'));
+                $response = $result = call_user_func($action, $chain);
+
+                if($response === $chain) {
+                    $response = null;
+                }
+
+                $actions = [];
+
+                if ($chain->_chain){
+                    $actions[] = $chain;
+                }
+
+                if (!is_array($response)) {
+                    $response = [$response];
+                }
+
+                foreach ($response as $r) {
+                    if (is_string($r)) {
+                        $actions[] = new jsExpression("alert([])", [r]);
+                    } elseif ($r instanceof jsExpressionable) {
+                        $actions[] = $r;
+                    } elseif ($r === null) {
+                        continue;
+                    } else {
+                        throw new Exception(['Incorrect callback. Must be string or action.', 'r'=>$r]);
+                    }
+                }
+
+
+                $ajaxec = join(";\n", array_map(function(jQuery $r){ return $r->jsRender(); }, $actions));
+
+                echo json_encode(['success'=>true, 'message'=>'Hello World', 'eval'=>$ajaxec]);
+                exit;
+            });
+
+            $thisAction->api(['on'=>'now', 'url'=>$cb->getURL(), 'obj'=>new jsExpression('this')]);
+
+            //throw new Exception('VirtualPage is not yet implemented');
             /*$url = '.virtualpage->getURL..';
             $actions[] = (new jsUniv(new jsExpression('this')))->ajaxec($url, true);
 
