@@ -72,7 +72,7 @@ class App
     }
 
     /**
-     * Build a URL that application can use for call-backs
+     * Build a URL that application can use for call-backs.
      *
      * @param array $args List of new GET arguments
      *
@@ -80,7 +80,7 @@ class App
      */
     public function url($args = [])
     {
-        $url = $_SERVER["REQUEST_URI"];
+        $url = $_SERVER['REQUEST_URI'];
         $query = parse_url($url, PHP_URL_QUERY);
 
         $args = http_build_query($args);
