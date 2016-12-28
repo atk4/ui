@@ -37,9 +37,6 @@ namespace atk4\ui;
  * @method jQuery form()
  * @method jQuery api()
  * @method jQuery visibility()
- *
- * Extensions by Univ
- * @method jUniv univ()
  */
 class jQuery extends jsChain
 {
@@ -56,7 +53,7 @@ class jQuery extends jsChain
     {
         parent::__construct();
 
-        $this->_constructor_arguments = $constructorArgs;
+        $this->_constructorArgs = $constructorArgs;
     }
 
     public function univ()

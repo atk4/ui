@@ -79,7 +79,7 @@ class jsTest extends \atk4\core\PHPUnit_AgileTestCase
         ]));
 
         $this->assertEquals('$(document).ready(function() {
-$(".box1").height($(".box2").height());
-})', $fx->jsRender());
+    $(".box1").height($(".box2").height());
+  })', $fx->jsRender());
     }
 }

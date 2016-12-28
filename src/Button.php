@@ -13,8 +13,8 @@ class Button extends View
      */
     public function renderView()
     {
-        if ($this->icon) {
-            $this->add(new Icon($this->icon), 'Content');
+        if ($this->icon && !is_object($this->icon)) {
+            $this->icon = $this->add(new Icon($this->icon), 'Content');
 
             if ($this->content) {
                 $this->addClass('labeled');
@@ -23,7 +23,6 @@ class Button extends View
             }
 
             $this->addClass('icon');
-            $this->icon = false;
         }
 
         parent::renderView();

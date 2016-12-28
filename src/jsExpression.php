@@ -46,8 +46,6 @@ class jsExpression implements jsExpressionable
                 // Allow template to contain []
                 if ($identifier === '') {
                     $identifier = $namelessCount++;
-
-                    // use rendering only with named tags
                 }
 
                 if (!isset($this->args[$identifier])) {

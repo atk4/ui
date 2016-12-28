@@ -53,13 +53,13 @@ class jsChain implements jsExpressionable
      *
      * @var array
      */
-    public $_constructor_arguments = [];
+    public $_constructorArgs = [];
 
     /**
      * Call chain. All calls to this mapper will be recorded here. Property traversal
      * is also stored here.
      *
-     * $js->foo()->bar(1)->baz->test(['abc'=>123]);
+     * $js->foo()->bar(1)->baz->test(['abc'=>123']);
      *
      * will be stored in $chain as
      *
@@ -167,8 +167,8 @@ class jsChain implements jsExpressionable
         $ret .= $this->_library;
 
         // next perhaps we have arguments
-        if ($this->_constructor_arguments) {
-            $ret .= $this->_renderArgs($this->_constructor_arguments);
+        if ($this->_constructorArgs) {
+            $ret .= $this->_renderArgs($this->_constructorArgs);
         }
 
         // next we do same with the calls

@@ -169,7 +169,7 @@ must operate with it in your browser by passing expressions into chain.
 The template language for jsExpression is super-simple:
 
  - [] will be mapped to next argument in the argument array
- - ['foo'] will be mapped to named argument in argument array
+ - [foo] will be mapped to named argument in argument array
 
 So the following three lines are identical::
 
