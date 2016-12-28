@@ -75,7 +75,6 @@ class Template implements \ArrayAccess
 
     public function __clone()
     {
-        parent::__clone();
         $this->template = unserialize(serialize($this->template));
 
         unset($this->tags);
@@ -89,11 +88,11 @@ class Template implements \ArrayAccess
      * @param string $type    Exception class or class postfix
      * @param string $code    Optional error code
      *
-     * @return Exception_Template
+     * @return Exception
      */
     public function exception($message = 'Undefined Exception', $type = null, $code = null)
     {
-        return new \atk4\core\Exception([$message,
+        return new Exception([$message,
             'template'=> $this->template_source,
             'type'    => $type,
         ], $code);
