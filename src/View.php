@@ -80,7 +80,7 @@ class View implements jsExpressionable
      * Specifies how to initialize $template.
      *
      * If you specify a string, then it will be considered a filename
-     * from which to load the $template. 
+     * from which to load the $template.
      *
      * @var string
      */
