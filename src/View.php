@@ -339,18 +339,20 @@ class View implements jsExpressionable
     /**
      * Remove one or several CSS classes from the element.
      *
-     * @param $remove_class
+     * @param array|string $class CSS class name or array of class names
      *
-     * @internal param array|string $class CSS class name or array of class names
+     * @return $this
      */
-    public function removeClass($remove_class)
+    public function removeClass($class)
     {
         if (is_array($class)) {
             $class = implode(' ', $class);
         }
 
-        $remove_class = explode(' ', $remove_class);
-        $this->class = array_diff($this->class, $remove_class);
+        $class = explode(' ', $class);
+        $this->class = array_diff($this->class, $class);
+
+        return $this;
     }
 
     // }}}
