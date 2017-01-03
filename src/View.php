@@ -582,7 +582,7 @@ class View implements jsExpressionable
 
             $cb->set(function () use ($action) {
                 $chain = new jQuery(new jsExpression('this'));
-                $response = $result = call_user_func($action, $chain);
+                $response = call_user_func($action, $chain);
 
                 if ($response === $chain) {
                     $response = null;

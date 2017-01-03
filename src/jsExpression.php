@@ -83,14 +83,14 @@ class jsExpression implements jsExpressionable
          */
         if (is_object($arg)) {
             if ($arg instanceof jsExpressionable) {
-                $r = $arg->jsRender();
+                $result = $arg->jsRender();
 
-                return $r;
+                return $result;
             } else {
                 throw new Exception(['Not sure how to represent this object in JSON', 'obj'=>$arg]);
             }
         } elseif (is_array($arg)) {
-            $a2 = [];
+            $array = [];
             // is array associative? (hash)
             $assoc = $arg != array_values($arg);
 
@@ -98,30 +98,30 @@ class jsExpression implements jsExpressionable
                 $value = $this->_json_encode($value);
                 $key = $this->_json_encode($key);
                 if (!$assoc) {
-                    $a2[] = $value;
+                    $array[] = $value;
                 } else {
-                    $a2[] = $key.':'.$value;
+                    $array[] = $key.':'.$value;
                 }
             }
 
             if ($assoc) {
-                $s = '{'.implode(',', $a2).'}';
+                $string = '{'.implode(',', $array).'}';
             } else {
-                $s = '['.implode(',', $a2).']';
+                $string = '['.implode(',', $array).']';
             }
         } elseif (is_string($arg)) {
-            $s = '"'.$this->_safe_js_string($arg).'"';
+            $string = '"'.$this->_safe_js_string($arg).'"';
         } elseif (is_bool($arg)) {
-            $s = json_encode($arg);
+            $string = json_encode($arg);
         } elseif (is_numeric($arg)) {
-            $s = json_encode($arg);
+            $string = json_encode($arg);
         } elseif (is_null($arg)) {
-            $s = json_encode($arg);
+            $string = json_encode($arg);
         } else {
             throw new Exception(['Unable to json_encode value - unknown type', 'arg'=>var_export($arg, true)]);
         }
 
-        return $s;
+        return $string;
     }
 
     public function _safe_js_string($str)
