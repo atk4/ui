@@ -67,13 +67,24 @@ class View implements jsExpressionable
     protected $skin;
 
     /**
-     * Path to template. If you don't specify full path
-     * by starting with '/' then will be prepended by
-     * default template path.
+     * Template object, that, for most Views will be rendered to
+     * produce HTML output. If you leave this object as "null" then
+     * a new Template will be generated during init() based on the
+     * value of $defaultTemplate.
      *
      * @var Template
      */
-    public $template = 'element.html';
+    public $template = null;
+
+    /**
+     * Specifies how to initialize $template.
+     *
+     * If you specify a string, then it will be considered a filename
+     * from which to load the $template. 
+     *
+     * @var string
+     */
+    public $defaultTemplate = 'element.html';
 
     /**
      * Set static contents of this view.
@@ -209,8 +220,8 @@ class View implements jsExpressionable
             $this->initDefaultApp();
         }
 
-        if (is_string($this->template)) {
-            $this->template = $this->app->loadTemplate($this->template);
+        if (is_string($this->defaultTemplate) && is_null($this->template)) {
+            $this->template = $this->app->loadTemplate($this->defaultTemplate);
         }
     }
 
