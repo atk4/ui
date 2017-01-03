@@ -239,7 +239,7 @@ class View implements jsExpressionable
      * In addition to adding a child object, set up it's template
      * and associate it's output with the region in our template.
      *
-     * @param $object View New object to add
+     * @param View $object New object to add
      * @param string $region
      *
      * @return View
@@ -345,6 +345,10 @@ class View implements jsExpressionable
      */
     public function removeClass($remove_class)
     {
+        if (is_array($class)) {
+            $class = implode(' ', $class);
+        }
+
         $remove_class = explode(' ', $remove_class);
         $this->class = array_diff($this->class, $remove_class);
     }
