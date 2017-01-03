@@ -9,12 +9,17 @@ Contents:
 
     overview
     quickstart
-    core
     template
     view
     js
     callbacks
+
+
+
+..
+   
     base-components
+    core
     layouts
     building-components
     lister
@@ -24,6 +29,8 @@ Contents:
     crud
     virtual-page
     console
+
+
 
 Indices and tables
 ==================
