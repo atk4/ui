@@ -74,6 +74,14 @@ class jsExpression implements jsExpressionable
         return trim($res);
     }
 
+    /**
+     * Provides replacement for json_encode that will respect jsExpressionable objects
+     * and call jsRender() for them instead of escaping.
+     *
+     * @param mixed @arg anything
+     *
+     * @return string valid JSON expression
+     */
     protected function _json_encode($arg)
     {
         /*
@@ -124,11 +132,14 @@ class jsExpression implements jsExpressionable
         return $string;
     }
 
+    /**
+     * TODO: Escapes the string, but needs a reference to where this code has been from.
+     */
     public function _safe_js_string($str)
     {
-        $l = strlen($str);
+        $length = strlen($str);
         $ret = '';
-        for ($i = 0; $i < $l; ++$i) {
+        for ($i = 0; $i < $length; ++$i) {
             switch ($str[$i]) {
                 case "\r":
                     $ret .= '\\r';
