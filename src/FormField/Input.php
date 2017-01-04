@@ -5,6 +5,7 @@ namespace atk4\ui\FormField;
 use atk4\ui\Form;
 use atk4\ui\Icon;
 use atk4\ui\Label;
+use atk4\ui\Button;
 
 /**
  * Input element for a form field.
@@ -21,6 +22,8 @@ class Input extends Generic
 
     public $icon = null;
 
+    public $leftIcon = null;
+
     /**
      * Specify left / right. If you use "true" will default to the right side.
      */
@@ -32,6 +35,10 @@ class Input extends Generic
     public $label = null;
 
     public $rightLabel = null;
+
+    public $action = null;
+
+    public $leftAction = null;
 
     /**
      * returns <input .../> tag.
@@ -81,6 +88,12 @@ class Input extends Generic
             $this->addClass('icon');
         }
 
+        if ($this->leftIcon && !is_object($this->leftIcon)) {
+            $this->leftIcon = $this->add(new Icon($this->leftIcon), 'BeforeInput');
+            $this->addClass('left icon');
+        }
+
+
         if ($this->label) {
             $this->label = $this->prepareRenderLabel($this->label, 'BeforeInput');
         }
@@ -92,6 +105,22 @@ class Input extends Generic
 
         if ($this->label || $this->rightLabel) {
             $this->addClass('labeled');
+        }
+
+        if ($this->action) {
+            if (!is_object($this->action)) {
+                $this->action = new Button($this->action);
+            }
+            $this->add($this->action, 'AfterInput');
+            $this->addClass('action');
+        }
+
+        if ($this->leftAction) {
+            if (!is_object($this->leftAction)) {
+                $this->leftAction = new Button($this->leftAction);
+            }
+            $this->add($this->leftAction, 'BeforeInput');
+            $this->addClass('left action');
         }
 
         $this->template->setHTML('Input', $this->getInput());

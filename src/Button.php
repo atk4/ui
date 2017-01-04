@@ -8,6 +8,8 @@ class Button extends View
 
     public $icon = null;
 
+    public $rightIcon = null;
+
     /**
      * $icon property will end up a button icon.
      */
@@ -24,6 +26,19 @@ class Button extends View
 
             $this->addClass('icon');
         }
+
+        if ($this->rightIcon && !is_object($this->rightIcon)) {
+            $this->rightIcon = $this->add(new Icon($this->rightIcon), 'Content');
+
+            if ($this->content) {
+                $this->addClass('right labeled');
+                $this->add(new Text($this->content));
+                $this->content = false;
+            }
+
+            $this->addClass('icon');
+        }
+
 
         parent::renderView();
     }
