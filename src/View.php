@@ -128,16 +128,16 @@ class View implements jsExpressionable
      *
      * @return Model
      */
-    public function setModel(\atk4\data\Model $m)
+    public function setModel(\atk4\data\Model $model)
     {
-        $this->model = $m;
+        $this->model = $model;
 
-        return $m;
+        return $model;
     }
 
     public function setSource(array $data)
     {
-        $good_data = [];
+        $goodData = [];
 
         foreach ($data as $key=>$value) {
             if (!is_array($value)) {
@@ -147,12 +147,12 @@ class View implements jsExpressionable
             if (!isset($value['id'])) {
                 $value['id'] = $key;
             }
-            $good_data[] = $value;
+            $goodData[] = $value;
         }
-        $good_data = ['data'=>$good_data];
+        $goodData = ['data'=>$goodData];
 
         $model = new \atk4\data\Model(
-            new \atk4\data\Persistence_Array($good_data), 'data'
+            new \atk4\data\Persistence_Array($goodData), 'data'
         );
         $model->addField('name');
 
