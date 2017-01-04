@@ -37,11 +37,9 @@ try {
     $layout->add(new \atk4\ui\FormField\Line(['label'=>'$', 'labelRight'=>new \atk4\ui\Label(['.00', 'basic'])]));
 
     $layout->add(new \atk4\ui\FormField\Line([
-        'iconLeft'=>'tags', 
-        'labelRight'=>new \atk4\ui\Label(['Add Tag', 'tag'])
+        'iconLeft'  => 'tags',
+        'labelRight'=> new \atk4\ui\Label(['Add Tag', 'tag']),
     ]));
-
-
 
     // left/right corner is not supported, but here is work-around:
     $label = new \atk4\ui\Label();
@@ -49,7 +47,7 @@ try {
     $label->add(new \atk4\ui\Icon('asterisk'));
 
     $layout->add(new \atk4\ui\FormField\Line([
-        'label'=>$label
+        'label'=> $label,
     ]))->addClass('left corner');
 
     $label = new \atk4\ui\Label();
@@ -57,16 +55,15 @@ try {
     $label->add(new \atk4\ui\Icon('asterisk'));
 
     $layout->add(new \atk4\ui\FormField\Line([
-        'label'=>$label
+        'label'=> $label,
     ]))->addClass('corner');
-
 
     $layout->add(new \atk4\ui\H2('Actions'));
 
     $layout->add(new \atk4\ui\FormField\Line(['action'=>'Search']));
 
-    $layout->add(new \atk4\ui\FormField\Line(['actionLeft'=>new \atk4\ui\Button([
-        'Checkout', 'icon'=>'cart', 'teal'
+    $layout->add(new \atk4\ui\FormField\Line(['actionLeft'=> new \atk4\ui\Button([
+        'Checkout', 'icon'=>'cart', 'teal',
     ])]));
 
     $layout->add(new \atk4\ui\FormField\Line(['iconLeft'=>'search',  'action'=>'Search']));
@@ -81,14 +78,13 @@ try {
     $layout->add(new \atk4\ui\FormField\Line(['iconLeft'=>'search',  'action'=>$dd]))
         ->add(new \atk4\ui\Button('Search'), 'AfterAfterInput');
 
-    $layout->add(new \atk4\ui\FormField\Line(['action'=>new \atk4\ui\Button([
-        'Copy', 'rightIcon'=>'copy', 'teal'
+    $layout->add(new \atk4\ui\FormField\Line(['action'=> new \atk4\ui\Button([
+        'Copy', 'rightIcon'=>'copy', 'teal',
     ])]));
 
-    $layout->add(new \atk4\ui\FormField\Line(['action'=>new \atk4\ui\Button([
-       'icon'=>'search'
+    $layout->add(new \atk4\ui\FormField\Line(['action'=> new \atk4\ui\Button([
+       'icon'=> 'search',
     ])]));
-
 
     $layout->add(new \atk4\ui\H2('Modifiers'));
 

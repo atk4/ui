@@ -2,10 +2,10 @@
 
 namespace atk4\ui\FormField;
 
+use atk4\ui\Button;
 use atk4\ui\Form;
 use atk4\ui\Icon;
 use atk4\ui\Label;
-use atk4\ui\Button;
 
 /**
  * Input element for a form field.
@@ -92,7 +92,6 @@ class Input extends Generic
             $this->iconLeft = $this->add(new Icon($this->iconLeft), 'BeforeInput');
             $this->addClass('left icon');
         }
-
 
         if ($this->label) {
             $this->label = $this->prepareRenderLabel($this->label, 'BeforeInput');

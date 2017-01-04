@@ -39,7 +39,6 @@ class Button extends View
             $this->addClass('icon');
         }
 
-
         parent::renderView();
     }
 
