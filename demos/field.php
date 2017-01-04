@@ -30,15 +30,15 @@ try {
     $dd->setSource(['.com', '.net', '.org']);
     $layout->add(new \atk4\ui\FormField\Line([
         'placeholder'=> 'Find Domain',
-        'rightLabel' => $dd,
+        'labelRight' => $dd,
     ]));
 
-    $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Weight', 'rightLabel'=>new \atk4\ui\Label(['kg', 'basic'])]));
-    $layout->add(new \atk4\ui\FormField\Line(['label'=>'$', 'rightLabel'=>new \atk4\ui\Label(['.00', 'basic'])]));
+    $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Weight', 'labelRight'=>new \atk4\ui\Label(['kg', 'basic'])]));
+    $layout->add(new \atk4\ui\FormField\Line(['label'=>'$', 'labelRight'=>new \atk4\ui\Label(['.00', 'basic'])]));
 
     $layout->add(new \atk4\ui\FormField\Line([
-        'leftIcon'=>'tags', 
-        'rightLabel'=>new \atk4\ui\Label(['Add Tag', 'tag'])
+        'iconLeft'=>'tags', 
+        'labelRight'=>new \atk4\ui\Label(['Add Tag', 'tag'])
     ]));
 
 
@@ -65,20 +65,20 @@ try {
 
     $layout->add(new \atk4\ui\FormField\Line(['action'=>'Search']));
 
-    $layout->add(new \atk4\ui\FormField\Line(['leftAction'=>new \atk4\ui\Button([
+    $layout->add(new \atk4\ui\FormField\Line(['actionLeft'=>new \atk4\ui\Button([
         'Checkout', 'icon'=>'cart', 'teal'
     ])]));
 
-    $layout->add(new \atk4\ui\FormField\Line(['leftIcon'=>'search',  'action'=>'Search']));
+    $layout->add(new \atk4\ui\FormField\Line(['iconLeft'=>'search',  'action'=>'Search']));
 
     $dd = new \atk4\ui\DropdownButton(['This Page', 'basic']);
     $dd->setSource(['This Organisation', 'Entire Site']);
-    $layout->add(new \atk4\ui\FormField\Line(['leftIcon'=>'search',  'action'=>$dd]));
+    $layout->add(new \atk4\ui\FormField\Line(['iconLeft'=>'search',  'action'=>$dd]));
 
     // double actions are not supported but you can add them yoruself
     $dd = new \atk4\ui\Dropdown(['Articles', 'compact selection']);
     $dd->setSource(['All', ['name'=>'Articles', 'active'=>true], 'Products']);
-    $layout->add(new \atk4\ui\FormField\Line(['leftIcon'=>'search',  'action'=>$dd]))
+    $layout->add(new \atk4\ui\FormField\Line(['iconLeft'=>'search',  'action'=>$dd]))
         ->add(new \atk4\ui\Button('Search'), 'AfterAfterInput');
 
     $layout->add(new \atk4\ui\FormField\Line(['action'=>new \atk4\ui\Button([

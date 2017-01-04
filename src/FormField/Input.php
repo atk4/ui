@@ -22,7 +22,7 @@ class Input extends Generic
 
     public $icon = null;
 
-    public $leftIcon = null;
+    public $iconLeft = null;
 
     /**
      * Specify left / right. If you use "true" will default to the right side.
@@ -34,11 +34,11 @@ class Input extends Generic
      */
     public $label = null;
 
-    public $rightLabel = null;
+    public $labelRight = null;
 
     public $action = null;
 
-    public $leftAction = null;
+    public $actionLeft = null;
 
     /**
      * returns <input .../> tag.
@@ -88,8 +88,8 @@ class Input extends Generic
             $this->addClass('icon');
         }
 
-        if ($this->leftIcon && !is_object($this->leftIcon)) {
-            $this->leftIcon = $this->add(new Icon($this->leftIcon), 'BeforeInput');
+        if ($this->iconLeft && !is_object($this->iconLeft)) {
+            $this->iconLeft = $this->add(new Icon($this->iconLeft), 'BeforeInput');
             $this->addClass('left icon');
         }
 
@@ -98,12 +98,12 @@ class Input extends Generic
             $this->label = $this->prepareRenderLabel($this->label, 'BeforeInput');
         }
 
-        if ($this->rightLabel) {
-            $this->rightLabel = $this->prepareRenderLabel($this->rightLabel, 'AfterInput');
+        if ($this->labelRight) {
+            $this->labelRight = $this->prepareRenderLabel($this->labelRight, 'AfterInput');
             $this->addClass('right');
         }
 
-        if ($this->label || $this->rightLabel) {
+        if ($this->label || $this->labelRight) {
             $this->addClass('labeled');
         }
 
@@ -115,11 +115,11 @@ class Input extends Generic
             $this->addClass('action');
         }
 
-        if ($this->leftAction) {
-            if (!is_object($this->leftAction)) {
-                $this->leftAction = new Button($this->leftAction);
+        if ($this->actionLeft) {
+            if (!is_object($this->actionLeft)) {
+                $this->actionLeft = new Button($this->actionLeft);
             }
-            $this->add($this->leftAction, 'BeforeInput');
+            $this->add($this->actionLeft, 'BeforeInput');
             $this->addClass('left action');
         }
 
