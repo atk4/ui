@@ -262,26 +262,34 @@ class View implements jsExpressionable
      * In addition to adding a child object, set up it's template
      * and associate it's output with the region in our template.
      *
-     * @param View   $object New object to add
-     * @param string $region
+     * @param View         $object New object to add
+     * @param string|array $region (or array for full set of defaults)
      *
      * @return View
      */
-    public function add(View $object, $region = 'Content')
+    public function add(View $object, $region = null)
     {
         if (!$this->app) {
             $this->init();
-            //$this->initDefaultApp();
         }
 
-        /** @var View $object */
-        $object = $this->_add($object);
+        if ($region === null) {
+            $defaults = ['region' => 'Content'];
+        } elseif (!is_array($region)) {
+            $defaults = ['region' => $region];
+        } else {
+            $defaults = $region;
+            if (isset($defaults[0])) {
+                $defaults['region'] = $defaults[0];
+                unset($defaults[0]);
+            }
+        }
 
-        $object->region = $region;
+        $object = $this->_add($object, $defaults);
 
-        if (!$object->template) {
-            $object->template = $this->template->cloneRegion($region);
-            $this->template->del($region);
+        if (!$object->template && $object->region) {
+            $object->template = $this->template->cloneRegion($object->region);
+            $this->template->del($object->region);
         }
 
         return $object;
