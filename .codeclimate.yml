@@ -13,7 +13,9 @@ engines:
     - 908ad3f93985ff14c44615cee6966c72  # View have a lot of public methods. Deal with it.
     checks:
       Naming/ShortVariable:
-        enabled: false
+        enabled: false      # because of on() and js() and $ui
+      Naming/ShortMethodName:
+        enabled: false      # because of on() and js() and $ui
       CleanCode/ElseExpression:
         enabled: false      # gives many incorrect suggestions
       Design/CouplingBetweenObjects:
