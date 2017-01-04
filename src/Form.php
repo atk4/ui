@@ -3,7 +3,7 @@
 namespace atk4\ui;
 
 /**
- * Implements a form
+ * Implements a form.
  */
 
 class Form extends View implements ArrayAccess {
@@ -14,18 +14,17 @@ class Form extends View implements ArrayAccess {
 
     public $layout = null;
 
-    function addField(...$args)
+    public function addField(...$args)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
-
         }
 
         $this->model->addField(...$args);
     }
 
-
-    function setLayout($layout) {
+    public function setLayout($layout)
+    {
         $this->layout = $layout;
     }
 
