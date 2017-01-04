@@ -139,7 +139,7 @@ class View implements jsExpressionable
     {
         $good_data = [];
 
-        foreach($data as $key=>$value) {
+        foreach ($data as $key=>$value) {
             if (!is_array($value)) {
                 $value = ['name'=>$value];
             }

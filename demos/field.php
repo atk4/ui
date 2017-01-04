@@ -1,6 +1,6 @@
 <?php
 /**
- * Testing fields
+ * Testing fields.
  */
 require '../vendor/autoload.php';
 
@@ -26,15 +26,13 @@ try {
     $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search users', 'label'=>'http://']));
     $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Weight', 'rightLabel'=>new \atk4\ui\Label(['kg', 'basic'])]));
 
-
     $dd = new \atk4\ui\Dropdown('.com');
-    $dd->setSource(['.com','.net','.org']);
+    $dd->setSource(['.com', '.net', '.org']);
 
     $layout->add(new \atk4\ui\FormField\Line([
-        'placeholder'=>'Find Domain', 
-        'rightLabel'=>$dd
+        'placeholder'=> 'Find Domain',
+        'rightLabel' => $dd,
     ]));
-
 
     echo $layout->render();
 } catch (\atk4\core\Exception $e) {

@@ -2,16 +2,15 @@
 
 namespace atk4\ui\FormField;
 
-use \atk4\ui\Form;
-use \atk4\ui\View;
-use \atk4\ui\Icon;
-use \atk4\ui\Label;
+use atk4\ui\Form;
+use atk4\ui\Icon;
+use atk4\ui\Label;
 
 /**
- * Input element for a form field
+ * Input element for a form field.
  */
-class Input extends Generic {
-
+class Input extends Generic
+{
     public $ui = 'input';
 
     public $inputType = 'text';
@@ -28,26 +27,25 @@ class Input extends Generic {
     public $loading = null;
 
     /**
-     * Set to a text
+     * Set to a text.
      */
     public $label = null;
 
     public $rightLabel = null;
 
     /**
-     * returns <input .../> tag
+     * returns <input .../> tag.
      */
-    function getInput()
+    public function getInput()
     {
         return '<input type="'.$this->inputType.'" placeholder="'.$this->placeholder.'"/>';
     }
 
     /**
-     * Used only from renderView()
+     * Used only from renderView().
      */
     private function prepareRenderLabel($label, $spot)
     {
-
         if (!is_object($label)) {
             $label = $this->add(new Label(), $spot)
                 ->set($label);
@@ -62,18 +60,18 @@ class Input extends Generic {
         return $label;
     }
 
-    function renderView()
+    public function renderView()
     {
 
         // TODO: I don't think we need the loading state at all.
         if ($this->loading) {
             if (!$this->icon) {
-                $this->icon = 'search'; // does not matter, but since 
+                $this->icon = 'search'; // does not matter, but since
             }
 
             $this->addClass('loading');
 
-            if($this->loading === 'left') {
+            if ($this->loading === 'left') {
                 $this->addClass('left');
             }
         }
@@ -99,6 +97,5 @@ class Input extends Generic {
         $this->template->setHTML('Input', $this->getInput());
 
         parent::renderView();
-
     }
 }

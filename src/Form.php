@@ -5,9 +5,8 @@ namespace atk4\ui;
 /**
  * Implements a form.
  */
-
-class Form extends View implements ArrayAccess {
-
+class Form extends View implements ArrayAccess
+{
     public $ui = 'form';
 
     public $defaultTemplate = 'form.html';
@@ -34,7 +33,7 @@ class Form extends View implements ArrayAccess {
      *
      * @return Form\Field\Generic
      */
-    function fieldFactory(\atk4\data\Field $f)
+    public function fieldFactory(\atk4\data\Field $f)
     {
         return new FormField\Line($this, $f);
     }
@@ -46,7 +45,7 @@ class Form extends View implements ArrayAccess {
      * If $actualFields are not specified, then all "editable" fields
      * will be added.
      */
-    function setModel(\atk4\data\Model $model, $fields = null)
+    public function setModel(\atk4\data\Model $model, $fields = null)
     {
         $model = parent::setModel($model);
 
@@ -59,22 +58,17 @@ class Form extends View implements ArrayAccess {
             // TODO: $fields = $model->getFields('editable');
         } elseif (is_array($fields)) {
             foreach ($fields as $field) {
-
                 $modelField = $model->getElement($field);
 
                 $formField = $this->add($this->fieldFactory($modelField));
-
             }
         } else {
             throw new Exception(['Incorrect value for $fields', 'fields'=>$fields]);
         }
-
     }
 
-    function init()
+    public function init()
     {
         parent::init();
     }
-
-
 }

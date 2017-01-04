@@ -2,13 +2,11 @@
 
 namespace atk4\ui\FormField;
 
-use \atk4\ui\Form;
-use \atk4\ui\View;
+use atk4\ui\Form;
 
 /**
- * Input element for a form field
+ * Input element for a form field.
  */
-class Line extends Input {
-
-
+class Line extends Input
+{
 }

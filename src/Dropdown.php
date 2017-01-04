@@ -8,10 +8,10 @@ class Dropdown extends Lister
 
     public $defaultTemplate = 'dropdown.html';
 
-    function renderView()
+    public function renderView()
     {
         $this->js(true)->dropdown();
+
         return parent::renderView();
     }
-
 }
