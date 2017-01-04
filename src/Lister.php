@@ -9,7 +9,7 @@ class Lister extends View
 
     public $template = null;
 
-    public function render()
+    public function renderView()
     {
         $this->t_row = $this->template->cloneRegion('row');
         //$this->t_totals = isset($this->template['totals']) ? $this->template->cloneRegion('totals') : null;
@@ -21,6 +21,6 @@ class Lister extends View
             $this->template->appendHTML('rows', $row_html);
         }
 
-        return $this->template->render();
+        return parent::renderView(); //$this->template->render();
     }
 }

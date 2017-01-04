@@ -8,7 +8,6 @@ use atk4\core\AppScopeTrait;
 use atk4\core\ContainerTrait;
 use atk4\core\InitializerTrait;
 use atk4\core\TrackableTrait;
-use atk4\data\Model;
 
 /**
  * Implements a most core view, which all of the other components descend
@@ -125,15 +124,39 @@ class View implements jsExpressionable
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
      *
-     * @param Model $m
+     * @param \atk4\data\Model $m
      *
      * @return Model
      */
-    public function setModel(Model $m)
+    public function setModel(\atk4\data\Model $m)
     {
         $this->model = $m;
 
         return $m;
+    }
+
+    public function setSource(array $data)
+    {
+        $good_data = [];
+
+        foreach($data as $key=>$value) {
+            if (!is_array($value)) {
+                $value = ['name'=>$value];
+            }
+
+            if (!isset($value['id'])) {
+                $value['id'] = $key;
+            }
+            $good_data[] = $value;
+        }
+        $good_data = ['data'=>$good_data];
+
+        $model = new \atk4\data\Model(
+            new \atk4\data\Persistence_Array($good_data), 'data'
+        );
+        $model->addField('name');
+
+        return $this->setModel($model);
     }
 
     /**
@@ -244,7 +267,7 @@ class View implements jsExpressionable
      *
      * @return View
      */
-    public function add($object, $region = 'Content')
+    public function add(View $object, $region = 'Content')
     {
         if (!$this->app) {
             $this->init();
