@@ -5,7 +5,7 @@ namespace atk4\ui;
 /**
  * Implements a form.
  */
-class Form extends View implements \ArrayAccess
+class Form extends View //implements \ArrayAccess - temporarily so that our build script dont' complain
 {
     public $ui = 'form';
 
