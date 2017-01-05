@@ -14,8 +14,6 @@ try {
   return false;
 }'));
 
-
-
     $layout->add(new \atk4\ui\H2('DefaultForm'));
 
     $a = [];
@@ -24,10 +22,10 @@ try {
     $m->addField('email');
 
     $f = $layout->add(new \atk4\ui\Form(['segment'=>true]));
-    $f->setModel($m, ['name','email']);
+    $f->setModel($m, ['name', 'email']);
 
-    $f->onSubmit(function($f){
-        return $f->error('name','what that?');
+    $f->onSubmit(function ($f) {
+        return $f->error('name', 'what that?');
     });
 
     $layout->add(new \atk4\ui\H2('Another Form'));
@@ -37,17 +35,15 @@ try {
     $m->addField('name');
     $m->addField('email');
 
-
     $f = $layout->add(new \atk4\ui\Form(['segment'=>true]));
-    $f->setModel($m, ['name','email']);
+    $f->setModel($m, ['name', 'email']);
 
-    $f->onSubmit(function($f){
-        return $f->error('name','what that?');
+    $f->onSubmit(function ($f) {
+        return $f->error('name', 'what that?');
     });
-    $f->onSubmit(function($f){
-        return $f->error('email','what that?');
+    $f->onSubmit(function ($f) {
+        return $f->error('email', 'what that?');
     });
-
 
     //
     //$field = $f->add(new \atk4\ui\FormField\Line(['placeholder'=>'Enter your name', 'form'=>$f]), null, ['name'=>'test']);

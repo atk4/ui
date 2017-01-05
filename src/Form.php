@@ -7,7 +7,6 @@ namespace atk4\ui;
  */
 class Form extends View //implements \ArrayAccess - temporarily so that our build script dont' complain
 {
-
     use \atk4\core\HookTrait;
 
     public $ui = 'form';
@@ -86,26 +85,25 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         parent::init();
     }
 
-    function error($field, $str)
+    public function error($field, $str)
     {
         return $this->js()->form('add prompt', $field, $str);
     }
 
-
-    function renderView() {
+    public function renderView()
+    {
         $this->ajaxSubmit();
 
         return parent::renderView();
     }
 
-    function ajaxSubmit()
+    public function ajaxSubmit()
     {
         $this->_add($cb = new jsCallback(), ['desired_name'=>'submit']);
 
-        $cb->set(function() {
-
+        $cb->set(function () {
             $response = $this->hook('submit');
-            if(!$response) {
+            if (!$response) {
                 return new jsExpression('console.log([])', ['Form submission is not handled']);
             }
 
@@ -113,9 +111,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         });
 
         $this->js(true)
-            ->api(['url'=>$cb->getURL(),  'method'=>'POST', 'serializeForm'=>true,])
-            ->form(['inline'=>true])
-            ;
+            ->api(['url'=>$cb->getURL(),  'method'=>'POST', 'serializeForm'=>true])
+            ->form(['inline'=>true]);
 
         $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
     }

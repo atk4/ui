@@ -6,8 +6,7 @@ class jsCallback extends Callback
 {
     public function set($callback, $args = [])
     {
-        return parent::set(function() use($callback) {
-
+        return parent::set(function () use ($callback) {
             $chain = new jQuery(new jsExpression('this'));
             $response = call_user_func($callback, $chain);
 
