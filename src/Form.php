@@ -7,6 +7,9 @@ namespace atk4\ui;
  */
 class Form extends View //implements \ArrayAccess - temporarily so that our build script dont' complain
 {
+
+    use \atk4\core\HookTrait;
+
     public $ui = 'form';
 
     public $defaultTemplate = 'form.html';
@@ -24,7 +27,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     public function setLayout($layout)
     {
-        $this->layout = $layout;
+        $this->layout = $this->add($layout);
+        $this->layout->addButton($button = new Button(['Save', 'primary']));
+        $button->on('click', $this->js()->form('submit'));
+    }
+
+    public function onSubmit($callback)
+    {
+        $this->addHook('submit', $callback);
     }
 
     /**
@@ -35,7 +45,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function fieldFactory(\atk4\data\Field $f)
     {
-        return new FormField\Line($this, $f);
+        return new FormField\Line(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
     }
 
     /**
@@ -54,13 +64,17 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             return $model;
         }
 
+        if (!$this->layout) {
+            $this->setLayout(new \atk4\ui\FormLayout\Vertical(['form'=>$this]));
+        }
+
         if ($fields === null) {
             // TODO: $fields = $model->getFields('editable');
         } elseif (is_array($fields)) {
             foreach ($fields as $field) {
                 $modelField = $model->getElement($field);
 
-                $formField = $this->add($this->fieldFactory($modelField));
+                $formField = $this->layout->addField($this->fieldFactory($modelField));
             }
         } else {
             throw new Exception(['Incorrect value for $fields', 'fields'=>$fields]);
@@ -70,5 +84,39 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function init()
     {
         parent::init();
+    }
+
+    function error($field, $str)
+    {
+        return $this->js()->form('add prompt', $field, $str);
+    }
+
+
+    function renderView() {
+        $this->ajaxSubmit();
+
+        return parent::renderView();
+    }
+
+    function ajaxSubmit()
+    {
+        $this->_add($cb = new jsCallback(), ['desired_name'=>'submit']);
+
+        $cb->set(function() {
+
+            $response = $this->hook('submit');
+            if(!$response) {
+                return new jsExpression('console.log([])', ['Form submission is not handled']);
+            }
+
+            return $response;
+        });
+
+        $this->js(true)
+            ->api(['url'=>$cb->getURL(),  'method'=>'POST', 'serializeForm'=>true,])
+            ->form(['inline'=>true])
+            ;
+
+        $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
     }
 }

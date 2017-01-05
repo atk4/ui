@@ -14,4 +14,6 @@ class Generic extends View
      * @var Form - to which this field belongs
      */
     public $form;
+
+    public $field;
 }
