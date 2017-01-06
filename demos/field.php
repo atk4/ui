@@ -15,13 +15,13 @@ try {
     $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search', 'icon'=>'search', 'disabled'=>true]));
     $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search', 'error'=>true]));
 
-    $layout->add(new \atk4\UI\H2('Icon Variations'));
+    $layout->add(new \atk4\ui\H2('Icon Variations'));
 
     $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search users', 'left'=>true, 'icon'=>'users']));
     $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search users', 'icon'=>'circular search link']));
     $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search users', 'icon'=>'inverted circular search link']));
 
-    $layout->add(new \atk4\UI\H2('Labels'));
+    $layout->add(new \atk4\ui\H2('Labels'));
 
     $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search users', 'label'=>'http://']));
 
@@ -72,7 +72,7 @@ try {
     $dd->setSource(['This Organisation', 'Entire Site']);
     $layout->add(new \atk4\ui\FormField\Line(['iconLeft'=>'search',  'action'=>$dd]));
 
-    // double actions are not supported but you can add them yoruself
+    // double actions are not supported but you can add them yourself
     $dd = new \atk4\ui\Dropdown(['Articles', 'compact selection']);
     $dd->setSource(['All', ['name'=>'Articles', 'active'=>true], 'Products']);
     $layout->add(new \atk4\ui\FormField\Line(['iconLeft'=>'search',  'action'=>$dd]))
@@ -96,7 +96,6 @@ try {
     echo $layout->render();
 } catch (\atk4\core\Exception $e) {
     var_dump($e->getMessage());
-
     var_dump($e->getParams());
     var_dump($e->getTrace());
     throw $e;
