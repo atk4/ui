@@ -22,7 +22,18 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
 
-        $this->model->addField(...$args);
+        if (!$this->layout) {
+            $this->setLayout(new \atk4\ui\FormLayout\Vertical(['form'=>$this]));
+        }
+
+        if($modelField = $this->model->hasElement($args[0])) {
+            $formField = $this->layout->addField($this->fieldFactory($modelField));
+        } else {
+            $modelField = $this->model->addField(...$args);
+            $formField = $this->layout->addField($this->fieldFactory($modelField));
+        }
+
+        return $formField;
     }
 
     public function setLayout($layout)
@@ -45,7 +56,15 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function fieldFactory(\atk4\data\Field $f)
     {
-        return new FormField\Line(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
+        switch ($f->type) {
+        case 'boolean':
+            return new FormField\Checkbox(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
+
+        default:
+            return new FormField\Line(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
+
+
+        }
     }
 
     /**
@@ -69,8 +88,20 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         if ($fields === null) {
-            // TODO: $fields = $model->getFields('editable');
-        } elseif (is_array($fields)) {
+            $fields = [];
+            foreach ($model->elements as $f) {
+                if (!$f instanceof \atk4\data\Field) {
+                    continue;
+                }
+
+                if (!$f->isEditable()) {
+                    continue;
+                }
+                $fields[] = $f->short_name;
+            }
+        } 
+
+        if (is_array($fields)) {
             foreach ($fields as $field) {
                 $modelField = $model->getElement($field);
 

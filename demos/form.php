@@ -14,17 +14,21 @@ try {
   return false;
 }'));
 
-
+    $layout->add(new \atk4\ui\View([
+        'Forms below focus on Data integration and automated layouts',
+        'ui'=>'ignored warning message'
+    ]));
 
     $layout->add(new \atk4\ui\H2('DefaultForm'));
 
     $a = [];
-    $m = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
-    $m->addField('name');
-    $m->addField('email');
+    $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
+    $m_register->addField('name');
+    $m_register->addField('email');
+    $m_register->addField('is_accept_terms', ['type'=>'boolean']);
 
     $f = $layout->add(new \atk4\ui\Form(['segment'=>true]));
-    $f->setModel($m, ['name','email']);
+    $f->setModel($m_register);
 
     $f->onSubmit(function($f){
         return $f->error('name','what that?');
@@ -32,24 +36,14 @@ try {
 
     $layout->add(new \atk4\ui\H2('Another Form'));
 
-    $a = [];
-    $m = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
-    $m->addField('name');
-    $m->addField('email');
-
-
     $f = $layout->add(new \atk4\ui\Form(['segment'=>true]));
-    $f->setModel($m, ['name','email']);
+    $f->setModel($m_register, false);
 
-    $f->onSubmit(function($f){
-        return $f->error('name','what that?');
-    });
-    $f->onSubmit(function($f){
-        return $f->error('email','what that?');
-    });
+    $f->addField('email');
+    $f->addField('name');
+    $f->addField('surname');
+    $f->addField('is_accept_terms');
 
-
-    //
     //$field = $f->add(new \atk4\ui\FormField\Line(['placeholder'=>'Enter your name', 'form'=>$f]), null, ['name'=>'test']);
 
     echo $layout->render();

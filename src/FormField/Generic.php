@@ -16,4 +16,13 @@ class Generic extends View
     public $form;
 
     public $field;
+
+    function renderView()
+    {
+        if($this->form) {
+            $this->template->trySet('name', $this->short_name);
+        }
+
+        parent::renderView();
+    }
 }
