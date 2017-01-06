@@ -78,7 +78,7 @@ class jsExpression implements jsExpressionable
      * Provides replacement for json_encode that will respect jsExpressionable objects
      * and call jsRender() for them instead of escaping.
      *
-     * @param mixed @arg anything
+     * @param mixed $arg anything
      *
      * @return string valid JSON expression
      */
