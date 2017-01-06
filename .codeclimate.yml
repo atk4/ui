@@ -26,6 +26,12 @@ engines:
         enabled: false      # methods start with _xx for private methods (that must remain public)
       Design/WeightedMethodCount:
         enabled: false      # because we solve complex task, our classes may be complex
+      Design/NpathComplexity:
+        enabled: false      # our code is complex so that your code wouldn't be!
+      Design/LongMethod:
+        enabled: false      # our code is long so that your code wouldn't be!
+      CyclomaticComplexity:
+        enabled: false      # our code is complex so that your code wouldn't be!
   radon:
     enabled: true
 ratings:

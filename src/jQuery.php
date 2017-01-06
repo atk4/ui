@@ -3,17 +3,17 @@
 namespace atk4\ui;
 
 /**
- * Implements mapper for jQuery library.
+ * Implements mapper for jQuery library. Following mappings are just to keep PhpStorm happy.
  *
  * @method jQuery append()
  * @method jQuery appendTo()
  * @method jQuery bind()
  * @method jQuery click()
- * @method jQuery on()
+ * @method jQuery on($a=null,$b=null,$c=null)
  * @method jQuery attr()
  * @method jQuery val()
  * @method jQuery prop()
- * @method jQuery data()
+ * @method jQuery data($a=null,$b=null)
  * @method jQuery confirm()
  * @method jQuery submit()
  * @method jQuery find()
@@ -32,10 +32,12 @@ namespace atk4\ui;
  * @method jQuery removeClass()
  * @method jQuery toggleClass()
  * @method jQuery position()
+ * @method jQuery text($t=null)
+ * @method jQuery html($t=null)
  *
  * Extensions by SemanticUI
- * @method jQuery form()
- * @method jQuery api()
+ * @method jQuery form($a=null)
+ * @method jQuery api($a=null)
  * @method jQuery visibility()
  */
 class jQuery extends jsChain

@@ -23,7 +23,7 @@ class ButtonTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testBasicInit()
     {
-        $layout = new \atk4\ui\Layout\App(['template'=>'./demos/templates/layout2.html']);
+        $layout = new \atk4\ui\Layout\App(['defaultTemplate'=>'./demos/templates/layout2.html']);
 
         $layout->add(new H2('Basic Button'));
         $layout->add(new Button())->set('Click me');

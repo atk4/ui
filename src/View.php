@@ -67,13 +67,24 @@ class View implements jsExpressionable
     protected $skin;
 
     /**
-     * Path to template. If you don't specify full path
-     * by starting with '/' then will be prepended by
-     * default template path.
+     * Template object, that, for most Views will be rendered to
+     * produce HTML output. If you leave this object as "null" then
+     * a new Template will be generated during init() based on the
+     * value of $defaultTemplate.
      *
      * @var Template
      */
-    public $template = 'element.html';
+    public $template = null;
+
+    /**
+     * Specifies how to initialize $template.
+     *
+     * If you specify a string, then it will be considered a filename
+     * from which to load the $template.
+     *
+     * @var string
+     */
+    public $defaultTemplate = 'element.html';
 
     /**
      * Set static contents of this view.
@@ -209,8 +220,8 @@ class View implements jsExpressionable
             $this->initDefaultApp();
         }
 
-        if (is_string($this->template)) {
-            $this->template = $this->app->loadTemplate($this->template);
+        if (is_string($this->defaultTemplate) && is_null($this->template)) {
+            $this->template = $this->app->loadTemplate($this->defaultTemplate);
         }
     }
 
@@ -228,7 +239,7 @@ class View implements jsExpressionable
      * In addition to adding a child object, set up it's template
      * and associate it's output with the region in our template.
      *
-     * @param $object View New object to add
+     * @param View   $object New object to add
      * @param string $region
      *
      * @return View
@@ -328,14 +339,20 @@ class View implements jsExpressionable
     /**
      * Remove one or several CSS classes from the element.
      *
-     * @param $remove_class
+     * @param array|string $class CSS class name or array of class names
      *
-     * @internal param array|string $class CSS class name or array of class names
+     * @return $this
      */
-    public function removeClass($remove_class)
+    public function removeClass($class)
     {
-        $remove_class = explode(' ', $remove_class);
-        $this->class = array_diff($this->class, $remove_class);
+        if (is_array($class)) {
+            $class = implode(' ', $class);
+        }
+
+        $class = explode(' ', $class);
+        $this->class = array_diff($this->class, $class);
+
+        return $this;
     }
 
     // }}}
@@ -478,7 +495,7 @@ class View implements jsExpressionable
      *
      * @return jQuery
      */
-    public function js($when = null)
+    public function js($when = null, $extra = null)
     {
         $chain = new jQuery($this);
 
@@ -496,6 +513,10 @@ class View implements jsExpressionable
         }
 
         $this->_js_actions[$when][] = $chain;
+
+        if ($extra) {
+            $this->_js_actions[$when][] = $extra;
+        }
 
         return $chain;
     }
@@ -555,8 +576,51 @@ class View implements jsExpressionable
 
         if (is_callable($action)) {
             // if callable $action is passed, then execute ajaxec()
-            //
-            throw new Exception('VirtualPage is not yet implemented');
+
+            // create callback, that will include event as part of the full name
+            $this->_add($cb = new Callback(), ['desired_name'=>$event]);
+
+            $cb->set(function () use ($action) {
+                $chain = new jQuery(new jsExpression('this'));
+                $response = call_user_func($action, $chain);
+
+                if ($response === $chain) {
+                    $response = null;
+                }
+
+                $actions = [];
+
+                if ($chain->_chain) {
+                    $actions[] = $chain;
+                }
+
+                if (!is_array($response)) {
+                    $response = [$response];
+                }
+
+                foreach ($response as $r) {
+                    if (is_string($r)) {
+                        $actions[] = new jsExpression('alert([])', [r]);
+                    } elseif ($r instanceof jsExpressionable) {
+                        $actions[] = $r;
+                    } elseif ($r === null) {
+                        continue;
+                    } else {
+                        throw new Exception(['Incorrect callback. Must be string or action.', 'r'=>$r]);
+                    }
+                }
+
+                $ajaxec = implode(";\n", array_map(function (jQuery $r) {
+                    return $r->jsRender();
+                }, $actions));
+
+                echo json_encode(['success'=>true, 'message'=>'Hello World', 'eval'=>$ajaxec]);
+                exit;
+            });
+
+            $thisAction->api(['on'=>'now', 'url'=>$cb->getURL(), 'obj'=>new jsExpression('this')]);
+
+            //throw new Exception('VirtualPage is not yet implemented');
             /*$url = '.virtualpage->getURL..';
             $actions[] = (new jsUniv(new jsExpression('this')))->ajaxec($url, true);
 

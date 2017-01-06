@@ -61,9 +61,9 @@ class jsExpression implements jsExpressionable
                 if (is_object($value) && $value instanceof jsExpressionable) {
                     $value = '('.$value->jsRender().')';
                 } elseif (is_object($value)) {
-                    $value = json_encode($value->toString());
+                    $value = $this->_json_encode($value->toString());
                 } else {
-                    $value = json_encode($value);
+                    $value = $this->_json_encode($value);
                 }
 
                 return $value;
@@ -72,5 +72,95 @@ class jsExpression implements jsExpressionable
         );
 
         return trim($res);
+    }
+
+    /**
+     * Provides replacement for json_encode that will respect jsExpressionable objects
+     * and call jsRender() for them instead of escaping.
+     *
+     * @param mixed @arg anything
+     *
+     * @return string valid JSON expression
+     */
+    protected function _json_encode($arg)
+    {
+        /*
+         * This function is very similar to json_encode, however it will traverse array
+         * before encoding in search of jsExpressionable objects. Those would
+         * be replaced with their jsRendering.
+         */
+        if (is_object($arg)) {
+            if ($arg instanceof jsExpressionable) {
+                $result = $arg->jsRender();
+
+                return $result;
+            } else {
+                throw new Exception(['Not sure how to represent this object in JSON', 'obj'=>$arg]);
+            }
+        } elseif (is_array($arg)) {
+            $array = [];
+            // is array associative? (hash)
+            $assoc = $arg != array_values($arg);
+
+            foreach ($arg as $key => $value) {
+                $value = $this->_json_encode($value);
+                $key = $this->_json_encode($key);
+                if (!$assoc) {
+                    $array[] = $value;
+                } else {
+                    $array[] = $key.':'.$value;
+                }
+            }
+
+            if ($assoc) {
+                $string = '{'.implode(',', $array).'}';
+            } else {
+                $string = '['.implode(',', $array).']';
+            }
+        } elseif (is_string($arg)) {
+            $string = '"'.$this->_safe_js_string($arg).'"';
+        } elseif (is_bool($arg)) {
+            $string = json_encode($arg);
+        } elseif (is_numeric($arg)) {
+            $string = json_encode($arg);
+        } elseif (is_null($arg)) {
+            $string = json_encode($arg);
+        } else {
+            throw new Exception(['Unable to json_encode value - unknown type', 'arg'=>var_export($arg, true)]);
+        }
+
+        return $string;
+    }
+
+    /**
+     * TODO: Escapes the string, but needs a reference to where this code has been from.
+     */
+    public function _safe_js_string($str)
+    {
+        $length = strlen($str);
+        $ret = '';
+        for ($i = 0; $i < $length; ++$i) {
+            switch ($str[$i]) {
+                case "\r":
+                    $ret .= '\\r';
+                    break;
+                case "\n":
+                    $ret .= '\\n';
+                    break;
+                case '"':
+                case "'":
+                case '<':
+                case '>':
+                case '&':
+                case '\\':
+                    $ret .= '\x'.dechex(ord($str[$i]));
+                    break;
+                default:
+                    $ret .= $str[$i];
+                    break;
+            }
+        }
+
+        return $ret;
     }
 }
