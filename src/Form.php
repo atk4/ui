@@ -25,7 +25,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $this->setLayout(new \atk4\ui\FormLayout\Vertical(['form'=>$this]));
         }
 
-        if($modelField = $this->model->hasElement($args[0])) {
+        if ($modelField = $this->model->hasElement($args[0])) {
             $formField = $this->layout->addField($this->fieldFactory($modelField));
         } else {
             $modelField = $this->model->addField(...$args);
@@ -62,7 +62,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         default:
             return new FormField\Line(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
 
-
         }
     }
 
@@ -98,7 +97,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 }
                 $fields[] = $f->short_name;
             }
-        } 
+        }
 
         if (is_array($fields)) {
             foreach ($fields as $field) {

@@ -28,22 +28,23 @@ class Vertical extends View
     }
 
     /**
-     * Create a group with fields
+     * Create a group with fields.
      */
-    function addGroup($label = null)
+    public function addGroup($label = null)
     {
         if ($label) {
             $this->add(new View([$label, 'ui'=>'dividing header', 'element'=>'h4']));
         }
     }
 
-    function recursiveRender() {
+    public function recursiveRender()
+    {
         $field_input = $this->template->cloneRegion('InputField');
         $field_checkbox = $this->template->cloneRegion('InputCheckbox');
 
         $this->template->del('Fields');
 
-        foreach($this->elements as $el) {
+        foreach ($this->elements as $el) {
 
             // Buttons go under Button section
             if ($el instanceof \atk4\ui\Button) {
@@ -58,9 +59,8 @@ class Vertical extends View
             }
 
             $template = $field_input;
-            $label = isset($el->field->ui['caption'])?
-                $el->field->ui['caption']:ucwords(str_replace('_',' ', $el->field->short_name));
-
+            $label = isset($el->field->ui['caption']) ?
+                $el->field->ui['caption'] : ucwords(str_replace('_', ' ', $el->field->short_name));
 
             // Anything but fields gets inserted directly
             if ($el instanceof \atk4\ui\FormField\Checkbox) {
@@ -81,7 +81,7 @@ class Vertical extends View
         }
 
         // Now collect JS from everywhere
-        foreach($this->elements as $el){
+        foreach ($this->elements as $el) {
             if ($el->_js_actions) {
                 $this->_js_actions = array_merge_recursive($this->_js_actions, $el->_js_actions);
             }

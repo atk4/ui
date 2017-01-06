@@ -13,8 +13,8 @@ class Checkbox extends Generic
 
     public $defaultTemplate = 'formfield/checkbox.html';
 
-    function renderView() {
-
+    public function renderView()
+    {
         $this->js(true)->checkbox();
 
         return parent::renderView();

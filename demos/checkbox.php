@@ -20,7 +20,6 @@ try {
     $layout->add(new \atk4\ui\View(['ui'=>'divider']));
     $layout->add(new \atk4\ui\FormField\Checkbox(['Custom setting?']))->js(true)->checkbox('set indeterminate');
 
-
     echo $layout->render();
 } catch (\atk4\core\Exception $e) {
     var_dump($e->getMessage());

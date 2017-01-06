@@ -16,7 +16,7 @@ try {
 
     $layout->add(new \atk4\ui\View([
         'Forms below focus on Data integration and automated layouts',
-        'ui'=>'ignored warning message'
+        'ui'=> 'ignored warning message',
     ]));
 
     $layout->add(new \atk4\ui\H2('DefaultForm'));

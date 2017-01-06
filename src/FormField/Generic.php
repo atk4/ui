@@ -17,9 +17,9 @@ class Generic extends View
 
     public $field;
 
-    function renderView()
+    public function renderView()
     {
-        if($this->form) {
+        if ($this->form) {
             $this->template->trySet('name', $this->short_name);
         }
 

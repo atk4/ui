@@ -13,13 +13,13 @@ class Radio extends Generic
 
     public $defaultTemplate = 'formfield/radio.html';
 
-    function setModel($m)
+    public function setModel($m)
     {
         $this->add(new \atk4\ui\Lister(), 'Radio')->setModel($m);
     }
 
-    function renderView() {
-
+    public function renderView()
+    {
         $this->js(true)->checkbox();
 
         return parent::renderView();

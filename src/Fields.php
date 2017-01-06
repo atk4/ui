@@ -10,12 +10,12 @@ class Fields extends View
 
     public $label = null;
 
-    function addField(...$args)
+    public function addField(...$args)
     {
         return $this->add($form->fieldFactory(...$args));
     }
 
-    function renderView()
+    public function renderView()
     {
         parent::renderView();
     }
