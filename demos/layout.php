@@ -4,7 +4,7 @@
  */
 require '../vendor/autoload.php';
 
-$layout = new \atk4\ui\Layout\App(['template'=>'./templates/layout1.html']);
+$layout = new \atk4\ui\Layout\App(['defaultTemplate'=>'./templates/layout1.html']);
 
 class Persistence_Faker extends \atk4\data\Persistence
 {
