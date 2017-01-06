@@ -30,8 +30,8 @@ try {
     $f = $layout->add(new \atk4\ui\Form(['segment'=>true]));
     $f->setModel($m_register);
 
-    $f->onSubmit(function($f){
-        return $f->error('name','what that?');
+    $f->onSubmit(function ($f) {
+        return $f->error('name', 'what that?');
     });
 
     $layout->add(new \atk4\ui\H2('Another Form'));

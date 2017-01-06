@@ -6,7 +6,7 @@ use atk4\ui\Form;
 use atk4\ui\View;
 
 /**
- * Generic Layout for a form
+ * Generic Layout for a form.
  */
 class Vertical extends View
 {
@@ -15,14 +15,15 @@ class Vertical extends View
     public $defaultTemplate = 'formlayout/vertical.html';
 
     /**
-     * Places field inside a layout somewhere
+     * Places field inside a layout somewhere.
      */
-    function addField(\atk4\ui\FormField\Generic $field)
+    public function addField(\atk4\ui\FormField\Generic $field)
     {
         return $this->_add($field, ['name'=>$field->short_name]);
     }
 
-    function addButton(\atk4\ui\Button $button) {
+    public function addButton(\atk4\ui\Button $button)
+    {
         return $this->_add($button);
     }
 
