@@ -11,7 +11,7 @@ JavaScript Mapping
 
 A modern user interface cannot exist without JavaScript. Agile UI provides you assistance with
 generating and executing events directly from PHP and the context of your Views. The most basic
-example of such integration would be a button, that hides itself whes clicked::
+example of such integration would be a button, that hides itself when clicked::
 
     $b = new Button();
     $b->js('click')->hide();
@@ -95,7 +95,7 @@ Finally, you can specify name of JavaScript event::
 Agile UI also provides support for an `on` event binding. This allows you to apply events on
 multiple elements::
 
-    $buttons = Buttons();
+    $buttons = new Buttons();
 
     $buttons->add(new Button('One'));
     $buttons->add(new Button('Two'));
@@ -157,6 +157,7 @@ Building actions with jsExpressionable
 
     // Resulting code:
     // $('#button-id').appendTo('#frame-id');
+    // which will be executed on page load
 
 
 
@@ -169,7 +170,7 @@ JavaScript Chain Building
     mappers for any JavaScript framework.
 
 Chain is a PHP object that represents one or several actions that are to be executed on the 
-client side. The jsChain objects itself is generic, so in my examples I'll be using jQuery which
+client side. The jsChain objects themselves are generic, so in my examples I'll be using jQuery which
 is a descendant of jsChain::
 
     $chain = new jQuery('#the-box-id');
@@ -194,15 +195,15 @@ will output:
 
 .. important::
 
-    It's considered a vary bad practice if you output perform jsRender and output the code manually. Agile UI takes care of 
+    It's considered a vary bad practice if you perform jsRender and output the JavaScript code manually. Agile UI takes care of 
     JavaScript binding and also decides which actions should be appearing for you as long as you create actions for your chain.
 
 .. php:method:: _json_encode
 
     jsChain will map all the other methods into JS counterparts while encoding all the arguments through _json_encode(). Although
-    similar to a standard json_encode function, this method recognizes :php:interface:`jsExpressionable` objects and will map
+    similar to a standard json_encode function, this method recognizes :php:interface:`jsExpressionable` objects and will
     substitute them with the result of :php:meth:`jsExpressionable::jsRender`. The result will not be escaped and any object
-    implementing jsExpressionable are responsible for safe JavaScript generation.
+    implementing jsExpressionable interface is responsible for safe JavaScript generation.
 
 The following code is safe::
 
@@ -222,8 +223,8 @@ between actual views. All views support JavaScript binding through two methods: 
 .. php:method:: js([$event, [$other_action]])
 
     Return action chain that targets this view. As event you can specify `true` which will make chain automatically execute
-    on document ready event. You can specify a specific JavaScript event such as `"click"` or `"mousein"`. You can use your
-    custom event that you would trigger manually also. If `$event` is false or null, no event binding will be performed.
+    on document ready event. You can specify a specific JavaScript event such as `"click"` or `"mousein"`. You can also use your
+    custom event that you would trigger manually. If `$event` is false or null, no event binding will be performed.
 
     If `$other_chain` is specified together with event, it will also be bound to said event. `$other_chain` can also be
     a PHP closure.
@@ -236,8 +237,7 @@ Several usage cases for plain `js()` method. The most basic scenario is to perfo
     $b1->js('click')->hide();
 
     $b2 = new Button('Two');
-
-    $b1->js('click', $b2->js('hide'));
+    $b2->js('click', $b1->js()->hide());
 
 
 .. php:method:: on(String $event, [String selector], $callback = null)
@@ -273,7 +273,7 @@ The best example would be a :php:class:`Lister` with interractive elements::
     $b2 = $buttons->add(new Button('Two'));
     $b3 = $buttons->add(new Button('Three'));
 
-    $buttons->on('click', '.button', $b3->hide());
+    $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
     // $('#top-element-id').on('click', '.button', function($event){ 
@@ -290,7 +290,7 @@ You can use both actions together. The next example will allow only one button t
     $b2 = $buttons->add(new Button('Two'));
     $b3 = $buttons->add(new Button('Three'));
 
-    $buttons->on('click', '.button', $b3->hide());
+    $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
     // $('#top-element-id').on('click', '.button', function($event){ 
@@ -329,13 +329,13 @@ get around this, you can use jsExpression::
     $b = new Button();
     $b->js(true)->text(new jsExpression('2+2'));
 
-This time `2+2` is no longer escaped and will used as a JS code. Another example
-show show you can use global variables::
+This time `2+2` is no longer escaped and will be used as a plain JS code. Another example
+shows how you can use global variables::
 
     echo (new jQuery('document'))->find('h1')->hide()->jsRender();
 
     // produces $('document').find('h1').hide();
-    // does not hide anything because document is streated as string selector!
+    // does not hide anything because document is treated as string selector!
 
     $expr = new jsExpression('document');
     echo (new jQuery($expr))->find('h1')->hide()->jsRender();
@@ -382,7 +382,7 @@ Writing JavaScript code
 -----------------------
 
 If you know JavaScript you are likely to write more extensive methods to provide extended
-functionality for your user browsers. Agile UI does not attempt to stop you from doing that
+functionality for your user browsers. Agile UI does not attempt to stop you from doing that,
 but you should follow a proper pattern.
 
 Open a new file `test.js` and type:
@@ -395,7 +395,7 @@ Open a new file `test.js` and type:
         }, 0);
     }
 
-When load this js dependency on your page. Refer to :php:meth:`App::includeJS()` and
+Then load this JavaScript dependency on your page. Refer to :php:meth:`App::includeJS()` and
 :php:meth:`App::includeCSS()`. Finally use UI code as a "glue" between your routine
 and the actual View objects. In my example, I'll be trying to match the size of `$right_container`
 with the size of `$left_container`::
