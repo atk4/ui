@@ -30,7 +30,7 @@ Look and Feel
 
 .. php:class: Input
 
-    Implement View for presenting Input fields. Based around http://semantic-ui.com/elements/input.html.
+    Implements View for presenting Input fields. Based around http://semantic-ui.com/elements/input.html.
 
 Similar to other views, Input has various properties that you can specify directly
 or inject through constructor. Those properties will affect the look of the input
@@ -53,7 +53,7 @@ Here are few ways to specify `icon` to an Input::
     $page->add($line);
 
     // using class factory
-    $line->add('FormField/Line', ['icon'=>'search']);
+    $page->add('FormField/Line', ['icon'=>'search']);
 
 The 'icon' property can be either string or a View. The string is for convenience and will
 be automatically substituted with `new Icon($icon)`. If you wish to be more specifc
@@ -70,9 +70,8 @@ To see how Icon interprets `new Icon(['search', 'big'])`, refer to :php:class:`I
 
 .. note::
 
-    View's constructor will match aplpy array into object properties, if they are defined
-    or addClass() if not. See :php:meth:`View::setProperties`
-
+    View's constructor will map received arguments into object properties, if they are defined
+    or addClass() if not. See :php:meth:`View::setProperties`.
 
 .. php:attr:: placeholder
 
@@ -80,17 +79,17 @@ To see how Icon interprets `new Icon(['search', 'big'])`, refer to :php:class:`I
 
 .. php:attr:: loading
 
-    set to "left" or "right" to display spinning loading indicator
+    Set to "left" or "right" to display spinning loading indicator.
 
 .. php:attr:: label
 .. php:attr:: labelRight
 
-    Cornvert text into :php:class:`Label` and insert it into the field.
+    Convert text into :php:class:`Label` and insert it into the field.
 
 .. php:attr:: action
 .. php:attr:: actionLeft
 
-    Cornvert text into :php:class:`Button` and insert it into the field.
+    Convert text into :php:class:`Button` and insert it into the field.
 
 To see various examples of fields and their attributes see `demos/field.php`.
 
