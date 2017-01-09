@@ -12,7 +12,7 @@ use \atk4\ui\Template;
 use \atk4\ui\View;
 
 try {
-    $layout = new \atk4\ui\Layout\App(['template'=>'./templates/layout2.html']);
+    $layout = new \atk4\ui\Layout\App(['defaultTemplate'=>'./templates/layout2.html']);
 
     $layout->add(new H2('Basic Button'));
     $layout->add(new Button())->set('Click me');

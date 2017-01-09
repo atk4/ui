@@ -13,6 +13,7 @@ Contents:
     view
     js
     callbacks
+    field
 
 
 

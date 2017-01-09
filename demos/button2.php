@@ -6,10 +6,9 @@ require '../vendor/autoload.php';
 use \atk4\ui\Button;
 use \atk4\ui\Buttons;
 use \atk4\ui\H2;
-use \atk4\ui\Template;
 
 try {
-    $layout = new \atk4\ui\Layout\App(['template'=>'./templates/layout2.html']);
+    $layout = new \atk4\ui\Layout\App(['defaultTemplate'=>'./templates/layout2.html']);
 
     $layout->js(true, new \atk4\ui\jsExpression('$.fn.api.settings.successTest = function(response) {
   if(response && response.eval) {
