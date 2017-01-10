@@ -175,11 +175,12 @@ Agile UI is currently in the **late development stage**. Our development process
 | Version    | Features                                 |
 | ---------- | ---------------------------------------- |
 | 0.1 [done] | Bootstrap the test-suite, continious integration and UI-testing. |
-| 0.2 [done] | Implement template engine and a static "View". |
-| 0.3 [done] | Implement JavaScript mechanics, integrate RequireJS, jQuery and Semantic UI |
-| 0.4        | Implement URL mechanics and reloading    |
-| 0.5 [done] | Implement standard set of UI elements - Button, Menu, Label, etc. |
-| 0.6 [done] | Implement Form                           |
-| 0.7        | Implement Grid                           |
-| 0.8        | Implement CRUD                           |
-| 0.9        | Implement real-time code execution (for consoles, progress-bars, spinners) |
+| 0.2 [done] | Rendering HTML, Composite Views and Templates
+| 0.3 [done] | JavaScript Actions, Callback, and Server Events
+| 0.4        | Reloading of any arbitrary view
+| 0.5        | Buttons, Fields, Dropdown, Boxes, Panels, Icons, Messages
+| 0.6        | Form Implementation incuding Fields, Validation, Submission and Events
+| 0.7        | Grid, Lister and Card
+| 0.8        | Dialogs and CRUD
+| 0.9        | Layouts, Wizard, Menus, Pages, Routing, Tabs, Accordion |
+| 1.0        | Finish standalone App class as well as interface for integration with 3rd party frameworks
