@@ -90,6 +90,11 @@ class View implements jsExpressionable
      */
     public $content = null;
 
+    /**
+     * Change this if you want to substitute default "div" for something else
+     */
+    public $element = null;
+
     // }}}
 
     // {{{ Setting Things up
@@ -104,7 +109,7 @@ class View implements jsExpressionable
      */
     public function __construct($defaults = [])
     {
-        if (is_string($defaults)) {
+        if (is_string($defaults) && $this->content !== false) {
             $this->content = $defaults;
 
             return;
@@ -168,7 +173,7 @@ class View implements jsExpressionable
      */
     protected function setProperties($properties)
     {
-        if (isset($properties[0])) {
+        if (isset($properties[0]) && $this->content !== false) {
             $this->content = $properties[0];
             unset($properties[0]);
         }
@@ -414,6 +419,10 @@ class View implements jsExpressionable
 
         if ($this->id) {
             $this->template->trySet('_id', $this->id);
+        }
+
+        if ($this->element) {
+            $this->template->set('_element', $this->element);
         }
     }
 

@@ -14,11 +14,47 @@ class Vertical extends View
 
     public $defaultTemplate = 'formlayout/vertical.html';
 
+    public $label = null;
+
+    public $n = null;
+
+    public $inline = null;
+
     /**
      * Places field inside a layout somewhere.
      */
-    public function addField(\atk4\ui\FormField\Generic $field)
+    public function addField($field, $args = [])
     {
+
+        if (is_string($args)) {
+            $args = ['caption' => $args];
+        } elseif (is_array($args) && isset($args[0])) {
+            $args ['caption'] = $args[0];
+            unset($args[0]);
+        }
+
+        /*
+        if (isset($args[1]) && is_string($args[1])) {
+            $args[1] = ['ui'=>['caption'=>$args[1]]];
+        }
+         */
+
+        if (!$field instanceof \atk4\ui\FormField\Generic) {
+            if (is_array($field)) {
+                $field = $this->form->fieldFactory(...$field);
+            } else {
+                $field = $this->form->fieldFactory($field);
+            }
+        }
+
+        if(isset($args['caption'])) {
+            $field->field->ui['caption'] = $args['caption'];
+        }
+
+        if(isset($args['width'])) {
+            $field->field->ui['width'] = $args['width'];
+        }
+        
         return $this->_add($field, ['name'=>$field->short_name]);
     }
 
@@ -30,19 +66,36 @@ class Vertical extends View
     /**
      * Create a group with fields.
      */
-    public function addGroup($label = null)
+    public function addHeader($label = null)
     {
         if ($label) {
             $this->add(new View([$label, 'ui'=>'dividing header', 'element'=>'h4']));
         }
+        return $this;
+    }
+
+    public function addGroup($label = null)
+    {
+        if (!is_array($label)) {
+            $label = ['label'=>$label];
+        } elseif (isset($label[0])) {
+            $label['label'] = $label[0];
+            unset($label[0]);
+        }
+
+        $label['form'] = $this->form;
+
+        return $this->add(new Vertical($label));
     }
 
     public function recursiveRender()
     {
         $field_input = $this->template->cloneRegion('InputField');
-        $field_checkbox = $this->template->cloneRegion('InputCheckbox');
+        $field_no_label = $this->template->cloneRegion('InputNoLabel');
+        $labeled_group = $this->template->cloneRegion('LabeledGroup');
+        $no_label_group = $this->template->cloneRegion('NoLabelGroup');
 
-        $this->template->del('Fields');
+        $this->template->del('Content');
 
         foreach ($this->elements as $el) {
 
@@ -52,11 +105,34 @@ class Vertical extends View
                 continue;
             }
 
-            // Anything but fields gets inserted directly
-            if (!$el instanceof \atk4\ui\FormField\Generic) {
-                $this->template->appendHTML('Fields', $el->getHTML());
+            if ($el instanceof \atk4\ui\FormLayout\Vertical) {
+
+                if ($el->label && !$el->inline) {
+                    $template = $labeled_group;
+                    $template->set('label', $el->label);
+                } else {
+                    $template = $no_label_group;
+                }
+
+                if($el->n) {
+                    $template->set('n', $el->n);
+                }
+
+                if($el->inline) {
+                    $template->set('class', 'inline');
+                }
+                $template->setHTML('Content', $el->getHTML());
+
+                $this->template->appendHTML('Content', $template->render());
                 continue;
             }
+
+            // Anything but fields gets inserted directly
+            if (!$el instanceof \atk4\ui\FormField\Generic) {
+                $this->template->appendHTML('Content', $el->getHTML());
+                continue;
+            }
+
 
             $template = $field_input;
             $label = isset($el->field->ui['caption']) ?
@@ -64,8 +140,8 @@ class Vertical extends View
 
             // Anything but fields gets inserted directly
             if ($el instanceof \atk4\ui\FormField\Checkbox) {
-                $template = $field_checkbox;
-                $el->set($label);
+                $template = $field_no_label;
+                $el->template->set('Content', $label);
                 /*
                 $el->addClass('field');
                 $this->template->appendHTML('Fields', '<div class="field">'.$el->getHTML().'</div>');
@@ -73,11 +149,25 @@ class Vertical extends View
                  */
             }
 
+            if ($this->label && $this->inline) {
+                $el->placeholder = $label;
+                $label = $this->label;
+                $this->label = null;
+            } elseif ($this->label || $this->inline) {
+                $template = $field_no_label;
+                $el->placeholder = $label;
+            }
+
             // Fields get extra pampering
             $template->setHTML('Input', $el->getHTML());
             $template->trySet('label', $label);
+            $template->trySet('label_for', $el->id.'_input');
 
-            $this->template->appendHTML('Fields', $template->render());
+            if (isset($el->field->ui['width'])) {
+                $template->set('field_class', $el->field->ui['width'].' wide');
+            }
+
+            $this->template->appendHTML('Content', $template->render());
         }
 
         // Now collect JS from everywhere

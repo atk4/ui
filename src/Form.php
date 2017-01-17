@@ -15,6 +15,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     public $layout = null;
 
+    /** This disables content */
+    public $content = false;
+
     public function addField(...$args)
     {
         if (!$this->model) {
@@ -25,15 +28,29 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $this->setLayout(new \atk4\ui\FormLayout\Vertical(['form'=>$this]));
         }
 
-        if ($modelField = $this->model->hasElement($args[0])) {
-            $formField = $this->layout->addField($this->fieldFactory($modelField));
-        } else {
-            $modelField = $this->model->addField(...$args);
-            $formField = $this->layout->addField($this->fieldFactory($modelField));
-        }
+        return $this->layout->addField(...$args); //$this->fieldFactory($modelField));
 
         return $formField;
     }
+
+    public function addHeader($title = null)
+    {
+        if (!$this->layout) {
+            $this->setLayout(new \atk4\ui\FormLayout\Vertical(['form'=>$this]));
+        }
+
+        return $this->layout->addHeader($title);
+    }
+
+    public function addGroup($title = null)
+    {
+        if (!$this->layout) {
+            $this->setLayout(new \atk4\ui\FormLayout\Vertical(['form'=>$this]));
+        }
+
+        return $this->layout->addGroup($title);
+    }
+
 
     public function setLayout($layout)
     {
@@ -53,7 +70,21 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * @return Form\Field\Generic
      */
-    public function fieldFactory(\atk4\data\Field $f)
+    public function fieldFactory(...$args)
+    {
+        if (is_string($args[0]) && ($modelField = $this->model->hasElement($args[0]))) {
+            // $modelField is set above
+        } elseif ($args[0] instanceof \atk4\data\Field) {
+            $modelField = $args[0];
+        } else {
+            $modelField = $this->model->addField(...$args);
+        }
+
+        return $this->_fieldFactory($modelField);
+    }
+
+
+    public function _fieldFactory(\atk4\data\Field $f)
     {
         switch ($f->type) {
         case 'boolean':
