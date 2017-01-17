@@ -59,12 +59,10 @@ try {
 
     //$field = $f->add(new \atk4\ui\FormField\Line(['placeholder'=>'Enter your name', 'form'=>$f]), null, ['name'=>'test']);
 
-
     $layout->add(new \atk4\ui\H2('Receipt Form with Nice dropdowns'));
 
     $f = $layout->add(new \atk4\ui\Form(['segment']));
     $f->setModel($m_register, false);
-
 
     echo $layout->render();
 } catch (\atk4\core\Exception $e) {

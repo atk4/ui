@@ -91,7 +91,7 @@ class View implements jsExpressionable
     public $content = null;
 
     /**
-     * Change this if you want to substitute default "div" for something else
+     * Change this if you want to substitute default "div" for something else.
      */
     public $element = null;
 

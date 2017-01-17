@@ -25,11 +25,10 @@ class Vertical extends View
      */
     public function addField($field, $args = [])
     {
-
         if (is_string($args)) {
             $args = ['caption' => $args];
         } elseif (is_array($args) && isset($args[0])) {
-            $args ['caption'] = $args[0];
+            $args['caption'] = $args[0];
             unset($args[0]);
         }
 
@@ -47,14 +46,14 @@ class Vertical extends View
             }
         }
 
-        if(isset($args['caption'])) {
+        if (isset($args['caption'])) {
             $field->field->ui['caption'] = $args['caption'];
         }
 
-        if(isset($args['width'])) {
+        if (isset($args['width'])) {
             $field->field->ui['width'] = $args['width'];
         }
-        
+
         return $this->_add($field, ['name'=>$field->short_name]);
     }
 
@@ -71,6 +70,7 @@ class Vertical extends View
         if ($label) {
             $this->add(new View([$label, 'ui'=>'dividing header', 'element'=>'h4']));
         }
+
         return $this;
     }
 
@@ -85,7 +85,7 @@ class Vertical extends View
 
         $label['form'] = $this->form;
 
-        return $this->add(new Vertical($label));
+        return $this->add(new self($label));
     }
 
     public function recursiveRender()
@@ -106,7 +106,6 @@ class Vertical extends View
             }
 
             if ($el instanceof \atk4\ui\FormLayout\Vertical) {
-
                 if ($el->label && !$el->inline) {
                     $template = $labeled_group;
                     $template->set('label', $el->label);
@@ -114,11 +113,11 @@ class Vertical extends View
                     $template = $no_label_group;
                 }
 
-                if($el->n) {
+                if ($el->n) {
                     $template->set('n', $el->n);
                 }
 
-                if($el->inline) {
+                if ($el->inline) {
                     $template->set('class', 'inline');
                 }
                 $template->setHTML('Content', $el->getHTML());
@@ -132,7 +131,6 @@ class Vertical extends View
                 $this->template->appendHTML('Content', $el->getHTML());
                 continue;
             }
-
 
             $template = $field_input;
             $label = isset($el->field->ui['caption']) ?

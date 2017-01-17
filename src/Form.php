@@ -51,7 +51,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return $this->layout->addGroup($title);
     }
 
-
     public function setLayout($layout)
     {
         $this->layout = $this->add($layout);
@@ -82,7 +81,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         return $this->_fieldFactory($modelField);
     }
-
 
     public function _fieldFactory(\atk4\data\Field $f)
     {
