@@ -67,18 +67,15 @@ try {
     $f->onSubmit(function ($f) {
         $errors = [];
 
-        foreach ($f->model->elements as $name=>$ff) {
-            if ($name == 'id') {
-                continue;
-            }
+        foreach($f->model->elements as $name=>$ff){
+            if($name=='id') continue;
 
-            if ($f->model[$name] != 'a') {
+            if($f->model[$name] != 'a') {
                 $errors[] = $f->error($name, 'Field '.$name.' should contain exactly "a", but contains '.$f->model[$name]);
             }
         }
 
-        return $f->success('No more errors', 'so we have saved everything into the database');
-        //return $f->error('name', 'what that?');
+        return $errors ?: $f->success('No more errors', 'so we have saved everything into the database');
     });
 
     //$field = $f->add(new \atk4\ui\FormField\Line(['placeholder'=>'Enter your name', 'form'=>$f]), null, ['name'=>'test']);
