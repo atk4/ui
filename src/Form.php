@@ -149,16 +149,16 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     }
 
     /**
-     * Looks inside the POST of the request and loads it into a current model
+     * Looks inside the POST of the request and loads it into a current model.
      */
-    function loadPOST()
+    public function loadPOST()
     {
         $post = new \atk4\ui\Persistence\POST($_POST);
         $this->model->load(0, $post);
     }
 
     /**
-     * Causes form to generate error
+     * Causes form to generate error.
      */
     public function error($field, $str)
     {
@@ -167,13 +167,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     public function success($str = 'Success', $sub_header = null)
     {
-
         $success = $this->app->loadTemplate($this->successTemplate);
         $success['header'] = $str;
 
         if ($sub_header) {
             $success['message'] = $sub_header;
-        }else {
+        } else {
             $success->del('p');
         }
 

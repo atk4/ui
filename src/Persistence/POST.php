@@ -2,7 +2,7 @@
 
 namespace atk4\ui\Persistence;
 
-use \atk4\data\Model;
+use atk4\data\Model;
 
 class POST extends \atk4\data\Persistence
 {
@@ -11,18 +11,17 @@ class POST extends \atk4\data\Persistence
         // carefully copy stuff from $_POST into the model
         $data = [];
 
-        foreach($m->elements as $field => $def) {
+        foreach ($m->elements as $field => $def) {
             if (!$def instanceof \atk4\data\Field) {
                 continue;
             }
-
 
             if ($def->type === 'boolean') {
                 $data[$field] = isset($_POST[$field]);
                 continue;
             }
 
-            if(isset($_POST[$field])) {
+            if (isset($_POST[$field])) {
                 $data[$field] = $_POST[$field];
             }
         }

@@ -4,7 +4,6 @@ namespace atk4\ui;
 
 class jsCallback extends Callback
 {
-
     public function flatternArray($response)
     {
         if (!is_array($response)) {
@@ -13,13 +12,12 @@ class jsCallback extends Callback
 
         $out = [];
 
-        foreach($response as $element) {
+        foreach ($response as $element) {
             $out = array_merge($out, $this->flatternArray($element));
         }
 
         return $out;
     }
-
 
     public function set($callback, $args = [])
     {

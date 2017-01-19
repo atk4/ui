@@ -31,12 +31,12 @@ try {
     $f->setModel($m_register);
 
     $f->onSubmit(function ($f) {
-        if($f->model['name'] != 'John') {
+        if ($f->model['name'] != 'John') {
             return $f->error('name', 'Your name is not John! It is "'.$f->model['name'].'". It should be John. Pleeease!');
         } else {
             return [
-                $f->jsInput('email')->val('john@gmail.com'), 
-                $f->jsField('is_accept_terms')->checkbox('set checked')
+                $f->jsInput('email')->val('john@gmail.com'),
+                $f->jsField('is_accept_terms')->checkbox('set checked'),
             ];
         }
     });
@@ -67,15 +67,16 @@ try {
     $f->onSubmit(function ($f) {
         $errors = [];
 
-        foreach($f->model->elements as $name=>$ff){
-            if($name=='id') continue;
-
-
-            if($f->model[$name] != 'a') {
-                $errors[] = $f->error($name, 'Field '.$name.' should contain exactly "a", but contains '.$f->model[$name]);
+        foreach ($f->model->elements as $name=>$ff) {
+            if ($name == 'id') {
+                continue;
             }
 
+            if ($f->model[$name] != 'a') {
+                $errors[] = $f->error($name, 'Field '.$name.' should contain exactly "a", but contains '.$f->model[$name]);
+            }
         }
+
         return $f->success('No more errors', 'so we have saved everything into the database');
         //return $f->error('name', 'what that?');
     });

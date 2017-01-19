@@ -2,13 +2,13 @@
 
 namespace atk4\ui\tests;
 
-use \atk4\data\Model;
+use atk4\data\Model;
 
 class PostTest extends \atk4\core\PHPUnit_AgileTestCase
-{ 
+{
     public $model;
 
-    function setUp()
+    public function setUp()
     {
         $_POST = ['name'=>'John', 'is_married'=>'Y'];
         $this->model = new Model();
@@ -16,12 +16,12 @@ class PostTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->model->addField('surname');
         $this->model->addField('is_married', ['type'=>'boolean']);
     }
+
     /**
-     * Test loading from POST persistence, some type mapping applies
+     * Test loading from POST persistence, some type mapping applies.
      */
     public function testPost()
     {
-
         $p = new \atk4\ui\Persistence\POST();
 
         $this->model['surname'] = 'DefSurname';
