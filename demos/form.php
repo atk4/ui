@@ -47,17 +47,17 @@ try {
     $f->setModel(new \atk4\data\Model());
 
     $f->addHeader('Example fields added one-by-one');
-    $f->addField('field1');
-    $f->addField('field2');
+    $f->addField('name');
+    $f->addField('email');
 
     $f->addHeader('Example of field grouping');
     $gr = $f->addGroup('Address with label');
-    $gr->addField('ad-dress', ['width'=>'twelve']);
+    $gr->addField('address', ['width'=>'twelve']);
     $gr->addField('code', ['Post Code', 'width'=>'four']);
 
     $gr = $f->addGroup(['n'=>'two']);
-    $gr->addField('c-ity');
-    $gr->addField('c-ountry');
+    $gr->addField('city');
+    $gr->addField('country');
 
     $gr = $f->addGroup(['Name', 'inline'=>true]);
     $gr->addField('first_name', ['width'=>'eight']);
@@ -86,6 +86,18 @@ try {
 
     $f = $layout->add(new \atk4\ui\Form(['segment']));
     $f->setModel($m_register, false);
+
+
+
+
+    $form = new \atk4\ui\Form();
+    $form->addField('name');
+
+    $layout->add($form);
+
+
+
+
 
     echo $layout->render();
 } catch (\atk4\core\Exception $e) {
