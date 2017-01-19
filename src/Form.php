@@ -142,8 +142,22 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function init()
     {
         parent::init();
+
+        $this->addHook('submit', [$this, 'loadPOST']);
     }
 
+    /**
+     * Looks inside the POST of the request and loads it into a current model
+     */
+    function loadPOST()
+    {
+        $post = new \atk4\ui\Persistence\POST($_POST);
+        $this->model->load(0, $post);
+    }
+
+    /**
+     * Causes form to generate error
+     */
     public function error($field, $str)
     {
         return $this->js()->form('add prompt', $field, $str);
@@ -154,6 +168,24 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $this->ajaxSubmit();
 
         return parent::renderView();
+    }
+
+    /**
+     * Returns JS Chain that targets INPUT element of a specified field. This method is handy
+     * if you wish to set a value to a certain field.
+     */
+    public function jsInput($name)
+    {
+        return $this->layout->getElement($name)->js()->find('input');
+    }
+
+    /**
+     * Returns JS Chain that targets INPUT element of a specified field. This method is handy
+     * if you wish to set a value to a certain field.
+     */
+    public function jsField($name)
+    {
+        return $this->layout->getElement($name)->js();
     }
 
     public function ajaxSubmit()
@@ -171,7 +203,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         $this->js(true)
             ->api(['url'=>$cb->getURL(),  'method'=>'POST', 'serializeForm'=>true])
-            ->form(['inline'=>true]);
+            ->form(['inline'=>true, 'on'=>'blur']);
 
         $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
     }

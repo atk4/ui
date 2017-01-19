@@ -31,31 +31,48 @@ try {
     $f->setModel($m_register);
 
     $f->onSubmit(function ($f) {
-        return $f->error('name', 'what that?');
+        if($f->model['name'] != 'John') {
+            return $f->error('name', 'Your name is not John! It is "'.$f->model['name'].'". It should be John. Pleeease!');
+        } else {
+            return [
+                $f->jsInput('email')->val('john@gmail.com'), 
+                $f->jsField('is_accept_terms')->checkbox('set checked')
+            ];
+        }
     });
 
     $layout->add(new \atk4\ui\H2('Another Form'));
 
     $f = $layout->add(new \atk4\ui\Form(['segment']));
-    $f->setModel($m_register, false);
+    $f->setModel(new \atk4\data\Model());
 
     $f->addHeader('Example fields added one-by-one');
-    $f->addField('email');
-    $f->addField('name');
+    $f->addField('field1');
+    $f->addField('field2');
 
     $f->addHeader('Example of field grouping');
     $gr = $f->addGroup('Address with label');
-    $gr->addField('address', ['width'=>'twelve']);
+    $gr->addField('ad-dress', ['width'=>'twelve']);
     $gr->addField('code', ['Post Code', 'width'=>'four']);
 
     $gr = $f->addGroup(['n'=>'two']);
-    $gr->addField('city');
-    $gr->addField('country');
+    $gr->addField('c-ity');
+    $gr->addField('c-ountry');
 
     $gr = $f->addGroup(['Name', 'inline'=>true]);
     $gr->addField('first_name', ['width'=>'eight']);
     $gr->addField('middle_name', ['width'=>'three', 'disabled'=>true]);
     $gr->addField('last_name', ['width'=>'five']);
+
+    $f->onSubmit(function ($f) {
+        foreach($f->model->elements as $name=>$ff){
+            if($name=='id') continue;
+            if($f->model[$name] != 'a') {
+                return $f->error($name, 'Field '.$name.' should contain exactly "a", but contains '.$f->model[$name]);
+            }
+        }
+        //return $f->error('name', 'what that?');
+    });
 
     //$field = $f->add(new \atk4\ui\FormField\Line(['placeholder'=>'Enter your name', 'form'=>$f]), null, ['name'=>'test']);
 
