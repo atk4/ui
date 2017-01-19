@@ -89,7 +89,6 @@ try {
     $f->setModel($m_register, false);
      */
 
-
     echo $layout->render();
 } catch (\atk4\core\Exception $e) {
     var_dump($e->getMessage());
