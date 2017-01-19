@@ -67,10 +67,12 @@ try {
     $f->onSubmit(function ($f) {
         $errors = [];
 
-        foreach($f->model->elements as $name=>$ff){
-            if($name=='id') continue;
+        foreach ($f->model->elements as $name=>$ff) {
+            if ($name == 'id') {
+                continue;
+            }
 
-            if($f->model[$name] != 'a') {
+            if ($f->model[$name] != 'a') {
                 $errors[] = $f->error($name, 'Field '.$name.' should contain exactly "a", but contains '.$f->model[$name]);
             }
         }
