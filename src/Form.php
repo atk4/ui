@@ -13,6 +13,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     public $defaultTemplate = 'form.html';
 
+    public $successTemplate = 'form-success.html';
+
     public $layout = null;
 
     /** This disables content */
@@ -161,6 +163,24 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function error($field, $str)
     {
         return $this->js()->form('add prompt', $field, $str);
+    }
+
+    public function success($str = 'Success', $sub_header = null)
+    {
+
+        $success = $this->app->loadTemplate($this->successTemplate);
+        $success['header'] = $str;
+
+        if ($sub_header) {
+            $success['message'] = $sub_header;
+        }else {
+            $success->del('p');
+        }
+
+        $js = $this->js()
+            ->html($success->render());
+
+        return $js;
     }
 
     public function renderView()
