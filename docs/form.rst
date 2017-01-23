@@ -27,7 +27,7 @@ Features of a Form include:
  - Integration with Model objects:
     - automatically populate all or specific fields
     - use of semi-automated layouting (you can arrange group of fields)
-    - respect caption and other ui-related settins defined in a model
+    - respect caption and other ui-related settings defined in a model
     - map field "type" into appropriate :ref:`field`
 
  - Augment Form with JS integration:
@@ -37,10 +37,10 @@ Features of a Form include:
     - POST data is automatically parsed and imported into Model
 
  - You may define onSubmit PHP handler that:
-    - can execute validate, save data and make decisions in PHP code
+    - can execute data validation, save data and make decisions in PHP code
     - display errors for single or multiple fields
     - perform custom actions on "input" element such as insert value
-    - perform custom action on "field" div, such as use checkbox APIs.
+    - perform custom action on "field" div, such as use checkbox APIs
     - execute any other arbitrary JavaScript or jQuery code
     - indicate successful completion of a form through a nicely formatted message
 
@@ -55,7 +55,7 @@ To create a form you need the following code::
 
     $layout->add($form);
 
-The first line creates a "Form" object that is assigned into variable `$f`. Next
+The first line creates a "Form" object that is assigned to variable `$f`. Next
 line defines a new field that is placed inside a form.
 
 Once form is defined, it needs to be placed somewhere in a Render Tree.
@@ -160,7 +160,7 @@ errors with a message about terms and conditions::
             $errors[] = $form->error('name', 'Name must be specified');
         }
 
-        if (!$form->model['name']) {
+        if (!$form->model['surname']) {
             $errors[] = $form->error('surname', 'Surname must be specified');
         }
 
@@ -238,7 +238,7 @@ My next example will add multiple fields on the same line::
     $form->addFields(['name', 'surname']);
 
     $gr = $form->addGroup('Address');
-    $gr->addFields(['address', 'city', 'country']); // grouped fields, will appear on same line
+    $gr->addFields(['address', 'city', 'country']); // grouped fields, will appear on the same line
 
 By default grouped fields will appear with fixed width. To distribute space you can either specify
 proportions manually::
@@ -252,7 +252,7 @@ or you can divide space equally between fields. I am also omitting header for th
     $gr = $f->addGroup(['n'=>'two']);
     $gr->addFields(['city', 'country']);
 
-You can also use in-line form froups. Fields in such a group with display header on the left and
+You can also use in-line form groups. Fields in such a group will display header on the left and
 the error messages appearing on the right from the field::
 
     $gr = $f->addGroup(['Name', 'inline'=>true]);
@@ -264,7 +264,7 @@ Semantic UI modifiers
 ---------------------
 
 There are many other classes Semantic UI allow you to use on a form. The next code will produce
-form inside a segnemt (outline) and will make fields appear smaller::
+form inside a segment (outline) and will make fields appear smaller::
 
     $f = new \atk4\ui\Form(['small segment']));
 
