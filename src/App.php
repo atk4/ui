@@ -36,7 +36,6 @@ class App
 
     public function initLayout($layout, $options = [])
     {
-
         if (is_string($layout)) {
             $layout = 'atk4\\ui\\Layout\\'.$layout;
             $layout = new $layout($options);
