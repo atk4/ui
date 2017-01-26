@@ -69,13 +69,11 @@ try {
 
     $app->initLayout('Fluid');
 
-
     $m_comp = $app->menu->addMenu('Components');
     $m_comp->addItem(['Demo1', 'icon'=>'form'], ['demo'=>'form']);
     $m_comp->addItem(['Demo2', 'icon'=>'crud'], ['demo'=>'crud']);
 
     var_dump($_GET);
-
 
     /*
 
@@ -94,7 +92,6 @@ try {
      */
 
     $app->run();
-
 } catch (\atk4\core\Exception $e) {
     var_dump($e->getMessage());
 

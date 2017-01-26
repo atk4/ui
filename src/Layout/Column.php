@@ -19,5 +19,4 @@ class Column extends Generic
 
     public $leftColumn = null;
     public $rightColumn = null;
-
 }

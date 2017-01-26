@@ -38,7 +38,7 @@ class Admin extends Generic
 
     public $template = 'layout/admin.html';
 
-    function init() {
+    public function init()
+    {
     }
-
 }

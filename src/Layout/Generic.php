@@ -2,7 +2,7 @@
 
 namespace atk4\ui;
 
-class Layout extends View
+class Generic extends View
 {
     public function render()
     {
