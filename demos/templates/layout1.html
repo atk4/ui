@@ -24,14 +24,14 @@
     </style>
   </head>
   <body>
-    <div class="ui inverted fixed horizontal menu"><a href="#" class="header item">UI Test Layout 2</a>
+    <div class="ui inverted fixed horizontal menu"><a class="header item" href="#">UI Test Layout 2</a>
       <div class="ui simple dropdown item">Basic Examples<i class="dropdown icon"></i>
-        <div class="menu"><a href="layout.php" class="item">Layout test</a><a href="button.php" class="item">Button test</a></div>
+        <div class="menu"><a class="item" href="layout.php">Layout test</a><a class="item" href="button.php">Button test</a></div>
       </div>
     </div>
     <div class="ui main basic segment">
       <h3>Nominal Acitivity Report</h3>
-      <div class="ui small form segment">
+      <form class="ui form small segment">
         <div class="inline fields">
           <div class="field">
             <div class="ui labeled icon top left pointing dropdown button my-dropdown"><i class="calendar icon"></i><span class="text">This Year</span>
@@ -82,7 +82,7 @@
             </div>
           </div>
         </div>
-        <div class="ui teal submit button"><i class="search icon"></i>Preview</div><a href="https://apps.zoomcharts.com/spreadsheet-analytics/#load=" class="ui teal submit button"><i class="pie graph icon"></i>Analyse</a>
+        <div class="ui teal submit button"><i class="search icon"></i>Preview</div><a class="ui teal submit button" href="https://apps.zoomcharts.com/spreadsheet-analytics/#load="><i class="pie graph icon"></i>Analyse</a>
         <div class="ui teal submit buttons">
           <div class="ui button">Save As..</div>
           <div class="ui floating pointing dropdown icon button my-dropdown"><i class="dropdown icon"></i>
@@ -93,7 +93,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </form>
       <h4>Ungrouped transaction list</h4>{Report}
       <table class="ui very compact small table">
         <thead>
@@ -122,12 +122,12 @@
         </tbody>
         <tfoot>
           <tr>
-            <th colspan="6" class="right aligned">Closing balance after {count}29{/} records:</th>
+            <th class="right aligned" colspan="6">Closing balance after {count}29{/} records:</th>
             <th>€1,056.91</th>
             <th>€0.00</th>
           </tr>
           <tr>
-            <th colspan="6" class="right aligned">Total for {nominal}Sales:Limerick{/nominal}:</th>
+            <th class="right aligned" colspan="6">Total for {nominal}Sales:Limerick{/nominal}:</th>
             <th>€1,056.91</th>
             <th>€0.00</th>
           </tr>
