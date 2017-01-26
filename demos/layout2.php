@@ -67,13 +67,17 @@ try {
     $app = new \atk4\ui\App('Hello World');
     $db = new Persistence_Faker();
 
-    $app->initLayout('Fluid');
+    $app->initLayout('Centered');
 
+    $app->layout->add('HelloWorld');
+
+    /*
     $m_comp = $app->menu->addMenu('Components');
     $m_comp->addItem(['Demo1', 'icon'=>'form'], ['demo'=>'form']);
     $m_comp->addItem(['Demo2', 'icon'=>'crud'], ['demo'=>'crud']);
 
     var_dump($_GET);
+     */
 
     /*
 

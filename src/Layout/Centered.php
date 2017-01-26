@@ -11,5 +11,16 @@ namespace atk4\ui\Layout;
  */
 class Centered extends Generic
 {
-    public $template = 'layout/centered.html';
+    public $defaultTemplate = 'layout/centered.html';
+
+    function init()
+    {
+        parent::init();
+
+        // set application's title
+
+        $this->template['title'] = $this->app->title;
+
+
+    }
 }

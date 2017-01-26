@@ -34,12 +34,27 @@ class App
         }
     }
 
-    public function setLayout(\atk4\ui\Layout $layout)
+    public function initLayout($layout, $options = [])
     {
-        $this->html = new View(['template'=>'html.html']);
+
+        if (is_string($layout)) {
+            $layout = 'atk4\\ui\\Layout\\'.$layout;
+            $layout = new $layout($options);
+        }
+
+        $this->html = new View(['defaultTemplate'=>'html.html']);
         $this->layout = $this->html->add($layout);
 
         return $this;
+    }
+
+    public function normalizeClassName($name, $prefix = null)
+    {
+        if ($name === 'HelloWorld') {
+            return 'atk4/ui/HelloWorld';
+        }
+
+        return $name;
     }
 
     public function add()
@@ -49,7 +64,7 @@ class App
 
     public function run()
     {
-        $this->html->set('title', $this->title);
+        $this->html->template->set('title', $this->title);
         echo $this->html->render();
     }
 

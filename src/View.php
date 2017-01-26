@@ -4,25 +4,21 @@
 
 namespace atk4\ui;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\ContainerTrait;
-use atk4\core\InitializerTrait;
-use atk4\core\TrackableTrait;
-
 /**
  * Implements a most core view, which all of the other components descend
  * form.
  */
 class View implements jsExpressionable
 {
-    use ContainerTrait {
+    use \atk4\core\ContainerTrait {
         add as _add;
     }
-    use InitializerTrait {
+    use \atk4\core\InitializerTrait {
         init as _init;
     }
-    use TrackableTrait;
-    use AppScopeTrait;
+    use \atk4\core\TrackableTrait;
+    use \atk4\core\AppScopeTrait;
+    use \atk4\core\FactoryTrait;
 
     // {{{ Properties of the class
 
@@ -267,12 +263,12 @@ class View implements jsExpressionable
      * In addition to adding a child object, set up it's template
      * and associate it's output with the region in our template.
      *
-     * @param View         $object New object to add
+     * @param View|strin   $object New object to add
      * @param string|array $region (or array for full set of defaults)
      *
      * @return View
      */
-    public function add(View $object, $region = null)
+    public function add($object, $region = null)
     {
         if (!$this->app) {
             $this->init();
