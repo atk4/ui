@@ -2,7 +2,9 @@
 .ui.middle.aligned.grid.container(style="height: 100%")
   .column
     | {Header}
-    h1 {$title}
+    h1.ui.center.aligned.header
+      img.ui.image(src="https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png")
+      .content {$title}
     | {/}
     .ui.piled.segment
       | {$Content}
