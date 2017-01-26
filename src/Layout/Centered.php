@@ -13,14 +13,12 @@ class Centered extends Generic
 {
     public $defaultTemplate = 'layout/centered.html';
 
-    function init()
+    public function init()
     {
         parent::init();
 
         // set application's title
 
         $this->template['title'] = $this->app->title;
-
-
     }
 }
