@@ -1,4 +1,5 @@
 <?php
+
 require '../vendor/autoload.php';
 
 $app = new \atk4\ui\App('Hello World', ['icon'=>'user']);
@@ -42,4 +43,3 @@ $seg->add(['Header', 'Center-aligned', 'aligned'=>'center', 'image'=>$img, 'subH
 
 $seg = $app->layout->add('View', ['ui'=>'segment']);
 $seg->add(['Header', 'Center-aligned', 'aligned'=>'center', 'image'=>[$img, 'disabled'], 'subHeader'=>'header with image']);
-

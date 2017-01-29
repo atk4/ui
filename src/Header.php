@@ -3,7 +3,7 @@
 namespace atk4\ui;
 
 /**
- * Class implements Headers
+ * Class implements Headers.
  *
  * Set this to 1, 2, 3, 4 or 5 if you are looking for Page Header. The size is not affected by
  * header placement on the page. Specify number to constructor like this:
@@ -23,22 +23,22 @@ class Header extends View
     public $size = null;
 
     /**
-     * Specify icon that will be included in a header
+     * Specify icon that will be included in a header.
      */
     public $icon = null;
 
     /**
-     * Include image with a specified source
+     * Include image with a specified source.
      */
     public $image = null;
 
     /**
-     * Will include sub-header
+     * Will include sub-header.
      */
     public $subHeader = null;
 
     /**
-     * Specify alignment of the header
+     * Specify alignment of the header.
      */
     public $aligned = null;
 

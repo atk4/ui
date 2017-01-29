@@ -22,7 +22,7 @@ class App
     public $catch_exceptions = true;
 
     /**
-     * Will always run application even if developer didn't explicitly executed run();
+     * Will always run application even if developer didn't explicitly executed run();.
      */
     public $always_run = true;
 
@@ -30,7 +30,9 @@ class App
 
     public function __construct($defaults = [])
     {
-        if(is_array($defaults) && $defaults) throw new Exception('wtf');
+        if (is_array($defaults) && $defaults) {
+            throw new Exception('wtf');
+        }
         if (is_string($defaults)) {
             $defaults = ['title'=>$defaults];
         }
@@ -50,12 +52,12 @@ class App
 
         // Set our exception handler
         if ($this->catch_exceptions) {
-            set_exception_handler(function($exception) {
+            set_exception_handler(function ($exception) {
                 return $this->caughtException($exception);
             });
         }
 
-        register_shutdown_function(function() {
+        register_shutdown_function(function () {
             if (!$this->run_called) {
                 try {
                     $this->run();
@@ -65,7 +67,6 @@ class App
             }
             exit;
         });
-
     }
 
     public function caughtException(\Throwable $exception)
@@ -75,20 +76,17 @@ class App
         if ($exception instanceof \atk4\core\Exception) {
             $l->layout->template->setHTML('Content', $exception->getHTML());
         } elseif ($exception instanceof \Error) {
-            $l->layout->add(new View(['ui'=>'message', get_class($exception).': '.$exception->getMessage(). ' (in '.
+            $l->layout->add(new View(['ui'=> 'message', get_class($exception).': '.$exception->getMessage().' (in '.
                 $exception->getFile().':'.$exception->getLine()
-                .')', 'error']));
+                .')', 'error', ]));
             $l->layout->add(new Text())->set(nl2br($exception->getTraceAsString()));
         } else {
             $l->layout->add(new View(['ui'=>'message', get_class($exception).': '.$exception->getMessage(), 'error']));
-
-
         }
         $l->layout->template->tryDel('Header');
         $l->run();
         $this->run_called = true;
     }
-
 
     public function initLayout($layout, $options = [])
     {
@@ -109,8 +107,8 @@ class App
     public function normalizeClassName($name, $prefix = null)
     {
         if (strpos('/', $name) === false && strpos('\\', $name) === false) {
-            $name = 'atk4/ui/'.($prefix?($prefix.'/'):'').$name;
-        } 
+            $name = 'atk4/ui/'.($prefix ? ($prefix.'/') : '').$name;
+        }
         if ($name === 'HelloWorld') {
             return 'atk4/ui/HelloWorld';
         }

@@ -274,7 +274,6 @@ class View implements jsExpressionable
             $this->init();
         }
 
-
         if ($region === null) {
             $defaults = ['region' => 'Content'];
         } elseif (!is_array($region)) {

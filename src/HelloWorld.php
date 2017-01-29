@@ -7,10 +7,9 @@ namespace atk4\ui;
 /**
  * Implements Hello World. Add this view anywhere!
  */
-
 class HelloWorld extends View
 {
-    function init()
+    public function init()
     {
         parent::init();
         $this->set('Content', 'Hello World');
