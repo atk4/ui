@@ -460,7 +460,6 @@ class View implements jsExpressionable
         $this->recursiveRender();
     }
 
-
     /**
      * This method is for those cases when developer want to simply render his
      * view and grab HTML himself.

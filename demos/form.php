@@ -92,7 +92,6 @@ try {
     $layout->renderAll();
     $layout->template->appendHTML('HEAD', $layout->getJS());
     echo $layout->template->render();
-
 } catch (\atk4\core\Exception $e) {
     $layout->template->setHTML('Content', $e->getHTML());
     echo $layout->template->render();

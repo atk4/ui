@@ -72,4 +72,3 @@ $view->add(new Button('World'), 'tag1');
 $view->add(new Button(['Agile UI', 'blue']), 'tag2');
 
 $layout->add($view);
-

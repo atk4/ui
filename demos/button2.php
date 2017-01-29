@@ -8,7 +8,6 @@ use \atk4\ui\Button;
 use \atk4\ui\Buttons;
 use \atk4\ui\H2;
 
-
 $layout->js(true, new \atk4\ui\jsExpression('$.fn.api.settings.successTest = function(response) {
   if(response && response.eval) {
      var result = function(){ eval(response.eval); }.call(this.obj);
