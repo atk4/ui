@@ -30,9 +30,6 @@ class App
 
     public function __construct($defaults = [])
     {
-        if (is_array($defaults) && $defaults) {
-            throw new Exception('wtf');
-        }
         if (is_string($defaults)) {
             $defaults = ['title'=>$defaults];
         }
@@ -57,16 +54,18 @@ class App
             });
         }
 
-        register_shutdown_function(function () {
-            if (!$this->run_called) {
-                try {
-                    $this->run();
-                } catch (\Exception $e) {
-                    $this->caughtException($e);
+        if ($this->always_run) {
+            register_shutdown_function(function () {
+                if (!$this->run_called) {
+                    try {
+                        $this->run();
+                    } catch (\Exception $e) {
+                        $this->caughtException($e);
+                    }
                 }
-            }
-            exit;
-        });
+                exit;
+            });
+        }
     }
 
     public function caughtException(\Throwable $exception)

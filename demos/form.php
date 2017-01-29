@@ -1,11 +1,19 @@
 <?php
 /**
- * Testing form.
+ * Apart from demonstrating the form, this example uses an alternative way of rendering the layouts.
+ * Here we don't create application object explicitly, instead we use our custom template
+ * with a generic layout.
+ *
+ * We then render everything recursively (renderAll) and plug accumulated JavaScript inside the <head> tag,
+ * echoing results after.
+ *
+ * This approach will also prevent your application from registering shutdown handler or catching error,
+ * so we will need to do a bit of work about that too.
  */
 require '../vendor/autoload.php';
 
 try {
-    $layout = new \atk4\ui\Layout\App(['defaultTemplate'=>'./templates/layout2.html']);
+    $layout = new \atk4\ui\Layout\Generic(['defaultTemplate'=>'./templates/layout2.html']);
 
     $layout->js(true, new \atk4\ui\jsExpression('$.fn.api.settings.successTest = function(response) {
   if(response && response.eval) {
@@ -49,6 +57,7 @@ try {
     $f->addHeader('Example fields added one-by-one');
     $f->addField('name');
     $f->addField('email');
+    $f->addField('email');
 
     $f->addHeader('Example of field grouping');
     $gr = $f->addGroup('Address with label');
@@ -80,20 +89,11 @@ try {
         return $errors ?: $f->success('No more errors', 'so we have saved everything into the database');
     });
 
-    //$field = $f->add(new \atk4\ui\FormField\Line(['placeholder'=>'Enter your name', 'form'=>$f]), null, ['name'=>'test']);
+    $layout->renderAll();
+    $layout->template->appendHTML('HEAD', $layout->getJS());
+    echo $layout->template->render();
 
-    /*
-    $layout->add(new \atk4\ui\H2('Receipt Form with Nice dropdowns'));
-
-    $f = $layout->add(new \atk4\ui\Form(['segment']));
-    $f->setModel($m_register, false);
-     */
-
-    echo $layout->render();
 } catch (\atk4\core\Exception $e) {
-    var_dump($e->getMessage());
-
-    var_dump($e->getParams());
-    var_dump($e->getTrace());
-    throw $e;
+    $layout->template->setHTML('Content', $e->getHTML());
+    echo $layout->template->render();
 }

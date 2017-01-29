@@ -255,7 +255,7 @@ class View implements jsExpressionable
      */
     protected function initDefaultApp()
     {
-        $this->app = new App(['skin'=>$this->skin]);
+        $this->app = new App(['skin'=>$this->skin, 'catch_exceptions'=>false, 'always_run'=>false]);
         $this->app->init();
     }
 
@@ -446,10 +446,10 @@ class View implements jsExpressionable
     }
 
     /**
-     * This method is for those cases when developer want to simply render his
-     * view and grab HTML himself.
+     * Render everything recursively, render ourselves but don't return
+     * anything just yet.
      */
-    public function render()
+    public function renderAll()
     {
         if (!$this->_initialized) {
             $this->init();
@@ -458,6 +458,16 @@ class View implements jsExpressionable
         $this->renderView();
 
         $this->recursiveRender();
+    }
+
+
+    /**
+     * This method is for those cases when developer want to simply render his
+     * view and grab HTML himself.
+     */
+    public function render()
+    {
+        $this->renderAll();
 
         return
             $this->getJS().
@@ -469,13 +479,7 @@ class View implements jsExpressionable
      */
     public function getHTML()
     {
-        if (!$this->_initialized) {
-            $this->init();
-        }
-
-        $this->renderView();
-
-        $this->recursiveRender();
+        $this->renderAll();
 
         return $this->template->render();
     }
