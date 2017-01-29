@@ -69,6 +69,8 @@ try {
 
     $app->initLayout('Centered');
 
+    $app->layout->add('Title', ['spot'=>'Title', 'icon'=>'plug', 'subHeader'=>'Learning to code']);
+
     $app->layout->add('HelloWorld');
 
     /*

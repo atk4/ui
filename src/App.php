@@ -16,11 +16,26 @@ class App
 
     public $skin = 'semantic-ui';
 
+    /**
+     * Will replace an exception handler with our own, that will output errors nicely.
+     */
+    public $catch_exceptions = true;
+
+    /**
+     * Will always run application even if developer didn't explicitly executed run();
+     */
+    public $always_run = true;
+
+    private $run_called = false;
+
     public function __construct($defaults = [])
     {
+        if(is_array($defaults) && $defaults) throw new Exception('wtf');
         if (is_string($defaults)) {
             $defaults = ['title'=>$defaults];
         }
+
+        $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
 
         if (!is_array($defaults)) {
             throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
@@ -32,7 +47,48 @@ class App
                 $this->$key = $val;
             }
         }
+
+        // Set our exception handler
+        if ($this->catch_exceptions) {
+            set_exception_handler(function($exception) {
+                return $this->caughtException($exception);
+            });
+        }
+
+        register_shutdown_function(function() {
+            if (!$this->run_called) {
+                try {
+                    $this->run();
+                } catch (\Exception $e) {
+                    $this->caughtException($e);
+                }
+            }
+            exit;
+        });
+
     }
+
+    public function caughtException(\Throwable $exception)
+    {
+        $l = new \atk4\ui\App();
+        $l->initLayout('Centered');
+        if ($exception instanceof \atk4\core\Exception) {
+            $l->layout->template->setHTML('Content', $exception->getHTML());
+        } elseif ($exception instanceof \Error) {
+            $l->layout->add(new View(['ui'=>'message', get_class($exception).': '.$exception->getMessage(). ' (in '.
+                $exception->getFile().':'.$exception->getLine()
+                .')', 'error']));
+            $l->layout->add(new Text())->set(nl2br($exception->getTraceAsString()));
+        } else {
+            $l->layout->add(new View(['ui'=>'message', get_class($exception).': '.$exception->getMessage(), 'error']));
+
+
+        }
+        $l->layout->template->tryDel('Header');
+        $l->run();
+        $this->run_called = true;
+    }
+
 
     public function initLayout($layout, $options = [])
     {
@@ -40,8 +96,11 @@ class App
             $layout = 'atk4\\ui\\Layout\\'.$layout;
             $layout = new $layout($options);
         }
+        $layout->app = $this;
 
         $this->html = new View(['defaultTemplate'=>'html.html']);
+        $this->html->app = $this;
+        $this->html->init();
         $this->layout = $this->html->add($layout);
 
         return $this;
@@ -49,6 +108,9 @@ class App
 
     public function normalizeClassName($name, $prefix = null)
     {
+        if (strpos('/', $name) === false && strpos('\\', $name) === false) {
+            $name = 'atk4/ui/'.($prefix?($prefix.'/'):'').$name;
+        } 
         if ($name === 'HelloWorld') {
             return 'atk4/ui/HelloWorld';
         }
@@ -63,6 +125,7 @@ class App
 
     public function run()
     {
+        $this->run_called = true;
         $this->html->template->set('title', $this->title);
         echo $this->html->render();
     }
@@ -70,7 +133,6 @@ class App
     public function init()
     {
         $this->_init();
-        $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
     }
 
     public function loadTemplate($name)

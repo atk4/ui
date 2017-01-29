@@ -37,7 +37,7 @@ class View implements jsExpressionable
      * Name of the region in the parent's template where this object
      * will output itself.
      */
-    public $region;
+    public $region = 'Content';
 
     /**
      * Enables UI keyword for Semantic UI indicating that this is a
@@ -273,6 +273,7 @@ class View implements jsExpressionable
         if (!$this->app) {
             $this->init();
         }
+
 
         if ($region === null) {
             $defaults = ['region' => 'Content'];
