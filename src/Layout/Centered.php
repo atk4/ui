@@ -21,4 +21,11 @@ class Centered extends Generic
 
         $this->template['title'] = $this->app->title;
     }
+
+    public function render()
+    {
+        $this->renderAll();
+        $this->template->appendHTML('HEAD', $this->getJS());
+        return $layout->template->render();
+    }
 }

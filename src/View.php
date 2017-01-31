@@ -57,6 +57,11 @@ class View implements jsExpressionable
     public $class = [];
 
     /**
+     * List of custom attributes
+     */
+    public $attr = [];
+
+    /**
      * Just here temporarily, until App picks it up.
      */
     protected $skin;
@@ -291,6 +296,8 @@ class View implements jsExpressionable
         if (!$object->template && $object->region) {
             $object->template = $this->template->cloneRegion($object->region);
             $this->template->del($object->region);
+        } else {
+            $this->template->del($object->region);
         }
 
         return $object;
@@ -387,6 +394,11 @@ class View implements jsExpressionable
         return $this;
     }
 
+    public function setAttr($attr, $value)
+    {
+        $this->attr[$attr] = $value;
+    }
+
     // }}}
 
     // {{{ Rendering
@@ -419,6 +431,14 @@ class View implements jsExpressionable
 
         if ($this->element) {
             $this->template->set('_element', $this->element);
+        }
+
+        if ($this->attr) {
+            $tmp = [];
+            foreach ($this->attr as $attr => $val) {
+                $tmp[] = $attr.'="'.htmlspecialchars($val).'"';
+            }
+            $this->template->set('attributes', implode(' ', $tmp));
         }
     }
 

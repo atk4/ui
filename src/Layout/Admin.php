@@ -40,5 +40,8 @@ class Admin extends Generic
 
     public function init()
     {
+        parent::init();
+
+        $this->menu = $this->add('Menu');
     }
 }

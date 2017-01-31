@@ -6,11 +6,17 @@ class Dropdown extends Lister
 {
     public $ui = 'dropdown';
 
+    public $js;
+
     public $defaultTemplate = 'dropdown.html';
 
     public function renderView()
     {
-        $this->js(true)->dropdown();
+        if (isset($this->js)) {
+            $this->js(true)->dropdown($this->js);
+        }else{
+            $this->js(true)->dropdown();
+        }
 
         return parent::renderView();
     }

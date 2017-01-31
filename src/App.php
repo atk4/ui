@@ -124,7 +124,9 @@ class App
     {
         $this->run_called = true;
         $this->html->template->set('title', $this->title);
-        echo $this->html->render();
+        $this->html->renderAll();
+        $this->html->template->appendHTML('HEAD', $this->html->getJS());
+        echo $this->html->template->render();
     }
 
     public function init()

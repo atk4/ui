@@ -1,0 +1,112 @@
+
+<div class="ui inverted fixed horizontal menu"><a class="header item" href="#">UI Test Layout 2</a>
+  <div class="ui simple dropdown item">Basic Examples<i class="dropdown icon"></i>
+    <div class="menu"><a class="item" href="layout.php">Layout test</a><a class="item" href="button.php">Button test</a></div>
+  </div>
+</div>
+<div class="ui main basic segment">
+  <h3>Nominal Acitivity Report</h3>
+  <form class="ui form small segment">
+    <div class="inline fields">
+      <div class="field">
+        <div class="ui labeled icon top left pointing dropdown button my-dropdown"><i class="calendar icon"></i><span class="text">This Year</span>
+          <div class="menu">
+            <div class="header">Date Presets</div>
+            <div class="item active">This Year</div>
+            <div class="item">Accounting Year</div>
+            <div class="item">Last Year</div>
+            <div class="item">Last Accounting Year</div>
+          </div>
+        </div>
+      </div>
+      <script>
+        $(function(){ 
+          $('.my-dropdown').dropdown();
+        });
+        
+      </script>
+      <div class="field">
+        <div class="ui labeled icon top left pointing dropdown button my-dropdown"><i class="tag icon"></i><span class="text">No Job</span>
+          <div class="menu">
+            <div class="header">Job Selection</div>
+            <div class="item">Limerick</div>
+            <div class="item">Dublin 29</div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui left icon input"><i class="calendar icon"></i>
+          <input type="text" name="email" placeholder="From"/>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui left icon input"><i class="calendar icon"></i>
+          <input type="text" name="email" placeholder="To"/>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui checkbox">
+          <input type="checkbox" name="suppress0"/>
+          <label>Suppress 0s</label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui checkbox">
+          <input type="checkbox" name="suppress0"/>
+          <label>Show Descriptions</label>
+        </div>
+      </div>
+    </div>
+    <div class="ui teal submit button"><i class="search icon"></i>Preview</div><a class="ui teal submit button" href="https://apps.zoomcharts.com/spreadsheet-analytics/#load="><i class="pie graph icon"></i>Analyse</a>
+    <div class="ui teal submit buttons">
+      <div class="ui button">Save As..</div>
+      <div class="ui floating pointing dropdown icon button my-dropdown"><i class="dropdown icon"></i>
+        <div class="menu">
+          <div class="item"><i class="file excel outline icon"> </i>Excel</div>
+          <div class="item"><i class="table icon"></i>CSV</div>
+          <div class="item"><i class="file pdf outline icon"></i>PDF</div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <h4>Ungrouped transaction list</h4>{Report}
+  <table class="ui very compact small table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Nominal</th>
+        <th>Contact</th>
+        <th>Ref</th>
+        <th>Job</th>
+        <th>Type</th>
+        <th>Debit</th>
+        <th>Credit</th>
+      </tr>
+    </thead>
+    <tbody>{rows}{row}
+      <tr>
+        <td>{date}08/12/1980{/}</td>
+        <td>{nominal}Sales:Wholesale:Munster{/}</td>
+        <td>{contact}Tipperary Toppers{/}</td>
+        <td>{ref_no}3377046{/}</td>
+        <td>{job}Great Gifts Joseph Greensmith{/}</td>
+        <td>{type}invoice{/}</td>
+        <td>€{debit}1,056.91{/}</td>
+        <td>€{credit}0.00{/}</td>
+      </tr>{/row}{/rows}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th class="right aligned" colspan="6">Closing balance after {count}29{/} records:</th>
+        <th>€1,056.91</th>
+        <th>€0.00</th>
+      </tr>
+      <tr>
+        <th class="right aligned" colspan="6">Total for {nominal}Sales:Limerick{/nominal}:</th>
+        <th>€1,056.91</th>
+        <th>€0.00</th>
+      </tr>
+    </tfoot>
+  </table>{/Report}
+</div>
+<div class="ui inverted vertical footer segment form-page">&nbps;Travel Match 2015. All Rights Reserved</div>
