@@ -57,7 +57,7 @@ class View implements jsExpressionable
     public $class = [];
 
     /**
-     * List of custom attributes
+     * List of custom attributes.
      */
     public $attr = [];
 
@@ -298,7 +298,6 @@ class View implements jsExpressionable
         }
 
         if ($this->template && $object->region) {
-
             if (is_string($this->template)) {
                 throw new Exception(['Property $template should contain object, not a string', 'template'=>$this->template]);
             }

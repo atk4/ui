@@ -5,7 +5,7 @@
 namespace atk4\ui;
 
 /**
- * Place menu 
+ * Place menu.
  */
 class Item extends View
 {
@@ -13,7 +13,7 @@ class Item extends View
 
     public $icon;
 
-    function renderView()
+    public function renderView()
     {
         if ($this->label) {
             $this->add(new Label($this->label));
@@ -25,5 +25,4 @@ class Item extends View
 
         parent::renderView();
     }
-
 }

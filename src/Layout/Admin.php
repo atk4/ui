@@ -2,7 +2,7 @@
 
 namespace atk4\ui\Layout;
 
-use \atk4\ui\Menu;
+use atk4\ui\Menu;
 
 /**
  * Implements a classic 100% width admin layout.
@@ -59,18 +59,15 @@ class Admin extends Generic
         }
     }
 
-    function renderView()
+    public function renderView()
     {
         if ($this->leftMenu) {
             if (count($this->leftMenu->elements) == 1) {
                 // no items were added, so lets add dashboard
-                $this->leftMenu->addItem(['Dashboard', 'icon'=>'dashboard'], 'index'); 
+                $this->leftMenu->addItem(['Dashboard', 'icon'=>'dashboard'], 'index');
             }
-            $this->leftMenu->addItem(['Logout', 'icon'=>'sign out'], 'logout'); 
-
+            $this->leftMenu->addItem(['Logout', 'icon'=>'sign out'], 'logout');
         }
         parent::renderView();
     }
-
-
 }
