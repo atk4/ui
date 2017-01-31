@@ -71,11 +71,9 @@ try {
 
     //$app->layout->add(['Header', 'Welcome to the app', 'icon'=>'plug', 'subHeader'=>'Learning to code'], 'Header');
 
-
     $m_comp = $app->menu->addMenu('Components');
     $m_comp->addItem(['Demo1', 'icon'=>'form'], ['demo'=>'form']);
     $m_comp->addItem(['Demo2', 'icon'=>'crud'], ['demo'=>'crud']);
-
 
     /*
 

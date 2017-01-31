@@ -26,6 +26,7 @@ class Centered extends Generic
     {
         $this->renderAll();
         $this->template->appendHTML('HEAD', $this->getJS());
+
         return $layout->template->render();
     }
 }
