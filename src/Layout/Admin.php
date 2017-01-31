@@ -2,6 +2,8 @@
 
 namespace atk4\ui\Layout;
 
+use \atk4\ui\Menu;
+
 /**
  * Implements a classic 100% width admin layout.
  *
@@ -36,12 +38,39 @@ class Admin extends Generic
 
     public $breadCrumb = null;  // for Breadcrumb
 
-    public $template = 'layout/admin.html';
+    public $defaultTemplate = 'layout/admin.html';
 
     public function init()
     {
         parent::init();
 
-        $this->menu = $this->add('Menu');
+        if ($this->menu === null) {
+            $this->menu = $this->add(new Menu('inverted fixed horizontal'), 'TopMenu');
+        }
+
+        if ($this->rightMenu === null) {
+            $this->rightMenu = $this->menu->add(new Menu(['ui'=>false]), 'RightMenu')
+                ->addClass('right menu')->removeClass('item');
+        }
+
+        if ($this->leftMenu === null) {
+            $this->leftMenu = $this->add(new Menu('left vertical inverted labeled visible sidebar'), 'LeftMenu');
+            $this->leftMenu->addHeader($this->app->title);
+        }
     }
+
+    function renderView()
+    {
+        if ($this->leftMenu) {
+            if (count($this->leftMenu->elements) == 1) {
+                // no items were added, so lets add dashboard
+                $this->leftMenu->addItem(['Dashboard', 'icon'=>'dashboard'], 'index'); 
+            }
+            $this->leftMenu->addItem(['Logout', 'icon'=>'sign out'], 'logout'); 
+
+        }
+        parent::renderView();
+    }
+
+
 }

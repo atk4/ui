@@ -11,10 +11,16 @@ class Item extends View
 {
     public $label;
 
+    public $icon;
+
     function renderView()
     {
         if ($this->label) {
             $this->add(new Label($this->label));
+        }
+
+        if ($this->icon) {
+            $this->add(new Icon($this->icon));
         }
 
         parent::renderView();
