@@ -8,7 +8,7 @@ use atk4\ui\View;
 /**
  * Generic Layout for a form.
  */
-class Vertical extends View
+class Generic extends View
 {
     public $form = null;
 
@@ -105,7 +105,7 @@ class Vertical extends View
                 continue;
             }
 
-            if ($el instanceof \atk4\ui\FormLayout\Vertical) {
+            if ($el instanceof \atk4\ui\FormLayout\Generic) {
                 if ($el->label && !$el->inline) {
                     $template = $labeled_group;
                     $template->set('label', $el->label);

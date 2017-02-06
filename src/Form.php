@@ -27,7 +27,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         if (!$this->layout) {
-            $this->setLayout(new \atk4\ui\FormLayout\Vertical(['form'=>$this]));
+            $this->setLayout(new \atk4\ui\FormLayout\Generic(['form'=>$this]));
         }
 
         return $this->layout->addField(...$args); //$this->fieldFactory($modelField));
@@ -38,7 +38,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function addHeader($title = null)
     {
         if (!$this->layout) {
-            $this->setLayout(new \atk4\ui\FormLayout\Vertical(['form'=>$this]));
+            $this->setLayout(new \atk4\ui\FormLayout\Generic(['form'=>$this]));
         }
 
         return $this->layout->addHeader($title);
@@ -47,7 +47,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function addGroup($title = null)
     {
         if (!$this->layout) {
-            $this->setLayout(new \atk4\ui\FormLayout\Vertical(['form'=>$this]));
+            $this->setLayout(new \atk4\ui\FormLayout\Generic(['form'=>$this]));
         }
 
         return $this->layout->addGroup($title);
@@ -113,7 +113,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         if (!$this->layout) {
-            $this->setLayout(new \atk4\ui\FormLayout\Vertical(['form'=>$this]));
+            $this->setLayout(new \atk4\ui\FormLayout\Generic(['form'=>$this]));
         }
 
         if ($fields === null) {

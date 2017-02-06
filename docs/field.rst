@@ -25,8 +25,33 @@ When you define your Model Fields, the 'type' will be mapped to appropriate Form
 object. Most of those will extend Input, so it makes sense to start by looking
 at this class.
 
+Binding Fields with Form
+------------------------
+
+Adding fields to the form is done through :php:meth:`Form::addField`, but you can also
+associate any field with a form manually::
+
+    $tabs = $form->add('Tabs');
+
+    $tab = $tabs->addTab();
+
+    $cols = $tab->add('Columns');
+
+    $c1 = $cols->addColumn();
+    
+    $line = $c1->add('FormField/Line', [
+        'name'=>'age',
+        'form'=>$form,
+        'field'=>$form->model->getElement('age')
+    ]);
+
+The rest of this documentation chapter focuses on field visual presentation. To learn more
+about Forms and how it interacts with fields, go to the :ref:`form`
+
+
 Look and Feel
 -------------
+
 
 .. php:class: Input
 

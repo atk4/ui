@@ -203,7 +203,7 @@ of labels etc.
 .. php:method:: setLayout(FormLayout\Generic $layout)
 
     Sets a custom FormLayout object for a form. If not specified then form will automatically
-    use FormLayout\Vertical.
+    use FormLayout\Generic.
 
 .. php:attr:: layout
 
