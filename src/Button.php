@@ -1,15 +1,22 @@
 <?php
+
 namespace atk4\ui;
 
-class Button extends View {
-    public $_class = 'button';
+class Button extends View
+{
+    public $ui = 'button';
 
     public $icon = null;
 
-    function renderView() {
-        if ($this->icon) {
+    public $rightIcon = null;
 
-            $this->add(new Icon($this->icon), 'Content');
+    /**
+     * $icon property will end up a button icon.
+     */
+    public function renderView()
+    {
+        if ($this->icon && !is_object($this->icon)) {
+            $this->icon = $this->add(new Icon($this->icon), 'Content');
 
             if ($this->content) {
                 $this->addClass('labeled');
@@ -18,15 +25,30 @@ class Button extends View {
             }
 
             $this->addClass('icon');
-            $this->icon = false;
+        }
+
+        if ($this->rightIcon && !is_object($this->rightIcon)) {
+            $this->rightIcon = $this->add(new Icon($this->rightIcon), 'Content');
+
+            if ($this->content) {
+                $this->addClass('right labeled');
+                $this->add(new Text($this->content));
+                $this->content = false;
+            }
+
+            $this->addClass('icon');
         }
 
         parent::renderView();
     }
 
-    function recursiveRender() {
+    /**
+     * By Default buttons should have something written on them, e.g. "Button".
+     */
+    public function recursiveRender()
+    {
         parent::recursiveRender();
-        if(!$this->template->get('Content')) {
+        if (!$this->template->get('Content')) {
             $this->template->set('Content', 'Button');
         }
     }

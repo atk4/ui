@@ -17,95 +17,20 @@ html
             bottom: 0;
             width: 100%;
         }
-        .main.segment {
-            margin-top: 3em;
+        body {
+            padding-top: 3em;
         }
       }
   body
     .ui.inverted.fixed.horizontal.menu
         a.header.item(href='#')
-          | SMBO Reports
+          | UI Test Layout 2
         .ui.simple.dropdown.item
-          | Sales 
+          | Basic Examples
           i.dropdown.icon
           .menu
-            a.item(href='#') Profit & Loss
-            .item
-              i.dropdown.icon
-              |             Clients
-              .menu
-                a.item(href='#') Collector
-                a.item(href='#') Debtors
-            .item
-              i.dropdown.icon
-              | Till
-              .menu
-                a.item(href='#') Cash-up list
-            .item
-              i.dropdown.icon
-              |             Analysis
-              .menu
-                a.item(href='#') Sales Analysis
-                a.item(href='#') Sales Breakdown
-            .divider
-            .header Accountant Reports
-            a.item(href='#') Aged Debtors
-            a.item(href='#') Debtor Control Report
-            a.item(href='#') Lodgement Analysis
-
-        .ui.simple.dropdown.item
-          | Purchases 
-          i.dropdown.icon
-          .menu
-            a.item(href='#') Profit & Loss
-            a.item(href='#') Stock
-            .item
-              i.dropdown.icon
-              | Suppliers
-              .menu
-                a.item(href='#') Creditors
-            .item
-              i.dropdown.icon
-              | Analysis
-              .menu
-                a.item(href='#') Purchase Analysis
-                a.item(href='#') Purchase Breakdown
-            .divider
-            .header Accountant Reports
-            a.item(href='#') Aged Debtors Report
-            a.item(href='#') Lodgement Analysis
-
-        .ui.simple.dropdown.item
-          | Ledger
-          i.dropdown.icon
-          .menu
-            a.item(href='#') At a glance
-            a.item(href='#') Profit & Loss
-            a.item(href='#') Balance Sheet
-            a.item(href='#') General Ledger
-            a.item(href='#').active Nominal Activity
-            a.item(href='#') Simple Trial Balance
-            .item
-              i.dropdown.icon
-              | Other Reports
-              .menu
-                a.item(href='#') Trial Balance D/D
-                a.item(href='#') Sales Breakdown
-            .divider
-            .header Accountant Reports
-            a.item(href='#') Opening Balances
-            a.item(href='#') YTD Report
-
-        .ui.simple.dropdown.item
-          | VAT
-          i.dropdown.icon
-          .menu
-            a.item(href='#') VAT Reconciliation
-            a.item(href='#') Intrastat
-            a.item(href='#') ARTD
-            a.item(href='#') VAT3
-            a.item(href='#') VAT Control
-            a.item(href='#') VAT Errors
+            a.item(href='layout.php') Layout test
+            a.item(href='button.php') Button test
 
     .ui.main.basic.segment
        h3 Nominal Acitivity Report

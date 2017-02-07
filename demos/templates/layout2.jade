@@ -10,6 +10,7 @@ html
     link(rel='stylesheet', type='text/css', href='http://semantic-ui.com/dist/semantic.css')
     script(src='https://code.jquery.com/jquery-3.1.1.js')
     script(src='http://semantic-ui.com/dist/semantic.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js')
     style(type='text/css').
       @media (min-height: 320px) {
         .ui.footer.form-page { /* Increased specificity for SO snippet priority */
@@ -21,6 +22,7 @@ html
             padding-top: 3em;
         }
       }
+    | {$HEAD}
   body
     .ui.inverted.fixed.horizontal.menu
         a.header.item(href='#')
@@ -29,8 +31,11 @@ html
           | Basic Examples
           i.dropdown.icon
           .menu
-            a.item(href='layout.php') Layout test
-            a.item(href='button.php') Button test
+            a.item(href='layout.php') User-defined Layouts
+            a.item(href='button.php') Button Styling
+            a.item(href='button2.php') Interactive Buttons
+            a.item(href='field.php') Form Fields
+            a.item(href='form.php') Form
 
     .ui.main.basic.segment
        h3 Button Test

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class represents a miniature app
+ * Class represents a miniature app.
  */
 class MiniApp
 {
@@ -13,8 +13,8 @@ class MiniApp
     {
         if (!is_array($defaults)) {
             throw new Exception([
-                '$defaults must be specified as an array', 
-                'arg' => $defaults
+                '$defaults must be specified as an array',
+                'arg' => $defaults,
             ]);
         }
 
