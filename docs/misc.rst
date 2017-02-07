@@ -25,7 +25,7 @@ To add icon inside your application::
 
     $this->add('Icon', 'bomb');
 
-The :ref:`seed` is used as an icon class and may contain spaces to contain multiple classes. You can add additional classes or remove them
+The :ref:`seed` is used as an icon class. It may contain spaces to separate multiple classes. You can add additional classes or remove them
 through :php:meth:`View::addClass` :php:meth:`View::removeClass`::
 
     $this->add('Icon', 'flag')->addClass('outline');

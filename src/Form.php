@@ -13,13 +13,29 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     public $defaultTemplate = 'form.html';
 
+    /**
+     * When form is submitted successfully, this template is used by method success() to replace form contents
+     */
     public $successTemplate = 'form-success.html';
 
+    /**
+     * A current layout of a form, needed if you call $form->addField()
+     */
     public $layout = null;
 
-    /** This disables content */
+    /** 
+     * Disables form contents
+     */
     public $content = false;
 
+    /**
+     * Will point to the Save button. If you don't want to have save, destroy it. Initialized by setLayout()
+     */
+    public $buttonSave;
+
+    /**
+     * Add field into current layout. If no layout, create one. If no model, create blank one.
+     */
     public function addField(...$args)
     {
         if (!$this->model) {
@@ -27,7 +43,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         if (!$this->layout) {
-            $this->setLayout(new \atk4\ui\FormLayout\Generic(['form'=>$this]));
+            $this->setLayout();
         }
 
         return $this->layout->addField(...$args); //$this->fieldFactory($modelField));
@@ -35,29 +51,39 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return $formField;
     }
 
+    /**
+     * Add header into the form, which appears as a separator.
+     */
     public function addHeader($title = null)
     {
         if (!$this->layout) {
-            $this->setLayout(new \atk4\ui\FormLayout\Generic(['form'=>$this]));
+            $this->setLayout();
         }
 
         return $this->layout->addHeader($title);
     }
 
+    /**
+     * Creates a group of fields and returts layout.
+     */
     public function addGroup($title = null)
     {
         if (!$this->layout) {
-            $this->setLayout(new \atk4\ui\FormLayout\Generic(['form'=>$this]));
+            $this->setLayout();
         }
 
         return $this->layout->addGroup($title);
     }
 
-    public function setLayout($layout)
+    public function setLayout($layout = null)
     {
+        if(!$layout) {
+            $layout = new \atk4\ui\FormLayout\Generic(['form'=>$this]);
+        }
+
         $this->layout = $this->add($layout);
-        $this->layout->addButton($button = new Button(['Save', 'primary']));
-        $button->on('click', $this->js()->form('submit'));
+        $this->layout->addButton($this->buttonSave = new Button(['Save', 'primary']));
+        $this->buttonSave->on('click', $this->js()->form('submit'));
     }
 
     public function onSubmit($callback)
