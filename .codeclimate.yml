@@ -36,8 +36,6 @@ engines:
         enabled: false      # our code is complex so that your code wouldn't be!
       Controversial/CamelCaseVariableName:
         enabled: false      # because we call variables $f_login, $m_user for better readability.
-      Controversial/Superglobals:
-        enabled: false      # we use $_POST superglobal in forms.
   radon:
     enabled: true
 ratings:
