@@ -15,8 +15,15 @@ class Generic extends View
      */
     public $form;
 
+    /**
+     * @var \atk4\data\Field - points to model field
+     */
     public $field;
 
+    /**
+     * It only makes sense to have "name" property inside a field if
+     * it was used inside a form.
+     */
     public function renderView()
     {
         if ($this->form) {

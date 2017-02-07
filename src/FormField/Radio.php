@@ -9,15 +9,27 @@ use atk4\ui\Form;
  */
 class Radio extends Generic
 {
+    /**
+     * {@inheritdoc}
+     */
     public $ui = 'radio checkbox';
 
+    /**
+     * {@inheritdoc}
+     */
     public $defaultTemplate = 'formfield/radio.html';
 
+    /**
+     * {@inheritdoc}
+     */
     public function setModel($m)
     {
         $this->add(new \atk4\ui\Lister(), 'Radio')->setModel($m);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function renderView()
     {
         $this->js(true)->checkbox();
