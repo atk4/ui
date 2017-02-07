@@ -4,12 +4,11 @@ require '../vendor/autoload.php';
 
 $app = new \atk4\ui\App('Agile UI - Demo Suite', ['icon'=>'user']);
 
-
-$app->initLayout((isset($_GET['layout']) && $_GET['layout']==='centered')?'Centered':'Admin');
+$app->initLayout((isset($_GET['layout']) && $_GET['layout'] === 'centered') ? 'Centered' : 'Admin');
 
 $layout = $app->layout;
 
-if(!isset($layout->leftMenu)){
+if (!isset($layout->leftMenu)) {
     return;
 }
 
@@ -29,11 +28,10 @@ $basic->addItem('Header', ['header']);
 $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon'=>'talk']);
 $basic->addItem('JavaScript Events', ['button2']);
 
-$f=basename($_SERVER['PHP_SELF']);
+$f = basename($_SERVER['PHP_SELF']);
 
 // Would be nice if this would be a link.
 $layout->menu->addItem()->add(new \atk4\ui\Button(['View Source', 'teal', 'icon'=>'github']))
     ->setAttr('target', '_blan')->on('click', new \atk4\ui\jsExpression('document.location=[];', ['https://github.com/atk4/ui/blob/develop/demos/'.$f]));
-
 
 $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';

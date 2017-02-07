@@ -402,6 +402,7 @@ class View implements jsExpressionable
     public function setAttr($attr, $value)
     {
         $this->attr[$attr] = $value;
+
         return $this;
     }
 

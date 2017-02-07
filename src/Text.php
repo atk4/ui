@@ -18,7 +18,8 @@ class Text extends View
 
     public function addParagraph($para)
     {
-        $this->content .= "<p>".htmlspecialchars($para)."</p>";
+        $this->content .= '<p>'.htmlspecialchars($para).'</p>';
+
         return $this;
     }
 }

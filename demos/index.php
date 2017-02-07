@@ -1,4 +1,5 @@
 <?php
+
 include 'init.php';
 
 $layout->add('Header')->set('Getting Started with Agile UI Demo Suite');

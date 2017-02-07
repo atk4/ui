@@ -1,4 +1,5 @@
 <?php
+
 include 'init.php';
 
 $t = $layout->add(['View', 'red'=>true,  'ui'=>'segment'])->add('Text');
@@ -10,4 +11,3 @@ $layout->add('Button')->set(['Manual layout'])->link(['layout']);
 $layout->add('Button')->set(['Centered Layout'])->link(['header', 'layout'=>'centered']);
 $layout->add('Button')->set(['Admin Layout'])->link(['header']);
 $layout->add('Button')->set(['Exception Error'])->link(['error']);
-

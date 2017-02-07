@@ -14,40 +14,11 @@
 
 <?php
 
-require'../vendor/autoload.php';
+require '../vendor/autoload.php';
 
 $button = new \atk4\ui\Button('hello');
 $button->init();
 echo $button->render();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 exit;
 
@@ -55,14 +26,9 @@ $app = new \atk4\ui\App('Hello');
 
 $layout = new \atk4\ui\Layout\Centered();
 
-
 $layout->add(new \atk4\ui\Button(['PHP7 Rocks', 'icon'=>'book', 'blue']));
 
 $app->setLayout($layout);
 $app->run();
 
-
-
-    
-    
     //\atk4\ui\Layout\Centered();

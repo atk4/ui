@@ -155,22 +155,22 @@ class App
      */
     public function url($args = [])
     {
-        if(is_string($args)) {
+        if (is_string($args)) {
             $args = [$args];
         }
 
-        if(!isset($args[0])) {
+        if (!isset($args[0])) {
             $args[0] = '';
         }
 
         $page = $args[0];
         unset($args[0]);
 
-        $url = $page?($page.'.php'):'';
+        $url = $page ? ($page.'.php') : '';
 
         $args = http_build_query($args);
 
-        if($args){ 
+        if ($args) {
             $url = $url.'?'.$args;
         }
 

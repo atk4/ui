@@ -4,9 +4,12 @@
  */
 require 'init.php';
 
-class Person extends \atk4\data\Model {
+class Person extends \atk4\data\Model
+{
     public $table = 'person';
-    function init() {
+
+    public function init()
+    {
         parent::init();
 
         $this->addField('name');
@@ -32,23 +35,28 @@ $form->setModel(new Person($db));
 
 $form->addHeader('Good controll over standard layouts');
 $f_address = $form->addGroup('Address with label');
-$f_address->addField('address', ['width'=>'twelve'])->iconLeft='building';
+$f_address->addField('address', ['width'=>'twelve'])->iconLeft = 'building';
 $f_address->addField('code', ['Post Code', 'width'=>'four']);
 
 $f_guardian = $form->addGroup(['Guardian', 'inline'=>true]);
 $f_guardian->addField('first_name', ['width'=>'eight'])
-    ->action=['Select', 'rightIcon'=>'search'];
+    ->action = ['Select', 'rightIcon'=>'search'];
 
 $f_guardian->addField('middle_name', ['width'=>'three', 'disabled'=>true]);
 $f_guardian->addField('last_name', ['width'=>'five']);
 
 $form->onSubmit(function ($f) {
-
     $errors = [];
-    if (strlen($f['first_name']<3)) $errors[] = $f->error('first_name', 'too short');
-    if (strlen($f['last_name']<5)) $errors[] = $f->error('last_name', 'too short');
+    if (strlen($f['first_name'] < 3)) {
+        $errors[] = $f->error('first_name', 'too short');
+    }
+    if (strlen($f['last_name'] < 5)) {
+        $errors[] = $f->error('last_name', 'too short');
+    }
 
-    if ($errors) return $errors;
+    if ($errors) {
+        return $errors;
+    }
 
     // create all related DB records
     $f->model->save();
@@ -60,4 +68,3 @@ $form->onSubmit(function ($f) {
         'there are now '.$f->model->action('count')->getOne().' records in DB'
     );
 });
-
