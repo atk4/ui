@@ -134,11 +134,11 @@ class View implements jsExpressionable
      *
      * @return Model
      */
-    public function setModel(\atk4\data\Model $model)
+    public function setModel(\atk4\data\Model $m)
     {
-        $this->model = $model;
+        $this->model = $m;
 
-        return $model;
+        return $m;
     }
 
     public function setSource(array $data)
