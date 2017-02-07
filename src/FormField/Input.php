@@ -45,7 +45,7 @@ class Input extends Generic
      */
     public function getInput()
     {
-        return '<input type="'.$this->inputType.'" placeholder="'.$this->placeholder.'"/>';
+        return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
 
     /**

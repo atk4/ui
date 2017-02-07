@@ -31,4 +31,10 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->expectOutputRegex($this->regex);
         include 'field.php';
     }
+
+    public function testLayout()
+    {
+        $this->expectOutputRegex($this->regex);
+        include 'layout.php';
+    }
 }

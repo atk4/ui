@@ -5,15 +5,18 @@ Agile UI Documentation
 Contents:
 
 .. toctree::
-    :maxdepth: 3
+    :maxdepth: 4
 
     overview
+    core
     quickstart
     template
     view
     js
     callbacks
     field
+    form
+    misc
 
 
 

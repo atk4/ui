@@ -7,7 +7,7 @@ class Lister extends View
     public $t_row = null;
     public $t_totals = null;
 
-    public $template = null;
+    public $defaultTemplate = null;
 
     public function renderView()
     {

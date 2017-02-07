@@ -90,6 +90,11 @@ class View implements jsExpressionable
      */
     public $content = null;
 
+    /**
+     * Change this if you want to substitute default "div" for something else.
+     */
+    public $element = null;
+
     // }}}
 
     // {{{ Setting Things up
@@ -104,7 +109,7 @@ class View implements jsExpressionable
      */
     public function __construct($defaults = [])
     {
-        if (is_string($defaults)) {
+        if (is_string($defaults) && $this->content !== false) {
             $this->content = $defaults;
 
             return;
@@ -168,7 +173,7 @@ class View implements jsExpressionable
      */
     protected function setProperties($properties)
     {
-        if (isset($properties[0])) {
+        if (isset($properties[0]) && $this->content !== false) {
             $this->content = $properties[0];
             unset($properties[0]);
         }
@@ -262,26 +267,34 @@ class View implements jsExpressionable
      * In addition to adding a child object, set up it's template
      * and associate it's output with the region in our template.
      *
-     * @param View   $object New object to add
-     * @param string $region
+     * @param View         $object New object to add
+     * @param string|array $region (or array for full set of defaults)
      *
      * @return View
      */
-    public function add(View $object, $region = 'Content')
+    public function add(View $object, $region = null)
     {
         if (!$this->app) {
             $this->init();
-            //$this->initDefaultApp();
         }
 
-        /** @var View $object */
-        $object = $this->_add($object);
+        if ($region === null) {
+            $defaults = ['region' => 'Content'];
+        } elseif (!is_array($region)) {
+            $defaults = ['region' => $region];
+        } else {
+            $defaults = $region;
+            if (isset($defaults[0])) {
+                $defaults['region'] = $defaults[0];
+                unset($defaults[0]);
+            }
+        }
 
-        $object->region = $region;
+        $object = $this->_add($object, $defaults);
 
-        if (!$object->template) {
-            $object->template = $this->template->cloneRegion($region);
-            $this->template->del($region);
+        if (!$object->template && $object->region) {
+            $object->template = $this->template->cloneRegion($object->region);
+            $this->template->del($object->region);
         }
 
         return $object;
@@ -406,6 +419,10 @@ class View implements jsExpressionable
 
         if ($this->id) {
             $this->template->trySet('_id', $this->id);
+        }
+
+        if ($this->element) {
+            $this->template->set('_element', $this->element);
         }
     }
 

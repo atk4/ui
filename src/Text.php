@@ -4,7 +4,7 @@ namespace atk4\ui;
 
 class Text extends View
 {
-    public $template = false;
+    public $defaultTemplate = false;
 
     public function render()
     {
