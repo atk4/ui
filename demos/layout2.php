@@ -4,68 +4,8 @@
  */
 require '../vendor/autoload.php';
 
-class Persistence_Faker extends \atk4\data\Persistence
-{
-    public $faker = null;
-
-    public $count = 50;
-
-    public function __construct($opts = [])
-    {
-        //parent::__construct($opts);
-
-        if (!$this->faker) {
-            $this->faker = Faker\Factory::create();
-        }
-    }
-
-    public function prepareIterator($m)
-    {
-        foreach ($this->export($m) as $row) {
-            yield $row;
-        }
-    }
-
-    public function export($m, $fields = [])
-    {
-        if (!$fields) {
-            foreach ($m->elements as $name=>$e) {
-                if ($e instanceof \atk4\data\Field) {
-                    $fields[] = $name;
-                }
-            }
-        }
-
-        $data = [];
-        for ($i = 0; $i < $this->count; $i++) {
-            $row = [];
-            foreach ($fields as $field) {
-                $type = $field;
-
-                if ($field == $m->id_field) {
-                    $row[$field] = $i + 1;
-                    continue;
-                }
-
-                $actual = $m->getElement($field)->actual;
-                if ($actual) {
-                    $type = $actual;
-                }
-
-                $row[$field] = $this->faker->$type;
-            }
-            $data[] = $row;
-        }
-
-        return array_map(function ($r) use ($m) {
-            return $this->typecastLoadRow($m, $r);
-        }, $data);
-    }
-}
-
 try {
     $app = new \atk4\ui\App('Agile Toolkit Demo App');
-    $db = new Persistence_Faker();
 
     $app->initLayout('Admin');
 
@@ -110,16 +50,6 @@ try {
 
         return $errors ?: $f->success('No more errors', 'so we have saved everything into the database');
     });
-
-    /*
-    $m = new \atk4\data\Model($p);
-
-    $m->addField('date', ['type'=>'date']);
-    $m->addField('contact', ['actual'=>'name']);
-
-    $layout->add(new \atk4\ui\Lister(), 'Report')
-        ->setModel($m);
-     */
 
     $app->run();
 } catch (\atk4\core\Exception $e) {
