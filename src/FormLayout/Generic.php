@@ -11,24 +11,24 @@ use atk4\ui\View;
 class Generic extends View
 {
     /**
-     * Links layout to the form
+     * Links layout to the form.
      */
     public $form = null;
 
     public $defaultTemplate = 'formlayout/generic.html';
 
     /**
-     * If specified will appear on top of the group. Can be string or Label object
+     * If specified will appear on top of the group. Can be string or Label object.
      */
     public $label = null;
 
     /**
-     * Specify width of a group in numerical word e.g. 'width'=>'two' as per Semantic UI grid system
+     * Specify width of a group in numerical word e.g. 'width'=>'two' as per Semantic UI grid system.
      */
     public $width = null;
 
     /**
-     * Set true if you want fields to appear in-line
+     * Set true if you want fields to appear in-line.
      */
     public $inline = null;
 

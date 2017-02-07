@@ -10,17 +10,17 @@ use atk4\ui\Form;
 class Radio extends Generic
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public $ui = 'radio checkbox';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public $defaultTemplate = 'formfield/radio.html';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setModel($m)
     {
@@ -28,7 +28,7 @@ class Radio extends Generic
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function renderView()
     {

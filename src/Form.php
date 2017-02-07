@@ -14,22 +14,22 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public $defaultTemplate = 'form.html';
 
     /**
-     * When form is submitted successfully, this template is used by method success() to replace form contents
+     * When form is submitted successfully, this template is used by method success() to replace form contents.
      */
     public $successTemplate = 'form-success.html';
 
     /**
-     * A current layout of a form, needed if you call $form->addField()
+     * A current layout of a form, needed if you call $form->addField().
      */
     public $layout = null;
 
-    /** 
-     * Disables form contents
+    /**
+     * Disables form contents.
      */
     public $content = false;
 
     /**
-     * Will point to the Save button. If you don't want to have save, destroy it. Initialized by setLayout()
+     * Will point to the Save button. If you don't want to have save, destroy it. Initialized by setLayout().
      */
     public $buttonSave;
 
@@ -77,7 +77,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     public function setLayout($layout = null)
     {
-        if(!$layout) {
+        if (!$layout) {
             $layout = new \atk4\ui\FormLayout\Generic(['form'=>$this]);
         }
 
