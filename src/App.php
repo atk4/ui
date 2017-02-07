@@ -155,15 +155,23 @@ class App
      */
     public function url($args = [])
     {
-        $url = $_SERVER['REQUEST_URI'];
-        $query = parse_url($url, PHP_URL_QUERY);
+        if(is_string($args)) {
+            $args = [$args];
+        }
+
+        if(!isset($args[0])) {
+            $args[0] = '';
+        }
+
+        $page = $args[0];
+        unset($args[0]);
+
+        $url = $page?($page.'.php'):'';
 
         $args = http_build_query($args);
 
-        if ($query) {
-            $url .= '&'.$args;
-        } else {
-            $url .= '?'.$args;
+        if($args){ 
+            $url = $url.'?'.$args;
         }
 
         return $url;

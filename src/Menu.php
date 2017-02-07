@@ -65,7 +65,14 @@ class Menu extends View
     public function addGroup($title)
     {
         $group = $this->add(new self(), ['defaultTemplate'=>'menugroup.html', 'ui'=>false]);
-        $group->set('title', $title);
+        if (is_string($title)) {
+            $group->set('title', $title);
+        } else {
+            if ($title['icon']) {
+                $group->add(new Icon($title['icon']), 'Icon')->removeClass('item');
+            }
+            $group->set('title', $title[0]);
+        }
 
         return $group;
     }

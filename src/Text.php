@@ -15,4 +15,10 @@ class Text extends View
     {
         return $this->content;
     }
+
+    public function addParagraph($para)
+    {
+        $this->content .= "<p>".htmlspecialchars($para)."</p>";
+        return $this;
+    }
 }

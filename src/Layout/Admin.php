@@ -66,7 +66,7 @@ class Admin extends Generic
                 // no items were added, so lets add dashboard
                 $this->leftMenu->addItem(['Dashboard', 'icon'=>'dashboard'], 'index');
             }
-            $this->leftMenu->addItem(['Logout', 'icon'=>'sign out'], 'logout');
+            //$this->leftMenu->addItem(['Logout', 'icon'=>'sign out'], ['logout']);
         }
         parent::renderView();
     }

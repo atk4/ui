@@ -402,6 +402,7 @@ class View implements jsExpressionable
     public function setAttr($attr, $value)
     {
         $this->attr[$attr] = $value;
+        return $this;
     }
 
     // }}}
@@ -768,7 +769,7 @@ class View implements jsExpressionable
             foreach ($eventActions as $action) {
                 // wrap into callback
                 if ($event !== 'always') {
-                    $action = (new jQuery($action->_constructorArgs[0]))
+                    $action = (new jQuery(@$action->_constructorArgs[0]))
                         ->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
                 }
 
