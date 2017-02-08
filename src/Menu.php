@@ -5,7 +5,7 @@
 namespace atk4\ui;
 
 /**
- * Place menu 
+ * Place menu.
  */
 class Menu extends View
 {
@@ -15,10 +15,10 @@ class Menu extends View
 
     //public $defaultTemplate = 'menu.html';
 
-    function addItem($name = null, $action = null)
+    public function addItem($name = null, $action = null)
     {
         $item = $this->add(['Item', 'element'=>'a']);
-        if(!is_null($name)) {
+        if (!is_null($name)) {
             $item->set($name);
         }
 
@@ -29,20 +29,22 @@ class Menu extends View
         return $item;
     }
 
-    function addMenu($name)
+    public function addMenu($name)
     {
-        $sub_menu = $this->add(new Menu(), ['defaultTemplate'=>'submenu.html', 'ui'=>'dropdown']);
+        $sub_menu = $this->add(new self(), ['defaultTemplate'=>'submenu.html', 'ui'=>'dropdown']);
         $sub_menu->set('label', $name);
         if ($this->ui == 'menu') {
             $sub_menu->js(true)->dropdown(['on'=>'hover', 'action'=>'hide']);
         }
+
         return $sub_menu;
     }
 
-    function addGroup($title)
+    public function addGroup($title)
     {
-        $group = $this->add(new Menu(), ['defaultTemplate'=>'menugroup.html', 'ui'=>false]);
+        $group = $this->add(new self(), ['defaultTemplate'=>'menugroup.html', 'ui'=>false]);
         $group->set('title', $title);
+
         return $group;
     }
 
@@ -50,6 +52,7 @@ class Menu extends View
     {
         $item = parent::add($object, $region);
         $item->addClass('item');
+
         return $item;
     }
 
@@ -59,7 +62,7 @@ class Menu extends View
         }
     }
      */
-    function renderView()
+    public function renderView()
     {
         if ($this->activate_on_click && $this->ui == 'menu') {
             // Semantic UI need some JS magic

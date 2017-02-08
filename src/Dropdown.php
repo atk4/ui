@@ -14,7 +14,7 @@ class Dropdown extends Lister
     {
         if (isset($this->js)) {
             $this->js(true)->dropdown($this->js);
-        }else{
+        } else {
             $this->js(true)->dropdown();
         }
 
