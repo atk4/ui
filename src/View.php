@@ -134,11 +134,11 @@ class View implements jsExpressionable
      *
      * @return Model
      */
-    public function setModel(\atk4\data\Model $model)
+    public function setModel(\atk4\data\Model $m)
     {
-        $this->model = $model;
+        $this->model = $m;
 
-        return $model;
+        return $m;
     }
 
     public function setSource(array $data)
@@ -295,8 +295,13 @@ class View implements jsExpressionable
 
         if (!$object->template && $object->region) {
             $object->template = $this->template->cloneRegion($object->region);
-            $this->template->del($object->region);
-        } else {
+        }
+
+        if ($this->template && $object->region) {
+            if (is_string($this->template)) {
+                throw new Exception(['Property $template should contain object, not a string', 'template'=>$this->template]);
+            }
+
             $this->template->del($object->region);
         }
 
@@ -397,6 +402,8 @@ class View implements jsExpressionable
     public function setAttr($attr, $value)
     {
         $this->attr[$attr] = $value;
+
+        return $this;
     }
 
     // }}}
@@ -620,7 +627,7 @@ class View implements jsExpressionable
      *
      * @return jQuery
      */
-    public function on($event, $selector = null, $action = null)
+    public function on($event, $selector = null, $action = null, $defaults = null)
     {
         // second argument may be omitted
         if (!is_string($selector) && is_null($action)) {
@@ -628,7 +635,7 @@ class View implements jsExpressionable
             $selector = null;
         }
 
-        $actions = [];
+        $actions = is_null($defaults) ? ['preventDefault'=>true, 'stopPropagation'=>true] : $defaults;
 
         // will be returned from this method, so you can chain more stuff on it
         $actions[] = $thisAction = new jQuery(new jsExpression('this'));
@@ -707,9 +714,6 @@ class View implements jsExpressionable
             $actions[] = $action;
         }
 
-        $actions['preventDefault'] = true;
-        $actions['stopPropagation'] = true;
-
         $action = new jsFunction($actions);
 
         if ($selector) {
@@ -766,7 +770,7 @@ class View implements jsExpressionable
             foreach ($eventActions as $action) {
                 // wrap into callback
                 if ($event !== 'always') {
-                    $action = (new jQuery($action->_constructorArgs[0]))
+                    $action = (new jQuery(@$action->_constructorArgs[0]))
                         ->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
                 }
 

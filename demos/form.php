@@ -10,17 +10,7 @@
  * This approach will also prevent your application from registering shutdown handler or catching error,
  * so we will need to do a bit of work about that too.
  */
-require '../vendor/autoload.php';
-
-try {
-    $layout = new \atk4\ui\Layout\Generic(['defaultTemplate'=>'./templates/layout2.html']);
-
-    $layout->js(true, new \atk4\ui\jsExpression('$.fn.api.settings.successTest = function(response) {
-  if(response && response.eval) {
-     var result = function(){ eval(response.eval); }.call(this.obj);
-  }
-  return false;
-}'));
+require 'init.php';
 
     $layout->add(new \atk4\ui\View([
         'Forms below focus on Data integration and automated layouts',
@@ -57,7 +47,6 @@ try {
     $f->addHeader('Example fields added one-by-one');
     $f->addField('name');
     $f->addField('email');
-    $f->addField('email');
 
     $f->addHeader('Example of field grouping');
     $gr = $f->addGroup('Address with label');
@@ -89,10 +78,5 @@ try {
         return $errors ?: $f->success('No more errors', 'so we have saved everything into the database');
     });
 
-    $layout->renderAll();
-    $layout->template->appendHTML('HEAD', $layout->getJS());
-    echo $layout->template->render();
-} catch (\atk4\core\Exception $e) {
-    $layout->template->setHTML('Content', $e->getHTML());
-    echo $layout->template->render();
-}
+    //$layout->renderAll();
+    //$layout->template->appendHTML('HEAD', $layout->getJS());
