@@ -1,0 +1,23 @@
+<table id="{$_id}" class="{_ui}ui{/} {$class} {_class}{/}" style="{$style}" {$attributes}>
+<thead>{Head}
+  <tr>{$cells}</tr>{/}
+</thead>
+<tbody>
+  {Body}
+  {Row}
+  <tr>{$cells}</tr>
+  {/}
+  {Empty}
+  <tr colspan="{$columns}">Table is empty!!!! Deal with it!</tr>
+  {/}
+  {/tbody}
+</tbody>{has_foot}
+<tfoot>
+  {Foot}
+  {Totals}
+  {/}
+  {Paginator}
+  {/}
+  {/}
+</tfoot>{/}
+<table/>

@@ -110,6 +110,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return $this->_fieldFactory($modelField);
     }
 
+    /**
+     * Will come up with a column object based on the field object supplied.
+     */
     public function _fieldFactory(\atk4\data\Field $f)
     {
         switch ($f->type) {
