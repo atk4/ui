@@ -13,7 +13,7 @@ class PostTest extends \atk4\core\PHPUnit_AgileTestCase
         $_POST = ['name'=>'John', 'is_married'=>'Y'];
         $this->model = new Model();
         $this->model->addField('name');
-        $this->model->addField('surname');
+        $this->model->addField('surname', ['default'=>'Smith']);
         $this->model->addField('is_married', ['type'=>'boolean']);
     }
 
@@ -30,5 +30,6 @@ class PostTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals('John', $this->model['name']);
         $this->assertEquals(true, $this->model['is_married']);
+        $this->assertEquals('DefSurname', $this->model['surname']);
     }
 }

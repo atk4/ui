@@ -64,7 +64,7 @@ try {
     $gr->addField('address', ['width'=>'twelve']);
     $gr->addField('code', ['Post Code', 'width'=>'four']);
 
-    $gr = $f->addGroup(['n'=>'two']);
+    $gr = $f->addGroup(['width'=>'two']);
     $gr->addField('city');
     $gr->addField('country');
 

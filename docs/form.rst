@@ -138,12 +138,12 @@ To continue with my example, I'd like to add new Person record into the database
 but only if they have also accepted terms and conditions. I can define onSubmit handler
 that would perform the check, display error or success message::
 
-    $form->onSubmit(function($f) {
-        if (!$f->model['terms']) {
+    $form->onSubmit(function($form) {
+        if (!$form->model['terms']) {
             return $form->error('terms', 'You must accept terms and conditions');
         }
 
-        $f->model->save();
+        $form->model->save();
 
         return $form->success('Registration Successful', 'We will call you soon.');
     });
@@ -203,7 +203,7 @@ of labels etc.
 .. php:method:: setLayout(FormLayout\Generic $layout)
 
     Sets a custom FormLayout object for a form. If not specified then form will automatically
-    use FormLayout\Vertical.
+    use FormLayout\Generic.
 
 .. php:attr:: layout
 

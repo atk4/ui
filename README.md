@@ -8,83 +8,96 @@
 
 **Web UI Component library.**
 
-If you feel that the PHP frameworks are too complex and too hard to learn, then you will find that Agile UI has a fresh perspective on how to build web apps. Motivation to build Agile UI was sparked by the 3 coinciding events:
+Most PHP frameworks come with some HTML-builder code - Laravel, Symfony and Yii all offer developers a way to define HTML Form through PHP logic.
 
--   Growing popularity of CSS frameworks (Semantic UI, Bootstrap CSS etc).
--   Wide varietty of PHP frameworks with many different standards and approaches.
--   The second coming of NoSQL and SemiSQL databases and Rest APIs.
+Agile UI explores and expands this pattern to all HTML produced by web applications creating a high-level server-side abstraction for the User Interface.
 
-Agile UI integrates with your favourite framework/application and lets you go one step higher on the ladder of abstraction. You no longer need to think in terms of GET/POST requests or HTML/JS output. Agile UI components allow you to generalize your UI code.
+When Agile UI is used inside your app / framework, it offers the following:
 
-Scroll down to see example.
+- Creating objects for Forms, Grids, CRUDs, Menus, Buttons, Pages and Layouts through Object code
+- Rendering the tree into HTML/JS
+- Reading data from form submissions, button clicks and other interractions
+
+Agile UI's role in your web app be best described as: 
+
+> Out-of-the-box UI that you can "use", not "reinvent".
+
+ ## Scope and Goals of Agile UI
+
+What makes this UI toolkit stand out from the others is its commitment to bring rich and interractive web components that can be used for 90% of web applications without any custom-HTML/JS. Additionally, Agile UI provides a very controlled and consistent ways to develop "add-ons" that include visual components and other re-usable elements.
+
+To achieve its goal, Agile UI offers both the tools for creating components and a wide selection of built-in components that provides the "minimum standard Web UI":
+
+![agile-ui](docs/images/agile-ui.png)
+
+We have developed Agile UI to be easy to integrate into existing PHP frameworks but, more importantly, **with your legacy applications**.
+
+Agile UI follows 'best development practices' and looks to create an eco-system of 3rd party "UI components" that follow the Web UI standard solving issues such as:
+
+- Incompatible HTML code produced by and excessive CSS/JS assets
+- Differences in UI styles between your main theme and add-on UI
+- Extensibility standard of all UI components based on principles of Dependency Injection, Template Injection and Inheritance
+- Full control over JavaScript events and integration with jQuery and its plugins
+- Controlled access between UI componets and domain model data with persistence abstraction
+- **And most importantly: a responsive and modern interface based on Semantic UI CSS**
 
 ## Q&A
 
 **Q: HTML-generating frameworks are lame and inefficient, real coders prefer to manually write HTML/CSS in Twig or Smarty.**
 
-Agile UI was created for those who are in a hurry and are not very picky about the shades of their UI buttons. We make all the efforts to create a stunningly looking UI and diverse set of components.
+Agile UI was created for those who are in a hurry and are not very picky about the shades of their UI buttons. We make all the efforts to create a solid looking UI and diverse set of components that, like all applications, can be adapted and released with any UI.
 
-Our goal is to create out-of-the-box UI which you can "use" not "reinvent". 
+Our goal was to create an out-of-the-box UI which you can "use", not "reinvent". 
 
 **Q: What about Angular-JS, VueJS and all the other JS frameworks?**
 
-We went with the default pattern that allows you to write entire application in ONE language: PHP.
+We went with the default pattern that allows you to write the entire application in ONE language: PHP.
 
-However, the "component" in Agile UI does not conflict with your desire to use a different  JavaScript framework. We found that **jQuery** and it's plug-ins are most suitable for our design patterns, however you can build a highly interractive component that relies on a different JavaScript frameworks or principles.
+However, the "component" in Agile UI does not conflict with if you choose to use a different  JavaScript framework. We found that **jQuery** and its plug-ins are most suitable for our design patterns. However, you can build a highly interractive component that relies on a different JavaScript frameworks or principles.
 
 **Q: I used "X" component framework and found it extremely limiting.**
 
-Many UI / Component frameworks in the past have been unable to find a good balance between flexiblity and convenience. Some out-of-the-box CRUD systems are too generic while other Form-builders are just too overengineered.
+In the past, many UI / Component frameworks have been unable to find a good balance between flexiblity and convenience. Some out-of-the-box CRUD systems are too generic while other Form-builders are just too overengineered and ugly looking.
 
 Agile UI follows these core principles in it's design:
 
--   Instead of focusing on generic HTML, create HTML for a specific CSS framework (Semantic UI).
--   Allow developer to use all the features of CSS framework without leaving PHP.
--   No custom proprietary JS code or huge. Keep all the HTML simple.
--   Allow developer to customise or extend components.
--   Keep Agile UI as a open-source project under MIT license.
+-   Instead of focusing on generic HTML, create HTML for a specific CSS framework (Semantic UI)
+-   Allow developer to use all the features of CSS framework without leaving PHP
+-   No custom proprietary JS code. Keep all the HTML simple
+-   Allow developer to customise or extend components
+-   Keep Agile UI as a open-source project under MIT license
 
-Following those principles gives us just the perfect combination of flexibility, elegancy and performance.
+Following those principles gives us the perfect combination of flexibility, elegancy and performance.
 
 **Q: I prefer Bootstrap CSS (or other CSS) over Semantic UI**
 
-We have considered several CSS frameworks, but decided to focus on Semantic UI implementation as our primary framework for the following reasons:
+We considered several CSS frameworks.  We decided to focus on Semantic UI implementation as our primary framework for the following reasons:
 
--   Great theeming and customisation variables;
--   Clear patterns in class definitions;
--   Extensive selection of core componetns;
--   jQuery and JavaScript API integrations.
+-   Great theming and customisation variables
+-   Clear patterns in class definitions
+-   Extensive selection of core components
+-   jQuery and JavaScript API integrations
 
-Being considerate towards the popularity of Bootstrap CSS we will be working towards an extension that could allow you to switch your entire UI between Semantic UI / Bootstrap in the future.
+Bearing in mind the popularity of Bootstrap CSS, we are working towards an extension that will allow you to switch your entire UI between Semantic UI and Bootstrap in the future.
 
-## Why?
+## List of main Features in Agile UI
 
-Our motivation for creating Agile UI goes beyond just helping you to write HTML. We pursue to complete the following goals:
+While many UI toolkits focus on giving you ready-to-use advance components, we decided to start with basic ones as building blocks then create more advanced compoents that could be easily integrated.
 
--   for a UI component, abstract opinionated decisions of a PHP Framework making any component cross-framework.
--   make base component set universally available to anyone so that they can make complex UI out of base components.
--   maintain a cross-framework platform where all of the 3rd party components can run safely and with minimum overheads.
-
-By making Agile UI and Agile Data available to all the developers for free under MIT license we can also focus on building Commercial Add-ons that would compete with other UI toolkits while also encouraging and promoting use of open-source in commercial environment.
-
-## What's included in Agile UI
-
-While many UI toolkits focus on giving you ready-to-use advance components, we decided to start from the basic ones than create a more advanced ones using the basics.
-
-1.  Rendering HTML - Agile UI is about initializing UI objects and then rendering them. Each component is driven by the UI logic but play it's vital part in the Render Tree.
-2.  Templates - We know that as developer you want control. We give you ability to create custom templates for your custom Views to improve performance and memory usage.
+1.  Rendering HTML - Agile UI is about initializing UI objects then rendering them. Each component is driven by the UI logic and all plays a vital part in the Render Tree.
+2.  Templates - We know that as developer you want control. We offer you the ability to create custom templates for your custom Views to improve performance and memory usage.
 3.  Composite Views - This allows View object to implement itself by relying on other Views.
 4.  JavaScript actions - This technique is designed to bind PHP Views with generic JavaScript routines and also to eliminate the need for you to write custom JavaScript code (e.g. `('#myid').dropdown();`).
-5.  JavaScript events - JS actions can be asigned to events. For instance you can instruct a "Button" object to refresh your "Grid" object in a single line of PHP.
-6.  Buttons, Fields, Dropdown, Boxes, Panels, Icons, Messages - All those basic Views can be used out-of-the-box and are utilising principles described above to remain flexible and configurable.
-7.  Callbacks - A concept where a client-side component's rendering can execute AJAX request to it's PHP code triggering a server-side event. Aglie UI ensures full isolation and robustness of this approach.
+5.  JavaScript events - JS actions can be asigned to events. For instance, you can instruct a "Button" object to refresh your "Grid" object in a single line of PHP.
+6.  Buttons, Fields, Dropdown, Boxes, Panels, Icons, Messages - All those basic Views can be used 'out-of-the-box' and are utilising principles described above to remain flexible and configurable.
+7.  Callbacks - A concept where a client-side component's rendering can execute an AJAX request to it's PHP code triggering a server-side event. Agile UI ensures full isolation and robustness with this approach.
 8.  Agile Data - Integration with data and business logic framework allows you to structure your growing PHP application's business logic properly and conforming to best practices of web development.
-9.  Form - Culmination of concepts "callbacks", "composite views" and reliance on dozen of basic views creates a very simple way to create a modern and flexible Form implementation. Capable of rendering, submitting it's own data back, handling errors and server-side validation just in a few lines of PHP code - Form is the most elegant "Form Builder" you will find for PHP.
-10.  Grid and Lister - An interractive and extensible UI component for outputing your data as a table or as a formatted list. When you have a lot of records to render, those components will proove to be very performance-efficient.
-11.  Dialogs - Introduces ability for you to use pop-ups and JavaScript dialog frame to revealing underlying UI.
-12.  CRUD - A composite view that combines Form, Dialogs and Grids to create a fully interractive interface for managing your Model Entity data. Extensible and compatible with various add-ons you will find CRUD to be a most efficient way to build your Admin system.
+9.  Form - Culmination of concepts "callbacks", "composite views" and reliance on a dozen basic views creates a very simple way to create a modern and flexible Form implementation. Capable of rendering, submitting it's own data back, handling errors and server-side validation just in a few lines of PHP code - Form is the most elegant "Form Builder" you will find for PHP.
+10.  Grid and Lister - An interractive and extensible UI component for outputing your data as a table or as a formatted list. When you have a lot of records to render, those components will prove to be very performance efficient.
+11.  Dialogs - Introduces ability for you to use pop-ups and JavaScript dialog frame to reveal underlying UI.
+12.  CRUD - A composite view that combines Form, Dialogs and Grids to create a fully interractive interface for managing your Model Entity data. Extensible and compatible with various add-ons, you will find CRUD to be a most efficient way to build your Admin system.
 13.  Layouts, Menus, Pages, Tabs, Accordion - Several objects to create a bigger picture and link together the entire UI of your application.
-14.  Application - This is an abstract interface that can be implemented using your full-stack framework of choice. The "App" class is built for stand-alone applications, but for any other framework a custom application class can be provided to make the entire UI section adjust accordingly.
+14.  Application - This is an abstract interface that can be implemented using your full-stack framework of choice. The "App" class is built for stand-alone applications.  For any other framework, a custom application class can be provided to make the entire UI section adjust accordingly.
 
 To demonstrate how the core components work, the next code snippet will show you how to build an entire web application in less than 30 lines of code:
 
@@ -128,7 +141,7 @@ LINK: Try this demo.
 
 ## Agile UI and your existing App
 
-Agile UI was created to be usable inside your existing application. This could be a legacy app or another open-source app, it's always possible to integrate Agile UI into it.
+Agile UI was created to be usable inside your existing application. Whether it is a legacy app or another open-source app, it's always possible to integrate Agile UI into it.
 
 That means -- NO REWRITING CODE. No letting go of the PHP framework you love. No hard decisions you might regret in the future.
 
@@ -137,36 +150,19 @@ That means -- NO REWRITING CODE. No letting go of the PHP framework you love. No
 3.  Select most appropriate Application class.
 4.  Create any UI in minutes.
 
-### Custom ORM / Template engine
-
-Elegant design of Agile UI is only possible because we have designed many of the low-level components specifically for Agile UI. There were no suitable Template/ORM engines to fullfil the requirements, so we have created our own that follow these principles:
-
--   Very simple template engine that contains NO logic structures and would be extremely lightweight yet support recursive rendering.
--   Domain Model mapping framework with support for "Smart" fields (meta-information, data transformation, validation), "Conditions" (safely create CRUD for a sub-set of data records), "Only-Fields" (retrieve and store only sub-set of fields from a model), "Expressions" (define fields through expression and Database logic, e.g. aggregation).
--   Minimum dependencies, to make sure the code is cross-framework.
--   Offer many enterprise-level extensions and flexibility. 
-
-Agile UI, Template and DSQL are all designed to fit well into Agile UI while also being fully-open source and licensed under MIT.
-
-If you have to integrate with your own ORM or RestAPI, there are ways to do it correctly. Additionally - if you are creating your own components you can also rely on different Template engine as long as your component is consistent about rendering data.
-
-Those features should enable you to restructure your applicaiton in such a way so that it's backwards compatible with your own older add-ons or legacy business logic implementation.
-
 ## Getting Started with Agile UI
 
-Without doubt Agile UI offers A LOT.
+Without a doubt, Agile UI offers A LOT.
 
-We have designed for Agile UI to be friendly to beginners and those who need to get the job done. If you have used other programming languages and are new to PHP, even if you haven't built web apps in the past, Agile UI is a good learning investment than can quickly turn you into a very fast and efficient developer.
+We have designed Agile UI to be both 'beginner-friendly and for those who need to get the job done. If you have experience with other programming languages and are new to PHP or even if you haven't built web apps in the past, Agile UI is a good learning investment than can turn you into a very efficient developer.
 
-We have put together a Learning program that will teach you just the things you need to know. By completing this program you can acquire "Agile Toolkit Developer Certificate". Should you require additional assistance with your project, we offer a "Commercial Support Agreement" that  gives you access to dozens of commercial extensions, development assistance, training and advice.
+We have put together a Learning program that will teach you just the things you need to know. By completing this program, you will acquire an "Agile Toolkit Developer Certificate". Should you require additional assistance with your project, we offer a "Commercial Support Agreement" that  gives you access to dozens of commercial extensions, development assistance, training and advice.
 
-However...
-
-If you wish to learn Agile UI in-inside out, be capable of developing sophisticated add-ons and extensions by learning the inner-workings of the framework, we have made full documentation for Agile UI available. We can provide you with a further guidance and training to help you achieve the status of "Agile Toolkit Certified Partner". This makes your organisation eligible to advice others on how to integrate Agile Toolkit as well as allow you to create and distribute commercial add-ons and extensions through the plaftorm.
+And if you wish to learn the inner-workings of Agile UI so you can develop sophisticated add-ons and extensions, we have full documentation for the framework. We can provide you with a further guidance and training to help you achieve the status of "Agile Toolkit Certified Partner". This makes your organisation eligible to advise others on how to integrate Agile Toolkit as well as allow you to create and distribute commercial add-ons and extensions through the plaftorm.
 
 ## Current Status
 
-Agile UI is currently in the **late development stage**. Our development process is open to anyone and we welcome any curious person to join us in the Gitter chat:
+Agile UI is currently in the **late development stage**. Our development process is open to anyone and we welcome "the curious" to join us in the Gitter chat:
 
 [![Gitter](https://img.shields.io/gitter/room/atk4/atk4.svg?maxAge=2592000)](https://gitter.im/atk4/atk4?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
