@@ -176,4 +176,111 @@ class App
 
         return $url;
     }
+
+    /**
+     * Construct HTML tag with supplied attributes.
+     *
+     * $html = getTag('img/', ['src'=>'foo.gif','border'=>0]);
+     * // "<img src="foo.gif" border="0"/>"
+     *
+     *
+     * The following rules are respected:
+     *
+     * 1. all array key=>val elements appear as attributes with value escaped.
+     * getTag('div/', ['data'=>'he"llo']);
+     * --> <div data="he\"llo">
+     *
+     * 2. boolean value true will add attribute without value
+     * getTag('td', ['nowrap'=>true]);
+     * --> <td nowrap>
+     *
+     * 3. null and false value will ignore the attribute
+     * getTag('img', ['src'=>false]);
+     * --> <img>
+     *
+     * 4. passing key 0=>"val" will re-define the element itself
+     * getTag('img', ['input', 'type'=>'picture']);
+     * --> <input type="picture" src="foo.gif">
+     *
+     * 5. use '/' at end of tag to close it. 
+     * getTag('img/', ['src'=>'foo.gif']);
+     * --> <img src="foo.gif"/>
+     *
+     * 6. if main tag is self-closing, overriding it keeps it self-closing
+     * getTag('img/', ['input', 'type'=>'picture']);
+     * --> <input type="picture" src="foo.gif"/>
+     *
+     * 7. simple way to close tag. Any attributes to closing tags are ignored
+     * getTag('/td');
+     * --> </td>
+     *
+     * 7b. except for 0=>'newtag'
+     * getTag('/td', ['th', 'align'=>'left']);
+     * --> </th>
+     *
+     * 8. using $value will add escaped content.
+     * getTag('a', ['href'=>'foo.html'] ,'click here >>');
+     * --> <a href="foo.html">click here &gt;&gt;</a>
+     *
+     * 9. you may skip attribute argument.
+     * getTag('b','text in bold');
+     * --> <b>text in bold</b>
+     *
+     * 10. pass array as text to net tags (array must contain 1 to 3 elements corresponding to arguments):
+     * getTag('a', ['href'=>'foo.html'], ['b','click here']);
+     * --> <a href="foo.html"><b>click here</b></a>
+     */
+    public function getTag($tag = null, $attr = null, $value = null)
+    {
+        if ($tag === null) {
+            $tag = 'div';
+        } elseif (is_array($tag)) {
+            $value = $attr;
+            $attr = $tag;
+            $tag = 'div';
+        }
+        if (is_string($attr)) {
+            $value = $attr;
+            $attr = null;
+        }
+        if (!$attr) {
+            return "<$tag>".($value ? $this->encodeHTML($value)."</$tag>" : '');
+        }
+        $tmp = array();
+        if (substr($tag, -1) == '/') {
+            $tag = substr($tag, 0, -1);
+            $postfix = '/';
+        } elseif (substr($tag, 0, 1) == '/') {
+            if (isset($attr[0])) {
+                return '</'.$attr[0].'>';
+            }
+            return '<'.$tag.'>';
+        } else {
+            $postfix = '';
+        }
+        foreach ($attr as $key => $val) {
+            if ($val === false) {
+                continue;
+            }
+            if ($val === true) {
+                $tmp[] = "$key";
+            } elseif ($key === 0) {
+                $tag = $val;
+            } else {
+                $tmp[] = "$key=\"".$this->encodeAttribute($val).'"';
+            }
+        }
+
+        return "<$tag".($tmp?(' '.implode(' ', $tmp)):'').$postfix.'>'.($value ? $value."</$tag>" : '');
+    }
+
+    function encodeAttribute($val)
+    {
+        return htmlspecialchars($val);
+    }
+
+    function encodeHTML($val)
+    {
+        return htmlentities($val);
+    }
 }
