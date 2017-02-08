@@ -22,7 +22,7 @@ class Radio extends Generic
     /**
      * {@inheritdoc}
      */
-    public function setModel($m)
+    public function setModel(\atk4\data\Model $m)
     {
         $this->add(new \atk4\ui\Lister(), 'Radio')->setModel($m);
     }

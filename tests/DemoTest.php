@@ -24,12 +24,14 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $this->expectOutputRegex($this->regex);
         include 'button.php';
+        $app->run();
     }
 
     public function testFields()
     {
         $this->expectOutputRegex($this->regex);
         include 'field.php';
+        $app->run();
     }
 
     public function testLayout()

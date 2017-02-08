@@ -1,18 +1,16 @@
 <?php
 /**
- * Testing form.
+ * Apart from demonstrating the form, this example uses an alternative way of rendering the layouts.
+ * Here we don't create application object explicitly, instead we use our custom template
+ * with a generic layout.
+ *
+ * We then render everything recursively (renderAll) and plug accumulated JavaScript inside the <head> tag,
+ * echoing results after.
+ *
+ * This approach will also prevent your application from registering shutdown handler or catching error,
+ * so we will need to do a bit of work about that too.
  */
-require '../vendor/autoload.php';
-
-try {
-    $layout = new \atk4\ui\Layout\App(['defaultTemplate'=>'./templates/layout2.html']);
-
-    $layout->js(true, new \atk4\ui\jsExpression('$.fn.api.settings.successTest = function(response) {
-  if(response && response.eval) {
-     var result = function(){ eval(response.eval); }.call(this.obj);
-  }
-  return false;
-}'));
+require 'init.php';
 
     $layout->add(new \atk4\ui\View([
         'Forms below focus on Data integration and automated layouts',
@@ -80,20 +78,5 @@ try {
         return $errors ?: $f->success('No more errors', 'so we have saved everything into the database');
     });
 
-    //$field = $f->add(new \atk4\ui\FormField\Line(['placeholder'=>'Enter your name', 'form'=>$f]), null, ['name'=>'test']);
-
-    /*
-    $layout->add(new \atk4\ui\H2('Receipt Form with Nice dropdowns'));
-
-    $f = $layout->add(new \atk4\ui\Form(['segment']));
-    $f->setModel($m_register, false);
-     */
-
-    echo $layout->render();
-} catch (\atk4\core\Exception $e) {
-    var_dump($e->getMessage());
-
-    var_dump($e->getParams());
-    var_dump($e->getTrace());
-    throw $e;
-}
+    //$layout->renderAll();
+    //$layout->template->appendHTML('HEAD', $layout->getJS());

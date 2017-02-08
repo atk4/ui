@@ -43,6 +43,26 @@ class Button extends View
     }
 
     /**
+     * Makes button into a "<a>" element with a link.
+     */
+    public function link($url)
+    {
+        $this->element = 'a';
+        if (is_string($url)) {
+            $sch = substr($url, 0, 3);
+            if ($sch === 'htt' || $sch = '://') {
+                $this->setAttr('target', '_blank');
+                $this->setAttr('href', $url);
+
+                return $this;
+            }
+        }
+        $this->setAttr('href', $this->app->url($url));
+
+        return $this;
+    }
+
+    /**
      * By Default buttons should have something written on them, e.g. "Button".
      */
     public function recursiveRender()

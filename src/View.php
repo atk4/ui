@@ -4,25 +4,21 @@
 
 namespace atk4\ui;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\ContainerTrait;
-use atk4\core\InitializerTrait;
-use atk4\core\TrackableTrait;
-
 /**
  * Implements a most core view, which all of the other components descend
  * form.
  */
 class View implements jsExpressionable
 {
-    use ContainerTrait {
+    use \atk4\core\ContainerTrait {
         add as _add;
     }
-    use InitializerTrait {
+    use \atk4\core\InitializerTrait {
         init as _init;
     }
-    use TrackableTrait;
-    use AppScopeTrait;
+    use \atk4\core\TrackableTrait;
+    use \atk4\core\AppScopeTrait;
+    use \atk4\core\FactoryTrait;
 
     // {{{ Properties of the class
 
@@ -41,7 +37,7 @@ class View implements jsExpressionable
      * Name of the region in the parent's template where this object
      * will output itself.
      */
-    public $region;
+    public $region = 'Content';
 
     /**
      * Enables UI keyword for Semantic UI indicating that this is a
@@ -59,6 +55,11 @@ class View implements jsExpressionable
      * List of classes that needs to be added.
      */
     public $class = [];
+
+    /**
+     * List of custom attributes.
+     */
+    public $attr = [];
 
     /**
      * Just here temporarily, until App picks it up.
@@ -133,11 +134,11 @@ class View implements jsExpressionable
      *
      * @return Model
      */
-    public function setModel(\atk4\data\Model $model)
+    public function setModel(\atk4\data\Model $m)
     {
-        $this->model = $model;
+        $this->model = $m;
 
-        return $model;
+        return $m;
     }
 
     public function setSource(array $data)
@@ -259,7 +260,7 @@ class View implements jsExpressionable
      */
     protected function initDefaultApp()
     {
-        $this->app = new App(['skin'=>$this->skin]);
+        $this->app = new App(['skin'=>$this->skin, 'catch_exceptions'=>false, 'always_run'=>false]);
         $this->app->init();
     }
 
@@ -267,12 +268,12 @@ class View implements jsExpressionable
      * In addition to adding a child object, set up it's template
      * and associate it's output with the region in our template.
      *
-     * @param View         $object New object to add
+     * @param View|strin   $object New object to add
      * @param string|array $region (or array for full set of defaults)
      *
      * @return View
      */
-    public function add(View $object, $region = null)
+    public function add($object, $region = null)
     {
         if (!$this->app) {
             $this->init();
@@ -294,6 +295,13 @@ class View implements jsExpressionable
 
         if (!$object->template && $object->region) {
             $object->template = $this->template->cloneRegion($object->region);
+        }
+
+        if ($this->template && $object->region) {
+            if (is_string($this->template)) {
+                throw new Exception(['Property $template should contain object, not a string', 'template'=>$this->template]);
+            }
+
             $this->template->del($object->region);
         }
 
@@ -391,6 +399,13 @@ class View implements jsExpressionable
         return $this;
     }
 
+    public function setAttr($attr, $value)
+    {
+        $this->attr[$attr] = $value;
+
+        return $this;
+    }
+
     // }}}
 
     // {{{ Rendering
@@ -424,6 +439,14 @@ class View implements jsExpressionable
         if ($this->element) {
             $this->template->set('_element', $this->element);
         }
+
+        if ($this->attr) {
+            $tmp = [];
+            foreach ($this->attr as $attr => $val) {
+                $tmp[] = $attr.'="'.htmlspecialchars($val).'"';
+            }
+            $this->template->set('attributes', implode(' ', $tmp));
+        }
     }
 
     /**
@@ -450,10 +473,10 @@ class View implements jsExpressionable
     }
 
     /**
-     * This method is for those cases when developer want to simply render his
-     * view and grab HTML himself.
+     * Render everything recursively, render ourselves but don't return
+     * anything just yet.
      */
-    public function render()
+    public function renderAll()
     {
         if (!$this->_initialized) {
             $this->init();
@@ -462,6 +485,15 @@ class View implements jsExpressionable
         $this->renderView();
 
         $this->recursiveRender();
+    }
+
+    /**
+     * This method is for those cases when developer want to simply render his
+     * view and grab HTML himself.
+     */
+    public function render()
+    {
+        $this->renderAll();
 
         return
             $this->getJS().
@@ -473,13 +505,7 @@ class View implements jsExpressionable
      */
     public function getHTML()
     {
-        if (!$this->_initialized) {
-            $this->init();
-        }
-
-        $this->renderView();
-
-        $this->recursiveRender();
+        $this->renderAll();
 
         return $this->template->render();
     }
@@ -601,7 +627,7 @@ class View implements jsExpressionable
      *
      * @return jQuery
      */
-    public function on($event, $selector = null, $action = null)
+    public function on($event, $selector = null, $action = null, $defaults = null)
     {
         // second argument may be omitted
         if (!is_string($selector) && is_null($action)) {
@@ -609,7 +635,7 @@ class View implements jsExpressionable
             $selector = null;
         }
 
-        $actions = [];
+        $actions = is_null($defaults) ? ['preventDefault'=>true, 'stopPropagation'=>true] : $defaults;
 
         // will be returned from this method, so you can chain more stuff on it
         $actions[] = $thisAction = new jQuery(new jsExpression('this'));
@@ -688,9 +714,6 @@ class View implements jsExpressionable
             $actions[] = $action;
         }
 
-        $actions['preventDefault'] = true;
-        $actions['stopPropagation'] = true;
-
         $action = new jsFunction($actions);
 
         if ($selector) {
@@ -747,7 +770,7 @@ class View implements jsExpressionable
             foreach ($eventActions as $action) {
                 // wrap into callback
                 if ($event !== 'always') {
-                    $action = (new jQuery($action->_constructorArgs[0]))
+                    $action = (new jQuery(@$action->_constructorArgs[0]))
                         ->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
                 }
 
