@@ -202,7 +202,7 @@ class App
      * getTag('img', ['input', 'type'=>'picture']);
      * --> <input type="picture" src="foo.gif">
      *
-     * 5. use '/' at end of tag to close it. 
+     * 5. use '/' at end of tag to close it.
      * getTag('img/', ['src'=>'foo.gif']);
      * --> <img src="foo.gif"/>
      *
@@ -246,7 +246,7 @@ class App
         if (!$attr) {
             return "<$tag>".($value ? $this->encodeHTML($value)."</$tag>" : '');
         }
-        $tmp = array();
+        $tmp = [];
         if (substr($tag, -1) == '/') {
             $tag = substr($tag, 0, -1);
             $postfix = '/';
@@ -254,6 +254,7 @@ class App
             if (isset($attr[0])) {
                 return '</'.$attr[0].'>';
             }
+
             return '<'.$tag.'>';
         } else {
             $postfix = '';
@@ -271,15 +272,15 @@ class App
             }
         }
 
-        return "<$tag".($tmp?(' '.implode(' ', $tmp)):'').$postfix.'>'.($value ? $value."</$tag>" : '');
+        return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value ? $value."</$tag>" : '');
     }
 
-    function encodeAttribute($val)
+    public function encodeAttribute($val)
     {
         return htmlspecialchars($val);
     }
 
-    function encodeHTML($val)
+    public function encodeHTML($val)
     {
         return htmlentities($val);
     }

@@ -2,10 +2,8 @@
 
 namespace atk4\ui\tests;
 
-
 class TagTest extends \atk4\core\PHPUnit_AgileTestCase
 {
-
     public function assertTagRender($html, $args)
     {
         $app = new \atk4\ui\App(['catch_exceptions'=>false, 'always_run'=>false]);
