@@ -84,6 +84,9 @@ to use :php:meth:`View::addClass` method::
     $button = new Icon('red book');
 
 
+Factories
+=========
 
 
-
+Render Tree
+===========
