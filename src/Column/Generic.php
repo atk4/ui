@@ -3,11 +3,12 @@
 namespace atk4\ui\Column;
 
 /**
- * Implements Column helper for grid
+ * Implements Column helper for grid.
  */
 class Generic
 {
-    function format($val) {
+    public function format($val)
+    {
         return $val;
     }
 }

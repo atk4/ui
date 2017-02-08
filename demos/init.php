@@ -36,5 +36,4 @@ $layout->menu->addItem()->add(new \atk4\ui\Button(['View Source', 'teal', 'icon'
 
 $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 
-
-require'somedatadef.php';
+require 'somedatadef.php';
