@@ -39,7 +39,8 @@ class Grid extends Lister
         }
 
         if (!is_object($column_def)) {
-            $column_def = $this->add('Column/'.($column_def?:'Generic'), $name);
+            $column_def = $this->add(new \atk4\ui\Column\Generic(), $name);
+                //$this->add('Column/'.($column_def?:'Generic'), $name);
         } else {
             $this->add($column_def, $name);
         }
