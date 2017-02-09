@@ -91,6 +91,9 @@ offering the following 3 things:
  - custom Layout(s) along with documentation
  - additional or tweaked Views
 
+Unique layouts can be used to change the default look and as a stand-in replacement to
+some of standard layouts or as a new and entirely different layout.
+
 
 .. _seed:
 
