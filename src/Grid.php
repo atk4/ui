@@ -26,7 +26,7 @@ class Grid extends Lister
      * for cells and will handle other things like alignment. If you do not specify
      * column, then it will be selected dynamically based on field type.
      */
-    function addColumn($name, $field_def = [], $column_def = null)
+    public function addColumn($name, $field_def = [], $column_def = null)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
@@ -53,7 +53,7 @@ class Grid extends Lister
     /**
      * Will come up with a column object based on the field object supplied.
      */
-    function _columnFactory(\atk4\data\Field $f)
+    public function _columnFactory(\atk4\data\Field $f)
     {
         switch ($f->type) {
         case 'boolean':
@@ -73,10 +73,10 @@ class Grid extends Lister
     {
         parent::init();
 
-        $this->t_head   = $this->template->cloneRegion('Head');
-        $this->t_row    = $this->template->cloneRegion('Row');
+        $this->t_head = $this->template->cloneRegion('Head');
+        $this->t_row = $this->template->cloneRegion('Row');
         $this->t_totals = $this->template->cloneRegion('Totals');
-        $this->t_empty  = $this->template->cloneRegion('Empty');
+        $this->t_empty = $this->template->cloneRegion('Empty');
 
         $this->template->del('Head');
         $this->template->del('Body');
@@ -85,13 +85,11 @@ class Grid extends Lister
 
     public function renderView()
     {
-
         $this->t_head->setHTML('cells', $this->renderHeaderCells());
         $this->template->setHTML('Head', $this->t_head->render());
 
         $rows = 0;
         foreach ($this->model as $this->current_id => $tmp) {
-
             $this->current_row = $this->model->get();
 
             $this->formatRow();
@@ -106,39 +104,38 @@ class Grid extends Lister
             $this->template->appendHTML('Body', $this->t_empty->render());
         }
 
-        return View::renderView(); 
+        return View::renderView();
     }
 
-    function renderHeaderCells()
+    public function renderHeaderCells()
     {
         $output = [];
-        foreach($this->columns as $name => $column) {
-
+        foreach ($this->columns as $name => $column) {
             $output[] = $this->app->getTag('th', [], $name);
         }
-        return join('', $output);
+
+        return implode('', $output);
     }
 
-    function renderCells()
+    public function renderCells()
     {
         $output = [];
-        foreach($this->columns as $name => $column) {
-
+        foreach ($this->columns as $name => $column) {
             $html = isset($this->current_row_html[$name]) ?
                 $this->current_row_html : $this->app->encodeHTML($this->current_row[$name]);
 
             $output[] = $this->app->getTag('td', [], $html);
         }
-        return join('', $output);
+
+        return implode('', $output);
     }
 
-    function formatRow()
+    public function formatRow()
     {
         $this->current_row_html = [];
 
-        foreach($this->columns as $name => $column) {
-
-            $value = isset($this->current_row[$name])?$this->current_row[$name]:null;
+        foreach ($this->columns as $name => $column) {
+            $value = isset($this->current_row[$name]) ? $this->current_row[$name] : null;
 
             $this->current_row[$name] = $column->format($value, $name, $this->current_row, $this->current_row_html);
         }

@@ -7,7 +7,6 @@ require 'somedatadef.php';
 
 $layout = new \atk4\ui\Layout\Generic(['defaultTemplate'=>'./templates/layout1.html']);
 
-
 try {
     $layout->add(new \atk4\ui\Lister(), 'Report')
         ->setModel(new Somedata());

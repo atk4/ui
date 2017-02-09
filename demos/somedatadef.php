@@ -1,15 +1,17 @@
 <?php
 
+if(!class_exists('SomeData')) {
 class SomeData extends \atk4\data\Model
 {
-    function __construct()
+    public function __construct()
     {
         $p = new Persistence_Faker();
 
         parent::__construct($p);
     }
 
-    function init() {
+    public function init()
+    {
         parent::init();
         $m = $this;
 
@@ -76,4 +78,5 @@ class Persistence_Faker extends \atk4\data\Persistence
             return $this->typecastLoadRow($m, $r);
         }, $data);
     }
+}
 }

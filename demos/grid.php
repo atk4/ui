@@ -1,5 +1,6 @@
 <?php
-include'init.php';
+
+include 'init.php';
 
 $g = $layout->add('Grid');
 $g->setModel(new SomeData());
