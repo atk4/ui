@@ -505,7 +505,7 @@ class View implements jsExpressionable
             $style = $this->style;
             array_walk(
                 $style,
-                function(&$item, $key){
+                function (&$item, $key) {
                     $item = $key.':'.$item;
                 }
             );
@@ -874,6 +874,7 @@ class View implements jsExpressionable
 
         if ($this->app && method_exists($this->app, 'jsReady')) {
             $this->app->jsReady($actions);
+
             return '';
         }
 
