@@ -68,7 +68,7 @@ class App
         }
     }
 
-    public function caughtException(\Throwable $exception)
+    public function caughtException($exception)
     {
         $l = new \atk4\ui\App();
         $l->initLayout('Centered');
