@@ -431,9 +431,10 @@ class View implements jsExpressionable
     {
         if (is_array($attr)) {
             $this->attr = array_merge($this->attr, $attr);
+
             return $this;
         }
-        
+
         $this->attr[$attr] = $value;
 
         return $this;
