@@ -114,7 +114,13 @@ class App
 
     public function add()
     {
-        return call_user_func_array([$this->layout, 'add'], func_get_args());
+        if ($this->layout) {
+            return call_user_func_array([$this->layout, 'add'], func_get_args());
+        } else {
+            list($obj) = func_get_args();
+
+            $obj->app = $this;
+        }
     }
 
     public function run()
