@@ -68,16 +68,16 @@ class App
         }
     }
 
-    public function caughtException(\Throwable $exception)
+    public function caughtException($exception)
     {
         $l = new \atk4\ui\App();
         $l->initLayout('Centered');
         if ($exception instanceof \atk4\core\Exception) {
             $l->layout->template->setHTML('Content', $exception->getHTML());
         } elseif ($exception instanceof \Error) {
-            $l->layout->add(new View(['ui'=> 'message', get_class($exception).': '.$exception->getMessage().' (in '.
-                $exception->getFile().':'.$exception->getLine()
-                .')', 'error', ]));
+            $l->layout->add(new View(['ui'=> 'message', get_class($exception).': '.
+                $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
+                'error', ]));
             $l->layout->add(new Text())->set(nl2br($exception->getTraceAsString()));
         } else {
             $l->layout->add(new View(['ui'=>'message', get_class($exception).': '.$exception->getMessage(), 'error']));
@@ -90,7 +90,7 @@ class App
     public function initLayout($layout, $options = [])
     {
         if (is_string($layout)) {
-            $layout = 'atk4\\ui\\Layout\\'.$layout;
+            $layout = $this->normalizeClassName($layout, 'Layout');
             $layout = new $layout($options);
         }
         $layout->app = $this;
@@ -106,10 +106,7 @@ class App
     public function normalizeClassName($name, $prefix = null)
     {
         if (strpos('/', $name) === false && strpos('\\', $name) === false) {
-            $name = 'atk4/ui/'.($prefix ? ($prefix.'/') : '').$name;
-        }
-        if ($name === 'HelloWorld') {
-            return 'atk4/ui/HelloWorld';
+            $name = '\\'.__NAMESPACE__.'\\'.($prefix ? ($prefix.'\\') : '').$name;
         }
 
         return $name;
@@ -129,6 +126,9 @@ class App
         echo $this->html->template->render();
     }
 
+    /**
+     * Initialize app.
+     */
     public function init()
     {
         $this->_init();
@@ -149,7 +149,7 @@ class App
     /**
      * Build a URL that application can use for call-backs.
      *
-     * @param array $args List of new GET arguments
+     * @param array|string $args List of new GET arguments
      *
      * @return string
      */

@@ -51,7 +51,7 @@ all. Creating any UI component with Agile UI is easier so consider it when
 you will be creating your re-usable "file uploader" next time.
 
 Addition of various application layouts allow you to produce ALL of your
-Web UI and no longer rely on any other HTML templatting techniques. Just
+Web UI and no longer rely on any other HTML templating techniques. Just
 like you have built button, or uploader component you can create much
 more diverse web app components such as "support ticket management UI".
 
@@ -59,7 +59,7 @@ more diverse web app components such as "support ticket management UI".
 --------------------------------
 
 If you have used some other "Admin Builder" or "Form Creator" or perhaps a
-"Universal CRUD" you were forced to deal with ther UI layout, create database
+"Universal CRUD" you were forced to deal with their UI layout, create database
 structure as they specify and follow their file placement patterns.
 
 True to our name, we have made the UI that will fit your database choice,

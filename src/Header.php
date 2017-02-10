@@ -63,7 +63,7 @@ class Header extends View
         }
 
         if ($this->subHeader) {
-            $this->add(new View($this->subHeader), 'SubHeader')->addClass('sub header');
+            $this->subHeader = $this->add(new View($this->subHeader), 'SubHeader')->addClass('sub header');
         }
 
         if ($this->aligned) {

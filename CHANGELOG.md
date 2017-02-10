@@ -1,3 +1,7 @@
+## 0.4
+
+* Implemented Layouts (Admin / Centered) #33
+* Created nicer demos
 
 ## 0.3
 

@@ -10,11 +10,11 @@ will be referred to throughout the documentation.
 Application and Layout
 ======================
 
-When writing application that uses Agile UI you can either elect to use individual components
+When writing application that uses Agile UI you can either select to use individual components
 or make them part of a bigger layout. If you use the component individually, then it will
 at some point initialize internal 'App' class that will assist with various tasks.
 
-Having compostition of multiple components will allow them to share the app object::
+Having composition of multiple components will allow them to share the app object::
 
     $grid = new \atk4\ui\Grid();
     $grid->setModel($user);
@@ -30,7 +30,7 @@ value for the 'app' property. This value is carried into new objects through App
 Adding the App
 --------------
 
-You can App object on your own then add elements into it::
+You can create App object on your own then add elements into it::
 
     $app = new App('My App');
     $app->add($grid);
@@ -73,7 +73,7 @@ several views that you can populate::
 Integration with Legacy Apps
 ----------------------------
 
-If you use Agile UI inside a legacy application, then you may already layout and some
+If you use Agile UI inside a legacy application, then you may already have layout and some
 patterns or limitations may be imposed on the app. Your first job would be to properly
 implement the "App" and either modification of your exsiting class or a new class.
 
@@ -140,7 +140,7 @@ identical effect as not using array::
 
     $button = new Button(['Hello']);
 
-Once the zero-indexed value is located and exracted from the seed, the rest of the array
+Once the zero-indexed value is located and extracted from the seed, the rest of the array
 will be used as a dependency-injection or "defaults"::
 
     $button = new Button(['Learn', 'icon'=>new Icon('book')]);

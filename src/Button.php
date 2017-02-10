@@ -49,13 +49,9 @@ class Button extends View
     {
         $this->element = 'a';
         if (is_string($url)) {
-            $sch = substr($url, 0, 3);
-            if ($sch === 'htt' || $sch = '://') {
-                $this->setAttr('target', '_blank');
-                $this->setAttr('href', $url);
+            $this->setAttr('href', $url);
 
-                return $this;
-            }
+            return $this;
         }
         $this->setAttr('href', $this->app->url($url));
 
