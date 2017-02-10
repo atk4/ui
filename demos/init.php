@@ -21,8 +21,6 @@ $form->addItem('Data Integration', ['form2']);
 
 $basic = $layout->leftMenu->addGroup(['Basics', 'icon'=>'cubes']);
 $basic->addItem('Button', ['button']);
-$basic->addItem('Icon');
-$basic->addItem('Label');
 $basic->addItem('Header', ['header']);
 
 $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon'=>'talk']);
