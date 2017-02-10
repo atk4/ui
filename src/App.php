@@ -103,7 +103,7 @@ class App
         return $this;
     }
 
-    public function normalizeClassName($name, $prefix = null)
+    public function normalizeClassNameApp($name, $prefix = null)
     {
         if (strpos('/', $name) === false && strpos('\\', $name) === false) {
             $name = '\\'.__NAMESPACE__.'\\'.($prefix ? ($prefix.'\\') : '').$name;
