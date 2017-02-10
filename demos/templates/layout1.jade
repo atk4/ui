@@ -30,12 +30,12 @@ html
           i.dropdown.icon
           .menu
             a.item(href='layout.php') Layout test
-            a.item(href='button.php') Button test
+            a.item(href='index.php') Back to other tests
 
     .ui.main.basic.segment
        h3 Nominal Acitivity Report
 
-       .ui.small.form.segment
+       form.ui.form.small.segment
         .inline.fields
           .field
             .ui.labeled.icon.top.left.pointing.dropdown.button.my-dropdown
@@ -104,7 +104,7 @@ html
 
        h4 Ungrouped transaction list
 
-       {Report}
+       | {Report}
        table.ui.very.compact.small.table
           thead
             tr
@@ -117,7 +117,7 @@ html
               th Debit
               th Credit
           tbody
-            {rows}{row}
+            | {rows}{row}
             tr
               td {date}08/12/1980{/}
               td {nominal}Sales:Wholesale:Munster{/}
@@ -127,7 +127,7 @@ html
               td {type}invoice{/}
               td €{debit}1,056.91{/}
               td €{credit}0.00{/}
-            {/row}{/rows}
+            | {/row}{/rows}
           tfoot
             tr
               th(colspan=6).right.aligned Closing balance after {count}29{/} records:
@@ -137,7 +137,7 @@ html
               th(colspan=6).right.aligned Total for {nominal}Sales:Limerick{/nominal}:
               th €1,056.91
               th €0.00
-       {/Report}
+       | {/Report}
 
 
 

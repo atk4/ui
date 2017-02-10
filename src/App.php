@@ -16,11 +16,25 @@ class App
 
     public $skin = 'semantic-ui';
 
+    /**
+     * Will replace an exception handler with our own, that will output errors nicely.
+     */
+    public $catch_exceptions = true;
+
+    /**
+     * Will always run application even if developer didn't explicitly executed run();.
+     */
+    public $always_run = true;
+
+    private $run_called = false;
+
     public function __construct($defaults = [])
     {
         if (is_string($defaults)) {
             $defaults = ['title'=>$defaults];
         }
+
+        $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
 
         if (!is_array($defaults)) {
             throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
@@ -32,14 +46,70 @@ class App
                 $this->$key = $val;
             }
         }
+
+        // Set our exception handler
+        if ($this->catch_exceptions) {
+            set_exception_handler(function ($exception) {
+                return $this->caughtException($exception);
+            });
+        }
+
+        if ($this->always_run) {
+            register_shutdown_function(function () {
+                if (!$this->run_called) {
+                    try {
+                        $this->run();
+                    } catch (\Exception $e) {
+                        $this->caughtException($e);
+                    }
+                }
+                exit;
+            });
+        }
     }
 
-    public function setLayout(\atk4\ui\Layout $layout)
+    public function caughtException($exception)
     {
-        $this->html = new View(['template'=>'html.html']);
+        $l = new \atk4\ui\App();
+        $l->initLayout('Centered');
+        if ($exception instanceof \atk4\core\Exception) {
+            $l->layout->template->setHTML('Content', $exception->getHTML());
+        } elseif ($exception instanceof \Error) {
+            $l->layout->add(new View(['ui'=> 'message', get_class($exception).': '.
+                $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
+                'error', ]));
+            $l->layout->add(new Text())->set(nl2br($exception->getTraceAsString()));
+        } else {
+            $l->layout->add(new View(['ui'=>'message', get_class($exception).': '.$exception->getMessage(), 'error']));
+        }
+        $l->layout->template->tryDel('Header');
+        $l->run();
+        $this->run_called = true;
+    }
+
+    public function initLayout($layout, $options = [])
+    {
+        if (is_string($layout)) {
+            $layout = $this->normalizeClassName($layout, 'Layout');
+            $layout = new $layout($options);
+        }
+        $layout->app = $this;
+
+        $this->html = new View(['defaultTemplate'=>'html.html']);
+        $this->html->app = $this;
+        $this->html->init();
         $this->layout = $this->html->add($layout);
 
         return $this;
+    }
+
+    public function normalizeClassName($name, $prefix = null)
+    {
+        if (strpos('/', $name) === false && strpos('\\', $name) === false) {
+            $name = '\\'.__NAMESPACE__.'\\'.($prefix ? ($prefix.'\\') : '').$name;
+        }
+
+        return $name;
     }
 
     public function add()
@@ -49,14 +119,19 @@ class App
 
     public function run()
     {
-        $this->html->set('title', $this->title);
-        echo $this->html->render();
+        $this->run_called = true;
+        $this->html->template->set('title', $this->title);
+        $this->html->renderAll();
+        $this->html->template->appendHTML('HEAD', $this->html->getJS());
+        echo $this->html->template->render();
     }
 
+    /**
+     * Initialize app.
+     */
     public function init()
     {
         $this->_init();
-        $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
     }
 
     public function loadTemplate($name)
@@ -74,21 +149,29 @@ class App
     /**
      * Build a URL that application can use for call-backs.
      *
-     * @param array $args List of new GET arguments
+     * @param array|string $args List of new GET arguments
      *
      * @return string
      */
     public function url($args = [])
     {
-        $url = $_SERVER['REQUEST_URI'];
-        $query = parse_url($url, PHP_URL_QUERY);
+        if (is_string($args)) {
+            $args = [$args];
+        }
+
+        if (!isset($args[0])) {
+            $args[0] = '';
+        }
+
+        $page = $args[0];
+        unset($args[0]);
+
+        $url = $page ? ($page.'.php') : '';
 
         $args = http_build_query($args);
 
-        if ($query) {
-            $url .= '&'.$args;
-        } else {
-            $url .= '?'.$args;
+        if ($args) {
+            $url = $url.'?'.$args;
         }
 
         return $url;

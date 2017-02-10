@@ -2,6 +2,6 @@
 
 namespace atk4\ui\Layout;
 
-class App extends \atk4\ui\Layout
+class Generic extends \atk4\ui\View
 {
 }
