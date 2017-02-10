@@ -50,6 +50,7 @@ class Button extends View
         $this->element = 'a';
         if (is_string($url)) {
             $this->setAttr('href', $url);
+
             return $this;
         }
         $this->setAttr('href', $this->app->url($url));
