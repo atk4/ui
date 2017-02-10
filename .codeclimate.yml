@@ -11,6 +11,7 @@ engines:
     enabled: true
     exclude_fingerprints:
     - 908ad3f93985ff14c44615cee6966c72  # View have a lot of public methods. Deal with it.
+    - 81ca5382dedb709060ec70ffea74e157  # allow exit in a call-back inside app constructor
     checks:
       Naming/ShortVariable:
         enabled: false      # because of on() and js() and $ui

@@ -35,28 +35,39 @@ focus on getting your project done.
 -----------------------------------
 
 If you use Raw PHP then you are expected to know HTML/CSS/JS. With Agile UI
-you can start if you have no web development experience at all. You will
-have plenty of components, layouts and add-ons to start your application.
+you can build web apps even if you have no web development experience at all.
+You will have plenty of components, layouts and add-ons to finish your
+application.
 
 As you progress you will learn how to write JavaScript routines to enhance
-your user experience.
-
+your user experience, HTML/PUG templates to build new unique components or
+CSS/LESS to create that unique look and feel.
 
 4. Agile UI can render all your UI
 ----------------------------------
 
-It's not only about the `Form` or `CRUD`. All of your HTML rendering can
-be done through Agile UI. 
+Unlike some other Form-Builders or CRUD components, Agile UI can do them
+all. Creating any UI component with Agile UI is easier so consider it when
+you will be creating your re-usable "file uploader" next time.
 
-Agile UI is inspired by Desktop toolkits but has been designed entirely
-for the Web.
+Addition of various application layouts allow you to produce ALL of your
+Web UI and no longer rely on any other HTML templating techniques. Just
+like you have built button, or uploader component you can create much
+more diverse web app components such as "support ticket management UI".
 
-5. Agile UI is lightweight
---------------------------
+5. Agile UI is the most flexible
+--------------------------------
 
-There are no unnecessary JavaScript, hidden HTML or excessive traffic
-between browser and the website. Agile UI is very transparent, lightweight
-and should be used by anyone in any situation.
+If you have used some other "Admin Builder" or "Form Creator" or perhaps a
+"Universal CRUD" you were forced to deal with their UI layout, create database
+structure as they specify and follow their file placement patterns.
+
+True to our name, we have made the UI that will fit your database choice,
+configuration and structure, allow you to decide how to store files as well
+as the UI layout of any standard add-ons or components.
+
+Through the use of Agile Data you can connect your UI elements with your
+business model and access data stored in SQL, NoSQL or APIs.
 
 
 Structure of this documentation
