@@ -90,7 +90,7 @@ class App
     public function initLayout($layout, $options = [])
     {
         if (is_string($layout)) {
-            $layout = $this->normalizeClassName($layout, 'Layout');
+            $layout = $this->normalizeClassNameApp($layout, 'Layout');
             $layout = new $layout($options);
         }
         $layout->app = $this;

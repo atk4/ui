@@ -313,7 +313,7 @@ class View implements jsExpressionable
 
         $object = $this->_add($object, $defaults);
 
-        if (!$object->template && $object->region) {
+        if (!$object->template && $object->region && $this->template) {
             $object->template = $this->template->cloneRegion($object->region);
         }
 
