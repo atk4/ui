@@ -28,14 +28,23 @@ class View implements jsExpressionable
      *
      * @private! but must remain public so that child views could interact
      * with parent's $js.
+     *
+     * @var array
      */
     public $_js_actions = [];
 
+    /**
+     * Data model.
+     *
+     * @var \atk4\data\Model
+     */
     public $model;
 
     /**
      * Name of the region in the parent's template where this object
      * will output itself.
+     *
+     * @var string
      */
     public $region = 'Content';
 
@@ -53,11 +62,15 @@ class View implements jsExpressionable
 
     /**
      * List of classes that needs to be added.
+     *
+     * @var array
      */
     public $class = [];
 
     /**
      * List of custom attributes.
+     *
+     * @var array
      */
     public $attr = [];
 
@@ -132,7 +145,7 @@ class View implements jsExpressionable
      *
      * @param \atk4\data\Model $m
      *
-     * @return Model
+     * @return \atk4\data\Model
      */
     public function setModel(\atk4\data\Model $m)
     {
@@ -141,6 +154,13 @@ class View implements jsExpressionable
         return $m;
     }
 
+    /**
+     * Sets source of the View.
+     *
+     * @param array $data
+     *
+     * @return \atk4\data\Model
+     */
     public function setSource(array $data)
     {
         $goodData = [];
@@ -166,7 +186,7 @@ class View implements jsExpressionable
     }
 
     /**
-     * Called from __consruct() and set() to initialize teh properties.
+     * Called from __construct() and set() to initialize teh properties.
      *
      * TODO: move into trait, because this is used often
      *
@@ -268,7 +288,7 @@ class View implements jsExpressionable
      * In addition to adding a child object, set up it's template
      * and associate it's output with the region in our template.
      *
-     * @param View|strin   $object New object to add
+     * @param View|string  $object New object to add
      * @param string|array $region (or array for full set of defaults)
      *
      * @return View
@@ -399,8 +419,21 @@ class View implements jsExpressionable
         return $this;
     }
 
-    public function setAttr($attr, $value)
+    /**
+     * Set attribute.
+     *
+     * @param string|array $attr
+     * @param string       $value
+     *
+     * @return $this
+     */
+    public function setAttr($attr, $value = null)
     {
+        if (is_array($attr)) {
+            $this->attr = array_merge($this->attr, $attr);
+            return $this;
+        }
+        
         $this->attr[$attr] = $value;
 
         return $this;
