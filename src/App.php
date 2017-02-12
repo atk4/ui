@@ -250,7 +250,7 @@ class App
             $attr = null;
         }
         if (!$attr) {
-            return "<$tag>".($value ? $this->encodeHTML($value)."</$tag>" : '');
+            return "<$tag>".($value ? ($value)."</$tag>" : '');
         }
         $tmp = [];
         if (substr($tag, -1) == '/') {

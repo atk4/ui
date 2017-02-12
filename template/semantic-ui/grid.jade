@@ -17,7 +17,8 @@ tbody
 
     //- This will be used if no rows are present in a table
     | {Empty}
-    tr(colspan="{$columns}") Table is empty!!!! Deal with it!
+    tr
+        td(colspan="{$columns}") No records.
     | {/}
 
     | {/tbody}
@@ -28,7 +29,7 @@ tfoot
 
     //- Totals will be optionally included at the bottom, if you call addTotals()
     | {Totals}
-
+    tr {$cells}
     | {/}
 
     //- Paginator is used by a separate class

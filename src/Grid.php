@@ -14,6 +14,10 @@ class Grid extends Lister
 
     public $compact = 'very compact';
 
+    public $totals = [];
+
+    public $totals_plan = false;
+
     /**
      * Defines a new column for this field. You need two objects for field to
      * work.
@@ -64,6 +68,21 @@ class Grid extends Lister
         }
     }
 
+    /**
+     * Overrides work like this: 
+     *
+     * [
+     *   'name'=>'Totals for {$num} rows:',
+     *   'price'=>'--',
+     *   'total'=>['sum']
+     * ]
+     *
+     */
+    public function addTotals($plan = [])
+    {
+        $this->totals_plan = $plan;
+    }
+
     public $t_head;
     public $t_row;
     public $t_totals;
@@ -94,6 +113,10 @@ class Grid extends Lister
 
             $this->formatRow();
 
+            if ($this->totals_plan) {
+                $this->updateTotals();
+            }
+
             $this->t_row->setHTML('cells', $this->renderCells());
 
             $this->template->appendHTML('Body', $this->t_row->render());
@@ -102,16 +125,60 @@ class Grid extends Lister
 
         if (!$rows) {
             $this->template->appendHTML('Body', $this->t_empty->render());
+        } elseif ($this->totals_plan) {
+
+            $this->t_totals->setHTML('cells', $this->renderTotalsCells());
+            $this->template->appendHTML('Foot', $this->t_totals->render());
+
+        } else {
         }
 
         return View::renderView();
+    }
+
+    function updateTotals()
+    {
+        foreach($this->totals_plan as $key=>$val) {
+            if (is_array($val)) {
+                switch($val[0]) {
+                case 'sum':
+                    $this->totals[$key] += $this->model[$key];
+                }
+            }
+        }
+    }
+
+    function renderTotalsCells()
+    {
+        $output = [];
+        foreach ($this->columns as $name => $column) {
+
+            if (!isset($this->totals_plan[$name])) {
+                $output[] = $this->app->getTag('th', '-');
+                continue;
+            }
+
+            if (is_array($this->totals_plan[$name])) {
+                // todo - format
+                $output[] = $this->app->getTag('th', [], $this->totals[$name]);
+                continue;
+            }
+
+
+            $output[] = $this->app->getTag('th', [], $this->totals_plan[$name]);
+        }
+
+        return implode('', $output);
     }
 
     public function renderHeaderCells()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $output[] = $this->app->getTag('th', [], $name);
+
+            $title = $this->model->hasElement($name);
+
+            $output[] = $this->app->getTag('th', [], $title? $title->getCaption() : $name);
         }
 
         return implode('', $output);

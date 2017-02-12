@@ -8,13 +8,16 @@
   <tr>{$cells}</tr>
   {/}
   {Empty}
-  <tr colspan="{$columns}">Table is empty!!!! Deal with it!</tr>
+  <tr>
+    <td colspan="{$columns}">No records.</td>
+  </tr>
   {/}
   {/tbody}
 </tbody>{has_foot}
 <tfoot>
   {Foot}
   {Totals}
+  <tr>{$cells}</tr>
   {/}
   {Paginator}
   {/}
