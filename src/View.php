@@ -317,7 +317,7 @@ class View implements jsExpressionable
             return $object;
         }
 
-        if (!$object->template && $object->region) {
+        if (!$object->template && $object->region && $this->template) {
             $object->template = $this->template->cloneRegion($object->region);
         }
 
@@ -424,6 +424,49 @@ class View implements jsExpressionable
     }
 
     /**
+     * Add inline CSS style to element.
+     * Multiple CSS styles can also be set if passed as array.
+     *
+     * @param string|array $property CSS Property or hash
+     * @param string       $style    CSS Style definition
+     *
+     * @return $this
+     */
+    public function setStyle($property, $style = null)
+    {
+        if (is_array($property) && is_null($style)) {
+            foreach ($property as $k => $v) {
+                $this->addStyle($k, $v);
+            }
+
+            return $this;
+        }
+        $this->style[$property] = $style;
+
+        return $this;
+    }
+
+    public function addStyle($property, $style = null)
+    {
+        return $this->setStyle($prperty, $style);
+    }
+
+    /**
+     * Remove inline CSS style from element, if it was added with setStyle
+     * or addStyle.
+     *
+     * @param string $property CSS Property to remove
+     *
+     * @return $this
+     */
+    public function removeStyle($property)
+    {
+        unset($this->style[$property]);
+
+        return $this;
+    }
+
+    /**
      * Set attribute.
      *
      * @param string|array $attr
@@ -460,6 +503,17 @@ class View implements jsExpressionable
     {
         if ($this->class) {
             $this->template->append('class', implode(' ', $this->class));
+        }
+
+        if ($this->style) {
+            $style = $this->style;
+            array_walk(
+                $style,
+                function (&$item, $key) {
+                    $item = $key.':'.$item;
+                }
+            );
+            $this->template->append('style', implode(';', $style));
         }
 
         if ($this->ui) {
@@ -821,6 +875,12 @@ class View implements jsExpressionable
         }
 
         $actions['indent'] = '';
+
+        if ($this->app && method_exists($this->app, 'jsReady')) {
+            $this->app->jsReady($actions);
+
+            return '';
+        }
 
         $ready = new jsFunction($actions);
 

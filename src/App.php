@@ -90,7 +90,7 @@ class App
     public function initLayout($layout, $options = [])
     {
         if (is_string($layout)) {
-            $layout = $this->normalizeClassName($layout, 'Layout');
+            $layout = $this->normalizeClassNameApp($layout, 'Layout');
             $layout = new $layout($options);
         }
         $layout->app = $this;
@@ -103,7 +103,7 @@ class App
         return $this;
     }
 
-    public function normalizeClassName($name, $prefix = null)
+    public function normalizeClassNameApp($name, $prefix = null)
     {
         if (strpos('/', $name) === false && strpos('\\', $name) === false) {
             $name = '\\'.__NAMESPACE__.'\\'.($prefix ? ($prefix.'\\') : '').$name;
@@ -114,7 +114,13 @@ class App
 
     public function add()
     {
-        return call_user_func_array([$this->layout, 'add'], func_get_args());
+        if ($this->layout) {
+            return call_user_func_array([$this->layout, 'add'], func_get_args());
+        } else {
+            list($obj) = func_get_args();
+
+            $obj->app = $this;
+        }
     }
 
     public function run()
