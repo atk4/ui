@@ -8,7 +8,6 @@ class Grid extends Lister
 {
     use \atk4\core\HookTrait;
 
-
     public $defaultTemplate = 'grid.html';
 
     public $ui = 'table';
@@ -139,8 +138,8 @@ class Grid extends Lister
 
             $html_tags = [];
 
-            foreach($this->hook('getHTMLTags', [$this->model]) as $ret) {
-                if(is_array($ret)) {
+            foreach ($this->hook('getHTMLTags', [$this->model]) as $ret) {
+                if (is_array($ret)) {
                     $html_tags = array_merge($html_tags, $ret);
                 }
             }
