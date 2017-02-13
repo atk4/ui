@@ -224,9 +224,9 @@ class App
      * getTag('/td', ['th', 'align'=>'left']);
      * --> </th>
      *
-     * 8. using $value will add escaped content.
+     * 8. using $value will NOT be escaped (so that you can pass nested HTML)
      * getTag('a', ['href'=>'foo.html'] ,'click here >>');
-     * --> <a href="foo.html">click here &gt;&gt;</a>
+     * --> <a href="foo.html">click here >></a>
      *
      * 9. you may skip attribute argument.
      * getTag('b','text in bold');
