@@ -22,8 +22,8 @@ class Status extends Generic
     public function getCellTemplate(\atk4\data\Field $f)
     {
         return $this->app->getTag(
-            'td', 
-            ['class'=>'{$_'.$f->short_name.'_status}'], 
+            'td',
+            ['class'=> '{$_'.$f->short_name.'_status}'],
             $this->app->getTag('i', ['class'=>'icon {$_'.$f->short_name.'_icon}'], '').
             ' {$'.$f->short_name.'}'
         );
@@ -45,7 +45,7 @@ class Status extends Generic
             return [];
         }
 
-        switch($cl) {
+        switch ($cl) {
         case 'positive':
             $ic = 'checkmark';
             break;
@@ -60,7 +60,7 @@ class Status extends Generic
 
         return [
             '_'.$field->short_name.'_status' => $cl.' single line',
-            '_'.$field->short_name.'_icon' => $ic
+            '_'.$field->short_name.'_icon'   => $ic,
         ];
     }
 }

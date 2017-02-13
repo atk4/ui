@@ -6,7 +6,6 @@ include 'init.php';
 $bb = $layout->add('Buttons');
 $bb->add(['Button', 'Refresh Grid', 'icon'=>'refresh']);
 
-
 $g = $layout->add(['Grid', 'celled'=>true]);
 
 $bb->on('click', $g->js()->reload());
@@ -22,10 +21,10 @@ $g->addColumn('title', new \atk4\ui\Column\Status([
 $g->addColumn('date');
 $g->addColumn('salary', (new \atk4\ui\Column\Generic())->addClass('right aligned', 'all'));
 
-$g->addHook('getHTMLTags', function($grid, $row) { 
-    if ($row->id==1) {
+$g->addHook('getHTMLTags', function ($grid, $row) {
+    if ($row->id == 1) {
         return [
-            'name'=>$grid->app->getTag('div', ['class'=>'ui ribbon label'], $row['name'])
+            'name'=> $grid->app->getTag('div', ['class'=>'ui ribbon label'], $row['name']),
         ];
     }
 });

@@ -19,7 +19,7 @@ if (!class_exists('SomeData')) {
             $m->addField('name');
             $m->addField('surname', ['actual'=>'name']);
             $m->addField('date', ['type'=>'date']);
-            $m->addField('salary', ['type'=>'money','actual'=>'randomNumber']);
+            $m->addField('salary', ['type'=>'money', 'actual'=>'randomNumber']);
         }
     }
 
