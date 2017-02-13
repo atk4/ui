@@ -15,6 +15,7 @@ if (!class_exists('SomeData')) {
             parent::init();
             $m = $this;
 
+            $m->addField('title');
             $m->addField('name');
             $m->addField('surname', ['actual'=>'name']);
             $m->addField('date', ['type'=>'date']);

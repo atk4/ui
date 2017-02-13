@@ -1,22 +1,30 @@
 <?php
 
+// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+
 namespace atk4\ui;
 
 class Grid extends Lister
 {
     public $defaultTemplate = 'grid.html';
 
+    public $ui = 'table';
+
     public $current_row_html = [];
+
+    public $default_column = '';
 
     public $columns = [];
 
-    public $ui = 'table';
 
-    public $compact = 'very compact';
+
+    /**
+     * Determines a strategy on how totals will be calculated.
+     */
+    public $totals_plan = false;
 
     public $totals = [];
 
-    public $totals_plan = false;
 
     /**
      * Defines a new column for this field. You need two objects for field to
@@ -30,7 +38,7 @@ class Grid extends Lister
      * for cells and will handle other things like alignment. If you do not specify
      * column, then it will be selected dynamically based on field type.
      */
-    public function addColumn($name, $field_def = [], $column_def = null)
+    public function addColumn($name, $column_def = null, $field_def = null)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
@@ -43,28 +51,29 @@ class Grid extends Lister
         }
 
         if (!is_object($column_def)) {
-            $column_def = $this->add(new \atk4\ui\Column\Generic(), $name);
-                //$this->add('Column/'.($column_def?:'Generic'), $name);
+            $column_def = $this->_columnFactory($field);
         } else {
             $this->add($column_def, $name);
         }
 
+        $column_def->grid = $this;
         $this->columns[$name] = $column_def;
 
         return $column_def;
     }
 
     /**
-     * Will come up with a column object based on the field object supplied.
+     * Will come up with a column object based on the field object supplied. If
+     * null is returned, then will use the default column.
      */
     public function _columnFactory(\atk4\data\Field $f)
     {
         switch ($f->type) {
         case 'boolean':
-            return new Column\Checkbox(['grid'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
+            return $this->add(new Column\Checkbox());
 
         default:
-            return new Column\Generic(['grid'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
+            return $this->default_column;
         }
     }
 
@@ -87,18 +96,25 @@ class Grid extends Lister
     public $t_totals;
     public $t_empty;
 
+    /**
+     * Init method will create one column object that will be used to render
+     * all columns in the grid unless you have specified a different
+     * column object
+     */
     public function init()
     {
         parent::init();
 
         $this->t_head = $this->template->cloneRegion('Head');
-        $this->t_row = $this->template->cloneRegion('Row');
+        $this->t_row_master = $this->template->cloneRegion('Row');
         $this->t_totals = $this->template->cloneRegion('Totals');
         $this->t_empty = $this->template->cloneRegion('Empty');
 
         $this->template->del('Head');
         $this->template->del('Body');
         $this->template->del('Foot');
+
+        $this->default_column = $this->add(new Column\Generic());
     }
 
     public function renderView()
@@ -106,19 +122,36 @@ class Grid extends Lister
         $this->t_head->setHTML('cells', $this->renderHeaderCells());
         $this->template->setHTML('Head', $this->t_head->render());
 
+        $this->t_row_master->setHTML('cells', $this->getRowTemplate());
+        $this->t_row = new Template($this->t_row_master->render());
+
         $rows = 0;
         foreach ($this->model as $this->current_id => $tmp) {
             $this->current_row = $this->model->get();
 
-            $this->formatRow();
+            //$this->formatRow();
 
             if ($this->totals_plan) {
                 $this->updateTotals();
             }
 
-            $this->t_row->setHTML('cells', $this->renderCells());
+            $this->t_row->set($this->model);
+
+
+            $html_tags = [];
+            foreach ($this->columns as $name => $column) {
+                if(!method_exists($column,'getHTMLTags')){ 
+                    continue;
+                }
+                $field = $this->model->hasElement($name);
+                $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
+            }
+            $this->t_row->setHTML($html_tags);
 
             $this->template->appendHTML('Body', $this->t_row->render());
+
+            $this->t_row->del(array_keys($html_tags));
+
             $rows++;
         }
 
@@ -170,14 +203,15 @@ class Grid extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $title = $this->model->hasElement($name);
+            $field = $this->model->hasElement($name);
 
-            $output[] = $this->app->getTag('th', [], $title ? $title->getCaption() : $name);
+            $output[] = $column->getHeaderCell($field);
         }
 
         return implode('', $output);
     }
 
+    /*
     public function renderCells()
     {
         $output = [];
@@ -190,15 +224,18 @@ class Grid extends Lister
 
         return implode('', $output);
     }
+     */
 
-    public function formatRow()
+    public function getRowTemplate()
     {
-        $this->current_row_html = [];
-
+        $output = [];
         foreach ($this->columns as $name => $column) {
-            $value = isset($this->current_row[$name]) ? $this->current_row[$name] : null;
 
-            $this->current_row[$name] = $column->format($value, $name, $this->current_row, $this->current_row_html);
+            $field = $this->model->hasElement($name);
+
+            $output[] = $column->getCellTemplate($field);
         }
+
+        return implode('', $output);
     }
 }

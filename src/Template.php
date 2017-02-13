@@ -382,6 +382,11 @@ class Template implements \ArrayAccess
      */
     public function del($tag)
     {
+        if (is_array($tag)) {
+            foreach ($tag as $t) {
+                $this->del($t);
+            }
+        }
         if ($this->isTopTag($tag)) {
             $this->loadTemplateFromString('');
 

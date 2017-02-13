@@ -68,6 +68,13 @@ class View implements jsExpressionable
     public $class = [];
 
     /**
+     * List of custom CSS attributes
+     *
+     * @var array
+     */
+    public $style = [];
+
+    /**
      * List of custom attributes.
      *
      * @var array
