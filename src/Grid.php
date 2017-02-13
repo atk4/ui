@@ -69,14 +69,13 @@ class Grid extends Lister
     }
 
     /**
-     * Overrides work like this: 
+     * Overrides work like this:.
      *
      * [
      *   'name'=>'Totals for {$num} rows:',
      *   'price'=>'--',
      *   'total'=>['sum']
      * ]
-     *
      */
     public function addTotals($plan = [])
     {
@@ -126,21 +125,19 @@ class Grid extends Lister
         if (!$rows) {
             $this->template->appendHTML('Body', $this->t_empty->render());
         } elseif ($this->totals_plan) {
-
             $this->t_totals->setHTML('cells', $this->renderTotalsCells());
             $this->template->appendHTML('Foot', $this->t_totals->render());
-
         } else {
         }
 
         return View::renderView();
     }
 
-    function updateTotals()
+    public function updateTotals()
     {
-        foreach($this->totals_plan as $key=>$val) {
+        foreach ($this->totals_plan as $key=>$val) {
             if (is_array($val)) {
-                switch($val[0]) {
+                switch ($val[0]) {
                 case 'sum':
                     $this->totals[$key] += $this->model[$key];
                 }
@@ -148,11 +145,10 @@ class Grid extends Lister
         }
     }
 
-    function renderTotalsCells()
+    public function renderTotalsCells()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-
             if (!isset($this->totals_plan[$name])) {
                 $output[] = $this->app->getTag('th', '-');
                 continue;
@@ -164,7 +160,6 @@ class Grid extends Lister
                 continue;
             }
 
-
             $output[] = $this->app->getTag('th', [], $this->totals_plan[$name]);
         }
 
@@ -175,10 +170,9 @@ class Grid extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-
             $title = $this->model->hasElement($name);
 
-            $output[] = $this->app->getTag('th', [], $title? $title->getCaption() : $name);
+            $output[] = $this->app->getTag('th', [], $title ? $title->getCaption() : $name);
         }
 
         return implode('', $output);
