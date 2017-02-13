@@ -11,7 +11,6 @@ class Generic
 
     public $grid;
 
-
     public $attr = [];
 
     /**
@@ -32,7 +31,6 @@ class Generic
      * You can also use the "{$name}" value if you wish to specific row value:
      *
      *    $grid->column['name']->setAttr('data', '{$id}');
-     *
      */
     public function setAttr($attr, $value, $position = 'body')
     {
@@ -40,30 +38,28 @@ class Generic
     }
 
     /**
-     * Returns a suitalbe cell tag with the supplied value. Applies modifiers added through addClass and setAttr
+     * Returns a suitalbe cell tag with the supplied value. Applies modifiers added through addClass and setAttr.
      */
     public function getTag($tag, $position, $value)
     {
-
         $attr = [];
 
         // "all" applies on all positions
-        if($this->attr['all']) {
+        if ($this->attr['all']) {
             $attr = array_merge_recursive($attr, $this->attr['all']);
         }
 
         // specific position classes
-        if($this->attr[$position]) {
+        if ($this->attr[$position]) {
             $attr = array_merge($attr, $this->attr[$position]);
         }
 
-        return $this->app->getTag($position=='body'?'td':'th', $attr, $value);
+        return $this->app->getTag($position == 'body' ? 'td' : 'th', $attr, $value);
     }
-
 
     /**
      * Provided with a field definition (from a model) will return a header
-     * cell, fully formatted to be included in a Grid. (<th>)
+     * cell, fully formatted to be included in a Grid. (<th>).
      *
      * Potentialy may include elements for sorting.
      */
@@ -74,7 +70,7 @@ class Generic
 
     /**
      * Provided with a field definition will return a string containing a "Template"
-     * that would procude <td> cell when rendered. Example output:
+     * that would procude <td> cell when rendered. Example output:.
      *
      *   <td><b>{$name}</b></td>
      *
@@ -88,5 +84,4 @@ class Generic
     {
         return $this->app->getTag('td', [], '{$'.$f->short_name.'}');
     }
-
 }

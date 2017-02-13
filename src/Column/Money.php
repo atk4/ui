@@ -3,18 +3,17 @@
 namespace atk4\ui\Column;
 
 /**
- * Formatting money
+ * Formatting money.
  */
 class Money extends Generic
 {
-
     public $currency = null;
 
     public $format = null;
 
     /**
      * Provided with a field definition (from a model) will return a header
-     * cell, fully formatted to be included in a Grid. (<th>)
+     * cell, fully formatted to be included in a Grid. (<th>).
      *
      * Potentialy may include elements for sorting.
      */
@@ -25,7 +24,7 @@ class Money extends Generic
 
     /**
      * Provided with a field definition will return a string containing a "Template"
-     * that would procude <td> cell when rendered. Example output:
+     * that would procude <td> cell when rendered. Example output:.
      *
      *   <td><b>{$name}</b></td>
      *

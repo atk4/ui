@@ -9,7 +9,8 @@ class Template extends Generic
 {
     public $template = null;
 
-    function __construct($template) {
+    public function __construct($template)
+    {
         $this->template = $template;
     }
 

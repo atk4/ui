@@ -16,15 +16,12 @@ class Grid extends Lister
 
     public $columns = [];
 
-
-
     /**
      * Determines a strategy on how totals will be calculated.
      */
     public $totals_plan = false;
 
     public $totals = [];
-
 
     /**
      * Defines a new column for this field. You need two objects for field to
@@ -99,7 +96,7 @@ class Grid extends Lister
     /**
      * Init method will create one column object that will be used to render
      * all columns in the grid unless you have specified a different
-     * column object
+     * column object.
      */
     public function init()
     {
@@ -137,10 +134,9 @@ class Grid extends Lister
 
             $this->t_row->set($this->model);
 
-
             $html_tags = [];
             foreach ($this->columns as $name => $column) {
-                if(!method_exists($column,'getHTMLTags')){ 
+                if (!method_exists($column, 'getHTMLTags')) {
                     continue;
                 }
                 $field = $this->model->hasElement($name);
@@ -230,7 +226,6 @@ class Grid extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-
             $field = $this->model->hasElement($name);
 
             $output[] = $column->getCellTemplate($field);

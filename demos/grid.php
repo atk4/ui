@@ -11,6 +11,6 @@ $g->addColumn('surname', new \atk4\ui\Column\Template('<td class="warning">{$sur
 $date = new \DateTime('2000-01-01');
 
 $g->addColumn('title', new \atk4\ui\Column\Status([
-    'positive'=>['Prof.'],
-    'negative'=>['Dr.'],
+    'positive'=> ['Prof.'],
+    'negative'=> ['Dr.'],
 ]));

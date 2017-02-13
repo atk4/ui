@@ -9,7 +9,8 @@ class Link extends Generic
 {
     public $page = null;
 
-    function __construct($page = []) {
+    public function __construct($page = [])
+    {
         $this->page = $page;
     }
 
@@ -18,20 +19,21 @@ class Link extends Generic
      */
     public function getCellTemplate(\atk4\data\Field $f)
     {
-        foreach($this->page as &$val) {
-            $val = str_replace('{$','___o',$val);
-            $val = str_replace('}','c___',$val);
+        foreach ($this->page as &$val) {
+            $val = str_replace('{$', '___o', $val);
+            $val = str_replace('}', 'c___', $val);
         }
 
         $href = $this->app->url($this->page);
         $output = $this->app->getTag('td', [], $this->app->getTag('a', ['href'=>$href], '{$'.$f->short_name.'}'));
 
-        $output = str_replace('___o','{$',$output);
-        $output = str_replace('c___','_urlencode}',$output);
+        $output = str_replace('___o', '{$', $output);
+        $output = str_replace('c___', '_urlencode}', $output);
+
         return $output;
     }
 
-    function getHTMLTags($row, $field)
+    public function getHTMLTags($row, $field)
     {
         return ['id_urlencode'=>$row->id];
     }
