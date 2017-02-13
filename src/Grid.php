@@ -6,6 +6,9 @@ namespace atk4\ui;
 
 class Grid extends Lister
 {
+    use \atk4\core\HookTrait;
+
+
     public $defaultTemplate = 'grid.html';
 
     public $ui = 'table';
@@ -135,6 +138,13 @@ class Grid extends Lister
             $this->t_row->set($this->model);
 
             $html_tags = [];
+
+            foreach($this->hook('getHTMLTags', [$this->model]) as $ret) {
+                if(is_array($ret)) {
+                    $html_tags = array_merge($html_tags, $ret);
+                }
+            }
+
             foreach ($this->columns as $name => $column) {
                 if (!method_exists($column, 'getHTMLTags')) {
                     continue;
