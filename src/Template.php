@@ -26,6 +26,8 @@ namespace atk4\ui;
 
 class Template implements \ArrayAccess
 {
+    use \atk4\core\AppScopeTrait;
+
     // {{{ Properties of a template
 
     /**
@@ -274,7 +276,7 @@ class Template implements \ArrayAccess
         }
 
         if (is_object($tag)) {
-            $tag = $tag->get();
+            $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
         }
 
         if (is_array($tag)) {
@@ -472,6 +474,7 @@ class Template implements \ArrayAccess
 
         $cl = get_class($this);
         $n = new $cl();
+        $n->app = $this->app;
         $n->template = unserialize(serialize(['_top#1' => $this->get($tag)]));
         $n->rebuildTags();
         $n->source = 'Clone ('.$tag.') of '.$this->source;

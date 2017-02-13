@@ -28,6 +28,8 @@ class App
 
     private $run_called = false;
 
+    public $ui_persistence = null;
+
     public function __construct($defaults = [])
     {
         if (is_string($defaults)) {
@@ -66,6 +68,8 @@ class App
                 exit;
             });
         }
+
+        $this->ui_persistence = new Persistence\UI();
     }
 
     public function caughtException($exception)
@@ -143,6 +147,7 @@ class App
     public function loadTemplate($name)
     {
         $template = new Template();
+        $template->app = $this;
         if (in_array($name[0], ['.', '/', '\\'])) {
             $template->load($name);
         } else {

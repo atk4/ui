@@ -105,6 +105,7 @@ class Grid extends Lister
     {
         parent::init();
 
+
         $this->t_head = $this->template->cloneRegion('Head');
         $this->t_row_master = $this->template->cloneRegion('Row');
         $this->t_totals = $this->template->cloneRegion('Totals');
@@ -124,6 +125,7 @@ class Grid extends Lister
 
         $this->t_row_master->setHTML('cells', $this->getRowTemplate());
         $this->t_row = new Template($this->t_row_master->render());
+        $this->t_row->app = $this->app;
 
         $rows = 0;
         foreach ($this->model as $this->current_id => $tmp) {
@@ -178,6 +180,9 @@ class Grid extends Lister
             if (is_array($val)) {
                 switch ($val[0]) {
                 case 'sum':
+                    if(!isset($this->totals[$key])) {
+                        $this->totals[$key] = 0;
+                    }
                     $this->totals[$key] += $this->model[$key];
                 }
             }
@@ -195,7 +200,8 @@ class Grid extends Lister
 
             if (is_array($this->totals_plan[$name])) {
                 // todo - format
-                $output[] = $this->app->getTag('th', [], $this->columns[$name]->format($this->totals[$name]));
+                $field = $this->model->getElement($name);
+                $output[] = $this->columns[$name]->getTotalsCell($field, $this->totals[$name]);
                 continue;
             }
 

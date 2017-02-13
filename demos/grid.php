@@ -20,7 +20,7 @@ $g->addColumn('title', new \atk4\ui\Column\Status([
 ]));
 
 $g->addColumn('date');
-$g->addColumn('salary');
+$g->addColumn('salary', (new \atk4\ui\Column\Generic())->addClass('right aligned', 'all'));
 
 $g->addHook('getHTMLTags', function($grid, $row) { 
     if ($row->id==1) {
@@ -30,4 +30,4 @@ $g->addHook('getHTMLTags', function($grid, $row) {
     }
 });
 
-$g->addTotals(['name'=>'Totals:']);
+$g->addTotals(['name'=>'Totals:', 'salary'=>['sum']]);

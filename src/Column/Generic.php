@@ -20,6 +20,7 @@ class Generic
     public function addClass($class, $position = 'body')
     {
         $this->attr[$position]['class'][] = $class;
+        return $this;
     }
 
     public $class = [];
@@ -35,6 +36,7 @@ class Generic
     public function setAttr($attr, $value, $position = 'body')
     {
         $this->attr[$position][$attr] = $value;
+        return $this;
     }
 
     /**
@@ -45,13 +47,17 @@ class Generic
         $attr = [];
 
         // "all" applies on all positions
-        if ($this->attr['all']) {
+        if (isset($this->attr['all'])) {
             $attr = array_merge_recursive($attr, $this->attr['all']);
         }
 
         // specific position classes
-        if ($this->attr[$position]) {
+        if (isset($this->attr[$position])) {
             $attr = array_merge($attr, $this->attr[$position]);
+        }
+
+        if (isset($attr['class'])) {
+            $attr['class'] = implode(' ', $attr['class']);
         }
 
         return $this->app->getTag($position == 'body' ? 'td' : 'th', $attr, $value);
@@ -65,7 +71,12 @@ class Generic
      */
     public function getHeaderCell(\atk4\data\Field $f)
     {
-        return $this->app->getTag('th', [], $f->getCaption());
+        return $this->getTag('th', 'head', $f->getCaption());
+    }
+
+    public function getTotalsCell(\atk4\data\Field $f, $value)
+    {
+        return $this->getTag('th', 'foot', $this->app->ui_persistence->typecastSaveField($f, $value));
     }
 
     /**
@@ -82,6 +93,6 @@ class Generic
      */
     public function getCellTemplate(\atk4\data\Field $f)
     {
-        return $this->app->getTag('td', [], '{$'.$f->short_name.'}');
+        return $this->getTag('td', 'body', '{$'.$f->short_name.'}');
     }
 }
