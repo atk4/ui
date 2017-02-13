@@ -160,7 +160,7 @@ class Grid extends Lister
 
             if (is_array($this->totals_plan[$name])) {
                 // todo - format
-                $output[] = $this->app->getTag('th', [], $this->totals[$name]);
+                $output[] = $this->app->getTag('th', [], $this->columns[$name]->format($this->totals[$name]));
                 continue;
             }
 
