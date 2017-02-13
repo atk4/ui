@@ -6,13 +6,11 @@ use atk4\data\Model;
 
 class UI extends \atk4\data\Persistence
 {
-
     public $date_format = 'd/m/Y';
 
     public $time_format = 'h:i:S';
 
     public $datetime_format = 'D, d M Y H:i:s O';
-
 
     public function _typecastSaveField(\atk4\data\Field $f, $value)
     {
@@ -49,6 +47,7 @@ class UI extends \atk4\data\Persistence
 
         return $v;
     }
+
     public function typecastSaveRow(Model $m, $row)
     {
         if (!$row) {
@@ -70,7 +69,6 @@ class UI extends \atk4\data\Persistence
                 $result[$field] = $value;
                 continue;
             }
-
 
             // Expression and null cannot be converted.
             if (

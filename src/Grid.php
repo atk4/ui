@@ -104,7 +104,6 @@ class Grid extends Lister
     {
         parent::init();
 
-
         $this->t_head = $this->template->cloneRegion('Head');
         $this->t_row_master = $this->template->cloneRegion('Row');
         $this->t_totals = $this->template->cloneRegion('Totals');
@@ -179,7 +178,7 @@ class Grid extends Lister
             if (is_array($val)) {
                 switch ($val[0]) {
                 case 'sum':
-                    if(!isset($this->totals[$key])) {
+                    if (!isset($this->totals[$key])) {
                         $this->totals[$key] = 0;
                     }
                     $this->totals[$key] += $this->model[$key];

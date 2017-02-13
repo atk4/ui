@@ -20,6 +20,7 @@ class Generic
     public function addClass($class, $position = 'body')
     {
         $this->attr[$position]['class'][] = $class;
+
         return $this;
     }
 
@@ -36,6 +37,7 @@ class Generic
     public function setAttr($attr, $value, $position = 'body')
     {
         $this->attr[$position][$attr] = $value;
+
         return $this;
     }
 
