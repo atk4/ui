@@ -131,7 +131,6 @@ class Grid extends Lister
         $this->template->del('Head');
         $this->template->del('Body');
         $this->template->del('Foot');
-
     }
 
     /**
