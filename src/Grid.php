@@ -12,14 +12,27 @@ class Grid extends Lister
 
     public $ui = 'table';
 
-    public $current_row_html = [];
+    /**
+     * Column objects can service multiple columns. You can use it for your advancage by re-using the object
+     * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
+     * used
+     */
+    public $default_column = null;
 
-    public $default_column = '';
-
+    /**
+     * Contains list of declared columns. Value will always be a column object
+     */
     public $columns = [];
 
     /**
-     * Determines a strategy on how totals will be calculated.
+     * Allows you to inject HTML into grid using getHTMLTags hook and column call-backs.
+     * Switch this feature off to increase performance at expense of some row-specific HTML.
+     */
+    public $use_html_tags = true;
+
+    /**
+     * Determines a strategy on how totals will be calculated. Do not touch those fields
+     * direcly, instead use addTotals()
      */
     public $totals_plan = false;
 
@@ -116,12 +129,16 @@ class Grid extends Lister
         $this->default_column = $this->add(new Column\Generic());
     }
 
+    /**
+     * @inherit
+     */
     public function renderView()
     {
         $this->t_head->setHTML('cells', $this->renderHeaderCells());
         $this->template->setHTML('Head', $this->t_head->render());
 
         $this->t_row_master->setHTML('cells', $this->getRowTemplate());
+        $this->t_row_master['_id'] = '{$_id}';
         $this->t_row = new Template($this->t_row_master->render());
         $this->t_row->app = $this->app;
 
@@ -137,26 +154,32 @@ class Grid extends Lister
 
             $this->t_row->set($this->model);
 
-            $html_tags = [];
+            if ($this->use_html_tags) {
+                // Prepare row-specific HTML tags.
+                $html_tags = [];
 
-            foreach ($this->hook('getHTMLTags', [$this->model]) as $ret) {
-                if (is_array($ret)) {
-                    $html_tags = array_merge($html_tags, $ret);
+                foreach ($this->hook('getHTMLTags', [$this->model]) as $ret) {
+                    if (is_array($ret)) {
+                        $html_tags = array_merge($html_tags, $ret);
+                    }
                 }
-            }
 
-            foreach ($this->columns as $name => $column) {
-                if (!method_exists($column, 'getHTMLTags')) {
-                    continue;
+                foreach ($this->columns as $name => $column) {
+                    if (!method_exists($column, 'getHTMLTags')) {
+                        continue;
+                    }
+                    $field = $this->model->hasElement($name);
+                    $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
                 }
-                $field = $this->model->hasElement($name);
-                $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
+
+                // Render row and add to body
+                $this->t_row->setHTML($html_tags);
+                $this->t_row->set('_id', $this->model->id);
+                $this->template->appendHTML('Body', $this->t_row->render());
+                $this->t_row->del(array_keys($html_tags));
+            } else {
+                $this->template->appendHTML('Body', $this->t_row->render());
             }
-            $this->t_row->setHTML($html_tags);
-
-            $this->template->appendHTML('Body', $this->t_row->render());
-
-            $this->t_row->del(array_keys($html_tags));
 
             $rows++;
         }
@@ -172,6 +195,9 @@ class Grid extends Lister
         return View::renderView();
     }
 
+    /**
+     * Executed for each row if "totals" are enabled to add up values
+     */
     public function updateTotals()
     {
         foreach ($this->totals_plan as $key=>$val) {
@@ -187,6 +213,26 @@ class Grid extends Lister
         }
     }
 
+    /**
+     * Responds with the HTML to be inserted in the header row that would
+     * contain captions of all columns
+     */
+    public function renderHeaderCells()
+    {
+        $output = [];
+        foreach ($this->columns as $name => $column) {
+            $field = $this->model->hasElement($name);
+
+            $output[] = $column->getHeaderCell($field);
+        }
+
+        return implode('', $output);
+    }
+
+    /**
+     * Responsd with HTML to be inserted in the footer row that would
+     * contain totals fro all columns
+     */
     public function renderTotalsCells()
     {
         $output = [];
@@ -209,33 +255,9 @@ class Grid extends Lister
         return implode('', $output);
     }
 
-    public function renderHeaderCells()
-    {
-        $output = [];
-        foreach ($this->columns as $name => $column) {
-            $field = $this->model->hasElement($name);
-
-            $output[] = $column->getHeaderCell($field);
-        }
-
-        return implode('', $output);
-    }
-
-    /*
-    public function renderCells()
-    {
-        $output = [];
-        foreach ($this->columns as $name => $column) {
-            $html = isset($this->current_row_html[$name]) ?
-                $this->current_row_html : $this->app->encodeHTML($this->current_row[$name]);
-
-            $output[] = $this->app->getTag('td', [], $html);
-        }
-
-        return implode('', $output);
-    }
+    /**
+     * Collects cell templates from all the columns and combine them into row template.
      */
-
     public function getRowTemplate()
     {
         $output = [];

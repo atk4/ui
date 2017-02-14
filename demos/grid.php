@@ -19,7 +19,7 @@ $g->addColumn('title', new \atk4\ui\Column\Status([
 ]));
 
 $g->addColumn('date');
-$g->addColumn('salary', (new \atk4\ui\Column\Generic())->addClass('right aligned', 'all'));
+$g->addColumn('salary', (new \atk4\ui\Column\Generic())->addClass('right aligned single line', 'all'));
 
 $g->addHook('getHTMLTags', function ($grid, $row) {
     if ($row->id == 1) {

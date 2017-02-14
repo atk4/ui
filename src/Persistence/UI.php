@@ -4,6 +4,16 @@ namespace atk4\ui\Persistence;
 
 use atk4\data\Model;
 
+/**
+ * This class is used for typecasting model types to the values that will be presented to the user. App will
+ * always initialize this persistence in $app->ui_persistence and this object will be used by various
+ * UI elements to output data to the user.
+ *
+ * Overriding and extending this class is a great place where you can tweak how various data-types are displayed
+ * to the user in the way so it would affect UI globally.
+ *
+ * You may want to localize some of the output.
+ */
 class UI extends \atk4\data\Persistence
 {
     public $date_format = 'd/m/Y';
@@ -12,6 +22,11 @@ class UI extends \atk4\data\Persistence
 
     public $datetime_format = 'D, d M Y H:i:s O';
 
+    public $currency = '€';
+
+    /**
+     * This method contains the logic of casting generic values into user-friendly format
+     */
     public function _typecastSaveField(\atk4\data\Field $f, $value)
     {
         // work only on copied value not real one !!!
@@ -19,8 +34,9 @@ class UI extends \atk4\data\Persistence
 
         switch ($f->type) {
         case 'boolean':
+            return $v ? 'Yes' : 'No';
         case 'money':
-            return number_format($v, 2);
+            return ($this->currency ? $this->currency.' ' : '').number_format($v, 2);
         case 'date':
         case 'datetime':
         case 'time':
@@ -48,6 +64,13 @@ class UI extends \atk4\data\Persistence
         return $v;
     }
 
+    /**
+     * This is override of the default Persistence logic to tweak the behaviour:
+     *
+     *  - "actual" property is ignored
+     *  - any validation for the "saving" or output is ignored.
+     *  - handling of all sorts of expressions is disabled
+     */
     public function typecastSaveRow(Model $m, $row)
     {
         if (!$row) {
@@ -66,16 +89,6 @@ class UI extends \atk4\data\Persistence
             // We have no knowledge of the field, it wasn't defined, so
             // we will leave it as-is.
             if (!$f) {
-                $result[$field] = $value;
-                continue;
-            }
-
-            // Expression and null cannot be converted.
-            if (
-                $value instanceof \atk4\dsql\Expression ||
-                $value instanceof \atk4\dsql\Expressionable ||
-                $value === null
-            ) {
                 $result[$field] = $value;
                 continue;
             }

@@ -11,11 +11,14 @@ class Generic
 
     public $grid;
 
+    /**
+     * Contains any custom attributes that may be applied on head, body or foot
+     */
     public $attr = [];
 
     /**
      * Adds a new class to the cells of this column. The optional second argument may be "head",
-     * "body", "odd", "even" or "foot". If position is not defined, then class will be applied on all cells.
+     * "body" or "foot". If position is not defined, then class will be applied on all cells.
      */
     public function addClass($class, $position = 'body')
     {
@@ -28,7 +31,7 @@ class Generic
 
     /**
      * Adds a new attribute to the cells of this column. The optional second argument may be "head",
-     * "body", "odd", "even" or "foot". If position is not defined, then attribute will be applied on all cells.
+     * "body" or "foot". If position is not defined, then attribute will be applied on all cells.
      *
      * You can also use the "{$name}" value if you wish to specific row value:
      *
@@ -76,6 +79,9 @@ class Generic
         return $this->getTag('th', 'head', $f->getCaption());
     }
 
+    /**
+     * Return HTML for a total value of a specific field
+     */
     public function getTotalsCell(\atk4\data\Field $f, $value)
     {
         return $this->getTag('th', 'foot', $this->app->ui_persistence->typecastSaveField($f, $value));

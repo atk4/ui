@@ -11,7 +11,8 @@ tbody
 
     //- Indicates a regular row in the table. Re-define this if you wish multiple "tr" per line.
     | {Row}
-    tr {$cells}
+    tr('data-id'='{$_id}')
+        | {$cells}
 
     | {/}
 
