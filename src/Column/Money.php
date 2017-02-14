@@ -11,16 +11,14 @@ class Money extends Generic
 
     public $format = null;
 
+    public $attr = ['all'=>['class'=>['right aligned single line']]];
+
     /**
      * Provided with a field definition (from a model) will return a header
      * cell, fully formatted to be included in a Grid. (<th>).
      *
      * Potentialy may include elements for sorting.
      */
-    public function getHeaderCell(\atk4\data\Field $f)
-    {
-        $this->app->getTag('th', [], $f->getCaption());
-    }
 
     /**
      * Provided with a field definition will return a string containing a "Template"
@@ -36,6 +34,18 @@ class Money extends Generic
      */
     public function getCellTemplate(\atk4\data\Field $f)
     {
-        return $val;
+        return $this->app->getTag(
+            'td',
+            ['class'=> '{$_'.$f->short_name.'_money}'],
+            '{$'.$f->short_name.'}'
+        );
+    }
+
+    function getHTMLTags($row, $field)
+    {
+        if($field->get()<0) {
+            return ['_'.$field->short_name.'_money'=>'right aligned single line negative'];
+        }
+        return ['_'.$field->short_name.'_money'=>'right aligned single line'];
     }
 }

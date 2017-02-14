@@ -50,7 +50,7 @@ class Grid extends Lister
      * for cells and will handle other things like alignment. If you do not specify
      * column, then it will be selected dynamically based on field type.
      */
-    public function addColumn($name, $column_def = null, $field_def = null)
+    public function addColumn($name, $columnDef = null, $fieldDef = null)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
@@ -59,19 +59,19 @@ class Grid extends Lister
         $field = $this->model->hasElement($name);
 
         if (!$field) {
-            $field = $this->model->addField($name, $field_def);
+            $field = $this->model->addField($name, $fieldDef);
         }
 
-        if (!is_object($column_def)) {
-            $column_def = $this->_columnFactory($field);
+        if (!is_object($columnDef)) {
+            $columnDef = $this->_columnFactory($field);
         } else {
-            $this->add($column_def, $name);
+            $this->add($columnDef, $name);
         }
 
-        $column_def->grid = $this;
-        $this->columns[$name] = $column_def;
+        $columnDef->grid = $this;
+        $this->columns[$name] = $columnDef;
 
-        return $column_def;
+        return $columnDef;
     }
 
     /**
@@ -245,7 +245,7 @@ class Grid extends Lister
             if (is_array($this->totals_plan[$name])) {
                 // todo - format
                 $field = $this->model->getElement($name);
-                $output[] = $this->columns[$name]->getTotalsCell($field, $this->totals[$name]);
+                $output[] = $column->getTotalsCell($field, $this->totals[$name]);
                 continue;
             }
 
