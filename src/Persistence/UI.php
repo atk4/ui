@@ -25,7 +25,7 @@ class UI extends \atk4\data\Persistence
     public $currency = '€';
 
     /**
-     * This method contains the logic of casting generic values into user-friendly format
+     * This method contains the logic of casting generic values into user-friendly format.
      */
     public function _typecastSaveField(\atk4\data\Field $f, $value)
     {
@@ -65,7 +65,7 @@ class UI extends \atk4\data\Persistence
     }
 
     /**
-     * This is override of the default Persistence logic to tweak the behaviour:
+     * This is override of the default Persistence logic to tweak the behaviour:.
      *
      *  - "actual" property is ignored
      *  - any validation for the "saving" or output is ignored.

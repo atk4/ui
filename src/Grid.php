@@ -15,12 +15,12 @@ class Grid extends Lister
     /**
      * Column objects can service multiple columns. You can use it for your advancage by re-using the object
      * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
-     * used
+     * used.
      */
     public $default_column = null;
 
     /**
-     * Contains list of declared columns. Value will always be a column object
+     * Contains list of declared columns. Value will always be a column object.
      */
     public $columns = [];
 
@@ -32,7 +32,7 @@ class Grid extends Lister
 
     /**
      * Determines a strategy on how totals will be calculated. Do not touch those fields
-     * direcly, instead use addTotals()
+     * direcly, instead use addTotals().
      */
     public $totals_plan = false;
 
@@ -196,7 +196,7 @@ class Grid extends Lister
     }
 
     /**
-     * Executed for each row if "totals" are enabled to add up values
+     * Executed for each row if "totals" are enabled to add up values.
      */
     public function updateTotals()
     {
@@ -215,7 +215,7 @@ class Grid extends Lister
 
     /**
      * Responds with the HTML to be inserted in the header row that would
-     * contain captions of all columns
+     * contain captions of all columns.
      */
     public function renderHeaderCells()
     {
@@ -231,7 +231,7 @@ class Grid extends Lister
 
     /**
      * Responsd with HTML to be inserted in the footer row that would
-     * contain totals fro all columns
+     * contain totals fro all columns.
      */
     public function renderTotalsCells()
     {

@@ -12,7 +12,7 @@ class Generic
     public $grid;
 
     /**
-     * Contains any custom attributes that may be applied on head, body or foot
+     * Contains any custom attributes that may be applied on head, body or foot.
      */
     public $attr = [];
 
@@ -80,7 +80,7 @@ class Generic
     }
 
     /**
-     * Return HTML for a total value of a specific field
+     * Return HTML for a total value of a specific field.
      */
     public function getTotalsCell(\atk4\data\Field $f, $value)
     {
