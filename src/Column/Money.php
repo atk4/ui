@@ -41,11 +41,12 @@ class Money extends Generic
         );
     }
 
-    function getHTMLTags($row, $field)
+    public function getHTMLTags($row, $field)
     {
-        if($field->get()<0) {
+        if ($field->get() < 0) {
             return ['_'.$field->short_name.'_money'=>'right aligned single line negative'];
         }
+
         return ['_'.$field->short_name.'_money'=>'right aligned single line'];
     }
 }
