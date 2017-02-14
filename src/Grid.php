@@ -108,6 +108,12 @@ class Grid extends Lister
     public $t_totals;
     public $t_empty;
 
+    public function __construct($data = [])
+    {
+        parent::__construct($data);
+        $this->default_column = $this->add(new Column\Generic());
+    }
+
     /**
      * Init method will create one column object that will be used to render
      * all columns in the grid unless you have specified a different
@@ -126,7 +132,6 @@ class Grid extends Lister
         $this->template->del('Body');
         $this->template->del('Foot');
 
-        $this->default_column = $this->add(new Column\Generic());
     }
 
     /**
