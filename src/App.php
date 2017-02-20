@@ -93,7 +93,7 @@ class App
 
     public function outputDebug($str)
     {
-        echo('DEBUG:'. $str.'<br/>');
+        echo 'DEBUG:'.$str.'<br/>';
     }
 
     public function initLayout($layout, $options = [])

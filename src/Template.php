@@ -89,7 +89,7 @@ class Template implements \ArrayAccess
     {
         $arg = [$message];
 
-        if($this->source) {
+        if ($this->source) {
             $arg['source'] = $this->source;
         }
 

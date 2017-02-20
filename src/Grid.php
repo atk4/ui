@@ -37,27 +37,27 @@ class Grid extends Lister
     public $totals_plan = false;
 
     /**
-     * Contains list of totals accumulated during the render process
+     * Contains list of totals accumulated during the render process.
      */
     public $totals = [];
 
     /**
-     * Contain the template for the "Head" type row
+     * Contain the template for the "Head" type row.
      */
     protected $t_head;
 
     /**
-     * Contain the template for the "Body" type row
+     * Contain the template for the "Body" type row.
      */
     protected $t_row;
 
     /**
-     * Contain the template for the "Foot" type row
+     * Contain the template for the "Foot" type row.
      */
     protected $t_totals;
 
     /**
-     * Contains the output to show if table contains no rows
+     * Contains the output to show if table contains no rows.
      */
     protected $t_empty;
 
@@ -109,7 +109,7 @@ class Grid extends Lister
 
         default:
             if (!$this->default_column) {
-                $this->default_column  =$this->add(new Column\Generic());
+                $this->default_column = $this->add(new Column\Generic());
             }
 
             return $this->default_column;
