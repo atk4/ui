@@ -8,8 +8,8 @@ class Grid extends Lister
 {
     use \atk4\core\HookTrait;
 
+    // overrides
     public $defaultTemplate = 'grid.html';
-
     public $ui = 'table';
 
     /**
@@ -36,7 +36,30 @@ class Grid extends Lister
      */
     public $totals_plan = false;
 
+    /**
+     * Contains list of totals accumulated during the render process
+     */
     public $totals = [];
+
+    /**
+     * Contain the template for the "Head" type row
+     */
+    protected $t_head;
+
+    /**
+     * Contain the template for the "Body" type row
+     */
+    protected $t_row;
+
+    /**
+     * Contain the template for the "Foot" type row
+     */
+    protected $t_totals;
+
+    /**
+     * Contains the output to show if table contains no rows
+     */
+    protected $t_empty;
 
     /**
      * Defines a new column for this field. You need two objects for field to
@@ -85,6 +108,10 @@ class Grid extends Lister
             return $this->add(new Column\Checkbox());
 
         default:
+            if (!$this->default_column) {
+                $this->default_column  =$this->add(new Column\Generic());
+            }
+
             return $this->default_column;
         }
     }
@@ -101,17 +128,6 @@ class Grid extends Lister
     public function addTotals($plan = [])
     {
         $this->totals_plan = $plan;
-    }
-
-    public $t_head;
-    public $t_row;
-    public $t_totals;
-    public $t_empty;
-
-    public function __construct($data = [])
-    {
-        parent::__construct($data);
-        $this->default_column = $this->add(new Column\Generic());
     }
 
     /**
@@ -133,9 +149,7 @@ class Grid extends Lister
         $this->template->del('Foot');
     }
 
-    /**
-     * @inherit
-     */
+    // @inheritdoc
     public function renderView()
     {
         $this->t_head->setHTML('cells', $this->renderHeaderCells());
@@ -149,8 +163,6 @@ class Grid extends Lister
         $rows = 0;
         foreach ($this->model as $this->current_id => $tmp) {
             $this->current_row = $this->model->get();
-
-            //$this->formatRow();
 
             if ($this->totals_plan) {
                 $this->updateTotals();

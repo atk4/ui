@@ -9,14 +9,34 @@ Grid
 
 Grid is the simplest way to output multiple records of structured data. Grid only works along with the model,
 however you can use :php:meth:`Lister::setSource` to inject static data (although it is slower than simply
-using a model).
+using a model). :ref:`no_data`
 
 
 Using Grid
 ==========
 
-The simplest way to create a grid is to 
+The simplest way to create a grid::
 
+    $grid = $layout->add('Grid');
+    $grid->setModel(new Order($db));
+
+The grid will be able to automatcally determine all the fields defined in your "Order" model, map them to
+appropriate column types, implement type-casting and also connect your model with the appropriate data source
+(database) $db.
+
+Adding Additional Columns
+-------------------------
+
+There are various ways to define a new column. The most common approach is to add a new Model Field that 
+would map into the new column. For instance if you are showing orders with quantity and price and are willing
+to add a "Total" column::
+
+    $grid = $layout->add('Grid');
+    $order = new Order($db);
+
+    $order->addExpression('total', '[price]*[amount]')->type = 'money';
+
+    $grid->setModel($order);
 
 Grid Data Handling
 ==================

@@ -91,6 +91,11 @@ class App
         $this->run_called = true;
     }
 
+    public function outputDebug($str)
+    {
+        echo('DEBUG:'. $str.'<br/>');
+    }
+
     public function initLayout($layout, $options = [])
     {
         if (is_string($layout)) {

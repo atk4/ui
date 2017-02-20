@@ -4,8 +4,8 @@ namespace atk4\ui;
 
 class Lister extends View
 {
-    public $t_row = null;
-    public $t_totals = null;
+    protected $t_row = null;
+    protected $t_totals = null;
 
     public $defaultTemplate = null;
 
