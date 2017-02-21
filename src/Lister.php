@@ -11,6 +11,9 @@ class Lister extends View
 
     public function renderView()
     {
+        if (!$this->template) {
+            throw new Exception(['Lister requires you to specify template explicitly']);
+        }
         $this->t_row = $this->template->cloneRegion('row');
         //$this->t_totals = isset($this->template['totals']) ? $this->template->cloneRegion('totals') : null;
 
