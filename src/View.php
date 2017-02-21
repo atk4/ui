@@ -318,9 +318,9 @@ class View implements jsExpressionable
 
         if (!$this->app) {
             $this->_add_later[] = [$object, $region];
+
             return $object;
         }
-
 
         if ($region === null) {
             $defaults = ['region' => 'Content'];
@@ -571,15 +571,11 @@ class View implements jsExpressionable
     public function recursiveRender()
     {
         foreach ($this->elements as $view) {
-
-
-
             if ($this->app && $view instanceof \atk4\core\AppScopeTrait && !$view->app) {
                 $view->app = $this->app;
                 $view->name = $this->name.$view->short_name;
                 $view->init();
             }
-
 
             if (!$view instanceof self) {
                 continue;

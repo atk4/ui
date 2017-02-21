@@ -6,7 +6,7 @@ use atk4\ui\View;
 
 /**
  * Multiple tests to ensure that adding views through various patterns initializes them
- * nicely still
+ * nicely still.
  */
 class RenderTreeTest extends \atk4\core\PHPUnit_AgileTestCase
 {
@@ -22,7 +22,6 @@ class RenderTreeTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertNotNull($b->template);
     }
 
-
     public function testBasicNest1()
     {
         $b = new View();
@@ -36,6 +35,4 @@ class RenderTreeTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertSame($b2->app, $b->app);
     }
-
-
 }
