@@ -116,6 +116,8 @@ class View implements jsExpressionable
      */
     public $element = null;
 
+    protected $_add_later = [];
+
     // }}}
 
     // {{{ Setting Things up
@@ -279,6 +281,12 @@ class View implements jsExpressionable
         if (is_string($this->defaultTemplate) && is_null($this->template)) {
             $this->template = $this->app->loadTemplate($this->defaultTemplate);
         }
+
+        foreach ($this->_add_later as list($object, $region)) {
+            $this->add($object, $region);
+        }
+
+        $this->_add_later = [];
     }
 
     /**
@@ -302,9 +310,17 @@ class View implements jsExpressionable
      */
     public function add($object, $region = null)
     {
+        /*
         if (!$this->app) {
             $this->init();
         }
+         */
+
+        if (!$this->app) {
+            $this->_add_later[] = [$object, $region];
+            return $object;
+        }
+
 
         if ($region === null) {
             $defaults = ['region' => 'Content'];
@@ -555,6 +571,16 @@ class View implements jsExpressionable
     public function recursiveRender()
     {
         foreach ($this->elements as $view) {
+
+
+
+            if ($this->app && $view instanceof \atk4\core\AppScopeTrait && !$view->app) {
+                $view->app = $this->app;
+                $view->name = $this->name.$view->short_name;
+                $view->init();
+            }
+
+
             if (!$view instanceof self) {
                 continue;
             }
