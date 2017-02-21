@@ -152,14 +152,17 @@ class Grid extends Lister
     // @inheritdoc
     public function renderView()
     {
+        // Generate Header Row
         $this->t_head->setHTML('cells', $this->renderHeaderCells());
         $this->template->setHTML('Head', $this->t_head->render());
 
+        // Generate template for data row
         $this->t_row_master->setHTML('cells', $this->getRowTemplate());
         $this->t_row_master['_id'] = '{$_id}';
         $this->t_row = new Template($this->t_row_master->render());
         $this->t_row->app = $this->app;
 
+        // Iterate data rows
         $rows = 0;
         foreach ($this->model as $this->current_id => $tmp) {
             $this->current_row = $this->model->get();
@@ -200,6 +203,7 @@ class Grid extends Lister
             $rows++;
         }
 
+        // Add totals rows or empty message.
         if (!$rows) {
             $this->template->appendHTML('Body', $this->t_empty->render());
         } elseif ($this->totals_plan) {
