@@ -12,7 +12,7 @@ A component (or widget) is an interactive part of your user-interface, just like
 
 ![grid](docs/images/grid.png)
 
-Normally creating a re-usable, interractive and flexible component would take you a lot of effort and knowledge but with Agile UI this can be done very easily and with only basic PHP knowledge.
+Creating a re-usable, interractive and flexible component usually takes a lot of effort and knowledge.  Howevever, with Agile UI, this can be done very easily and with just a basic PHP knowledge.
 
 *(WARNING: Agile UI may permanently change your understanding of a phrase "reinvent the wheel")*
 
@@ -24,7 +24,7 @@ Components created with Agile UI are:
 
 ## Bundled componens
 
-Agile UI comes with many built-in components.
+Agile UI comes with many built-in components;
 
 | Name                                     | Description                              | Introduced |
 | ---------------------------------------- | ---------------------------------------- | ---------- |
@@ -53,13 +53,13 @@ Agile UI comes with many built-in components.
 
 All bundled components are free and licensed under MIT license. They are installed together with Agile UI.
 
-External and 3rd party components may use different licensing terms.
+External and 3rd party components may be subject to different licensing terms.
 
 ## Installing and Using
 
 In your command line type `composer require atk4/ui`.
 
-Afterwards use this code to see a Hello World message:
+Afterwards, use this code to see a Hello World message:
 
 ``` php
 require "vendor/autoload.php";
@@ -149,7 +149,7 @@ Because Agile UI makes active use of Agile Core and Agile data, I'm linking all 
 -   [Agile Data Documentation](http://agile-data.readthedocs.io)
 -   [Agile Core Documentation](http://agile-core.readthedocs.io)
 
-If anything is un-clear or you want to get in touch with other awesome people who use Agile UI:
+If anything is unclear or you want to get in touch with other awesome people who use Agile UI:
 
 -   [Forum](https://forum.agiletoolkit.org) - use label Agile UI or Agile Data.
 -   [Developer Gitter Live Chat](https://gitter.im/atk4/atk4) - if you wish to say Thanks to those who created Agile UI (for free!)
@@ -175,7 +175,7 @@ Agile UI follows 'best development practices' and looks to create an eco-system 
 
 **Q: HTML-generating frameworks are lame and inefficient, real coders prefer to manually write HTML/CSS in Twig or Smarty.**
 
-Agile UI was created for those who are in a hurry and are not very picky about the shades of their UI buttons. We make all the efforts to create a solid looking UI and diverse set of components that, like all applications, can be adapted and released with any UI.
+Agile UI was created for those who are in a hurry and not immediately concerned about the shades of their UI buttons. We have created a solid looking UI and diverse set of components that, like all applications, can be adapted and released with any UI.
 
 Our goal was to create an out-of-the-box UI which you can "use", not "reinvent". 
 
@@ -183,21 +183,21 @@ Our goal was to create an out-of-the-box UI which you can "use", not "reinvent".
 
 We went with the default pattern that allows you to write the entire application in ONE language: PHP.
 
-However, the "component" in Agile UI does not conflict with if you choose to use a different  JavaScript framework. We found that **jQuery** and its plug-ins are most suitable for our design patterns. However, you can build a highly interractive component that relies on a different JavaScript frameworks or principles.
+However, the "component" in Agile UI does not conflict if you choose to use a different  JavaScript framework. We found that **jQuery** and its plug-ins are most suitable for our design patterns. However, you can build a highly interractive component that relies on a different JavaScript frameworks or principles.
 
 **Q: I used "X" component framework and found it extremely limiting.**
 
-In the past, many UI / Component frameworks have been unable to find a good balance between flexiblity and convenience. Some out-of-the-box CRUD systems are too generic while other Form-builders are just too overengineered and ugly looking.
+In the past, many UI / Component frameworks have been unable to find a good balance between flexiblity and convenience. Some out-of-the-box CRUD systems are too generic while other Form-builders are just too overengineered and unattractive.
 
 Agile UI follows these core principles in it's design:
 
 -   Instead of focusing on generic HTML, create HTML for a specific CSS framework (Semantic UI)
--   Allow developer to use all the features of CSS framework without leaving PHP
+-   Allow developers to use all the features of CSS framework without leaving PHP
 -   No custom proprietary JS code. Keep all the HTML simple
--   Allow developer to customise or extend components
+-   Allow developers to customise or extend components
 -   Keep Agile UI as a open-source project under MIT license
 
-Following those principles gives us the perfect combination of flexibility, elegancy and performance.
+Following those principles gives us the perfect combination of flexibility, elegance and performance.
 
 **Q: I prefer Bootstrap CSS (or other CSS) over Semantic UI**
 
@@ -212,15 +212,15 @@ Bearing in mind the popularity of Bootstrap CSS, we are working towards an exten
 
 ## List of core Features in Agile UI
 
-While many UI toolkits focus on giving you ready-to-use advance components, we decided to start with basic ones as building blocks then create more advanced compoents that could be easily integrated.
+While many UI toolkits focus on giving you ready-to-use advance components, we produced a foundation of basic ones as building blocks then create more advanced components that are easily integrated.
 
-1.  Rendering HTML - Agile UI is about initializing UI objects then rendering them. Each component is driven by the UI logic and all plays a vital part in the Render Tree.
-2.  Templates - We know that as developer you want control. We offer you the ability to create custom templates for your custom Views to improve performance and memory usage.
+1.  Rendering HTML - Agile UI is about initializing UI objects then rendering them. Each component is driven by the UI logic and all play a vital part in the Render Tree.
+2.  Templates - We know that as developer you want control. We offer the ability to create custom templates for custom Views to improve performance and memory usage.
 3.  Composite Views - This allows View object to implement itself by relying on other Views.
 4.  JavaScript actions - This technique is designed to bind PHP Views with generic JavaScript routines and also to eliminate the need for you to write custom JavaScript code (e.g. `('#myid').dropdown();`).
 5.  JavaScript events - JS actions can be asigned to events. For instance, you can instruct a "Button" object to refresh your "Grid" object in a single line of PHP.
 6.  Buttons, Fields, Dropdown, Boxes, Panels, Icons, Messages - All those basic Views can be used 'out-of-the-box' and are utilising principles described above to remain flexible and configurable.
-7.  Callbacks - A concept where a client-side component's rendering can execute an AJAX request to it's PHP code triggering a server-side event. Agile UI ensures full isolation and robustness with this approach.
+7.  Callbacks - A concept where a client-side component's rendering can execute an AJAX request to its PHP code triggering a server-side event. Agile UI ensures full isolation and robustness with this approach.
 8.  Agile Data - Integration with data and business logic framework allows you to structure your growing PHP application's business logic properly and conforming to best practices of web development.
 9.  Form - Culmination of concepts "callbacks", "composite views" and reliance on a dozen basic views creates a very simple way to create a modern and flexible Form implementation. Capable of rendering, submitting it's own data back, handling errors and server-side validation just in a few lines of PHP code - Form is the most elegant "Form Builder" you will find for PHP.
 10.  Grid and Lister - An interractive and extensible UI component for outputing your data as a table or as a formatted list. When you have a lot of records to render, those components will prove to be very performance efficient.
