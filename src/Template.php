@@ -490,17 +490,21 @@ class Template implements \ArrayAccess
 
     /**
      * Loads template from a specified file.
+     *
+     * @param string $filename Template file name
+     *
+     * @return $this
      */
-    public function load($template_file)
+    public function load($filename)
     {
-        if (!is_readable($template_file)) {
+        if (!is_readable($filename)) {
             throw new Exception([
                 'Unable to read template from file',
-                'file'=> $template_file,
+                'file'=> $filename,
             ]);
         }
-        $this->loadTemplateFromString(file_get_contents($template_file));
-        $this->source = 'loaded from file: '.$template_file;
+        $this->loadTemplateFromString(file_get_contents($filename));
+        $this->source = 'loaded from file: '.$filename;
 
         return $this;
     }
