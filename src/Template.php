@@ -388,6 +388,7 @@ class Template implements \ArrayAccess
             foreach ($tag as $t) {
                 $this->del($t);
             }
+            return $this;
         }
         if ($this->isTopTag($tag)) {
             $this->loadTemplateFromString('');
