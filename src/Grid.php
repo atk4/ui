@@ -16,48 +16,66 @@ class Grid extends Lister
      * Column objects can service multiple columns. You can use it for your advancage by re-using the object
      * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
      * used.
+     *
+     * @var Column\Generic
      */
     public $default_column = null;
 
     /**
      * Contains list of declared columns. Value will always be a column object.
+     *
+     * @var array
      */
     public $columns = [];
 
     /**
      * Allows you to inject HTML into grid using getHTMLTags hook and column call-backs.
      * Switch this feature off to increase performance at expense of some row-specific HTML.
+     *
+     * @var boolean
      */
     public $use_html_tags = true;
 
     /**
      * Determines a strategy on how totals will be calculated. Do not touch those fields
      * direcly, instead use addTotals().
+     *
+     * @var boolean
      */
     public $totals_plan = false;
 
     /**
      * Contains list of totals accumulated during the render process.
+     *
+     * @var array
      */
     public $totals = [];
 
     /**
      * Contain the template for the "Head" type row.
+     *
+     * @var Template
      */
     protected $t_head;
 
     /**
      * Contain the template for the "Body" type row.
+     *
+     * @var Template
      */
     protected $t_row;
 
     /**
      * Contain the template for the "Foot" type row.
+     *
+     * @var Template
      */
     protected $t_totals;
 
     /**
      * Contains the output to show if table contains no rows.
+     *
+     * @var Template
      */
     protected $t_empty;
 
@@ -65,13 +83,22 @@ class Grid extends Lister
      * Defines a new column for this field. You need two objects for field to
      * work.
      *
-     * First is being Model field. If your Grid is already associated
-     * with the model, it will automatically pick one by looking up element
+     * First is being Model field. If your Grid is already associated with
+     * the model, it will automatically pick one by looking up element
      * corresponding to the $name.
      *
-     * The other object is a Column. This object know how to produce HTML
-     * for cells and will handle other things like alignment. If you do not specify
-     * column, then it will be selected dynamically based on field type.
+     * The other object is a Column. This object know how to produce HTML for
+     * cells and will handle other things like alignment. If you do not specify
+     * column, then it will be selected dynamically based on field type
+     *
+     * And third object is a Field. You can use it in case your current data
+     * model doesn't already have such field.
+     *
+     * @param string         $name Data model field name
+     * @param Column\Generic $columnDef
+     * @param array          $fieldDef Array of defaults for new Model field
+     *
+     * @return Column\Generic
      */
     public function addColumn($name, $columnDef = null, $fieldDef = null)
     {
@@ -80,12 +107,11 @@ class Grid extends Lister
         }
 
         $field = $this->model->hasElement($name);
-
         if (!$field) {
             $field = $this->model->addField($name, $fieldDef);
         }
 
-        if (!is_object($columnDef)) {
+        if ($columnDef === null) {
             $columnDef = $this->_columnFactory($field);
         } else {
             $this->add($columnDef, $name);
@@ -98,8 +124,12 @@ class Grid extends Lister
     }
 
     /**
-     * Will come up with a column object based on the field object supplied. If
-     * null is returned, then will use the default column.
+     * Will come up with a column object based on the field object supplied.
+     * By default will use default column.
+     *
+     * @param \atk4\data\Field $f Data model field
+     *
+     * @return Column\Generic
      */
     public function _columnFactory(\atk4\data\Field $f)
     {
@@ -118,12 +148,13 @@ class Grid extends Lister
 
     /**
      * Overrides work like this:.
-     *
      * [
      *   'name'=>'Totals for {$num} rows:',
      *   'price'=>'--',
      *   'total'=>['sum']
      * ]
+     *
+     * @param array $plan
      */
     public function addTotals($plan = [])
     {
@@ -149,6 +180,18 @@ class Grid extends Lister
         $this->template->del('Foot');
     }
 
+    /**
+     * Sets data Model of Grid.
+     *
+     * If $columns is not defined, then automatically will add columns for all
+     * visible model fields. If $columns is set to false, then will not add
+     * columns at all.
+     *
+     * @param \atk4\data\Model $m       Data model
+     * @param array|bool       $columns
+     *
+     * @return \atk4\data\Model
+     */
     public function setModel(\atk4\data\Model $m, $columns = null)
     {
         parent::setModel($m);
@@ -173,7 +216,9 @@ class Grid extends Lister
         }
     }
 
-    // @inheritdoc
+    /**
+     * @inheritdoc
+     */
     public function renderView()
     {
         if (!$this->columns) {
@@ -264,6 +309,8 @@ class Grid extends Lister
     /**
      * Responds with the HTML to be inserted in the header row that would
      * contain captions of all columns.
+     *
+     * @return string
      */
     public function renderHeaderCells()
     {
@@ -280,6 +327,8 @@ class Grid extends Lister
     /**
      * Responsd with HTML to be inserted in the footer row that would
      * contain totals fro all columns.
+     *
+     * @return string
      */
     public function renderTotalsCells()
     {
@@ -305,6 +354,8 @@ class Grid extends Lister
 
     /**
      * Collects cell templates from all the columns and combine them into row template.
+     *
+     * @return string
      */
     public function getRowTemplate()
     {
