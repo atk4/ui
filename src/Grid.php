@@ -149,9 +149,38 @@ class Grid extends Lister
         $this->template->del('Foot');
     }
 
+    public function setModel(\atk4\data\Model $m, $columns = null)
+    {
+        parent::setModel($m);
+
+        if ($columns === null) {
+            $columns = [];
+            foreach ($m->elements as $name => $element) {
+                if (!$element instanceof \atk4\data\Field) {
+                    continue;
+                }
+
+                if ($element->isVisible()) {
+                    $columns[] = $name;
+                }
+            }
+        } elseif ($columns === false) {
+            return;
+        }
+
+        foreach($columns as $column)
+        {
+            $this->addColumn($column);
+        }
+    }
+
     // @inheritdoc
     public function renderView()
     {
+        if (!$this->columns) {
+            throw new Exception(['Grid does not have any columns defined', 'columns'=>$this->columns]);
+        }
+
         // Generate Header Row
         $this->t_head->setHTML('cells', $this->renderHeaderCells());
         $this->template->setHTML('Head', $this->t_head->render());
