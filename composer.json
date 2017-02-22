@@ -14,8 +14,8 @@
     ],
     "require": {
         "php": ">=5.6.0",
-        "atk4/data": "^1.1.8",
-        "atk4/core": "^1.1.9",
+        "atk4/data": "^1.1.9",
+        "atk4/core": "^1.1.11",
         "facebook/webdriver": "^1.1"
     },
     "require-dev": {
@@ -23,7 +23,6 @@
         "facebook/webdriver": "^1.1",
         "phpunit/phpunit-selenium": ">=1.2",
         "fzaninotto/faker": "*",
-        "atk4/core": "^1.1.9",
         "semantic/ui": "*",
         "codeclimate/php-test-reporter": "*"
     },
