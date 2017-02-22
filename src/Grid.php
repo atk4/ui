@@ -168,8 +168,7 @@ class Grid extends Lister
             return;
         }
 
-        foreach($columns as $column)
-        {
+        foreach ($columns as $column) {
             $this->addColumn($column);
         }
     }
