@@ -14,7 +14,7 @@ class Lister extends View
     public $defaultTemplate = null;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function renderView()
     {

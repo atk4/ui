@@ -32,7 +32,7 @@ class Grid extends Lister
      * Allows you to inject HTML into grid using getHTMLTags hook and column call-backs.
      * Switch this feature off to increase performance at expense of some row-specific HTML.
      *
-     * @var boolean
+     * @var bool
      */
     public $use_html_tags = true;
 
@@ -40,7 +40,7 @@ class Grid extends Lister
      * Determines a strategy on how totals will be calculated. Do not touch those fields
      * direcly, instead use addTotals().
      *
-     * @var boolean
+     * @var bool
      */
     public $totals_plan = false;
 
@@ -94,9 +94,9 @@ class Grid extends Lister
      * And third object is a Field. You can use it in case your current data
      * model doesn't already have such field.
      *
-     * @param string         $name Data model field name
+     * @param string         $name      Data model field name
      * @param Column\Generic $columnDef
-     * @param array          $fieldDef Array of defaults for new Model field
+     * @param array          $fieldDef  Array of defaults for new Model field
      *
      * @return Column\Generic
      */
@@ -152,7 +152,7 @@ class Grid extends Lister
      *   'name'=>'Totals for {$num} rows:',
      *   'price'=>'--',
      *   'total'=>['sum']
-     * ]
+     * ].
      *
      * @param array $plan
      */
@@ -217,7 +217,7 @@ class Grid extends Lister
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function renderView()
     {
