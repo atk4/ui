@@ -19,10 +19,6 @@
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",
-        /*
-        "facebook/webdriver": "^1.1",
-        "phpunit/phpunit-selenium": ">=1.2",
-        */
         "fzaninotto/faker": "*",
         "semantic/ui": "*",
         "codeclimate/php-test-reporter": "*"
