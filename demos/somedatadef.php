@@ -33,9 +33,9 @@ if (!class_exists('SomeData')) {
         {
             //parent::__construct($opts);
 
-        if (!$this->faker) {
-            $this->faker = Faker\Factory::create();
-        }
+            if (!$this->faker) {
+                $this->faker = Faker\Factory::create();
+            }
         }
 
         public function prepareIterator($m)
