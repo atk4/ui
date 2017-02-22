@@ -58,6 +58,10 @@ class App
 
         if ($this->always_run) {
             register_shutdown_function(function () {
+                if (!$this->_initialized) {
+                    $this->init();
+                }
+
                 if (!$this->run_called) {
                     try {
                         $this->run();
