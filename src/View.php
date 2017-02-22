@@ -469,9 +469,12 @@ class View implements jsExpressionable
         return $this;
     }
 
+    /**
+     * @see setStyle()
+     */
     public function addStyle($property, $style = null)
     {
-        return $this->setStyle($prperty, $style);
+        return $this->setStyle($property, $style);
     }
 
     /**
