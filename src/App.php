@@ -73,7 +73,9 @@ class App
             });
         }
 
-        $this->ui_persistence = new Persistence\UI();
+        if (!isset($this->ui_persistence)) {
+            $this->ui_persistence = new Persistence\UI();
+        }
     }
 
     public function caughtException($exception)
