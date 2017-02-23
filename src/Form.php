@@ -168,6 +168,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         } else {
             throw new Exception(['Incorrect value for $fields', 'fields'=>$fields]);
         }
+        return $model;
     }
 
     public function init()
@@ -182,8 +183,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function loadPOST()
     {
-        $post = new \atk4\ui\Persistence\POST($_POST);
-        $this->model->load(0, $post);
+        $this->model->set($this->app->ui_persistence->typecastLoadRow($this->model, $_POST));
     }
 
     /**
