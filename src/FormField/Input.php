@@ -45,7 +45,14 @@ class Input extends Generic
      */
     public function getInput()
     {
-        return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
+        return $this->app->getTag('input', [
+            'name'=>$this->short_name,
+            'type'=>$this->inputType,
+            'placeholder'=>$this->placeholder,
+            'id'=>$this->id.'_input',
+            'value'=>$this->field->get()
+        ]);
+        //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
 
     /**
