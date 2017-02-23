@@ -32,11 +32,10 @@ class App
 
     public function __construct($defaults = [])
     {
+        // Process defaults
         if (is_string($defaults)) {
-            $defaults = ['title'=>$defaults];
+            $defaults = ['title' => $defaults];
         }
-
-        $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
 
         if (!is_array($defaults)) {
             throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
@@ -49,6 +48,9 @@ class App
             }
         }
 
+        // Set up template folder
+        $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
+
         // Set our exception handler
         if ($this->catch_exceptions) {
             set_exception_handler(function ($exception) {
@@ -56,6 +58,7 @@ class App
             });
         }
 
+        // Always run app on shutdown
         if ($this->always_run) {
             register_shutdown_function(function () {
                 if (!$this->_initialized) {
@@ -73,6 +76,7 @@ class App
             });
         }
 
+        // Set up UI persistence
         if (!isset($this->ui_persistence)) {
             $this->ui_persistence = new Persistence\UI();
         }

@@ -746,6 +746,7 @@ class View implements jsExpressionable
      * @param string           $event    JavaScript event
      * @param string           $selector Optional jQuery-style selector
      * @param jsChain|callable $action   code to execute
+     * @param array            $defaults Options
      *
      * @throws Exception
      *
@@ -768,7 +769,7 @@ class View implements jsExpressionable
             // if callable $action is passed, then execute ajaxec()
 
             // create callback, that will include event as part of the full name
-            $this->_add($cb = new Callback(), ['desired_name'=>$event]);
+            $this->_add($cb = new jsCallback(), ['desired_name'=>$event]);
 
             $cb->set(function () use ($action) {
                 $chain = new jQuery(new jsExpression('this'));
