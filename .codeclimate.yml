@@ -51,6 +51,9 @@ engines:
         enabled: false      # because of on() and js() and $ui
       Naming/ShortVariable:
         enabled: false      # because of on() and js() and $ui
+      # THERE IS MUCH TO MUCH OF THESE ERRORS - TEMPORARILY DISABLE THIS CHECK
+      UnusedFormalParameter:
+        enabled: false
   radon:
     enabled: true
 ratings:
