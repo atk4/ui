@@ -168,6 +168,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         } else {
             throw new Exception(['Incorrect value for $fields', 'fields'=>$fields]);
         }
+
         return $model;
     }
 
