@@ -50,7 +50,7 @@ class Input extends Generic
             'type'       => $this->inputType,
             'placeholder'=> $this->placeholder,
             'id'         => $this->id.'_input',
-            'value'      => $this->field->get(),
+            'value'      => isset($this->field) ? $this->field->get() : '',
         ]);
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
