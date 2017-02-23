@@ -39,4 +39,11 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->expectOutputRegex($this->regex);
         include 'layout.php';
     }
+
+    public function testGrid()
+    {
+        $this->expectOutputRegex($this->regex);
+        include 'grid.php';
+        $app->run();
+    }
 }

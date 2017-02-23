@@ -68,6 +68,13 @@ class View implements jsExpressionable
     public $class = [];
 
     /**
+     * List of custom CSS attributes.
+     *
+     * @var array
+     */
+    public $style = [];
+
+    /**
      * List of custom attributes.
      *
      * @var array
@@ -108,6 +115,8 @@ class View implements jsExpressionable
      * Change this if you want to substitute default "div" for something else.
      */
     public $element = null;
+
+    protected $_add_later = [];
 
     // }}}
 
@@ -272,6 +281,12 @@ class View implements jsExpressionable
         if (is_string($this->defaultTemplate) && is_null($this->template)) {
             $this->template = $this->app->loadTemplate($this->defaultTemplate);
         }
+
+        foreach ($this->_add_later as list($object, $region)) {
+            $this->add($object, $region);
+        }
+
+        $this->_add_later = [];
     }
 
     /**
@@ -295,8 +310,16 @@ class View implements jsExpressionable
      */
     public function add($object, $region = null)
     {
+        /*
         if (!$this->app) {
             $this->init();
+        }
+         */
+
+        if (!$this->app) {
+            $this->_add_later[] = [$object, $region];
+
+            return $object;
         }
 
         if ($region === null) {
@@ -313,7 +336,11 @@ class View implements jsExpressionable
 
         $object = $this->_add($object, $defaults);
 
-        if (!$object->template && $object->region) {
+        if (!$object instanceof self) {
+            return $object;
+        }
+
+        if (!$object->template && $object->region && $this->template) {
             $object->template = $this->template->cloneRegion($object->region);
         }
 
@@ -420,6 +447,52 @@ class View implements jsExpressionable
     }
 
     /**
+     * Add inline CSS style to element.
+     * Multiple CSS styles can also be set if passed as array.
+     *
+     * @param string|array $property CSS Property or hash
+     * @param string       $style    CSS Style definition
+     *
+     * @return $this
+     */
+    public function setStyle($property, $style = null)
+    {
+        if (is_array($property) && is_null($style)) {
+            foreach ($property as $k => $v) {
+                $this->addStyle($k, $v);
+            }
+
+            return $this;
+        }
+        $this->style[$property] = $style;
+
+        return $this;
+    }
+
+    /**
+     * @see setStyle()
+     */
+    public function addStyle($property, $style = null)
+    {
+        return $this->setStyle($property, $style);
+    }
+
+    /**
+     * Remove inline CSS style from element, if it was added with setStyle
+     * or addStyle.
+     *
+     * @param string $property CSS Property to remove
+     *
+     * @return $this
+     */
+    public function removeStyle($property)
+    {
+        unset($this->style[$property]);
+
+        return $this;
+    }
+
+    /**
      * Set attribute.
      *
      * @param string|array $attr
@@ -458,6 +531,17 @@ class View implements jsExpressionable
             $this->template->append('class', implode(' ', $this->class));
         }
 
+        if ($this->style) {
+            $style = $this->style;
+            array_walk(
+                $style,
+                function (&$item, $key) {
+                    $item = $key.':'.$item;
+                }
+            );
+            $this->template->append('style', implode(';', $style));
+        }
+
         if ($this->ui) {
             if (is_string($this->ui)) {
                 $this->template->set('_class', $this->ui);
@@ -490,6 +574,12 @@ class View implements jsExpressionable
     public function recursiveRender()
     {
         foreach ($this->elements as $view) {
+            if ($this->app && $view instanceof \atk4\core\AppScopeTrait && !$view->app) {
+                $view->app = $this->app;
+                $view->name = $this->name.$view->short_name;
+                $view->init();
+            }
+
             if (!$view instanceof self) {
                 continue;
             }
@@ -656,6 +746,7 @@ class View implements jsExpressionable
      * @param string           $event    JavaScript event
      * @param string           $selector Optional jQuery-style selector
      * @param jsChain|callable $action   code to execute
+     * @param array            $defaults Options
      *
      * @throws Exception
      *
@@ -678,7 +769,7 @@ class View implements jsExpressionable
             // if callable $action is passed, then execute ajaxec()
 
             // create callback, that will include event as part of the full name
-            $this->_add($cb = new Callback(), ['desired_name'=>$event]);
+            $this->_add($cb = new jsCallback(), ['desired_name'=>$event]);
 
             $cb->set(function () use ($action) {
                 $chain = new jQuery(new jsExpression('this'));
@@ -817,6 +908,12 @@ class View implements jsExpressionable
         }
 
         $actions['indent'] = '';
+
+        if ($this->app && method_exists($this->app, 'jsReady')) {
+            $this->app->jsReady($actions);
+
+            return '';
+        }
 
         $ready = new jsFunction($actions);
 

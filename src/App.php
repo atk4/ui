@@ -28,13 +28,14 @@ class App
 
     private $run_called = false;
 
+    public $ui_persistence = null;
+
     public function __construct($defaults = [])
     {
+        // Process defaults
         if (is_string($defaults)) {
-            $defaults = ['title'=>$defaults];
+            $defaults = ['title' => $defaults];
         }
-
-        $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
 
         if (!is_array($defaults)) {
             throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
@@ -47,6 +48,9 @@ class App
             }
         }
 
+        // Set up template folder
+        $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
+
         // Set our exception handler
         if ($this->catch_exceptions) {
             set_exception_handler(function ($exception) {
@@ -54,8 +58,13 @@ class App
             });
         }
 
+        // Always run app on shutdown
         if ($this->always_run) {
             register_shutdown_function(function () {
+                if (!$this->_initialized) {
+                    $this->init();
+                }
+
                 if (!$this->run_called) {
                     try {
                         $this->run();
@@ -65,6 +74,11 @@ class App
                 }
                 exit;
             });
+        }
+
+        // Set up UI persistence
+        if (!isset($this->ui_persistence)) {
+            $this->ui_persistence = new Persistence\UI();
         }
     }
 
@@ -87,10 +101,15 @@ class App
         $this->run_called = true;
     }
 
+    public function outputDebug($str)
+    {
+        echo 'DEBUG:'.$str.'<br/>';
+    }
+
     public function initLayout($layout, $options = [])
     {
         if (is_string($layout)) {
-            $layout = $this->normalizeClassName($layout, 'Layout');
+            $layout = $this->normalizeClassNameApp($layout, 'Layout');
             $layout = new $layout($options);
         }
         $layout->app = $this;
@@ -103,7 +122,7 @@ class App
         return $this;
     }
 
-    public function normalizeClassName($name, $prefix = null)
+    public function normalizeClassNameApp($name, $prefix = null)
     {
         if (strpos('/', $name) === false && strpos('\\', $name) === false) {
             $name = '\\'.__NAMESPACE__.'\\'.($prefix ? ($prefix.'\\') : '').$name;
@@ -114,7 +133,13 @@ class App
 
     public function add()
     {
-        return call_user_func_array([$this->layout, 'add'], func_get_args());
+        if ($this->layout) {
+            return call_user_func_array([$this->layout, 'add'], func_get_args());
+        } else {
+            list($obj) = func_get_args();
+
+            $obj->app = $this;
+        }
     }
 
     public function run()
@@ -137,6 +162,7 @@ class App
     public function loadTemplate($name)
     {
         $template = new Template();
+        $template->app = $this;
         if (in_array($name[0], ['.', '/', '\\'])) {
             $template->load($name);
         } else {
@@ -175,5 +201,113 @@ class App
         }
 
         return $url;
+    }
+
+    /**
+     * Construct HTML tag with supplied attributes.
+     *
+     * $html = getTag('img/', ['src'=>'foo.gif','border'=>0]);
+     * // "<img src="foo.gif" border="0"/>"
+     *
+     *
+     * The following rules are respected:
+     *
+     * 1. all array key=>val elements appear as attributes with value escaped.
+     * getTag('div/', ['data'=>'he"llo']);
+     * --> <div data="he\"llo">
+     *
+     * 2. boolean value true will add attribute without value
+     * getTag('td', ['nowrap'=>true]);
+     * --> <td nowrap>
+     *
+     * 3. null and false value will ignore the attribute
+     * getTag('img', ['src'=>false]);
+     * --> <img>
+     *
+     * 4. passing key 0=>"val" will re-define the element itself
+     * getTag('img', ['input', 'type'=>'picture']);
+     * --> <input type="picture" src="foo.gif">
+     *
+     * 5. use '/' at end of tag to close it.
+     * getTag('img/', ['src'=>'foo.gif']);
+     * --> <img src="foo.gif"/>
+     *
+     * 6. if main tag is self-closing, overriding it keeps it self-closing
+     * getTag('img/', ['input', 'type'=>'picture']);
+     * --> <input type="picture" src="foo.gif"/>
+     *
+     * 7. simple way to close tag. Any attributes to closing tags are ignored
+     * getTag('/td');
+     * --> </td>
+     *
+     * 7b. except for 0=>'newtag'
+     * getTag('/td', ['th', 'align'=>'left']);
+     * --> </th>
+     *
+     * 8. using $value will NOT be escaped (so that you can pass nested HTML)
+     * getTag('a', ['href'=>'foo.html'] ,'click here >>');
+     * --> <a href="foo.html">click here >></a>
+     *
+     * 9. you may skip attribute argument.
+     * getTag('b','text in bold');
+     * --> <b>text in bold</b>
+     *
+     * 10. pass array as text to net tags (array must contain 1 to 3 elements corresponding to arguments):
+     * getTag('a', ['href'=>'foo.html'], ['b','click here']);
+     * --> <a href="foo.html"><b>click here</b></a>
+     */
+    public function getTag($tag = null, $attr = null, $value = null)
+    {
+        if ($tag === null) {
+            $tag = 'div';
+        } elseif (is_array($tag)) {
+            $value = $attr;
+            $attr = $tag;
+            $tag = 'div';
+        }
+        if (is_string($attr)) {
+            $value = $attr;
+            $attr = null;
+        }
+        if (!$attr) {
+            return "<$tag>".($value ? ($value)."</$tag>" : '');
+        }
+        $tmp = [];
+        if (substr($tag, -1) == '/') {
+            $tag = substr($tag, 0, -1);
+            $postfix = '/';
+        } elseif (substr($tag, 0, 1) == '/') {
+            if (isset($attr[0])) {
+                return '</'.$attr[0].'>';
+            }
+
+            return '<'.$tag.'>';
+        } else {
+            $postfix = '';
+        }
+        foreach ($attr as $key => $val) {
+            if ($val === false) {
+                continue;
+            }
+            if ($val === true) {
+                $tmp[] = "$key";
+            } elseif ($key === 0) {
+                $tag = $val;
+            } else {
+                $tmp[] = "$key=\"".$this->encodeAttribute($val).'"';
+            }
+        }
+
+        return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value ? $value."</$tag>" : '');
+    }
+
+    public function encodeAttribute($val)
+    {
+        return htmlspecialchars($val);
+    }
+
+    public function encodeHTML($val)
+    {
+        return htmlentities($val);
     }
 }

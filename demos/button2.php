@@ -17,14 +17,17 @@ $layout->js(true, new \atk4\ui\jsExpression('$.fn.api.settings.successTest = fun
 
 $layout->add(new H2('Basic Button'));
 
+// This button hides on page load
 $b = $layout->add(new Button(['id'=>'b1']))->set('Hidden Button');
 $b->js(true)->hide();
 
+// This button hides when clicked
 $b = $layout->add(new Button(['id'=>'b2']))->set('Hide on click Button');
 $b->js('click')->hide();
 
 $layout->add(new H2('Callbacks'));
 
+// On button click reload it and change it's title
 $b = $layout->add(new Button(['id'=>'b3']))->set('Callback Test');
 $b->on('click', function ($b) {
     return $b->text(rand(1, 20));

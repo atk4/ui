@@ -2,7 +2,7 @@
 
 require '../vendor/autoload.php';
 
-$app = new \atk4\ui\App('Agile UI - Demo Suite', ['icon'=>'user']);
+$app = new \atk4\ui\App('Agile UI v0.4 - Demo Suite', ['icon'=>'user']);
 
 $app->initLayout((isset($_GET['layout']) && $_GET['layout'] === 'centered') ? 'Centered' : 'Admin');
 
@@ -14,10 +14,14 @@ if (!isset($layout->leftMenu)) {
 
 $layout->leftMenu->addItem(['Welcome Page', 'icon'=>'gift'], ['index']);
 $layout->leftMenu->addItem(['Layouts', 'icon'=>'object group'], ['layouts']);
+
 $form = $layout->leftMenu->addGroup(['Form', 'icon'=>'edit']);
 $form->addItem('Basics and Layouting', ['form']);
 $form->addItem('Input Field Decoration', ['field']);
 $form->addItem('Data Integration', ['form2']);
+
+$form = $layout->leftMenu->addGroup(['Grid', 'icon'=>'table']);
+$form->addItem('Column Formats and Features', ['grid']);
 
 $basic = $layout->leftMenu->addGroup(['Basics', 'icon'=>'cubes']);
 $basic->addItem('Button', ['button']);
@@ -33,3 +37,5 @@ $layout->menu->addItem()->add(new \atk4\ui\Button(['View Source', 'teal', 'icon'
     ->setAttr('target', '_blan')->on('click', new \atk4\ui\jsExpression('document.location=[];', ['https://github.com/atk4/ui/blob/develop/demos/'.$f]));
 
 $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+
+require_once 'somedatadef.php';
