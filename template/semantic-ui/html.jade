@@ -6,13 +6,22 @@ html(lang="{lang}en{/}")
     meta(charset='utf-8')
     link(rel='stylesheet', type='text/css', href='http://semantic-ui.com/dist/semantic.css')
     script(src='https://code.jquery.com/jquery-3.1.1.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js')
     script(src='http://semantic-ui.com/dist/semantic.js')
     script.
         $.fn.api.settings.successTest = function(response) {
           if(response && response.eval) {
-            var result = function(){ eval(response.eval); }.call(this.obj);
+              try {
+                var result = function(){ eval(response.eval); }.call(this.obj);
+              } catch (e) {
+                //alert(e);
+              }
           }
-          return false;
+          return true;
+        }
+
+        $.fn.api.settings.onFailure = function(response) {
+          alert(response);
         }
     | {$HEAD}
     style(type='text/css').
