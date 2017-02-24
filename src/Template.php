@@ -614,6 +614,10 @@ class Template implements \ArrayAccess
     /**
      * Render either a whole template or a specified region. Returns
      * current contents of a template.
+     *
+     * @param string $region
+     *
+     * @return string
      */
     public function render($region = null)
     {
@@ -627,6 +631,10 @@ class Template implements \ArrayAccess
     /**
      * Walk through the template array collecting the values
      * and returning them as a string.
+     *
+     * @param array $template
+     *
+     * @return string
      */
     protected function recursiveRender(&$template)
     {

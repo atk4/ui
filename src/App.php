@@ -8,12 +8,14 @@ class App
         init as _init;
     }
 
+    // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
 
     public $layout = null; // the top-most view object
 
     public $template_dir = null;
 
+    // @var string Name of skin
     public $skin = 'semantic-ui';
 
     /**
@@ -301,11 +303,25 @@ class App
         return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value ? $value."</$tag>" : '');
     }
 
+    /**
+     * Encodes string - removes HTML special chars.
+     *
+     * @param string $val
+     *
+     * @return string
+     */
     public function encodeAttribute($val)
     {
         return htmlspecialchars($val);
     }
 
+    /**
+     * Encodes string - removes HTML entities.
+     *
+     * @param string $val
+     *
+     * @return string
+     */
     public function encodeHTML($val)
     {
         return htmlentities($val);
