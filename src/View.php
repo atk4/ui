@@ -696,6 +696,7 @@ class View implements jsExpressionable
             if ($extra) {
                 $this->_js_actions[$when][] = $extra;
             }
+
             return $chain;
         }
 
@@ -774,11 +775,11 @@ class View implements jsExpressionable
 
             $cb->set(function () use ($action) {
                 $chain = new jQuery(new jsExpression('this'));
+
                 return call_user_func($action, $chain);
             });
 
             $thisAction->api(['on'=>'now', 'url'=>$cb->getURL(), 'obj'=>new jsExpression('this')]);
-
         } elseif ($action) {
             // otherwise include
             $actions[] = $action;
@@ -796,7 +797,7 @@ class View implements jsExpressionable
     }
 
     /**
-     * Convert View into a value in case it happens to be inside our json_encode (as argument to jsChain)
+     * Convert View into a value in case it happens to be inside our json_encode (as argument to jsChain).
      */
     public function jsRender()
     {
@@ -808,7 +809,7 @@ class View implements jsExpressionable
     }
 
     /**
-     * Get JavaScript objects from this render tree
+     * Get JavaScript objects from this render tree.
      */
     public function getJS()
     {

@@ -65,7 +65,6 @@ class App
         // Always run app on shutdown
         if ($this->always_run) {
             register_shutdown_function(function () {
-
                 if (!$this->run_called) {
                     try {
                         $this->run();
