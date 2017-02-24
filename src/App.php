@@ -14,6 +14,7 @@ class App
 
     public $template_dir = null;
 
+    // @var string Name of skin
     public $skin = 'semantic-ui';
 
     /**
@@ -301,11 +302,25 @@ class App
         return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value ? $value."</$tag>" : '');
     }
 
+    /**
+     * Encodes string - removes HTML special chars.
+     *
+     * @param string $val
+     *
+     * @return string
+     */
     public function encodeAttribute($val)
     {
         return htmlspecialchars($val);
     }
 
+    /**
+     * Encodes string - removes HTML entities.
+     *
+     * @param string $val
+     *
+     * @return string
+     */
     public function encodeHTML($val)
     {
         return htmlentities($val);
