@@ -321,9 +321,9 @@ class View implements jsExpressionable
      * @param View|string  $object New object to add
      * @param string|array $region (or array for full set of defaults)
      *
-     * @return View
-     *
      * @throws Exception
+     *
+     * @return View
      */
     public function add($object, $region = null)
     {
@@ -918,9 +918,9 @@ class View implements jsExpressionable
     /**
      * Render this view into #id for javascript.
      *
-     * @return string
-     *
      * @throws Exception
+     *
+     * @return string
      */
     public function jsRender()
     {
