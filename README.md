@@ -35,14 +35,14 @@ Agile UI comes with many built-in components;
 | [Header](http://ui.agiletoolkit.org/demos/header.php) | Simple view for header.                  | 0.3        |
 | [Menu](http://ui.agiletoolkit.org/demos/layout2.php) | Horizontal and vertical multi-dimensional menus with icons. | 0.4        |
 | [Form](http://ui.agiletoolkit.org/demos/form.php) | Validation, Interactivity, Feedback, Layouts, Field types. | 0.4        |
-| Layouts 1                                | Admin, Centered.                         | 0.4        |
-| [Grid](http://ui.agiletoolkit.org/demos/grid.php) | Formatting, Columns, Status, Link, Template, Delete. | 0.5        |
+| [Layouts 1](http://ui.agiletoolkit.org/demos/layouts.php)                                | Admin, Centered.                         | 0.4        |
+| [Grid](http://ui.agiletoolkit.org/demos/grid.php) | Formatting, Columns, Status, Link, Template, Delete. | 1.0        |
 | GridAdvanced                             | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1 *      |
+| Messages                                 | Such as "Info", "Error", "Warning" or "Tip" for easy use. | 1.1 *       |
 | Dialog                                   | Modal dialog with dynamically loaded content. | 1.1 *      |
 | Relading                                 | Dynamically re-render part of the UI.    | 1.1 *      |
 | Actions                                  | Extended buttons with various interactions | 1.1 *      |
 | CRUD                                     | Create, List, Edit and Delete records (based on Advanced Grid) | 1.2 *      |
-| Messages                                 | Such as "Info", "Error", "Warning" or "Tip" for easy use. | 1.0        |
 | Layouts 2                                | 4 Responsive: Admin, Centered, Site, Wide. | 1.2 *      |
 | Breadcrumb                               | Push links to pages for navigation. Wizard. | 1.3 *      |
 | Items, Cards                             | Responsive Items and Card implementaiton. | 1.4 *      |
