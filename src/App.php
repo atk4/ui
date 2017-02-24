@@ -8,6 +8,7 @@ class App
         init as _init;
     }
 
+    // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
 
     public $layout = null; // the top-most view object
