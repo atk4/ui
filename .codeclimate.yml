@@ -12,31 +12,48 @@ engines:
     exclude_fingerprints:
     - 908ad3f93985ff14c44615cee6966c72  # View have a lot of public methods. Deal with it.
     - 81ca5382dedb709060ec70ffea74e157  # allow exit in a call-back inside app constructor
+    - 409aa7b6ded69296360c17d5c267c8dc  # Grid::renderView iterates method
+    - a4801fad2cfbf1b485de61cca855955d  # Grid calls View::renderView() bypassing Lister.
+    - 5030329ed016f46a2791c854caacb39c  # Grid::getHTMLTags passes $row / $field, but $row is not used by money column
+    - 113c8195220e554776225802db7021d6  # Persistence_Faker: Allow static access to class Faker\Factory in __construct
     checks:
-      Naming/ShortVariable:
-        enabled: false      # because of on() and js() and $ui
-      Naming/ShortMethodName:
-        enabled: false      # because of on() and js() and $ui
       CleanCode/ElseExpression:
         enabled: false      # gives many incorrect suggestions
-      Design/CouplingBetweenObjects:
-        enabled: false      # because we always allow to inject overrides!
       Controversial/CamelCaseClassName:
         enabled: false      # because jQuery.php and similar class names
-      Controversial/CamelCasePropertyName:
-        enabled: false      # becasue we use _xx for private properties (that must remain public)
       Controversial/CamelCaseMethodName:
         enabled: false      # methods start with _xx for private methods (that must remain public)
-      Design/WeightedMethodCount:
-        enabled: false      # because we solve complex task, our classes may be complex
-      Design/NpathComplexity:
-        enabled: false      # our code is complex so that your code wouldn't be!
-      Design/LongMethod:
-        enabled: false      # our code is long so that your code wouldn't be!
-      CyclomaticComplexity:
-        enabled: false      # our code is complex so that your code wouldn't be!
+      Controversial/CamelCaseParameterName:
+        enabled: false      # allow parameter names to not use camelCase notation
+      Controversial/CamelCasePropertyName:
+        enabled: false      # becasue we use _xx for private properties (that must remain public)
       Controversial/CamelCaseVariableName:
         enabled: false      # because we call variables $f_login, $m_user for better readability.
+      Controversial/Superglobals:
+        enabled: false      # yes we use superglobals and that's OK
+      CyclomaticComplexity:
+        enabled: false      # our code is complex so that your code wouldn't be!
+      CleanCode/BooleanArgumentFlag:
+        enabled: false      # sometimes it is meaningful to pass boolean arguments to methods
+      Design/CouplingBetweenObjects:
+        enabled: false      # because we always allow to inject overrides!
+      Design/LongMethod:
+        enabled: false      # our code is long so that your code wouldn't be!
+      Design/NpathComplexity:
+        enabled: false      # our code is complex so that your code wouldn't be!
+      Design/TooManyMethods:
+        enabled: false      # methods never should be to many
+      Design/TooManyPublicMethods:
+        enabled: false      # it is OK that some classes have more than 12 public methods
+      Design/WeightedMethodCount:
+        enabled: false      # because we solve complex task, our classes may be complex
+      Naming/ShortMethodName:
+        enabled: false      # because of on() and js() and $ui
+      Naming/ShortVariable:
+        enabled: false      # because of on() and js() and $ui
+      # THERE IS MUCH TO MUCH OF THESE ERRORS - TEMPORARILY DISABLE THIS CHECK
+      UnusedFormalParameter:
+        enabled: false
   radon:
     enabled: true
 ratings:

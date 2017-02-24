@@ -1,0 +1,26 @@
+<table id="{$_id}" class="{_ui}ui{/} {$class} {_class}{/}" style="{$style}" {$attributes}>
+<thead>{Head}
+  <tr>{$cells}</tr>{/}
+</thead>
+<tbody>
+  {Body}
+  {Row}
+  <tr data-id="{$_id}">{$cells}</tr>
+  {/}
+  {Empty}
+  <tr>
+    <td colspan="{$columns}">No records.</td>
+  </tr>
+  {/}
+  {/tbody}
+</tbody>{has_foot}
+<tfoot>
+  {Foot}
+  {Totals}
+  <tr>{$cells}</tr>
+  {/}
+  {Paginator}
+  {/}
+  {/}
+</tfoot>{/}
+<table/>

@@ -26,6 +26,8 @@ namespace atk4\ui;
 
 class Template implements \ArrayAccess
 {
+    use \atk4\core\AppScopeTrait;
+
     // {{{ Properties of a template
 
     /**
@@ -49,17 +51,10 @@ class Template implements \ArrayAccess
      *
      * @var string
      */
-    public $template_source = null;
+    public $source = null;
 
     /** @var string */
     public $default_exception = 'Exception_Template';
-
-    /**
-     * Which file template is loaded from.
-     */
-    public $origin_filename = null;
-
-    public $template_file = null;
 
     // }}}
 
@@ -90,12 +85,19 @@ class Template implements \ArrayAccess
      *
      * @return Exception
      */
-    public function exception($message = 'Undefined Exception', $type = null, $code = null)
+    public function exception($message = 'Undefined Exception', $code = null)
     {
-        return new Exception([$message,
-            'template'=> $this->template_source,
-            'type'    => $type,
-        ], $code);
+        $arg = [$message];
+
+        if ($this->source) {
+            $arg['source'] = $this->source;
+        }
+
+        $arg['tags'] = implode(', ', array_keys($this->tags));
+
+        $arg['template'] = $this->template;
+
+        return new Exception($arg, $code);
     }
 
     // }}}
@@ -274,7 +276,7 @@ class Template implements \ArrayAccess
         }
 
         if (is_object($tag)) {
-            $tag = $tag->get();
+            $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
         }
 
         if (is_array($tag)) {
@@ -382,6 +384,13 @@ class Template implements \ArrayAccess
      */
     public function del($tag)
     {
+        if (is_array($tag)) {
+            foreach ($tag as $t) {
+                $this->del($t);
+            }
+
+            return $this;
+        }
         if ($this->isTopTag($tag)) {
             $this->loadTemplateFromString('');
 
@@ -467,9 +476,10 @@ class Template implements \ArrayAccess
 
         $cl = get_class($this);
         $n = new $cl();
+        $n->app = $this->app;
         $n->template = unserialize(serialize(['_top#1' => $this->get($tag)]));
         $n->rebuildTags();
-        $n->source = 'Clone ('.$tag.') of '.$this->source;
+        $n->source = 'clone ('.$tag.') of template '.$this->source;
 
         return $n;
     }
@@ -480,18 +490,21 @@ class Template implements \ArrayAccess
 
     /**
      * Loads template from a specified file.
+     *
+     * @param string $filename Template file name
+     *
+     * @return $this
      */
-    public function load($template_file)
+    public function load($filename)
     {
-        $this->template_file = $template_file;
-        if (!is_readable($template_file)) {
+        if (!is_readable($filename)) {
             throw new Exception([
                 'Unable to read template from file',
-                'file'=> $template_file,
+                'file'=> $filename,
             ]);
         }
-        $this->loadTemplateFromString(file_get_contents($template_file));
-        $this->source = 'Loaded from file: '.$template_file;
+        $this->loadTemplateFromString(file_get_contents($filename));
+        $this->source = 'loaded from file: '.$filename;
 
         return $this;
     }
@@ -505,8 +518,7 @@ class Template implements \ArrayAccess
      */
     public function loadTemplateFromString($str)
     {
-        $this->template_source = $str;
-        $this->source = 'string';
+        $this->source = 'string: '.$str;
         $this->template = $this->tags = [];
         if (!$str) {
             return;

@@ -11,9 +11,10 @@ class Callback
     use AppScopeTrait;
 
     /**
-     * Executes user-specified action when call-back is triggerde.
+     * Executes user-specified action when call-back is triggered.
      *
      * @param callback $callback
+     * @param array    $args
      *
      * @return mixed|null
      */
