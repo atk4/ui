@@ -1,3 +1,10 @@
+## 1.0.0
+
+* Implement Grid
+* Many improvements everywhere
+* Simpler execution
+* First stable release
+
 ## 0.4
 
 * Implemented Layouts (Admin / Centered) #33
