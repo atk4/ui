@@ -338,7 +338,6 @@ class Template implements \ArrayAccess
      *
      * @param mixed        $tag
      * @param string|array $value
-     *
      * @param $this
      */
     public function setHTML($tag, $value = null)
@@ -352,7 +351,6 @@ class Template implements \ArrayAccess
      *
      * @param mixed        $tag
      * @param string|array $value
-     *
      * @param $this
      */
     public function trySetHTML($tag, $value = null)
@@ -367,7 +365,6 @@ class Template implements \ArrayAccess
      * @param mixed        $tag
      * @param string|array $value
      * @param bool         $encode
-     *
      * @param $this
      */
     public function trySet($tag, $value = null, $encode = true)
@@ -385,7 +382,6 @@ class Template implements \ArrayAccess
      * @param mixed        $tag
      * @param string|array $value
      * @param bool         $encode
-     *
      * @param $this
      */
     public function append($tag, $value, $encode = true)
