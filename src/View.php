@@ -725,7 +725,7 @@ class View implements jsExpressionable
      *
      * @return jQuery
      */
-    public function js($when = null, $action = null, $extra = null)
+    public function js($when = null, $action = null)
     {
         $chain = new jQuery($this);
 
@@ -733,8 +733,8 @@ class View implements jsExpressionable
         if ($when === true) {
             $this->_js_actions[$when][] = $chain;
 
-            if ($extra) {
-                $this->_js_actions[$when][] = $extra;
+            if ($action) {
+                $this->_js_actions[$when][] = $action;
             }
 
             return $chain;
@@ -746,7 +746,7 @@ class View implements jsExpressionable
 
         // next - binding on a specific event
         $action = (new jQuery($this))
-            ->bind($when, new jsFunction([$chain, $extra, 'preventDefault'=>true, 'stopPropagation'=>true]));
+            ->bind($when, new jsFunction([$chain, $action, 'preventDefault'=>true, 'stopPropagation'=>true]));
 
         $this->_js_actions[$when][] = $action;
 
