@@ -815,7 +815,7 @@ class View implements jsExpressionable
     {
         $actions = [];
 
-        foreach ($this->_js_actions as $event=>$eventActions) {
+        foreach ($this->_js_actions as $eventActions) {
             foreach ($eventActions as $action) {
                 $actions[] = $action;
             }
