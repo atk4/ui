@@ -65,16 +65,16 @@ class UI extends \atk4\data\Persistence
     }
 
     /**
-     * Interpret user-defined input for various types
+     * Interpret user-defined input for various types.
      */
     public function _typecastLoadField(\atk4\data\Field $f, $value)
     {
         switch ($f->type) {
         case 'boolean':
-            $value = (boolean)$value;
+            $value = (bool) $value;
             break;
         case 'money':
-            return str_replace(',','', $value);
+            return str_replace(',', '', $value);
         case 'date':
         case 'datetime':
         case 'time':
@@ -92,12 +92,14 @@ class UI extends \atk4\data\Persistence
                     throw new Exception(['Incorrectly formatted datetime', 'format' => $format, 'value' => $value, 'field' => $f]);
                 }
                 $v->setTimeZone(new $tz_class(date_default_timezone_get()));
+
                 return $v;
             } else {
                 $v = $dt_class::createFromFormat($format, $value);
                 if ($v === false) {
                     throw new Exception(['Incorrectly formatted date/time', 'format' => $format, 'value' => $value, 'field' => $f]);
                 }
+
                 return $v;
             }
 

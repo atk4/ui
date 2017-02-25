@@ -114,7 +114,6 @@ class Grid extends Lister
         if ($columnDef === null) {
             $columnDef = $this->_columnFactory($field);
         } elseif (is_string($columnDef) || is_array($columnDef)) {
-
             if (!$this->app) {
                 throw new Exception(['You can only specify column type by name if Grid is in a render-tree']);
             }
