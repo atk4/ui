@@ -19,7 +19,6 @@ class Link extends Generic
      */
     public function getCellTemplate(\atk4\data\Field $f)
     {
-
         if (!is_array($this->page)) {
             return $this->app->getTag('td', [], $this->app->getTag('a', ['href'=>$this->page], '{$'.$f->short_name.'}'));
         }

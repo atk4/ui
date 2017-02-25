@@ -43,6 +43,7 @@ class Callback
         if ($this->POST_trigger) {
             return $_SERVER['REQUEST_URI'];
         }
+
         return $this->app->url([$this->name=>'callback']);
     }
 }

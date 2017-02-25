@@ -9,7 +9,6 @@ $app->initLayout((isset($_GET['layout']) && $_GET['layout'] === 'centered') ? 'C
 $layout = $app->layout;
 
 if (isset($layout->leftMenu)) {
-
     $layout->leftMenu->addItem(['Welcome Page', 'icon'=>'gift'], ['index']);
     $layout->leftMenu->addItem(['Layouts', 'icon'=>'object group'], ['layouts']);
 
@@ -35,8 +34,6 @@ if (isset($layout->leftMenu)) {
         ->setAttr('target', '_blan')->on('click', new \atk4\ui\jsExpression('document.location=[];', ['https://github.com/atk4/ui/blob/develop/demos/'.$f]));
 
     $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
-
 }
-
 
 require_once 'somedatadef.php';
