@@ -725,7 +725,7 @@ class View implements jsExpressionable
      *
      * @return jQuery
      */
-    public function js($when = null, $action = null)
+    public function js($when = null, $action = null, $extra = null)
     {
         $chain = new jQuery($this);
 
