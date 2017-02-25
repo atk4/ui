@@ -28,17 +28,17 @@ Agile UI comes with many built-in components;
 
 | Name                                     | Description                              | Introduced |
 | ---------------------------------------- | ---------------------------------------- | ---------- |
-| Core | Template, Render Tree and various patterns | 0.1 |
-| [Button](http://ui.agiletoolkit.org/demos/button.php) | Button in various variations including icons, labels, styles and tags | 0.1        |
-| [Input](http://ui.agiletoolkit.org/demos/field.php) | Decoration of input fields, integration with buttons. | 0.2        |
-| [JS](http://ui.agiletoolkit.org/demos/button2.php) | Assign JS events and abstraction of PHP callbacks. | 0.2        |
-| [Header](http://ui.agiletoolkit.org/demos/header.php) | Simple view for header.                  | 0.3        |
-| [Menu](http://ui.agiletoolkit.org/demos/layout2.php) | Horizontal and vertical multi-dimensional menus with icons. | 0.4        |
-| [Form](http://ui.agiletoolkit.org/demos/form.php) | Validation, Interactivity, Feedback, Layouts, Field types. | 0.4        |
-| [Layouts 1](http://ui.agiletoolkit.org/demos/layouts.php)                                | Admin, Centered.                         | 0.4        |
-| [Grid](http://ui.agiletoolkit.org/demos/grid.php) | Formatting, Columns, Status, Link, Template, Delete. | 1.0        |
+| Core                                     | Template, Render Tree and various patterns | 0.1        |
+| [Button](http://ui.agiletoolkit.org/demos/button.php) [[source](https://github.com/atk4/ui/blob/develop/demos/button.php#L14)] | Button in various variations including icons, labels, styles and tags | 0.1        |
+| [Input](http://ui.agiletoolkit.org/demos/field.php) [[source](https://github.com/atk4/ui/blob/develop/demos/field.php#L9)] | Decoration of input fields, integration with buttons. | 0.2        |
+| [JS](http://ui.agiletoolkit.org/demos/button2.php) [[source](https://github.com/atk4/ui/blob/develop/demos/button2.php#L15)] | Assign JS events and abstraction of PHP callbacks. | 0.2        |
+| [Header](http://ui.agiletoolkit.org/demos/header.php) [[source](https://github.com/atk4/ui/blob/develop/demos/header.php#L8)] | Simple view for header.                  | 0.3        |
+| [Menu](http://ui.agiletoolkit.org/demos/layout2.php) [[source](https://github.com/atk4/ui/blob/develop/demos/layout2.php#L16)] | Horizontal and vertical multi-dimensional menus with icons. | 0.4        |
+| [Form](http://ui.agiletoolkit.org/demos/form.php) [[source](https://github.com/atk4/ui/blob/develop/demos/form.php#L44)] | Validation, Interactivity, Feedback, Layouts, Field types. | 0.4        |
+| [Layouts](http://ui.agiletoolkit.org/demos/layouts.php) [[source](https://github.com/atk4/ui/blob/develop/demos/layout.php#L9)] | Admin, Centered.                         | 0.4        |
+| [Grid](http://ui.agiletoolkit.org/demos/grid.php) [[source](https://github.com/atk4/ui/blob/develop/demos/grid.php#L9)] | Formatting, Columns, Status, Link, Template, Delete. | 1.0        |
 | GridAdvanced                             | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1 *      |
-| Messages                                 | Such as "Info", "Error", "Warning" or "Tip" for easy use. | 1.1 *       |
+| Messages                                 | Such as "Info", "Error", "Warning" or "Tip" for easy use. | 1.1 *      |
 | Dialog                                   | Modal dialog with dynamically loaded content. | 1.1 *      |
 | Relading                                 | Dynamically re-render part of the UI.    | 1.1 *      |
 | Actions                                  | Extended buttons with various interactions | 1.1 *      |
