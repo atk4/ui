@@ -59,7 +59,7 @@ class App
         }
 
         if (!$this->_initialized) {
-            $this->init();
+            //$this->init();
         }
 
         // Always run app on shutdown
