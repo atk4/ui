@@ -113,6 +113,12 @@ class Grid extends Lister
 
         if ($columnDef === null) {
             $columnDef = $this->_columnFactory($field);
+        } elseif (is_string($columnDef) || is_array($columnDef)) {
+            if (!$this->app) {
+                throw new Exception(['You can only specify column type by name if Grid is in a render-tree']);
+            }
+
+            $columnDef = $this->add($columnDef, $name);
         } else {
             $this->add($columnDef, $name);
         }
@@ -170,14 +176,16 @@ class Grid extends Lister
     {
         parent::init();
 
-        $this->t_head = $this->template->cloneRegion('Head');
-        $this->t_row_master = $this->template->cloneRegion('Row');
-        $this->t_totals = $this->template->cloneRegion('Totals');
-        $this->t_empty = $this->template->cloneRegion('Empty');
+        if (!$this->t_head) {
+            $this->t_head = $this->template->cloneRegion('Head');
+            $this->t_row_master = $this->template->cloneRegion('Row');
+            $this->t_totals = $this->template->cloneRegion('Totals');
+            $this->t_empty = $this->template->cloneRegion('Empty');
 
-        $this->template->del('Head');
-        $this->template->del('Body');
-        $this->template->del('Foot');
+            $this->template->del('Head');
+            $this->template->del('Body');
+            $this->template->del('Foot');
+        }
     }
 
     /**

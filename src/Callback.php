@@ -10,6 +10,8 @@ class Callback
     use TrackableTrait;
     use AppScopeTrait;
 
+    public $POST_trigger = false;
+
     /**
      * Executes user-specified action when call-back is triggered.
      *
@@ -20,8 +22,14 @@ class Callback
      */
     public function set($callback, $args = [])
     {
-        if (isset($_GET[$this->name])) {
-            return call_user_func_array($callback, $args);
+        if ($this->POST_trigger) {
+            if (isset($_POST[$this->name])) {
+                return call_user_func_array($callback, $args);
+            }
+        } else {
+            if (isset($_GET[$this->name])) {
+                return call_user_func_array($callback, $args);
+            }
         }
     }
 
@@ -32,6 +40,10 @@ class Callback
      */
     public function getURL()
     {
+        if ($this->POST_trigger) {
+            return $_SERVER['REQUEST_URI'];
+        }
+
         return $this->app->url([$this->name=>'callback']);
     }
 }

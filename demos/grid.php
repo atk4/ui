@@ -10,7 +10,8 @@ $g = $layout->add(['Grid', 'celled'=>true]);
 
 $bb->on('click', $g->js()->reload());
 
-$g->setModel(new SomeData());
+$g->setModel(new SomeData(), false);
+
 $g->addColumn('name', new \atk4\ui\Column\Link(['details', 'id'=>'{$id}']));
 $g->addColumn('surname', new \atk4\ui\Column\Template('<td class="warning">{$surname}</td>'));
 $g->addColumn('title', new \atk4\ui\Column\Status([

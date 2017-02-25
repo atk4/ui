@@ -8,12 +8,14 @@ class App
         init as _init;
     }
 
+    // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
 
     public $layout = null; // the top-most view object
 
     public $template_dir = null;
 
+    // @var string Name of skin
     public $skin = 'semantic-ui';
 
     /**
@@ -26,7 +28,7 @@ class App
      */
     public $always_run = true;
 
-    private $run_called = false;
+    public $run_called = false;
 
     public $ui_persistence = null;
 
@@ -58,13 +60,13 @@ class App
             });
         }
 
+        if (!$this->_initialized) {
+            //$this->init();
+        }
+
         // Always run app on shutdown
         if ($this->always_run) {
             register_shutdown_function(function () {
-                if (!$this->_initialized) {
-                    $this->init();
-                }
-
                 if (!$this->run_called) {
                     try {
                         $this->run();
@@ -301,11 +303,25 @@ class App
         return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value ? $value."</$tag>" : '');
     }
 
+    /**
+     * Encodes string - removes HTML special chars.
+     *
+     * @param string $val
+     *
+     * @return string
+     */
     public function encodeAttribute($val)
     {
         return htmlspecialchars($val);
     }
 
+    /**
+     * Encodes string - removes HTML entities.
+     *
+     * @param string $val
+     *
+     * @return string
+     */
     public function encodeHTML($val)
     {
         return htmlentities($val);
