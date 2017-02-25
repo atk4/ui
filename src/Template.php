@@ -1,6 +1,9 @@
 <?php
 
 // vim:ts=4:sw=4:et:fdm=marker:fdl=0
+
+namespace atk4\ui;
+
 /**
  * This class is a lightweight template engine. It's based around operating with
  * chunks of HTML code and the main aims are:.
@@ -21,9 +24,6 @@
  * 2.0          Reimplemented template parsing, now doing it with regexps
  * 3.0          Re-integrated as part of Agile UI under MIT license
  */
-
-namespace atk4\ui;
-
 class Template implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
@@ -61,13 +61,22 @@ class Template implements \ArrayAccess
     // {{{ Core methods - initialization
 
     // Template creation, interface functions
+
+    /**
+     * Construct template.
+     *
+     * @param string $template
+     */
     public function __construct($template = null)
     {
-        if (!is_null($template)) {
+        if ($template !== null) {
             $this->loadTemplateFromString($template);
         }
     }
 
+    /**
+     * Clone template.
+     */
     public function __clone()
     {
         $this->template = unserialize(serialize($this->template));
@@ -79,23 +88,22 @@ class Template implements \ArrayAccess
     /**
      * Returns relevant exception class. Use this method with "throw".
      *
-     * @param string $message Static text of exception.
-     * @param string $type    Exception class or class postfix
-     * @param string $code    Optional error code
+     * @param string $message Static text of exception
+     * @param int    $code    Optional error code
      *
      * @return Exception
      */
     public function exception($message = 'Undefined Exception', $code = null)
     {
-        $arg = [$message];
+        $arg = [
+            $message,
+            'tags'     => implode(', ', array_keys($this->tags)),
+            'template' => $this->template,
+        ];
 
         if ($this->source) {
             $arg['source'] = $this->source;
         }
-
-        $arg['tags'] = implode(', ', array_keys($this->tags));
-
-        $arg['template'] = $this->template;
 
         return new Exception($arg, $code);
     }
@@ -107,7 +115,7 @@ class Template implements \ArrayAccess
     /**
      * Returns true if specified tag is a top-tag of the template.
      *
-     * Since Agile Toolkit 4.3 this tag is always called _top
+     * Since Agile Toolkit 4.3 this tag is always called _top.
      *
      * @param string $tag
      *
@@ -124,12 +132,17 @@ class Template implements \ArrayAccess
      *
      * Because there might be multiple tags and getTagRef is
      * returning only one template, it will return the first
-     * occurence:
+     * occurrence:
      *
      * {greeting}hello{/},  {greeting}world{/}
      *
      * calling getTagRef('greeting',$template) will point
      * second argument towards &array('hello');
+     *
+     * @param string $tag
+     * @param array  $template
+     *
+     * @return $this
      */
     public function getTagRef($tag, &$template)
     {
@@ -140,9 +153,6 @@ class Template implements \ArrayAccess
         }
 
         @list($tag, $ref) = explode('#', $tag);
-        if (!$ref) {
-            $ref = 1;
-        }
         if (!isset($this->tags[$tag])) {
             throw $this->exception('Tag not found in Template')
                 ->addMoreInfo('tag', $tag)
@@ -164,7 +174,12 @@ class Template implements \ArrayAccess
      * second argument towards array(&array('hello'),&array('world'));
      *
      * If $tag is specified as array, then $templates will
-     * contain all occurences of all tags from the array.
+     * contain all occurrences of all tags from the array.
+     *
+     * @param string $tag
+     * @param array  $template
+     *
+     * @return bool
      */
     public function getTagRefList($tag, &$template)
     {
@@ -201,7 +216,7 @@ class Template implements \ArrayAccess
         }
         if (!isset($this->tags[$tag][$ref - 1])) {
             throw $this->exception('Tag not found in Template')
-                ->setTag($tag);
+                ->addMoreInfo('tag', $tag);
         }
         $template = [&$this->tags[$tag][$ref - 1]];
 
@@ -210,6 +225,10 @@ class Template implements \ArrayAccess
 
     /**
      * Checks if template has defined a specified tag.
+     *
+     * @param string|array $tag
+     *
+     * @return bool
      */
     public function hasTag($tag)
     {
@@ -234,6 +253,8 @@ class Template implements \ArrayAccess
 
     /**
      * Add tags from a specified region.
+     *
+     * @param array $template
      */
     protected function rebuildTagsRegion(&$template)
     {
@@ -256,9 +277,9 @@ class Template implements \ArrayAccess
     // {{{ Manipulating contents of tags
 
     /**
-     * This function will replace region refered by $tag to a new content.
+     * This function will replace region referred by $tag to a new content.
      *
-     * If tag is found inside template several times, all occurences are
+     * If tag is found inside template several times, all occurrences are
      * replaced.
      *
      * ALTERNATIVE USE(2) of this function is to pass associative array as
@@ -268,6 +289,12 @@ class Template implements \ArrayAccess
      *  set($_GET);
      *
      * would read and set multiple region values from $_GET array.
+     *
+     * @param mixed        $tag
+     * @param string|array $value
+     * @param bool         $encode
+     *
+     * @return $this
      */
     public function set($tag, $value = null, $encode = true)
     {
@@ -308,6 +335,11 @@ class Template implements \ArrayAccess
     /**
      * Set value of a tag to a HTML content. The value is set without
      * encoding, so you must be sure to sanitize.
+     *
+     * @param mixed        $tag
+     * @param string|array $value
+     *
+     * @param $this
      */
     public function setHTML($tag, $value = null)
     {
@@ -317,6 +349,11 @@ class Template implements \ArrayAccess
     /**
      * See setHTML() but won't generate exception for non-existing
      * $tag.
+     *
+     * @param mixed        $tag
+     * @param string|array $value
+     *
+     * @param $this
      */
     public function trySetHTML($tag, $value = null)
     {
@@ -326,6 +363,12 @@ class Template implements \ArrayAccess
     /**
      * Same as set(), but won't generate exception for non-existing
      * $tag.
+     *
+     * @param mixed        $tag
+     * @param string|array $value
+     * @param bool         $encode
+     *
+     * @param $this
      */
     public function trySet($tag, $value = null, $encode = true)
     {
@@ -338,6 +381,12 @@ class Template implements \ArrayAccess
 
     /**
      * Add more content inside a tag.
+     *
+     * @param mixed        $tag
+     * @param string|array $value
+     * @param bool         $encode
+     *
+     * @param $this
      */
     public function append($tag, $value, $encode = true)
     {
@@ -357,6 +406,15 @@ class Template implements \ArrayAccess
         return $this;
     }
 
+    /**
+     * Add more content inside a tag. The content is appended without
+     * encoding, so you must be sure to sanitize.
+     *
+     * @param mixed        $tag
+     * @param string|array $value
+     *
+     * @return $this
+     */
     public function appendHTML($tag, $value)
     {
         return $this->append($tag, $value, false);
@@ -365,6 +423,10 @@ class Template implements \ArrayAccess
     /**
      * Get value of the tag. Note that this may contain an array
      * if tag contains a structure.
+     *
+     * @param string $tag
+     *
+     * @return $this
      */
     public function get($tag)
     {
@@ -381,6 +443,10 @@ class Template implements \ArrayAccess
      * IMPORTANT: This does not dispose of the tags which were previously
      * inside the region. This causes some severe pitfalls for the users
      * and ideally must be checked and proper errors must be generated.
+     *
+     * @param string|array $tag
+     *
+     * @return $this
      */
     public function del($tag)
     {
@@ -407,6 +473,10 @@ class Template implements \ArrayAccess
 
     /**
      * Similar to del() but won't throw exception if tag is not present.
+     *
+     * @param string|array $tag
+     *
+     * @return $this
      */
     public function tryDel($tag)
     {
@@ -446,6 +516,11 @@ class Template implements \ArrayAccess
 
     /**
      * Executes call-back for each matching tag in the template.
+     *
+     * @param string|array $tag
+     * @param callable     $callable
+     *
+     * @return $this
      */
     public function eachTag($tag, $callable)
     {
@@ -467,6 +542,10 @@ class Template implements \ArrayAccess
 
     /**
      * Creates a new template using portion of existing template.
+     *
+     * @param string $tag
+     *
+     * @return self
      */
     public function cloneRegion($tag)
     {
@@ -550,6 +629,11 @@ class Template implements \ArrayAccess
 
     /**
      * Recursively find nested tags inside a string, converting them to array.
+     *
+     * @param array $input
+     * @param array $template
+     *
+     * @return string|null
      */
     protected function parseTemplateRecursive(&$input, &$template)
     {
@@ -594,6 +678,8 @@ class Template implements \ArrayAccess
 
     /**
      * Deploys parse recursion.
+     *
+     * @param string $str
      */
     protected function parseTemplate($str)
     {
