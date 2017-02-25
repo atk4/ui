@@ -9,3 +9,5 @@ docs/build
 /build
 .DS_Store
 *.codekit3
+
+run_local.sh

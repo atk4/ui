@@ -731,22 +731,24 @@ class View implements jsExpressionable
 
         // Substitute $when to make it better work as a array key
         if ($when === true) {
-            $when = 'always';
+            $this->_js_actions[$when][] = $chain;
+
+            if ($action) {
+                $this->_js_actions[$when][] = $action;
+            }
+
+            return $chain;
         }
 
         if ($when === false || $when === null) {
             return $chain;
         }
 
-        if (!isset($this->_js_actions[$when])) {
-            $this->_js_actions[$when] = [];
-        }
+        // next - binding on a specific event
+        $action = (new jQuery($this))
+            ->bind($when, new jsFunction([$chain, $action, 'preventDefault'=>true, 'stopPropagation'=>true]));
 
-        $this->_js_actions[$when][] = $chain;
-
-        if ($action) {
-            $this->_js_actions[$when][] = $action;
-        }
+        $this->_js_actions[$when][] = $action;
 
         return $chain;
     }
@@ -813,67 +815,11 @@ class View implements jsExpressionable
 
             $cb->set(function () use ($action) {
                 $chain = new jQuery(new jsExpression('this'));
-                $response = call_user_func($action, $chain);
 
-                if ($response === $chain) {
-                    $response = null;
-                }
-
-                $actions = [];
-
-                if ($chain->_chain) {
-                    $actions[] = $chain;
-                }
-
-                if (!is_array($response)) {
-                    $response = [$response];
-                }
-
-                foreach ($response as $r) {
-                    if (is_string($r)) {
-                        $actions[] = new jsExpression('alert([])', [r]);
-                    } elseif ($r instanceof jsExpressionable) {
-                        $actions[] = $r;
-                    } elseif ($r === null) {
-                        continue;
-                    } else {
-                        throw new Exception(['Incorrect callback. Must be string or action.', 'r'=>$r]);
-                    }
-                }
-
-                $ajaxec = implode(";\n", array_map(function (jQuery $r) {
-                    return $r->jsRender();
-                }, $actions));
-
-                echo json_encode(['success'=>true, 'message'=>'Hello World', 'eval'=>$ajaxec]);
-                exit;
+                return call_user_func($action, $chain);
             });
 
             $thisAction->api(['on'=>'now', 'url'=>$cb->getURL(), 'obj'=>new jsExpression('this')]);
-
-            //throw new Exception('VirtualPage is not yet implemented');
-            /*$url = '.virtualpage->getURL..';
-            $actions[] = (new jsUniv(new jsExpression('this')))->ajaxec($url, true);
-
-            /*
-            $p = $this->add('VirtualPage');
-
-            $p->set(function ($p) use ($action) {
-                // $action is an actual callable
-                $js2 = $p->js()->_selectorRegion();
-
-                $js3 = call_user_func($action, $js2, $_POST);
-
-                // If method returns something, execute that instead
-                if ($js3) {
-                    $p->js(null, $js3)->execute();
-                } else {
-                    $js2->execute();
-                }
-            });
-
-            $action = $this->js()->_selectorThis()->univ()->ajaxec($p->getURL(), true);
-             */
         } elseif ($action) {
             // otherwise include
             $actions[] = $action;
@@ -888,35 +834,10 @@ class View implements jsExpressionable
         }
 
         return $thisAction;
-
-        /*
-        if ($js) {
-            $ret_js = $this->js(null, $js)->_selectorThis();
-        } else {
-            $ret_js = $this->js()->_selectorThis();
-        }
-
-        $on_chain = $this->js(true);
-        $fired = false;
-
-        $this->app->jui->addHook(
-            'pre-getJS',
-            function ($app) use ($event, $selector, $ret_js, $on_chain, &$fired) {
-                if ($fired) {
-                    return;
-                }
-                $fired = true;
-
-                $on_chain->on($event, $selector, $ret_js->_enclose(null, true));
-            }
-        );
-
-        return $ret_js;
-         */
     }
 
     /**
-     * Render this view into #id for javascript.
+     * Convert View into a value in case it happens to be inside our json_encode (as argument to jsChain).
      *
      * @throws Exception
      *
@@ -932,20 +853,14 @@ class View implements jsExpressionable
     }
 
     /**
-     * TODO: refactor.
+     * Get JavaScript objects from this render tree.
      */
     public function getJS()
     {
         $actions = [];
 
-        foreach ($this->_js_actions as $event=>$eventActions) {
+        foreach ($this->_js_actions as $eventActions) {
             foreach ($eventActions as $action) {
-                // wrap into callback
-                if ($event !== 'always') {
-                    $action = (new jQuery(@$action->_constructorArgs[0]))
-                        ->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
-                }
-
                 $actions[] = $action;
             }
         }

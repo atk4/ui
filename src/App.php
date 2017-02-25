@@ -28,7 +28,7 @@ class App
      */
     public $always_run = true;
 
-    private $run_called = false;
+    public $run_called = false;
 
     public $ui_persistence = null;
 
@@ -60,13 +60,13 @@ class App
             });
         }
 
+        if (!$this->_initialized) {
+            //$this->init();
+        }
+
         // Always run app on shutdown
         if ($this->always_run) {
             register_shutdown_function(function () {
-                if (!$this->_initialized) {
-                    $this->init();
-                }
-
                 if (!$this->run_called) {
                     try {
                         $this->run();
