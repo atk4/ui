@@ -21,7 +21,14 @@ html(lang="{lang}en{/}")
         }
 
         $.fn.api.settings.onFailure = function(response) {
-          alert(response);
+            w=window.open(null,'Error in JSON response','height=1000,width=1100,location=no,menubar=no,scrollbars=yes,status=no,titlebar=no,toolbar=no');
+            if(w){
+                w.document.write('<h5>Error in JSON response</h5>');
+                w.document.write(response);
+                w.document.write('<center><input type=button onclick="window.close()" value="Close"></center>');
+            }else{
+                alert("Error in ajaxec response"+response);
+            }
         }
     | {$HEAD}
     style(type='text/css').
