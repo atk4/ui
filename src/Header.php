@@ -5,14 +5,14 @@ namespace atk4\ui;
 /**
  * Class implements Headers.
  *
- * Set this to 1, 2, 3, 4 or 5 if you are looking for Page Header. The size is not affected by
+ * Set size to 1, 2, 3, 4 or 5 if you are looking for Page Header. The size is not affected by
  * header placement on the page. Specify number to constructor like this:
  *
- * $h = new Header(['size'=>1]); // creates H1 header.
+ * $h = new Header(['size'=>1]); // creates <h1>..</h1> header.
  *
- * Alternatively see content headers. Those will emphasize the text in the context of the section.
+ * Alternatively set content headers. Those will emphasize the text in the context of the section.
  *
- * $h = new Header('size'=>'large');  // make large header <div class="ui large header">..</div>
+ * $h = new Header(['size'=>'large']);  // make large header <div class="ui large header">..</div>
  */
 class Header extends View
 {
