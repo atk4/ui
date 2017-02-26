@@ -9,32 +9,48 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 {
     use \atk4\core\HookTrait;
 
+    // @inheritdoc
     public $ui = 'form';
 
+    // @inheritdoc
     public $defaultTemplate = 'form.html';
 
     /**
-     * When form is submitted successfully, this template is used by method success() to replace form contents.
+     * When form is submitted successfully, this template is used by method
+     * success() to replace form contents.
+     *
+     * @var string
      */
     public $successTemplate = 'form-success.html';
 
     /**
      * A current layout of a form, needed if you call $form->addField().
+     *
+     * @var \atk4\ui\FormLayout\Generic
      */
     public $layout = null;
 
     /**
      * Disables form contents.
+     *
+     * {@inheritdoc}
      */
     public $content = false;
 
     /**
-     * Will point to the Save button. If you don't want to have save, destroy it. Initialized by setLayout().
+     * Will point to the Save button. If you don't want to have save, destroy
+     * it. Initialized by setLayout().
+     *
+     * @var Button
      */
     public $buttonSave;
 
     /**
      * Add field into current layout. If no layout, create one. If no model, create blank one.
+     *
+     * @param mixed ...$args
+     *
+     * @return FormField\Generic
      */
     public function addField(...$args)
     {
@@ -47,12 +63,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         return $this->layout->addField(...$args); //$this->fieldFactory($modelField));
-
-        return $formField;
     }
 
     /**
      * Add header into the form, which appears as a separator.
+     *
+     * @param string $title
+     *
+     * @return \atk4\ui\FormLayout\Generic
      */
     public function addHeader($title = null)
     {
@@ -64,7 +82,11 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     }
 
     /**
-     * Creates a group of fields and returts layout.
+     * Creates a group of fields and returns layout.
+     *
+     * @param string|array $title
+     *
+     * @return \atk4\ui\FormLayout\Generic
      */
     public function addGroup($title = null)
     {
@@ -75,10 +97,15 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return $this->layout->addGroup($title);
     }
 
+    /**
+     * Sets form layout.
+     *
+     * @param string|\atk4\ui\FormLayout\Generic $layout
+     */
     public function setLayout($layout = null)
     {
         if (!$layout) {
-            $layout = new \atk4\ui\FormLayout\Generic(['form'=>$this]);
+            $layout = new \atk4\ui\FormLayout\Generic(['form' => $this]);
         }
 
         $this->layout = $this->add($layout);
@@ -86,6 +113,11 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $this->buttonSave->on('click', $this->js()->form('submit'));
     }
 
+    /**
+     * Adds callback in submit hook.
+     *
+     * @param callable $callback
+     */
     public function onSubmit($callback)
     {
         $this->addHook('submit', $callback);
@@ -94,6 +126,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Provided with a Agile Data Model Field, this method have to decide
      * and create instance of a View that will act as a form-field.
+     *
+     * @param mixed ...$args
      *
      * @return Form\Field\Generic
      */
@@ -112,6 +146,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     /**
      * Will come up with a column object based on the field object supplied.
+     *
+     * @param \atk4\data\Field $f
+     *
+     * @return FormField\Generic
      */
     public function _fieldFactory(\atk4\data\Field $f)
     {
@@ -131,6 +169,11 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * If $actualFields are not specified, then all "editable" fields
      * will be added.
+     *
+     * @param \atk4\data\Model $model
+     * @param array            $fields
+     *
+     * @return \atk4\data\Model
      */
     public function setModel(\atk4\data\Model $model, $fields = null)
     {
@@ -172,6 +215,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return $model;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function init()
     {
         parent::init();
@@ -189,12 +235,25 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     /**
      * Causes form to generate error.
+     *
+     * @param string $field Field name
+     * @param string $str   Error message
+     *
+     * @return jsChain
      */
     public function error($field, $str)
     {
         return $this->js()->form('add prompt', $field, $str);
     }
 
+    /**
+     * Causes form to generate success message.
+     *
+     * @param string $str        Success message
+     * @param string $sub_header Sub-header
+     *
+     * @return jsChain
+     */
     public function success($str = 'Success', $sub_header = null)
     {
         $success = $this->app->loadTemplate($this->successTemplate);
@@ -212,6 +271,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return $js;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function renderView()
     {
         $this->ajaxSubmit();
@@ -222,6 +284,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Returns JS Chain that targets INPUT element of a specified field. This method is handy
      * if you wish to set a value to a certain field.
+     *
+     * @param string $name Name of element
+     *
+     * @return jsChain
      */
     public function jsInput($name)
     {
@@ -231,12 +297,19 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Returns JS Chain that targets INPUT element of a specified field. This method is handy
      * if you wish to set a value to a certain field.
+     *
+     * @param string $name Name of element
+     *
+     * @return jsChain
      */
     public function jsField($name)
     {
         return $this->layout->getElement($name)->js();
     }
 
+    /**
+     * Does ajax submit.
+     */
     public function ajaxSubmit()
     {
         $this->_add($cb = new jsCallback(), ['desired_name'=>'submit']);

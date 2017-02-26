@@ -9,7 +9,11 @@ class Grid extends Lister
     use \atk4\core\HookTrait;
 
     // overrides
+
+    // @inheritdoc
     public $defaultTemplate = 'grid.html';
+
+    // @inheritdoc
     public $ui = 'table';
 
     /**

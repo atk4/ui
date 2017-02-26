@@ -2,12 +2,8 @@
 
 namespace atk4\ui;
 
-class H2 extends View
+class H2 extends Header
 {
-    public function init()
-    {
-        parent::init();
-        // TEMPORARY IMPLEMENTATION
-        $this->template->set('_element', 'h4');
-    }
+    // @inheritdoc
+    public $size = 2;
 }
