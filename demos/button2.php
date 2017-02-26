@@ -15,7 +15,7 @@ $layout->js(true, new \atk4\ui\jsExpression('$.fn.api.settings.successTest = fun
   return false;
 }'));
 
-$layout->add(new Header('Basic Button', 'size'=>2));
+$layout->add(new Header(['Basic Button', 'size'=>2]));
 
 // This button hides on page load
 $b = $layout->add(new Button(['id'=>'b1']))->set('Hidden Button');
@@ -25,7 +25,7 @@ $b->js(true)->hide();
 $b = $layout->add(new Button(['id'=>'b2']))->set('Hide on click Button');
 $b->js('click')->hide();
 
-$layout->add(new Header('Callbacks', 'size'=>2));
+$layout->add(new Header(['Callbacks', 'size'=>2]));
 
 // On button click reload it and change it's title
 $b = $layout->add(new Button(['id'=>'b3']))->set('Callback Test');

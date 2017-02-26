@@ -26,7 +26,7 @@ $layout->add(new \atk4\ui\View([
     'ui'=> 'ignored warning message',
 ]));
 
-$layout->add(new \atk4\ui\Header('Fully-interractive, responsive and slick-looking form in 20 lines of PHP code', 'size'=>2));
+$layout->add(new \atk4\ui\Header(['Fully-interractive, responsive and slick-looking form in 20 lines of PHP code', 'size'=>2]));
 
 $form = $layout->add(new \atk4\ui\Form(['segment']));
 
