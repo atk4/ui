@@ -7,7 +7,7 @@ require '../vendor/autoload.php';
 try {
     $layout = new \atk4\ui\Layout\App(['defaultTemplate'=>'./templates/layout2.html']);
 
-    $layout->add(new \atk4\ui\H2('Checkboxes'));
+    $layout->add(new \atk4\ui\Header('Checkboxes', 'size'=>2));
 
     $layout->add(new \atk4\ui\FormField\Checkbox('Make my profile visible'));
 

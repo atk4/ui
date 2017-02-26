@@ -17,7 +17,7 @@ require 'init.php';
         'ui'=> 'ignored warning message',
     ]));
 
-    $layout->add(new \atk4\ui\H2('DefaultForm'));
+    $layout->add(new \atk4\ui\Header('DefaultForm', 'size'=>2));
 
     $a = [];
     $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
@@ -39,7 +39,7 @@ require 'init.php';
         }
     });
 
-    $layout->add(new \atk4\ui\H2('Another Form'));
+    $layout->add(new \atk4\ui\Header('Another Form', 'size'=>2));
 
     $f = $layout->add(new \atk4\ui\Form(['segment']));
     $f->setModel(new \atk4\data\Model());
