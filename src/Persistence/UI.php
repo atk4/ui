@@ -3,6 +3,7 @@
 namespace atk4\ui\Persistence;
 
 use atk4\data\Model;
+use atk4\ui\Exception;
 
 /**
  * This class is used for typecasting model types to the values that will be presented to the user. App will
@@ -62,6 +63,51 @@ class UI extends \atk4\data\Persistence
         }
 
         return $v;
+    }
+
+    /**
+     * Interpret user-defined input for various types.
+     */
+    public function _typecastLoadField(\atk4\data\Field $f, $value)
+    {
+        switch ($f->type) {
+        case 'boolean':
+            $value = (bool) $value;
+            break;
+        case 'money':
+            return str_replace(',', '', $value);
+        case 'date':
+        case 'datetime':
+        case 'time':
+            $dt_class = isset($f->dateTimeClass) ? $f->dateTimeClass : 'DateTime';
+            $tz_class = isset($f->dateTimeZoneClass) ? $f->dateTimeZoneClass : 'DateTimeZone';
+
+            // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
+            $format = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
+            $format = $f->persist_format ?: $format[$f->type];
+
+            // datetime only - set from persisting timezone
+            if ($f->type == 'datetime' && isset($f->persist_timezone)) {
+                $v = $dt_class::createFromFormat($format, $value, new $tz_class($f->persist_timezone));
+                if ($v === false) {
+                    throw new Exception(['Incorrectly formatted datetime', 'format' => $format, 'value' => $value, 'field' => $f]);
+                }
+                $v->setTimeZone(new $tz_class(date_default_timezone_get()));
+
+                return $v;
+            } else {
+                $v = $dt_class::createFromFormat($format, $value);
+                if ($v === false) {
+                    throw new Exception(['Incorrectly formatted date/time', 'format' => $format, 'value' => $value, 'field' => $f]);
+                }
+
+                return $v;
+            }
+
+            break;
+        }
+
+        return $value;
     }
 
     /**

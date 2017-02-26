@@ -230,7 +230,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function loadPOST()
     {
-        $this->model->set($this->app->ui_persistence->typecastLoadRow($this->model, $_POST));
+        $data = array_intersect_key($_POST, $this->model->elements);
+        $this->model->set($this->app->ui_persistence->typecastLoadRow($this->model, $data));
     }
 
     /**
@@ -312,7 +313,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function ajaxSubmit()
     {
-        $this->_add($cb = new jsCallback(), ['desired_name'=>'submit']);
+        $this->_add($cb = new jsCallback(), ['desired_name'=>'submit', 'POST_trigger'=>true]);
+
+        $this->add(new View(['element'=>'input']))
+            ->setAttr('name', $cb->name)
+            ->setAttr('value', 'submit')
+            ->setAttr('type', 'hidden');
 
         $cb->set(function () {
             $response = $this->hook('submit');

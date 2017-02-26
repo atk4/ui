@@ -448,7 +448,7 @@ class Template implements \ArrayAccess
     {
         if (is_array($tag)) {
             foreach ($tag as $t) {
-                $this->del($t);
+                $this->tryDel($t);
             }
 
             return $this;
