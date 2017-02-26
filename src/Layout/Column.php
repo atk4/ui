@@ -13,6 +13,7 @@ namespace atk4\ui\Layout;
  */
 class Column extends Generic
 {
+    // @inheritdoc
     public $template = 'layout/column.html';
 
     public $menu = null;

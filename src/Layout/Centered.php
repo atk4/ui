@@ -11,8 +11,12 @@ namespace atk4\ui\Layout;
  */
 class Centered extends Generic
 {
+    // @inheritdoc
     public $defaultTemplate = 'layout/centered.html';
 
+    /**
+     * {@inheritdoc}
+     */
     public function init()
     {
         parent::init();
