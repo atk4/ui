@@ -91,6 +91,10 @@ class Menu extends View
         }
     }
      */
+
+    /**
+     * {@inheritdoc}
+     */
     public function renderView()
     {
         if ($this->activate_on_click && $this->ui == 'menu') {

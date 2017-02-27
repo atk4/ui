@@ -380,8 +380,8 @@ class View implements jsExpressionable
      * Override this method without compatibility with parrent, if you wish
      * to set your own things your own way for your view.
      *
-     * @param array       $arg1
-     * @param string|null $arg2
+     * @param string|array $arg1
+     * @param string|null  $arg2
      *
      * @throws Exception
      *
@@ -419,7 +419,7 @@ class View implements jsExpressionable
 
         throw new Exception([
             'Not sure what to do with argument',
-            'arg1'=> $arg1,
+            'arg1' => $arg1,
         ]);
     }
 
