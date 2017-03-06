@@ -104,7 +104,7 @@ class Grid extends Lister
      *
      * @return Column\Generic
      */
-    public function addColumn($name, $columnDef = null, $fieldDef = null)
+    public function addColumn($name, $columnDef = null, $fieldDef = [])
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
