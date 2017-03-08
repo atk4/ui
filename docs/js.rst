@@ -1,9 +1,10 @@
 
 
 
-.. _js:
 
 .. php:namespace: atk4\\ui
+
+.. _js:
 
 ==================
 JavaScript Mapping

@@ -76,7 +76,7 @@ $layout->add(new \atk4\ui\FormField\Line(['iconLeft'=>'search',  'action'=>$dd])
     ->add(new \atk4\ui\Button('Search'), 'AfterAfterInput');
 
 $layout->add(new \atk4\ui\FormField\Line(['action'=> new \atk4\ui\Button([
-    'Copy', 'rightIcon'=>'copy', 'teal',
+    'Copy', 'iconRight'=>'copy', 'teal',
 ])]));
 
 $layout->add(new \atk4\ui\FormField\Line(['action'=> new \atk4\ui\Button([

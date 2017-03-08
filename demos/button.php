@@ -19,13 +19,16 @@ $layout->add(new Header(['Properties', 'size'=>2]));
 $b1 = new Button();
 $b2 = new Button();
 $b3 = new Button();
+$b4 = new Button();
 
 $b1->set(['Load', 'primary']);
 $b2->set(['Load', 'labeled', 'icon'=>'pause']);
-$b3->set(['Next', 'right labeled', 'icon'=>'right arrow']);
+$b3->set(['Next', 'iconRight'=>'right arrow']);
+$b4->set([false, 'circular', 'icon'=>'settings']);
 $layout->add($b1);
 $layout->add($b2);
 $layout->add($b3);
+$layout->add($b4);
 
 $button = new Button();
 $button->set('Click me');
@@ -72,3 +75,9 @@ $view->add(new Button('World'), 'tag1');
 $view->add(new Button(['Agile UI', 'blue']), 'tag2');
 
 $layout->add($view);
+
+$layout->add(new Header(['Attaching', 'size'=>2]));
+
+$layout->add(['Button', 'Scroll Up', 'top attached']);
+$layout->add(['Grid', 'attached', 'header'=>false])->setSource(['One', 'Two', 'Three', 'Four']);
+$layout->add(['Button', 'Scroll Up', 'bottom attached']);

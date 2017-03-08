@@ -12,6 +12,8 @@ class Callback
 
     public $POST_trigger = false;
 
+    public $triggered = false;
+
     /**
      * Executes user-specified action when call-back is triggered.
      *
@@ -24,10 +26,14 @@ class Callback
     {
         if ($this->POST_trigger) {
             if (isset($_POST[$this->name])) {
+                $this->triggered = true;
+
                 return call_user_func_array($callback, $args);
             }
         } else {
             if (isset($_GET[$this->name])) {
+                $this->triggered = true;
+
                 return call_user_func_array($callback, $args);
             }
         }

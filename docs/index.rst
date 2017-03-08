@@ -14,6 +14,7 @@ Contents:
     view
     js
     callbacks
+    button
     field
     form
     grid
@@ -22,7 +23,7 @@ Contents:
 
 
 ..
-   
+
     base-components
     core
     layouts
