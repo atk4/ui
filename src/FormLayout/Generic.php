@@ -15,6 +15,7 @@ class Generic extends View
      */
     public $form = null;
 
+    // @var inheritdoc
     public $defaultTemplate = 'formlayout/generic.html';
 
     /**
@@ -23,7 +24,8 @@ class Generic extends View
     public $label = null;
 
     /**
-     * Specify width of a group in numerical word e.g. 'width'=>'two' as per Semantic UI grid system.
+     * Specify width of a group in numerical word e.g. 'width'=>'two' as per
+     * Semantic UI grid system.
      */
     public $width = null;
 
@@ -34,6 +36,11 @@ class Generic extends View
 
     /**
      * Places field inside a layout somewhere.
+     *
+     * @param \atk4\ui\FormField\Generic|array $field
+     * @param array|string                     $args
+     *
+     * @return \atk4\ui\FormField\Generic
      */
     public function addField($field, $args = [])
     {
@@ -50,12 +57,10 @@ class Generic extends View
         }
          */
 
-        if (!$field instanceof \atk4\ui\FormField\Generic) {
-            if (is_array($field)) {
-                $field = $this->form->fieldFactory(...$field);
-            } else {
-                $field = $this->form->fieldFactory($field);
-            }
+        if (is_array($field)) {
+            $field = $this->form->fieldFactory(...$field);
+        } elseif (!$field instanceof \atk4\ui\FormField\Generic) {
+            $field = $this->form->fieldFactory($field);
         }
 
         if (isset($args['caption'])) {
@@ -69,6 +74,13 @@ class Generic extends View
         return $this->_add($field, ['name'=>$field->short_name]);
     }
 
+    /**
+     * Adds Button.
+     *
+     * @param \atk4\ui\Button $button
+     *
+     * @return \atk4\ui\Button
+     */
     public function addButton(\atk4\ui\Button $button)
     {
         return $this->_add($button);
@@ -76,6 +88,10 @@ class Generic extends View
 
     /**
      * Create a group with fields.
+     *
+     * @param string $label
+     *
+     * @return $this
      */
     public function addHeader($label = null)
     {
@@ -86,6 +102,13 @@ class Generic extends View
         return $this;
     }
 
+    /**
+     * Adds group.
+     *
+     * @param string|array $label
+     *
+     * @return self
+     */
     public function addGroup($label = null)
     {
         if (!is_array($label)) {
@@ -100,6 +123,9 @@ class Generic extends View
         return $this->add(new self($label));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function recursiveRender()
     {
         $field_input = $this->template->cloneRegion('InputField');

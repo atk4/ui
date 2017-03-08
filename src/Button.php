@@ -4,6 +4,7 @@ namespace atk4\ui;
 
 class Button extends View
 {
+    // @inheritdoc
     public $ui = 'button';
 
     public $icon = null;
@@ -12,6 +13,8 @@ class Button extends View
 
     /**
      * $icon property will end up a button icon.
+     *
+     * {@inheritdoc}
      */
     public function renderView()
     {
@@ -44,6 +47,10 @@ class Button extends View
 
     /**
      * Makes button into a "<a>" element with a link.
+     *
+     * @param string $url
+     *
+     * @return $this
      */
     public function link($url)
     {
@@ -60,6 +67,8 @@ class Button extends View
 
     /**
      * By Default buttons should have something written on them, e.g. "Button".
+     *
+     * {@inheritdoc}
      */
     public function recursiveRender()
     {

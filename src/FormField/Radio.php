@@ -3,6 +3,7 @@
 namespace atk4\ui\FormField;
 
 use atk4\ui\Form;
+use atk4\ui\Lister;
 
 /**
  * Input element for a form field.
@@ -24,7 +25,7 @@ class Radio extends Generic
      */
     public function setModel(\atk4\data\Model $m)
     {
-        $this->add(new \atk4\ui\Lister(), 'Radio')->setModel($m);
+        $this->add(new Lister(), 'Radio')->setModel($m);
     }
 
     /**
