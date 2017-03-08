@@ -7,7 +7,8 @@ namespace atk4\ui;
  */
 class Button extends View
 {
-    // @inheritdoc
+    public $defaultTemplate = 'button.html';
+
     public $ui = 'button';
 
     /**
@@ -20,7 +21,7 @@ class Button extends View
      * Additional icon that can appear on the right of the button.
      * @var [type]
      */
-    public $rightIcon = null;
+    public $iconRight = null;
 
     /**
      * $icon property will end up a button icon.
@@ -29,25 +30,39 @@ class Button extends View
      */
     public function renderView()
     {
-        if ($this->icon && !is_object($this->icon)) {
-            $this->icon = $this->add(new Icon($this->icon), 'Content');
+        if ($this->icon) {
+            if (!is_object($this->icon)) {
+                $this->icon = new Icon($this->icon);
+            }
+
+            $this->add($this->icon, 'LeftIcon');
 
             if ($this->content) {
                 $this->addClass('labeled');
-                $this->add(new Text($this->content));
-                $this->content = false;
             }
 
             $this->addClass('icon');
         }
 
-        if ($this->rightIcon && !is_object($this->rightIcon)) {
-            $this->rightIcon = $this->add(new Icon($this->rightIcon), 'Content');
+        if ($this->iconRight) {
+
+            if ($this->icon) {
+                throw new Exception([
+                    'Cannot use icon and iconRight simultaniously',
+                    'icon'=>$this->icon,
+                    'iconRight'=>$this->iconRight
+                ]);
+            }
+
+
+            if (!is_object($this->iconRight)) {
+                $this->iconRight = new Icon($this->iconRight);
+            }
+
+            $this->add($this->iconRight, 'RightIcon');
 
             if ($this->content) {
                 $this->addClass('right labeled');
-                $this->add(new Text($this->content));
-                $this->content = false;
             }
 
             $this->addClass('icon');
@@ -74,18 +89,5 @@ class Button extends View
         $this->setAttr('href', $this->app->url($url));
 
         return $this;
-    }
-
-    /**
-     * By Default buttons should have something written on them, e.g. "Button".
-     *
-     * {@inheritdoc}
-     */
-    public function recursiveRender()
-    {
-        parent::recursiveRender();
-        if (!$this->template->get('Content')) {
-            $this->template->set('Content', 'Button');
-        }
     }
 }

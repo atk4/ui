@@ -37,15 +37,15 @@ Icon can also be specified as object::
 
     $b1 = new Button(['Forks', 'blue', 'icon'=>new Icon('fork'));
 
-.. php:attr:: rightIcon
+.. php:attr:: iconRight
 
 Setting this will display icon on the right of the button::
 
 
-    $b1 = new Button(['Next', 'rightIcon'=>'right arrow']);
+    $b1 = new Button(['Next', 'iconRight'=>'right arrow']);
 
 Apart from being on the right, same rules apply as :php:attr:`Button::$icon`. Both
-icons can be specified simultaniously.
+icons cannot be specified simultaniously.
 
 Linking
 -------
@@ -64,5 +64,14 @@ For other JavaScript actions described :ref:`js` you can use::
 
     $button->js('click', new jsExpression('document.location.reload()'));
 
+Complex Buttons
+---------------
 
+With knowledge of Semantic UI button (http://semantic-ui.com/elements/button.html) can help you
+in creating more complex buttons::
+
+    $forks = new Button(['labeled'=> true]); // Button, not Buttons!
+    $forks->add(new Button(['Forks', 'blue']))->add(new Icon('fork'));
+    $forks->add(new Label(['1,048', 'basic blue left pointing']));
+    $layout->add($forks);
 
