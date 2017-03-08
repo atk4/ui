@@ -46,7 +46,7 @@ class Grid extends Lister
     public $totals_plan = false;
 
     /**
-     * Setting this to false will hide header row
+     * Setting this to false will hide header row.
      *
      * @var bool
      */
