@@ -7,8 +7,16 @@ class Button extends View
     // @inheritdoc
     public $ui = 'button';
 
+    /**
+     * Icon that will appear on the button (left).
+     * @var string|array|Icon
+     */
     public $icon = null;
 
+    /**
+     * Additional icon that can appear on the right of the button.
+     * @var string|array|Icon
+     */
     public $rightIcon = null;
 
     /**
