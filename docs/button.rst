@@ -60,18 +60,17 @@ Will link button to a destination URL or page::
 
 If array is used, it's routed to :php:meth:`App::url`
 
-For other JavaScript actions described :ref:`js` you can use::
+For other JavaScript actions you can use :ref:`js`::
 
     $button->js('click', new jsExpression('document.location.reload()'));
 
 Complex Buttons
 ---------------
 
-With knowledge of Semantic UI button (http://semantic-ui.com/elements/button.html) can help you
+Knowledge of Semantic UI button (http://semantic-ui.com/elements/button.html) can help you
 in creating more complex buttons::
 
     $forks = new Button(['labeled'=> true]); // Button, not Buttons!
     $forks->add(new Button(['Forks', 'blue']))->add(new Icon('fork'));
     $forks->add(new Label(['1,048', 'basic blue left pointing']));
     $layout->add($forks);
-
