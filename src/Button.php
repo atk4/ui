@@ -2,6 +2,9 @@
 
 namespace atk4\ui;
 
+/**
+ * Component implementing UI Button.
+ */
 class Button extends View
 {
     // @inheritdoc
@@ -15,7 +18,7 @@ class Button extends View
 
     /**
      * Additional icon that can appear on the right of the button.
-     * @var string|array|Icon
+     * @var [type]
      */
     public $rightIcon = null;
 
