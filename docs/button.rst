@@ -19,7 +19,7 @@ of View alone yields in many various usage patterns such as::
     $b1 = new Button(['Load', 'primary']);
 
     $button = new Button('Hello there');
-    $button->addClass(['size big'=>true]);
+    $button->addClass('size big');
 
 Icons
 -----
