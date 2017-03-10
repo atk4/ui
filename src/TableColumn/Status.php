@@ -8,7 +8,7 @@ namespace atk4\ui\TableColumn;
 class Status extends Generic
 {
     /**
-     * Describes list of highlited statuses for this Field
+     * Describes list of highlited statuses for this Field.
      *
      * @var array
      */

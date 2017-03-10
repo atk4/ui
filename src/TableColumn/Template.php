@@ -8,14 +8,14 @@ namespace atk4\ui\TableColumn;
 class Template extends Generic
 {
     /**
-     * User-defined template for this Column
+     * User-defined template for this Column.
      *
      * @var string
      */
     public $template = null;
 
     /**
-     * call new TableColumn\Template('{$name} {$surname}');
+     * call new TableColumn\Template('{$name} {$surname}');.
      *
      * @param string $template Template with {$tags}
      */

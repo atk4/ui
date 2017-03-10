@@ -16,7 +16,7 @@ class Link extends Generic
      * Use
      *   new Link('http://yahoo.com?id={$id}');
      * or
-     *   new Link(['order', 'id'=>'{$id}']);
+     *   new Link(['order', 'id'=>'{$id}']);.
      *
      * @param string|array $page Destination definition
      */
@@ -48,11 +48,12 @@ class Link extends Generic
     }
 
     /**
-     * Auto-fill tag for the row-id
+     * Auto-fill tag for the row-id.
      *
-     * @param  [type] $row   [description]
-     * @param  [type] $field [description]
-     * @return [type]        [description]
+     * @param [type] $row   [description]
+     * @param [type] $field [description]
+     *
+     * @return [type] [description]
      */
     public function getHTMLTags($row, $field)
     {

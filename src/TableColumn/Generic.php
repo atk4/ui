@@ -10,7 +10,7 @@ class Generic
     use \atk4\core\AppScopeTrait;
 
     /**
-     * Link back to the table, where column is used
+     * Link back to the table, where column is used.
      *
      * @var \atk4\ui\Table
      */
@@ -144,12 +144,13 @@ class Generic
      * Return associative array of tags to be filled with pre-rendered HTML on
      * a column-basis. Will not be invoked if html-output is turned off for the table.
      *
-     * @param  array $row    link to row data
-     * @param  string $field field being rendered
+     * @param array  $row   link to row data
+     * @param string $field field being rendered
      *
-     * @return [type]        [description]
+     * @return [type] [description]
      */
-    public function getHTMLTags($row, $field) {
+    public function getHTMLTags($row, $field)
+    {
         return [];
     }
 }
