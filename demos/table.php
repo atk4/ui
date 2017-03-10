@@ -4,9 +4,9 @@ date_default_timezone_set('UTC');
 include 'init.php';
 
 $bb = $layout->add('Buttons');
-$bb->add(['Button', 'Refresh Grid', 'icon'=>'refresh']);
+$bb->add(['Button', 'Refresh Table', 'icon'=>'refresh']);
 
-$g = $layout->add(['Grid', 'celled'=>true]);
+$g = $layout->add(['Table', 'celled'=>true]);
 
 $bb->on('click', $g->js()->reload());
 
@@ -22,10 +22,10 @@ $g->addColumn('title', new \atk4\ui\Column\Status([
 $g->addColumn('date');
 $g->addColumn('salary', new \atk4\ui\Column\Money()); //->addClass('right aligned single line', 'all'));
 
-$g->addHook('getHTMLTags', function ($grid, $row) {
+$g->addHook('getHTMLTags', function ($table, $row) {
     if ($row->id == 1) {
         return [
-            'name'=> $grid->app->getTag('div', ['class'=>'ui ribbon label'], $row['name']),
+            'name'=> $table->app->getTag('div', ['class'=>'ui ribbon label'], $row['name']),
         ];
     }
 });
