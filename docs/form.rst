@@ -111,7 +111,7 @@ a model. I will also add one extra checkbox where user can accept terms and cond
     $form->setModel(new Person($db));
 
     $form->addField(
-        'terms', 
+        'terms',
         ['type'=>'boolean', 'ui'=>['caption'=>'Accept Terms and Conditions']]
     );
 
@@ -120,7 +120,7 @@ Form Submit Handling
 
 .. php:method:: onSubmit($callback)
 
-    Specify a PHP call-back that will be executed on successful form submission. 
+    Specify a PHP call-back that will be executed on successful form submission.
 
 .. php:method:: error($field, $message)
 
@@ -268,4 +268,4 @@ form inside a segment (outline) and will make fields appear smaller::
 
     $f = new \atk4\ui\Form(['small segment']));
 
-For further styling see documentation on :php:class:`View`. 
+For further styling see documentation on :php:class:`View`.

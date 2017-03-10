@@ -8,9 +8,10 @@ class Grid extends Lister
 {
     use \atk4\core\HookTrait;
 
-    // overrides
+    // Overrides
     public $defaultTemplate = 'grid.html';
     public $ui = 'table';
+    public $content = false;
 
     /**
      * Column objects can service multiple columns. You can use it for your advancage by re-using the object
@@ -43,6 +44,13 @@ class Grid extends Lister
      * @var bool
      */
     public $totals_plan = false;
+
+    /**
+     * Setting this to false will hide header row.
+     *
+     * @var bool
+     */
+    public $header = true;
 
     /**
      * Contains list of totals accumulated during the render process.
@@ -100,7 +108,7 @@ class Grid extends Lister
      *
      * @return Column\Generic
      */
-    public function addColumn($name, $columnDef = null, $fieldDef = null)
+    public function addColumn($name, $columnDef = null, $fieldDef = [])
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
@@ -140,8 +148,8 @@ class Grid extends Lister
     public function _columnFactory(\atk4\data\Field $f)
     {
         switch ($f->type) {
-        case 'boolean':
-            return $this->add(new Column\Checkbox());
+        //case 'boolean':
+            //return $this->add(new Column\Checkbox());
 
         default:
             if (!$this->default_column) {
@@ -234,8 +242,10 @@ class Grid extends Lister
         }
 
         // Generate Header Row
-        $this->t_head->setHTML('cells', $this->renderHeaderCells());
-        $this->template->setHTML('Head', $this->t_head->render());
+        if ($this->header) {
+            $this->t_head->setHTML('cells', $this->renderHeaderCells());
+            $this->template->setHTML('Head', $this->t_head->render());
+        }
 
         // Generate template for data row
         $this->t_row_master->setHTML('cells', $this->getRowTemplate());

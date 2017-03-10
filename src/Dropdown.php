@@ -4,12 +4,17 @@ namespace atk4\ui;
 
 class Dropdown extends Lister
 {
+    // @inheritdoc
     public $ui = 'dropdown';
+
+    // @inheritdoc
+    public $defaultTemplate = 'dropdown.html';
 
     public $js;
 
-    public $defaultTemplate = 'dropdown.html';
-
+    /**
+     * {@inheritdoc}
+     */
     public function renderView()
     {
         if (isset($this->js)) {

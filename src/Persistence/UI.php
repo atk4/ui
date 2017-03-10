@@ -3,6 +3,7 @@
 namespace atk4\ui\Persistence;
 
 use atk4\data\Model;
+use atk4\ui\Exception;
 
 /**
  * This class is used for typecasting model types to the values that will be presented to the user. App will

@@ -5,45 +5,60 @@ namespace atk4\ui;
 /**
  * Class implements Headers.
  *
- * Set this to 1, 2, 3, 4 or 5 if you are looking for Page Header. The size is not affected by
+ * Set size to 1, 2, 3, 4 or 5 if you are looking for Page Header. The size is not affected by
  * header placement on the page. Specify number to constructor like this:
  *
- * $h = new Header(1); // creates H1 header.
+ * $h = new Header(['size'=>1]); // creates <h1>..</h1> header.
  *
- * Alternatively see content headers. Those will emphasise the text in the context of the section.
+ * Alternatively set content headers. Those will emphasize the text in the context of the section.
  *
- * $h = new Header('large');  // make large header <div class="ui large header">..</div>
+ * $h = new Header(['size'=>'large']);  // make large header <div class="ui large header">..</div>
  */
 class Header extends View
 {
+    // @inheritdoc
     public $ui = 'header';
     /**
      * Set to 1, 2, .. 5 for page-headers or small/medium/large for content headers.
+     *
+     * @var int|string
      */
     public $size = null;
 
     /**
      * Specify icon that will be included in a header.
+     *
+     * @var string
      */
     public $icon = null;
 
     /**
      * Include image with a specified source.
+     *
+     * @var string
      */
     public $image = null;
 
     /**
      * Will include sub-header.
+     *
+     * @var string
      */
     public $subHeader = null;
 
     /**
      * Specify alignment of the header.
+     *
+     * @var string
      */
     public $aligned = null;
 
+    // @inheritdoc
     public $defaultTemplate = 'header.html';
 
+    /**
+     * {@inheritdoc}
+     */
     public function renderView()
     {
         if ($this->size) {
