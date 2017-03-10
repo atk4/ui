@@ -1,18 +1,25 @@
 <?php
 
-namespace atk4\ui\Column;
+namespace atk4\ui\TableColumn;
 
 /**
  * Implements Column helper for grid.
  */
 class Status extends Generic
 {
+    /**
+     * Describes list of highlited statuses for this Field
+     *
+     * @var array
+     */
     public $states = [];
 
     /**
      * Pass argument with possible states like this:.
      *
      *  [ 'positive'=>['Paid', 'Archived'], 'negative'=>['Overdue'] ]
+     *
+     * @param array $states List of status=>[value,value,value]
      */
     public function __construct($states)
     {

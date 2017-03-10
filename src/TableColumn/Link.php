@@ -1,14 +1,25 @@
 <?php
 
-namespace atk4\ui\Column;
+namespace atk4\ui\TableColumn;
 
 /**
  * Implements Column helper for grid.
  */
 class Link extends Generic
 {
+    /**
+     * TODO: Refactor so that this goes away!!
+     */
     public $page = null;
 
+    /**
+     * Use
+     *   new Link('http://yahoo.com?id={$id}');
+     * or
+     *   new Link(['order', 'id'=>'{$id}']);
+     *
+     * @param string|array $page Destination definition
+     */
     public function __construct($page = [])
     {
         $this->page = $page[0];
@@ -36,6 +47,13 @@ class Link extends Generic
         return $output;
     }
 
+    /**
+     * Auto-fill tag for the row-id
+     *
+     * @param  [type] $row   [description]
+     * @param  [type] $field [description]
+     * @return [type]        [description]
+     */
     public function getHTMLTags($row, $field)
     {
         return ['id_urlencode'=>$row->id];

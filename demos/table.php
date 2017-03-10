@@ -12,15 +12,15 @@ $bb->on('click', $g->js()->reload());
 
 $g->setModel(new SomeData(), false);
 
-$g->addColumn('name', new \atk4\ui\Column\Link(['details', 'id'=>'{$id}']));
-$g->addColumn('surname', new \atk4\ui\Column\Template('<td class="warning">{$surname}</td>'));
-$g->addColumn('title', new \atk4\ui\Column\Status([
+$g->addColumn('name', new \atk4\ui\TableColumn\Link(['details', 'id'=>'{$id}']));
+$g->addColumn('surname', new \atk4\ui\TableColumn\Template('<td class="warning">{$surname}</td>'));
+$g->addColumn('title', new \atk4\ui\TableColumn\Status([
     'positive'=> ['Prof.'],
     'negative'=> ['Dr.'],
 ]));
 
 $g->addColumn('date');
-$g->addColumn('salary', new \atk4\ui\Column\Money()); //->addClass('right aligned single line', 'all'));
+$g->addColumn('salary', new \atk4\ui\TableColumn\Money()); //->addClass('right aligned single line', 'all'));
 
 $g->addHook('getHTMLTags', function ($table, $row) {
     if ($row->id == 1) {

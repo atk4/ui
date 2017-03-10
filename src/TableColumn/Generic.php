@@ -1,6 +1,6 @@
 <?php
 
-namespace atk4\ui\Column;
+namespace atk4\ui\TableColumn;
 
 /**
  * Implements Column helper for table.
@@ -9,7 +9,11 @@ class Generic
 {
     use \atk4\core\AppScopeTrait;
 
-    // @var \atk4\ui\Table
+    /**
+     * Link back to the table, where column is used
+     *
+     * @var \atk4\ui\Table
+     */
     public $table;
 
     /**
@@ -43,8 +47,8 @@ class Generic
      *
      *    $table->column['name']->setAttr('data', '{$id}');
      *
-     * @param string @attr
-     * @param string @value
+     * @param string $attr
+     * @param string $value
      * @param string $position
      *
      * @return $this
@@ -93,7 +97,7 @@ class Generic
      *
      * Potentially may include elements for sorting.
      *
-     * @param \atk4\data\Field$f
+     * @param \atk4\data\Field $f
      *
      * @return string
      */
@@ -134,5 +138,18 @@ class Generic
     public function getCellTemplate(\atk4\data\Field $f)
     {
         return $this->getTag('td', 'body', '{$'.$f->short_name.'}');
+    }
+
+    /**
+     * Return associative array of tags to be filled with pre-rendered HTML on
+     * a column-basis. Will not be invoked if html-output is turned off for the table.
+     *
+     * @param  array $row    link to row data
+     * @param  string $field field being rendered
+     *
+     * @return [type]        [description]
+     */
+    public function getHTMLTags($row, $field) {
+        return [];
     }
 }

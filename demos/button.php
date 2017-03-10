@@ -79,5 +79,5 @@ $layout->add($view);
 $layout->add(new Header(['Attaching', 'size'=>2]));
 
 $layout->add(['Button', 'Scroll Up', 'top attached']);
-$layout->add(['Grid', 'attached', 'header'=>false])->setSource(['One', 'Two', 'Three', 'Four']);
+$layout->add(['Table', 'attached', 'header'=>false])->setSource(['One', 'Two', 'Three', 'Four']);
 $layout->add(['Button', 'Scroll Up', 'bottom attached']);

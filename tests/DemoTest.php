@@ -40,10 +40,10 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         include 'layout.php';
     }
 
-    public function testGrid()
+    public function testTable()
     {
         $this->expectOutputRegex($this->regex);
-        include 'grid.php';
+        include 'table.php';
         $app->run();
     }
 }
