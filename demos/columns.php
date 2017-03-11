@@ -1,6 +1,6 @@
 <?php
 /**
- * Testing Columns
+ * Testing Columns.
  */
 require 'init.php';
 
@@ -16,7 +16,6 @@ $app->addStyle('
 ');
 
 $page = $layout->add(['View', 'id'=>'example']);
-
 
 $page->add(['Header', 'Basic Column']);
 
@@ -35,13 +34,15 @@ $r->addColumn();
 $page->add(['Header', 'Add elements into columns']);
 
 /**
- * Example box with some content, good for putting into columns
+ * Example box with some content, good for putting into columns.
  */
 class Box extends \atk4\ui\View
 {
     public $ui = 'segment';
     public $content = false;
-    public function init() {
+
+    public function init()
+    {
         parent::init();
         $this->add('Table')->setSource(['One', 'Two', 'Three', 'Four']);
     }
