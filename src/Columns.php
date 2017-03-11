@@ -48,8 +48,11 @@ class Columns extends View
 
     public function renderView()
     {
-        $width = $this->width ?: $this->content ?: $this->calculated_width;
-        $this->content = null;
+        $width = $this->width ?: $this->calculated_width;
+        if ($this->content) {
+            $this->addClass($this->content);
+            $this->content = null;
+        }
 
         if (isset($this->sizes[$width])) {
             $this->addClass($this->sizes[$width].' column');
