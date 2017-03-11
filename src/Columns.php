@@ -14,20 +14,20 @@ class Columns extends View
     public $calculated_width = 0;
 
     /**
-     * Allows Grid to calculate widths automatically
+     * Allows Grid to calculate widths automatically.
      */
-    public $sizes = ['', 'one','two','three','four','five','six','seven',
-    'eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen'];
+    public $sizes = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
+    'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', ];
 
-    public function addColumn($defaults = null) {
-
+    public function addColumn($defaults = null)
+    {
         if (!is_array($defaults)) {
             $defaults = [$defaults];
         }
 
         $size = $defaults[0];
         unset($defaults[0]);
-        $defaults=array_merge(['View',null], $defaults);
+        $defaults = array_merge(['View', null], $defaults);
 
         $column = $this->add($defaults);
 
@@ -42,7 +42,8 @@ class Columns extends View
         return $column;
     }
 
-    public function addRow($width = null) {
+    public function addRow($width = null)
+    {
         return $this->add(new static([$width, 'ui'=>false]))->addClass('row');
     }
 
@@ -58,8 +59,6 @@ class Columns extends View
             $this->addClass($this->sizes[$width].' column');
         }
 
-
         parent::renderView();
     }
-
 }

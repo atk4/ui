@@ -1,6 +1,6 @@
 <?php
 /**
- * Testing Columns
+ * Testing Columns.
  */
 require 'init.php';
 
@@ -68,7 +68,9 @@ class Box extends \atk4\ui\View
 {
     public $ui = 'segment';
     public $content = false;
-    public function init() {
+
+    public function init()
+    {
         parent::init();
         $this->add(['Table','header'=>false])
             ->setSource(['One', 'Two', 'Three', 'Four']);
