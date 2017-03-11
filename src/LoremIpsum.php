@@ -25,17 +25,17 @@ class LoremIpsum extends Text
     public $words = 50;
 
     /**
-     * Returns string of LoremIpsum text
+     * Returns string of LoremIpsum text.
      *
-     * @param  int  $words     Amount of words to generate
+     * @param int $words Amount of words to generate
      *
-     * @return string             "Lorem Ipsum" text
+     * @return string "Lorem Ipsum" text
      */
     public function generateLorem($words)
     {
-        $punctuation = array('. ', '. ', '. ', '. ', '. ', '. ', '. ', '. ', '... ', '! ', '? ');
+        $punctuation = ['. ', '. ', '. ', '. ', '. ', '. ', '. ', '. ', '... ', '! ', '? '];
 
-        $dictionary = array('abbas', 'abdo', 'abico', 'abigo', 'abluo', 'accumsan',
+        $dictionary = ['abbas', 'abdo', 'abico', 'abigo', 'abluo', 'accumsan',
                 'acsi', 'ad', 'adipiscing', 'aliquam', 'aliquip', 'amet', 'antehabeo',
                 'appellatio', 'aptent', 'at', 'augue', 'autem', 'bene', 'blandit',
                 'brevitas', 'caecus', 'camur', 'capto', 'causa', 'cogo', 'comis',
@@ -64,7 +64,7 @@ class LoremIpsum extends Text
                 'utrum', 'uxor', 'valde', 'valetudo', 'validus', 'vel', 'velit',
                 'veniam', 'venio', 'vereor', 'vero', 'verto', 'vicis', 'vindico',
                 'virtus', 'voco', 'volutpat', 'vulpes', 'vulputate', 'wisi', 'ymo',
-                'zelus', );
+                'zelus', ];
 
         $lorem = '';
 
@@ -89,6 +89,7 @@ class LoremIpsum extends Text
             $this->size = $defaults[0];
             unset($defaults[0]);
         }
+
         return parent::setProperties($defaults);
     }
 

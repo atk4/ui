@@ -19,7 +19,6 @@ $app->addStyle('
 
 $page = $layout->add(['View', 'id'=>'example']);
 
-
 $page->add(['Header', 'Basic Usage']);
 
 $c = $page->add(new \atk4\ui\Columns());
@@ -58,11 +57,10 @@ $r->addColumn([2, 'right aligned'])->add(['Icon', 'huge home']);
 $r->addColumn(12)->add(['LoremIpsum', 1]);
 $r->addColumn(2)->add(['Icon', 'huge trash']);
 
-
 $page->add(['Header', 'Add elements into columns and using classes']);
 
 /**
- * Example box component with some content, good for putting into columns
+ * Example box component with some content, good for putting into columns.
  */
 class Box extends \atk4\ui\View
 {
@@ -72,7 +70,7 @@ class Box extends \atk4\ui\View
     public function init()
     {
         parent::init();
-        $this->add(['Table','header'=>false])
+        $this->add(['Table', 'header'=>false])
             ->setSource(['One', 'Two', 'Three', 'Four']);
     }
 }
