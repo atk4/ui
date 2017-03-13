@@ -11,7 +11,11 @@ class Link extends Generic
 
     public function __construct($page = [])
     {
-        $this->page = $page[0];
+        if (!is_array($page)) {
+            $this->page = $page;
+        } elseif (isset($page[0]) {
+            $this->page = $page[0];
+        }
     }
 
     /**
