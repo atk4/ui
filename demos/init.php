@@ -26,7 +26,7 @@ if (isset($layout->leftMenu)) {
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon'=>'cubes']);
     $basic->addItem('Button', ['button']);
     $basic->addItem('Header', ['header']);
-    $basic->addItem('Columns, Tabs, etc', ['columns']);
+    $basic->addItem('Columns', ['columns']);
 
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon'=>'talk']);
     $basic->addItem('JavaScript Events', ['button2']);

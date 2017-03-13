@@ -124,6 +124,20 @@ class App
         return $this;
     }
 
+    /**
+     * Adds a <style> block to the HTML Header. Not escaped. Try to avoid
+     * and use file include instead.
+     *
+     * @param string $style CSS rules, like ".foo { background: red }".
+     */
+    public function addStyle($style)
+    {
+        if (!$this->html) {
+            throw new Exception(['App does not know how to add style']);
+        }
+        $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
+    }
+
     public function normalizeClassNameApp($name, $prefix = null)
     {
         if (strpos('/', $name) === false && strpos('\\', $name) === false) {
