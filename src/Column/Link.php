@@ -12,10 +12,9 @@ class Link extends Generic
     public function __construct($page = [])
     {
         if (!is_array($page)) {
-            $this->page = $page;
-        } elseif (isset($page[0]) {
-            $this->page = $page[0];
+            $page = [$page];
         }
+        $this->page = $page;
     }
 
     /**
@@ -23,9 +22,6 @@ class Link extends Generic
      */
     public function getCellTemplate(\atk4\data\Field $f)
     {
-        if (!is_array($this->page)) {
-            return $this->app->getTag('td', [], $this->app->getTag('a', ['href'=>$this->page], '{$'.$f->short_name.'}'));
-        }
         foreach ($this->page as &$val) {
             $val = str_replace('{$', '___o', $val);
             $val = str_replace('}', 'c___', $val);
