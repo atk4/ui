@@ -147,7 +147,7 @@ class Generic
      * @param array  $row   link to row data
      * @param string $field field being rendered
      *
-     * @return [type] [description]
+     * @return array Associative array with tags and their HTML values.
      */
     public function getHTMLTags($row, $field)
     {

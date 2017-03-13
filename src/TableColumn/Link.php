@@ -47,14 +47,6 @@ class Link extends Generic
         return $output;
     }
 
-    /**
-     * Auto-fill tag for the row-id.
-     *
-     * @param [type] $row   [description]
-     * @param [type] $field [description]
-     *
-     * @return [type] [description]
-     */
     public function getHTMLTags($row, $field)
     {
         return ['id_urlencode'=>$row->id];
