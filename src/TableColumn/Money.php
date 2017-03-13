@@ -1,6 +1,6 @@
 <?php
 
-namespace atk4\ui\Column;
+namespace atk4\ui\TableColumn;
 
 /**
  * Column for formatting money.
