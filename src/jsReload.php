@@ -29,7 +29,7 @@ class jsReload implements jsExpressionable
         $addSpinner = (new jQuery($this->view))->text('')->append("<div class='ui active loader inline'></div>");
 
         $getRequest = (new jQuery())->get($this->cb->getURL(), '', new jsFunction(['data'], [
-          (new jQuery($this->view))->replaceWith(new jsExpression("data"))
+          (new jQuery($this->view))->replaceWith(new jsExpression('data')),
         ]));
 
         $final = new jsChain();
