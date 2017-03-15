@@ -26,13 +26,15 @@ class jsReload implements jsExpressionable
 
     public function jsRender()
     {
+        $addSpinner = (new jQuery($this->view))->text('')->append("<div class='ui active loader inline'></div>");
 
-        // Temporarily here
-        //$r = new jsExpression('document.location=[]', [$this->cb->getURL()]);
+        $getRequest = (new jQuery())->get($this->cb->getURL(), '', new jsFunction(['data'], [
+          (new jQuery($this->view))->replaceWith(new jsExpression("data"))
+        ]));
 
-        // Works but not ideal! Proof of concept!
-        $r = (new jQuery($this->view))->load($this->cb->getURL());
+        $final = new jsChain();
+        $final->_constructorArgs = [$addSpinner, $getRequest];
 
-        return $r->jsRender();
+        return $final->jsRender();
     }
 }
