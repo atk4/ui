@@ -656,7 +656,7 @@ class View implements jsExpressionable
         $this->renderAll();
 
         return
-            $this->getJS().
+            $this->getJS(true).
             $this->template->render();
     }
 
@@ -855,7 +855,7 @@ class View implements jsExpressionable
     /**
      * Get JavaScript objects from this render tree.
      */
-    public function getJS()
+    public function getJS($force_echo = false)
     {
         $actions = [];
 
@@ -871,7 +871,7 @@ class View implements jsExpressionable
 
         $actions['indent'] = '';
 
-        if ($this->app && method_exists($this->app, 'jsReady')) {
+        if (!$force_echo && $this->app && method_exists($this->app, 'jsReady')) {
             $this->app->jsReady($actions);
 
             return '';

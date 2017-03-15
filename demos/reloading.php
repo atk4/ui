@@ -17,5 +17,5 @@ $layout->add(['Header', 'No duplicate JS bindings']);
 $b3 = $layout->add(['Button', 'Reload other button']);
 $b4 = $layout->add(['Button', 'Add one dot']);
 
-$b3->js('click', new \atk4\ui\jsReload($b4));
 $b4->js('click', $b4->js()->text(new \atk4\ui\jsExpression('[]+"."', [$b4->js()->text()])));
+$b3->js('click', new \atk4\ui\jsReload($b4));
