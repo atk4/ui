@@ -26,11 +26,11 @@ class jsReload implements jsExpressionable
     {
         $final = (new jQuery($this->view))
           ->spinner([
-            'loaderText' => ''
+            'loaderText' => '',
           ])
           ->reloadView(
           [
-            'callback' => $this->cb->getURL()
+            'callback' => $this->cb->getURL(),
           ]
         );
 
