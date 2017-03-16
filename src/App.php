@@ -8,6 +8,8 @@ class App
         init as _init;
     }
 
+    use \atk4\core\HookTrait;
+
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
 
@@ -147,9 +149,11 @@ class App
     public function run()
     {
         $this->run_called = true;
+        $this->hook('beforeRender');
         $this->html->template->set('title', $this->title);
         $this->html->renderAll();
         $this->html->template->appendHTML('HEAD', $this->html->getJS());
+        $this->hook('beforeOutput');
         echo $this->html->template->render();
     }
 
