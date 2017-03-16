@@ -110,6 +110,18 @@ class App
         echo 'DEBUG:'.$str.'<br/>';
     }
 
+    /** 
+     * Will perform a preemptive output and terminate. Do not use this
+     * directly, instead call it form Callback, jsCallback or similar
+     * other classes.
+     */
+    public function terminate($output = null)
+    {
+        echo $output;
+        $this->run_called = true; // prevent shutdown function from triggering.
+        exit;
+    }
+
     public function initLayout($layout, $options = [])
     {
         if (is_string($layout)) {

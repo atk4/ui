@@ -18,9 +18,7 @@ class jsReload implements jsExpressionable
         $this->cb = $this->view->add(new Callback('reload'));
 
         $this->cb->set(function () {
-            echo $this->view->render();
-            $this->view->app->run_called = true; // prevent shutdown function from triggering.
-            exit;
+            $this->view->app->terminate($this->view->render());
         });
     }
 
