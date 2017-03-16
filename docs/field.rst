@@ -122,3 +122,15 @@ Integration with Form
 ---------------------
 
 This section explains how Field interracts with the form.
+
+JavaScript on Input
+-------------------
+
+.. php:meth:: jsInput()
+
+Input class implements method jsInput which is identical to :php:meth:`View::js`, except
+that it would target the INPUT element rather then the whole field::
+
+    $field->jsInput(true)->val(123);
+
+
