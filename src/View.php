@@ -750,7 +750,7 @@ class View implements jsExpressionable
 
         // next - binding on a specific event
         $action = (new jQuery($this))
-            ->bind($when, new jsFunction([$chain, $action, 'preventDefault'=>true, 'stopPropagation'=>true]));
+            ->bind($when, new jsFunction([$chain, $action]));
 
         $this->_js_actions[$when][] = $action;
 
