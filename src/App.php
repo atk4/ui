@@ -112,7 +112,7 @@ class App
         echo 'DEBUG:'.$str.'<br/>';
     }
 
-    /** 
+    /**
      * Will perform a preemptive output and terminate. Do not use this
      * directly, instead call it form Callback, jsCallback or similar
      * other classes.
@@ -175,6 +175,7 @@ class App
             }
 
             $obj->app = $this;
+
             return $obj;
         }
     }
