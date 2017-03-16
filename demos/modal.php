@@ -61,4 +61,5 @@ $t->on('click', 'tr', new \atk4\ui\jsModal(
         ]
     )
 ));
+$t->addStyle('cursor', 'pointer');
 
