@@ -31,6 +31,7 @@ if (isset($layout->leftMenu)) {
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon'=>'talk']);
     $basic->addItem('JavaScript Events', ['button2']);
     $basic->addItem('Element Reloading', ['reloading']);
+    $basic->addItem('Modal Dialogs', ['modal']);
 
     $f = basename($_SERVER['PHP_SELF']);
 
