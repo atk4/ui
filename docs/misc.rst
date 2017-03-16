@@ -110,3 +110,98 @@ Basic Usage
 -----------
 
 First argument of constructor or first element in array passed to constructor is considered 
+
+
+.. php:class:: HelloWorld
+
+HelloWorld
+==========
+
+A very basic class that says hello world. This is a manefistation of our component concept. If using
+other PHP frameworks may require you to create multiple files and spend considerable time creating even
+a "Hello, World!" app, then we do it in a single line::
+
+    $app->layout->add('HelloWorld');
+
+The component will output "Hello, World!".
+
+.. php:class:: LoremIpsum
+
+LoremIpsum
+==========
+
+This is another component that is included for learning purposes, but is also quite useful in actual
+development. It saves you a trip to google and some copy-pasting action for a filler text. Simply
+add 'LoremIpsum' component::
+
+    $app->layout->add('LoremIpsum');
+
+You may specify amont of text to be generated with lorem::
+
+    $app->layout->add(['LoremIpsum', 1]); // just add a little one
+
+    // or
+
+    $app->layout->add(new LoremIpsum(5)); // adds a lot of text
+
+.. php:class:: Columns
+
+Columns
+=======
+
+This class implements CSS Grid or ability to divide your elements into columns. If you are an expert
+designer with knowledge of HTML/CSS we recommend you to create your own layouts and templates, but
+if you are not sure how to do that, then using "Columns" class might be a good alternative for some
+basic content arrangements.
+
+.. php:meth:: addColumn()
+
+When you add new component to the page it will typically consume 100% width of its container. Columns
+will break down width into chunks that can be used by other elements::
+
+    $c = $page->add(new \atk4\ui\Columns());
+    $c->addColumn()->add(['LoremIpsum', 1]);
+    $c->addColumn()->add(['LoremIpsum', 1]);
+
+By default width is equally divided by columns. You may specify a custom width expressed as fraction of 16::
+
+    $c = $page->add(new \atk4\ui\Columns());
+    $c->addColumn(6)->add(['LoremIpsum', 1]);
+    $c->addColumn(10)->add(['LoremIpsum', 2]);  // wider column, more filler
+
+You can specify how many columns are expected in a grid, but if you do you can't specify widths of individual
+columns. This seem like a limitation of Semantic UI::
+
+    $c = $page->add(new \atk4\ui\Columns(['width'=>4]));
+    $c->addColumn()->add(new Box(['red']));
+    $c->addColumn([null, 'right floated'])->add(new Box(['blue']));
+
+Rows
+----
+
+When you add columns for a total width which is more than permitted, columns will stack below and form a second
+row. To improve and controll the flow of rows better, you can specify addRow()::
+
+    $c = $page->add(new \atk4\ui\Columns(['internally celled']));
+
+    $r = $c->addRow();
+    $r->addColumn([2, 'right aligned'])->add(['Icon', 'huge home']);
+    $r->addColumn(12)->add(['LoremIpsum', 1]);
+    $r->addColumn(2)->add(['Icon', 'huge trash']);
+
+    $r = $c->addRow();
+    $r->addColumn([2, 'right aligned'])->add(['Icon', 'huge home']);
+    $r->addColumn(12)->add(['LoremIpsum', 1]);
+    $r->addColumn(2)->add(['Icon', 'huge trash']);
+
+This example also uses custom class for Columns ('internally celled') that adds dividers between columns and rows.
+For more information on available classes, see http://semantic-ui.com/collections/grid.html.
+
+Responsiveness and Performance
+------------------------------
+
+Although you can use responsiveness with the Column class to some degree, we recommend that you create your own
+component template where you can have greater control over all classes.
+
+Similarly if you intend to output a lot of data, we recommend you to use :php:class:`Lister` instead with a custom
+template.

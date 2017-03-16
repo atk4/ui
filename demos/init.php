@@ -17,12 +17,16 @@ if (isset($layout->leftMenu)) {
     $form->addItem('Input Field Decoration', ['field']);
     $form->addItem('Data Integration', ['form2']);
 
-    $form = $layout->leftMenu->addGroup(['Grid', 'icon'=>'table']);
-    $form->addItem('Column Formats and Features', ['grid']);
+    $form = $layout->leftMenu->addGroup(['Grid and Table', 'icon'=>'table']);
+    $form->addItem('Data table with formatted columns', ['table']);
+    $form->addItem('Table interractions', ['multitable']);
+    $form->addItem('Grid - Table+Bar+Search+Paginator', ['table']);
+    $form->addItem('Interactivity - Modals and Expanders', ['expander']);
 
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon'=>'cubes']);
     $basic->addItem('Button', ['button']);
     $basic->addItem('Header', ['header']);
+    $basic->addItem('Columns', ['columns']);
 
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon'=>'talk']);
     $basic->addItem('JavaScript Events', ['button2']);

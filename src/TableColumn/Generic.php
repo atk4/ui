@@ -1,16 +1,20 @@
 <?php
 
-namespace atk4\ui\Column;
+namespace atk4\ui\TableColumn;
 
 /**
- * Implements Column helper for grid.
+ * Implements Column helper for table.
  */
 class Generic
 {
     use \atk4\core\AppScopeTrait;
 
-    // @var \atk4\ui\Grid
-    public $grid;
+    /**
+     * Link back to the table, where column is used.
+     *
+     * @var \atk4\ui\Table
+     */
+    public $table;
 
     /**
      * Contains any custom attributes that may be applied on head, body or foot.
@@ -41,10 +45,10 @@ class Generic
      *
      * You can also use the "{$name}" value if you wish to specific row value:
      *
-     *    $grid->column['name']->setAttr('data', '{$id}');
+     *    $table->column['name']->setAttr('data', '{$id}');
      *
-     * @param string @attr
-     * @param string @value
+     * @param string $attr
+     * @param string $value
      * @param string $position
      *
      * @return $this
@@ -89,11 +93,11 @@ class Generic
 
     /**
      * Provided with a field definition (from a model) will return a header
-     * cell, fully formatted to be included in a Grid. (<th>).
+     * cell, fully formatted to be included in a Table. (<th>).
      *
      * Potentially may include elements for sorting.
      *
-     * @param \atk4\data\Field$f
+     * @param \atk4\data\Field $f
      *
      * @return string
      */
@@ -124,8 +128,8 @@ class Generic
      * The must correspond to the name of the field, although you can also use multiple tags. The tag
      * will also be formatted before inserting, see UI Persistence formatting in the documentation.
      *
-     * This method will be executed only once per grid rendering, if you need to format data manually,
-     * you should use $this->grid->addHook('formatRow');
+     * This method will be executed only once per table rendering, if you need to format data manually,
+     * you should use $this->table->addHook('formatRow');
      *
      * @param \atk4\data\Field $f
      *
@@ -134,5 +138,19 @@ class Generic
     public function getCellTemplate(\atk4\data\Field $f)
     {
         return $this->getTag('td', 'body', '{$'.$f->short_name.'}');
+    }
+
+    /**
+     * Return associative array of tags to be filled with pre-rendered HTML on
+     * a column-basis. Will not be invoked if html-output is turned off for the table.
+     *
+     * @param array  $row   link to row data
+     * @param string $field field being rendered
+     *
+     * @return array Associative array with tags and their HTML values.
+     */
+    public function getHTMLTags($row, $field)
+    {
+        return [];
     }
 }

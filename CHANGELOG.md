@@ -1,3 +1,8 @@
+## 1.1.0
+
+* IMPORTANT: Grid renamed into Table
+* IMPORTANT: Column namespace renamed into TableColumn (to avoid confusion with Columns / CSS Grid)
+
 ## 1.0.2
 
 * Button::$rightIcon renamed into $iconRight to follow global pattern

@@ -1,67 +1,67 @@
 
-.. _grid:
+.. _table:
 
 ====
-Grid
+Table
 ====
 
 .. php:namespace:: atk4\ui
 
-Grid is the simplest way to output multiple records of structured data. Grid only works along with the model,
+Table is the simplest way to output multiple records of structured data. Table only works along with the model,
 however you can use :php:meth:`Lister::setSource` to inject static data (although it is slower than simply
 using a model). :ref:`no_data`
 
 
-Using Grid
+Using Table
 ==========
 
-The simplest way to create a grid::
+The simplest way to create a table::
 
-    $grid = $layout->add('Grid');
-    $grid->setModel(new Order($db));
+    $table = $layout->add('Table');
+    $table->setModel(new Order($db));
 
-The grid will be able to automatcally determine all the fields defined in your "Order" model, map them to
+The table will be able to automatcally determine all the fields defined in your "Order" model, map them to
 appropriate column types, implement type-casting and also connect your model with the appropriate data source
 (database) $db.
 
 To change the order or explicitly specify which columns must appear, you can pass list of columns as a second
 argument to setModel::
 
-    $grid = $layout->add('Grid');
-    $grid->setModel(new Order($db), ['name', 'price', 'amount', 'status']);
+    $table = $layout->add('Table');
+    $table->setModel(new Order($db), ['name', 'price', 'amount', 'status']);
 
-Grid will make use of "Only Fields" feature in Agile Data to adjust query for fetching only the necessary
+Table will make use of "Only Fields" feature in Agile Data to adjust query for fetching only the necessary
 columns. See also :ref:`field_visibility`.
 
 Adding Additional Columns
 -------------------------
 
-If you feel that you'd like to add several other columns to your grid, you need to understand what type
+If you feel that you'd like to add several other columns to your table, you need to understand what type
 of columns they would be. 
 
 If your column is designed to carry a value of any type, then it's much better to define it as a Model
 Field. A good example of this scenario is adding "total" column to list of your invoice lines that
 already contain "price" and "amount" values. Start by adding new Field in the model that is associated
-with your grid::
+with your table::
 
-    $grid = $layout->add('Grid');
+    $table = $layout->add('Table');
     $order = new Order($db);
 
     $order->addExpression('total', '[price]*[amount]')->type = 'money';
 
-    $grid->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
+    $table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
 
-The type of the Model Field determines the way how value is presented in the grid. I've specified
+The type of the Model Field determines the way how value is presented in the table. I've specified
 value to be 'money' which makes column align values to the right, format it with 2 decimal signs
 and possibly add a currency sign.
 
 To learn about value formatting, read documentation on :ref:`ui_persistence`.
 
-Grid object does not contain any information about your fields (such as captions) but instead it will
+Table object does not contain any information about your fields (such as captions) but instead it will
 consult your Model for the necessary field information. If you are willing to define the type but also
 specify the caption, you can use code like this::
 
-    $grid = $layout->add('Grid');
+    $table = $layout->add('Table');
     $order = new Order($db);
 
     $order->addExpression('total', [
@@ -70,20 +70,20 @@ specify the caption, you can use code like this::
         'caption'=>'Total Price'
     ]);
 
-    $grid->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
+    $table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
 
 Column Objects
 --------------
 
-Grid object relies on a separate class: \atk4\ui\Column\Generic to present most of the values. The goals
+Table object relies on a separate class: \atk4\ui\TableColumn\Generic to present most of the values. The goals
 of the column object is to format anything around the actual values. The type = 'money' will result in
 a custom formatting of the value, but will also require column to be right-aligned. To simplify this,
-type = 'money' will use a different column class - :php:class:`Column\Money`. There are several others,
+type = 'money' will use a different column class - :php:class:`TableColumn\Money`. There are several others,
 but first we need to look at the generic column and understand it's base capabilities:
 
-.. php:class:: Column\Generic
+.. php:class:: TableColumn\Generic
 
-A class resposnible for cell formatting. This class defines 3 main methods that is used by the Grid
+A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
 when constructing HTML:
 
 .. php:method:: getHeaderCell(\atk4\data\Field $f)
@@ -96,13 +96,13 @@ if necessary and localize them.
 
 .. php:method:: getTotalsCell(\atk4\data\Field $f, $value)
 
-Provided with the field and the value, format the cell for the footer "totals" column. Grid
-can rely on various strategies for calculating totals. See :php:meth:`Grid::addTotals`.
+Provided with the field and the value, format the cell for the footer "totals" column. Table
+can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
 
 .. php:method:: getCellTemplate(\atk4\data\Field f)
 
 Provided with a field, this method will respond with HTML **template**. In order to keep
-performance of Web Application at the maximum, Grid will execute getCellTemplate for all the
+performance of Web Application at the maximum, Table will execute getCellTemplate for all the
 fields once. When iterating, a combined template will be used to display the values.
 
 The template must not incorporate field values (simply because related model will not be
@@ -126,47 +126,47 @@ Sometimes you do want to inject HTML instead of using row values:
 .. php:method:: getHTMLTags($model, $field = null)
 
 Return array of HTML tags that will be injected into the row template. See
-:php:ref:`grid_html` for further example.
+:php:ref:`table_html` for further example.
 
 Advanced Column Denifitions
 ---------------------------
 
-.. php:class:: Grid
+.. php:class:: Table
 
-Grid defines a method `columnFactory`, which returns Column object which is to be used to
+Table defines a method `columnFactory`, which returns Column object which is to be used to
 display values of specific model Field. 
 
 .. php:method:: columnFactory(\atk4\data\Field $f)
 
-If the value of the field can be displayed by :php:class:`Column\Generic` then Grid will
+If the value of the field can be displayed by :php:class:`TableColumn\Generic` then Table will
 respord with object of this class. Since the default column does not contain any customization,
-then to save memory Grid will re-use the same objects for all generic fields.
+then to save memory Table will re-use the same objects for all generic fields.
 
 .. php:attr:: default_column
 
 Protected property that will contain "generic" column that will be used to format all
 columns, unless a different column type is specified or the Field type will require a use
 of a different class (e.g. 'money'). Value will be initialized after first call to
-:php:meth:`Grid::addColumn`
+:php:meth:`Table::addColumn`
 
 .. php:attr:: columns
 
     Contains array of defined columns.
 
-.. php:method:: addColumn([$name], Column\Generic $column = null, \atk4\ui\Data\Field = null)
+.. php:method:: addColumn([$name], TableColumn\Generic $column = null, \atk4\ui\Data\Field = null)
 
-Adds a new column to the grid. This method has several few usages, here is the most basic one::
+Adds a new column to the table. This method has several few usages, here is the most basic one::
 
-    $grid->setModel(new Order($db), ['name', 'price', 'total']);
-    $grid->addColumn(new \atk4\ui\Column\Delete());
+    $table->setModel(new Order($db), ['name', 'price', 'total']);
+    $table->addColumn(new \atk4\ui\TableColumn\Delete());
 
 The above code will add a new extra column that will only contain 'delete' icon. When clicked
 it will automatically delete the record.
 
 You have probably noticed, that I have omitted the name for this column. If name is not specified
 (null) then the Column object will receive "null" when the call to
-:php:meth:`Column\Generic::getHeaderCell`, :php:meth:`Column\Generic::getTotalsCell` and 
-:php:meth:`Column\Generic::getCellTemplate` will be made. The :php:class:`Column\Generic` will
+:php:meth:`TableColumn\Generic::getHeaderCell`, :php:meth:`TableColumn\Generic::getTotalsCell` and 
+:php:meth:`TableColumn\Generic::getCellTemplate` will be made. The :php:class:`TableColumn\Generic` will
 not be able to cope with this situations, but many other column types are perfectly fine with this.
 
 Some column classes will be able to take some information from a specified column, but will work
@@ -177,11 +177,11 @@ method will rely on 3rd argument to create a new field for you. Here is example 
 the "total" column value (as above) but using PHP math instead of doing it inside database::
 
 
-    $grid = $layout->add('Grid');
+    $table = $layout->add('Table');
     $order = new Order($db);
 
-    $grid->setModel($order, ['name', 'price', 'amount', 'status']);
-    $grid->addColumn('total', new \atk4\data\Field\Calculated(
+    $table->setModel($order, ['name', 'price', 'amount', 'status']);
+    $table->addColumn('total', new \atk4\data\Field\Calculated(
         function($row) {
             return $row['price'] * $row['amount'];
         }));
@@ -189,18 +189,18 @@ the "total" column value (as above) but using PHP math instead of doing it insid
 If you execute this code, you'll notice that the "total" column is now displayed last. If you
 wish to position it before status, you can use the final format of addColumn()::
 
-    $grid = $layout->add('Grid');
+    $table = $layout->add('Table');
     $order = new Order($db);
 
-    $grid->setModel($order, ['name', 'price', 'amount']);
-    $grid->addColumn('total', new \atk4\data\Field\Calculated(
+    $table->setModel($order, ['name', 'price', 'amount']);
+    $table->addColumn('total', new \atk4\data\Field\Calculated(
         function($row) {
             return $row['price'] * $row['amount'];
         }));
-    $grid->addColumn('status');
+    $table->addColumn('status');
 
 This way we don't populate the column through setModel() and instead populate it manually later
-through addColumn(). This will use an identical logic (see :php:meth:`Grid::columnFactory`). For
+through addColumn(). This will use an identical logic (see :php:meth:`Table::columnFactory`). For
 your convenience there is a way to add multiple columns efficiently.
 
 .. php:method:: addColumns($names);
@@ -210,25 +210,25 @@ your convenience there is a way to add multiple columns efficiently.
 
 As a final note in this section - you can re-use column objects multiple times::
 
-    $c_gap = new \atk4\ui\Column\Template('<td> ... <td>');
+    $c_gap = new \atk4\ui\TableColumn\Template('<td> ... <td>');
     
-    $grid->addColumn($c_gap);
-    $grid->setModel(new Order($db), ['name', 'price', 'amount']);
-    $grid->addColumn($c_gap);
-    $grid->addColumns(['total','status'])
-    $grid->addColumn($c_gap);
+    $table->addColumn($c_gap);
+    $table->setModel(new Order($db), ['name', 'price', 'amount']);
+    $table->addColumn($c_gap);
+    $table->addColumns(['total','status'])
+    $table->addColumn($c_gap);
 
-This will result in 3 gap columns rendered to the left, middle and right of your Grid.
+This will result in 3 gap columns rendered to the left, middle and right of your Table.
 
-.. _grid_html:
+.. _table_html:
 
 Injecting HTML
 --------------
 
-The tag will override model value. Here is example usage of :php:meth:`Column\Generic::getHTMLTags`::
+The tag will override model value. Here is example usage of :php:meth:`TableColumn\Generic::getHTMLTags`::
 
 
-    class ExpiredColumn extends \atk4\ui\Column\Generic
+    class ExpiredColumn extends \atk4\ui\TableColumn\Generic
         public function getCellTemplate()
         {
             return '{$_expired}';
@@ -244,17 +244,17 @@ The tag will override model value. Here is example usage of :php:meth:`Column\Ge
         }
     }
 
-Your column now can be added to any grid::
+Your column now can be added to any table::
 
-    $grid->addColumn(new ExpiredColumn());
+    $table->addColumn(new ExpiredColumn());
 
-IMPORTANT: HTML injection will work unless :php:attr:`Grid::use_html_tags` property is disabled (for performance).
+IMPORTANT: HTML injection will work unless :php:attr:`Table::use_html_tags` property is disabled (for performance).
 
-Grid Data Handling
+Talbe Data Handling
 ==================
 
-Grid is very similar to :php:class:`Lister` in the way how it loads and displays data. To control which
-data Grid will be displaying you need to properly specify the model and persistence. The following two
+Table is very similar to :php:class:`Lister` in the way how it loads and displays data. To control which
+data Table will be displaying you need to properly specify the model and persistence. The following two
 examples will show you how to display list of "files" inside your Dropbox folder and how to display list
 of issues from your Github repository::
 
@@ -262,14 +262,14 @@ of issues from your Github repository::
     $dropbox = \atk4\dropbox\Persistence($db_config);
     $files = new \atk4\dropbox\Model\File($dropbox);
 
-    $layout->add('Grid')->setModel($files);
+    $layout->add('Table')->setModel($files);
 
 
     // Show contents of dropbox
     $github = \atk4\github\Persistence_Issues($github_api_config);
     $issues = new \atk4\github\Model\Issue($github);
 
-    $layout->add('Grid')->setModel($issues);
+    $layout->add('Table')->setModel($issues);
 
 This example demonstrates that by selecting a 3rd party persistence implementation, you can access
 virtually any API, Database or SQL resource and it will always take care of formatting for you as well
@@ -278,48 +278,48 @@ as handle field types.
 I must also note that by simply adding 'Delete' column (as in example above) will allow your app users
 to delete files from dropbox or issues from GitHub. 
 
-Grid follows a "universal data design" principles established by Agile UI to make it compatible with
+Table follows a "universal data design" principles established by Agile UI to make it compatible with
 all the different data persitences. (see :php:ref:`universal_data_access`)
 
 For most applications, however, you would be probably using internally defined models that rely on
-data stored inside your own database. Either way, several principles apply to the way how Grid works.
+data stored inside your own database. Either way, several principles apply to the way how Table works.
 
-Grid Rendering Steps
+Table Rendering Steps
 --------------------
 
-Once model is specified to the Grid it will keep the object until render process will begin. Grid
-columns can be defined anytime and will be stored in the :php:attr:`Grid::columns` property. Columns
+Once model is specified to the Table it will keep the object until render process will begin. Table
+columns can be defined anytime and will be stored in the :php:attr:`Table::columns` property. Columns
 without defined name will have a numeric index.
 
-During the render process (see :php:meth:`View::renderView`) Grid will perform the following actions:
+During the render process (see :php:meth:`View::renderView`) Table will perform the following actions:
 
 1. Generate header row.
 2. Generate template for data rows.
 3. Iterate through rows
-    3.1 Current row data is accessible through $grid->model property.
-    3.2 Update Totals if :php:meth:`Grid::addTotals` was used.
-    3.3 Insert row values into :php:attr:`Grid::t_row`
+    3.1 Current row data is accessible through $table->model property.
+    3.2 Update Totals if :php:meth:`Table::addTotals` was used.
+    3.3 Insert row values into :php:attr:`Table::t_row`
         3.3.1 Template relies on :ref:`ui_persistence` for formatting values
     3.4 Collect HTML tags from 'getHTMLTags' hook.
     3.5 Collect getHTMLTags() from columns objects
-    3.6 Inject HTML into :php:attr:`Grid::t_row` template
+    3.6 Inject HTML into :php:attr:`Table::t_row` template
     3.7 Render and append row template to Table Body ({$Body})
     3.8 Clear HTML tag values from template.
-4. If no rows were displayed, then "empty message" will be shown (see :php:attr:`Grid::t_empty`).
+4. If no rows were displayed, then "empty message" will be shown (see :php:attr:`Table::t_empty`).
 5. If :php:meth:`addTotals` was used, append totals row to table footer.
 
 
 Advanced Usage
 ==============
 
-Grid is a very flexible object and can be extended through various means. This chapter will focus
+Table is a very flexible object and can be extended through various means. This chapter will focus
 on various requirements and will provide a way how to achieve that.
 
 Toolbar, Quick-search and Paginator
 -----------------------------------
 
-It's quite common to have "Toolbar" above the grid and pagination below. The toolbar often hosts
-a Quicksearch form too. Default Grid implementation does not have any of these features, however
+It's quite common to have "Toolbar" above the table and pagination below. The toolbar often hosts
+a Quicksearch form too. Default Table implementation does not have any of these features, however
 you can use a separate 'Advanced Grid' add-on, which extends standard Grid functionality::
 
 
@@ -341,7 +341,7 @@ you can use a separate 'Advanced Grid' add-on, which extends standard Grid funct
         $page->add('Info')->set('This UI will appear in-line in your grid');
     });
 
-    // Standartise use of 'Actions' through Column\Action
+    // Standartise use of 'Actions' through TableColumn\Action
     $grid->addAction('Delete');
 
 The implementation for Advanced Grid is scheduled to be added in Agile UI 1.1, check with
@@ -349,10 +349,10 @@ http://github.com/atk4/ui on the progress.
 
 Column attributes and classes
 =============================
-By default Grid will include ID for each row: `<tr data-id="123">`. The following code example
+By default Table will include ID for each row: `<tr data-id="123">`. The following code example
 demonstrates how various standard column types are relying on this property::
 
-    $grid->on('click', 'td', new jsExpression(
+    $table->on('click', 'td', new jsExpression(
         'document.location=page.php?id=[]', 
         [(new jQuery())->closest('tr')->data('id')]
     ));
@@ -362,7 +362,7 @@ See also :ref:`js`.
 Static Attributes and classes
 -----------------------------
 
-.. php:class:: Column\Generic
+.. php:class:: TableColumn\Generic
 
 .. php:method:: addClass($class, $scope = 'body');
 
@@ -372,31 +372,31 @@ Static Attributes and classes
 The following code will make sure that contens of the column appear on a single line by
 adding class "single line" to all body cells::
 
-    $grid->addColumn('name', (new \atk4\ui\Column()->addClass('single line')));
+    $table->addColumn('name', (new \atk4\ui\TableColumn\Generic()->addClass('single line')));
 
 If you wish to add a class to 'head' or 'foot' or 'all' cells, you can pass 2nd argument to addClass::
 
-    $grid->addColumn('name', (new \atk4\ui\Column()->addClass('right aligned', 'all')));
+    $table->addColumn('name', (new \atk4\ui\TableColumn\Generic()->addClass('right aligned', 'all')));
 
 There are several ways to make your code more readable::
 
-    $grid->addColumn('name', new \atk4\ui\Column\Generic())
+    $table->addColumn('name', new \atk4\ui\TableColumn\Generic())
         ->addClass('right aligned', 'all');
 
 Or if you wish to use factory, the syntax is::
 
-    $grid->addColumn('name', 'Generic')
+    $table->addColumn('name', 'Generic')
         ->addClass('right aligned', 'all');
 
 For setting an attribute you can use setAttr() method::
 
-    $grid->addColumn('name', 'Generic')
+    $table->addColumn('name', 'Generic')
         ->setAttr('colspan', 2, 'all');
 
 Setting a new value to the attribute will override previous value.
 
-Please note that if you are redefining :php:meth:`Column\Generic::getHeaderCell`, 
-:php:meth:`Column\Generic::getTotalsCell` or :php:meth:`Column\Generic::getCellTemplate`
+Please note that if you are redefining :php:meth:`TableColumn\Generic::getHeaderCell`, 
+:php:meth:`TableColumn\Generic::getTotalsCell` or :php:meth:`TableColumn\Generic::getCellTemplate`
 and you wish to preserve functionality of setting custom attributes and
 classes, you should generate your TD/TH tag through getTag method.
 
@@ -409,37 +409,37 @@ classes, you should generate your TD/TH tag through getTag method.
 Using dynamic values
 --------------------
 
-Body attributes will be embedded into the template by the default :php:meth:`Column\Generic::getCellTemplate`,
+Body attributes will be embedded into the template by the default :php:meth:`TableColumn\Generic::getCellTemplate`,
 but if you specify attribute (or class) value as a tag, then it will be auto-filled
 with row value or injected HTML.
 
-For further examples of and advanced usage, see implementation of :php:class:`Column\Status`.
+For further examples of and advanced usage, see implementation of :php:class:`TableColumn\Status`.
 
 
 
 Standard Column Types
 =====================
 
-In addition to :php:class:`Column\Generic`, Agile UI includes several column implementations.
+In addition to :php:class:`TableColumn\Generic`, Agile UI includes several column implementations.
 
 Link
 ----
 
-.. php:class:: Column\Link
+.. php:class:: TableColumn\Link
 
 Put `<a href..` link over the value of the cell. The page property can be specified to constructor. There
 are two usage patterns. With the first you can specify full URL as a string::
 
-    $grid->addColumn('name', new \atk4\ui\Column\Link('http://google.com/?q={$name}'));
+    $table->addColumn('name', new \atk4\ui\TableColumn\Link('http://google.com/?q={$name}'));
 
 The name value will be automatically inserted. The other option is to use page array::
 
-    $grid->addColumn('name', new \atk4\ui\Column\Link(['details', 'id'=>'{$id}', 'status'=>'{$status}']));
+    $table->addColumn('name', new \atk4\ui\TableColumn\Link(['details', 'id'=>'{$id}', 'status'=>'{$status}']));
 
 Money
 -----
 
-.. php:class:: Column\Money
+.. php:class:: TableColumn\Money
 
 Helps formatting monetary values. Will align value to the right and if value is less than zero will also
 use red text. The money cells are not wrapped.
@@ -449,7 +449,7 @@ For the actual number formatting, see :ref:`ui_persistence`
 Status
 ------
 
-.. php:class:: Column\Status
+.. php:class:: TableColumn\Status
 
 Allow you to set highlight class and icon based on column value. This is most suitable for columns that
 contain pre-defined values. 
@@ -460,7 +460,7 @@ to use different icons and colors to emphasise status::
 
     $states = [ 'positive'=>['paid', 'archived'], 'negative'=>['declined'] ];
 
-    $grid->addColumn('status', new \atk4\ui\Column\Status($states));
+    $table->addColumn('status', new \atk4\ui\TableColumn\Status($states));
 
 Current list of states supported:
 
@@ -473,14 +473,14 @@ Current list of states supported:
 Template
 --------
 
-.. php:class:: Column\Template
+.. php:class:: TableColumn\Template
 
 This column is suitable if you wish to have custom cell formatting but do not wish to go through
 the trouble of setting up your own class.
 
 If you wish to display movie rating "4 out of 10" based around the column "rating", you can use::
 
-    $grid->addColumn('rating', new \atk4\ui\Column\Template('{$rating} out of 10'));
+    $table->addColumn('rating', new \atk4\ui\TableColumn\Template('{$rating} out of 10'));
 
 Template may incorporate values from multiple fields in a data row, but current implementation
 will only work if you asign it to a primary column (by passing 1st argument to addColumn).
@@ -491,10 +491,7 @@ will only work if you asign it to a primary column (by passing 1st argument to a
 Action Column
 =============
 
-.. note:: Action column is planned for Agile UI 1.1.
-
-
-.. php:class:: Column\Action
+.. php:class:: TableColumn\Action
 
 This column allows you to incorporate any of the standard :ref:`actions` into your column.
 The functionality and diveristy of actions is seamlessly integrated into the column and
@@ -502,7 +499,7 @@ the actions are performed on the row level.
 
 The basic usage format is::
 
-    $act = $grid->addColumn(new \atk4\ui\Column\Action())
+    $act = $table->addColumn(new \atk4\ui\Column\Action())
 
     // Pencil icon linking to a URL
     $act->addAction(new \atk4\ui\Action\Link(

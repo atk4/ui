@@ -4,12 +4,12 @@
 
 namespace atk4\ui;
 
-class Grid extends Lister
+class Table extends Lister
 {
     use \atk4\core\HookTrait;
 
     // Overrides
-    public $defaultTemplate = 'grid.html';
+    public $defaultTemplate = 'table.html';
     public $ui = 'table';
     public $content = false;
 
@@ -30,7 +30,7 @@ class Grid extends Lister
     public $columns = [];
 
     /**
-     * Allows you to inject HTML into grid using getHTMLTags hook and column call-backs.
+     * Allows you to inject HTML into table using getHTMLTags hook and column call-backs.
      * Switch this feature off to increase performance at expense of some row-specific HTML.
      *
      * @var bool
@@ -91,7 +91,7 @@ class Grid extends Lister
      * Defines a new column for this field. You need two objects for field to
      * work.
      *
-     * First is being Model field. If your Grid is already associated with
+     * First is being Model field. If your Table is already associated with
      * the model, it will automatically pick one by looking up element
      * corresponding to the $name.
      *
@@ -123,7 +123,7 @@ class Grid extends Lister
             $columnDef = $this->_columnFactory($field);
         } elseif (is_string($columnDef) || is_array($columnDef)) {
             if (!$this->app) {
-                throw new Exception(['You can only specify column type by name if Grid is in a render-tree']);
+                throw new Exception(['You can only specify column type by name if Table is in a render-tree']);
             }
 
             $columnDef = $this->add($columnDef, $name);
@@ -131,7 +131,7 @@ class Grid extends Lister
             $this->add($columnDef, $name);
         }
 
-        $columnDef->grid = $this;
+        $columnDef->table = $this;
         $this->columns[$name] = $columnDef;
 
         return $columnDef;
@@ -153,7 +153,7 @@ class Grid extends Lister
 
         default:
             if (!$this->default_column) {
-                $this->default_column = $this->add(new Column\Generic());
+                $this->default_column = $this->add(new TableColumn\Generic());
             }
 
             return $this->default_column;
@@ -177,7 +177,7 @@ class Grid extends Lister
 
     /**
      * Init method will create one column object that will be used to render
-     * all columns in the grid unless you have specified a different
+     * all columns in the table unless you have specified a different
      * column object.
      */
     public function init()
@@ -197,7 +197,7 @@ class Grid extends Lister
     }
 
     /**
-     * Sets data Model of Grid.
+     * Sets data Model of Table.
      *
      * If $columns is not defined, then automatically will add columns for all
      * visible model fields. If $columns is set to false, then will not add
@@ -238,7 +238,7 @@ class Grid extends Lister
     public function renderView()
     {
         if (!$this->columns) {
-            throw new Exception(['Grid does not have any columns defined', 'columns'=>$this->columns]);
+            throw new Exception(['Table does not have any columns defined', 'columns'=>$this->columns]);
         }
 
         // Generate Header Row
