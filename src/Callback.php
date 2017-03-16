@@ -13,8 +13,8 @@ use atk4\core\TrackableTrait;
  * $button->set('Click to do something')->link(
  *      $button
  *          ->add('Callback')
- *          ->set(function(){  
- *              do_something(); 
+ *          ->set(function(){
+ *              do_something();
  *          })
  *          ->getURL()
  *  );
@@ -25,7 +25,7 @@ class Callback
     use AppScopeTrait;
 
     /**
-     * Will look for trigger in the POST data. Will re-use existing URL, but 
+     * Will look for trigger in the POST data. Will re-use existing URL, but
      * $_POST[$this->name] will have to be set.
      */
     public $POST_trigger = false;
@@ -33,7 +33,7 @@ class Callback
     public $triggered = false;
 
     /**
-     * Initialize object and set default properties
+     * Initialize object and set default properties.
      *
      * @param array|string $defaults
      *
@@ -55,7 +55,6 @@ class Callback
             }
         }
     }
-
 
     /**
      * Executes user-specified action when call-back is triggered.

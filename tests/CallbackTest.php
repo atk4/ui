@@ -2,9 +2,6 @@
 
 namespace atk4\ui\tests;
 
-use atk4\ui\Button;
-use atk4\ui\Icon;
-
 class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 {
     /**
@@ -31,7 +28,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
         // simulate triggering
         $_GET[$cb->name] = true;
 
-        $cb->set(function($x) use (&$var) { 
+        $cb->set(function ($x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -47,7 +44,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
         $cb = $app->add('Callback');
 
         // simulate triggering
-        $cb->set(function($x) use (&$var) { 
+        $cb->set(function ($x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -65,7 +62,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
         // simulate triggering
         $_POST[$cb->name] = true;
 
-        $cb->set(function($x) use (&$var) { 
+        $cb->set(function ($x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -83,7 +80,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
         // simulate triggering
         $_GET[$cb->name] = true;
 
-        $cb->set(function($x) use (&$var) { 
+        $cb->set(function ($x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -104,7 +101,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
         $cb = $app->add('CallbackLater');
 
         // simulate triggering
-        $cb->set(function($x) use (&$var) { 
+        $cb->set(function ($x) use (&$var) {
             $var = $x;
         }, [34]);
 
