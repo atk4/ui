@@ -7,10 +7,8 @@ namespace atk4\ui;
  */
 class jsModal extends jsExpression
 {
-
     public function __construct($title, $url)
     {
-
         $content = '
   <i class="close icon"></i>
   <div class="header">
@@ -27,8 +25,7 @@ class jsModal extends jsExpression
 
         parent::__construct('
         var m=$("<div>").appendTo("body").addClass("ui fullscreen scrolling modal").html([content]);
-        m.modal({onHide: function() { m.children().remove(); return true; }}).modal("show").find(".content").load([url], function() { m.modal("refresh"); })', 
+        m.modal({onHide: function() { m.children().remove(); return true; }}).modal("show").find(".content").load([url], function() { m.modal("refresh"); })',
             ['content'=>$content, 'url'=>$url]);
     }
-
 }

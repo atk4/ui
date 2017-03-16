@@ -23,8 +23,8 @@ class Counter extends \atk4\ui\FormField\Line
 $layout->add(['Header', 'Virtual Page Logic']);
 
 $vp = $layout->add('VirtualPage'); // this page will not be visible unless you trigger it specifically
-$vp->add(['Header','Contens of your pop-up here']);
-$vp->add(['LoremIpsum','size'=>2]);
+$vp->add(['Header', 'Contens of your pop-up here']);
+$vp->add(['LoremIpsum', 'size'=>2]);
 $vp->add(new Counter());
 
 $bar = $layout->add('Buttons');
@@ -39,7 +39,6 @@ $bar->add('Button')->set('Open in pop-up mode')->on('click', new \atk4\ui\jsExpr
 $bar->add('Button')->set('Load in Modal')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut')));
 
 $bar->add('Button')->set('Load slowly in Modal')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut').'&slow=true'));
-if(isset($_GET['slow'])) {
+if (isset($_GET['slow'])) {
     sleep(1);
 }
-

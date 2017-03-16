@@ -32,7 +32,7 @@ class Callback
 
     /**
      * Contains either false if callback wasn't triggered or the value passed
-     * as an argument to a call-back:
+     * as an argument to a call-back:.
      *
      * e.g. following URL of getURL('test') will result in $triggered = 'test';
      */
