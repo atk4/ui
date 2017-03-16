@@ -168,7 +168,12 @@ class App
         } else {
             list($obj) = func_get_args();
 
+            if (!is_object($obj)) {
+                throw new Exception(['Incorrect use of App::add']);
+            }
+
             $obj->app = $this;
+            return $obj;
         }
     }
 
