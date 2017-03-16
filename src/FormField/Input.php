@@ -42,7 +42,7 @@ class Input extends Generic
 
     /**
      * Method similar to View::js() however will adjust selector
-     * to target the "input" element. 
+     * to target the "input" element.
      *
      * $field->jsInput(true)->val(123);
      */
