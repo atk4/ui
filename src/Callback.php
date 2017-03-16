@@ -5,14 +5,57 @@ namespace atk4\ui;
 use atk4\core\AppScopeTrait;
 use atk4\core\TrackableTrait;
 
+/**
+ * Add this object to your render tree and it will expose a unique URL which, when
+ * executed directly will perform a PHP callback that you set().
+ *
+ * $button = $layout->add('Button');
+ * $button->set('Click to do something')->link(
+ *      $button
+ *          ->add('Callback')
+ *          ->set(function(){  
+ *              do_something(); 
+ *          })
+ *          ->getURL()
+ *  );
+ */
 class Callback
 {
     use TrackableTrait;
     use AppScopeTrait;
 
+    /**
+     * Will look for trigger in the POST data. Will re-use existing URL, but 
+     * $_POST[$this->name] will have to be set.
+     */
     public $POST_trigger = false;
 
     public $triggered = false;
+
+    /**
+     * Initialize object and set default properties
+     *
+     * @param array|string $defaults
+     *
+     * @throws Exception
+     */
+    public function __construct($defaults = [])
+    {
+        if (!is_array($defaults)) {
+            throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
+        }
+
+        foreach ($defaults as $key => $val) {
+            if (property_exists($this, $key)) {
+                if (is_array($val)) {
+                    $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
+                } elseif ($val !== null) {
+                    $this->$key = $val;
+                }
+            }
+        }
+    }
+
 
     /**
      * Executes user-specified action when call-back is triggered.
@@ -24,6 +67,10 @@ class Callback
      */
     public function set($callback, $args = [])
     {
+        if (!$this->app) {
+            throw new Exception(['Call-back must be part of a RenderTree']);
+        }
+
         if ($this->POST_trigger) {
             if (isset($_POST[$this->name])) {
                 $this->triggered = true;
