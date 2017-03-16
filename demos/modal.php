@@ -48,18 +48,17 @@ $t = $layout->add(['Table', 'celled'=>true]);
 $t->setModel(new SomeData());
 
 $frame = $layout->add('VirtualPage');
-$frame->set(function($frame) {
+$frame->set(function ($frame) {
     $frame->add(['Header', 'Clicked row with ID = '.$_GET['id']]);
 });
 
 $t->on('click', 'tr', new \atk4\ui\jsModal(
-    'Row Clicked', 
+    'Row Clicked',
     new \atk4\ui\jsExpression(
         '[]+"&id="+[]', [
-            $frame->getURL('cut'), 
-            (new \atk4\ui\jQuery(new \atk4\ui\jsExpression('this')))->data('id')
+            $frame->getURL('cut'),
+            (new \atk4\ui\jQuery(new \atk4\ui\jsExpression('this')))->data('id'),
         ]
     )
 ));
 $t->addStyle('cursor', 'pointer');
-

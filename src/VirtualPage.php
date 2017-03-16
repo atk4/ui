@@ -25,7 +25,7 @@ class VirtualPage extends View
 
         $this->cb->set(function () {
             if ($this->cb->triggered && $this->fx) {
-                foreach($this->fx as $fx) {
+                foreach ($this->fx as $fx) {
                     $fx($this);
                 }
             }
@@ -60,12 +60,16 @@ class VirtualPage extends View
         });
     }
 
-    public function set($fx = [], $junk = null) {
-        if (!$fx) return;
+    public function set($fx = [], $junk = null)
+    {
+        if (!$fx) {
+            return;
+        }
         if (!is_array($fx)) {
             $fx = [$fx];
         }
         $this->fx = $fx;
+
         return $this;
     }
 
