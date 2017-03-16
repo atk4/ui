@@ -32,6 +32,8 @@ class App
 
     public $run_called = false;
 
+    public $is_rendering = false;
+
     public $ui_persistence = null;
 
     public function __construct($defaults = [])
@@ -181,9 +183,11 @@ class App
     {
         $this->run_called = true;
         $this->hook('beforeRender');
+        $this->is_rendering = true;
         $this->html->template->set('title', $this->title);
         $this->html->renderAll();
         $this->html->template->appendHTML('HEAD', $this->html->getJS());
+        $this->is_rendering = false;
         $this->hook('beforeOutput');
         echo $this->html->template->render();
     }
