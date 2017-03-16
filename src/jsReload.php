@@ -23,10 +23,9 @@ class jsReload implements jsExpressionable
 
     public function jsRender()
     {
-
         $final = (new jQuery($this->view))->reloadView(
           [
-            'callback' => $this->cb->getURL()
+            'callback' => $this->cb->getURL(),
           ]
         );
 
