@@ -42,3 +42,23 @@ $bar->add('Button')->set('Load slowly in Modal')->on('click', new \atk4\ui\jsMod
 if (isset($_GET['slow'])) {
     sleep(1);
 }
+
+$layout->add(['Header', 'Modal when you click on table row']);
+$t = $layout->add(['Table', 'celled'=>true]);
+$t->setModel(new SomeData());
+
+$frame = $layout->add('VirtualPage');
+$frame->set(function($frame) {
+    $frame->add(['Header', 'Clicked row with ID = '.$_GET['id']]);
+});
+
+$t->on('click', 'tr', new \atk4\ui\jsModal(
+    'Row Clicked', 
+    new \atk4\ui\jsExpression(
+        '[]+"&id="+[]', [
+            $frame->getURL('cut'), 
+            (new \atk4\ui\jQuery(new \atk4\ui\jsExpression('this')))->data('id')
+        ]
+    )
+));
+
