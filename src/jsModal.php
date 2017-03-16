@@ -9,6 +9,10 @@ class jsModal extends jsExpression
 {
     public function __construct($title, $url)
     {
+        if ($url instanceof VirtualPage) {
+            $url = $url->getURL('cut');
+        }
+
         $content = '
   <i class="close icon"></i>
   <div class="header">
