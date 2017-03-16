@@ -15,6 +15,8 @@ class VirtualPage extends View
 {
     public $cb = null;
 
+    public $fx = [];
+
     public function init()
     {
         parent::init();
@@ -22,6 +24,12 @@ class VirtualPage extends View
         $this->cb = $this->add('CallbackLater');
 
         $this->cb->set(function () {
+            if ($this->cb->triggered && $this->fx) {
+                foreach($this->fx as $fx) {
+                    $fx($this);
+                }
+            }
+
             if ($this->cb->triggered == 'cut') {
                 $this->app->terminate($this->render());
             }
@@ -50,6 +58,15 @@ class VirtualPage extends View
 
             $this->app->terminate($this->app->html->template->render());
         });
+    }
+
+    public function set($fx = [], $junk = null) {
+        if (!$fx) return;
+        if (!is_array($fx)) {
+            $fx = [$fx];
+        }
+        $this->fx = $fx;
+        return $this;
     }
 
     public function getURL($mode = 'callback')
