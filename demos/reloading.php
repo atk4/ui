@@ -25,11 +25,12 @@ $layout->add(['Header', 'Make sure nested JS bindings are applied too']);
 $seg = $layout->add(['View', 'ui'=>'segment']);
 
 // Re-usable component implementing counter
-class Counter extends \atk4\ui\FormField\Line {
-
+class Counter extends \atk4\ui\FormField\Line
+{
     public $content = 20; // default
 
-    function init() {
+    public function init()
+    {
         parent::init();
 
         $this->actionLeft = new \atk4\ui\Button(['icon'=> 'minus']);
