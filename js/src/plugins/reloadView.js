@@ -4,13 +4,14 @@ export default class reloadView {
     constructor(element, options) {
         const $element = $(element);
 
-        $element
-            .text('')
-            .append("<div class='ui active loader inline'></div>");
-
-        $.get(options.callback, function(data) {
-            $element.replaceWith(data);
-        });
+        if(options.callback) {
+            $.get(options.callback, (data) => {
+                $element.replaceWith(data);
+            });
+        }
     }
 }
 
+reloadView.DEFAULTS = {
+    callback: null,
+};

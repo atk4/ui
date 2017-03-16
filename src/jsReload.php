@@ -17,15 +17,20 @@ class jsReload implements jsExpressionable
 
         $this->cb = $this->view->add(new CallbackLater());
         $this->cb->set(function () {
+            sleep(10);
             $this->view->app->terminate($this->view->render());
         });
     }
 
     public function jsRender()
     {
-        $final = (new jQuery($this->view))->reloadView(
+        $final = (new jQuery($this->view))
+          ->spinner([
+            'loaderText' => ''
+          ])
+          ->reloadView(
           [
-            'callback' => $this->cb->getURL(),
+            'callback' => $this->cb->getURL()
           ]
         );
 

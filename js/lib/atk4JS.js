@@ -184,14 +184,19 @@ var reloadView = function reloadView(element, options) {
 
     var $element = (0, _jquery2.default)(element);
 
-    $element.text('').append("<div class='ui active loader inline'></div>");
-
-    _jquery2.default.get(options.callback, function (data) {
-        $element.replaceWith(data);
-    });
+    if (options.callback) {
+        _jquery2.default.get(options.callback, function (data) {
+            $element.replaceWith(data);
+        });
+    }
 };
 
 exports.default = reloadView;
+
+
+reloadView.DEFAULTS = {
+    callback: null
+};
 module.exports = exports['default'];
 
 /***/ }),
@@ -209,6 +214,10 @@ var _plugin = __webpack_require__(1);
 
 var _plugin2 = _interopRequireDefault(_plugin);
 
+var _spinner = __webpack_require__(4);
+
+var _spinner2 = _interopRequireDefault(_spinner);
+
 var _reloadView = __webpack_require__(2);
 
 var _reloadView2 = _interopRequireDefault(_reloadView);
@@ -216,9 +225,93 @@ var _reloadView2 = _interopRequireDefault(_reloadView);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Register our plugins
-(0, _plugin2.default)('reloadView', _reloadView2.default);
+
 
 // Import our plugins
+(0, _plugin2.default)('spinner', _spinner2.default);
+(0, _plugin2.default)('reloadView', _reloadView2.default);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _jquery = __webpack_require__(0);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var spinner = function () {
+    function spinner(element, options) {
+        _classCallCheck(this, spinner);
+
+        var $element = (0, _jquery2.default)(element);
+
+        // Remove any existing dimmers/spinners
+        $element.remove('.dimmer');
+        $element.remove('.spinner');
+
+        var $baseDimmer = (0, _jquery2.default)(options.baseDimmerMarkup);
+        var $baseLoader = (0, _jquery2.default)(options.baseLoaderMarkup);
+
+        var $finalSpinner = null;
+
+        $baseLoader.toggleClass('active', options.active);
+        $baseLoader.toggleClass('indeterminate', options.indeterminate);
+        $baseLoader.toggleClass('centered', options.centered);
+        $baseLoader.toggleClass('inline', options.inline);
+
+        var isText = !!options.loaderText;
+        if (isText) {
+            $baseLoader.toggleClass('text', true);
+            $baseLoader.text(options.loaderText);
+        }
+
+        if (options.dimmed) {
+            $baseDimmer.toggleClass('active', options.active);
+            $finalSpinner = $baseDimmer.append($baseLoader);
+        } else {
+            $finalSpinner = $baseLoader;
+        }
+
+        this.showSpinner($element, $finalSpinner);
+    }
+
+    _createClass(spinner, [{
+        key: 'showSpinner',
+        value: function showSpinner($element, $spinner) {
+            $spinner.appendTo($element);
+        }
+    }]);
+
+    return spinner;
+}();
+
+exports.default = spinner;
+
+
+spinner.DEFAULTS = {
+    active: true,
+    dimmed: false,
+    inline: true,
+    indeterminate: false,
+    loaderText: 'Loading',
+    centered: true,
+    baseDimmerMarkup: '<div class="ui dimmer"></div>',
+    baseLoaderMarkup: '<div class="ui loader"></div>'
+};
+module.exports = exports['default'];
 
 /***/ })
 /******/ ]);
