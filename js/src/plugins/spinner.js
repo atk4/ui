@@ -31,10 +31,13 @@ export default class spinner {
             $finalSpinner = $baseLoader;
         }
 
-        this.showSpinner($element, $finalSpinner);
+        // If replace is true we remove the existing content in the $element.
+        this.showSpinner($element, $finalSpinner, options.replace);
     }
 
-    showSpinner($element, $spinner) {
+    showSpinner($element, $spinner, replace = false) {
+        if(replace) $element.empty();
+
         $element
             .append($spinner);
     }
@@ -42,6 +45,7 @@ export default class spinner {
 
 spinner.DEFAULTS = {
     active: false,
+    replace: false,
     dimmed: false,
     inline: false,
     indeterminate: false,

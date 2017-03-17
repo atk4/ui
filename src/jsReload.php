@@ -17,7 +17,7 @@ class jsReload implements jsExpressionable
 
         $this->cb = $this->view->add(new CallbackLater());
         $this->cb->set(function () {
-            sleep(10); //Testing only.
+            sleep(1); //Testing only.
             $this->view->app->terminate($this->view->render());
         });
     }
@@ -30,6 +30,7 @@ class jsReload implements jsExpressionable
             'active' => true,
             'inline' => true,
             'centered' => true,
+            'replace' => true,
           ])
           ->reloadView(
           [

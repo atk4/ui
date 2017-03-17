@@ -285,12 +285,17 @@ var spinner = function () {
             $finalSpinner = $baseLoader;
         }
 
-        this.showSpinner($element, $finalSpinner);
+        // If replace is true we remove the existing content in the $element.
+        this.showSpinner($element, $finalSpinner, options.replace);
     }
 
     _createClass(spinner, [{
         key: 'showSpinner',
         value: function showSpinner($element, $spinner) {
+            var replace = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+            if (replace) $element.empty();
+
             $element.append($spinner);
         }
     }]);
@@ -303,6 +308,7 @@ exports.default = spinner;
 
 spinner.DEFAULTS = {
     active: false,
+    replace: false,
     dimmed: false,
     inline: false,
     indeterminate: false,
