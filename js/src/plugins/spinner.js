@@ -35,18 +35,18 @@ export default class spinner {
     }
 
     showSpinner($element, $spinner) {
-        $spinner
-            .appendTo($element);
+        $element
+            .append($spinner);
     }
 }
 
 spinner.DEFAULTS = {
-    active: true,
+    active: false,
     dimmed: false,
-    inline: true,
+    inline: false,
     indeterminate: false,
     loaderText: 'Loading',
-    centered: true,
+    centered: false,
     baseDimmerMarkup: '<div class="ui dimmer"></div>',
     baseLoaderMarkup: '<div class="ui loader"></div>',
 };
