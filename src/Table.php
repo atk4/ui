@@ -230,6 +230,8 @@ class Table extends Lister
         foreach ($columns as $column) {
             $this->addColumn($column);
         }
+
+        return $this->model;
     }
 
     /**

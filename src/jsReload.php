@@ -11,9 +11,14 @@ class jsReload implements jsExpressionable
 
     public $cb = null;
 
-    public function __construct($view)
+    public $url = null;
+
+    public $arg = [];
+
+    public function __construct($view, $arg = [])
     {
         $this->view = $view;
+        $this->arg = $arg;
 
         $this->cb = $this->view->add(new CallbackLater());
         $this->cb->set(function () {
@@ -25,7 +30,7 @@ class jsReload implements jsExpressionable
     {
         $addSpinner = (new jQuery($this->view))->text('')->append("<div class='ui active loader inline'></div>");
 
-        $getRequest = (new jQuery())->get($this->cb->getURL(), '', new jsFunction(['data'], [
+        $getRequest = (new jQuery())->get($this->url ?: $this->cb->getURL(), '', new jsFunction(['data'], [
           (new jQuery($this->view))->replaceWith(new jsExpression('data')),
         ]));
 
