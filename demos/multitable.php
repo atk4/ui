@@ -71,7 +71,7 @@ $m = new File($db);
 $m->addCondition('parent_folder_id', null);
 $m->setOrder('is_folder desc, name');
 
-$layout->add(['Header', 'Testing table']);
+$layout->add(['Header', 'MacOS File Finder', 'subHeader'=>'Component built around Table, Columns and jsReload']);
 
 $vp = $layout->add('VirtualPage')->set(function ($vp) use ($m) {
     $m->action('delete')->execute();
@@ -80,7 +80,7 @@ $vp = $layout->add('VirtualPage')->set(function ($vp) use ($m) {
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });
 
-$layout->add(['Button', 'Import Filesystem', 'top attached'])->on('click', new \atk4\ui\jsModal('Now importing ... ', $vp));
+$layout->add(['Button', 'Re-Import From Filesystem', 'top attached'])->on('click', new \atk4\ui\jsModal('Now importing ... ', $vp));
 
 $layout->add(new Finder('bottom attached'))
     ->addClass('top attached segment')
