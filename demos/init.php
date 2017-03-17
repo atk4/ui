@@ -37,9 +37,12 @@ if (isset($layout->leftMenu)) {
 
     $f = basename($_SERVER['PHP_SELF']);
 
+    $url = 'https://github.com/atk4/ui/blob/feature/js-reloading/demos/';
+    //$url = 'https://github.com/atk4/ui/blob/develop/demos/';
+
     // Would be nice if this would be a link.
     $layout->menu->addItem()->add(new \atk4\ui\Button(['View Source', 'teal', 'icon'=>'github']))
-        ->setAttr('target', '_blan')->on('click', new \atk4\ui\jsExpression('document.location=[];', ['https://github.com/atk4/ui/blob/develop/demos/'.$f]));
+        ->setAttr('target', '_blan')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url.$f])); 
 
     $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }
