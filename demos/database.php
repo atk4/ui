@@ -2,16 +2,18 @@
 
 // A very basic file that sets up Agile Data to be used in some demonstrations
 try {
-    $db = new \atk4\data\Persistence_SQL('mysql:dbname=atk4;host=localhost','root','root');
+    $db = new \atk4\data\Persistence_SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
 } catch (PDOException $e) {
     throw new \atk4\ui\Exception([
-        'This demo requires access to the database. See "demos/database.php"'
+        'This demo requires access to the database. See "demos/database.php"',
     ], null, $e);
 }
 
-class Country extends \atk4\data\Model {
+class Country extends \atk4\data\Model
+{
     public $table = 'country';
-    function init()
+
+    public function init()
     {
         parent::init();
         $this->addField('name', ['actual'=>'nicename']);
@@ -43,11 +45,10 @@ class File extends \atk4\data\Model
     }
 
     /**
-     * Perform import from filesystem
+     * Perform import from filesystem.
      */
     public function importFromFilesystem($path)
     {
-
         $dir = new DirectoryIterator($path);
         foreach ($dir as $fileinfo) {
             if ($fileinfo->getFilename()[0] === '.') {
@@ -60,15 +61,14 @@ class File extends \atk4\data\Model
             $this->unload();
 
             $this->save([
-                'name'=>$fileinfo->getFilename(),
-                'is_folder'=>$fileinfo->isDir(),
-                'type'=>pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION)
+                'name'     => $fileinfo->getFilename(),
+                'is_folder'=> $fileinfo->isDir(),
+                'type'     => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
             ]);
 
-            if($fileinfo->isDir()) {
+            if ($fileinfo->isDir()) {
                 $this->ref('SubFolder')->importFromFilesystem($path.'/'.$fileinfo->getFilename());
             }
         }
     }
 }
-

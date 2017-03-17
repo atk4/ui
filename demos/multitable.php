@@ -3,7 +3,6 @@
 require 'init.php';
 require 'database.php';
 
-
 // Re-usable component implementing counter
 class Finder extends \atk4\ui\Columns
 {
@@ -21,7 +20,7 @@ class Finder extends \atk4\ui\Columns
 
         $selections = isset($_GET[$this->name]) ? explode(',', $_GET[$this->name]) : [];
 
-        if($selections) {
+        if ($selections) {
             $table->js(true)->find('tr[data-id='.$selections[0].']')->addClass('active');
         }
 
@@ -29,13 +28,12 @@ class Finder extends \atk4\ui\Columns
         $js_reload = new \atk4\ui\jsReload($this);
         $js_reload->url = new \atk4\ui\jsExpression("[]+'&".$this->name."='+[]+[]", [
             $js_reload->cb->getURL(),
-            $path ? (join(',', $path).',') : '',
-            new \atk4\ui\jsExpression('$(this).data("id")')
+            $path ? (implode(',', $path).',') : '',
+            new \atk4\ui\jsExpression('$(this).data("id")'),
         ]);
         $table->on('click', 'tr', $js_reload);
 
-
-        while($selections && $id = array_shift($selections)) {
+        while ($selections && $id = array_shift($selections)) {
             $path[] = $id;
             $model->load($id);
             $ref = array_shift($route);
@@ -52,45 +50,38 @@ class Finder extends \atk4\ui\Columns
             $table = $this->addColumn()->add(['Table', 'header'=>false, 'very basic selectable'])->addStyle('cursor', 'pointer');
             $table->setModel($model, [$model->title_field]);
 
-            if($selections) {
+            if ($selections) {
                 $table->js(true)->find('tr[data-id='.$selections[0].']')->addClass('active');
             }
-
 
             $js_reload = new \atk4\ui\jsReload($this);
             $js_reload->url = new \atk4\ui\jsExpression("[]+'&".$this->name."='+[]+[]", [
                 $js_reload->cb->getURL(),
-                $path ? (join(',', $path).',') : '',
-                new \atk4\ui\jsExpression('$(this).data("id")')
+                $path ? (implode(',', $path).',') : '',
+                new \atk4\ui\jsExpression('$(this).data("id")'),
             ]);
             $table->on('click', 'tr', $js_reload);
         }
 
         return $this->model;
     }
-
 }
 
 $m = new File($db);
 $m->addCondition('parent_folder_id', null);
 $m->setOrder('is_folder desc, name');
 
-
 $layout->add(['Header', 'Testing table']);
 
-$vp = $layout->add('VirtualPage')->set(function($vp) use($m) {
+$vp = $layout->add('VirtualPage')->set(function ($vp) use ($m) {
     $m->action('delete')->execute();
     $m->importFromFilesystem(dirname(dirname(__FILE__)));
-    $vp->add(['Button', 'Import Complete', 'big green fluid'])->link('multitable.php');;
+    $vp->add(['Button', 'Import Complete', 'big green fluid'])->link('multitable.php');
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });
-
-
 
 $layout->add(['Button', 'Import Filesystem', 'top attached'])->on('click', new \atk4\ui\jsModal('Now importing ... ', $vp));
 
 $layout->add(new Finder('bottom attached'))
     ->addClass('top attached segment')
-    ->setModel($m, ['SubFolder'])
-    ;
-
+    ->setModel($m, ['SubFolder']);
