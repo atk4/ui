@@ -20,8 +20,10 @@ class Finder extends \atk4\ui\Columns
         $table->setModel($model, [$model->title_field]);
 
         $selections = isset($_GET[$this->name]) ? explode(',', $_GET[$this->name]) : [];
-        //$selections[] = 14664;
-        //$selections[] = 14665;
+
+        if($selections) {
+            $table->js(true)->find('tr[data-id='.$selections[0].']')->addClass('active');
+        }
 
         $path = [];
         $js_reload = new \atk4\ui\jsReload($this);
@@ -33,7 +35,7 @@ class Finder extends \atk4\ui\Columns
         $table->on('click', 'tr', $js_reload);
 
 
-        foreach($selections as $id) {
+        while($selections && $id = array_shift($selections)) {
             $path[] = $id;
             $model->load($id);
             $ref = array_shift($route);
@@ -50,6 +52,11 @@ class Finder extends \atk4\ui\Columns
             $table = $this->addColumn()->add(['Table', 'header'=>false, 'very basic selectable'])->addStyle('cursor', 'pointer');
             $table->setModel($model, [$model->title_field]);
 
+            if($selections) {
+                $table->js(true)->find('tr[data-id='.$selections[0].']')->addClass('active');
+            }
+
+
             $js_reload = new \atk4\ui\jsReload($this);
             $js_reload->url = new \atk4\ui\jsExpression("[]+'&".$this->name."='+[]+[]", [
                 $js_reload->cb->getURL(),
@@ -65,9 +72,6 @@ class Finder extends \atk4\ui\Columns
 }
 
 $m = new File($db);
-$m->addExpression('name2', 'if([is_folder], concat([name], " (", [count], ")"), [name])')
-    ->caption = 'Name';
-$m->title_field = 'name2';
 $m->addCondition('parent_folder_id', null);
 $m->setOrder('is_folder desc, name');
 
