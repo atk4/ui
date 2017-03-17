@@ -33,7 +33,7 @@ class jsReload implements jsExpressionable
           ])
           ->reloadView(
           [
-            'callback' => $this->cb->getURL()
+            'callback' => $this->cb->getURL(),
           ]
         );
 
