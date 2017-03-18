@@ -27,10 +27,10 @@ class jsReload implements jsExpressionable
         $final = (new jQuery($this->view))
           ->spinner([
             'loaderText' => '',
-            'active' => true,
-            'inline' => true,
-            'centered' => true,
-            'replace' => true,
+            'active'     => true,
+            'inline'     => true,
+            'centered'   => true,
+            'replace'    => true,
           ])
           ->reloadView(
           [
