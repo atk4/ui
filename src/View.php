@@ -656,7 +656,7 @@ class View implements jsExpressionable
         $this->renderAll();
 
         return
-            $this->getJS().
+            $this->getJS(true).
             $this->template->render();
     }
 
@@ -725,9 +725,13 @@ class View implements jsExpressionable
      *
      * @return jQuery
      */
-    public function js($when = null, $action = null)
+    public function js($when = null, $action = null, $selector = null)
     {
-        $chain = new jQuery($this);
+        if ($selector) {
+            $chain = new jQuery($selector);
+        } else {
+            $chain = new jQuery($this);
+        }
 
         // Substitute $when to make it better work as a array key
         if ($when === true) {
@@ -746,7 +750,7 @@ class View implements jsExpressionable
 
         // next - binding on a specific event
         $action = (new jQuery($this))
-            ->bind($when, new jsFunction([$chain, $action, 'preventDefault'=>true, 'stopPropagation'=>true]));
+            ->bind($when, new jsFunction([$chain, $action]));
 
         $this->_js_actions[$when][] = $action;
 
@@ -855,7 +859,7 @@ class View implements jsExpressionable
     /**
      * Get JavaScript objects from this render tree.
      */
-    public function getJS()
+    public function getJS($force_echo = false)
     {
         $actions = [];
 
@@ -871,7 +875,7 @@ class View implements jsExpressionable
 
         $actions['indent'] = '';
 
-        if ($this->app && method_exists($this->app, 'jsReady')) {
+        if (!$force_echo && $this->app && method_exists($this->app, 'jsReady')) {
             $this->app->jsReady($actions);
 
             return '';

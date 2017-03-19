@@ -63,5 +63,34 @@ call-back to decide on-the-spot the correct response action for supplied data. T
 PHP developer to invoke actions without writing custom handlers in the JavaScript.
 
 
-.. php::class Callback
+.. php::class: Callback
+
+This class implements the actuall callback functionality. You can use it to perform arbitrary actions::
+
+    $button = $layout->add('Button');
+    $button->set('Click to do something')->link(
+         $button
+             ->add('Callback')
+             ->set(function(){  
+                 do_something(); 
+             })
+            ->getURL()
+     );
+
+In this example `do_something` will be executed, but the execution will continue.
+
+.. php::method: getURL()
+
+Returns a generated URL which will cause callback to be executed.
+
+.. php:method: set(callback, arguments)
+
+Will specify a callback to be executed if the URL is triggered.
+
+
+.. php::class: CallbackLater
+
+This class is very similar to Callback but it will not execute immediatelly. Instead it will be executed
+either at the end at beforeRender or beforeOutput hook from inside App, whichever comes first.
+
 

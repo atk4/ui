@@ -8,6 +8,8 @@ class App
         init as _init;
     }
 
+    use \atk4\core\HookTrait;
+
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
 
@@ -29,6 +31,8 @@ class App
     public $always_run = true;
 
     public $run_called = false;
+
+    public $is_rendering = false;
 
     public $ui_persistence = null;
 
@@ -108,6 +112,18 @@ class App
         echo 'DEBUG:'.$str.'<br/>';
     }
 
+    /**
+     * Will perform a preemptive output and terminate. Do not use this
+     * directly, instead call it form Callback, jsCallback or similar
+     * other classes.
+     */
+    public function terminate($output = null)
+    {
+        echo $output;
+        $this->run_called = true; // prevent shutdown function from triggering.
+        exit;
+    }
+
     public function initLayout($layout, $options = [])
     {
         if (is_string($layout)) {
@@ -154,16 +170,26 @@ class App
         } else {
             list($obj) = func_get_args();
 
+            if (!is_object($obj)) {
+                throw new Exception(['Incorrect use of App::add']);
+            }
+
             $obj->app = $this;
+
+            return $obj;
         }
     }
 
     public function run()
     {
         $this->run_called = true;
+        $this->hook('beforeRender');
+        $this->is_rendering = true;
         $this->html->template->set('title', $this->title);
         $this->html->renderAll();
         $this->html->template->appendHTML('HEAD', $this->html->getJS());
+        $this->is_rendering = false;
+        $this->hook('beforeOutput');
         echo $this->html->template->render();
     }
 
