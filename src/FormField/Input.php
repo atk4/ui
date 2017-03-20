@@ -126,9 +126,8 @@ class Input extends Generic
 
         if ($this->action) {
             if (!is_object($this->action)) {
-                $this->action = new Button($this->action);
+                $this->addAction($this->action);
             }
-            $this->add($this->action, 'AfterInput');
             $this->addClass('action');
         }
 
@@ -144,5 +143,15 @@ class Input extends Generic
         $this->content = null;
 
         parent::renderView();
+    }
+
+    function addAction($defaults = []) {
+        if (!is_array($defaults)) {
+            $defaults = [$defaults];
+        }
+
+        $this->action = $this->add(new Button($defaults), 'AfterInput');
+
+        return $this->action;
     }
 }

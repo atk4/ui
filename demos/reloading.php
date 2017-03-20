@@ -49,3 +49,15 @@ $seg->add(new Counter('-20'));
 // Add button to reload all counters
 $bar = $layout->add('Buttons');
 $b = $bar->add(['Button', 'Reload counter'])->js('click', new \atk4\ui\jsReload($seg));
+
+// Relading with argument
+$layout->add(['Header', 'We can pass argument to reloader']);
+
+$v = $layout->add(['View', 'ui'=>'segment'])->set(isset($_GET['val'])?$_GET['val']:'No value');
+
+$layout->add(['Button', 'Set value to "hello"'])->js('click', new \atk4\ui\jsReload($v, ['val'=>'hello']));
+$layout->add(['Button', 'Set value to "world"'])->js('click', new \atk4\ui\jsReload($v, ['val'=>'world']));
+
+$val = $layout->add(['FormField/Line', '']);
+$val->addAction('Set Custom Value')->js('click', new \atk4\ui\jsReload($v, ['val'=>$val->jsInput()->val()]));
+
