@@ -25,7 +25,7 @@ class Finder extends \atk4\ui\Columns
         }
 
         $path = [];
-        $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression("[]+[]", [
+        $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
             $path ? (implode(',', $path).',') : '',
             new \atk4\ui\jsExpression('$(this).data("id")'),
         ])]);
@@ -52,7 +52,7 @@ class Finder extends \atk4\ui\Columns
                 $table->js(true)->find('tr[data-id='.$selections[0].']')->addClass('active');
             }
 
-            $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression("[]+[]", [
+            $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
                 $path ? (implode(',', $path).',') : '',
                 new \atk4\ui\jsExpression('$(this).data("id")'),
             ])]);
