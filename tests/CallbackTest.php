@@ -44,7 +44,6 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
         $cb = $app->add('Callback');
 
         // don't simulate triggering
-
         $cb->set(function ($x) use (&$var) {
             $var = $x;
         }, [34]);
@@ -102,7 +101,6 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
         $cb = $app->add('CallbackLater');
 
         // don't simulate triggering
-
         $cb->set(function ($x) use (&$var) {
             $var = $x;
         }, [34]);

@@ -27,7 +27,7 @@ if (!class_exists('SomeData')) {
     {
         public $faker = null;
 
-        public $count = 50;
+        public $count = 10;
 
         public function __construct($opts = [])
         {

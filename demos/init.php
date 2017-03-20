@@ -1,8 +1,10 @@
 <?php
 
+date_default_timezone_set('UTC');
+
 require '../vendor/autoload.php';
 
-$app = new \atk4\ui\App('Agile UI v0.4 - Demo Suite', ['icon'=>'user']);
+$app = new \atk4\ui\App('Agile UI v1.1 - Demo Suite', ['icon'=>'user']);
 
 $app->initLayout((isset($_GET['layout']) && $_GET['layout'] === 'centered') ? 'Centered' : 'Admin');
 
@@ -31,6 +33,7 @@ if (isset($layout->leftMenu)) {
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon'=>'talk']);
     $basic->addItem('JavaScript Events', ['button2']);
     $basic->addItem('Element Reloading', ['reloading']);
+    $basic->addItem('Modal Dialogs', ['modal']);
 
     $f = basename($_SERVER['PHP_SELF']);
 

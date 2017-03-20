@@ -30,6 +30,12 @@ class Callback
      */
     public $POST_trigger = false;
 
+    /**
+     * Contains either false if callback wasn't triggered or the value passed
+     * as an argument to a call-back:.
+     *
+     * e.g. following URL of getURL('test') will result in $triggered = 'test';
+     */
     public $triggered = false;
 
     /**
@@ -72,13 +78,13 @@ class Callback
 
         if ($this->POST_trigger) {
             if (isset($_POST[$this->name])) {
-                $this->triggered = true;
+                $this->triggered = $_POST[$this->name];
 
                 return call_user_func_array($callback, $args);
             }
         } else {
             if (isset($_GET[$this->name])) {
-                $this->triggered = true;
+                $this->triggered = $_GET[$this->name];
 
                 return call_user_func_array($callback, $args);
             }
@@ -90,12 +96,12 @@ class Callback
      *
      * @return string
      */
-    public function getURL()
+    public function getURL($arg = 'callback')
     {
         if ($this->POST_trigger) {
             return $_SERVER['REQUEST_URI'];
         }
 
-        return $this->app->url([$this->name=>'callback']);
+        return $this->app->url([$this->name=>$arg]);
     }
 }
