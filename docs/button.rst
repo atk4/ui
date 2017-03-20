@@ -5,7 +5,7 @@
 Button
 ======
 
-.. php:namespace:: atk4\ui\Button
+.. php:namespace:: atk4\ui
 
 .. php:class:: Button
 
