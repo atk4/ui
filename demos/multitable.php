@@ -25,12 +25,10 @@ class Finder extends \atk4\ui\Columns
         }
 
         $path = [];
-        $js_reload = new \atk4\ui\jsReload($this);
-        $js_reload->url = new \atk4\ui\jsExpression("[]+'&".$this->name."='+[]+[]", [
-            $js_reload->cb->getURL(),
+        $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression("[]+[]", [
             $path ? (implode(',', $path).',') : '',
             new \atk4\ui\jsExpression('$(this).data("id")'),
-        ]);
+        ])]);
         $table->on('click', 'tr', $js_reload);
 
         while ($selections && $id = array_shift($selections)) {
@@ -54,12 +52,10 @@ class Finder extends \atk4\ui\Columns
                 $table->js(true)->find('tr[data-id='.$selections[0].']')->addClass('active');
             }
 
-            $js_reload = new \atk4\ui\jsReload($this);
-            $js_reload->url = new \atk4\ui\jsExpression("[]+'&".$this->name."='+[]+[]", [
-                $js_reload->cb->getURL(),
+            $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression("[]+[]", [
                 $path ? (implode(',', $path).',') : '',
                 new \atk4\ui\jsExpression('$(this).data("id")'),
-            ]);
+            ])]);
             $table->on('click', 'tr', $js_reload);
         }
 
