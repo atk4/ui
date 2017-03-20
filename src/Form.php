@@ -139,6 +139,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $modelField = $args[0];
         } else {
             $modelField = $this->model->addField(...$args);
+            $modelField->never_persist = true;
         }
 
         return $this->_fieldFactory($modelField);
