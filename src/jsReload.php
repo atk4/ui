@@ -17,9 +17,11 @@ class jsReload implements jsExpressionable
      */
     public $args = [];
 
-    public function __construct($view)
+    public function __construct($view, $args = [])
     {
         $this->view = $view;
+
+        $this->args = $args;
 
         $this->cb = $this->view->add(new CallbackLater());
         $this->cb->set(function () {
