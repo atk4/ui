@@ -11,11 +11,17 @@ class jsReload implements jsExpressionable
 
     public $cb = null;
 
-    public $url = null;
+    /**
+     * If defined, they will be added at the end of your URL.
+     * Value in ARG can be either string or jsExpressionable.
+     */
+    public $args = [];
 
-    public function __construct($view)
+    public function __construct($view, $args = [])
     {
         $this->view = $view;
+
+        $this->args = $args;
 
         $this->cb = $this->view->add(new CallbackLater());
         $this->cb->set(function () {
@@ -35,7 +41,8 @@ class jsReload implements jsExpressionable
           ])
           ->reloadView(
           [
-            'callback' => $this->url ?: $this->cb->getURL(),
+              'uri'         => $this->cb->getURL(),
+              'uri_options' => $this->args,
           ]
         );
 
