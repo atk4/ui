@@ -19,7 +19,7 @@ import $ from 'jquery';
  *
  * MyPlugin.DEFAULTS = {};
  *
- * plugin('myPlugin', MyPlugin');
+ * plugin('myPlugin', MyPlugin);
  */
 export default function plugin(pluginName, className, shortHand = false) {
     let dataName = `__${pluginName}`;
