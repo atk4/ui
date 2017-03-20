@@ -4,8 +4,8 @@ export default class reloadView {
     constructor(element, options) {
         const $element = $(element);
 
-        if(options.callback) {
-            $.get(options.callback, (data) => {
+        if(options.uri) {
+            $.get(options.uri, options.uri_options, (data) => {
                 $element.replaceWith(data);
             });
         }
@@ -13,5 +13,6 @@ export default class reloadView {
 }
 
 reloadView.DEFAULTS = {
-    callback: null,
+    uri: null,
+    uri_options: [],
 };
