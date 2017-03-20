@@ -17,7 +17,6 @@ class jsReload implements jsExpressionable
 
         $this->cb = $this->view->add(new CallbackLater());
         $this->cb->set(function () {
-            sleep(1); //Testing only.
             $this->view->app->terminate($this->view->render());
         });
     }
