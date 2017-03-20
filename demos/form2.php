@@ -5,24 +5,22 @@
 require 'init.php';
 require 'database.php';
 
-
-
 $layout->add(['Header', 'Database-driven form with an enjoyable layout']);
 
 $form = $layout->add(new \atk4\ui\Form(['segment']));
 
-$form->setModel(new Country($db), false)->loadBy('iso','GB');
+$form->setModel(new Country($db), false)->loadBy('iso', 'GB');
 
 $f_address = $form->addGroup('Basic Country Information');
 $f_address->addField('name', ['width'=>'ten'])
     ->addAction(['Check Duplicate', 'iconRight'=>'search'])
-    ->on('click', function($val) { 
+    ->on('click', function ($val) {
         // We can't get the value until https://github.com/atk4/ui/issues/77
         return 'Value appears to be unique';
     });
 
-$f_address->addField('iso', ['Post Code', 'width'=>'three'])->iconLeft='flag';
-$f_address->addField('iso3', ['Post Code', 'width'=>'three'])->iconLeft='flag';
+$f_address->addField('iso', ['Post Code', 'width'=>'three'])->iconLeft = 'flag';
+$f_address->addField('iso3', ['Post Code', 'width'=>'three'])->iconLeft = 'flag';
 
 $f_guardian = $form->addGroup(['Codes', 'inline'=>true]);
 $f_guardian->addField('first_name', ['width'=>'eight']);

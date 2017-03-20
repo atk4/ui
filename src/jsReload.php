@@ -41,7 +41,7 @@ class jsReload implements jsExpressionable
           ])
           ->reloadView(
           [
-              'uri' => $this->cb->getURL(), 
+              'uri'         => $this->cb->getURL(),
               'uri_options' => $this->args,
           ]
         );

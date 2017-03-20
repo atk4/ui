@@ -145,7 +145,8 @@ class Input extends Generic
         parent::renderView();
     }
 
-    function addAction($defaults = []) {
+    public function addAction($defaults = [])
+    {
         if (!is_array($defaults)) {
             $defaults = [$defaults];
         }
