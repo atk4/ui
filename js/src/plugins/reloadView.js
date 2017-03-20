@@ -14,5 +14,5 @@ export default class reloadView {
 
 reloadView.DEFAULTS = {
     uri: null,
-    uri_options: [],
+    uri_options: {},
 };
