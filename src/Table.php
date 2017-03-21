@@ -307,6 +307,28 @@ class Table extends Lister
     }
 
     /**
+     * Same as on('click', 'tr', $action), but will also make sure you can't
+     * click outside of the body. Additionally when you move cursor over the
+     * rows, pointer will be used and rows will be highlighted as you hover.
+     */
+    public function onRowClick($action)
+    {
+        $this->addClass('selectable');
+        $this->js(true)->find('tbody')->css('cursor', 'pointer');
+        return $this->on('click', 'tbody>tr', $action);
+    }
+
+    /**
+     * Use this to quickly acces the <tr> and wrap in jQuery
+     *
+     * $this->jsRow()->data('id');
+     */
+    public function jsRow()
+    {
+        return new jQuery(new jsExpression('this'));
+    }
+
+    /**
      * Executed for each row if "totals" are enabled to add up values.
      */
     public function updateTotals()
