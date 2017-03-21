@@ -315,11 +315,12 @@ class Table extends Lister
     {
         $this->addClass('selectable');
         $this->js(true)->find('tbody')->css('cursor', 'pointer');
+
         return $this->on('click', 'tbody>tr', $action);
     }
 
     /**
-     * Use this to quickly acces the <tr> and wrap in jQuery
+     * Use this to quickly acces the <tr> and wrap in jQuery.
      *
      * $this->jsRow()->data('id');
      */
