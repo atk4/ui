@@ -33,7 +33,10 @@ class Finder extends \atk4\ui\Columns
 
         while ($selections && $id = array_shift($selections)) {
             $path[] = $id;
-            $model->load($id);
+            $model->tryLoad($id);
+            if (!$model->loaded()) {
+              break;
+            }
             $ref = array_shift($route);
             if (!$route) {
                 $route[] = $ref; // repeat last route
