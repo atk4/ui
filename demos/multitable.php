@@ -35,7 +35,7 @@ class Finder extends \atk4\ui\Columns
             $path[] = $id;
             $model->tryLoad($id);
             if (!$model->loaded()) {
-              break;
+                break;
             }
             $ref = array_shift($route);
             if (!$route) {
