@@ -26,6 +26,6 @@ class Template extends Generic
 
     public function getCellTemplate(\atk4\data\Field $f)
     {
-        return $this->template;
+        return $this->getTag('td', 'body', $this->template);
     }
 }
