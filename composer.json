@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=5.6.0",
-        "atk4/data": "^1.1.11",
+        "atk4/data": "^1.1.12",
         "atk4/core": "^1.1.11"
     },
     "require-dev": {
