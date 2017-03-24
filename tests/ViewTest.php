@@ -1,4 +1,5 @@
 <?php
+
 namespace atk4\ui\tests;
 
 class ViewTest extends \atk4\core\PHPUnit_AgileTestCase
@@ -10,7 +11,7 @@ class ViewTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $v = new \atk4\ui\View();
         $v->set('foo');
-        
+
         $a = $v->render();
         $b = $v->render();
         $this->assertEquals($a, $b);
