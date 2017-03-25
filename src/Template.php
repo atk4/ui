@@ -154,7 +154,7 @@ class Template implements \ArrayAccess
 
         $a = explode('#', $tag);
         $tag = array_shift($a);
-        $ref = array_shift($a);
+        //$ref = array_shift($a); // unused
         if (!isset($this->tags[$tag])) {
             throw $this->exception('Tag not found in Template')
                 ->addMoreInfo('tag', $tag)
@@ -178,8 +178,8 @@ class Template implements \ArrayAccess
      * If $tag is specified as array, then $templates will
      * contain all occurrences of all tags from the array.
      *
-     * @param string $tag
-     * @param array  $template
+     * @param string|array $tag
+     * @param array        &$template
      *
      * @return bool
      */
@@ -242,7 +242,7 @@ class Template implements \ArrayAccess
 
         $a = explode('#', $tag);
         $tag = array_shift($a);
-        $ref = array_shift($a);
+        //$ref = array_shift($a); // unused
 
         return isset($this->tags[$tag]) || $this->isTopTag($tag);
     }
