@@ -94,6 +94,6 @@ class Header extends View
             $this->template->set('title', $this->content);
         }
 
-        parent::renderView();
+        return parent::renderView();
     }
 }

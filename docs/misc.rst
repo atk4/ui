@@ -103,19 +103,37 @@ with the button, it will add 'labeled' class.
 Label
 =====
 
+.. php:class:: Icon
+
 Implementing http://semantic-ui.com/elements/label.html for Agile UI, Label is a very basic view,
 that can be used on it's own or as part of another UI view (such as menu item).
 
 Basic Usage
 -----------
 
-First argument of constructor or first element in array passed to constructor is considered 
+First argument of constructor or first element in array passed to constructor is considered::
 
+    $layout->add(['Label', 'hello world']);
 
-.. php:class:: HelloWorld
+Label has the following propetries:
+
+.. php:attr:: icon
+
+.. php:attr:: iconRight
+
+.. php:attr:: image
+
+.. php:attr:: imageRight
+
+.. php:attr:: detail
+
+All the above can be string, array (passed to Icon, Image or View class) or an object.
+
 
 HelloWorld
 ==========
+
+.. php:class:: HelloWorld
 
 A very basic class that says hello world. This is a manefistation of our component concept. If using
 other PHP frameworks may require you to create multiple files and spend considerable time creating even

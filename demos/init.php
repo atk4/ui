@@ -28,6 +28,7 @@ if (isset($layout->leftMenu)) {
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon'=>'cubes']);
     $basic->addItem('Button', ['button']);
     $basic->addItem('Header', ['header']);
+    $basic->addItem('Labels', ['label']);
     $basic->addItem('Columns', ['columns']);
 
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon'=>'talk']);
