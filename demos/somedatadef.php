@@ -27,15 +27,15 @@ if (!class_exists('SomeData')) {
     {
         public $faker = null;
 
-        public $count = 50;
+        public $count = 10;
 
         public function __construct($opts = [])
         {
             //parent::__construct($opts);
 
-        if (!$this->faker) {
-            $this->faker = Faker\Factory::create();
-        }
+            if (!$this->faker) {
+                $this->faker = Faker\Factory::create();
+            }
         }
 
         public function prepareIterator($m)

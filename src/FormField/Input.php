@@ -41,11 +41,29 @@ class Input extends Generic
     public $actionLeft = null;
 
     /**
+     * Method similar to View::js() however will adjust selector
+     * to target the "input" element.
+     *
+     * $field->jsInput(true)->val(123);
+     */
+    public function jsInput($when = null, $action = null)
+    {
+        return $this->js($when, $action, '#'.$this->id.'_input');
+    }
+
+    /**
      * returns <input .../> tag.
      */
     public function getInput()
     {
-        return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
+        return $this->app->getTag('input', [
+            'name'       => $this->short_name,
+            'type'       => $this->inputType,
+            'placeholder'=> $this->placeholder,
+            'id'         => $this->id.'_input',
+            'value'      => isset($this->field) ? $this->field->get() : $this->content ?: '',
+        ]);
+        //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
 
     /**
@@ -108,9 +126,8 @@ class Input extends Generic
 
         if ($this->action) {
             if (!is_object($this->action)) {
-                $this->action = new Button($this->action);
+                $this->addAction($this->action);
             }
-            $this->add($this->action, 'AfterInput');
             $this->addClass('action');
         }
 
@@ -123,7 +140,19 @@ class Input extends Generic
         }
 
         $this->template->setHTML('Input', $this->getInput());
+        $this->content = null;
 
         parent::renderView();
+    }
+
+    public function addAction($defaults = [])
+    {
+        if (!is_array($defaults)) {
+            $defaults = [$defaults];
+        }
+
+        $this->action = $this->add(new Button($defaults), 'AfterInput');
+
+        return $this->action;
     }
 }

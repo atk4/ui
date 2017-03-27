@@ -1,9 +1,9 @@
 {
     "name": "atk4/ui",
     "type": "library",
-    "description": "Agile UI - User Interface Component Library",
-    "keywords": ["framework", "ui", "web", "form", "widget", "render", "gadget", "button", "grid", "crud"],
-    "homepage": "https://github.com/atk4/ui",
+    "description": "Agile UI - Web Component Framework written in PHP",
+    "keywords": ["framework", "ui", "web", "form", "component", "widget", "render", "gadget", "button", "grid", "crud"],
+    "homepage": "https://agiletoolkit.org/ui",
     "license": "MIT",
     "authors": [
         {
@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=5.6.0",
-        "atk4/data": "^1.1.9",
+        "atk4/data": "^1.1.12",
         "atk4/core": "^1.1.11"
     },
     "require-dev": {

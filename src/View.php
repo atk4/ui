@@ -52,11 +52,15 @@ class View implements jsExpressionable
      * Enables UI keyword for Semantic UI indicating that this is a
      * UI element. If you set this variable value to string, it will
      * be appended at the end of the element class.
+     *
+     * @var bool
      */
     public $ui = false;
 
     /**
      * ID of the element, that's unique and is used in JS operations.
+     *
+     * @var string
      */
     public $id = null;
 
@@ -83,6 +87,8 @@ class View implements jsExpressionable
 
     /**
      * Just here temporarily, until App picks it up.
+     *
+     * @var string
      */
     protected $skin;
 
@@ -108,14 +114,19 @@ class View implements jsExpressionable
 
     /**
      * Set static contents of this view.
+     *
+     * @var string|false
      */
     public $content = null;
 
     /**
      * Change this if you want to substitute default "div" for something else.
+     *
+     * @var string
      */
     public $element = null;
 
+    // @var array
     protected $_add_later = [];
 
     // }}}
@@ -126,7 +137,7 @@ class View implements jsExpressionable
      * May accept properties of a class, but if property is not defined, it will
      * be used as a HTML class instead.
      *
-     * @param array $defaults
+     * @param array|string $defaults
      *
      * @throws Exception
      */
@@ -195,11 +206,11 @@ class View implements jsExpressionable
     }
 
     /**
-     * Called from __construct() and set() to initialize teh properties.
+     * Called from __construct() and set() to initialize the properties.
      *
      * TODO: move into trait, because this is used often
      *
-     * @param $properties
+     * @param array $properties
      */
     protected function setProperties($properties)
     {
@@ -211,7 +222,7 @@ class View implements jsExpressionable
             if (property_exists($this, $key)) {
                 if (is_array($val)) {
                     $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
-                } elseif (!is_null($val)) {
+                } elseif ($val !== null) {
                     $this->$key = $val;
                 }
             } else {
@@ -247,8 +258,8 @@ class View implements jsExpressionable
 
         throw new Exception([
             'Not sure what to do',
-            'key'=> $key,
-            'val'=> $val,
+            'key' => $key,
+            'val' => $val,
         ]);
     }
 
@@ -262,6 +273,7 @@ class View implements jsExpressionable
      */
     public function init()
     {
+        // set name and id of view
         if (!$this->name) {
             if (!$this->id) {
                 $this->id = $this->name = 'atk';
@@ -272,16 +284,19 @@ class View implements jsExpressionable
             $this->id = $this->name;
         }
 
+        // initialize
         $this->_init();
 
         if (!$this->app) {
             $this->initDefaultApp();
         }
 
+        // set up template
         if (is_string($this->defaultTemplate) && is_null($this->template)) {
             $this->template = $this->app->loadTemplate($this->defaultTemplate);
         }
 
+        // add default objects
         foreach ($this->_add_later as list($object, $region)) {
             $this->add($object, $region);
         }
@@ -306,6 +321,8 @@ class View implements jsExpressionable
      * @param View|string  $object New object to add
      * @param string|array $region (or array for full set of defaults)
      *
+     * @throws Exception
+     *
      * @return View
      */
     public function add($object, $region = null)
@@ -314,7 +331,7 @@ class View implements jsExpressionable
         if (!$this->app) {
             $this->init();
         }
-         */
+        */
 
         if (!$this->app) {
             $this->_add_later[] = [$object, $region];
@@ -363,8 +380,8 @@ class View implements jsExpressionable
      * Override this method without compatibility with parrent, if you wish
      * to set your own things your own way for your view.
      *
-     * @param array       $arg1
-     * @param string|null $arg2
+     * @param string|array $arg1
+     * @param string|null  $arg2
      *
      * @throws Exception
      *
@@ -372,16 +389,15 @@ class View implements jsExpressionable
      */
     public function set($arg1 = [], $arg2 = null)
     {
-        if (is_string($arg1) && !is_null($arg2)) {
+        if (is_string($arg1) && $arg2 !== null) {
 
             // must be initialized
-
             $this->template->set($arg1, $arg2);
 
             return $this;
         }
 
-        if (!is_null($arg2)) {
+        if ($arg2 !== null) {
             throw new Exception([
                 'Second argument to set() can be only passed if the first one is a string',
                 'arg1'=> $arg1,
@@ -403,7 +419,7 @@ class View implements jsExpressionable
 
         throw new Exception([
             'Not sure what to do with argument',
-            'arg1'=> $arg1,
+            'arg1' => $arg1,
         ]);
     }
 
@@ -454,10 +470,12 @@ class View implements jsExpressionable
      * @param string       $style    CSS Style definition
      *
      * @return $this
+     *
+     * @todo Think about difference between setStyle and addStyle
      */
     public function setStyle($property, $style = null)
     {
-        if (is_array($property) && is_null($style)) {
+        if (is_array($property) && $style === null) {
             foreach ($property as $k => $v) {
                 $this->addStyle($k, $v);
             }
@@ -469,9 +487,12 @@ class View implements jsExpressionable
         return $this;
     }
 
+    /**
+     * @see setStyle()
+     */
     public function addStyle($property, $style = null)
     {
-        return $this->setStyle($prperty, $style);
+        return $this->setStyle($property, $style);
     }
 
     /**
@@ -492,8 +513,8 @@ class View implements jsExpressionable
     /**
      * Set attribute.
      *
-     * @param string|array $attr
-     * @param string       $value
+     * @param string|array $attr  Attribute name or hash
+     * @param string       $value Attribute value
      *
      * @return $this
      */
@@ -510,13 +531,35 @@ class View implements jsExpressionable
         return $this;
     }
 
+    /**
+     * Remove attribute.
+     *
+     * @param string|array $attr Attribute name or hash
+     *
+     * @return $this
+     */
+    public function removeAttr($property)
+    {
+        if (is_array($property)) {
+            foreach ($property as $v) {
+                unset($this->attr[$v]);
+            }
+
+            return $this;
+        }
+
+        unset($this->attr[$property]);
+
+        return $this;
+    }
+
     // }}}
 
     // {{{ Rendering
 
     /**
      * View-specific rendering stuff. Feel free to replace this method with
-     * your own. View::renderView contanis some logic that integrates with
+     * your own. View::renderView contains some logic that integrates with
      * semanticUI.
      *
      * NOTE: maybe in the future, SemanticUI-related stuff needs to go into
@@ -558,7 +601,7 @@ class View implements jsExpressionable
         if ($this->attr) {
             $tmp = [];
             foreach ($this->attr as $attr => $val) {
-                $tmp[] = $attr.'="'.htmlspecialchars($val).'"';
+                $tmp[] = $attr.'="'.$this->app->encodeAttribute($val).'"';
             }
             $this->template->set('attributes', implode(' ', $tmp));
         }
@@ -571,12 +614,6 @@ class View implements jsExpressionable
     public function recursiveRender()
     {
         foreach ($this->elements as $view) {
-            if ($this->app && $view instanceof \atk4\core\AppScopeTrait && !$view->app) {
-                $view->app = $this->app;
-                $view->name = $this->name.$view->short_name;
-                $view->init();
-            }
-
             if (!$view instanceof self) {
                 continue;
             }
@@ -611,18 +648,23 @@ class View implements jsExpressionable
     /**
      * This method is for those cases when developer want to simply render his
      * view and grab HTML himself.
+     *
+     * @return string
      */
     public function render()
     {
         $this->renderAll();
 
         return
-            $this->getJS().
+            $this->getJS(true).
             $this->template->render();
     }
 
     /**
-     * Created for recursive rendering or when you want to only get HTML of this object (not javascript).
+     * Created for recursive rendering or when you want to only get HTML of
+     * this object (not javascript).
+     *
+     * @return string
      */
     public function getHTML()
     {
@@ -678,32 +720,39 @@ class View implements jsExpressionable
      *
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string|bool|null $when Event when chain will be executed
+     * @param string|bool|null $when   Event when chain will be executed
+     * @param jsExpression     $action JavaScript action
      *
      * @return jQuery
      */
-    public function js($when = null, $extra = null)
+    public function js($when = null, $action = null, $selector = null)
     {
-        $chain = new jQuery($this);
+        if ($selector) {
+            $chain = new jQuery($selector);
+        } else {
+            $chain = new jQuery($this);
+        }
 
         // Substitute $when to make it better work as a array key
         if ($when === true) {
-            $when = 'always';
+            $this->_js_actions[$when][] = $chain;
+
+            if ($action) {
+                $this->_js_actions[$when][] = $action;
+            }
+
+            return $chain;
         }
 
         if ($when === false || $when === null) {
             return $chain;
         }
 
-        if (!isset($this->_js_actions[$when])) {
-            $this->_js_actions[$when] = [];
-        }
+        // next - binding on a specific event
+        $action = (new jQuery($this))
+            ->bind($when, new jsFunction([$chain, $action]));
 
-        $this->_js_actions[$when][] = $chain;
-
-        if ($extra) {
-            $this->_js_actions[$when][] = $extra;
-        }
+        $this->_js_actions[$when][] = $action;
 
         return $chain;
     }
@@ -743,6 +792,7 @@ class View implements jsExpressionable
      * @param string           $event    JavaScript event
      * @param string           $selector Optional jQuery-style selector
      * @param jsChain|callable $action   code to execute
+     * @param array            $defaults Options
      *
      * @throws Exception
      *
@@ -765,71 +815,15 @@ class View implements jsExpressionable
             // if callable $action is passed, then execute ajaxec()
 
             // create callback, that will include event as part of the full name
-            $this->_add($cb = new Callback(), ['desired_name'=>$event]);
+            $this->_add($cb = new jsCallback(), ['desired_name'=>$event]);
 
             $cb->set(function () use ($action) {
                 $chain = new jQuery(new jsExpression('this'));
-                $response = call_user_func($action, $chain);
 
-                if ($response === $chain) {
-                    $response = null;
-                }
-
-                $actions = [];
-
-                if ($chain->_chain) {
-                    $actions[] = $chain;
-                }
-
-                if (!is_array($response)) {
-                    $response = [$response];
-                }
-
-                foreach ($response as $r) {
-                    if (is_string($r)) {
-                        $actions[] = new jsExpression('alert([])', [r]);
-                    } elseif ($r instanceof jsExpressionable) {
-                        $actions[] = $r;
-                    } elseif ($r === null) {
-                        continue;
-                    } else {
-                        throw new Exception(['Incorrect callback. Must be string or action.', 'r'=>$r]);
-                    }
-                }
-
-                $ajaxec = implode(";\n", array_map(function (jQuery $r) {
-                    return $r->jsRender();
-                }, $actions));
-
-                echo json_encode(['success'=>true, 'message'=>'Hello World', 'eval'=>$ajaxec]);
-                exit;
+                return call_user_func($action, $chain);
             });
 
             $thisAction->api(['on'=>'now', 'url'=>$cb->getURL(), 'obj'=>new jsExpression('this')]);
-
-            //throw new Exception('VirtualPage is not yet implemented');
-            /*$url = '.virtualpage->getURL..';
-            $actions[] = (new jsUniv(new jsExpression('this')))->ajaxec($url, true);
-
-            /*
-            $p = $this->add('VirtualPage');
-
-            $p->set(function ($p) use ($action) {
-                // $action is an actual callable
-                $js2 = $p->js()->_selectorRegion();
-
-                $js3 = call_user_func($action, $js2, $_POST);
-
-                // If method returns something, execute that instead
-                if ($js3) {
-                    $p->js(null, $js3)->execute();
-                } else {
-                    $js2->execute();
-                }
-            });
-
-            $action = $this->js()->_selectorThis()->univ()->ajaxec($p->getURL(), true);
-             */
         } elseif ($action) {
             // otherwise include
             $actions[] = $action;
@@ -844,33 +838,15 @@ class View implements jsExpressionable
         }
 
         return $thisAction;
-
-        /*
-        if ($js) {
-            $ret_js = $this->js(null, $js)->_selectorThis();
-        } else {
-            $ret_js = $this->js()->_selectorThis();
-        }
-
-        $on_chain = $this->js(true);
-        $fired = false;
-
-        $this->app->jui->addHook(
-            'pre-getJS',
-            function ($app) use ($event, $selector, $ret_js, $on_chain, &$fired) {
-                if ($fired) {
-                    return;
-                }
-                $fired = true;
-
-                $on_chain->on($event, $selector, $ret_js->_enclose(null, true));
-            }
-        );
-
-        return $ret_js;
-         */
     }
 
+    /**
+     * Convert View into a value in case it happens to be inside our json_encode (as argument to jsChain).
+     *
+     * @throws Exception
+     *
+     * @return string
+     */
     public function jsRender()
     {
         if (!$this->_initialized) {
@@ -881,20 +857,14 @@ class View implements jsExpressionable
     }
 
     /**
-     * TODO: refactor.
+     * Get JavaScript objects from this render tree.
      */
-    public function getJS()
+    public function getJS($force_echo = false)
     {
         $actions = [];
 
-        foreach ($this->_js_actions as $event=>$eventActions) {
+        foreach ($this->_js_actions as $eventActions) {
             foreach ($eventActions as $action) {
-                // wrap into callback
-                if ($event !== 'always') {
-                    $action = (new jQuery(@$action->_constructorArgs[0]))
-                        ->bind($event, new jsFunction([$action, 'preventDefault'=>true, 'stopPropagation'=>true]));
-                }
-
                 $actions[] = $action;
             }
         }
@@ -905,7 +875,7 @@ class View implements jsExpressionable
 
         $actions['indent'] = '';
 
-        if ($this->app && method_exists($this->app, 'jsReady')) {
+        if (!$force_echo && $this->app && method_exists($this->app, 'jsReady')) {
             $this->app->jsReady($actions);
 
             return '';

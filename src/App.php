@@ -8,12 +8,16 @@ class App
         init as _init;
     }
 
+    use \atk4\core\HookTrait;
+
+    // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
 
     public $layout = null; // the top-most view object
 
     public $template_dir = null;
 
+    // @var string Name of skin
     public $skin = 'semantic-ui';
 
     /**
@@ -26,17 +30,18 @@ class App
      */
     public $always_run = true;
 
-    private $run_called = false;
+    public $run_called = false;
+
+    public $is_rendering = false;
 
     public $ui_persistence = null;
 
     public function __construct($defaults = [])
     {
+        // Process defaults
         if (is_string($defaults)) {
-            $defaults = ['title'=>$defaults];
+            $defaults = ['title' => $defaults];
         }
-
-        $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
 
         if (!is_array($defaults)) {
             throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
@@ -49,6 +54,9 @@ class App
             }
         }
 
+        // Set up template folder
+        $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
+
         // Set our exception handler
         if ($this->catch_exceptions) {
             set_exception_handler(function ($exception) {
@@ -56,12 +64,13 @@ class App
             });
         }
 
+        if (!$this->_initialized) {
+            //$this->init();
+        }
+
+        // Always run app on shutdown
         if ($this->always_run) {
             register_shutdown_function(function () {
-                if (!$this->_initialized) {
-                    $this->init();
-                }
-
                 if (!$this->run_called) {
                     try {
                         $this->run();
@@ -73,7 +82,10 @@ class App
             });
         }
 
-        $this->ui_persistence = new Persistence\UI();
+        // Set up UI persistence
+        if (!isset($this->ui_persistence)) {
+            $this->ui_persistence = new Persistence\UI();
+        }
     }
 
     public function caughtException($exception)
@@ -100,6 +112,18 @@ class App
         echo 'DEBUG:'.$str.'<br/>';
     }
 
+    /**
+     * Will perform a preemptive output and terminate. Do not use this
+     * directly, instead call it form Callback, jsCallback or similar
+     * other classes.
+     */
+    public function terminate($output = null)
+    {
+        echo $output;
+        $this->run_called = true; // prevent shutdown function from triggering.
+        exit;
+    }
+
     public function initLayout($layout, $options = [])
     {
         if (is_string($layout)) {
@@ -114,6 +138,20 @@ class App
         $this->layout = $this->html->add($layout);
 
         return $this;
+    }
+
+    /**
+     * Adds a <style> block to the HTML Header. Not escaped. Try to avoid
+     * and use file include instead.
+     *
+     * @param string $style CSS rules, like ".foo { background: red }".
+     */
+    public function addStyle($style)
+    {
+        if (!$this->html) {
+            throw new Exception(['App does not know how to add style']);
+        }
+        $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
     }
 
     public function normalizeClassNameApp($name, $prefix = null)
@@ -132,16 +170,26 @@ class App
         } else {
             list($obj) = func_get_args();
 
+            if (!is_object($obj)) {
+                throw new Exception(['Incorrect use of App::add']);
+            }
+
             $obj->app = $this;
+
+            return $obj;
         }
     }
 
     public function run()
     {
         $this->run_called = true;
+        $this->hook('beforeRender');
+        $this->is_rendering = true;
         $this->html->template->set('title', $this->title);
         $this->html->renderAll();
         $this->html->template->appendHTML('HEAD', $this->html->getJS());
+        $this->is_rendering = false;
+        $this->hook('beforeOutput');
         echo $this->html->template->render();
     }
 
@@ -295,11 +343,25 @@ class App
         return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value ? $value."</$tag>" : '');
     }
 
+    /**
+     * Encodes string - removes HTML special chars.
+     *
+     * @param string $val
+     *
+     * @return string
+     */
     public function encodeAttribute($val)
     {
         return htmlspecialchars($val);
     }
 
+    /**
+     * Encodes string - removes HTML entities.
+     *
+     * @param string $val
+     *
+     * @return string
+     */
     public function encodeHTML($val)
     {
         return htmlentities($val);

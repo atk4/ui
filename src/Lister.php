@@ -4,11 +4,18 @@ namespace atk4\ui;
 
 class Lister extends View
 {
+    // @var Template
     protected $t_row = null;
+
+    // @var Template
     protected $t_totals = null;
 
+    // @inheritdoc
     public $defaultTemplate = null;
 
+    /**
+     * {@inheritdoc}
+     */
     public function renderView()
     {
         if (!$this->template) {

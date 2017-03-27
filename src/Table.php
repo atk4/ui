@@ -4,60 +4,86 @@
 
 namespace atk4\ui;
 
-class Grid extends Lister
+class Table extends Lister
 {
     use \atk4\core\HookTrait;
 
-    // overrides
-    public $defaultTemplate = 'grid.html';
+    // Overrides
+    public $defaultTemplate = 'table.html';
     public $ui = 'table';
+    public $content = false;
 
     /**
      * Column objects can service multiple columns. You can use it for your advancage by re-using the object
      * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
      * used.
+     *
+     * @var Column\Generic
      */
     public $default_column = null;
 
     /**
      * Contains list of declared columns. Value will always be a column object.
+     *
+     * @var array
      */
     public $columns = [];
 
     /**
-     * Allows you to inject HTML into grid using getHTMLTags hook and column call-backs.
+     * Allows you to inject HTML into table using getHTMLTags hook and column call-backs.
      * Switch this feature off to increase performance at expense of some row-specific HTML.
+     *
+     * @var bool
      */
     public $use_html_tags = true;
 
     /**
      * Determines a strategy on how totals will be calculated. Do not touch those fields
      * direcly, instead use addTotals().
+     *
+     * @var bool
      */
     public $totals_plan = false;
 
     /**
+     * Setting this to false will hide header row.
+     *
+     * @var bool
+     */
+    public $header = true;
+
+    /**
      * Contains list of totals accumulated during the render process.
+     *
+     * @var array
      */
     public $totals = [];
 
     /**
      * Contain the template for the "Head" type row.
+     *
+     * @var Template
      */
     protected $t_head;
 
     /**
      * Contain the template for the "Body" type row.
+     *
+     * @var Template
      */
     protected $t_row;
 
     /**
      * Contain the template for the "Foot" type row.
+     *
+     * @var Template
      */
     protected $t_totals;
 
     /**
      * Contains the output to show if table contains no rows.
+     *
+     * @var Template
      */
     protected $t_empty;
 
@@ -65,51 +91,69 @@ class Grid extends Lister
      * Defines a new column for this field. You need two objects for field to
      * work.
      *
-     * First is being Model field. If your Grid is already associated
-     * with the model, it will automatically pick one by looking up element
+     * First is being Model field. If your Table is already associated with
+     * the model, it will automatically pick one by looking up element
      * corresponding to the $name.
      *
-     * The other object is a Column. This object know how to produce HTML
-     * for cells and will handle other things like alignment. If you do not specify
-     * column, then it will be selected dynamically based on field type.
+     * The other object is a Column. This object know how to produce HTML for
+     * cells and will handle other things like alignment. If you do not specify
+     * column, then it will be selected dynamically based on field type
+     *
+     * And third object is a Field. You can use it in case your current data
+     * model doesn't already have such field.
+     *
+     * @param string         $name      Data model field name
+     * @param Column\Generic $columnDef
+     * @param array          $fieldDef  Array of defaults for new Model field
+     *
+     * @return Column\Generic
      */
-    public function addColumn($name, $columnDef = null, $fieldDef = null)
+    public function addColumn($name, $columnDef = null, $fieldDef = [])
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
 
         $field = $this->model->hasElement($name);
-
         if (!$field) {
             $field = $this->model->addField($name, $fieldDef);
         }
 
-        if (!is_object($columnDef)) {
+        if ($columnDef === null) {
             $columnDef = $this->_columnFactory($field);
+        } elseif (is_string($columnDef) || is_array($columnDef)) {
+            if (!$this->app) {
+                throw new Exception(['You can only specify column type by name if Table is in a render-tree']);
+            }
+
+            $columnDef = $this->add($columnDef, $name);
         } else {
             $this->add($columnDef, $name);
         }
 
-        $columnDef->grid = $this;
+        $columnDef->table = $this;
         $this->columns[$name] = $columnDef;
 
         return $columnDef;
     }
 
     /**
-     * Will come up with a column object based on the field object supplied. If
-     * null is returned, then will use the default column.
+     * Will come up with a column object based on the field object supplied.
+     * By default will use default column.
+     *
+     * @param \atk4\data\Field $f Data model field
+     *
+     * @return Column\Generic
      */
     public function _columnFactory(\atk4\data\Field $f)
     {
         switch ($f->type) {
-        case 'boolean':
-            return $this->add(new Column\Checkbox());
+        //case 'boolean':
+            //return $this->add(new Column\Checkbox());
 
         default:
             if (!$this->default_column) {
-                $this->default_column = $this->add(new Column\Generic());
+                $this->default_column = $this->add(new TableColumn\Generic());
             }
 
             return $this->default_column;
@@ -118,12 +162,13 @@ class Grid extends Lister
 
     /**
      * Overrides work like this:.
-     *
      * [
      *   'name'=>'Totals for {$num} rows:',
      *   'price'=>'--',
      *   'total'=>['sum']
-     * ]
+     * ].
+     *
+     * @param array $plan
      */
     public function addTotals($plan = [])
     {
@@ -132,23 +177,37 @@ class Grid extends Lister
 
     /**
      * Init method will create one column object that will be used to render
-     * all columns in the grid unless you have specified a different
+     * all columns in the table unless you have specified a different
      * column object.
      */
     public function init()
     {
         parent::init();
 
-        $this->t_head = $this->template->cloneRegion('Head');
-        $this->t_row_master = $this->template->cloneRegion('Row');
-        $this->t_totals = $this->template->cloneRegion('Totals');
-        $this->t_empty = $this->template->cloneRegion('Empty');
+        if (!$this->t_head) {
+            $this->t_head = $this->template->cloneRegion('Head');
+            $this->t_row_master = $this->template->cloneRegion('Row');
+            $this->t_totals = $this->template->cloneRegion('Totals');
+            $this->t_empty = $this->template->cloneRegion('Empty');
 
-        $this->template->del('Head');
-        $this->template->del('Body');
-        $this->template->del('Foot');
+            $this->template->del('Head');
+            $this->template->del('Body');
+            $this->template->del('Foot');
+        }
     }
 
+    /**
+     * Sets data Model of Table.
+     *
+     * If $columns is not defined, then automatically will add columns for all
+     * visible model fields. If $columns is set to false, then will not add
+     * columns at all.
+     *
+     * @param \atk4\data\Model $m       Data model
+     * @param array|bool       $columns
+     *
+     * @return \atk4\data\Model
+     */
     public function setModel(\atk4\data\Model $m, $columns = null)
     {
         parent::setModel($m);
@@ -173,16 +232,20 @@ class Grid extends Lister
         }
     }
 
-    // @inheritdoc
+    /**
+     * {@inheritdoc}
+     */
     public function renderView()
     {
         if (!$this->columns) {
-            throw new Exception(['Grid does not have any columns defined', 'columns'=>$this->columns]);
+            throw new Exception(['Table does not have any columns defined', 'columns'=>$this->columns]);
         }
 
         // Generate Header Row
-        $this->t_head->setHTML('cells', $this->renderHeaderCells());
-        $this->template->setHTML('Head', $this->t_head->render());
+        if ($this->header) {
+            $this->t_head->setHTML('cells', $this->renderHeaderCells());
+            $this->template->setHTML('Head', $this->t_head->render());
+        }
 
         // Generate template for data row
         $this->t_row_master->setHTML('cells', $this->getRowTemplate());
@@ -264,12 +327,14 @@ class Grid extends Lister
     /**
      * Responds with the HTML to be inserted in the header row that would
      * contain captions of all columns.
+     *
+     * @return string
      */
     public function renderHeaderCells()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $field = $this->model->hasElement($name);
+            $field = $this->model->getElement($name);
 
             $output[] = $column->getHeaderCell($field);
         }
@@ -278,18 +343,22 @@ class Grid extends Lister
     }
 
     /**
-     * Responsd with HTML to be inserted in the footer row that would
-     * contain totals fro all columns.
+     * Responds with HTML to be inserted in the footer row that would
+     * contain totals for all columns.
+     *
+     * @return string
      */
     public function renderTotalsCells()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
+            // if no totals plan, then show dash, but keep column formatting
             if (!isset($this->totals_plan[$name])) {
-                $output[] = $this->app->getTag('th', '-');
+                $output[] = $column->getTag('th', 'foot', '-');
                 continue;
             }
 
+            // if totals plan is set as array, then show formatted value
             if (is_array($this->totals_plan[$name])) {
                 // todo - format
                 $field = $this->model->getElement($name);
@@ -297,7 +366,8 @@ class Grid extends Lister
                 continue;
             }
 
-            $output[] = $this->app->getTag('th', [], $this->totals_plan[$name]);
+            // otherwise just show it, for example, "Totals:" cell
+            $output[] = $column->getTag('th', 'foot', $this->totals_plan[$name]);
         }
 
         return implode('', $output);
@@ -305,12 +375,14 @@ class Grid extends Lister
 
     /**
      * Collects cell templates from all the columns and combine them into row template.
+     *
+     * @return string
      */
     public function getRowTemplate()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $field = $this->model->hasElement($name);
+            $field = $this->model->getElement($name);
 
             $output[] = $column->getCellTemplate($field);
         }

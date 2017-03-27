@@ -64,9 +64,7 @@ $(function() {
 
         $this->assertEquals('<script>
 $(function() {
-  $("#b").bind("click",function(event) {
-    event.preventDefault();
-    event.stopPropagation();
+  $("#b").bind("click",function() {
     $("#b").hide();
   });
 })</script>', $v->getJS());

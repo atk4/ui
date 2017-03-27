@@ -9,10 +9,15 @@ namespace atk4\ui;
  */
 class Item extends View
 {
+    // @var string
     public $label;
 
+    // @var string
     public $icon;
 
+    /**
+     * {@inheritdoc}
+     */
     public function renderView()
     {
         if ($this->label) {

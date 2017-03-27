@@ -1,16 +1,30 @@
 <?php
 
-namespace atk4\ui\Column;
+namespace atk4\ui\TableColumn;
 
 /**
  * Implements Column helper for grid.
  */
 class Link extends Generic
 {
+    /**
+     * TODO: Refactor so that this goes away!!
+     */
     public $page = null;
 
+    /**
+     * Use
+     *   new Link('http://yahoo.com?id={$id}');
+     * or
+     *   new Link(['order', 'id'=>'{$id}']);.
+     *
+     * @param string|array $page Destination definition
+     */
     public function __construct($page = [])
     {
+        if (!is_array($page)) {
+            $page = [$page];
+        }
         $this->page = $page;
     }
 
@@ -25,7 +39,7 @@ class Link extends Generic
         }
 
         $href = $this->app->url($this->page);
-        $output = $this->app->getTag('td', [], $this->app->getTag('a', ['href'=>$href], '{$'.$f->short_name.'}'));
+        $output = $this->getTag('td', 'body', $this->app->getTag('a', ['href'=>$href], '{$'.$f->short_name.'}'));
 
         $output = str_replace('___o', '{$', $output);
         $output = str_replace('c___', '_urlencode}', $output);

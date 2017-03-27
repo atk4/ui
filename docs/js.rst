@@ -1,9 +1,10 @@
 
 
 
-.. _js:
 
 .. php:namespace: atk4\\ui
+
+.. _js:
 
 ==================
 JavaScript Mapping
@@ -418,3 +419,32 @@ This will map into the following JavaScript code:
 
 You can further simplify JavaScript code yourself, but keep the JavaScript logic inside the `.js` files
 and leave PHP only for binding.
+
+
+Reloading
+=========
+
+.. php:class:: jsReload
+
+jsReload is a JavaScript action that performs reload of a certain object::
+
+    $js_reload_table = new jsReload($table);
+
+This action can be used similar to any other jsExpression. For intance completing the form can reload some
+other view::
+
+    $m_book = new Book($db);
+
+    $f = $app->layout->add('Form');
+    $t = $app->layout->add('Table');
+
+    $f->setModel($m_book);
+
+    $f->onSubmit(function($f) use($t) {
+        $f->model->save();
+        return new \atk4\ui\jsReload($t);
+    });
+
+    $t->setModel($m_book);
+
+In this example, filling out and submitting the form will result in table contents being refreshed using AJAX.

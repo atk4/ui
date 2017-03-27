@@ -53,8 +53,7 @@ class jsCallback extends Callback
                 return $r->jsRender();
             }, $actions));
 
-            echo json_encode(['success'=>true, 'message'=>'Hello World', 'eval'=>$ajaxec]);
-            exit;
+            $this->app->terminate(json_encode(['success'=>true, 'message'=>'Success', 'eval'=>$ajaxec]));
         });
     }
 }

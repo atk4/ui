@@ -38,8 +38,12 @@ class Admin extends Generic
 
     public $breadCrumb = null;  // for Breadcrumb
 
+    // @inheritdoc
     public $defaultTemplate = 'layout/admin.html';
 
+    /**
+     * {@inheritdoc}
+     */
     public function init()
     {
         parent::init();
@@ -59,6 +63,9 @@ class Admin extends Generic
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function renderView()
     {
         if ($this->leftMenu) {

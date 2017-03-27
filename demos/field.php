@@ -4,7 +4,7 @@
  */
 require 'init.php';
 
-$layout->add(new \atk4\ui\H2('Types'));
+$layout->add(new \atk4\ui\Header(['Types', 'size'=>2]));
 
 $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search']));
 $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search', 'loading'=>true]));
@@ -12,13 +12,13 @@ $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search', 'loading'=>'l
 $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search', 'icon'=>'search', 'disabled'=>true]));
 $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search', 'error'=>true]));
 
-$layout->add(new \atk4\ui\H2('Icon Variations'));
+$layout->add(new \atk4\ui\Header(['Icon Variations', 'size'=>2]));
 
 $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search users', 'left'=>true, 'icon'=>'users']));
 $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search users', 'icon'=>'circular search link']));
 $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search users', 'icon'=>'inverted circular search link']));
 
-$layout->add(new \atk4\ui\H2('Labels'));
+$layout->add(new \atk4\ui\Header(['Labels', 'size'=>2]));
 
 $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search users', 'label'=>'http://']));
 
@@ -55,7 +55,7 @@ $layout->add(new \atk4\ui\FormField\Line([
     'label'=> $label,
 ]))->addClass('corner');
 
-$layout->add(new \atk4\ui\H2('Actions'));
+$layout->add(new \atk4\ui\Header(['Actions', 'size'=>2]));
 
 $layout->add(new \atk4\ui\FormField\Line(['action'=>'Search']));
 
@@ -76,14 +76,14 @@ $layout->add(new \atk4\ui\FormField\Line(['iconLeft'=>'search',  'action'=>$dd])
     ->add(new \atk4\ui\Button('Search'), 'AfterAfterInput');
 
 $layout->add(new \atk4\ui\FormField\Line(['action'=> new \atk4\ui\Button([
-    'Copy', 'rightIcon'=>'copy', 'teal',
+    'Copy', 'iconRight'=>'copy', 'teal',
 ])]));
 
 $layout->add(new \atk4\ui\FormField\Line(['action'=> new \atk4\ui\Button([
    'icon'=> 'search',
 ])]));
 
-$layout->add(new \atk4\ui\H2('Modifiers'));
+$layout->add(new \atk4\ui\Header(['Modifiers', 'size'=>2]));
 
 $layout->add(new \atk4\ui\FormField\Line(['icon'=>'search', 'transparent'=>true, 'placeholder'=>'transparent']));
 $layout->add(new \atk4\ui\FormField\Line(['icon'=>'search', 'fluid'=>true, 'placeholder'=>'fluid']));

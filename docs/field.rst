@@ -9,7 +9,7 @@ Input Fields
 
 Agile UI dedicates a separate namespace for the Form Fields. What's common about
 the Form Fields is that they have either 'input' or 'select' element inside them
-making them perfect for using inside a :php:class:`Form`.
+making them perfect for using inside a :php:class:`\atk4\ui\Form`.
 
 Field can also be used on it's own like this::
 
@@ -122,3 +122,15 @@ Integration with Form
 ---------------------
 
 This section explains how Field interracts with the form.
+
+JavaScript on Input
+-------------------
+
+.. php:method:: jsInput([$event, [$other_action]])
+
+Input class implements method jsInput which is identical to :php:meth:`View::js`, except
+that it would target the INPUT element rather then the whole field::
+
+    $field->jsInput(true)->val(123);
+
+
