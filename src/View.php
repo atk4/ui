@@ -647,7 +647,7 @@ class View implements jsExpressionable
             $this->renderView();
 
             $this->recursiveRender();
-            $this->_rendered=true;
+            $this->_rendered = true;
         }
     }
 
