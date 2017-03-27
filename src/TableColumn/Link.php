@@ -39,7 +39,7 @@ class Link extends Generic
         }
 
         $href = $this->app->url($this->page);
-        $output = $this->app->getTag('td', [], $this->app->getTag('a', ['href'=>$href], '{$'.$f->short_name.'}'));
+        $output = $this->getTag('td', 'body', $this->app->getTag('a', ['href'=>$href], '{$'.$f->short_name.'}'));
 
         $output = str_replace('___o', '{$', $output);
         $output = str_replace('c___', '_urlencode}', $output);

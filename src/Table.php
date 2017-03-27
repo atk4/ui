@@ -334,7 +334,7 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $field = $this->model->hasElement($name);
+            $field = $this->model->getElement($name);
 
             $output[] = $column->getHeaderCell($field);
         }
@@ -343,8 +343,8 @@ class Table extends Lister
     }
 
     /**
-     * Responsd with HTML to be inserted in the footer row that would
-     * contain totals fro all columns.
+     * Responds with HTML to be inserted in the footer row that would
+     * contain totals for all columns.
      *
      * @return string
      */
@@ -352,11 +352,13 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
+            // if no totals plan, then show dash, but keep column formatting
             if (!isset($this->totals_plan[$name])) {
-                $output[] = $this->app->getTag('th', '-');
+                $output[] = $column->getTag('th', 'foot', '-');
                 continue;
             }
 
+            // if totals plan is set as array, then show formatted value
             if (is_array($this->totals_plan[$name])) {
                 // todo - format
                 $field = $this->model->getElement($name);
@@ -364,7 +366,8 @@ class Table extends Lister
                 continue;
             }
 
-            $output[] = $this->app->getTag('th', [], $this->totals_plan[$name]);
+            // otherwise just show it, for example, "Totals:" cell
+            $output[] = $column->getTag('th', 'foot', $this->totals_plan[$name]);
         }
 
         return implode('', $output);
@@ -379,7 +382,7 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $field = $this->model->hasElement($name);
+            $field = $this->model->getElement($name);
 
             $output[] = $column->getCellTemplate($field);
         }
