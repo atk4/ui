@@ -129,6 +129,9 @@ class View implements jsExpressionable
     // @var array
     protected $_add_later = [];
 
+    // will be set to true after render
+    protected $_rendered = false;
+
     // }}}
 
     // {{{ Setting Things up
@@ -640,9 +643,12 @@ class View implements jsExpressionable
             $this->init();
         }
 
-        $this->renderView();
+        if (!$this->_rendered) {
+            $this->renderView();
 
-        $this->recursiveRender();
+            $this->recursiveRender();
+            $this->_rendered=true;
+        }
     }
 
     /**
