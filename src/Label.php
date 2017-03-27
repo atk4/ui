@@ -7,12 +7,12 @@ class Label extends View
     public $ui = 'label';
 
     /**
-     * Add icon before label
+     * Add icon before label.
      */
     public $icon = null;
 
     /**
-     * Icon after label
+     * Icon after label.
      */
     public $iconRight = null;
 
@@ -22,12 +22,12 @@ class Label extends View
     public $detail = null;
 
     /**
-     * Image to the left of the label
+     * Image to the left of the label.
      */
     public $image = null;
 
     /**
-     * Image to the right of the label
+     * Image to the right of the label.
      */
     public $imageRight = null;
 

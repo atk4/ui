@@ -59,10 +59,9 @@ class jsExpression implements jsExpressionable
                 $value = $this->args[$identifier];
 
                 // No escaping for {}
-                if($matches[0][0] === '{') {
+                if ($matches[0][0] === '{') {
                     return $value;
                 }
-
 
                 if (is_object($value) && $value instanceof jsExpressionable) {
                     $value = '('.$value->jsRender().')';

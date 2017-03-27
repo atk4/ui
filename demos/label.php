@@ -16,8 +16,8 @@ $del = $layout->add(['Label', 'Zoe', 'image'=>'https://semantic-ui.com/images/av
 $del->on('click', '.delete', $del->js()->fadeOut());
 
 $val = isset($_GET['toggle']) && $_GET['toggle'];
-$toggle = $layout->add(['Label', 'icon'=>'toggle '.($val?'on':'off')])->set('Value: '.$val);
-$toggle->on('click', new \atk4\ui\jsReload($toggle, ['toggle'=>$val?null:1]));
+$toggle = $layout->add(['Label', 'icon'=>'toggle '.($val ? 'on' : 'off')])->set('Value: '.$val);
+$toggle->on('click', new \atk4\ui\jsReload($toggle, ['toggle'=>$val ? null : 1]));
 
 $m = $layout->add('Menu');
 $m->addItem('Inbox')->add(['Label', '20', 'floating red']);
