@@ -81,7 +81,7 @@ class Generic
 
         // specific position classes
         if (isset($this->attr[$position])) {
-            $attr = array_merge($attr, $this->attr[$position]);
+            $attr = array_merge_recursive($attr, $this->attr[$position]);
         }
 
         if (isset($attr['class'])) {
