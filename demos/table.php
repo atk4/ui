@@ -13,7 +13,7 @@ $bb->on('click', $g->js()->reload());
 $g->setModel(new SomeData(), false);
 
 $g->addColumn('name', new \atk4\ui\TableColumn\Link(['details', 'id'=>'{$id}']));
-$g->addColumn('surname', new \atk4\ui\TableColumn\Template('<td class="warning">{$surname}</td>'));
+$g->addColumn('surname', new \atk4\ui\TableColumn\Template('{$surname}'))->addClass('warning');
 $g->addColumn('title', new \atk4\ui\TableColumn\Status([
     'positive'=> ['Prof.'],
     'negative'=> ['Dr.'],
