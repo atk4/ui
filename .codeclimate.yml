@@ -47,6 +47,8 @@ engines:
         enabled: false      # it is OK that some classes have more than 12 public methods
       Design/WeightedMethodCount:
         enabled: false      # because we solve complex task, our classes may be complex
+      Naming/BooleanGetMethodName:
+        enabled: false      # there are few methods which return boolean, but also has parameter as reference, for example, Template->getTagRefList()
       Naming/ShortMethodName:
         enabled: false      # because of on() and js() and $ui
       Naming/ShortVariable:
@@ -54,6 +56,8 @@ engines:
       # THERE IS MUCH TO MUCH OF THESE ERRORS - TEMPORARILY DISABLE THIS CHECK
       UnusedFormalParameter:
         enabled: false
+
+
   radon:
     enabled: true
 ratings:
