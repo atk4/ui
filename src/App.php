@@ -303,14 +303,37 @@ class App
         if ($tag === null) {
             $tag = 'div';
         } elseif (is_array($tag)) {
-            $value = $attr;
-            $attr = $tag;
+            $tmp = $tag;
+
             $tag = 'div';
+            $value = '';
+
+            if (isset($tmp[0])) {
+                $tag = $tmp[0];
+                unset($tmp[0]);
+            }
+
+            if (isset($tmp[1])) {
+                $value = $tmp[1];
+                unset($tmp[1]);
+            }
+
+            $attr = $tmp;
+        }
+        if ($tag[0] === '<') {
+            return $tag;
         }
         if (is_string($attr)) {
             $value = $attr;
             $attr = null;
         }
+
+        if (is_string($value)) {
+            $value = $this->encodeHTML($value);
+        } elseif (is_array($value)) {
+            $value = $this->getTag($value);
+        }
+
         if (!$attr) {
             return "<$tag>".($value ? ($value)."</$tag>" : '');
         }

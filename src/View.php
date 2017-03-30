@@ -266,6 +266,31 @@ class View implements jsExpressionable
         ]);
     }
 
+    public function setElement($element) {
+        $this->element = $element;
+        return $this;
+    }
+
+    /**
+     * Makes button into a "<a>" element with a link.
+     *
+     * @param string $url
+     *
+     * @return $this
+     */
+    public function link($url)
+    {
+        $this->element = 'a';
+        if (is_string($url)) {
+            $this->setAttr('href', $url);
+
+            return $this;
+        }
+        $this->setAttr('href', $this->app->url($url));
+
+        return $this;
+    }
+
     // }}}
 
     // {{{ Default init() method and add() logic
