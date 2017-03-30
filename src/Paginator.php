@@ -7,7 +7,7 @@ class Paginator extends View
     public $defaultTemplate = 'paginator.html';
 
     /**
-     * Specify how many pages this paginator has total
+     * Specify how many pages this paginator has total.
      */
     public $total = null;
 
@@ -24,20 +24,20 @@ class Paginator extends View
 
     /**
      * When there are more than $range*2+1 items, then current page will be surrounded by $range pages
-     * followed by spacer ..., for example if range=2, then
+     * followed by spacer ..., for example if range=2, then.
      *
      * 1, ..., 5, 6, *7*, 8, 9, ..., 34
      */
-    public $range  = 4;
+    public $range = 4;
 
     public $ui = 'pagination menu';
 
     /**
-     * If specified, must be instance of a view which will be reloaded on selection
+     * If specified, must be instance of a view which will be reloaded on selection.
      */
     public $reload = null;
 
-    function init()
+    public function init()
     {
         parent::init();
 
@@ -47,14 +47,14 @@ class Paginator extends View
     }
 
     /**
-     * Pages begin with 1
+     * Pages begin with 1.
      */
-    function getCurrentPage()
+    public function getCurrentPage()
     {
-        return isset($_GET[$this->name]) ? (int)$_GET[$this->name]: 1;
+        return isset($_GET[$this->name]) ? (int) $_GET[$this->name] : 1;
     }
 
-    function getPaginatorItems()
+    public function getPaginatorItems()
     {
         if ($this->page < 1) {
             $this->page = 1;
@@ -105,22 +105,24 @@ class Paginator extends View
         return $p;
     }
 
-    function url($page) {
+    public function url($page)
+    {
         return $this->app->url(['paginator', $this->name=>$page]);
     }
 
-    function renderItem($t, $page = null) {
+    public function renderItem($t, $page = null)
+    {
         if ($page) {
-            $t->trySet('page', (string)$page);
+            $t->trySet('page', (string) $page);
             $t->trySet('link', $this->url($page));
 
-            $t->trySet('active', $page === $this->page ? 'active': '');
+            $t->trySet('active', $page === $this->page ? 'active' : '');
         }
 
         $this->template->appendHTML('rows', $t->render());
     }
 
-    function renderView()
+    public function renderView()
     {
         $t_item = $this->template->cloneRegion('Item');
         $t_first = $this->template->hasTag('FirstItem') ? $this->template->cloneRegion('FirstItem') : $t_item;
@@ -145,8 +147,6 @@ class Paginator extends View
             $this->on('click', '.item', new jsReload($this->reload, [$this->name => new jsExpression('$(this).data("page")')]));
         }
 
-
         parent::renderView();
     }
-
 }
