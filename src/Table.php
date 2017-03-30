@@ -113,13 +113,12 @@ class Table extends Lister
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
 
-        $field = $this->model->hasElement($name);
-        if (!$field && $columnDef) {
-            throw new Exception(['Field with a specified name is not defined in a model']);
-            //$field = $this->model->addField($name, $fieldDef);
-        } elseif (!$field) {
-            $columnDef = $name;
-            $name = null;
+        if ($name !== null) {
+            $field = $this->model->hasElement($name);
+            if (!$field) {
+                $columnDef = $name;
+                $name = null;
+            }
         }
 
         if ($columnDef === null) {
