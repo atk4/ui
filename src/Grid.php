@@ -52,7 +52,7 @@ class Grid extends View
         }
 
         $x = $this->menu->addMenuRight();
-        $this->quickSearch = $x->addItem()->add(new \atk4\ui\FormField\Input(['placeholder'=>'Search', 'icon'=>'search']))->addClass('transparent');
+        $this->quickSearch = $x->addItem()->setElement('div')->add(new \atk4\ui\FormField\Input(['placeholder'=>'Search', 'icon'=>'search']))->addClass('transparent');
     }
 
     public function addAction($label, $action)

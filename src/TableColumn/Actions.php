@@ -20,6 +20,7 @@ class Actions extends Generic
 
         $this->actions[$name] = $button;
         $button->addClass('b_'.$name);
+        $button->addClass('compact');
         $this->table->on('click', '.b_'.$name, $callback);
     }
 
