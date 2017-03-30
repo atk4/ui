@@ -11,10 +11,10 @@ class Actions extends Generic
 
     public function addAction($button, $callback)
     {
-        $name = 'action_'.(count($this->actions)+1);
+        $name = 'action_'.(count($this->actions) + 1);
 
-        if(!is_object($button)) {
-           $button = new \atk4\ui\Button($button);
+        if (!is_object($button)) {
+            $button = new \atk4\ui\Button($button);
         }
         $button->app = $this->table->app;
 
@@ -25,16 +25,15 @@ class Actions extends Generic
 
     public function getCellTemplate(\atk4\data\Field $f = null)
     {
-            $output = '';
+        $output = '';
 
         // render our actions
-        foreach($this->actions as $action) {
-            $output.=$action->getHTML();
+        foreach ($this->actions as $action) {
+            $output .= $action->getHTML();
         }
 
         return $this->getTag('td', 'body', [$output]);
     }
-
 
     // rest will be implemented for crud
 }

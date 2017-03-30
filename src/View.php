@@ -266,8 +266,10 @@ class View implements jsExpressionable
         ]);
     }
 
-    public function setElement($element) {
+    public function setElement($element)
+    {
         $this->element = $element;
+
         return $this;
     }
 
@@ -672,7 +674,7 @@ class View implements jsExpressionable
             $this->renderView();
 
             $this->recursiveRender();
-            $this->_rendered=true;
+            $this->_rendered = true;
         }
     }
 

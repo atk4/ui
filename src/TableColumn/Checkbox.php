@@ -3,7 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 /**
- * Implements Checkbox column for selecting rows
+ * Implements Checkbox column for selecting rows.
  */
 class Checkbox extends Generic
 {
@@ -14,12 +14,14 @@ class Checkbox extends Generic
      *
      * [3, 5, 20]
      */
-    public function jsChecked() {
-        return new \atk4\ui\jsExpression(" $(".$this->table->jsRender().").find('.checked.".$this->class."').closest('tr').map(function(){ ".
+    public function jsChecked()
+    {
+        return new \atk4\ui\jsExpression(' $('.$this->table->jsRender().").find('.checked.".$this->class."').closest('tr').map(function(){ ".
             "return $(this).data('id');}).get()");
     }
 
-    public function init() {
+    public function init()
+    {
         parent::init();
         if (!$this->class) {
             $this->class = 'cb_'.$this->short_name;

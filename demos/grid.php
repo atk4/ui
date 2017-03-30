@@ -19,7 +19,6 @@ $m->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression('aler
 
 $m->table->addColumn('iso', 'TableColumn/Link');
 
-
 /*
 $m = new File($db);
 $m->addCondition('parent_folder_id', null);

@@ -70,5 +70,4 @@ class Button extends View
 
         parent::renderView();
     }
-
 }

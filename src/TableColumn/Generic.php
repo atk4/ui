@@ -108,6 +108,7 @@ class Generic
         if ($f === null) {
             return $this->getTag('th', 'head', '');
         }
+
         return $this->getTag('th', 'head', $f->getCaption());
     }
 
@@ -145,6 +146,7 @@ class Generic
         if ($f === null) {
             return $this->getTag('td', 'body', '{$c_'.$this->short_name.'}');
         }
+
         return $this->getTag('td', 'body', '{$'.$f->short_name.'}');
     }
 

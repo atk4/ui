@@ -137,7 +137,7 @@ class Table extends Lister
         $columnDef->table = $this;
         if (is_null($name)) {
             $this->columns[] = $columnDef;
-        }elseif(isset($this->columns[$name])) {
+        } elseif (isset($this->columns[$name])) {
             if (!is_array($this->columns[$name])) {
                 $this->columns[$name] = [$this->columns[$name]];
             }
