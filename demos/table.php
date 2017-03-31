@@ -9,7 +9,6 @@ $table = $layout->add(['Table', 'celled'=>true]);
 $bb->add(['Button', 'Refresh Table', 'icon'=>'refresh'])
     ->on('click', new \atk4\ui\jsReload($table));
 
-
 $bb->on('click', $table->js()->reload());
 
 $table->setModel(new SomeData(), false);

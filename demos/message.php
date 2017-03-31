@@ -10,8 +10,8 @@ $bar_type = $layout->add(['View', 'ui'=>' basic buttons']);
 $bar_type = $layout->add(['View', 'ui'=>' basic buttons']);
 
 $msg = $layout->add([
-    'Message', 
-    'This is a title of your message', 
+    'Message',
+    'This is a title of your message',
     'type' => isset($_GET['type']) ? $_GET['type'] : null,
     'icon' => isset($_GET['icon']) ? $_GET['icon'] : null,
 ]);
@@ -23,7 +23,6 @@ $bar_type->add(['Button', 'error']);
 $bar_type->add(['Button', 'info']);
 $bar_type->add(['Button', 'warning']);
 
-
 $bar_icon = $layout->add(['View', 'ui'=>' basic buttons']);
 $bar_icon->on('click', '.button', new \atk4\ui\jsReload($msg, ['icon'=>(new \atk4\ui\jQuery())->find('i')->attr('class')]));
 $bar_icon->add(['Button', 'icon'=>'book']);
@@ -31,4 +30,3 @@ $bar_icon->add(['Button', 'icon'=>'check circle outline']);
 $bar_icon->add(['Button', 'icon'=>'pointing right']);
 $bar_icon->add(['Button', 'icon'=>'asterisk loading']);
 $bar_icon->add(['Button', 'icon'=>'vertically flipped cloud']);
-
