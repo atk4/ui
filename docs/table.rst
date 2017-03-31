@@ -1,14 +1,14 @@
 
 .. _table:
 
-====
+=====
 Table
-====
+=====
 
 .. php:namespace:: atk4\ui
 
 Table is the simplest way to output multiple records of structured data. Table only works along with the model,
-however you can use :php:meth:`Lister::setSource` to inject static data (although it is slower than simply
+however you can use :php:meth:`View::setSource` to inject static data (although it is slower than simply
 using a model). :ref:`no_data`
 
 

@@ -30,10 +30,12 @@ Contents:
     layouts
     building-components
     lister
-    tree
+    table
+    paginator
     grid
     form
     crud
+    tree
     virtual-page
     console
 

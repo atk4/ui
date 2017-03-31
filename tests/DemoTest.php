@@ -46,4 +46,11 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         include 'table.php';
         $app->run();
     }
+
+    public function testPaginator()
+    {
+        $this->expectOutputRegex($this->regex);
+        include 'paginator.php';
+        $app->run();
+    }
 }
