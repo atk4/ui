@@ -8,6 +8,8 @@ namespace atk4\ui\TableColumn;
 class Generic
 {
     use \atk4\core\AppScopeTrait;
+    use \atk4\core\InitializerTrait;
+    use \atk4\core\TrackableTrait;
 
     /**
      * Link back to the table, where column is used.
@@ -101,8 +103,12 @@ class Generic
      *
      * @return string
      */
-    public function getHeaderCell(\atk4\data\Field $f)
+    public function getHeaderCell(\atk4\data\Field $f = null)
     {
+        if ($f === null) {
+            return $this->getTag('th', 'head', '');
+        }
+
         return $this->getTag('th', 'head', $f->getCaption());
     }
 
@@ -135,8 +141,12 @@ class Generic
      *
      * @return string
      */
-    public function getCellTemplate(\atk4\data\Field $f)
+    public function getCellTemplate(\atk4\data\Field $f = null)
     {
+        if ($f === null) {
+            return $this->getTag('td', 'body', '{$c_'.$this->short_name.'}');
+        }
+
         return $this->getTag('td', 'body', '{$'.$f->short_name.'}');
     }
 

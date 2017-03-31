@@ -20,7 +20,7 @@ class TagTest extends \atk4\core\PHPUnit_AgileTestCase
     public function testEscaping()
     {
         $this->assertTagRender('<div foo="he&quot;llo">', [['foo'=>'he"llo']]);
-        $this->assertTagRender('<b>bold text >></b>', ['b', 'bold text >>']);
+        $this->assertTagRender('<b>bold text &gt;&gt;</b>', ['b', 'bold text >>']);
     }
 
     public function testElementSubstitution()

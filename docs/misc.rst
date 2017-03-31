@@ -127,7 +127,6 @@ Label has the following propetries:
 
 All the above can be string, array (passed to Icon, Image or View class) or an object.
 
-
 .. php:class:: HelloWorld
 
 HelloWorld

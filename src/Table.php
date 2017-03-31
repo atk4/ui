@@ -104,19 +104,21 @@ class Table extends Lister
      *
      * @param string         $name      Data model field name
      * @param Column\Generic $columnDef
-     * @param array          $fieldDef  Array of defaults for new Model field
      *
      * @return Column\Generic
      */
-    public function addColumn($name, $columnDef = null, $fieldDef = [])
+    public function addColumn($name, $columnDef = null)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
 
-        $field = $this->model->hasElement($name);
-        if (!$field) {
-            $field = $this->model->addField($name, $fieldDef);
+        if ($name !== null) {
+            $field = $this->model->hasElement($name);
+            if (!$field) {
+                $columnDef = $name;
+                $name = null;
+            }
         }
 
         if ($columnDef === null) {
@@ -132,7 +134,16 @@ class Table extends Lister
         }
 
         $columnDef->table = $this;
-        $this->columns[$name] = $columnDef;
+        if (is_null($name)) {
+            $this->columns[] = $columnDef;
+        } elseif (isset($this->columns[$name])) {
+            if (!is_array($this->columns[$name])) {
+                $this->columns[$name] = [$this->columns[$name]];
+            }
+            $this->columns[$name][] = $columnDef;
+        } else {
+            $this->columns[$name] = $columnDef;
+        }
 
         return $columnDef;
     }
@@ -336,9 +347,19 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $field = $this->model->getElement($name);
 
-            $output[] = $column->getHeaderCell($field);
+            // If multiple formatters are defined, use the first for the header cell
+            if (is_array($column)) {
+                $column = $column[0];
+            }
+
+            if (!is_int($name)) {
+                $field = $this->model->getElement($name);
+
+                $output[] = $column->getHeaderCell($field);
+            } else {
+                $output[] = $column->getHeaderCell();
+            }
         }
 
         return implode('', $output);
@@ -384,9 +405,19 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $field = $this->model->getElement($name);
 
-            $output[] = $column->getCellTemplate($field);
+            // If multiple formatters are defined, use the first for the header cell
+            if (is_array($column)) {
+                $column = $column[0];
+            }
+
+            if (!is_int($name)) {
+                $field = $this->model->getElement($name);
+
+                $output[] = $column->getCellTemplate($field);
+            } else {
+                $output[] = $column->getCellTemplate();
+            }
         }
 
         return implode('', $output);
