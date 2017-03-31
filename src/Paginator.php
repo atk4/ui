@@ -47,7 +47,7 @@ class Paginator extends View
     }
 
     /**
-     * Set total number of pages. 
+     * Set total number of pages.
      */
     public function setTotal($total)
     {
