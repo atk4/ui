@@ -29,6 +29,7 @@ Contents:
     core
     layouts
     building-components
+    menu
     lister
     table
     paginator

@@ -9,15 +9,20 @@ namespace atk4\ui;
  */
 class Item extends View
 {
-    // @var string
+    /**
+     * Specify a label for this menu item
+     *
+     * @var string
+     */
     public $label;
 
-    // @var string
+    /**
+     * Specify icon for this menu item
+     *
+     * @var string
+     */
     public $icon;
 
-    /**
-     * {@inheritdoc}
-     */
     public function renderView()
     {
         if ($this->label) {

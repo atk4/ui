@@ -16,11 +16,6 @@ class Paginator extends View
     public $page = null;
 
     /**
-     * Specifies how many items per page must be shown.
-     */
-    public $ipp = 50;
-
-    /**
      * When there are more than $range*2+1 items, then current page will be surrounded by $range pages
      * followed by spacer ..., for example if range=2, then.
      *
