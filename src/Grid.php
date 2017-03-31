@@ -9,23 +9,58 @@ namespace atk4\ui;
  */
 class Grid extends View
 {
+    /**
+     * Will be initalized to Menu object, however you can set this to false to disable menu.
+     *
+     * @var Menu $menu
+     */
     public $menu = null;
 
+    /**
+     * Calling addQuickSearch will create a form with a field inside $menu to perform quick searches
+     *
+     * @var FormField\Generic $quickSearch
+     */
     public $quickSearch = null;
 
-    public $table = null;
-
-    public $buttons = null;
-
-    public $actions = null;
-
-    public $defaultTemplate = 'grid.html';
-
-    public $ipp = 50;
-
+    /**
+     * Paginator is automatically added below the table and will provide 
+     * divide long tables into pages
+     */
     public $paginator = null;
 
+    /**
+     * Number of items per page to display.
+     *
+     * @var int $ipp
+     */
+    public $ipp = 50;
+
+    /**
+     * Calling addAction will add a new column inside $table, and will be re-used
+     * for next addAction().
+     *
+     * @var TableColumn\Action $actions
+     */
+    public $actions = null;
+
+    /**
+     * Calling addSelection will add a new column inside $table, containing checkboxes.
+     * This column will be stored here, in case you want to access it.
+     *
+     * @var TableColumn\Checkbox $selection
+     */
     public $selection = null;
+
+    /**
+     * Component that actually renders data rows / coluns and possibly totals.
+     *
+     * @var Table $table
+     */
+    public $table = null;
+
+
+    public $defaultTemplate = 'grid.html';
 
     public function init()
     {
@@ -40,8 +75,8 @@ class Grid extends View
         }
 
         if (is_null($this->paginator)) {
-            $seg = $this->add(['View', 'ui'=>'segment'], 'Paginator')->addClass('center aligned basic');
-            $this->paginator = $seg->add(['Paginator', 'ipp'=>$this->ipp]);
+            $seg = $this->add(['View'], 'Paginator')->addStyle('text-align', 'center');
+            $this->paginator = $seg->add('Paginator');
         }
     }
 
@@ -60,10 +95,10 @@ class Grid extends View
             throw new Exception(['Unable to add QuickSearch without Menu']);
         }
 
+        $form = $this->menu
+            ->addMenuRight()->addItem()->setElement('div')
+            ->add('View')->setElement('form');
 
-
-        $x = $this->menu->addMenuRight();
-        $form =$x->addItem()->setElement('div')->add('View')->setElement('form');
         $this->quickSearch = $form->add(new \atk4\ui\FormField\Input(['placeholder'=>'Search', 'short_name'=>$this->name.'_q', 'icon'=>'search']))
             ->addClass('transparent');
 
@@ -111,13 +146,10 @@ class Grid extends View
 
         if ($this->paginator) {
             $this->paginator->reload = $this;
-            if ($this->ipp) {
-                $this->paginator->ipp = $this->ipp;
-            }
 
-            $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->paginator->ipp));
+            $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
 
-            $this->model->setLimit($this->paginator->ipp, ($this->paginator->page - 1) * $this->paginator->ipp);
+            $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
         }
 
         return parent::recursiveRender();
