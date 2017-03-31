@@ -36,7 +36,7 @@ class Paginator extends View
     public $ui = 'pagination menu';
     public $defaultTemplate = 'paginator.html';
 
-    function init()
+    public function init()
     {
         parent::init();
 
@@ -47,7 +47,7 @@ class Paginator extends View
 
     public function setTotal($total)
     {
-        $this->total = (int)$total;
+        $this->total = (int) $total;
 
         if ($this->page < 1) {
             $this->page = 1;
@@ -67,14 +67,14 @@ class Paginator extends View
 
     /**
      * Calculate logical sequence of items in a paginator. Responds with array
-     * containing recipe for HTML augmenting:
+     * containing recipe for HTML augmenting:.
      *
      * [ '[', '...', 10, 11, 12 ]
      *
      * Array will contain '[', ']', denoting "first" , "last" items, '...' for the spacer and any
      * other integer value for a regular page link.
      */
-    function getPaginatorItems()
+    public function getPaginatorItems()
     {
         if ($this->page < 1) {
             $this->page = 1;
@@ -126,16 +126,18 @@ class Paginator extends View
     }
 
     /**
-     * TODO: Remove after https://github.com/atk4/ui/issues/69 is fixed
+     * TODO: Remove after https://github.com/atk4/ui/issues/69 is fixed.
      */
-    function url($page) {
+    public function url($page)
+    {
         return $this->app->url(['paginator', $this->name=>$page]);
     }
 
     /**
-     * Render page item using template $t for the page number $page. 
+     * Render page item using template $t for the page number $page.
      */
-    function renderItem($t, $page = null) {
+    public function renderItem($t, $page = null)
+    {
         if ($page) {
             $t->trySet('page', (string) $page);
             $t->trySet('link', $this->url($page));

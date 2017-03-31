@@ -40,10 +40,9 @@ class Grid extends View
         }
 
         if (is_null($this->paginator)) {
-            $seg = $this->add(['View', 'ui'=>'segment'],'Paginator')->addClass('center aligned basic');
+            $seg = $this->add(['View', 'ui'=>'segment'], 'Paginator')->addClass('center aligned basic');
             $this->paginator = $seg->add(['Paginator', 'ipp'=>$this->ipp]);
         }
-
     }
 
     public function addButton($text)
@@ -91,12 +90,12 @@ class Grid extends View
     {
         // bind with paginator
 
-        if($this->paginator) {
+        if ($this->paginator) {
             $this->paginator->reload = $this;
 
             $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->paginator->ipp));
 
-            $this->model->setLimit($this->paginator->ipp, ($this->paginator->page-1) * $this->paginator->ipp);
+            $this->model->setLimit($this->paginator->ipp, ($this->paginator->page - 1) * $this->paginator->ipp);
         }
 
         return parent::recursiveRender();
