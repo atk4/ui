@@ -20,6 +20,13 @@ that incapsulates Agile UI.
 Used when application flow needs to be terminated preemptievely. For example when
 call-back is triggered and need to respond with some JSON.
 
+Execution state
+===============
+
+.. php:attr:: is_rendering
+
+Will be true if application is currently rendering recursively through the Render Tree.
+
 Hooks
 =====
 
