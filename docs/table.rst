@@ -318,34 +318,7 @@ on various requirements and will provide a way how to achieve that.
 Toolbar, Quick-search and Paginator
 -----------------------------------
 
-It's quite common to have "Toolbar" above the table and pagination below. The toolbar often hosts
-a Quicksearch form too. Default Table implementation does not have any of these features, however
-you can use a separate 'Advanced Grid' add-on, which extends standard Grid functionality::
-
-
-    $grid = $layout->add(new \atk4\ui\AdvancedGrid());
-
-    // Buttons appear above the grid. Clicking them will dynamically load more views inside dialog.
-    $grid->addButton('Download', function($page){ 
-        $page->add('Info')->set('This UI will appear in a dialog');
-    });
-
-    // Paginator allow to go back and fourth inside Grid, if you have a lot of data.
-    $grid->addPaginator(20);
-
-    // Quick-search allow your user to quickly search for results.
-    $grid->addQuickSearch(['name', 'surname']);
-
-    // Expander allow user to "open up" individual records and reveal additional UI elements
-    $grid->addExpander(function($page, $id){ 
-        $page->add('Info')->set('This UI will appear in-line in your grid');
-    });
-
-    // Standartise use of 'Actions' through TableColumn\Action
-    $grid->addAction('Delete');
-
-The implementation for Advanced Grid is scheduled to be added in Agile UI 1.1, check with
-http://github.com/atk4/ui on the progress.
+See :php:class:`Grid`
 
 Column attributes and classes
 =============================
@@ -405,6 +378,13 @@ classes, you should generate your TD/TH tag through getTag method.
     Will apply cell-based attributes or classes then use :php:meth:`App::getTag` to
     generate HTML tag and encode it's content.
 
+Columns without fields
+----------------------
+
+You can add column to a table that does not link with field::
+
+    $cb = $table->addColumn('Checkbox');
+
 
 Using dynamic values
 --------------------
@@ -414,7 +394,6 @@ but if you specify attribute (or class) value as a tag, then it will be auto-fil
 with row value or injected HTML.
 
 For further examples of and advanced usage, see implementation of :php:class:`TableColumn\Status`.
-
 
 
 Standard Column Types
@@ -487,44 +466,34 @@ will only work if you asign it to a primary column (by passing 1st argument to a
 
 (In the future it may be optional with the ability to specify caption).
 
+Checkbox
+--------
 
-Action Column
-=============
+.. php:class:: TableColumn\Checkbox
 
-.. php:class:: TableColumn\Action
+.. php:method:: jsChecked()
 
-This column allows you to incorporate any of the standard :ref:`actions` into your column.
-The functionality and diveristy of actions is seamlessly integrated into the column and
-the actions are performed on the row level.
+Adding this column will render checkbox for each row. This column must not be used on a field.
+Checkbox column provides you with a handy jsChecked() method, which you can use to reference
+current item selection. The next code will allow you to select the checkboxes, and when you
+click on the button, it will reload $segment component while passing all the id's::
+
+    $box = $table->addColumn(new \atk4\ui\TableColumn\Checkbox());
+
+    $button->on('click', new jsReload($segment, ['ids'=>$box->jsChecked()]));
+
+jsChecked expression represents a JavaScript string which you can place inside a form field,
+use as argument etc.
+
+Actions
+-------
+
+.. php:class:: TableColumn\Actions
+
+This column can have number of buttons (or similar views) inside a column. This would allow you
+to interract with each row directly.
 
 The basic usage format is::
 
-    $act = $table->addColumn(new \atk4\ui\Column\Action())
-
-    // Pencil icon linking to a URL
-    $act->addAction(new \atk4\ui\Action\Link(
-        'http://google.com/?q={$text}'
-    ));
-
-    // Delete, that will delete current row
-    $act->addAction(new \atk4\ui\Action\Delete('trash'));
-
-    // Method, executes user-defined method for the model
-    $act->addAction(new \atk4\ui\Action\Method('archive'));
-
-    // Callback executes JavaScript
-    $act->addAction(new \atk4\ui\Action\Callback(
-        function($model) {
-            return new jsExpression('alert([])', 'Clicked on id='.$model->id);
-        }
-    ));
-
-    // Dialog opens a modal dialog with content
-    $act->addAction(new \atk4\ui\Action\Dialog(
-        function($page, $model) {
-            $page->add('Info')->set('Dialog for record with id='.$model->id);
-        }
-    ));
-
-For more information about Actions, see :ref:`actions`. (Scheduled to be implemented in Agile UI 1.1)
+    $act = $table->addColumn(new \atk4\ui\TableColumn\Actions());
 

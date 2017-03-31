@@ -64,9 +64,43 @@ include quick-search component::
 If you don't specify argument, then search will be done by a title field.
 (http://agile-data.readthedocs.io/en/develop/model.html#title-field)
 
+Paginator
+=========
+
+.. php:attr: $paginator
+
+.. php:attr: $ipp
+
+Grid comes with a paginator already. You can disable it by setting $paginator property to false. You can use $ipp
+to specify different number of pages on the page::
+
+    $grid->ipp = 10;
+
+Actions
+=======
+
+.. php:method: addAction($label, $action)
+
+.. php:attr: $actions
+
+:php:class:`Table` supports use of :php:class:`TableColumn\Actions`, which allows to display button for each row.
+Calling addAction() provides a useful short-cut for creating column-based actions.
+
+Selection
+=========
+
+Grid can have a checkbox column for you to select elements. It relies on :php:class:`TableColumn\Checkbox`, but will
+additionally place this column before any other column inside a grid. You can use :php:meth:`TableColumn\Checkbox::jsChecked()`
+method to reference value of selected checkboxes inside any :ref:`js_action`::
+
+    $sel = $grid->addSelection();
+    $grid->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
+        'alert("Selected: "+[])', [$sel->jsChecked()]
+    ));
+
 Advanced Usage
 ==============
 
 .. php:attr: $table
 
-You can use a different component instead of default 'Table' 
+You can use a different component instead of default :php:class:`Table` by injecting $table property.

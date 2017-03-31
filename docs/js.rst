@@ -33,6 +33,8 @@ by specifying selector, you can perform certain actions:
 Agile UI provides a built-in integration for jQuery. To use jQuery and any other JavaScript library
 in Agile UI you need to understand how Action sand Events work.
 
+.. _js_action:
+
 Actions
 -------
 

@@ -17,7 +17,7 @@ class Checkbox extends Generic
     public function jsChecked()
     {
         return new \atk4\ui\jsExpression(' $('.$this->table->jsRender().").find('.checked.".$this->class."').closest('tr').map(function(){ ".
-            "return $(this).data('id');}).get()");
+            "return $(this).data('id');}).get().join(',')");
     }
 
     public function init()
