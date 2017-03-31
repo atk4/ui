@@ -103,12 +103,11 @@ class Grid extends View
             ->addClass('transparent');
 
         if (isset($_GET[$this->name.'_q'])) {
-
             $q = $_GET[$this->name.'_q'];
             $this->quickSearch->set($q);
 
             $cond = [];
-            foreach($fields as $field) {
+            foreach ($fields as $field) {
                 $cond[] = [$field, 'like', '%'.$q.'%'];
             }
             $this->model->addCondition($cond);
