@@ -9,9 +9,8 @@ namespace atk4\ui;
  *
  * $page->add([
  *  'Message',
- *  'type'=>'error',
- *  'Unable to save your document',
- *  'text'=>'
+ *  'type' => 'error',
+ *  'text' => 'Unable to save your document',
  *  ])
  *  ->text->addParagraph('')
  */
@@ -26,11 +25,15 @@ class Message extends View
 
     /**
      * Contains a text to be included below.
+     *
+     * @var Text|false
      */
     public $text = null;
 
     /**
      * Specify icon to be displayed.
+     *
+     * @var string
      */
     public $icon = null;
 
