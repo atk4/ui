@@ -8,7 +8,7 @@ $g->setModel(new Country($db));
 $g->addQuickSearch();
 
 $g->menu->addItem(['Add Country', 'icon'=>'add square'], new \atk4\ui\jsExpression('alert(123)'));
-$g->menu->addItem(['Re-Import', 'icon'=>'power']);
+$g->menu->addItem(['Re-Import', 'icon'=>'power'], new \atk4\ui\jsReload($g));
 $g->menu->addItem(['Delete All', 'icon'=>'trash', 'red active']);
 
 $g->addAction('Say HI', new \atk4\ui\jsExpression('alert("hi")'));

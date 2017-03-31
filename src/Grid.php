@@ -56,9 +56,28 @@ class Grid extends View
             $fields = [$this->model->title_field];
         }
 
+        if (!$this->menu) {
+            throw new Exception(['Unable to add QuickSearch without Menu']);
+        }
+
+
+
         $x = $this->menu->addMenuRight();
-        $this->quickSearch = $x->addItem()->setElement('div')
-            ->add(new \atk4\ui\FormField\Input(['placeholder'=>'Search', 'icon'=>'search']))->addClass('transparent');
+        $form =$x->addItem()->setElement('div')->add('View')->setElement('form');
+        $this->quickSearch = $form->add(new \atk4\ui\FormField\Input(['placeholder'=>'Search', 'short_name'=>$this->name.'_q', 'icon'=>'search']))
+            ->addClass('transparent');
+
+        if (isset($_GET[$this->name.'_q'])) {
+
+            $q = $_GET[$this->name.'_q'];
+            $this->quickSearch->set($q);
+
+            $cond = [];
+            foreach($fields as $field) {
+                $cond[] = [$field, 'like', '%'.$q.'%'];
+            }
+            $this->model->addCondition($cond);
+        }
     }
 
     public function addAction($label, $action)
