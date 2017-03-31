@@ -54,12 +54,12 @@ that you have enough pages, user should see $range*2+1 bars.
 
 .. php:meth: getPaginatorItems
 
-You can override this method to implement a different logic for calculating which page links to desplay given
+You can override this method to implement a different logic for calculating which page links to display given
 the current and total pages.
 
 .. php:meth: getCurrentPage
 
-
+Returns number of current page.
 
 Template
 ========
