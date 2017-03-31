@@ -5,7 +5,6 @@ require 'init.php';
 $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 
 $layout->add(['Header', 'Message Types']);
-$bar_type = $layout->add(['View', 'ui'=>' basic buttons']);
 
 $bar_type = $layout->add(['View', 'ui'=>' basic buttons']);
 
