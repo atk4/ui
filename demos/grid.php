@@ -18,3 +18,5 @@ $sel = $g->addSelection();
 $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
     'alert("Selected: "+[].join(", "))', [$sel->jsChecked()]
 ));
+
+$g->ipp = 10;

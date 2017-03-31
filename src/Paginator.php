@@ -45,6 +45,17 @@ class Paginator extends View
         }
     }
 
+    public function setTotal($total)
+    {
+        $this->total = (int)$total;
+
+        if ($this->page < 1) {
+            $this->page = 1;
+        } elseif ($this->page > $this->total) {
+            $this->page = $this->total;
+        }
+    }
+
     /**
      * Determine and return the current page. You can extend this method for
      * the advanced logic.
