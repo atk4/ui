@@ -129,6 +129,7 @@ Label has the following propetries:
 
 All the above can be string, array (passed to Icon, Image or View class) or an object.
 
+.. php:class:: HelloWorld
 
 HelloWorld
 ==========
@@ -172,7 +173,7 @@ designer with knowledge of HTML/CSS we recommend you to create your own layouts 
 if you are not sure how to do that, then using "Columns" class might be a good alternative for some
 basic content arrangements.
 
-.. php:meth:: addColumn()
+.. php:method:: addColumn()
 
 When you add new component to the page it will typically consume 100% width of its container. Columns
 will break down width into chunks that can be used by other elements::
