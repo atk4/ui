@@ -12,27 +12,27 @@ class Grid extends View
     /**
      * Will be initalized to Menu object, however you can set this to false to disable menu.
      *
-     * @var Menu $menu
+     * @var Menu
      */
     public $menu = null;
 
     /**
-     * Calling addQuickSearch will create a form with a field inside $menu to perform quick searches
+     * Calling addQuickSearch will create a form with a field inside $menu to perform quick searches.
      *
-     * @var FormField\Generic $quickSearch
+     * @var FormField\Generic
      */
     public $quickSearch = null;
 
     /**
-     * Paginator is automatically added below the table and will provide 
-     * divide long tables into pages
+     * Paginator is automatically added below the table and will provide
+     * divide long tables into pages.
      */
     public $paginator = null;
 
     /**
      * Number of items per page to display.
      *
-     * @var int $ipp
+     * @var int
      */
     public $ipp = 50;
 
@@ -40,7 +40,7 @@ class Grid extends View
      * Calling addAction will add a new column inside $table, and will be re-used
      * for next addAction().
      *
-     * @var TableColumn\Action $actions
+     * @var TableColumn\Action
      */
     public $actions = null;
 
@@ -48,17 +48,16 @@ class Grid extends View
      * Calling addSelection will add a new column inside $table, containing checkboxes.
      * This column will be stored here, in case you want to access it.
      *
-     * @var TableColumn\Checkbox $selection
+     * @var TableColumn\Checkbox
      */
     public $selection = null;
 
     /**
      * Component that actually renders data rows / coluns and possibly totals.
      *
-     * @var Table $table
+     * @var Table
      */
     public $table = null;
-
 
     public $defaultTemplate = 'grid.html';
 
