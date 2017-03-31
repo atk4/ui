@@ -6,17 +6,23 @@ class Paginator extends View
 {
     /**
      * Specify how many pages this paginator has total.
+     *
+     * @var int
      */
     public $total = null;
 
     /**
      * Override what is the current page. If not set, Paginator will look inside
      * $_GET[$this->name]. If page > total, then page = total.
+     *
+     * @var int
      */
     public $page = null;
 
     /**
      * Specifies how many items per page must be shown.
+     *
+     * @var int
      */
     public $ipp = 50;
 
@@ -25,6 +31,8 @@ class Paginator extends View
      * followed by spacer ..., for example if range=2, then.
      *
      * 1, ..., 5, 6, *7*, 8, 9, ..., 34
+     *
+     * @var int
      */
     public $range = 4;
 
@@ -36,6 +44,9 @@ class Paginator extends View
     public $ui = 'pagination menu';
     public $defaultTemplate = 'paginator.html';
 
+    /**
+     * Initialization.
+     */
     public function init()
     {
         parent::init();
@@ -48,6 +59,8 @@ class Paginator extends View
     /**
      * Determine and return the current page. You can extend this method for
      * the advanced logic.
+     *
+     * @return int
      */
     public function getCurrentPage()
     {
@@ -62,6 +75,8 @@ class Paginator extends View
      *
      * Array will contain '[', ']', denoting "first" , "last" items, '...' for the spacer and any
      * other integer value for a regular page link.
+     *
+     * @return array
      */
     public function getPaginatorItems()
     {
@@ -116,6 +131,10 @@ class Paginator extends View
 
     /**
      * TODO: Remove after https://github.com/atk4/ui/issues/69 is fixed.
+     *
+     * @param int|string $page
+     *
+     * @return string
      */
     public function url($page)
     {
@@ -124,6 +143,9 @@ class Paginator extends View
 
     /**
      * Render page item using template $t for the page number $page.
+     *
+     * @param Template   $t
+     * @param int|string $page
      */
     public function renderItem($t, $page = null)
     {
@@ -137,6 +159,9 @@ class Paginator extends View
         $this->template->appendHTML('rows', $t->render());
     }
 
+    /**
+     * Renders view.
+     */
     public function renderView()
     {
         $t_item = $this->template->cloneRegion('Item');
