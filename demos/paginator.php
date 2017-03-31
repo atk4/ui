@@ -12,4 +12,3 @@ $label = $seg->add(['Label']);
 $bb = $seg->add(['Paginator', 'total'=>50, 'range'=>2, 'reload'=>$seg]);
 $label->addClass('blue ribbon');
 $label->set('Current page: '.$bb->page);
-

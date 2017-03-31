@@ -5,7 +5,7 @@ namespace atk4\ui;
 class Paginator extends View
 {
     /**
-     * Specify how many pages this paginator has total
+     * Specify how many pages this paginator has total.
      */
     public $total = null;
 
@@ -22,14 +22,14 @@ class Paginator extends View
 
     /**
      * When there are more than $range*2+1 items, then current page will be surrounded by $range pages
-     * followed by spacer ..., for example if range=2, then
+     * followed by spacer ..., for example if range=2, then.
      *
      * 1, ..., 5, 6, *7*, 8, 9, ..., 34
      */
-    public $range  = 4;
+    public $range = 4;
 
     /**
-     * If specified, must be instance of a view which will be reloaded on selection
+     * If specified, must be instance of a view which will be reloaded on selection.
      */
     public $reload = null;
 
@@ -49,9 +49,9 @@ class Paginator extends View
      * Determine and return the current page. You can extend this method for
      * the advanced logic.
      */
-    function getCurrentPage()
+    public function getCurrentPage()
     {
-        return isset($_GET[$this->name]) ? (int)$_GET[$this->name]: 1;
+        return isset($_GET[$this->name]) ? (int) $_GET[$this->name] : 1;
     }
 
     /**
@@ -126,16 +126,16 @@ class Paginator extends View
      */
     function renderItem($t, $page = null) {
         if ($page) {
-            $t->trySet('page', (string)$page);
+            $t->trySet('page', (string) $page);
             $t->trySet('link', $this->url($page));
 
-            $t->trySet('active', $page === $this->page ? 'active': '');
+            $t->trySet('active', $page === $this->page ? 'active' : '');
         }
 
         $this->template->appendHTML('rows', $t->render());
     }
 
-    function renderView()
+    public function renderView()
     {
         $t_item = $this->template->cloneRegion('Item');
         $t_first = $this->template->hasTag('FirstItem') ? $this->template->cloneRegion('FirstItem') : $t_item;
@@ -159,7 +159,6 @@ class Paginator extends View
         if ($this->reload) {
             $this->on('click', '.item', new jsReload($this->reload, [$this->name => new jsExpression('$(this).data("page")')]));
         }
-
 
         parent::renderView();
     }
