@@ -53,4 +53,11 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         include 'paginator.php';
         $app->run();
     }
+
+    public function testGird()
+    {
+        $this->expectOutputRegex($this->regex);
+        include 'grid.php';
+        $app->run();
+    }
 }
