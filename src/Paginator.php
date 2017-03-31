@@ -20,13 +20,6 @@ class Paginator extends View
     public $page = null;
 
     /**
-     * Specifies how many items per page must be shown.
-     *
-     * @var int
-     */
-    public $ipp = 50;
-
-    /**
      * When there are more than $range*2+1 items, then current page will be surrounded by $range pages
      * followed by spacer ..., for example if range=2, then.
      *
@@ -44,15 +37,26 @@ class Paginator extends View
     public $ui = 'pagination menu';
     public $defaultTemplate = 'paginator.html';
 
-    /**
-     * Initialization.
-     */
     public function init()
     {
         parent::init();
 
         if (!$this->page) {
             $this->page = $this->getCurrentPage();
+        }
+    }
+
+    /**
+     * Set total number of pages.
+     */
+    public function setTotal($total)
+    {
+        $this->total = (int) $total;
+
+        if ($this->page < 1) {
+            $this->page = 1;
+        } elseif ($this->page > $this->total) {
+            $this->page = $this->total;
         }
     }
 
@@ -159,9 +163,6 @@ class Paginator extends View
         $this->template->appendHTML('rows', $t->render());
     }
 
-    /**
-     * Renders view.
-     */
     public function renderView()
     {
         $t_item = $this->template->cloneRegion('Item');
