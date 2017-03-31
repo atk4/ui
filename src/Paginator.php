@@ -6,45 +6,26 @@ class Paginator extends View
 {
     /**
      * Specify how many pages this paginator has total.
-<<<<<<< HEAD
-=======
      *
      * @var int
->>>>>>> origin/develop
      */
     public $total = null;
 
     /**
      * Override what is the current page. If not set, Paginator will look inside
      * $_GET[$this->name]. If page > total, then page = total.
-<<<<<<< HEAD
-=======
      *
      * @var int
->>>>>>> origin/develop
      */
     public $page = null;
 
     /**
-<<<<<<< HEAD
-=======
-     * Specifies how many items per page must be shown.
-     *
-     * @var int
-     */
-    public $ipp = 50;
-
-    /**
->>>>>>> origin/develop
      * When there are more than $range*2+1 items, then current page will be surrounded by $range pages
      * followed by spacer ..., for example if range=2, then.
      *
      * 1, ..., 5, 6, *7*, 8, 9, ..., 34
-<<<<<<< HEAD
-=======
      *
      * @var int
->>>>>>> origin/develop
      */
     public $range = 4;
 
@@ -56,12 +37,6 @@ class Paginator extends View
     public $ui = 'pagination menu';
     public $defaultTemplate = 'paginator.html';
 
-<<<<<<< HEAD
-=======
-    /**
-     * Initialization.
-     */
->>>>>>> origin/develop
     public function init()
     {
         parent::init();
@@ -71,7 +46,9 @@ class Paginator extends View
         }
     }
 
-<<<<<<< HEAD
+    /**
+     * Set total number of pages. 
+     */
     public function setTotal($total)
     {
         $this->total = (int) $total;
@@ -86,13 +63,8 @@ class Paginator extends View
     /**
      * Determine and return the current page. You can extend this method for
      * the advanced logic.
-=======
-    /**
-     * Determine and return the current page. You can extend this method for
-     * the advanced logic.
      *
      * @return int
->>>>>>> origin/develop
      */
     public function getCurrentPage()
     {
@@ -107,11 +79,8 @@ class Paginator extends View
      *
      * Array will contain '[', ']', denoting "first" , "last" items, '...' for the spacer and any
      * other integer value for a regular page link.
-<<<<<<< HEAD
-=======
      *
      * @return array
->>>>>>> origin/develop
      */
     public function getPaginatorItems()
     {
@@ -166,13 +135,10 @@ class Paginator extends View
 
     /**
      * TODO: Remove after https://github.com/atk4/ui/issues/69 is fixed.
-<<<<<<< HEAD
-=======
      *
      * @param int|string $page
      *
      * @return string
->>>>>>> origin/develop
      */
     public function url($page)
     {
@@ -181,12 +147,9 @@ class Paginator extends View
 
     /**
      * Render page item using template $t for the page number $page.
-<<<<<<< HEAD
-=======
      *
      * @param Template   $t
      * @param int|string $page
->>>>>>> origin/develop
      */
     public function renderItem($t, $page = null)
     {
@@ -200,12 +163,6 @@ class Paginator extends View
         $this->template->appendHTML('rows', $t->render());
     }
 
-<<<<<<< HEAD
-=======
-    /**
-     * Renders view.
-     */
->>>>>>> origin/develop
     public function renderView()
     {
         $t_item = $this->template->cloneRegion('Item');
