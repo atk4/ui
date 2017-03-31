@@ -12,7 +12,7 @@ class Grid extends View
     /**
      * Will be initalized to Menu object, however you can set this to false to disable menu.
      *
-     * @var Menu
+     * @var Menu|false
      */
     public $menu = null;
 
@@ -26,6 +26,8 @@ class Grid extends View
     /**
      * Paginator is automatically added below the table and will provide
      * divide long tables into pages.
+     *
+     * @var Paginator|false
      */
     public $paginator = null;
 
@@ -55,7 +57,7 @@ class Grid extends View
     /**
      * Component that actually renders data rows / coluns and possibly totals.
      *
-     * @var Table
+     * @var Table|false
      */
     public $table = null;
 
