@@ -3,7 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 /**
- * Formatting money.
+ * Formatting action buttons column.
  */
 class Actions extends Generic
 {

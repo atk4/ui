@@ -64,5 +64,9 @@ include quick-search component::
 If you don't specify argument, then search will be done by a title field.
 (http://agile-data.readthedocs.io/en/develop/model.html#title-field)
 
+Advanced Usage
+==============
 
+.. php:attr: $table
 
+You can use a different component instead of default 'Table' 

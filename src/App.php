@@ -36,6 +36,11 @@ class App
 
     public $ui_persistence = null;
 
+    /**
+     * Constructor.
+     *
+     * @param array $defaults
+     */
     public function __construct($defaults = [])
     {
         // Process defaults
@@ -88,6 +93,11 @@ class App
         }
     }
 
+    /**
+     * Catch exception.
+     *
+     * @param mixed $exception
+     */
     public function caughtException($exception)
     {
         $l = new \atk4\ui\App();
@@ -107,6 +117,11 @@ class App
         $this->run_called = true;
     }
 
+    /**
+     * Outputs debug info.
+     *
+     * @param string $str
+     */
     public function outputDebug($str)
     {
         echo 'DEBUG:'.$str.'<br/>';
@@ -116,6 +131,8 @@ class App
      * Will perform a preemptive output and terminate. Do not use this
      * directly, instead call it form Callback, jsCallback or similar
      * other classes.
+     *
+     * @param string $output
      */
     public function terminate($output = null)
     {
@@ -124,6 +141,14 @@ class App
         exit;
     }
 
+    /**
+     * Initializes layout.
+     *
+     * @param string|Layout\Generic $layout
+     * @param array                 $options
+     *
+     * @return $this
+     */
     public function initLayout($layout, $options = [])
     {
         if (is_string($layout)) {
@@ -154,6 +179,14 @@ class App
         $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
     }
 
+    /**
+     * Normalizes class name.
+     *
+     * @param string $name
+     * @param string $prefix
+     *
+     * @return string
+     */
     public function normalizeClassNameApp($name, $prefix = null)
     {
         if (strpos('/', $name) === false && strpos('\\', $name) === false) {
@@ -163,6 +196,11 @@ class App
         return $name;
     }
 
+    /**
+     * Create object and associate it with this app.
+     *
+     * @return object
+     */
     public function add()
     {
         if ($this->layout) {
@@ -180,6 +218,9 @@ class App
         }
     }
 
+    /**
+     * Runs app and echo rendered template.
+     */
     public function run()
     {
         $this->run_called = true;
@@ -201,6 +242,13 @@ class App
         $this->_init();
     }
 
+    /**
+     * Load template.
+     *
+     * @param string $name
+     *
+     * @return Template
+     */
     public function loadTemplate($name)
     {
         $template = new Template();
@@ -297,6 +345,12 @@ class App
      * 10. pass array as text to net tags (array must contain 1 to 3 elements corresponding to arguments):
      * getTag('a', ['href'=>'foo.html'], ['b','click here']);
      * --> <a href="foo.html"><b>click here</b></a>
+     *
+     * @param string|array $tag
+     * @param string       $attr
+     * @param string|array $value
+     *
+     * @return string
      */
     public function getTag($tag = null, $attr = null, $value = null)
     {
