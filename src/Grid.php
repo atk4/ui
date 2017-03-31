@@ -92,6 +92,9 @@ class Grid extends View
 
         if ($this->paginator) {
             $this->paginator->reload = $this;
+            if ($this->ipp) {
+                $this->paginator->ipp = $this->ipp;
+            }
 
             $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->paginator->ipp));
 
