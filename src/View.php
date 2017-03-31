@@ -266,6 +266,13 @@ class View implements jsExpressionable
         ]);
     }
 
+    /**
+     * Sets View element.
+     *
+     * @param string $element
+     *
+     * @return $this
+     */
     public function setElement($element)
     {
         $this->element = $element;
@@ -274,7 +281,7 @@ class View implements jsExpressionable
     }
 
     /**
-     * Makes button into a "<a>" element with a link.
+     * Makes view into a "<a>" element with a link.
      *
      * @param string $url
      *
