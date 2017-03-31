@@ -27,6 +27,27 @@ Execution state
 
 Will be true if application is currently rendering recursively through the Render Tree.
 
+Links
+=====
+
+.. php:method:: url(page)
+
+Method to generate links between pages. Specified with associative array::
+
+    $url = $app->url(['contact', 'from'=>'John Smith']);
+
+this method must respond with a properly formatted url such as::
+
+    contact.php?from=John+Smith
+
+You may redefine this metod if you are using beautiful URLs and advanced
+routing::
+
+    /app/contact/John+Smith
+
+Rest of Agile UI code can rely on url() wrapper.
+
+
 Hooks
 =====
 

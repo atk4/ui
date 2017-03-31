@@ -4,8 +4,6 @@ namespace atk4\ui;
 
 class Paginator extends View
 {
-    public $defaultTemplate = 'paginator.html';
-
     /**
      * Specify how many pages this paginator has total
      */
@@ -30,12 +28,13 @@ class Paginator extends View
      */
     public $range  = 4;
 
-    public $ui = 'pagination menu';
-
     /**
      * If specified, must be instance of a view which will be reloaded on selection
      */
     public $reload = null;
+
+    public $ui = 'pagination menu';
+    public $defaultTemplate = 'paginator.html';
 
     function init()
     {
@@ -47,13 +46,23 @@ class Paginator extends View
     }
 
     /**
-     * Pages begin with 1
+     * Determine and return the current page. You can extend this method for
+     * the advanced logic.
      */
     function getCurrentPage()
     {
         return isset($_GET[$this->name]) ? (int)$_GET[$this->name]: 1;
     }
 
+    /**
+     * Calculate logical sequence of items in a paginator. Responds with array
+     * containing recipe for HTML augmenting:
+     *
+     * [ '[', '...', 10, 11, 12 ]
+     *
+     * Array will contain '[', ']', denoting "first" , "last" items, '...' for the spacer and any
+     * other integer value for a regular page link.
+     */
     function getPaginatorItems()
     {
         if ($this->page < 1) {
@@ -105,10 +114,16 @@ class Paginator extends View
         return $p;
     }
 
+    /**
+     * TODO: Remove after https://github.com/atk4/ui/issues/69 is fixed
+     */
     function url($page) {
         return $this->app->url(['paginator', $this->name=>$page]);
     }
 
+    /**
+     * Render page item using template $t for the page number $page. 
+     */
     function renderItem($t, $page = null) {
         if ($page) {
             $t->trySet('page', (string)$page);
@@ -148,5 +163,4 @@ class Paginator extends View
 
         parent::renderView();
     }
-
 }
