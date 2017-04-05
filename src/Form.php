@@ -258,6 +258,13 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function success($str = 'Success', $sub_header = null)
     {
+        /*
+         * below code works, but polutes output with bad id=xx
+        $success = new Message([$str, 'id'=>false, 'type'=>'success', 'icon'=>'check']);
+        $success->app = $this->app;
+        $success->init();
+        $success->text->addParagraph($sub_header);
+         */
         $success = $this->app->loadTemplate($this->successTemplate);
         $success['header'] = $str;
 
