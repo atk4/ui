@@ -156,7 +156,13 @@ class View implements jsExpressionable
             throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
         }
 
+
         $this->setProperties($defaults);
+
+        if (is_string($this->class)) {
+            $this->class = explode(' ', $this->class);
+        }
+
     }
 
     /**
