@@ -54,6 +54,13 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         $app->run();
     }
 
+    public function testView()
+    {
+        $this->expectOutputRegex($this->regex);
+        include 'view.php';
+        $app->run();
+    }
+
     public function testGrid()
     {
         $this->markTestSkipped('Skipping test because we do not have access to DB yet');

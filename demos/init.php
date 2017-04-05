@@ -26,6 +26,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem('Interactivity - Modals and Expanders', ['expander']);
 
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon'=>'cubes']);
+    $basic->addItem('View', ['view']);
     $basic->addItem('Button', ['button']);
     $basic->addItem('Header', ['header']);
     $basic->addItem('Message', ['message']);

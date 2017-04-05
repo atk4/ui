@@ -157,6 +157,10 @@ class View implements jsExpressionable
         }
 
         $this->setProperties($defaults);
+
+        if (is_string($this->class)) {
+            $this->class = explode(' ', $this->class);
+        }
     }
 
     /**
