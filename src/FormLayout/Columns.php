@@ -55,7 +55,7 @@ class Columns extends Generic
         $c = $this->add('Columns');
 
         $chunks = array_chunk($fields, ceil($cnt / $col));
-        foreach($chunks as $chunk) {
+        foreach ($chunks as $chunk) {
             $cc = $c->addColumn();
             $cc->add(['FormLayout/Generic', 'form'=>$this->form])->setModel($model, $chunk);
         }

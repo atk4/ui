@@ -195,7 +195,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $this->addHook('submit', function () {
 
             // Field validation
-            $result = $this->hook('validate'); 
+            $result = $this->hook('validate');
 
             $errors = [];
 
