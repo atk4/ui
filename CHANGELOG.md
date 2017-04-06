@@ -1,3 +1,9 @@
+## 1.0.3
+
+* Updated JS/CSS dependencies to use cloudflare CDN, more reliable than
+  semantic-ui.com
+* cleaned up demos/form2.php
+
 ## 1.0.2
 
 * Button::$rightIcon renamed into $iconRight to follow global pattern
