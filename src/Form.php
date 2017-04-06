@@ -55,10 +55,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
 
-        if (!$this->layout) {
-            $this->setLayout();
-        }
-
         return $this->layout->addField(...$args); //$this->fieldFactory($modelField));
     }
 
@@ -71,10 +67,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function addHeader($title = null)
     {
-        if (!$this->layout) {
-            $this->setLayout();
-        }
-
         return $this->layout->addHeader($title);
     }
 
@@ -87,25 +79,31 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function addGroup($title = null)
     {
-        if (!$this->layout) {
-            $this->setLayout();
-        }
-
         return $this->layout->addGroup($title);
     }
 
     /**
-     * Sets form layout.
-     *
-     * @param string|\atk4\ui\FormLayout\Generic $layout
+     * initialize form layout. You can inject custom layout
+     * if you 'layout'=>.. to constructor.
      */
-    public function setLayout($layout = null)
+    public function initLayout()
     {
-        if (!$layout) {
-            $layout = new \atk4\ui\FormLayout\Generic(['form' => $this]);
+        if (is_string($this->layout)) {
+            $this->layout = [$this->layout];
+        } elseif ($this->layout === null) {
+            $this->layout = ['FormLayout/Generic'];
         }
 
-        $this->layout = $this->add($layout);
+        if (is_array($this->layout)) {
+            $this->layout['form'] = $this;
+            $this->layout = $this->add($this->layout);
+        } elseif (is_object($this->layout)) {
+            $this->layout->form = $this;
+            $this->add($this->layout);
+        } else {
+            throw new Exception(['Unsupported specification of form layout. Can be array, string or object', 'layout'=>$this->layout]);
+        }
+
         $this->layout->addButton($this->buttonSave = new Button(['Save', 'primary']));
         $this->buttonSave->on('click', $this->js()->form('submit'));
     }
@@ -182,33 +180,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             return $model;
         }
 
-        if (!$this->layout) {
-            $this->setLayout(new \atk4\ui\FormLayout\Generic(['form'=>$this]));
-        }
-
-        if ($fields === null) {
-            $fields = [];
-            foreach ($model->elements as $f) {
-                if (!$f instanceof \atk4\data\Field) {
-                    continue;
-                }
-
-                if (!$f->isEditable()) {
-                    continue;
-                }
-                $fields[] = $f->short_name;
-            }
-        }
-
-        if (is_array($fields)) {
-            foreach ($fields as $field) {
-                $modelField = $model->getElement($field);
-
-                $formField = $this->layout->addField($this->fieldFactory($modelField));
-            }
-        } else {
-            throw new Exception(['Incorrect value for $fields', 'fields'=>$fields]);
-        }
+        $this->layout->setModel($model, $fields);
 
         return $model;
     }
@@ -217,12 +189,13 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     {
         parent::init();
 
+        $this->initLayout();
+
         $this->addHook('submit', [$this, 'loadPOST']);
         $this->addHook('submit', function(){ 
 
             // Field validation
             $result = $this->hook('validate'); 
-            var_dump($result);
 
             $errors = [];
 

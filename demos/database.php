@@ -70,7 +70,7 @@ class Stat extends \atk4\data\Model
 
         $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type'=>'currency']);
 
-        $this->addFields(['project_hours_est', 'project_hours_reported'], ['type'=>'int']);
+        $this->addFields(['project_hours_est', 'project_hours_reported'], ['type'=>'integer']);
 
         $this->addFields(['project_expenses_est', 'project_expenses'], ['type'=>'currency']);
         $this->add(new Percent, 'project_mgmt_cost_pct');

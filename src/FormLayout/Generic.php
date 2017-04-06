@@ -74,6 +74,41 @@ class Generic extends View
         return $this->_add($field, ['name'=>$field->short_name]);
     }
 
+    public function setModel(\atk4\data\Model $model, $fields = null)
+    {
+        parent::setModel($model);
+
+        if ($fields === false) {
+            return $model;
+        }
+
+        if ($fields === null) {
+            $fields = [];
+            foreach ($model->elements as $f) {
+                if (!$f instanceof \atk4\data\Field) {
+                    continue;
+                }
+
+                if (!$f->isEditable()) {
+                    continue;
+                }
+                $fields[] = $f->short_name;
+            }
+        }
+
+        if (is_array($fields)) {
+            foreach ($fields as $field) {
+                $modelField = $model->getElement($field);
+
+                $formField = $this->addField($this->form->fieldFactory($modelField));
+            }
+        } else {
+            throw new Exception(['Incorrect value for $fields', 'fields'=>$fields]);
+        }
+
+        return $model;
+    }
+
     /**
      * Adds Button.
      *
@@ -123,9 +158,6 @@ class Generic extends View
         return $this->add(new self($label));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function recursiveRender()
     {
         $field_input = $this->template->cloneRegion('InputField');

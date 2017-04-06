@@ -61,7 +61,7 @@ class Input extends Generic
             'type'       => $this->inputType,
             'placeholder'=> $this->placeholder,
             'id'         => $this->id.'_input',
-            'value'      => isset($this->field) ? $this->field->get() : $this->content ?: '',
+            'value'      => isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: '',
         ]);
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }

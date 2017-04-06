@@ -19,7 +19,7 @@ class UI extends \atk4\data\Persistence
 {
     public $date_format = 'd/m/Y';
 
-    public $time_format = 'h:i:S';
+    public $time_format = 'h:i:s';
 
     public $datetime_format = 'D, d M Y H:i:s O';
 
