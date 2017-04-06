@@ -18,7 +18,7 @@ class jsModal extends jsExpression
   <div class="header">
     '.htmlspecialchars($title).'
   </div>
-  <div class="image content">
+  <div class="image content atk-dialog-content">
   <div class="ui active inverted dimmer">
     <div class="ui text loader">Loading</div>
   </div>
@@ -28,8 +28,13 @@ class jsModal extends jsExpression
 ';
 
         parent::__construct('
-        var m=$("<div>").appendTo("body").addClass("ui fullscreen scrolling modal").html([content]);
-        m.modal({onHide: function() { m.children().remove(); return true; }}).modal("show").find(".content").load([url], function() { m.modal("refresh"); })',
+        var m=$("<div>").appendTo("body").addClass("ui scrolling modal").html([content]);
+        m.modal({onHide: function() { m.children().remove(); return true; }}).modal("show").find(".content").load([url], function() { m.modal("refresh"); });
+        m.find(".atk-dialog-content").data("opener", this).on("close", function() {
+            m.modal("hide");
+            m.remove();
+        });
+',
             ['content'=>$content, 'url'=>$url]);
     }
 }

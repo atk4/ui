@@ -24,6 +24,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem('Table interractions', ['multitable']);
     $form->addItem('Grid - Table+Bar+Search+Paginator', ['grid']);
     $form->addItem('Interactivity - Modals and Expanders', ['expander']);
+    $form->addItem('CRUD - Full editing solution', ['crud']);
 
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon'=>'cubes']);
     $basic->addItem('Button', ['button']);

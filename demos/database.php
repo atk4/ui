@@ -20,10 +20,10 @@ class Country extends \atk4\data\Model
     public function init()
     {
         parent::init();
-        $this->addField('name', ['actual'=>'nicename']);
+        $this->addField('name', ['actual'=>'nicename', 'mandatory'=>true, 'type'=>'string']);
 
-        $this->addField('iso', ['caption'=>'ISO']);
-        $this->addField('iso3', ['caption'=>'ISO3']);
+        $this->addField('iso', ['caption'=>'ISO', 'mandatory'=>true, 'type'=>'string']);
+        $this->addField('iso3', ['caption'=>'ISO3', 'mandatory'=>true, 'type'=>'string']);
         $this->addField('numcode', ['caption'=>'ISO Numeric Code']);
         $this->addField('phonecode', ['caption'=>'Phone Prefix']);
     }

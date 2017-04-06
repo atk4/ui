@@ -64,7 +64,7 @@ class Generic extends View
         }
 
         if (isset($args['caption'])) {
-            $field->field->ui['caption'] = $args['caption'];
+            $field->field->caption = $args['caption'];
         }
 
         if (isset($args['width'])) {
@@ -171,8 +171,7 @@ class Generic extends View
             }
 
             $template = $field_input;
-            $label = isset($el->field->ui['caption']) ?
-                $el->field->ui['caption'] : ucwords(str_replace('_', ' ', $el->field->short_name));
+            $label = $el->field->getCaption();
 
             // Anything but fields gets inserted directly
             if ($el instanceof \atk4\ui\FormField\Checkbox) {
@@ -198,9 +197,14 @@ class Generic extends View
             $template->setHTML('Input', $el->getHTML());
             $template->trySet('label', $label);
             $template->trySet('label_for', $el->id.'_input');
+            $template->set('field_class', '');
+
+            if ($el->field->mandatory) {
+                $template->append('field_class', 'required ');
+            }
 
             if (isset($el->field->ui['width'])) {
-                $template->set('field_class', $el->field->ui['width'].' wide');
+                $template->append('field_class', $el->field->ui['width'].' wide ');
             }
 
             $this->template->appendHTML('Content', $template->render());
