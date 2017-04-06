@@ -291,7 +291,7 @@ class App
         $page = $args[0];
         unset($args[0]);
 
-        $url = $page ? ($page . ($extension ? '.'.$extension : '')) : '';
+        $url = $page ? ($page.($extension ? '.'.$extension : '')) : '';
 
         $args = http_build_query($args);
 
