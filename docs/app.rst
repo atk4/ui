@@ -30,7 +30,7 @@ Will be true if application is currently rendering recursively through the Rende
 Links
 =====
 
-.. php:method:: url(page, extension)
+.. php:method:: url(page)
 
 Method to generate links between pages. Specified with associative array::
 
@@ -39,8 +39,6 @@ Method to generate links between pages. Specified with associative array::
 this method must respond with a properly formatted url such as::
 
     contact.php?from=John+Smith
-
-If your pages use extension other than .php, then you should pass that extension too.
 
 You may redefine this metod if you are using beautiful URLs and advanced
 routing::

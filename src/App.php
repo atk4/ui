@@ -268,12 +268,11 @@ class App
     /**
      * Build a URL that application can use for call-backs.
      *
-     * @param array|string $args      List of new GET arguments
-     * @param string       $extension Default file extension
+     * @param array|string $args List of new GET arguments
      *
      * @return string
      */
-    public function url($args = [], $extension = 'php')
+    public function url($args = [])
     {
         if (is_string($args)) {
             $args = [$args];
@@ -286,7 +285,7 @@ class App
         $page = $args[0];
         unset($args[0]);
 
-        $url = $page ? ($page.($extension ? '.'.$extension : '')) : '';
+        $url = $page ? $page.'.php' : '';
 
         $args = http_build_query($args);
 
