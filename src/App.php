@@ -308,7 +308,7 @@ class App
      */
     public function requireJS($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' =>$url]) . $this->getTag('/script'));
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' =>$url]).$this->getTag('/script'));
 
         return $this;
     }
