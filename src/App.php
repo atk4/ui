@@ -308,7 +308,7 @@ class App
      */
     public function requireJS($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' =>$url]).$this->getTag('/script'));
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' =>$url], ''));
 
         return $this;
     }
@@ -368,9 +368,9 @@ class App
      * getTag('/td', ['th', 'align'=>'left']);
      * --> </th>
      *
-     * 8. using $value will NOT be escaped (so that you can pass nested HTML)
+     * 8. using $value will add value inside tag. It will also encode value.
      * getTag('a', ['href'=>'foo.html'] ,'click here >>');
-     * --> <a href="foo.html">click here >></a>
+     * --> <a href="foo.html">click here &gt;&gt;</a>
      *
      * 9. you may skip attribute argument.
      * getTag('b','text in bold');
@@ -423,7 +423,7 @@ class App
         }
 
         if (!$attr) {
-            return "<$tag>".($value ? ($value)."</$tag>" : '');
+            return "<$tag>".($value !== null ? $value."</$tag>" : '');
         }
         $tmp = [];
         if (substr($tag, -1) == '/') {
@@ -451,7 +451,7 @@ class App
             }
         }
 
-        return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value ? $value."</$tag>" : '');
+        return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value !== null ? $value."</$tag>" : '');
     }
 
     /**
