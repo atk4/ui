@@ -5,7 +5,7 @@ namespace atk4\ui;
 class Paginator extends View
 {
     /**
-     * Specify how many pages this paginator has total.
+     * Specify how many pages this paginator has in total.
      *
      * @var int
      */
@@ -48,10 +48,16 @@ class Paginator extends View
 
     /**
      * Set total number of pages.
+     *
+     * @param int $total
      */
     public function setTotal($total)
     {
         $this->total = (int) $total;
+
+        if ($this->total < 1) {
+            $this->total = 1;
+        }
 
         if ($this->page < 1) {
             $this->page = 1;
