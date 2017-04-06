@@ -273,11 +273,12 @@ class App
     /**
      * Build a URL that application can use for call-backs.
      *
-     * @param array|string $args List of new GET arguments
+     * @param array|string $args      List of new GET arguments
+     * @param string       $extension Default file extension
      *
      * @return string
      */
-    public function url($args = [])
+    public function url($args = [], $extension = 'php')
     {
         if (is_string($args)) {
             $args = [$args];
@@ -290,7 +291,7 @@ class App
         $page = $args[0];
         unset($args[0]);
 
-        $url = $page ? ($page.'.php') : '';
+        $url = $page ? ($page . ($extension ? '.'.$extension : '')) : '';
 
         $args = http_build_query($args);
 
@@ -302,19 +303,32 @@ class App
     }
 
     /**
-     * Adds additional JS include in aaplication template.
+     * Adds additional JS script include in aplication template.
      *
-     * @param string $name
+     * @param string $url
      *
      * @return $this
      */
-    public function requireJS($name)
+    public function requireJS($url)
     {
-        $this->template->trySet('', $this->url($name));
+        $this->html->template->appendHTML('HEAD', '<script src="'.$this->url($url, null).'"></script>');
 
         return $this;
     }
 
+    /**
+     * Adds additional CSS stylesheet include in aplication template.
+     *
+     * @param string $url
+     *
+     * @return $this
+     */
+    public function requireCSS($url)
+    {
+        $this->html->template->appendHTML('HEAD', '<link rel="stylesheet" type="text/css" href="'.$this->url($url, null).'">');
+
+        return $this;
+    }
 
     /**
      * Construct HTML tag with supplied attributes.

@@ -902,6 +902,10 @@ class View implements jsExpressionable
 
     /**
      * Get JavaScript objects from this render tree.
+     *
+     * @param bool $force_echo
+     *
+     * @return string
      */
     public function getJS($force_echo = false)
     {
