@@ -256,12 +256,12 @@ class Table extends Lister
 
         // Generate Header Row
         if ($this->header) {
-            $this->t_head->setHTML('cells', $this->renderHeaderCells());
+            $this->t_head->setHTML('cells', $this->getHeaderRowHTML());
             $this->template->setHTML('Head', $this->t_head->render());
         }
 
         // Generate template for data row
-        $this->t_row_master->setHTML('cells', $this->getRowTemplate());
+        $this->t_row_master->setHTML('cells', $this->getDataRowHTML());
         $this->t_row_master['_id'] = '{$_id}';
         $this->t_row = new Template($this->t_row_master->render());
         $this->t_row->app = $this->app;
@@ -311,7 +311,7 @@ class Table extends Lister
         if (!$rows) {
             $this->template->appendHTML('Body', $this->t_empty->render());
         } elseif ($this->totals_plan) {
-            $this->t_totals->setHTML('cells', $this->renderTotalsCells());
+            $this->t_totals->setHTML('cells', $this->getTotalsRowHTML());
             $this->template->appendHTML('Foot', $this->t_totals->render());
         } else {
         }
@@ -343,7 +343,7 @@ class Table extends Lister
      *
      * @return string
      */
-    public function renderHeaderCells()
+    public function getHeaderRowHTML()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
@@ -371,7 +371,7 @@ class Table extends Lister
      *
      * @return string
      */
-    public function renderTotalsCells()
+    public function getTotalsRowHTML()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
@@ -401,7 +401,7 @@ class Table extends Lister
      *
      * @return string
      */
-    public function getRowTemplate()
+    public function getDataRowHTML()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
