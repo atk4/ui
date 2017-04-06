@@ -306,7 +306,7 @@ class App
      */
     public function requireJS($url)
     {
-        $this->html->template->appendHTML('HEAD', '<script src="'.$this->url($url, null).'"></script>');
+        $this->html->template->appendHTML('HEAD', '<script src="'.$url.'"></script>');
 
         return $this;
     }
@@ -320,7 +320,7 @@ class App
      */
     public function requireCSS($url)
     {
-        $this->html->template->appendHTML('HEAD', '<link rel="stylesheet" type="text/css" href="'.$this->url($url, null).'">');
+        $this->html->template->appendHTML('HEAD', '<link rel="stylesheet" type="text/css" href="'.$url.'">');
 
         return $this;
     }
