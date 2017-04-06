@@ -47,6 +47,24 @@ routing::
 
 Rest of Agile UI code can rely on url() wrapper.
 
+Includes
+========
+
+.. php:method:: requireJS($url)
+
+Method to include additional JavaScript file in page::
+
+    $app->requireJS('https://code.jquery.com/jquery-3.1.1.js');
+    $app->requireJS('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js');
+
+Using of CDN servers is always better than storing external libraries locally.
+Most of the time CDN servers are faster (cached) and more reliable.
+
+.. php:method:: requireCSS($url)
+
+Method to include additional CSS stylesheet in page::
+
+    $app->requireCSS('http://semantic-ui.com/dist/semantic.css');
 
 Hooks
 =====

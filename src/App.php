@@ -36,6 +36,9 @@ class App
 
     public $ui_persistence = null;
 
+    /** @var View For internal use */
+    public $html = null;
+
     /**
      * Constructor.
      *
@@ -157,9 +160,12 @@ class App
         }
         $layout->app = $this;
 
-        $this->html = new View(['defaultTemplate'=>'html.html']);
-        $this->html->app = $this;
-        $this->html->init();
+        if (!$this->html) {
+            $this->html = new View(['defaultTemplate' => 'html.html']);
+            $this->html->app = $this;
+            $this->html->init();
+        }
+
         $this->layout = $this->html->add($layout);
 
         return $this;
@@ -282,7 +288,7 @@ class App
         $page = $args[0];
         unset($args[0]);
 
-        $url = $page ? ($page.'.php') : '';
+        $url = $page ? $page.'.php' : '';
 
         $args = http_build_query($args);
 
@@ -291,6 +297,34 @@ class App
         }
 
         return $url;
+    }
+
+    /**
+     * Adds additional JS script include in aplication template.
+     *
+     * @param string $url
+     *
+     * @return $this
+     */
+    public function requireJS($url)
+    {
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' =>$url]).$this->getTag('/script'));
+
+        return $this;
+    }
+
+    /**
+     * Adds additional CSS stylesheet include in aplication template.
+     *
+     * @param string $url
+     *
+     * @return $this
+     */
+    public function requireCSS($url)
+    {
+        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]));
+
+        return $this;
     }
 
     /**
@@ -304,7 +338,7 @@ class App
      *
      * 1. all array key=>val elements appear as attributes with value escaped.
      * getTag('div/', ['data'=>'he"llo']);
-     * --> <div data="he\"llo">
+     * --> <div data="he\"llo"/>
      *
      * 2. boolean value true will add attribute without value
      * getTag('td', ['nowrap'=>true]);
