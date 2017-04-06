@@ -37,6 +37,14 @@ class App
     public $ui_persistence = null;
 
     /**
+     * If you specify a string, then it will be considered a filename
+     * from which to load the template.
+     *
+     * @var string
+     */
+    public $defaultTemplate = 'html.html';
+
+    /**
      * Constructor.
      *
      * @param array $defaults
@@ -157,7 +165,7 @@ class App
         }
         $layout->app = $this;
 
-        $this->html = new View(['defaultTemplate'=>'html.html']);
+        $this->html = new View(['defaultTemplate' => $this->defaultTemplate]);
         $this->html->app = $this;
         $this->html->init();
         $this->layout = $this->html->add($layout);
@@ -292,6 +300,21 @@ class App
 
         return $url;
     }
+
+    /**
+     * Adds additional JS include in aaplication template.
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function requireJS($name)
+    {
+        $this->template->trySet('', $this->url($name));
+
+        return $this;
+    }
+
 
     /**
      * Construct HTML tag with supplied attributes.
