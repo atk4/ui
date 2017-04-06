@@ -37,14 +37,6 @@ class App
     public $ui_persistence = null;
 
     /**
-     * If you specify a string, then it will be considered a filename
-     * from which to load the template.
-     *
-     * @var string
-     */
-    public $defaultTemplate = 'html.html';
-
-    /**
      * Constructor.
      *
      * @param array $defaults
@@ -165,9 +157,12 @@ class App
         }
         $layout->app = $this;
 
-        $this->html = new View(['defaultTemplate' => $this->defaultTemplate]);
-        $this->html->app = $this;
-        $this->html->init();
+        if (!$this->html) {
+            $this->html = new View(['defaultTemplate' => 'html.html']);
+            $this->html->app = $this;
+            $this->html->init();
+        }
+
         $this->layout = $this->html->add($layout);
 
         return $this;
