@@ -20,6 +20,17 @@ class Generic extends View
      */
     public $field;
 
+    public function init()
+    {
+        parent::init();
+        if ($this->field->mandatory) {
+            $this->form->addHook('validate', function() {
+                var_dump($this->field->get());
+                return [$this->field->short_name => !$this->field->get() ];
+            });
+        }
+    }
+
     /**
      * It only makes sense to have "name" property inside a field if
      * it was used inside a form.

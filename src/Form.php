@@ -9,10 +9,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 {
     use \atk4\core\HookTrait;
 
-    // @inheritdoc
     public $ui = 'form';
-
-    // @inheritdoc
     public $defaultTemplate = 'form.html';
 
     /**
@@ -216,14 +213,47 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return $model;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function init()
     {
         parent::init();
 
         $this->addHook('submit', [$this, 'loadPOST']);
+        $this->addHook('submit', function(){ 
+
+            // Field validation
+            $result = $this->hook('validate'); 
+            var_dump($result);
+
+            $errors = [];
+
+            foreach($result as $er) {
+                if (!is_array($er)) {
+                    continue;
+                }
+
+                foreach($er as $field => $error) {
+                    var_dump($error);
+                    if ($error === null || $error === false) {
+                        continue;
+                    }
+
+                    if (isset($errors[$field])) {
+                        continue;
+                    }
+                    $errors[$field] = is_string($error) ? $error: 'Incorrect value specified';
+                }
+            }
+
+            $return = [];
+
+            if ($errors) {
+                foreach ($errors as $field=>$error) {
+                    $return[] = $this->error($field, $error);
+                }
+
+                return $return;
+            }
+        });
     }
 
     /**
@@ -280,9 +310,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return $js;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function renderView()
     {
         $this->ajaxSubmit();
