@@ -192,19 +192,19 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $this->initLayout();
 
         $this->addHook('submit', [$this, 'loadPOST']);
-        $this->addHook('submit', function(){ 
+        $this->addHook('submit', function () {
 
             // Field validation
             $result = $this->hook('validate'); 
 
             $errors = [];
 
-            foreach($result as $er) {
+            foreach ($result as $er) {
                 if (!is_array($er)) {
                     continue;
                 }
 
-                foreach($er as $field => $error) {
+                foreach ($er as $field => $error) {
                     var_dump($error);
                     if ($error === null || $error === false) {
                         continue;
@@ -213,7 +213,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                     if (isset($errors[$field])) {
                         continue;
                     }
-                    $errors[$field] = is_string($error) ? $error: 'Incorrect value specified';
+                    $errors[$field] = is_string($error) ? $error : 'Incorrect value specified';
                 }
             }
 
