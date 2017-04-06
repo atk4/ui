@@ -28,17 +28,17 @@ class Checkbox extends Generic
         }
     }
 
-    public function getHeaderCell(\atk4\data\Field $f = null)
+    public function getHeaderCellHTML(\atk4\data\Field $f = null)
     {
         if (isset($f)) {
             throw new Exception(['Checkbox must be placed in an empty column. Don\'t specify any field.', 'field'=>$f]);
         }
         $this->table->js(true)->find('.'.$this->class)->checkbox();
 
-        return parent::getHeaderCell($f);
+        return parent::getHeaderCellHTML($f);
     }
 
-    public function getCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellHTML(\atk4\data\Field $f = null)
     {
         return $this->getTag('td', 'body', ['div', 'class'=>'ui checkbox '.$this->class, ['input', 'type'=>'checkbox']]);
     }

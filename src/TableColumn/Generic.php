@@ -103,7 +103,7 @@ class Generic
      *
      * @return string
      */
-    public function getHeaderCell(\atk4\data\Field $f = null)
+    public function getHeaderCellHTML(\atk4\data\Field $f = null)
     {
         if ($f === null) {
             return $this->getTag('th', 'head', '');
@@ -120,7 +120,7 @@ class Generic
      *
      * @return string
      */
-    public function getTotalsCell(\atk4\data\Field $f, $value)
+    public function getTotalsCellHTML(\atk4\data\Field $f, $value)
     {
         return $this->getTag('th', 'foot', $this->app->ui_persistence->typecastSaveField($f, $value));
     }
@@ -141,7 +141,7 @@ class Generic
      *
      * @return string
      */
-    public function getCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellHTML(\atk4\data\Field $f = null)
     {
         if ($f === null) {
             return $this->getTag('td', 'body', '{$c_'.$this->short_name.'}');

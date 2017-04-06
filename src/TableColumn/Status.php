@@ -26,7 +26,7 @@ class Status extends Generic
         $this->states = $states;
     }
 
-    public function getCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellHTML(\atk4\data\Field $f = null)
     {
         if ($f === null) {
             throw new Exception(['Status can be used only with model field']);
