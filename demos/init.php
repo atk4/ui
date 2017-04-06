@@ -18,6 +18,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem('Basics and Layouting', ['form']);
     $form->addItem('Input Field Decoration', ['field']);
     $form->addItem('Data Integration', ['form2']);
+    $form->addItem('Form Multi-column layout', ['form3']);
 
     $form = $layout->leftMenu->addGroup(['Grid and Table', 'icon'=>'table']);
     $form->addItem('Data table with formatted columns', ['table']);
@@ -41,7 +42,7 @@ if (isset($layout->leftMenu)) {
 
     $f = basename($_SERVER['PHP_SELF']);
 
-    $url = 'https://github.com/atk4/ui/blob/feature/grid-part2/demos/';
+    $url = 'https://github.com/atk4/ui/blob/feature/implement-crud/demos/';
     //$url = 'https://github.com/atk4/ui/blob/develop/demos/';
 
     // Would be nice if this would be a link.
