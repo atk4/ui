@@ -36,6 +36,9 @@ class App
 
     public $ui_persistence = null;
 
+    /** @var View For internal use */
+    public $html = null;
+
     /**
      * Constructor.
      *
@@ -305,7 +308,7 @@ class App
      */
     public function requireJS($url)
     {
-        $this->html->template->appendHTML('HEAD', '<script src="'.$url.'"></script>');
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' =>$url]) . $this->getTag('/script'));
 
         return $this;
     }
@@ -319,7 +322,7 @@ class App
      */
     public function requireCSS($url)
     {
-        $this->html->template->appendHTML('HEAD', '<link rel="stylesheet" type="text/css" href="'.$url.'">');
+        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]));
 
         return $this;
     }
@@ -335,7 +338,7 @@ class App
      *
      * 1. all array key=>val elements appear as attributes with value escaped.
      * getTag('div/', ['data'=>'he"llo']);
-     * --> <div data="he\"llo">
+     * --> <div data="he\"llo"/>
      *
      * 2. boolean value true will add attribute without value
      * getTag('td', ['nowrap'=>true]);
