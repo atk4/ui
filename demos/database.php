@@ -29,6 +29,65 @@ class Country extends \atk4\data\Model
     }
 }
 
+class Stat extends \atk4\data\Model
+{
+    public $table = 'stats';
+    public $title = 'Project Stat';
+
+    public function init()
+    {
+        parent::init();
+
+        $this->addFields(['project_name', 'project_code']);
+        $this->addField('description', ['type'=>'text']);
+        $this->addField('client_name');
+        $this->addField('client_address', ['type'=>'text']);
+
+        $this->hasOne('client_country_iso', [
+            new Country(), 
+            'their_field'=>'iso',
+            'ui'=>[
+                'display'=>[
+                    'form'=>'Line'
+                ]
+            ]
+        ])
+            ->addField('client_country','name');
+
+        $this->addField('is_commercial', ['type'=>'boolean']);
+        $this->addField('currency', ['enum'=>['EUR','USD','GBP']]);
+        $this->addField('currency_symbol', ['never_persist'=>true]);
+        $this->addHook('afterLoad', function($m) {
+            /* implementation for "intl"
+            $locale='en-UK';
+            $fmt = new \NumberFormatter( $locale."@currency=".$m['currency'], NumberFormatter::CURRENCY );
+            $m['currency_symbol'] = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
+             */
+
+            $map = ['EUR'=>'€', 'USD'=>'$', 'GBP'=>'£'];
+            $m['currency_symbol'] = $map[$m['currency']];
+        });
+
+        $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type'=>'currency']);
+
+        $this->addFields(['project_hours_est', 'project_hours_reported'], ['type'=>'int']);
+
+        $this->addFields(['project_expenses_est', 'project_expenses'], ['type'=>'currency']);
+        $this->add(new Percent, 'project_mgmt_cost_pct');
+        $this->add(new Percent, 'project_qa_cost_pct');
+
+        $this->addFields(['start_date', 'finish_date'], ['type'=>'date']);
+        $this->addField('finish_time', ['type'=>'time']);
+
+        $this->addFields(['created', 'updated'], ['type'=>'datetime']);
+    }
+}
+
+class Percent extends \atk4\data\Field
+{
+    public $type = 'float'; // will need to be able to affect rendering and storage
+}
+
 class File extends \atk4\data\Model
 {
     public $table = 'file';
