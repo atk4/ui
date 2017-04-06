@@ -356,9 +356,9 @@ class Table extends Lister
             if (!is_int($name)) {
                 $field = $this->model->getElement($name);
 
-                $output[] = $column->getHeaderCell($field);
+                $output[] = $column->getHeaderCellHTML($field);
             } else {
-                $output[] = $column->getHeaderCell();
+                $output[] = $column->getHeaderCellHTML();
             }
         }
 
@@ -385,7 +385,7 @@ class Table extends Lister
             if (is_array($this->totals_plan[$name])) {
                 // todo - format
                 $field = $this->model->getElement($name);
-                $output[] = $column->getTotalsCell($field, $this->totals[$name]);
+                $output[] = $column->getTotalsCellHTML($field, $this->totals[$name]);
                 continue;
             }
 
@@ -414,9 +414,9 @@ class Table extends Lister
             if (!is_int($name)) {
                 $field = $this->model->getElement($name);
 
-                $output[] = $column->getCellTemplate($field);
+                $output[] = $column->getDataCellHTML($field);
             } else {
-                $output[] = $column->getCellTemplate();
+                $output[] = $column->getDataCellHTML();
             }
         }
 

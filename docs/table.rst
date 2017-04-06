@@ -37,7 +37,7 @@ Adding Additional Columns
 -------------------------
 
 If you feel that you'd like to add several other columns to your table, you need to understand what type
-of columns they would be. 
+of columns they would be.
 
 If your column is designed to carry a value of any type, then it's much better to define it as a Model
 Field. A good example of this scenario is adding "total" column to list of your invoice lines that
@@ -86,7 +86,7 @@ but first we need to look at the generic column and understand it's base capabil
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
 when constructing HTML:
 
-.. php:method:: getHeaderCell(\atk4\data\Field $f)
+.. php:method:: getHeaderCellHTML(\atk4\data\Field $f)
 
 Must respond with HTML for the header cell (`<th>`) and an appropriate caption. If necessary
 will include "sorting" icons or any other controls that go in the header of the table.
@@ -94,15 +94,15 @@ will include "sorting" icons or any other controls that go in the header of the 
 The output of this field will automatically encode any values (such as caption), shorten them
 if necessary and localize them.
 
-.. php:method:: getTotalsCell(\atk4\data\Field $f, $value)
+.. php:method:: getTotalsCellHTML(\atk4\data\Field $f, $value)
 
 Provided with the field and the value, format the cell for the footer "totals" column. Table
 can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
 
-.. php:method:: getCellTemplate(\atk4\data\Field f)
+.. php:method:: getDataCellHTML(\atk4\data\Field f)
 
 Provided with a field, this method will respond with HTML **template**. In order to keep
-performance of Web Application at the maximum, Table will execute getCellTemplate for all the
+performance of Web Application at the maximum, Table will execute getDataCellHTML for all the
 fields once. When iterating, a combined template will be used to display the values.
 
 The template must not incorporate field values (simply because related model will not be
@@ -134,7 +134,7 @@ Advanced Column Denifitions
 .. php:class:: Table
 
 Table defines a method `columnFactory`, which returns Column object which is to be used to
-display values of specific model Field. 
+display values of specific model Field.
 
 .. php:method:: columnFactory(\atk4\data\Field $f)
 
@@ -165,8 +165,8 @@ it will automatically delete the record.
 
 You have probably noticed, that I have omitted the name for this column. If name is not specified
 (null) then the Column object will receive "null" when the call to
-:php:meth:`TableColumn\Generic::getHeaderCell`, :php:meth:`TableColumn\Generic::getTotalsCell` and 
-:php:meth:`TableColumn\Generic::getCellTemplate` will be made. The :php:class:`TableColumn\Generic` will
+:php:meth:`TableColumn\Generic::getHeaderCellHTML`, :php:meth:`TableColumn\Generic::getTotalsCellHTML` and
+:php:meth:`TableColumn\Generic::getDataCellHTML` will be made. The :php:class:`TableColumn\Generic` will
 not be able to cope with this situations, but many other column types are perfectly fine with this.
 
 Some column classes will be able to take some information from a specified column, but will work
@@ -211,7 +211,7 @@ your convenience there is a way to add multiple columns efficiently.
 As a final note in this section - you can re-use column objects multiple times::
 
     $c_gap = new \atk4\ui\TableColumn\Template('<td> ... <td>');
-    
+
     $table->addColumn($c_gap);
     $table->setModel(new Order($db), ['name', 'price', 'amount']);
     $table->addColumn($c_gap);
@@ -229,7 +229,7 @@ The tag will override model value. Here is example usage of :php:meth:`TableColu
 
 
     class ExpiredColumn extends \atk4\ui\TableColumn\Generic
-        public function getCellTemplate()
+        public function getDataCellHTML()
         {
             return '{$_expired}';
         }
@@ -276,7 +276,7 @@ virtually any API, Database or SQL resource and it will always take care of form
 as handle field types.
 
 I must also note that by simply adding 'Delete' column (as in example above) will allow your app users
-to delete files from dropbox or issues from GitHub. 
+to delete files from dropbox or issues from GitHub.
 
 Table follows a "universal data design" principles established by Agile UI to make it compatible with
 all the different data persitences. (see :php:ref:`universal_data_access`)
@@ -326,7 +326,7 @@ By default Table will include ID for each row: `<tr data-id="123">`. The followi
 demonstrates how various standard column types are relying on this property::
 
     $table->on('click', 'td', new jsExpression(
-        'document.location=page.php?id=[]', 
+        'document.location=page.php?id=[]',
         [(new jQuery())->closest('tr')->data('id')]
     ));
 
@@ -368,8 +368,8 @@ For setting an attribute you can use setAttr() method::
 
 Setting a new value to the attribute will override previous value.
 
-Please note that if you are redefining :php:meth:`TableColumn\Generic::getHeaderCell`, 
-:php:meth:`TableColumn\Generic::getTotalsCell` or :php:meth:`TableColumn\Generic::getCellTemplate`
+Please note that if you are redefining :php:meth:`TableColumn\Generic::getHeaderCellHTML`,
+:php:meth:`TableColumn\Generic::getTotalsCellHTML` or :php:meth:`TableColumn\Generic::getDataCellHTML`
 and you wish to preserve functionality of setting custom attributes and
 classes, you should generate your TD/TH tag through getTag method.
 
@@ -389,7 +389,7 @@ You can add column to a table that does not link with field::
 Using dynamic values
 --------------------
 
-Body attributes will be embedded into the template by the default :php:meth:`TableColumn\Generic::getCellTemplate`,
+Body attributes will be embedded into the template by the default :php:meth:`TableColumn\Generic::getDataCellHTML`,
 but if you specify attribute (or class) value as a tag, then it will be auto-filled
 with row value or injected HTML.
 
@@ -431,7 +431,7 @@ Status
 .. php:class:: TableColumn\Status
 
 Allow you to set highlight class and icon based on column value. This is most suitable for columns that
-contain pre-defined values. 
+contain pre-defined values.
 
 If your column "status" can be one of the following "pending", "declined", "archived" and "paid" and you would like
 to use different icons and colors to emphasise status::
