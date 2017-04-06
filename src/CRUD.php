@@ -27,12 +27,13 @@ class CRUD extends Grid
     public $operations = 'CRUD';
     protected $_can = [];
 
-    function init() {
+    public function init()
+    {
         parent::init();
 
         $this->addClass('atk-reloadable-crud')->on('reload', new jsReload($this));
 
-        foreach(str_split($this->operations) as $op) {
+        foreach (str_split($this->operations) as $op) {
             $this->_can[$op] = true;
         }
 
@@ -40,44 +41,41 @@ class CRUD extends Grid
             throw new Exception(['You cannot disable "R" operation']);
         }
 
-
         if (isset($this->_can['U'])) {
             $this->pageEdit = $this->add($this->pageEdit ?: 'VirtualPage');
             $this->formEdit = $this->pageEdit->add($this->formEdit ?: 'Form');
         }
 
         if (isset($this->_can['C'])) {
-
             $this->pageCreate = $this->add($this->pageCreate ?: 'VirtualPage');
 
             $this->itemCreate = $this->menu->addItem(
                 $this->itemCreate ?: ['Add new', 'icon'=>'plus'],
                 new jsModal('Add new', $this->pageCreate)
             );
-
         }
     }
 
-    function setModel(\atk4\data\Model $m, $defaultFields = null) {
-
+    public function setModel(\atk4\data\Model $m, $defaultFields = null)
+    {
         if ($defaultFields !== null) {
             $this->fieldsDefault = $defaultFields;
         }
 
         $this->itemCreate->set('Add New '.(isset($m->title) ? $m->title : get_class($m)));
 
-        $this->pageCreate->set(function($page) use ($m) {
+        $this->pageCreate->set(function ($page) use ($m) {
             $form = $page->add($this->formCreate ?: 'Form');
             $form->setModel($m, $this->fieldsCreate ?: $this->fieldsDefault);
-            $form->onSubmit(function($form) {
+            $form->onSubmit(function ($form) {
                 $form->model->save();
+
                 return [
                     new jsExpression('$($(".atk-dialog-content").data("opener")).closest(".atk-reloadable-crud").trigger("reload")'),
                     new jsExpression('$(".atk-dialog-content").trigger("close")'),
                 ];
             });
         });
-
 
         return parent::setModel($m, $this->fieldsGrid ?: $this->fieldsDefault);
     }
