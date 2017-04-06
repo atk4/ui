@@ -25,7 +25,7 @@ $form = $seg->add(['Form', 'layout'=>'FormLayout/Columns']);
    isset($_GET['m']) ? (
    $_GET['m'] == 'country' ? new Country($db) : (
     $_GET['m'] == 'file' ? new File($db) : new Stat($db)
-    ) ) : new Stat($db)
+    )) : new Stat($db)
   )->loadAny();
 
 $form->onSubmit(function ($form) {
