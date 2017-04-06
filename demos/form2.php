@@ -18,7 +18,7 @@ class Person extends \atk4\data\Model
     }
 }
 
-$a = [];
+$a = ['person'=>[]];
 $db = new \atk4\data\Persistence_Array($a);
 
 $layout->add(new \atk4\ui\View([
@@ -40,17 +40,17 @@ $f_address->addField('code', ['Post Code', 'width'=>'four']);
 
 $f_guardian = $form->addGroup(['Guardian', 'inline'=>true]);
 $f_guardian->addField('first_name', ['width'=>'eight'])
-    ->action = ['Select', 'rightIcon'=>'search'];
+    ->action = ['Select', 'iconRight'=>'search'];
 
 $f_guardian->addField('middle_name', ['width'=>'three', 'disabled'=>true]);
 $f_guardian->addField('last_name', ['width'=>'five']);
 
 $form->onSubmit(function ($f) {
     $errors = [];
-    if (strlen($f['first_name'] < 3)) {
+    if (strlen($f->model['first_name']) < 3) {
         $errors[] = $f->error('first_name', 'too short');
     }
-    if (strlen($f['last_name'] < 5)) {
+    if (strlen($f->model['last_name']) < 5) {
         $errors[] = $f->error('last_name', 'too short');
     }
 
@@ -60,11 +60,11 @@ $form->onSubmit(function ($f) {
 
     // create all related DB records
     $f->model->save();
-    $f->model->ref('address_id')->save($f->get(['address', 'code']));
-    $f->model->ref('Guardian')->insert($f->get(['first_name', 'middle_name', 'last_name']));
+    //$f->model->ref('address_id')->save($f->get(['address', 'code']));
+    //$f->model->ref('Guardian')->insert($f->get(['first_name', 'middle_name', 'last_name']));
 
     return $f->success(
-        'Record Added',
-        'there are now '.$f->model->action('count')->getOne().' records in DB'
+        'Record Added'
+        //'there are now '.$f->model->action('count')->getOne().' records in DB'
     );
 });

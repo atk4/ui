@@ -78,5 +78,3 @@ require 'init.php';
         return $errors ?: $f->success('No more errors', 'so we have saved everything into the database');
     });
 
-    //$layout->renderAll();
-    //$layout->template->appendHTML('HEAD', $layout->getJS());
