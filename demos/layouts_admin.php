@@ -22,7 +22,7 @@ try {
     $app->layout->leftMenu->addItem(['Home', 'icon'=>'home']);
     $app->layout->leftMenu->addItem(['Topics', 'icon'=>'block layout']);
     $app->layout->leftMenu->addItem(['Friends', 'icon'=>'smile']);
-    $app->layout->leftMenu->addItem(['Historty', 'icon'=>'calendar']);
+    $app->layout->leftMenu->addItem(['History', 'icon'=>'calendar']);
     $app->layout->leftMenu->addItem(['Settings', 'icon'=>'cogs']);
 
     $app->layout->add(['Header', 'Basic Form Example']);
