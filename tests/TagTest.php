@@ -4,9 +4,12 @@ namespace atk4\ui\tests;
 
 class TagTest extends \atk4\core\PHPUnit_AgileTestCase
 {
+    public function getApp() {
+        return new \atk4\ui\App(['catch_exceptions'=>false, 'always_run'=>false]);
+    }
     public function assertTagRender($html, $args)
     {
-        $app = new \atk4\ui\App(['catch_exceptions'=>false, 'always_run'=>false]);
+        $app = $this->getApp();
         $this->assertEquals($html, $app->getTag(...$args));
     }
 
@@ -52,6 +55,7 @@ class TagTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertTagRender('<a href="hello"><b>welcome</b></a>', ['a', ['href'=>'hello'], ['b', 'welcome']]);
 
         // this way it works
+        $app = $this->getApp();
         $this->assertTagRender('<a href="hello">click <i class="blue">here <b class="red">NOW</b></i></a>',
             $app->getTag('a', ['href'=>'hello'], 'click '.
                 $app->getTag('i', ['class'=>'blue'], 'here '.
