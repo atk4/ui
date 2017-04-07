@@ -11,8 +11,12 @@ class Money extends Generic
 
     public $attr = ['all'=>['class'=>['right aligned single line']]];
 
-    public function getCellTemplate(\atk4\data\Field $f)
+    public function getCellTemplate(\atk4\data\Field $f = null)
     {
+        if (!isset($f)) {
+            throw new Exception(['Money column requires a field']);
+        }
+
         return $this->app->getTag(
             'td',
             ['class'=> '{$_'.$f->short_name.'_money}'],

@@ -3,7 +3,7 @@
 namespace atk4\ui\tests;
 
 use atk4\ui\Button;
-use atk4\ui\Buttons;
+use atk4\ui\View;
 
 class jsIntegrationTest extends \atk4\core\PHPUnit_AgileTestCase
 {
@@ -18,7 +18,7 @@ class jsIntegrationTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testIDIntegrity2()
     {
-        $v = new Buttons();
+        $v = new View(['ui'=>'buttons']);
         $b1 = $v->add(new Button());
         $b2 = $v->add(new Button());
         $html = $v->render();
@@ -75,7 +75,7 @@ $(function() {
      */
     public function testBasicChain4()
     {
-        $bb = new Buttons();
+        $bb = new View(['ui'=>'buttons']);
         $b1 = $bb->add(new Button(['id'=>'b1']));
         $b2 = $bb->add(new Button(['id'=>'b2']));
 

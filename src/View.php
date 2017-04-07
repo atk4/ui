@@ -129,6 +129,9 @@ class View implements jsExpressionable
     // @var array
     protected $_add_later = [];
 
+    // will be set to true after render
+    protected $_rendered = false;
+
     // }}}
 
     // {{{ Setting Things up
@@ -154,6 +157,10 @@ class View implements jsExpressionable
         }
 
         $this->setProperties($defaults);
+
+        if (is_string($this->class)) {
+            $this->class = explode(' ', $this->class);
+        }
     }
 
     /**
@@ -261,6 +268,40 @@ class View implements jsExpressionable
             'key' => $key,
             'val' => $val,
         ]);
+    }
+
+    /**
+     * Sets View element.
+     *
+     * @param string $element
+     *
+     * @return $this
+     */
+    public function setElement($element)
+    {
+        $this->element = $element;
+
+        return $this;
+    }
+
+    /**
+     * Makes view into a "<a>" element with a link.
+     *
+     * @param string $url
+     *
+     * @return $this
+     */
+    public function link($url)
+    {
+        $this->element = 'a';
+        if (is_string($url)) {
+            $this->setAttr('href', $url);
+
+            return $this;
+        }
+        $this->setAttr('href', $this->app->url($url));
+
+        return $this;
     }
 
     // }}}
@@ -640,9 +681,12 @@ class View implements jsExpressionable
             $this->init();
         }
 
-        $this->renderView();
+        if (!$this->_rendered) {
+            $this->renderView();
 
-        $this->recursiveRender();
+            $this->recursiveRender();
+            $this->_rendered = true;
+        }
     }
 
     /**

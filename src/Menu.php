@@ -17,10 +17,15 @@ class Menu extends View
 
     public function addItem($name = null, $action = null)
     {
-        $item = $this->add(new Item(['element'=>'a']));
-        if (!is_null($name)) {
-            $item->set($name);
+        if (is_object($name)) {
+            $item = $name;
+        } elseif ($name) {
+            $item = new Item($name);
+        } else {
+            $item = new Item();
         }
+
+        $item = $this->add($item)->setElement('a');
 
         if (is_array($action)) {
             $action = $this->app->url($action);
@@ -28,6 +33,10 @@ class Menu extends View
 
         if (is_string($action)) {
             $item->setAttr('href', $action);
+        }
+
+        if ($action instanceof jsExpressionable) {
+            $item->js('click', $action);
         }
 
         return $item;
@@ -75,6 +84,14 @@ class Menu extends View
         }
 
         return $group;
+    }
+
+    public function addMenuRight()
+    {
+        $menu = $this->add(new self(), ['RightMenu', 'ui'=>false]);
+        $menu->removeClass('item')->addClass('right menu');
+
+        return $menu;
     }
 
     public function add($object, $region = null)

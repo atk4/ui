@@ -22,13 +22,17 @@ if (isset($layout->leftMenu)) {
     $form = $layout->leftMenu->addGroup(['Grid and Table', 'icon'=>'table']);
     $form->addItem('Data table with formatted columns', ['table']);
     $form->addItem('Table interractions', ['multitable']);
-    $form->addItem('Grid - Table+Bar+Search+Paginator', ['table']);
+    $form->addItem('Grid - Table+Bar+Search+Paginator', ['grid']);
     $form->addItem('Interactivity - Modals and Expanders', ['expander']);
 
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon'=>'cubes']);
+    $basic->addItem('View', ['view']);
     $basic->addItem('Button', ['button']);
     $basic->addItem('Header', ['header']);
-    $basic->addItem('Columns', ['columns']);
+    $basic->addItem('Message', ['message']);
+    $basic->addItem('Labels', ['label']);
+    $basic->addItem('Menu', ['menu']);
+    $basic->addItem('Paginator', ['paginator']);
 
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon'=>'talk']);
     $basic->addItem('JavaScript Events', ['button2']);
@@ -37,9 +41,12 @@ if (isset($layout->leftMenu)) {
 
     $f = basename($_SERVER['PHP_SELF']);
 
+    $url = 'https://github.com/atk4/ui/blob/feature/grid-part2/demos/';
+    //$url = 'https://github.com/atk4/ui/blob/develop/demos/';
+
     // Would be nice if this would be a link.
     $layout->menu->addItem()->add(new \atk4\ui\Button(['View Source', 'teal', 'icon'=>'github']))
-        ->setAttr('target', '_blan')->on('click', new \atk4\ui\jsExpression('document.location=[];', ['https://github.com/atk4/ui/blob/develop/demos/'.$f]));
+        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url.$f]));
 
     $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }

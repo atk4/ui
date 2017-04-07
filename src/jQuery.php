@@ -55,6 +55,10 @@ class jQuery extends jsChain
     {
         parent::__construct();
 
+        if ($constructorArgs == []) {
+            $constructorArgs = [new jsExpression('this')];
+        }
+
         $this->_constructorArgs = $constructorArgs;
     }
 

@@ -130,7 +130,6 @@ JavaScript on Input
 
 Input class implements method jsInput which is identical to :php:meth:`View::js`, except
 that it would target the INPUT element rather then the whole field::
-
     $field->jsInput(true)->val(123);
 
 
