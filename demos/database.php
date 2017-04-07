@@ -68,11 +68,11 @@ class Stat extends \atk4\data\Model
             $m['currency_symbol'] = $map[$m['currency']];
         });
 
-        $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type'=>'currency']);
+        $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type'=>'money']);
 
         $this->addFields(['project_hours_est', 'project_hours_reported'], ['type'=>'integer']);
 
-        $this->addFields(['project_expenses_est', 'project_expenses'], ['type'=>'currency']);
+        $this->addFields(['project_expenses_est', 'project_expenses'], ['type'=>'money']);
         $this->add(new Percent(), 'project_mgmt_cost_pct');
         $this->add(new Percent(), 'project_qa_cost_pct');
 
