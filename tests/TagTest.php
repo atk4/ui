@@ -53,7 +53,7 @@ class TagTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertTagRender('<a href="hello">click <i class="blue">here <b class="red">NOW</b></i></a>',
             $app->getTag('a', ['href'=>'hello'], 'click ' .
                 $app->getTag('i', ['class'=>'blue'], 'here ' .
-                    $app->getTag('b', ['class'=>'red'], 'NOW')));
+                    $app->getTag('b', ['class'=>'red'], 'NOW')))
         );
 
         // there is no way to pass 'click ' and 'here ' in parameters :(
