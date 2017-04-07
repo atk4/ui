@@ -37,7 +37,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
     public function testLayout()
     {
         $this->expectOutputRegex($this->regex);
-        include 'layout.php';
+        include 'layouts_manual.php';
     }
 
     public function testTable()
@@ -51,6 +51,13 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $this->expectOutputRegex($this->regex);
         include 'paginator.php';
+        $app->run();
+    }
+
+    public function testView()
+    {
+        $this->expectOutputRegex($this->regex);
+        include 'view.php';
         $app->run();
     }
 

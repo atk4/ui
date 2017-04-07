@@ -31,7 +31,7 @@ class Link extends Generic
     /**
      * kill me now for this code :!!
      */
-    public function getCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellHTML(\atk4\data\Field $f = null)
     {
         if (is_null($f)) {
             $f = $this;

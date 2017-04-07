@@ -157,6 +157,10 @@ class View implements jsExpressionable
         }
 
         $this->setProperties($defaults);
+
+        if (is_string($this->class)) {
+            $this->class = explode(' ', $this->class);
+        }
     }
 
     /**
@@ -898,6 +902,10 @@ class View implements jsExpressionable
 
     /**
      * Get JavaScript objects from this render tree.
+     *
+     * @param bool $force_echo
+     *
+     * @return string
      */
     public function getJS($force_echo = false)
     {

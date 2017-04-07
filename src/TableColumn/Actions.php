@@ -24,7 +24,7 @@ class Actions extends Generic
         $this->table->on('click', '.b_'.$name, $callback);
     }
 
-    public function getCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellHTML(\atk4\data\Field $f = null)
     {
         $output = '';
 

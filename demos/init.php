@@ -28,6 +28,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem('CRUD - Full editing solution', ['crud']);
 
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon'=>'cubes']);
+    $basic->addItem('View', ['view']);
     $basic->addItem('Button', ['button']);
     $basic->addItem('Header', ['header']);
     $basic->addItem('Message', ['message']);
@@ -42,8 +43,8 @@ if (isset($layout->leftMenu)) {
 
     $f = basename($_SERVER['PHP_SELF']);
 
-    $url = 'https://github.com/atk4/ui/blob/feature/implement-crud/demos/';
-    //$url = 'https://github.com/atk4/ui/blob/develop/demos/';
+    //$url = 'https://github.com/atk4/ui/blob/feature/grid-part2/demos/';
+    $url = 'https://github.com/atk4/ui/blob/develop/demos/';
 
     // Would be nice if this would be a link.
     $layout->menu->addItem()->add(new \atk4\ui\Button(['View Source', 'teal', 'icon'=>'github']))

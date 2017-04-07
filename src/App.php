@@ -36,6 +36,9 @@ class App
 
     public $ui_persistence = null;
 
+    /** @var View For internal use */
+    public $html = null;
+
     /**
      * Constructor.
      *
@@ -157,9 +160,12 @@ class App
         }
         $layout->app = $this;
 
-        $this->html = new View(['defaultTemplate'=>'html.html']);
-        $this->html->app = $this;
-        $this->html->init();
+        if (!$this->html) {
+            $this->html = new View(['defaultTemplate' => 'html.html']);
+            $this->html->app = $this;
+            $this->html->init();
+        }
+
         $this->layout = $this->html->add($layout);
 
         return $this;
@@ -282,7 +288,7 @@ class App
         $page = $args[0];
         unset($args[0]);
 
-        $url = $page ? ($page.'.php') : '';
+        $url = $page ? $page.'.php' : '';
 
         $args = http_build_query($args);
 
@@ -291,6 +297,34 @@ class App
         }
 
         return $url;
+    }
+
+    /**
+     * Adds additional JS script include in aplication template.
+     *
+     * @param string $url
+     *
+     * @return $this
+     */
+    public function requireJS($url)
+    {
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' =>$url], ''));
+
+        return $this;
+    }
+
+    /**
+     * Adds additional CSS stylesheet include in aplication template.
+     *
+     * @param string $url
+     *
+     * @return $this
+     */
+    public function requireCSS($url)
+    {
+        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]));
+
+        return $this;
     }
 
     /**
@@ -304,7 +338,7 @@ class App
      *
      * 1. all array key=>val elements appear as attributes with value escaped.
      * getTag('div/', ['data'=>'he"llo']);
-     * --> <div data="he\"llo">
+     * --> <div data="he\"llo"/>
      *
      * 2. boolean value true will add attribute without value
      * getTag('td', ['nowrap'=>true]);
@@ -334,17 +368,21 @@ class App
      * getTag('/td', ['th', 'align'=>'left']);
      * --> </th>
      *
-     * 8. using $value will NOT be escaped (so that you can pass nested HTML)
+     * 8. using $value will add value inside tag. It will also encode value.
      * getTag('a', ['href'=>'foo.html'] ,'click here >>');
-     * --> <a href="foo.html">click here >></a>
+     * --> <a href="foo.html">click here &gt;&gt;</a>
      *
      * 9. you may skip attribute argument.
      * getTag('b','text in bold');
      * --> <b>text in bold</b>
      *
-     * 10. pass array as text to net tags (array must contain 1 to 3 elements corresponding to arguments):
+     * 10. pass array as 3rd parameter to nest tags (array must contain 1 to 3 elements corresponding to arguments):
      * getTag('a', ['href'=>'foo.html'], ['b','click here']);
      * --> <a href="foo.html"><b>click here</b></a>
+     *
+     * 11. extended example:
+     * getTag('a', ['href'=>'hello'], ['b', 'class'=>'red', ['i', 'class'=>'blue', 'welcome']]);
+     * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
      * @param string|array $tag
      * @param string       $attr
@@ -359,17 +397,18 @@ class App
         } elseif (is_array($tag)) {
             $tmp = $tag;
 
-            $tag = 'div';
-            $value = '';
-
             if (isset($tmp[0])) {
                 $tag = $tmp[0];
                 unset($tmp[0]);
+            } else {
+                $tag = 'div';
             }
 
             if (isset($tmp[1])) {
                 $value = $tmp[1];
                 unset($tmp[1]);
+            } else {
+                $value = null;
             }
 
             $attr = $tmp;
@@ -389,7 +428,7 @@ class App
         }
 
         if (!$attr) {
-            return "<$tag>".($value ? ($value)."</$tag>" : '');
+            return "<$tag>".($value !== null ? $value."</$tag>" : '');
         }
         $tmp = [];
         if (substr($tag, -1) == '/') {
@@ -417,7 +456,7 @@ class App
             }
         }
 
-        return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value ? $value."</$tag>" : '');
+        return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value !== null ? $value."</$tag>" : '');
     }
 
     /**
