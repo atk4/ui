@@ -45,29 +45,30 @@ class TagTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertTagRender('<a href="hello"></a>', ['a', ['href'=>'hello'], '']);
         $this->assertTagRender('<a href="hello">welcome</a>', ['a', ['href'=>'hello'], 'welcome']);
     }
+
     public function testNestedTags()
     {
         $this->assertTagRender('<a href="hello"><b>welcome</b></a>', ['a', ['href'=>'hello'], ['b'=>'welcome']]);
 
         // this way it works
         $this->assertTagRender('<a href="hello">click <i class="blue">here <b class="red">NOW</b></i></a>',
-            $app->getTag('a', ['href'=>'hello'], 'click ' .
-                $app->getTag('i', ['class'=>'blue'], 'here ' .
+            $app->getTag('a', ['href'=>'hello'], 'click '.
+                $app->getTag('i', ['class'=>'blue'], 'here '.
                     $app->getTag('b', ['class'=>'red'], 'NOW')))
         );
 
         // there is no way to pass 'click ' and 'here ' in parameters :(
         $this->assertTagRender('<a href="hello">click <i class="blue">here <b class="red">NOW</b></i></a>', [
             'a',
-            ['href'=>'hello'],
+            ['href'=> 'hello'],
             [
                 'i',
                 [
                     'b',
-                    ['class'=>'red'],
+                    ['class'=> 'red'],
                     'NOW',
                 ],
-                'class'=>'blue',
+                'class'=> 'blue',
             ],
         ]);
     }
