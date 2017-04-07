@@ -49,7 +49,7 @@ class TagTest extends \atk4\core\PHPUnit_AgileTestCase
     public function testNestedTags()
     {
         // simply nest 1 tag
-        $this->assertTagRender('<a href="hello"><b>welcome</b></a>', ['a', ['href'=>'hello'], ['b','welcome']]);
+        $this->assertTagRender('<a href="hello"><b>welcome</b></a>', ['a', ['href'=>'hello'], ['b', 'welcome']]);
 
         // this way it works
         $this->assertTagRender('<a href="hello">click <i class="blue">here <b class="red">NOW</b></i></a>',
