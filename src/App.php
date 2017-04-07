@@ -376,7 +376,7 @@ class App
      * getTag('b','text in bold');
      * --> <b>text in bold</b>
      *
-     * 10. pass array as text to net tags (array must contain 1 to 3 elements corresponding to arguments):
+     * 10. pass array as 3rd parameter to nest tags (array must contain 1 to 3 elements corresponding to arguments):
      * getTag('a', ['href'=>'foo.html'], ['b','click here']);
      * --> <a href="foo.html"><b>click here</b></a>
      *
@@ -393,17 +393,18 @@ class App
         } elseif (is_array($tag)) {
             $tmp = $tag;
 
-            $tag = 'div';
-            $value = '';
-
             if (isset($tmp[0])) {
                 $tag = $tmp[0];
                 unset($tmp[0]);
+            } else {
+                $tag = 'div';
             }
 
             if (isset($tmp[1])) {
                 $value = $tmp[1];
                 unset($tmp[1]);
+            } else {
+                $value = null;
             }
 
             $attr = $tmp;
