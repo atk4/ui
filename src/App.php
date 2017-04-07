@@ -380,6 +380,10 @@ class App
      * getTag('a', ['href'=>'foo.html'], ['b','click here']);
      * --> <a href="foo.html"><b>click here</b></a>
      *
+     * 11. extended example:
+     * getTag('a', ['href'=>'hello'], ['b', 'class'=>'red', ['i', 'class'=>'blue', 'welcome']]);
+     * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
+     *
      * @param string|array $tag
      * @param string       $attr
      * @param string|array $value
