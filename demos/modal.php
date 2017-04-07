@@ -51,7 +51,6 @@ $frame->set(function ($frame) {
     $frame->add(['Header', 'Clicked row with ID = '.$_GET['id']]);
 });
 
-// TODO: make this work:
 $t->onRowClick(new \atk4\ui\jsModal('Row Clicked', $frame, ['id'=>$t->jsRow()->data('id')]));
 
 // Old COMPAT code
