@@ -5,6 +5,8 @@ export default function modal(options) {
 
     let $newModal = $('<div class="ui fullscreen scrolling modal"></div>');
 
+    $newModal.toggleClass('fullscreen', !!options.wide);
+
     let $modalContent = $('<div class="image content"></div>')
         .html(options.content);
 
