@@ -17,8 +17,8 @@ class jsModal extends jsExpression
           ->modal([
             'header'  => $title,
             'content' => $args['content'],
-            'uri' => $url,
-            'wide' => false,
+            'uri'     => $url,
+            'wide'    => false,
           ]);
 
         $final->_constructorArgs = null;
