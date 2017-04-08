@@ -19,9 +19,9 @@ import $ from 'jquery';
  *
  * MyPlugin.DEFAULTS = {};
  *
- * plugin('myPlugin', MyPlugin);
+ * registerPlugin('myPlugin', MyPlugin);
  */
-export default function plugin(pluginName, className, shortHand = false) {
+export function registerPlugin(pluginName, className, shortHand = false) {
     let dataName = `__${pluginName}`;
     let old = $.fn[pluginName];
 
@@ -48,4 +48,10 @@ export default function plugin(pluginName, className, shortHand = false) {
 
     // - No conflict
     $.fn[pluginName].noConflict = () => $.fn[pluginName] = old;
+}
+
+export function registerMethod(methodName, namespace = 'ATK', method) {
+    $[namespace] = $[namespace] || Object.create($.prototype);
+
+    $[namespace][methodName] = method;
 }

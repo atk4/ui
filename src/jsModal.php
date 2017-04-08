@@ -13,23 +13,16 @@ class jsModal extends jsExpression
             $url = $url->getURL('cut');
         }
 
-        $content = '
-  <i class="close icon"></i>
-  <div class="header">
-    '.htmlspecialchars($title).'
-  </div>
-  <div class="image content">
-  <div class="ui active inverted dimmer">
-    <div class="ui text loader">Loading</div>
-  </div>
+        $final = (new jQuery())
+          ->modal([
+            'header' => $title,
+            'content' => $args['content'],
+            'uri' => $url
+          ]);
 
+        $final->_constructorArgs = NULL;
+        $final->_library .= '.ATK';
 
-  </div>
-';
-
-        parent::__construct('
-        var m=$("<div>").appendTo("body").addClass("ui fullscreen scrolling modal").html([content]);
-        m.modal({onHide: function() { m.children().remove(); return true; }}).modal("show").find(".content").load([url], [arg], function() { m.modal("refresh"); })',
-            ['content'=>$content, 'url'=>$url, 'arg'=>$args]);
+        parent::__construct($final->jsRender());
     }
 }
