@@ -15,12 +15,12 @@ class jsModal extends jsExpression
 
         $final = (new jQuery())
           ->modal([
-            'header' => $title,
+            'header'  => $title,
             'content' => $args['content'],
-            'uri' => $url
+            'uri'     => $url,
           ]);
 
-        $final->_constructorArgs = NULL;
+        $final->_constructorArgs = null;
         $final->_library .= '.ATK';
 
         parent::__construct($final->jsRender());
