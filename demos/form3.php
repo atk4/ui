@@ -17,7 +17,7 @@ $buttons->add(['Button', 'Use Country Model', 'icon'=>'arrow down'])
     ->on('click', new jsReload($seg, ['m'=>'country']));
 $buttons->add(['Button', 'Use File Model', 'icon'=>'arrow down'])
     ->on('click', new jsReload($seg, ['m'=>'file']));
-$buttons->add(['Button', 'use Stat Model', 'icon'=>'arrow down'])
+$buttons->add(['Button', 'Use Stat Model', 'icon'=>'arrow down'])
     ->on('click', new jsReload($seg, ['m'=>'stat']));
 
 $form = $seg->add(['Form', 'layout'=>'FormLayout/Columns']);
