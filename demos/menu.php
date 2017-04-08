@@ -8,7 +8,7 @@ $m = $layout->add('Menu');
 $m->addItem('foo', 'foo.php');
 $m->addItem('bar');
 $m->addItem('baz');
-$m->add(['DropDown', 'huhhuh', 'js'=>['on'=>'hover']])->setSource(['a', 'b', 'c']);
+$m->add(['Dropdown', 'huhhuh', 'js'=>['on'=>'hover']])->setSource(['a', 'b', 'c']);
 
 $sm = $m->addMenu('Sub-menu');
 $sm->addItem('one', 'one.php');

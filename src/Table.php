@@ -104,19 +104,21 @@ class Table extends Lister
      *
      * @param string         $name      Data model field name
      * @param Column\Generic $columnDef
-     * @param array          $fieldDef  Array of defaults for new Model field
      *
      * @return Column\Generic
      */
-    public function addColumn($name, $columnDef = null, $fieldDef = [])
+    public function addColumn($name, $columnDef = null)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
 
-        $field = $this->model->hasElement($name);
-        if (!$field) {
-            $field = $this->model->addField($name, $fieldDef);
+        if ($name !== null) {
+            $field = $this->model->hasElement($name);
+            if (!$field) {
+                $columnDef = $name;
+                $name = null;
+            }
         }
 
         if ($columnDef === null) {
@@ -132,7 +134,16 @@ class Table extends Lister
         }
 
         $columnDef->table = $this;
-        $this->columns[$name] = $columnDef;
+        if (is_null($name)) {
+            $this->columns[] = $columnDef;
+        } elseif (isset($this->columns[$name])) {
+            if (!is_array($this->columns[$name])) {
+                $this->columns[$name] = [$this->columns[$name]];
+            }
+            $this->columns[$name][] = $columnDef;
+        } else {
+            $this->columns[$name] = $columnDef;
+        }
 
         return $columnDef;
     }
@@ -230,6 +241,8 @@ class Table extends Lister
         foreach ($columns as $column) {
             $this->addColumn($column);
         }
+
+        return $this->model;
     }
 
     /**
@@ -243,12 +256,12 @@ class Table extends Lister
 
         // Generate Header Row
         if ($this->header) {
-            $this->t_head->setHTML('cells', $this->renderHeaderCells());
+            $this->t_head->setHTML('cells', $this->getHeaderRowHTML());
             $this->template->setHTML('Head', $this->t_head->render());
         }
 
         // Generate template for data row
-        $this->t_row_master->setHTML('cells', $this->getRowTemplate());
+        $this->t_row_master->setHTML('cells', $this->getDataRowHTML());
         $this->t_row_master['_id'] = '{$_id}';
         $this->t_row = new Template($this->t_row_master->render());
         $this->t_row->app = $this->app;
@@ -298,7 +311,7 @@ class Table extends Lister
         if (!$rows) {
             $this->template->appendHTML('Body', $this->t_empty->render());
         } elseif ($this->totals_plan) {
-            $this->t_totals->setHTML('cells', $this->renderTotalsCells());
+            $this->t_totals->setHTML('cells', $this->getTotalsRowHTML());
             $this->template->appendHTML('Foot', $this->t_totals->render());
         } else {
         }
@@ -353,41 +366,54 @@ class Table extends Lister
      *
      * @return string
      */
-    public function renderHeaderCells()
+    public function getHeaderRowHTML()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $field = $this->model->hasElement($name);
 
-            $output[] = $column->getHeaderCell($field);
+            // If multiple formatters are defined, use the first for the header cell
+            if (is_array($column)) {
+                $column = $column[0];
+            }
+
+            if (!is_int($name)) {
+                $field = $this->model->getElement($name);
+
+                $output[] = $column->getHeaderCellHTML($field);
+            } else {
+                $output[] = $column->getHeaderCellHTML();
+            }
         }
 
         return implode('', $output);
     }
 
     /**
-     * Responsd with HTML to be inserted in the footer row that would
-     * contain totals fro all columns.
+     * Responds with HTML to be inserted in the footer row that would
+     * contain totals for all columns.
      *
      * @return string
      */
-    public function renderTotalsCells()
+    public function getTotalsRowHTML()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
+            // if no totals plan, then show dash, but keep column formatting
             if (!isset($this->totals_plan[$name])) {
-                $output[] = $this->app->getTag('th', '-');
+                $output[] = $column->getTag('th', 'foot', '-');
                 continue;
             }
 
+            // if totals plan is set as array, then show formatted value
             if (is_array($this->totals_plan[$name])) {
                 // todo - format
                 $field = $this->model->getElement($name);
-                $output[] = $column->getTotalsCell($field, $this->totals[$name]);
+                $output[] = $column->getTotalsCellHTML($field, $this->totals[$name]);
                 continue;
             }
 
-            $output[] = $this->app->getTag('th', [], $this->totals_plan[$name]);
+            // otherwise just show it, for example, "Totals:" cell
+            $output[] = $column->getTag('th', 'foot', $this->totals_plan[$name]);
         }
 
         return implode('', $output);
@@ -398,13 +424,23 @@ class Table extends Lister
      *
      * @return string
      */
-    public function getRowTemplate()
+    public function getDataRowHTML()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $field = $this->model->hasElement($name);
 
-            $output[] = $column->getCellTemplate($field);
+            // If multiple formatters are defined, use the first for the header cell
+            if (is_array($column)) {
+                $column = $column[0];
+            }
+
+            if (!is_int($name)) {
+                $field = $this->model->getElement($name);
+
+                $output[] = $column->getDataCellHTML($field);
+            } else {
+                $output[] = $column->getDataCellHTML();
+            }
         }
 
         return implode('', $output);

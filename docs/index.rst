@@ -29,11 +29,14 @@ Contents:
     core
     layouts
     building-components
+    menu
     lister
-    tree
+    table
+    paginator
     grid
     form
     crud
+    tree
     virtual-page
     console
 

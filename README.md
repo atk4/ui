@@ -39,7 +39,7 @@ Agile UI comes with many built-in components;
 | [Grid](http://ui.agiletoolkit.org/demos/grid.php) [[source](https://github.com/atk4/ui/blob/develop/demos/grid.php#L9)] | Formatting, Columns, Status, Link, Template, Delete. | 1.0        |
 | GridAdvanced                             | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1 *      |
 | Messages                                 | Such as "Info", "Error", "Warning" or "Tip" for easy use. | 1.1 *      |
-| Dialog                                   | Modal dialog with dynamically loaded content. | 1.1 *      |
+| Modal                                    | Modal dialog with dynamically loaded content. | 1.1 *      |
 | Relading                                 | Dynamically re-render part of the UI.    | 1.1 *      |
 | Actions                                  | Extended buttons with various interactions | 1.1 *      |
 | CRUD                                     | Create, List, Edit and Delete records (based on Advanced Grid) | 1.2 *      |

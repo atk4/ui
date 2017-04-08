@@ -26,13 +26,17 @@ class Status extends Generic
         $this->states = $states;
     }
 
-    public function getCellTemplate(\atk4\data\Field $f)
+    public function getDataCellHTML(\atk4\data\Field $f = null)
     {
+        if ($f === null) {
+            throw new Exception(['Status can be used only with model field']);
+        }
+
         return $this->app->getTag(
             'td',
             ['class'=> '{$_'.$f->short_name.'_status}'],
-            $this->app->getTag('i', ['class'=>'icon {$_'.$f->short_name.'_icon}'], '').
-            ' {$'.$f->short_name.'}'
+            [$this->app->getTag('i', ['class'=>'icon {$_'.$f->short_name.'_icon}'], '').
+            ' {$'.$f->short_name.'}', ]
         );
     }
 

@@ -4,7 +4,6 @@
  */
 require 'init.php';
 use \atk4\ui\Button;
-use \atk4\ui\Buttons;
 use \atk4\ui\Header;
 use \atk4\ui\Icon;
 use \atk4\ui\Label;
@@ -48,7 +47,7 @@ $layout->add($b_yes);
 $layout->add($b_no);
 
 $layout->add(new Header(['Combining Buttons', 'size'=>2]));
-$bar = new Buttons('vertical');  // NOTE: class called Buttons, not Button
+$bar = new View(['ui'=>'buttons', null, 'vertical']);  // NOTE: class called Buttons, not Button
 $bar->add(new Button(['Play', 'icon'=>'play']));
 $bar->add(new Button(['Pause', 'icon'=>'pause']));
 $bar->add(new Button(['Shuffle', 'icon'=>'shuffle']));
@@ -56,7 +55,7 @@ $bar->add(new Button(['Shuffle', 'icon'=>'shuffle']));
 $layout->add($bar);
 
 $layout->add(new Header(['Icon Bar', 'size'=>2]));
-$bar = new Buttons('blue big');
+$bar = new View(['ui'=>'buttons', null, 'blue big']);  // NOTE: class called Buttons, not Button
 $bar->add(new Button(['icon'=>'file']));
 $bar->add(new Button(['icon'=>['save', 'yellow']]));
 $bar->add(new Button(['icon'=>'upload', 'disabled'=>true]));

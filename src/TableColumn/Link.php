@@ -31,15 +31,19 @@ class Link extends Generic
     /**
      * kill me now for this code :!!
      */
-    public function getCellTemplate(\atk4\data\Field $f)
+    public function getDataCellHTML(\atk4\data\Field $f = null)
     {
+        if (is_null($f)) {
+            $f = $this;
+        }
+
         foreach ($this->page as &$val) {
             $val = str_replace('{$', '___o', $val);
             $val = str_replace('}', 'c___', $val);
         }
 
         $href = $this->app->url($this->page);
-        $output = $this->app->getTag('td', [], $this->app->getTag('a', ['href'=>$href], '{$'.$f->short_name.'}'));
+        $output = $this->getTag('td', 'body', ['a', 'href'=>$href, '{$'.$f->short_name.'}']);
 
         $output = str_replace('___o', '{$', $output);
         $output = str_replace('c___', '_urlencode}', $output);
