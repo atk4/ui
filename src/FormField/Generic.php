@@ -23,12 +23,9 @@ class Generic extends View
     public function init()
     {
         parent::init();
-        if (isset($this->field) && $this->field->mandatory) {
-            $this->form->addHook('validate', function () {
-                var_dump($this->field->get());
 
-                return [$this->field->short_name => !$this->field->get()];
-            });
+        if ($this->form && $this->field) {
+            $this->form->fields[$this->field->name] = $this;
         }
     }
 

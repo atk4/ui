@@ -1,5 +1,7 @@
 <?php
 
+// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+
 namespace atk4\ui;
 
 /**
@@ -9,16 +11,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 {
     use \atk4\core\HookTrait;
 
+    // {{{ Properties
+
     public $ui = 'form';
     public $defaultTemplate = 'form.html';
-
-    /**
-     * When form is submitted successfully, this template is used by method
-     * success() to replace form contents.
-     *
-     * @var string
-     */
-    public $successTemplate = 'form-success.html';
 
     /**
      * A current layout of a form, needed if you call $form->addField().
@@ -26,6 +22,11 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * @var \atk4\ui\FormLayout\Generic
      */
     public $layout = null;
+
+    /**
+     * List of fields currently registered with this form. 
+     */
+    public $fields = [];
 
     /**
      * Disables form contents.
@@ -43,154 +44,27 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public $buttonSave;
 
     /**
-     * Add field into current layout. If no layout, create one. If no model, create blank one.
+     * When form is submitted successfully, this template is used by method
+     * success() to replace form contents.
      *
-     * @param mixed ...$args
+     * WARNING: may be removed in the future as we refactor into using Message class
      *
-     * @return FormField\Generic
+     * @var string
      */
-    public function addField(...$args)
-    {
-        if (!$this->model) {
-            $this->model = new \atk4\ui\misc\ProxyModel();
-        }
+    public $successTemplate = 'form-success.html';
 
-        return $this->layout->addField(...$args); //$this->fieldFactory($modelField));
-    }
+    // }}}
 
-    /**
-     * Add header into the form, which appears as a separator.
-     *
-     * @param string $title
-     *
-     * @return \atk4\ui\FormLayout\Generic
-     */
-    public function addHeader($title = null)
-    {
-        return $this->layout->addHeader($title);
-    }
-
-    /**
-     * Creates a group of fields and returns layout.
-     *
-     * @param string|array $title
-     *
-     * @return \atk4\ui\FormLayout\Generic
-     */
-    public function addGroup($title = null)
-    {
-        return $this->layout->addGroup($title);
-    }
-
-    /**
-     * initialize form layout. You can inject custom layout
-     * if you 'layout'=>.. to constructor.
-     */
-    public function initLayout()
-    {
-        if (is_string($this->layout)) {
-            $this->layout = [$this->layout];
-        } elseif ($this->layout === null) {
-            $this->layout = ['FormLayout/Generic'];
-        }
-
-        if (is_array($this->layout)) {
-            $this->layout['form'] = $this;
-            $this->layout = $this->add($this->layout);
-        } elseif (is_object($this->layout)) {
-            $this->layout->form = $this;
-            $this->add($this->layout);
-        } else {
-            throw new Exception(['Unsupported specification of form layout. Can be array, string or object', 'layout'=>$this->layout]);
-        }
-
-        $this->layout->addButton($this->buttonSave = new Button(['Save', 'primary']));
-        $this->buttonSave->on('click', $this->js()->form('submit'));
-    }
-
-    /**
-     * Adds callback in submit hook.
-     *
-     * @param callable $callback
-     */
-    public function onSubmit($callback)
-    {
-        $this->addHook('submit', $callback);
-    }
-
-    /**
-     * Provided with a Agile Data Model Field, this method have to decide
-     * and create instance of a View that will act as a form-field.
-     *
-     * @param mixed ...$args
-     *
-     * @return Form\Field\Generic
-     */
-    public function fieldFactory(...$args)
-    {
-        if (is_string($args[0]) && ($modelField = $this->model->hasElement($args[0]))) {
-            // $modelField is set above
-        } elseif ($args[0] instanceof \atk4\data\Field) {
-            $modelField = $args[0];
-        } else {
-            $modelField = $this->model->addField(...$args);
-            $modelField->never_persist = true;
-        }
-
-        return $this->_fieldFactory($modelField);
-    }
-
-    /**
-     * Will come up with a column object based on the field object supplied.
-     *
-     * @param \atk4\data\Field $f
-     *
-     * @return FormField\Generic
-     */
-    public function _fieldFactory(\atk4\data\Field $f)
-    {
-        switch ($f->type) {
-        case 'boolean':
-            return new FormField\Checkbox(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
-
-        default:
-            return new FormField\Line(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
-
-        }
-    }
-
-    /**
-     * Associates form with the model but also specifies which of Model
-     * fields should be added automatically.
-     *
-     * If $actualFields are not specified, then all "editable" fields
-     * will be added.
-     *
-     * @param \atk4\data\Model $model
-     * @param array            $fields
-     *
-     * @return \atk4\data\Model
-     */
-    public function setModel(\atk4\data\Model $model, $fields = null)
-    {
-        $model = parent::setModel($model);
-
-        // Will not try to populate any fields
-        if ($fields === false) {
-            return $model;
-        }
-
-        $this->layout->setModel($model, $fields);
-
-        return $model;
-    }
-
+    // {{{ Base Methods
     public function init()
     {
         parent::init();
 
+        // Initialize layout, so when you call addField / setModel next time, form will know
+        // where to add your fields.
         $this->initLayout();
 
+        // When form is submitted, will perform POST field loading.
         $this->addHook('submit', [$this, 'loadPOST']);
         $this->addHook('submit', function () {
 
@@ -230,12 +104,62 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     }
 
     /**
-     * Looks inside the POST of the request and loads it into a current model.
+     * initialize form layout. You can inject custom layout
+     * if you 'layout'=>.. to constructor.
      */
-    public function loadPOST()
+    protected function initLayout()
     {
-        $data = array_intersect_key($_POST, $this->model->elements);
-        $this->model->set($this->app->ui_persistence->typecastLoadRow($this->model, $data));
+        if (is_string($this->layout)) {
+            $this->layout = [$this->layout];
+        } elseif ($this->layout === null) {
+            $this->layout = ['FormLayout/Generic'];
+        }
+
+        if (is_array($this->layout)) {
+            $this->layout['form'] = $this;
+            $this->layout = $this->add($this->layout);
+        } elseif (is_object($this->layout)) {
+            $this->layout->form = $this;
+            $this->add($this->layout);
+        } else {
+            throw new Exception(['Unsupported specification of form layout. Can be array, string or object', 'layout'=>$this->layout]);
+        }
+
+        // Layout needs to have a save button
+        $this->layout->addButton($this->buttonSave = new Button(['Save', 'primary']));
+        $this->buttonSave->on('click', $this->js()->form('submit'));
+    }
+
+    /**
+     * Associates form with the model but also specifies which of Model
+     * fields should be added automatically.
+     *
+     * If $actualFields are not specified, then all "editable" fields
+     * will be added.
+     *
+     * @param \atk4\data\Model $model
+     * @param array            $fields
+     *
+     * @return \atk4\data\Model
+     */
+    public function setModel(\atk4\data\Model $model, $fields = null)
+    {
+        // Model is set for the form and also for the current layout
+        $model = parent::setModel($model);
+        $this->layout->setModel($model, $fields);
+
+        return $model;
+    }
+
+    /**
+     * Adds callback in submit hook.
+     *
+     * @param callable $callback
+     */
+    public function onSubmit($callback)
+    {
+        $this->addHook('submit', $callback);
+        return $this;
     }
 
     /**
@@ -283,11 +207,48 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return $js;
     }
 
-    public function renderView()
-    {
-        $this->ajaxSubmit();
+    // }}}
 
-        return parent::renderView();
+    // {{{ Layout Manipulation
+
+    /**
+     * Add field into current layout. If no layout, create one. If no model, create blank one.
+     *
+     * @param mixed ...$args
+     *
+     * @return FormField\Generic
+     */
+    public function addField(...$args)
+    {
+        if (!$this->model) {
+            $this->model = new \atk4\ui\misc\ProxyModel();
+        }
+
+        return $this->layout->addField(...$args); //$this->fieldFactory($modelField));
+    }
+
+    /**
+     * Add header into the form, which appears as a separator.
+     *
+     * @param string $title
+     *
+     * @return \atk4\ui\FormLayout\Generic
+     */
+    public function addHeader($title = null)
+    {
+        return $this->layout->addHeader($title);
+    }
+
+    /**
+     * Creates a group of fields and returns layout.
+     *
+     * @param string|array $title
+     *
+     * @return \atk4\ui\FormLayout\Generic
+     */
+    public function addGroup($title = null)
+    {
+        return $this->layout->addGroup($title);
     }
 
     /**
@@ -314,6 +275,74 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function jsField($name)
     {
         return $this->layout->getElement($name)->js();
+    }
+
+
+    // }}}
+
+    // {{{ Internals
+
+    /**
+     * Provided with a Agile Data Model Field, this method have to decide
+     * and create instance of a View that will act as a form-field.
+     *
+     * @param mixed ...$args
+     *
+     * @return Form\Field\Generic
+     */
+    public function fieldFactory(...$args)
+    {
+        if (is_string($args[0]) && ($modelField = $this->model->hasElement($args[0]))) {
+            // $modelField is set above
+        } elseif ($args[0] instanceof \atk4\data\Field) {
+            $modelField = $args[0];
+        } else {
+            $modelField = $this->model->addField(...$args);
+            $modelField->never_persist = true;
+        }
+
+        return $this->_fieldFactory($modelField);
+    }
+
+    /**
+     * Will come up with a column object based on the field object supplied.
+     *
+     * @param \atk4\data\Field $f
+     *
+     * @return FormField\Generic
+     */
+    public function _fieldFactory(\atk4\data\Field $f)
+    {
+        switch ($f->type) {
+        case 'boolean':
+            return new FormField\Checkbox(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
+
+        default:
+            return new FormField\Line(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
+
+        }
+    }
+
+    /**
+     * Looks inside the POST of the request and loads it into a current model.
+     */
+    public function loadPOST()
+    {
+        $data = $_POST;
+
+        $this->hook('loadPOST', [&$data]);
+
+        $data = array_intersect_key($data, $this->fields);
+
+
+        $this->model->set($this->app->ui_persistence->typecastLoadRow($this->model, $data));
+    }
+
+    public function renderView()
+    {
+        $this->ajaxSubmit();
+
+        return parent::renderView();
     }
 
     /**
@@ -343,4 +372,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
     }
+
+    // }}}
 }
