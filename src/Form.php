@@ -24,7 +24,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public $layout = null;
 
     /**
-     * List of fields currently registered with this form. 
+     * List of fields currently registered with this form.
      */
     public $fields = [];
 
@@ -159,6 +159,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function onSubmit($callback)
     {
         $this->addHook('submit', $callback);
+
         return $this;
     }
 
@@ -277,7 +278,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return $this->layout->getElement($name)->js();
     }
 
-
     // }}}
 
     // {{{ Internals
@@ -333,7 +333,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $this->hook('loadPOST', [&$data]);
 
         $data = array_intersect_key($data, $this->fields);
-
 
         $this->model->set($this->app->ui_persistence->typecastLoadRow($this->model, $data));
     }
