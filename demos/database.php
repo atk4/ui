@@ -20,12 +20,12 @@ class Country extends \atk4\data\Model
     public function init()
     {
         parent::init();
-        $this->addField('name', ['actual'=>'nicename', 'mandatory'=>true, 'type'=>'string']);
+        $this->addField('name', ['actual'=>'nicename', 'required'=>true, 'type'=>'string']);
 
-        $this->addField('iso', ['caption'=>'ISO', 'mandatory'=>true, 'type'=>'string']);
-        $this->addField('iso3', ['caption'=>'ISO3', 'mandatory'=>true, 'type'=>'string']);
-        $this->addField('numcode', ['caption'=>'ISO Numeric Code']);
-        $this->addField('phonecode', ['caption'=>'Phone Prefix']);
+        $this->addField('iso', ['caption'=>'ISO', 'required'=>true, 'type'=>'string']);
+        $this->addField('iso3', ['caption'=>'ISO3', 'required'=>true, 'type'=>'string']);
+        $this->addField('numcode', ['caption'=>'ISO Numeric Code', 'type'=>'number', 'required'=>true]);
+        $this->addField('phonecode', ['caption'=>'Phone Prefix', 'type'=>'number']);
     }
 }
 
@@ -38,10 +38,10 @@ class Stat extends \atk4\data\Model
     {
         parent::init();
 
-        $this->addFields(['project_name', 'project_code']);
-        $this->addField('description', ['type'=>'text']);
-        $this->addField('client_name');
-        $this->addField('client_address', ['type'=>'text']);
+        $this->addFields(['project_name', 'project_code'], ['type'=>'string']);
+        $this->addField('description', ['ui'=>['form'=>['FormField/TextArea', 'rows'=>5]]]);
+        $this->addField('client_name', ['type'=>'string']);
+        $this->addField('client_address', ['ui'=>['form'=>[new \atk4\ui\FormField\TextArea(), 'rows'=>4]]]);
 
         $this->hasOne('client_country_iso', [
             new Country(),

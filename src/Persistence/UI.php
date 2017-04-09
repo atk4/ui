@@ -83,7 +83,7 @@ class UI extends \atk4\data\Persistence
             $tz_class = isset($f->dateTimeZoneClass) ? $f->dateTimeZoneClass : 'DateTimeZone';
 
             // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
-            $format = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
+            $format = ['date' => '!+'.$this->date_format, 'datetime' => '!+'.$this->datetime_format, 'time' => '!+'.$this->time_format];
             $format = $f->persist_format ?: $format[$f->type];
 
             // datetime only - set from persisting timezone

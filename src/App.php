@@ -399,6 +399,19 @@ class App
 
             if (isset($tmp[0])) {
                 $tag = $tmp[0];
+
+                if (is_array($tag)) {
+                    // OH a bunch of tags
+                    $output = '';
+                    foreach($tmp as $subtag) {
+                        //var_dump($subtag);
+                        $output.= $this->getTag($subtag);
+                    }
+                    return $output;
+                }
+
+
+
                 unset($tmp[0]);
             } else {
                 $tag = 'div';

@@ -313,12 +313,41 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function _fieldFactory(\atk4\data\Field $f)
     {
+        $arg = ['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name];
+
+        if (isset($f->ui['form'])) {
+            $display = $f->ui['form'];
+
+            if (is_string($display) || is_object($display)) {
+                $display = [$display];
+            }
+
+
+            // ui['form'] = ['FormField/TextArea', 'rows'=>2]
+            if (isset($display[0])) {
+                $display = array_merge($display, $arg);
+                return $this->factory($display);
+            }
+
+        }
+
+        if ($f->enum) {
+            $arg['values'] = array_combine($f->enum, $f->enum);
+            return new FormField\Dropdown($arg);
+        }
+
         switch ($f->type) {
         case 'boolean':
-            return new FormField\Checkbox(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
+            return new FormField\Checkbox($arg);
+
+        case 'string':
+            return new FormField\Line($arg);
+
+        case null:
+            return new FormField\TextArea($arg);
 
         default:
-            return new FormField\Line(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
+            return new FormField\Line($arg);
 
         }
     }
@@ -328,14 +357,25 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function loadPOST()
     {
-        $data = $_POST;
+        $post = $_POST;
 
-        $this->hook('loadPOST', [&$data]);
+        $this->hook('loadPOST', [&$post]);
+        $data = [];
+        $errors = [];
 
-        $data = array_intersect_key($data, $this->fields);
+        foreach($this->fields as $key=>$field) {
+            try {
+                $value = isset($post[$key]) ? $post[$key] : null;
 
+                $this->model[$key] = $this->app->ui_persistence->typecastLoadField($field->field, $value);
+            } catch (\atk4\core\Exception $e) {
+                $errors[] = $this->error($key, $e->getMessage());
+            }
+        }
 
-        $this->model->set($this->app->ui_persistence->typecastLoadRow($this->model, $data));
+        if ($errors) {
+            $this->breakHook($errors);
+        }
     }
 
     public function renderView()

@@ -231,7 +231,7 @@ class Generic extends View
             $template->trySet('label_for', $el->id.'_input');
             $template->set('field_class', '');
 
-            if ($el->field->mandatory) {
+            if ($el->field->required) {
                 $template->append('field_class', 'required ');
             }
 
