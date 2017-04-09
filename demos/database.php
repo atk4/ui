@@ -41,7 +41,7 @@ class Stat extends \atk4\data\Model
         $this->addFields(['project_name', 'project_code'], ['type'=>'string']);
         $this->addField('description', ['ui'=>['form'=>['FormField/TextArea', 'rows'=>5]]]);
         $this->addField('client_name', ['type'=>'string']);
-        $this->addField('client_address', ['ui'=>['form'=>[new \atk4\ui\FormField\TextArea(), 'rows'=>4]]]);
+        $this->addField('client_address', ['ui'=>['form'=>[new \atk4\ui\FormField\Textarea(), 'rows'=>4]]]);
 
         $this->hasOne('client_country_iso', [
             new Country(),
