@@ -344,7 +344,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             return new FormField\Line($arg);
 
         case null:
-            return new FormField\TextArea($arg);
+            return new FormField\Textarea($arg);
 
         default:
             return new FormField\Line($arg);
