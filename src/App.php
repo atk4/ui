@@ -403,14 +403,13 @@ class App
                 if (is_array($tag)) {
                     // OH a bunch of tags
                     $output = '';
-                    foreach($tmp as $subtag) {
+                    foreach ($tmp as $subtag) {
                         //var_dump($subtag);
-                        $output.= $this->getTag($subtag);
+                        $output .= $this->getTag($subtag);
                     }
+
                     return $output;
                 }
-
-
 
                 unset($tmp[0]);
             } else {

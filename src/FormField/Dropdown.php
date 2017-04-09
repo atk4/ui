@@ -24,12 +24,11 @@ class Dropdown extends Input
      */
     public function getInput()
     {
-
         $value = isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: '';
 
         $options = [];
-        foreach($this->values as $key=>$val) {
-            $item = ['option', 'value'=>(string)$key, $val];
+        foreach ($this->values as $key=>$val) {
+            $item = ['option', 'value'=>(string) $key, $val];
             if ($value == $val) {
                 $item['selected'] = true;
             }
@@ -43,9 +42,8 @@ class Dropdown extends Input
             'placeholder'=> $this->placeholder,
             'id'         => $this->id.'_input',
         ], [$options]
-       // 
+       //
     );
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
-
 }

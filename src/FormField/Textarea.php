@@ -7,9 +7,8 @@ use atk4\ui\Form;
 /**
  * Input element for a form field.
  */
-class TextArea extends Input
+class Textarea extends Input
 {
-
     public $rows = 2;
 
     public function init()
@@ -32,5 +31,4 @@ class TextArea extends Input
     );
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
-
 }

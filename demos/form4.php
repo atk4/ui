@@ -5,8 +5,6 @@
 require 'init.php';
 require 'database.php';
 
-use \atk4\ui\jsReload;
-
 $layout->add(['Header', 'Form automatically decided how many columns to use']);
 
 $form = $layout->add(['Form']);

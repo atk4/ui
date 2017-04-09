@@ -322,17 +322,17 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 $display = [$display];
             }
 
-
             // ui['form'] = ['FormField/TextArea', 'rows'=>2]
             if (isset($display[0])) {
                 $display = array_merge($display, $arg);
+
                 return $this->factory($display);
             }
-
         }
 
         if ($f->enum) {
             $arg['values'] = array_combine($f->enum, $f->enum);
+
             return new FormField\Dropdown($arg);
         }
 
@@ -363,7 +363,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $data = [];
         $errors = [];
 
-        foreach($this->fields as $key=>$field) {
+        foreach ($this->fields as $key=>$field) {
             try {
                 $value = isset($post[$key]) ? $post[$key] : null;
 
