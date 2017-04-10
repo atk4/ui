@@ -6,7 +6,13 @@ export default class reloadView {
 
         if(options.uri) {
             $.get(options.uri, options.uri_options, (data) => {
-                $element.replaceWith(data);
+                if(options.replace) {
+                    $element.replaceWith(data);
+                } else {
+                    $element.html(data);
+                }
+
+                options.complete.call(this);
             });
         }
     }
@@ -15,4 +21,6 @@ export default class reloadView {
 reloadView.DEFAULTS = {
     uri: null,
     uri_options: {},
+    replace: true,
+    complete: () => {}
 };
