@@ -175,9 +175,8 @@ class App
 
     protected function initIncludes()
     {
-
         $f = dirname(dirname(__FILE__)).'/js/lib/atk4JS.js';
-        if(file_exists($f)) {
+        if (file_exists($f)) {
             $this->requireJS('../js/lib/atk4JS.js');
         } else {
             $this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js');

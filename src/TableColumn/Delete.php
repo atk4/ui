@@ -12,7 +12,7 @@ class Delete extends Generic
         parent::init();
 
         $this->vp = $this->table->_add(new \atk4\ui\CallbackLater());
-        $this->vp->set(function() {
+        $this->vp->set(function () {
             $this->table->model->load($_POST[$this->name])->delete();
 
             $reload = $this->table->reload ?: $this->table;
@@ -22,9 +22,9 @@ class Delete extends Generic
         });
 
         $this->table->on('click', 'a.'.$this->short_name)->ajaxec([
-            'uri'=>$this->vp->getURL(),
-            'uri_options'=>[$this->name => $this->table->jsRow()->data('id')],
-            'confirm'=>(new \atk4\ui\jQuery())->attr('title')
+            'uri'        => $this->vp->getURL(),
+            'uri_options'=> [$this->name => $this->table->jsRow()->data('id')],
+            'confirm'    => (new \atk4\ui\jQuery())->attr('title'),
         ]);
     }
 

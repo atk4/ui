@@ -14,7 +14,7 @@ class Table extends Lister
     public $content = false;
 
     /**
-     * If table is part of Grid or CRUD, we want to reload that instead of grid
+     * If table is part of Grid or CRUD, we want to reload that instead of grid.
      */
     public $reload = null;
 

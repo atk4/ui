@@ -54,7 +54,8 @@ class CRUD extends Grid
         }
     }
 
-    public function can($operation) {
+    public function can($operation)
+    {
         return isset($this->ops[$operation]) && $this->ops[$operation];
     }
 
@@ -79,7 +80,7 @@ class CRUD extends Grid
                     ];
                 });
             });
-        };
+        }
 
         return parent::setModel($m, $this->fieldsGrid ?: $this->fieldsDefault);
     }
