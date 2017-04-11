@@ -12,7 +12,6 @@ $layout->add(['Header', 'JS-actions will be re-applied']);
 $b2 = $layout->add(['Button', 'Reload Myself']);
 $b2->js('click', new \atk4\ui\jsReload($b2));
 
-
 // Test 3 - avoid duplicate
 $layout->add(['Header', 'No duplicate JS bindings']);
 $b3 = $layout->add(['Button', 'Reload other button']);

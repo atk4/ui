@@ -74,7 +74,7 @@ class UI extends \atk4\data\Persistence
         case 'string':
         case 'text':
             // Normalize line breaks
-            $value = str_replace (array("\r\n", "\r"), "\n", $value);
+            $value = str_replace(["\r\n", "\r"], "\n", $value);
             break;
         case 'boolean':
             $value = (bool) $value;
