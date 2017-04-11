@@ -69,7 +69,7 @@ class CRUD extends Grid
             $this->itemCreate->set('Add New '.(isset($m->title) ? $m->title : get_class($m)));
 
             $this->pageCreate->set(function ($page) use ($m) {
-                $form = $page->add($this->formCreate ?:  ['Form', 'layout'=>'FormLayout/Columns']);
+                $form = $page->add($this->formCreate ?: ['Form', 'layout'=>'FormLayout/Columns']);
                 $form->setModel($m, $this->fieldsCreate ?: $this->fieldsDefault);
                 $form->onSubmit(function ($form) {
                     $form->model->save();
@@ -87,11 +87,12 @@ class CRUD extends Grid
         if ($this->can('u')) {
             $this->addAction(new Icon('pencil'), new jsModal('Edit', $this->pageEdit, [$this->name=>$this->table->jsRow()->data('id')]));
 
-            $this->pageEdit->set(function() {
+            $this->pageEdit->set(function () {
                 $this->model->load($_POST[$this->name]);
                 $this->formEdit->setModel($this->model);
-                $this->formEdit->onSubmit(function($form) {
+                $this->formEdit->onSubmit(function ($form) {
                     $form->save();
+
                     return [
                         new jsExpression('$($(".atk-dialog-content").data("opener")).closest(".atk-reloadable-crud").trigger("reload")'),
                         new jsExpression('$(".atk-dialog-content").trigger("close")'),
