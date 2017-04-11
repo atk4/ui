@@ -26,7 +26,7 @@ class CRUD extends Grid
 
     /**
      * Permitted operatios. You can add more of your own and you don't need to keep
-     * them 1-character long. Use full words such as 'archive' if you run out of 
+     * them 1-character long. Use full words such as 'archive' if you run out of
      * letters.
      */
     public $ops = ['c'=>true, 'r'=>true, 'u'=>true, 'd'=>true];
