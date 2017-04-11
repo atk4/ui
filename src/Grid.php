@@ -81,6 +81,11 @@ class Grid extends View
         }
     }
 
+    public function addColumn($name, $columnDef = null)
+    {
+        return $this->table->addColumn($name, $columnDef);
+    }
+
     public function addButton($text)
     {
         return $this->menu->addItem()->add(new Button($text));

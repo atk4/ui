@@ -35,16 +35,16 @@ class CRUD extends Grid
     {
         parent::init();
 
-        if (!isset($this->_can['r'])) {
+        if (!$this->can('r')) {
             throw new Exception(['You cannot disable "r" operation']);
         }
 
-        if (isset($this->_can['u'])) {
+        if ($this->can('u')) {
             $this->pageEdit = $this->add($this->pageEdit ?: 'VirtualPage');
             $this->formEdit = $this->pageEdit->add($this->formEdit ?: 'Form');
         }
 
-        if (isset($this->_can['c'])) {
+        if ($this->can('c')) {
             $this->pageCreate = $this->add($this->pageCreate ?: 'VirtualPage');
 
             $this->itemCreate = $this->menu->addItem(
@@ -54,26 +54,32 @@ class CRUD extends Grid
         }
     }
 
+    public function can($operation) {
+        return isset($this->ops[$operation]) && $this->ops[$operation];
+    }
+
     public function setModel(\atk4\data\Model $m, $defaultFields = null)
     {
         if ($defaultFields !== null) {
             $this->fieldsDefault = $defaultFields;
         }
 
-        $this->itemCreate->set('Add New '.(isset($m->title) ? $m->title : get_class($m)));
+        if ($this->can('c')) {
+            $this->itemCreate->set('Add New '.(isset($m->title) ? $m->title : get_class($m)));
 
-        $this->pageCreate->set(function ($page) use ($m) {
-            $form = $page->add($this->formCreate ?: 'Form');
-            $form->setModel($m, $this->fieldsCreate ?: $this->fieldsDefault);
-            $form->onSubmit(function ($form) {
-                $form->model->save();
+            $this->pageCreate->set(function ($page) use ($m) {
+                $form = $page->add($this->formCreate ?: 'Form');
+                $form->setModel($m, $this->fieldsCreate ?: $this->fieldsDefault);
+                $form->onSubmit(function ($form) {
+                    $form->model->save();
 
-                return [
-                    new jsExpression('$($(".atk-dialog-content").data("opener")).closest(".atk-reloadable-crud").trigger("reload")'),
-                    new jsExpression('$(".atk-dialog-content").trigger("close")'),
-                ];
+                    return [
+                        new jsExpression('$($(".atk-dialog-content").data("opener")).closest(".atk-reloadable-crud").trigger("reload")'),
+                        new jsExpression('$(".atk-dialog-content").trigger("close")'),
+                    ];
+                });
             });
-        });
+        };
 
         return parent::setModel($m, $this->fieldsGrid ?: $this->fieldsDefault);
     }

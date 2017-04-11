@@ -88,7 +88,7 @@ class Menu extends View
 
     public function addMenuRight()
     {
-        $menu = $this->add(new self(), ['RightMenu', 'ui'=>false]);
+        $menu = $this->add([new self(), 'ui'=>false], 'RightMenu');
         $menu->removeClass('item')->addClass('right menu');
 
         return $menu;
