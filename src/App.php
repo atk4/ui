@@ -168,7 +168,20 @@ class App
 
         $this->layout = $this->html->add($layout);
 
+        $this->initIncludes();
+
         return $this;
+    }
+
+    protected function initIncludes()
+    {
+
+        $f = dirname(dirname(__FILE__)).'/js/lib/atk4JS.js';
+        if(file_exists($f)) {
+            $this->requireJS('../js/lib/atk4JS.js');
+        } else {
+            $this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js');
+        }
     }
 
     /**

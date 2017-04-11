@@ -853,8 +853,16 @@ class View implements jsExpressionable
         // will be returned from this method, so you can chain more stuff on it
         $actions[] = $thisAction = new jQuery(new jsExpression('this'));
 
-        if (is_callable($action)) {
+        if (is_callable($action) || (is_array($action) && isset($action[0]) && is_callable($action[0]))) {
             // if callable $action is passed, then execute ajaxec()
+
+            if (is_array($action)) {
+                $urlData = $action;
+                unset($urlData[0]);
+                $action = $action[0];
+            } else {
+                $urlData = [];
+            }
 
             // create callback, that will include event as part of the full name
             $this->_add($cb = new jsCallback(), ['desired_name'=>$event]);
@@ -865,7 +873,7 @@ class View implements jsExpressionable
                 return call_user_func($action, $chain);
             });
 
-            $thisAction->api(['on'=>'now', 'url'=>$cb->getURL(), 'obj'=>new jsExpression('this')]);
+            $thisAction->api(['on'=>'now', 'url'=>$cb->getURL(), 'urlData'=>$urlData, 'obj'=>new jsExpression('this')]);
         } elseif ($action) {
             // otherwise include
             $actions[] = $action;

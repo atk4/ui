@@ -7,7 +7,7 @@ namespace atk4\ui;
  */
 class jsModal extends jsExpression
 {
-    public function __construct($title, $url)
+    public function __construct($title, $url, $args = [])
     {
         if ($url instanceof VirtualPage) {
             $url = $url->getURL('cut');
@@ -29,12 +29,12 @@ class jsModal extends jsExpression
 
         parent::__construct('
         var m=$("<div>").appendTo("body").addClass("ui scrolling modal").html([content]);
-        m.modal({onHide: function() { m.children().remove(); return true; }}).modal("show").find(".content").load([url], function() { m.modal("refresh"); });
+        m.modal({onHide: function() { m.children().remove(); return true; }}).modal("show").find(".content").load([url], [arg], function() { m.modal("refresh"); });
         m.find(".atk-dialog-content").data("opener", this).on("close", function() {
             m.modal("hide");
             m.remove();
         });
 ',
-            ['content'=>$content, 'url'=>$url]);
+            ['content'=>$content, 'url'=>$url, 'arg'=>$args]);
     }
 }

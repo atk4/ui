@@ -14,6 +14,11 @@ class Table extends Lister
     public $content = false;
 
     /**
+     * If table is part of Grid or CRUD, we want to reload that instead of grid
+     */
+    public $reload = null;
+
+    /**
      * Column objects can service multiple columns. You can use it for your advancage by re-using the object
      * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
      * used.
@@ -323,6 +328,35 @@ class Table extends Lister
         }
 
         return View::renderView();
+    }
+
+    /**
+     * Same as on('click', 'tr', $action), but will also make sure you can't
+     * click outside of the body. Additionally when you move cursor over the
+     * rows, pointer will be used and rows will be highlighted as you hover.
+     *
+     * @param jsChain|callable $action Code to execute
+     *
+     * @return jQuery
+     */
+    public function onRowClick($action)
+    {
+        $this->addClass('selectable');
+        $this->js(true)->find('tbody')->css('cursor', 'pointer');
+
+        return $this->on('click', 'tbody>tr', $action);
+    }
+
+    /**
+     * Use this to quickly access the <tr> and wrap in jQuery.
+     *
+     * $this->jsRow()->data('id');
+     *
+     * @return jQuery
+     */
+    public function jsRow()
+    {
+        return (new jQuery(new jsExpression('this')))->closest('tr');
     }
 
     /**
