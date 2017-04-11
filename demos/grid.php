@@ -14,8 +14,6 @@ $g->menu->addItem(['Delete All', 'icon'=>'trash', 'red active']);
 $g->addAction('Say HI', new \atk4\ui\jsExpression('alert("hi")'));
 $g->addAction(['icon'=>'pencil'], new \atk4\ui\jsExpression('alert($(this).closest("tr").data("id"))'));
 
-$g->addColumn(new atk4\ui\TableColumn\Delete());
-
 $sel = $g->addSelection();
 $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
     'alert("Selected: "+[])', [$sel->jsChecked()]

@@ -17,6 +17,8 @@ class VirtualPage extends View
 
     public $fx = [];
 
+    public $ui = 'container';
+
     public function init()
     {
         parent::init();
