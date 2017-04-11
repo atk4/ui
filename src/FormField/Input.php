@@ -126,17 +126,22 @@ class Input extends Generic
 
         if ($this->action) {
             if (!is_object($this->action)) {
-                $this->addAction($this->action);
+                $this->action = new Button($this->action);
             }
-            $this->addClass('action');
+            if (!$this->action->_initialized) {
+                $this->add($this->action, 'AfterInput');
+                $this->addClass('action');
+            }
         }
 
         if ($this->actionLeft) {
             if (!is_object($this->actionLeft)) {
                 $this->actionLeft = new Button($this->actionLeft);
             }
-            $this->add($this->actionLeft, 'BeforeInput');
-            $this->addClass('left action');
+            if (!$this->actionLeft->_initialized) {
+                $this->add($this->actionLeft, 'BeforeInput');
+                $this->addClass('left action');
+            }
         }
 
         $this->template->setHTML('Input', $this->getInput());

@@ -368,16 +368,14 @@ class View implements jsExpressionable
      */
     public function add($object, $region = null)
     {
-        /*
-        if (!$this->app) {
-            $this->init();
-        }
-        */
-
         if (!$this->app) {
             $this->_add_later[] = [$object, $region];
 
             return $object;
+        }
+
+        if (is_array($region)) {
+            throw new Exception('Second argument to add must be region or null!');
         }
 
         if ($region === null) {

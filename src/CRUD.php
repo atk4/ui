@@ -24,29 +24,27 @@ class CRUD extends Grid
     public $formCreate = null;
     public $pageCreate = null;
 
-    public $operations = 'CRUD';
-    protected $_can = [];
+    /**
+     * Permitted operatios. You can add more of your own and you don't need to keep
+     * them 1-character long. Use full words such as 'archive' if you run out of 
+     * letters.
+     */
+    public $ops = ['c'=>true, 'r'=>true, 'u'=>true, 'd'=>true];
 
     public function init()
     {
         parent::init();
 
-        $this->addClass('atk-reloadable-crud')->on('reload', new jsReload($this));
-
-        foreach (str_split($this->operations) as $op) {
-            $this->_can[$op] = true;
+        if (!isset($this->_can['r'])) {
+            throw new Exception(['You cannot disable "r" operation']);
         }
 
-        if (!isset($this->_can['R'])) {
-            throw new Exception(['You cannot disable "R" operation']);
-        }
-
-        if (isset($this->_can['U'])) {
+        if (isset($this->_can['u'])) {
             $this->pageEdit = $this->add($this->pageEdit ?: 'VirtualPage');
             $this->formEdit = $this->pageEdit->add($this->formEdit ?: 'Form');
         }
 
-        if (isset($this->_can['C'])) {
+        if (isset($this->_can['c'])) {
             $this->pageCreate = $this->add($this->pageCreate ?: 'VirtualPage');
 
             $this->itemCreate = $this->menu->addItem(

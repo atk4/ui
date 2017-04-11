@@ -71,6 +71,11 @@ class UI extends \atk4\data\Persistence
     public function _typecastLoadField(\atk4\data\Field $f, $value)
     {
         switch ($f->type) {
+        case 'string':
+        case 'text':
+            // Normalize line breaks
+            $value = str_replace (array("\r\n", "\r"), "\n", $value);
+            break;
         case 'boolean':
             $value = (bool) $value;
             break;

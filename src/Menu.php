@@ -57,7 +57,7 @@ class Menu extends View
             $name = [];
         }
 
-        $sub_menu = $this->add(new self(), ['defaultTemplate'=>'submenu.html', 'ui'=>'dropdown']);
+        $sub_menu = $this->add([new self(), 'defaultTemplate'=>'submenu.html', 'ui'=>'dropdown']);
         $sub_menu->set('label', $label);
 
         if (isset($name['icon'])) {
@@ -73,7 +73,7 @@ class Menu extends View
 
     public function addGroup($title)
     {
-        $group = $this->add(new self(), ['defaultTemplate'=>'menugroup.html', 'ui'=>false]);
+        $group = $this->add([new self(), 'defaultTemplate'=>'menugroup.html', 'ui'=>false]);
         if (is_string($title)) {
             $group->set('title', $title);
         } else {

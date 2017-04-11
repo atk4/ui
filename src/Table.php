@@ -164,7 +164,7 @@ class Table extends Lister
 
         default:
             if (!$this->default_column) {
-                $this->default_column = $this->add(new TableColumn\Generic());
+                $this->default_column = $this->_add(new TableColumn\Generic());
             }
 
             return $this->default_column;
