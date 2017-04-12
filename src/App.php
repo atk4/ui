@@ -339,7 +339,6 @@ class App
         }
 
         foreach ($page as $arg => $val) {
-
             if ($arg === 0) {
                 continue;
             }
@@ -371,17 +370,17 @@ class App
      *
      * @return string
      */
-    public function stickyGet($name) {
+    public function stickyGet($name)
+    {
         if (isset($_GET[$name])) {
             $this->sticky_get_arguments[$name] = $_GET[$name];
 
             return $_GET[$name];
         }
-
-        return null;
     }
 
-    protected $sticky_get_arguments = array();
+    protected $sticky_get_arguments = [];
+
     /**
      * Remove sticky GET which was set by stickyGET.
      *
