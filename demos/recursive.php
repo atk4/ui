@@ -2,8 +2,9 @@
 
 include 'init.php';
 
-class MySwitcher extends \atk4\ui\View {
-    function init()
+class MySwitcher extends \atk4\ui\View
+{
+    public function init()
     {
         parent::init();
 
@@ -18,16 +19,15 @@ class MySwitcher extends \atk4\ui\View {
 
         switch ($this->app->stickyGet($this->name)) {
         case 'yellow':
-            $this->add(['ui'=>'yellow segment'])->add(new MySwitcher());
+            $this->add(['ui'=>'yellow segment'])->add(new self());
             break;
         case 'blue':
-            $this->add(['ui'=>'blue segment'])->add(new MySwitcher());;
+            $this->add(['ui'=>'blue segment'])->add(new self());
             break;
         case 'button':
             $this->add(['ui'=>'green segment'])->add(['Button', 'Refresh page'])->link([]);
             break;
         }
-
     }
 }
 
