@@ -20,7 +20,7 @@ class View implements jsExpressionable
     use \atk4\core\AppScopeTrait;
     use \atk4\core\FactoryTrait;
     use \atk4\core\DIContainerTrait {
-        setDefaults as _setDefaults;
+        setProperties as _setProperties;
         setMissingProperty as _setMissingProperty;
     }
 
@@ -160,7 +160,7 @@ class View implements jsExpressionable
             throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
         }
 
-        $this->setDefaults($defaults);
+        $this->setProperties($defaults);
 
         if (is_string($this->class)) {
             $this->class = explode(' ', $this->class);
@@ -223,14 +223,14 @@ class View implements jsExpressionable
      *
      * @param array $properties
      */
-    protected function setDefaults($properties)
+    protected function setProperties($properties)
     {
         if (isset($properties[0]) && $this->content !== false) {
             $this->content = $properties[0];
             unset($properties[0]);
         }
 
-        $this->_setDefaults($properties);
+        $this->_setProperties($properties);
     }
 
     /**
@@ -446,7 +446,7 @@ class View implements jsExpressionable
         }
 
         if (is_array($arg1)) {
-            $this->setDefaults($arg1);
+            $this->setProperties($arg1);
 
             return $this;
         }
