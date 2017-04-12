@@ -223,14 +223,14 @@ class View implements jsExpressionable
      *
      * @param array $properties
      */
-    protected function setProperties($properties)
+    protected function setDefaults($properties)
     {
         if (isset($properties[0]) && $this->content !== false) {
             $this->content = $properties[0];
             unset($properties[0]);
         }
 
-        $this->_setProperties($properties);
+        $this->_setDefaults($properties);
     }
 
     /**
@@ -446,7 +446,7 @@ class View implements jsExpressionable
         }
 
         if (is_array($arg1)) {
-            $this->setProperties($arg1);
+            $this->setDefaults($arg1);
 
             return $this;
         }
