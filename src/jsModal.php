@@ -29,7 +29,7 @@ class jsModal extends jsExpression
 
         parent::__construct('
         var m=$("<div>").appendTo("body").addClass("ui scrolling modal").html([content]);
-        m.modal({onHide: function() { m.children().remove(); return true; }}).modal("show").find(".content").load([url], [arg], function() { m.modal("refresh"); });
+        m.modal({onHide: function() { m.children().remove(); return true; }}).modal("show").find(".content").load($.addParams([url], [arg]), function() { m.modal("refresh"); });
         m.find(".atk-dialog-content").data("opener", this).on("close", function() {
             m.modal("hide");
             m.remove();

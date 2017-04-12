@@ -385,6 +385,10 @@ class View implements jsExpressionable
             }
         }
 
+        if (is_array($object) && !isset($object[0])) {
+            $object[0] = 'View';
+        }
+
         $object = $this->_add($object, $defaults);
 
         if (!$object instanceof self) {

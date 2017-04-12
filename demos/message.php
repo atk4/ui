@@ -6,24 +6,26 @@ $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/
 
 $layout->add(['Header', 'Message Types']);
 
-$bar_type = $layout->add(['View', 'ui'=>' basic buttons']);
+$seg = $layout->add(['ui'=>'raised segment']);
 
-$msg = $layout->add([
+$bar_type = $seg->add(['ui'=>' basic buttons']);
+
+$msg = $seg->add([
     'Message',
     'This is a title of your message',
-    'type' => isset($_GET['type']) ? $_GET['type'] : null,
-    'icon' => isset($_GET['icon']) ? $_GET['icon'] : null,
+    'type' => $app->stickyGet('type'),
+    'icon' => $app->stickyGet('icon'),
 ]);
 $msg->text->addParagraph('You can add some more text here for your messages');
 
-$bar_type->on('click', '.button', new \atk4\ui\jsReload($msg, ['type'=>(new \atk4\ui\jQuery())->text()]));
+$bar_type->on('click', '.button', new \atk4\ui\jsReload($seg, ['type'=>(new \atk4\ui\jQuery())->text()]));
 $bar_type->add(['Button', 'success']);
 $bar_type->add(['Button', 'error']);
 $bar_type->add(['Button', 'info']);
 $bar_type->add(['Button', 'warning']);
 
-$bar_icon = $layout->add(['View', 'ui'=>' basic buttons']);
-$bar_icon->on('click', '.button', new \atk4\ui\jsReload($msg, ['icon'=>(new \atk4\ui\jQuery())->find('i')->attr('class')]));
+$bar_icon = $seg->add(['View', 'ui'=>' basic buttons']);
+$bar_icon->on('click', '.button', new \atk4\ui\jsReload($seg, ['icon'=>(new \atk4\ui\jQuery())->find('i')->attr('class')]));
 $bar_icon->add(['Button', 'icon'=>'book']);
 $bar_icon->add(['Button', 'icon'=>'check circle outline']);
 $bar_icon->add(['Button', 'icon'=>'pointing right']);

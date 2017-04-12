@@ -35,6 +35,8 @@ class CRUD extends Grid
     {
         parent::init();
 
+        $this->on('reload', new jsReload($this));
+
         if (!$this->can('r')) {
             throw new Exception(['You cannot disable "r" operation']);
         }
@@ -75,8 +77,8 @@ class CRUD extends Grid
                     $form->model->save();
 
                     return [
-                        new jsExpression('$($(".atk-dialog-content").data("opener")).closest(".atk-reloadable-crud").trigger("reload")'),
-                        new jsExpression('$(".atk-dialog-content").trigger("close")'),
+                        (new jQuery($this))->trigger('reload'),
+                        new jsExpression('$("#atk-dialog-content").trigger("close")'),
                     ];
                 });
             });
@@ -88,13 +90,13 @@ class CRUD extends Grid
             $this->addAction(new Icon('pencil'), new jsModal('Edit', $this->pageEdit, [$this->name=>$this->table->jsRow()->data('id')]));
 
             $this->pageEdit->set(function () {
-                $this->model->load($_POST[$this->name]);
+                $this->model->load($this->app->stickyGet($this->name));
                 $this->formEdit->setModel($this->model);
                 $this->formEdit->onSubmit(function ($form) {
-                    $form->save();
+                    $form->model->save();
 
                     return [
-                        new jsExpression('$($(".atk-dialog-content").data("opener")).closest(".atk-reloadable-crud").trigger("reload")'),
+                        (new jQuery($this))->trigger('reload'),
                         new jsExpression('$(".atk-dialog-content").trigger("close")'),
                     ];
                 });

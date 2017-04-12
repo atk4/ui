@@ -40,6 +40,7 @@ class Paginator extends View
     public function init()
     {
         parent::init();
+        $this->app->stickyGet($this->name);
 
         if (!$this->page) {
             $this->page = $this->getCurrentPage();
@@ -148,7 +149,7 @@ class Paginator extends View
      */
     public function url($page)
     {
-        return $this->app->url(['paginator', $this->name=>$page]);
+        return $this->app->url([$this->name=>$page]);
     }
 
     /**
