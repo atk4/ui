@@ -78,7 +78,7 @@ class CRUD extends Grid
 
                     return [
                         (new jQuery($this))->trigger('reload'),
-                        new jsExpression('$("#atk-dialog-content").trigger("close")'),
+                        new jsExpression('$(".atk-dialog-content").trigger("close")'),
                     ];
                 });
             });

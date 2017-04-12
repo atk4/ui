@@ -49,7 +49,7 @@ class Callback
      */
     public function __construct($defaults = [])
     {
-        $this->setProperties($defaults);
+        $this->setDefaults($defaults);
     }
 
     /**
