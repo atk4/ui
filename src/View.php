@@ -20,6 +20,7 @@ class View implements jsExpressionable
     use \atk4\core\AppScopeTrait;
     use \atk4\core\FactoryTrait;
     use \atk4\core\DIContainerTrait {
+        setProperties as _setProperties;
         setMissingProperty as _setMissingProperty;
     }
 
@@ -228,17 +229,8 @@ class View implements jsExpressionable
             $this->content = $properties[0];
             unset($properties[0]);
         }
-        foreach ($properties as $key => $val) {
-            if (property_exists($this, $key)) {
-                if (is_array($val)) {
-                    $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
-                } elseif ($val !== null) {
-                    $this->$key = $val;
-                }
-            } else {
-                $this->setProperty($key, $val);
-            }
-        }
+
+        $this->_setProperties($properties);
     }
 
     /**
@@ -249,7 +241,7 @@ class View implements jsExpressionable
      *
      * @throws Exception
      */
-    protected function setProperty($key, $val)
+    protected function setMissingProperty($key, $val)
     {
         if (is_numeric($key)) {
             $key = $val;
