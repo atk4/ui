@@ -38,6 +38,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('JavaScript Events', ['button2']);
     $basic->addItem('Element Reloading', ['reloading']);
     $basic->addItem('Modal Dialogs', ['modal']);
+    $basic->addItem('Sticky GET', ['sticky']);
 
     $f = basename($_SERVER['PHP_SELF']);
 
