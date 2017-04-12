@@ -644,7 +644,7 @@ class View implements jsExpressionable
             foreach ($this->attr as $attr => $val) {
                 $tmp[] = $attr.'="'.$this->app->encodeAttribute($val).'"';
             }
-            $this->template->set('attributes', implode(' ', $tmp));
+            $this->template->setHTML('attributes', implode(' ', $tmp));
         }
     }
 

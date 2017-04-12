@@ -6,7 +6,7 @@ require '../vendor/autoload.php';
 
 $app = new \atk4\ui\App('Agile UI v1.1 - Demo Suite', ['icon'=>'user']);
 
-$app->initLayout((isset($_GET['layout']) && $_GET['layout'] === 'centered') ? 'Centered' : 'Admin');
+$app->initLayout($app->stickyGET('layout') ?: 'Admin');
 
 $layout = $app->layout;
 
