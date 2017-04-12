@@ -3,8 +3,8 @@
 namespace atk4\ui;
 
 use atk4\core\AppScopeTrait;
-use atk4\core\TrackableTrait;
 use atk4\core\DIContainerTrait;
+use atk4\core\TrackableTrait;
 
 /**
  * Add this object to your render tree and it will expose a unique URL which, when
