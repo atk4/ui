@@ -280,6 +280,25 @@ class App
         return $template;
     }
 
+    protected function getRequestURI()
+    {
+        if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
+            $request_uri = $_SERVER['HTTP_X_REWRITE_URL'];
+        } elseif (isset($_SERVER['REQUEST_URI'])) { // Apache
+            $request_uri = $_SERVER['REQUEST_URI'];
+        } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
+            $request_uri = $_SERVER['ORIG_PATH_INFO'];
+            // This one comes without QUERRY string
+        } else {
+            throw new BaseException('Unable to determine RequestURI. This shouldn\'t be called at all in CLI');
+        }
+        $request_uri = explode('?', $request_uri, 2);
+
+        return $request_uri[0];
+    }
+
+    public $page = null;
+
     /**
      * Build a URL that application can use for call-backs.
      *
@@ -287,28 +306,90 @@ class App
      *
      * @return string
      */
-    public function url($args = [])
+    public function url($page = [])
     {
-        if (is_string($args)) {
-            $args = [$args];
+        $sticky = $this->sticky_get_arguments;
+        $result = [];
+
+        if ($this->page === null) {
+            $this->page = basename($this->getRequestURI(), '.php');
         }
 
-        if (!isset($args[0])) {
-            $args[0] = '';
+        if (is_string($page)) {
+            return $page;
         }
 
-        $page = $args[0];
-        unset($args[0]);
+        if (!isset($page[0])) {
+            $page[0] = $this->page;
+
+            if (is_array($sticky) && !empty($sticky)) {
+                foreach ($sticky as $key => $val) {
+                    if ($val === true) {
+                        if (isset($_GET[$key])) {
+                            $val = $_GET[$key];
+                        } else {
+                            continue;
+                        }
+                    }
+                    if (!isset($result[$key])) {
+                        $result[$key] = $val;
+                    }
+                }
+            }
+        }
+
+        foreach ($page as $arg => $val) {
+
+            if ($arg === 0) {
+                continue;
+            }
+
+            if ($val === null || $val === false) {
+                unset($result[$arg]);
+            } else {
+                $result[$arg] = $val;
+            }
+        }
+
+        $page = $page[0];
 
         $url = $page ? $page.'.php' : '';
 
-        $args = http_build_query($args);
+        $args = http_build_query($result);
 
         if ($args) {
             $url = $url.'?'.$args;
         }
 
         return $url;
+    }
+
+    /**
+     * Make current get argument with specified name automatically appended to all generated URLs.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public function stickyGet($name) {
+        if (isset($_GET[$name])) {
+            $this->sticky_get_arguments[$name] = $_GET[$name];
+
+            return $_GET[$name];
+        }
+
+        return null;
+    }
+
+    protected $sticky_get_arguments = array();
+    /**
+     * Remove sticky GET which was set by stickyGET.
+     *
+     * @param string $name
+     */
+    public function stickyForget($name)
+    {
+        unset($this->sticky_get_arguments[$name]);
     }
 
     /**

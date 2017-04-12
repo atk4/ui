@@ -6,7 +6,7 @@ require '../vendor/autoload.php';
 
 $app = new \atk4\ui\App('Agile UI v1.1 - Demo Suite', ['icon'=>'user']);
 
-$app->initLayout((isset($_GET['layout']) && $_GET['layout'] === 'centered') ? 'Centered' : 'Admin');
+$app->initLayout($app->stickyGET('layout') ?: 'Admin');
 
 $layout = $app->layout;
 
@@ -40,6 +40,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('JavaScript Events', ['button2']);
     $basic->addItem('Element Reloading', ['reloading']);
     $basic->addItem('Modal Dialogs', ['modal']);
+    $basic->addItem('Sticky GET', ['sticky']);
 
     $f = basename($_SERVER['PHP_SELF']);
 
