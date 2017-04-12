@@ -19,6 +19,9 @@ class View implements jsExpressionable
     use \atk4\core\TrackableTrait;
     use \atk4\core\AppScopeTrait;
     use \atk4\core\FactoryTrait;
+    use \atk4\core\DIContainerTrait {
+        setMissingProperty as _setMissingProperty;
+    }
 
     // {{{ Properties of the class
 

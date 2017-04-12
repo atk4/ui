@@ -7,7 +7,7 @@ $layout->add(['Header', 'Default view has no styling']);
 $layout->add('View')->set('just a <div> element');
 
 $layout->add(['Header', 'View can specify CSS class']);
-$layout->add(['View', 'ui'=>'segment', 'class'=>'raised'])->set('Segment');
+$layout->add(['View', 'ui'=>'segment', 'raised'])->set('Segment');
 
 $layout->add(['Header', 'View can contain stuff']);
 $layout->add(['View', 'ui'=>'segment'])
@@ -38,7 +38,7 @@ $plane = $layout->add(['View', 'template'=>new \atk4\ui\Template('<div id="{$_id
 $plane->template->set('num', rand(5, 20));
 
 $layout->add(['Header', 'Can be rendered into HTML']);
-$layout->add(['View', 'ui'=>'segment', 'class'=>'raised', 'element'=>'pre'])->set($plane->render());
+$layout->add(['View', 'ui'=>'segment', 'raised', 'element'=>'pre'])->set($plane->render());
 
 $layout->add(['Header', 'Has a unique global identifier']);
 $layout->add(['Label', 'Plane ID: ', 'detail'=>$plane->name]);
