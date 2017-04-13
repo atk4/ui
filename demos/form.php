@@ -23,7 +23,7 @@ require 'init.php';
     $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
     $m_register->addField('name');
     $m_register->addField('email');
-    $m_register->addField('is_accept_terms', ['type'=>'boolean']);
+    $m_register->addField('is_accept_terms', ['type'=>'boolean', 'mandatory'=>true]);
 
     $f = $layout->add(new \atk4\ui\Form(['segment'=>true]));
     $f->setModel($m_register);

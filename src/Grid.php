@@ -72,13 +72,18 @@ class Grid extends View
         }
 
         if (is_null($this->table)) {
-            $this->table = $this->add(['Table', 'very compact'], 'Table');
+            $this->table = $this->add(['Table', 'very compact', 'reload'=>$this], 'Table');
         }
 
         if (is_null($this->paginator)) {
             $seg = $this->add(['View'], 'Paginator')->addStyle('text-align', 'center');
-            $this->paginator = $seg->add('Paginator');
+            $this->paginator = $seg->add(['Paginator', 'reload'=>$this]);
         }
+    }
+
+    public function addColumn($name, $columnDef = null)
+    {
+        return $this->table->addColumn($name, $columnDef);
     }
 
     public function addButton($text)

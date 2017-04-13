@@ -168,7 +168,19 @@ class App
 
         $this->layout = $this->html->add($layout);
 
+        $this->initIncludes();
+
         return $this;
+    }
+
+    protected function initIncludes()
+    {
+        $f = dirname(dirname(__FILE__)).'/js/lib/atk4JS.js';
+        if (file_exists($f)) {
+            $this->requireJS('../js/lib/atk4JS.js');
+        } else {
+            $this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js');
+        }
     }
 
     /**
@@ -276,9 +288,9 @@ class App
             $request_uri = $_SERVER['REQUEST_URI'];
         } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
             $request_uri = $_SERVER['ORIG_PATH_INFO'];
-            // This one comes without QUERRY string
+            // This one comes without QUERY string
         } else {
-            throw new BaseException('Unable to determine RequestURI. This shouldn\'t be called at all in CLI');
+            $request_uri = '';
         }
         $request_uri = explode('?', $request_uri, 2);
 
@@ -479,6 +491,18 @@ class App
 
             if (isset($tmp[0])) {
                 $tag = $tmp[0];
+
+                if (is_array($tag)) {
+                    // OH a bunch of tags
+                    $output = '';
+                    foreach ($tmp as $subtag) {
+                        //var_dump($subtag);
+                        $output .= $this->getTag($subtag);
+                    }
+
+                    return $output;
+                }
+
                 unset($tmp[0]);
             } else {
                 $tag = 'div';

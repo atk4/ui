@@ -64,7 +64,7 @@ class Generic extends View
         }
 
         if (isset($args['caption'])) {
-            $field->field->ui['caption'] = $args['caption'];
+            $field->field->caption = $args['caption'];
         }
 
         if (isset($args['width'])) {
@@ -72,6 +72,41 @@ class Generic extends View
         }
 
         return $this->_add($field, ['name'=>$field->short_name]);
+    }
+
+    public function setModel(\atk4\data\Model $model, $fields = null)
+    {
+        parent::setModel($model);
+
+        if ($fields === false) {
+            return $model;
+        }
+
+        if ($fields === null) {
+            $fields = [];
+            foreach ($model->elements as $f) {
+                if (!$f instanceof \atk4\data\Field) {
+                    continue;
+                }
+
+                if (!$f->isEditable()) {
+                    continue;
+                }
+                $fields[] = $f->short_name;
+            }
+        }
+
+        if (is_array($fields)) {
+            foreach ($fields as $field) {
+                $modelField = $model->getElement($field);
+
+                $formField = $this->addField($this->form->fieldFactory($modelField));
+            }
+        } else {
+            throw new Exception(['Incorrect value for $fields', 'fields'=>$fields]);
+        }
+
+        return $model;
     }
 
     /**
@@ -123,9 +158,6 @@ class Generic extends View
         return $this->add(new self($label));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function recursiveRender()
     {
         $field_input = $this->template->cloneRegion('InputField');
@@ -171,8 +203,7 @@ class Generic extends View
             }
 
             $template = $field_input;
-            $label = isset($el->field->ui['caption']) ?
-                $el->field->ui['caption'] : ucwords(str_replace('_', ' ', $el->field->short_name));
+            $label = $el->field->getCaption();
 
             // Anything but fields gets inserted directly
             if ($el instanceof \atk4\ui\FormField\Checkbox) {
@@ -198,9 +229,14 @@ class Generic extends View
             $template->setHTML('Input', $el->getHTML());
             $template->trySet('label', $label);
             $template->trySet('label_for', $el->id.'_input');
+            $template->set('field_class', '');
+
+            if ($el->field->required) {
+                $template->append('field_class', 'required ');
+            }
 
             if (isset($el->field->ui['width'])) {
-                $template->set('field_class', $el->field->ui['width'].' wide');
+                $template->append('field_class', $el->field->ui['width'].' wide ');
             }
 
             $this->template->appendHTML('Content', $template->render());

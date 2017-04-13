@@ -3,6 +3,7 @@
 namespace atk4\ui;
 
 use atk4\core\AppScopeTrait;
+use atk4\core\DIContainerTrait;
 use atk4\core\TrackableTrait;
 
 /**
@@ -23,6 +24,7 @@ class Callback
 {
     use TrackableTrait;
     use AppScopeTrait;
+    use DIContainerTrait;
 
     /**
      * Will look for trigger in the POST data. Will re-use existing URL, but
@@ -47,19 +49,7 @@ class Callback
      */
     public function __construct($defaults = [])
     {
-        if (!is_array($defaults)) {
-            throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
-        }
-
-        foreach ($defaults as $key => $val) {
-            if (property_exists($this, $key)) {
-                if (is_array($val)) {
-                    $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
-                } elseif ($val !== null) {
-                    $this->$key = $val;
-                }
-            }
-        }
+        $this->setDefaults($defaults);
     }
 
     /**

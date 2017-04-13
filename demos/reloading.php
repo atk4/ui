@@ -47,7 +47,7 @@ $seg->add(new Counter('40'));
 $seg->add(new Counter('-20'));
 
 // Add button to reload all counters
-$bar = $layout->add('Buttons');
+$bar = $layout->add(['View', 'ui'=>'buttons']);
 $b = $bar->add(['Button', 'Reload counter'])->js('click', new \atk4\ui\jsReload($seg));
 
 // Relading with argument

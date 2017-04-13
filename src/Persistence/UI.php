@@ -19,7 +19,7 @@ class UI extends \atk4\data\Persistence
 {
     public $date_format = 'd/m/Y';
 
-    public $time_format = 'h:i:S';
+    public $time_format = 'h:i:s';
 
     public $datetime_format = 'D, d M Y H:i:s O';
 
@@ -71,6 +71,11 @@ class UI extends \atk4\data\Persistence
     public function _typecastLoadField(\atk4\data\Field $f, $value)
     {
         switch ($f->type) {
+        case 'string':
+        case 'text':
+            // Normalize line breaks
+            $value = str_replace(["\r\n", "\r"], "\n", $value);
+            break;
         case 'boolean':
             $value = (bool) $value;
             break;
@@ -83,7 +88,7 @@ class UI extends \atk4\data\Persistence
             $tz_class = isset($f->dateTimeZoneClass) ? $f->dateTimeZoneClass : 'DateTimeZone';
 
             // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
-            $format = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
+            $format = ['date' => '!+'.$this->date_format, 'datetime' => '!+'.$this->datetime_format, 'time' => '!+'.$this->time_format];
             $format = $f->persist_format ?: $format[$f->type];
 
             // datetime only - set from persisting timezone

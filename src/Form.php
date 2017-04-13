@@ -1,5 +1,7 @@
 <?php
 
+// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+
 namespace atk4\ui;
 
 /**
@@ -9,19 +11,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 {
     use \atk4\core\HookTrait;
 
-    // @inheritdoc
+    // {{{ Properties
+
     public $ui = 'form';
-
-    // @inheritdoc
     public $defaultTemplate = 'form.html';
-
-    /**
-     * When form is submitted successfully, this template is used by method
-     * success() to replace form contents.
-     *
-     * @var string
-     */
-    public $successTemplate = 'form-success.html';
 
     /**
      * A current layout of a form, needed if you call $form->addField().
@@ -29,6 +22,11 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * @var \atk4\ui\FormLayout\Generic
      */
     public $layout = null;
+
+    /**
+     * List of fields currently registered with this form.
+     */
+    public $fields = [];
 
     /**
      * Disables form contents.
@@ -46,6 +44,175 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public $buttonSave;
 
     /**
+     * When form is submitted successfully, this template is used by method
+     * success() to replace form contents.
+     *
+     * WARNING: may be removed in the future as we refactor into using Message class
+     *
+     * @var string
+     */
+    public $successTemplate = 'form-success.html';
+
+    // }}}
+
+    // {{{ Base Methods
+    public function init()
+    {
+        parent::init();
+
+        // Initialize layout, so when you call addField / setModel next time, form will know
+        // where to add your fields.
+        $this->initLayout();
+
+        // When form is submitted, will perform POST field loading.
+        $this->addHook('submit', [$this, 'loadPOST']);
+        $this->addHook('submit', function () {
+
+            // Field validation
+            $result = $this->hook('validate');
+
+            $errors = [];
+
+            foreach ($result as $er) {
+                if (!is_array($er)) {
+                    continue;
+                }
+
+                foreach ($er as $field => $error) {
+                    var_dump($error);
+                    if ($error === null || $error === false) {
+                        continue;
+                    }
+
+                    if (isset($errors[$field])) {
+                        continue;
+                    }
+                    $errors[$field] = is_string($error) ? $error : 'Incorrect value specified';
+                }
+            }
+
+            $return = [];
+
+            if ($errors) {
+                foreach ($errors as $field=>$error) {
+                    $return[] = $this->error($field, $error);
+                }
+
+                return $return;
+            }
+        });
+    }
+
+    /**
+     * initialize form layout. You can inject custom layout
+     * if you 'layout'=>.. to constructor.
+     */
+    protected function initLayout()
+    {
+        if (is_string($this->layout)) {
+            $this->layout = [$this->layout];
+        } elseif ($this->layout === null) {
+            $this->layout = ['FormLayout/Generic'];
+        }
+
+        if (is_array($this->layout)) {
+            $this->layout['form'] = $this;
+            $this->layout = $this->add($this->layout);
+        } elseif (is_object($this->layout)) {
+            $this->layout->form = $this;
+            $this->add($this->layout);
+        } else {
+            throw new Exception(['Unsupported specification of form layout. Can be array, string or object', 'layout'=>$this->layout]);
+        }
+
+        // Layout needs to have a save button
+        $this->layout->addButton($this->buttonSave = new Button(['Save', 'primary']));
+        $this->buttonSave->on('click', $this->js()->form('submit'));
+    }
+
+    /**
+     * Associates form with the model but also specifies which of Model
+     * fields should be added automatically.
+     *
+     * If $actualFields are not specified, then all "editable" fields
+     * will be added.
+     *
+     * @param \atk4\data\Model $model
+     * @param array            $fields
+     *
+     * @return \atk4\data\Model
+     */
+    public function setModel(\atk4\data\Model $model, $fields = null)
+    {
+        // Model is set for the form and also for the current layout
+        $model = parent::setModel($model);
+        $this->layout->setModel($model, $fields);
+
+        return $model;
+    }
+
+    /**
+     * Adds callback in submit hook.
+     *
+     * @param callable $callback
+     */
+    public function onSubmit($callback)
+    {
+        $this->addHook('submit', $callback);
+
+        return $this;
+    }
+
+    /**
+     * Causes form to generate error.
+     *
+     * @param string $field Field name
+     * @param string $str   Error message
+     *
+     * @return jsChain
+     */
+    public function error($field, $str)
+    {
+        return $this->js()->form('add prompt', $field, $str);
+    }
+
+    /**
+     * Causes form to generate success message.
+     *
+     * @param string $str        Success message
+     * @param string $sub_header Sub-header
+     *
+     * @return jsChain
+     */
+    public function success($str = 'Success', $sub_header = null)
+    {
+        /*
+         * below code works, but polutes output with bad id=xx
+        $success = new Message([$str, 'id'=>false, 'type'=>'success', 'icon'=>'check']);
+        $success->app = $this->app;
+        $success->init();
+        $success->text->addParagraph($sub_header);
+         */
+        $success = $this->app->loadTemplate($this->successTemplate);
+        $success['header'] = $str;
+
+        if ($sub_header) {
+            $success['message'] = $sub_header;
+        } else {
+            $success->del('p');
+        }
+
+        $js = $this->js()
+            ->html($success->render());
+
+        return $js;
+    }
+
+    // }}}
+
+    // {{{ Layout Manipulation
+
+    /**
      * Add field into current layout. If no layout, create one. If no model, create blank one.
      *
      * @param mixed ...$args
@@ -56,10 +223,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
-        }
-
-        if (!$this->layout) {
-            $this->setLayout();
         }
 
         return $this->layout->addField(...$args); //$this->fieldFactory($modelField));
@@ -74,10 +237,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function addHeader($title = null)
     {
-        if (!$this->layout) {
-            $this->setLayout();
-        }
-
         return $this->layout->addHeader($title);
     }
 
@@ -90,38 +249,38 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function addGroup($title = null)
     {
-        if (!$this->layout) {
-            $this->setLayout();
-        }
-
         return $this->layout->addGroup($title);
     }
 
     /**
-     * Sets form layout.
+     * Returns JS Chain that targets INPUT element of a specified field. This method is handy
+     * if you wish to set a value to a certain field.
      *
-     * @param string|\atk4\ui\FormLayout\Generic $layout
+     * @param string $name Name of element
+     *
+     * @return jsChain
      */
-    public function setLayout($layout = null)
+    public function jsInput($name)
     {
-        if (!$layout) {
-            $layout = new \atk4\ui\FormLayout\Generic(['form' => $this]);
-        }
-
-        $this->layout = $this->add($layout);
-        $this->layout->addButton($this->buttonSave = new Button(['Save', 'primary']));
-        $this->buttonSave->on('click', $this->js()->form('submit'));
+        return $this->layout->getElement($name)->js()->find('input');
     }
 
     /**
-     * Adds callback in submit hook.
+     * Returns JS Chain that targets INPUT element of a specified field. This method is handy
+     * if you wish to set a value to a certain field.
      *
-     * @param callable $callback
+     * @param string $name Name of element
+     *
+     * @return jsChain
      */
-    public function onSubmit($callback)
+    public function jsField($name)
     {
-        $this->addHook('submit', $callback);
+        return $this->layout->getElement($name)->js();
     }
+
+    // }}}
+
+    // {{{ Internals
 
     /**
      * Provided with a Agile Data Model Field, this method have to decide
@@ -154,76 +313,43 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function _fieldFactory(\atk4\data\Field $f)
     {
+        $arg = ['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name];
+
+        if (isset($f->ui['form'])) {
+            $display = $f->ui['form'];
+
+            if (is_string($display) || is_object($display)) {
+                $display = [$display];
+            }
+
+            // ui['form'] = ['FormField/TextArea', 'rows'=>2]
+            if (isset($display[0])) {
+                $display = array_merge($display, $arg);
+
+                return $this->factory($display);
+            }
+        }
+
+        if ($f->enum) {
+            $arg['values'] = array_combine($f->enum, $f->enum);
+
+            return new FormField\Dropdown($arg);
+        }
+
         switch ($f->type) {
         case 'boolean':
-            return new FormField\Checkbox(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
+            return new FormField\Checkbox($arg);
+
+        case 'string':
+            return new FormField\Line($arg);
+
+        case null:
+            return new FormField\Line($arg);
 
         default:
-            return new FormField\Line(['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name]);
+            return new FormField\Line($arg);
 
         }
-    }
-
-    /**
-     * Associates form with the model but also specifies which of Model
-     * fields should be added automatically.
-     *
-     * If $actualFields are not specified, then all "editable" fields
-     * will be added.
-     *
-     * @param \atk4\data\Model $model
-     * @param array            $fields
-     *
-     * @return \atk4\data\Model
-     */
-    public function setModel(\atk4\data\Model $model, $fields = null)
-    {
-        $model = parent::setModel($model);
-
-        // Will not try to populate any fields
-        if ($fields === false) {
-            return $model;
-        }
-
-        if (!$this->layout) {
-            $this->setLayout(new \atk4\ui\FormLayout\Generic(['form'=>$this]));
-        }
-
-        if ($fields === null) {
-            $fields = [];
-            foreach ($model->elements as $f) {
-                if (!$f instanceof \atk4\data\Field) {
-                    continue;
-                }
-
-                if (!$f->isEditable()) {
-                    continue;
-                }
-                $fields[] = $f->short_name;
-            }
-        }
-
-        if (is_array($fields)) {
-            foreach ($fields as $field) {
-                $modelField = $model->getElement($field);
-
-                $formField = $this->layout->addField($this->fieldFactory($modelField));
-            }
-        } else {
-            throw new Exception(['Incorrect value for $fields', 'fields'=>$fields]);
-        }
-
-        return $model;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init()
-    {
-        parent::init();
-
-        $this->addHook('submit', [$this, 'loadPOST']);
     }
 
     /**
@@ -231,82 +357,32 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function loadPOST()
     {
-        $data = array_intersect_key($_POST, $this->model->elements);
-        $this->model->set($this->app->ui_persistence->typecastLoadRow($this->model, $data));
-    }
+        $post = $_POST;
 
-    /**
-     * Causes form to generate error.
-     *
-     * @param string $field Field name
-     * @param string $str   Error message
-     *
-     * @return jsChain
-     */
-    public function error($field, $str)
-    {
-        return $this->js()->form('add prompt', $field, $str);
-    }
+        $this->hook('loadPOST', [&$post]);
+        $data = [];
+        $errors = [];
 
-    /**
-     * Causes form to generate success message.
-     *
-     * @param string $str        Success message
-     * @param string $sub_header Sub-header
-     *
-     * @return jsChain
-     */
-    public function success($str = 'Success', $sub_header = null)
-    {
-        $success = $this->app->loadTemplate($this->successTemplate);
-        $success['header'] = $str;
+        foreach ($this->fields as $key=>$field) {
+            try {
+                $value = isset($post[$key]) ? $post[$key] : null;
 
-        if ($sub_header) {
-            $success['message'] = $sub_header;
-        } else {
-            $success->del('p');
+                $this->model[$key] = $this->app->ui_persistence->typecastLoadField($field->field, $value);
+            } catch (\atk4\core\Exception $e) {
+                $errors[] = $this->error($key, $e->getMessage());
+            }
         }
 
-        $js = $this->js()
-            ->html($success->render());
-
-        return $js;
+        if ($errors) {
+            $this->breakHook($errors);
+        }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function renderView()
     {
         $this->ajaxSubmit();
 
         return parent::renderView();
-    }
-
-    /**
-     * Returns JS Chain that targets INPUT element of a specified field. This method is handy
-     * if you wish to set a value to a certain field.
-     *
-     * @param string $name Name of element
-     *
-     * @return jsChain
-     */
-    public function jsInput($name)
-    {
-        return $this->layout->getElement($name)->js()->find('input');
-    }
-
-    /**
-     * Returns JS Chain that targets INPUT element of a specified field. This method is handy
-     * if you wish to set a value to a certain field.
-     *
-     * @param string $name Name of element
-     *
-     * @return jsChain
-     */
-    public function jsField($name)
-    {
-        return $this->layout->getElement($name)->js();
     }
 
     /**
@@ -336,4 +412,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
     }
+
+    // }}}
 }

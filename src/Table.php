@@ -14,6 +14,11 @@ class Table extends Lister
     public $content = false;
 
     /**
+     * If table is part of Grid or CRUD, we want to reload that instead of grid.
+     */
+    public $reload = null;
+
+    /**
      * Column objects can service multiple columns. You can use it for your advancage by re-using the object
      * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
      * used.
@@ -113,14 +118,18 @@ class Table extends Lister
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
 
-        if ($name !== null) {
+        $field = null;
+        if (is_string($name)) {
             $field = $this->model->hasElement($name);
-            if (!$field) {
-                $columnDef = $name;
-                $name = null;
-            }
         }
 
+        // No such field or not a string, so use it as columnDef
+        if (!$field) {
+            $columnDef = $name;
+            $name = null;
+        }
+
+        // At this point $columnDef is surely there and we might have field also.
         if ($columnDef === null) {
             $columnDef = $this->_columnFactory($field);
         } elseif (is_string($columnDef) || is_array($columnDef)) {
@@ -128,12 +137,14 @@ class Table extends Lister
                 throw new Exception(['You can only specify column type by name if Table is in a render-tree']);
             }
 
-            $columnDef = $this->add($columnDef, $name);
-        } else {
-            $this->add($columnDef, $name);
+            $columnDef = $this->factory($columnDef);
         }
 
         $columnDef->table = $this;
+        if (!$columnDef->_initialized) {
+            $this->_add($columnDef, $name);
+        }
+
         if (is_null($name)) {
             $this->columns[] = $columnDef;
         } elseif (isset($this->columns[$name])) {
@@ -164,7 +175,7 @@ class Table extends Lister
 
         default:
             if (!$this->default_column) {
-                $this->default_column = $this->add(new TableColumn\Generic());
+                $this->default_column = new TableColumn\Generic();
             }
 
             return $this->default_column;
@@ -345,7 +356,7 @@ class Table extends Lister
      */
     public function jsRow()
     {
-        return new jQuery(new jsExpression('this'));
+        return (new jQuery(new jsExpression('this')))->closest('tr');
     }
 
     /**

@@ -64,6 +64,57 @@ CREATE TABLE `file` (
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+
+
+
+
+# Dump of table stats
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `stats`;
+
+CREATE TABLE `stats` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `project_name` varchar(100) DEFAULT NULL COMMENT 'n',
+  `project_code` varchar(4) DEFAULT NULL,
+  `description` text,
+  `client_name` varchar(255) DEFAULT NULL,
+  `client_address` text,
+  `client_country_iso` char(2) DEFAULT NULL,
+  `is_commercial` tinyint(1) DEFAULT NULL,
+  `currency` enum('EUR','USD','GBP') DEFAULT NULL,
+  `is_completed` tinyint(1) DEFAULT NULL,
+  `project_budget` decimal(14,2) DEFAULT NULL,
+  `project_invoiced` decimal(14,2) DEFAULT NULL,
+  `project_paid` decimal(14,2) DEFAULT NULL,
+  `project_hour_cost` decimal(14,2) DEFAULT NULL,
+  `project_hours_est` int(11) DEFAULT NULL,
+  `project_hours_reported` int(11) DEFAULT NULL,
+  `project_expenses_est` decimal(14,2) DEFAULT NULL,
+  `project_expenses` decimal(14,2) DEFAULT NULL,
+  `project_mgmt_cost_pct` float DEFAULT NULL,
+  `project_qa_cost_pct` float DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `finish_date` date DEFAULT NULL,
+  `finish_time` time DEFAULT NULL,
+  `created` timestamp NULL DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `stats` WRITE;
+/*!40000 ALTER TABLE `stats` DISABLE KEYS */;
+
+INSERT INTO `stats` (`id`, `project_name`, `project_code`, `description`, `client_name`, `client_address`, `client_country_iso`, `is_commercial`, `currency`, `is_completed`, `project_budget`, `project_invoiced`, `project_paid`, `project_hour_cost`, `project_hours_est`, `project_hours_reported`, `project_expenses_est`, `project_expenses`, `project_mgmt_cost_pct`, `project_qa_cost_pct`, `start_date`, `finish_date`, `finish_time`, `created`, `updated`)
+VALUES
+	(1,'Agile DSQL','at01','DSQL is a composable SQL query builder. You can write multi-vendor queries in PHP profiting from better security, clean syntax and avoid human errors.','Agile Toolkit','Some Street,\nGarden City\nUK\n','GB',0,'GBP',1,7000.00,0.00,0.00,0.00,150,125,50.00,0.00,0.1,0.2,'2016-01-26','2016-06-23','12:50:00','2017-04-06 10:34:34','2017-04-06 10:35:04'),
+	(2,'Agile Core','at02','Collection of PHP Traits for designing object-oriented frameworks.','Agile Toolkit','Some Street,\nGarden City\nUK\n','GB',0,'GBP',1,3000.00,0.00,0.00,0.00,70,56,50.00,0.00,0.1,0.2,'2016-04-27','2016-05-21','18:41:00','2017-04-06 10:21:50','2017-04-06 10:35:04'),
+	(3,'Agile Data','at03','Agile Data implements an entirely new pattern for data abstraction, that is specifically designed for remote databases such as RDS, Cloud SQL, BigQuery and other distributed data storage architectures. It focuses on reducing number of requests your App have to send to the Database by using more sophisticated queries while also offering full Domain Model mapping and Database vendor abstraction.','Agile Toolkit','Some Street,\nGarden City\nUK\n','GB',0,'GBP',1,12000.00,0.00,0.00,0.00,300,394,600.00,430.00,0.2,0.3,'2016-04-17','2016-06-20','03:04:00','2017-04-06 10:30:15','2017-04-06 10:35:04'),
+	(4,'Agile UI','at04','Web UI Component library.','Agile Toolkit','Some Street,\nGarden City\nUK\n','GB',0,'GBP',0,20000.00,0.00,0.00,0.00,600,368,1200.00,0.00,0.3,0.4,'2016-09-17',NULL,NULL,'2017-04-06 10:30:15','2017-04-06 10:35:04');
+
+/*!40000 ALTER TABLE `stats` ENABLE KEYS */;
+UNLOCK TABLES;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

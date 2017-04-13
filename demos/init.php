@@ -18,12 +18,14 @@ if (isset($layout->leftMenu)) {
     $form->addItem('Basics and Layouting', ['form']);
     $form->addItem('Input Field Decoration', ['field']);
     $form->addItem('Data Integration', ['form2']);
+    $form->addItem('Form Multi-column layout', ['form3']);
 
     $form = $layout->leftMenu->addGroup(['Grid and Table', 'icon'=>'table']);
     $form->addItem('Data table with formatted columns', ['table']);
     $form->addItem('Table interractions', ['multitable']);
     $form->addItem('Grid - Table+Bar+Search+Paginator', ['grid']);
     $form->addItem('Interactivity - Modals and Expanders', ['expander']);
+    $form->addItem('CRUD - Full editing solution', ['crud']);
 
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon'=>'cubes']);
     $basic->addItem('View', ['view']);
@@ -39,6 +41,8 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('Element Reloading', ['reloading']);
     $basic->addItem('Modal Dialogs', ['modal']);
     $basic->addItem('Sticky GET', ['sticky']);
+    $basic->addItem('Recursive Views', ['recursive']);
+    //$basic->addItem('Virtual Page', ['virtual']);
 
     $f = basename($_SERVER['PHP_SELF']);
 
