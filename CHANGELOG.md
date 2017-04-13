@@ -1,7 +1,55 @@
 ## 1.1.0
 
-* IMPORTANT: Grid renamed into Table
-* IMPORTANT: Column namespace renamed into TableColumn (to avoid confusion with Columns / CSS Grid)
+A massive release containing unimaginable amount of new features, fixes and actually the first version
+of Agile Data that allows you to actually build nice apps with it.
+
+### Major Features
+- Added CRUD component to add, edit, delete and add records to your data sets #105, 
+- Added Advanced Grid now supporting checkbox column, actions, multiple formatters, anonymous columns, and delete
+- .. also Renamed old Grid into Table, #118 #84 #83 #93 #95 #64
+- Added QuickSearch #107 
+- Added Paginator
+- Added Form Model, Validation support
+- Added Form Fields: Textarea, Dropdown
+- Added Automated multi-column layout FormLayout\Columns
+- Added support for stickyGet #131
+- Added jsModal() for dialogs #124 #71
+- Added jsReload() with argument support and spinner #51 #66 #78 #79 
+- Added Message #100
+- Added Label #88
+- Added Columns #65
+- Added JS Library #73
+- Form can edit all field types of from Agile Data
+- Renamed Grid into Table
+
+### New Demo Pages
+ - Layouts #123 #113
+ - Form / Multi-column layout
+ - Grid / Table Interactions
+ - Grid / Table+Bar+Search+Paginator
+ - Grid / Interactivity - Modals
+ - Crud
+ - View demo #104
+ - Message
+ - Labels
+ - Menu #96 #97 
+ - Paginator
+ - Interactivity / Element Reloading
+ - Interactivity / Modal Dialogs
+ - Interactivity / Sticky GET
+ - Interactivity / Recursive Views
+
+### Fixes
+- Bugfixes #111, #86, #85
+
+### Minor changes
+- Upgraded to Agile Core 1.2 #129
+- Field->jsInput()
+- App->requireJS() #120 #50
+- Remaned all .jade files into .pug #89
+- Renamed namespace Column into TableColumn
+
+Full diff: https://github.com/atk4/ui/compare/1.0.3...1.1.0
 
 ## 1.0.2
 
