@@ -33,7 +33,7 @@ git branch release/$version
 git checkout release/$version
 
 # Find out previous version
-prev_version=$(git log --tags --simplify-by-decoration --pretty="format:%d" | head -1 | grep -Eo '[0-9\.]+')
+prev_version=$(git log --tags --simplify-by-decoration --pretty="format:%d" | grep -Eo '[0-9\.]+' | head -1)
 
 echo "Releasing $prev_version -> $version"
 
@@ -42,8 +42,8 @@ vimr CHANGELOG.md
 # Compute diffs
 git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative $prev_version...
 
-git log --pretty=full $prev_version... | grep '#[0-9]*' | sed 's/#\([0-9]*\)/\1/' | while read i; do
-    echo '---------------------------------------------------------------------------------'
+git log --pretty=full $prev_version... | grep '#[0-9]*' | sed 's/.*#\([0-9]*\).*/\1/' | sort | uniq | while read i; do
+    echo "-[ $i ]-------------------------------------------------------------------------------"
     ghi --color show $i | head -50
 done
 
