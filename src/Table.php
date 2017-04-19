@@ -127,7 +127,7 @@ class Table extends Lister
         }
 
         // No such field or not a string, so use it as columnDef
-        if (!$field) {
+        if (!$field && !$columnDef) {
             $columnDef = $name;
             $name = null;
         }
