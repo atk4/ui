@@ -114,6 +114,9 @@ class Table extends Lister
      */
     public function addColumn($name, $columnDef = null)
     {
+        if (!$this->_initialized) {
+            $this->init();
+        }
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
