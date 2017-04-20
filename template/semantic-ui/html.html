@@ -18,7 +18,7 @@
         }
         return true;
       }
-      
+
       $.fn.api.settings.onFailure = function(response) {
           w=window.open(null,'Error in JSON response','height=1000,width=1100,location=no,menubar=no,scrollbars=yes,status=no,titlebar=no,toolbar=no');
           if(w){
@@ -30,7 +30,7 @@
           }
       }
     </script>{$HEAD}
-    <style type="text/css">| {$style}</style>
+    <style type="text/css">{$style}</style>
   </head>
   <body class="{$class}">{$Content}</body>
 </html>
