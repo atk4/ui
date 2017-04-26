@@ -10,5 +10,4 @@ use atk4\ui\Form;
 class Password extends Line
 {
     public $inputType = 'password';
-
 }
