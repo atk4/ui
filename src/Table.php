@@ -114,6 +114,9 @@ class Table extends Lister
      */
     public function addColumn($name, $columnDef = null)
     {
+        if (!$this->_initialized) {
+            $this->init();
+        }
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
@@ -124,7 +127,7 @@ class Table extends Lister
         }
 
         // No such field or not a string, so use it as columnDef
-        if (!$field) {
+        if (!$field && !$columnDef) {
             $columnDef = $name;
             $name = null;
         }
