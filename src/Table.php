@@ -114,9 +114,6 @@ class Table extends Lister
      */
     public function addColumn($name, $columnDef = null)
     {
-        if (!$this->_initialized) {
-            $this->init();
-        }
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
@@ -127,7 +124,7 @@ class Table extends Lister
         }
 
         // No such field or not a string, so use it as columnDef
-        if (!$field && !$columnDef) {
+        if (!$field) {
             $columnDef = $name;
             $name = null;
         }
@@ -173,8 +170,11 @@ class Table extends Lister
     public function _columnFactory(\atk4\data\Field $f)
     {
         switch ($f->type) {
+        case 'password':
+            return $this->add(new TableColumn\Password());
+
         //case 'boolean':
-            //return $this->add(new Column\Checkbox());
+            //return $this->add(new TableColumn\Checkbox());
 
         default:
             if (!$this->default_column) {
@@ -186,7 +186,7 @@ class Table extends Lister
     }
 
     /**
-     * Overrides work like this:.
+     * Override works like this:.
      * [
      *   'name'=>'Totals for {$num} rows:',
      *   'price'=>'--',
