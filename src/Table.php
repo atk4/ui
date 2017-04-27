@@ -173,8 +173,11 @@ class Table extends Lister
     public function _columnFactory(\atk4\data\Field $f)
     {
         switch ($f->type) {
+        case 'password':
+            return $this->add(new TableColumn\Password());
+
         //case 'boolean':
-            //return $this->add(new Column\Checkbox());
+            //return $this->add(new TableColumn\Checkbox());
 
         default:
             if (!$this->default_column) {
@@ -186,7 +189,7 @@ class Table extends Lister
     }
 
     /**
-     * Overrides work like this:.
+     * Override works like this:.
      * [
      *   'name'=>'Totals for {$num} rows:',
      *   'price'=>'--',

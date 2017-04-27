@@ -288,7 +288,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * @param mixed ...$args
      *
-     * @return Form\Field\Generic
+     * @return FormField\Generic
      */
     public function fieldFactory(...$args)
     {
@@ -342,6 +342,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         case 'string':
             return new FormField\Line($arg);
+
+        case 'password':
+            return new FormField\Password($arg);
 
         case null:
             return new FormField\Line($arg);
