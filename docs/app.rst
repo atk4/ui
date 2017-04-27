@@ -54,8 +54,8 @@ Includes
 
 Method to include additional JavaScript file in page::
 
-    $app->requireJS('https://code.jquery.com/jquery-3.1.1.js');
-    $app->requireJS('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js');
+    $app->requireJS('//code.jquery.com/jquery-3.1.1.js');
+    $app->requireJS('//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js');
 
 Using of CDN servers is always better than storing external libraries locally.
 Most of the time CDN servers are faster (cached) and more reliable.
@@ -64,7 +64,7 @@ Most of the time CDN servers are faster (cached) and more reliable.
 
 Method to include additional CSS stylesheet in page::
 
-    $app->requireCSS('http://semantic-ui.com/dist/semantic.css');
+    $app->requireCSS('//semantic-ui.com/dist/semantic.css');
 
 Hooks
 =====
