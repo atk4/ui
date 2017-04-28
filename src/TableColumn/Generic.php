@@ -10,6 +10,7 @@ class Generic
     use \atk4\core\AppScopeTrait;
     use \atk4\core\InitializerTrait;
     use \atk4\core\TrackableTrait;
+    use \atk4\core\DIContainerTrait;
 
     /**
      * Link back to the table, where column is used.
@@ -24,6 +25,16 @@ class Generic
      * @var array
      */
     public $attr = [];
+
+    /**
+     * Constructor.
+     *
+     * @param array $defaults
+     */
+    public function __construct($defaults = [])
+    {
+        $this->setDefaults($defaults);
+    }
 
     /**
      * Adds a new class to the cells of this column. The optional second argument may be "head",
