@@ -5,7 +5,22 @@
 Overview of Agile UI
 ====================
 
-Agile UI is a component framework that makes you type less HTML in your
+Agile UI is a PHP component framework.
+
+Before I start diving in, I'd like to make sure you understand cleary what
+Agile UI is and what does it do.
+
+ 1. Agile UI is an open-source software library/framework, that makes certain
+     tasks easier to be done for developers.
+
+ 2. In particular Agile UI focuses on 
+
+
+
+
+
+
+that makes you type less HTML in your
 PHP project. Integrating with a most popular PHP CSS frameworks, with
 Agile UI you can generate a cutting-edge responsive HTML layout that is
 lightweight, look beautiful and is fully interractive.

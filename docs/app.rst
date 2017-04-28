@@ -64,7 +64,7 @@ Most of the time CDN servers are faster (cached) and more reliable.
 
 Method to include additional CSS stylesheet in page::
 
-    $app->requireCSS('http://semantic-ui.com/dist/semantic.css');
+    $app->requireCSS('//semantic-ui.com/dist/semantic.css');
 
 Hooks
 =====
