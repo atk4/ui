@@ -1,4 +1,4 @@
-## 1.1.0
+## 1.1
 
 A massive release containing unimaginable amount of new features, fixes and actually the first version
 of Agile Data that allows you to actually build nice apps with it.
@@ -23,21 +23,21 @@ of Agile Data that allows you to actually build nice apps with it.
 - Renamed Grid into Table
 
 ### New Demo Pages
- - Layouts #123 #113
- - Form / Multi-column layout
- - Grid / Table Interactions
- - Grid / Table+Bar+Search+Paginator
- - Grid / Interactivity - Modals
- - Crud
- - View demo #104
- - Message
- - Labels
- - Menu #96 #97 
- - Paginator
- - Interactivity / Element Reloading
- - Interactivity / Modal Dialogs
- - Interactivity / Sticky GET
- - Interactivity / Recursive Views
+- Layouts #123 #113
+- Form / Multi-column layout
+- Grid / Table Interactions
+- Grid / Table+Bar+Search+Paginator
+- Grid / Interactivity - Modals
+- Crud
+- View demo #104
+- Message
+- Labels
+- Menu #96 #97 
+- Paginator
+- Interactivity / Element Reloading
+- Interactivity / Modal Dialogs
+- Interactivity / Sticky GET
+- Interactivity / Recursive Views
 
 ### Fixes
 - Bugfixes #111, #86, #85
@@ -51,7 +51,28 @@ of Agile Data that allows you to actually build nice apps with it.
 
 Full diff: https://github.com/atk4/ui/compare/1.0.3...1.1.0
 
-## 1.0.2
+### Minor releases (in reverse order)
+
+#### 1.1.1
+
+- Use proper CDN for 3rd party CSS/JS code #150
+- Add support for 'password' type #143
+- Fix bad error with addColumn() when using non-existant field #134
+- Option for Money Table Column to hide zero values #152
+- Fix reloading bug #149
+- Improve exit; support in callbacks #151
+- Other bugfixes #133
+
+## 1.0 Release
+
+* Implement Grid
+* Many improvements everywhere
+* Simpler execution
+* First stable release
+
+### Minor Releases
+
+#### 1.0.2
 
 * Button::$rightIcon renamed into $iconRight to follow global pattern
 * Removed depreciated classes H2, Fields and MiniApp
@@ -63,30 +84,27 @@ Full diff: https://github.com/atk4/ui/compare/1.0.3...1.1.0
 * Added example for top/bottom attached buttons to Grid.
 * You can disable "header" for grid now
 
-## 1.0.1
+#### 1.0.1
 
 Qucik post-release bugfixes
 
-## 1.0.0
+#### 1.0.0
 
-* Implement Grid
-* Many improvements everywhere
-* Simpler execution
-* First stable release
+## Pre-Releases
 
-## 0.4
+### 0.4
 
 * Implemented Layouts (Admin / Centered) #33
 * Created nicer demos
 
-## 0.3
+### 0.3
 
 * Implemented js() and on() #20
 * Implemented Server-Side JS calls #28
 * Implemented Form #29 and #30
 * Enhanced documentation
 
-## 0.2
+### 0.2
 
 * Implemented Render Tree
 * Implemented Template-based Rendering #15
@@ -96,7 +114,7 @@ Qucik post-release bugfixes
 * Advanced JSChains (enclosing, etc) #18
 * Implemented Very Basic Layouts
 
-## 0.1
+### 0.1
 
 * Initial Release
 * Bootstraped Documentation (sphinx-doc)
