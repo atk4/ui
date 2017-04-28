@@ -31,7 +31,7 @@ class Money extends Generic
         if ($field->get() < 0) {
             return ['_'.$field->short_name.'_money'=>'right aligned single line negative'];
         } elseif (!$this->show_zero_values && $field->get() == 0) {
-            return ['_'.$field->short_name.'_money'=>'right aligned single line',$field->short_name=>'-'];
+            return ['_'.$field->short_name.'_money'=>'right aligned single line', $field->short_name=>'-'];
         }
 
         return ['_'.$field->short_name.'_money'=>'right aligned single line'];
