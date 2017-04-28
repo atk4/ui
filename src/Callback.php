@@ -70,13 +70,23 @@ class Callback
             if (isset($_POST[$this->name])) {
                 $this->triggered = $_POST[$this->name];
 
-                return call_user_func_array($callback, $args);
+                $t = $this->app->run_called;
+                $this->app->run_called = true;
+                $ret = call_user_func_array($callback, $args);
+                $this->app->run_called = $t;
+
+                return $ret;
             }
         } else {
             if (isset($_GET[$this->name])) {
                 $this->triggered = $_GET[$this->name];
 
-                return call_user_func_array($callback, $args);
+                $t = $this->app->run_called;
+                $this->app->run_called = true;
+                $ret = call_user_func_array($callback, $args);
+                $this->app->run_called = $t;
+
+                return $ret;
             }
         }
     }
