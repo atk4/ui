@@ -3,8 +3,8 @@
   <head>
     <title>{title}Agile UI - Untitled Project{/}</title>{$meta}
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="http://semantic-ui.com/dist/semantic.css">
-    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js"></script>
     <script>
@@ -18,7 +18,7 @@
         }
         return true;
       }
-
+      
       $.fn.api.settings.onFailure = function(response) {
           w=window.open(null,'Error in JSON response','height=1000,width=1100,location=no,menubar=no,scrollbars=yes,status=no,titlebar=no,toolbar=no');
           if(w){
