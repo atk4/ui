@@ -8,8 +8,8 @@ Contents:
     :maxdepth: 4
 
     overview
-    core
     quickstart
+    core
     template
     view
     js

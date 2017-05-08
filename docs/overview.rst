@@ -5,226 +5,185 @@
 Overview of Agile UI
 ====================
 
-Agile UI is a PHP component framework.
+Agile UI is a PHP component framework for building User Interfaces entirely in PHP.
+As a framework it's closely coupled with Agile Data (http://agile-data.readthedocs.io),
+to which it delegates all data operations and User Interface is using
+(https://semantic-ui.com) for presentation.
 
-Before I start diving in, I'd like to make sure you understand cleary what
-Agile UI is and what does it do.
-
- 1. Agile UI is an open-source software library/framework, that makes certain
-     tasks easier to be done for developers.
-
- 2. In particular Agile UI focuses on 
-
-
-
-
-
-
-that makes you type less HTML in your
-PHP project. Integrating with a most popular PHP CSS frameworks, with
-Agile UI you can generate a cutting-edge responsive HTML layout that is
-lightweight, look beautiful and is fully interractive.
+**Agile Toolkit = Agile UI + Agile Data + Component Platform.**
 
 Agile UI Design Goals
 =====================
 
-If you are just starting with Agile UI, you need to know the following 5 things:
+Agile UI works out of the box and is a very handy framework if you need to add
+a casual CRUD or Form in your Web Application, Admin system or Homepage. There
+are no files to install, simply declare composer dependency and write the code
+in a way that it would fit your current application / framework::
 
-1. Agile UI Works anywhere
---------------------------
+    html...html...
+        <?php 
+            $crud = new \atk4\ui\CRUD();
+            $crud->setModel(new Orders($db));
+            echo $crud->render();
+        ?>
+    html.... html...
 
-Agile UI is not tied specifically to any full-stack framework or application.
-You are welcome to use it anywhere and it should just work out of the box.
+Agile UI can handle your applications HTML output entirely - starting with page layouts
+and all the way, down to the form labels.
 
-2. Agile UI saves you time
---------------------------
+You should use Agile UI in your application if you seek to achieve the following goals:
 
-Agile UI exists for applications where you need to provide user UI in HTML.
-Most typical usage would be Admin Interfaces, User Preferences page and
-SaaS applications.
+1. UI Consistency
+-----------------
 
-Design of Agile UI allows you to avoid duplicating HTML blocks and lets you
-focus on getting your project done.
+Built out of base components that can be extended by you or 3rd parties, Agile UI gives
+you and the rest of your development team clean and simple Object-Oriented toolkit for
+building any web interface - the most basic or the most complex ones.
 
-3. Agile UI is simpler than raw PHP
------------------------------------
+The framework is designed around re-usable components such as Form, CRUD, Menu etc that
+can read your data structure and automatically configure fields/columns/labels. Each
+component can be enhanced and placed inside other components.
 
-If you use Raw PHP then you are expected to know HTML/CSS/JS. With Agile UI
-you can build web apps even if you have no web development experience at all.
-You will have plenty of components, layouts and add-ons to finish your
-application.
+Compared to "Form" implementation in other PHP Frameworks where you would still need
+to concern yourself with HTML layouts, routes, JS submission handling, validation display,
+integration with database and showing correct values in the drop-downs, the "Form" in
+Agile UI is entirely self-sufficient and handles all of the above tasks automatically.
 
-As you progress you will learn how to write JavaScript routines to enhance
-your user experience, HTML/PUG templates to build new unique components or
-CSS/LESS to create that unique look and feel.
+.. image:: images/ui-component-diagram.png
+    :width: 30%
+    :align: right
 
-4. Agile UI can render all your UI
-----------------------------------
+In addition to the components that you can use right away, Agile UI also gives you great tools
+for building your own components. 
 
-Unlike some other Form-Builders or CRUD components, Agile UI can do them
-all. Creating any UI component with Agile UI is easier so consider it when
-you will be creating your re-usable "file uploader" next time.
+For exmaple, you can design "User Management" component, that could consist of several
+sub-pages, forms, grids, menus and CRUDs but just like any other component could be 
+displayed with just a few lines of code::
 
-Addition of various application layouts allow you to produce ALL of your
-Web UI and no longer rely on any other HTML templating techniques. Just
-like you have built button, or uploader component you can create much
-more diverse web app components such as "support ticket management UI".
+    $mgmt = $layout->add(new UserManagement());
+    $mgmt->setModel(new User($db));
 
-5. Agile UI is the most flexible
---------------------------------
-
-If you have used some other "Admin Builder" or "Form Creator" or perhaps a
-"Universal CRUD" you were forced to deal with their UI layout, create database
-structure as they specify and follow their file placement patterns.
-
-True to our name, we have made the UI that will fit your database choice,
-configuration and structure, allow you to decide how to store files as well
-as the UI layout of any standard add-ons or components.
-
-Through the use of Agile Data you can connect your UI elements with your
-business model and access data stored in SQL, NoSQL or APIs.
+This code can place your complex component with all it's JavaScript bindings, stylings
+and call-backs anywhere in your application - on the tab, in the dialog, inside another
+component, in the grid system or inside your own custom HTML template.
 
 
-Structure of this documentation
-===============================
+2. Time Saving and prototyping
+------------------------------
 
-You should start by looking into QuickStart section, that will introduce
-you to some of the code examples. Using a quick-start sections you will
-see how powerful UI can be built in a shortest time possible.
+The major benefit is saving your development time by letting you use some off-the-shelf
+UI components to create quick working prototype. If you follow Agile Methodology that's
+the ideal goal for you. Once there, you can enhance your application and, if necessary,
+replace standard components with your custom ones.
 
-If you are ready to start learning Agile UI, the next seciton will talk
-about the View class, a core concept behind entire framework. You will
-learn how rendering works and various techniques used in the core
-of Agile UI.
+For example, you may be displaying your shopping basket items using the "Table" component
+intitially, but then replace it with your own Lister w/ HTML template.
 
-Next section "Components" will walk you through the basic set of built-in
-components. All of the basic components are very similar and they directly
-extend 'View', so there are a lot of things you can do with them.
+We have designed Agile Toolkit to make component substitution as simple as possible.
+Often you can simply try few ways to vizualize your data rigth inside your app before
+you / your client decides what's the best one.
 
-Continue with the "Creating Components" where you will learn how you can
-create your own components and layouts.
+3. Enterprise Features
+----------------------
 
-Next few sections will focus on some of the important advanced techniques
-explaining how Virtual Pages work, how to build advanced JavaScript
-interractions between your elements.
+Agile Toolkit is most suitable for commercial projects: created from scratch or being refactored.
+We have dedicated sections in this documentation that explain how you can clean up
+your business logic, separate different application layers, introduce API between presentation
+and business logic or make your application database-agnostic.
 
-Agile UI bundles some advanced components, such as Form, Grid, CRUD and
-Console. Those all are highly interractive and are built using set of
-basic components. 
+The code for Agile UI / Agile Data is based off it's predcessor (ATK4.3 and AModules) which
+have been evolving since 2007 under a more restrictive license. 
 
-The final sections of documentation will tell you how to install 3rd party
-components and how to use them securily in your project. You will also
-earn how to create components for yourself and share them with others.
+We continue to support our open-source projects and make them available to PHP community
+while we also offer commercial add-ons for those enterprise clients and complex projects.
+Not only using our commercial components can save you some time, but they come with 
+some advanced features.
 
-Agile Data
-==========
+We want to ensure that our free code is always available and maintained, so please
+consider some our commercial extensions or tell us if you have idea for a new component.
 
-Agile Data is a business logic and data persistance framework. It's a
-separate library that has been specifically designed and developed
-for use in Agile UI.
+Best ways to learn Agile Toolkit
+================================
 
-With Agile Data you can easily connect your UI with your data and make
-UI components store your data in SQL, NoSQL or RestAPI. On top of the
-existing persistences, Agile UI introduces a new persistence class: "UI".
+We recommend that you start looking at Agile UI first. Continue reading through the
+:ref:`quickstart` section to learn how to build a simple TODO application in just
+50 lines of code.
 
-This UI persistence will be extensively used when data needs to be
-displayed to the user through UI elements or when input must be
-received from the UI layer.
+ - QuickStart - 20-minute read and some code examples you can try.
+ - Core Concept - Read if you plan to design and build your own components.
 
-If you do not intend to store data anywhere or are using your own
-ORM, the Agile Data will still be used to some extent and therefore
-it appears as requirement.
+   - Patterns and Principles
+   - Views and common component properties/methods
+   - Component Design and UI code refactoring
+   - Injecting HTML Templates and Full-page Layouts
+   - JavaScript Event Bindings and Actions
+   - App class and Framework Integration
+   - Usage Patterns
 
-Most of the ORMs lack several important features that are necessary
-for UI framework design:
+ - Components - Reference for UI component classes
 
- - ability to load/store data safely with conditions.
- - built-in support for column meta-information
- - field, type and table mapping
- - "onlyFields" support for efficient querying
- - domain-level model references.
+   - Button, Label, Header, Message, Menu, Column
+   - Table and TableColumn
+   - Form and Field
+   - Grid and CRUD
+   - Paginator
 
-Agile Data is distributed under same open-source license as Agile UI
-and the rest of this documentation will assume you are using Agile
-Data for the purpose of overal clarity. 
+ - Advanced Topics
 
-Interface Stability
-===================
 
-Agile UI is based on Agile Toolkit 4.3 which has been a maintained
-UI framework that can trace it's roots back to 2003. As a result, the
-object interface is highly stable and all of the documented methods,
-models and properties will not change even in the major releases.
+If you are not interested in UI and only need Rest API, we recommend that you look
+into documentation for Agile Data (http://agile-data.readthedocs.io) and the
+Rest API extension (coming soon).
 
-If we do have to change something we will keep things backwards
-compatible for a period of a few years.
+Application Tutorials
+---------------------
 
-We expect you to extend base classes to build your UI as it is a
-best practice to use Agile UI.
+We have wrote few working cloud applications ourselves with Agile Toolkit and are
+offering you to look at their code. Some of them come with tutorials that teach you
+how to build application step-by-step.
 
-Testing and Enterprise Use
-==========================
+Education
+---------
 
-Agile UI is designed with corporate use in mind. The main aim of
-the framework is to make your application consistent, modern and
-fast.
+If you represent a group of students that wish to learn Agile Toolkit contact us
+about our education materials. We offer special support for those that want to
+learn how to develop Web Apps using Agile Toolkit.
 
-We understand the importante of testing and all of the Agile UI
-components come fully tested across multiple browsers. In most cases
-browser compatibilty is defined by the underlying CSS framework.
+Commercial Project Strategy
+---------------------------
 
-With Agile UI we will provide you with a guide how to test your
-own components. 
+If you maintain a legacy PHP application and would like to have a free chat with
+us about some support and assistance, do not hesitate to reach out.
 
-Unit Tests
-----------
 
-You only need to unit-test you own classes and controllers. For
-example if your application creates a separate class that deals
-with APR calculation, you need to include unit-test for that
-specific class.
+What you DO NOT need to know
+============================
 
-Business Logic Unit Tests
--------------------------
+Some technologies are "prerequirements" in other PHP frameworks, but Agile Toolkit
+lets you develop a perfectly functional web application even if you are NOT familiar
+with technologies like:
 
-Those tests are most suitable for testing your business logic,
-that is included in Agile Data. Use "array" persistences to
-pre-set model with the necessary data, execute your business
-logic with mock objects.
+ - HTML and Asset Management
+ - JavaScript, jQuery, NPM
+ - CSS styling, LESS
+ - Linux, Infrastructure, Docker
+ - Rest API and JSON
 
-1. set up mock database arrays
-2. instatiate model(s)
-3. execute business operation
-4. assert new content of array.
+We do recommend that you come back and learn those technologies **after** you have mastered
+Agile Toolkit.
 
-In most cases the Integration tests are easier to make, and
-give you equal testability.
+Database abstraction
+--------------------
 
-Integration Database Tests
---------------------------
+Agile Data offers abstraction of database servers and will use appropriate query
+language to fetch your data. You may need to use SQL/NoSQL language of your database
+for some more advanced usage cases.
 
-This test-suite will operate with SQL database by executing
-various database operations in Agile Data and then asserting
-business logic changes.
+Cloud deployment
+----------------
 
-1. load "safe" database schema
-2. each test starts transaction and is finished with a roll-back.
-3. perform changes such as adding new invocie
-4. assert through other models e.g. by running client report model.
+There are also ways to deploy your application into the cloud without knowledge of
+infrastructure, Linux and SSH. A good place to start is Heroku (https://www.heroku.com/).
+We reference Heroku in our tutorials, but Agile Toolkit can work with any cloud
+hosting that runs PHP apps.
 
-Component Tests
----------------
-
-All of the basic components are tested for you using UI tests,
-but you should test your own components. This test will place
-your component under various configurations and will make sure
-that it continues to work. 
-
-If your component relies on a model, this can also attempt
-various model combinations for an extensive test.
-
-User Testing
-------------
-
-Once you place your components on your pages and associate
-them with your actual data you can perform user tests.
