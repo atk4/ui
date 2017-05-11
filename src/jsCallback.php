@@ -28,10 +28,11 @@ class jsCallback extends Callback implements jsExpressionable
         if (!$this->app) {
             throw new Exception(['Call-back must be part of a RenderTree']);
         }
+
         return (new jQuery())->ajaxec([
-            'uri'=>$this->getURL(),
-            'uri_options'=>$this->args,
-            'confirm'=>$this->confirm,
+            'uri'        => $this->getURL(),
+            'uri_options'=> $this->args,
+            'confirm'    => $this->confirm,
         ])->jsRender();
     }
 
@@ -44,8 +45,8 @@ class jsCallback extends Callback implements jsExpressionable
     {
         $this->args = [];
 
-        foreach($args as $key=>$val) {
-            if(is_numeric($key)) {
+        foreach ($args as $key=>$val) {
+            if (is_numeric($key)) {
                 $key = 'c'.$key;
             }
             $this->args[$key] = $val;
@@ -54,9 +55,8 @@ class jsCallback extends Callback implements jsExpressionable
         return parent::set(function () use ($callback) {
             $chain = new jQuery(new jsExpression('this'));
 
-
             $values = [];
-            foreach($this->args as $key=>$value) {
+            foreach ($this->args as $key=>$value) {
                 $values[] = isset($_POST[$key]) ? $_POST[$key] : null;
             }
 

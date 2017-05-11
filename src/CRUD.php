@@ -104,9 +104,10 @@ class CRUD extends Grid
         }
 
         if ($this->can('d')) {
-            $this->addAction(['icon'=>'red trash'], function($j, $id) { 
+            $this->addAction(['icon'=>'red trash'], function ($j, $id) {
                 $this->model->load($id)->delete();
-                return $j->closest('tr')->transition('fade left'); 
+
+                return $j->closest('tr')->transition('fade left');
             });
         }
 

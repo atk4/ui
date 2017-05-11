@@ -849,24 +849,23 @@ class View implements jsExpressionable
         }
 
         $arguments = isset($defaults['args']) ? $defaults['args'] : [];
-        if(is_null($defaults)) {
+        if (is_null($defaults)) {
             $defaults = [];
         }
 
         // all non-key items of defaults are actually arguments
-        foreach($defaults as $key=>$value)
-        {
-            if(is_numeric($key)) {
+        foreach ($defaults as $key=>$value) {
+            if (is_numeric($key)) {
                 $arguments[] = $value;
                 unset($defaults[$key]);
             }
         }
 
         $actions = [];
-        if(isset($defaults['preventDefault'])) {
+        if (isset($defaults['preventDefault'])) {
             $actions['preventDefault'] = true;
         }
-        if(isset($defaults['stopPropagation'])) {
+        if (isset($defaults['stopPropagation'])) {
             $actions['stopPropagation'] = true;
         }
 
@@ -891,7 +890,7 @@ class View implements jsExpressionable
                 return call_user_func_array($action, $args);
             }, $arguments);
 
-            if(isset($defaults['confirm'])) {
+            if (isset($defaults['confirm'])) {
                 $cb->setConfirm($defaults['confirm']);
             }
 

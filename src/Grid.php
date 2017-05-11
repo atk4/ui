@@ -161,7 +161,7 @@ class Grid extends View
     }
 
     /**
-     * Proxy function for Table::jsRow()
+     * Proxy function for Table::jsRow().
      */
     public function jsRow()
     {

@@ -9,11 +9,11 @@ class Actions extends Generic
 {
     public $actions = [];
 
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->addClass('right aligned');
     }
-
 
     public function addAction($button, $callback, $confirm = false)
     {
