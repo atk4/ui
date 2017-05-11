@@ -2,8 +2,12 @@
 
 namespace atk4\ui;
 
-class jsCallback extends Callback
+class jsCallback extends Callback implements jsExpressionable
 {
+    public $args = [];
+
+    public $confirm = null;
+
     public function flatternArray($response)
     {
         if (!is_array($response)) {
@@ -19,11 +23,44 @@ class jsCallback extends Callback
         return $out;
     }
 
+    public function jsRender()
+    {
+        if (!$this->app) {
+            throw new Exception(['Call-back must be part of a RenderTree']);
+        }
+        return (new jQuery())->ajaxec([
+            'uri'=>$this->getURL(),
+            'uri_options'=>$this->args,
+            'confirm'=>$this->confirm,
+        ])->jsRender();
+    }
+
+    public function setConfirm($text = 'Are you sure?')
+    {
+        $this->confirm = $text;
+    }
+
     public function set($callback, $args = [])
     {
+        $this->args = [];
+
+        foreach($args as $key=>$val) {
+            if(is_numeric($key)) {
+                $key = 'c'.$key;
+            }
+            $this->args[$key] = $val;
+        }
+
         return parent::set(function () use ($callback) {
             $chain = new jQuery(new jsExpression('this'));
-            $response = call_user_func($callback, $chain);
+
+
+            $values = [];
+            foreach($this->args as $key=>$value) {
+                $values[] = isset($_POST[$key]) ? $_POST[$key] : null;
+            }
+
+            $response = call_user_func_array($callback, array_merge([$chain], $values));
 
             if ($response === $chain) {
                 $response = null;

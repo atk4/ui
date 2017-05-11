@@ -72,7 +72,7 @@ class Grid extends View
         }
 
         if (is_null($this->table)) {
-            $this->table = $this->add(['Table', 'very compact', 'reload'=>$this], 'Table');
+            $this->table = $this->add(['Table', 'very compact striped', 'reload'=>$this], 'Table');
         }
 
         if (is_null($this->paginator)) {
@@ -158,5 +158,13 @@ class Grid extends View
         }
 
         return parent::recursiveRender();
+    }
+
+    /**
+     * Proxy function for Table::jsRow()
+     */
+    public function jsRow()
+    {
+        return $this->table->jsRow();
     }
 }
