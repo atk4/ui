@@ -690,14 +690,16 @@ class View implements jsExpressionable
      * This method is for those cases when developer want to simply render his
      * view and grab HTML himself.
      *
+     * @var bool $force_echo
+     *
      * @return string
      */
-    public function render()
+    public function render($force_echo = true)
     {
         $this->renderAll();
 
         return
-            $this->getJS(true).
+            $this->getJS($force_echo).
             $this->template->render();
     }
 
