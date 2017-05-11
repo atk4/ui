@@ -73,7 +73,6 @@ class Grid extends View
     {
         parent::init();
 
-
         if (is_null($this->menu)) {
             $this->menu = $this->add(['Menu', 'activate_on_click'=>false], 'Menu');
         }
@@ -137,13 +136,13 @@ class Grid extends View
     }
 
     /**
-     * Apply ordering to the current model as per the sort parameters
+     * Apply ordering to the current model as per the sort parameters.
      */
     public function applySort()
     {
         $sortby = $this->app->stickyGET($this->name.'_sort', null);
         $desc = false;
-        if($sortby && $sortby[0] == '-') {
+        if ($sortby && $sortby[0] == '-') {
             $desc = true;
             $sortby = substr($sortby, 1);
         }
@@ -155,7 +154,6 @@ class Grid extends View
             $this->table->sort_by = $sortby;
             $this->table->sort_order = $desc ? 'descending' : 'ascending';
         }
-
 
         $this->table->on('click', 'thead>tr>th', new jsReload($this, [$this->name.'_sort'=>(new jQuery())->data('column')]));
     }

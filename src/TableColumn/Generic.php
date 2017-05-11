@@ -135,9 +135,9 @@ class Generic
         }
 
         return $this->getTag(
-            'th', 
-            'head', 
-            $f->getCaption(), 
+            'th',
+            'head',
+            $f->getCaption(),
             $attr
         );
     }
