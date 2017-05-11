@@ -690,11 +690,7 @@ class View implements jsExpressionable
      * This method is for those cases when developer want to simply render his
      * view and grab HTML himself.
      *
-<<<<<<< d538f4e327617782653bfa6917d366e57b46c14f
-     * @var bool
-=======
      * @param bool $force_echo
->>>>>>> 4324cd103aaa88ce7c5bd85074192483c00d4346
      *
      * @return string
      */
