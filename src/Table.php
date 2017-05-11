@@ -92,6 +92,12 @@ class Table extends Lister
      */
     protected $t_empty;
 
+    public $sortable = null;
+
+    public $sort_by = null;
+
+    public $sort_order = null;
+
     /**
      * Defines a new column for this field. You need two objects for field to
      * work.
@@ -269,6 +275,10 @@ class Table extends Lister
     {
         if (!$this->columns) {
             throw new Exception(['Table does not have any columns defined', 'columns'=>$this->columns]);
+        }
+
+        if ($this->sortable) {
+            $this->addClass('sortable');
         }
 
         // Generate Header Row

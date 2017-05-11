@@ -83,10 +83,8 @@ class Generic
      *
      * @return string
      */
-    public function getTag($tag, $position, $value)
+    public function getTag($tag, $position, $value, $attr = [])
     {
-        $attr = [];
-
         // "all" applies on all positions
         if (isset($this->attr['all'])) {
             $attr = array_merge_recursive($attr, $this->attr['all']);
@@ -117,10 +115,31 @@ class Generic
     public function getHeaderCellHTML(\atk4\data\Field $f = null)
     {
         if ($f === null) {
-            return $this->getTag('th', 'head', '');
+            return $this->getTag('th', 'head', '', $this->table->sortable ? ['class'=>['disabled']] : []);
         }
 
-        return $this->getTag('th', 'head', $f->getCaption());
+        // If table is being sorted by THIS column, set the proper class
+        $attr = [];
+        if ($this->table->sortable) {
+            $attr['data-column'] = $f->short_name;
+
+            if ($this->table->sort_by === $f->short_name) {
+                $attr['class'][] = 'sorted '.$this->table->sort_order;
+
+                if ($this->table->sort_order === 'ascending') {
+                    $attr['data-column'] = '-'.$f->short_name;
+                } elseif ($this->table->sort_order === 'descending') {
+                    $attr['data-column'] = '';
+                }
+            }
+        }
+
+        return $this->getTag(
+            'th', 
+            'head', 
+            $f->getCaption(), 
+            $attr
+        );
     }
 
     /**

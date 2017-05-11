@@ -13,7 +13,7 @@ using a model). :ref:`no_data`
 
 
 Using Table
-==========
+===========
 
 The simplest way to create a table::
 
@@ -219,6 +219,35 @@ As a final note in this section - you can re-use column objects multiple times::
     $table->addColumn($c_gap);
 
 This will result in 3 gap columns rendered to the left, middle and right of your Table.
+
+Table sorting
+=============
+
+.. php:attr:: sortable
+.. php:attr:: sort_by
+.. php:attr:: sort_order
+
+Table does not support an interractive sorting on it's own, (but :php:class:`Grid` does), however
+you can designade columns to display headers as if table were sorted::
+
+    $table->sortable = true;
+    $table->sort_by = 'name';
+    $table->sort_order = 'ascending';
+
+This will highlight the 
+
+JavaScript Sorting
+------------------
+
+You can make your table sortable through JavaScript inside your browser. This won't work well if
+your data is paginated, because only the current page will be sorted::
+
+    $table->app->includeJS('http://semantic-ui.com/javascript/library/tablesort.js');
+    $table->js(true)->tablesort();
+
+For more information see https://github.com/kylefox/jquery-tablesort
+
+
 
 .. _table_html:
 
