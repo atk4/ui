@@ -33,7 +33,7 @@ class App
     public $run_called = false;
 
     /**
-     * function setModel(MyModel $m);
+     * function setModel(MyModel $m);.
      *
      * is considered 'WARNING' even though MyModel descends from the parent class. This
      * is not an incompatible class. We want to write clean PHP code and therefore this
@@ -90,7 +90,7 @@ class App
         if ($this->fix_incompatible) {
             if (PHP_MAJOR_VERSION >= 7) {
                 set_error_handler(function ($errno, $errstr) {
-                   return strpos($errstr, 'Declaration of') === 0;
+                    return strpos($errstr, 'Declaration of') === 0;
                 }, E_WARNING);
             }
         }
