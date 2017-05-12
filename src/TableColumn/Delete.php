@@ -30,6 +30,6 @@ class Delete extends Generic
 
     public function getDataCellHTML(\atk4\data\Field $f = null)
     {
-        return $this->getTag('td', 'body', ['a', 'href'=>'#', 'title'=>'Delete {$'.$this->table->model->title_field.'}?', 'class'=>$this->short_name, ['i', 'class'=>'ui red trash icon', '']]);
+        return $this->getTag('body', ['a', 'href'=>'#', 'title'=>'Delete {$'.$this->table->model->title_field.'}?', 'class'=>$this->short_name, ['i', 'class'=>'ui red trash icon', '']]);
     }
 }

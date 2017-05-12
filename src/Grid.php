@@ -55,7 +55,7 @@ class Grid extends View
     public $selection = null;
 
     /**
-     * Table can be sorted by clicking on column headers. This will be automatically enabled
+     * Grid can be sorted by clicking on column headers. This will be automatically enabled
      * if Model supports ordering. You may override by setting true/false.
      */
     public $sortable = null;

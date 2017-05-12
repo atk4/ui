@@ -234,7 +234,8 @@ you can designade columns to display headers as if table were sorted::
     $table->sort_by = 'name';
     $table->sort_order = 'ascending';
 
-This will highlight the 
+This will highlight the column "name" header and will also display a sorting indicator as per sort
+order.
 
 JavaScript Sorting
 ------------------

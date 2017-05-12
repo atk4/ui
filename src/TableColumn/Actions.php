@@ -33,7 +33,7 @@ class Actions extends Generic
             $output .= $action->getHTML();
         }
 
-        return $this->getTag('td', 'body', [$output]);
+        return $this->getTag('body', [$output]);
     }
 
     // rest will be implemented for crud

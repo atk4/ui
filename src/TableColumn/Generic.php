@@ -77,13 +77,13 @@ class Generic
      * Returns a suitable cell tag with the supplied value. Applies modifiers
      * added through addClass and setAttr.
      *
-     * @param string $tag
-     * @param string $position
-     * @param string $value
+     * @param string $position - 'head', 'body' or 'tail'
+     * @param string $value - what is inside? either html or array defining HTML structure, see App::getTag help
+     * @param array $attr - extra attributes to apply on the tag
      *
      * @return string
      */
-    public function getTag($tag, $position, $value, $attr = [])
+    public function getTag($position, $value, $attr = [])
     {
         // "all" applies on all positions
         if (isset($this->attr['all'])) {
@@ -115,7 +115,7 @@ class Generic
     public function getHeaderCellHTML(\atk4\data\Field $f = null)
     {
         if ($f === null) {
-            return $this->getTag('th', 'head', '', $this->table->sortable ? ['class'=>['disabled']] : []);
+            return $this->getTag('head', '', $this->table->sortable ? ['class'=>['disabled']] : []);
         }
 
         // If table is being sorted by THIS column, set the proper class
@@ -135,7 +135,6 @@ class Generic
         }
 
         return $this->getTag(
-            'th',
             'head',
             $f->getCaption(),
             $attr
@@ -152,7 +151,7 @@ class Generic
      */
     public function getTotalsCellHTML(\atk4\data\Field $f, $value)
     {
-        return $this->getTag('th', 'foot', $this->app->ui_persistence->typecastSaveField($f, $value));
+        return $this->getTag('foot', $this->app->ui_persistence->typecastSaveField($f, $value));
     }
 
     /**
@@ -174,10 +173,10 @@ class Generic
     public function getDataCellHTML(\atk4\data\Field $f = null)
     {
         if ($f === null) {
-            return $this->getTag('td', 'body', '{$c_'.$this->short_name.'}');
+            return $this->getTag('body', '{$c_'.$this->short_name.'}');
         }
 
-        return $this->getTag('td', 'body', '{$'.$f->short_name.'}');
+        return $this->getTag('body', '{$'.$f->short_name.'}');
     }
 
     /**
