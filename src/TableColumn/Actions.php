@@ -27,7 +27,7 @@ class Actions extends Generic
         $this->actions[$name] = $button;
         $button->addClass('b_'.$name);
         $button->addClass('compact');
-        $this->table->on('click', '.b_'.$name, $callback, [$this->jsRow()->data('id'), 'confirm'=>'Are you sure?']);
+        $this->table->on('click', '.b_'.$name, $callback, [$this->table->jsRow()->data('id'), 'confirm'=>'Are you sure?']);
     }
 
     public function getDataCellHTML(\atk4\data\Field $f = null)

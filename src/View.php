@@ -901,6 +901,9 @@ class View implements jsExpressionable
             $actions[] = $action;
         }
 
+        $chain = new jQuery();
+        $actions[] = $chain;
+
         $action = new jsFunction($actions);
 
         if ($selector) {
@@ -909,8 +912,6 @@ class View implements jsExpressionable
             $this->js(true)->on($event, $action);
         }
 
-        $chain = new jQuery();
-        $action[] = $chain;
 
         return $chain;
     }
