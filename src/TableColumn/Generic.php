@@ -78,8 +78,8 @@ class Generic
      * added through addClass and setAttr.
      *
      * @param string $position - 'head', 'body' or 'tail'
-     * @param string $value - what is inside? either html or array defining HTML structure, see App::getTag help
-     * @param array $attr - extra attributes to apply on the tag
+     * @param string $value    - what is inside? either html or array defining HTML structure, see App::getTag help
+     * @param array  $attr     - extra attributes to apply on the tag
      *
      * @return string
      */
