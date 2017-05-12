@@ -18,13 +18,19 @@ $b->js(true)->hide();
 $b = $layout->add(new Button(['id'=>'b2']))->set('Hide on click Button');
 $b->js('click')->hide();
 
-$layout->add(new Header('Callbacks'));
+$layout->add(new Header('js() method'));
 
 $b = $layout->add(new Button('Hide button B'));
 $b2 = $layout->add(new Button('B'));
 $b->js('click', $b2->js()->hide('b2'))->hide('b1');
 
-$layout->add(new Header('js() method'));
+$layout->add(new Header('on() method'));
+
+$b = $layout->add(new Button('Hide button C'));
+$b2 = $layout->add(new Button('C'));
+$b->on('click', $b2->js()->hide('c2'))->hide('c1');
+
+$layout->add(new Header('Callbacks'));
 
 // On button click reload it and change it's title
 $b = $layout->add(new Button('Callback Test'));

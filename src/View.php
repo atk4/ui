@@ -844,15 +844,32 @@ class View implements jsExpressionable
     public function on($event, $selector = null, $action = null, $defaults = null)
     {
         // second argument may be omitted
-        if (!is_string($selector) && is_null($action)) {
+        if (!is_string($selector) && (is_null($action) || is_array($action))) {
+            $defaults = $action;
             $action = $selector;
             $selector = null;
         }
 
-        $actions = is_null($defaults) ? ['preventDefault'=>true, 'stopPropagation'=>true] : $defaults;
+        $arguments = isset($defaults['args']) ? $defaults['args'] : [];
+        if (is_null($defaults)) {
+            $defaults = [];
+        }
 
-        // will be returned from this method, so you can chain more stuff on it
-        $actions[] = $thisAction = new jQuery(new jsExpression('this'));
+        // all non-key items of defaults are actually arguments
+        foreach ($defaults as $key=>$value) {
+            if (is_numeric($key)) {
+                $arguments[] = $value;
+                unset($defaults[$key]);
+            }
+        }
+
+        $actions = [];
+        if (isset($defaults['preventDefault'])) {
+            $actions['preventDefault'] = true;
+        }
+        if (isset($defaults['stopPropagation'])) {
+            $actions['stopPropagation'] = true;
+        }
 
         if (is_callable($action) || (is_array($action) && isset($action[0]) && is_callable($action[0]))) {
             // if callable $action is passed, then execute ajaxec()
@@ -869,16 +886,25 @@ class View implements jsExpressionable
             $this->_add($cb = new jsCallback(), ['desired_name'=>$event]);
 
             $cb->set(function () use ($action) {
-                $chain = new jQuery(new jsExpression('this'));
+                $args = func_get_args();
+                $args[0] = new jQuery(new jsExpression('this'));
 
-                return call_user_func($action, $chain);
-            });
+                return call_user_func_array($action, $args);
+            }, $arguments);
 
-            $thisAction->api(['on'=>'now', 'url'=>$cb->getURL(), 'urlData'=>$urlData, 'obj'=>new jsExpression('this')]);
+            if (isset($defaults['confirm'])) {
+                $cb->setConfirm($defaults['confirm']);
+            }
+
+            $actions[] = $cb;
+            //$thisAction->api(['on'=>'now', 'url'=>$cb->getURL(), 'urlData'=>$urlData, 'obj'=>new jsExpression('this')]);
         } elseif ($action) {
             // otherwise include
             $actions[] = $action;
         }
+
+        $chain = new jQuery();
+        $actions[] = $chain;
 
         $action = new jsFunction($actions);
 
@@ -888,7 +914,7 @@ class View implements jsExpressionable
             $this->js(true)->on($event, $action);
         }
 
-        return $thisAction;
+        return $chain;
     }
 
     /**
