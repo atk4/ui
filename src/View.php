@@ -909,7 +909,10 @@ class View implements jsExpressionable
             $this->js(true)->on($event, $action);
         }
 
-        return new jQuery();
+        $chain = new jQuery();
+        $action[] = $chain;
+
+        return $chain;
     }
 
     /**

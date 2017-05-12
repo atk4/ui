@@ -87,7 +87,7 @@ class CRUD extends Grid
         $m = parent::setModel($m, $this->fieldsGrid ?: $this->fieldsDefault);
 
         if ($this->can('u')) {
-            $this->addAction(['icon'=>'edit'], new jsModal('Edit', $this->pageEdit, [$this->name=>$this->table->jsRow()->data('id')]));
+            $this->addAction(['icon'=>'edit'], new jsModal('Edit', $this->pageEdit, [$this->name=>$this->jsRow()->data('id')]));
 
             $this->pageEdit->set(function () {
                 $this->model->load($this->app->stickyGet($this->name));
