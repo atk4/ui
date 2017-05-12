@@ -40,6 +40,6 @@ class Checkbox extends Generic
 
     public function getDataCellHTML(\atk4\data\Field $f = null)
     {
-        return $this->getTag('td', 'body', ['div', 'class'=>'ui checkbox '.$this->class, ['input', 'type'=>'checkbox']]);
+        return $this->getTag('body', ['div', 'class'=>'ui checkbox '.$this->class, ['input', 'type'=>'checkbox']]);
     }
 }

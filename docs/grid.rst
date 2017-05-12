@@ -98,6 +98,20 @@ method to reference value of selected checkboxes inside any :ref:`js_action`::
         'alert("Selected: "+[])', [$sel->jsChecked()]
     ));
 
+Sorting
+=======
+
+.. php:attr: $sortable
+
+When grid is associated with a model that supports order, it will automatically make itself sortable. You can
+override this behaviour by setting $sortable property to `true` or `false`. 
+
+Additionally you may set list of sortable fields to a sortable property if you wish that your grid would be
+sortable only for those columns.
+
+See also :php:attr:`Table::$sortable`.
+
+
 Advanced Usage
 ==============
 
