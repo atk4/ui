@@ -27,12 +27,25 @@ class Dropdown extends Input
         $value = isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: '';
 
         $options = [];
-        foreach ($this->values as $key=>$val) {
-            $item = ['option', 'value'=>(string) $key, $val];
-            if ($value == $val) {
-                $item['selected'] = true;
+
+        if (isset($this->model)) {
+            foreach ($this->model as $key=>$row) {
+                $title = $row[$row->title_field];
+
+                $item = ['option', 'value'=>(string) $key, $title];
+                if ($value == $key) {
+                    $item['selected'] = true;
+                }
+                $options[] = $item;
             }
-            $options[] = $item;
+        } else {
+            foreach ($this->values as $key=>$val) {
+                $item = ['option', 'value'=>(string) $key, $val];
+                if ($value == $val) {
+                    $item['selected'] = true;
+                }
+                $options[] = $item;
+            }
         }
 
         return $this->app->getTag('select', [

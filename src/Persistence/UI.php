@@ -17,11 +17,12 @@ use atk4\ui\Exception;
  */
 class UI extends \atk4\data\Persistence
 {
-    public $date_format = 'd/m/Y';
+    public $date_format = 'M d, Y';
 
-    public $time_format = 'h:i:s';
+    public $time_format = 'H:i';
 
-    public $datetime_format = 'D, d M Y H:i:s O';
+    public $datetime_format = 'M d, Y H:i:s';
+        // 'D, d M Y H:i:s O';
 
     public $currency = '€';
 
