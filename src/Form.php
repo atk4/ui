@@ -345,7 +345,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             return $dd;
         }
 
-
         switch ($f->type) {
         case 'boolean':
             return new FormField\Checkbox($arg);
@@ -356,18 +355,20 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         case 'password':
             return new FormField\Password($arg);
 
-            
         case 'datetime':
             $arg['options']['ampm'] = false;
+
             return new FormField\Calendar($arg);
 
         case 'date':
             $arg['type'] = 'date';
+
             return new FormField\Calendar($arg);
 
         case 'time':
             $arg['type'] = 'time';
             $arg['options']['ampm'] = false;
+
             return new FormField\Calendar($arg);
 
         case 'money':

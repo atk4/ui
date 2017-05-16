@@ -9,15 +9,14 @@ use atk4\ui\Form;
  */
 class Calendar extends Input
 {
-
     /**
      * Set this to 'date', 'time', 'month' or 'year'. Leaving this blank
-     * will show both date and time
+     * will show both date and time.
      */
     public $type = null;
 
     /**
-     * Any other options you'd like to pass to calendar  JS
+     * Any other options you'd like to pass to calendar  JS.
      */
     public $options = [];
 
@@ -35,8 +34,6 @@ class Calendar extends Input
 
         $this->js(true)->calendar($this->options);
 
-
         parent::renderView();
     }
-
 }

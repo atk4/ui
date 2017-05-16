@@ -31,7 +31,6 @@ $form->setModel(
 $form->onSubmit(function ($form) {
     $errors = [];
     foreach ($form->model->dirty as $field => $value) {
-
         if ($form->model->getElement($field)->never_persist) {
             continue;
         }

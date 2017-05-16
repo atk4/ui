@@ -52,7 +52,7 @@ class Input extends Generic
     }
 
     /**
-     * Returns presentable value to be inserted into input tag
+     * Returns presentable value to be inserted into input tag.
      */
     public function getValue()
     {
@@ -69,7 +69,7 @@ class Input extends Generic
             'type'       => $this->inputType,
             'placeholder'=> $this->placeholder,
             'id'         => $this->id.'_input',
-            'value'      => $this->getValue()
+            'value'      => $this->getValue(),
         ]);
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }

@@ -9,17 +9,18 @@ use atk4\ui\Form;
  */
 class Money extends Input
 {
-    function getValue() {
+    public function getValue()
+    {
         $v = $this->field ? $this->field->get() : ($this->content ?: null);
 
         if (is_null($v)) {
-            return null;
+            return;
         }
 
         return number_format($v, 2);
     }
 
-    function renderView() 
+    public function renderView()
     {
         if ($this->label === null) {
             $this->label = $this->app->ui_persistence->currency;
@@ -27,5 +28,4 @@ class Money extends Input
 
         parent::renderView();
     }
-
 }
