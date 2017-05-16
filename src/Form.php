@@ -342,6 +342,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
             $dd = new FormField\Dropdown($arg);
             $dd->setModel($f->reference->refModel());
+
             return $dd;
         }
 

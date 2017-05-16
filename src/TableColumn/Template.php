@@ -28,9 +28,11 @@ class Template extends Generic
     {
         return $this->getTag('body', '{$c_'.$this->short_name.'}');
     }
+
     public function getHtmlTags($row, $field)
     {
         $this->table->add($this->template);
+
         return ['c_'.$this->short_name => $this->template->set($row)->render()];
     }
 }
