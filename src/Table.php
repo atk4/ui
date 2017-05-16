@@ -433,7 +433,7 @@ class Table extends Lister
         foreach ($this->columns as $name => $column) {
             // if no totals plan, then show dash, but keep column formatting
             if (!isset($this->totals_plan[$name])) {
-                $output[] = $column->getTag('th', 'foot', '-');
+                $output[] = $column->getTag('foot', '-');
                 continue;
             }
 
@@ -446,7 +446,7 @@ class Table extends Lister
             }
 
             // otherwise just show it, for example, "Totals:" cell
-            $output[] = $column->getTag('th', 'foot', $this->totals_plan[$name]);
+            $output[] = $column->getTag('foot', $this->totals_plan[$name]);
         }
 
         return implode('', $output);
