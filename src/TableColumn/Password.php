@@ -9,6 +9,6 @@ class Password extends Generic
 {
     public function getDataCellHTML(\atk4\data\Field $f = null)
     {
-        return $this->getTag('td', 'body', '***');
+        return $this->getTag('body', '***');
     }
 }

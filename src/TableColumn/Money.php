@@ -19,10 +19,10 @@ class Money extends Generic
             throw new Exception(['Money column requires a field']);
         }
 
-        return $this->app->getTag(
-            'td',
-            ['class'=> '{$_'.$f->short_name.'_money}'],
-            '{$'.$f->short_name.'}'
+        return $this->getTag(
+            'body',
+            '{$'.$f->short_name.'}',
+            ['class'=> '{$_'.$f->short_name.'_money}']
         );
     }
 
