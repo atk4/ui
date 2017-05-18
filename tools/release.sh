@@ -69,8 +69,8 @@ merge_tag=$(git rev-parse HEAD)
 (cd js; npm run build)
 sed  -i "" '/^lib/d' js/.gitignore
 git add js/lib
-sed -i "" "s|\$this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js')|\$this->requireJS('https://cdn.rawgit.com/atk4/ui/$version/js/lib/atk4JS.js')|" src/App.php
-git commit -m "Add pre-built version of JS libraries" js
+sed -i "" "s|\$this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js')|\$this->requireJS('https://cdn.rawgit.com/atk4/ui/$version/js/lib/atk4JS.min.js')|" src/App.php
+git commit -m "Add pre-built version of JS libraries" js src/App.php
 
 git tag $version
 git push origin release/$version
