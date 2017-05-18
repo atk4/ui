@@ -87,7 +87,7 @@ class CRUD extends Grid
         $m = parent::setModel($m, $this->fieldsGrid ?: $this->fieldsDefault);
 
         if ($this->can('u')) {
-            $this->addAction(new Icon('pencil'), new jsModal('Edit', $this->pageEdit, [$this->name=>$this->table->jsRow()->data('id')]));
+            $this->addAction(['icon'=>'edit'], new jsModal('Edit', $this->pageEdit, [$this->name=>$this->jsRow()->data('id')]));
 
             $this->pageEdit->set(function () {
                 $this->model->load($this->app->stickyGet($this->name));
@@ -101,15 +101,14 @@ class CRUD extends Grid
                     ];
                 });
             });
-
-            /*
-            $this->pageEdit = $this->add($this->pageEdit ?: 'VirtualPage');
-            $this->formEdit = $this->pageEdit->add($this->formEdit ?: 'Form');
-             */
         }
 
         if ($this->can('d')) {
-            $this->addColumn(new TableColumn\Delete());
+            $this->addAction(['icon'=>'red trash'], function ($j, $id) {
+                $this->model->load($id)->delete();
+
+                return $j->closest('tr')->transition('fade left');
+            });
         }
 
         return $m;

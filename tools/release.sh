@@ -49,6 +49,13 @@ done
 
 open "https://github.com/atk4/$product/compare/$prev_version...develop"
 
+# Build jsLib and bundle
+(cd js; npm run build)
+sed  -i "" '/^lib/d' js/.gitignore
+git add js/lib
+sed -i "" "s|\$this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js')|\$this->requireJS('https://cdn.rawgit.com/atk4/ui/$version/js/lib/atk4JS.js')|" src/App.php
+git commit -m "Add pre-built version of JS libraries" js
+
 # Update dependency versions
 sed -i "" -e '/atk4\/schema/s/dev-develop/\*/' composer.json # workaround composers inability to change both requries simultaniously
 composer require atk4/core atk4/data
@@ -56,13 +63,14 @@ composer require atk4/core atk4/data
 composer update
 ./vendor/phpunit/phpunit/phpunit  --no-coverage
 
-echo "Press enter to publish the release"
-read junk
-
 git commit -m "Added release notes for $version" CHANGELOG.md || echo "but its ok"
 merge_tag=$(git rev-parse HEAD)
 
 git commit -m "Set up stable dependencies for $version" composer.json
+
+
+echo "Press enter to publish the release"
+read junk
 
 git tag $version
 git push origin release/$version

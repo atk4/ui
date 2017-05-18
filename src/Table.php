@@ -92,6 +92,12 @@ class Table extends Lister
      */
     protected $t_empty;
 
+    public $sortable = null;
+
+    public $sort_by = null;
+
+    public $sort_order = null;
+
     /**
      * Defines a new column for this field. You need two objects for field to
      * work.
@@ -271,6 +277,10 @@ class Table extends Lister
             throw new Exception(['Table does not have any columns defined', 'columns'=>$this->columns]);
         }
 
+        if ($this->sortable) {
+            $this->addClass('sortable');
+        }
+
         // Generate Header Row
         if ($this->header) {
             $this->t_head->setHTML('cells', $this->getHeaderRowHTML());
@@ -423,7 +433,7 @@ class Table extends Lister
         foreach ($this->columns as $name => $column) {
             // if no totals plan, then show dash, but keep column formatting
             if (!isset($this->totals_plan[$name])) {
-                $output[] = $column->getTag('th', 'foot', '-');
+                $output[] = $column->getTag('foot', '-');
                 continue;
             }
 
@@ -436,7 +446,7 @@ class Table extends Lister
             }
 
             // otherwise just show it, for example, "Totals:" cell
-            $output[] = $column->getTag('th', 'foot', $this->totals_plan[$name]);
+            $output[] = $column->getTag('foot', $this->totals_plan[$name]);
         }
 
         return implode('', $output);

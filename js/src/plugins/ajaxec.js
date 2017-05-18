@@ -5,9 +5,10 @@ export default class ajaxec {
         const $element = $(element);
 
         // ask for user confirmation just before
+        // TODO: because this is constructor, button can't be clicked again :(
         if (options.confirm) {
             if (!confirm(options.confirm)) {
-                return false;
+                return ;
             }
         }
 
