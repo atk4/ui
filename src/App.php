@@ -32,6 +32,17 @@ class App
 
     public $run_called = false;
 
+    /**
+     * function setModel(MyModel $m);.
+     *
+     * is considered 'WARNING' even though MyModel descends from the parent class. This
+     * is not an incompatible class. We want to write clean PHP code and therefore this
+     * warning is disabled by default until it's fixed correctly in PHP.
+     *
+     * See: http://stackoverflow.com/a/42840762/204819
+     */
+    public $fix_incompatible = true;
+
     public $is_rendering = false;
 
     public $ui_persistence = null;
@@ -74,6 +85,14 @@ class App
 
         if (!$this->_initialized) {
             //$this->init();
+        }
+
+        if ($this->fix_incompatible) {
+            if (PHP_MAJOR_VERSION >= 7) {
+                set_error_handler(function ($errno, $errstr) {
+                    return strpos($errstr, 'Declaration of') === 0;
+                }, E_WARNING);
+            }
         }
 
         // Always run app on shutdown
