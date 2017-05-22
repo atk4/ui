@@ -129,6 +129,23 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
+    public function testRender1a()
+    {
+
+        // Simplest way to integrate
+        $this->table->addColumn(['TableColumn/Template', 'hello<b>world</b>']);
+
+        $this->assertEquals(
+            '<td>{$name}</td><td>{$ref}</td><td>hello<b>world</b></td>',
+            $this->table->getDataRowHTML()
+        );
+
+        $this->assertEquals(
+            '<tr data-id="1"><td>bar</td><td>ref123</td><td>hello<b>world</b></td></tr>',
+            $this->extract($this->table->render())
+        );
+    }
+
     public function testLink1()
     {
         $this->table->addColumn('name', new \atk4\ui\TableColumn\Link('example.php?id={$id}'));

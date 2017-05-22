@@ -150,8 +150,15 @@ class Table extends Lister
         }
 
         $columnDef->table = $this;
-        if (!$columnDef->_initialized) {
+        if (isset($columnDef->_initializerTrait) && !$columnDef->_initialized) {
             $this->_add($columnDef);
+        }
+
+        if (!$columnDef instanceof TableColumn\Generic) {
+            throw new Exception([
+                'Table columns must extend TableColumn\Generic',
+                'column'=>$columnDef
+            ]);
         }
 
         if (is_null($name)) {
