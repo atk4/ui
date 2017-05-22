@@ -157,7 +157,7 @@ class Table extends Lister
         if (!$columnDef instanceof TableColumn\Generic) {
             throw new Exception([
                 'Table columns must extend TableColumn\Generic',
-                'column'=>$columnDef
+                'column'=> $columnDef,
             ]);
         }
 

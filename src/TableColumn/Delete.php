@@ -31,11 +31,11 @@ class Delete extends Generic
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
         return $this->app->getTag(
-            'a', 
-            ['href'=>'#', 'title'=>'Delete {$'.$this->table->model->title_field.'}?', 'class'=>$this->short_name], 
+            'a',
+            ['href'=> '#', 'title'=>'Delete {$'.$this->table->model->title_field.'}?', 'class'=>$this->short_name],
             [
                 ['i', ['class'=>'ui red trash icon'], ''],
-                'Delete'
+                'Delete',
             ]);
     }
 }
