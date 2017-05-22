@@ -16,6 +16,7 @@ class Money extends Generic
     public function getTagAttributes($position, $attr = [])
     {
         $attr = array_merge_recursive($attr, ['class'=>['{$_'.$this->short_name.'_class}']]);
+
         return parent::getTagAttributes($position, $attr);
     }
 
@@ -24,7 +25,6 @@ class Money extends Generic
         if (!isset($f)) {
             throw new Exception(['Money column requires a field']);
         }
-
 
         return $this->getTag(
             'body',

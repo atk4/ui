@@ -59,11 +59,11 @@ class TagTest extends \atk4\core\PHPUnit_AgileTestCase
 
         // nest multiple tags
         $this->assertTagRender(
-            '<a href="hello"><b class="red"><i class="blue">welcome</i></b></a>', 
+            '<a href="hello"><b class="red"><i class="blue">welcome</i></b></a>',
             ['a', ['href'=>'hello'], [
                 ['b', ['class'=>'red'], [
-                    ['i', ['class'=>'blue'], 'welcome']
-                ]]
+                    ['i', ['class'=>'blue'], 'welcome'],
+                ]],
             ]]);
 
         // this way it doesn't work, because $value of getTag is always encoded if it is a string

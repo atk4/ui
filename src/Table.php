@@ -483,7 +483,7 @@ class Table extends Lister
             $cell = null;
             $cnt = count($column);
             $td_attr = [];
-            foreach($column as $c) {
+            foreach ($column as $c) {
                 if (--$cnt) {
                     $html = $c->getDataCellTemplate($field);
                     $td_attr = $c->getTagAttributes('body', $td_attr);
@@ -505,7 +505,6 @@ class Table extends Lister
             }
 
             $output[] = $cell;
-
         }
 
         return implode('', $output);

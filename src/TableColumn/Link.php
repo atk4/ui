@@ -10,8 +10,8 @@ namespace atk4\ui\TableColumn;
  *   new Link(['order', 'id'=>'id' ]);
  * or
  *   new Link(['order', 'id' ]);
- * or 
- *   new Link([['order', 'x'=>$myval], 'id' ]);
+ * or
+ *   new Link([['order', 'x'=>$myval], 'id' ]);.
  */
 class Link extends Generic
 {
@@ -26,7 +26,7 @@ class Link extends Generic
     /**
      * If string 'example', then will be passed to $app->url('example') along with any defined arguments.
      * If set as arrray, then non-0 key/values will be also passed to the URL:
-     *  $page = ['example', 'type'=>'123'];
+     *  $page = ['example', 'type'=>'123'];.
      *
      * $url = $app->url(['example', 'type'=>'123']);
      *
@@ -37,7 +37,7 @@ class Link extends Generic
     /**
      * When constructing a URL using 'page', this specifies list of values which will be added
      * to the destination URL. For example if you set $args = ['document_id'=>'id'] then row value
-     * of ['id'] will be added to url's property "document_id"
+     * of ['id'] will be added to url's property "document_id".
      *
      * For a full example:
      *  $page = ['example', 'type'=>'client'];
@@ -64,7 +64,8 @@ class Link extends Generic
         parent::__construct($page);
     }
 
-    public function setDefaults($properties = [], $strict = false) {
+    public function setDefaults($properties = [], $strict = false)
+    {
         if (isset($properties[0])) {
             $this->page = array_shift($properties);
         }
@@ -74,7 +75,8 @@ class Link extends Generic
         parent::setDefaults($properties);
     }
 
-    function init() {
+    public function init()
+    {
         parent::init();
 
         if ($this->url && is_string($this->url)) {
@@ -114,6 +116,5 @@ class Link extends Generic
         }
 
         throw new \atk4\ui\Exception('Link without destination');
-
     }
 }

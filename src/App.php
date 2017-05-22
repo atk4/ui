@@ -549,14 +549,14 @@ class App
             $value = $this->encodeHTML($value);
         } elseif (is_array($value)) {
             $result = [];
-            foreach($value as $v) {
+            foreach ($value as $v) {
                 if (is_array($v)) {
                     $result[] = $this->getTag(...$v);
                 } else {
                     $result[] = $v;
                 }
             }
-            $value = join('', $result);
+            $value = implode('', $result);
         }
 
         if (!$attr) {
