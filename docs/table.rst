@@ -319,7 +319,8 @@ Table Rendering Steps
 
 Once model is specified to the Table it will keep the object until render process will begin. Table
 columns can be defined anytime and will be stored in the :php:attr:`Table::columns` property. Columns
-without defined name will have a numeric index.
+without defined name will have a numeric index. It's also possible to define multiple columns per key
+in which case we call them "formatters". 
 
 During the render process (see :php:meth:`View::renderView`) Table will perform the following actions:
 
@@ -338,6 +339,73 @@ During the render process (see :php:meth:`View::renderView`) Table will perform 
 4. If no rows were displayed, then "empty message" will be shown (see :php:attr:`Table::t_empty`).
 5. If :php:meth:`addTotals` was used, append totals row to table footer.
 
+Dealing with Multiple formatters
+================================
+
+You can add column several times like this::
+
+    $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
+    $table->addColumn('salary', new \atk4\ui\TableColumn\Link(['page2']));
+
+In this case system needs to format the output as a currency and subsequently format it as a link.
+Formattrers are always applied in the same orders they are defined. Remember that setModel() will
+typically set a Generic fromatter for all columns.
+
+There are a few things to note:
+
+1. calling addColumn multiple time will convert :php:attr:`Table::columns` value for that column
+   into array containing all column objects
+
+2. formatting is always applied in same order as defined - in example above Money first, Link after. 
+
+3. output of the 'Money' formatter is used into Link formatter as if it would be value of cell.
+
+:php:meth:`TableColumn\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
+without the <td> cell itself. Subsequently :php:meth:`TableColumn\Link::getDataCellTemplate` is called
+and the '{$salary}' tag from this link is replaced by output from Money column resulting in this
+template::
+
+    <a href="{$c_name_link}">£ {$salary}</a>
+
+To calculate which tag should be used, a different approach is done. Attributes for <td> tag
+from Money are collected then merged with attributes of a Link class. The money column wishes
+to add class "right aligned single line" to the <td> tag but sometimes it may also use
+class "negative". The way how it's done is by defining `class="{$f_name_money}"` as one
+of the TD properties.
+
+The link does add any TD properties so the resulting "td" tag would be::
+
+    ['class' => ['{$f_name_money}'] ]
+
+    // would produce <td class="{$f_name_money}"> .. </td>
+
+Combined with the field template generated above it provides us with a full cell
+template::
+
+    <td class="{$f_name_money}"><a href="{$c_name_link}">£ {$salary}</a></td>
+
+Which is concatinated with other table columns just before rendering starts. The
+actual template is formed by calling. This may be too much detail, so if you need
+to make a note on how template caching works then,
+
+ - values are encapsulated for named fields.
+ - values are concatinated by anonymous fields.
+ - <td> properties are stacked
+ - last formatter will convert array with td properties into an actual tag.
+
+Header and Footer
+-----------------
+When using with multiple formatters, the last formatter gets to render Header column.
+The footer (totals) uses the same approach for geterating template, however a
+different methods are called from the columns: getTotalsCellTemplate
+
+Redefining
+----------
+
+If you are defining your own column, you may want to re-define getDataCellTemplate. The
+getDataCellHTML can be left as-is and will be handled correctly. If you have overriden
+getDataCellHTML only, then your column will still work OK provided that it's used as a
+last formatter.
 
 Advanced Usage
 ==============

@@ -30,7 +30,7 @@ class Actions extends Generic
         $this->table->on('click', '.b_'.$name, $callback, [$this->table->jsRow()->data('id'), 'confirm'=>'Are you sure?']);
     }
 
-    public function getDataCellHTML(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
         $output = '';
 
@@ -39,7 +39,7 @@ class Actions extends Generic
             $output .= $action->getHTML();
         }
 
-        return $this->getTag('body', [$output]);
+        return $output;
     }
 
     // rest will be implemented for crud

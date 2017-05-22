@@ -73,6 +73,20 @@ class Generic
         return $this;
     }
 
+    public function getTagAttributes($position, $attr = [])
+    {
+        // "all" applies on all positions
+        if (isset($this->attr['all'])) {
+            $attr = array_merge_recursive($attr, $this->attr['all']);
+        }
+
+        // specific position classes
+        if (isset($this->attr[$position])) {
+            $attr = array_merge_recursive($attr, $this->attr[$position]);
+        }
+
+        return $attr;
+    }
     /**
      * Returns a suitable cell tag with the supplied value. Applies modifiers
      * added through addClass and setAttr.
@@ -85,15 +99,7 @@ class Generic
      */
     public function getTag($position, $value, $attr = [])
     {
-        // "all" applies on all positions
-        if (isset($this->attr['all'])) {
-            $attr = array_merge_recursive($attr, $this->attr['all']);
-        }
-
-        // specific position classes
-        if (isset($this->attr[$position])) {
-            $attr = array_merge_recursive($attr, $this->attr[$position]);
-        }
+        $attr = $this->getTagAttributes($position, $attr);
 
         if (isset($attr['class'])) {
             $attr['class'] = implode(' ', $attr['class']);
@@ -106,13 +112,11 @@ class Generic
      * Provided with a field definition (from a model) will return a header
      * cell, fully formatted to be included in a Table. (<th>).
      *
-     * Potentially may include elements for sorting.
-     *
      * @param \atk4\data\Field $f
      *
      * @return string
      */
-    public function getHeaderCellHTML(\atk4\data\Field $f = null)
+    public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
     {
         if ($f === null) {
             return $this->getTag('head', '', $this->table->sortable ? ['class'=>['disabled']] : []);
@@ -170,13 +174,33 @@ class Generic
      *
      * @return string
      */
-    public function getDataCellHTML(\atk4\data\Field $f = null)
+    public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
     {
-        if ($f === null) {
-            return $this->getTag('body', '{$c_'.$this->short_name.'}');
-        }
+        return $this->getTag('body', [$this->getDataCellTemplate($f)], $extra_tags);
+    }
 
-        return $this->getTag('body', '{$'.$f->short_name.'}');
+    /**
+     * Provided with a field definition will return a string containing a "Template"
+     * that would produce CONTENS OF <td> cell when rendered. Example output:.
+     *
+     *   <b>{$name}</b>
+     *
+     * The tag that corresponds to the name of the field (e.g. {$name}) may be substituted
+     * by another template returned by getDataCellTemplate when multiple formatters are
+     * applied to the same column. The first one to be applied is executed first, then
+     * a subsequent ones are executed.
+     *
+     * @param \atk4\data\Field $f
+     *
+     * @return string
+     */
+    public function getDataCellTemplate(\atk4\data\Field $f = null)
+    {
+        if ($f) {
+            return '{$'.$f->short_name.'}';
+        } else {
+            return '{_$'.$this->short_name.'}';
+        }
     }
 
     /**
