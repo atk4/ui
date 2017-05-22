@@ -8,7 +8,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
     public $table;
     public $column;
 
-    function setUp() {
+    public function setUp()
+    {
         $arr = ['table'=>[1=>['id'=>1, 'name'=>'bar', 'ref'=>'ref123', 'salary'=>-123]]];
         $db = new \atk4\data\Persistence_Array($arr);
         $m = new \atk4\data\Model($db, 'table');
@@ -19,7 +20,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->table->setModel($m, ['name', 'ref']);
     }
 
-    function testgetDataRowHTML() {
+    public function testgetDataRowHTML()
+    {
         $this->assertEquals('<td>{$name}</td><td>{$ref}</td>', $this->table->getDataRowHTML());
 
         $this->assertEquals(
@@ -28,7 +30,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function testMultipleFormatters() {
+    public function testMultipleFormatters()
+    {
         $this->table->addColumn('name', new \atk4\ui\TableColumn\Template('<b>{$name}</b>'));
 
         $this->assertEquals('<td><b>{$name}</b></td><td>{$ref}</td>', $this->table->getDataRowHTML());
@@ -39,11 +42,12 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function testTDLast() {
+    public function testTDLast()
+    {
         $this->table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 
         $this->assertEquals(
-            '<td>{$name}</td><td>{$ref}</td><td class="{$_money_class} right aligned single line">{$salary}</td>', 
+            '<td>{$name}</td><td>{$ref}</td><td class="{$_money_class} right aligned single line">{$salary}</td>',
             $this->table->getDataRowHTML()
         );
 
@@ -53,12 +57,13 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function testTDNotLast() {
+    public function testTDNotLast()
+    {
         $this->table->addColumn('salary', new \atk4\ui\TableColumn\Money());
         $this->table->addColumn('salary', new \atk4\ui\TableColumn\Template('<b>{$salary}</b>'));
 
         $this->assertEquals(
-            '<td>{$name}</td><td>{$ref}</td><td class="{$_money_class} right aligned single line"><b>{$salary}</b></td>', 
+            '<td>{$name}</td><td>{$ref}</td><td class="{$_money_class} right aligned single line"><b>{$salary}</b></td>',
             $this->table->getDataRowHTML()
         );
 
@@ -68,7 +73,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function testTwoMoneys() {
+    public function testTwoMoneys()
+    {
         $this->table->addColumn('name', new \atk4\ui\TableColumn\Money());
         $this->table->addColumn('salary', new \atk4\ui\TableColumn\Money());
         $this->table->addColumn('salary', new \atk4\ui\TableColumn\Template('<b>{$salary}</b>'));
@@ -84,7 +90,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function testTemplateStacking() {
+    public function testTemplateStacking()
+    {
 
         // Simplest way to integrate
         $this->table->addColumn('name', new \atk4\ui\TableColumn\Template('<b>{$name}</b>'));
@@ -101,13 +108,16 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function extract($val) {
+    public function extract($val)
+    {
         // extract only <tr> out
-        preg_match('/<.*data-id="1".*/m',$val, $matches);
+        preg_match('/<.*data-id="1".*/m', $val, $matches);
+
         return $matches[0];
     }
 
-    function testRender1() {
+    public function testRender1()
+    {
 
         // Simplest way to integrate
         $this->table->addColumn('name', new \atk4\ui\TableColumn\Template('<b>{$name}</b>'));
@@ -119,7 +129,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function testLink1() {
+    public function testLink1()
+    {
         $this->table->addColumn('name', new \atk4\ui\TableColumn\Link('example.php?id={$id}'));
 
         $this->assertEquals(
@@ -133,7 +144,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function testLink1a() {
+    public function testLink1a()
+    {
         $this->table->addColumn('name', ['TableColumn/Link', 'url'=>'example.php?id={$id}']);
 
         $this->assertEquals(
@@ -147,7 +159,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function testLink2() {
+    public function testLink2()
+    {
         $this->table->addColumn('name', new \atk4\ui\TableColumn\Link(['example', 'id'=>'{$id}']));
 
         // url is properly encoded
@@ -158,7 +171,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function testLink3() {
+    public function testLink3()
+    {
         $this->table->addColumn('name', new \atk4\ui\TableColumn\Link(['example'], ['id']));
 
         $this->assertEquals(
@@ -167,7 +181,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function testLink4() {
+    public function testLink4()
+    {
         $this->table->addColumn('name', new \atk4\ui\TableColumn\Link(['example'], ['test'=>'id']));
 
         $this->assertEquals(
@@ -176,7 +191,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    function testLink5() {
+    public function testLink5()
+    {
         $this->table->addColumn('name', ['TableColumn/Link', 'example', ['test'=>'id']]);
 
         $this->assertEquals(
@@ -184,7 +200,6 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
             $this->extract($this->table->render())
         );
     }
-
 
     /*
     function testLink1() {

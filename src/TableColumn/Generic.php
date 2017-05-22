@@ -87,6 +87,7 @@ class Generic
 
         return $attr;
     }
+
     /**
      * Returns a suitable cell tag with the supplied value. Applies modifiers
      * added through addClass and setAttr.
