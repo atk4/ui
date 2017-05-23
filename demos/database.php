@@ -39,7 +39,8 @@ class Stat extends \atk4\data\Model
         parent::init();
 
         $this->addFields(['project_name', 'project_code'], ['type'=>'string']);
-        $this->addField('description', ['ui'=>['form'=>['FormField/TextArea', 'rows'=>5]]]);
+        //$this->addField('description', ['ui'=>['form'=>['FormField/TextArea', 'rows'=>5]]]);
+        $this->addField('description', ['type'=>'text']);
         $this->addField('client_name', ['type'=>'string']);
         $this->addField('client_address', ['type'=>'string', 'ui'=>['form'=>[new \atk4\ui\FormField\Textarea(), 'rows'=>4]]]);
 

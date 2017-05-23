@@ -12,7 +12,7 @@ class Actions extends Generic
     public function init()
     {
         parent::init();
-        $this->addClass('right aligned');
+        $this->addClass('right aligned collapsing');
     }
 
     public function addAction($button, $callback, $confirm = false)

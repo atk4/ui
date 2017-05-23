@@ -78,7 +78,7 @@ class Grid extends View
         }
 
         if (is_null($this->table)) {
-            $this->table = $this->add(['Table', 'very compact striped', 'reload'=>$this], 'Table');
+            $this->table = $this->add(['Table', 'very compact striped single line', 'reload'=>$this], 'Table');
         }
 
         if (is_null($this->paginator)) {
