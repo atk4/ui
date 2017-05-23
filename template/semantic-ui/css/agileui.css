@@ -3,8 +3,8 @@
   pointer-events: none;
   visibility: hidden;
 }
-.topMenu {
-  width: calc(-160%);
+.topMenu.ui.menu.fixed {
+  width: calc(100% -  260px );
 }
 .mainContainer {
   padding-left: 260px;
