@@ -5,25 +5,32 @@
 
 // Top Menu
 
-.topMenuGhost.ui.menu {
+.atk-topMenuGhost.ui.menu {
   margin: 0;
   pointer-events: none;
   visibility: hidden;
 }
-.ui.visible.left.sidebar ~ .topMenu.ui.menu.fixed {
+.ui.visible.left.sidebar ~ .atk-topMenu.ui.menu.fixed {
   width: ~'calc(100% - '@leftMenuWidth~')';
 }
 
 
 // Container
 
-.ui.visible.left.sidebar ~ .mainContainer {
+.ui.visible.left.sidebar ~ .atk-mainContainer {
   padding-left: @leftMenuWidth;
 }
 
 
 // list-style-position: 
 
-.overflow-auto {
+.ui.table.atk-overflow-auto {
   overflow: auto;
+  >.ui.table {
+    border: none;
+  }
+}
+.atk-cell-expanded {
+  min-width: 320px;
+  white-space: normal
 }

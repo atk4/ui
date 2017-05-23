@@ -1,15 +1,22 @@
-.topMenuGhost.ui.menu {
+.atk-topMenuGhost.ui.menu {
   margin: 0;
   pointer-events: none;
   visibility: hidden;
 }
-.ui.visible.left.sidebar ~ .topMenu.ui.menu.fixed {
+.ui.visible.left.sidebar ~ .atk-topMenu.ui.menu.fixed {
   width: calc(100% -  260px );
 }
-.ui.visible.left.sidebar ~ .mainContainer {
+.ui.visible.left.sidebar ~ .atk-mainContainer {
   padding-left: 260px;
 }
-.overflow-auto {
+.ui.table.atk-overflow-auto {
   overflow: auto;
+}
+.ui.table.atk-overflow-auto > .ui.table {
+  border: none;
+}
+.atk-cell-expanded {
+  min-width: 320px;
+  white-space: normal;
 }
 /*# sourceMappingURL=agileui.css.map */
