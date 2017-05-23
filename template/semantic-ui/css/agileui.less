@@ -41,6 +41,11 @@ footer.atk-footer {
 
   }
 }
+.ui.left.sidebar {
+  &.visible {
+    // display: none;
+  }
+}
 
 
 // Components
@@ -55,4 +60,26 @@ footer.atk-footer {
   min-width: 320px;
   max-width: 640px;
   white-space: normal
+}
+
+
+// Responsive
+
+@media (max-width: 768px) {
+  .ui.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
+    width: 100% !important;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  .ui.visible.left.sidebar ~ .atk-mainContainer,
+  .ui.visible.left.sidebar ~ footer.atk-footer {
+    padding-left: 0;
+  }
+  .ui.left.sidebar {
+    opacity: 0;
+    width: 100%;
+  }
+  // .ui.left.sidebar.visible {
+  //   display: block;
+  // }
 }

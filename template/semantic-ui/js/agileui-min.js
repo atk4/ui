@@ -1,1 +1,1 @@
-$(function(){$(".leftMenuTrigger").click(function(){$(".ui.left.sidebar").toggleClass("visible")})});
+function leftMenu(){var e=768,n=$(window).width();console.log(768,n)}$(function(){leftMenu(),$(".leftMenuTrigger").click(function(){$(".ui.left.sidebar").toggleClass("visible")})}),$(window).resize(function(){leftMenu()});
