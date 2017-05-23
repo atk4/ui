@@ -1,7 +1,7 @@
 {$LeftMenu}
 <!-- | {$TopMenu}-->
-<div class="ui menu" style="margin:0;visibility:hidden;"><span class="item"></span></div>
-<div class="ui inverted fixed menu" style="width:calc(100% - 260px);"><a class="item" href="javascript:void(0)">Item #1</a><a class="item" href="javascript:void(0)">Item #2</a><a class="item" href="javascript:void(0)">Item #3</a>
+<div class="topMenuGhost ui menu"><span class="item"></span></div>
+<div class="topMenu ui inverted fixed menu"><a class="item" href="javascript:void(0)">Item #1</a><a class="item" href="javascript:void(0)">Item #2</a><a class="item" href="javascript:void(0)">Item #3</a>
   <div class="ui dropdown item">Dropdown<i class="dropdown icon"></i>
     <div class="menu transition hidden">
       <div class="item">Action</div>
@@ -14,6 +14,6 @@
     </div>
   </div><a class="right item" href="javascript:void(0)">Item #3</a>
 </div>
-<div style="padding-left: 260px;">
+<div class="mainContainer">
   <div class="ui main container basic segment very padded">{$Content}</div>
 </div>

@@ -1,8 +1,8 @@
 | {$LeftMenu}
 // | {$TopMenu}
 
-.ui.menu(style='margin:0;visibility:hidden') #[span.item]
-.ui.inverted.fixed.menu(style='width:calc(100% - 260px)')
+.topMenuGhost.ui.menu #[span.item]
+.topMenu.ui.inverted.fixed.menu
   a.item(href='javascript:void(0)') Item #1
   a.item(href='javascript:void(0)') Item #2
   a.item(href='javascript:void(0)') Item #3
@@ -19,6 +19,6 @@
       .item One more separated link
   a.right.item(href='javascript:void(0)') Item #3
 
-div(style="padding-left: 260px")
+.mainContainer
   .ui.main.container.basic.segment.very.padded
     | {$Content}

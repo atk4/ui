@@ -1,0 +1,12 @@
+.topMenuGhost.ui.menu {
+  margin: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+.topMenu {
+  width: calc(-160%);
+}
+.mainContainer {
+  padding-left: 260px;
+}
+/*# sourceMappingURL=agileui.css.map */
