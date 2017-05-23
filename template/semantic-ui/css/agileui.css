@@ -6,7 +6,7 @@
 .ui.visible.left.sidebar ~ .topMenu.ui.menu.fixed {
   width: calc(100% -  260px );
 }
-.mainContainer {
+.ui.visible.left.sidebar ~ .mainContainer {
   padding-left: 260px;
 }
 /*# sourceMappingURL=agileui.css.map */
