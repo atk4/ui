@@ -194,25 +194,28 @@ class App
 
     protected function initIncludes()
     {
+
+        $uri = $this->getRequestURI();
+
         $f = dirname(dirname(__FILE__)).'/js/lib/atk4JS.js';
-        if (file_exists($f)) {
+        if (file_exists($f) && strpos($uri, '/demos/')!== false) {
             $this->requireJS('../js/lib/atk4JS.js');
         } else {
             $this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js');
         }
 
         $f = dirname(dirname(__FILE__)).'/template/semantic-ui/js/agileui.js';
-        if (file_exists($f)) {
+        if (file_exists($f) && strpos($uri, '/demos/')!== false) {
             $this->requireJS('../template/semantic-ui/js/agileui.js');
         } else {
             $this->requireJS('https://cdn.rawgit.com/atk4/ui/develop-ui-mk2/template/semantic-ui/js/agileui.js');
         }
 
         $f = dirname(dirname(__FILE__)).'/template/semantic-ui/css/agileui.css';
-        if (file_exists($f)) {
-            $this->requireJS('../template/semantic-ui/css/agileui.css');
+        if (file_exists($f) && strpos($uri, '/demos/')!== false) {
+            $this->requireCSS('../template/semantic-ui/css/agileui.css');
         } else {
-            $this->requireJS('https://cdn.rawgit.com/atk4/ui/develop-ui-mk2/template/semantic-ui/css/agileui.css');
+            $this->requireCSS('https://cdn.rawgit.com/atk4/ui/develop-ui-mk2/template/semantic-ui/css/agileui.css');
         }
     }
 
