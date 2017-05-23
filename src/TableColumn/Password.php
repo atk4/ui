@@ -7,8 +7,8 @@ namespace atk4\ui\TableColumn;
  */
 class Password extends Generic
 {
-    public function getDataCellHTML(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        return $this->getTag('body', '***');
+        return '***';
     }
 }
