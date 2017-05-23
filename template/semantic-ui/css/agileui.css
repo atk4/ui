@@ -3,7 +3,7 @@
   pointer-events: none;
   visibility: hidden;
 }
-.topMenu.ui.menu.fixed {
+.ui.visible.left.sidebar ~ .topMenu.ui.menu.fixed {
   width: calc(100% -  260px );
 }
 .mainContainer {

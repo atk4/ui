@@ -3,6 +3,8 @@
 
 .topMenuGhost.ui.menu #[span.item]
 .topMenu.ui.inverted.fixed.menu
+  a.leftMenuTrigger.item.icon(href='javascript:void(0)')
+    i.content.icon
   a.item(href='javascript:void(0)') Item #1
   a.item(href='javascript:void(0)') Item #2
   a.item(href='javascript:void(0)') Item #3
@@ -10,7 +12,6 @@
     | Dropdown
     i.dropdown.icon
     .menu.transition.hidden
-      .item Action
       .item Another Action
       .item Something else here
       .divider

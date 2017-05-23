@@ -1,0 +1,1 @@
+$(function(){$(".leftMenuTrigger").click(function(){$(".ui.left.sidebar").toggleClass("visible")})});
