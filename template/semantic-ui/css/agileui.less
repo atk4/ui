@@ -3,7 +3,7 @@
 @leftMenuWidth: 260px;
 
 
-// Top Menu
+// Layout
 
 .atk-topMenuGhost.ui.menu {
   margin: 0;
@@ -13,16 +13,16 @@
 .ui.visible.left.sidebar ~ .atk-topMenu.ui.menu.fixed {
   width: ~'calc(100% - '@leftMenuWidth~')';
 }
-
-
-// Container
-
-.ui.visible.left.sidebar ~ .atk-mainContainer {
+.ui.visible.left.sidebar ~ .atk-mainContainer,
+.ui.visible.left.sidebar ~ .atk-footer {
   padding-left: @leftMenuWidth;
+}
+.atk-footer.ui.segment {
+  margin: 0;
 }
 
 
-// list-style-position: 
+// Components
 
 .ui.table.atk-overflow-auto {
   overflow: auto;
@@ -32,5 +32,6 @@
 }
 .atk-cell-expanded {
   min-width: 320px;
+  max-width: 640px;
   white-space: normal
 }
