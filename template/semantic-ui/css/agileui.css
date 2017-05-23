@@ -111,4 +111,15 @@ footer.atk-footer .ui.segment {
     width: 100%;
   }
 }
+@media print {
+  .ui.visible.left.sidebar ~ .atk-mainContainer,
+  .ui.visible.left.sidebar ~ footer.atk-footer {
+    padding-left: 0;
+  }
+  .ui.left.sidebar,
+  .atk-topMenu,
+  .atk-topMenuGhost {
+    display: none !important;
+  }
+}
 /*# sourceMappingURL=agileui.css.map */

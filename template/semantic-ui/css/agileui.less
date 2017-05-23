@@ -111,7 +111,6 @@ footer.atk-footer {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
     visibility: visible;
-    // width: 100%;
   }
   body.atk-leftMenu-visible {
     &:after {
@@ -127,9 +126,6 @@ footer.atk-footer {
       }
     }
   }
-  // .ui.left.sidebar.visible {
-  //   display: block;
-  // }
 }
 @media (min-width: @tabletWidth) and (max-width: (@desktopWidth - 1px)) {
   body.atk-leftMenu-visible .atk-overlay.pushable {
@@ -142,5 +138,18 @@ footer.atk-footer {
   }
   .ui.left.sidebar {
     width: 100%;
+  }
+}
+
+
+// Print
+
+@media print {
+  .ui.visible.left.sidebar ~ .atk-mainContainer,
+  .ui.visible.left.sidebar ~ footer.atk-footer {
+    padding-left: 0;
+  }
+  .ui.left.sidebar, .atk-topMenu, .atk-topMenuGhost {
+    display: none !important;
   }
 }
