@@ -5,12 +5,18 @@
 
 // Layout
 
-.ui.visible.left.sidebar ~ .atk-topMenu.ui.menu.fixed {
+.ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
   width: ~'calc(100% - '@leftMenuWidth~')';
 }
 .ui.visible.left.sidebar ~ .atk-mainContainer,
-.ui.visible.left.sidebar ~ .atk-footer {
+.ui.visible.left.sidebar ~ footer.atk-footer {
   padding-left: @leftMenuWidth;
+}
+
+.atk-layout {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 .atk-topMenuGhost.ui.menu {
   display: none;
@@ -18,11 +24,22 @@
   pointer-events: none;
   visibility: hidden;
 }
-.atk-topMenu.ui.inverted.fixed.menu ~ .atk-topMenuGhost {
+header.atk-topMenu.ui.inverted.fixed.menu ~ .atk-topMenuGhost {
   display: block;
 }
-.atk-topMenu.ui.menu .item > .label {
+header.atk-topMenu.ui.menu .item > .label {
   margin-left: 0;
+}
+.atk-mainContainer {
+  flex: 1;
+}
+footer.atk-footer {
+  .ui.divider, .ui.segment {
+    margin: 0;
+  }
+  .ui.segment {
+
+  }
 }
 
 

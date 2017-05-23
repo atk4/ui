@@ -1,21 +1,25 @@
-{$LeftMenu}
-<!-- | {$TopMenu}-->
-<div class="atk-topMenu ui inverted fixed menu"><a class="leftMenuTrigger item icon" href="javascript:void(0)"><i class="content icon"></i></a><a class="ui item">
-    <div class="ui red label" href="javascript:void(0)"><i class="attention icon"></i>&nbsp;23</div></a>
-  <div class="ui dropdown item right">Dropdown<i class="dropdown icon"></i>
-    <div class="menu transition hidden">
-      <div class="item">Another Action</div>
-      <div class="item">Something else here</div>
-      <div class="divider"></div>
-      <div class="item">Separated Link</div>
-      <div class="divider"></div>
-      <div class="item">One more separated link</div>
+
+<div class="atk-layout">{$LeftMenu}
+  <!-- | {$TopMenu}-->
+  <header class="atk-topMenu ui inverted fixed menu"><a class="leftMenuTrigger item icon" href="javascript:void(0)"><i class="content icon"></i></a><a class="ui item">
+      <div class="ui red label" href="javascript:void(0)"><i class="attention icon"></i>&nbsp;23</div></a>
+    <div class="ui dropdown item right">Dropdown<i class="dropdown icon"></i>
+      <div class="menu transition hidden">
+        <div class="item">Another Action</div>
+        <div class="item">Something else here</div>
+        <div class="divider"></div>
+        <div class="item">Separated Link</div>
+        <div class="divider"></div>
+        <div class="item">One more separated link</div>
+      </div>
     </div>
+  </header>
+  <div class="atk-topMenuGhost ui menu"><span class="item"></span></div>
+  <div class="atk-mainContainer">
+    <div class="ui main container basic segment very padded">{$Content}</div>
   </div>
+  <footer class="atk-footer">
+    <div class="ui divider"></div>
+    <div class="ui center aligned basic segment">Made with <a href="javascript:void(0)">Agile Toolkit</a></div>
+  </footer>
 </div>
-<div class="atk-topMenuGhost ui menu"><span class="item"></span></div>
-<div class="atk-mainContainer">
-  <div class="ui main container basic segment very padded">{$Content}</div>
-</div>
-<div class="ui divider"></div>
-<div class="atk-footer ui center aligned basic segment">Made with <a href="javascript:void(0)">Agile Toolkit</a></div>
