@@ -9,4 +9,7 @@
 .ui.visible.left.sidebar ~ .mainContainer {
   padding-left: 260px;
 }
+.overflow-auto {
+  overflow: auto;
+}
 /*# sourceMappingURL=agileui.css.map */
