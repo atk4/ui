@@ -1,12 +1,24 @@
-style.
-    body {
-        padding-top: 3em;
-    }
-
 | {$LeftMenu}
+// | {$TopMenu}
 
-| {$TopMenu}
+.ui.menu(style='margin:0;visibility:hidden') #[span.item]
+.ui.inverted.fixed.menu(style='width:calc(100% - 260px)')
+  a.item(href='javascript:void(0)') Item #1
+  a.item(href='javascript:void(0)') Item #2
+  a.item(href='javascript:void(0)') Item #3
+  .ui.dropdown.item
+    | Dropdown
+    i.dropdown.icon
+    .menu.transition.hidden
+      .item Action
+      .item Another Action
+      .item Something else here
+      .divider
+      .item Separated Link
+      .divider
+      .item One more separated link
+  a.right.item(href='javascript:void(0)') Item #3
 
 div(style="padding-left: 260px")
-    .ui.main.container.basic.segment
-        | {$Content}
+  .ui.main.container.basic.segment.very.padded
+    | {$Content}
