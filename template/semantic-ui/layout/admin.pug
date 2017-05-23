@@ -1,14 +1,14 @@
 | {$LeftMenu}
 // | {$TopMenu}
 
-.atk-topMenuGhost.ui.menu #[span.item]
 .atk-topMenu.ui.inverted.fixed.menu
   a.leftMenuTrigger.item.icon(href='javascript:void(0)')
     i.content.icon
-  a.item(href='javascript:void(0)') Item #1
-  a.item(href='javascript:void(0)') Item #2
-  a.item(href='javascript:void(0)') Item #3
-  .ui.dropdown.item
+  a.ui.item
+    .ui.red.label(href='javascript:void(0)')
+      i.attention.icon
+      | &nbsp;23
+  .ui.dropdown.item.right
     | Dropdown
     i.dropdown.icon
     .menu.transition.hidden
@@ -18,8 +18,7 @@
       .item Separated Link
       .divider
       .item One more separated link
-  a.right.item(href='javascript:void(0)') Item #3
-
+.atk-topMenuGhost.ui.menu #[span.item]
 .atk-mainContainer
   .ui.main.container.basic.segment.very.padded
     | {$Content}

@@ -5,17 +5,24 @@
 
 // Layout
 
-.atk-topMenuGhost.ui.menu {
-  margin: 0;
-  pointer-events: none;
-  visibility: hidden;
-}
 .ui.visible.left.sidebar ~ .atk-topMenu.ui.menu.fixed {
   width: ~'calc(100% - '@leftMenuWidth~')';
 }
 .ui.visible.left.sidebar ~ .atk-mainContainer,
 .ui.visible.left.sidebar ~ .atk-footer {
   padding-left: @leftMenuWidth;
+}
+.atk-topMenuGhost.ui.menu {
+  display: none;
+  margin: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+.atk-topMenu.ui.inverted.fixed.menu ~ .atk-topMenuGhost {
+  display: block;
+}
+.atk-topMenu.ui.menu .item > .label {
+  margin-left: 0;
 }
 .atk-footer.ui.segment {
   margin: 0;
