@@ -16,7 +16,7 @@
   pointer-events: none;
   visibility: hidden;
 }
-header.atk-topMenu.ui.inverted.fixed.menu ~ .atk-topMenuGhost {
+header.atk-topMenu.ui.fixed.menu ~ .atk-topMenuGhost {
   display: block;
 }
 header.atk-topMenu.ui.menu .item > .label {
