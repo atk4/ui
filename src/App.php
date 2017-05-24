@@ -200,7 +200,7 @@ class App
         if (file_exists($f) && strpos($uri, '/demos/') !== false) {
             $this->requireJS('../js/lib/atk4JS.js');
         } else {
-            $this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js');
+            $this->requireJS('https://cdn.rawgit.com/atk4/ui/1.1.2/js/lib/atk4JS.min.js');
         }
 
         $f = dirname(dirname(__FILE__)).'/template/semantic-ui/js/agileui.js';
