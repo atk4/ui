@@ -31,7 +31,9 @@ $(function(){
   });
 
   //leftMenu();
-  $('.atk-leftMenuTrigger').click(function(){
+  $('.atk-leftMenuTrigger').click(function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
     $('.ui.left.sidebar').toggleClass('visible');
      $('body').toggleClass('atk-leftMenu-visible');
   });
