@@ -55,6 +55,12 @@ class Grid extends View
     public $selection = null;
 
     /**
+     * Grid can be sorted by clicking on column headers. This will be automatically enabled
+     * if Model supports ordering. You may override by setting true/false.
+     */
+    public $sortable = null;
+
+    /**
      * Component that actually renders data rows / coluns and possibly totals.
      *
      * @var Table|false
@@ -72,7 +78,7 @@ class Grid extends View
         }
 
         if (is_null($this->table)) {
-            $this->table = $this->add(['Table', 'very compact', 'reload'=>$this], 'Table');
+            $this->table = $this->add(['Table', 'very compact striped single line', 'reload'=>$this], 'Table');
         }
 
         if (is_null($this->paginator)) {
@@ -129,9 +135,42 @@ class Grid extends View
         $this->actions->addAction($label, $action);
     }
 
+    /**
+     * Apply ordering to the current model as per the sort parameters.
+     */
+    public function applySort()
+    {
+        $sortby = $this->app->stickyGET($this->name.'_sort', null);
+        $desc = false;
+        if ($sortby && $sortby[0] == '-') {
+            $desc = true;
+            $sortby = substr($sortby, 1);
+        }
+
+        $this->table->sortable = true;
+
+        if ($sortby && isset($this->table->columns[$sortby]) && $this->model->hasElement($sortby) instanceof \atk4\data\Field) {
+            $this->model->setOrder($sortby, $desc);
+            $this->table->sort_by = $sortby;
+            $this->table->sort_order = $desc ? 'descending' : 'ascending';
+        }
+
+        $this->table->on('click', 'thead>tr>th', new jsReload($this, [$this->name.'_sort'=>(new jQuery())->data('column')]));
+    }
+
     public function setModel(\atk4\data\Model $model, $columns = null)
     {
-        return $this->model = $this->table->setModel($model, $columns);
+        $this->model = $this->table->setModel($model, $columns);
+
+        if ($this->sortable === null) {
+            $this->sortable = true;
+        }
+
+        if ($this->sortable) {
+            $this->applySort();
+        }
+
+        return $this->model;
     }
 
     public function addSelection()
@@ -148,7 +187,6 @@ class Grid extends View
     public function recursiveRender()
     {
         // bind with paginator
-
         if ($this->paginator) {
             $this->paginator->reload = $this;
 
@@ -158,5 +196,13 @@ class Grid extends View
         }
 
         return parent::recursiveRender();
+    }
+
+    /**
+     * Proxy function for Table::jsRow().
+     */
+    public function jsRow()
+    {
+        return $this->table->jsRow();
     }
 }

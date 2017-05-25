@@ -17,6 +17,7 @@ Contents:
     button
     field
     form
+    table
     grid
     misc
     app

@@ -92,6 +92,12 @@ class Table extends Lister
      */
     protected $t_empty;
 
+    public $sortable = null;
+
+    public $sort_by = null;
+
+    public $sort_order = null;
+
     /**
      * Defines a new column for this field. You need two objects for field to
      * work.
@@ -144,8 +150,15 @@ class Table extends Lister
         }
 
         $columnDef->table = $this;
-        if (!$columnDef->_initialized) {
-            $this->_add($columnDef, $name);
+        if (isset($columnDef->_initializerTrait) && !$columnDef->_initialized) {
+            $this->_add($columnDef);
+        }
+
+        if (!$columnDef instanceof TableColumn\Generic) {
+            throw new Exception([
+                'Table columns must extend TableColumn\Generic',
+                'column'=> $columnDef,
+            ]);
         }
 
         if (is_null($name)) {
@@ -175,6 +188,9 @@ class Table extends Lister
         switch ($f->type) {
         case 'password':
             return $this->add(new TableColumn\Password());
+
+        case 'text':
+            return $this->add(new TableColumn\Text());
 
         //case 'boolean':
             //return $this->add(new TableColumn\Checkbox());
@@ -271,6 +287,10 @@ class Table extends Lister
             throw new Exception(['Table does not have any columns defined', 'columns'=>$this->columns]);
         }
 
+        if ($this->sortable) {
+            $this->addClass('sortable');
+        }
+
         // Generate Header Row
         if ($this->header) {
             $this->t_head->setHTML('cells', $this->getHeaderRowHTML());
@@ -304,12 +324,17 @@ class Table extends Lister
                     }
                 }
 
-                foreach ($this->columns as $name => $column) {
-                    if (!method_exists($column, 'getHTMLTags')) {
-                        continue;
+                foreach ($this->columns as $name => $columns) {
+                    if (!is_array($columns)) {
+                        $columns = [$columns];
                     }
                     $field = $this->model->hasElement($name);
-                    $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
+                    foreach ($columns as $column) {
+                        if (!method_exists($column, 'getHTMLTags')) {
+                            continue;
+                        }
+                        $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
+                    }
                 }
 
                 // Render row and add to body
@@ -423,7 +448,7 @@ class Table extends Lister
         foreach ($this->columns as $name => $column) {
             // if no totals plan, then show dash, but keep column formatting
             if (!isset($this->totals_plan[$name])) {
-                $output[] = $column->getTag('th', 'foot', '-');
+                $output[] = $column->getTag('foot', '-');
                 continue;
             }
 
@@ -436,7 +461,7 @@ class Table extends Lister
             }
 
             // otherwise just show it, for example, "Totals:" cell
-            $output[] = $column->getTag('th', 'foot', $this->totals_plan[$name]);
+            $output[] = $column->getTag('foot', $this->totals_plan[$name]);
         }
 
         return implode('', $output);
@@ -453,17 +478,43 @@ class Table extends Lister
         foreach ($this->columns as $name => $column) {
 
             // If multiple formatters are defined, use the first for the header cell
-            if (is_array($column)) {
-                $column = $column[0];
-            }
 
             if (!is_int($name)) {
                 $field = $this->model->getElement($name);
-
-                $output[] = $column->getDataCellHTML($field);
             } else {
-                $output[] = $column->getDataCellHTML();
+                $field = null;
             }
+
+            if (!is_array($column)) {
+                $column = [$column];
+            }
+
+            // we need to smartly wrap things up
+            $cell = null;
+            $cnt = count($column);
+            $td_attr = [];
+            foreach ($column as $c) {
+                if (--$cnt) {
+                    $html = $c->getDataCellTemplate($field);
+                    $td_attr = $c->getTagAttributes('body', $td_attr);
+                } else {
+                    // Last formatter, ask it to give us whole rendering
+                    $html = $c->getDataCellHTML($field, $td_attr);
+                }
+
+                if ($cell) {
+                    if ($name) {
+                        // if name is set, we can wrap things
+                        $cell = str_replace('{$'.$name.'}', $cell, $html);
+                    } else {
+                        $cell = $cell.' '.$html;
+                    }
+                } else {
+                    $cell = $html;
+                }
+            }
+
+            $output[] = $cell;
         }
 
         return implode('', $output);

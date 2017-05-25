@@ -49,7 +49,8 @@ class Admin extends Generic
         parent::init();
 
         if ($this->menu === null) {
-            $this->menu = $this->add(new Menu('inverted fixed horizontal'), 'TopMenu');
+            $this->menu = $this->add(new Menu(['atk-topMenu inverted fixed horizontal', 'element'=>'header']), 'TopMenu');
+            $this->menu->addItem(['class'=>'icon atk-leftMenuTrigger'])->add(['Icon', 'content']);
         }
 
         if ($this->rightMenu === null) {

@@ -1,3 +1,4 @@
+
 ## 1.1
 
 A massive release containing unimaginable amount of new features, fixes and actually the first version
@@ -62,6 +63,13 @@ Full diff: https://github.com/atk4/ui/compare/1.0.3...1.1.0
 - Fix reloading bug #149
 - Improve exit; support in callbacks #151
 - Other bugfixes #133
+
+#### 1.1.2
+
+- Implemented Grid / Table sorting #163
+- CRUD look and feel improvements #156
+- Added support for passing arguments into on('', function($arg)) from JS
+- Bugfixes #164
 
 ## 1.0 Release
 

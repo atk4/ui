@@ -32,6 +32,17 @@ class App
 
     public $run_called = false;
 
+    /**
+     * function setModel(MyModel $m);.
+     *
+     * is considered 'WARNING' even though MyModel descends from the parent class. This
+     * is not an incompatible class. We want to write clean PHP code and therefore this
+     * warning is disabled by default until it's fixed correctly in PHP.
+     *
+     * See: http://stackoverflow.com/a/42840762/204819
+     */
+    public $fix_incompatible = true;
+
     public $is_rendering = false;
 
     public $ui_persistence = null;
@@ -74,6 +85,14 @@ class App
 
         if (!$this->_initialized) {
             //$this->init();
+        }
+
+        if ($this->fix_incompatible) {
+            if (PHP_MAJOR_VERSION >= 7) {
+                set_error_handler(function ($errno, $errstr) {
+                    return strpos($errstr, 'Declaration of') === 0;
+                }, E_WARNING);
+            }
         }
 
         // Always run app on shutdown
@@ -175,11 +194,27 @@ class App
 
     protected function initIncludes()
     {
+        $uri = $this->getRequestURI();
+
         $f = dirname(dirname(__FILE__)).'/js/lib/atk4JS.js';
-        if (file_exists($f)) {
+        if (file_exists($f) && strpos($uri, '/demos/') !== false) {
             $this->requireJS('../js/lib/atk4JS.js');
         } else {
-            $this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js');
+            $this->requireJS('https://cdn.rawgit.com/atk4/ui/1.1.2/js/lib/atk4JS.min.js');
+        }
+
+        $f = dirname(dirname(__FILE__)).'/template/semantic-ui/js/agileui.js';
+        if (file_exists($f) && strpos($uri, '/demos/') !== false) {
+            $this->requireJS('../template/semantic-ui/js/agileui.js');
+        } else {
+            $this->requireJS('https://cdn.rawgit.com/atk4/ui/develop-ui-mk2/template/semantic-ui/js/agileui.js');
+        }
+
+        $f = dirname(dirname(__FILE__)).'/template/semantic-ui/css/agileui.css';
+        if (file_exists($f) && strpos($uri, '/demos/') !== false) {
+            $this->requireCSS('../template/semantic-ui/css/agileui.css');
+        } else {
+            $this->requireCSS('https://cdn.rawgit.com/atk4/ui/develop-ui-mk2/template/semantic-ui/css/agileui.css');
         }
     }
 
@@ -468,9 +503,10 @@ class App
      * getTag('b','text in bold');
      * --> <b>text in bold</b>
      *
-     * 10. pass array as 3rd parameter to nest tags (array must contain 1 to 3 elements corresponding to arguments):
-     * getTag('a', ['href'=>'foo.html'], ['b','click here']);
-     * --> <a href="foo.html"><b>click here</b></a>
+     * 10. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
+     * array (passed to getTag recursively)
+     * getTag('a', ['href'=>'foo.html'], [['b','click here'], ' for fun']);
+     * --> <a href="foo.html"><b>click here</b> for fun</a>
      *
      * 11. extended example:
      * getTag('a', ['href'=>'hello'], ['b', 'class'=>'red', ['i', 'class'=>'blue', 'welcome']]);
@@ -528,7 +564,15 @@ class App
         if (is_string($value)) {
             $value = $this->encodeHTML($value);
         } elseif (is_array($value)) {
-            $value = $this->getTag($value);
+            $result = [];
+            foreach ($value as $v) {
+                if (is_array($v)) {
+                    $result[] = $this->getTag(...$v);
+                } else {
+                    $result[] = $v;
+                }
+            }
+            $value = implode('', $result);
         }
 
         if (!$attr) {

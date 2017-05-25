@@ -28,7 +28,7 @@ class Checkbox extends Generic
         }
     }
 
-    public function getHeaderCellHTML(\atk4\data\Field $f = null)
+    public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
     {
         if (isset($f)) {
             throw new Exception(['Checkbox must be placed in an empty column. Don\'t specify any field.', 'field'=>$f]);
@@ -38,8 +38,8 @@ class Checkbox extends Generic
         return parent::getHeaderCellHTML($f);
     }
 
-    public function getDataCellHTML(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        return $this->getTag('td', 'body', ['div', 'class'=>'ui checkbox '.$this->class, ['input', 'type'=>'checkbox']]);
+        return $this->app->getTag('div', ['class'=>'ui checkbox '.$this->class], [['input', ['type'=>'checkbox']]]);
     }
 }

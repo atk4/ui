@@ -9,7 +9,13 @@ class Actions extends Generic
 {
     public $actions = [];
 
-    public function addAction($button, $callback)
+    public function init()
+    {
+        parent::init();
+        $this->addClass('right aligned collapsing');
+    }
+
+    public function addAction($button, $callback, $confirm = false)
     {
         $name = 'action_'.(count($this->actions) + 1);
 
@@ -21,10 +27,10 @@ class Actions extends Generic
         $this->actions[$name] = $button;
         $button->addClass('b_'.$name);
         $button->addClass('compact');
-        $this->table->on('click', '.b_'.$name, $callback);
+        $this->table->on('click', '.b_'.$name, $callback, [$this->table->jsRow()->data('id'), 'confirm'=>'Are you sure?']);
     }
 
-    public function getDataCellHTML(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
         $output = '';
 
@@ -33,7 +39,7 @@ class Actions extends Generic
             $output .= $action->getHTML();
         }
 
-        return $this->getTag('td', 'body', [$output]);
+        return $output;
     }
 
     // rest will be implemented for crud

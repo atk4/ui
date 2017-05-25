@@ -60,6 +60,8 @@ class Columns extends Generic
             $cc->add(['FormLayout/Generic', 'form'=>$this->form])->setModel($model, $chunk);
         }
 
+        $this->add(['ui'=>'clearing divider']);
+
         return $model;
     }
 }
