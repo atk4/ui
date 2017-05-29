@@ -86,8 +86,14 @@ Simple scenario:
     digging through heaps of HTML, CSS or JS frameworks and need a solution which
     just works.
 
+.. _overview_example:
+
+Overview Example
+^^^^^^^^^^^^^^^^
+
 Agile UI / Agile Data code for your app can fit into a single file. See below for
 clarifications::
+
 
     <?php
     require'vendor/autoload.php';
@@ -188,8 +194,8 @@ Best use of Agile UI
 
 .. _component:
 
-Component
-=========
+Component Overview
+==================
 The component is a fundamental builing block of Agile UI. Each component is fully
 self-sufficient and creating a class instance is enough to make component work.
 
@@ -210,9 +216,13 @@ Agile UI. You will find CRUD / Form / Grid components much more useful:
 
 Using Components
 ----------------
-In the main example above, component `GRID` was made part of application layout.
+Look above at the :ref:`overview_example`, component `GRID` was made part
+of application layout with a line::
 
-A more advanced integration may require you to render component individually:: 
+    $app->layout->add(new \atk4\ui\CRUD());
+
+
+To render component individually and get the HTML and JavaScrit use this format::
 
     $form = new Form();
     $form->init();
@@ -233,19 +243,19 @@ This would render an individual component and will return HTML / JavaScript::
         </form>
     </div>
 
-For more advanced ways to render components see :php:meth:`View::render()`
+For other use-cases please look into :php:meth:`View::render()`
 
 Factory
 -------
 Factory is a mechanism which allow you to use shorter syntax for creating objects.
-Agile UI goal is to be simple to use and readable, so taking advantage of PHP language
-having loose types allows us to use a shorter syntax::
+Agile UI goal is to be simple to use and readable, so taking advantage of loose types
+in PHP language allows us to use an alternative shorter syntax::
 
     $form->add(['Button', 'Cancel', 'icon'=>'pencil'])
         ->link('dashboard.php');
 
 By default classes specified as 1st element of array passed to the add() method are
-resolved to namespace `atk4\ui`, however the application class can fine-tune the
+resolved to namespace `atk4\\ui`, however the application class can fine-tune the
 search.
 
 Usage of factory is optional. For more information see:
@@ -255,11 +265,15 @@ Templates
 ---------
 Components rely on :php:class:`Template` class for parsing and rendering their
 HTML. The default template is written for Semantic UI framework, which makes sure
-that elements will look good.
+that elements will look good and consistent.
 
 
 Layouts
 -------
+.. image:: images/layout-hierarchy.png
+    :width: 40%
+    :align: right
+
 Using App class will utilise a minimum of 2 templates:
 
  - html.html - boilerplate HTML code (<head>, <script>, <meta> and empty <body>)
@@ -270,9 +284,11 @@ As you add more components, they will appear inside your layout.
 You'll also find that layout class such as :php:class:`Layout\Admin` is initializing
 some components on its own - sidebar menu, top menu.
 
-Having those components initializes allows framework to make use of application
-layout. for instance, authentication contoller may want to put a user-menu on the
-right-hand side of your top menu (with logout link).
+.. image:: images/admin-layout.png
+
+If you are extending your Admin Layout, be sure to maintain same property names
+and then other components will make use of them, for example authentication controller
+will automatically populate a user-menu with the name of the user and log-out button.
 
 
 Advanced techniques
@@ -405,17 +421,16 @@ If you maintain a legacy PHP application and would like to have a free chat with
 us about some support and assistance, do not hesitate to reach out.
 
 
-What you DO NOT need to know
-============================
+Things Agile UI simplifies
+==========================
 
 Some technologies are "prerequirements" in other PHP frameworks, but Agile Toolkit
 lets you develop a perfectly functional web application even if you are NOT familiar
-with technologies like:
+with technologies such as:
 
  - HTML and Asset Management
  - JavaScript, jQuery, NPM
  - CSS styling, LESS
- - Linux, Infrastructure, Docker
  - Rest API and JSON
 
 We do recommend that you come back and learn those technologies **after** you have mastered

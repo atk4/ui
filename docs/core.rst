@@ -2,6 +2,7 @@
 Core Concepts
 =============
 
+
 Before diving into individual features of Agile UI, there are several core concepts that
 will be referred to throughout the documentation.
 
@@ -327,4 +328,15 @@ will be automatically embedded into the column and having it appear anywhere els
 
 It's usually quite furtile to try and extract JS chains from the $sub_tree because JS wouldn't work anyways, so this method
 will only work with static components.
+
+.. toctree::
+    :maxdepth: 4
+
+    app
+    init
+    render
+    template
+    persistence
+    callback
+    virtualpage
 

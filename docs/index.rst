@@ -10,17 +10,9 @@ Contents:
     overview
     quickstart
     core
-    template
-    view
+    components
     js
-    callbacks
-    button
-    field
-    form
-    table
-    grid
-    misc
-    app
+    advanced
 
 
 ..

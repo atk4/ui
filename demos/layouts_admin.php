@@ -13,17 +13,26 @@ try {
     $m_comp->addItem('Centered');
     $m_comp->addItem('Admin');
 
+    $m_right = $app->layout->menuRight;
+    $m_right->addItem(['Warning', 'red', 'icon'=>'red warning']);
+    $m_user = $m_right->addMenu('John Smith');
+    $m_user->addItem('Profile');
+    $m_user->addDivider();
+    $m_user->addItem('Logout');
+
     $m_comp = $app->layout->menu->addMenu(['Component Demo', 'icon'=>'puzzle']);
     $m_form = $m_comp->addMenu('Forms');
     $m_form->addItem('Form Elements');
     $m_form->addItem('Form Layouts');
     $m_comp->addItem('CRUD');
 
-    $app->layout->leftMenu->addItem(['Home', 'icon'=>'home']);
-    $app->layout->leftMenu->addItem(['Topics', 'icon'=>'block layout']);
-    $app->layout->leftMenu->addItem(['Friends', 'icon'=>'smile']);
-    $app->layout->leftMenu->addItem(['History', 'icon'=>'calendar']);
-    $app->layout->leftMenu->addItem(['Settings', 'icon'=>'cogs']);
+    $app->layout->menuLeft->addItem(['Home', 'icon'=>'home']);
+    $app->layout->menuLeft->addItem(['Topics', 'icon'=>'block layout']);
+    $app->layout->menuLeft->addItem(['Friends', 'icon'=>'smile']);
+    $app->layout->menuLeft->addItem(['History', 'icon'=>'calendar']);
+    $app->layout->menuLeft->addItem(['Settings', 'icon'=>'cogs']);
+
+    $app->layout->template['Footer'] = 'ATK is awesome';
 
     $app->layout->add(['Header', 'Basic Form Example']);
 
