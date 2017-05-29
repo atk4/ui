@@ -336,6 +336,16 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             return new FormField\Dropdown($arg);
         }
 
+        // Field values can be picked from the model.
+        if (isset($f->reference)) {
+            //$arg['values'] = $f->ref();
+
+            $dd = new FormField\Dropdown($arg);
+            $dd->setModel($f->reference->refModel());
+
+            return $dd;
+        }
+
         switch ($f->type) {
         case 'boolean':
             return new FormField\Checkbox($arg);
@@ -345,6 +355,25 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         case 'password':
             return new FormField\Password($arg);
+
+        case 'datetime':
+            $arg['options']['ampm'] = false;
+
+            return new FormField\Calendar($arg);
+
+        case 'date':
+            $arg['type'] = 'date';
+
+            return new FormField\Calendar($arg);
+
+        case 'time':
+            $arg['type'] = 'time';
+            $arg['options']['ampm'] = false;
+
+            return new FormField\Calendar($arg);
+
+        case 'money':
+            return new FormField\Money($arg);
 
         case null:
             return new FormField\Line($arg);
