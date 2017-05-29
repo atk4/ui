@@ -35,7 +35,8 @@ class Admin extends Generic
     public $burger = true;      // burger menu item
 
     /**
-     * Obsolete, use menuLeft
+     * Obsolete, use menuLeft.
+     *
      * @obsolete
      */
     public $leftMenu = null;
