@@ -113,6 +113,12 @@ class UI extends \atk4\data\Persistence
             break;
         }
 
+        if (isset($f->reference)) {
+            if ($value === '') {
+                $value = null;
+            }
+        }
+
         return $value;
     }
 
