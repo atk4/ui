@@ -322,7 +322,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 $display = [$display];
             }
 
-            // ui['form'] = ['FormField/TextArea', 'rows'=>2]
             if (isset($display[0])) {
                 $display = array_merge($display, $arg);
 
@@ -355,6 +354,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         case 'password':
             return new FormField\Password($arg);
+
+        case 'text':
+            return new FormField\TextArea($arg);
 
         case 'datetime':
             $arg['options']['ampm'] = false;
