@@ -4,11 +4,11 @@ include 'init.php';
 
 // buttons configuration: [page, title]
 $buttons = [
-    ['page' => 'layouts_nolayout',               'title' => 'HTML without layout'],
-    ['page' => 'layouts_manual',                 'title' => 'Manual layout'],
+    ['page' => ['layouts_nolayout'],               'title' => 'HTML without layout'],
+    ['page' => ['layouts_manual'],                 'title' => 'Manual layout'],
     ['page' => ['header', 'layout'=>'centered'], 'title' => 'Centered layout'],
-    ['page' => 'layouts_admin',                  'title' => 'Admin Layout'],
-    ['page' => 'layouts_error',                  'title' => 'Exception Error'],
+    ['page' => ['layouts_admin'],                  'title' => 'Admin Layout'],
+    ['page' => ['layouts_error'],                  'title' => 'Exception Error'],
 ];
 
 // layout

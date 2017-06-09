@@ -15,6 +15,8 @@ class Menu extends View
 
     public $defaultTemplate = 'menu.html';
 
+    public $in_dropdown = false;
+
     public function addItem($name = null, $action = null)
     {
         if (is_object($name)) {
@@ -57,14 +59,14 @@ class Menu extends View
             $name = [];
         }
 
-        $sub_menu = $this->add([new self(), 'defaultTemplate'=>'submenu.html', 'ui'=>'dropdown']);
+        $sub_menu = $this->add([new self(), 'defaultTemplate'=>'submenu.html', 'ui'=>'dropdown', 'in_dropdown'=>true]);
         $sub_menu->set('label', $label);
 
         if (isset($name['icon'])) {
             $sub_menu->add(new Icon($name['icon']), 'Icon')->removeClass('item');
         }
 
-        if ($this->ui == 'menu') {
+        if (!$this->in_dropdown) {
             $sub_menu->js(true)->dropdown(['on'=>'hover', 'action'=>'hide']);
         }
 
@@ -98,6 +100,13 @@ class Menu extends View
     {
         $item = parent::add($object, $region);
         $item->addClass('item');
+
+        return $item;
+    }
+
+    public function addDivider()
+    {
+        $item = parent::add(['class'=>['divider']]);
 
         return $item;
     }

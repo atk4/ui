@@ -5,226 +5,449 @@
 Overview of Agile UI
 ====================
 
-Agile UI is a PHP component framework.
+Agile UI is a PHP component framework for building User Interfaces entirely in PHP.
+Although the components and Agile UI will typically on HTML, JavaScript, jQuery and 
+CSS the goal of Agile UI is to abstract them away behind easy-to-use component object.
 
-Before I start diving in, I'd like to make sure you understand cleary what
-Agile UI is and what does it do.
+As a framework it's closely coupled with Agile Data (http://agile-data.readthedocs.io),
+which abstricts away database interaction operations. The default UI template set
+uses Semantic UI (https://semantic-ui.com) for presentation.
 
- 1. Agile UI is an open-source software library/framework, that makes certain
-     tasks easier to be done for developers.
+At a glance, Agile UI consists of the following:
 
- 2. In particular Agile UI focuses on 
+.. figure:: images/all-atk-classes.png
 
-
-
-
-
-
-that makes you type less HTML in your
-PHP project. Integrating with a most popular PHP CSS frameworks, with
-Agile UI you can generate a cutting-edge responsive HTML layout that is
-lightweight, look beautiful and is fully interractive.
+Agile UI is designed and built for Agile Toolkit (http://agiletoolkit.org/) platform,
+with the goal to provide a user-friendly experience in creating data-heavy API / UI
+backend.
 
 Agile UI Design Goals
 =====================
 
-If you are just starting with Agile UI, you need to know the following 5 things:
+Our goal is offer a free UI framework which you can use to develop even the most complex
+business application UI in just a few hours without diving deep into HTML/JS specifics.
 
-1. Agile UI Works anywhere
---------------------------
+1. Out of the box experience
+----------------------------
 
-Agile UI is not tied specifically to any full-stack framework or application.
-You are welcome to use it anywhere and it should just work out of the box.
+Sample scenario:
 
-2. Agile UI saves you time
---------------------------
+    If during .COM boom you purchased 1000 good-looking .COM domains and now selling
+    them, you need to track offers from byers. You could use Excel but what if your
+    staff need to access the data or you need to implement business operations such
+    as accepting offers?
 
-Agile UI exists for applications where you need to provide user UI in HTML.
-Most typical usage would be Admin Interfaces, User Preferences page and
-SaaS applications.
+Agile UI is ideal for such scenario. By simply describing your data model, relations
+and operations you get a fully working UI and API with minimal setup.
 
-Design of Agile UI allows you to avoid duplicating HTML blocks and lets you
-focus on getting your project done.
-
-3. Agile UI is simpler than raw PHP
------------------------------------
-
-If you use Raw PHP then you are expected to know HTML/CSS/JS. With Agile UI
-you can build web apps even if you have no web development experience at all.
-You will have plenty of components, layouts and add-ons to finish your
-application.
-
-As you progress you will learn how to write JavaScript routines to enhance
-your user experience, HTML/PUG templates to build new unique components or
-CSS/LESS to create that unique look and feel.
-
-4. Agile UI can render all your UI
-----------------------------------
-
-Unlike some other Form-Builders or CRUD components, Agile UI can do them
-all. Creating any UI component with Agile UI is easier so consider it when
-you will be creating your re-usable "file uploader" next time.
-
-Addition of various application layouts allow you to produce ALL of your
-Web UI and no longer rely on any other HTML templating techniques. Just
-like you have built button, or uploader component you can create much
-more diverse web app components such as "support ticket management UI".
-
-5. Agile UI is the most flexible
+2. Compact and easy to integrate
 --------------------------------
 
-If you have used some other "Admin Builder" or "Form Creator" or perhaps a
-"Universal CRUD" you were forced to deal with their UI layout, create database
-structure as they specify and follow their file placement patterns.
+Simple scenario:
 
-True to our name, we have made the UI that will fit your database choice,
-configuration and structure, allow you to decide how to store files as well
-as the UI layout of any standard add-ons or components.
+    Your domains such as "happy.com" receives a lot of offers, so you want to place
+    a special form for potential buyers to fill out. To weed out spammers you want
+    to perform a address verification for filled-in data.
 
-Through the use of Agile Data you can connect your UI elements with your
-business model and access data stored in SQL, NoSQL or APIs.
+Agile UI contains a Form component which you can integrate into your existing app.
+More importantly it can securely access your offer database.
 
-
-Structure of this documentation
-===============================
-
-You should start by looking into QuickStart section, that will introduce
-you to some of the code examples. Using a quick-start sections you will
-see how powerful UI can be built in a shortest time possible.
-
-If you are ready to start learning Agile UI, the next seciton will talk
-about the View class, a core concept behind entire framework. You will
-learn how rendering works and various techniques used in the core
-of Agile UI.
-
-Next section "Components" will walk you through the basic set of built-in
-components. All of the basic components are very similar and they directly
-extend 'View', so there are a lot of things you can do with them.
-
-Continue with the "Creating Components" where you will learn how you can
-create your own components and layouts.
-
-Next few sections will focus on some of the important advanced techniques
-explaining how Virtual Pages work, how to build advanced JavaScript
-interractions between your elements.
-
-Agile UI bundles some advanced components, such as Form, Grid, CRUD and
-Console. Those all are highly interractive and are built using set of
-basic components. 
-
-The final sections of documentation will tell you how to install 3rd party
-components and how to use them securily in your project. You will also
-earn how to create components for yourself and share them with others.
-
-Agile Data
-==========
-
-Agile Data is a business logic and data persistance framework. It's a
-separate library that has been specifically designed and developed
-for use in Agile UI.
-
-With Agile Data you can easily connect your UI with your data and make
-UI components store your data in SQL, NoSQL or RestAPI. On top of the
-existing persistences, Agile UI introduces a new persistence class: "UI".
-
-This UI persistence will be extensively used when data needs to be
-displayed to the user through UI elements or when input must be
-received from the UI layer.
-
-If you do not intend to store data anywhere or are using your own
-ORM, the Agile Data will still be used to some extent and therefore
-it appears as requirement.
-
-Most of the ORMs lack several important features that are necessary
-for UI framework design:
-
- - ability to load/store data safely with conditions.
- - built-in support for column meta-information
- - field, type and table mapping
- - "onlyFields" support for efficient querying
- - domain-level model references.
-
-Agile Data is distributed under same open-source license as Agile UI
-and the rest of this documentation will assume you are using Agile
-Data for the purpose of overal clarity. 
-
-Interface Stability
-===================
-
-Agile UI is based on Agile Toolkit 4.3 which has been a maintained
-UI framework that can trace it's roots back to 2003. As a result, the
-object interface is highly stable and all of the documented methods,
-models and properties will not change even in the major releases.
-
-If we do have to change something we will keep things backwards
-compatible for a period of a few years.
-
-We expect you to extend base classes to build your UI as it is a
-best practice to use Agile UI.
-
-Testing and Enterprise Use
-==========================
-
-Agile UI is designed with corporate use in mind. The main aim of
-the framework is to make your application consistent, modern and
-fast.
-
-We understand the importante of testing and all of the Agile UI
-components come fully tested across multiple browsers. In most cases
-browser compatibilty is defined by the underlying CSS framework.
-
-With Agile UI we will provide you with a guide how to test your
-own components. 
-
-Unit Tests
-----------
-
-You only need to unit-test you own classes and controllers. For
-example if your application creates a separate class that deals
-with APR calculation, you need to include unit-test for that
-specific class.
-
-Business Logic Unit Tests
--------------------------
-
-Those tests are most suitable for testing your business logic,
-that is included in Agile Data. Use "array" persistences to
-pre-set model with the necessary data, execute your business
-logic with mock objects.
-
-1. set up mock database arrays
-2. instatiate model(s)
-3. execute business operation
-4. assert new content of array.
-
-In most cases the Integration tests are easier to make, and
-give you equal testability.
-
-Integration Database Tests
+3. Compatible with RestAPI
 --------------------------
 
-This test-suite will operate with SQL database by executing
-various database operations in Agile Data and then asserting
-business logic changes.
+Simple scenario:
 
-1. load "safe" database schema
-2. each test starts transaction and is finished with a roll-back.
-3. perform changes such as adding new invocie
-4. assert through other models e.g. by running client report model.
+    You need a basic mobile app to check recent offers from your mobile phone.
 
-Component Tests
----------------
+You can set up API end-point for authorized access to your Offer database that
+follows same business rules and has access to same operations.
 
-All of the basic components are tested for you using UI tests,
-but you should test your own components. This test will place
-your component under various configurations and will make sure
-that it continues to work. 
+4. Deploy and Scale
+-------------------
 
-If your component relies on a model, this can also attempt
-various model combinations for an extensive test.
+Simple scenario:
 
-User Testing
-------------
+    You want to use serverless architecture where a 3rd party company is looking
+    after your server, database and security, you simply provide your app.
 
-Once you place your components on your pages and associate
-them with your actual data you can perform user tests.
+Agile UI is designed and optimized for quick deployment into modern serverless
+architecture providers such as Heroku, Docker or even AWS Lambdas.
+
+Agile UI / PHP application has a minimum "start-up" time, has the best CPU usage
+and gives you the highest efficiency and best scaling.  
+
+5. High-level Solution
+----------------------
+
+Simple scenario:
+
+    You are a busy person who needs to get your application ready in 1h and then
+    forget about it for the next few years. You are not particularly thrilled about
+    digging through heaps of HTML, CSS or JS frameworks and need a solution which
+    just works.
+
+.. _overview_example:
+
+Overview Example
+^^^^^^^^^^^^^^^^
+
+Agile UI / Agile Data code for your app can fit into a single file. See below for
+clarifications::
+
+
+    <?php
+    require'vendor/autoload.php';
+
+    // Define your data structure
+    class Offer extends \atk4\data\Model {
+
+        public $table = 'offer';
+
+        function init() {
+            parent::init();
+
+            // Persistence may not have structure, so we define here
+            $this->addField('domain_name');
+            $this->addFields(['contact_email', 'contact_phone']);
+            $this->addField('date', ['type'=>'date']);
+            $this->addField('offer', ['type'=>'money']);
+            $this->addField('is_accepted', ['type'=>'boolean']);
+        }
+    }
+
+    // Create Application object and initialize Admin Layout
+    $app = new \atk4\ui\App('Offer tracking system');
+    $app->initLayout('Admin');
+
+    // Connect to database and place a fully-interractive CRUD
+    $db = new \atk4\data\Persistence_SQL($dsn);
+    $app->layout->add(new \atk4\ui\CRUD())
+        ->setModel(new Offer($db));
+
+Through the course of this example, I am performing several core actions:
+
+  - `$app` is an object representing your Web Application and abstracting
+    all the input, output, error-handling and other technical implementation
+    details of a standard web application.
+
+    In most applications you would want to extend this class yourself. When
+    integrating Agile UI with MVC framework, you would be using a different
+    App class, that properly integrates that framework capabilities.
+   
+    For a :ref:`component` the App class provides level of abstraction and
+    utility.
+
+    For full documentation see :ref:`app`.
+
+  - `$db` this is database persistence object. It may be a Database which is
+    either SQL or NoSQL but can also be RestAPI, a cache or a pseudo-persistence.
+
+    I have used Persistence_SQL class, which takes advantage of standard-compliant
+    database server to speed up aggregation, multi-table and multi-record operations.
+
+    For a :ref:`component` the Persistence class provides data storage abstraction
+    through the use of a Model class.
+
+    Agile Data has full documentation at http://agile-data.readthedocs.io.
+
+  - `Offer` is a Model - a database-agnostic declaration of your business entity.
+    Model object represents a data-set for a specific persistence and conditions.
+
+    In our example, object is created representing all Offer records then passed
+    into the CRUD :ref:`component`. 
+
+    For a :ref:`component`, the Model represents information about the structure
+    and offers mechanism to retrieve, store and delete date from `$db` persistence.
+
+
+  - `CRUD` is a :ref:`component` class. Particularly CRUD is bundled with Agile UI
+    and implements out-of-the-box interface for displaynig data in a table format
+    with operations to add, delete or edit record.
+
+    Although it's not obvious from the code, CRUD relies on multiple other components
+    such as :php:class:`Grid`, :php:class:`Form`, :php:class:`Menu`, :php:class:`Paginator`,
+    :php:class:`Button`.
+
+
+To sum this up in a more technical terms, Agile UI:
+
+ - Full abstraction of Web technologies through components.
+ - Concise syntax to define UI layouts in PHP.
+ - Built-in security and safety.
+ - Decoupled from data storage/retrievel mechanism.
+ - Designed to be integrated into full-stack frameworks.
+ - Abstaining from duplicating field names, types or validation logic outside of Model
+   class.
+
+
+Best use of Agile UI
+--------------------
+
+ - Creating admin backend UI for data entry and dashboards in shortest time and with
+   minimum amount of code.
+
+ - Building UI components which you are willing to use across multiple environments
+   (Laravel, Wordpress, Drupal, etc)
+
+ - Creating MVP prototype for Web Apps.
+
+
+.. _component:
+
+Component Overview
+==================
+The component is a fundamental builing block of Agile UI. Each component is fully
+self-sufficient and creating a class instance is enough to make component work.
+
+That means that components may rely on each-other and even though some may appear
+very basic to you, they are relied on by some other components for maximum
+felxibility. The next example adds "Cancel" button to a form::
+
+    $button = $form->add(new \atk4\ui\Button([
+        'Cancel',
+        'icon'=>new \atk4\ui\Icon('pencil')
+    ]))->link('dashboard.php');
+
+:php:class:`Button` and :php:class:`Icon` are some of the most basic components in
+Agile UI. You will find CRUD / Form / Grid components much more useful:
+
+.. figure:: images/all-atk-classes.png
+
+
+Using Components
+----------------
+Look above at the :ref:`overview_example`, component `GRID` was made part
+of application layout with a line::
+
+    $app->layout->add(new \atk4\ui\CRUD());
+
+
+To render component individually and get the HTML and JavaScrit use this format::
+
+    $form = new Form();
+    $form->init();
+    $form->setModel(new User($db));
+
+    $html = $form->render();
+
+
+This would render an individual component and will return HTML / JavaScript::
+
+    <script>
+      ..form submit callback setup..
+    </script>
+    <div class="ui form">
+        <form id="atk_form">
+           ... fields
+           ... buttons
+        </form>
+    </div>
+
+For other use-cases please look into :php:meth:`View::render()`
+
+Factory
+-------
+Factory is a mechanism which allow you to use shorter syntax for creating objects.
+Agile UI goal is to be simple to use and readable, so taking advantage of loose types
+in PHP language allows us to use an alternative shorter syntax::
+
+    $form->add(['Button', 'Cancel', 'icon'=>'pencil'])
+        ->link('dashboard.php');
+
+By default classes specified as 1st element of array passed to the add() method are
+resolved to namespace `atk4\\ui`, however the application class can fine-tune the
+search.
+
+Usage of factory is optional. For more information see:
+http://agile-core.readthedocs.io/en/develop/factory.html
+
+Templates
+---------
+Components rely on :php:class:`Template` class for parsing and rendering their
+HTML. The default template is written for Semantic UI framework, which makes sure
+that elements will look good and consistent.
+
+
+Layouts
+-------
+.. image:: images/layout-hierarchy.png
+    :width: 40%
+    :align: right
+
+Using App class will utilise a minimum of 2 templates:
+
+ - html.html - boilerplate HTML code (<head>, <script>, <meta> and empty <body>)
+ - layout/admin.html - responsive layout containing page elements (menu, footer, etc)
+
+As you add more components, they will appear inside your layout.
+
+You'll also find that layout class such as :php:class:`Layout\Admin` is initializing
+some components on its own - sidebar menu, top menu.
+
+.. image:: images/admin-layout.png
+
+If you are extending your Admin Layout, be sure to maintain same property names
+and then other components will make use of them, for example authentication controller
+will automatically populate a user-menu with the name of the user and log-out button.
+
+
+Advanced techniques
+===================
+By design we make sure that adding component into a Render Tree (See :ref:`view`)
+is enough, so App provides a mechanism for components to:
+
+ - Depending on JS, CSS and other assets
+ - Define event handlers and actions
+ - Handle callbacks
+
+Non-PHP dependencies
+--------------------
+Your componet may depend on additional JavaScript library, CSS or other files.
+At a present time you have to make them available through CDN and HTTPS.
+See: :php:meth:`App::requireJS`
+
+
+Events and Actions
+------------------
+Agile UI allows you to initiate come JavaScript actions from inside PHP. The
+amount of application is quite narrow and is only intended for binding events
+between the components inside your component without involving developers
+who use your component in this process.
+
+Callbacks
+---------
+Some actions can be done only on the server side. For example adding a new
+record into the database.
+
+Agile UI allows for component to do just that without no extra effort from
+you (such as setting up API routes). To make this possible, a component
+must be able to use unique URLs which will trigger the call-back.
+
+To see how this is implemented, read about :ref:`callback`
+
+Virtual Pages
+-------------
+.. image:: images/ui-component-diagram.png
+    :width: 30%
+    :align: right
+
+Extending the concept of Callbacks, you can also define Virtual Pages. It
+is a dynamically generated URL which will respond with a partial render of
+your components.
+
+Virtual Pages are useful for displaying UI on dynamic dialogs. As with
+everything else, virtual pages can be contained within the components so
+that no extra effort from you is required when component wishes to use
+dynamic modal dialog.
+
+Extending with Add-ons
+----------------------
+Agile UI is designed for data-agnostic UI components which you can add inside
+your application with a single line of code, but Agile Toolkit goes one way
+further by offering you a directory of published add-ons and install them
+by using a simple wizard.
+
+
+Using Agile UI
+==============
+Technologies advance forward to make it simpler and faster to build web
+apps. In some cases you can use ReactJS + Firebase but in most cases
+you will need to have a backend.
+
+Agile Data is a most powerful framework for defining data-driven business
+model and Agile UI offers a very straightforward extension to attach your
+data to a wide range of stardard UI widgets.
+
+With this approach even the most complex business apps can be implemented
+in one day.
+
+You can still implement ReactJS application by connecting it to the RestAPI
+endpoint provided by Agile Toolkit.
+
+.. warning:: information on setting up API endpoints is coming soon.
+
+Learning Agile Toolkit
+----------------------
+
+We recommend that you start looking at Agile UI first. Continue reading through the
+:ref:`quickstart` section and try building some basic apps. You will need to
+have a basic understanding of "code" and some familiarity with PHP language.
+
+
+ - QuickStart - 20-minute read and some code examples you can try.
+ - Core Concept - Read if you plan to design and build your own components.
+
+   - Patterns and Principles
+   - Views and common component properties/methods
+   - Component Design and UI code refactoring
+   - Injecting HTML Templates and Full-page Layouts
+   - JavaScript Event Bindings and Actions
+   - App class and Framework Integration
+   - Usage Patterns
+
+ - Components - Reference for UI component classes
+
+   - Button, Label, Header, Message, Menu, Column
+   - Table and TableColumn
+   - Form and Field
+   - Grid and CRUD
+   - Paginator
+
+ - Advanced Topics
+
+
+If you are not interested in UI and only need Rest API, we recommend that you look
+into documentation for Agile Data (http://agile-data.readthedocs.io) and the
+Rest API extension (coming soon).
+
+Application Tutorials
+---------------------
+
+We have wrote few working cloud applications ourselves with Agile Toolkit and are
+offering you to look at their code. Some of them come with tutorials that teach you
+how to build application step-by-step.
+
+Education
+---------
+
+If you represent a group of students that wish to learn Agile Toolkit contact us
+about our education materials. We offer special support for those that want to
+learn how to develop Web Apps using Agile Toolkit.
+
+Commercial Project Strategy
+---------------------------
+
+If you maintain a legacy PHP application and would like to have a free chat with
+us about some support and assistance, do not hesitate to reach out.
+
+
+Things Agile UI simplifies
+==========================
+
+Some technologies are "prerequirements" in other PHP frameworks, but Agile Toolkit
+lets you develop a perfectly functional web application even if you are NOT familiar
+with technologies such as:
+
+ - HTML and Asset Management
+ - JavaScript, jQuery, NPM
+ - CSS styling, LESS
+ - Rest API and JSON
+
+We do recommend that you come back and learn those technologies **after** you have mastered
+Agile Toolkit.
+
+Database abstraction
+--------------------
+
+Agile Data offers abstraction of database servers and will use appropriate query
+language to fetch your data. You may need to use SQL/NoSQL language of your database
+for some more advanced usage cases.
+
+Cloud deployment
+----------------
+
+There are also ways to deploy your application into the cloud without knowledge of
+infrastructure, Linux and SSH. A good place to start is Heroku (https://www.heroku.com/).
+We reference Heroku in our tutorials, but Agile Toolkit can work with any cloud
+hosting that runs PHP apps.
+
