@@ -487,9 +487,10 @@ class App
      * getTag('b','text in bold');
      * --> <b>text in bold</b>
      *
-     * 10. pass array as 3rd parameter to nest tags (array must contain 1 to 3 elements corresponding to arguments):
-     * getTag('a', ['href'=>'foo.html'], ['b','click here']);
-     * --> <a href="foo.html"><b>click here</b></a>
+     * 10. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
+     * array (passed to getTag recursively)
+     * getTag('a', ['href'=>'foo.html'], [['b','click here'], ' for fun']);
+     * --> <a href="foo.html"><b>click here</b> for fun</a>
      *
      * 11. extended example:
      * getTag('a', ['href'=>'hello'], ['b', 'class'=>'red', ['i', 'class'=>'blue', 'welcome']]);
@@ -547,7 +548,15 @@ class App
         if (is_string($value)) {
             $value = $this->encodeHTML($value);
         } elseif (is_array($value)) {
-            $value = $this->getTag($value);
+            $result = [];
+            foreach ($value as $v) {
+                if (is_array($v)) {
+                    $result[] = $this->getTag(...$v);
+                } else {
+                    $result[] = $v;
+                }
+            }
+            $value = implode('', $result);
         }
 
         if (!$attr) {
