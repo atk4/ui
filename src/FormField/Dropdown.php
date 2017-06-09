@@ -55,12 +55,13 @@ class Dropdown extends Input
         }
 
         return $this->app->getTag('select', [
+            'class'      => 'fluid search selection',
             'name'       => $this->short_name,
             'type'       => $this->inputType,
             'rows'       => $this->rows,
             'placeholder'=> $this->placeholder,
             'id'         => $this->id.'_input',
-        ], [$options]
+        ], [[$options]]
        //
     );
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';

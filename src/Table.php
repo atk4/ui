@@ -189,6 +189,9 @@ class Table extends Lister
         case 'password':
             return $this->add(new TableColumn\Password());
 
+        case 'text':
+            return $this->add(new TableColumn\Text());
+
         //case 'boolean':
             //return $this->add(new TableColumn\Checkbox());
 

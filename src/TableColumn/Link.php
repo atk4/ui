@@ -99,22 +99,18 @@ class Link extends Generic
             return ['c_'.$this->short_name => $this->url->set($row->get())->render()];
         }
 
-        if ($this->page) {
-            $p = $this->page;
+        $p = $this->page ?: [];
 
-            foreach ($this->args as $key=>$val) {
-                if (is_numeric($key)) {
-                    $key = $val;
-                }
-
-                if ($row->hasElement($val)) {
-                    $p[$key] = $row[$val];
-                }
+        foreach ($this->args as $key=>$val) {
+            if (is_numeric($key)) {
+                $key = $val;
             }
 
-            return ['c_'.$this->short_name => $this->app->url($p)];
+            if ($row->hasElement($val)) {
+                $p[$key] = $row[$val];
+            }
         }
 
-        throw new \atk4\ui\Exception('Link without destination');
+        return ['c_'.$this->short_name => $this->app->url($p)];
     }
 }
