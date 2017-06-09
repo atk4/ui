@@ -123,7 +123,7 @@ class App
     public function caughtException($exception)
     {
         $l = new \atk4\ui\App();
-        $l->initLayout('Centered');
+        $l->initLayout('CenteredPage');
         if ($exception instanceof \atk4\core\Exception) {
             $l->layout->template->setHTML('Content', $exception->getHTML());
         } elseif ($exception instanceof \Error) {
