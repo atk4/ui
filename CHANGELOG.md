@@ -71,6 +71,15 @@ Full diff: https://github.com/atk4/ui/compare/1.0.3...1.1.0
 - Added support for passing arguments into on('', function($arg)) from JS
 - Bugfixes #164
 
+#### 1.1.3
+
+- Fix linking to JS libraries in the CDN
+- Improve UI layout and add responsivitiy
+- Improve the way hasOne relations are displayed on the form #165
+- Bugfixes in Menu
+- Added type 'text', improve how 'money', date and time appear on a form
+- Renamed `$layout->leftMenu` into `$layout->menuLeft` to follow principle of "Left/Right" always being last word.
+
 ## 1.0 Release
 
 * Implement Grid
