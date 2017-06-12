@@ -10,6 +10,9 @@ class App
 
     use \atk4\core\HookTrait;
 
+    // @var string|false Location where to load JS/CSS files
+    public $cdn = 'https://cdn.rawgit.com/atk4/ui/1.1.3';
+
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
 
@@ -197,24 +200,24 @@ class App
         $uri = $this->getRequestURI();
 
         $f = dirname(dirname(__FILE__)).'/js/lib/atk4JS.js';
-        if (file_exists($f) && strpos($uri, '/demos/') !== false) {
+        if ((file_exists($f) && strpos($uri, '/demos/') !== false) || !$this->cdn) {
             $this->requireJS('../js/lib/atk4JS.js');
         } else {
-            $this->requireJS('https://cdn.rawgit.com/atk4/ui/1.1.2/js/lib/atk4JS.min.js');
+            $this->requireJS($this->cdn.'/js/lib/atk4JS.min.js');
         }
 
         $f = dirname(dirname(__FILE__)).'/template/semantic-ui/js/agileui.js';
-        if (file_exists($f) && strpos($uri, '/demos/') !== false) {
+        if ((file_exists($f) && strpos($uri, '/demos/') !== false) || !$this->cdn) {
             $this->requireJS('../template/semantic-ui/js/agileui.js');
         } else {
-            $this->requireJS('https://cdn.rawgit.com/atk4/ui/develop-ui-mk2/template/semantic-ui/js/agileui.js');
+            $this->requireJS($this->cdn.'/template/semantic-ui/js/agileui.js');
         }
 
         $f = dirname(dirname(__FILE__)).'/template/semantic-ui/css/agileui.css';
-        if (file_exists($f) && strpos($uri, '/demos/') !== false) {
+        if ((file_exists($f) && strpos($uri, '/demos/') !== false) || !$this->cdn) {
             $this->requireCSS('../template/semantic-ui/css/agileui.css');
         } else {
-            $this->requireCSS('https://cdn.rawgit.com/atk4/ui/develop-ui-mk2/template/semantic-ui/css/agileui.css');
+            $this->requireCSS($this->cdn.'/template/semantic-ui/css/agileui.css');
         }
     }
 

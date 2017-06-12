@@ -56,6 +56,8 @@ composer require atk4/core atk4/data
 composer update
 ./vendor/phpunit/phpunit/phpunit  --no-coverage
 
+sed -i "" "s|public \$cdn = .*|public \$cdn = 'https://cdn.rawgit.com/atk4/ui/$version')|" src/App.php
+git add src/App.php
 git commit -m "Set up stable dependencies for $version" composer.json
 
 
@@ -69,7 +71,6 @@ merge_tag=$(git rev-parse HEAD)
 (cd js; npm run build)
 sed  -i "" '/^lib/d' js/.gitignore
 git add js/lib
-sed -i "" "s|\$this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js')|\$this->requireJS('https://cdn.rawgit.com/atk4/ui/$version/js/lib/atk4JS.js')|" src/App.php
 git commit -m "Add pre-built version of JS libraries" js
 
 git tag $version

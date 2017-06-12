@@ -73,11 +73,13 @@ Full diff: https://github.com/atk4/ui/compare/1.0.3...1.1.0
 
 #### 1.1.3
 
+- Improve UI layout and add responsivitiy #170
+- Documentation restructure, new Overview section, many more screenshots #154
+- Added support for multiple formatters in Table. You can use 'addColumn' with existing column. #162
+- Added type 'text', improve how 'money', date and time appear on a form. #165
+- Improve the way hasOne relations are displayed on the form #165 (dropdowns)
 - Fix linking to JS libraries in the CDN
-- Improve UI layout and add responsivitiy
-- Improve the way hasOne relations are displayed on the form #165
 - Bugfixes in Menu
-- Added type 'text', improve how 'money', date and time appear on a form
 - Renamed `$layout->leftMenu` into `$layout->menuLeft` to follow principle of "Left/Right" always being last word.
 
 ## 1.0 Release
