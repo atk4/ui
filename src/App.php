@@ -11,7 +11,7 @@ class App
     use \atk4\core\HookTrait;
 
     // @var string|false Location where to load JS/CSS files
-    public $cdn = 'https://cdn.rawgit.com/atk4/ui/1.1.3';
+    public $cdn = 'https://cdn.rawgit.com/atk4/ui/1.1.4';
 
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
