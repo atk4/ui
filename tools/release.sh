@@ -56,9 +56,8 @@ composer require atk4/core atk4/data
 composer update
 ./vendor/phpunit/phpunit/phpunit  --no-coverage
 
-sed -i "" "s|public \$cdn = .*|public \$cdn = 'https://cdn.rawgit.com/atk4/ui/$version')|" src/App.php
-git add src/App.php
-git commit -m "Set up stable dependencies for $version" composer.json
+sed -i "" "s|public \$cdn = .*|public \$cdn = 'https://cdn.rawgit.com/atk4/ui/$version';|" src/App.php
+git commit -m "Updated CDN to use $version" src/App.php || echo "but its ok"
 
 
 echo "Press enter to publish the release"
@@ -66,6 +65,9 @@ read junk
 
 git commit -m "Added release notes for $version" CHANGELOG.md || echo "but its ok"
 merge_tag=$(git rev-parse HEAD)
+
+# use stable verisons
+git commit -m "Set up stable dependencies for $version" composer.json
 
 # Build jsLib and bundle
 (cd js; npm run build)
