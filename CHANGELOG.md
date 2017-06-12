@@ -82,6 +82,10 @@ Full diff: https://github.com/atk4/ui/compare/1.0.3...1.1.0
 - Bugfixes in Menu
 - Renamed `$layout->leftMenu` into `$layout->menuLeft` to follow principle of "Left/Right" always being last word.
 
+#### 1.1.4
+
+- Improve CDN handling. Using `$app->cdn = false` will disable it.
+
 ## 1.0 Release
 
 * Implement Grid
