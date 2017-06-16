@@ -437,6 +437,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 if (!$response) {
                     if (!$this->model instanceof \atk4\ui\misc\ProxyModel) {
                         $this->model->save();
+
                         return $this->success('Form data has been saved');
                     } else {
                         return new jsExpression('console.log([])', ['Form submission is not handled']);
@@ -447,6 +448,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 foreach ($val->errors as $field=>$error) {
                     $response[] = $this->error($field, $error);
                 }
+
                 return $response;
             }
 
