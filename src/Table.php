@@ -403,7 +403,7 @@ class Table extends Lister
 
                 // initial value is always 0
                 if (!isset($this->totals[$key])) {
-                     $this->totals[$key] = 0;
+                    $this->totals[$key] = 0;
                 }
 
                 // closure support
