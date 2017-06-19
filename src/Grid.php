@@ -42,7 +42,7 @@ class Grid extends View
      * Calling addAction will add a new column inside $table, and will be re-used
      * for next addAction().
      *
-     * @var TableColumn\Action
+     * @var TableColumn\Actions
      */
     public $actions = null;
 
@@ -57,6 +57,8 @@ class Grid extends View
     /**
      * Grid can be sorted by clicking on column headers. This will be automatically enabled
      * if Model supports ordering. You may override by setting true/false.
+     *
+     * @var bool $sortable
      */
     public $sortable = null;
 
@@ -87,6 +89,13 @@ class Grid extends View
         }
     }
 
+    /**
+     * Add new column to grid. If column with this name already exists,
+     * an
+     *
+     * @param string $name      New or existing column name
+     * @param [type] $columnDef [description]
+     */
     public function addColumn($name, $columnDef = null)
     {
         return $this->table->addColumn($name, $columnDef);

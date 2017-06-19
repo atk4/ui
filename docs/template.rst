@@ -2,9 +2,8 @@
 
 .. _Template:
 
-========
-Template
-========
+Introduction
+============
 
 Agile UI relies on a lightweigt built-in template engine to manipulate templates.
 The design goals of a template engine are:

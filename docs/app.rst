@@ -2,9 +2,9 @@
 
 .. _app:
 
-===
-App
-===
+
+Purpose of App class
+====================
 
 .. php:class:: App
 
@@ -17,9 +17,6 @@ In most use-scenarios, however, you would create instance of App class yourself 
     $app->initLayout('Centered');
     $app->layout->add('LoremIpsum');
 
-
-Purpose of App class
-====================
 As you add one component into another, they will automatically inherit reference to App class. App
 class is ideal place to have all your environment configured and all the dependencies defined that
 other parts of your applications may require.
