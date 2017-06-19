@@ -75,7 +75,7 @@ git commit -m "Set up stable dependencies for $version" composer.json
 
 # Build CSS
 lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
-uglifyjs --compress -- pubilc/agileui.js > public/agileui.min.js
+uglifyjs --compress -- public/agileui.js > public/agileui.min.js
 
 echo '!agileui.css' >> public/.gitignore
 echo '!agileui.css.map' >> public/.gitignore
