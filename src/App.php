@@ -11,7 +11,13 @@ class App
     use \atk4\core\HookTrait;
 
     // @var string|false Location where to load JS/CSS files
-    public $cdn = 'https://cdn.rawgit.com/atk4/ui/1.1.4';
+    public $cdn = [
+        'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.1.5',
+        'jquery'          => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
+        'serialize-object'=> 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
+        'semantic-ui'     => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
+        'calendar'        => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
+    ];
 
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
@@ -65,6 +71,10 @@ class App
             $defaults = ['title' => $defaults];
         }
 
+        if (isset($defaults[0])) {
+            $defaults['title'] = $defaults[0];
+            unset($defaults[0]);
+        }
         if (!is_array($defaults)) {
             throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
         }
@@ -195,30 +205,31 @@ class App
         return $this;
     }
 
-    protected function initIncludes()
+    public function initIncludes()
     {
-        $uri = $this->getRequestURI();
+        // jQuery
+        $url = ($this->cdn && isset($this->cdn['jquery'])) ? $this->cdn['jquery'] : '../public';
+        $this->requireJS($url.'/jquery.min.js');
 
-        $f = dirname(dirname(__FILE__)).'/js/lib/atk4JS.js';
-        if ((file_exists($f) && strpos($uri, '/demos/') !== false) || !$this->cdn) {
-            $this->requireJS('../js/lib/atk4JS.js');
-        } else {
-            $this->requireJS($this->cdn.'/js/lib/atk4JS.min.js');
-        }
+        // Semantic UI
+        $url = ($this->cdn && isset($this->cdn['semantic-ui'])) ? $this->cdn['semantic-ui'] : '../public';
+        $this->requireJS($url.'/semantic.min.js');
+        $this->requireCSS($url.'/semantic.css');
 
-        $f = dirname(dirname(__FILE__)).'/template/semantic-ui/js/agileui.js';
-        if ((file_exists($f) && strpos($uri, '/demos/') !== false) || !$this->cdn) {
-            $this->requireJS('../template/semantic-ui/js/agileui.js');
-        } else {
-            $this->requireJS($this->cdn.'/template/semantic-ui/js/agileui.js');
-        }
+        // Serialize Object
+        $url = ($this->cdn && isset($this->cdn['serialize-object'])) ? $this->cdn['serialize-object'] : '../public';
+        $this->requireJS($url.'/jquery.serialize-object.min.js');
 
-        $f = dirname(dirname(__FILE__)).'/template/semantic-ui/css/agileui.css';
-        if ((file_exists($f) && strpos($uri, '/demos/') !== false) || !$this->cdn) {
-            $this->requireCSS('../template/semantic-ui/css/agileui.css');
-        } else {
-            $this->requireCSS($this->cdn.'/template/semantic-ui/css/agileui.css');
-        }
+        // Calendar
+        $url = ($this->cdn && isset($this->cdn['calendar'])) ? $this->cdn['calendar'] : '../public';
+        $this->requireJS($url.'/calendar.min.js');
+        $this->requireCSS($url.'/calendar.css');
+
+        // Agile UI
+        $url = ($this->cdn && isset($this->cdn['atk'])) ? $this->cdn['atk'] : '../public';
+        $this->requireJS($url.'/atk4JS.min.js');
+        $this->requireJS($url.'/agileui.js');
+        $this->requireCSS($url.'/agileui.css');
     }
 
     /**
@@ -438,7 +449,7 @@ class App
      */
     public function requireJS($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' =>$url], ''));
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' =>$url], '')."\n");
 
         return $this;
     }
@@ -452,7 +463,7 @@ class App
      */
     public function requireCSS($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]));
+        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url])."\n");
 
         return $this;
     }

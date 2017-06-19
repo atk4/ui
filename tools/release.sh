@@ -71,8 +71,12 @@ git commit -m "Set up stable dependencies for $version" composer.json
 
 # Build jsLib and bundle
 (cd js; npm run build)
-sed  -i "" '/^lib/d' js/.gitignore
-git add js/lib
+echo '!agileui.css' >> public/.gitignore
+echo '!agileui.min.js' >> public/.gitignore
+echo '!atk4JS.js' >> public/.gitignore
+echo '!atk4JS.min.js' >> public/.gitignore
+#sed  -i "" '/^lib/d' js/.gitignore
+git add public
 git commit -m "Add pre-built version of JS libraries" js
 
 git tag $version
