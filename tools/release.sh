@@ -56,7 +56,7 @@ composer require atk4/core atk4/data
 composer update
 ./vendor/phpunit/phpunit/phpunit  --no-coverage
 
-sed -i "" "s|public \$cdn = .*|public \$cdn = 'https://cdn.rawgit.com/atk4/ui/$version';|" src/App.php
+sed -i "" "s|'atk'=>'https://.*|'atk'=>'https://cdn.rawgit.com/atk4/ui/$version',|" src/App.php
 git commit -m "Updated CDN to use $version" src/App.php || echo "but its ok"
 
 
