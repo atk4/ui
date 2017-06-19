@@ -49,6 +49,7 @@ class Country extends \atk4\data\Model
 
         // look if name is unique
         $c = clone $this;
+        $c->unload();
         $c->tryLoadBy('name', $this['name']);
         if ($c->loaded() && $c->id != $this->id) {
             $errors['name'] = 'Country name must be unique';
