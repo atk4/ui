@@ -958,12 +958,15 @@ class View implements jsExpressionable
 
         if (!$force_echo && $this->app && method_exists($this->app, 'jsReady')) {
             $this->app->jsReady($actions);
-
             return '';
         }
 
-        $ready = new jsFunction($actions);
+        // delegate $action rendering in hosting app if exist.
+        if ($this->app && method_exists($this->app, 'getViewJs')) {
+        	return $this->app->getViewJs($actions);
+        }
 
+	    $ready = new jsFunction($actions);
         return "<script>\n".
             (new jQuery($ready))->jsRender().
             '</script>';
