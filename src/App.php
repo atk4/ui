@@ -19,6 +19,9 @@ class App
         'calendar'        => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
     ];
 
+    // @var string Version of Agile UI
+    public $version = '1.1.4';
+
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
 

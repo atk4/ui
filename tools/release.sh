@@ -57,7 +57,8 @@ composer update
 ./vendor/phpunit/phpunit/phpunit  --no-coverage
 
 sed -i "" "s|'atk'=>'https://.*|'atk'=>'https://cdn.rawgit.com/atk4/ui/$version',|" src/App.php
-git commit -m "Updated CDN to use $version" src/App.php || echo "but its ok"
+sed -i "" "s|'public \$version = .*|public \$version = '$version';|" src/App.php
+git commit -m "Updated CDN and \$version in App.php to $version" src/App.php || echo "but its ok"
 
 
 echo "Press enter to publish the release"

@@ -62,6 +62,8 @@ class Admin extends Generic
             $this->leftMenu = $this->menuLeft;
             $this->menuLeft->addHeader($this->app->title);
         }
+
+        $this->template->trySet('version', $this->app->version);
     }
 
     /**
