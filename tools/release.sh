@@ -84,7 +84,7 @@ echo '!atk4JS.js' >> public/.gitignore
 echo '!atk4JS.min.js' >> public/.gitignore
 #sed  -i "" '/^lib/d' js/.gitignore
 git add public
-git commit -m "Add pre-built version of JS libraries" public
+git commit -m "Build release $version" public
 
 git tag $version
 git push origin release/$version
