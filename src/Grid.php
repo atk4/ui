@@ -58,7 +58,7 @@ class Grid extends View
      * Grid can be sorted by clicking on column headers. This will be automatically enabled
      * if Model supports ordering. You may override by setting true/false.
      *
-     * @var bool $sortable
+     * @var bool
      */
     public $sortable = null;
 
@@ -91,7 +91,7 @@ class Grid extends View
 
     /**
      * Add new column to grid. If column with this name already exists,
-     * an
+     * an.
      *
      * @param string $name      New or existing column name
      * @param [type] $columnDef [description]

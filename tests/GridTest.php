@@ -23,7 +23,6 @@ class ButtonTest extends \atk4\core\PHPUnit_AgileTestCase
         $t = new Table();
         $t->addColumn('hello');
         $t->addColumn(new Template('password={$password}'));
-
     }
 
     public function test2()
@@ -40,7 +39,7 @@ class ButtonTest extends \atk4\core\PHPUnit_AgileTestCase
         $val = $t->render();
         preg_match('/<.*data-id="1".*/m', $val, $matches);
 
-        var_Dump($matches[0]);
+        var_dump($matches[0]);
 
         return $matches[0];
     }
@@ -48,11 +47,11 @@ class ButtonTest extends \atk4\core\PHPUnit_AgileTestCase
 
 class MyModel extends \atk4\data\Model
 {
-    function init() {
+    public function init()
+    {
         parent::init();
 
         $this->addField('email');
         $this->addField('password', ['type'=>'password']);
     }
-
 }

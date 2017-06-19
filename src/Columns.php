@@ -11,14 +11,14 @@ class Columns extends View
 
     /**
      * Explicitly specify the width of all columns. Normally that's 16, but
-     * semantic-ui allows you to override with 5 => "ui five column grid"
+     * semantic-ui allows you to override with 5 => "ui five column grid".
      *
      * @var int
      */
     public $width = null;
 
     /**
-     * Sum of all column widths added so far
+     * Sum of all column widths added so far.
      *
      * @var int
      */
@@ -33,7 +33,7 @@ class Columns extends View
     'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', ];
 
     /**
-     * Add new vertical column
+     * Add new vertical column.
      *
      * @param int|array $defaults specify width (1..16) or relative to $width
      */

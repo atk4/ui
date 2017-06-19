@@ -28,7 +28,7 @@ class Country extends \atk4\data\Model
         $this->addField('numcode', ['caption'=>'ISO Numeric Code', 'type'=>'number', 'required'=>true]);
         $this->addField('phonecode', ['caption'=>'Phone Prefix', 'type'=>'number']);
 
-        $this->addHook('beforeSave', function($m) {
+        $this->addHook('beforeSave', function ($m) {
             if (!$m['sys_name']) {
                 $m['sys_name'] = strtoupper($m['name']);
             }
