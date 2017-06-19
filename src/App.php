@@ -12,7 +12,7 @@ class App
 
     // @var string|false Location where to load JS/CSS files
     public $cdn = [
-        'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.1.5',
+        'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.1.5/public',
         'jquery'          => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
         'serialize-object'=> 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui'     => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
