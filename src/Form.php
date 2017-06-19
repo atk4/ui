@@ -65,7 +65,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $this->initLayout();
 
         // When form is submitted, will perform POST field loading.
-        $this->addHook('submit', [$this, 'loadPOST']);
+        /*
         $this->addHook('submit', function () {
 
             // Field validation
@@ -101,6 +101,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 return $return;
             }
         });
+         */
     }
 
     /**
@@ -401,12 +402,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
                 $this->model[$key] = $this->app->ui_persistence->typecastLoadField($field->field, $value);
             } catch (\atk4\core\Exception $e) {
-                $errors[] = $this->error($key, $e->getMessage());
+                $errors[$key] = $e->getMessage();
             }
         }
 
         if ($errors) {
-            $this->breakHook($errors);
+            throw new \atk4\data\ValidationException($errors);
         }
     }
 
@@ -430,9 +431,25 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             ->setAttr('type', 'hidden');
 
         $cb->set(function () {
-            $response = $this->hook('submit');
-            if (!$response) {
-                return new jsExpression('console.log([])', ['Form submission is not handled']);
+            try {
+                $this->loadPOST();
+                $response = $this->hook('submit');
+                if (!$response) {
+                    if (!$this->model instanceof \atk4\ui\misc\ProxyModel) {
+                        $this->model->save();
+
+                        return $this->success('Form data has been saved');
+                    } else {
+                        return new jsExpression('console.log([])', ['Form submission is not handled']);
+                    }
+                }
+            } catch (\atk4\data\ValidationException $val) {
+                $response = [];
+                foreach ($val->errors as $field=>$error) {
+                    $response[] = $this->error($field, $error);
+                }
+
+                return $response;
             }
 
             return $response;

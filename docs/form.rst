@@ -10,39 +10,40 @@ Forms
 
 .. php:class:: Form
 
-One of the most important views of Agile UI is a "Form" View, which will appear in your application just like this:
+One of the most important components of Agile UI is the "Form" - a View:
 
 .. image:: images/form.png
 
 Features of a Form include:
 
- - Rendering a valid HTML form:
-    - including form fields
+ - Rendering a beautiful and valid form:
+    - wide range of supported field types
     - field grouping (more than one field per line)
-    - adds and links labels, placeholders and hints
-    - allows any "Field" variations (see :ref:`field`) - checkboxes, drop-downs, etc.
-    - automatically sets ID for form/fields/labels
+    - define field width, positioning and size
+    - labels, placeholders and hints
     - supports automated layouts or you can define a custom one
 
  - Integration with Model objects:
     - automatically populate all or specific fields
+    - handle multi-field validation
     - use of semi-automated layouting (you can arrange group of fields)
     - respect caption and other ui-related settings defined in a model
-    - map field "type" into appropriate :ref:`field`
+    - lookup referenced models for data
+    - data types are converted automatically (e.g. date, time, boolean)
 
- - Augment Form with JS integration:
+ - JavaScript integration
     - form is submitted using JavaScript
     - during submit, the loading indicator is shown
     - javascript sends data through POST
     - POST data is automatically parsed and imported into Model
 
  - You may define onSubmit PHP handler that:
-    - can execute data validation, save data and make decisions in PHP code
-    - display errors for single or multiple fields
-    - perform custom actions on "input" element such as insert value
-    - perform custom action on "field" div, such as use checkbox APIs
-    - execute any other arbitrary JavaScript or jQuery code
+    - can handle more validation
+    - make advanced decisions before saving data
+    - perform a different Actions, such as reload parts of page or close dialog.
+    - save data into multiple models
     - indicate successful completion of a form through a nicely formatted message
+    - anything else really!
 
 
 Creating Basic Forms
@@ -53,26 +54,59 @@ To create a form you need the following code::
     $form = new \atk4\ui\Form();
     $form->addField('email');
 
-    $layout->add($form);
+    $app->layout->add($form);
 
 The first line creates a "Form" object that is assigned to variable `$f`. Next
-line defines a new field that is placed inside a form.
-
-Once form is defined, it needs to be placed somewhere in a Render Tree.
-
-.. php:method:: addField(name)
-
-    Create a new field on a form. If form is associated with a model, which have
-    a field with a matching name, then field meta-information will be loaded from
-    the model.
+line defines a new field that is placed inside a form. Once form is defined, it
+needs to be placed somewhere in a Render Tree, so that the users can see it.
 
 If $form is not yet associated with a model (like above) then an empty model will
-be created. The arguments to addField are compatible with Model::addField()::
+be created. If you are not using the model, you will need to define
+:php:meth:`onSubmit()` handler. (Your other option is to use :php:meth:`setModel()`.
 
-    $form->addField('is_accept_terms', ['type'=>'boolean']);
+Adding Fields to a form
+^^^^^^^^^^^^^^^^^^^^^^^
 
-Additionally, any fields that are added into Form directly are marked with the
-flag "never_persist".
+.. php:method:: addField(data_field, form_field = null)
+
+Create a new field on a form. The first argument is a data field definition.
+This can simply be a string "email". Additionally you can specify an array or
+even a instance of 
+`\atk4\data\Field <http://agile-data.readthedocs.io/en/develop/fields.html>`_
+
+If form is associated with a model, and the specified field exists, then 
+Data Field object will be looked up. Data Field defines type, caption, possible
+values and other information about the data itself.
+
+Second argument can be used to describe area around the field, which is a visual
+object derived from :php:class:`Form::Field`. The class usually is guessed
+from the data field type, but you can specify your own object here. Alternatively
+you can pass array which will be used as defaults when creating appropriate
+Form Field.
+
+Here are some of the examples::
+
+    // Data field type decides form field class
+    $form->addField(['is_accept_terms', 'type'=>'boolean']); 
+
+    // Specifying enum makes form use drop-down
+    $form->addField(['agree', 'enum'=>['Yes', 'No']]);
+
+    // We can switch to use Radio selection
+    $form->addField(['agree', 'enum'=>['Yes', 'No']], new \atk4\ui\FormField\Radio());
+
+.. important:: Always use `'type'=>` because this also takes care of
+    `type-casting <http://agile-data.readthedocs.io/en/develop/typecasting.html>`_
+    e.g. converting data formats.
+
+Integrating Form with a Model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As you work on your application, in most cases you will be linking Form with 
+`Model <http://agile-data.readthedocs.io/en/develop/model.html>`. This is much
+more convenient and takes care of handling data flow all the way from the user
+input to storing them in the database.
+
 
 .. php:method:: setModel($model, [$fields])
 
@@ -88,7 +122,7 @@ flag "never_persist".
 
     Model that is currently associated with a Form.
 
-For the next demo, lets actually define a model::
+For the next demo, lets actually define a model `Person`::
 
     class Person extends \atk4\data\Model
     {
@@ -97,18 +131,29 @@ For the next demo, lets actually define a model::
         public function init()
         {
             parent::init();
-            $this->addField('name');
+            $this->addField('name', ['required'=>true]);
             $this->addField('surname');
             $this->addField('gender', ['enum' => ['M', 'F']]);
         }
+
+        public function validate()
+        {
+            $errors = parent::validate();
+
+            if ($this['name'] == $this['surname']) {
+                $errors['surname'] = 'Your surname cannot be same as the name';
+            }
+
+            return $errors;
+        }
     }
 
-We can now populate form fields based around the fields as they are defined inside
-a model. I will also add one extra checkbox where user can accept terms and conditions::
+We can now populate form fields based around the data fields defined in the model::
 
-    $form = $layout->add('Form'); // using short version
+    $app->layout->add('Form')
+        ->setModel(new Person($db));
 
-    $form->setModel(new Person($db));
+This should display a following form:
 
     $form->addField(
         'terms',
