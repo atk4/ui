@@ -12,11 +12,11 @@ class App
 
     // @var string|false Location where to load JS/CSS files
     public $cdn = [
-        'atk'=>'https://cdn.rawgit.com/atk4/ui/1.1.5',
-        'jquery'=>'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
-        'serialize-object'=>'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui'=>'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
-        'calendar'=>'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
+        'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.1.5',
+        'jquery'          => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
+        'serialize-object'=> 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
+        'semantic-ui'     => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
+        'calendar'        => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
     ];
 
     // @var string Name of application
@@ -231,7 +231,6 @@ class App
         $this->requireJS($url.'/agileui.js');
         $this->requireCSS($url.'/agileui.css');
     }
-
 
     /**
      * Adds a <style> block to the HTML Header. Not escaped. Try to avoid
