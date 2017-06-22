@@ -409,7 +409,7 @@ class App
 
         // put URL together
         $args = http_build_query($result);
-        $url = ($page[0] ? $page[0].'.php' : '') . ($args ? '?'.$args: '');
+        $url = ($page[0] ? $page[0].'.php' : '').($args ? '?'.$args : '');
 
         return $url;
     }
