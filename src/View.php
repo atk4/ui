@@ -956,10 +956,15 @@ class View implements jsExpressionable
 
         $actions['indent'] = '';
 
-        if (!$force_echo && $this->app && method_exists($this->app, 'jsReady')) {
+        if (!$force_echo && $this->app && $this->app->hasMethod('jsReady')) {
             $this->app->jsReady($actions);
 
             return '';
+        }
+
+        // delegate $action rendering in hosting app if exist.
+        if ($this->app && $this->app->hasMethod('getViewJS')) {
+            return $this->app->getViewJS($actions);
         }
 
         $ready = new jsFunction($actions);

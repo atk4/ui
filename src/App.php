@@ -9,6 +9,8 @@ class App
     }
 
     use \atk4\core\HookTrait;
+    use \atk4\core\DynamicMethodTrait;
+
 
     // @var string|false Location where to load JS/CSS files
     public $cdn = [
