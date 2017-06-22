@@ -11,7 +11,6 @@ class App
     use \atk4\core\HookTrait;
     use \atk4\core\DynamicMethodTrait;
 
-
     // @var string|false Location where to load JS/CSS files
     public $cdn = [
         'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.1.9/public',
