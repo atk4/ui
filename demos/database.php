@@ -35,9 +35,9 @@ class Country extends \atk4\data\Model
         });
     }
 
-    public function validate()
+    public function validate($intent = null)
     {
-        $errors = parent::validate();
+        $errors = parent::validate($intent);
 
         if (strlen($this['iso']) !== 2) {
             $errors['iso'] = 'Must be exactly 2 characters';
