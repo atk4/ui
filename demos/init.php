@@ -9,6 +9,10 @@ $app = new \atk4\ui\App([
     'icon'=> 'user',
 ]);
 
+if (file_exists('../public/atk4JS.min.js')) {
+    $app->cdn['atk'] = '../public';
+}
+
 $app->initLayout($app->stickyGET('layout') ?: 'Admin');
 
 $layout = $app->layout;
