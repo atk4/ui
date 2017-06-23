@@ -27,14 +27,22 @@ class jsModal extends jsExpression
   </div>
 ';
 
-        parent::__construct('
+	    parent::__construct('
+		var param = [arg];
         var m=$("<div>").appendTo("body").addClass("ui scrolling modal").html([content]);
-        m.modal({duration: 100, onHide: function() { m.children().remove(); return true; }}).modal("show").find(".content").load($.addParams([url], [arg]), function() { m.modal("refresh"); });
+        m.modal({onHide: function() { m.children().remove(); return true; }, onShow: function(){
+        let $el = $(this);
+        $.getJSON( [url], param, function(resp){
+                $el.find(".atk-dialog-content").html(resp.html);
+                eval(resp.eval.replace(/<\/?script>/g, \'\'));
+            }
+        );
+    }}).modal("show");
         m.find(".atk-dialog-content").data("opener", this).on("close", function() {
             m.modal("hide");
             m.remove();
         });
 ',
-            ['content'=>$content, 'url'=>$url, 'arg'=>$args]);
+		    ['content'=>$content, 'url'=>$url, 'arg'=>array_merge($args,['json'=>true])]);
     }
 }

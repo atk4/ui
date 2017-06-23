@@ -686,21 +686,36 @@ class View implements jsExpressionable
         }
     }
 
-    /**
-     * This method is for those cases when developer want to simply render his
-     * view and grab HTML himself.
-     *
-     * @param bool $force_echo
-     *
-     * @return string
-     */
-    public function render($force_echo = true)
-    {
-        $this->renderAll();
+	/**
+	 * This method is for those cases when developer want to simply render his
+	 * view and grab HTML himself.
+	 *
+	 * @param bool $force_echo
+	 *
+	 * @return string
+	 */
+	public function render($force_echo = true)
+	{
+		$this->renderAll();
+		return
+			$this->getJS($force_echo).
+			$this->template->render();
+	}
 
-        return
-            $this->getJS($force_echo).
-            $this->template->render();
+	/**
+	 * Render View using json format.
+	 * @param bool $force_echo
+	 *
+	 * @return string
+	 */
+    public function renderJSON($force_echo = true)
+    {
+	    $this->renderAll();
+	    return json_encode(['success'=>true,
+	                        'message'=>'Success',
+	                        'eval'=>$this->getJS($force_echo),
+	                        'html'=>$this->template->render(),
+	                        'id'=>$this->name]);
     }
 
     /**
