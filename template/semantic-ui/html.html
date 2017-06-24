@@ -5,15 +5,20 @@
     <meta charset="utf-8">{$HEAD}
     <script>
       $.fn.api.settings.successTest = function(response) {
-          if (response && response.html && response.id) {
-              $('#'+response.id).replaceWith(response.html);
-          }
-          if (response && response.eval) {
-              try {
-                  var result = function(){ eval(response.eval.replace(/<\/?script>/g, '')); }.call(this.obj);
-              } catch (e) {
-
+          if(response.success){
+              if (response && response.html && response.id) {
+                  $('#'+response.id).replaceWith(response.html);
               }
+              if (response && response.eval) {
+                  try {
+                      var result = function(){ eval(response.eval.replace(/<\/?script>/g, '')); }.call(this.obj);
+                  } catch (e) {
+
+                  }
+              }
+          } else {
+              var m = $("<div>").appendTo("body").addClass("ui scrolling modal").html(response.message);
+              m.modal({duration: 100, onHide: function() { m.children().remove(); return true; }}).modal("show");
           }
           return true;
       }
