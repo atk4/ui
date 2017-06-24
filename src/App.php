@@ -368,29 +368,33 @@ class App
             $this->page = basename($this->getRequestURI(), '.php');
         }
 
+        // if page passed as string, then simply use it
         if (is_string($page)) {
             return $page;
         }
 
+        // use current page by default
         if (!isset($page[0])) {
             $page[0] = $this->page;
+        }
 
-            if (is_array($sticky) && !empty($sticky)) {
-                foreach ($sticky as $key => $val) {
-                    if ($val === true) {
-                        if (isset($_GET[$key])) {
-                            $val = $_GET[$key];
-                        } else {
-                            continue;
-                        }
+        //add sticky arguments
+        if (is_array($sticky) && !empty($sticky)) {
+            foreach ($sticky as $key => $val) {
+                if ($val === true) {
+                    if (isset($_GET[$key])) {
+                        $val = $_GET[$key];
+                    } else {
+                        continue;
                     }
-                    if (!isset($result[$key])) {
-                        $result[$key] = $val;
-                    }
+                }
+                if (!isset($result[$key])) {
+                    $result[$key] = $val;
                 }
             }
         }
 
+        // add arguments
         foreach ($page as $arg => $val) {
             if ($arg === 0) {
                 continue;
@@ -403,15 +407,9 @@ class App
             }
         }
 
-        $page = $page[0];
-
-        $url = $page ? $page.'.php' : '';
-
+        // put URL together
         $args = http_build_query($result);
-
-        if ($args) {
-            $url = $url.'?'.$args;
-        }
+        $url = ($page[0] ? $page[0].'.php' : '').($args ? '?'.$args : '');
 
         return $url;
     }
