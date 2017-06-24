@@ -720,7 +720,7 @@ class View implements jsExpressionable
 	    } catch (\Exception $exception) {
     		$l = $this->add(new View());
 		    if ($exception instanceof \atk4\core\Exception) {
-			    $l->setHTML('Content', $exception->getHTML());
+			    $l->template->setHTML('Content', $exception->getHTML());
 		    } elseif ($exception instanceof \Error) {
 			    $l->add(new View(['ui'=> 'message', get_class($exception).': '.
 			                                                $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
