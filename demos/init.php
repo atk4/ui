@@ -4,7 +4,14 @@ date_default_timezone_set('UTC');
 
 require '../vendor/autoload.php';
 
-$app = new \atk4\ui\App('Agile UI v1.2-dev - Demo Suite', ['icon'=>'user']);
+$app = new \atk4\ui\App([
+    'Agile UI v1.1 - Demo Suite',
+    'icon'=> 'user',
+]);
+
+if (file_exists('../public/atk4JS.min.js')) {
+    $app->cdn['atk'] = '../public';
+}
 
 $app->initLayout($app->stickyGET('layout') ?: 'Admin');
 

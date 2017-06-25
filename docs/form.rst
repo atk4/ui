@@ -102,7 +102,7 @@ Here are some of the examples::
 Integrating Form with a Model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As you work on your application, in most cases you will be linknig Form with 
+As you work on your application, in most cases you will be linking Form with 
 `Model <http://agile-data.readthedocs.io/en/develop/model.html>`. This is much
 more convenient and takes care of handling data flow all the way from the user
 input to storing them in the database.

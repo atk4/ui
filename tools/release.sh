@@ -56,8 +56,9 @@ composer require atk4/core atk4/data
 composer update
 ./vendor/phpunit/phpunit/phpunit  --no-coverage
 
-sed -i "" "s|public \$cdn = .*|public \$cdn = 'https://cdn.rawgit.com/atk4/ui/$version';|" src/App.php
-git commit -m "Updated CDN to use $version" src/App.php || echo "but its ok"
+sed -i "" "s|'https://cdn.rawgit.com/atk4/ui/.*|'https://cdn.rawgit.com/atk4/ui/$version/public',|" src/App.php
+sed -i "" "s|public \$version.*|public \$version = '$version';|" src/App.php
+git commit -m "Updated CDN and \$version in App.php to $version" src/App.php || echo "but its ok"
 
 
 echo "Press enter to publish the release"
@@ -71,9 +72,19 @@ git commit -m "Set up stable dependencies for $version" composer.json
 
 # Build jsLib and bundle
 (cd js; npm run build)
-sed  -i "" '/^lib/d' js/.gitignore
-git add js/lib
-git commit -m "Add pre-built version of JS libraries" js
+
+# Build CSS
+lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
+uglifyjs --compress -- public/agileui.js > public/agileui.min.js
+
+echo '!agileui.css' >> public/.gitignore
+echo '!agileui.css.map' >> public/.gitignore
+echo '!agileui.min.js' >> public/.gitignore
+echo '!atk4JS.js' >> public/.gitignore
+echo '!atk4JS.min.js' >> public/.gitignore
+#sed  -i "" '/^lib/d' js/.gitignore
+git add public
+git commit -m "Build release $version" public
 
 git tag $version
 git push origin release/$version

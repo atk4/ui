@@ -86,6 +86,16 @@ Full diff: https://github.com/atk4/ui/compare/1.0.3...1.1.0
 
 - Improve CDN handling. Using `$app->cdn = false` will disable it.
 
+#### 1.1.5 - 1.1.9 (multiple releases)
+
+Probably the last big release before 1.2.x
+
+ - Added new Form Validation implementation #177
+ - Table totals can now include min, max and count #178
+ - Refactored asset includes (can now be cached locally) #181
+ - Footer now indicates version
+
+
 ## 1.0 Release
 
 * Implement Grid
