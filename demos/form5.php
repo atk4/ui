@@ -1,4 +1,5 @@
 <?php
+
 require 'init.php';
 
 $layout->add(new \atk4\ui\View([
@@ -26,7 +27,6 @@ $f->addField('five', new \atk4\ui\FormField\Checkbox());
 
 // Objects still accept seed
 $f->addField('six', new \atk4\ui\FormField\Checkbox(['caption'=>'Caption3']));
-
 
 $a = [];
 $m = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
