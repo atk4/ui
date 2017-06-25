@@ -13,7 +13,6 @@ class Columns extends Generic
     public $col = null;
     public $size = '';
 
-
     public function setModel(\atk4\data\Model $model, $fields = null)
     {
         // dont add any fields automatically
@@ -37,7 +36,7 @@ class Columns extends Generic
 
         if ($this->col !== null) {
             $col = $this->col;
-            $size = $this->size; 
+            $size = $this->size;
         } elseif ($cnt < 10) {
             $col = 1;
             $size = '';
