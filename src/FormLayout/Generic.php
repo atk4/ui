@@ -35,20 +35,42 @@ class Generic extends View
     public $inline = null;
 
     /**
-     * Places field inside a layout somewhere.
+     * Places field inside a layout somewhere. Should be called
+     * through $form->addField()
      *
-     * @param \atk4\ui\FormField\Generic|array $field
-     * @param array|string                     $args
+     * @param string              $name
+     * @param array|string|object $field
      *
      * @return \atk4\ui\FormField\Generic
      */
-    public function addField($field, $args = [])
+    public function addField($name, $field = [])
     {
+        if (!is_string($name)) {
+            throw new Exception(['Format for addField now require first argument to be name']);
+        }
+
+        // Several possible configurations are allowed.
+        if ($field instanceof FormField\Generic) {
+            // field is specified so we don't have to do anything at all!
+        } elseif (is_string($field)) {
+            $field = [$field];
+        }
+
+            && is_string($type)) {
+
+
         if (is_string($args)) {
             $args = ['caption' => $args];
         } elseif (is_array($args) && isset($args[0])) {
             $args['caption'] = $args[0];
             unset($args[0]);
+        } elseif ($args instanceof FormField\Generic) {
+
+            // 1. If field object specified explicitly as 2nd arg
+            $field = $this->form->fieldFactory(...$field);
+        }
+
+        // 2. If string is used for field type in 2nd arg
         }
 
         /*
@@ -62,6 +84,9 @@ class Generic extends View
         } elseif (!$field instanceof \atk4\ui\FormField\Generic) {
             $field = $this->form->fieldFactory($field);
         }
+
+
+        // ---------------
 
         if (isset($args['caption'])) {
             $field->field->caption = $args['caption'];

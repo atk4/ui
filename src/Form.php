@@ -64,6 +64,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         // where to add your fields.
         $this->initLayout();
 
+        $this->addField('empty', new FormField\Hidden());
+
         // When form is submitted, will perform POST field loading.
         /*
         $this->addHook('submit', function () {
