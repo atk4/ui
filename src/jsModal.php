@@ -12,7 +12,7 @@ class jsModal extends jsExpression
         if ($url instanceof VirtualPage) {
             $url = $url->getURL('cut');
         }
-        $args = array_merge($args,['json'=>true]);
+        $args = array_merge($args, ['json'=>true]);
         parent::__construct('$(this).createModal([arg])', ['arg'=>['uri'=>$url, 'title'=>$title, 'uri_options'=>$args]]);
     }
 }
