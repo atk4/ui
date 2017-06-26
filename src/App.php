@@ -13,7 +13,7 @@ class App
 
     // @var string|false Location where to load JS/CSS files
     public $cdn = [
-        'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.1.9/public',
+        'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.1.10/public',
         'jquery'          => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
         'serialize-object'=> 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui'     => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
@@ -21,7 +21,7 @@ class App
     ];
 
     // @var string Version of Agile UI
-    public $version = '1.1.9';
+    public $version = '1.1.10';
 
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
@@ -368,29 +368,33 @@ class App
             $this->page = basename($this->getRequestURI(), '.php');
         }
 
+        // if page passed as string, then simply use it
         if (is_string($page)) {
             return $page;
         }
 
+        // use current page by default
         if (!isset($page[0])) {
             $page[0] = $this->page;
+        }
 
-            if (is_array($sticky) && !empty($sticky)) {
-                foreach ($sticky as $key => $val) {
-                    if ($val === true) {
-                        if (isset($_GET[$key])) {
-                            $val = $_GET[$key];
-                        } else {
-                            continue;
-                        }
+        //add sticky arguments
+        if (is_array($sticky) && !empty($sticky)) {
+            foreach ($sticky as $key => $val) {
+                if ($val === true) {
+                    if (isset($_GET[$key])) {
+                        $val = $_GET[$key];
+                    } else {
+                        continue;
                     }
-                    if (!isset($result[$key])) {
-                        $result[$key] = $val;
-                    }
+                }
+                if (!isset($result[$key])) {
+                    $result[$key] = $val;
                 }
             }
         }
 
+        // add arguments
         foreach ($page as $arg => $val) {
             if ($arg === 0) {
                 continue;
@@ -403,15 +407,9 @@ class App
             }
         }
 
-        $page = $page[0];
-
-        $url = $page ? $page.'.php' : '';
-
+        // put URL together
         $args = http_build_query($result);
-
-        if ($args) {
-            $url = $url.'?'.$args;
-        }
+        $url = ($page[0] ? $page[0].'.php' : '').($args ? '?'.$args : '');
 
         return $url;
     }
