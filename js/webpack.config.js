@@ -48,7 +48,8 @@ const config = {
   },
   plugins: plugins,
   externals: {
-      'jquery': 'jQuery'
+      'jquery': 'jQuery',
+      'modal' : 'semantic-ui-modal'
   }
 };
 
