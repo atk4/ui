@@ -95,6 +95,17 @@ Probably the last big release before 1.2.x
  - Refactored asset includes (can now be cached locally) #181
  - Footer now indicates version
 
+#### 1.1.10
+
+ - Fix warning in database demos
+ - Fix detection of local public files for demos
+ - Fix Delete button in crud (couldn't be clicked twice)
+ - Enabled App to have dynamic methods
+ - Fixed bug in Status column
+ - Fixed stickyURL #185
+ - Improved compatibility with custom JS renderers (for wordpress integration)
+ - Fixed centered layout #186
+ - "get-assets.php" now creates 'public' folder, usable in your project
 
 ## 1.0 Release
 

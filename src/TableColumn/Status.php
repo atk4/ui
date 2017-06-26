@@ -68,6 +68,8 @@ class Status extends Generic
         case 'default':
             $ic = 'question';
             break;
+        default:
+            $ic = '';
 
         }
 
