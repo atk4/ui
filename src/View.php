@@ -686,51 +686,55 @@ class View implements jsExpressionable
         }
     }
 
-	/**
-	 * This method is for those cases when developer want to simply render his
-	 * view and grab HTML himself.
-	 *
-	 * @param bool $force_echo
-	 *
-	 * @return string
-	 */
-	public function render($force_echo = true)
-	{
-		$this->renderAll();
-		return
-			$this->getJS($force_echo).
-			$this->template->render();
-	}
+    /**
+     * This method is for those cases when developer want to simply render his
+     * view and grab HTML himself.
+     *
+     * @param bool $force_echo
+     *
+     * @return string
+     */
+    public function render($force_echo = true)
+    {
+        $this->renderAll();
 
-	/**
-	 * Render View using json format.
-	 * @param bool $force_echo
-	 *
-	 * @return string
-	 */
+        return
+            $this->getJS($force_echo).
+            $this->template->render();
+    }
+
+    /**
+     * Render View using json format.
+     *
+     * @param bool $force_echo
+     *
+     * @return string
+     */
     public function renderJSON($force_echo = true)
     {
-    	try {
-		    $this->renderAll();
-		    return json_encode(['success'=>true,
-		                        'message'=>'Success',
-		                        'eval'=>$this->getJS($force_echo),
-		                        'html'=>$this->template->render(),
-		                        'id'=>$this->name]);
-	    } catch (\Exception $exception) {
-    		$l = $this->add(new View());
-		    if ($exception instanceof \atk4\core\Exception) {
-			    $l->template->setHTML('Content', $exception->getHTML());
-		    } elseif ($exception instanceof \Error) {
-			    $l->add(new View(['ui'=> 'message', get_class($exception).': '.
-			                                                $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
-				    'error', ]));
-			    $l->add(new Text())->set(nl2br($exception->getTraceAsString()));
-		    } else {
-			    $l->add(new View(['ui'=>'message', get_class($exception).': '.$exception->getMessage(), 'error']));
-		    }
-    		return json_encode(['success'=>false,
-			                    'message' => $l->getHTML()]);
+        try {
+            $this->renderAll();
+
+            return json_encode(['success'=> true,
+                                'message'=> 'Success',
+                                'eval'   => $this->getJS($force_echo),
+                                'html'   => $this->template->render(),
+                                'id'     => $this->name, ]);
+        } catch (\Exception $exception) {
+            $l = $this->add(new self());
+            if ($exception instanceof \atk4\core\Exception) {
+                $l->template->setHTML('Content', $exception->getHTML());
+            } elseif ($exception instanceof \Error) {
+                $l->add(new self(['ui'=> 'message', get_class($exception).': '.
+                                                            $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
+                    'error', ]));
+                $l->add(new Text())->set(nl2br($exception->getTraceAsString()));
+            } else {
+                $l->add(new self(['ui'=>'message', get_class($exception).': '.$exception->getMessage(), 'error']));
+            }
+
+            return json_encode(['success' => false,
+                                'message' => $l->getHTML(), ]);
         }
     }
 
