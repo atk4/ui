@@ -352,7 +352,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             return new FormField\Checkbox($arg);
 
         case 'text':
-            return new FormField\TextArea($arg);
+            return new FormField\Textarea($arg);
 
         case 'string':
             return new FormField\Line($arg);
