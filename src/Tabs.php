@@ -13,6 +13,14 @@ class Tabs extends View
 
     public $defaultTemplate = 'tabs.html';
 
+    /**
+     * Adds tab in tabs widget.
+     *
+     * @param mixed    $name   Name of tab or Tab object
+     * @param callable $action Optional callback action
+     *
+     * @return View
+     */
     public function addTab($name = null, $action = null)
     {
         // add tabs menu item
@@ -24,6 +32,7 @@ class Tabs extends View
             $item = new Tab();
         }
 
+        // add tabs menu item
         $item = $this->add([$item, 'class'=>['item']], 'Menu');
         $item->setAttr('data-tab', $item->name);
 

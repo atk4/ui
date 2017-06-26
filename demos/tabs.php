@@ -11,8 +11,7 @@ $t->addTab('Hello')->add('HelloWorld');
 $t->addTab('Lorem')->add('LoremIpsum');
 
 // dynamic tab
-/*
 $t->addTab('Dynamic', function($tab){
+    sleep(3);
     $tab->add('LoremIpsum');
 });
-*/
