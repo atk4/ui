@@ -1,4 +1,4 @@
-import $ from 'jquery';
+const $ = require('jquery');
 
 export default class ajaxec {
     constructor(element, options) {

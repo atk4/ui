@@ -1,4 +1,4 @@
-import $ from 'jquery';
+const $ = require('jquery');
 
 export default class addParams {
     constructor(element, options) {

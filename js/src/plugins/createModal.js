@@ -1,32 +1,29 @@
-import $ from 'jQuery';
-$.fn.modal = require('semantic-ui-modal');
+const $ = require('jquery');
+const modal = require('semantic-ui-modal');
 
 export default class createModal {
   constructor(element, options) {
-    const container = this.getDialogHtml(options.title);
-    const m = $('<div>').appendTo('body').addClass('ui scrolling modal').html(container);
 
-    m.modal({
-      onHide: function () {
-        m.children().remove();
-        return true;
+    let $m = $('<div class="atk-modal ui modal scrolling"/>').appendTo('body').html(this.getDialogHtml(options.title));
+
+    $m.modal($.extend({
+      onHide: function (el) {
+      return true;
+    },
+      onHidden: function () {
+        $m.remove();
       },
-      onShow: function () {
-        const $el = $(this);
+      onVisible: function () {
         $.getJSON(options.uri, options.uri_options, function (resp) {
-          console.log($);
-          $el.find('.atk-dialog-content').html(resp.html);
-          let result = function(){eval(resp.eval.replace(/<\/?script>/g, '')); }.call(this.obj);
-          //global.eval(resp.eval.replace(/<\/?script>/g, ''));
+          $m.find('.atk-dialog-content').html(resp.html);
+          const result = function(){ eval(resp.eval.replace(/<\/?script>/g, '')); }.call(this.obj);
+        }).fail(function(){
+          console.log('Error loading modal content.')
         });
-      }})
-      .modal('show');
-
-    m.find('.atk-dialog-content').data('opener', this)
-    .on('close', function () {
-      m.modal('hide');
-      m.remove();
-    });
+        $m.on("close", '.atk-dialog-content', function () {
+            $m.modal('hide');
+        });
+      }}, options.modal)).modal('show');
   }
 
   getDialogHtml(title) {
@@ -43,5 +40,8 @@ export default class createModal {
 createModal.DEFAULTS = {
   title: '',
   uri: null,
-  uri_options: {}
+  uri_options: {},
+  modal: {
+      duration: 100
+  }
 };
