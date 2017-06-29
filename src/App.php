@@ -121,7 +121,6 @@ class App
             }
 
             register_shutdown_function(function () {
-
                 if (is_string($this->_cwd_restore)) {
                     chdir($this->_cwd_restore);
                 }

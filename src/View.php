@@ -865,7 +865,7 @@ class View implements jsExpressionable
 
         $actions = [];
         $actions['preventDefault'] = true;
-        $actions['stopPropagation'] = true; 
+        $actions['stopPropagation'] = true;
         if (isset($defaults['preventDefault'])) {
             $actions['preventDefault'] = $defaults['preventDefault'];
         }
