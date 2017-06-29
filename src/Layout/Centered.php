@@ -19,6 +19,6 @@ class Centered extends Generic
 
         // set application's title
 
-        $this->template['title'] = $this->app->title;
+        $this->template->trySet('title', $this->app->title);
     }
 }
