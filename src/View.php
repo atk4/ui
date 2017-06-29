@@ -864,11 +864,13 @@ class View implements jsExpressionable
         }
 
         $actions = [];
+        $actions['preventDefault'] = true;
+        $actions['stopPropagation'] = true;
         if (isset($defaults['preventDefault'])) {
-            $actions['preventDefault'] = true;
+            $actions['preventDefault'] = $defaults['preventDefault'];
         }
         if (isset($defaults['stopPropagation'])) {
-            $actions['stopPropagation'] = true;
+            $actions['stopPropagation'] = $defaults['stopPropagation'];
         }
 
         if (is_callable($action) || (is_array($action) && isset($action[0]) && is_callable($action[0]))) {

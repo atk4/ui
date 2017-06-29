@@ -45,6 +45,8 @@ class App
 
     public $run_called = false;
 
+    public $_cwd_restore = true;
+
     /**
      * function setModel(MyModel $m);.
      *
@@ -114,7 +116,15 @@ class App
 
         // Always run app on shutdown
         if ($this->always_run) {
+            if ($this->_cwd_restore) {
+                $this->_cwd_restore = getcwd();
+            }
+
             register_shutdown_function(function () {
+                if (is_string($this->_cwd_restore)) {
+                    chdir($this->_cwd_restore);
+                }
+
                 if (!$this->run_called) {
                     try {
                         $this->run();
