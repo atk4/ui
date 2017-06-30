@@ -1,11 +1,9 @@
-const $ = require('jquery');
 
 export default class ajaxec {
     constructor(element, options) {
         const $element = $(element);
 
         // ask for user confirmation just before
-        // TODO: because this is constructor, button can't be clicked again :(
         if (options.confirm) {
             if (!confirm(options.confirm)) {
                 return ;

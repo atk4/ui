@@ -1,5 +1,3 @@
-var $ = require('jquery');
-
 /* https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647 */
 
 /**

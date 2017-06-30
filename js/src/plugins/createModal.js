@@ -1,5 +1,3 @@
-const $ = require('jquery');
-const modal = require('semantic-ui-modal');
 
 export default class createModal {
   constructor(element, options) {

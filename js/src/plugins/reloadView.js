@@ -1,4 +1,3 @@
-const $ = require('jquery');
 
 export default class reloadView {
     constructor(element, options) {

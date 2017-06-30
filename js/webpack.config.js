@@ -4,11 +4,12 @@ const webpack = require('webpack');
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
 const env  = require('yargs').argv.env; // use --env with webpack 2
-//const nodeExternals = require('webpack-node-externals');
 
 let libraryName = 'atk4JS';
 
-let plugins = [], outputFile;
+let plugins = [
+
+], outputFile;
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
@@ -41,7 +42,7 @@ const config = {
       // }
     ]
   },
-  externals: {modal: 'semantic-ui-modal', jquery: 'jQuery'},
+  externals: {jquery: 'jQuery'},
   resolve: {
     modules: [path.resolve('./src'), path.join(__dirname, 'node_modules')],
     extensions: ['.json', '.js'],

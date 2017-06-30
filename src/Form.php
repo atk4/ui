@@ -431,7 +431,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $this->add(new View(['element'=>'input']))
             ->setAttr('name', $cb->name)
             ->setAttr('value', 'submit')
-            ->setAttr('type', 'hidden');
+            ->setStyle(['display'=>'none']);
 
         $cb->set(function () {
             try {

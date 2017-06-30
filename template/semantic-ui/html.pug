@@ -22,6 +22,7 @@ html(lang="{lang}en{/}")
                 var m = $("<div>").appendTo("body").addClass("ui scrolling modal").html(response.message);
                 m.modal({duration: 100, onHide: function() { m.children().remove(); return true; }}).modal("show");
             }
+            this.data = new Object();
             return true;
         }
         $.fn.api.settings.onFailure = function(response) {
