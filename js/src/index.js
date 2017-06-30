@@ -1,3 +1,4 @@
+import 'atk4-semantic-ui';
 import registerPlugin from './plugin';
 
 // Import our plugins
