@@ -84,7 +84,9 @@ $(function() {
 
         $this->assertEquals('<script>
 $(function() {
-  $("#b1").on("click",function() {
+  $("#b1").on("click",function(event) {
+    event.preventDefault();
+    event.stopPropagation();
     $("#b2").hide();
   });
 })</script>', $bb->getJS());
