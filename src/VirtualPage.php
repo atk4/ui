@@ -33,6 +33,9 @@ class VirtualPage extends View
             }
 
             if ($this->cb->triggered == 'cut') {
+                if (isset($_GET['json'])) {
+                    $this->app->terminate($this->renderJSON());
+                }
                 $this->app->terminate($this->render());
             }
 

@@ -704,6 +704,41 @@ class View implements jsExpressionable
     }
 
     /**
+     * Render View using json format.
+     *
+     * @param bool $force_echo
+     *
+     * @return string
+     */
+    public function renderJSON($force_echo = true)
+    {
+        try {
+            $this->renderAll();
+
+            return json_encode(['success'=> true,
+                                'message'=> 'Success',
+                                'eval'   => $this->getJS($force_echo),
+                                'html'   => $this->template->render(),
+                                'id'     => $this->name, ]);
+        } catch (\Exception $exception) {
+            $l = $this->add(new self());
+            if ($exception instanceof \atk4\core\Exception) {
+                $l->template->setHTML('Content', $exception->getHTML());
+            } elseif ($exception instanceof \Error) {
+                $l->add(new self(['ui'=> 'message', get_class($exception).': '.
+                                                            $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
+                    'error', ]));
+                $l->add(new Text())->set(nl2br($exception->getTraceAsString()));
+            } else {
+                $l->add(new self(['ui'=>'message', get_class($exception).': '.$exception->getMessage(), 'error']));
+            }
+
+            return json_encode(['success' => false,
+                                'message' => $l->getHTML(), ]);
+        }
+    }
+
+    /**
      * Created for recursive rendering or when you want to only get HTML of
      * this object (not javascript).
      *

@@ -1,4 +1,3 @@
-import $ from 'jquery';
 
 export default class addParams {
     constructor(element, options) {

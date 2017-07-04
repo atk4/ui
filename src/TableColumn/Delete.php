@@ -17,8 +17,7 @@ class Delete extends Generic
 
             $reload = $this->table->reload ?: $this->table;
 
-            $ajaxec = (new \atk4\ui\jQuery($reload))->replaceWith($reload->render())->jsRender();
-            $this->table->app->terminate(json_encode(['success'=>true, 'message'=>'Success', 'eval'=>$ajaxec]));
+            $this->table->app->terminate($reload->renderJSON());
         });
 
         $this->table->on('click', 'a.'.$this->short_name)->ajaxec([
