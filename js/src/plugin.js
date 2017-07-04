@@ -23,19 +23,26 @@ export default function plugin(pluginName, className, shortHand = false) {
     let dataName = `__${pluginName}`;
     let old = $.fn[pluginName];
 
-    $.fn[pluginName] = function (option) {
+    $.fn[pluginName] = function (option = {}, args = []) {
+
+        // Check if we are calling a plugin specific function: $(element).plugin('function',[arg1, arg2]);
+        if (typeof option === 'string') {
+            if (this.data(dataName) && typeof this.data(dataName)[option] === 'function') {
+                return this.data(dataName)['call'](option, args);
+            }
+        }
         return this.each(function () {
             let $this = $(this);
-            let data = $this.data(dataName);
             let options = $.extend({}, className.DEFAULTS, $this.data(), typeof option === 'object' && option);
+            let plugin = $this.data(dataName);
 
-            if (!data || $.isEmptyObject(data)) {
-                $this.data(dataName, (data = new className(this, options)));
+            //Create plugin and attach it to our jquery Element
+            if (!plugin) {
+                plugin = new className(this, options);
+                $this.data(dataName, plugin);
             }
-
-            if (typeof option === 'string') {
-                data[option]();
-            }
+            //Call the main function of our plugin
+            plugin.main();
         });
     };
 
@@ -43,7 +50,8 @@ export default function plugin(pluginName, className, shortHand = false) {
     if (shortHand) {
         $[pluginName] = (options) => $({})[pluginName](options);
     }
-
     // - No conflict
     $.fn[pluginName].noConflict = () => $.fn[pluginName] = old;
+
+
 }

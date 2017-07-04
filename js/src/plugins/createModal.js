@@ -1,27 +1,38 @@
+import atkPlugin from 'plugins/atkPlugin';
 
-export default class createModal {
-  constructor(element, options) {
+export default class createModal extends atkPlugin {
 
-    let $m = $('<div class="atk-modal ui modal scrolling"/>').appendTo('body').html(this.getDialogHtml(options.title));
+  main() {
+      const options = this.settings;
+      let $m = $('<div class="atk-modal ui modal scrolling"/>').appendTo('body').html(this.getDialogHtml(options.title));
 
-    $m.modal($.extend({
-      onHide: function (el) {
-      return true;
-    },
-      onHidden: function () {
-        $m.remove();
-      },
-      onVisible: function () {
-        $.getJSON(options.uri, options.uri_options, function (resp) {
-          $m.find('.atk-dialog-content').html(resp.html);
-          const result = function(){ eval(resp.eval.replace(/<\/?script>/g, '')); }.call(this.obj);
-        }).fail(function(){
-          console.log('Error loading modal content.')
-        });
-        $m.on("close", '.atk-dialog-content', function () {
-            $m.modal('hide');
-        });
-      }}, options.modal)).modal('show');
+      $m.modal($.extend({
+          onHide: function (el) {
+              return true;
+          },
+          onHidden: function () {
+              $m.remove();
+          },
+          onVisible: function () {
+              let $content = $m.find('.atk-dialog-content');
+              if (options.mode === 'json') {
+                  $.getJSON(options.uri, options.uri_options, function (resp) {
+                      $content.html(resp.html);
+                      const result = function(){ eval(resp.eval.replace(/<\/?script>/g, '')); }.call(this.obj);
+                  }).fail(function(){
+                      console.log('Error loading modal content.')
+                  });
+              } else {
+                  $content
+                      .load($.addParams(options.uri, options.uri_options), function() {
+                          $m.modal("refresh");
+                      });
+              }
+              //Attach closing handler
+              $m.on("close", '.atk-dialog-content', function () {
+                  $m.modal('hide');
+              });
+          }}, options.modal)).modal('show');
   }
 
   getDialogHtml(title) {
