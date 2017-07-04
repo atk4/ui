@@ -95,7 +95,7 @@ class jsCallback extends Callback implements jsExpressionable
             } catch (\atk4\data\ValidationException $e) {
                 // Validation exceptions will be presented to user in a friendly way
 
-                $acitons = [];
+                $actions = [];
                 $actions[] = new jsExpression('alert([])', [$e->getMessage()]);
 
                 $ajaxec = implode(";\n", array_map(function (jsExpressionable $r) {
