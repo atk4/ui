@@ -5,29 +5,6 @@ html(lang="{lang}en{/}")
     | {$meta}
     meta(charset='utf-8')
     | {$HEAD}
-    script.
-        $.fn.api.settings.successTest = function(response) {
-          if(response && response.eval) {
-              try {
-                var result = function(){ eval(response.eval); }.call(this.obj);
-              } catch (e) {
-                //alert(e);
-              }
-          }
-          this.data = new Object();
-          return true;
-        }
-
-        $.fn.api.settings.onFailure = function(response) {
-            w=window.open(null,'Error in JSON response','height=1000,width=1100,location=no,menubar=no,scrollbars=yes,status=no,titlebar=no,toolbar=no');
-            if(w){
-                w.document.write('<h5>Error in JSON response</h5>');
-                w.document.write(response);
-                w.document.write('<center><input type=button onclick="window.close()" value="Close"></center>');
-            }else{
-                alert("Error in ajaxec response"+response);
-            }
-        }
     style(type='text/css')
       | {$style}
   body(class="{$class}")
