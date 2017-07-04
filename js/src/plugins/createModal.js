@@ -4,6 +4,10 @@ export default class createModal extends atkPlugin {
 
   main() {
       const options = this.settings;
+      // make sure we have an object when no option is passed
+      if ($.isArray(options.uri_options)) {
+          options.uri_options = {};
+      }
       let $m = $('<div class="atk-modal ui modal scrolling"/>').appendTo('body').html(this.getDialogHtml(options.title));
 
       $m.modal($.extend({
@@ -16,7 +20,7 @@ export default class createModal extends atkPlugin {
           onVisible: function () {
               let $content = $m.find('.atk-dialog-content');
               if (options.mode === 'json') {
-                  $.getJSON(options.uri, options.uri_options, function (resp) {
+                  $.getJSON(options.uri, $.extend(options.uri_options, {json:true}), function (resp) {
                       $content.html(resp.html);
                       const result = function(){ eval(resp.eval.replace(/<\/?script>/g, '')); }.call(this.obj);
                       $m.modal('refresh');
@@ -34,6 +38,7 @@ export default class createModal extends atkPlugin {
                   $m.modal('hide');
               });
           }}, options.modal)).modal('show');
+      this.modals.push($m);
   }
 
   getDialogHtml(title) {

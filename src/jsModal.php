@@ -7,16 +7,12 @@ namespace atk4\ui;
  */
 class jsModal extends jsExpression
 {
-    public function __construct($title, $url, $args = [])
+    public function __construct($title, $url, $args = [], $mode = 'json')
     {
-	    $mode = 'json';
         if ($url instanceof VirtualPage) {
             $url = $url->getURL('cut');
-	        $args = array_merge($args, ['json'=>true]);
-        } else {
-        	$mode = 'html';
         }
-        //$args = array_merge($args, ['json'=>true]);
+
         parent::__construct('$(this).createModal([arg])', ['arg'=>['uri'=>$url, 'title'=>$title, 'mode'=>$mode, 'uri_options'=>$args]]);
     }
 }
