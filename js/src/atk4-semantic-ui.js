@@ -23,9 +23,20 @@
             }
         } else {
             //catch application error and display them in a new modal window.
-            var m = $("<div>").appendTo("body").addClass("ui scrolling modal").html(response.message);
-            m.modal({duration: 100, onHide: function() { m.children().remove(); return true; }}).modal("show");
-            return {success:true};
+            var m = $("<div>")
+                     .appendTo('body')
+                     .addClass('ui scrolling modal')
+                     .css('padding', '1em')
+                     .html(response.message);
+            m.modal({
+                duration: 100,
+                onHide: function() {
+                  m.children().remove();
+                  return true;
+                }
+              })
+              .modal('show')
+              .modal('refresh');
         }
     }
 
