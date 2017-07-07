@@ -20,7 +20,8 @@ class Modal extends View
         $this->uri = $uri;
     }
 
-    public function renderView() {
+    public function renderView()
+    {
         if ($this->uri) {
             $this->template->trySet('uri', $this->uri);
         }
