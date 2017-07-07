@@ -26,5 +26,4 @@ class Modal extends View
 		}
 		parent::renderView();
 	}
-
 }
