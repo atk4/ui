@@ -8,37 +8,16 @@ export default class createModal extends atkPlugin {
       if ($.isArray(options.uri_options)) {
           options.uri_options = {};
       }
-      let $m = $('<div class="atk-modal ui modal scrolling"/>').appendTo('body').html(this.getDialogHtml(options.title));
+      // create modal and add it to the DOM
+      let $m = $('<div class="atk-modal ui modal scrolling"/>')
+          .appendTo('body')
+          .html(this.getDialogHtml(options.title));
 
-      $m.modal($.extend({
-          onHide: function (el) {
-              return true;
-          },
-          onHidden: function () {
-              $m.remove();
-          },
-          onVisible: function () {
-              let $content = $m.find('.atk-dialog-content');
-              if (options.mode === 'json') {
-                  $.getJSON(options.uri, $.extend(options.uri_options, {json:true}), function (resp) {
-                      $content.html(resp.html);
-                      const result = function(){ eval(resp.eval.replace(/<\/?script>/g, '')); }.call(this.obj);
-                      $m.modal('refresh');
-                  }).fail(function(){
-                      console.log('Error loading modal content.')
-                  });
-              } else {
-                  $content
-                      .load($.addParams(options.uri, options.uri_options), function() {
-                          $m.modal("refresh");
-                      });
-              }
-              //Attach closing handler
-              $m.on("close", '.atk-dialog-content', function () {
-                  $m.modal('hide');
-              });
-          }}, options.modal)).modal('show');
-      this.modals.push($m);
+      //add setting to our modal for modalService
+      $m.data('modalSettings', {uri:options.uri, type:options.mode, arg:options.uri_options, needRemove:true, needCloseTrigger:true});
+
+      //call semantic-ui modal
+      $m.modal(options.modal).modal('show');
   }
 
   getDialogHtml(title) {
