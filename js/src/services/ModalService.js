@@ -26,6 +26,7 @@ class ModalService {
         settings.allowMultiple = true;
         settings.onHidden = this.onHidden;
         settings.onShow = this.onShow;
+        settings.onHide = this.onHide;
         settings.onVisible = this.onVisible;
     }
 
@@ -37,7 +38,7 @@ class ModalService {
         let arg = {}, data;
         // const service = apiService;
         const $modal = $(this);
-        //const $content = $(this).find('.atk-dialog-content');
+        const $content = $(this).find('.atk-dialog-content');
 
         // does data come from DOM or createModal
         if (!$.isEmptyObject($modal.data('modalSettings'))) {
@@ -58,7 +59,6 @@ class ModalService {
 
         // does modal content need to be loaded dynamically
         if (data && data.uri) {
-            const $content = $modal.find('.atk-dialog-content');
             $content.api({
                 on: 'now',
                 url: data.uri,
@@ -83,9 +83,14 @@ class ModalService {
 
     onShow() {}
 
+    onHide() {
+        return $(this).data('isClosable');
+    }
+
     addModal(modal) {
         this.modals.push(modal);
         this.setCloseTriggerEventInModals();
+        this.hideShowCloseIcon();
     }
 
     removeModal(modal) {
@@ -96,6 +101,7 @@ class ModalService {
         }
         this.modals.pop();
         this.setCloseTriggerEventInModals();
+        this.hideShowCloseIcon();
     }
 
     /**
@@ -111,6 +117,22 @@ class ModalService {
                 });
             } else {
                 modal.off('close', '.atk-dialog-content');
+            }
+        }
+    }
+
+    /**
+     * Only last modal in queue should have the close icon
+     */
+    hideShowCloseIcon() {
+        for (let i = this.modals.length - 1; i >= 0; --i) {
+            const modal = this.modals[i];
+            if (i === this.modals.length - 1) {
+                modal.find('i.icon.close').show();
+                modal.data('isClosable', true);
+            } else {
+                modal.find('i.icon.close').hide();
+                modal.data('isClosable', false);
             }
         }
     }
