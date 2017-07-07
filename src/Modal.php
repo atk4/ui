@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by abelair.
- * Date: 2017-07-05
- * Time: 3:06 PM
- */
 
 namespace atk4\ui;
-
 
 class Modal extends View
 {
