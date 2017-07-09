@@ -26,18 +26,18 @@ $vp->add(['Header', 'Contens of your pop-up here']);
 $vp->add(['LoremIpsum', 'size'=>2]);
 $vp->add(new Counter());
 
-$bar = $layout->add('Buttons');
-$bar->add('Button')->set('Go to Virtual Page')->link($vp->getURL());
-$bar->add('Button')->set('Open in pop-up mode')->link($vp->getURL('popup'));
-$bar->add('Button')->set('Open in cut-out mode')->link($vp->getURL('cut'));
+$bar = $layout->add(['View', 'ui'=>'buttons']);
+$bar->add('Button')->set('Inside current layout')->link($vp->getURL());
+$bar->add('Button')->set('On a blank page')->link($vp->getURL('popup'));
+$bar->add('Button')->set('No layout at all')->link($vp->getURL('cut'));
 
 $layout->add(['Header', 'Actual pop-ups']);
 
-$bar = $layout->add('Buttons');
-$bar->add('Button')->set('Open in pop-up mode')->on('click', new \atk4\ui\jsExpression('window.open([], "", "width=800,height=500")', [$vp->getURL('popup')]));
+$bar = $layout->add(['View', 'ui'=>'buttons']);
+$bar->add('Button')->set('Open in Pop-up')->on('click', new \atk4\ui\jsExpression('window.open([], "", "width=800,height=500")', [$vp->getURL('popup')]));
 $bar->add('Button')->set('Load in Modal')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut')));
 
-$bar->add('Button')->set('Load slowly in Modal')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut').'&slow=true'));
+$bar->add('Button')->set('Simulate slow load')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut').'&slow=true'));
 if (isset($_GET['slow'])) {
     sleep(1);
 }
@@ -51,6 +51,10 @@ $frame->set(function ($frame) {
     $frame->add(['Header', 'Clicked row with ID = '.$_GET['id']]);
 });
 
+$t->onRowClick(new \atk4\ui\jsModal('Row Clicked', $frame, ['id'=>$t->jsRow()->data('id')]));
+
+// Old COMPAT code
+/*
 $t->on('click', 'tr', new \atk4\ui\jsModal(
     'Row Clicked',
     new \atk4\ui\jsExpression(
@@ -61,3 +65,4 @@ $t->on('click', 'tr', new \atk4\ui\jsModal(
     )
 ));
 $t->addStyle('cursor', 'pointer');
+ */

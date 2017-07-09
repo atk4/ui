@@ -52,6 +52,14 @@ class Input extends Generic
     }
 
     /**
+     * Returns presentable value to be inserted into input tag.
+     */
+    public function getValue()
+    {
+        return isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: '';
+    }
+
+    /**
      * returns <input .../> tag.
      */
     public function getInput()
@@ -61,7 +69,7 @@ class Input extends Generic
             'type'       => $this->inputType,
             'placeholder'=> $this->placeholder,
             'id'         => $this->id.'_input',
-            'value'      => isset($this->field) ? $this->field->get() : $this->content ?: '',
+            'value'      => $this->getValue(),
         ]);
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
@@ -126,17 +134,22 @@ class Input extends Generic
 
         if ($this->action) {
             if (!is_object($this->action)) {
-                $this->addAction($this->action);
+                $this->action = new Button($this->action);
             }
-            $this->addClass('action');
+            if (!$this->action->_initialized) {
+                $this->add($this->action, 'AfterInput');
+                $this->addClass('action');
+            }
         }
 
         if ($this->actionLeft) {
             if (!is_object($this->actionLeft)) {
                 $this->actionLeft = new Button($this->actionLeft);
             }
-            $this->add($this->actionLeft, 'BeforeInput');
-            $this->addClass('left action');
+            if (!$this->actionLeft->_initialized) {
+                $this->add($this->actionLeft, 'BeforeInput');
+                $this->addClass('left action');
+            }
         }
 
         $this->template->setHTML('Input', $this->getInput());

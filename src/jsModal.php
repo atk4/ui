@@ -7,29 +7,12 @@ namespace atk4\ui;
  */
 class jsModal extends jsExpression
 {
-    public function __construct($title, $url)
+    public function __construct($title, $url, $args = [])
     {
         if ($url instanceof VirtualPage) {
             $url = $url->getURL('cut');
         }
-
-        $content = '
-  <i class="close icon"></i>
-  <div class="header">
-    '.htmlspecialchars($title).'
-  </div>
-  <div class="image content">
-  <div class="ui active inverted dimmer">
-    <div class="ui text loader">Loading</div>
-  </div>
-
-
-  </div>
-';
-
-        parent::__construct('
-        var m=$("<div>").appendTo("body").addClass("ui fullscreen scrolling modal").html([content]);
-        m.modal({onHide: function() { m.children().remove(); return true; }}).modal("show").find(".content").load([url], function() { m.modal("refresh"); })',
-            ['content'=>$content, 'url'=>$url]);
+        $args = array_merge($args, ['json'=>true]);
+        parent::__construct('$(this).createModal([arg])', ['arg'=>['uri'=>$url, 'title'=>$title, 'uri_options'=>$args]]);
     }
 }

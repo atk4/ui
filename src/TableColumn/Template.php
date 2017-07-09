@@ -19,13 +19,17 @@ class Template extends Generic
      *
      * @param string $template Template with {$tags}
      */
-    public function __construct($template)
+    public function setDefaults($template = [], $strict = false)
     {
-        $this->template = $template;
+        if (is_array($template) && isset($template[0])) {
+            $this->template = $template[0];
+        } elseif (is_string($template)) {
+            $this->template = $template;
+        }
     }
 
-    public function getCellTemplate(\atk4\data\Field $f)
+    public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        return $this->getTag('td', 'body', $this->template);
+        return $this->template;
     }
 }

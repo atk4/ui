@@ -9,20 +9,13 @@ namespace atk4\ui;
  */
 class Text extends View
 {
-    // @inheritdoc
     public $defaultTemplate = false;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function render()
+    public function render($force_echo = true)
     {
         return $this->content;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getHTML()
     {
         return $this->content;

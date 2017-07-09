@@ -1,11 +1,13 @@
 /config.codekit
 /phpunit.xml
+*.bak
 /.idea
 /public/semantic
 /public/jquery
 /vendor
 docs/build
 /composer.lock
+/demos/db.php
 /build
 .DS_Store
 *.codekit3

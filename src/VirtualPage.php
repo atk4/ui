@@ -17,6 +17,8 @@ class VirtualPage extends View
 
     public $fx = [];
 
+    public $ui = 'container';
+
     public function init()
     {
         parent::init();
@@ -31,6 +33,9 @@ class VirtualPage extends View
             }
 
             if ($this->cb->triggered == 'cut') {
+                if (isset($_GET['json'])) {
+                    $this->app->terminate($this->renderJSON());
+                }
                 $this->app->terminate($this->render());
             }
 

@@ -14,6 +14,11 @@ class Table extends Lister
     public $content = false;
 
     /**
+     * If table is part of Grid or CRUD, we want to reload that instead of grid.
+     */
+    public $reload = null;
+
+    /**
      * Column objects can service multiple columns. You can use it for your advancage by re-using the object
      * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
      * used.
@@ -87,6 +92,12 @@ class Table extends Lister
      */
     protected $t_empty;
 
+    public $sortable = null;
+
+    public $sort_by = null;
+
+    public $sort_order = null;
+
     /**
      * Defines a new column for this field. You need two objects for field to
      * work.
@@ -104,21 +115,30 @@ class Table extends Lister
      *
      * @param string         $name      Data model field name
      * @param Column\Generic $columnDef
-     * @param array          $fieldDef  Array of defaults for new Model field
      *
      * @return Column\Generic
      */
-    public function addColumn($name, $columnDef = null, $fieldDef = [])
+    public function addColumn($name, $columnDef = null)
     {
+        if (!$this->_initialized) {
+            $this->init();
+        }
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
 
-        $field = $this->model->hasElement($name);
-        if (!$field) {
-            $field = $this->model->addField($name, $fieldDef);
+        $field = null;
+        if (is_string($name)) {
+            $field = $this->model->hasElement($name);
         }
 
+        // No such field or not a string, so use it as columnDef
+        if (!$field && !$columnDef) {
+            $columnDef = $name;
+            $name = null;
+        }
+
+        // At this point $columnDef is surely there and we might have field also.
         if ($columnDef === null) {
             $columnDef = $this->_columnFactory($field);
         } elseif (is_string($columnDef) || is_array($columnDef)) {
@@ -126,13 +146,31 @@ class Table extends Lister
                 throw new Exception(['You can only specify column type by name if Table is in a render-tree']);
             }
 
-            $columnDef = $this->add($columnDef, $name);
-        } else {
-            $this->add($columnDef, $name);
+            $columnDef = $this->factory($columnDef);
         }
 
         $columnDef->table = $this;
-        $this->columns[$name] = $columnDef;
+        if (isset($columnDef->_initializerTrait) && !$columnDef->_initialized) {
+            $this->_add($columnDef);
+        }
+
+        if (!$columnDef instanceof TableColumn\Generic) {
+            throw new Exception([
+                'Table columns must extend TableColumn\Generic',
+                'column'=> $columnDef,
+            ]);
+        }
+
+        if (is_null($name)) {
+            $this->columns[] = $columnDef;
+        } elseif (isset($this->columns[$name])) {
+            if (!is_array($this->columns[$name])) {
+                $this->columns[$name] = [$this->columns[$name]];
+            }
+            $this->columns[$name][] = $columnDef;
+        } else {
+            $this->columns[$name] = $columnDef;
+        }
 
         return $columnDef;
     }
@@ -148,12 +186,18 @@ class Table extends Lister
     public function _columnFactory(\atk4\data\Field $f)
     {
         switch ($f->type) {
-        //case 'boolean':
-            //return $this->add(new Column\Checkbox());
+        case 'password':
+            return $this->add(new TableColumn\Password());
+
+        case 'text':
+            return $this->add(new TableColumn\Text());
+
+        case 'boolean':
+            return $this->add(new TableColumn\Status(['positive'=>[true], 'negative'=>[false]]));
 
         default:
             if (!$this->default_column) {
-                $this->default_column = $this->add(new TableColumn\Generic());
+                $this->default_column = new TableColumn\Generic();
             }
 
             return $this->default_column;
@@ -161,7 +205,7 @@ class Table extends Lister
     }
 
     /**
-     * Overrides work like this:.
+     * Override works like this:.
      * [
      *   'name'=>'Totals for {$num} rows:',
      *   'price'=>'--',
@@ -230,6 +274,8 @@ class Table extends Lister
         foreach ($columns as $column) {
             $this->addColumn($column);
         }
+
+        return $this->model;
     }
 
     /**
@@ -241,14 +287,18 @@ class Table extends Lister
             throw new Exception(['Table does not have any columns defined', 'columns'=>$this->columns]);
         }
 
+        if ($this->sortable) {
+            $this->addClass('sortable');
+        }
+
         // Generate Header Row
         if ($this->header) {
-            $this->t_head->setHTML('cells', $this->renderHeaderCells());
+            $this->t_head->setHTML('cells', $this->getHeaderRowHTML());
             $this->template->setHTML('Head', $this->t_head->render());
         }
 
         // Generate template for data row
-        $this->t_row_master->setHTML('cells', $this->getRowTemplate());
+        $this->t_row_master->setHTML('cells', $this->getDataRowHTML());
         $this->t_row_master['_id'] = '{$_id}';
         $this->t_row = new Template($this->t_row_master->render());
         $this->t_row->app = $this->app;
@@ -274,12 +324,17 @@ class Table extends Lister
                     }
                 }
 
-                foreach ($this->columns as $name => $column) {
-                    if (!method_exists($column, 'getHTMLTags')) {
-                        continue;
+                foreach ($this->columns as $name => $columns) {
+                    if (!is_array($columns)) {
+                        $columns = [$columns];
                     }
                     $field = $this->model->hasElement($name);
-                    $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
+                    foreach ($columns as $column) {
+                        if (!method_exists($column, 'getHTMLTags')) {
+                            continue;
+                        }
+                        $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
+                    }
                 }
 
                 // Render row and add to body
@@ -298,7 +353,7 @@ class Table extends Lister
         if (!$rows) {
             $this->template->appendHTML('Body', $this->t_empty->render());
         } elseif ($this->totals_plan) {
-            $this->t_totals->setHTML('cells', $this->renderTotalsCells());
+            $this->t_totals->setHTML('cells', $this->getTotalsRowHTML());
             $this->template->appendHTML('Foot', $this->t_totals->render());
         } else {
         }
@@ -307,18 +362,77 @@ class Table extends Lister
     }
 
     /**
+     * Same as on('click', 'tr', $action), but will also make sure you can't
+     * click outside of the body. Additionally when you move cursor over the
+     * rows, pointer will be used and rows will be highlighted as you hover.
+     *
+     * @param jsChain|callable $action Code to execute
+     *
+     * @return jQuery
+     */
+    public function onRowClick($action)
+    {
+        $this->addClass('selectable');
+        $this->js(true)->find('tbody')->css('cursor', 'pointer');
+
+        return $this->on('click', 'tbody>tr', $action);
+    }
+
+    /**
+     * Use this to quickly access the <tr> and wrap in jQuery.
+     *
+     * $this->jsRow()->data('id');
+     *
+     * @return jQuery
+     */
+    public function jsRow()
+    {
+        return (new jQuery(new jsExpression('this')))->closest('tr');
+    }
+
+    /**
      * Executed for each row if "totals" are enabled to add up values.
      */
     public function updateTotals()
     {
         foreach ($this->totals_plan as $key=>$val) {
+
+            // if value is array, then we treat it as built-in or callable aggregate method
             if (is_array($val)) {
-                switch ($val[0]) {
-                case 'sum':
-                    if (!isset($this->totals[$key])) {
-                        $this->totals[$key] = 0;
+                $f = $val[0]; // shortcut
+
+                // initial value is always 0
+                if (!isset($this->totals[$key])) {
+                    $this->totals[$key] = 0;
+                }
+
+                // closure support
+                // arguments - current value, key, \atk4\ui\Table object
+                if ($f instanceof \Closure) {
+                    $this->totals[$key] += ($f($this->model[$key], $key, $this) ?: 0);
+                }
+                // built-in methods
+                elseif (is_string($f)) {
+                    switch ($f) {
+                        case 'sum':
+                            $this->totals[$key] += $this->model[$key];
+                            break;
+                        case 'count':
+                            $this->totals[$key] += 1;
+                            break;
+                        case 'min':
+                            if ($this->model[$key] < $this->totals[$key]) {
+                                $this->totals[$key] = $this->model[$key];
+                            }
+                            break;
+                        case 'max':
+                            if ($this->model[$key] > $this->totals[$key]) {
+                                $this->totals[$key] = $this->model[$key];
+                            }
+                            break;
+                        default:
+                            throw new Exception(['Aggregation method does not exist', 'method'=>$f]);
                     }
-                    $this->totals[$key] += $this->model[$key];
                 }
             }
         }
@@ -330,13 +444,23 @@ class Table extends Lister
      *
      * @return string
      */
-    public function renderHeaderCells()
+    public function getHeaderRowHTML()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $field = $this->model->getElement($name);
 
-            $output[] = $column->getHeaderCell($field);
+            // If multiple formatters are defined, use the first for the header cell
+            if (is_array($column)) {
+                $column = $column[0];
+            }
+
+            if (!is_int($name)) {
+                $field = $this->model->getElement($name);
+
+                $output[] = $column->getHeaderCellHTML($field);
+            } else {
+                $output[] = $column->getHeaderCellHTML();
+            }
         }
 
         return implode('', $output);
@@ -348,13 +472,13 @@ class Table extends Lister
      *
      * @return string
      */
-    public function renderTotalsCells()
+    public function getTotalsRowHTML()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
             // if no totals plan, then show dash, but keep column formatting
             if (!isset($this->totals_plan[$name])) {
-                $output[] = $column->getTag('th', 'foot', '-');
+                $output[] = $column->getTag('foot', '-');
                 continue;
             }
 
@@ -362,12 +486,12 @@ class Table extends Lister
             if (is_array($this->totals_plan[$name])) {
                 // todo - format
                 $field = $this->model->getElement($name);
-                $output[] = $column->getTotalsCell($field, $this->totals[$name]);
+                $output[] = $column->getTotalsCellHTML($field, $this->totals[$name]);
                 continue;
             }
 
             // otherwise just show it, for example, "Totals:" cell
-            $output[] = $column->getTag('th', 'foot', $this->totals_plan[$name]);
+            $output[] = $column->getTag('foot', $this->totals_plan[$name]);
         }
 
         return implode('', $output);
@@ -378,13 +502,49 @@ class Table extends Lister
      *
      * @return string
      */
-    public function getRowTemplate()
+    public function getDataRowHTML()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            $field = $this->model->getElement($name);
 
-            $output[] = $column->getCellTemplate($field);
+            // If multiple formatters are defined, use the first for the header cell
+
+            if (!is_int($name)) {
+                $field = $this->model->getElement($name);
+            } else {
+                $field = null;
+            }
+
+            if (!is_array($column)) {
+                $column = [$column];
+            }
+
+            // we need to smartly wrap things up
+            $cell = null;
+            $cnt = count($column);
+            $td_attr = [];
+            foreach ($column as $c) {
+                if (--$cnt) {
+                    $html = $c->getDataCellTemplate($field);
+                    $td_attr = $c->getTagAttributes('body', $td_attr);
+                } else {
+                    // Last formatter, ask it to give us whole rendering
+                    $html = $c->getDataCellHTML($field, $td_attr);
+                }
+
+                if ($cell) {
+                    if ($name) {
+                        // if name is set, we can wrap things
+                        $cell = str_replace('{$'.$name.'}', $cell, $html);
+                    } else {
+                        $cell = $cell.' '.$html;
+                    }
+                } else {
+                    $cell = $html;
+                }
+            }
+
+            $output[] = $cell;
         }
 
         return implode('', $output);

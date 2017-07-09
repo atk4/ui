@@ -44,6 +44,7 @@
   },
   "homepage": "https://github.com/krasimir/webpack-library-starter",
   "dependencies": {
-    "jquery": "^3.1.1"
+    "jquery": "^3.1.1",
+    "semantic-ui-modal": "^2.2.10"
   }
 }

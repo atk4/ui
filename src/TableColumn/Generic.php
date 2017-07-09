@@ -8,6 +8,9 @@ namespace atk4\ui\TableColumn;
 class Generic
 {
     use \atk4\core\AppScopeTrait;
+    use \atk4\core\InitializerTrait;
+    use \atk4\core\TrackableTrait;
+    use \atk4\core\DIContainerTrait;
 
     /**
      * Link back to the table, where column is used.
@@ -22,6 +25,16 @@ class Generic
      * @var array
      */
     public $attr = [];
+
+    /**
+     * Constructor.
+     *
+     * @param array $defaults
+     */
+    public function __construct($defaults = [])
+    {
+        $this->setDefaults($defaults);
+    }
 
     /**
      * Adds a new class to the cells of this column. The optional second argument may be "head",
@@ -60,20 +73,8 @@ class Generic
         return $this;
     }
 
-    /**
-     * Returns a suitable cell tag with the supplied value. Applies modifiers
-     * added through addClass and setAttr.
-     *
-     * @param string $tag
-     * @param string $position
-     * @param string $value
-     *
-     * @return string
-     */
-    public function getTag($tag, $position, $value)
+    public function getTagAttributes($position, $attr = [])
     {
-        $attr = [];
-
         // "all" applies on all positions
         if (isset($this->attr['all'])) {
             $attr = array_merge_recursive($attr, $this->attr['all']);
@@ -83,6 +84,23 @@ class Generic
         if (isset($this->attr[$position])) {
             $attr = array_merge_recursive($attr, $this->attr[$position]);
         }
+
+        return $attr;
+    }
+
+    /**
+     * Returns a suitable cell tag with the supplied value. Applies modifiers
+     * added through addClass and setAttr.
+     *
+     * @param string $position - 'head', 'body' or 'tail'
+     * @param string $value    - what is inside? either html or array defining HTML structure, see App::getTag help
+     * @param array  $attr     - extra attributes to apply on the tag
+     *
+     * @return string
+     */
+    public function getTag($position, $value, $attr = [])
+    {
+        $attr = $this->getTagAttributes($position, $attr);
 
         if (isset($attr['class'])) {
             $attr['class'] = implode(' ', $attr['class']);
@@ -95,15 +113,37 @@ class Generic
      * Provided with a field definition (from a model) will return a header
      * cell, fully formatted to be included in a Table. (<th>).
      *
-     * Potentially may include elements for sorting.
-     *
      * @param \atk4\data\Field $f
      *
      * @return string
      */
-    public function getHeaderCell(\atk4\data\Field $f)
+    public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
     {
-        return $this->getTag('th', 'head', $f->getCaption());
+        if ($f === null) {
+            return $this->getTag('head', '', $this->table->sortable ? ['class'=>['disabled']] : []);
+        }
+
+        // If table is being sorted by THIS column, set the proper class
+        $attr = [];
+        if ($this->table->sortable) {
+            $attr['data-column'] = $f->short_name;
+
+            if ($this->table->sort_by === $f->short_name) {
+                $attr['class'][] = 'sorted '.$this->table->sort_order;
+
+                if ($this->table->sort_order === 'ascending') {
+                    $attr['data-column'] = '-'.$f->short_name;
+                } elseif ($this->table->sort_order === 'descending') {
+                    $attr['data-column'] = '';
+                }
+            }
+        }
+
+        return $this->getTag(
+            'head',
+            $f->getCaption(),
+            $attr
+        );
     }
 
     /**
@@ -114,9 +154,9 @@ class Generic
      *
      * @return string
      */
-    public function getTotalsCell(\atk4\data\Field $f, $value)
+    public function getTotalsCellHTML(\atk4\data\Field $f, $value)
     {
-        return $this->getTag('th', 'foot', $this->app->ui_persistence->typecastSaveField($f, $value));
+        return $this->getTag('foot', $this->app->ui_persistence->typecastSaveField($f, $value));
     }
 
     /**
@@ -135,9 +175,33 @@ class Generic
      *
      * @return string
      */
-    public function getCellTemplate(\atk4\data\Field $f)
+    public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
     {
-        return $this->getTag('td', 'body', '{$'.$f->short_name.'}');
+        return $this->getTag('body', [$this->getDataCellTemplate($f)], $extra_tags);
+    }
+
+    /**
+     * Provided with a field definition will return a string containing a "Template"
+     * that would produce CONTENS OF <td> cell when rendered. Example output:.
+     *
+     *   <b>{$name}</b>
+     *
+     * The tag that corresponds to the name of the field (e.g. {$name}) may be substituted
+     * by another template returned by getDataCellTemplate when multiple formatters are
+     * applied to the same column. The first one to be applied is executed first, then
+     * a subsequent ones are executed.
+     *
+     * @param \atk4\data\Field $f
+     *
+     * @return string
+     */
+    public function getDataCellTemplate(\atk4\data\Field $f = null)
+    {
+        if ($f) {
+            return '{$'.$f->short_name.'}';
+        } else {
+            return '{_$'.$this->short_name.'}';
+        }
     }
 
     /**

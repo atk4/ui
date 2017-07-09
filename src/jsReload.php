@@ -23,22 +23,15 @@ class jsReload implements jsExpressionable
 
         $this->args = $args;
 
-        $this->cb = $this->view->add(new CallbackLater());
+        $this->cb = $this->view->_add(new CallbackLater());
         $this->cb->set(function () {
-            $this->view->app->terminate($this->view->render());
+            $this->view->app->terminate($this->view->renderJSON());
         });
     }
 
     public function jsRender()
     {
         $final = (new jQuery($this->view))
-          ->spinner([
-            'loaderText' => '',
-            'active'     => true,
-            'inline'     => true,
-            'centered'   => true,
-            'replace'    => true,
-          ])
           ->reloadView(
           [
               'uri'         => $this->cb->getURL(),

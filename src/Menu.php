@@ -15,12 +15,19 @@ class Menu extends View
 
     public $defaultTemplate = 'menu.html';
 
+    public $in_dropdown = false;
+
     public function addItem($name = null, $action = null)
     {
-        $item = $this->add(new Item(['element'=>'a']));
-        if (!is_null($name)) {
-            $item->set($name);
+        if (is_object($name)) {
+            $item = $name;
+        } elseif ($name) {
+            $item = new Item($name);
+        } else {
+            $item = new Item();
         }
+
+        $item = $this->add($item)->setElement('a');
 
         if (is_array($action)) {
             $action = $this->app->url($action);
@@ -28,6 +35,10 @@ class Menu extends View
 
         if (is_string($action)) {
             $item->setAttr('href', $action);
+        }
+
+        if ($action instanceof jsExpressionable) {
+            $item->js('click', $action);
         }
 
         return $item;
@@ -48,14 +59,14 @@ class Menu extends View
             $name = [];
         }
 
-        $sub_menu = $this->add(new self(), ['defaultTemplate'=>'submenu.html', 'ui'=>'dropdown']);
+        $sub_menu = $this->add([new self(), 'defaultTemplate'=>'submenu.html', 'ui'=>'dropdown', 'in_dropdown'=>true]);
         $sub_menu->set('label', $label);
 
         if (isset($name['icon'])) {
             $sub_menu->add(new Icon($name['icon']), 'Icon')->removeClass('item');
         }
 
-        if ($this->ui == 'menu') {
+        if (!$this->in_dropdown) {
             $sub_menu->js(true)->dropdown(['on'=>'hover', 'action'=>'hide']);
         }
 
@@ -64,7 +75,7 @@ class Menu extends View
 
     public function addGroup($title)
     {
-        $group = $this->add(new self(), ['defaultTemplate'=>'menugroup.html', 'ui'=>false]);
+        $group = $this->add([new self(), 'defaultTemplate'=>'menugroup.html', 'ui'=>false]);
         if (is_string($title)) {
             $group->set('title', $title);
         } else {
@@ -77,10 +88,25 @@ class Menu extends View
         return $group;
     }
 
+    public function addMenuRight()
+    {
+        $menu = $this->add([new self(), 'ui'=>false], 'RightMenu');
+        $menu->removeClass('item')->addClass('right menu');
+
+        return $menu;
+    }
+
     public function add($object, $region = null)
     {
         $item = parent::add($object, $region);
         $item->addClass('item');
+
+        return $item;
+    }
+
+    public function addDivider()
+    {
+        $item = parent::add(['class'=>['divider']]);
 
         return $item;
     }
@@ -99,8 +125,8 @@ class Menu extends View
     {
         if ($this->activate_on_click && $this->ui == 'menu') {
             // Semantic UI need some JS magic
-            $this->on('click', 'a.item', $this->js()->find('.active')->removeClass('active'), []);
-            $this->on('click', 'a.item', null, [])->addClass('active');
+            $this->on('click', 'a.item', $this->js()->find('.active')->removeClass('active'), ['preventDefault'=>false, 'stopPropagation'=>false]);
+            $this->on('click', 'a.item', null, ['preventDefault'=>false, 'stopPropagation'=>false])->addClass('active');
         }
 
         if ($this->content) {

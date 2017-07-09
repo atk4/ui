@@ -39,11 +39,11 @@ Each of the views will automatically render all of the child views.
 
 
 
-Initializing Tree
-=================
+Initializing Render Tree
+========================
 
 Views use a principle of ``delayed init``, which allow you to manipulate View objects
-in any way you wish, before they will actuallized:.
+in any way you wish, before they will actuallized.
 
 .. php:method:: add($object, $region = 'Content')
 

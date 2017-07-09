@@ -2,12 +2,29 @@
 
 include 'init.php';
 
-$t = $layout->add(['View', 'red'=>true,  'ui'=>'segment'])->add('Text');
+// buttons configuration: [page, title]
+$buttons = [
+    ['page' => ['layouts_nolayout'],               'title' => 'HTML without layout'],
+    ['page' => ['layouts_manual'],                 'title' => 'Manual layout'],
+    ['page' => ['header', 'layout'=>'centered'], 'title' => 'Centered layout'],
+    ['page' => ['layouts_admin'],                  'title' => 'Admin Layout'],
+    ['page' => ['layouts_error'],                  'title' => 'Exception Error'],
+];
 
-$t->addParagraph('Layouts can be used to wrap your UI elements into HTML / Boilerplate');
+// layout
+$layout->add(['View', 'red'=>true,  'ui'=>'segment'])
+    ->add('Text')
+    ->addParagraph('Layouts can be used to wrap your UI elements into HTML / Boilerplate');
 
-$layout->add('Button')->set(['HTML without layout'])->link(['nolayout']);
-$layout->add('Button')->set(['Manual layout'])->link(['layout']);
-$layout->add('Button')->set(['Centered Layout'])->link(['header', 'layout'=>'centered']);
-$layout->add('Button')->set(['Admin Layout'])->link(['layout2']);
-$layout->add('Button')->set(['Exception Error'])->link(['error']);
+// toolbar
+$tb = $layout->add('View');
+
+// iframe
+$i = $layout->add(['View', 'green'=>true, 'ui'=>'segment'])->setElement('iframe')->setStyle(['width'=>'100%', 'height'=>'500px']);
+
+// add buttons in toolbar
+foreach ($buttons as $k=>$args) {
+    $tb->add('Button')
+        ->set([$args['title'], 'iconRight'=>'down arrow'])
+        ->js('click', $i->js()->attr('src', $layout->app->url($args['page'])));
+}
