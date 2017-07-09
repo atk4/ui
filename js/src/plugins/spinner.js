@@ -1,4 +1,3 @@
-import $ from 'jquery';
 
 export default class spinner {
     constructor(element, options) {

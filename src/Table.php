@@ -192,8 +192,8 @@ class Table extends Lister
         case 'text':
             return $this->add(new TableColumn\Text());
 
-        //case 'boolean':
-            //return $this->add(new TableColumn\Checkbox());
+        case 'boolean':
+            return $this->add(new TableColumn\Status(['positive'=>[true], 'negative'=>[false]]));
 
         default:
             if (!$this->default_column) {

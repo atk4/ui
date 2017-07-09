@@ -4,10 +4,9 @@ date_default_timezone_set('UTC');
 
 require '../vendor/autoload.php';
 
-$app = new \atk4\ui\App([
-    'Agile UI v1.1 - Demo Suite',
-    'icon'=> 'user',
-]);
+$app = new \atk4\ui\App();
+
+$app->title = 'Agile UI - Demo Suite';
 
 if (file_exists('../public/atk4JS.min.js')) {
     $app->cdn['atk'] = '../public';
@@ -60,7 +59,7 @@ if (isset($layout->leftMenu)) {
     $layout->menu->addItem()->add(new \atk4\ui\Button(['View Source', 'teal', 'icon'=>'github']))
         ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url.$f]));
 
-    $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+    $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }
 
 require_once 'somedatadef.php';
