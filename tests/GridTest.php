@@ -5,7 +5,7 @@ namespace atk4\ui\tests;
 use atk4\ui\Table;
 use atk4\ui\TableColumn\Template;
 
-class ButtonTest extends \atk4\core\PHPUnit_AgileTestCase
+class GridTest extends \atk4\core\PHPUnit_AgileTestCase
 {
     public $m;
 
