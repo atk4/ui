@@ -105,7 +105,7 @@ class jsCallback extends Callback implements jsExpressionable
                 $m = new Message($e->getMessage());
                 $m->addClass('error');
 
-                $this->app->terminate(json_encode(['success'=>false, 'message'=>$m->getHTML(), 'eval'=>$ajaxec]));
+                $this->app->terminate(json_encode(['success'=>false, 'message'=>$m->getHTML()]));
             }
         });
     }
