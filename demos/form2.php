@@ -76,7 +76,7 @@ $form->onSubmit(function ($f) {
             $this->addField('gender', ['enum' => ['M', 'F']]);
         }
 
-        public function validate($intent = NULL)
+        public function validate($intent = null)
         {
             $errors = parent::validate();
 
