@@ -6,44 +6,167 @@
 [![Test Coverage](https://codeclimate.com/github/atk4/ui/badges/coverage.svg)](https://codeclimate.com/github/atk4/ui/coverage)
 [![Version](https://badge.fury.io/gh/atk4%2Fui.svg)](https://packagist.org/packages/atk4/ui)
 
-**Web UI Component library.**
+**Agile UI is a high-level PHP framework for creating User Interfaces in Web Apps**
 
-A component (or widget) is an interactive part of your user-interface, just like this example here:
+Regardless of which full-stack framework you are using - with Agile UI you won't need to write or know HTML, CSS or JavaScript for the basic tasks, such as creating the CRUD or the Form. Agile UI abstracts interaction between the browser and your application into a next-gen Object-Oriented interface with powerful abstraction.
 
-![grid](docs/images/grid.png)
+## Quick-and-dirty code
 
-Creating a re-usable, interractive and flexible component usually takes a lot of effort and knowledge.  Howevever, with Agile UI, this can be done very easily and with just a basic PHP knowledge.
+Agile UI does not impose on you how you must write the code, it focuses on building UI. Here are few examples that show you what you can do.
 
-*(WARNING: Agile UI may permanently change your understanding of a phrase "reinvent the wheel")*
+### Admin+CRUD in 15 lines
 
-Components created with Agile UI are:
+``` php
+  $app = new \atk4\ui\App('My App');
+  $app->initLayout(new \atk4\ui\Layout\Admin());
 
--   Portable. Use those components in any major PHP framework or application (including legacy apps)
--   Data-agnostic. Widgets vizualize and interract with data, that can come from SQL, NoSQL or API (See Agile Data, https://git.io/ad).
--   Composable. Your components can encapsulate other componens recursively.
+  $db = \atk4\data\Persistence::connect($DSN);
+
+  class User extends \atk4\data\Model {
+      public $table = 'user';
+      function init() {
+          parent::init();
+
+          $this->addField('name');
+          $this->addField('email', ['required'=>true]);
+          $this->addField('password', ['type'=>'password']);
+      }
+  }
+
+  $app->layout->add(new \atk4\ui\CRUD())
+    ->setModel(new User($db));
+```
+
+A total of 15 lines to create a fully working Admin system with a CRUD:
+
+![](docs/images/admin-in-15-lines.png)
+
+## Registration Page - 15 lines
+
+Agile UI is not for admin systems only. It can be used to render your front-end UI too. Lets look at how to create a simple user registration page in.
+
+``` php
+$app = new \atk4\ui\App('My App');
+$app->initLayout(new \atk4\ui\Layout\Centered());
+
+$db = \atk4\data\Persistence::connect($DSN);
+
+$form = $app->layout->add(new \atk4\ui\Form());
+$form->setModel(new User($db));
+$form->buttonSave->set(['Register', 'icon'=>'right arrow']);
+$form->onSubmit(function($form){
+    $u = $form->model->newInstance()->tryLoadBy('email', $form->model['email']);
+    if ($u->loaded()) {
+        return $form->error('email', 'There is already account with this email.');
+    }
+    $form->model->save();
+    return $form->success('Thank you. You may login now.');
+});
+```
+
+Again - the result is beautiful and interractive:
+
+![](docs/images/register-in-15-lines.png)
+
+## What can be done in few hours?
+
+With some knowledge and training you will be able to build entire business-class applications just within few hours. 
+
+-   Warehouse app - source: https://github.com/atk4/warehouse
+-   Warehouse app - demo: https://atk-warehouse.herokuapp.com (free hosting, so wait 5 seconds)
+
+WARNING: this specification is intentionally kept simple for demonstration purposes.
+
+## Reinventing Data Persistence
+
+Conventionally you have to work with ORMs or direct data queries. Agile UI relies on a entirely different class framework for database persistence - [Agile Data](https://github.com/atk4/data). Not only it has all the benefits of ORM, but it also addresses all the faults and shortcomings to deliver powerful features like:
+
+-   Aggregation, scoping, behaviours, audit and custom actions
+-   NoSQL and RestAPI persistence support for Cloud Databases and Services
+-   SQL Expressions, Deep traversal and working with multiple persistences
+
+Through tight integration with Agile Data it makes it possible for your Forms to automatically explore relations and provide values for drop-downs:
+
+![](./docs/images/relation-exploration.png)
+
+## Add-ons and extensions
+
+Agile UI has been developed from ground-up to be extensible in a whole new way. Each add-on delivers wide range of classes you can incorporate into your application without worrying about UI and Data compatibility.
+
+### Components
+
+Components present a UI element which you can place anywhere in your layout. How about a UI for performing all user management operations - reset password, block account or edit user data:
+
+``` php
+$user_admin = $app->layout->add(new \atk4\login\UserAdmin(new User($db)));
+```
+
+### Grid Actions
+
+What about also adding a button for a popup to send a custom message to a user implemented in entirely different add-on?
+
+``` php
+$user_admin->addAction(\atk4\sendgrid\Actions\SendUserMessage());
+```
+
+### Entire Application Parts
+
+Even entire parts of your applications can be provided by add-on. The following code adds Log-in, Registration and Password reminder for your application:
+
+``` php
+$app->add(new \atk4\login\Auth([
+  new User($db),
+  'reminder'=>true, 'register'=>true
+  'outbox' = new \atk4\sendgrid\Outbox(['key'=>$apiKey])
+]));
+```
+
+![Login](./docs/images/login-demo.png)
+
+### Extending Layouts
+
+An add-on can add new menu items. It does not happen automatically but through a very simple line of code:
+
+``` php
+$auth->addChangePassword($app->layout->menu_user);
+```
+
+### Other things you can extend
+
+There are many other things you can extend:
+
+-   application layouts (e.g. Admin and Centered)
+-   form fields (e.g. CheckBox and Calendar)
+-   table columns (e.g. Status and Links)
+-   action-column actions (e.g. Button, Expander)
+-   data types (e.g. money, date)
+-   persistences (APIs and Services)
+-   models (e.g. User, Country)
+
+Because Agile UI takes care of the hard work, each add-on is very minimalistic and does not contain anything unnecessary. Your application will remain lean and you always have option to customize.
 
 ## Bundled componens
 
 Agile UI comes with many built-in components;
 
-| Name                                     | Description                              | Introduced |
+| Component                                | Description                              | Introduced |
 | ---------------------------------------- | ---------------------------------------- | ---------- |
-| Core                                     | Template, Render Tree and various patterns | 0.1        |
-| [Button](http://ui.agiletoolkit.org/demos/button.php) [[source](https://github.com/atk4/ui/blob/develop/demos/button.php#L14)] | Button in various variations including icons, labels, styles and tags | 0.1        |
-| [Input](http://ui.agiletoolkit.org/demos/field.php) [[source](https://github.com/atk4/ui/blob/develop/demos/field.php#L9)] | Decoration of input fields, integration with buttons. | 0.2        |
-| [JS](http://ui.agiletoolkit.org/demos/button2.php) [[source](https://github.com/atk4/ui/blob/develop/demos/button2.php#L15)] | Assign JS events and abstraction of PHP callbacks. | 0.2        |
-| [Header](http://ui.agiletoolkit.org/demos/header.php) [[source](https://github.com/atk4/ui/blob/develop/demos/header.php#L8)] | Simple view for header.                  | 0.3        |
-| [Menu](http://ui.agiletoolkit.org/demos/layout2.php) [[source](https://github.com/atk4/ui/blob/develop/demos/layout2.php#L16)] | Horizontal and vertical multi-dimensional menus with icons. | 0.4        |
-| [Form](http://ui.agiletoolkit.org/demos/form.php) [[source](https://github.com/atk4/ui/blob/develop/demos/form.php#L44)] | Validation, Interactivity, Feedback, Layouts, Field types. | 0.4        |
-| [Layouts](http://ui.agiletoolkit.org/demos/layouts.php) [[source](https://github.com/atk4/ui/blob/develop/demos/layout.php#L9)] | Admin, Centered.                         | 0.4        |
-| [Grid](http://ui.agiletoolkit.org/demos/grid.php) [[source](https://github.com/atk4/ui/blob/develop/demos/grid.php#L9)] | Formatting, Columns, Status, Link, Template, Delete. | 1.0        |
-| GridAdvanced                             | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1 *      |
-| Messages                                 | Such as "Info", "Error", "Warning" or "Tip" for easy use. | 1.1 *      |
-| Modal                                    | Modal dialog with dynamically loaded content. | 1.1 *      |
-| Relading                                 | Dynamically re-render part of the UI.    | 1.1 *      |
-| Actions                                  | Extended buttons with various interactions | 1.1 *      |
-| CRUD                                     | Create, List, Edit and Delete records (based on Advanced Grid) | 1.2 *      |
-| Layouts 2                                | 4 Responsive: Admin, Centered, Site, Wide. | 1.2 *      |
+| [View](http://ui.agiletoolkit.org/demos/view.php) | Template, Render Tree and various patterns | 0.1        |
+| [Button](http://ui.agiletoolkit.org/demos/button.php) | Button in various variations including icons, labels, styles and tags | 0.1        |
+| [Input](http://ui.agiletoolkit.org/demos/field.php) | Decoration of input fields, integration with buttons. | 0.2        |
+| [JS](http://ui.agiletoolkit.org/demos/button2.php) | Assign JS events and abstraction of PHP callbacks. | 0.2        |
+| [Header](http://ui.agiletoolkit.org/demos/header.php) | Simple view for header.                  | 0.3        |
+| [Menu](http://ui.agiletoolkit.org/demos/layout2.php) | Horizontal and vertical multi-dimensional menus with icons. | 0.4        |
+| [Form](http://ui.agiletoolkit.org/demos/form.php) | Validation, Interactivity, Feedback, Layouts, Field types. | 0.4        |
+| [Layouts](http://ui.agiletoolkit.org/demos/layouts.php) | Admin, Centered.                         | 0.4        |
+| [Table](http://ui.agiletoolkit.org/demos/table.php) | Formatting, Columns, Status, Link, Template, Delete. | 1.0        |
+| [Grid](http://ui.agiletoolkit.org/demos/grid.php) | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1        |
+| [Message](http://ui.agiletoolkit.org/demos/message.php) | Such as "Info", "Error", "Warning" or "Tip" for easy use. | 1.1        |
+| Modal                                    | Modal dialog with dynamically loaded content. | 1.1        |
+| [Reloading](http://ui.agiletoolkit.org/demos/reloading.php) | Dynamically re-render part of the UI.    | 1.1        |
+| Actions                                  | Extended buttons with various interactions | 1.1        |
+| [CRUD](http://ui.agiletoolkit.org/demos/crud.php) | Create, List, Edit and Delete records (based on Advanced Grid) | 1.1        |
+| Tabs                                     | 4 Responsive: Admin, Centered, Site, Wide. | 1.2 *      |
 | Breadcrumb                               | Push links to pages for navigation. Wizard. | 1.3 *      |
 | Items, Cards                             | Responsive Items and Card implementaiton. | 1.4 *      |
 | Wizard                                   | Multi-step, wizard with temporary data storing. | 1.5 *      |
