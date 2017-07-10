@@ -76,7 +76,7 @@ $form->onSubmit(function ($f) {
             $this->addField('gender', ['enum' => ['M', 'F']]);
         }
 
-        public function validate()
+        public function validate($intent = NULL)
         {
             $errors = parent::validate();
 
@@ -89,4 +89,5 @@ $form->onSubmit(function ($f) {
     }
 
     $app->layout->add('Form')
+      ->addClass('segment')
         ->setModel(new Person($db));
