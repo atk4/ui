@@ -13,6 +13,7 @@ export default class createModal extends atkPlugin {
           .appendTo('body')
           .html(this.getDialogHtml(options.title));
 
+
       //add setting to our modal for modalService
       $m.data('modalSettings', {uri:options.uri, type:options.mode, arg:options.uri_options, needRemove:true, needCloseTrigger:true});
 
