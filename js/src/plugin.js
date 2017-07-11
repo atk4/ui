@@ -33,7 +33,7 @@ export default function plugin(pluginName, className, shortHand = false) {
         }
         return this.each(function () {
             let $this = $(this);
-            let options = $.extend({}, className.DEFAULTS, $this.data(), typeof option === 'object' && option);
+            let options = $.extend({}, className.DEFAULTS, typeof option === 'object' && option);
             let plugin = $this.data(dataName);
 
             //Create plugin and attach it to our jquery Element
@@ -42,7 +42,7 @@ export default function plugin(pluginName, className, shortHand = false) {
                 $this.data(dataName, plugin);
             }
             //Call the main function of our plugin
-            plugin.main();
+            plugin.main(options);
         });
     };
 

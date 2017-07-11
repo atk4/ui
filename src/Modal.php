@@ -24,6 +24,7 @@ class Modal extends View
      * @param $vp VirtualPage
      *
      * @return $this
+     *
      * @throws Exception
      */
     public function addVirtualPage($vp)
@@ -38,7 +39,7 @@ class Modal extends View
     /**
      * Set modal to show on page.
      * Will trigger modal to be show on page.
-     * ex: $button->on('click', $modal->show());
+     * ex: $button->on('click', $modal->show());.
      *
      * @return mixed
      */
@@ -48,7 +49,7 @@ class Modal extends View
     }
 
     /**
-     * Set modal option
+     * Set modal option.
      *
      * @param $option
      * @param $value
@@ -62,7 +63,8 @@ class Modal extends View
     }
 
     /**
-     * Set modal options passing an array
+     * Set modal options passing an array.
+     *
      * @param $options
      *
      * @return $this
@@ -79,6 +81,7 @@ class Modal extends View
 
     /**
      * Add scrolling capability to modal.
+     *
      * @return $this
      */
     public function addScrolling()
@@ -88,7 +91,7 @@ class Modal extends View
     }
 
     /**
-     * Set modal transition
+     * Set modal transition.
      *
      * @param $transition_type
      *
@@ -101,7 +104,8 @@ class Modal extends View
     }
 
     /**
-     * Set modal transition duration
+     * Set modal transition duration.
+     *
      * @param $time
      *
      * @return $this
@@ -113,18 +117,20 @@ class Modal extends View
     }
 
     /**
-     * Add modal settings
+     * Add modal settings.
+     *
      * @param $setting_option
      * @param $value
      */
-    public function settings( $setting_option, $value)
+    public function settings($setting_option, $value)
     {
-        $this->options['setting'][$setting_option]= $value;
+        $this->options['setting'][$setting_option] = $value;
     }
 
     /**
-     * Add a deny action to modal
-     * @param $label
+     * Add a deny action to modal.
+     *
+     * @param $label.
      * @param $jsAction : Javascript action that will run when deny is click.
      *
      * @return $this
@@ -139,8 +145,9 @@ class Modal extends View
     }
 
     /**
-     * Add an approve action to modal
-     * @param $label
+     * Add an approve action to modal.
+     *
+     * @param $label.
      * @param $jsAction : Javascript action that will run when approve is click.
      *
      * @return $this
@@ -156,6 +163,7 @@ class Modal extends View
 
     /**
      * Add an action button to modal.
+     *
      * @param $button
      *
      * @return $this
@@ -169,6 +177,7 @@ class Modal extends View
 
     /**
      * Set uri that will load content in modal.
+     *
      * @param $uri
      */
     public function setUri($uri)
@@ -177,7 +186,7 @@ class Modal extends View
     }
 
     /**
-     * Make this modal unclosable via close icon or via the dimmer area
+     * Make this modal unclosable via close icon or via the dimmer area.
      *
      * @return $this
      */

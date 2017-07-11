@@ -2,8 +2,8 @@ import atkPlugin from 'plugins/atkPlugin';
 
 export default class createModal extends atkPlugin {
 
-  main() {
-      const options = this.settings;
+  main(options) {
+      //const options = this.settings;
       // make sure we have an object when no option is passed
       if ($.isArray(options.uri_options)) {
           options.uri_options = {};

@@ -2,7 +2,8 @@ import atkPlugin from 'plugins/atkPlugin';
 
 export default class ajaxec extends atkPlugin {
 
-    main() {
+    main(options) {
+        this.settings = options;
         //Allow user to confirm if available.
         if(this.settings.confirm){
             if(confirm(this.settings.confirm)) {

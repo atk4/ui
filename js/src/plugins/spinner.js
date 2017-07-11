@@ -2,8 +2,8 @@ import atkPlugin from 'plugins/atkPlugin';
 
 export default class spinner extends atkPlugin {
 
-    main() {
-        const options = this.settings;
+    main(options) {
+        //const options = this.settings;
         // Remove any existing dimmers/spinners
         this.$el.remove('.dimmer');
         this.$el.remove('.spinner');
@@ -41,6 +41,10 @@ export default class spinner extends atkPlugin {
 
         $element
             .append($spinner);
+    }
+
+    remove() {
+        this.$el.find('.loader').remove();
     }
 }
 

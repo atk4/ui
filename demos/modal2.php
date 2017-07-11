@@ -1,12 +1,15 @@
 <?php
+require 'Session.php';
 require 'init.php';
+
+$session = new Session();
 
 /********** VIRTUAL ******************/
 
 $layout->add(['Header', 'Virtual Page in modal']);
 
 $modal_vp1 = $layout->add(['Modal', 'title' =>'Lorem Ipsum from a virutal page']);
-$modal_vp2 = $layout->add(['Modal', 'title' =>'Message from a virutal page']);
+$modal_vp2 = $layout->add(['Modal', 'title' =>'Message from a virutal page'])->addClass('small');
 
 $vp = $layout->add('VirtualPage'); // this page will not be visible unless you trigger it specifically
 $vp->add(['Header', 'Contens of your pop-up here']);
@@ -27,15 +30,15 @@ $b->on('click', $modal_vp1->show());
 /********** ANIMATION ***************/
 
 $menu_items = [
-    'scale'=>[],
-    'flip'=>['horizontal flip','vertical flip'],
-    'fade'=>['fade up', 'fade down', 'fade left', 'fade right'],
-    'drop'=> [],
-    'fly'=>['fly left', 'fly right', 'fly up', 'fly down'],
-    'swing' => ['swing left', 'swing right', 'swing up', 'swing down'],
-    'slide' => ['slide left', 'slide right', 'slide up', 'slide down'],
+    'scale'  => [],
+    'flip'   => ['horizontal flip','vertical flip'],
+    'fade'   => ['fade up', 'fade down', 'fade left', 'fade right'],
+    'drop'   => [],
+    'fly'    => ['fly left', 'fly right', 'fly up', 'fly down'],
+    'swing'  => ['swing left', 'swing right', 'swing up', 'swing down'],
+    'slide'  => ['slide left', 'slide right', 'slide up', 'slide down'],
     'browse' => ['browse', 'browse right'],
-    'static' => ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce']
+    'static' => ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce'],
 ];
 
 $layout->add(['Header', 'Modal Animation']);
@@ -67,7 +70,7 @@ $layout->add(['Header', 'Modal Options']);
 
 $modal_da = $layout->add(['Modal', 'title'=>'Deny / Approve actions']);
 $modal_da->add('Message')->set('This modal is only closable via the green button');
-$modal_da->addDenyAction('No', new \atk4\ui\jsExpression('function(){window.alert("C\'ant do that"); return false;}'));
+$modal_da->addDenyAction('No', new \atk4\ui\jsExpression('function(){window.alert("Can\'t do that."); return false;}'));
 $modal_da->addApproveAction('Yes', new \atk4\ui\jsExpression('function(){window.alert("You\'re good to go!");}'));
 $modal_da->notClosable();
 
@@ -75,3 +78,84 @@ $menu_bar = $layout->add(['View', 'ui'=>'buttons']);
 $b = $menu_bar->add('Button')->set('Show Deny/Approve');
 $b->on('click', $modal_da->show());
 
+
+/************** MULTI STEP *********/
+
+$layout->add(['Header', 'Modal Multi Step']);
+
+$modal_step = $layout->add(['Modal', 'title'=>'Multi step actions']);
+$modal_step->setOption('observeChanges', true);
+
+$action      = new \atk4\ui\View(['ui'=>'buttons']);
+$prev_action = new \atk4\ui\Button(['Prev', 'labeled', 'icon' =>'left arrow']);
+$next_action = new \atk4\ui\Button(['Next', 'iconRight' =>'right arrow']);
+
+$action->add($prev_action);
+$action->add($next_action);
+
+$modal_step->addButtonAction($action);
+
+$vp_step = $layout->add('VirtualPage');
+$vp_step->set(function($vp_step) use ($modal_step, $session, $prev_action, $next_action) {
+    $page = $session->recall('page', 1);
+    $success = $session->recall('success', false);
+    if (isset($_GET['move'])) {
+        if ($_GET['move'] === 'next' && $success) {
+            ++$page;
+        }
+        if ($_GET['move'] === 'prev' && $page > 1) {
+            --$page;
+        }
+        $session->memorize('success', false);
+        $success = false;
+    } else {
+        $page = 1;
+    }
+    $session->memorize('page', $page);
+    if ($page === 1 ) {
+        $vp_step->add('Message')->set('testing multi story');
+        $session->memorize('success', true);
+        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).addClass("disabled")', ['#' . $prev_action->name]));
+        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).removeClass("disabled")', ['#' . $next_action->name]));
+    } else if ($page === 2) {
+        $a = [];
+        $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
+        $m_register->addField('name');
+
+        $f = $vp_step->add(new \atk4\ui\Form(['segment'=>true]));
+        $f->setModel($m_register);
+
+        $f->onSubmit(function ($f) use ($vp_step, $session, $next_action, $prev_action) {
+            if ($f->model['name'] != 'John') {
+                //$vp_step->js(true, new \atk4\ui\jsExpression('$([]).addClass("disabled")', [ '#' . $next_action->name]));
+                return $f->error('name', 'Your name is not John! It is "'.$f->model['name'].'". It should be John. Pleeease!');
+            } else {
+                $session->memorize('success', true);
+                $session->memorize('name', $f->model['name']);
+                $js[] = $f->success('Thank you, '.$f->model['name'].' you can go on!');
+                $js[] = $vp_step->js(true, new \atk4\ui\jsExpression('$([]).removeClass("disabled")', ['#' . $next_action->name]));
+                return $js;
+            }
+        });
+        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).removeClass("disabled")', ['#' . $prev_action->name]));
+        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).addClass("disabled")', ['#' . $next_action->name]));
+
+    } else if ($page === 3) {
+        $name = $session->recall('name');
+        $vp_step->add('Message')->set("Thank you ${name} for visiting us! We will be in touch");
+        $session->memorize('success', true);
+        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).hide()', [ '#' . $prev_action->name]));
+        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).hide()', [ '#' . $next_action->name]));
+    }
+    $modal_step->js(true)->modal('refresh');
+});
+
+$modal_step->addVirtualPage($vp_step);
+$next_action->on('click',  $modal_step->js()->reloadView(['uri' =>$vp_step->getURL('cut'), 'uri_options' => ['json' =>true, 'move' =>'next']]));
+$prev_action->on('click',  $modal_step->js()->reloadView(['uri' =>$vp_step->getURL('cut'), 'uri_options' => ['json' =>true, 'move' =>'prev']]));
+
+
+
+$menu_bar = $layout->add(['View', 'ui'=>'buttons']);
+$b = $menu_bar->add('Button')->set('Multi Step Modal');
+$b->on('click', $modal_step->show());
