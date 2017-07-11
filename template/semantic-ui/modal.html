@@ -1,3 +1,6 @@
-<{_element}div{/} id="{$_id}" class="{_ui}ui {/} {$class} {_class}{/}" style="{$style}" {$attributes}><i class="icon close"></i>
+<{_element}div{/} id="{$_id}" class="{_ui}ui {/} {$class} {_class}{/}" style="{$style}" {$attributes}><i class="{$close}"></i>
 <div class="header">{$title}</div>
-<div class="img content atk-dialog-content" data-uri="{$uri}" data-type="{_mode}json{/}" data-arg="{$arg}">{$Content}</div></{_element}div{/}>
+<div class="img content atk-dialog-content" data-uri="{$uri}" data-type="{_mode}json{/}" data-arg="{$arg}">{$Content}</div>
+<div class="actions">
+  <div>{$actions}</div>
+</div></{_element}div{/}>
