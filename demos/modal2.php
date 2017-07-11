@@ -74,3 +74,4 @@ $modal_da->notClosable();
 $menu_bar = $layout->add(['View', 'ui'=>'buttons']);
 $b = $menu_bar->add('Button')->set('Show Deny/Approve');
 $b->on('click', $modal_da->show());
+

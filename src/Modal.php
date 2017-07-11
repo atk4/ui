@@ -6,7 +6,7 @@ class Modal extends View
 {
     public $defaultTemplate = 'modal.html';
     public $title = 'Modal title';
-    public $ui = 'modal scrolling';
+    public $ui = 'modal';
     public $uri = null;
     public $options = [];
 
@@ -78,6 +78,16 @@ class Modal extends View
     }
 
     /**
+     * Add scrolling capability to modal.
+     * @return $this
+     */
+    public function addScrolling()
+    {
+        $this->addClass('scrolling');
+        return $this;
+    }
+
+    /**
      * Set modal transition
      *
      * @param $transition_type
@@ -115,28 +125,44 @@ class Modal extends View
     /**
      * Add a deny action to modal
      * @param $label
-     * @param $action
+     * @param $jsAction : Javascript action that will run when deny is click.
      *
      * @return $this
      */
-    public function addDenyAction($label, $action)
+    public function addDenyAction($label, $jsAction)
     {
-        $this->add('Button', 'actions')->set($label)->addClass('ui red cancel');
-        $this->options['modal_option']['onDeny'] = $action;
+        $b = new Button();
+        $b->set($label)->addClass('red cancel');
+        $this->addButtonAction($b);
+        $this->options['modal_option']['onDeny'] = $jsAction;
         return $this;
     }
 
     /**
      * Add an approve action to modal
      * @param $label
-     * @param $action
+     * @param $jsAction : Javascript action that will run when approve is click.
      *
      * @return $this
      */
-    public function addApproveAction($label, $action)
+    public function addApproveAction($label, $jsAction)
     {
-        $this->add('Button', 'actions')->set($label)->addClass('ui green ok');
-        $this->options['modal_option']['onApprove'] = $action;
+        $b = new Button();
+        $b->set($label)->addClass('green ok');
+        $this->addButtonAction($b);
+        $this->options['modal_option']['onApprove'] = $jsAction;
+        return $this;
+    }
+
+    /**
+     * Add an action button to modal.
+     * @param $button
+     *
+     * @return $this
+     */
+    public function addButtonAction($button)
+    {
+        $this->add($button, 'actions');
         return $this;
     }
 
@@ -152,7 +178,7 @@ class Modal extends View
 
     /**
      * Make this modal unclosable via close icon or via the dimmer area
-     * 
+     *
      * @return $this
      */
     public function notClosable()
@@ -166,14 +192,19 @@ class Modal extends View
         if ($this->uri) {
             $this->template->trySet('uri', $this->uri);
         }
+
+        // call modal creation first
+        if (isset($this->options['modal_option'])) {
+            $this->js(true)->modal($this->options['modal_option']);
+        } else {
+            $this->js(true)->modal();
+        }
+
+        //add setting if available.
         if (isset($this->options['setting'])) {
             foreach ($this->options['setting'] as $key => $value) {
                 $this->js(true)->modal('setting', $key, $value);
             }
-        }
-
-        if (isset($this->options['modal_option'])) {
-            $this->js(true)->modal($this->options['modal_option']);
         }
 
         if (!isset($this->options['modal_option']['closable']) || $this->options['modal_option']['closable']) {
