@@ -23,9 +23,9 @@ class Modal extends View
      *
      * @param $vp VirtualPage
      *
-     * @return $this
-     *
      * @throws Exception
+     *
+     * @return $this
      */
     public function addVirtualPage($vp)
     {
