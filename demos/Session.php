@@ -17,8 +17,9 @@ class Session
     }
 
     // {{{ Session management: http://agiletoolkit.org/doc/session
+
     /**
-     * Remember data in object-relevant session data
+     * Remember data in object-relevant session data.
      *
      * @param string $key   Key for the data
      * @param mixed  $value Value
@@ -67,7 +68,6 @@ class Session
 
             return $this->memorize($key, $default);
         } else {
-
             return $this->recall($key);
         }
     }
@@ -87,11 +87,11 @@ class Session
         }
 
         if (is_null($key)) {
-            unset ($_SESSION['o'][$this->name]);
-            unset ($_SESSION['s'][$this->name]);
+            unset($_SESSION['o'][$this->name]);
+            unset($_SESSION['s'][$this->name]);
         } else {
-            unset ($_SESSION['o'][$this->name][$key]);
-            unset ($_SESSION['s'][$this->name][$key]);
+            unset($_SESSION['o'][$this->name][$key]);
+            unset($_SESSION['s'][$this->name][$key]);
         }
 
         return $this;
@@ -116,7 +116,6 @@ class Session
             || is_null($_SESSION['o'][$this->name][$key])
         ) {
             if (!isset($_SESSION['s'][$this->name][$key])) {
-
                 return $default;
             }
             $v = $this->add(unserialize($_SESSION['s'][$this->name][$key]));
@@ -128,7 +127,7 @@ class Session
         return $_SESSION['o'][$this->name][$key];
     }
 
-    public function initializeSession($create=true)
+    public function initializeSession($create = true)
     {
         /* Attempts to re-initialize session. If session is not found,
            new one will be created, unless $create is set to false. Avoiding
@@ -136,17 +135,18 @@ class Session
         Call to memorize() / recall() will automatically create session */
 
         if ($this->_is_session_initialized || session_id()) {
-
             return;
         }
 
         // Change settings if defined in settings file
-        $params=session_get_cookie_params();
+        $params = session_get_cookie_params();
 
         $params['httponly'] = true;   // true by default
 
-        if($create===false && !isset($_COOKIE[$this->name]))return;
-        $this->_is_session_initialized=true;
+        if ($create === false && !isset($_COOKIE[$this->name])) {
+            return;
+        }
+        $this->_is_session_initialized = true;
         session_set_cookie_params(
             $params['lifetime'],
             $params['path'],
@@ -162,9 +162,9 @@ class Session
     public function destroySession()
     {
         if ($this->_is_session_initialized) {
-            $_SESSION = array();
+            $_SESSION = [];
             if (isset($_COOKIE[$this->name])) {
-                setcookie($this->name, '', time()-42000, '/');
+                setcookie($this->name, '', time() - 42000, '/');
             }
             session_destroy();
             $this->_is_session_initialized = false;
