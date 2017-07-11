@@ -150,10 +150,10 @@ $vp_step->set(function ($vp_step) use ($modal_step, $session, $prev_action, $nex
 
 $modal_step->addVirtualPage($vp_step);
 $next_action->on('click',  $modal_step->js()->reloadView(
-    ['uri' =>$vp_step->getURL('cut'), 'uri_options' => ['json' => true, 'move' => 'next']]
+    ['uri' => $vp_step->getURL('cut'), 'uri_options' => ['json' => true, 'move' => 'next']]
 ));
 $prev_action->on('click',  $modal_step->js()->reloadView(
-    ['uri' =>$vp_step->getURL('cut'), 'uri_options' => ['json' => true, 'move' => 'prev']]
+    ['uri' => $vp_step->getURL('cut'), 'uri_options' => ['json' => true, 'move' => 'prev']]
 ));
 
 $menu_bar = $layout->add(['View', 'ui'=>'buttons']);
