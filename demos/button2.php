@@ -42,3 +42,8 @@ $b = $layout->add(new Button('success'));
 $b->on('click', function ($b) {
     return 'success';
 });
+
+$b = $layout->add(new Button('failure'));
+$b->on('click', function ($b) {
+    throw new \atk4\data\ValidationException(['Everything is bad']);
+});
