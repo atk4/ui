@@ -1,4 +1,5 @@
 <?php
+
 require 'Session.php';
 require 'init.php';
 
@@ -15,7 +16,6 @@ $vp = $layout->add('VirtualPage'); // this page will not be visible unless you t
 $vp->add(['Header', 'Contens of your pop-up here']);
 $vp->add(['LoremIpsum', 'size'=>2]);
 $vp->add('Button')->set('Open next virutal page')->on('click', $modal_vp2->show());
-
 
 $vp1 = $layout->add('VirtualPage'); // this page will not be visible unless you trigger it specifically
 $vp1->add('Message')->text->addParagraph('This text belong to a second virtual page');
@@ -78,7 +78,6 @@ $menu_bar = $layout->add(['View', 'ui'=>'buttons']);
 $b = $menu_bar->add('Button')->set('Show Deny/Approve');
 $b->on('click', $modal_da->show());
 
-
 /************** MULTI STEP *********/
 
 $layout->add(['Header', 'Modal Multi Step']);
@@ -133,12 +132,12 @@ $vp_step->set(function ($vp_step) use ($modal_step, $session, $prev_action, $nex
                 $session->memorize('name', $f->model['name']);
                 $js[] = $f->success('Thank you, '.$f->model['name'].' you can go on!');
                 $js[] = $vp_step->js(true, new \atk4\ui\jsExpression('$([]).removeClass("disabled")', ['#'.$next_action->name]));
+
                 return $js;
             }
         });
         $vp_step->js(true, new \atk4\ui\jsExpression('$([]).removeClass("disabled")', ['#'.$prev_action->name]));
         $vp_step->js(true, new \atk4\ui\jsExpression('$([]).addClass("disabled")', ['#'.$next_action->name]));
-
     } elseif ($page === 3) {
         $name = $session->recall('name');
         $vp_step->add('Message')->set("Thank you ${name} for visiting us! We will be in touch");
@@ -150,10 +149,12 @@ $vp_step->set(function ($vp_step) use ($modal_step, $session, $prev_action, $nex
 });
 
 $modal_step->addVirtualPage($vp_step);
-$next_action->on('click',  $modal_step->js()->reloadView(['uri' =>$vp_step->getURL('cut'), 'uri_options' => ['json' =>true, 'move' =>'next']]));
-$prev_action->on('click',  $modal_step->js()->reloadView(['uri' =>$vp_step->getURL('cut'), 'uri_options' => ['json' =>true, 'move' =>'prev']]));
-
-
+$next_action->on('click',  $modal_step->js()->reloadView(
+    ['uri' =>$vp_step->getURL('cut'), 'uri_options' => ['json' => true, 'move' => 'next']]
+));
+$prev_action->on('click',  $modal_step->js()->reloadView(
+    ['uri' =>$vp_step->getURL('cut'), 'uri_options' => ['json' => true, 'move' => 'prev']]
+));
 
 $menu_bar = $layout->add(['View', 'ui'=>'buttons']);
 $b = $menu_bar->add('Button')->set('Multi Step Modal');

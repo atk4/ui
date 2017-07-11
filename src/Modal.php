@@ -33,6 +33,7 @@ class Modal extends View
             throw new Exception('Error: Trying to add a non virtual page to modal using addVirtualPage');
         }
         $this->setUri($vp->getUrl('cut'));
+
         return $this;
     }
 
@@ -59,6 +60,7 @@ class Modal extends View
     public function setOption($option, $value)
     {
         $this->options['modal_option'][$option] = $value;
+
         return $this;
     }
 
@@ -76,6 +78,7 @@ class Modal extends View
         } else {
             $this->options['modal_option'] = $options;
         }
+
         return $this;
     }
 
@@ -87,6 +90,7 @@ class Modal extends View
     public function addScrolling()
     {
         $this->addClass('scrolling');
+
         return $this;
     }
 
@@ -100,6 +104,7 @@ class Modal extends View
     public function transition($transition_type)
     {
         $this->settings('transition', $transition_type);
+
         return $this;
     }
 
@@ -113,6 +118,7 @@ class Modal extends View
     public function duration($time)
     {
         $this->settings('duration', $time);
+
         return $this;
     }
 
@@ -141,6 +147,7 @@ class Modal extends View
         $b->set($label)->addClass('red cancel');
         $this->addButtonAction($b);
         $this->options['modal_option']['onDeny'] = $jsAction;
+
         return $this;
     }
 
@@ -158,6 +165,7 @@ class Modal extends View
         $b->set($label)->addClass('green ok');
         $this->addButtonAction($b);
         $this->options['modal_option']['onApprove'] = $jsAction;
+
         return $this;
     }
 
@@ -171,9 +179,9 @@ class Modal extends View
     public function addButtonAction($button)
     {
         $this->add($button, 'actions');
+
         return $this;
     }
-
 
     /**
      * Set uri that will load content in modal.
@@ -193,6 +201,7 @@ class Modal extends View
     public function notClosable()
     {
         $this->options['modal_option']['closable'] = false;
+
         return $this;
     }
 
