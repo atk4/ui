@@ -15,9 +15,11 @@ export default class createModal {
         $.getJSON(options.uri, options.uri_options, function (resp) {
           $m.find('.atk-dialog-content').html(resp.html);
           const result = function(){ eval(resp.eval.replace(/<\/?script>/g, '')); }.call(this.obj);
+          $m.modal('refresh');
         }).fail(function(){
           console.log('Error loading modal content.')
         });
+
         $m.on("close", '.atk-dialog-content', function () {
             $m.modal('hide');
         });
