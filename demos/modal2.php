@@ -134,6 +134,7 @@ $vp_step->set(function ($vp_step) use ($modal_step, $session, $prev_action, $nex
                 $session->memorize('name', $f->model['name']);
                 $js[] = $f->success('Thank you, '.$f->model['name'].' you can go on!');
                 $js[] = $next_action->js()->removeClass('disabled');
+                
                 return $js;
             }
         });
