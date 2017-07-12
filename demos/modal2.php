@@ -112,38 +112,39 @@ $vp_step->set(function ($vp_step) use ($modal_step, $session, $prev_action, $nex
     }
     $session->memorize('page', $page);
     if ($page === 1) {
-        $vp_step->add('Message')->set('testing multi story');
+        $vp_step->add('Message')->set('Thanks for choosing us. We will be asking some questions along the way.');
         $session->memorize('success', true);
-        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).addClass("disabled")', ['#'.$prev_action->name]));
-        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).removeClass("disabled")', ['#'.$next_action->name]));
+        $vp_step->js(true, $prev_action->js(true)->show());
+        $vp_step->js(true, $next_action->js(true)->show());
+        $vp_step->js(true, $prev_action->js()->addClass('disabled'));
+        $vp_step->js(true, $next_action->js(true)->removeClass('disabled'));
     } elseif ($page === 2) {
         $a = [];
         $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
-        $m_register->addField('name');
+        $m_register->addField('name', ['caption'=>'Please enter your name (John)']);
 
         $f = $vp_step->add(new \atk4\ui\Form(['segment'=>true]));
         $f->setModel($m_register);
 
-        $f->onSubmit(function ($f) use ($vp_step, $session, $next_action, $prev_action) {
+        $f->onSubmit(function ($f) use ($next_action, $session) {
             if ($f->model['name'] != 'John') {
                 return $f->error('name', 'Your name is not John! It is "'.$f->model['name'].'". It should be John. Pleeease!');
             } else {
                 $session->memorize('success', true);
                 $session->memorize('name', $f->model['name']);
                 $js[] = $f->success('Thank you, '.$f->model['name'].' you can go on!');
-                $js[] = $vp_step->js(true, new \atk4\ui\jsExpression('$([]).removeClass("disabled")', ['#'.$next_action->name]));
-
+                $js[] = $next_action->js()->removeClass('disabled');
                 return $js;
             }
         });
-        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).removeClass("disabled")', ['#'.$prev_action->name]));
-        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).addClass("disabled")', ['#'.$next_action->name]));
+        $vp_step->js(true, $prev_action->js()->removeClass('disabled'));
+        $vp_step->js(true, $next_action->js(true)->addClass('disabled'));
     } elseif ($page === 3) {
         $name = $session->recall('name');
         $vp_step->add('Message')->set("Thank you ${name} for visiting us! We will be in touch");
         $session->memorize('success', true);
-        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).hide()', ['#'.$prev_action->name]));
-        $vp_step->js(true, new \atk4\ui\jsExpression('$([]).hide()', ['#'.$next_action->name]));
+        $vp_step->js(true, $prev_action->js(true)->hide());
+        $vp_step->js(true, $next_action->js(true)->hide());
     }
     $modal_step->js(true)->modal('refresh');
 });
