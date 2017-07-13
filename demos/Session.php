@@ -8,7 +8,7 @@
 class Session
 {
     public $name;
-    public $_is_session_initialized = false;
+    public $is_initialized = false;
 
     public function __construct($name = 'atk4')
     {
@@ -134,7 +134,7 @@ class Session
            session creation and placing cookies is to enhance user privacy.
         Call to memorize() / recall() will automatically create session */
 
-        if ($this->_is_session_initialized || session_id()) {
+        if ($this->is_initialized || session_id()) {
             return;
         }
 
@@ -146,7 +146,7 @@ class Session
         if ($create === false && !isset($_COOKIE[$this->name])) {
             return;
         }
-        $this->_is_session_initialized = true;
+        $this->is_initialized = true;
         session_set_cookie_params(
             $params['lifetime'],
             $params['path'],
@@ -161,13 +161,13 @@ class Session
     /** Completely destroy existing session */
     public function destroySession()
     {
-        if ($this->_is_session_initialized) {
+        if ($this->is_initialized) {
             $_SESSION = [];
             if (isset($_COOKIE[$this->name])) {
                 setcookie($this->name, '', time() - 42000, '/');
             }
             session_destroy();
-            $this->_is_session_initialized = false;
+            $this->is_initialized = false;
         }
     }
 }
