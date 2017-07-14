@@ -151,10 +151,10 @@ $vp_step->set(function ($vp_step) use ($modal_step, $session, $prev_action, $nex
 });
 
 $modal_step->addVirtualPage($vp_step);
-$next_action->on('click', $modal_step->js()->reloadView(
+$next_action->on('click', $modal_step->js()->atkReloadView(
     ['uri' => $vp_step->getURL('cut'), 'uri_options' => ['json' => true, 'move' => 'next']]
 ));
-$prev_action->on('click', $modal_step->js()->reloadView(
+$prev_action->on('click', $modal_step->js()->atkReloadView(
     ['uri' => $vp_step->getURL('cut'), 'uri_options' => ['json' => true, 'move' => 'prev']]
 ));
 

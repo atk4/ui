@@ -10,7 +10,7 @@ import ajaxec from 'plugins/ajaxec'
 import createModal from 'plugins/createModal'
 
 // Register our plugins
-registerPlugin('spinner', spinner);
-registerPlugin('reloadView', reloadView);
-registerPlugin('ajaxec', ajaxec);
-registerPlugin('createModal', createModal);
+registerPlugin('Spinner', spinner);
+registerPlugin('ReloadView', reloadView);
+registerPlugin('Ajaxec', ajaxec);
+registerPlugin('CreateModal', createModal);

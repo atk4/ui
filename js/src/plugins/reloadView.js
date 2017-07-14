@@ -4,7 +4,7 @@ export default class reloadView extends atkPlugin {
 
     main(options) {
         this.settings = options;
-        const spinner = this.$el.spinner({
+        const spinner = this.$el.atkSpinner({
             'loaderText': '',
             'active': true,
             'inline': true,
@@ -18,8 +18,8 @@ export default class reloadView extends atkPlugin {
                 data: this.settings.uri_options,
                 method: 'GET',
                 obj: this.$el,
-                onComplete: function(response, content){
-                    content.spinner('remove');
+                onComplete: function(response, content) {
+                    content.atkSpinner('remove');
                 }
             });
         }

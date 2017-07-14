@@ -19,9 +19,16 @@
  *
  * plugin('myPlugin', MyPlugin);
  */
-export default function plugin(pluginName, className, shortHand = false) {
+export default function plugin(name, className, shortHand = false) {
+
+    if(!$.atk){
+        $.atk = new Object();
+    };
+    let pluginName = 'atk' + name;
     let dataName = `__${pluginName}`;
     let old = $.fn[pluginName];
+
+    $.atk[className] = className;
 
     $.fn[pluginName] = function (option = {}, args = []) {
 
@@ -38,7 +45,7 @@ export default function plugin(pluginName, className, shortHand = false) {
 
             //Create plugin and attach it to our jquery Element
             if (!plugin) {
-                plugin = new className(this, options);
+                plugin = new $.atk[className](this, options);
                 $this.data(dataName, plugin);
             }
             //Call the main function of our plugin
@@ -52,6 +59,4 @@ export default function plugin(pluginName, className, shortHand = false) {
     }
     // - No conflict
     $.fn[pluginName].noConflict = () => $.fn[pluginName] = old;
-
-
 }
