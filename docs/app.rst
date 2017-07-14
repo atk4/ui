@@ -2,9 +2,6 @@
 
 .. _app:
 
-===
-App
-===
 
 .. php:class:: App
 

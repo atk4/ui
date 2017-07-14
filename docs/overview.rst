@@ -194,8 +194,9 @@ Best use of Agile UI
 
 .. _component:
 
-Component Overview
-==================
+Component
+=========
+
 The component is a fundamental builing block of Agile UI. Each component is fully
 self-sufficient and creating a class instance is enough to make component work.
 

@@ -42,8 +42,6 @@ We call this format 'Seed' this section will explain how and where it is used.
 .. toctree::
     seed
 
-
-
 Render Tree
 ===========
 Agile Toolkit is allows you to create components hierarchically. What is really unique and
@@ -73,8 +71,9 @@ behaviour see:
 
 
 
-Agile Data Integration
-======================
+Agile Data
+==========
+
 Agile UI framework is focused on building User Interfaces, but quite often interface must
 present data values to the user or even receive data values from user's input.
 
@@ -93,13 +92,29 @@ inputs user data.
 .. toctree::
     data
 
+Callbacks and Virtual Pages
+===========================
+
+By reying on the ability of generating :ref:`unique_name`, it's possible to create several classes
+for implementing PHP call-backs. They follow the pattern:
+
+ - present something on the page (maybe)
+ - generate URL with unique parameter
+ - if unique parameter is passed back, behave differently
+
+Once concept is established, it can even be used on a higher level, for example::
+
+    $button->on('click', function() { return 'clicked button'; });
+
+.. toctree::
+    callbacks
+
 
 
 .. toctree::
     :maxdepth: 4
 
     init
-    template
     callback
     virtualpage
 

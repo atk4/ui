@@ -2,8 +2,8 @@
 
 .. _data:
 
-Agile Data Integration
-======================
+Integration
+-----------
 
 Agile UI relies on Agile Data library for flexible access to user defined data sources. The purpose of this integration
 is to relieve developer from manually creating data fetching and storing code.
