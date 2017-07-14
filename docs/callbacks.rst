@@ -3,7 +3,7 @@
 .. _callback:
 
 Introduction
----------------------
+------------
 
 Agile UI pursues a goal of creating full-featured, interractive user interface. Part of that relies
 on abstraction of Browser/Server communication. 
