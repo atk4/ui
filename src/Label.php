@@ -55,24 +55,24 @@ class Label extends View
 
     public function renderView()
     {
-        if ($this->icon) {
+        if ($this->icon !== null) {
             $this->icon = $this->add(new Icon($this->icon), 'BeforeContent');
         }
 
-        if ($this->image) {
+        if ($this->image !== null) {
             $this->image = $this->add(new Image($this->image), 'BeforeContent');
             $this->addClass('image');
         }
 
-        if ($this->detail) {
+        if ($this->detail !== null) {
             $this->detail = $this->add(new View($this->detail), 'AfterContent')->addClass('detail');
         }
 
-        if ($this->iconRight) {
+        if ($this->iconRight !== null) {
             $this->iconRight = $this->add(new Icon($this->iconRight), 'AfterContent');
         }
 
-        if ($this->imageRight) {
+        if ($this->imageRight !== null) {
             $this->imageRight = $this->add(new Image($this->imageRight), 'AfterContent');
             $this->addClass('image');
         }
