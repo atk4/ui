@@ -2,8 +2,7 @@ import atkPlugin from 'plugins/atkPlugin';
 
 export default class reloadView extends atkPlugin {
 
-    main(options) {
-        this.settings = options;
+    main() {
         const spinner = this.$el.atkSpinner({
             'loaderText': '',
             'active': true,

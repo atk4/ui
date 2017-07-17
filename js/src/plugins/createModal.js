@@ -2,8 +2,8 @@ import atkPlugin from 'plugins/atkPlugin';
 
 export default class createModal extends atkPlugin {
 
-  main(options) {
-      //const options = this.settings;
+  main() {
+      const options = this.settings;
       // make sure we have an object when no option is passed
       if ($.isArray(options.uri_options)) {
           options.uri_options = {};
@@ -13,13 +13,11 @@ export default class createModal extends atkPlugin {
           .appendTo('body')
           .html(this.getDialogHtml(options.title));
 
-
       //add setting to our modal for modalService
       $m.data('modalSettings', {uri:options.uri, type:options.mode, arg:options.uri_options, needRemove:true, needCloseTrigger:true});
 
       //call semantic-ui modal
       $m.modal(options.modal).modal('show');
-
   }
 
   getDialogHtml(title) {

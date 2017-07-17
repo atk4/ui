@@ -2,13 +2,21 @@
 
 namespace atk4\ui;
 
+/**
+ * This class add modal to a page.
+ *
+ * Modal are added to the layout but their content is hidden by default.
+ * The modal action $modal->show() need to be triggered for the modal to be display.
+ *
+ */
 class Modal extends View
 {
     public $defaultTemplate = 'modal.html';
     public $title = 'Modal title';
     public $ui = 'modal';
-    public $uri = null;
-    public $options = [];
+    public $fx = [];
+    public $cb = null;
+    public $cb_view = null;
 
     public function init()
     {
@@ -17,24 +25,40 @@ class Modal extends View
     }
 
     /**
-     * Bind a virutal page to this modal.
-     * When modal open, the VP content will be fetch
-     * from server and display in modal.
-     *
-     * @param $vp VirtualPage
-     *
-     * @throws Exception
+     * Set callback function for this modal.
+     * @param array|string $fx
      *
      * @return $this
+     * @throws Exception
      */
-    public function addVirtualPage($vp)
+    public function set($fx)
     {
-        if (!$vp instanceof VirtualPage) {
-            throw new Exception('Error: Trying to add a non virtual page to modal using addVirtualPage');
+        if (!is_object($fx) && !($fx instanceof Closure)) {
+            throw new Exception('Error: Need to pass a function to Modal::set()');
         }
-        $this->setUri($vp->getUrl('cut'));
+        $this->fx = [$fx];
+        $this->enableCallback();
 
         return $this;
+    }
+
+    /**
+     * Add View to be loaded in this modal and
+     * attach CallbackLater to it.
+     * The cb_view only will be loaded dynamically within modal
+     * div.atk-content.
+     */
+    public function enableCallback()
+    {
+        $this->cb_view = $this->add('View');
+        $this->cb = $this->cb_view->add('CallbackLater');
+
+        $this->cb->set(function(){
+            if ($this->cb->triggered && $this->fx) {
+                $this->fx[0]($this->cb_view);
+            }
+            $this->app->terminate($this->cb_view->renderJSON());
+        });
     }
 
     /**
@@ -184,16 +208,6 @@ class Modal extends View
     }
 
     /**
-     * Set uri that will load content in modal.
-     *
-     * @param $uri
-     */
-    public function setUri($uri)
-    {
-        $this->uri = $uri;
-    }
-
-    /**
      * Make this modal unclosable via close icon or via the dimmer area.
      *
      * @return $this
@@ -207,8 +221,8 @@ class Modal extends View
 
     public function renderView()
     {
-        if ($this->uri) {
-            $this->template->trySet('uri', $this->uri);
+        if (!empty($this->fx)) {
+            $this->template->trySet('uri', $this->cb->getURL());
         }
 
         // call modal creation first

@@ -5,26 +5,33 @@ require 'init.php';
 
 $session = new Session();
 
-/********** VIRTUAL ******************/
+/*
+ * Modal demos.
+ */
 
-$layout->add(['Header', 'Virtual Page in modal']);
+/********** DYNAMIC ******************/
 
-$modal_vp1 = $layout->add(['Modal', 'title' =>'Lorem Ipsum from a virutal page']);
-$modal_vp2 = $layout->add(['Modal', 'title' =>'Message from a virutal page'])->addClass('small');
+$layout->add(['Header', 'Modal loading dynamic content via callback']);
 
-$vp = $layout->add('VirtualPage'); // this page will not be visible unless you trigger it specifically
-$vp->add(['Header', 'Contens of your pop-up here']);
-$vp->add(['LoremIpsum', 'size'=>2]);
-$vp->add('Button')->set('Open next virutal page')->on('click', $modal_vp2->show());
+//modal_vp1 will be render into page but hide until $modal_vp1->show() is activate.
+$modal_vp1 = $layout->add(['Modal', 'title' =>'Lorem Ipsum load dynamically']);
 
-$vp1 = $layout->add('VirtualPage'); // this page will not be visible unless you trigger it specifically
-$vp1->add('Message')->text->addParagraph('This text belong to a second virtual page');
+//modal_vp2 will be render into page but hide until $modal_vp1->show() is activate.
+$modal_vp2 = $layout->add(['Modal', 'title' =>'Text message load dynamically'])->addClass('small');
 
-$modal_vp1->addVirtualPage($vp);
-$modal_vp2->addVirtualPage($vp1);
+//When $modal_vp1->show() is activate, it will dynamically add this content to it.
+$modal_vp1->set(function($modal) use ($modal_vp2) {
+    $modal->add(['LoremIpsum', 'size' => 2]);
+    $modal->add('Button')->set('Open Text Message')->on('click', $modal_vp2->show());
+});
+
+//When $modal_vp2->show() is activate, it will dynamically add this content to it.
+$modal_vp2->set(function($modal){
+    $modal->add('Message')->text->addParagraph('This text is loaded using a second modal.');
+});
 
 $bar = $layout->add(['View', 'ui'=>'buttons']);
-$b = $bar->add('Button')->set('Open first Virtual page');
+$b = $bar->add('Button')->set('Open Lorem Ipsum');
 $b->on('click', $modal_vp1->show());
 
 /********** ANIMATION ***************/
@@ -80,11 +87,13 @@ $b->on('click', $modal_da->show());
 
 /************** MULTI STEP *********/
 
-$layout->add(['Header', 'Modal Multi Step']);
+$layout->add(['Header', 'Multiple page modal']);
 
+//Add modal to layout.
 $modal_step = $layout->add(['Modal', 'title'=>'Multi step actions']);
 $modal_step->setOption('observeChanges', true);
 
+//Add buttons to modal for next and previous actions.
 $action = new \atk4\ui\View(['ui'=>'buttons']);
 $prev_action = new \atk4\ui\Button(['Prev', 'labeled', 'icon' =>'left arrow']);
 $next_action = new \atk4\ui\Button(['Next', 'iconRight' =>'right arrow']);
@@ -94,8 +103,8 @@ $action->add($next_action);
 
 $modal_step->addButtonAction($action);
 
-$vp_step = $layout->add('VirtualPage');
-$vp_step->set(function ($vp_step) use ($modal_step, $session, $prev_action, $next_action) {
+//Set modal functionality. Will changes content according to page being displayed.
+$modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $next_action) {
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
     if (isset($_GET['move'])) {
@@ -106,24 +115,23 @@ $vp_step->set(function ($vp_step) use ($modal_step, $session, $prev_action, $nex
             --$page;
         }
         $session->memorize('success', false);
-        $success = false;
     } else {
         $page = 1;
     }
     $session->memorize('page', $page);
     if ($page === 1) {
-        $vp_step->add('Message')->set('Thanks for choosing us. We will be asking some questions along the way.');
+        $modal->add('Message')->set('Thanks for choosing us. We will be asking some questions along the way.');
         $session->memorize('success', true);
-        $vp_step->js(true, $prev_action->js(true)->show());
-        $vp_step->js(true, $next_action->js(true)->show());
-        $vp_step->js(true, $prev_action->js()->addClass('disabled'));
-        $vp_step->js(true, $next_action->js(true)->removeClass('disabled'));
+        $modal->js(true, $prev_action->js(true)->show());
+        $modal->js(true, $next_action->js(true)->show());
+        $modal->js(true, $prev_action->js()->addClass('disabled'));
+        $modal->js(true, $next_action->js(true)->removeClass('disabled'));
     } elseif ($page === 2) {
         $a = [];
         $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
         $m_register->addField('name', ['caption'=>'Please enter your name (John)']);
 
-        $f = $vp_step->add(new \atk4\ui\Form(['segment'=>true]));
+        $f = $modal->add(new \atk4\ui\Form(['segment'=>true]));
         $f->setModel($m_register);
 
         $f->onSubmit(function ($f) use ($next_action, $session) {
@@ -138,26 +146,29 @@ $vp_step->set(function ($vp_step) use ($modal_step, $session, $prev_action, $nex
                 return $js;
             }
         });
-        $vp_step->js(true, $prev_action->js()->removeClass('disabled'));
-        $vp_step->js(true, $next_action->js(true)->addClass('disabled'));
+        $modal->js(true, $prev_action->js()->removeClass('disabled'));
+        $modal->js(true, $next_action->js(true)->addClass('disabled'));
     } elseif ($page === 3) {
         $name = $session->recall('name');
-        $vp_step->add('Message')->set("Thank you ${name} for visiting us! We will be in touch");
+        $modal->add('Message')->set("Thank you ${name} for visiting us! We will be in touch");
         $session->memorize('success', true);
-        $vp_step->js(true, $prev_action->js(true)->hide());
-        $vp_step->js(true, $next_action->js(true)->hide());
+        $modal->js(true, $prev_action->js(true)->hide());
+        $modal->js(true, $next_action->js(true)->hide());
     }
     $modal_step->js(true)->modal('refresh');
 });
 
-$modal_step->addVirtualPage($vp_step);
+//Bind next action to modal next button.
 $next_action->on('click', $modal_step->js()->atkReloadView(
-    ['uri' => $vp_step->getURL('cut'), 'uri_options' => ['json' => true, 'move' => 'next']]
-));
-$prev_action->on('click', $modal_step->js()->atkReloadView(
-    ['uri' => $vp_step->getURL('cut'), 'uri_options' => ['json' => true, 'move' => 'prev']]
+    ['uri' => $modal_step->cb->getURL(), 'uri_options' => ['move' => 'next']]
 ));
 
+//Bin prev action to modal previous button.
+$prev_action->on('click', $modal_step->js()->atkReloadView(
+    ['uri' => $modal_step->cb->getURL(), 'uri_options' => ['move' => 'prev']]
+));
+
+//Bind display modal to page display button.
 $menu_bar = $layout->add(['View', 'ui'=>'buttons']);
 $b = $menu_bar->add('Button')->set('Multi Step Modal');
 $b->on('click', $modal_step->show());

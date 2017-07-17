@@ -2,8 +2,8 @@ import atkPlugin from 'plugins/atkPlugin';
 
 export default class spinner extends atkPlugin {
 
-    main(options) {
-        //const options = this.settings;
+    main() {
+        const options = this.settings;
         // Remove any existing dimmers/spinners
         this.$el.remove('.dimmer');
         this.$el.remove('.spinner');

@@ -14,6 +14,7 @@ export default class atkPlugin {
     constructor(element, options) {
         this.$el = $(element);
         this.settings = options;
+        this.main();
     }
 
     /**
