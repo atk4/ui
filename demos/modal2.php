@@ -20,13 +20,13 @@ $modal_vp1 = $layout->add(['Modal', 'title' =>'Lorem Ipsum load dynamically']);
 $modal_vp2 = $layout->add(['Modal', 'title' =>'Text message load dynamically'])->addClass('small');
 
 //When $modal_vp1->show() is activate, it will dynamically add this content to it.
-$modal_vp1->set(function($modal) use ($modal_vp2) {
+$modal_vp1->set(function ($modal) use ($modal_vp2) {
     $modal->add(['LoremIpsum', 'size' => 2]);
     $modal->add('Button')->set('Open Text Message')->on('click', $modal_vp2->show());
 });
 
 //When $modal_vp2->show() is activate, it will dynamically add this content to it.
-$modal_vp2->set(function($modal){
+$modal_vp2->set(function ($modal) {
     $modal->add('Message')->text->addParagraph('This text is loaded using a second modal.');
 });
 

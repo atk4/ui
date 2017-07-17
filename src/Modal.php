@@ -7,7 +7,6 @@ namespace atk4\ui;
  *
  * Modal are added to the layout but their content is hidden by default.
  * The modal action $modal->show() need to be triggered for the modal to be display.
- *
  */
 class Modal extends View
 {
@@ -26,10 +25,12 @@ class Modal extends View
 
     /**
      * Set callback function for this modal.
+     *
      * @param array|string $fx
      *
-     * @return $this
      * @throws Exception
+     *
+     * @return $this
      */
     public function set($fx)
     {
@@ -53,7 +54,7 @@ class Modal extends View
         $this->cb_view = $this->add('View');
         $this->cb = $this->cb_view->add('CallbackLater');
 
-        $this->cb->set(function(){
+        $this->cb->set(function () {
             if ($this->cb->triggered && $this->fx) {
                 $this->fx[0]($this->cb_view);
             }
