@@ -3,10 +3,27 @@
 namespace atk4\ui;
 
 /**
- * This class add modal to a page.
+ * This class add modal dialog to a page.
  *
  * Modal are added to the layout but their content is hidden by default.
- * The modal action $modal->show() need to be triggered for the modal to be display.
+ * $modal->show() is the triggered needed to actually display the modal.
+ *
+ * Modal can be use as a regular view, simply by adding other view to it.
+ *  $modal->add(['Message', 'title'=>'Welcome to Agile Toolkit')->text('Your text here').
+ *
+ * Modal can add content dynamically via CallbackLater.
+ *  $modal->set(function ($modal) {
+ *     $modal->add('Form');
+ * });
+ *
+ * Modal can use semantic-ui predefine method onApprove or onDeny by passing
+ * a jsAction to Modal::addDenyAction or Modal::addApproveAction method. It will not close until the jsAction return true.
+ *  $modal->addDenyAction('No', new \atk4\ui\jsExpression('function(){window.alert("Can\'t do that."); return false;}'));
+ *  $modal->addApproveAction('Yes', new \atk4\ui\jsExpression('function(){window.alert("You\'re good to go!");}'));
+ *
+ * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
+ *
+ * Some helper methods are also available to set: transition time, transition type or modal settings from semantic-ui.
  */
 class Modal extends View
 {
@@ -177,7 +194,7 @@ class Modal extends View
     }
 
     /**
-     * Add an approve action to modal.
+     * Add an approve action button to modal.
      *
      * @param $label.
      * @param $jsAction : Javascript action that will run when approve is click.
@@ -209,7 +226,7 @@ class Modal extends View
     }
 
     /**
-     * Make this modal unclosable via close icon or via the dimmer area.
+     * Make this modal not closable via close icon, esc key or via the dimmer area.
      *
      * @return $this
      */

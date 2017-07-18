@@ -9,6 +9,17 @@ $session = new Session();
  * Modal demos.
  */
 
+/********** REGULAR ******************/
+
+$layout->add(['Header', 'Simple Modal']);
+
+$modal_simple = $layout->add(['Modal', 'title' =>'Simple modal']);
+$modal_simple->add('Message')->set('Modal message here.');
+
+$menu_bar = $layout->add(['View', 'ui'=>'buttons']);
+$b = $menu_bar->add('Button')->set('Show Modal');
+$b->on('click', $modal_simple->show());
+
 /********** DYNAMIC ******************/
 
 $layout->add(['Header', 'Modal loading dynamic content via callback']);
