@@ -31,7 +31,7 @@ export default function plugin(name, className, shortHand = false) {
     let old = $.fn[pluginName];
 
     // add plugin to atk namespace.
-    $.atk[className] = className;
+    $.atk[name] = className;
 
     // register plugin to jQuery fn prototype.
     $.fn[pluginName] = function (option = {}, args = []) {
@@ -47,7 +47,7 @@ export default function plugin(name, className, shortHand = false) {
             let options = $.extend({}, className.DEFAULTS, typeof option === 'object' && option);
             // create plugin using the constructor function store in atk namespace object
             // and add a reference of it to this jQuery object data.
-            $(this).data(dataName, (new $.atk[className](this, options)));
+            $(this).data(dataName, (new $.atk[name](this, options)));
         });
     };
 
