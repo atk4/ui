@@ -1,4 +1,9 @@
+// if(!$) {
+//     $ = jQuery.noConflict();
+// }
+
 import 'atk4-semantic-ui';
+
 import 'helpers/addParams';
 
 import registerPlugin from './plugin';
@@ -14,3 +19,5 @@ registerPlugin('Spinner', spinner);
 registerPlugin('ReloadView', reloadView);
 registerPlugin('Ajaxec', ajaxec);
 registerPlugin('CreateModal', createModal);
+
+
