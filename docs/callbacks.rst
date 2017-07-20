@@ -5,11 +5,11 @@
 Introduction
 ------------
 
-Agile UI pursues a goal of creating full-featured, interractive user interface. Part of that relies
+Agile UI pursues a goal of creating a full-featured, interractive, user interface. Part of that relies
 on abstraction of Browser/Server communication. 
 
 Callback mechanism allow any :ref:`component` of Agile Toolkit to send HTTP requests back to itself
-thorugh a unique route and not worry about accidentally affecting or triggering action of any other
+through a unique route and not worry about accidentally affecting or triggering action of any other
 component.
 
 One example of this behaviour is the format of :php:meth:`View::on` where you pass 2nd argument as a
@@ -44,7 +44,7 @@ To create a new callback, do this::
     $layout->add($c);
 
 Because 'Callback' is not a View, it won't be rendered. The reason we are adding into :ref:`render_tree`
-is for it to establish unique name which will be used to generate callback URL:
+is for it to establish a unique name which will be used to generate callback URL:
 
 .. php:method:: getURL($val)
 
@@ -67,14 +67,14 @@ callback URL triggering a special action. We haven't set that action yet, so I'l
 
 Callback Triggering
 -------------------
-To illustrate how callbacks work, lets imagine the following workflow:
+To illustrate how callbacks work, let's imagine the following workflow:
 
  - your application with the above code resides in file 'test.php`
  - when user opens 'test.php' in the browser, first 4 lines of code execute
    but the set() will not execute "terminate". Execution will continue as normal.
  - getURL() will provide link e.g. `test.php?app_callback=callback`
 
-When page renders, user can click on a label. If he does, browser will send
+When page renders, the user can click on a label. If they do, the browser will send
 another request to the server:
 
  - this time same request is sent but with the `?app_callback=callback` parameter
@@ -104,7 +104,7 @@ much more preferred way is to use :php:attr:`$triggered`.
 
 .. php:attr:: triggered
 
-You use property `triggered` to detect if callback was executed or not, without short-circuting
+You use property `triggered` to detect if callback was executed or not, without short-circuting the
 execution with set() and terminate(). This can be helpful sometimes when you need to affect the
 rendering of the page through a special call-back link. The next example will change color of
 the label regardless of the callback function::
@@ -122,22 +122,22 @@ the label regardless of the callback function::
 
 .. php:attr:: POST_trigger
 
-A Callback class also use a POST variable for triggering. For this case the $callback->name should be set
+A Callback class can also use a POST variable for triggering. For this case the $callback->name should be set
 through the POST data.
 
 Even though the functionality of Callback is very basic, it gives a very solid foundation for number of
-derrived classes.
+derived classes.
 
 CallbackLater
 -------------
 
 .. php::class: CallbackLater
 
-This class is very similar to Callback but it will not execute immediatelly. Instead it will be executed
+This class is very similar to Callback, but it will not execute immediatelly. Instead it will be executed
 either at the end at beforeRender or beforeOutput hook from inside App, whichever comes first.
 
 In other words this won't break the flow of your code logic, it simply won't render it. In the next example
-the $label->detail is asigned at the very end, yet callback is able to access the property::
+the $label->detail is assigned at the very end, yet callback is able to access the property::
 
     $label = $layout->add(['Label','Callback URL:']);
     $cb = $label->add('CallbackLater');
@@ -174,7 +174,7 @@ a container. When jsReload is created, it transparently creates a 'CallbackLater
 `$view`. On the JavaScript side, it will execute this new route which will respond with a NEW content
 for the $view object. 
 
-Should jsReload use regular 'Callback' then it wouldn't know that $view must contain LoremIpsum text.
+Should jsReload use regular 'Callback', then it wouldn't know that $view must contain LoremIpsum text.
 
 jsReload existance is only possible thanks to CallbackLater implementation.
 
@@ -184,8 +184,8 @@ jsCallback
 
 .. php::class: jsCallback
 
-So far return value of callback handler was pretty much insignificant. But wouldn't it be great if this
-value was meaningfull in some way?
+So far, the return value of callback handler was pretty much insignificant. But wouldn't it be great if this
+value was meaningful in some way?
 
 jsCallback implements exactly that. When you specify a handler for jsCallback, it can return one or multiple :ref:`js_action`
 which will be rendered into JavaScript in response to triggering callback's URL. Let's bring up our older example, but will
@@ -206,7 +206,7 @@ When you trigger callback, you'll see the output::
     {"success":true,"message":"Success","eval":"alert(\"ok\")"}
 
 This is how jsCallback renders actions and sends them back to the browser. In order to retrieve and execute actions,
-you'll need a JavaScript routine. Luckily jsCallback also implements jsExpressionable, so in itself it is an action.
+you'll need a JavaScript routine. Luckily jsCallback also implements jsExpressionable, so it, in itself is an action.
 
 Let me try this again. jsCallback is an :ref:`js_action` which will execute request towards a callback-URL that will
 execute PHP method returning one or more :ref:`js_action` which will be received and executed by the original action.
@@ -223,7 +223,7 @@ To fully use jsAction above, here is a modified code::
     $label->detail = $cb->getURL();
     $label->on('click', $cb);
 
-Now, that is pretty long. For your convenience there is a shorter mechanism::
+Now, that is pretty long. For your convenience, there is a shorter mechanism::
 
     $label = $layout->add(['Label', 'Callback test']);
 
@@ -280,7 +280,7 @@ will send browser screen width back to the callback::
     $label->detail = $cb->getURL();
     $label->js('click', $cb);
 
-In here you see that I'm using a 2nd argument to $cb->set() to specify arguments which I'd like to fetch from the
+In here you see that I'm using a 2nd argument to $cb->set() to specify arguments, which, I'd like to fetch from the
 browser. Those arguments are passed to the callback and eventually arrive as $arg1 inside my callback. The :php:meth:`View::on()`
 also supports argument passing::
 
@@ -302,13 +302,13 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
 Refering to event origin
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-You might have noticed that jsCallback now passes first argument ($j) which so far we have ignored. This argument is a
+You might have noticed that jsCallback now passes first argument ($j) which so far, we have ignored. This argument is a
 jQuery chain for the element which received the event. We can change the response to do something with this element.
 Instead of `return` use::
 
     $j->text('width is '.$arg1);
 
-Now instead of showing alert box, label content will be changed to display window width.
+Now instead of showing an alert box, label content will be changed to display window width.
 
 There are many other applications for jsCallback, for example, it's used in :php:meth:`Form::onSubmit()`.
 
@@ -316,13 +316,13 @@ There are many other applications for jsCallback, for example, it's used in :php
 VirtualPage
 -----------
 
-So far we looked at the callbacks that either return raw output or are linked with JavaScript to execute action.
-There is one more interesting way how browser can be connected to PHP - VirtualPage.
+So far we looked at the callbacks that either return raw output, or are linked with JavaScript to execute action.
+There is one more interesting way how a browser can be connected to PHP - VirtualPage.
 
 .. php::class: VirtualPage
 
 Virtual Page is a view that renders as an empty string, so adding VirtualPage anywhere inside your :ref:`render_tree`
-will simply won't display any of it's content anywhere::
+simply won't display any of it's content anywhere::
 
     $vp = $layout->add('VirtualPage');
     $vp->add('LoremIpsum');
@@ -340,7 +340,7 @@ VirtuaPage has a property $cb, which refers to... CallbackLater object! Lets see
     $label->link($vp->cb->getURL());
 
 If you follow the link, you'll see 'LoremIpsum' text, but the label will not be visible now. This is because,
-when triggered, VirtualPage will get rid of all the other Content inside layout and will output itself and
+when triggered, VirtualPage will get rid of all the other Content inside layout, and will output itself and
 any views you have added into VirtualPage object.
 
 Output Modes
@@ -348,7 +348,7 @@ Output Modes
 
 .. php::method: getURL($mode = 'callback')
 
-You may pass argument to :php:meth:`Callback::getURL()` but with VirtualPage this value has a deeper meening.
+You may pass argument to :php:meth:`Callback::getURL()` but with VirtualPage this value has a deeper meaning.
 
  - getURL('cut') will return ONLY the HTML of virtual page, no Layout.
  - getURL('popup') will use a very minimalistic layout for valid HTML, suitable for iframes or popup windows.
