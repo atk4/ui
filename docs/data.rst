@@ -6,13 +6,13 @@ Integration
 -----------
 
 Agile UI relies on Agile Data library for flexible access to user defined data sources. The purpose of this integration
-is to relieve developer from manually creating data fetching and storing code.
+is to relieve a developer from manually creating data fetching and storing code.
 
-Other benefits of relying on Agile Data models is ability to store meta information of the models themselves. Without
+Other benefits of relying on Agile Data models is the ability to store meta information of the models themselves. Without
 Agile UI as hard dependency, Agile UI would have to re-implement all those features on it's own resulting in much
 bigger code footprint.
 
-There are no way to use Agile UI without Agile Data, however Agile Data is flexibly enough to work with your own
+There are no way to use Agile UI without Agile Data, however Agile Data is flexible enough to work with your own
 data sources. The rest of this chapter will explain how you can map various data structures.
 
 Static Data Arrays
@@ -28,9 +28,9 @@ method :php:meth:`View::setSource` which will work-around complexities and give 
     ]);
 
 .. note:: 
-    Dynamic views will not be able to identify that you are working with static data and some features may not work properly.
-    There are no plans in Agile UI to improve ways of using "setSource", instead you should learn more how to use Agile Data
-    for expressing your native data source. Agile UI is not optimized for setSource so it's performance will generally be
+    Dynamic views will not be able to identify that you are working with static data, and some features may not work properly.
+    There are no plans in Agile UI to improve ways of using "setSource", instead, you should learn more how to use Agile Data
+    for expressing your native data source. Agile UI is not optimized for setSource so its performance will generally be
     slower too.
 
 Raw SQL Queries
