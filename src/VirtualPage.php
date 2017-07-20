@@ -40,7 +40,6 @@ class VirtualPage extends View
             }
 
             if ($this->cb->triggered == 'popup') {
-                $this->ui = 'container'; // to maintain some gaps..
                 $this->app->html->template->set('title', $this->app->title);
                 $this->app->html->template->setHTML('Content', parent::getHTML());
                 $this->app->html->template->appendHTML('HEAD', $this->getJS());
