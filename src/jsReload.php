@@ -32,7 +32,7 @@ class jsReload implements jsExpressionable
     public function jsRender()
     {
         $final = (new jQuery($this->view))
-          ->reloadView(
+          ->atkReloadView(
           [
               'uri'         => $this->cb->getURL(),
               'uri_options' => $this->args,
