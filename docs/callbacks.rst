@@ -375,9 +375,11 @@ Although VirtualPage works without defining a callback, using one is more reliab
     $label->detail = $vp->cb->getURL();
     $label->link($vp->cb->getURL());
 
-Capability of defining callback makes it possible for VirtualPage to be embedded into any :ref:`component`
+This code will perform identically as the previous example, however 'LoremIpsum' will never be initialized
+unless you are requesting VirtualPage specifically, saving some CPU time. Capability of defining callback
+also makes it possible for VirtualPage to be embedded into any :ref:`component` quite reliably.
 
-As example, :php:class:`Tabs` component rely on VirtualPage and allow you to define dynamically loadable tabs::
+To illustrate, :php:class:`Tabs` component rely on VirtualPage and allow you to define dynamically loadable tabs::
 
     $t = $layout->add('Tabs');
 
