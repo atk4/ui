@@ -1,4 +1,4 @@
-import apiService from 'services/ApiService';
+import $ from 'jquery';
 
 /**
  * Singleton class

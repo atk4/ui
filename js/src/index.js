@@ -1,7 +1,3 @@
-// if(!$) {
-//     $ = jQuery.noConflict();
-// }
-
 import 'atk4-semantic-ui';
 
 import 'helpers/addParams';

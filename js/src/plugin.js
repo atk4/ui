@@ -1,4 +1,4 @@
-/* https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647 */
+import $ from 'jquery';
 
 /**
  * Generate a jQuery plugin
@@ -18,10 +18,14 @@
  * MyPlugin.DEFAULTS = {};
  *
  * plugin('myPlugin', MyPlugin);
+ *
+ * credit : https://gist.github.com/monkeymonk/c08cb040431f89f99928132ca221d647
+ *
+ * import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
+ * in final webpack output.
  */
 
 export default function plugin(name, className, shortHand = false) {
-    (function($){
         // Add atk namespace to jQuery global space.
         if(!$.atk){
             $.atk = new Object();
@@ -58,5 +62,4 @@ export default function plugin(name, className, shortHand = false) {
         }
         // - No conflict
         $.fn[pluginName].noConflict = () => $.fn[pluginName] = old;
-    })(jQuery);
 }

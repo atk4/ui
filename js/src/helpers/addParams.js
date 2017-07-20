@@ -1,4 +1,5 @@
 // Add atk namespace to jQuery global space.
+
 (function($) {
     if(!$.atk){
         $.atk = new Object();
@@ -17,5 +18,4 @@
 export default (function($){
     $.atkAddParams = $.atk.addParams
 })(jQuery);
-
 

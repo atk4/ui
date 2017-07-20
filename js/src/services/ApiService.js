@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 /**
  * Singleton class
  * Handle Semantic-ui api functionality throughout the app.
@@ -57,7 +59,7 @@ class ApiService {
                         throw({message:'Unable to replace element with id: '+ response.id});
                     }
                 }
-
+                //noinspection JSAnnotator
                 if (response && response.eval) {
                     eval(response.eval.replace(/<\/?script>/g, ''));
                 }
