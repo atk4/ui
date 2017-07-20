@@ -61,10 +61,10 @@ class ApiService {
                 }
                 //noinspection JSAnnotator
                 if (response && response.eval) {
-                    eval(response.eval.replace(/<\/?script>/g, ''));
+                    eval(`(function($) {${response.eval.replace(/<\/?script>/g, '')}})(jQuery);`);
                 }
-            } else {
-                // other service can still throw an error
+            } else if (response.isServiceError) {
+                // service can still throw an error
                 throw ({message:response.message});
             }
         } catch (e) {

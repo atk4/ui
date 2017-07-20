@@ -12,7 +12,7 @@
 
         return url;
     }
-})(jQuery)
+})(jQuery);
 
 
 export default (function($){

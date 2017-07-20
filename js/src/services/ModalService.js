@@ -69,6 +69,7 @@ class ModalService {
                     const result = content.html(response.html);
                     if (!result.length) {
                         response.success = false;
+                        response.isServiceError = true;
                         response.message = 'Unable to replace atk-dialog content in modal from server response';
                     } else {
                         $modal.modal('refresh');
