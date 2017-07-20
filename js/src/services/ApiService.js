@@ -61,7 +61,7 @@ class ApiService {
                 }
                 //noinspection JSAnnotator
                 if (response && response.eval) {
-                    eval(`(function($) {${response.eval.replace(/<\/?script>/g, '')}})(jQuery);`);
+                    eval(response.eval.replace(/<\/?script>/g, ''));
                 }
             } else if (response.isServiceError) {
                 // service can still throw an error
