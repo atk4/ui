@@ -15,7 +15,7 @@ component.
 One example of this behaviour is the format of :php:meth:`View::on` where you pass 2nd argument as a
 PHP callback::
 
-    $button = new Buttion();
+    $button = new Button();
 
     // clicking button generates random number every time
     $button->on('click', function($action){
@@ -43,8 +43,8 @@ To create a new callback, do this::
     $c = new \atk4\ui\Callback();
     $layout->add($c);
 
-Adding Callback into any object will not affect the rendering, but it will make Callback part of the
-:ref:`render_tree` and it will produce it with a unique callback URL:
+Because 'Callback' is not a View, it won't be rendered. The reason we are adding into :ref:`render_tree`
+is for it to establish unique name which will be used to generate callback URL:
 
 .. php:method:: getURL($val)
 
@@ -57,18 +57,38 @@ The following example code generates unique URL::
     $label->detail = $cb->getURL();
     $label->link($cb->getURL());
 
-If request is sent towards this URL, Callback object can execute a PHP callback, specified through
+I have assigned generated URL to the label, so that if you click it, your browser will visit
+callback URL triggering a special action. We haven't set that action yet, so I'll do it next with
 :php:meth::`Callback::set()`::
 
     $cb->set(function() use($app) {
         $app->terminate('in callback');
     });
 
-Calling :php:meth:`App::terminate()` will prevent the default behaviour (of rendering UI) and will
-output specified string instead.
+Callback Triggering
+-------------------
+To illustrate how callbacks work, lets imagine the following workflow:
 
-The callback is triggered just as you call :php:meth:`Callback::set()` and if you return anything
-inside the callback, the set() will retutrn it too::
+ - your application with the above code resides in file 'test.php`
+ - when user opens 'test.php' in the browser, first 4 lines of code execute
+   but the set() will not execute "terminate". Execution will continue as normal.
+ - getURL() will provide link e.g. `test.php?app_callback=callback`
+
+When page renders, user can click on a label. If he does, browser will send
+another request to the server:
+
+ - this time same request is sent but with the `?app_callback=callback` parameter
+ - the :php:meth:`Callback::set()` will notice this argument and execute "terminate()"
+ - terminate() will exit app execution and output 'in callback' back to user.
+
+Calling :php:meth:`App::terminate()` will prevent the default behaviour (of rendering UI) and will
+output specified string instead, stopping further execution of your application.
+
+Return value of set()
+---------------------
+
+The callback verifies trigger condition when you call :php:meth:`Callback::set()`. If your callback
+returns any value, the set() will return it too::
 
     $label = $layout->add(['Label','Callback URL:']);
     $cb = $label->add('Callback');
@@ -79,10 +99,15 @@ inside the callback, the set() will retutrn it too::
         $label->addClass('red');
     }
 
+This example uses return of the :php:meth:`Callback::set()` to add class to a label, however a
+much more preferred way is to use :php:attr:`$triggered`.
+
 .. php:attr:: triggered
 
-You use property `triggered` to detect if callback was executed or not, this way you don't depend
-on the callback return value::
+You use property `triggered` to detect if callback was executed or not, without short-circuting
+execution with set() and terminate(). This can be helpful sometimes when you need to affect the
+rendering of the page through a special call-back link. The next example will change color of
+the label regardless of the callback function::
 
     $label = $layout->add(['Label','Callback URL:']);
     $cb = $label->add('Callback');
@@ -94,8 +119,6 @@ on the callback return value::
     if ($cb->triggered) {
         $label->addClass('red');
     }
-
-If you have passed argument to getURL() the value of this argument will be also asigned to $triggered property.
 
 .. php:attr:: POST_trigger
 
@@ -171,7 +194,7 @@ use jsCallback class now::
     $label = $layout->add(['Label','Callback URL:']);
     $cb = $label->add('jsCallback');
 
-    $cb->set(function() use($app) { 
+    $cb->set(function() { 
         return 'ok';
     });
 
