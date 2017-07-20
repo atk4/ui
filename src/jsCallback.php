@@ -29,7 +29,7 @@ class jsCallback extends Callback implements jsExpressionable
             throw new Exception(['Call-back must be part of a RenderTree']);
         }
 
-        return (new jQuery())->ajaxec([
+        return (new jQuery())->atkAjaxec([
             'uri'        => $this->getURL(),
             'uri_options'=> $this->args,
             'confirm'    => $this->confirm,

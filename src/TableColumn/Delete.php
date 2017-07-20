@@ -20,7 +20,7 @@ class Delete extends Generic
             $this->table->app->terminate($reload->renderJSON());
         });
 
-        $this->table->on('click', 'a.'.$this->short_name)->ajaxec([
+        $this->table->on('click', 'a.'.$this->short_name)->atkAjaxec([
             'uri'        => $this->vp->getURL(),
             'uri_options'=> [$this->name => $this->table->jsRow()->data('id')],
             'confirm'    => (new \atk4\ui\jQuery())->attr('title'),

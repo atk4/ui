@@ -1,22 +1,25 @@
+import atkPlugin from 'plugins/atkPlugin';
 
-export default class reloadView {
-    constructor(element, options) {
-        const $element = $(element);
+export default class reloadView extends atkPlugin {
 
-        $element.spinner({
+    main() {
+        const spinner = this.$el.atkSpinner({
             'loaderText': '',
             'active': true,
             'inline': true,
             'centered': true,
             'replace': false});
 
-        if(options.uri) {
-            $element.api({
+        if(this.settings.uri) {
+            this.$el.api({
                 on: 'now',
-                url: options.uri,
-                data: options.uri_options,
+                url: this.settings.uri,
+                data: this.settings.uri_options,
                 method: 'GET',
-                obj: $element
+                obj: this.$el,
+                onComplete: function(response, content) {
+                    content.atkSpinner('remove');
+                }
             });
         }
     }
