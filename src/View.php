@@ -663,7 +663,7 @@ class View implements jsExpressionable
             }
         }
 
-        if ($this->content) {
+        if (isset($this->content) && $this->content !== false) {
             $this->template->append('Content', $this->content);
         }
     }
