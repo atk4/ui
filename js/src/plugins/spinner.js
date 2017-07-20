@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import atkPlugin from 'plugins/atkPlugin';
 
 export default class spinner extends atkPlugin {
