@@ -44,12 +44,13 @@ class Modal extends View
      * Set callback function for this modal.
      *
      * @param array|string $fx
+     * @param array|string $arg2
      *
      * @throws Exception
      *
      * @return $this
      */
-    public function set($fx)
+    public function set($fx = [], $arg2 = null)
     {
         if (!is_object($fx) && !($fx instanceof Closure)) {
             throw new Exception('Error: Need to pass a function to Modal::set()');
