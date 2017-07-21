@@ -61,7 +61,7 @@ class ApiService {
      * Under certain circumstance, response.eval was run and execute prior to onSuccess eval,
      * thus causing some code to be running twice.
      * To avoid conflict, property name in response was change from eval to atkjs.
-     * Which mean response.atkjs now contains code to be eval. 
+     * Which mean response.atkjs now contains code to be eval.
      *
      * @param response
      * @param element
