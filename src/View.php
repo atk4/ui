@@ -717,7 +717,7 @@ class View implements jsExpressionable
 
             return json_encode(['success'=> true,
                                 'message'=> 'Success',
-                                'eval'   => $this->getJS($force_echo),
+                                'atkjs'   => $this->getJS($force_echo),
                                 'html'   => $this->template->render(),
                                 'id'     => $this->name, ]);
         } catch (\Exception $exception) {

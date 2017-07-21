@@ -91,7 +91,7 @@ class jsCallback extends Callback implements jsExpressionable
                     return $r->jsRender();
                 }, $actions));
 
-                $this->app->terminate(json_encode(['success'=>true, 'message'=>'Success', 'eval'=>$ajaxec]));
+                $this->app->terminate(json_encode(['success'=>true, 'message'=>'Success', 'atkjs'=>$ajaxec]));
             } catch (\atk4\data\ValidationException $e) {
                 // Validation exceptions will be presented to user in a friendly way
 
