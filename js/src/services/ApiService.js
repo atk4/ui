@@ -11,11 +11,27 @@ class ApiService {
         return this.instance;
     }
 
+
     constructor() {
         if (!this.instance) {
             this.instance = this;
         }
         return this.instance;
+    }
+
+    /**
+     * Execute js code.
+     * This function should be call using .call() by
+     * passing proper context for 'this'.
+     * ex: apiService.evalResponse.call(this, code, jQuery)
+     * By passig the jQuery reference, $ var use by code that need to be eval
+     * will work just fine, even if $ is not assign globally.
+     *
+     * @param code //javascript to be eval.
+     * @param $  // reference to jQuery.
+     */
+    evalResponse(code, $) {
+        eval(code);
     }
 
 
@@ -41,10 +57,11 @@ class ApiService {
      * and allow us to properly eval the response.
      * Furthermore, the dom element responsible of the api call is returned if needed.
      *
-     * If need, some data are set in the element, inlude into the api call, prior to the call.
-     * This is the case for modal dialog that need to replace specific element content with html
-     * returned by the server without the proper id being set as usual.
-     * In case of modal, for example, the data 'isModal' is set to true and prior to be pass with the api call is set to true.
+     * Change in response object property from eval to atkjs.
+     * Under certain circumstance, response.eval was run and execute prior to onSuccess eval,
+     * thus causing some code to be running twice.
+     * To avoid conflict, property name in response was change from eval to atkjs.
+     * Which mean response.atkjs now contains code to be eval.
      *
      * @param response
      * @param element
@@ -59,16 +76,16 @@ class ApiService {
                         throw({message:'Unable to replace element with id: '+ response.id});
                     }
                 }
-                //noinspection JSAnnotator
-                if (response && response.eval) {
-                    eval(`(function($) {${response.eval.replace(/<\/?script>/g, '')}})(jQuery);`);
+                if (response && response.atkjs) {
+                    // Call evalResponse with proper context, js code and jQuery as $ var.
+                    apiService.evalResponse.call(this, response.atkjs.replace(/<\/?script>/g, ''), jQuery);
                 }
             } else if (response.isServiceError) {
                 // service can still throw an error
                 throw ({message:response.message});
             }
         } catch (e) {
-            alert('Error in ajax replace or eval:\n' + e.message);
+            alert('Error in ajax replace or atkjs:\n' + e.message);
         }
     }
 
@@ -123,7 +140,6 @@ class ApiService {
         }
 
     }
-
 
     /**
      * Display App error in a semantic-ui modal.

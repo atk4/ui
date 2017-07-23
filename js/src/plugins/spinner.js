@@ -4,6 +4,7 @@ import atkPlugin from 'plugins/atkPlugin';
 export default class spinner extends atkPlugin {
 
     main() {
+        this.timer;
         const options = this.settings;
         // Remove any existing dimmers/spinners
         this.$el.remove('.dimmer');
@@ -38,13 +39,14 @@ export default class spinner extends atkPlugin {
     }
 
     showSpinner($element, $spinner, replace = false) {
-        if(replace) $element.empty();
-
-        $element
-            .append($spinner);
+        this.timer = setTimeout(() => {
+            if(replace) $element.empty();
+            $element.append($spinner);
+        }, 500);
     }
 
     remove() {
+        clearTimeout(this.timer);
         this.$el.find('.loader').remove();
     }
 }
@@ -58,5 +60,5 @@ spinner.DEFAULTS = {
     loaderText: 'Loading',
     centered: false,
     baseDimmerMarkup: '<div class="ui dimmer"></div>',
-    baseLoaderMarkup: '<div class="ui loader"></div>',
+    baseLoaderMarkup: '<div class="ui loader"></div>'
 };

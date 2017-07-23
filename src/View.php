@@ -715,11 +715,11 @@ class View implements jsExpressionable
         try {
             $this->renderAll();
 
-            return json_encode(['success'=> true,
-                                'message'=> 'Success',
-                                'eval'   => $this->getJS($force_echo),
-                                'html'   => $this->template->render(),
-                                'id'     => $this->name, ]);
+            return json_encode(['success' => true,
+                                'message' => 'Success',
+                                'atkjs'   => $this->getJS($force_echo),
+                                'html'    => $this->template->render(),
+                                'id'      => $this->name, ]);
         } catch (\Exception $exception) {
             $l = $this->add(new self());
             if ($exception instanceof \atk4\core\Exception) {
