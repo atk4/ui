@@ -9,17 +9,20 @@ This release was possible thanks to our new contributors:
  - [TheGrammerNazi](https://github.com/TheGrammerNazi)
 
 ### Major Changes
- - Refactored JS Plugin System. ATK now implements:
+ - Refactored JS Plugin System. ATK now implements: #189, #201, #193, #202
    - spinner (link to doc needed)
    - reloadView (link to doc needed)
    - ajaxec (link to doc needed)
    - createModal (link to doc needed)
  - Refactored addField() and addColumn() #179
- - Documented Callbacks and Virtual pages #200 (http://agile-ui.readthedocs.io/en/latest/core.html#callbacks-and-virtual-pages)
- - 
+ - Documentation improvements:
+   - Callbacks and Virtual pages #200 (http://agile-ui.readthedocs.io/en/latest/core.html#callbacks-and-virtual-pages)
+   - README file #196
+ - Fixed problem with Checkbox on a form #130
+ - Fixed form submission with Enter #173
+ - Improved form validation #191
+ - Fix label display when it's 0 #198
 
-
-Releasfocusing on clean-ups, stability and adding more components.
 
 ## 1.1
 
