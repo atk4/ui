@@ -1,3 +1,25 @@
+## 1.2
+
+This release includes huge JavaScript overhaul and clean-up, refactored jsModal implementation,
+refactor of Table::addColumn() and Table::addField(), integration with Wordpress and a lot of new
+documentation.
+
+This release was possible thanks to our new contributors:
+ - [ibelar](https://github.com/ibelar)
+ - [TheGrammerNazi](https://github.com/TheGrammerNazi)
+
+### Major Changes
+ - Refactored JS Plugin System. ATK now implements:
+   - spinner (link to doc needed)
+   - reloadView (link to doc needed)
+   - ajaxec (link to doc needed)
+   - createModal (link to doc needed)
+ - Refactored addField() and addColumn() #179
+ - Documented Callbacks and Virtual pages #200 (http://agile-ui.readthedocs.io/en/latest/core.html#callbacks-and-virtual-pages)
+ - 
+
+
+Releasfocusing on clean-ups, stability and adding more components.
 
 ## 1.1
 
