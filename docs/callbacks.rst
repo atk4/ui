@@ -407,3 +407,26 @@ class, you can set $ui property to something else. Try::
     $label->detail = $vp->cb->getURL('popup');
     $label->link($vp->cb->getURL('popup'));
 
+
+.. php::class: Tabs
+
+Tabs is a view that works as it sounds - it's a basic tabs implementation.
+
+.. php::method: addTab($name, $action)
+
+    Use addTab() method to add more tabs in Tabs view. First parameter is a title of the tab.
+
+    Tabs can be static or dynamic. Dynamic tabs use :php:class:`VirtualPage` implementation mentioned above.
+    You should pass callable action as a second parameter.
+
+    Example::
+
+    $t = $layout->add('Tabs');
+
+    // add static tab
+    $t->addTab('Static Tab')->add('HelloWorld');
+
+    // add dynamic tab
+    $t->addTab('Dynamically Loading', function ($tab) {
+        $tab->add('LoremIpsum');
+    });
