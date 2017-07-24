@@ -40,6 +40,13 @@ class Tabs extends View
         $sub = $this->add(['View', 'class'=>['ui tab']], 'Tabs');
         $sub->setAttr('data-tab', $item->name);
 
+        // if there is callback action, then
+        if ($action && is_callable($action)) {
+            $vp = $sub->add('VirtualPage');
+            $vp->set($action);
+            $sub->setAttr('data-url', $vp->getURL());
+        }
+
         return  $sub;
     }
 
@@ -53,7 +60,17 @@ class Tabs extends View
         $this->js(true)->find('.tab')->first()->addClass('active');
 
         // initialize JS tabs
-        $this->js(true)->find('.item')->tab();
+        // https://github.com/Semantic-Org/Semantic-UI/issues/2535
+        $this->js(true)->find('.item')->tab([
+            'cache' => false,
+            //'history' => true,
+            'context' => 'parent',
+            //'auto' => true,
+            'apiSettings' => [
+                //'loadingDuration' => 300,
+                //'url' => 'http://www.google.lv',
+            ],
+        ]);
 
         // use content as class name
         if ($this->content) {

@@ -8,10 +8,11 @@ $t = $layout->add('Tabs');
 
 // static tab
 $t->addTab('Hello')->add('HelloWorld');
-$t->addTab('Lorem')->add('LoremIpsum');
+$t->addTab('Static Tab')->add('LoremIpsum');
 
 // dynamic tab
-$t->addTab('Dynamic', function ($tab) {
-    sleep(3);
+$t->addTab('Dynamically Loading', function ($tab) {
+    $tab->add('Text')->set('BEFORE !!!');
     $tab->add('LoremIpsum');
+    $tab->add('Text')->set('AFTER !!!');
 });
