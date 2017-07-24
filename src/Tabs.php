@@ -44,7 +44,7 @@ class Tabs extends View
             $vp = $sub->add('VirtualPage');
             $sub->setAttr('data-url', $vp->getURL());
 
-            $vp->set(function()use($vp, $action){
+            $vp->set(function () use ($vp, $action) {
                 $action($vp);
                 $this->app->terminate($vp->render());
             });
@@ -66,7 +66,7 @@ class Tabs extends View
         // https://github.com/Semantic-Org/Semantic-UI/issues/2535
         // https://stackoverflow.com/a/33532195/1466341
         $this->js(true)->find('.item')->tab([
-            'cache' => false,
+            'cache'   => false,
             'context' => 'parent',
             //'auto' => true,
             'apiSettings' => [
