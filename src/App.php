@@ -13,7 +13,7 @@ class App
 
     // @var string|false Location where to load JS/CSS files
     public $cdn = [
-        'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.1.9/public',
+        'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.2.0-RC1/public',
         'jquery'          => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
         'serialize-object'=> 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui'     => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
@@ -21,7 +21,7 @@ class App
     ];
 
     // @var string Version of Agile UI
-    public $version = '1.1.9';
+    public $version = '1.2.0-RC1';
 
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
@@ -44,6 +44,8 @@ class App
     public $always_run = true;
 
     public $run_called = false;
+
+    public $_cwd_restore = true;
 
     /**
      * function setModel(MyModel $m);.
@@ -114,7 +116,15 @@ class App
 
         // Always run app on shutdown
         if ($this->always_run) {
+            if ($this->_cwd_restore) {
+                $this->_cwd_restore = getcwd();
+            }
+
             register_shutdown_function(function () {
+                if (is_string($this->_cwd_restore)) {
+                    chdir($this->_cwd_restore);
+                }
+
                 if (!$this->run_called) {
                     try {
                         $this->run();

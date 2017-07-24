@@ -1,4 +1,6 @@
-import $ from 'jquery';
+import 'atk4-semantic-ui';
+
+import 'helpers/addParams';
 
 import registerPlugin from './plugin';
 
@@ -6,20 +8,12 @@ import registerPlugin from './plugin';
 import spinner from 'plugins/spinner'
 import reloadView from 'plugins/reloadView'
 import ajaxec from 'plugins/ajaxec'
-import addParams from 'plugins/addParams'
+import createModal from 'plugins/createModal'
 
 // Register our plugins
-registerPlugin('spinner', spinner);
-registerPlugin('reloadView', reloadView);
-registerPlugin('ajaxec', ajaxec);
-registerPlugin('addParams', addParams);
+registerPlugin('Spinner', spinner);
+registerPlugin('ReloadView', reloadView);
+registerPlugin('Ajaxec', ajaxec);
+registerPlugin('CreateModal', createModal);
 
-$.addParams = function ( url, data )
-{
-    if ( ! $.isEmptyObject(data) )
-    {
-        url += ( url.indexOf('?') >= 0 ? '&' : '?' ) + $.param(data);
-    }
 
-    return url;
-}

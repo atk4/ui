@@ -33,11 +33,13 @@ class VirtualPage extends View
             }
 
             if ($this->cb->triggered == 'cut') {
+                if (isset($_GET['json'])) {
+                    $this->app->terminate($this->renderJSON());
+                }
                 $this->app->terminate($this->render());
             }
 
             if ($this->cb->triggered == 'popup') {
-                $this->ui = 'container'; // to maintain some gaps..
                 $this->app->html->template->set('title', $this->app->title);
                 $this->app->html->template->setHTML('Content', parent::getHTML());
                 $this->app->html->template->appendHTML('HEAD', $this->getJS());

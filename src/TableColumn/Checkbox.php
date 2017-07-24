@@ -31,7 +31,7 @@ class Checkbox extends Generic
     public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
     {
         if (isset($f)) {
-            throw new Exception(['Checkbox must be placed in an empty column. Don\'t specify any field.', 'field'=>$f]);
+            throw new \atk4\ui\Exception(['Checkbox must be placed in an empty column. Don\'t specify any field.', 'field'=>$f]);
         }
         $this->table->js(true)->find('.'.$this->class)->checkbox();
 

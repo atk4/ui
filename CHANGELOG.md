@@ -1,3 +1,28 @@
+## 1.2
+
+This release includes huge JavaScript overhaul and clean-up, refactored jsModal implementation,
+refactor of Table::addColumn() and Table::addField(), integration with Wordpress and a lot of new
+documentation.
+
+This release was possible thanks to our new contributors:
+ - [ibelar](https://github.com/ibelar)
+ - [TheGrammerNazi](https://github.com/TheGrammerNazi)
+
+### Major Changes
+ - Refactored JS Plugin System. ATK now implements: #189, #201, #193, #202
+   - spinner (link to doc needed)
+   - reloadView (link to doc needed)
+   - ajaxec (link to doc needed)
+   - createModal (link to doc needed)
+ - Refactored addField() and addColumn() #179
+ - Documentation improvements:
+   - Callbacks and Virtual pages #200 (http://agile-ui.readthedocs.io/en/latest/core.html#callbacks-and-virtual-pages)
+   - README file #196
+ - Fixed problem with Checkbox on a form #130
+ - Fixed form submission with Enter #173
+ - Improved form validation #191
+ - Fix label display when it's 0 #198
+
 
 ## 1.1
 
@@ -95,6 +120,17 @@ Probably the last big release before 1.2.x
  - Refactored asset includes (can now be cached locally) #181
  - Footer now indicates version
 
+#### 1.1.10
+
+ - Fix warning in database demos
+ - Fix detection of local public files for demos
+ - Fix Delete button in crud (couldn't be clicked twice)
+ - Enabled App to have dynamic methods
+ - Fixed bug in Status column
+ - Fixed stickyURL #185
+ - Improved compatibility with custom JS renderers (for wordpress integration)
+ - Fixed centered layout #186
+ - "get-assets.php" now creates 'public' folder, usable in your project
 
 ## 1.0 Release
 
