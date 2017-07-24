@@ -67,7 +67,7 @@ class Tabs extends View
             'context' => 'parent',
             //'auto' => true,
             'apiSettings' => [
-                //'loadingDuration' => 300,
+                'loadingDuration' => 300,
                 //'url' => 'http://www.google.lv',
             ],
         ]);
