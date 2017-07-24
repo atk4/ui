@@ -9,9 +9,8 @@ namespace atk4\ui;
  */
 class Tabs extends View
 {
-    public $ui = 'tabular menu';
-
     public $defaultTemplate = 'tabs.html';
+    public $ui = 'tabular menu';
 
     /**
      * Adds tab in tabs widget.
@@ -43,8 +42,12 @@ class Tabs extends View
         // if there is callback action, then
         if ($action && is_callable($action)) {
             $vp = $sub->add('VirtualPage');
-            $vp->set($action);
             $sub->setAttr('data-url', $vp->getURL());
+
+            $vp->set(function()use($vp, $action){
+                $action($vp);
+                $this->app->terminate($vp->render());
+            });
         }
 
         return  $sub;
@@ -61,9 +64,9 @@ class Tabs extends View
 
         // initialize JS tabs
         // https://github.com/Semantic-Org/Semantic-UI/issues/2535
+        // https://stackoverflow.com/a/33532195/1466341
         $this->js(true)->find('.item')->tab([
             'cache' => false,
-            //'history' => true,
             'context' => 'parent',
             //'auto' => true,
             'apiSettings' => [
