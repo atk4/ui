@@ -7,44 +7,23 @@ class Notifier extends \atk4\data\Model
 {
     public $table = 'notifier';
 
-
     public function init()
     {
         parent::init();
-        
-        $this->addField('text', [
-            'default' => 'This text will appear in notification',
-            'caption' => 'type any text',
-        ]);
-        $this->addField('icon', [
-            'default' => 'warning sign',
-            'caption' => 'Use semantic-ui icon name',
-        ]);
-        $this->addField('type', [
-            'enum'    => ['success', 'info', 'warning', 'error'],
-            'default' => 'success',
-            'caption' => 'Select type:',
-        ]);
-        $this->addField('transition', [
-            'enum'    => ['scale', 'fade', 'jiggle', 'flash'],
-            'default' => 'scale',
-            'caption' => 'Select transition:',
-        ]);
-        $this->addField('width', [
-            'enum'    => ['25%', '50%', '75%', '100%'],
-            'default' => '100%',
-            'caption' => 'Select width:',
-        ]);
-        $this->addField('position', [
-            'enum'    => ['topLeft', 'topCenter', 'topRight', 'bottomLeft', 'bottomCenter', 'bottomRight', 'center'],
-            'default' => 'topCenter',
-            'caption' => 'Select position:',
-        ]);
-        $this->addField('attach', [
-            'enum'    => ['Body', 'Form'],
-            'default' => 'Body',
-            'caption' => 'Attach to:',
-        ]);
+
+        $this->addField('text', ['default' => 'This text will appear in notification','caption' => 'type any text']);
+
+        $this->addField('icon', ['default' => 'warning sign', 'caption' => 'Use semantic-ui icon name']);
+
+        $this->addField('type', ['enum' => ['success', 'info', 'warning', 'error'], 'default' => 'success', 'caption' => 'Select type:']);
+
+        $this->addField('transition', ['enum' => ['scale', 'fade', 'jiggle', 'flash'], 'default' => 'scale', 'caption' => 'Select transition:']);
+
+        $this->addField('width', ['enum' => ['25%', '50%', '75%', '100%'], 'default' => '100%', 'caption' => 'Select width:']);
+
+        $this->addField('position', ['enum' => ['topLeft', 'topCenter', 'topRight', 'bottomLeft', 'bottomCenter', 'bottomRight', 'center'], 'default' => 'topCenter', 'caption' => 'Select position:']);
+
+        $this->addField('attach', ['enum' => ['Body', 'Form'], 'default' => 'Body', 'caption' => 'Attach to:']);
     }
 }
 
