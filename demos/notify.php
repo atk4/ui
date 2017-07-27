@@ -11,36 +11,36 @@ class Notifier extends \atk4\data\Model
         parent::init();
         $this->addField('text', [
             'default' => 'This text will appear in notification',
-            'caption' => 'type any text'
+            'caption' => 'type any text',
         ]);
         $this->addField('icon', [
             'default' => 'warning sign',
-            'caption' => 'Use semantic-ui icon name'
+            'caption' => 'Use semantic-ui icon name',
         ]);
         $this->addField('type', [
             'enum'    => ['success', 'info', 'warning', 'error'],
             'default' => 'success',
-            'caption' => 'Select type: '
+            'caption' => 'Select type:',
         ]);
         $this->addField('transition', [
             'enum'    => ['scale', 'fade', 'jiggle', 'flash'],
             'default' => 'scale',
-            'caption' => 'Select transition:'
+            'caption' => 'Select transition:',
         ]);
         $this->addField('width', [
             'enum'    => ['25%', '50%', '75%', '100%'],
             'default' => '100%' ,
-            'caption' => 'Select width:'
+            'caption' => 'Select width:',
         ]);
         $this->addField('position', [
             'enum'    => ['topLeft', 'topCenter', 'topRight', 'bottomLeft', 'bottomCenter', 'bottomRight', 'center'],
             'default' => 'topCenter',
-            'caption' => 'Select position:'
+            'caption' => 'Select position:',
         ]);
         $this->addField('attach', [
             'enum'    => ['Body', 'Form'],
             'default' => 'Body',
-            'caption' => 'Attach to:'
+            'caption' => 'Attach to:',
         ]);
     }
 }
@@ -73,7 +73,7 @@ $form->onSubmit(function ($f) {
         'width'          => $f->model['width'],
         'openTransition' => $f->model['transition'],
         'icon'           => $f->model['icon'],
-        'content'        => $f->model['text']
+        'content'        => $f->model['text'],
     ];
 
     if ($f->model['attach'] === 'Body') {
