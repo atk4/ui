@@ -6,10 +6,12 @@ require 'database.php';
 class Notifier extends \atk4\data\Model
 {
     public $table = 'notifier';
-    
+
+
     public function init()
     {
         parent::init();
+        
         $this->addField('text', [
             'default' => 'This text will appear in notification',
             'caption' => 'type any text',
