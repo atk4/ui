@@ -6,6 +6,7 @@ require 'database.php';
 class Notifier extends \atk4\data\Model
 {
     public $table = 'notifier';
+    
     public function init()
     {
         parent::init();
@@ -66,7 +67,6 @@ $f_p2->addField('position', ['width'=>'four']);
 $f_p2->addField('attach', ['width'=>'four']);
 
 $form->onSubmit(function ($f) {
-
     $options = [
         'type'           => $f->model['type'],
         'position'       => $f->model['position'],
