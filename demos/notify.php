@@ -11,7 +11,7 @@ class Notifier extends \atk4\data\Model
     {
         parent::init();
 
-        $this->addField('text', ['default' => 'This text will appear in notification','caption' => 'type any text']);
+        $this->addField('text', ['default' => 'This text will appear in notification', 'caption' => 'type any text']);
 
         $this->addField('icon', ['default' => 'warning sign', 'caption' => 'Use semantic-ui icon name']);
 
