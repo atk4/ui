@@ -29,7 +29,7 @@ class Notifier extends \atk4\data\Model
         ]);
         $this->addField('width', [
             'enum'    => ['25%', '50%', '75%', '100%'],
-            'default' => '100%' ,
+            'default' => '100%',
             'caption' => 'Select width:',
         ]);
         $this->addField('position', [
