@@ -24,7 +24,8 @@ work without persistent database.
 Installing
 ==========
 
-Start your command-line and execute composer command::
+Create a directory wich is accessible by you web server. Start your command-line,
+enter this directory and execute composer command::
 
     composer require atk4/ui
 
@@ -32,7 +33,7 @@ Start your command-line and execute composer command::
 Coding "Hello, World"
 =====================
 
-Open file `index.php` and add the following code::
+Open a new file `index.php` and enter the following code::
 
     <?php                                     // 1
     require 'vendor/autoload.php';           // 2
@@ -69,8 +70,17 @@ Data Persistence
 To build our "ToDo" application, we need a good location to store list of tasks. We don't really want to mess with
 the actual database and instead will use "SESSION" for storing data.
 
+To be able to actually run this example, create a new file todo.php in the same directory as index.php and
+create the application::
+
+    <?php                                   
+    require 'vendor/autoload.php';         
+
+    $app = new \atk4\ui\App('ToDo List'); 
+    $app->initLayout('Centered');         
+
 All components of Agile Data are database-agnostic and will not concern themselve with the way how you store data.
-I will start the sesion and connect `persistence <http://agile-data.readthedocs.io/en/develop/persistence.html>`_
+I will start the session and connect `persistence <http://agile-data.readthedocs.io/en/develop/persistence.html>`_
 with it::
 
     session_start();
@@ -167,7 +177,7 @@ another. In our example replace right column (label 17) with the following code:
     $grid = $col->addColumn()->add(['CRUD', 'paginator'=>false, 'ops'=>[    // 18
         'c'=>false, 'd'=>false                              // 19
     ]]);
-    $grid->setModel(new ToDo($s));
+    $grid->setModel(new ToDoItem($s));
 
     $grid->menu->addItem('Complete Selected',               // 20
         new \atk4\ui\jsReload($grid->table, [               // 21
