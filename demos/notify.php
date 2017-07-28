@@ -30,7 +30,7 @@ class Notifier extends \atk4\data\Model
 $head = $layout->add(['Header', 'Notification Types']);
 
 $form = $layout->add(new \atk4\ui\Form(['segment']));
-$form->add(['Label', 'Some of notification preferences you can set.', 'top attached'], 'AboveFields');
+$form->add(['Label', 'Some of notification options that can be set.', 'top attached'], 'AboveFields');
 $form->buttonSave->set('Show');
 $form->setModel(new Notifier($db), false);
 
