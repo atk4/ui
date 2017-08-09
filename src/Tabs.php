@@ -67,7 +67,7 @@ class Tabs extends View
         // https://stackoverflow.com/a/33532195/1466341
         $this->js(true)->find('.item')->tab([
             'cache'   => false,
-            'context' => 'parent',
+            //'context' => 'parent',
             //'auto' => true,
             'apiSettings' => [
                 'loadingDuration' => 300,
