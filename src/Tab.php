@@ -9,4 +9,23 @@ namespace atk4\ui;
  */
 class Tab extends Item
 {
+    public $path = null;
+
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    public function renderView()
+    {
+        if ($this->path) {
+            $this->js(true)->tab(
+                ['cache'=>false, 'auto'=>true, 'path'=>$this->path]
+            );
+        } else {
+            $this->js(true)->tab();
+        }
+
+        parent::renderView();
+    }
 }
