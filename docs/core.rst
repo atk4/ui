@@ -37,7 +37,7 @@ can be used elsewhere, for example::
 
     $button->icon = 'book';
 
-We call this format 'Seed' this section will explain how and where it is used.
+We call this format 'Seed'. This section will explain how and where it is used.
 
 .. toctree::
     seed
@@ -98,14 +98,14 @@ inputs user data.
 Callbacks and Virtual Pages
 ===========================
 
-By reying on the ability of generating :ref:`unique_name`, it's possible to create several classes
+By relying on the ability of generating :ref:`unique_name`, it's possible to create several classes
 for implementing PHP call-backs. They follow the pattern:
 
  - present something on the page (maybe)
  - generate URL with unique parameter
  - if unique parameter is passed back, behave differently
 
-Once concept is established, it can even be used on a higher level, for example::
+Once the concept is established, it can even be used on a higher level, for example::
 
     $button->on('click', function() { return 'clicked button'; });
 
