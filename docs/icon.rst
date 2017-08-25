@@ -172,7 +172,7 @@ Here is the code with comments::
         }
     }
 
-    // Usage Examples. Start with the most basig usage
+    // Usage Examples. Start with the most basic usage
     $app->add(new SocialAdd('instagram'));
 
     // Next specify label and separatly name of social network
