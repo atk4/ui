@@ -13,7 +13,7 @@ Implements a clickable button::
 
     $button = $view->add(new \atk4\ui\Button('Click me'));
 
-Button will typically inherit all same properties of a :php:class:`View`. Functionality
+The button will typically inherit all same properties of a :php:class:`View`. Functionality
 of View alone yields in many various usage patterns such as::
 
     $b1 = new Button(['Load', 'primary']);
@@ -38,7 +38,7 @@ Includes icon on the button::
     $bar->add(new Button(['Pause', 'icon'=>'pause']));
     $bar->add(new Button(['Shuffle', 'icon'=>'shuffle']));
 
-Icon can also be specified as object::
+Icon can also be specified as an object::
 
     $b1 = new Button(['Forks', 'blue', 'icon'=>new Icon('fork'));
 
@@ -72,7 +72,7 @@ For other JavaScript actions you can use :ref:`js`::
 Complex Buttons
 ---------------
 
-Knowledge of Semantic UI button (http://semantic-ui.com/elements/button.html) can help you
+Knowledge of the Semantic UI button (http://semantic-ui.com/elements/button.html) can help you
 in creating more complex buttons::
 
     $forks = new Button(['labeled'=> true]); // Button, not Buttons!
