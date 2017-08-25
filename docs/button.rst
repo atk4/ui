@@ -22,7 +22,7 @@ of View alone yields in many various usage patterns such as::
     $button->addClass('size big');
 
 
-You can refer to Semantic UI documentation for Button to find more about available classes: http://semantic-ui.com/elements/button.html.
+You can refer to the Semantic UI documentation for Button to find out more about available classes: http://semantic-ui.com/elements/button.html.
 
 Demo: http://ui.agiletoolkit.org/demos/button.php
 
@@ -49,7 +49,7 @@ Setting this will display icon on the right of the button::
 
     $b1 = new Button(['Next', 'iconRight'=>'right arrow']);
 
-Apart from being on the right, same rules apply as :php:attr:`Button::$icon`. Both
+Apart from being on the right, the same rules apply as :php:attr:`Button::$icon`. Both
 icons cannot be specified simultaniously.
 
 Linking
