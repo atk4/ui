@@ -155,18 +155,20 @@ of a different class (e.g. 'money'). Value will be initialized after first call 
 
 .. php:method:: addColumn([$name], TableColumn\Generic $column = null, \atk4\ui\Data\Field = null)
 
-Adds a new column to the table. This method has several few usages, here is the most basic one::
+Adds a new column to the table. This method has several usages. The most basic one is::
 
     $table->setModel(new Order($db), ['name', 'price', 'total']);
     $table->addColumn(new \atk4\ui\TableColumn\Delete());
 
 The above code will add a new extra column that will only contain 'delete' icon. When clicked
-it will automatically delete the record.
+it will automatically delete the corresponding record.
 
 You have probably noticed, that I have omitted the name for this column. If name is not specified
-(null) then the Column object will receive "null" when the call to
+(null) then the Column object will not be associated with any model field in
 :php:meth:`TableColumn\Generic::getHeaderCellHTML`, :php:meth:`TableColumn\Generic::getTotalsCellHTML` and
-:php:meth:`TableColumn\Generic::getDataCellHTML` will be made. The :php:class:`TableColumn\Generic` will
+:php:meth:`TableColumn\Generic::getDataCellHTML`.
+
+Some columns require name, such as :php:class:`TableColumn\Generic` will
 not be able to cope with this situations, but many other column types are perfectly fine with this.
 
 Some column classes will be able to take some information from a specified column, but will work

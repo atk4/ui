@@ -21,8 +21,13 @@ of View alone yields in many various usage patterns such as::
     $button = new Button('Hello there');
     $button->addClass('size big');
 
-Icons
------
+
+You can refer to Semantic UI documentation for Button to find more about available classes: http://semantic-ui.com/elements/button.html.
+
+Demo: http://ui.agiletoolkit.org/demos/button.php
+
+Button Icon
+-----------
 
 .. php:attr:: icon
 

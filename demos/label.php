@@ -1,7 +1,7 @@
 <?php
 
 require 'init.php';
-$img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+$img = 'https://cdn.rawgit.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 
 $layout->add(['Header', 'Labels']);
 $layout->add(['Label', 'Hot!']);

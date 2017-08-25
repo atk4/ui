@@ -42,11 +42,14 @@ We call this format 'Seed' this section will explain how and where it is used.
 .. toctree::
     seed
 
+.. _render:
+
 Render Tree
 ===========
-Agile Toolkit is allows you to create components hierarchically. What is really unique and
-awesome, is that you can create and link multiple UI objects together before linking them
-with other chunks of your UI::
+Agile Toolkit is allows you to create components hierarchically. Once complete, the component
+hierarchy will render itself and will present HTML output that would appear to user.
+
+You can create and link multiple UI objects together before linking them with other chunks of your UI::
 
     $msg = new \atk4\ui\Message('Hey There');
     $msg->add(new \atk4\ui\Button('Button'));
