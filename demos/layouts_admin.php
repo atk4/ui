@@ -65,5 +65,6 @@ try {
     var_dump($e->getMessage());
 
     var_dump($e->getParams());
+
     throw $e;
 }

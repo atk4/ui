@@ -2,7 +2,7 @@
 
 require 'init.php';
 
-use \atk4\ui\Button;
+use atk4\ui\Button;
 
 $layout->add(new \atk4\ui\View([
     'Sticky GET allows us to preserve some GET arguments',
