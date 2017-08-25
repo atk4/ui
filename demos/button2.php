@@ -4,9 +4,9 @@
  */
 include 'init.php';
 
-use \atk4\ui\Button;
-use \atk4\ui\Buttons;
-use \atk4\ui\Header;
+use atk4\ui\Button;
+use atk4\ui\Buttons;
+use atk4\ui\Header;
 
 $layout->add(new Header('Basic Button'));
 

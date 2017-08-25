@@ -40,6 +40,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('Message', ['message']);
     $basic->addItem('Labels', ['label']);
     $basic->addItem('Menu', ['menu']);
+    $basic->addItem('Tabs', ['tabs']);
     $basic->addItem('Paginator', ['paginator']);
 
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon'=>'talk']);

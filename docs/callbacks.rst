@@ -6,7 +6,7 @@ Introduction
 ------------
 
 Agile UI pursues a goal of creating a full-featured, interractive, user interface. Part of that relies
-on abstraction of Browser/Server communication. 
+on abstraction of Browser/Server communication.
 
 Callback mechanism allow any :ref:`component` of Agile Toolkit to send HTTP requests back to itself
 through a unique route and not worry about accidentally affecting or triggering action of any other
@@ -142,7 +142,7 @@ the $label->detail is assigned at the very end, yet callback is able to access t
     $label = $layout->add(['Label','Callback URL:']);
     $cb = $label->add('CallbackLater');
 
-    $cb->set(function() use($app, $label) { 
+    $cb->set(function() use($app, $label) {
         $app->terminate('Label detail is '.$label->detail);
     });
 
@@ -150,7 +150,7 @@ the $label->detail is assigned at the very end, yet callback is able to access t
     $label->link($cb->getURL());
 
 CallbackLater is used by several actions in Agile UI, such as jsReload(), and ensures that the component
-you are reloading are fully rendered by the time callback is executed. 
+you are reloading are fully rendered by the time callback is executed.
 
 Given our knowledge of Callbacks, lets take a closer look at how jsReload actually works. So what do we
 know about :php:class:`jsReload` already?
@@ -172,7 +172,7 @@ Here is example of jsReload::
 NOTE: that we can't perform jsReload on LoremIpsum directly, because it's a text, it needs to be inside
 a container. When jsReload is created, it transparently creates a 'CallbackLater' object inside
 `$view`. On the JavaScript side, it will execute this new route which will respond with a NEW content
-for the $view object. 
+for the $view object.
 
 Should jsReload use regular 'Callback', then it wouldn't know that $view must contain LoremIpsum text.
 
@@ -194,7 +194,7 @@ use jsCallback class now::
     $label = $layout->add(['Label','Callback URL:']);
     $cb = $label->add('jsCallback');
 
-    $cb->set(function() { 
+    $cb->set(function() {
         return 'ok';
     });
 
@@ -216,7 +216,7 @@ To fully use jsAction above, here is a modified code::
     $label = $layout->add(['Label','Callback URL:']);
     $cb = $label->add('jsCallback');
 
-    $cb->set(function() { 
+    $cb->set(function() {
         return 'ok';
     });
 
@@ -227,7 +227,7 @@ Now, that is pretty long. For your convenience, there is a shorter mechanism::
 
     $label = $layout->add(['Label', 'Callback test']);
 
-    $label->on('click', function() { 
+    $label->on('click', function() {
         return 'ok';
     });
 
@@ -246,7 +246,7 @@ If you set `confirm` property action will ask for user's confirmation before sen
 
     $cb->confirm = 'sure?';
 
-    $cb->set(function() { 
+    $cb->set(function() {
         return 'ok';
     });
 
@@ -258,7 +258,7 @@ property::
 
     $label = $layout->add(['Label', 'Callback test']);
 
-    $label->on('click', function() { 
+    $label->on('click', function() {
         return 'ok';
     }, ['confirm'=>'sure?']);
 
@@ -273,7 +273,7 @@ will send browser screen width back to the callback::
     $label = $layout->add('Label');
     $cb = $label->add('jsCallback');
 
-    $cb->set(function($j, $arg1){ 
+    $cb->set(function($j, $arg1){
         return 'width is '.$arg1;
     }, [new \atk4\ui\jsExpression( '$(window).width()' )]);
 
@@ -286,7 +286,7 @@ also supports argument passing::
 
     $label = $layout->add(['Label', 'Callback test']);
 
-    $label->on('click', function($j, $arg1) { 
+    $label->on('click', function($j, $arg1) {
         return 'width is '.$arg1;
     }, ['confirm'=>'sure?', 'args'=>[new \atk4\ui\jsExpression( '$(window).width()' )]]);
 
@@ -294,7 +294,7 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
 
     $label = $layout->add(['Label', 'Callback test']);
 
-    $label->on('click', function($j, $arg1) { 
+    $label->on('click', function($j, $arg1) {
         return 'width is '.$arg1;
     }, [new \atk4\ui\jsExpression( '$(window).width()' )]);
 
@@ -366,7 +366,7 @@ Setting Callback
 Although VirtualPage works without defining a callback, using one is more reliable and is always recommended::
 
     $vp = $layout->add('VirtualPage');
-    $vp->set(function($vp){ 
+    $vp->set(function($vp){
         $vp->add('LoremIpsum');
     });
 
@@ -389,6 +389,10 @@ To illustrate, :php:class:`Tabs` component rely on VirtualPage and allow you to 
 The dynamic tab is implemented through Virtual Page, which is passed to your callback as $p. VirtualPage
 is also used in Modal, CRUD and various other components.
 
+.. php::method: getURL()
+
+    You can use this shortcut method instead of $vp->cb->getURL().
+
 .. php::attr: $ui
 
 When using 'popup' mode, the output appears inside a `<div class="ui container">`. If you want to change this
@@ -403,3 +407,26 @@ class, you can set $ui property to something else. Try::
     $label->detail = $vp->cb->getURL('popup');
     $label->link($vp->cb->getURL('popup'));
 
+
+.. php::class: Tabs
+
+Tabs is a view that works as it sounds - it's a basic tabs implementation.
+
+.. php::method: addTab($name, $action)
+
+    Use addTab() method to add more tabs in Tabs view. First parameter is a title of the tab.
+
+    Tabs can be static or dynamic. Dynamic tabs use :php:class:`VirtualPage` implementation mentioned above.
+    You should pass callable action as a second parameter.
+
+    Example::
+
+    $t = $layout->add('Tabs');
+
+    // add static tab
+    $t->addTab('Static Tab')->add('HelloWorld');
+
+    // add dynamic tab
+    $t->addTab('Dynamically Loading', function ($tab) {
+        $tab->add('LoremIpsum');
+    });
