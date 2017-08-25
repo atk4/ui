@@ -27,8 +27,8 @@ You can, of course, create instance of an Icon yourself::
     $icon = new \atk4\ui\Icon('book');
     $b1 = new \atk4\ui\Button(['Click Me', 'icon'=>$icon]);
 
-You do not need to add icon into render tree when specifying like that. The icon is selected
-through class and to find out what icons are available, refer to Semantic-UI icon documentation:
+You do not need to add an icon into the render tree when specifying like that. The icon is selected
+through class. To find out what icons are available, refer to Semantic-UI icon documentation:
 
 https://semantic-ui.com/elements/icon.html
 
@@ -70,8 +70,8 @@ icon::
       <i class="user icon"></i>
     </i>'), false]));
 
-There are however several other options you can use when working with your custom HTML. This is not
-exclusive to Icon, but I'm adding few examples here for your convenience.
+However there are several other options you can use when working with your custom HTML. This is not
+exclusive to Icon, but I'm adding a few examples here, just for your convenience.
 
 Let's start with a View that contains your custom HTML loaded from file or embedded like this::
 
@@ -80,7 +80,7 @@ Let's start with a View that contains your custom HTML loaded from file or embed
       <i class="{Content}user{/} icon"></i>
     </i>{/}, It is me</div>')]);
 
-Looking at the template it has a region `{Icon}..{/}`. Try by executing above code and you'll see
+Looking at the template it has a region `{Icon}..{/}`. Try by executing the code above, and you'll see
 a text message with a user icon in a circle. You can replace this region by passing it as a template
 into Icon class. For that you need to disable a standard Icon template and specify a correct Spot
 when adding::
@@ -115,7 +115,7 @@ the following features:
 Here is the code with comments::
 
     /**
-     * Implements a social network add button. You can initialize button by passing
+     * Implements a social network add button. You can initialize the button by passing
      * social network as a parameter: new SocialAdd('facebook')
      * or alternatively you can specify $social, $icon and content individually:
      * new SocialAdd(['Follow on Facebook', 'social'=>'facebook', 'icon'=>'facebook f']);
