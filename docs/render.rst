@@ -1,4 +1,3 @@
-.. _render:
 
 Introduction
 ------------
