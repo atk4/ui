@@ -45,9 +45,9 @@ Property $icon will place icon on your button and can be specified in one of the
 
 or if you prefer initializing objects::
 
-    $button = new Button('Forks');
+    $button = new Button('Like');
     $button->addClass('blue');
-    $button->icon = new Icon('fork');
+    $button->icon = new Icon('thumbs u');
 
     $app->add($button);
 
@@ -69,9 +69,9 @@ with property ``ui='buttons'`` and add your other buttons inside::
 
     $bar = $app->add(['ui'=>'vertical buttons']);
 
-    $bar->add(['Button', 'Play', 'icon'=>'play']));
-    $bar->add(['Button', 'Pause', 'icon'=>'pause']));
-    $bar->add(['Button', 'Shuffle', 'icon'=>'shuffle']));
+    $bar->add(['Button', 'Play', 'icon'=>'play']);
+    $bar->add(['Button', 'Pause', 'icon'=>'pause']);
+    $bar->add(['Button', 'Shuffle', 'icon'=>'shuffle']);
 
 At this point using alternative syntax where you initialize objects yourself becomes a bit too complex and lengthy::
 
