@@ -11,15 +11,19 @@ Button
 
 Implements a clickable button::
 
-    $button = $view->add(new \atk4\ui\Button('Click me'));
+    $button = $app->add(['Button', 'Click me']);
 
-The button will typically inherit all same properties of a :php:class:`View`. Functionality
-of View alone yields in many various usage patterns such as::
+The Button will typically inherit all same properties of a :php:class:`View`. The base class "View"
+implements many useful methods already, such as::
 
-    $b1 = new Button(['Load', 'primary']);
+    $button->addClass('big red');
 
-    $button = new Button('Hello there');
-    $button->addClass('size big');
+Alternatvie syntax if you wish to initialize object yourself::
+
+    $button = new Button('Click me');
+    $button->addClass('big red');
+
+    $app->add($button);
 
 
 You can refer to the Semantic UI documentation for Button to find out more about available classes: http://semantic-ui.com/elements/button.html.
@@ -33,21 +37,25 @@ Button Icon
 
 Includes icon on the button::
 
-    $bar = new Buttons('vertical');  // NOTE: class called Buttons, not Button
+    $bar = $app->add(['ui'=>'vertical buttons']);
+
     $bar->add(new Button(['Play', 'icon'=>'play']));
     $bar->add(new Button(['Pause', 'icon'=>'pause']));
     $bar->add(new Button(['Shuffle', 'icon'=>'shuffle']));
 
-Icon can also be specified as an object::
 
-    $b1 = new Button(['Forks', 'blue', 'icon'=>new Icon('fork'));
+The icon can also be specified as an object::
+
+Icon can also be specified as object::
+
+    $button = new Button(['Forks', 'blue', 'icon'=>new Icon('fork'));
 
 .. php:attr:: iconRight
 
 Setting this will display icon on the right of the button::
 
 
-    $b1 = new Button(['Next', 'iconRight'=>'right arrow']);
+    $button = new Button(['Next', 'iconRight'=>'right arrow']);
 
 Apart from being on the right, the same rules apply as :php:attr:`Button::$icon`. Both
 icons cannot be specified simultaniously.
@@ -79,3 +87,4 @@ in creating more complex buttons::
     $forks->add(new Button(['Forks', 'blue']))->add(new Icon('fork'));
     $forks->add(new Label(['1,048', 'basic blue left pointing']));
     $layout->add($forks);
+
