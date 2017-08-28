@@ -24,7 +24,7 @@ Attributes
 
 .. php:attr:: subHeader
 
-Specify size an sub-header content::
+Specify size and sub-header content::
 
     $seg->add([
         'Header',
