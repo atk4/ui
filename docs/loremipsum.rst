@@ -27,7 +27,7 @@ You can define the length of the LoremIpsum text::
         ->addParagraph('Second Paragraph');
 
 
-You may specify amont of text to be generated with lorem::
+You may specify amount of text to be generated with lorem::
 
     $app->layout->add(['LoremIpsum', 1]); // just add a little one
 
