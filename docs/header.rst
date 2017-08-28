@@ -28,7 +28,7 @@ Specify size and sub-header content::
 
     $seg->add([
         'Header',
-        'H1',
+        'H1 header',
         'size'=>1,
         'subHeader'=>'H1 subheader'
     ]);
@@ -37,7 +37,7 @@ Specify size and sub-header content::
 
     $seg->add([
         'Header', 
-        'Small', 
+        'Small header', 
         'size'=>'small', 
         'subHeader'=>'small subheader'
     ]);
@@ -64,7 +64,7 @@ Here you can also specify seed for the image::
     $img = 'https://cdn.rawgit.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
     $seg->add([
         'Header', 
-        'Center-aligned', 
+        'Center-aligned header', 
         'aligned'=>'center', 
         'image'=>[$img, 'disabled'], 
         'subHeader'=>'header with image'
