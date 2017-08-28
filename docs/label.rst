@@ -31,7 +31,7 @@ appear on the label::
     $app->add($label);
 
 
-Label has the following propetries:
+Label has the following properties:
 
 .. php:attr:: icon
 
