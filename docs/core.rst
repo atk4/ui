@@ -37,16 +37,19 @@ can be used elsewhere, for example::
 
     $button->icon = 'book';
 
-We call this format 'Seed' this section will explain how and where it is used.
+We call this format 'Seed'. This section will explain how and where it is used.
 
 .. toctree::
     seed
 
+.. _render:
+
 Render Tree
 ===========
-Agile Toolkit is allows you to create components hierarchically. What is really unique and
-awesome, is that you can create and link multiple UI objects together before linking them
-with other chunks of your UI::
+Agile Toolkit is allows you to create components hierarchically. Once complete, the component
+hierarchy will render itself and will present HTML output that would appear to user.
+
+You can create and link multiple UI objects together before linking them with other chunks of your UI::
 
     $msg = new \atk4\ui\Message('Hey There');
     $msg->add(new \atk4\ui\Button('Button'));
@@ -110,14 +113,14 @@ inputs user data.
 Callbacks and Virtual Pages
 ===========================
 
-By reying on the ability of generating :ref:`unique_name`, it's possible to create several classes
+By relying on the ability of generating :ref:`unique_name`, it's possible to create several classes
 for implementing PHP call-backs. They follow the pattern:
 
  - present something on the page (maybe)
  - generate URL with unique parameter
  - if unique parameter is passed back, behave differently
 
-Once concept is established, it can even be used on a higher level, for example::
+Once the concept is established, it can even be used on a higher level, for example::
 
     $button->on('click', function() { return 'clicked button'; });
 

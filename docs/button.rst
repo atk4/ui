@@ -11,41 +11,88 @@ Button
 
 Implements a clickable button::
 
-    $button = $view->add(new \atk4\ui\Button('Click me'));
+    $button = $app->add(['Button', 'Click me']);
 
-Button will typically inherit all same properties of a :php:class:`View`. Functionality
-of View alone yields in many various usage patterns such as::
+The Button will typically inherit all same properties of a :php:class:`View`. The base class "View"
+implements many useful methods already, such as::
 
-    $b1 = new Button(['Load', 'primary']);
+    $button->addClass('big red');
 
-    $button = new Button('Hello there');
-    $button->addClass('size big');
+Alternatvie syntax if you wish to initialize object yourself::
 
-Icons
------
+    $button = new Button('Click me');
+    $button->addClass('big red');
+
+    $app->add($button);
+
+
+You can refer to the Semantic UI documentation for Button to find out more about available classes: http://semantic-ui.com/elements/button.html.
+
+Demo: http://ui.agiletoolkit.org/demos/button.php
+
+Button Icon
+-----------
 
 .. php:attr:: icon
 
-Includes icon on the button::
+Property $icon will place icon on your button and can be specified in one of the following two ways::
 
-    $bar = new Buttons('vertical');  // NOTE: class called Buttons, not Button
-    $bar->add(new Button(['Play', 'icon'=>'play']));
-    $bar->add(new Button(['Pause', 'icon'=>'pause']));
-    $bar->add(new Button(['Shuffle', 'icon'=>'shuffle']));
+    $button = $app->add(['Button', 'Like', 'blue', 'icon'=>'thumbs up']);
 
-Icon can also be specified as object::
+    // or 
 
-    $b1 = new Button(['Forks', 'blue', 'icon'=>new Icon('fork'));
+    $button = $app->add(['Button', 'Like', 'blue', 'icon'=>new Icon('thumbs up')]);
+
+or if you prefer initializing objects::
+
+    $button = new Button('Like');
+    $button->addClass('blue');
+    $button->icon = new Icon('thumbs u');
+
+    $app->add($button);
 
 .. php:attr:: iconRight
 
 Setting this will display icon on the right of the button::
 
 
-    $b1 = new Button(['Next', 'iconRight'=>'right arrow']);
+    $button = $app->add(['Button', 'Next', 'iconRight'=>'right arrow']);
 
-Apart from being on the right, same rules apply as :php:attr:`Button::$icon`. Both
+Apart from being on the right, the same rules apply as :php:attr:`Button::$icon`. Both
 icons cannot be specified simultaniously.
+
+Button Bar
+----------
+
+Buttons can be aranged into a bar. You would need to create a :php:class:`View` component
+with property ``ui='buttons'`` and add your other buttons inside::
+
+    $bar = $app->add(['ui'=>'vertical buttons']);
+
+    $bar->add(['Button', 'Play', 'icon'=>'play']);
+    $bar->add(['Button', 'Pause', 'icon'=>'pause']);
+    $bar->add(['Button', 'Shuffle', 'icon'=>'shuffle']);
+
+At this point using alternative syntax where you initialize objects yourself becomes a bit too complex and lengthy::
+
+    $bar = new View();
+    $bar->ui = 'buttons';
+    $bar->addClass('vertical');
+
+    $button = new Button('Play');
+    $button->icon = 'play';
+    $bar->add($button);
+
+    $button = new Button('Pause');
+    $button->icon = 'pause';
+    $bar->add($button);
+
+    $button = new Button('Shuffle');
+    $button->icon = 'shuffle';
+    $bar->add($button);
+
+    $app->add($bar);
+
 
 Linking
 -------
@@ -67,10 +114,13 @@ For other JavaScript actions you can use :ref:`js`::
 Complex Buttons
 ---------------
 
-Knowledge of Semantic UI button (http://semantic-ui.com/elements/button.html) can help you
+
+
+Knowledge of the Semantic UI button (http://semantic-ui.com/elements/button.html) can help you
 in creating more complex buttons::
 
     $forks = new Button(['labeled'=> true]); // Button, not Buttons!
     $forks->add(new Button(['Forks', 'blue']))->add(new Icon('fork'));
     $forks->add(new Label(['1,048', 'basic blue left pointing']));
     $layout->add($forks);
+

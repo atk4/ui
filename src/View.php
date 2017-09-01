@@ -223,7 +223,7 @@ class View implements jsExpressionable
      *
      * @param array $properties
      */
-    protected function setDefaults($properties)
+    public function setDefaults($properties)
     {
         if (isset($properties[0]) && $this->content !== false) {
             $this->content = $properties[0];
