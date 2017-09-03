@@ -178,6 +178,6 @@ Here is the code with comments::
     // Next specify label and separatly name of social network
     $app->add(new SocialAdd(['Follow on Twitter', 'social'=>'twitter']));
 
-    // Finally proivde custom icon and make the button clickable.
+    // Finally provide custom icon and make the button clickable.
     $app->add(new SocialAdd(['facebook', 'icon'=>'facebook f']))
         ->link('http://facebook.com');
