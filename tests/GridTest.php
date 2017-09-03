@@ -47,6 +47,7 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
             $this->extract($t)
         );
     }
+
     public function test2()
     {
         $t = new Table();
@@ -85,7 +86,8 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
 
 class MyModel extends \atk4\data\Model
 {
-    public $title_field='email';
+    public $title_field = 'email';
+
     public function init()
     {
         parent::init();
