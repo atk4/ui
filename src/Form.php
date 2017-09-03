@@ -293,30 +293,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * @return FormField\Generic
      */
-    public function fieldFactory(...$args)
+    public function decoratorFactory(\atk4\data\Field $f, $defaults = [])
     {
-        if (is_string($args[0]) && ($modelField = $this->model->hasElement($args[0]))) {
-            // $modelField is set above
-        } elseif ($args[0] instanceof \atk4\data\Field) {
-            $modelField = $args[0];
-        } else {
-            $modelField = $this->model->addField(...$args);
-            $modelField->never_persist = true;
-        }
-
-        return $this->_fieldFactory($modelField);
-    }
-
-    /**
-     * Will come up with a column object based on the field object supplied.
-     *
-     * @param \atk4\data\Field $f
-     *
-     * @return FormField\Generic
-     */
-    public function _fieldFactory(\atk4\data\Field $f)
-    {
-        $arg = ['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name];
+        $arg = array_merge(
+            ['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name],
+            $defaults
+        );
 
         if (isset($f->ui['form'])) {
             $display = $f->ui['form'];

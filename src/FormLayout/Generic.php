@@ -38,65 +38,55 @@ class Generic extends View
      * Places field inside a layout somewhere. Should be called
      * through $form->addField()
      *
-     * @param string              $name
-     * @param array|string|object $field
+     * @param string|null              $name
+     * @param array|string|object|null $decorator
+     * @param array|string|object|null $dataType
      *
      * @return \atk4\ui\FormField\Generic
      */
-    public function addField($name, $field = [])
+    public function addField(string $name, $decorator = null, $dataType = null)
     {
         if (!is_string($name)) {
             throw new Exception(['Format for addField now require first argument to be name']);
         }
 
-        // Several possible configurations are allowed.
-        if ($field instanceof FormField\Generic) {
-            // field is specified so we don't have to do anything at all!
-        } elseif (is_string($field)) {
-            $field = [$field];
+        if (is_string($dataType)) {
+            $dataType = $this->model->addField($name, ['type'=>$dataType]);
+        } elseif (is_array($dataType)) {
+            $dataType = $this->model->addField($name, $dataType);
+        } elseif (!$dataType) {
+            if ($name) {
+                $dataType = $this->form->model->hasElement($name);
+                if (!$dataType) {
+                    $dataType = $this->form->model->addField($name);
+                }
+            }
+            // if name is null and $dataType is null it is a valid case for decorators like capcha
+        } elseif (is_object($dataType)) {
+            if (!$dataType instanceof \atk4\data\Field) {
+                throw new Exception(['Field type object must descend \atk4\data\Field', 'type'=>$dataType]);
+            }
+        } else {
+            throw new Exception(['Value of $dataType argument is incorrect', 'dataType'=>$dataType]);
         }
 
-            && is_string($type)) {
-
-
-        if (is_string($args)) {
-            $args = ['caption' => $args];
-        } elseif (is_array($args) && isset($args[0])) {
-            $args['caption'] = $args[0];
-            unset($args[0]);
-        } elseif ($args instanceof FormField\Generic) {
-
-            // 1. If field object specified explicitly as 2nd arg
-            $field = $this->form->fieldFactory(...$field);
+        if (is_string($decorator)) {
+            $decorator = $this->form->decoratorFactory($dataType, ['caption'=>$decorator]);
+        } elseif (is_array($decorator)) {
+            $decorator = $this->form->decoratorFactory($dataType, $decorator);
+        } elseif (!$decorator) {
+            $decorator = $this->form->decoratorFactory($dataType);
+        } elseif (is_object($decorator)) {
+            if (!$decorator instanceof \atk4\ui\FormField\Generic) {
+                throw new Exception(['Field decorator must descend from \atk4\ui\FormField\Generic', 'decorator'=>$decorator]);
+            }
+            $decorator->field = $dataType;
+            $decorator->form = $this->form;
+        } else {
+            throw new Exception(['Value of $decorator argument is incorrect', 'decorator'=>$decorator]);
         }
 
-        // 2. If string is used for field type in 2nd arg
-        }
-
-        /*
-        if (isset($args[1]) && is_string($args[1])) {
-            $args[1] = ['ui'=>['caption'=>$args[1]]];
-        }
-         */
-
-        if (is_array($field)) {
-            $field = $this->form->fieldFactory(...$field);
-        } elseif (!$field instanceof \atk4\ui\FormField\Generic) {
-            $field = $this->form->fieldFactory($field);
-        }
-
-
-        // ---------------
-
-        if (isset($args['caption'])) {
-            $field->field->caption = $args['caption'];
-        }
-
-        if (isset($args['width'])) {
-            $field->field->ui['width'] = $args['width'];
-        }
-
-        return $this->_add($field, ['name'=>$field->short_name]);
+        return $this->_add($decorator, ['desired_name'=>'huj']);
     }
 
     public function setModel(\atk4\data\Model $model, $fields = null)
@@ -123,9 +113,7 @@ class Generic extends View
 
         if (is_array($fields)) {
             foreach ($fields as $field) {
-                $modelField = $model->getElement($field);
-
-                $formField = $this->addField($this->form->fieldFactory($modelField));
+                $this->addField($field);
             }
         } else {
             throw new Exception(['Incorrect value for $fields', 'fields'=>$fields]);
