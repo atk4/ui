@@ -37,7 +37,7 @@ class Generic extends View
 
     /**
      * Places field inside a layout somewhere. Should be called
-     * through $form->addField()
+     * through $form->addField().
      *
      * @param string|null              $name
      * @param array|string|object|null $decorator
