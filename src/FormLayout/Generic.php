@@ -2,9 +2,9 @@
 
 namespace atk4\ui\FormLayout;
 
+use atk4\ui\Exception;
 use atk4\ui\Form;
 use atk4\ui\View;
-use atk4\ui\Exception;
 
 /**
  * Generic Layout for a form.
