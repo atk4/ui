@@ -4,6 +4,7 @@ namespace atk4\ui\FormLayout;
 
 use atk4\ui\Form;
 use atk4\ui\View;
+use atk4\ui\Exception;
 
 /**
  * Generic Layout for a form.
@@ -40,53 +41,62 @@ class Generic extends View
      *
      * @param string|null              $name
      * @param array|string|object|null $decorator
-     * @param array|string|object|null $dataType
+     * @param array|string|object|null $field
      *
      * @return \atk4\ui\FormField\Generic
      */
-    public function addField(string $name, $decorator = null, $dataType = null)
+    public function addField(string $name, $decorator = null, $field = null)
     {
         if (!is_string($name)) {
             throw new Exception(['Format for addField now require first argument to be name']);
         }
 
-        if (is_string($dataType)) {
-            $dataType = $this->model->addField($name, ['type'=>$dataType]);
-        } elseif (is_array($dataType)) {
-            $dataType = $this->model->addField($name, $dataType);
-        } elseif (!$dataType) {
-            if ($name) {
-                $dataType = $this->form->model->hasElement($name);
-                if (!$dataType) {
-                    $dataType = $this->form->model->addField($name);
-                }
+        if (!$this->form->model) {
+            $this->form->model = new \atk4\ui\misc\ProxyModel();
+        }
+
+        if (is_string($field)) {
+            $field = ['type'=>$field];
+        }
+
+        if ($name) {
+            $existingField = $this->form->model->hasElement($name);
+        }
+
+        if (!$existingField) {
+            // Add missing field
+            if ($field) {
+                $field = $this->form->model->addField($name, $field);
+            } else {
+                $field = $this->form->model->addField($name);
             }
-            // if name is null and $dataType is null it is a valid case for decorators like capcha
-        } elseif (is_object($dataType)) {
-            if (!$dataType instanceof \atk4\data\Field) {
-                throw new Exception(['Field type object must descend \atk4\data\Field', 'type'=>$dataType]);
-            }
+        } elseif (is_array($field)) {
+            // Add properties to existing field
+            $existingField->setDefaults($field);
+            $field = $existingField;
+        } elseif (is_object($field)) {
+            throw new Exception(['Duplicate field', 'name'=>$name]);
         } else {
-            throw new Exception(['Value of $dataType argument is incorrect', 'dataType'=>$dataType]);
+            $field = $existingField;
         }
 
         if (is_string($decorator)) {
-            $decorator = $this->form->decoratorFactory($dataType, ['caption'=>$decorator]);
+            $decorator = $this->form->decoratorFactory($field, ['caption'=>$decorator]);
         } elseif (is_array($decorator)) {
-            $decorator = $this->form->decoratorFactory($dataType, $decorator);
+            $decorator = $this->form->decoratorFactory($field, $decorator);
         } elseif (!$decorator) {
-            $decorator = $this->form->decoratorFactory($dataType);
+            $decorator = $this->form->decoratorFactory($field);
         } elseif (is_object($decorator)) {
             if (!$decorator instanceof \atk4\ui\FormField\Generic) {
                 throw new Exception(['Field decorator must descend from \atk4\ui\FormField\Generic', 'decorator'=>$decorator]);
             }
-            $decorator->field = $dataType;
+            $decorator->field = $field;
             $decorator->form = $this->form;
         } else {
             throw new Exception(['Value of $decorator argument is incorrect', 'decorator'=>$decorator]);
         }
 
-        return $this->_add($decorator, ['desired_name'=>'huj']);
+        return $this->_add($decorator, ['desired_name'=>$field->short_name]);
     }
 
     public function setModel(\atk4\data\Model $model, $fields = null)
@@ -248,8 +258,8 @@ class Generic extends View
                 $template->append('field_class', 'required ');
             }
 
-            if (isset($el->field->ui['width'])) {
-                $template->append('field_class', $el->field->ui['width'].' wide ');
+            if (isset($el->width)) {
+                $template->append('field_class', $el->width.' wide ');
             }
 
             $this->template->appendHTML('Content', $template->render());

@@ -25,7 +25,7 @@ require 'init.php';
     $m_register->addField('email');
     $m_register->addField('is_accept_terms', ['type'=>'boolean', 'mandatory'=>true]);
 
-    $f = $layout->add(new \atk4\ui\Form(['segment'=>true]));
+    $f = $app->add(new \atk4\ui\Form(['segment'=>true]));
     $f->setModel($m_register);
 
     $f->onSubmit(function ($f) {
@@ -51,7 +51,7 @@ require 'init.php';
     $f->addHeader('Example of field grouping');
     $gr = $f->addGroup('Address with label');
     $gr->addField('address', ['width'=>'twelve']);
-    $gr->addField('code', ['Post Code', 'width'=>'four']);
+    $gr->addField('code', ['width'=>'four'], ['caption'=>'Post Code']);
 
     $gr = $f->addGroup(['width'=>'two']);
     $gr->addField('city');
@@ -80,3 +80,4 @@ require 'init.php';
 
     //$layout->renderAll();
     //$layout->template->appendHTML('HEAD', $layout->getJS());
+    //

@@ -64,7 +64,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         // where to add your fields.
         $this->initLayout();
 
-        $this->addField('empty', new FormField\Hidden());
+        //$this->addField('empty', new FormField\Hidden());
 
         // When form is submitted, will perform POST field loading.
         /*
@@ -295,10 +295,18 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function decoratorFactory(\atk4\data\Field $f, $defaults = [])
     {
-        $arg = array_merge(
+        if (isset($defaults[0])) {
+            $class = $defaults[0];
+            unset($defaults[0]);
+        } else {
+            $class = null;
+        }
+
+        $defaults = array_merge(
             ['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name],
             $defaults
         );
+
 
         if (isset($f->ui['form'])) {
             $display = $f->ui['form'];
@@ -307,29 +315,52 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 $display = [$display];
             }
 
-            // ui['form'] = ['FormField/TextArea', 'rows'=>2]
             if (isset($display[0])) {
-                $display = array_merge($display, $arg);
-
-                return $this->factory($display);
+                $class = $class ?: $display[0];
+                unset($display[0]);
             }
+
+            $defaults = array_merge($display, $defaults);
         }
 
-        if ($f->enum) {
-            $arg['values'] = array_combine($f->enum, $f->enum);
+        if (!$class && $f->enum) {
+            $defaults['values'] = array_combine($f->enum, $f->enum);
 
-            return new FormField\Dropdown($arg);
+            $class = 'Dropdown';
         }
 
         // Field values can be picked from the model.
         if (isset($f->reference)) {
-            //$arg['values'] = $f->ref();
-
-            $dd = new FormField\Dropdown($arg);
-            $dd->setModel($f->reference->refModel());
-
-            return $dd;
+            $class = 'Dropdown';
+            $defaults['model'] = $f->reference->refModel();
+            //$dd = new FormField\Dropdown($arg);
+            //$dd->setModel($f->reference->refModel());
+            //return $dd;
         }
+
+        if (isset($this->typeToDecorator[$f->type])) {
+            $class = $this->typeToDecorator[$f->type];
+        }
+
+        if (!$class) {
+            $class = 'Line';
+        }
+
+        return $this->factory($class, $defaults, 'FormField');
+    }
+
+    protected $typeToDecorator = [
+        'boolean'=>'Checkbox',
+        'text'=>'Textarea',
+        'string'=>'Line',
+        'password'=>'Password',
+        'datetime'=>'Datetime',
+        'date'=>'Date',
+        'time'=>'Time',
+        'money'=>'Money',
+    ];
+
+    /*
 
         switch ($f->type) {
         case 'boolean':
@@ -370,7 +401,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             return new FormField\Line($arg);
 
         }
-    }
+     */
 
     /**
      * Looks inside the POST of the request and loads it into a current model.
