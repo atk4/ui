@@ -307,7 +307,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $defaults
         );
 
-
         if (isset($f->ui['form'])) {
             $display = $f->ui['form'];
 
@@ -350,14 +349,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     }
 
     protected $typeToDecorator = [
-        'boolean'=>'Checkbox',
-        'text'=>'Textarea',
-        'string'=>'Line',
-        'password'=>'Password',
-        'datetime'=>'Datetime',
-        'date'=>'Date',
-        'time'=>'Time',
-        'money'=>'Money',
+        'boolean' => 'Checkbox',
+        'text'    => 'Textarea',
+        'string'  => 'Line',
+        'password'=> 'Password',
+        'datetime'=> 'Datetime',
+        'date'    => 'Date',
+        'time'    => 'Time',
+        'money'   => 'Money',
     ];
 
     /*
