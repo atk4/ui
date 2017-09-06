@@ -110,6 +110,8 @@ inputs user data.
 .. toctree::
     data
 
+.. _callback:
+
 Callbacks and Virtual Pages
 ===========================
 
@@ -125,7 +127,11 @@ Once the concept is established, it can even be used on a higher level, for exam
     $button->on('click', function() { return 'clicked button'; });
 
 .. toctree::
+    :maxdepth: 4
+
     callbacks
+
+ok
 
  - "call-backs"
  - "virtual pages"

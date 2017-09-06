@@ -10,9 +10,96 @@ Forms
 
 .. php:class:: Form
 
-One of the most important components of Agile UI is the "Form":
+One of the most important components of Agile UI is the "Form". Class ``Form``
+implements the following 4 major features:
 
-.. image:: images/form.png
+- Form Rendering using Semantic UI Form (https://semantic-ui.com/collections/form.html):
+
+    .. image:: images/form.png
+
+- Access to any database (SQL, NoSQL) through Agile Data (http://agile-data.readthedocs.io/en/develop/persistence.html).
+- Full Integration with Events and Actions (:ref:`js`)
+- PHP-based Submit Handler using callbacks (:ref:`callback`)
+
+    
+
+
+Basic Usage
+===========
+
+To create a form you need the following code::
+
+    $form = $app->add('Form');
+    $form->addField('email');
+
+The form component can be further tweaked by setting a custom call-back handler
+directly in PHP::
+
+    $form->onSubmit(function($form) {
+        // implement subscribe here
+
+        return "Subscribed ".$form->model['email']." to newsletter.";
+    });
+
+Form is a composite component and it relies on other components to render parts
+of it. This is how you can modify a default button::
+
+    $form->buttonSave->set('Subscribe');
+    $form->buttonSave->icon = 'mail';
+
+Form renders it's layout and fields thanks to classes located in namespaces
+``atk4\ui\FormLayout`` and ``atk4\ui\FormField``. To learn more about form
+rendering and field decoration, see:
+
+ - :php:class:`FormLayout::Generic`
+ - :php:class:`FormField::Generic`
+
+This documentation chapter will focus on Form mechanics, such as submission,
+integration with front-end, integration with Model, error handling etc.
+
+Usage with Model
+----------------
+
+A most common use of form is if you have a working Model (http://agile-data.readthedocs.io/en/develop/model.html)::
+
+    // Form will automatically add a new user and save into the database
+    $form = $app->add('Form');
+    $form->setModel(new User($db));
+
+The basic 2-line syntax will extract all the required logic from the Model including:
+
+ - Fields defined for this Model will be displayed
+ - Display of default values in the form
+ - Depending on field type, a decorator will be selected from FormField/Generic
+ - Using :php:class:`FormLayout::Columns` can make form more compact by splitting it into columns
+ - Field captions, placeholders, hints and other elements defined in Field::ui are respected (http://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
+ - Fields that are not editable by default will not appear on the form (http://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
+ - Field typecasting will be invoked such as for converting dates
+ - Reference fields (http://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as Dropdowns
+ - Booleans are displayed as checkboxes but stored as defined by the model field
+ - Mandatory and Required fields will be visually highlighted (http://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$mandatory)
+ - Validation will be performed and errors will appear on the form (NEED LINK)
+ - Unless you specify a submission handler, form will save the model ``User`` into ``$db`` on successful submission.
+
+All of the above works auto-magically, but you can tweak it even more:
+
+ - Provide custom submission handler
+ - Specify which fields and in which order to display on the form
+ - Override labels, decorator classes
+ - Froup fields or use custom layout template
+ - Mix standard model fields with your own
+ - Add JS Actions around fields
+ - Split up form into multiple tabs
+
+Extensions
+----------
+
+By design, Form is very extensible component. You can introduce new layouts and new field decorators including:
+
+ - Capcha decorator
+ - File Upload field
+
+
 
 Features of a Form include:
 
@@ -46,38 +133,12 @@ Features of a Form include:
     - anything else really!
 
 
-Creating Basic Forms
----------------------
-
-To create a form you need the following code::
-
-    $form = $app->add('Form');
-    $form->addField('email');
-
-The form component can be further tweaked by setting a custom call-back handler
-directly in PHP::
-
-    $form->onSubmit(function($form) {
-        // implement subscribe here
-
-        return "Subscribed ".$form->model['email']." to newsletter.";
-    });
-
-Form is a composite component and it relies on other components to render parts
-of it. This is how you can modify a default button::
-
-    $form->buttonSave->set('Subscribe');
-    $form->buttonSave->icon = 'mail';
 
 
 
-The first line creates a "Form" object that is assigned to variable `$f`. Next
-line defines a new field that is placed inside a form. Once form is defined, it
-needs to be placed somewhere in a Render Tree, so that the users can see it.
 
-If $form is not yet associated with a model (like above) then an empty model will
-be created. If you are not using the model, you will need to define
-:php:meth:`onSubmit()` handler. (Your other option is to use :php:meth:`setModel()`.
+
+
 
 Adding Fields to a form
 ^^^^^^^^^^^^^^^^^^^^^^^

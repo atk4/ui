@@ -1,7 +1,4 @@
 
-
-.. _callback:
-
 Introduction
 ------------
 
