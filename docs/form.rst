@@ -10,7 +10,7 @@ Forms
 
 .. php:class:: Form
 
-One of the most important components of Agile UI is the "Form" - a View:
+One of the most important components of Agile UI is the "Form":
 
 .. image:: images/form.png
 
@@ -51,10 +51,25 @@ Creating Basic Forms
 
 To create a form you need the following code::
 
-    $form = new \atk4\ui\Form();
+    $form = $app->add('Form');
     $form->addField('email');
 
-    $app->layout->add($form);
+The form component can be further tweaked by setting a custom call-back handler
+directly in PHP::
+
+    $form->onSubmit(function($form) {
+        // implement subscribe here
+
+        return "Subscribed ".$form->model['email']." to newsletter.";
+    });
+
+Form is a composite component and it relies on other components to render parts
+of it. This is how you can modify a default button::
+
+    $form->buttonSave->set('Subscribe');
+    $form->buttonSave->icon = 'mail';
+
+
 
 The first line creates a "Form" object that is assigned to variable `$f`. Next
 line defines a new field that is placed inside a form. Once form is defined, it
