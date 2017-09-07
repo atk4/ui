@@ -17,17 +17,17 @@ implements the following 4 major features:
 
     .. image:: images/form.png
 
-- Access to any database (SQL, NoSQL) through Agile Data (http://agile-data.readthedocs.io/en/develop/persistence.html).
+- Loading and storing data in any database (SQL, NoSQL) supported by Agile Data (http://agile-data.readthedocs.io/en/develop/persistence.html).
 - Full Integration with Events and Actions (:ref:`js`)
 - PHP-based Submit Handler using callbacks (:ref:`callback`)
 
-    
-
+Form can be used a web application built entirely in Agile UI or you can extract
+the component by integrating it into your existing application or framework.
 
 Basic Usage
 ===========
 
-To create a form you need the following code::
+It only takes 2 PHP lines to create a fully working form::
 
     $form = $app->add('Form');
     $form->addField('email');
@@ -42,19 +42,18 @@ directly in PHP::
     });
 
 Form is a composite component and it relies on other components to render parts
-of it. This is how you can modify a default button::
+of it. Form uses :php:class:`Button` that you can tweak to your liking::
 
     $form->buttonSave->set('Subscribe');
     $form->buttonSave->icon = 'mail';
 
-Form renders it's layout and fields thanks to classes located in namespaces
-``atk4\ui\FormLayout`` and ``atk4\ui\FormField``. To learn more about form
-rendering and field decoration, see:
+Form also relies on a ``atk4\ui\FormLayout`` class and displays fields through
+decorators defined at ``atk4\ui\FormField``. See dedicated documentation for:
 
  - :php:class:`FormLayout::Generic`
  - :php:class:`FormField::Generic`
 
-This documentation chapter will focus on Form mechanics, such as submission,
+The rest of this chapter will focus on Form mechanics, such as submission,
 integration with front-end, integration with Model, error handling etc.
 
 Usage with Model
@@ -91,114 +90,314 @@ All of the above works auto-magically, but you can tweak it even more:
  - Add JS Actions around fields
  - Split up form into multiple tabs
 
+If your form is NOT associated with a model, then Form will automatically create a :php:class:`ProxyModel`
+and associate it with your Form. As you add fields, they will also be added into ProxyModel.
+
 Extensions
 ----------
 
-By design, Form is very extensible component. You can introduce new layouts and new field decorators including:
+Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some extensions like:
 
  - Capcha decorator
  - File Upload field
+ - Multi-record form
+ - Multi-tab form
+
+If you develop feature like that, please let me know so that I can include it in the documentation
+and give you credit.
 
 
+Adding Fields
+=============
 
-Features of a Form include:
+.. php:method:: addField($name, $decorator = null, $field = null)
 
- - Rendering a beautiful and valid form:
-    - wide range of supported field types
-    - field grouping (more than one field per line)
-    - define field width, positioning and size
-    - labels, placeholders and hints
-    - supports automated layouts or you can define a custom one
+Create a new field on a form::
 
- - Integration with Model objects:
-    - automatically populate all or specific fields
-    - handle multi-field validation
-    - use of semi-automated layouting (you can arrange group of fields)
-    - respect caption and other ui-related settings defined in a model
-    - lookup referenced models for data
-    - data types are converted automatically (e.g. date, time, boolean)
+    $form = $app->add('Form');
+    $form->addField('email');
+    $form->addField('gender', ['Dropdown', 'values'=>['Female', 'Male']);
+    $form->addField('terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']);
 
- - JavaScript integration
-    - form is submitted using JavaScript
-    - during submit, the loading indicator is shown
-    - javascript sends data through POST
-    - POST data is automatically parsed and imported into Model
+Create a new field on a form using Model does not require you to describe each field.
+Form will rely on Model Field Definition and UI meta-values to decide on the best way to handle
+specific field type::
 
- - You may define onSubmit PHP handler that:
-    - can handle more validation
-    - make advanced decisions before saving data
-    - perform a different Actions, such as reload parts of page or close dialog.
-    - save data into multiple models
-    - indicate successful completion of a form through a nicely formatted message
-    - anything else really!
+    $form = $app->add('Form');
+    $form->setModel(new User($db), ['email', 'gender', 'terms']);
 
+Adding new fields
+-----------------
 
+First argument to addField is the name of the field. You cannot have multiple fields
+with the same name.
 
+If field exist inside associated model, then model field definition will be used as
+a base, otherwise you can specify field definition through 3rd argument. I explain
+that below in more detail.
 
+You can specify first argument ``null`` in which case decorator will be added without
+association with field. This will not work with regular fields, but you can add
+custom decorators such as CAPCHA, which does not really need association with a
+field.
 
+Field Decorator
+---------------
 
+To avoid term miss-use, we use "Field" to refer to ``\atk4\data\Field``. This class
+is documented here: http://agile-data.readthedocs.io/en/develop/fields.html
 
+Form uses a small UI components to vizualize HTML input fields associated with
+the respective Model Field. We call this object "Field Decorator". All field
+decorators extend from class :php:class:`FormField::Generic`.
 
+Agile UI comes with at least the following decorators:
 
-Adding Fields to a form
-^^^^^^^^^^^^^^^^^^^^^^^
+- Input (also extends into Line, Password, Hidden)
+- Dropdown
+- Checkbox
+- Radio
+- Calendar
+- Radio
+- Money
 
-.. php:method:: addField(data_field, form_field = null)
+For some examples see: http://ui.agiletoolkit.org/demos/form3.php
 
-Create a new field on a form. The first argument is a data field definition.
-This can simply be a string "email". Additionally you can specify an array or
-even a instance of 
-`\atk4\data\Field <http://agile-data.readthedocs.io/en/develop/fields.html>`_
+Field Decorator can be passed to ``addField`` using 'string', :php:ref:`seed` or 'object'::
 
-If form is associated with a model, and the specified field exists, then 
-Data Field object will be looked up. Data Field defines type, caption, possible
-values and other information about the data itself.
+    $form->addField('accept_terms', 'Checkbox');
+    $form->addField('gender', ['Dropdown', 'values'=>['Female', 'Male']]);
 
-Second argument can be used to describe area around the field, which is a visual
-object derived from :php:class:`Form::Field`. The class usually is guessed
-from the data field type, but you can specify your own object here. Alternatively
-you can pass array which will be used as defaults when creating appropriate
-Form Field.
+    $calendar = new \atk4\ui\FormField\Calendar();
+    $calendar->type = 'tyme';
+    $calendar->options['ampm'] = true;
+    $form->addField('time', $calendar);
 
-Here are some of the examples::
+For more information on default decorators as well as examples on how to create
+your own see documentation on :php:class:`FormField::Generic`.
 
-    // Data field type decides form field class
-    $form->addField(['is_accept_terms', 'type'=>'boolean']); 
+.. php:method:: decoratorFactory(\atk4\data\Field $f, $defaults = [])
 
-    // Specifying enum makes form use drop-down
-    $form->addField(['agree', 'enum'=>['Yes', 'No']]);
+If Decorator is not specified (``null``) then it's class will be determined from
+the type of the Data Field with ``decoratorFactory`` method.
 
-    // We can switch to use Radio selection
-    $form->addField(['agree', 'enum'=>['Yes', 'No']], new \atk4\ui\FormField\Radio());
+Data Field
+----------
 
-.. important:: Always use `'type'=>` because this also takes care of
-    `type-casting <http://agile-data.readthedocs.io/en/develop/typecasting.html>`_
-    e.g. converting data formats.
+Data field is the 3rd argument to ``Form::addField()``.
 
-Integrating Form with a Model
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+There are 3 ways to define Data Field using 'string', 'array' or 'object'::
 
-As you work on your application, in most cases you will be linking Form with 
-`Model <http://agile-data.readthedocs.io/en/develop/model.html>`. This is much
-more convenient and takes care of handling data flow all the way from the user
-input to storing them in the database.
+    $form->addField('accept_terms', 'Checkbox', 'Accept Terms & Conditions');
+    $form->addField('gender', null, ['enum'=>['Female', 'Male']]);
 
+    class MyBoolean extends \atk4\data\Field {
+        public $type = 'boolean';
+        public $enum = ['N', 'Y'];
+    }
+    $form->addField('test2', null, new MyBoolean());
 
-.. php:method:: setModel($model, [$fields])
+String will be converted into ``['caption' => $string]`` a short way to give
+field a custom label. Without a custom label, Form will clean up the name (1st
+argument) by replacing '_' with spaces and uppercasing words (accept_terms
+becomes "Accept Terms")
 
-    Associate field with existing model object and import all editable fields
-    in the order in which they were defined inside model's init() method.
+Specifying array will use the same syntax as the 2nd argument for ``\atk4\data\Model::addField()``.
+(http://agile-data.readthedocs.io/en/develop/model.html#Model::addField)
 
-    You can specify which fields to import and their order by simply listing
-    field names through second argument.
+If field already exist inside model, then values of $field will be merged into
+existing field properties. This example make email field mandatory for the form::
 
-    Specifying "false" or empty array as a second argument will import no fields.
+    $form = $app->add('Form');
+    $form->setModel(new User($db), false);
+
+    $form->addField('email', null, ['required'=>true]);
+
+addField into Existing Model
+----------------------------
+
+If your form is using a model and you add additional field, then it will automatically
+be marked as "never_persist" (http://agile-data.readthedocs.io/en/develop/fields.html#Field::$never_persist).
+
+This is to make sure that custom fields wouldn't go directly into database. Next
+example displays a registration form for a User::
+
+    class User extends \atk4\data\Model {
+        public $table = 'user';
+        function init() {
+            parent::init();
+
+            $this->addField('email');
+            $this->addFiled('password');
+        }
+    }
+
+    $form = $app->add('Form');
+    $form->setModel(new User($db));
+
+    // add password verification field
+    $form->addField('password_verify', 'Password', 'Type password again');
+    $form->addField('accept_terms', null, ['type'=>'boolean']);
+
+    // submit event
+    $form->onSubmit(function($form){ 
+        if ($form->model['password'] != $form->model['password_verify']) {
+            return $form->error('password_verify', 'Passwords do not match');
+        }
+
+        if (!$form->model['accept_terms']) {
+            return $form->error('accept_terms', 'Read and accept terms');
+        }
+
+        $form->model->save(); // will only store email / password
+        return $form->success('Thank you. Check your email now');
+    });
+
+Type vs Decorator Class
+-----------------------
+
+Sometimes you may wonder - should you pass decorator class ('Checkbox') or
+a data field type (['type' => 'boolean']);
+
+I always to recommend use of field type, because it will take care of type-casting
+for you. Here is an example with date::
+
+    $form = $app->add('Form');
+    $form->addField('date1', null, ['type'=>'date']);
+    $form->addField('date2', ['Calendar', 'type'=>'date']);
+
+    $form->onSubmit(function($form) {
+        echo 'date1 = '.print_r($form->model['date1'], true).' and date2 = '.print_r($form->model['date2'], true);
+    });
+
+Field ``date1`` is defined inside a :php:class:`ProxyModel` as a date field and will
+be automatically converted into DateTime object by Persistence typecasting.
+
+Field ``date2`` has no type and therefore Persistence typecasting will not modify it's
+value and it's stored inside model as a string.
+
+The above code result in the following output::
+
+    date1 = DateTime Object ( [date] => 2017-09-03 00:00:00 .. ) and date2 = September 3, 2017
+
+Seeding Decorator from Model
+----------------------------
+
+In a large projects, you most likely will not be setting individual fields for each Form, instead
+you would simply use ``addModel()`` to populate all defined fields inside a model. Form does
+have a pretty good guess about Decorator based on field type, but what if you want to
+use a custom decorator?
+
+This is where ``$field->ui`` comes in (http://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui).
+
+You can specify ``'ui'=>['form' => $decorator_seed]`` for your model field::
+
+    class User extends \atk4\data\Model {
+        public $table = 'user';
+
+        function init() {
+            parent::init();
+
+            $this->add('email');
+            $this->add('password', ['type'=>'password']);
+
+            $this->add('birth_year', ['type'=>'date', 'ui'=>['type'=>'month']);
+        }
+    }
+
+The seed for the UI will be combined with the default overriding :php:attr:`FormField\Calendar::type`
+to allow month/year entry by the Calendar extension, which will then be saved and
+stored as a regular date. Obviously you can also specify decorator class::
+
+    $this->add('birth_year', ['ui'=>['Calendar', 'type'=>'month']);
+
+Without the 'type' propoerty, now the calendar selection will be stored as text.
+
+using setModel()
+----------------
+
+Although there were many examples above for the use of setModel() this method
+needs a bit more info::
 
 .. php:attr:: model
 
-    Model that is currently associated with a Form.
+.. php:method:: setModel($model, [$fields])
 
-For the next demo, lets actually define a model `Person`::
+Associate field with existing model object and import all editable fields
+in the order in which they were defined inside model's init() method.
+
+You can specify which fields to import and their order by simply listing
+field names through second argument.
+
+Specifying "false" or empty array as a second argument will import no fields,
+so you can then use `addField` to import fields individually.
+
+See also: http://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable
+
+Loading Values
+--------------
+
+Although you can set form fields individually using ``$form->model['field'] = $value``
+it's always nicer to load values for the database. Given a ``User`` model this is how
+you can create a form to change profile of a currently logged user::
+
+    $user = new User($db);
+    $user->getElement('password')->never_persist = true; // ignore password field
+    $user->load($current_user);
+
+    // Display all fields (except password) and values
+    $form = $app->add('Form');
+    $form->setModel($user);
+
+Submitting this form will automatically store values back to the database. Form uses
+POST data to submit itself and will re-use the query-string, so you can also safely
+use any GET arguments for passing record $id. You may also perform model load after
+record association. This gives the benefit of not loading any other fileds, unless
+it's marked as System (http://agile-data.readthedocs.io/en/develop/fields.html#Field::$system),
+see http://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::onlyFields::
+
+    $form = $app->add('Form');
+    $form->setModel(new User($db), ['email', 'name']);
+    $form->model->load($current_user);
+
+As before, field ``password`` will not be loaded from the database, but this time
+using onlyFields restriction rather then `never_persist`.
+
+Validating
+----------
+
+Topic of Validation in web apps is quite extensive. You sould start by reading what Agile Data
+has to say about validation:
+http://agile-data.readthedocs.io/en/develop/persistence.html#validation
+
+TL;DR - sometimes validation needed when storing field value inside model (e.g. setting boolean
+to "blah") and sometimes validation should be performed only when storing model data into
+database.
+
+Here are few questions:
+
+- If user specified incorrect value into field, can it be stored inside model and then
+  re-displayed in the field again? If user must enter "date of birth" and he picks date
+  in the future, should we reset field value or simply indicate error?
+
+- If you have a multi-step form with a complex logic, it may need to run validation before
+  record status changes from "draft" to "submitted".
+
+As far as form is concerned:
+
+- Decorators must be able to parse entered values. For instance Dropdown will make sure that
+  value entered is one of the available values (by key)
+
+- Form will rely on Agile Data Typecasting (http://agile-data.readthedocs.io/en/develop/typecasting.html)
+  to load values from POST data and store them in model.
+
+- Form submit handler will rely on ``Model::save()`` (http://agile-data.readthedocs.io/en/develop/persistence.html#Model::save)
+  not to throw validation exception. 
+
+- Form submit handler will also interpret use of :php:meth:`Form::error` by displaying errors that
+  do not originate inside Model save logic.
+
+Example use of Model's validate() method::
 
     class Person extends \atk4\data\Model
     {
@@ -224,12 +423,14 @@ For the next demo, lets actually define a model `Person`::
         }
     }
 
+
+
 We can now populate form fields based around the data fields defined in the model::
 
     $app->layout->add('Form')
         ->setModel(new Person($db));
 
-This should display a following form:
+This should display a following form::
 
     $form->addField(
         'terms',
@@ -338,6 +539,8 @@ of labels etc.
 
     Creates a sub-layout, returning new instance of a :php:class:`FormLayout\Generic` object. You
     can also specify a header.
+
+.. todo:: MOVE THIS TO SEPARATE FILE
 
 .. php:class:: FormLayout\Generic
 

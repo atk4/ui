@@ -20,6 +20,7 @@ is::
 .. toctree::
     app
 
+.. _seed:
 
 Seed
 ====

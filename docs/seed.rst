@@ -1,4 +1,3 @@
-.. _seed:
 
 Purpose of the Seed
 -------------------

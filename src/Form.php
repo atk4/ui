@@ -222,13 +222,13 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * @return FormField\Generic
      */
-    public function addField(...$args)
+    public function addField(string $name, $decorator = null, $field = null)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
 
-        return $this->layout->addField(...$args); //$this->fieldFactory($modelField));
+        return $this->layout->addField($name, $decorator, $field);
     }
 
     /**
@@ -354,8 +354,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         'string'  => 'Line',
         'password'=> 'Password',
         'datetime'=> 'Datetime',
-        'date'    => 'Date',
-        'time'    => 'Time',
+        'date'    => ['Calendar', 'type'=>'date'],
+        'time'    => ['Time', 'type'=>'time', 'ampm'=>false],
         'money'   => 'Money',
     ];
 
