@@ -43,11 +43,9 @@ $form = $app->add('Form');
 $form->addField('date1', null, ['type'=>'date']);
 $form->addField('date2', ['Calendar', 'type'=>'date']);
 
-$form->onSubmit(function($form) {
+$form->onSubmit(function ($form) {
     echo 'date1 = '.print_r($form->model['date1'], true).' and date2 = '.print_r($form->model['date2'], true);
 });
-
-
 
 ////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Handler Output');

@@ -110,7 +110,7 @@ class Table extends Lister
      * cells and will handle other things, like alignment. If you do not specify
      * column, then it will be selected dynamically based on field type.
      *
-     * @param string                   $name      Data model field name
+     * @param string                   $name            Data model field name
      * @param array|string|object|null $columnDecorator
      * @param array|string|object|null $field
      *
@@ -166,9 +166,6 @@ class Table extends Lister
         } else {
             throw new Exception(['Value of $columnDecorator argument is incorrect', 'columnDecorator'=>$columnDecorator]);
         }
-
-
-
 
         /*
         $field = null;
@@ -231,7 +228,6 @@ class Table extends Lister
      */
     public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
-
         if (isset($this->typeToDecorator[$f->type])) {
             $defaults = $this->typeToDecorator[$f->type];
             $defaults['table'] = $this;
@@ -243,6 +239,7 @@ class Table extends Lister
                 if (!$this->default_column) {
                     $this->default_column = $this->_add($this->factory($seed, $defaults, 'TableColumn'));
                 }
+
                 return $this->default_column;
             }
         }
@@ -252,7 +249,7 @@ class Table extends Lister
 
     protected $typeToDecorator = [
         'password' => 'Password',
-        'text'    => 'Text',
+        'text'     => 'Text',
         'boolean'  => ['Status', 'positive'=>[true], 'negative'=>['false']],
     ];
 
