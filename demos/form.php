@@ -21,15 +21,14 @@ $tab->add(['Header', 'Very simple form']);
 
 $form = $tab->add('Form');
 $form->addField('email');
-$form->onSubmit(function($form) {
+$form->onSubmit(function ($form) {
     // implement subscribe here
 
-    return $form->success("Subscribed ".$form->model['email']." to newsletter.");
+    return $form->success('Subscribed '.$form->model['email'].' to newsletter.');
 });
 
 $form->buttonSave->set('Subscribe');
 $form->buttonSave->icon = 'mail';
-
 
 $tab->add(['Header', 'But very flexible']);
 
@@ -38,7 +37,6 @@ $g = $form->addGroup(['width'=>'three']);
 $g->addField('name');
 $g->addField('surname');
 $g->addField('gender', ['Dropdown', 'values'=>['Female', 'Male']]);
-
 
 $tab->add(['Header', 'Comparing Field type vs Decorator class']);
 $form = $app->add('Form');
@@ -57,33 +55,33 @@ $tab = $tabs->addTab('Handler Output');
 $tab->add(['Header', 'Form can respond with manually generated error']);
 $form = $tab->add('Form');
 $form->addField('email');
-$form->onSubmit(function($form) {
-    return $form->error('email', 'some error action '.rand(1,100));
+$form->onSubmit(function ($form) {
+    return $form->error('email', 'some error action '.rand(1, 100));
 });
-
 
 $tab->add(['Header', '..or success message']);
 $form = $tab->add('Form');
 $form->addField('email');
-$form->onSubmit(function($form) {
+$form->onSubmit(function ($form) {
     return $form->success('form was successful');
 });
 
 $tab->add(['Header', 'Any other view can be output']);
 $form = $tab->add('Form');
 $form->addField('email');
-$form->onSubmit(function($form) {
+$form->onSubmit(function ($form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
-    $view->text->addParagraph('some text '.rand(1,100));
+    $view->text->addParagraph('some text '.rand(1, 100));
+
     return $view;
 });
 
 $tab->add(['Header', 'jsAction can be used too']);
 $form = $tab->add('Form');
 $field = $form->addField('email');
-$form->onSubmit(function($form) use($field) {
-    return $field->jsInput()->val('random is '.rand(1,100));
+$form->onSubmit(function ($form) use ($field) {
+    return $field->jsInput()->val('random is '.rand(1, 100));
 });
 
 /////////////////////////////////////////////////////////////////////
@@ -93,8 +91,9 @@ $tab->add(['Header', 'Form handles errors (PHP 7.0+)', 'size'=>2]);
 
 $form = $tab->add('Form');
 $form->addField('email');
-$form->onSubmit(function($form) {
+$form->onSubmit(function ($form) {
     $o = new \StdClass();
+
     return $o['abc'];
 });
 
@@ -102,7 +101,7 @@ $tab->add(['Header', 'Form handles random output', 'size'=>2]);
 
 $form = $tab->add('Form');
 $form->addField('email');
-$form->onSubmit(function($form) {
+$form->onSubmit(function ($form) {
     echo 'some output here';
 });
 
@@ -110,10 +109,9 @@ $tab->add(['Header', 'Form shows Agile exceptions', 'size'=>2]);
 
 $form = $tab->add('Form');
 $form->addField('email');
-$form->onSubmit(function($form) {
+$form->onSubmit(function ($form) {
     $form->factory([]);
 });
-
 
 /////////////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Complex Examples');
@@ -183,4 +181,3 @@ $f->onSubmit(function ($f) {
 });
 
 $tabs->addTabURL('Form Database', ['form2.php', 'layout'=>'Centered']);
-

@@ -53,7 +53,8 @@ class Tabs extends View
         return  $sub;
     }
 
-    function addTabURL($name, $url) {
+    public function addTabURL($name, $url)
+    {
         $item = $this->add(['Tab', $name, 'class'=>['item']], 'Menu');
         $item->setAttr('data-tab', $item->name);
 
@@ -61,9 +62,8 @@ class Tabs extends View
         $sub = $this->add(['View', 'class'=>['ui tab']], 'Tabs');
         $sub->setAttr('data-tab', $item->name);
 
-        ## TODO: refactor this ugly hack
+        //# TODO: refactor this ugly hack
         $item->setPath(str_replace('.php.', '.', $this->app->url($url)).'#');
-        return null;
     }
 
     /**

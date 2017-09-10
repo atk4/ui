@@ -68,10 +68,10 @@ class jsCallback extends Callback implements jsExpressionable
                 }
 
                 if ($response instanceof View) {
-                    $response = new jsExpression( '$([html]).modal("show")', [ 
-                        'html'=>'<div class="ui fullscreen modal"> <i class="close icon"></i>  <div class="content"> '.
+                    $response = new jsExpression('$([html]).modal("show")', [
+                        'html'=> '<div class="ui fullscreen modal"> <i class="close icon"></i>  <div class="content"> '.
                         $response->render()
-                        .' </div> </div>'
+                        .' </div> </div>',
                     ]);
                 }
 
