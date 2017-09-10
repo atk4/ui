@@ -1,6 +1,6 @@
 <?php
 /**
- * Demonstrates how to use layouts.
+ * Demonstrates how to use menu.
  */
 require 'init.php';
 

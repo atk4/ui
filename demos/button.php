@@ -3,12 +3,12 @@
  * Demonstrates how to use layouts.
  */
 require 'init.php';
-use \atk4\ui\Button;
-use \atk4\ui\Header;
-use \atk4\ui\Icon;
-use \atk4\ui\Label;
-use \atk4\ui\Template;
-use \atk4\ui\View;
+use atk4\ui\Button;
+use atk4\ui\Header;
+use atk4\ui\Icon;
+use atk4\ui\Label;
+use atk4\ui\Template;
+use atk4\ui\View;
 
 $layout->add(new Header(['Basic Button', 'size'=>2]));
 $layout->add(new Button())->set('Click me');

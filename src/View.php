@@ -223,7 +223,7 @@ class View implements jsExpressionable
      *
      * @param array $properties
      */
-    protected function setDefaults($properties)
+    public function setDefaults($properties)
     {
         if (isset($properties[0]) && $this->content !== false) {
             $this->content = $properties[0];
@@ -663,7 +663,7 @@ class View implements jsExpressionable
             }
         }
 
-        if ($this->content) {
+        if (isset($this->content) && $this->content !== false) {
             $this->template->append('Content', $this->content);
         }
     }
@@ -715,11 +715,11 @@ class View implements jsExpressionable
         try {
             $this->renderAll();
 
-            return json_encode(['success'=> true,
-                                'message'=> 'Success',
-                                'eval'   => $this->getJS($force_echo),
-                                'html'   => $this->template->render(),
-                                'id'     => $this->name, ]);
+            return json_encode(['success' => true,
+                                'message' => 'Success',
+                                'atkjs'   => $this->getJS($force_echo),
+                                'html'    => $this->template->render(),
+                                'id'      => $this->name, ]);
         } catch (\Exception $exception) {
             $l = $this->add(new self());
             if ($exception instanceof \atk4\core\Exception) {
