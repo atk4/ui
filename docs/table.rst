@@ -7,22 +7,50 @@ Table
 
 .. php:namespace:: atk4\ui
 
-Table is the simplest way to output multiple records of structured data. Table only works along with the model,
-however you can use :php:meth:`View::setSource` to inject static data (although it is slower than simply
-using a model). :ref:`no_data`
+.. php:class:: Table
 
+Table is the simplest way to output multiple records of structured, static data data:
 
-Using Table
+    .. image:: images/table.png
+
+Various composite components use Table as a building block, see :php:class:`Grid` and :php:class:`CRUD`.
+Main features of Table class are:
+
+ - Tabular rendering using column headers on top of markup of https://semantic-ui.com/collections/table.html.
+ - Support for data formatting. (money, dates, etc)
+ - Column decorators, icons, buttons, links and color.
+ - Support for "Totals" row.
+ - Can use Agile Data source or Static data.
+ - Custom HTML, Format hooks
+
+Basic Usage
 ===========
 
-The simplest way to create a table::
+The simplest way to create a table is when you use it with Agile Data model::
 
-    $table = $layout->add('Table');
+    $table = $app->add('Table');
     $table->setModel(new Order($db));
 
 The table will be able to automatcally determine all the fields defined in your "Order" model, map them to
 appropriate column types, implement type-casting and also connect your model with the appropriate data source
-(database) $db.
+(database) $db. 
+
+You can also use Table with Array data source like this::
+
+    $my_array = [
+        ['name'=>'Vinny', 'surname'=>'Sihra', 'birthdate'=>new \DateTime('1973-02-03')],
+        ['name'=>'Zoe', 'surname'=>'Shatwell', 'birthdate'=>new \DateTime('1958-08-21')],
+        ['name'=>'Darcy', 'surname'=>'Wild', 'birthdate'=>new \DateTime('1968-11-01')],
+        ['name'=>'Brett', 'surname'=>'Bird', 'birthdate'=>new \DateTime('1988-12-20')],
+    ];
+
+    $table = $app->add('Table');
+    $table->setSource($my_array);
+
+    $table->addColumn('name');
+    $table->addColumn('surname', ['Link', 'url'=>'details.php?surname={$surname}']);
+    $table->addColumn('birthdate', null, ['type'=>'date']);
+
 
 To change the order or explicitly specify which columns must appear, you can pass list of columns as a second
 argument to setModel::
@@ -80,7 +108,6 @@ To read more about column objects, see :ref:`tablecolumn`
 Advanced Column Denifitions
 ---------------------------
 
-.. php:class:: Table
 
 Table defines a method `columnFactory`, which returns Column object which is to be used to
 display values of specific model Field.
