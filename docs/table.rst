@@ -35,6 +35,9 @@ The table will be able to automatcally determine all the fields defined in your 
 appropriate column types, implement type-casting and also connect your model with the appropriate data source
 (database) $db. 
 
+Using with Array Data
+---------------------
+
 You can also use Table with Array data source like this::
 
     $my_array = [
@@ -51,9 +54,19 @@ You can also use Table with Array data source like this::
     $table->addColumn('surname', ['Link', 'url'=>'details.php?surname={$surname}']);
     $table->addColumn('birthdate', null, ['type'=>'date']);
 
+.. warning:: I encourage you to seek appropriate Agile Data persistence instead of
+    handling data like this. The implementation of :php:meth:`View::setSource` will
+    create a model for you with Array persistence for you anyways.
 
-To change the order or explicitly specify which columns must appear, you can pass list of columns as a second
-argument to setModel::
+Adding Columns
+--------------
+
+.. php:method:: setModel(\atk4\data\Model $m, $fields = null)
+
+.. php:method:: addColumn($name, $columnDecorator = null, $field = null)
+
+To change the order or explicitly specify which field columns must appear, if you pass list of those
+fields as second argument to setModel::
 
     $table = $layout->add('Table');
     $table->setModel(new Order($db), ['name', 'price', 'amount', 'status']);
@@ -61,16 +74,26 @@ argument to setModel::
 Table will make use of "Only Fields" feature in Agile Data to adjust query for fetching only the necessary
 columns. See also :ref:`field_visibility`.
 
-Adding Additional Columns
--------------------------
 
-If you feel that you'd like to add several other columns to your table, you need to understand what type
-of columns they would be.
+You can also add individual column to your table::
 
-If your column is designed to carry a value of any type, then it's much better to define it as a Model
-Field. A good example of this scenario is adding "total" column to list of your invoice lines that
-already contain "price" and "amount" values. Start by adding new Field in the model that is associated
-with your table::
+    $table->setModel(new Order($db), false); // don't add any fields by default
+    $table->addColumn('name');
+    $table->addColumn('price');
+
+When invoking addColumn, you have a great control over the field properties and decoration. The format
+of addColumn() is very similar to :php:meth:`Form::addField`. 
+
+Calculations
+============
+
+Apart from adding columns that reflect currrent values of your database, there are several ways
+how you can calculate additional values. You must know the capabilities of your database server
+if you want to execute some calculation there. (See http://agile-data.readthedocs.io/en/develop/expressions.html)
+
+It's always a good idea to calculate column inside datababase. Lets create "total" column  which will
+multiply "price" and "amount" values. Use ``addExpression`` to provide in-line definition for this
+fields if it's not alrady defined in ``Order::init()``::
 
     $table = $layout->add('Table');
     $order = new Order($db);
@@ -108,7 +131,6 @@ To read more about column objects, see :ref:`tablecolumn`
 Advanced Column Denifitions
 ---------------------------
 
-
 Table defines a method `columnFactory`, which returns Column object which is to be used to
 display values of specific model Field.
 
@@ -129,12 +151,14 @@ of a different class (e.g. 'money'). Value will be initialized after first call 
 
     Contains array of defined columns.
 
-.. php:method:: addColumn([$name], TableColumn\Generic $column = null, \atk4\ui\Data\Field = null)
 
-Adds a new column to the table. This method has several usages. The most basic one is::
 
-    $table->setModel(new Order($db), ['name', 'price', 'total']);
-    $table->addColumn(new \atk4\ui\TableColumn\Delete());
+addColumn adds a new column to the table. This method was explained above but can also be
+used to add colums without field::
+
+    $action = $this->addColumn(null, ['Actions']);
+    $actions->addAction('Test', function() { return 'ok'; });
+
 
 The above code will add a new extra column that will only contain 'delete' icon. When clicked
 it will automatically delete the corresponding record.
