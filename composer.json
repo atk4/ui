@@ -16,8 +16,8 @@
     ],
     "require": {
         "php": ">=5.6.0",
-        "atk4/data": "1.2.*",
-        "atk4/core": "1.2.*",
+        "atk4/data": "dev-develop",
+        "atk4/core": "dev-feature/refactor-factory-better-merge as dev-develop",
         "fzaninotto/faker": "*"
     },
     "require-dev": {
