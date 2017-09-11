@@ -290,7 +290,7 @@ class App
             list($obj) = func_get_args();
 
             if (!is_object($obj)) {
-                throw new Exception(['Incorrect use of App::add']);
+                throw new Exception(['Incorrect use of App::add. First parameter should be object.']);
             }
 
             $obj->app = $this;
