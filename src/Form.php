@@ -56,6 +56,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     // }}}
 
     // {{{ Base Methods
+
+    function __construct($class = null) {
+        if ($class) {
+            $this->addClass($class);
+        }
+    }
+
+
     public function init()
     {
         parent::init();
@@ -129,7 +137,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         // Layout needs to have a save button
-        $this->layout->addButton($this->buttonSave = new Button(['Save', 'primary']));
+        $this->buttonSave = $this->layout->addButton(['Save', 'primary']);
         $this->buttonSave->on('click', $this->js()->form('submit'));
     }
 
@@ -303,7 +311,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         $defaults = array_merge(
-            ['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name],
+            [$class?:'Line', 'form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name],
             $defaults
         );
 

@@ -148,22 +148,29 @@ class View implements jsExpressionable
      *
      * @throws Exception
      */
-    public function __construct($defaults = [])
+    public function __construct($label = null, $class = null)
     {
-        if (is_string($defaults) && $this->content !== false) {
-            $this->content = $defaults;
+        if (is_array($label)) {
+            // backwards mode
+            $defaults = $label;
+            if (isset($defaults[0])) {
+                $label = $defaults[0];
+                unset($defaults[0]);
+            } else {
+                $label = null;
+            }
 
-            return;
+            if (isset($defaults[1])) {
+                $class = $defaults[1];
+                unset($defaults[1]);
+            }
+            $this->setDefaults($defaults);
         }
 
-        if (!is_array($defaults)) {
-            throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
-        }
+        $this->content = $label;
 
-        $this->setDefaults($defaults);
-
-        if (is_string($this->class)) {
-            $this->class = explode(' ', $this->class);
+        if ($class) {
+            $this->addClass($class);
         }
     }
 
@@ -217,23 +224,6 @@ class View implements jsExpressionable
     }
 
     /**
-     * Called from __construct() and set() to initialize the properties.
-     *
-     * TODO: move into trait, because this is used often
-     *
-     * @param array $properties
-     */
-    public function setDefaults($properties)
-    {
-        if (isset($properties[0]) && $this->content !== false) {
-            $this->content = $properties[0];
-            unset($properties[0]);
-        }
-
-        $this->_setDefaults($properties);
-    }
-
-    /**
      * TODO: move into trait because it's used so often.
      *
      * @param $key
@@ -259,9 +249,10 @@ class View implements jsExpressionable
         }
 
         throw new Exception([
-            'Not sure what to do',
-            'key' => $key,
-            'val' => $val,
+            'Unable to set property for the object',
+            'object' => $this,
+            'property' => $key,
+            'value' => $val,
         ]);
     }
 
@@ -474,6 +465,14 @@ class View implements jsExpressionable
     {
         if (is_array($class)) {
             $class = implode(' ', $class);
+        }
+
+        if (!$this->class) {
+            $this->class = [];
+        }
+
+        if (is_string($this->class)) {
+            throw new Exception(['Property $class should always be array', 'object'=>$this, 'class'=>$this->class]);
         }
 
         $this->class = array_merge($this->class, explode(' ', $class));

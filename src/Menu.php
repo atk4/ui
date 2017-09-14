@@ -17,14 +17,17 @@ class Menu extends View
 
     public $in_dropdown = false;
 
-    public function addItem($name = null, $action = null)
+    /**
+     * $seed can also be name here
+     */
+    public function addItem($item = null, $action = null)
     {
-        if (is_object($name)) {
-            $item = $name;
-        } elseif ($name) {
-            $item = new Item($name);
-        } else {
-            $item = new Item();
+        if (is_string($item)) {
+            $item = ['Item', $item];
+        } elseif(is_array($item)) {
+            array_unshift($item, 'Item');
+        } elseif(!$item) {
+            $item = ['Item'];
         }
 
         $item = $this->add($item)->setElement('a');

@@ -10,6 +10,9 @@ class App
 
     use \atk4\core\HookTrait;
     use \atk4\core\DynamicMethodTrait;
+    use \atk4\core\FactoryTrait;
+    use \atk4\core\AppScopeTrait;
+    use \atk4\core\DIContainerTrait;
 
     // @var string|false Location where to load JS/CSS files
     public $cdn = [
@@ -72,6 +75,8 @@ class App
      */
     public function __construct($defaults = [])
     {
+        $this->app = $this;
+
         // Process defaults
         if (is_string($defaults)) {
             $defaults = ['title' => $defaults];
@@ -81,9 +86,14 @@ class App
             $defaults['title'] = $defaults[0];
             unset($defaults[0]);
         }
-        if (!is_array($defaults)) {
+
+        /*
+        if (is_array($defaults)) {
             throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
-        }
+        }*/
+        $this->setDefaults($defaults);
+        /*
+
         foreach ($defaults as $key => $val) {
             if (is_array($val)) {
                 $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
@@ -91,6 +101,7 @@ class App
                 $this->$key = $val;
             }
         }
+         */
 
         // Set up template folder
         $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
@@ -154,12 +165,12 @@ class App
         if ($exception instanceof \atk4\core\Exception) {
             $l->layout->template->setHTML('Content', $exception->getHTML());
         } elseif ($exception instanceof \Error) {
-            $l->layout->add(new View(['ui'=> 'message', get_class($exception).': '.
+            $l->layout->add(['Message', get_class($exception).': '.
                 $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
-                'error', ]));
-            $l->layout->add(new Text())->set(nl2br($exception->getTraceAsString()));
+                'error', ]);
+            $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
         } else {
-            $l->layout->add(new View(['ui'=>'message', get_class($exception).': '.$exception->getMessage(), 'error']));
+            $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
         }
         $l->layout->template->tryDel('Header');
         $l->run();
@@ -200,10 +211,13 @@ class App
      */
     public function initLayout($layout, $options = [])
     {
+        $layout = $this->factory($layout, null, 'Layout');
+        /*
         if (is_string($layout)) {
             $layout = $this->normalizeClassNameApp($layout, 'Layout');
             $layout = new $layout($options);
         }
+         */
         $layout->app = $this;
 
         if (!$this->html) {
@@ -268,13 +282,9 @@ class App
      *
      * @return string
      */
-    public function normalizeClassNameApp($name, $prefix = null)
+    public function normalizeClassNameApp($name)
     {
-        if (strpos('/', $name) === false && strpos('\\', $name) === false) {
-            $name = '\\'.__NAMESPACE__.'\\'.($prefix ? ($prefix.'\\') : '').$name;
-        }
-
-        return $name;
+        return '\\'.__NAMESPACE__.'\\'.$name;
     }
 
     /**
