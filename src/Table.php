@@ -98,6 +98,13 @@ class Table extends Lister
 
     public $sort_order = null;
 
+    public function __construct($class = null)
+    {
+        if ($class) {
+            $this->addClass($class);
+        }
+    }
+
     /**
      * Defines a new column for this field. You need two objects for field to
      * work.
@@ -134,14 +141,19 @@ class Table extends Lister
 
         if ($name) {
             $existingField = $this->model->hasElement($name);
+        } else {
+            $existingField = null;
         }
 
         if (!$existingField) {
             // Add missing field
             if ($field) {
                 $field = $this->model->addField($name, $field);
+                $field->never_persist = true;
             } else {
+                // TODO; set field to null here!
                 $field = $this->model->addField($name);
+                $field->never_persist = true;
             }
         } elseif (is_array($field)) {
             // Add properties to existing field
@@ -228,13 +240,14 @@ class Table extends Lister
      */
     public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
-        if (isset($this->typeToDecorator[$f->type])) {
-            $defaults = $this->typeToDecorator[$f->type];
-            $defaults['table'] = $this;
-        } else {
-            $defaults = ['Generic'];
-            $defaults['table'] = $this;
+        $seed = $this->mergeSeeds(
+            $seed, 
+            isset($f->ui['table'])?$f->ui['table']:null, 
+            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type]:null,
+            ['Generic']
+        );
 
+        /*
             if (!$seed) {
                 if (!$this->default_column) {
                     $this->default_column = $this->_add($this->factory($seed, $defaults, 'TableColumn'));
@@ -243,8 +256,9 @@ class Table extends Lister
                 return $this->default_column;
             }
         }
+         */
 
-        return $this->_add($this->factory($seed, $defaults, 'TableColumn'));
+        return $this->_add($this->factory($seed, ['table'=>$this], 'TableColumn'));
     }
 
     protected $typeToDecorator = [

@@ -138,7 +138,7 @@ class Grid extends View
     public function addAction($label, $action)
     {
         if (!$this->actions) {
-            $this->actions = $this->table->addColumn('TableColumn/Actions');
+            $this->actions = $this->table->addColumn(null, 'Actions');
         }
 
         $this->actions->addAction($label, $action);
