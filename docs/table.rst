@@ -9,7 +9,7 @@ Table
 
 .. php:class:: Table
 
-Table is the simplest way to output multiple records of structured, static data data:
+Table is the simplest way to output multiple records of structured, static data:
 
     .. image:: images/table.png
 
@@ -31,7 +31,7 @@ The simplest way to create a table is when you use it with Agile Data model::
     $table = $app->add('Table');
     $table->setModel(new Order($db));
 
-The table will be able to automatcally determine all the fields defined in your "Order" model, map them to
+The table will be able to automatically determine all the fields defined in your "Order" model, map them to
 appropriate column types, implement type-casting and also connect your model with the appropriate data source
 (database) $db. 
 
@@ -77,7 +77,7 @@ columns. See also :ref:`field_visibility`.
 
 You can also add individual column to your table::
 
-    $table->setModel(new Order($db), false); // don't add any fields by default
+    $table->setModel(new Order($db), false); // false here means - don't add any columns by default
     $table->addColumn('name');
     $table->addColumn('price');
 
@@ -93,7 +93,7 @@ if you want to execute some calculation there. (See http://agile-data.readthedoc
 
 It's always a good idea to calculate column inside datababase. Lets create "total" column  which will
 multiply "price" and "amount" values. Use ``addExpression`` to provide in-line definition for this
-fields if it's not alrady defined in ``Order::init()``::
+field if it's not alrady defined in ``Order::init()``::
 
     $table = $layout->add('Table');
     $order = new Order($db);
@@ -154,7 +154,7 @@ of a different class (e.g. 'money'). Value will be initialized after first call 
 
 
 addColumn adds a new column to the table. This method was explained above but can also be
-used to add colums without field::
+used to add columns without respective field in data source::
 
     $action = $this->addColumn(null, ['Actions']);
     $actions->addAction('Test', function() { return 'ok'; });
