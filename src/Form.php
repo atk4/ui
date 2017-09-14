@@ -349,7 +349,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     }
 
     /**
-     * Provides decorator seeds for most common types
+     * Provides decorator seeds for most common types.
      */
     protected $typeToDecorator = [
         'boolean' => 'Checkbox',
