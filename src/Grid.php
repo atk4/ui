@@ -91,14 +91,17 @@ class Grid extends View
 
     /**
      * Add new column to grid. If column with this name already exists,
-     * an.
+     * an. Simply calls Table::addColumn(), so check that method out.
      *
-     * @param string $name      New or existing column name
-     * @param [type] $columnDef [description]
+     * @param string                   $name            Data model field name
+     * @param array|string|object|null $columnDecorator
+     * @param array|string|object|null $field
+     *
+     * @return Column\Generic
      */
-    public function addColumn($name, $columnDef = null)
+    public function addColumn($name, $columnDecorator = null, $field = null)
     {
-        return $this->table->addColumn($name, $columnDef);
+        return $this->table->addColumn($name, $columnDecorator, $field);
     }
 
     public function addButton($text)

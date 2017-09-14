@@ -367,14 +367,17 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return $this->factory($class, $defaults, 'FormField');
     }
 
+    /**
+     * Provides decorator seeds for most common types.
+     */
     protected $typeToDecorator = [
         'boolean' => 'Checkbox',
         'text'    => 'Textarea',
         'string'  => 'Line',
         'password'=> 'Password',
-        'datetime'=> 'Datetime',
+        'datetime'=> 'Calendar',
         'date'    => ['Calendar', 'type'=>'date'],
-        'time'    => ['Time', 'type'=>'time', 'ampm'=>false],
+        'time'    => ['Calendar', 'type'=>'time', 'ampm'=>false],
         'money'   => 'Money',
     ];
 
