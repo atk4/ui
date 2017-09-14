@@ -20,6 +20,7 @@ is::
 .. toctree::
     app
 
+.. _seed:
 
 Seed
 ====
@@ -61,6 +62,21 @@ To find out more about how components are linked up together and rendered, see:
 .. toctree::
     render
 
+Type Presentation
+=================
+
+Several components are too complex to be implemented in a single class. :php:class:`Table`, for example,
+has ability to format columns by utilising type-specific column classes. Another example is :php:class:`Form`
+which relies on Field-specific FormField component.
+
+Agile UI uses a specific pattern for those definitions, which makes overal structure more extensible
+by having an ability to introduce new types with consistent support throughout the UI.
+
+.. toctree::
+    type-presentation
+    
+
+
 Templates
 =========
 Agile UI components store their HTML inside `*.html` template files. Those files are loaded
@@ -95,6 +111,8 @@ inputs user data.
 .. toctree::
     data
 
+.. _callback:
+
 Callbacks and Virtual Pages
 ===========================
 
@@ -110,9 +128,17 @@ Once the concept is established, it can even be used on a higher level, for exam
     $button->on('click', function() { return 'clicked button'; });
 
 .. toctree::
+    :maxdepth: 4
+
     callbacks
 
+ok
 
+ - "call-backs"
+ - "virtual pages"
+ - sticky 
+
+Documentation is coming soon.
 
 .. toctree::
     :maxdepth: 4
@@ -120,4 +146,5 @@ Once the concept is established, it can even be used on a higher level, for exam
     init
     callback
     virtualpage
+    stickyget
 

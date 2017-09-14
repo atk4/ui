@@ -75,58 +75,7 @@ specify the caption, you can use code like this::
 Column Objects
 --------------
 
-Table object relies on a separate class: \atk4\ui\TableColumn\Generic to present most of the values. The goals
-of the column object is to format anything around the actual values. The type = 'money' will result in
-a custom formatting of the value, but will also require column to be right-aligned. To simplify this,
-type = 'money' will use a different column class - :php:class:`TableColumn\Money`. There are several others,
-but first we need to look at the generic column and understand it's base capabilities:
-
-.. php:class:: TableColumn\Generic
-
-A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
-when constructing HTML:
-
-.. php:method:: getHeaderCellHTML(\atk4\data\Field $f)
-
-Must respond with HTML for the header cell (`<th>`) and an appropriate caption. If necessary
-will include "sorting" icons or any other controls that go in the header of the table.
-
-The output of this field will automatically encode any values (such as caption), shorten them
-if necessary and localize them.
-
-.. php:method:: getTotalsCellHTML(\atk4\data\Field $f, $value)
-
-Provided with the field and the value, format the cell for the footer "totals" column. Table
-can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
-
-.. php:method:: getDataCellHTML(\atk4\data\Field f)
-
-Provided with a field, this method will respond with HTML **template**. In order to keep
-performance of Web Application at the maximum, Table will execute getDataCellHTML for all the
-fields once. When iterating, a combined template will be used to display the values.
-
-The template must not incorporate field values (simply because related model will not be
-loaded just yet), but instead should resort to tags and syntax compatible with :php:class:`Template`.
-
-A sample template could be::
-
-    <td><b>{$name}</b></td>
-
-Note that the "name" here must correspond with the field name inside the Model. You may use
-multiple field names to format the column::
-
-    <td><b>{$year}-{$month}-{$day}</b></td>
-
-The above 3 methods define first argument as a field, however it's possible to define column
-without a physical field. This makes sense for situations when column contains multiple field
-values or if it doesn't contain any values at all.
-
-Sometimes you do want to inject HTML instead of using row values:
-
-.. php:method:: getHTMLTags($model, $field = null)
-
-Return array of HTML tags that will be injected into the row template. See
-:php:ref:`table_html` for further example.
+To read more about column objects, see :ref:`tablecolumn`
 
 Advanced Column Denifitions
 ---------------------------
@@ -138,7 +87,7 @@ display values of specific model Field.
 
 .. php:method:: columnFactory(\atk4\data\Field $f)
 
-If the value of the field can be displayed by :php:class:`TableColumn\Generic` then Table will
+If the value of the field can be displayed by :php:class:`TableColumn\\Generic` then :php:class:`Table` will
 respord with object of this class. Since the default column does not contain any customization,
 then to save memory Table will re-use the same objects for all generic fields.
 

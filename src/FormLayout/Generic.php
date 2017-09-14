@@ -2,6 +2,7 @@
 
 namespace atk4\ui\FormLayout;
 
+use atk4\ui\Exception;
 use atk4\ui\Form;
 use atk4\ui\View;
 
@@ -35,43 +36,67 @@ class Generic extends View
     public $inline = null;
 
     /**
-     * Places field inside a layout somewhere.
+     * Places field inside a layout somewhere. Should be called
+     * through $form->addField().
      *
-     * @param \atk4\ui\FormField\Generic|array $field
-     * @param array|string                     $args
+     * @param string|null              $name
+     * @param array|string|object|null $decorator
+     * @param array|string|object|null $field
      *
      * @return \atk4\ui\FormField\Generic
      */
-    public function addField($field, $args = [])
+    public function addField(string $name, $decorator = null, $field = null)
     {
-        if (is_string($args)) {
-            $args = ['caption' => $args];
-        } elseif (is_array($args) && isset($args[0])) {
-            $args['caption'] = $args[0];
-            unset($args[0]);
+        if (!is_string($name)) {
+            throw new Exception(['Format for addField now require first argument to be name']);
         }
 
-        /*
-        if (isset($args[1]) && is_string($args[1])) {
-            $args[1] = ['ui'=>['caption'=>$args[1]]];
-        }
-         */
-
-        if (is_array($field)) {
-            $field = $this->form->fieldFactory(...$field);
-        } elseif (!$field instanceof \atk4\ui\FormField\Generic) {
-            $field = $this->form->fieldFactory($field);
+        if (!$this->form->model) {
+            $this->form->model = new \atk4\ui\misc\ProxyModel();
         }
 
-        if (isset($args['caption'])) {
-            $field->field->caption = $args['caption'];
+        if (is_string($field)) {
+            $field = ['type'=>$field];
         }
 
-        if (isset($args['width'])) {
-            $field->field->ui['width'] = $args['width'];
+        if ($name) {
+            $existingField = $this->form->model->hasElement($name);
         }
 
-        return $this->_add($field, ['name'=>$field->short_name]);
+        if (!$existingField) {
+            // Add missing field
+            if ($field) {
+                $field = $this->form->model->addField($name, $field);
+            } else {
+                $field = $this->form->model->addField($name);
+            }
+        } elseif (is_array($field)) {
+            // Add properties to existing field
+            $existingField->setDefaults($field);
+            $field = $existingField;
+        } elseif (is_object($field)) {
+            throw new Exception(['Duplicate field', 'name'=>$name]);
+        } else {
+            $field = $existingField;
+        }
+
+        if (is_string($decorator)) {
+            $decorator = $this->form->decoratorFactory($field, ['caption'=>$decorator]);
+        } elseif (is_array($decorator)) {
+            $decorator = $this->form->decoratorFactory($field, $decorator);
+        } elseif (!$decorator) {
+            $decorator = $this->form->decoratorFactory($field);
+        } elseif (is_object($decorator)) {
+            if (!$decorator instanceof \atk4\ui\FormField\Generic) {
+                throw new Exception(['Field decorator must descend from \atk4\ui\FormField\Generic', 'decorator'=>$decorator]);
+            }
+            $decorator->field = $field;
+            $decorator->form = $this->form;
+        } else {
+            throw new Exception(['Value of $decorator argument is incorrect', 'decorator'=>$decorator]);
+        }
+
+        return $this->_add($decorator, ['desired_name'=>$field->short_name]);
     }
 
     public function setModel(\atk4\data\Model $model, $fields = null)
@@ -98,9 +123,7 @@ class Generic extends View
 
         if (is_array($fields)) {
             foreach ($fields as $field) {
-                $modelField = $model->getElement($field);
-
-                $formField = $this->addField($this->form->fieldFactory($modelField));
+                $this->addField($field);
             }
         } else {
             throw new Exception(['Incorrect value for $fields', 'fields'=>$fields]);
@@ -235,8 +258,8 @@ class Generic extends View
                 $template->append('field_class', 'required ');
             }
 
-            if (isset($el->field->ui['width'])) {
-                $template->append('field_class', $el->field->ui['width'].' wide ');
+            if (isset($el->width)) {
+                $template->append('field_class', $el->width.' wide ');
             }
 
             $this->template->appendHTML('Content', $template->render());

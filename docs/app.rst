@@ -3,6 +3,9 @@
 .. _app:
 
 
+Purpose of App class
+====================
+
 .. php:class:: App
 
 App is a mandatory object that's essential for Agile UI to operate. If you don't create App object explicitly, it
@@ -14,9 +17,6 @@ In most use-scenarios, however, you would create instance of an App class yourse
     $app->initLayout('Centered');
     $app->layout->add('LoremIpsum');
 
-
-Purpose of App class
-====================
 As you add one component into another, they will automatically inherit reference to App class. App
 class is an ideal place to have all your environment configured and all the dependencies defined that
 other parts of your applications may require.
