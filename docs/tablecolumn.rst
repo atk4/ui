@@ -24,12 +24,9 @@ when constructing HTML:
 Must respond with HTML for the header cell (`<th>`) and an appropriate caption. If necessary
 will include "sorting" icons or any other controls that go in the header of the table.
 
-The output of this field will automatically encode any values (such as caption), shorten them
-if necessary and localize them.
-
 .. php:method:: getTotalsCellHTML(\atk4\data\Field $f, $value)
 
-Provided with the field and the value, format the cell for the footer "totals" column. Table
+Provided with the field and the value, format the cell for the footer "totals" row. Table
 can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
 
 .. php:method:: getDataCellHTML(\atk4\data\Field f)

@@ -22,7 +22,7 @@ class Columns extends View
      *
      * @var int
      */
-    public $calculated_width = 0;
+    protected $calculated_width = 0;
 
     /**
      * Allows Grid to calculate widths automatically.

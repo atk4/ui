@@ -40,6 +40,9 @@ class Input extends Generic
 
     public $actionLeft = null;
 
+    /**
+     * Specify width for semantic UI grid. For "four wide" use 'four'.
+     */
     public $width = null;
 
     /**
