@@ -18,15 +18,15 @@ class Menu extends View
     public $in_dropdown = false;
 
     /**
-     * $seed can also be name here
+     * $seed can also be name here.
      */
     public function addItem($item = null, $action = null)
     {
         if (is_string($item)) {
             $item = ['Item', $item];
-        } elseif(is_array($item)) {
+        } elseif (is_array($item)) {
             array_unshift($item, 'Item');
-        } elseif(!$item) {
+        } elseif (!$item) {
             $item = ['Item'];
         }
 

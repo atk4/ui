@@ -250,9 +250,9 @@ class View implements jsExpressionable
 
         throw new Exception([
             'Unable to set property for the object',
-            'object' => $this,
+            'object'   => $this,
             'property' => $key,
-            'value' => $val,
+            'value'    => $val,
         ]);
     }
 

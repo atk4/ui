@@ -96,7 +96,6 @@ class Generic extends View
             } else {
                 throw new Exception(['Value of $decorator argument is incorrect', 'decorator'=>$decorator]);
             }
-
         } catch (\Exception $e) {
             throw new Exception(['Unable to add form field', 'name'=>$name, 'decorator'=>$decorator, 'field'=>$field], null, $e);
         }
@@ -151,6 +150,7 @@ class Generic extends View
         } elseif (is_string($button)) {
             $button = ['Button', $button];
         }
+
         return $this->_add($button);
     }
 

@@ -57,12 +57,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     // {{{ Base Methods
 
-    function __construct($class = null) {
+    public function __construct($class = null)
+    {
         if ($class) {
             $this->addClass($class);
         }
     }
-
 
     public function init()
     {
@@ -311,7 +311,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         $defaults = array_merge(
-            [$class?:'Line', 'form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name],
+            [$class ?: 'Line', 'form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name],
             $defaults
         );
 
