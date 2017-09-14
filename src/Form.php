@@ -307,8 +307,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         // TODO: finish this!!!!!
         /*
         $seed = $this->mergeSeeds(
-            $seed, 
-            isset($f->ui['form'])?$f->ui['form']:null, 
+            $seed,
+            isset($f->ui['form'])?$f->ui['form']:null,
             isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type]:null,
             ['Generic']
         );

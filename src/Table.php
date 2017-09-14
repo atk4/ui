@@ -241,9 +241,9 @@ class Table extends Lister
     public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
         $seed = $this->mergeSeeds(
-            $seed, 
-            isset($f->ui['table'])?$f->ui['table']:null, 
-            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type]:null,
+            $seed,
+            isset($f->ui['table']) ? $f->ui['table'] : null,
+            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
             ['Generic']
         );
 
