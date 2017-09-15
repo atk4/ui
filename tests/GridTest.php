@@ -21,10 +21,11 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
     public function test1()
     {
         $t = new Table();
+        $t->init();
         $t->setModel($this->m, false);
 
         $t->addColumn('email');
-        $t->addColumn(new Template('password={$password}'));
+        $t->addColumn(null, new Template('password={$password}'));
 
         $this->assertEquals('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHTML());
         $this->assertEquals(
@@ -36,6 +37,7 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
     public function test1a()
     {
         $t = new Table();
+        $t->init();
         $t->setModel($this->m, false);
 
         $t->addColumn('email');
@@ -51,8 +53,9 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
     public function test2()
     {
         $t = new Table();
+        $t->init();
         $t->setModel($this->m, ['email']);
-        $t->addColumn('TableColumn/Delete');
+        $t->addColumn(null, 'Delete');
 
         $this->assertEquals('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="delete"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHTML());
         $this->assertEquals(
@@ -64,8 +67,9 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
     public function test3()
     {
         $t = new Table();
+        $t->init();
         $t->setModel($this->m, ['email']);
-        $t->addColumn('xtra', ['type'=>'password']);
+        $t->addColumn('xtra', null, ['type'=>'password']);
 
         $this->assertEquals('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
         $this->assertEquals(

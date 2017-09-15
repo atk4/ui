@@ -89,7 +89,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 }
 
                 foreach ($er as $field => $error) {
-                    var_dump($error);
                     if ($error === null || $error === false) {
                         continue;
                     }
@@ -156,10 +155,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function setModel(\atk4\data\Model $model, $fields = null)
     {
         // Model is set for the form and also for the current layout
-        $model = parent::setModel($model);
-        $this->layout->setModel($model, $fields);
+        try {
+            $model = parent::setModel($model);
+            $this->layout->setModel($model, $fields);
 
-        return $model;
+            return $model;
+        } catch (Exception $e) {
+            throw $e->addMoreInfo('model', $model);
+        }
     }
 
     /**
@@ -295,76 +298,48 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     /**
      * Provided with a Agile Data Model Field, this method have to decide
-     * and create instance of a View that will act as a form-field.
+     * and create instance of a View that will act as a form-field. It takes
+     * various input and looks for hints as to which class to use:
      *
-     * @param mixed ...$args
+     * 1. The $seed argument is evaluated
+     * 2. $f->ui['form'] is evaluated if present
+     * 3. $f->type is converted into seed and evaluated
+     * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
+     *
+     * @param \atk4\data\Field $f        Data model field
+     * @param array            $defaults Defaults to pass to factory() when decorator is initialized
      *
      * @return FormField\Generic
      */
-    public function decoratorFactory(\atk4\data\Field $f, $defaults = [])
+    public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
 
-        // TODO: finish this!!!!!
-        /*
+        if ($f && !$f instanceof \atk4\data\Field) {
+            throw new Exception(['Argument 1 for decoratorFactory must be \atk4\data\Field or null', 'f'=>$f]);
+        }
+
+        $fallback_seed = 'Line';
+
+        if ($f->enum) {
+            $fallback_seed = ['Dropdown', 'values' => array_combine($f->enum, $f->enum)];
+        } elseif (isset($f->reference)) {
+            $fallback_seed = ['Dropdown', 'model' => $f->reference->refModel()];
+        }
+
         $seed = $this->mergeSeeds(
             $seed,
             isset($f->ui['form'])?$f->ui['form']:null,
             isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type]:null,
-            ['Generic']
-        );
-         */
-
-        if (isset($defaults[0])) {
-            $class = $defaults[0];
-            unset($defaults[0]);
-        } else {
-            $class = null;
-        }
-
-        $defaults = array_merge(
-            [$class ?: 'Line', 'form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name],
-            $defaults
+            $fallback_seed
         );
 
-        if (isset($f->ui['form'])) {
-            $display = $f->ui['form'];
+        $defaults = [
+            'form'=>$this, 
+            'field'=>$f,
+            'short_name'=>$f->short_name
+        ];
 
-            if (is_string($display) || is_object($display)) {
-                $display = [$display];
-            }
-
-            if (isset($display[0])) {
-                $class = $class ?: $display[0];
-                unset($display[0]);
-            }
-
-            $defaults = array_merge($display, $defaults);
-        }
-
-        if (!$class && $f->enum) {
-            $defaults['values'] = array_combine($f->enum, $f->enum);
-
-            $class = 'Dropdown';
-        }
-
-        // Field values can be picked from the model.
-        if (isset($f->reference)) {
-            $class = 'Dropdown';
-            $defaults['model'] = $f->reference->refModel();
-            //$dd = new FormField\Dropdown($arg);
-            //$dd->setModel($f->reference->refModel());
-            //return $dd;
-        }
-
-        if (isset($this->typeToDecorator[$f->type])) {
-            $class = $this->typeToDecorator[$f->type];
-        }
-
-        if (!$class) {
-            $class = 'Line';
-        }
-
-        return $this->factory($class, $defaults, 'FormField');
+        return $this->factory($seed, $defaults, 'FormField');
     }
 
     /**

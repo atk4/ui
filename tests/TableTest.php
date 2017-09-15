@@ -17,7 +17,7 @@ class TableTest extends \atk4\core\PHPUnit_AgileTestCase
         ]);
 
         // 4 ways to add column
-        $b->addColumn(new \atk4\ui\TableColumn\Link('test.php?id=1'));
+        $b->addColumn(null, new \atk4\ui\TableColumn\Link('test.php?id=1'));
 
         $b->render();
     }

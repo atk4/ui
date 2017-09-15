@@ -43,6 +43,8 @@ $table->addTotals(['name'=>'Totals:', 'salary'=>['sum']]);
     $table = $app->add('Table');
     $table->setSource($my_array);
 
-    $table->addColumn('name');
+    // somehow setSourec() already creates name()
+    // TODO: im not sure how i feel about it
+    //$table->addColumn('name');
     $table->addColumn('surname', ['Link', 'url'=>'details.php?surname={$surname}']);
     $table->addColumn('birthdate', null, ['type'=>'date']);

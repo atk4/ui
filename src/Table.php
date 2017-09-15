@@ -218,15 +218,25 @@ class Table extends Lister
         if (is_null($name)) {
             $this->columns[] = $columnDecorator;
         } elseif (isset($this->columns[$name])) {
-            if (!is_array($this->columns[$name])) {
-                $this->columns[$name] = [$this->columns[$name]];
-            }
-            $this->columns[$name][] = $columnDecorator;
+            throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name'=>$name]);
         } else {
             $this->columns[$name] = $columnDecorator;
         }
 
         return $columnDecorator;
+    }
+
+    function addDecorator($name, $decorator)
+    {
+        if (!$this->columns[$name]) {
+            throw new Exceptino(['No such column, cannot decorate', 'name'=>$name]);
+        }
+        $decorator = $this->_add($this->factory($decorator, ['table'=>$this], 'TableColumn'));
+
+        if (!is_array($this->columns[$name])) {
+            $this->columns[$name] = [$this->columns[$name]];
+        }
+        $this->columns[$name][] = $decorator;
     }
 
     /**

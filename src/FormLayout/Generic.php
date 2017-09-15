@@ -96,7 +96,7 @@ class Generic extends View
             } else {
                 throw new Exception(['Value of $decorator argument is incorrect', 'decorator'=>$decorator]);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new Exception(['Unable to add form field', 'name'=>$name, 'decorator'=>$decorator, 'field'=>$field], null, $e);
         }
 
