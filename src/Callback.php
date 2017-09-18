@@ -93,6 +93,10 @@ class Callback
         }
     }
 
+    function triggered() {
+        return isset($_GET[$this->name]) ? $_GET[$this->name] : false;
+    }
+
     /**
      * Return URL that will trigger action on this call-back.
      *
