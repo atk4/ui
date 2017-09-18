@@ -456,42 +456,38 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             };
 
             try {
-                try {
-                    try {
-                        $this->loadPOST();
-                        ob_start();
-                        $response = $this->hook('submit');
-                        $output = ob_get_clean();
+                $this->loadPOST();
+                ob_start();
+                $response = $this->hook('submit');
+                $output = ob_get_clean();
 
-                        if ($output) {
-                            $message = new Message('Direct Output Detected');
-                            $message->init();
-                            $message->addClass('error');
-                            $message->text->set($output);
+                if ($output) {
+                    $message = new Message('Direct Output Detected');
+                    $message->init();
+                    $message->addClass('error');
+                    $message->text->set($output);
 
-                            return $message;
-                        }
-
-                        if (!$response) {
-                            if (!$this->model instanceof \atk4\ui\misc\ProxyModel) {
-                                $this->model->save();
-
-                                return $this->success('Form data has been saved');
-                            } else {
-                                return new jsExpression('console.log([])', ['Form submission is not handled']);
-                            }
-                        }
-                    } catch (\atk4\data\ValidationException $val) {
-                        $response = [];
-                        foreach ($val->errors as $field=>$error) {
-                            $response[] = $this->error($field, $error);
-                        }
-
-                        return $response;
-                    }
-                } catch (\Error $e) {
-                    return $caught($e);
+                    return $message;
                 }
+
+                if (!$response) {
+                    if (!$this->model instanceof \atk4\ui\misc\ProxyModel) {
+                        $this->model->save();
+
+                        return $this->success('Form data has been saved');
+                    } else {
+                        return new jsExpression('console.log([])', ['Form submission is not handled']);
+                    }
+                }
+            } catch (\atk4\data\ValidationException $val) {
+                $response = [];
+                foreach ($val->errors as $field=>$error) {
+                    $response[] = $this->error($field, $error);
+                }
+
+                return $response;
+            } catch (\Error $e) {
+                return $caught($e);
             } catch (\Exception $e) {
                 return $caught($e);
             }

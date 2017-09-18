@@ -139,7 +139,7 @@ class Generic extends View
     /**
      * Adds Button.
      *
-     * @param \atk4\ui\Button $button
+     * @param array|string $button
      *
      * @return \atk4\ui\Button
      */

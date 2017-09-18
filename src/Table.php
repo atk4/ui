@@ -243,8 +243,8 @@ class Table extends Lister
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param \atk4\data\Field $f        Data model field
-     * @param array            $defaults Defaults to pass to factory() when decorator is initialized
+     * @param \atk4\data\Field $f    Data model field
+     * @param array            $seed Defaults to pass to factory() when decorator is initialized
      *
      * @return TableColumn\Generic
      */
