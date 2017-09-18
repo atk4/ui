@@ -151,7 +151,6 @@ class Table extends Lister
                 $field = $this->model->addField($name, $field);
                 $field->never_persist = true;
             } else {
-                // TODO; set field to null here!
                 $field = $this->model->addField($name);
                 $field->never_persist = true;
             }
