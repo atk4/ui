@@ -144,7 +144,8 @@ class View implements jsExpressionable
      * May accept properties of a class, but if property is not defined, it will
      * be used as a HTML class instead.
      *
-     * @param array|string $defaults
+     * @param array|string $label
+     * @param array|string $class
      *
      * @throws Exception
      */

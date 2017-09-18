@@ -278,7 +278,6 @@ class App
      * Normalizes class name.
      *
      * @param string $name
-     * @param string $prefix
      *
      * @return string
      */
@@ -375,7 +374,7 @@ class App
     /**
      * Build a URL that application can use for call-backs.
      *
-     * @param array|string $args List of new GET arguments
+     * @param array|string $page URL as string or array with page name as first element and other GET arguments
      *
      * @return string
      */
@@ -439,7 +438,7 @@ class App
      *
      * @param string $name
      *
-     * @return string
+     * @return string|null
      */
     public function stickyGet($name)
     {
