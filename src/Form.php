@@ -299,7 +299,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Provided with a Agile Data Model Field, this method have to decide
      * and create instance of a View that will act as a form-field. It takes
-     * various input and looks for hints as to which class to use:
+     * various input and looks for hints as to which class to use:.
      *
      * 1. The $seed argument is evaluated
      * 2. $f->ui['form'] is evaluated if present
@@ -313,7 +313,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
-
         if ($f && !$f instanceof \atk4\data\Field) {
             throw new Exception(['Argument 1 for decoratorFactory must be \atk4\data\Field or null', 'f'=>$f]);
         }
@@ -328,15 +327,15 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         $seed = $this->mergeSeeds(
             $seed,
-            isset($f->ui['form'])?$f->ui['form']:null,
-            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type]:null,
+            isset($f->ui['form']) ? $f->ui['form'] : null,
+            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
             $fallback_seed
         );
 
         $defaults = [
-            'form'=>$this, 
-            'field'=>$f,
-            'short_name'=>$f->short_name
+            'form'      => $this,
+            'field'     => $f,
+            'short_name'=> $f->short_name,
         ];
 
         return $this->factory($seed, $defaults, 'FormField');
