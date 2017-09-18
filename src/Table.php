@@ -219,6 +219,7 @@ class Table extends Lister
             $this->columns[] = $columnDecorator;
         } elseif (!is_string($name)) {
             echo 'about to throw exception.....';
+
             throw new Exception(['Name must be a string', 'name'=>$name]);
         } elseif (isset($this->columns[$name])) {
             throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name'=>$name]);
