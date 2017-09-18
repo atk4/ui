@@ -229,7 +229,7 @@ class Table extends Lister
         return $columnDecorator;
     }
 
-    function addDecorator($name, $decorator)
+    public function addDecorator($name, $decorator)
     {
         if (!$this->columns[$name]) {
             throw new Exceptino(['No such column, cannot decorate', 'name'=>$name]);
