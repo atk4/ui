@@ -93,7 +93,8 @@ class Callback
         }
     }
 
-    function triggered() {
+    public function triggered()
+    {
         return isset($_GET[$this->name]) ? $_GET[$this->name] : false;
     }
 

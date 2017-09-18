@@ -19,7 +19,8 @@ class VirtualPage extends View
 
     public $ui = 'container';
 
-    public function triggered(){
+    public function triggered()
+    {
         return $this->cb->triggered();
     }
 
