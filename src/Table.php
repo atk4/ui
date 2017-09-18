@@ -217,6 +217,9 @@ class Table extends Lister
 
         if (is_null($name)) {
             $this->columns[] = $columnDecorator;
+        } elseif (!is_string($name)) {
+            echo 'about to throw exception.....';
+            throw new Exception(['Name must be a string', 'name'=>$name]);
         } elseif (isset($this->columns[$name])) {
             throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name'=>$name]);
         } else {
@@ -256,17 +259,6 @@ class Table extends Lister
             isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
             ['Generic']
         );
-
-        /*
-            if (!$seed) {
-                if (!$this->default_column) {
-                    $this->default_column = $this->_add($this->factory($seed, $defaults, 'TableColumn'));
-                }
-
-                return $this->default_column;
-            }
-        }
-         */
 
         return $this->_add($this->factory($seed, ['table'=>$this], 'TableColumn'));
     }

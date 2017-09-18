@@ -119,6 +119,9 @@ class Generic
      */
     public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
     {
+        if (!$this->table) {
+            throw new \atk4\ui\Exception(['How $table could not be set??', 'f'=>$f, 'value'=>$value]);
+        }
         if ($f === null) {
             return $this->getTag('head', '', $this->table->sortable ? ['class'=>['disabled']] : []);
         }

@@ -17,12 +17,12 @@ class TableTest extends \atk4\core\PHPUnit_AgileTestCase
         ]);
 
         // 4 ways to add column
-        $b->addColumn(null, new \atk4\ui\TableColumn\Link('test.php?id=1'));
+        $t->addColumn(null, new \atk4\ui\TableColumn\Link('test.php?id=1'));
 
         // multiple ways to add column which doesn't exist in model
         $t->addColumn('five', new \atk4\ui\TableColumn\Link('test.php?id=1'));
         $t->addColumn('six', [new \atk4\ui\TableColumn\Link('test.php?id=2')]);
-        $t->addColumn('seven', ['Link', 'id'=>3]);
+        $t->addColumn('seven', ['Link', ['id'=>3]]);
         $t->addColumn('eight', 'Link');
         $t->addColumn('nine');
 

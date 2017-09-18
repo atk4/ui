@@ -187,7 +187,7 @@ class Grid extends View
 
     public function addSelection()
     {
-        $this->selection = $this->table->addColumn('TableColumn/Checkbox');
+        $this->selection = $this->table->addColumn(null, 'Checkbox');
 
         // Move element to the beginning
         $k = array_search($this->selection, $this->table->columns);
