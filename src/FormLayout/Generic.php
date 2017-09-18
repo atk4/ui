@@ -63,37 +63,41 @@ class Generic extends View
             $existingField = $this->form->model->hasElement($name);
         }
 
-        if (!$existingField) {
-            // Add missing field
-            if ($field) {
-                $field = $this->form->model->addField($name, $field);
+        try {
+            if (!$existingField) {
+                // Add missing field
+                if ($field) {
+                    $field = $this->form->model->addField($name, $field);
+                } else {
+                    $field = $this->form->model->addField($name);
+                }
+            } elseif (is_array($field)) {
+                // Add properties to existing field
+                $existingField->setDefaults($field);
+                $field = $existingField;
+            } elseif (is_object($field)) {
+                throw new Exception(['Duplicate field', 'name'=>$name]);
             } else {
-                $field = $this->form->model->addField($name);
+                $field = $existingField;
             }
-        } elseif (is_array($field)) {
-            // Add properties to existing field
-            $existingField->setDefaults($field);
-            $field = $existingField;
-        } elseif (is_object($field)) {
-            throw new Exception(['Duplicate field', 'name'=>$name]);
-        } else {
-            $field = $existingField;
-        }
 
-        if (is_string($decorator)) {
-            $decorator = $this->form->decoratorFactory($field, ['caption'=>$decorator]);
-        } elseif (is_array($decorator)) {
-            $decorator = $this->form->decoratorFactory($field, $decorator);
-        } elseif (!$decorator) {
-            $decorator = $this->form->decoratorFactory($field);
-        } elseif (is_object($decorator)) {
-            if (!$decorator instanceof \atk4\ui\FormField\Generic) {
-                throw new Exception(['Field decorator must descend from \atk4\ui\FormField\Generic', 'decorator'=>$decorator]);
+            if (is_string($decorator)) {
+                $decorator = $this->form->decoratorFactory($field, ['caption'=>$decorator]);
+            } elseif (is_array($decorator)) {
+                $decorator = $this->form->decoratorFactory($field, $decorator);
+            } elseif (!$decorator) {
+                $decorator = $this->form->decoratorFactory($field);
+            } elseif (is_object($decorator)) {
+                if (!$decorator instanceof \atk4\ui\FormField\Generic) {
+                    throw new Exception(['Field decorator must descend from \atk4\ui\FormField\Generic', 'decorator'=>$decorator]);
+                }
+                $decorator->field = $field;
+                $decorator->form = $this->form;
+            } else {
+                throw new Exception(['Value of $decorator argument is incorrect', 'decorator'=>$decorator]);
             }
-            $decorator->field = $field;
-            $decorator->form = $this->form;
-        } else {
-            throw new Exception(['Value of $decorator argument is incorrect', 'decorator'=>$decorator]);
+        } catch (\Throwable $e) {
+            throw new Exception(['Unable to add form field', 'name'=>$name, 'decorator'=>$decorator, 'field'=>$field], null, $e);
         }
 
         return $this->_add($decorator, ['desired_name'=>$field->short_name]);
@@ -135,12 +139,18 @@ class Generic extends View
     /**
      * Adds Button.
      *
-     * @param \atk4\ui\Button $button
+     * @param array|string $button
      *
      * @return \atk4\ui\Button
      */
-    public function addButton(\atk4\ui\Button $button)
+    public function addButton($button)
     {
+        if (is_array($button)) {
+            array_unshift($button, 'Button');
+        } elseif (is_string($button)) {
+            $button = ['Button', $button];
+        }
+
         return $this->_add($button);
     }
 
@@ -154,7 +164,7 @@ class Generic extends View
     public function addHeader($label = null)
     {
         if ($label) {
-            $this->add(new View([$label, 'ui'=>'dividing header', 'element'=>'h4']));
+            $this->add(['Header', $label, 'dividing', 'element'=>'h4']);
         }
 
         return $this;

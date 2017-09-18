@@ -33,7 +33,7 @@ The simplest way to create a table is when you use it with Agile Data model::
 
 The table will be able to automatically determine all the fields defined in your "Order" model, map them to
 appropriate column types, implement type-casting and also connect your model with the appropriate data source
-(database) $db. 
+(database) $db.
 
 Using with Array Data
 ---------------------
@@ -77,12 +77,12 @@ columns. See also :ref:`field_visibility`.
 
 You can also add individual column to your table::
 
-    $table->setModel(new Order($db), false); // false here means - don't add any columns by default
+    $table->setModel(new Order($db), false); // false here means - don't add any fields by default
     $table->addColumn('name');
     $table->addColumn('price');
 
 When invoking addColumn, you have a great control over the field properties and decoration. The format
-of addColumn() is very similar to :php:meth:`Form::addField`. 
+of addColumn() is very similar to :php:meth:`Form::addField`.
 
 Calculations
 ============
@@ -154,7 +154,7 @@ of a different class (e.g. 'money'). Value will be initialized after first call 
 
 
 addColumn adds a new column to the table. This method was explained above but can also be
-used to add columns without respective field in data source::
+used to add colums without field::
 
     $action = $this->addColumn(null, ['Actions']);
     $actions->addAction('Test', function() { return 'ok'; });
@@ -322,7 +322,7 @@ Table Rendering Steps
 Once model is specified to the Table it will keep the object until render process will begin. Table
 columns can be defined anytime and will be stored in the :php:attr:`Table::columns` property. Columns
 without defined name will have a numeric index. It's also possible to define multiple columns per key
-in which case we call them "formatters". 
+in which case we call them "formatters".
 
 During the render process (see :php:meth:`View::renderView`) Table will perform the following actions:
 
@@ -358,7 +358,7 @@ There are a few things to note:
 1. calling addColumn multiple time will convert :php:attr:`Table::columns` value for that column
    into array containing all column objects
 
-2. formatting is always applied in same order as defined - in example above Money first, Link after. 
+2. formatting is always applied in same order as defined - in example above Money first, Link after.
 
 3. output of the 'Money' formatter is used into Link formatter as if it would be value of cell.
 

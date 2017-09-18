@@ -17,14 +17,22 @@ class Menu extends View
 
     public $in_dropdown = false;
 
-    public function addItem($name = null, $action = null)
+    /**
+     * $seed can also be name here.
+     *
+     * @param string|array $item
+     * @param string|array $action
+     *
+     * @return Item
+     */
+    public function addItem($item = null, $action = null)
     {
-        if (is_object($name)) {
-            $item = $name;
-        } elseif ($name) {
-            $item = new Item($name);
-        } else {
-            $item = new Item();
+        if (is_string($item)) {
+            $item = ['Item', $item];
+        } elseif (is_array($item)) {
+            array_unshift($item, 'Item');
+        } elseif (!$item) {
+            $item = ['Item'];
         }
 
         $item = $this->add($item)->setElement('a');
@@ -44,11 +52,25 @@ class Menu extends View
         return $item;
     }
 
+    /**
+     * Adds header.
+     *
+     * @param string $name
+     *
+     * @return Item
+     */
     public function addHeader($name)
     {
         return $this->add(new Item($name))->addClass('header');
     }
 
+    /**
+     * Adds sub-menu.
+     *
+     * @param string|array $name
+     *
+     * @return Menu
+     */
     public function addMenu($name)
     {
         if (is_array($name)) {
@@ -73,6 +95,13 @@ class Menu extends View
         return $sub_menu;
     }
 
+    /**
+     * Adds menu group.
+     *
+     * @param string|array $title
+     *
+     * @return Menu
+     */
     public function addGroup($title)
     {
         $group = $this->add([new self(), 'defaultTemplate'=>'menugroup.html', 'ui'=>false]);
@@ -88,6 +117,11 @@ class Menu extends View
         return $group;
     }
 
+    /**
+     * Add right positioned menu.
+     *
+     * @return Menu
+     */
     public function addMenuRight()
     {
         $menu = $this->add([new self(), 'ui'=>false], 'RightMenu');
@@ -96,6 +130,14 @@ class Menu extends View
         return $menu;
     }
 
+    /**
+     * Add Item.
+     *
+     * @param View|string  $object New object to add
+     * @param string|array $region (or array for full set of defaults)
+     *
+     * @return View
+     */
     public function add($object, $region = null)
     {
         $item = parent::add($object, $region);
@@ -104,6 +146,11 @@ class Menu extends View
         return $item;
     }
 
+    /**
+     * Adds divider.
+     *
+     * @return View
+     */
     public function addDivider()
     {
         $item = parent::add(['class'=>['divider']]);

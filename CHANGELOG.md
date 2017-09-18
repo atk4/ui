@@ -1,3 +1,6 @@
+## 1.3
+
+
 ## 1.2
 
 This release includes huge JavaScript overhaul and clean-up, refactored jsModal implementation,

@@ -141,7 +141,7 @@ class Grid extends View
     public function addAction($label, $action)
     {
         if (!$this->actions) {
-            $this->actions = $this->table->addColumn('TableColumn/Actions');
+            $this->actions = $this->table->addColumn(null, 'Actions');
         }
 
         $this->actions->addAction($label, $action);
@@ -187,7 +187,7 @@ class Grid extends View
 
     public function addSelection()
     {
-        $this->selection = $this->table->addColumn('TableColumn/Checkbox');
+        $this->selection = $this->table->addColumn(null, 'Checkbox');
 
         // Move element to the beginning
         $k = array_search($this->selection, $this->table->columns);

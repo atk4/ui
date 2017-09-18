@@ -23,7 +23,7 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = $this->add('CallbackLater');
+        $this->cb = $this->_add('CallbackLater');
 
         $this->cb->set(function () {
             if ($this->cb->triggered && $this->fx) {

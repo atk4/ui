@@ -98,6 +98,13 @@ class Table extends Lister
 
     public $sort_order = null;
 
+    public function __construct($class = null)
+    {
+        if ($class) {
+            $this->addClass($class);
+        }
+    }
+
     /**
      * Defines a new column for this field. You need two objects for field to
      * work.
@@ -134,14 +141,18 @@ class Table extends Lister
 
         if ($name) {
             $existingField = $this->model->hasElement($name);
+        } else {
+            $existingField = null;
         }
 
         if (!$existingField) {
             // Add missing field
             if ($field) {
                 $field = $this->model->addField($name, $field);
+                $field->never_persist = true;
             } else {
                 $field = $this->model->addField($name);
+                $field->never_persist = true;
             }
         } elseif (is_array($field)) {
             // Add properties to existing field
@@ -205,11 +216,12 @@ class Table extends Lister
 
         if (is_null($name)) {
             $this->columns[] = $columnDecorator;
+        } elseif (!is_string($name)) {
+            echo 'about to throw exception.....';
+
+            throw new Exception(['Name must be a string', 'name'=>$name]);
         } elseif (isset($this->columns[$name])) {
-            if (!is_array($this->columns[$name])) {
-                $this->columns[$name] = [$this->columns[$name]];
-            }
-            $this->columns[$name][] = $columnDecorator;
+            throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name'=>$name]);
         } else {
             $this->columns[$name] = $columnDecorator;
         }
@@ -217,34 +229,38 @@ class Table extends Lister
         return $columnDecorator;
     }
 
+    public function addDecorator($name, $decorator)
+    {
+        if (!$this->columns[$name]) {
+            throw new Exceptino(['No such column, cannot decorate', 'name'=>$name]);
+        }
+        $decorator = $this->_add($this->factory($decorator, ['table'=>$this], 'TableColumn'));
+
+        if (!is_array($this->columns[$name])) {
+            $this->columns[$name] = [$this->columns[$name]];
+        }
+        $this->columns[$name][] = $decorator;
+    }
+
     /**
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param \atk4\data\Field $f        Data model field
-     * @param array            $defaults Defaults to pass to factory() when decorator is initialized
+     * @param \atk4\data\Field $f    Data model field
+     * @param array            $seed Defaults to pass to factory() when decorator is initialized
      *
      * @return TableColumn\Generic
      */
     public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
-        if (isset($this->typeToDecorator[$f->type])) {
-            $defaults = $this->typeToDecorator[$f->type];
-            $defaults['table'] = $this;
-        } else {
-            $defaults = ['Generic'];
-            $defaults['table'] = $this;
+        $seed = $this->mergeSeeds(
+            $seed,
+            isset($f->ui['table']) ? $f->ui['table'] : null,
+            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
+            ['Generic']
+        );
 
-            if (!$seed) {
-                if (!$this->default_column) {
-                    $this->default_column = $this->_add($this->factory($seed, $defaults, 'TableColumn'));
-                }
-
-                return $this->default_column;
-            }
-        }
-
-        return $this->_add($this->factory($seed, $defaults, 'TableColumn'));
+        return $this->_add($this->factory($seed, ['table'=>$this], 'TableColumn'));
     }
 
     protected $typeToDecorator = [
