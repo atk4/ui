@@ -29,14 +29,18 @@ class Callback
     /**
      * Will look for trigger in the POST data. Will re-use existing URL, but
      * $_POST[$this->name] will have to be set.
+     *
+     * @var bool
      */
     public $POST_trigger = false;
 
     /**
      * Contains either false if callback wasn't triggered or the value passed
-     * as an argument to a call-back:.
+     * as an argument to a call-back.
      *
      * e.g. following URL of getURL('test') will result in $triggered = 'test';
+     *
+     * @var string|false
      */
     public $triggered = false;
 
@@ -44,8 +48,6 @@ class Callback
      * Initialize object and set default properties.
      *
      * @param array|string $defaults
-     *
-     * @throws Exception
      */
     public function __construct($defaults = [])
     {
@@ -93,6 +95,11 @@ class Callback
         }
     }
 
+    /**
+     * Is callback triggered?
+     *
+     * @return bool
+     */
     public function triggered()
     {
         return isset($_GET[$this->name]) ? $_GET[$this->name] : false;
@@ -101,14 +108,16 @@ class Callback
     /**
      * Return URL that will trigger action on this call-back.
      *
+     * @param string $mode
+     *
      * @return string
      */
-    public function getURL($arg = 'callback')
+    public function getURL($mode = 'callback')
     {
         if ($this->POST_trigger) {
             return $_SERVER['REQUEST_URI'];
         }
 
-        return $this->app->url([$this->name=>$arg]);
+        return $this->app->url([$this->name=>$mode]);
     }
 }

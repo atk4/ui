@@ -21,7 +21,7 @@ class Button extends View
     /**
      * Additional icon that can appear on the right of the button.
      *
-     * @var [type]
+     * @var string|array|Icon
      */
     public $iconRight = null;
 
