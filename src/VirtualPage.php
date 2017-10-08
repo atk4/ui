@@ -13,12 +13,18 @@ namespace atk4\ui;
  */
 class VirtualPage extends View
 {
+    /** @var Callback */
     public $cb = null;
 
+    /** @var array Functions of virtual page */
     public $fx = [];
 
+    /** @var string UI container class */
     public $ui = 'container';
 
+    /**
+     * Initialization.
+     */
     public function init()
     {
         parent::init();
@@ -64,6 +70,14 @@ class VirtualPage extends View
         });
     }
 
+    /**
+     * Set function of virtual page.
+     *
+     * @param array $fx
+     * @param mixed $junk
+     *
+     * @return $this
+     */
     public function set($fx = [], $junk = null)
     {
         if (!$fx) {
@@ -77,6 +91,23 @@ class VirtualPage extends View
         return $this;
     }
 
+    /**
+     * Is virtual page active?
+     *
+     * @return bool
+     */
+    public function triggered()
+    {
+        return $this->cb->triggered();
+    }
+
+    /**
+     * Returns URL whichwill activate virtual page.
+     *
+     * @param string $mode
+     *
+     * @return string
+     */
     public function getURL($mode = 'callback')
     {
         return $this->cb->getURL($mode);
@@ -84,8 +115,7 @@ class VirtualPage extends View
 
     /**
      * VirtualPage is not rendered normally. It's invisible. Only when
-     * it is triggered, it will exclusively output
-     * it's content.
+     * it is triggered, it will exclusively output it's content.
      */
     public function getHTML()
     {
