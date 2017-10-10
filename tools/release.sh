@@ -33,7 +33,7 @@ git branch release/$version
 git checkout release/$version
 
 # Find out previous version
-prev_version=$(git log --tags --simplify-by-decoration --pretty="format:%d" | grep -Eo '[0-9\.]+' | head -1)
+prev_version=$(git log --tags --simplify-by-decoration --pretty="format:%d" | grep -Eo '[0-9\.A-Z-]+' | head -1)
 
 echo "Releasing $prev_version -> $version"
 
