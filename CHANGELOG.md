@@ -35,6 +35,12 @@ This release was possible thanks to our new contributors:
  - Cleanups #207 #218
  - Switched to codecov.io for a more serious coverage reports (will focus on improving those)
 
+### Minor releases (in reverse order)
+
+#### 1.2.1
+
+ - fixed warning in PHP 5.6.x for `function(string $name)`.
+
 
 ## 1.1
 
