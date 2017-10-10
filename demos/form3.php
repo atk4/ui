@@ -3,7 +3,7 @@
  * Testing form.
  */
 require 'init.php';
-require'database.php';
+require 'database.php';
 
 use atk4\ui\jsReload;
 

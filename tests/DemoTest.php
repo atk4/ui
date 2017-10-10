@@ -37,12 +37,10 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->inc($page)->run();
     }
 
-
-
     public function demoList()
     {
         return [
-            ['button.php'], 
+            ['button.php'],
             ['table.php'],
             ['form.php'],
             ['form2.php'],
@@ -67,11 +65,9 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         ];
     }
 
- public function testLayout()
- {
-     $this->expectOutputRegex($this->regex);
-     include 'layouts_manual.php';
- }
-
-
+    public function testLayout()
+    {
+        $this->expectOutputRegex($this->regex);
+        include 'layouts_manual.php';
+    }
 }

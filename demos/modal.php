@@ -3,21 +3,21 @@
 require 'init.php';
 // Re-usable component implementing counter
 if (!class_exists('Counter')) {
-class Counter extends \atk4\ui\FormField\Line
-{
-    public $content = 20; // default
-
-    public function init()
+    class Counter extends \atk4\ui\FormField\Line
     {
-        parent::init();
+        public $content = 20; // default
 
-        $this->actionLeft = new \atk4\ui\Button(['icon'=> 'minus']);
-        $this->action = new \atk4\ui\Button(['icon'=> 'plus']);
+        public function init()
+        {
+            parent::init();
 
-        $this->actionLeft->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])-1', [$this->jsInput()->val()])));
-        $this->action->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])+1', [$this->jsInput()->val()])));
+            $this->actionLeft = new \atk4\ui\Button(['icon'=> 'minus']);
+            $this->action = new \atk4\ui\Button(['icon'=> 'plus']);
+
+            $this->actionLeft->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])-1', [$this->jsInput()->val()])));
+            $this->action->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])+1', [$this->jsInput()->val()])));
+        }
     }
-}
 }
 
 // Test 1 - Basic reloading
