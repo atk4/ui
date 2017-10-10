@@ -12,7 +12,7 @@ before_script:
     - php -S localhost:8888 &
     - composer install
     - mysql -e 'create database atk4;'
-    - mysql -e atk4 < demo/atk4.sql
+    - mysql -e atk4 < demos/atk4.sql
     - 'echo $db = new \atk4\data\Persistence_SQL("mysql:dbname=atk4;host=localhost", "root", ""); > demos/db.php'
 
 after_script:
