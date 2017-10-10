@@ -34,14 +34,15 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
     public function testDemo($page)
     {
         $this->expectOutputRegex($this->regex);
-        $this->inc('button.php')->run();
+        $this->inc($page)->run();
     }
+
+
 
     public function demoList()
     {
         return [
-            ['button.php'],
-            ['layouts_manual.php'],
+            ['button.php'], 
             ['table.php'],
             ['form.php'],
             ['form2.php'],
@@ -65,4 +66,12 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
             ['recursive.php'],
         ];
     }
+
+ public function testLayout()
+ {
+     $this->expectOutputRegex($this->regex);
+     include 'layouts_manual.php';
+ }
+
+
 }

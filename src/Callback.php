@@ -115,8 +115,6 @@ class Callback
     public function getURL($mode = 'callback')
     {
         if ($this->POST_trigger) {
-            var_dump($_SERVER['REQUEST_URI']);
-
             return $_SERVER['REQUEST_URI'];
         }
 

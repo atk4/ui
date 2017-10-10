@@ -13,6 +13,8 @@ try {
     ], null, $e);
 }
 
+if(!class_exists('Country')) {
+
 class Country extends \atk4\data\Model
 {
     public $table = 'country';
@@ -165,4 +167,5 @@ class File extends \atk4\data\Model
             }
         }
     }
+}
 }

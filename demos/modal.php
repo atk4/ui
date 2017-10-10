@@ -2,6 +2,7 @@
 
 require 'init.php';
 // Re-usable component implementing counter
+if (!class_exists('Counter')) {
 class Counter extends \atk4\ui\FormField\Line
 {
     public $content = 20; // default
@@ -16,6 +17,7 @@ class Counter extends \atk4\ui\FormField\Line
         $this->actionLeft->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])-1', [$this->jsInput()->val()])));
         $this->action->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])+1', [$this->jsInput()->val()])));
     }
+}
 }
 
 // Test 1 - Basic reloading
