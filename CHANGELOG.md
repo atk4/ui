@@ -1,30 +1,39 @@
-## 1.3
-
 
 ## 1.2
 
-This release includes huge JavaScript overhaul and clean-up, refactored jsModal implementation,
-refactor of Table::addColumn() and Table::addField(), integration with Wordpress and a lot of new
-documentation.
+This release includes change to view constructor arguments, huge JavaScript overhaul and clean-up,
+refactored jsModal implementation, refactor of Table::addColumn() and Table::addField(), integration
+with Wordpress and a lot of new documentation.
 
 This release was possible thanks to our new contributors:
  - [ibelar](https://github.com/ibelar)
  - [TheGrammerNazi](https://github.com/TheGrammerNazi)
+ - [Darkside666](https://github.com/Darkside666)
 
 ### Major Changes
+ - Refactored View arguments. `$button = new Button($label, $class)` instead of using arrays. Backwards compatible.
+ - Migrated to [Agile Core 1.3](https://github.com/atk4/core/releases/tag/1.3.0) and [Agile Data 1.2.1](https://github.com/atk4/data/releases/tag/1.2.1)
+ - Added support for Tabs 
+ - Added notify.js #205
+ - Add Callback::triggered() method.  #226
  - Refactored JS Plugin System. ATK now implements: #189, #201, #193, #202
    - spinner (link to doc needed)
    - reloadView (link to doc needed)
    - ajaxec (link to doc needed)
    - createModal (link to doc needed)
- - Refactored addField() and addColumn() #179
+ - Refactored addField() and addColumn() #179 #187 #223 #225
+
+### Other changes 
  - Documentation improvements:
    - Callbacks and Virtual pages #200 (http://agile-ui.readthedocs.io/en/latest/core.html#callbacks-and-virtual-pages)
    - README file #196
+   - Add documentation for icon, image, label, loremipsum, message, tablecolumn, text, decorators. #218
  - Fixed problem with Checkbox on a form #130
  - Fixed form submission with Enter #173
  - Improved form validation #191
  - Fix label display when it's 0 #198
+ - Cleanups #207 #218
+ - Switched to codecov.io for a more serious coverage reports (will focus on improving those)
 
 
 ## 1.1
