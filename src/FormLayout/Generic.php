@@ -45,7 +45,7 @@ class Generic extends View
      *
      * @return \atk4\ui\FormField\Generic
      */
-    public function addField(string $name, $decorator = null, $field = null)
+    public function addField($name, $decorator = null, $field = null)
     {
         if (!is_string($name)) {
             throw new Exception(['Format for addField now require first argument to be name']);
