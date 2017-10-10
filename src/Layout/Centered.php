@@ -11,6 +11,8 @@ namespace atk4\ui\Layout;
  */
 class Centered extends Generic
 {
+    use \atk4\core\DebugTrait;
+
     public $defaultTemplate = 'layout/centered.html';
 
     public function init()

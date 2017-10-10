@@ -54,7 +54,6 @@ class Link extends Generic
     {
         if (is_array($page)) {
             $page = ['page' => $page];
-            unset($page[0]);
         } elseif (is_string($page)) {
             $page = ['url' => $page];
         }

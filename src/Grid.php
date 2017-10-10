@@ -42,7 +42,7 @@ class Grid extends View
      * Calling addAction will add a new column inside $table, and will be re-used
      * for next addAction().
      *
-     * @var TableColumn\Action
+     * @var TableColumn\Actions
      */
     public $actions = null;
 
@@ -57,6 +57,8 @@ class Grid extends View
     /**
      * Grid can be sorted by clicking on column headers. This will be automatically enabled
      * if Model supports ordering. You may override by setting true/false.
+     *
+     * @var bool
      */
     public $sortable = null;
 
@@ -87,9 +89,19 @@ class Grid extends View
         }
     }
 
-    public function addColumn($name, $columnDef = null)
+    /**
+     * Add new column to grid. If column with this name already exists,
+     * an. Simply calls Table::addColumn(), so check that method out.
+     *
+     * @param string                   $name            Data model field name
+     * @param array|string|object|null $columnDecorator
+     * @param array|string|object|null $field
+     *
+     * @return Column\Generic
+     */
+    public function addColumn($name, $columnDecorator = null, $field = null)
     {
-        return $this->table->addColumn($name, $columnDef);
+        return $this->table->addColumn($name, $columnDecorator, $field);
     }
 
     public function addButton($text)
@@ -129,7 +141,7 @@ class Grid extends View
     public function addAction($label, $action)
     {
         if (!$this->actions) {
-            $this->actions = $this->table->addColumn('TableColumn/Actions');
+            $this->actions = $this->table->addColumn(null, 'Actions');
         }
 
         $this->actions->addAction($label, $action);
@@ -175,7 +187,7 @@ class Grid extends View
 
     public function addSelection()
     {
-        $this->selection = $this->table->addColumn('TableColumn/Checkbox');
+        $this->selection = $this->table->addColumn(null, 'Checkbox');
 
         // Move element to the beginning
         $k = array_search($this->selection, $this->table->columns);

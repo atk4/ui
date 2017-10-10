@@ -56,6 +56,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     // }}}
 
     // {{{ Base Methods
+
+    public function __construct($class = null)
+    {
+        if ($class) {
+            $this->addClass($class);
+        }
+    }
+
     public function init()
     {
         parent::init();
@@ -63,6 +71,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         // Initialize layout, so when you call addField / setModel next time, form will know
         // where to add your fields.
         $this->initLayout();
+
+        //$this->addField('empty', new FormField\Hidden());
 
         // When form is submitted, will perform POST field loading.
         /*
@@ -79,7 +89,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 }
 
                 foreach ($er as $field => $error) {
-                    var_dump($error);
                     if ($error === null || $error === false) {
                         continue;
                     }
@@ -127,7 +136,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         // Layout needs to have a save button
-        $this->layout->addButton($this->buttonSave = new Button(['Save', 'primary']));
+        $this->buttonSave = $this->layout->addButton(['Save', 'primary']);
         $this->buttonSave->on('click', $this->js()->form('submit'));
     }
 
@@ -146,10 +155,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function setModel(\atk4\data\Model $model, $fields = null)
     {
         // Model is set for the form and also for the current layout
-        $model = parent::setModel($model);
-        $this->layout->setModel($model, $fields);
+        try {
+            $model = parent::setModel($model);
+            $this->layout->setModel($model, $fields);
 
-        return $model;
+            return $model;
+        } catch (Exception $e) {
+            throw $e->addMoreInfo('model', $model);
+        }
     }
 
     /**
@@ -220,13 +233,13 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * @return FormField\Generic
      */
-    public function addField(...$args)
+    public function addField(string $name, $decorator = null, $field = null)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
 
-        return $this->layout->addField(...$args); //$this->fieldFactory($modelField));
+        return $this->layout->addField($name, $decorator, $field);
     }
 
     /**
@@ -285,67 +298,64 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     /**
      * Provided with a Agile Data Model Field, this method have to decide
-     * and create instance of a View that will act as a form-field.
+     * and create instance of a View that will act as a form-field. It takes
+     * various input and looks for hints as to which class to use:.
      *
-     * @param mixed ...$args
+     * 1. The $seed argument is evaluated
+     * 2. $f->ui['form'] is evaluated if present
+     * 3. $f->type is converted into seed and evaluated
+     * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
+     *
+     * @param \atk4\data\Field $f        Data model field
+     * @param array            $defaults Defaults to pass to factory() when decorator is initialized
      *
      * @return FormField\Generic
      */
-    public function fieldFactory(...$args)
+    public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
-        if (is_string($args[0]) && ($modelField = $this->model->hasElement($args[0]))) {
-            // $modelField is set above
-        } elseif ($args[0] instanceof \atk4\data\Field) {
-            $modelField = $args[0];
-        } else {
-            $modelField = $this->model->addField(...$args);
-            $modelField->never_persist = true;
+        if ($f && !$f instanceof \atk4\data\Field) {
+            throw new Exception(['Argument 1 for decoratorFactory must be \atk4\data\Field or null', 'f'=>$f]);
         }
 
-        return $this->_fieldFactory($modelField);
+        $fallback_seed = 'Line';
+
+        if ($f->enum) {
+            $fallback_seed = ['Dropdown', 'values' => array_combine($f->enum, $f->enum)];
+        } elseif (isset($f->reference)) {
+            $fallback_seed = ['Dropdown', 'model' => $f->reference->refModel()];
+        }
+
+        $seed = $this->mergeSeeds(
+            $seed,
+            isset($f->ui['form']) ? $f->ui['form'] : null,
+            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
+            $fallback_seed
+        );
+
+        $defaults = [
+            'form'      => $this,
+            'field'     => $f,
+            'short_name'=> $f->short_name,
+        ];
+
+        return $this->factory($seed, $defaults, 'FormField');
     }
 
     /**
-     * Will come up with a column object based on the field object supplied.
-     *
-     * @param \atk4\data\Field $f
-     *
-     * @return FormField\Generic
+     * Provides decorator seeds for most common types.
      */
-    public function _fieldFactory(\atk4\data\Field $f)
-    {
-        $arg = ['form'=>$this, 'field'=>$f, 'short_name'=>$f->short_name];
+    protected $typeToDecorator = [
+        'boolean' => 'Checkbox',
+        'text'    => 'Textarea',
+        'string'  => 'Line',
+        'password'=> 'Password',
+        'datetime'=> 'Calendar',
+        'date'    => ['Calendar', 'type'=>'date'],
+        'time'    => ['Calendar', 'type'=>'time', 'ampm'=>false],
+        'money'   => 'Money',
+    ];
 
-        if (isset($f->ui['form'])) {
-            $display = $f->ui['form'];
-
-            if (is_string($display) || is_object($display)) {
-                $display = [$display];
-            }
-
-            // ui['form'] = ['FormField/TextArea', 'rows'=>2]
-            if (isset($display[0])) {
-                $display = array_merge($display, $arg);
-
-                return $this->factory($display);
-            }
-        }
-
-        if ($f->enum) {
-            $arg['values'] = array_combine($f->enum, $f->enum);
-
-            return new FormField\Dropdown($arg);
-        }
-
-        // Field values can be picked from the model.
-        if (isset($f->reference)) {
-            //$arg['values'] = $f->ref();
-
-            $dd = new FormField\Dropdown($arg);
-            $dd->setModel($f->reference->refModel());
-
-            return $dd;
-        }
+    /*
 
         switch ($f->type) {
         case 'boolean':
@@ -386,7 +396,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             return new FormField\Line($arg);
 
         }
-    }
+     */
 
     /**
      * Looks inside the POST of the request and loads it into a current model.
@@ -434,9 +444,31 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             ->setStyle(['display'=>'none']);
 
         $cb->set(function () {
+            $caught = function ($e) {
+                return new jsExpression('$([html]).modal("show")', [
+                    'html'=> '<div class="ui fullscreen modal"> <i class="close icon"></i> <div class="header"> '.
+                    htmlspecialchars(get_class($e)).
+                    ' </div> <div class="content"> '.
+                    ($e instanceof \atk4\core\Exception ? $e->getHTML() : nl2br(htmlspecialchars($e->getMessage())))
+                    .' </div> </div>',
+                ]);
+            };
+
             try {
                 $this->loadPOST();
+                ob_start();
                 $response = $this->hook('submit');
+                $output = ob_get_clean();
+
+                if ($output) {
+                    $message = new Message('Direct Output Detected');
+                    $message->init();
+                    $message->addClass('error');
+                    $message->text->set($output);
+
+                    return $message;
+                }
+
                 if (!$response) {
                     if (!$this->model instanceof \atk4\ui\misc\ProxyModel) {
                         $this->model->save();
@@ -453,6 +485,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 }
 
                 return $response;
+            } catch (\Error $e) {
+                return $caught($e);
+            } catch (\Exception $e) {
+                return $caught($e);
             }
 
             return $response;
