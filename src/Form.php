@@ -233,7 +233,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * @return FormField\Generic
      */
-    public function addField(string $name, $decorator = null, $field = null)
+    public function addField($name, $decorator = null, $field = null)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
