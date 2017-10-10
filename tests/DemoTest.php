@@ -22,6 +22,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $_SERVER['REQUEST_URI'] = '/ui/'.$f;
         include $f;
+
         return $app;
     }
 
@@ -39,7 +40,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
     public function demoList()
     {
         return [
-            ['button.php'], 
+            ['button.php'],
             ['layouts_manual.php'],
             ['table.php'],
             ['form.php'],
@@ -64,5 +65,4 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
             ['recursive.php'],
         ];
     }
-
 }
