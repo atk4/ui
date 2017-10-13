@@ -33,9 +33,7 @@ class VirtualPage extends View
 
         $this->cb->set(function () {
             if ($this->cb->triggered && $this->fx) {
-                foreach ($this->fx as $fx) {
-                    $fx($this);
-                }
+                call_user_func($this->fx, $this);
             }
 
             if ($this->cb->triggered == 'cut') {
@@ -83,8 +81,13 @@ class VirtualPage extends View
         if (!$fx) {
             return;
         }
-        if (!is_array($fx)) {
-            $fx = [$fx];
+        if ($this->fx) {
+            throw new Exception([
+                'Callback for this Virtual Page is already defined',
+                'vp'    => $this,
+                'old_fx'=> $this->fx,
+                'new_fx'=> $fx,
+            ]);
         }
         $this->fx = $fx;
 
