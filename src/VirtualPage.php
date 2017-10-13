@@ -33,9 +33,7 @@ class VirtualPage extends View
 
         $this->cb->set(function () {
             if ($this->cb->triggered && $this->fx) {
-                if ($this->fx) {
-                    call_user_func($this->fx, $this);
-                }
+                call_user_func($this->fx, $this);
             }
 
             if ($this->cb->triggered == 'cut') {
