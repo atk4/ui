@@ -456,7 +456,9 @@ class View implements jsExpressionable
 
         throw new Exception([
             'Not sure what to do with argument',
+            'this' => $this,
             'arg1' => $arg1,
+            'arg2' => $arg2,
         ]);
     }
 
