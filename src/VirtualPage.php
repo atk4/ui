@@ -34,7 +34,7 @@ class VirtualPage extends View
         $this->cb->set(function () {
             if ($this->cb->triggered && $this->fx) {
                 foreach ($this->fx as $fx) {
-                    $fx($this);
+                    call_user_func($fx, $this);
                 }
             }
 
