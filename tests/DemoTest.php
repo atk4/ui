@@ -47,6 +47,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
             ['multitable.php'],
             ['grid.php'],
             ['crud.php'],
+            ['crud2.php'],
 
             ['view.php'],
             ['field.php'],
