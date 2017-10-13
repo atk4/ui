@@ -2,10 +2,12 @@
 
 namespace atk4\ui\tests;
 
-class AppMock extends \atk4\ui\App {
+class AppMock extends \atk4\ui\App
+{
     public $terminated = false;
 
-    function terminate($output = NULL) {
+    public function terminate($output = null)
+    {
         $this->terminate = true;
     }
 }
@@ -128,7 +130,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
         $app = $this->app;
 
         $vp = $app->add('VirtualPage');
-        $vp->set(function($p) use (&$var){ 
+        $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
 
@@ -141,9 +143,12 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
     }
 
     public $var = null;
-    public function callPull230(){
+
+    public function callPull230()
+    {
         $this->var = 26;
     }
+
     public function testPull230()
     {
         $var = null;
