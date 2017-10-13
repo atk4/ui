@@ -104,6 +104,12 @@ class Grid extends View
         return $this->table->addColumn($name, $columnDecorator, $field);
     }
 
+    public function addDecorator($name, $decorator)
+    {
+        return $this->table->addDecorator($name, $decorator);
+    }
+
+
     public function addButton($text)
     {
         return $this->menu->addItem()->add(new Button($text));
