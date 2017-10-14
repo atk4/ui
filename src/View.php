@@ -377,7 +377,7 @@ class View implements jsExpressionable
         }
 
         // Create object first
-        $object = $this->factory($huj = $this->mergeSeeds($seed, ['View']), $defaults);
+        $object = $this->factory($this->mergeSeeds($seed, ['View']), $defaults);
 
         if ($object instanceof self && $region) {
             $object->region = $region;
