@@ -41,6 +41,15 @@ This release was possible thanks to our new contributors:
 
  - fixed warning in PHP 5.6.x for `function(string $name)`.
 
+#### 1.2.2
+
+Bugfixes #231 #232 #230 #229
+
+ - Virtual Page cannot have multiple callbacks
+ - Grid::addDecorator added to proxy Table::addDecorator
+ - Field type "boolean" now properly shown on grid/crud (thanks @slava-vishnyakov)
+ - Virtual Page trigger allows [$obj, 'methd'] callables now
+ - Added more tests
 
 ## 1.1
 
