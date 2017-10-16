@@ -1,4 +1,5 @@
 <?php
+
 require 'init.php';
 $s = $app->add(['ui'=>'green segment'])->setStyle('min-height', '20em');
 $b = $app->add(['Button', 'Click me']);
