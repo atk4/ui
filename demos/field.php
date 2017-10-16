@@ -4,9 +4,9 @@
  */
 require 'init.php';
 
-$layout->add(new \atk4\ui\Header(['Types', 'size'=>2]));
+$layout->add(['Header', 'Types', 'size'=>2]);
 
-$layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search']));
+$layout->add(new \atk4\ui\FormField\Line())->setDefaults(['placeholder'=>'Search']);
 $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search', 'loading'=>true]));
 $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search', 'loading'=>'left']));
 $layout->add(new \atk4\ui\FormField\Line(['placeholder'=>'Search', 'icon'=>'search', 'disabled'=>true]));

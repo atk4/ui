@@ -5,13 +5,15 @@ php:
     - '7.0'
     - '7.1'
 
-#services:
-#    - mysql
+services:
+    - mysql
 
 before_script:
     - php -S localhost:8888 &
     - composer install
-#    - mysql -e 'create database dsql_test;'
+    - mysql -e 'create database atk4;'
+    - mysql atk4 < demos/atk4.sql
+    - mv demos/db.travis.php demos/db.php
 
 after_script:
     - echo $TRAVIS_BRANCH

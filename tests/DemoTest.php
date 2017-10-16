@@ -18,56 +18,57 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         chdir('..');
     }
 
-    private $regex = '/^..DOCTYPE/';
-
-    public function testButtons()
+    public function inc($f)
     {
-        $this->expectOutputRegex($this->regex);
-        include 'button.php';
-        $app->run();
+        $_SERVER['REQUEST_URI'] = '/ui/'.$f;
+        include $f;
+
+        return $app;
     }
 
-    public function testFields()
+    private $regex = '/^..DOCTYPE/';
+
+    /**
+     * @dataProvider demoList
+     */
+    public function testDemo($page)
     {
         $this->expectOutputRegex($this->regex);
-        include 'field.php';
-        $app->run();
+        $this->inc($page)->run();
+    }
+
+    public function demoList()
+    {
+        return [
+            ['button.php'],
+            ['table.php'],
+            ['form.php'],
+            ['form2.php'],
+            ['multitable.php'],
+            ['grid.php'],
+            ['crud.php'],
+            ['crud2.php'],
+
+            ['view.php'],
+            ['field.php'],
+            ['message.php'],
+            ['header.php'],
+            ['label.php'],
+            ['menu.php'],
+            ['tabs.php'],
+            ['paginator.php'],
+
+            ['button2.php'],
+            ['reloading.php'],
+            ['modal.php'],
+            ['sticky.php'],
+            ['recursive.php'],
+        ];
     }
 
     public function testLayout()
     {
         $this->expectOutputRegex($this->regex);
         include 'layouts_manual.php';
-    }
-
-    public function testTable()
-    {
-        $this->expectOutputRegex($this->regex);
-        include 'table.php';
-        $app->run();
-    }
-
-    public function testPaginator()
-    {
-        $this->expectOutputRegex($this->regex);
-        include 'paginator.php';
-        $app->run();
-    }
-
-    public function testView()
-    {
-        $this->expectOutputRegex($this->regex);
-        include 'view.php';
-        $app->run();
-    }
-
-    public function testGrid()
-    {
-        $this->markTestSkipped('Skipping test because we do not have access to DB yet');
-        /*
-        $this->expectOutputRegex($this->regex);
-        include 'grid.php';
-        $app->run();
-        */
     }
 }

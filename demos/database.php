@@ -13,68 +13,69 @@ try {
     ], null, $e);
 }
 
-class Country extends \atk4\data\Model
-{
-    public $table = 'country';
-
-    public function init()
+if (!class_exists('Country')) {
+    class Country extends \atk4\data\Model
     {
-        parent::init();
-        $this->addField('name', ['actual'=>'nicename', 'required'=>true, 'type'=>'string']);
-        $this->addField('sys_name', ['actual'=>'name', 'system'=>true]);
+        public $table = 'country';
 
-        $this->addField('iso', ['caption'=>'ISO', 'required'=>true, 'type'=>'string']);
-        $this->addField('iso3', ['caption'=>'ISO3', 'required'=>true, 'type'=>'string']);
-        $this->addField('numcode', ['caption'=>'ISO Numeric Code', 'type'=>'number', 'required'=>true]);
-        $this->addField('phonecode', ['caption'=>'Phone Prefix', 'type'=>'number']);
+        public function init()
+        {
+            parent::init();
+            $this->addField('name', ['actual'=>'nicename', 'required'=>true, 'type'=>'string']);
+            $this->addField('sys_name', ['actual'=>'name', 'system'=>true]);
 
-        $this->addHook('beforeSave', function ($m) {
-            if (!$m['sys_name']) {
-                $m['sys_name'] = strtoupper($m['name']);
+            $this->addField('iso', ['caption'=>'ISO', 'required'=>true, 'type'=>'string']);
+            $this->addField('iso3', ['caption'=>'ISO3', 'required'=>true, 'type'=>'string']);
+            $this->addField('numcode', ['caption'=>'ISO Numeric Code', 'type'=>'number', 'required'=>true]);
+            $this->addField('phonecode', ['caption'=>'Phone Prefix', 'type'=>'number']);
+
+            $this->addHook('beforeSave', function ($m) {
+                if (!$m['sys_name']) {
+                    $m['sys_name'] = strtoupper($m['name']);
+                }
+            });
+        }
+
+        public function validate($intent = null)
+        {
+            $errors = parent::validate($intent);
+
+            if (strlen($this['iso']) !== 2) {
+                $errors['iso'] = 'Must be exactly 2 characters';
             }
-        });
+
+            if (strlen($this['iso3']) !== 3) {
+                $errors['iso3'] = 'Must be exactly 3 characters';
+            }
+
+            // look if name is unique
+            $c = clone $this;
+            $c->unload();
+            $c->tryLoadBy('name', $this['name']);
+            if ($c->loaded() && $c->id != $this->id) {
+                $errors['name'] = 'Country name must be unique';
+            }
+
+            return $errors;
+        }
     }
 
-    public function validate($intent = null)
+    class Stat extends \atk4\data\Model
     {
-        $errors = parent::validate($intent);
+        public $table = 'stats';
+        public $title = 'Project Stat';
 
-        if (strlen($this['iso']) !== 2) {
-            $errors['iso'] = 'Must be exactly 2 characters';
-        }
+        public function init()
+        {
+            parent::init();
 
-        if (strlen($this['iso3']) !== 3) {
-            $errors['iso3'] = 'Must be exactly 3 characters';
-        }
+            $this->addFields(['project_name', 'project_code'], ['type'=>'string']);
+            //$this->addField('description', ['ui'=>['form'=>['FormField/TextArea', 'rows'=>5]]]);
+            $this->addField('description', ['type'=>'text']);
+            $this->addField('client_name', ['type'=>'string']);
+            $this->addField('client_address', ['type'=>'string', 'ui'=>['form'=>[new \atk4\ui\FormField\Textarea(), 'rows'=>4]]]);
 
-        // look if name is unique
-        $c = clone $this;
-        $c->unload();
-        $c->tryLoadBy('name', $this['name']);
-        if ($c->loaded() && $c->id != $this->id) {
-            $errors['name'] = 'Country name must be unique';
-        }
-
-        return $errors;
-    }
-}
-
-class Stat extends \atk4\data\Model
-{
-    public $table = 'stats';
-    public $title = 'Project Stat';
-
-    public function init()
-    {
-        parent::init();
-
-        $this->addFields(['project_name', 'project_code'], ['type'=>'string']);
-        //$this->addField('description', ['ui'=>['form'=>['FormField/TextArea', 'rows'=>5]]]);
-        $this->addField('description', ['type'=>'text']);
-        $this->addField('client_name', ['type'=>'string']);
-        $this->addField('client_address', ['type'=>'string', 'ui'=>['form'=>[new \atk4\ui\FormField\Textarea(), 'rows'=>4]]]);
-
-        $this->hasOne('client_country_iso', [
+            $this->hasOne('client_country_iso', [
             new Country(),
             'their_field'=> 'iso',
             'ui'         => [
@@ -85,83 +86,84 @@ class Stat extends \atk4\data\Model
         ])
             ->addField('client_country', 'name');
 
-        $this->addField('is_commercial', ['type'=>'boolean']);
-        $this->addField('currency', ['enum'=>['EUR', 'USD', 'GBP']]);
-        $this->addField('currency_symbol', ['never_persist'=>true]);
-        $this->addHook('afterLoad', function ($m) {
-            /* implementation for "intl"
-            $locale='en-UK';
-            $fmt = new \NumberFormatter( $locale."@currency=".$m['currency'], NumberFormatter::CURRENCY );
-            $m['currency_symbol'] = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
-             */
+            $this->addField('is_commercial', ['type'=>'boolean']);
+            $this->addField('currency', ['enum'=>['EUR', 'USD', 'GBP']]);
+            $this->addField('currency_symbol', ['never_persist'=>true]);
+            $this->addHook('afterLoad', function ($m) {
+                /* implementation for "intl"
+                $locale='en-UK';
+                $fmt = new \NumberFormatter( $locale."@currency=".$m['currency'], NumberFormatter::CURRENCY );
+                $m['currency_symbol'] = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
+                 */
 
-            $map = ['EUR'=>'€', 'USD'=>'$', 'GBP'=>'£'];
-            $m['currency_symbol'] = $map[$m['currency']];
-        });
+                $map = ['EUR'=>'€', 'USD'=>'$', 'GBP'=>'£'];
+                $m['currency_symbol'] = $map[$m['currency']];
+            });
 
-        $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type'=>'money']);
+            $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type'=>'money']);
 
-        $this->addFields(['project_hours_est', 'project_hours_reported'], ['type'=>'integer']);
+            $this->addFields(['project_hours_est', 'project_hours_reported'], ['type'=>'integer']);
 
-        $this->addFields(['project_expenses_est', 'project_expenses'], ['type'=>'money']);
-        $this->add(new Percent(), 'project_mgmt_cost_pct');
-        $this->add(new Percent(), 'project_qa_cost_pct');
+            $this->addFields(['project_expenses_est', 'project_expenses'], ['type'=>'money']);
+            $this->add(new Percent(), 'project_mgmt_cost_pct');
+            $this->add(new Percent(), 'project_qa_cost_pct');
 
-        $this->addFields(['start_date', 'finish_date'], ['type'=>'date']);
-        $this->addField('finish_time', ['type'=>'time']);
+            $this->addFields(['start_date', 'finish_date'], ['type'=>'date']);
+            $this->addField('finish_time', ['type'=>'time']);
 
-        $this->addFields(['created', 'updated'], ['type'=>'datetime', 'ui'=>['form'=>['FormField/Line', 'disabled'=>true]]]);
+            $this->addFields(['created', 'updated'], ['type'=>'datetime', 'ui'=>['form'=>['Line', 'disabled'=>true]]]);
+        }
     }
-}
 
-class Percent extends \atk4\data\Field
-{
-    public $type = 'float'; // will need to be able to affect rendering and storage
-}
-
-class File extends \atk4\data\Model
-{
-    public $table = 'file';
-
-    public function init()
+    class Percent extends \atk4\data\Field
     {
-        parent::init();
-        $this->addField('name');
+        public $type = 'float'; // will need to be able to affect rendering and storage
+    }
 
-        $this->addField('type', ['caption'=>'MIME Type']);
-        $this->addField('is_folder', ['type'=>'boolean']);
+    class File extends \atk4\data\Model
+    {
+        public $table = 'file';
 
-        $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
+        public function init()
+        {
+            parent::init();
+            $this->addField('name');
+
+            $this->addField('type', ['caption'=>'MIME Type']);
+            $this->addField('is_folder', ['type'=>'boolean']);
+
+            $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
             ->addField('count', ['aggregate' => 'count', 'field' => $this->expr('*')]);
 
-        $this->hasOne('parent_folder_id', new self())
+            $this->hasOne('parent_folder_id', new self())
             ->addTitle();
-    }
+        }
 
-    /**
-     * Perform import from filesystem.
-     */
-    public function importFromFilesystem($path)
-    {
-        $dir = new DirectoryIterator($path);
-        foreach ($dir as $fileinfo) {
-            if ($fileinfo->getFilename()[0] === '.') {
-                continue;
-            }
-            if ($fileinfo->getFilename() === 'vendor') {
-                continue;
-            }
+        /**
+         * Perform import from filesystem.
+         */
+        public function importFromFilesystem($path)
+        {
+            $dir = new DirectoryIterator($path);
+            foreach ($dir as $fileinfo) {
+                if ($fileinfo->getFilename()[0] === '.') {
+                    continue;
+                }
+                if ($fileinfo->getFilename() === 'vendor') {
+                    continue;
+                }
 
-            $this->unload();
+                $this->unload();
 
-            $this->save([
+                $this->save([
                 'name'     => $fileinfo->getFilename(),
                 'is_folder'=> $fileinfo->isDir(),
                 'type'     => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
             ]);
 
-            if ($fileinfo->isDir()) {
-                $this->ref('SubFolder')->importFromFilesystem($path.'/'.$fileinfo->getFilename());
+                if ($fileinfo->isDir()) {
+                    $this->ref('SubFolder')->importFromFilesystem($path.'/'.$fileinfo->getFilename());
+                }
             }
         }
     }

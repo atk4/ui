@@ -1,7 +1,7 @@
-.. _seed:
 
-Using Seed
-----------
+Purpose of the Seed
+-------------------
+
 
 When creating a view, you have a chance to pass an argument to it. We have decided to
 refer to this special argument as "seed" because it has multiple purposes and the structure

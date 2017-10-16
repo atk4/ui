@@ -20,7 +20,6 @@ class View implements jsExpressionable
     use \atk4\core\AppScopeTrait;
     use \atk4\core\FactoryTrait;
     use \atk4\core\DIContainerTrait {
-        setDefaults as _setDefaults;
         setMissingProperty as _setMissingProperty;
     }
 
@@ -144,26 +143,34 @@ class View implements jsExpressionable
      * May accept properties of a class, but if property is not defined, it will
      * be used as a HTML class instead.
      *
-     * @param array|string $defaults
+     * @param array|string $label
+     * @param array|string $class
      *
      * @throws Exception
      */
-    public function __construct($defaults = [])
+    public function __construct($label = null, $class = null)
     {
-        if (is_string($defaults) && $this->content !== false) {
-            $this->content = $defaults;
+        if (is_array($label)) {
+            // backwards mode
+            $defaults = $label;
+            if (isset($defaults[0])) {
+                $label = $defaults[0];
+                unset($defaults[0]);
+            } else {
+                $label = null;
+            }
 
-            return;
+            if (isset($defaults[1])) {
+                $class = $defaults[1];
+                unset($defaults[1]);
+            }
+            $this->setDefaults($defaults);
         }
 
-        if (!is_array($defaults)) {
-            throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
-        }
+        $this->content = $label;
 
-        $this->setDefaults($defaults);
-
-        if (is_string($this->class)) {
-            $this->class = explode(' ', $this->class);
+        if ($class) {
+            $this->addClass($class);
         }
     }
 
@@ -217,23 +224,6 @@ class View implements jsExpressionable
     }
 
     /**
-     * Called from __construct() and set() to initialize the properties.
-     *
-     * TODO: move into trait, because this is used often
-     *
-     * @param array $properties
-     */
-    public function setDefaults($properties)
-    {
-        if (isset($properties[0]) && $this->content !== false) {
-            $this->content = $properties[0];
-            unset($properties[0]);
-        }
-
-        $this->_setDefaults($properties);
-    }
-
-    /**
      * TODO: move into trait because it's used so often.
      *
      * @param $key
@@ -259,9 +249,10 @@ class View implements jsExpressionable
         }
 
         throw new Exception([
-            'Not sure what to do',
-            'key' => $key,
-            'val' => $val,
+            'Unable to set property for the object',
+            'object'   => $this,
+            'property' => $key,
+            'value'    => $val,
         ]);
     }
 
@@ -361,40 +352,45 @@ class View implements jsExpressionable
      *
      * @return View
      */
-    public function add($object, $region = null)
+    public function add($seed, $defaults = null)
     {
         if (!$this->app) {
-            $this->_add_later[] = [$object, $region];
+            $this->_add_later[] = [$seed, $defaults];
 
-            return $object;
+            return $seed;
         }
 
-        if (is_array($region)) {
+        if (is_array($defaults)) {
             throw new Exception('Second argument to add must be region or null!');
         }
 
-        if ($region === null) {
-            $defaults = ['region' => 'Content'];
-        } elseif (!is_array($region)) {
-            $defaults = ['region' => $region];
-        } else {
-            $defaults = $region;
-            if (isset($defaults[0])) {
-                $defaults['region'] = $defaults[0];
-                unset($defaults[0]);
-            }
+        $region = null;
+        if (is_array($defaults) && isset($defaults['region'])) {
+            $region = $defaults['region'];
+            unset($defaults['region']);
+        } elseif (is_array($defaults) && isset($defaults[0])) {
+            $region = $defaults[0];
+            unset($defaults[0]);
+        } elseif (is_string($defaults)) {
+            $region = $defaults;
+            $defaults = null;
         }
 
-        if (is_array($object) && !isset($object[0])) {
-            $object[0] = 'View';
+        // Create object first
+        $object = $this->factory($this->mergeSeeds($seed, ['View']), $defaults);
+
+        if ($object instanceof self && $region) {
+            $object->region = $region;
         }
 
-        $object = $this->_add($object, $defaults);
+        // Will call init() of the object
+        $object = $this->_add($object);
 
         if (!$object instanceof self) {
             return $object;
         }
 
+        // We are adding a new view, so do a bit more
         if (!$object->template && $object->region && $this->template) {
             $object->template = $this->template->cloneRegion($object->region);
         }
@@ -450,6 +446,9 @@ class View implements jsExpressionable
         }
 
         if (is_array($arg1)) {
+            if (isset($arg1[0])) {
+                $this->content = $arg1[0];
+            }
             $this->setDefaults($arg1);
 
             return $this;
@@ -457,7 +456,9 @@ class View implements jsExpressionable
 
         throw new Exception([
             'Not sure what to do with argument',
+            'this' => $this,
             'arg1' => $arg1,
+            'arg2' => $arg2,
         ]);
     }
 
@@ -474,6 +475,14 @@ class View implements jsExpressionable
     {
         if (is_array($class)) {
             $class = implode(' ', $class);
+        }
+
+        if (!$this->class) {
+            $this->class = [];
+        }
+
+        if (is_string($this->class)) {
+            throw new Exception(['Property $class should always be array', 'object'=>$this, 'class'=>$this->class]);
         }
 
         $this->class = array_merge($this->class, explode(' ', $class));

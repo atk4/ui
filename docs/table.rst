@@ -7,25 +7,66 @@ Table
 
 .. php:namespace:: atk4\ui
 
-Table is the simplest way to output multiple records of structured data. Table only works along with the model,
-however you can use :php:meth:`View::setSource` to inject static data (although it is slower than simply
-using a model). :ref:`no_data`
+.. php:class:: Table
 
+Table is the simplest way to output multiple records of structured, static data:
 
-Using Table
+    .. image:: images/table.png
+
+Various composite components use Table as a building block, see :php:class:`Grid` and :php:class:`CRUD`.
+Main features of Table class are:
+
+ - Tabular rendering using column headers on top of markup of https://semantic-ui.com/collections/table.html.
+ - Support for data formatting. (money, dates, etc)
+ - Column decorators, icons, buttons, links and color.
+ - Support for "Totals" row.
+ - Can use Agile Data source or Static data.
+ - Custom HTML, Format hooks
+
+Basic Usage
 ===========
 
-The simplest way to create a table::
+The simplest way to create a table is when you use it with Agile Data model::
 
-    $table = $layout->add('Table');
+    $table = $app->add('Table');
     $table->setModel(new Order($db));
 
-The table will be able to automatcally determine all the fields defined in your "Order" model, map them to
+The table will be able to automatically determine all the fields defined in your "Order" model, map them to
 appropriate column types, implement type-casting and also connect your model with the appropriate data source
 (database) $db.
 
-To change the order or explicitly specify which columns must appear, you can pass list of columns as a second
-argument to setModel::
+Using with Array Data
+---------------------
+
+You can also use Table with Array data source like this::
+
+    $my_array = [
+        ['name'=>'Vinny', 'surname'=>'Sihra', 'birthdate'=>new \DateTime('1973-02-03')],
+        ['name'=>'Zoe', 'surname'=>'Shatwell', 'birthdate'=>new \DateTime('1958-08-21')],
+        ['name'=>'Darcy', 'surname'=>'Wild', 'birthdate'=>new \DateTime('1968-11-01')],
+        ['name'=>'Brett', 'surname'=>'Bird', 'birthdate'=>new \DateTime('1988-12-20')],
+    ];
+
+    $table = $app->add('Table');
+    $table->setSource($my_array);
+
+    $table->addColumn('name');
+    $table->addColumn('surname', ['Link', 'url'=>'details.php?surname={$surname}']);
+    $table->addColumn('birthdate', null, ['type'=>'date']);
+
+.. warning:: I encourage you to seek appropriate Agile Data persistence instead of
+    handling data like this. The implementation of :php:meth:`View::setSource` will
+    create a model for you with Array persistence for you anyways.
+
+Adding Columns
+--------------
+
+.. php:method:: setModel(\atk4\data\Model $m, $fields = null)
+
+.. php:method:: addColumn($name, $columnDecorator = null, $field = null)
+
+To change the order or explicitly specify which field columns must appear, if you pass list of those
+fields as second argument to setModel::
 
     $table = $layout->add('Table');
     $table->setModel(new Order($db), ['name', 'price', 'amount', 'status']);
@@ -33,16 +74,26 @@ argument to setModel::
 Table will make use of "Only Fields" feature in Agile Data to adjust query for fetching only the necessary
 columns. See also :ref:`field_visibility`.
 
-Adding Additional Columns
--------------------------
 
-If you feel that you'd like to add several other columns to your table, you need to understand what type
-of columns they would be.
+You can also add individual column to your table::
 
-If your column is designed to carry a value of any type, then it's much better to define it as a Model
-Field. A good example of this scenario is adding "total" column to list of your invoice lines that
-already contain "price" and "amount" values. Start by adding new Field in the model that is associated
-with your table::
+    $table->setModel(new Order($db), false); // false here means - don't add any fields by default
+    $table->addColumn('name');
+    $table->addColumn('price');
+
+When invoking addColumn, you have a great control over the field properties and decoration. The format
+of addColumn() is very similar to :php:meth:`Form::addField`.
+
+Calculations
+============
+
+Apart from adding columns that reflect currrent values of your database, there are several ways
+how you can calculate additional values. You must know the capabilities of your database server
+if you want to execute some calculation there. (See http://agile-data.readthedocs.io/en/develop/expressions.html)
+
+It's always a good idea to calculate column inside datababase. Lets create "total" column  which will
+multiply "price" and "amount" values. Use ``addExpression`` to provide in-line definition for this
+field if it's not alrady defined in ``Order::init()``::
 
     $table = $layout->add('Table');
     $order = new Order($db);
@@ -75,70 +126,17 @@ specify the caption, you can use code like this::
 Column Objects
 --------------
 
-Table object relies on a separate class: \atk4\ui\TableColumn\Generic to present most of the values. The goals
-of the column object is to format anything around the actual values. The type = 'money' will result in
-a custom formatting of the value, but will also require column to be right-aligned. To simplify this,
-type = 'money' will use a different column class - :php:class:`TableColumn\Money`. There are several others,
-but first we need to look at the generic column and understand it's base capabilities:
-
-.. php:class:: TableColumn\Generic
-
-A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
-when constructing HTML:
-
-.. php:method:: getHeaderCellHTML(\atk4\data\Field $f)
-
-Must respond with HTML for the header cell (`<th>`) and an appropriate caption. If necessary
-will include "sorting" icons or any other controls that go in the header of the table.
-
-The output of this field will automatically encode any values (such as caption), shorten them
-if necessary and localize them.
-
-.. php:method:: getTotalsCellHTML(\atk4\data\Field $f, $value)
-
-Provided with the field and the value, format the cell for the footer "totals" column. Table
-can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
-
-.. php:method:: getDataCellHTML(\atk4\data\Field f)
-
-Provided with a field, this method will respond with HTML **template**. In order to keep
-performance of Web Application at the maximum, Table will execute getDataCellHTML for all the
-fields once. When iterating, a combined template will be used to display the values.
-
-The template must not incorporate field values (simply because related model will not be
-loaded just yet), but instead should resort to tags and syntax compatible with :php:class:`Template`.
-
-A sample template could be::
-
-    <td><b>{$name}</b></td>
-
-Note that the "name" here must correspond with the field name inside the Model. You may use
-multiple field names to format the column::
-
-    <td><b>{$year}-{$month}-{$day}</b></td>
-
-The above 3 methods define first argument as a field, however it's possible to define column
-without a physical field. This makes sense for situations when column contains multiple field
-values or if it doesn't contain any values at all.
-
-Sometimes you do want to inject HTML instead of using row values:
-
-.. php:method:: getHTMLTags($model, $field = null)
-
-Return array of HTML tags that will be injected into the row template. See
-:php:ref:`table_html` for further example.
+To read more about column objects, see :ref:`tablecolumn`
 
 Advanced Column Denifitions
 ---------------------------
-
-.. php:class:: Table
 
 Table defines a method `columnFactory`, which returns Column object which is to be used to
 display values of specific model Field.
 
 .. php:method:: columnFactory(\atk4\data\Field $f)
 
-If the value of the field can be displayed by :php:class:`TableColumn\Generic` then Table will
+If the value of the field can be displayed by :php:class:`TableColumn\\Generic` then :php:class:`Table` will
 respord with object of this class. Since the default column does not contain any customization,
 then to save memory Table will re-use the same objects for all generic fields.
 
@@ -153,12 +151,14 @@ of a different class (e.g. 'money'). Value will be initialized after first call 
 
     Contains array of defined columns.
 
-.. php:method:: addColumn([$name], TableColumn\Generic $column = null, \atk4\ui\Data\Field = null)
 
-Adds a new column to the table. This method has several usages. The most basic one is::
 
-    $table->setModel(new Order($db), ['name', 'price', 'total']);
-    $table->addColumn(new \atk4\ui\TableColumn\Delete());
+addColumn adds a new column to the table. This method was explained above but can also be
+used to add colums without field::
+
+    $action = $this->addColumn(null, ['Actions']);
+    $actions->addAction('Test', function() { return 'ok'; });
+
 
 The above code will add a new extra column that will only contain 'delete' icon. When clicked
 it will automatically delete the corresponding record.
@@ -322,7 +322,7 @@ Table Rendering Steps
 Once model is specified to the Table it will keep the object until render process will begin. Table
 columns can be defined anytime and will be stored in the :php:attr:`Table::columns` property. Columns
 without defined name will have a numeric index. It's also possible to define multiple columns per key
-in which case we call them "formatters". 
+in which case we call them "formatters".
 
 During the render process (see :php:meth:`View::renderView`) Table will perform the following actions:
 
@@ -358,7 +358,7 @@ There are a few things to note:
 1. calling addColumn multiple time will convert :php:attr:`Table::columns` value for that column
    into array containing all column objects
 
-2. formatting is always applied in same order as defined - in example above Money first, Link after. 
+2. formatting is always applied in same order as defined - in example above Money first, Link after.
 
 3. output of the 'Money' formatter is used into Link formatter as if it would be value of cell.
 
