@@ -7,3 +7,8 @@ npm install
 npm run dev
 ```
 
+Or to build once
+
+```
+npm run build
+```
