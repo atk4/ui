@@ -42,7 +42,7 @@ export default class notify extends atkPlugin {
      */
     getNotifier(options) {
       return `<div class="atk-notify"> 
-                <div class="ui ${options.type} ${options.size} inverted segment" style="overflow: auto; display: block !important">
+                <div class="ui ${options.color} ${options.size} inverted segment" style="overflow: auto; display: block !important">
                     <i class="close icon" style="float:right"></i>
                     <div class="content">
                         <i class="${options.icon} icon" style=""></i>
@@ -128,7 +128,7 @@ export default class notify extends atkPlugin {
 
 
 notify.DEFAULTS = {
-    type: 'green',
+    color: 'green',
     size: 'small',
     icon: null,
     content: null,
