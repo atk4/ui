@@ -15,7 +15,7 @@ class Notifier extends \atk4\data\Model
 
         $this->addField('icon', ['default' => 'warning sign', 'caption' => 'Use semantic-ui icon name']);
 
-        $this->addField('type', ['enum' => ['success', 'info', 'warning', 'error'], 'default' => 'success', 'caption' => 'Select type:']);
+        $this->addField('type', ['enum' => ['green', 'red', 'orange', 'yellow', 'teal', 'blue','violet', 'purple', 'pink', 'brown'], 'default' => 'green', 'caption' => 'Select type:']);
 
         $this->addField('transition', ['enum' => ['scale', 'fade', 'jiggle', 'flash'], 'default' => 'scale', 'caption' => 'Select transition:']);
 
