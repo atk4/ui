@@ -4,13 +4,11 @@ namespace atk4\ui;
 
 /**
  * Class jsNotify
- * @package atk4\ui
  */
-
 class jsNotify implements jsExpressionable
 {
 
-    public $options  = null;
+    public $options = null;
     public $attachTo = null;
 
     public function __construct($options = null, $attachTo = null)
@@ -40,6 +38,7 @@ class jsNotify implements jsExpressionable
 
     /**
      * Set notifier option by specifying option name.
+     *
      * @param $option
      * @param $value
      *
@@ -48,11 +47,13 @@ class jsNotify implements jsExpressionable
     public function setOption($option, $value)
     {
         $this->options[$option] = $value;
+
         return $this;
     }
 
     /**
      * Set notifier content.
+     *
      * @param $content
      *
      * @return $this
@@ -60,12 +61,14 @@ class jsNotify implements jsExpressionable
     public function setContent($content)
     {
         $this->setOption('content', $content);
+
         return $this;
     }
 
     /**
      * Set notifier color.
      *  - any colors define in semantic-ui can be used.
+     *
      * @param $color
      *
      * @return $this
@@ -73,11 +76,13 @@ class jsNotify implements jsExpressionable
     public function setColor($color)
     {
         $this->setOption('color', $color);
+
         return $this;
     }
 
     /**
      * Add an icon to the notifier.
+     *
      * @param $icon
      *
      * @return $this
@@ -85,12 +90,14 @@ class jsNotify implements jsExpressionable
     public function setIcon($icon)
     {
         $this->setOption('icon', $icon);
+
         return $this;
     }
 
     /**
      * Set open and close transition for the notifier.
      *   - any transition define in semantic ui can be used.
+     *
      * @param $openTransition
      * @param null $closeTransition
      *
@@ -109,6 +116,7 @@ class jsNotify implements jsExpressionable
 
     /**
      * Set open duration in millisecond.
+     *
      * @param $duration : interger
      *
      * @return $this
@@ -116,6 +124,7 @@ class jsNotify implements jsExpressionable
     public function setDuration($duration)
     {
         $this->setOption('duration', $duration);
+
         return $this;
     }
 
@@ -129,11 +138,13 @@ class jsNotify implements jsExpressionable
     public function setPosition($position)
     {
         $this->setOption('position', $position);
+
         return $this;
     }
 
     /**
      * Set the width percentage of the notifier within the body or attached to element.
+     *
      * @param $width: integer
      *
      * @return $this
@@ -141,11 +152,13 @@ class jsNotify implements jsExpressionable
     public function setWidth($width)
     {
         $this->setOption('width', $width);
+
         return $this;
     }
 
     /**
      * Set the opacity of the notifier.
+     *
      * @param $opacity : range from 0 to 1
      *
      * @return $this
@@ -153,6 +166,7 @@ class jsNotify implements jsExpressionable
     public function setOpacity($opacity)
     {
         $this->setOption('opacity', $opacity);
+
         return $this;
     }
 
@@ -165,6 +179,8 @@ class jsNotify implements jsExpressionable
      * @param $to
      *
      * @throws Exception
+     *
+     * @return $this
      */
     public function attachTo($to)
     {
@@ -173,11 +189,14 @@ class jsNotify implements jsExpressionable
         }
 
         $this->attachTo = $to;
+
+        return $this;
     }
 
 
     /**
      * Render the notifier.
+     *
      * @return string
      */
     public function jsRender()
