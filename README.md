@@ -6,13 +6,21 @@
 [![codecov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
 [![Version](https://badge.fury.io/gh/atk4%2Fui.svg)](https://packagist.org/packages/atk4/ui)
 
-**Agile UI is a high-level PHP framework for creating User Interfaces in Web Apps**
+**Agile UI is a high-level PHP framework for creating User Interfaces and Web Apps**
 
-Regardless of which full-stack framework you are using - with Agile UI you won't need to write or know HTML, CSS or JavaScript for the basic tasks, such as creating the CRUD or the Form. Agile UI abstracts interaction between the browser and your application into a next-gen Object-Oriented interface with powerful abstraction.
+You might need a CRUD for your "Admin Interface" or perhaps a basic Contact Form or you simply need Web UI to access [your database in SQL or NoSQL](https://github.com/atk4/data) - Agile UI provides universal and and extensible open-source platform for developing interactive PHP components.
 
-## Quick-and-dirty code
+Any component can then be added to your existing Web App in just few lines of code:
 
-Agile UI does not impose on you how you must write the code, it focuses on building UI. Here are few examples that show you what you can do.
+``` php
+$crud = new \atk4\ui\CRUD();
+$crud->setModel(new User($db));
+echo $crud->render();
+```
+
+## Building Admin in Agile UI
+
+Agile UI is ideal platform for "Admin Systems". You need one, but don't want to spend too much time on it. Here are few examples showing what you can accomplish:
 
 ### Admin+CRUD in 15 lines
 
@@ -162,11 +170,11 @@ Agile UI comes with many built-in components;
 | [Table](http://ui.agiletoolkit.org/demos/table.php) | Formatting, Columns, Status, Link, Template, Delete. | 1.0        |
 | [Grid](http://ui.agiletoolkit.org/demos/grid.php) | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1        |
 | [Message](http://ui.agiletoolkit.org/demos/message.php) | Such as "Info", "Error", "Warning" or "Tip" for easy use. | 1.1        |
-| Modal                                    | Modal dialog with dynamically loaded content. | 1.1        |
+| [Modal](https://ui.agiletoolkit.org/demos/modal.php) | Modal dialog with dynamically loaded content. | 1.1        |
 | [Reloading](http://ui.agiletoolkit.org/demos/reloading.php) | Dynamically re-render part of the UI.    | 1.1        |
-| Actions                                  | Extended buttons with various interactions | 1.1        |
+| [Actions](https://ui.agiletoolkit.org/demos/reloading.php) | Extended buttons with various interactions | 1.1        |
 | [CRUD](http://ui.agiletoolkit.org/demos/crud.php) | Create, List, Edit and Delete records (based on Advanced Grid) | 1.1        |
-| Tabs                                     | 4 Responsive: Admin, Centered, Site, Wide. | 1.2 *      |
+| [Tabs](https://ui.agiletoolkit.org/demos/tabs.php) | 4 Responsive: Admin, Centered, Site, Wide. | 1.2        |
 | Breadcrumb                               | Push links to pages for navigation. Wizard. | 1.3 *      |
 | Items, Cards                             | Responsive Items and Card implementaiton. | 1.4 *      |
 | Wizard                                   | Multi-step, wizard with temporary data storing. | 1.5 *      |
