@@ -48,7 +48,6 @@ $f_p2->addField('position', ['width'=>'four']);
 $f_p2->addField('attach', ['width'=>'four']);
 
 $form->onSubmit(function ($f) {
-
     $notifier = new \atk4\ui\jsNotify();
     $notifier->setColor($f->model['color'])
              ->setPosition($f->model['position'])
@@ -60,5 +59,6 @@ $form->onSubmit(function ($f) {
     if ($f->model['attach'] !== 'Body') {
         $notifier->attachTo($f);
     }
+
     return $notifier;
 });

@@ -3,11 +3,10 @@
 namespace atk4\ui;
 
 /**
- * Class jsNotify
+ * Class jsNotify.
  */
 class jsNotify implements jsExpressionable
 {
-
     public $options = null;
     public $attachTo = null;
 
@@ -20,7 +19,6 @@ class jsNotify implements jsExpressionable
         if ($attachTo) {
             $this->attachTo = $attachTo;
         }
-
     }
 
     /**
@@ -33,6 +31,7 @@ class jsNotify implements jsExpressionable
     public function setOptions($options)
     {
         $this->options = $options;
+
         return $this;
     }
 
@@ -193,7 +192,6 @@ class jsNotify implements jsExpressionable
         return $this;
     }
 
-
     /**
      * Render the notifier.
      *
@@ -211,4 +209,5 @@ class jsNotify implements jsExpressionable
 
         return $final->jsRender();
     }
+
 }
