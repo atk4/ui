@@ -126,19 +126,18 @@ class ApiService {
      * @param response
      */
     onFailure(response) {
-        if (!response.success) {
+        // if json is returned, it should contains the error within message property
+        if (response.hasOwnProperty('success') && !response.success) {
             apiService.showErrorModal(response.message);
         } else {
-            var w = window.open(null,'Error in JSON response','height=1000,width=1100,location=no,menubar=no,scrollbars=yes,status=no,titlebar=no,toolbar=no');
-            if(w){
-                w.document.write('<h5>Error in JSON response</h5>');
-                w.document.write(response);
-                w.document.write('<center><input type=button onclick="window.close()" value="Close"></center>');
-            }else{
-                alert("Error in ajaxec response"+response);
+            //check if we have html returned by server with <body> content.
+            var body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
+            if (body) {
+                apiService.showErrorModal(body);
+            } else {
+              alert("Error in ajaxec response"+response);
             }
         }
-
     }
 
     /**
