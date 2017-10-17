@@ -209,5 +209,4 @@ class jsNotify implements jsExpressionable
 
         return $final->jsRender();
     }
-
 }
