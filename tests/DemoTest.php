@@ -63,6 +63,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
             ['modal.php'],
             ['sticky.php'],
             ['recursive.php'],
+            ['notify.php'],
         ];
     }
 
