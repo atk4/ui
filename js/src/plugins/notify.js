@@ -12,9 +12,14 @@ export default class notify extends atkPlugin {
     main() {
         let cssStyle;
         this.timer = null;
+        let domElement = 'body';
 
-        cssStyle = this.getClasses();
-        cssStyle.base.width = this.settings.width;
+        if (!$.isEmptyObject(this.$el[0])) {
+          domElement = this.$el;
+        }
+
+        cssStyle = this.getClasses(domElement);
+        cssStyle.base.width = this.settings.width + '%';
         cssStyle.base.opacity = this.settings.opacity;
 
         this.notify = $(this.getNotifier(this.settings)).hide();
@@ -22,17 +27,16 @@ export default class notify extends atkPlugin {
 
         this.notify.on('click', '.icon.close', {self:this}, this.removeNotifier);
 
-        let domElement = 'body';
-        if (!$.isEmptyObject(this.$el[0])) {
-            domElement = this.$el;
-        }
+
         this.notify.appendTo(domElement);
 
         this.notify.transition(this.settings.openTransition);
 
-        this.timer = setTimeout(() => {
+        if (this.settings.duration) {
+          this.timer = setTimeout(() => {
             this.removeNotifier({data:{self:this}});
-        }, this.settings.duration);
+          }, this.settings.duration);
+        }
     }
 
     /**
@@ -67,12 +71,13 @@ export default class notify extends atkPlugin {
     /**
      * Return basis css class use for this notification.
      *
+     * @param el
      * @returns {{base: {position: string, z-index: number}}}
      */
-    getClasses() {
+    getClasses(el) {
         return {
             base: {
-                position: 'absolute',
+                position: (el === 'body') ? 'fixed' : 'absolute',
                 'z-index': 9999
             }
         }
@@ -132,7 +137,7 @@ notify.DEFAULTS = {
     size: 'small',
     icon: null,
     content: null,
-    width: '100%',
+    width: 100,
     closeTransition: 'scale',
     openTransition: 'scale',
     duration: 3000,

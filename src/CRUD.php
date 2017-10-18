@@ -23,6 +23,7 @@ class CRUD extends Grid
     public $fieldsCreate = null;
     public $formCreate = null;
     public $pageCreate = null;
+    public $notify = null;
 
     /**
      * Permitted operatios. You can add more of your own and you don't need to keep
@@ -30,7 +31,7 @@ class CRUD extends Grid
      * letters.
      */
     public $ops = ['c'=>true, 'r'=>true, 'u'=>true, 'd'=>true];
-
+    
     public function init()
     {
         parent::init();
@@ -53,6 +54,13 @@ class CRUD extends Grid
                 $this->itemCreate ?: ['Add new', 'icon'=>'plus'],
                 new jsModal('Add new', $this->pageCreate)
             );
+        }
+
+        if (!$this->notify) {
+            $this->notify = new jsNotify([
+                'content' => 'Data is saved!',
+                'color'   => 'green',
+            ]);
         }
     }
 
@@ -79,6 +87,7 @@ class CRUD extends Grid
                     return [
                         (new jQuery($this))->trigger('reload'),
                         new jsExpression('$(".atk-dialog-content").trigger("close")'),
+                        $this->notify,
                     ];
                 });
             });
@@ -98,6 +107,7 @@ class CRUD extends Grid
                     return [
                         (new jQuery($this))->trigger('reload'),
                         new jsExpression('$(".atk-dialog-content").trigger("close")'),
+                        $this->notify,
                     ];
                 });
             });

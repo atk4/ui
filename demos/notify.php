@@ -27,6 +27,7 @@ class Notifier extends \atk4\data\Model
     }
 }
 
+ /*** Notification type form ****/
 $head = $layout->add(['Header', 'Notification Types']);
 
 $form = $layout->add(new \atk4\ui\Form(['segment']));
@@ -51,7 +52,7 @@ $form->onSubmit(function ($f) {
     $notifier = new \atk4\ui\jsNotify();
     $notifier->setColor($f->model['color'])
              ->setPosition($f->model['position'])
-             ->setWidth($f->model['width'])
+             ->setWidth(rtrim($f->model['width'], '%'))
              ->setContent($f->model['text'])
              ->setTransition($f->model['transition'])
              ->setIcon($f->model['icon']);
@@ -62,3 +63,35 @@ $form->onSubmit(function ($f) {
 
     return $notifier;
 });
+
+/**** Notification in modal with form ***/
+
+$modal_form = $layout->add(['Modal', 'title'=>'Add a name']);
+
+$modal_form->set(function($page) use ($modal_form) {
+    $a = [];
+    $m = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
+    $m->addField('name', ['caption'=>'Add your name']);
+
+    $f = $page->add(new \atk4\ui\Form(['segment'=>true]));
+    $f->setModel($m);
+
+    $f->onSubmit(function ($f) use ($modal_form) {
+        if (empty($f->model['name'])) {
+            return $f->error('name', 'Please add a name!');
+        } else {
+            $js_actions[0] = $modal_form->hide();
+            $js_actions[1] = new \atk4\ui\jsNotify([
+                'position'=> 'topCenter',
+                'content' => 'Thank you '.$f->model['name'],
+                'openTransition' => 'jiggle',
+            ]);
+            return $js_actions;
+        }
+    });
+});
+
+//Bind display modal to page display button.
+$menu_bar = $layout->add(['View', 'ui'=>'buttons']);
+$b = $menu_bar->add('Button')->set('On Modal Close');
+$b->on('click', $modal_form->show());

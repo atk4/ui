@@ -115,6 +115,8 @@ class jsNotify implements jsExpressionable
 
     /**
      * Set open duration in millisecond.
+     *  - if you set duration to 0, then notification
+     *    will stay forever until close by user.
      *
      * @param $duration : interger
      *
