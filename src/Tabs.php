@@ -33,6 +33,7 @@ class Tabs extends View
 
         // add tabs menu item
         $item = $this->add([$item, 'class'=>['item']], 'Menu');
+        $item->setElement('a');
         $item->setAttr('data-tab', $item->name);
 
         // add tabs sub-view
