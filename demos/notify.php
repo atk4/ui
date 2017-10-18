@@ -83,10 +83,10 @@ $modal_form->set(function ($page) use ($modal_form) {
             $js_actions[0] = $modal_form->hide();
             $js_actions[1] = new \atk4\ui\jsNotify([
                 'position'       => 'topCenter',
-                'content'        => 'Thank you '.$f->model['name'],
+                'content'        => 'Thank you ' . $f->model['name'],
                 'openTransition' => 'jiggle',
             ]);
-            
+
             return $js_actions;
         }
     });
