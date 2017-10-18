@@ -68,7 +68,7 @@ $form->onSubmit(function ($f) {
 
 $modal_form = $layout->add(['Modal', 'title'=>'Add a name']);
 
-$modal_form->set(function($page) use ($modal_form) {
+$modal_form->set(function ($page) use ($modal_form) {
     $a = [];
     $m = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
     $m->addField('name', ['caption'=>'Add your name']);
@@ -82,8 +82,8 @@ $modal_form->set(function($page) use ($modal_form) {
         } else {
             $js_actions[0] = $modal_form->hide();
             $js_actions[1] = new \atk4\ui\jsNotify([
-                'position'=> 'topCenter',
-                'content' => 'Thank you '.$f->model['name'],
+                'position'       => 'topCenter',
+                'content'        => 'Thank you '.$f->model['name'],
                 'openTransition' => 'jiggle',
             ]);
             return $js_actions;

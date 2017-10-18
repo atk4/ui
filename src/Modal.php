@@ -94,6 +94,7 @@ class Modal extends View
 
     /**
      * Hide modal from page.
+     * 
      * @return mixed
      */
     public function hide()

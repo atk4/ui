@@ -31,7 +31,7 @@ class CRUD extends Grid
      * letters.
      */
     public $ops = ['c'=>true, 'r'=>true, 'u'=>true, 'd'=>true];
-    
+
     public function init()
     {
         parent::init();
