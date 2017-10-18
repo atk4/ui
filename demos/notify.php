@@ -86,6 +86,7 @@ $modal_form->set(function ($page) use ($modal_form) {
                 'content'        => 'Thank you '.$f->model['name'],
                 'openTransition' => 'jiggle',
             ]);
+            
             return $js_actions;
         }
     });
