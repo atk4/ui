@@ -2,8 +2,11 @@
 
 namespace atk4\ui\FormField;
 
+<<<<<<< HEAD
 use atk4\ui\jQuery;
 
+=======
+>>>>>>> atk4/feature/autocomplete-field
 class AutoComplete extends Input
 {
     public $defaultTemplate = 'formfield/autocomplete.html';
@@ -25,6 +28,7 @@ class AutoComplete extends Input
                 'mockResponse' => [
                     'success' => true,
                     'results' => [
+<<<<<<< HEAD
                         ['name' => 'd1', 'id' => 'd1v', 'description' => 'd1 apple'],
                         ['name' => 'd2', 'id' => 'd2v', 'description' => 'd2 google'],
                         ['name' => 'd3', 'id' => 'd3v', 'description' => 'd3 yahoo'],
@@ -32,6 +36,14 @@ class AutoComplete extends Input
                 ],
             ],
             'filterRemoteData'  => true,
+=======
+                        ['name' => 'd1', 'id' => 'd1v'],
+                        ['name' => 'd2', 'id' => 'd2v'],
+                        ['name' => 'd3', 'id' => 'd3v'],
+                    ],
+                ],
+            ],
+>>>>>>> atk4/feature/autocomplete-field
         ]);
         $this->js(true, $chain);
     }
