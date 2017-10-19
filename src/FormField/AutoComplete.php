@@ -2,8 +2,6 @@
 
 namespace atk4\ui\FormField;
 
-use atk4\ui\Form;
-
 class AutoComplete extends Input
 {
     public $defaultTemplate = 'formfield/autocomplete.html';
@@ -23,9 +21,9 @@ class AutoComplete extends Input
                         ['name' => 'd1', 'id' => 'd1v'],
                         ['name' => 'd2', 'id' => 'd2v'],
                         ['name' => 'd3', 'id' => 'd3v'],
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ]);
     }
 
