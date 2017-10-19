@@ -28,7 +28,7 @@ class AutoComplete extends Input
                         ['name' => 'd1', 'id' => 'd1v', 'description' => 'd1 apple'],
                         ['name' => 'd2', 'id' => 'd2v', 'description' => 'd2 google'],
                         ['name' => 'd3', 'id' => 'd3v', 'description' => 'd3 yahoo'],
-                    ]
+                    ],
                 ],
             ],
             'filterRemoteData'  => true,
