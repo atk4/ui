@@ -14,7 +14,7 @@ class App
     use \atk4\core\AppScopeTrait;
     use \atk4\core\DIContainerTrait;
 
-    // @var string|false Location where to load JS/CSS files
+    // @var array|false Location where to load JS/CSS files
     public $cdn = [
         'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.2.3/public',
         'jquery'          => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
@@ -29,8 +29,10 @@ class App
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
 
+    // @var Layout\Generic
     public $layout = null; // the top-most view object
 
+    // @var string
     public $template_dir = null;
 
     // @var string Name of skin
@@ -38,16 +40,22 @@ class App
 
     /**
      * Will replace an exception handler with our own, that will output errors nicely.
+     *
+     * @var bool
      */
     public $catch_exceptions = true;
 
     /**
      * Will always run application even if developer didn't explicitly executed run();.
+     *
+     * @var bool
      */
     public $always_run = true;
 
+    // @var bool
     public $run_called = false;
 
+    // @var bool
     public $_cwd_restore = true;
 
     /**
@@ -58,11 +66,15 @@ class App
      * warning is disabled by default until it's fixed correctly in PHP.
      *
      * See: http://stackoverflow.com/a/42840762/204819
+     *
+     * @var bool
      */
     public $fix_incompatible = true;
 
+    // @var bool
     public $is_rendering = false;
 
+    // @var Persistence\UI
     public $ui_persistence = null;
 
     /** @var View For internal use */
@@ -233,28 +245,31 @@ class App
         return $this;
     }
 
+    /**
+     * Initialize JS and CSS includes.
+     */
     public function initIncludes()
     {
         // jQuery
-        $url = ($this->cdn && isset($this->cdn['jquery'])) ? $this->cdn['jquery'] : '../public';
+        $url = isset($this->cdn['jquery']) ? $this->cdn['jquery'] : '../public';
         $this->requireJS($url.'/jquery.min.js');
 
         // Semantic UI
-        $url = ($this->cdn && isset($this->cdn['semantic-ui'])) ? $this->cdn['semantic-ui'] : '../public';
+        $url = isset($this->cdn['semantic-ui']) ? $this->cdn['semantic-ui'] : '../public';
         $this->requireJS($url.'/semantic.min.js');
         $this->requireCSS($url.'/semantic.css');
 
         // Serialize Object
-        $url = ($this->cdn && isset($this->cdn['serialize-object'])) ? $this->cdn['serialize-object'] : '../public';
+        $url = isset($this->cdn['serialize-object']) ? $this->cdn['serialize-object'] : '../public';
         $this->requireJS($url.'/jquery.serialize-object.min.js');
 
         // Calendar
-        $url = ($this->cdn && isset($this->cdn['calendar'])) ? $this->cdn['calendar'] : '../public';
+        $url = isset($this->cdn['calendar']) ? $this->cdn['calendar'] : '../public';
         $this->requireJS($url.'/calendar.min.js');
         $this->requireCSS($url.'/calendar.css');
 
         // Agile UI
-        $url = ($this->cdn && isset($this->cdn['atk'])) ? $this->cdn['atk'] : '../public';
+        $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
         $this->requireJS($url.'/atk4JS.min.js');
         $this->requireJS($url.'/agileui.js');
         $this->requireCSS($url.'/agileui.css');
