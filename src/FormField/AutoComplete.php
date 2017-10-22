@@ -9,10 +9,15 @@ class AutoComplete extends Input
     public $defaultTemplate = 'formfield/autocomplete.html';
     public $ui = 'input';
     public $searchClassName = 'search';
+    public $callback;
 
     public function init()
     {
         parent::init();
+
+        $this->callback = $this->add('CallbackLater');
+        $this->callback->set([$this, 'getData']);
+
         $this->template->set('input_id', $this->name.'-ac');
 
         $this->template->set('place_holder', $this->placeholder);
@@ -34,6 +39,29 @@ class AutoComplete extends Input
             'filterRemoteData'  => true,
         ]);
         $this->js(true, $chain);
+
+        $this->template->set('debug', $this->getCallbackURL());
+    }
+
+    /**
+     * Returns URL which would respond with first 50 matching records.
+     *
+     */
+    public function getCallbackURL()
+    {
+        return $this->callback->getURL();
+    }
+
+    public function getData()
+    {
+        if (!$this->model) {
+            $this->app->terminate(json_encode([['id'=>'-1', 'name'=>'Model must be set for AutoComplete']]));
+        }
+        $this->model->setLimit(50);
+        if(isset($_GET['q'])) {
+            $this->model->addCondition($this->model->title_field, 'like', '%'.$_GET['q'].'%');
+        }
+        $this->app->terminate(json_encode($this->model->export(['id', 'name'])));
     }
 
     /**
