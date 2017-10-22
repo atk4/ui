@@ -45,7 +45,6 @@ class AutoComplete extends Input
 
     /**
      * Returns URL which would respond with first 50 matching records.
-     *
      */
     public function getCallbackURL()
     {
@@ -58,7 +57,7 @@ class AutoComplete extends Input
             $this->app->terminate(json_encode([['id'=>'-1', 'name'=>'Model must be set for AutoComplete']]));
         }
         $this->model->setLimit(50);
-        if(isset($_GET['q'])) {
+        if (isset($_GET['q'])) {
             $this->model->addCondition($this->model->title_field, 'like', '%'.$_GET['q'].'%');
         }
         $this->app->terminate(json_encode($this->model->export(['id', 'name'])));
