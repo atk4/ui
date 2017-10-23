@@ -25,18 +25,11 @@ class AutoComplete extends Input
         $chain = new jQuery('#'.$this->name.'-ac');
 
         $chain->dropdown([
-            'fields'      => ['name' => 'name', 'value' => 'id', 'text' => 'description'],
+            'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
             'apiSettings' => [
-                'mockResponse' => [
-                    'success' => true,
-                    'results' => [
-                        ['name' => 'd1', 'id' => 'd1v', 'description' => 'd1 apple'],
-                        ['name' => 'd2', 'id' => 'd2v', 'description' => 'd2 google'],
-                        ['name' => 'd3', 'id' => 'd3v', 'description' => 'd3 yahoo'],
-                    ],
-                ],
+                'url' => $this->getCallbackURL().'&q={query}',
             ],
-            'filterRemoteData'  => true,
+            /*'filterRemoteData'  => true,*/
         ]);
         $this->js(true, $chain);
 
@@ -60,7 +53,10 @@ class AutoComplete extends Input
         if (isset($_GET['q'])) {
             $this->model->addCondition($this->model->title_field, 'like', '%'.$_GET['q'].'%');
         }
-        $this->app->terminate(json_encode($this->model->export(['id', 'name'])));
+        $this->app->terminate(json_encode([
+            'success' => true,
+            'results' => $this->model->export(['id', 'name']),
+        ]));
     }
 
     /**
