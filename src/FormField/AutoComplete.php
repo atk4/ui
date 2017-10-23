@@ -56,7 +56,6 @@ class AutoComplete extends Input
                     $modal_chain,
                     $ac_chain,
                     ];
-
             });
         });
         $this->action->js('click', new \atk4\ui\jsModal('hello', $vp));
