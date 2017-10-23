@@ -11,6 +11,8 @@ class AutoComplete extends Input
     public $searchClassName = 'search';
     public $callback;
 
+    public $plus = false; // set this to cerate right-aligned button for adding a new a new record
+
     public function init()
     {
         parent::init();
@@ -33,7 +35,27 @@ class AutoComplete extends Input
         ]);
         $this->js(true, $chain);
 
-        $this->template->set('debug', $this->getCallbackURL());
+        if ($this->plus) {
+            $this->action = $this->factory(['Button', 'Add new']);
+        }
+            //var_Dump($this->model->get());
+        $vp = $this->app->add('VirtualPage');
+        $vp->set(function($p) {
+            $f = $p->add('Form');
+            $f->setModel($this->model);
+
+            $f->onSubmit(function($f){
+                $id = $f->model->save()->id;
+
+                // TODO close this modal
+                // TODO refresh $this autocomplete
+                // TODO set value of $id
+                return new \atk4\ui\jsExpression('alert([])', ['ID is '.$id]);
+            });
+
+
+        });
+        $this->action->js('click', new \atk4\ui\jsModal('hello', $vp));
     }
 
     /**
