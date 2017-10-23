@@ -177,4 +177,9 @@ class Input extends Generic
 
         return $this->action;
     }
+
+    public function set($value)
+    {
+        $this->content = $value;
+    }
 }

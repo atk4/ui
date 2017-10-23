@@ -10,9 +10,9 @@ $layout->add(['Header', 'Database-driven form with an enjoyable layout']);
 $form = $layout->add(new \atk4\ui\Form(['segment']));
 $form->add(['Label', 'Input new country information here', 'top attached'], 'AboveFields');
 
-$form->setModel(new Country($db), false);
+///$form->setModel(new Country($db), false);
 //$form->addField('test');
-$form->addField('name', ['AutoComplete']);
+$form->addField('country', ['AutoComplete'])->setModel(new Country($db));
 
 $form->onSubmit(function ($f) {
     $notifier = new \atk4\ui\jsNotify();
