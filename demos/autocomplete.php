@@ -10,16 +10,27 @@ $layout->add(['Header', 'Database-driven form with an enjoyable layout']);
 $form = $layout->add(new \atk4\ui\Form(['segment']));
 $form->add(['Label', 'Input new country information here', 'top attached'], 'AboveFields');
 
-///$form->setModel(new Country($db), false);
-//$form->addField('test');
-$form->addField('country', ['AutoComplete'])->setModel(new Country($db));
+$m = new \atk4\data\Model($db, 'test');
+
+// Without AutoComplete
+//$m->hasOne('country_id', new Country());
+
+// With AutoComplete
+$m->hasOne('country_id', [new Country(), 'ui'=>['form'=> [
+    'AutoComplete',
+    'plus'=> true,
+]]]);
+
+$form->setModel($m);
+
+$acc = $form->getField('country_id');
+//$acc->actionRight = ['Button', 'Hello htere'];
 
 $form->onSubmit(function ($f) {
-    $notifier = new \atk4\ui\jsNotify();
-    $notifier->setContent($f->model['name']);
-
-    return $notifier;
+    return $f->model->ref('country_id')['name'];
 });
+
+return;
 
 $layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder'=>'Search users', 'left'=>true, 'icon'=>'users']));
 

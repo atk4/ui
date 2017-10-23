@@ -71,46 +71,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         // Initialize layout, so when you call addField / setModel next time, form will know
         // where to add your fields.
         $this->initLayout();
-
-        //$this->addField('empty', new FormField\Hidden());
-
-        // When form is submitted, will perform POST field loading.
-        /*
-        $this->addHook('submit', function () {
-
-            // Field validation
-            $result = $this->hook('validate');
-
-            $errors = [];
-
-            foreach ($result as $er) {
-                if (!is_array($er)) {
-                    continue;
-                }
-
-                foreach ($er as $field => $error) {
-                    if ($error === null || $error === false) {
-                        continue;
-                    }
-
-                    if (isset($errors[$field])) {
-                        continue;
-                    }
-                    $errors[$field] = is_string($error) ? $error : 'Incorrect value specified';
-                }
-            }
-
-            $return = [];
-
-            if ($errors) {
-                foreach ($errors as $field=>$error) {
-                    $return[] = $this->error($field, $error);
-                }
-
-                return $return;
-            }
-        });
-         */
     }
 
     /**
@@ -175,6 +135,15 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $this->addHook('submit', $callback);
 
         return $this;
+    }
+
+    /**
+     * Return Field decorator associated with
+     * the field.
+     */
+    public function getField($name)
+    {
+        return $this->fields[$name];
     }
 
     /**
