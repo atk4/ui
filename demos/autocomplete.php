@@ -16,9 +16,9 @@ $m = new \atk4\data\Model($db, 'test');
 //$m->hasOne('country_id', new Country());
 
 // With AutoComplete
-$m->hasOne('country_id', [new Country(), 'ui'=>['form'=>[
+$m->hasOne('country_id', [new Country(), 'ui'=>['form'=> [
     'AutoComplete',
-    'plus'=>true,
+    'plus'=> true,
 ]]]);
 
 $form->setModel($m);
@@ -29,21 +29,6 @@ $acc = $form->getField('country_id');
 $form->onSubmit(function ($f) {
     return $f->model->ref('country_id')['name'];
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 return;
 

@@ -139,7 +139,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     /**
      * Return Field decorator associated with
-     * the field
+     * the field.
      */
     public function getField($name)
     {
