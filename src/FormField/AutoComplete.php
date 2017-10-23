@@ -47,10 +47,16 @@ class AutoComplete extends Input
             $f->onSubmit(function ($f) {
                 $id = $f->model->save()->id;
 
-                // TODO close this modal
-                // TODO refresh $this autocomplete
-                // TODO set value of $id
-                return new \atk4\ui\jsExpression('alert([])', ['ID is '.$id]);
+                $modal_chain = new jQuery('.atk-modal');
+                $modal_chain->modal('hide');
+                $ac_chain = new jQuery('#'.$this->name.'-ac');
+                $ac_chain->dropdown('set value', $id)->dropdown('set text', $f->model['name']);
+
+                return [
+                    $modal_chain,
+                    $ac_chain,
+                    ];
+
             });
         });
         $this->action->js('click', new \atk4\ui\jsModal('hello', $vp));
