@@ -42,10 +42,11 @@ class Loader extends View
      *  });
      *
      * @param callable $fx
-     * @param array $args
+     * @param array    $args
+     *
+     * @throws Exception
      *
      * @return $this
-     * @throws Exception
      */
     public function set($fx, $args = [])
     {
@@ -81,7 +82,7 @@ class Loader extends View
      * Return a js action that will triggered the loader to start.
      *
      * @param bool|null $when
-     * @param array $args
+     * @param array     $args
      *
      * @return mixed
      */
