@@ -63,8 +63,8 @@ Output Modes
 VirtualPage can be used to provide you either with RAW HTML content or wrap it into boilerplate HTML.
 As you may know, :php:meth:`Callback::getURL()` accepts an argument, and VirtualPage gives this argument meaning:
 
- - getURL('cut') gives you URL which will return ONLY the HTML of virtual page, no Layout or boilerplate.
- - getURL('popup') gives you URL which will return a very minimalistic layout inside a valid HTML boilerplate, suitable for iframes or popup windows.
+- getURL('cut') gives you URL which will return ONLY the HTML of virtual page, no Layout or boilerplate.
+- getURL('popup') gives you URL which will return a very minimalistic layout inside a valid HTML boilerplate, suitable for iframes or popup windows.
 
 You can experement with::
 
@@ -197,10 +197,10 @@ Sometimes you want to control the event.
 
 Returns JS action which will trigger loading. The action will be carried out in 2 steps:
 
- - loading indicator will be displayed
- - JS will request content from $this->getURL() and provided by set()
- - Content will be placed inside Loader's DIV
- - loading indicator will is hidden
+- loading indicator will be displayed
+- JS will request content from $this->getURL() and provided by set()
+- Content will be placed inside Loader's DIV
+- loading indicator will is hidden
 
 .. php:attr:: $loadEvent = null
 
