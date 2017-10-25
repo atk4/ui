@@ -11,24 +11,24 @@ $session = new Session();
 
 /********** REGULAR ******************/
 
-$layout->add(['Header', 'Simple Modal']);
+$app->add(['Header', 'Simple Modal']);
 
-$modal_simple = $layout->add(['Modal', 'title' =>'Simple modal']);
+$modal_simple = $app->add(['Modal', 'title' =>'Simple modal']);
 $modal_simple->add('Message')->set('Modal message here.');
 
-$menu_bar = $layout->add(['View', 'ui'=>'buttons']);
+$menu_bar = $app->add(['View', 'ui'=>'buttons']);
 $b = $menu_bar->add('Button')->set('Show Modal');
 $b->on('click', $modal_simple->show());
 
 /********** DYNAMIC ******************/
 
-$layout->add(['Header', 'Modal loading dynamic content via callback']);
+$app->add(['Header', 'Modal loading dynamic content via callback']);
 
 //modal_vp1 will be render into page but hide until $modal_vp1->show() is activate.
-$modal_vp1 = $layout->add(['Modal', 'title' =>'Lorem Ipsum load dynamically']);
+$modal_vp1 = $app->add(['Modal', 'title' =>'Lorem Ipsum load dynamically']);
 
 //modal_vp2 will be render into page but hide until $modal_vp1->show() is activate.
-$modal_vp2 = $layout->add(['Modal', 'title' =>'Text message load dynamically'])->addClass('small');
+$modal_vp2 = $app->add(['Modal', 'title' =>'Text message load dynamically'])->addClass('small');
 
 //When $modal_vp1->show() is activate, it will dynamically add this content to it.
 $modal_vp1->set(function ($modal) use ($modal_vp2) {
@@ -41,7 +41,7 @@ $modal_vp2->set(function ($modal) {
     $modal->add('Message')->text->addParagraph('This text is loaded using a second modal.');
 });
 
-$bar = $layout->add(['View', 'ui'=>'buttons']);
+$bar = $app->add(['View', 'ui'=>'buttons']);
 $b = $bar->add('Button')->set('Open Lorem Ipsum');
 $b->on('click', $modal_vp1->show());
 
@@ -59,13 +59,13 @@ $menu_items = [
     'static' => ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce'],
 ];
 
-$layout->add(['Header', 'Modal Animation']);
+$app->add(['Header', 'Modal Animation']);
 
-$modal_transition = $layout->add(['Modal', 'title' =>'Animated modal']);
+$modal_transition = $app->add(['Modal', 'title' =>'Animated modal']);
 $modal_transition->add('Message')->set('A lot of animated transition available');
 $modal_transition->duration(1000);
 
-$menu_bar = $layout->add(['View', 'ui'=>'buttons']);
+$menu_bar = $app->add(['View', 'ui'=>'buttons']);
 $main = $menu_bar->add('Menu');
 $tm = $main->addMenu('Select Transition');
 
@@ -84,24 +84,24 @@ foreach ($menu_items as $key=>$items) {
 
 /************** DENY APPROVE *********/
 
-$layout->add(['Header', 'Modal Options']);
+$app->add(['Header', 'Modal Options']);
 
-$modal_da = $layout->add(['Modal', 'title'=>'Deny / Approve actions']);
+$modal_da = $app->add(['Modal', 'title'=>'Deny / Approve actions']);
 $modal_da->add('Message')->set('This modal is only closable via the green button');
 $modal_da->addDenyAction('No', new \atk4\ui\jsExpression('function(){window.alert("Can\'t do that."); return false;}'));
 $modal_da->addApproveAction('Yes', new \atk4\ui\jsExpression('function(){window.alert("You\'re good to go!");}'));
 $modal_da->notClosable();
 
-$menu_bar = $layout->add(['View', 'ui'=>'buttons']);
+$menu_bar = $app->add(['View', 'ui'=>'buttons']);
 $b = $menu_bar->add('Button')->set('Show Deny/Approve');
 $b->on('click', $modal_da->show());
 
 /************** MULTI STEP *********/
 
-$layout->add(['Header', 'Multiple page modal']);
+$app->add(['Header', 'Multiple page modal']);
 
 //Add modal to layout.
-$modal_step = $layout->add(['Modal', 'title'=>'Multi step actions']);
+$modal_step = $app->add(['Modal', 'title'=>'Multi step actions']);
 $modal_step->setOption('observeChanges', true);
 
 //Add buttons to modal for next and previous actions.
@@ -180,6 +180,6 @@ $prev_action->on('click', $modal_step->js()->atkReloadView(
 ));
 
 //Bind display modal to page display button.
-$menu_bar = $layout->add(['View', 'ui'=>'buttons']);
+$menu_bar = $app->add(['View', 'ui'=>'buttons']);
 $b = $menu_bar->add('Button')->set('Multi Step Modal');
 $b->on('click', $modal_step->show());

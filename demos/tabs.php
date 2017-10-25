@@ -4,7 +4,7 @@
  */
 require 'init.php';
 
-$t = $layout->add('Tabs');
+$t = $app->add('Tabs');
 
 // static tab
 $t->addTab('Hello')->add('HelloWorld');

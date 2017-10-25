@@ -7,11 +7,11 @@ require 'database.php';
 
 use atk4\ui\jsReload;
 
-$layout->add(['Header', 'Form automatically decided how many columns to use']);
+$app->add(['Header', 'Form automatically decided how many columns to use']);
 
-$buttons = $layout->add(['View', 'ui'=>'green basic buttons']);
+$buttons = $app->add(['View', 'ui'=>'green basic buttons']);
 
-$seg = $layout->add(['View', 'ui'=>'raised segment']);
+$seg = $app->add(['View', 'ui'=>'raised segment']);
 
 $buttons->add(['Button', 'Use Country Model', 'icon'=>'arrow down'])
     ->on('click', new jsReload($seg, ['m'=>'country']));
