@@ -5,13 +5,11 @@
 require 'init.php';
 
     $tabs = $app->add('Tabs');
-    $tabs->addTab('First tab is static')->add(['Button', rand(1,100)]);
+    $tabs->addTab('First tab is static')->add(['Button', rand(1, 100)]);
 
-    $tabs->addTab('Second tab is dynamic', function($vp) {
-        $vp->add(['Button', rand(1,100)]);
+    $tabs->addTab('Second tab is dynamic', function ($vp) {
+        $vp->add(['Button', rand(1, 100)]);
     });
-
-
 
 $t = $layout->add('Tabs');
 
