@@ -33,25 +33,24 @@ class Loader extends View
     /**
      * Set callback function for this loader.
      *
-     * The loader view is pass as an argument to the loader set function.
-     * This allow to easily update the loader view content.
+     * The loader view is pass as an argument to the loader callback function.
+     * This allow to easily update the loader view content within the callback.
      *  $l1 = $layout->add('Loader');
      *  $l1->set(function ($loader_view) {
      *    do_long_processing_action();
      *    $loader_view->set('new content');
      *  });
      *
-     * @param array|string $fx
-     * @param null         $args
-     *
-     * @throws Exception
+     * @param callable $fx
+     * @param array $args
      *
      * @return $this
+     * @throws Exception
      */
-    public function set($fx, $args = null)
+    public function set($fx, $args = [])
     {
         if (!is_object($fx) && !($fx instanceof Closure)) {
-            throw new Exception('Error: Need to pass a function to Loader::set()');
+            throw new Exception('Error: Need to pass a closure function to Loader::set()');
         }
 
         $this->loaderCallback = $this->loader->add('CallbackLater');
@@ -61,10 +60,7 @@ class Loader extends View
             $this->app->terminate($this->renderJSON());
         } else {
             if ($this->needOnPageLoad) {
-                $this->loader->js(true)->atkReloadView([
-                    'uri'         => $this->loaderCallback->getURL(),
-                    'uri_options' => $args,
-                ]);
+                $this->jsStartLoader(true, $args);
             }
         }
 
@@ -74,7 +70,7 @@ class Loader extends View
     /**
      * Return loader callback url when set.
      *
-     * @return null
+     * @return string|null
      */
     public function getLoaderUrl()
     {
@@ -84,13 +80,14 @@ class Loader extends View
     /**
      * Return a js action that will triggered the loader to start.
      *
+     * @param bool|null $when
      * @param array $args
      *
      * @return mixed
      */
-    public function jsStartLoader($args = [])
+    public function jsStartLoader($when = null, $args = [])
     {
-        return $this->loader->js()->atkReloadView([
+        return $this->loader->js($when)->atkReloadView([
             'uri'         => $this->loaderCallback->getURL(),
             'uri_options' => $args,
         ]);
