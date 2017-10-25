@@ -15,7 +15,7 @@ In most use-scenarios, however, you would create instance of an App class yourse
 
     $app = new \atk4\ui\App('My App');
     $app->initLayout('Centered');
-    $app->layout->add('LoremIpsum');
+    $app->add('LoremIpsum');
 
 As you add one component into another, they will automatically inherit reference to App class. App
 class is an ideal place to have all your environment configured and all the dependencies defined that
@@ -25,7 +25,7 @@ Most standard classes, however, will refrain from having too much asumptions abo
 to keep overal code portable.
 
 There may be some cases, when it's necessary to have multiple $app objects, for example if you are
-executing unit-tests, you may want to create new App instance. If your application encounters 
+executing unit-tests, you may want to create new App instance. If your application encounters
 exception, it will catch it and create a new App instance to display error message ensuring that the
 error is not repeated.
 
@@ -91,8 +91,8 @@ active. (See :ref:`system_pattern`)::
             // Make sure user is valid
             if(!$this->user->loaded()) {
                 $this->initLayout('Centered');
-                $this->layout->add(['Message', 'Login Required', 'error']);
-                $this->layout->add(['Button', 'Login', 'primary'])->link('index.php');
+                $this->add(['Message', 'Login Required', 'error']);
+                $this->add(['Button', 'Login', 'primary'])->link('index.php');
                 exit;
             }
 
@@ -109,7 +109,7 @@ After declaring your Application class like this, you can use it conveniently an
 
     include'vendor/autoload.php';
     $app = new Warehouse();
-    $app->layout->add('CRUD')
+    $app->add('CRUD')
         ->setModel($app->system->ref('Order'));
 
 
@@ -119,7 +119,7 @@ Quick Usage and Page pattern
 A lot of the documentation for Agile UI uses a principle of initializing App object first, then, manually
 add the UI elements using a procedural approach::
 
-    $app->layout->add('HelloWorld');
+    $app->add('HelloWorld');
 
 There is another approach in which your application will determine which Page class should be used for
 executing the request, subsequently creating setting it up and letting it populate UI (This behaviour is
@@ -140,7 +140,7 @@ App also does certain actions to simplify handling of the application. For insta
 render itself automatically at the end of the application, so you can safely add objects into the `App`
 without actually triggering a global execution process::
 
-    $app->layout->add('HelloWorld');
+    $app->add('HelloWorld');
 
     // Next line is optional
     $app->run();
@@ -163,7 +163,7 @@ terminated.
 Integration with other Frameworks
 ---------------------------------
 If you use Agile UI in conjunction with another framework, then you may be using a framework-specific App class,
-that implements tighter integration with the host application or full-stack framework. 
+that implements tighter integration with the host application or full-stack framework.
 
 
 .. php:method:: requireJS()
@@ -328,7 +328,7 @@ Layout can be initialized through the app like this::
 
 This will initialize two new views inside the app::
 
-    $app->html 
+    $app->html
     $app->layout
 
 The first view is a HTML boilerplate - containing HEAD / BODY tags but not the body
@@ -344,6 +344,9 @@ several views that you can populate::
 
     // Add item into menu
     $app->layout->menu->addItem('User Admin', 'admin');
+    // or simply which does the same thing
+    $app->menu->addItem('User Admin', 'admin');
+
 
 Integration with Legacy Apps
 ----------------------------

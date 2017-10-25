@@ -111,7 +111,7 @@ Finally, if you prefer a more consise code, you can also use the following forma
 The rest of documentaiton will use thi sconsise code to keep things readable, however if
 you value type-hinting of your IDE, you can keep using "new" keyword. I must also
 mention that if you specify first argument to add() as a string it will be passed
-to `$app->factory()`, which will be responsible of instantiating the actual object. 
+to `$app->factory()`, which will be responsible of instantiating the actual object.
 
 (TODO: link to App:Factory)
 
@@ -191,22 +191,22 @@ UI Role and Classes
 
 
 A constructor of a view often maps into a ``<div>`` tag that has a specific role
-in a CSS framework. According to the principles of Agile UI, we support a 
-wide varietty of roles. In some cases, a dedicated object will exist, for 
+in a CSS framework. According to the principles of Agile UI, we support a
+wide varietty of roles. In some cases, a dedicated object will exist, for
 example a Button. In other cases, you can use a View and specify a UI role
 explicitly::
 
-    $view = $layout->add('View', ['ui'=>'segment']);
+    $view = $app->add('View', ['ui'=>'segment']);
 
 If you happen to pass more key/values to the constructor or as second argument
 to add() they will be treated as default values for the properties of that
 specific view::
 
-    $view = $layout->add('View', ['ui'=>'segment', 'id'=>'test-id']);
+    $view = $app->add('View', ['ui'=>'segment', 'id'=>'test-id']);
 
 For a more IDE-friendly format, however, I recommend to use the following syntax::
 
-    $view = $layout->add('View', ['ui'=>'segment']);
+    $view = $app->add('View', ['ui'=>'segment']);
     $view->id = 'test-id';
 
 You must be aware of a difference here - passing array to constructor will
@@ -220,7 +220,7 @@ which syntax you are using.
 If you are don't specify key for the properties, they will be considered an
 extra class for a view::
 
-    $view = $layout->add('View', ['inverted', 'orange', 'ui'=>'segment']);
+    $view = $app->add('View', ['inverted', 'orange', 'ui'=>'segment']);
     $view->id = 'test-id';
 
 You can either specify multiple classes one-by-one or as a single string
@@ -261,11 +261,11 @@ by creating instance of \atk4\ui\Icon() inside the button.
 
 The same pattern can be used for other scenarios::
 
-    $button = $layout->add('Button', ['icon'=>'book']);
+    $button = $app->add('Button', ['icon'=>'book']);
 
 This code will have same effect as::
 
-    $button = $layout->add('Button');
+    $button = $app->add('Button');
     $button->icon = 'book';
 
 During the Render of a button, the following code will be executed::
@@ -275,7 +275,7 @@ During the Render of a button, the following code will be executed::
 If you wish to use a different icon-set, you can change Factory's route for 'Icon'
 to your own implementation OR you can pass icon as a view::
 
-    $button = $layout->add('Button', ['icon'=>new MyAwesomeIcon('book'));
+    $button = $app->add('Button', ['icon'=>new MyAwesomeIcon('book'));
 
 
 Rendering of a Tree
@@ -348,16 +348,16 @@ Here is a best practice for using custom template::
 As soon as the view becomes part of a render-tree, the Template object will also be allocated.
 At this point it's also possible to override default template::
 
-    $layout->add(new MyView(), ['template'=>$layout->template->cloneRegion('MyRegion')]);
+    $app->add(new MyView(), ['template'=>$template->cloneRegion('MyRegion')]);
 
 Or you can set $template into object inside your constructor, in which case it will be left as-is.
 
 On other hand, if your 'template' property is null, then the process of adding View inside RenderTree
-will automatically clone region of a parent. 
+will automatically clone region of a parent.
 
 ``Lister`` is a class that has no default template, and therefore you can add it like this::
 
-    $profile = $layout->add('View', ['template'=>'myview.html']);
+    $profile = $app->add('View', ['template'=>'myview.html']);
     $profile->setModel($user);
     $profile->add('Lister', 'Tags')->setModel($user->ref('Tags'));
 

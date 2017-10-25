@@ -240,7 +240,7 @@ example displays a registration form for a User::
     $form->addField('accept_terms', null, ['type'=>'boolean']);
 
     // submit event
-    $form->onSubmit(function($form){ 
+    $form->onSubmit(function($form){
         if ($form->model['password'] != $form->model['password_verify']) {
             return $form->error('password_verify', 'Passwords do not match');
         }
@@ -392,7 +392,7 @@ As far as form is concerned:
   to load values from POST data and store them in model.
 
 - Form submit handler will rely on ``Model::save()`` (http://agile-data.readthedocs.io/en/develop/persistence.html#Model::save)
-  not to throw validation exception. 
+  not to throw validation exception.
 
 - Form submit handler will also interpret use of :php:meth:`Form::error` by displaying errors that
   do not originate inside Model save logic.
@@ -427,7 +427,7 @@ Example use of Model's validate() method::
 
 We can now populate form fields based around the data fields defined in the model::
 
-    $app->layout->add('Form')
+    $app->add('Form')
         ->setModel(new Person($db));
 
 This should display a following form::

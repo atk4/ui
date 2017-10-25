@@ -29,10 +29,10 @@ You can define the length of the LoremIpsum text::
 
 You may specify amount of text to be generated with lorem::
 
-    $app->layout->add(['LoremIpsum', 1]); // just add a little one
+    $app->add(['LoremIpsum', 1]); // just add a little one
 
     // or
 
-    $app->layout->add(new LoremIpsum(5)); // adds a lot of text
+    $app->add(new LoremIpsum(5)); // adds a lot of text
 
 

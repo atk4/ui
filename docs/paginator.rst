@@ -21,7 +21,7 @@ Adding and Using
 Place paginator in a designated spot on your page. You also should specify what's the total number of pages
 paginator should have::
 
-    $paginator = $layout->add('Paginator');
+    $paginator = $app->add('Paginator');
     $paginator->total = 20;
 
 Paginator will not display links to all the 20 pages, instead it will show first, last, current page and few

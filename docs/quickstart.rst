@@ -35,13 +35,13 @@ Coding "Hello, World"
 
 Open a new file `index.php` and enter the following code::
 
-    <?php                                     // 1
+    <?php                                    // 1
     require 'vendor/autoload.php';           // 2
 
     $app = new \atk4\ui\App('My First App'); // 3
     $app->initLayout('Centered');            // 4
 
-    $app->layout->add('HelloWorld');        // 5
+    $app->add('HelloWorld');                 // 5
 
 .. rubric:: Clarifications
 
@@ -73,11 +73,11 @@ the actual database and instead will use "SESSION" for storing data.
 To be able to actually run this example, create a new file todo.php in the same directory as index.php and
 create the application::
 
-    <?php                                   
-    require 'vendor/autoload.php';         
+    <?php
+    require 'vendor/autoload.php';
 
-    $app = new \atk4\ui\App('ToDo List'); 
-    $app->initLayout('Centered');         
+    $app = new \atk4\ui\App('ToDo List');
+    $app->initLayout('Centered');
 
 All components of Agile Data are database-agnostic and will not concern themselve with the way how you store data.
 I will start the session and connect `persistence <http://agile-data.readthedocs.io/en/develop/persistence.html>`_
@@ -92,7 +92,7 @@ Data Model
 We need a class `Task` which decribes `data model <http://agile-data.readthedocs.io/en/develop/model.html>`_ for the
 single ToDo item::
 
-    
+
     class ToDoItem extends \atk4\data\Model {
         public $table = 'todo_item';        // 6
         function init() {
@@ -102,7 +102,7 @@ single ToDo item::
                                             // 7
             $this->addField('due', [
               'type'=>'date',               // 8
-              'caption'=>'Due Date', 
+              'caption'=>'Due Date',
               'default'=>new \DateTime('+1 week')   // 9
             ]);
         }
@@ -125,7 +125,7 @@ Form and CRUD Components
 
 Next we need to add Components that are capable of manipulating the data::
 
-    $col = $app->layout->add(['Columns', 'divided']);       // 10
+    $col = $app->add(['Columns', 'divided']);               // 10
     $col_reload = new \atk4\ui\jsReload($col);              // 11
 
     $form = $col->addColumn()->add('Form');                 // 12
@@ -137,8 +137,8 @@ Next we need to add Components that are capable of manipulating the data::
     });
 
     $col->addColumn()                                       // 17
-        ->add('Table')                                      
-        ->setModel(new ToDoItem($s));                      
+        ->add('Table')
+        ->setModel(new ToDoItem($s));
 
 .. rubric:: Clarifications
 
@@ -186,7 +186,7 @@ another. In our example replace right column (label 17) with the following code:
     );
 
     if (isset($_GET['delete'])) {                           // 23
-        foreach(explode(',', $_GET['delete']) as $id) { 
+        foreach(explode(',', $_GET['delete']) as $id) {
             $grid->model->delete($id);                      // 25
         }
     }
@@ -216,7 +216,7 @@ another. In our example replace right column (label 17) with the following code:
     so it will reflect removal of the items.
 
 
-Conclusion 
+Conclusion
 ==========
 
 We have just implemented a full-stack application with a stunning UI, advanced use of JavaScript, Form
@@ -227,7 +227,7 @@ All of that in about 50 lines of PHP code. More importantly, this code is portab
 and does not have any complex requirements. In fact, we could wrap it up into an individual Component
 that can be invoked with just one line of code::
 
-    $app->layout->add(new ToDoManager())->setModel(new ToDoItem());
+    $app->add(new ToDoManager())->setModel(new ToDoItem());
 
 Just like that you could be developing more components and re-using existing ones in your current
 or next web application.
@@ -239,7 +239,7 @@ If you have enjoyed this tutorial, we have prepared another one for you, that bu
 and multi-user application and takes advantage of database expressions, authentication and introduces
 more UI components:
 
- - https://github.com/atk4/money-lending-tutorial 
+ - https://github.com/atk4/money-lending-tutorial
  - (Demo: https://money-lending-tutorial.herokuapp.com)
 
 
