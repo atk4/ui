@@ -24,7 +24,7 @@ class Loader extends View
 
         //supply default loader view if none is supply.
         if (!$this->loader) {
-           $this->loader = new View(['ui' => 'segment padded']);
+            $this->loader = new View(['ui' => 'segment padded']);
         }
 
         $this->add($this->loader);
@@ -42,10 +42,11 @@ class Loader extends View
      *  });
      *
      * @param array|string $fx
-     * @param null $args
+     * @param null         $args
+     *
+     * @throws Exception
      *
      * @return $this
-     * @throws Exception
      */
     public function set($fx, $args = null)
     {
@@ -72,6 +73,7 @@ class Loader extends View
 
     /**
      * Return loader callback url when set.
+     *
      * @return null
      */
     public function getLoaderUrl()
