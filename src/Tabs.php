@@ -45,10 +45,7 @@ class Tabs extends View
             $vp = $sub->add('VirtualPage');
             $item->setPath($vp->getUrl());
 
-            $vp->set(function () use ($vp, $action) {
-                $action($vp);
-                $this->app->terminate($vp->render());
-            });
+            $vp->set($action);
         }
 
         return  $sub;

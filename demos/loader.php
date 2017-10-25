@@ -10,7 +10,7 @@ $l1->needOnPageLoad = true;
 $l1->set(function ($loader) {
     //set your time expensive function here.
     sleep(2);
-    $loader->add(new \atk4\ui\Message(['text' => 'Load using page load']));
+    $loader->add(new \atk4\ui\LoremIpsum(['size'=>1]));
 });
 
 $app->add(['Header', 'Attach loader in supplied view and start it using an action.']);
