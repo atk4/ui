@@ -2,4 +2,4 @@
 
 include 'init.php';
 
-$layout->add('Button')->set('hoho');
+$app->add('Button')->set('hoho');

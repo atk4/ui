@@ -3,8 +3,8 @@
 date_default_timezone_set('UTC');
 include 'init.php';
 
-$bb = $layout->add(['View', 'ui'=>'buttons']);
-$table = $layout->add(['Table', 'celled'=>true]);
+$bb = $app->add(['View', 'ui'=>'buttons']);
+$table = $app->add(['Table', 'celled'=>true]);
 
 $bb->add(['Button', 'Refresh Table', 'icon'=>'refresh'])
     ->on('click', new \atk4\ui\jsReload($table));

@@ -8,7 +8,7 @@
 Tabs
 ====
 
-Tabs implement a yet another way to organise your data. The implementation is based on: http://semantic-ui.com/elements/icon.html. 
+Tabs implement a yet another way to organise your data. The implementation is based on: http://semantic-ui.com/elements/icon.html.
 
 
 Demo: http://ui.agiletoolkit.org/demos/tabs.php
@@ -36,7 +36,7 @@ to pass a call-back which will be triggered when user clicks on the tab.
 
 Note that tab contents are refreshed including any values you put on the form::
 
-    $t = $layout->add('Tabs');
+    $t = $app->add('Tabs');
 
     // dynamic tab
     $t->addTab('Dynamic Lorem Ipsum', function ($tab) {

@@ -6,10 +6,10 @@ require 'init.php';
 require 'database.php';
 
 // create header
-$layout->add(['Header', 'Database-driven form with an enjoyable layout']);
+$app->add(['Header', 'Database-driven form with an enjoyable layout']);
 
 // create form
-$form = $layout->add(new \atk4\ui\Form(['segment']));
+$form = $app->add(new \atk4\ui\Form(['segment']));
 $form->add(['Label', 'Input new country information here', 'top attached'], 'AboveFields');
 
 $form->setModel(new Country($db), false);
@@ -88,6 +88,6 @@ $form->onSubmit(function ($f) {
         }
     }
 
-    $app->layout->add('Form')
+    $app->add('Form')
       ->addClass('segment')
         ->setModel(new Person($db));

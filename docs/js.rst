@@ -63,26 +63,26 @@ or::
         5,
         10
     ]));
-    
+
 
 All of the mentioned 4 examples will produce a valid "action" object that can be used further.
 
 .. important::
-    
+
     We never encourage writing JavaScript logic in PHP. The purpose of JS layer is for binding
     events and actions with your generic JavaScript routines.
-    
+
 Events
 ------
 
 Agile UI also offers a great way to associate your actions with certain client-side events. Those
-events can be triggered by the user or by other JavaScript code. There are several ways to bind 
+events can be triggered by the user or by other JavaScript code. There are several ways to bind
 `$action`.
 
 To execute actions instantly on page load, use `true` as first argument to `js()`::
 
     $view->js(
-        true, 
+        true,
         new jsExpression('alert([])', ['Hello world']
     );
 
@@ -172,7 +172,7 @@ JavaScript Chain Building
     Base class jsChain can be extended by other classes such as jQuery to provide transparent
     mappers for any JavaScript framework.
 
-Chain is a PHP object that represents one or several actions that are to be executed on the 
+Chain is a PHP object that represents one or several actions that are to be executed on the
 client side. The jsChain objects themselves are generic, so in my examples I'll be using jQuery which
 is a descendant of jsChain::
 
@@ -198,7 +198,7 @@ will output:
 
 .. important::
 
-    It's considered a vary bad practice if you perform jsRender and output the JavaScript code manually. Agile UI takes care of 
+    It's considered a vary bad practice if you perform jsRender and output the JavaScript code manually. Agile UI takes care of
     JavaScript binding and also decides which actions should be appearing for you as long as you create actions for your chain.
 
 .. php:method:: _json_encode
@@ -260,7 +260,7 @@ The following code will show 3 buttons and clicking any button will hide itself.
 
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event){ 
+    // $('#top-element-id').on('click', '.button', function($event){
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $(this).hide();
@@ -279,7 +279,7 @@ The best example would be a :php:class:`Lister` with interractive elements::
     $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event){ 
+    // $('#top-element-id').on('click', '.button', function($event){
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $('#b3-element-id').hide();
@@ -296,7 +296,7 @@ You can use both actions together. The next example will allow only one button t
     $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event){ 
+    // $('#top-element-id').on('click', '.button', function($event){
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $('#b3-element-id').hide();
@@ -375,7 +375,7 @@ So the following three lines are identical::
     $sum = new jsExpression('[0]+[1]', [0=>$h1, 1=>$h2]);
     $sum = new jsExpression('[a]+[b]', ['a'=>$h1, 'b'=>$h2]);
 
-.. important:: 
+.. important::
 
     We have specifically selected a very simple tag format as a reminder to you not to write
     any code as part of jsExpression. You must not use jsExpression() for anything complex.
@@ -393,7 +393,7 @@ Open a new file `test.js` and type:
 .. code-block:: js
 
     function mySum(arr) {
-        return arr.reduce(function(a, b) { 
+        return arr.reduce(function(a, b) {
             return a+b;
         }, 0);
     }
@@ -437,8 +437,8 @@ other view::
 
     $m_book = new Book($db);
 
-    $f = $app->layout->add('Form');
-    $t = $app->layout->add('Table');
+    $f = $app->add('Form');
+    $t = $app->add('Table');
 
     $f->setModel($m_book);
 
