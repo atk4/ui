@@ -28,7 +28,7 @@ Adding a static conten is pretty simple::
 
 You can add multiple elements into a single tab, like any other view.
 
-.. php::method: addTab($name, $action)
+.. php:method:: addTab($name, $action)
 
     Use addTab() method to add more tabs in Tabs view. First parameter is a title of the tab.
 

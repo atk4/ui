@@ -128,7 +128,7 @@ derived classes.
 CallbackLater
 -------------
 
-.. php::class: CallbackLater
+.. php:class:: CallbackLater
 
 This class is very similar to Callback, but it will not execute immediatelly. Instead it will be executed
 either at the end at beforeRender or beforeOutput hook from inside App, whichever comes first.
@@ -179,7 +179,7 @@ jsReload existance is only possible thanks to CallbackLater implementation.
 jsCallback
 ----------
 
-.. php::class: jsCallback
+.. php:class:: jsCallback
 
 So far, the return value of callback handler was pretty much insignificant. But wouldn't it be great if this
 value was meaningful in some way?
@@ -234,7 +234,7 @@ User Confirmation
 The implementation perfectly hides existence of callback route, javascript action and jsCallback. The jsCallback
 is based on 'Callback' therefore code after :php:meth:`View::on()` will not be executed during triggering.
 
-.. php::attr: confirm
+.. php:attr:: confirm
 
 If you set `confirm` property action will ask for user's confirmation before sending a callback::
 
@@ -262,7 +262,7 @@ property::
 JavaScript arguments
 ^^^^^^^^^^^^^^^^^^^^
 
-.. php::method: set($callback, $arguments = [])
+.. php:method:: set($callback, $arguments = [])
 
 It is possible to modify expression of jsCallback to pass additional arguments to it's callback. The next example
 will send browser screen width back to the callback::

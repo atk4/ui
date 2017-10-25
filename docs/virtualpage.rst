@@ -6,7 +6,7 @@ Before learning about VirtualPage, Loader and other ways of dynamic content load
 understand :ref:`callback`.
 
 
-.. php::class: VirtualPage
+.. php:class:: VirtualPage
 
 Unlike any of the Callback classes, VirtualPage is a legit :php:class:`View`, but it's behaviour is a little
 "different". In normal circumstances, rendering VirtualPage will result in empty string. Adding VirtualPage
@@ -38,7 +38,7 @@ for developers.
 (For situations when Component does not natively support VirtualPage, you can still use :php:class:`Loader`, documented
 below).
 
-.. php::attr: $cb
+.. php:attr:: $cb
 
 VirtuaPage relies on :php:class:`CallbackLater` object, which is stored in a property $cb. If the Calllback is triggered
 through a GET argument, then VirtualPage will change it's rendering technique. Lets examine it in more detail::
@@ -58,7 +58,7 @@ see only the 'LoremIpsum' text.
 Output Modes
 ^^^^^^^^^^^^
 
-.. php::method: getURL($mode = 'callback')
+.. php:method:: getURL($mode = 'callback')
 
 VirtualPage can be used to provide you either with RAW HTML content or wrap it into boilerplate HTML.
 As you may know, :php:meth:`Callback::getURL()` accepts an argument, and VirtualPage gives this argument meaning:
@@ -74,7 +74,7 @@ You can experement with::
 Setting Callback
 ^^^^^^^^^^^^^^^^
 
-.. php::method: set($callback)
+.. php:method:: set($callback)
 
 Although VirtualPage can work without defining a callback, using one is more reliable and is always recommended::
 
@@ -126,11 +126,11 @@ uses the following implementation of addTab()::
 You do not need to fully understand the code to notice that Dynamic Content support requires just
 few lines of extra code.
 
-.. php::method: getURL($html_wrapping)
+.. php:method:: getURL($html_wrapping)
 
     You can use this shortcut method instead of $vp->cb->getURL().
 
-.. php::attr: $ui
+.. php:attr:: $ui
 
 When using 'popup' mode, the output appears inside a `<div class="ui container">`. If you want to change this
 class, you can set $ui property to something else. Try::
@@ -151,9 +151,9 @@ class, you can set $ui property to something else. Try::
 Loader
 ------
 
-.. php::class: Loader
+.. php:class:: Loader
 
-.. php::method: set()
+.. php:method:: set()
 
 Loader is designed to delay some slow-loading content by loading it dynamically, after main
 page is rendered.
@@ -193,7 +193,7 @@ Triggering Loader
 By default, Loader will display a spinner and will start loading it's contents as soon as DOM Ready() event fires.
 Sometimes you want to control the event. 
 
-.. php::method: jsLoad()
+.. php:method:: jsLoad()
 
 Returns JS action which will trigger loading. The action will be carried out in 2 steps:
 
@@ -202,15 +202,15 @@ Returns JS action which will trigger loading. The action will be carried out in 
  - Content will be placed inside Loader's DIV
  - loading indicator will is hidden
 
-.. php::attr: $loadEvent = null
+.. php:attr:: $loadEvent = null
 
 If you have NOT invoked jsLoad in your code, Loader will automatically assign it do DOM Ready(). If the automatic
 behaviour does not work, you should set value for $loadEvent:
 
- - null = load on DOM ready unless you have invoked jsLoad() in the code.
- - true = load on DOM ready
- - false = never load
- - "string" - bind to custom JS event
+- null = load on DOM ready unless you have invoked jsLoad() in the code.
+- true = load on DOM ready
+- false = never load
+- "string" - bind to custom JS event
 
 To indicate how custom binding works::
 
@@ -258,7 +258,7 @@ Next example will display DataTable, but will allow you to repalce data with a f
 Progress Bar
 ^^^^^^^^^^^^
 
-.. php::attr: $progressBar = null
+.. php:attr:: $progressBar = null
 
 Loader can have a progress bar. Imagine that your Loader has to run slow process 4 times::
 
