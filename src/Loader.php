@@ -1,5 +1,4 @@
 <?php
-
 namespace atk4\ui;
 
 /**
@@ -13,14 +12,16 @@ class Loader extends View
 {
     /**
      * Set to a custom object or inject properties into default loader.
+     *
+     * @var View
      */
     public $loader;
 
-    public $loadEvent = true;
-
+    /** @var string */
     public $ui = 'ui segment';
 
-    public $args = null;
+    /** @var Callback */
+    public $loaderCallback;
 
     public function init()
     {
@@ -40,6 +41,9 @@ class Loader extends View
      *    $loader_view->set('new content');
      *  });
      *
+     * Or
+     *  $l1->set([$my_object, 'run_long_process']);
+     *
      * NOTE: default values are like that due ot PHP 7.0 warning:
      * Declaration of atk4\ui\Loader::set($fx, $args = Array) should be compatible with atk4\ui\View::set($arg1 = Array, $arg2 = NULL)
      *
@@ -52,14 +56,14 @@ class Loader extends View
      */
     public function set($fx = [], $args = null)
     {
-        if (!is_object($fx) && !($fx instanceof Closure)) {
-            throw new Exception('Error: Need to pass a closure function to Loader::set()');
+        if (!is_callable($fx)) {
+            throw new Exception('Error: Need to pass a callable function to Loader::set()');
         }
 
         $this->loaderCallback = $this->add('Callback');
 
-        if ($this->loaderCallback->set(function () use ($fx) {
-            call_user_func($fx, $this);
+        if ($this->loaderCallback->set(function () use ($fx, $args) {
+            call_user_func_array($fx, array_merge($this, $args===null ? [] : $args));
             $this->app->terminate($this->renderJSON());
         }));
 
@@ -88,21 +92,20 @@ class Loader extends View
      */
     public function getLoaderUrl()
     {
-        return ($this->loaderCallback) ? $this->loaderCallback->getUrl() : null;
+        return ($this->loaderCallback ? $this->loaderCallback->getUrl() : null);
     }
 
     /**
-     * Return a js action that will triggered the loader to start.
+     * Return a js action that will trigger the loader to start.
      *
-     * @param bool|null $when
-     * @param array     $args
+     * @param array $args
      *
      * @return mixed
      */
     public function jsLoad($args = [])
     {
         return $this->js()->atkReloadView([
-            'uri'         => $this->loaderCallback->getURL(),
+            'uri'         => $this->getLoaderUrl(),
             'uri_options' => $args,
         ]);
     }
