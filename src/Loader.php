@@ -12,11 +12,13 @@ namespace atk4\ui;
 class Loader extends View
 {
     /**
-     * Set to a custom object or inject properties into default loader.
+     * Set to a custom object or inject properties into default loader
      */
     public $loader;
 
     public $loadEvent = true;
+
+
 
     public $ui = 'ui segment';
 
@@ -40,6 +42,9 @@ class Loader extends View
      *    $loader_view->set('new content');
      *  });
      *
+     * NOTE: default values are like that due ot PHP 7.0 warning:
+     * Declaration of atk4\ui\Loader::set($fx, $args = Array) should be compatible with atk4\ui\View::set($arg1 = Array, $arg2 = NULL)
+     *
      * @param callable $fx
      * @param array    $args
      *
@@ -47,7 +52,7 @@ class Loader extends View
      *
      * @return $this
      */
-    public function set($fx, $args = [])
+    public function set($fx = [], $args = null)
     {
         if (!is_object($fx) && !($fx instanceof Closure)) {
             throw new Exception('Error: Need to pass a closure function to Loader::set()');
@@ -55,18 +60,19 @@ class Loader extends View
 
         $this->loaderCallback = $this->add('Callback');
 
-        if ($this->loaderCallback->set(function () use ($fx) {
+        if ($this->loaderCallback->set(function() use ($fx) {
             call_user_func($fx, $this);
             $this->app->terminate($this->renderJSON());
         }));
+
 
         return $this;
     }
 
     /**
-     * Automatically load if jsLoad() wasn't called already.
+     * Automatically load if jsLoad() wasn't called already. 
      */
-    public function renderView()
+    function renderView()
     {
         if (!$this->loaderCallback->triggered() && !$this->_jsLoad_invoked && $this->loadEvent) {
             $this->js($this->loadEvent, $this->jsLoad());
@@ -77,6 +83,7 @@ class Loader extends View
     }
 
     protected $_jsLoad_invoked = false;
+
 
     /**
      * Return loader callback url when set.
