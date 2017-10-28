@@ -21,6 +21,7 @@ $l1 = $app->add('Loader');
 $l1->set(function ($p) {
     //set your time expensive function here.
     sleep(2);
+    $p->add(['Button', 'One']);
     $p->add(new \atk4\ui\LoremIpsum(['size'=>1]));
     $p->add(new \atk4\ui\tests\ViewTester());
 });
@@ -29,12 +30,16 @@ $l1 = $app->add('Loader');
 
 $l1->set(function ($p) {
     //set your time expensive function here.
+    $p->add(['Button', 'Two']);
     $p->add(new \atk4\ui\LoremIpsum(['size'=>1]));
     $p->add(new \atk4\ui\tests\ViewTester());
+    sleep(2);
     $l2 = $p->add('Loader');
 
     $l2->set(function ($p) {
         //set your time expensive function here.
+        sleep(3);
+        $p->add(['Button', 'Three']);
         $p->add(new \atk4\ui\LoremIpsum(['size'=>1]));
         $p->add(new \atk4\ui\tests\ViewTester());
     });
