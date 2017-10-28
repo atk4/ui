@@ -23,9 +23,9 @@ class Loader extends View
      * you would want to wait. You can set a custom JavaScript event name then trigger() it.
      *
      * Default value is `true` which means loading will take place as soon as possible. Setting this
-     * to `false` will disable event entirely. 
+     * to `false` will disable event entirely.
      *
-     * @var boolean|string
+     * @var bool|string
      */
     public $loadEvent = true;
 
@@ -39,7 +39,7 @@ class Loader extends View
         parent::init();
 
         if (!$this->shim) {
-            $this->shim = ['View', 'class'=>['padded segment'], 'style'=>['min-height'=>'7em']];
+            $this->shim = ['View', 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
         }
         $this->cb = $this->add('Callback');
     }
@@ -109,7 +109,7 @@ class Loader extends View
     {
         return $this->js()->atkReloadView([
             'uri'         => $this->cb->getURL(),
-            'uri_options' => $args
+            'uri_options' => $args,
         ]);
     }
 }
