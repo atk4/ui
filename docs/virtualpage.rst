@@ -173,11 +173,16 @@ while a spinner is shown to a user::
 
     });
 
-A good use-case example would be a dashboard graph. Unlike VirtualPage which is not visible to a regular render,
-Loader needs to occupy some space, so adding other objects inside content can be a good filler until content is loaded::
 
-    $loader = $app->add('Loader');
-    $loader->add(['Message', 'Please wait until we load LoremIpsum...', 'red']);
+A good use-case example would be a dashboard graph. Unlike VirtualPage which is not visible to a regular render,
+Loader needs to occupy some space. 
+
+.. php:attr:: $shim
+
+By default it will display a white segment with 7em height, but you can specify any other view thorugh $shim
+property::
+
+    $loader = $app->add(['Loader', 'shim'=>['Message', 'Please wait until we load LoremIpsum...', 'red']);
     $loader->set(function($p) {
 
         // Simulate slow-loading component
@@ -193,13 +198,13 @@ Triggering Loader
 By default, Loader will display a spinner and will start loading it's contents as soon as DOM Ready() event fires.
 Sometimes you want to control the event. 
 
-.. php:method:: jsLoad()
+.. php:method:: jsLoad($args = [])
 
 Returns JS action which will trigger loading. The action will be carried out in 2 steps:
 
 - loading indicator will be displayed
 - JS will request content from $this->getURL() and provided by set()
-- Content will be placed inside Loader's DIV
+- Content will be placed inside Loader's DIV replacing shiv (or previously loaded content)
 - loading indicator will is hidden
 
 .. php:attr:: $loadEvent = null

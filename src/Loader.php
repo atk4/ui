@@ -9,14 +9,14 @@ namespace atk4\ui;
 class Loader extends View
 {
     /**
-     * Loader is an object that is displayed inside loader while the actual content is fetched
+     * Shim is a filler object that is displayed inside loader while the actual content is fetched
      * from the server. You may supply an object here or a seed. This view will be replaced
      * by an actual content when loading stops. Additionally there will be loading indicator
      * on top of this content.
      *
      * @var View
      */
-    public $loader;
+    public $shim;
 
     /**
      * Specify which event will cause Loader to begen fetching it's actual data. In some cases
@@ -38,7 +38,9 @@ class Loader extends View
     {
         parent::init();
 
-        $this->loader = $this->factory(['View', 'padded segment', 'style'=>['min-height'=>'7em']], $this->loader);
+        if (!$this->shim) {
+            $this->shim = ['View', 'class'=>['padded segment'], 'style'=>['min-height'=>'7em']];
+        }
         $this->cb = $this->add('Callback');
     }
 
@@ -86,9 +88,11 @@ class Loader extends View
      */
     public function renderView()
     {
-        if (!$this->cb->triggered() && $this->loadEvent) {
-            $this->js($this->loadEvent, $this->jsLoad());
-            $this->add($this->loader);
+        if (!$this->cb->triggered()) {
+            if ($this->loadEvent) {
+                $this->js($this->loadEvent, $this->jsLoad());
+            }
+            $this->add($this->shim);
         }
 
         return parent::renderView();
@@ -105,7 +109,7 @@ class Loader extends View
     {
         return $this->js()->atkReloadView([
             'uri'         => $this->cb->getURL(),
-            'uri_options' => $args,
+            'uri_options' => $args
         ]);
     }
 }
