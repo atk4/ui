@@ -37,7 +37,7 @@ class Loader extends View
     {
         parent::init();
 
-        $this->loader = $this->factory('LoaderShim', $this->loader);
+        $this->loader = $this->factory(['View', 'padded segment', 'style'=>['min-height'=>'7em']], $this->loader);
     }
 
     /**
@@ -72,8 +72,8 @@ class Loader extends View
 
         $this->loaderCallback = $this->add('Callback');
 
-        if ($this->loaderCallback->set(function () use ($fx, $args) {
-            call_user_func_array($fx, array_merge($this, $args === null ? [] : $args));
+        if ($this->loaderCallback->set(function () use ($fx) {
+            call_user_func($fx, $this);
             $this->app->terminate($this->renderJSON());
         }));
 
