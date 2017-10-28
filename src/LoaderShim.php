@@ -8,7 +8,8 @@ class LoaderShim extends View
 
     public $minHeigh = '7em';
 
-    function init() {
+    public function init()
+    {
         parent::init();
 
         if ($this->minHeigh) {
