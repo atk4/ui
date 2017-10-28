@@ -2,7 +2,7 @@
 
 require 'init.php';
 
-$app->add(['Button', 'Loader Examples - Page 2', 'small right floated basic blue', 'iconRight'=>'right arrow'])
+$app->add(['Button', 'Loader Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['loader2']);
 
 // ViewTester will perform callback to self.
@@ -55,4 +55,3 @@ $app->add([
     sleep(1);
     $p->add(new \atk4\ui\LoremIpsum(['size' => 2]));
 });
-
