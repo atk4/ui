@@ -3,41 +3,43 @@
 namespace atk4\ui;
 
 /**
- * Class implements Loader.
- *
- * You may supply your own view as the loader view.
- *  - if not, view is supply by default.
- *  ex: $loader = new Loader(['loader' => new View()]);
+ * Class implements Loader, which is a View that will dynamically render it's content.
+ * To provide content for a loader, use set() callback.
  */
 class Loader extends View
 {
     /**
-     * Set to a custom object or inject properties into default loader.
+     * Loader is an object that is displayed inside loader while the actual content is fetched
+     * from the server. You may supply an object here or a seed. This view will be replaced
+     * by an actual content when loading stops. Additionally there will be loading indicator
+     * on top of this content.
      *
      * @var View
      */
     public $loader;
 
     /**
-     * When should we trigger loader.
-     *  true - on page load
-     *  string - on particular js event, for example, 'click'.
+     * Specify which event will cause Loader to begen fetching it's actual data. In some cases
+     * you would want to wait. You can set a custom JavaScript event name then trigger() it.
      *
-     * @var true|string
+     * Default value is `true` which means loading will take place as soon as possible. Setting this
+     * to `false` will disable event entirely. 
+     *
+     * @var boolean|string
      */
     public $loadEvent = true;
 
-    /** @var string */
     public $ui = 'ui segment';
 
-    /** @var Callback */
-    public $loaderCallback;
+    /** @var Callback for triggering */
+    protected $cb;
 
     public function init()
     {
         parent::init();
 
         $this->loader = $this->factory(['View', 'padded segment', 'style'=>['min-height'=>'7em']], $this->loader);
+        $this->cb = $this->add('Callback');
     }
 
     /**
@@ -70,39 +72,26 @@ class Loader extends View
             throw new Exception('Error: Need to pass a callable function to Loader::set()');
         }
 
-        $this->loaderCallback = $this->add('Callback');
-
-        if ($this->loaderCallback->set(function () use ($fx) {
+        $this->cb->set(function () use ($fx) {
             call_user_func($fx, $this);
             $this->app->terminate($this->renderJSON());
-        }));
+        });
 
         return $this;
     }
 
     /**
-     * Automatically load if jsLoad() wasn't called already.
+     * Automatically call the jsLoad on a supplied event unless it was already triggered
+     * or if user have invoked jsLoad manually.
      */
     public function renderView()
     {
-        if (!$this->loaderCallback->triggered() && !$this->_jsLoad_invoked && $this->loadEvent) {
+        if (!$this->cb->triggered() && $this->loadEvent) {
             $this->js($this->loadEvent, $this->jsLoad());
             $this->add($this->loader);
         }
 
         return parent::renderView();
-    }
-
-    protected $_jsLoad_invoked = false;
-
-    /**
-     * Return loader callback url when set.
-     *
-     * @return string|null
-     */
-    public function getLoaderUrl()
-    {
-        return $this->loaderCallback ? $this->loaderCallback->getUrl() : null;
     }
 
     /**
@@ -115,7 +104,7 @@ class Loader extends View
     public function jsLoad($args = [])
     {
         return $this->js()->atkReloadView([
-            'uri'         => $this->getLoaderUrl(),
+            'uri'         => $this->cb->getURL(),
             'uri_options' => $args,
         ]);
     }
