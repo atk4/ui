@@ -13,10 +13,10 @@ $session = new Session();
 
 $app->add(['Header', 'Simple Modal']);
 
-$modal_simple = $app->add(['Modal', 'title' =>'Simple modal']);
+$modal_simple = $app->add(['Modal', 'title' => 'Simple modal']);
 $modal_simple->add('Message')->set('Modal message here.');
 
-$menu_bar = $app->add(['View', 'ui'=>'buttons']);
+$menu_bar = $app->add(['View', 'ui' => 'buttons']);
 $b = $menu_bar->add('Button')->set('Show Modal');
 $b->on('click', $modal_simple->show());
 
@@ -25,10 +25,10 @@ $b->on('click', $modal_simple->show());
 $app->add(['Header', 'Modal loading dynamic content via callback']);
 
 //modal_vp1 will be render into page but hide until $modal_vp1->show() is activate.
-$modal_vp1 = $app->add(['Modal', 'title' =>'Lorem Ipsum load dynamically']);
+$modal_vp1 = $app->add(['Modal', 'title' => 'Lorem Ipsum load dynamically']);
 
 //modal_vp2 will be render into page but hide until $modal_vp1->show() is activate.
-$modal_vp2 = $app->add(['Modal', 'title' =>'Text message load dynamically'])->addClass('small');
+$modal_vp2 = $app->add(['Modal', 'title' => 'Text message load dynamically'])->addClass('small');
 
 //When $modal_vp1->show() is activate, it will dynamically add this content to it.
 $modal_vp1->set(function ($modal) use ($modal_vp2) {
@@ -41,7 +41,7 @@ $modal_vp2->set(function ($modal) {
     $modal->add('Message')->text->addParagraph('This text is loaded using a second modal.');
 });
 
-$bar = $app->add(['View', 'ui'=>'buttons']);
+$bar = $app->add(['View', 'ui' => 'buttons']);
 $b = $bar->add('Button')->set('Open Lorem Ipsum');
 $b->on('click', $modal_vp1->show());
 
@@ -61,15 +61,15 @@ $menu_items = [
 
 $app->add(['Header', 'Modal Animation']);
 
-$modal_transition = $app->add(['Modal', 'title' =>'Animated modal']);
+$modal_transition = $app->add(['Modal', 'title' => 'Animated modal']);
 $modal_transition->add('Message')->set('A lot of animated transition available');
 $modal_transition->duration(1000);
 
-$menu_bar = $app->add(['View', 'ui'=>'buttons']);
+$menu_bar = $app->add(['View', 'ui' => 'buttons']);
 $main = $menu_bar->add('Menu');
 $tm = $main->addMenu('Select Transition');
 
-foreach ($menu_items as $key=>$items) {
+foreach ($menu_items as $key => $items) {
     if (!empty($items)) {
         $sm = $tm->addMenu($key);
         foreach ($items as $item) {
@@ -86,13 +86,13 @@ foreach ($menu_items as $key=>$items) {
 
 $app->add(['Header', 'Modal Options']);
 
-$modal_da = $app->add(['Modal', 'title'=>'Deny / Approve actions']);
+$modal_da = $app->add(['Modal', 'title' => 'Deny / Approve actions']);
 $modal_da->add('Message')->set('This modal is only closable via the green button');
 $modal_da->addDenyAction('No', new \atk4\ui\jsExpression('function(){window.alert("Can\'t do that."); return false;}'));
 $modal_da->addApproveAction('Yes', new \atk4\ui\jsExpression('function(){window.alert("You\'re good to go!");}'));
 $modal_da->notClosable();
 
-$menu_bar = $app->add(['View', 'ui'=>'buttons']);
+$menu_bar = $app->add(['View', 'ui' => 'buttons']);
 $b = $menu_bar->add('Button')->set('Show Deny/Approve');
 $b->on('click', $modal_da->show());
 
@@ -101,13 +101,13 @@ $b->on('click', $modal_da->show());
 $app->add(['Header', 'Multiple page modal']);
 
 //Add modal to layout.
-$modal_step = $app->add(['Modal', 'title'=>'Multi step actions']);
+$modal_step = $app->add(['Modal', 'title' => 'Multi step actions']);
 $modal_step->setOption('observeChanges', true);
 
 //Add buttons to modal for next and previous actions.
-$action = new \atk4\ui\View(['ui'=>'buttons']);
-$prev_action = new \atk4\ui\Button(['Prev', 'labeled', 'icon' =>'left arrow']);
-$next_action = new \atk4\ui\Button(['Next', 'iconRight' =>'right arrow']);
+$action = new \atk4\ui\View(['ui' => 'buttons']);
+$prev_action = new \atk4\ui\Button(['Prev', 'labeled', 'icon' => 'left arrow']);
+$next_action = new \atk4\ui\Button(['Next', 'iconRight' => 'right arrow']);
 
 $action->add($prev_action);
 $action->add($next_action);
@@ -140,9 +140,9 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
     } elseif ($page === 2) {
         $a = [];
         $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
-        $m_register->addField('name', ['caption'=>'Please enter your name (John)']);
+        $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $f = $modal->add(new \atk4\ui\Form(['segment'=>true]));
+        $f = $modal->add(new \atk4\ui\Form(['segment' => true]));
         $f->setModel($m_register);
 
         $f->onSubmit(function ($f) use ($next_action, $session) {
@@ -180,6 +180,6 @@ $prev_action->on('click', $modal_step->js()->atkReloadView(
 ));
 
 //Bind display modal to page display button.
-$menu_bar = $app->add(['View', 'ui'=>'buttons']);
+$menu_bar = $app->add(['View', 'ui' => 'buttons']);
 $b = $menu_bar->add('Button')->set('Multi Step Modal');
 $b->on('click', $modal_step->show());

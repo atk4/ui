@@ -149,7 +149,7 @@ class Paginator extends View
      */
     public function url($page)
     {
-        return $this->app->url([$this->name=>$page]);
+        return $this->app->url([$this->name => $page]);
     }
 
     /**

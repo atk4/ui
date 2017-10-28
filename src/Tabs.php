@@ -32,12 +32,12 @@ class Tabs extends View
         }
 
         // add tabs menu item
-        $item = $this->add([$item, 'class'=>['item']], 'Menu');
+        $item = $this->add([$item, 'class' => ['item']], 'Menu');
         $item->setElement('a');
         $item->setAttr('data-tab', $item->name);
 
         // add tabs sub-view
-        $sub = $this->add(['View', 'class'=>['ui tab']], 'Tabs');
+        $sub = $this->add(['View', 'class' => ['ui tab']], 'Tabs');
         $sub->setAttr('data-tab', $item->name);
 
         // if there is callback action, then
@@ -53,11 +53,11 @@ class Tabs extends View
 
     public function addTabURL($name, $url)
     {
-        $item = $this->add(['Tab', $name, 'class'=>['item']], 'Menu');
+        $item = $this->add(['Tab', $name, 'class' => ['item']], 'Menu');
         $item->setAttr('data-tab', $item->name);
 
         // add tabs sub-view
-        $sub = $this->add(['View', 'class'=>['ui tab']], 'Tabs');
+        $sub = $this->add(['View', 'class' => ['ui tab']], 'Tabs');
         $sub->setAttr('data-tab', $item->name);
 
         //# TODO: refactor this ugly hack

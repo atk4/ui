@@ -16,11 +16,11 @@ class App
 
     // @var array|false Location where to load JS/CSS files
     public $cdn = [
-        'atk'             => 'https://cdn.rawgit.com/atk4/ui/1.2.3/public',
-        'jquery'          => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
-        'serialize-object'=> 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui'     => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
-        'calendar'        => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
+        'atk'              => 'https://cdn.rawgit.com/atk4/ui/1.2.3/public',
+        'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
+        'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
+        'semantic-ui'      => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
+        'calendar'         => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
     ];
 
     // @var string Version of Agile UI
@@ -485,7 +485,7 @@ class App
      */
     public function requireJS($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' =>$url], '')."\n");
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url], '')."\n");
 
         return $this;
     }

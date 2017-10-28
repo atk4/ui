@@ -20,7 +20,7 @@ class Tab extends Item
     {
         if ($this->path) {
             $this->js(true)->tab(
-                ['cache'=>false, 'auto'=>true, 'path'=>$this->path]
+                ['cache' => false, 'auto' => true, 'path' => $this->path]
             );
         } else {
             $this->js(true)->tab();

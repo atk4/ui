@@ -17,9 +17,9 @@ if (!class_exists('SomeData')) {
 
             $m->addField('title');
             $m->addField('name');
-            $m->addField('surname', ['actual'=>'name']);
-            $m->addField('date', ['type'=>'date']);
-            $m->addField('salary', ['type'=>'money', 'actual'=>'randomNumber']);
+            $m->addField('surname', ['actual' => 'name']);
+            $m->addField('date', ['type' => 'date']);
+            $m->addField('salary', ['type' => 'money', 'actual' => 'randomNumber']);
         }
     }
 
@@ -48,7 +48,7 @@ if (!class_exists('SomeData')) {
         public function export($m, $fields = [])
         {
             if (!$fields) {
-                foreach ($m->elements as $name=>$e) {
+                foreach ($m->elements as $name => $e) {
                     if ($e instanceof \atk4\data\Field) {
                         $fields[] = $name;
                     }
