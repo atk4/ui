@@ -18,6 +18,14 @@ class Loader extends View
      */
     public $loader;
 
+    /**
+     * When should we trigger loader.
+     *  true - on page load
+     *  string - on particular js event, for example, 'click'
+     * @var true|string
+     */
+    public $loadEvent = true;
+
     /** @var string */
     public $ui = 'ui segment';
 
