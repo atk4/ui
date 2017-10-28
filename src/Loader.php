@@ -37,7 +37,7 @@ class Loader extends View
     {
         parent::init();
 
-        $this->loader = $this->factory(['View', 'padded segment', 'style'=>['min-height'=>'7em']], $this->loader);
+        $this->loader = $this->factory(['View', 'padded segment', 'style' => ['min-height' => '7em']], $this->loader);
     }
 
     /**

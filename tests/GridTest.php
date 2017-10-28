@@ -12,8 +12,8 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
     public function setUp()
     {
         $a = [];
-        $a[1] = ['id'=>1, 'email'=>'test@test.com', 'password'=>'abc123', 'xtra'=>'xtra'];
-        $a[2] = ['id'=>2, 'email'=>'test@yahoo.com', 'password'=>'secret'];
+        $a[1] = ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'];
+        $a[2] = ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'];
 
         $this->m = new MyModel(new \atk4\data\Persistence_Array($a));
     }
@@ -69,7 +69,7 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
         $t = new Table();
         $t->init();
         $t->setModel($this->m, ['email']);
-        $t->addColumn('xtra', null, ['type'=>'password']);
+        $t->addColumn('xtra', null, ['type' => 'password']);
 
         $this->assertEquals('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
         $this->assertEquals(
@@ -97,6 +97,6 @@ class MyModel extends \atk4\data\Model
         parent::init();
 
         $this->addField('email');
-        $this->addField('password', ['type'=>'password']);
+        $this->addField('password', ['type' => 'password']);
     }
 }

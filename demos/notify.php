@@ -36,17 +36,17 @@ $form->buttonSave->set('Show');
 $form->setModel(new Notifier($db), false);
 
 $f_p = $form->addGroup(['Set Text and Icon:']);
-$f_p->addField('text', ['width'=>'eight']);
-$f_p->addField('icon', ['width'=>'four']);
+$f_p->addField('text', ['width' => 'eight']);
+$f_p->addField('icon', ['width' => 'four']);
 
 $f_p1 = $form->addGroup(['Set Color, Transition and Width:']);
-$f_p1->addField('color', ['width'=>'four']);
-$f_p1->addField('transition', ['width'=>'four']);
-$f_p1->addField('width', ['width'=>'four']);
+$f_p1->addField('color', ['width' => 'four']);
+$f_p1->addField('transition', ['width' => 'four']);
+$f_p1->addField('width', ['width' => 'four']);
 
 $f_p2 = $form->addGroup(['Set Position and Attach to:']);
-$f_p2->addField('position', ['width'=>'four']);
-$f_p2->addField('attach', ['width'=>'four']);
+$f_p2->addField('position', ['width' => 'four']);
+$f_p2->addField('attach', ['width' => 'four']);
 
 $form->onSubmit(function ($f) {
     $notifier = new \atk4\ui\jsNotify();
@@ -66,14 +66,14 @@ $form->onSubmit(function ($f) {
 
 /**** Notification in modal with form ***/
 
-$modal_form = $app->add(['Modal', 'title'=>'Add a name']);
+$modal_form = $app->add(['Modal', 'title' => 'Add a name']);
 
 $modal_form->set(function ($page) use ($modal_form) {
     $a = [];
     $m = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
-    $m->addField('name', ['caption'=>'Add your name']);
+    $m->addField('name', ['caption' => 'Add your name']);
 
-    $f = $page->add(new \atk4\ui\Form(['segment'=>true]));
+    $f = $page->add(new \atk4\ui\Form(['segment' => true]));
     $f->setModel($m);
 
     $f->onSubmit(function ($f) use ($modal_form) {
@@ -93,6 +93,6 @@ $modal_form->set(function ($page) use ($modal_form) {
 });
 
 //Bind display modal to page display button.
-$menu_bar = $app->add(['View', 'ui'=>'buttons']);
+$menu_bar = $app->add(['View', 'ui' => 'buttons']);
 $b = $menu_bar->add('Button')->set('On Modal Close');
 $b->on('click', $modal_form->show());

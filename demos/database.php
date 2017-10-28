@@ -21,13 +21,13 @@ if (!class_exists('Country')) {
         public function init()
         {
             parent::init();
-            $this->addField('name', ['actual'=>'nicename', 'required'=>true, 'type'=>'string']);
-            $this->addField('sys_name', ['actual'=>'name', 'system'=>true]);
+            $this->addField('name', ['actual' => 'nicename', 'required' => true, 'type' => 'string']);
+            $this->addField('sys_name', ['actual' => 'name', 'system' => true]);
 
-            $this->addField('iso', ['caption'=>'ISO', 'required'=>true, 'type'=>'string']);
-            $this->addField('iso3', ['caption'=>'ISO3', 'required'=>true, 'type'=>'string']);
-            $this->addField('numcode', ['caption'=>'ISO Numeric Code', 'type'=>'number', 'required'=>true]);
-            $this->addField('phonecode', ['caption'=>'Phone Prefix', 'type'=>'number']);
+            $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string']);
+            $this->addField('iso3', ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
+            $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
+            $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number']);
 
             $this->addHook('beforeSave', function ($m) {
                 if (!$m['sys_name']) {
@@ -69,26 +69,26 @@ if (!class_exists('Country')) {
         {
             parent::init();
 
-            $this->addFields(['project_name', 'project_code'], ['type'=>'string']);
+            $this->addFields(['project_name', 'project_code'], ['type' => 'string']);
             //$this->addField('description', ['ui'=>['form'=>['FormField/TextArea', 'rows'=>5]]]);
-            $this->addField('description', ['type'=>'text']);
-            $this->addField('client_name', ['type'=>'string']);
-            $this->addField('client_address', ['type'=>'string', 'ui'=>['form'=>[new \atk4\ui\FormField\Textarea(), 'rows'=>4]]]);
+            $this->addField('description', ['type' => 'text']);
+            $this->addField('client_name', ['type' => 'string']);
+            $this->addField('client_address', ['type' => 'string', 'ui' => ['form' => [new \atk4\ui\FormField\Textarea(), 'rows' => 4]]]);
 
             $this->hasOne('client_country_iso', [
             new Country(),
-            'their_field'=> 'iso',
-            'ui'         => [
-                'display'=> [
-                    'form'=> 'Line',
+            'their_field' => 'iso',
+            'ui'          => [
+                'display' => [
+                    'form' => 'Line',
                 ],
             ],
         ])
             ->addField('client_country', 'name');
 
-            $this->addField('is_commercial', ['type'=>'boolean']);
-            $this->addField('currency', ['enum'=>['EUR', 'USD', 'GBP']]);
-            $this->addField('currency_symbol', ['never_persist'=>true]);
+            $this->addField('is_commercial', ['type' => 'boolean']);
+            $this->addField('currency', ['enum' => ['EUR', 'USD', 'GBP']]);
+            $this->addField('currency_symbol', ['never_persist' => true]);
             $this->addHook('afterLoad', function ($m) {
                 /* implementation for "intl"
                 $locale='en-UK';
@@ -96,22 +96,22 @@ if (!class_exists('Country')) {
                 $m['currency_symbol'] = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
                  */
 
-                $map = ['EUR'=>'€', 'USD'=>'$', 'GBP'=>'£'];
+                $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
                 $m['currency_symbol'] = $map[$m['currency']];
             });
 
-            $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type'=>'money']);
+            $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type' => 'money']);
 
-            $this->addFields(['project_hours_est', 'project_hours_reported'], ['type'=>'integer']);
+            $this->addFields(['project_hours_est', 'project_hours_reported'], ['type' => 'integer']);
 
-            $this->addFields(['project_expenses_est', 'project_expenses'], ['type'=>'money']);
+            $this->addFields(['project_expenses_est', 'project_expenses'], ['type' => 'money']);
             $this->add(new Percent(), 'project_mgmt_cost_pct');
             $this->add(new Percent(), 'project_qa_cost_pct');
 
-            $this->addFields(['start_date', 'finish_date'], ['type'=>'date']);
-            $this->addField('finish_time', ['type'=>'time']);
+            $this->addFields(['start_date', 'finish_date'], ['type' => 'date']);
+            $this->addField('finish_time', ['type' => 'time']);
 
-            $this->addFields(['created', 'updated'], ['type'=>'datetime', 'ui'=>['form'=>['Line', 'disabled'=>true]]]);
+            $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => ['Line', 'disabled' => true]]]);
         }
     }
 
@@ -129,8 +129,8 @@ if (!class_exists('Country')) {
             parent::init();
             $this->addField('name');
 
-            $this->addField('type', ['caption'=>'MIME Type']);
-            $this->addField('is_folder', ['type'=>'boolean']);
+            $this->addField('type', ['caption' => 'MIME Type']);
+            $this->addField('is_folder', ['type' => 'boolean']);
 
             $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
             ->addField('count', ['aggregate' => 'count', 'field' => $this->expr('*')]);
@@ -156,9 +156,9 @@ if (!class_exists('Country')) {
                 $this->unload();
 
                 $this->save([
-                'name'     => $fileinfo->getFilename(),
-                'is_folder'=> $fileinfo->isDir(),
-                'type'     => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
+                'name'      => $fileinfo->getFilename(),
+                'is_folder' => $fileinfo->isDir(),
+                'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
             ]);
 
                 if ($fileinfo->isDir()) {
