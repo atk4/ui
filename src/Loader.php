@@ -1,4 +1,5 @@
 <?php
+
 namespace atk4\ui;
 
 /**
@@ -63,7 +64,7 @@ class Loader extends View
         $this->loaderCallback = $this->add('Callback');
 
         if ($this->loaderCallback->set(function () use ($fx, $args) {
-            call_user_func_array($fx, array_merge($this, $args===null ? [] : $args));
+            call_user_func_array($fx, array_merge($this, $args === null ? [] : $args));
             $this->app->terminate($this->renderJSON());
         }));
 
@@ -92,7 +93,7 @@ class Loader extends View
      */
     public function getLoaderUrl()
     {
-        return ($this->loaderCallback ? $this->loaderCallback->getUrl() : null);
+        return $this->loaderCallback ? $this->loaderCallback->getUrl() : null;
     }
 
     /**
