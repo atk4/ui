@@ -2,12 +2,12 @@
 
 require 'init.php';
 
-$layout->add(new \atk4\ui\View([
+$app->add(new \atk4\ui\View([
     'Forms below focus on Data integration and automated layouts',
     'ui'=> 'ignored warning message',
 ]));
 
-$cc = $layout->add('Columns');
+$cc = $app->add('Columns');
 $f = $cc->addColumn()->add(new \atk4\ui\Form());
 
 // adding field without model creates a regular line

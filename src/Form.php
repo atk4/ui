@@ -229,7 +229,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Add field into current layout. If no layout, create one. If no model, create blank one.
      *
-     * @param mixed ...$args
+     * @param string|null              $name
+     * @param array|string|object|null $decorator
+     * @param array|string|object|null $field
      *
      * @return FormField\Generic
      */

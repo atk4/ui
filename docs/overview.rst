@@ -6,7 +6,7 @@ Overview of Agile UI
 ====================
 
 Agile UI is a PHP component framework for building User Interfaces entirely in PHP.
-Although the components and Agile UI will typically use HTML, JavaScript, jQuery and 
+Although the components and Agile UI will typically use HTML, JavaScript, jQuery and
 CSS.The goal of Agile UI is to abstract them away behind easy-to-use component object.
 
 As a framework it's closely coupled with Agile Data (http://agile-data.readthedocs.io),
@@ -81,9 +81,9 @@ and gives you the highest efficiency and best scaling.  
 
 Simple scenario:
 
-    You are a busy person, who needs to get your application ready in 1h and then 
-    will forget about it for the next few years. You are not particularly thrilled 
-    about digging through heaps of HTML, CSS or JS frameworks and need a solution 
+    You are a busy person, who needs to get your application ready in 1h and then
+    will forget about it for the next few years. You are not particularly thrilled
+    about digging through heaps of HTML, CSS or JS frameworks and need a solution
     which will be quick, and, just works.
 
 .. _overview_example:
@@ -121,7 +121,7 @@ clarifications::
 
     // Connect to database and place a fully-interractive CRUD
     $db = new \atk4\data\Persistence_SQL($dsn);
-    $app->layout->add(new \atk4\ui\CRUD())
+    $app->add(new \atk4\ui\CRUD())
         ->setModel(new Offer($db));
 
 Through the course of this example, I am performing several core actions:
@@ -133,7 +133,7 @@ Through the course of this example, I am performing several core actions:
     In most applications you would want to extend this class yourself. When
     integrating Agile UI with MVC framework, you would be using a different
     App class, that properly integrates framework capabilities.
-   
+
     For a :ref:`component` the App class provides level of abstraction and
     utility.
 
@@ -154,7 +154,7 @@ Through the course of this example, I am performing several core actions:
     Model object represents a data-set for specific persistence and conditions.
 
     In our example, the object is created representing all Offer records then passed
-    into the CRUD :ref:`component`. 
+    into the CRUD :ref:`component`.
 
     For a :ref:`component`, the Model represents information about the structure
     and offers mechanism to retrieve, store and delete date from `$db` persistence.
@@ -220,7 +220,7 @@ Using Components
 Look above at the :ref:`overview_example`, component `GRID` was made part
 of application layout with a line::
 
-    $app->layout->add(new \atk4\ui\CRUD());
+    $app->add(new \atk4\ui\CRUD());
 
 
 To render a component individually and get the HTML and JavaScript use this format::

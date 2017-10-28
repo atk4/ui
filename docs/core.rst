@@ -15,7 +15,7 @@ is::
 
     $app = new \atk4\ui\App('My App');
     $app->initLayout('Centered');
-    $app->layout->add('LoremIpsum');
+    $app->add('LoremIpsum');
 
 .. toctree::
     app
@@ -27,11 +27,11 @@ Seed
 Agile UI is developed to be easy to read and with simple and concise syntax. We make use of
 dynamic nature of PHP, therefore two syntax patterns are supported everywhere::
 
-    $app->layout->add(new \atk4\ui\Button('Hello'));
+    $app->add(new \atk4\ui\Button('Hello'));
 
     and
 
-    $app->layout->add(['Button', 'Hello']);
+    $app->add(['Button', 'Hello']);
 
 Method add() supports arguments in a various formats and we call that "Seed". The same format
 can be used elsewhere, for example::
@@ -56,7 +56,7 @@ You can create and link multiple UI objects together before linking them with ot
     $msg = new \atk4\ui\Message('Hey There');
     $msg->add(new \atk4\ui\Button('Button'));
 
-    $app->layout->add($msg);
+    $app->add($msg);
 
 To find out more about how components are linked up together and rendered, see:
 
@@ -75,7 +75,7 @@ by having an ability to introduce new types with consistent support throughout t
 
 .. toctree::
     type-presentation
-    
+
 
 
 Templates
@@ -103,7 +103,7 @@ have to worry over the details::
     $user = new User($db);
     $user->load(1);
 
-    $view = $app->layout-add(['template'=>'Hello, {$name}, your balance is {$balance}']);
+    $view = $app->add(['template'=>'Hello, {$name}, your balance is {$balance}']);
     $view->setModel($user);
 
 Next section will explain you how the Agile UI interacts with the data layer and how it outputs or
@@ -158,7 +158,6 @@ find out how:
     :maxdepth: 4
 
     virtualpage
-
 
 
 Documentation is coming soon.

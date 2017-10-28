@@ -15,7 +15,6 @@ try {
     echo $layout->render();
 } catch (\atk4\core\Exception $e) {
     var_dump($e->getMessage());
-
     var_dump($e->getParams());
 
     throw $e;

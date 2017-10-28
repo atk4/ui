@@ -28,9 +28,9 @@ class Notifier extends \atk4\data\Model
 }
 
  /*** Notification type form ****/
-$head = $layout->add(['Header', 'Notification Types']);
+$head = $app->add(['Header', 'Notification Types']);
 
-$form = $layout->add(new \atk4\ui\Form(['segment']));
+$form = $app->add(new \atk4\ui\Form(['segment']));
 $form->add(['Label', 'Some of notification options that can be set.', 'top attached'], 'AboveFields');
 $form->buttonSave->set('Show');
 $form->setModel(new Notifier($db), false);
@@ -66,7 +66,7 @@ $form->onSubmit(function ($f) {
 
 /**** Notification in modal with form ***/
 
-$modal_form = $layout->add(['Modal', 'title'=>'Add a name']);
+$modal_form = $app->add(['Modal', 'title'=>'Add a name']);
 
 $modal_form->set(function ($page) use ($modal_form) {
     $a = [];
@@ -93,6 +93,6 @@ $modal_form->set(function ($page) use ($modal_form) {
 });
 
 //Bind display modal to page display button.
-$menu_bar = $layout->add(['View', 'ui'=>'buttons']);
+$menu_bar = $app->add(['View', 'ui'=>'buttons']);
 $b = $menu_bar->add('Button')->set('On Modal Close');
 $b->on('click', $modal_form->show());

@@ -68,7 +68,7 @@ Adding Columns
 To change the order or explicitly specify which field columns must appear, if you pass list of those
 fields as second argument to setModel::
 
-    $table = $layout->add('Table');
+    $table = $app->add('Table');
     $table->setModel(new Order($db), ['name', 'price', 'amount', 'status']);
 
 Table will make use of "Only Fields" feature in Agile Data to adjust query for fetching only the necessary
@@ -95,7 +95,7 @@ It's always a good idea to calculate column inside datababase. Lets create "tota
 multiply "price" and "amount" values. Use ``addExpression`` to provide in-line definition for this
 field if it's not alrady defined in ``Order::init()``::
 
-    $table = $layout->add('Table');
+    $table = $app->add('Table');
     $order = new Order($db);
 
     $order->addExpression('total', '[price]*[amount]')->type = 'money';
@@ -112,7 +112,7 @@ Table object does not contain any information about your fields (such as caption
 consult your Model for the necessary field information. If you are willing to define the type but also
 specify the caption, you can use code like this::
 
-    $table = $layout->add('Table');
+    $table = $app->add('Table');
     $order = new Order($db);
 
     $order->addExpression('total', [
@@ -179,7 +179,7 @@ method will rely on 3rd argument to create a new field for you. Here is example 
 the "total" column value (as above) but using PHP math instead of doing it inside database::
 
 
-    $table = $layout->add('Table');
+    $table = $app->add('Table');
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount', 'status']);
@@ -191,7 +191,7 @@ the "total" column value (as above) but using PHP math instead of doing it insid
 If you execute this code, you'll notice that the "total" column is now displayed last. If you
 wish to position it before status, you can use the final format of addColumn()::
 
-    $table = $layout->add('Table');
+    $table = $app->add('Table');
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount']);
@@ -294,14 +294,14 @@ of issues from your Github repository::
     $dropbox = \atk4\dropbox\Persistence($db_config);
     $files = new \atk4\dropbox\Model\File($dropbox);
 
-    $layout->add('Table')->setModel($files);
+    $app->add('Table')->setModel($files);
 
 
     // Show contents of dropbox
     $github = \atk4\github\Persistence_Issues($github_api_config);
     $issues = new \atk4\github\Model\Issue($github);
 
-    $layout->add('Table')->setModel($issues);
+    $app->add('Table')->setModel($issues);
 
 This example demonstrates that by selecting a 3rd party persistence implementation, you can access
 virtually any API, Database or SQL resource and it will always take care of formatting for you as well
