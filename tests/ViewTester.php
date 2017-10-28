@@ -22,6 +22,5 @@ class ViewTester extends \atk4\ui\View
             $this->js(true, $reload);
             $this->js(true, new \atk4\ui\jsExpression('var s = Date.now(); var i=setInterval(function() { var p = Date.now()-s; var el=$[]; el.find(".detail").text(p+"ms"); if(el.is(".green")) { clearInterval(i); }}, 100)', [$label]));
         }
-
     }
 }
