@@ -11,10 +11,16 @@ namespace atk4\ui;
  */
 class Loader extends View
 {
-    public $loader = null;
-    public $needOnPageLoad = false;
-    public $loaderCallback = null;
-    public $ui = '';
+    /**
+     * Set to a custom object or inject properties into default loader
+     */
+    public $loader;
+
+    public $loadEvent = true;
+
+
+
+    public $ui = 'ui segment';
 
     public $args = null;
 
@@ -22,12 +28,7 @@ class Loader extends View
     {
         parent::init();
 
-        //supply default loader view if none is supply.
-        if (!$this->loader) {
-            $this->loader = new View(['ui' => 'segment padded']);
-        }
-
-        $this->add($this->loader);
+        $this->loader = $this->factory('LoaderShim', $this->loader);
     }
 
     /**
@@ -54,19 +55,32 @@ class Loader extends View
             throw new Exception('Error: Need to pass a closure function to Loader::set()');
         }
 
-        $this->loaderCallback = $this->loader->add('CallbackLater');
+        $this->loaderCallback = $this->add('Callback');
 
-        if ($this->loaderCallback->triggered() && $fx) {
-            call_user_func($fx, $this->loader);
+        if ($this->loaderCallback->set(function() use ($fx) {
+            call_user_func($fx, $this);
             $this->app->terminate($this->renderJSON());
-        } else {
-            if ($this->needOnPageLoad) {
-                $this->jsStartLoader(true, $args);
-            }
-        }
+        }));
+
 
         return $this;
     }
+
+    /**
+     * Automatically load if jsLoad() wasn't called already. 
+     */
+    function renderView()
+    {
+        if (!$this->loaderCallback->triggered() && !$this->_jsLoad_invoked && $this->loadEvent) {
+            $this->js($this->loadEvent, $this->jsLoad());
+            $this->add($this->loader);
+        }
+
+        return parent::renderView();
+    }
+
+    protected $_jsLoad_invoked = false;
+
 
     /**
      * Return loader callback url when set.
@@ -86,9 +100,9 @@ class Loader extends View
      *
      * @return mixed
      */
-    public function jsStartLoader($when = null, $args = [])
+    public function jsLoad($args = [])
     {
-        return $this->loader->js($when)->atkReloadView([
+        return $this->js()->atkReloadView([
             'uri'         => $this->loaderCallback->getURL(),
             'uri_options' => $args,
         ]);

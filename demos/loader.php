@@ -1,17 +1,46 @@
 <?php
 
 require 'init.php';
+/*
+
+$a = $app->add(['Button','A']);
+$a->js(true, new \atk4\ui\jsExpression('console.log(1)'));
+$b = $app->add(['Button','B']);
+$b->js(true, new \atk4\ui\jsExpression('console.log(2)'));
+
+$a_rel = new \atk4\ui\jsReload($a);
+$b_rel = new \atk4\ui\jsReload($b);
+
+ */
+$app->add(new \atk4\ui\tests\ViewTester());
 
 /**** Start on page load ***/
 $app->add(['Header', 'Attach loader to default view and start it on page load.']);
 $l1 = $app->add('Loader');
-$l1->needOnPageLoad = true;
 
-$l1->set(function ($loader) {
+$l1->set(function ($p) {
     //set your time expensive function here.
     sleep(2);
-    $loader->add(new \atk4\ui\LoremIpsum(['size'=>1]));
+    $p->add(new \atk4\ui\LoremIpsum(['size'=>1]));
+    $p->add(new \atk4\ui\tests\ViewTester());
 });
+
+$l1 = $app->add('Loader');
+
+$l1->set(function ($p) {
+    //set your time expensive function here.
+    $p->add(new \atk4\ui\LoremIpsum(['size'=>1]));
+    $p->add(new \atk4\ui\tests\ViewTester());
+    $l2 = $p->add('Loader');
+
+    $l2->set(function ($p) {
+        //set your time expensive function here.
+        $p->add(new \atk4\ui\LoremIpsum(['size'=>1]));
+        $p->add(new \atk4\ui\tests\ViewTester());
+    });
+});
+
+exit;
 
 $app->add(['Header', 'Attach loader in supplied view and start it using an action.']);
 
