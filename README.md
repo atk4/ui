@@ -3,25 +3,29 @@
 [![Build Status](https://travis-ci.org/atk4/ui.png?branch=develop)](https://travis-ci.org/atk4/ui)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
 [![StyleCI](https://styleci.io/repos/68417565/shield)](https://styleci.io/repos/68417565)
-[![Test Coverage](https://codeclimate.com/github/atk4/ui/badges/coverage.svg)](https://codeclimate.com/github/atk4/ui/coverage)
+[![codecov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
 [![Version](https://badge.fury.io/gh/atk4%2Fui.svg)](https://packagist.org/packages/atk4/ui)
 
-**Agile UI is a high-level PHP framework for creating User Interfaces in Web Apps**
+**Agile UI is a high-level PHP framework for creating User Interfaces and Web Apps**
 
-Regardless of which full-stack framework you are using - with Agile UI you won't need to write or know HTML, CSS or JavaScript for the basic tasks, such as creating the CRUD or the Form. Agile UI abstracts interaction between the browser and your application into a next-gen Object-Oriented interface with powerful abstraction.
+You might need a CRUD for your "Admin Interface" or perhaps a basic Contact Form connected to [your database in SQL or NoSQL](https://github.com/atk4/data) - Agile UI provides universal and and extensible open-source platform for developing interactive PHP components as well as number of useful components ready to be used out of the box:
 
-## Quick-and-dirty code
+``` php
+$crud = new \atk4\ui\CRUD();
+$crud->setModel(new User($db));
+echo $crud->render();
+```
 
-Agile UI does not impose on you how you must write the code, it focuses on building UI. Here are few examples that show you what you can do.
+## Give Agile UI a try!
+
+You can build a simple Admin System in JUST 15 lines of PHP code. Download Agile UI from www.agiletoolkit.org or through composer `composer require atk4/ui`, then use this code:
 
 ### Admin+CRUD in 15 lines
 
 ``` php
   $app = new \atk4\ui\App('My App');
   $app->initLayout(new \atk4\ui\Layout\Admin());
-
   $db = \atk4\data\Persistence::connect($DSN);
-
   class User extends \atk4\data\Model {
       public $table = 'user';
       function init() {
@@ -32,12 +36,11 @@ Agile UI does not impose on you how you must write the code, it focuses on build
           $this->addField('password', ['type'=>'password']);
       }
   }
-
   $app->layout->add(new \atk4\ui\CRUD())
     ->setModel(new User($db));
 ```
 
-A total of 15 lines to create a fully working Admin system with a CRUD:
+The new CRUD will be fully interactive, will dynamically reload itself, support pagination. You can also add more actions, drill-downs, quick-search and dialogs easily.
 
 ![](docs/images/admin-in-15-lines.png)
 
@@ -48,7 +51,6 @@ Agile UI is not for admin systems only. It can be used to render your front-end 
 ``` php
 $app = new \atk4\ui\App('My App');
 $app->initLayout(new \atk4\ui\Layout\Centered());
-
 $db = \atk4\data\Persistence::connect($DSN);
 
 $form = $app->layout->add(new \atk4\ui\Form());
@@ -64,7 +66,7 @@ $form->onSubmit(function($form){
 });
 ```
 
-Again - the result is beautiful and interractive:
+Again - the result is a beautiful, interactive form which dynamically submits itself (AJAX), shows server-side validation errors and stores data into the database.
 
 ![](docs/images/register-in-15-lines.png)
 
@@ -75,17 +77,17 @@ With some knowledge and training you will be able to build entire business-class
 -   Warehouse app - source: https://github.com/atk4/warehouse
 -   Warehouse app - demo: https://atk-warehouse.herokuapp.com (free hosting, so wait 5 seconds)
 
-WARNING: this specification is intentionally kept simple for demonstration purposes.
+WARNING: this application is intentionally kept simple for demonstration purposes.
 
 ## Reinventing Data Persistence
 
-Conventionally you have to work with ORMs or direct data queries. Agile UI relies on a entirely different class framework for database persistence - [Agile Data](https://github.com/atk4/data). Not only it has all the benefits of ORM, but it also addresses all the faults and shortcomings to deliver powerful features like:
+Conventionally for your CRUDs you have to integrate them with ORMs or even supply SQL queries. Agile UI relies [Agile Data](https://github.com/atk4/data) which provides sufficient information about your schema, relations and persistence to populate all the UI fields/columns automatically.
 
--   Aggregation, scoping, behaviours, audit and custom actions
--   NoSQL and RestAPI persistence support for Cloud Databases and Services
--   SQL Expressions, Deep traversal and working with multiple persistences
+-   Map types - boolean into checkboxes, Date, Money
+-   Convert "hasOne" relations into drop-downs
+-   All the little things, e.g. storing DateTime in UTC or converting number formats
 
-Through tight integration with Agile Data it makes it possible for your Forms to automatically explore relations and provide values for drop-downs:
+This is a Form presented inside a Modal fully created and populated by a standard CRUD component:
 
 ![](./docs/images/relation-exploration.png)
 
@@ -162,11 +164,11 @@ Agile UI comes with many built-in components;
 | [Table](http://ui.agiletoolkit.org/demos/table.php) | Formatting, Columns, Status, Link, Template, Delete. | 1.0        |
 | [Grid](http://ui.agiletoolkit.org/demos/grid.php) | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1        |
 | [Message](http://ui.agiletoolkit.org/demos/message.php) | Such as "Info", "Error", "Warning" or "Tip" for easy use. | 1.1        |
-| Modal                                    | Modal dialog with dynamically loaded content. | 1.1        |
+| [Modal](https://ui.agiletoolkit.org/demos/modal.php) | Modal dialog with dynamically loaded content. | 1.1        |
 | [Reloading](http://ui.agiletoolkit.org/demos/reloading.php) | Dynamically re-render part of the UI.    | 1.1        |
-| Actions                                  | Extended buttons with various interactions | 1.1        |
+| [Actions](https://ui.agiletoolkit.org/demos/reloading.php) | Extended buttons with various interactions | 1.1        |
 | [CRUD](http://ui.agiletoolkit.org/demos/crud.php) | Create, List, Edit and Delete records (based on Advanced Grid) | 1.1        |
-| Tabs                                     | 4 Responsive: Admin, Centered, Site, Wide. | 1.2 *      |
+| [Tabs](https://ui.agiletoolkit.org/demos/tabs.php) | 4 Responsive: Admin, Centered, Site, Wide. | 1.2        |
 | Breadcrumb                               | Push links to pages for navigation. Wizard. | 1.3 *      |
 | Items, Cards                             | Responsive Items and Card implementaiton. | 1.4 *      |
 | Wizard                                   | Multi-step, wizard with temporary data storing. | 1.5 *      |
@@ -178,11 +180,18 @@ All bundled components are free and licensed under MIT license. They are install
 
 External and 3rd party components may be subject to different licensing terms.
 
-## Installing and Using
+## Getting Started
 
-In your command line type `composer require atk4/ui`.
+Although we support  `composer require atk4/ui` for your first application we recommend you to:
 
-Afterwards, use this code to see a Hello World message:
+1.  Go to www.agiletoolkit.org and click download.
+2.  Follow instructions to run the "sample" app.
+3.  Blank repo is bundled, so `git add . && git commit`
+4.  Deploy to cloud - Heroku, Google App Engine or any Docker environment through `git push`.
+
+### Simple Hello World component
+
+Semantic of Agile UI is really simple:
 
 ``` php
 require "vendor/autoload.php";
@@ -190,10 +199,10 @@ require "vendor/autoload.php";
 $app = new \atk4\ui\App('My First App');
 $app->initLayout('Centered');
 
-$app->layout->add('HelloWorld');
+$app->add('HelloWorld');
 ```
 
-That's right! We have [Hello World component](https://github.com/atk4/ui/blob/develop/src/HelloWorld.php)!! When you are ready to do something bit more advanced:
+That's right! We have [HelloWorld an LoremIpsum components](https://github.com/atk4/ui/blob/develop/src/HelloWorld.php)!! Next is a code for a more sophisticated admin system:
 
 ``` php
 require "vendor/autoload.php";
@@ -242,13 +251,13 @@ $f->onSubmit(function ($f) {
 });
 ```
 
-For more examples simply look into [demo folder](https://github.com/atk4/ui/tree/develop/demos).
+We have many examples in the [demo folder](https://github.com/atk4/ui/tree/develop/demos).
 
 ### Single component render
 
-If you need to render only one component without boilerplate HTML, use render() method.
+Agile UI fits into your framework of choice. That's why we didn't bother adding our own Router and didn't want to give you another REST framework. Enjoy Agile UI in any environment - Wordpress, Laravel, Yii or plain PHP. If you need to render only one component without boilerplate HTML, use render() method.
 
-``` html
+``` HTML
  <head>
     <link rel="stylesheet" type="text/css" href="http://semantic-ui.com/dist/semantic.css">
     <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
@@ -279,48 +288,21 @@ If anything is unclear or you want to get in touch with other awesome people who
 
  ## Scope and Goals of Agile UI
 
-What makes this UI toolkit stand out from the others UI libraries is a commitment to bring rich and interractive web components that can be used for 90% of web applications without any custom-HTML/JS. Additionally, Agile UI provides a very controlled and consistent ways to develop "add-ons" that include visual components and other re-usable elements.
+What makes this UI toolkit stand out from the others UI libraries is a commitment to bring rich and interractive web components that can be used for web applications without any custom-HTML/JS. Additionally, Agile UI provides a very controlled and consistent ways to develop "add-ons" that include visual components and other re-usable elements.
 
 To achieve its goal, Agile UI offers both the tools for creating components and a wide selection of built-in components that provides the "minimum standard Web UI":
 
 ![agile-ui](docs/images/agile-ui.png)
 
-Agile UI follows 'best development practices' and looks to create an eco-system of 3rd party "UI components" that follow the Web UI standard solving issues such as:
-
-- Incompatible HTML code produced by and excessive CSS/JS assets
-- Differences in UI styles between your main theme and add-on UI
-- Extensibility standard of all UI components based on principles of Dependency Injection, Template Injection and Inheritance
-- Full control over JavaScript events and integration with jQuery and its plugins
-- Controlled access between UI componets and domain model data with persistence abstraction
-- **And most importantly: a responsive and modern interface based on Semantic UI CSS**
-
 ## Q&A
 
 **Q: HTML-generating frameworks are lame and inefficient, real coders prefer to manually write HTML/CSS in Twig or Smarty.**
 
-Agile UI was created for those who are in a hurry and not immediately concerned about the shades of their UI buttons. We have created a solid looking UI and diverse set of components that, like all applications, can be adapted and released with any UI.
-
-Our goal was to create an out-of-the-box UI which you can "use", not "reinvent". 
+Agile UI focuses on "out-of-the-box" experience and development efficiency. Our ambition is to make PHP usable for those who are not familiar with HTML/CSS/JS. In fact, we are working with some educational partners and have "education course" available for secondary school students that teaches how to build Data-drivven Web Apps in just 1 year.
 
 **Q: What about Angular-JS, VueJS and all the other JS frameworks?**
 
-We went with the default pattern that allows you to write the entire application in ONE language: PHP.
-
-However, the "component" in Agile UI does not conflict if you choose to use a different  JavaScript framework. We found that **jQuery** and its plug-ins are most suitable for our design patterns. However, you can build a highly interractive component that relies on a different JavaScript frameworks or principles.
-
-**Q: I used "X" component framework and found it extremely limiting.**
-
-In the past, many UI / Component frameworks have been unable to find a good balance between flexiblity and convenience. Some out-of-the-box CRUD systems are too generic while other Form-builders are just too overengineered and unattractive.
-
-Agile UI follows these core principles in it's design:
-
--   Instead of focusing on generic HTML, create HTML for a specific CSS framework (Semantic UI)
--   Allow developers to use all the features of CSS framework without leaving PHP
--   No custom proprietary JS code. Keep all the HTML simple
--   Allow developers to customise or extend components
--   Keep Agile UI as a open-source project under MIT license
-
-Following those principles gives us the perfect combination of flexibility, elegance and performance.
+You should look into [Agile API](https://github.com/atk4/api), which provides binding between Agile Data and your front-end framework.
 
 **Q: I prefer Bootstrap CSS (or other CSS) over Semantic UI**
 
@@ -331,7 +313,7 @@ We considered several CSS frameworks.  We decided to focus on Semantic UI implem
 -   Extensive selection of core components
 -   jQuery and JavaScript API integrations
 
-Bearing in mind the popularity of Bootstrap CSS, we are working towards an extension that will allow you to switch your entire UI between Semantic UI and Bootstrap in the future.
+Bearing in mind the popularity of Bootstrap CSS, we plan to build extension for it sometime soon.
 
 ## List of core Features in Agile UI
 
@@ -351,6 +333,7 @@ While many UI toolkits focus on giving you ready-to-use advance components, we p
 12.  CRUD - A composite view that combines Form, Dialogs and Grids to create a fully interractive interface for managing your Model Entity data. Extensible and compatible with various add-ons, you will find CRUD to be a most efficient way to build your Admin system.
 13.  Layouts, Menus, Pages, Tabs, Accordion - Several objects to create a bigger picture and link together the entire UI of your application.
 14.  Application - This is an abstract interface that can be implemented using your full-stack framework of choice. The "App" class is built for stand-alone applications.  For any other framework, a custom application class can be provided to make the entire UI section adjust accordingly.
+15.  Tabs - Dynamically loadable tabs that can contain further dynamic content (e.g. CRUD) and work out-of-the-box.
 
 
 

@@ -13,23 +13,27 @@ namespace atk4\ui;
  */
 class VirtualPage extends View
 {
+    /** @var Callback */
     public $cb = null;
 
+    /** @var array Functions of virtual page */
     public $fx = [];
 
+    /** @var string UI container class */
     public $ui = 'container';
 
+    /**
+     * Initialization.
+     */
     public function init()
     {
         parent::init();
 
-        $this->cb = $this->add('CallbackLater');
+        $this->cb = $this->_add('CallbackLater');
 
         $this->cb->set(function () {
             if ($this->cb->triggered && $this->fx) {
-                foreach ($this->fx as $fx) {
-                    $fx($this);
-                }
+                call_user_func($this->fx, $this);
             }
 
             if ($this->cb->triggered == 'cut') {
@@ -40,7 +44,6 @@ class VirtualPage extends View
             }
 
             if ($this->cb->triggered == 'popup') {
-                $this->ui = 'container'; // to maintain some gaps..
                 $this->app->html->template->set('title', $this->app->title);
                 $this->app->html->template->setHTML('Content', parent::getHTML());
                 $this->app->html->template->appendHTML('HEAD', $this->getJS());
@@ -65,19 +68,49 @@ class VirtualPage extends View
         });
     }
 
+    /**
+     * Set function of virtual page.
+     *
+     * @param array $fx
+     * @param mixed $junk
+     *
+     * @return $this
+     */
     public function set($fx = [], $junk = null)
     {
         if (!$fx) {
             return;
         }
-        if (!is_array($fx)) {
-            $fx = [$fx];
+        if ($this->fx) {
+            throw new Exception([
+                'Callback for this Virtual Page is already defined',
+                'vp'    => $this,
+                'old_fx'=> $this->fx,
+                'new_fx'=> $fx,
+            ]);
         }
         $this->fx = $fx;
 
         return $this;
     }
 
+    /**
+     * Is virtual page active?
+     *
+     * @return bool
+     */
+    public function triggered()
+    {
+        return $this->cb->triggered();
+    }
+
+    /**
+     * Returns URL whichwill activate virtual page.
+     *
+     * @param string $mode
+     *
+     * @return string
+     */
     public function getURL($mode = 'callback')
     {
         return $this->cb->getURL($mode);
@@ -85,8 +118,7 @@ class VirtualPage extends View
 
     /**
      * VirtualPage is not rendered normally. It's invisible. Only when
-     * it is triggered, it will exclusively output
-     * it's content.
+     * it is triggered, it will exclusively output it's content.
      */
     public function getHTML()
     {

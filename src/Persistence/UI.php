@@ -22,7 +22,7 @@ class UI extends \atk4\data\Persistence
     public $time_format = 'H:i';
 
     public $datetime_format = 'M d, Y H:i:s';
-        // 'D, d M Y H:i:s O';
+    // 'D, d M Y H:i:s O';
 
     public $currency = '€';
 

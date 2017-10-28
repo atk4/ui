@@ -20,6 +20,8 @@ class Generic extends View
      */
     public $field;
 
+    public $width = null;
+
     public function init()
     {
         parent::init();

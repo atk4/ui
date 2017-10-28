@@ -41,6 +41,11 @@ class Input extends Generic
     public $actionLeft = null;
 
     /**
+     * Specify width for semantic UI grid. For "four wide" use 'four'.
+     */
+    public $width = null;
+
+    /**
      * Method similar to View::js() however will adjust selector
      * to target the "input" element.
      *
@@ -130,6 +135,10 @@ class Input extends Generic
 
         if ($this->label || $this->labelRight) {
             $this->addClass('labeled');
+        }
+
+        if ($this->width) {
+            $this->addClass($this->width.' wide');
         }
 
         if ($this->action) {

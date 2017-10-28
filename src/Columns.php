@@ -9,16 +9,34 @@ class Columns extends View
 {
     public $ui = 'grid';
 
+    /**
+     * Explicitly specify the width of all columns. Normally that's 16, but
+     * semantic-ui allows you to override with 5 => "ui five column grid".
+     *
+     * @var int
+     */
     public $width = null;
 
-    public $calculated_width = 0;
+    /**
+     * Sum of all column widths added so far.
+     *
+     * @var int
+     */
+    protected $calculated_width = 0;
 
     /**
      * Allows Grid to calculate widths automatically.
+     *
+     * @var array
      */
     public $sizes = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
     'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', ];
 
+    /**
+     * Add new vertical column.
+     *
+     * @param int|array $defaults specify width (1..16) or relative to $width
+     */
     public function addColumn($defaults = null)
     {
         if (!is_array($defaults)) {
@@ -42,6 +60,12 @@ class Columns extends View
         return $column;
     }
 
+    /**
+     * Adds a new row to your grid system. You can specify width of this row
+     * which will default to 16.
+     *
+     * @param int $width
+     */
     public function addRow($width = null)
     {
         return $this->add(new static([$width, 'ui'=>false]))->addClass('row');

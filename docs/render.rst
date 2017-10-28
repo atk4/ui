@@ -1,7 +1,6 @@
-.. _render:
 
-Render Tree
-===========
+Introduction
+------------
 
 Agile UI allows you to create and combine various objects into a single Render Tree for unified rendering. Tree represents
 all the UI components that will contribute to the HTML generation. Render tree is automatically created and maintained::
@@ -58,10 +57,10 @@ When you create an application and select a Layout, the layout is automatically 
 
     echo $app->layout->name; // present, because layout is initalized!
 
-After that, adding any objects into layout will initialize those objects too::
+After that, adding any objects into app (into layout) will initialize those objects too::
 
-    $b = $app->layout->add(new Button('Test1'));o
-    
+    $b = $app->add(new Button('Test1'));
+
     echo $b->name; // present, because button was added into initialized object.
 
 If object cannot determine the path to the application, then it will remain uninitialized for some time. This is called
@@ -75,7 +74,7 @@ If object cannot determine the path to the application, then it will remain unin
 At this point, if you execute $v->render() it will create it's own App and will create it's own render tree. On other hand
 if you add $v inside layout, trees will merge and the same $app will be used::
 
-    $app->layout->add($v);
+    $app->add($v);
 
     echo $b2->name; // fully set now and unique.
 
@@ -87,7 +86,7 @@ Rendering outside
 -----------------
 
 It's possible for some views to be rendered outside of the app. In the previous section I speculated that calling $v->render()
-will create it's own tree independent from the main one. 
+will create it's own tree independent from the main one.
 
 Agile UI sometimes uses the following approach to render element on the outside:
 
@@ -105,3 +104,32 @@ will be automatically embedded into the column and having it appear anywhere els
 
 It's usually quite furtile to try and extract JS chains from the $sub_tree because JS wouldn't work anyways, so this method
 will only work with static components.
+
+.. _unique_name:
+
+Unique Name
+-----------
+
+Through adding objects into render tree (even if those are not Views) objects can assume unique names. When you create
+your application, then any object you add into your app will have a unique `name` property::
+
+    $b = $app->add('Button');
+    echo $b->name;
+
+The other property of the name is that it's also "permanent". Refreshing the page guarantees your object to have the same
+name. Ultimatly, you can create a View that uses it's name to store some information::
+
+    class MyView extends View {
+        function init() {
+            parent::init();
+
+            if ($_GET[$this->name]) {
+                $this->add(['Label', 'Secret info is', 'big red', 'detail'=>$_GET[$this->name]);
+            }
+
+            $this->add(['Button', 'Send info to ourselves'])
+                ->link([$this->name => 'secret_info']);
+        }
+    }
+
+This quality of Agile UI objects is further explored thorugh :php:class:`Callback` and :php:class:`VirtualPage`

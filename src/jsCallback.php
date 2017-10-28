@@ -29,7 +29,7 @@ class jsCallback extends Callback implements jsExpressionable
             throw new Exception(['Call-back must be part of a RenderTree']);
         }
 
-        return (new jQuery())->ajaxec([
+        return (new jQuery())->atkAjaxec([
             'uri'        => $this->getURL(),
             'uri_options'=> $this->args,
             'confirm'    => $this->confirm,
@@ -63,6 +63,18 @@ class jsCallback extends Callback implements jsExpressionable
 
                 $response = call_user_func_array($callback, array_merge([$chain], $values));
 
+                if (is_array($response) && $response[0] instanceof View) {
+                    $response = $response[0];
+                }
+
+                if ($response instanceof View) {
+                    $response = new jsExpression('$([html]).modal("show")', [
+                        'html'=> '<div class="ui fullscreen modal"> <i class="close icon"></i>  <div class="content"> '.
+                        $response->render()
+                        .' </div> </div>',
+                    ]);
+                }
+
                 if ($response === $chain) {
                     $response = null;
                 }
@@ -91,7 +103,7 @@ class jsCallback extends Callback implements jsExpressionable
                     return $r->jsRender();
                 }, $actions));
 
-                $this->app->terminate(json_encode(['success'=>true, 'message'=>'Success', 'eval'=>$ajaxec]));
+                $this->app->terminate(json_encode(['success'=>true, 'message'=>'Success', 'atkjs'=>$ajaxec]));
             } catch (\atk4\data\ValidationException $e) {
                 // Validation exceptions will be presented to user in a friendly way
 

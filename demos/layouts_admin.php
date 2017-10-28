@@ -34,9 +34,9 @@ try {
 
     $app->layout->template['Footer'] = 'ATK is awesome';
 
-    $app->layout->add(['Header', 'Basic Form Example']);
+    $app->add(['Header', 'Basic Form Example']);
 
-    $f = $app->layout->add(new \atk4\ui\Form(['segment']));
+    $f = $app->add(new \atk4\ui\Form(['segment']));
     $f->setModel(new \atk4\data\Model());
 
     $f_group = $f->addGroup('Name');
@@ -46,7 +46,7 @@ try {
 
     $f_group = $f->addGroup('Address');
     $f_group->addField('address', ['width'=>'twelve']);
-    $f_group->addField('zip', ['Post Code', 'width'=>'four']);
+    $f_group->addField('zip', ['width'=>'four']);
 
     $f->onSubmit(function ($f) {
         $errors = [];
@@ -65,5 +65,6 @@ try {
     var_dump($e->getMessage());
 
     var_dump($e->getParams());
+
     throw $e;
 }

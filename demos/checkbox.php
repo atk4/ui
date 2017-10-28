@@ -26,5 +26,6 @@ try {
 
     var_dump($e->getParams());
     var_dump($e->getTrace());
+
     throw $e;
 }

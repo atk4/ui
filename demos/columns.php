@@ -17,7 +17,7 @@ $app->addStyle('
 }
 ');
 
-$page = $layout->add(['View', 'id'=>'example']);
+$page = $app->add(['View', 'id'=>'example']);
 
 $page->add(['Header', 'Basic Usage']);
 

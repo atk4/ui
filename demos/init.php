@@ -40,6 +40,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('Message', ['message']);
     $basic->addItem('Labels', ['label']);
     $basic->addItem('Menu', ['menu']);
+    $basic->addItem('Tabs', ['tabs']);
     $basic->addItem('Paginator', ['paginator']);
 
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon'=>'talk']);
@@ -56,7 +57,7 @@ if (isset($layout->leftMenu)) {
     $url = 'https://github.com/atk4/ui/blob/develop/demos/';
 
     // Would be nice if this would be a link.
-    $layout->menu->addItem()->add(new \atk4\ui\Button(['View Source', 'teal', 'icon'=>'github']))
+    $layout->menu->addItem()->add(['Button', 'View Source', 'teal', 'icon'=>'github'])
         ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url.$f]));
 
     $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';

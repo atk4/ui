@@ -17,7 +17,7 @@ Using Menu
 
 Here is a simple usage::
 
-    $menu = $layout->add('Menu');
+    $menu = $app->add('Menu');
     $menu->addItem('foo');
     $menu->addItem('bar');
 
@@ -53,7 +53,7 @@ menu you can also use groups. For horizontal menu, you can use addRightMenu.
 
 ::
 
-    $menu = $layout->add('Menu');
+    $menu = $app->add('Menu');
     $menu->addItem('foo');
     $sub = $menu->addMenu('Some Bars');
     $sub->addItem('bar 1');

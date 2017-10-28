@@ -3,8 +3,8 @@
 date_default_timezone_set('UTC');
 include 'init.php';
 
-$bb = $layout->add(['View', 'ui'=>'buttons']);
-$table = $layout->add(['Table', 'celled'=>true]);
+$bb = $app->add(['View', 'ui'=>'buttons']);
+$table = $app->add(['Table', 'celled'=>true]);
 
 $bb->add(['Button', 'Refresh Table', 'icon'=>'refresh'])
     ->on('click', new \atk4\ui\jsReload($table));
@@ -32,3 +32,19 @@ $table->addHook('getHTMLTags', function ($table, $row) {
 });
 
 $table->addTotals(['name'=>'Totals:', 'salary'=>['sum']]);
+
+    $my_array = [
+        ['name'=>'Vinny', 'surname'=>'Sihra', 'birthdate'=>new \DateTime('1973-02-03')],
+        ['name'=> 'Zoe', 'surname'=>'Shatwell', 'birthdate'=>new \DateTime('1958-08-21')],
+        ['name'=> 'Darcy', 'surname'=>'Wild', 'birthdate'=>new \DateTime('1968-11-01')],
+        ['name'=> 'Brett', 'surname'=>'Bird', 'birthdate'=>new \DateTime('1988-12-20')],
+    ];
+
+    $table = $app->add('Table');
+    $table->setSource($my_array);
+
+    // somehow setSourec() already creates name()
+    // TODO: im not sure how i feel about it
+    //$table->addColumn('name');
+    $table->addColumn('surname', ['Link', 'url'=>'details.php?surname={$surname}']);
+    $table->addColumn('birthdate', null, ['type'=>'date']);
