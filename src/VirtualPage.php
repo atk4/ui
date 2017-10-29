@@ -79,7 +79,7 @@ class VirtualPage extends View
      *
      * Note that only one callback function can be defined.
      *
-     * @param array $fx Need this to be defined as arrayotherwise we get warning in PHP7
+     * @param array $fx   Need this to be defined as arrayotherwise we get warning in PHP7
      * @param mixed $junk
      *
      * @return $this
