@@ -12,11 +12,13 @@ $t->addTab('Static Tab')->add('LoremIpsum');
 
 // dynamic tab
 $t->addTab('Dynamic Lorem Ipsum', function ($tab) {
+    sleep(2);
     $tab->add(['LoremIpsum', 'size' => 2]);
 });
 
 // dynamic tab
 $t->addTab('Dynamic Form', function ($tab) {
+    sleep(2);
     $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
     $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
 

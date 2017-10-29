@@ -46,6 +46,7 @@ if (isset($layout->leftMenu)) {
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon' => 'talk']);
     $basic->addItem('JavaScript Events', ['button2']);
     $basic->addItem('Element Reloading', ['reloading']);
+    $basic->addItem('Loader', ['loader']);
     $basic->addItem('Modal Dialogs', ['modal']);
     $basic->addItem('Sticky GET', ['sticky']);
     $basic->addItem('Recursive Views', ['recursive']);

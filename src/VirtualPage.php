@@ -16,8 +16,8 @@ class VirtualPage extends View
     /** @var Callback */
     public $cb = null;
 
-    /** @var array Functions of virtual page */
-    public $fx = [];
+    /** @var callable Optional callback function of virtual page */
+    public $fx = null;
 
     /** @var string UI container class */
     public $ui = 'container';
@@ -32,24 +32,29 @@ class VirtualPage extends View
         $this->cb = $this->_add('CallbackLater');
 
         $this->cb->set(function () {
-            if ($this->cb->triggered && $this->fx) {
-                call_user_func($this->fx, $this);
-                $this->app->terminate($this->render());
-            }
 
-            if ($this->cb->triggered == 'cut') {
+            // if virtual page callback is triggered
+            if ($type = $this->cb->triggered) {
+
+                // process callback
+                if ($this->fx) {
+                    call_user_func($this->fx, $this);
+                }
+
+                // special treatment for popup
+                if ($type == 'popup') {
+                    $this->app->html->template->set('title', $this->app->title);
+                    $this->app->html->template->setHTML('Content', parent::getHTML());
+                    $this->app->html->template->appendHTML('HEAD', $this->getJS());
+
+                    $this->app->terminate($this->app->html->template->render());
+                }
+
+                // render and terminate
                 if (isset($_GET['json'])) {
                     $this->app->terminate($this->renderJSON());
                 }
                 $this->app->terminate($this->render());
-            }
-
-            if ($this->cb->triggered == 'popup') {
-                $this->app->html->template->set('title', $this->app->title);
-                $this->app->html->template->setHTML('Content', parent::getHTML());
-                $this->app->html->template->appendHTML('HEAD', $this->getJS());
-
-                $this->app->terminate($this->app->html->template->render());
             }
 
             // Remove all elements from inside the Content
@@ -70,9 +75,11 @@ class VirtualPage extends View
     }
 
     /**
-     * Set function of virtual page.
+     * Set callback function of virtual page.
      *
-     * @param array $fx
+     * Note that only one callback function can be defined.
+     *
+     * @param array $fx Need this to be defined as arrayotherwise we get warning in PHP7
      * @param mixed $junk
      *
      * @return $this
@@ -80,8 +87,9 @@ class VirtualPage extends View
     public function set($fx = [], $junk = null)
     {
         if (!$fx) {
-            return;
+            return $this;
         }
+
         if ($this->fx) {
             throw new Exception([
                 'Callback for this Virtual Page is already defined',
