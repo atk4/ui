@@ -39,7 +39,7 @@ class Loader extends View
         parent::init();
 
         if (!$this->shim) {
-            $this->shim = ['View', 'ui' => 'active centered inline loader'];
+            $this->shim = ['View', 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
         }
 
         $this->cb = $this->add('Callback');
