@@ -48,7 +48,8 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('Element Reloading', ['reloading']);
     $basic->addItem('Loader', ['loader']);
     $basic->addItem('Noifyer', ['notify']);
-    $basic->addItem('Modal Dialogs', ['modal']);
+    $basic->addItem('Modal View', ['modal2']);
+    $basic->addItem('Dynamic jsModal', ['modal']);
     $basic->addItem('Sticky GET', ['sticky']);
     $basic->addItem('Recursive Views', ['recursive']);
     //$basic->addItem('Virtual Page', ['virtual']);

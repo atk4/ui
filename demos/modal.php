@@ -2,10 +2,20 @@
 
 require 'init.php';
 // Re-usable component implementing counter
+
+$app->add(['Header', 'Dynamic Modal Dialog']);
+
+    $modal = $app->add(['Modal', 'title' => 'Add a name']);
+    $modal->add('LoremIpsum');
+    $modal->add(['Button', 'Hide'])->on('click', $modal->hide());
+
+    $app->add(['Button', 'Show'])->on('click', $modal->show());
+
+
 if (!class_exists('Counter')) {
     class Counter extends \atk4\ui\FormField\Line
     {
-        public $content = 20; // default
+        public $content = 20;
 
         public function init()
         {
@@ -16,6 +26,7 @@ if (!class_exists('Counter')) {
 
             $this->actionLeft->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])-1', [$this->jsInput()->val()])));
             $this->action->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])+1', [$this->jsInput()->val()])));
+
         }
     }
 }
@@ -54,17 +65,3 @@ $frame->set(function ($frame) {
 });
 
 $t->onRowClick(new \atk4\ui\jsModal('Row Clicked', $frame, ['id' => $t->jsRow()->data('id')]));
-
-// Old COMPAT code
-/*
-$t->on('click', 'tr', new \atk4\ui\jsModal(
-    'Row Clicked',
-    new \atk4\ui\jsExpression(
-        '[]+"&id="+[]', [
-            $frame->getURL('cut'),
-            (new \atk4\ui\jQuery(new \atk4\ui\jsExpression('this')))->data('id'),
-        ]
-    )
-));
-$t->addStyle('cursor', 'pointer');
- */
