@@ -15,7 +15,7 @@ $b = $app->add(new Button('Hidden Button'));
 $b->js(true)->hide();
 
 // This button hides when clicked
-$b = $app->add(new Button(['id'=>'b2']))->set('Hide on click Button');
+$b = $app->add(new Button(['id' => 'b2']))->set('Hide on click Button');
 $b->js('click')->hide();
 
 $app->add(new Header('js() method'));

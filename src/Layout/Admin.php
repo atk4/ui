@@ -48,12 +48,12 @@ class Admin extends Generic
         parent::init();
 
         if ($this->menu === null) {
-            $this->menu = $this->add(['Menu', 'atk-topMenu inverted fixed horizontal', 'element'=>'header'], 'TopMenu');
-            $this->burger = $this->menu->addItem(['class'=>['icon atk-leftMenuTrigger']])->add(['Icon', 'content']);
+            $this->menu = $this->add(['Menu', 'atk-topMenu inverted fixed horizontal', 'element' => 'header'], 'TopMenu');
+            $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']])->add(['Icon', 'content']);
         }
 
         if ($this->menuRight === null) {
-            $this->menuRight = $this->menu->add(new Menu(['ui'=>false]), 'RightMenu')
+            $this->menuRight = $this->menu->add(new Menu(['ui' => false]), 'RightMenu')
                 ->addClass('right menu')->removeClass('item');
         }
 
@@ -74,7 +74,7 @@ class Admin extends Generic
         if ($this->menuLeft) {
             if (count($this->menuLeft->elements) == 1) {
                 // no items were added, so lets add dashboard
-                $this->menuLeft->addItem(['Dashboard', 'icon'=>'dashboard'], 'index');
+                $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], 'index');
             }
             //$this->leftMenu->addItem(['Logout', 'icon'=>'sign out'], ['logout']);
         }

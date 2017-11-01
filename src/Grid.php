@@ -76,16 +76,16 @@ class Grid extends View
         parent::init();
 
         if (is_null($this->menu)) {
-            $this->menu = $this->add(['Menu', 'activate_on_click'=>false], 'Menu');
+            $this->menu = $this->add(['Menu', 'activate_on_click' => false], 'Menu');
         }
 
         if (is_null($this->table)) {
-            $this->table = $this->add(['Table', 'very compact striped single line', 'reload'=>$this], 'Table');
+            $this->table = $this->add(['Table', 'very compact striped single line', 'reload' => $this], 'Table');
         }
 
         if (is_null($this->paginator)) {
             $seg = $this->add(['View'], 'Paginator')->addStyle('text-align', 'center');
-            $this->paginator = $seg->add(['Paginator', 'reload'=>$this]);
+            $this->paginator = $seg->add(['Paginator', 'reload' => $this]);
         }
     }
 
@@ -128,7 +128,7 @@ class Grid extends View
             ->addMenuRight()->addItem()->setElement('div')
             ->add('View')->setElement('form');
 
-        $this->quickSearch = $form->add(new \atk4\ui\FormField\Input(['placeholder'=>'Search', 'short_name'=>$this->name.'_q', 'icon'=>'search']))
+        $this->quickSearch = $form->add(new \atk4\ui\FormField\Input(['placeholder' => 'Search', 'short_name' => $this->name.'_q', 'icon' => 'search']))
             ->addClass('transparent');
 
         if (isset($_GET[$this->name.'_q'])) {
@@ -172,7 +172,7 @@ class Grid extends View
             $this->table->sort_order = $desc ? 'descending' : 'ascending';
         }
 
-        $this->table->on('click', 'thead>tr>th', new jsReload($this, [$this->name.'_sort'=>(new jQuery())->data('column')]));
+        $this->table->on('click', 'thead>tr>th', new jsReload($this, [$this->name.'_sort' => (new jQuery())->data('column')]));
     }
 
     public function setModel(\atk4\data\Model $model, $columns = null)

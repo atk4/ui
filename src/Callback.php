@@ -118,6 +118,6 @@ class Callback
             return $_SERVER['REQUEST_URI'];
         }
 
-        return $this->app->url([$this->name=>$mode]);
+        return $this->app->url([$this->name => $mode]);
     }
 }

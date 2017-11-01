@@ -30,9 +30,9 @@ class jsCallback extends Callback implements jsExpressionable
         }
 
         return (new jQuery())->atkAjaxec([
-            'uri'        => $this->getURL(),
-            'uri_options'=> $this->args,
-            'confirm'    => $this->confirm,
+            'uri'         => $this->getURL(),
+            'uri_options' => $this->args,
+            'confirm'     => $this->confirm,
         ])->jsRender();
     }
 
@@ -45,7 +45,7 @@ class jsCallback extends Callback implements jsExpressionable
     {
         $this->args = [];
 
-        foreach ($args as $key=>$val) {
+        foreach ($args as $key => $val) {
             if (is_numeric($key)) {
                 $key = 'c'.$key;
             }
@@ -57,7 +57,7 @@ class jsCallback extends Callback implements jsExpressionable
                 $chain = new jQuery(new jsExpression('this'));
 
                 $values = [];
-                foreach ($this->args as $key=>$value) {
+                foreach ($this->args as $key => $value) {
                     $values[] = isset($_POST[$key]) ? $_POST[$key] : null;
                 }
 
@@ -69,7 +69,7 @@ class jsCallback extends Callback implements jsExpressionable
 
                 if ($response instanceof View) {
                     $response = new jsExpression('$([html]).modal("show")', [
-                        'html'=> '<div class="ui fullscreen modal"> <i class="close icon"></i>  <div class="content"> '.
+                        'html' => '<div class="ui fullscreen modal"> <i class="close icon"></i>  <div class="content"> '.
                         $response->render()
                         .' </div> </div>',
                     ]);
@@ -95,7 +95,7 @@ class jsCallback extends Callback implements jsExpressionable
                     } elseif ($r === null) {
                         continue;
                     } else {
-                        throw new Exception(['Incorrect callback. Must be string or action.', 'r'=>$r]);
+                        throw new Exception(['Incorrect callback. Must be string or action.', 'r' => $r]);
                     }
                 }
 
@@ -103,7 +103,7 @@ class jsCallback extends Callback implements jsExpressionable
                     return $r->jsRender();
                 }, $actions));
 
-                $this->app->terminate(json_encode(['success'=>true, 'message'=>'Success', 'atkjs'=>$ajaxec]));
+                $this->app->terminate(json_encode(['success' => true, 'message' => 'Success', 'atkjs' => $ajaxec]));
             } catch (\atk4\data\ValidationException $e) {
                 // Validation exceptions will be presented to user in a friendly way
 
@@ -117,7 +117,7 @@ class jsCallback extends Callback implements jsExpressionable
                 $m = new Message($e->getMessage());
                 $m->addClass('error');
 
-                $this->app->terminate(json_encode(['success'=>false, 'message'=>$m->getHTML()]));
+                $this->app->terminate(json_encode(['success' => false, 'message' => $m->getHTML()]));
             }
         });
     }

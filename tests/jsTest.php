@@ -29,7 +29,7 @@ class jsTest extends \atk4\core\PHPUnit_AgileTestCase
                         10,
                         new jsExpression(
                             '[a]+[b]',
-                            ['a'=> 2, 'b'=>3]
+                            ['a' => 2, 'b' => 3]
                         ),
                     ]
                 )

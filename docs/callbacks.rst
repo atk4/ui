@@ -1,6 +1,6 @@
 
-Introduction
-------------
+Callback Introduction
+---------------------
 
 Agile UI pursues a goal of creating a full-featured, interractive, user interface. Part of that relies
 on abstraction of Browser/Server communication.
@@ -31,9 +31,9 @@ The Callback class
 Callback is not a View. This class does not extend any other class but it does implement several important
 traits:
 
- - TrackableTrait [todo add link]
- - AppScopeTrait
- - DIContainerTrait
+ - `TrackableTrait <http://agile-core.readthedocs.io/en/develop/container.html?highlight=trackable#trackable-trait>`_
+ - `AppScopeTrait <http://agile-core.readthedocs.io/en/develop/appscope.html>`_
+ - `DIContainerTrait <http://agile-core.readthedocs.io/en/develop/di.html>`_
 
 To create a new callback, do this::
 
@@ -128,7 +128,7 @@ derived classes.
 CallbackLater
 -------------
 
-.. php::class: CallbackLater
+.. php:class:: CallbackLater
 
 This class is very similar to Callback, but it will not execute immediatelly. Instead it will be executed
 either at the end at beforeRender or beforeOutput hook from inside App, whichever comes first.
@@ -179,7 +179,7 @@ jsReload existance is only possible thanks to CallbackLater implementation.
 jsCallback
 ----------
 
-.. php::class: jsCallback
+.. php:class:: jsCallback
 
 So far, the return value of callback handler was pretty much insignificant. But wouldn't it be great if this
 value was meaningful in some way?
@@ -234,7 +234,7 @@ User Confirmation
 The implementation perfectly hides existence of callback route, javascript action and jsCallback. The jsCallback
 is based on 'Callback' therefore code after :php:meth:`View::on()` will not be executed during triggering.
 
-.. php::attr: confirm
+.. php:attr:: confirm
 
 If you set `confirm` property action will ask for user's confirmation before sending a callback::
 
@@ -262,7 +262,7 @@ property::
 JavaScript arguments
 ^^^^^^^^^^^^^^^^^^^^
 
-.. php::method: set($callback, $arguments = [])
+.. php:method:: set($callback, $arguments = [])
 
 It is possible to modify expression of jsCallback to pass additional arguments to it's callback. The next example
 will send browser screen width back to the callback::
@@ -310,120 +310,3 @@ Now instead of showing an alert box, label content will be changed to display wi
 There are many other applications for jsCallback, for example, it's used in :php:meth:`Form::onSubmit()`.
 
 
-VirtualPage
------------
-
-So far we looked at the callbacks that either return raw output, or are linked with JavaScript to execute action.
-There is one more interesting way how a browser can be connected to PHP - VirtualPage.
-
-.. php::class: VirtualPage
-
-Virtual Page is a view that renders as an empty string, so adding VirtualPage anywhere inside your :ref:`render_tree`
-simply won't display any of it's content anywhere::
-
-    $vp = $app->add('VirtualPage');
-    $vp->add('LoremIpsum');
-
-.. php::attr: $cb
-
-VirtuaPage has a property $cb, which refers to... CallbackLater object! Lets see what happens if we trigger this callback now::
-
-    $vp = $app->add('VirtualPage');
-    $vp->add('LoremIpsum');
-
-    $label = $app->add('Label');
-
-    $label->detail = $vp->cb->getURL();
-    $label->link($vp->cb->getURL());
-
-If you follow the link, you'll see 'LoremIpsum' text, but the label will not be visible now. This is because,
-when triggered, VirtualPage will get rid of all the other Content inside layout, and will output itself and
-any views you have added into VirtualPage object.
-
-Output Modes
-^^^^^^^^^^^^
-
-.. php::method: getURL($mode = 'callback')
-
-You may pass argument to :php:meth:`Callback::getURL()` but with VirtualPage this value has a deeper meaning.
-
- - getURL('cut') will return ONLY the HTML of virtual page, no Layout.
- - getURL('popup') will use a very minimalistic layout for valid HTML, suitable for iframes or popup windows.
-
-You can experement with::
-
-    $label->detail = $vp->cb->getURL('popup');
-    $label->link($vp->cb->getURL('popup'));
-
-Setting Callback
-^^^^^^^^^^^^^^^^
-
-.. php::method: set($callback)
-
-Although VirtualPage works without defining a callback, using one is more reliable and is always recommended::
-
-    $vp = $app->add('VirtualPage');
-    $vp->set(function($vp){
-        $vp->add('LoremIpsum');
-    });
-
-    $label = $app->add('Label');
-
-    $label->detail = $vp->cb->getURL();
-    $label->link($vp->cb->getURL());
-
-This code will perform identically as the previous example, however 'LoremIpsum' will never be initialized
-unless you are requesting VirtualPage specifically, saving some CPU time. Capability of defining callback
-also makes it possible for VirtualPage to be embedded into any :ref:`component` quite reliably.
-
-To illustrate, :php:class:`Tabs` component rely on VirtualPage and allow you to define dynamically loadable tabs::
-
-    $t = $app->add('Tabs');
-
-    $t->addTab('Tab1')->add('LoremIpsum'); // regular tab
-    $t->addTab('Tab2', function($p){ $p->add('LoremIpsum'); }); // dynamic tab
-
-The dynamic tab is implemented through Virtual Page, which is passed to your callback as $p. VirtualPage
-is also used in Modal, CRUD and various other components.
-
-.. php::method: getURL()
-
-    You can use this shortcut method instead of $vp->cb->getURL().
-
-.. php::attr: $ui
-
-When using 'popup' mode, the output appears inside a `<div class="ui container">`. If you want to change this
-class, you can set $ui property to something else. Try::
-
-    $vp = $app->add('VirtualPage');
-    $vp->add('LoremIpsum');
-    $vp->ui = 'red inverted segment';
-
-    $label = $app->add('Label');
-
-    $label->detail = $vp->cb->getURL('popup');
-    $label->link($vp->cb->getURL('popup'));
-
-
-.. php::class: Tabs
-
-Tabs is a view that works as it sounds - it's a basic tabs implementation.
-
-.. php::method: addTab($name, $action)
-
-    Use addTab() method to add more tabs in Tabs view. First parameter is a title of the tab.
-
-    Tabs can be static or dynamic. Dynamic tabs use :php:class:`VirtualPage` implementation mentioned above.
-    You should pass callable action as a second parameter.
-
-    Example::
-
-    $t = $app->add('Tabs');
-
-    // add static tab
-    $t->addTab('Static Tab')->add('HelloWorld');
-
-    // add dynamic tab
-    $t->addTab('Dynamically Loading', function ($tab) {
-        $tab->add('LoremIpsum');
-    });

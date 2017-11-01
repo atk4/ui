@@ -50,8 +50,8 @@ class Button extends View
             if ($this->icon) {
                 throw new Exception([
                     'Cannot use icon and iconRight simultaniously',
-                    'icon'     => $this->icon,
-                    'iconRight'=> $this->iconRight,
+                    'icon'      => $this->icon,
+                    'iconRight' => $this->iconRight,
                 ]);
             }
 

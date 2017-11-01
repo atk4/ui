@@ -583,7 +583,7 @@ class Template implements \ArrayAccess
         if (!is_readable($filename)) {
             throw new Exception([
                 'Unable to read template from file',
-                'file'=> $filename,
+                'file' => $filename,
             ]);
         }
         $this->loadTemplateFromString(file_get_contents($filename));

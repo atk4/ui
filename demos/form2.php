@@ -16,8 +16,8 @@ $form->setModel(new Country($db), false);
 
 // form basic field group
 $f_address = $form->addGroup('Basic Country Information');
-$f_address->addField('name', ['width'=>'sixteen'])
-    ->addAction(['Check Duplicate', 'iconRight'=>'search'])
+$f_address->addField('name', ['width' => 'sixteen'])
+    ->addAction(['Check Duplicate', 'iconRight' => 'search'])
     ->on('click', function ($val) {
         // We can't get the value until https://github.com/atk4/ui/issues/77
         return 'Value appears to be unique';
@@ -25,16 +25,16 @@ $f_address->addField('name', ['width'=>'sixteen'])
 
 // form codes field group
 $f_codes = $form->addGroup(['Codes']);
-$f_codes->addField('iso', ['width'=>'four'])->iconLeft = 'flag';
-$f_codes->addField('iso3', ['width'=>'four'])->iconLeft = 'flag';
-$f_codes->addField('numcode', ['width'=>'four'])->iconLeft = 'flag';
-$f_codes->addField('phonecode', ['width'=>'four'])->iconLeft = 'flag';
+$f_codes->addField('iso', ['width' => 'four'])->iconLeft = 'flag';
+$f_codes->addField('iso3', ['width' => 'four'])->iconLeft = 'flag';
+$f_codes->addField('numcode', ['width' => 'four'])->iconLeft = 'flag';
+$f_codes->addField('phonecode', ['width' => 'four'])->iconLeft = 'flag';
 
 // form names field group
 $f_names = $form->addGroup(['More Information about you']);
-$f_names->addField('first_name', ['width'=>'eight']);
-$f_names->addField('middle_name', ['width'=>'three']);
-$f_names->addField('last_name', ['width'=>'five']);
+$f_names->addField('first_name', ['width' => 'eight']);
+$f_names->addField('middle_name', ['width' => 'three']);
+$f_names->addField('last_name', ['width' => 'five']);
 
 // form on submit
 $form->onSubmit(function ($f) {
@@ -71,7 +71,7 @@ $form->onSubmit(function ($f) {
         public function init()
         {
             parent::init();
-            $this->addField('name', ['required'=>true]);
+            $this->addField('name', ['required' => true]);
             $this->addField('surname');
             $this->addField('gender', ['enum' => ['M', 'F']]);
         }

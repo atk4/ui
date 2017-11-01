@@ -44,6 +44,7 @@ We call this format 'Seed'. This section will explain how and where it is used.
     seed
 
 .. _render:
+.. _render_tree:
 
 Render Tree
 ===========
@@ -113,8 +114,8 @@ inputs user data.
 
 .. _callback:
 
-Callbacks and Virtual Pages
-===========================
+Callbacks
+=========
 
 By relying on the ability of generating :ref:`unique_name`, it's possible to create several classes
 for implementing PHP call-backs. They follow the pattern:
@@ -132,19 +133,40 @@ Once the concept is established, it can even be used on a higher level, for exam
 
     callbacks
 
-ok
 
- - "call-backs"
- - "virtual pages"
- - sticky
+.. _virtualpage:
+
+VirtualPage and Loader
+======================
+
+Building on the foundation of :ref:`callback`, components :php:class:`VirtualPage` and :php:class:`Loader`
+exist to enhance other Components with dynamically loadable content. Here is example for :php:class:`Tabs`::
+
+    $tabs = $app->add('Tabs');
+    $tabs->addTab('First tab is static')->add('LoremIpsum');
+
+    $tabs->addTab('Second tab is dynamic', function($vp) {
+        $vp->add('LoremIpsum');
+    });
+
+As you switch between those two tabs, you'll notice that the :php:class:`Button` label on the "Second tab"
+reloads every time. :php:class:`Tabs` implements this by using :php:class:`VirtualPage`, read further to
+find out how:
+
+
+.. toctree::
+    :maxdepth: 4
+
+    virtualpage
+
 
 Documentation is coming soon.
+=============================
 
 .. toctree::
     :maxdepth: 4
 
     init
     callback
-    virtualpage
     stickyget
 

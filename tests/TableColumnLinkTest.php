@@ -10,7 +10,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function setUp()
     {
-        $arr = ['table'=>[1=>['id'=>1, 'name'=>'bar', 'ref'=>'ref123', 'salary'=>-123]]];
+        $arr = ['table' => [1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123]]];
         $db = new \atk4\data\Persistence_Array($arr);
         $m = new \atk4\data\Model($db, 'table');
         $m->addField('name');
@@ -164,7 +164,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testLink1a()
     {
-        $this->table->addDecorator('name', ['Link', 'url'=>'example.php?id={$id}']);
+        $this->table->addDecorator('name', ['Link', 'url' => 'example.php?id={$id}']);
 
         $this->assertEquals(
             '<td><a href="{$c_link}">{$name}</a></td><td>{$ref}</td>',
@@ -179,7 +179,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testLink2()
     {
-        $this->table->addDecorator('name', new \atk4\ui\TableColumn\Link(['example', 'id'=>'{$id}']));
+        $this->table->addDecorator('name', new \atk4\ui\TableColumn\Link(['example', 'id' => '{$id}']));
 
         // url is properly encoded
 
@@ -201,7 +201,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testLink4()
     {
-        $this->table->addDecorator('name', new \atk4\ui\TableColumn\Link(['example'], ['test'=>'id']));
+        $this->table->addDecorator('name', new \atk4\ui\TableColumn\Link(['example'], ['test' => 'id']));
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1">bar</a></td><td>ref123</td></tr>',
@@ -211,7 +211,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testLink5()
     {
-        $this->table->addDecorator('name', ['Link', ['example'], ['test'=>'id']]);
+        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id']]);
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1">bar</a></td><td>ref123</td></tr>',

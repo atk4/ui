@@ -7,5 +7,5 @@ namespace atk4\ui\TableColumn;
  */
 class Text extends Generic
 {
-    public $attr = ['all'=>['class'=>['atk-cell-expanded']]];
+    public $attr = ['all' => ['class' => ['atk-cell-expanded']]];
 }
