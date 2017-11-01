@@ -15,7 +15,7 @@ class jsNotify implements jsExpressionable
         if ($options && is_array($options)) {
             $this->setOptions($options);
         } elseif (is_string($options)) {
-            $this->setOptions(['content'=>$options]);
+            $this->setOptions(['content' => $options]);
         }
 
         if ($attachTo) {

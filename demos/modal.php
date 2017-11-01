@@ -11,7 +11,6 @@ $app->add(['Header', 'Dynamic Modal Dialog']);
 
     $app->add(['Button', 'Show'])->on('click', $modal->show());
 
-
 if (!class_exists('Counter')) {
     class Counter extends \atk4\ui\FormField\Line
     {
@@ -26,7 +25,6 @@ if (!class_exists('Counter')) {
 
             $this->actionLeft->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])-1', [$this->jsInput()->val()])));
             $this->action->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])+1', [$this->jsInput()->val()])));
-
         }
     }
 }

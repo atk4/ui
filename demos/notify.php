@@ -11,7 +11,7 @@ $modal = $app->add(['Modal', 'Modal Title']);
 
 $modal->set(function ($p) use ($modal) {
     $form = $p->add('Form');
-    $form->addField('name', null, ['caption'=>'Add your name']);
+    $form->addField('name', null, ['caption' => 'Add your name']);
 
     $form->onSubmit(function ($f) use ($modal) {
         if (empty($f->model['name'])) {
@@ -19,11 +19,10 @@ $modal->set(function ($p) use ($modal) {
         } else {
             return [
                 $modal->hide(),
-                new \atk4\ui\jsNotify('Thank you '.$f->model['name'])
+                new \atk4\ui\jsNotify('Thank you '.$f->model['name']),
             ];
         }
     });
 });
 
 $app->add(['Button', 'Open Modal'])->on('click', $modal->show());
-
