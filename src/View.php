@@ -203,9 +203,9 @@ class View implements jsExpressionable
     {
         $goodData = [];
 
-        foreach ($data as $key=>$value) {
+        foreach ($data as $key => $value) {
             if (!is_array($value)) {
-                $value = ['name'=>$value];
+                $value = ['name' => $value];
             }
 
             if (!isset($value['id'])) {
@@ -213,7 +213,7 @@ class View implements jsExpressionable
             }
             $goodData[] = $value;
         }
-        $goodData = ['data'=>$goodData];
+        $goodData = ['data' => $goodData];
 
         $model = new \atk4\data\Model(
             new \atk4\data\Persistence_Array($goodData), 'data'
@@ -337,7 +337,7 @@ class View implements jsExpressionable
      */
     protected function initDefaultApp()
     {
-        $this->app = new App(['skin'=>$this->skin, 'catch_exceptions'=>false, 'always_run'=>false]);
+        $this->app = new App(['skin' => $this->skin, 'catch_exceptions' => false, 'always_run' => false]);
         $this->app->init();
     }
 
@@ -397,7 +397,7 @@ class View implements jsExpressionable
 
         if ($this->template && $object->region) {
             if (is_string($this->template)) {
-                throw new Exception(['Property $template should contain object, not a string', 'template'=>$this->template]);
+                throw new Exception(['Property $template should contain object, not a string', 'template' => $this->template]);
             }
 
             $this->template->del($object->region);
@@ -434,8 +434,8 @@ class View implements jsExpressionable
         if ($arg2 !== null) {
             throw new Exception([
                 'Second argument to set() can be only passed if the first one is a string',
-                'arg1'=> $arg1,
-                'arg2'=> $arg2,
+                'arg1' => $arg1,
+                'arg2' => $arg2,
             ]);
         }
 
@@ -482,7 +482,7 @@ class View implements jsExpressionable
         }
 
         if (is_string($this->class)) {
-            throw new Exception(['Property $class should always be array', 'object'=>$this, 'class'=>$this->class]);
+            throw new Exception(['Property $class should always be array', 'object' => $this, 'class' => $this->class]);
         }
 
         $this->class = array_merge($this->class, explode(' ', $class));
@@ -734,12 +734,12 @@ class View implements jsExpressionable
             if ($exception instanceof \atk4\core\Exception) {
                 $l->template->setHTML('Content', $exception->getHTML());
             } elseif ($exception instanceof \Error) {
-                $l->add(new self(['ui'=> 'message', get_class($exception).': '.
+                $l->add(new self(['ui' => 'message', get_class($exception).': '.
                                                             $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
                     'error', ]));
                 $l->add(new Text())->set(nl2br($exception->getTraceAsString()));
             } else {
-                $l->add(new self(['ui'=>'message', get_class($exception).': '.$exception->getMessage(), 'error']));
+                $l->add(new self(['ui' => 'message', get_class($exception).': '.$exception->getMessage(), 'error']));
             }
 
             return json_encode(['success' => false,
@@ -900,7 +900,7 @@ class View implements jsExpressionable
         }
 
         // all non-key items of defaults are actually arguments
-        foreach ($defaults as $key=>$value) {
+        foreach ($defaults as $key => $value) {
             if (is_numeric($key)) {
                 $arguments[] = $value;
                 unset($defaults[$key]);
@@ -929,7 +929,7 @@ class View implements jsExpressionable
             }
 
             // create callback, that will include event as part of the full name
-            $this->_add($cb = new jsCallback(), ['desired_name'=>$event]);
+            $this->_add($cb = new jsCallback(), ['desired_name' => $event]);
 
             $cb->set(function () use ($action) {
                 $args = func_get_args();

@@ -40,10 +40,10 @@ class jsFunction implements jsExpressionable
         $this->fx_args = $args ?: [];
 
         if (!is_array($statements)) {
-            throw new Exception(['$statements is not array', 'statements'=>$statements]);
+            throw new Exception(['$statements is not array', 'statements' => $statements]);
         }
 
-        foreach ($statements as $key=>$value) {
+        foreach ($statements as $key => $value) {
             if (is_numeric($key)) {
                 $this->fx_statements[] = $value;
             } else {
@@ -89,7 +89,7 @@ class jsFunction implements jsExpressionable
             if ($statement instanceof jsExpressionable) {
                 $statement = $statement->jsRender();
             } else {
-                throw new Exception(['Incorrect statement for jsFunction.', 'statement'=>$statement]);
+                throw new Exception(['Incorrect statement for jsFunction.', 'statement' => $statement]);
             }
 
             $output .= "\n".$this->indent.'  '.$statement.';';

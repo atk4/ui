@@ -100,7 +100,7 @@ class Link extends Generic
 
         $p = $this->page ?: [];
 
-        foreach ($this->args as $key=>$val) {
+        foreach ($this->args as $key => $val) {
             if (is_numeric($key)) {
                 $key = $val;
             }

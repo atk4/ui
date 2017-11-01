@@ -10,11 +10,11 @@ class PostTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function setUp()
     {
-        $_POST = ['name'=>'John', 'is_married'=>'Y'];
+        $_POST = ['name' => 'John', 'is_married' => 'Y'];
         $this->model = new Model();
         $this->model->addField('name');
-        $this->model->addField('surname', ['default'=>'Smith']);
-        $this->model->addField('is_married', ['type'=>'boolean']);
+        $this->model->addField('surname', ['default' => 'Smith']);
+        $this->model->addField('is_married', ['type' => 'boolean']);
     }
 
     /**

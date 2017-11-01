@@ -30,23 +30,23 @@ class Dropdown extends Input
 
         $options = [];
         if ($this->empty) {
-            $item = ['option', 'value'=>'', $this->empty];
+            $item = ['option', 'value' => '', $this->empty];
             $options[] = $item;
         }
 
         if (isset($this->model)) {
-            foreach ($this->model as $key=>$row) {
+            foreach ($this->model as $key => $row) {
                 $title = $row[$row->title_field];
 
-                $item = ['option', 'value'=>(string) $key, $title];
+                $item = ['option', 'value' => (string) $key, $title];
                 if ($value == $key) {
                     $item['selected'] = true;
                 }
                 $options[] = $item;
             }
         } else {
-            foreach ($this->values as $key=>$val) {
-                $item = ['option', 'value'=>(string) $key, $val];
+            foreach ($this->values as $key => $val) {
+                $item = ['option', 'value' => (string) $key, $val];
                 if ($value == $key) {
                     $item['selected'] = true;
                 }
@@ -55,12 +55,12 @@ class Dropdown extends Input
         }
 
         return $this->app->getTag('select', [
-            'class'      => 'fluid search selection',
-            'name'       => $this->short_name,
-            'type'       => $this->inputType,
-            'rows'       => $this->rows,
-            'placeholder'=> $this->placeholder,
-            'id'         => $this->id.'_input',
+            'class'       => 'fluid search selection',
+            'name'        => $this->short_name,
+            'type'        => $this->inputType,
+            'rows'        => $this->rows,
+            'placeholder' => $this->placeholder,
+            'id'          => $this->id.'_input',
         ], [[$options]]
        //
     );

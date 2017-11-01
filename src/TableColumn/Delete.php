@@ -21,9 +21,9 @@ class Delete extends Generic
         });
 
         $this->table->on('click', 'a.'.$this->short_name)->atkAjaxec([
-            'uri'        => $this->vp->getURL(),
-            'uri_options'=> [$this->name => $this->table->jsRow()->data('id')],
-            'confirm'    => (new \atk4\ui\jQuery())->attr('title'),
+            'uri'         => $this->vp->getURL(),
+            'uri_options' => [$this->name => $this->table->jsRow()->data('id')],
+            'confirm'     => (new \atk4\ui\jQuery())->attr('title'),
         ]);
     }
 
@@ -31,9 +31,9 @@ class Delete extends Generic
     {
         return $this->app->getTag(
             'a',
-            ['href'=> '#', 'title'=>'Delete {$'.$this->table->model->title_field.'}?', 'class'=>$this->short_name],
+            ['href' => '#', 'title' => 'Delete {$'.$this->table->model->title_field.'}?', 'class' => $this->short_name],
             [
-                ['i', ['class'=>'ui red trash icon'], ''],
+                ['i', ['class' => 'ui red trash icon'], ''],
                 'Delete',
             ]);
     }
