@@ -47,6 +47,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('JavaScript Events', ['button2']);
     $basic->addItem('Element Reloading', ['reloading']);
     $basic->addItem('Loader', ['loader']);
+    $basic->addItem('Noifyer', ['notify']);
     $basic->addItem('Modal Dialogs', ['modal']);
     $basic->addItem('Sticky GET', ['sticky']);
     $basic->addItem('Recursive Views', ['recursive']);
