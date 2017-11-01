@@ -43,7 +43,6 @@ class Modal extends View
     {
         parent::init();
         $this->template->trySet('title', $this->title);
-
     }
 
     /**
@@ -91,7 +90,7 @@ class Modal extends View
      * Will trigger modal to be show on page.
      * ex: $button->on('click', $modal->show());.
      *
-     * @param  array $args
+     * @param array $args
      *
      * @return mixed
      */
@@ -100,6 +99,7 @@ class Modal extends View
         if (!empty($args)) {
             $this->args = array_merge($this->args, $args);
         }
+
         return $this->js()->modal('show');
     }
 
