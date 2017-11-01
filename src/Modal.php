@@ -29,15 +29,21 @@ class Modal extends View
 {
     public $defaultTemplate = 'modal.html';
     public $title = 'Modal title';
+    public $loading_label = 'Loading...';
     public $ui = 'modal';
     public $fx = [];
     public $cb = null;
     public $cb_view = null;
+    public $args = [];
+
+    //now only supported json type response.
+    public $type = 'json';
 
     public function init()
     {
         parent::init();
         $this->template->trySet('title', $this->title);
+
     }
 
     /**
@@ -85,10 +91,15 @@ class Modal extends View
      * Will trigger modal to be show on page.
      * ex: $button->on('click', $modal->show());.
      *
+     * @param  array $args
+     *
      * @return mixed
      */
-    public function show()
+    public function show($args = [])
     {
+        if (!empty($args)) {
+            $this->args = array_merge($this->args, $args);
+        }
         return $this->js()->modal('show');
     }
 
@@ -250,8 +261,12 @@ class Modal extends View
 
     public function renderView()
     {
+        $data['type'] = $this->type;
+        $data['label'] = $this->loading_label;
+
         if (!empty($this->fx)) {
-            $this->template->trySet('uri', $this->cb->getURL());
+            // $this->template->trySet('uri', $this->cb->getURL());
+            $data['uri'] = $this->cb->getUrl();
         }
 
         // call modal creation first
@@ -271,6 +286,12 @@ class Modal extends View
         if (!isset($this->options['modal_option']['closable']) || $this->options['modal_option']['closable']) {
             $this->template->trySet('close', 'icon close');
         }
+
+        if (!empty($this->args)) {
+            //$this->js(true)->find('.atk-dialog-content')->data(['args' => $this->args]);
+            $data['args'] = $this->args;
+        }
+        $this->js(true)->data($data);
 
         parent::renderView();
     }

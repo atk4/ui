@@ -35,34 +35,33 @@ class ModalService {
     }
 
     onVisible() {
-        let arg = {}, data;
+        let args = {}, data;
         // const service = apiService;
         const $modal = $(this);
         const $content = $(this).find('.atk-dialog-content');
 
-        // does data come from DOM or createModal
-        if (!$.isEmptyObject($modal.data('modalSettings'))) {
-            data = $modal.data('modalSettings');
-        } else if (!$.isEmptyObject($content.data())) {
-            data = $content.data();
+        // check data associated with this modal.
+        if (!$.isEmptyObject($modal.data())) {
+          data = $modal.data();
         }
 
         // add data argument
-        if (data && data.arg) {
-            arg = data.arg;
+        if (data && data.args) {
+            args = data.args;
         }
 
         // check for data type, usually json or html
         if (data && data.type === 'json') {
-            arg = $.extend(arg, {json:true});
+            args = $.extend(true, args, {json:true});
         }
 
         // does modal content need to be loaded dynamically
         if (data && data.uri) {
+            $content.html(modalService.getLoader(data.label ? data.label : ''));
             $content.api({
                 on: 'now',
                 url: data.uri,
-                data: arg,
+                data: args,
                 method: 'GET',
                 obj: $content,
                 onComplete: function(response, content) {
@@ -95,8 +94,7 @@ class ModalService {
     }
 
     removeModal(modal) {
-        const settings = modal.data('modalSettings');
-        if (settings && settings.needRemove) {
+        if (modal.data().needRemove) {
             //This modal was add by createModal and need to be remove.
             modal.remove();
         }
@@ -112,7 +110,7 @@ class ModalService {
     setCloseTriggerEventInModals() {
         for (let i = this.modals.length - 1; i >= 0; --i) {
             const modal = this.modals[i];
-            if (modal.data('modalSettings') && modal.data('modalSettings').needCloseTrigger) {
+            if (modal.data().needCloseTrigger) {
                 modal.on('close', '.atk-dialog-content', function(){
                     modal.modal('hide');
                 });
@@ -136,6 +134,11 @@ class ModalService {
                 modal.data('isClosable', false);
             }
         }
+    }
+
+    getLoader(loaderText) {
+        return `<div class="ui active inverted dimmer">
+              <div class="ui text loader">${loaderText}</div>`
     }
 }
 
