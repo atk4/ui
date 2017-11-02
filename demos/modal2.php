@@ -3,7 +3,6 @@
 require 'Session.php';
 require 'init.php';
 
-$app->add(['Message', 'Message', 'blue'])->text->addParagraph('This text is loaded using a second modal.');
 $app->add(['Header', 'Modal View']);
 
 $session = new Session();
