@@ -3,6 +3,8 @@
 require 'Session.php';
 require 'init.php';
 
+$app->add(['Header', 'Modal View']);
+
 $session = new Session();
 
 /*
@@ -10,8 +12,6 @@ $session = new Session();
  */
 
 /********** REGULAR ******************/
-
-$app->add(['Header', 'Simple Modal']);
 
 $modal_simple = $app->add(['Modal', 'title' => 'Simple modal']);
 $modal_simple->add('Message')->set('Modal message here.');
