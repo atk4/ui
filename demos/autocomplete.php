@@ -16,19 +16,18 @@ $m = new \atk4\data\Model($db, 'test');
 $m->hasOne('country1', new Country());
 
 // With AutoComplete
-$m->hasOne('country2', [new Country(), 'ui'=>['form'=> [
+$m->hasOne('country2', [new Country(), 'ui' => ['form' => [
     'AutoComplete',
     'plus' => true,
 ]]]);
 
-
 $form->setModel($m);
 
 $form->addField('country3', [
-    'AutoComplete', 
-    'model'=>new Country($db), 
-    'placeholder'=>'Search for country by code, LV or UK',
-    'search'=>['name','iso', 'iso3']
+    'AutoComplete',
+    'model'       => new Country($db),
+    'placeholder' => 'Search for country by code, LV or UK',
+    'search'      => ['name', 'iso', 'iso3'],
 ]);
 
 //$acc = $form->getField('country_id');

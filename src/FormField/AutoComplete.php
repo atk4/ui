@@ -82,11 +82,12 @@ class AutoComplete extends Input
         }
         $this->model->setLimit(10);
         if (isset($_GET['q'])) {
-
             if ($this->search instanceof Closure) {
                 $this->search($this->model, $_GET['q']);
             } elseif ($this->search && is_array($this->search)) {
-                $this->model->addCondition($x=array_map(function($field) { return [$field, 'like', '%'.$_GET['q'].'%']; }, $this->search));
+                $this->model->addCondition($x = array_map(function ($field) {
+                    return [$field, 'like', '%'.$_GET['q'].'%'];
+                }, $this->search));
             } else {
                 $this->model->addCondition($this->model->title_field, 'like', '%'.$_GET['q'].'%');
             }
@@ -95,9 +96,9 @@ class AutoComplete extends Input
         $data = $this->model->export([$this->model->id_field, $this->model->title_field]);
 
         if ($this->empty) {
-            $label = $this->empty === true ? '..' : (string)$this->empty;
+            $label = $this->empty === true ? '..' : (string) $this->empty;
 
-            array_unshift($data, [$this->model->id_field => 0, $this->model->title_field=>$label]);
+            array_unshift($data, [$this->model->id_field => 0, $this->model->title_field => $label]);
         }
 
         $this->app->terminate(json_encode([
