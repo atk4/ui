@@ -167,7 +167,9 @@ class View implements jsExpressionable
             $this->setDefaults($defaults);
         }
 
-        $this->content = $label;
+        if ($label !== null) {
+            $this->content = $label;
+        }
 
         if ($class) {
             $this->addClass($class);
