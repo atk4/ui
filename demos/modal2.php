@@ -7,7 +7,6 @@ $app->add(['Header', 'Modal View']);
 
 $session = new Session();
 
-
 /*
  * Modal demos.
  */
@@ -37,10 +36,10 @@ $modal_vp1->set(function ($modal) use ($modal_vp2) {
     $modal->add(new \atk4\ui\tests\ViewTester());
     $modal->add(['LoremIpsum', 'size' => 2]);
     $form = $modal->add('Form');
-    $form->addField('color', null, ['enum'=>['red','green','blue']]);
-    $form->onSubmit(function($form) use ($modal_vp2) {
-        return $modal_vp2->show(['color'=>$form->model['color']]);
-    });;
+    $form->addField('color', null, ['enum' => ['red', 'green', 'blue']]);
+    $form->onSubmit(function ($form) use ($modal_vp2) {
+        return $modal_vp2->show(['color' => $form->model['color']]);
+    });
 });
 
 //When $modal_vp2->show() is activate, it will dynamically add this content to it.
