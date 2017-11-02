@@ -2,9 +2,23 @@
 
 require 'init.php';
 
-$v = $app->add('View')->set('allo');
-$sse = $app->add('SSE'/*new atk4\ui\SSE()*/);
 
+//$vp = $app->add('VirtualPage');
+//
+//$vp->set(function($p){
+//    $p->add(['Message', 'Message'])->text->addParagraph('youhoy');
+//});
+
+$sse = $app->add('SSE'/*new atk4\ui\SSE()*/);
+//$sse->set(function ($p){
+//   $p->add('View')->set('allo');
+//});
+
+$msg = $app->add(['Message', 'Message'])->text->addParagraph('Time is: ' . time());
+
+$sse->addViewEventHandler($msg, function($msg) {
+   $msg->text->addParagraph('Time is: ');
+});
 $t = 't';
 
 // SSE is a virtual page like and does not output anything

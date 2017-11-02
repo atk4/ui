@@ -13,7 +13,7 @@ use atk4\core\InitializerTrait;
  * @package atk4\ui
  */
 
-class SSE extends View
+class SSE extends VirtualPage
 {
 
     /*use TrackableTrait;
@@ -21,10 +21,12 @@ class SSE extends View
     use DIContainerTrait;
     use InitializerTrait;*/
 
-    public $view;
+    public $view = null;
     public $events;
     public $ui = '';
     public $cb;
+    public $handlers = null;
+    public $isTriggered = false;
 
     public $defaults =[
         'sleep_time'            => 0.5,                 // seconds to sleep after the data has been sent
@@ -52,11 +54,33 @@ class SSE extends View
         parent::init();
         $this->cb = $this->_add('CallbackLater');
 
-        $this->cb->set(function () {
-            if ($this->cb->triggered) {
+        if (!$this->view ) {
+            $this->view = $this->add('View');
+        }
+
+        $this->cb->set(function(){
+           if ($this->cb->triggered) {
+               $this->isTriggered = true;
+           }
+        });
+
+        if ($this->isTriggered) {
+            //call_user_func($this->fx, $this);
+            // process callback
+            if ($this->handlers) {
                 $this->sendSse();
             }
-        });
+        }
+
+//        $this->cb->set(function () {
+//            if ($this->cb->triggered) {
+//                //call_user_func($this->fx, $this);
+//                // process callback
+//                if ($this->handlers) {
+//                    $this->sendSse();
+//                }
+//            }
+//        });
 
         $chain = new jsChain();
 
@@ -71,6 +95,18 @@ class SSE extends View
             'uri' => './sse.php'
         ]);*/
 
+    }
+
+    public function handleViewEvents()
+    {
+        foreach ($this->handlers as $handler) {
+            call_user_func($handler['fx'], $handler['view']);
+        }
+    }
+
+    public function addViewEventHandler($view, $fx)
+    {
+        $this->handlers[] = ['id' => $view->short_name, 'view' => $view, 'fx' => $fx];
     }
 
 //    public function set($fx = [], $args = null)
@@ -104,11 +140,27 @@ class SSE extends View
 //        $time = date('r');
 //        echo "data: The server time is: {$time}\n\n";
 
-        echo "retry: 3000\n";
-        $v = new View(['ui'=>'segement']);
-        $t = $v->renderJSON();
-        $this->sendBlock('1000', $t, null);
-        $this->flush();
+        echo "retry: 10000\n";
+//        $v = new View(['ui'=>'segement']);
+//        $t = $v->renderJSON();
+        for ($x = 0; $x < count($this->handlers); $x++) {
+            $view = $this->handlers[$x]['view'];
+            $fx = $this->handlers[$x]['fx'];
+            call_user_func($fx, $view);
+            $this->sendBlock('1000', $view->renderJSON(), null);
+            $this->flush();
+        }
+
+//        foreach ($this->handlers as &$handler) {
+//            $view = $handler['view'];
+//            $fx = $handler['fx'];
+//            call_user_func($fx, $view);
+//            $this->sendBlock('1000', $view->renderJSON(), null);
+//            $this->flush();
+//        }
+
+
+
 //        $this->initSse();
 //        $this->setStart(time());
 //        header('Content-Type: text/event-stream');
@@ -213,14 +265,6 @@ class SSE extends View
     public function addEvent(View $view, $callable)
     {
 
-    }
-
-    /**
-     * SSE is not rendered normally. It's invisible.
-     * It will only expose a Callback url to activate sse event.
-     */
-    public function getHTML()
-    {
     }
 
     public function start()
