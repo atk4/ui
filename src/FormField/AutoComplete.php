@@ -78,7 +78,7 @@ class AutoComplete extends Input
     public function getData()
     {
         if (!$this->model) {
-            $this->app->terminate(json_encode([['id'=>'-1', 'name'=>'Model must be set for AutoComplete']]));
+            $this->app->terminate(json_encode([['id' => '-1', 'name' => 'Model must be set for AutoComplete']]));
         }
         $this->model->setLimit(10);
         if (isset($_GET['q'])) {
@@ -112,11 +112,11 @@ class AutoComplete extends Input
     public function getInput()
     {
         return $this->app->getTag('input', [
-            'name'       => $this->short_name,
-            'type'       => 'hidden',
+            'name' => $this->short_name,
+            'type' => 'hidden',
             /*'placeholder'=> $this->placeholder,*/
-            'id'         => $this->id.'_input',
-            'value'      => $this->getValue(),
+            'id'    => $this->id.'_input',
+            'value' => $this->getValue(),
         ]);
     }
 }

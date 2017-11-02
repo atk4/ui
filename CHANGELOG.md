@@ -1,3 +1,24 @@
+## 1.3
+
+We have included a pretty important new component called "Loader". It is designed to load parts of your
+page dynamically and with super-easy setup. Here is how to use it:
+
+``` php
+$loader = $app->add('Loader');
+$loader->set(function($p) {
+    sleep(2);  // or any other slow-loading code.
+    $p->add('LoremIpsum');
+});
+```
+
+Your page will load instantly except for the LoremIpsum, which will take some moment.
+
+ - [Loader Documentation](http://agile-ui.readthedocs.io/en/latest/virtualpage.html?highlight=loader#loader)
+ - [Loader Demo](http://ui.agiletoolkit.org/demos/loader.php), [and another demo](http://ui.agiletoolkit.org/demos/loader2.php)
+
+Another addition is 'jsNotify' class 
+
+
 
 ## 1.2
 
