@@ -3,6 +3,7 @@
 require 'Session.php';
 require 'init.php';
 
+$app->add(['Message', 'Message', 'blue'])->text->addParagraph('This text is loaded using a second modal.');
 $app->add(['Header', 'Modal View']);
 
 $session = new Session();
@@ -44,8 +45,8 @@ $modal_vp1->set(function ($modal) use ($modal_vp2) {
 
 //When $modal_vp2->show() is activate, it will dynamically add this content to it.
 $modal_vp2->set(function ($modal) {
-    $modal->add(new \atk4\ui\tests\ViewTester());
-    $modal->add(['Message', 'Message', $_GET['color']])->text->addParagraph('This text is loaded using a second modal.');
+    //$modal->add(new \atk4\ui\tests\ViewTester());
+    $modal->add(['Message', 'Message', @$_GET['color']])->text->addParagraph('This text is loaded using a second modal.');
 });
 
 $bar = $app->add(['View', 'ui' => 'buttons']);

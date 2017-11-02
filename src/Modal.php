@@ -96,11 +96,12 @@ class Modal extends View
      */
     public function show($args = [])
     {
+        $js_chain = $this->js();
         if (!empty($args)) {
-            $this->args = array_merge($this->args, $args);
+            $js_chain->data(['args'=> $args]);
         }
 
-        return $this->js()->modal('show');
+        return $js_chain->modal('show');
     }
 
     /**
@@ -288,7 +289,6 @@ class Modal extends View
         }
 
         if (!empty($this->args)) {
-            //$this->js(true)->find('.atk-dialog-content')->data(['args' => $this->args]);
             $data['args'] = $this->args;
         }
         $this->js(true)->data($data);
