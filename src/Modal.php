@@ -98,7 +98,7 @@ class Modal extends View
     {
         $js_chain = $this->js();
         if (!empty($args)) {
-            $js_chain->data(['args'=> $args]);
+            $js_chain->data(['args' => $args]);
         }
 
         return $js_chain->modal('show');
