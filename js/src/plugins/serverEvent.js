@@ -1,4 +1,5 @@
 import atkPlugin from 'plugins/atkPlugin';
+import apiService from '../services/ApiService';
 
 export default class serverEvent extends atkPlugin {
 
@@ -7,11 +8,10 @@ export default class serverEvent extends atkPlugin {
     if (typeof(EventSource) !== "undefined") {
       let source = new EventSource(this.settings.uri);
       source.onmessage = function (e) {
-        //console.log('event', e.lastEventId, e.data);
-        console.log('event', JSON.parse(e.data));
+        // console.log('event', JSON.parse(e.data));
+        apiService.atkSuccessTest(JSON.parse(e.data));
       };
       source.onerror = function (e) {
-        //console.log('error', e);
       }
     } else {
       console.log('server side event not supported');

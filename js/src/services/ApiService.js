@@ -112,7 +112,7 @@ class ApiService {
      * @param response
      * @param content
      */
-    atkSuccessTest(response, content) {
+    atkSuccessTest(response, content = null) {
         if (response.success) {
             this.onSuccess(response, content);
         } else {

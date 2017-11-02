@@ -13,122 +13,105 @@ use atk4\core\InitializerTrait;
  * @package atk4\ui
  */
 
-class SSE extends VirtualPage
+class SSE
 {
 
-    /*use TrackableTrait;
+    use TrackableTrait;
     use AppScopeTrait;
     use DIContainerTrait;
-    use InitializerTrait;*/
+    use InitializerTrait;
 
     public $view = null;
-    public $events;
-    public $ui = '';
-    public $cb;
-    public $handlers = null;
-    public $isTriggered = false;
-
-    public $defaults =[
-        'sleep_time'            => 0.5,                 // seconds to sleep after the data has been sent
-        'exec_limit'            => 600,                 // the time limit of the script in seconds
-        'client_reconnect'      => 1,                   // the time client to reconnect after connection has lost in seconds
-        'allow_cors'            => false,               // Allow Cross-Origin Access?
-        'keep_alive_time'       => 300,                 // The interval of sending a signal to keep the connection alive
-        'is_reconnect'          => false,               // A read-only flag indicates whether the user reconnects
-        'use_chunked_encoding'  => false,               // Allow chunked encoding
-    ];
-
     public $start;
-//    public function __construct($defaults = [])
-//    {
-//        //$this->setDefaults($defaults);
-//        $t= 't';
-//        /*$this->view = $view;
-//        $this->view->js(true)->atkServerEvent([
-//            'uri' => './sse.php'
-//        ]);*/
-//    }
+    public $runEvent = false;
+    public $isRunning = false;
+
+    //Connection defaults.
+    public $sleepTime = 0.5;            //seconds to sleep after the data has been sent.
+    public $execLimit = 600;            //the time limit of the script in seconds.
+    public $clientReconnect = 2;        //the time client to reconnect after connection has lost in seconds.
+    public $allowCors = false;          //Allow Cross-Origin Access.
+    public $keepAliveTime = 300;        //The interval of sending a signal to keep the connection alive.
+    public $isReconnect = false;        //A read-only flag indicates whether the user reconnects.
+    public $useChunkEncoding = false;   //Allow chunked encoding
+
 
     public function init()
     {
-        parent::init();
-        $this->cb = $this->_add('CallbackLater');
-
-        if (!$this->view ) {
-            $this->view = $this->add('View');
+        if ($this->runEvent) {
+            $chain = new jsChain();
+            $this->app->html->js(true, $chain->atkServerEvent(
+                ['uri' => $this->getUrl()]
+            ));
+            $this->isRunning = true;
         }
 
-        $this->cb->set(function(){
-           if ($this->cb->triggered) {
-               $this->isTriggered = true;
-           }
-        });
 
-        if ($this->isTriggered) {
-            //call_user_func($this->fx, $this);
-            // process callback
-            if ($this->handlers) {
-                $this->sendSse();
-            }
+        $this->_initialized = true;
+    }
+
+    /**
+     * Executes user-specified action when call-back is triggered.
+     *
+     * @param callback $callback
+     * @param array    $args
+     *
+     * @return mixed|null
+     */
+    public function set($callback, $args = [])
+    {
+        if (!$this->app) {
+            throw new Exception(['Call-back must be part of a RenderTree']);
         }
 
-//        $this->cb->set(function () {
-//            if ($this->cb->triggered) {
-//                //call_user_func($this->fx, $this);
-//                // process callback
-//                if ($this->handlers) {
-//                    $this->sendSse();
-//                }
-//            }
-//        });
-
-        $chain = new jsChain();
-
-        $this->js(true, $chain->atkServerEvent(
-            ['uri' => $this->cb->getUrl()]
-        ));
-
-        /*$this->_initialized = true;
         $this->view = $this->owner;
-        $this->cb = $this->view->add('Callback');
-        $this->view->js(true)->atkServerEvent([
-            'uri' => './sse.php'
-        ]);*/
 
-    }
+        if (isset($_GET[$this->name])) {
+            $this->triggered = $_GET[$this->name];
 
-    public function handleViewEvents()
-    {
-        foreach ($this->handlers as $handler) {
-            call_user_func($handler['fx'], $handler['view']);
+            $this->app->run_called = true;
+            $this->app->stickyGet($this->name);
+            $ret = call_user_func_array($callback, $args);
+            $this->sendSse();
+
+            return $ret;
         }
+
+        return $this;
     }
 
-    public function addViewEventHandler($view, $fx)
+    public function run()
     {
-        $this->handlers[] = ['id' => $view->short_name, 'view' => $view, 'fx' => $fx];
+        $chain = new jsChain();
+        return $chain->atkServerEvent(['uri' => $this->getUrl()]);
     }
 
-//    public function set($fx = [], $args = null)
-//    {
-//        if (!is_callable($fx)) {
-//            throw new Exception('Error: Need to pass a callable function to Loader::set()');
-//        }
-//
-//        $this->cb->set(function () use ($fx) {
-//            call_user_func($fx, $this->view);
-//            $this->sendSse();
-//            //$this->app->terminate($this->renderJSON());
-//        });
-//
-//        return $this;
-//    }
+
+    /**
+     * Is callback triggered?
+     *
+     * @return bool
+     */
+    public function triggered()
+    {
+        return isset($_GET[$this->name]) ? $_GET[$this->name] : false;
+    }
+
+    /**
+     * Return URL that will trigger action on this call-back.
+     *
+     * @param string $mode
+     *
+     * @return string
+     */
+    public function getURL($mode = 'sse')
+    {
+        return $this->app->url([$this->name => $mode]);
+    }
+
 
     public function sendSse()
     {
-//        header('Content-Type: text/event-stream');
-//        header('Cache-Control: no-cache');
-
         $this->initSse();
         $this->setStart(time());
         header('Content-Type: text/event-stream');
@@ -137,53 +120,10 @@ class SSE extends VirtualPage
         //header('Content-Encoding: none;');
         header('Pragma: no-cache');
 
-//        $time = date('r');
-//        echo "data: The server time is: {$time}\n\n";
+        echo "retry: ". $this->clientReconnect * 1000 . "\n";
 
-        echo "retry: 10000\n";
-//        $v = new View(['ui'=>'segement']);
-//        $t = $v->renderJSON();
-        for ($x = 0; $x < count($this->handlers); $x++) {
-            $view = $this->handlers[$x]['view'];
-            $fx = $this->handlers[$x]['fx'];
-            call_user_func($fx, $view);
-            $this->sendBlock('1000', $view->renderJSON(), null);
-            $this->flush();
-        }
-
-//        foreach ($this->handlers as &$handler) {
-//            $view = $handler['view'];
-//            $fx = $handler['fx'];
-//            call_user_func($fx, $view);
-//            $this->sendBlock('1000', $view->renderJSON(), null);
-//            $this->flush();
-//        }
-
-
-
-//        $this->initSse();
-//        $this->setStart(time());
-//        header('Content-Type: text/event-stream');
-//        header('Cache-Control: no-cache');
-//        header('Cache-Control: private');
-//        header('Content-Encoding: none;');
-//        header('Pragma: no-cache');
-//
-//        echo "retry: 1000\n";
-//
-//        if ($this->isTick()) {
-//            // No updates needed, send a comment to keep the connection alive.
-//            // From https://developer.mozilla.org/en-US/docs/Server-sent_events/Using_server-sent_events
-//            echo ': ' . sha1(mt_rand()) . "\n\n";
-//        }
-//        $time = time();
-//        echo "data: The server time is: {$time}\n\n";
-//        flush();
-         exit;
-//
-//        // put into sleep when in loop.
-//        // $this->sleep();
-
+        $this->sendBlock('1000', $this->view->renderJSON(), null);
+        $this->flush();
     }
 
 
@@ -262,18 +202,6 @@ class SSE extends VirtualPage
         return $this->getUptime() % $this->defaults[keep_alive_time] === 0;
     }
 
-    public function addEvent(View $view, $callable)
-    {
-
-    }
-
-    public function start()
-    {
-        $start =  new jsChain();
-        return $start->atkServerEvent([
-            'uri' => './sse.php'
-        ]);
-    }
 
     protected function initSse()
     {
