@@ -4,18 +4,14 @@ namespace atk4\ui;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
-use atk4\core\TrackableTrait;
 use atk4\core\InitializerTrait;
+use atk4\core\TrackableTrait;
 
 /**
- * Class SSE
- *
- * @package atk4\ui
+ * Class SSE.
  */
-
 class SSE
 {
-
     use TrackableTrait;
     use AppScopeTrait;
     use DIContainerTrait;
@@ -35,7 +31,6 @@ class SSE
     public $isReconnect = false;        //A read-only flag indicates whether the user reconnects.
     public $useChunkEncoding = false;   //Allow chunked encoding
 
-
     public function init()
     {
         if ($this->runEvent) {
@@ -45,7 +40,6 @@ class SSE
             ));
             $this->isRunning = true;
         }
-
 
         $this->_initialized = true;
     }
@@ -83,9 +77,9 @@ class SSE
     public function run()
     {
         $chain = new jsChain();
+
         return $chain->atkServerEvent(['uri' => $this->getUrl()]);
     }
-
 
     /**
      * Is callback triggered?
@@ -109,7 +103,6 @@ class SSE
         return $this->app->url([$this->name => $mode]);
     }
 
-
     public function sendSse()
     {
         $this->initSse();
@@ -120,15 +113,14 @@ class SSE
         //header('Content-Encoding: none;');
         header('Pragma: no-cache');
 
-        echo "retry: ". $this->clientReconnect * 1000 . "\n";
+        echo 'retry: '.$this->clientReconnect * 1000 ."\n";
 
         $this->sendBlock('1000', $this->view->renderJSON(), null);
         $this->flush();
     }
 
-
     /**
-     * Send Data in buffer to client
+     * Send Data in buffer to client.
      */
     public function flush()
     {
@@ -137,18 +129,19 @@ class SSE
     }
 
     /**
-     * Send Data
+     * Send Data.
      *
      * @param string $content
      */
     private function send($content)
     {
-        print($content);
+        echo $content;
     }
+
     /**
-     * Send a SSE data block
+     * Send a SSE data block.
      *
-     * @param mixed $id Event ID
+     * @param mixed  $id   Event ID
      * @param string $data Event Data
      * @param string $name Event Name
      */
@@ -158,21 +151,23 @@ class SSE
         if (strlen($name) && $name !== null) {
             $this->send("event: {$name}\n");
         }
-        $this->send($this->wrapData($data) . "\n\n");
+        $this->send($this->wrapData($data)."\n\n");
     }
+
     /**
-     * Create SSE data string
+     * Create SSE data string.
      *
      * @param string $string data to be processed
+     *
      * @return string
      */
     private function wrapData($string)
     {
-        return 'data:' . str_replace("\n","\ndata: ", $string);
+        return 'data:'.str_replace("\n", "\ndata: ", $string);
     }
 
     /**
-     * Sleep the process
+     * Sleep the process.
      */
     public function sleep()
     {
@@ -185,7 +180,8 @@ class SSE
     }
 
     /**
-     * Get time start
+     * Get time start.
+     *
      * @return int
      */
     public function getUptime()
@@ -194,7 +190,8 @@ class SSE
     }
 
     /**
-     * Get the number tick
+     * Get the number tick.
+     *
      * @return bool
      */
     public function isTick()
@@ -202,12 +199,11 @@ class SSE
         return $this->getUptime() % $this->defaults[keep_alive_time] === 0;
     }
 
-
     protected function initSse()
     {
         @set_time_limit(0); // Disable time limit
         // Prevent buffering
-        if(function_exists('apache_setenv')){
+        if (function_exists('apache_setenv')) {
             @apache_setenv('no-gzip', 1);
         }
         @ini_set('zlib.output_compression', 0);
