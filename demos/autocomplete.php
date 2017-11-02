@@ -13,17 +13,25 @@ $form->add(['Label', 'Input new country information here', 'top attached'], 'Abo
 $m = new \atk4\data\Model($db, 'test');
 
 // Without AutoComplete
-//$m->hasOne('country_id', new Country());
+$m->hasOne('country1', new Country());
 
 // With AutoComplete
-$m->hasOne('country_id', [new Country(), 'ui'=>['form'=> [
+$m->hasOne('country2', [new Country(), 'ui'=>['form'=> [
     'AutoComplete',
     'plus'=> true,
 ]]]);
 
+
 $form->setModel($m);
 
-$acc = $form->getField('country_id');
+$form->addField('country3', [
+    'AutoComplete', 
+    'model'=>new Country($db), 
+    'placeholder'=>'Search for country by code, LV or UK',
+    'search'=>['name','iso', 'iso3']
+]);
+
+//$acc = $form->getField('country_id');
 //$acc->actionRight = ['Button', 'Hello htere'];
 
 $form->onSubmit(function ($f) {
