@@ -16,9 +16,9 @@ $m = new \atk4\data\Model($db, 'test');
 //$m->hasOne('country_id', new Country());
 
 // With AutoComplete
-$m->hasOne('country_id', [new Country(), 'ui'=>['form'=> [
+$m->hasOne('country_id', [new Country(), 'ui' => ['form' => [
     'AutoComplete',
-    'plus'=> true,
+    'plus' => true,
 ]]]);
 
 $form->setModel($m);
@@ -32,17 +32,17 @@ $form->onSubmit(function ($f) {
 
 return;
 
-$layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder'=>'Search users', 'left'=>true, 'icon'=>'users']));
+$layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'left' => true, 'icon' => 'users']));
 
-$layout->add(new \atk4\ui\Header(['Labels', 'size'=>2]));
+$layout->add(new \atk4\ui\Header(['Labels', 'size' => 2]));
 
-$layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder'=>'Search users', 'label'=>'http://']));
-$layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder'=>'Weight', 'labelRight'=>new \atk4\ui\Label(['kg', 'basic'])]));
-$layout->add(new \atk4\ui\FormField\AutoComplete(['label'=>'$', 'labelRight'=>new \atk4\ui\Label(['.00', 'basic'])]));
+$layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'label' => 'http://']));
+$layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Weight', 'labelRight' => new \atk4\ui\Label(['kg', 'basic'])]));
+$layout->add(new \atk4\ui\FormField\AutoComplete(['label' => '$', 'labelRight' => new \atk4\ui\Label(['.00', 'basic'])]));
 
 $layout->add(new \atk4\ui\FormField\AutoComplete([
-    'iconLeft'  => 'tags',
-    'labelRight'=> new \atk4\ui\Label(['Add Tag', 'tag']),
+    'iconLeft'   => 'tags',
+    'labelRight' => new \atk4\ui\Label(['Add Tag', 'tag']),
 ]));
 
 // left/right corner is not supported, but here is work-around:
@@ -51,5 +51,5 @@ $label->addClass('left corner');
 $label->add(new \atk4\ui\Icon('asterisk'));
 
 $layout->add(new \atk4\ui\FormField\AutoComplete([
-    'label'=> $label,
+    'label' => $label,
 ]))->addClass('left corner');
