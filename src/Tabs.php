@@ -15,8 +15,8 @@ class Tabs extends View
     /**
      * Adds tab in tabs widget.
      *
-     * @param mixed    $name   Name of tab or Tab object
-     * @param callable $action Optional callback action
+     * @param mixed $name   Name of tab or Tab object
+     * @param mixed $action Optional callback action or URL (or array with url + parameters)
      *
      * @return View
      */
@@ -32,39 +32,29 @@ class Tabs extends View
         }
 
         // add tabs menu item
-        $item = $this->add([$item, 'class'=>['item']], 'Menu');
+        $item = $this->add([$item, 'class' => ['item']], 'Menu');
         $item->setElement('a');
         $item->setAttr('data-tab', $item->name);
 
         // add tabs sub-view
-        $sub = $this->add(['View', 'class'=>['ui tab']], 'Tabs');
+        $sub = $this->add(['View', 'class' => ['ui tab']], 'Tabs');
         $sub->setAttr('data-tab', $item->name);
 
-        // if there is callback action, then
-        if ($action && is_callable($action)) {
-            $vp = $sub->add('VirtualPage');
-            $item->setPath($vp->getUrl());
+        if ($action) {
+            if (is_callable($action)) {
+                // if there is callback action, then use VirtualPage
+                $vp = $sub->add('VirtualPage');
+                $item->setPath($vp->getUrl());
 
-            $vp->set(function () use ($vp, $action) {
-                $action($vp);
-                $this->app->terminate($vp->render());
-            });
+                $vp->set($action);
+            } else {
+                // otherwise treat it as URL
+                //# TODO: refactor this ugly hack
+                $item->setPath(str_replace('.php.', '.', $this->app->url($action)).'#');
+            }
         }
 
-        return  $sub;
-    }
-
-    public function addTabURL($name, $url)
-    {
-        $item = $this->add(['Tab', $name, 'class'=>['item']], 'Menu');
-        $item->setAttr('data-tab', $item->name);
-
-        // add tabs sub-view
-        $sub = $this->add(['View', 'class'=>['ui tab']], 'Tabs');
-        $sub->setAttr('data-tab', $item->name);
-
-        //# TODO: refactor this ugly hack
-        $item->setPath(str_replace('.php.', '.', $this->app->url($url)).'#');
+        return $sub;
     }
 
     /**

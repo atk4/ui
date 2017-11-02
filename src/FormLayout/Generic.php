@@ -56,7 +56,7 @@ class Generic extends View
         }
 
         if (is_string($field)) {
-            $field = ['type'=>$field];
+            $field = ['type' => $field];
         }
 
         if ($name) {
@@ -76,31 +76,31 @@ class Generic extends View
                 $existingField->setDefaults($field);
                 $field = $existingField;
             } elseif (is_object($field)) {
-                throw new Exception(['Duplicate field', 'name'=>$name]);
+                throw new Exception(['Duplicate field', 'name' => $name]);
             } else {
                 $field = $existingField;
             }
 
             if (is_string($decorator)) {
-                $decorator = $this->form->decoratorFactory($field, ['caption'=>$decorator]);
+                $decorator = $this->form->decoratorFactory($field, ['caption' => $decorator]);
             } elseif (is_array($decorator)) {
                 $decorator = $this->form->decoratorFactory($field, $decorator);
             } elseif (!$decorator) {
                 $decorator = $this->form->decoratorFactory($field);
             } elseif (is_object($decorator)) {
                 if (!$decorator instanceof \atk4\ui\FormField\Generic) {
-                    throw new Exception(['Field decorator must descend from \atk4\ui\FormField\Generic', 'decorator'=>$decorator]);
+                    throw new Exception(['Field decorator must descend from \atk4\ui\FormField\Generic', 'decorator' => $decorator]);
                 }
                 $decorator->field = $field;
                 $decorator->form = $this->form;
             } else {
-                throw new Exception(['Value of $decorator argument is incorrect', 'decorator'=>$decorator]);
+                throw new Exception(['Value of $decorator argument is incorrect', 'decorator' => $decorator]);
             }
         } catch (\Throwable $e) {
-            throw new Exception(['Unable to add form field', 'name'=>$name, 'decorator'=>$decorator, 'field'=>$field], null, $e);
+            throw new Exception(['Unable to add form field', 'name' => $name, 'decorator' => $decorator, 'field' => $field], null, $e);
         }
 
-        return $this->_add($decorator, ['desired_name'=>$field->short_name]);
+        return $this->_add($decorator, ['desired_name' => $field->short_name]);
     }
 
     public function setModel(\atk4\data\Model $model, $fields = null)
@@ -130,7 +130,7 @@ class Generic extends View
                 $this->addField($field);
             }
         } else {
-            throw new Exception(['Incorrect value for $fields', 'fields'=>$fields]);
+            throw new Exception(['Incorrect value for $fields', 'fields' => $fields]);
         }
 
         return $model;
@@ -164,7 +164,7 @@ class Generic extends View
     public function addHeader($label = null)
     {
         if ($label) {
-            $this->add(['Header', $label, 'dividing', 'element'=>'h4']);
+            $this->add(['Header', $label, 'dividing', 'element' => 'h4']);
         }
 
         return $this;
@@ -180,7 +180,7 @@ class Generic extends View
     public function addGroup($label = null)
     {
         if (!is_array($label)) {
-            $label = ['label'=>$label];
+            $label = ['label' => $label];
         } elseif (isset($label[0])) {
             $label['label'] = $label[0];
             unset($label[0]);

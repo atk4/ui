@@ -63,10 +63,10 @@ class Columns extends Generic
         $chunks = array_chunk($fields, ceil($cnt / $col));
         foreach ($chunks as $chunk) {
             $cc = $c->addColumn();
-            $cc->add(['FormLayout/Generic', 'form'=>$this->form])->setModel($model, $chunk);
+            $cc->add(['FormLayout/Generic', 'form' => $this->form])->setModel($model, $chunk);
         }
 
-        $this->add(['ui'=>'clearing hidden divider']);
+        $this->add(['ui' => 'clearing hidden divider']);
 
         return $model;
     }

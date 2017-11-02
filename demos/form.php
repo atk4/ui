@@ -33,15 +33,15 @@ $form->buttonSave->icon = 'mail';
 $tab->add(['Header', 'But very flexible']);
 
 $form = $tab->add('Form');
-$g = $form->addGroup(['width'=>'three']);
+$g = $form->addGroup(['width' => 'three']);
 $g->addField('name');
 $g->addField('surname');
-$g->addField('gender', ['Dropdown', 'values'=>['Female', 'Male']]);
+$g->addField('gender', ['Dropdown', 'values' => ['Female', 'Male']]);
 
 $tab->add(['Header', 'Comparing Field type vs Decorator class']);
 $form = $app->add('Form');
-$form->addField('date1', null, ['type'=>'date']);
-$form->addField('date2', ['Calendar', 'type'=>'date']);
+$form->addField('date1', null, ['type' => 'date']);
+$form->addField('date2', ['Calendar', 'type' => 'date']);
 
 $form->onSubmit(function ($form) {
     echo 'date1 = '.print_r($form->model['date1'], true).' and date2 = '.print_r($form->model['date2'], true);
@@ -85,7 +85,7 @@ $form->onSubmit(function ($form) use ($field) {
 /////////////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Handler Safety');
 
-$tab->add(['Header', 'Form handles errors (PHP 7.0+)', 'size'=>2]);
+$tab->add(['Header', 'Form handles errors (PHP 7.0+)', 'size' => 2]);
 
 $form = $tab->add('Form');
 $form->addField('email');
@@ -95,7 +95,7 @@ $form->onSubmit(function ($form) {
     return $o['abc'];
 });
 
-$tab->add(['Header', 'Form handles random output', 'size'=>2]);
+$tab->add(['Header', 'Form handles random output', 'size' => 2]);
 
 $form = $tab->add('Form');
 $form->addField('email');
@@ -103,7 +103,7 @@ $form->onSubmit(function ($form) {
     echo 'some output here';
 });
 
-$tab->add(['Header', 'Form shows Agile exceptions', 'size'=>2]);
+$tab->add(['Header', 'Form shows Agile exceptions', 'size' => 2]);
 
 $form = $tab->add('Form');
 $form->addField('email');
@@ -120,9 +120,9 @@ $a = [];
 $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
 $m_register->addField('name');
 $m_register->addField('email');
-$m_register->addField('is_accept_terms', ['type'=>'boolean', 'mandatory'=>true]);
+$m_register->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
 
-$f = $tab->add(new \atk4\ui\Form(['segment'=>true]));
+$f = $tab->add(new \atk4\ui\Form(['segment' => true]));
 $f->setModel($m_register);
 
 $f->onSubmit(function ($f) {
@@ -150,22 +150,22 @@ $f->addField('email');
 
 $f->addHeader('Example of field grouping');
 $gr = $f->addGroup('Address with label');
-$gr->addField('address', ['width'=>'twelve']);
-$gr->addField('code', ['width'=>'four'], ['caption'=>'Post Code']);
+$gr->addField('address', ['width' => 'twelve']);
+$gr->addField('code', ['width' => 'four'], ['caption' => 'Post Code']);
 
-$gr = $f->addGroup(['width'=>'two']);
+$gr = $f->addGroup(['width' => 'two']);
 $gr->addField('city');
 $gr->addField('country');
 
-$gr = $f->addGroup(['Name', 'inline'=>true]);
-$gr->addField('first_name', ['width'=>'eight']);
-$gr->addField('middle_name', ['width'=>'three', 'disabled'=>true]);
-$gr->addField('last_name', ['width'=>'five']);
+$gr = $f->addGroup(['Name', 'inline' => true]);
+$gr->addField('first_name', ['width' => 'eight']);
+$gr->addField('middle_name', ['width' => 'three', 'disabled' => true]);
+$gr->addField('last_name', ['width' => 'five']);
 
 $f->onSubmit(function ($f) {
     $errors = [];
 
-    foreach ($f->model->elements as $name=>$ff) {
+    foreach ($f->model->elements as $name => $ff) {
         if ($name == 'id') {
             continue;
         }
@@ -178,4 +178,4 @@ $f->onSubmit(function ($f) {
     return $errors ?: $f->success('No more errors', 'so we have saved everything into the database');
 });
 
-$tabs->addTabURL('Form Database', ['form2.php', 'layout'=>'Centered']);
+$tabs->addTab('Form Database', ['form2.php', 'layout' => 'Centered']);

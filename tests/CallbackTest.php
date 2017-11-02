@@ -23,7 +23,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function setUp()
     {
-        $this->app = new AppMock(['always_run'=>false]);
+        $this->app = new AppMock(['always_run' => false]);
         $this->app->initLayout('Centered');
     }
 
@@ -67,7 +67,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add(['Callback', 'POST_trigger'=>true]);
+        $cb = $app->add(['Callback', 'POST_trigger' => true]);
 
         // simulate triggering
         $_POST[$cb->name] = true;

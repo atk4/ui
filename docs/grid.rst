@@ -17,11 +17,11 @@ Using Grid
 
 Here is a simple usage::
 
-    $layout->add('Grid')->setModel(new Country($db));
+    $app->add('Grid')->setModel(new Country($db));
 
 To make your grid look nicer, you might want to add some buttons and enable quicksearch::
 
-    $grid = $layout->add('Grid');
+    $grid = $app->add('Grid');
     $grid->setModel(new Country($db));
 
     $grid->addQuickSearch();
@@ -47,7 +47,7 @@ Semantic UI limitations that wouldn't allow to format buttons nicely::
 
 If you don't need menu, you can disable menu bar entirely::
 
-    $grid = $layout->add(['Grid', 'menu' => false]);
+    $grid = $app->add(['Grid', 'menu' => false]);
 
 Adding Quick Search
 ===================
@@ -104,7 +104,7 @@ Sorting
 .. php:attr: $sortable
 
 When grid is associated with a model that supports order, it will automatically make itself sortable. You can
-override this behaviour by setting $sortable property to `true` or `false`. 
+override this behaviour by setting $sortable property to `true` or `false`.
 
 Additionally you may set list of sortable fields to a sortable property if you wish that your grid would be
 sortable only for those columns.

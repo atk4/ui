@@ -136,7 +136,7 @@ class Table extends Lister
         // This code should be vaugely consistent with FormLayout\Generic::addField()
 
         if (is_string($field)) {
-            $field = ['type'=>$field];
+            $field = ['type' => $field];
         }
 
         if ($name) {
@@ -159,7 +159,7 @@ class Table extends Lister
             $existingField->setDefaults($field);
             $field = $existingField;
         } elseif (is_object($field)) {
-            throw new Exception(['Duplicate field', 'name'=>$name]);
+            throw new Exception(['Duplicate field', 'name' => $name]);
         } else {
             $field = $existingField;
         }
@@ -170,12 +170,12 @@ class Table extends Lister
             $columnDecorator = $this->decoratorFactory($field);
         } elseif (is_object($columnDecorator)) {
             if (!$columnDecorator instanceof \atk4\ui\TableColumn\Generic) {
-                throw new Exception(['Column decorator must descend from \atk4\ui\TableColumn\Generic', 'columnDecorator'=>$columnDecorator]);
+                throw new Exception(['Column decorator must descend from \atk4\ui\TableColumn\Generic', 'columnDecorator' => $columnDecorator]);
             }
             $columnDecorator->table = $this;
             $this->_add($columnDecorator);
         } else {
-            throw new Exception(['Value of $columnDecorator argument is incorrect', 'columnDecorator'=>$columnDecorator]);
+            throw new Exception(['Value of $columnDecorator argument is incorrect', 'columnDecorator' => $columnDecorator]);
         }
 
         /*
@@ -219,9 +219,9 @@ class Table extends Lister
         } elseif (!is_string($name)) {
             echo 'about to throw exception.....';
 
-            throw new Exception(['Name must be a string', 'name'=>$name]);
+            throw new Exception(['Name must be a string', 'name' => $name]);
         } elseif (isset($this->columns[$name])) {
-            throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name'=>$name]);
+            throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name' => $name]);
         } else {
             $this->columns[$name] = $columnDecorator;
         }
@@ -232,9 +232,9 @@ class Table extends Lister
     public function addDecorator($name, $decorator)
     {
         if (!$this->columns[$name]) {
-            throw new Exceptino(['No such column, cannot decorate', 'name'=>$name]);
+            throw new Exceptino(['No such column, cannot decorate', 'name' => $name]);
         }
-        $decorator = $this->_add($this->factory($decorator, ['table'=>$this], 'TableColumn'));
+        $decorator = $this->_add($this->factory($decorator, ['table' => $this], 'TableColumn'));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
@@ -260,13 +260,13 @@ class Table extends Lister
             ['Generic']
         );
 
-        return $this->_add($this->factory($seed, ['table'=>$this], 'TableColumn'));
+        return $this->_add($this->factory($seed, ['table' => $this], 'TableColumn'));
     }
 
     protected $typeToDecorator = [
         'password' => 'Password',
         'text'     => 'Text',
-        'boolean'  => ['Status', ['positive'=>[true], 'negative'=>['false']]],
+        'boolean'  => ['Status', ['positive' => [true], 'negative' => ['false']]],
     ];
 
     /**
@@ -349,7 +349,7 @@ class Table extends Lister
     public function renderView()
     {
         if (!$this->columns) {
-            throw new Exception(['Table does not have any columns defined', 'columns'=>$this->columns]);
+            throw new Exception(['Table does not have any columns defined', 'columns' => $this->columns]);
         }
 
         if ($this->sortable) {
@@ -460,7 +460,7 @@ class Table extends Lister
      */
     public function updateTotals()
     {
-        foreach ($this->totals_plan as $key=>$val) {
+        foreach ($this->totals_plan as $key => $val) {
 
             // if value is array, then we treat it as built-in or callable aggregate method
             if (is_array($val)) {
@@ -496,7 +496,7 @@ class Table extends Lister
                             }
                             break;
                         default:
-                            throw new Exception(['Aggregation method does not exist', 'method'=>$f]);
+                            throw new Exception(['Aggregation method does not exist', 'method' => $f]);
                     }
                 }
             }

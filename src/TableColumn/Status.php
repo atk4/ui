@@ -32,12 +32,12 @@ class Status extends Generic
             throw new Exception(['Status can be used only with model field']);
         }
 
-        $extra_tags = array_merge_recursive($extra_tags, ['class'=> '{$_'.$f->short_name.'_status}']);
+        $extra_tags = array_merge_recursive($extra_tags, ['class' => '{$_'.$f->short_name.'_status}']);
 
         return $this->app->getTag(
             'td',
             $extra_tags,
-            [$this->app->getTag('i', ['class'=>'icon {$_'.$f->short_name.'_icon}'], '').
+            [$this->app->getTag('i', ['class' => 'icon {$_'.$f->short_name.'_icon}'], '').
             ' {$'.$f->short_name.'}', ]
         );
     }
@@ -47,7 +47,7 @@ class Status extends Generic
         $cl = '';
 
         // search for a class
-        foreach ($this->states as $class=>$values) {
+        foreach ($this->states as $class => $values) {
             if (in_array($field->get(), $values)) {
                 $cl = $class;
                 break;

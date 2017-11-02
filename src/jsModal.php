@@ -13,6 +13,6 @@ class jsModal extends jsExpression
             $url = $url->getURL('cut');
         }
 
-        parent::__construct('$(this).atkCreateModal([arg])', ['arg'=>['uri'=>$url, 'title'=>$title, 'mode'=>$mode, 'uri_options'=>$args]]);
+        parent::__construct('$(this).atkCreateModal([arg])', ['arg' => ['uri' => $url, 'title' => $title, 'mode' => $mode, 'uri_options' => $args]]);
     }
 }

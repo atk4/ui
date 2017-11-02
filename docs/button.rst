@@ -39,7 +39,7 @@ Property $icon will place icon on your button and can be specified in one of the
 
     $button = $app->add(['Button', 'Like', 'blue', 'icon'=>'thumbs up']);
 
-    // or 
+    // or
 
     $button = $app->add(['Button', 'Like', 'blue', 'icon'=>new Icon('thumbs up')]);
 
@@ -122,5 +122,5 @@ in creating more complex buttons::
     $forks = new Button(['labeled'=> true]); // Button, not Buttons!
     $forks->add(new Button(['Forks', 'blue']))->add(new Icon('fork'));
     $forks->add(new Label(['1,048', 'basic blue left pointing']));
-    $layout->add($forks);
+    $app->add($forks);
 

@@ -1,6 +1,6 @@
 
-Introduction
-------------
+Callback Introduction
+---------------------
 
 Agile UI pursues a goal of creating a full-featured, interractive, user interface. Part of that relies
 on abstraction of Browser/Server communication.
@@ -31,14 +31,14 @@ The Callback class
 Callback is not a View. This class does not extend any other class but it does implement several important
 traits:
 
- - TrackableTrait [todo add link]
- - AppScopeTrait
- - DIContainerTrait
+ - `TrackableTrait <http://agile-core.readthedocs.io/en/develop/container.html?highlight=trackable#trackable-trait>`_
+ - `AppScopeTrait <http://agile-core.readthedocs.io/en/develop/appscope.html>`_
+ - `DIContainerTrait <http://agile-core.readthedocs.io/en/develop/di.html>`_
 
 To create a new callback, do this::
 
     $c = new \atk4\ui\Callback();
-    $layout->add($c);
+    $app->add($c);
 
 Because 'Callback' is not a View, it won't be rendered. The reason we are adding into :ref:`render_tree`
 is for it to establish a unique name which will be used to generate callback URL:
@@ -49,7 +49,7 @@ is for it to establish a unique name which will be used to generate callback URL
 
 The following example code generates unique URL::
 
-    $label = $layout->add(['Label','Callback URL:']);
+    $label = $app->add(['Label','Callback URL:']);
     $cb = $label->add('Callback');
     $label->detail = $cb->getURL();
     $label->link($cb->getURL());
@@ -87,7 +87,7 @@ Return value of set()
 The callback verifies trigger condition when you call :php:meth:`Callback::set()`. If your callback
 returns any value, the set() will return it too::
 
-    $label = $layout->add(['Label','Callback URL:']);
+    $label = $app->add(['Label','Callback URL:']);
     $cb = $label->add('Callback');
     $label->detail = $cb->getURL();
     $label->link($cb->getURL());
@@ -106,7 +106,7 @@ execution with set() and terminate(). This can be helpful sometimes when you nee
 rendering of the page through a special call-back link. The next example will change color of
 the label regardless of the callback function::
 
-    $label = $layout->add(['Label','Callback URL:']);
+    $label = $app->add(['Label','Callback URL:']);
     $cb = $label->add('Callback');
     $label->detail = $cb->getURL();
     $label->link($cb->getURL());
@@ -128,7 +128,7 @@ derived classes.
 CallbackLater
 -------------
 
-.. php::class: CallbackLater
+.. php:class:: CallbackLater
 
 This class is very similar to Callback, but it will not execute immediatelly. Instead it will be executed
 either at the end at beforeRender or beforeOutput hook from inside App, whichever comes first.
@@ -136,7 +136,7 @@ either at the end at beforeRender or beforeOutput hook from inside App, whicheve
 In other words this won't break the flow of your code logic, it simply won't render it. In the next example
 the $label->detail is assigned at the very end, yet callback is able to access the property::
 
-    $label = $layout->add(['Label','Callback URL:']);
+    $label = $app->add(['Label','Callback URL:']);
     $cb = $label->add('CallbackLater');
 
     $cb->set(function() use($app, $label) {
@@ -158,8 +158,8 @@ know about :php:class:`jsReload` already?
 
 Here is example of jsReload::
 
-    $view = $layout->add(['ui'=>'tertiary green inverted segment']);
-    $button = $layout->add(['Button', 'Reload Lorem']);
+    $view = $app->add(['ui'=>'tertiary green inverted segment']);
+    $button = $app->add(['Button', 'Reload Lorem']);
 
     $button->on('click', new \atk4\ui\jsReload($view));
 
@@ -179,7 +179,7 @@ jsReload existance is only possible thanks to CallbackLater implementation.
 jsCallback
 ----------
 
-.. php::class: jsCallback
+.. php:class:: jsCallback
 
 So far, the return value of callback handler was pretty much insignificant. But wouldn't it be great if this
 value was meaningful in some way?
@@ -188,7 +188,7 @@ jsCallback implements exactly that. When you specify a handler for jsCallback, i
 which will be rendered into JavaScript in response to triggering callback's URL. Let's bring up our older example, but will
 use jsCallback class now::
 
-    $label = $layout->add(['Label','Callback URL:']);
+    $label = $app->add(['Label','Callback URL:']);
     $cb = $label->add('jsCallback');
 
     $cb->set(function() {
@@ -210,7 +210,7 @@ execute PHP method returning one or more :ref:`js_action` which will be received
 
 To fully use jsAction above, here is a modified code::
 
-    $label = $layout->add(['Label','Callback URL:']);
+    $label = $app->add(['Label','Callback URL:']);
     $cb = $label->add('jsCallback');
 
     $cb->set(function() {
@@ -222,7 +222,7 @@ To fully use jsAction above, here is a modified code::
 
 Now, that is pretty long. For your convenience, there is a shorter mechanism::
 
-    $label = $layout->add(['Label', 'Callback test']);
+    $label = $app->add(['Label', 'Callback test']);
 
     $label->on('click', function() {
         return 'ok';
@@ -234,11 +234,11 @@ User Confirmation
 The implementation perfectly hides existence of callback route, javascript action and jsCallback. The jsCallback
 is based on 'Callback' therefore code after :php:meth:`View::on()` will not be executed during triggering.
 
-.. php::attr: confirm
+.. php:attr:: confirm
 
 If you set `confirm` property action will ask for user's confirmation before sending a callback::
 
-    $label = $layout->add(['Label','Callback URL:']);
+    $label = $app->add(['Label','Callback URL:']);
     $cb = $label->add('jsCallback');
 
     $cb->confirm = 'sure?';
@@ -253,7 +253,7 @@ If you set `confirm` property action will ask for user's confirmation before sen
 This is used with delete operations. When using :php:meth:`View::on()` you can pass extra argument to set the 'confirm'
 property::
 
-    $label = $layout->add(['Label', 'Callback test']);
+    $label = $app->add(['Label', 'Callback test']);
 
     $label->on('click', function() {
         return 'ok';
@@ -262,12 +262,12 @@ property::
 JavaScript arguments
 ^^^^^^^^^^^^^^^^^^^^
 
-.. php::method: set($callback, $arguments = [])
+.. php:method:: set($callback, $arguments = [])
 
 It is possible to modify expression of jsCallback to pass additional arguments to it's callback. The next example
 will send browser screen width back to the callback::
 
-    $label = $layout->add('Label');
+    $label = $app->add('Label');
     $cb = $label->add('jsCallback');
 
     $cb->set(function($j, $arg1){
@@ -281,7 +281,7 @@ In here you see that I'm using a 2nd argument to $cb->set() to specify arguments
 browser. Those arguments are passed to the callback and eventually arrive as $arg1 inside my callback. The :php:meth:`View::on()`
 also supports argument passing::
 
-    $label = $layout->add(['Label', 'Callback test']);
+    $label = $app->add(['Label', 'Callback test']);
 
     $label->on('click', function($j, $arg1) {
         return 'width is '.$arg1;
@@ -289,7 +289,7 @@ also supports argument passing::
 
 If you do not need to specify confirm, you can actually pass arguments in a key-less array too::
 
-    $label = $layout->add(['Label', 'Callback test']);
+    $label = $app->add(['Label', 'Callback test']);
 
     $label->on('click', function($j, $arg1) {
         return 'width is '.$arg1;
@@ -310,120 +310,3 @@ Now instead of showing an alert box, label content will be changed to display wi
 There are many other applications for jsCallback, for example, it's used in :php:meth:`Form::onSubmit()`.
 
 
-VirtualPage
------------
-
-So far we looked at the callbacks that either return raw output, or are linked with JavaScript to execute action.
-There is one more interesting way how a browser can be connected to PHP - VirtualPage.
-
-.. php::class: VirtualPage
-
-Virtual Page is a view that renders as an empty string, so adding VirtualPage anywhere inside your :ref:`render_tree`
-simply won't display any of it's content anywhere::
-
-    $vp = $layout->add('VirtualPage');
-    $vp->add('LoremIpsum');
-
-.. php::attr: $cb
-
-VirtuaPage has a property $cb, which refers to... CallbackLater object! Lets see what happens if we trigger this callback now::
-
-    $vp = $layout->add('VirtualPage');
-    $vp->add('LoremIpsum');
-
-    $label = $layout->add('Label');
-
-    $label->detail = $vp->cb->getURL();
-    $label->link($vp->cb->getURL());
-
-If you follow the link, you'll see 'LoremIpsum' text, but the label will not be visible now. This is because,
-when triggered, VirtualPage will get rid of all the other Content inside layout, and will output itself and
-any views you have added into VirtualPage object.
-
-Output Modes
-^^^^^^^^^^^^
-
-.. php::method: getURL($mode = 'callback')
-
-You may pass argument to :php:meth:`Callback::getURL()` but with VirtualPage this value has a deeper meaning.
-
- - getURL('cut') will return ONLY the HTML of virtual page, no Layout.
- - getURL('popup') will use a very minimalistic layout for valid HTML, suitable for iframes or popup windows.
-
-You can experement with::
-
-    $label->detail = $vp->cb->getURL('popup');
-    $label->link($vp->cb->getURL('popup'));
-
-Setting Callback
-^^^^^^^^^^^^^^^^
-
-.. php::method: set($callback)
-
-Although VirtualPage works without defining a callback, using one is more reliable and is always recommended::
-
-    $vp = $layout->add('VirtualPage');
-    $vp->set(function($vp){
-        $vp->add('LoremIpsum');
-    });
-
-    $label = $layout->add('Label');
-
-    $label->detail = $vp->cb->getURL();
-    $label->link($vp->cb->getURL());
-
-This code will perform identically as the previous example, however 'LoremIpsum' will never be initialized
-unless you are requesting VirtualPage specifically, saving some CPU time. Capability of defining callback
-also makes it possible for VirtualPage to be embedded into any :ref:`component` quite reliably.
-
-To illustrate, :php:class:`Tabs` component rely on VirtualPage and allow you to define dynamically loadable tabs::
-
-    $t = $layout->add('Tabs');
-
-    $t->addTab('Tab1')->add('LoremIpsum'); // regular tab
-    $t->addTab('Tab2', function($p){ $p->add('LoremIpsum'); }); // dynamic tab
-
-The dynamic tab is implemented through Virtual Page, which is passed to your callback as $p. VirtualPage
-is also used in Modal, CRUD and various other components.
-
-.. php::method: getURL()
-
-    You can use this shortcut method instead of $vp->cb->getURL().
-
-.. php::attr: $ui
-
-When using 'popup' mode, the output appears inside a `<div class="ui container">`. If you want to change this
-class, you can set $ui property to something else. Try::
-
-    $vp = $layout->add('VirtualPage');
-    $vp->add('LoremIpsum');
-    $vp->ui = 'red inverted segment';
-
-    $label = $layout->add('Label');
-
-    $label->detail = $vp->cb->getURL('popup');
-    $label->link($vp->cb->getURL('popup'));
-
-
-.. php::class: Tabs
-
-Tabs is a view that works as it sounds - it's a basic tabs implementation.
-
-.. php::method: addTab($name, $action)
-
-    Use addTab() method to add more tabs in Tabs view. First parameter is a title of the tab.
-
-    Tabs can be static or dynamic. Dynamic tabs use :php:class:`VirtualPage` implementation mentioned above.
-    You should pass callable action as a second parameter.
-
-    Example::
-
-    $t = $layout->add('Tabs');
-
-    // add static tab
-    $t->addTab('Static Tab')->add('HelloWorld');
-
-    // add dynamic tab
-    $t->addTab('Dynamically Loading', function ($tab) {
-        $tab->add('LoremIpsum');
-    });

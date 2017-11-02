@@ -8,7 +8,7 @@
 Tabs
 ====
 
-Tabs implement a yet another way to organise your data. The implementation is based on: http://semantic-ui.com/elements/icon.html. 
+Tabs implement a yet another way to organise your data. The implementation is based on: http://semantic-ui.com/elements/icon.html.
 
 
 Demo: http://ui.agiletoolkit.org/demos/tabs.php
@@ -28,6 +28,25 @@ Adding a static conten is pretty simple::
 
 You can add multiple elements into a single tab, like any other view.
 
+.. php:method:: addTab($name, $action)
+
+    Use addTab() method to add more tabs in Tabs view. First parameter is a title of the tab.
+
+    Tabs can be static or dynamic. Dynamic tabs use :php:class:`VirtualPage` implementation mentioned above.
+    You should pass callable action as a second parameter.
+
+    Example::
+
+    $t = $layout->add('Tabs');
+
+    // add static tab
+    $t->addTab('Static Tab')->add('HelloWorld');
+
+    // add dynamic tab
+    $t->addTab('Dynamically Loading', function ($tab) {
+        $tab->add('LoremIpsum');
+    });
+
 Dynamic Tabs
 ============
 
@@ -36,7 +55,7 @@ to pass a call-back which will be triggered when user clicks on the tab.
 
 Note that tab contents are refreshed including any values you put on the form::
 
-    $t = $layout->add('Tabs');
+    $t = $app->add('Tabs');
 
     // dynamic tab
     $t->addTab('Dynamic Lorem Ipsum', function ($tab) {

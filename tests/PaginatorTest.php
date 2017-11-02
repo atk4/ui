@@ -39,7 +39,7 @@ class PaginatorTest extends \atk4\core\PHPUnit_AgileTestCase
      */
     public function testPaginator($page, $range, $total, $expected)
     {
-        $p = new \atk4\ui\Paginator(['page'=>$page, 'range'=>$range, 'total'=>$total]);
+        $p = new \atk4\ui\Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
         $this->assertEquals($expected, $p->getPaginatorItems());
     }
 }

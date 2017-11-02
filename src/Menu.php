@@ -81,7 +81,7 @@ class Menu extends View
             $name = [];
         }
 
-        $sub_menu = $this->add([new self(), 'defaultTemplate'=>'submenu.html', 'ui'=>'dropdown', 'in_dropdown'=>true]);
+        $sub_menu = $this->add([new self(), 'defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
         $sub_menu->set('label', $label);
 
         if (isset($name['icon'])) {
@@ -89,7 +89,7 @@ class Menu extends View
         }
 
         if (!$this->in_dropdown) {
-            $sub_menu->js(true)->dropdown(['on'=>'hover', 'action'=>'hide']);
+            $sub_menu->js(true)->dropdown(['on' => 'hover', 'action' => 'hide']);
         }
 
         return $sub_menu;
@@ -104,7 +104,7 @@ class Menu extends View
      */
     public function addGroup($title)
     {
-        $group = $this->add([new self(), 'defaultTemplate'=>'menugroup.html', 'ui'=>false]);
+        $group = $this->add([new self(), 'defaultTemplate' => 'menugroup.html', 'ui' => false]);
         if (is_string($title)) {
             $group->set('title', $title);
         } else {
@@ -124,7 +124,7 @@ class Menu extends View
      */
     public function addMenuRight()
     {
-        $menu = $this->add([new self(), 'ui'=>false], 'RightMenu');
+        $menu = $this->add([new self(), 'ui' => false], 'RightMenu');
         $menu->removeClass('item')->addClass('right menu');
 
         return $menu;
@@ -153,7 +153,7 @@ class Menu extends View
      */
     public function addDivider()
     {
-        $item = parent::add(['class'=>['divider']]);
+        $item = parent::add(['class' => ['divider']]);
 
         return $item;
     }
@@ -172,8 +172,8 @@ class Menu extends View
     {
         if ($this->activate_on_click && $this->ui == 'menu') {
             // Semantic UI need some JS magic
-            $this->on('click', 'a.item', $this->js()->find('.active')->removeClass('active'), ['preventDefault'=>false, 'stopPropagation'=>false]);
-            $this->on('click', 'a.item', null, ['preventDefault'=>false, 'stopPropagation'=>false])->addClass('active');
+            $this->on('click', 'a.item', $this->js()->find('.active')->removeClass('active'), ['preventDefault' => false, 'stopPropagation' => false]);
+            $this->on('click', 'a.item', null, ['preventDefault' => false, 'stopPropagation' => false])->addClass('active');
         }
 
         if ($this->content) {

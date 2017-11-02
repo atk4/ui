@@ -17,7 +17,7 @@ $app->addStyle('
 }
 ');
 
-$page = $layout->add(['View', 'id'=>'example']);
+$page = $app->add(['View', 'id' => 'example']);
 
 $page->add(['Header', 'Basic Usage']);
 
@@ -70,11 +70,11 @@ class Box extends \atk4\ui\View
     public function init()
     {
         parent::init();
-        $this->add(['Table', 'header'=>false])
+        $this->add(['Table', 'header' => false])
             ->setSource(['One', 'Two', 'Three', 'Four']);
     }
 }
 
-$c = $page->add(new \atk4\ui\Columns(['width'=>4]));
+$c = $page->add(new \atk4\ui\Columns(['width' => 4]));
 $c->addColumn()->add(new Box(['red']));
 $c->addColumn([null, 'right floated'])->add(new Box(['blue']));

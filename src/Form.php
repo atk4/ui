@@ -92,7 +92,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $this->layout->form = $this;
             $this->add($this->layout);
         } else {
-            throw new Exception(['Unsupported specification of form layout. Can be array, string or object', 'layout'=>$this->layout]);
+            throw new Exception(['Unsupported specification of form layout. Can be array, string or object', 'layout' => $this->layout]);
         }
 
         // Layout needs to have a save button
@@ -198,7 +198,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Add field into current layout. If no layout, create one. If no model, create blank one.
      *
-     * @param mixed ...$args
+     * @param string|null              $name
+     * @param array|string|object|null $decorator
+     * @param array|string|object|null $field
      *
      * @return FormField\Generic
      */
@@ -283,7 +285,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
         if ($f && !$f instanceof \atk4\data\Field) {
-            throw new Exception(['Argument 1 for decoratorFactory must be \atk4\data\Field or null', 'f'=>$f]);
+            throw new Exception(['Argument 1 for decoratorFactory must be \atk4\data\Field or null', 'f' => $f]);
         }
 
         $fallback_seed = 'Line';
@@ -302,9 +304,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         );
 
         $defaults = [
-            'form'      => $this,
-            'field'     => $f,
-            'short_name'=> $f->short_name,
+            'form'       => $this,
+            'field'      => $f,
+            'short_name' => $f->short_name,
         ];
 
         return $this->factory($seed, $defaults, 'FormField');
@@ -314,14 +316,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * Provides decorator seeds for most common types.
      */
     protected $typeToDecorator = [
-        'boolean' => 'Checkbox',
-        'text'    => 'Textarea',
-        'string'  => 'Line',
-        'password'=> 'Password',
-        'datetime'=> 'Calendar',
-        'date'    => ['Calendar', 'type'=>'date'],
-        'time'    => ['Calendar', 'type'=>'time', 'ampm'=>false],
-        'money'   => 'Money',
+        'boolean'  => 'Checkbox',
+        'text'     => 'Textarea',
+        'string'   => 'Line',
+        'password' => 'Password',
+        'datetime' => 'Calendar',
+        'date'     => ['Calendar', 'type' => 'date'],
+        'time'     => ['Calendar', 'type' => 'time', 'ampm' => false],
+        'money'    => 'Money',
     ];
 
     /*
@@ -378,7 +380,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $data = [];
         $errors = [];
 
-        foreach ($this->fields as $key=>$field) {
+        foreach ($this->fields as $key => $field) {
             try {
                 $value = isset($post[$key]) ? $post[$key] : null;
 
@@ -405,17 +407,17 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function ajaxSubmit()
     {
-        $this->_add($cb = new jsCallback(), ['desired_name'=>'submit', 'POST_trigger'=>true]);
+        $this->_add($cb = new jsCallback(), ['desired_name' => 'submit', 'POST_trigger' => true]);
 
-        $this->add(new View(['element'=>'input']))
+        $this->add(new View(['element' => 'input']))
             ->setAttr('name', $cb->name)
             ->setAttr('value', 'submit')
-            ->setStyle(['display'=>'none']);
+            ->setStyle(['display' => 'none']);
 
         $cb->set(function () {
             $caught = function ($e) {
                 return new jsExpression('$([html]).modal("show")', [
-                    'html'=> '<div class="ui fullscreen modal"> <i class="close icon"></i> <div class="header"> '.
+                    'html' => '<div class="ui fullscreen modal"> <i class="close icon"></i> <div class="header"> '.
                     htmlspecialchars(get_class($e)).
                     ' </div> <div class="content"> '.
                     ($e instanceof \atk4\core\Exception ? $e->getHTML() : nl2br(htmlspecialchars($e->getMessage())))
@@ -449,7 +451,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 }
             } catch (\atk4\data\ValidationException $val) {
                 $response = [];
-                foreach ($val->errors as $field=>$error) {
+                foreach ($val->errors as $field => $error) {
                     $response[] = $this->error($field, $error);
                 }
 
@@ -464,8 +466,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         });
 
         $this->js(true)
-            ->api(['url'=>$cb->getURL(),  'method'=>'POST', 'serializeForm'=>true])
-            ->form(['inline'=>true, 'on'=>'blur']);
+            ->api(['url' => $cb->getURL(),  'method' => 'POST', 'serializeForm' => true])
+            ->form(['inline' => true, 'on' => 'blur']);
 
         $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
     }

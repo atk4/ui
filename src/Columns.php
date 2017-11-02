@@ -68,7 +68,7 @@ class Columns extends View
      */
     public function addRow($width = null)
     {
-        return $this->add(new static([$width, 'ui'=>false]))->addClass('row');
+        return $this->add(new static([$width, 'ui' => false]))->addClass('row');
     }
 
     public function renderView()

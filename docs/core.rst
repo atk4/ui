@@ -15,7 +15,7 @@ is::
 
     $app = new \atk4\ui\App('My App');
     $app->initLayout('Centered');
-    $app->layout->add('LoremIpsum');
+    $app->add('LoremIpsum');
 
 .. toctree::
     app
@@ -27,11 +27,11 @@ Seed
 Agile UI is developed to be easy to read and with simple and concise syntax. We make use of
 dynamic nature of PHP, therefore two syntax patterns are supported everywhere::
 
-    $app->layout->add(new \atk4\ui\Button('Hello'));
+    $app->add(new \atk4\ui\Button('Hello'));
 
     and
 
-    $app->layout->add(['Button', 'Hello']);
+    $app->add(['Button', 'Hello']);
 
 Method add() supports arguments in a various formats and we call that "Seed". The same format
 can be used elsewhere, for example::
@@ -44,6 +44,7 @@ We call this format 'Seed'. This section will explain how and where it is used.
     seed
 
 .. _render:
+.. _render_tree:
 
 Render Tree
 ===========
@@ -55,7 +56,7 @@ You can create and link multiple UI objects together before linking them with ot
     $msg = new \atk4\ui\Message('Hey There');
     $msg->add(new \atk4\ui\Button('Button'));
 
-    $app->layout->add($msg);
+    $app->add($msg);
 
 To find out more about how components are linked up together and rendered, see:
 
@@ -74,7 +75,7 @@ by having an ability to introduce new types with consistent support throughout t
 
 .. toctree::
     type-presentation
-    
+
 
 
 Templates
@@ -102,7 +103,7 @@ have to worry over the details::
     $user = new User($db);
     $user->load(1);
 
-    $view = $app->layout-add(['template'=>'Hello, {$name}, your balance is {$balance}']);
+    $view = $app->add(['template'=>'Hello, {$name}, your balance is {$balance}']);
     $view->setModel($user);
 
 Next section will explain you how the Agile UI interacts with the data layer and how it outputs or
@@ -113,8 +114,8 @@ inputs user data.
 
 .. _callback:
 
-Callbacks and Virtual Pages
-===========================
+Callbacks
+=========
 
 By relying on the ability of generating :ref:`unique_name`, it's possible to create several classes
 for implementing PHP call-backs. They follow the pattern:
@@ -132,19 +133,40 @@ Once the concept is established, it can even be used on a higher level, for exam
 
     callbacks
 
-ok
 
- - "call-backs"
- - "virtual pages"
- - sticky 
+.. _virtualpage:
+
+VirtualPage and Loader
+======================
+
+Building on the foundation of :ref:`callback`, components :php:class:`VirtualPage` and :php:class:`Loader`
+exist to enhance other Components with dynamically loadable content. Here is example for :php:class:`Tabs`::
+
+    $tabs = $app->add('Tabs');
+    $tabs->addTab('First tab is static')->add('LoremIpsum');
+
+    $tabs->addTab('Second tab is dynamic', function($vp) {
+        $vp->add('LoremIpsum');
+    });
+
+As you switch between those two tabs, you'll notice that the :php:class:`Button` label on the "Second tab"
+reloads every time. :php:class:`Tabs` implements this by using :php:class:`VirtualPage`, read further to
+find out how:
+
+
+.. toctree::
+    :maxdepth: 4
+
+    virtualpage
+
 
 Documentation is coming soon.
+=============================
 
 .. toctree::
     :maxdepth: 4
 
     init
     callback
-    virtualpage
     stickyget
 
