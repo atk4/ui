@@ -422,6 +422,113 @@ This will map into the following JavaScript code:
 You can further simplify JavaScript code yourself, but keep the JavaScript logic inside the `.js` files
 and leave PHP only for binding.
 
+Modal
+=====
+
+.. php:class:: Modal
+
+.. php:method:: set(callback)
+.. php:method:: show()
+.. php:method:: hide()
+
+This class allows you to open modal dialogs and close them easily. It's based around Semantic UI
+`.modal(), <https://semantic-ui.com/modules/modal.html>`_ but integrates PHP callback for dynamically
+producing content of your dialog::
+
+
+    $modal = $app->add(['Modal', 'title' => 'Simple title']);
+    $modal->set(function ($p) use ($modal) {
+        $p->add('LoremIpsum');
+
+        $p->add(['Button', 'Hide'])->on('click', $modal->hide());
+    });
+
+    $app->add(['Button', 'Show'])->on('click', $modal->show());
+
+Modal will render as a `<div>` block but will be hidden. Alternatively you can use Modal without loadable content::
+
+    $modal = $app->add(['Modal', 'title' => 'Add a name']);
+    $modal->add('LoremIpsum');
+    $modal->add(['Button', 'Hide'])->on('click', $modal->hide());
+
+    $app->add(['Button', 'Show'])->on('click', $modal->show());
+
+This way it's more convenient for holding static content, such as Terms of Service.
+
+
+jsModal
+=======
+
+.. php:class:: jsModal
+
+This is alternative implementation to :php:class:`Modal` and is convenient for situations
+when you do not know in advance that you migth need to open Dialog box. This class is not
+a component, but rathen an Action so you mustn't add it into Render Tree::
+
+    $vp = $app->add('VirtualPage');
+    $vp->add(['LoremIpsum', 'size' => 2]);
+
+    $app->add(['Button', 'Dynamic Modal'])
+        ->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut')));
+
+If compare this with example for :php:class:`Modal`, you'll notice that Modal div is always
+destroyed when you close modal instead of hiding it and then re-created again.
+
+jsNotify
+========
+
+.. php:class:: jsNotify
+.. php:method:: setColor(color)
+
+Implementation for dynamic notifier, which you can use to display operation status::
+
+    $app->add(['Button', 'Test'])->on(
+        'click', 
+        (new \atk4\ui\jsNotify('Not yet implemented'))
+            ->setColor('red')
+    );
+
+
+A typical use case would be to provide visual feedback of an action after used performs operation inside
+a Modal window with a Form. When user submits a form, it's Submit handler will close modal, so to leave
+some feedback to the user jsNotify can display a bar on top of the screen for some time::
+
+    $modal = $app->add(['Modal', 'Modal Title']);
+
+    $modal->set(function ($p) use ($modal) {
+        $form = $p->add('Form');
+        $form->addField('name', null, ['caption'=>'Add your name']);
+
+        $form->onSubmit(function ($f) use ($modal) {
+            if (empty($f->model['name'])) {
+                return $f->error('name', 'Please add a name!');
+            } else {
+                return [
+                    $modal->hide(),
+                    new \atk4\ui\jsNotify('Thank you '.$f->model['name'])
+                ];
+            }
+        });
+    });
+
+    $app->add(['Button', 'Open Modal'])->on('click', $modal->show());
+
+.. php:method:: setIcon(color)
+.. php:method:: setTransition(openTransition, closeTransition)
+.. php:method:: setDuration(duration)
+.. php:method:: setPosition(duration)
+.. php:method:: setWidth(duration)
+.. php:method:: setOpacity(duration)
+
+You can pass options either as array or by calling methods.
+
+.. php:method:: attachTo(view)
+
+Finally you can attach your notification to another view::
+
+    $jsNotify->attachTo($form);
+
+
 
 Reloading
 =========

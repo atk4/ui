@@ -54,7 +54,11 @@ class VirtualPage extends View
                 if (isset($_GET['json'])) {
                     $this->app->terminate($this->renderJSON());
                 }
-                $this->app->terminate($this->render());
+
+                // do not terminate if callback supplied (no cutting)
+                if ($type != 'callback') {
+                    $this->app->terminate($this->render());
+                }
             }
 
             // Remove all elements from inside the Content
