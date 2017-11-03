@@ -1,11 +1,13 @@
 <?php
 
 namespace atk4\ui;
-/**
+
+/*
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
 
 use atk4\core\InitializerTrait;
+
 class jsSSE extends jsCallback
 {
     use InitializerTrait;
@@ -82,7 +84,7 @@ class jsSSE extends jsCallback
      */
     private function output($content)
     {
-        print($content);
+        echo $content;
     }
 
     /**
