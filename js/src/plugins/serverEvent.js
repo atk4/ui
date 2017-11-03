@@ -8,11 +8,16 @@ export default class serverEvent extends atkPlugin {
     if (typeof(EventSource) !== "undefined") {
       let source = new EventSource(this.settings.uri);
       source.onmessage = function (e) {
-        // console.log('event', JSON.parse(e.data));
         apiService.atkSuccessTest(JSON.parse(e.data));
       };
       source.onerror = function (e) {
-      }
+          if (e.eventPhase === EventSource.CLOSED) {
+            source.close();
+          }
+      };
+      source.addEventListener("jsAction", function(e) {
+        apiService.atkSuccessTest(JSON.parse(e.data));
+      }, false);
     } else {
       console.log('server side event not supported');
     }
