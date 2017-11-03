@@ -7,11 +7,11 @@ namespace atk4\ui;
  */
 class jsSSE extends jsCallback
 {
-
     // Allows us to fall-back to standard functionality of jsCallback if browser does not support SSE
     public $browserSupport = false;
 
-    function init() {
+    public function init()
+    {
         parent::init();
 
         if ($this->triggered() == 'sse') {
@@ -19,19 +19,19 @@ class jsSSE extends jsCallback
         }
     }
 
-    function send($action) {
+    public function send($action)
+    {
         if ($this->browserSupport) {
-
             $ajaxec = $this->getAjaxec($action);
 
             // TODO: implement
             $this->sendBlock($ajaxec);
             $this->flush();
-
         } // else ignore event
     }
 
-    function terminate($ajaxec, $success = true){ 
+    public function terminate($ajaxec, $success = true)
+    {
         if ($this->browserSupport) {
 
             // if !success, then log error to console
@@ -39,10 +39,8 @@ class jsSSE extends jsCallback
 
             // no further output please
             $this->app->terminate();
-
-        }else {
+        } else {
             $this->app->terminate(json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]));
         }
     }
-
 }

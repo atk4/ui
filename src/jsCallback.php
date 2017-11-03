@@ -84,55 +84,57 @@ class jsCallback extends Callback implements jsExpressionable
                 //$this->app->terminate(json_encode(['success' => false, 'message' => $m->getHTML()]));
             }
         });
+
         return $this;
     }
 
-    function terminate($ajaxec, $success = true) {
+    public function terminate($ajaxec, $success = true)
+    {
         $this->app->terminate(json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]));
     }
 
-    function getAjaxec($response, $chain = null) {
-                if (is_array($response) && $response[0] instanceof View) {
-                    $response = $response[0];
-                }
+    public function getAjaxec($response, $chain = null)
+    {
+        if (is_array($response) && $response[0] instanceof View) {
+            $response = $response[0];
+        }
 
-                if ($response instanceof View) {
-                    $response = new jsExpression('$([html]).modal("show")', [
+        if ($response instanceof View) {
+            $response = new jsExpression('$([html]).modal("show")', [
                         'html' => '<div class="ui fullscreen modal"> <i class="close icon"></i>  <div class="content"> '.
                         $response->render()
                         .' </div> </div>',
                     ]);
-                }
+        }
 
-                if ($response === $chain) {
-                    $response = null;
-                }
+        if ($response === $chain) {
+            $response = null;
+        }
 
-                $actions = [];
+        $actions = [];
 
-                if ($chain->_chain) {
-                    $actions[] = $chain;
-                }
+        if ($chain->_chain) {
+            $actions[] = $chain;
+        }
 
-                $response = $this->flatternArray($response);
+        $response = $this->flatternArray($response);
 
-                foreach ($response as $r) {
-                    if (is_string($r)) {
-                        $actions[] = new jsExpression('alert([])', [$r]);
-                    } elseif ($r instanceof jsExpressionable) {
-                        $actions[] = $r;
-                    } elseif ($r === null) {
-                        continue;
-                    } else {
-                        throw new Exception(['Incorrect callback. Must be string or action.', 'r' => $r]);
-                    }
-                }
+        foreach ($response as $r) {
+            if (is_string($r)) {
+                $actions[] = new jsExpression('alert([])', [$r]);
+            } elseif ($r instanceof jsExpressionable) {
+                $actions[] = $r;
+            } elseif ($r === null) {
+                continue;
+            } else {
+                throw new Exception(['Incorrect callback. Must be string or action.', 'r' => $r]);
+            }
+        }
 
-                $ajaxec = implode(";\n", array_map(function (jsExpressionable $r) {
-                    return $r->jsRender();
-                }, $actions));
+        $ajaxec = implode(";\n", array_map(function (jsExpressionable $r) {
+            return $r->jsRender();
+        }, $actions));
 
-                return $ajaxec;
-
+        return $ajaxec;
     }
 }
