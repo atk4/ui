@@ -18,7 +18,7 @@ class jsSSE extends jsCallback
     {
         //parent::init();
         $this->_initialized = true;
-        if ($this->triggered() === 'callback') {
+        if ($this->triggered() === 'sse') {
             $this->browserSupport = true;
             $this->initSse();
         }
@@ -31,7 +31,8 @@ class jsSSE extends jsCallback
         }
 
         return (new jQuery())->atkServerEvent([
-            'uri' => $this->getURL(),
+            'uri'  => $this->getURL(),
+            'name' => $this->name,
         ])->jsRender();
     }
 
@@ -101,6 +102,18 @@ class jsSSE extends jsCallback
             $this->output("event: {$name}\n");
         }
         $this->output($this->wrapData($data)."\n\n");
+    }
+
+    /**
+     * Return URL that will trigger action on this call-back.
+     *
+     * @param string $mode
+     *
+     * @return string
+     */
+    public function getURL()
+    {
+        return $this->app->url();
     }
 
     /**

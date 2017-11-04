@@ -6,7 +6,7 @@ export default class serverEvent extends atkPlugin {
   main() {
 
     if (typeof(EventSource) !== "undefined") {
-      let source = new EventSource(this.settings.uri);
+      let source = new EventSource(this.settings.uri + `?${this.settings.name}=sse`);
       source.onmessage = function (e) {
         apiService.atkSuccessTest(JSON.parse(e.data));
       };
@@ -19,7 +19,10 @@ export default class serverEvent extends atkPlugin {
         apiService.atkSuccessTest(JSON.parse(e.data));
       }, false);
     } else {
-      console.log('server side event not supported');
+      console.log('server side event not supported fallback to atkAjaxec');
+      this.$el.atkAjaxec({
+        uri: this.settings.uri + `?${this.settings.name}=callback`
+      })
     }
   }
 }
@@ -27,4 +30,5 @@ export default class serverEvent extends atkPlugin {
 serverEvent.DEFAULTS = {
   uri: null,
   uri_options: {},
+  name: '',
 };
