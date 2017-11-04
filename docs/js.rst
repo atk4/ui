@@ -557,3 +557,64 @@ other view::
     $t->setModel($m_book);
 
 In this example, filling out and submitting the form will result in table contents being refreshed using AJAX.
+
+
+Background Tasks
+================
+
+Agile UI has addressed one of the big shortcoming with the PHP language - ability to execute running / background
+processes. It's best illustrated with example. 
+
+Say you need to process a large image, resize, find face, watermark, create thumbnails and store externally. For
+the average image this could take 5-10 seconds, so you'd like to user updated about the process. There are
+various ways to do so.
+
+The most basic approach you could probably figure out already::
+
+    $button = $app->add(['Button', 'Process the image']);
+    $button->on('click', function() use($button, $image) {
+
+        sleep(1); // $image->resize();
+        sleep(1); // $image->findFace();
+        sleep(1); // $image->watermark();
+        sleep(1); // $image->createThumbnails();
+
+        return $button->js()->text('Success')->addClass('disabled');
+
+    });
+
+However, it would be nice if you could communicate to the user the progress of your process:
+
+
+Server Side Event (jsSSE)
+-------------------------
+
+.. php:class:: jsSSE
+
+.. php:method:: send(action)
+
+This class implements ability for your PHP code to send messages to the browser in the middle of the process
+execution::
+
+    $button = $app->add(['Button', 'Process the image']);
+
+    $sse = $app->add(['jsSSE']);
+
+    $button->on('click', $sse->set(function() use($sse, $button, $image) {
+
+        $sse->send($button->js()->text('Processing'));
+        sleep(1); // $image->resize();
+
+        $sse->send($button->js()->text('Looking for face'));
+        sleep(1); // $image->findFace();
+
+        $sse->send($button->js()->text('Adding watermark'));
+        sleep(1); // $image->watermark();
+
+        $sse->send($button->js()->text('Creating thumbnail'));
+        sleep(1); // $image->createThumbnails();
+
+        return $button->js()->text('Success')->addClass('disabled');
+
+    });
+
