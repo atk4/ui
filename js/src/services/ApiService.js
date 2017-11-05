@@ -48,7 +48,7 @@ class ApiService {
     }
 
     onAbort(message) {
-        alert(message);
+        console.log(message);
     }
     /**
      * Handle a server response success
