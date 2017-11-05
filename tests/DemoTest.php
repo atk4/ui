@@ -39,8 +39,57 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function demoList()
     {
+
+$copy_paste = trim('
+  autocomplete.php
+  button.php
+  button2.php
+  checkbox.php
+  columns.php
+  crud.php
+  crud2.php
+  field.php
+  field2.php
+  form.php
+  form2.php
+  form3.php
+  form4.php
+  form5.php
+  grid.php
+  header.php
+  index.php
+  init.php
+  label.php
+  layouts.php
+  loader.php
+  loader2.php
+  menu.php
+  message.php
+  modal.php
+  multitable.php
+  notify.php
+  notify2.php
+  paginator.php
+  recursive.php
+  reloading.php
+  sse.php
+  sticky.php
+  table.php
+  tabs.php
+  test.php
+  view.php
+  virtual.php
+');
+$copy_paste = explode("\n", $copy_paste);
+$copy_paste = array_map(function($i) { return [trim($i)]; }, $copy_paste);
+return $copy_paste;
+var_Dump($copy_paste);
         return [
+            ['autocomplete.php'],
             ['button.php'],
+            ['button2.php'],
+            ['checkbox.php'],
+
             ['table.php'],
             ['form.php'],
             ['form2.php'],
@@ -58,7 +107,6 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
             ['tabs.php'],
             ['paginator.php'],
 
-            ['button2.php'],
             ['reloading.php'],
             ['modal.php'],
             ['sticky.php'],

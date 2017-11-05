@@ -423,7 +423,7 @@ class View implements jsExpressionable
      *
      * @return $this
      */
-    public function set($arg1 = [], $arg2 = null)
+    public function set($arg1 = null, $arg2 = null)
     {
         if (is_string($arg1) && $arg2 !== null) {
 

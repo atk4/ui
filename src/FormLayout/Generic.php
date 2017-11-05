@@ -82,7 +82,7 @@ class Generic extends View
             }
 
             if (is_string($decorator)) {
-                $decorator = $this->form->decoratorFactory($field, ['caption' => $decorator]);
+                $decorator = $this->form->decoratorFactory($field, null, ['caption' => $decorator]);
             } elseif (is_array($decorator)) {
                 $decorator = $this->form->decoratorFactory($field, $decorator);
             } elseif (!$decorator) {
@@ -236,7 +236,7 @@ class Generic extends View
             }
 
             $template = $field_input;
-            $label = $el->field->getCaption();
+            $label = $el->caption ?: $el->field->getCaption();
 
             // Anything but fields gets inserted directly
             if ($el instanceof \atk4\ui\FormField\CheckBox) {

@@ -13,6 +13,8 @@ class CheckBox extends Generic
 
     public $defaultTemplate = 'formfield/checkbox.html';
 
+    public $label;
+
     public function init()
     {
         parent::init();

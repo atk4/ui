@@ -178,7 +178,7 @@ class Input extends Generic
         return $this->action;
     }
 
-    public function set($value)
+    public function set($value = null, $junk = null)
     {
         $this->content = $value;
     }

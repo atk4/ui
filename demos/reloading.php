@@ -24,6 +24,7 @@ $b3->js('click', new \atk4\ui\jsReload($b4));
 $app->add(['Header', 'Make sure nested JS bindings are applied too']);
 $seg = $app->add(['View', 'ui' => 'segment']);
 
+if (!class_exists('Counter')) {
 // Re-usable component implementing counter
 class Counter extends \atk4\ui\FormField\Line
 {
@@ -39,6 +40,7 @@ class Counter extends \atk4\ui\FormField\Line
         $this->actionLeft->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])-1', [$this->jsInput()->val()])));
         $this->action->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])+1', [$this->jsInput()->val()])));
     }
+}
 }
 
 // Add 3 counters
