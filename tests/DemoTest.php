@@ -39,8 +39,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function demoList()
     {
-
-$copy_paste = trim('
+        $copy_paste = trim('
   autocomplete.php
   button.php
   button2.php
@@ -80,10 +79,14 @@ $copy_paste = trim('
   view.php
   virtual.php
 ');
-$copy_paste = explode("\n", $copy_paste);
-$copy_paste = array_map(function($i) { return [trim($i)]; }, $copy_paste);
-return $copy_paste;
-var_Dump($copy_paste);
+        $copy_paste = explode("\n", $copy_paste);
+        $copy_paste = array_map(function ($i) {
+            return [trim($i)];
+        }, $copy_paste);
+
+        return $copy_paste;
+        var_dump($copy_paste);
+
         return [
             ['autocomplete.php'],
             ['button.php'],
