@@ -19,7 +19,7 @@ export default class serverEvent extends atkPlugin {
         apiService.atkSuccessTest(JSON.parse(e.data));
       }, false);
     } else {
-      console.log('server side event not supported fallback to atkAjaxec');
+      console.log('server side event not supported fallback to atkReloadView');
       this.$el.atkReloadView({
         uri: this.settings.uri,
         uri_options: {[this.settings.name]:'callback'},
