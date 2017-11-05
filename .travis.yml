@@ -14,9 +14,11 @@ before_script:
     - mysql -e 'create database atk4;'
     - mysql atk4 < demos/atk4.sql
     - mv demos/db.travis.php demos/db.php
+    - sudo npm install -g zombie
 
 after_script:
     - echo $TRAVIS_BRANCH
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then ; bash tools/test.sh; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending codecov report"; bash <(curl -s https://codecov.io/bash); fi
 
