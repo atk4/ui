@@ -9,7 +9,7 @@ services:
     - mysql
 
 before_script:
-    -  [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]] && php -S localhost:8888 &
+    - [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]] && php -S localhost:8888 &
     - composer install
     - mysql -e 'create database atk4;'
     - mysql atk4 < demos/atk4.sql
@@ -24,9 +24,7 @@ after_script:
 script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then NC="--no-coverage"; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then bash tools/test.sh; fi
-      #- wget -O - http://localhost:8888/demos/button2.php 
-    - ./vendor/phpunit/phpunit/phpunit $NC
-
+    - ./vendor/phpunit/phpunit/phpunit $NC #- wget -O - http://localhost:8888/demos/button2.php 
 
 cache:
   directories:
