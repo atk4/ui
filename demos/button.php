@@ -80,4 +80,3 @@ $app->add(new Header(['Attaching', 'size' => 2]));
 $app->add(['Button', 'Scroll Up', 'top attached']);
 $app->add(['Table', 'attached', 'header' => false])->setSource(['One', 'Two', 'Three', 'Four']);
 $app->add(['Button', 'Scroll Up', 'bottom attached']);
-
