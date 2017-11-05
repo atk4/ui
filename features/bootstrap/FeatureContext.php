@@ -2,8 +2,6 @@
 
 use Behat\Behat\Context\Context;
 use Behat\MinkExtension\Context\RawMinkContext;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
 
 /**
  * Defines application features from the specific context.
@@ -33,7 +31,6 @@ class FeatureContext extends RawMinkContext implements Context
      */
     public function iPressButton($arg1)
     {
-
         $button = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
         $this->button_id = $button->getAttribute('id');
         $button->click();
@@ -46,10 +43,9 @@ class FeatureContext extends RawMinkContext implements Context
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
         if ($element->getAttribute('style')) {
-          throw new \Exception("Element with text \"$arg1\" must be invisible");
+            throw new \Exception("Element with text \"$arg1\" must be invisible");
         }
     }
-
 
     /**
      * @Then dump :arg1
@@ -60,18 +56,16 @@ class FeatureContext extends RawMinkContext implements Context
         var_dump($element->getOuterHtml());
     }
 
-
     /**
      * @Then I don't see button :arg1
      */
     public function iDontSee($arg1)
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
-        if (strpos('display: none', $element->getAttribute('style')) !== false){
-          throw new \Exception("Element with text \"$arg1\" must be invisible");
+        if (strpos('display: none', $element->getAttribute('style')) !== false) {
+            throw new \Exception("Element with text \"$arg1\" must be invisible");
         }
     }
-
 
     /**
      * @Then Label changes to a number
@@ -80,10 +74,9 @@ class FeatureContext extends RawMinkContext implements Context
     {
         $element = $this->getSession()->getPage()->findById($this->button_id);
         if (!is_numeric($element->getHtml())) {
-          throw new \Exception("Label must be numeric");
+            throw new \Exception('Label must be numeric');
         }
     }
-
 
     /**
      * @Then Modal opens with text :arg1
@@ -92,8 +85,7 @@ class FeatureContext extends RawMinkContext implements Context
     {
         $modal = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
         if ($modal->getAttribute('class') != 'ui modal scrolling') {
-          throw new \Exception('No such modal');
+            throw new \Exception('No such modal');
         }
-
     }
 }

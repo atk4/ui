@@ -144,7 +144,7 @@ class jsExpression implements jsExpressionable
     {
         $length = strlen($str);
         $ret = '';
-        for ($i = 0; $i < $length; ++$i) {
+        for ($i = 0; $i < $length; $i++) {
             switch ($str[$i]) {
                 case "\r":
                     $ret .= '\\r';
