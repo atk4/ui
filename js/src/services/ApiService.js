@@ -48,7 +48,7 @@ class ApiService {
     }
 
     onAbort(message) {
-        alert(message);
+        console.log(message);
     }
     /**
      * Handle a server response success
@@ -112,7 +112,7 @@ class ApiService {
      * @param response
      * @param content
      */
-    atkSuccessTest(response, content) {
+    atkSuccessTest(response, content = null) {
         if (response.success) {
             this.onSuccess(response, content);
         } else {
