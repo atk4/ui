@@ -75,7 +75,6 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
   sticky.php
   table.php
   tabs.php
-  test.php
   view.php
   virtual.php
 ');

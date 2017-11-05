@@ -85,7 +85,7 @@ class AutoComplete extends Input
             if ($this->search instanceof Closure) {
                 $this->search($this->model, $_GET['q']);
             } elseif ($this->search && is_array($this->search)) {
-                $this->model->addCondition($x = array_map(function ($field) {
+                $this->model->addCondition(array_map(function ($field) {
                     return [$field, 'like', '%'.$_GET['q'].'%'];
                 }, $this->search));
             } else {
