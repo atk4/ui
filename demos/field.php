@@ -23,7 +23,7 @@ $app->add(new \atk4\ui\Header(['Labels', 'size' => 2]));
 $app->add(new \atk4\ui\FormField\Line(['placeholder' => 'Search users', 'label' => 'http://']));
 
 // dropdown example
-$dd = new \atk4\ui\Dropdown('.com');
+$dd = new \atk4\ui\DropDown('.com');
 $dd->setSource(['.com', '.net', '.org']);
 $app->add(new \atk4\ui\FormField\Line([
     'placeholder' => 'Find Domain',
@@ -65,12 +65,12 @@ $app->add(new \atk4\ui\FormField\Line(['actionLeft' => new \atk4\ui\Button([
 
 $app->add(new \atk4\ui\FormField\Line(['iconLeft' => 'search',  'action' => 'Search']));
 
-$dd = new \atk4\ui\DropdownButton(['This Page', 'basic']);
+$dd = new \atk4\ui\DropDownButton(['This Page', 'basic']);
 $dd->setSource(['This Organisation', 'Entire Site']);
 $app->add(new \atk4\ui\FormField\Line(['iconLeft' => 'search',  'action' => $dd]));
 
 // double actions are not supported but you can add them yourself
-$dd = new \atk4\ui\Dropdown(['Articles', 'compact selection']);
+$dd = new \atk4\ui\DropDown(['Articles', 'compact selection']);
 $dd->setSource(['All', ['name' => 'Articles', 'active' => true], 'Products']);
 $app->add(new \atk4\ui\FormField\Line(['iconLeft' => 'search',  'action' => $dd]))
     ->add(new \atk4\ui\Button('Search'), 'AfterAfterInput');

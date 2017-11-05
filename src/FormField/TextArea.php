@@ -7,7 +7,7 @@ use atk4\ui\Form;
 /**
  * Input element for a form field.
  */
-class Textarea extends Input
+class TextArea extends Input
 {
     public $rows = 2;
 

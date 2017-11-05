@@ -49,7 +49,7 @@ This release was possible thanks to our new contributors:
    - Callbacks and Virtual pages #200 (http://agile-ui.readthedocs.io/en/latest/core.html#callbacks-and-virtual-pages)
    - README file #196
    - Add documentation for icon, image, label, loremipsum, message, tablecolumn, text, decorators. #218
- - Fixed problem with Checkbox on a form #130
+ - Fixed problem with CheckBox on a form #130
  - Fixed form submission with Enter #173
  - Improved form validation #191
  - Fix label display when it's 0 #198
@@ -90,7 +90,7 @@ of Agile Data that allows you to actually build nice apps with it.
 - Added QuickSearch #107 
 - Added Paginator
 - Added Form Model, Validation support
-- Added Form Fields: Textarea, Dropdown
+- Added Form Fields: TextArea, DropDown
 - Added Automated multi-column layout FormLayout\Columns
 - Added support for stickyGet #131
 - Added jsModal() for dialogs #124 #71

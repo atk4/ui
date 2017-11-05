@@ -7,7 +7,7 @@ use atk4\ui\Form;
 /**
  * Input element for a form field.
  */
-class Checkbox extends Generic
+class CheckBox extends Generic
 {
     public $ui = 'checkbox';
 

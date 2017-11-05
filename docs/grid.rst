@@ -89,8 +89,8 @@ Calling addAction() provides a useful short-cut for creating column-based action
 Selection
 =========
 
-Grid can have a checkbox column for you to select elements. It relies on :php:class:`TableColumn\Checkbox`, but will
-additionally place this column before any other column inside a grid. You can use :php:meth:`TableColumn\Checkbox::jsChecked()`
+Grid can have a checkbox column for you to select elements. It relies on :php:class:`TableColumn\CheckBox`, but will
+additionally place this column before any other column inside a grid. You can use :php:meth:`TableColumn\CheckBox::jsChecked()`
 method to reference value of selected checkboxes inside any :ref:`js_action`::
 
     $sel = $grid->addSelection();

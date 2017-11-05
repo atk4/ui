@@ -50,7 +50,7 @@ class Grid extends View
      * Calling addSelection will add a new column inside $table, containing checkboxes.
      * This column will be stored here, in case you want to access it.
      *
-     * @var TableColumn\Checkbox
+     * @var TableColumn\CheckBox
      */
     public $selection = null;
 
@@ -192,7 +192,7 @@ class Grid extends View
 
     public function addSelection()
     {
-        $this->selection = $this->table->addColumn(null, 'Checkbox');
+        $this->selection = $this->table->addColumn(null, 'CheckBox');
 
         // Move element to the beginning
         $k = array_search($this->selection, $this->table->columns);

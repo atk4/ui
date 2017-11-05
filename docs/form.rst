@@ -74,7 +74,7 @@ The basic 2-line syntax will extract all the required logic from the Model inclu
  - Field captions, placeholders, hints and other elements defined in Field::ui are respected (http://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
  - Fields that are not editable by default will not appear on the form (http://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
  - Field typecasting will be invoked such as for converting dates
- - Reference fields (http://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as Dropdowns
+ - Reference fields (http://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as DropDown
  - Booleans are displayed as checkboxes but stored as defined by the model field
  - Mandatory and Required fields will be visually highlighted (http://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$mandatory)
  - Validation will be performed and errors will appear on the form (NEED LINK)
@@ -116,7 +116,7 @@ Create a new field on a form::
 
     $form = $app->add('Form');
     $form->addField('email');
-    $form->addField('gender', ['Dropdown', 'values'=>['Female', 'Male']);
+    $form->addField('gender', ['DropDown', 'values'=>['Female', 'Male']);
     $form->addField('terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']);
 
 Create a new field on a form using Model does not require you to describe each field.
@@ -154,8 +154,8 @@ decorators extend from class :php:class:`FormField::Generic`.
 Agile UI comes with at least the following decorators:
 
 - Input (also extends into Line, Password, Hidden)
-- Dropdown
-- Checkbox
+- DropDown
+- CheckBox
 - Radio
 - Calendar
 - Radio
@@ -165,8 +165,8 @@ For some examples see: http://ui.agiletoolkit.org/demos/form3.php
 
 Field Decorator can be passed to ``addField`` using 'string', :php:ref:`seed` or 'object'::
 
-    $form->addField('accept_terms', 'Checkbox');
-    $form->addField('gender', ['Dropdown', 'values'=>['Female', 'Male']]);
+    $form->addField('accept_terms', 'CheckBox');
+    $form->addField('gender', ['DropDown', 'values'=>['Female', 'Male']]);
 
     $calendar = new \atk4\ui\FormField\Calendar();
     $calendar->type = 'tyme';
@@ -188,7 +188,7 @@ Data field is the 3rd argument to ``Form::addField()``.
 
 There are 3 ways to define Data Field using 'string', 'array' or 'object'::
 
-    $form->addField('accept_terms', 'Checkbox', 'Accept Terms & Conditions');
+    $form->addField('accept_terms', 'CheckBox', 'Accept Terms & Conditions');
     $form->addField('gender', null, ['enum'=>['Female', 'Male']]);
 
     class MyBoolean extends \atk4\data\Field {
@@ -256,7 +256,7 @@ example displays a registration form for a User::
 Type vs Decorator Class
 -----------------------
 
-Sometimes you may wonder - should you pass decorator class ('Checkbox') or
+Sometimes you may wonder - should you pass decorator class ('CheckBox') or
 a data field type (['type' => 'boolean']);
 
 I always to recommend use of field type, because it will take care of type-casting
@@ -385,7 +385,7 @@ Here are few questions:
 
 As far as form is concerned:
 
-- Decorators must be able to parse entered values. For instance Dropdown will make sure that
+- Decorators must be able to parse entered values. For instance DropDown will make sure that
   value entered is one of the available values (by key)
 
 - Form will rely on Agile Data Typecasting (http://agile-data.readthedocs.io/en/develop/typecasting.html)

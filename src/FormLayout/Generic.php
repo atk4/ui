@@ -239,7 +239,7 @@ class Generic extends View
             $label = $el->field->getCaption();
 
             // Anything but fields gets inserted directly
-            if ($el instanceof \atk4\ui\FormField\Checkbox) {
+            if ($el instanceof \atk4\ui\FormField\CheckBox) {
                 $template = $field_no_label;
                 $el->template->set('Content', $label);
                 /*

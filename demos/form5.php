@@ -20,13 +20,13 @@ $f->addField('two', 'Caption');
 $f->addField('three', ['caption' => 'Caption2']);
 
 // Use zeroth argument of the seed to specify standard class
-$f->addField('four', ['Checkbox', 'caption' => 'Caption2']);
+$f->addField('four', ['CheckBox', 'caption' => 'Caption2']);
 
 // Use explicit object for user-defined or 3rd party field
-$f->addField('five', new \atk4\ui\FormField\Checkbox());
+$f->addField('five', new \atk4\ui\FormField\CheckBox());
 
 // Objects still accept seed
-$f->addField('six', new \atk4\ui\FormField\Checkbox(['caption' => 'Caption3']));
+$f->addField('six', new \atk4\ui\FormField\CheckBox(['caption' => 'Caption3']));
 
 $a = [];
 $m = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
@@ -40,14 +40,14 @@ $m->addField('two', ['caption' => 'Caption']);
 // ui can also specify caption which is a form-specific
 $m->addField('three', ['ui' => ['form' => ['caption' => 'Caption']]]);
 
-// type is converted into Checkbox form field with caption as a seed
+// type is converted into CheckBox form field with caption as a seed
 $m->addField('four', ['type' => 'boolean', 'ui' => ['form' => ['caption' => 'Caption2']]]);
 
 // Can specify class for a checkbox explicitly
-$m->addField('five', ['ui' => ['form' => ['Checkbox', 'caption' => 'Caption3']]]);
+$m->addField('five', ['ui' => ['form' => ['CheckBox', 'caption' => 'Caption3']]]);
 
 // Form-specific caption overrides general caption of a field. Also you can specify object instead of seed
-$m->addField('six', ['caption' => 'badcaption', 'ui' => ['form' => new \atk4\ui\FormField\Checkbox(['caption' => 'Caption4'])]]);
+$m->addField('six', ['caption' => 'badcaption', 'ui' => ['form' => new \atk4\ui\FormField\CheckBox(['caption' => 'Caption4'])]]);
 
 $f = $cc->addColumn()->add(new \atk4\ui\Form());
 $f->setModel($m);
@@ -63,13 +63,13 @@ $f->addField('one', ['caption' => 'Caption0']);
 $f->addField('two', 'Caption2');
 
 // We can override type, but seed from model will still be respected
-$f->addField('three', ['Checkbox']);
+$f->addField('three', ['CheckBox']);
 
 // We override type and caption here
 $f->addField('four', ['Line', 'caption' => 'CaptionX']);
 
 // We can specify form field object. It's still seeded with caption from model.
-$f->addField('five', new \atk4\ui\FormField\Checkbox());
+$f->addField('five', new \atk4\ui\FormField\CheckBox());
 
 // can add field that does not exist in a model
-$f->addField('nine', new \atk4\ui\FormField\Checkbox(['caption' => 'Caption3']));
+$f->addField('nine', new \atk4\ui\FormField\CheckBox(['caption' => 'Caption3']));

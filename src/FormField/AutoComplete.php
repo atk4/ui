@@ -11,7 +11,7 @@ class AutoComplete extends Input
     public $searchClassName = 'search';
     public $callback;
 
-    public $empty = true;  // set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value.
+    public $empty = '...';  // set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value.
 
     public $search;
 
@@ -96,9 +96,7 @@ class AutoComplete extends Input
         $data = $this->model->export([$this->model->id_field, $this->model->title_field]);
 
         if ($this->empty) {
-            $label = $this->empty === true ? '..' : (string) $this->empty;
-
-            array_unshift($data, [$this->model->id_field => 0, $this->model->title_field => $label]);
+            array_unshift($data, [$this->model->id_field => 0, $this->model->title_field => $this->empty]);
         }
 
         $this->app->terminate(json_encode([
