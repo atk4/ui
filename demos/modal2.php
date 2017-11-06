@@ -127,10 +127,10 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
     $success = $session->recall('success', false);
     if (isset($_GET['move'])) {
         if ($_GET['move'] === 'next' && $success) {
-            ++$page;
+            $page++;
         }
         if ($_GET['move'] === 'prev' && $page > 1) {
-            --$page;
+            $page--;
         }
         $session->memorize('success', false);
     } else {
