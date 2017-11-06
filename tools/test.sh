@@ -4,7 +4,7 @@ echo "Setting up coverage logging";
 mkdir coverage
 chmod 777 coverage
 cp tools/coverage.php demos/coverage.php
-sed -i '' "s|node_modules_path.*|node_modules_path: `npm get prefix`/lib/node_modules|g" behat.yml
+sed -i "s|node_modules_path.*|node_modules_path: `npm get prefix`/lib/node_modules|g" behat.yml
 
 echo "Running UI tests"
 ./vendor/bin/behat || exit -1
