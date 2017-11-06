@@ -3,6 +3,7 @@
 echo "Setting up coverage logging";
 mkdir coverage
 chmod 777 coverage
+cp behat-travis.yml behat.yml
 cp tools/coverage.php demos/coverage.php
 sed -i "s|node_modules_path.*|node_modules_path: `npm get prefix`/lib/node_modules|g" behat.yml
 
