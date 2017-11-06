@@ -11,4 +11,4 @@ default:
       sessions:
         default:
           zombie: 
-          #node_modules_path: /usr/local/lib/node_modules/
+            node_modules_path: /usr/local/lib/node_modules
