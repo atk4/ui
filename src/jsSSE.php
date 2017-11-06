@@ -13,12 +13,13 @@ class jsSSE extends jsCallback
     use InitializerTrait;
     // Allows us to fall-back to standard functionality of jsCallback if browser does not support SSE
     public $browserSupport = false;
+    public $showLoader = false;
 
     public function init()
     {
         //parent::init();
         $this->_initialized = true;
-        if ($this->triggered() === 'sse') {
+        if (@$_GET['event'] === 'sse') {
             $this->browserSupport = true;
             $this->initSse();
         }
@@ -30,10 +31,12 @@ class jsSSE extends jsCallback
             throw new Exception(['Call-back must be part of a RenderTree']);
         }
 
-        return (new jQuery())->atkServerEvent([
-            'uri'  => $this->getURL('sse'),
-            'name' => $this->name,
-        ])->jsRender();
+        $options = ['uri' => $this->getURL()];
+        if ($this->showLoader) {
+            $options['showLoader'] = $this->showLoader;
+        }
+
+        return (new jQuery())->atkServerEvent($options)->jsRender();
     }
 
     public function send($action, $success = true)
@@ -103,20 +106,6 @@ class jsSSE extends jsCallback
         }
         $this->output($this->wrapData($data)."\n\n");
     }
-
-    /**
-     * Return URL that will trigger action on this call-back.
-     *
-     * @param string $mode
-     *
-     * @return string
-     */
-    /*
-    public function getURL($mode = 'callback')
-    {
-        return $this->app->url();
-    }
-     */
 
     /**
      * Create SSE data string.

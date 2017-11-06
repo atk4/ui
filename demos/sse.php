@@ -14,7 +14,7 @@ $button = $app->add(['Button', 'Turn On']);
 // non-SSE way
 //$button->on('click', $bar->js()->progress(['percent'=> 40]));
 
-$sse = $app->add('jsSSE');
+$sse = $app->add(['jsSSE', 'showLoader' => true]);
 
 $button->on('click', $sse->set(function () use ($sse, $bar) {
     $sse->send($bar->js()->progress(['percent' => 20]));
