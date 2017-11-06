@@ -111,7 +111,7 @@ class jsSSE extends jsCallback
      *
      * @return string
      */
-    public function getURL()
+    public function getURL($mode = 'callback')
     {
         return $this->app->url();
     }
