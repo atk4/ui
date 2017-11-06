@@ -13,3 +13,4 @@ ls -l coverage/
 ./vendor/bin/phpcov  merge coverage/ --clover clover.xml
 
 wc -l clover.xml
+rm demos/coverage.php
