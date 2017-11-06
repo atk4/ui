@@ -10,8 +10,10 @@ sed -i "s|node_modules_path.*|node_modules_path: `npm get prefix`/lib/node_modul
 echo "Running UI tests"
 ./vendor/bin/behat || exit -1
 
-ls -l coverage/
 
+sleep 3
+
+ls -l coverage/
 mv coverage build/
 #./vendor/bin/phpcov  merge coverage/ --clover clover.xml
 
