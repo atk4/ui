@@ -31,7 +31,7 @@ class jsSSE extends jsCallback
         }
 
         return (new jQuery())->atkServerEvent([
-            'uri'  => $this->getURL(),
+            'uri'  => $this->getURL('sse'),
             'name' => $this->name,
         ])->jsRender();
     }
@@ -111,10 +111,12 @@ class jsSSE extends jsCallback
      *
      * @return string
      */
+    /*
     public function getURL($mode = 'callback')
     {
         return $this->app->url();
     }
+     */
 
     /**
      * Create SSE data string.
