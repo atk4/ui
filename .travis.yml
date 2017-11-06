@@ -21,13 +21,13 @@ before_script:
 
 after_script:
     - echo $TRAVIS_BRANCH
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report build/logs/clover.xml --coverage-report 'build/coverage/*.xml'; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending codecov report"; bash <(curl -s https://codecov.io/bash) -f '*.xml' -s build/; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending codecov report"; bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
 
 script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then NC="--no-coverage"; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then bash tools/test.sh; fi
     - ./vendor/phpunit/phpunit/phpunit $NC #- wget -O - http://localhost:8888/demos/button2.php 
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then bash tools/test.sh; fi
 
 cache:
   directories:

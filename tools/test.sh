@@ -14,8 +14,8 @@ echo "Running UI tests"
 sleep 3
 
 ls -l coverage/
-mv coverage build/
-#./vendor/bin/phpcov  merge coverage/ --clover clover.xml
+#mv coverage build/
+./vendor/bin/phpcov  merge coverage/ --clover clover.xml
 
 #wc -l clover.xml
 #rm demos/coverage.php
