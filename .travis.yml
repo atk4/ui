@@ -8,13 +8,15 @@ php:
 services:
     - mysql
 
+before_install:
+    - npm install -g zombie
+
 before_script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then php -S localhost:8888; fi &
-    - composer install
     - mysql -e 'create database atk4;'
     - mysql atk4 < demos/atk4.sql
     - mv demos/db.travis.php demos/db.php
-    - sudo $(which npm) install -g zombie
+    - composer install
 
 after_script:
     - echo $TRAVIS_BRANCH
