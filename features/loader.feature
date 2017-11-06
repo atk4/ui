@@ -1,4 +1,4 @@
-Feature: Form
+Feature: Loader
     In order to have an awesome PHP UI Framework
     As a responsible open-source developer
     I need to write tests for our demo pages
