@@ -7,7 +7,7 @@ default:
   extensions:
     Behat\MinkExtension:
       show_cmd: 'open %s'
-      base_url:  'http://localhost:8888/ui/demos/'
+      base_url:  'http://localhost:8888/demos/'
       sessions:
         default:
           zombie: 
