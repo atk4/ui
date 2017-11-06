@@ -8,23 +8,26 @@ php:
 services:
     - mysql
 
+before_install:
+    - npm install -g zombie
+    - npm get prefix
+
 before_script:
-    - php -S localhost:8888 &
-    - composer install
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then php -S localhost:8888; fi &
     - mysql -e 'create database atk4;'
     - mysql atk4 < demos/atk4.sql
     - mv demos/db.travis.php demos/db.php
+    - composer install
 
 after_script:
     - echo $TRAVIS_BRANCH
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending codecov report"; bash <(curl -s https://codecov.io/bash); fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending codecov report"; bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
 
 script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then NC="--no-coverage"; fi
-    - wget -O - http://localhost:8888/demos/button2.php 
-    - ./vendor/phpunit/phpunit/phpunit $NC
-
+    - ./vendor/phpunit/phpunit/phpunit $NC #- wget -O - http://localhost:8888/demos/button2.php 
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then bash tools/test.sh; fi
 
 cache:
   directories:
@@ -39,11 +42,3 @@ notifications:
     on_start: never     # options: [always|never|change] default: always
 
     email: false
-
-addons:
-  browserstack:
-    username: "romansmalinovski1"
-    forcelocal: true
-    only: localhost,80,0
-    access_key:
-      secure: "MH+pRFR53eQHQuWY6a+LXEi0YY3tbvUeyKHrl3OUAgDdCm/6ztN/n9qv2iOKzHNwNAlhqz6R4rzUBkNIElaoTyXifo29/kLF8Pxg/1ggoMSzpRv5cb3iSLAhjqwIUYQxsd6rJA6q1XvN+LrvrnIc0BfsMwBN97kH5btiI1grvk6q5At7hcpu3ydxBnFfn+O9kCugEHgRrjt3i4t/J+JOD1BeIy6xUDWwOyqvweuIbBixcOdJvAoUGWhLoZc9CBgnpsWxyJGgeyJ5iGKlM2qd+b36t3dqo+6rfWCYRqTCy/OMnqVKbkVDc3VkXrNkAN0k9ZuXA125MIFTFCopeBClfdbjZjS/h3tszrE5/qkyy+x000ptA4NTbP2wOyIKaPtC5h470gWv9B7xJTHGU4kx2+y7poNwCTEMCKv4vrD1If4lTBZ0NfZjd8klblj8NPFN2VWOcwMz8Xyex7oAJfFglYnX4mhvbt7jpozp/oq3b9ADtHZqDRrv36iYeG5RGNl78bGIB+gPyHIhKNif1DlZoH0+EWx09xuG9DPo2CKAFjhTB8Ct8C6Nk7IdY9o6Yb78G4r7GQliDor2kcP9erycUkA8/Rd6oTN/x5eqCMM800D1Kool77+HW7cg0PgXQGROUxvvV5Rwdi0T0WXIMNWqxAylOCQTNFoGFLWqgQWnoB4="

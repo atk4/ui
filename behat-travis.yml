@@ -1,0 +1,14 @@
+default:
+  suites:
+    my_suite:
+      contexts:
+        - FeatureContext
+        - Behat\MinkExtension\Context\MinkContext
+  extensions:
+    Behat\MinkExtension:
+      show_cmd: 'open %s'
+      base_url:  'http://localhost:8888/demos/'
+      sessions:
+        default:
+          zombie: 
+            node_modules_path: /usr/local/lib/node_modules/

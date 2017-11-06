@@ -1,3 +1,4 @@
+/behat.yml
 /config.codekit
 /phpunit.xml
 *.bak
