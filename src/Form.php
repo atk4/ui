@@ -71,46 +71,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         // Initialize layout, so when you call addField / setModel next time, form will know
         // where to add your fields.
         $this->initLayout();
-
-        //$this->addField('empty', new FormField\Hidden());
-
-        // When form is submitted, will perform POST field loading.
-        /*
-        $this->addHook('submit', function () {
-
-            // Field validation
-            $result = $this->hook('validate');
-
-            $errors = [];
-
-            foreach ($result as $er) {
-                if (!is_array($er)) {
-                    continue;
-                }
-
-                foreach ($er as $field => $error) {
-                    if ($error === null || $error === false) {
-                        continue;
-                    }
-
-                    if (isset($errors[$field])) {
-                        continue;
-                    }
-                    $errors[$field] = is_string($error) ? $error : 'Incorrect value specified';
-                }
-            }
-
-            $return = [];
-
-            if ($errors) {
-                foreach ($errors as $field=>$error) {
-                    $return[] = $this->error($field, $error);
-                }
-
-                return $return;
-            }
-        });
-         */
     }
 
     /**
@@ -175,6 +135,15 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $this->addHook('submit', $callback);
 
         return $this;
+    }
+
+    /**
+     * Return Field decorator associated with
+     * the field.
+     */
+    public function getField($name)
+    {
+        return $this->fields[$name];
     }
 
     /**
@@ -306,7 +275,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * 1. The $seed argument is evaluated
      * 2. $f->ui['form'] is evaluated if present
      * 3. $f->type is converted into seed and evaluated
-     * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
+     * 4. lastly, falling back to Line, DropDown (based on $reference and $enum)
      *
      * @param \atk4\data\Field $f        Data model field
      * @param array            $defaults Defaults to pass to factory() when decorator is initialized
@@ -322,9 +291,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $fallback_seed = 'Line';
 
         if ($f->enum) {
-            $fallback_seed = ['Dropdown', 'values' => array_combine($f->enum, $f->enum)];
+            $fallback_seed = ['DropDown', 'values' => array_combine($f->enum, $f->enum)];
         } elseif (isset($f->reference)) {
-            $fallback_seed = ['Dropdown', 'model' => $f->reference->refModel()];
+            $fallback_seed = ['DropDown', 'model' => $f->reference->refModel()];
         }
 
         $seed = $this->mergeSeeds(
@@ -347,8 +316,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * Provides decorator seeds for most common types.
      */
     protected $typeToDecorator = [
-        'boolean'  => 'Checkbox',
-        'text'     => 'Textarea',
+        'boolean'  => 'CheckBox',
+        'text'     => 'TextArea',
         'string'   => 'Line',
         'password' => 'Password',
         'datetime' => 'Calendar',
@@ -356,49 +325,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         'time'     => ['Calendar', 'type' => 'time', 'ampm' => false],
         'money'    => 'Money',
     ];
-
-    /*
-
-        switch ($f->type) {
-        case 'boolean':
-            return new FormField\Checkbox($arg);
-
-        case 'text':
-            return new FormField\Textarea($arg);
-
-        case 'string':
-            return new FormField\Line($arg);
-
-        case 'password':
-            return new FormField\Password($arg);
-
-        case 'datetime':
-            $arg['options']['ampm'] = false;
-
-            return new FormField\Calendar($arg);
-
-        case 'date':
-            $arg['type'] = 'date';
-
-            return new FormField\Calendar($arg);
-
-        case 'time':
-            $arg['type'] = 'time';
-            $arg['options']['ampm'] = false;
-
-            return new FormField\Calendar($arg);
-
-        case 'money':
-            return new FormField\Money($arg);
-
-        case null:
-            return new FormField\Line($arg);
-
-        default:
-            return new FormField\Line($arg);
-
-        }
-     */
 
     /**
      * Looks inside the POST of the request and loads it into a current model.

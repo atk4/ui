@@ -22,6 +22,8 @@ class Generic extends View
 
     public $width = null;
 
+    public $caption = null;
+
     public function init()
     {
         parent::init();

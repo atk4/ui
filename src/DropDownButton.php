@@ -2,7 +2,7 @@
 
 namespace atk4\ui;
 
-class DropdownButton extends Dropdown
+class DropDownButton extends DropDown
 {
     // @inheritdoc
     public $ui = 'dropdown button';

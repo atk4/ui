@@ -7,7 +7,7 @@ use atk4\ui\Form;
 /**
  * Input element for a form field.
  */
-class Dropdown extends Input
+class DropDown extends Input
 {
     public $rows = 2;
 

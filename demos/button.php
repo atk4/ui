@@ -1,6 +1,6 @@
 <?php
 /**
- * Demonstrates how to use layouts.
+ * Demonstrates how to use buttons.
  */
 require 'init.php';
 use atk4\ui\Button;

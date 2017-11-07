@@ -483,7 +483,7 @@ Columns without fields
 
 You can add column to a table that does not link with field::
 
-    $cb = $table->addColumn('Checkbox');
+    $cb = $table->addColumn('CheckBox');
 
 
 Using dynamic values
@@ -566,19 +566,19 @@ will only work if you asign it to a primary column (by passing 1st argument to a
 
 (In the future it may be optional with the ability to specify caption).
 
-Checkbox
+CheckBox
 --------
 
-.. php:class:: TableColumn\Checkbox
+.. php:class:: TableColumn\CheckBox
 
 .. php:method:: jsChecked()
 
 Adding this column will render checkbox for each row. This column must not be used on a field.
-Checkbox column provides you with a handy jsChecked() method, which you can use to reference
+CheckBox column provides you with a handy jsChecked() method, which you can use to reference
 current item selection. The next code will allow you to select the checkboxes, and when you
 click on the button, it will reload $segment component while passing all the id's::
 
-    $box = $table->addColumn(new \atk4\ui\TableColumn\Checkbox());
+    $box = $table->addColumn(new \atk4\ui\TableColumn\CheckBox());
 
     $button->on('click', new jsReload($segment, ['ids'=>$box->jsChecked()]));
 
