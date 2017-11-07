@@ -29,6 +29,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem('Input Field Decoration', ['field']);
     $form->addItem('Data Integration', ['form2']);
     $form->addItem('Form Multi-column layout', ['form3']);
+    $form->addItem('AutoComplete Field', ['autocomplete']);
 
     $form = $layout->leftMenu->addGroup(['Grid and Table', 'icon' => 'table']);
     $form->addItem('Data table with formatted columns', ['table']);
@@ -50,6 +51,7 @@ if (isset($layout->leftMenu)) {
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon' => 'talk']);
     $basic->addItem('JavaScript Events', ['button2']);
     $basic->addItem('Element Reloading', ['reloading']);
+    $basic->addItem('PHP Jobs (SSE)', ['sse']);
     $basic->addItem('Loader', ['loader']);
     $basic->addItem('Noifyer', ['notify']);
     $basic->addItem('Modal View', ['modal2']);
