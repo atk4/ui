@@ -15,6 +15,7 @@ $session = new Session();
 
 $modal_simple = $app->add(['Modal', 'title' => 'Simple modal']);
 $modal_simple->add('Message')->set('Modal message here.');
+$modal_simple->add(new \atk4\ui\tests\ViewTester());
 
 $menu_bar = $app->add(['View', 'ui' => 'buttons']);
 $b = $menu_bar->add('Button')->set('Show Modal');
@@ -32,13 +33,19 @@ $modal_vp2 = $app->add(['Modal', 'title' => 'Text message load dynamically'])->a
 
 //When $modal_vp1->show() is activate, it will dynamically add this content to it.
 $modal_vp1->set(function ($modal) use ($modal_vp2) {
+    $modal->add(new \atk4\ui\tests\ViewTester());
     $modal->add(['LoremIpsum', 'size' => 2]);
-    $modal->add('Button')->set('Open Text Message')->on('click', $modal_vp2->show());
+    $form = $modal->add('Form');
+    $form->addField('color', null, ['enum' => ['red', 'green', 'blue']]);
+    $form->onSubmit(function ($form) use ($modal_vp2) {
+        return $modal_vp2->show(['color' => $form->model['color']]);
+    });
 });
 
 //When $modal_vp2->show() is activate, it will dynamically add this content to it.
 $modal_vp2->set(function ($modal) {
-    $modal->add('Message')->text->addParagraph('This text is loaded using a second modal.');
+    //$modal->add(new \atk4\ui\tests\ViewTester());
+    $modal->add(['Message', 'Message', @$_GET['color']])->text->addParagraph('This text is loaded using a second modal.');
 });
 
 $bar = $app->add(['View', 'ui' => 'buttons']);
