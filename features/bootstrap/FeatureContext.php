@@ -88,4 +88,14 @@ class FeatureContext extends RawMinkContext implements Context
             throw new \Exception('No such modal');
         }
     }
+
+    /**
+     * @Then Progress bar should be go all the way
+     */
+    public function progressBarShouldBeGoAllTheWay()
+    {
+        $element = $this->getSession()->getPage()->find('css', '.bar');
+        //TODO: zombiejs does not support sse :(
+        //var_dump($element->getOuterHtml());
+    }
 }
