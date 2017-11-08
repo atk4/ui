@@ -1,24 +1,73 @@
 ## 1.3
 
-We have included a pretty important new component called "Loader". It is designed to load parts of your
-page dynamically and with super-easy setup. Here is how to use it:
+This version is focused on dynamic interaction between the browser and your PHP apps. It contains 3
+new Components and 3 new Actions and a new Form Field Decorator.
+
+Loader (#246, #250) is a component that calls itself back to load its content. While the content is being generated,
+your user will see a spinner animation:
 
 ``` php
 $loader = $app->add('Loader');
+
 $loader->set(function($p) {
     sleep(2);  // or any other slow-loading code.
     $p->add('LoremIpsum');
 });
 ```
 
-Your page will load instantly except for the LoremIpsum, which will take some moment.
+There are also ways to trigger and reload the contents as well as passing some arguments in. We include 2
+demos for the loader: [basic loader demo](http://ui.agiletoolkit.org/demos/loader.php) and
+[practical use example](http://ui.agiletoolkit.org/demos/loader2.php). For additional information,
+look into [Loader Documentation](http://agile-ui.readthedocs.io/en/latest/virtualpage.html?highlight=loader#loader)
 
- - [Loader Documentation](http://agile-ui.readthedocs.io/en/latest/virtualpage.html?highlight=loader#loader)
- - [Loader Demo](http://ui.agiletoolkit.org/demos/loader.php), [and another demo](http://ui.agiletoolkit.org/demos/loader2.php)
+Next we thought - why not also load content [dynamically inside a Modal dialog](http://ui.agiletoolkit.org/demos/modal2.php), so we added this:
 
-Another addition is 'jsNotify' class 
+``` php
+$modal = $app->add(['Modal', 'title' => 'Lorem Ipsum load dynamically']);
 
+$modal->set(function ($p) {
+    sleep(2);  // or any other slow-loading code.
+    $p->add('LoremIpsum');
+});
+```
 
+Code is very consistent with the Loader or dynamic definition of
+[Tabs](http://agile-ui.readthedocs.io/en/latest/tabs.html?highlight=tabs#dynamic-tabs)
+but would open in a modal window. However we wanted to go even further.
+
+What if it would take several seconds for content to load? We used Server-Sent-Events
+for streaming updates from your PHP code in real-time (#258 #259). Yet it's just as simple
+to use as anything else in Agile UI:
+
+``` php
+// see SSE demo for $bar implementation
+
+$button->on('click', $sse->set(function () use ($sse, $bar) {
+
+    sleep(0.5);
+    $sse->send($bar->js()->progress(['percent' => 40]));
+    sleep(2);
+    $sse->send($bar->js()->progress(['percent' => 80]));
+    sleep(1);
+    return $bar->js()->progress(['percent' => 100]);
+}));
+```
+
+In the next release we will include 'ProgressBar' and 'Console' classes that rely
+on event streaming.
+
+Other additions include:
+
+ - [AutoComplete field](http://ui.agiletoolkit.org/demos/autocomplete.php) for dynamically loading contents of a drop-down. #245
+ - [Notifyer](http://ui.agiletoolkit.org/demos/notify.php) for flashing success or error messages on top of the screen dynamically. #242
+ - [jsModal](http://ui.agiletoolkit.org/demos/modal2.php) Action for opening Modal windows
+
+We also added AutoComplete "Plus" mode. It's a button next to your AutoComplete field which you can click to add new element
+inside a referenced entity which will then be automatically filled-in. Super-useful!
+
+Lastly - a lot of new documentation and minor fixes. #240 #244 #248 #256 #257
+
+Our Test-suite now includes broser testing. #262 #263
 
 ## 1.2
 
