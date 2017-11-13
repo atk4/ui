@@ -69,6 +69,11 @@ Lastly - a lot of new documentation and minor fixes. #240 #244 #248 #256 #257
 
 Our Test-suite now includes broser testing. #262 #263
 
+### 1.3.1
+
+Fixed bug in dependencies, which was requesting behat/mink-zombie-driver as a dependency.
+
+
 ## 1.2
 
 This release includes change to view constructor arguments, huge JavaScript overhaul and clean-up,
