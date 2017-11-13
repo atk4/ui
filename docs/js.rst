@@ -63,26 +63,26 @@ or::
         5,
         10
     ]));
-    
+
 
 All of the mentioned 4 examples will produce a valid "action" object that can be used further.
 
 .. important::
-    
+
     We never encourage writing JavaScript logic in PHP. The purpose of JS layer is for binding
     events and actions with your generic JavaScript routines.
-    
+
 Events
 ------
 
 Agile UI also offers a great way to associate your actions with certain client-side events. Those
-events can be triggered by the user or by other JavaScript code. There are several ways to bind 
+events can be triggered by the user or by other JavaScript code. There are several ways to bind
 `$action`.
 
 To execute actions instantly on page load, use `true` as first argument to `js()`::
 
     $view->js(
-        true, 
+        true,
         new jsExpression('alert([])', ['Hello world']
     );
 
@@ -172,7 +172,7 @@ JavaScript Chain Building
     Base class jsChain can be extended by other classes such as jQuery to provide transparent
     mappers for any JavaScript framework.
 
-Chain is a PHP object that represents one or several actions that are to be executed on the 
+Chain is a PHP object that represents one or several actions that are to be executed on the
 client side. The jsChain objects themselves are generic, so in my examples I'll be using jQuery which
 is a descendant of jsChain::
 
@@ -198,7 +198,7 @@ will output:
 
 .. important::
 
-    It's considered a vary bad practice if you perform jsRender and output the JavaScript code manually. Agile UI takes care of 
+    It's considered a vary bad practice if you perform jsRender and output the JavaScript code manually. Agile UI takes care of
     JavaScript binding and also decides which actions should be appearing for you as long as you create actions for your chain.
 
 .. php:method:: _json_encode
@@ -260,7 +260,7 @@ The following code will show 3 buttons and clicking any button will hide itself.
 
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event){ 
+    // $('#top-element-id').on('click', '.button', function($event){
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $(this).hide();
@@ -279,7 +279,7 @@ The best example would be a :php:class:`Lister` with interractive elements::
     $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event){ 
+    // $('#top-element-id').on('click', '.button', function($event){
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $('#b3-element-id').hide();
@@ -296,7 +296,7 @@ You can use both actions together. The next example will allow only one button t
     $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function($event){ 
+    // $('#top-element-id').on('click', '.button', function($event){
     //   event.stopPropagation();
     //   event.preventDefault();
     //   $('#b3-element-id').hide();
@@ -375,7 +375,7 @@ So the following three lines are identical::
     $sum = new jsExpression('[0]+[1]', [0=>$h1, 1=>$h2]);
     $sum = new jsExpression('[a]+[b]', ['a'=>$h1, 'b'=>$h2]);
 
-.. important:: 
+.. important::
 
     We have specifically selected a very simple tag format as a reminder to you not to write
     any code as part of jsExpression. You must not use jsExpression() for anything complex.
@@ -393,7 +393,7 @@ Open a new file `test.js` and type:
 .. code-block:: js
 
     function mySum(arr) {
-        return arr.reduce(function(a, b) { 
+        return arr.reduce(function(a, b) {
             return a+b;
         }, 0);
     }
@@ -422,6 +422,113 @@ This will map into the following JavaScript code:
 You can further simplify JavaScript code yourself, but keep the JavaScript logic inside the `.js` files
 and leave PHP only for binding.
 
+Modal
+=====
+
+.. php:class:: Modal
+
+.. php:method:: set(callback)
+.. php:method:: show()
+.. php:method:: hide()
+
+This class allows you to open modal dialogs and close them easily. It's based around Semantic UI
+`.modal(), <https://semantic-ui.com/modules/modal.html>`_ but integrates PHP callback for dynamically
+producing content of your dialog::
+
+
+    $modal = $app->add(['Modal', 'title' => 'Simple title']);
+    $modal->set(function ($p) use ($modal) {
+        $p->add('LoremIpsum');
+
+        $p->add(['Button', 'Hide'])->on('click', $modal->hide());
+    });
+
+    $app->add(['Button', 'Show'])->on('click', $modal->show());
+
+Modal will render as a `<div>` block but will be hidden. Alternatively you can use Modal without loadable content::
+
+    $modal = $app->add(['Modal', 'title' => 'Add a name']);
+    $modal->add('LoremIpsum');
+    $modal->add(['Button', 'Hide'])->on('click', $modal->hide());
+
+    $app->add(['Button', 'Show'])->on('click', $modal->show());
+
+This way it's more convenient for holding static content, such as Terms of Service.
+
+
+jsModal
+=======
+
+.. php:class:: jsModal
+
+This is alternative implementation to :php:class:`Modal` and is convenient for situations
+when you do not know in advance that you migth need to open Dialog box. This class is not
+a component, but rathen an Action so you mustn't add it into Render Tree::
+
+    $vp = $app->add('VirtualPage');
+    $vp->add(['LoremIpsum', 'size' => 2]);
+
+    $app->add(['Button', 'Dynamic Modal'])
+        ->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut')));
+
+If compare this with example for :php:class:`Modal`, you'll notice that Modal div is always
+destroyed when you close modal instead of hiding it and then re-created again.
+
+jsNotify
+========
+
+.. php:class:: jsNotify
+.. php:method:: setColor(color)
+
+Implementation for dynamic notifier, which you can use to display operation status::
+
+    $app->add(['Button', 'Test'])->on(
+        'click', 
+        (new \atk4\ui\jsNotify('Not yet implemented'))
+            ->setColor('red')
+    );
+
+
+A typical use case would be to provide visual feedback of an action after used performs operation inside
+a Modal window with a Form. When user submits a form, it's Submit handler will close modal, so to leave
+some feedback to the user jsNotify can display a bar on top of the screen for some time::
+
+    $modal = $app->add(['Modal', 'Modal Title']);
+
+    $modal->set(function ($p) use ($modal) {
+        $form = $p->add('Form');
+        $form->addField('name', null, ['caption'=>'Add your name']);
+
+        $form->onSubmit(function ($f) use ($modal) {
+            if (empty($f->model['name'])) {
+                return $f->error('name', 'Please add a name!');
+            } else {
+                return [
+                    $modal->hide(),
+                    new \atk4\ui\jsNotify('Thank you '.$f->model['name'])
+                ];
+            }
+        });
+    });
+
+    $app->add(['Button', 'Open Modal'])->on('click', $modal->show());
+
+.. php:method:: setIcon(color)
+.. php:method:: setTransition(openTransition, closeTransition)
+.. php:method:: setDuration(duration)
+.. php:method:: setPosition(duration)
+.. php:method:: setWidth(duration)
+.. php:method:: setOpacity(duration)
+
+You can pass options either as array or by calling methods.
+
+.. php:method:: attachTo(view)
+
+Finally you can attach your notification to another view::
+
+    $jsNotify->attachTo($form);
+
+
 
 Reloading
 =========
@@ -437,8 +544,8 @@ other view::
 
     $m_book = new Book($db);
 
-    $f = $app->layout->add('Form');
-    $t = $app->layout->add('Table');
+    $f = $app->add('Form');
+    $t = $app->add('Table');
 
     $f->setModel($m_book);
 
@@ -450,3 +557,64 @@ other view::
     $t->setModel($m_book);
 
 In this example, filling out and submitting the form will result in table contents being refreshed using AJAX.
+
+
+Background Tasks
+================
+
+Agile UI has addressed one of the big shortcoming with the PHP language - ability to execute running / background
+processes. It's best illustrated with example. 
+
+Say you need to process a large image, resize, find face, watermark, create thumbnails and store externally. For
+the average image this could take 5-10 seconds, so you'd like to user updated about the process. There are
+various ways to do so.
+
+The most basic approach you could probably figure out already::
+
+    $button = $app->add(['Button', 'Process the image']);
+    $button->on('click', function() use($button, $image) {
+
+        sleep(1); // $image->resize();
+        sleep(1); // $image->findFace();
+        sleep(1); // $image->watermark();
+        sleep(1); // $image->createThumbnails();
+
+        return $button->js()->text('Success')->addClass('disabled');
+
+    });
+
+However, it would be nice if you could communicate to the user the progress of your process:
+
+
+Server Side Event (jsSSE)
+-------------------------
+
+.. php:class:: jsSSE
+
+.. php:method:: send(action)
+
+This class implements ability for your PHP code to send messages to the browser in the middle of the process
+execution::
+
+    $button = $app->add(['Button', 'Process the image']);
+
+    $sse = $app->add(['jsSSE']);
+
+    $button->on('click', $sse->set(function() use($sse, $button, $image) {
+
+        $sse->send($button->js()->text('Processing'));
+        sleep(1); // $image->resize();
+
+        $sse->send($button->js()->text('Looking for face'));
+        sleep(1); // $image->findFace();
+
+        $sse->send($button->js()->text('Adding watermark'));
+        sleep(1); // $image->watermark();
+
+        $sse->send($button->js()->text('Creating thumbnail'));
+        sleep(1); // $image->createThumbnails();
+
+        return $button->js()->text('Success')->addClass('disabled');
+
+    });
+

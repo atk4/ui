@@ -8,20 +8,11 @@ Contents:
     :maxdepth: 4
 
     overview
-    core
     quickstart
-    template
-    view
+    core
+    components
     js
-    callbacks
-    button
-    field
-    form
-    table
-    grid
-    misc
-    app
-
+    advanced
 
 
 ..

@@ -47,14 +47,14 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Agile UI'
-copyright = u'2016, Agile Toolkit'
+copyright = u'2016-2017, Agile Toolkit'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-version = '0.3'
+version = 'v1.x'
 # The full version, including alpha/beta/rc tags.
 #release = '0.2.1'
 

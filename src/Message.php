@@ -61,7 +61,10 @@ class Message extends View
         }
 
         if ($this->icon) {
-            $this->add(new Icon($this->icon), 'Icon');
+            if (!is_object($this->icon)) {
+                $this->icon = new Icon($this->icon);
+            }
+            $this->add($this->icon, 'Icon');
             $this->addClass('icon');
         }
 

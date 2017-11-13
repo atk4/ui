@@ -9,12 +9,30 @@ class App
     }
 
     use \atk4\core\HookTrait;
+    use \atk4\core\DynamicMethodTrait;
+    use \atk4\core\FactoryTrait;
+    use \atk4\core\AppScopeTrait;
+    use \atk4\core\DIContainerTrait;
+
+    // @var array|false Location where to load JS/CSS files
+    public $cdn = [
+        'atk'              => 'https://cdn.rawgit.com/atk4/ui/1.3.1/public',
+        'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
+        'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
+        'semantic-ui'      => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
+        'calendar'         => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
+    ];
+
+    // @var string Version of Agile UI
+    public $version = '1.3.1';
 
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
 
+    // @var Layout\Generic
     public $layout = null; // the top-most view object
 
+    // @var string
     public $template_dir = null;
 
     // @var string Name of skin
@@ -22,15 +40,23 @@ class App
 
     /**
      * Will replace an exception handler with our own, that will output errors nicely.
+     *
+     * @var bool
      */
     public $catch_exceptions = true;
 
     /**
      * Will always run application even if developer didn't explicitly executed run();.
+     *
+     * @var bool
      */
     public $always_run = true;
 
+    // @var bool
     public $run_called = false;
+
+    // @var bool
+    public $_cwd_restore = true;
 
     /**
      * function setModel(MyModel $m);.
@@ -40,11 +66,15 @@ class App
      * warning is disabled by default until it's fixed correctly in PHP.
      *
      * See: http://stackoverflow.com/a/42840762/204819
+     *
+     * @var bool
      */
     public $fix_incompatible = true;
 
+    // @var bool
     public $is_rendering = false;
 
+    // @var Persistence\UI
     public $ui_persistence = null;
 
     /** @var View For internal use */
@@ -57,14 +87,25 @@ class App
      */
     public function __construct($defaults = [])
     {
+        $this->app = $this;
+
         // Process defaults
         if (is_string($defaults)) {
             $defaults = ['title' => $defaults];
         }
 
-        if (!is_array($defaults)) {
-            throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
+        if (isset($defaults[0])) {
+            $defaults['title'] = $defaults[0];
+            unset($defaults[0]);
         }
+
+        /*
+        if (is_array($defaults)) {
+            throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
+        }*/
+        $this->setDefaults($defaults);
+        /*
+
         foreach ($defaults as $key => $val) {
             if (is_array($val)) {
                 $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
@@ -72,6 +113,7 @@ class App
                 $this->$key = $val;
             }
         }
+         */
 
         // Set up template folder
         $this->template_dir = dirname(dirname(__FILE__)).'/template/'.$this->skin;
@@ -97,7 +139,15 @@ class App
 
         // Always run app on shutdown
         if ($this->always_run) {
+            if ($this->_cwd_restore) {
+                $this->_cwd_restore = getcwd();
+            }
+
             register_shutdown_function(function () {
+                if (is_string($this->_cwd_restore)) {
+                    chdir($this->_cwd_restore);
+                }
+
                 if (!$this->run_called) {
                     try {
                         $this->run();
@@ -127,12 +177,12 @@ class App
         if ($exception instanceof \atk4\core\Exception) {
             $l->layout->template->setHTML('Content', $exception->getHTML());
         } elseif ($exception instanceof \Error) {
-            $l->layout->add(new View(['ui'=> 'message', get_class($exception).': '.
+            $l->layout->add(['Message', get_class($exception).': '.
                 $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
-                'error', ]));
-            $l->layout->add(new Text())->set(nl2br($exception->getTraceAsString()));
+                'error', ]);
+            $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
         } else {
-            $l->layout->add(new View(['ui'=>'message', get_class($exception).': '.$exception->getMessage(), 'error']));
+            $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
         }
         $l->layout->template->tryDel('Header');
         $l->run();
@@ -173,10 +223,13 @@ class App
      */
     public function initLayout($layout, $options = [])
     {
+        $layout = $this->factory($layout, null, 'Layout');
+        /*
         if (is_string($layout)) {
             $layout = $this->normalizeClassNameApp($layout, 'Layout');
             $layout = new $layout($options);
         }
+         */
         $layout->app = $this;
 
         if (!$this->html) {
@@ -192,14 +245,34 @@ class App
         return $this;
     }
 
-    protected function initIncludes()
+    /**
+     * Initialize JS and CSS includes.
+     */
+    public function initIncludes()
     {
-        $f = dirname(dirname(__FILE__)).'/js/lib/atk4JS.js';
-        if (file_exists($f)) {
-            $this->requireJS('../js/lib/atk4JS.js');
-        } else {
-            $this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js');
-        }
+        // jQuery
+        $url = isset($this->cdn['jquery']) ? $this->cdn['jquery'] : '../public';
+        $this->requireJS($url.'/jquery.min.js');
+
+        // Semantic UI
+        $url = isset($this->cdn['semantic-ui']) ? $this->cdn['semantic-ui'] : '../public';
+        $this->requireJS($url.'/semantic.min.js');
+        $this->requireCSS($url.'/semantic.css');
+
+        // Serialize Object
+        $url = isset($this->cdn['serialize-object']) ? $this->cdn['serialize-object'] : '../public';
+        $this->requireJS($url.'/jquery.serialize-object.min.js');
+
+        // Calendar
+        $url = isset($this->cdn['calendar']) ? $this->cdn['calendar'] : '../public';
+        $this->requireJS($url.'/calendar.min.js');
+        $this->requireCSS($url.'/calendar.css');
+
+        // Agile UI
+        $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
+        $this->requireJS($url.'/atk4JS.min.js');
+        $this->requireJS($url.'/agileui.js');
+        $this->requireCSS($url.'/agileui.css');
     }
 
     /**
@@ -220,17 +293,12 @@ class App
      * Normalizes class name.
      *
      * @param string $name
-     * @param string $prefix
      *
      * @return string
      */
-    public function normalizeClassNameApp($name, $prefix = null)
+    public function normalizeClassNameApp($name)
     {
-        if (strpos('/', $name) === false && strpos('\\', $name) === false) {
-            $name = '\\'.__NAMESPACE__.'\\'.($prefix ? ($prefix.'\\') : '').$name;
-        }
-
-        return $name;
+        return '\\'.__NAMESPACE__.'\\'.$name;
     }
 
     /**
@@ -246,7 +314,7 @@ class App
             list($obj) = func_get_args();
 
             if (!is_object($obj)) {
-                throw new Exception(['Incorrect use of App::add']);
+                throw new Exception(['Incorrect use of App::add. First parameter should be object.']);
             }
 
             $obj->app = $this;
@@ -321,7 +389,7 @@ class App
     /**
      * Build a URL that application can use for call-backs.
      *
-     * @param array|string $args List of new GET arguments
+     * @param array|string $page URL as string or array with page name as first element and other GET arguments
      *
      * @return string
      */
@@ -334,29 +402,33 @@ class App
             $this->page = basename($this->getRequestURI(), '.php');
         }
 
+        // if page passed as string, then simply use it
         if (is_string($page)) {
             return $page;
         }
 
+        // use current page by default
         if (!isset($page[0])) {
             $page[0] = $this->page;
+        }
 
-            if (is_array($sticky) && !empty($sticky)) {
-                foreach ($sticky as $key => $val) {
-                    if ($val === true) {
-                        if (isset($_GET[$key])) {
-                            $val = $_GET[$key];
-                        } else {
-                            continue;
-                        }
+        //add sticky arguments
+        if (is_array($sticky) && !empty($sticky)) {
+            foreach ($sticky as $key => $val) {
+                if ($val === true) {
+                    if (isset($_GET[$key])) {
+                        $val = $_GET[$key];
+                    } else {
+                        continue;
                     }
-                    if (!isset($result[$key])) {
-                        $result[$key] = $val;
-                    }
+                }
+                if (!isset($result[$key])) {
+                    $result[$key] = $val;
                 }
             }
         }
 
+        // add arguments
         foreach ($page as $arg => $val) {
             if ($arg === 0) {
                 continue;
@@ -369,15 +441,9 @@ class App
             }
         }
 
-        $page = $page[0];
-
-        $url = $page ? $page.'.php' : '';
-
+        // put URL together
         $args = http_build_query($result);
-
-        if ($args) {
-            $url = $url.'?'.$args;
-        }
+        $url = ($page[0] ? $page[0].'.php' : '').($args ? '?'.$args : '');
 
         return $url;
     }
@@ -387,7 +453,7 @@ class App
      *
      * @param string $name
      *
-     * @return string
+     * @return string|null
      */
     public function stickyGet($name)
     {
@@ -419,7 +485,7 @@ class App
      */
     public function requireJS($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' =>$url], ''));
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url], '')."\n");
 
         return $this;
     }
@@ -433,7 +499,7 @@ class App
      */
     public function requireCSS($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]));
+        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url])."\n");
 
         return $this;
     }
@@ -487,9 +553,10 @@ class App
      * getTag('b','text in bold');
      * --> <b>text in bold</b>
      *
-     * 10. pass array as 3rd parameter to nest tags (array must contain 1 to 3 elements corresponding to arguments):
-     * getTag('a', ['href'=>'foo.html'], ['b','click here']);
-     * --> <a href="foo.html"><b>click here</b></a>
+     * 10. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
+     * array (passed to getTag recursively)
+     * getTag('a', ['href'=>'foo.html'], [['b','click here'], ' for fun']);
+     * --> <a href="foo.html"><b>click here</b> for fun</a>
      *
      * 11. extended example:
      * getTag('a', ['href'=>'hello'], ['b', 'class'=>'red', ['i', 'class'=>'blue', 'welcome']]);
@@ -547,7 +614,15 @@ class App
         if (is_string($value)) {
             $value = $this->encodeHTML($value);
         } elseif (is_array($value)) {
-            $value = $this->getTag($value);
+            $result = [];
+            foreach ($value as $v) {
+                if (is_array($v)) {
+                    $result[] = $this->getTag(...$v);
+                } else {
+                    $result[] = $v;
+                }
+            }
+            $value = implode('', $result);
         }
 
         if (!$attr) {

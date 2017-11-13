@@ -11,6 +11,8 @@ namespace atk4\ui\Layout;
  */
 class Centered extends Generic
 {
+    use \atk4\core\DebugTrait;
+
     public $defaultTemplate = 'layout/centered.html';
 
     public function init()
@@ -19,6 +21,6 @@ class Centered extends Generic
 
         // set application's title
 
-        $this->template['title'] = $this->app->title;
+        $this->template->trySet('title', $this->app->title);
     }
 }

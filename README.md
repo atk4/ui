@@ -3,48 +3,134 @@
 [![Build Status](https://travis-ci.org/atk4/ui.png?branch=develop)](https://travis-ci.org/atk4/ui)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
 [![StyleCI](https://styleci.io/repos/68417565/shield)](https://styleci.io/repos/68417565)
-[![Test Coverage](https://codeclimate.com/github/atk4/ui/badges/coverage.svg)](https://codeclimate.com/github/atk4/ui/coverage)
+[![codecov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
 [![Version](https://badge.fury.io/gh/atk4%2Fui.svg)](https://packagist.org/packages/atk4/ui)
 
-**Web UI Component library.**
+**Agile UI is a high-level PHP framework for creating User Interfaces and Web Apps**
 
-A component (or widget) is an interactive part of your user-interface, just like this example here:
+You might need a CRUD for your "Admin Interface" or perhaps a basic Contact Form connected to [your database in SQL or NoSQL](https://github.com/atk4/data) - Agile UI provides universal and and extensible open-source platform for developing interactive PHP components as well as number of useful components ready to be used out of the box:
 
-![grid](docs/images/grid.png)
+``` php
+$crud = new \atk4\ui\CRUD();
+$crud->setModel(new User($db));
+echo $crud->render();
+```
 
-Creating a re-usable, interractive and flexible component usually takes a lot of effort and knowledge.  Howevever, with Agile UI, this can be done very easily and with just a basic PHP knowledge.
+## Agile UI is part of [Agile Toolkit](https://agiletoolkit.org/)
 
-*(WARNING: Agile UI may permanently change your understanding of a phrase "reinvent the wheel")*
+[![](docs/images/intro.png)](https://youtu.be/a3imXsrvpVk)
 
-Components created with Agile UI are:
+## Setting up and Examples
 
--   Portable. Use those components in any major PHP framework or application (including legacy apps)
--   Data-agnostic. Widgets vizualize and interract with data, that can come from SQL, NoSQL or API (See Agile Data, https://git.io/ad).
--   Composable. Your components can encapsulate other componens recursively.
+Install by downloading from from www.agiletoolkit.org or through composer `composer require atk4/ui`.
 
-## Bundled componens
+Components like [CRUD](http://ui.agiletoolkit.org/demos/crud.php), [Form](http://ui.agiletoolkit.org/demos/form3.php) and [Grid](http://ui.agiletoolkit.org/demos/grid.php) are cornerstone for a modern Admin systems. This first example demonstrates how to build a very simple Admin UI with a single CRUD:
 
-Agile UI comes with many built-in components;
+``` php
+  $app = new \atk4\ui\App('My App');
+  $app->initLayout('Admin');
+  $db = \atk4\data\Persistence::connect($DSN);
+  class User extends \atk4\data\Model {
+      public $table = 'user';
+      function init() {
+          parent::init();
 
-| Name                                     | Description                              | Introduced |
+          $this->addField('name');
+          $this->addField('email', ['required'=>true]);
+          $this->addField('password', ['type'=>'password']);
+      }
+  }
+
+  $app->add('CRUD')->setModel(new User($db));
+```
+
+The new CRUD will be fully **interactive**, will **dynamically reload itself** and support pagination. You can also add more actions, drill-downs, quick-search and dialogs easily.
+
+![](docs/images/admin-in-15-lines.png)
+
+## Build Powerful Web Apps in pure PHP
+
+PHP is a beautiful and powerful language which we can use to abstract a lot of User Interface implementation. The idea for Agile UI originates from Desktop Toolkits (also used for Mobile apps). The challenge we had to overcome is transparent communication between the browser and a backend.
+
+The next snippet illustrates how you can dynamically load a "[Chart](https://github.com/atk4/chart)" on your dashboard page:
+
+``` php
+$loader = $app->add('Loader'); // Will load charts through AJAX
+
+$loader->set(function($page) use ($m) {
+  
+  $chart = $page->add(new \atk4\chart\BarChart());
+  $chart->setModel($m, ['name', 'sales', 'purchase', 'profit']);
+});
+```
+
+Next time you load the page, you'll see a [loading spinner](http://ui.agiletoolkit.org/demos/loader.php) which will wait for Chart to fetch and prepare data.
+
+## What's new in 1.3
+
+Last release of Agile UI has added some cool features:
+
+-   [Loader](http://ui.agiletoolkit.org/demos/loader.php) which can be nested, carry arguments, integrate with events and more.
+-   [Notifyer](http://ui.agiletoolkit.org/demos/notifyer.php) flashes a dynamic success/error message
+-   [Modal View](http://ui.agiletoolkit.org/demos/modal2.php) and [Dynamic jsModal](http://ui.agiletoolkit.org/demos/modal.php) are similar but use different techniques for Dynamic Dialogs
+-   [AutoComplete](http://ui.agiletoolkit.org/demos/autocomplete.php) is a new Form Field that will automatically traverse [referenced](http://agile-data.readthedocs.io/en/develop/references.html) Model and even open a Modal dialog for adding a new record. Very useful for web apps!
+-   [jsSSE](http://ui.agiletoolkit.org/demos/sse.php) is an easy-to-use module for running background jobs in PHP and displaying progress visually through a Progress-bar or Console.
+
+There are loads of minor improvements and a lot of new documentation. If you use 1.2 version, there won't be any breaking changes. For ATK4.x users we recommend to migrate now.
+
+## Add-ons and integrations
+
+Agile UI has been developed from ground-up to be extensible in a whole new way. Each add-on delivers wide range of classes you can incorporate into your application without worrying about UI and Data compatibility.
+
+-   [Charts add-on](https://github.com/atk4/chart) - Modern looking and free charts with [chartJS](http://chartjs.org)
+-   [Audit for Models](https://github.com/atk4/audit) - Record all DB operations with Undo/Redo support for Agile Data
+-   [Data for Reports](https://github.com/atk4/report) - Implement data aggregation and union models for Agile Data
+-   [User Authentication](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
+
+Agile UI and Agile Data was built using minimalistic approach and can be integrated into other frameworks and apps. Here are some of the connectors:
+
+-   [Laravel Agile Data](https://github.com/atk4/laravel-ad) - ServiceProvider for Agile Data
+-   .. more connectors wanted. If you are working to integrate Agile UI or Agile Data, please list it here (even if incomplete).
+
+## Things you can Build in Agile UI:
+
+Agile UI comes with a lot of ready-to-use components, but they are also very extensible:
+
+-   application layouts (e.g. Admin and Centered)
+-   form fields (e.g. CheckBox and Calendar)
+-   table columns (e.g. Status and Links)
+-   action-column actions (e.g. Button, Expander)
+-   data types (e.g. money, date)
+-   persistences (APIs and Services)
+-   models (e.g. User, Country)
+
+## Bundled and Planned components
+
+Agile UI comes with many built-in components:
+
+| Component                                | Description                              | Introduced |
 | ---------------------------------------- | ---------------------------------------- | ---------- |
-| Core                                     | Template, Render Tree and various patterns | 0.1        |
-| [Button](http://ui.agiletoolkit.org/demos/button.php) [[source](https://github.com/atk4/ui/blob/develop/demos/button.php#L14)] | Button in various variations including icons, labels, styles and tags | 0.1        |
-| [Input](http://ui.agiletoolkit.org/demos/field.php) [[source](https://github.com/atk4/ui/blob/develop/demos/field.php#L9)] | Decoration of input fields, integration with buttons. | 0.2        |
-| [JS](http://ui.agiletoolkit.org/demos/button2.php) [[source](https://github.com/atk4/ui/blob/develop/demos/button2.php#L15)] | Assign JS events and abstraction of PHP callbacks. | 0.2        |
-| [Header](http://ui.agiletoolkit.org/demos/header.php) [[source](https://github.com/atk4/ui/blob/develop/demos/header.php#L8)] | Simple view for header.                  | 0.3        |
-| [Menu](http://ui.agiletoolkit.org/demos/layout2.php) [[source](https://github.com/atk4/ui/blob/develop/demos/layout2.php#L16)] | Horizontal and vertical multi-dimensional menus with icons. | 0.4        |
-| [Form](http://ui.agiletoolkit.org/demos/form.php) [[source](https://github.com/atk4/ui/blob/develop/demos/form.php#L44)] | Validation, Interactivity, Feedback, Layouts, Field types. | 0.4        |
-| [Layouts](http://ui.agiletoolkit.org/demos/layouts.php) [[source](https://github.com/atk4/ui/blob/develop/demos/layout.php#L9)] | Admin, Centered.                         | 0.4        |
-| [Grid](http://ui.agiletoolkit.org/demos/grid.php) [[source](https://github.com/atk4/ui/blob/develop/demos/grid.php#L9)] | Formatting, Columns, Status, Link, Template, Delete. | 1.0        |
-| GridAdvanced                             | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1 *      |
-| Messages                                 | Such as "Info", "Error", "Warning" or "Tip" for easy use. | 1.1 *      |
-| Modal                                    | Modal dialog with dynamically loaded content. | 1.1 *      |
-| Relading                                 | Dynamically re-render part of the UI.    | 1.1 *      |
-| Actions                                  | Extended buttons with various interactions | 1.1 *      |
-| CRUD                                     | Create, List, Edit and Delete records (based on Advanced Grid) | 1.2 *      |
-| Layouts 2                                | 4 Responsive: Admin, Centered, Site, Wide. | 1.2 *      |
-| Breadcrumb                               | Push links to pages for navigation. Wizard. | 1.3 *      |
+| [View](http://ui.agiletoolkit.org/demos/view.php) | Template, Render Tree and various patterns | 0.1        |
+| [Button](http://ui.agiletoolkit.org/demos/button.php) | Button in various variations including icons, labels, styles and tags | 0.1        |
+| [Input](http://ui.agiletoolkit.org/demos/field.php) | Decoration of input fields, integration with buttons. | 0.2        |
+| [JS](http://ui.agiletoolkit.org/demos/button2.php) | Assign JS events and abstraction of PHP callbacks. | 0.2        |
+| [Header](http://ui.agiletoolkit.org/demos/header.php) | Simple view for header.                  | 0.3        |
+| [Menu](http://ui.agiletoolkit.org/demos/layout2.php) | Horizontal and vertical multi-dimensional menus with icons. | 0.4        |
+| [Form](http://ui.agiletoolkit.org/demos/form.php) | Validation, Interactivity, Feedback, Layouts, Field types. | 0.4        |
+| [Layouts](http://ui.agiletoolkit.org/demos/layouts.php) | Admin, Centered.                         | 0.4        |
+| [Table](http://ui.agiletoolkit.org/demos/table.php) | Formatting, Columns, Status, Link, Template, Delete. | 1.0        |
+| [Grid](http://ui.agiletoolkit.org/demos/grid.php) | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1        |
+| [Message](http://ui.agiletoolkit.org/demos/message.php) | Such as "Info", "Error", "Warning" or "Tip" for easy use. | 1.1        |
+| [Modal](https://ui.agiletoolkit.org/demos/modal.php) | Modal dialog with dynamically loaded content. | 1.1        |
+| [Reloading](http://ui.agiletoolkit.org/demos/reloading.php) | Dynamically re-render part of the UI.    | 1.1        |
+| [Actions](https://ui.agiletoolkit.org/demos/reloading.php) | Extended buttons with various interactions | 1.1        |
+| [CRUD](http://ui.agiletoolkit.org/demos/crud.php) | Create, List, Edit and Delete records (based on Advanced Grid) | 1.1        |
+| [Tabs](https://ui.agiletoolkit.org/demos/tabs.php) | 4 Responsive: Admin, Centered, Site, Wide. | 1.2        |
+| [Loader](http://ui.agiletoolkit.org/demos/loader.php) | Dynamically load itself and contained components inside. | 1.3        |
+| [Modal View](http://ui.agiletoolkit.org/demos/modal2.php) | Open/Load contained components in a dialog. | 1.3        |
+| Breadcrumb                               | Push links to pages for navigation. Wizard. | 1.4 *      |
+| ProgressBar                              | Interactive display of a multi-step PHP code execution progress | 1.4 *      |
+| Console                                  | Execute server/shell commands and display progress live | 1.4 *      |
 | Items, Cards                             | Responsive Items and Card implementaiton. | 1.4 *      |
 | Wizard                                   | Multi-step, wizard with temporary data storing. | 1.5 *      |
 |                                          |                                          |            |
@@ -55,11 +141,18 @@ All bundled components are free and licensed under MIT license. They are install
 
 External and 3rd party components may be subject to different licensing terms.
 
-## Installing and Using
+## Getting Started
 
-In your command line type `composer require atk4/ui`.
+Although we support  `composer require atk4/ui` for your first application we recommend you to:
 
-Afterwards, use this code to see a Hello World message:
+1.  Go to www.agiletoolkit.org and click download.
+2.  Follow instructions to run the "sample" app.
+3.  Blank repo is bundled, so `git add . && git commit`
+4.  Deploy to cloud - Heroku, Google App Engine or any Docker environment through `git push`.
+
+### Simple Hello World component
+
+Semantic of Agile UI is really simple:
 
 ``` php
 require "vendor/autoload.php";
@@ -67,10 +160,10 @@ require "vendor/autoload.php";
 $app = new \atk4\ui\App('My First App');
 $app->initLayout('Centered');
 
-$app->layout->add('HelloWorld');
+$app->add('HelloWorld');
 ```
 
-That's right! We have [Hello World component](https://github.com/atk4/ui/blob/develop/src/HelloWorld.php)!! When you are ready to do something bit more advanced:
+That's right! We have [HelloWorld an LoremIpsum components](https://github.com/atk4/ui/blob/develop/src/HelloWorld.php)!! Next is a code for a more sophisticated admin system:
 
 ``` php
 require "vendor/autoload.php";
@@ -119,13 +212,13 @@ $f->onSubmit(function ($f) {
 });
 ```
 
-For more examples simply look into [demo folder](https://github.com/atk4/ui/tree/develop/demos).
+We have many examples in the [demo folder](https://github.com/atk4/ui/tree/develop/demos).
 
 ### Single component render
 
-If you need to render only one component without boilerplate HTML, use render() method.
+Agile UI fits into your framework of choice. That's why we didn't bother adding our own Router and didn't want to give you another REST framework. Enjoy Agile UI in any environment - Wordpress, Laravel, Yii or plain PHP. If you need to render only one component without boilerplate HTML, use render() method.
 
-``` html
+``` HTML
  <head>
     <link rel="stylesheet" type="text/css" href="http://semantic-ui.com/dist/semantic.css">
     <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
@@ -156,48 +249,21 @@ If anything is unclear or you want to get in touch with other awesome people who
 
  ## Scope and Goals of Agile UI
 
-What makes this UI toolkit stand out from the others UI libraries is a commitment to bring rich and interractive web components that can be used for 90% of web applications without any custom-HTML/JS. Additionally, Agile UI provides a very controlled and consistent ways to develop "add-ons" that include visual components and other re-usable elements.
+What makes this UI toolkit stand out from the others UI libraries is a commitment to bring rich and interractive web components that can be used for web applications without any custom-HTML/JS. Additionally, Agile UI provides a very controlled and consistent ways to develop "add-ons" that include visual components and other re-usable elements.
 
 To achieve its goal, Agile UI offers both the tools for creating components and a wide selection of built-in components that provides the "minimum standard Web UI":
 
 ![agile-ui](docs/images/agile-ui.png)
 
-Agile UI follows 'best development practices' and looks to create an eco-system of 3rd party "UI components" that follow the Web UI standard solving issues such as:
-
-- Incompatible HTML code produced by and excessive CSS/JS assets
-- Differences in UI styles between your main theme and add-on UI
-- Extensibility standard of all UI components based on principles of Dependency Injection, Template Injection and Inheritance
-- Full control over JavaScript events and integration with jQuery and its plugins
-- Controlled access between UI componets and domain model data with persistence abstraction
-- **And most importantly: a responsive and modern interface based on Semantic UI CSS**
-
 ## Q&A
 
 **Q: HTML-generating frameworks are lame and inefficient, real coders prefer to manually write HTML/CSS in Twig or Smarty.**
 
-Agile UI was created for those who are in a hurry and not immediately concerned about the shades of their UI buttons. We have created a solid looking UI and diverse set of components that, like all applications, can be adapted and released with any UI.
-
-Our goal was to create an out-of-the-box UI which you can "use", not "reinvent". 
+Agile UI focuses on "out-of-the-box" experience and development efficiency. Our ambition is to make PHP usable for those who are not familiar with HTML/CSS/JS. In fact, we are working with some educational partners and have "education course" available for secondary school students that teaches how to build Data-drivven Web Apps in just 1 year.
 
 **Q: What about Angular-JS, VueJS and all the other JS frameworks?**
 
-We went with the default pattern that allows you to write the entire application in ONE language: PHP.
-
-However, the "component" in Agile UI does not conflict if you choose to use a different  JavaScript framework. We found that **jQuery** and its plug-ins are most suitable for our design patterns. However, you can build a highly interractive component that relies on a different JavaScript frameworks or principles.
-
-**Q: I used "X" component framework and found it extremely limiting.**
-
-In the past, many UI / Component frameworks have been unable to find a good balance between flexiblity and convenience. Some out-of-the-box CRUD systems are too generic while other Form-builders are just too overengineered and unattractive.
-
-Agile UI follows these core principles in it's design:
-
--   Instead of focusing on generic HTML, create HTML for a specific CSS framework (Semantic UI)
--   Allow developers to use all the features of CSS framework without leaving PHP
--   No custom proprietary JS code. Keep all the HTML simple
--   Allow developers to customise or extend components
--   Keep Agile UI as a open-source project under MIT license
-
-Following those principles gives us the perfect combination of flexibility, elegance and performance.
+You should look into [Agile API](https://github.com/atk4/api), which provides binding between Agile Data and your front-end framework.
 
 **Q: I prefer Bootstrap CSS (or other CSS) over Semantic UI**
 
@@ -208,27 +274,11 @@ We considered several CSS frameworks.  We decided to focus on Semantic UI implem
 -   Extensive selection of core components
 -   jQuery and JavaScript API integrations
 
-Bearing in mind the popularity of Bootstrap CSS, we are working towards an extension that will allow you to switch your entire UI between Semantic UI and Bootstrap in the future.
+Bearing in mind the popularity of Bootstrap CSS, we plan to build extension for it sometime soon.
 
-## List of core Features in Agile UI
+## Credits and License
 
-While many UI toolkits focus on giving you ready-to-use advance components, we produced a foundation of basic ones as building blocks then create more advanced components that are easily integrated.
-
-1.  Rendering HTML - Agile UI is about initializing UI objects then rendering them. Each component is driven by the UI logic and all play a vital part in the Render Tree.
-2.  Templates - We know that as developer you want control. We offer the ability to create custom templates for custom Views to improve performance and memory usage.
-3.  Composite Views - This allows View object to implement itself by relying on other Views.
-4.  JavaScript actions - This technique is designed to bind PHP Views with generic JavaScript routines and also to eliminate the need for you to write custom JavaScript code (e.g. `('#myid').dropdown();`).
-5.  JavaScript events - JS actions can be asigned to events. For instance, you can instruct a "Button" object to refresh your "Grid" object in a single line of PHP.
-6.  Buttons, Fields, Dropdown, Boxes, Panels, Icons, Messages - All those basic Views can be used 'out-of-the-box' and are utilising principles described above to remain flexible and configurable.
-7.  Callbacks - A concept where a client-side component's rendering can execute an AJAX request to its PHP code triggering a server-side event. Agile UI ensures full isolation and robustness with this approach.
-8.  Agile Data - Integration with data and business logic framework allows you to structure your growing PHP application's business logic properly and conforming to best practices of web development.
-9.  Form - Culmination of concepts "callbacks", "composite views" and reliance on a dozen basic views creates a very simple way to create a modern and flexible Form implementation. Capable of rendering, submitting it's own data back, handling errors and server-side validation just in a few lines of PHP code - Form is the most elegant "Form Builder" you will find for PHP.
-10.  Grid and Lister - An interractive and extensible UI component for outputing your data as a table or as a formatted list. When you have a lot of records to render, those components will prove to be very performance efficient.
-11.  Dialogs - Introduces ability for you to use pop-ups and JavaScript dialog frame to reveal underlying UI.
-12.  CRUD - A composite view that combines Form, Dialogs and Grids to create a fully interractive interface for managing your Model Entity data. Extensible and compatible with various add-ons, you will find CRUD to be a most efficient way to build your Admin system.
-13.  Layouts, Menus, Pages, Tabs, Accordion - Several objects to create a bigger picture and link together the entire UI of your application.
-14.  Application - This is an abstract interface that can be implemented using your full-stack framework of choice. The "App" class is built for stand-alone applications.  For any other framework, a custom application class can be provided to make the entire UI section adjust accordingly.
-
+Agile UI, Data and API are projects we develop in our free time and offer you free of charge under terms of MIT license. If you wish to say thanks to our core team or take part in the project, please contact us through our chat on Gitter.
 
 
 [![Gitter](https://img.shields.io/gitter/room/atk4/atk4.svg?maxAge=2592000)](https://gitter.im/atk4/atk4?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)

@@ -98,35 +98,87 @@ class Table extends Lister
 
     public $sort_order = null;
 
+    public function __construct($class = null)
+    {
+        if ($class) {
+            $this->addClass($class);
+        }
+    }
+
     /**
      * Defines a new column for this field. You need two objects for field to
      * work.
      *
      * First is being Model field. If your Table is already associated with
      * the model, it will automatically pick one by looking up element
-     * corresponding to the $name.
+     * corresponding to the $name or add it as per your definition inside $field.
      *
-     * The other object is a Column. This object know how to produce HTML for
-     * cells and will handle other things like alignment. If you do not specify
-     * column, then it will be selected dynamically based on field type
+     * The other object is a Column Decorator. This object know how to produce HTML for
+     * cells and will handle other things, like alignment. If you do not specify
+     * column, then it will be selected dynamically based on field type.
      *
-     * And third object is a Field. You can use it in case your current data
-     * model doesn't already have such field.
-     *
-     * @param string         $name      Data model field name
-     * @param Column\Generic $columnDef
+     * @param string                   $name            Data model field name
+     * @param array|string|object|null $columnDecorator
+     * @param array|string|object|null $field
      *
      * @return Column\Generic
      */
-    public function addColumn($name, $columnDef = null)
+    public function addColumn($name, $columnDecorator = null, $field = null)
     {
         if (!$this->_initialized) {
-            $this->init();
+            throw new Exception\NoRenderTree($this, 'addColumn()');
         }
+
         if (!$this->model) {
             $this->model = new \atk4\ui\misc\ProxyModel();
         }
 
+        // This code should be vaugely consistent with FormLayout\Generic::addField()
+
+        if (is_string($field)) {
+            $field = ['type' => $field];
+        }
+
+        if ($name) {
+            $existingField = $this->model->hasElement($name);
+        } else {
+            $existingField = null;
+        }
+
+        if (!$existingField) {
+            // Add missing field
+            if ($field) {
+                $field = $this->model->addField($name, $field);
+                $field->never_persist = true;
+            } else {
+                $field = $this->model->addField($name);
+                $field->never_persist = true;
+            }
+        } elseif (is_array($field)) {
+            // Add properties to existing field
+            $existingField->setDefaults($field);
+            $field = $existingField;
+        } elseif (is_object($field)) {
+            throw new Exception(['Duplicate field', 'name' => $name]);
+        } else {
+            $field = $existingField;
+        }
+
+        if (is_array($columnDecorator) || is_string($columnDecorator)) {
+            $columnDecorator = $this->decoratorFactory($field, $columnDecorator);
+        } elseif (!$columnDecorator) {
+            $columnDecorator = $this->decoratorFactory($field);
+        } elseif (is_object($columnDecorator)) {
+            if (!$columnDecorator instanceof \atk4\ui\TableColumn\Generic) {
+                throw new Exception(['Column decorator must descend from \atk4\ui\TableColumn\Generic', 'columnDecorator' => $columnDecorator]);
+            }
+            $columnDecorator->table = $this;
+            $this->_add($columnDecorator);
+        } else {
+            throw new Exception(['Value of $columnDecorator argument is incorrect', 'columnDecorator' => $columnDecorator]);
+        }
+
+        /*
         $field = null;
         if (is_string($name)) {
             $field = $this->model->hasElement($name);
@@ -150,49 +202,72 @@ class Table extends Lister
         }
 
         $columnDef->table = $this;
-        if (!$columnDef->_initialized) {
-            $this->_add($columnDef, $name);
+        if (isset($columnDef->_initializerTrait) && !$columnDef->_initialized) {
+            $this->_add($columnDef);
         }
+
+        if (!$columnDef instanceof TableColumn\Generic) {
+            throw new Exception([
+                'Table columns must extend TableColumn\Generic',
+                'column'=> $columnDef,
+            ]);
+        }
+         */
 
         if (is_null($name)) {
-            $this->columns[] = $columnDef;
+            $this->columns[] = $columnDecorator;
+        } elseif (!is_string($name)) {
+            echo 'about to throw exception.....';
+
+            throw new Exception(['Name must be a string', 'name' => $name]);
         } elseif (isset($this->columns[$name])) {
-            if (!is_array($this->columns[$name])) {
-                $this->columns[$name] = [$this->columns[$name]];
-            }
-            $this->columns[$name][] = $columnDef;
+            throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name' => $name]);
         } else {
-            $this->columns[$name] = $columnDef;
+            $this->columns[$name] = $columnDecorator;
         }
 
-        return $columnDef;
+        return $columnDecorator;
+    }
+
+    public function addDecorator($name, $decorator)
+    {
+        if (!$this->columns[$name]) {
+            throw new Exceptino(['No such column, cannot decorate', 'name' => $name]);
+        }
+        $decorator = $this->_add($this->factory($decorator, ['table' => $this], 'TableColumn'));
+
+        if (!is_array($this->columns[$name])) {
+            $this->columns[$name] = [$this->columns[$name]];
+        }
+        $this->columns[$name][] = $decorator;
     }
 
     /**
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param \atk4\data\Field $f Data model field
+     * @param \atk4\data\Field $f    Data model field
+     * @param array            $seed Defaults to pass to factory() when decorator is initialized
      *
-     * @return Column\Generic
+     * @return TableColumn\Generic
      */
-    public function _columnFactory(\atk4\data\Field $f)
+    public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
-        switch ($f->type) {
-        case 'password':
-            return $this->add(new TableColumn\Password());
+        $seed = $this->mergeSeeds(
+            $seed,
+            isset($f->ui['table']) ? $f->ui['table'] : null,
+            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
+            ['Generic']
+        );
 
-        //case 'boolean':
-            //return $this->add(new TableColumn\Checkbox());
-
-        default:
-            if (!$this->default_column) {
-                $this->default_column = new TableColumn\Generic();
-            }
-
-            return $this->default_column;
-        }
+        return $this->_add($this->factory($seed, ['table' => $this], 'TableColumn'));
     }
+
+    protected $typeToDecorator = [
+        'password' => 'Password',
+        'text'     => 'Text',
+        'boolean'  => ['Status', ['positive' => [true], 'negative' => ['false']]],
+    ];
 
     /**
      * Override works like this:.
@@ -274,7 +349,7 @@ class Table extends Lister
     public function renderView()
     {
         if (!$this->columns) {
-            throw new Exception(['Table does not have any columns defined', 'columns'=>$this->columns]);
+            throw new Exception(['Table does not have any columns defined', 'columns' => $this->columns]);
         }
 
         if ($this->sortable) {
@@ -314,12 +389,17 @@ class Table extends Lister
                     }
                 }
 
-                foreach ($this->columns as $name => $column) {
-                    if (!method_exists($column, 'getHTMLTags')) {
-                        continue;
+                foreach ($this->columns as $name => $columns) {
+                    if (!is_array($columns)) {
+                        $columns = [$columns];
                     }
                     $field = $this->model->hasElement($name);
-                    $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
+                    foreach ($columns as $column) {
+                        if (!method_exists($column, 'getHTMLTags')) {
+                            continue;
+                        }
+                        $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
+                    }
                 }
 
                 // Render row and add to body
@@ -380,14 +460,44 @@ class Table extends Lister
      */
     public function updateTotals()
     {
-        foreach ($this->totals_plan as $key=>$val) {
+        foreach ($this->totals_plan as $key => $val) {
+
+            // if value is array, then we treat it as built-in or callable aggregate method
             if (is_array($val)) {
-                switch ($val[0]) {
-                case 'sum':
-                    if (!isset($this->totals[$key])) {
-                        $this->totals[$key] = 0;
+                $f = $val[0]; // shortcut
+
+                // initial value is always 0
+                if (!isset($this->totals[$key])) {
+                    $this->totals[$key] = 0;
+                }
+
+                // closure support
+                // arguments - current value, key, \atk4\ui\Table object
+                if ($f instanceof \Closure) {
+                    $this->totals[$key] += ($f($this->model[$key], $key, $this) ?: 0);
+                }
+                // built-in methods
+                elseif (is_string($f)) {
+                    switch ($f) {
+                        case 'sum':
+                            $this->totals[$key] += $this->model[$key];
+                            break;
+                        case 'count':
+                            $this->totals[$key] += 1;
+                            break;
+                        case 'min':
+                            if ($this->model[$key] < $this->totals[$key]) {
+                                $this->totals[$key] = $this->model[$key];
+                            }
+                            break;
+                        case 'max':
+                            if ($this->model[$key] > $this->totals[$key]) {
+                                $this->totals[$key] = $this->model[$key];
+                            }
+                            break;
+                        default:
+                            throw new Exception(['Aggregation method does not exist', 'method' => $f]);
                     }
-                    $this->totals[$key] += $this->model[$key];
                 }
             }
         }
@@ -463,17 +573,43 @@ class Table extends Lister
         foreach ($this->columns as $name => $column) {
 
             // If multiple formatters are defined, use the first for the header cell
-            if (is_array($column)) {
-                $column = $column[0];
-            }
 
             if (!is_int($name)) {
                 $field = $this->model->getElement($name);
-
-                $output[] = $column->getDataCellHTML($field);
             } else {
-                $output[] = $column->getDataCellHTML();
+                $field = null;
             }
+
+            if (!is_array($column)) {
+                $column = [$column];
+            }
+
+            // we need to smartly wrap things up
+            $cell = null;
+            $cnt = count($column);
+            $td_attr = [];
+            foreach ($column as $c) {
+                if (--$cnt) {
+                    $html = $c->getDataCellTemplate($field);
+                    $td_attr = $c->getTagAttributes('body', $td_attr);
+                } else {
+                    // Last formatter, ask it to give us whole rendering
+                    $html = $c->getDataCellHTML($field, $td_attr);
+                }
+
+                if ($cell) {
+                    if ($name) {
+                        // if name is set, we can wrap things
+                        $cell = str_replace('{$'.$name.'}', $cell, $html);
+                    } else {
+                        $cell = $cell.' '.$html;
+                    }
+                } else {
+                    $cell = $html;
+                }
+            }
+
+            $output[] = $cell;
         }
 
         return implode('', $output);

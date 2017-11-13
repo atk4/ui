@@ -2,7 +2,7 @@
 
 namespace atk4\ui;
 
-class Dropdown extends Lister
+class DropDown extends Lister
 {
     // @inheritdoc
     public $ui = 'dropdown';

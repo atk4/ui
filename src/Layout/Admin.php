@@ -19,48 +19,51 @@ use atk4\ui\Menu;
  * Footer for a short copyright notice and perhaps some debug elements.
  *
  * Spots:
- *  - LeftMenu  (has_leftMenu)
+ *  - LeftMenu  (has_menuLeft)
  *  - Menu
- *  - RightMenu (has_righMenu)
- *  - UserCard
- *  - BreadCrumb
+ *  - RightMenu (has_menuRight)
  *  - Footer
  *
  *  - Content
  */
 class Admin extends Generic
 {
-    public $leftMenu = null;    // vertical menu
+    public $menuLeft = null;    // vertical menu
     public $menu = null;        // horizontal menu
-    public $rightMenu = null;   // vertical pull-down
+    public $menuRight = null;   // vertical pull-down
 
-    public $userCard = null;    // for currently-logged-in-user
-
-    public $breadCrumb = null;  // for Breadcrumb
-
-    // @inheritdoc
-    public $defaultTemplate = 'layout/admin.html';
+    public $burger = true;      // burger menu item
 
     /**
-     * {@inheritdoc}
+     * Obsolete, use menuLeft.
+     *
+     * @obsolete
      */
+    public $leftMenu = null;
+
+    public $defaultTemplate = 'layout/admin.html';
+
     public function init()
     {
         parent::init();
 
         if ($this->menu === null) {
-            $this->menu = $this->add(new Menu('inverted fixed horizontal'), 'TopMenu');
+            $this->menu = $this->add(['Menu', 'atk-topMenu inverted fixed horizontal', 'element' => 'header'], 'TopMenu');
+            $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']])->add(['Icon', 'content']);
         }
 
-        if ($this->rightMenu === null) {
-            $this->rightMenu = $this->menu->add(new Menu(['ui'=>false]), 'RightMenu')
+        if ($this->menuRight === null) {
+            $this->menuRight = $this->menu->add(new Menu(['ui' => false]), 'RightMenu')
                 ->addClass('right menu')->removeClass('item');
         }
 
-        if ($this->leftMenu === null) {
-            $this->leftMenu = $this->add(new Menu('left vertical inverted labeled visible sidebar'), 'LeftMenu');
-            $this->leftMenu->addHeader($this->app->title);
+        if ($this->menuLeft === null) {
+            $this->menuLeft = $this->add(new Menu('left vertical inverted labeled visible sidebar'), 'LeftMenu');
+            $this->leftMenu = $this->menuLeft;
+            $this->menuLeft->addHeader($this->app->title);
         }
+
+        $this->template->trySet('version', $this->app->version);
     }
 
     /**
@@ -68,10 +71,10 @@ class Admin extends Generic
      */
     public function renderView()
     {
-        if ($this->leftMenu) {
-            if (count($this->leftMenu->elements) == 1) {
+        if ($this->menuLeft) {
+            if (count($this->menuLeft->elements) == 1) {
                 // no items were added, so lets add dashboard
-                $this->leftMenu->addItem(['Dashboard', 'icon'=>'dashboard'], 'index');
+                $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], 'index');
             }
             //$this->leftMenu->addItem(['Logout', 'icon'=>'sign out'], ['logout']);
         }

@@ -64,7 +64,7 @@ class Label extends View
             $this->addClass('image');
         }
 
-        if ($this->detail) {
+        if (isset($this->detail)) {
             $this->detail = $this->add(new View($this->detail), 'AfterContent')->addClass('detail');
         }
 

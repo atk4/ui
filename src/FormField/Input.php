@@ -41,6 +41,11 @@ class Input extends Generic
     public $actionLeft = null;
 
     /**
+     * Specify width for semantic UI grid. For "four wide" use 'four'.
+     */
+    public $width = null;
+
+    /**
      * Method similar to View::js() however will adjust selector
      * to target the "input" element.
      *
@@ -65,11 +70,11 @@ class Input extends Generic
     public function getInput()
     {
         return $this->app->getTag('input', [
-            'name'       => $this->short_name,
-            'type'       => $this->inputType,
-            'placeholder'=> $this->placeholder,
-            'id'         => $this->id.'_input',
-            'value'      => $this->getValue(),
+            'name'        => $this->short_name,
+            'type'        => $this->inputType,
+            'placeholder' => $this->placeholder,
+            'id'          => $this->id.'_input',
+            'value'       => $this->getValue(),
         ]);
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
@@ -132,6 +137,10 @@ class Input extends Generic
             $this->addClass('labeled');
         }
 
+        if ($this->width) {
+            $this->addClass($this->width.' wide');
+        }
+
         if ($this->action) {
             if (!is_object($this->action)) {
                 $this->action = new Button($this->action);
@@ -167,5 +176,10 @@ class Input extends Generic
         $this->action = $this->add(new Button($defaults), 'AfterInput');
 
         return $this->action;
+    }
+
+    public function set($value = null, $junk = null)
+    {
+        $this->content = $value;
     }
 }

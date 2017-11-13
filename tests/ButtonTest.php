@@ -12,7 +12,7 @@ class ButtonTest extends \atk4\core\PHPUnit_AgileTestCase
      */
     public function testButtonIcon()
     {
-        $b = new Button(['Load', 'icon'=>'pause']);
+        $b = new Button(['Load', 'icon' => 'pause']);
         $b->render();
     }
 }

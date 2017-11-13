@@ -26,16 +26,18 @@ class Status extends Generic
         $this->states = $states;
     }
 
-    public function getDataCellHTML(\atk4\data\Field $f = null)
+    public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
     {
         if ($f === null) {
             throw new Exception(['Status can be used only with model field']);
         }
 
+        $extra_tags = array_merge_recursive($extra_tags, ['class' => '{$_'.$f->short_name.'_status}']);
+
         return $this->app->getTag(
             'td',
-            ['class'=> '{$_'.$f->short_name.'_status}'],
-            [$this->app->getTag('i', ['class'=>'icon {$_'.$f->short_name.'_icon}'], '').
+            $extra_tags,
+            [$this->app->getTag('i', ['class' => 'icon {$_'.$f->short_name.'_icon}'], '').
             ' {$'.$f->short_name.'}', ]
         );
     }
@@ -45,7 +47,7 @@ class Status extends Generic
         $cl = '';
 
         // search for a class
-        foreach ($this->states as $class=>$values) {
+        foreach ($this->states as $class => $values) {
             if (in_array($field->get(), $values)) {
                 $cl = $class;
                 break;
@@ -71,7 +73,6 @@ class Status extends Generic
             break;
         default:
             $ic = '';
-            break;
 
         }
 

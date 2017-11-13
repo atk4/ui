@@ -20,7 +20,6 @@ class View implements jsExpressionable
     use \atk4\core\AppScopeTrait;
     use \atk4\core\FactoryTrait;
     use \atk4\core\DIContainerTrait {
-        setDefaults as _setDefaults;
         setMissingProperty as _setMissingProperty;
     }
 
@@ -144,26 +143,36 @@ class View implements jsExpressionable
      * May accept properties of a class, but if property is not defined, it will
      * be used as a HTML class instead.
      *
-     * @param array|string $defaults
+     * @param array|string $label
+     * @param array|string $class
      *
      * @throws Exception
      */
-    public function __construct($defaults = [])
+    public function __construct($label = null, $class = null)
     {
-        if (is_string($defaults) && $this->content !== false) {
-            $this->content = $defaults;
+        if (is_array($label)) {
+            // backwards mode
+            $defaults = $label;
+            if (isset($defaults[0])) {
+                $label = $defaults[0];
+                unset($defaults[0]);
+            } else {
+                $label = null;
+            }
 
-            return;
+            if (isset($defaults[1])) {
+                $class = $defaults[1];
+                unset($defaults[1]);
+            }
+            $this->setDefaults($defaults);
         }
 
-        if (!is_array($defaults)) {
-            throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
+        if ($label !== null) {
+            $this->content = $label;
         }
 
-        $this->setDefaults($defaults);
-
-        if (is_string($this->class)) {
-            $this->class = explode(' ', $this->class);
+        if ($class) {
+            $this->addClass($class);
         }
     }
 
@@ -196,9 +205,9 @@ class View implements jsExpressionable
     {
         $goodData = [];
 
-        foreach ($data as $key=>$value) {
+        foreach ($data as $key => $value) {
             if (!is_array($value)) {
-                $value = ['name'=>$value];
+                $value = ['name' => $value];
             }
 
             if (!isset($value['id'])) {
@@ -206,7 +215,7 @@ class View implements jsExpressionable
             }
             $goodData[] = $value;
         }
-        $goodData = ['data'=>$goodData];
+        $goodData = ['data' => $goodData];
 
         $model = new \atk4\data\Model(
             new \atk4\data\Persistence_Array($goodData), 'data'
@@ -214,23 +223,6 @@ class View implements jsExpressionable
         $model->addField('name');
 
         return $this->setModel($model);
-    }
-
-    /**
-     * Called from __construct() and set() to initialize the properties.
-     *
-     * TODO: move into trait, because this is used often
-     *
-     * @param array $properties
-     */
-    protected function setDefaults($properties)
-    {
-        if (isset($properties[0]) && $this->content !== false) {
-            $this->content = $properties[0];
-            unset($properties[0]);
-        }
-
-        $this->_setDefaults($properties);
     }
 
     /**
@@ -259,9 +251,10 @@ class View implements jsExpressionable
         }
 
         throw new Exception([
-            'Not sure what to do',
-            'key' => $key,
-            'val' => $val,
+            'Unable to set property for the object',
+            'object'   => $this,
+            'property' => $key,
+            'value'    => $val,
         ]);
     }
 
@@ -346,7 +339,7 @@ class View implements jsExpressionable
      */
     protected function initDefaultApp()
     {
-        $this->app = new App(['skin'=>$this->skin, 'catch_exceptions'=>false, 'always_run'=>false]);
+        $this->app = new App(['skin' => $this->skin, 'catch_exceptions' => false, 'always_run' => false]);
         $this->app->init();
     }
 
@@ -361,47 +354,52 @@ class View implements jsExpressionable
      *
      * @return View
      */
-    public function add($object, $region = null)
+    public function add($seed, $defaults = null)
     {
         if (!$this->app) {
-            $this->_add_later[] = [$object, $region];
+            $this->_add_later[] = [$seed, $defaults];
 
-            return $object;
+            return $seed;
         }
 
-        if (is_array($region)) {
+        if (is_array($defaults)) {
             throw new Exception('Second argument to add must be region or null!');
         }
 
-        if ($region === null) {
-            $defaults = ['region' => 'Content'];
-        } elseif (!is_array($region)) {
-            $defaults = ['region' => $region];
-        } else {
-            $defaults = $region;
-            if (isset($defaults[0])) {
-                $defaults['region'] = $defaults[0];
-                unset($defaults[0]);
-            }
+        $region = null;
+        if (is_array($defaults) && isset($defaults['region'])) {
+            $region = $defaults['region'];
+            unset($defaults['region']);
+        } elseif (is_array($defaults) && isset($defaults[0])) {
+            $region = $defaults[0];
+            unset($defaults[0]);
+        } elseif (is_string($defaults)) {
+            $region = $defaults;
+            $defaults = null;
         }
 
-        if (is_array($object) && !isset($object[0])) {
-            $object[0] = 'View';
+        // Create object first
+        $object = $this->factory($this->mergeSeeds($seed, ['View']), $defaults);
+
+        if ($object instanceof self && $region) {
+            $object->region = $region;
         }
 
-        $object = $this->_add($object, $defaults);
+        // Will call init() of the object
+        $object = $this->_add($object);
 
         if (!$object instanceof self) {
             return $object;
         }
 
+        // We are adding a new view, so do a bit more
         if (!$object->template && $object->region && $this->template) {
             $object->template = $this->template->cloneRegion($object->region);
         }
 
         if ($this->template && $object->region) {
             if (is_string($this->template)) {
-                throw new Exception(['Property $template should contain object, not a string', 'template'=>$this->template]);
+                throw new Exception(['Property $template should contain object, not a string', 'template' => $this->template]);
             }
 
             $this->template->del($object->region);
@@ -425,7 +423,7 @@ class View implements jsExpressionable
      *
      * @return $this
      */
-    public function set($arg1 = [], $arg2 = null)
+    public function set($arg1 = null, $arg2 = null)
     {
         if (is_string($arg1) && $arg2 !== null) {
 
@@ -438,8 +436,8 @@ class View implements jsExpressionable
         if ($arg2 !== null) {
             throw new Exception([
                 'Second argument to set() can be only passed if the first one is a string',
-                'arg1'=> $arg1,
-                'arg2'=> $arg2,
+                'arg1' => $arg1,
+                'arg2' => $arg2,
             ]);
         }
 
@@ -450,6 +448,9 @@ class View implements jsExpressionable
         }
 
         if (is_array($arg1)) {
+            if (isset($arg1[0])) {
+                $this->content = $arg1[0];
+            }
             $this->setDefaults($arg1);
 
             return $this;
@@ -457,7 +458,9 @@ class View implements jsExpressionable
 
         throw new Exception([
             'Not sure what to do with argument',
+            'this' => $this,
             'arg1' => $arg1,
+            'arg2' => $arg2,
         ]);
     }
 
@@ -474,6 +477,14 @@ class View implements jsExpressionable
     {
         if (is_array($class)) {
             $class = implode(' ', $class);
+        }
+
+        if (!$this->class) {
+            $this->class = [];
+        }
+
+        if (is_string($this->class)) {
+            throw new Exception(['Property $class should always be array', 'object' => $this, 'class' => $this->class]);
         }
 
         $this->class = array_merge($this->class, explode(' ', $class));
@@ -663,7 +674,7 @@ class View implements jsExpressionable
             }
         }
 
-        if ($this->content) {
+        if (isset($this->content) && $this->content !== false) {
             $this->template->append('Content', $this->content);
         }
     }
@@ -701,6 +712,41 @@ class View implements jsExpressionable
         return
             $this->getJS($force_echo).
             $this->template->render();
+    }
+
+    /**
+     * Render View using json format.
+     *
+     * @param bool $force_echo
+     *
+     * @return string
+     */
+    public function renderJSON($force_echo = true)
+    {
+        try {
+            $this->renderAll();
+
+            return json_encode(['success' => true,
+                                'message' => 'Success',
+                                'atkjs'   => $this->getJS($force_echo),
+                                'html'    => $this->template->render(),
+                                'id'      => $this->name, ]);
+        } catch (\Exception $exception) {
+            $l = $this->add(new self());
+            if ($exception instanceof \atk4\core\Exception) {
+                $l->template->setHTML('Content', $exception->getHTML());
+            } elseif ($exception instanceof \Error) {
+                $l->add(new self(['ui' => 'message', get_class($exception).': '.
+                                                            $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
+                    'error', ]));
+                $l->add(new Text())->set(nl2br($exception->getTraceAsString()));
+            } else {
+                $l->add(new self(['ui' => 'message', get_class($exception).': '.$exception->getMessage(), 'error']));
+            }
+
+            return json_encode(['success' => false,
+                                'message' => $l->getHTML(), ]);
+        }
     }
 
     /**
@@ -856,7 +902,7 @@ class View implements jsExpressionable
         }
 
         // all non-key items of defaults are actually arguments
-        foreach ($defaults as $key=>$value) {
+        foreach ($defaults as $key => $value) {
             if (is_numeric($key)) {
                 $arguments[] = $value;
                 unset($defaults[$key]);
@@ -864,11 +910,13 @@ class View implements jsExpressionable
         }
 
         $actions = [];
+        $actions['preventDefault'] = true;
+        $actions['stopPropagation'] = true;
         if (isset($defaults['preventDefault'])) {
-            $actions['preventDefault'] = true;
+            $actions['preventDefault'] = $defaults['preventDefault'];
         }
         if (isset($defaults['stopPropagation'])) {
-            $actions['stopPropagation'] = true;
+            $actions['stopPropagation'] = $defaults['stopPropagation'];
         }
 
         if (is_callable($action) || (is_array($action) && isset($action[0]) && is_callable($action[0]))) {
@@ -883,7 +931,7 @@ class View implements jsExpressionable
             }
 
             // create callback, that will include event as part of the full name
-            $this->_add($cb = new jsCallback(), ['desired_name'=>$event]);
+            $this->_add($cb = new jsCallback(), ['desired_name' => $event]);
 
             $cb->set(function () use ($action) {
                 $args = func_get_args();
@@ -956,10 +1004,15 @@ class View implements jsExpressionable
 
         $actions['indent'] = '';
 
-        if (!$force_echo && $this->app && method_exists($this->app, 'jsReady')) {
+        if (!$force_echo && $this->app && $this->app->hasMethod('jsReady')) {
             $this->app->jsReady($actions);
 
             return '';
+        }
+
+        // delegate $action rendering in hosting app if exist.
+        if ($this->app && $this->app->hasMethod('getViewJS')) {
+            return $this->app->getViewJS($actions);
         }
 
         $ready = new jsFunction($actions);

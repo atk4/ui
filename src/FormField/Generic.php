@@ -20,13 +20,17 @@ class Generic extends View
      */
     public $field;
 
+    public $width = null;
+
+    public $caption = null;
+
     public function init()
     {
         parent::init();
 
         if ($this->form && $this->field) {
             if (isset($this->form->fields[$this->field->short_name])) {
-                throw new \atk4\ui\Exception(['Form already has a field with the same name', 'name'=>$this->field->short_name]);
+                throw new \atk4\ui\Exception(['Form already has a field with the same name', 'name' => $this->field->short_name]);
             }
             $this->form->fields[$this->field->short_name] = $this;
         }

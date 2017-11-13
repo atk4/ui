@@ -7,11 +7,13 @@ use atk4\ui\Form;
 /**
  * Input element for a form field.
  */
-class Checkbox extends Generic
+class CheckBox extends Generic
 {
     public $ui = 'checkbox';
 
     public $defaultTemplate = 'formfield/checkbox.html';
+
+    public $label;
 
     public function init()
     {

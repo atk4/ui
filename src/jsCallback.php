@@ -29,10 +29,10 @@ class jsCallback extends Callback implements jsExpressionable
             throw new Exception(['Call-back must be part of a RenderTree']);
         }
 
-        return (new jQuery())->ajaxec([
-            'uri'        => $this->getURL(),
-            'uri_options'=> $this->args,
-            'confirm'    => $this->confirm,
+        return (new jQuery())->atkAjaxec([
+            'uri'         => $this->getURL(),
+            'uri_options' => $this->args,
+            'confirm'     => $this->confirm,
         ])->jsRender();
     }
 
@@ -45,52 +45,96 @@ class jsCallback extends Callback implements jsExpressionable
     {
         $this->args = [];
 
-        foreach ($args as $key=>$val) {
+        foreach ($args as $key => $val) {
             if (is_numeric($key)) {
                 $key = 'c'.$key;
             }
             $this->args[$key] = $val;
         }
 
-        return parent::set(function () use ($callback) {
-            $chain = new jQuery(new jsExpression('this'));
+        parent::set(function () use ($callback) {
+            try {
+                $chain = new jQuery(new jsExpression('this'));
 
-            $values = [];
-            foreach ($this->args as $key=>$value) {
-                $values[] = isset($_POST[$key]) ? $_POST[$key] : null;
-            }
-
-            $response = call_user_func_array($callback, array_merge([$chain], $values));
-
-            if ($response === $chain) {
-                $response = null;
-            }
-
-            $actions = [];
-
-            if ($chain->_chain) {
-                $actions[] = $chain;
-            }
-
-            $response = $this->flatternArray($response);
-
-            foreach ($response as $r) {
-                if (is_string($r)) {
-                    $actions[] = new jsExpression('alert([])', [$r]);
-                } elseif ($r instanceof jsExpressionable) {
-                    $actions[] = $r;
-                } elseif ($r === null) {
-                    continue;
-                } else {
-                    throw new Exception(['Incorrect callback. Must be string or action.', 'r'=>$r]);
+                $values = [];
+                foreach ($this->args as $key => $value) {
+                    $values[] = isset($_POST[$key]) ? $_POST[$key] : null;
                 }
+
+                $response = call_user_func_array($callback, array_merge([$chain], $values));
+
+                $ajaxec = $this->getAjaxec($response, $chain);
+
+                $this->terminate($ajaxec);
+            } catch (\atk4\data\ValidationException $e) {
+                // Validation exceptions will be presented to user in a friendly way
+
+                $actions = [];
+                $actions[] = new jsExpression('alert([])', [$e->getMessage()]);
+
+                $ajaxec = implode(";\n", array_map(function (jsExpressionable $r) {
+                    return $r->jsRender();
+                }, $actions));
+
+                $m = new Message($e->getMessage());
+                $m->addClass('error');
+
+                $this->terminate($m->getHTML(), false);
+                // TODO, may have a bug here? passing HTML as ajaxec?
+                //$this->app->terminate(json_encode(['success' => false, 'message' => $m->getHTML()]));
             }
-
-            $ajaxec = implode(";\n", array_map(function (jsExpressionable $r) {
-                return $r->jsRender();
-            }, $actions));
-
-            $this->app->terminate(json_encode(['success'=>true, 'message'=>'Success', 'eval'=>$ajaxec]));
         });
+
+        return $this;
+    }
+
+    public function terminate($ajaxec, $success = true)
+    {
+        $this->app->terminate(json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]));
+    }
+
+    public function getAjaxec($response, $chain = null)
+    {
+        if (is_array($response) && $response[0] instanceof View) {
+            $response = $response[0];
+        }
+
+        if ($response instanceof View) {
+            $response = new jsExpression('$([html]).modal("show")', [
+                        'html' => '<div class="ui fullscreen modal"> <i class="close icon"></i>  <div class="content"> '.
+                        $response->render()
+                        .' </div> </div>',
+                    ]);
+        }
+
+        if ($response === $chain) {
+            $response = null;
+        }
+
+        $actions = [];
+
+        if ($chain->_chain) {
+            $actions[] = $chain;
+        }
+
+        $response = $this->flatternArray($response);
+
+        foreach ($response as $r) {
+            if (is_string($r)) {
+                $actions[] = new jsExpression('alert([])', [$r]);
+            } elseif ($r instanceof jsExpressionable) {
+                $actions[] = $r;
+            } elseif ($r === null) {
+                continue;
+            } else {
+                throw new Exception(['Incorrect callback. Must be string or action.', 'r' => $r]);
+            }
+        }
+
+        $ajaxec = implode(";\n", array_map(function (jsExpressionable $r) {
+            return $r->jsRender();
+        }, $actions));
+
+        return $ajaxec;
     }
 }

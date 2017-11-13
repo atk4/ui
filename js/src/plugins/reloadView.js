@@ -1,19 +1,16 @@
-import $ from 'jquery';
+import atkPlugin from 'plugins/atkPlugin';
 
-export default class reloadView {
-    constructor(element, options) {
-        const $element = $(element);
+export default class reloadView extends atkPlugin {
 
-        $element.spinner({
-            'loaderText': '',
-            'active': true,
-            'inline': true,
-            'centered': true,
-            'replace': true});
+    main() {
 
-        if(options.uri) {
-            $.get(options.uri, options.uri_options, (data) => {
-                $element.replaceWith(data);
+        if(this.settings.uri) {
+            this.$el.api({
+                on: 'now',
+                url: this.settings.uri,
+                data: this.settings.uri_options,
+                method: 'GET',
+                obj: this.$el
             });
         }
     }

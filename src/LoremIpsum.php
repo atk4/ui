@@ -69,10 +69,10 @@ class LoremIpsum extends Text
         $lorem = '';
 
         while ($words > 0) {
-            $sentence_length = rand(3, 10);
+            $sentence_length = mt_rand(3, 10);
 
             $lorem .= ucfirst($dictionary[array_rand($dictionary)]);
-            for ($i = 1; $i < $sentence_length; ++$i) {
+            for ($i = 1; $i < $sentence_length; $i++) {
                 $lorem .= ' '.$dictionary[array_rand($dictionary)];
             }
 
@@ -96,7 +96,7 @@ class LoremIpsum extends Text
     public function init()
     {
         parent::init();
-        for ($x = 0; $x < $this->size; ++$x) {
+        for ($x = 0; $x < $this->size; $x++) {
             $this->addParagraph($this->generateLorem($this->words * $this->size));
         }
     }

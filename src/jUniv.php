@@ -5,7 +5,7 @@ namespace atk4\ui;
 /**
  * Various helper functions for Agile UI.
  *
- * @method jQuery_Chain ajaxec()
+ * @method jQuery_Chain atkAjaxec()
  * @method jQuery_Chain successMessage()
  * @method jQuery_Chain errorMessage()
  * @method jQuery_Chain consoleError()
@@ -22,7 +22,7 @@ namespace atk4\ui;
  * @method jQuery_Chain datepicker()
  * @method jQuery_Chain button()
  * @method jQuery_Chain slider()
- * @method jQuery_Chain spinner()
+ * @method jQuery_Chain atkSpinner()
  * @method jQuery_Chain tabs()
  */
 class jUniv extends jsChain

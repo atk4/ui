@@ -3,14 +3,14 @@
 namespace atk4\ui\TableColumn;
 
 /**
- * Implements Checkbox column for selecting rows.
+ * Implements CheckBox column for selecting rows.
  */
-class Checkbox extends Generic
+class CheckBox extends Generic
 {
     public $class = null;
 
     /**
-     * Return action which will calculate and return array of all checkbox IDs, e.g.
+     * Return action which will calculate and return array of all CheckBox IDs, e.g.
      *
      * [3, 5, 20]
      */
@@ -28,18 +28,18 @@ class Checkbox extends Generic
         }
     }
 
-    public function getHeaderCellHTML(\atk4\data\Field $f = null)
+    public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
     {
         if (isset($f)) {
-            throw new Exception(['Checkbox must be placed in an empty column. Don\'t specify any field.', 'field'=>$f]);
+            throw new \atk4\ui\Exception(['CheckBox must be placed in an empty column. Don\'t specify any field.', 'field' => $f]);
         }
         $this->table->js(true)->find('.'.$this->class)->checkbox();
 
         return parent::getHeaderCellHTML($f);
     }
 
-    public function getDataCellHTML(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        return $this->getTag('body', ['div', 'class'=>'ui checkbox '.$this->class, ['input', 'type'=>'checkbox']]);
+        return $this->app->getTag('div', ['class' => 'ui checkbox '.$this->class], [['input', ['type' => 'checkbox']]]);
     }
 }

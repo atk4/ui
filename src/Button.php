@@ -21,7 +21,7 @@ class Button extends View
     /**
      * Additional icon that can appear on the right of the button.
      *
-     * @var [type]
+     * @var string|array|Icon
      */
     public $iconRight = null;
 
@@ -50,8 +50,8 @@ class Button extends View
             if ($this->icon) {
                 throw new Exception([
                     'Cannot use icon and iconRight simultaniously',
-                    'icon'     => $this->icon,
-                    'iconRight'=> $this->iconRight,
+                    'icon'      => $this->icon,
+                    'iconRight' => $this->iconRight,
                 ]);
             }
 

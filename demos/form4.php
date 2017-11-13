@@ -5,9 +5,9 @@
 require 'init.php';
 require 'database.php';
 
-$layout->add(['Header', 'Form automatically decided how many columns to use']);
+$app->add(['Header', 'Form automatically decided how many columns to use']);
 
-$form = $layout->add(['Form']);
+$form = $app->add(['Form']);
 $form->setModel(new Country($db));
 
 $form->onSubmit(function ($form) {

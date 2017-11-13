@@ -33,7 +33,7 @@ git branch release/$version
 git checkout release/$version
 
 # Find out previous version
-prev_version=$(git log --tags --simplify-by-decoration --pretty="format:%d" | grep -Eo '[0-9\.]+' | head -1)
+prev_version=$(git log --tags --simplify-by-decoration --pretty="format:%d" | grep -Eo '[0-9\.A-Z-]+' | head -1)
 
 echo "Releasing $prev_version -> $version"
 
@@ -50,13 +50,16 @@ done
 open "https://github.com/atk4/$product/compare/$prev_version...develop"
 
 # Update dependency versions
-sed -i "" -e '/atk4\/schema/s/dev-develop/\*/' composer.json # workaround composers inability to change both requries simultaniously
+sed -i "" -e '/atk4.*dev-develop/d' composer.json
+composer update
 composer require atk4/core atk4/data
 
 composer update
 ./vendor/phpunit/phpunit/phpunit  --no-coverage
 
-git commit -m "Set up stable dependencies for $version" composer.json
+sed -i "" "s|'https://cdn.rawgit.com/atk4/ui/.*|'https://cdn.rawgit.com/atk4/ui/$version/public',|" src/App.php
+sed -i "" "s|public \$version.*|public \$version = '$version';|" src/App.php
+git commit -m "Updated CDN and \$version in App.php to $version" src/App.php || echo "but its ok"
 
 
 echo "Press enter to publish the release"
@@ -65,12 +68,24 @@ read junk
 git commit -m "Added release notes for $version" CHANGELOG.md || echo "but its ok"
 merge_tag=$(git rev-parse HEAD)
 
+# use stable verisons
+git commit -m "Set up stable dependencies for $version" composer.json
+
 # Build jsLib and bundle
 (cd js; npm run build)
-sed  -i "" '/^lib/d' js/.gitignore
-git add js/lib
-sed -i "" "s|\$this->requireJS('http://ui.agiletoolkit.org/js/lib/atk4JS.js')|\$this->requireJS('https://cdn.rawgit.com/atk4/ui/$version/js/lib/atk4JS.js')|" src/App.php
-git commit -m "Add pre-built version of JS libraries" js
+
+# Build CSS
+lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
+uglifyjs --compress -- public/agileui.js > public/agileui.min.js
+
+echo '!agileui.css' >> public/.gitignore
+echo '!agileui.css.map' >> public/.gitignore
+echo '!agileui.min.js' >> public/.gitignore
+echo '!atk4JS.js' >> public/.gitignore
+echo '!atk4JS.min.js' >> public/.gitignore
+#sed  -i "" '/^lib/d' js/.gitignore
+git add public
+git commit -m "Build release $version" public
 
 git tag $version
 git push origin release/$version
