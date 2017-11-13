@@ -65,7 +65,10 @@ class Status extends Generic
         case 'negative':
             $ic = 'close';
             break;
-        case 'default':
+        case 'disabled':
+            $ic = '';
+            break;
+        case 'unknown':
             $ic = 'question';
             break;
         default:
