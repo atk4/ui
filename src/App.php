@@ -389,8 +389,8 @@ class App
     /**
      * Build a URL that application can use for call-backs.
      *
-     * @param array|string $page URL as string or array with page name as first element and other GET arguments
-     * @param boolean $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array|string $page           URL as string or array with page name as first element and other GET arguments
+     * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
      *
      * @return string
      */
