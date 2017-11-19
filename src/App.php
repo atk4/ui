@@ -389,12 +389,17 @@ class App
     /**
      * Build a URL that application can use for call-backs.
      *
-     * @param array|string $page URL as string or array with page name as first element and other GET arguments
+     * @param array|string $page           URL as string or array with page name as first element and other GET arguments
+     * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
      *
      * @return string
      */
-    public function url($page = [])
+    public function url($page = [], $needRequestUri = false)
     {
+        if ($needRequestUri) {
+            return $_SERVER['REQUEST_URI'];
+        }
+
         $sticky = $this->sticky_get_arguments;
         $result = [];
 

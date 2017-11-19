@@ -114,10 +114,6 @@ class Callback
      */
     public function getURL($mode = 'callback')
     {
-        if ($this->POST_trigger) {
-            return $_SERVER['REQUEST_URI'];
-        }
-
-        return $this->app->url([$this->name => $mode]);
+        return $this->app->url([$this->name => $mode], $this->POST_trigger);
     }
 }
