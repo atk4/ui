@@ -344,7 +344,6 @@ class Table extends Lister
 
             $this->renderRow($this->model);
 
-
             $rows++;
         }
 
@@ -360,8 +359,8 @@ class Table extends Lister
         return View::renderView();
     }
 
-    function renderRow() {
-
+    public function renderRow()
+    {
         $this->t_row->set($this->model);
 
         if ($this->use_html_tags) {
