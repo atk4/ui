@@ -73,6 +73,14 @@ Our Test-suite now includes broser testing. #262 #263
 
 Fixed bug in dependencies, which was requesting behat/mink-zombie-driver as a dependency.
 
+### 1.3.2
+
+Fixed issues related to PHP 7.2
+
+ - Template.php uses depreciated each(). #278
+ - using url() on index.php not working. #279
+ - make url() more flexible (for 3rd party integrations), #271
+
 
 ## 1.2
 
