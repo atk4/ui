@@ -11,3 +11,5 @@ $t->addParagraph('This is just collection of tests. You are welcome to explore t
 $app->add(['Button', 'See the sources', 'right labeled', 'icon' => 'right arrow'])->link('https://github.com/atk4/ui/tree/develop/demos');
 $app->add(['Button', 'Visit AgileToolkit.org Website', 'right labeled', 'icon' => 'right arrow'])->link('http://agiletoolkit.org/');
 $app->add(['Button', 'Open Documentation', 'right labeled', 'icon' => 'right arrow'])->link('http://agile-ui.readthedocs.io/');
+
+$app->add(['Button'])->link(['foo'=>'bar']);
