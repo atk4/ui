@@ -404,7 +404,13 @@ class App
         $result = [];
 
         if ($this->page === null) {
-            $this->page = basename($this->getRequestURI(), '.php');
+            $uri = $this->getRequestURI();
+
+            if (substr($uri, -1, 1) == '/') {
+                $uri .= 'index.php';
+            }
+
+            $this->page = basename($uri, '.php');
         }
 
         // if page passed as string, then simply use it
