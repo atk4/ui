@@ -407,10 +407,10 @@ class App
             $uri = $this->getRequestURI();
 
             if (substr($uri, -1, 1) == '/') {
-                $uri .= 'index.php';
+                $this->page = 'index';
+            } else {
+                $this->page = basename($uri, '.php');
             }
-
-            $this->page = basename($uri, '.php');
         }
 
         // if page passed as string, then simply use it
