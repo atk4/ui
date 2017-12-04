@@ -14,10 +14,32 @@ class Console extends View implements \Psr\Log\LoggerInterface
     public $ui = 'inverted black segment';
     public $element = 'pre';
 
+    /**
+     * Will be set to $true while executing callback. Some methods
+     * will use this to automatically schedule their own callback
+     * and allowing you a cleaner syntax, such as
+     *
+     * $console->setModel($user, 'generateReport');
+     *
+     * @var boolean
+     */
     protected $sseInProgress = false;
 
+    /**
+     * Stores object jsSSE which is used for communication
+     *
+     * @var jsSSE
+     */
     public $sse;
 
+    /**
+     * Supply callback which will be executed in "background" sending
+     * your console output.
+     *
+     * @param $callback string
+     *
+     * @return $this
+     */
     public function set($callback)
     {
         $this->sse = $this->add('jsSSE');
@@ -47,14 +69,23 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
     /**
      * Output a single line to the console.
+     *
+     * @param $text string
+     *
+     * @return $this
      */
     public function output($text)
     {
         $this->sse->send($this->js()->append(htmlspecialchars($text).'<br/>'));
+        return $this;
     }
 
     /**
-     * Output un-escaped HTML line.
+     * Output un-escaped HTML line. Use this to send HTML.
+     *
+     * @param $text string
+     *
+     * @return $this
      */
     public function outputHTML($text)
     {
@@ -94,6 +125,16 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * for running:.
      *
      * $app->add('Console')->setModel(new User($db), 'generateReports');
+     *
+     * You can enable output from inside your method if you:
+     *
+     *  - implement \atk4\core\DebugTrait in your model
+     *  - use $this->debug() or $this->info()
+     *  - if you wish to get log from other objects, be sure to switch debug on with $obj->debug = true;
+     *
+     * @param $model \atk4\data\Model
+     * @param $method string 
+     * @param $args array
      */
     public function setModel(\atk4\data\Model $model, string $method, $args = [])
     {
@@ -161,6 +202,4 @@ class Console extends View implements \Psr\Log\LoggerInterface
     {
         return $this->$level($str, $args);
     }
-
-    // Methods to be called only from inside callback
 }
