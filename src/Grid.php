@@ -143,13 +143,13 @@ class Grid extends View
         }
     }
 
-    public function addAction($label, $action)
+    public function addAction($label, $action, $confirm = false)
     {
         if (!$this->actions) {
             $this->actions = $this->table->addColumn(null, 'Actions');
         }
 
-        $this->actions->addAction($label, $action);
+        return $this->actions->addAction($label, $action, $confirm);
     }
 
     /**

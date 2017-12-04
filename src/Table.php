@@ -178,42 +178,6 @@ class Table extends Lister
             throw new Exception(['Value of $columnDecorator argument is incorrect', 'columnDecorator' => $columnDecorator]);
         }
 
-        /*
-        $field = null;
-        if (is_string($name)) {
-            $field = $this->model->hasElement($name);
-        }
-
-        // No such field or not a string, so use it as columnDef
-        if (!$field && !$columnDef) {
-            $columnDef = $name;
-            $name = null;
-        }
-
-        // At this point $columnDef is surely there and we might have field also.
-        if ($columnDef === null) {
-            $columnDef = $this->_columnFactory($field);
-        } elseif (is_string($columnDef) || is_array($columnDef)) {
-            if (!$this->app) {
-                throw new Exception(['You can only specify column type by name if Table is in a render-tree']);
-            }
-
-            $columnDef = $this->factory($columnDef);
-        }
-
-        $columnDef->table = $this;
-        if (isset($columnDef->_initializerTrait) && !$columnDef->_initialized) {
-            $this->_add($columnDef);
-        }
-
-        if (!$columnDef instanceof TableColumn\Generic) {
-            throw new Exception([
-                'Table columns must extend TableColumn\Generic',
-                'column'=> $columnDef,
-            ]);
-        }
-         */
-
         if (is_null($name)) {
             $this->columns[] = $columnDecorator;
         } elseif (!is_string($name)) {

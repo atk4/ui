@@ -27,6 +27,13 @@ class Generic
     public $attr = [];
 
     /**
+     * If set, will override column header value
+     *
+     * @var string
+     */
+    public $caption = null;
+
+    /**
      * Constructor.
      *
      * @param array $defaults
@@ -123,7 +130,7 @@ class Generic
             throw new \atk4\ui\Exception(['How $table could not be set??', 'f' => $f, 'value' => $value]);
         }
         if ($f === null) {
-            return $this->getTag('head', '', $this->table->sortable ? ['class' => ['disabled']] : []);
+            return $this->getTag('head', $this->caption ?: '', $this->table->sortable ? ['class' => ['disabled']] : []);
         }
 
         // If table is being sorted by THIS column, set the proper class
