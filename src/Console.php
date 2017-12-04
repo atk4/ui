@@ -17,16 +17,16 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * Will be set to $true while executing callback. Some methods
      * will use this to automatically schedule their own callback
-     * and allowing you a cleaner syntax, such as
+     * and allowing you a cleaner syntax, such as.
      *
      * $console->setModel($user, 'generateReport');
      *
-     * @var boolean
+     * @var bool
      */
     protected $sseInProgress = false;
 
     /**
-     * Stores object jsSSE which is used for communication
+     * Stores object jsSSE which is used for communication.
      *
      * @var jsSSE
      */
@@ -77,6 +77,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     public function output($text)
     {
         $this->sse->send($this->js()->append(htmlspecialchars($text).'<br/>'));
+
         return $this;
     }
 
@@ -133,7 +134,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *  - if you wish to get log from other objects, be sure to switch debug on with $obj->debug = true;
      *
      * @param $model \atk4\data\Model
-     * @param $method string 
+     * @param $method string
      * @param $args array
      */
     public function setModel(\atk4\data\Model $model, string $method, $args = [])
