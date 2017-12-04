@@ -67,6 +67,8 @@ class Console extends View
      * This method can be executed from inside callback or
      * without it.
      */
+
+    /*
     public function runCommand($exec, $args = [])
     {
         if (!$this->sseInProgress) {
@@ -76,11 +78,12 @@ class Console extends View
             return null;
         }
 
-        // TODO: implement command
-        //  - argument escaping
-        //  - stdout / stderr streaming
-        //  - return exit error code
+
+        // not implemented here
+        //
+        //
     }
+     */
 
     /**
      * Execute method of a certain model. That's a short-hand method
