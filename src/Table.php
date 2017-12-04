@@ -336,7 +336,9 @@ class Table extends Lister
         $rows = 0;
         foreach ($this->model as $this->current_id => $tmp) {
             $this->current_row = $this->model->get();
-            $this->hook('beforeRow');
+            if ($this->hook('beforeRow') === false) {
+                continue;
+            }
 
             if ($this->totals_plan) {
                 $this->updateTotals();
@@ -359,6 +361,10 @@ class Table extends Lister
         return View::renderView();
     }
 
+    /**
+     * Render individual row. Override this method if you want to do more
+     * decoration
+     */
     public function renderRow()
     {
         $this->t_row->set($this->model);
