@@ -80,6 +80,8 @@ class App
     /** @var View For internal use */
     public $html = null;
 
+    public $logger = null;
+
     /**
      * Constructor.
      *
