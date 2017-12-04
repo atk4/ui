@@ -336,44 +336,13 @@ class Table extends Lister
         $rows = 0;
         foreach ($this->model as $this->current_id => $tmp) {
             $this->current_row = $this->model->get();
+            $this->hook('beforeRow');
 
             if ($this->totals_plan) {
                 $this->updateTotals();
             }
 
-            $this->t_row->set($this->model);
-
-            if ($this->use_html_tags) {
-                // Prepare row-specific HTML tags.
-                $html_tags = [];
-
-                foreach ($this->hook('getHTMLTags', [$this->model]) as $ret) {
-                    if (is_array($ret)) {
-                        $html_tags = array_merge($html_tags, $ret);
-                    }
-                }
-
-                foreach ($this->columns as $name => $columns) {
-                    if (!is_array($columns)) {
-                        $columns = [$columns];
-                    }
-                    $field = $this->model->hasElement($name);
-                    foreach ($columns as $column) {
-                        if (!method_exists($column, 'getHTMLTags')) {
-                            continue;
-                        }
-                        $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
-                    }
-                }
-
-                // Render row and add to body
-                $this->t_row->setHTML($html_tags);
-                $this->t_row->set('_id', $this->model->id);
-                $this->template->appendHTML('Body', $this->t_row->render());
-                $this->t_row->del(array_keys($html_tags));
-            } else {
-                $this->template->appendHTML('Body', $this->t_row->render());
-            }
+            $this->renderRow($this->model);
 
             $rows++;
         }
@@ -388,6 +357,43 @@ class Table extends Lister
         }
 
         return View::renderView();
+    }
+
+    public function renderRow()
+    {
+        $this->t_row->set($this->model);
+
+        if ($this->use_html_tags) {
+            // Prepare row-specific HTML tags.
+            $html_tags = [];
+
+            foreach ($this->hook('getHTMLTags', [$this->model]) as $ret) {
+                if (is_array($ret)) {
+                    $html_tags = array_merge($html_tags, $ret);
+                }
+            }
+
+            foreach ($this->columns as $name => $columns) {
+                if (!is_array($columns)) {
+                    $columns = [$columns];
+                }
+                $field = $this->model->hasElement($name);
+                foreach ($columns as $column) {
+                    if (!method_exists($column, 'getHTMLTags')) {
+                        continue;
+                    }
+                    $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
+                }
+            }
+
+            // Render row and add to body
+            $this->t_row->setHTML($html_tags);
+            $this->t_row->set('_id', $this->model->id);
+            $this->template->appendHTML('Body', $this->t_row->render());
+            $this->t_row->del(array_keys($html_tags));
+        } else {
+            $this->template->appendHTML('Body', $this->t_row->render());
+        }
     }
 
     /**
