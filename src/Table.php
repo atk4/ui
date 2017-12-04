@@ -363,7 +363,7 @@ class Table extends Lister
 
     /**
      * Render individual row. Override this method if you want to do more
-     * decoration
+     * decoration.
      */
     public function renderRow()
     {
