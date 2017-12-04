@@ -98,7 +98,8 @@ class CRUD extends Grid
         return $m;
     }
 
-    public function renderView() {
+    public function renderView()
+    {
         if ($this->can('u')) {
             $this->addAction(['icon' => 'edit'], new jsModal('Edit', $this->pageEdit, [$this->name => $this->jsRow()->data('id')]));
 

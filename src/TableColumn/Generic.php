@@ -27,7 +27,7 @@ class Generic
     public $attr = [];
 
     /**
-     * If set, will override column header value
+     * If set, will override column header value.
      *
      * @var string
      */

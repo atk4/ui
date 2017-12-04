@@ -16,7 +16,7 @@ class Actions extends Generic
     }
 
     /**
-     * Adds a new button which will execute $callback when clicked. 
+     * Adds a new button which will execute $callback when clicked.
      *
      * Returns button object
      */
@@ -39,9 +39,10 @@ class Actions extends Generic
 
     /**
      * Adds a new button which will open a modal dialog and dynamically
-     * load contents through $callback. Will pass a virtual page
+     * load contents through $callback. Will pass a virtual page.
      */
-    public function addModal($button, $title, $callback) {
+    public function addModal($button, $title, $callback)
+    {
         $modal = $this->owner->owner->add(['Modal', 'title'=>$title]);
         $modal->set($callback);
 
