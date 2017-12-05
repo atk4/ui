@@ -314,14 +314,12 @@ class Template implements \ArrayAccess
             $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
         }
 
-        if (is_array($tag)) {
-            if (is_null($value)) {
-                foreach ($tag as $s => $v) {
-                    $this->trySet($s, $v, $encode);
-                }
-
-                return $this;
+        if (is_array($tag) && $value === null) {
+            foreach ($tag as $s => $v) {
+                $this->trySet($s, $v, $encode);
             }
+
+            return $this;
         }
 
         if (is_array($value)) {
