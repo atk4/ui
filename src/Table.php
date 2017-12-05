@@ -401,7 +401,6 @@ class Table extends Lister
         // Render row and add to body
         $this->t_row->set('_id', $this->model->id);
         $this->template->appendHTML('Body', $this->t_row->render());
-
     }
 
     /**
