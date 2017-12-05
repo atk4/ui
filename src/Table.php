@@ -371,6 +371,7 @@ class Table extends Lister
     {
         $this->t_row = new Template($this->t_row_master);
         $this->t_row->app = $this->app;
+        $this->t_row->set('_id', $this->model->id);
         $this->t_row->set($m ?: $this->model);
 
         if ($this->use_html_tags) {
@@ -399,7 +400,6 @@ class Table extends Lister
         }
 
         // Render row and add to body
-        $this->t_row->set('_id', $this->model->id);
         $this->template->appendHTML('Body', $this->t_row->render());
     }
 
