@@ -5,6 +5,7 @@ require 'init.php';
 class Test extends \atk4\data\Model
 {
     use \atk4\core\DebugTrait;
+    use \atk4\core\AppScopeTrait;
 
     public function generateReport()
     {
@@ -32,7 +33,7 @@ $app->add('Console')->set(function ($console) {
     //$console->send(new \atk4\ui\jsExpression('alert(1)'));
 });
 
-$app->add('Console')->setModel(new Test(), 'generateReport');
+$app->add('Console')->setModel($app->add(new Test()), 'generateReport');
 
 exit;
 $app->add(['ui' => 'divider']);

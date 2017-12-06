@@ -63,7 +63,7 @@ class jsCallback extends Callback implements jsExpressionable
 
                 $response = call_user_func_array($callback, array_merge([$chain], $values));
 
-                $ajaxec = $this->getAjaxec($response, $chain);
+                $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
 
                 $this->terminate($ajaxec);
             } catch (\atk4\data\ValidationException $e) {
@@ -113,7 +113,7 @@ class jsCallback extends Callback implements jsExpressionable
 
         $actions = [];
 
-        if ($chain->_chain) {
+        if ($chain && $chain->_chain) {
             $actions[] = $chain;
         }
 

@@ -40,6 +40,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * @return $this
      */
+    public $_output_bypass = false;
+
     public function set($callback)
     {
         $this->sse = $this->add('jsSSE');
@@ -48,6 +50,27 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $this->sseInProgress = true;
 
             try {
+                $tmp = true;
+
+
+                ob_implicit_flush(true);
+                ob_start(function($content) {
+                    if ($this->_output_bypass) {
+                        return $content;
+                    }
+
+                    $output = '';
+                    $this->sse->echoFunction = function($str) use (&$output) {
+                        $output .= $str;
+                    };
+                    $this->output($content);
+                    $this->sse->echoFunction = false;
+
+                    return $output;
+                }, 2);
+
+
+
                 call_user_func($callback, $this);
             } catch (\atk4\core\Exception $e) {
                 $lines = explode("\n", $e->getHTMLText());
@@ -76,7 +99,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function output($text)
     {
+        $this->_output_bypass=true;
         $this->sse->send($this->js()->append(htmlspecialchars($text).'<br/>'));
+        $this->_output_bypass=false;
         return $this;
     }
 
@@ -89,7 +114,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function outputHTML($text)
     {
+        $this->_output_bypass=true;
         $this->sse->send($this->js()->append($text.'<br/>'));
+        $this->_output_bypass=false;
     }
 
     /**
@@ -147,15 +174,19 @@ class Console extends View implements \Psr\Log\LoggerInterface
         }
 
         // temporarily override app logging
-        $old_logger = $model->app->logger;
-        $model->app->logger = $this;
+        if (isset($model->app)) {
+            $old_logger = $model->app->logger;
+            $model->app->logger = $this;
+        }
 
         $this->output('--[ Executing '.get_class($model).'->'.$method.' ]--------------');
         $model->debug = true;
         $result = call_user_func_array([$model, $method], $args);
         $this->output('--[ Result: '.json_encode($result).' ]------------');
 
-        $model->app->logger = $old_logger;
+        if (isset($model->app)) {
+            $model->app->logger = $old_logger;
+        }
     }
 
     public function emergency($str, $args = [])

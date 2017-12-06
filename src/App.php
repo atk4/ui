@@ -210,7 +210,9 @@ class App
      */
     public function terminate($output = null)
     {
-        echo $output;
+        if ($output !== null) {
+            echo $output;
+        }
         $this->run_called = true; // prevent shutdown function from triggering.
         exit;
     }
