@@ -437,45 +437,51 @@ class Table extends Lister
      */
     public function updateTotals()
     {
-        foreach ($this->totals_plan as $key => $val) {
+        foreach ($this->totals_plan as $key => $f) {
 
-            // if value is array, then we treat it as built-in or callable aggregate method
-            if (is_array($val)) {
-                $f = $val[0]; // shortcut
+            // backward-compatibility
+            if (is_array($f) && isset($f[0]) && !is_object($f[0])) {
+                $f = $f[0];
+            }
 
-                // initial value is always 0
-                if (!isset($this->totals[$key])) {
-                    $this->totals[$key] = 0;
+            // initial value is always 0
+            if (!isset($this->totals[$key])) {
+                $this->totals[$key] = 0;
+            }
+
+            // built-in methods
+            if (is_string($f)) {
+                switch ($f) {
+                    case 'sum':
+                        $this->totals[$key] += $this->model[$key];
+                        break;
+                    case 'count':
+                        $this->totals[$key] += 1;
+                        break;
+                    case 'min':
+                        if ($this->model[$key] < $this->totals[$key]) {
+                            $this->totals[$key] = $this->model[$key];
+                        }
+                        break;
+                    case 'max':
+                        if ($this->model[$key] > $this->totals[$key]) {
+                            $this->totals[$key] = $this->model[$key];
+                        }
+                        break;
+                    default:
+                        throw new Exception(['Aggregation method does not exist', 'method' => $f]);
                 }
 
-                // callable support
-                // arguments - current value, key, \atk4\ui\Table object
-                if (is_callable($f)) {
-                    $this->totals[$key] += (call_user_func_array($f, [$this->model[$key], $key, $this]) ?: 0);
-                }
-                // built-in methods
-                elseif (is_string($f)) {
-                    switch ($f) {
-                        case 'sum':
-                            $this->totals[$key] += $this->model[$key];
-                            break;
-                        case 'count':
-                            $this->totals[$key] += 1;
-                            break;
-                        case 'min':
-                            if ($this->model[$key] < $this->totals[$key]) {
-                                $this->totals[$key] = $this->model[$key];
-                            }
-                            break;
-                        case 'max':
-                            if ($this->model[$key] > $this->totals[$key]) {
-                                $this->totals[$key] = $this->model[$key];
-                            }
-                            break;
-                        default:
-                            throw new Exception(['Aggregation method does not exist', 'method' => $f]);
-                    }
-                }
+                return;
+            }
+
+            // callable support:
+            // arguments - current value, key, \atk4\ui\Table object
+            if (is_callable($f)) {
+                $val = call_user_func_array($f, [$this->model[$key], $key, $this]);
+                $this->totals[$key] += ($val ?: 0);
+
+                return;
             }
         }
     }
