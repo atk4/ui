@@ -448,10 +448,10 @@ class Table extends Lister
                     $this->totals[$key] = 0;
                 }
 
-                // closure support
+                // callable support
                 // arguments - current value, key, \atk4\ui\Table object
-                if ($f instanceof \Closure) {
-                    $this->totals[$key] += ($f($this->model[$key], $key, $this) ?: 0);
+                if (is_callable($f)) {
+                    $this->totals[$key] += (call_user_func_array($f, [$this->model[$key], $key, $this]) ?: 0);
                 }
                 // built-in methods
                 elseif (is_string($f)) {
