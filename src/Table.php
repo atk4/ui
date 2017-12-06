@@ -439,9 +439,9 @@ class Table extends Lister
     {
         foreach ($this->totals_plan as $key => $f) {
 
-            // backward-compatibility
-            if (is_array($f) && isset($f[0]) && !is_object($f[0])) {
-                $f = $f[0];
+            // if it's just string, then it's a title - we ignore that
+            if (is_string($f)) {
+                continue;
             }
 
             // initial value is always 0
@@ -450,6 +450,9 @@ class Table extends Lister
             }
 
             // built-in methods
+            if (is_array($f) && isset($f[0]) && !is_callable($f)) {
+                $f = $f[0];
+            }
             if (is_string($f)) {
                 switch ($f) {
                     case 'sum':
