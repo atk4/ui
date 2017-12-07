@@ -2,6 +2,8 @@
 Core Concepts
 =============
 
+.. php:namespace:: atk4\ui
+
 Agile Toolkit and Agile UI is built by following the core concepts. Understanding the
 concepts is very important especially if you plan to write and distribute your own
 add-ons.
@@ -136,8 +138,8 @@ Once the concept is established, it can even be used on a higher level, for exam
 
 .. _virtualpage:
 
-VirtualPage and Loader
-======================
+VirtualPage
+===========
 
 Building on the foundation of :ref:`callback`, components :php:class:`VirtualPage` and :php:class:`Loader`
 exist to enhance other Components with dynamically loadable content. Here is example for :php:class:`Tabs`::
@@ -158,6 +160,7 @@ find out how:
     :maxdepth: 4
 
     virtualpage
+
 
 
 Documentation is coming soon.
