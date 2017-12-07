@@ -16,6 +16,7 @@ class AutoComplete extends Input
     public $search;
 
     public $plus = false; // set this to cerate right-aligned button for adding a new a new record
+    public $cache = false; // set this to cache initial result in session storage.
 
     public function init()
     {
@@ -34,8 +35,10 @@ class AutoComplete extends Input
             'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
             'apiSettings' => [
                 'url' => $this->getCallbackURL().'&q={query}',
+                // Note on semantic api cache. if property is present, either true or false, cache will not work.
+                // Need to be set to 'local' or remove completely for caching to work.
+                'cache' => ($this->cache) ? 'local' : false,
             ],
-            /*'filterRemoteData'  => true,*/
         ]);
         $this->js(true, $chain);
 
@@ -59,7 +62,7 @@ class AutoComplete extends Input
                 return [
                     $modal_chain,
                     $ac_chain,
-                    ];
+                ];
             });
         });
         if ($this->action) {
