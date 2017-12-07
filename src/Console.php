@@ -101,11 +101,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     {
         $this->_output_bypass=true;
         $this->sse->send($this->js()->append(htmlspecialchars($text).'<br/>'));
-<<<<<<< HEAD
         $this->_output_bypass=false;
-=======
-
->>>>>>> 10c0016d767367e4399e81ea082d5cb9ec7a3d69
         return $this;
     }
 
