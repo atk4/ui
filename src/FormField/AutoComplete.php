@@ -10,7 +10,7 @@ class AutoComplete extends Input
     public $ui = 'input';
 
     /**
-     * Object used to capture requests from the browser
+     * Object used to capture requests from the browser.
      *
      * @var Callback
      */
@@ -21,11 +21,11 @@ class AutoComplete extends Input
      *
      * @var string
      */
-    public $empty = '...';  
+    public $empty = '...';
 
     /**
      * Either set this to array of fields which must be searched (e.g. "name", "surname"), or define this
-     * as a callback to be executed callback($model, $search_string);
+     * as a callback to be executed callback($model, $search_string);.
      *
      * If left null, then search will be performed on a model's title field
      *
@@ -39,14 +39,13 @@ class AutoComplete extends Input
      * true = will use "Add new" label
      * string = will use your string
      *
-     * @var null|boolean|string
+     * @var null|bool|string
      */
     public $plus = false;
 
-
     /**
      * Semantic UI uses cache to remmber choices. For dynamic sites this may be dangerous, so
-     * it's disabled by default. To switch cache on, set 'cache'=>'local'
+     * it's disabled by default. To switch cache on, set 'cache'=>'local'.
      *
      * Use this config variable for default sttings passed to Semantic UI .dropdown()
      *
