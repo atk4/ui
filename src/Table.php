@@ -46,11 +46,12 @@ class Table extends Lister
 
     /**
      * Determines a strategy on how totals will be calculated. Do not touch those fields
-     * direcly, instead use addTotals().
+     * directly, instead use addTotals().
+     * You can call addTotals() multiple times to add multiple total rows (and calculations).
      *
-     * @var bool
+     * @var array
      */
-    public $totals_plan = false;
+    public $totals_plan = [];
 
     /**
      * Setting this to false will hide header row.
@@ -278,6 +279,9 @@ class Table extends Lister
     ];
 
     /**
+     * Adds totals calculation plan.
+     * You can call this method multiple times to add more than one totals row.
+     *
      * Override works like this:.
      * [
      *   'name'=>'Totals for {$num} rows:',
@@ -289,7 +293,7 @@ class Table extends Lister
      */
     public function addTotals($plan = [])
     {
-        $this->totals_plan = $plan;
+        $this->totals_plan[] = $plan;
     }
 
     /**
@@ -395,8 +399,10 @@ class Table extends Lister
         if (!$rows) {
             $this->template->appendHTML('Body', $this->t_empty->render());
         } elseif ($this->totals_plan) {
-            $this->t_totals->setHTML('cells', $this->getTotalsRowHTML());
-            $this->template->appendHTML('Foot', $this->t_totals->render());
+            foreach ($this->totals_plan as $plan_id => $plan) {
+                $this->t_totals->setHTML('cells', $this->getTotalsRowHTML($plan_id));
+                $this->template->appendHTML('Foot', $this->t_totals->render());
+            }
         }
 
         return View::renderView();
@@ -473,47 +479,62 @@ class Table extends Lister
 
     /**
      * Executed for each row if "totals" are enabled to add up values.
+     * It will calculate requested totals for all total plans.
      */
     public function updateTotals()
     {
-        foreach ($this->totals_plan as $key => $val) {
+        foreach ($this->totals_plan as $plan_id => $plan) {
+            $t = &$this->totals[$plan_id]; // shortcut
 
-            // if value is array, then we treat it as built-in or callable aggregate method
-            if (is_array($val)) {
-                $f = $val[0]; // shortcut
+            foreach ($plan as $key => $f) {
+
+                // if it's just string, then it's a title - we ignore that
+                if (is_string($f)) {
+                    continue;
+                }
 
                 // initial value is always 0
-                if (!isset($this->totals[$key])) {
-                    $this->totals[$key] = 0;
+                if (!isset($t[$key])) {
+                    $t[$key] = 0;
                 }
 
-                // closure support
-                // arguments - current value, key, \atk4\ui\Table object
-                if ($f instanceof \Closure) {
-                    $this->totals[$key] += ($f($this->model[$key], $key, $this) ?: 0);
-                }
                 // built-in methods
-                elseif (is_string($f)) {
+                if (is_array($f) && isset($f[0]) && !is_callable($f)) {
+                    $f = $f[0];
+                }
+                if (is_string($f)) {
                     switch ($f) {
                         case 'sum':
-                            $this->totals[$key] += $this->model[$key];
+                            $t[$key] += $this->model[$key];
                             break;
                         case 'count':
-                            $this->totals[$key] += 1;
+                            $t[$key] += 1;
                             break;
                         case 'min':
-                            if ($this->model[$key] < $this->totals[$key]) {
-                                $this->totals[$key] = $this->model[$key];
+                            if ($this->model[$key] < $t[$key]) {
+                                $t[$key] = $this->model[$key];
                             }
                             break;
                         case 'max':
-                            if ($this->model[$key] > $this->totals[$key]) {
-                                $this->totals[$key] = $this->model[$key];
+                            if ($this->model[$key] > $t[$key]) {
+                                $t[$key] = $this->model[$key];
                             }
                             break;
                         default:
                             throw new Exception(['Aggregation method does not exist', 'method' => $f]);
                     }
+
+                    continue;
+                }
+
+                // callable support:
+                // arguments - current value, key, \atk4\ui\Table object
+                if (is_callable($f)) {
+                    if ($val = call_user_func_array($f, [$this->model[$key], $key, $this])) {
+                        $t[$key] += $val;
+                    }
+
+                    continue;
                 }
             }
         }
@@ -549,30 +570,37 @@ class Table extends Lister
 
     /**
      * Responds with HTML to be inserted in the footer row that would
-     * contain totals for all columns.
+     * contain totals for all columns. This generates only one totals row
+     * for particular totals plan with $plan_id.
+     *
+     * @param int $plan_id
      *
      * @return string
      */
-    public function getTotalsRowHTML()
+    public function getTotalsRowHTML($plan_id)
     {
+        // shortcuts
+        $plan = &$this->totals_plan[$plan_id];
+        $totals = &$this->totals[$plan_id];
+
         $output = [];
         foreach ($this->columns as $name => $column) {
             // if no totals plan, then show dash, but keep column formatting
-            if (!isset($this->totals_plan[$name])) {
+            if (!isset($plan[$name])) {
                 $output[] = $column->getTag('foot', '-');
                 continue;
             }
 
             // if totals plan is set as array, then show formatted value
-            if (is_array($this->totals_plan[$name])) {
+            if (is_array($plan[$name])) {
                 // todo - format
                 $field = $this->model->getElement($name);
-                $output[] = $column->getTotalsCellHTML($field, $this->totals[$name]);
+                $output[] = $column->getTotalsCellHTML($field, $totals[$name]);
                 continue;
             }
 
             // otherwise just show it, for example, "Totals:" cell
-            $output[] = $column->getTag('foot', $this->totals_plan[$name]);
+            $output[] = $column->getTag('foot', $plan[$name]);
         }
 
         return implode('', $output);
