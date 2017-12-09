@@ -399,7 +399,7 @@ class Table extends Lister
         if (!$rows) {
             $this->template->appendHTML('Body', $this->t_empty->render());
         } elseif ($this->totals_plan) {
-            foreach ($this->totals_plan as $plan_id => $plan) {
+            foreach (array_keys($this->totals_plan) as $plan_id) {
                 $this->t_totals->setHTML('cells', $this->getTotalsRowHTML($plan_id));
                 $this->template->appendHTML('Foot', $this->t_totals->render());
             }
