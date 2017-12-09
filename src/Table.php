@@ -493,9 +493,11 @@ class Table extends Lister
                     continue;
                 }
 
-                // initial value is always 0
+                // simply initialize array key, but don't set any value
+                // we can't set initial value to 0, because min/max or some custom totals
+                // methods can use this 0 as value for comparison and that's wrong
                 if (!isset($t[$key])) {
-                    $t[$key] = 0;
+                    $t[$key] = null;
                 }
 
                 // built-in methods
@@ -505,17 +507,29 @@ class Table extends Lister
                 if (is_string($f)) {
                     switch ($f) {
                         case 'sum':
-                            $t[$key] += $this->model[$key];
+                            // set initial value
+                            $t[$key] = ($t[$key] === null ? 0 : $t[$key]);
+                            // sum
+                            $t[$key] = $t[$key] + $this->model[$key];
                             break;
                         case 'count':
-                            $t[$key] += 1;
+                            // set initial value
+                            $t[$key] = ($t[$key] === null ? 0 : $t[$key]);
+                            // increment
+                            $t[$key]++;
                             break;
                         case 'min':
+                            // set initial value
+                            $t[$key] = ($t[$key] === null ? $this->model[$key] : $t[$key]);
+                            // do comparison
                             if ($this->model[$key] < $t[$key]) {
                                 $t[$key] = $this->model[$key];
                             }
                             break;
                         case 'max':
+                            // set initial value
+                            $t[$key] = ($t[$key] === null ? $this->model[$key] : $t[$key]);
+                            // do comparison
                             if ($this->model[$key] > $t[$key]) {
                                 $t[$key] = $this->model[$key];
                             }
@@ -527,12 +541,16 @@ class Table extends Lister
                     continue;
                 }
 
-                // callable support:
-                // arguments - current value, key, \atk4\ui\Table object
+                // callable support
+                // arguments:
+                // - current total value
+                // - current field value from model
+                // - key (column/field name)
+                // - \atk4\ui\Table object itself
+                // should return new total value (for example, current value + current field value)
+                // NOTE: Keep in mind, that current total value initially will be null !
                 if (is_callable($f)) {
-                    if ($val = call_user_func_array($f, [$this->model[$key], $key, $this])) {
-                        $t[$key] += $val;
-                    }
+                    $t[$key] = call_user_func_array($f, [$t[$key], $this->model[$key], $key, $this]);
 
                     continue;
                 }
@@ -592,7 +610,7 @@ class Table extends Lister
             }
 
             // if totals plan is set as array, then show formatted value
-            if (is_array($plan[$name])) {
+            if (is_array($plan[$name]) || is_callable($plan[$name])) {
                 // todo - format
                 $field = $this->model->getElement($name);
                 $output[] = $column->getTotalsCellHTML($field, $totals[$name]);
