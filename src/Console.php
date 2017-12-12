@@ -177,7 +177,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * @param $method string
      * @param $args array
      */
-    public function setModel(\atk4\data\Model $model, string $method = null, $args = [])
+    public function setModel(\atk4\data\Model $model, $method = null, $args = [])
     {
         if (!$method) {
             throw new Exception('You must specify $method argument');
