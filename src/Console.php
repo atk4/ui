@@ -112,7 +112,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function output($text)
     {
-        $this->output(htmlspecialchars($text));
+        $this->outputHTML(htmlspecialchars($text));
 
         return $this;
     }
