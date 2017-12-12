@@ -206,47 +206,47 @@ class Console extends View implements \Psr\Log\LoggerInterface
         }
     }
 
-    public function emergency($str, $args = [])
+    public function emergency($str, array $args = [])
     {
         return $this->outputHTML("<font color='pink'>".htmlspecialchars($str).'</font>');
     }
 
-    public function alert($str, $args = [])
+    public function alert($str, array $args = [])
     {
         return $this->outputHTML("<font color='pink'>".htmlspecialchars($str).'</font>');
     }
 
-    public function critical($str, $args = [])
+    public function critical($str, array $args = [])
     {
         return $this->outputHTML("<font color='pink'>".htmlspecialchars($str).'</font>');
     }
 
-    public function error($str, $args = [])
+    public function error($str, array $args = [])
     {
         return $this->outputHTML("<font color='pink'>".htmlspecialchars($str).'</font>');
     }
 
-    public function warning($str, $args = [])
+    public function warning($str, array $args = [])
     {
         return $this->outputHTML("<font color='pink'>".htmlspecialchars($str).'</font>');
     }
 
-    public function notice($str, $args = [])
+    public function notice($str, array $args = [])
     {
         return $this->outputHTML("<font color='yellow'>".htmlspecialchars($str).'</font>');
     }
 
-    public function info($str, $args = [])
+    public function info($str, array $args = [])
     {
         return $this->outputHTML("<font color='gray'>".htmlspecialchars($str).'</font>');
     }
 
-    public function debug($str, $args = [])
+    public function debug($str, array $args = [])
     {
         return $this->outputHTML("<font color='cyan'>".htmlspecialchars($str).'</font>');
     }
 
-    public function log($level, $str, $args = [])
+    public function log($level, $str, array $args = [])
     {
         return $this->$level($str, $args);
     }
