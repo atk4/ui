@@ -36,7 +36,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * Bypass is used internally to capture and wrap direct output, but prevent jsSSE from
      * triggering output recurlively.
      *
-     * @var boolean
+     * @var bool
      */
     public $_output_bypass = false;
 
