@@ -53,6 +53,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('Element Reloading', ['reloading']);
     $basic->addItem('PHP Jobs (SSE)', ['sse']);
     $basic->addItem('Loader', ['loader']);
+    $basic->addItem('Console', ['console']);
     $basic->addItem('Noifyer', ['notify']);
     $basic->addItem('Modal View', ['modal2']);
     $basic->addItem('Dynamic jsModal', ['modal']);

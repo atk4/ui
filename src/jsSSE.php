@@ -15,6 +15,11 @@ class jsSSE extends jsCallback
     public $browserSupport = false;
     public $showLoader = false;
 
+    /**
+     * @var callable - custom function for outputting (instead of echo)
+     */
+    public $echoFunction = null;
+
     public function init()
     {
         //parent::init();
@@ -50,7 +55,9 @@ class jsSSE extends jsCallback
     public function terminate($ajaxec, $success = true)
     {
         if ($this->browserSupport) {
-            $this->sendEvent('js', json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'jsAction');
+            if ($ajaxec) {
+                $this->sendEvent('js', json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'jsAction');
+            }
 
             // no further output please
             $this->app->terminate();
@@ -77,7 +84,6 @@ class jsSSE extends jsCallback
      */
     public function flush()
     {
-        @ob_flush();
         @flush();
     }
 
@@ -88,7 +94,11 @@ class jsSSE extends jsCallback
      */
     private function output($content)
     {
-        echo $content;
+        if ($this->echoFunction) {
+            call_user_func($this->echoFunction, $content);
+        } else {
+            echo $content;
+        }
     }
 
     /**
@@ -105,6 +115,7 @@ class jsSSE extends jsCallback
             $this->output("event: {$name}\n");
         }
         $this->output($this->wrapData($data)."\n\n");
+        flush();
     }
 
     /**
@@ -122,20 +133,25 @@ class jsSSE extends jsCallback
     protected function initSse()
     {
         @set_time_limit(0); // Disable time limit
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
         // Prevent buffering
         if (function_exists('apache_setenv')) {
             @apache_setenv('no-gzip', 1);
         }
         @ini_set('zlib.output_compression', 0);
         @ini_set('implicit_flush', 1);
-        while (ob_get_level() != 0) {
-            ob_end_flush();
-        }
-        ob_implicit_flush(1);
+        //while (ob_get_level() != 0) {
+        //ob_end_flush();
+        //}
+        //ob_implicit_flush(1);
         //Somehow header has to be set right away.
         header('Content-Type: text/event-stream');
         header('Cache-Control: no-cache');
         header('Cache-Control: private');
+        header('Content-Encoding: none');
         header('Pragma: no-cache');
     }
 }
