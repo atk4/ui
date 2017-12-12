@@ -1,6 +1,6 @@
 .. php:namespace:: atk4\\ui
 
-.. php:class:: Tabs
+.. php:class:: Console
 
 =======
 Console
@@ -45,12 +45,12 @@ and also allows you to execute shell process on the server while redirecting out
 Using With Model
 ================
 
-We recommend that you pack up your busineess logic into your Model methods. When it't time to call your method,
+We recommend that you pack up your busineess logic into your Model methods. When it's time to call your method,
 you could either do this::
 
     $user->generateReport(30);
 
-Which would execute your own routine for some report generation, but duing it though a normal request will look like
+Which would execute your own routine for some report generation, but doing it though a normal request will look like
 your site is slow and is unable to load page quick. Alternative is to run it through a console::
 
     $console->setModel($user, 'generateReport', [30]);

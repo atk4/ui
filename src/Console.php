@@ -33,12 +33,10 @@ class Console extends View implements \Psr\Log\LoggerInterface
     public $sse;
 
     /**
-     * Supply callback which will be executed in "background" sending
-     * your console output.
+     * Bypass is used internally to capture and wrap direct output, but prevent jsSSE from
+     * triggering output recurlively.
      *
-     * @param $callback string
-     *
-     * @return $this
+     * @var boolean
      */
     public $_output_bypass = false;
 
@@ -111,9 +109,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function output($text)
     {
-        $this->_output_bypass = true;
-        $this->sse->send($this->js()->append(htmlspecialchars($text).'<br/>'));
-        $this->_output_bypass = false;
+        $this->output(htmlspecialchars($text));
 
         return $this;
     }
@@ -130,6 +126,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
         $this->_output_bypass = true;
         $this->sse->send($this->js()->append($text.'<br/>'));
         $this->_output_bypass = false;
+
+        return $this;
     }
 
     /**
@@ -176,8 +174,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * @param $method string
      * @param $args array
      */
-    public function setModel(\atk4\data\Model $model, string $method, $args = [])
+    public function setModel(\atk4\data\Model $model, string $method = null, $args = [])
     {
+        if (!$method) {
+            throw new Exception('You must specify $method argument');
+        }
         if (!$this->sseInProgress) {
             $this->set(function () use ($model, $method, $args) {
                 $this->setModel($model, $method, $args);

@@ -15,6 +15,9 @@ class jsSSE extends jsCallback
     public $browserSupport = false;
     public $showLoader = false;
 
+    /**
+     * @var Callable - custom function for outputting (instead of echo)
+     */
     public $echoFunction = null;
 
     public function init()

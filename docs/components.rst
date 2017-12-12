@@ -57,7 +57,7 @@ Interactive components
 
 Interactive components rely on :ref:`callback`, :ref:`virtualpage` or :ref:`sse` to communicate with themselves in the PHP realm. You add them
 just as you would add any other component, yet they will send additional requests, like loading additional data or executing
-other code.
+other code. Here is how interractive components will typically communicate:
 
 1. request by browser is made. 
 2. :php:class:`App` asks :php:class:`Console` to render HTML+JavaScript. 
