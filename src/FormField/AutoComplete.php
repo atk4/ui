@@ -8,14 +8,50 @@ class AutoComplete extends Input
 {
     public $defaultTemplate = 'formfield/autocomplete.html';
     public $ui = 'input';
-    public $searchClassName = 'search';
+
+    /**
+     * Object used to capture requests from the browser.
+     *
+     * @var Callback
+     */
     public $callback;
 
-    public $empty = '...';  // set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value.
+    /**
+     * Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value.
+     *
+     * @var string
+     */
+    public $empty = '...';
 
+    /**
+     * Either set this to array of fields which must be searched (e.g. "name", "surname"), or define this
+     * as a callback to be executed callback($model, $search_string);.
+     *
+     * If left null, then search will be performed on a model's title field
+     *
+     * @var array|Closure
+     */
     public $search;
 
-    public $plus = false; // set this to cerate right-aligned button for adding a new a new record
+    /**
+     * Set this to create right-aligned button for adding a new a new record.
+     *
+     * true = will use "Add new" label
+     * string = will use your string
+     *
+     * @var null|bool|string
+     */
+    public $plus = false;
+
+    /**
+     * Semantic UI uses cache to remmber choices. For dynamic sites this may be dangerous, so
+     * it's disabled by default. To switch cache on, set 'cache'=>'local'.
+     *
+     * Use this apiConfig variable to pass API settings to Semantic UI in .dropdown()
+     *
+     * @var array
+     */
+    public $apiConfig = ['cache' => false];
 
     public function init()
     {
@@ -32,15 +68,14 @@ class AutoComplete extends Input
 
         $chain->dropdown([
             'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
-            'apiSettings' => [
+            'apiSettings' => array_merge($this->apiConfig, [
                 'url' => $this->getCallbackURL().'&q={query}',
-            ],
-            /*'filterRemoteData'  => true,*/
+            ]),
         ]);
         $this->js(true, $chain);
 
         if ($this->plus) {
-            $this->action = $this->factory(['Button', 'Add new']);
+            $this->action = $this->factory(['Button', is_string($this->plus) ? $this->plus : 'Add new']);
         }
         //var_Dump($this->model->get());
         $vp = $this->app->add('VirtualPage');
@@ -59,7 +94,7 @@ class AutoComplete extends Input
                 return [
                     $modal_chain,
                     $ac_chain,
-                    ];
+                ];
             });
         });
         if ($this->action) {
