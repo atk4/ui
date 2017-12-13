@@ -64,7 +64,7 @@ class Grid extends View
      *
      * @var bool
      */
-    public $sortable = null;
+    public $sortable = true;
 
     /**
      * Component that actually renders data rows / coluns and possibly totals.

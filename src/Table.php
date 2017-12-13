@@ -45,15 +45,6 @@ class Table extends Lister
     public $use_html_tags = true;
 
     /**
-     * Determines a strategy on how totals will be calculated. Do not touch those fields
-     * directly, instead use addTotals().
-     * You can call addTotals() multiple times to add multiple total rows (and calculations).
-     *
-     * @var array
-     */
-    public $totals_plan = [];
-
-    /**
      * Setting this to false will hide header row.
      *
      * @var bool
@@ -61,7 +52,17 @@ class Table extends Lister
     public $header = true;
 
     /**
+     * Determines a strategy on how totals will be calculated. Do not touch those fields
+     * directly, instead use addTotals() or setTotals().
+     *
+     * @var array
+     */
+    public $totals_plan = [];
+
+    /**
      * Contains list of totals accumulated during the render process.
+     *
+     * Don't use this property directly. Use addTotals() and setTotals() instead.
      *
      * @var array
      */
@@ -282,18 +283,48 @@ class Table extends Lister
      * Adds totals calculation plan.
      * You can call this method multiple times to add more than one totals row.
      *
-     * Override works like this:.
-     * [
-     *   'name'=>'Totals for {$num} rows:',
-     *   'price'=>'--',
-     *   'total'=>['sum']
-     * ].
-     *
      * @param array $plan
+     *
+     * @return $this
      */
     public function addTotals($plan = [])
     {
+        // normalize plan
+        foreach ($plan as $field => &$def) {
+            // title
+            if (is_string($def)) {
+                $def = ['title' => $def];
+            }
+
+            // callable
+            if (is_callable($def)) {
+                $def = ['row' => $def];
+            }
+
+            // built-in method
+            if (is_array($def) && isset($def[0]) && is_string($def[0])) {
+                $def = ['row' => $def[0]];
+            }
+        }
+
         $this->totals_plan[] = $plan;
+
+        return $this;
+    }
+
+    /**
+     * Sets totals calculation plan.
+     * This will overwrite all previously set plans.
+     *
+     * @param array $plan
+     *
+     * @return $this
+     */
+    public function setTotals($plan = [])
+    {
+        $this->totals_plan = [];
+
+        return $this->addTotals($plan);
     }
 
     /**
@@ -395,7 +426,7 @@ class Table extends Lister
             $rows++;
         }
 
-        // Add totals rows or empty message.
+        // Add totals rows or empty message
         if (!$rows) {
             $this->template->appendHTML('Body', $this->t_empty->render());
         } elseif ($this->totals_plan) {
@@ -486,73 +517,78 @@ class Table extends Lister
         foreach ($this->totals_plan as $plan_id => $plan) {
             $t = &$this->totals[$plan_id]; // shortcut
 
-            foreach ($plan as $key => $f) {
-
-                // if it's just string, then it's a title - we ignore that
-                if (is_string($f)) {
-                    continue;
-                }
+            foreach ($plan as $key => $def) {
 
                 // simply initialize array key, but don't set any value
                 // we can't set initial value to 0, because min/max or some custom totals
                 // methods can use this 0 as value for comparison and that's wrong
-                if (!isset($t[$key])) {
-                    $t[$key] = null;
+                if (!isset($t[$key]) && !isset($def['title'])) {
+                    if (isset($def['default'])) {
+                        $f = $def['default']; // shortcut
+
+                        $t[$key] = is_callable($f)
+                            ? call_user_func_array($f, [$this->model[$key], $this->model])
+                            : $f;
+                    } else {
+                        $t[$key] = null;
+                    }
                 }
 
-                // built-in methods
-                if (is_array($f) && isset($f[0]) && !is_callable($f)) {
-                    $f = $f[0];
-                }
-                if (is_string($f)) {
-                    switch ($f) {
-                        case 'sum':
-                            // set initial value
-                            $t[$key] = ($t[$key] === null ? 0 : $t[$key]);
-                            // sum
-                            $t[$key] = $t[$key] + $this->model[$key];
-                            break;
-                        case 'count':
-                            // set initial value
-                            $t[$key] = ($t[$key] === null ? 0 : $t[$key]);
-                            // increment
-                            $t[$key]++;
-                            break;
-                        case 'min':
-                            // set initial value
-                            $t[$key] = ($t[$key] === null ? $this->model[$key] : $t[$key]);
-                            // do comparison
-                            if ($this->model[$key] < $t[$key]) {
-                                $t[$key] = $this->model[$key];
-                            }
-                            break;
-                        case 'max':
-                            // set initial value
-                            $t[$key] = ($t[$key] === null ? $this->model[$key] : $t[$key]);
-                            // do comparison
-                            if ($this->model[$key] > $t[$key]) {
-                                $t[$key] = $this->model[$key];
-                            }
-                            break;
-                        default:
-                            throw new Exception(['Aggregation method does not exist', 'method' => $f]);
+                // calc row totals
+                if (isset($def['row'])) {
+                    $f = $def['row']; // shortcut
+
+                    // built-in functions
+                    if (is_string($f)) {
+                        switch ($f) {
+                            case 'sum':
+                                // set initial value
+                                $t[$key] = ($t[$key] === null ? 0 : $t[$key]);
+                                // sum
+                                $t[$key] = $t[$key] + $this->model[$key];
+                                break;
+                            case 'count':
+                                // set initial value
+                                $t[$key] = ($t[$key] === null ? 0 : $t[$key]);
+                                // increment
+                                $t[$key]++;
+var_dump($t);
+                                break;
+                            case 'min':
+                                // set initial value
+                                $t[$key] = ($t[$key] === null ? $this->model[$key] : $t[$key]);
+                                // compare
+                                if ($this->model[$key] < $t[$key]) {
+                                    $t[$key] = $this->model[$key];
+                                }
+                                break;
+                            case 'max':
+                                // set initial value
+                                $t[$key] = ($t[$key] === null ? $this->model[$key] : $t[$key]);
+                                // compare
+                                if ($this->model[$key] > $t[$key]) {
+                                    $t[$key] = $this->model[$key];
+                                }
+                                break;
+                            default:
+                                throw new Exception(['Aggregation method does not exist', 'column' => $key, 'method' => $f]);
+                        }
+
+                        continue;
                     }
 
-                    continue;
-                }
+                    // Callable support
+                    // Arguments:
+                    // - current total value
+                    // - current field value from model
+                    // - \atk4\data\Model table model with current record loaded
+                    // Should return new total value (for example, current value + current field value)
+                    // NOTE: Keep in mind, that current total value initially can be null !
+                    if (is_callable($f)) {
+                        $t[$key] = call_user_func_array($f, [$t[$key], $this->model[$key], $this->model]);
 
-                // callable support
-                // arguments:
-                // - current total value
-                // - current field value from model
-                // - key (column/field name)
-                // - \atk4\ui\Table object itself
-                // should return new total value (for example, current value + current field value)
-                // NOTE: Keep in mind, that current total value initially will be null !
-                if (is_callable($f)) {
-                    $t[$key] = call_user_func_array($f, [$t[$key], $this->model[$key], $key, $this]);
-
-                    continue;
+                        continue;
+                    }
                 }
             }
         }
@@ -605,7 +641,7 @@ class Table extends Lister
         foreach ($this->columns as $name => $column) {
             // if no totals plan, then show dash, but keep column formatting
             if (!isset($plan[$name])) {
-                $output[] = $column->getTag('foot', '-');
+                $output[] = $column->getTag('foot', '');
                 continue;
             }
 
