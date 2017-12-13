@@ -15,11 +15,20 @@ class CheckBox extends Generic
 
     public $label;
 
+    public function __construct($label = null, $class = null)
+    {
+        parent::__construct($label, $class);
+
+        // in constructor we provide label not content (value of field)
+        $this->label = $this->content;
+        $this->content = null;
+    }
+
     public function init()
     {
         parent::init();
 
-        // checkboxes are annoying becasue they don't send value
+        // checkboxes are annoying because they don't send value
         // when they are not ticked. We assume they are ticked and
         // sent "false" as a workaround
         if ($this->form) {
@@ -33,8 +42,17 @@ class CheckBox extends Generic
 
     public function renderView()
     {
+        // if no value, then remove "selected" attribute
+        if (!$this->getValue()) {
+            $this->template->tryDel("checked");
+        }
+        if ($this->label) {
+            $this->template->trySet('Label', $this->label);
+        }
+
         $this->js(true)->checkbox();
 
+        $this->content = null; // no content again
         return parent::renderView();
     }
 }

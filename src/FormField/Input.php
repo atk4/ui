@@ -46,25 +46,6 @@ class Input extends Generic
     public $width = null;
 
     /**
-     * Method similar to View::js() however will adjust selector
-     * to target the "input" element.
-     *
-     * $field->jsInput(true)->val(123);
-     */
-    public function jsInput($when = null, $action = null)
-    {
-        return $this->js($when, $action, '#'.$this->id.'_input');
-    }
-
-    /**
-     * Returns presentable value to be inserted into input tag.
-     */
-    public function getValue()
-    {
-        return isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: '';
-    }
-
-    /**
      * returns <input .../> tag.
      */
     public function getInput()
@@ -100,7 +81,6 @@ class Input extends Generic
 
     public function renderView()
     {
-
         // TODO: I don't think we need the loading state at all.
         if ($this->loading) {
             if (!$this->icon) {
@@ -161,9 +141,6 @@ class Input extends Generic
             }
         }
 
-        $this->template->setHTML('Input', $this->getInput());
-        $this->content = null;
-
         parent::renderView();
     }
 
@@ -176,10 +153,5 @@ class Input extends Generic
         $this->action = $this->add(new Button($defaults), 'AfterInput');
 
         return $this->action;
-    }
-
-    public function set($value = null, $junk = null)
-    {
-        $this->content = $value;
     }
 }

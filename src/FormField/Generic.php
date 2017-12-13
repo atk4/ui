@@ -20,10 +20,6 @@ class Generic extends View
      */
     public $field;
 
-    public $width = null;
-
-    public $caption = null;
-
     public function init()
     {
         parent::init();
@@ -34,6 +30,31 @@ class Generic extends View
             }
             $this->form->fields[$this->field->short_name] = $this;
         }
+    }
+
+    /**
+     * Method similar to View::js() however will adjust selector
+     * to target the "input" element.
+     *
+     * $field->jsInput(true)->val(123);
+     */
+    public function jsInput($when = null, $action = null)
+    {
+        return $this->js($when, $action, '#'.$this->id.'_input');
+    }
+
+    /**
+     * Returns presentable value to be inserted into input tag.
+     */
+    public function getValue()
+    {
+        return isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : ($this->content ?: '');
+    }
+
+    // @todo Maybe don't need this method at all, because View->set() is doing almost the same
+    public function set($value = null, $junk = null)
+    {
+        $this->content = $value;
     }
 
     /**

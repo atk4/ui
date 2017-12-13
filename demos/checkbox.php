@@ -16,3 +16,8 @@ require 'init.php';
 
     $app->add(new \atk4\ui\View(['ui' => 'divider']));
     $app->add(new \atk4\ui\FormField\CheckBox(['Custom setting?']))->js(true)->checkbox('set indeterminate');
+
+    $app->add(new \atk4\ui\View(['ui' => 'divider']));
+    $c = new \atk4\ui\FormField\CheckBox(['Selected checkbox by default']);
+    $c->set(true);
+    $app->add($c);
