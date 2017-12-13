@@ -23,7 +23,7 @@ $f->addField('three', ['caption' => 'Caption2']);
 $f->addField('four', ['CheckBox', 'caption' => 'Caption2']);
 
 // Use explicit object for user-defined or 3rd party field
-$f->addField('five', new \atk4\ui\FormField\CheckBox());
+$f->addField('five', new \atk4\ui\FormField\CheckBox())->set(true);
 
 // Objects still accept seed
 $f->addField('six', new \atk4\ui\FormField\CheckBox(['caption' => 'Caption3']));
