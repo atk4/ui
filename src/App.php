@@ -77,8 +77,15 @@ class App
     // @var Persistence\UI
     public $ui_persistence = null;
 
-    /** @var View For internal use */
+    /**
+     * @var View For internal use
+     */
     public $html = null;
+
+    /**
+     * @var LoggerInterface, target for objects with DebugTrait
+     */
+    public $logger = null;
 
     /**
      * Constructor.
@@ -208,7 +215,9 @@ class App
      */
     public function terminate($output = null)
     {
-        echo $output;
+        if ($output !== null) {
+            echo $output;
+        }
         $this->run_called = true; // prevent shutdown function from triggering.
         exit;
     }

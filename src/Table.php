@@ -196,7 +196,7 @@ class Table extends Lister
     public function addDecorator($name, $decorator)
     {
         if (!$this->columns[$name]) {
-            throw new Exceptino(['No such column, cannot decorate', 'name' => $name]);
+            throw new Exception(['No such column, cannot decorate', 'name' => $name]);
         }
         $decorator = $this->_add($this->factory($decorator, ['table' => $this], 'TableColumn'));
 

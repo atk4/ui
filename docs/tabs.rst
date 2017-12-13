@@ -1,7 +1,6 @@
 
 .. php:namespace:: atk4\ui
 
-
 .. php:class:: Tabs
 
 ====

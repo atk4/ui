@@ -45,6 +45,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
   button2.php
   checkbox.php
   columns.php
+  console.php
   crud.php
   crud2.php
   field.php
