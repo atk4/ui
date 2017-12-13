@@ -47,11 +47,11 @@ class AutoComplete extends Input
      * Semantic UI uses cache to remmber choices. For dynamic sites this may be dangerous, so
      * it's disabled by default. To switch cache on, set 'cache'=>'local'.
      *
-     * Use this config variable for default sttings passed to Semantic UI .dropdown()
+     * Use this apiConfig variable to pass API settings to Semantic UI in .dropdown()
      *
      * @var array
      */
-    public $config = ['cache' => false];
+    public $apiConfig = ['cache' => false];
 
     public function init()
     {
@@ -68,7 +68,7 @@ class AutoComplete extends Input
 
         $chain->dropdown([
             'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
-            'apiSettings' => array_merge($this->config, [
+            'apiSettings' => array_merge($this->apiConfig, [
                 'url' => $this->getCallbackURL().'&q={query}',
             ]),
         ]);
