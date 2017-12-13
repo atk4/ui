@@ -44,7 +44,7 @@ class CheckBox extends Generic
     {
         // if no value, then remove "selected" attribute
         if (!$this->getValue()) {
-            $this->template->tryDel("checked");
+            $this->template->tryDel('checked');
         }
         if ($this->label) {
             $this->template->trySet('Label', $this->label);
