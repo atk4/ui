@@ -15,7 +15,6 @@ $f->addField('two', ['Radio'], ['enum'=>['female', 'male']])->set('male');
 
 $f->addField('three', null, ['values'=>['female', 'male']])->set(1);
 $f->addField('four', ['Radio'], ['values'=>['female', 'male']])->set(1);
-$f->onSubmit(function($f) {
+$f->onSubmit(function ($f) {
     echo json_encode($f->model->get());
 });
-
