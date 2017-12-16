@@ -335,7 +335,6 @@ class View implements jsExpressionable
             }
         }
 
-
         // add default objects
         foreach ($this->_add_later as list($object, $region)) {
             $this->add($object, $region);
@@ -398,7 +397,7 @@ class View implements jsExpressionable
          */
 
         // Create object first
-        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region ? ['region'=>$region]: null);
+        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region ? ['region'=>$region] : null);
 
         // Will call init() of the object
         $object = $this->_add($object);
