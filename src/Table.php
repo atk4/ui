@@ -69,28 +69,28 @@ class Table extends Lister
      *
      * @var Template
      */
-    protected $t_head;
+    public $t_head;
 
     /**
      * Contain the template for the "Body" type row.
      *
      * @var Template
      */
-    protected $t_row;
+    public $t_row;
 
     /**
      * Contain the template for the "Foot" type row.
      *
      * @var Template
      */
-    protected $t_totals;
+    public $t_totals;
 
     /**
      * Contains the output to show if table contains no rows.
      *
      * @var Template
      */
-    protected $t_empty;
+    public $t_empty;
 
     public $sortable = null;
 
@@ -249,14 +249,12 @@ class Table extends Lister
     }
 
     /**
-     * Init method will create one column object that will be used to render
+     * initChunks method will create one column object that will be used to render
      * all columns in the table unless you have specified a different
      * column object.
      */
-    public function init()
+    public function initChunks()
     {
-        parent::init();
-
         if (!$this->t_head) {
             $this->t_head = $this->template->cloneRegion('Head');
             $this->t_row_master = $this->template->cloneRegion('Row');
