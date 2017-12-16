@@ -413,7 +413,7 @@ class View implements jsExpressionable
     // {{{ Manipulating classes and view properties
 
     /**
-     * Override this method without compatibility with parrent, if you wish
+     * Override this method without compatibility with parent, if you wish
      * to set your own things your own way for your view.
      *
      * @param string|array $arg1
@@ -441,7 +441,7 @@ class View implements jsExpressionable
             ]);
         }
 
-        if (is_string($arg1)) {
+        if (is_scalar($arg1)) {
             $this->content = $arg1;
 
             return $this;

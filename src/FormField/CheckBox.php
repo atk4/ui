@@ -32,7 +32,7 @@ class CheckBox extends Generic
     {
         parent::init();
 
-        // checkboxes are annoying becasue they don't send value
+        // checkboxes are annoying because they don't send value
         // when they are not ticked. We assume they are ticked and
         // sent "false" as a workaround
         if ($this->form) {
@@ -66,9 +66,9 @@ class CheckBox extends Generic
          */
         $this->content = null;
 
-
         $this->js(true)->checkbox();
 
+        $this->content = null; // no content again
         return parent::renderView();
     }
 }

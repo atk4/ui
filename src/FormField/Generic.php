@@ -59,6 +59,18 @@ class Generic extends View
         return $this;
     }
 
+    /*
+     * Method similar to View::js() however will adjust selector
+     * to target the "input" element.
+     *
+     * $field->jsInput(true)->val(123);
+     */
+    public function jsInput($when = null, $action = null)
+    {
+        return $this->js($when, $action, '#'.$this->id.'_input');
+    }
+
+
     /**
      * It only makes sense to have "name" property inside a field if
      * it was used inside a form.
