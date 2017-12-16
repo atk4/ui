@@ -36,7 +36,7 @@ class Input extends Generic
     public $label = null;
 
     /**
-     * Set label that will appear to the right of the input field
+     * Set label that will appear to the right of the input field.
      */
     public $labelRight = null;
 

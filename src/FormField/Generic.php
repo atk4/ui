@@ -52,10 +52,12 @@ class Generic extends View
     {
         if ($this->field) {
             $this->field->set($value);
+
             return $this;
         }
 
         $this->content = $value;
+
         return $this;
     }
 
@@ -69,7 +71,6 @@ class Generic extends View
     {
         return $this->js($when, $action, '#'.$this->id.'_input');
     }
-
 
     /**
      * It only makes sense to have "name" property inside a field if

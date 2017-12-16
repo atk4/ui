@@ -19,8 +19,8 @@ class CheckBox extends Generic
      */
     public $label = null;
 
-
-    public function __construct($label = null, $class = null) {
+    public function __construct($label = null, $class = null)
+    {
         $this->label = $label;
 
         if ($class) {
@@ -61,7 +61,7 @@ class CheckBox extends Generic
             $this->template->set('checked', 'checked');
         }
 
-        /**
+        /*
          * We don't want this displayed, because it can only affect "checked" status anyway
          */
         $this->content = null;
