@@ -82,7 +82,7 @@ class Generic extends View
             }
 
             if (is_string($decorator)) {
-                $decorator = $this->form->decoratorFactory($field, null, ['caption' => $decorator]);
+                $decorator = $this->form->decoratorFactory($field, ['caption' => $decorator]);
             } elseif (is_array($decorator)) {
                 $decorator = $this->form->decoratorFactory($field, $decorator);
             } elseif (!$decorator) {

@@ -13,7 +13,20 @@ class CheckBox extends Generic
 
     public $defaultTemplate = 'formfield/checkbox.html';
 
-    public $label;
+    /**
+     * Label appears to the right of the checkbox. If label is not set specifically
+     * then the $caption property will be displayed as a label instead.
+     */
+    public $label = null;
+
+
+    public function __construct($label = null, $class = null) {
+        $this->label = $label;
+
+        if ($class) {
+            $this->addClass($class);
+        }
+    }
 
     public function init()
     {
@@ -31,8 +44,29 @@ class CheckBox extends Generic
         }
     }
 
+    public function set($value = null, $junk = null)
+    {
+        if (!is_bool($value)) {
+            throw new Exception(['Field\CheckBox::set() needs value to be a boolean', 'value'=>$value]);
+        }
+
+        parent::set($value);
+    }
+
     public function renderView()
     {
+        $this->template['label'] = $this->label ?: $this->caption;
+
+        if ($this->field ? $this->field->get() : $this->content) {
+            $this->template->set('checked', 'checked');
+        }
+
+        /**
+         * We don't want this displayed, because it can only affect "checked" status anyway
+         */
+        $this->content = null;
+
+
         $this->js(true)->checkbox();
 
         return parent::renderView();

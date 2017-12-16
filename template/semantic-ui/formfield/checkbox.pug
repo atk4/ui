@@ -1,4 +1,5 @@
 | <div id="{$_id}" class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
-input(id="{$_id}_input" type="checkbox" class="hidden" name="{$name}")
-label {$Content}
+| <input id="{$_id}_input" type="checkbox" class="hidden" name="{$name}" {$checked}>
+label {Content}{$label}{/}
+| </input>
 | </div>

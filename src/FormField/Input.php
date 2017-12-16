@@ -30,10 +30,14 @@ class Input extends Generic
     public $loading = null;
 
     /**
-     * Set to a text.
+     * Some fields also support $label. For Input the label can be placed to the left or to the right of
+     * the field and you can fit "$" inside a label. Input label will appear on the left.
      */
     public $label = null;
 
+    /**
+     * Set label that will appear to the right of the input field
+     */
     public $labelRight = null;
 
     public $action = null;
@@ -176,10 +180,5 @@ class Input extends Generic
         $this->action = $this->add(new Button($defaults), 'AfterInput');
 
         return $this->action;
-    }
-
-    public function set($value = null, $junk = null)
-    {
-        $this->content = $value;
     }
 }
