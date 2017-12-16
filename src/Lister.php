@@ -35,12 +35,10 @@ class Lister extends View
         $this->t_row->trySet('_id', $this->name);
         //$this->t_totals = isset($this->template['totals']) ? $this->template->cloneRegion('totals') : null;
 
-
         foreach ($this->model as $this->current_id => $this->current_row) {
             if ($this->hook('beforeRow') === false) {
                 continue;
             }
-
 
             $rowHTML = $this->t_row->set($this->current_row)->render();
             $this->template->appendHTML('rows', $rowHTML);
