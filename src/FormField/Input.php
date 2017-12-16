@@ -164,6 +164,9 @@ class Input extends Generic
             }
         }
 
+        $this->template->setHTML('Input', $this->getInput());
+        $this->content = null;
+
         parent::renderView();
     }
 
