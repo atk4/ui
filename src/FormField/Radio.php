@@ -13,17 +13,22 @@ class Radio extends Generic
 
     /**
      * Contains a lister that will render individual radio buttons.
+     *
+     * @var Lister
      */
     public $lister = null;
 
     /**
      * List of values.
+     *
+     * @var array
      */
     public $values = [];
 
     public function init()
     {
         parent::init();
+
         $this->lister = $this->add('Lister', 'Radio');
         $this->lister->t_row['_name'] = $this->short_name;
     }
