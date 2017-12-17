@@ -34,7 +34,14 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
     public function testDemo($page)
     {
         $this->expectOutputRegex($this->regex);
-        $this->inc($page)->run();
+
+        try {
+            $this->inc($page)->run();
+        } catch (\atk4\core\Exception $e) {
+            $e->addMoreInfo('test', $page);
+
+            throw $e;
+        }
     }
 
     public function demoList()
