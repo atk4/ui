@@ -6,8 +6,6 @@ namespace atk4\ui;
 
 class Table extends Lister
 {
-    use \atk4\core\HookTrait;
-
     // Overrides
     public $defaultTemplate = 'table.html';
     public $ui = 'table';
