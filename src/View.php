@@ -354,11 +354,11 @@ class View implements jsExpressionable
     }
 
     /**
-     * In addition to adding a child object, set up it's template
+     * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
      *
-     * @param View|string  $object New object to add
-     * @param string|array $region (or array for full set of defaults)
+     * @param mixed  $seed   New object to add
+     * @param string $region
      *
      * @throws Exception
      *
