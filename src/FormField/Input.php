@@ -111,7 +111,7 @@ class Input extends Generic
 
         return $label;
     }
-    
+
     /**
      * Used only from renderView().
      *
