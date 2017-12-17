@@ -24,11 +24,13 @@ class Generic extends View
 
     /**
      * Caption is a text that must appear somewhere nearby the field. For a form with layout, this
-     * will typically place caption above the input field, but checkbox this may appear next to the
+     * will typically place caption above the input field, but for checkbox this may appear next to the
      * checkbox itself. If Form Layout does not have captions above the input field, then caption
      * will appear as a placeholder of the input fields and it may also appear as a tooltip.
      *
      * Caption is usually specified by a model.
+     *
+     * @var string
      */
     public $caption = null;
 
@@ -47,6 +49,11 @@ class Generic extends View
     /**
      * Sets the value of this field. If field is a part of the form and is associated with
      * the model, then the model's value will also be affected.
+     *
+     * @param mixed $value
+     * @param mixed $junk
+     *
+     * @return $this
      */
     public function set($value = null, $junk = null)
     {
