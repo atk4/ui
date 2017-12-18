@@ -49,7 +49,7 @@ class View implements jsExpressionable
      *
      * @var string
      */
-    public $region = 'Content';
+    public $region = null; //'Content';
 
     /**
      * Enables UI keyword for Semantic UI indicating that this is a
@@ -320,9 +320,19 @@ class View implements jsExpressionable
             $this->initDefaultApp();
         }
 
-        // set up template
-        if (is_string($this->defaultTemplate) && is_null($this->template)) {
-            $this->template = $this->app->loadTemplate($this->defaultTemplate);
+        if ($this->region && !$this->template && !$this->defaultTemplate && $this->owner && $this->owner->template) {
+            $this->template = $this->owner->template->cloneRegion($this->region);
+
+            $this->owner->template->del($this->region);
+        } else {
+            // set up template
+            if (is_string($this->defaultTemplate) && is_null($this->template)) {
+                $this->template = $this->app->loadTemplate($this->defaultTemplate);
+            }
+
+            if (!$this->region) {
+                $this->region = 'Content';
+            }
         }
 
         // add default objects
@@ -344,28 +354,35 @@ class View implements jsExpressionable
     }
 
     /**
-     * In addition to adding a child object, set up it's template
+     * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
      *
-     * @param View|string  $object New object to add
-     * @param string|array $region (or array for full set of defaults)
+     * @param mixed  $seed   New object to add
+     * @param string $region
      *
      * @throws Exception
      *
      * @return View
      */
-    public function add($seed, $defaults = null)
+    public function add($seed, $region = null)
     {
         if (!$this->app) {
-            $this->_add_later[] = [$seed, $defaults];
+            $this->_add_later[] = [$seed, $region];
 
             return $seed;
         }
 
-        if (is_array($defaults)) {
+        if (is_array($region)) {
             throw new Exception('Second argument to add must be region or null!');
         }
 
+        /*
+        if (is_string($defaults)) {
+            $defaults = ['region'=>$defaults];
+        }
+         */
+
+        /*
         $region = null;
         if (is_array($defaults) && isset($defaults['region'])) {
             $region = $defaults['region'];
@@ -377,13 +394,10 @@ class View implements jsExpressionable
             $region = $defaults;
             $defaults = null;
         }
+         */
 
         // Create object first
-        $object = $this->factory($this->mergeSeeds($seed, ['View']), $defaults);
-
-        if ($object instanceof self && $region) {
-            $object->region = $region;
-        }
+        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region ? ['region'=>$region] : null);
 
         // Will call init() of the object
         $object = $this->_add($object);
@@ -393,6 +407,7 @@ class View implements jsExpressionable
         }
 
         // We are adding a new view, so do a bit more
+        /*
         if (!$object->template && $object->region && $this->template) {
             $object->template = $this->template->cloneRegion($object->region);
         }
@@ -404,6 +419,7 @@ class View implements jsExpressionable
 
             $this->template->del($object->region);
         }
+         */
 
         return $object;
     }
