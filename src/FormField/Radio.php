@@ -37,12 +37,12 @@ class Radio extends Generic
     {
         if (!$this->model) {
             $p = new \atk4\data\Persistence_Static($this->values);
-            $m = new \atk4\data\Model($p);
+            $this->model = new \atk4\data\Model($p);
         }
 
         $value = $this->field ? $this->field->get() : $this->content;
 
-        $this->lister->setModel($m);
+        $this->lister->setModel($this->model);
         $this->lister->addHook('beforeRow', function ($lister) use ($value) {
             $lister->t_row->set('checked', $value == $lister->model->id ? 'checked' : '');
         });
