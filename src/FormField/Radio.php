@@ -37,7 +37,7 @@ class Radio extends Generic
     {
         if (!$this->model) {
             $p = new \atk4\data\Persistence_Static($this->values);
-            $this->model = new \atk4\data\Model($p);
+            $this->setModel(new \atk4\data\Model($p));
         }
 
         $value = $this->field ? $this->field->get() : $this->content;
