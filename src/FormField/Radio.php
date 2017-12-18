@@ -2,38 +2,50 @@
 
 namespace atk4\ui\FormField;
 
-use atk4\ui\Form;
-use atk4\ui\Lister;
-
 /**
  * Input element for a form field.
  */
 class Radio extends Generic
 {
-    /**
-     * {@inheritdoc}
-     */
-    public $ui = 'radio checkbox';
+    public $ui = false;
 
-    /**
-     * {@inheritdoc}
-     */
     public $defaultTemplate = 'formfield/radio.html';
 
     /**
-     * {@inheritdoc}
+     * Contains a lister that will render individual radio buttons.
+     *
+     * @var Lister
      */
-    public function setModel(\atk4\data\Model $m)
-    {
-        $this->add(new Lister(), 'Radio')->setModel($m);
-    }
+    public $lister = null;
 
     /**
-     * {@inheritdoc}
+     * List of values.
+     *
+     * @var array
      */
+    public $values = [];
+
+    public function init()
+    {
+        parent::init();
+
+        $this->lister = $this->add('Lister', 'Radio');
+        $this->lister->t_row['_name'] = $this->short_name;
+    }
+
     public function renderView()
     {
-        $this->js(true)->checkbox();
+        if (!$this->model) {
+            $p = new \atk4\data\Persistence_Static($this->values);
+            $this->setModel(new \atk4\data\Model($p));
+        }
+
+        $value = $this->field ? $this->field->get() : $this->content;
+
+        $this->lister->setModel($this->model);
+        $this->lister->addHook('beforeRow', function ($lister) use ($value) {
+            $lister->t_row->set('checked', $value == $lister->model->id ? 'checked' : '');
+        });
 
         return parent::renderView();
     }

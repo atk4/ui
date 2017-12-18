@@ -16,6 +16,7 @@ $button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [
 $app->add(['Header', 'Line in a Form']);
 $form = $app->add('Form');
 $field = $form->addField('name', new \atk4\ui\FormField\Line());
+$field->set('value in a form');
 $form->onSubmit(function ($f) {
     return $f->model['name'];
 });
