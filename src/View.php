@@ -201,7 +201,7 @@ class View implements jsExpressionable
      *
      * @return \atk4\data\Model
      */
-    public function setSource(array $data)
+    public function setSource(array $data, $fields = null)
     {
         $goodData = [];
 
@@ -224,12 +224,18 @@ class View implements jsExpressionable
             new \atk4\data\Persistence_Array($goodData), 'data'
         );
         //$model->addField('name');
-        foreach($firstRow as $field=>$val) {
-            if($field === 'id') {
-                continue;
+
+        if ($fields) {
+            $model->addFields($fields);
+        } elseif ($fields === null) {
+            foreach($firstRow as $field=>$val) {
+                if($field === 'id') {
+                    continue;
+                }
+                $model->addField($field);
             }
-            $model->addField($field);
         }
+
         if (isset($firstRow['title'])) {
             $model->title_field = 'title';
         } elseif (isset($firstRow['name'])) {
