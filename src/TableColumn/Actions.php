@@ -44,7 +44,7 @@ class Actions extends Generic
     public function addModal($button, $title, $callback)
     {
         $modal = $this->owner->owner->add(['Modal', 'title'=>$title]);
-        $modal->set(function($t) use($callback) { 
+        $modal->set(function ($t) use ($callback) {
             call_user_func($callback, $t, $this->app->stickyGet($this->name));
         });
 

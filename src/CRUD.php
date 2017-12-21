@@ -121,7 +121,6 @@ class CRUD extends Grid
             }, 'Are you sure?');
         }
 
-
         return $m;
     }
 }
