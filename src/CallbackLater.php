@@ -17,7 +17,8 @@ class CallbackLater extends Callback
         }
 
         if ($this->app->is_rendering) {
-            $hook = 'beforeOutput';
+            return parent::set($callback, $args);
+            //$hook = 'beforeOutput';
         } else {
             $hook = 'beforeRender';
         }
