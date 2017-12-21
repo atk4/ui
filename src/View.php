@@ -215,12 +215,29 @@ class View implements jsExpressionable
             }
             $goodData[] = $value;
         }
+
+        $firstRow = reset($goodData);
+
         $goodData = ['data' => $goodData];
 
         $model = new \atk4\data\Model(
             new \atk4\data\Persistence_Array($goodData), 'data'
         );
-        $model->addField('name');
+        //$model->addField('name');
+        foreach($firstRow as $field=>$val) {
+            if($field === 'id') {
+                continue;
+            }
+            $model->addField($field);
+        }
+        if (isset($firstRow['title'])) {
+            $model->title_field = 'title';
+        } elseif (isset($firstRow['name'])) {
+            $model->title_field = 'title';
+        } else {
+            $model->title_field = 'id';
+        }
+
 
         return $this->setModel($model);
     }
@@ -333,6 +350,10 @@ class View implements jsExpressionable
             if (!$this->region) {
                 $this->region = 'Content';
             }
+        }
+
+        if ($this->template && !isset($this->template->app) && isset($this->app)) {
+            $this->template->app = $this->app;
         }
 
         // add default objects

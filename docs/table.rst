@@ -9,7 +9,8 @@ Table
 
 .. php:class:: Table
 
-Table is the simplest way to output multiple records of structured, static data:
+Table is the simplest way to output multiple records of structured, static data. For Un-structure output
+please see :php:class:`Lister`
 
     .. image:: images/table.png
 
