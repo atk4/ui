@@ -44,9 +44,11 @@ class Actions extends Generic
     public function addModal($button, $title, $callback)
     {
         $modal = $this->owner->owner->add(['Modal', 'title'=>$title]);
-        $modal->set($callback);
+        $modal->set(function($t) use($callback) { 
+            call_user_func($callback, $t, $this->app->stickyGet($this->name));
+        });
 
-        return $this->addAction($button, $modal->show(['id'=>$this->owner->jsRow()->data('id')]));
+        return $this->addAction($button, $modal->show([$this->name=>$this->owner->jsRow()->data('id')]));
     }
 
     public function getDataCellTemplate(\atk4\data\Field $f = null)
