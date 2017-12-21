@@ -75,6 +75,8 @@ class CRUD extends Grid
             $this->fieldsDefault = $defaultFields;
         }
 
+        $m = parent::setModel($m, $this->fieldsGrid ?: $this->fieldsDefault);
+
         if ($this->can('c')) {
             $this->itemCreate->set('Add New '.(isset($m->title) ? $m->title : preg_replace('|.*\\\|', '', get_class($m))));
 
@@ -93,13 +95,6 @@ class CRUD extends Grid
             });
         }
 
-        $m = parent::setModel($m, $this->fieldsGrid ?: $this->fieldsDefault);
-
-        return $m;
-    }
-
-    public function renderView()
-    {
         if ($this->can('u')) {
             $this->addAction(['icon' => 'edit'], new jsModal('Edit', $this->pageEdit, [$this->name => $this->jsRow()->data('id')]));
 
@@ -126,6 +121,7 @@ class CRUD extends Grid
             }, 'Are you sure?');
         }
 
-        return parent::renderView();
+
+        return $m;
     }
 }
