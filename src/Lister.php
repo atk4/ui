@@ -44,15 +44,15 @@ class Lister extends View
                 continue;
             }
 
-            if($this->t_row->hasTag('_title')) {
+            if ($this->t_row->hasTag('_title')) {
                 $this->t_row->set('_title', $this->model[$this->model->title_field]);
             }
 
-            if($this->t_row->hasTag('_href')) {
+            if ($this->t_row->hasTag('_href')) {
                 $this->t_row->set('_href', $this->app->url(['id'=>$this->current_id]));
             }
 
-            if($this->t_row->hasTag('_id')) {
+            if ($this->t_row->hasTag('_id')) {
                 $this->t_row->set('_id', $this->current_id);
             }
 

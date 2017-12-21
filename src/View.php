@@ -228,8 +228,8 @@ class View implements jsExpressionable
         if ($fields) {
             $model->addFields($fields);
         } elseif ($fields === null) {
-            foreach($firstRow as $field=>$val) {
-                if($field === 'id') {
+            foreach ($firstRow as $field=>$val) {
+                if ($field === 'id') {
                     continue;
                 }
                 $model->addField($field);
@@ -243,7 +243,6 @@ class View implements jsExpressionable
         } else {
             $model->title_field = 'id';
         }
-
 
         return $this->setModel($model);
     }
