@@ -90,7 +90,7 @@ $button can be either a string (for a button label) or something like `['icon'=>
 
 If $confirm is set to true, then user will see a confirmation when he clicks on the action (yes/no).
 
-Calling this method multiple times will add button into same aciton column.
+Calling this method multiple times will add button into same action column.
 
 See :php:meth:`TableColumn\Actions::addAction`
 
@@ -107,7 +107,7 @@ to populate a content::
         $p->add('LoremIpsum');
     });
 
-Calling this method multiple times will add button into same aciton column.
+Calling this method multiple times will add button into same action column.
 
 See :php:meth:`TableColumn\Actions::addModal`
 
