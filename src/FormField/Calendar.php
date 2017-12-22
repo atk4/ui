@@ -17,7 +17,7 @@ class Calendar extends Input
 
     /**
      * Any other options you'd like to pass to calendar JS.
-     * See https://github.com/mdehoog/Semantic-UI-Calendar for all possible options
+     * See https://github.com/mdehoog/Semantic-UI-Calendar for all possible options.
      */
     public $options = [];
 
