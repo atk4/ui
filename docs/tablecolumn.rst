@@ -57,3 +57,24 @@ Sometimes you do want to inject HTML instead of using row values:
 
 Return array of HTML tags that will be injected into the row template. See
 :php:ref:`table_html` for further example.
+
+.. php:class:: Actions
+
+Can be used to add "action" column to your table::
+
+    $action = $table->addColumn(null, 'Actions');
+
+If you want to have label above the action column, then::
+
+    $action = $table->addColumn(null, ['Actions', 'caption'=>'User Actions']);
+
+See also :php:meth:`\atk4\ui\Grid::addAction()`
+
+.. php:method:: addAction($button, $action, $confirm = false)
+
+Adds another button into "Actions" column which will perform a certain JavaScript action when clicked.
+See also :php:meth:`\atk4\ui\Grid::addAction()`
+
+.. php:method:: addModal($button, $title, $callback)
+
+Triggers a modal dialog when you click on the button. See description on :php:meth:`\atk4\ui\Grid::addModalAction()`

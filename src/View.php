@@ -366,6 +366,9 @@ class View implements jsExpressionable
      */
     public function add($seed, $region = null)
     {
+        if ($this->_rendered) {
+            throw new Exception('You cannot add anything into the view after it is has been rendered');
+        }
         if (!$this->app) {
             $this->_add_later[] = [$seed, $region];
 
