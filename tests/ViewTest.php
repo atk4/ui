@@ -16,4 +16,18 @@ class ViewTest extends \atk4\core\PHPUnit_AgileTestCase
         $b = $v->render();
         $this->assertEquals($a, $b);
     }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testAddAfterRender()
+    {
+        $v = new \atk4\ui\View();
+        $v->set('foo');
+
+        $a = $v->render();
+        $v->add('View');  // this should fail. No adding after rendering.
+        $b = $v->render();
+        $this->assertEquals($a, $b);
+    }
 }
