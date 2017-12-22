@@ -23,7 +23,6 @@ $g->addModalAction(['icon'=>'external'], 'Modal Test', function ($p, $id) {
     $p->add(['Message', 'Clicked on ID='.$id]);
 });
 
-
 $sel = $g->addSelection();
 $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
     'alert("Selected: "+[])', [$sel->jsChecked()]
