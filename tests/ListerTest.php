@@ -5,7 +5,7 @@ namespace atk4\ui\tests;
 class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
 {
     /**
-     * Can use lister with custom template
+     * Can use lister with custom template.
      */
     public function testListerRender()
     {
@@ -16,7 +16,7 @@ class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
     }
 
     /**
-     * Or clone lister's template from parent
+     * Or clone lister's template from parent.
      */
     public function testListerRender2()
     {
@@ -28,7 +28,7 @@ class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
     }
 
     /**
-     * Or clone lister's template from parent
+     * Or clone lister's template from parent.
      */
     public function testListerRender3()
     {
