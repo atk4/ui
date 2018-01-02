@@ -134,7 +134,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     }
 
     /**
-     * Executes a JavaScript action
+     * Executes a JavaScript action.
      *
      * @param $js jsExpressionable
      *
