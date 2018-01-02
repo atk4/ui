@@ -203,6 +203,8 @@ class View implements jsExpressionable
      */
     public function setSource(array $data, $fields = null)
     {
+        $this->setModel(new \atk4\data\Model(new \atk4\data\Persistence_Static($data)), $fields);
+        /*
         $goodData = [];
 
         foreach ($data as $key => $value) {
@@ -245,6 +247,7 @@ class View implements jsExpressionable
         }
 
         return $this->setModel($model);
+         */
     }
 
     /**
