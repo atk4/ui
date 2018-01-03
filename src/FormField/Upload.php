@@ -38,7 +38,7 @@ class Upload extends Input
 
     /**
      * Allow multiple file or not.
-     * CURRENTLY NOT SUPPORTED
+     * CURRENTLY NOT SUPPORTED.
      *
      * @var bool
      */
@@ -82,7 +82,7 @@ class Upload extends Input
             $this->hasDeleteCb = true;
             if ($this->cb->triggered() && @$_POST['action'] === 'delete') {
                 $fileName = @$_POST['f_name'];
-                $this->cb->set(function() use ($fx, $fileName) {
+                $this->cb->set(function () use ($fx, $fileName) {
                     return call_user_func_array($fx, [$fileName]);
                 });
             }
@@ -103,11 +103,11 @@ class Upload extends Input
                 $action = @$_POST['action'];
                 $files = @$_FILES;
                 if ($action === 'upload' && !$files['file']['error']) {
-                    $this->cb->set(function() use ($fx, $files) {
+                    $this->cb->set(function () use ($fx, $files) {
                         return call_user_func_array($fx, $files);
                     });
                 } elseif ($action === null || $files['file']['error']) {
-                    $this->cb->set(function() use ($fx, $files) {
+                    $this->cb->set(function () use ($fx, $files) {
                         return call_user_func($fx, 'error');
                     });
                 }
@@ -130,7 +130,6 @@ class Upload extends Input
         if ($this->multiple) {
             $this->template->trySet('multiple', 'multiple');
         }
-
 
         $this->js(true)->atkFileUpload([
             'uri'      => $this->cb->getURL(),
