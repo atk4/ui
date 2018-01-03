@@ -11,6 +11,7 @@ import ajaxec from 'plugins/ajaxec';
 import createModal from 'plugins/createModal';
 import notify from 'plugins/notify';
 import serverEvent from 'plugins/serverEvent';
+import fileUpload from "./plugins/fileUpload";
 
 // Register our plugins
 registerPlugin('Spinner', spinner);
@@ -19,4 +20,5 @@ registerPlugin('Ajaxec', ajaxec);
 registerPlugin('CreateModal', createModal);
 registerPlugin('Notify', notify, true);
 registerPlugin('ServerEvent', serverEvent, true);
+registerPlugin('FileUpload', fileUpload);
 
