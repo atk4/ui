@@ -44,17 +44,9 @@ class Lister extends View
                 continue;
             }
 
-            if ($this->t_row->hasTag('_title')) {
-                $this->t_row->set('_title', $this->model[$this->model->title_field]);
-            }
-
-            if ($this->t_row->hasTag('_href')) {
-                $this->t_row->set('_href', $this->app->url(['id'=>$this->current_id]));
-            }
-
-            if ($this->t_row->hasTag('_id')) {
-                $this->t_row->set('_id', $this->current_id);
-            }
+            $this->t_row->trySet('_title', $this->model[$this->model->title_field]);
+            $this->t_row->trySet('_href', $this->app->url(['id'=>$this->current_id]));
+            $this->t_row->trySet('_id', $this->current_id);
 
             if ($this->t_row == $this->template) {
                 $rowHTML .= $this->t_row->set($this->current_row)->render();
