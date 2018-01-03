@@ -197,7 +197,8 @@ class View implements jsExpressionable
     /**
      * Sets source of the View.
      *
-     * @param array $data
+     * @param array $data   Array of data
+     * @param array $fields Limit model to particular fields
      *
      * @return \atk4\data\Model
      */
