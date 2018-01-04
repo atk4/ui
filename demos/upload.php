@@ -4,12 +4,13 @@ require 'init.php';
 
 $form = $app->add('Form');
 
-$img   = $form->addField('file', ['UploadImg']);
-$field = $form->addField('file1', ['Upload', [ 'accept' => ['.png', '.jpg']]]);
+$img = $form->addField('file', ['UploadImg']);
+$field = $form->addField('file1', ['Upload', ['accept' => ['.png', '.jpg']]]);
 
 $img->onDelete(function ($fileName) use ($img) {
     $img->clearThumbnail();
-    return new atk4\ui\jsNotify(['content' => $fileName.' has been removed!','color' => 'green']);
+
+    return new atk4\ui\jsNotify(['content' => $fileName.' has been removed!', 'color' => 'green']);
 });
 
 $field->onDelete(function ($fileName) {
@@ -37,7 +38,6 @@ $img->onUpload(function ($files) use ($form, $img) {
 });
 
 $field->onUpload(function ($files) use ($form, $img) {
-
     if ($files === 'error') {
         return $form->error('file1', 'Error uploading file.');
     }
