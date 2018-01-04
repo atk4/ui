@@ -41,7 +41,7 @@ class Upload extends Input
 
     /**
      * Allow multiple file or not.
-     * CURRENTLY NOT SUPPORTED
+     * CURRENTLY NOT SUPPORTED.
      *
      * @var bool
      */
@@ -143,7 +143,7 @@ class Upload extends Input
                         return $actions;
                     });
                 } elseif ($action === null || $files['file']['error']) {
-                    $this->cb->set(function() use ($fx, $files) {
+                    $this->cb->set(function () use ($fx, $files) {
                         return call_user_func($fx, 'error');
                     });
                 }
