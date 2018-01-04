@@ -4,22 +4,22 @@ require 'init.php';
 
 $form = $app->add('Form');
 
-$img = $form->addField('file', ['UploadImg', ['defaultSrc' => './images/default.png']]);
-$field = $form->addField('file1', ['Upload', ['accept' => ['.png', '.jpg']]]);
+$img = $form->addField('img', ['UploadImg', ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
+$field = $form->addField('file', ['Upload', ['accept' => ['.png', '.jpg']]]);
 
-$img->onDelete(function ($fileName) use ($img) {
+$img->onDelete(function ($fileId) use ($img) {
     $img->clearThumbnail('./images/default.png');
 
-    return new atk4\ui\jsNotify(['content' => $fileName.' has been removed!', 'color' => 'green']);
+    return new atk4\ui\jsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
 });
 
-$field->onDelete(function ($fileName) {
-    return new atk4\ui\jsNotify(['content' => $fileName.' has been removed!', 'color' => 'green']);
+$field->onDelete(function ($fileId) {
+    return new atk4\ui\jsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
 });
 
 $img->onUpload(function ($files) use ($form, $img) {
     if ($files === 'error') {
-        return $form->error('file', 'Error uploading file.');
+        return $form->error('img', 'Error uploading image.');
     }
 
     $img->setThumbnailSrc('./images/logo.png');
@@ -39,7 +39,7 @@ $img->onUpload(function ($files) use ($form, $img) {
 
 $field->onUpload(function ($files) use ($form, $img) {
     if ($files === 'error') {
-        return $form->error('file1', 'Error uploading file.');
+        return $form->error('file', 'Error uploading file.');
     }
 
     return new atk4\ui\jsNotify(['content' => 'File is uploaded!', 'color' => 'green']);
@@ -47,5 +47,5 @@ $field->onUpload(function ($files) use ($form, $img) {
 
 $form->onSubmit(function ($form) {
     // implement submission here
-    return $form->success('Thanks for submitting file: '.$form->model['file_id'].' / '.$form->model['file1']);
+    return $form->success('Thanks for submitting file: '.$form->model['img'].' / '.$form->model['file']);
 });

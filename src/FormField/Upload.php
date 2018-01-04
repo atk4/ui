@@ -18,6 +18,15 @@ class Upload extends Input
     public $action = null;
 
     /**
+     * The uploaded file id.
+     * This id is return on form submit.
+     * If not set, will default to file name.
+     *
+     * @var null
+     */
+    public $fileId = null;
+
+    /**
      * Whether you need to open file browser dialog using input focus or not.
      * default to true.
      *
@@ -59,7 +68,7 @@ class Upload extends Input
      * The
      * @var null
      */
-    public $fieldIdName = null;
+    //public $fieldIdName = null;
 
     /**
      * Whether cb has been define or not.
@@ -75,34 +84,23 @@ class Upload extends Input
     {
         parent::init();
 
+        $this->inputType = 'hidden';
+
         $this->cb = $this->add('jsCallback');
 
         if (!$this->action) {
             $this->action = new \atk4\ui\Button(['icon' => 'upload']);
         }
-
-        if (!$this->fieldIdName) {
-            $this->fieldIdName = $this->field->short_name.'_id';
-        }
-
-        if ($this->form) {
-            $this->form->addField( $this->fieldIdName, ['Hidden']);
-        }
     }
 
     /**
-     * Set an id to the uploaded file.
-     * When id is added during the upload callback,
-     * the same id will be returned on delete callback
-     * instead of the file name.
+     * Set file id.
      *
      * @param $id
      */
     public function setFileId($id)
     {
-        $this->addJsAction($this->js()->data('fileId', $id));
-        $this->addJsAction(new jsExpression("$('input[name=[field_id]]').val([field_value])", ['field_id' => $this->fieldIdName, 'field_value' => $id]));
-        $this->addJsAction(new jsExpression("$('this').parents('form').form('set value', [field_id], [field_value])", ['field_id' => $this->fieldIdName, 'field_value' => $id]));
+        $this->fileId = $id;
     }
 
     /**
@@ -150,10 +148,15 @@ class Upload extends Input
             $this->hasUploadCb = true;
             if ($this->cb->triggered()) {
                 $action = @$_POST['action'];
-                $files = @$_FILES;
+                if ($files = @$_FILES) {
+                    $this->fileId = $files['file']['name'];
+                }
                 if ($action === 'upload' && !$files['file']['error']) {
                     $this->cb->set(function() use ($fx, $files) {
                         $actions[] = call_user_func_array($fx, $files);
+                        $actions[] = $this->js()->data('fileId', $this->fileId);
+                        $actions[] = $this->jsInput()->val($this->fileId);
+
                         if (!empty($this->jsActions)) {
                             $actions = array_merge($actions, $this->jsActions);
                         }
@@ -181,7 +184,11 @@ class Upload extends Input
             $this->template->trySet('accept', implode(',', $this->accept));
         }
         if ($this->multiple) {
-            $this->template->trySet('multiple', 'multiple');
+            //$this->template->trySet('multiple', 'multiple');
+        }
+
+        if ($this->placeholder) {
+            $this->template->trySet('PlaceHolder', $this->placeholder);
         }
 
         $this->js(true)->atkFileUpload([

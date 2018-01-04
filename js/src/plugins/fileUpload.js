@@ -6,7 +6,6 @@ export default class fileUpload extends atkPlugin {
     const that = this;
 
     this.textInput = this.$el.find('input[type="text"]');
-    this.textInput.attr('readonly', true);
 
     this.fileInput = this.$el.find('input[type="file"]');
     this.action = $('#' + this.settings.action);

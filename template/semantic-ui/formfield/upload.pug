@@ -1,9 +1,9 @@
 | <div id="{$_id}">
 | <div class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
 | {$BeforeInput}{$AfterBeforeInput}
+| <input type="text" placeholder="{$PlaceHolder}" readonly/>
 | {Input}<input type="{input_type}text{/}"/>{/}
 | <input type="file" accept="{$accept}" {$multiple} style="display:none"/>
-| {$IdInput}
 | {$AfterInput}{$AfterAfterInput}
 | </div>
 | <div class="ui tiny indicating progress" data-value="1" data-total="100">

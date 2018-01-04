@@ -230,7 +230,7 @@ class Generic extends View
             }
 
             // Anything but fields or hidden field gets inserted directly
-            if (!$el instanceof \atk4\ui\FormField\Generic || $el instanceof \atk4\ui\FormField\Hidden) {
+            if (!$el instanceof \atk4\ui\FormField\Generic) {
                 $this->template->appendHTML('Content', $el->getHTML());
                 continue;
             }
