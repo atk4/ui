@@ -197,32 +197,14 @@ class View implements jsExpressionable
     /**
      * Sets source of the View.
      *
-     * @param array $data
+     * @param array $data   Array of data
+     * @param array $fields Limit model to particular fields
      *
      * @return \atk4\data\Model
      */
-    public function setSource(array $data)
+    public function setSource(array $data, $fields = null)
     {
-        $goodData = [];
-
-        foreach ($data as $key => $value) {
-            if (!is_array($value)) {
-                $value = ['name' => $value];
-            }
-
-            if (!isset($value['id'])) {
-                $value['id'] = $key;
-            }
-            $goodData[] = $value;
-        }
-        $goodData = ['data' => $goodData];
-
-        $model = new \atk4\data\Model(
-            new \atk4\data\Persistence_Array($goodData), 'data'
-        );
-        $model->addField('name');
-
-        return $this->setModel($model);
+        $this->setModel(new \atk4\data\Model(new \atk4\data\Persistence_Static($data)), $fields);
     }
 
     /**
@@ -333,6 +315,10 @@ class View implements jsExpressionable
             if (!$this->region) {
                 $this->region = 'Content';
             }
+        }
+
+        if ($this->template && !isset($this->template->app) && isset($this->app)) {
+            $this->template->app = $this->app;
         }
 
         // add default objects
