@@ -134,6 +134,22 @@ class Console extends View implements \Psr\Log\LoggerInterface
     }
 
     /**
+     * Executes a JavaScript action.
+     *
+     * @param $js jsExpressionable
+     *
+     * @return $this
+     */
+    public function send($js)
+    {
+        $this->_output_bypass = true;
+        $this->sse->send($js);
+        $this->_output_bypass = false;
+
+        return $this;
+    }
+
+    /**
      * Executes command passing along escaped arguments.
      *
      * Will also stream stdout / stderr as the comand executes.
