@@ -4,11 +4,11 @@ require 'init.php';
 
 $form = $app->add('Form');
 
-$img = $form->addField('file', ['UploadImg']);
+$img = $form->addField('file', ['UploadImg', ['defaultSrc' => './images/default.png']]);
 $field = $form->addField('file1', ['Upload', ['accept' => ['.png', '.jpg']]]);
 
 $img->onDelete(function ($fileName) use ($img) {
-    $img->clearThumbnail();
+    $img->clearThumbnail('./images/default.png');
 
     return new atk4\ui\jsNotify(['content' => $fileName.' has been removed!', 'color' => 'green']);
 });
@@ -22,8 +22,8 @@ $img->onUpload(function ($files) use ($form, $img) {
         return $form->error('file', 'Error uploading file.');
     }
 
-    $img->setThumbnailSrc('./images/test.jpg');
-    $img->setFileId('abasicid');
+    $img->setThumbnailSrc('./images/logo.png');
+    $img->setFileId('123456');
     //Do file processing here...
 
     /* This will get caught by jsCallback and show via modal. */
@@ -47,5 +47,5 @@ $field->onUpload(function ($files) use ($form, $img) {
 
 $form->onSubmit(function ($form) {
     // implement submission here
-    return $form->success('Thanks for submitting file: '.$form->model['file'].' / '.$form->model['file1']);
+    return $form->success('Thanks for submitting file: '.$form->model['file_id'].' / '.$form->model['file1']);
 });

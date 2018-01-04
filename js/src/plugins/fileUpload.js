@@ -35,6 +35,10 @@ export default class fileUpload extends atkPlugin {
       if (!that.textInput.val()) {
         that.fileInput.click();
       } else {
+        // When upload is complete a js action can be send to set an id
+        // to the uploaded file via the jQuery data property.
+        // Check if that id exist and send it with
+        // delete callback, If not, default to file name.
         let id = that.$el.data().fileId;
         if (id === '' || typeof id === 'undefined') {
           id = that.textInput.val();
@@ -84,6 +88,8 @@ export default class fileUpload extends atkPlugin {
     const that = this;
     const fileName = file.name;
 
+    // if submit button id is set, then disable submit
+    // during upload.
     if (this.settings.submit) {
       $('#'+this.settings.submit).addClass('disabled');
     }

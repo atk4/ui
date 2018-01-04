@@ -3,6 +3,9 @@
 namespace atk4\ui\FormField;
 
 use atk4\ui\Exception;
+use atk4\ui\jsChain;
+use atk4\ui\jsExpression;
+use atk4\ui\Template;
 use atk4\ui\View;
 
 class Upload extends Input
@@ -39,7 +42,7 @@ class Upload extends Input
 
     /**
      * Allow multiple file or not.
-     * CURRENTLY NOT SUPPORTED.
+     * CURRENTLY NOT SUPPORTED
      *
      * @var bool
      */
@@ -51,6 +54,12 @@ class Upload extends Input
      * @var array
      */
     public $accept = [];
+
+    /**
+     * The
+     * @var null
+     */
+    public $fieldIdName = null;
 
     /**
      * Whether cb has been define or not.
@@ -71,6 +80,14 @@ class Upload extends Input
         if (!$this->action) {
             $this->action = new \atk4\ui\Button(['icon' => 'upload']);
         }
+
+        if (!$this->fieldIdName) {
+            $this->fieldIdName = $this->field->short_name.'_id';
+        }
+
+        if ($this->form) {
+            $this->form->addField( $this->fieldIdName, ['Hidden']);
+        }
     }
 
     /**
@@ -84,6 +101,8 @@ class Upload extends Input
     public function setFileId($id)
     {
         $this->addJsAction($this->js()->data('fileId', $id));
+        $this->addJsAction(new jsExpression("$('input[name=[field_id]]').val([field_value])", ['field_id' => $this->fieldIdName, 'field_value' => $id]));
+        $this->addJsAction(new jsExpression("$('this').parents('form').form('set value', [field_id], [field_value])", ['field_id' => $this->fieldIdName, 'field_value' => $id]));
     }
 
     /**
@@ -108,12 +127,11 @@ class Upload extends Input
             $this->hasDeleteCb = true;
             if ($this->cb->triggered() && @$_POST['action'] === 'delete') {
                 $fileName = @$_POST['f_name'];
-                $this->cb->set(function () use ($fx, $fileName) {
+                $this->cb->set(function() use ($fx, $fileName) {
                     $actions[] = call_user_func_array($fx, [$fileName]);
                     if (!empty($this->jsActions)) {
                         $actions = array_merge($actions, $this->jsActions);
                     }
-
                     return $actions;
                 });
             }
@@ -134,16 +152,15 @@ class Upload extends Input
                 $action = @$_POST['action'];
                 $files = @$_FILES;
                 if ($action === 'upload' && !$files['file']['error']) {
-                    $this->cb->set(function () use ($fx, $files) {
+                    $this->cb->set(function() use ($fx, $files) {
                         $actions[] = call_user_func_array($fx, $files);
                         if (!empty($this->jsActions)) {
                             $actions = array_merge($actions, $this->jsActions);
                         }
-
                         return $actions;
                     });
                 } elseif ($action === null || $files['file']['error']) {
-                    $this->cb->set(function () use ($fx, $files) {
+                    $this->cb->set(function() use ($fx, $files) {
                         return call_user_func($fx, 'error');
                     });
                 }
