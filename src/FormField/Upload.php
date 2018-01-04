@@ -3,8 +3,6 @@
 namespace atk4\ui\FormField;
 
 use atk4\ui\Exception;
-use atk4\ui\jsChain;
-use atk4\ui\jsExpression;
 use atk4\ui\View;
 
 class Upload extends Input
@@ -86,7 +84,7 @@ class Upload extends Input
     public function setFileId($id)
     {
         $this->addJsAction($this->js()->data('fileId', $id));
-     }
+    }
 
     /**
      * Add a js action to be return to server on callback.
@@ -110,11 +108,12 @@ class Upload extends Input
             $this->hasDeleteCb = true;
             if ($this->cb->triggered() && @$_POST['action'] === 'delete') {
                 $fileName = @$_POST['f_name'];
-                $this->cb->set(function() use ($fx, $fileName) {
+                $this->cb->set(function () use ($fx, $fileName) {
                     $actions[] = call_user_func_array($fx, [$fileName]);
                     if (!empty($this->jsActions)) {
                         $actions = array_merge($actions, $this->jsActions);
                     }
+
                     return $actions;
                 });
             }
@@ -135,11 +134,12 @@ class Upload extends Input
                 $action = @$_POST['action'];
                 $files = @$_FILES;
                 if ($action === 'upload' && !$files['file']['error']) {
-                    $this->cb->set(function() use ($fx, $files) {
+                    $this->cb->set(function () use ($fx, $files) {
                         $actions[] = call_user_func_array($fx, $files);
                         if (!empty($this->jsActions)) {
                             $actions = array_merge($actions, $this->jsActions);
                         }
+
                         return $actions;
                     });
                 } elseif ($action === null || $files['file']['error']) {

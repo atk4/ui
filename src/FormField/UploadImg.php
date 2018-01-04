@@ -15,7 +15,7 @@ class UploadImg extends Upload
 
     /**
      * The template region where to add the thumbnail view.
-     * Default to AfterAfterInput
+     * Default to AfterAfterInput.
      *
      * @var string
      */
