@@ -3,8 +3,6 @@
 namespace atk4\ui\FormField;
 
 use atk4\ui\Exception;
-use atk4\ui\jsChain;
-use atk4\ui\jsExpression;
 use atk4\ui\Template;
 use atk4\ui\View;
 
@@ -51,7 +49,7 @@ class Upload extends Input
 
     /**
      * Allow multiple file or not.
-     * CURRENTLY NOT SUPPORTED
+     * CURRENTLY NOT SUPPORTED.
      *
      * @var bool
      */
@@ -65,7 +63,8 @@ class Upload extends Input
     public $accept = [];
 
     /**
-     * The
+     * The.
+     *
      * @var null
      */
     //public $fieldIdName = null;
@@ -125,11 +124,12 @@ class Upload extends Input
             $this->hasDeleteCb = true;
             if ($this->cb->triggered() && @$_POST['action'] === 'delete') {
                 $fileName = @$_POST['f_name'];
-                $this->cb->set(function() use ($fx, $fileName) {
+                $this->cb->set(function () use ($fx, $fileName) {
                     $actions[] = call_user_func_array($fx, [$fileName]);
                     if (!empty($this->jsActions)) {
                         $actions = array_merge($actions, $this->jsActions);
                     }
+
                     return $actions;
                 });
             }
@@ -152,7 +152,7 @@ class Upload extends Input
                     $this->fileId = $files['file']['name'];
                 }
                 if ($action === 'upload' && !$files['file']['error']) {
-                    $this->cb->set(function() use ($fx, $files) {
+                    $this->cb->set(function () use ($fx, $files) {
                         $actions[] = call_user_func_array($fx, $files);
                         $actions[] = $this->js()->data('fileId', $this->fileId);
                         $actions[] = $this->jsInput()->val($this->fileId);
@@ -160,10 +160,11 @@ class Upload extends Input
                         if (!empty($this->jsActions)) {
                             $actions = array_merge($actions, $this->jsActions);
                         }
+
                         return $actions;
                     });
                 } elseif ($action === null || $files['file']['error']) {
-                    $this->cb->set(function() use ($fx, $files) {
+                    $this->cb->set(function () use ($fx, $files) {
                         return call_user_func($fx, 'error');
                     });
                 }
