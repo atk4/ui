@@ -205,50 +205,6 @@ class View implements jsExpressionable
     public function setSource(array $data, $fields = null)
     {
         $this->setModel(new \atk4\data\Model(new \atk4\data\Persistence_Static($data)), $fields);
-        /*
-        $goodData = [];
-
-        foreach ($data as $key => $value) {
-            if (!is_array($value)) {
-                $value = ['name' => $value];
-            }
-
-            if (!isset($value['id'])) {
-                $value['id'] = $key;
-            }
-            $goodData[] = $value;
-        }
-
-        $firstRow = reset($goodData);
-
-        $goodData = ['data' => $goodData];
-
-        $model = new \atk4\data\Model(
-            new \atk4\data\Persistence_Array($goodData), 'data'
-        );
-        //$model->addField('name');
-
-        if ($fields) {
-            $model->addFields($fields);
-        } elseif ($fields === null) {
-            foreach ($firstRow as $field=>$val) {
-                if ($field === 'id') {
-                    continue;
-                }
-                $model->addField($field);
-            }
-        }
-
-        if (isset($firstRow['title'])) {
-            $model->title_field = 'title';
-        } elseif (isset($firstRow['name'])) {
-            $model->title_field = 'title';
-        } else {
-            $model->title_field = 'id';
-        }
-
-        return $this->setModel($model);
-         */
     }
 
     /**
