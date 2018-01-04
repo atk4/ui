@@ -3,6 +3,9 @@
 namespace atk4\ui\FormField;
 
 use atk4\ui\Exception;
+use atk4\ui\jsChain;
+use atk4\ui\jsExpression;
+use atk4\ui\View;
 
 class Upload extends Input
 {
@@ -59,6 +62,8 @@ class Upload extends Input
     public $hasUploadCb = false;
     public $hasDeleteCb = false;
 
+    public $jsActions = [];
+
     public function init()
     {
         parent::init();
@@ -68,6 +73,29 @@ class Upload extends Input
         if (!$this->action) {
             $this->action = new \atk4\ui\Button(['icon' => 'upload']);
         }
+    }
+
+    /**
+     * Set an id to the uploaded file.
+     * When id is added during the upload callback,
+     * the same id will be returned on delete callback
+     * instead of the file name.
+     *
+     * @param $id
+     */
+    public function setFileId($id)
+    {
+        $this->addJsAction($this->js()->data('fileId', $id));
+     }
+
+    /**
+     * Add a js action to be return to server on callback.
+     *
+     * @param $action
+     */
+    public function addJsAction($action)
+    {
+        $this->jsActions[] = $action;
     }
 
     /**
@@ -83,7 +111,11 @@ class Upload extends Input
             if ($this->cb->triggered() && @$_POST['action'] === 'delete') {
                 $fileName = @$_POST['f_name'];
                 $this->cb->set(function() use ($fx, $fileName) {
-                    return call_user_func_array($fx, [$fileName]);
+                    $actions[] = call_user_func_array($fx, [$fileName]);
+                    if (!empty($this->jsActions)) {
+                        $actions = array_merge($actions, $this->jsActions);
+                    }
+                    return $actions;
                 });
             }
         }
@@ -104,7 +136,11 @@ class Upload extends Input
                 $files = @$_FILES;
                 if ($action === 'upload' && !$files['file']['error']) {
                     $this->cb->set(function() use ($fx, $files) {
-                        return call_user_func_array($fx, $files);
+                        $actions[] = call_user_func_array($fx, $files);
+                        if (!empty($this->jsActions)) {
+                            $actions = array_merge($actions, $this->jsActions);
+                        }
+                        return $actions;
                     });
                 } elseif ($action === null || $files['file']['error']) {
                     $this->cb->set(function() use ($fx, $files) {
@@ -130,7 +166,6 @@ class Upload extends Input
         if ($this->multiple) {
             $this->template->trySet('multiple', 'multiple');
         }
-
 
         $this->js(true)->atkFileUpload([
             'uri'      => $this->cb->getURL(),

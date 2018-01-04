@@ -35,7 +35,11 @@ export default class fileUpload extends atkPlugin {
       if (!that.textInput.val()) {
         that.fileInput.click();
       } else {
-        that.doFileDelete(that.textInput.val());
+        let id = that.$el.data().fileId;
+        if (id === '' || typeof id === 'undefined') {
+          id = that.textInput.val();
+        }
+        that.doFileDelete(id);
       }
     });
 

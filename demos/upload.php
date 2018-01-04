@@ -4,22 +4,26 @@ require 'init.php';
 
 $form = $app->add('Form');
 
-$field = $form->addField('file', ['Upload']);
-$field1 = $form->addField('file1', ['Upload', ['accept' => ['.png', '.jpg']]]);
+$img   = $form->addField('file', ['UploadImg']);
+$field = $form->addField('file1', ['Upload', [ 'accept' => ['.png', '.jpg']]]);
 
+
+$img->onDelete(function ($fileName) use ($img) {
+    $img->clearThumbnail();
+    return new atk4\ui\jsNotify(['content' => $fileName.' has been removed!','color' => 'green']);
+});
 
 $field->onDelete(function ($fileName) {
     return new atk4\ui\jsNotify(['content' => $fileName.' has been removed!','color' => 'green']);
 });
 
-$field1->onDelete(function ($fileName) {
-    return new atk4\ui\jsNotify(['content' => $fileName.' has been removed!','color' => 'green']);
-});
-
-$field->onUpload(function ($files) use ($form, $field) {
+$img->onUpload(function ($files) use ($form, $img) {
     if ($files === 'error') {
         return $form->error('file', 'Error uploading file.');
     }
+
+    $img->setThumbnailSrc('./images/test.jpg');
+    $img->setFileId('abasicid');
     //Do file processing here...
 
    /* This will get caught by jsCallback and show via modal. */
@@ -34,7 +38,7 @@ $field->onUpload(function ($files) use ($form, $field) {
 
 });
 
-$field1->onUpload(function ($files) use ($form, $field) {
+$field->onUpload(function ($files) use ($form, $img) {
 
     if ($files === 'error') {
         return $form->error('file1', 'Error uploading file.');
