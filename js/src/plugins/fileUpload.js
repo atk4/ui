@@ -14,8 +14,8 @@ export default class fileUpload extends atkPlugin {
     this.bar = this.$el.find('.progress')
       .progress({
         text : {
+          percent: '{percent}%',
           active: '{percent}%',
-          success: this.settings.completeLabel,
         }
       })
       .hide();
@@ -66,6 +66,7 @@ export default class fileUpload extends atkPlugin {
       case 'delete':
         this.action.html(this.getEraseContent);
         setTimeout(function() {
+          that.bar.progress('reset');
           that.bar.hide('fade');
         }, 1000);
         break;
@@ -85,7 +86,7 @@ export default class fileUpload extends atkPlugin {
   doFileUpload(file) {
 
     const that = this;
-    const fileName = file.name;
+    //const fileName = file.name;
 
     // if submit button id is set, then disable submit
     // during upload.
@@ -97,7 +98,6 @@ export default class fileUpload extends atkPlugin {
     formData.append('file', file);
     formData.append('action', 'upload');
 
-    that.bar.progress('reset');
     that.bar.show();
 
     this.$el.api({
@@ -114,6 +114,7 @@ export default class fileUpload extends atkPlugin {
         xhr.upload.addEventListener("progress", function (evt) {
           if (evt.lengthComputable) {
             let percentComplete = evt.loaded / evt.total;
+            console.log(percentComplete);
             that.bar.progress('set percent', parseInt(percentComplete * 100));
           }
         }, false);
@@ -121,6 +122,7 @@ export default class fileUpload extends atkPlugin {
       },
       onComplete: function(response, content) {
         if (response.success) {
+          that.bar.progress('set label', that.settings.completeLabel);
           that.setState('delete');
         }
         if (that.settings.submit) {
