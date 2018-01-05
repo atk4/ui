@@ -8,6 +8,7 @@ use atk4\ui\View;
 
 class Upload extends Input
 {
+    public $inputType = 'hidden';
     /**
      * The action button to open file browser dialog.
      *
@@ -83,7 +84,7 @@ class Upload extends Input
     {
         parent::init();
 
-        $this->inputType = 'hidden';
+        //$this->inputType = 'hidden';
 
         $this->cb = $this->add('jsCallback');
 
@@ -125,12 +126,19 @@ class Upload extends Input
             if ($this->cb->triggered() && @$_POST['action'] === 'delete') {
                 $fileName = @$_POST['f_name'];
                 $this->cb->set(function () use ($fx, $fileName) {
-                    $actions[] = call_user_func_array($fx, [$fileName]);
-                    if (!empty($this->jsActions)) {
-                        $actions = array_merge($actions, $this->jsActions);
+                    $js = [];
+                    $results = call_user_func_array($fx, [$fileName]);
+                    if (is_array($results)) {
+                        $js = array_merge($js, $results);
+                    } else {
+                        $js[] = $results;
                     }
 
-                    return $actions;
+                    if (!empty($this->jsActions)) {
+                        $js = array_merge($js, $this->jsActions);
+                    }
+
+                    return $js;
                 });
             }
         }
@@ -153,15 +161,21 @@ class Upload extends Input
                 }
                 if ($action === 'upload' && !$files['file']['error']) {
                     $this->cb->set(function () use ($fx, $files) {
-                        $actions[] = call_user_func_array($fx, $files);
-                        $actions[] = $this->js()->data('fileId', $this->fileId);
-                        $actions[] = $this->jsInput()->val($this->fileId);
+                        $js = [];
+                        $results = call_user_func_array($fx, $files);
+                        if (is_array($results)) {
+                            $js = array_merge($js, $results);
+                        } else {
+                            $js[] = $results;
+                        }
+                        $js[] = $this->js()->data('fileId', $this->fileId);
+                        $js[] = $this->jsInput()->val($this->fileId);
 
                         if (!empty($this->jsActions)) {
-                            $actions = array_merge($actions, $this->jsActions);
+                            $js = array_merge($js, $this->jsActions);
                         }
 
-                        return $actions;
+                        return $js;
                     });
                 } elseif ($action === null || $files['file']['error']) {
                     $this->cb->set(function () use ($fx, $files) {
