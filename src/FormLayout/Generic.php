@@ -229,8 +229,8 @@ class Generic extends View
                 continue;
             }
 
-            // Anything but fields gets inserted directly
-            if (!$el instanceof \atk4\ui\FormField\Generic) {
+            // Anything but fields or explicitly defined fields gets inserted directly
+            if (!$el instanceof \atk4\ui\FormField\Generic || !$el->layoutWrap) {
                 $this->template->appendHTML('Content', $el->getHTML());
                 continue;
             }
