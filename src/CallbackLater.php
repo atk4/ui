@@ -10,6 +10,15 @@ namespace atk4\ui;
  */
 class CallbackLater extends Callback
 {
+    /**
+     * Executes user-specified action before rendering or if App is
+     * already in rendering state, then before output.
+     *
+     * @param callback $callback
+     * @param array    $args
+     *
+     * @return mixed|null
+     */
     public function set($callback, $args = [])
     {
         if (!$this->app) {
@@ -17,8 +26,7 @@ class CallbackLater extends Callback
         }
 
         if ($this->app->is_rendering) {
-            return parent::set($callback, $args);
-            //$hook = 'beforeOutput';
+            $hook = 'beforeOutput';
         } else {
             $hook = 'beforeRender';
         }
