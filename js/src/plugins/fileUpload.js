@@ -1,4 +1,5 @@
 import atkPlugin from 'plugins/atkPlugin';
+import uploadService from "../services/UploadService";
 
 export default class fileUpload extends atkPlugin {
 
@@ -51,7 +52,8 @@ export default class fileUpload extends atkPlugin {
     this.fileInput.on('change', function(e) {
       if (e.target.files.length > 0) {
         that.textInput.val( e.target.files[0].name);
-        that.doFileUpload(e.target.files[0]);
+        //that.doFileUpload(e.target.files[0]);
+        that.doFileUpload(e.target.files);
       }
     })
   }
@@ -84,54 +86,49 @@ export default class fileUpload extends atkPlugin {
   /**
    * Do the actual file uploading process.
    *
-   * @param file
+   * @param file the FileList object.
    */
   doFileUpload(file) {
 
     const that = this;
-    //const fileName = file.name;
-
     // if submit button id is set, then disable submit
     // during upload.
     if (this.settings.submit) {
       $('#'+this.settings.submit).addClass('disabled');
     }
 
-    let formData = new FormData();
-    formData.append('file', file);
-    formData.append('action', 'upload');
+    // setup task on upload completion.
+    let completeCb =  function(response, content) {
+      if (response.success) {
+        that.bar.progress('set label', that.settings.completeLabel);
+        that.setState('delete');
+      }
+      if (that.settings.submit) {
+        $('#'+that.settings.submit).removeClass('disabled');
+      }
+    }
+
+    // setup progress bar update via xhr.
+    let xhrCb = function() {
+      let xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          let percentComplete = evt.loaded / evt.total;
+          that.bar.progress('set percent', parseInt(percentComplete * 100));
+        }
+      }, false);
+      return xhr;
+    }
 
     that.bar.show();
-
-    this.$el.api({
-      on: 'now',
-      url: this.settings.uri,
-      cache: false,
-      processData: false,
-      contentType: false,
-      data: formData,
-      method: 'POST',
-      obj: this.$el,
-      xhr: function () {
-        let xhr = new window.XMLHttpRequest();
-        xhr.upload.addEventListener("progress", function (evt) {
-          if (evt.lengthComputable) {
-            let percentComplete = evt.loaded / evt.total;
-            that.bar.progress('set percent', parseInt(percentComplete * 100));
-          }
-        }, false);
-        return xhr;
-      },
-      onComplete: function(response, content) {
-        if (response.success) {
-          that.bar.progress('set label', that.settings.completeLabel);
-          that.setState('delete');
-        }
-        if (that.settings.submit) {
-          $('#'+that.settings.submit).removeClass('disabled');
-        }
-      }
-    });
+    uploadService.uploadFiles(
+      file,
+      this.$el,
+      {action: 'upload'},
+      this.settings.uri,
+      completeCb,
+      xhrCb
+    );
   }
 
   /**
