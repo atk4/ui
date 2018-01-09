@@ -5,7 +5,7 @@ const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
 const env  = require('yargs').argv.env; // use --env with webpack 2
 
-let libraryName = 'atk4JS';
+let libraryName = 'atk';
 
 let plugins = [
 
@@ -13,9 +13,9 @@ let plugins = [
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = libraryName + '.min.js';
+  outputFile = libraryName + '4JS.min.js';
 } else {
-  outputFile = libraryName + '.js';
+  outputFile = libraryName + '4JS.js';
 }
 
 const config = {
@@ -26,7 +26,7 @@ const config = {
     filename: outputFile,
     library: libraryName,
     libraryTarget: 'umd',
-    umdNamedDefine: true
+    umdNamedDefine: true,
   },
   module: {
     rules: [
