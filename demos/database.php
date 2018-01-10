@@ -77,13 +77,13 @@ if (!class_exists('Country')) {
 
             $this->hasOne('client_country_iso', [
             new Country(),
-            'their_field' => 'iso',
-            'ui'          => [
-                'display' => [
-                    'form' => 'Line',
+                'their_field' => 'iso',
+                'ui'          => [
+                    'display' => [
+                        'form' => 'Line',
+                    ],
                 ],
-            ],
-        ])
+            ])
             ->addField('client_country', 'name');
 
             $this->addField('is_commercial', ['type' => 'boolean']);
