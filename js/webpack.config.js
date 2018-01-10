@@ -5,7 +5,7 @@ const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
 const env  = require('yargs').argv.env; // use --env with webpack 2
 
-let libraryName = 'atkjs-ui';
+let libraryName = 'atk';
 
 let plugins = [
 
@@ -13,9 +13,9 @@ let plugins = [
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = libraryName + '.min.js';
+  outputFile = libraryName + 'js-ui.min.js';
 } else {
-  outputFile = libraryName + '.js';
+  outputFile = libraryName + 'js-ui.js';
 }
 
 const config = {
