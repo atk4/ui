@@ -1,4 +1,11 @@
 import $ from 'jquery';
+import spinner from "./plugins/spinner";
+import serverEvent from "./plugins/serverEvent";
+import reloadView from "./plugins/reloadView";
+import ajaxec from "./plugins/ajaxec";
+import createModal from "./plugins/createModal";
+import notify from "./plugins/notify";
+import fileUpload from "./plugins/fileUpload";
 
 /**
  * Generate a jQuery plugin
@@ -24,6 +31,15 @@ import $ from 'jquery';
  * import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
  * in final webpack output.
  */
+
+//Create plugins.
+plugin('Spinner', spinner);
+plugin('ReloadView', reloadView);
+plugin('Ajaxec', ajaxec);
+plugin('CreateModal', createModal);
+plugin('Notify', notify, true);
+plugin('ServerEvent', serverEvent, true);
+plugin('FileUpload', fileUpload);
 
 export default function plugin(name, className, shortHand = false) {
         // Add atk namespace to jQuery global space.

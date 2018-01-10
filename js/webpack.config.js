@@ -5,7 +5,7 @@ const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
 const env  = require('yargs').argv.env; // use --env with webpack 2
 
-let libraryName = 'atk4JS';
+let libraryName = 'atk';
 
 let plugins = [
 
@@ -19,14 +19,14 @@ if (env === 'build') {
 }
 
 const config = {
-  entry: __dirname + '/src/index.js',
+  entry: __dirname + '/src/agile-toolkit.js',
   devtool: 'source-map',
   output: {
     path: __dirname + '/../public',
     filename: outputFile,
     library: libraryName,
     libraryTarget: 'umd',
-    umdNamedDefine: true
+    umdNamedDefine: true,
   },
   module: {
     rules: [
