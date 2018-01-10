@@ -2,8 +2,6 @@
 
 include 'init.php';
 
-$app->requireJS('test.js');
-
 $app->add('Header')->set('Getting Started with Agile UI Demo Suite');
 
 $t = $app->add(['View', false, 'red',  'ui' => 'segment'])->add('Text');
