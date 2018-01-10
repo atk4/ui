@@ -5,7 +5,7 @@ try {
     if (file_exists('db.php')) {
         include 'db.php';
     } else {
-        $db = new \atk4\data\Persistence_SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
+        $db = new \atk4\data\Persistence_SQL('mysql:dbname=atk4;host=localhost', 'root', '');
     }
 } catch (PDOException $e) {
     throw new \atk4\ui\Exception([
@@ -77,13 +77,13 @@ if (!class_exists('Country')) {
 
             $this->hasOne('client_country_iso', [
             new Country(),
-            'their_field' => 'iso',
-            'ui'          => [
-                'display' => [
-                    'form' => 'Line',
+                'their_field' => 'iso',
+                'ui'          => [
+                    'display' => [
+                        'form' => 'Line',
+                    ],
                 ],
-            ],
-        ])
+            ])
             ->addField('client_country', 'name');
 
             $this->addField('is_commercial', ['type' => 'boolean']);

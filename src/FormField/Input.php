@@ -70,7 +70,7 @@ class Input extends Generic
      */
     public function getValue()
     {
-        return isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: '';
+        return isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : (isset($this->content) ? $this->content : '');
     }
 
     /**
