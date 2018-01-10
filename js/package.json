@@ -1,8 +1,8 @@
 {
-  "name": "atk",
+  "name": "atkjs-ui",
   "version": "1.0.0",
   "description": "Agile Toolkit Javascript library.",
-  "main": "lib/atk.js",
+  "main": "lib/atkjs-ui.js",
   "scripts": {
     "build": "webpack --env build",
     "dev": "webpack --progress --colors --watch --env dev",

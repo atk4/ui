@@ -5,7 +5,7 @@ const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
 const env  = require('yargs').argv.env; // use --env with webpack 2
 
-let libraryName = 'atk';
+let libraryName = 'atkjs-ui';
 
 let plugins = [
 
@@ -19,7 +19,7 @@ if (env === 'build') {
 }
 
 const config = {
-  entry: __dirname + '/src/agile-toolkit.js',
+  entry: __dirname + '/src/agile-toolkit-ui.js',
   devtool: 'source-map',
   output: {
     path: __dirname + '/../public',

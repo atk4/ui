@@ -12,7 +12,7 @@ $app = new \atk4\ui\App();
 
 $app->title = 'Agile UI - Demo Suite';
 
-if (file_exists('../public/atk.min.js')) {
+if (file_exists('../public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = '../public';
 }
 
