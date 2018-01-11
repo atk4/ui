@@ -214,7 +214,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
         $this->output('--[ Executing '.get_class($model).'->'.$method.' ]--------------');
         $model->debug = true;
-        $result = call_user_func_array([$model, $method], $args);
+        $result = call_user_func_array([$model, $method], array_merge([$this], $args));
         $this->output('--[ Result: '.json_encode($result).' ]------------');
 
         if (isset($model->app)) {
