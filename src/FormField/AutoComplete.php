@@ -128,14 +128,13 @@ class AutoComplete extends Input
             }
         }
 
-      
         //fix #327: https://github.com/atk4/ui/issues/327
         $data = [];
-		$res = $this->model->export([$this->model->id_field, $this->model->title_field]);
-		foreach($res as $item) {
-			$data[] = ['id' => $item[$this->model->id_field], 'name' => $item[$this->model->title_field]];
-		}
-		
+        $res = $this->model->export([$this->model->id_field, $this->model->title_field]);
+        foreach ($res as $item) {
+            $data[] = ['id' => $item[$this->model->id_field], 'name' => $item[$this->model->title_field]];
+        }
+        
         if ($this->empty) {
             array_unshift($data, ['id' => 0, 'name' => $this->empty]);
         }
