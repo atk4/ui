@@ -1,6 +1,6 @@
 <?php
 /**
- * Demonstrates how to use a wizard
+ * Demonstrates how to use a wizard.
  */
 require 'init.php';
 
@@ -12,8 +12,7 @@ $t->addStep('Welcome', function ($p) {
     $p->add(['Message', 'Welcome to wizard demonstration'])->text
         ->addParagraph('Use button "Next" to advance')
         ->addParagraph('You can specify your existing database connection string which will be used
-        to create a table for model of your choice')
-        ;
+        to create a table for model of your choice');
 });
 
 // If you add a form on a step, then wizard will automatically submit that
@@ -26,6 +25,7 @@ $t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection
     $f->addField('dsn', 'Connect DSN', ['required'=>true])->placholder = 'mysql://user:pass@db-host.example.com/mydb';
     $f->onSubmit(function ($f) use ($p) {
         $p->memorize('dsn', $f->model['dsn']);
+
         return $p->jsNext();
     });
 });
@@ -34,12 +34,10 @@ $t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection
 // and set a custom js action or even set a different link. You can use recall()
 // to access some values that were recorded on another steps.
 $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'table'], function ($p) {
-
     if ($_GET['name']) {
         $p->memorize('model', $_GET['name']);
         header('Location: '.$p->urlNext());
     }
-
 
     $t = $p->add(['Grid', 'paginator'=>false, 'menu'=>false]);
 
@@ -59,10 +57,11 @@ $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'tabl
 $t->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'database'], function ($p) {
     $c = $p->add('Console');
 
-    $c->set(function ($c) use($p) {
+    $c->set(function ($c) use ($p) {
         $c->output('please wait');
         sleep(1);
         $c->output('DO IT!');
+
         return $p->jsNext();
     });
 });

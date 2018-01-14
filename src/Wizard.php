@@ -5,28 +5,27 @@
 namespace atk4\ui;
 
 /**
- * Wizard widget
+ * Wizard widget.
  */
 class Wizard extends View
 {
-
     use \atk4\core\SessionTrait;
 
     public $defaultTemplate = 'wizard.html';
     public $ui = 'steps';
 
     /**
-     * Callback, that triggers selection of a step
+     * Callback, that triggers selection of a step.
      */
     public $stepCallback = null;
 
     /**
-     * List of steps
+     * List of steps.
      */
     public $steps = [];
 
     /**
-     * Current step
+     * Current step.
      */
     public $currentStep = null;
 
@@ -38,7 +37,7 @@ class Wizard extends View
      * Icon that will be used on all steps by default.
      *  - 'empty' , since no such icon exists, no visible icon will be used unless step is completed
      *  - 'square outline', use this (or any other) Semantic UI icon by default
-     *  - false,  disables icons alltogether (or using checkboxes for completed steps)
+     *  - false,  disables icons alltogether (or using checkboxes for completed steps).
      */
     public $defaultIcon = 'empty'; // 'square outline'
 
@@ -55,12 +54,12 @@ class Wizard extends View
         // add buttons
         if ($this->currentStep) {
             $this->buttonPrev = $this->add(['Button', 'Back', 'basic'], 'Left');
-            $this->buttonPrev->link($this->stepCallback->getURL($this->currentStep-1));
+            $this->buttonPrev->link($this->stepCallback->getURL($this->currentStep - 1));
         }
 
         $this->buttonNext = $this->add(['Button', 'Next', 'primary'], 'Right');
 
-        $this->buttonNext->link($this->stepCallback->getURL($this->currentStep+1));
+        $this->buttonNext->link($this->stepCallback->getURL($this->currentStep + 1));
     }
 
     /**
@@ -74,10 +73,10 @@ class Wizard extends View
     public function addStep($name, $callback)
     {
         $step = $this->factory([
-            'Step', 
-            'wizard' => $this, 
-            'template'=>clone $this->stepTemplate,
-            'sequence'=>count($this->steps),
+            'Step',
+            'wizard'  => $this,
+            'template'=> clone $this->stepTemplate,
+            'sequence'=> count($this->steps),
         ], $name);
 
         // add tabs menu item
@@ -102,17 +101,13 @@ class Wizard extends View
     {
         if (count($this->steps) == $this->currentStep + 1) {
             $this->buttonFinish = $this->add(['Button', 'Finish', 'primary'], 'Right');
-            $this->buttonFinish->link($this->stepCallback->getURL( count($this->steps) ));
+            $this->buttonFinish->link($this->stepCallback->getURL(count($this->steps)));
         } elseif ($this->currentStep == count($this->steps)) {
-
             $this->buttonPrev->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
 
             $res = call_user_func($callback, $this);
-
-
         }
-
     }
 
     public function add($seed, $region = null)
@@ -140,11 +135,10 @@ class Wizard extends View
         return new jsExpression('document.location = []', [$this->urlNext()]);
     }
 
-
     public function recursiveRender()
     {
         if (!$this->steps) {
-            $this->addStep(['No Steps Defined', 'icon'=>'configure', 'description'=>'use $wizard->addStep() now'], function($p){ 
+            $this->addStep(['No Steps Defined', 'icon'=>'configure', 'description'=>'use $wizard->addStep() now'], function ($p) {
                 $p->add(['Message', 'Step content will appear here', 'type'=>'error', 'text'=>'Specify callback to addStep() which would populate this area.']);
             });
         }
@@ -152,7 +146,6 @@ class Wizard extends View
         if (count($this->steps) == $this->currentStep + 1) {
             $this->buttonNext->destroy();
         }
-
 
         parent::recursiveRender();
     }
@@ -164,11 +157,11 @@ class Wizard extends View
         $enumeration = ['one', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
         $this->ui = $enumeration[$c].' '.$this->ui;
 
-        if ($c>6) {
+        if ($c > 6) {
             $this->addClass('mini');
-        } elseif($c>5) {
+        } elseif ($c > 5) {
             $this->addClass('tiny');
-        } elseif($c>4) {
+        } elseif ($c > 4) {
             $this->addClass('small');
         }
 

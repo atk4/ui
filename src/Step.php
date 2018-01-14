@@ -5,13 +5,12 @@
 namespace atk4\ui;
 
 /**
- * One step of the wizard
+ * One step of the wizard.
  */
 class Step extends View
 {
-
     /**
-     * Use the parent's template
+     * Use the parent's template.
      */
     public $defaultTemplate = null;
 
@@ -24,11 +23,12 @@ class Step extends View
     public $icon = null;
 
     /**
-     * Will be assigned 0, 1, 2, etc, 
+     * Will be assigned 0, 1, 2, etc,.
      */
     public $sequence = null;
 
-    function __construct($title) { 
+    public function __construct($title)
+    {
         $this->title = $title;
     }
 
@@ -36,7 +36,6 @@ class Step extends View
     {
         $this->template->set('title', $this->title);
         $this->template->set('description', $this->description);
-
 
         if ($this->icon == false) {
             $this->template->del('has_icon');

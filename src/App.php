@@ -384,7 +384,7 @@ class App
             $request_uri = $_SERVER['REQUEST_URI'];
         } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
             $request_uri = $_SERVER['ORIG_PATH_INFO'];
-            // This one comes without QUERY string
+        // This one comes without QUERY string
         } else {
             $request_uri = '';
         }
