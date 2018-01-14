@@ -40,7 +40,6 @@ $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'tabl
         exit;
     }
 
-
     $c = $p->add('Columns');
 
     $t = $c->addColumn()->add(['Grid', 'paginator'=>false, 'menu'=>false]);
