@@ -375,7 +375,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         $cb->set(function () {
             $caught = function ($e) {
-                return new jsExpression('$([html]).modal("show")', [
+                return new jsExpression('$([html]).modal("hide others").modal("show")', [
                     'html' => '<div class="ui fullscreen modal"> <i class="close icon"></i> <div class="header"> '.
                     htmlspecialchars(get_class($e)).
                     ' </div> <div class="content"> '.
