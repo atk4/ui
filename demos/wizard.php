@@ -34,12 +34,18 @@ $t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection
 // and set a custom js action or even set a different link. You can use recall()
 // to access some values that were recorded on another steps.
 $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'table'], function ($p) {
-    if ($_GET['name']) {
+    if (isset($_GET['name'])) {
         $p->memorize('model', $_GET['name']);
         header('Location: '.$p->urlNext());
+        exit;
     }
 
-    $t = $p->add(['Grid', 'paginator'=>false, 'menu'=>false]);
+
+    $c = $p->add('Columns');
+
+    $t = $c->addColumn()->add(['Grid', 'paginator'=>false, 'menu'=>false]);
+    $c->addColumn()->add(['Message', 'Information', 'info'])->text
+        ->addParagraph('Selecting which model you would like to import into your DSN. If corresponding table already exist, we might add extra fields into it. No tables, columns or rows will be deleted.');
 
     $t->setSource(['Country', 'Stat']);
 
