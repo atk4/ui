@@ -1,0 +1,18 @@
+<{_element}div{/} id="{$_id}" class="{_ui}ui{/} {$class} top attached {_class}{/}" style="{$style}" {$attributes}>
+| {Step}
+<div id="{$_id}" class="ui {$class} step" style="{$style}" {$attributes}>
+| {has_icon}
+<i class="{icon}configure{/} icon"></i>
+| {/has_icon}
+.content
+    .title {title}No steps in this Wizard{/}
+    .description {description}Use $wizard->addStep() to define steps.{/}
+</div>
+| {/Step}
+</{_element}div{/}>
+.ui.attached.segment
+    | {$Content}
+.ui.bottom.attached.segment
+    .ui.grid 
+        .eight.wide.column {$Left}
+        .eight.wide.right.aligned.column {$Right}
