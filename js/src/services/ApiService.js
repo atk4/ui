@@ -148,12 +148,21 @@ class ApiService {
         //catch application error and display them in a new modal window.
         var m = $("<div>")
             .appendTo('body')
-            .addClass('ui scrolling modal')
+            .addClass('ui modal')
             .css('padding', '1em')
             .html(errorMsg);
+        var trace = m.find('.atk-stack').css({'max-height':'120px', 'overflow': 'scroll'}).hide();
+
+        if (trace.length > 0) {
+            m.prepend($('<div class="ui button">Trace</div>').on('click', function() {
+                trace.toggle();
+            }));
+        }
         m.modal({
             duration: 100,
-            allowMultiple: false,
+            allowMultiple: true,
+            detachable: true,
+            observeChanges: false,
             onHide: function() {
                 m.children().remove();
                 return true;

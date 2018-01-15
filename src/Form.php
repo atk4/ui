@@ -375,13 +375,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         $cb->set(function () {
             $caught = function ($e) {
-                return new jsExpression('$([html]).modal("show")', [
-                    'html' => '<div class="ui fullscreen modal"> <i class="close icon"></i> <div class="header"> '.
-                    htmlspecialchars(get_class($e)).
-                    ' </div> <div class="content"> '.
-                    ($e instanceof \atk4\core\Exception ? $e->getHTML() : nl2br(htmlspecialchars($e->getMessage())))
-                    .' </div> </div>',
-                ]);
+                $html = '<div class="header"> '.
+                        htmlspecialchars(get_class($e)).
+                        ' </div> <div class="content"> '.
+                        ($e instanceof \atk4\core\Exception ? $e->getHTML() : nl2br(htmlspecialchars($e->getMessage())))
+                        .' </div>';
+                $this->app->terminate(json_encode(['success' => false, 'message' => $html]));
             };
 
             try {
