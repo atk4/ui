@@ -3,11 +3,9 @@
 date_default_timezone_set('UTC');
 include 'init.php';
 
-
 // Paginator which tracks its own position
 $app->add(['Header', 'Paginator tracks its own position']);
 $app->add(['Paginator', 'total' => 40, 'getArgName' => 'page']);
-
 
 // Dynamically reloading paginator
 $app->add(['Header', 'Dynamic reloading']);
@@ -16,7 +14,6 @@ $label = $seg->add(['Label']);
 $bb = $seg->add(['Paginator', 'total' => 50, 'range' => 2, 'reload' => $seg]);
 $label->addClass('blue ribbon');
 $label->set('Current page: '.$bb->page);
-
 
 // Multiple dependent Paginators
 $app->add(['Header', 'Sticky Usage']);
