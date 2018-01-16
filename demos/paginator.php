@@ -13,7 +13,6 @@ $bb = $seg->add(['Paginator', 'total' => 50, 'range' => 2, 'reload' => $seg]);
 $label->addClass('blue ribbon');
 $label->set('Current page: '.$bb->page);
 
-
 $app->add(['Header', 'Sticky Usage']);
 $seg = $app->add(['View', 'ui' => 'blue segment']);
 
@@ -29,6 +28,3 @@ $seg->add(['ui'=>'hidden divider']);
 $label = $seg->add(['Label']);
 $label->addClass('orange');
 $label->set('Month: '.$month.' and Day: '.$day);
-
-
-

@@ -30,7 +30,7 @@ class Paginator extends View
     public $range = 4;
 
     /**
-     * Set this if you want GET argument name to look beautifully, 
+     * Set this if you want GET argument name to look beautifully,.
      */
     public $getArgName = null;
 
@@ -145,7 +145,7 @@ class Paginator extends View
     }
 
     /**
-     * Return URL for displaying a certain page
+     * Return URL for displaying a certain page.
      *
      * @param int|string $page
      *
