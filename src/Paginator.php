@@ -30,6 +30,11 @@ class Paginator extends View
     public $range = 4;
 
     /**
+     * Set this if you want GET argument name to look beautifully, 
+     */
+    public $getArgName = null;
+
+    /**
      * If specified, must be instance of a view which will be reloaded on selection.
      */
     public $reload = null;
@@ -40,7 +45,6 @@ class Paginator extends View
     public function init()
     {
         parent::init();
-        $this->app->stickyGet($this->name);
 
         if (!$this->page) {
             $this->page = $this->getCurrentPage();
@@ -75,7 +79,7 @@ class Paginator extends View
      */
     public function getCurrentPage()
     {
-        return isset($_GET[$this->name]) ? (int) $_GET[$this->name] : 1;
+        return isset($_GET[$this->getArgName ?: $this->name]) ? (int) $_GET[$this->getArgName ?: $this->name] : 1;
     }
 
     /**
@@ -141,15 +145,15 @@ class Paginator extends View
     }
 
     /**
-     * TODO: Remove after https://github.com/atk4/ui/issues/69 is fixed.
+     * Return URL for displaying a certain page
      *
      * @param int|string $page
      *
      * @return string
      */
-    public function url($page)
+    public function getPageURL($page)
     {
-        return $this->app->url([$this->name => $page]);
+        return $this->url([$this->getArgName ?: $this->name => $page]);
     }
 
     /**
@@ -162,7 +166,7 @@ class Paginator extends View
     {
         if ($page) {
             $t->trySet('page', (string) $page);
-            $t->trySet('link', $this->url($page));
+            $t->trySet('link', $this->getPageURL($page));
 
             $t->trySet('active', $page === $this->page ? 'active' : '');
         }
@@ -192,7 +196,7 @@ class Paginator extends View
         }
 
         if ($this->reload) {
-            $this->on('click', '.item', new jsReload($this->reload, [$this->name => new jsExpression('$(this).data("page")')]));
+            $this->on('click', '.item', new jsReload($this->reload, [$this->getArgName ?: $this->name => new jsExpression('$(this).data("page")')]));
         }
 
         parent::renderView();
