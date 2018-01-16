@@ -400,6 +400,7 @@ class App
      *
      * @param array|string $page           URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extra_args     Additional URL arguments
      *
      * @return string
      */

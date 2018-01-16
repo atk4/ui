@@ -1031,12 +1031,30 @@ class View implements jsExpressionable
 
     // {{{ Sticky URLs
 
+    /** @var array stickyGet arguments */
     public $stickyArgs = [];
 
+    /** @var array Cached stickyGet arguments */
     public $_stickyArgsCached = null;
 
     /**
+     * Build an URL which this view can use for call-backs. It should
+     * be guaranteed that requesting returned URL would at some point call
+     * $this->init().
+     *
+     * @param array $page
+     *
+     * @return string
+     */
+    public function url($page = [])
+    {
+        return $this->app->url($page, false, $this->_getStickyArgs());
+    }
+
+    /**
      * Get sticky arguments defined by the view and parents (including API).
+     *
+     * @return array
      */
     public function _getStickyArgs()
     {
@@ -1052,19 +1070,19 @@ class View implements jsExpressionable
     }
 
     /**
-     * Build an URL that this view can use for call-backs. It should
-     * be guaranteed that requesting returned URL would at some point call
-     * $this->init().
+     * Save sticky GET argument and return it's value.
+     *
+     * @param string $name
+     *
+     * @return string
      */
-    public function url($page = [])
-    {
-        return $this->app->url($page, false, $this->_getStickyArgs());
-    }
-
     public function stickyGet($name)
     {
         if ($this->_stickyArgsCached) {
-            throw new Exception(['Unable to set stickyGet after url() has been used here or by a child', 'name'=>$name]);
+            throw new Exception([
+                'Unable to set stickyGet after url() has been used here or by a child',
+                'name' => $name,
+            ]);
         }
 
         if (isset($_GET[$name])) {

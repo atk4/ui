@@ -58,6 +58,9 @@ class Callback
         $this->setDefaults($defaults);
     }
 
+    /**
+     * Initialization.
+     */
     public function init()
     {
         $this->_init();

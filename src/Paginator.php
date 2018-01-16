@@ -30,7 +30,9 @@ class Paginator extends View
     public $range = 4;
 
     /**
-     * Set this if you want GET argument name to look beautifully,.
+     * Set this if you want GET argument name to look beautifully.
+     *
+     * @var null|string
      */
     public $getArgName = null;
 
@@ -42,12 +44,19 @@ class Paginator extends View
     public $ui = 'pagination menu';
     public $defaultTemplate = 'paginator.html';
 
+    /**
+     * Initializing.
+     */
     public function init()
     {
         parent::init();
 
         if (!$this->page) {
             $this->page = $this->getCurrentPage();
+        }
+
+        if (!$this->getArgName) {
+            $this->getArgName = $this->name;
         }
     }
 
@@ -79,7 +88,7 @@ class Paginator extends View
      */
     public function getCurrentPage()
     {
-        return isset($_GET[$this->getArgName ?: $this->name]) ? (int) $_GET[$this->getArgName ?: $this->name] : 1;
+        return isset($_GET[$this->getArgName]) ? (int) $_GET[$this->getArgName] : 1;
     }
 
     /**
@@ -153,7 +162,7 @@ class Paginator extends View
      */
     public function getPageURL($page)
     {
-        return $this->url([$this->getArgName ?: $this->name => $page]);
+        return $this->url([$this->getArgName => $page]);
     }
 
     /**
@@ -196,7 +205,7 @@ class Paginator extends View
         }
 
         if ($this->reload) {
-            $this->on('click', '.item', new jsReload($this->reload, [$this->getArgName ?: $this->name => new jsExpression('$(this).data("page")')]));
+            $this->on('click', '.item', new jsReload($this->reload, [$this->getArgName => new jsExpression('$(this).data("page")')]));
         }
 
         parent::renderView();
