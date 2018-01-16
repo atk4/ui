@@ -257,7 +257,7 @@ class View implements jsExpressionable
     /**
      * Makes view into a "<a>" element with a link.
      *
-     * @param string $url
+     * @param string|array $url
      *
      * @return $this
      */
@@ -269,7 +269,7 @@ class View implements jsExpressionable
 
             return $this;
         }
-        $this->setAttr('href', $this->app->url($url));
+        $this->setAttr('href', $this->url($url));
 
         return $this;
     }
