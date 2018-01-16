@@ -5,6 +5,7 @@ namespace atk4\ui;
 use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
 use atk4\core\TrackableTrait;
+use atk4\core\InitializerTrait;
 
 /**
  * Add this object to your render tree and it will expose a unique URL which, when
@@ -25,6 +26,9 @@ class Callback
     use TrackableTrait;
     use AppScopeTrait;
     use DIContainerTrait;
+    use InitializerTrait {
+        init as _init;
+    }
 
     /**
      * Will look for trigger in the POST data. Will re-use existing URL, but
@@ -54,6 +58,18 @@ class Callback
         $this->setDefaults($defaults);
     }
 
+    public function init()
+    {
+        $this->_init();
+
+        if (!$this->app) {
+            throw new Exception(['Call-back must be part of a RenderTree']);
+        }
+
+        $this->owner->stickyGet($this->name);
+    }
+
+
     /**
      * Executes user-specified action when call-back is triggered.
      *
@@ -64,9 +80,6 @@ class Callback
      */
     public function set($callback, $args = [])
     {
-        if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
-        }
 
         if ($this->POST_trigger) {
             if (isset($_POST[$this->name])) {
@@ -114,6 +127,6 @@ class Callback
      */
     public function getURL($mode = 'callback')
     {
-        return $this->app->url([$this->name => $mode], $this->POST_trigger);
+        return $this->owner->url([$this->name => $mode], $this->POST_trigger);
     }
 }

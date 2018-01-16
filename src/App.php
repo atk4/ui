@@ -403,14 +403,14 @@ class App
      *
      * @return string
      */
-    public function url($page = [], $needRequestUri = false)
+    public function url($page = [], $needRequestUri = false, $extra_args = [])
     {
         if ($needRequestUri) {
             return $_SERVER['REQUEST_URI'];
         }
 
         $sticky = $this->sticky_get_arguments;
-        $result = [];
+        $result = $extra_args;
 
         if ($this->page === null) {
             $uri = $this->getRequestURI();
