@@ -4,8 +4,8 @@ namespace atk4\ui;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
-use atk4\core\TrackableTrait;
 use atk4\core\InitializerTrait;
+use atk4\core\TrackableTrait;
 
 /**
  * Add this object to your render tree and it will expose a unique URL which, when
@@ -69,7 +69,6 @@ class Callback
         $this->owner->stickyGet($this->name);
     }
 
-
     /**
      * Executes user-specified action when call-back is triggered.
      *
@@ -80,7 +79,6 @@ class Callback
      */
     public function set($callback, $args = [])
     {
-
         if ($this->POST_trigger) {
             if (isset($_POST[$this->name])) {
                 $this->triggered = $_POST[$this->name];
