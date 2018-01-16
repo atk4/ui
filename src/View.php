@@ -1029,21 +1029,19 @@ class View implements jsExpressionable
 
     // }}}
 
-    // {{{ Sticky URLs 
-    /**
-     *
-     */
+    // {{{ Sticky URLs
+
     public $stickyArgs = [];
 
     public $_stickyArgsCached = null;
 
     /**
-     * Get sticky arguments defined by the view and parents (including API)
+     * Get sticky arguments defined by the view and parents (including API).
      */
-    function _getStickyArgs()
+    public function _getStickyArgs()
     {
         if ($this->_stickyArgsCached === null) {
-            if ($this->owner && $this->owner instanceof View) {
+            if ($this->owner && $this->owner instanceof self) {
                 $this->_stickyArgsCached = array_merge($this->owner->_getStickyArgs(), $this->stickyArgs);
             } else {
                 $this->_stickyArgsCached = [];
@@ -1058,11 +1056,13 @@ class View implements jsExpressionable
      * be guaranteed that requesting returned URL would at some point call
      * $this->init().
      */
-    function url($page = []) {
+    public function url($page = [])
+    {
         return $this->app->url($page, false, $this->_getStickyArgs());
     }
 
-    function stickyGet($name){
+    public function stickyGet($name)
+    {
         if ($this->_stickyArgsCached) {
             throw new Exception(['Unable to set stickyGet after url() has been used here or by a child', 'name'=>$name]);
         }
@@ -1073,7 +1073,6 @@ class View implements jsExpressionable
             return $_GET[$name];
         }
     }
-
 
     // }}}
 }
