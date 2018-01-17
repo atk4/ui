@@ -79,7 +79,16 @@ Consider this code::
     $b3 = $app->add('Button');
     $b3->set($b3->url());
 
+This will display 3 buttons and each button will contain a URL which needs to be opened in order for
+corresponding button to be initialized. Because middle button is inside a callback the URL for that
+will be different.
 
 
+Dropping sticky argument
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Sometimes you want to drop a sticky argument. If your sticky was set locally, you can drop it by calling
+either a parent's url or $app->url(), however for global sticky Get you can use either `url(['client_id'=>false])` 
+or `stickyForget('client_id')`.
 
 
