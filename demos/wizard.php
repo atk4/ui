@@ -61,13 +61,22 @@ $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'tabl
 // the next step.
 $t->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'database'], function ($p) {
     $c = $p->add('Console');
+    $p->buttonFinish->addClass('disabled');
 
     $c->set(function ($c) use ($p) {
+        $dsn = $p->recall('dsn');
+        $model = $p->recall('model');
+
+
         $c->output('please wait');
         sleep(1);
-        $c->output('DO IT!');
+        $c->output('connecting to "'.$dsn.'" (well not really, this is only a demo)');
+        sleep(2);
+        $c->output('initializing table for model "'.$model.'" (again - tricking you)');
+        sleep(1);
+        $c->output('DONE');
 
-        return $p->jsNext();
+        $c->send($p->buttonFinish->js()->removeClass('disabled'));
     });
 });
 
@@ -76,5 +85,5 @@ $t->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'data
 // because you shouldn't be able to navigate wizard back without restarting it.
 // Only one finish can be added.
 $t->addFinish(function ($p) {
-    $c->add(['Header', 'You are DONE', 'huge centered']);
+    $p->add(['Header', 'You are DONE', 'huge centered']);
 });

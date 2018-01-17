@@ -58,6 +58,7 @@ class Wizard extends View
         }
 
         $this->buttonNext = $this->add(['Button', 'Next', 'primary'], 'Right');
+        $this->buttonFinish = $this->add(['Button', 'Finish', 'primary'], 'Right');
 
         $this->buttonNext->link($this->stepCallback->getURL($this->currentStep + 1));
     }
@@ -90,6 +91,7 @@ class Wizard extends View
             $_GET[$this->stepCallback->urlTrigger] = 0;
 
             $this->stepCallback->set($callback, [$this]);
+
         } elseif ($step->sequence < $this->currentStep) {
             $step->addClass('completed');
         }
@@ -104,14 +106,19 @@ class Wizard extends View
     public function addFinish($callback)
     {
         if (count($this->steps) == $this->currentStep + 1) {
-            $this->buttonFinish = $this->add(['Button', 'Finish', 'primary'], 'Right');
             $this->buttonFinish->link($this->stepCallback->getURL(count($this->steps)));
         } elseif ($this->currentStep == count($this->steps)) {
+
             $this->buttonPrev->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
+            $this->buttonFinish->destroy();
 
+            $this->app->catch_runaway_callbacks = false;
             $res = call_user_func($callback, $this);
+        } else {
+            $this->buttonFinish->destroy();
         }
+
     }
 
     public function add($seed, $region = null)
