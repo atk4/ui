@@ -137,9 +137,9 @@ class ApiService {
       //check if we have html returned by server with <body> content.
       var body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
       if (body) {
-        apiService.showErrorWindow(body);
+        apiService.showErrorModal(body);
       } else {
-        alert("Error in ajaxec response"+response);
+        apiService.showErrorModal(response);
       }
     }
   }
@@ -180,7 +180,7 @@ class ApiService {
         'margin': 'auto',
         'width': '100%',
         'height': '100%',
-        'position': 'fixed',
+        'position': 'absolute',
         'top': 0,
         'bottom': 0,
         'z-index': '100000',
