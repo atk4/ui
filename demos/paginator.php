@@ -16,7 +16,7 @@ $label->addClass('blue ribbon');
 $label->set('Current page: '.$bb->page);
 
 // Multiple dependent Paginators
-$app->add(['Header', 'Sticky Usage']);
+$app->add(['Header', 'Local Sticky Usage']);
 $seg = $app->add(['View', 'ui' => 'blue segment']);
 
 $month = $seg->stickyGet('month') ?: 1;
