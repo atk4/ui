@@ -148,6 +148,19 @@ class Modal extends View
     }
 
     /**
+     * Whether any change in modal DOM should automatically refresh cached positions.
+     * Allow modal window to add scrolling when adding content dynamically after modal creation.
+     *
+     * @return $this
+     */
+    public function observeChanges()
+    {
+        $this->setOptions(['observeChanges' => true]);
+
+        return $this;
+    }
+
+    /**
      * Add scrolling capability to modal.
      *
      * @return $this
