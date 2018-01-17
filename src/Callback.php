@@ -133,6 +133,6 @@ class Callback
      */
     public function getURL($mode = 'callback')
     {
-        return $this->owner->url([$this->name => $mode], $this->POST_trigger);
+        return $this->owner->url([$this->trigger ?: $this->name => $mode, '__atk_callback'=>1], $this->POST_trigger);
     }
 }
