@@ -97,7 +97,6 @@ class Callback
      */
     public function set($callback, $args = [])
     {
-
         if ($this->postTrigger) {
             if (isset($_POST[$this->postTrigger])) {
                 $this->app->catch_runaway_callbacks = false;
