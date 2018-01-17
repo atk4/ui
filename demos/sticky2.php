@@ -23,16 +23,12 @@ if (isset($_GET['name'])) {
         return new \atk4\ui\jsNotify('Color was = '.$_GET['name']);
     });
 
-
     // Next we have loader, which will dynamically load console which will dynamically output "success" message.
-    $frame->add('Loader')->set(function($page) {
-        $page->add('Console')->set(function($console) {
+    $frame->add('Loader')->set(function ($page) {
+        $page->add('Console')->set(function ($console) {
             $console->output('success!, color is still '.$_GET['name']);
         });
     });
-
-
-
 }
 
 $t = $app->add(['Table']);
@@ -44,14 +40,12 @@ $frame->add(['Button', 'does not inherit sticky get'])->on('click', function () 
     return new \atk4\ui\jsNotify('$_GET = '.json_encode($_GET));
 });
 
-
-
 $app->add(['Header', 'Use of View::url()']);
 
 $b1 = $app->add('Button');
 $b1->set($b1->url());
 
-$app->add('Loader')->set(function($page) use($b1) {
+$app->add('Loader')->set(function ($page) use ($b1) {
     $b2 = $page->add('Button');
     $b2->set($b2->url());
 
