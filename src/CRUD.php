@@ -38,7 +38,6 @@ class CRUD extends Grid
 
         $this->on('reload', new jsReload($this));
 
-
         if (!$this->can('r')) {
             throw new Exception(['You cannot disable "r" operation']);
         }

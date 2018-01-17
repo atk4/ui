@@ -19,7 +19,6 @@ class Delete extends Generic
 
             $this->table->app->terminate($reload->renderJSON());
         });
-
     }
 
     public function getDataCellTemplate(\atk4\data\Field $f = null)

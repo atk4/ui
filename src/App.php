@@ -46,7 +46,7 @@ class App
     public $catch_exceptions = true;
 
     /**
-     * Will display error if callback wasn't triggered
+     * Will display error if callback wasn't triggered.
      */
     public $catch_runaway_callbacks = true;
 

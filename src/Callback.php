@@ -49,7 +49,7 @@ class Callback
     public $triggered = false;
 
     /**
-     * Specify a custom GET trigger here
+     * Specify a custom GET trigger here.
      */
     public $trigger = null;
 
