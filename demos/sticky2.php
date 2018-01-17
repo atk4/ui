@@ -14,6 +14,8 @@ if (isset($_GET['name'])) {
     // frame will generate URL with sticky parameter
     $frame->add(['Label', 'Name:', 'detail'=>$_GET['name'], 'black'])->link($frame->url());
 
+    $frame->add(['Menu'])->addItem('Test', ['foo'=>'bar']);
+
     // app still generates URL without localized sticky
     $frame->add(['Label', 'Reset', 'iconRight'=>'close', 'black'])->link($app->url());
     $frame->add(['ui'=>'hidden divider']);
