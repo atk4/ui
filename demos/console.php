@@ -5,7 +5,6 @@ require 'init.php';
 class Test extends \atk4\data\Model
 {
     use \atk4\core\DebugTrait;
-    use \atk4\core\AppScopeTrait;
 
     public function generateReport()
     {
