@@ -33,26 +33,6 @@ class Label extends View
 
     public $defaultTemplate = 'label.html';
 
-    /**
-     * Makes label into a "<a>" element with a link.
-     *
-     * @param string $url
-     *
-     * @return $this
-     */
-    public function link($url)
-    {
-        $this->element = 'a';
-        if (is_string($url)) {
-            $this->setAttr('href', $url);
-
-            return $this;
-        }
-        $this->setAttr('href', $this->app->url($url));
-
-        return $this;
-    }
-
     public function renderView()
     {
         if ($this->icon) {
