@@ -134,7 +134,7 @@ class AutoComplete extends Input
         foreach ($res as $item) {
             $data[] = ['id' => $item[$this->model->id_field], 'name' => $item[$this->model->title_field]];
         }
-        
+
         if ($this->empty) {
             array_unshift($data, ['id' => 0, 'name' => $this->empty]);
         }
