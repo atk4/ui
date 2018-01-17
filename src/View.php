@@ -365,26 +365,6 @@ class View implements jsExpressionable
             throw new Exception('Second argument to add must be region or null!');
         }
 
-        /*
-        if (is_string($defaults)) {
-            $defaults = ['region'=>$defaults];
-        }
-         */
-
-        /*
-        $region = null;
-        if (is_array($defaults) && isset($defaults['region'])) {
-            $region = $defaults['region'];
-            unset($defaults['region']);
-        } elseif (is_array($defaults) && isset($defaults[0])) {
-            $region = $defaults[0];
-            unset($defaults[0]);
-        } elseif (is_string($defaults)) {
-            $region = $defaults;
-            $defaults = null;
-        }
-         */
-
         // Create object first
         $object = $this->factory($this->mergeSeeds($seed, ['View']), $region ? ['region'=>$region] : null);
 
@@ -394,21 +374,6 @@ class View implements jsExpressionable
         if (!$object instanceof self) {
             return $object;
         }
-
-        // We are adding a new view, so do a bit more
-        /*
-        if (!$object->template && $object->region && $this->template) {
-            $object->template = $this->template->cloneRegion($object->region);
-        }
-
-        if ($this->template && $object->region) {
-            if (is_string($this->template)) {
-                throw new Exception(['Property $template should contain object, not a string', 'template' => $this->template]);
-            }
-
-            $this->template->del($object->region);
-        }
-         */
 
         return $object;
     }
