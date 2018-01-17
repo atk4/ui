@@ -22,7 +22,6 @@ class VirtualPage extends View
     /** @var specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     public $urlTrigger = null;
 
-
     /** @var string UI container class */
     public $ui = 'container';
 
