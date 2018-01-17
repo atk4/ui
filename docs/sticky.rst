@@ -72,7 +72,7 @@ Consider this code::
     $b1->set($b1->url());
 
     $app->add('Loader')->set(function($page) {
-        $b2 = $page->add('Button')->set($b2
+        $b2 = $page->add('Button');
         $b2->set($b2->url());
     });
 
