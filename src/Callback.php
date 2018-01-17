@@ -34,7 +34,7 @@ class Callback
      * Will look for trigger in the POST data. Will not care about URL, but
      * $_POST[$this->postTrigger] must be set.
      *
-     * @var string|boolean
+     * @var string|bool
      */
     public $postTrigger = false;
 
