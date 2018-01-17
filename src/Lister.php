@@ -45,7 +45,7 @@ class Lister extends View
             }
 
             $this->t_row->trySet('_title', $this->model[$this->model->title_field]);
-            $this->t_row->trySet('_href', $this->app->url(['id'=>$this->current_id]));
+            $this->t_row->trySet('_href', $this->url(['id'=>$this->current_id]));
             $this->t_row->trySet('_id', $this->current_id);
 
             if ($this->t_row == $this->template) {

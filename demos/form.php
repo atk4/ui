@@ -108,8 +108,19 @@ $tab->add(['Header', 'Form shows Agile exceptions', 'size' => 2]);
 $form = $tab->add('Form');
 $form->addField('email');
 $form->onSubmit(function ($form) {
-    $form->factory([]);
+    throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
+    return 'somehow it did not crash';
 });
+
+$form->add(['Button', 'Modal Test', 'secondary'])->on('click', $form->add('Modal')
+                                                                    ->set(function ($p) {
+                                                                        $form = $p->add('Form');
+                                                                        $form->addField('email');
+                                                                        $form->onSubmit(function ($form) {
+                                                                            throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
+                                                                            return 'somehow it did not crash';
+                                                                        });
+                                                                    })->show());
 
 /////////////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Complex Examples');

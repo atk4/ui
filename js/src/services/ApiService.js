@@ -128,7 +128,11 @@ class ApiService {
     onFailure(response) {
         // if json is returned, it should contains the error within message property
         if (response.hasOwnProperty('success') && !response.success) {
-            apiService.showErrorModal(response.message);
+            if (response.hasOwnProperty('useWindow') && response.useWindow) {
+              apiService.showErrorWindow(response.message)
+            } else {
+              apiService.showErrorModal(response.message);
+            }
         } else {
             //check if we have html returned by server with <body> content.
             var body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
@@ -163,6 +167,43 @@ class ApiService {
             .modal('refresh');
     }
 
+  /**
+   * Display App error in a separate window.
+   * @param errorMsg
+   */
+    showErrorWindow(errorMsg) {
+      var error = $('<div class="atk-exception">')
+        .css({
+          'padding':'8px',
+          'background-color': 'rgba(0, 0, 0, 0.5)',
+          'padding':'4px',
+          'width': '100%',
+          'height': '100%',
+          'position': 'fixed',
+          'top': 0,
+          'bottom': 0,
+          'z-index': '100000',
+          'overflow-y': 'scroll',
+        })
+        .html($('<div>')
+          .css({
+            'width': '70%',
+            'margin-top': '4%',
+            'margin-bottom': '4%',
+            'margin-left': 'auto',
+            'margin-right': 'auto',
+            'background': 'white',
+            'padding': '4px',
+            'overflow-x': 'scroll'
+          }).html(errorMsg)
+            .prepend($('<i class="ui big close icon"></i>').css('float', 'right').click(function(){
+              var $this = $(this).parents('.atk-exception');
+              $this.hide();
+              $this.remove();
+          }))
+        );
+      error.appendTo('body');
+    }
 }
 
 const apiService = new ApiService();
