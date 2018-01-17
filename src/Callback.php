@@ -32,7 +32,7 @@ class Callback
 
     /**
      * Will look for trigger in the POST data. Will not care about URL, but
-     * $_POST[$this->postTrigger] must be set
+     * $_POST[$this->postTrigger] must be set.
      *
      * @var string|false
      */
@@ -139,6 +139,6 @@ class Callback
      */
     public function getURL($mode = 'callback')
     {
-        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool)$this->postTrigger);
+        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
     }
 }
