@@ -49,6 +49,11 @@ class Callback
     public $triggered = false;
 
     /**
+     * Specify a custom GET trigger here
+     */
+    public $trigger = null;
+
+    /**
      * Initialize object and set default properties.
      *
      * @param array|string $defaults
@@ -68,8 +73,6 @@ class Callback
         if (!$this->app) {
             throw new Exception(['Call-back must be part of a RenderTree']);
         }
-
-        $this->owner->stickyGet($this->name);
     }
 
     /**
@@ -82,9 +85,11 @@ class Callback
      */
     public function set($callback, $args = [])
     {
+        $this->owner->stickyGet($this->trigger ?: $this->name);
+
         if ($this->POST_trigger) {
             if (isset($_POST[$this->name])) {
-                $this->triggered = $_POST[$this->name];
+                $this->triggered = $_POST[$this->trigger ?: $this->name];
 
                 $t = $this->app->run_called;
                 $this->app->run_called = true;
@@ -94,8 +99,8 @@ class Callback
                 return $ret;
             }
         } else {
-            if (isset($_GET[$this->name])) {
-                $this->triggered = $_GET[$this->name];
+            if (isset($_GET[$this->trigger ?: $this->name])) {
+                $this->triggered = $_GET[$this->trigger ?: $this->name];
 
                 $t = $this->app->run_called;
                 $this->app->run_called = true;
@@ -116,7 +121,7 @@ class Callback
      */
     public function triggered()
     {
-        return isset($_GET[$this->name]) ? $_GET[$this->name] : false;
+        return isset($_GET[$this->trigger ?: $this->name]) ? $_GET[$this->trigger ?: $this->name] : false;
     }
 
     /**
