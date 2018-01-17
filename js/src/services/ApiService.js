@@ -179,7 +179,7 @@ class ApiService {
           'padding':'4px',
           'width': '100%',
           'height': '100%',
-          'position': 'absolute',
+          'position': 'fixed',
           'top': 0,
           'bottom': 0,
           'z-index': '100000',
