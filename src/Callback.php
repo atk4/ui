@@ -95,7 +95,7 @@ class Callback
 
         if ($this->postTrigger) {
             if (isset($_POST[$this->postTrigger])) {
-                $this->triggered = $_POST[$this->urlTrigger];
+                $this->triggered = $_POST[$this->postTrigger];
 
                 $t = $this->app->run_called;
                 $this->app->run_called = true;
