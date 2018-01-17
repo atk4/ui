@@ -19,8 +19,7 @@ class jsSSE extends jsCallback
 
     public function init()
     {
-        //parent::init();
-        $this->_initialized = true;
+        parent::init();
         if (@$_GET['event'] === 'sse') {
             $this->browserSupport = true;
             $this->initSse();
@@ -37,6 +36,7 @@ class jsSSE extends jsCallback
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
         }
+
 
         return (new jQuery())->atkServerEvent($options)->jsRender();
     }
