@@ -67,10 +67,10 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add(['Callback', 'POST_trigger' => true]);
+        $cb = $app->add(['Callback', 'postTrigger' => 'go']);
 
         // simulate triggering
-        $_POST[$cb->name] = true;
+        $_POST['go'] = true;
 
         $cb->set(function ($x) use (&$var) {
             $var = $x;
@@ -135,7 +135,26 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
         });
 
         // simulate triggering
-        $_GET[$vp->cb->name] = true;
+        $_GET[$vp->name] = true;
+
+        $this->expectOutputRegex('/^..DOCTYPE/');
+        $app->run();
+        $this->assertEquals(25, $var);
+    }
+
+    public function testVirtualPageCustomTrigger()
+    {
+        $var = null;
+
+        $app = $this->app;
+
+        $vp = $app->add(['VirtualPage', 'urlTrigger'=>'bah']);
+        $vp->set(function ($p) use (&$var) {
+            $var = 25;
+        });
+
+        // simulate triggering
+        $_GET['bah'] = true;
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $app->run();
@@ -159,7 +178,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
         $vp->set([$this, 'callPull230']);
 
         // simulate triggering
-        $_GET[$vp->cb->name] = true;
+        $_GET[$vp->name] = true;
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $app->run();
