@@ -1047,6 +1047,17 @@ class View implements jsExpressionable
     public function stickyGet($name)
     {
         if ($this->_stickyArgsCached) {
+
+            if (isset($this->_stickyArgsCached[$name])) {
+                return $this->_stickyArgsCached[$name]; // already cached
+            }
+
+            if (isset($_GET[$name])) {
+                return; // setting this has no effect anyway, no need to alert
+            }
+
+
+
             throw new Exception([
                 'Unable to set stickyGet after url() has been used here or by a child',
                 'urlBy'=>$this->_triggerBy,
