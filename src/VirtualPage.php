@@ -19,6 +19,10 @@ class VirtualPage extends View
     /** @var callable Optional callback function of virtual page */
     public $fx = null;
 
+    /** @var specify custom callback trigger for the URL (see Callback::$urlTrigger) */
+    public $urlTrigger = null;
+
+
     /** @var string UI container class */
     public $ui = 'container';
 
@@ -29,7 +33,7 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = $this->_add(['CallbackLater', 'urlTrigger'=>$this->name]);
+        $this->cb = $this->_add(['CallbackLater', 'urlTrigger'=>$this->urlTrigger ?: $this->name]);
         $this->stickyGet($this->name);
 
         $this->cb->set(function () {

@@ -54,6 +54,10 @@ through a GET argument, then VirtualPage will change it's rendering technique. L
 This code will only show the link containing a URL, but will not show LoremIpsum text.  If you do follow the link, you'll
 see only the 'LoremIpsum' text. 
 
+.. php:attr:: $urlTrigger
+
+See :php:attr:`Callback::urlTrigger`.
+
 
 Output Modes
 ^^^^^^^^^^^^
