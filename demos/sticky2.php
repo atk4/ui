@@ -14,8 +14,6 @@ if (isset($_GET['name'])) {
     // frame will generate URL with sticky parameter
     $frame->add(['Label', 'Name:', 'detail'=>$_GET['name'], 'black'])->link($frame->url());
 
-    $frame->add(['Menu'])->addItem('Test', ['foo'=>'bar']);
-
     // app still generates URL without localized sticky
     $frame->add(['Label', 'Reset', 'iconRight'=>'close', 'black'])->link($app->url());
     $frame->add(['ui'=>'hidden divider']);
@@ -24,6 +22,17 @@ if (isset($_GET['name'])) {
     $frame->add(['Button', 'Triggering callback here will inherit color'])->on('click', function () {
         return new \atk4\ui\jsNotify('Color was = '.$_GET['name']);
     });
+
+
+    // Next we have loader, which will dynamically load console which will dynamically output "success" message.
+    $frame->add('Loader')->set(function($page) {
+        $page->add('Console')->set(function($console) {
+            $console->output('success!, color is still '.$_GET['name']);
+        });
+    });
+
+
+
 }
 
 $t = $app->add(['Table']);
@@ -34,3 +43,20 @@ $frame = $app->add(['ui'=>'green segment']);
 $frame->add(['Button', 'does not inherit sticky get'])->on('click', function () {
     return new \atk4\ui\jsNotify('$_GET = '.json_encode($_GET));
 });
+
+
+
+$app->add(['Header', 'Use of View::url()']);
+
+$b1 = $app->add('Button');
+$b1->set($b1->url());
+
+$app->add('Loader')->set(function($page) use($b1) {
+    $b2 = $page->add('Button');
+    $b2->set($b2->url());
+
+    $b2->on('click', new \atk4\ui\jsReload($b1));
+});
+
+$b3 = $app->add('Button');
+$b3->set($b3->url());
