@@ -113,14 +113,14 @@ $form->onSubmit(function ($form) {
 });
 
 $form->add(['Button', 'Modal Test', 'secondary'])->on('click', $form->add('Modal')
-    ->set(function ($p) {
-        $form = $p->add('Form');
-        $form->addField('email');
-        $form->onSubmit(function ($form) {
-            throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
-            return 'somehow it did not crash';
-        });
-    })->show());
+                                                                    ->set(function ($p) {
+                                                                        $form = $p->add('Form');
+                                                                        $form->addField('email');
+                                                                        $form->onSubmit(function ($form) {
+                                                                            throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
+                                                                            return 'somehow it did not crash';
+                                                                        });
+                                                                    })->show());
 
 /////////////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Complex Examples');

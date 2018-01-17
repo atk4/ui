@@ -172,33 +172,37 @@ class ApiService {
    * @param errorMsg
    */
     showErrorWindow(errorMsg) {
-      var m = $('<div class="atk-exception">')
-        .appendTo('body')
+      var error = $('<div class="atk-exception">')
         .css({
           'padding':'8px',
           'background-color': 'rgba(0, 0, 0, 0.5)',
-          'padding':'1em',
-          'position': 'absolute',
-          'height': '100%',
+          'padding':'4px',
           'width': '100%',
-          'top': '0px',
-          'left': '0px',
+          'height': '100%',
+          'position': 'absolute',
+          'top': 0,
+          'bottom': 0,
           'z-index': '100000',
-          'overflow': 'scroll'
+          'overflow-y': 'scroll',
         })
         .html($('<div>')
           .css({
             'width': '70%',
-            'margin': 'auto',
+            'margin-top': '4%',
+            'margin-bottom': '4%',
+            'margin-left': 'auto',
+            'margin-right': 'auto',
             'background': 'white',
-            'padding': '4px'
+            'padding': '4px',
+            'overflow-x': 'scroll'
           }).html(errorMsg)
-          .prepend($('<i class="ui big close icon"></i>').css('float', 'right').click(function(){
+            .prepend($('<i class="ui big close icon"></i>').css('float', 'right').click(function(){
               var $this = $(this).parents('.atk-exception');
               $this.hide();
               $this.remove();
           }))
         );
+      error.appendTo('body');
     }
 }
 
