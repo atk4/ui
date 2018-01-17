@@ -1013,7 +1013,7 @@ class View implements jsExpressionable
      */
     public function url($page = [])
     {
-        return $this->app->url($page, false, $this->_getStickyArgs());
+        return $this->app->url($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
     }
 
     /**
@@ -1025,7 +1025,7 @@ class View implements jsExpressionable
     {
         if ($this->_stickyArgsCached === null) {
             if ($this->owner && $this->owner instanceof self) {
-                $this->_stickyArgsCached = array_merge($this->owner->_getStickyArgs(), $this->stickyArgs);
+                $this->_stickyArgsCached = array_merge($this->owner->_getStickyArgs($triggerBy), $this->stickyArgs);
             } else {
                 $this->_stickyArgsCached = [];
             }
