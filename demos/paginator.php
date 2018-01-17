@@ -5,7 +5,7 @@ include 'init.php';
 
 // Paginator which tracks its own position
 $app->add(['Header', 'Paginator tracks its own position']);
-$app->add(['Paginator', 'total' => 40, 'getArgName' => 'page']);
+$app->add(['Paginator', 'total' => 40, 'urlTrigger' => 'page']);
 
 // Dynamically reloading paginator
 $app->add(['Header', 'Dynamic reloading']);
@@ -23,9 +23,9 @@ $month = $seg->stickyGet('month') ?: 1;
 $day = $seg->stickyGet('day') ?: 1;
 
 // we intentionally left 31 days here and do not calculate number of days in particular month to keep example simple
-$month_paginator = $seg->add(['Paginator', 'total' => 12, 'range' => 3, 'getArgName' => 'month']);
+$month_paginator = $seg->add(['Paginator', 'total' => 12, 'range' => 3, 'urlTrigger' => 'month']);
 $seg->add(['ui'=>'hidden divider']);
-$day_paginator = $seg->add(['Paginator', 'total' => 31, 'range' => 3, 'getArgName' => 'day']);
+$day_paginator = $seg->add(['Paginator', 'total' => 31, 'range' => 3, 'urlTrigger' => 'day']);
 $seg->add(['ui'=>'hidden divider']);
 
 $label = $seg->add(['Label']);

@@ -29,7 +29,7 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = $this->_add(['CallbackLater', 'trigger'=>$this->name]);
+        $this->cb = $this->_add(['CallbackLater', 'urlTrigger'=>$this->name]);
         $this->stickyGet($this->name);
 
         $this->cb->set(function () {

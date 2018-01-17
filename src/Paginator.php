@@ -34,7 +34,7 @@ class Paginator extends View
      *
      * @var null|string
      */
-    public $getArgName = null;
+    public $urlTrigger = null;
 
     /**
      * If specified, must be instance of a view which will be reloaded on selection.
@@ -51,13 +51,14 @@ class Paginator extends View
     {
         parent::init();
 
+        if (!$this->urlTrigger) {
+            $this->urlTrigger = $this->name;
+        }
+
         if (!$this->page) {
             $this->page = $this->getCurrentPage();
         }
 
-        if (!$this->getArgName) {
-            $this->getArgName = $this->name;
-        }
     }
 
     /**
@@ -88,7 +89,7 @@ class Paginator extends View
      */
     public function getCurrentPage()
     {
-        return isset($_GET[$this->getArgName]) ? (int) $_GET[$this->getArgName] : 1;
+        return isset($_GET[$this->urlTrigger]) ? (int) $_GET[$this->urlTrigger] : 1;
     }
 
     /**
@@ -162,7 +163,7 @@ class Paginator extends View
      */
     public function getPageURL($page)
     {
-        return $this->url([$this->getArgName => $page]);
+        return $this->url([$this->urlTrigger => $page]);
     }
 
     /**
@@ -205,7 +206,7 @@ class Paginator extends View
         }
 
         if ($this->reload) {
-            $this->on('click', '.item', new jsReload($this->reload, [$this->getArgName => new jsExpression('$(this).data("page")')]));
+            $this->on('click', '.item', new jsReload($this->reload, [$this->urlTrigger => new jsExpression('$(this).data("page")')]));
         }
 
         parent::renderView();

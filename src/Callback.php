@@ -51,7 +51,7 @@ class Callback
     /**
      * Specify a custom GET trigger here.
      */
-    public $trigger = null;
+    public $urlTrigger = null;
 
     /**
      * Initialize object and set default properties.
@@ -70,6 +70,10 @@ class Callback
     {
         $this->_init();
 
+        if (!$this->urlTrigger) {
+            $this->urlTrigger = $this->name;
+        }
+
         if (!$this->app) {
             throw new Exception(['Call-back must be part of a RenderTree']);
         }
@@ -85,11 +89,11 @@ class Callback
      */
     public function set($callback, $args = [])
     {
-        $this->owner->stickyGet($this->trigger ?: $this->name);
+        $this->owner->stickyGet($this->urlTrigger);
 
         if ($this->POST_trigger) {
             if (isset($_POST[$this->name])) {
-                $this->triggered = $_POST[$this->trigger ?: $this->name];
+                $this->triggered = $_POST[$this->urlTrigger];
 
                 $t = $this->app->run_called;
                 $this->app->run_called = true;
@@ -99,12 +103,12 @@ class Callback
                 return $ret;
             }
         } else {
-            if (isset($_GET[$this->trigger ?: $this->name])) {
-                $this->triggered = $_GET[$this->trigger ?: $this->name];
+            if (isset($_GET[$this->urlTrigger])) {
+                $this->triggered = $_GET[$this->urlTrigger];
 
                 $t = $this->app->run_called;
                 $this->app->run_called = true;
-                $this->owner->stickyGet($this->trigger ?: $this->name);
+                $this->owner->stickyGet($this->urlTrigger);
                 $ret = call_user_func_array($callback, $args);
                 //$this->app->stickyForget($this->name);
                 $this->app->run_called = $t;
@@ -121,7 +125,7 @@ class Callback
      */
     public function triggered()
     {
-        return isset($_GET[$this->trigger ?: $this->name]) ? $_GET[$this->trigger ?: $this->name] : false;
+        return isset($_GET[$this->urlTrigger]) ? $_GET[$this->urlTrigger] : false;
     }
 
     /**
@@ -133,6 +137,6 @@ class Callback
      */
     public function getURL($mode = 'callback')
     {
-        return $this->owner->url([$this->trigger ?: $this->name => $mode, '__atk_callback'=>1], $this->POST_trigger);
+        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], $this->POST_trigger);
     }
 }
