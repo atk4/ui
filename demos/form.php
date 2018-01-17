@@ -113,7 +113,7 @@ $form->onSubmit(function ($form) {
 });
 
 $form->add(['Button', 'Modal Test', 'secondary'])->on('click', $form->add('Modal')
-    ->set(function($p){ 
+    ->set(function ($p) {
         $form = $p->add('Form');
         $form->addField('email');
         $form->onSubmit(function ($form) {
@@ -121,7 +121,6 @@ $form->add(['Button', 'Modal Test', 'secondary'])->on('click', $form->add('Modal
             return 'somehow it did not crash';
         });
     })->show());
-
 
 /////////////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Complex Examples');
