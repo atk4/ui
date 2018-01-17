@@ -19,17 +19,16 @@ if (isset($_GET['name'])) {
     $frame->add(['ui'=>'hidden divider']);
 
     // nested interractive elemetns will respect lockal sticky get
-    $frame->add(['Button', 'Triggering callback here will inherit color'])->on('click', function() {
+    $frame->add(['Button', 'Triggering callback here will inherit color'])->on('click', function () {
         return new \atk4\ui\jsNotify('Color was = '.$_GET['name']);
     });
 }
-
 
 $t = $app->add(['Table']);
 $t->setSource(['Red', 'Green', 'Blue']);
 $t->addDecorator('name', ['Link', [], ['name']]);
 
 $frame = $app->add(['ui'=>'green segment']);
-$frame->add(['Button', 'does not inherit sticky get'])->on('click', function() {
+$frame->add(['Button', 'does not inherit sticky get'])->on('click', function () {
     return new \atk4\ui\jsNotify('$_GET = '.json_encode($_GET));
 });
