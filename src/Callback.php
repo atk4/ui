@@ -34,7 +34,7 @@ class Callback
      * Will look for trigger in the POST data. Will not care about URL, but
      * $_POST[$this->postTrigger] must be set.
      *
-     * @var string|false
+     * @var string|boolean
      */
     public $postTrigger = false;
 
@@ -51,7 +51,7 @@ class Callback
     /**
      * Specify a custom GET trigger here.
      *
-     * @var string|false
+     * @var string|null
      */
     public $urlTrigger = null;
 
@@ -74,6 +74,10 @@ class Callback
 
         if (!$this->urlTrigger) {
             $this->urlTrigger = $this->name;
+        }
+
+        if ($this->postTrigger === true) {
+            $this->postTrigger = $this->name;
         }
 
         if (!$this->app) {
