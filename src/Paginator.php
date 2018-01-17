@@ -58,7 +58,6 @@ class Paginator extends View
         if (!$this->page) {
             $this->page = $this->getCurrentPage();
         }
-
     }
 
     /**
