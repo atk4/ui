@@ -31,12 +31,12 @@ class Callback
     }
 
     /**
-     * Will look for trigger in the POST data. Will re-use existing URL, but
-     * $_POST[$this->name] will have to be set.
+     * Will look for trigger in the POST data. Will not care about URL, but
+     * $_POST[$this->postTrigger] must be set
      *
-     * @var bool
+     * @var string|false
      */
-    public $POST_trigger = false;
+    public $postTrigger = false;
 
     /**
      * Contains either false if callback wasn't triggered or the value passed
@@ -50,6 +50,8 @@ class Callback
 
     /**
      * Specify a custom GET trigger here.
+     *
+     * @var string|false
      */
     public $urlTrigger = null;
 
@@ -91,8 +93,8 @@ class Callback
     {
         $this->owner->stickyGet($this->urlTrigger);
 
-        if ($this->POST_trigger) {
-            if (isset($_POST[$this->name])) {
+        if ($this->postTrigger) {
+            if (isset($_POST[$this->postTrigger])) {
                 $this->triggered = $_POST[$this->urlTrigger];
 
                 $t = $this->app->run_called;
@@ -137,6 +139,6 @@ class Callback
      */
     public function getURL($mode = 'callback')
     {
-        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], $this->POST_trigger);
+        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool)$this->postTrigger);
     }
 }

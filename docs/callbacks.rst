@@ -117,13 +117,18 @@ the label regardless of the callback function::
         $label->addClass('red');
     }
 
-.. php:attr:: POST_trigger
+.. php:attr:: postTrigger
 
 A Callback class can also use a POST variable for triggering. For this case the $callback->name should be set
 through the POST data.
 
 Even though the functionality of Callback is very basic, it gives a very solid foundation for number of
 derived classes.
+
+.. php:attr:: urlTrigger
+
+Specifies which GET parameter to use for triggering. Normally it's same as `$callback->name`, but you can set it
+to anything you want. As long as you keep it unique on a current page, you should be OK.
 
 CallbackLater
 -------------

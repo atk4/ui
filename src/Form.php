@@ -366,7 +366,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function ajaxSubmit()
     {
-        $this->_add($cb = new jsCallback(), ['desired_name' => 'submit', 'POST_trigger' => true]);
+        $this->_add($cb = new jsCallback(), ['desired_name' => 'submit', 'postTrigger' => $this->name.'_submit']);
 
         $this->add(new View(['element' => 'input']))
             ->setAttr('name', $cb->name)

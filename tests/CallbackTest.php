@@ -67,7 +67,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add(['Callback', 'POST_trigger' => true]);
+        $cb = $app->add(['Callback', 'postTrigger' => true]);
 
         // simulate triggering
         $_POST[$cb->name] = true;
