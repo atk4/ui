@@ -37,7 +37,6 @@ class jsSSE extends jsCallback
             $options['showLoader'] = $this->showLoader;
         }
 
-
         return (new jQuery())->atkServerEvent($options)->jsRender();
     }
 

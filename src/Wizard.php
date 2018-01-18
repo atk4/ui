@@ -83,7 +83,6 @@ class Wizard extends View
         // add tabs menu item
         $this->steps[] = $this->add($step, 'Step');
 
-
         if ($step->sequence == $this->currentStep) {
             $step->addClass('active');
 
