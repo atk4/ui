@@ -58,7 +58,7 @@ class Upload extends Input
 
     /**
      * An array of string value for accept file type.
-     * ex: ['.jpg', '.jpeg', '.png'] or ['images/*']
+     * ex: ['.jpg', '.jpeg', '.png'] or ['images/*'].
      *
      * @var array
      */
