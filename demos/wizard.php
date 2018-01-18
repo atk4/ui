@@ -67,7 +67,6 @@ $t->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'data
         $dsn = $p->recall('dsn');
         $model = $p->recall('model');
 
-
         $c->output('please wait');
         sleep(1);
         $c->output('connecting to "'.$dsn.'" (well not really, this is only a demo)');

@@ -90,7 +90,6 @@ class Wizard extends View
             $_GET[$this->stepCallback->urlTrigger] = 0;
 
             $this->stepCallback->set($callback, [$this]);
-
         } elseif ($step->sequence < $this->currentStep) {
             $step->addClass('completed');
         }
@@ -107,7 +106,6 @@ class Wizard extends View
         if (count($this->steps) == $this->currentStep + 1) {
             $this->buttonFinish->link($this->stepCallback->getURL(count($this->steps)));
         } elseif ($this->currentStep == count($this->steps)) {
-
             $this->buttonPrev->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
             $this->buttonFinish->destroy();
@@ -117,7 +115,6 @@ class Wizard extends View
         } else {
             $this->buttonFinish->destroy();
         }
-
     }
 
     public function add($seed, $region = null)
