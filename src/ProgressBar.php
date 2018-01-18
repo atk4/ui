@@ -3,7 +3,7 @@
 namespace atk4\ui;
 
 /**
- * Class implements ProgressBar
+ * Class implements ProgressBar.
  *
  * $bar = $app->add([
  *  'ProgressBar',
@@ -27,11 +27,11 @@ class ProgressBar extends View
     public $value = 0;
 
     /**
-     * Indicates a maximum value of a progress bar
+     * Indicates a maximum value of a progress bar.
      */
     public $max = 100;
 
-    function __construct($value = 0, $label = null, $class = null)
+    public function __construct($value = 0, $label = null, $class = null)
     {
         $this->value = $value;
 
@@ -52,6 +52,6 @@ class ProgressBar extends View
 
     public function jsValue($value)
     {
-        return $this->js()->progress(['percent'=>(int)$value]);
+        return $this->js()->progress(['percent'=>(int) $value]);
     }
 }
