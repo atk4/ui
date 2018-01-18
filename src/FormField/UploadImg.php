@@ -56,7 +56,7 @@ class UploadImg extends Upload
     {
         $action = $this->thumbnail->js();
         $action->attr('src', $src);
-        $this->addJsAction($action);
+        $this->addJSAction($action);
     }
 
     /**
@@ -73,6 +73,6 @@ class UploadImg extends Upload
         } else {
             $action->removeAttr('src');
         }
-        $this->addJsAction($action);
+        $this->addJSAction($action);
     }
 }

@@ -58,17 +58,11 @@ class Upload extends Input
 
     /**
      * An array of string value for accept file type.
+     * ex: ['.jpg', '.jpeg', '.png'] or ['images/*']
      *
      * @var array
      */
     public $accept = [];
-
-    /**
-     * The.
-     *
-     * @var null
-     */
-    //public $fieldIdName = null;
 
     /**
      * Whether cb has been define or not.
@@ -108,7 +102,7 @@ class Upload extends Input
      *
      * @param $action
      */
-    public function addJsAction($action)
+    public function addJSAction($action)
     {
         if (is_array($action)) {
             $this->jsActions = array_merge($action, $this->jsActions);
