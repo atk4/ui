@@ -38,7 +38,7 @@ class VirtualPage extends View
         $this->cb->set(function () {
 
             // if virtual page callback is triggered
-            if ($type = $this->cb->triggered) {
+            if ($type = $this->cb->triggered()) {
 
                 // process callback
                 if ($this->fx) {
