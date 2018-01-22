@@ -6,7 +6,6 @@ $app->add(['ui' => 'divider']);
 
 $bar = $app->add(['ProgressBar']);
 
-
 $button = $app->add(['Button', 'Turn On']);
 // non-SSE way
 //$button->on('click', $bar->js()->progress(['percent'=> 40]));
