@@ -44,7 +44,7 @@ class AutoComplete extends Input
     public $plus = false;
 
     /**
-     * Semantic UI uses cache to remmber choices. For dynamic sites this may be dangerous, so
+     * Semantic UI uses cache to remember choices. For dynamic sites this may be dangerous, so
      * it's disabled by default. To switch cache on, set 'cache'=>'local'.
      *
      * Use this apiConfig variable to pass API settings to Semantic UI in .dropdown()
@@ -52,6 +52,27 @@ class AutoComplete extends Input
      * @var array
      */
     public $apiConfig = ['cache' => false];
+
+    /**
+     * Semantic UI dropdown module settings.
+     * Use this setting to configure various dropdown module settings
+     * to use with Autocomplete.
+     *
+     * For example, using this setting will automatically submit
+     * form when field value is changes.
+     * $form->addField('field', ['AutoComplete', 'settings'=>['allowReselection' => true,
+     *                           'selectOnKeydown' => false,
+     *                           'onChange'        => new atk4\ui\jsExpression('function(value,t,c){
+     *                                                          if ($(this).data("value") !== value) {
+     *                                                            $(this).parents(".form").form("submit");
+     *                                                            $(this).data("value", value);
+     *                                                          }
+     *                                                         }'),
+     *                          ]]);
+     *
+     * @var array
+     */
+    public $settings = [];
 
     public function init()
     {
@@ -63,16 +84,6 @@ class AutoComplete extends Input
         $this->template->set('input_id', $this->name.'-ac');
 
         $this->template->set('place_holder', $this->placeholder);
-
-        $chain = new jQuery('#'.$this->name.'-ac');
-
-        $chain->dropdown([
-            'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
-            'apiSettings' => array_merge($this->apiConfig, [
-                'url' => $this->getCallbackURL().'&q={query}',
-            ]),
-        ]);
-        $this->js(true, $chain);
 
         if ($this->plus) {
             $this->action = $this->factory(['Button', is_string($this->plus) ? $this->plus : 'Add new']);
@@ -156,5 +167,45 @@ class AutoComplete extends Input
             'id'    => $this->id.'_input',
             'value' => $this->getValue(),
         ]);
+    }
+
+    /**
+     * Set Semantic-ui Api settings to use with dropdown.
+     *
+     * @param array $config
+     *
+     * @return $this
+     */
+    public function setApiConfig($config)
+    {
+        $this->apiConfig = array_merge($this->apiConfig, $config);
+
+        return $this;
+    }
+
+    /**
+     * Override this method if you want to add more logic to the initialization of the
+     * auto-complete field.
+     *
+     * @param jQuery
+     */
+    protected function initDropdown($chain)
+    {
+        $settings = array_merge([
+            'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
+            'apiSettings' => array_merge($this->apiConfig, ['url' => $this->getCallbackURL().'&q={query}']),
+        ], $this->settings);
+
+        $chain->dropdown($settings);
+    }
+
+    public function renderView()
+    {
+        $chain = new jQuery('#'.$this->name.'-ac');
+
+        $this->initDropdown($chain);
+
+        $this->js(true, $chain);
+        parent::renderView();
     }
 }
