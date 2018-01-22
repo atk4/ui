@@ -185,9 +185,9 @@ class AutoComplete extends Input
 
     /**
      * Override this method if you want to add more logic to the initialization of the
-     * auto-complete field
+     * auto-complete field.
      *
-     * @param jQuery 
+     * @param jQuery
      */
     protected function initDropdown($chain)
     {
