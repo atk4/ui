@@ -4,11 +4,8 @@ require 'init.php';
 
 $app->add(['ui' => 'divider']);
 
-$bar = $app->add(['View', 'template' => new \atk4\ui\Template('<div id="{$_id}" class="ui teal progress">
-  <div class="bar"></div>
-  <div class="label">Testing SSE</div>
-</div>')]);
-$bar->js(true)->progress();
+$bar = $app->add(['ProgressBar']);
+
 
 $button = $app->add(['Button', 'Turn On']);
 // non-SSE way
@@ -17,15 +14,15 @@ $button = $app->add(['Button', 'Turn On']);
 $sse = $app->add(['jsSSE', 'showLoader' => true]);
 
 $button->on('click', $sse->set(function () use ($sse, $bar) {
-    $sse->send($bar->js()->progress(['percent' => 20]));
-    sleep(0.5);
-    $sse->send($bar->js()->progress(['percent' => 40]));
+    $sse->send($bar->jsValue(20));
     sleep(1);
-    $sse->send($bar->js()->progress(['percent' => 60]));
+    $sse->send($bar->jsValue(40));
+    sleep(1);
+    $sse->send($bar->jsValue(60));
     sleep(2);
-    $sse->send($bar->js()->progress(['percent' => 80]));
+    $sse->send($bar->jsValue(80));
     sleep(1);
 
     // non-SSE way
-    return $bar->js()->progress(['percent' => 100]);
+    return $bar->jsValue(100);
 }));
