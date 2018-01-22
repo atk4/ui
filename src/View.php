@@ -820,7 +820,7 @@ class View implements jsExpressionable
         return $chain;
     }
 
-    function jsReload($args = [])
+    public function jsReload($args = [])
     {
         return new jsReload($this, $args);
     }
