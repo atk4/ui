@@ -423,6 +423,26 @@ Example::
 
     echo $butt->getJSID();  // foo_bar
 
+
+Reloading a View
+================
+
+.. php:method:: jsReload($get_arguments)
+
+Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::jsReload(),
+which will respond with JavaScript Action for reloading the view::
+
+    $b1 = $app->add(['Button', 'Click me']);
+    $b2 = $app->add(['Button', 'Rand: '.rand(1,100)]);
+
+    $b1->on('click', $b2->jsReload());
+
+    // Previously:
+    // $b1->on('click', new \atk4\ui\jsReload($b2));
+
+
+
+
 Modifying Basic Elements
 ========================
 

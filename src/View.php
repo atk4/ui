@@ -821,6 +821,18 @@ class View implements jsExpressionable
     }
 
     /**
+     * Returns JS for reloading View.
+     *
+     * @param array $args
+     *
+     * @return \atk4\ui\jsReload
+     */
+    public function jsReload($args = [])
+    {
+        return new jsReload($this, $args);
+    }
+
+    /**
      * Views in Agile Toolkit can assign javascript actions to themselves. This
      * is done by calling $view->js() or $view->on().
      *
