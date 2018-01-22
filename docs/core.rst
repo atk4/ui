@@ -65,6 +65,35 @@ To find out more about how components are linked up together and rendered, see:
 .. toctree::
     render
 
+Sticky GET
+==========
+Agile UI implements advanced approach allowing any View object that you add into Render Tree to
+declare "sticky GET arguments". Here is example::
+
+    if(isset($_GET['message'])) {
+        $app->add('Message')->set($_GET['message']);
+    }
+
+    $app->add(['Button', 'Trigger message'])->link(['message'=>'Hello World']);
+
+The code is simple - if you click the button, page will appear with the message just above, however
+there is a potential problem here. What if "Message" wanted to perform a :ref:`Callback`? What if
+we use :php:class:`Console` instead, which must display an interractive data stream?
+
+In Agile UI you can request that some $_GET arguments are preserved and included into callback urls::
+
+    if($this->app->stickyGet('message')) {
+        $app->add('Message')->set($_GET['message']);
+    }
+
+    $app->add(['Button', 'Trigger message'])->link(['message'=>'Hello World']);
+
+There are two types of "sticky" parameters, application-wide and view-specific.
+
+.. toctree::
+
+    sticky
+
 Type Presentation
 =================
 

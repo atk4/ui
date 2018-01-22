@@ -46,6 +46,11 @@ class App
     public $catch_exceptions = true;
 
     /**
+     * Will display error if callback wasn't triggered.
+     */
+    public $catch_runaway_callbacks = true;
+
+    /**
      * Will always run application even if developer didn't explicitly executed run();.
      *
      * @var bool
@@ -179,7 +184,10 @@ class App
      */
     public function caughtException($exception)
     {
+        $this->catch_runaway_callbacks = false;
+
         $l = new \atk4\ui\App();
+        $l->catch_runaway_callbacks = false;
         $l->initLayout('Centered');
         if ($exception instanceof \atk4\core\Exception) {
             $l->layout->template->setHTML('Content', $exception->getHTML());
@@ -279,7 +287,7 @@ class App
 
         // Agile UI
         $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
-        $this->requireJS($url.'/atk4JS.min.js');
+        $this->requireJS($url.'/atkjs-ui.min.js');
         $this->requireJS($url.'/agileui.js');
         $this->requireCSS($url.'/agileui.css');
     }
@@ -345,6 +353,11 @@ class App
         $this->html->template->appendHTML('HEAD', $this->html->getJS());
         $this->is_rendering = false;
         $this->hook('beforeOutput');
+
+        if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
+            $this->terminate('!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']);
+        }
+
         echo $this->html->template->render();
     }
 
@@ -400,17 +413,18 @@ class App
      *
      * @param array|string $page           URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extra_args     Additional URL arguments
      *
      * @return string
      */
-    public function url($page = [], $needRequestUri = false)
+    public function url($page = [], $needRequestUri = false, $extra_args = [])
     {
         if ($needRequestUri) {
             return $_SERVER['REQUEST_URI'];
         }
 
         $sticky = $this->sticky_get_arguments;
-        $result = [];
+        $result = $extra_args;
 
         if ($this->page === null) {
             $uri = $this->getRequestURI();

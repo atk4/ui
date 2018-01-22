@@ -5,7 +5,7 @@ const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
 const env  = require('yargs').argv.env; // use --env with webpack 2
 
-let libraryName = 'atk4JS';
+let libraryName = 'atk';
 
 let plugins = [
 
@@ -13,20 +13,20 @@ let plugins = [
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = libraryName + '.min.js';
+  outputFile = libraryName + 'js-ui.min.js';
 } else {
-  outputFile = libraryName + '.js';
+  outputFile = libraryName + 'js-ui.js';
 }
 
 const config = {
-  entry: __dirname + '/src/index.js',
+  entry: __dirname + '/src/agile-toolkit-ui.js',
   devtool: 'source-map',
   output: {
     path: __dirname + '/../public',
     filename: outputFile,
     library: libraryName,
     libraryTarget: 'umd',
-    umdNamedDefine: true
+    umdNamedDefine: true,
   },
   module: {
     rules: [
