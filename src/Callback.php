@@ -80,6 +80,8 @@ class Callback
             $this->postTrigger = $this->name;
         }
 
+        $this->owner->stickyGet($this->urlTrigger);
+
         if (!$this->app) {
             throw new Exception(['Call-back must be part of a RenderTree']);
         }
@@ -95,10 +97,9 @@ class Callback
      */
     public function set($callback, $args = [])
     {
-        $this->owner->stickyGet($this->urlTrigger);
-
         if ($this->postTrigger) {
             if (isset($_POST[$this->postTrigger])) {
+                $this->app->catch_runaway_callbacks = false;
                 $this->triggered = $_POST[$this->postTrigger];
 
                 $t = $this->app->run_called;
@@ -110,6 +111,7 @@ class Callback
             }
         } else {
             if (isset($_GET[$this->urlTrigger])) {
+                $this->app->catch_runaway_callbacks = false;
                 $this->triggered = $_GET[$this->urlTrigger];
 
                 $t = $this->app->run_called;
