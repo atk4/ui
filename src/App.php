@@ -539,7 +539,7 @@ class App
     }
 
     /**
-     * A convenient wrapper for sending user to another page
+     * A convenient wrapper for sending user to another page.
      */
     public function redirect($page)
     {
@@ -550,7 +550,7 @@ class App
     }
 
     /**
-     * Generate action for redirecting user to another page
+     * Generate action for redirecting user to another page.
      */
     public function jsRedirect($page)
     {

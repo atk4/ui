@@ -53,5 +53,3 @@ $b = $app->add(new Button('failure'));
 $b->on('click', function ($b) {
     throw new \atk4\data\ValidationException(['Everything is bad']);
 });
-
-
