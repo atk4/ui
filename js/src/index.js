@@ -1,22 +1,17 @@
-import 'atk4-semantic-ui';
-
+import atk from 'atk4-semantic-ui';
 import 'helpers/addParams';
-
 import registerPlugin from './plugin';
 
-// Import our plugins
-import spinner from 'plugins/spinner';
-import reloadView from 'plugins/reloadView';
-import ajaxec from 'plugins/ajaxec';
-import createModal from 'plugins/createModal';
-import notify from 'plugins/notify';
-import serverEvent from 'plugins/serverEvent';
+//Allow to register a plugin with jQuery;
+atk.registerPlugin = registerPlugin;
 
-// Register our plugins
-registerPlugin('Spinner', spinner);
-registerPlugin('ReloadView', reloadView);
-registerPlugin('Ajaxec', ajaxec);
-registerPlugin('CreateModal', createModal);
-registerPlugin('Notify', notify, true);
-registerPlugin('ServerEvent', serverEvent, true);
-
+/**
+ * Exporting services in order to be available globally
+ * or by importing it into your own module.
+ *
+ * Available as a global Var: atk.uploadService.fileUpload()
+ * Available as an import:
+ *  import atk from atk4JS;
+ *  atk.uploadService.fileUpload();
+ */
+module.exports = atk;
