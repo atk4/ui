@@ -22,6 +22,8 @@ Basic Usage
 
 .. php:method:: set($callback)
 
+.. php:method:: send($callback);
+
 
 After adding a console to your :ref:`render_tree`, you just need to set a call-back::
 

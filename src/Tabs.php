@@ -50,7 +50,7 @@ class Tabs extends View
             } else {
                 // otherwise treat it as URL
                 //# TODO: refactor this ugly hack
-                $item->setPath(str_replace('.php.', '.', $this->app->url($action)).'#');
+                $item->setPath(str_replace('.php.', '.', $this->url($action)).'#');
             }
         }
 

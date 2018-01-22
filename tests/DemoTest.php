@@ -68,6 +68,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
   init.php
   label.php
   layouts.php
+  lister.php
   loader.php
   loader2.php
   menu.php

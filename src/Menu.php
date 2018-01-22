@@ -38,7 +38,7 @@ class Menu extends View
         $item = $this->add($item)->setElement('a');
 
         if (is_array($action)) {
-            $action = $this->app->url($action);
+            $action = $this->url($action);
         }
 
         if (is_string($action)) {

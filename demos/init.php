@@ -40,6 +40,7 @@ if (isset($layout->leftMenu)) {
 
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon' => 'cubes']);
     $basic->addItem('View', ['view']);
+    $basic->addItem('Lister', ['lister']);
     $basic->addItem('Button', ['button']);
     $basic->addItem('Header', ['header']);
     $basic->addItem('Message', ['message']);

@@ -43,12 +43,12 @@ class CRUD extends Grid
         }
 
         if ($this->can('u')) {
-            $this->pageEdit = $this->add($this->pageEdit ?: 'VirtualPage');
+            $this->pageEdit = $this->add([$this->pageEdit ?: 'VirtualPage', 'short_name'=>'edit']);
             $this->formEdit = $this->pageEdit->add($this->formEdit ?: ['Form', 'layout' => 'FormLayout/Columns']);
         }
 
         if ($this->can('c')) {
-            $this->pageCreate = $this->add($this->pageCreate ?: 'VirtualPage');
+            $this->pageCreate = $this->add([$this->pageCreate ?: 'VirtualPage', 'short_name'=>'add']);
 
             $this->itemCreate = $this->menu->addItem(
                 $this->itemCreate ?: ['Add new', 'icon' => 'plus'],

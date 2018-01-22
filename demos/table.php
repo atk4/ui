@@ -41,7 +41,7 @@ $table->addTotals(['name' => 'Totals:', 'salary' => ['sum']]);
     ];
 
     $table = $app->add('Table');
-    $table->setSource($my_array);
+    $table->setSource($my_array, false);
 
     // somehow setSourec() already creates name()
     // TODO: im not sure how i feel about it

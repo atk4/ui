@@ -197,32 +197,14 @@ class View implements jsExpressionable
     /**
      * Sets source of the View.
      *
-     * @param array $data
+     * @param array $data   Array of data
+     * @param array $fields Limit model to particular fields
      *
      * @return \atk4\data\Model
      */
-    public function setSource(array $data)
+    public function setSource(array $data, $fields = null)
     {
-        $goodData = [];
-
-        foreach ($data as $key => $value) {
-            if (!is_array($value)) {
-                $value = ['name' => $value];
-            }
-
-            if (!isset($value['id'])) {
-                $value['id'] = $key;
-            }
-            $goodData[] = $value;
-        }
-        $goodData = ['data' => $goodData];
-
-        $model = new \atk4\data\Model(
-            new \atk4\data\Persistence_Array($goodData), 'data'
-        );
-        $model->addField('name');
-
-        return $this->setModel($model);
+        $this->setModel(new \atk4\data\Model(new \atk4\data\Persistence_Static($data)), $fields);
     }
 
     /**
@@ -275,7 +257,7 @@ class View implements jsExpressionable
     /**
      * Makes view into a "<a>" element with a link.
      *
-     * @param string $url
+     * @param string|array $url
      *
      * @return $this
      */
@@ -287,7 +269,7 @@ class View implements jsExpressionable
 
             return $this;
         }
-        $this->setAttr('href', $this->app->url($url));
+        $this->setAttr('href', $this->url($url));
 
         return $this;
     }
@@ -335,6 +317,10 @@ class View implements jsExpressionable
             }
         }
 
+        if ($this->template && !isset($this->template->app) && isset($this->app)) {
+            $this->template->app = $this->app;
+        }
+
         // add default objects
         foreach ($this->_add_later as list($object, $region)) {
             $this->add($object, $region);
@@ -379,26 +365,6 @@ class View implements jsExpressionable
             throw new Exception('Second argument to add must be region or null!');
         }
 
-        /*
-        if (is_string($defaults)) {
-            $defaults = ['region'=>$defaults];
-        }
-         */
-
-        /*
-        $region = null;
-        if (is_array($defaults) && isset($defaults['region'])) {
-            $region = $defaults['region'];
-            unset($defaults['region']);
-        } elseif (is_array($defaults) && isset($defaults[0])) {
-            $region = $defaults[0];
-            unset($defaults[0]);
-        } elseif (is_string($defaults)) {
-            $region = $defaults;
-            $defaults = null;
-        }
-         */
-
         // Create object first
         $object = $this->factory($this->mergeSeeds($seed, ['View']), $region ? ['region'=>$region] : null);
 
@@ -408,21 +374,6 @@ class View implements jsExpressionable
         if (!$object instanceof self) {
             return $object;
         }
-
-        // We are adding a new view, so do a bit more
-        /*
-        if (!$object->template && $object->region && $this->template) {
-            $object->template = $this->template->cloneRegion($object->region);
-        }
-
-        if ($this->template && $object->region) {
-            if (is_string($this->template)) {
-                throw new Exception(['Property $template should contain object, not a string', 'template' => $this->template]);
-            }
-
-            $this->template->del($object->region);
-        }
-         */
 
         return $object;
     }
@@ -776,6 +727,10 @@ class View implements jsExpressionable
      */
     public function getHTML()
     {
+        if (isset($_GET['__atk_reload']) && $_GET['__atk_reload'] == $this->name) {
+            $this->app->terminate($this->renderJSON());
+        }
+
         $this->renderAll();
 
         return $this->template->render();
@@ -1039,6 +994,83 @@ class View implements jsExpressionable
         return "<script>\n".
             (new jQuery($ready))->jsRender().
             '</script>';
+    }
+
+    // }}}
+
+    // {{{ Sticky URLs
+
+    /** @var array stickyGet arguments */
+    public $stickyArgs = [];
+
+    /** @var array Cached stickyGet arguments */
+    public $_stickyArgsCached = null;
+
+    public $_triggerBy = null;
+
+    /**
+     * Build an URL which this view can use for call-backs. It should
+     * be guaranteed that requesting returned URL would at some point call
+     * $this->init().
+     *
+     * @param array $page
+     *
+     * @return string
+     */
+    public function url($page = [])
+    {
+        return $this->app->url($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
+    }
+
+    /**
+     * Get sticky arguments defined by the view and parents (including API).
+     *
+     * @return array
+     */
+    public function _getStickyArgs($triggerBy)
+    {
+        $this->_triggerBy = $triggerBy;
+        if ($this->_stickyArgsCached === null) {
+            if ($this->owner && $this->owner instanceof self) {
+                $this->_stickyArgsCached = array_merge($this->owner->_getStickyArgs($triggerBy), $this->stickyArgs);
+            } else {
+                $this->_stickyArgsCached = [];
+            }
+        }
+
+        return $this->_stickyArgsCached;
+    }
+
+    /**
+     * Save sticky GET argument and return it's value.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public function stickyGet($name)
+    {
+        if ($this->_stickyArgsCached) {
+            if (isset($this->_stickyArgsCached[$name])) {
+                return $this->_stickyArgsCached[$name]; // already cached
+            }
+
+            if (isset($_GET[$name])) {
+                return; // setting this has no effect anyway, no need to alert
+            }
+
+            throw new Exception([
+                'Unable to set stickyGet after url() has been used here or by a child',
+                'urlBy'    => $this->_triggerBy,
+                'stickyBy' => $name,
+            ]);
+        }
+
+        if (isset($_GET[$name])) {
+            $this->stickyArgs[$name] = $_GET[$name];
+
+            return $_GET[$name];
+        }
     }
 
     // }}}
