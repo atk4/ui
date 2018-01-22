@@ -69,7 +69,7 @@ class ModalService {
                     if (!result.length) {
                         response.success = false;
                         response.isServiceError = true;
-                        response.message = 'Unable to replace atk-dialog content in modal from server response';
+                        response.message = 'Modal service error: Unable to replace atk-dialog content in modal from server response. Empty Content.';
                     } else {
                         $modal.modal('refresh');
                         //content is replace no need to do it in api
