@@ -820,6 +820,13 @@ class View implements jsExpressionable
         return $chain;
     }
 
+    /**
+     * Returns JS for reloading View.
+     *
+     * @param array $args
+     *
+     * @return \atk4\ui\jsReload
+     */
     public function jsReload($args = [])
     {
         return new jsReload($this, $args);
