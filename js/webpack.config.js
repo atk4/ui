@@ -13,13 +13,13 @@ let plugins = [
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = libraryName + '4JS.min.js';
+  outputFile = libraryName + 'js-ui.min.js';
 } else {
-  outputFile = libraryName + '4JS.js';
+  outputFile = libraryName + 'js-ui.js';
 }
 
 const config = {
-  entry: __dirname + '/src/index.js',
+  entry: __dirname + '/src/agile-toolkit-ui.js',
   devtool: 'source-map',
   output: {
     path: __dirname + '/../public',

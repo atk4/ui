@@ -1,4 +1,4 @@
-import atk from 'atk4-semantic-ui';
+import atk from 'atk-semantic-ui';
 import 'helpers/addParams';
 import registerPlugin from './plugin';
 

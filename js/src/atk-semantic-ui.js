@@ -7,10 +7,10 @@ import uploadService from "./services/UploadService";
 apiService.setService($.fn.api.settings);
 modalService.setModals($.fn.modal.settings);
 
-let atk = {
+let atkSemantic = {
   uploadService: uploadService,
   apiService: apiService,
   modalService: modalService
 };
 
-module.exports = atk;
+module.exports = atkSemantic;
