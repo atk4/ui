@@ -8,11 +8,13 @@ $t = $app->add('Tabs');
 
 // static tab
 $t->addTab('Hello')->add('HelloWorld');
-$t->addTab('Static Tab')->add('LoremIpsum');
+$tab = $t->addTab('Static Tab');
+$tab->add(['Message', 'Content of this tab will refresh only if you reload entire page']);
+$tab->add('LoremIpsum');
 
 // dynamic tab
 $t->addTab('Dynamic Lorem Ipsum', function ($tab) {
-    sleep(2);
+    $tab->add(['Message', 'Every time you come to this tab, you will see a different text']);
     $tab->add(['LoremIpsum', 'size' => 2]);
 });
 

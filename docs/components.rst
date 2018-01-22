@@ -73,6 +73,7 @@ other code. Here is how interractive components will typically communicate:
     console
     loader
     progressbar
+    wizard
 
 
 Composite components

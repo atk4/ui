@@ -317,9 +317,9 @@ using setModel()
 ----------------
 
 Although there were many examples above for the use of setModel() this method
-needs a bit more info::
+needs a bit more info:
 
-.. php:attr:: model
+.. php:attribute:: model
 
 .. php:method:: setModel($model, [$fields])
 
