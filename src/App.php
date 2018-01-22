@@ -539,6 +539,25 @@ class App
     }
 
     /**
+     * A convenient wrapper for sending user to another page
+     */
+    public function redirect($page)
+    {
+        header('Location: '.$this->url($page));
+
+        $this->run_called = true; // prevent shutdown function from triggering.
+        exit;
+    }
+
+    /**
+     * Generate action for redirecting user to another page
+     */
+    public function jsRedirect($page)
+    {
+        return new jsExpression('document.location = []', [$this->url($page)]);
+    }
+
+    /**
      * Construct HTML tag with supplied attributes.
      *
      * $html = getTag('img/', ['src'=>'foo.gif','border'=>0]);

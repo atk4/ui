@@ -50,7 +50,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('Paginator', ['paginator']);
 
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon' => 'talk']);
-    $basic->addItem('JavaScript Events', ['button2']);
+    $basic->addItem('JavaScript Events', ['js']);
     $basic->addItem('Element Reloading', ['reloading']);
     $basic->addItem('PHP Jobs (SSE)', ['sse']);
     $basic->addItem('Loader', ['loader']);
