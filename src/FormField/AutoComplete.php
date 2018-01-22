@@ -58,9 +58,21 @@ class AutoComplete extends Input
      * Use this setting to configure various dropdown module settings
      * to use with Autocomplete.
      *
+     * For example, using this setting will automatically submit
+     * form when field value is changes.
+     * $form->addField('field', ['AutoComplete', 'settings'=>['allowReselection' => true,
+     *                           'selectOnKeydown' => false,
+     *                           'onChange'        => new atk4\ui\jsExpression('function(value,t,c){
+     *                                                          if ($(this).data("value") !== value) {
+     *                                                            $(this).parents(".form").form("submit");
+     *                                                            $(this).data("value", value);
+     *                                                          }
+     *                                                         }'),
+     *                          ]]);
+     *
      * @var array
      */
-    public $dropdownSettings = [];
+    public $settings = [];
 
     public function init()
     {
@@ -158,32 +170,6 @@ class AutoComplete extends Input
     }
 
     /**
-     * Set Semantic-ui dropdown module settings.
-     *
-     * For example, using this setting will automatically submit
-     * form when field value is changes.
-     * $ac->setDropdownSettings(['allowReselection' => true,
-     *                           'selectOnKeydown' => false,
-     *                           'onChange'        => new atk4\ui\jsExpression('function(value,t,c){
-     *                                                          if ($(this).data("value") !== value) {
-     *                                                            $(this).parents(".form").form("submit");
-     *                                                            $(this).data("value", value);
-     *                                                          }
-     *                                                         }'),
-     *                          ]);
-     *
-     * @param array $settings
-     *
-     * @return $this
-     */
-    public function setDropdownSettings($settings)
-    {
-        $this->dropdownSettings = $settings;
-
-        return $this;
-    }
-
-    /**
      * Set Semantic-ui Api settings to use with dropdown.
      *
      * @param array $config
@@ -197,16 +183,27 @@ class AutoComplete extends Input
         return $this;
     }
 
+    /**
+     * Override this method if you want to add more logic to the initialization of the
+     * auto-complete field
+     *
+     * @param jQuery 
+     */
+    protected function initDropdown($chain)
+    {
+        $settings = array_merge([
+            'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
+            'apiSettings' => array_merge($this->apiConfig, ['url' => $this->getCallbackURL().'&q={query}']),
+        ], $this->settings);
+
+        $chain->dropdown($settings);
+    }
+
     public function renderView()
     {
         $chain = new jQuery('#'.$this->name.'-ac');
 
-        $settings = array_merge([
-            'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
-            'apiSettings' => array_merge($this->apiConfig, ['url' => $this->getCallbackURL().'&q={query}']),
-        ], $this->dropdownSettings);
-
-        $chain->dropdown($settings);
+        $this->initDropdown($chain);
 
         $this->js(true, $chain);
         parent::renderView();
