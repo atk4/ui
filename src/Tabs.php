@@ -44,7 +44,7 @@ class Tabs extends View
             if (is_callable($action)) {
                 // if there is callback action, then use VirtualPage
                 $vp = $sub->add('VirtualPage');
-                $item->setPath($vp->getUrl());
+                $item->setPath($vp->getUrl('cut'));
 
                 $vp->set($action);
             } else {
