@@ -78,7 +78,7 @@ class Modal extends View
         $this->cb = $this->cb_view->add('CallbackLater');
 
         $this->cb->set(function () {
-            if ($this->cb->triggered && $this->fx) {
+            if ($this->cb->triggered() && $this->fx) {
                 $this->fx[0]($this->cb_view);
             }
             $this->app->terminate($this->cb_view->renderJSON());

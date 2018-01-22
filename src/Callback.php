@@ -4,6 +4,7 @@ namespace atk4\ui;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
+use atk4\core\InitializerTrait;
 use atk4\core\TrackableTrait;
 
 /**
@@ -25,14 +26,17 @@ class Callback
     use TrackableTrait;
     use AppScopeTrait;
     use DIContainerTrait;
+    use InitializerTrait {
+        init as _init;
+    }
 
     /**
-     * Will look for trigger in the POST data. Will re-use existing URL, but
-     * $_POST[$this->name] will have to be set.
+     * Will look for trigger in the POST data. Will not care about URL, but
+     * $_POST[$this->postTrigger] must be set.
      *
-     * @var bool
+     * @var string|bool
      */
-    public $POST_trigger = false;
+    public $postTrigger = false;
 
     /**
      * Contains either false if callback wasn't triggered or the value passed
@@ -45,6 +49,13 @@ class Callback
     public $triggered = false;
 
     /**
+     * Specify a custom GET trigger here.
+     *
+     * @var string|null
+     */
+    public $urlTrigger = null;
+
+    /**
      * Initialize object and set default properties.
      *
      * @param array|string $defaults
@@ -52,6 +63,26 @@ class Callback
     public function __construct($defaults = [])
     {
         $this->setDefaults($defaults);
+    }
+
+    /**
+     * Initialization.
+     */
+    public function init()
+    {
+        $this->_init();
+
+        if (!$this->urlTrigger) {
+            $this->urlTrigger = $this->name;
+        }
+
+        if ($this->postTrigger === true) {
+            $this->postTrigger = $this->name;
+        }
+
+        if (!$this->app) {
+            throw new Exception(['Call-back must be part of a RenderTree']);
+        }
     }
 
     /**
@@ -64,13 +95,11 @@ class Callback
      */
     public function set($callback, $args = [])
     {
-        if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
-        }
+        $this->owner->stickyGet($this->urlTrigger);
 
-        if ($this->POST_trigger) {
-            if (isset($_POST[$this->name])) {
-                $this->triggered = $_POST[$this->name];
+        if ($this->postTrigger) {
+            if (isset($_POST[$this->postTrigger])) {
+                $this->triggered = $_POST[$this->postTrigger];
 
                 $t = $this->app->run_called;
                 $this->app->run_called = true;
@@ -80,14 +109,14 @@ class Callback
                 return $ret;
             }
         } else {
-            if (isset($_GET[$this->name])) {
-                $this->triggered = $_GET[$this->name];
+            if (isset($_GET[$this->urlTrigger])) {
+                $this->triggered = $_GET[$this->urlTrigger];
 
                 $t = $this->app->run_called;
                 $this->app->run_called = true;
-                $this->app->stickyGet($this->name);
+                $this->owner->stickyGet($this->urlTrigger);
                 $ret = call_user_func_array($callback, $args);
-                $this->app->stickyForget($this->name);
+                //$this->app->stickyForget($this->name);
                 $this->app->run_called = $t;
 
                 return $ret;
@@ -102,7 +131,7 @@ class Callback
      */
     public function triggered()
     {
-        return isset($_GET[$this->name]) ? $_GET[$this->name] : false;
+        return isset($_GET[$this->urlTrigger]) ? $_GET[$this->urlTrigger] : false;
     }
 
     /**
@@ -114,6 +143,6 @@ class Callback
      */
     public function getURL($mode = 'callback')
     {
-        return $this->app->url([$this->name => $mode], $this->POST_trigger);
+        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
     }
 }

@@ -6,11 +6,8 @@ namespace atk4\ui;
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
 
-use atk4\core\InitializerTrait;
-
 class jsSSE extends jsCallback
 {
-    use InitializerTrait;
     // Allows us to fall-back to standard functionality of jsCallback if browser does not support SSE
     public $browserSupport = false;
     public $showLoader = false;
@@ -22,8 +19,7 @@ class jsSSE extends jsCallback
 
     public function init()
     {
-        //parent::init();
-        $this->_initialized = true;
+        parent::init();
         if (@$_GET['event'] === 'sse') {
             $this->browserSupport = true;
             $this->initSse();

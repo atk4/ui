@@ -366,22 +366,21 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function ajaxSubmit()
     {
-        $this->_add($cb = new jsCallback(), ['desired_name' => 'submit', 'POST_trigger' => true]);
+        $this->_add($cb = new jsCallback(), ['desired_name' => 'submit', 'postTrigger' => true]);
 
         $this->add(new View(['element' => 'input']))
-            ->setAttr('name', $cb->name)
+            ->setAttr('name', $cb->postTrigger)
             ->setAttr('value', 'submit')
             ->setStyle(['display' => 'none']);
 
         $cb->set(function () {
-            $caught = function ($e) {
-                return new jsExpression('$([html]).modal("hide others").modal("show")', [
-                    'html' => '<div class="ui fullscreen modal"> <i class="close icon"></i> <div class="header"> '.
-                    htmlspecialchars(get_class($e)).
-                    ' </div> <div class="content"> '.
-                    ($e instanceof \atk4\core\Exception ? $e->getHTML() : nl2br(htmlspecialchars($e->getMessage())))
-                    .' </div> </div>',
-                ]);
+            $caught = function ($e, $useWindow) {
+                $html = '<div class="header"> '.
+                        htmlspecialchars(get_class($e)).
+                        ' </div> <div class="content"> '.
+                        ($e instanceof \atk4\core\Exception ? $e->getHTML() : nl2br(htmlspecialchars($e->getMessage()))).
+                        ' </div>';
+                $this->app->terminate(json_encode(['success' => false, 'message' => $html, 'useWindow' => $useWindow]));
             };
 
             try {
@@ -416,9 +415,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
                 return $response;
             } catch (\Error $e) {
-                return $caught($e);
+                return $caught($e, false);
             } catch (\Exception $e) {
-                return $caught($e);
+                return $caught($e, true);
             }
 
             return $response;

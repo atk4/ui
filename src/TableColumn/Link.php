@@ -110,6 +110,6 @@ class Link extends Generic
             }
         }
 
-        return ['c_'.$this->short_name => $this->app->url($p)];
+        return ['c_'.$this->short_name => $this->table->url($p)];
     }
 }
