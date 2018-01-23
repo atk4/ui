@@ -76,5 +76,5 @@ class Box extends \atk4\ui\View
 }
 
 $c = $page->add(new \atk4\ui\Columns(['width' => 4]));
-$c->addColumn()->add(new Box(['red']));
-$c->addColumn([null, 'right floated'])->add(new Box(['blue']));
+$c->addColumn()->add(new Box([null, 'red']));
+$c->addColumn([null, null, 'right floated'])->add(new Box([null, 'blue']));
