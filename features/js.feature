@@ -34,8 +34,8 @@ Scenario:
  When I press button "Callback Test"
  Then Label changes to a number
 
-Scenario:
- Given I am on "js.php"
- When I press button "failure"
- Then Modal opens with text "Everything is bad"
+#Scenario:
+ #Given I am on "js.php"
+ #When I press button "failure"
+ #Then Modal opens with text "Everything is bad"
 
