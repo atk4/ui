@@ -18,6 +18,7 @@ inherited by its descendants.
     lister
     table
     field
+    fileupload
 
 Simple components
 =================
