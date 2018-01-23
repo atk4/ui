@@ -6,11 +6,13 @@
 [![codecov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
 [![Version](https://badge.fury.io/gh/atk4%2Fui.svg)](https://packagist.org/packages/atk4/ui)
 
-**Agile UI is a high-level PHP framework for creating User Interfaces and Web Apps**
+**Agile UI is a high-level PHP framework for creating Web User Interfaces**
 
-You might need a re-usable CRUD system for your "Admin Interface"  or a Signup Wizard - Agile UI provides universal and and extensible open-source framework for writing User Interfaces in pure PHP (no knowledge of HTML / JavaScript is required).
+Universal and Open-Source PHP framework providing you with wide range of "UI Components" - CRUD, Wizard, Form, Table, Menu, ProgressBar, AutoComplete and many more. Any component can be invoked from pure PHP and integrated into legacy, open-source PHP apps or framework. 
 
-If you are new to web apps or development, you'll find that Agile Toolkit can save you a lot of time by **hiding complex details** and **providing simple-to-use syntax**. If you are senior PHP developer, you'll appreciate **extensibility** of components and **depth and stability** of data persistency.
+A most common use for Agile UI is building "Admin Interface", "Signup Wizard" or even "SaaS Web App UI" where a consistent UI needs to be built with minimum effort.
+
+Agile UI is loved by beginners because it saves time by **hiding complex details** and **providing simple-to-use syntax**. It makes it possible to build apps without need to know HTML or JavaScript. If you are senior PHP developer, you'll appreciate **extensibility** of components and **depth and stability** of data persistency. ATK UI + [Data](https://github.com/atk4/data) + [API](https://github.com/atk4/api) combination is very well suited for **commercial apps**.
 
 ``` php
 $crud = new \atk4\ui\CRUD();
@@ -69,7 +71,7 @@ $wizard->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>
 
 ## Agile UI is part of [Agile Toolkit](https://agiletoolkit.org/)
 
-Agile UI uses framework "[Agile Data](https://github.com/atk4/data)" which offers layer of transparency and can be connected to SQL, NoSQL, API or other persistence media. See also "[Agile API](https://github.com/atk4/api)" if you need a RestAPI for a Mobile / JS application:
+Agile UI uses framework "[Agile Data](https://github.com/atk4/data)" which [offers a rich set of enterprise features compared to ORMs](http://socialcompare.com/en/comparison/php-data-access-libraries-orm-activerecord-persistence) layer of transparency and can be connected to SQL, NoSQL, API or other persistence media. See also "[Agile API](https://github.com/atk4/api)" if you need a RestAPI for a Mobile / JS application:
 
 [![](docs/images/intro.png)](https://youtu.be/a3imXsrvpVk)
 
@@ -79,7 +81,7 @@ If you are new to PHP and Development download bundle of Agile UI  from www.agil
 
 Those who are confident with composer should use:  `composer require atk4/ui`.
 
-You can build any web app with Agile UI, but it's most suited for admin systems thanks to it's [CRUD](http://ui.agiletoolkit.org/demos/crud.php), [Form](http://ui.agiletoolkit.org/demos/form3.php) and [Grid](http://ui.agiletoolkit.org/demos/grid.php) components. 
+Start with components such as [CRUD](http://ui.agiletoolkit.org/demos/crud.php), [Form](http://ui.agiletoolkit.org/demos/form3.php) and [Wizard](http://ui.agiletoolkit.org/demos/wizard.php).
 
 ### Learn ATK on Udemy.com
 
