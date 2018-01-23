@@ -37,5 +37,5 @@ Scenario:
 Scenario:
  Given I am on "js.php"
  When I press button "failure"
- Then Modal opens with text "Success"
+ Then Modal opens with text "Everything is bad"
 
