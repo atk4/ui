@@ -49,7 +49,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         $copy_paste = trim('
   autocomplete.php
   button.php
-  button2.php
+  js.php
   checkbox.php
   columns.php
   console.php
@@ -99,7 +99,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         return [
             ['autocomplete.php'],
             ['button.php'],
-            ['button2.php'],
+            ['js.php'],
             ['checkbox.php'],
 
             ['table.php'],
