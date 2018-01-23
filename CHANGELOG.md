@@ -1,3 +1,82 @@
+## 1.4
+
+In this version we focus on high-level components: Wizard, Console, ProgressBar, AutoComplete field, Lister, Radio field
+and necessary modifications to implement Login add-on.
+
+For detailed explanation read this article: https://medium.com/@romaninsh/atk-newsletter-1-ui-1-4-released-cb7b84fc12c8.
+
+**Implemented enhancements:**
+
+- Modal::show\(\) arguments. [\#255](https://github.com/atk4/ui/issues/255)
+- Implement session memorize [\#116](https://github.com/atk4/ui/issues/116)
+- Feature/implement wizard [\#305](https://github.com/atk4/ui/pull/305) ([romaninsh](https://github.com/romaninsh))
+
+**Fixed bugs:**
+
+- Adding child and re-rendering has no effect [\#296](https://github.com/atk4/ui/issues/296)
+- CRUD edit form is broken [\#295](https://github.com/atk4/ui/issues/295)
+- form2 demo page is bad [\#290](https://github.com/atk4/ui/issues/290)
+- Feature/fix 295 [\#297](https://github.com/atk4/ui/pull/297) ([romaninsh](https://github.com/romaninsh))
+- Fix implementation of Radio field [\#292](https://github.com/atk4/ui/pull/292) ([romaninsh](https://github.com/romaninsh))
+
+**Closed issues:**
+
+- Label-\>link\(\) unneccessary [\#330](https://github.com/atk4/ui/issues/330)
+- AutoComplete does not work if model id\_field != 'id' or title\_field' != name [\#327](https://github.com/atk4/ui/issues/327)
+- Can not move Modal window by dragging of its title bar [\#323](https://github.com/atk4/ui/issues/323)
+- Form error reloads in new popup window [\#318](https://github.com/atk4/ui/issues/318)
+- Form does not handle integer fields set to 0 correctly [\#317](https://github.com/atk4/ui/issues/317)
+- Paginator with self-reloading option is broken after change to CallbackLater [\#313](https://github.com/atk4/ui/issues/313)
+- Implement Upload Field for form [\#304](https://github.com/atk4/ui/issues/304)
+- even though $console-\>send\(\) is documented, it's not implemented. [\#302](https://github.com/atk4/ui/issues/302)
+- CRUD values from model don't propagate to boolean and dropdown values [\#288](https://github.com/atk4/ui/issues/288)
+- AutoComplete ignores model conditions until input is done [\#282](https://github.com/atk4/ui/issues/282)
+- when URL omits `index.php` URL detection is working incorrectly. [\#279](https://github.com/atk4/ui/issues/279)
+- Create example with header/footer row in table [\#276](https://github.com/atk4/ui/issues/276)
+- \[Epic\] - Console [\#275](https://github.com/atk4/ui/issues/275)
+- \[Epic\] - progress bar [\#274](https://github.com/atk4/ui/issues/274)
+- \[Epic\] Wizard [\#273](https://github.com/atk4/ui/issues/273)
+- Console and Progress-bar [\#160](https://github.com/atk4/ui/issues/160)
+- TableColumn\Template not supporting HTML [\#135](https://github.com/atk4/ui/issues/135)
+- Minor Improvements to jsReload [\#75](https://github.com/atk4/ui/issues/75)
+- add lister documentation [\#27](https://github.com/atk4/ui/issues/27)
+- integrate selenium testsuite [\#9](https://github.com/atk4/ui/issues/9)
+
+**Merged pull requests:**
+
+- fix jsCallback catch on Validation Exception [\#347](https://github.com/atk4/ui/pull/347) ([ibelar](https://github.com/ibelar))
+- Doc/upload field [\#346](https://github.com/atk4/ui/pull/346) ([ibelar](https://github.com/ibelar))
+- Feature/api redirect [\#345](https://github.com/atk4/ui/pull/345) ([romaninsh](https://github.com/romaninsh))
+- Updating readme for 1.4 [\#344](https://github.com/atk4/ui/pull/344) ([romaninsh](https://github.com/romaninsh))
+- fix tab callback [\#343](https://github.com/atk4/ui/pull/343) ([romaninsh](https://github.com/romaninsh))
+- Add View::jsReload\(\) [\#341](https://github.com/atk4/ui/pull/341) ([romaninsh](https://github.com/romaninsh))
+- it's better to call getter method not access property directly [\#340](https://github.com/atk4/ui/pull/340) ([DarkSide666](https://github.com/DarkSide666))
+- implement progress bar [\#337](https://github.com/atk4/ui/pull/337) ([romaninsh](https://github.com/romaninsh))
+- feature/Autocomplete-with-dropdown-settings [\#335](https://github.com/atk4/ui/pull/335) ([ibelar](https://github.com/ibelar))
+- feature/Modal observes changes [\#334](https://github.com/atk4/ui/pull/334) ([ibelar](https://github.com/ibelar))
+- Implement $view-\>url\(\) functionality as per \#307 [\#333](https://github.com/atk4/ui/pull/333) ([romaninsh](https://github.com/romaninsh))
+- fix \#330 [\#332](https://github.com/atk4/ui/pull/332) ([DarkSide666](https://github.com/DarkSide666))
+- feature/Error-Modal-Rev\(fix\#318\) [\#331](https://github.com/atk4/ui/pull/331) ([ibelar](https://github.com/ibelar))
+- fix \#327: title\_field and id\_field [\#328](https://github.com/atk4/ui/pull/328) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
+- fix/\#318 Form error [\#326](https://github.com/atk4/ui/pull/326) ([ibelar](https://github.com/ibelar))
+- Feature/js package [\#320](https://github.com/atk4/ui/pull/320) ([ibelar](https://github.com/ibelar))
+- fix 317 [\#319](https://github.com/atk4/ui/pull/319) ([DarkSide666](https://github.com/DarkSide666))
+- resolve \#313 [\#314](https://github.com/atk4/ui/pull/314) ([romaninsh](https://github.com/romaninsh))
+- Fix Hidden type field label display [\#311](https://github.com/atk4/ui/pull/311) ([ibelar](https://github.com/ibelar))
+- Feature/upload field [\#306](https://github.com/atk4/ui/pull/306) ([ibelar](https://github.com/ibelar))
+- Feature/fix 302 [\#303](https://github.com/atk4/ui/pull/303) ([romaninsh](https://github.com/romaninsh))
+- Inserted a link to calendar github page in comment [\#300](https://github.com/atk4/ui/pull/300) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
+- Removed empty first line [\#299](https://github.com/atk4/ui/pull/299) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
+- Added implementation of Lister [\#298](https://github.com/atk4/ui/pull/298) ([romaninsh](https://github.com/romaninsh))
+- Move cloneRegion into lister's init [\#294](https://github.com/atk4/ui/pull/294) ([romaninsh](https://github.com/romaninsh))
+- Feature/refactor region population [\#293](https://github.com/atk4/ui/pull/293) ([romaninsh](https://github.com/romaninsh))
+- Enhancements of our Form [\#291](https://github.com/atk4/ui/pull/291) ([romaninsh](https://github.com/romaninsh))
+- Corrected mistyped "Exception" \(was "Exceptino"\) [\#287](https://github.com/atk4/ui/pull/287) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
+- Fix/\#282-Autocomplete [\#285](https://github.com/atk4/ui/pull/285) ([ibelar](https://github.com/ibelar))
+- Implementing Console [\#280](https://github.com/atk4/ui/pull/280) ([romaninsh](https://github.com/romaninsh))
+- Improvements for Tables, CRUDS and few other areas. [\#277](https://github.com/atk4/ui/pull/277) ([romaninsh](https://github.com/romaninsh))
+
+
 ## 1.3
 
 This version is focused on dynamic interaction between the browser and your PHP apps. It contains 3
