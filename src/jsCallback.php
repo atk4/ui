@@ -68,29 +68,19 @@ class jsCallback extends Callback implements jsExpressionable
                 $this->terminate($ajaxec);
             } catch (\atk4\data\ValidationException $e) {
                 // Validation exceptions will be presented to user in a friendly way
-
-                $actions = [];
-                $actions[] = new jsExpression('alert([])', [$e->getMessage()]);
-
-                $ajaxec = implode(";\n", array_map(function (jsExpressionable $r) {
-                    return $r->jsRender();
-                }, $actions));
-
                 $m = new Message($e->getMessage());
                 $m->addClass('error');
 
-                $this->terminate($m->getHTML(), false);
-                // TODO, may have a bug here? passing HTML as ajaxec?
-                //$this->app->terminate(json_encode(['success' => false, 'message' => $m->getHTML()]));
+                $this->terminate(null, $m->getHTML(), false);
             }
         });
 
         return $this;
     }
 
-    public function terminate($ajaxec, $success = true)
+    public function terminate($ajaxec, $msg = null, $success = true)
     {
-        $this->app->terminate(json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]));
+        $this->app->terminate(json_encode(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]));
     }
 
     public function getAjaxec($response, $chain = null)

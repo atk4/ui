@@ -84,7 +84,7 @@ class FeatureContext extends RawMinkContext implements Context
     public function modalOpensWithText($arg1)
     {
         $modal = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
-        if ($modal->getAttribute('class') != 'ui modal scrolling') {
+        if ($modal->getAttribute('class') != 'ui modal visible active') {
             throw new \Exception('No such modal');
         }
     }
