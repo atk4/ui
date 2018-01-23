@@ -133,7 +133,7 @@ Last release of Agile UI has put emphasis on high-level components and real-time
 
 ## What's new in 1.3
 
-Last release of Agile UI has added some cool features:
+Previous release has introduced:
 
 -   [Loader](http://ui.agiletoolkit.org/demos/loader.php) which can be nested, carry arguments, integrate with events and more.
 -   [Notifyer](http://ui.agiletoolkit.org/demos/notifyer.php) flashes a dynamic success/error message
@@ -141,19 +141,18 @@ Last release of Agile UI has added some cool features:
 -   [AutoComplete](http://ui.agiletoolkit.org/demos/autocomplete.php) is a new Form Field that will automatically traverse [referenced](http://agile-data.readthedocs.io/en/develop/references.html) Model and even open a Modal dialog for adding a new record. Very useful for web apps!
 -   [jsSSE](http://ui.agiletoolkit.org/demos/sse.php) is an easy-to-use module for running background jobs in PHP and displaying progress visually through a Progress-bar or Console.
 
-There are loads of minor improvements and a lot of new documentation. If you use 1.2 version, there won't be any breaking changes. For ATK4.x users we recommend to migrate now.
-
 ## Add-ons and integrations
 
-Agile UI has been developed from ground-up to be extensible in a whole new way. Each add-on delivers wide range of classes you can incorporate into your application without worrying about UI and Data compatibility.
+Add-ons:
 
+-   [User Authentication](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
 -   [Charts add-on](https://github.com/atk4/chart) - Modern looking and free charts with [chartJS](http://chartjs.org)
 -   [Audit for Models](https://github.com/atk4/audit) - Record all DB operations with Undo/Redo support for Agile Data
 -   [Data for Reports](https://github.com/atk4/report) - Implement data aggregation and union models for Agile Data
--   [User Authentication](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
 
-Agile UI and Agile Data was built using minimalistic approach and can be integrated into other frameworks and apps. Here are some of the connectors:
+Integrations:
 
+-   [Agile UI for Wordpress](https://github.com/ibelar/atk-wordpress) - Write Wordpress plugin using Agile UI
 -   [Laravel Agile Data](https://github.com/atk4/laravel-ad) - ServiceProvider for Agile Data
 -   .. more connectors wanted. If you are working to integrate Agile UI or Agile Data, please list it here (even if incomplete).
 
@@ -193,14 +192,26 @@ Agile UI comes with many built-in components:
 | [Tabs](https://ui.agiletoolkit.org/demos/tabs.php) | 4 Responsive: Admin, Centered, Site, Wide. | 1.2        |
 | [Loader](http://ui.agiletoolkit.org/demos/loader.php) | Dynamically load itself and contained components inside. | 1.3        |
 | [Modal View](http://ui.agiletoolkit.org/demos/modal2.php) | Open/Load contained components in a dialog. | 1.3        |
-| Breadcrumb                               | Push links to pages for navigation. Wizard. | 1.4 *      |
-| ProgressBar                              | Interactive display of a multi-step PHP code execution progress | 1.4 *      |
-| Console                                  | Execute server/shell commands and display progress live | 1.4 *      |
-| Items, Cards                             | Responsive Items and Card implementaiton. | 1.4 *      |
-| Wizard                                   | Multi-step, wizard with temporary data storing. | 1.5 *      |
+| Breadcrumb                               | Push links to pages for navigation. Wizard. | 1.4        |
+| ProgressBar                              | Interactive display of a multi-step PHP code execution progress | 1.4        |
+| Console                                  | Execute server/shell commands and display progress live | 1.4        |
+| Items, Cards                             | Responsive Items and Card implementaiton. | 1.4        |
+| Wizard                                   | Multi-step, wizard with temporary data storing. | 1.4        |
 |                                          |                                          |            |
 
--- * Component is not implemented yet.
+## Roadmap
+
+Agile UI has still more stuff ahead:
+
+### 1.5 - Locale and Translations
+
+-   Make all the texts and error messages translateable
+-   Add "Developer Console" into UI
+-   ..
+
+
+
+
 
 All bundled components are free and licensed under MIT license. They are installed together with Agile UI.
 
