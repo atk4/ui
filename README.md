@@ -6,9 +6,13 @@
 [![codecov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
 [![Version](https://badge.fury.io/gh/atk4%2Fui.svg)](https://packagist.org/packages/atk4/ui)
 
-**Agile UI is a high-level PHP framework for creating User Interfaces and Web Apps**
+**Agile UI is a high-level PHP framework for creating Web User Interfaces**
 
-You might need a CRUD for your "Admin Interface" or perhaps a basic Contact Form connected to [your database in SQL or NoSQL](https://github.com/atk4/data) - Agile UI provides universal and and extensible open-source platform for developing interactive PHP components as well as number of useful components ready to be used out of the box:
+Universal and Open-Source PHP framework providing you with wide range of "UI Components" - CRUD, Wizard, Form, Table, Menu, ProgressBar, AutoComplete and many more. Any component can be invoked from pure PHP and integrated into legacy, open-source PHP apps or framework. 
+
+A most common use for Agile UI is building "Admin Interface", "Signup Wizard" or even "SaaS Web App UI" where a consistent UI needs to be built with minimum effort.
+
+Agile UI is loved by beginners because it saves time by **hiding complex details** and **providing simple-to-use syntax**. It makes it possible to build apps without need to know HTML or JavaScript. If you are senior PHP developer, you'll appreciate **extensibility** of components and **depth and stability** of data persistency. ATK UI + [Data](https://github.com/atk4/data) + [API](https://github.com/atk4/api) combination is very well suited for **commercial apps**.
 
 ``` php
 $crud = new \atk4\ui\CRUD();
@@ -16,20 +20,84 @@ $crud->setModel(new User($db));
 echo $crud->render();
 ```
 
+*Components can be used inside your existing app, Wordpress plug-in or your framework of choice*
+
+Here is an example of a multi-step wizard:
+
+``` php
+<?php
+$app = new \atk4\ui\App('Test App');
+$app->initLayout('Centered');
+$wizard = $app->add('Wizard');
+
+$wizard->addStep('Welcome', function ($wizard) {
+    $wizard->add(['Message', 'Welcome to wizard demonstration'])->text
+        ->addParagraph('This code is only executed when you are on step1');
+});
+
+$wizard->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection String'], function ($step) {
+    $form = $step->add('Form');
+
+    $form->addField('dsn', 'Connect DSN', ['required'=>true]);
+    $form->onSubmit(function ($form) use ($step) {
+        $step->memorize('dsn', $form->model['dsn']);
+
+        return $step->jsNext();
+    });
+});
+
+$wizard->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'database'], function ($step) {
+    $consore = $step->add('Console');
+    $step->buttonFinish->addClass('disabled');
+
+    $console->set(function ($consore) use ($step) {
+        $dsn = $step->recall('dsn');
+        $model = $step->recall('model');
+
+        $console->output('please wait');
+        sleep(1);
+        $console->output('connecting to "'.$dsn.'"');
+        sleep(2);
+        $console->output('initializing table for model "'.$model.'"');
+        sleep(1);
+        $console->output('DONE');
+
+        $console->send($step->buttonFinish->js()->removeClass('disabled'));
+    });
+});
+```
+
+*See this example in action: http://ui.agiletoolkit.org/demos/wizard.php*
+
 ## Agile UI is part of [Agile Toolkit](https://agiletoolkit.org/)
+
+Agile UI uses framework "[Agile Data](https://github.com/atk4/data)" which [offers a rich set of enterprise features compared to ORMs](http://socialcompare.com/en/comparison/php-data-access-libraries-orm-activerecord-persistence) layer of transparency and can be connected to SQL, NoSQL, API or other persistence media. See also "[Agile API](https://github.com/atk4/api)" if you need a RestAPI for a Mobile / JS application:
 
 [![](docs/images/intro.png)](https://youtu.be/a3imXsrvpVk)
 
-## Setting up and Examples
+## Getting Started
 
-Install by downloading from from www.agiletoolkit.org or through composer `composer require atk4/ui`.
+If you are new to PHP and Development download bundle of Agile UI  from www.agiletoolkit.org that includes some examples and dependencies, works without any set-up.
 
-Components like [CRUD](http://ui.agiletoolkit.org/demos/crud.php), [Form](http://ui.agiletoolkit.org/demos/form3.php) and [Grid](http://ui.agiletoolkit.org/demos/grid.php) are cornerstone for a modern Admin systems. This first example demonstrates how to build a very simple Admin UI with a single CRUD:
+Those who are confident with composer should use:  `composer require atk4/ui`.
+
+Start with components such as [CRUD](http://ui.agiletoolkit.org/demos/crud.php), [Form](http://ui.agiletoolkit.org/demos/form3.php) and [Wizard](http://ui.agiletoolkit.org/demos/wizard.php).
+
+### Learn ATK on Udemy.com
+
+For a **LIMITED TIME**, I'm offering you to get access to my course on udemy.com. New Lessons are coming out every week, [here is how you can apply](https://forum.agiletoolkit.org/t/udemy-com-atk-course-early-access-limited-time-free/413).
+
+### Build your admin quick
+
+It's really easy to put together a complex Admin system, here is how. Add this code to a new PHP file (tweak it with your database details, table and fields):
 
 ``` php
+<?php
+  
   $app = new \atk4\ui\App('My App');
   $app->initLayout('Admin');
-  $db = \atk4\data\Persistence::connect($DSN);
+  $db = \atk4\data\Persistence::connect('mysql://user:pass@localhost/yourdb');
+
   class User extends \atk4\data\Model {
       public $table = 'user';
       function init() {
@@ -44,31 +112,28 @@ Components like [CRUD](http://ui.agiletoolkit.org/demos/crud.php), [Form](http:/
   $app->add('CRUD')->setModel(new User($db));
 ```
 
-The new CRUD will be fully **interactive**, will **dynamically reload itself** and support pagination. You can also add more actions, drill-downs, quick-search and dialogs easily.
+Your new CRUD is fully **interactive**, will **dynamically reload itself** and support pagination. You can also add more actions, drill-downs, quick-search and dialogs easily:
 
 ![](docs/images/admin-in-15-lines.png)
 
-## Build Powerful Web Apps in pure PHP
+## What's new in 1.4
 
-PHP is a beautiful and powerful language which we can use to abstract a lot of User Interface implementation. The idea for Agile UI originates from Desktop Toolkits (also used for Mobile apps). The challenge we had to overcome is transparent communication between the browser and a backend.
+Last release of Agile UI has put emphasis on high-level components and real-time interactivity.:
 
-The next snippet illustrates how you can dynamically load a "[Chart](https://github.com/atk4/chart)" on your dashboard page:
-
-``` php
-$loader = $app->add('Loader'); // Will load charts through AJAX
-
-$loader->set(function($page) use ($m) {
-  
-  $chart = $page->add(new \atk4\chart\BarChart());
-  $chart->setModel($m, ['name', 'sales', 'purchase', 'profit']);
-});
-```
-
-Next time you load the page, you'll see a [loading spinner](http://ui.agiletoolkit.org/demos/loader.php) which will wait for Chart to fetch and prepare data.
+-   Wizard - ideal for sign-up process
+-   Login - add-on implementing authentication control
+-   Console - real-time output tracking
+-   ProgressBar - execute long process in PHP and show progress-bar to user
+-   Upload - Form field for uploading files and images
+-   AutoComplete - drop-in replacement for DropDowns
+-   Password field - store passwords encrypted
+-   Lister - show information as a list
+-   Radio buttons - yet another alternative to a drop-down
+-   Static data - provide data to Table in array.
 
 ## What's new in 1.3
 
-Last release of Agile UI has added some cool features:
+Previous release has introduced:
 
 -   [Loader](http://ui.agiletoolkit.org/demos/loader.php) which can be nested, carry arguments, integrate with events and more.
 -   [Notifyer](http://ui.agiletoolkit.org/demos/notifyer.php) flashes a dynamic success/error message
@@ -76,19 +141,18 @@ Last release of Agile UI has added some cool features:
 -   [AutoComplete](http://ui.agiletoolkit.org/demos/autocomplete.php) is a new Form Field that will automatically traverse [referenced](http://agile-data.readthedocs.io/en/develop/references.html) Model and even open a Modal dialog for adding a new record. Very useful for web apps!
 -   [jsSSE](http://ui.agiletoolkit.org/demos/sse.php) is an easy-to-use module for running background jobs in PHP and displaying progress visually through a Progress-bar or Console.
 
-There are loads of minor improvements and a lot of new documentation. If you use 1.2 version, there won't be any breaking changes. For ATK4.x users we recommend to migrate now.
-
 ## Add-ons and integrations
 
-Agile UI has been developed from ground-up to be extensible in a whole new way. Each add-on delivers wide range of classes you can incorporate into your application without worrying about UI and Data compatibility.
+Add-ons:
 
+-   [User Authentication](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
 -   [Charts add-on](https://github.com/atk4/chart) - Modern looking and free charts with [chartJS](http://chartjs.org)
 -   [Audit for Models](https://github.com/atk4/audit) - Record all DB operations with Undo/Redo support for Agile Data
 -   [Data for Reports](https://github.com/atk4/report) - Implement data aggregation and union models for Agile Data
--   [User Authentication](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
 
-Agile UI and Agile Data was built using minimalistic approach and can be integrated into other frameworks and apps. Here are some of the connectors:
+Integrations:
 
+-   [Agile UI for Wordpress](https://github.com/ibelar/atk-wordpress) - Write Wordpress plugin using Agile UI
 -   [Laravel Agile Data](https://github.com/atk4/laravel-ad) - ServiceProvider for Agile Data
 -   .. more connectors wanted. If you are working to integrate Agile UI or Agile Data, please list it here (even if incomplete).
 
@@ -128,14 +192,26 @@ Agile UI comes with many built-in components:
 | [Tabs](https://ui.agiletoolkit.org/demos/tabs.php) | 4 Responsive: Admin, Centered, Site, Wide. | 1.2        |
 | [Loader](http://ui.agiletoolkit.org/demos/loader.php) | Dynamically load itself and contained components inside. | 1.3        |
 | [Modal View](http://ui.agiletoolkit.org/demos/modal2.php) | Open/Load contained components in a dialog. | 1.3        |
-| Breadcrumb                               | Push links to pages for navigation. Wizard. | 1.4 *      |
-| ProgressBar                              | Interactive display of a multi-step PHP code execution progress | 1.4 *      |
-| Console                                  | Execute server/shell commands and display progress live | 1.4 *      |
-| Items, Cards                             | Responsive Items and Card implementaiton. | 1.4 *      |
-| Wizard                                   | Multi-step, wizard with temporary data storing. | 1.5 *      |
+| Breadcrumb                               | Push links to pages for navigation. Wizard. | 1.4        |
+| ProgressBar                              | Interactive display of a multi-step PHP code execution progress | 1.4        |
+| Console                                  | Execute server/shell commands and display progress live | 1.4        |
+| Items, Cards                             | Responsive Items and Card implementaiton. | 1.4        |
+| Wizard                                   | Multi-step, wizard with temporary data storing. | 1.4        |
 |                                          |                                          |            |
 
--- * Component is not implemented yet.
+## Roadmap
+
+Agile UI has still more stuff ahead:
+
+### 1.5 - Locale and Translations
+
+-   Make all the texts and error messages translateable
+-   Add "Developer Console" into UI
+-   ..
+
+
+
+
 
 All bundled components are free and licensed under MIT license. They are installed together with Agile UI.
 
