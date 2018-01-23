@@ -83,7 +83,7 @@ class LoremIpsum extends Text
         return $lorem;
     }
 
-    function __construct($size = null)
+    public function __construct($size = null)
     {
         if ($size) {
             $this->size = $size;
