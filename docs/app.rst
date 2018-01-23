@@ -222,6 +222,27 @@ address same model scope.
 
 If you need to generate URL that respects stickyGet arguments, use :php:meth:`App::url()`.
 
+See also :php:meth:`View::stickyGet`
+
+Redirects
+---------
+
+.. php:method:: redirect(page)
+.. php:method:: jsRedirect(page)
+
+App implements two handy methods for handling redirects between pages. The main purpose for those is
+to provide a simple way to redirect for users who are not familiar with JavaScript and HTTP headers
+so well.  Example::
+
+    if (!isset($_GET['age'])) {
+        $app->redirect(['age'=>18]);
+    }
+
+    $app->add(['Button', 'Increase age'])
+        ->on('click', $app->jsRedirect(['age'=>$_GET['age']+1]));
+
+No much magic in these methods.
+
 Execution Termination
 ---------------------
 
