@@ -83,14 +83,11 @@ class LoremIpsum extends Text
         return $lorem;
     }
 
-    public function setProperties($defaults)
+    function __construct($size = null)
     {
-        if (isset($defaults[0])) {
-            $this->size = $defaults[0];
-            unset($defaults[0]);
+        if ($size) {
+            $this->size = $size;
         }
-
-        return parent::setProperties($defaults);
     }
 
     public function init()

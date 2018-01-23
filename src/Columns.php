@@ -45,9 +45,9 @@ class Columns extends View
 
         $size = $defaults[0];
         unset($defaults[0]);
-        $defaults = array_merge(['View', null], $defaults);
 
-        $column = $this->add($defaults);
+        $column = $this->factory(['View'], $defaults);
+        $this->add($column);
 
         if ($size && isset($this->sizes[$size])) {
             $column->addClass($this->sizes[$size].' wide');
