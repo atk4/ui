@@ -62,7 +62,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem(['Progress Bar', 'icon'=>'yellow star'], ['progress']);
     $basic->addItem(['Loader', 'icon'=>'yellow star'], ['loader']);
     $basic->addItem(['Console', 'icon'=>'yellow star'], ['console']);
-    $basic->addItem('Noifyer', ['notify']);
+    $basic->addItem('Notifyer', ['notify']);
     $basic->addItem(['Modal View', 'icon'=>'yellow star'], ['modal2']);
     $basic->addItem('Dynamic jsModal', ['modal']);
     $basic->addItem('Sticky GET', ['sticky']);
