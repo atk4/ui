@@ -68,7 +68,7 @@ You may change this package to suit your own needs.
 First start by installing the package using npm install. 
 
 ```
-    cd path_to_js_dir/js
+    cd atk4/ui/js
     npm install
 ```
 
