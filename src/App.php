@@ -391,9 +391,9 @@ class App
 
     public $db = null;
 
-    public function dbConnect($dsn)
+    public function dbConnect($dsn, $user = null, $password = null, $args = [])
     {
-        return $this->db = $this->add(\atk4\data\Persistence::connect($dsn));
+        return $this->db = $this->add(\atk4\data\Persistence::connect($dsn, $user, $password, $args));
     }
 
     protected function getRequestURI()

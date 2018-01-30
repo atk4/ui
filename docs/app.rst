@@ -243,6 +243,18 @@ so well.  Example::
 
 No much magic in these methods.
 
+Database Connection
+-------------------
+
+.. php:method:: dbConnect(dsn)
+
+This method should be used instead of manually calling Persistence::connect. This will
+properly propogate Persistence's "api" property to $this, so that you can refrence::
+
+    $this->app->...
+
+inside your model code.
+
 Execution Termination
 ---------------------
 
