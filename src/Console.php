@@ -59,7 +59,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * While inside a callback you may execute runCommand or setModel multiple times.
      */
-    public function set($callback = null, $junk = null)
+    public function set($callback = null, $event = true)
     {
         if (!$callback) {
             throw new Exception('Please specify the $callback argument');
@@ -98,7 +98,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
             $this->sseInProgress = false;
         });
-        $this->js(true, $this->sse);
+        if ($event) {
+            $this->js($event, $this->sse);
+        }
 
         return $this;
     }
