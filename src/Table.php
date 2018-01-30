@@ -204,6 +204,15 @@ class Table extends Lister
         $this->columns[$name][] = $decorator;
     }
 
+    public function getColumnDecorators($name)
+    {
+        $dec = $this->columns[$name];
+        if (!is_array($dec)) {
+            $dec = [$dec];
+        }
+        return $dec;
+    }
+
     /**
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
