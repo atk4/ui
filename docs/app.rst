@@ -246,7 +246,9 @@ No much magic in these methods.
 Database Connection
 -------------------
 
-.. php:method:: dbConnect(dsn)
+.. php:method:: dbConnect(dsn, $user = null, $password = null, $args = [])
+
+(Arguments are identical to `Persistence::connect <http://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`_.
 
 This method should be used instead of manually calling Persistence::connect. This will
 properly propogate Persistence's "api" property to $this, so that you can refrence::
