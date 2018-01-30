@@ -210,6 +210,7 @@ class Table extends Lister
         if (!is_array($dec)) {
             $dec = [$dec];
         }
+
         return $dec;
     }
 
