@@ -389,6 +389,13 @@ class App
         return $template;
     }
 
+    public $db = null;
+
+    public function dbConnect($dsn, $user = null, $password = null, $args = [])
+    {
+        return $this->db = $this->add(\atk4\data\Persistence::connect($dsn, $user, $password, $args));
+    }
+
     protected function getRequestURI()
     {
         if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
