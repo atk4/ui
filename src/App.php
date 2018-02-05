@@ -128,7 +128,7 @@ class App
          */
 
         // Set up template folder
-        $this->template_dir = __DIR__ . '/../template/'.$this->skin;
+        $this->template_dir = __DIR__.'/../template/'.$this->skin;
 
         // Set our exception handler
         if ($this->catch_exceptions) {
