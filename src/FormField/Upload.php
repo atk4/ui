@@ -102,7 +102,7 @@ class Upload extends Input
      *
      * @return $this|void
      */
-    public function set($fileId, $fileName = null, $junk = null)
+    public function set($fileId = null, $fileName = null, $junk = null)
     {
         $this->setFileId($fileId);
 
