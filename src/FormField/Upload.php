@@ -7,8 +7,7 @@ use atk4\ui\Template;
 use atk4\ui\View;
 
 /**
- * Class Upload
- *
+ * Class Upload.
  */
 class Upload extends Input
 {

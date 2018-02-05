@@ -49,6 +49,7 @@ $field->onUpload(function ($files) use ($form, $field) {
         return $form->error('file', 'Error uploading file.');
     }
     $field->setFileId('a_token');
+
     return new atk4\ui\jsNotify(['content' => 'File is uploaded!', 'color' => 'green']);
 });
 
