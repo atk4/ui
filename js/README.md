@@ -97,6 +97,11 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.0.2
+
+  - update uploadField plugin.
+    - Allow initial value to be displayed.
+
 ### version 1.0.1
 
 - add new function for exporting package version number;

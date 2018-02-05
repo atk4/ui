@@ -88,6 +88,26 @@ class Upload extends Input
     }
 
     /**
+     * Allow to set file name and file id.
+     *  - Value will be display to user, ex: file name.
+     *  - fileId is the file id send when using onDelete callback.
+     *      If null, onDelete receive the file name.
+     *
+     * @param mixed|null  $value  // Field value, display to user.
+     * @param string|null $fileId // Field id.
+     *
+     * @return $this|void
+     */
+    public function set($value, $fileId = null)
+    {
+        if ($fileId) {
+            $this->setFileId($fileId);
+        }
+
+        return parent::set($value);
+    }
+
+    /**
      * Set file id.
      *
      * @param $id
@@ -145,14 +165,18 @@ class Upload extends Input
             if ($this->cb->triggered()) {
                 $action = @$_POST['action'];
                 if ($files = @$_FILES) {
+                    //set fileId to file name as default.
                     $this->fileId = $files['file']['name'];
+                    // display file name to user as default.
+                    $this->set($this->fileId);
                 }
                 if ($action === 'upload' && !$files['file']['error']) {
                     $this->cb->set(function () use ($fx, $files) {
                         $this->addJsAction(call_user_func_array($fx, $files));
+                        $value = $this->field ? $this->field->get() : $this->content;
                         $this->addJsAction([
                             $this->js()->data('fileId', $this->fileId),
-                            $this->jsInput()->val($this->fileId),
+                            $this->jsInput()->val($value)->trigger('updateInput'),
                         ]);
 
                         return $this->jsActions;
@@ -189,6 +213,7 @@ class Upload extends Input
         $this->js(true)->atkFileUpload([
             'uri'      => $this->cb->getURL(),
             'action'   => $this->action->name,
+            'id'       => $this->fileId,
             'hasFocus' => $this->hasFocusEnable,
             'submit'   => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
         ]);

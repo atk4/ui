@@ -5,7 +5,12 @@ require 'init.php';
 $form = $app->add('Form');
 
 $img = $form->addField('img', ['UploadImg', ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
+//$img->set('afile-name');
+//$img->setThumbnailSrc('./images/logo.png');
+
 $field = $form->addField('file', ['Upload', ['accept' => ['.png', '.jpg']]]);
+
+$field->set('original-file-name', 'a_generated_token');
 
 $img->onDelete(function ($fileId) use ($img) {
     $img->clearThumbnail('./images/default.png');
@@ -24,6 +29,7 @@ $img->onUpload(function ($files) use ($form, $img) {
 
     $img->setThumbnailSrc('./images/logo.png');
     $img->setFileId('123456');
+    $img->set($files['name'].' (token: 123456)');
     //Do file processing here...
 
     /* This will get caught by jsCallback and show via modal. */
