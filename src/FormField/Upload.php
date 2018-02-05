@@ -6,6 +6,10 @@ use atk4\ui\Exception;
 use atk4\ui\Template;
 use atk4\ui\View;
 
+/**
+ * Class Upload
+ *
+ */
 class Upload extends Input
 {
     public $inputType = 'hidden';
@@ -20,6 +24,7 @@ class Upload extends Input
      * The uploaded file id.
      * This id is return on form submit.
      * If not set, will default to file name.
+     * file id is also sent with onDelete Callback.
      *
      * @var null
      */
@@ -88,23 +93,48 @@ class Upload extends Input
     }
 
     /**
-     * Allow to set file name and file id.
-     *  - Value will be display to user, ex: file name.
-     *  - fileId is the file id send when using onDelete callback.
-     *      If null, onDelete receive the file name.
+     * Allow to set file id and file name
+     *  - fileId will be the file id sent with onDelete callback.
+     *  - fileName is the field value display to user.
      *
-     * @param mixed|null  $value  // Field value, display to user.
-     * @param string|null $fileId // Field id.
+     * @param string      $fileId   // Field id for onDelete Callback.
+     * @param string|null $fileName // Field name display to user.
+     * @param mixed       $junk
      *
      * @return $this|void
      */
-    public function set($value, $fileId = null)
+    public function set($fileId, $fileName = null, $junk = null)
     {
-        if ($fileId) {
-            $this->setFileId($fileId);
+        $this->setFileId($fileId);
+
+        if (!$fileName) {
+            $fileName = $fileId;
         }
 
-        return parent::set($value);
+        return $this->setInput($fileName, $junk);
+    }
+
+    /**
+     * Set input field value.
+     *
+     * @param $value // The field input value.
+     * @param $junk
+     *
+     * @return $this
+     */
+    public function setInput($value, $junk = null)
+    {
+        return parent::set($value, $junk);
+    }
+
+    /**
+     * Get input field value.
+     *
+     * @return array|false|mixed|null|string
+     */
+    public function getInputValue()
+    {
+        return $this->field ? $this->field->get() : $this->content;
     }
 
     /**
@@ -168,15 +198,14 @@ class Upload extends Input
                     //set fileId to file name as default.
                     $this->fileId = $files['file']['name'];
                     // display file name to user as default.
-                    $this->set($this->fileId);
+                    $this->setInput($this->fileId);
                 }
                 if ($action === 'upload' && !$files['file']['error']) {
                     $this->cb->set(function () use ($fx, $files) {
                         $this->addJsAction(call_user_func_array($fx, $files));
-                        $value = $this->field ? $this->field->get() : $this->content;
+                        //$value = $this->field ? $this->field->get() : $this->content;
                         $this->addJsAction([
-                            $this->js()->data('fileId', $this->fileId),
-                            $this->jsInput()->val($value)->trigger('updateInput'),
+                            $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
                         ]);
 
                         return $this->jsActions;
@@ -210,10 +239,11 @@ class Upload extends Input
             $this->template->trySet('PlaceHolder', $this->placeholder);
         }
 
+        $value = $this->field ? $this->field->get() : $this->content;
         $this->js(true)->atkFileUpload([
             'uri'      => $this->cb->getURL(),
             'action'   => $this->action->name,
-            'id'       => $this->fileId,
+            'file'     => ['id' => $this->fileId, 'name' => $this->getInputValue()],
             'hasFocus' => $this->hasFocusEnable,
             'submit'   => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
         ]);

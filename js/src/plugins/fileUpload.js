@@ -4,7 +4,6 @@ import uploadService from "../services/UploadService";
 export default class fileUpload extends atkPlugin {
 
   main() {
-    this.$el.data().fileId = this.settings.id;
     this.textInput = this.$el.find('input[type="text"]');
     this.hiddenInput = this.$el.find('input[type="hidden"]');
 
@@ -31,10 +30,28 @@ export default class fileUpload extends atkPlugin {
     })
       .hide();
 
-    // check for existing file input value and adjust state accordingly.
-    if (this.hiddenInput.val()) {
-      this.textInput.val(this.hiddenInput.val());
+    this.$el.data().fileId = this.settings.file.id;
+    this.hiddenInput.val(this.settings.file.id);
+    this.textInput.val(this.settings.file.name);
+    if (this.settings.file.id) {
       this.setState('delete');
+    }
+  }
+
+  /**
+   * Update input value.
+   *
+   * @param fileId
+   * @param fileName
+   */
+  updateField(fileId, fileName) {
+    this.$el.data().fileId = fileId;
+    this.hiddenInput.val(fileId);
+
+    if (fileName === '' || typeof fileName === 'undefined' || fileName === null) {
+      this.textInput.val(fileId);
+    } else {
+      this.textInput.val(fileName);
     }
   }
 
@@ -76,10 +93,6 @@ export default class fileUpload extends atkPlugin {
         //that.doFileUpload(e.target.files[0]);
         that.doFileUpload(e.target.files);
       }
-    });
-
-    this.hiddenInput.on('updateInput', function(e) {
-      that.textInput.val(e.target.value);
     });
   }
 
@@ -132,7 +145,7 @@ export default class fileUpload extends atkPlugin {
       if (that.settings.submit) {
         $('#'+that.settings.submit).removeClass('disabled');
       }
-    }
+    };
 
     // setup progress bar update via xhr.
     let xhrCb = function() {
@@ -144,7 +157,7 @@ export default class fileUpload extends atkPlugin {
         }
       }, false);
       return xhr;
-    }
+    };
 
     that.bar.show();
     uploadService.uploadFiles(
@@ -193,7 +206,7 @@ export default class fileUpload extends atkPlugin {
 
 fileUpload.DEFAULTS = {
   uri: null,
-  id: null,
+  file: {id: null, name: null},
   uri_options: {},
   hasFocus: true,
   action: null,
