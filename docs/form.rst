@@ -366,7 +366,7 @@ using onlyFields restriction rather then `never_persist`.
 Validating
 ----------
 
-Topic of Validation in web apps is quite extensive. You sould start by reading what Agile Data
+Topic of Validation in web apps is quite extensive. You should start by reading what Agile Data
 has to say about validation:
 http://agile-data.readthedocs.io/en/develop/persistence.html#validation
 
