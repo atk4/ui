@@ -371,10 +371,6 @@ class View implements jsExpressionable
         // Will call init() of the object
         $object = $this->_add($object);
 
-        if (!$object instanceof self) {
-            return $object;
-        }
-
         return $object;
     }
 
