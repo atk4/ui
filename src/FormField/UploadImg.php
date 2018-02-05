@@ -14,13 +14,6 @@ class UploadImg extends Upload
     public $thumbnail = null;
 
     /**
-     * The image src for thumbnail.
-     *
-     * @var string|null
-     */
-    public $src = null;
-
-    /**
      * The template region where to add the thumbnail view.
      * Default to AfterAfterInput.
      *
@@ -44,11 +37,12 @@ class UploadImg extends Upload
         }
 
         if (!$this->thumbnail) {
-            $this->thumbnail = new View(['element'=>'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]);
+            $this->thumbnail = (new View(['element'=>'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]))
+                                    ->setAttr(['width' => '36px', 'height' => '36px']);
         }
 
         if ($this->defaultSrc) {
-            $this->thumbnail->setAttr(['src' => $this->defaultSrc, 'width' => '36px', 'height' => '36px']);
+            $this->thumbnail->setAttr(['src' => $this->defaultSrc]);
         }
 
         $this->add($this->thumbnail, $this->thumnailRegion);
@@ -61,7 +55,7 @@ class UploadImg extends Upload
      */
     public function setThumbnailSrc($src)
     {
-        $this->src = $src;
+        $this->thumbnail->setAttr(['src' => $src]);
         $action = $this->thumbnail->js();
         $action->attr('src', $src);
         $this->addJSAction($action);
@@ -82,11 +76,5 @@ class UploadImg extends Upload
             $action->removeAttr('src');
         }
         $this->addJSAction($action);
-    }
-
-    public function renderView()
-    {
-        $this->src ? $this->thumbnail->js(true)->attr('src', $this->src) : null;
-        parent::renderView();
     }
 }
