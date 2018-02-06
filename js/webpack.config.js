@@ -8,7 +8,9 @@ const env  = require('yargs').argv.env; // use --env with webpack 2
 let libraryName = 'atk';
 
 let plugins = [
-
+  new webpack.DefinePlugin({
+    _ATKVERSION_ : JSON.stringify(require("./package.json").version)
+  })
 ], outputFile;
 
 if (env === 'build') {
