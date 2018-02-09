@@ -202,6 +202,7 @@ class Input extends Generic
         }
 
         $this->action = $this->add(new Button($defaults), 'AfterInput');
+        $this->addClass('action');
 
         return $this->action;
     }
