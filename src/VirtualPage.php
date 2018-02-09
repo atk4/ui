@@ -32,54 +32,9 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = $this->_add(['CallbackLater', 'urlTrigger'=>$this->urlTrigger ?: $this->name]);
+        $this->cb = $this->_add(['Callback', 'urlTrigger'=>$this->urlTrigger ?: $this->name]);
         $this->stickyGet($this->name);
 
-        $this->cb->set(function () {
-
-            // if virtual page callback is triggered
-            if ($type = $this->cb->triggered()) {
-
-                // process callback
-                if ($this->fx) {
-                    call_user_func($this->fx, $this);
-                }
-
-                // special treatment for popup
-                if ($type == 'popup') {
-                    $this->app->html->template->set('title', $this->app->title);
-                    $this->app->html->template->setHTML('Content', parent::getHTML());
-                    $this->app->html->template->appendHTML('HEAD', $this->getJS());
-
-                    $this->app->terminate($this->app->html->template->render());
-                }
-
-                // render and terminate
-                if (isset($_GET['json'])) {
-                    $this->app->terminate($this->renderJSON());
-                }
-
-                // do not terminate if callback supplied (no cutting)
-                if ($type != 'callback') {
-                    $this->app->terminate($this->render());
-                }
-            }
-
-            // Remove all elements from inside the Content
-            foreach ($this->app->layout->elements as $key => $view) {
-                if ($view instanceof View && $view->region == 'Content') {
-                    unset($this->app->layout->elements[$key]);
-                }
-            }
-
-            $this->app->layout->template->setHTML('Content', parent::getHTML());
-            $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $this->_js_actions);
-
-            $this->app->html->template->setHTML('Content', $this->app->layout->getHTML());
-            $this->app->html->template->appendHTML('HEAD', $this->app->layout->getJS());
-
-            $this->app->terminate($this->app->html->template->render());
-        });
     }
 
     /**
@@ -139,5 +94,50 @@ class VirtualPage extends View
      */
     public function getHTML()
     {
+        $this->cb->set(function () {
+
+            // if virtual page callback is triggered
+            if ($type = $this->cb->triggered()) {
+
+                // process callback
+                if ($this->fx) {
+                    call_user_func($this->fx, $this);
+                }
+
+                // special treatment for popup
+                if ($type == 'popup') {
+                    $this->app->html->template->set('title', $this->app->title);
+                    $this->app->html->template->setHTML('Content', parent::getHTML());
+                    $this->app->html->template->appendHTML('HEAD', $this->getJS());
+
+                    $this->app->terminate($this->app->html->template->render());
+                }
+
+                // render and terminate
+                if (isset($_GET['json'])) {
+                    $this->app->terminate($this->renderJSON());
+                }
+
+                // do not terminate if callback supplied (no cutting)
+                if ($type != 'callback') {
+                    $this->app->terminate($this->render());
+                }
+            }
+
+            // Remove all elements from inside the Content
+            foreach ($this->app->layout->elements as $key => $view) {
+                if ($view instanceof View && $view->region == 'Content') {
+                    unset($this->app->layout->elements[$key]);
+                }
+            }
+
+            $this->app->layout->template->setHTML('Content', parent::getHTML());
+            $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $this->_js_actions);
+
+            $this->app->html->template->setHTML('Content', $this->app->layout->getHTML());
+            $this->app->html->template->appendHTML('HEAD', $this->app->layout->getJS());
+
+            $this->app->terminate($this->app->html->template->render());
+        });
     }
 }
