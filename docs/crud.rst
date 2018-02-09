@@ -46,9 +46,9 @@ parameters to CRUD.
 Disabling Actions
 =================
 
-.. php:attr: $canCreate
-.. php:attr: $canUpdate
-.. php:attr: $canDelete
+.. php:attr:: canCreate
+.. php:attr:: canUpdate
+.. php:attr:: canDelete
 
 By default CRUD allows all the four operations - reading, creating, updating and deleting. CRUD cannot function
 without read operation, but the other operations can be explicitly disabled::
@@ -58,10 +58,10 @@ without read operation, but the other operations can be explicitly disabled::
 Specifying Fields
 =================
 
-.. php:attr: $fieldsDefault
-.. php:attr: $fieldsCreate
-.. php:attr: $fieldsRead
-.. php:attr: $fieldsUpdate
+.. php:attr:: fieldsDefault
+.. php:attr:: fieldsCreate
+.. php:attr:: fieldsRead
+.. php:attr:: fieldsUpdate
 
 Through those properties you can specify which fields to use. setModel() second argument will set `fieldsDefault` but
 if it's not passed, then you can inject fieldsDefault property during creation of setModel. Alternatively
@@ -106,9 +106,9 @@ specify your own form to use, which can be either an object or a seed::
 Custom Page
 ===========
 
-.. php:attr: $pageDefault
-.. php:attr: $pageCreate
-.. php:attr: $pageUpdate
+.. php:attr:: pageDefault
+.. php:attr:: pageCreate
+.. php:attr:: pageUpdate
 
 You can also specify a custom class for your Page. Normally it's a :php:class:`VirtualPage` but you
 can extend it to introduce your own style or add more components that just a form::
@@ -140,7 +140,7 @@ can extend it to introduce your own style or add more components that just a for
 Notification
 ============
 
-.. php:attr: $notify
+.. php:attr:: notify
 
 When data is saved, property `$notify` can contain a custom notification action. By default it uses :php:class:`jsNotify`
 which will display green strip on top of the page. You can either override it or add additional actions::
