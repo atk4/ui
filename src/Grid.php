@@ -131,8 +131,7 @@ class Grid extends View
         $this->quickSearch = $form->add(new \atk4\ui\FormField\Input(['placeholder' => 'Search', 'short_name' => $this->name.'_q', 'icon' => 'search']))
             ->addClass('transparent');
 
-        if (isset($_GET[$this->name.'_q'])) {
-            $q = $_GET[$this->name.'_q'];
+        if ($q = $this->stickyGet($this->name.'_q')) {
             $this->quickSearch->set($q);
 
             $cond = [];
@@ -194,6 +193,10 @@ class Grid extends View
 
         if ($this->sortable) {
             $this->applySort();
+        }
+
+        if ($this->quickSearch && is_array($this->quickSearch)) {
+            $this->addQuickSearch($this->quickSearch);
         }
 
         return $this->model;
