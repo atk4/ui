@@ -12,12 +12,12 @@ class CRUD extends Grid
     public $formDefault = null;
     public $fieldsDefault = null;
 
-    public $fieldsGrid = null;
+    public $fieldsRead = null;
 
-    public $columnEdit = null;
-    public $fieldsEdit = null;
-    public $formEdit = null;
-    public $pageEdit = null;
+    public $columnUpdate = null;
+    public $fieldsUpdate = null;
+    public $formUpdate = null;
+    public $pageUpdate = null;
 
     public $itemCreate = null;
     public $fieldsCreate = null;
@@ -41,8 +41,8 @@ class CRUD extends Grid
         $this->on('reload', new jsReload($this));
 
         if ($this->canUpdate) {
-            $this->pageEdit = $this->add([$this->pageEdit ?: 'VirtualPage', 'short_name'=>'edit']);
-            $this->formEdit = $this->pageEdit->add($this->formEdit ?: ['Form', 'layout' => 'FormLayout/Columns']);
+            $this->pageUpdate = $this->add([$this->pageUpdate ?: 'VirtualPage', 'short_name'=>'edit']);
+            $this->formUpdate = $this->pageUpdate->add($this->formUpdate ?: ['Form', 'layout' => 'FormLayout/Columns']);
         }
 
         if ($this->canCreate) {
@@ -73,7 +73,7 @@ class CRUD extends Grid
             $this->fieldsDefault = $defaultFields;
         }
 
-        $m = parent::setModel($m, $this->fieldsGrid ?: $this->fieldsDefault);
+        $m = parent::setModel($m, $this->fieldsRead ?: $this->fieldsDefault);
 
         if ($this->canCreate) {
             $this->itemCreate->set('Add New '.(isset($m->title) ? $m->title : preg_replace('|.*\\\|', '', get_class($m))));
@@ -94,12 +94,12 @@ class CRUD extends Grid
         }
 
         if ($this->canUpdate) {
-            $this->addAction(['icon' => 'edit'], new jsModal('Edit', $this->pageEdit, [$this->name => $this->jsRow()->data('id')]));
+            $this->addAction(['icon' => 'edit'], new jsModal('Edit', $this->pageUpdate, [$this->name => $this->jsRow()->data('id')]));
 
-            $this->pageEdit->set(function () {
+            $this->pageUpdate->set(function () {
                 $this->model->load($this->app->stickyGet($this->name));
-                $this->formEdit->setModel($this->model);
-                $this->formEdit->onSubmit(function ($form) {
+                $this->formUpdate->setModel($this->model);
+                $this->formUpdate->onSubmit(function ($form) {
                     $form->model->save();
 
                     return [
