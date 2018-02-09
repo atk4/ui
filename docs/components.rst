@@ -41,11 +41,11 @@ control over even the small elements.
     text
     loremipsum
     header
+    beadcrumb
     icon
     image
     message
     tabs
-    wizard
     helloworld
 
 
