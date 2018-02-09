@@ -7,8 +7,7 @@ use atk4\ui\Template;
 use atk4\ui\View;
 
 /**
- * Class Upload
- *
+ * Class Upload.
  */
 class Upload extends Input
 {
@@ -103,7 +102,7 @@ class Upload extends Input
      *
      * @return $this|void
      */
-    public function set($fileId, $fileName = null, $junk = null)
+    public function set($fileId = null, $fileName = null, $junk = null)
     {
         $this->setFileId($fileId);
 
@@ -210,7 +209,7 @@ class Upload extends Input
 
                         return $this->jsActions;
                     });
-                } elseif ($action === null || $files['file']['error']) {
+                } elseif ($action === null || isset($files['file']['error'])) {
                     $this->cb->set(function () use ($fx, $files) {
                         return call_user_func($fx, 'error');
                     });
@@ -243,7 +242,7 @@ class Upload extends Input
         $this->js(true)->atkFileUpload([
             'uri'      => $this->cb->getURL(),
             'action'   => $this->action->name,
-            'file'     => ['id' => $this->fileId, 'name' => $this->getInputValue()],
+            'file'     => ['id' => $this->fileId ?: $this->field->get(), 'name' => $this->getInputValue()],
             'hasFocus' => $this->hasFocusEnable,
             'submit'   => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
         ]);

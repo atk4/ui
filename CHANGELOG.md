@@ -76,6 +76,15 @@ For detailed explanation read this article: https://medium.com/@romaninsh/atk-ne
 - Implementing Console [\#280](https://github.com/atk4/ui/pull/280) ([romaninsh](https://github.com/romaninsh))
 - Improvements for Tables, CRUDS and few other areas. [\#277](https://github.com/atk4/ui/pull/277) ([romaninsh](https://github.com/romaninsh))
 
+### 1.4.1
+
+Added `$app->dbConnect()` as a simpler way to connect to the database. Some improvements in JS libraries.
+
+**Merged pull requests:**
+
+- Feature/add dbconnect [\#353](https://github.com/atk4/ui/pull/353) ([romaninsh](https://github.com/romaninsh))
+- Feature/js package 1.0.1 [\#350](https://github.com/atk4/ui/pull/350) ([ibelar](https://github.com/ibelar))
+- Fix/demo typo [\#348](https://github.com/atk4/ui/pull/348) ([ibelar](https://github.com/ibelar))
 
 ## 1.3
 
