@@ -97,6 +97,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         // Layout needs to have a save button
         $this->buttonSave = $this->layout->addButton(['Save', 'primary']);
+        $this->buttonSave->setElement('button');
         $this->buttonSave->on('click', $this->js()->form('submit'));
     }
 

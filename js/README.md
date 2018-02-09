@@ -101,6 +101,7 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
   - update uploadField plugin.
     - Allow initial value to be displayed.
+  - add Autofocus to modal when using form.
 
 ### version 1.0.1
 

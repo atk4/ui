@@ -71,6 +71,9 @@ class ModalService {
                         response.isServiceError = true;
                         response.message = 'Modal service error: Unable to replace atk-dialog content in modal from server response. Empty Content.';
                     } else {
+                        if ($modal.modal.settings.autofocus) {
+                            modalService.doAutoFocus($modal);
+                        }
                         $modal.modal('refresh');
                         //content is replace no need to do it in api
                         response.id = null;
@@ -101,6 +104,16 @@ class ModalService {
         this.modals.pop();
         this.setCloseTriggerEventInModals();
         this.hideShowCloseIcon();
+    }
+
+    doAutoFocus(modal) {
+      let inputs = modal.find('[tabindex], :input').filter(':visible');
+      let autofocus = inputs.filter('[autofocus]');
+      let input = (autofocus.length > 0)? autofocus.first() : inputs.first();
+
+      if(input.length > 0) {
+        input.focus().select();
+      }
     }
 
     /**
