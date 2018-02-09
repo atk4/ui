@@ -18,12 +18,13 @@ class BreadCrumb extends Lister
     public $ui = 'breadcrumb';
 
     /**
-     * Adds a new page that will appear on the right
+     * Adds a new page that will appear on the right.
      *
      * @param string|array $item
      * @param string|array $action
      */
-    public function addCrumb($section = null, $link = null) {
+    public function addCrumb($section = null, $link = null)
+    {
         if (is_array($link)) {
             $link = $this->url($link);
         }
@@ -34,13 +35,16 @@ class BreadCrumb extends Lister
      * Converts the last crumb you added into a title. This may be convenient if you add
      * crumbs conditionally and the last should remain as a title.
      */
-    public function popTitle() {
+    public function popTitle()
+    {
         $title = array_pop($this->path);
         $this->set($title['section']);
+
         return $this;
     }
 
-    public function addCrumbReverse($section = null, $link = null) {
+    public function addCrumbReverse($section = null, $link = null)
+    {
         array_unshift($this->path, ['section'=>$section, 'link'=>$link]);
     }
 

@@ -21,9 +21,7 @@ if ($id = $app->stickyGet('country_id')) {
     $m->load($id);
     $crumb->addCrumb($m['name'], []);
 
-
     // here we can check for additional criteria and display a deeper level on the crumb
-
 
     $app->add('Form')->setModel($m);
 } else {
