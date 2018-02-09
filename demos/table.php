@@ -41,10 +41,10 @@ $table->addTotals(['name' => 'Totals:', 'salary' => ['sum']]);
     ];
 
     $table = $app->add('Table');
-    $table->setSource($my_array, false);
+    $table->setSource($my_array, ['name']);
 
-    // somehow setSourec() already creates name()
-    // TODO: im not sure how i feel about it
     //$table->addColumn('name');
     $table->addColumn('surname', ['Link', 'url' => 'details.php?surname={$surname}']);
     $table->addColumn('birthdate', null, ['type' => 'date']);
+
+    $table->getColumnDecorators('name')[0]->addClass('disabled');

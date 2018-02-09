@@ -38,7 +38,7 @@ class BreadCrumb extends Lister
     public function popTitle()
     {
         $title = array_pop($this->path);
-        $this->set($title['section']);
+        $this->set($title['section'] ?: '');
 
         return $this;
     }
