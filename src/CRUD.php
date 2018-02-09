@@ -30,7 +30,9 @@ class CRUD extends Grid
      * them 1-character long. Use full words such as 'archive' if you run out of
      * letters.
      */
-    public $ops = ['c' => true, 'r' => true, 'u' => true, 'd' => true];
+    public $canCreate = true;
+    public $canUpdate = true;
+    public $canDelete = true;
 
     public function init()
     {
@@ -38,16 +40,12 @@ class CRUD extends Grid
 
         $this->on('reload', new jsReload($this));
 
-        if (!$this->can('r')) {
-            throw new Exception(['You cannot disable "r" operation']);
-        }
-
-        if ($this->can('u')) {
+        if ($this->canUpdate) {
             $this->pageEdit = $this->add([$this->pageEdit ?: 'VirtualPage', 'short_name'=>'edit']);
             $this->formEdit = $this->pageEdit->add($this->formEdit ?: ['Form', 'layout' => 'FormLayout/Columns']);
         }
 
-        if ($this->can('c')) {
+        if ($this->canCreate) {
             $this->pageCreate = $this->add([$this->pageCreate ?: 'VirtualPage', 'short_name'=>'add']);
 
             $this->itemCreate = $this->menu->addItem(
@@ -66,7 +64,7 @@ class CRUD extends Grid
 
     public function can($operation)
     {
-        return isset($this->ops[$operation]) && $this->ops[$operation];
+        throw new Exception('Please simply check $crud->canCreate or similar property directly');
     }
 
     public function setModel(\atk4\data\Model $m, $defaultFields = null)
@@ -77,7 +75,7 @@ class CRUD extends Grid
 
         $m = parent::setModel($m, $this->fieldsGrid ?: $this->fieldsDefault);
 
-        if ($this->can('c')) {
+        if ($this->canCreate) {
             $this->itemCreate->set('Add New '.(isset($m->title) ? $m->title : preg_replace('|.*\\\|', '', get_class($m))));
 
             $this->pageCreate->set(function ($page) use ($m) {
@@ -95,7 +93,7 @@ class CRUD extends Grid
             });
         }
 
-        if ($this->can('u')) {
+        if ($this->canUpdate) {
             $this->addAction(['icon' => 'edit'], new jsModal('Edit', $this->pageEdit, [$this->name => $this->jsRow()->data('id')]));
 
             $this->pageEdit->set(function () {
@@ -113,7 +111,7 @@ class CRUD extends Grid
             });
         }
 
-        if ($this->can('d')) {
+        if ($this->canDelete) {
             $this->addAction(['icon' => 'red trash'], function ($j, $id) {
                 $this->model->load($id)->delete();
 
