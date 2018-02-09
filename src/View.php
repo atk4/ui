@@ -1039,11 +1039,11 @@ class View implements jsExpressionable
     {
         $this->_triggerBy = $triggerBy;
         //if ($this->_stickyArgsCached === null) {
-            if ($this->owner && $this->owner instanceof self) {
-                $this->_stickyArgsCached = array_merge($this->owner->_getStickyArgs($triggerBy), $this->stickyArgs);
-            } else {
-                $this->_stickyArgsCached = [];
-            }
+        if ($this->owner && $this->owner instanceof self) {
+            $this->_stickyArgsCached = array_merge($this->owner->_getStickyArgs($triggerBy), $this->stickyArgs);
+        } else {
+            $this->_stickyArgsCached = [];
+        }
         //}
 
         return $this->_stickyArgsCached;
