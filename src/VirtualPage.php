@@ -34,7 +34,6 @@ class VirtualPage extends View
 
         $this->cb = $this->_add(['Callback', 'urlTrigger'=>$this->urlTrigger ?: $this->name]);
         $this->stickyGet($this->name);
-
     }
 
     /**
