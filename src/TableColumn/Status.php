@@ -36,7 +36,7 @@ class Status extends Generic
 
         $extra_tags = array_merge_recursive($attr, $extra_tags, ['class' => '{$_'.$f->short_name.'_status}']);
 
-        if (isset($extra_tags['class'])) {
+        if (isset($extra_tags['class']) && is_array($extra_tags['class'])) {
             $extra_tags['class'] = implode(' ', $extra_tags['class']);
         }
 
