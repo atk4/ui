@@ -147,15 +147,12 @@ class Grid extends View
 
         $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container]);
 
-        if (isset($_GET['_q'])) {
-            $q = $_GET['_q'];
-
+        if ($q = $this->stickyGet('_q')) {
             $cond = [];
             foreach ($fields as $field) {
                 $cond[] = [$field, 'like', '%'.$q.'%'];
             }
             $this->model->addCondition($cond);
-            $this->app->stickyGet('_q', $q);
         }
     }
 
@@ -164,28 +161,21 @@ class Grid extends View
         if (!$fields) {
             $fields = [$this->model->title_field];
         }
-
         if (!$this->menu) {
             throw new Exception(['Unable to add QuickSearch without Menu']);
         }
-
         $form = $this->menu
             ->addMenuRight()->addItem()->setElement('div')
             ->add('View')->setElement('form');
-
         $this->quickSearch = $form->add(new \atk4\ui\FormField\Input(['placeholder' => 'Search', 'short_name' => $this->name.'_q', 'icon' => 'search']))
-            ->addClass('transparent');
-
-        if (isset($_GET[$this->name.'_q'])) {
-            $q = $_GET[$this->name.'_q'];
+                                  ->addClass('transparent');
+        if ($q = $this->stickyGet($this->name.'_q')) {
             $this->quickSearch->set($q);
-
             $cond = [];
             foreach ($fields as $field) {
                 $cond[] = [$field, 'like', '%'.$q.'%'];
             }
             $this->model->addCondition($cond);
-            $this->app->stickyGet($this->name.'_q', $q);
         }
     }
 
@@ -212,7 +202,8 @@ class Grid extends View
      */
     public function applySort()
     {
-        $sortby = $this->app->stickyGET($this->name.'_sort', null);
+        //$sortby = $this->app->stickyGET($this->name.'_sort', null);
+        $sortby = $this->stickyGet($this->name.'_sort');
         $desc = false;
         if ($sortby && $sortby[0] == '-') {
             $desc = true;
@@ -228,20 +219,21 @@ class Grid extends View
         }
 
         $this->table->on('click', 'thead>tr>th', new jsReload($this->container, [$this->name.'_sort' => (new jQuery())->data('column')]));
+
     }
 
     public function setModel(\atk4\data\Model $model, $columns = null)
     {
         $this->model = $this->table->setModel($model, $columns);
-
         if ($this->sortable === null) {
             $this->sortable = true;
         }
-
         if ($this->sortable) {
             $this->applySort();
         }
-
+        if ($this->quickSearch && is_array($this->quickSearch)) {
+            $this->addQuickSearch($this->quickSearch);
+        }
         return $this->model;
     }
 
@@ -265,6 +257,12 @@ class Grid extends View
             $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
 
             $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
+        }
+
+        if ($this->quickSearch instanceof jsSearch) {
+            if ($sortby = $this->stickyGet($this->name.'_sort')) {
+                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setSortArgs', [$this->name.'_sort', $sortby]));
+            }
         }
 
         return parent::recursiveRender();
