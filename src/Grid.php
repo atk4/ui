@@ -228,7 +228,7 @@ class Grid extends View
             $this->table->sort_order = $desc ? 'descending' : 'ascending';
         }
 
-        $this->table->on('click', 'thead>tr>th', new jsReload($this, [$this->name.'_sort' => (new jQuery())->data('column')]));
+        $this->table->on('click', 'thead>tr>th', new jsReload($this->container, [$this->name.'_sort' => (new jQuery())->data('column')]));
     }
 
     public function setModel(\atk4\data\Model $model, $columns = null)
