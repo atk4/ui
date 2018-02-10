@@ -69,22 +69,31 @@ class Grid extends View
      */
     public $table = null;
 
+    /**
+     * The container for table and paginator.
+     *
+     * @var View
+     */
+    public $container = null;
+
     public $defaultTemplate = 'grid.html';
 
     public function init()
     {
         parent::init();
 
+        $this->container = $this->add(['View', 'ui'=>'', 'template' => new Template('<div id="{$_id}"><div class="ui table atk-overflow-auto">{$Table}</div>{$Paginator}</div>')]);
+
         if (is_null($this->menu)) {
             $this->menu = $this->add(['Menu', 'activate_on_click' => false], 'Menu');
         }
 
         if (is_null($this->table)) {
-            $this->table = $this->add(['Table', 'very compact striped single line', 'reload' => $this], 'Table');
+            $this->table = $this->container->add(['Table', 'very compact striped single line', 'reload' => $this], 'Table');
         }
 
         if (is_null($this->paginator)) {
-            $seg = $this->add(['View'], 'Paginator')->addStyle('text-align', 'center');
+            $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
             $this->paginator = $seg->add(['Paginator', 'reload' => $this]);
         }
     }
@@ -114,6 +123,42 @@ class Grid extends View
         return $this->menu->addItem()->add(new Button($text));
     }
 
+    /**
+     * Add Search input field using js action.
+     *
+     * @param array $fields
+     *
+     * @throws Exception
+     * @throws \atk4\data\Exception
+     */
+    public function addJsSearch($fields = [])
+    {
+        if (!$fields) {
+            $fields = [$this->model->title_field];
+        }
+
+        if (!$this->menu) {
+            throw new Exception(['Unable to add QuickSearch without Menu']);
+        }
+
+        $view = $this->menu
+            ->addMenuRight()->addItem()->setElement('div')
+            ->add('View');
+
+        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container]);
+
+        if (isset($_GET['_q'])) {
+            $q = $_GET['_q'];
+
+            $cond = [];
+            foreach ($fields as $field) {
+                $cond[] = [$field, 'like', '%'.$q.'%'];
+            }
+            $this->model->addCondition($cond);
+            $this->app->stickyGet('_q', $q);
+        }
+    }
+
     public function addQuickSearch($fields = [])
     {
         if (!$fields) {
@@ -140,6 +185,7 @@ class Grid extends View
                 $cond[] = [$field, 'like', '%'.$q.'%'];
             }
             $this->model->addCondition($cond);
+            $this->app->stickyGet($this->name.'_q', $q);
         }
     }
 
@@ -158,7 +204,7 @@ class Grid extends View
             $this->actions = $this->table->addColumn(null, 'Actions');
         }
 
-        return $this->actions->addModal($button, $title, $callback);
+        return $this->actions->addModal($button, $title, $callback, $this);
     }
 
     /**
@@ -181,7 +227,7 @@ class Grid extends View
             $this->table->sort_order = $desc ? 'descending' : 'ascending';
         }
 
-        $this->table->on('click', 'thead>tr>th', new jsReload($this, [$this->name.'_sort' => (new jQuery())->data('column')]));
+        $this->table->on('click', 'thead>tr>th', new jsReload($this->container, [$this->name.'_sort' => (new jQuery())->data('column')]));
     }
 
     public function setModel(\atk4\data\Model $model, $columns = null)
@@ -214,7 +260,7 @@ class Grid extends View
     {
         // bind with paginator
         if ($this->paginator) {
-            $this->paginator->reload = $this;
+            $this->paginator->reload = $this->container;
 
             $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
 
