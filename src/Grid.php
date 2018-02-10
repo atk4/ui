@@ -88,7 +88,6 @@ class Grid extends View
             $this->menu = $this->add(['Menu', 'activate_on_click' => false], 'Menu');
         }
 
-
         if (is_null($this->table)) {
             $this->table = $this->container->add(['Table', 'very compact striped single line', 'reload' => $this], 'Table');
         }

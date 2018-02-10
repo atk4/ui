@@ -8,7 +8,6 @@ namespace atk4\ui;
 
 class jsSearch extends View
 {
-
     /**
      * The View to reload using this jsSearch.
      *
