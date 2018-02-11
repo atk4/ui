@@ -36,7 +36,7 @@ export default class jsSearch extends atkPlugin {
 
       if (!that.filterState && that.textInput.val()) {
         that.setFilterState(true);
-        that.doSearch(that.settings.uri,  $.extend({}, that.sortArgs, that.settings.uri_options, {'_q' : e.target.value}));
+        that.doSearch(that.settings.uri,  $.extend({}, that.sortArgs, that.settings.uri_options, {'_q' : that.textInput.val()}));
       }
     });
   }
