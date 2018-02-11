@@ -219,7 +219,6 @@ class Grid extends View
         }
 
         $this->table->on('click', 'thead>tr>th', new jsReload($this->container, [$this->name.'_sort' => (new jQuery())->data('column')]));
-
     }
 
     public function setModel(\atk4\data\Model $model, $columns = null)
@@ -234,6 +233,7 @@ class Grid extends View
         if ($this->quickSearch && is_array($this->quickSearch)) {
             $this->addQuickSearch($this->quickSearch);
         }
+
         return $this->model;
     }
 
