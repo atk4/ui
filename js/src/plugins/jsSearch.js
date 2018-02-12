@@ -11,14 +11,16 @@ export default class jsSearch extends atkPlugin {
     this.searchContent = this.searchAction.html();
     this.$el.data('preValue', '');
 
-    this.setAction();
+    this.setInputAction(this);
+    this.setSearchAction(this);
   }
 
   /**
-   * Set text input and button event handler.
+   * Set input field event handler.
+   *
+   * @param that
    */
-  setAction() {
-    const that = this;
+  setInputAction(that) {
     this.textInput.on('keyup', function(e) {
       if (e.keyCode === 13 && e.target.value) {
         that.setButtonState(true);
@@ -35,7 +37,14 @@ export default class jsSearch extends atkPlugin {
         that.setButtonState(false);
       }
     });
+  }
 
+  /**
+   * Set Search button event handler.
+   *
+   * @param that
+   */
+  setSearchAction(that) {
     this.searchAction.on('click', function(e){
       if (that.state.button){
         that.setButtonState(false);
@@ -52,10 +61,21 @@ export default class jsSearch extends atkPlugin {
     });
   }
 
+  /**
+   * Add argument to url for sorting purpose.
+   *
+   * @param name
+   * @param sortBy
+   */
   setSortArgs(name, sortBy) {
     this.sortArgs[name] = sortBy;
   }
 
+  /**
+   * Set Filter icon state.
+   *
+   * @param isOn
+   */
   setFilterState(isOn) {
     if (isOn) {
       this.leftIcon.show();
@@ -65,6 +85,11 @@ export default class jsSearch extends atkPlugin {
     this.state.filter = isOn;
   }
 
+  /**
+   * Set search button state.
+   *
+   * @param isOn
+   */
   setButtonState(isOn) {
     if (isOn) {
       this.searchAction.html(this.getEraseContent());
@@ -74,6 +99,12 @@ export default class jsSearch extends atkPlugin {
     this.state.button = isOn;
   }
 
+  /**
+   * Send request to server using the search query.
+   *
+   * @param uri
+   * @param options
+   */
   doSearch(uri, options) {
     this.$el.api({
       on: 'now',
