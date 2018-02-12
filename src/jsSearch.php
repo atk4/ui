@@ -26,7 +26,7 @@ class jsSearch extends View
     {
         parent::init();
 
-        $this->input = $this->add(new \atk4\ui\FormField\Line(['action' => new \atk4\ui\Button(['icon' => 'search', 'ui' => 'button atk-action'])]));
+        $this->input = $this->add(new \atk4\ui\FormField\Line(['iconLeft' => 'filter',  'action' => new \atk4\ui\Button(['icon' => 'search', 'ui' => 'button atk-action'])]));
     }
 
     public function renderView()

@@ -4,10 +4,12 @@ export default class jsSearch extends atkPlugin {
 
   main() {
     this.sortArgs = {};
-    this.filterState = false;
+    this.state = {button: false, filter: false};
     this.textInput = this.$el.find('input[type="text"]');
+    this.leftIcon = this.$el.find('i.filter.icon').hide();
     this.searchAction = this.$el.find('.atk-action');
     this.searchContent = this.searchAction.html();
+    this.$el.data('preValue', '');
 
     this.setAction();
   }
@@ -17,24 +19,33 @@ export default class jsSearch extends atkPlugin {
    */
   setAction() {
     const that = this;
-    this.textInput.on('keydown', function(e) {
+    this.textInput.on('keyup', function(e) {
       if (e.keyCode === 13 && e.target.value) {
+        that.setButtonState(true);
         that.setFilterState(true);
+        that.$el.data('preValue', e.target.value);
         that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options, {'_q' : e.target.value}));
-      }
-      if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
+      } else if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
+        that.setButtonState(false);
         that.setFilterState(false);
+        that.$el.data('preValue', '');
+        that.textInput.val('');
         that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options));
+      } else if (that.$el.data('preValue') !== e.target.value) {
+        that.setButtonState(false);
       }
     });
 
     this.searchAction.on('click', function(e){
-      if (that.filterState){
+      if (that.state.button){
+        that.setButtonState(false);
         that.setFilterState(false);
+        that.textInput.val('');
         that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options));
       }
 
-      if (!that.filterState && that.textInput.val()) {
+      if (!that.state.button && that.textInput.val()) {
+        that.setButtonState(true);
         that.setFilterState(true);
         that.doSearch(that.settings.uri,  $.extend({}, that.sortArgs, that.settings.uri_options, {'_q' : that.textInput.val()}));
       }
@@ -45,14 +56,22 @@ export default class jsSearch extends atkPlugin {
     this.sortArgs[name] = sortBy;
   }
 
-  setFilterState(isFilterOn) {
-    if (isFilterOn) {
+  setFilterState(isOn) {
+    if (isOn) {
+      this.leftIcon.show();
+    } else {
+      this.leftIcon.hide();
+    }
+    this.state.filter = isOn;
+  }
+
+  setButtonState(isOn) {
+    if (isOn) {
       this.searchAction.html(this.getEraseContent());
     } else {
       this.searchAction.html(this.searchContent);
-      this.textInput.val('');
     }
-    this.filterState = isFilterOn;
+    this.state.button = isOn;
   }
 
   doSearch(uri, options) {
