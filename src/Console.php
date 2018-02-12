@@ -59,9 +59,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * While inside a callback you may execute runCommand or setModel multiple times.
      *
-     * @param $callback callback which will be executed while displaying output inside console
-     * @param $event boolean|string "true" would mean to execute on page load, string would indicate
-     *                              js event. See first argument for View::js()
+     * @param callback       $callback callback which will be executed while displaying output inside console
+     * @param boolean|string $event    "true" would mean to execute on page load, string would indicate
+     *                                 js event. See first argument for View::js()
      *
      * @return $this
      */
@@ -70,6 +70,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
         if (!$callback) {
             throw new Exception('Please specify the $callback argument');
         }
+
         $this->sse = $this->add('jsSSE');
         $this->sse->set(function () use ($callback) {
             $this->sseInProgress = true;
@@ -104,6 +105,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
             $this->sseInProgress = false;
         });
+
         if ($event) {
             $this->js($event, $this->sse);
         }
@@ -114,13 +116,14 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * Output a single line to the console.
      *
-     * @param $text string
+     * @param string $message
+     * @param array  $context
      *
      * @return $this
      */
-    public function output($text)
+    public function output($message, array $context = [])
     {
-        $this->outputHTML(htmlspecialchars($text));
+        $this->outputHTML(htmlspecialchars($message), $context);
 
         return $this;
     }
@@ -128,14 +131,17 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * Output un-escaped HTML line. Use this to send HTML.
      *
-     * @param $text string
+     * @todo Use $message as template and fill values from $context in there.
+     *
+     * @param string $message
+     * @param array  $context
      *
      * @return $this
      */
-    public function outputHTML($text)
+    public function outputHTML($message, $context = [])
     {
         $this->_output_bypass = true;
-        $this->sse->send($this->js()->append($text.'<br/>'));
+        $this->sse->send($this->js()->append($message.'<br/>'));
         $this->_output_bypass = false;
 
         return $this;
@@ -144,7 +150,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * Executes a JavaScript action.
      *
-     * @param $js jsExpressionable
+     * @param jsExpressionable $js
      *
      * @return $this
      */
@@ -166,7 +172,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * This method can be executed from inside callback or
      * without it.
      */
-
     /*
     public function runCommand($exec, $args = [])
     {
@@ -197,9 +202,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *  - use $this->debug() or $this->info()
      *  - if you wish to get log from other objects, be sure to switch debug on with $obj->debug = true;
      *
-     * @param $model \atk4\data\Model
-     * @param $method string
-     * @param $args array
+     * @param \atk4\data\Model $model
+     * @param string           $method
+     * @param array            $args
+     *
+     * @return \atk4\data\Model
      */
     public function setModel(\atk4\data\Model $model, $method = null, $args = [])
     {
@@ -211,7 +218,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 $this->setModel($model, $method, $args);
             });
 
-            return;
+            return $model;
         }
 
         // temporarily override app logging
@@ -228,50 +235,110 @@ class Console extends View implements \Psr\Log\LoggerInterface
         if (isset($model->app)) {
             $model->app->logger = $old_logger;
         }
+
+        return $model;
     }
 
-    public function emergency($str, array $args = [])
+    // Methods below implements \Psr\Log\LoggerInterface
+
+    /**
+     * System is unusable.
+     *
+     * @param string $message
+     * @param array  $context
+     */
+    public function emergency($message, array $context = [])
     {
-        return $this->outputHTML("<font color='pink'>".htmlspecialchars($str).'</font>');
+        $this->outputHTML("<font color='pink'>".htmlspecialchars($message).'</font>', $context);
     }
 
-    public function alert($str, array $args = [])
+    /**
+     * Action must be taken immediately.
+     *
+     * @param string $message
+     * @param array  $context
+     */
+    public function alert($message, array $context = [])
     {
-        return $this->outputHTML("<font color='pink'>".htmlspecialchars($str).'</font>');
+        $this->outputHTML("<font color='pink'>".htmlspecialchars($message).'</font>', $context);
     }
 
-    public function critical($str, array $args = [])
+    /**
+     * Critical conditions.
+     *
+     * @param string $message
+     * @param array  $context
+     */
+    public function critical($message, array $context = [])
     {
-        return $this->outputHTML("<font color='pink'>".htmlspecialchars($str).'</font>');
+        $this->outputHTML("<font color='pink'>".htmlspecialchars($message).'</font>', $context);
     }
 
-    public function error($str, array $args = [])
+    /**
+     * Runtime errors that do not require immediate action but should typically
+     * be logged and monitored.
+     *
+     * @param string $message
+     * @param array  $context
+     */
+    public function error($message, array $context = [])
     {
-        return $this->outputHTML("<font color='pink'>".htmlspecialchars($str).'</font>');
+        $this->outputHTML("<font color='pink'>".htmlspecialchars($message).'</font>', $context);
     }
 
-    public function warning($str, array $args = [])
+    /**
+     * Exceptional occurrences that are not errors.
+     *
+     * @param string $message
+     * @param array  $context
+     */
+    public function warning($message, array $context = [])
     {
-        return $this->outputHTML("<font color='pink'>".htmlspecialchars($str).'</font>');
+        $this->outputHTML("<font color='pink'>".htmlspecialchars($message).'</font>', $context);
     }
 
-    public function notice($str, array $args = [])
+    /**
+     * Normal but significant events.
+     *
+     * @param string $message
+     * @param array  $context
+     */
+    public function notice($message, array $context = [])
     {
-        return $this->outputHTML("<font color='yellow'>".htmlspecialchars($str).'</font>');
+        $this->outputHTML("<font color='yellow'>".htmlspecialchars($message).'</font>', $context);
     }
 
-    public function info($str, array $args = [])
+    /**
+     * Interesting events.
+     *
+     * @param string $message
+     * @param array  $context
+     */
+    public function info($message, array $context = [])
     {
-        return $this->outputHTML("<font color='gray'>".htmlspecialchars($str).'</font>');
+        $this->outputHTML("<font color='gray'>".htmlspecialchars($message).'</font>', $context);
     }
 
-    public function debug($str, array $args = [])
+    /**
+     * Detailed debug information.
+     *
+     * @param string $message
+     * @param array  $context
+     */
+    public function debug($message, array $context = [])
     {
-        return $this->outputHTML("<font color='cyan'>".htmlspecialchars($str).'</font>');
+        $this->outputHTML("<font color='cyan'>".htmlspecialchars($message).'</font>', $context);
     }
 
-    public function log($level, $str, array $args = [])
+    /**
+     * Logs with an arbitrary level.
+     *
+     * @param mixed  $level
+     * @param string $message
+     * @param array  $context
+     */
+    public function log($level, $message, array $context = [])
     {
-        return $this->$level($str, $args);
+        $this->$level($message, $context);
     }
 }

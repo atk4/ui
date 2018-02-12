@@ -283,8 +283,8 @@ Your column now can be added to any table::
 
 IMPORTANT: HTML injection will work unless :php:attr:`Table::use_html_tags` property is disabled (for performance).
 
-Talbe Data Handling
-==================
+Table Data Handling
+===================
 
 Table is very similar to :php:class:`Lister` in the way how it loads and displays data. To control which
 data Table will be displaying you need to properly specify the model and persistence. The following two
@@ -350,23 +350,23 @@ Dealing with Multiple decorators
 .. php:method:: getColumnDecorators($name)
 
 Decorator is an object, responsible for wrapping column data into a table cell (td/tr). This object
-is also responsible for setting class of the column, labeling the column and somehow making look nicer
-especially inside a table.
+is also responsible for setting class of the column, labeling the column and somehow making it look
+nicer especially inside a table.
 
 .. important:: Decorating is not formatting. If we talk "date", then in order to display it to
-    the user, date must be in a proper format. Formatting of data is done by Persistence_UI and 
+    the user, date must be in a proper format. Formatting of data is done by Persistence_UI and
     is not limited to the table columns. Decorators may add an icon, change cell style, align cell
-    or hide overfolwing text to make table output look better.
+    or hide overflowing text to make table output look better.
 
-One column may have several decorator::
+One column may have several decorators::
 
     $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
     $table->addDecorator('salary', new \atk4\ui\TableColumn\Link(['page2']));
 
 In this case the first decorator will take care of tr/td tags but second decorator will compliment
 it. Result is that table will output 'salary' as a currency (align and red ink) and also decorate
-it with a link. The first decorator will be responsible for the table column header. If type is not
-set or type is like "integer", then a generic formatter is used.
+it with a link. The first decorator will be responsible for the table column header. If field type
+is not set or type is like "integer", then a generic formatter is used.
 
 There are a few things to note:
 
@@ -377,8 +377,8 @@ There are a few things to note:
 
 2. formatting is always applied in same order as defined - in example above Money first, Link after.
 
-3. output of the 'Money' formatter is used into Link formatter as if it would be value of cell, however
-   formatters have access to original value also. Formatter implementation is usually aware of combinations.
+3. output of the 'Money' decorator is used into Link decorator as if it would be value of cell, however
+   decorators have access to original value also. Decorator implementation is usually aware of combinations.
 
 :php:meth:`TableColumn\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
 without the <td> cell itself. Subsequently :php:meth:`TableColumn\Link::getDataCellTemplate` is called
@@ -415,8 +415,8 @@ to make a note on how template caching works then,
 
 Header and Footer
 -----------------
-When using with multiple decorators, the last decorator gets to render Header column.
-The footer (totals) uses the same approach for geterating template, however a
+When using with multiple decorators, the last decorator gets to render Header cell.
+The footer (totals) uses the same approach for generating template, however a
 different methods are called from the columns: getTotalsCellTemplate
 
 Redefining

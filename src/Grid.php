@@ -19,7 +19,11 @@ class Grid extends View
     /**
      * Calling addQuickSearch will create a form with a field inside $menu to perform quick searches.
      *
-     * @var FormField\Generic
+     * If you pass this property as array of field names while creating Grid, then when you will call
+     * setModel() QuickSearch object will be created automatically and these model fields will be used
+     * for filtering.
+     *
+     * @var array|FormField\Generic
      */
     public $quickSearch = null;
 
@@ -114,6 +118,13 @@ class Grid extends View
         return $this->menu->addItem()->add(new Button($text));
     }
 
+    /**
+     * Adds QuickSearch widget in Grid.
+     *
+     * By default it filters only by model title_field field.
+     *
+     * @param array $fields Array of field names which will be used in data filtering
+     */
     public function addQuickSearch($fields = [])
     {
         if (!$fields) {
@@ -128,7 +139,11 @@ class Grid extends View
             ->addMenuRight()->addItem()->setElement('div')
             ->add('View')->setElement('form');
 
-        $this->quickSearch = $form->add(new \atk4\ui\FormField\Input(['placeholder' => 'Search', 'short_name' => $this->name.'_q', 'icon' => 'search']))
+        $this->quickSearch = $form->add(new \atk4\ui\FormField\Input([
+                'placeholder' => 'Search',
+                'short_name' => $this->name.'_q',
+                'icon' => 'search',
+            ]))
             ->addClass('transparent');
 
         if ($q = $this->stickyGet($this->name.'_q')) {
@@ -174,13 +189,21 @@ class Grid extends View
 
         $this->table->sortable = true;
 
-        if ($sortby && isset($this->table->columns[$sortby]) && $this->model->hasElement($sortby) instanceof \atk4\data\Field) {
+        if (
+            $sortby
+            && isset($this->table->columns[$sortby])
+            && $this->model->hasElement($sortby) instanceof \atk4\data\Field
+        ) {
             $this->model->setOrder($sortby, $desc);
             $this->table->sort_by = $sortby;
             $this->table->sort_order = $desc ? 'descending' : 'ascending';
         }
 
-        $this->table->on('click', 'thead>tr>th', new jsReload($this, [$this->name.'_sort' => (new jQuery())->data('column')]));
+        $this->table->on(
+            'click',
+            'thead>tr>th',
+            new jsReload($this, [$this->name.'_sort' => (new jQuery())->data('column')])
+        );
     }
 
     public function setModel(\atk4\data\Model $model, $columns = null)

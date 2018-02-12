@@ -1,9 +1,9 @@
 
-.. _menu:
+.. _breadcrumb:
 
-====
-Menu
-====
+==========
+BreadCrumb
+==========
 
 .. php:namespace:: atk4\ui
 .. php:class:: BreadCrumb

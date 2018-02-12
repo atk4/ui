@@ -50,7 +50,7 @@ Disabling Actions
 .. php:attr:: canUpdate
 .. php:attr:: canDelete
 
-By default CRUD allows all the four operations - reading, creating, updating and deleting. CRUD cannot function
+By default CRUD allows all four operations - creating, reading, updating and deleting. CRUD cannot function
 without read operation, but the other operations can be explicitly disabled::
 
     $app->add(['CRUD', 'canDelete'=>false]);
@@ -68,9 +68,9 @@ if it's not passed, then you can inject fieldsDefault property during creation o
 you can override which fields will be used for the corresponding mode by specifying the property::
 
     $crud=$this->add([
-        'CRUD', 
-        'fieldsRead'=>['name'], 
-        'fieldsUpdate'=>['name', 'surname']
+        'CRUD',
+        'fieldsRead'=>['name'], // only field 'name' will be visible in table
+        'fieldsUpdate'=>['name', 'surname'] // fields 'name' and 'surname' will be accessible in edit form
     ]);
 
 Custom Form
@@ -78,7 +78,6 @@ Custom Form
 
 :php:class:`Form` in Agile UI allows you to use many different things, such as custom layouts. With CRUD you can
 specify your own form to use, which can be either an object or a seed::
-
 
     class UserForm extends \atk4\ui\Form {
         function setModel($m, $fields = null) {
@@ -112,7 +111,6 @@ Custom Page
 
 You can also specify a custom class for your Page. Normally it's a :php:class:`VirtualPage` but you
 can extend it to introduce your own style or add more components that just a form::
-
 
     class TwoPanels extends \atk4\ui\VirtualPage {
 

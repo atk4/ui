@@ -1021,7 +1021,7 @@ class View implements jsExpressionable
      * be guaranteed that requesting returned URL would at some point call
      * $this->init().
      *
-     * @param array $page
+     * @param string|array $page URL as string or array with page name as first element and other GET arguments
      *
      * @return string
      */

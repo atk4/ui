@@ -62,11 +62,22 @@ class CRUD extends Grid
         }
     }
 
+    /**
+     * @obsolete
+     */
     public function can($operation)
     {
         throw new Exception('Please simply check $crud->canCreate or similar property directly');
     }
 
+    /**
+     * Sets data model of CRUD.
+     *
+     * @param \atk4\data\Model $m
+     * @param array            $defaultFields
+     *
+     * @return \atk4\data\Model
+     */
     public function setModel(\atk4\data\Model $m, $defaultFields = null)
     {
         if ($defaultFields !== null) {

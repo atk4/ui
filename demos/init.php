@@ -50,6 +50,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('Message', ['message']);
     $basic->addItem('Labels', ['label']);
     $basic->addItem('Menu', ['menu']);
+    $basic->addItem('BreadCrumb', ['breadcrumb']);
     $basic->addItem('Tabs', ['tabs']);
     $basic->addItem(['Columns', 'icon'=>'yellow star'], ['columns']);
     $basic->addItem('Paginator', ['paginator']);

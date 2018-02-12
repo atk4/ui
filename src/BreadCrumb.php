@@ -9,19 +9,23 @@ namespace atk4\ui;
  */
 class BreadCrumb extends Lister
 {
+    /** @var array */
     public $path = [];
 
+    /** @var string */
     public $defaultTemplate = 'breadcrumb.html';
 
+    /** @var string */
     public $dividerClass = 'right angle icon';
 
+    /** @var string */
     public $ui = 'breadcrumb';
 
     /**
-     * Adds a new page that will appear on the right.
+     * Adds a new link that will appear on the right.
      *
-     * @param string|array $item
-     * @param string|array $action
+     * @param string       $section Title of link
+     * @param string|array $link    Link itself
      */
     public function addCrumb($section = null, $link = null)
     {
@@ -34,6 +38,8 @@ class BreadCrumb extends Lister
     /**
      * Converts the last crumb you added into a title. This may be convenient if you add
      * crumbs conditionally and the last should remain as a title.
+     *
+     * @return $this
      */
     public function popTitle()
     {
@@ -43,11 +49,20 @@ class BreadCrumb extends Lister
         return $this;
     }
 
+    /**
+     * Adds a new link that will appear on the left.
+     *
+     * @param string       $section Title of link
+     * @param string|array $link    Link itself
+     */
     public function addCrumbReverse($section = null, $link = null)
     {
         array_unshift($this->path, ['section'=>$section, 'link'=>$link]);
     }
 
+    /**
+     * Renders view.
+     */
     public function renderView()
     {
         $this->setSource($this->path);
