@@ -141,8 +141,8 @@ class Grid extends View
 
         $this->quickSearch = $form->add(new \atk4\ui\FormField\Input([
                 'placeholder' => 'Search',
-                'short_name' => $this->name.'_q',
-                'icon' => 'search',
+                'short_name'  => $this->name.'_q',
+                'icon'        => 'search',
             ]))
             ->addClass('transparent');
 

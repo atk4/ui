@@ -194,7 +194,7 @@ class Table extends Lister
     /**
      * Add column Decorator.
      *
-     * @param string                     $name Column name
+     * @param string                     $name      Column name
      * @param string|TableColumn/Generic $decorator
      */
     public function addDecorator($name, $decorator)

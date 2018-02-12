@@ -59,9 +59,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * While inside a callback you may execute runCommand or setModel multiple times.
      *
-     * @param callback       $callback callback which will be executed while displaying output inside console
-     * @param boolean|string $event    "true" would mean to execute on page load, string would indicate
-     *                                 js event. See first argument for View::js()
+     * @param callback    $callback callback which will be executed while displaying output inside console
+     * @param bool|string $event    "true" would mean to execute on page load, string would indicate
+     *                              js event. See first argument for View::js()
      *
      * @return $this
      */
