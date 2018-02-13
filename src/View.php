@@ -1017,6 +1017,20 @@ class View implements jsExpressionable
     public $_triggerBy = null;
 
     /**
+     * Build an URL which this view can use for js call-backs. It should
+     * be guaranteed that requesting returned URL would at some point call
+     * $this->init().
+     *
+     * @param array $page
+     *
+     * @return string
+     */
+    public function jsUrl($page = [])
+    {
+        return $this->app->jsUrl($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
+    }
+
+    /**
      * Build an URL which this view can use for call-backs. It should
      * be guaranteed that requesting returned URL would at some point call
      * $this->init().
