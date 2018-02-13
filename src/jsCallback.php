@@ -138,6 +138,7 @@ class jsCallback extends Callback implements jsExpressionable
     public function getURL($mode = 'callback')
     {
         $this->owner->needAjax = true;
+
         return parent::getURL($mode);
     }
 }
