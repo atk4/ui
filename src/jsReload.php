@@ -20,6 +20,7 @@ class jsReload implements jsExpressionable
     public function __construct($view, $args = [])
     {
         $this->view = $view;
+        $this->view->needAjax = true;
 
         $this->args = $args;
     }
@@ -38,7 +39,7 @@ class jsReload implements jsExpressionable
         $final = (new jQuery($this->view))
           ->atkReloadView(
           [
-              'uri'         => $this->view->jsUrl(['__atk_reload'=>$this->view->name]),
+              'uri'         => $this->view->url(['__atk_reload'=>$this->view->name]),
               'uri_options' => $this->args,
           ]
         );

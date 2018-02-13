@@ -1016,19 +1016,8 @@ class View implements jsExpressionable
 
     public $_triggerBy = null;
 
-    /**
-     * Build an URL which this view can use for js call-backs. It should
-     * be guaranteed that requesting returned URL would at some point call
-     * $this->init().
-     *
-     * @param array $page
-     *
-     * @return string
-     */
-    public function jsUrl($page = [])
-    {
-        return $this->app->jsUrl($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
-    }
+    /** @var bool Whether url need to be set using ajax */
+    public $needAjax = false;
 
     /**
      * Build an URL which this view can use for call-backs. It should
@@ -1041,7 +1030,7 @@ class View implements jsExpressionable
      */
     public function url($page = [])
     {
-        return $this->app->url($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
+        return $this->app->url($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs), $this->needAjax);
     }
 
     /**
