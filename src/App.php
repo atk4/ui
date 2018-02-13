@@ -415,7 +415,6 @@ class App
 
     public $page = null;
 
-
     /**
      * Build a URL that application can use for js call-backs.
      *
