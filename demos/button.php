@@ -10,73 +10,74 @@ use atk4\ui\Label;
 use atk4\ui\Template;
 use atk4\ui\View;
 
-$app->add(new Header(['Basic Button', 'size' => 2]));
-$app->add(new Button())->set('Click me');
 
-$app->add(new Header(['Properties', 'size' => 2]));
+$app->add(['Header', 'Basic Button', 'size' => 2]);
 
-$b1 = new Button();
-$b2 = new Button();
-$b3 = new Button();
-$b4 = new Button();
+// With Seed
+$app->add(['Button', 'Click me'])->link(['index']);
 
-$b1->set(['Load', 'primary']);
-$b2->set(['Load', 'labeled', 'icon' => 'pause']);
-$b3->set(['Next', 'iconRight' => 'right arrow']);
-$b4->set([false, 'circular', 'icon' => 'settings']);
+// Without Seeding
+$b1 = new Button('Click me (no seed)');
 $app->add($b1);
-$app->add($b2);
-$app->add($b3);
-$app->add($b4);
+// must be added first
+$b1->link(['index']);
 
-$button = new Button();
-$button->set('Click me');
-$button->set(['primary' => true]);
-$button->set(['icon' => 'check']);
-$button->set(['size big' => true]);
 
-$app->add(new Header(['Big Button', 'size' => 2]));
 
-$app->add($button);
 
-$app->add(new Header(['Button Intent', 'size' => 2]));
+$app->add(['Header', 'Properties', 'size' => 2]);
+$app->add(['Button', 'Primary button', 'primary']);
+$app->add(['Button', 'Load', 'labeled', 'icon'=>'pause']);
+$app->add(['Button', 'Next', 'iconRight'=>'right arrow']);
+$app->add(['Button', null, 'circular', 'icon'=>'settings']);
 
-$b_yes = new Button(['Yes', 'positive basic']);
-$b_no = new Button(['No', 'negative basic']);
-$app->add($b_yes);
-$app->add($b_no);
+$app->add(['Header', 'Big Button', 'size' => 2]);
+$app->add(['Button', 'Click me', 'big primary', 'icon'=>'check']);
 
-$app->add(new Header(['Combining Buttons', 'size' => 2]));
-$bar = new View(['ui' => 'buttons', null, 'vertical']);  // NOTE: class called Buttons, not Button
-$bar->add(new Button(['Play', 'icon' => 'play']));
-$bar->add(new Button(['Pause', 'icon' => 'pause']));
-$bar->add(new Button(['Shuffle', 'icon' => 'shuffle']));
 
-$app->add($bar);
+$app->add(['Header', 'Button Intent', 'size' => 2]);
+$app->add(['Button', 'Yes', 'positive basic']);
+$app->add(['Button', 'No', 'negative basic']);
 
-$app->add(new Header(['Icon Bar', 'size' => 2]));
-$bar = new View(['ui' => 'buttons', null, 'blue big']);  // NOTE: class called Buttons, not Button
-$bar->add(new Button(['icon' => 'file']));
-$bar->add(new Button(['icon' => ['save', 'yellow']]));
-$bar->add(new Button(['icon' => 'upload', 'disabled' => true]));
-$app->add($bar);
+$app->add(['Header', 'Combining Buttons', 'size' => 2]);
 
-$app->add(new Header(['Forks', 'size' => 2]));
-$forks = new Button(['labeled' => true]); // Button, not Buttons!
-$forks->add(new Button(['Forks', 'blue']))->add(new Icon('fork'));
-$forks->add(new Label(['1,048', 'basic blue left pointing']));
-$app->add($forks);
+$bar = $app->add(['ui' => 'vertical buttons']); 
+$bar->add(['Button', 'Play', 'icon' => 'play']);
+$bar->add(['Button', 'Pause', 'icon' => 'pause']);
+$bar->add(['Button', 'Shuffle', 'icon' => 'shuffle']);
 
-$app->add(new Header(['Custom Template', 'size' => 2]));
-$view = new View(['template' => new Template('Hello, {$tag1}, my name is {$tag2}')]);
+$app->add(['Header', 'Icon Bar', 'size' => 2]);
+$bar = $app->add(['ui' => 'big blue buttons']); 
+$bar->add(['Button', 'icon'=>'file']);
+$bar->add(['Button', 'icon'=>'yellow save']);
+$bar->add(['Button', 'icon'=>'upload', 'disabled'=>true]);
+
+$app->add(['Header', 'Forks Button Component', 'size' => 2]);
+
+// Creating your own button component example
+class ForkButton extends Button {
+    function __construct($n) {
+        $this->add(new Button(['Forks', 'blue']))->add(new Icon('fork'));
+        $this->add(new Label([number_format($n), 'basic blue left pointing']));
+        parent::__construct(null, 'labeled');
+    }
+}
+
+$app->add(new ForkButton(1234+rand(1,100)));
+
+
+
+
+$app->add(['Header', 'Custom Template', 'size' => 2]);
+
+$view = $app->add(['template' => new Template('Hello, {$tag1}, my name is {$tag2}')]);
 
 $view->add(new Button('World'), 'tag1');
 $view->add(new Button(['Agile UI', 'blue']), 'tag2');
 
-$app->add($view);
+$app->add(['Header', 'Attaching', 'size' => 2]);
 
-$app->add(new Header(['Attaching', 'size' => 2]));
-
-$app->add(['Button', 'Scroll Up', 'top attached']);
-$app->add(['Table', 'attached', 'header' => false])->setSource(['One', 'Two', 'Three', 'Four']);
-$app->add(['Button', 'Scroll Up', 'bottom attached']);
+$app->add(['Button', 'Previous', 'top attached']);
+$app->add(['Table', 'attached', 'header' => false])
+    ->setSource(['One', 'Two', 'Three', 'Four']);
+$app->add(['Button', 'Next', 'bottom attached']);
