@@ -28,14 +28,14 @@ form where you can enter new record details.
 The form save will re-use the model of your auto-complete, so be sure to set() defaults and
 addCondition()s::
 
-    $form->addField('test', ['AutoComplete', 'plus'=>true])->setModel(new Country());
+    $form->addField('test', ['AutoComplete', 'plus'=>true])->setModel(new Country($db));
 
 Specifying in Model
 -------------------
 
 You can also specify that you prefer to use AutoComplete inside your model definition::
 
-    $model->hasOne('country_id', [new Country(), 'ui'=>['form'=>['AutoComplete']]]);
+    $model->hasOne('country_id', [new Country($db), 'ui'=>['form'=>['AutoComplete']]]);
 
 Advanced Usage
 --------------
@@ -53,5 +53,5 @@ You can do much more with AutoComplete field by passing dropdown settings::
                                     $(this).data("value", value);
                                    }}'),
         ]
-    ])->setModel(new Country());
+    ])->setModel(new Country($db));
 
