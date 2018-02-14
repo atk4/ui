@@ -1,4 +1,5 @@
 import atkPlugin from 'plugins/atkPlugin';
+import $ from 'jquery';
 
 export default class jsSearch extends atkPlugin {
 
