@@ -6,9 +6,10 @@ export default class jsSearch extends atkPlugin {
     this.sortArgs = {};
     this.state = {button: false, filter: false};
     this.textInput = this.$el.find('input[type="text"]');
-    this.leftIcon = this.$el.find('i.filter.icon').hide();
-    this.searchAction = this.$el.find('.atk-action');
-    this.searchContent = this.searchAction.html();
+    this.leftIcon = this.$el.find('.atk-filter-icon').hide();
+    this.searchAction = this.$el.find('.atk-search-button');
+    this.searchIcon = this.searchAction.find('i.atk-search-icon');
+    this.removeIcon  = this.searchAction.find('i.atk-remove-icon').hide();
     this.$el.data('preValue', '');
 
     this.setInputAction(this);
@@ -23,16 +24,18 @@ export default class jsSearch extends atkPlugin {
   setInputAction(that) {
     this.textInput.on('keyup', function(e) {
       if (e.keyCode === 13 && e.target.value) {
-        that.setButtonState(true);
-        that.setFilterState(true);
+        that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options, {'_q' : e.target.value}), function(){
+          that.setButtonState(true);
+          that.setFilterState(true);
+        });
         that.$el.data('preValue', e.target.value);
-        that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options, {'_q' : e.target.value}));
       } else if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
-        that.setButtonState(false);
-        that.setFilterState(false);
+        that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options), function(){
+          that.setButtonState(false);
+          that.setFilterState(false);
+        });
         that.$el.data('preValue', '');
         that.textInput.val('');
-        that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options));
       } else if (that.$el.data('preValue') !== e.target.value) {
         that.setButtonState(false);
       }
@@ -47,16 +50,18 @@ export default class jsSearch extends atkPlugin {
   setSearchAction(that) {
     this.searchAction.on('click', function(e){
       if (that.state.button){
-        that.setButtonState(false);
-        that.setFilterState(false);
+        that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options), function() {
+          that.setButtonState(false);
+          that.setFilterState(false);
+        });
         that.textInput.val('');
-        that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options));
       }
 
       if (!that.state.button && that.textInput.val()) {
-        that.setButtonState(true);
-        that.setFilterState(true);
-        that.doSearch(that.settings.uri,  $.extend({}, that.sortArgs, that.settings.uri_options, {'_q' : that.textInput.val()}));
+        that.doSearch(that.settings.uri,  $.extend({}, that.sortArgs, that.settings.uri_options, {'_q' : that.textInput.val()}), function() {
+          that.setButtonState(true);
+          that.setFilterState(true);
+        });
       }
     });
   }
@@ -92,9 +97,11 @@ export default class jsSearch extends atkPlugin {
    */
   setButtonState(isOn) {
     if (isOn) {
-      this.searchAction.html(this.getEraseContent());
+      this.searchIcon.hide();
+      this.removeIcon.show();
     } else {
-      this.searchAction.html(this.searchContent);
+      this.searchIcon.show();
+      this.removeIcon.hide();
     }
     this.state.button = isOn;
   }
@@ -105,7 +112,7 @@ export default class jsSearch extends atkPlugin {
    * @param uri
    * @param options
    */
-  doSearch(uri, options) {
+  doSearch(uri, options, cb = function(){}) {
     this.$el.api({
       on: 'now',
       url: uri,
@@ -113,16 +120,8 @@ export default class jsSearch extends atkPlugin {
       method: 'GET',
       obj: this.$el,
       stateContext: this.searchAction,
+      onComplete: cb,
     });
-  }
-
-  /**
-   * Return the html content for erase action button.
-   *
-   * @returns {string}
-   */
-  getEraseContent() {
-    return `<i class="red remove icon" style=""></i>`;
   }
 }
 
