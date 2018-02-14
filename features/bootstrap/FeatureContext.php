@@ -27,6 +27,16 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * @When I use form with button :arg1
+     */
+    public function iUseFormWithButton($arg1)
+    {
+        $button = $this->getSession()->getPage()->find('xpath', '//button[text()="'.$arg1.'"]');
+        $this->button_id = $button->getAttribute('id');
+        $button->click();
+    }
+
+    /**
      * @When I press button :arg1
      */
     public function iPressButton($arg1)
