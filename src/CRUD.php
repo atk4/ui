@@ -122,9 +122,9 @@ class CRUD extends Grid
     }
 
     /**
-     * Initializes interface elements for new record creation
+     * Initializes interface elements for new record creation.
      */
-    function initCreate()
+    public function initCreate()
     {
         // setting itemCreate manually is possible.
         if (!$this->itemCreate) {
@@ -143,7 +143,7 @@ class CRUD extends Grid
                 $this->formCreate = $this->pageCreate->add($this->formCreate ?: $this->formDefault);
             }
 
-           // $form = $page->add($this->formCreate ?: ['Form', 'layout' => 'FormLayout/Columns']);
+            // $form = $page->add($this->formCreate ?: ['Form', 'layout' => 'FormLayout/Columns']);
             $this->formCreate->setModel($this->model, $this->fieldsCreate ?: $this->fieldsDefault);
 
             // set save handler with reload trigger
@@ -157,9 +157,9 @@ class CRUD extends Grid
 
     /**
      * Method to override to create a custom JavaScript action to execute
-     * when submitting create form
+     * when submitting create form.
      */
-    function jsSaveCreate()
+    public function jsSaveCreate()
     {
         return [
             // reload Grid
@@ -173,11 +173,10 @@ class CRUD extends Grid
         ];
     }
 
-
     /**
-     * Initializes interface elements for editing records
+     * Initializes interface elements for editing records.
      */
-    function initUpdate()
+    public function initUpdate()
     {
         $this->addAction(['icon' => 'edit'], new jsModal('Edit', $this->pageUpdate, [$this->name => $this->jsRow()->data('id')]));
 
@@ -189,21 +188,20 @@ class CRUD extends Grid
                 $this->formUpdate = $this->pageUpdate->add($this->formUpdate ?: $this->formDefault);
             }
 
-            $this->formUpdate->setModel($this->model, $this->fieldsUpdate ?: $this->fieldsDefault );
+            $this->formUpdate->setModel($this->model, $this->fieldsUpdate ?: $this->fieldsDefault);
             $this->formUpdate->onSubmit(function ($form) {
                 $this->formUpdate->model->save();
 
                 return $this->jsSaveUpdate();
-
             });
         });
     }
 
     /**
      * Method to override to create a custom JavaScript action to execute
-     * when submitting update form
+     * when submitting update form.
      */
-    function jsSaveUpdate()
+    public function jsSaveUpdate()
     {
         return [
             // reload Grid
@@ -218,9 +216,9 @@ class CRUD extends Grid
     }
 
     /**
-     * Initialize UI for deleting records
+     * Initialize UI for deleting records.
      */
-    function initDelete()
+    public function initDelete()
     {
         $this->addAction(['icon' => 'red trash'], function ($jschain, $id) {
             $this->model->load($id)->delete();
