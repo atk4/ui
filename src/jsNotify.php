@@ -7,34 +7,22 @@ namespace atk4\ui;
  */
 class jsNotify implements jsExpressionable
 {
-    public $options = null;
+    use \atk4\core\DIContainerTrait;
+
+    public $options = [];
     public $attachTo = null;
 
     public function __construct($options = null, $attachTo = null)
     {
         if ($options && is_array($options)) {
-            $this->setOptions($options);
+            $this->setDefaults($options);
         } elseif (is_string($options)) {
-            $this->setOptions(['content' => $options]);
+            $this->setDefaults(['content' => $options]);
         }
 
         if ($attachTo) {
             $this->attachTo = $attachTo;
         }
-    }
-
-    /**
-     * Set Notifier options using array.
-     *
-     * @param $options
-     *
-     * @return $this
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
-
-        return $this;
     }
 
     /**
@@ -45,8 +33,9 @@ class jsNotify implements jsExpressionable
      *
      * @return $this
      */
-    public function setOption($option, $value)
+    public function setMissingProperty($option, $value)
     {
+        echo 'here';exit;
         $this->options[$option] = $value;
 
         return $this;
@@ -61,7 +50,7 @@ class jsNotify implements jsExpressionable
      */
     public function setContent($content)
     {
-        $this->setOption('content', $content);
+        $this->content = $content;
 
         return $this;
     }
@@ -76,7 +65,7 @@ class jsNotify implements jsExpressionable
      */
     public function setColor($color)
     {
-        $this->setOption('color', $color);
+        $this->color = $color;
 
         return $this;
     }
@@ -90,7 +79,7 @@ class jsNotify implements jsExpressionable
      */
     public function setIcon($icon)
     {
-        $this->setOption('icon', $icon);
+        $this->iccon = $icon;
 
         return $this;
     }
@@ -106,10 +95,10 @@ class jsNotify implements jsExpressionable
      */
     public function setTransition($openTransition, $closeTransition = null)
     {
-        $this->setOption('openTransition', $openTransition);
+        $this->openTransition = $openTransition;
 
         if ($closeTransition) {
-            $this->setOption('closeTransition', $closeTransition);
+            $this->closeTransition = $closeTransition;
         }
 
         return $this;
@@ -126,7 +115,7 @@ class jsNotify implements jsExpressionable
      */
     public function setDuration($duration)
     {
-        $this->setOption('duration', $duration);
+        $this->duration = $duration;
 
         return $this;
     }
@@ -140,7 +129,7 @@ class jsNotify implements jsExpressionable
      */
     public function setPosition($position)
     {
-        $this->setOption('position', $position);
+        $this->position = $position;
 
         return $this;
     }
@@ -154,7 +143,7 @@ class jsNotify implements jsExpressionable
      */
     public function setWidth($width)
     {
-        $this->setOption('width', $width);
+        $this->width = $width;
 
         return $this;
     }
@@ -168,7 +157,7 @@ class jsNotify implements jsExpressionable
      */
     public function setOpacity($opacity)
     {
-        $this->setOption('opacity', $opacity);
+        $this->opacity = $opacity;
 
         return $this;
     }

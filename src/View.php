@@ -353,7 +353,7 @@ class View implements jsExpressionable
     public function add($seed, $region = null)
     {
         if ($this->_rendered) {
-            throw new Exception('You cannot add anything into the view after it is has been rendered');
+            throw new Exception('You cannot add anything into the view after it was rendered');
         }
         if (!$this->app) {
             $this->_add_later[] = [$seed, $region];
@@ -362,14 +362,24 @@ class View implements jsExpressionable
         }
 
         if (is_array($region)) {
-            throw new Exception('Second argument to add must be region or null!');
+            $args = $region;
+            if (isset($args['regon'])) {
+                $region = ['region'=>$args['region']];
+                unset($args['region']);
+            }
+        } elseif ($region) {
+            $args = null;
+            $region = ['region'=>$region];
+        } else {
+            $args = null;
+            $region = null;
         }
 
         // Create object first
-        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region ? ['region'=>$region] : null);
+        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region);
 
         // Will call init() of the object
-        $object = $this->_add($object);
+        $object = $this->_add($object, $args);
 
         return $object;
     }
