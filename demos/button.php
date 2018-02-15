@@ -8,8 +8,6 @@ use atk4\ui\Header;
 use atk4\ui\Icon;
 use atk4\ui\Label;
 use atk4\ui\Template;
-use atk4\ui\View;
-
 
 $app->add(['Header', 'Basic Button', 'size' => 2]);
 
@@ -22,9 +20,6 @@ $app->add($b1);
 // must be added first
 $b1->link(['index']);
 
-
-
-
 $app->add(['Header', 'Properties', 'size' => 2]);
 $app->add(['Button', 'Primary button', 'primary']);
 $app->add(['Button', 'Load', 'labeled', 'icon'=>'pause']);
@@ -34,20 +29,19 @@ $app->add(['Button', null, 'circular', 'icon'=>'settings']);
 $app->add(['Header', 'Big Button', 'size' => 2]);
 $app->add(['Button', 'Click me', 'big primary', 'icon'=>'check']);
 
-
 $app->add(['Header', 'Button Intent', 'size' => 2]);
 $app->add(['Button', 'Yes', 'positive basic']);
 $app->add(['Button', 'No', 'negative basic']);
 
 $app->add(['Header', 'Combining Buttons', 'size' => 2]);
 
-$bar = $app->add(['ui' => 'vertical buttons']); 
+$bar = $app->add(['ui' => 'vertical buttons']);
 $bar->add(['Button', 'Play', 'icon' => 'play']);
 $bar->add(['Button', 'Pause', 'icon' => 'pause']);
 $bar->add(['Button', 'Shuffle', 'icon' => 'shuffle']);
 
 $app->add(['Header', 'Icon Bar', 'size' => 2]);
-$bar = $app->add(['ui' => 'big blue buttons']); 
+$bar = $app->add(['ui' => 'big blue buttons']);
 $bar->add(['Button', 'icon'=>'file']);
 $bar->add(['Button', 'icon'=>'yellow save']);
 $bar->add(['Button', 'icon'=>'upload', 'disabled'=>true]);
@@ -55,18 +49,17 @@ $bar->add(['Button', 'icon'=>'upload', 'disabled'=>true]);
 $app->add(['Header', 'Forks Button Component', 'size' => 2]);
 
 // Creating your own button component example
-class ForkButton extends Button {
-    function __construct($n) {
+class ForkButton extends Button
+{
+    public function __construct($n)
+    {
         $this->add(new Button(['Forks', 'blue']))->add(new Icon('fork'));
         $this->add(new Label([number_format($n), 'basic blue left pointing']));
         parent::__construct(null, 'labeled');
     }
 }
 
-$app->add(new ForkButton(1234+rand(1,100)));
-
-
-
+$app->add(new ForkButton(1234 + rand(1, 100)));
 
 $app->add(['Header', 'Custom Template', 'size' => 2]);
 
