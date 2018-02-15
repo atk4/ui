@@ -35,8 +35,6 @@ class jsNotify implements jsExpressionable
      */
     public function setMissingProperty($option, $value)
     {
-        echo 'here';
-        exit;
         $this->options[$option] = $value;
 
         return $this;
@@ -51,7 +49,7 @@ class jsNotify implements jsExpressionable
      */
     public function setContent($content)
     {
-        $this->content = $content;
+        $this->options['content'] = $content;
 
         return $this;
     }
@@ -66,7 +64,7 @@ class jsNotify implements jsExpressionable
      */
     public function setColor($color)
     {
-        $this->color = $color;
+        $this->options['color'] = $color;
 
         return $this;
     }
@@ -80,7 +78,7 @@ class jsNotify implements jsExpressionable
      */
     public function setIcon($icon)
     {
-        $this->iccon = $icon;
+        $this->options['icon'] = $icon;
 
         return $this;
     }
@@ -96,10 +94,10 @@ class jsNotify implements jsExpressionable
      */
     public function setTransition($openTransition, $closeTransition = null)
     {
-        $this->openTransition = $openTransition;
+        $this->options['openTransition'] = $openTransition;
 
         if ($closeTransition) {
-            $this->closeTransition = $closeTransition;
+            $this->options['closeTransition'] = $closeTransition;
         }
 
         return $this;
