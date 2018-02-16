@@ -57,7 +57,7 @@ $form->onSubmit(function ($f) {
              ->setTransition($f->model['transition'])
              ->setIcon($f->model['icon']);
 
-    var_dump($notifier->options);
+    //var_dump($notifier->options);
 
     if ($f->model['attach'] !== 'Body') {
         $notifier->attachTo($f);
