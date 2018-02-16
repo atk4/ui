@@ -363,7 +363,7 @@ class View implements jsExpressionable
 
         if (is_array($region)) {
             $args = $region;
-            if (isset($args['regon'])) {
+            if (isset($args['region'])) {
                 $region = ['region'=>$args['region']];
                 unset($args['region']);
             }

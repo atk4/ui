@@ -21,22 +21,22 @@ class CRUD extends Grid
     /** @var array of fields to show on form when editing a record */
     public $fieldsUpdate = null;
 
-    /** @var array Seed for form that is used by default * */
+    /** @var array|Form Seed for form that is used by default * */
     public $formDefault = ['Form', 'layout' => 'FormLayout/Columns'];
 
-    /** @var array Seed for form that is used when adding * */
+    /** @var array|Form Seed for form that is used when adding * */
     public $formCreate = null;
 
-    /** @var array Seed for form that is used when editing * */
+    /** @var array|Form Seed for form that is used when editing * */
     public $formUpdate = null;
 
-    /** @var array Seed for VirtualPage to use in modal * */
+    /** @var array|View Seed for VirtualPage to use in modal * */
     public $pageDefault = ['VirtualPage'];
 
-    /** @var array Seed for virtual page when adding * */
+    /** @var array|View Seed for virtual page when adding * */
     public $pageCreate = null;
 
-    /** @var array Seed for virtual page when editing * */
+    /** @var array|View Seed for virtual page when editing * */
     public $pageUpdate = null;
 
     /** @var Item Will be set to menu item for new record add action * */

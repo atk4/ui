@@ -80,7 +80,7 @@ class jsNotify implements jsExpressionable
      */
     public function setIcon($icon)
     {
-        $this->iccon = $icon;
+        $this->icon = $icon;
 
         return $this;
     }
