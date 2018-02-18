@@ -9,61 +9,59 @@ namespace atk4\ui;
  */
 class CRUD extends Grid
 {
-    /** Array of fields to show */
+    /** @var array of fields to show */
     public $fieldsDefault = null;
 
-    /** Array of fields to show in grid */
+    /** @var array of fields to show in grid */
     public $fieldsRead = null;
 
-    /** Array of fields to show on form when adding new record */
+    /** @var array of fields to show on form when adding new record */
     public $fieldsCreate = null;
 
-    /** Array of fields to show on form when editing a record */
+    /** @var array of fields to show on form when editing a record */
     public $fieldsUpdate = null;
 
-    /** Seed for form that is used by default **/
+    /** @var array|Form Seed for form that is used by default * */
     public $formDefault = ['Form', 'layout' => 'FormLayout/Columns'];
 
-    /** Seed for form that is used when adding **/
+    /** @var array|Form Seed for form that is used when adding * */
     public $formCreate = null;
 
-    /** Seed for form that is used when editing **/
+    /** @var array|Form Seed for form that is used when editing * */
     public $formUpdate = null;
 
-    /** Seed for VirtualPage to use in modal **/
+    /** @var array|View Seed for VirtualPage to use in modal * */
     public $pageDefault = ['VirtualPage'];
 
-    /** Seed for virtual page when adding **/
+    /** @var array|View Seed for virtual page when adding * */
     public $pageCreate = null;
 
-    /** Seed for virtual page when editing **/
+    /** @var array|View Seed for virtual page when editing * */
     public $pageUpdate = null;
 
-    /** Will be set to menu item for new record add action **/
+    /** @var Item Will be set to menu item for new record add action * */
     public $itemCreate = null;
 
-    /** Action to perform when editing issuccessful **/
+    /** @var array Default action to perform when adding or editing is successful * */
     public $notifyDefault = ['jsNotify', 'content' => 'Data is saved!', 'color'   => 'green'];
 
-    /** Action to perform when editing issuccessful **/
+    /** @var array Action to perform when adding is successful * */
     public $notifyCreate = null;
 
-    /** Action to perform when editing issuccessful **/
-    public $notifyCUpdcate = null;
+    /** @var array Action to perform when editing is successful * */
+    public $notifyUpdate = null;
 
     /**
-     * Permitted operatios. You can add more of your own and you don't need to keep
-     * them 1-character long. Use full words such as 'archive' if you run out of
-     * letters.
+     * Permitted operations. You can add more of your own.
      *
-     * if 'true' user can create records
+     * @var bool if 'true' user can create records
      */
     public $canCreate = true;
 
-    /** If 'true' then user can update records **/
+    /** @var bool If 'true' then user can update records * */
     public $canUpdate = true;
 
-    /** If 'true' user can delete records **/
+    /** @var bool If 'true' user can delete records * */
     public $canDelete = true;
 
     public function init()
@@ -123,6 +121,8 @@ class CRUD extends Grid
 
     /**
      * Initializes interface elements for new record creation.
+     *
+     * @return array|jsExpression
      */
     public function initCreate()
     {
@@ -158,6 +158,8 @@ class CRUD extends Grid
     /**
      * Method to override to create a custom JavaScript action to execute
      * when submitting create form.
+     *
+     * @return array|jsExpression
      */
     public function jsSaveCreate()
     {
@@ -175,6 +177,8 @@ class CRUD extends Grid
 
     /**
      * Initializes interface elements for editing records.
+     *
+     * @return array|jsExpression
      */
     public function initUpdate()
     {
@@ -200,6 +204,8 @@ class CRUD extends Grid
     /**
      * Method to override to create a custom JavaScript action to execute
      * when submitting update form.
+     *
+     * @return array|jsExpression
      */
     public function jsSaveUpdate()
     {
@@ -211,7 +217,7 @@ class CRUD extends Grid
             new jsExpression('$(".atk-dialog-content").trigger("close")'),
 
             // display notification
-            $this->factory($this->notifyCreate ?: $this->notifyDefault),
+            $this->factory($this->notifyUpdate ?: $this->notifyDefault),
         ];
     }
 
