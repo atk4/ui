@@ -41,9 +41,14 @@ class Actions extends Generic
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      */
-    public function addModal($button, $title, $callback)
+    public function addModal($button, $title, $callback, $owner = null)
     {
-        $modal = $this->owner->owner->add(['Modal', 'title'=>$title]);
+        if (!$owner) {
+            $modal = $this->owner->owner->add(['Modal', 'title'=>$title]);
+        } else {
+            $modal = $owner->add(['Modal', 'title'=>$title]);
+        }
+
         $modal->set(function ($t) use ($callback) {
             call_user_func($callback, $t, $this->app->stickyGet($this->name));
         });

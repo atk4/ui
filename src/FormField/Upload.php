@@ -6,6 +6,9 @@ use atk4\ui\Exception;
 use atk4\ui\Template;
 use atk4\ui\View;
 
+/**
+ * Class Upload.
+ */
 class Upload extends Input
 {
     public $inputType = 'hidden';
@@ -20,6 +23,7 @@ class Upload extends Input
      * The uploaded file id.
      * This id is return on form submit.
      * If not set, will default to file name.
+     * file id is also sent with onDelete Callback.
      *
      * @var null
      */
@@ -88,6 +92,51 @@ class Upload extends Input
     }
 
     /**
+     * Allow to set file id and file name
+     *  - fileId will be the file id sent with onDelete callback.
+     *  - fileName is the field value display to user.
+     *
+     * @param string      $fileId   // Field id for onDelete Callback.
+     * @param string|null $fileName // Field name display to user.
+     * @param mixed       $junk
+     *
+     * @return $this|void
+     */
+    public function set($fileId = null, $fileName = null, $junk = null)
+    {
+        $this->setFileId($fileId);
+
+        if (!$fileName) {
+            $fileName = $fileId;
+        }
+
+        return $this->setInput($fileName, $junk);
+    }
+
+    /**
+     * Set input field value.
+     *
+     * @param $value // The field input value.
+     * @param $junk
+     *
+     * @return $this
+     */
+    public function setInput($value, $junk = null)
+    {
+        return parent::set($value, $junk);
+    }
+
+    /**
+     * Get input field value.
+     *
+     * @return array|false|mixed|null|string
+     */
+    public function getInputValue()
+    {
+        return $this->field ? $this->field->get() : $this->content;
+    }
+
+    /**
      * Set file id.
      *
      * @param $id
@@ -145,19 +194,22 @@ class Upload extends Input
             if ($this->cb->triggered()) {
                 $action = @$_POST['action'];
                 if ($files = @$_FILES) {
+                    //set fileId to file name as default.
                     $this->fileId = $files['file']['name'];
+                    // display file name to user as default.
+                    $this->setInput($this->fileId);
                 }
                 if ($action === 'upload' && !$files['file']['error']) {
                     $this->cb->set(function () use ($fx, $files) {
                         $this->addJsAction(call_user_func_array($fx, $files));
+                        //$value = $this->field ? $this->field->get() : $this->content;
                         $this->addJsAction([
-                            $this->js()->data('fileId', $this->fileId),
-                            $this->jsInput()->val($this->fileId),
+                            $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
                         ]);
 
                         return $this->jsActions;
                     });
-                } elseif ($action === null || $files['file']['error']) {
+                } elseif ($action === null || isset($files['file']['error'])) {
                     $this->cb->set(function () use ($fx, $files) {
                         return call_user_func($fx, 'error');
                     });
@@ -186,9 +238,11 @@ class Upload extends Input
             $this->template->trySet('PlaceHolder', $this->placeholder);
         }
 
+        $value = $this->field ? $this->field->get() : $this->content;
         $this->js(true)->atkFileUpload([
             'uri'      => $this->cb->getURL(),
             'action'   => $this->action->name,
+            'file'     => ['id' => $this->fileId ?: $this->field->get(), 'name' => $this->getInputValue()],
             'hasFocus' => $this->hasFocusEnable,
             'submit'   => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
         ]);

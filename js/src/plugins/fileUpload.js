@@ -4,8 +4,6 @@ import uploadService from "../services/UploadService";
 export default class fileUpload extends atkPlugin {
 
   main() {
-    const that = this;
-
     this.textInput = this.$el.find('input[type="text"]');
     this.hiddenInput = this.$el.find('input[type="hidden"]');
 
@@ -13,15 +11,55 @@ export default class fileUpload extends atkPlugin {
     this.action = $('#' + this.settings.action);
     this.actionContent = this.action.html();
 
-    this.bar = this.$el.find('.progress')
-      .progress({
-        text : {
-          percent: '{percent}%',
-          active: '{percent}%',
-        }
-      })
+    this.bar = this.$el.find('.progress');
+    this.setEventHandler();
+    this.setInitialState();
+
+  }
+
+  /**
+   * Setup field initial state.
+   */
+  setInitialState() {
+    // Set progress bar.
+    this.bar.progress({
+      text : {
+        percent: '{percent}%',
+        active: '{percent}%',
+      }
+    })
       .hide();
 
+    this.$el.data().fileId = this.settings.file.id;
+    this.hiddenInput.val(this.settings.file.id);
+    this.textInput.val(this.settings.file.name);
+    if (this.settings.file.id) {
+      this.setState('delete');
+    }
+  }
+
+  /**
+   * Update input value.
+   *
+   * @param fileId
+   * @param fileName
+   */
+  updateField(fileId, fileName) {
+    this.$el.data().fileId = fileId;
+    this.hiddenInput.val(fileId);
+
+    if (fileName === '' || typeof fileName === 'undefined' || fileName === null) {
+      this.textInput.val(fileId);
+    } else {
+      this.textInput.val(fileName);
+    }
+  }
+
+  /**
+   * Add event handler to input element.
+   */
+  setEventHandler() {
+    const that = this;
     // Open file dialog on focus.
     if (this.settings.hasFocus) {
       this.textInput.on('focus', function(e) {
@@ -41,7 +79,7 @@ export default class fileUpload extends atkPlugin {
         // Check if that id exist and send it with
         // delete callback, If not, default to file name.
         let id = that.$el.data().fileId;
-        if (id === '' || typeof id === 'undefined') {
+        if (id === '' || typeof id === 'undefined' || id === null) {
           id = that.textInput.val();
         }
         that.doFileDelete(id);
@@ -55,7 +93,7 @@ export default class fileUpload extends atkPlugin {
         //that.doFileUpload(e.target.files[0]);
         that.doFileUpload(e.target.files);
       }
-    })
+    });
   }
 
   /**
@@ -103,10 +141,11 @@ export default class fileUpload extends atkPlugin {
         that.bar.progress('set label', that.settings.completeLabel);
         that.setState('delete');
       }
+
       if (that.settings.submit) {
         $('#'+that.settings.submit).removeClass('disabled');
       }
-    }
+    };
 
     // setup progress bar update via xhr.
     let xhrCb = function() {
@@ -118,7 +157,7 @@ export default class fileUpload extends atkPlugin {
         }
       }, false);
       return xhr;
-    }
+    };
 
     that.bar.show();
     uploadService.uploadFiles(
@@ -167,6 +206,7 @@ export default class fileUpload extends atkPlugin {
 
 fileUpload.DEFAULTS = {
   uri: null,
+  file: {id: null, name: null},
   uri_options: {},
   hasFocus: true,
   action: null,
