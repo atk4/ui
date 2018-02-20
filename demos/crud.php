@@ -20,8 +20,10 @@ $crud = $cc->add([
     'ipp'          => 5,
 ]);
 
-// Condition on the model can be applied after setting the model
-$crud->setModel(new Country($app->db))->addCondition('numcode', '<', 200);
+// Condition on the model can be applied on a model
+$m = new Country($app->db);
+$m->addCondition('numcode', '<', 200);
+$crud->setModel($m);
 
 // Because CRUD inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon'=>'cogs'], 'Details', function ($p, $id) use ($crud) {
