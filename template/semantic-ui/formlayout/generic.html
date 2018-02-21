@@ -3,7 +3,7 @@
 {LabeledGroup}
 <div class="{$field_class} field">
   <label>{$label}</label>
-  <div class="{$width} {$class} fields">{$Content}</div>
+  <div class="{$width} {$class} fields">{$Content}</div>{$Hint}
 </div>
 {/}
 {NoLabelGroup}
@@ -13,7 +13,9 @@
 {/}
 {InputField}
 <div class="{$field_class} field">
-  <label for="{$label_for}">{$label}</label>{$Input}
+  <label for="{$label_for}">{$label}</label>
+  {$Input}
+  {$Hint}
 </div>
 {/}
 {InputNoLabel}
