@@ -16,16 +16,15 @@ $button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [
 $app->add(['Header', 'Line in a Form']);
 $form = $app->add('Form');
 
-$field = $form->addField('Title', null, ['values'=>['Mr','Mrs','Miss'], 'ui'=>['hint'=>'select one']]);
+$field = $form->addField('Title', null, ['values'=>['Mr', 'Mrs', 'Miss'], 'ui'=>['hint'=>'select one']]);
 
 $field = $form->addField('name', ['Line', 'hint'=>'this is sample hint that escapes <html> characters']);
 $field->set('value in a form');
 
-
 $field = $form->addField('surname', new \atk4\ui\FormField\Line([
-    'hint'=>['template'=>new \atk4\ui\Template(
+    'hint'=> ['template'=> new \atk4\ui\Template(
         'Click <a href="http://example.com/" target="_blank">here</a>'
-    )]
+    )],
 ]));
 
 $form->onSubmit(function ($f) {
