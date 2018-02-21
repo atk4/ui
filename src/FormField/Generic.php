@@ -43,7 +43,7 @@ class Generic extends View
      * Placed as a pointing label below the field. This only works when FormField appears in a form. You can also
      * set this to object, such as 'Text' otherwise HTML characters are escaped.
      *
-     * @var string|\atk4\ui\View
+     * @var string|\atk4\ui\View|array
      */
     public $hint = null;
 
