@@ -5,6 +5,7 @@ div(class="{$field_class} field")
     label {$label}
     div(class="{$width} {$class} fields")
         | {$Content}
+    | {$Hint}
 | {/}
 
 | {NoLabelGroup}
@@ -17,6 +18,7 @@ div(class="{$field_class} field")
 div(class="{$field_class} field")
     label(for="{$label_for}") {$label}
     | {$Input}
+    | {$Hint}
 | {/}
 
 | {InputNoLabel}

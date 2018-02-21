@@ -272,6 +272,16 @@ class Generic extends View
                 $template->append('field_class', $el->width.' wide ');
             }
 
+            if ($el->hint) {
+                $hint = new \atk4\ui\Label([null, 'pointing', 'id'=>$el->id.'_hint']);
+                if (is_object($el->hint) || is_array($el->hint)) {
+                    $hint->add($el->hint);
+                } else {
+                    $hint->set($el->hint);
+                }
+                $template->setHTML('Hint', $hint->getHTML());
+            }
+
             $this->template->appendHTML('Content', $template->render());
         }
 

@@ -91,6 +91,36 @@ properly:
  - Input (abstract, extends Generic) - Easiest since it alrady implements `<input>` and various
    ways to attach button to the input with markup of Semantic UI field.
 
+Hints
+-----
+
+.. php:attr: hint
+
+When Field appears in a Form, then you can specify a Hint also. It appears below the field and
+although it intends to be "extra info" or "extra help" due to current limitation of Semantic UI
+the only way we can display hint is using a gray bubble. In the future version of Agile UI we
+will update to use a more suitable control.
+
+Hint can be specified either inside field decorator seed or inside the Field::ui attribute::
+
+
+    $form->addField('title', null, ['values'=>['Mr', 'Mrs', 'Miss'], 'hint'=>'select one']);
+
+    $form->addField('name', ['hint'=>'Full Name Only']);
+
+Text will have HTML characters escaped. You may also specify hint value as an object::
+
+    $form->addField('name', ['hint'=>new \atk4\ui\Text(
+        'Click <a href="http://example.com/" target="_blank">here</a>'
+    )]);
+
+or you can inject a view with a custom template::
+
+    $form->addField('name', ['hint'=>['template'=>new \atk4\ui\Template(
+        'Click <a href="http://example.com/" target="_blank">here</a>'
+    )]]);
+
+
 Relatioship with Model
 ======================
 
