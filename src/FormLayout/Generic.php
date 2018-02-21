@@ -274,7 +274,7 @@ class Generic extends View
 
             if ($el->hint) {
                 $hint = new \atk4\ui\Label([null, 'pointing', 'id'=>$el->id.'_hint']);
-                if (is_object($el->hint)) {
+                if (is_object($el->hint) || is_array($el->hint)) {
                     $hint->add($el->hint);
                 } else {
                     $hint->set($el->hint);
