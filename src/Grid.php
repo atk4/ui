@@ -131,7 +131,7 @@ class Grid extends View
      * @throws Exception
      * @throws \atk4\data\Exception
      */
-    public function addJsSearch($fields = [])
+    public function addQuickSearch($fields = [])
     {
         if (!$fields) {
             $fields = [$this->model->title_field];
@@ -148,29 +148,6 @@ class Grid extends View
         $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container]);
 
         if ($q = $this->stickyGet('_q')) {
-            $cond = [];
-            foreach ($fields as $field) {
-                $cond[] = [$field, 'like', '%'.$q.'%'];
-            }
-            $this->model->addCondition($cond);
-        }
-    }
-
-    public function addQuickSearch($fields = [])
-    {
-        if (!$fields) {
-            $fields = [$this->model->title_field];
-        }
-        if (!$this->menu) {
-            throw new Exception(['Unable to add QuickSearch without Menu']);
-        }
-        $form = $this->menu
-            ->addMenuRight()->addItem()->setElement('div')
-            ->add('View')->setElement('form');
-        $this->quickSearch = $form->add(new \atk4\ui\FormField\Input(['placeholder' => 'Search', 'short_name' => $this->name.'_q', 'icon' => 'search']))
-                                  ->addClass('transparent');
-        if ($q = $this->stickyGet($this->name.'_q')) {
-            $this->quickSearch->set($q);
             $cond = [];
             foreach ($fields as $field) {
                 $cond[] = [$field, 'like', '%'.$q.'%'];

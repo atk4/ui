@@ -94,37 +94,6 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         }, $copy_paste);
 
         return $copy_paste;
-        var_dump($copy_paste);
-
-        return [
-            ['autocomplete.php'],
-            ['button.php'],
-            ['js.php'],
-            ['checkbox.php'],
-
-            ['table.php'],
-            ['form.php'],
-            ['form2.php'],
-            ['multitable.php'],
-            ['grid.php'],
-            ['crud.php'],
-            ['crud2.php'],
-
-            ['view.php'],
-            ['field.php'],
-            ['message.php'],
-            ['header.php'],
-            ['label.php'],
-            ['menu.php'],
-            ['tabs.php'],
-            ['paginator.php'],
-
-            ['reloading.php'],
-            ['modal.php'],
-            ['sticky.php'],
-            ['recursive.php'],
-            ['notify.php'],
-        ];
     }
 
     public function testLayout()
