@@ -19,9 +19,9 @@ $field = $form->addField('name', ['Line', 'hint'=>'this is sample hint that esca
 $field->set('value in a form');
 
 $field = $form->addField('surname', new \atk4\ui\FormField\Line([
-    'hint'=>new \atk4\ui\Text(
+    'hint'=> new \atk4\ui\Text(
         'Click <a href="http://example.com/" target="_blank">here</a>'
-    )
+    ),
 ]));
 
 $form->onSubmit(function ($f) {
