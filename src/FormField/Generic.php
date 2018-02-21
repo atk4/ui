@@ -39,6 +39,12 @@ class Generic extends View
      */
     public $caption = null;
 
+    /**
+     * Placed as a pointing label below the field. This only works when FormField appears in a form. You can also
+     * set this to object, such as 'Text' otherwise HTML characters are escaped.
+     */
+    public $hint = null;
+
     public function init()
     {
         parent::init();

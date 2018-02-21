@@ -10,13 +10,20 @@ $field = $app->add(new \atk4\ui\FormField\Line());
 
 $field->set('hello world');
 
-$button = $app->add(['Button', 'check value']);
+$button = $field->addAction('check value');
 $button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [$field->jsInput()->val()]));
 
 $app->add(['Header', 'Line in a Form']);
 $form = $app->add('Form');
-$field = $form->addField('name', new \atk4\ui\FormField\Line());
+$field = $form->addField('name', ['Line', 'hint'=>'this is sample hint that escapes <html> characters']);
 $field->set('value in a form');
+
+$field = $form->addField('surname', new \atk4\ui\FormField\Line([
+    'hint'=>new \atk4\ui\Text(
+        'Click <a href="http://example.com/" target="_blank">here</a>'
+    )
+]));
+
 $form->onSubmit(function ($f) {
     return $f->model['name'];
 });
