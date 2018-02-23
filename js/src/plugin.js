@@ -6,6 +6,7 @@ import ajaxec from "./plugins/ajaxec";
 import createModal from "./plugins/createModal";
 import notify from "./plugins/notify";
 import fileUpload from "./plugins/fileUpload";
+import jsSearch from "./plugins/jsSearch";
 
 /**
  * Generate a jQuery plugin
@@ -40,6 +41,7 @@ plugin('CreateModal', createModal);
 plugin('Notify', notify, true);
 plugin('ServerEvent', serverEvent, true);
 plugin('FileUpload', fileUpload);
+plugin('JsSearch', jsSearch);
 
 export default function plugin(name, className, shortHand = false) {
         // Add atk namespace to jQuery global space.

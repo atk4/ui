@@ -97,7 +97,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         // Layout needs to have a save button
         $this->buttonSave = $this->layout->addButton(['Save', 'primary']);
+        $this->buttonSave->setAttr('tabindex', 0);
         $this->buttonSave->on('click', $this->js()->form('submit'));
+        $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#'.$this->name]));
     }
 
     /**
@@ -288,7 +290,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             throw new Exception(['Argument 1 for decoratorFactory must be \atk4\data\Field or null', 'f' => $f]);
         }
 
-        $fallback_seed = 'Line';
+        $fallback_seed = ['Line'];
 
         if ($f->enum) {
             $fallback_seed = ['DropDown', 'values' => array_combine($f->enum, $f->enum)];
@@ -296,6 +298,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $fallback_seed = ['DropDown', 'values' => $f->values];
         } elseif (isset($f->reference)) {
             $fallback_seed = ['DropDown', 'model' => $f->reference->refModel()];
+        }
+
+        if (isset($f->ui['hint'])) {
+            $fallback_seed['hint'] = $f->ui['hint'];
         }
 
         $seed = $this->mergeSeeds(

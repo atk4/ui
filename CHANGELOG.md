@@ -86,6 +86,22 @@ Added `$app->dbConnect()` as a simpler way to connect to the database. Some impr
 - Feature/js package 1.0.1 [\#350](https://github.com/atk4/ui/pull/350) ([ibelar](https://github.com/ibelar))
 - Fix/demo typo [\#348](https://github.com/atk4/ui/pull/348) ([ibelar](https://github.com/ibelar))
 
+### 1.4.2
+
+**Closed issues:**
+
+- Add one more argument to jsModal\(\) an Modal\(\) for JS callback [\#364](https://github.com/atk4/ui/issues/364)
+
+**Merged pull requests:**
+
+- relpace QuickSearch with a JS by default [\#375](https://github.com/atk4/ui/pull/375) ([romaninsh](https://github.com/romaninsh))
+- Cleaned up button demo [\#374](https://github.com/atk4/ui/pull/374) ([romaninsh](https://github.com/romaninsh))
+- Feature/jsSearch-update [\#371](https://github.com/atk4/ui/pull/371) ([ibelar](https://github.com/ibelar))
+- Fix/\#364 \#270 [\#368](https://github.com/atk4/ui/pull/368) ([ibelar](https://github.com/ibelar))
+- Small cleanups [\#361](https://github.com/atk4/ui/pull/361) ([gartner](https://github.com/gartner))
+- Fix/\#356 Upload Field Set [\#360](https://github.com/atk4/ui/pull/360) ([ibelar](https://github.com/ibelar))
+- Fixed typo [\#359](https://github.com/atk4/ui/pull/359) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
+
 ## 1.3
 
 This version is focused on dynamic interaction between the browser and your PHP apps. It contains 3
