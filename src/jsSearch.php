@@ -34,6 +34,7 @@ class jsSearch extends View
     public function init()
     {
         parent::init();
+        $this->reload->needAjax = true;
 
         //$this->input = $this->add(new \atk4\ui\FormField\Line(['iconLeft' => 'filter',  'action' => new \atk4\ui\Button(['icon' => 'search', 'ui' => 'button atk-action'])]));
     }
