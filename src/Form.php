@@ -97,8 +97,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         // Layout needs to have a save button
         $this->buttonSave = $this->layout->addButton(['Save', 'primary']);
-        $this->buttonSave->setElement('button');
+        $this->buttonSave->setAttr('tabindex', 0);
         $this->buttonSave->on('click', $this->js()->form('submit'));
+        $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#'.$this->name]));
     }
 
     /**
