@@ -15,10 +15,11 @@ engines:
     - 409aa7b6ded69296360c17d5c267c8dc  # Grid::renderView iterates method
     - a4801fad2cfbf1b485de61cca855955d  # Grid calls View::renderView() bypassing Lister.
     - 5030329ed016f46a2791c854caacb39c  # Grid::getHTMLTags passes $row / $field, but $row is not used by money column
-    - 113c8195220e554776225802db7021d6  # Persistence_Faker: Allow static access to class Faker\Factory in __construct
     checks:
       CleanCode/ElseExpression:
         enabled: false      # gives many incorrect suggestions
+      CleanCode/StaticAccess:
+        enabled: false      # sometimes we use static access, specifically for Persistence::connect
       Controversial/CamelCaseClassName:
         enabled: false      # because jQuery.php and similar class names
       Controversial/CamelCaseMethodName:
@@ -47,6 +48,10 @@ engines:
         enabled: false      # it is OK that some classes have more than 12 public methods
       Design/WeightedMethodCount:
         enabled: false      # because we solve complex task, our classes may be complex
+      Design/TooManyFields:
+        enabled: false      # few classes really need so many fields
+      Design/LongClass:
+        enabled: false      # code of some classes can be quite long, that's OK
       Naming/BooleanGetMethodName:
         enabled: false      # there are few methods which return boolean, but also has parameter as reference, for example, Template->getTagRefList()
       Naming/ShortMethodName:

@@ -333,7 +333,7 @@ class Template implements \ArrayAccess
         }
 
         $this->getTagRefList($tag, $template);
-        foreach ($template as $key => &$ref) {
+        foreach ($template as &$ref) {
             $ref = [$value];
         }
 
@@ -403,7 +403,7 @@ class Template implements \ArrayAccess
         }
 
         $this->getTagRefList($tag, $template);
-        foreach ($template as $key => &$ref) {
+        foreach ($template as &$ref) {
             $ref[] = $value;
         }
 
@@ -671,7 +671,7 @@ class Template implements \ArrayAccess
 
             $this->tags[$tag][] = &$template[$full_tag];
 
-            $rtag = $this->parseTemplateRecursive($input, $template[$full_tag]);
+            $this->parseTemplateRecursive($input, $template[$full_tag]);
 
             $chunk = @each($input);
             if ($chunk[1]) {
