@@ -238,7 +238,7 @@ class Upload extends Input
             $this->template->trySet('PlaceHolder', $this->placeholder);
         }
 
-        $value = $this->field ? $this->field->get() : $this->content;
+        //$value = $this->field ? $this->field->get() : $this->content;
         $this->js(true)->atkFileUpload([
             'uri'      => $this->cb->getURL(),
             'action'   => $this->action->name,
