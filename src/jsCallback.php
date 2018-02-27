@@ -8,6 +8,8 @@ class jsCallback extends Callback implements jsExpressionable
 
     public $confirm = null;
 
+    public $needJsUrl = true;
+
     public function flatternArray($response)
     {
         if (!is_array($response)) {
@@ -126,17 +128,5 @@ class jsCallback extends Callback implements jsExpressionable
         }, $actions));
 
         return $ajaxec;
-    }
-
-    /**
-     * Return URL that will trigger action on this js call-back.
-     *
-     * @param string $mode
-     *
-     * @return string
-     */
-    public function getURL($mode = 'callback')
-    {
-        return $this->owner->jsUrl([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
     }
 }
