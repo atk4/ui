@@ -111,7 +111,7 @@ class Wizard extends View
             $this->buttonFinish->destroy();
 
             $this->app->catch_runaway_callbacks = false;
-            $res = call_user_func($callback, $this);
+            call_user_func($callback, $this);
         } else {
             $this->buttonFinish->destroy();
         }

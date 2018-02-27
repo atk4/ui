@@ -342,7 +342,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $post = $_POST;
 
         $this->hook('loadPOST', [&$post]);
-        $data = [];
         $errors = [];
 
         foreach ($this->fields as $key => $field) {
