@@ -1016,6 +1016,9 @@ class View implements jsExpressionable
 
     public $_triggerBy = null;
 
+    /** @var bool Whether url need to be set using ajax */
+    public $needAjax = false;
+
     /**
      * Build an URL which this view can use for call-backs. It should
      * be guaranteed that requesting returned URL would at some point call
@@ -1027,7 +1030,7 @@ class View implements jsExpressionable
      */
     public function url($page = [])
     {
-        return $this->app->url($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
+        return $this->app->url($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs), $this->needAjax);
     }
 
     /**

@@ -10,6 +10,7 @@ class jsModal extends jsExpression
     public function __construct($title, $url, $args = [], $mode = 'json')
     {
         if ($url instanceof VirtualPage) {
+            $url->needAjax = true;
             $url = $url->getURL('cut');
         }
 

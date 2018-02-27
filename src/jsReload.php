@@ -20,6 +20,7 @@ class jsReload implements jsExpressionable
     public function __construct($view, $args = [])
     {
         $this->view = $view;
+        $this->view->needAjax = true;
 
         $this->args = $args;
     }
