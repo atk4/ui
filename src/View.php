@@ -1025,9 +1025,9 @@ class View implements jsExpressionable
      *
      * @return string
      */
-    public function jsUrl($page = [])
+    public function jsURL($page = [])
     {
-        return $this->app->jsUrl($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
+        return $this->app->jsURL($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
     }
 
     /**

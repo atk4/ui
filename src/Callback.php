@@ -56,11 +56,11 @@ class Callback
     public $urlTrigger = null;
 
     /**
-     * Whether the owner should return a jsUrl or not.
+     * Whether the owner should return a jsURL or not.
      *
      * @var bool
      */
-    public $needJsUrl = false;
+    public $needJsURL = false;
 
     /**
      * Initialize object and set default properties.
@@ -152,8 +152,8 @@ class Callback
      */
     public function getURL($mode = 'callback')
     {
-        if ($this->needJsUrl) {
-            return $this->owner->jsUrl([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
+        if ($this->needJsURL) {
+            return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
         } else {
             return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
         }

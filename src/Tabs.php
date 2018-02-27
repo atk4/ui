@@ -17,11 +17,11 @@ class Tabs extends View
      *
      * @param mixed $name      Name of tab or Tab object
      * @param mixed $action    Optional callback action or URL (or array with url + parameters)
-     * @param bool  $needJsUrl Whether the virtual page should generate a jsUrl or not.
+     * @param bool  $needJsURL Whether the virtual page should generate a jsURL or not.
      *
      * @return View
      */
-    public function addTab($name = null, $action = null, $needJsUrl = false)
+    public function addTab($name = null, $action = null, $needJsURL = false)
     {
         // add tabs menu item
         if (is_object($name)) {
@@ -45,7 +45,7 @@ class Tabs extends View
             if (is_callable($action)) {
                 // if there is callback action, then use VirtualPage
                 $vp = $sub->add('VirtualPage');
-                $vp->cb->needJsUrl = $needJsUrl;
+                $vp->cb->needJsURL = $needJsURL;
                 $item->setPath($vp->getUrl('cut'));
 
                 $vp->set($action);

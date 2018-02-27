@@ -53,7 +53,7 @@ class jsSearch extends View
         $this->template->set('BtnSearchIcon', $this->btnSearchIcon);
         $this->template->set('BtnRemoveIcon', $this->btnRemoveIcon);
 
-        $this->js(true)->atkJsSearch(['uri' => $this->reload->jsUrl(), 'uri_options' => ['__atk_reload'=>$this->reload->name]]);
+        $this->js(true)->atkJsSearch(['uri' => $this->reload->jsURL(), 'uri_options' => ['__atk_reload'=>$this->reload->name]]);
         parent::renderView();
     }
 }

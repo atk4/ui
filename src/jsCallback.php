@@ -8,7 +8,7 @@ class jsCallback extends Callback implements jsExpressionable
 
     public $confirm = null;
 
-    public $needJsUrl = true;
+    public $needJsURL = true;
 
     public function flatternArray($response)
     {

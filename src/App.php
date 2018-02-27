@@ -424,7 +424,7 @@ class App
      *
      * @return string
      */
-    public function jsUrl($page = [], $needRequestUri = false, $extra_args = [])
+    public function jsURL($page = [], $needRequestUri = false, $extra_args = [])
     {
         return $this->url($page, $needRequestUri, $extra_args);
     }
