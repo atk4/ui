@@ -56,7 +56,8 @@ class Callback
     public $urlTrigger = null;
 
     /**
-     * Whether the owner should return a jsURL or not.
+     * If set to "true" the callback will use $app->jsURL wich is primarily used for invoking callbacks
+     * while inside JavaScript and would expect non-HTML output
      *
      * @var bool
      */

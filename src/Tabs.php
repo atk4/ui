@@ -41,11 +41,11 @@ class Tabs extends View
     }
 
     /**
-     * Adds dynamic tab in tabs widget.
-     * Dynamic tabs are loaded via a virtual page callback or url.
+     * Adds dynamic tab in tabs widget which will load a separate
+     * page/url when activated.
      *
      * @param mixed $name      Name of tab or Tab object
-     * @param url   $needJsURL Supply URL of another page which will open in the tab
+     * @param string|array $url    URL to open inside a tab
      *
      * @throws Exception
      */
