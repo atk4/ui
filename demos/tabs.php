@@ -13,13 +13,13 @@ $tab->add(['Message', 'Content of this tab will refresh only if you reload entir
 $tab->add('LoremIpsum');
 
 // dynamic tab
-$t->addTab('Dynamic Lorem Ipsum', function ($tab) {
+$t->addTabURL('Dynamic Lorem Ipsum', function ($tab) {
     $tab->add(['Message', 'Every time you come to this tab, you will see a different text']);
     $tab->add(['LoremIpsum', 'size' => 2]);
 });
 
 // dynamic tab
-$t->addTab('Dynamic Form', function ($tab) {
+$t->addTabURL('Dynamic Form', function ($tab) {
     sleep(2);
     $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
     $m_register->addField('name', ['caption' => 'Please enter your name (John)']);

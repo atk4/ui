@@ -15,46 +15,82 @@ class Tabs extends View
     /**
      * Adds tab in tabs widget.
      *
-     * @param mixed $name      Name of tab or Tab object
-     * @param mixed $action    Optional callback action or URL (or array with url + parameters)
-     * @param bool  $needJsURL Whether the virtual page should generate a jsURL or not.
+     * @param mixed $name Name of tab or Tab object
      *
      * @return View
+     *
+     * @throws Exception
      */
-    public function addTab($name = null, $action = null, $needJsURL = false)
+    public function addTab($name)
     {
-        // add tabs menu item
-        if (is_object($name)) {
-            $item = $name;
-        } elseif ($name) {
-            $item = new Tab($name);
+        return $this->addSubView($this->addTabMenuItem($name)->name);
+    }
+
+    /**
+     * Adds dynamic tab in tabs widget.
+     * Dynamic tabs are loaded via a virtual page callback or url.
+     *
+     * @param mixed $name      Name of tab or Tab object
+     * @param mixed $action    Callback action or URL (or array with url + parameters)
+     * @param bool  $needJsURL Whether the virtual page should generate a jsURL or not.
+     *
+     * @throws Exception
+     */
+    public function addTabURL($name, $action, $needJsURL = false)
+    {
+        $item = $this->addTabMenuItem($name);
+        $sub = $this->addSubView($item->name);
+
+        if (is_callable($action)) {
+            // if there is callback action, then use VirtualPage
+            $vp = $sub->add('VirtualPage');
+            $vp->cb->needJsURL = $needJsURL;
+            $item->setPath($vp->getUrl('cut'));
+
+            $vp->set($action);
         } else {
-            $item = new Tab();
+            // otherwise treat it as URL
+            //# TODO: refactor this ugly hack
+            $item->setPath(str_replace('.php.', '.', ($needJsURL) ? $this->jsURL($action):$this->url($action)).'#');
+        }
+    }
+
+    /**
+     * Add a tab menu item.
+     *
+     * @param $name Name of tab or Tab object.
+     *
+     * @return Tab|View Tab menu item view.
+     *
+     * @throws Exception
+     */
+    private function addTabMenuItem($name)
+    {
+        if (is_object($name)) {
+            $tab = $name;
+        } else {
+            $tab = new Tab($name);
         }
 
-        // add tabs menu item
-        $item = $this->add([$item, 'class' => ['item']], 'Menu');
+        $item = $this->add([$tab, 'class' => ['item']], 'Menu');
         $item->setElement('a');
-        $item->setAttr('data-tab', $item->name);
+        $item->setAttr('data-tab', $tab->name);
 
-        // add tabs sub-view
+        return $item;
+    }
+
+    /**
+     * Add sub view to tab.
+     *
+     * @param string $name name of view.
+     *
+     * @return View
+     * @throws Exception
+     */
+    private function addSubView($name)
+    {
         $sub = $this->add(['View', 'class' => ['ui tab']], 'Tabs');
-        $sub->setAttr('data-tab', $item->name);
-
-        if ($action) {
-            if (is_callable($action)) {
-                // if there is callback action, then use VirtualPage
-                $vp = $sub->add('VirtualPage');
-                $vp->cb->needJsURL = $needJsURL;
-                $item->setPath($vp->getUrl('cut'));
-
-                $vp->set($action);
-            } else {
-                // otherwise treat it as URL
-                //# TODO: refactor this ugly hack
-                $item->setPath(str_replace('.php.', '.', $this->url($action)).'#');
-            }
-        }
+        $sub->setAttr('data-tab', $name);
 
         return $sub;
     }
