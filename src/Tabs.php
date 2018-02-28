@@ -72,11 +72,9 @@ class Tabs extends View
             $tab = new Tab($name);
         }
 
-        $item = $this->add([$tab, 'class' => ['item']], 'Menu');
-        $item->setElement('a');
-        $item->setAttr('data-tab', $tab->name);
-
-        return $item;
+        return $this->add([$tab, 'class' => ['item']], 'Menu')
+                ->setElement('a')
+                ->setAttr('data-tab', $tab->name);
     }
 
     /**
@@ -90,10 +88,7 @@ class Tabs extends View
      */
     private function addSubView($name)
     {
-        $sub = $this->add(['View', 'class' => ['ui tab']], 'Tabs');
-        $sub->setAttr('data-tab', $name);
-
-        return $sub;
+        return $this->add(['View', 'class' => ['ui tab']], 'Tabs')->setAttr('data-tab', $name);
     }
 
     /**
