@@ -57,7 +57,7 @@ class Callback
 
     /**
      * If set to "true" the callback will use $app->jsURL wich is primarily used for invoking callbacks
-     * while inside JavaScript and would expect non-HTML output
+     * while inside JavaScript and would expect non-HTML output.
      *
      * @var bool
      */

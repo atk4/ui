@@ -44,8 +44,8 @@ class Tabs extends View
      * Adds dynamic tab in tabs widget which will load a separate
      * page/url when activated.
      *
-     * @param mixed $name      Name of tab or Tab object
-     * @param string|array $url    URL to open inside a tab
+     * @param mixed        $name Name of tab or Tab object
+     * @param string|array $url  URL to open inside a tab
      *
      * @throws Exception
      */
