@@ -15,8 +15,8 @@ class Tabs extends View
     /**
      * Adds tab in tabs widget.
      *
-     * @param mixed $name Name of tab or Tab object
-     * @param mixed $callback    Callback action or URL (or array with url + parameters)
+     * @param mixed $name     Name of tab or Tab object
+     * @param mixed $callback Callback action or URL (or array with url + parameters)
      *
      * @throws Exception
      *
@@ -34,9 +34,8 @@ class Tabs extends View
 
             $vp->set($callback);
 
-            return null;
+            return;
         }
-
 
         return $sub;
     }
@@ -56,8 +55,6 @@ class Tabs extends View
         $sub = $this->addSubView($item->name);
 
         $item->setPath($url);
-
-        return null;
     }
 
     /**
