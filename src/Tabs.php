@@ -17,9 +17,9 @@ class Tabs extends View
      *
      * @param mixed $name Name of tab or Tab object
      *
-     * @return View
-     *
      * @throws Exception
+     *
+     * @return View
      */
     public function addTab($name)
     {
@@ -51,7 +51,7 @@ class Tabs extends View
         } else {
             // otherwise treat it as URL
             //# TODO: refactor this ugly hack
-            $item->setPath(str_replace('.php.', '.', ($needJsURL) ? $this->jsURL($action):$this->url($action)).'#');
+            $item->setPath(str_replace('.php.', '.', ($needJsURL) ? $this->jsURL($action) : $this->url($action)).'#');
         }
     }
 
@@ -60,9 +60,9 @@ class Tabs extends View
      *
      * @param $name Name of tab or Tab object.
      *
-     * @return Tab|View Tab menu item view.
-     *
      * @throws Exception
+     *
+     * @return Tab|View Tab menu item view.
      */
     private function addTabMenuItem($name)
     {
@@ -84,8 +84,9 @@ class Tabs extends View
      *
      * @param string $name name of view.
      *
-     * @return View
      * @throws Exception
+     *
+     * @return View
      */
     private function addSubView($name)
     {
