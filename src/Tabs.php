@@ -53,6 +53,8 @@ class Tabs extends View
             //# TODO: refactor this ugly hack
             $item->setPath(str_replace('.php.', '.', ($needJsURL) ? $this->jsURL($action) : $this->url($action)).'#');
         }
+
+        return $sub;
     }
 
     /**
