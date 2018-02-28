@@ -16,14 +16,29 @@ class Tabs extends View
      * Adds tab in tabs widget.
      *
      * @param mixed $name Name of tab or Tab object
+     * @param mixed $callback    Callback action or URL (or array with url + parameters)
      *
      * @throws Exception
      *
      * @return View
      */
-    public function addTab($name)
+    public function addTab($name, $callback = null)
     {
-        return $this->addSubView($this->addTabMenuItem($name)->name);
+        $item = $this->addTabMenuItem($name);
+        $sub = $this->addSubView($item->name);
+
+        if ($callback) {
+            // if there is callback action, then use VirtualPage
+            $vp = $sub->add('VirtualPage');
+            $item->setPath($vp->getUrl('cut'));
+
+            $vp->set($callback);
+
+            return null;
+        }
+
+
+        return $sub;
     }
 
     /**
@@ -31,30 +46,18 @@ class Tabs extends View
      * Dynamic tabs are loaded via a virtual page callback or url.
      *
      * @param mixed $name      Name of tab or Tab object
-     * @param mixed $action    Callback action or URL (or array with url + parameters)
-     * @param bool  $needJsURL Whether the virtual page should generate a jsURL or not.
+     * @param url   $needJsURL Supply URL of another page which will open in the tab
      *
      * @throws Exception
      */
-    public function addTabURL($name, $action, $needJsURL = false)
+    public function addTabURL($name, $url)
     {
         $item = $this->addTabMenuItem($name);
         $sub = $this->addSubView($item->name);
 
-        if (is_callable($action)) {
-            // if there is callback action, then use VirtualPage
-            $vp = $sub->add('VirtualPage');
-            $vp->cb->needJsURL = $needJsURL;
-            $item->setPath($vp->getUrl('cut'));
+        $item->setPath($url);
 
-            $vp->set($action);
-        } else {
-            // otherwise treat it as URL
-            //# TODO: refactor this ugly hack
-            $item->setPath(str_replace('.php.', '.', ($needJsURL) ? $this->jsURL($action) : $this->url($action)).'#');
-        }
-
-        return $sub;
+        return null;
     }
 
     /**

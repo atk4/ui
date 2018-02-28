@@ -189,4 +189,4 @@ $f->onSubmit(function ($f) {
     return $errors ?: $f->success('No more errors', 'so we have saved everything into the database');
 });
 
-$tabs->addTabURL('Form Database', ['form2.php', 'layout' => 'Centered']);
+$tabs->addTabURL('Form Database', ['form2', 'layout' => 'Centered']);
