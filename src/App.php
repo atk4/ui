@@ -17,9 +17,9 @@ class App
     // @var array|false Location where to load JS/CSS files
     public $cdn = [
         'atk'              => 'https://cdn.rawgit.com/atk4/ui/1.4.2/public',
-        'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1',
+        'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui'      => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10',
+        'semantic-ui'      => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0',
         'calendar'         => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
     ];
 
