@@ -104,7 +104,7 @@ class SSE
     }
 
     /**
-     * This method is for consistency. You should call SSE through JavaScript
+     * This method is for consistency. You should call SSE through JavaScript.
      */
     public function getURL($mode = 'sse')
     {

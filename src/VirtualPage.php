@@ -136,7 +136,7 @@ class VirtualPage extends View
 
     /**
      * Return URL that is designed to be loaded from inside JavaScript and contain JSON code.
-     * This is useful for dynamically loaded Modal, Tab or Loader
+     * This is useful for dynamically loaded Modal, Tab or Loader.
      *
      * @param string $mode
      *

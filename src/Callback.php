@@ -139,7 +139,7 @@ class Callback
     /**
      * Return URL that will trigger action on this call-back. If you intend to request
      * the URL direcly in your browser (as iframe, new tab, or document location), you
-     * should use getURL instead
+     * should use getURL instead.
      *
      * @param string $mode
      *
@@ -149,7 +149,6 @@ class Callback
     {
         return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
     }
-
 
     /**
      * Return URL that will trigger action on this call-back. If you intend to request
