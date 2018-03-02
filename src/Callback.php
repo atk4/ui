@@ -145,7 +145,7 @@ class Callback
      *
      * @return string
      */
-    public function getJSURL($mode = 'callback')
+    public function getJSURL($mode = 'ajax')
     {
         return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
     }

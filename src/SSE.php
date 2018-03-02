@@ -108,7 +108,7 @@ class SSE
      */
     public function getURL($mode = 'sse')
     {
-        return $this->getJSURL($mode);
+        throw new Exception('SSE should only be loaded through JavaScript, not directly');
     }
 
     public function sendSse()
