@@ -178,12 +178,12 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
 
 //Bind next action to modal next button.
 $next_action->on('click', $modal_step->js()->atkReloadView(
-    ['uri' => $modal_step->cb->getURL(), 'uri_options' => ['move' => 'next']]
+    ['uri' => $modal_step->cb->getJSURL(), 'uri_options' => ['move' => 'next']]
 ));
 
 //Bin prev action to modal previous button.
 $prev_action->on('click', $modal_step->js()->atkReloadView(
-    ['uri' => $modal_step->cb->getURL(), 'uri_options' => ['move' => 'prev']]
+    ['uri' => $modal_step->cb->getJSURL(), 'uri_options' => ['move' => 'prev']]
 ));
 
 //Bind display modal to page display button.

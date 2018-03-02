@@ -299,6 +299,13 @@ through :ref:`page_manager`.
 The url() method will automatically append values of arguments mentioned to `stickyGet()`,
 but if you need URL to drop any sticky value, specify value explicitly as `false`.
 
+.. php:method:: jsURL(callback_page)
+
+Use jsURL for creating callback, which return non-HTML output. This may be routed differently
+by a host framework (https://github.com/atk4/ui/issues/369).
+
+
+
 Includes
 --------
 

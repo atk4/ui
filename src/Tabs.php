@@ -15,46 +15,82 @@ class Tabs extends View
     /**
      * Adds tab in tabs widget.
      *
-     * @param mixed $name   Name of tab or Tab object
-     * @param mixed $action Optional callback action or URL (or array with url + parameters)
+     * @param mixed $name     Name of tab or Tab object
+     * @param mixed $callback Callback action or URL (or array with url + parameters)
+     *
+     * @throws Exception
      *
      * @return View
      */
-    public function addTab($name = null, $action = null)
+    public function addTab($name, $callback = null)
     {
-        // add tabs menu item
-        if (is_object($name)) {
-            $item = $name;
-        } elseif ($name) {
-            $item = new Tab($name);
-        } else {
-            $item = new Tab();
-        }
+        $item = $this->addTabMenuItem($name);
+        $sub = $this->addSubView($item->name);
 
-        // add tabs menu item
-        $item = $this->add([$item, 'class' => ['item']], 'Menu');
-        $item->setElement('a');
-        $item->setAttr('data-tab', $item->name);
+        if ($callback) {
+            // if there is callback action, then use VirtualPage
+            $vp = $sub->add('VirtualPage');
+            $item->setPath($vp->getJSURL('cut'));
 
-        // add tabs sub-view
-        $sub = $this->add(['View', 'class' => ['ui tab']], 'Tabs');
-        $sub->setAttr('data-tab', $item->name);
+            $vp->set($callback);
 
-        if ($action) {
-            if (is_callable($action)) {
-                // if there is callback action, then use VirtualPage
-                $vp = $sub->add('VirtualPage');
-                $item->setPath($vp->getUrl('cut'));
-
-                $vp->set($action);
-            } else {
-                // otherwise treat it as URL
-                //# TODO: refactor this ugly hack
-                $item->setPath(str_replace('.php.', '.', $this->url($action)).'#');
-            }
+            return;
         }
 
         return $sub;
+    }
+
+    /**
+     * Adds dynamic tab in tabs widget which will load a separate
+     * page/url when activated.
+     *
+     * @param mixed        $name Name of tab or Tab object
+     * @param string|array $url  URL to open inside a tab
+     *
+     * @throws Exception
+     */
+    public function addTabURL($name, $url)
+    {
+        $item = $this->addTabMenuItem($name);
+        $sub = $this->addSubView($item->name);
+
+        $item->setPath($url);
+    }
+
+    /**
+     * Add a tab menu item.
+     *
+     * @param $name Name of tab or Tab object.
+     *
+     * @throws Exception
+     *
+     * @return Tab|View Tab menu item view.
+     */
+    private function addTabMenuItem($name)
+    {
+        if (is_object($name)) {
+            $tab = $name;
+        } else {
+            $tab = new Tab($name);
+        }
+
+        return $this->add([$tab, 'class' => ['item']], 'Menu')
+                ->setElement('a')
+                ->setAttr('data-tab', $tab->name);
+    }
+
+    /**
+     * Add sub view to tab.
+     *
+     * @param string $name name of view.
+     *
+     * @throws Exception
+     *
+     * @return View
+     */
+    private function addSubView($name)
+    {
+        return $this->add(['View', 'class' => ['ui tab']], 'Tabs')->setAttr('data-tab', $name);
     }
 
     /**

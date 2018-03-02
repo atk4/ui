@@ -927,7 +927,7 @@ class View implements jsExpressionable
             }
 
             $actions[] = $cb;
-        //$thisAction->api(['on'=>'now', 'url'=>$cb->getURL(), 'urlData'=>$urlData, 'obj'=>new jsExpression('this')]);
+        //$thisAction->api(['on'=>'now', 'url'=>$cb->getJSURL(), 'urlData'=>$urlData, 'obj'=>new jsExpression('this')]);
         } elseif ($action) {
             // otherwise include
             $actions[] = $action;
@@ -1015,6 +1015,20 @@ class View implements jsExpressionable
     public $_stickyArgsCached = null;
 
     public $_triggerBy = null;
+
+    /**
+     * Build an URL which this view can use for js call-backs. It should
+     * be guaranteed that requesting returned URL would at some point call
+     * $this->init().
+     *
+     * @param array $page
+     *
+     * @return string
+     */
+    public function jsURL($page = [])
+    {
+        return $this->app->jsURL($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
+    }
 
     /**
      * Build an URL which this view can use for call-backs. It should

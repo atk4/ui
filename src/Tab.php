@@ -21,7 +21,10 @@ class Tab extends Item
      */
     public function setPath($path)
     {
-        $this->path = $path;
+        if (!is_string($path)) {
+            $path = $this->app->url($path);
+        }
+        $this->path = $path.'#';
 
         return $this;
     }

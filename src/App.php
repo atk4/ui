@@ -416,7 +416,22 @@ class App
     public $page = null;
 
     /**
-     * Build a URL that application can use for call-backs.
+     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
+     * mechanism for NON-HTML response.
+     *
+     * @param array|string $page           URL as string or array with page name as first element and other GET arguments
+     * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extra_args     Additional URL arguments
+     *
+     * @return string
+     */
+    public function jsURL($page = [], $needRequestUri = false, $extra_args = [])
+    {
+        return $this->url($page, $needRequestUri, $extra_args);
+    }
+
+    /**
+     * Build a URL that application can use for loading HTML data.
      *
      * @param array|string $page           URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
