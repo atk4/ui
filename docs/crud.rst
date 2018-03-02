@@ -100,8 +100,6 @@ specify your own form to use, which can be either an object or a seed::
     ])->setModel($big_model);
 
 
-.. todo:: add example / test implementation
-
 Custom Page
 ===========
 
@@ -138,14 +136,16 @@ can extend it to introduce your own style or add more components that just a for
 Notification
 ============
 
-.. php:attr:: notify
+.. php:attr:: notifyDefault
+.. php:attr:: notifyCreate
+.. php:attr:: notifyUpdate
 
 When data is saved, property `$notify` can contain a custom notification action. By default it uses :php:class:`jsNotify`
 which will display green strip on top of the page. You can either override it or add additional actions::
 
     $crud=$this->add([
         'CRUD',
-        'notify'=>[
+        'notifyDefault'=>[
             new \atk4\ui\jsNotify(['Custom Notification', 'color'=>'blue']),
             $otherview->jsReload();
             // both actions will be executed

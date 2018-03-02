@@ -148,7 +148,7 @@ class CRUD extends Grid
 
             // set save handler with reload trigger
             $this->formCreate->onSubmit(function ($form) {
-                $this->formCreate->model->save();
+                $form->model->save();
 
                 return $this->jsSaveCreate();
             });
@@ -194,7 +194,7 @@ class CRUD extends Grid
 
             $this->formUpdate->setModel($this->model, $this->fieldsUpdate ?: $this->fieldsDefault);
             $this->formUpdate->onSubmit(function ($form) {
-                $this->formUpdate->model->save();
+                $form->model->save();
 
                 return $this->jsSaveUpdate();
             });
