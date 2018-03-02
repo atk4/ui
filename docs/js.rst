@@ -130,7 +130,7 @@ Including JS/CSS
 ----------------
 
 Sometimes you need to include an additional .js or .css file for your code
-to work. See :php:meth:`App::includeJS()` and :php:meth:`App::includeCSS()`
+to work. See :php:meth:`App::requireJS()` and :php:meth:`App::requireCSS()`
 for details.
 
 

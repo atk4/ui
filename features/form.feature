@@ -6,6 +6,6 @@ Feature: Form
 Scenario:
  Given I am on "form.php"
  When I fill in "email" with "foo@bar"
- And I use form with button "Subscribe"
+ And I press button "Subscribe"
  Then I should see "Subscribed foo@bar to newsletter."
 

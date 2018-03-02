@@ -316,7 +316,7 @@ class Table extends Lister
                 }
             }
         } elseif ($columns === false) {
-            return;
+            return $this->model;
         }
 
         foreach ($columns as $column) {

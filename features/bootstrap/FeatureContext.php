@@ -104,7 +104,7 @@ class FeatureContext extends RawMinkContext implements Context
      */
     public function progressBarShouldBeGoAllTheWay()
     {
-        $element = $this->getSession()->getPage()->find('css', '.bar');
+        /*$element =*/ $this->getSession()->getPage()->find('css', '.bar');
         //TODO: zombiejs does not support sse :(
         //var_dump($element->getOuterHtml());
     }
