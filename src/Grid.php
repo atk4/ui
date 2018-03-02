@@ -88,17 +88,15 @@ class Grid extends View
 
         $this->container = $this->add(['View', 'ui'=>'', 'template' => new Template('<div id="{$_id}"><div class="ui table atk-overflow-auto">{$Table}</div>{$Paginator}</div>')]);
 
-        if (is_null($this->menu)) {
-            $this->menu = $this->add(['Menu', 'activate_on_click' => false], 'Menu');
+        if ($this->menu !== false) {
+            $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        if (is_null($this->table)) {
-            $this->table = $this->container->add(['Table', 'very compact striped single line', 'reload' => $this], 'Table');
-        }
+        $this->table = $this->container->add($this->factory(['Table', 'very compact striped single line', 'reload' => $this], $this->table), 'Table');
 
-        if (is_null($this->paginator)) {
+        if ($this->paginator !== false) {
             $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
-            $this->paginator = $seg->add(['Paginator', 'reload' => $this]);
+            $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this], $this->paginator));
         }
     }
 

@@ -71,8 +71,12 @@ Paginator
 
 .. php:attr: $ipp
 
-Grid comes with a paginator already. You can disable it by setting $paginator property to false. You can use $ipp
-to specify different number of items per page::
+Grid comes with a paginator already. You can disable it by setting $paginator property to false. Alternatively you
+can provide seed for the paginator or even entire object::
+
+    $grid = $app->add(['Grid', 'paginator'=>['range'=>2]]);
+
+You can use $ipp property to specify different number of items per page::
 
     $grid->ipp = 10;
 
