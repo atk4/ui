@@ -122,7 +122,8 @@ class VirtualPage extends View
     }
 
     /**
-     * Returns URL whichwill activate virtual page.
+     * Returns URL which you can load directly in the browser location, open in a new tab,
+     * new window or inside iframe. This URL will contain HTML for a new page.
      *
      * @param string $mode
      *
@@ -131,6 +132,19 @@ class VirtualPage extends View
     public function getURL($mode = 'callback')
     {
         return $this->cb->getURL($mode);
+    }
+
+    /**
+     * Return URL that is designed to be loaded from inside JavaScript and contain JSON code.
+     * This is useful for dynamically loaded Modal, Tab or Loader
+     *
+     * @param string $mode
+     *
+     * @return string
+     */
+    public function getJSURL($mode = 'callback')
+    {
+        return $this->cb->getJSURL($mode);
     }
 
     /**

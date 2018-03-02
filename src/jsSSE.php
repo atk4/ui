@@ -32,7 +32,7 @@ class jsSSE extends jsCallback
             throw new Exception(['Call-back must be part of a RenderTree']);
         }
 
-        $options = ['uri' => $this->getURL()];
+        $options = ['uri' => $this->getJSURL()];
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
         }

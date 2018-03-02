@@ -56,14 +56,6 @@ class Callback
     public $urlTrigger = null;
 
     /**
-     * If set to "true" the callback will use $app->jsURL wich is primarily used for invoking callbacks
-     * while inside JavaScript and would expect non-HTML output.
-     *
-     * @var bool
-     */
-    public $needJsURL = false;
-
-    /**
      * Initialize object and set default properties.
      *
      * @param array|string $defaults
@@ -145,7 +137,23 @@ class Callback
     }
 
     /**
-     * Return URL that will trigger action on this call-back.
+     * Return URL that will trigger action on this call-back. If you intend to request
+     * the URL direcly in your browser (as iframe, new tab, or document location), you
+     * should use getURL instead
+     *
+     * @param string $mode
+     *
+     * @return string
+     */
+    public function getJSURL($mode = 'callback')
+    {
+        return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
+    }
+
+
+    /**
+     * Return URL that will trigger action on this call-back. If you intend to request
+     * the URL loading from inside JavaScript, it's always advised to use getJSURL instead.
      *
      * @param string $mode
      *
@@ -153,10 +161,6 @@ class Callback
      */
     public function getURL($mode = 'callback')
     {
-        if ($this->needJsURL) {
-            return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
-        } else {
-            return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
-        }
+        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
     }
 }

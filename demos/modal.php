@@ -46,9 +46,9 @@ $app->add(['Header', 'Actual pop-ups']);
 
 $bar = $app->add(['View', 'ui' => 'buttons']);
 $bar->add('Button')->set('Open in Pop-up')->on('click', new \atk4\ui\jsExpression('window.open([], "", "width=800,height=500")', [$vp->getURL('popup')]));
-$bar->add('Button')->set('Load in Modal')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut')));
+$bar->add('Button')->set('Load in Modal')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getJSURL('cut')));
 
-$bar->add('Button')->set('Simulate slow load')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut').'&slow=true'));
+$bar->add('Button')->set('Simulate slow load')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getJSURL('cut').'&slow=true'));
 if (isset($_GET['slow'])) {
     sleep(1);
 }

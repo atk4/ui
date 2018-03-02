@@ -118,7 +118,7 @@ class AutoComplete extends Input
      */
     public function getCallbackURL()
     {
-        return $this->callback->getURL();
+        return $this->callback->getJSURL();
     }
 
     public function getData()

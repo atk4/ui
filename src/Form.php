@@ -429,7 +429,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         });
 
         $this->js(true)
-            ->api(['url' => $cb->getURL(),  'method' => 'POST', 'serializeForm' => true])
+            ->api(['url' => $cb->getJSURL(),  'method' => 'POST', 'serializeForm' => true])
             ->form(['inline' => true, 'on' => 'blur']);
 
         $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));

@@ -10,8 +10,7 @@ class jsModal extends jsExpression
     public function __construct($title, $url, $args = [], $mode = 'json')
     {
         if ($url instanceof VirtualPage) {
-            $url->cb->needJsURL = true;
-            $url = $url->getURL('cut');
+            $url = $url->getJSURL('cut');
         }
 
         parent::__construct('$(this).atkCreateModal([arg])', ['arg' => ['uri' => $url, 'title' => $title, 'mode' => $mode, 'uri_options' => $args]]);

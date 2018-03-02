@@ -98,9 +98,17 @@ class SSE
      *
      * @return string
      */
+    public function getJSURL($mode = 'sse')
+    {
+        return $this->app->jsURL([$this->name => $mode]);
+    }
+
+    /**
+     * This method is for consistency. You should call SSE through JavaScript
+     */
     public function getURL($mode = 'sse')
     {
-        return $this->app->url([$this->name => $mode]);
+        return $this->getJSURL($mode);
     }
 
     public function sendSse()

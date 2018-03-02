@@ -8,8 +8,6 @@ class jsCallback extends Callback implements jsExpressionable
 
     public $confirm = null;
 
-    public $needJsURL = true;
-
     public function flatternArray($response)
     {
         if (!is_array($response)) {
@@ -32,7 +30,7 @@ class jsCallback extends Callback implements jsExpressionable
         }
 
         return (new jQuery())->atkAjaxec([
-            'uri'         => $this->getURL(),
+            'uri'         => $this->getJSURL(),
             'uri_options' => $this->args,
             'confirm'     => $this->confirm,
         ])->jsRender();
@@ -128,5 +126,10 @@ class jsCallback extends Callback implements jsExpressionable
         }, $actions));
 
         return $ajaxec;
+    }
+
+    function getURL($mode = 'callback')
+    {
+        throw new Exception('Do not use getURL on jsCallback, use getJSURL()');
     }
 }
