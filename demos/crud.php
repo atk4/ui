@@ -24,9 +24,10 @@ $crud = $cc->add([
 ]);
 
 // Condition on the model can be applied on a model
-$m = new Country($app->db);
+$m = new Country($db);
 // somehow this breaks test-suite, but only on travis
 //$m->addCondition('numcode', '<', 200);
+$m->addCondition('numcode', '<', 200);
 $crud->setModel($m);
 
 // Because CRUD inherits Grid, you can also define custom actions
