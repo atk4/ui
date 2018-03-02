@@ -108,7 +108,7 @@ Custom Page
 .. php:attr:: pageUpdate
 
 You can also specify a custom class for your Page. Normally it's a :php:class:`VirtualPage` but you
-can extend it to introduce your own style or add more components that just a form::
+can extend it to introduce your own style or add more components than just a form::
 
     class TwoPanels extends \atk4\ui\VirtualPage {
 
@@ -140,7 +140,7 @@ Notification
 .. php:attr:: notifyCreate
 .. php:attr:: notifyUpdate
 
-When data is saved, property `$notify` can contain a custom notification action. By default it uses :php:class:`jsNotify`
+When data is saved, properties `$notifyDefault` can contain a custom notification action. By default it uses :php:class:`jsNotify`
 which will display green strip on top of the page. You can either override it or add additional actions::
 
     $crud=$this->add([
