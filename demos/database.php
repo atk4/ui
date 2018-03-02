@@ -5,13 +5,15 @@ try {
     if (file_exists('db.php')) {
         include 'db.php';
     } else {
-        $db = new \atk4\data\Persistence_SQL('mysql:dbname=atk4;host=localhost', 'root', '');
+        $db = new \atk4\data\Persistence_SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
     }
 } catch (PDOException $e) {
     throw new \atk4\ui\Exception([
         'This demo requires access to the database. See "demos/database.php"',
     ], null, $e);
 }
+
+$app->db = $db;
 
 if (!class_exists('Country')) {
     class Country extends \atk4\data\Model

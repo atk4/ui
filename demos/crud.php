@@ -84,4 +84,4 @@ $crud = $cc->add([
 $crud->menu->addItem(['Rescan', 'icon'=>'recycle']);
 
 // Condition on the model can be applied after setting the model
-$crud->setModel(new File($app->db))->addCondition('parent_folder_id', null);
+$crud->setModel(new File($db))->addCondition('parent_folder_id', null);
