@@ -49,6 +49,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         $copy_paste = trim('
   autocomplete.php
   button.php
+  breadcrumb.php
   js.php
   checkbox.php
   columns.php

@@ -19,7 +19,11 @@ class Grid extends View
     /**
      * Calling addQuickSearch will create a form with a field inside $menu to perform quick searches.
      *
-     * @var FormField\Generic
+     * If you pass this property as array of field names while creating Grid, then when you will call
+     * setModel() QuickSearch object will be created automatically and these model fields will be used
+     * for filtering.
+     *
+     * @var array|FormField\Generic
      */
     public $quickSearch = null;
 
@@ -84,17 +88,15 @@ class Grid extends View
 
         $this->container = $this->add(['View', 'ui'=>'', 'template' => new Template('<div id="{$_id}"><div class="ui table atk-overflow-auto">{$Table}</div>{$Paginator}</div>')]);
 
-        if (is_null($this->menu)) {
-            $this->menu = $this->add(['Menu', 'activate_on_click' => false], 'Menu');
+        if ($this->menu !== false) {
+            $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        if (is_null($this->table)) {
-            $this->table = $this->container->add(['Table', 'very compact striped single line', 'reload' => $this], 'Table');
-        }
+        $this->table = $this->container->add($this->factory(['Table', 'very compact striped single line', 'reload' => $this], $this->table), 'Table');
 
-        if (is_null($this->paginator)) {
+        if ($this->paginator !== false) {
             $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
-            $this->paginator = $seg->add(['Paginator', 'reload' => $this]);
+            $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this], $this->paginator));
         }
     }
 
@@ -189,13 +191,21 @@ class Grid extends View
 
         $this->table->sortable = true;
 
-        if ($sortby && isset($this->table->columns[$sortby]) && $this->model->hasElement($sortby) instanceof \atk4\data\Field) {
+        if (
+            $sortby
+            && isset($this->table->columns[$sortby])
+            && $this->model->hasElement($sortby) instanceof \atk4\data\Field
+        ) {
             $this->model->setOrder($sortby, $desc);
             $this->table->sort_by = $sortby;
             $this->table->sort_order = $desc ? 'descending' : 'ascending';
         }
 
-        $this->table->on('click', 'thead>tr>th', new jsReload($this->container, [$this->name.'_sort' => (new jQuery())->data('column')]));
+        $this->table->on(
+            'click',
+            'thead>tr>th',
+            new jsReload($this, [$this->name.'_sort' => (new jQuery())->data('column')])
+        );
     }
 
     public function setModel(\atk4\data\Model $model, $columns = null)
@@ -207,6 +217,10 @@ class Grid extends View
         if ($this->sortable) {
             $this->applySort();
         }
+        if ($this->quickSearch && is_array($this->quickSearch)) {
+            $this->addQuickSearch($this->quickSearch);
+        }
+
         if ($this->quickSearch && is_array($this->quickSearch)) {
             $this->addQuickSearch($this->quickSearch);
         }

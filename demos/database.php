@@ -13,6 +13,8 @@ try {
     ], null, $e);
 }
 
+$app->db = $db;
+
 if (!class_exists('Country')) {
     class Country extends \atk4\data\Model
     {

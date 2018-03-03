@@ -191,6 +191,12 @@ class Table extends Lister
         return $columnDecorator;
     }
 
+    /**
+     * Add column Decorator.
+     *
+     * @param string                     $name      Column name
+     * @param string|TableColumn/Generic $decorator
+     */
     public function addDecorator($name, $decorator)
     {
         if (!$this->columns[$name]) {
@@ -202,6 +208,23 @@ class Table extends Lister
             $this->columns[$name] = [$this->columns[$name]];
         }
         $this->columns[$name][] = $decorator;
+    }
+
+    /**
+     * Return array of column decorators for particular column.
+     *
+     * @param string $name Column name
+     *
+     * @return array
+     */
+    public function getColumnDecorators($name)
+    {
+        $dec = $this->columns[$name];
+        if (!is_array($dec)) {
+            $dec = [$dec];
+        }
+
+        return $dec;
     }
 
     /**

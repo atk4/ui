@@ -353,7 +353,7 @@ class View implements jsExpressionable
     public function add($seed, $region = null)
     {
         if ($this->_rendered) {
-            throw new Exception('You cannot add anything into the view after it is has been rendered');
+            throw new Exception('You cannot add anything into the view after it was rendered');
         }
         if (!$this->app) {
             $this->_add_later[] = [$seed, $region];
@@ -362,14 +362,24 @@ class View implements jsExpressionable
         }
 
         if (is_array($region)) {
-            throw new Exception('Second argument to add must be region or null!');
+            $args = $region;
+            if (isset($args['region'])) {
+                $region = ['region'=>$args['region']];
+                unset($args['region']);
+            }
+        } elseif ($region) {
+            $args = null;
+            $region = ['region'=>$region];
+        } else {
+            $args = null;
+            $region = null;
         }
 
         // Create object first
-        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region ? ['region'=>$region] : null);
+        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region);
 
         // Will call init() of the object
-        $object = $this->_add($object);
+        $object = $this->_add($object, $args);
 
         return $object;
     }
@@ -1035,7 +1045,7 @@ class View implements jsExpressionable
      * be guaranteed that requesting returned URL would at some point call
      * $this->init().
      *
-     * @param array $page
+     * @param string|array $page URL as string or array with page name as first element and other GET arguments
      *
      * @return string
      */
@@ -1052,13 +1062,13 @@ class View implements jsExpressionable
     public function _getStickyArgs($triggerBy)
     {
         $this->_triggerBy = $triggerBy;
-        if ($this->_stickyArgsCached === null) {
-            if ($this->owner && $this->owner instanceof self) {
-                $this->_stickyArgsCached = array_merge($this->owner->_getStickyArgs($triggerBy), $this->stickyArgs);
-            } else {
-                $this->_stickyArgsCached = [];
-            }
+        //if ($this->_stickyArgsCached === null) {
+        if ($this->owner && $this->owner instanceof self) {
+            $this->_stickyArgsCached = array_merge($this->owner->_getStickyArgs($triggerBy), $this->stickyArgs);
+        } else {
+            $this->_stickyArgsCached = [];
         }
+        //}
 
         return $this->_stickyArgsCached;
     }
@@ -1073,10 +1083,11 @@ class View implements jsExpressionable
     public function stickyGet($name)
     {
         if ($this->_stickyArgsCached) {
-            if (isset($this->_stickyArgsCached[$name])) {
-                return $this->_stickyArgsCached[$name]; // already cached
-            }
+            //if (isset($this->_stickyArgsCached[$name])) {
+                //return $this->_stickyArgsCached[$name]; // already cached
+            //}
 
+            /*
             if (isset($_GET[$name])) {
                 return; // setting this has no effect anyway, no need to alert
             }
@@ -1086,6 +1097,7 @@ class View implements jsExpressionable
                 'urlBy'    => $this->_triggerBy,
                 'stickyBy' => $name,
             ]);
+             */
         }
 
         if (isset($_GET[$name])) {
