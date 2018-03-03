@@ -137,7 +137,22 @@ class Callback
     }
 
     /**
-     * Return URL that will trigger action on this call-back.
+     * Return URL that will trigger action on this call-back. If you intend to request
+     * the URL direcly in your browser (as iframe, new tab, or document location), you
+     * should use getURL instead.
+     *
+     * @param string $mode
+     *
+     * @return string
+     */
+    public function getJSURL($mode = 'ajax')
+    {
+        return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
+    }
+
+    /**
+     * Return URL that will trigger action on this call-back. If you intend to request
+     * the URL loading from inside JavaScript, it's always advised to use getJSURL instead.
      *
      * @param string $mode
      *

@@ -27,14 +27,14 @@ Adding a static conten is pretty simple::
 
 You can add multiple elements into a single tab, like any other view.
 
-.. php:method:: addTab($name, $action)
+.. php:method:: addTab($name, $action = null)
 
-    Use addTab() method to add more tabs in Tabs view. First parameter is a title of the tab.
+Use addTab() method to add more tabs in Tabs view. First parameter is a title of the tab.
 
-    Tabs can be static or dynamic. Dynamic tabs use :php:class:`VirtualPage` implementation mentioned above.
-    You should pass callable action as a second parameter.
+Tabs can be static or dynamic. Dynamic tabs use :php:class:`VirtualPage` implementation mentioned above.
+You should pass callable action as a second parameter.
 
-    Example::
+Example::
 
     $t = $layout->add('Tabs');
 
@@ -76,4 +76,14 @@ Note that tab contents are refreshed including any values you put on the form::
     });
 
 
+URL Tabs
+========
+
+.. php:method:: addTabURL($name, $url)
+
+Tab can load external URL or a different page if you prefer that instead of VirtualPage. This works similar to iframe::
+
+    $t = $app->add('Tabs');
+
+    $t->addTabURL('Terms and Condition', 'terms.html');
 

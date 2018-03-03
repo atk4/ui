@@ -39,7 +39,7 @@ $g->addField('surname');
 $g->addField('gender', ['DropDown', 'values' => ['Female', 'Male']]);
 
 $tab->add(['Header', 'Comparing Field type vs Decorator class']);
-$form = $app->add('Form');
+$form = $tab->add('Form');
 $form->addField('date1', null, ['type' => 'date']);
 $form->addField('date2', ['Calendar', 'type' => 'date']);
 
@@ -189,4 +189,4 @@ $f->onSubmit(function ($f) {
     return $errors ?: $f->success('No more errors', 'so we have saved everything into the database');
 });
 
-$tabs->addTab('Form Database', ['form2.php', 'layout' => 'Centered']);
+$tabs->addTabURL('Form Database', ['form2', 'layout' => 'Centered']);

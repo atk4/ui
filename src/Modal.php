@@ -279,8 +279,7 @@ class Modal extends View
         $data['label'] = $this->loading_label;
 
         if (!empty($this->fx)) {
-            // $this->template->trySet('uri', $this->cb->getURL());
-            $data['uri'] = $this->cb->getUrl();
+            $data['uri'] = $this->cb->getJSURL();
         }
 
         // call modal creation first
