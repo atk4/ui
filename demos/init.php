@@ -13,7 +13,7 @@ $app = new \atk4\ui\App();
 $app->title = 'Agile UI Demo v'.$app->version;
 
 if (file_exists('../public/atkjs-ui.min.js')) {
-    $app->cdn = false; //['atk'] = '../public';
+    $app->cdn['atk'] = '../public';
 }
 
 $app->initLayout($app->stickyGET('layout') ?: 'Admin');
