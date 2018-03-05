@@ -87,10 +87,8 @@ class Wizard extends View
             $_GET[$this->stepCallback->urlTrigger] = 0;
         }
 
-
         if ($step->sequence == $this->currentStep) {
             $step->addClass('active');
-
 
             $this->stepCallback->set($callback, [$this]);
         } elseif ($step->sequence < $this->currentStep) {
