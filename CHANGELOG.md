@@ -102,6 +102,30 @@ Added `$app->dbConnect()` as a simpler way to connect to the database. Some impr
 - Fix/\#356 Upload Field Set [\#360](https://github.com/atk4/ui/pull/360) ([ibelar](https://github.com/ibelar))
 - Fixed typo [\#359](https://github.com/atk4/ui/pull/359) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
 
+## 1.4.3
+
+
+**Closed issues:**
+
+- Bug in Table-\>setModel, should always return model object [\#390](https://github.com/atk4/ui/issues/390)
+- Grid/Table can not handle $g-\>addColumn\(null, ..., null\) [\#388](https://github.com/atk4/ui/issues/388)
+- Fix "method\_complexity" issue in src/FormLayout/Generic.php [\#383](https://github.com/atk4/ui/issues/383)
+- masterCrud - add element , hit enter, no UI feedback but adds multiple items [\#379](https://github.com/atk4/ui/issues/379)
+- Field hints  [\#377](https://github.com/atk4/ui/issues/377)
+- app method url\(\) should have an argument indicating a regular or ajax url [\#369](https://github.com/atk4/ui/issues/369)
+- Console don't show log records [\#367](https://github.com/atk4/ui/issues/367)
+- CRUD does not work when placed inside Dynamic Tab [\#363](https://github.com/atk4/ui/issues/363)
+
+**Merged pull requests:**
+
+- fix \#390 and fix \#388 [\#391](https://github.com/atk4/ui/pull/391) ([DarkSide666](https://github.com/DarkSide666))
+- includeJS -\> requireJS / includeCSS -\> requireCSS [\#386](https://github.com/atk4/ui/pull/386) ([gartner](https://github.com/gartner))
+- Feature/jsUrl Rev [\#382](https://github.com/atk4/ui/pull/382) ([ibelar](https://github.com/ibelar))
+- Update semantic UI to 2.3.0 and jQuery to 3.3.1 [\#381](https://github.com/atk4/ui/pull/381) ([romaninsh](https://github.com/romaninsh))
+- Fix/\#379 [\#380](https://github.com/atk4/ui/pull/380) ([ibelar](https://github.com/ibelar))
+- Feature/add form label support [\#378](https://github.com/atk4/ui/pull/378) ([romaninsh](https://github.com/romaninsh))
+- Feature/various fixes [\#354](https://github.com/atk4/ui/pull/354) ([romaninsh](https://github.com/romaninsh))
+
 ## 1.3
 
 This version is focused on dynamic interaction between the browser and your PHP apps. It contains 3
