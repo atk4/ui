@@ -83,11 +83,12 @@ class Wizard extends View
         // add tabs menu item
         $this->steps[] = $this->add($step, 'Step');
 
+        if (!$this->stepCallback->triggered()) {
+            $_GET[$this->stepCallback->urlTrigger] = 0;
+        }
+
         if ($step->sequence == $this->currentStep) {
             $step->addClass('active');
-
-            // basically workaround to trick that first step was executed
-            $_GET[$this->stepCallback->urlTrigger] = 0;
 
             $this->stepCallback->set($callback, [$this]);
         } elseif ($step->sequence < $this->currentStep) {
