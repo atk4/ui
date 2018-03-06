@@ -263,7 +263,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
         $exec = escapeshellcmd($exec);
         $spec = [1=>['pipe', 'w'], 2=>['pipe', 'w']]; // we want stdout and stderr
         $pipes = null;
-        $proc = proc_open($x = $exec.' '.implode(' ', $args), $spec, $pipes);
+        $proc = proc_open($exec.' '.implode(' ', $args), $spec, $pipes);
         if (!is_resource($proc)) {
             throw new Exception(['Command failed to execute', 'exec'=>$exec, 'args'=>$args]);
         }
