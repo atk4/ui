@@ -140,7 +140,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function outputHTML($message, $context = [])
     {
-        $message = preg_replace_callback('/{([a-z0-9_-]+)}/i', function($match) use ($context) {
+        $message = preg_replace_callback('/{([a-z0-9_-]+)}/i', function ($match) use ($context) {
             if (isset($context[$match[1]]) && is_string($context[$match[1]])) {
                 return $context[$match[1]];
             }
@@ -148,7 +148,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
             // don't change the original message
             return '{'.$match[1].'}';
         }, $message);
-
 
         $this->_output_bypass = true;
         $this->sse->send($this->js()->append($message.'<br/>'));
@@ -196,8 +195,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     public function exec($exec, $args = [])
     {
         if (!$this->sseInProgress) {
-            $this->set(function () use($exec, $args) {
-
+            $this->set(function () use ($exec, $args) {
                 $a = $args ? (' with '.count($args).' arguments') : '';
                 $this->output('--[ Executing '.$exec.$a.' ]--------------');
 
@@ -227,16 +225,17 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 break;
             }
 
-
-            foreach($read as $f) {
+            foreach ($read as $f) {
                 $data = fgets($f);
                 if ($data[-1] == "\n") {
                     $data = substr($data, 0, -1);
                 }
                 $data = rtrim($data);
-                if(!$data)continue;
+                if (!$data) {
+                    continue;
+                }
 
-                if ($f === $pipes[2])  {
+                if ($f === $pipes[2]) {
                     // STDERR
                     $this->warning($data);
                 } else {
@@ -262,21 +261,23 @@ class Console extends View implements \Psr\Log\LoggerInterface
         }
 
         $exec = escapeshellcmd($exec);
-        $spec = [1=>['pipe','w'],2=>['pipe','w']]; // we want stdout and stderr
+        $spec = [1=>['pipe', 'w'], 2=>['pipe', 'w']]; // we want stdout and stderr
         $pipes = null;
-        $proc = proc_open($x=$exec.' '.join(' ',$args), $spec, $pipes);
+        $proc = proc_open($x = $exec.' '.implode(' ', $args), $spec, $pipes);
         if (!is_resource($proc)) {
             throw new Exception(['Command failed to execute', 'exec'=>$exec, 'args'=>$args]);
         }
+
         return [$proc, $pipes];
     }
 
     /**
-     * This method is obsolete. Use Console::runMethod() instead
+     * This method is obsolete. Use Console::runMethod() instead.
      */
     public function setModel(\atk4\data\Model $model, $method = null, $args = [])
     {
         $this->runMethod($model, $method, $args);
+
         return $model;
     }
 
@@ -301,9 +302,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * for the $user_model automatically, but for any nested objects you would have
      * to pass on the property.
      *
-     * @param Object           $object
-     * @param string|callable  $method
-     * @param array            $args
+     * @param object          $object
+     * @param string|callable $method
+     * @param array           $args
      *
      * @return \atk4\data\Model
      */
@@ -327,7 +328,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $this->output('--[ Executing '.get_class($object).'->'.$method.' ]--------------');
             $object->debug = true;
             $result = call_user_func_array([$object, $method], $args);
-        } elseif(is_string($object)) {
+        } elseif (is_string($object)) {
             $static = $object.'::'.$method;
             $this->output('--[ Executing '.$static.' ]--------------');
             $result = call_user_func_array($object.'::'.$method, $args);
