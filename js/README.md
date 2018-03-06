@@ -97,6 +97,11 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.1.0
+
+  - update reloadView plugin to accept new parameter for executing callback.
+  - update apiService to execute callback after on Success has run.
+
 ### version 1.0.2
 
   - update uploadField plugin.
