@@ -15,6 +15,7 @@ class ApiService {
   constructor() {
     if (!this.instance) {
       this.instance = this;
+      this.afterSuccessCallbacks = [];
     }
     return this.instance;
   }
@@ -80,6 +81,14 @@ class ApiService {
           // Call evalResponse with proper context, js code and jQuery as $ var.
           apiService.evalResponse.call(this, response.atkjs.replace(/<\/?script>/g, ''), jQuery);
         }
+        if (apiService.afterSuccessCallbacks.length > 0) {
+          const self = this;
+          let callbacks = apiService.afterSuccessCallbacks;
+          callbacks.forEach(function(callback){
+            apiService.evalResponse.call(self, callback, jQuery);
+          });
+          apiService.afterSuccessCallbacks.splice(0);
+        }
       } else if (response.isServiceError) {
         // service can still throw an error
         throw ({message:response.message});
@@ -87,6 +96,16 @@ class ApiService {
     } catch (e) {
         apiService.showErrorModal(apiService.getErrorHtml(e.message));
     }
+  }
+
+  /**
+   * Accumulate callbacks function to run after onSuccess.
+   * Callback is a string containing code to be eval.
+   *
+   * @param callback
+   */
+  onAfterSuccess(callback) {
+    this.afterSuccessCallbacks.push(callback);
   }
 
   /**
