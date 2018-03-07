@@ -25,29 +25,49 @@ class Test extends \atk4\data\Model
 $tt = $app->add('Tabs');
 
 $t = $tt->addTab('set()');
-$t->add(['Header', 'icon'=>'terminal', 'Console output streaming', 'subHeader'=>'any output your PHP script produces through console is displayed to user in real-time']);
+$t->add([
+    'Header',
+    'icon'=>'terminal',
+    'Console output streaming',
+    'subHeader'=>'any output your PHP script produces through console is displayed to user in real-time',
+]);
 $t->add('Console')->set(function ($console) {
     $console->output('Executing test process...');
     sleep(1);
     $console->output('Now trying something dangerous..');
     sleep(1);
-    echo 'direct output is cautpred captured';
+    echo 'direct output is captured';
 
     throw new \atk4\data\Exception('BOOM - exceptions are caught');
 });
 
 $t = $tt->addTab('runMethod()', function ($t) {
-    $t->add(['Header', 'icon'=>'terminal', 'Non-interractive method invocation', 'subHeader'=>'console can invoke a method, which normaly would be non-interractive and can still capture debug output']);
+    $t->add([
+        'Header',
+        'icon'=>'terminal',
+        'Non-interractive method invocation',
+        'subHeader'=>'console can invoke a method, which normaly would be non-interractive and can still capture debug output',
+    ]);
     $t->add('Console')->runMethod($t->add(new Test()), 'generateReport');
 });
 
 $t = $tt->addTab('exec() single', function ($t) {
-    $t->add(['Header', 'icon'=>'terminal', 'Command execution', 'subHeader'=>'it is easy to run server-side commands and stream output through console']);
+    $t->add([
+        'Header',
+        'icon'=>'terminal',
+        'Command execution',
+        'subHeader'=>'it is easy to run server-side commands and stream output through console',
+    ]);
     $t->add('Console')->exec('/bin/pwd');
 });
 
 $t = $tt->addTab('exec() chain', function ($t) {
-    $t->add(['Header', 'icon'=>'terminal', 'Command execution', 'subHeader'=>'it is easy to run server-side commands and stream output through console']);
+    $t->add([
+        'Header',
+        'icon'=>'terminal',
+        'Command execution',
+        'subHeader'=>'it is easy to run server-side commands and stream output through console',
+    ]);
     $t->add('Console')->set(function ($c) {
         $c
             ->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1'])
@@ -57,6 +77,11 @@ $t = $tt->addTab('exec() chain', function ($t) {
 });
 
 $t = $tt->addTab('composer update', function ($t) {
-    $t->add(['Header', 'icon'=>'terminal', 'Command execution', 'subHeader'=>'it is easy to run server-side commands and stream output through console']);
+    $t->add([
+        'Header',
+        'icon'=>'terminal',
+        'Command execution',
+        'subHeader'=>'it is easy to run server-side commands and stream output through console',
+    ]);
     $t->add('Console')->exec('bash', ['-c', 'cd ..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
 });
