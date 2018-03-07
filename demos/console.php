@@ -89,7 +89,6 @@ $t = $tt->addTab('composer update', function ($t) {
 
     $b = $w->add(['Button', 'I understand, proceed anyway', 'primary big']);
 
-
     $c = $t->add(['Console', 'event'=>false]);
     $c->exec('bash', ['-c', 'cd ..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
 

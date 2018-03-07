@@ -127,11 +127,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
     }
 
     /**
-     * Return JavaScript expression to execute console
+     * Return JavaScript expression to execute console.
      *
      * @return jsExpressionable
      */
-    function jsExecute()
+    public function jsExecute()
     {
         return $this->sse;
     }
@@ -182,6 +182,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     public function renderView()
     {
         $this->addStyle('overflow-x', 'auto');
+
         return parent::renderView();
     }
 
