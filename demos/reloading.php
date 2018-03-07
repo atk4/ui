@@ -5,7 +5,7 @@ require 'init.php';
 // Test 1 - Basic reloading
 $app->add(['Header', 'Button reloading segment']);
 $v = $app->add(['View', 'ui' => 'segment'])->set((string) rand(1, 100));
-$app->add(['Button', 'Reload random number'])->js('click', new \atk4\ui\jsReload($v));
+$app->add(['Button', 'Reload random number'])->js('click', new \atk4\ui\jsReload($v, [], new \atk4\ui\jsExpression('console.log("Output with afterSuccess");')));
 
 // Test 2 - Reloading self
 $app->add(['Header', 'JS-actions will be re-applied']);
@@ -61,4 +61,4 @@ $app->add(['Button', 'Set value to "hello"'])->js('click', new \atk4\ui\jsReload
 $app->add(['Button', 'Set value to "world"'])->js('click', new \atk4\ui\jsReload($v, ['val' => 'world']));
 
 $val = $app->add(['FormField/Line', '']);
-$val->addAction('Set Custom Value')->js('click', new \atk4\ui\jsReload($v, ['val' => $val->jsInput()->val()]));
+$val->addAction('Set Custom Value')->js('click', new \atk4\ui\jsReload($v, ['val' => $val->jsInput()->val()], $val->jsInput()->focus()));
