@@ -83,5 +83,15 @@ $t = $tt->addTab('composer update', function ($t) {
         'Command execution',
         'subHeader'=> 'it is easy to run server-side commands and stream output through console',
     ]);
-    $t->add('Console')->exec('bash', ['-c', 'cd ..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
+
+    $w = $t->add(['Message', 'This demo may not work', 'warning']);
+    $w->text->addParagraph('This demo requires you to have have "bash" and "composer" installed and may display error if the process running PHP does not have write access to the "vendor" folder and "composer.*".');
+
+    $b = $w->add(['Button', 'I understand, proceed anyway', 'primary big']);
+
+
+    $c = $t->add(['Console', 'event'=>false]);
+    $c->exec('bash', ['-c', 'cd ..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
+
+    $b->on('click', $c->jsExecute());
 });

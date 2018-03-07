@@ -15,6 +15,15 @@ class Console extends View implements \Psr\Log\LoggerInterface
     public $element = 'pre';
 
     /**
+     * Specify which event will trigger this console. Set to 'false'
+     * to disable automatic triggering if you need to trigger it
+     * manually.
+     *
+     * @var bool
+     */
+    public $event = true;
+
+    /**
      * Will be set to $true while executing callback. Some methods
      * will use this to automatically schedule their own callback
      * and allowing you a cleaner syntax, such as.
@@ -65,10 +74,14 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * @return $this
      */
-    public function set($callback = null, $event = true)
+    public function set($callback = null, $event = null)
     {
         if (!$callback) {
             throw new Exception('Please specify the $callback argument');
+        }
+
+        if (isset($event)) {
+            $this->event = $event;
         }
 
         $this->sse = $this->add('jsSSE');
@@ -106,11 +119,21 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $this->sseInProgress = false;
         });
 
-        if ($event) {
-            $this->js($event, $this->sse);
+        if ($this->event) {
+            $this->js($this->event, $this->jsExecute());
         }
 
         return $this;
+    }
+
+    /**
+     * Return JavaScript expression to execute console
+     *
+     * @return jsExpressionable
+     */
+    function jsExecute()
+    {
+        return $this->sse;
     }
 
     /**
@@ -158,6 +181,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
     public function renderView()
     {
+        $this->addStyle('overflow-x', 'auto');
         return parent::renderView();
     }
 
@@ -227,9 +251,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
             foreach ($read as $f) {
                 $data = fgets($f);
-                if ($data[-1] == "\n") {
-                    $data = substr($data, 0, -1);
-                }
                 $data = rtrim($data);
                 if (!$data) {
                     continue;
