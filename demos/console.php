@@ -85,7 +85,7 @@ $t = $tt->addTab('composer update', function ($t) {
     ]);
 
     $w = $t->add(['Message', 'This demo may not work', 'warning']);
-    $w->text->addParagraph('This demo requires you to have have "bash" and "composer" installed and may display error if the process running PHP does not have write access to the "vendor" folder and "composer.*".');
+    $w->text->addParagraph('This demo requires you to have "bash" and "composer" installed and may display error if the process running PHP does not have write access to the "vendor" folder and "composer.*".');
 
     $b = $w->add(['Button', 'I understand, proceed anyway', 'primary big']);
 
