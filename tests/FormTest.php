@@ -5,10 +5,9 @@ namespace atk4\ui\tests;
 class FormTest extends \atk4\core\PHPUnit_AgileTestCase
 {
     /**
-     * Some tests for form
-     *
+     * Some tests for form.
      */
-    function testGetField()
+    public function testGetField()
     {
         $f = new \atk4\ui\Form();
         $f->init();
