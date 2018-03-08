@@ -127,6 +127,16 @@ See how ATK Data compares with other ORM engines and you'll understand why we ch
 
 To help you understand the real power behind ATK Data integration, look at this aggregation / reporting addon: https://github.com/atk4/report. Compared to any open-source report suites that you can find for PHP, this is the only implementation that relies on "Model Domain Logic" rather then SQL queries for expressing your report criteria and can be used for ANY component in ATK UI as well as addons, such as [Charts](https://github.com/atk4/chart). There are no performance implications, because all the expressions and aggregations are executed inside your database through the means of SQL.
 
+## ATK is commercially supported
+
+The MIT license gives you absolute freedom, but no warranty. To compliment that, the team who created ATK as well as some early contributors joined together to run a consultancy company. We help you deliver your projects by:
+
+-   Fixing bugs in ATK or add-ons - free of charge
+-   Building add-ons that extend functionality - moderate hourly rate fee.
+-   Integration tasks or building parts of your project - quotation based.
+
+Our motto is to "always give back to open-source community and be fair to our clients". We are hiring PHP and JavaScript developers who are passionate about ATK and are active within our community.
+
 # Getting Started
 
 If you are new to PHP and Development download bundle of Agile UI  from www.agiletoolkit.org that includes some examples and dependencies, and check our our [Udemy course](https://forum.agiletoolkit.org/t/udemy-com-atk-course-early-access-limited-time-free/413). 
