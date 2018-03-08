@@ -1,8 +1,8 @@
 # ATK UI is stable - Stop wasting your time
 
-When using General Purpose PHP framework, a lot of time is spent on writing HTML, CSS, JS as well as planning routes, call-backs, integrating interactivity and integrating them with APIs or a database. 
+When using General Purpose PHP framework, a lot of time is spent on writing HTML, CSS, JS as well as planning routes, call-backs, adding interactivity and integrating your APIs or a database. 
 
-**ATK UI is a high-level object-oriented PHP framework with 30+ popular UI components.**
+**ATK UI is a high-level object-oriented PHP framework with 30+ popular UI components that seamlessly integrate with your SQL, NoSQL or API backend.**
 
 [![Build Status](https://travis-ci.org/atk4/ui.png?branch=develop)](https://travis-ci.org/atk4/ui)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
@@ -33,17 +33,19 @@ A most popular use for ATK UI is for building admin / backend systems. Some popu
 
 Add-ons above combine existing components (such as Form, CRUD, Bredcrumb) to create a high-level enterprise-level systems for data management.
 
+There are also many in-house data management applications that are built with ATK.
+
 ### Q: Is ATK good for beginners?
 
 Yes, it can save months or years of your learning time and you will be able to create a fully-functional Web Apps as per specification.
 
-If you are an absolute beginner and have a half hour to spare, [watch this video demonstrating how to create a most basic app that works with a database and publish it to the cloud](https://youtu.be/OCoK9ZQbt0E).
+If you are an absolute beginner and have a half hour to spare, [watch this video demonstrating how to create a most basic PHP app from scratch that works with a database and publish it to the cloud](https://youtu.be/OCoK9ZQbt0E).
 
 ### Q: Why I haven't heard about ATK before?
 
-The current version of ATK Data / ATK UI have been developed and published in 2016 / 2017. Some ideas presented by the frameworks are quite revolutionary, but not fully compatible with the standard development practices. (https://youtu.be/a3imXsrvpVk)
+The current version of ATK Data / ATK UI have been developed and published in 2016 / 2017. Some ideas presented by the frameworks are quite revolutionary, but are different to the standard development practices. (https://youtu.be/a3imXsrvpVk)
 
-The adoption rate is growing and we are seeing a lot of new members in our community, but it will take some more time for others to find out. We are pleased that those who have tried ATK are extremely happy and are starting to gradually contribute more and more. 
+The adoption rate is growing and we are seeing a lot of new members in our community. It will take some more time for others to discover ATK. We are pleased that those who have tried ATK are extremely happy and are starting to gradually contribute more and more.
 
 ATK is a FREE and open-source component framework and if you enjoy it and want to help, spread the ❤.
 
@@ -57,7 +59,7 @@ $crud->setModel(new User($db));
 $HTML = $crud->render();
 ```
 
-Normally you would want to put your $HTML somewhere, why not use our [Layout](http://ui.agiletoolkit.org/demos/layouts.php) component? Here is a fully functioning example:
+If you don't need $HTML from only CRUD, why not use our [Layout](http://ui.agiletoolkit.org/demos/layouts.php) component? Here is a fully functioning example:
 
 ``` php
 <?php
@@ -68,15 +70,15 @@ $app->dbConnect('mysql://user:pass@localhost/atk')
 $app->add('CRUD')->setModel(new User($app->db));
 ```
 
-And CRUD is only one of 30+ components that come bundled with ATK UI.
+CRUD is one of 30+ components that come bundled with ATK UI and all of them are easy to use.
 
-If you have 1 minute of time, [download the stable bundle](https://www.agiletoolkit.org) that and try it on your laptop.
+If you have 1 minute of time, [download the stable bundle](https://www.agiletoolkit.org) and try some examples yourself.
 
 ## Callbacks. Callbacks everywhere!
 
-In the conventional web application, you have to design and declare "routes", which can be used to render HTML or respond with JSON then manually connect them to your front-end logic. 
+In the conventional web application, you have to design and declare "routes", which can be used to render HTML or respond with JSON. Routes have to be connected to your front-end logic. 
 
-One of the fundamental features of ATK is Callback - ability to dynamically generate a route to invoke a specific code. Those are used quite extensively and recursively and they make your PHP code look beautiful and simple:
+One of the fundamental features of ATK is Callback - ability to dynamically generate a route then have JS part of the component invoke it. Thanks to this approach, code can be fluid, simple and readable:
 
 ``` php
 $tabs = $app->add('Tabs');
@@ -92,14 +94,14 @@ $tab->addTab('Settings', function($p) use($app) {
     $m = new Settings($app->db);
     $m->load(2);
     $p->add('Form')->setModel($m);
-})
+});
 ```
 
 ## Semantic UI
 
 We love and support Semantic UI CSS. All of the components in ATK UI rely on this awesome framework. In fact, there is [almost no CSS](https://github.com/atk4/ui/blob/develop/public/agileui.less) that we add or tweak. Perhaps we just suck at CSS and are much rather work on building some [awesome SaaS projects](https://saasty.io).
 
-However, by no means we restrict or limit YOUR options at writing custom HTML, JS or CSS. It's [easy to make your own view or tweak an existing one in ATK](http://ui.agiletoolkit.org/demos/view.php).
+However, by no means we restrict or limit YOUR options at writing custom HTML, JS or CSS. It's [easy to make your own view or tweak an existing one in ATK](http://ui.agiletoolkit.org/demos/view.php). We offer a [flexible way to extend JS services](https://github.com/atk4/ui/tree/develop/js) or integrate custom Layouts and CSS.
 
 ## Wizard
 
@@ -122,6 +124,8 @@ ATK [does it in about 50 lines](https://github.com/atk4/ui/blob/develop/demos/wi
 Comparing to some other CRUD / Admin builders, the UI components rely on a very powerful ATK Data framework, which can be also used separately and can be used to power your [RestAPI](https://github.com/atk4/api) end-points. 
 
 See how ATK Data compares with other ORM engines and you'll understand why we choose it over some of the alternatives: http://socialcompare.com/en/comparison/php-data-access-libraries-orm-activerecord-persistence
+
+To help you understand the real power behind ATK Data integration, look at this aggregation / reporting addon: https://github.com/atk4/report. Compared to any open-source report suites that you can find for PHP, this is the only implementation that relies on "Model Domain Logic" rather then SQL queries for expressing your report criteria and can be used for ANY component in ATK UI as well as addons, such as [Charts](https://github.com/atk4/chart). There are no performance implications, because all the expressions and aggregations are executed inside your database through the means of SQL.
 
 # Getting Started
 
