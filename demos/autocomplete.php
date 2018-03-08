@@ -37,8 +37,6 @@ $form->onSubmit(function ($f) {
     return $f->model->ref('country_id')['name'];
 });
 
-return;
-
 $layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'left' => true, 'icon' => 'users']));
 
 $layout->add(new \atk4\ui\Header(['Labels', 'size' => 2]));
