@@ -145,6 +145,7 @@ class Generic extends View
         if (empty($this->form)) {
             throw new Exception(['Incorrect value for $form', 'form' => $this->form]);
         }
+
         return $this->form->getField($name);
     }
 
