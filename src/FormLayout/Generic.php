@@ -135,16 +135,16 @@ class Generic extends View
 
         return $model;
     }
-    
+
     /**
      * Return Field decorator associated with
      * the form's field.
      */
     public function getField($name)
     {
-        if (empty($this->form))
+        if (empty($this->form)) {
             throw new Exception(['Incorrect value for $form', 'form' => $this->form]);
-        
+        }
         return $this->form->getField($name);
     }
 
