@@ -137,6 +137,8 @@ The MIT license gives you absolute freedom, but no warranty. To compliment that,
 
 Our motto is to "always give back to open-source community and be fair to our clients". We are hiring PHP and JavaScript developers who are passionate about ATK and are active within our community.
 
+If you need a help, go to [our website](https://www.agiletoolkit.org) and click on "Contact" link.
+
 # Getting Started
 
 If you are new to PHP and Development download bundle of Agile UI  from www.agiletoolkit.org that includes some examples and dependencies, and check our our [Udemy course](https://forum.agiletoolkit.org/t/udemy-com-atk-course-early-access-limited-time-free/413). 
