@@ -126,6 +126,17 @@ Added `$app->dbConnect()` as a simpler way to connect to the database. Some impr
 - Feature/add form label support [\#378](https://github.com/atk4/ui/pull/378) ([romaninsh](https://github.com/romaninsh))
 - Feature/various fixes [\#354](https://github.com/atk4/ui/pull/354) ([romaninsh](https://github.com/romaninsh))
 
+## 1.4.4 
+
+**Closed issues:**
+
+- jsReload to allow a callback [\#387](https://github.com/atk4/ui/issues/387)
+
+**Merged pull requests:**
+
+- fix/\#387-Allow a js function to run after reload is complete. [\#395](https://github.com/atk4/ui/pull/395) ([ibelar](https://github.com/ibelar))
+- Improvements to console, new demo and more documentation [\#394](https://github.com/atk4/ui/pull/394) ([romaninsh](https://github.com/romaninsh))
+
 ## 1.3
 
 This version is focused on dynamic interaction between the browser and your PHP apps. It contains 3
