@@ -188,7 +188,7 @@ class CRUD extends Grid
             $this->model->load($this->app->stickyGet($this->name));
 
             // Maybe developer has already created form
-            if (!is_object($this->formUpdate) || $this->formUpdate->_initialized) {
+            if (!is_object($this->formUpdate) || !$this->formUpdate->_initialized) {
                 $this->formUpdate = $this->pageUpdate->add($this->formUpdate ?: $this->formDefault);
             }
 
