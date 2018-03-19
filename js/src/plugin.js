@@ -7,6 +7,7 @@ import createModal from "./plugins/createModal";
 import notify from "./plugins/notify";
 import fileUpload from "./plugins/fileUpload";
 import jsSearch from "./plugins/jsSearch";
+import jsSortable from "./plugins/jsSortable";
 
 /**
  * Generate a jQuery plugin
@@ -42,6 +43,7 @@ plugin('Notify', notify, true);
 plugin('ServerEvent', serverEvent, true);
 plugin('FileUpload', fileUpload);
 plugin('JsSearch', jsSearch);
+plugin('JsSortable', jsSortable);
 
 export default function plugin(name, className, shortHand = false) {
         // Add atk namespace to jQuery global space.

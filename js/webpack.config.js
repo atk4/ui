@@ -44,7 +44,7 @@ const config = {
       // }
     ]
   },
-  externals: {jquery: 'jQuery'},
+  externals: {jquery: 'jQuery', draggable: 'Draggable'},
   resolve: {
     modules: [path.resolve('./src'), path.join(__dirname, 'node_modules')],
     extensions: ['.json', '.js'],
