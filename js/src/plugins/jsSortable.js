@@ -27,7 +27,7 @@ export default class jsSortable extends atkPlugin {
   }
 
   getSortOrders() {
-    this.sendOrders();
+    this.sendSortOrders();
   }
 
   /**
