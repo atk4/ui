@@ -9,7 +9,7 @@ $g->addQuickSearch();
 //$g->addColumn('id');
 $dragHandler = $g->addDragHandler();
 
-$dragHandler->onReorder(function($newOrder) {
+$dragHandler->onReorder(function ($newOrder) {
     return new \atk4\ui\jsNotify('New orders: '.implode(' - ', $newOrder));
 });
 
