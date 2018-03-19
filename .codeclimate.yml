@@ -45,76 +45,76 @@ checks:
       threshold: 150
 
 
-engines:
-  duplication:
-    enabled: true
-    config:
-      languages:
-        php:
-          mass_threshold: 50
-  fixme:
-    enabled: true
-  phpmd:
-    enabled: true
-    exclude_fingerprints:
-    - 9d462b7c90c564bf28007ee399340fad # table() NPath is too complex.
-    - 7c90035f65bb3bdbd2c03c648a705aac # we use static for factory, so it's good
-    - 80ef7f404dd4f054ca51d9ee12d9e9dd # we exit from toStrign() because it can't throw exceptions
-    - ae61f5e0cda0328c140f3b7298dbb8af # don't complain about call to static connection, as it's a fallback
-    - e71149b967391adfaf3347a53d3c0023 # don't complain about $junk used in foreach when we only need keys
-    checks:
-      CyclomaticComplexity:            # because we solve complex stuff
-        enabled: false
-      Naming/LongVariable:             # because we have variable naming patterns
-        enabled: false
-      UnusedFormalParameter:           # because when we extend methods/hooks we wish to keep unified method call interface
-        enabled: false
-      Design/TooManyPublicMethods:     # because we follow our internal design patters
-        enabled: false
-      Design/TooManyMethods:           # because we solve complex stuff
-        enabled: false
-      Design/LongMethod:               # because methods are as long as we need them to be
-        enabled: false
-      ExcessivePublicCount:            # because Model has too many public methods
-        enabled: false
-      Design/TooManyFields:            # because we solve complex things
-        enabled: false
-      Design/NpathComplexity:          # because splitting up complex stuff into methods makes things even more complex
-        enabled: false
-      Design/WeightedMethodCount:      # because we we solve complex stuff
-        enabled: false
-      Design/LongClass:                # because we design carefully what is native and what is extension
-        enabled: false
-      Controversial/CamelCaseMethodName:    # because we need certain method naming patterns, render_blah for rendering [blah]
-        enabled: false
-      Controversial/CamelCaseParameterName: #
-        enabled: false
-      Controversial/CamelCasePropertyName:  # because we use _better_dont_change properties
-        enabled: false
-      Controversial/CamelCaseVariableName:  #
-        enabled: false
-      Controversial/CamelCaseClassName:     # Because we use Join_SQL where we specifically include _
-        enabled: false
-      Naming/ShortVariable:             # because sometimes variables should be short
-        enabled: false
-      CleanCode/ElseExpression:         # because following this makes code more complex
-        enabled: false
-
-  radon:
-    enabled: true
-ratings:
-  paths:
-  - "src/**"
-exclude_paths:
-- "docs/**"
-- "tests/**"
-- "vendor/**"
-# exclude obsolete classes
-- "src/Field_Many.php"
-- "src/Field_One.php"
-- "src/Field_SQL_One.php"
-- "src/Relation_Many.php"
-- "src/Relation_One.php"
-- "src/Relation_SQL_One.php"
-# exclude classes completely inherited from other repos
-- "src/Exception.php"
+#engines:
+#  duplication:
+#    enabled: true
+#    config:
+#      languages:
+#        php:
+#          mass_threshold: 50
+#  fixme:
+#    enabled: true
+#  phpmd:
+#    enabled: true
+#    exclude_fingerprints:
+#    - 9d462b7c90c564bf28007ee399340fad # table() NPath is too complex.
+#    - 7c90035f65bb3bdbd2c03c648a705aac # we use static for factory, so it's good
+#    - 80ef7f404dd4f054ca51d9ee12d9e9dd # we exit from toStrign() because it can't throw exceptions
+#    - ae61f5e0cda0328c140f3b7298dbb8af # don't complain about call to static connection, as it's a fallback
+#    - e71149b967391adfaf3347a53d3c0023 # don't complain about $junk used in foreach when we only need keys
+#    checks:
+#      CyclomaticComplexity:            # because we solve complex stuff
+#        enabled: false
+#      Naming/LongVariable:             # because we have variable naming patterns
+#        enabled: false
+#      UnusedFormalParameter:           # because when we extend methods/hooks we wish to keep unified method call interface
+#        enabled: false
+#      Design/TooManyPublicMethods:     # because we follow our internal design patters
+#        enabled: false
+#      Design/TooManyMethods:           # because we solve complex stuff
+#        enabled: false
+#      Design/LongMethod:               # because methods are as long as we need them to be
+#        enabled: false
+#      ExcessivePublicCount:            # because Model has too many public methods
+#        enabled: false
+#      Design/TooManyFields:            # because we solve complex things
+#        enabled: false
+#      Design/NpathComplexity:          # because splitting up complex stuff into methods makes things even more complex
+#        enabled: false
+#      Design/WeightedMethodCount:      # because we we solve complex stuff
+#        enabled: false
+#      Design/LongClass:                # because we design carefully what is native and what is extension
+#        enabled: false
+#      Controversial/CamelCaseMethodName:    # because we need certain method naming patterns, render_blah for rendering [blah]
+#        enabled: false
+#      Controversial/CamelCaseParameterName: #
+#        enabled: false
+#      Controversial/CamelCasePropertyName:  # because we use _better_dont_change properties
+#        enabled: false
+#      Controversial/CamelCaseVariableName:  #
+#        enabled: false
+#      Controversial/CamelCaseClassName:     # Because we use Join_SQL where we specifically include _
+#        enabled: false
+#      Naming/ShortVariable:             # because sometimes variables should be short
+#        enabled: false
+#      CleanCode/ElseExpression:         # because following this makes code more complex
+#        enabled: false
+#
+#  radon:
+#    enabled: true
+#ratings:
+#  paths:
+#  - "src/**"
+#exclude_paths:
+#- "docs/**"
+#- "tests/**"
+#- "vendor/**"
+## exclude obsolete classes
+#- "src/Field_Many.php"
+#- "src/Field_One.php"
+#- "src/Field_SQL_One.php"
+#- "src/Relation_Many.php"
+#- "src/Relation_One.php"
+#- "src/Relation_SQL_One.php"
+## exclude classes completely inherited from other repos
+#- "src/Exception.php"
