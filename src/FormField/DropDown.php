@@ -36,7 +36,7 @@ class DropDown extends Input
 
         if (isset($this->model)) {
             foreach ($this->model as $key => $row) {
-                $title = $row[$row->title_field];
+                $title = $row->getTitle();
 
                 $item = ['option', 'value' => (string) $key, $title];
                 if ($value == $key) {

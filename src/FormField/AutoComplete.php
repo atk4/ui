@@ -100,7 +100,7 @@ class AutoComplete extends Input
                 $modal_chain = new jQuery('.atk-modal');
                 $modal_chain->modal('hide');
                 $ac_chain = new jQuery('#'.$this->name.'-ac');
-                $ac_chain->dropdown('set value', $id)->dropdown('set text', $f->model[$this->model->title_field]);
+                $ac_chain->dropdown('set value', $id)->dropdown('set text', $f->model->getTitle());
 
                 return [
                     $modal_chain,
