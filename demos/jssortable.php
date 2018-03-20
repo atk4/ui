@@ -3,7 +3,6 @@
 require 'init.php';
 require 'database.php';
 
-
 $g = $app->add(['Grid']);
 $g->setModel(new Country($db));
 $g->ipp = 6;
@@ -12,7 +11,6 @@ $dragHandler = $g->addDragHandler();
 $dragHandler->onReorder(function ($order) {
     return new \atk4\ui\jsNotify(implode(' - ', $order));
 });
-
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -25,17 +23,15 @@ $view = $app->add(['View', 'template' => new \atk4\ui\Template('
     </div>'
 )]);
 
-
 $view->add('Lister', 'List')
      ->addHook('beforeRow', function ($l) {
          $l->current_row['iso'] = strtolower($l->current_row['iso']);
      })->setModel(new Country($db))
      ->setLimit(20);
 
-
 $sortable = $view->add(['jsSortable', 'container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
-$sortable->onReorder(function($order, $src, $pos){
+$sortable->onReorder(function ($order, $src, $pos) {
     if (@$_GET['btn']) {
         return new \atk4\ui\jsNotify(implode(' - ', $order));
     } else {

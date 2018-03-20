@@ -1,12 +1,9 @@
 <?php
-/**
- */
 
 namespace atk4\ui;
 
 class jsSortable extends jsCallback
 {
-
     /**
      * The html element that contains others element for reordering.
      *
@@ -60,7 +57,7 @@ class jsSortable extends jsCallback
         }
         $this->app->requireJS('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.5/lib/draggable.bundle.js');
 
-        $this->view->js(true)->atkJsSortable([  'uri'         => $this->getJSURL(),
+        $this->view->js(true)->atkJsSortable(['uri'                 => $this->getJSURL(),
                                                       'uri_options' => $this->args,
                                                       'container'   => $this->container,
                                                       'draggable'   => $this->draggable,
