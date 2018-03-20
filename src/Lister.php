@@ -44,7 +44,7 @@ class Lister extends View
                 continue;
             }
 
-            $this->t_row->trySet('_title', $this->model[$this->model->title_field]);
+            $this->t_row->trySet('_title', $this->model->getTitle());
             $this->t_row->trySet('_href', $this->url(['id'=>$this->current_id]));
             $this->t_row->trySet('_id', $this->current_id);
 

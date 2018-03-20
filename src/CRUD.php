@@ -132,7 +132,7 @@ class CRUD extends Grid
                 $this->itemCreate ?: ['Add new', 'icon' => 'plus'],
                 new jsModal('Add new', $this->pageCreate)
             );
-            $this->itemCreate->set('Add New '.(isset($this->model->title) ? $this->model->title : preg_replace('|.*\\\|', '', get_class($this->model))));
+            $this->itemCreate->set('Add New '.$this->model->getModelCaption());
         }
 
         // setting callback for the page
