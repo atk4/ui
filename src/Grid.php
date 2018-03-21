@@ -239,6 +239,21 @@ class Grid extends View
         return $this->selection;
     }
 
+    /**
+     * Add column with drag handler on each row.
+     * Drag handler allow to reorder table via drag n drop.
+     */
+    public function addDragHandler()
+    {
+        $handler = $this->table->addColumn(null, 'DragHandler');
+
+        // Move element to the beginning
+        $k = array_search($this->selection, $this->table->columns);
+        $this->table->columns = [$k => $this->table->columns[$k]] + $this->table->columns;
+
+        return $handler;
+    }
+
     public function recursiveRender()
     {
         // bind with paginator

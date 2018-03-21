@@ -97,6 +97,10 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.2.0
+
+  - add plugin, jsSortable, to allow reordering of list element via drap n drop.
+
 ### version 1.1.0
 
   - update reloadView plugin to accept new parameter for executing callback.
