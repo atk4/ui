@@ -69,4 +69,4 @@ $table->addColumn('amount_copy', ['Multiformat', 'callback'=>function($a, $b) {
 
     // Short way is to simply return seed
     return 'Money';
-}]);
+}, 'attr'=>['all'=>['class'=>['right aligned singel line']]]]);

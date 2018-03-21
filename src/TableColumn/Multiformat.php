@@ -13,6 +13,10 @@ class Multiformat extends Generic
         return '{$c_'.$this->short_name.'}';
     }
 
+    public function __construct($callback) {
+        $this->callback = $callback;
+    }
+
     public function getHTMLTags($row, $field)
     {
         if (!$this->callback) {

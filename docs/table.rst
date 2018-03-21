@@ -541,17 +541,29 @@ Multiformat
 Sometimes your formatting may change depending on value. For example you may want to place link
 only on certain rows. For this you can use a 'Multiformat' decorator::
 
-    $table->addColumn('amount', ['Multiformat', 'callback'=>function($a, $b) {
+    $table->addColumn('amount', ['Multiformat', function($a, $b) {
 
         if($a['is_invoiced'] > 0) {
-            return ['Link', 'invoice', ['invoice_id'=>'id']];
+            return ['Money', ['Link', 'invoice', ['invoice_id'=>'id']]];
         } elseif (abs($a['is_refunded']) < 50) {
-            return ['Template', 'Amount was <b>refunded</b>'];
+            return [['Template', 'Amount was <b>refunded</b>']];
         }
 
-        return ['Money'];
+        return 'Money';
     }]);
 
+You supply a callback to the Multiformat decorator, which will then be used to determine
+the actual set of decorators to be used on a given row. The example above will look at various
+fields of your models and will conditionally add Link on top of Money formatting.
+
+Your callback can return things in varous ways:
+
+ - return array of seeds: [['Link'], 'Money'];
+ - if string or object is returned it is wrapped inside array automatically
+
+Multiple decorators will be created and merged.
+
+.. note:: If you are operating with large tables, code your own decorator, which would be more CPU-efficient.
 
 Advanced Usage
 ==============
