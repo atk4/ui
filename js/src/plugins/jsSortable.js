@@ -9,7 +9,7 @@ import 'draggable';
  *    $app->requireJS('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.5/lib/draggable.bundle.js');
  *
  *  After reordering, callback is sent to server with post information:
- *    order => contains the order of data-{label} as a comma delimited json string;
+ *    order => contains the order of data-{label} as a comma delimited string;
  *    source => the element being reorder.
  *    pos => the final position of the element being reorder.
  *
@@ -26,8 +26,13 @@ export default class jsSortable extends atkPlugin {
 
   main() {
     this.ids = [];
+    //the data label attribute value of the source element being drag. ex: data-id
     this.sourceId = null;
-    this.sourcePos = null;
+    //the new index value of the dragged element after sorting.
+    this.newIdx = null;
+    //the original index value of the dragged element.
+    this.orgIdx = null;
+
     this.injectStyles(this.settings.mirrorCss + this.settings.overCss);
     this.dragContainer = this.$el.find(this.settings.container);
     const sortable = new Draggable.Sortable(
@@ -36,18 +41,18 @@ export default class jsSortable extends atkPlugin {
                               handle: this.settings.handleClass ? '.'+this.settings.handleClass : null
                             });
     this.initialize();
-    sortable.on('drag:stop',  (e) => {
+
+    sortable.on('sortable:stop', (e) => {
       const that = this;
       let ids = [];
-      that.dragContainer.children().each(function(idx){
-          if (!$(this).hasClass('draggable--original') && !$(this).hasClass('draggable-mirror')) {
-            ids.push($(this).data(that.settings.dataLabel));
-          }
-          if ($(this).hasClass('draggable-source--is-dragging')) {
-            that.sourceId = $(this).data(that.settings.dataLabel);
-            that.sourcePos = idx;
+      that.newIdx = e.data.newIndex;
+      that.orgIdx = e.data.oldIndex;
+      that.sourceId = $(e.data.dragEvent.data.originalSource).data(that.settings.dataLabel);
+      that.dragContainer.children().each(function (idx) {
+        if (!$(this).hasClass('draggable--original') && !$(this).hasClass('draggable-mirror')) {
+          ids.push($(this).data(that.settings.dataLabel));
         }
-       });
+      });
       that.ids = ids;
       if (that.settings.autoFireCb) {
         that.sendSortOrders();
@@ -80,7 +85,7 @@ export default class jsSortable extends atkPlugin {
       this.dragContainer.api({
         on: 'now',
         url: url,
-        data: {order: this.ids.toString(), pos: this.sourcePos, source: this.sourceId},
+        data: {order: this.ids.toString(), org_idx: this.orgIdx, new_idx: this.newIdx, source: this.sourceId},
         method: 'POST',
         obj: this.dragContainer,
       });
