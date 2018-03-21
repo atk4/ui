@@ -3,11 +3,12 @@
 namespace atk4\ui\TableColumn;
 
 /**
- * Swaps out column decorators based on logic
+ * Swaps out column decorators based on logic.
  */
 class Multiformat extends Generic
 {
     public $callback = null;
+
     public function getDataCellHTML(\atk4\data\Field $f = null)
     {
         return '{$c_'.$this->short_name.'}';
@@ -35,7 +36,6 @@ class Multiformat extends Generic
         $td_attr = [];
         $html_tags = [];
         foreach ($decorators as $c) {
-
             if (!is_object($c)) {
                 $c = $this->owner->decoratorFactory($field, $c);
             }
@@ -64,15 +64,12 @@ class Multiformat extends Generic
             $html_tags = array_merge($c->getHTMLTags($row, $field), $html_tags);
         }
 
-
         $template = $this->owner->add(['Template', $cell]);
         $template->set($row);
         $template->setHTML($html_tags);
-
 
         $val = $template->render();
 
         return ['c_'.$this->short_name => $val];
     }
-
 }
