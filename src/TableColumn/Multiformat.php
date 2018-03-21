@@ -8,7 +8,7 @@ namespace atk4\ui\TableColumn;
 class Multiformat extends Generic
 {
     public $callback = null;
-    public function getDataCellHTML(\atk4\data\Field $f = null)
+    public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
     {
         return '{$c_'.$this->short_name.'}';
     }
