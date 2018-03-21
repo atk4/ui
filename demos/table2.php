@@ -38,23 +38,23 @@ $table->addHook('beforeRow', function ($table) {
 $table->template->appendHTML('Foot', '<tr class="center aligned"><td colspan=2>This will appear above totals</th></tr>');
 $table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
 
-
 $app->add(['Header', 'Columns with multiple formats', 'subHeader'=>'Single column can use logic to swap out formatters', 'icon'=>'table']);
 
 $table = $app->add('Table');
 $table->setModel($m, ['action']);
 
 // copy of amount through a PHP callback
-$m->addField('amount_copy', ['Callback', function($m) { return $m['amount']; }, 'type'=>'money']);
+$m->addField('amount_copy', ['Callback', function ($m) {
+    return $m['amount'];
+}, 'type'=>'money']);
 
 // column with 2 decorators that stack. Money will use red ink and alignment, format will change text.
 $table->addColumn('amount', ['Money']);
 $table->addDecorator('amount', ['Template', 'Refunded: {$amount}']);
 
 // column which uses selective format depending on condition
-$table->addColumn('amount_copy', ['Multiformat', 'callback'=>function($a, $b) {
-
-    if($a['amount_copy'] > 0) {
+$table->addColumn('amount_copy', ['Multiformat', 'callback'=>function ($a, $b) {
+    if ($a['amount_copy'] > 0) {
         // Two formatters together
         return ['Link', 'Money'];
     } elseif (abs($a['amount_copy']) < 50) {
@@ -62,8 +62,8 @@ $table->addColumn('amount_copy', ['Multiformat', 'callback'=>function($a, $b) {
         // One formatter, but inject template and some attributes
         return [[
             'Template',
-            'too <b>little</b> to <u>matter</u>', 
-            'attr' => ['all' => ['class' => ['right aligned single line']]] 
+            'too <b>little</b> to <u>matter</u>',
+            'attr' => ['all' => ['class' => ['right aligned single line']]],
         ]];
     }
 
