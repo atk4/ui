@@ -328,6 +328,10 @@ class Template implements \ArrayAccess
             return $this;
         }
 
+        if (is_object($value)) {
+            throw new Exception(['Value should not be an object', 'value'=>$value]);
+        }
+
         if ($encode) {
             $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
         }
