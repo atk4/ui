@@ -25,11 +25,6 @@ class Button extends View
      */
     public $iconRight = null;
 
-    /**
-     * $icon property will end up a button icon.
-     *
-     * {@inheritdoc}
-     */
     public function renderView()
     {
         if ($this->icon) {

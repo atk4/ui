@@ -27,6 +27,7 @@ class CRUD extends Grid
     /** @var array|Form Seed for form that is used when adding * */
     public $formCreate = null;
 
+
     /** @var array|Form Seed for form that is used when editing * */
     public $formUpdate = null;
 
@@ -80,7 +81,9 @@ class CRUD extends Grid
     }
 
     /**
-     * @obsolete
+     * @deprecated 1.4 use $canCreate, $canDelete etc
+     *
+     * @param mixed $operation
      */
     public function can($operation)
     {

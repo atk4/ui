@@ -25,14 +25,11 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     /**
      * List of fields currently registered with this form.
+     *
+     * @var array $fields Array of FormField objects
      */
     public $fields = [];
 
-    /**
-     * Disables form contents.
-     *
-     * {@inheritdoc}
-     */
     public $content = false;
 
     /**
@@ -142,6 +139,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Return Field decorator associated with
      * the field.
+     *
+     * @param string $name Name of the field
      */
     public function getField($name)
     {
@@ -280,7 +279,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * 4. lastly, falling back to Line, DropDown (based on $reference and $enum)
      *
      * @param \atk4\data\Field $f        Data model field
-     * @param array            $defaults Defaults to pass to factory() when decorator is initialized
+     * @param array            $seed Defaults to pass to factory() when decorator is initialized
      *
      * @return FormField\Generic
      */
@@ -322,6 +321,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     /**
      * Provides decorator seeds for most common types.
+     *
+     * @var array Describes how factory converts type to decorator seed
      */
     protected $typeToDecorator = [
         'boolean'  => 'CheckBox',
