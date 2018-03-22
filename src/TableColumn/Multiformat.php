@@ -7,6 +7,9 @@ namespace atk4\ui\TableColumn;
  */
 class Multiformat extends Generic
 {
+    /**
+     * @var callable Method to execute which will return array of seeds for decorators
+     */
     public $callback = null;
 
     public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
