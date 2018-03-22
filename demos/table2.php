@@ -53,7 +53,7 @@ $table->addColumn('amount', ['Money']);
 $table->addDecorator('amount', ['Template', 'Refunded: {$amount}']);
 
 // column which uses selective format depending on condition
-$table->addColumn('amount_copy', ['Multiformat', 'callback'=>function ($a, $b) {
+$table->addColumn('amount_copy', ['Multiformat', function ($a, $b) {
     if ($a['amount_copy'] > 0) {
         // Two formatters together
         return ['Link', 'Money'];
