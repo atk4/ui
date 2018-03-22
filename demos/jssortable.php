@@ -31,11 +31,11 @@ $view->add('Lister', 'List')
 
 $sortable = $view->add(['jsSortable', 'container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
-$sortable->onReorder(function ($order, $src, $pos) {
+$sortable->onReorder(function ($order, $src, $pos, $oldPos) {
     if (@$_GET['btn']) {
         return new \atk4\ui\jsNotify(implode(' - ', $order));
     } else {
-        return new \atk4\ui\jsNotify($src.' was move at positsion '.$pos);
+        return new \atk4\ui\jsNotify($src.' moved from position '.$oldPos.' to '.$pos);
     }
 });
 
