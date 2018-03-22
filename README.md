@@ -1,4 +1,4 @@
-# ATK UI is stable - Stop wasting your time
+# ATK UI - High Level OO PHP framework for building Web UI
 
 When using General Purpose PHP framework, a lot of time is spent on writing HTML, CSS, JS as well as planning routes, call-backs, adding interactivity and integrating your APIs or a database. 
 
