@@ -16,21 +16,37 @@ class Wizard extends View
 
     /**
      * Callback, that triggers selection of a step.
+     *
+     * @var callable
      */
     public $stepCallback = null;
 
     /**
      * List of steps.
+     *
+     * @var array
      */
     public $steps = [];
 
     /**
      * Current step.
+     *
+     * @var int
      */
     public $currentStep = null;
 
+    /**
+     * Button for going to previous step
+     *
+     * @var Button
+     */
     public $buttonPrev = null;
 
+    /**
+     * Buttor for going to next step
+     *
+     * @var Button
+     */
     public $buttonNext = null;
 
     /**
@@ -38,6 +54,8 @@ class Wizard extends View
      *  - 'empty' , since no such icon exists, no visible icon will be used unless step is completed
      *  - 'square outline', use this (or any other) Semantic UI icon by default
      *  - false,  disables icons alltogether (or using checkboxes for completed steps).
+     *
+     * @var string|false
      */
     public $defaultIcon = 'empty'; // 'square outline'
 
@@ -67,7 +85,7 @@ class Wizard extends View
      * Adds step to the wizard.
      *
      * @param mixed $name   Name of tab or Tab object
-     * @param mixed $action Optional callback action or URL (or array with url + parameters)
+     * @param mixed $callback Optional callback action or URL (or array with url + parameters)
      *
      * @return View
      */
@@ -102,6 +120,12 @@ class Wizard extends View
         return $step;
     }
 
+    /**
+     * Adds an extra screen to show user when he goes beyond last step.
+     * There won't be "back" button on this step anymore.
+     *
+     * @param callable $callback Virtual page
+     */
     public function addFinish($callback)
     {
         if (count($this->steps) == $this->currentStep + 1) {
@@ -133,11 +157,21 @@ class Wizard extends View
         return $result;
     }
 
+    /**
+     * Get URL to next step. Will respect stickyGET.
+     *
+     * @return string URL to next step.
+     */
     public function urlNext()
     {
         return $this->stepCallback->getURL($this->currentStep + 1);
     }
 
+    /**
+     * Get URL to previous step. Will respect stickyGET.
+     *
+     * @return string URL to previous step.
+     */
     public function jsNext()
     {
         return new jsExpression('document.location = []', [$this->urlNext()]);

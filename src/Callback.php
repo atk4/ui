@@ -23,6 +23,7 @@ use atk4\core\TrackableTrait;
  */
 class Callback
 {
+
     use TrackableTrait;
     use AppScopeTrait;
     use DIContainerTrait;
@@ -90,7 +91,7 @@ class Callback
     /**
      * Executes user-specified action when call-back is triggered.
      *
-     * @param callback $callback
+     * @param callable $callback
      * @param array    $args
      *
      * @return mixed|null

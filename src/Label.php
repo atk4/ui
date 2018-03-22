@@ -7,27 +7,41 @@ class Label extends View
     public $ui = 'label';
 
     /**
-     * Add icon before label.
+     * Add icon before label. If 'string' or seed is specified, it will
+     * be converted to object by init().
+     *
+     * @var View|array|string
      */
     public $icon = null;
 
     /**
-     * Icon after label.
+     * Icon to the right of the label.
+     *
+     * @see $icon
+     * @var View|array|string
      */
     public $iconRight = null;
 
     /**
      * Add "Detail" to label.
+     *
+     * @var string|null|false
      */
     public $detail = null;
 
     /**
-     * Image to the left of the label.
+     * Image to the left of the label. Cannot be used with label. If string
+     * is set, will be used as Image source. Can also contain seed or object.
+     *
+     * @var View|array|string
      */
     public $image = null;
 
     /**
      * Image to the right of the label.
+     *
+     * @see $image
+     * @var View|array|string
      */
     public $imageRight = null;
 

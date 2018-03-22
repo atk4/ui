@@ -7,6 +7,10 @@ namespace atk4\ui;
  */
 class jsReload implements jsExpressionable
 {
+    /**
+     * Specifies which view to reload. Use constructor to set.
+     * @var View
+     */
     public $view = null;
 
     /**
@@ -19,6 +23,8 @@ class jsReload implements jsExpressionable
     /**
      * If defined, they will be added at the end of your URL.
      * Value in ARG can be either string or jsExpressionable.
+     *
+     * @var array
      */
     public $args = [];
 
