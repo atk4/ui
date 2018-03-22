@@ -40,7 +40,7 @@ class Card extends Table
         $mm = parent::setSource($data);
         $this->addDecorator('value', ['Multiformat', function ($row, $field) use ($m) {
             $field = $m->getElement($row->data['id']);
-            $ret =  $this->decoratorFactory($field);
+            $ret = $this->decoratorFactory($field);
             if ($ret instanceof \atk4\ui\TableColumn\Money) {
                 $ret->attr['all']['class'] = ['single line'];
             }
