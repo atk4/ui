@@ -13,6 +13,7 @@ class Table extends Lister
 
     /**
      * TODO: is this used??
+     *
      * @var null
      *
      * If table is part of Grid or CRUD, we want to reload that instead of grid.
@@ -111,7 +112,8 @@ class Table extends Lister
 
     /**
      * When $sortable is true, and $sort_by is set, you can set this to
-     * "ascending" or "descending"
+     * "ascending" or "descending".
+     *
      * @var string
      */
     public $sort_order = null;

@@ -26,7 +26,7 @@ class ProgressBar extends View
 
     /**
      * Value that appears on a progress bar. Set it through constructor, e.g.
-     * $app->add(['ProgressBar', 20]);
+     * $app->add(['ProgressBar', 20]);.
      *
      * @var int
      */
@@ -64,9 +64,10 @@ class ProgressBar extends View
     }
 
     /**
-     * Return js action for setting value (client-side)
+     * Return js action for setting value (client-side).
      *
-     * @param  int $value new value
+     * @param int $value new value
+     *
      * @return jsExpressionable
      */
     public function jsValue($value)

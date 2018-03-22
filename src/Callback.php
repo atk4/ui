@@ -23,7 +23,6 @@ use atk4\core\TrackableTrait;
  */
 class Callback
 {
-
     use TrackableTrait;
     use AppScopeTrait;
     use DIContainerTrait;

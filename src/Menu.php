@@ -23,9 +23,10 @@ class Menu extends View
     public $defaultTemplate = 'menu.html';
 
     /**
-     * will be set to true, when Menu is used as a part of a dropdown
+     * will be set to true, when Menu is used as a part of a dropdown.
      *
      * @internal
+     *
      * @var [type]
      */
     public $in_dropdown = false;

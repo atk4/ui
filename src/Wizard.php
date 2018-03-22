@@ -36,14 +36,14 @@ class Wizard extends View
     public $currentStep = null;
 
     /**
-     * Button for going to previous step
+     * Button for going to previous step.
      *
      * @var Button
      */
     public $buttonPrev = null;
 
     /**
-     * Buttor for going to next step
+     * Buttor for going to next step.
      *
      * @var Button
      */
@@ -84,7 +84,7 @@ class Wizard extends View
     /**
      * Adds step to the wizard.
      *
-     * @param mixed $name   Name of tab or Tab object
+     * @param mixed $name     Name of tab or Tab object
      * @param mixed $callback Optional callback action or URL (or array with url + parameters)
      *
      * @return View

@@ -9,6 +9,7 @@ class jsReload implements jsExpressionable
 {
     /**
      * Specifies which view to reload. Use constructor to set.
+     *
      * @var View
      */
     public $view = null;

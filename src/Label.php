@@ -18,6 +18,7 @@ class Label extends View
      * Icon to the right of the label.
      *
      * @see $icon
+     *
      * @var View|array|string
      */
     public $iconRight = null;
@@ -41,6 +42,7 @@ class Label extends View
      * Image to the right of the label.
      *
      * @see $image
+     *
      * @var View|array|string
      */
     public $imageRight = null;

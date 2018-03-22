@@ -630,10 +630,11 @@ class Template implements \ArrayAccess
     private $tag_cnt = [];
 
     /**
-     * Register tags and return unique tag name
+     * Register tags and return unique tag name.
      *
-     * @param  string $tag tag name
-     * @return string      unique tag name
+     * @param string $tag tag name
+     *
+     * @return string unique tag name
      */
     protected function regTag($tag)
     {

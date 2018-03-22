@@ -222,7 +222,7 @@ class View implements jsExpressionable
      * TODO: move into trait because it's used so often.
      *
      * @param string $key
-     * @param mixed $val
+     * @param mixed  $val
      *
      * @throws Exception
      */
@@ -805,8 +805,8 @@ class View implements jsExpressionable
      *
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string|bool|null $when   Event when chain will be executed
-     * @param jsExpression     $action JavaScript action
+     * @param string|bool|null $when     Event when chain will be executed
+     * @param jsExpression     $action   JavaScript action
      * @param string           $selector If you wish to override jQuery($selector)
      *
      * @return jQuery
@@ -1073,10 +1073,10 @@ class View implements jsExpressionable
      * Needed for tracking which view in a render tree called url().
      *
      * @internal
+     *
      * @var [type]
      */
     public $_triggerBy = null;
-
 
     /**
      * Get sticky arguments defined by the view and parents (including API).
