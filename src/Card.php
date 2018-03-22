@@ -13,8 +13,9 @@ namespace atk4\ui;
 class Card extends Table
 {
     protected $_bypass = false;
-    function setModel($m, $columndef = null){
 
+    public function setModel($m, $columndef = null)
+    {
         if ($this->_bypass) {
             return parent::setModel($m);
         }
@@ -27,24 +28,24 @@ class Card extends Table
 
         $ui_values = $this->app->ui_persistence->typecastSaveRow($m, $m->get());
 
-        foreach($m->get() as $key => $value) {
+        foreach ($m->get() as $key => $value) {
             $data[] = [
-                'id'=>$key,
-                'field'=>$m->getElement($key)->getCaption(),
-                'value'=>$ui_values[$key],
+                'id'   => $key,
+                'field'=> $m->getElement($key)->getCaption(),
+                'value'=> $ui_values[$key],
             ];
         }
 
         $this->_bypass = true;
         $mm = parent::setSource($data);
-        $this->addDecorator('value', ['Multiformat', function($row, $field) use($m) {
+        $this->addDecorator('value', ['Multiformat', function ($row, $field) use ($m) {
             $field = $m->getElement($row->data['id']);
-            $ret =  $this->decoratorFactory($field);
+            $ret = $this->decoratorFactory($field);
+
             return $ret;
         }]);
         $this->_bypass = false;
+
         return $mm;
     }
-
-
 }

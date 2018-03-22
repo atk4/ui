@@ -1,4 +1,5 @@
 <?php
+
 include 'init.php';
 include 'database.php';
 
