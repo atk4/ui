@@ -6,7 +6,13 @@ class Lister extends View
 {
     use \atk4\core\HookTrait;
 
-    // @var Template
+    /**
+     * Lister repeats part of it's template. This property will contain
+     * the repeating part. Clones from {row}. If your tempalte does not
+     * have {row} tag, then entire temlate will be repeated.
+     *
+     * @var Template
+     */
     public $t_row = null;
 
     public $defaultTemplate = null;
@@ -18,6 +24,11 @@ class Lister extends View
         $this->initChunks();
     }
 
+    /**
+     * From the current template will extract {row} into $this->t_row.
+     *
+     * @return void
+     */
     public function initChunks()
     {
         if (!$this->template) {

@@ -4,10 +4,29 @@ namespace atk4\ui;
 
 class jsCallback extends Callback implements jsExpressionable
 {
+    /**
+     * Holds information about arguments passed in to the callback.
+     *
+     * @var array
+     */
     public $args = [];
 
+    /**
+     * Text to display as a confirmation. Set with setConfirm(..).
+     *
+     * @var string
+     */
     public $confirm = null;
 
+    /**
+     * When multiple jsExpressionable's are collected inside an array and may
+     * have some degree of nesting, convert it into a one-dimensional array,
+     * so that it's easier for us to wrap it into a function body.
+     *
+     * @param [type] $response [description]
+     *
+     * @return [type] [description]
+     */
     public function flatternArray($response)
     {
         if (!is_array($response)) {
@@ -36,6 +55,11 @@ class jsCallback extends Callback implements jsExpressionable
         ])->jsRender();
     }
 
+    /**
+     * Set a confirmation to be displayed before actually sending a request.
+     *
+     * @param string $text
+     */
     public function setConfirm($text = 'Are you sure?')
     {
         $this->confirm = $text;
@@ -78,11 +102,27 @@ class jsCallback extends Callback implements jsExpressionable
         return $this;
     }
 
+    /**
+     * A proper way to finish execution of AJAX response. Generates JSON
+     * which is returned to frontend.
+     *
+     * @param array|jsExpressionable $ajaxec  Array of jsExpressionable
+     * @param string                 $msg     General message, typically won't be displayed
+     * @param bool                   $success Was request successful or not
+     *
+     * @return [type] [description]
+     */
     public function terminate($ajaxec, $msg = null, $success = true)
     {
         $this->app->terminate(json_encode(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]));
     }
 
+    /**
+     * Provided with a $response from callbacks convert it into a JavaScript code.
+     *
+     * @param array|jsExpressionable $response response from callbacks,
+     * @param string                 $chain    JavaScript string
+     */
     public function getAjaxec($response, $chain = null)
     {
         if (is_array($response) && $response[0] instanceof View) {

@@ -9,9 +9,6 @@ namespace atk4\ui;
  */
 class HelloWorld extends View
 {
-    /**
-     * {@inheritdoc}
-     */
     public function init()
     {
         parent::init();

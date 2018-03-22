@@ -37,7 +37,10 @@ class Paginator extends View
     public $urlTrigger = null;
 
     /**
-     * If specified, must be instance of a view which will be reloaded on selection.
+     * If specified, must be instance of a view which will be reloaded on click.
+     * Otherwise will use link to current page.
+     *
+     * @var View
      */
     public $reload = null;
 

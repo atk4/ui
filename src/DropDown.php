@@ -4,17 +4,17 @@ namespace atk4\ui;
 
 class DropDown extends Lister
 {
-    // @inheritdoc
     public $ui = 'dropdown';
 
-    // @inheritdoc
     public $defaultTemplate = 'dropdown.html';
 
+    /**
+     * Supply an optional parameter to the drop-down.
+     *
+     * @var array will be converted to json passed into dropdown()
+     */
     public $js;
 
-    /**
-     * {@inheritdoc}
-     */
     public function renderView()
     {
         if (isset($this->js)) {

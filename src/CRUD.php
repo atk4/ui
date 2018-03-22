@@ -80,7 +80,9 @@ class CRUD extends Grid
     }
 
     /**
-     * @obsolete
+     * @deprecated 1.4 use $canCreate, $canDelete etc
+     *
+     * @param mixed $operation
      */
     public function can($operation)
     {

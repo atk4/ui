@@ -11,10 +11,24 @@ class Menu extends View
 {
     public $ui = 'menu';
 
+    /**
+     * if you set this to false, then upon clicking on the item, it won't
+     * be highlighted as "active". This is useful if you have action on your
+     * menu and page does not actually reload.
+     *
+     * @var bool
+     */
     public $activate_on_click = true;
 
     public $defaultTemplate = 'menu.html';
 
+    /**
+     * will be set to true, when Menu is used as a part of a dropdown.
+     *
+     * @internal
+     *
+     * @var [type]
+     */
     public $in_dropdown = false;
 
     /**

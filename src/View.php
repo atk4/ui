@@ -29,7 +29,7 @@ class View implements jsExpressionable
      * When you call render() this will be populated with JavaScript
      * chains.
      *
-     * @private! but must remain public so that child views could interact
+     * @internal must remain public so that child views could interact
      * with parent's $js.
      *
      * @var array
@@ -129,10 +129,21 @@ class View implements jsExpressionable
      */
     public $element = null;
 
-    // @var array
+    /**
+     * If add() method is called, but current view is not part of render tree yet,
+     * then arguments to add() are simply stored in this array. When the view is
+     * initialized by calling init() or adding into App or another initialized View,
+     * then add() will be re-invoked with the contents of this array.
+     *
+     * @var array
+     */
     protected $_add_later = [];
 
-    // will be set to true after render
+    /**
+     * will be set to true after rendered. This is so that we don't render view twice.
+     *
+     * @var bool
+     */
     protected $_rendered = false;
 
     // }}}
@@ -210,8 +221,8 @@ class View implements jsExpressionable
     /**
      * TODO: move into trait because it's used so often.
      *
-     * @param $key
-     * @param $val
+     * @param string $key
+     * @param mixed  $val
      *
      * @throws Exception
      */
@@ -513,6 +524,11 @@ class View implements jsExpressionable
     }
 
     /**
+     * @param string|array $property CSS Property or hash
+     * @param string       $style    CSS Style definition
+     *
+     * @return $this
+     *
      * @see setStyle()
      */
     public function addStyle($property, $style = null)
@@ -559,7 +575,7 @@ class View implements jsExpressionable
     /**
      * Remove attribute.
      *
-     * @param string|array $attr Attribute name or hash
+     * @param string|array $property Attribute name or hash
      *
      * @return $this
      */
@@ -789,8 +805,9 @@ class View implements jsExpressionable
      *
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string|bool|null $when   Event when chain will be executed
-     * @param jsExpression     $action JavaScript action
+     * @param string|bool|null $when     Event when chain will be executed
+     * @param jsExpression     $action   JavaScript action
+     * @param string           $selector If you wish to override jQuery($selector)
      *
      * @return jQuery
      */
@@ -1024,8 +1041,6 @@ class View implements jsExpressionable
     /** @var array Cached stickyGet arguments */
     public $_stickyArgsCached = null;
 
-    public $_triggerBy = null;
-
     /**
      * Build an URL which this view can use for js call-backs. It should
      * be guaranteed that requesting returned URL would at some point call
@@ -1055,7 +1070,18 @@ class View implements jsExpressionable
     }
 
     /**
+     * Needed for tracking which view in a render tree called url().
+     *
+     * @internal
+     *
+     * @var [type]
+     */
+    public $_triggerBy = null;
+
+    /**
      * Get sticky arguments defined by the view and parents (including API).
+     *
+     * @param string $triggerBy If exception occurs, will know which view called url()
      *
      * @return array
      */

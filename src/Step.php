@@ -9,9 +9,6 @@ namespace atk4\ui;
  */
 class Step extends View
 {
-    /**
-     * Use template defined by Wizard (and wizard.pug).
-     */
     public $defaultTemplate = null;
 
     /**
@@ -23,6 +20,8 @@ class Step extends View
 
     /**
      * Description to show in the step under the title.
+     *
+     * @var string
      */
     public $description = null;
 
