@@ -23,6 +23,9 @@ class jsSortable extends jsCallback
      *  The callback will send source parameter on the moved element using this attribute.
      *  default to data-id.
      *
+     * If the data-{label} attribute is not set for each list element, then the $_POST['order']
+     * value will be empty. Only org_idx and new_idx will be sent in callback request.
+     *
      * @var string
      */
     public $dataLabel = 'id';
@@ -78,9 +81,10 @@ class jsSortable extends jsCallback
             if ($this->triggered()) {
                 $sortOrders = explode(',', @$_POST['order']);
                 $source = @$_POST['source'];
-                $pos = @$_POST['pos'];
-                $this->set(function () use ($fx, $sortOrders, $source, $pos) {
-                    return call_user_func_array($fx, [$sortOrders, $source, $pos]);
+                $newIdx = @$_POST['new_idx'];
+                $orgIdx = @$_POST['org_idx'];
+                $this->set(function () use ($fx, $sortOrders, $source, $newIdx, $orgIdx) {
+                    return call_user_func_array($fx, [$sortOrders, $source, $newIdx, $orgIdx]);
                 });
             }
         }
