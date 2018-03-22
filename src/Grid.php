@@ -116,9 +116,9 @@ class Grid extends View
     }
 
     /**
-     * Add additional decorator for existing column
+     * Add additional decorator for existing column.
      *
-     * @param string $name                        Column name
+     * @param string                    $name      Column name
      * @param TableColumn\Generic|array $decorator Seed or object of the decorator
      */
     public function addDecorator($name, $decorator)
@@ -175,9 +175,9 @@ class Grid extends View
      * Adds a new button into the action column on the right. For CRUD this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array|View $button Label text, object or seed for the Button
-     * @param jsExpressionable|callable $action JavaScript action or callback
-     * @param bool|string  $confirm Should we display confirmation "Are you sure?"
+     * @param string|array|View         $button  Label text, object or seed for the Button
+     * @param jsExpressionable|callable $action  JavaScript action or callback
+     * @param bool|string               $confirm Should we display confirmation "Are you sure?"
      */
     public function addAction($button, $action, $confirm = false)
     {
@@ -190,11 +190,11 @@ class Grid extends View
 
     /**
      * Similar to addAction but when button is clicked, modal is displayed
-     * with the $title and $callback is executed through VirtualPage
+     * with the $title and $callback is executed through VirtualPage.
      *
      * @param string|array|View $button
-     * @param string $title
-     * @param callable $callback function($page){ . .}
+     * @param string            $title
+     * @param callable          $callback function($page){ . .}
      */
     public function addModalAction($button, $title, $callback)
     {

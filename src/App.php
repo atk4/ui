@@ -61,7 +61,7 @@ class App
 
     /**
      * Will be set to true after app->run() is called, which may be done automatically
-     * on exit
+     * on exit.
      *
      * @var bool
      */

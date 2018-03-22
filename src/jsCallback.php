@@ -12,7 +12,7 @@ class jsCallback extends Callback implements jsExpressionable
     public $args = [];
 
     /**
-     * Text to display as a confirmation. Set with setConfirm(..)
+     * Text to display as a confirmation. Set with setConfirm(..).
      *
      * @var string
      */
@@ -23,8 +23,9 @@ class jsCallback extends Callback implements jsExpressionable
      * have some degree of nesting, convert it into a one-dimensional array,
      * so that it's easier for us to wrap it into a function body.
      *
-     * @param  [type] $response [description]
-     * @return [type]           [description]
+     * @param [type] $response [description]
+     *
+     * @return [type] [description]
      */
     public function flatternArray($response)
     {
@@ -105,11 +106,11 @@ class jsCallback extends Callback implements jsExpressionable
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      *
-     * @param  array|jsExpressionable  $ajaxec  Array of jsExpressionable
-     * @param  string  $msg     General message, typically won't be displayed
-     * @param  bool $success Was request successful or not
+     * @param array|jsExpressionable $ajaxec  Array of jsExpressionable
+     * @param string                 $msg     General message, typically won't be displayed
+     * @param bool                   $success Was request successful or not
      *
-     * @return [type]           [description]
+     * @return [type] [description]
      */
     public function terminate($ajaxec, $msg = null, $success = true)
     {
@@ -117,11 +118,10 @@ class jsCallback extends Callback implements jsExpressionable
     }
 
     /**
-     * Provided with a $response from callbacks convert it into a JavaScript code
+     * Provided with a $response from callbacks convert it into a JavaScript code.
      *
      * @param array|jsExpressionable $response response from callbacks,
-     *
-     * @param string $chain JavaScript string
+     * @param string                 $chain    JavaScript string
      */
     public function getAjaxec($response, $chain = null)
     {

@@ -27,7 +27,6 @@ class CRUD extends Grid
     /** @var array|Form Seed for form that is used when adding * */
     public $formCreate = null;
 
-
     /** @var array|Form Seed for form that is used when editing * */
     public $formUpdate = null;
 
