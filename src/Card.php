@@ -14,7 +14,7 @@ class Card extends Table
 {
     protected $_bypass = false;
 
-    public function setModel($m, $columndef = null)
+    public function setModel(\atk4\data\Model $m, $columndef = null)
     {
         if ($this->_bypass) {
             return parent::setModel($m);
