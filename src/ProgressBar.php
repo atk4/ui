@@ -24,10 +24,18 @@ class ProgressBar extends View
 
     public $defaultTemplate = 'progress.html';
 
+    /**
+     * Value that appears on a progress bar. Set it through constructor, e.g.
+     * $app->add(['ProgressBar', 20]);.
+     *
+     * @var int
+     */
     public $value = 0;
 
     /**
      * Indicates a maximum value of a progress bar.
+     *
+     * @var int
      */
     public $max = 100;
 
@@ -45,11 +53,23 @@ class ProgressBar extends View
         return parent::renderView();
     }
 
+    /**
+     * Return js action for incrementing progress by one.
+     *
+     * @return jsExpressionable
+     */
     public function jsIncrement()
     {
         return $this->js()->progress('increment');
     }
 
+    /**
+     * Return js action for setting value (client-side).
+     *
+     * @param int $value new value
+     *
+     * @return jsExpressionable
+     */
     public function jsValue($value)
     {
         return $this->js()->progress(['percent'=>(int) $value]);

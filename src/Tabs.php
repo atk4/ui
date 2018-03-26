@@ -60,7 +60,7 @@ class Tabs extends View
     /**
      * Add a tab menu item.
      *
-     * @param $name Name of tab or Tab object.
+     * @param string $name Name of tab or Tab object.
      *
      * @throws Exception
      *

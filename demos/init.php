@@ -37,9 +37,9 @@ if (isset($layout->leftMenu)) {
 
     $form = $layout->leftMenu->addGroup(['Grid and Table', 'icon' => 'table']);
     $form->addItem('Data table with formatted columns', ['table']);
+    $form->addItem('Advanced table examples', ['table2']);
     $form->addItem('Table interractions', ['multitable']);
     $form->addItem('Grid - Table+Bar+Search+Paginator', ['grid']);
-    //$form->addItem('Interactivity - Modals and Expanders', ['expander']);
     $form->addItem('CRUD - Full editing solution', ['crud']);
 
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon' => 'cubes']);

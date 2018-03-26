@@ -47,6 +47,8 @@ class App
 
     /**
      * Will display error if callback wasn't triggered.
+     *
+     * @var bool
      */
     public $catch_runaway_callbacks = true;
 
@@ -57,7 +59,12 @@ class App
      */
     public $always_run = true;
 
-    // @var bool
+    /**
+     * Will be set to true after app->run() is called, which may be done automatically
+     * on exit.
+     *
+     * @var bool
+     */
     public $run_called = false;
 
     // @var bool
@@ -413,6 +420,9 @@ class App
         return $request_uri[0];
     }
 
+    /**
+     * @var null
+     */
     public $page = null;
 
     /**
@@ -520,6 +530,9 @@ class App
         }
     }
 
+    /**
+     * @var array global sticky arguments
+     */
     protected $sticky_get_arguments = [];
 
     /**
@@ -562,6 +575,8 @@ class App
 
     /**
      * A convenient wrapper for sending user to another page.
+     *
+     * @param array|string $page Destination page
      */
     public function redirect($page)
     {
@@ -573,6 +588,8 @@ class App
 
     /**
      * Generate action for redirecting user to another page.
+     *
+     * @param string|array $page Destination URL or page/arguments
      */
     public function jsRedirect($page)
     {

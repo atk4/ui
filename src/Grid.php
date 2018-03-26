@@ -86,7 +86,7 @@ class Grid extends View
     {
         parent::init();
 
-        $this->container = $this->add(['View', 'ui'=>'', 'template' => new Template('<div id="{$_id}"><div class="ui table atk-overflow-auto">{$Table}</div>{$Paginator}</div>')]);
+        $this->container = $this->add(['View', 'ui'=>'', 'template' => new Template('<div id="{$_id}"><div class="ui table atk-overflow-auto">{$Table}{$Content}</div>{$Paginator}</div>')]);
 
         if ($this->menu !== false) {
             $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu), 'Menu');
@@ -108,18 +108,31 @@ class Grid extends View
      * @param array|string|object|null $columnDecorator
      * @param array|string|object|null $field
      *
-     * @return Column\Generic
+     * @return TableColumn\Generic
      */
     public function addColumn($name, $columnDecorator = null, $field = null)
     {
         return $this->table->addColumn($name, $columnDecorator, $field);
     }
 
+    /**
+     * Add additional decorator for existing column.
+     *
+     * @param string                    $name      Column name
+     * @param TableColumn\Generic|array $decorator Seed or object of the decorator
+     */
     public function addDecorator($name, $decorator)
     {
         return $this->table->addDecorator($name, $decorator);
     }
 
+    /**
+     * Add a new buton to the Grid Menu with a given text.
+     *
+     * WARNING: needs to be reviewed!
+     *
+     * @param mixed $text
+     */
     public function addButton($text)
     {
         return $this->menu->addItem()->add(new Button($text));
@@ -158,6 +171,14 @@ class Grid extends View
         }
     }
 
+    /**
+     * Adds a new button into the action column on the right. For CRUD this
+     * column will already contain "delete" and "edit" buttons.
+     *
+     * @param string|array|View         $button  Label text, object or seed for the Button
+     * @param jsExpressionable|callable $action  JavaScript action or callback
+     * @param bool|string               $confirm Should we display confirmation "Are you sure?"
+     */
     public function addAction($button, $action, $confirm = false)
     {
         if (!$this->actions) {
@@ -167,6 +188,14 @@ class Grid extends View
         return $this->actions->addAction($button, $action, $confirm);
     }
 
+    /**
+     * Similar to addAction but when button is clicked, modal is displayed
+     * with the $title and $callback is executed through VirtualPage.
+     *
+     * @param string|array|View $button
+     * @param string            $title
+     * @param callable          $callback function($page){ . .}
+     */
     public function addModalAction($button, $title, $callback)
     {
         if (!$this->actions) {
@@ -228,6 +257,12 @@ class Grid extends View
         return $this->model;
     }
 
+    /**
+     * Makes rows of this grid selectable by creating new column on the left with
+     * checkboxes.
+     *
+     * @return TableColumn\CheckBox
+     */
     public function addSelection()
     {
         $this->selection = $this->table->addColumn(null, 'CheckBox');

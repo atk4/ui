@@ -51,6 +51,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
   button.php
   breadcrumb.php
   js.php
+  card.php
   checkbox.php
   columns.php
   console.php
@@ -84,6 +85,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
   sse.php
   sticky.php
   table.php
+  table2.php
   tabs.php
   view.php
   virtual.php

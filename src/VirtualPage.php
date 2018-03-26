@@ -19,7 +19,7 @@ class VirtualPage extends View
     /** @var callable Optional callback function of virtual page */
     public $fx = null;
 
-    /** @var specify custom callback trigger for the URL (see Callback::$urlTrigger) */
+    /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     public $urlTrigger = null;
 
     /** @var string UI container class */

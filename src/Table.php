@@ -12,6 +12,10 @@ class Table extends Lister
     public $content = false;
 
     /**
+     * TODO: is this used??
+     *
+     * @var null
+     *
      * If table is part of Grid or CRUD, we want to reload that instead of grid.
      */
     public $reload = null;
@@ -21,7 +25,7 @@ class Table extends Lister
      * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
      * used.
      *
-     * @var Column\Generic
+     * @var TableColumn\Generic
      */
     public $default_column = null;
 
@@ -90,10 +94,28 @@ class Table extends Lister
      */
     public $t_empty;
 
+    /**
+     * Set this if you want table to appear as sortable. This does not add any
+     * mechanic of actual sorting - either implement manually or use Grid.
+     *
+     * @var null|bool
+     */
     public $sortable = null;
 
+    /**
+     * When $sortable is true, you can specify which column will appear to have
+     * active sorting on it.
+     *
+     * @var string
+     */
     public $sort_by = null;
 
+    /**
+     * When $sortable is true, and $sort_by is set, you can set this to
+     * "ascending" or "descending".
+     *
+     * @var string
+     */
     public $sort_order = null;
 
     public function __construct($class = null)
@@ -119,7 +141,7 @@ class Table extends Lister
      * @param array|string|object|null $columnDecorator
      * @param array|string|object|null $field
      *
-     * @return Column\Generic
+     * @return TableColumn\Generic
      */
     public function addColumn($name, $columnDecorator = null, $field = null)
     {
@@ -250,6 +272,7 @@ class Table extends Lister
 
     protected $typeToDecorator = [
         'password' => 'Password',
+        'money'    => 'Money',
         'text'     => 'Text',
         'boolean'  => ['Status', ['positive' => [true], 'negative' => ['false']]],
     ];
