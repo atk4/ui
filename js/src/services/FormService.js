@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 /**
  * Singleton class
- * Handle Semantic-ui api functionality throughout the app.
+ * Handle Semantic-ui form functionality throughout the app.
  */
 
 class FormService {
@@ -26,6 +26,7 @@ class FormService {
    */
   setService(settings) {
     settings.rules.visible = this.isVisible;
+    settings.rules.notEmpty = settings.rules.empty;
   }
 
   /**
@@ -50,16 +51,16 @@ class FormService {
     const ruleName = this.getRuleName(rule);
     const ruleFunction = this.getRuleFunction(ruleName);
     const $field = this.getField(form, fieldName);
-    const value = $field.val();
+    if ($field) {
+      const value = $field.val();
+    }
     const ancillary = this.getAncillaryValue(rule);
-
     if (ruleFunction) {
       return ruleFunction.call($field, value, ancillary);
     } else {
       console.log('this rule does not exist: '+ruleName);
       return false;
     }
-
   }
 
   normalizeRule(rule) {

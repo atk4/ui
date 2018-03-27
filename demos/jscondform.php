@@ -6,7 +6,7 @@ $form = $app->add('Form');
 //$g = $form->addGroup(['width' => 'three']);
 $form->addField('name');
 
-//$form->addField('gender', ['DropDown', 'values' => ['Female', 'Male']]);
+$form->addField('gender', ['DropDown', 'values' => ['Female', 'Male']]);
 $form->addField('value');
 $form->addField('surname');
 

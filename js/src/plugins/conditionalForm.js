@@ -8,50 +8,64 @@ export default class conditionalForm extends atkPlugin {
   main() {
     this.inputs = {};
     //add change listener to all inputs
-    this.$el.find('input').on('change', this, this.onInputChange);
-    this.$el.find('select').on('change', this, this.onInputChange);
+    this.$el.find('input, select').on('change', this, this.onInputChange);
     this.initialize();
   }
 
   initialize() {
     const that = this;
-    //hide each field where visibility rule apply.
-    $.each(this.settings.fieldRules, (idx, field) => {
-      //get field where visibility rule apply
-      const fname = Object.keys(field)[0];
-      const $field = formService.getField(this.$el, field);
-      if ($field.length > 0) {
-        const $container = $field.closest('.field').hide();
-        $field.data('original', $field.val());
-        that.inputs[field] = {state: false};
-      } else {
-        console.log('Unable to find field: '+field);
+
+    // extract field name from rules and setup initial state.
+    this.inputs = this.settings.fieldRules.reduce((inputs, rules, idx) => {
+      const inputName = Object.keys(rules)[0];
+      inputs[inputName] = false;
+      return inputs;
+    },{});
+
+    //hide fields and get original value.
+    for (const inputName in this.inputs) {
+      const $input = formService.getField(that.$el, inputName);
+      if ($input) {
+        const $container = $input.closest('.field').hide();
+        $input.data('original', $input.val());
       }
-    });
+    }
   }
 
   onInputChange(e) {
     //check rule when inputs has changed.
    const that = e.data;
-   $.each(that.settings.fieldRules, (field, rules) => {
-     const $field = formService.getField(that.$el, field);
-     const $fieldGroup =  $field.closest('.field');
-     let passed = true;
-     $.each(rules, (fieldName, rule) => {
-       if (!Array.isArray(rule)) {
-          rule = [rule];
-       }
-       rule.forEach((r) => {
-         passed &= formService.validateField(that.$el, fieldName, r);
-       })
-     });
-     that.inputs[field].state |= passed;
-     that.setFieldState(passed, $field, $fieldGroup);
-     //passed ? $fieldGroup.show() : $fieldGroup.hide();
+   that.resetInputStatus();
+   that.settings.fieldRules.forEach((fieldRules) => {
+     const inputName = Object.keys(fieldRules)[0];
+     let isValid = true;
+     for (const input in fieldRules[inputName]) {
+       isValid &= formService.validateField(that.$el, input, fieldRules[inputName][input]);
+     }
+     //apply or conditions.
+     that.inputs[inputName] |= isValid;
    });
+
+   that.setInputsState();
   }
 
-  setFieldState(passed, field, fieldGroup) {
+  resetInputStatus(){
+    for (const inputName in this.inputs) {
+      this.inputs[inputName] = false;
+    }
+  }
+
+  setInputsState() {
+    for (const inputName in this.inputs) {
+      const $input = formService.getField(this.$el, inputName);
+      if ($input) {
+        const $container = $input.closest('.field').hide();
+        this.setInputState(this.inputs[inputName], $input, $container);
+      }
+    }
+  }
+
+  setInputState(passed, field, fieldGroup) {
     if (passed) {
       fieldGroup.show();
     } else if (!passed && this.settings.autoReset) {
@@ -67,18 +81,7 @@ export default class conditionalForm extends atkPlugin {
 conditionalForm.DEFAULTS = {
   autoReset: true,
   fieldRules:[
-              {surname:{name:"empty",gender:"is[1]",value:"integer[1..10]"}},
+              {surname:{name:"notEmpty",gender:"is[1]",value:"integer[1..10]"}},
               {surname:{name:"isExactly[dog]"}},
               ]
 };
-
-// fieldRules: {
-//   surname: {name: 'empty'/*, gender:'is[1]'*/, value: 'integer[0..10]'},
-//   surname: {name: 'isExactly[dog]'}
-// },
-// fieldRules: [
-//              {surname: {name: 'empty'/*, gender:'is[1]'*/, value: 'integer[0..10]'}},
-//              {surname: {name: 'isExactly[dog]'}},
-//             ],
-
-//{fieldRules:[{surname:{name:"empty",gender:"is[1]",value:"integer[1..10]"}},{surname:{name:"isExactly[dog]"}}]}
