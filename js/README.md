@@ -97,6 +97,11 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.3.0
+
+  - add plugin, conditionalForm, to allow field to show or hide upon other field condition.
+  - add formService throughout the app.  
+
 ### version 1.2.0
 
   - add plugin, jsSortable, to allow reordering of list element via drap n drop.

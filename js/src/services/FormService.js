@@ -25,7 +25,7 @@ class FormService {
    * @param settings
    */
   setService(settings) {
-    settings.rules.visible = this.isVisible;
+    settings.rules.isVisible = this.isVisible;
     settings.rules.notEmpty = settings.rules.empty;
   }
 
@@ -39,26 +39,27 @@ class FormService {
   }
 
   /**
-   * Validate a field using semantic-ui validate rule function.
+   * Validate a field using our own or semantic-ui validation rule function.
    *
    * @param form  Form containing the field.
-   * @param field Name of field
+   * @param fieldName Name of field
    * @param rule  Rule to apply test.
    * @returns {*|boolean}
    */
   validateField(form, fieldName, rule) {
     rule = this.normalizeRule(rule);
-    const ruleName = this.getRuleName(rule);
-    const ruleFunction = this.getRuleFunction(ruleName);
-    const $field = this.getField(form, fieldName);
-    if ($field) {
-      const value = $field.val();
-    }
-    const ancillary = this.getAncillaryValue(rule);
+    const ruleFunction = this.getRuleFunction(this.getRuleName(rule));
     if (ruleFunction) {
+      const $field = this.getField(form, fieldName);
+      if (!$field) {
+        console.log('You are validating a field that does not exist: ', fieldName);
+        return false;
+      }
+      const value = $field.val();
+      const ancillary = this.getAncillaryValue(rule);
       return ruleFunction.call($field, value, ancillary);
     } else {
-      console.log('this rule does not exist: '+ruleName);
+      console.log('this rule does not exist: '+this.getRuleName(rule));
       return false;
     }
   }
