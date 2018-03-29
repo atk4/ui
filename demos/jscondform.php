@@ -52,7 +52,6 @@ $f_dog->js(true)->atkConditionalForm(['fieldRules' => [
                                     ],
                                    ]);
 
-
 $app->add(['Header', 'Hide or show group', 'size'=>2]);
 
 $f_group = $app->add(new \atk4\ui\Form(['segment']));
@@ -72,7 +71,7 @@ $g_code->addField('html', ['CheckBox']);
 $g_code->addField('css', ['CheckBox']);
 
 $g_other = $f_group->addGroup(['Other Language']);
-$g_other->addField('other',['width' => 'twelve']);
+$g_other->addField('other', ['width' => 'twelve']);
 
 //To hide-show group simply select a field in that group and passed the group class selector.
 $f_group->js(true)->atkConditionalForm(['fieldRules' => ['php' => [['dev' => 'checked']], 'other'=>['dev'=>'checked']], 'selector' => '.atk-form-group']);
