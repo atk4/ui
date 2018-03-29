@@ -101,6 +101,10 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
   - add plugin, conditionalForm, to allow field to show or hide upon other field condition.
   - add formService throughout the app.  
+  
+### version 1.2.1
+
+  - Quick fix for issue #421.
 
 ### version 1.2.0
 
