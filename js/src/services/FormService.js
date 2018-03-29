@@ -27,6 +27,7 @@ class FormService {
   setService(settings) {
     settings.rules.isVisible = this.isVisible;
     settings.rules.notEmpty = settings.rules.empty;
+    settings.rules.isEqual = this.isEqual;
   }
 
   /**
@@ -36,6 +37,10 @@ class FormService {
    */
   isVisible() {
     return $(this).is(':visible');
+  }
+
+  isEqual(value, compare) {
+    return parseInt(value) === parseInt(compare);
   }
 
   /**
@@ -55,7 +60,7 @@ class FormService {
         console.log('You are validating a field that does not exist: ', fieldName);
         return false;
       }
-      const value = $field.val();
+      const value = this.getFieldValue($field);
       const ancillary = this.getAncillaryValue(rule);
       return ruleFunction.call($field, value, ancillary);
     } else {
@@ -71,6 +76,17 @@ class FormService {
     return rule;
   }
 
+  getContainer($field){
+    const $container = $field.closest('.field');
+    if ($container.length > 1) {
+      //radio button.
+      return this.getContainer($container.parent());
+    } else if ($container.length === 0) {
+      return null;
+    }
+    return $container;
+  }
+
   getField(form, identifier) {
     if(form.find('#' + identifier).length > 0 ) {
       return form.find('#' + identifier);
@@ -82,6 +98,17 @@ class FormService {
       return form.find('[name="' + identifier +'[]"]');
     }
     return false;
+  }
+
+  getFieldValue($field) {
+    let value;
+    if ($field.length > 1) {
+      // radio button.
+      value = $field.filter(':checked').val();
+    } else {
+      value = $field.val();
+    }
+    return value;
   }
 
   getRuleFunction(rule) {

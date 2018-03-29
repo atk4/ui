@@ -122,7 +122,10 @@ export default class conditionalForm extends atkPlugin {
       //console.log(input);
       const $input = formService.getField(that.$el, input.inputName);
       if ($input) {
-        const $container = $input.closest('.field').hide();
+        const $container = formService.getContainer($input);
+        if ($container) {
+          $container.hide();
+        }
         that.setInputState(input.state, $input, $container );
       }
     });
@@ -133,7 +136,7 @@ export default class conditionalForm extends atkPlugin {
       fieldGroup.show();
     } else if (!passed && this.settings.autoReset) {
       fieldGroup.hide();
-      field.val(field.data('original'));
+      //field.val(field.data('original'));
     } else if (!passed && !this.settings.autoReset) {
       fieldGroup.hide();
     }
