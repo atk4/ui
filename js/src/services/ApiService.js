@@ -74,7 +74,11 @@ class ApiService {
         if (response && response.html && response.id) {
           result = $('#'+response.id).replaceWith(response.html);
           if (!result.length) {
-            throw({message:'Unable to replace element with id: '+ response.id});
+            //TODO Find a better solution for long term.
+            //Need a way to gracefully abort server request.
+            //when user cancel a request by selecting another request.
+            console.log('Unable to replace element with id: '+ response.id);
+            //throw({message:'Unable to replace element with id: '+ response.id});
           }
         }
         if (response && response.atkjs) {
