@@ -6,7 +6,9 @@ import formService from "../services/FormService";
  * Show or hide input field base on other input field condition.
  * Support all semantic-ui form validation rule.
  * Note on rule. FormService also add two more rule to semantic-ui existing ones:
- *    notEmpty and isVisible.
+ *    - notEmpty;
+ *    - isVisible;
+ *    - isEqual[number] for number comparaison.
  *
  * Here is the phrasing of the rule.
  *  - Show "this field" if all condition are met.
@@ -50,8 +52,13 @@ export default class conditionalForm extends atkPlugin {
 
   main() {
     this.inputs = [];
+    this.selector = this.settings.selector;
+    if (!this.selector) {
+      this.selector = formService.getDefaultSelector();
+    }
     //add change listener to inputs according to selector
     this.$el.find('input, select').on('change', this, this.onInputChange);
+
     this.initialize();
   }
 
@@ -122,11 +129,12 @@ export default class conditionalForm extends atkPlugin {
       //console.log(input);
       const $input = formService.getField(that.$el, input.inputName);
       if ($input) {
-        const $container = formService.getContainer($input);
+        const $container = formService.getContainer($input, that.selector);
         if ($container) {
           $container.hide();
+          that.setInputState(input.state, $input, $container );
         }
-        that.setInputState(input.state, $input, $container );
+
       }
     });
   }
@@ -146,5 +154,6 @@ export default class conditionalForm extends atkPlugin {
 
 conditionalForm.DEFAULTS = {
   autoReset: true,
+  selector: null,
   fieldRules:[],
 };

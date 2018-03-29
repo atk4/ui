@@ -76,11 +76,15 @@ class FormService {
     return rule;
   }
 
-  getContainer($field){
-    const $container = $field.closest('.field');
+  getDefaultSelector() {
+    return $.fn.form.settings.selector.group;
+  }
+
+  getContainer($field, selector){
+    const $container = $field.closest(selector);
     if ($container.length > 1) {
       //radio button.
-      return this.getContainer($container.parent());
+      return this.getContainer($container.parent(), selector);
     } else if ($container.length === 0) {
       return null;
     }
