@@ -148,7 +148,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Set display rule for a group collection.
      *
-     * @param array $rules
+     * @param array  $rules
      * @param string $selector
      *
      * @return $this

@@ -55,13 +55,13 @@ class jsConditionalForm implements jsExpressionable
 
     public function jsRender()
     {
-       $chain = (new jQuery($this->form))
+        $chain = (new jQuery($this->form))
                 ->atkConditionalForm(
                     ['fieldRules' => $this->fieldRules,
-                     'selector' => $this->selector]
+                     'selector'   => $this->selector, ]
                 );
 
-       return $chain->jsRender();
+        return $chain->jsRender();
     }
 
     // }}}
