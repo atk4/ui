@@ -57,7 +57,7 @@ export default class conditionalForm extends atkPlugin {
       this.selector = formService.getDefaultSelector();
     }
     //add change listener to inputs according to selector
-    this.$el.find('input, select').on('change', this, this.onInputChange);
+    this.$el.find('input, select').on('blur change', this, this.onInputChange);
 
     this.initialize();
   }

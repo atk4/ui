@@ -75,6 +75,13 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public $fieldsDisplayRules = [];
 
+    /**
+     * Default selector for jsConditionalForm.
+     *
+     * @var string
+     */
+    public $fieldDisplaySelector = '.field';
+
     // }}}
 
     // {{{ Base Methods
@@ -128,11 +135,32 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * Setter for field display rules.
      *
      * @param array $rules
+     *
+     * @return $this
      */
     public function setFieldsDisplayRules($rules = [])
     {
         $this->fieldsDisplayRules = $rules;
+
+        return $this;
     }
+
+    /**
+     * Set display rule for a group collection.
+     *
+     * @param array $rules
+     * @param string $selector
+     *
+     * @return $this
+     */
+    public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
+    {
+        $this->fieldsDisplayRules = $rules;
+        $this->fieldDisplaySelector = $selector;
+
+        return $this;
+    }
+
     /**
      * Associates form with the model but also specifies which of Model
      * fields should be added automatically.
@@ -397,8 +425,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function renderView()
     {
         $this->ajaxSubmit();
-        if (!empty($this->fieldRules)) {
-            $this->js(true, new jsConditionalForm($this, $this->fieldsDisplayRules));
+        if (!empty($this->fieldsDisplayRules)) {
+            $this->js(true, new jsConditionalForm($this, $this->fieldsDisplayRules, $this->fieldDisplaySelector));
         }
 
         return parent::renderView();

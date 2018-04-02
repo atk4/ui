@@ -12,13 +12,14 @@ $f_phone->addField('phone2');
 $f_phone->addField('phone3');
 $f_phone->addField('phone4');
 
-$f_phone->js(true)->atkConditionalForm(['fieldRules' => [
-                                                            'phone2' => ['phone1' => ['number', 'minLength[5]']],
-                                                            'phone3' => ['phone2' => 'notEmpty', 'phone1' => ['number', 'minLength[5]']],
-                                                            'phone4' => ['phone2' => 'notEmpty', 'phone1' => 'notEmpty', 'phone3' => 'notEmpty'],
-                                                        ],
-                                       ]);
+// Show phoneX when previous phone is visible and has a number with at least 5 char.
+$f_phone->setFieldsDisplayRules([
+                                    'phone2' => ['phone1' => ['number', 'minLength[5]']],
+                                    'phone3' => ['phone2' => ['number', 'minLength[5]', 'isVisible']],
+                                    'phone4' => ['phone3' => ['number', 'minLength[5]', 'isVisible']],
+                                ]);
 
+//////////////////////////////////////////////////////////
 $app->add(['Header', 'Optional subscription', 'size'=>2]);
 
 $f_sub = $app->add(new \atk4\ui\Form(['segment']));
@@ -31,14 +32,17 @@ $f_sub->addField('gender', ['Radio'], ['enum'=>['Female', 'Male']])->set('Female
 $f_sub->addField('m_gift', ['DropDown', 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
 $f_sub->addField('f_gift', ['DropDown', 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
-$f_sub->js(true)->atkConditionalForm(['fieldRules' => [
-                                                        'email' => ['subscribe' => 'checked'],
-                                                        'gender'=> ['subscribe' => 'checked'],
-                                                        'm_gift'=> ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
-                                                        'f_gift'=> ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
-                                                     ],
-                                    ]);
+// Show email and gender when subscribe is checked.
+// Show m_gift when gender is exactly equal to 'male' and subscribe is checked.
+// Show f_gift when gender is exactly equal to 'female' and subscribe is checked.
+$f_sub->setFieldsDisplayRules([
+                               'email' => ['subscribe' => 'checked'],
+                               'gender'=> ['subscribe' => 'checked'],
+                               'm_gift'=> ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
+                               'f_gift'=> ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
+                              ]);
 
+//////////////////////////////////////////////////////////
 $app->add(['Header', 'Dog registration', 'size'=>2]);
 
 $f_dog = $app->add(new \atk4\ui\Form(['segment']));
@@ -47,11 +51,14 @@ $f_dog->addField('race', ['Line']);
 $f_dog->addField('age');
 $f_dog->addField('hair_cut', ['DropDown', 'values' => ['Short', 'Long']]);
 
-$f_dog->js(true)->atkConditionalForm(['fieldRules' => [
-                                        'hair_cut' => [['race' => 'contains[poodle]', 'age'=>'integer[0..5]'], ['race' => 'isExactly[bichon]']],
-                                    ],
-                                   ]);
+// Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
+// OR
+// Show 'hair_cut' when race contains exactly the word 'bichon'
+$f_dog->setFieldsDisplayRules([
+                                'hair_cut' => [['race' => 'contains[poodle]', 'age'=>'integer[1..5]'], ['race' => 'isExactly[bichon]']],
+                              ]);
 
+//////////////////////////////////////////////////////////
 $app->add(['Header', 'Hide or show group', 'size'=>2]);
 
 $f_group = $app->add(new \atk4\ui\Form(['segment']));
@@ -70,8 +77,11 @@ $g_code->addField('js', ['CheckBox']);
 $g_code->addField('html', ['CheckBox']);
 $g_code->addField('css', ['CheckBox']);
 
-$g_other = $f_group->addGroup(['Other Language']);
-$g_other->addField('other', ['width' => 'twelve']);
+$g_other = $f_group->addGroup(['Others']);
+$g_other->addField('language', ['width' => 'eight']);
+$g_other->addField('favorite_pet', ['width' => 'four']);
 
-//To hide-show group simply select a field in that group and passed the group class selector.
-$f_group->js(true)->atkConditionalForm(['fieldRules' => ['php' => [['dev' => 'checked']], 'other'=>['dev'=>'checked']], 'selector' => '.atk-form-group']);
+//To hide-show group simply select a field in that group.
+// Show group where 'php' belong when dev is checked.
+// Show group where 'language' belong when dev is checked.
+$f_group->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language'=>['dev'=>'checked']]);
