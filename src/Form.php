@@ -50,6 +50,31 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public $successTemplate = 'form-success.html';
 
+    /**
+     * Collection of field's conditions for displaying a target field on the form.
+     *
+     * Specifying a condition for showing a target field required the name of the target field
+     * and the rules to show that target field. Each rule contains a source field's name and a condition for the
+     * source field. When each rule is true, then the target field is show on the form.
+     *
+     *  Combine multiple rules for showing a field.
+     *   ex: ['target' => ['source1' => 'notEmpty', 'source2' => 'notEmpty']]
+     *   Show 'target' if 'source1' is not empty AND 'source2' is notEmpty.
+     *
+     *  Combine multiple condition to the same source field.
+     *   ex: ['target' => ['source1' => ['notEmpty','number']]
+     *   Show 'target' if 'source1 is notEmpty AND is a number.
+     *
+     *  Combine multiple arrays of rules will OR the rules for the target field.
+     *  ex: ['target' => [['source1' => ['notEmpty', 'number']], ['source1' => 'isExactly[5]']
+     *  Show "target' if 'source1' is not empty AND is a number
+     *      OR
+     *  Show 'target' if 'source1' is exactly 5.
+     *
+     * @var array
+     */
+    public $fieldsDisplayRules = [];
+
     // }}}
 
     // {{{ Base Methods
@@ -99,6 +124,15 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#'.$this->name]));
     }
 
+    /**
+     * Setter for field display rules.
+     *
+     * @param array $rules
+     */
+    public function setFieldsDisplayRules($rules = [])
+    {
+        $this->fieldsDisplayRules = $rules;
+    }
     /**
      * Associates form with the model but also specifies which of Model
      * fields should be added automatically.
@@ -363,6 +397,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function renderView()
     {
         $this->ajaxSubmit();
+        if (!empty($this->fieldRules)) {
+            $this->js(true, new jsConditionalForm($this, $this->fieldsDisplayRules));
+        }
 
         return parent::renderView();
     }
