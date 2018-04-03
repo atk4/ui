@@ -253,7 +253,7 @@ class App
             $layout = $this->normalizeClassNameApp($layout, 'Layout');
             $layout = new $layout($options);
         }
-         */
+        */
         $layout->app = $this;
 
         if (!$this->html) {
@@ -355,6 +355,12 @@ class App
         $this->run_called = true;
         $this->hook('beforeRender');
         $this->is_rendering = true;
+
+        // if no App layout set
+        if (!isset($this->html)) {
+            throw new Exception(['App layout should be set.']);
+        }
+
         $this->html->template->set('title', $this->title);
         $this->html->renderAll();
         $this->html->template->appendHTML('HEAD', $this->html->getJS());
