@@ -1,6 +1,8 @@
+import debounce from 'debounce';
 import atkPlugin from 'plugins/atkPlugin';
 import $ from 'jquery';
 import formService from "../services/FormService";
+
 
 /**
  * Show or hide input field base on other input field condition.
@@ -57,7 +59,9 @@ export default class conditionalForm extends atkPlugin {
       this.selector = formService.getDefaultSelector();
     }
     //add change listener to inputs according to selector
-    this.$el.find('input, select').on('blur change', this, this.onInputChange);
+    this.$el.find( ':checkbox').on('change', this, debounce(this.onInputChange, 100, true));
+    this.$el.find(':radio').on('change', this, debounce(this.onInputChange, 100, true));
+    this.$el.find('input').on(this.settings.validateEvent, this, debounce(this.onInputChange, 500));
 
     this.initialize();
   }
@@ -113,7 +117,6 @@ export default class conditionalForm extends atkPlugin {
        input.state |= isAndValid;
      });
     });
-
    that.setInputsState();
   }
 
@@ -126,7 +129,6 @@ export default class conditionalForm extends atkPlugin {
   setInputsState() {
     const that = this;
     this.inputs.forEach((input) => {
-      //console.log(input);
       const $input = formService.getField(that.$el, input.inputName);
       if ($input) {
         const $container = formService.getContainer($input, that.selector);
@@ -154,6 +156,7 @@ export default class conditionalForm extends atkPlugin {
 
 conditionalForm.DEFAULTS = {
   autoReset: true,
+  validateEvent: 'keydown',
   selector: null,
   fieldRules:[],
 };

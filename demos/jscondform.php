@@ -15,8 +15,8 @@ $f_phone->addField('phone4');
 // Show phoneX when previous phone is visible and has a number with at least 5 char.
 $f_phone->setFieldsDisplayRules([
                                     'phone2' => ['phone1' => ['number', 'minLength[5]']],
-                                    'phone3' => ['phone2' => ['number', 'minLength[5]', 'isVisible']],
-                                    'phone4' => ['phone3' => ['number', 'minLength[5]', 'isVisible']],
+                                    'phone3' => ['phone2' => ['number', 'minLength[5]'],'phone1' => ['number', 'minLength[5]']],
+                                    'phone4' => ['phone3' => ['number', 'minLength[5]'],'phone2' => ['number', 'minLength[5]'],'phone1' => ['number', 'minLength[5]']],
                                 ]);
 
 //////////////////////////////////////////////////////////
