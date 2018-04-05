@@ -89,7 +89,7 @@ class AutoComplete extends Input
             $this->action = $this->factory(['Button', is_string($this->plus) ? $this->plus : 'Add new']);
         }
         //var_Dump($this->model->get());
-        $vp = $this->app->add('VirtualPage');
+        $vp = $this->form->add('VirtualPage');
         $vp->set(function ($p) {
             $f = $p->add('Form');
             $f->setModel($this->model);
