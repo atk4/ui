@@ -72,7 +72,7 @@ merge_tag=$(git rev-parse HEAD)
 git commit -m "Set up stable dependencies for $version" composer.json
 
 # Build jsLib and bundle
-(cd js; npm run build)
+(cd js; npm install; npm run build)
 
 # Build CSS
 lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
