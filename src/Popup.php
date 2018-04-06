@@ -44,15 +44,14 @@ class Popup extends View
      */
     public $popOptions = [];
 
-
     public function init()
     {
         parent::init();
         $this->popOptions = array_merge($this->popOptions, [
-            'popup' => '#'.$this->name,
-            'on' => $this->triggerOn,
+            'popup'    => '#'.$this->name,
+            'on'       => $this->triggerOn,
             'position' => $this->position,
-            'target' => ($this->target) ? '#'.$this->target->name : false,
+            'target'   => ($this->target) ? '#'.$this->target->name : false,
         ]);
     }
 
@@ -117,7 +116,6 @@ class Popup extends View
 
         return $this;
     }
-
 
     public function renderView()
     {

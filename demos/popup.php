@@ -9,12 +9,11 @@ $browse = $m->add(['DropDown', 'Browse']);
 $browse->setSource([]);
 $m->addItem('Cart')->add('Icon')->set('cart');
 
-
 $pop = $app->add('Popup', ['triggerBy' => $browse, 'position' => 'bottom left'])
            ->setHoverable()
            ->setOption('delay', ['show' => 100, 'hide' => 400]);
 
-$v= $pop->add('View', ['ui'=>'fluid']);
+$v = $pop->add('View', ['ui'=>'fluid']);
 $cols = $v->add('Columns', ['ui' => 'relaxed divided grid']);
 
 $c1 = $cols->addColumn();
@@ -46,7 +45,7 @@ $app->add('Header')->set('Specifying trigger');
 
 $button = $app->add(['Button', 'Click Me', 'primary']);
 
-$b_pop = $app->add('Popup',  ['triggerBy' => $button, 'triggerOn' => 'click']);
+$b_pop = $app->add('Popup', ['triggerBy' => $button, 'triggerOn' => 'click']);
 $b_pop->add('Header', ['size'=> 5])->set('Using click events');
 $b_pop->add('View')->set('Clicked popups will close if you click away, but not if you click inside it.');
 
@@ -60,13 +59,6 @@ $i_pop->add('View')->set('You can use this field to search data.');
 //    ->js(true)
 //    ->popup();
 
-
 ///
 
-
-
 //$btn = $app->add('Button', ['content'=> 'allo']);
-
-
-
-
