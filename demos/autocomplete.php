@@ -33,11 +33,11 @@ $form->addField('country3', [
 //$acc = $form->getField('country_id');
 //$acc->actionRight = ['Button', 'Hello htere'];
 
-$form->onSubmit(function ($f) {
-    return $f->model->ref('country_id')['name'];
+$form->onSubmit(function ($f) use ($db) {
+    return $f->model->ref('country1')['name'].' / '.$f->model->ref('country2')['name'].' / '.(new Country($db))->load($f->model['country3'])->get('name');
 });
 
-$layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'left' => true, 'icon' => 'users']));
+//$layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', /*'left' => true,*/ 'icon' => 'users']));
 
 $layout->add(new \atk4\ui\Header(['Labels', 'size' => 2]));
 
