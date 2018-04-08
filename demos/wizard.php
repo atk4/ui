@@ -22,7 +22,7 @@ $t->addStep('Welcome', function ($p) {
 $t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection String'], function ($p) {
     $f = $p->add('Form');
 
-    $f->addField('dsn', 'Connect DSN', ['required'=>true])->placholder = 'mysql://user:pass@db-host.example.com/mydb';
+    $f->addField('dsn', 'Connect DSN', ['required'=>true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
     $f->onSubmit(function ($f) use ($p) {
         $p->memorize('dsn', $f->model['dsn']);
 
