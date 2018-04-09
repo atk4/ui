@@ -137,11 +137,16 @@ class Popup extends View
      *
      * @throws Exception
      */
-    public function set($fx)
+    public function set($f = null, $arg2 = null)
     {
         if (!is_object($fx) && !($fx instanceof Closure)) {
             throw new Exception('Error: Need to pass a function to Popup::set()');
         }
+
+        if ($arg2) {
+            throw new Exception('Only one argument is needed by Popup::set()');
+        }
+
         $this->cb = $this->add('Callback');
 
         if (!$this->minWidth) {
