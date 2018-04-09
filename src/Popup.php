@@ -11,7 +11,6 @@ namespace atk4\ui;
  *
  * When adding a popup to the page, you need to specify it's trigger element
  * and the event needed on the trigger element in order to display the popup.
- *
  */
 class Popup extends View
 {
@@ -130,7 +129,6 @@ class Popup extends View
             //PopupService will replace content with this one.
             $this->app->terminate($content->renderJSON());
         }
-
     }
 
     /**
@@ -221,7 +219,7 @@ class Popup extends View
 
         if ($this->cb) {
             $this->setAttr('data-uri', $this->cb->getJSURL());
-            $this->setAttr('data-cache', $this->useCache ? 'true':'false');
+            $this->setAttr('data-cache', $this->useCache ? 'true' : 'false');
             $this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
         }
 
