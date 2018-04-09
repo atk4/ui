@@ -70,6 +70,9 @@ class Cart extends \atk4\ui\Lister
 
 /**
  * Implementation of a generic item shelf. Shows selection of products and allow to bind click event.
+ *
+ * Method linkCart allow you to link ItemShelf with Cart. Clicking on a shelf item will place that
+ * item inside a cart reloading it afterwards.
  */
 class ItemShelf extends \atk4\ui\View
 {
