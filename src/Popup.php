@@ -2,6 +2,17 @@
 
 namespace atk4\ui;
 
+/**
+ * Implement popup view.
+ *
+ * Popup are views that will be display when triggered by another view.
+ *
+ * Popup can add content statically or dynamically via a callback.
+ *
+ * When adding a popup to the page, you need to specify it's trigger element
+ * and the event needed on the trigger element in order to display the popup.
+ *
+ */
 class Popup extends View
 {
     public $ui = 'popup';
@@ -11,7 +22,7 @@ class Popup extends View
      * Usually the view where popup is attached to,
      * unless target is supply.
      *
-     * @var View|null
+     * @var View|string|null Object view or a string id.
      */
     public $triggerBy = null;
 
@@ -44,6 +55,46 @@ class Popup extends View
      */
     public $popOptions = [];
 
+    /**
+     * The callback use to generate dynamic content.
+     *
+     * @var Callback|null
+     */
+    public $cb = null;
+
+    /**
+     * The dynamic View to load inside the popup
+     * when dynamic content is use.
+     *
+     * Default to 'View'.
+     *
+     * @var View|string
+     */
+    public $dynamicContent = 'View';
+
+    /**
+     * Whether or not dynamic content is cache.
+     * If cache is on, will retrieve content only the first time
+     * popup is requrired.
+     *
+     * @var bool
+     */
+    public $useCache = false;
+
+    /**
+     * Min width for a dynamic popup.
+     *
+     * @var string
+     */
+    public $minWidth = '120px';
+
+    /**
+     * Min height for a dynamic popup.
+     *
+     * @var string
+     */
+    public $minHeight = '60px';
+
     public function init()
     {
         parent::init();
@@ -55,9 +106,45 @@ class Popup extends View
         ]);
     }
 
-    public function setTriggerByName($name)
+    /**
+     * Set callback for loading content dynamically.
+     * Callback will reveive a view attach to this popup
+     * for adding content to it.
+     *
+     * @param $fx
+     *
+     * @throws Exception
+     */
+    public function set($fx)
     {
-        $this->popOptions['popup'] = $name;
+        if (!is_object($fx) && !($fx instanceof Closure)) {
+            throw new Exception('Error: Need to pass a function to Popup::set()');
+        }
+        $this->cb = $this->add('Callback');
+
+        if ($this->cb->triggered()) {
+            //create content view to pass to callback.
+            $content = $this->add($this->dynamicContent);
+            $this->cb->set($fx, [$content]);
+            //only render our content view.
+            //PopupService will replace content with this one.
+            $this->app->terminate($content->renderJSON());
+        }
+
+    }
+
+    /**
+     * Set triggerBy.
+     *
+     * @param $trigger
+     *
+     * @return $this
+     */
+    public function setTriggerBy($trigger)
+    {
+        $this->triggerBy = $trigger;
+
+        return $this;
     }
 
     /**
@@ -120,13 +207,22 @@ class Popup extends View
     public function renderView()
     {
         if ($this->triggerBy) {
-            $name = '#'.$this->triggerBy->name;
-            if ($this->triggerBy instanceof FormField\Generic) {
-                $name = '#'.$this->triggerBy->name.'_input';
+            $name = $this->triggerBy;
+            if (!is_string($this->triggerBy)) {
+                $name = '#'.$this->triggerBy->name;
+                if ($this->triggerBy instanceof FormField\Generic) {
+                    $name = '#'.$this->triggerBy->name.'_input';
+                }
             }
             $chain = new jQuery($name);
             $chain->popup($this->popOptions);
             $this->js(true, $chain);
+        }
+
+        if ($this->cb) {
+            $this->setAttr('data-uri', $this->cb->getJSURL());
+            $this->setAttr('data-cache', $this->useCache ? 'true':'false');
+            $this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
         }
 
         parent::renderView();

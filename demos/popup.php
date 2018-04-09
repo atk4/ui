@@ -2,12 +2,41 @@
 
 require 'init.php';
 
+$m_right = $layout->menuRight->addMenu(['', 'icon'=>'user']);
+
+$signup = $app->add('Popup', ['triggerBy'=>$m_right, 'position' => 'bottom right'])->setHoverable();
+$signup->set(function($pop) {
+    $f = $pop->add('Form');
+    $f->addField('email', null, ['required'=>true]);
+    $f->addField('password', ['Password'], ['required'=>true]);
+    $f->buttonSave->set('Login');
+    $f->onSubmit(function($f){
+        return new atk4\ui\jsExpression('alert([])', ['Thank you '.$f->model['email']]);
+    });
+});
+
+//////////////////////////////////////////////////////////////////////////////
+
 $app->add('Header')->set('Menu popup');
 
 $m = $app->add('Menu');
 $browse = $m->add(['DropDown', 'Browse']);
 $browse->setSource([]);
-$m->addItem('Cart')->add('Icon')->set('cart');
+$cart = $m->addItem('Cart');
+$cart->add('Icon')->set('cart');
+
+$dyn_pop = $app->add('Popup', ['triggerBy'=> $cart, 'position' => 'bottom left'])->setHoverable();
+$dyn_pop->set(function($pop){
+    //get number of items in cart with total price.
+    $item = rand(2,8);
+    $unit_price = rand(1,3);
+    $total = $item * ($unit_price + rand(0,100)/100);
+    $pop->add(['Label', 'Number of items:', 'detail' => $item]);
+    $pop->add(['Label', '$'.$total]);
+    $pop->add('Item')->setElement('hr');
+    $btn = $pop->add(['Button', 'Checkout', 'primary small']);
+    $btn->js('click', new atk4\ui\jsExpression('alert([])', ['Thank you for checking out']));
+});
 
 $pop = $app->add('Popup', ['triggerBy' => $browse, 'position' => 'bottom left'])
            ->setHoverable()
@@ -58,7 +87,3 @@ $i_pop->add('View')->set('You can use this field to search data.');
 //    ->set('Click')
 //    ->js(true)
 //    ->popup();
-
-///
-
-//$btn = $app->add('Button', ['content'=> 'allo']);
