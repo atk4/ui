@@ -1104,7 +1104,7 @@ class View implements jsExpressionable
      * If GET argument is empty or false, it won't make into URL.
      *
      * If GET argument is not presently set you can specify a 2nd argument
-     * to forge-set the GET argument for current view and it's sub-views. 
+     * to forge-set the GET argument for current view and it's sub-views.
      *
      * @param string $name
      * @param string $newValue
@@ -1115,6 +1115,7 @@ class View implements jsExpressionable
     {
         if ($newValue) {
             $this->stickyArgs[$name] = $newValue;
+
             return $newValue;
         }
         if (isset($_GET[$name])) {
