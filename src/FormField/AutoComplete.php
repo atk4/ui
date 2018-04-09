@@ -198,7 +198,7 @@ class AutoComplete extends Input
     {
         $settings = array_merge([
             'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
-            'apiSettings' => array_merge($this->apiConfig, ['url' => $this->getCallbackURL().'&q={query}']),
+            'apiSettings' => array_merge(['url' => $this->getCallbackURL().'&q={query}'], $this->apiConfig),
         ], $this->settings);
 
         $chain->dropdown($settings);
