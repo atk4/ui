@@ -140,7 +140,7 @@ $shelf = $app->add(new ItemShelf());
 
 // Here we are facing a pretty interesting problem. If you attempt to put "Cart" object inside a popup directly,
 // it won't work, because it will be located inside the menu item's DOM tree and, although hidden, will be
-// impacted by some css rules of the menu. 
+// impacted by some css rules of the menu.
 //
 // This can happen when your popup content is non-trivial. So we are moving Popup into the app and linking up
 // the triggers. Now, since it's outside, we can't use a single jsAction to reload menu item (along with label)
@@ -156,16 +156,12 @@ $shelf = $app->add(new ItemShelf());
 // as i would be in the application. That's also impacts under which key 'memorize' is storing data - having
 // two different objects won't work, since they won't share session data.
 
-
-
-
 $cart = $app->add(new Cart());
 
 // Next I am calling destroy. This won't actually destroy the cart, but it will remove it from the application.
 // If i add unset($cart) afterwards, garbage collector will trigger destructor. Instead I'm passing $cart
 // into the callback and making it part of the pop-up render tree.
 $cart->destroy();
-
 
 // Label now can be added referencing Cart's items. Init() was colled when I added it into app, so the
 // item property is populated.
@@ -174,9 +170,8 @@ if (!$cart->items) {
     $cart_outter_label->addStyle('display', 'none');
 }
 
-$cart_popup->set(function($popup) use($shelf, $cart_outter_label, $cart) {
-
-    $cart_inner_label = $popup->add(['Label', 'Number of items:', ]);
+$cart_popup->set(function ($popup) use ($shelf, $cart_outter_label, $cart) {
+    $cart_inner_label = $popup->add(['Label', 'Number of items:']);
 
     // cart is already initialized, so init() is not called again. However, cart will be rendered
     // as a child of a pop-up now.
@@ -187,19 +182,16 @@ $cart_popup->set(function($popup) use($shelf, $cart_outter_label, $cart) {
     $btn = $popup->add(['Button', 'Checkout', 'primary small']);
 });
 
-
 // Add item shelf below menu and link it with the cart
 $shelf->linkCart($cart, [
     // array is a valid js action. Will relad cart item (along with drop-down and label)
-    $cart_outter_label->jsReload(), 
+    $cart_outter_label->jsReload(),
 
     // also will hide current item from the shelf
     (new \atk4\ui\jQuery())->hide(),
 ]);
 
-
 // label placed on top of menu item, not in the popup
-
 
 $pop = $browse->add('Popup', ['triggerBy' => $browse, 'position' => 'bottom left', 'minWidth'=>'500px'])
            ->setHoverable()
