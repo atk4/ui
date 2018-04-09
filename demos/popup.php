@@ -2,71 +2,211 @@
 
 require 'init.php';
 
-$m_right = $layout->menuRight->addMenu(['', 'icon'=>'user']);
 
-$signup = $app->add('Popup', ['triggerBy'=>$m_right, 'position' => 'bottom right'])->setHoverable();
-$signup->set(function ($pop) {
-    $f = $pop->add('Form');
-    $f->addField('email', null, ['required'=>true]);
-    $f->addField('password', ['Password'], ['required'=>true]);
-    $f->buttonSave->set('Login');
-    $f->onSubmit(function ($f) {
-        return new atk4\ui\jsExpression('alert([])', ['Thank you '.$f->model['email']]);
-    });
-});
+/**
+ * Example implementation of a dynamic view which support session. 
+ *
+ * Cart will memorize and restore its items into session. Cart will also
+ * render the items.
+ */
+class Cart extends \atk4\ui\Lister 
+{
+    use \atk4\core\SessionTrait;
+
+    public $items = [];
+
+    public $defaultTemplate = 'lister.html';
+
+    function init()
+    {
+        parent::init();
+        $this->items = $this->recall('items', []);
+
+        // Clicking on any URL produced by this Lister will carry on an extra GET argument
+        $this->stickyGet($this->name.'_remove', true);
+
+        // Set default description for our row template. Normally this is replaced by the 'descr' field
+        // of a model, but we don't have it, so it will stay like this.
+        $this->t_row['descr'] = 'click on link to remove item';
+
+        // We link to ourselves with this special GET argument to indicate that item must be removed.
+        if (isset($_GET[$this->name.'_remove'])) {
+            $this->removeItem($_GET['id']);
+
+            // redirect again, since we don't want this to stay in the URL
+            $this->app->redirect([$this->name.'_remove'=>false]);
+        }
+    }
+
+    /**
+     * adding an item into the cart
+     */
+    function addItem($item)
+    {
+        $this->items[] = $item;
+        $this->memorize('items', $this->items);
+    }
+
+    /**
+     * remove item form the cart with specified index
+     */
+    function removeItem($no)
+    {
+        unset($this->items[$no]);
+        $this->memorize('items', $this->items);
+    }
+
+    /**
+     * renders as a regular lister, but source is the items
+     */
+    function renderView()
+    {
+        // memorize items
+
+        $this->setSource($this->items);
+        return parent::renderView();
+    }
+
+}
+
+/**
+ * Implementation of a generic item shelf. Shows selection of products and allow to bind click event
+ */
+class ItemShelf extends \atk4\ui\View {
+    public $ui = 'green segment';
+    function init() {
+        parent::init();
+        $v = $this->add('View', ['ui'=>'fluid']);
+        $cols = $v->add('Columns', ['ui' => 'relaxed divided grid']);
+
+        $c1 = $cols->addColumn();
+        $c1->add('Header', ['size' => 'small'])->set('Snacks');
+        $l1 = $c1->add('View', ['ui' => 'list']);
+        $l1->add('Item', ['content'=>'Crisps', 'ui' => 'item'])->setElement('a');
+        $l1->add('Item', ['content'=>'Pork Scratchings', 'ui' => 'item'])->setElement('a');
+        $l1->add('Item', ['content'=>'Candies', 'ui' => 'item'])->setElement('a');
+        $l1->add('Item', ['content'=>'Sweets', 'ui' => 'item'])->setElement('a');
+
+        $c2 = $cols->addColumn();
+        $c2->add('Header', ['size' => 'small'])->set('Drinks');
+        $l2 = $c2->add('View', ['ui' => 'list']);
+        $l2->add('Item', ['content'=>'Fizzy Drink', 'ui' => 'item'])->setElement('a');
+        $l2->add('Item', ['content'=>'Hot Latte', 'ui' => 'item'])->setElement('a');
+        $l2->add('Item', ['content'=>'Water', 'ui' => 'item'])->setElement('a');
+        $l2->add('Item', ['content'=>'Apple Juice', 'ui' => 'item'])->setElement('a');
+
+        $c3 = $cols->addColumn();
+        $c3->add('Header', ['size' => 'small'])->set('Mains');
+        $l3 = $c3->add('View', ['ui' => 'list']);
+        $l3->add('Item', ['content'=>'Chicken Tikka', 'ui' => 'item'])->setElement('a');
+        $l3->add('Item', ['content'=>'Green Curry', 'ui' => 'item'])->setElement('a');
+        $l3->add('Item', ['content'=>'Pastries', 'ui' => 'item'])->setElement('a');
+    }
+
+    /**
+     * Associate your shelf with cart, so that when item is clicked, the content of a
+     * cart is updated.
+     *
+     * Also - you can supply jsAction to execute when this happens.
+     */
+    function linkCart(Cart $cart, $jsAction = null) {
+        $this->on('click', '.item', function($a, $b) use($cart, $jsAction) {
+            $cart->addItem($b);
+            return $jsAction;
+
+        }, [(new \atk4\ui\jQuery())->text()]);
+    }
+}
+
+
+$app->add('Header')->set('Menu popup');
+$m = $app->add('Menu');
+
+// You may add popup on top of menu items or dropdowns. Dropdowns have a slightly different
+// look, with that triangle on the right. You don't have to add pop-up right away, it can be
+// added later.
+$browse = $m->add(['DropDown', 'Browse']);
+
+// Add cart item into the menu, with a popup inside
+$cart_item = $m->addItem(['Cart', 'icon'=>'cart']);
+
+$cart_popup = $cart_item->add(['Popup', 'position'=>'bottom left']);
+// Popup won't dissapear as you hover over it.
+$cart_popup->setHoverable();
+
+// Label placed inside the popup
+$cart_inner_label = $cart_popup->add(['Label', 'Number of items:', ]);
+
+// Custom Cart view placed inside a popup
+$cart = $cart_popup->add(new Cart());
+$cart_inner_label->detail = count($cart->items);
+$cart_popup->add('Item')->setElement('hr');
+$btn = $cart_popup->add(['Button', 'Checkout', 'primary small']);
+
+// label placed on top of menu item, not in the popup
+$cart_outter_label = $cart_item->add(['Label', count($cart->items), 'floating red ']);
+if(!$cart->items) {
+    $cart_outter_label->addStyle('display', 'none');
+}
+
+// Add item shelf below menu and link it with the cart
+$shelf = $app->add(new ItemShelf());
+$shelf->linkCart($cart, [
+    // array is a valid js action. Will relad cart item (along with drop-down and label)
+    $cart_item->jsReload(), 
+
+    // also will hide current item from the shelf
+    (new \atk4\ui\jQuery())->hide()
+]);
+
+
+$pop = $browse->add('Popup', ['triggerBy' => $browse, 'position' => 'bottom left', 'minWidth'=>'500px'])
+           ->setHoverable()
+           ->setOption('delay', ['show' => 100, 'hide' => 400]);
+$shelf2 = $pop->add(new ItemShelf());
+$shelf2->linkCart($cart, $cart_item->jsReload());
+
 
 //////////////////////////////////////////////////////////////////////////////
 
-$app->add('Header')->set('Menu popup');
 
-$m = $app->add('Menu');
-$browse = $m->add(['DropDown', 'Browse']);
-$browse->setSource([]);
-$cart = $m->addItem('Cart');
-$cart->add('Icon')->set('cart');
+$um = $m->add(['Menu', 'ui' => false], 'RightMenu')
+    ->addClass('right menu')->removeClass('item');
+$m_right = $um->addMenu(['', 'icon'=>'user']);
 
-$dyn_pop = $app->add('Popup', ['triggerBy'=> $cart, 'position' => 'bottom left'])->setHoverable();
-$dyn_pop->set(function ($pop) {
-    //get number of items in cart with total price.
-    $item = rand(2, 8);
-    $unit_price = rand(1, 3);
-    $total = $item * ($unit_price + rand(0, 100) / 100);
-    $pop->add(['Label', 'Number of items:', 'detail' => $item]);
-    $pop->add(['Label', '$'.$total]);
-    $pop->add('Item')->setElement('hr');
-    $btn = $pop->add(['Button', 'Checkout', 'primary small']);
-    $btn->js('click', new atk4\ui\jsExpression('alert([])', ['Thank you for checking out']));
+// If you add popup right inside the view, it will link itself with the element. If you are adding it into other container,
+// you can still manually link it and specify an event.
+$signup = $m_right->add('Popup', ['position' => 'bottom right'])->setHoverable();
+
+// This popup will be dynamically loaded.
+$signup->stickyGet('logged');
+$signup->set(function ($pop) {
+
+    // contetn of the popup will be different depending on this condition.
+    if (isset($_GET['logged'])) { 
+        $pop->add(['Message', 'You are already logged in as '.$_GET['logged']]);
+        $pop->add(['Button', 'Logout', 'primary', 'icon'=>'sign out'])
+            ->link($pop->app->url());
+    } else {
+        $f = $pop->add('Form');
+        $f->addField('email', null, ['required'=>true]);
+        $f->addField('password', ['Password'], ['required'=>true]);
+        $f->buttonSave->set('Login');
+
+
+        // popup handles callbacks properly, so dynamic element such as form works
+        // perfectly inside a popup.
+        $f->onSubmit(function ($f) {
+            if ($f->model['password'] != '123') {
+                return $f->error('password', 'Please use password "123"');
+            }
+
+            // refreshes entire page
+            return $f->app->jsRedirect(['logged'=>$f->model['email']]);
+            //return new atk4\ui\jsExpression('alert([])', ['Thank you '.$f->model['email']]);
+        });
+    }
 });
-
-$pop = $app->add('Popup', ['triggerBy' => $browse, 'position' => 'bottom left'])
-           ->setHoverable()
-           ->setOption('delay', ['show' => 100, 'hide' => 400]);
-
-$v = $pop->add('View', ['ui'=>'fluid']);
-$cols = $v->add('Columns', ['ui' => 'relaxed divided grid']);
-
-$c1 = $cols->addColumn();
-$c1->add('Header', ['size' => 5])->set('Fabrics');
-$l1 = $c1->add('View', ['ui' => 'list']);
-$l1->add('Item', ['content'=>'Cahsmere', 'ui' => 'item'])->setElement('a');
-$l1->add('Item', ['content'=>'Linen', 'ui' => 'item'])->setElement('a');
-$l1->add('Item', ['content'=>'Cotton', 'ui' => 'item'])->setElement('a');
-$l1->add('Item', ['content'=>'Viscose', 'ui' => 'item'])->setElement('a');
-
-$c2 = $cols->addColumn();
-$c2->add('Header', ['size' => 5])->set('Size');
-$l2 = $c2->add('View', ['ui' => 'list']);
-$l2->add('Item', ['content'=>'Small', 'ui' => 'item'])->setElement('a');
-$l2->add('Item', ['content'=>'Medium', 'ui' => 'item'])->setElement('a');
-$l2->add('Item', ['content'=>'Large', 'ui' => 'item'])->setElement('a');
-$l2->add('Item', ['content'=>'Plus', 'ui' => 'item'])->setElement('a');
-
-$c3 = $cols->addColumn();
-$c3->add('Header', ['size' => 5])->set('Colors');
-$l3 = $c3->add('View', ['ui' => 'list']);
-$l3->add('Item', ['content'=>'Neutrals', 'ui' => 'item'])->setElement('a');
-$l3->add('Item', ['content'=>'Brights', 'ui' => 'item'])->setElement('a');
-$l3->add('Item', ['content'=>'Pastels', 'ui' => 'item'])->setElement('a');
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -74,16 +214,18 @@ $app->add('Header')->set('Specifying trigger');
 
 $button = $app->add(['Button', 'Click Me', 'primary']);
 
-$b_pop = $app->add('Popup', ['triggerBy' => $button, 'triggerOn' => 'click']);
-$b_pop->add('Header', ['size'=> 5])->set('Using click events');
-$b_pop->add('View')->set('Clicked popups will close if you click away, but not if you click inside it.');
+$b_pop = $button->add('Popup');
+
+$b_pop->add('Header')->set('Using click events');
+$b_pop->add('View')->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
 
 $input = $app->add(new \atk4\ui\FormField\Line(['placeholder' => 'Search users', 'icon' => 'circular search link']));
 
 $i_pop = $app->add('Popup', ['triggerBy' => $input, 'triggerOn' => 'focus']);
 $i_pop->add('View')->set('You can use this field to search data.');
 
-//$button = $app->add('Button', ['attr' => ['data-content'=>'Click here an nothing happen']])
-//    ->set('Click')
-//    ->js(true)
-//    ->popup();
+
+$button = $app->add(['Button', null, 'icon'=>'volume down']);
+$b_pop = $button->add(['Popup', 'triggerOn'=>'hover']);
+
+$b_pop->add(['FormField\Checkbox', 'Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));

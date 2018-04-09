@@ -30,7 +30,7 @@ class Popup extends View
      *
      * @var string
      */
-    public $triggerOn = 'hover';
+    public $triggerOn = null; 
 
     /**
      * Default position of the popup in relation to target element.
@@ -85,18 +85,42 @@ class Popup extends View
      *
      * @var string
      */
-    public $minWidth = '120px';
+    public $minWidth = null; //'120px';
 
     /**
      * Min height for a dynamic popup.
      *
      * @var string
      */
-    public $minHeight = '60px';
+    public $minHeight = null; //'60px';
 
     public function init()
     {
         parent::init();
+
+        if (
+            $this->owner instanceof Item ||
+            $this->owner instanceof Menu ||
+            $this->owner instanceof DropDown
+        ) {
+            if (is_null($this->triggerBy)) {
+                $this->triggerBy = $this->owner;
+            }
+            if (is_null($this->triggerOn)) {
+                $this->triggerOn = 'hover';
+            }
+        } elseif (
+            $this->owner instanceof Button
+        ) {
+            if (is_null($this->triggerBy)) {
+                $this->triggerBy = $this->owner;
+            }
+            if (is_null($this->triggerOn)) {
+                $this->triggerOn = 'click';
+            }
+        }
+
+
         $this->popOptions = array_merge($this->popOptions, [
             'popup'    => '#'.$this->name,
             'on'       => $this->triggerOn,
@@ -120,6 +144,14 @@ class Popup extends View
             throw new Exception('Error: Need to pass a function to Popup::set()');
         }
         $this->cb = $this->add('Callback');
+
+        if (!$this->minWidth) {
+            $this->minWidth = '120px';
+        }
+
+        if (!$this->minHeight) {
+            $this->minHeight = '60px';
+        }
 
         if ($this->cb->triggered()) {
             //create content view to pass to callback.
@@ -220,8 +252,16 @@ class Popup extends View
         if ($this->cb) {
             $this->setAttr('data-uri', $this->cb->getJSURL());
             $this->setAttr('data-cache', $this->useCache ? 'true' : 'false');
-            $this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
         }
+
+        if ($this->minWidth) {
+            $this->setStyle('min-width', $this->minWidth);
+        }
+
+        if ($this->minHeight) {
+            $this->setStyle('min-height', $this->minHeight);
+        }
+            //$this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
 
         parent::renderView();
     }

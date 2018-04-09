@@ -1,11 +1,13 @@
 <div id="{$_id}" class="{_ui}ui{/} {$class} {_class}list{/}" style="{$style}" {$attributes}>
-| {rows}{row}
+| {rows}
 .ui.list
+    | {row}
     .item
         i(class="{$icon} icon")
         .content
             a.header(href="{$_href}") {$_title}
             .description
                 | {descr}Value of "descr" column appears here. See docs on how to override Lister template{/}
-| {/}{/}
+    | {/}
+| {/}
 </div>
