@@ -137,7 +137,7 @@ class Popup extends View
      *
      * @throws Exception
      */
-    public function set($f = null, $arg2 = null)
+    public function set($fx = null, $arg2 = null)
     {
         if (!is_object($fx) && !($fx instanceof Closure)) {
             throw new Exception('Error: Need to pass a function to Popup::set()');
