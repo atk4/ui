@@ -135,8 +135,38 @@ $cart_popup = $app->add(['Popup', 'position'=>'bottom left', 'triggerBy'=>$cart_
 $cart_popup->setHoverable();
 
 $shelf = $app->add(new ItemShelf());
+
+// Here we are facing a pretty interesting problem. If you attempt to put "Cart" object inside a popup directly,
+// it won't work, because it will be located inside the menu item's DOM tree and, although hidden, will be
+// impacted by some css rules of the menu. 
+//
+// This can happen when your popup content is non-trivial. So we are moving Popup into the app and linking up
+// the triggers. Now, since it's outside, we can't use a single jsAction to reload menu item (along with label)
+// and the contens. We could use 2 requests for reloading, but that's not good.
+//
+// The next idea is to make cart dynamic, so it loads when you move mouse over the menu. This probably is good,
+// as it will always be accurate, even if you added items form multiple browser tabs.
+//
+// However in this case Cart object will exist only inside the popup callback, and we won't be able to get
+// the label out.
+//
+// The final solution works like this - Cart is added to the application directly at first. It's initialized
+// as i would be in the application. That's also impacts under which key 'memorize' is storing data - having
+// two different objects won't work, since they won't share session data.
+
+
+
+
 $cart = $app->add(new Cart());
 
+// Next I am calling destroy. This won't actually destroy the cart, but it will remove it from the application.
+// If i add unset($cart) afterwards, garbage collector will trigger destructor. Instead I'm passing $cart
+// into the callback and making it part of the pop-up render tree.
+$cart->destroy();
+
+
+// Label now can be added referencing Cart's items. Init() was colled when I added it into app, so the
+// item property is populated.
 $cart_outter_label = $cart_item->add(['Label', count($cart->items), 'floating red ']);
 if(!$cart->items) {
     $cart_outter_label->addStyle('display', 'none');
@@ -145,8 +175,11 @@ if(!$cart->items) {
 $cart_popup->set(function($popup) use($shelf, $cart_outter_label, $cart) {
 
     $cart_inner_label = $popup->add(['Label', 'Number of items:', ]);
-    // Custom Cart view placed inside a popup
+
+    // cart is already initialized, so init() is not called again. However, cart will be rendered
+    // as a child of a pop-up now.
     $cart = $popup->add($cart);
+
     $cart_inner_label->detail = count($cart->items);
     $popup->add('Item')->setElement('hr');
     $btn = $popup->add(['Button', 'Checkout', 'primary small']);
