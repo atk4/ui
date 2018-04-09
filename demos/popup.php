@@ -130,41 +130,47 @@ $browse = $m->add(['DropDown', 'Browse']);
 // Add cart item into the menu, with a popup inside
 $cart_item = $m->addItem(['Cart', 'icon'=>'cart']);
 
-$cart_popup = $cart_item->add(['Popup', 'position'=>'bottom left']);
+$cart_popup = $app->add(['Popup', 'position'=>'bottom left', 'triggerBy'=>$cart_item, 'triggerOn'=>'hover']);
 // Popup won't dissapear as you hover over it.
 $cart_popup->setHoverable();
 
-// Label placed inside the popup
-$cart_inner_label = $cart_popup->add(['Label', 'Number of items:', ]);
+$shelf = $app->add(new ItemShelf());
+$cart = $app->add(new Cart());
 
-// Custom Cart view placed inside a popup
-$cart = $cart_popup->add(new Cart());
-$cart_inner_label->detail = count($cart->items);
-$cart_popup->add('Item')->setElement('hr');
-$btn = $cart_popup->add(['Button', 'Checkout', 'primary small']);
-
-// label placed on top of menu item, not in the popup
 $cart_outter_label = $cart_item->add(['Label', count($cart->items), 'floating red ']);
 if(!$cart->items) {
     $cart_outter_label->addStyle('display', 'none');
 }
 
+$cart_popup->set(function($popup) use($shelf, $cart_outter_label, $cart) {
+
+    $cart_inner_label = $popup->add(['Label', 'Number of items:', ]);
+    // Custom Cart view placed inside a popup
+    $cart = $popup->add($cart);
+    $cart_inner_label->detail = count($cart->items);
+    $popup->add('Item')->setElement('hr');
+    $btn = $popup->add(['Button', 'Checkout', 'primary small']);
+});
+
+
 // Add item shelf below menu and link it with the cart
-$shelf = $app->add(new ItemShelf());
 $shelf->linkCart($cart, [
     // array is a valid js action. Will relad cart item (along with drop-down and label)
-    $cart_item->jsReload(), 
+    $cart_outter_label->jsReload(), 
 
     // also will hide current item from the shelf
     (new \atk4\ui\jQuery())->hide()
 ]);
 
 
+// label placed on top of menu item, not in the popup
+
+
 $pop = $browse->add('Popup', ['triggerBy' => $browse, 'position' => 'bottom left', 'minWidth'=>'500px'])
            ->setHoverable()
            ->setOption('delay', ['show' => 100, 'hide' => 400]);
 $shelf2 = $pop->add(new ItemShelf());
-$shelf2->linkCart($cart, $cart_item->jsReload());
+//$shelf2->linkCart($cart, $cart_item->jsReload());
 
 
 //////////////////////////////////////////////////////////////////////////////
