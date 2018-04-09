@@ -2,14 +2,13 @@
 
 require 'init.php';
 
-
 /**
- * Example implementation of a dynamic view which support session. 
+ * Example implementation of a dynamic view which support session.
  *
  * Cart will memorize and restore its items into session. Cart will also
  * render the items.
  */
-class Cart extends \atk4\ui\Lister 
+class Cart extends \atk4\ui\Lister
 {
     use \atk4\core\SessionTrait;
 
@@ -17,7 +16,7 @@ class Cart extends \atk4\ui\Lister
 
     public $defaultTemplate = 'lister.html';
 
-    function init()
+    public function init()
     {
         parent::init();
         $this->items = $this->recall('items', []);
@@ -39,42 +38,45 @@ class Cart extends \atk4\ui\Lister
     }
 
     /**
-     * adding an item into the cart
+     * adding an item into the cart.
      */
-    function addItem($item)
+    public function addItem($item)
     {
         $this->items[] = $item;
         $this->memorize('items', $this->items);
     }
 
     /**
-     * remove item form the cart with specified index
+     * remove item form the cart with specified index.
      */
-    function removeItem($no)
+    public function removeItem($no)
     {
         unset($this->items[$no]);
         $this->memorize('items', $this->items);
     }
 
     /**
-     * renders as a regular lister, but source is the items
+     * renders as a regular lister, but source is the items.
      */
-    function renderView()
+    public function renderView()
     {
         // memorize items
 
         $this->setSource($this->items);
+
         return parent::renderView();
     }
-
 }
 
 /**
- * Implementation of a generic item shelf. Shows selection of products and allow to bind click event
+ * Implementation of a generic item shelf. Shows selection of products and allow to bind click event.
  */
-class ItemShelf extends \atk4\ui\View {
+class ItemShelf extends \atk4\ui\View
+{
     public $ui = 'green segment';
-    function init() {
+
+    public function init()
+    {
         parent::init();
         $v = $this->add('View', ['ui'=>'fluid']);
         $cols = $v->add('Columns', ['ui' => 'relaxed divided grid']);
@@ -109,15 +111,15 @@ class ItemShelf extends \atk4\ui\View {
      *
      * Also - you can supply jsAction to execute when this happens.
      */
-    function linkCart(Cart $cart, $jsAction = null) {
-        $this->on('click', '.item', function($a, $b) use($cart, $jsAction) {
+    public function linkCart(Cart $cart, $jsAction = null)
+    {
+        $this->on('click', '.item', function ($a, $b) use ($cart, $jsAction) {
             $cart->addItem($b);
-            return $jsAction;
 
+            return $jsAction;
         }, [(new \atk4\ui\jQuery())->text()]);
     }
 }
-
 
 $app->add('Header')->set('Menu popup');
 $m = $app->add('Menu');
@@ -135,7 +137,7 @@ $cart_popup = $cart_item->add(['Popup', 'position'=>'bottom left']);
 $cart_popup->setHoverable();
 
 // Label placed inside the popup
-$cart_inner_label = $cart_popup->add(['Label', 'Number of items:', ]);
+$cart_inner_label = $cart_popup->add(['Label', 'Number of items:']);
 
 // Custom Cart view placed inside a popup
 $cart = $cart_popup->add(new Cart());
@@ -145,7 +147,7 @@ $btn = $cart_popup->add(['Button', 'Checkout', 'primary small']);
 
 // label placed on top of menu item, not in the popup
 $cart_outter_label = $cart_item->add(['Label', count($cart->items), 'floating red ']);
-if(!$cart->items) {
+if (!$cart->items) {
     $cart_outter_label->addStyle('display', 'none');
 }
 
@@ -153,12 +155,11 @@ if(!$cart->items) {
 $shelf = $app->add(new ItemShelf());
 $shelf->linkCart($cart, [
     // array is a valid js action. Will relad cart item (along with drop-down and label)
-    $cart_item->jsReload(), 
+    $cart_item->jsReload(),
 
     // also will hide current item from the shelf
-    (new \atk4\ui\jQuery())->hide()
+    (new \atk4\ui\jQuery())->hide(),
 ]);
-
 
 $pop = $browse->add('Popup', ['triggerBy' => $browse, 'position' => 'bottom left', 'minWidth'=>'500px'])
            ->setHoverable()
@@ -166,9 +167,7 @@ $pop = $browse->add('Popup', ['triggerBy' => $browse, 'position' => 'bottom left
 $shelf2 = $pop->add(new ItemShelf());
 $shelf2->linkCart($cart, $cart_item->jsReload());
 
-
 //////////////////////////////////////////////////////////////////////////////
-
 
 $um = $m->add(['Menu', 'ui' => false], 'RightMenu')
     ->addClass('right menu')->removeClass('item');
@@ -183,7 +182,7 @@ $signup->stickyGet('logged');
 $signup->set(function ($pop) {
 
     // contetn of the popup will be different depending on this condition.
-    if (isset($_GET['logged'])) { 
+    if (isset($_GET['logged'])) {
         $pop->add(['Message', 'You are already logged in as '.$_GET['logged']]);
         $pop->add(['Button', 'Logout', 'primary', 'icon'=>'sign out'])
             ->link($pop->app->url());
@@ -192,7 +191,6 @@ $signup->set(function ($pop) {
         $f->addField('email', null, ['required'=>true]);
         $f->addField('password', ['Password'], ['required'=>true]);
         $f->buttonSave->set('Login');
-
 
         // popup handles callbacks properly, so dynamic element such as form works
         // perfectly inside a popup.
@@ -223,7 +221,6 @@ $input = $app->add(new \atk4\ui\FormField\Line(['placeholder' => 'Search users',
 
 $i_pop = $app->add('Popup', ['triggerBy' => $input, 'triggerOn' => 'focus']);
 $i_pop->add('View')->set('You can use this field to search data.');
-
 
 $button = $app->add(['Button', null, 'icon'=>'volume down']);
 $b_pop = $button->add(['Popup', 'triggerOn'=>'hover']);

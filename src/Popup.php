@@ -30,7 +30,7 @@ class Popup extends View
      *
      * @var string
      */
-    public $triggerOn = null; 
+    public $triggerOn = null;
 
     /**
      * Default position of the popup in relation to target element.
@@ -119,7 +119,6 @@ class Popup extends View
                 $this->triggerOn = 'click';
             }
         }
-
 
         $this->popOptions = array_merge($this->popOptions, [
             'popup'    => '#'.$this->name,
@@ -261,7 +260,7 @@ class Popup extends View
         if ($this->minHeight) {
             $this->setStyle('min-height', $this->minHeight);
         }
-            //$this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
+        //$this->setStyle(['min-width' => $this->minWidth, 'min-height' => $this->minHeight]);
 
         parent::renderView();
     }
