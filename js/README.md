@@ -97,6 +97,10 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.3.0
+
+  - Add PopupService in order to be able to load popup content dynamically via Callback.
+
 ### version 1.2.1
 
   - Quick fix for issue #421.

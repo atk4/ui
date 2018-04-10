@@ -50,6 +50,11 @@ class Lister extends View
         $this->t_row->trySet('_id', $this->name);
         $rowHTML = '';
 
+        // if no model is set, don't show anything (even warning)
+        if (!$this->model) {
+            return parent::renderView();
+        }
+
         foreach ($this->model as $this->current_id => $this->current_row) {
             if ($this->hook('beforeRow') === false) {
                 continue;
