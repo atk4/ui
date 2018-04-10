@@ -94,6 +94,14 @@ class Popup extends View
      */
     public $minHeight = null; //'60px';
 
+    function __construct($triggerBy = null) {
+        if (is_object($triggerBy)) {
+            $this->triggerBy = $triggerBy;
+        } else {
+            parent::__construct($triggerBy);
+        }
+    }
+
     public function init()
     {
         parent::init();
@@ -101,23 +109,27 @@ class Popup extends View
         if (
             $this->owner instanceof Item ||
             $this->owner instanceof Menu ||
-            $this->owner instanceof DropDown
-        ) {
-            if (is_null($this->triggerBy)) {
-                $this->triggerBy = $this->owner;
-            }
-            if (is_null($this->triggerOn)) {
-                $this->triggerOn = 'hover';
-            }
-        } elseif (
+            $this->owner instanceof DropDown ||
             $this->owner instanceof Button
         ) {
-            if (is_null($this->triggerBy)) {
-                $this->triggerBy = $this->owner;
-            }
-            if (is_null($this->triggerOn)) {
-                $this->triggerOn = 'click';
-            }
+            throw new Exception([
+                'Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"',
+                'owner'=>$this->owner
+            ]);
+        }
+
+        if (
+            ($this->triggerBy instanceof Item ||
+            $this->triggerBy instanceof Menu ||
+            $this->triggerBy instanceof DropDown) && $this->triggerOn == null
+        ) {
+            $this->triggerOn = 'hover';
+        }
+
+        if (
+            $this->triggerBy instanceof Button && $this->triggerOn == null
+        ) {
+            $this->triggerOn = 'click';
         }
 
         $this->popOptions = array_merge($this->popOptions, [

@@ -135,7 +135,7 @@ $browse = $m->add(['DropDown', 'Browse']);
 // Add cart item into the menu, with a popup inside
 $cart_item = $m->addItem(['Cart', 'icon'=>'cart']);
 
-$cart_popup = $app->add(['Popup', 'position'=>'bottom left', 'triggerBy'=>$cart_item, 'triggerOn'=>'hover']);
+$cart_popup = $app->add(['Popup', $cart_item, 'position'=>'bottom left']);
 // Popup won't dissapear as you hover over it.
 $cart_popup->setHoverable();
 
@@ -196,7 +196,7 @@ $shelf->linkCart($cart, [
 
 // label placed on top of menu item, not in the popup
 
-$pop = $app->add('Popup', ['triggerBy' => $browse, 'triggerOn' => 'hover', 'position' => 'bottom left', 'minWidth'=>'500px'])
+$pop = $app->add(['Popup', $browse, 'position' => 'bottom left', 'minWidth'=>'500px'])
            ->setHoverable()
            ->setOption('delay', ['show' => 100, 'hide' => 400]);
 $shelf2 = $pop->add(new ItemShelf());
@@ -210,7 +210,7 @@ $m_right = $um->addMenu(['', 'icon'=>'user']);
 
 // If you add popup right inside the view, it will link itself with the element. If you are adding it into other container,
 // you can still manually link it and specify an event.
-$signup = $m_right->add('Popup', ['position' => 'bottom right'])->setHoverable();
+$signup = $app->add(['Popup', $m_right, 'position' => 'bottom right'])->setHoverable();
 
 // This popup will be dynamically loaded.
 $signup->stickyGet('logged');
@@ -247,17 +247,17 @@ $app->add('Header')->set('Specifying trigger');
 
 $button = $app->add(['Button', 'Click Me', 'primary']);
 
-$b_pop = $button->add('Popup');
+$b_pop = $app->add(['Popup', $button]);
 
 $b_pop->add('Header')->set('Using click events');
 $b_pop->add('View')->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
 
 $input = $app->add(new \atk4\ui\FormField\Line(['placeholder' => 'Search users', 'icon' => 'circular search link']));
 
-$i_pop = $app->add('Popup', ['triggerBy' => $input, 'triggerOn' => 'focus']);
+$i_pop = $app->add(['Popup', $input, 'triggerOn' => 'focus']);
 $i_pop->add('View')->set('You can use this field to search data.');
 
 $button = $app->add(['Button', null, 'icon'=>'volume down']);
-$b_pop = $app->add(['Popup', 'triggerBy' => $button, 'triggerOn'=>'hover'])->setHoverable();
+$b_pop = $app->add(['Popup', $button, 'triggerOn'=>'hover'])->setHoverable();
 
 $b_pop->add(['FormField\Checkbox', 'Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
