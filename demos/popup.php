@@ -196,7 +196,7 @@ $shelf->linkCart($cart, [
 
 // label placed on top of menu item, not in the popup
 
-$pop = $browse->add('Popup', ['triggerBy' => $browse, 'position' => 'bottom left', 'minWidth'=>'500px'])
+$pop = $app->add('Popup', ['triggerBy' => $browse, 'triggerOn' => 'hover', 'position' => 'bottom left', 'minWidth'=>'500px'])
            ->setHoverable()
            ->setOption('delay', ['show' => 100, 'hide' => 400]);
 $shelf2 = $pop->add(new ItemShelf());
@@ -258,6 +258,6 @@ $i_pop = $app->add('Popup', ['triggerBy' => $input, 'triggerOn' => 'focus']);
 $i_pop->add('View')->set('You can use this field to search data.');
 
 $button = $app->add(['Button', null, 'icon'=>'volume down']);
-$b_pop = $button->add(['Popup', 'triggerOn'=>'hover']);
+$b_pop = $app->add(['Popup', 'triggerBy' => $button, 'triggerOn'=>'hover'])->setHoverable();
 
 $b_pop->add(['FormField\Checkbox', 'Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
