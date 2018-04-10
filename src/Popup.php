@@ -94,7 +94,8 @@ class Popup extends View
      */
     public $minHeight = null; //'60px';
 
-    function __construct($triggerBy = null) {
+    public function __construct($triggerBy = null)
+    {
         if (is_object($triggerBy)) {
             $this->triggerBy = $triggerBy;
         } else {
@@ -114,7 +115,7 @@ class Popup extends View
         ) {
             throw new Exception([
                 'Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"',
-                'owner'=>$this->owner
+                'owner'=> $this->owner,
             ]);
         }
 
