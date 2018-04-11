@@ -19,6 +19,6 @@ $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 
 $table->js(true, (new atk4\ui\jQuery('.atk-table-dropdown .dropdown'))
     ->dropdown([
-                'action' => 'hide',
-                'values'  => $table->columMenus
+                'action'  => 'hide',
+                'values'  => $table->columMenus,
                ]));
