@@ -36,6 +36,8 @@ class Table extends Lister
      */
     public $columns = [];
 
+    public $columMenus = [];
+
     /**
      * Allows you to inject HTML into table using getHTMLTags hook and column call-backs.
      * Switch this feature off to increase performance at expense of some row-specific HTML.
