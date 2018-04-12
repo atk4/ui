@@ -715,16 +715,7 @@ class App
             $result = [];
             foreach ($value as $v) {
                 if (is_array($v)) {
-                    $arg = [];
-                    foreach ($v as $key => $value) {
-                        if (is_numeric($key)) {
-                            $arg[] = $value;
-                        } else {
-                            $arg[] = [$key => $value];
-                        }
-                    }
-                    $result[] = $this->getTag(...$arg);
-                    //$result[] = $this->getTag(...$v);
+                    $result[] = $this->getTag(...$v);
                 } else {
                     $result[] = $v;
                 }
