@@ -1,6 +1,11 @@
 <?php
 
 namespace atk4\ui\TableColumn;
+use atk4\ui\DropDown;
+use atk4\ui\Exception;
+use atk4\ui\jQuery;
+use atk4\ui\jsExpression;
+use atk4\ui\Popup;
 
 /**
  * Implements Column helper for table.
@@ -34,6 +39,20 @@ class Generic
     public $caption = null;
 
     /**
+     * Include header action tag in rendering or not.
+     *
+     * @var bool
+     */
+    public $hasHeaderAction = false;
+
+    /**
+     * The tag value required for getTag when using an header action.
+     *
+     * @var array|null
+     */
+    public $headerActionTag = null;
+
+    /**
      * Constructor.
      *
      * @param array $defaults
@@ -41,6 +60,72 @@ class Generic
     public function __construct($defaults = [])
     {
         $this->setDefaults($defaults);
+    }
+
+    /**
+     * Setup popup header action.
+     *
+     * @param Popup $popup
+     * @param $icon
+     */
+    public function addHeaderPopup($popup,  $icon = 'caret square down')
+    {
+        $this->headerAction = true;
+        $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
+            [
+                ['i', ['id' => $this->name.'_ac', 'class' => $icon.' icon']],
+            ]
+        ];
+        $popup->triggerBy = '#'.$this->name.'_ac';
+        $popup->popOptions = array_merge($popup->popOptions, ['on' =>'click', 'position' => 'bottom left', /*'movePopup' => false,*//* 'target' => '#'.$this->name.'_th'*/]);
+    }
+
+    /**
+     * Setup dropdown header action.
+     * This method return a callback where you can detect
+     * menu item change via $cb->onMenuItem($item) function.
+     *
+     * @param $items
+     * @param string $icon
+     *
+     * @return \atk4\ui\jsCallback
+     * @throws Exception
+     */
+    public function addHeaderDropdown($name, $items,  $icon = 'caret square down')
+    {
+        $this->headerAction = true;
+        $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
+            [
+                [
+                    'div', ['id' => $this->name.'_ac', 'class'=>'ui top right pointing dropdown', 'data-menu-id' => $name],
+                    [['i', ['class' => $icon.' icon']]],
+                ],
+            ]
+        ];
+
+        $cb = $this->table->add(new jsHeader());
+
+        $function = "function(value, text, item){
+                            if (value === undefined || value === '' || value === null) return;
+                            $(this)
+                            .api({
+                                on:'now', 
+                                url:'{$cb->getJSURL()}', 
+                                data:{item:value, id:$(this).data('menu-id')}
+                                }
+                            );
+                     }";
+
+        $chain = new jQuery('#'.$this->name.'_ac');
+        $chain->dropdown([
+                             'action'   => 'hide',
+                             'values'   => $items,
+                             'onChange' => new jsExpression($function)
+                         ]);
+
+        $this->table->js(true, $chain);
+
+        return $cb;
     }
 
     /**
@@ -149,18 +234,12 @@ class Generic
             }
         }
 
-        if (!empty($this->table->columMenus)) {
+        if ($this->headerAction) {
+            $attr = array_merge($attr, ['id' => $this->name.'_th']);
             $tag = $this->getTag(
                 'head',
                 [$f->getCaption(),
-                    ['div',  ['class'=>'atk-table-dropdown'],
-                        [
-                            [
-                                'div', ['class'=>'ui top right pointing dropdown'],
-                                [['i', ['class' => 'caret square down icon']]],
-                            ],
-                        ],
-                    ],
+                    $this->headerActionTag
                 ],
                 $attr
             );
