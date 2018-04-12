@@ -21,7 +21,7 @@ class DropDown extends Input
         //See https://github.com/atk4/ui/issues/418
         //if field is required, disable empty selection once a value is
         //selected. Currently standard behaviour of sematic ui dropdown
-        if(isset($this->field) && $this->field->required) {
+        if (isset($this->field) && $this->field->required) {
             $this->jsInput(true)->dropdown();
         }
         //add any (does not have to be $this->empty) placeholder to allow

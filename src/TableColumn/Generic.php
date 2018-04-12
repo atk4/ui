@@ -150,16 +150,16 @@ class Generic
         }
 
         if (!empty($this->table->columMenus)) {
-            $tag =  $this->getTag(
+            $tag = $this->getTag(
                 'head',
-                [ $f->getCaption(),
+                [$f->getCaption(),
                     ['div',  ['class'=>'atk-table-dropdown'],
                         [
                             [
                                 'div', ['class'=>'ui top right pointing dropdown'],
-                                [['i', ['class' => 'caret square down icon']]]
-                            ]
-                        ]
+                                [['i', ['class' => 'caret square down icon']]],
+                            ],
+                        ],
                     ],
                 ],
                 $attr

@@ -657,7 +657,11 @@ class App
      * --> <a href="foo.html"><b>click here</b> for fun</a>
      *
      * 11. extended example:
-     * getTag('a', ['href'=>'hello'], ['b', 'class'=>'red', ['i', 'class'=>'blue', 'welcome']]);
+     * getTag('a', ['href'=>'hello'], [
+     *    ['b', 'class'=>'red', [
+     *        ['i', 'class'=>'blue', 'welcome']
+     *    ]]
+     * ]);
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
      * @param string|array $tag
