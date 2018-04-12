@@ -2,7 +2,6 @@
 
 namespace atk4\ui\TableColumn;
 
-use atk4\ui\DropDown;
 use atk4\ui\Exception;
 use atk4\ui\jQuery;
 use atk4\ui\jsExpression;
@@ -63,22 +62,72 @@ class Generic
         $this->setDefaults($defaults);
     }
 
+
+    /**
+     * Add popup to header.
+     *
+     * @param string $id
+     * @param string $icon
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function addPopup($id, $icon = 'caret square down')
+    {
+        if (!$this->app) {
+            throw new Exception('Columns\'s popup need to have a layout.');
+        }
+        $popup = $this->app->add('Popup')->setHoverable();
+        $this->addHeaderPopup($id, $popup, $icon);
+
+        return $popup;
+    }
+
     /**
      * Setup popup header action.
      *
      * @param Popup $popup
      * @param $icon
      */
-    public function addHeaderPopup($popup, $icon = 'caret square down')
+    public function addHeaderPopup($id, $popup, $icon = 'caret square down')
     {
         $this->headerAction = true;
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
-                ['i', ['id' => $this->name.'_ac', 'class' => $icon.' icon']],
+                ['i', ['id' => 'atk-popup-cln-ac-'.$id, 'class' => $icon.' icon']],
             ],
         ];
-        $popup->triggerBy = '#'.$this->name.'_ac';
+        $popup->triggerBy = '#atk-popup-cln-ac-'.$id;
         $popup->popOptions = array_merge($popup->popOptions, ['on' =>'click', 'position' => 'bottom left'/*'movePopup' => false,*//* 'target' => '#'.$this->name.'_th'*/]);
+    }
+
+    /**
+     * Add a dropdown header menu.
+     *
+     * @param string   $id
+     * @param array    $items
+     * @param callable $fx
+     * @param string   $icon
+     *
+     * @throws Exception
+     */
+    public function addDropdown($id, $items, $fx, $icon = 'caret square down')
+    {
+        $menuITems = [];
+        foreach ($items as $key => $item) {
+            if (is_int($key)) {
+                $menuITems[] = ['name' => $item, 'value' => $item];
+
+            } else {
+                $menuITems[] = ['name' => $key, 'value' => $item];
+            }
+        }
+
+        $cb = $this->addHeaderDropdown($id, $menuITems, $icon);
+
+        $cb->onChangeItem(function($menu, $item) use ($fx) {
+           return call_user_func($fx, $item);
+        });
     }
 
     /**
@@ -93,13 +142,13 @@ class Generic
      *
      * @return \atk4\ui\jsCallback
      */
-    public function addHeaderDropdown($name, $items, $icon = 'caret square down')
+    public function addHeaderDropdown($id, $items, $icon = 'caret square down')
     {
         $this->headerAction = true;
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
                 [
-                    'div', ['id' => $this->name.'_ac', 'class'=>'ui top right pointing dropdown', 'data-menu-id' => $name],
+                    'div', ['id' => 'atk-dropdown-cln-ac-'.$id, 'class'=>'ui top right pointing dropdown', 'data-menu-id' => $id],
                     [['i', ['class' => $icon.' icon']]],
                 ],
             ],
@@ -118,7 +167,7 @@ class Generic
                             );
                      }";
 
-        $chain = new jQuery('#'.$this->name.'_ac');
+        $chain = new jQuery('#atk-dropdown-cln-ac-'.$id);
         $chain->dropdown([
                              'action'   => 'hide',
                              'values'   => $items,

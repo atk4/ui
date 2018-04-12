@@ -12,25 +12,18 @@ $col_name = $table->addColumn('name', new \atk4\ui\TableColumn\Link(['details', 
 //will add dropdown menu to this colum.
 $col_surname = $table->addColumn('surname', new \atk4\ui\TableColumn\Template('{$surname}'))->addClass('warning');
 
-$table->addColumn('title');
+$col_title = $table->addColumn('title');
 $table->addColumn('date');
 $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 
 //popup setup
-$pop = $app->add('Popup')->setHoverable();
-$pop->add('View')->set('Testing popup.');
-$col_name->addHeaderPopup($pop);
+$col_name->addPopup('name')->add('View')->set('Testing popup');
 
-//dropdown setup.
-$menu = $col_surname->addHeaderDropdown('surname', [['name'=> 'Customize', 'value' => 'customize'], ['name' => 'Rename', 'value' => 'rename']]);
-
-$menu->onChangeItem(function ($menu, $item) {
-    return new atk4\ui\jsNotify($menu.' / '.$item);
+//dropdown menu
+$col_surname->addDropdown('surname', ['Customize', 'Rename', 'Update'], function($item){
+    return 'Surname item: '.$item;
 });
 
-// testing
-//$table->js(true, (new atk4\ui\jQuery('.atk-table-dropdown .dropdown'))
-//    ->dropdown([
-//                'action'  => 'hide',
-//                'values'  => [['name'=> 'Customize Field', 'value' => 'customize'], ['name' => 'Rename', 'value' => 'rename']],
-//               ]));
+$col_title->addDropdown('title', ['Change', 'Reorder', 'Update'], function($item){
+    return 'Title item: '.$item;
+});
