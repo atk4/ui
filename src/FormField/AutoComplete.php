@@ -45,7 +45,7 @@ class AutoComplete extends Input
 
     /**
      * Sets the max. amount of records that are loaded. The default 10
-     * displays nicely in UI,
+     * displays nicely in UI.
      *
      * @var int
      */
