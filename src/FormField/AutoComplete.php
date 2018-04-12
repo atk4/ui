@@ -44,6 +44,14 @@ class AutoComplete extends Input
     public $plus = false;
 
     /**
+     * Sets the max. amount of records that are loaded. The default 10
+     * displays nicely in UI.
+     *
+     * @var int
+     */
+    public $limit = 10;
+
+    /**
      * Semantic UI uses cache to remember choices. For dynamic sites this may be dangerous, so
      * it's disabled by default. To switch cache on, set 'cache'=>'local'.
      *
@@ -131,7 +139,7 @@ class AutoComplete extends Input
         if (!$this->model) {
             $this->app->terminate(json_encode([['id' => '-1', 'name' => 'Model must be set for AutoComplete']]));
         }
-        $this->model->setLimit(10);
+        $this->model->setLimit($this->limit);
         if (isset($_GET['q'])) {
             if ($this->search instanceof Closure) {
                 $this->search($this->model, $_GET['q']);
