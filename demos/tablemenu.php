@@ -20,10 +20,10 @@ $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 $col_name->addPopup('name')->add('View')->set('Testing popup');
 
 //dropdown menu
-$col_surname->addDropdown('surname', ['Customize', 'Rename', 'Update'], function($item){
+$col_surname->addDropdown('surname', ['Customize', 'Rename', 'Update'], function ($item) {
     return 'Surname item: '.$item;
 });
 
-$col_title->addDropdown('title', ['Change', 'Reorder', 'Update'], function($item){
+$col_title->addDropdown('title', ['Change', 'Reorder', 'Update'], function ($item) {
     return 'Title item: '.$item;
 });

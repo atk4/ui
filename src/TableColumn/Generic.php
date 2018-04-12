@@ -62,15 +62,15 @@ class Generic
         $this->setDefaults($defaults);
     }
 
-
     /**
      * Add popup to header.
      *
      * @param string $id
      * @param string $icon
      *
-     * @return mixed
      * @throws Exception
+     *
+     * @return mixed
      */
     public function addPopup($id, $icon = 'caret square down')
     {
@@ -117,7 +117,6 @@ class Generic
         foreach ($items as $key => $item) {
             if (is_int($key)) {
                 $menuITems[] = ['name' => $item, 'value' => $item];
-
             } else {
                 $menuITems[] = ['name' => $key, 'value' => $item];
             }
@@ -125,8 +124,8 @@ class Generic
 
         $cb = $this->addHeaderDropdown($id, $menuITems, $icon);
 
-        $cb->onChangeItem(function($menu, $item) use ($fx) {
-           return call_user_func($fx, $item);
+        $cb->onChangeItem(function ($menu, $item) use ($fx) {
+            return call_user_func($fx, $item);
         });
     }
 
