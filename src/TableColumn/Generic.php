@@ -1,6 +1,7 @@
 <?php
 
 namespace atk4\ui\TableColumn;
+
 use atk4\ui\DropDown;
 use atk4\ui\Exception;
 use atk4\ui\jQuery;
@@ -68,16 +69,16 @@ class Generic
      * @param Popup $popup
      * @param $icon
      */
-    public function addHeaderPopup($popup,  $icon = 'caret square down')
+    public function addHeaderPopup($popup, $icon = 'caret square down')
     {
         $this->headerAction = true;
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
                 ['i', ['id' => $this->name.'_ac', 'class' => $icon.' icon']],
-            ]
+            ],
         ];
         $popup->triggerBy = '#'.$this->name.'_ac';
-        $popup->popOptions = array_merge($popup->popOptions, ['on' =>'click', 'position' => 'bottom left', /*'movePopup' => false,*//* 'target' => '#'.$this->name.'_th'*/]);
+        $popup->popOptions = array_merge($popup->popOptions, ['on' =>'click', 'position' => 'bottom left'/*'movePopup' => false,*//* 'target' => '#'.$this->name.'_th'*/]);
     }
 
     /**
@@ -88,10 +89,11 @@ class Generic
      * @param $items
      * @param string $icon
      *
-     * @return \atk4\ui\jsCallback
      * @throws Exception
+     *
+     * @return \atk4\ui\jsCallback
      */
-    public function addHeaderDropdown($name, $items,  $icon = 'caret square down')
+    public function addHeaderDropdown($name, $items, $icon = 'caret square down')
     {
         $this->headerAction = true;
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
@@ -100,7 +102,7 @@ class Generic
                     'div', ['id' => $this->name.'_ac', 'class'=>'ui top right pointing dropdown', 'data-menu-id' => $name],
                     [['i', ['class' => $icon.' icon']]],
                 ],
-            ]
+            ],
         ];
 
         $cb = $this->table->add(new jsHeader());
@@ -120,7 +122,7 @@ class Generic
         $chain->dropdown([
                              'action'   => 'hide',
                              'values'   => $items,
-                             'onChange' => new jsExpression($function)
+                             'onChange' => new jsExpression($function),
                          ]);
 
         $this->table->js(true, $chain);
@@ -239,7 +241,7 @@ class Generic
             $tag = $this->getTag(
                 'head',
                 [$f->getCaption(),
-                    $this->headerActionTag
+                    $this->headerActionTag,
                 ],
                 $attr
             );

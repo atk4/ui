@@ -24,8 +24,8 @@ $col_name->addHeaderPopup($pop);
 //dropdown setup.
 $menu = $col_surname->addHeaderDropdown('surname', [['name'=> 'Customize', 'value' => 'customize'], ['name' => 'Rename', 'value' => 'rename']]);
 
-$menu->onChangeItem(function($menu, $item){
-   return new atk4\ui\jsNotify($menu.' / '.$item);
+$menu->onChangeItem(function ($menu, $item) {
+    return new atk4\ui\jsNotify($menu.' / '.$item);
 });
 
 // testing
