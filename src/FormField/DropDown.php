@@ -18,17 +18,7 @@ class DropDown extends Input
     public function init()
     {
         parent::init();
-        //See https://github.com/atk4/ui/issues/418
-        //if field is required, disable empty selection once a value is
-        //selected. Currently standard behaviour of sematic ui dropdown
-        if (isset($this->field) && $this->field->required) {
-            $this->jsInput(true)->dropdown();
-        }
-        //add any (does not have to be $this->empty) placeholder to allow
-        //empty selection even after a value was selected
-        else {
-            $this->jsInput(true)->dropdown(['placeholder' => $this->empty]);
-        }
+        $this->jsInput(true)->dropdown();
     }
 
     /**
@@ -72,14 +62,8 @@ class DropDown extends Input
             'placeholder' => $this->placeholder,
             'id'          => $this->id.'_input',
         ], [[$options]]
-       //
-    );
+        //
+        );
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
-    }
-
-    public function renderView()
-    {
-        $this->jsInput(true)->dropdown($this->options);
-        parent::renderView();
     }
 }
