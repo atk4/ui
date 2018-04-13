@@ -41,7 +41,7 @@ $col_title->addDropdown('title', ['Change', 'Reorder', 'Update'], function ($ite
 
 $app->add(['Header', 'Grid column may contains popup or dropdown menu.']);
 
-//For popup positioning to work correctly, table need to be inside a view segment.
+//For popup positioning to work correctly, grid need to be inside a view segment.
 $view = $app->add('View', ['ui' => 'basic segment']);
 $g = $view->add(['Grid']);
 $g->setModel(new Country($db));
