@@ -102,6 +102,11 @@ class Generic
         $popup->triggerBy = '#'.$id;
         $popup->popOptions = array_merge($popup->popOptions, ['on' =>'click', 'position' => 'bottom right', 'movePopup' => false]);
         $popup->stopClickEvent = true;
+
+        if (@$_GET['__atk_reload']) {
+            //This is part of a reload, need to reactivate popup.
+            $this->table->js(true, $popup->jsPopup());
+        }
     }
 
     /**
