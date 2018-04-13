@@ -72,13 +72,13 @@ class Generic
      *
      * @return mixed
      */
-    public function addPopup($id, $icon = 'caret square down')
+    public function addPopup($icon = 'caret square down')
     {
         if (!$this->app) {
             throw new Exception('Columns\'s popup need to have a layout.');
         }
         $popup = $this->app->add('Popup')->setHoverable();
-        $this->addHeaderPopup($id, $popup, $icon);
+        $this->addHeaderPopup($popup, $icon);
 
         return $popup;
     }
@@ -89,16 +89,19 @@ class Generic
      * @param Popup $popup
      * @param $icon
      */
-    public function addHeaderPopup($id, $popup, $icon = 'caret square down')
+    public function addHeaderPopup($popup, $icon = 'caret square down')
     {
         $this->headerAction = true;
+        $id = $this->name.'_ac';
+
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
-                ['i', ['id' => 'atk-popup-cln-ac-'.$id, 'class' => $icon.' icon']],
+                ['i', ['id' => $id, 'class' => $icon.' icon']],
             ],
         ];
-        $popup->triggerBy = '#atk-popup-cln-ac-'.$id;
-        $popup->popOptions = array_merge($popup->popOptions, ['on' =>'click', 'position' => 'bottom left'/*'movePopup' => false,*//* 'target' => '#'.$this->name.'_th'*/]);
+        $popup->triggerBy = '#'.$id;
+        $popup->popOptions = array_merge($popup->popOptions, ['on' =>'click', 'position' => 'bottom right', 'movePopup' => false]);
+        $popup->stopClickEvent = true;
     }
 
     /**
@@ -111,7 +114,7 @@ class Generic
      *
      * @throws Exception
      */
-    public function addDropdown($id, $items, $fx, $icon = 'caret square down')
+    public function addDropdown($menuId, $items, $fx, $icon = 'caret square down')
     {
         $menuITems = [];
         foreach ($items as $key => $item) {
@@ -122,9 +125,9 @@ class Generic
             }
         }
 
-        $cb = $this->addHeaderDropdown($id, $menuITems, $icon);
+        $cb = $this->addHeaderDropdown($menuId, $menuITems, $icon);
 
-        $cb->onChangeItem(function ($menu, $item) use ($fx) {
+        $cb->onSelectItem(function ($menu, $item) use ($fx) {
             return call_user_func($fx, $item);
         });
     }
@@ -141,13 +144,14 @@ class Generic
      *
      * @return \atk4\ui\jsCallback
      */
-    public function addHeaderDropdown($id, $items, $icon = 'caret square down')
+    public function addHeaderDropdown($menuId, $items, $icon = 'caret square down')
     {
         $this->headerAction = true;
+        $id = $this->name.'_ac';
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
                 [
-                    'div', ['id' => 'atk-dropdown-cln-ac-'.$id, 'class'=>'ui top right pointing dropdown', 'data-menu-id' => $id],
+                    'div', ['id' => $id, 'class'=>'ui top right pointing dropdown', 'data-menu-id' => $menuId],
                     [['i', ['class' => $icon.' icon']]],
                 ],
             ],
@@ -166,12 +170,15 @@ class Generic
                             );
                      }";
 
-        $chain = new jQuery('#atk-dropdown-cln-ac-'.$id);
+        $chain = new jQuery('#'.$id);
         $chain->dropdown([
                              'action'   => 'hide',
                              'values'   => $items,
                              'onChange' => new jsExpression($function),
                          ]);
+
+        //will stop grid column from being sorted.
+        $chain->on('click', new jsExpression('function(e){e.stopPropagation();}'));
 
         $this->table->js(true, $chain);
 

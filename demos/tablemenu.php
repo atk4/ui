@@ -2,28 +2,56 @@
 
 date_default_timezone_set('UTC');
 include 'init.php';
+require 'database.php';
 
-$table = $app->add(['Table', 'celled' => true]);
+$app->add(['Header', 'Table column may contains popup or dropdown menu.']);
+
+//For popup positioning to work correctly, table need to be inside a view segment.
+$view = $app->add('View', ['ui' => 'basic segment']);
+
+$table = $view->add(['Table', 'celled' => true]);
 $table->setModel(new SomeData(), false);
 
 //will add popup to this column.
-$col_name = $table->addColumn('name', new \atk4\ui\TableColumn\Link(['details', 'id' => '{$id}']));
+$col_name = $table->addColumn('name');
 
 //will add dropdown menu to this colum.
-$col_surname = $table->addColumn('surname', new \atk4\ui\TableColumn\Template('{$surname}'))->addClass('warning');
+$col_surname = $table->addColumn('surname');
 
 $col_title = $table->addColumn('title');
+
 $table->addColumn('date');
 $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 
-//popup setup
-$col_name->addPopup('name')->add('View')->set('Testing popup');
+//regular popup setup
+$col_name->addPopup()->add('View')->set('Name popup');
 
-//dropdown menu
-$col_surname->addDropdown('surname', ['Customize', 'Rename', 'Update'], function ($item) {
-    return 'Surname item: '.$item;
+//dynamic popup setup
+//This popup will add content using the callback function.
+$col_surname->addPopup()->set(function($pop) {
+    $pop->add('View')->set('This popup is load dynamically');
 });
 
+//Another dropdown menu.
 $col_title->addDropdown('title', ['Change', 'Reorder', 'Update'], function ($item) {
     return 'Title item: '.$item;
 });
+
+////////////////////////////////////////////////
+
+$app->add(['Header', 'Grid column may contains popup or dropdown menu.']);
+
+//For popup positioning to work correctly, table need to be inside a view segment.
+$view = $app->add('View', ['ui' => 'basic segment']);
+$g = $view->add(['Grid']);
+$g->setModel(new Country($db));
+$g->ipp = 5;
+
+//Adding a dropdown menu to the column 'name'.
+$g->addHeaderDropdown('name', ['Rename', 'Delete'], function($item){
+   return $item;
+});
+
+//Adding a popup view to the column 'iso'
+$pop = $g->addHeaderPopup('iso');
+$pop->add('View')->set('Grid column popup');

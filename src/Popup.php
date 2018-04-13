@@ -94,6 +94,18 @@ class Popup extends View
      */
     public $minHeight = null; //'60px';
 
+    /**
+     * Whether or not the click event triggering popup
+     * should stop event propagation.
+     *
+     * Ex: when Popup is located inside a sortable grid header.
+     * Set this options to true in order to activate just the popup
+     * and stop sort action.
+     *
+     * @var bool
+     */
+    public $stopClickEvent = false;
+
     public function __construct($triggerBy = null)
     {
         if (is_object($triggerBy)) {
@@ -263,6 +275,9 @@ class Popup extends View
             }
             $chain = new jQuery($name);
             $chain->popup($this->popOptions);
+            if ($this->stopClickEvent) {
+                $chain->on('click', new jsExpression('function(e){e.stopPropagation();}'));
+            }
             $this->js(true, $chain);
         }
 
