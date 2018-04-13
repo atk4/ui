@@ -227,7 +227,11 @@ class Grid extends View
             throw new Exception('The column where you want to add popup does not exist: '.$columnName);
         }
 
-        return $column->addPopup($icon);
+        $popup = $column->addPopup($icon);
+        if ($this->name === @$_GET['__atk_reload']) {
+            $this->js(true, $popup->jsPopup());
+        }
+        return $popup;
     }
 
     /**

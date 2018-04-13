@@ -263,22 +263,35 @@ class Popup extends View
         return $this;
     }
 
+    /**
+     * Return js action need to display popup.
+     * When a grid is reloading, this method can be call
+     * in order to display the popup once again.
+     *
+     * @return jQuery
+     */
+    public function jsPopup()
+    {
+        $name = $this->triggerBy;
+        if (!is_string($this->triggerBy)) {
+            $name = '#'.$this->triggerBy->name;
+            if ($this->triggerBy instanceof FormField\Generic) {
+                $name = '#'.$this->triggerBy->name.'_input';
+            }
+        }
+        $chain = new jQuery($name);
+        $chain->popup($this->popOptions);
+        if ($this->stopClickEvent) {
+            $chain->on('click', new jsExpression('function(e){e.stopPropagation();}'));
+        }
+
+        return $chain;
+    }
+
     public function renderView()
     {
         if ($this->triggerBy) {
-            $name = $this->triggerBy;
-            if (!is_string($this->triggerBy)) {
-                $name = '#'.$this->triggerBy->name;
-                if ($this->triggerBy instanceof FormField\Generic) {
-                    $name = '#'.$this->triggerBy->name.'_input';
-                }
-            }
-            $chain = new jQuery($name);
-            $chain->popup($this->popOptions);
-            if ($this->stopClickEvent) {
-                $chain->on('click', new jsExpression('function(e){e.stopPropagation();}'));
-            }
-            $this->js(true, $chain);
+            $this->js(true, $this->jsPopup());
         }
 
         if ($this->cb) {
