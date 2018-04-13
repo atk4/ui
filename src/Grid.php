@@ -231,6 +231,7 @@ class Grid extends View
         if ($this->name === @$_GET['__atk_reload']) {
             $this->js(true, $popup->jsPopup());
         }
+
         return $popup;
     }
 
