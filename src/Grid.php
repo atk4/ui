@@ -205,7 +205,7 @@ class Grid extends View
             throw new Exception('The column where you want to add dropdown does not exist: '.$columnName);
         }
 
-        $column->addDropdown($columnName, $items, function($item) use ($fx) {
+        $column->addDropdown($columnName, $items, function ($item) use ($fx) {
             return call_user_func($fx, [$item]);
         }, $icon);
     }
@@ -216,8 +216,9 @@ class Grid extends View
      * @param string $columnName The name of column where to add popup.
      * @param string $icon       The icon.
      *
-     * @return mixed
      * @throws Exception
+     *
+     * @return mixed
      */
     public function addHeaderPopup($columnName, $icon = 'caret square down')
     {

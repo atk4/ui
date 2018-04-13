@@ -28,7 +28,7 @@ $col_name->addPopup()->add('View')->set('Name popup');
 
 //dynamic popup setup
 //This popup will add content using the callback function.
-$col_surname->addPopup()->set(function($pop) {
+$col_surname->addPopup()->set(function ($pop) {
     $pop->add('View')->set('This popup is load dynamically');
 });
 
@@ -48,8 +48,8 @@ $g->setModel(new Country($db));
 $g->ipp = 5;
 
 //Adding a dropdown menu to the column 'name'.
-$g->addHeaderDropdown('name', ['Rename', 'Delete'], function($item){
-   return $item;
+$g->addHeaderDropdown('name', ['Rename', 'Delete'], function ($item) {
+    return $item;
 });
 
 //Adding a popup view to the column 'iso'
