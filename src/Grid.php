@@ -195,39 +195,44 @@ class Grid extends View
      * @param array    $items      The menu items to add.
      * @param callable $fx         The callback function to execute when an item is selected.
      * @param string   $icon       The icon.
+     * @param string   $menuId     The menu id return by callback.
      *
      * @throws Exception
      */
-    public function addHeaderDropdown($columnName, $items, $fx, $icon = 'caret square down')
+    public function addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
     {
         $column = $this->table->columns[$columnName];
         if (!isset($column)) {
             throw new Exception('The column where you want to add dropdown does not exist: '.$columnName);
         }
+        if (!$menuId) {
+            $menuId = $columnName;
+        }
 
-        $column->addDropdown($columnName, $items, function ($item) use ($fx) {
+        $column->addDropdown($items, function ($item) use ($fx) {
             return call_user_func($fx, [$item]);
-        }, $icon);
+        }, $icon, $menuId);
     }
 
     /**
      * Add a popup to header column.
      *
      * @param string $columnName The name of column where to add popup.
+     * @param Popup  $popup      Popup view.
      * @param string $icon       The icon.
      *
      * @throws Exception
      *
      * @return mixed
      */
-    public function addHeaderPopup($columnName, $icon = 'caret square down')
+    public function addPopup($columnName, $popup = null, $icon = 'caret square down')
     {
         $column = $this->table->columns[$columnName];
         if (!isset($column)) {
             throw new Exception('The column where you want to add popup does not exist: '.$columnName);
         }
 
-        return $column->addPopup($icon);
+        return $column->addPopup($popup, $icon);
     }
 
     /**

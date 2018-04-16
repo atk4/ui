@@ -65,6 +65,7 @@ class Generic
     /**
      * Add popup to header.
      *
+     * @param Popup  $popup
      * @param string $id
      * @param string $icon
      *
@@ -72,13 +73,16 @@ class Generic
      *
      * @return mixed
      */
-    public function addPopup($icon = 'caret square down')
+    public function addPopup($popup = null, $icon = 'caret square down')
     {
         if (!$this->app) {
             throw new Exception('Columns\'s popup need to have a layout.');
         }
-        $popup = $this->app->add('Popup')->setHoverable();
-        $this->addHeaderPopup($popup, $icon);
+        if (!$popup) {
+            $popup = $this->app->add('Popup')->setHoverable();
+        }
+
+        $this->setHeaderPopup($popup, $icon);
 
         return $popup;
     }
@@ -89,7 +93,7 @@ class Generic
      * @param Popup $popup
      * @param $icon
      */
-    public function addHeaderPopup($popup, $icon = 'caret square down')
+    public function setHeaderPopup($popup, $icon = 'caret square down')
     {
         $this->headerAction = true;
         $id = $this->name.'_ac';
@@ -112,14 +116,14 @@ class Generic
     /**
      * Add a dropdown header menu.
      *
-     * @param string   $id
-     * @param array    $items
-     * @param callable $fx
-     * @param string   $icon
+     * @param array       $items
+     * @param callable    $fx
+     * @param string      $icon
+     * @param string|null $menuId     The menu name.
      *
      * @throws Exception
      */
-    public function addDropdown($menuId, $items, $fx, $icon = 'caret square down')
+    public function addDropdown($items, $fx, $icon = 'caret square down', $menuId = null)
     {
         $menuITems = [];
         foreach ($items as $key => $item) {
@@ -130,10 +134,10 @@ class Generic
             }
         }
 
-        $cb = $this->addHeaderDropdown($menuId, $menuITems, $icon);
+        $cb = $this->setHeaderDropdown($menuITems, $icon, $menuId);
 
         $cb->onSelectItem(function ($menu, $item) use ($fx) {
-            return call_user_func($fx, $item);
+            return call_user_func($fx, [$item, $menu]);
         });
     }
 
@@ -142,14 +146,15 @@ class Generic
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @param $items
-     * @param string $icon
+     * @param             $items
+     * @param string      $icon
+     * @param string|null $menuId The id of the menu.
      *
      * @throws Exception
      *
      * @return \atk4\ui\jsCallback
      */
-    public function addHeaderDropdown($menuId, $items, $icon = 'caret square down')
+    public function setHeaderDropdown($items, $icon = 'caret square down', $menuId = null)
     {
         $this->headerAction = true;
         $id = $this->name.'_ac';

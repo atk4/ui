@@ -33,7 +33,7 @@ $col_surname->addPopup()->set(function ($pop) {
 });
 
 //Another dropdown menu.
-$col_title->addDropdown('title', ['Change', 'Reorder', 'Update'], function ($item) {
+$col_title->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
     return 'Title item: '.$item;
 });
 
@@ -48,10 +48,10 @@ $g->setModel(new Country($db));
 $g->ipp = 5;
 
 //Adding a dropdown menu to the column 'name'.
-$g->addHeaderDropdown('name', ['Rename', 'Delete'], function ($item) {
+$g->addDropdown('name', ['Rename', 'Delete'], function ($item) {
     return $item;
 });
 
 //Adding a popup view to the column 'iso'
-$pop = $g->addHeaderPopup('iso');
+$pop = $g->addPopup('iso');
 $pop->add('View')->set('Grid column popup');
