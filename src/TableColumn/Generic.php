@@ -119,7 +119,7 @@ class Generic
      * @param array       $items
      * @param callable    $fx
      * @param string      $icon
-     * @param string|null $menuId     The menu name.
+     * @param string|null $menuId The menu name.
      *
      * @throws Exception
      */

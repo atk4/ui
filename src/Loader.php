@@ -31,7 +31,7 @@ class Loader extends View
 
     public $ui = 'ui segment';
 
-    /** @var Callback for triggering */
+    /** @var callable for triggering */
     protected $cb;
 
     public function init()
