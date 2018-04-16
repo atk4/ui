@@ -137,7 +137,7 @@ class Generic
         $cb = $this->setHeaderDropdown($menuITems, $icon, $menuId);
 
         $cb->onSelectItem(function ($menu, $item) use ($fx) {
-            return call_user_func($fx, [$item, $menu]);
+            return call_user_func($fx, $item, $menu);
         });
     }
 
