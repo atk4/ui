@@ -19,7 +19,7 @@ class App
         'atk'              => 'https://cdn.rawgit.com/atk4/ui/1.4.5/public',
         'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui'      => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0',
+        'semantic-ui'      => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1',
         'calendar'         => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
     ];
 
