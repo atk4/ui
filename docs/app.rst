@@ -324,6 +324,10 @@ and the following hooks are available:
  - beforeOutput
 
 
+.. note:: beforeOutput and beforeRender are not executed if $app->terminate() is called, even
+    if parameter is passed.
+
+
 Application and Layout
 ======================
 
