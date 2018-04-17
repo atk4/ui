@@ -8,7 +8,6 @@ $app->add(['Header', 'Database-driven form with an enjoyable layout']);
 
 $app->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'label' => 'http://']))->setModel(new Country($app->db));
 
-
 // create form
 $form = $app->add(new \atk4\ui\Form(['segment']));
 $form->add(['Label', 'Input new country information here', 'top attached'], 'AboveFields');
@@ -65,8 +64,8 @@ $app->add(new \atk4\ui\FormField\AutoComplete([
 
 $app->add(['Header', 'Auto-complete inside modal']);
 
-$modal = $app->add('Modal')->set(function($p) {
-    $a=$p->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'label' => 'http://']));
+$modal = $app->add('Modal')->set(function ($p) {
+    $a = $p->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'label' => 'http://']));
     $a->setModel(new Country($p->app->db));
 });
 $app->add(['Button', 'Open autocomplete on a Modal window'])->on('click', $modal->show());

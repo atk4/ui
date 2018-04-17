@@ -115,14 +115,11 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
         $_GET[$cb->name.'_2'] = true;
 
         $cb->set(function ($x) use (&$var, $app, &$cbname) {
-
             $cb2 = $app->add('CallbackLater');
             $cbname = $cb2->name;
-            $cb2->set(function($y) use (&$var) {
+            $cb2->set(function ($y) use (&$var) {
                 $var = $y;
             }, [$x]);
-
-
         }, [34]);
 
         $this->assertEquals(null, $var);

@@ -214,7 +214,6 @@ class AutoComplete extends Input
         $this->callback = $this->add('Callback');
         $this->callback->set([$this, 'getData']);
 
-
         $chain = new jQuery('#'.$this->name.'-ac');
 
         $this->initDropdown($chain);
