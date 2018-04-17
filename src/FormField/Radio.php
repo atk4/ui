@@ -52,7 +52,7 @@ class Radio extends Generic
 
 
     /**
-     * Returns value if field if a field is set to this input, null else.
+     * Returns value of field if a field is set to this input, null else.
      *
      * @return mixed
      */
