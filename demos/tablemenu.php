@@ -29,7 +29,7 @@ $col_name->addPopup()->add('View')->set('Name popup');
 //dynamic popup setup
 //This popup will add content using the callback function.
 $col_surname->addPopup()->set(function ($pop) {
-    $pop->add('View')->set('This popup is load dynamically');
+    $pop->add('View')->set('This popup is loaded dynamically');
 });
 
 //Another dropdown menu.
