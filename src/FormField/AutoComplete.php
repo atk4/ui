@@ -86,9 +86,6 @@ class AutoComplete extends Input
     {
         parent::init();
 
-        $this->callback = $this->add('CallbackLater');
-        $this->callback->set([$this, 'getData']);
-
         $this->template->set('input_id', $this->name.'-ac');
 
         $this->template->set('place_holder', $this->placeholder);
@@ -214,6 +211,10 @@ class AutoComplete extends Input
 
     public function renderView()
     {
+        $this->callback = $this->add('Callback');
+        $this->callback->set([$this, 'getData']);
+
+
         $chain = new jQuery('#'.$this->name.'-ac');
 
         $this->initDropdown($chain);
