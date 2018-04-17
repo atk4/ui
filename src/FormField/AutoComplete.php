@@ -12,7 +12,7 @@ class AutoComplete extends Input
     /**
      * Object used to capture requests from the browser.
      *
-     * @var Callback
+     * @var callable
      */
     public $callback;
 
