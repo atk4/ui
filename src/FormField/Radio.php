@@ -49,4 +49,15 @@ class Radio extends Generic
 
         return parent::renderView();
     }
+
+
+    /**
+     * Returns value if field if a field is set to this input, null else.
+     *
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->field ? $this->field->get() : null;
+    }
 }
