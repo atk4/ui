@@ -88,10 +88,13 @@ class FilterPopup extends Popup
         });
     }
 
+    /**
+     * Check if filter is on.
+     * 
+     * @return bool
+     */
     public function isFilterOn()
     {
-        $test = $this->recallData();
-
         return !empty($this->recallData());
     }
 
