@@ -90,7 +90,7 @@ class FilterPopup extends Popup
 
     /**
      * Check if filter is on.
-     * 
+     *
      * @return bool
      */
     public function isFilterOn()
