@@ -189,6 +189,24 @@ class Grid extends View
     }
 
     /**
+     * An array of column name where filter is needed.
+     * Leave empty to include all column in grid.
+     *
+     * @param array|null $names An array with the name of column.
+     *
+     * @return $this
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     */
+    public function addFilterColumn($names = null)
+    {
+        $this->menu->addItem(['Clear Filter'], new \atk4\ui\jsReload($this->table->reload, ['atk_clear_filter' => 1]));
+        $this->table->setFilterColumn($names);
+
+        return $this;
+    }
+
+    /**
      * Add a dropdown menu to header column.
      *
      * @param string   $columnName The name of column where to add dropdown.

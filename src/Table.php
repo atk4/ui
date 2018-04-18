@@ -4,6 +4,8 @@
 
 namespace atk4\ui;
 
+use atk4\ui\TableColumn\FilterPopup;
+
 class Table extends Lister
 {
     // Overrides
@@ -12,11 +14,9 @@ class Table extends Lister
     public $content = false;
 
     /**
-     * TODO: is this used??
+     * If table is part of Grid or CRUD, we want to reload that instead of table.
      *
-     * @var null
-     *
-     * If table is part of Grid or CRUD, we want to reload that instead of grid.
+     * @var View|null Ususally a Grid or Crud view that contains the table.
      */
     public $reload = null;
 
@@ -211,6 +211,44 @@ class Table extends Lister
         }
 
         return $columnDecorator;
+    }
+
+    /**
+     * Set Popup action for columns filtering.
+     *
+     * @param array $cols An array with colomns name that need filtering.
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     */
+    public function setFilterColumn($cols = null)
+    {
+        if (!$this->model) {
+            throw new Exception('Model need to be defined in order to use column filtering.');
+        }
+
+        // set filter to all column when null.
+        if (!$cols) {
+            foreach ($this->model->elements as $key => $field){
+                if ($this->columns[$key]) {
+                    $cols[] = $field->short_name;
+                }
+            }
+        }
+
+        // create column popup.
+        foreach ($cols as $colName) {
+            $col = $this->columns[$colName];
+            if ($col) {
+                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getElement($colName), 'reload' => $this->reload]));
+                $pop->isFilterOn() ? $col->setHeaderPopupIcon('green caret square down') : null;
+                $pop->form->onSubmit(function($f){
+                    return new jsReload($this->reload);
+                });
+                //apply condition according to popup form.
+                $this->model = $pop->setFilterCondition($this->model);
+            }
+        }
     }
 
     /**

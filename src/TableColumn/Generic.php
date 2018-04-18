@@ -78,9 +78,8 @@ class Generic
         if (!$this->app) {
             throw new Exception('Columns\'s popup need to have a layout.');
         }
-        if (!$popup) {
-            $popup = $this->app->add('Popup')->setHoverable();
-        }
+
+        $popup = $this->app->add($popup ? $popup : 'Popup')->setHoverable();
 
         $this->setHeaderPopup($popup, $icon);
 
@@ -111,6 +110,21 @@ class Generic
             //This is part of a reload, need to reactivate popup.
             $this->table->js(true, $popup->jsPopup());
         }
+    }
+
+    /**
+     * Set header popup icon.
+     *
+     * @param $icon
+     */
+    public function setHeaderPopupIcon($icon)
+    {
+        $id = $this->name.'_ac';
+        $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
+            [
+                ['i', ['id' => $id, 'class' => $icon.' icon']],
+            ],
+        ];
     }
 
     /**
