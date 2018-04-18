@@ -31,8 +31,10 @@ class Generic extends Model
      *
      * @return mixed
      */
-    public static function factoryType($type, $persistence) {
+    public static function factoryType($type, $persistence)
+    {
         $class = 'atk4\\ui\\TableColumn\\FilterModel\Type'.$type;
+
         return new $class($persistence);
     }
 
@@ -66,6 +68,5 @@ class Generic extends Model
      */
     public function getFormDisplayRule()
     {
-        return null;
     }
 }

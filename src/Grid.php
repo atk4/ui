@@ -194,9 +194,10 @@ class Grid extends View
      *
      * @param array|null $names An array with the name of column.
      *
-     * @return $this
      * @throws Exception
      * @throws \atk4\core\Exception
+     *
+     * @return $this
      */
     public function addFilterColumn($names = null)
     {

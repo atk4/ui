@@ -7,8 +7,8 @@ use atk4\data\Field;
 use atk4\data\Persistence_Array;
 use atk4\ui\Form;
 use atk4\ui\jsReload;
-use \atk4\ui\TableColumn\FilterModel\Generic;
 use atk4\ui\Popup;
+use atk4\ui\TableColumn\FilterModel\Generic;
 
 /**
  * Implement a filterPopup in a table column.
@@ -17,7 +17,7 @@ use atk4\ui\Popup;
  */
 class FilterPopup extends Popup
 {
-    /**
+    /*
      * This view use session to store model data.
      */
     use SessionTrait;
@@ -69,7 +69,7 @@ class FilterPopup extends Popup
 
         //create filter data model according to field type.
         $m = Generic::factoryType(ucfirst($this->field->type), new Persistence_Array($this->data));
-        $m ->addField('name', ['default'=> $this->field->short_name, 'system' => true]);
+        $m->addField('name', ['default'=> $this->field->short_name, 'system' => true]);
 
         //TODO Use When form condition is merge
         //$this->form->setFieldsDisplayRules($m->getFormDisplayRule());
@@ -77,12 +77,13 @@ class FilterPopup extends Popup
         //load first and only record associate with this popup.
         $this->form->setModel($m->tryLoadAny());
 
-        $this->form->onSubmit(function($f) {
+        $this->form->onSubmit(function ($f) {
             $f->model->save();
             $this->memorize($this->field->short_name, $this->data['data']);
         });
-        $this->form->add(['Button', 'Clear', 'clear tiny'])->on('click', function($f) {
+        $this->form->add(['Button', 'Clear', 'clear tiny'])->on('click', function ($f) {
             $this->forget();
+
             return [$this->form->js()->form('reset'), new jsReload($this->reload)];
         });
     }
@@ -90,6 +91,7 @@ class FilterPopup extends Popup
     public function isFilterOn()
     {
         $test = $this->recallData();
+
         return !empty($this->recallData());
     }
 

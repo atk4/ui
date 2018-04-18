@@ -229,7 +229,7 @@ class Table extends Lister
 
         // set filter to all column when null.
         if (!$cols) {
-            foreach ($this->model->elements as $key => $field){
+            foreach ($this->model->elements as $key => $field) {
                 if ($this->columns[$key]) {
                     $cols[] = $field->short_name;
                 }
@@ -242,7 +242,7 @@ class Table extends Lister
             if ($col) {
                 $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getElement($colName), 'reload' => $this->reload]));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('green caret square down') : null;
-                $pop->form->onSubmit(function($f){
+                $pop->form->onSubmit(function ($f) {
                     return new jsReload($this->reload);
                 });
                 //apply condition according to popup form.

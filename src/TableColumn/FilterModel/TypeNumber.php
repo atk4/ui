@@ -33,6 +33,7 @@ class TypeNumber extends Generic
                     $m->addCondition($m->expr('[field] between [value] and [value2]'), ['field' => $filter['name'], 'value' => $filter['value'], 'value2' => $filter['value2']]);
             }
         }
+
         return $m;
     }
 }
