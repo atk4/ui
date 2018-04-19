@@ -71,7 +71,6 @@ class FilterPopup extends Popup
         $this->setOption('delay', ['hide' => 1500]);
         $this->setHoverable();
 
-
         // Get data back from session.
         $this->data = $this->recallData();
 
