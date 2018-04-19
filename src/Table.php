@@ -240,9 +240,9 @@ class Table extends Lister
         foreach ($cols as $colName) {
             $col = $this->columns[$colName];
             if ($col) {
-                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getElement($colName), 'reload' => $this->reload]));
+                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getElement($colName), 'reload' => $this->reload, 'colTrigger' => '#'.$col->name.'_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('green caret square down') : null;
-                $pop->form->onSubmit(function ($f) {
+                $pop->form->onSubmit(function ($f) use ($pop) {
                     return new jsReload($this->reload);
                 });
                 //apply condition according to popup form.

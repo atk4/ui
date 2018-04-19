@@ -6,6 +6,7 @@ use atk4\core\SessionTrait;
 use atk4\data\Field;
 use atk4\data\Persistence_Array;
 use atk4\ui\Form;
+use atk4\ui\jQuery;
 use atk4\ui\jsReload;
 use atk4\ui\Popup;
 use atk4\ui\TableColumn\FilterModel\Generic;
@@ -50,6 +51,15 @@ class FilterPopup extends Popup
      */
     public $reload = null;
 
+    /**
+     * The Table Column triggering the poupup.
+     * This is need to simulate click in order to properly
+     * close the popup window on "Clear".
+     *
+     * @var string
+     */
+    public $colTrigger;
+
     public function init()
     {
         parent::init();
@@ -58,12 +68,16 @@ class FilterPopup extends Popup
             $this->forget();
         }
 
+        $this->setOption('delay', ['hide' => 1500]);
+        $this->setHoverable();
+
+
         // Get data back from session.
         $this->data = $this->recallData();
 
-        $this->form = $this->add('Form')->addClass('mini');
-        $this->form->buttonSave->addClass('tiny');
-        $this->form->addGroup("Where {$this->field->short_name} :");
+        $this->form = $this->add('Form')->addClass('');
+        $this->form->buttonSave->addClass('');
+        $this->form->addGroup("Where {$this->field->getCaption()} :");
 
         $this->form->buttonSave->set('Set');
 
@@ -80,11 +94,18 @@ class FilterPopup extends Popup
         $this->form->onSubmit(function ($f) {
             $f->model->save();
             $this->memorize($this->field->short_name, $this->data['data']);
+            //trigger click action in order to close popup.
+            //otherwise calling ->popup('hide') is not working as expected.
+            return (new jQuery($this->triggerBy))->trigger('click');
         });
-        $this->form->add(['Button', 'Clear', 'clear tiny'])->on('click', function ($f) {
+        $this->form->add(['Button', 'Clear', 'clear '])->on('click', function ($f) {
             $this->forget();
 
-            return [$this->form->js()->form('reset'), new jsReload($this->reload)];
+            return [
+                $this->form->js()->form('reset'),
+                new jsReload($this->reload),
+                (new jQuery($this->colTrigger))->trigger('click'),
+            ];
         });
     }
 

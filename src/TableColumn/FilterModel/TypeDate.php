@@ -2,7 +2,7 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
-class TypeNumber extends Generic
+class TypeDate extends Generic
 {
     public function init()
     {
@@ -18,8 +18,8 @@ class TypeNumber extends Generic
         if (isset($filter['op'])) {
             switch ($filter['op']) {
                 case 0: //'='
-                $m->addCondition($filter['name'], $filter['value']);
-                break;
+                    $m->addCondition($filter['name'], $filter['value']);
+                    break;
                 case 1: //'!='
                     $m->addCondition($filter['name'], '!=', $filter['value']);
                     break;
@@ -33,8 +33,6 @@ class TypeNumber extends Generic
                     $m->addCondition(
                         $m->expr('[field] between [value] and [value2]', ['field' => $filter['name'], 'value' => $filter['value'], 'value2' => $filter['value2']])
                     );
-
-                    //select `id`,`nicename` `name`,`name` `sys_name`,`iso`,`iso3`,`numcode`,`phonecode` from `country` where 'numcode' between 4 and 70 limit 0, 10
             }
         }
 

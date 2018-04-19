@@ -8,5 +8,5 @@ $view = $app->add('View', ['ui' => 'basic segment']);
 $g = $view->add(['Grid']);
 $g->setModel(new Country($db));
 
-$g->addFilterColumn();
+$g->addFilterColumn(/*['name']*/);
 $g->ipp = 10;

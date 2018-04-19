@@ -60,7 +60,7 @@ class Generic extends Model
     }
 
     /**
-     * Method the will set Field display condition in a form.
+     * Method that will set Field display condition in a form.
      * If form filter need to have a field display at certain condition, then
      * override this method in your FilterModel\TypeModel.
      *
