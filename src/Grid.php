@@ -145,8 +145,9 @@ class Grid extends View
      * @param null   $ipp   The default item's per page value.
      * @param string $label The memu item label.
      *
-     * @return $this
      * @throws Exception
+     *
+     * @return $this
      */
     public function addRowLimiter($items = [10, 25, 50, 100], $ipp = null, $label = 'Items per page')
     {
@@ -169,7 +170,7 @@ class Grid extends View
         //Callback later will give us time to properly render menu item before final output.
         $cb = $this->add(new CallbackLater());
         if ($cb->triggered()) {
-            $cb->set(function() use ($label, $limiter) {
+            $cb->set(function () use ($label, $limiter) {
                 $this->ipp = @$_GET['ipp'];
                 $this->stickyGet('ipp');
                 $limiter->set($label.' ('.$this->ipp.')');
@@ -191,7 +192,7 @@ class Grid extends View
         //set limiter as a dropdown.
         $limiter->js(true)->dropdown([
                                                'values'   => $menuItems,
-                                               'onChange' => new jsExpression($function)
+                                               'onChange' => new jsExpression($function),
                                            ]);
         $limiter->set($label.' ('.$ipp.')');
 
