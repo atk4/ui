@@ -139,62 +139,38 @@ class Grid extends View
     }
 
     /**
-     * Add Dropdown menu in grid menu in order to dynamically setup number of item per page.
+     * Add PageLength View in grid menu or paginator in order to dynamically setup number of item per page.
      *
-     * @param array  $items An array of item's per page value.
-     * @param null   $ipp   The default item's per page value.
-     * @param string $label The memu item label.
+     * @param array   $items  An array of item's per page value.
+     * @param string  $label  The memu item label.
+     * @param boolean $inMenu Whether to add selector in grid menu or paginator.
      *
      * @throws Exception
      *
      * @return $this
      */
-    public function addRowLimiter($items = [10, 25, 50, 100], $ipp = null, $label = 'Items per page')
+    public function addPageLengthSelector($items = [10, 25, 50, 100], $label = '[ipp] / Page', $inMenu = false)
     {
         if (!$this->menu) {
             throw new Exception(['Unable to add QuickSearch without Menu']);
         }
 
-        if (!$ipp) {
-            $ipp = $items[0];
+        if (@$_GET['ipp']){
+            $this->ipp = $_GET['ipp'];
+            $this->stickyGet('ipp');
         }
 
-        $this->ipp = $ipp;
-        $limiter = $this->menu->add('View')->addClass('ui dropdown');
-
-        $menuItems = [];
-        foreach ($items as $key => $item) {
-            $menuItems[] = ['name' => $item, 'value' => $item];
+        if ($inMenu) {
+            $pageLength = $this->menu->add(['PageLength', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp]);
+        } else {
+            $pageLength = $this->paginator->add(['PageLength', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], 'afterPaginator');
         }
 
-        //Callback later will give us time to properly render menu item before final output.
-        $cb = $this->add(new CallbackLater());
-        if ($cb->triggered()) {
-            $cb->set(function () use ($label, $limiter) {
-                $this->ipp = @$_GET['ipp'];
-                $this->stickyGet('ipp');
-                $limiter->set($label.' ('.$this->ipp.')');
-                $this->app->terminate($this->renderJSON());
-            });
-        }
-
-        $function = "function(value, text, item){
-                            if (value === undefined || value === '' || value === null) return;
-                            $(this)
-                            .api({
-                                on:'now',
-                                url:'{$cb->getURL()}',
-                                data:{ipp:value}
-                                }
-                            );
-                     }";
-
-        //set limiter as a dropdown.
-        $limiter->js(true)->dropdown([
-                                               'values'   => $menuItems,
-                                               'onChange' => new jsExpression($function),
-                                           ]);
-        $limiter->set($label.' ('.$ipp.')');
+        $pageLength->onPageLengthSelect(function ($ipp) {
+            $this->ipp = $ipp;
+            //return the view to reload.
+            return $this;
+        });
 
         return $this;
     }
