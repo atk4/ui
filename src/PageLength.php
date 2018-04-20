@@ -9,7 +9,7 @@ namespace atk4\ui;
 class PageLength extends View
 {
     /**
-     * The View that will hold this PageLength
+     * The View that will hold this PageLength.
      *
      * @var View|null
      */
@@ -33,7 +33,7 @@ class PageLength extends View
     /**
      * The current number of item per page.
      *
-     * @var integer|null
+     * @var int|null
      */
     public $currentIpp = null;
 

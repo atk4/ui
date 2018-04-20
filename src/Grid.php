@@ -141,9 +141,9 @@ class Grid extends View
     /**
      * Add PageLength View in grid menu or paginator in order to dynamically setup number of item per page.
      *
-     * @param array   $items  An array of item's per page value.
-     * @param string  $label  The memu item label.
-     * @param boolean $inMenu Whether to add selector in grid menu or paginator.
+     * @param array  $items  An array of item's per page value.
+     * @param string $label  The memu item label.
+     * @param bool   $inMenu Whether to add selector in grid menu or paginator.
      *
      * @throws Exception
      *
@@ -155,7 +155,7 @@ class Grid extends View
             throw new Exception(['Unable to add QuickSearch without Menu']);
         }
 
-        if (@$_GET['ipp']){
+        if (@$_GET['ipp']) {
             $this->ipp = $_GET['ipp'];
             $this->stickyGet('ipp');
         }
