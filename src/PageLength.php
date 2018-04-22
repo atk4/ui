@@ -50,18 +50,22 @@ class PageLength extends View
 
         if ($this->owner instanceof Menu) {
             $this->pageLength = $this->addClass('ui dropdown');
+            $labelView = $this->pageLength->add('View');
         } elseif ($this->owner instanceof Paginator) {
             $this->addClass('ui pagination menu');
             $this->pageLength = $this->add('Item')->setElement('a')->addClass('ui item dropdown');
+            $labelView = $this->pageLength;
         }
+
+        $labelView->addClass('atk-page-length-label');
+
+        //Callback later will give us time to properly render menu item before final output.
+        $this->cb = $this->add(new CallbackLater());
 
         $menuItems = [];
         foreach ($this->pageLengthItems as $key => $item) {
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
-
-        //Callback later will give us time to properly render menu item before final output.
-        $this->cb = $this->add(new CallbackLater());
 
         //set semantic-ui dropdown onChange function.
         $function = "function(value, text, item){
@@ -77,10 +81,25 @@ class PageLength extends View
 
         //set pageLength as a dropdown.
         $this->pageLength->js(true)->dropdown([
-                                         'values'   => $menuItems,
-                                         'onChange' => new jsExpression($function),
-                                     ]);
-        $this->pageLength->set(preg_replace("/\[ipp\]/", $this->currentIpp ? $this->currentIpp : $this->pageLengthItems[0], $this->label));
+                                                         'values'   => $menuItems,
+                                                         'onChange' => new jsExpression($function),
+                                                     ]);
+
+        $labelView->set(preg_replace("/\[ipp\]/", $this->currentIpp ? $this->currentIpp : $this->pageLengthItems[0], $this->label));
+    }
+
+    /**
+     * Set label using js action.
+     *
+     * @param $ipp
+     *
+     * @return jQuery
+     */
+    public function jsSetLabel($ipp)
+    {
+        return $this->pageLength->js(true)
+                          ->find('.atk-page-length-label')
+                          ->html(preg_replace("/\[ipp\]/", $ipp, $this->label));
     }
 
     /**

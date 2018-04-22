@@ -162,14 +162,23 @@ class Grid extends View
         }
 
         if ($inMenu) {
+            //$this->stickyGet('_q');
             $pageLength = $this->menu->add(['PageLength', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp]);
         } else {
             $pageLength = $this->paginator->add(['PageLength', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], 'afterPaginator');
         }
 
-        $pageLength->onPageLengthSelect(function ($ipp) {
+        $pageLength->onPageLengthSelect(function ($ipp) use ($inMenu, $pageLength) {
             $this->ipp = $ipp;
             $this->setModelLimitFromPaginator();
+            //add ipp to quicksearch
+            if ($this->quickSearch instanceof jsSearch) {
+                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
+            }
+            //if inMenu we need to set label and rerender dropdown because menu is not part of the reload like paginator is.
+            if ($inMenu) {
+                $this->container->js(true, $pageLength->jsSetLabel($ipp));
+            }
             //return the view to reload.
             return $this->container;
         });
@@ -199,7 +208,7 @@ class Grid extends View
             ->addMenuRight()->addItem()->setElement('div')
             ->add('View');
 
-        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container, 'args' => $this->container->stickyGet('ipp') ? ['ipp' => $this->container->stickyGet('ipp')] : []]);
+        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container]);
 
         if ($q = $this->stickyGet('_q')) {
             $cond = [];
@@ -349,7 +358,7 @@ class Grid extends View
 
         if ($this->quickSearch instanceof jsSearch) {
             if ($sortby = $this->stickyGet($this->name.'_sort')) {
-                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setSortArgs', [$this->name.'_sort', $sortby]));
+                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->name.'_sort', $sortby]));
             }
         }
 

@@ -97,6 +97,10 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.3.1
+
+  - Add more generic method jsSearch::setUrlArgs(arg, value) in favor of deprecared setSortArgs method.
+  
 ### version 1.3.0
 
   - Add PopupService in order to be able to load popup content dynamically via Callback.
