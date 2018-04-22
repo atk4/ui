@@ -92,11 +92,11 @@ class Grid extends View
             $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        $this->table = $this->container->add($this->factory(['Table', 'very compact striped single line', 'reload' => $this], $this->table), 'Table');
+        $this->table = $this->container->add($this->factory(['Table', 'very compact striped single line', 'reload' => $this->container], $this->table), 'Table');
 
         if ($this->paginator !== false) {
             $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
-            $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this], $this->paginator));
+            $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator));
         }
     }
 
@@ -155,9 +155,10 @@ class Grid extends View
             throw new Exception(['Unable to add QuickSearch without Menu']);
         }
 
-        if (@$_GET['ipp']) {
-            $this->ipp = $_GET['ipp'];
-            $this->stickyGet('ipp');
+        if ($ipp =  $this->container->stickyGet('ipp')) {
+            $this->ipp = $ipp;
+        } else {
+            $this->ipp = $items[0];
         }
 
         if ($inMenu) {
@@ -168,8 +169,9 @@ class Grid extends View
 
         $pageLength->onPageLengthSelect(function ($ipp) {
             $this->ipp = $ipp;
+            $this->setModelLimitFromPaginator();
             //return the view to reload.
-            return $this;
+            return $this->container;
         });
 
         return $this;
@@ -197,7 +199,7 @@ class Grid extends View
             ->addMenuRight()->addItem()->setElement('div')
             ->add('View');
 
-        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container]);
+        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container, 'args' => $this->container->stickyGet('ipp') ? ['ipp' => $this->container->stickyGet('ipp')] : []]);
 
         if ($q = $this->stickyGet('_q')) {
             $cond = [];
@@ -270,7 +272,7 @@ class Grid extends View
         $this->table->on(
             'click',
             'thead>tr>th',
-            new jsReload($this, [$this->name.'_sort' => (new jQuery())->data('column')])
+            new jsReload($this->container, [$this->name.'_sort' => (new jQuery())->data('column')])
         );
     }
 
@@ -324,15 +326,25 @@ class Grid extends View
         return $handler;
     }
 
+    /**
+     * Will set model limit according to paginator value.
+     *
+     * @throws \atk4\data\Exception
+     * @throws \atk4\dsql\Exception
+     */
+    private function setModelLimitFromPaginator()
+    {
+        $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
+
+        $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
+    }
+
     public function recursiveRender()
     {
         // bind with paginator
         if ($this->paginator) {
             $this->paginator->reload = $this->container;
-
-            $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
-
-            $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
+            $this->setModelLimitFromPaginator();
         }
 
         if ($this->quickSearch instanceof jsSearch) {
