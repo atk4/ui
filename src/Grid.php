@@ -155,7 +155,7 @@ class Grid extends View
             throw new Exception(['Unable to add QuickSearch without Menu']);
         }
 
-        if ($ipp =  $this->container->stickyGet('ipp')) {
+        if ($ipp = $this->container->stickyGet('ipp')) {
             $this->ipp = $ipp;
         } else {
             $this->ipp = $items[0];
