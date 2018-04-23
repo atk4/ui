@@ -8,8 +8,9 @@ class TypeNumber extends Generic
     {
         parent::init();
 
-        $this->op->values = ['=', '!=', '<', '>', 'between'];
-        $this->addField('value2', ['ui' => ['caption' => '']]);
+        $this->op->values = ['equal' => '=', 'not equal' => '!=', 'smaller' => '<', 'greater' => '>', 'between' => 'Between'];
+        $this->value->ui['form'] = ['Line', 'inputType' => 'number'];
+        $this->addField('value2', ['ui' => ['caption' => '', 'form' => ['Line', 'inputType' => 'number']]]);
     }
 
     public function setConditionForModel($m)
@@ -17,24 +18,22 @@ class TypeNumber extends Generic
         $filter = $this->tryLoadAny()->get();
         if (isset($filter['op'])) {
             switch ($filter['op']) {
-                case 0: //'='
+                case 'equal':
                 $m->addCondition($filter['name'], $filter['value']);
                 break;
-                case 1: //'!='
+                case 'not equal':
                     $m->addCondition($filter['name'], '!=', $filter['value']);
                     break;
-                case 2: //'<'
+                case 'smaller':
                     $m->addCondition($filter['name'], '<', $filter['value']);
                     break;
-                case 3: //'>'
+                case 'greater':
                     $m->addCondition($filter['name'], '>', $filter['value']);
                     break;
-                case 4: //'between'
+                case 'between':
                     $m->addCondition(
-                        $m->expr('[field] between [value] and [value2]', ['field' => $filter['name'], 'value' => $filter['value'], 'value2' => $filter['value2']])
+                        $m->expr('[field] between [value] and [value2]', ['field' => $m->getElement($filter['name']), 'value' => $filter['value'], 'value2' => $filter['value2']])
                     );
-
-                    //select `id`,`nicename` `name`,`name` `sys_name`,`iso`,`iso3`,`numcode`,`phonecode` from `country` where 'numcode' between 4 and 70 limit 0, 10
             }
         }
 

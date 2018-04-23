@@ -8,7 +8,7 @@ class TypeString extends Generic
     {
         parent::init();
 
-        $this->op->values = ['Is', 'Contains', 'Start', 'End'];
+        $this->op->values = ['is' => 'Is', 'contains' => 'Contains', 'start' => 'Start', 'end' => 'End'];
     }
 
     public function setConditionForModel($model)
@@ -16,16 +16,16 @@ class TypeString extends Generic
         $filter = $this->tryLoadAny()->get();
         if (isset($filter['op'])) {
             switch ($filter['op']) {
-                case 0: //'Is'
+                case 'is':
                     $model->addCondition($filter['name'], $filter['value']);
                     break;
-                case 1: //'Contains'
+                case 'contains':
                     $model->addCondition($filter['name'], 'LIKE', '%'.$filter['value'].'%');
                     break;
-                case 2: //'Start'
+                case 'start':
                     $model->addCondition($filter['name'], 'LIKE', $filter['value'].'%');
                     break;
-                case 3: //'End'
+                case 'end':
                     $model->addCondition($filter['name'], 'LIKE', '%'.$filter['value']);
                     break;
             }
