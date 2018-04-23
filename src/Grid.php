@@ -175,7 +175,7 @@ class Grid extends View
             if ($this->quickSearch instanceof jsSearch) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
             }
-            //if inMenu we need to set label and rerender dropdown because menu is not part of the reload like paginator is.
+            //if inMenu we need to set label because menu is not part of the reload like paginator is.
             if ($inMenu) {
                 $this->container->js(true, $pageLength->jsSetLabel($ipp));
             }
