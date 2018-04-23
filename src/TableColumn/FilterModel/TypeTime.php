@@ -2,8 +2,6 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
-use DateTime;
-
 class TypeTime extends Generic
 {
     public function init()
