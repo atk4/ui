@@ -3,6 +3,7 @@
 namespace atk4\ui\TableColumn\FilterModel;
 
 use DateTime;
+
 class TypeDate extends Generic
 {
     public function init()
@@ -18,7 +19,7 @@ class TypeDate extends Generic
             'on after'  => 'Is on or after',
             'not'       => 'Is not',
             'empty'     => 'Is empty',
-            'not empty' => 'Is not empty'
+            'not empty' => 'Is not empty',
         ];
 
         // the date value to operate on.
@@ -32,22 +33,22 @@ class TypeDate extends Generic
             '+1 month'       => 'One month from now',
             'x day ago'      => 'Numbers of days ago',
             'x day from now' => 'Number of days from now',
-            'exact'          => 'Exact date'
+            'exact'          => 'Exact date',
         ];
 
         // The range value field use when within is select.
         $this->addField('range',
-                        ['ui'=>['caption' => ''],
+                        ['ui'     => ['caption' => ''],
                          'values' => [
-                             '-1 week' => 'The past week',
-                             '-1 month' => 'The past month',
-                             '-1 year'  => 'The past year',
-                             '+1 week'  => 'The next week',
-                             '+1 month' => 'The next month',
-                             '+1 year'  => 'The next year',
+                             '-1 week'      => 'The past week',
+                             '-1 month'     => 'The past month',
+                             '-1 year'      => 'The past year',
+                             '+1 week'      => 'The next week',
+                             '+1 month'     => 'The next month',
+                             '+1 year'      => 'The next year',
                              'x day before' => 'The next numbers of days before',
-                             'x day after'  => 'The next number of days after'
-                         ]]);
+                             'x day after'  => 'The next number of days after',
+                         ], ]);
 
         // The exact date field input when exact is select as input value.
         $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
@@ -61,8 +62,9 @@ class TypeDate extends Generic
      *
      * @param $m
      *
-     * @return mixed
      * @throws \atk4\data\Exception
+     *
+     * @return mixed
      */
     public function setConditionForModel($m)
     {
