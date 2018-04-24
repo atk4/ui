@@ -8,6 +8,7 @@ import notify from "./plugins/notify";
 import fileUpload from "./plugins/fileUpload";
 import jsSearch from "./plugins/jsSearch";
 import jsSortable from "./plugins/jsSortable";
+import conditionalForm from "./plugins/conditionalForm";
 
 /**
  * Generate a jQuery plugin
@@ -33,19 +34,7 @@ import jsSortable from "./plugins/jsSortable";
  * import $ from 'jquery' will bind '$' var to jQuery var without '$' var conflicting with other library
  * in final webpack output.
  */
-
-//Create plugins.
-plugin('Spinner', spinner);
-plugin('ReloadView', reloadView);
-plugin('Ajaxec', ajaxec);
-plugin('CreateModal', createModal);
-plugin('Notify', notify, true);
-plugin('ServerEvent', serverEvent, true);
-plugin('FileUpload', fileUpload);
-plugin('JsSearch', jsSearch);
-plugin('JsSortable', jsSortable);
-
-export default function plugin(name, className, shortHand = false) {
+function plugin(name, className, shortHand = false) {
         // Add atk namespace to jQuery global space.
         if(!$.atk){
             $.atk = new Object();
@@ -83,3 +72,27 @@ export default function plugin(name, className, shortHand = false) {
         // - No conflict
         $.fn[pluginName].noConflict = () => $.fn[pluginName] = old;
 }
+
+/**
+ * Create all jQuery plugins need for atk.
+ */
+function createAtkplugins() {
+  const atkJqPlugins = [
+    {name: 'Spinner', plugin: spinner, sh: false},
+    {name: 'ReloadView', plugin: reloadView, sh: false},
+    {name: 'Ajaxec', plugin: ajaxec, sh: false},
+    {name: 'CreateModal', plugin: createModal, sh: false},
+    {name: 'Notify', plugin: notify,sh: true},
+    {name: 'ServerEvent', plugin: serverEvent, sh: true},
+    {name: 'FileUpload', plugin: fileUpload, sh: false},
+    {name: 'JsSearch', plugin: jsSearch, sh: false},
+    {name: 'JsSortable', plugin: jsSortable, sh: false},
+    {name: 'ConditionalForm', plugin: conditionalForm, sh: true},
+  ];
+
+  atkJqPlugins.forEach((atkJqPlugin) => {
+    plugin(atkJqPlugin.name, atkJqPlugin.plugin, atkJqPlugin.sh);
+  });
+}
+
+export {plugin, createAtkplugins};
