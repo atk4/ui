@@ -2,8 +2,9 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
+use atk4\data\Field;
 use atk4\data\Model;
-
+use atk4\data\Persistence;
 /**
  * Implement a generic Type model for filtering data.
  */
@@ -23,19 +24,38 @@ class Generic extends Model
      */
     public $value;
 
+    public $lookupField = null;
+
     /**
      * Factory method that will return a FilerModel Type class.
      *
-     * @param $type
-     * @param $persistence
+     * @param Field       $field
+     * @param Persistence $persistence
      *
      * @return mixed
      */
-    public static function factoryType($type, $persistence)
+    public static function factoryType($field, $persistence)
     {
-        $class = 'atk4\\ui\\TableColumn\\FilterModel\Type'.$type;
+        $filterDomain = 'atk4\\ui\\TableColumn\\FilterModel\Type';
 
-        return new $class($persistence);
+        // check if field as a type
+        if (empty($type = $field->type)) {
+            $type = 'string';
+        }
+        $class = $filterDomain.ucfirst($type);
+
+        /*
+         * You can set your own filter model condition by extending
+         * Field class and setting your filter model class.
+         */
+        if (!empty($field->filterModel) && isset($field->filterModel)) {
+            if ($field->filterModel instanceof Model) {
+                return $field->filterModel;
+            }
+            $class = $field->filterModel;
+        }
+
+         return new $class($persistence,['lookupField' => $field] );
     }
 
     public function init()

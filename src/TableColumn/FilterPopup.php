@@ -81,7 +81,7 @@ class FilterPopup extends Popup
         $this->form->buttonSave->set('Set');
 
         //create filter data model according to field type.
-        $m = Generic::factoryType(ucfirst($this->field->type), new Persistence_Array($this->data));
+        $m = Generic::factoryType($this->field, new Persistence_Array($this->data));
         $m->addField('name', ['default'=> $this->field->short_name, 'system' => true]);
 
         //TODO Use When form condition is merge
