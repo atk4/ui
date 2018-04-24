@@ -8,7 +8,7 @@ class TypeString extends Generic
     {
         parent::init();
 
-        $this->op->values = ['is' => 'Is', 'contains' => 'Contains', 'start' => 'Start', 'end' => 'End'];
+        $this->op->values = ['is' => 'Is', 'contains' => 'Contains', 'start' => 'Start with', 'end' => 'End with'];
     }
 
     public function setConditionForModel($model)

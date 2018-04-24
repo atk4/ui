@@ -8,10 +8,11 @@ class TypeEnum extends Generic
 {
     public function init()
     {
+        //bypass parent init since we are not using op and value field but create them from
+        //the lookup field value.
         Model ::init();
         $this->_initialized = true;
         $this->op = null;
-        //$this->addField('also_checked', ['type' => 'boolean', 'ui' => ['caption' => 'heel']]);
         if ($this->lookupField->values) {
             foreach ($this->lookupField->values as $key => $value) {
                 $this->addField($key, ['type' => 'boolean', 'ui' => ['caption' => $value]]);
@@ -32,8 +33,9 @@ class TypeEnum extends Generic
                 $values[] = $key;
             }
         }
-
-        $model->addCondition($filter['name'], 'in', $values);
+        if (!empty($values)) {
+            $model->addCondition($filter['name'], 'in', $values);
+        }
 
         return $model;
     }
