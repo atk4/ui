@@ -47,7 +47,7 @@ class SSE
     /**
      * Executes user-specified action when call-back is triggered.
      *
-     * @param callback $callback
+     * @param callable $callback
      * @param array    $args
      *
      * @return mixed|null
