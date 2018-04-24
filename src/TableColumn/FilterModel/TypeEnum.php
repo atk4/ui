@@ -11,7 +11,8 @@ class TypeEnum extends Generic
         //bypass parent init since we are not using op and value field but create them from
         //the lookup field value.
         Model ::init();
-        $this->_initialized = true;
+        $this->afterInit();
+
         $this->op = null;
         if ($this->lookupField->values) {
             foreach ($this->lookupField->values as $key => $value) {

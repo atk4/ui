@@ -2,15 +2,18 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
+use atk4\core\SessionTrait;
 use atk4\data\Field;
 use atk4\data\Model;
 use atk4\data\Persistence;
-
+use atk4\data\Persistence_Array;
 /**
  * Implement a generic Type model for filtering data.
  */
 class Generic extends Model
 {
+    use SessionTrait;
+
     /**
      * The operator for defining a condition on a field.
      *
@@ -25,6 +28,18 @@ class Generic extends Model
      */
     public $value;
 
+    /**
+     * Whether or not this filter model use session to store it's data.
+     *
+     * @var bool
+     */
+    public $useSession = false;
+
+    /**
+     * The field where this filter need to query data.
+     *
+     * @var null
+     */
     public $lookupField = null;
 
     /**
@@ -35,11 +50,13 @@ class Generic extends Model
      *
      * @return mixed
      */
-    public static function factoryType($field, $persistence)
+    public static function factoryType($field/*, $persistence*/)
     {
+        $data = [];
+        $persistence = new Persistence_Array($data);
         $filterDomain = 'atk4\\ui\\TableColumn\\FilterModel\Type';
 
-        // check if field as a type
+        // check if field as a type and use string as default
         if (empty($type = $field->type)) {
             $type = 'string';
         }
@@ -56,15 +73,53 @@ class Generic extends Model
             $class = $field->filterModel;
         }
 
-        return new $class($persistence, ['lookupField' => $field]);
+        return new $class($persistence, ['lookupField' => $field, 'useSession' => true]);
     }
 
     public function init()
     {
         parent::init();
-        //$this->addField('op', [new \atk4\ui\DropDown()]);
         $this->op = $this->addField('op', ['ui' => ['caption' => '']]);
         $this->value = $this->addField('value', ['ui' => ['caption' => '']]);
+        $this->afterInit();
+    }
+
+    /**
+     * Perform further initialisation.
+     *
+     * @throws \atk4\core\Exception
+     */
+    public function afterInit()
+    {
+        $this->addField('name', ['default'=> $this->lookupField->short_name, 'system' => true]);
+
+        if ($this->useSession) {
+            // create a name for our filter model to save as session data.
+            $this->name = 'filter_model_'.$this->lookupField->short_name;
+
+            if (@$_GET['atk_clear_filter']) {
+                $this->forget();
+            }
+
+            if ($data = $this->recallData()) {
+                $this->persistence->data['data'][] = $data;
+            }
+
+            // Add hook in order to persist data in session.
+            $this->addHook('afterSave', function($m) {
+                $this->memorize('data', $m->get());
+            });
+        }
+    }
+
+    /**
+     * Recall filter model data.
+     *
+     * @return array
+     */
+    public function recallData()
+    {
+        return $this->recall('data');
     }
 
     /**

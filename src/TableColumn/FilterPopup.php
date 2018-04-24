@@ -2,9 +2,7 @@
 
 namespace atk4\ui\TableColumn;
 
-use atk4\core\SessionTrait;
 use atk4\data\Field;
-use atk4\data\Persistence_Array;
 use atk4\ui\Form;
 use atk4\ui\jQuery;
 use atk4\ui\jsReload;
@@ -18,18 +16,6 @@ use atk4\ui\TableColumn\FilterModel\Generic;
  */
 class FilterPopup extends Popup
 {
-    /*
-     * This view use session to store model data.
-     */
-    use SessionTrait;
-
-    /**
-     * The data associcate to this model.
-     *
-     * @var array
-     */
-    public $data = [];
-
     /**
      * The form associate with this FilterPopup.
      *
@@ -63,26 +49,16 @@ class FilterPopup extends Popup
     public function init()
     {
         parent::init();
-
-        if (@$_GET['atk_clear_filter']) {
-            $this->forget();
-        }
-
         $this->setOption('delay', ['hide' => 1500]);
         $this->setHoverable();
 
-        // Get data back from session.
-        $this->data = $this->recallData();
+        $m = Generic::factoryType($this->field);
 
         $this->form = $this->add('Form')->addClass('');
         $this->form->buttonSave->addClass('');
         $this->form->addGroup("Where {$this->field->getCaption()} :");
 
         $this->form->buttonSave->set('Set');
-
-        //create filter data model according to field type.
-        $m = Generic::factoryType($this->field, new Persistence_Array($this->data));
-        $m->addField('name', ['default'=> $this->field->short_name, 'system' => true]);
 
         //TODO Use When form condition is merge
         //$this->form->setFieldsDisplayRules($m->getFormDisplayRule());
@@ -92,14 +68,15 @@ class FilterPopup extends Popup
 
         $this->form->onSubmit(function ($f) {
             $f->model->save();
-            $this->memorize($this->field->short_name, $this->data['data']);
             //trigger click action in order to close popup.
             //otherwise calling ->popup('hide') is not working as expected.
             return (new jQuery($this->triggerBy))->trigger('click');
         });
-        $this->form->add(['Button', 'Clear', 'clear '])->on('click', function ($f) {
-            $this->forget();
 
+        $this->form->add(['Button', 'Clear', 'clear '])->on('click', function ($f) use ($m){
+            if ($m->useSession) {
+                $m->forget();
+            }
             return [
                 $this->form->js()->form('reset'),
                 new jsReload($this->reload),
@@ -125,7 +102,7 @@ class FilterPopup extends Popup
      */
     public function recallData()
     {
-        return $this->recall($this->field->short_name);
+        return $this->form->model->recallData();
     }
 
     /**
