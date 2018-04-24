@@ -12,11 +12,11 @@ class TypeEnum extends Generic
         $this->_initialized = true;
         $this->op = null;
         //$this->addField('also_checked', ['type' => 'boolean', 'ui' => ['caption' => 'heel']]);
-        if ($this->lookupField->values){
-            forEach($this->lookupField->values as $key => $value) {
+        if ($this->lookupField->values) {
+            foreach ($this->lookupField->values as $key => $value) {
                 $this->addField($key, ['type' => 'boolean', 'ui' => ['caption' => $value]]);
             }
-        } else if ($this->lookupField->enum) {
+        } elseif ($this->lookupField->enum) {
             foreach ($this->lookupField->enum as $enum) {
                 $this->addField($enum, ['type' => 'boolean', 'ui' => ['caption' => $enum]]);
             }
@@ -33,7 +33,7 @@ class TypeEnum extends Generic
             }
         }
 
-        $model->addCondition($filter['name'], 'in',  $values);
+        $model->addCondition($filter['name'], 'in', $values);
 
         return $model;
     }

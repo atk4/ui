@@ -5,6 +5,7 @@ namespace atk4\ui\TableColumn\FilterModel;
 use atk4\data\Field;
 use atk4\data\Model;
 use atk4\data\Persistence;
+
 /**
  * Implement a generic Type model for filtering data.
  */
@@ -55,7 +56,7 @@ class Generic extends Model
             $class = $field->filterModel;
         }
 
-         return new $class($persistence,['lookupField' => $field] );
+        return new $class($persistence, ['lookupField' => $field]);
     }
 
     public function init()
