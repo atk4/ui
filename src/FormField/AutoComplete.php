@@ -44,6 +44,14 @@ class AutoComplete extends Input
     public $plus = false;
 
     /**
+     * Sets the max. amount of records that are loaded. The default 10
+     * displays nicely in UI.
+     *
+     * @var int
+     */
+    public $limit = 10;
+
+    /**
      * Semantic UI uses cache to remember choices. For dynamic sites this may be dangerous, so
      * it's disabled by default. To switch cache on, set 'cache'=>'local'.
      *
@@ -78,9 +86,6 @@ class AutoComplete extends Input
     {
         parent::init();
 
-        $this->callback = $this->add('CallbackLater');
-        $this->callback->set([$this, 'getData']);
-
         $this->template->set('input_id', $this->name.'-ac');
 
         $this->template->set('place_holder', $this->placeholder);
@@ -89,7 +94,12 @@ class AutoComplete extends Input
             $this->action = $this->factory(['Button', is_string($this->plus) ? $this->plus : 'Add new']);
         }
         //var_Dump($this->model->get());
-        $vp = $this->app->add('VirtualPage');
+        if ($this->form) {
+            $vp = $this->form->add('VirtualPage');
+        } else {
+            $vp = $this->owner->add('VirtualPage');
+        }
+
         $vp->set(function ($p) {
             $f = $p->add('Form');
             $f->setModel($this->model);
@@ -126,7 +136,7 @@ class AutoComplete extends Input
         if (!$this->model) {
             $this->app->terminate(json_encode([['id' => '-1', 'name' => 'Model must be set for AutoComplete']]));
         }
-        $this->model->setLimit(10);
+        $this->model->setLimit($this->limit);
         if (isset($_GET['q'])) {
             if ($this->search instanceof Closure) {
                 $this->search($this->model, $_GET['q']);
@@ -193,7 +203,7 @@ class AutoComplete extends Input
     {
         $settings = array_merge([
             'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
-            'apiSettings' => array_merge($this->apiConfig, ['url' => $this->getCallbackURL().'&q={query}']),
+            'apiSettings' => array_merge(['url' => $this->getCallbackURL().'&q={query}'], $this->apiConfig),
         ], $this->settings);
 
         $chain->dropdown($settings);
@@ -201,6 +211,9 @@ class AutoComplete extends Input
 
     public function renderView()
     {
+        $this->callback = $this->add('Callback');
+        $this->callback->set([$this, 'getData']);
+
         $chain = new jQuery('#'.$this->name.'-ac');
 
         $this->initDropdown($chain);

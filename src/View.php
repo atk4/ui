@@ -1098,14 +1098,26 @@ class View implements jsExpressionable
     }
 
     /**
-     * Save sticky GET argument and return it's value.
+     * Mark GET argument as sticky. Calling url() on this view or any
+     * sub-views will embedd the value of this GET argument.
+     *
+     * If GET argument is empty or false, it won't make into URL.
+     *
+     * If GET argument is not presently set you can specify a 2nd argument
+     * to forge-set the GET argument for current view and it's sub-views.
      *
      * @param string $name
+     * @param string $newValue
      *
      * @return string
      */
-    public function stickyGet($name)
+    public function stickyGet($name, $newValue = null)
     {
+        if ($newValue) {
+            $this->stickyArgs[$name] = $newValue;
+
+            return $newValue;
+        }
         if (isset($_GET[$name])) {
             $this->stickyArgs[$name] = $_GET[$name];
 

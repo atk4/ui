@@ -137,6 +137,28 @@ Added `$app->dbConnect()` as a simpler way to connect to the database. Some impr
 - fix/\#387-Allow a js function to run after reload is complete. [\#395](https://github.com/atk4/ui/pull/395) ([ibelar](https://github.com/ibelar))
 - Improvements to console, new demo and more documentation [\#394](https://github.com/atk4/ui/pull/394) ([romaninsh](https://github.com/romaninsh))
 
+## 1.4.5
+
+
+**Closed issues:**
+
+- CRUD - add if model is loaded.. [\#362](https://github.com/atk4/ui/issues/362)
+- If you don't set Layout of your App, then get useless exception [\#312](https://github.com/atk4/ui/issues/312)
+
+**Merged pull requests:**
+
+- fix/\#421-Alert [\#423](https://github.com/atk4/ui/pull/423) ([ibelar](https://github.com/ibelar))
+- Feature/clean up docblocks [\#417](https://github.com/atk4/ui/pull/417) ([romaninsh](https://github.com/romaninsh))
+- Feature/add card [\#416](https://github.com/atk4/ui/pull/416) ([romaninsh](https://github.com/romaninsh))
+- Feature/Draggable [\#409](https://github.com/atk4/ui/pull/409) ([ibelar](https://github.com/ibelar))
+- Implement "Multiformat" column decorator for table [\#408](https://github.com/atk4/ui/pull/408) ([romaninsh](https://github.com/romaninsh))
+- feature/Draggable [\#407](https://github.com/atk4/ui/pull/407) ([ibelar](https://github.com/ibelar))
+- Make use of getTitle\(\) and getModelCaption\(\) [\#406](https://github.com/atk4/ui/pull/406) ([romaninsh](https://github.com/romaninsh))
+- Autocomplete to use $title\_field instead of 'name' [\#403](https://github.com/atk4/ui/pull/403) ([FabulousGee](https://github.com/FabulousGee))
+- Fix: Typo [\#401](https://github.com/atk4/ui/pull/401) ([gartner](https://github.com/gartner))
+- Removed "return" in demo which was blocking some examples. [\#399](https://github.com/atk4/ui/pull/399) ([FabulousGee](https://github.com/FabulousGee))
+- Cleanup of Pr/397: Added getField-method to Generic FormLayout [\#398](https://github.com/atk4/ui/pull/398) ([romaninsh](https://github.com/romaninsh))
+
 ## 1.3
 
 This version is focused on dynamic interaction between the browser and your PHP apps. It contains 3

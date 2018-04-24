@@ -4,10 +4,12 @@ require 'init.php';
 require 'database.php';
 
 // create header
-$layout->add(['Header', 'Database-driven form with an enjoyable layout']);
+$app->add(['Header', 'Database-driven form with an enjoyable layout']);
+
+$app->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'label' => 'http://']))->setModel(new Country($app->db));
 
 // create form
-$form = $layout->add(new \atk4\ui\Form(['segment']));
+$form = $app->add(new \atk4\ui\Form(['segment']));
 $form->add(['Label', 'Input new country information here', 'top attached'], 'AboveFields');
 
 $m = new \atk4\data\Model($db, 'test');
@@ -33,19 +35,20 @@ $form->addField('country3', [
 //$acc = $form->getField('country_id');
 //$acc->actionRight = ['Button', 'Hello htere'];
 
-$form->onSubmit(function ($f) {
-    return $f->model->ref('country_id')['name'];
+$form->onSubmit(function ($f) use ($db) {
+    return $f->model->ref('country1')['name'].' / '.$f->model->ref('country2')['name'].' / '.(new Country($db))->load($f->model['country3'])->get('name');
 });
 
-$layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'left' => true, 'icon' => 'users']));
+$app->add(['Header', 'Labels']);
 
-$layout->add(new \atk4\ui\Header(['Labels', 'size' => 2]));
+// from seed
+$app->add(['FormField/AutoComplete', 'placeholder' => 'Search users', 'label' => 'http://'])->setModel(new Country($app->db));
 
-$layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'label' => 'http://']));
-$layout->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Weight', 'labelRight' => new \atk4\ui\Label(['kg', 'basic'])]));
-$layout->add(new \atk4\ui\FormField\AutoComplete(['label' => '$', 'labelRight' => new \atk4\ui\Label(['.00', 'basic'])]));
+// through constructor
+$app->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Weight', 'labelRight' => new \atk4\ui\Label(['kg', 'basic'])]));
+$app->add(new \atk4\ui\FormField\AutoComplete(['label' => '$', 'labelRight' => new \atk4\ui\Label(['.00', 'basic'])]));
 
-$layout->add(new \atk4\ui\FormField\AutoComplete([
+$app->add(new \atk4\ui\FormField\AutoComplete([
     'iconLeft'   => 'tags',
     'labelRight' => new \atk4\ui\Label(['Add Tag', 'tag']),
 ]));
@@ -55,6 +58,14 @@ $label = new \atk4\ui\Label();
 $label->addClass('left corner');
 $label->add(new \atk4\ui\Icon('asterisk'));
 
-$layout->add(new \atk4\ui\FormField\AutoComplete([
+$app->add(new \atk4\ui\FormField\AutoComplete([
     'label' => $label,
 ]))->addClass('left corner');
+
+$app->add(['Header', 'Auto-complete inside modal']);
+
+$modal = $app->add('Modal')->set(function ($p) {
+    $a = $p->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'label' => 'http://']));
+    $a->setModel(new Country($p->app->db));
+});
+$app->add(['Button', 'Open autocomplete on a Modal window'])->on('click', $modal->show());
