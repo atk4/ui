@@ -7,6 +7,7 @@ use atk4\data\Field;
 use atk4\data\Model;
 use atk4\data\Persistence;
 use atk4\data\Persistence_Array;
+
 /**
  * Implement a generic Type model for filtering data.
  */
@@ -106,7 +107,7 @@ class Generic extends Model
             }
 
             // Add hook in order to persist data in session.
-            $this->addHook('afterSave', function($m) {
+            $this->addHook('afterSave', function ($m) {
                 $this->memorize('data', $m->get());
             });
         }

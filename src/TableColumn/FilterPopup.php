@@ -73,10 +73,11 @@ class FilterPopup extends Popup
             return (new jQuery($this->triggerBy))->trigger('click');
         });
 
-        $this->form->add(['Button', 'Clear', 'clear '])->on('click', function ($f) use ($m){
+        $this->form->add(['Button', 'Clear', 'clear '])->on('click', function ($f) use ($m) {
             if ($m->useSession) {
                 $m->forget();
             }
+
             return [
                 $this->form->js()->form('reset'),
                 new jsReload($this->reload),
