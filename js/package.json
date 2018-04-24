@@ -44,6 +44,7 @@
   },
   "homepage": "http://www.agiletoolkit.org/",
   "dependencies": {
+    "debounce": "^1.1.0",
     "jquery": "^3.1.1",
     "semantic-ui-modal": "^2.2.10"
   }

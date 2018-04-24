@@ -99,6 +99,8 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ### version 1.3.0
 
+  - add plugin, conditionalForm, to allow field to show or hide upon other field condition.
+  - add formService throughout the app.  
   - Add PopupService in order to be able to load popup content dynamically via Callback.
 
 ### version 1.2.1

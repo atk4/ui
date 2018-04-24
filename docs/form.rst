@@ -10,19 +10,25 @@ Forms
 
 .. php:class:: Form
 
-One of the most important components of Agile UI is the "Form". Class ``Form``
+One of the most important components of ATK UI is the "Form". Class :php:class:`Form`
 implements the following 4 major features:
 
-- Form Rendering using Semantic UI Form (https://semantic-ui.com/collections/form.html):
+- Form Rendering using Semantic UI HTML/CSS (https://semantic-ui.com/collections/form.html):
 
     .. image:: images/form.png
 
-- Loading and storing data in any database (SQL, NoSQL) supported by Agile Data (http://agile-data.readthedocs.io/en/develop/persistence.html).
-- Full Integration with Events and Actions (:ref:`js`)
-- PHP-based Submit Handler using callbacks (:ref:`callback`)
+- Fields are automatically populated based on your existing data model with special treatment
+  for date/time, auto-complete and even file upload.
 
-Form can be used a web application built entirely in Agile UI or you can extract
-the component by integrating it into your existing application or framework.
+- Loading data from database and storing it back. Any persistence (SQL, NoSQL) supported by
+  ATK Data (http://agile-data.readthedocs.io/en/develop/persistence.html) can be used. 
+  
+- Support for Events and Actions on fields, buttons and form callback. (:ref:`js`) Automatic
+  execution of PHP-based Submit Handler passing all the collected data (:ref:`callback`)
+
+So if looking for a PHP Form class, ATK Form has the most complete implementation which does
+not require to fall-back into HTML / JS, perform any data conversion, load / store data and
+implement any advanced interacitons such as file uploads.
 
 Basic Usage
 ===========
@@ -99,7 +105,7 @@ Extensions
 Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some extensions like:
 
  - Capcha decorator
- - File Upload field
+ - File Upload field (see https://github.com/atk4/filestore)
  - Multi-record form
  - Multi-tab form
 
@@ -125,6 +131,12 @@ specific field type::
 
     $form = $app->add('Form');
     $form->setModel(new User($db), ['email', 'gender', 'terms']);
+
+Field Decorator does not have to be added directly into the form. You can use a separate 
+:php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`FormField\Generic::$form`::
+
+    $myview = $form->add(['defaultTemplate'=>'./mytemplate.html']);
+    $myview->add(['FormField\Dropdown', 'form'=>$form]);
 
 Adding new fields
 -----------------
@@ -319,7 +331,7 @@ using setModel()
 Although there were many examples above for the use of setModel() this method
 needs a bit more info:
 
-.. php:attribute:: model
+.. php:attr:: model
 
 .. php:method:: setModel($model, [$fields])
 
@@ -593,3 +605,119 @@ form inside a segment (outline) and will make fields appear smaller::
     $f = new \atk4\ui\Form(['small segment']));
 
 For further styling see documentation on :php:class:`View`.
+
+Mandatory and Required Fields
+=============================
+
+ATK Data has two field flags - "mandatory" and "required". Because ATK Data works with PHP
+values, the values are defined like this:
+
+ - mandatory = value of the field must not be null.
+ - required = value of the field must not be empty. (see is_empty())
+
+Form changes things slightly, because it does not allow user to enter NULL values. For
+example - string (or unspecified type) fields will contain empty string if are not
+entered (""). Form will never set NULL value for them.
+
+When working with other types such as numeric values and dates - empty string is not
+a valid number (or date) and therefore will be converted to NULL.
+
+So in most cases you'd want "required=true" flag set on your ATK Data fields. For
+numeric field, if zero must be a permitted entry, use "mandatory=true" instead.
+
+
+Conditional Form
+================
+
+.. php:method:: setFieldsDisplayRules()
+
+So far we had to present form with a set of fields while initializing. Sometimes 
+you would want to hide/display fields while user enters the data.
+
+The logic is based aroung passing a declarative array::
+
+    $form = $app->add('Form');
+    $form->addField('phone1');
+    $form->addField('phone2');
+    $form->addField('phone3');
+    $form->addField('phone4');
+
+    $form->setFieldsDisplayRules([
+        'phone2'=>['phone1'=>'empty'],
+        'phone3'=>['phone1'=>'empty', 'phone2'=>'empty'],
+        'phone4'=>['phone1'=>'empty', 'phone2'=>'empty', 'phone3'=>'empty'],
+    ]);
+
+The only catch here is that "empty" means "not empty". ATK UI relies on rules defined by SemanticUI
+https://semantic-ui.com/behaviors/form.html, so you can use any of the conditions there.
+
+Here is a more advanced example::
+
+    $f_sub = $app->add('Form');
+    $f_sub->addField('name');
+    $f_sub->addField('subscribe', ['CheckBox', 'Subscribe to weekly newsletter', 'toggle']);
+    $f_sub->addField('email');
+    $f_sub->addField('gender', ['Radio'], ['enum'=>['Female', 'Male']])->set('Female');
+    $f_sub->addField('m_gift', ['DropDown', 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
+    $f_sub->addField('f_gift', ['DropDown', 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
+
+    // Show email and gender when subscribe is checked.
+
+    // Show m_gift when gender is exactly equal to 'male' and subscribe is checked.
+    // Show f_gift when gender is exactly equal to 'female' and subscribe is checked.
+
+    $f_sub->setFieldsDisplayRules([
+       'email' => ['subscribe' => 'checked'],
+       'gender'=> ['subscribe' => 'checked'],
+       'm_gift'=> ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
+       'f_gift'=> ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
+    ]);
+
+You may also define multiple conditions for the field to be visible if you wrap them inside and array::
+
+
+    $f_sub = $app->add('Form');
+    $f_dog->addField('race', ['Line']);
+    $f_dog->addField('age');
+    $f_dog->addField('hair_cut', ['DropDown', 'values' => ['Short', 'Long']]);
+
+    // Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
+    // OR
+    // Show 'hair_cut' when race contains exactly the word 'bichon'
+    $f_dog->setFieldsDisplayRules([
+        'hair_cut' => [['race' => 'contains[poodle]', 'age'=>'integer[1..5]'], ['race' => 'isExactly[bichon]']],
+    ]);
+
+Hiding / Showing group of field
+-------------------------------
+
+Instead of defining rules for fields individually you can hide/show entire group::
+
+    $f_group = $app->add(['Form', 'segment']);
+    $f_group->add(['Label', 'Work on form group too.', 'top attached'], 'AboveFields');
+
+    $g_basic = $f_group->addGroup(['Basic Information']);
+    $g_basic->addField('first_name', ['width' => 'eight']);
+    $g_basic->addField('middle_name', ['width' => 'three']);
+    $g_basic->addField('last_name', ['width' => 'five']);
+
+    $f_group->addField('dev', ['CheckBox', 'caption' => 'I am a developper']);
+
+    $g_code = $f_group->addGroup(['Check all language that apply']);
+    $g_code->addField('php', ['CheckBox']);
+    $g_code->addField('js', ['CheckBox']);
+    $g_code->addField('html', ['CheckBox']);
+    $g_code->addField('css', ['CheckBox']);
+
+    $g_other = $f_group->addGroup(['Others']);
+    $g_other->addField('language', ['width' => 'eight']);
+    $g_other->addField('favorite_pet', ['width' => 'four']);
+
+    //To hide-show group simply select a field in that group.
+    // Show group where 'php' belong when dev is checked.
+    // Show group where 'language' belong when dev is checked.
+
+    $f_group->setGroupDisplayRules([
+        'php' => ['dev' => 'checked'], 
+        'language'=>['dev'=>'checked']
+    ]);
