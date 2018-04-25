@@ -8,35 +8,43 @@ class TypeNumber extends Generic
     {
         parent::init();
 
-        $this->op->values = ['equal' => '=', 'not equal' => '!=', 'smaller' => '<', 'greater' => '>', 'between' => 'Between'];
+        $this->op->values = [
+            '='       => '=',
+            '!='      => '!=',
+            '<'       => '<',
+            '<='      => '< or equal',
+            '>'       => '>',
+            '>='      => '> or equal',
+            'between' => 'Between',
+        ];
+        $this->op->default = '=';
+
         $this->value->ui['form'] = ['Line', 'inputType' => 'number'];
-        $this->addField('value2', ['ui' => ['caption' => '', 'form' => ['Line', 'inputType' => 'number']]]);
+        $this->addField('range', ['ui' => ['caption' => '', 'form' => ['Line', 'inputType' => 'number']]]);
     }
 
     public function setConditionForModel($m)
     {
         $filter = $this->tryLoadAny()->get();
-        if (isset($filter['op'])) {
+        if (isset($filter['id'])) {
             switch ($filter['op']) {
-                case 'equal':
-                $m->addCondition($filter['name'], $filter['value']);
-                break;
-                case 'not equal':
-                    $m->addCondition($filter['name'], '!=', $filter['value']);
-                    break;
-                case 'smaller':
-                    $m->addCondition($filter['name'], '<', $filter['value']);
-                    break;
-                case 'greater':
-                    $m->addCondition($filter['name'], '>', $filter['value']);
-                    break;
                 case 'between':
                     $m->addCondition(
-                        $m->expr('[field] between [value] and [value2]', ['field' => $m->getElement($filter['name']), 'value' => $filter['value'], 'value2' => $filter['value2']])
+                        $m->expr('[field] between [value] and [range]', ['field' => $m->getElement($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
                     );
+                    break;
+                default:
+                    $m->addCondition($filter['name'], $filter['op'], $filter['value']);
             }
         }
 
         return $m;
+    }
+
+    public function getFormDisplayRules()
+    {
+        return [
+            'range'       => ['op' => 'isExactly[between]'],
+        ];
     }
 }

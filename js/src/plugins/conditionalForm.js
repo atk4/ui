@@ -62,6 +62,8 @@ export default class conditionalForm extends atkPlugin {
     this.$el.find( ':checkbox').on('change', this, debounce(this.onInputChange, 100, true));
     this.$el.find(':radio').on('change', this, debounce(this.onInputChange, 100, true));
     this.$el.find('input').on(this.settings.validateEvent, this, debounce(this.onInputChange, 500));
+    this.$el.find('select').on('change', this, debounce(this.onInputChange, 100));
+
 
     this.initialize();
   }

@@ -8,8 +8,17 @@ class TypeTime extends Generic
     {
         parent::init();
 
-        $this->op->values = ['equal' => '=', 'not equal' => '!=', 'smaller' => '<', 'greater' => '>', 'between' => 'Between'];
-        //$this->value->ui['form'] = ['Line', 'inputType' => 'time'];
+        $this->op->values = [
+            '='       => '=',
+            '!='      => '!=',
+            '<'       => '<',
+            '<='      => '< or equal',
+            '>'       => '>',
+            '>='      => '> or equal',
+            'between' => 'Between',
+        ];
+
+        $this->op->default = '=';
         $this->value->type = 'time';
         $this->addField('range', ['ui' => ['caption' => ''], 'type' => 'time']);
     }
@@ -17,20 +26,8 @@ class TypeTime extends Generic
     public function setConditionForModel($m)
     {
         $filter = $this->tryLoadAny()->get();
-        if (isset($filter['op'])) {
+        if (isset($filter['id'])) {
             switch ($filter['op']) {
-                case 'equal':
-                    $m->addCondition($filter['name'], $filter['value']);
-                    break;
-                case 'not equal':
-                    $m->addCondition($filter['name'], '!=', $filter['value']);
-                    break;
-                case 'smaller':
-                    $m->addCondition($filter['name'], '<', $filter['value']);
-                    break;
-                case 'greater':
-                    $m->addCondition($filter['name'], '>', $filter['value']);
-                    break;
                 case 'between':
                     $d1 = $filter['value'];
                     $d2 = $filter['range'];
@@ -43,9 +40,18 @@ class TypeTime extends Generic
                     }
                     $m->addCondition($m->expr('[field] between [value] and [value2]', ['field' => $m->getElement($filter['name']), 'value' => $value, 'value2' => $value2]));
                     break;
+                default:
+                    $m->addCondition($filter['name'], $filter['op'], $filter['value']);
             }
         }
 
         return $m;
+    }
+
+    public function getFormDisplayRules()
+    {
+        return [
+            'range'       => ['op' => 'isExactly[between]'],
+        ];
     }
 }

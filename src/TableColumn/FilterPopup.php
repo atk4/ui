@@ -60,8 +60,7 @@ class FilterPopup extends Popup
 
         $this->form->buttonSave->set('Set');
 
-        //TODO Use When form condition is merge
-        //$this->form->setFieldsDisplayRules($m->getFormDisplayRule());
+        $this->form->setFieldsDisplayRules($m->getFormDisplayRules());
 
         //load first and only record associate with this popup.
         $this->form->setModel($m->tryLoadAny());
@@ -74,9 +73,7 @@ class FilterPopup extends Popup
         });
 
         $this->form->add(['Button', 'Clear', 'clear '])->on('click', function ($f) use ($m) {
-            if ($m->useSession) {
-                $m->forget();
-            }
+            $m->clearData();
 
             return [
                 $this->form->js()->form('reset'),
@@ -97,7 +94,7 @@ class FilterPopup extends Popup
     }
 
     /**
-     * Recall session data.
+     * Recall model data.
      *
      * @return mixed
      */

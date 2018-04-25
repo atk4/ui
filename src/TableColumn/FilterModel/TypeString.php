@@ -9,12 +9,13 @@ class TypeString extends Generic
         parent::init();
 
         $this->op->values = ['is' => 'Is', 'contains' => 'Contains', 'start' => 'Start with', 'end' => 'End with'];
+        $this->op->default = 'is';
     }
 
     public function setConditionForModel($model)
     {
         $filter = $this->tryLoadAny()->get();
-        if (isset($filter['op'])) {
+        if (isset($filter['id'])) {
             switch ($filter['op']) {
                 case 'is':
                     $model->addCondition($filter['name'], $filter['value']);

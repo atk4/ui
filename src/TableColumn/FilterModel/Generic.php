@@ -30,13 +30,6 @@ class Generic extends Model
     public $value;
 
     /**
-     * Whether or not this filter model use session to store it's data.
-     *
-     * @var bool
-     */
-    public $useSession = false;
-
-    /**
      * The field where this filter need to query data.
      *
      * @var null
@@ -51,7 +44,7 @@ class Generic extends Model
      *
      * @return mixed
      */
-    public static function factoryType($field/*, $persistence*/)
+    public static function factoryType($field)
     {
         $data = [];
         $persistence = new Persistence_Array($data);
@@ -74,7 +67,7 @@ class Generic extends Model
             $class = $field->filterModel;
         }
 
-        return new $class($persistence, ['lookupField' => $field, 'useSession' => true]);
+        return new $class($persistence, ['lookupField' => $field]);
     }
 
     public function init()
@@ -94,7 +87,7 @@ class Generic extends Model
     {
         $this->addField('name', ['default'=> $this->lookupField->short_name, 'system' => true]);
 
-        if ($this->useSession) {
+        if (isset($this->_sessionTrait) && $this->_sessionTrait) {
             // create a name for our filter model to save as session data.
             $this->name = 'filter_model_'.$this->lookupField->short_name;
 
@@ -143,7 +136,18 @@ class Generic extends Model
      *
      * @return null
      */
-    public function getFormDisplayRule()
+    public function getFormDisplayRules()
     {
+        return null;
+    }
+
+    /**
+     * Check if this model is using session or not.
+     *
+     * @return bool
+     */
+    public function clearData()
+    {
+        $this->forget();
     }
 }

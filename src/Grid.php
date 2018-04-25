@@ -201,7 +201,7 @@ class Grid extends View
      */
     public function addFilterColumn($names = null)
     {
-        $this->menu->addItem(['Clear Filter'], new \atk4\ui\jsReload($this->table->reload, ['atk_clear_filter' => 1]));
+        $this->menu->addItem(['Clear Filters'], new \atk4\ui\jsReload($this->table->reload, ['atk_clear_filter' => 1]));
         $this->table->setFilterColumn($names);
 
         return $this;
