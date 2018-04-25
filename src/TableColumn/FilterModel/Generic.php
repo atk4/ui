@@ -138,7 +138,6 @@ class Generic extends Model
      */
     public function getFormDisplayRules()
     {
-        return null;
     }
 
     /**
