@@ -1,5 +1,6 @@
 import atkPlugin from 'plugins/atkPlugin';
 
+
 export default class ajaxec extends atkPlugin {
 
     main() {
@@ -9,7 +10,9 @@ export default class ajaxec extends atkPlugin {
                 this.doExecute();
             }
         } else {
-            this.doExecute();
+            if (!this.$el.hasClass('loading')){
+              this.doExecute();
+            }
         }
     }
 
@@ -19,7 +22,7 @@ export default class ajaxec extends atkPlugin {
             url: this.settings.uri,
             data: this.settings.uri_options,
             method: 'POST',
-            obj: this.$el
+            obj: this.$el,
         });
     }
 }
