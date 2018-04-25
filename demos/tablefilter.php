@@ -11,5 +11,3 @@ $g->setModel(new Country($db));
 $g->addFilterColumn();
 
 $g->ipp = 20;
-
-
