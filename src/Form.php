@@ -82,6 +82,15 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public $fieldDisplaySelector = '.field';
 
+
+     /**
+     * Use this apiConfig variable to pass API settings to Semantic UI in .api().
+     *
+     * @var array
+     */
+    public $apiConfig = [];
+
+
     // }}}
 
     // {{{ Base Methods
@@ -432,6 +441,22 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return parent::renderView();
     }
 
+
+    /**
+     * Set Semantic-ui Api settings to use with form
+     *
+     * @param array $config
+     *
+     * @return $this
+     */
+    public function setApiConfig($config)
+    {
+        $this->apiConfig = array_merge($this->apiConfig, $config);
+
+        return $this;
+    }
+
+
     /**
      * Does ajax submit.
      */
@@ -496,7 +521,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         //var_Dump($cb->getURL());
         $this->js(true)
-            ->api(['url' => $cb->getJSURL(),  'method' => 'POST', 'serializeForm' => true])
+            ->api(array_merge(['url' => $cb->getJSURL(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
             ->form(['inline' => true, 'on' => 'blur']);
 
         $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
