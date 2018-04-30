@@ -23,7 +23,6 @@ class App
         'calendar'         => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
     ];
 
-
     // @var string Version of Agile UI
     public $version = '1.4.5';
 
@@ -557,7 +556,8 @@ class App
      *
      * @param string $url
      * @parma bool   $isAsync Whether or not you want Async loading.
-     * @param bool   $isDefer Whether or not you want Defer loading.
+     *
+     * @param bool $isDefer Whether or not you want Defer loading.
      *
      * @return $this
      */
