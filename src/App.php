@@ -23,6 +23,7 @@ class App
         'calendar'         => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
     ];
 
+
     // @var string Version of Agile UI
     public $version = '1.4.5';
 
@@ -555,12 +556,14 @@ class App
      * Adds additional JS script include in aplication template.
      *
      * @param string $url
+     * @parma bool   $isAsync Whether or not you want Async loading.
+     * @param bool   $isDefer Whether or not you want Defer loading.
      *
      * @return $this
      */
-    public function requireJS($url)
+    public function requireJS($url, $isAsync = false, $isDefer = false)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url], '')."\n");
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '')."\n");
 
         return $this;
     }
