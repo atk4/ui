@@ -83,9 +83,9 @@ You can use $ipp property to specify different number of items per page::
 Actions
 =======
 
-.. php:attr: $actions
+.. php:attr:: actions
 
-.. php:method: addAction($button, $action, $confirm = false)
+.. php:method:: addAction($button, $action, $confirm = false)
 
 :php:class:`Table` supports use of :php:class:`TableColumn\Actions`, which allows to display button for each row.
 Calling addAction() provides a useful short-cut for creating column-based actions.
@@ -98,7 +98,7 @@ Calling this method multiple times will add button into same action column.
 
 See :php:meth:`TableColumn\Actions::addAction`
 
-.. php:method: addModalAction($button, $title, $callback)
+.. php:method:: addModalAction($button, $title, $callback)
 
 Similar to addAction, but when clicking a button, will open a modal dialog and execute $callback
 to populate a content::
@@ -113,7 +113,7 @@ to populate a content::
 
 Calling this method multiple times will add button into same action column.
 
-See :php:meth:`TableColumn\Actions::addModal`
+See :php:meth:`atk4\\ui\\TableColumn\\Actions::addModal`
 
 Selection
 =========

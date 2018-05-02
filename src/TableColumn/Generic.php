@@ -45,6 +45,8 @@ class Generic
      */
     public $hasHeaderAction = false;
 
+    public $headerAction = null;
+
     /**
      * The tag value required for getTag when using an header action.
      *

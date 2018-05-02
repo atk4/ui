@@ -1,11 +1,37 @@
 
 .. _tablecolumn:
 
-Table Columns and Formatters
-============================
+.. php:namespace:: atk4\ui
+
+=======================
+Table Column Decorators
+=======================
+
+Classes like :php:class:`Table` and :php:class:`Card` do not render their cell
+contents themselves. Instead they rely on Column Decorator class to position content within the
+cell.
+
+This is in contrast to :php:class:`View` and :php:class:`Lister` which do not
+use Table/Cell and therefore Column decorator is not required. 
+
+
+All column decorators in Agile UI have a base class :php:class:`TableColumn\\Generic`. Decorators will often
+look at the content of the associated value, for example :php:class:`Money` will add cell class `negative`
+only if monetary value is less than zero. The value is taken from Model's Field object.
+
+Column decorators can also function without associated value. :php:class:`Template` may have no
+fields or perhaps display multiple field values. :php:class:`Action` displays interractie buttons
+in the table. :php:class:`CheckBox` makes grid rows selectable. :php:class:`Ordering` displays 
+a draggable handle for re-ordering rows within the table.
+
+A final mention is about :php:class:`Multiformat`, which is a column decorator that can swap-in
+any other decorator based on condition. This allows you to change button [Archive] for active records,
+but if record is already archived, use a template "Archived on {$archive_date}". 
+
+Generic Column Decorator
+========================
 
 .. php:namespace:: atk4\ui\TableColumn
-
 .. php:class:: Generic
 
     Generic description of a column for :php:class:`atk4\\ui\\Table`
@@ -58,6 +84,90 @@ Sometimes you do want to inject HTML instead of using row values:
 Return array of HTML tags that will be injected into the row template. See
 :php:ref:`table_html` for further example.
 
+
+Decorators for data types
+=========================
+
+In addition to :php:class:`TableColumn\Generic`, Agile UI includes several column implementations.
+
+Link
+----
+
+.. php:class:: TableColumn\Link
+
+Put `<a href..` link over the value of the cell. The page property can be specified to constructor. There
+are two usage patterns. With the first you can specify full URL as a string::
+
+    $table->addColumn('name', ['Link', 'http://google.com/?q={$name}']);
+
+The URL may also be specified as an array. It will be passed to App::url() which will encode arguments::
+
+    $table->addColumn('name', ['Link', ['details', 'id'=>123, 'q'=>$anything]]);
+    
+In this case even if `$anything = '{$name}'` the substitution will not take place for safety reasons. To
+pass on some values from your model, use second argument to constructor::
+    
+    $table->addColumn('name', ['Link', ['details', 'id'=>123], ['q'=>'name']]);
+
+
+Money
+-----
+
+.. php:class:: TableColumn\Money
+
+Helps decorating monetary values. Will align value to the right and if value is less than zero will also
+use red text (td class "negative" for semantic ui). The money cells are not wrapped.
+
+For the actual number formatting, see :ref:`ui_persistence`
+
+Status
+------
+
+.. php:class:: TableColumn\Status
+
+Allow you to set highlight class and icon based on column value. This is most suitable for columns that
+contain pre-defined values.
+
+If your column "status" can be one of the following "pending", "declined", "archived" and "paid" and you would like
+to use different icons and colors to emphasise status::
+
+
+    $states = [ 'positive'=>['paid', 'archived'], 'negative'=>['declined'] ];
+
+    $table->addColumn('status', new \atk4\ui\TableColumn\Status($states));
+
+Current list of states supported:
+
+ - positive (icon checkmark)
+ - negative (icon close)
+ - and the default/unspecified state (icon question)
+
+(list of states may be expanded furteher)
+
+Template
+--------
+
+.. php:class:: TableColumn\Template
+
+This column is suitable if you wish to have custom cell formatting but do not wish to go through
+the trouble of setting up your own class.
+
+If you wish to display movie rating "4 out of 10" based around the column "rating", you can use::
+
+    $table->addColumn('rating', new \atk4\ui\TableColumn\Template('{$rating} out of 10'));
+
+Template may incorporate values from multiple fields in a data row, but current implementation
+will only work if you asign it to a primary column (by passing 1st argument to addColumn).
+
+(In the future it may be optional with the ability to specify caption).
+
+
+Interractive Derorators
+=======================
+
+Actions
+-------
+
 .. php:class:: Actions
 
 Can be used to add "action" column to your table::
@@ -68,13 +178,96 @@ If you want to have label above the action column, then::
 
     $action = $table->addColumn(null, ['Actions', 'caption'=>'User Actions']);
 
-See also :php:meth:`\atk4\ui\Grid::addAction()`
-
 .. php:method:: addAction($button, $action, $confirm = false)
 
 Adds another button into "Actions" column which will perform a certain JavaScript action when clicked.
-See also :php:meth:`\atk4\ui\Grid::addAction()`
+See also :php:meth:`atk4\\ui\\Grid::addAction()`::
+
+    $button = $action->addAction('Reload Table', $table->jsReload());
+
+Normally you would also want to pass the ID of the row which was clicked. You can use :php:meth:`atk4\\ui\\Table:jsRow()`
+and jQuery's data() method to reference it::
+
+    $button = $action->addAction('Reload Table', $table->jsReload(['clicked'=>$table->jsRow()->data('id')]));
+
+Moreover you may pass $action argument as a PHP callback.
 
 .. php:method:: addModal($button, $title, $callback)
 
-Triggers a modal dialog when you click on the button. See description on :php:meth:`\atk4\ui\Grid::addModalAction()`
+Triggers a modal dialog when you click on the button. See description on :php:meth:`atk4\\ui\\Grid::addModalAction()`::
+
+    $action->addAction('Say HI', function ($j, $id) use ($g) {
+        return 'Loaded "'.$g->model->load($id)['name'].'" from ID='.$id;
+    });
+
+Note that in this case ID is automatically passed to your call-back.
+
+CheckBox
+--------
+
+.. php:class:: TableColumn\CheckBox
+
+.. php:method:: jsChecked()
+
+Adding this column will render checkbox for each row. This column must not be used on a field.
+CheckBox column provides you with a handy jsChecked() method, which you can use to reference
+current item selection. The next code will allow you to select the checkboxes, and when you
+click on the button, it will reload $segment component while passing all the id's::
+
+    $box = $table->addColumn(new \atk4\ui\TableColumn\CheckBox());
+
+    $button->on('click', new jsReload($segment, ['ids'=>$box->jsChecked()]));
+
+jsChecked expression represents a JavaScript string which you can place inside a form field,
+use as argument etc.
+
+
+Multiformat
+-----------
+
+Sometimes your formatting may change depending on value. For example you may want to place link
+only on certain rows. For this you can use a 'Multiformat' decorator::
+
+    $table->addColumn('amount', ['Multiformat', function($a, $b) {
+
+        if($a['is_invoiced'] > 0) {
+            return ['Money', ['Link', 'invoice', ['invoice_id'=>'id']]];
+        } elseif (abs($a['is_refunded']) < 50) {
+            return [['Template', 'Amount was <b>refunded</b>']];
+        }
+
+        return 'Money';
+    }]);
+
+You supply a callback to the Multiformat decorator, which will then be used to determine
+the actual set of decorators to be used on a given row. The example above will look at various
+fields of your models and will conditionally add Link on top of Money formatting.
+
+Your callback can return things in varous ways:
+
+ - return array of seeds: [['Link'], 'Money'];
+ - if string or object is returned it is wrapped inside array automatically
+
+Multiple decorators will be created and merged.
+
+.. note:: If you are operating with large tables, code your own decorator, which would be more CPU-efficient.
+
+
+Column Menus and Popups
+=======================
+
+Table column may have a menu as seen in http://ui.agiletoolkit.org/demos/tablecolumnmenu.php. Menu is added
+into table column and can be linked with Popup or Menu::
+
+    
+    $table = $app->add(['ui'=>'segment'])->add(['Table', 'celled' => true]);
+    $table->setModel(new Country($app->db));
+
+    $name_column = $table->getColumnDecorators('name');
+    $name_column[0]->addPopup()->add('LoremIpsum');
+
+.. important:: Currently Admin layout requires you to wrap your table inside extra "ui container". 
+
+.. important:: If content of a pop-up is too large, it may not be possible to display it on-screen. Watch for warning.
+
+You may also use :php:meth:`atk4\\ui\\Popup::set` method to dynamically load the content.
