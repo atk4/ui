@@ -555,9 +555,8 @@ class App
      * Adds additional JS script include in aplication template.
      *
      * @param string $url
-     * @parma bool   $isAsync Whether or not you want Async loading.
-     *
-     * @param bool $isDefer Whether or not you want Defer loading.
+     * @param bool   $isAsync Whether or not you want Async loading.
+     * @param bool   $isDefer Whether or not you want Defer loading.
      *
      * @return $this
      */
