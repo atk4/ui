@@ -467,7 +467,8 @@ Form Submit Handling
 .. php:method:: setApiConfing($config)
 
     Add additional parameters to Semantic UI .api function which does the AJAX submission of the form.
-    All available parameters can be found here: https://semantic-ui.com/behaviors/api.html#/settings
+For example, if you want the loading overlay at a different HTML element, you can define it with $form->setApiConfig(['stateContext' => 'my-JQuery-selector']);
+All available parameters can be found here: https://semantic-ui.com/behaviors/api.html#/settings
 
 .. php:attr:: successTemplate
 
