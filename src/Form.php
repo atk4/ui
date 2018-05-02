@@ -82,14 +82,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public $fieldDisplaySelector = '.field';
 
-
-     /**
+    /**
      * Use this apiConfig variable to pass API settings to Semantic UI in .api().
      *
      * @var array
      */
     public $apiConfig = [];
-
 
     // }}}
 
@@ -441,9 +439,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         return parent::renderView();
     }
 
-
     /**
-     * Set Semantic-ui Api settings to use with form
+     * Set Semantic-ui Api settings to use with form. A complete list is here:
+     * https://semantic-ui.com/behaviors/api.html#/settings
      *
      * @param array $config
      *
@@ -455,7 +453,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         return $this;
     }
-
 
     /**
      * Does ajax submit.
