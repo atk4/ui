@@ -1,11 +1,11 @@
 .atk-layout
-  | {$LeftMenu}
-  main.atk-mainContainer
-    | {$Ghost}{$TopMenu}
-    .ui.main.container.basic.segment.very.padded
-      | {$Content}
-  footer.atk-footer
-    .ui.divider
-    .ui.center.aligned.basic.segment {Footer}Made with #[a(href='http://agiletoolkit.org/' target='_blank') Agile Toolkit] v{$version}{/}
-  .atk-overlay.pushable
-    .pusher
+    .atk-admin-left-menu|{$LeftMenu}
+    main.atk-main-container
+        | {$TopMenu}
+        .atk-content
+            |<div class="{$LayoutClass}">{$Content}</div>
+    footer.atk-footer
+        .ui.divider
+        .ui.center.aligned.basic.segment {Footer}Made with #[a(href='http://agiletoolkit.org/' target='_blank') Agile Toolkit] v{$version}{/}
+    .atk-overlay.pushable
+        .pusher
