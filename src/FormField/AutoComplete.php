@@ -12,7 +12,7 @@ class AutoComplete extends Input
     /**
      * Object used to capture requests from the browser.
      *
-     * @var callable
+     * @var Callback
      */
     public $callback;
 
@@ -34,6 +34,27 @@ class AutoComplete extends Input
     public $search;
 
     /**
+     * Set custom model field here to use it's value as ID in dropdown instead of default model ID field.
+     *
+     * @var string
+     */
+    public $id_field;
+
+    /**
+     * Set custom model field here to display it's value in dropdown instead of default model title field.
+     *
+     * @var string
+     */
+    public $title_field;
+
+    /**
+     * Limit records we show in autocomplete dropdown.
+     *
+     * @var int
+     */
+    public $limit = 10;
+
+    /**
      * Set this to create right-aligned button for adding a new a new record.
      *
      * true = will use "Add new" label
@@ -42,14 +63,6 @@ class AutoComplete extends Input
      * @var null|bool|string
      */
     public $plus = false;
-
-    /**
-     * Sets the max. amount of records that are loaded. The default 10
-     * displays nicely in UI.
-     *
-     * @var int
-     */
-    public $limit = 10;
 
     /**
      * Semantic UI uses cache to remember choices. For dynamic sites this may be dangerous, so
@@ -86,6 +99,9 @@ class AutoComplete extends Input
     {
         parent::init();
 
+        $this->callback = $this->add('CallbackLater');
+        $this->callback->set([$this, 'getData']);
+
         $this->template->set('input_id', $this->name.'-ac');
 
         $this->template->set('place_holder', $this->placeholder);
@@ -94,12 +110,7 @@ class AutoComplete extends Input
             $this->action = $this->factory(['Button', is_string($this->plus) ? $this->plus : 'Add new']);
         }
         //var_Dump($this->model->get());
-        if ($this->form) {
-            $vp = $this->form->add('VirtualPage');
-        } else {
-            $vp = $this->owner->add('VirtualPage');
-        }
-
+        $vp = $this->app->add('VirtualPage');
         $vp->set(function ($p) {
             $f = $p->add('Form');
             $f->setModel($this->model);
@@ -136,7 +147,12 @@ class AutoComplete extends Input
         if (!$this->model) {
             $this->app->terminate(json_encode([['id' => '-1', 'name' => 'Model must be set for AutoComplete']]));
         }
+
+        $id_field = $this->id_field ?: $this->model->id_field;
+        $title_field = $this->title_field ?: $this->model->title_field;
+
         $this->model->setLimit($this->limit);
+
         if (isset($_GET['q'])) {
             if ($this->search instanceof Closure) {
                 $this->search($this->model, $_GET['q']);
@@ -145,14 +161,13 @@ class AutoComplete extends Input
                     return [$field, 'like', '%'.$_GET['q'].'%'];
                 }, $this->search));
             } else {
-                $this->model->addCondition($this->model->title_field, 'like', '%'.$_GET['q'].'%');
+                $this->model->addCondition($title_field, 'like', '%'.$_GET['q'].'%');
             }
         }
 
         $data = [];
-        $res = $this->model->export([$this->model->id_field, $this->model->title_field]);
-        foreach ($res as $item) {
-            $data[] = ['id' => $item[$this->model->id_field], 'name' => $item[$this->model->title_field]];
+        foreach ($this->model as $junk) {
+            $data[] = ['id' => $this->model[$id_field], 'name' => $this->model[$title_field]];
         }
 
         if ($this->empty) {
@@ -203,7 +218,7 @@ class AutoComplete extends Input
     {
         $settings = array_merge([
             'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
-            'apiSettings' => array_merge(['url' => $this->getCallbackURL().'&q={query}'], $this->apiConfig),
+            'apiSettings' => array_merge($this->apiConfig, ['url' => $this->getCallbackURL().'&q={query}']),
         ], $this->settings);
 
         $chain->dropdown($settings);
@@ -211,9 +226,6 @@ class AutoComplete extends Input
 
     public function renderView()
     {
-        $this->callback = $this->add('Callback');
-        $this->callback->set([$this, 'getData']);
-
         $chain = new jQuery('#'.$this->name.'-ac');
 
         $this->initDropdown($chain);
