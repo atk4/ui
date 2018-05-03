@@ -257,7 +257,35 @@ Column Menus and Popups
 =======================
 
 Table column may have a menu as seen in http://ui.agiletoolkit.org/demos/tablecolumnmenu.php. Menu is added
-into table column and can be linked with Popup or Menu::
+into table column and can be linked with Popup or Menu.
+
+Basic Use
+---------
+
+The simplest way to use Menus and Popups is through a wrappers: :php:meth:`Table::addDropdown` and :php:meth:`Table::addPopup`::
+
+    $grid->addPopup('iso')
+        ->add('View')
+        ->set('Grid column popup text');
+
+    // OR
+
+    $grid->addDropdown('name', ['Sort A-Z', 'Sort by Relevance'], function ($item) {
+        return $item;
+    });
+
+Those wrappers will invoke methods :php:meth:`TableColumn::addDropdown` and :php:meth:`TableColmun::addPopup` for
+a specified column, which are documented below.
+
+
+Popups
+------
+
+.. php:method:: addPopup()
+
+To create a popup, you need to get the column decorator object. This must be the first decorator, which
+is responsible for rendering of the TH box. If you are adding column manually, :php:meth:`Table::addColumn()`
+will return it. When using model, use :php:meth:`Table::getColumnDecorators`::
 
     
     $table = $app->add(['ui'=>'segment'])->add(['Table', 'celled' => true]);
@@ -270,4 +298,25 @@ into table column and can be linked with Popup or Menu::
 
 .. important:: If content of a pop-up is too large, it may not be possible to display it on-screen. Watch for warning.
 
-You may also use :php:meth:`atk4\\ui\\Popup::set` method to dynamically load the content.
+You may also use :php:meth:`atk4\\ui\\Popup::set` method to dynamically load the content::
+
+
+    $table = $app->add(['ui'=>'segment'])->add(['Table', 'celled' => true]);
+    $table->setModel(new Country($app->db));
+
+    $name_column = $table->getColumnDecorators('name');
+    $name_column[0]->addPopup()->set(function($p) {
+        $p->add('HelloWorld');
+    });
+
+Dropdown Menus
+--------------
+
+.. php:method:: addDropdown()
+
+Menus will show item selection and will trigger a callback when user selects one of them::
+
+    $some_column->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
+        return 'Title item: '.$item;
+    });
+
