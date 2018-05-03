@@ -34,6 +34,24 @@ class AutoComplete extends Input
     public $search;
 
     /**
+     * Set this to create right-aligned button for adding a new a new record.
+     *
+     * true = will use "Add new" label
+     * string = will use your string
+     *
+     * @var null|bool|string
+     */
+    public $plus = false;
+
+    /**
+     * Sets the max. amount of records that are loaded. The default 10
+     * displays nicely in UI.
+     *
+     * @var int
+     */
+    public $limit = 10;
+
+    /**
      * Set custom model field here to use it's value as ID in dropdown instead of default model ID field.
      *
      * @var string
@@ -46,23 +64,6 @@ class AutoComplete extends Input
      * @var string
      */
     public $title_field;
-
-    /**
-     * Limit records we show in autocomplete dropdown.
-     *
-     * @var int
-     */
-    public $limit = 10;
-
-    /**
-     * Set this to create right-aligned button for adding a new a new record.
-     *
-     * true = will use "Add new" label
-     * string = will use your string
-     *
-     * @var null|bool|string
-     */
-    public $plus = false;
 
     /**
      * Semantic UI uses cache to remember choices. For dynamic sites this may be dangerous, so
@@ -99,9 +100,6 @@ class AutoComplete extends Input
     {
         parent::init();
 
-        $this->callback = $this->add('CallbackLater');
-        $this->callback->set([$this, 'getData']);
-
         $this->template->set('input_id', $this->name.'-ac');
 
         $this->template->set('place_holder', $this->placeholder);
@@ -110,7 +108,12 @@ class AutoComplete extends Input
             $this->action = $this->factory(['Button', is_string($this->plus) ? $this->plus : 'Add new']);
         }
         //var_Dump($this->model->get());
-        $vp = $this->app->add('VirtualPage');
+        if ($this->form) {
+            $vp = $this->form->add('VirtualPage');
+        } else {
+            $vp = $this->owner->add('VirtualPage');
+        }
+
         $vp->set(function ($p) {
             $f = $p->add('Form');
             $f->setModel($this->model);
@@ -218,7 +221,7 @@ class AutoComplete extends Input
     {
         $settings = array_merge([
             'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
-            'apiSettings' => array_merge($this->apiConfig, ['url' => $this->getCallbackURL().'&q={query}']),
+            'apiSettings' => array_merge(['url' => $this->getCallbackURL().'&q={query}'], $this->apiConfig),
         ], $this->settings);
 
         $chain->dropdown($settings);
@@ -226,6 +229,9 @@ class AutoComplete extends Input
 
     public function renderView()
     {
+        $this->callback = $this->add('Callback');
+        $this->callback->set([$this, 'getData']);
+
         $chain = new jQuery('#'.$this->name.'-ac');
 
         $this->initDropdown($chain);
