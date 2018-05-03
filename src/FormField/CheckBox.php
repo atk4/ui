@@ -32,14 +32,12 @@ class CheckBox extends Generic
     {
         parent::init();
 
-        // checkboxes are annoying because they don't send value
-        // when they are not ticked. We assume they are ticked and
-        // sent "false" as a workaround
+        // checkboxes are annoying because they don't send value when they are
+        // not ticked. We assume they are ticked and sent boolean "false" as a
+        // workaround. Otherwise send boolean "true".
         if ($this->form) {
             $this->form->addHook('loadPOST', function ($form, &$post) {
-                if (!isset($post[$this->field->short_name])) {
-                    $post[$this->field->short_name] = false;
-                }
+                $post[$this->field->short_name] = isset($post[$this->field->short_name]);
             });
         }
     }
