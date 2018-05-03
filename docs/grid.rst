@@ -115,6 +115,17 @@ Calling this method multiple times will add button into same action column.
 
 See :php:meth:`atk4\\ui\\TableColumn\\Actions::addModal`
 
+
+Column Menus
+============
+
+.. php:method:: addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
+
+.. php:method:: addPopup($columnName, $popup = null, $icon = 'caret square down')
+
+Methods addDropdown and addPopup provide a wrapper for :php:meth:`atk4\\ui\\TableColumn\\addDropdown` and 
+:php:meth:`atk4\\ui\\TableColumn\\addPopup` methods.
+
 Selection
 =========
 

@@ -262,7 +262,7 @@ into table column and can be linked with Popup or Menu.
 Basic Use
 ---------
 
-The simplest way to use Menus and Popups is through a wrappers: :php:meth:`Table::addDropdown` and :php:meth:`Table::addPopup`::
+The simplest way to use Menus and Popups is through a wrappers: :php:meth:`atk4\\ui\\Grid::addDropdown` and :php:meth:`atk4\\ui\\Grid::addPopup`::
 
     $grid->addPopup('iso')
         ->add('View')
@@ -284,8 +284,8 @@ Popups
 .. php:method:: addPopup()
 
 To create a popup, you need to get the column decorator object. This must be the first decorator, which
-is responsible for rendering of the TH box. If you are adding column manually, :php:meth:`Table::addColumn()`
-will return it. When using model, use :php:meth:`Table::getColumnDecorators`::
+is responsible for rendering of the TH box. If you are adding column manually, :php:meth:`atk4\\ui\\Table::addColumn()`
+will return it. When using model, use :php:meth:`atk4\\ui\\Table::getColumnDecorators`::
 
     
     $table = $app->add(['ui'=>'segment'])->add(['Table', 'celled' => true]);

@@ -6,6 +6,7 @@
 Purpose of App class
 ====================
 
+.. php:namespace:: atk4\ui
 .. php:class:: App
 
 App is a mandatory object that's essential for Agile UI to operate. If you don't create App object explicitly, it
@@ -190,6 +191,18 @@ Initializes all includes required by Agile UI. You may extend this class to add 
 
 Decodes current request without any arguments. If you are changing URL generation pattern, you
 probably need to change this method to properly identify the current page. See :php:class:`App::url()`
+
+Loading Templates for Views
+---------------------------
+
+.. php:method:: loadTemplate($name)
+
+Views use :php:attr:`View::$defaultTemplate` to specify which template they are using. By default
+those are loaded from `vendor/atk4/ui/templates/semantic-ui` however by overriding this method,
+you can specify extended logic.
+
+You may override this method if you are using a different CSS framework.
+
 
 Utilities by App
 ================

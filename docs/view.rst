@@ -43,7 +43,7 @@ Each of the views will automatically render all of the child views.
 Initializing Render Tree
 ========================
 
-Views use a principle of ``delayed init``, which allow you to manipulate View objects
+Views use a principle of `delayed init`, which allow you to manipulate View objects
 in any way you wish, before they will actuallized.
 
 .. php:method:: add($object, $region = 'Content')
@@ -57,8 +57,8 @@ in any way you wish, before they will actuallized.
 
     If this object is initialized, will also initialize $object
 
-    :param $object:
-    :param $region:
+    :param $object: Object or :ref:`seed` to add into render tree.
+    :param $region: When outputing HTML, which region in :php:attr:`View::$template` to use.
 
 
 .. php:method:: init()
@@ -312,24 +312,53 @@ The most suitable location for that is inside ``renderView`` method.
 
 .. php:method:: renderView()
 
-    Perform necessary changes in the $template property according to the presentation logic
-    of this view.
+Perform necessary changes in the $template property according to the presentation logic
+of this view.
 
-    You should override this method when necessary and don't forget to execute parent::renderView().
+You should override this method when necessary and don't forget to execute parent::renderView()::
 
+    function renderView() {
+        if (str_len($this->info) > 100) {
+             $this->addClass('tiny');
+        }
+
+        parent::renderView();
+    }
+
+It's important when you call parent. You wouldn't be able to affect template of a current view
+anymore after calling renderView.
+
+Also, note that child classes are rendered already before invocation of rederView. If you wish
+to do something before child render, override method :php:meth:`View::recursiveRender()`
 
 .. php:attr:: template
 
-    Template of a current view. The default value is 'element.html', however various UI
-    classes will override this to use a different template, such as 'button.html'.
+Template of a current view. This attribute contains an object of a class :php:class:`Template`.
+You may secify this value explicitly::
 
-    Before executing init() the template will be resolved and an appropriate Template object
-    will assigned to this property. If null, will clone owner's $region.
+    $app->add(['template'=>new \atk4\ui\Template('<b>hello</b>')]);
+
+.. php:attr:: defaultTemplate
+
+By default, if value of :php:attr:`View::$template` is not set, then it is loaded from class
+specified in `defaultTemplate`::
+
+    $app->add(['defaultTemplate'=>'./mytpl.html']);
+
+You should specify defaultTemplate using relative path to your project root or, for add-ons,
+relative to a current file::
+
+    // in Add-on
+    $app->add(['defaultTemplate'=>__DIR__.'/../templates/mytpl.httml']);
+
+Agile UI does not currently provide advanced search path for templates, by default the
+template is loaded from folder `vendor/atk4/ui/templates/semantic-ui/`. To change this
+behaviour, see :php:class:`App::loadTemplate()`.
 
 .. php:attr:: region
 
-    Name of the region in the owner's template where this object
-    will output itself. By default 'Content'.
+Name of the region in the owner's template where this object
+will output itself. By default 'Content'.
 
 
 Here is a best practice for using custom template::
