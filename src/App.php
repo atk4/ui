@@ -393,7 +393,7 @@ class App
     {
         $template = new Template();
         $template->app = $this;
-        if (in_array($name[0], ['.', '/', '\\'])) {
+        if (in_array($name[0], ['.', '/', '\\']) || strpos($name, ':\\') !== false) {
             $template->load($name);
         } else {
             $template->load($this->template_dir.'/'.$name);
