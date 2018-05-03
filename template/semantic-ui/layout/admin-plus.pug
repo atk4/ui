@@ -1,0 +1,11 @@
+.atk-layout
+    .atk-admin-left-menu|{$LeftMenu}
+    main.atk-main-container
+        | {$TopMenu}
+        .atk-content.atk-menu-push
+            |<div class="{$LayoutClass}">{$Content}</div>
+    footer.atk-footer.atk-menu-push
+        .ui.divider
+        .ui.center.aligned.basic.segment {Footer}Made with #[a(href='http://agiletoolkit.org/' target='_blank') Agile Toolkit] v{$version}{/}
+    .atk-overlay.pushable
+        .pusher

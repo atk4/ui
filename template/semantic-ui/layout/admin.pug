@@ -1,8 +1,7 @@
 .atk-layout
   | {$LeftMenu}
-  | {$TopMenu}
-  .atk-topMenuGhost.ui.menu #[span.item]
   main.atk-mainContainer
+    | {$Ghost}{$TopMenu}
     .ui.main.container.basic.segment.very.padded
       | {$Content}
   footer.atk-footer

@@ -2,7 +2,10 @@
 
 namespace atk4\ui\Layout;
 
+use atk4\ui\jsExpression;
+use atk4\ui\jsFunction;
 use atk4\ui\Menu;
+use atk4\ui\Template;
 
 /**
  * Implements a classic 100% width admin layout.
@@ -41,15 +44,19 @@ class Admin extends Generic
      */
     public $leftMenu = null;
 
-    public $defaultTemplate = 'layout/admin.html';
+    public $defaultTemplate = 'layout/admin-plus.html';
 
     public function init()
     {
         parent::init();
 
+        //$this->addClass('ui basic segment');
         if ($this->menu === null) {
-            $this->menu = $this->add(['Menu', 'atk-topMenu inverted fixed horizontal', 'element' => 'header'], 'TopMenu');
-            $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']])->add(['Icon', 'content']);
+            //$this->add(['View', 'element' => 'span'], 'Ghost')->addClass('ui left vertical inverted labeled visible sidebar');
+
+            $this->menu = $this->add(['Menu', 'atk-admin-top-menu inverted fixed horizontal atk-menu-push', 'element' => 'header'], 'TopMenu');
+            $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']]);
+            $this->burger->add(['Icon', 'content']);
         }
 
         if ($this->menuRight === null) {
@@ -64,6 +71,21 @@ class Admin extends Generic
         }
 
         $this->template->trySet('version', $this->app->version);
+        $this->template->trySet('LayoutClass', 'ui container fluid basic segment padded very');
+
+        $function = 'function(e){
+            if(parseInt($(".atk-menu-push").css("padding-left")) === 0){
+                $(".atk-menu-push").animate({"padding-left":"260px"},{duration:200, queue:false});
+                $(".atk-admin-left-menu > .ui.left.sidebar").animate({"left":"0px"},{duration:200, queue:false});
+            } else {
+                $(".atk-menu-push").animate({"padding-left":"0px"},{duration:200, queue:false});
+                $(".atk-admin-left-menu > .ui.left.sidebar").animate({"left":"-260px"},{duration:200, queue:false});
+
+            }
+        }';
+
+        $this->burger->js(true)->on('click', new jsExpression($function));
+
     }
 
     /**
