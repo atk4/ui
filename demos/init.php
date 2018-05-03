@@ -27,18 +27,19 @@ if (isset($layout->leftMenu)) {
     $form = $layout->leftMenu->addGroup(['Form', 'icon' => 'edit']);
     $form->addItem('Basics and Layouting', ['form']);
     $form->addItem('Input Field Decoration', ['field']);
-    $form->addItem(['File Uploading', 'icon'=>'yellow star'], ['upload']);
-    $form->addItem(['Checkboxes', 'icon'=>'yellow star'], ['checkbox']);
+    $form->addItem(['File Uploading'], ['upload']);
+    $form->addItem(['Checkboxes'], ['checkbox']);
     $form->addItem('Data Integration', ['form2']);
     $form->addItem('Form Multi-column layout', ['form3']);
-    $form->addItem(['Integration with Columns', 'icon'=>'yellow star'], ['form5']);
-    $form->addItem(['AutoComplete Field', 'icon'=>'yellow star'], ['autocomplete']);
-    $form->addItem(['Value Selectors', 'icon'=>'yellow star'], ['form6']);
+    $form->addItem(['Integration with Columns'], ['form5']);
+    $form->addItem(['AutoComplete Field'], ['autocomplete']);
+    $form->addItem(['Value Selectors'], ['form6']);
 
     $form = $layout->leftMenu->addGroup(['Grid and Table', 'icon' => 'table']);
     $form->addItem('Data table with formatted columns', ['table']);
     $form->addItem('Advanced table examples', ['table2']);
     $form->addItem('Table interractions', ['multitable']);
+    $form->addItem(['Column Menus', 'icon'=>'yellow star'], ['tablecolumnmenu']);
     $form->addItem('Grid - Table+Bar+Search+Paginator', ['grid']);
     $form->addItem('CRUD - Full editing solution', ['crud']);
 
@@ -52,19 +53,20 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('Menu', ['menu']);
     $basic->addItem('BreadCrumb', ['breadcrumb']);
     $basic->addItem('Tabs', ['tabs']);
-    $basic->addItem(['Columns', 'icon'=>'yellow star'], ['columns']);
+    $basic->addItem(['Columns'], ['columns']);
     $basic->addItem('Paginator', ['paginator']);
 
     $basic = $layout->leftMenu->addGroup(['Interactivity', 'icon' => 'talk']);
-    $basic->addItem(['Wizard', 'icon'=>'yellow star'], ['wizard']);
+    $basic->addItem(['Wizard'], ['wizard']);
     $basic->addItem('JavaScript Events', ['js']);
     $basic->addItem('Element Reloading', ['reloading']);
-    $basic->addItem(['Background PHP Jobs (SSE)', 'icon'=>'yellow star'], ['sse']);
-    $basic->addItem(['Progress Bar', 'icon'=>'yellow star'], ['progress']);
-    $basic->addItem(['Loader', 'icon'=>'yellow star'], ['loader']);
-    $basic->addItem(['Console', 'icon'=>'yellow star'], ['console']);
+    $basic->addItem(['Background PHP Jobs (SSE)'], ['sse']);
+    $basic->addItem(['Progress Bar'], ['progress']);
+    $basic->addItem(['Loader'], ['loader']);
+    $basic->addItem(['Console'], ['console']);
     $basic->addItem('Notifier', ['notify']);
-    $basic->addItem(['Modal View', 'icon'=>'yellow star'], ['modal2']);
+    $basic->addItem(['Pop-up', 'icon'=>'yellow star'], ['popup']);
+    $basic->addItem(['Modal View'], ['modal2']);
     $basic->addItem('Dynamic jsModal', ['modal']);
     $basic->addItem('Sticky GET', ['sticky']);
     $basic->addItem('Recursive Views', ['recursive']);

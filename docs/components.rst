@@ -19,6 +19,7 @@ inherited by its descendants.
     table
     field
     fileupload
+    tablecolumn
 
 Simple components
 =================
