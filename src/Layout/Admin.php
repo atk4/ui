@@ -4,6 +4,7 @@ namespace atk4\ui\Layout;
 
 use atk4\ui\jQuery;
 use atk4\ui\Menu;
+
 /**
  * Implements a classic 100% width admin layout.
  *
@@ -69,7 +70,6 @@ class Admin extends Generic
         $this->template->trySet('version', $this->app->version);
 
         $this->burger->js('click', (new jQuery('.atk-layout'))->toggleClass('atk-menu-open'));
-
     }
 
     public function setFluidLayout()
