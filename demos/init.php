@@ -19,6 +19,7 @@ if (file_exists('../public/atkjs-ui.min.js')) {
 $app->initLayout($app->stickyGET('layout') ?: 'Admin');
 
 $layout = $app->layout;
+//$layout->setFluidLayout();
 
 if (isset($layout->leftMenu)) {
     $layout->leftMenu->addItem(['Welcome Page', 'icon' => 'gift'], ['index']);

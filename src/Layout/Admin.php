@@ -34,7 +34,7 @@ class Admin extends Generic
 
     public $burger = true;      // burger menu item
 
-    public $layoutClass = 'ui container fluid basic segment padded very';
+    public $layoutClass = 'ui container';
 
     /**
      * Obsolete, use menuLeft.
@@ -67,11 +67,14 @@ class Admin extends Generic
         }
 
         $this->template->trySet('version', $this->app->version);
-        $this->template->trySet('LayoutClass', $this->layoutClass);
-
 
         $this->burger->js('click', (new jQuery('.atk-layout'))->toggleClass('atk-menu-open'));
 
+    }
+
+    public function setFluidLayout()
+    {
+        $this->layoutClass = $this->layoutClass.' fluid';
     }
 
     /**
@@ -79,6 +82,7 @@ class Admin extends Generic
      */
     public function renderView()
     {
+        $this->template->trySet('LayoutClass', $this->layoutClass);
         if ($this->menuLeft) {
             if (count($this->menuLeft->elements) == 1) {
                 // no items were added, so lets add dashboard
