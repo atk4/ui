@@ -1,6 +1,6 @@
 {
   "name": "atkjs-ui",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Agile Toolkit Javascript library.",
   "main": "lib/atkjs-ui.js",
   "scripts": {
@@ -44,6 +44,7 @@
   },
   "homepage": "http://www.agiletoolkit.org/",
   "dependencies": {
+    "debounce": "^1.1.0",
     "jquery": "^3.1.1",
     "semantic-ui-modal": "^2.2.10"
   }

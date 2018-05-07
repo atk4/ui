@@ -237,6 +237,53 @@ class Grid extends View
     }
 
     /**
+     * Add a dropdown menu to header column.
+     *
+     * @param string   $columnName The name of column where to add dropdown.
+     * @param array    $items      The menu items to add.
+     * @param callable $fx         The callback function to execute when an item is selected.
+     * @param string   $icon       The icon.
+     * @param string   $menuId     The menu id return by callback.
+     *
+     * @throws Exception
+     */
+    public function addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
+    {
+        $column = $this->table->columns[$columnName];
+        if (!isset($column)) {
+            throw new Exception('The column where you want to add dropdown does not exist: '.$columnName);
+        }
+        if (!$menuId) {
+            $menuId = $columnName;
+        }
+
+        $column->addDropdown($items, function ($item) use ($fx) {
+            return call_user_func($fx, [$item]);
+        }, $icon, $menuId);
+    }
+
+    /**
+     * Add a popup to header column.
+     *
+     * @param string $columnName The name of column where to add popup.
+     * @param Popup  $popup      Popup view.
+     * @param string $icon       The icon.
+     *
+     * @throws Exception
+     *
+     * @return mixed
+     */
+    public function addPopup($columnName, $popup = null, $icon = 'caret square down')
+    {
+        $column = $this->table->columns[$columnName];
+        if (!isset($column)) {
+            throw new Exception('The column where you want to add popup does not exist: '.$columnName);
+        }
+
+        return $column->addPopup($popup, $icon);
+    }
+
+    /**
      * Similar to addAction but when button is clicked, modal is displayed
      * with the $title and $callback is executed through VirtualPage.
      *
