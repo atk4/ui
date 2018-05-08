@@ -52,6 +52,20 @@ class AutoComplete extends Input
     public $limit = 10;
 
     /**
+     * Set custom model field here to use it's value as ID in dropdown instead of default model ID field.
+     *
+     * @var string
+     */
+    public $id_field;
+
+    /**
+     * Set custom model field here to display it's value in dropdown instead of default model title field.
+     *
+     * @var string
+     */
+    public $title_field;
+
+    /**
      * Semantic UI uses cache to remember choices. For dynamic sites this may be dangerous, so
      * it's disabled by default. To switch cache on, set 'cache'=>'local'.
      *
@@ -136,7 +150,12 @@ class AutoComplete extends Input
         if (!$this->model) {
             $this->app->terminate(json_encode([['id' => '-1', 'name' => 'Model must be set for AutoComplete']]));
         }
+
+        $id_field = $this->id_field ?: $this->model->id_field;
+        $title_field = $this->title_field ?: $this->model->title_field;
+
         $this->model->setLimit($this->limit);
+
         if (isset($_GET['q'])) {
             if ($this->search instanceof Closure) {
                 $this->search($this->model, $_GET['q']);
@@ -145,14 +164,13 @@ class AutoComplete extends Input
                     return [$field, 'like', '%'.$_GET['q'].'%'];
                 }, $this->search));
             } else {
-                $this->model->addCondition($this->model->title_field, 'like', '%'.$_GET['q'].'%');
+                $this->model->addCondition($title_field, 'like', '%'.$_GET['q'].'%');
             }
         }
 
         $data = [];
-        $res = $this->model->export([$this->model->id_field, $this->model->title_field]);
-        foreach ($res as $item) {
-            $data[] = ['id' => $item[$this->model->id_field], 'name' => $item[$this->model->title_field]];
+        foreach ($this->model as $junk) {
+            $data[] = ['id' => $this->model[$id_field], 'name' => $this->model[$title_field]];
         }
 
         if ($this->empty) {

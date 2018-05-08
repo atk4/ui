@@ -9,6 +9,9 @@ Table
 
 .. php:class:: Table
 
+.. important:: For columns, see :php:class:`TableColumn\\Generic`. For DIV-based lists, see :php:class:`Lister`. For an
+    interractive features see :php:class:`Grid` and :php:class:`CRUD`.
+
 Table is the simplest way to output multiple records of structured, static data. For Un-structure output
 please see :php:class:`Lister`
 
@@ -426,144 +429,6 @@ If you are defining your own column, you may want to re-define getDataCellTempla
 getDataCellHTML can be left as-is and will be handled correctly. If you have overriden
 getDataCellHTML only, then your column will still work OK provided that it's used as a
 last decorator.
-
-Standard Decorators
-===================
-
-In addition to :php:class:`TableColumn\Generic`, Agile UI includes several column implementations.
-
-Link
-----
-
-.. php:class:: TableColumn\Link
-
-Put `<a href..` link over the value of the cell. The page property can be specified to constructor. There
-are two usage patterns. With the first you can specify full URL as a string::
-
-    $table->addColumn('name', ['Link', 'http://google.com/?q={$name}']);
-
-The URL may also be specified as an array. It will be passed to App::url() which will encode arguments::
-
-    $table->addColumn('name', ['Link', ['details', 'id'=>123, 'q'=>$anything]]);
-    
-In this case even if `$anything = '{$name}'` the substitution will not take place for safety reasons. To
-pass on some values from your model, use second argument to constructor::
-    
-    $table->addColumn('name', ['Link', ['details', 'id'=>123], ['q'=>'name']]);
-
-
-Money
------
-
-.. php:class:: TableColumn\Money
-
-Helps decorating monetary values. Will align value to the right and if value is less than zero will also
-use red text (td class "negative" for semantic ui). The money cells are not wrapped.
-
-For the actual number formatting, see :ref:`ui_persistence`
-
-Status
-------
-
-.. php:class:: TableColumn\Status
-
-Allow you to set highlight class and icon based on column value. This is most suitable for columns that
-contain pre-defined values.
-
-If your column "status" can be one of the following "pending", "declined", "archived" and "paid" and you would like
-to use different icons and colors to emphasise status::
-
-
-    $states = [ 'positive'=>['paid', 'archived'], 'negative'=>['declined'] ];
-
-    $table->addColumn('status', new \atk4\ui\TableColumn\Status($states));
-
-Current list of states supported:
-
- - positive (icon checkmark)
- - negative (icon close)
- - and the default/unspecified state (icon question)
-
-(list of states may be expanded furteher)
-
-Template
---------
-
-.. php:class:: TableColumn\Template
-
-This column is suitable if you wish to have custom cell formatting but do not wish to go through
-the trouble of setting up your own class.
-
-If you wish to display movie rating "4 out of 10" based around the column "rating", you can use::
-
-    $table->addColumn('rating', new \atk4\ui\TableColumn\Template('{$rating} out of 10'));
-
-Template may incorporate values from multiple fields in a data row, but current implementation
-will only work if you asign it to a primary column (by passing 1st argument to addColumn).
-
-(In the future it may be optional with the ability to specify caption).
-
-CheckBox
---------
-
-.. php:class:: TableColumn\CheckBox
-
-.. php:method:: jsChecked()
-
-Adding this column will render checkbox for each row. This column must not be used on a field.
-CheckBox column provides you with a handy jsChecked() method, which you can use to reference
-current item selection. The next code will allow you to select the checkboxes, and when you
-click on the button, it will reload $segment component while passing all the id's::
-
-    $box = $table->addColumn(new \atk4\ui\TableColumn\CheckBox());
-
-    $button->on('click', new jsReload($segment, ['ids'=>$box->jsChecked()]));
-
-jsChecked expression represents a JavaScript string which you can place inside a form field,
-use as argument etc.
-
-Actions
--------
-
-.. php:class:: TableColumn\Actions
-
-This column can have number of buttons (or similar views) inside a column. This would allow you
-to interract with each row directly.
-
-The basic usage format is::
-
-    $act = $table->addColumn(new \atk4\ui\TableColumn\Actions());
-
-
-Multiformat
------------
-
-Sometimes your formatting may change depending on value. For example you may want to place link
-only on certain rows. For this you can use a 'Multiformat' decorator::
-
-    $table->addColumn('amount', ['Multiformat', function($a, $b) {
-
-        if($a['is_invoiced'] > 0) {
-            return ['Money', ['Link', 'invoice', ['invoice_id'=>'id']]];
-        } elseif (abs($a['is_refunded']) < 50) {
-            return [['Template', 'Amount was <b>refunded</b>']];
-        }
-
-        return 'Money';
-    }]);
-
-You supply a callback to the Multiformat decorator, which will then be used to determine
-the actual set of decorators to be used on a given row. The example above will look at various
-fields of your models and will conditionally add Link on top of Money formatting.
-
-Your callback can return things in varous ways:
-
- - return array of seeds: [['Link'], 'Money'];
- - if string or object is returned it is wrapped inside array automatically
-
-Multiple decorators will be created and merged.
-
-.. note:: If you are operating with large tables, code your own decorator, which would be more CPU-efficient.
 
 Advanced Usage
 ==============

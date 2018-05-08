@@ -393,7 +393,7 @@ class App
     {
         $template = new Template();
         $template->app = $this;
-        if (in_array($name[0], ['.', '/', '\\'])) {
+        if (in_array($name[0], ['.', '/', '\\']) || strpos($name, ':\\') !== false) {
             $template->load($name);
         } else {
             $template->load($this->template_dir.'/'.$name);
@@ -555,12 +555,14 @@ class App
      * Adds additional JS script include in aplication template.
      *
      * @param string $url
+     * @param bool   $isAsync Whether or not you want Async loading.
+     * @param bool   $isDefer Whether or not you want Defer loading.
      *
      * @return $this
      */
-    public function requireJS($url)
+    public function requireJS($url, $isAsync = false, $isDefer = false)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url], '')."\n");
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '')."\n");
 
         return $this;
     }
