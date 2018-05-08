@@ -7,7 +7,7 @@ require 'database.php';
 $app->add(['Header', 'Table column may contains popup or dropdown menu.']);
 
 //For popup positioning to work correctly, table need to be inside a view segment.
-$view = $app->add('View', ['ui' => 'basic segment']);
+$view = $app->add('View', ['ui' => 'basic']);
 
 $table = $view->add(['Table', 'celled' => true]);
 $table->setModel(new SomeData(), false);
