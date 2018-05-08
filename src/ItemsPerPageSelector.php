@@ -29,9 +29,9 @@ class ItemsPerPageSelector extends View
     /**
      * The current number of item per page.
      *
-     * @var int|null
+     * @var int
      */
-    public $currentIpp = null;
+    public $currentIpp = 10;
 
     /**
      * The callback function.
