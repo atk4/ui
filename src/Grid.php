@@ -339,12 +339,17 @@ class Grid extends View
     public function recursiveRender()
     {
         // bind with paginator
+        // paginator is only supported for SQL persistences (has method 'action')
         if ($this->paginator) {
-            $this->paginator->reload = $this->container;
+            if ($this->model->persistence->hasMethod('action')) {
+                $this->paginator->reload = $this->container;
 
-            $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
+                $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
 
-            $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
+                $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
+            } else {
+                $this->paginator->destroy();
+            }
         }
 
         if ($this->quickSearch instanceof jsSearch) {
