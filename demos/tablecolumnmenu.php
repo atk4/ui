@@ -6,10 +6,7 @@ require 'database.php';
 
 $app->add(['Header', 'Table column may contains popup or dropdown menu.']);
 
-//For popup positioning to work correctly, table need to be inside a view segment.
-$view = $app->add('View');
-
-$table = $view->add(['Table', 'celled' => true]);
+$table = $app->add(['Table', 'celled' => true]);
 $table->setModel(new SomeData(), false);
 
 //will add popup to this column.
@@ -24,12 +21,12 @@ $table->addColumn('date');
 $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 
 //regular popup setup
-$col_name->addPopup()->add('View')->set('Name popup');
+$col_name->addPopup()->add('Text')->set('Name popup');
 
 //dynamic popup setup
 //This popup will add content using the callback function.
 $col_surname->addPopup()->set(function ($pop) {
-    $pop->add('View')->set('This popup is loaded dynamically');
+    $pop->add('Text')->set('This popup is loaded dynamically');
 });
 
 //Another dropdown menu.
@@ -42,8 +39,7 @@ $col_title->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
 $app->add(['Header', 'Grid column may contains popup or dropdown menu.']);
 
 //For popup positioning to work correctly, grid need to be inside a view segment.
-$view = $app->add('View');
-$g = $view->add(['Grid']);
+$g = $app->add(['Grid']);
 $g->setModel(new Country($db));
 $g->ipp = 5;
 
