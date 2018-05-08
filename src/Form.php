@@ -441,7 +441,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     /**
      * Set Semantic-ui Api settings to use with form. A complete list is here:
-     * https://semantic-ui.com/behaviors/api.html#/settings
+     * https://semantic-ui.com/behaviors/api.html#/settings.
      *
      * @param array $config
      *
