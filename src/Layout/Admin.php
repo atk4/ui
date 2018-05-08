@@ -2,6 +2,7 @@
 
 namespace atk4\ui\Layout;
 
+use atk4\ui\jQuery;
 use atk4\ui\Menu;
 
 /**
@@ -34,6 +35,8 @@ class Admin extends Generic
 
     public $burger = true;      // burger menu item
 
+    public $layoutClass = 'ui container';
+
     /**
      * Obsolete, use menuLeft.
      *
@@ -48,8 +51,10 @@ class Admin extends Generic
         parent::init();
 
         if ($this->menu === null) {
-            $this->menu = $this->add(['Menu', 'atk-topMenu inverted fixed horizontal', 'element' => 'header'], 'TopMenu');
-            $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']])->add(['Icon', 'content']);
+            $this->menu = $this->add(['Menu', 'atk-admin-top-menu inverted fixed horizontal atk-menu-push', 'element' => 'header'], 'TopMenu');
+            $this->burger = $this->menu->addItem(['class' => [' atk-menu-trigger']]);
+            $this->burger->add(['Icon', 'content']);
+            $this->menu->addHeader($this->app->title);
         }
 
         if ($this->menuRight === null) {
@@ -60,10 +65,16 @@ class Admin extends Generic
         if ($this->menuLeft === null) {
             $this->menuLeft = $this->add(new Menu('left vertical inverted labeled visible sidebar'), 'LeftMenu');
             $this->leftMenu = $this->menuLeft;
-            $this->menuLeft->addHeader($this->app->title);
         }
 
         $this->template->trySet('version', $this->app->version);
+
+        $this->burger->js('click', (new jQuery('.atk-layout'))->toggleClass('atk-menu-open'));
+    }
+
+    public function setFluidLayout()
+    {
+        $this->layoutClass = $this->layoutClass.' fluid';
     }
 
     /**
@@ -71,6 +82,7 @@ class Admin extends Generic
      */
     public function renderView()
     {
+        $this->template->trySet('LayoutClass', $this->layoutClass);
         if ($this->menuLeft) {
             if (count($this->menuLeft->elements) == 1) {
                 // no items were added, so lets add dashboard

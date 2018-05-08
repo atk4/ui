@@ -1,16 +1,11 @@
 
 <div class="atk-layout">
-  {$LeftMenu}
-  {$TopMenu}
-  <div class="atk-topMenuGhost ui menu"><span class="item"></span></div>
-  <main class="atk-mainContainer">
-    <div class="ui main container basic segment very padded">{$Content}</div>
+  <div class="atk-admin-left-menu">{$LeftMenu}</div>
+  <main class="atk-main-container">{$TopMenu}
+    <div class="atk-content"><div class="{$LayoutClass}">{$Content}</div></div>
   </main>
   <footer class="atk-footer">
     <div class="ui divider"></div>
     <div class="ui center aligned basic segment">{Footer}Made with <a href="http://agiletoolkit.org/" target="_blank">Agile Toolkit</a> v{$version}{/}</div>
   </footer>
-  <div class="atk-overlay pushable">
-    <div class="pusher"></div>
-  </div>
 </div>

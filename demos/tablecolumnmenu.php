@@ -7,9 +7,9 @@ require 'database.php';
 $app->add(['Header', 'Table column may contains popup or dropdown menu.']);
 
 //For popup positioning to work correctly, table need to be inside a view segment.
-$view = $app->add('View', ['ui' => 'basic segment']);
+//$view = $app->add('View', ['ui' => 'basic segment']);
 
-$table = $view->add(['Table', 'celled' => true]);
+$table = $app->add(['Table', 'celled' => true]);
 $table->setModel(new SomeData(), false);
 
 //will add popup to this column.
@@ -42,8 +42,8 @@ $col_title->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
 $app->add(['Header', 'Grid column may contains popup or dropdown menu.']);
 
 //For popup positioning to work correctly, grid need to be inside a view segment.
-$view = $app->add('View', ['ui' => 'basic segment']);
-$g = $view->add(['Grid']);
+//$view = $app->add('View', ['ui' => 'basic segment']);
+$g = $app->add(['Grid']);
 $g->setModel(new Country($db));
 $g->ipp = 5;
 
