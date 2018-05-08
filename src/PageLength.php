@@ -14,6 +14,7 @@ class PageLength extends View
      * @var View|null
      */
     public $pageLength = null;
+    public $defaultTemplate = 'pagelength.html';
 
     /**
      * Default page length menu items.
