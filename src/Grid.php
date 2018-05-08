@@ -143,14 +143,14 @@ class Grid extends View
      *
      * if an array is passed, it will also add an ItemPerPageSelector to paginator.
      *
-     * @param integer|array $ipp
-     * @param string        $label
+     * @param int|array $ipp
+     * @param string    $label
      *
      * @throws Exception
      */
     public function setIpp($ipp, $label = 'Item per pages:')
     {
-        if(is_array($ipp)) {
+        if (is_array($ipp)) {
             $this->addItemsPerPageSelector($ipp, $label);
             if (@$_GET['ipp']) {
                 $this->ipp = $_GET['ipp'];
@@ -161,11 +161,12 @@ class Grid extends View
             $this->ipp = $ipp;
         }
     }
+
     /**
      * Add ItemsPerPageSelector View in grid menu or paginator in order to dynamically setup number of item per page.
      *
-     * @param array  $items  An array of item's per page value.
-     * @param string $label  The memu item label.
+     * @param array  $items An array of item's per page value.
+     * @param string $label The memu item label.
      *
      * @throws Exception
      *
@@ -173,7 +174,6 @@ class Grid extends View
      */
     public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Item per pages:')
     {
-
         if ($ipp = $this->container->stickyGet('ipp')) {
             $this->ipp = $ipp;
         } else {

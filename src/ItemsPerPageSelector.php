@@ -8,8 +8,7 @@ namespace atk4\ui;
  */
 class ItemsPerPageSelector extends View
 {
-
-    public $defaultTemplate =  'pagelength.html';
+    public $defaultTemplate = 'pagelength.html';
     public $ui = ' ';
 
     /**
@@ -73,7 +72,6 @@ class ItemsPerPageSelector extends View
                                      ]);
 
         $this->set($this->currentIpp);
-
     }
 
     /**

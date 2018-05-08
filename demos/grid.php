@@ -34,4 +34,3 @@ $g->setIpp([10, 25, 50, 100]);
 // Two different way of setting ipp.
 //$g->setIpp(25);
 //$g->ipp = 12;
-
