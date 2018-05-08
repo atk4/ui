@@ -3,18 +3,14 @@
 namespace atk4\ui;
 
 /**
- * Implement a page length selector.
+ * Implement an item per page length selector.
  * Set as a dropdown menu which contains the number of items per page need.
  */
-class PageLength extends View
+class ItemsPerPageSelector extends View
 {
-    /**
-     * The View that will hold this PageLength.
-     *
-     * @var View|null
-     */
-    public $pageLength = null;
-    public $defaultTemplate = 'pagelength.html';
+
+    public $defaultTemplate =  'pagelength.html';
+    public $ui = ' ';
 
     /**
      * Default page length menu items.
@@ -29,7 +25,7 @@ class PageLength extends View
      *
      * @var string
      */
-    public $label = 'Items per page ([ipp])';
+    public $label = 'Items per page:';
 
     /**
      * The current number of item per page.
@@ -49,16 +45,8 @@ class PageLength extends View
     {
         parent::init();
 
-        if ($this->owner instanceof Menu) {
-            $this->pageLength = $this->addClass('ui dropdown');
-            $labelView = $this->pageLength->add('View');
-        } elseif ($this->owner instanceof Paginator) {
-            $this->addClass('ui pagination menu');
-            $this->pageLength = $this->add('Item')->setElement('a')->addClass('ui item dropdown');
-            $labelView = $this->pageLength;
-        }
-
-        $labelView->addClass('atk-page-length-label');
+        $this->add('Icon')->set('dropdown');
+        $this->template->tryset('Label', $this->label);
 
         //Callback later will give us time to properly render menu item before final output.
         $this->cb = $this->add(new CallbackLater());
@@ -67,7 +55,6 @@ class PageLength extends View
         foreach ($this->pageLengthItems as $key => $item) {
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
-
         //set semantic-ui dropdown onChange function.
         $function = "function(value, text, item){
                             if (value === undefined || value === '' || value === null) return;
@@ -80,13 +67,13 @@ class PageLength extends View
                             );
                      }";
 
-        //set pageLength as a dropdown.
-        $this->pageLength->js(true)->dropdown([
-                                                         'values'   => $menuItems,
-                                                         'onChange' => new jsExpression($function),
-                                                     ]);
+        $this->js(true)->dropdown([
+                                         'values'   => $menuItems,
+                                         'onChange' => new jsExpression($function),
+                                     ]);
 
-        $labelView->set(preg_replace("/\[ipp\]/", $this->currentIpp ? $this->currentIpp : $this->pageLengthItems[0], $this->label));
+        $this->set($this->currentIpp);
+
     }
 
     /**
@@ -98,9 +85,7 @@ class PageLength extends View
      */
     public function jsSetLabel($ipp)
     {
-        return $this->pageLength->js(true)
-                          ->find('.atk-page-length-label')
-                          ->html(preg_replace("/\[ipp\]/", $ipp, $this->label));
+        return $this->js(true)->html($ipp);
     }
 
     /**
@@ -116,7 +101,8 @@ class PageLength extends View
             if ($this->cb->triggered()) {
                 $this->cb->set(function () use ($fx) {
                     $ipp = @$_GET['ipp'];
-                    $this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
+                    //$this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
+                    $this->set($ipp);
                     $reload = call_user_func($fx, $ipp);
                     if ($reload) {
                         $this->app->terminate($reload->renderJSON());

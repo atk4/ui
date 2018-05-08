@@ -1,11 +1,4 @@
-<{_element}div{/} id="{$_id}" class="{_ui}ui{/} {$class} {_class}{/}" style="{$style} display:none" {$attributes}>{$Content}</{_element}div{/}>
 .ui.horizontal.list
-  .item Items per page:
+  .item {$Label}
   .item
-    .ui.selection.compact.dropdown
-      | 25
-      i.dropdown.icon
-      .menu
-        .item(data-value='2') 25
-        .item(data-value='1') 50
-        .item(data-value='0') 100
+    |<{_element}div{/} id="{$_id}" class="{_ui}ui selection compact dropdown{/} {$class} {_class}{/}" style="{$style}" {$attributes}>{$Content}</{_element}div{/}>

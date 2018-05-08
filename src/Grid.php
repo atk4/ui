@@ -139,21 +139,40 @@ class Grid extends View
     }
 
     /**
-     * Add PageLength View in grid menu or paginator in order to dynamically setup number of item per page.
+     * Set item per page value.
+     *
+     * if an array is passed, it will also add an ItemPerPageSelector to paginator.
+     *
+     * @param integer|array $ipp
+     * @param string        $label
+     *
+     * @throws Exception
+     */
+    public function setIpp($ipp, $label = 'Item per pages:')
+    {
+        if(is_array($ipp)) {
+            $this->addItemsPerPageSelector($ipp, $label);
+            if (@$_GET['ipp']) {
+                $this->ipp = $_GET['ipp'];
+            } else {
+                $this->ipp = $ipp[0];
+            }
+        } else {
+            $this->ipp = $ipp;
+        }
+    }
+    /**
+     * Add ItemsPerPageSelector View in grid menu or paginator in order to dynamically setup number of item per page.
      *
      * @param array  $items  An array of item's per page value.
      * @param string $label  The memu item label.
-     * @param bool   $inMenu Whether to add selector in grid menu or paginator.
      *
      * @throws Exception
      *
      * @return $this
      */
-    public function addPageLengthSelector($items = [10, 25, 50, 100], $label = '[ipp] / Page', $inMenu = false)
+    public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Item per pages:')
     {
-        if (!$this->menu) {
-            throw new Exception(['Unable to add QuickSearch without Menu']);
-        }
 
         if ($ipp = $this->container->stickyGet('ipp')) {
             $this->ipp = $ipp;
@@ -161,23 +180,15 @@ class Grid extends View
             $this->ipp = $items[0];
         }
 
-        if ($inMenu) {
-            //$this->stickyGet('_q');
-            $pageLength = $this->menu->add(['PageLength', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp]);
-        } else {
-            $pageLength = $this->paginator->add(['PageLength', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], 'afterPaginator');
-        }
+        $pageLength = $this->paginator->add(['ItemsPerPageSelector', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], 'afterPaginator');
+        $this->paginator->template->trySet('PaginatorType', 'ui grid');
 
-        $pageLength->onPageLengthSelect(function ($ipp) use ($inMenu, $pageLength) {
+        $pageLength->onPageLengthSelect(function ($ipp) use ($pageLength) {
             $this->ipp = $ipp;
             $this->setModelLimitFromPaginator();
             //add ipp to quicksearch
             if ($this->quickSearch instanceof jsSearch) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
-            }
-            //if inMenu we need to set label because menu is not part of the reload like paginator is.
-            if ($inMenu) {
-                $this->container->js(true, $pageLength->jsSetLabel($ipp));
             }
             //return the view to reload.
             return $this->container;
