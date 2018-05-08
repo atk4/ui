@@ -2,9 +2,11 @@
 <div class="atk-layout">
   {$LeftMenu}
   {$TopMenu}
-  <div class="atk-topMenuGhost ui menu"><span class="item"></span></div>
+  <div class="atk-topMenuGhost">
+    <div class="ui three item menu"><a class="active item">Editorials</a><a class="item">Reviews</a><a class="item">Upcoming Events</a></div>
+  </div>
   <main class="atk-mainContainer">
-    <div class="ui main container basic segment very padded">{$Content}</div>
+    <div class="atk-mainContainerWrapper">{$Content}</div>
   </main>
   <footer class="atk-footer">
     <div class="ui divider"></div>
