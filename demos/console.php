@@ -58,6 +58,8 @@ $t = $tt->addTab('exec() single', function ($t) {
         'Command execution',
         'subHeader'=> 'it is easy to run server-side commands and stream output through console',
     ]);
+    $w = $t->add(['Message', 'This demo may not work', 'warning']);
+    $w->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
     $t->add('Console')->exec('/bin/pwd');
 });
 
@@ -68,11 +70,12 @@ $t = $tt->addTab('exec() chain', function ($t) {
         'Command execution',
         'subHeader'=> 'it is easy to run server-side commands and stream output through console',
     ]);
+    $w = $t->add(['Message', 'This demo may not work', 'warning']);
+    $w->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
     $t->add('Console')->set(function ($c) {
-        $c
-            ->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1'])
-            ->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8'])
-            ->exec('/bin/no-such-command');
+        $c->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1']);
+        $c->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8']);
+        $c->exec('/bin/no-such-command');
     });
 });
 
