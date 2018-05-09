@@ -31,7 +31,7 @@ class ItemsPerPageSelector extends View
      *
      * @var int
      */
-    public $currentIpp = 10;
+    public $currentIpp = null;
 
     /**
      * The callback function.
@@ -71,6 +71,9 @@ class ItemsPerPageSelector extends View
                                          'onChange' => new jsExpression($function),
                                      ]);
 
+        if (!$this->currentIpp) {
+            $this->currentIpp = $this->pageLengthItems[0];
+        }
         $this->set($this->currentIpp);
     }
 
