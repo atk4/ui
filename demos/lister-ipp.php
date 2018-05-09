@@ -14,7 +14,7 @@ $l = $v->add('Lister', 'List')->addHook('beforeRow', function ($l) {
     $l->current_row['iso'] = strtolower($l->current_row['iso']);
 });
 
-$m = $l->setModel(new Country($db))->setLimit(10);
+$m = $l->setModel(new Country($db))->setLimit(12);
 
 $ipp = $v->add(new atk4\ui\ItemsPerPageSelector(['label' => 'Select how many countries:', 'pageLengthItems' => [12, 24, 36]]), 'Content');
 
