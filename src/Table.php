@@ -699,7 +699,7 @@ class Table extends Lister
             if (is_string($plan[$name]['title'])) {
                 $title = $plan[$name]['title'];
             } elseif (is_callable($plan[$name]['title'])) {
-                $title = call_user_func_array($plan[$name]['title'], [$this->totals, $this->model]);
+                $title = call_user_func_array($plan[$name]['title'], [$totals, $this->model]);
             }
 
             // title can be defined as template and we fill in other total values if needed

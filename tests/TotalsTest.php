@@ -50,10 +50,11 @@ class TotalsTest extends \atk4\core\PHPUnit_AgileTestCase
 
         // assert
         $this->assertEquals([
-                'type'   => 4,
-                'price'  => 1,
-                'cnt'    => 5,
-                'amount' => 327,
+                'type'      => 4,
+                'price'     => 1,
+                'cnt'       => 5,
+                'amount'    => 327,
+                '_row_count'=> 4,
             ], $this->table->totals[0]
         );
     }
@@ -65,9 +66,9 @@ class TotalsTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         // add first totals plan
         $this->table->addTotals([
-            'name'   => 'Totals 1:', // Totals 1:
+            'name'   => 'Total {$_row_count} rows', // Total 4 rows
             'type'   => function ($totals, $model) {
-                return $totals['price'] * $totals['cnt'];
+                return 'Pay me: '.$totals['price'] * $totals['cnt'];
             }, // 25600
             'price'  => [
                             function ($total, $value, $model) {
@@ -93,10 +94,11 @@ class TotalsTest extends \atk4\core\PHPUnit_AgileTestCase
 
         // assert
         $this->assertEquals([
-                //'type' => 25600,
-                'price'  => 256,
-                'cnt'    => 100,
-                'amount' => 2327,
+                //'type'    => 25600,
+                'price'     => 256,
+                'cnt'       => 100,
+                'amount'    => 2327,
+                '_row_count'=> 4,
             ], $this->table->totals['first']
         );
     }
