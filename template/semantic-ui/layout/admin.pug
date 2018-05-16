@@ -1,9 +1,11 @@
 .atk-layout
   | {$LeftMenu}
   | {$TopMenu}
-  .atk-topMenuGhost.ui.menu #[span.item]
+  .atk-topMenuGhost.ui.menu
+    .item
+      .ui.button &nbsp;
   main.atk-mainContainer
-    .ui.main.container.basic.segment.very.padded
+    .atk-mainContainerWrapper
       | {$Content}
   footer.atk-footer
     .ui.divider
