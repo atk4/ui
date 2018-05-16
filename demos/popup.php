@@ -260,4 +260,4 @@ $i_pop->add('View')->set('You can use this field to search data.');
 $button = $app->add(['Button', null, 'icon'=>'volume down']);
 $b_pop = $app->add(['Popup', $button, 'triggerOn'=>'hover'])->setHoverable();
 
-$b_pop->add(['FormField\Checkbox', 'Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
+$b_pop->add(['FormField\CheckBox', 'Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
