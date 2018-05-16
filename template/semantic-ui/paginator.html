@@ -1,8 +1,11 @@
-<{_element}div{/} id="{$_id}" class="{_ui}ui{/} {$class} {_class}{/}" style="{$style}" {$attributes}>
-{rows}
-{Item}<a class="item {$active}" href="{$link}" data-page="{$page}">{$page}</a>
-{/}
-{Spacer}
-<div class="disabled item">...</div>
-{/}
-{/rows}</{_element}div{/}>
+<div class="{PaginatorType}ui pagination menu{/}">
+<div class="left floated left aligned ten wide column"><{_element}div{/} id="{$_id}" class="{_ui}ui{/} {$class} {_class}{/}" style="{$style}" {$attributes}>
+  {rows}
+  {Item}<a class="item {$active}" href="{$link}" data-page="{$page}">{$page}</a>
+  {/}
+  {Spacer}
+  <div class="disabled item">...</div>
+  {/}
+  {/rows}</{_element}div{/}>
+</div>
+<div class="right floated right aligned six wide column">{$afterPaginator}</div></div>

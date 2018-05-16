@@ -28,4 +28,5 @@ $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
     'alert("Selected: "+[])', [$sel->jsChecked()]
 ));
 
-$g->ipp = 10;
+//Setting ipp with an array will add an ItemPerPageSelector to paginator.
+$g->setIpp([10, 25, 50, 100]);

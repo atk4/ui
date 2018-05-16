@@ -4,7 +4,7 @@ import $ from 'jquery';
 export default class jsSearch extends atkPlugin {
 
   main() {
-    this.sortArgs = {};
+    this.urlArgs = {};
     this.state = {button: false, filter: false};
     this.textInput = this.$el.find('input[type="text"]');
     this.leftIcon = this.$el.find('.atk-filter-icon').hide();
@@ -25,13 +25,13 @@ export default class jsSearch extends atkPlugin {
   setInputAction(that) {
     this.textInput.on('keyup', function(e) {
       if (e.keyCode === 13 && e.target.value) {
-        that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options, {'_q' : e.target.value}), function(){
+        that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options, {'_q' : e.target.value}), function(){
           that.setButtonState(true);
           that.setFilterState(true);
         });
         that.$el.data('preValue', e.target.value);
       } else if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
-        that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options), function(){
+        that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options), function(){
           that.setButtonState(false);
           that.setFilterState(false);
         });
@@ -51,7 +51,7 @@ export default class jsSearch extends atkPlugin {
   setSearchAction(that) {
     this.searchAction.on('click', function(e){
       if (that.state.button){
-        that.doSearch(that.settings.uri, $.extend({}, that.sortArgs, that.settings.uri_options), function() {
+        that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options), function() {
           that.setButtonState(false);
           that.setFilterState(false);
         });
@@ -59,7 +59,7 @@ export default class jsSearch extends atkPlugin {
       }
 
       if (!that.state.button && that.textInput.val()) {
-        that.doSearch(that.settings.uri,  $.extend({}, that.sortArgs, that.settings.uri_options, {'_q' : that.textInput.val()}), function() {
+        that.doSearch(that.settings.uri,  $.extend({}, that.urlArgs, that.settings.uri_options, {'_q' : that.textInput.val()}), function() {
           that.setButtonState(true);
           that.setFilterState(true);
         });
@@ -70,11 +70,23 @@ export default class jsSearch extends atkPlugin {
   /**
    * Add argument to url for sorting purpose.
    *
+   * @Deprecated Use setUrlArgs instead.
+   *
    * @param name
    * @param sortBy
    */
   setSortArgs(name, sortBy) {
-    this.sortArgs[name] = sortBy;
+    this.setUrlArgs(name, sortBy);
+  }
+
+  /**
+   * More generic way to set url argument.
+   *
+   * @param arg
+   * @param value
+   */
+  setUrlArgs(arg, value) {
+    this.urlArgs[arg] = value;
   }
 
   /**

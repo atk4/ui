@@ -92,11 +92,11 @@ class Grid extends View
             $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        $this->table = $this->container->add($this->factory(['Table', 'very compact striped single line', 'reload' => $this], $this->table), 'Table');
+        $this->table = $this->container->add($this->factory(['Table', 'very compact striped single line', 'reload' => $this->container], $this->table), 'Table');
 
         if ($this->paginator !== false) {
             $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
-            $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this], $this->paginator));
+            $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator));
         }
     }
 
@@ -136,6 +136,65 @@ class Grid extends View
     public function addButton($text)
     {
         return $this->menu->addItem()->add(new Button($text));
+    }
+
+    /**
+     * Set item per page value.
+     *
+     * if an array is passed, it will also add an ItemPerPageSelector to paginator.
+     *
+     * @param int|array $ipp
+     * @param string    $label
+     *
+     * @throws Exception
+     */
+    public function setIpp($ipp, $label = 'Item per pages:')
+    {
+        if (is_array($ipp)) {
+            $this->addItemsPerPageSelector($ipp, $label);
+            if (@$_GET['ipp']) {
+                $this->ipp = $_GET['ipp'];
+            } else {
+                $this->ipp = $ipp[0];
+            }
+        } else {
+            $this->ipp = $ipp;
+        }
+    }
+
+    /**
+     * Add ItemsPerPageSelector View in grid menu or paginator in order to dynamically setup number of item per page.
+     *
+     * @param array  $items An array of item's per page value.
+     * @param string $label The memu item label.
+     *
+     * @throws Exception
+     *
+     * @return $this
+     */
+    public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Item per pages:')
+    {
+        if ($ipp = $this->container->stickyGet('ipp')) {
+            $this->ipp = $ipp;
+        } else {
+            $this->ipp = $items[0];
+        }
+
+        $pageLength = $this->paginator->add(['ItemsPerPageSelector', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], 'afterPaginator');
+        $this->paginator->template->trySet('PaginatorType', 'ui grid');
+
+        $pageLength->onPageLengthSelect(function ($ipp) use ($pageLength) {
+            $this->ipp = $ipp;
+            $this->setModelLimitFromPaginator();
+            //add ipp to quicksearch
+            if ($this->quickSearch instanceof jsSearch) {
+                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
+            }
+            //return the view to reload.
+            return $this->container;
+        });
+
+        return $this;
     }
 
     /**
@@ -280,7 +339,7 @@ class Grid extends View
         $this->table->on(
             'click',
             'thead>tr>th',
-            new jsReload($this, [$this->name.'_sort' => (new jQuery())->data('column')])
+            new jsReload($this->container, [$this->name.'_sort' => (new jQuery())->data('column')])
         );
     }
 
@@ -334,20 +393,30 @@ class Grid extends View
         return $handler;
     }
 
+    /**
+     * Will set model limit according to paginator value.
+     *
+     * @throws \atk4\data\Exception
+     * @throws \atk4\dsql\Exception
+     */
+    private function setModelLimitFromPaginator()
+    {
+        $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
+
+        $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
+    }
+
     public function recursiveRender()
     {
         // bind with paginator
         if ($this->paginator) {
             $this->paginator->reload = $this->container;
-
-            $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
-
-            $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
+            $this->setModelLimitFromPaginator();
         }
 
         if ($this->quickSearch instanceof jsSearch) {
             if ($sortby = $this->stickyGet($this->name.'_sort')) {
-                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setSortArgs', [$this->name.'_sort', $sortby]));
+                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->name.'_sort', $sortby]));
             }
         }
 
