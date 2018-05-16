@@ -3,7 +3,7 @@
 namespace atk4\ui\FormLayout;
 
 /**
- * Custom Layout for a form (user-defined HTML)
+ * Custom Layout for a form (user-defined HTML).
  */
 class Custom extends _Abstract
 {
@@ -11,16 +11,14 @@ class Custom extends _Abstract
     // @var inheritdoc
     public $defaultTemplate = null;
 
-
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         if (!$this->template) {
             throw new Exception(['You must specify template for FormLayout/Custom. Try [\'Custom\', \'defaultTemplate\'=>\'./yourform.html\']']);
         }
     }
-
-
 
     /**
      * Adds Button into {$Buttons}
