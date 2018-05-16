@@ -230,7 +230,7 @@ class Table extends Lister
         // set filter to all column when null.
         if (!$cols) {
             foreach ($this->model->elements as $key => $field) {
-                if ($this->columns[$key]) {
+                if (isset($this->columns[$key]) && $this->columns[$key]) {
                     $cols[] = $field->short_name;
                 }
             }
