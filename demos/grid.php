@@ -30,4 +30,3 @@ $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
 
 //Setting ipp with an array will add an ItemPerPageSelector to paginator.
 $g->setIpp([10, 25, 50, 100]);
-
