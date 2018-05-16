@@ -20,7 +20,7 @@ $buttons->add(['Button', 'Use File Model', 'icon' => 'arrow down'])
 $buttons->add(['Button', 'Use Stat Model', 'icon' => 'arrow down'])
     ->on('click', new jsReload($seg, ['m' => 'stat']));
 
-$form = $seg->add(['Form', 'layout' => 'FormLayout/Columns']);
+$form = $seg->add(['Form', 'layout' => 'Columns']);
 $form->setModel(
     isset($_GET['m']) ? (
         $_GET['m'] == 'country' ? new Country($db) : (

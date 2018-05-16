@@ -22,7 +22,7 @@ class CRUD extends Grid
     public $fieldsUpdate = null;
 
     /** @var array|Form Seed for form that is used by default * */
-    public $formDefault = ['Form', 'layout' => 'FormLayout/Columns'];
+    public $formDefault = ['Form', 'layout' => 'Columns'];
 
     /** @var array|Form Seed for form that is used when adding * */
     public $formCreate = null;
