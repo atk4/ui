@@ -1,3 +1,42 @@
+
+## 1.5
+
+In this release we add pop-ups and integrated it with Grid Columns.
+
+TODO: fully updated changelog will be in 1.5.1 version along with more examples!
+
+
+**Closed issues:**
+
+- Why Dropdown field doesn't care about model field default value [\#463](https://github.com/atk4/ui/issues/463)
+- Placing Form Fields inside layouts: Add "Region" parameter to addField [\#444](https://github.com/atk4/ui/issues/444)
+- Autocomplete does not load values when in CRUD's modal: [\#438](https://github.com/atk4/ui/issues/438)
+- AutoComplete does not work within Wizard [\#429](https://github.com/atk4/ui/issues/429)
+- ApiService sometimes throw alert if the DIV is being removed while loading [\#421](https://github.com/atk4/ui/issues/421)
+- Form Dropdowns do not show ... \(empty selection\) once something is selected [\#418](https://github.com/atk4/ui/issues/418)
+
+**Merged pull requests:**
+
+- Feature/admin layout2 [\#460](https://github.com/atk4/ui/pull/460) ([romaninsh](https://github.com/romaninsh))
+- add warnings in Console tests for Windows [\#459](https://github.com/atk4/ui/pull/459) ([DarkSide666](https://github.com/DarkSide666))
+- Feature/autocomplete custom titlefield [\#457](https://github.com/atk4/ui/pull/457) ([DarkSide666](https://github.com/DarkSide666))
+- Added setApiConfig\(\) function to Form.php [\#455](https://github.com/atk4/ui/pull/455) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
+- feature/async-defer [\#454](https://github.com/atk4/ui/pull/454) ([ibelar](https://github.com/ibelar))
+- Fix/\#452 Grid action button [\#453](https://github.com/atk4/ui/pull/453) ([ibelar](https://github.com/ibelar))
+- feature/Grid-ipp-selector [\#450](https://github.com/atk4/ui/pull/450) ([ibelar](https://github.com/ibelar))
+- Feature/Table-Column-Filter [\#448](https://github.com/atk4/ui/pull/448) ([ibelar](https://github.com/ibelar))
+- Fix/Crud Draghandler Position [\#442](https://github.com/atk4/ui/pull/442) ([ibelar](https://github.com/ibelar))
+- semantic-ui release update [\#439](https://github.com/atk4/ui/pull/439) ([ibelar](https://github.com/ibelar))
+- Allow to set a custom Limit to loaded records [\#435](https://github.com/atk4/ui/pull/435) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
+- Feature/Table Column Menu [\#432](https://github.com/atk4/ui/pull/432) ([ibelar](https://github.com/ibelar))
+- Fix \#418 [\#431](https://github.com/atk4/ui/pull/431) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
+- Allow to override url setting [\#430](https://github.com/atk4/ui/pull/430) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
+- Fixed typo placholder =\> placeholder [\#428](https://github.com/atk4/ui/pull/428) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
+- feature/dynamic-popup [\#427](https://github.com/atk4/ui/pull/427) ([ibelar](https://github.com/ibelar))
+- feature/release-build [\#426](https://github.com/atk4/ui/pull/426) ([ibelar](https://github.com/ibelar))
+- Adding virtualpage into Form makes sure we inherit stickyGet [\#425](https://github.com/atk4/ui/pull/425) ([romaninsh](https://github.com/romaninsh))
+- Feature/Conditional Form [\#422](https://github.com/atk4/ui/pull/422) ([ibelar](https://github.com/ibelar))
+
 ## 1.4
 
 In this version we focus on high-level components: Wizard, Console, ProgressBar, AutoComplete field, Lister, Radio field
