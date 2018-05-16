@@ -7,7 +7,7 @@ use atk4\ui\Form;
 use atk4\ui\View;
 
 /**
- * Custom Layout for a form (user-defined HTML)
+ * Custom Layout for a form (user-defined HTML).
  */
 class Custom extends View
 {
@@ -19,8 +19,8 @@ class Custom extends View
     // @var inheritdoc
     public $defaultTemplate = null;
 
-
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         if (!$this->template) {
@@ -94,7 +94,7 @@ class Custom extends View
         }
 
         // find out spot
-        #$decorator = $this->_add($decorator, ['desired_name' => $field->short_name]);
+        //$decorator = $this->_add($decorator, ['desired_name' => $field->short_name]);
         return $this->add($decorator, $this->template->hasTag($field->short_name) ? $field->short_name : null);
     }
 
