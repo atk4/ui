@@ -88,12 +88,12 @@ export default class conditionalForm extends atkPlugin {
       return {inputName : ruleKey, rules: temp, state: false}
     });
 
-    that.setInputsState();
+    this.applyRules();
+    this.setInputsState();
   }
 
   /**
-   * Check each validation rule and apply proper state to the
-   * input where rules apply when a field is change.
+   * Field change handler.
    *
    * @param e
    */
@@ -101,33 +101,49 @@ export default class conditionalForm extends atkPlugin {
     //check rule when inputs has changed.
    const that = e.data;
    that.resetInputStatus();
-   that.inputs.forEach((input, idx) => {
-     input.rules.forEach((rules) => {
-       let isAndValid = true;
-       let validateInputNames = Object.keys(rules);
-       validateInputNames.forEach( (inputName) => {
-         const validationRule = rules[inputName];
-         if (Array.isArray(validationRule)){
-            validationRule.forEach((rule) => {
-              isAndValid &= formService.validateField(that.$el, inputName, rule);
-            });
-         } else {
-           isAndValid &= formService.validateField(that.$el, inputName, validationRule);
-         }
-       });
-       // Apply OR conditon between rules.
-       input.state |= isAndValid;
-     });
-    });
+   that.applyRules();
    that.setInputsState();
   }
 
+  /**
+   * Check each validation rule and apply proper visibility state to the
+   * input where rules apply.
+   *
+   */
+  applyRules() {
+    const that = this;
+    this.inputs.forEach((input, idx) => {
+      input.rules.forEach((rules) => {
+        let isAndValid = true;
+        let validateInputNames = Object.keys(rules);
+        validateInputNames.forEach( (inputName) => {
+          const validationRule = rules[inputName];
+          if (Array.isArray(validationRule)){
+            validationRule.forEach((rule) => {
+              isAndValid &= formService.validateField(that.$el, inputName, rule);
+            });
+          } else {
+            isAndValid &= formService.validateField(that.$el, inputName, validationRule);
+          }
+        });
+        // Apply OR conditon between rules.
+        input.state |= isAndValid;
+      });
+    });
+  }
+
+  /**
+   * Set all input state visibility to false.
+   */
   resetInputStatus(){
     this.inputs.forEach((input) => {
       input.state = false;
     });
   }
 
+  /**
+   * Set fields visibility according to their state.
+   */
   setInputsState() {
     const that = this;
     this.inputs.forEach((input) => {
@@ -138,7 +154,6 @@ export default class conditionalForm extends atkPlugin {
           $container.hide();
           that.setInputState(input.state, $input, $container );
         }
-
       }
     });
   }
