@@ -46,14 +46,14 @@ class DropDownPlus extends Input
     }
 
     /**
-     * Set js dropdown() options;
+     * Set js dropdown() options;.
      *
      * @param $option
      * @param $value
      */
     public function setDropdownOption($option, $value)
     {
-       $this->dropOptions[$option] = $value;
+        $this->dropOptions[$option] = $value;
     }
 
     public function renderView()
@@ -61,13 +61,13 @@ class DropDownPlus extends Input
         $this->js(true)->dropdown($this->dropOptions);
 
         if ($this->isMultiple) {
-            $this->defaultClass = $this->defaultClass. ' multiple';
+            $this->defaultClass = $this->defaultClass.' multiple';
             //$this->template->trySetHtml('BeforeInput', "<input name='{$inputName}' type='hidden'/>");
         }
 
         $this->addClass($this->defaultClass);
 
-        if ($this->dropIcon){
+        if ($this->dropIcon) {
             $this->template->trySet('DropIcon', $this->dropIcon);
         }
 
