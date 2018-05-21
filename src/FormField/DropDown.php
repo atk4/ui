@@ -18,7 +18,7 @@ class DropDown extends Input
      *          'globe'      => ['Globe', 'icon' => 'globe icon'],
      *          'registered' => ['Registered', 'icon' => 'registered icon'],
      *          'file'       => ['File', 'icon' => 'file icon']
-     *          ]
+     *          ].
      *
      *
      * @var array
@@ -75,7 +75,7 @@ class DropDown extends Input
     /**
      * Whether or not to accept multiple value.
      *   Multiple values are sent using a string with comma as value delimiter.
-     *   ex: 'value1,value2,value3'
+     *   ex: 'value1,value2,value3'.
      *
      * @var bool
      */
