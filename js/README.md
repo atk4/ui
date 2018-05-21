@@ -97,6 +97,10 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.3.3
+
+   - Add onChange event handler for hidden input in conditionalForm in order to include new Dropdown field.
+
 ### version 1.3.2
 
   - Prevent ajaxec from firing while it is loading.
