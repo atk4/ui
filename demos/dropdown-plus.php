@@ -5,27 +5,27 @@ require 'init.php';
 $form = $app->add('Form');
 
 $form->addField('enum',
-                ['DropDownPlus',
-                    'caption' => 'Using Enum',
+                ['DropDown',
+                    'caption' => 'Using Single Values',
                     'values'  => ['default', 'option1', 'option2', 'option3'],
                 ]);
 
 $form->addField('values',
-                ['DropDownPlus',
+                ['DropDown',
                     'caption' => 'Using values with default text',
                     'empty'   => 'Choose an option',
                     'values'  => ['default' => 'Default', 'option1' => 'Option 1', 'option2' => 'Option 2', 'option3' => 'Option 3'],
                 ]);
 
 $form->addField('icon',
-                ['DropDownPlus',
+                ['DropDown',
                     'caption' => 'Using icon',
                     'empty'   => 'Choose an icon',
-                    'values'  => ['tag' => ['Tag', 'tag icon'], 'globe' => ['Globe', 'globe icon'], 'registered' => ['Registered', 'registered icon'], 'file' => ['File', 'file icon']],
+                    'values'  => ['tag' => ['Tag', 'icon' => 'tag icon'], 'globe' => ['Globe', 'icon' => 'globe icon'], 'registered' => ['Registered', 'icon' => 'registered icon'], 'file' => ['File', 'icon' => 'file icon']],
                 ]);
 
 $form->addField('multi',
-                ['DropDownPlus',
+                ['DropDown',
                     'caption'    => 'Multiple selection',
                     'empty'      => 'Choose has many options needed',
                     'isMultiple' => true,
