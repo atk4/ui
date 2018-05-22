@@ -122,7 +122,7 @@ class Menu extends View
         if (is_string($title)) {
             $group->set('title', $title);
         } else {
-            if ($title['icon']) {
+            if (isset($title['icon'])) {
                 $group->add(new Icon($title['icon']), 'Icon')->removeClass('item');
             }
             $group->set('title', $title[0]);
