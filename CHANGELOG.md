@@ -37,6 +37,22 @@ TODO: fully updated changelog will be in 1.5.1 version along with more examples!
 - Adding virtualpage into Form makes sure we inherit stickyGet [\#425](https://github.com/atk4/ui/pull/425) ([romaninsh](https://github.com/romaninsh))
 - Feature/Conditional Form [\#422](https://github.com/atk4/ui/pull/422) ([ibelar](https://github.com/ibelar))
 
+### 1.5.1
+
+**Closed issues:**
+
+- demos/jscondform.php page is not added in demos left side menu [\#469](https://github.com/atk4/ui/issues/469)
+- case-sensitive issue [\#464](https://github.com/atk4/ui/issues/464)
+
+**Merged pull requests:**
+
+- bugfix if icon is not set [\#475](https://github.com/atk4/ui/pull/475) ([DarkSide666](https://github.com/DarkSide666))
+- Feature/Dropdown-Plus [\#474](https://github.com/atk4/ui/pull/474) ([ibelar](https://github.com/ibelar))
+- fix/issue\#466 [\#472](https://github.com/atk4/ui/pull/472) ([ibelar](https://github.com/ibelar))
+- add conditional field demo in menu [\#471](https://github.com/atk4/ui/pull/471) ([DarkSide666](https://github.com/DarkSide666))
+- fix 464 [\#470](https://github.com/atk4/ui/pull/470) ([DarkSide666](https://github.com/DarkSide666))
+- Feature/form custom layout [\#467](https://github.com/atk4/ui/pull/467) ([romaninsh](https://github.com/romaninsh))
+
 ## 1.4
 
 In this version we focus on high-level components: Wizard, Console, ProgressBar, AutoComplete field, Lister, Radio field
