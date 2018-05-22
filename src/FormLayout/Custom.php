@@ -7,7 +7,6 @@ namespace atk4\ui\FormLayout;
  */
 class Custom extends _Abstract
 {
-
     // @var inheritdoc
     public $defaultTemplate = null;
 
@@ -21,7 +20,7 @@ class Custom extends _Abstract
     }
 
     /**
-     * Adds Button into {$Buttons}
+     * Adds Button into {$Buttons}.
      *
      * @param array|string $button
      *

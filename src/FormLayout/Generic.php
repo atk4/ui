@@ -2,9 +2,7 @@
 
 namespace atk4\ui\FormLayout;
 
-use atk4\ui\Exception;
 use atk4\ui\Form;
-use atk4\ui\View;
 
 /**
  * Generic Layout for a form.
@@ -30,7 +28,8 @@ class Generic extends _Abstract
      */
     public $inline = null;
 
-    protected function _addField($decorator, $field) {
+    protected function _addField($decorator, $field)
+    {
         return $this->_add($decorator, ['desired_name' => $field->short_name]);
     }
 

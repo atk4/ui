@@ -1,10 +1,12 @@
 <?php
+
 namespace atk4\ui\FormLayout;
 
 /**
- * Custom Layout for a form (user-defined HTML)
+ * Custom Layout for a form (user-defined HTML).
  */
-abstract class _Abstract extends \atk4\ui\View {
+abstract class _Abstract extends \atk4\ui\View
+{
     /**
      * Links layout to the form.
      */
@@ -78,7 +80,8 @@ abstract class _Abstract extends \atk4\ui\View {
         return $this->_addField($decorator, $field);
     }
 
-    protected function _addField($decorator, $field) {
+    protected function _addField($decorator, $field)
+    {
         return $this->add($decorator, $this->template->hasTag($field->short_name) ? $field->short_name : null);
     }
 
@@ -129,11 +132,11 @@ abstract class _Abstract extends \atk4\ui\View {
     }
 
     /**
-     * Adds Button into form layout
+     * Adds Button into form layout.
      *
      * @param array|string $button
      *
      * @return \atk4\ui\Button
      */
-    abstract function addButton($button);
+    abstract public function addButton($button);
 }
