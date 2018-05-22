@@ -98,7 +98,7 @@ class Menu extends View
         $sub_menu = $this->add([new self(), 'defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
         $sub_menu->set('label', $label);
 
-        if (isset($name['icon'])) {
+        if (isset($name['icon']) && $name['icon']) {
             $sub_menu->add(new Icon($name['icon']), 'Icon')->removeClass('item');
         }
 
@@ -122,7 +122,7 @@ class Menu extends View
         if (is_string($title)) {
             $group->set('title', $title);
         } else {
-            if ($title['icon']) {
+            if (isset($title['icon']) && $title['icon']) {
                 $group->add(new Icon($title['icon']), 'Icon')->removeClass('item');
             }
             $group->set('title', $title[0]);
