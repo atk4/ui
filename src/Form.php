@@ -115,14 +115,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     protected function initLayout()
     {
-        if (is_string($this->layout)) {
-            $this->layout = [$this->layout];
-        } elseif ($this->layout === null) {
-            $this->layout = ['FormLayout/Generic'];
+        if ($this->layout === null) {
+            $this->layout = 'Generic';
         }
 
-        if (is_array($this->layout)) {
-            $this->layout['form'] = $this;
+        if (is_string($this->layout) || is_array($this->layout)) {
+            $this->layout = $this->factory($this->layout, ['form'=>$this], 'FormLayout');
             $this->layout = $this->add($this->layout);
         } elseif (is_object($this->layout)) {
             $this->layout->form = $this;
