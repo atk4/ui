@@ -41,6 +41,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem('Advanced table examples', ['table2']);
     $form->addItem('Table interractions', ['multitable']);
     $form->addItem(['Column Menus', 'icon'=>'yellow star'], ['tablecolumnmenu']);
+    $form->addItem(['Column Filters', 'icon'=>'yellow star'], ['tablefilter']);
     $form->addItem('Grid - Table+Bar+Search+Paginator', ['grid']);
     $form->addItem('CRUD - Full editing solution', ['crud']);
 
