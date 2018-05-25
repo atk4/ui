@@ -34,7 +34,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem(['Integration with Columns'], ['form5']);
     $form->addItem(['AutoComplete Field'], ['autocomplete']);
     $form->addItem(['Value Selectors'], ['form6']);
-    $form->addItem(['Conditional Fields' 'icon'=>'yellow star'], ['jscondform']);
+    $form->addItem(['Conditional Fields', 'icon'=>'yellow star'], ['jscondform']);
 
     $form = $layout->leftMenu->addGroup(['Grid and Table', 'icon' => 'table']);
     $form->addItem('Data table with formatted columns', ['table']);
