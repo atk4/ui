@@ -34,13 +34,14 @@ if (isset($layout->leftMenu)) {
     $form->addItem(['Integration with Columns'], ['form5']);
     $form->addItem(['AutoComplete Field'], ['autocomplete']);
     $form->addItem(['Value Selectors'], ['form6']);
-    $form->addItem(['Conditional Fields'], ['jscondform']);
+    $form->addItem(['Conditional Fields', 'icon'=>'yellow star'], ['jscondform']);
 
     $form = $layout->leftMenu->addGroup(['Grid and Table', 'icon' => 'table']);
     $form->addItem('Data table with formatted columns', ['table']);
     $form->addItem('Advanced table examples', ['table2']);
     $form->addItem('Table interractions', ['multitable']);
     $form->addItem(['Column Menus', 'icon'=>'yellow star'], ['tablecolumnmenu']);
+    $form->addItem(['Column Filters', 'icon'=>'yellow star'], ['tablefilter']);
     $form->addItem('Grid - Table+Bar+Search+Paginator', ['grid']);
     $form->addItem('CRUD - Full editing solution', ['crud']);
 
