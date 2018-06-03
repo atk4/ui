@@ -85,6 +85,7 @@ class DropDown extends Input
     {
         parent::init();
 
+        $this->ui = ' ';
         $this->inputType = 'hidden';
 
         if (isset($this->field) && $this->field->required) {
