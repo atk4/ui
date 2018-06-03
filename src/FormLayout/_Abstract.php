@@ -2,6 +2,8 @@
 
 namespace atk4\ui\FormLayout;
 
+use atk4\ui\Exception;
+
 /**
  * Custom Layout for a form (user-defined HTML).
  */
