@@ -955,7 +955,11 @@ class View implements jsExpressionable
 
             $actions[] = $cb;
         //$thisAction->api(['on'=>'now', 'url'=>$cb->getJSURL(), 'urlData'=>$urlData, 'obj'=>new jsExpression('this')]);
-        } elseif ($action) {
+        }
+        elseif(is_array($action)) {
+            $actions = array_merge($actions, $action);
+        }
+        elseif ($action) {
             // otherwise include
             $actions[] = $action;
         }
