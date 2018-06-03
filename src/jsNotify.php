@@ -114,7 +114,7 @@ class jsNotify implements jsExpressionable
      */
     public function setDuration($duration)
     {
-        $this->duration = $duration;
+        $this->options['duration'] = $duration;
 
         return $this;
     }
@@ -128,7 +128,7 @@ class jsNotify implements jsExpressionable
      */
     public function setPosition($position)
     {
-        $this->position = $position;
+        $this->options['position'] = $position;
 
         return $this;
     }
@@ -142,7 +142,7 @@ class jsNotify implements jsExpressionable
      */
     public function setWidth($width)
     {
-        $this->width = $width;
+        $this->options['width'] = $width;
 
         return $this;
     }
@@ -156,7 +156,7 @@ class jsNotify implements jsExpressionable
      */
     public function setOpacity($opacity)
     {
-        $this->opacity = $opacity;
+        $this->options['opacity'] = $opacity;
 
         return $this;
     }
