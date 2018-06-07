@@ -370,6 +370,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $fallback_seed['hint'] = $f->ui['hint'];
         }
 
+        if (isset($f->ui['placeholder'])) {
+            $fallback_seed['placeholder'] = $f->ui['placeholder'];
+        }
+
         $seed = $this->mergeSeeds(
             $seed,
             isset($f->ui['form']) ? $f->ui['form'] : null,

@@ -72,7 +72,7 @@ $form->onSubmit(function ($f) {
         {
             parent::init();
             $this->addField('name', ['required' => true]);
-            $this->addField('surname');
+            $this->addField('surname', ['ui'=>['placeholder'=>'e.g. Smith']]);
             $this->addField('gender', ['enum' => ['M', 'F']]);
         }
 
