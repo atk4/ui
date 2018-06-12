@@ -15,6 +15,11 @@ export default class jsSearch extends atkPlugin {
 
     this.setInputAction(this);
     this.setSearchAction(this);
+
+    //Set input initial value if available.
+    if (this.settings.q) {
+      this.setFilter(this.settings.q);
+    }
   }
 
   /**
@@ -80,6 +85,20 @@ export default class jsSearch extends atkPlugin {
   }
 
   /**
+   * Allow to set filter initial input.
+   * Mostly use on page load
+   * when input need to be set to reflect a search state.
+   *
+   * @param text || The text input value.
+   */
+  setFilter(text){
+    this.textInput.val(text);
+    this.setButtonState(true);
+    this,this.setFilterState(true);
+    this.$el.data('preValue', text);
+  }
+
+  /**
    * More generic way to set url argument.
    *
    * @param arg
@@ -141,4 +160,5 @@ export default class jsSearch extends atkPlugin {
 jsSearch.DEFAULTS = {
   uri: null,
   uri_options: {},
+  q: null
 };
