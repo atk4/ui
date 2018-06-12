@@ -240,20 +240,13 @@ class App
     /**
      * Initializes layout.
      *
-     * @param string|Layout\Generic $layout
-     * @param array                 $options
+     * @param string|Layout\Generic|array $seed
      *
      * @return $this
      */
-    public function initLayout($layout, $options = [])
+    public function initLayout($seed)
     {
-        $layout = $this->factory($layout, null, 'Layout');
-        /*
-        if (is_string($layout)) {
-            $layout = $this->normalizeClassNameApp($layout, 'Layout');
-            $layout = new $layout($options);
-        }
-        */
+        $layout = $this->factory($seed, null, 'Layout');
         $layout->app = $this;
 
         if (!$this->html) {
