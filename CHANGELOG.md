@@ -53,6 +53,27 @@ TODO: fully updated changelog will be in 1.5.1 version along with more examples!
 - fix 464 [\#470](https://github.com/atk4/ui/pull/470) ([DarkSide666](https://github.com/DarkSide666))
 - Feature/form custom layout [\#467](https://github.com/atk4/ui/pull/467) ([romaninsh](https://github.com/romaninsh))
 
+## 1.5.2
+
+**Closed issues:**
+
+- Class 'atk4\ui\FormLayout\Exception' not found \(in \_Abstract.php\) [\#480](https://github.com/atk4/ui/issues/480)
+- App-\>initLayout 2nd parameter $options [\#476](https://github.com/atk4/ui/issues/476)
+- allow to use icon in DropDown [\#473](https://github.com/atk4/ui/issues/473)
+- implement custom form layout [\#465](https://github.com/atk4/ui/issues/465)
+- TableColumn/Link doesn't evaluate as template [\#462](https://github.com/atk4/ui/issues/462)
+
+**Merged pull requests:**
+
+- feature/jsSearch-Initial-Value [\#490](https://github.com/atk4/ui/pull/490) ([ibelar](https://github.com/ibelar))
+- fix \#476 [\#489](https://github.com/atk4/ui/pull/489) ([DarkSide666](https://github.com/DarkSide666))
+- Fix/AutoComplete [\#488](https://github.com/atk4/ui/pull/488) ([ibelar](https://github.com/ibelar))
+- Allow $field-\>ui\['placeholder'\] to affect form fields' placeholder directly. [\#484](https://github.com/atk4/ui/pull/484) ([romaninsh](https://github.com/romaninsh))
+- Make View-\>on\(event, \[jsAction1, jsAction2\]\) work [\#482](https://github.com/atk4/ui/pull/482) ([PhilippGrashoff](https://github.com/PhilippGrashoff))
+- Fix/\#480 Unable to find Exception [\#481](https://github.com/atk4/ui/pull/481) ([ibelar](https://github.com/ibelar))
+- Fix/\#478 Notify options [\#479](https://github.com/atk4/ui/pull/479) ([ibelar](https://github.com/ibelar))
+- Fix/Dropdown search not showing input char [\#477](https://github.com/atk4/ui/pull/477) ([ibelar](https://github.com/ibelar))
+
 ## 1.4
 
 In this version we focus on high-level components: Wizard, Console, ProgressBar, AutoComplete field, Lister, Radio field
