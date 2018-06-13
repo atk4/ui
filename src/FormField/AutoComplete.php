@@ -238,7 +238,7 @@ class AutoComplete extends Input
 
         $this->js(true, $chain);
 
-        if ($this->form->model && $this->form->model->loaded()) {
+        if (isset($this->form->model) && $this->form->model && $this->form->model->loaded()) {
             $data = $this->form->model->ref($this->field->short_name)->get();
             $chain->dropdown('set value', $data['id'])->dropdown('set text', $data[$this->model->title_field]);
             $this->js(true, $chain);
