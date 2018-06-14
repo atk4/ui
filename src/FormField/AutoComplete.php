@@ -239,7 +239,6 @@ class AutoComplete extends Input
         $this->js(true, $chain);
 
         if ($this->field->get()) {
-
             $id_field = $this->id_field ?: $this->model->id_field;
             $title_field = $this->title_field ?: $this->model->title_field;
 
