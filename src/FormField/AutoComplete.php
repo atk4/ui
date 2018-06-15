@@ -245,7 +245,7 @@ class AutoComplete extends Input
             $this->model->tryLoadBy($id_field, $this->field->get());
 
             if (!$this->model->loaded()) {
-                $this->field->set('0');
+                $this->field->set(null);
             } else {
                 $chain->dropdown('set value', $this->model[$id_field])->dropdown('set text', $this->model[$title_field]);
                 $this->js(true, $chain);
