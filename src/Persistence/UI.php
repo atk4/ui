@@ -114,7 +114,7 @@ class UI extends \atk4\data\Persistence
         }
 
         if (isset($f->reference)) {
-            if ($value === '') {
+            if (empty($value)) {
                 $value = null;
             }
         }
