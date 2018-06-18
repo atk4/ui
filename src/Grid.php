@@ -86,7 +86,7 @@ class Grid extends View
     {
         parent::init();
 
-        $this->container = $this->add(['View', 'ui'=>'', 'template' => new Template('<div id="{$_id}"><div class="ui table atk-overflow-auto">{$Table}{$Content}</div>{$Paginator}</div>')]);
+        $this->container = $this->add(['View', 'ui'=>'ui basic segment', 'template' => new Template('<div id="{$_id}" class="{$_class} {$class}"><div class="ui table atk-overflow-auto">{$Table}{$Content}</div>{$Paginator}</div>')]);
 
         if ($this->menu !== false) {
             $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu), 'Menu');
