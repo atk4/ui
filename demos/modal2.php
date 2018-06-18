@@ -23,7 +23,7 @@ $b->on('click', $modal_simple->show());
 
 /********** DYNAMIC ******************/
 
-$app->add(['Header', 'Modal loading dynamic content via callback']);
+$app->add(['Header', 'Three levels of Modal loading dynamic content via callback']);
 
 //modal_vp1 will be render into page but hide until $modal_vp1->show() is activate.
 $modal_vp1 = $app->add(['Modal', 'title' => 'Lorem Ipsum load dynamically']);
@@ -31,21 +31,29 @@ $modal_vp1 = $app->add(['Modal', 'title' => 'Lorem Ipsum load dynamically']);
 //modal_vp2 will be render into page but hide until $modal_vp1->show() is activate.
 $modal_vp2 = $app->add(['Modal', 'title' => 'Text message load dynamically'])->addClass('small');
 
+$modal_vp3 = $app->add(['Modal', 'title' => 'Third level modal'])->addClass('small');
+$modal_vp3->set(function($modal){
+    $modal->add(['Text'])->set('This is yet another modal');
+    //$modal->add(['LoremIpsum', 'size' => 2]);
+
+});
+
 //When $modal_vp1->show() is activate, it will dynamically add this content to it.
 $modal_vp1->set(function ($modal) use ($modal_vp2) {
     $modal->add(new \atk4\ui\tests\ViewTester());
     $modal->add(['LoremIpsum', 'size' => 2]);
     $form = $modal->add('Form');
-    $form->addField('color', null, ['enum' => ['red', 'green', 'blue']]);
+    $form->addField('color', null, ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
     $form->onSubmit(function ($form) use ($modal_vp2) {
         return $modal_vp2->show(['color' => $form->model['color']]);
     });
 });
 
 //When $modal_vp2->show() is activate, it will dynamically add this content to it.
-$modal_vp2->set(function ($modal) {
+$modal_vp2->set(function ($modal) use ($modal_vp3) {
     //$modal->add(new \atk4\ui\tests\ViewTester());
     $modal->add(['Message', 'Message', @$_GET['color']])->text->addParagraph('This text is loaded using a second modal.');
+    $modal->add('Button')->set('Third modal')->on('click', $modal_vp3->show());
 });
 
 $bar = $app->add(['View', 'ui' => 'buttons']);
@@ -123,16 +131,17 @@ $modal_step->addButtonAction($action);
 
 //Set modal functionality. Will changes content according to page being displayed.
 $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $next_action) {
-    $page = $session->recall('page', 1);
-    $success = $session->recall('success', false);
-    if (isset($_GET['move'])) {
-        if ($_GET['move'] === 'next' && $success) {
-            $page++;
+    $page    = $session->recall( 'page', 1 );
+    $success = $session->recall( 'success', false );
+    if ( isset( $_GET['move'] ) ) {
+        if ( $_GET['move'] === 'next' && $success ) {
+            $page ++;
         }
-        if ($_GET['move'] === 'prev' && $page > 1) {
-            $page--;
+        if ( $_GET['move'] === 'prev' && $page > 1 ) {
+            $page --;
         }
-        $session->memorize('success', false);
+        $session->memorize( 'success', false );
+    } elseif ($page === 2) {
     } else {
         $page = 1;
     }

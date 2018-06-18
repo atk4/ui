@@ -22,7 +22,7 @@ export default class createModal extends atkPlugin {
   }
 
   getDialogHtml(title) {
-    return `<i class="close icon"></i>
+    return `<i class="${this.settings.icon} icon close"></i>
           <div class="header">${title}</div>
           <div class="image content atk-dialog-content">
             </div>
@@ -34,6 +34,7 @@ createModal.DEFAULTS = {
   title: '',
   uri: null,
   uri_options: {},
+  icon: '',
   label: 'Loading...',
   modal: {
       duration: 100
