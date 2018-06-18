@@ -97,6 +97,16 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.3.5
+
+#### Changes in ModalService
+  - Set top modal position value to 'absolute'
+    - this fix semantic.ui 2.3.2 modal positioning problem.
+  - Add esc key handler to document while modal are in service.
+    - this allow to close all open modal window using esc key one after the others.  
+#### Changes in createModal
+  - Allow to pass a string icon value for closing icon.  
+
 ### version 1.3.4
 
   - Allow jsSearch to load using already set input value.
