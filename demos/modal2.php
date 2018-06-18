@@ -32,10 +32,9 @@ $modal_vp1 = $app->add(['Modal', 'title' => 'Lorem Ipsum load dynamically']);
 $modal_vp2 = $app->add(['Modal', 'title' => 'Text message load dynamically'])->addClass('small');
 
 $modal_vp3 = $app->add(['Modal', 'title' => 'Third level modal'])->addClass('small');
-$modal_vp3->set(function($modal){
+$modal_vp3->set(function ($modal) {
     $modal->add(['Text'])->set('This is yet another modal');
     //$modal->add(['LoremIpsum', 'size' => 2]);
-
 });
 
 //When $modal_vp1->show() is activate, it will dynamically add this content to it.
@@ -131,16 +130,16 @@ $modal_step->addButtonAction($action);
 
 //Set modal functionality. Will changes content according to page being displayed.
 $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $next_action) {
-    $page    = $session->recall( 'page', 1 );
-    $success = $session->recall( 'success', false );
-    if ( isset( $_GET['move'] ) ) {
-        if ( $_GET['move'] === 'next' && $success ) {
-            $page ++;
+    $page = $session->recall('page', 1);
+    $success = $session->recall('success', false);
+    if (isset($_GET['move'])) {
+        if ($_GET['move'] === 'next' && $success) {
+            $page++;
         }
-        if ( $_GET['move'] === 'prev' && $page > 1 ) {
-            $page --;
+        if ($_GET['move'] === 'prev' && $page > 1) {
+            $page--;
         }
-        $session->memorize( 'success', false );
+        $session->memorize('success', false);
     } elseif ($page === 2) {
     } else {
         $page = 1;
