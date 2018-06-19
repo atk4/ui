@@ -53,7 +53,7 @@ TODO: fully updated changelog will be in 1.5.1 version along with more examples!
 - fix 464 [\#470](https://github.com/atk4/ui/pull/470) ([DarkSide666](https://github.com/DarkSide666))
 - Feature/form custom layout [\#467](https://github.com/atk4/ui/pull/467) ([romaninsh](https://github.com/romaninsh))
 
-## 1.5.2
+### 1.5.2
 
 **Closed issues:**
 
@@ -73,6 +73,23 @@ TODO: fully updated changelog will be in 1.5.1 version along with more examples!
 - Fix/\#480 Unable to find Exception [\#481](https://github.com/atk4/ui/pull/481) ([ibelar](https://github.com/ibelar))
 - Fix/\#478 Notify options [\#479](https://github.com/atk4/ui/pull/479) ([ibelar](https://github.com/ibelar))
 - Fix/Dropdown search not showing input char [\#477](https://github.com/atk4/ui/pull/477) ([ibelar](https://github.com/ibelar))
+
+### 1.5.3
+
+This release addresses problem Semantic UI is having with multiple modals. We will now hide existing modal
+if new one needs to be opened and after this new modal is closed it will be re-opened once again. The relevant
+issue is [\#487](https://github.com/atk4/ui/issues/487)
+
+**Closed issues:**
+
+- Grid should have loader while reloading [\#493](https://github.com/atk4/ui/issues/493)
+
+**Merged pull requests:**
+
+- Grid will display loader while fetching data [\#497](https://github.com/atk4/ui/pull/497) ([ibelar](https://github.com/ibelar))
+- fix/\#487-Modal Behaviour [\#496](https://github.com/atk4/ui/pull/496) ([ibelar](https://github.com/ibelar))
+- fix/Persisitence-ui-for-reference-field [\#494](https://github.com/atk4/ui/pull/494) ([ibelar](https://github.com/ibelar))
+- atk4/ui/fix/\#491 auto complete not initializing with proper text [\#492](https://github.com/atk4/ui/pull/492) ([skondakov](https://github.com/skondakov))
 
 ## 1.4
 
