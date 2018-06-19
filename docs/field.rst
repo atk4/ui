@@ -13,7 +13,7 @@ quite simple components that present themselves as input controls: line, select,
 Relationship with Form
 ======================
 
-All Field Decorators can be integrated with :php:class:`\atk4\ui\Form` which will
+All Field Decorators can be integrated with :php:class:`atk4\\ui\\Form` which will
 facilitate collection and processing of data in a form. Field decorators can also
 be used as stand-alone controls.
 
@@ -62,7 +62,7 @@ page and the following HTML is now produced::
     </div>
 
 The markup that surronds the button which includes Label and formatting is produced by 
-:php:class:`\atk4\ui\FormLayout\Generic`, which does draw some of the information from the Field
+:php:class:`atk4\\ui\\FormLayout\\Generic`, which does draw some of the information from the Field
 itself. 
 
 Using in Form Layouts
@@ -83,7 +83,7 @@ into multiple Tabs or detach field groups or even create nested layouts::
 
     $form->onSubmit(function($f) {  return $f->model['name'].' has age '.$f->model['age']; });
 
-This is further explained in documentation for :php:class:`\atk4\ui\FormLayout\Generic` class,
+This is further explained in documentation for :php:class:`atk4\\ui\\FormLayout\\Generic` class,
 however if you do plan on adding your own field types, it's important that you extend it
 properly:
 
@@ -124,18 +124,35 @@ or you can inject a view with a custom template::
 Relatioship with Model
 ======================
 
-In the examples above, we looked at the manual use where you create Field Decorator object explicitly.
-The most common use-case in large application is use with Models. You would need a model, such as
+In the examples above, we looked at how to create Field Decorator object explicitly.
+The most common use-case in large application is the use with Models. You would need a model, such as
 `Country` model (see demos/database.php) as well as
-`Persistence $db <http://agile-data.readthedocs.io/en/develop/persistence.html>`_.
+`Persistence $db <http://agile-data.readthedocs.io/en/develop/persistence.html>`_::
 
-Now, in order to create a form, the following is sufficient::
+    class Country extends \atk4\data\Model
+    {
+        public $table = 'country';
+
+        public function init()
+        {
+            parent::init();
+            $this->addField('name', ['actual' => 'nicename', 'required' => true, 'type' => 'string']);
+            $this->addField('sys_name', ['actual' => 'name', 'system' => true]);
+
+            $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string']);
+            $this->addField('iso3', ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
+            $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
+            $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number']);
+        }
+    }
+
+To create a form, the following is sufficient::
 
     $form = $app->add('Form');
     $form->setModel(new Country($db);
 
 The above will populate fields from model into the form automatically. You can use second
-argument to :php:meth:`\atk4\ui\Form::setModel()` to indicate which fields to display
+argument to :php:meth:`atk4\ui\Form::setModel()` to indicate which fields to display
 or rely on :ref:`field_visibility`.
 
 When Form fields are populated, then :php:meth:`\atk4\ui\Form::_decoratorFactory` is
