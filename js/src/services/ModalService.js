@@ -31,11 +31,11 @@ class ModalService {
     }
 
     onHidden() {
-        modalService.removeModal($(this));
+      modalService.removeModal($(this));
     }
 
     onVisible() {
-        let args = {}, data;
+      let args = {}, data;
         // const service = apiService;
         const $modal = $(this);
         const $content = $(this).find('.atk-dialog-content');
@@ -81,19 +81,41 @@ class ModalService {
                 }
             });
         }
-        modalService.addModal($modal);
     }
 
-    onShow() {}
+    onShow() {
+        const $modal = $(this);
+        modalService.addModal($modal);
+    }
 
     onHide() {
         return $(this).data('isClosable');
     }
 
     addModal(modal) {
+        const that = this;
         this.modals.push(modal);
+
         this.setCloseTriggerEventInModals();
         this.hideShowCloseIcon();
+
+        // temp fix while semantic modal positioning is not fixed.
+        // hide other modals.
+        if (this.modals.length > 1 ) {
+           modal.css('position', 'absolute');
+           this.modals[this.modals.length - 2].css('opacity', 0);
+        }
+
+        // add modal esc handler.
+        if (this.modals.length === 1) {
+            $(document).on('keyup.atk.modalService', function (e) {
+              if (e.keyCode === 27) {
+                  if (that.modals.length > 0) {
+                      that.modals[that.modals.length -1].modal('hide');
+                  }
+              }
+            });
+        }
     }
 
     removeModal(modal) {
@@ -104,6 +126,17 @@ class ModalService {
         this.modals.pop();
         this.setCloseTriggerEventInModals();
         this.hideShowCloseIcon();
+
+        // temp fix while semantic modal positioning is not fixed.
+        // show last modals.
+        if (this.modals.length > 0 ) {
+           modal.css('position', '');
+           this.modals[this.modals.length - 1].css('opacity', '');
+        }
+
+        if (this.modals.length === 0 ) {
+            $(document).off('atk.modalService');
+        }
     }
 
     doAutoFocus(modal) {
