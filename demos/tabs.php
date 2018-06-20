@@ -18,6 +18,13 @@ $t->addTab('Dynamic Lorem Ipsum', function ($tab) {
     $tab->add(['LoremIpsum', 'size' => 2]);
 });
 
+// modal tab
+$t->addTab('Modal popup', function ($tab) {
+    $tab->add(['Button', 'Load Lorem'])->on('click', $tab->add('Modal')->set(function($p){
+        $p->add(['LoremIpsum', 'size' => 2]);
+    })->show());
+});
+
 // dynamic tab
 $t->addTab('Dynamic Form', function ($tab) {
     $tab->add(['Message', 'It takes 2 seconds for this tab to load', 'warning']);
