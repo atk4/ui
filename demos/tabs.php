@@ -20,7 +20,7 @@ $t->addTab('Dynamic Lorem Ipsum', function ($tab) {
 
 // modal tab
 $t->addTab('Modal popup', function ($tab) {
-    $tab->add(['Button', 'Load Lorem'])->on('click', $tab->add('Modal')->set(function($p){
+    $tab->add(['Button', 'Load Lorem'])->on('click', $tab->add('Modal')->set(function ($p) {
         $p->add(['LoremIpsum', 'size' => 2]);
     })->show());
 });
