@@ -56,12 +56,16 @@ class Calendar extends Input
         if ($format = $this->app->ui_persistence->$typeFormat) {
             $formatter = "function(date, settings){
                             if (!date) return;
-                            return atk.phpDate('${format}', date);
+                            return atk.phpDate([format], date);
                         }";
-            $this->options['formatter'][$this->type] = new jsExpression($formatter);
+            $this->options['formatter'][$this->type] = new jsExpression($formatter, ['format' => $format]);
         }
 
         $this->options['type'] = $this->type;
+
+        if ($dayOfWeek = $this->app->ui_persistence->firstDayOfWeek) {
+            $this->options['firstDayOfWeek'] = $dayOfWeek;
+        }
 
         $this->js(true)->calendar($this->options);
 
