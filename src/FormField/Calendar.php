@@ -53,10 +53,10 @@ class Calendar extends Input
 
         $typeFormat = $this->type.'_format';
         if ($format = $this->app->ui_persistence->$typeFormat) {
-            $formatter = "function(date, settings){
+            $formatter = 'function(date, settings){
                             if (!date) return;
                             return atk.phpDate([format], date);
-                        }";
+                        }';
             $this->options['formatter'][$this->type] = new jsExpression($formatter, ['format' => $format]);
         }
 

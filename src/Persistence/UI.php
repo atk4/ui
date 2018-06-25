@@ -26,7 +26,7 @@ class UI extends \atk4\data\Persistence
 
     /**
      * Calendar input first day of week.
-     *  0 = sunday;
+     *  0 = sunday;.
      *
      * @var int
      */
