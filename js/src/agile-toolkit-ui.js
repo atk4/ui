@@ -1,6 +1,7 @@
 import atk from 'atk-semantic-ui';
 import 'helpers/addParams';
 import {plugin, createAtkplugins} from "./plugin";
+import date from 'locutus/php/datetime/date';
 
 // Create atk plugins.
 createAtkplugins();
@@ -8,6 +9,8 @@ createAtkplugins();
 atk.version = function(){return _ATKVERSION_};
 //Allow to register a plugin with jQuery;
 atk.registerPlugin = plugin;
+
+atk.phpDate = date;
 
 
 /**

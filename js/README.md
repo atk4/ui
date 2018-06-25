@@ -97,6 +97,11 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.3.6
+
+  - Add locutus library dependency for outputing js date using php format.
+    - use in Calendar.js formatter. 
+
 ### version 1.3.5
 
 #### Changes in ModalService
