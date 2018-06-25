@@ -4,7 +4,6 @@ namespace atk4\ui\FormField;
 
 use atk4\ui\Form;
 use atk4\ui\jsExpression;
-use atk4\ui\jsFunction;
 
 /**
  * Input element for a form field.
@@ -49,7 +48,7 @@ class Calendar extends Input
         }
 
         if (!$this->type) {
-             $this->type = 'datetime';
+            $this->type = 'datetime';
         }
 
         $typeFormat = $this->type.'_format';
