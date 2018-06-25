@@ -27,11 +27,9 @@ class CallbackLater extends Callback
 
         if ($this->app->is_rendering) {
             return parent::set($callback, $args);
-        } else {
-            $hook = 'beforeRender';
         }
 
-        $this->app->addHook($hook, function (...$args) use ($callback) {
+        $this->app->addHook('beforeRender', function (...$args) use ($callback) {
             array_shift($args); // Hook will have first argument pointing to the app. We don't need that.
             return parent::set($callback, $args);
         }, $args);
