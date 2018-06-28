@@ -81,7 +81,10 @@ class Modal extends View
             if ($this->cb->triggered() && $this->fx) {
                 $this->fx[0]($this->cb_view);
             }
-            $this->app->terminate($this->cb_view->renderJSON());
+            $modalName = isset($_GET['__atk_m']) ? $_GET['__atk_m'] : null;
+            if ($modalName === $this->name) {
+                $this->app->terminate($this->cb_view->renderJSON());
+            }
         });
     }
 
@@ -279,6 +282,7 @@ class Modal extends View
         $data['label'] = $this->loading_label;
 
         if (!empty($this->fx)) {
+            $this->cb_view->stickyGet('__atk_m', $this->name);
             $data['uri'] = $this->cb->getJSURL();
         }
 
