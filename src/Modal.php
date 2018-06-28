@@ -75,6 +75,7 @@ class Modal extends View
     public function enableCallback()
     {
         $this->cb_view = $this->add('View');
+        $this->cb_view->stickyGet('__atk_m', $this->name);
         $this->cb = $this->cb_view->add('CallbackLater');
 
         $this->cb->set(function () {
@@ -282,7 +283,6 @@ class Modal extends View
         $data['label'] = $this->loading_label;
 
         if (!empty($this->fx)) {
-            $this->cb_view->stickyGet('__atk_m', $this->name);
             $data['uri'] = $this->cb->getJSURL();
         }
 
