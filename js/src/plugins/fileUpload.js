@@ -8,7 +8,7 @@ export default class fileUpload extends atkPlugin {
     this.hiddenInput = this.$el.find('input[type="hidden"]');
 
     this.fileInput = this.$el.find('input[type="file"]');
-    this.action = $('#' + this.settings.action);
+    this.action = this.$el.find('#' + this.settings.action);
     this.actionContent = this.action.html();
 
     this.bar = this.$el.find('.progress');
@@ -68,6 +68,10 @@ export default class fileUpload extends atkPlugin {
         }
       });
     }
+    this.textInput.on('click', function(e) {
+      this.blur();
+      this.focus();
+    });
 
     // add event handler to action button.
     this.action.on('click', function(e) {
