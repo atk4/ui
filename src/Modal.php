@@ -75,13 +75,17 @@ class Modal extends View
     public function enableCallback()
     {
         $this->cb_view = $this->add('View');
+        $this->cb_view->stickyGet('__atk_m', $this->name);
         $this->cb = $this->cb_view->add('CallbackLater');
 
         $this->cb->set(function () {
             if ($this->cb->triggered() && $this->fx) {
                 $this->fx[0]($this->cb_view);
             }
-            $this->app->terminate($this->cb_view->renderJSON());
+            $modalName = isset($_GET['__atk_m']) ? $_GET['__atk_m'] : null;
+            if ($modalName === $this->name) {
+                $this->app->terminate($this->cb_view->renderJSON());
+            }
         });
     }
 
