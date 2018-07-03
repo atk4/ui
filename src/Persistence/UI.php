@@ -24,6 +24,14 @@ class UI extends \atk4\data\Persistence
     public $datetime_format = 'M d, Y H:i:s';
     // 'D, d M Y H:i:s O';
 
+    /**
+     * Calendar input first day of week.
+     *  0 = sunday;.
+     *
+     * @var int
+     */
+    public $firstDayOfWeek = 0;
+
     public $currency = '€';
 
     /**

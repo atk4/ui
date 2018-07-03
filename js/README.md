@@ -99,6 +99,8 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ### version 1.3.6
 
+  - Add locutus library dependency for outputing js date using php format.
+    - use in Calendar.js formatter. 
   - Fix fileUpload plugin to handle click event 
     - allow to use click event after user cancel file upload open dialog using cancel button.
   - fix fileUload plugin to find button eleemnt instead of direct setup. 
