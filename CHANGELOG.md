@@ -91,6 +91,30 @@ issue is [\#487](https://github.com/atk4/ui/issues/487)
 - fix/Persisitence-ui-for-reference-field [\#494](https://github.com/atk4/ui/pull/494) ([ibelar](https://github.com/ibelar))
 - atk4/ui/fix/\#491 auto complete not initializing with proper text [\#492](https://github.com/atk4/ui/pull/492) ([skondakov](https://github.com/skondakov))
 
+## 1.5.4
+
+This issue fixed a problem where modal windows coulddn't open when placed in a dynamic tab. There
+probably were some other situation where callbacks were not reachable, and this release should
+address them.
+
+**Closed issues:**
+
+- Add Filter Type Money [\#517](https://github.com/atk4/ui/issues/517)
+- UploadField: should open dialog on "click" too not only on "focus" [\#511](https://github.com/atk4/ui/issues/511)
+- UploadField compatibility with multiple jQuery [\#510](https://github.com/atk4/ui/issues/510)
+- Enhancement: Make dropdown options visible when clicking into empty area between text and dropdown icon [\#502](https://github.com/atk4/ui/issues/502)
+- Modal in Tab not working [\#500](https://github.com/atk4/ui/issues/500)
+- AutoComplete  not initializing with proper text [\#491](https://github.com/atk4/ui/issues/491)
+
+**Merged pull requests:**
+
+- Atk4/ui/fix/\#517 add filter type money [\#518](https://github.com/atk4/ui/pull/518) ([skondakov](https://github.com/skondakov))
+- fix/\#510-\#511-file-upload [\#516](https://github.com/atk4/ui/pull/516) ([ibelar](https://github.com/ibelar))
+- Fix/modal callback in modal callback [\#509](https://github.com/atk4/ui/pull/509) ([ibelar](https://github.com/ibelar))
+- Feature/Calendar-input-using-ui-persistence [\#508](https://github.com/atk4/ui/pull/508) ([ibelar](https://github.com/ibelar))
+- Fix problem with multiple callbacks being not executed [\#501](https://github.com/atk4/ui/pull/501) ([romaninsh](https://github.com/romaninsh))
+- hotfix [\#499](https://github.com/atk4/ui/pull/499) ([romaninsh](https://github.com/romaninsh))
+
 ## 1.4
 
 In this version we focus on high-level components: Wizard, Console, ProgressBar, AutoComplete field, Lister, Radio field
