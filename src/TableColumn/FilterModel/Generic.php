@@ -30,6 +30,12 @@ class Generic extends Model
     public $value;
 
     /**
+     * Determines if this field shouldn't have a value field, and use only op field
+     * @var bool
+     */
+    public $noValueField = false;
+
+    /**
      * The field where this filter need to query data.
      *
      * @var null
@@ -74,7 +80,11 @@ class Generic extends Model
     {
         parent::init();
         $this->op = $this->addField('op', ['ui' => ['caption' => '']]);
-        $this->value = $this->addField('value', ['ui' => ['caption' => '']]);
+
+        if (!$this->noValueField) {
+            $this->value = $this->addField('value', ['ui' => ['caption' => '']]);
+        }
+
         $this->afterInit();
     }
 
