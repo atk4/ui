@@ -30,7 +30,8 @@ class Generic extends Model
     public $value;
 
     /**
-     * Determines if this field shouldn't have a value field, and use only op field
+     * Determines if this field shouldn't have a value field, and use only op field.
+     *
      * @var bool
      */
     public $noValueField = false;
