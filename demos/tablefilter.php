@@ -8,7 +8,7 @@ $view = $app->add('View', ['ui' => 'basic segment']);
 $g = $view->add(['Grid']);
 
 $m = new Country($db);
-$m->addExpression('is_uk', 'if([iso] = "GB", 1, 0)')->type='boolean';
+$m->addExpression('is_uk', 'if([iso] = "GB", 1, 0)')->type = 'boolean';
 
 $g->setModel($m);
 $g->addFilterColumn();
