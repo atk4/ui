@@ -7,7 +7,10 @@ require 'database.php';
 $view = $app->add('View', ['ui' => 'basic segment']);
 $g = $view->add(['Grid']);
 
-$g->setModel(new Country($db));
+$m = new Country($db);
+$m->addExpression('is_uk', 'if([iso] = "GB", 1, 0)')->type='boolean';
+
+$g->setModel($m);
 $g->addFilterColumn();
 
 $g->ipp = 20;
