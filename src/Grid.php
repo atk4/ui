@@ -375,10 +375,6 @@ class Grid extends View
             $this->addQuickSearch($this->quickSearch);
         }
 
-        if ($this->quickSearch && is_array($this->quickSearch)) {
-            $this->addQuickSearch($this->quickSearch);
-        }
-
         return $this->model;
     }
 
