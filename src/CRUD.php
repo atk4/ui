@@ -165,7 +165,7 @@ class CRUD extends Grid
      */
     public function jsSaveCreate()
     {
-        return $this->jsSave();
+        return $this->jsSave($this->notifyCreate ?: $this->notifyDefault);
     }
 
     /**
@@ -202,7 +202,7 @@ class CRUD extends Grid
      */
     public function jsSaveUpdate()
     {
-        return $this->jsSave();
+        return $this->jsSave($this->notifyUpdate ?: $this->notifyDefault);
     }
 
     /**
@@ -212,14 +212,14 @@ class CRUD extends Grid
      *
      * @return array
      */
-    public function jsSave()
+    public function jsSave($notifier)
     {
         return [
             // close modal
             new jsExpression('$(".atk-dialog-content").trigger("close")'),
 
             // display notification
-            $this->factory($this->notifyUpdate ?: $this->notifyDefault),
+            $this->factory($notifier),
 
             // reload Grid Container.
             $this->container->jsReload(),
