@@ -68,7 +68,7 @@ class CRUD extends Grid
     {
         parent::init();
 
-        $this->on('reload', $this->jsReload());
+        $this->stickyGet($this->paginator->name);
 
         if ($this->canUpdate) {
             $this->pageUpdate = $this->add($this->pageUpdate ?: $this->pageDefault, ['short_name'=>'edit']);
@@ -137,6 +137,23 @@ class CRUD extends Grid
             $this->itemCreate->set('Add New '.$this->model->getModelCaption());
         }
 
+        if ($this->itemCreate && ($this->stickyGet('__atk_reload') === $this->container->name)){
+            $args = [];
+            if ($page = $this->stickyGet($this->paginator->name)) {
+                $args[$this->paginator->name] = $page;
+            }
+            if ($sort = $this->stickyGet($this->name.'_sort')) {
+                $args[$this->name.'_sort'] = $sort;
+            }
+
+            $this->container->js(true,  (new jQuery($this->itemCreate->name))->bind('click',
+                                                                                  new jsExpression( 'function(){[fs]}', ['fs' => new jsModal('Add new', $this->pageCreate, $args)]
+
+                                                                                  )
+                )
+            );
+
+        }
         // setting callback for the page
         $this->pageCreate->set(function () {
 
@@ -165,16 +182,7 @@ class CRUD extends Grid
      */
     public function jsSaveCreate()
     {
-        return [
-            // reload Grid
-            (new jQuery($this))->trigger('reload'),
-
-            // close modal
-            new jsExpression('$(".atk-dialog-content").trigger("close")'),
-
-            // display notification
-            $this->factory($this->notifyCreate ?: $this->notifyDefault),
-        ];
+        return $this->jsSave();
     }
 
     /**
@@ -211,15 +219,41 @@ class CRUD extends Grid
      */
     public function jsSaveUpdate()
     {
-        return [
-            // reload Grid
-            (new jQuery($this))->trigger('reload'),
+        return $this->jsSave();
+    }
 
+    /**
+     * Default js action when saving form.
+     *
+     * @return array
+     * @throws \atk4\core\Exception
+     */
+    public function jsSave()
+    {
+//        $args = [];
+//        if ($page = $this->stickyGet($this->paginator->name)) {
+//            $args[$this->paginator->name] = $page;
+//        }
+//        if ($sort = $this->stickyGet($this->name.'_sort')) {
+//            $args[$this->name.'_sort'] = $sort;
+//        }
+
+        $reload = $this->container->jsReload();
+
+//        if ($this->itemCreate) {
+//
+//            $reload->afterSuccess = $this->itemCreate->js('click', new jsModal('Add new', $this->pageCreate, $args));
+//        }
+
+        return [
             // close modal
             new jsExpression('$(".atk-dialog-content").trigger("close")'),
 
             // display notification
             $this->factory($this->notifyUpdate ?: $this->notifyDefault),
+
+            // reload Grid Container.
+            $reload,
         ];
     }
 
