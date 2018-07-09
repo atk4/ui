@@ -208,12 +208,12 @@ class CRUD extends Grid
     /**
      * Default js action when saving form.
      *
-     * @return array
      * @throws \atk4\core\Exception
+     *
+     * @return array
      */
     public function jsSave()
     {
-
         return [
             // close modal
             new jsExpression('$(".atk-dialog-content").trigger("close")'),
