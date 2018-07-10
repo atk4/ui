@@ -68,7 +68,8 @@ class CRUD extends Grid
     {
         parent::init();
 
-        $this->on('reload', $this->jsReload());
+        $this->stickyGet($this->paginator->name);
+        $this->stickyGet('_q');
 
         if ($this->canUpdate) {
             $this->pageUpdate = $this->add($this->pageUpdate ?: $this->pageDefault, ['short_name'=>'edit']);
@@ -165,16 +166,7 @@ class CRUD extends Grid
      */
     public function jsSaveCreate()
     {
-        return [
-            // reload Grid
-            (new jQuery($this))->trigger('reload'),
-
-            // close modal
-            new jsExpression('$(".atk-dialog-content").trigger("close")'),
-
-            // display notification
-            $this->factory($this->notifyCreate ?: $this->notifyDefault),
-        ];
+        return $this->jsSave($this->notifyCreate ?: $this->notifyDefault);
     }
 
     /**
@@ -211,15 +203,27 @@ class CRUD extends Grid
      */
     public function jsSaveUpdate()
     {
-        return [
-            // reload Grid
-            (new jQuery($this))->trigger('reload'),
+        return $this->jsSave($this->notifyUpdate ?: $this->notifyDefault);
+    }
 
+    /**
+     * Default js action when saving form.
+     *
+     * @throws \atk4\core\Exception
+     *
+     * @return array
+     */
+    public function jsSave($notifier)
+    {
+        return [
             // close modal
             new jsExpression('$(".atk-dialog-content").trigger("close")'),
 
             // display notification
-            $this->factory($this->notifyUpdate ?: $this->notifyDefault),
+            $this->factory($notifier),
+
+            // reload Grid Container.
+            $this->container->jsReload(),
         ];
     }
 
