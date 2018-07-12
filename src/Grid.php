@@ -103,7 +103,6 @@ class Grid extends View
      */
     public $containerTemplate = null;
 
-
     public $defaultTemplate = 'grid.html';
 
     public function init()
