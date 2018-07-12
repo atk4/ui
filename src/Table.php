@@ -118,6 +118,8 @@ class Table extends Lister
      */
     public $sort_order = null;
 
+    public $generic = 'generic';
+
     public function __construct($class = null)
     {
         if ($class) {
@@ -302,7 +304,7 @@ class Table extends Lister
             $seed,
             isset($f->ui['table']) ? $f->ui['table'] : null,
             isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
-            ['Generic']
+            [$this->generic]
         );
 
         return $this->_add($this->factory($seed, ['table' => $this], 'TableColumn'));
