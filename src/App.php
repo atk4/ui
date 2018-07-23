@@ -201,7 +201,7 @@ class App
             $l->layout->template->setHTML('Content', $exception->getHTML());
         } elseif ($exception instanceof \Error) {
             $l->layout->add(['Message', get_class($exception).': '.
-            $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
+            $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error', ]);
             $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
         } else {
             $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
@@ -210,7 +210,7 @@ class App
 
         //send json for callback error.
         if (isset($_GET['__atk_callback'])) {
-            echo json_encode([  'success' => false,
+            echo json_encode(['success'   => false,
                                 'message' => $l->layout->getHtml(),
                              ]);
         } else {
