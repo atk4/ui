@@ -194,21 +194,31 @@ class App
         $this->catch_runaway_callbacks = false;
 
         $l = new \atk4\ui\App();
-        $l->catch_runaway_callbacks = false;
         $l->initLayout('Centered');
+
+        //check for error type.
         if ($exception instanceof \atk4\core\Exception) {
             $l->layout->template->setHTML('Content', $exception->getHTML());
         } elseif ($exception instanceof \Error) {
             $l->layout->add(['Message', get_class($exception).': '.
-                $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
-                'error', ]);
+            $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
             $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
         } else {
             $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
         }
         $l->layout->template->tryDel('Header');
-        $l->run();
-        $this->run_called = true;
+
+        //send json for callback error.
+        if (isset($_GET['__atk_callback'])) {
+            echo json_encode([  'success' => false,
+                                'message' => $l->layout->getHtml(),
+                             ]);
+        } else {
+            $l->catch_runaway_callbacks = false;
+            $l->run();
+            $this->run_called = true;
+        }
+        exit;
     }
 
     /**
