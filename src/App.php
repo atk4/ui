@@ -200,7 +200,7 @@ class App
         if ($exception instanceof \atk4\core\Exception) {
             $l->layout->template->setHTML('Content', $exception->getHTML());
         } elseif ($exception instanceof \Error) {
-            $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error', ]);
+            $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
             $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
         } else {
             $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
