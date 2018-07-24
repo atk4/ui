@@ -80,29 +80,6 @@ class Grid extends View
      */
     public $container = null;
 
-    /**
-     * Default css class for grid container view.
-     * This view hold
-     *   - the Table via the template Table region,
-     *   - other contents add to grid via the template Content region,
-     *   - paginator via the template Paginator region.
-     *
-     * @var string
-     */
-    public $containerCss = 'ui vertical segment';
-
-    /**
-     * The container view template.
-     * Must at least contains tags:
-     *  - {$_css} for containerCss,
-     *  - {$Table} for Table view,
-     *  - {$Content} for other views,
-     *  - {$Paginator} for paginator view.
-     *
-     * @var null|string|Template
-     */
-    public $containerTemplate = null;
-
     public $defaultTemplate = 'grid.html';
 
     public function init()
