@@ -16,7 +16,7 @@ class App
 
     // @var array|false Location where to load JS/CSS files
     public $cdn = [
-        'atk'              => 'https://cdn.rawgit.com/atk4/ui/1.5.4/public',
+        'atk'              => 'https://cdn.rawgit.com/atk4/ui/1.5.5/public',
         'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui'      => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1',
@@ -24,7 +24,7 @@ class App
     ];
 
     // @var string Version of Agile UI
-    public $version = '1.5.4';
+    public $version = '1.5.5';
 
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
@@ -208,7 +208,7 @@ class App
         $l->layout->template->tryDel('Header');
 
         //send json for callback error.
-        if (isset($_GET['__atk_callback'])) {
+        if (isset($_GET['__atk_callback']) && !isset($_GET['__atk_tab'])) {
             echo json_encode(['success'   => false,
                                 'message' => $l->layout->getHtml(),
                              ]);

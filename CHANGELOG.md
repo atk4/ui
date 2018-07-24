@@ -115,6 +115,22 @@ address them.
 - Fix problem with multiple callbacks being not executed [\#501](https://github.com/atk4/ui/pull/501) ([romaninsh](https://github.com/romaninsh))
 - hotfix [\#499](https://github.com/atk4/ui/pull/499) ([romaninsh](https://github.com/romaninsh))
 
+## 1.5.4
+
+**Closed issues:**
+
+- CRUD edit form reload don't use stickyGet parameters [\#524](https://github.com/atk4/ui/issues/524)
+- If AJAX request fails - provide user-friendly way to see error [\#522](https://github.com/atk4/ui/issues/522)
+- Date picker doesn't respect APP-\>ui\_persistence-\>date\_format [\#507](https://github.com/atk4/ui/issues/507)
+
+**Merged pull requests:**
+
+- feature/allow dash char in form input name [\#530](https://github.com/atk4/ui/pull/530) ([ibelar](https://github.com/ibelar))
+- fix/\#522 Ajax error display [\#529](https://github.com/atk4/ui/pull/529) ([ibelar](https://github.com/ibelar))
+- Fix/issue\#524 crud [\#527](https://github.com/atk4/ui/pull/527) ([ibelar](https://github.com/ibelar))
+- Add FilterMode\TypeDatetime [\#520](https://github.com/atk4/ui/pull/520) ([skondakov](https://github.com/skondakov))
+- Atk4/feature/add filter type boolean [\#519](https://github.com/atk4/ui/pull/519) ([skondakov](https://github.com/skondakov))
+
 ## 1.4
 
 In this version we focus on high-level components: Wizard, Console, ProgressBar, AutoComplete field, Lister, Radio field

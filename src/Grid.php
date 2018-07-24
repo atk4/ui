@@ -108,28 +108,8 @@ class Grid extends View
     public function init()
     {
         parent::init();
-
-        if (!$this->containerTemplate) {
-            // default template.
-            $template = new Template('<div id="{$_id}" class="{$_class} {$class}"><div class="ui table atk-overflow-auto">{$Table}{$Content}</div>{$Paginator}</div>');
-        } elseif ($this->containerTemplate instanceof \atk4\ui\Template) {
-            $template = $this->template;
-        } elseif (gettype($this->containerTemplate) === 'string') {
-            $template = new Template($this->containerTemplate);
-        }
-
-        $this->container = $this->add(['View', 'ui' => $this->containerCss, 'template' => $template]);
-
-        if (!$this->table) {
-            //default table.
-            $table = $this->factory(['Table', 'very compact striped single line', 'reload' => $this->container]);
-        } elseif (gettype($this->table) === 'array') {
-            $table = $this->factory(['Table', 'very compact striped single line', 'reload' => $this->container], $this->table);
-        } elseif ($this->table instanceof \atk4\ui\Table) {
-            $table = $this->table;
-        }
-
-        $this->table = $this->container->add($table, 'Table');
+        $this->container = $this->add(['View', 'template' => $this->template->cloneRegion('Container')]);
+        $this->template->del('Container');
 
         if ($this->menu !== false) {
             $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu), 'Menu');
