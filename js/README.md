@@ -97,6 +97,10 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.3.7
+
+  - allow jQuery FormSerializer to accept dash char in input name. ex: e-mail. 
+
 ### version 1.3.6
 
   - Add locutus library dependency for outputing js date using php format.
