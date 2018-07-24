@@ -36,7 +36,7 @@ class Tab extends Item
     {
         if ($this->path) {
             $this->js(true)->tab(
-                ['cache' => false, 'auto' => true, 'path' => $this->path]
+                ['cache' => false, 'auto' => true, 'path' => $this->path, 'apiSettings' => ['data' => ['__atk_tab' => 1]]]
             );
         } else {
             $this->js(true)->tab();

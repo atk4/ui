@@ -208,7 +208,7 @@ class App
         $l->layout->template->tryDel('Header');
 
         //send json for callback error.
-        if (isset($_GET['__atk_callback'])) {
+        if (isset($_GET['__atk_callback']) && !isset($_GET['__atk_tab'])) {
             echo json_encode(['success'   => false,
                                 'message' => $l->layout->getHtml(),
                              ]);
