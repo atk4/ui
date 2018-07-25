@@ -229,13 +229,12 @@ class App
     {
         $ajax = false;
 
-        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-           && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
-        {
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+           && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             $ajax = true;
         }
 
-        return ($ajax && !isset($_GET['__atk_tab']));
+        return $ajax && !isset($_GET['__atk_tab']);
     }
 
     /**
