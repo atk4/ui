@@ -225,7 +225,7 @@ class App
      *
      * @return bool
      */
-    private function isJsonExceptionRequired()
+    protected function isJsonExceptionRequired()
     {
         $ajax = false;
 
