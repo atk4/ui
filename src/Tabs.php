@@ -17,9 +17,9 @@ class Tabs extends View
     /**
      * Adds tab in tabs widget.
      *
-     * @param mixed   $name     Name of tab or Tab object
-     * @param mixed   $callback Callback action or URL (or array with url + parameters)
-     * @param boolean $selected Determines if the current tab is set as selected or not <
+     * @param mixed $name     Name of tab or Tab object
+     * @param mixed $callback Callback action or URL (or array with url + parameters)
+     * @param bool  $selected Determines if the current tab is set as selected or not <
      *
      * @throws Exception
      *
@@ -107,8 +107,8 @@ class Tabs extends View
     public function renderView()
     {
         // activate first tab
-        $this->js(true)->find('#' . $this->selectedTabName)->addClass('active');
-        $this->js(true)->find('.tab[data-tab="' . $this->selectedTabName . '"]')->addClass('active');
+        $this->js(true)->find('#'.$this->selectedTabName)->addClass('active');
+        $this->js(true)->find('.tab[data-tab="'.$this->selectedTabName.'"]')->addClass('active');
 
         // use content as class name
         if ($this->content) {
