@@ -297,6 +297,11 @@ class Generic
         if (!$this->table) {
             throw new \atk4\ui\Exception(['How $table could not be set??', 'f' => $f, 'value' => $value]);
         }
+
+        if ($tag = $this->table->hook('getColumnHeaderCell', [$this, $f, $value])) {
+            return $tag[0];
+        }
+
         if ($f === null) {
             return $this->getTag('head', $this->caption ?: '', $this->table->sortable ? ['class' => ['disabled']] : []);
         }

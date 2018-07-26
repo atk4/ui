@@ -302,7 +302,7 @@ class Table extends Lister
             $seed,
             isset($f->ui['table']) ? $f->ui['table'] : null,
             isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
-            ['Generic']
+            [$this->default_column ? $this->default_column : 'Generic']
         );
 
         return $this->_add($this->factory($seed, ['table' => $this], 'TableColumn'));
