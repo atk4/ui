@@ -115,7 +115,7 @@ address them.
 - Fix problem with multiple callbacks being not executed [\#501](https://github.com/atk4/ui/pull/501) ([romaninsh](https://github.com/romaninsh))
 - hotfix [\#499](https://github.com/atk4/ui/pull/499) ([romaninsh](https://github.com/romaninsh))
 
-## 1.5.4
+## 1.5.5
 
 **Closed issues:**
 
@@ -130,6 +130,13 @@ address them.
 - Fix/issue\#524 crud [\#527](https://github.com/atk4/ui/pull/527) ([ibelar](https://github.com/ibelar))
 - Add FilterMode\TypeDatetime [\#520](https://github.com/atk4/ui/pull/520) ([skondakov](https://github.com/skondakov))
 - Atk4/feature/add filter type boolean [\#519](https://github.com/atk4/ui/pull/519) ([skondakov](https://github.com/skondakov))
+
+## 1.5.6
+
+ - Refactored how Grid container works. Move hardcoded HTML template to the file.
+ - Hotfixed notice in CRUD.php
+ - updated JS package versions (security fixes mostly)
+
 
 ## 1.4
 
