@@ -133,10 +133,17 @@ address them.
 
 ## 1.5.6
 
- - Refactored how Grid container works. Move hardcoded HTML template to the file.
- - Hotfixed notice in CRUD.php
- - updated JS package versions (security fixes mostly)
+**Merged pull requests:**
 
+- Fix decorator for boolean fields with enum set [\#533](https://github.com/atk4/ui/pull/533) ([DarkSide666](https://github.com/DarkSide666))
+- fix/caughtException in tab [\#531](https://github.com/atk4/ui/pull/531) ([ibelar](https://github.com/ibelar))
+- feature/Allow customization of container and table in grid. [\#528](https://github.com/atk4/ui/pull/528) ([ibelar](https://github.com/ibelar))
+
+## 1.5.7
+
+**Merged pull requests:**
+
+- fix/FormSerializer option [\#537](https://github.com/atk4/ui/pull/537) ([ibelar](https://github.com/ibelar))
 
 ## 1.4
 
