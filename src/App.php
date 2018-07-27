@@ -207,7 +207,7 @@ class App
         }
         $l->layout->template->tryDel('Header');
 
-        if ($this->isJsonExceptionRequired()) {
+        if ($this->isJsonRequest()) {
             echo json_encode(['success'   => false,
                                 'message' => $l->layout->getHtml(),
                              ]);
@@ -225,7 +225,7 @@ class App
      *
      * @return bool
      */
-    protected function isJsonExceptionRequired()
+    protected function isJsonRequest()
     {
         $ajax = false;
 
