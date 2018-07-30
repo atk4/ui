@@ -12,7 +12,7 @@ class jsModal extends jsExpression
      *
      * @param $title       //When empty, header will be remove in modal.
      * @param $url
-     * @param array $args
+     * @param array  $args
      * @param string $mode
      */
     public function __construct($title, $url, $args = [], $mode = 'json')

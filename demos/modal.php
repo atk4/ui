@@ -3,7 +3,6 @@
 require 'init.php';
 // Re-usable component implementing counter
 
-
 $app->add(['Header', 'Static Modal Dialog']);
 
 $bar = $app->add(['View', 'ui' => 'buttons']);
@@ -12,13 +11,12 @@ $modal = $app->add(['Modal', 'title' => 'Add a name']);
 $modal->add('LoremIpsum');
 $modal->add(['Button', 'Hide'])->on('click', $modal->hide());
 
-$noTitle =  $app->add(['Modal', 'title' => false]);
+$noTitle = $app->add(['Modal', 'title' => false]);
 $noTitle->add('LoremIpsum');
 $noTitle->add(['Button', 'Hide'])->on('click', $noTitle->hide());
 
 $bar->add(['Button', 'Show'])->on('click', $modal->show());
 $bar->add(['Button', 'No Title'])->on('click', $noTitle->show());
-
 
 if (!class_exists('Counter')) {
     class Counter extends \atk4\ui\FormField\Line
@@ -62,7 +60,7 @@ if (isset($_GET['slow'])) {
     sleep(1);
 }
 
-$bar->add('Button')->set('No title')->on('click', new \atk4\ui\jsModal(null, $vp->getJSURL('cut').'&slow=true' ));
+$bar->add('Button')->set('No title')->on('click', new \atk4\ui\jsModal(null, $vp->getJSURL('cut').'&slow=true'));
 if (isset($_GET['slow'])) {
     sleep(1);
 }
