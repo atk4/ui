@@ -207,8 +207,7 @@ class App
         }
         $l->layout->template->tryDel('Header');
 
-        //send json for callback error.
-        if (isset($_GET['__atk_callback']) && !isset($_GET['__atk_tab'])) {
+        if ($this->isJsonRequest()) {
             echo json_encode(['success'   => false,
                                 'message' => $l->layout->getHtml(),
                              ]);
@@ -218,6 +217,24 @@ class App
             $this->run_called = true;
         }
         exit;
+    }
+
+    /**
+     * Most of the ajax request will require sending exception in json
+     * instead of html, except for tab.
+     *
+     * @return bool
+     */
+    protected function isJsonRequest()
+    {
+        $ajax = false;
+
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+           && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            $ajax = true;
+        }
+
+        return $ajax && !isset($_GET['__atk_tab']);
     }
 
     /**
