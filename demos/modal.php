@@ -3,13 +3,22 @@
 require 'init.php';
 // Re-usable component implementing counter
 
-$app->add(['Header', 'Dynamic Modal Dialog']);
 
-    $modal = $app->add(['Modal', 'title' => 'Add a name']);
-    $modal->add('LoremIpsum');
-    $modal->add(['Button', 'Hide'])->on('click', $modal->hide());
+$app->add(['Header', 'Static Modal Dialog']);
 
-    $app->add(['Button', 'Show'])->on('click', $modal->show());
+$bar = $app->add(['View', 'ui' => 'buttons']);
+
+$modal = $app->add(['Modal', 'title' => 'Add a name']);
+$modal->add('LoremIpsum');
+$modal->add(['Button', 'Hide'])->on('click', $modal->hide());
+
+$noTitle =  $app->add(['Modal', 'title' => false]);
+$noTitle->add('LoremIpsum');
+$noTitle->add(['Button', 'Hide'])->on('click', $noTitle->hide());
+
+$bar->add(['Button', 'Show'])->on('click', $modal->show());
+$bar->add(['Button', 'No Title'])->on('click', $noTitle->show());
+
 
 if (!class_exists('Counter')) {
     class Counter extends \atk4\ui\FormField\Line
@@ -53,6 +62,11 @@ if (isset($_GET['slow'])) {
     sleep(1);
 }
 
+$bar->add('Button')->set('No title')->on('click', new \atk4\ui\jsModal(null, $vp->getJSURL('cut').'&slow=true' ));
+if (isset($_GET['slow'])) {
+    sleep(1);
+}
+
 $app->add(['Header', 'Modal when you click on table row']);
 $t = $app->add(['Table', 'celled' => true]);
 $t->setModel(new SomeData());
@@ -63,3 +77,6 @@ $frame->set(function ($frame) {
 });
 
 $t->onRowClick(new \atk4\ui\jsModal('Row Clicked', $frame, ['id' => $t->jsRow()->data('id')]));
+
+$app->layout->js(true, new \atk4\ui\jsExpression('serviceInit("blabla")'));
+$app->requireJS('../public/init.js');

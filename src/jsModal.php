@@ -7,7 +7,15 @@ namespace atk4\ui;
  */
 class jsModal extends jsExpression
 {
-    public function __construct($title, $url, $args = [], $mode = 'json', $hasHeader = true)
+    /**
+     * jsModal constructor.
+     *
+     * @param $title       //When empty, header will be remove in modal.
+     * @param $url
+     * @param array $args
+     * @param string $mode
+     */
+    public function __construct($title, $url, $args = [], $mode = 'json')
     {
         if ($url instanceof VirtualPage) {
             $url = $url->getJSURL('cut');
@@ -15,7 +23,7 @@ class jsModal extends jsExpression
 
         parent::__construct('$(this).atkCreateModal([arg])', ['arg' => ['uri' => $url, 'title' => $title, 'mode' => $mode, 'uri_options' => $args]]);
 
-        if (!$hasHeader) {
+        if (empty($title)) {
             $this->removeHeader();
         }
     }
