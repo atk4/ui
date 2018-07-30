@@ -30,7 +30,7 @@ class Modal extends View
     public $defaultTemplate = 'modal.html';
     public $title = 'Modal title';
     public $loading_label = 'Loading...';
-    public $headerCss = 'header ui blue';
+    public $headerCss = 'header';
     public $ui = 'modal';
     public $fx = [];
     public $cb = null;
