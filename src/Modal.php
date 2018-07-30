@@ -30,6 +30,7 @@ class Modal extends View
     public $defaultTemplate = 'modal.html';
     public $title = 'Modal title';
     public $loading_label = 'Loading...';
+    public $headerCss = 'header ui blue';
     public $ui = 'modal';
     public $fx = [];
     public $cb = null;
@@ -281,6 +282,8 @@ class Modal extends View
     {
         $data['type'] = $this->type;
         $data['label'] = $this->loading_label;
+
+        $this->template->trySet('headerCss', $this->headerCss);
 
         if (!empty($this->fx)) {
             $data['uri'] = $this->cb->getJSURL();
