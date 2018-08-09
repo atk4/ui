@@ -28,8 +28,15 @@ namespace atk4\ui;
 class Modal extends View
 {
     public $defaultTemplate = 'modal.html';
+
+    /**
+     * Set to empty or false for no header.
+     *
+     * @var string
+     */
     public $title = 'Modal title';
     public $loading_label = 'Loading...';
+    public $headerCss = 'header';
     public $ui = 'modal';
     public $fx = [];
     public $cb = null;
@@ -38,12 +45,6 @@ class Modal extends View
 
     //now only supported json type response.
     public $type = 'json';
-
-    public function init()
-    {
-        parent::init();
-        $this->template->trySet('title', $this->title);
-    }
 
     /**
      * Set callback function for this modal.
@@ -281,6 +282,11 @@ class Modal extends View
     {
         $data['type'] = $this->type;
         $data['label'] = $this->loading_label;
+
+        if (!empty($this->title)) {
+            $this->template->trySet('title', $this->title);
+            $this->template->trySet('headerCss', $this->headerCss);
+        }
 
         if (!empty($this->fx)) {
             $data['uri'] = $this->cb->getJSURL();

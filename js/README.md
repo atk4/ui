@@ -97,6 +97,10 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.3.9
+
+  - Add option for creating modal in createModal plugin.
+
 ### version 1.3.8
 
   - allow jQuery FormSerializer to accept _ char at beginning of input name. ex: _e-mail
