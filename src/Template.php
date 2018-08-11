@@ -610,7 +610,7 @@ class Template implements \ArrayAccess
         $this->tag_cnt = [];
 
         /* First expand self-closing tags {$tag} -> {tag}{/tag} */
-        $str = preg_replace('/{\$([\w]+)}/', '{\1}{/\1}', $str);
+        $str = preg_replace('/{\$([-_:\w]+)}/', '{\1}{/\1}', $str);
 
         $this->parseTemplate($str);
 
@@ -702,7 +702,7 @@ class Template implements \ArrayAccess
      */
     protected function parseTemplate($str)
     {
-        $tag = '/{([\/$]?[-_\w]*)}/';
+        $tag = '/{([\/$]?[-_:\w]*)}/';
 
         $input = preg_split($tag, $str, -1, PREG_SPLIT_DELIM_CAPTURE);
 
