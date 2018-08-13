@@ -347,9 +347,9 @@ class View implements jsExpressionable
     protected function initDefaultApp()
     {
         $this->app = new App([
-            'skin' => $this->skin, 
-            'catch_exceptions' => false, 
-            'always_run' => false,
+            'skin'                    => $this->skin,
+            'catch_exceptions'        => false,
+            'always_run'              => false,
             'catch_runaway_callbacks' => false,
         ]);
         $this->app->init();
