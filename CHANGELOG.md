@@ -145,6 +145,16 @@ address them.
 
 - fix/FormSerializer option [\#537](https://github.com/atk4/ui/pull/537) ([ibelar](https://github.com/ibelar))
 
+## 1.5.8
+
+ - Modals now support "null" title. Will remove extra spacing for the header too
+ - Modal content height is now 100px minimum
+ - Added $app->isJsonRequest(), detects xmlhttprequest and tabs
+ - Dynamic and Static tabs now have consistent padding
+ - $tabs->addTab()->setActive() can be used to automatically jump to tab on load
+ - When using stand-alone $view->render() support for callbacks improved
+ - jsModal::setOption() can be used to customize header and label.
+
 ## 1.4
 
 In this version we focus on high-level components: Wizard, Console, ProgressBar, AutoComplete field, Lister, Radio field
