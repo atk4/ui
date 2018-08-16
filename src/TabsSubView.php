@@ -22,7 +22,7 @@ class TabsSubView extends View
     public function renderView()
     {
         $this->setAttr('data-tab', $this->dataTabName);
-        
+
         parent::renderView();
     }
 }
