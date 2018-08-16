@@ -12,6 +12,8 @@ class Tabs extends View
     public $defaultTemplate = 'tabs.html';
     public $ui = 'tabular menu';
 
+    public $activeTabName = null;
+
     /**
      * Adds tab in tabs widget.
      *
@@ -29,12 +31,10 @@ class Tabs extends View
 
         if ($callback) {
             // if there is callback action, then use VirtualPage
-            $vp = $sub->add('VirtualPage');
+            $vp = $sub->add(['VirtualPage', 'ui' => '']);
             $item->setPath($vp->getJSURL('cut'));
 
             $vp->set($callback);
-
-            return;
         }
 
         return $sub;
@@ -52,7 +52,7 @@ class Tabs extends View
     public function addTabURL($name, $url)
     {
         $item = $this->addTabMenuItem($name);
-        $sub = $this->addSubView($item->name);
+        $this->addSubView($item->name);
 
         $item->setPath($url);
     }
@@ -74,9 +74,15 @@ class Tabs extends View
             $tab = new Tab($name);
         }
 
-        return $this->add([$tab, 'class' => ['item']], 'Menu')
-                ->setElement('a')
-                ->setAttr('data-tab', $tab->name);
+        $tab = $this->add([$tab, 'class' => ['item']], 'Menu')
+            ->setElement('a')
+            ->setAttr('data-tab', $tab->name);
+
+        if (empty($this->activeTabName)) {
+            $this->activeTabName = $tab->name;
+        }
+
+        return $tab;
     }
 
     /**
@@ -86,11 +92,11 @@ class Tabs extends View
      *
      * @throws Exception
      *
-     * @return View
+     * @return TabsSubView
      */
     private function addSubView($name)
     {
-        return $this->add(['View', 'class' => ['ui tab']], 'Tabs')->setAttr('data-tab', $name);
+        return $this->add(['TabsSubView', 'dataTabName' => $name], 'Tabs');
     }
 
     /**
@@ -98,10 +104,6 @@ class Tabs extends View
      */
     public function renderView()
     {
-        // activate first tab
-        $this->js(true)->find('.menu .item')->first()->addClass('active');
-        $this->js(true)->find('.tab')->first()->addClass('active');
-
         // use content as class name
         if ($this->content) {
             $this->addClass($this->content);

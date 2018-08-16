@@ -42,6 +42,10 @@ class Tab extends Item
             $this->js(true)->tab();
         }
 
+        if ($this->owner->activeTabName == $this->name) {
+            $this->js(true)->click();
+        }
+
         parent::renderView();
     }
 }

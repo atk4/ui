@@ -12,6 +12,11 @@ $tab = $t->addTab('Static Tab');
 $tab->add(['Message', 'Content of this tab will refresh only if you reload entire page']);
 $tab->add('LoremIpsum');
 
+// set the default active tab
+$t->addTab('Default Active Tab', function ($tab) {
+    $tab->add(['Message', 'This is the active tab by default']);
+})->setActive();
+
 // dynamic tab
 $t->addTab('Dynamic Lorem Ipsum', function ($tab) {
     $tab->add(['Message', 'Every time you come to this tab, you will see a different text']);
