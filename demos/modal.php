@@ -75,6 +75,3 @@ $frame->set(function ($frame) {
 });
 
 $t->onRowClick(new \atk4\ui\jsModal('Row Clicked', $frame, ['id' => $t->jsRow()->data('id')]));
-
-$app->layout->js(true, new \atk4\ui\jsExpression('serviceInit("blabla")'));
-$app->requireJS('../public/init.js');
