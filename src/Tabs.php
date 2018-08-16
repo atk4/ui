@@ -12,37 +12,29 @@ class Tabs extends View
     public $defaultTemplate = 'tabs.html';
     public $ui = 'tabular menu';
 
-    public $selectedTabName = null;
+    public $activeTabName = null;
 
     /**
      * Adds tab in tabs widget.
      *
      * @param mixed $name     Name of tab or Tab object
      * @param mixed $callback Callback action or URL (or array with url + parameters)
-     * @param bool  $selected Determines if the current tab is set as selected or not <
      *
      * @throws Exception
      *
      * @return View
      */
-    public function addTab($name, $callback = null, $selected = false)
+    public function addTab($name, $callback = null)
     {
         $item = $this->addTabMenuItem($name);
         $sub = $this->addSubView($item->name);
 
-        // Set the first tab as selected, or change to the current tab <
-        if ($selected || empty($this->selectedTabName)) {
-            $this->selectedTabName = $item->name;
-        }
-
         if ($callback) {
             // if there is callback action, then use VirtualPage
-            $vp = $sub->add('VirtualPage');
+            $vp = $sub->add(['VirtualPage', 'ui' => '']);
             $item->setPath($vp->getJSURL('cut'));
 
             $vp->set($callback);
-
-            return;
         }
 
         return $sub;
@@ -60,7 +52,7 @@ class Tabs extends View
     public function addTabURL($name, $url)
     {
         $item = $this->addTabMenuItem($name);
-        $sub = $this->addSubView($item->name);
+        $this->addSubView($item->name);
 
         $item->setPath($url);
     }
@@ -82,9 +74,15 @@ class Tabs extends View
             $tab = new Tab($name);
         }
 
-        return $this->add([$tab, 'class' => ['item']], 'Menu')
+        $tab = $this->add([$tab, 'class' => ['item']], 'Menu')
             ->setElement('a')
             ->setAttr('data-tab', $tab->name);
+
+        if (empty($this->activeTabName)) {
+            $this->activeTabName = $tab->name;
+        }
+
+        return $tab;
     }
 
     /**
@@ -94,11 +92,11 @@ class Tabs extends View
      *
      * @throws Exception
      *
-     * @return View
+     * @return TabsSubView
      */
     private function addSubView($name)
     {
-        return $this->add(['View', 'class' => ['ui tab']], 'Tabs')->setAttr('data-tab', $name);
+        return $this->add(['TabsSubView', 'dataTabName' => $name], 'Tabs');
     }
 
     /**
@@ -106,10 +104,6 @@ class Tabs extends View
      */
     public function renderView()
     {
-        // activate first tab
-        $this->js(true)->find('#'.$this->selectedTabName)->addClass('active');
-        $this->js(true)->find('.tab[data-tab="'.$this->selectedTabName.'"]')->addClass('active');
-
         // use content as class name
         if ($this->content) {
             $this->addClass($this->content);
