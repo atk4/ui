@@ -88,6 +88,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
         $this->sse->set(function () use ($callback) {
             $this->sseInProgress = true;
 
+            if (isset($this->app)) {
+                $old_logger = $this->app->logger;
+                $this->app->logger = $this;
+            }
+
             try {
                 ob_start(function ($content) {
                     if ($this->_output_bypass) {
@@ -116,6 +121,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
             } catch (\Exception $e) {
                 $this->output('Exception: '.$e->getMessage());
             }
+
+            if (isset($this->app)) {
+                $this->app->logger = $old_logger;
+            }
+
             $this->sseInProgress = false;
         });
 
