@@ -84,16 +84,16 @@ class Calendar extends Input
      *
      * @param string|jsExpression|array $expr
      */
-     public function onChange($expr)
-     {
+    public function onChange($expr)
+    {
         if (is_string($expr)) {
             $expr = new \atk4\ui\jsExpression($expr);
         }
         if (!is_array($expr)) {
             $expr = [$expr];
         }
-        
+
         // Semantic-UI Calendar have different approach for on change event
         $this->options['onChange'] = new \atk4\ui\jsFunction(['date', 'text', 'mode'], $expr);
-     }
+    }
 }
