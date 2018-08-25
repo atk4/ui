@@ -26,6 +26,7 @@ if (isset($layout->leftMenu)) {
 
     $form = $layout->leftMenu->addGroup(['Form', 'icon' => 'edit']);
     $form->addItem('Basics and Layouting', ['form']);
+    $form->addItem('Input Fields', ['field2']);
     $form->addItem('Input Field Decoration', ['field']);
     $form->addItem(['File Uploading'], ['upload']);
     $form->addItem(['Checkboxes'], ['checkbox']);

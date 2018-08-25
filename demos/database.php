@@ -5,7 +5,7 @@ try {
     if (file_exists('db.php')) {
         include 'db.php';
     } else {
-        $db = new \atk4\data\Persistence_SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
+        $db = new \atk4\data\Persistence_SQL('mysql:dbname=atk4;host=localhost', 'root', '');
     }
 } catch (PDOException $e) {
     throw new \atk4\ui\Exception([
