@@ -91,9 +91,9 @@ class UI extends \atk4\data\Persistence
             } catch (\Exception $e) {
                 throw new Exception([
                     'Value must be '.$f->serialize,
-                    'serializator'=>$f->serialize,
-                    'value' => $value,
-                    'field' => $f
+                    'serializator'=> $f->serialize,
+                    'value'       => $value,
+                    'field'       => $f,
                 ]);
             }
             $value = $new_value;
