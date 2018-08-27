@@ -39,6 +39,11 @@ class UI extends \atk4\data\Persistence
      */
     public function _typecastSaveField(\atk4\data\Field $f, $value)
     {
+        // serialize if we explicitly want that
+        if ($f->serialize) {
+            $value = $this->serializeSaveField($f, $value);
+        }
+
         // work only on copied value not real one !!!
         $v = is_object($value) ? clone $value : $value;
 
@@ -79,6 +84,21 @@ class UI extends \atk4\data\Persistence
      */
     public function _typecastLoadField(\atk4\data\Field $f, $value)
     {
+        // serialize if we explicitly want that
+        if ($f->serialize && $value) {
+            try {
+                $new_value = $this->serializeLoadField($f, $value);
+            } catch (\Exception $e) {
+                throw new Exception([
+                    'Value must be '.$f->serialize,
+                    'serializator'=> $f->serialize,
+                    'value'       => $value,
+                    'field'       => $f,
+                ]);
+            }
+            $value = $new_value;
+        }
+
         switch ($f->type) {
         case 'string':
         case 'text':
