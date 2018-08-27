@@ -70,4 +70,30 @@ class Calendar extends Input
 
         parent::renderView();
     }
+
+    /**
+     * Shorthand method for on('change') event.
+     * Some input fields, like Calendar, could call this differently.
+     *
+     * If $expr is string or jsExpression, then it will execute it instantly.
+     *
+     * Examples:
+     * $field->onChange('console.log(date, text, mode)');
+     * $field->onChange(new \atk4\ui\jsExpression('console.log(date, text, mode)'));
+     * $field->onChange('$(this).parents(".form").form("submit")');
+     *
+     * @param string|jsExpression|array $expr
+     */
+    public function onChange($expr)
+    {
+        if (is_string($expr)) {
+            $expr = new \atk4\ui\jsExpression($expr);
+        }
+        if (!is_array($expr)) {
+            $expr = [$expr];
+        }
+
+        // Semantic-UI Calendar have different approach for on change event
+        $this->options['onChange'] = new \atk4\ui\jsFunction(['date', 'text', 'mode'], $expr);
+    }
 }

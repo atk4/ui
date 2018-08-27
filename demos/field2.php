@@ -46,3 +46,33 @@ $form_page->addField('age', new \atk4\ui\FormField\Line());
 $form->onSubmit(function ($f) {
     return $f->model['name'].' has age '.$f->model['age'];
 });
+
+$app->add(['Header', 'onChange event', 'subHeader'=>'see in browser console']);
+
+$form = $app->add('Form');
+
+$c1 = $form->addField('c1', new \atk4\ui\FormField\Calendar(['type'=>'date']));
+$c2 = $form->addField('c2', new \atk4\ui\FormField\Calendar(['type'=>'date']));
+$c3 = $form->addField('c3', new \atk4\ui\FormField\Calendar(['type'=>'date']));
+
+$f1 = $form->addField('f1');
+$f2 = $form->addField('f2');
+$f3 = $form->addField('f3');
+$f4 = $form->addField('f4');
+
+$c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
+$c2->onChange(new \atk4\ui\jsExpression('console.log("c2 changed: "+date+","+text+","+mode)'));
+$c3->onChange([
+    new \atk4\ui\jsExpression('console.log("c3 changed: "+date+","+text+","+mode)'),
+    new \atk4\ui\jsExpression('console.log("c3 really changed: "+date+","+text+","+mode)'),
+]);
+
+$f1->onChange('console.log("f1 changed")');
+$f2->onChange(new \atk4\ui\jsExpression('console.log("f2 changed")'));
+$f3->onChange([
+    new \atk4\ui\jsExpression('console.log("f3 changed")'),
+    new \atk4\ui\jsExpression('console.log("f3 really changed")'),
+]);
+$f4->onChange(function () {
+    return new \atk4\ui\jsExpression('console.log("f4 changed")');
+});

@@ -272,6 +272,29 @@ that it would target the INPUT element rather then the whole field::
 
     $field->jsInput(true)->val(123);
 
+onChange event
+--------------
+
+.. php:method:: onChange($expression)
+
+It's prefferable to use this short-hand version of on('change', 'input', $expression) method.
+$expression argument can be string, jsExpression, array of jsExpressions or even PHP callback function.
+
+    // simple string
+    $f1 = $f->addField('f1');
+    $f1->onChange('console.log("f1 changed")');
+
+    // callback
+    $f2 = $f->addField('f2');
+    $f2->onChange(function(){return new \atk4\ui\jsExpression('console.log("f2 changed")');});
+
+    // Calendar field - wraps in function call with arguments date, text and mode
+    $c1 = $f->addField('c1', new \atk4\ui\FormField\Calendar(['type'=>'date']));
+    $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
+
+
+
+
 
 DropDown
 ========
