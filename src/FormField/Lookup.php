@@ -2,9 +2,13 @@
 
 namespace atk4\ui\FormField;
 
+use atk4\ui\jQuery;
+use atk4\ui\jsExpression;
+use atk4\ui\jsFunction;
+
 class Lookup extends Input
 {
-    public $defaultTemplate = 'formfield/autocomplete.html';
+    public $defaultTemplate = 'formfield/lookup.html';
     public $ui = 'input';
 
     /**
@@ -94,9 +98,23 @@ class Lookup extends Input
      */
     public $settings = [];
 
+    public $filterHeaderLabel = 'Filtering options:';
+
+    public $filters = [
+        ['field' => 'city', 'label' => 'A City'],
+        ['field' => 'bla', 'label'=> 'Blalal'],
+    ];
+
+    public function addFilter($name, $label = null)
+    {
+
+    }
+
     public function init()
     {
         parent::init();
+
+        $this->label =  null;
 
         $this->template->set('input_id', $this->name.'-ac');
 
@@ -195,6 +213,18 @@ class Lookup extends Input
         ]);
     }
 
+    public function getFilterInput($name, $id, $value = null)
+    {
+        return $this->app->getTag('input', [
+            'name' => $name,
+            'type' => 'hidden',
+            /*'placeholder'=> $this->placeholder,*/
+            'id'    => $id,
+            'value' => $value,
+        ]);
+    }
+
+
     /**
      * Set Semantic-ui Api settings to use with dropdown.
      *
@@ -225,16 +255,77 @@ class Lookup extends Input
         $chain->dropdown($settings);
     }
 
+    
+    public function prepareJsDropdown() {
+
+    }
+
+
+    public function createFilterJsDropdown()
+    {
+        foreach ($this->filters as $k => $filter) {
+            $f_name = $this->name.'-ac_f'.$k;
+            $chain = new jQuery('#'.$f_name);
+
+            $this->js(true, $chain->dropdown([
+                                                 'fields'       => ['name' => 'name', 'value' => 'id'],
+                                                  'apiSettings' => ['url' => $this->getCallbackURL().'&q={query}',
+                                                                    'cache' => false,
+                                                                    'data' => array_merge($this->getFilterQuery(),['filter' => $filter['field']]),
+                                                                    ],
+                                                  'onChange'    => new jsFunction([$this->getJsDropdown()])
+                                             ]));
+        }
+    }
+
+    public function getJsDropdown()
+    {
+        $chain = new jQuery('#'.$this->name.'-ac');
+        $this->initDropdown($chain);
+
+        return $chain;
+    }
+
+
+    public function getFilterQuery()
+    {
+        $q = [];
+        foreach ($this->filters as $key => $filter) {
+            $q[$filter['field']] = new jsExpression('$([input]).val()', ['input' => 'input[name='.$filter['field'].']']);
+        }
+
+        return $q;
+    }
+
     public function renderView()
     {
+        $this->fieldClass = 'ui segment';
         $this->callback = $this->add('Callback');
         $this->callback->set([$this, 'getData']);
 
-        $chain = new jQuery('#'.$this->name.'-ac');
+        if ($this->filters) {
+            //add filtering query to main dropdown
+            $this->apiConfig = array_merge($this->apiConfig, ['data' => $this->getFilterQuery()]);
 
-        $this->initDropdown($chain);
+            //render filters to template
+            $this->template->set('FilterHeaderLabel', $this->filterHeaderLabel);
+            $ft = $this->template->cloneRegion('Dropdown');
+            $html = '';
 
-        $this->js(true, $chain);
+            foreach ($this->filters as $k => $filter) {
+                $f_name = $this->name.'-ac_f'.$k;
+                $ft->set('input_id', $f_name);
+                $ft->set('FilterLabel', $filter['label']);
+                $ft->setHTML('Input', $this->getFilterInput($filter['field'], $filter['field'].'_id'));
+                $html .=  $ft->render();
+            }
+            $this->template->setHTML('Filters', $html);
+
+            // create proper js for dropdown.
+            $this->createFilterJsDropdown();
+        }
+
+        $this->js(true, $this->getJsDropdown());
 
         if ($this->field && $this->field->get()) {
             $id_field = $this->id_field ?: $this->model->id_field;
@@ -245,11 +336,12 @@ class Lookup extends Input
             if (!$this->model->loaded()) {
                 $this->field->set(null);
             } else {
+                $chain = new jQuery('#'.$this->name.'-ac');
                 $chain->dropdown('set value', $this->model[$id_field])->dropdown('set text', $this->model[$title_field]);
                 $this->js(true, $chain);
             }
         }
 
-        parent::renderView();
+        Parent::renderView();
     }
 }

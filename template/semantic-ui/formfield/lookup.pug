@@ -1,5 +1,11 @@
-| <div id="{$_id}" class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
+| <div class="ui basic secondary segment">
+| <span class="">{$FilterHeaderLabel}</span><hr>
+| {$Filters}
+| </div>
+| {Dropdown}
+| <div id="{$_id}" class="{_ui}ui field{/} {$class} {$_class}" style="{$style}" {$attributes}>
 | {$BeforeInput}{$AfterBeforeInput}
+| <label>{$FilterLabel}</label>
 | <div id="{$input_id}" class="ui search selection dropdown" style="width:100%">
 | {Input}<input class={$input_class} type="{input_type}text{/}" {$input_attributes}/>{/}
 | <i class="dropdown icon"></i>
@@ -8,3 +14,4 @@
 | </div>
 | {$AfterInput}{$AfterAfterInput}
 | </div>
+| {/Dropdown}
