@@ -123,7 +123,7 @@ class Lookup extends Input
     {
         parent::init();
 
-        $this->label =  null;
+        $this->label = null;
 
         $this->template->set('input_id', $this->name.'-ac');
 
@@ -238,7 +238,7 @@ class Lookup extends Input
         if ($this->filter) {
             foreach ($this->filters as $k => $filter) {
                 if (isset($_GET[$filter['field']]) && !empty($_GET[$filter['field']]) && $_GET[$filter['field']] != $this->filterEmpty) {
-                    $this->model->addCondition($filter["field"], $_GET[$filter['field']]);
+                    $this->model->addCondition($filter['field'], $_GET[$filter['field']]);
                 }
             }
         }
@@ -249,8 +249,7 @@ class Lookup extends Input
      */
     public function renderFilters()
     {
-        if(isset($_GET['filter'])) {
-
+        if (isset($_GET['filter'])) {
             if (isset($_GET['q'])) {
                 $this->model->addCondition($_GET['filter'], 'like', '%'.$_GET['q'].'%');
             }
@@ -294,7 +293,6 @@ class Lookup extends Input
             'value' => $value,
         ]);
     }
-
 
     /**
      * Set Semantic-ui Api settings to use with dropdown.
@@ -364,15 +362,15 @@ class Lookup extends Input
 
             $this->js(true, $chain->dropdown([
                                                  'fields'       => ['name' => 'name', 'value' => 'id'],
-                                                  'apiSettings' => ['url' => $this->getCallbackURL().'&q={query}',
-                                                                    'cache' => false,
-                                                                    'data' => ['filter' => $filter['field']],
+                                                  'apiSettings' => ['url'         => $this->getCallbackURL().'&q={query}',
+                                                                    'cache'       => false,
+                                                                    'data'        => ['filter' => $filter['field']],
                                                                     'onResponse'  => new jsFunction(['resp'], [
-                                                                        new jsExpression('if (!resp.success){$([name]).dropdown(); atk.apiService.atkSuccessTest(resp);}', ['name' => '#'.$f_name])
-                                                                    ])
+                                                                        new jsExpression('if (!resp.success){$([name]).dropdown(); atk.apiService.atkSuccessTest(resp);}', ['name' => '#'.$f_name]),
+                                                                    ]),
                                                   ],
                                                   'onChange'    => new jsFunction([
-                                                      $this->getJsDropdown()
+                                                      $this->getJsDropdown(),
                                                                                   ]),
                                              ]));
         }
@@ -430,7 +428,7 @@ class Lookup extends Input
                 $ft->set('FilterLabel', $filter['label']);
                 $ft->set('place_holder', $this->filterEmpty);
                 $ft->setHTML('Input', $this->getFilterInput($filter['field'], $filter['field'].'_id'));
-                $html .=  $ft->render();
+                $html .= $ft->render();
             }
             $this->template->setHTML('Filters', $html);
 
