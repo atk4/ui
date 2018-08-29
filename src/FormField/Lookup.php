@@ -98,17 +98,26 @@ class Lookup extends Input
      */
     public $settings = [];
 
+    /**
+     * Default string for presenting filter.
+     *
+     * @var string
+     */
     public $filterHeaderLabel = 'Filtering options:';
 
-    public $filters = [
-        ['field' => 'city', 'label' => 'A City'],
-        ['field' => 'bla', 'label'=> 'Blalal'],
-    ];
+    /**
+     * Default label when no data is selected in filter.
+     *
+     * @var string
+     */
+    public $filterEmpty = 'All';
 
-    public function addFilter($name, $label = null)
-    {
-
-    }
+    /**
+     * Array containing filters.
+     *
+     * @var null|array
+     */
+    public $filters = null;
 
     public function init()
     {
@@ -170,6 +179,9 @@ class Lookup extends Input
         $id_field = $this->id_field ?: $this->model->id_field;
         $title_field = $this->title_field ?: $this->model->title_field;
 
+        $this->renderFilters();
+        $this->applyFilters();
+
         $this->model->setLimit($this->limit);
 
         if (isset($_GET['q'])) {
@@ -197,6 +209,54 @@ class Lookup extends Input
                                               'success' => true,
                                               'results' => $data,
                                           ]));
+    }
+
+    /**
+     * Add filter dropdown.
+     * @param $name
+     * @param null $label
+     */
+    public function addFilter($name, $label = null)
+    {
+        $this->filters[] = ['field' => $name, 'label' => $label];
+    }
+
+    /**
+     * Check if filtering is need.
+     */
+    public function applyFilters()
+    {
+        foreach ($this->filters as $k => $filter) {
+            if (isset($_GET[$filter['field']]) && !empty($_GET[$filter['field']]) && $_GET[$filter['field']] != $this->filterEmpty) {
+                $this->model->addCondition($filter["field"], $_GET[$filter['field']]);
+            }
+        }
+    }
+
+    /**
+     * Check if filtering is needed and terminate app execution.
+     */
+    public function renderFilters()
+    {
+        if(isset($_GET['filter'])) {
+
+            if (isset($_GET['q'])) {
+                $this->model->addCondition($_GET['filter'], 'like', '%'.$_GET['q'].'%');
+            }
+            $action = $this->model->action('field', [$_GET['filter']]);
+            $action->group($_GET['filter']);
+            $rows = $action->get();
+            $data = [];
+            foreach ($rows as $k => $v) {
+                $data[] = ['id' => $k, 'name' => $v[$_GET['filter']]];
+            }
+            array_unshift($data, ['id' => 0, 'name' => $this->filterEmpty]);
+
+            $this->app->terminate(json_encode([
+                                                  'success' => true,
+                                                  'results' => $data,
+                                              ]));
+        }
     }
 
     /**
@@ -255,12 +315,36 @@ class Lookup extends Input
         $chain->dropdown($settings);
     }
 
-    
-    public function prepareJsDropdown() {
-
-    }
-
-
+    /**
+     * For each filters, we need to create js dropdown and setup proper api settings.
+     *
+     * When changing value on any of the filter we need to set main dropdown
+     * apiSettings again in order for main dropdown to send proper filter value.
+     * This is done via the onChange function of the dropdown filter.
+     *
+     * This function will generate js similar to this:
+     *   $("#filterName1").dropdown({
+     *      "fields":{
+     *                  "name":"name",
+     *                  "value":"id"
+     *                },
+     *      "apiSettings":{
+     *                      "url":"autocomplete.php?atk_admin_form_generic_country2_callback=ajax\x26__atk_callback=1\x26q={query}",
+     *                      "cache":false,
+     *                      "data":{"filter":"city"}
+     *                  },
+     *      "onChange":function() {
+     *           $("#mainDropdown").dropdown(
+     *              {"fields":{"name":"name","value":"id"},
+     *              "apiSettings":{"url":"autocomplete.php?atk_admin_form_generic_country2_callback=ajax\x26__atk_callback=1\x26q={query}",
+     *              "cache":false,
+     *              "data":{"filteName1":$("input[name=filteName1]").parent().find(".text").text(),"filteName2":$("input[name=filteName2]").parent().find(".text").text()}
+     *               }
+     *          });
+     *    }});
+     *
+     * @throws \atk4\ui\Exception
+     */
     public function createFilterJsDropdown()
     {
         foreach ($this->filters as $k => $filter) {
@@ -271,13 +355,23 @@ class Lookup extends Input
                                                  'fields'       => ['name' => 'name', 'value' => 'id'],
                                                   'apiSettings' => ['url' => $this->getCallbackURL().'&q={query}',
                                                                     'cache' => false,
-                                                                    'data' => array_merge($this->getFilterQuery(),['filter' => $filter['field']]),
-                                                                    ],
-                                                  'onChange'    => new jsFunction([$this->getJsDropdown()])
+                                                                    'data' => ['filter' => $filter['field']],
+                                                                    'onResponse'  => new jsFunction(['resp'], [
+                                                                        new jsExpression('if (!resp.success){$([name]).dropdown(); atk.apiService.atkSuccessTest(resp);}', ['name' => '#'.$f_name])
+                                                                    ])
+                                                  ],
+                                                  'onChange'    => new jsFunction([
+                                                      $this->getJsDropdown()
+                                                                                  ]),
                                              ]));
         }
     }
 
+    /**
+     * Return the main dropdown js chain.
+     *
+     * @return jQuery
+     */
     public function getJsDropdown()
     {
         $chain = new jQuery('#'.$this->name.'-ac');
@@ -286,12 +380,18 @@ class Lookup extends Input
         return $chain;
     }
 
-
+    /**
+     * Will create jsExpression need to add to the dropdown apiSettings data when using filters.
+     *
+     * ex: {"data":{"filterName1":$("input[name=filterName1]").parent().find(".text").text(),"filterName2":$("input[name=filterName2]").parent().find(".text").text()}}
+     *
+     * @return array
+     */
     public function getFilterQuery()
     {
         $q = [];
         foreach ($this->filters as $key => $filter) {
-            $q[$filter['field']] = new jsExpression('$([input]).val()', ['input' => 'input[name='.$filter['field'].']']);
+            $q[$filter['field']] = new jsExpression('$([input]).parent().find([class]).text()', ['input' => 'input[name='.$filter['field'].']', 'class' => '.text']);
         }
 
         return $q;
@@ -299,11 +399,12 @@ class Lookup extends Input
 
     public function renderView()
     {
-        $this->fieldClass = 'ui segment';
         $this->callback = $this->add('Callback');
         $this->callback->set([$this, 'getData']);
 
         if ($this->filters) {
+            $this->fieldClass = 'ui segment';
+
             //add filtering query to main dropdown
             $this->apiConfig = array_merge($this->apiConfig, ['data' => $this->getFilterQuery()]);
 
@@ -316,6 +417,7 @@ class Lookup extends Input
                 $f_name = $this->name.'-ac_f'.$k;
                 $ft->set('input_id', $f_name);
                 $ft->set('FilterLabel', $filter['label']);
+                $ft->set('place_holder', $this->filterEmpty);
                 $ft->setHTML('Input', $this->getFilterInput($filter['field'], $filter['field'].'_id'));
                 $html .=  $ft->render();
             }
@@ -323,6 +425,8 @@ class Lookup extends Input
 
             // create proper js for dropdown.
             $this->createFilterJsDropdown();
+        } else {
+            $this->template->del('FilterContainer');
         }
 
         $this->js(true, $this->getJsDropdown());
