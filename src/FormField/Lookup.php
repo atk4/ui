@@ -213,6 +213,15 @@ class Lookup extends Input
 
     /**
      * Add filter dropdown.
+     *
+     * Ex: you need to restreint value available in city dropdown base on user input Country and language
+     *
+     *      $l = $form->addField('city',['Lookup']);
+     *      $l->addFilter('country_test', 'Country');
+     *      $l->addFilter('language', 'Lang');
+     *
+     * This way, dropdown value will contains city corresponding to proper country and/or language.
+     *
      * @param $name
      * @param null $label
      */
@@ -226,9 +235,11 @@ class Lookup extends Input
      */
     public function applyFilters()
     {
-        foreach ($this->filters as $k => $filter) {
-            if (isset($_GET[$filter['field']]) && !empty($_GET[$filter['field']]) && $_GET[$filter['field']] != $this->filterEmpty) {
-                $this->model->addCondition($filter["field"], $_GET[$filter['field']]);
+        if ($this->filter) {
+            foreach ($this->filters as $k => $filter) {
+                if (isset($_GET[$filter['field']]) && !empty($_GET[$filter['field']]) && $_GET[$filter['field']] != $this->filterEmpty) {
+                    $this->model->addCondition($filter["field"], $_GET[$filter['field']]);
+                }
             }
         }
     }
