@@ -388,7 +388,7 @@ class Lookup extends Input
 
             $this->js(true, $chain->dropdown($options));
         }
-        //set filter value using $(this) context for onChange handler.
+        //set filter value using $(this) context for onChange handler instead of filter name.
         $options['apiSettings']['data']['filter'] = (new jQuery())->find("input")->attr("name");
         $this->filterChain = $options;
     }
@@ -424,6 +424,27 @@ class Lookup extends Input
         return $q;
     }
 
+    /**
+     * When filter changed value,
+     * we need to regenerate each filter dropdown.
+     *
+     * Note: regenerating dropdown seem to have them lost their
+     * text value. Need to reset text value by getting them prior to regenerating dropdown.
+     *
+     * @return jQuery
+     * @throws \atk4\ui\Exception
+     */
+    public function onJsFilterChanged()
+    {
+        return (new jQuery())
+            ->on('filterChanged',
+                 new jsFunction(array_merge(
+                                    [new jsExpression('let dropdowns = $(".atk-filter-dropdown")')],
+                                    [new jsExpression('dropdowns.each(function(){const value = $(this).dropdown("get text"); $(this).dropdown([chain]); $(this).dropdown("set text", value); $(this).dropdown("refresh");})', ['chain' => $this->filterChain])]
+                                ))
+            );
+    }
+
 
     public function renderView()
     {
@@ -454,24 +475,9 @@ class Lookup extends Input
 
             // create proper js for dropdown.
             $this->createFilterJsDropdown();
-            /*
-             * When filter changed value,
-             * we need to regenerate each dropdown except
-             * the one triggering the changed.
-             * Note: regenerating dropdown seem to have them lost their
-             * text value. Need to reset text value by getting them prior to regenerating dropdown.
-             */
-            $this->js(true,
-                      (new jQuery())
-                      ->on('filterChanged',
-                            new jsFunction(array_merge(
-                                               [new jsExpression('console.log("onChanged", this);')],
-                                            [new jsExpression('let that = this')],
-                                            [new jsExpression('let dropdowns = $(".atk-filter-dropdown").filter(function(idx){return $(that).attr("id") != $(this).attr("id")})')],
-                                            [new jsExpression('dropdowns.each(function(){const value = $(this).dropdown("get text"); $(this).dropdown([chain]); $(this).dropdown("set text", value); $(this).dropdown("refresh");})', ['chain' => $this->filterChain])]
-                                           ))
-                      )
-            );
+
+            // output changed handler for filters.
+            $this->js(true, $this->onJsFilterChanged());
         } else {
             $this->template->del('FilterContainer');
         }
