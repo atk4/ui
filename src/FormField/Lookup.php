@@ -371,9 +371,9 @@ class Lookup extends Input
             $options = [
                 'fields'       => ['name' => 'name', 'value' => 'id'],
                 'match'        => 'value',
-                'apiSettings' => ['url'         => $this->getCallbackURL().'&q={query}',
-                                  'cache'       => false,
-                                  'data'        => array_merge($this->getFilterQuery(), ['filter' => $filter['field']]),
+                'apiSettings'  => ['url'         => $this->getCallbackURL().'&q={query}',
+                                  'cache'        => false,
+                                  'data'         => array_merge($this->getFilterQuery(), ['filter' => $filter['field']]),
                                   /*'onResponse'  => new jsFunction(['resp'], [
                                       new jsExpression('if (!resp.success){$([name]).dropdown(); atk.apiService.atkSuccessTest(resp);}', ['name' => '#'.$f_name]),
                                   ]),*/
@@ -389,7 +389,7 @@ class Lookup extends Input
             $this->js(true, $chain->dropdown($options));
         }
         //set filter value using $(this) context for onChange handler instead of filter name.
-        $options['apiSettings']['data']['filter'] = (new jQuery())->find("input")->attr("name");
+        $options['apiSettings']['data']['filter'] = (new jQuery())->find('input')->attr('name');
         $this->filterChain = $options;
     }
 
@@ -418,7 +418,6 @@ class Lookup extends Input
         $q = [];
         foreach ($this->filters as $key => $filter) {
             $q[$filter['field']] = new jsExpression('$([input]).parent().dropdown("get text")', ['input' => 'input[name='.$filter['field'].']']);
-
         }
 
         return $q;
@@ -431,8 +430,9 @@ class Lookup extends Input
      * Note: regenerating dropdown seem to have them lost their
      * text value. Need to reset text value by getting them prior to regenerating dropdown.
      *
-     * @return jQuery
      * @throws \atk4\ui\Exception
+     *
+     * @return jQuery
      */
     public function onJsFilterChanged()
     {
@@ -444,7 +444,6 @@ class Lookup extends Input
                                 ))
             );
     }
-
 
     public function renderView()
     {
