@@ -383,7 +383,7 @@ class Lookup extends Input
                                                     $this->getJsDropdown(),
                                                 ]),
             ];
-            
+
             $this->js(true, $chain->dropdown($options));
         }
         //set filter value using $(this) context for onChange handler instead of filter name.
