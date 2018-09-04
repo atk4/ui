@@ -93,9 +93,10 @@ class LoremIpsum extends Text
     {
         if (is_scalar($defaults) && $defaults) {
             $this->size = $defaults;
+
             return;
         }
-        
+
         parent::__construct($defaults);
     }
 
