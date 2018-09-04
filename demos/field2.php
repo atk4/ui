@@ -4,8 +4,6 @@
  */
 require 'init.php';
 
-
-
 $app->add(['Header', 'Stand Alone Line']);
 // you can pass values to button
 $field = $app->add(new \atk4\ui\FormField\Line());
@@ -14,8 +12,6 @@ $field->set('hello world');
 
 $button = $field->addAction('check value');
 $button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [$field->jsInput()->val()]));
-
-
 
 $app->add(['Header', 'Line in a Form']);
 $form = $app->add('Form');
@@ -35,8 +31,6 @@ $form->onSubmit(function ($f) {
     return $f->model['name'];
 });
 
-
-
 $app->add(['Header', 'Multiple Form Layouts']);
 
 $form = $app->add('Form');
@@ -52,8 +46,6 @@ $form_page->addField('age', new \atk4\ui\FormField\Line());
 $form->onSubmit(function ($f) {
     return $f->model['name'].' has age '.$f->model['age'];
 });
-
-
 
 $app->add(['Header', 'onChange event', 'subHeader'=>'see in browser console']);
 
@@ -97,7 +89,7 @@ $d1 = $g->addField('d1', new \atk4\ui\FormField\DropDown(['values' => [
             'globe'      => ['Globe', 'icon' => 'globe icon'],
             'registered' => ['Registered', 'icon' => 'registered icon'],
             'file'       => ['File', 'icon' => 'file icon'],
-        ]
+        ],
 ]));
 $d1->onChange('console.log("d1 changed")');
 
@@ -107,7 +99,6 @@ $r1 = $g->addField('r1', new \atk4\ui\FormField\Radio(['values' => [
             'Globe',
             'Registered',
             'File',
-        ]
+        ],
 ]));
 $r1->onChange('console.log("r1 changed")');
-

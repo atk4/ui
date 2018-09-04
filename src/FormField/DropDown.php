@@ -18,7 +18,7 @@ class DropDown extends Input
      *          'globe'      => ['Globe', 'icon' => 'globe icon'],
      *          'registered' => ['Registered', 'icon' => 'registered icon'],
      *          'file'       => ['File', 'icon' => 'file icon']
-     *          ]
+     *          ].
      *
      *
      * @var array
