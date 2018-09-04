@@ -51,14 +51,10 @@ $app->add(['Header', 'onChange event', 'subHeader'=>'see in browser console']);
 
 $form = $app->add('Form');
 
-$c1 = $form->addField('c1', new \atk4\ui\FormField\Calendar(['type'=>'date']));
-$c2 = $form->addField('c2', new \atk4\ui\FormField\Calendar(['type'=>'date']));
-$c3 = $form->addField('c3', new \atk4\ui\FormField\Calendar(['type'=>'date']));
-
-$f1 = $form->addField('f1');
-$f2 = $form->addField('f2');
-$f3 = $form->addField('f3');
-$f4 = $form->addField('f4');
+$g = $form->addGroup('Calendar');
+$c1 = $g->addField('c1', new \atk4\ui\FormField\Calendar(['type'=>'date']));
+$c2 = $g->addField('c2', new \atk4\ui\FormField\Calendar(['type'=>'date']));
+$c3 = $g->addField('c3', new \atk4\ui\FormField\Calendar(['type'=>'date']));
 
 $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
 $c2->onChange(new \atk4\ui\jsExpression('console.log("c2 changed: "+date+","+text+","+mode)'));
@@ -66,6 +62,12 @@ $c3->onChange([
     new \atk4\ui\jsExpression('console.log("c3 changed: "+date+","+text+","+mode)'),
     new \atk4\ui\jsExpression('console.log("c3 really changed: "+date+","+text+","+mode)'),
 ]);
+
+$g = $form->addGroup('Line');
+$f1 = $g->addField('f1');
+$f2 = $g->addField('f2');
+$f3 = $g->addField('f3');
+$f4 = $g->addField('f4');
 
 $f1->onChange('console.log("f1 changed")');
 $f2->onChange(new \atk4\ui\jsExpression('console.log("f2 changed")'));
@@ -76,3 +78,27 @@ $f3->onChange([
 $f4->onChange(function () {
     return new \atk4\ui\jsExpression('console.log("f4 changed")');
 });
+
+$g = $form->addGroup('CheckBox');
+$b1 = $g->addField('b1', new \atk4\ui\FormField\CheckBox());
+$b1->onChange('console.log("b1 changed")');
+
+$g = $form->addGroup('DropDown');
+$d1 = $g->addField('d1', new \atk4\ui\FormField\DropDown(['values' => [
+            'tag'        => ['Tag', 'icon' => 'tag icon'],
+            'globe'      => ['Globe', 'icon' => 'globe icon'],
+            'registered' => ['Registered', 'icon' => 'registered icon'],
+            'file'       => ['File', 'icon' => 'file icon'],
+        ],
+]));
+$d1->onChange('console.log("d1 changed")');
+
+$g = $form->addGroup('Radio');
+$r1 = $g->addField('r1', new \atk4\ui\FormField\Radio(['values' => [
+            'Tag',
+            'Globe',
+            'Registered',
+            'File',
+        ],
+]));
+$r1->onChange('console.log("r1 changed")');
