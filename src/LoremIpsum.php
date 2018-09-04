@@ -83,11 +83,21 @@ class LoremIpsum extends Text
         return $lorem;
     }
 
-    public function __construct($size = null)
+    /**
+     * Constructor.
+     * Pass array of defaults or simply size property value.
+     *
+     * @param array|int $defaults
+     */
+    public function __construct($defaults = null)
     {
-        if ($size) {
-            $this->size = $size;
+        if (is_scalar($defaults) && $defaults) {
+            $this->size = $defaults;
+
+            return;
         }
+
+        parent::__construct($defaults);
     }
 
     public function init()
