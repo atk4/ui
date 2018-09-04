@@ -112,6 +112,8 @@ class Lookup extends Input
      */
     public $filterEmpty = 'All';
 
+    public $filterChain = null;
+
     /**
      * Array containing filters.
      *
@@ -237,7 +239,12 @@ class Lookup extends Input
     {
         if ($this->filters) {
             foreach ($this->filters as $k => $filter) {
-                if (isset($_GET[$filter['field']]) && !empty($_GET[$filter['field']]) && $_GET[$filter['field']] != $this->filterEmpty) {
+                if (
+                    isset($_GET[$filter['field']]) &&
+                    !empty($_GET[$filter['field']]) &&
+                    $_GET[$filter['field']] != $this->filterEmpty &&
+                    $_GET['filter'] != $filter['field']
+                ) {
                     $this->model->addCondition($filter['field'], $_GET[$filter['field']]);
                 }
             }
@@ -253,6 +260,8 @@ class Lookup extends Input
             if (isset($_GET['q'])) {
                 $this->model->addCondition($_GET['filter'], 'like', '%'.$_GET['q'].'%');
             }
+            // Apply filtering to filter.
+            $this->applyFilters();
             $action = $this->model->action('field', [$_GET['filter']]);
             $action->group($_GET['filter']);
             $rows = $action->get();
@@ -260,7 +269,7 @@ class Lookup extends Input
             foreach ($rows as $k => $v) {
                 $data[] = ['id' => $k, 'name' => $v[$_GET['filter']]];
             }
-            array_unshift($data, ['id' => 0, 'name' => $this->filterEmpty]);
+            array_unshift($data, ['id' => -1, 'name' => $this->filterEmpty]);
 
             $this->app->terminate(json_encode([
                                                   'success' => true,
@@ -359,21 +368,29 @@ class Lookup extends Input
         foreach ($this->filters as $k => $filter) {
             $f_name = $this->name.'-ac_f'.$k;
             $chain = new jQuery('#'.$f_name);
+            $options = [
+                'fields'       => ['name' => 'name', 'value' => 'id'],
+                'match'        => 'value',
+                'apiSettings' => ['url'         => $this->getCallbackURL().'&q={query}',
+                                  'cache'       => false,
+                                  'data'        => array_merge($this->getFilterQuery(), ['filter' => $filter['field']]),
+                                  /*'onResponse'  => new jsFunction(['resp'], [
+                                      new jsExpression('if (!resp.success){$([name]).dropdown(); atk.apiService.atkSuccessTest(resp);}', ['name' => '#'.$f_name]),
+                                  ]),*/
+                ],
+                'onChange'    => new jsFunction([
+                                                    (new jQuery())->trigger('filterChanged'),
+                                                    $this->getJsDropdown(),
+                                                ]),
+            ];
 
-            $this->js(true, $chain->dropdown([
-                                                 'fields'       => ['name' => 'name', 'value' => 'id'],
-                                                  'apiSettings' => ['url'         => $this->getCallbackURL().'&q={query}',
-                                                                    'cache'       => false,
-                                                                    'data'        => ['filter' => $filter['field']],
-                                                                    'onResponse'  => new jsFunction(['resp'], [
-                                                                        new jsExpression('if (!resp.success){$([name]).dropdown(); atk.apiService.atkSuccessTest(resp);}', ['name' => '#'.$f_name]),
-                                                                    ]),
-                                                  ],
-                                                  'onChange'    => new jsFunction([
-                                                      $this->getJsDropdown(),
-                                                                                  ]),
-                                             ]));
+            //$js_dropdown = $chain->dropdown($options);
+
+            $this->js(true, $chain->dropdown($options));
         }
+        //set filter value using $(this) context for onChange handler.
+        $options['apiSettings']['data']['filter'] = (new jQuery())->find("input")->attr("name");
+        $this->filterChain = $options;
     }
 
     /**
@@ -400,11 +417,13 @@ class Lookup extends Input
     {
         $q = [];
         foreach ($this->filters as $key => $filter) {
-            $q[$filter['field']] = new jsExpression('$([input]).parent().find([class]).text()', ['input' => 'input[name='.$filter['field'].']', 'class' => '.text']);
+            $q[$filter['field']] = new jsExpression('$([input]).parent().dropdown("get text")', ['input' => 'input[name='.$filter['field'].']']);
+
         }
 
         return $q;
     }
+
 
     public function renderView()
     {
@@ -427,6 +446,7 @@ class Lookup extends Input
                 $ft->set('input_id', $f_name);
                 $ft->set('FilterLabel', $filter['label']);
                 $ft->set('place_holder', $this->filterEmpty);
+                $ft->set('filterClass', 'atk-filter-dropdown');
                 $ft->setHTML('Input', $this->getFilterInput($filter['field'], $filter['field'].'_id'));
                 $html .= $ft->render();
             }
@@ -434,6 +454,24 @@ class Lookup extends Input
 
             // create proper js for dropdown.
             $this->createFilterJsDropdown();
+            /*
+             * When filter changed value,
+             * we need to regenerate each dropdown except
+             * the one triggering the changed.
+             * Note: regenerating dropdown seem to have them lost their
+             * text value. Need to reset text value by getting them prior to regenerating dropdown.
+             */
+            $this->js(true,
+                      (new jQuery())
+                      ->on('filterChanged',
+                            new jsFunction(array_merge(
+                                               [new jsExpression('console.log("onChanged", this);')],
+                                            [new jsExpression('let that = this')],
+                                            [new jsExpression('let dropdowns = $(".atk-filter-dropdown").filter(function(idx){return $(that).attr("id") != $(this).attr("id")})')],
+                                            [new jsExpression('dropdowns.each(function(){const value = $(this).dropdown("get text"); $(this).dropdown([chain]); $(this).dropdown("set text", value); $(this).dropdown("refresh");})', ['chain' => $this->filterChain])]
+                                           ))
+                      )
+            );
         } else {
             $this->template->del('FilterContainer');
         }
