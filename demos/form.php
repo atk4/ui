@@ -37,6 +37,16 @@ $g = $form->addGroup(['width' => 'three']);
 $g->addField('name');
 $g->addField('surname');
 $g->addField('gender', ['DropDown', 'values' => ['Female', 'Male']]);
+$g->addField('likes', ['DropDown', [
+    'isValueRequired' => true,
+    'values'          => [
+        'car'   => ['Cars', 'icon' => 'car icon'],
+        'plane' => ['Big and small planes', 'icon' => 'plane icon'],
+        'motor' => ['Motorcycles', 'icon' => 'motorcycle icon'],
+    ],
+    'width' => 'two',
+    //'dropdownOptions' => ['showOnFocus' => false], // https://github.com/atk4/ui/issues/512
+]])->set('plane'); // default value
 
 $tab->add(['Header', 'Comparing Field type vs Decorator class']);
 $form = $tab->add('Form');
