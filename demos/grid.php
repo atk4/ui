@@ -7,6 +7,9 @@ $g = $app->add(['Grid']);
 $g->setModel(new Country($db));
 $g->addQuickSearch();
 
+// Example how to filter quickSearch on each keypress
+//$g->quickSearch->on('keyup', 'input', $g->quickSearch->js()->find('.atk-search-button')->click());
+
 $g->menu->addItem(['Add Country', 'icon' => 'add square'], new \atk4\ui\jsExpression('alert(123)'));
 $g->menu->addItem(['Re-Import', 'icon' => 'power'], new \atk4\ui\jsReload($g));
 $g->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
