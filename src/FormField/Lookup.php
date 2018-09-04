@@ -374,7 +374,7 @@ class Lookup extends Input
                 'apiSettings'  => ['url'         => $this->getCallbackURL().'&q={query}',
                                   'cache'        => false,
                                   'data'         => array_merge($this->getFilterQuery(), ['filter' => $filter['field']]),
-                                  'onResponse'  => new jsFunction(['resp'], [
+                                  'onResponse'   => new jsFunction(['resp'], [
                                       new jsExpression('if (!resp.success){atk.apiService.atkSuccessTest(resp);}'),
                                   ]),
                 ],
