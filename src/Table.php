@@ -316,12 +316,11 @@ class Table extends Lister
     ];
 
     /**
-     *
      * Make columns resizable by dragging column header.
      *
-     * @param null $fx              A callback function with columns widths as parameter.
-     * @param null $widths          An array of widths value, integer only. ex: [100,200,300,100]
-     * @param null $resizerOptions  An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
+     * @param null $fx             A callback function with columns widths as parameter.
+     * @param null $widths         An array of widths value, integer only. ex: [100,200,300,100]
+     * @param null $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
      *
      * @throws Exception
      * @return $this
@@ -329,11 +328,11 @@ class Table extends Lister
     public function resizableColumn($fx = null, $widths = null, $resizerOptions = null)
     {
         $options = [];
-        if ($fx  && is_callable($fx)) {
+        if ($fx && is_callable($fx)) {
             $cb = $this->add('jsCallBack');
             $cb->set($fx, ['widths'=>'widths']);
             $options['uri'] = $cb->getJSURL();
-        } else if ($fx && is_array($fx)) {
+        } elseif ($fx && is_array($fx)) {
             $widths = $fx;
         }
 
