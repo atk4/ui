@@ -332,6 +332,7 @@ class Table extends Lister
      * @param null $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
      *
      * @throws Exception
+     *
      * @return $this
      */
     public function resizableColumn($fx = null, $widths = null, $resizerOptions = null)
