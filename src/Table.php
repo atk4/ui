@@ -324,20 +324,14 @@ class Table extends Lister
      * @param null $resizerOptions  An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
      *
      * @throws Exception
+     * @return $this
      */
     public function resizableColumn($fx = null, $widths = null, $resizerOptions = null)
     {
         $options = [];
         if ($fx  && is_callable($fx)) {
             $cb = $this->add('jsCallBack');
-            $cb->set(function() use ($fx) {
-                $widths = [];
-                if (isset($_POST['widths'])) {
-                    //$widths = explode(',', $_GET['widths']);
-                    $widths = json_decode($_POST['widths']);
-                }
-                return call_user_func($fx, $widths);
-            });
+            $cb->set($fx, ['widths'=>'widths']);
             $options['uri'] = $cb->getJSURL();
         } else if ($fx && is_array($fx)) {
             $widths = $fx;
