@@ -318,6 +318,15 @@ class Table extends Lister
     /**
      * Make columns resizable by dragging column header.
      *
+     * The callback param function will receive two parameter, a jQuery chain object and a json string containing all table columns
+     * name and size. To retrieve columns width, simply json decode the $widths param in your callback function.
+     * ex:
+     *  $table->resizableColumn(function($j, $w){
+     *       //do somethings with columns width
+     *       $columns = json_decode($w);
+     *   });
+     *
+     *
      * @param null $fx             A callback function with columns widths as parameter.
      * @param null $widths         An array of widths value, integer only. ex: [100,200,300,100]
      * @param null $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
