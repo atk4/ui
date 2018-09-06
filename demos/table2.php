@@ -70,3 +70,10 @@ $table->addColumn('amount_copy', ['Multiformat', function ($a, $b) {
     // Short way is to simply return seed
     return 'Money';
 }, 'attr'=>['all'=>['class'=>['right aligned singel line']]]]);
+
+$app->add(['Header', 'Table with resizable columns', 'subHeader'=>'Just drag column header to resize', 'icon'=>'table']);
+
+
+$table = $app->add('Table');
+$table->setModel($m);
+$table->addClass('celled')->resizableColumn();

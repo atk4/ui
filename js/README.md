@@ -97,6 +97,11 @@ This command will output the atkjs-ui.min.js file, also in /public folder.
 
 ## Release note
 
+### version 1.4.0
+
+ - add new plugin atkColumnresizer. This new jQuery plugin allow to resize table column using drag n drop,
+ - fix padding setting in apiService error modal.
+
 ### version 1.3.9
 
   - Add option for creating modal in createModal plugin.
