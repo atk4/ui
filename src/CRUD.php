@@ -192,7 +192,7 @@ class CRUD extends Grid
             }
 
             $this->formUpdate->setModel($this->model, $this->fieldsUpdate ?: $this->fieldsDefault);
-            
+
             // set save handler with reload trigger
             // adds default submit hook if it is not already set for this form
             if (!$this->formUpdate->hookHasCallbacks('submit')) {
