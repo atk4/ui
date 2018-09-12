@@ -1,4 +1,5 @@
 import atkPlugin from 'plugins/atkPlugin';
+import debounce from 'debounce';
 import $ from 'jquery';
 
 export default class jsSearch extends atkPlugin {
@@ -13,8 +14,8 @@ export default class jsSearch extends atkPlugin {
     this.removeIcon  = this.searchAction.find('i.atk-remove-icon').hide();
     this.$el.data('preValue', '');
 
-    this.setInputAction(this);
-    this.setSearchAction(this);
+    this.setInputAction();
+    this.setSearchAction();
 
     //Set input initial value if available.
     if (this.settings.q) {
@@ -27,7 +28,41 @@ export default class jsSearch extends atkPlugin {
    *
    * @param that
    */
-  setInputAction(that) {
+  setInputAction() {
+    if (this.settings.autoQuery) {
+      this.onAutoQueryAction();
+    } else {
+      this.onEnterAction();
+    }
+  }
+
+  /**
+   * Query server on each keystroke after proper timeout.
+   */
+  onAutoQueryAction() {
+    const that = this;
+    this.textInput.on('keyup', debounce(function(e){
+      if (e.target.value === '' || e.keyCode === 27) {
+        that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options), function(){
+          that.setButtonState(false);
+          that.setFilterState(false);
+          that.textInput.val('');
+        });
+      } else if (e.target.value != that.$el.data('preValue')){
+        that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options, {'_q' : e.target.value}), function(){
+          that.setButtonState(true);
+          that.setFilterState(true);
+        });
+      }
+      that.$el.data('preValue', e.target.value);
+    }, this.settings.timeOut));
+  }
+
+  /**
+   * Query server after pressing Enter.
+   */
+  onEnterAction() {
+    const that = this;
     this.textInput.on('keyup', function(e) {
       if (e.keyCode === 13 && e.target.value) {
         that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options, {'_q' : e.target.value}), function(){
@@ -53,7 +88,8 @@ export default class jsSearch extends atkPlugin {
    *
    * @param that
    */
-  setSearchAction(that) {
+  setSearchAction() {
+    const that = this;
     this.searchAction.on('click', function(e){
       if (that.state.button){
         that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options), function() {
@@ -160,5 +196,7 @@ export default class jsSearch extends atkPlugin {
 jsSearch.DEFAULTS = {
   uri: null,
   uri_options: {},
-  q: null
+  q: null,
+  autoQuery: false,
+  timeOut: 500,
 };

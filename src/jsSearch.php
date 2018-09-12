@@ -16,6 +16,15 @@ class jsSearch extends View
     public $reload = null;
 
     public $args = [];
+
+    /**
+     * Whether or not jsSearch will query server on each keystroke.
+     * Default is with using Enter key.
+     *
+     * @var bool
+     */
+    public $autoQuery = false;
+
     /**
      * The input field.
      *
@@ -54,7 +63,11 @@ class jsSearch extends View
         $this->template->set('BtnSearchIcon', $this->btnSearchIcon);
         $this->template->set('BtnRemoveIcon', $this->btnRemoveIcon);
 
-        $this->js(true)->atkJsSearch(['uri' => $this->reload->jsURL(), 'uri_options' => array_merge(['__atk_reload'=>$this->reload->name], $this->args)]);
+        $this->js(true)->atkJsSearch([
+                'uri'         => $this->reload->jsURL(),
+                'uri_options' => array_merge(['__atk_reload'=>$this->reload->name], $this->args),
+                'autoQuery'   => $this->autoQuery,
+            ]);
 
         parent::renderView();
     }

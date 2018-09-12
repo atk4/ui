@@ -199,13 +199,16 @@ class Grid extends View
 
     /**
      * Add Search input field using js action.
+     * By default, will query server when using Enter key on input search field.
+     * You can change it to query server on each keystroke by passing $autoQuery true,
      *
-     * @param array $fields
+     * @param array   $fields        The list of fields to search for.
+     * @param boolean $hasAutoQuery  Will query server on each key pressed.
      *
      * @throws Exception
      * @throws \atk4\data\Exception
      */
-    public function addQuickSearch($fields = [])
+    public function addQuickSearch($fields = [], $hasAutoQuery = false)
     {
         if (!$fields) {
             $fields = [$this->model->title_field];
@@ -219,7 +222,7 @@ class Grid extends View
             ->addMenuRight()->addItem()->setElement('div')
             ->add('View');
 
-        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container]);
+        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
 
         if ($q = $this->stickyGet('_q')) {
             $cond = [];
