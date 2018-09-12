@@ -200,10 +200,10 @@ class Grid extends View
     /**
      * Add Search input field using js action.
      * By default, will query server when using Enter key on input search field.
-     * You can change it to query server on each keystroke by passing $autoQuery true,
+     * You can change it to query server on each keystroke by passing $autoQuery true,.
      *
-     * @param array   $fields        The list of fields to search for.
-     * @param boolean $hasAutoQuery  Will query server on each key pressed.
+     * @param array $fields       The list of fields to search for.
+     * @param bool  $hasAutoQuery Will query server on each key pressed.
      *
      * @throws Exception
      * @throws \atk4\data\Exception
