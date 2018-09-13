@@ -46,7 +46,7 @@ export default class columnResizer extends atkPlugin {
 
     let widths = [];
     columns.each(function(idx, item){
-      widths.push({column : $(item).data('column'), size: $(item).css('width')});
+      widths.push({column : $(item).data('column'), size: $(item).outerWidth()});
     });
 
     this.sendWidths(widths);
