@@ -153,7 +153,7 @@ class CRUD extends Grid
 
             // set save handler with reload trigger
             // adds default submit hook if it is not already set for this form
-            if (!$this->formUCreate->hookHasCallbacks('submit')) {
+            if (!$this->formCreate->hookHasCallbacks('submit')) {
                 $this->formCreate->onSubmit(function ($form) {
                     $form->model->save();
 
