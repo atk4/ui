@@ -231,6 +231,18 @@ class Grid extends View
     }
 
     /**
+     * Returns JS for reloading View.
+     *
+     * @param array $args
+     *
+     * @return \atk4\ui\jsReload
+     */
+    public function jsReload($args = [])
+    {
+        return new jsReload($this->container, $args);
+    }
+
+    /**
      * Adds a new button into the action column on the right. For CRUD this
      * column will already contain "delete" and "edit" buttons.
      *
