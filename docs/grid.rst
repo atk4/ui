@@ -54,7 +54,7 @@ Adding Quick Search
 
 .. php:attr: $quickSearch
 
-.. php:method: addQuickSearch($fields = [])
+.. php:method: addQuickSearch($fields = [], $hasAutoQuery = false)
 
 After you have associated grid with a model using :php:class:`View::setModel()` you can
 include quick-search component::
@@ -63,6 +63,11 @@ include quick-search component::
 
 If you don't specify argument, then search will be done by a models title field.
 (http://agile-data.readthedocs.io/en/develop/model.html#title-field)
+
+By default, quick search input field will query server when user press the Enter key. However, it is possible to make it
+querying the server automatically, i.e. after the user has finished typing, by setting the auto query parameter::
+
+    $grid->addQuickSearch(['name', 'surname'], true);
 
 Paginator
 =========
