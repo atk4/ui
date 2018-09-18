@@ -9,6 +9,7 @@ import fileUpload from "./plugins/fileUpload";
 import jsSearch from "./plugins/jsSearch";
 import jsSortable from "./plugins/jsSortable";
 import conditionalForm from "./plugins/conditionalForm";
+import columnResizer from "./plugins/columnResizer";
 
 /**
  * Generate a jQuery plugin
@@ -88,6 +89,7 @@ function createAtkplugins() {
     {name: 'JsSearch', plugin: jsSearch, sh: false},
     {name: 'JsSortable', plugin: jsSortable, sh: false},
     {name: 'ConditionalForm', plugin: conditionalForm, sh: true},
+    {name: 'ColumnResizer', plugin: columnResizer, sh: false},
   ];
 
   atkJqPlugins.forEach((atkJqPlugin) => {
