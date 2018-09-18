@@ -1,10 +1,24 @@
 
-## 1.5
+# 1.5 Release
 
-In this release we add pop-ups and integrated it with Grid Columns.
+*Improved Admin Layout*: now is fully flexible and more responsive.
 
-TODO: fully updated changelog will be in 1.5.1 version along with more examples!
+Grids can now have items per page configured:
 
+``` php
+$grid->addItemsPerPageSelector();
+```
+
+Filter grid by placing a pop-up in it's column header ([demo](http://ui.agiletoolkit.org/demos/tablefilter.php):
+
+``` php
+$grid->addFilterColumn();
+```
+
+TBC
+
+
+## 1.5.0
 
 **Closed issues:**
 
