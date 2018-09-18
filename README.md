@@ -1,8 +1,10 @@
-# ATK UI - High Level OO PHP framework for building Web UI
+# ATK UI - Collection of interractive Web App UI components
 
-When using General Purpose PHP framework, a lot of time is spent on writing HTML, CSS, JS as well as planning routes, call-backs, adding interactivity and integrating your APIs or a database. 
+Do you use a CSS framework?
 
-**ATK UI is a high-level object-oriented PHP framework with 30+ popular UI components that seamlessly integrate with your SQL, NoSQL or API backend.**
+ATK UI began as a project to wrap CSS framework into PHP objects. We started with Fields, Forms, Tables and Menus. Then we added callbacks to enable interactivity. Then came layouts. Next we integrated data mapping and persistence frameworks; virtual pages and JavaScript action abstraction; dynamic popups, real-time console and progress-bar. All that now fits into wizard and dynamic tabs. ATK UI has matured well.
+
+**ATK UI helps you create modern Web UI without writing HTML/CSS/JS. Bundled with over 30 interactive UI components that seamlessly integrate with your SQL, NoSQL or API backend, ATK UI brings consistent and easy-to-use interface into your custom projects or popular web apps**
 
 [![Build Status](https://travis-ci.org/atk4/ui.png?branch=develop)](https://travis-ci.org/atk4/ui)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
@@ -12,67 +14,61 @@ When using General Purpose PHP framework, a lot of time is spent on writing HTML
 
 Quick-Links: [Documentation](http://agile-ui.readthedocs.io). [Namespaces](http://www.agiletoolkit.org/dox/namespaces.html). [Demo-site](https://ui.agiletoolkit.org). [ATK Data](https://github.com/atk4/ui). [Forum](https://forum.agiletoolkit.org/). [Chat](https://gitter.im/atk4/atk4). [Commercial support](https://www.agiletoolkit.org/contact). [Udemy Course](https://forum.agiletoolkit.org/t/udemy-com-atk-course-early-access-limited-time-free/413).
 
-### Q: How ATK UI compares to Laravel/Wordpress/Symfony/.. ?
+## ATK UI is simple and really saves time
 
-ATK UI does not compete with general-purpose frameworks, instead it attempts to "compliment" the existing eco-system with extensive set of standard-compliant HTML-generator components.
+Some of you "live to code". For everyone else - ATK UI is a great fit. Easy to learn and saves loads of time. 
 
-### Q: What does ATK UI accomplish?
+Watch this free Udemy course if you are a beginner: https://www.udemy.com/web-apps-with-php-and-atk
 
-CSS frameworks give developer option not to open a can-of-worms called "CSS" and create clean and responsive UI.
+### How does it work?
 
-ATK UI takes this concept to the next level by connecting this UI to your database / api through a server-side PHP-only logic.
+Dowlnoad from www.agiletoolkit.org or Install ATK UI with `composer require atk4/ui` 
 
-### Q: When is best to use ATK?
+Then create new PHP file:
 
-A most popular use for ATK UI is for building admin / backend systems. Some popular extensions can be a huge time-saver:
+``` php
+<?php
+require 'vendor/autoload.php';
 
--   https://github.com/atk4/mastercrud - Create hierarchical CRUD system with integrated breadcrumb
--   https://github.com/atk4/filestore - Associate your database records with S3/Dropbox file-store.
--   https://github.com/atk4/login - Out-of-the-box authentication for your ATK Web App.
--   https://github.com/atk4/audit - Transparent data audit for ATK Data.
+$app = new \atk4\ui\App();   // That's your UI application
+$app->initLayout('Centered');
 
-Add-ons above combine existing components (such as Form, CRUD, Bredcrumb) to create a high-level enterprise-level systems for data management.
+$form = new \atk4\ui\Form(); // Yeah, that's a form!
+$app->add($form);
 
-There are also many in-house data management applications that are built with ATK.
+$form->addField('email');    // adds field
+$form->onSubmit(function ($form) {
+    // implement subscribe here
 
-### Q: Is ATK good for beginners?
+    return $form->success('Subscribed '.$form->model['email'].' to newsletter.');
+});
 
-Yes, it can save months or years of your learning time and you will be able to create a fully-functional Web Apps as per specification.
+// Decorate anything
+$form->buttonSave->set('Subscribe');
+$form->buttonSave->icon = 'mail';
 
-If you are an absolute beginner and have a half hour to spare, [watch this video demonstrating how to create a most basic PHP app from scratch that works with a database and publish it to the cloud](https://youtu.be/OCoK9ZQbt0E).
+// everything renders automatically
+```
 
-### Q: Why I haven't heard about ATK before?
+Result:
 
-The current version of ATK Data / ATK UI have been developed and published in 2016 / 2017. Some ideas presented by the frameworks are quite revolutionary, but are different to the standard development practices. (https://youtu.be/a3imXsrvpVk)
+![subscribe](/Users/rw/Sites/ui/docs/images/subscribe.png)
 
-The adoption rate is growing and we are seeing a lot of new members in our community. It will take some more time for others to discover ATK. We are pleased that those who have tried ATK are extremely happy and are starting to gradually contribute more and more.
+ATK UI relies on https://fomantic-ui.com CSS framework to render the form beautifully. It also implements submission call-back in a very straightforward way. The demo also demonstrates use of JavaScript action, which can make objects interract with each-other (e.g. Form submit reloads Table). 
 
-ATK is a FREE and open-source component framework and if you enjoy it and want to help, spread the ❤.
+### Database Integration with ATK Data
 
-## Enough talk, show me the code!
+To get most of ATK UI, it relies on ATK Data to describe your business models such as "User" or "Purchase". When you define models, you can start using some more advanced components:
 
 [CRUD](http://ui.agiletoolkit.org/demos/crud.php) is a fully-interractive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use: 
 
 ``` php
-$crud = new \atk4\ui\CRUD();
-$crud->setModel(new User($db));
-$HTML = $crud->render();
-```
-
-If you don't need $HTML from only CRUD, why not use our [Layout](http://ui.agiletoolkit.org/demos/layouts.php) component? Here is a fully functioning example:
-
-``` php
-<?php
 $app = new \atk4\ui\App('hello world');
-$app->initLayout('Centered');
+$app->initLayout('Admin');
 $app->dbConnect('mysql://user:pass@localhost/atk')
 
 $app->add('CRUD')->setModel(new User($app->db));
 ```
-
-CRUD is one of 30+ components that come bundled with ATK UI and all of them are easy to use.
-
-If you have 1 minute of time, [download the stable bundle](https://www.agiletoolkit.org) and try some examples yourself.
 
 ## Callbacks. Callbacks everywhere!
 
@@ -96,12 +92,6 @@ $tab->addTab('Settings', function($p) use($app) {
     $p->add('Form')->setModel($m);
 });
 ```
-
-## Semantic UI
-
-We love and support Semantic UI CSS. All of the components in ATK UI rely on this awesome framework. In fact, there is [almost no CSS](https://github.com/atk4/ui/blob/develop/public/agileui.less) that we add or tweak. Perhaps we just suck at CSS and are much rather work on building some [awesome SaaS projects](https://saasty.io).
-
-However, by no means we restrict or limit YOUR options at writing custom HTML, JS or CSS. It's [easy to make your own view or tweak an existing one in ATK](http://ui.agiletoolkit.org/demos/view.php). We offer a [flexible way to extend JS services](https://github.com/atk4/ui/tree/develop/js) or integrate custom Layouts and CSS.
 
 ## Wizard
 
