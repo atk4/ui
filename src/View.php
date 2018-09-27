@@ -729,6 +729,7 @@ class View implements jsExpressionable
                                 'html'    => $this->template->render(),
                                 'id'      => $this->name, ]);
         } catch (\Exception $exception) {
+            $this->_rendered = false;
             $l = $this->add(new self());
             if ($exception instanceof \atk4\core\Exception) {
                 $l->template->setHTML('Content', $exception->getHTML());
