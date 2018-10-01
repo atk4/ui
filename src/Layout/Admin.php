@@ -2,7 +2,9 @@
 
 namespace atk4\ui\Layout;
 
+use atk4\ui\jQuery;
 use atk4\ui\Menu;
+use atk4\ui\Template;
 
 /**
  * Implements a classic 100% width admin layout.
@@ -34,6 +36,11 @@ class Admin extends Generic
 
     public $burger = true;      // burger menu item
 
+    /*
+     * Whether or not left Menu is visible on Page load.
+     */
+    public $isMenuLeftVisible = true;
+
     /**
      * Obsolete, use menuLeft.
      *
@@ -49,7 +56,12 @@ class Admin extends Generic
 
         if ($this->menu === null) {
             $this->menu = $this->add(['Menu', 'atk-topMenu inverted fixed horizontal', 'element' => 'header'], 'TopMenu');
-            $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']])->add(['Icon', 'content']);
+            $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']]);
+            $this->burger->on('click', [
+                (new jQuery('.ui.left.sidebar'))->toggleClass('visible'),
+                (new jQuery('body'))->toggleClass('atk-leftMenu-visible'),
+            ]);
+            $this->burger->add(['Icon', 'content']);
         }
 
         if ($this->menuRight === null) {
@@ -58,8 +70,12 @@ class Admin extends Generic
         }
 
         if ($this->menuLeft === null) {
-            $this->menuLeft = $this->add(new Menu('left vertical inverted labeled visible sidebar'), 'LeftMenu');
+            $this->menuLeft = $this->add(new Menu('left vertical inverted labeled sidebar'), 'LeftMenu');
             $this->leftMenu = $this->menuLeft;
+
+            $closeIcon = $this->menuLeft->add(['View', 'template' => new Template('<a id="{$_id}" href="#" onclick="return false;" class="{$class} item atk-leftMenuClose"><i class="close icon"></i></a>')]);
+            $closeIcon->on('click', (new jQuery('body'))->removeClass('atk-leftMenu-visible'));
+
             $this->menuLeft->addHeader($this->app->title);
         }
 
@@ -75,6 +91,9 @@ class Admin extends Generic
             if (count($this->menuLeft->elements) == 1) {
                 // no items were added, so lets add dashboard
                 $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], 'index');
+            }
+            if ($this->isMenuLeftVisible) {
+                $this->menuLeft->addClass('visible');
             }
             //$this->leftMenu->addItem(['Logout', 'icon'=>'sign out'], ['logout']);
         }
