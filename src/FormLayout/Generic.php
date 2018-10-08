@@ -159,7 +159,7 @@ class Generic extends _Abstract
             $template->setHTML('Input', $el->getHTML());
             $template->trySet('label', $label);
             $template->trySet('label_for', $el->id.'_input');
-            $template->set('field_class', '');
+            $template->set('field_class', $el->getFieldClass());
 
             if ($el->field->required) {
                 $template->append('field_class', 'required ');

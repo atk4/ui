@@ -20,6 +20,8 @@ class Generic extends View
      */
     public $field;
 
+    public $fieldClass = '';
+
     /**
      * @var bool - Whether you need this field to be rendered wrap in a form layout or as his.
      */
@@ -117,5 +119,10 @@ class Generic extends View
             $expr = new \atk4\ui\jsExpression($expr);
         }
         $this->on('change', '#'.$this->id.'_input', $expr);
+    }
+
+    public function getFieldClass()
+    {
+        return $this->fieldClass;
     }
 }
