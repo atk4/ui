@@ -50,8 +50,6 @@ Filter grid by placing a pop-up in it's column header ([demo](http://ui.agiletoo
 $grid->addFilterColumn();
 ```
 
-TBC
-
 
 ## 1.5.0
 
