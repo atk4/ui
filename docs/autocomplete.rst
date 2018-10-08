@@ -55,3 +55,24 @@ You can do much more with AutoComplete field by passing dropdown settings::
         ]
     ])->setModel(new Country($db));
 
+
+Lookup Field
+============
+
+In 1.6 we have introduced Lookup field, which is identical to AutoComplete but additionally allows
+use of Filters::
+
+
+    $form = $app->add(new \atk4\ui\Form(['segment']));
+    $form->add(['Label', 'Add city', 'top attached'], 'AboveFields');
+
+    $l = $form->addField('city',['Lookup']);
+
+    // will restraint possible city value in droddown base on country and/or language.
+    $l->addFilter('country', 'Country');
+    $l->addFilter('language', 'Lang');
+
+    //make sure country and language belong to your model.
+    $l->setModel(new City($db));
+
+Possibly this feature will be introduced into "AutoComplete" class.
