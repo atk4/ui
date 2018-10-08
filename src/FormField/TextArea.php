@@ -27,6 +27,8 @@ class TextArea extends Input
             'rows'        => $this->rows,
             'placeholder' => $this->placeholder,
             'id'          => $this->id.'_input',
+            'readonly'    => $this->readonly,
+            'disabled'    => $this->disabled,
         ], isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: ''
     );
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';

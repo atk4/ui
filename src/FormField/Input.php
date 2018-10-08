@@ -24,6 +24,10 @@ class Input extends Generic
 
     public $iconLeft = null;
 
+    public $disabled = false;
+    public $readonly = false;
+
+
     /**
      * Specify left / right. If you use "true" will default to the right side.
      */
@@ -84,6 +88,8 @@ class Input extends Generic
             'placeholder' => $this->placeholder,
             'id'          => $this->id.'_input',
             'value'       => $this->getValue(),
+            'readonly'    => $this->readonly,
+            'disabled'    => $this->disabled,
         ]);
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
@@ -146,6 +152,11 @@ class Input extends Generic
             if ($this->loading === 'left') {
                 $this->addClass('left');
             }
+        }
+
+        //state
+        if ($this->disabled) {
+            $this->addClass('disabled');
         }
 
         // icons
