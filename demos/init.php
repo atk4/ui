@@ -33,7 +33,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem('Data Integration', ['form2']);
     $form->addItem('Form Multi-column layout', ['form3']);
     $form->addItem(['Integration with Columns'], ['form5']);
-    $form->addItem(['AutoComplete Field'], ['autocomplete']);
+    $form->addItem(['AutoComplete Field', 'icon'=>'yellow star'], ['autocomplete']);
     $form->addItem(['Value Selectors'], ['form6']);
     $form->addItem(['Conditional Fields'], ['jscondform']);
 

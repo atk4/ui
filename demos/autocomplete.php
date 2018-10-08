@@ -69,3 +69,31 @@ $modal = $app->add('Modal')->set(function ($p) {
     $a->setModel(new Country($p->app->db));
 });
 $app->add(['Button', 'Open autocomplete on a Modal window'])->on('click', $modal->show());
+
+
+
+$app->add(['Header', 'New Lookup field']);
+
+$form = $app->add(new \atk4\ui\Form(['segment']));
+$form->add(['Label', 'Input new country information here', 'top attached'], 'AboveFields');
+
+$c = new Country($db);
+$c->addExpression('letter1', 'concat("Ends with ", substring([name], -1))');
+
+$form->addField('country1', [
+    'Lookup',
+    'model'       => new Country($db),
+    'hint'=>'Lookup field is just like AutoComplete, supports all the same options.',
+    'placeholder' => 'Search for country by code, LV or UK',
+    'search'      => ['name', 'iso', 'iso3'],
+]);
+
+$lookup = $form->addField('country2', [
+    'Lookup',
+    'model'       => $c,
+    'hint'=>'However one or few "filtering" options can be added narrowing down the final result set',
+    'placeholder' => 'Search for country by code, LV or UK',
+    'search'      => ['name', 'iso', 'iso3'],
+]);
+$lookup->addFilter('letter1');
+

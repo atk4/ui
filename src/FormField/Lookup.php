@@ -224,12 +224,18 @@ class Lookup extends Input
      *
      * This way, dropdown value will contains city corresponding to proper country and/or language.
      *
-     * @param $name
+     * @param $field
      * @param null $label
      */
-    public function addFilter($name, $label = null)
+    public function addFilter($field, $label = null)
     {
-        $this->filters[] = ['field' => $name, 'label' => $label];
+        if (!$this->model->hasElement($field) instanceof \atk4\data\Field) {
+            throw new \atk4\ui\Exception([
+                'Unable to filter by non-existant field',
+                'field'=>$field
+            ]);
+        }
+        $this->filters[] = ['field' => $field, 'label' => $label];
     }
 
     /**
@@ -243,7 +249,7 @@ class Lookup extends Input
                     isset($_GET[$filter['field']]) &&
                     !empty($_GET[$filter['field']]) &&
                     $_GET[$filter['field']] != $this->filterEmpty &&
-                    $_GET['filter'] != $filter['field']
+                    @$_GET['filter'] != $filter['field']
                 ) {
                     $this->model->addCondition($filter['field'], $_GET[$filter['field']]);
                 }
