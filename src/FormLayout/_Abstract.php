@@ -11,6 +11,8 @@ abstract class _Abstract extends \atk4\ui\View
 {
     /**
      * Links layout to the form.
+     *
+     * @var \atk4\ui\Form
      */
     public $form = null;
 
@@ -89,6 +91,7 @@ abstract class _Abstract extends \atk4\ui\View
 
     /**
      * Returns array of names of fields to automatically include them in form.
+     * This includes all editable or visible fields of the model.
      *
      * @param \atk4\data\Model $model
      *
@@ -102,7 +105,7 @@ abstract class _Abstract extends \atk4\ui\View
                 continue;
             }
 
-            if ($f->isEditable() || ($f->read_only && $f->isVisible())) {
+            if ($f->isEditable() || $f->isVisible()) {
                 $fields[] = $f->short_name;
             }
         }
