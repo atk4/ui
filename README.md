@@ -2,7 +2,7 @@
 
 Do you use a CSS framework?
 
-ATK UI began as a project to wrap CSS framework into PHP objects. We started with Fields, Forms, Tables and Menus. Then we added callbacks to enable interactivity. Then came layouts. Next we integrated data mapping and persistence frameworks; virtual pages and JavaScript action abstraction; dynamic popups, real-time console and progress-bar. All that now fits into wizard and dynamic tabs. ATK UI has matured well.
+ATK UI began 2 years ago as a project to wrap CSS framework into PHP objects. We started with Fields, Forms, Tables and Menus. Then we added callbacks to enable interactivity. Then came layouts. Next we integrated data mapping and persistence frameworks; virtual pages and JavaScript action abstraction; dynamic popups, real-time console and progress-bar. We have even added high-level components such as wizard and dynamic tabs and make them extremely simple to use! 
 
 **ATK UI helps you create modern Web UI without writing HTML/CSS/JS. Bundled with over 30 interactive UI components that seamlessly integrate with your SQL, NoSQL or API backend, ATK UI brings consistent and easy-to-use interface into your custom projects or popular web apps**
 
@@ -24,7 +24,7 @@ Watch this free Udemy course if you are a beginner: https://www.udemy.com/web-ap
 
 Dowlnoad from www.agiletoolkit.org or Install ATK UI with `composer require atk4/ui` 
 
-Then create new PHP file:
+Then you only need to create a single PHP file:
 
 ``` php
 <?php
@@ -50,7 +50,7 @@ $form->buttonSave->icon = 'mail';
 // everything renders automatically
 ```
 
-Result:
+Open PHP in the browser and observe a fully working and good looking form:
 
 ![subscribe](docs/images/subscribe.png)
 
