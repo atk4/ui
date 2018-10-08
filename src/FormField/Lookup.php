@@ -232,7 +232,7 @@ class Lookup extends Input
         if (!$this->model->hasElement($field) instanceof \atk4\data\Field) {
             throw new \atk4\ui\Exception([
                 'Unable to filter by non-existant field',
-                'field'=>$field
+                'field'=> $field,
             ]);
         }
         $this->filters[] = ['field' => $field, 'label' => $label];
