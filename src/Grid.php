@@ -377,15 +377,22 @@ class Grid extends View
         );
     }
 
+    /**
+     * Sets data Model of Grid.
+     *
+     * If $columns is not defined, then automatically will add columns for all
+     * visible model fields. If $columns is set to false, then will not add
+     * columns at all.
+     *
+     * @param \atk4\data\Model $m       Data model
+     * @param array|bool       $columns
+     *
+     * @return \atk4\data\Model
+     */
     public function setModel(\atk4\data\Model $model, $columns = null)
     {
         $this->model = $this->table->setModel($model, $columns);
-        if ($this->sortable === null) {
-            $this->sortable = true;
-        }
-        if ($this->sortable) {
-            $this->applySort();
-        }
+
         if ($this->quickSearch && is_array($this->quickSearch)) {
             $this->addQuickSearch($this->quickSearch);
         }
@@ -413,6 +420,8 @@ class Grid extends View
     /**
      * Add column with drag handler on each row.
      * Drag handler allow to reorder table via drag n drop.
+     *
+     * @return TableColumn\Generic
      */
     public function addDragHandler()
     {
@@ -436,6 +445,27 @@ class Grid extends View
         $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
     }
 
+    /**
+     * Renders view.
+     *
+     * Before rendering take care of data sorting.
+     */
+    public function renderView()
+    {
+        // take care of sorting
+        if ($this->sortable === null) {
+            $this->sortable = true;
+        }
+        if ($this->sortable) {
+            $this->applySort();
+        }
+
+        return parent::renderView();
+    }
+
+    /**
+     * Recursively renders view.
+     */
     public function recursiveRender()
     {
         // bind with paginator
@@ -455,6 +485,8 @@ class Grid extends View
 
     /**
      * Proxy function for Table::jsRow().
+     *
+     * @return jQuery
      */
     public function jsRow()
     {
