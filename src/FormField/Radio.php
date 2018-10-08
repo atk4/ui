@@ -49,4 +49,26 @@ class Radio extends Generic
 
         return parent::renderView();
     }
+
+    /**
+     * Shorthand method for on('change') event.
+     * Some input fields, like Calendar, could call this differently.
+     *
+     * If $expr is string or jsExpression, then it will execute it instantly.
+     * If $expr is callback method, then it'll make additional request to webserver.
+     *
+     * Examples:
+     * $field->onChange('console.log("changed")');
+     * $field->onChange(new \atk4\ui\jsExpression('console.log("changed")'));
+     * $field->onChange('$(this).parents(".form").form("submit")');
+     *
+     * @param string|jsExpression|array|callable $expr
+     */
+    public function onChange($expr)
+    {
+        if (is_string($expr)) {
+            $expr = new \atk4\ui\jsExpression($expr);
+        }
+        $this->on('change', 'input', $expr);
+    }
 }

@@ -396,15 +396,44 @@ contents. It is a standard html5 doctype template.
 The layout will be selected based on your choice - 'Centered', 'Admin' etc. This will
 not only change the overal page outline, but will also introduce some additional views.
 
-Going with the 'Admin' layout will populate some menu objects. Each layout may come with
-several views that you can populate::
+Each layout, depending on it's content, may come with several views that you can populate.
+
+Admin Layout
+------------
+.. php:namespace:: atk4\ui\Layout
+.. php:class:: Admin
+
+Agile Toolkit comes with a ready to use admin layout for your application. The layout is build
+with top, left and right menu object.
+
+.. php:attr:: menuLeft
+
+Populating the left menu object is simply a matter of adding the right menu items to the layout menu::
 
     $app->initLayout('Admin');
+    $layout = $app->layout;
 
     // Add item into menu
-    $app->layout->menu->addItem('User Admin', 'admin');
-    // or simply which does the same thing
-    $app->menu->addItem('User Admin', 'admin');
+    $layout->menuLeft->addItem(['Welcome Page', 'icon' => 'gift'], ['index']);
+    $layout->menuLeft->addItem(['Layouts', 'icon' => 'object group'], ['layouts']);
+
+    $EditGroup = $layout->menuLeft->addGroup(['Edit', 'icon' => 'edit']);
+    $EditGroup->addItem('Basics', ['edit/basic']);
+
+.. php:attr:: menu
+
+This is the top menu of the admin layout. You can add other item to the top menu using::
+
+    $layout->menu->addItem()->add(['Button', 'View Source', 'teal', 'icon' => 'github'])
+        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url.$f]));
+
+.. php:attr:: menuRight
+
+The top right dropdown menu.
+
+.. php:attr:: isMenuLeftVisible
+
+Whether or not the left menu is open on page load or not. Default is true.
 
 
 Integration with Legacy Apps

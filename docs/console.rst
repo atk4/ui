@@ -36,7 +36,7 @@ After adding a console to your :ref:`render_tree`, you just need to set a call-b
 
         sleep(2);
 
-        $console->send(new \atk4\ui\jsExpression('alert([])', ['The wait is over']);
+        $console->send(new \atk4\ui\jsExpression('alert([])', ['The wait is over']));
     });
 
 Console uses :ref:`sse` which works pretty much out-of-the-box with the modern browsers and unlike websockets

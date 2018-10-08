@@ -92,7 +92,7 @@ class Grid extends View
             $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        $this->table = $this->container->add($this->factory(['Table', 'very compact striped single line', 'reload' => $this->container], $this->table), 'Table');
+        $this->table = $this->container->add($this->factory(['Table', 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
 
         if ($this->paginator !== false) {
             $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
@@ -199,13 +199,16 @@ class Grid extends View
 
     /**
      * Add Search input field using js action.
+     * By default, will query server when using Enter key on input search field.
+     * You can change it to query server on each keystroke by passing $autoQuery true,.
      *
-     * @param array $fields
+     * @param array $fields       The list of fields to search for.
+     * @param bool  $hasAutoQuery Will query server on each key pressed.
      *
      * @throws Exception
      * @throws \atk4\data\Exception
      */
-    public function addQuickSearch($fields = [])
+    public function addQuickSearch($fields = [], $hasAutoQuery = false)
     {
         if (!$fields) {
             $fields = [$this->model->title_field];
@@ -219,7 +222,7 @@ class Grid extends View
             ->addMenuRight()->addItem()->setElement('div')
             ->add('View');
 
-        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container]);
+        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
 
         if ($q = $this->stickyGet('_q')) {
             $cond = [];
@@ -228,6 +231,18 @@ class Grid extends View
             }
             $this->model->addCondition($cond);
         }
+    }
+
+    /**
+     * Returns JS for reloading View.
+     *
+     * @param array $args
+     *
+     * @return \atk4\ui\jsReload
+     */
+    public function jsReload($args = [])
+    {
+        return new jsReload($this->container, $args);
     }
 
     /**

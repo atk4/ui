@@ -152,11 +152,14 @@ class CRUD extends Grid
             $this->formCreate->setModel($this->model, $this->fieldsCreate ?: $this->fieldsDefault);
 
             // set save handler with reload trigger
-            $this->formCreate->onSubmit(function ($form) {
-                $form->model->save();
+            // adds default submit hook if it is not already set for this form
+            if (!$this->formCreate->hookHasCallbacks('submit')) {
+                $this->formCreate->onSubmit(function ($form) {
+                    $form->model->save();
 
-                return $this->jsSaveCreate();
-            });
+                    return $this->jsSaveCreate();
+                });
+            }
         });
     }
 
@@ -189,11 +192,16 @@ class CRUD extends Grid
             }
 
             $this->formUpdate->setModel($this->model, $this->fieldsUpdate ?: $this->fieldsDefault);
-            $this->formUpdate->onSubmit(function ($form) {
-                $form->model->save();
 
-                return $this->jsSaveUpdate();
-            });
+            // set save handler with reload trigger
+            // adds default submit hook if it is not already set for this form
+            if (!$this->formUpdate->hookHasCallbacks('submit')) {
+                $this->formUpdate->onSubmit(function ($form) {
+                    $form->model->save();
+
+                    return $this->jsSaveUpdate();
+                });
+            }
         });
     }
 

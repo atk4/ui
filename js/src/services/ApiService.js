@@ -199,7 +199,6 @@ class ApiService {
       .css({
         'padding':'8px',
         'background-color': 'rgba(0, 0, 0, 0.5)',
-        'padding':'4px',
         'margin': 'auto',
         'width': '100%',
         'height': '100%',

@@ -48,6 +48,7 @@ class Actions extends Generic
         } else {
             $modal = $owner->add(['Modal', 'title'=>$title]);
         }
+        $modal->observeChanges(); // adds scrollbar if needed
 
         $modal->set(function ($t) use ($callback) {
             call_user_func($callback, $t, $this->app->stickyGet($this->name));

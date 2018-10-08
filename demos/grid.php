@@ -5,7 +5,9 @@ require 'database.php';
 
 $g = $app->add(['Grid']);
 $g->setModel(new Country($db));
-$g->addQuickSearch();
+
+//Adding Quicksearch on Name field using auto query.
+$g->addQuickSearch(['name'], true);
 
 $g->menu->addItem(['Add Country', 'icon' => 'add square'], new \atk4\ui\jsExpression('alert(123)'));
 $g->menu->addItem(['Re-Import', 'icon' => 'power'], new \atk4\ui\jsReload($g));
