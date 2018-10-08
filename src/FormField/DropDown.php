@@ -101,10 +101,10 @@ class DropDown extends Input
         $value = isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: '';
 
         return $this->app->getTag('input', [
-            'name'  => $this->short_name,
-            'type'  => $this->inputType,
-            'id'    => $this->id.'_input',
-            'value' => $value,
+            'name'        => $this->short_name,
+            'type'        => $this->inputType,
+            'id'          => $this->id.'_input',
+            'value'       => $value,
             'readonly'    => $this->readonly,
             'disabled'    => $this->disabled,
         ]);

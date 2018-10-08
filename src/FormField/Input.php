@@ -27,7 +27,6 @@ class Input extends Generic
     public $disabled = false;
     public $readonly = false;
 
-
     /**
      * Specify left / right. If you use "true" will default to the right side.
      */
