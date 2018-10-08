@@ -2,7 +2,7 @@
 
 # 1.6 Release
 
-Our 1.6 release signifies a switch from a stale Semantic UI CSS framework to a community-supported [Fomantic UI](https://fomantic-ui.com/) fork, version 2.6.2. Calendar widget is now supported natively, various other issues are addressed but, more importantly, Fomantic UI is open for collaboration. We are working with their core maintainers [hammy2899](https://github.com/hammy2899) and [prudho](https://github.com/prudho) to implement new modern UI features.
+Our 1.6 release signifies a switch from a stale Semantic UI CSS framework to a community-supported [Fomantic UI](https://fomantic-ui.com/) fork, version 2.6.2. Calendar widget is now supported natively, various other issues are addressed but, more importantly, Fomantic UI is open for collaboration. We are working with their core maintainers [hammy2899](https://github.com/hammy2899), [prudho](https://github.com/prudho) and [ColinFrick](https://github.com/ColinFrick) to implement new modern UI features.
 
 Also now have ability to resize any table, Grid or CRUD:
 
