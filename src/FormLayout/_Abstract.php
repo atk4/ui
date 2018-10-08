@@ -102,7 +102,7 @@ abstract class _Abstract extends \atk4\ui\View
                 continue;
             }
 
-            if ($f->isEditable() || $f->read_only) {
+            if ($f->isEditable()) {
                 $fields[] = $f->short_name;
             }
         }
