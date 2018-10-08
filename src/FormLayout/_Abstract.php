@@ -86,7 +86,7 @@ abstract class _Abstract extends \atk4\ui\View
     {
         return $this->add($decorator, $this->template->hasTag($field->short_name) ? $field->short_name : null);
     }
-    
+
     /**
      * Returns array of names of fields to automatically include them in form.
      *
@@ -134,14 +134,14 @@ abstract class _Abstract extends \atk4\ui\View
         $add_fields = [];
         foreach ($fields as $field) {
             $f = $model->getElement($field);
-            
+
             if ($f->isEditable()) {
                 $add_fields[] = [$f->short_name];
             } elseif ($f->isVisible()) {
                 $add_fields[] = [$f->short_name, ['disabled'=>true]];
             }
         }
-        
+
         if (is_array($add_fields)) {
             foreach ($add_fields as $field) {
                 call_user_func_array([$this, 'addField'], $field);

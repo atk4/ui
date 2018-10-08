@@ -12,7 +12,7 @@ class Columns extends Generic
 {
     /** @var int count of columns */
     public $col = null;
-    
+
     /** @var string size CSS class */
     public $size = '';
 
