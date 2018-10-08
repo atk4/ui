@@ -19,8 +19,7 @@ class App
         'atk'              => 'https://cdn.rawgit.com/atk4/ui/1.5.8/public',
         'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui'      => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1',
-        'calendar'         => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
+        'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.6.2/dist',
     ];
 
     // @var string Version of Agile UI
@@ -300,16 +299,11 @@ class App
         // Semantic UI
         $url = isset($this->cdn['semantic-ui']) ? $this->cdn['semantic-ui'] : '../public';
         $this->requireJS($url.'/semantic.min.js');
-        $this->requireCSS($url.'/semantic.css');
+        $this->requireCSS($url.'/semantic.min.css');
 
         // Serialize Object
         $url = isset($this->cdn['serialize-object']) ? $this->cdn['serialize-object'] : '../public';
         $this->requireJS($url.'/jquery.serialize-object.min.js');
-
-        // Calendar
-        $url = isset($this->cdn['calendar']) ? $this->cdn['calendar'] : '../public';
-        $this->requireJS($url.'/calendar.min.js');
-        $this->requireCSS($url.'/calendar.css');
 
         // Agile UI
         $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
