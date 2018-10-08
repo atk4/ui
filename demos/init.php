@@ -26,7 +26,7 @@ if (isset($layout->leftMenu)) {
 
     $form = $layout->leftMenu->addGroup(['Form', 'icon' => 'edit']);
     $form->addItem('Basics and Layouting', ['form']);
-    $form->addItem('Input Fields', ['field2']);
+    $form->addItem(['Input Fields', 'icon'=>'yellow star'], ['field2']);
     $form->addItem('Input Field Decoration', ['field']);
     $form->addItem(['File Uploading'], ['upload']);
     $form->addItem(['Checkboxes'], ['checkbox']);
@@ -35,14 +35,14 @@ if (isset($layout->leftMenu)) {
     $form->addItem(['Integration with Columns'], ['form5']);
     $form->addItem(['AutoComplete Field'], ['autocomplete']);
     $form->addItem(['Value Selectors'], ['form6']);
-    $form->addItem(['Conditional Fields', 'icon'=>'yellow star'], ['jscondform']);
+    $form->addItem(['Conditional Fields'], ['jscondform']);
 
     $form = $layout->leftMenu->addGroup(['Grid and Table', 'icon' => 'table']);
     $form->addItem('Data table with formatted columns', ['table']);
-    $form->addItem('Advanced table examples', ['table2']);
+    $form->addItem(['Advanced table examples', 'icon'=>'yellow star'], ['table2']);
     $form->addItem('Table interractions', ['multitable']);
-    $form->addItem(['Column Menus', 'icon'=>'yellow star'], ['tablecolumnmenu']);
-    $form->addItem(['Column Filters', 'icon'=>'yellow star'], ['tablefilter']);
+    $form->addItem(['Column Menus'], ['tablecolumnmenu']);
+    $form->addItem(['Column Filters'], ['tablefilter']);
     $form->addItem('Grid - Table+Bar+Search+Paginator', ['grid']);
     $form->addItem('CRUD - Full editing solution', ['crud']);
 
@@ -68,7 +68,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem(['Loader'], ['loader']);
     $basic->addItem(['Console'], ['console']);
     $basic->addItem('Notifier', ['notify']);
-    $basic->addItem(['Pop-up', 'icon'=>'yellow star'], ['popup']);
+    $basic->addItem(['Pop-up'], ['popup']);
     $basic->addItem(['Modal View'], ['modal2']);
     $basic->addItem('Dynamic jsModal', ['modal']);
     $basic->addItem('Sticky GET', ['sticky']);
