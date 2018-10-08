@@ -10,26 +10,27 @@ use atk4\ui\Form;
  */
 class Columns extends Generic
 {
+    /** @var int count of columns */
     public $col = null;
+    
+    /** @var string size CSS class */
     public $size = '';
 
+    /**
+     * Sets form model and adds form fields.
+     *
+     * @param \atk4\data\Model $model
+     * @param array|null       $fields
+     *
+     * @return \atk4\data\Model
+     */
     public function setModel(\atk4\data\Model $model, $fields = null)
     {
         // dont add any fields automatically
         parent::setModel($model, false);
 
         if ($fields === null) {
-            $fields = [];
-            foreach ($model->elements as $f) {
-                if (!$f instanceof \atk4\data\Field) {
-                    continue;
-                }
-
-                if (!$f->isEditable()) {
-                    continue;
-                }
-                $fields[] = $f->short_name;
-            }
+            $fields = $this->getModelFields($model);
         }
 
         $cnt = count($fields);

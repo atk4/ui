@@ -86,7 +86,38 @@ abstract class _Abstract extends \atk4\ui\View
     {
         return $this->add($decorator, $this->template->hasTag($field->short_name) ? $field->short_name : null);
     }
+    
+    /**
+     * Returns array of names of fields to automatically include them in form.
+     *
+     * @param \atk4\data\Model $model
+     *
+     * @return array
+     */
+    protected function getModelFields(\atk4\data\Model $model)
+    {
+        $fields = [];
+        foreach ($model->elements as $f) {
+            if (!$f instanceof \atk4\data\Field) {
+                continue;
+            }
 
+            if ($f->isEditable() || $f->read_only) {
+                $fields[] = $f->short_name;
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Sets form model and adds form fields.
+     *
+     * @param \atk4\data\Model $model
+     * @param array|null       $fields
+     *
+     * @return \atk4\data\Model
+     */
     public function setModel(\atk4\data\Model $model, $fields = null)
     {
         parent::setModel($model);
@@ -96,25 +127,27 @@ abstract class _Abstract extends \atk4\ui\View
         }
 
         if ($fields === null) {
-            $fields = [];
-            foreach ($model->elements as $f) {
-                if (!$f instanceof \atk4\data\Field) {
-                    continue;
-                }
-
-                if (!$f->isEditable()) {
-                    continue;
-                }
-                $fields[] = $f->short_name;
-            }
+            $fields = $this->getModelFields($model);
         }
 
-        if (is_array($fields)) {
-            foreach ($fields as $field) {
-                $this->addField($field);
+        // prepare array of fields - check if fields are editable or read_only/disabled
+        $add_fields = [];
+        foreach ($fields as $field) {
+            $f = $model->getElement($field);
+            
+            if ($f->isEditable()) {
+                $add_fields[] = [$f->short_name];
+            } elseif ($f->isVisible()) {
+                $add_fields[] = [$f->short_name, ['disabled'=>true]];
+            }
+        }
+        
+        if (is_array($add_fields)) {
+            foreach ($add_fields as $field) {
+                call_user_func_array([$this, 'addField'], $field);
             }
         } else {
-            throw new Exception(['Incorrect value for $fields', 'fields' => $fields]);
+            throw new Exception(['Incorrect value for $fields', 'fields' => $add_fields]);
         }
 
         return $model;
@@ -123,6 +156,10 @@ abstract class _Abstract extends \atk4\ui\View
     /**
      * Return Field decorator associated with
      * the form's field.
+     *
+     * @param string $name
+     *
+     * @return \atk4\ui\FormField\Generic
      */
     public function getField($name)
     {
