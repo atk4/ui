@@ -23,6 +23,27 @@ $table->resizableColumn(function($j, $w){
 
 // For Grid or CRUD:
 $crud->table->resizableColumn
+```
+
+We also introducing a somewhat experemental "Lookup" field. It is identical to AutoComplete and can work as a stand-in
+replacement, but supports "filters". For now we are looking for ways to make this field more compact before it becomes
+part of AutoComplete.
+
+``` php
+
+$form = $app->add(new \atk4\ui\Form(['segment']));
+$form->add(['Label', 'Add city', 'top attached'], 'AboveFields');
+
+$l = $form->addField('city',['Lookup']);
+
+// will restraint possible city value in droddown base on country and/or language.
+$l->addFilter('country', 'Country');
+$l->addFilter('language', 'Lang');
+
+//make sure country and language belong to your model.
+$l->setModel(new City($db));
+```
+
 
 **Closed issues:**
 
