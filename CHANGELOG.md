@@ -4,7 +4,25 @@
 
 Our 1.6 release signifies a switch from a stale Semantic UI CSS framework to a community-supported [Fomantic UI](https://fomantic-ui.com/) fork, version 2.6.2. Calendar widget is now supported natively, various other issues are addressed but, more importantly, Fomantic UI is open for collaboration. We are working with their core maintainers [hammy2899](https://github.com/hammy2899) and [prudho](https://github.com/prudho) to implement new modern UI features.
 
-[Full Changelog](https://github.com/atk4/ui/compare/1.5.8...HEAD)
+Also now have ability to resize any table, Grid or CRUD:
+
+``` php
+
+// Enable reizable columns on the table
+$table->resizableColumn();
+
+// Also supports custom callaback (on-resize) and ability to pre-set the width:
+$table->resizableColumn(function($j, $w){
+    $columnWidths = json_decode($w);
+    // store widths somewhere
+    return;
+}, [200,300,100,100,100]); // default widths
+
+[$table->resizableColumns();](https://agile-ui.readthedocs.io/en/latest/table.html?highlight=table#resizable-columns)
+
+
+// For Grid or CRUD:
+$crud->table->resizableColumn
 
 **Closed issues:**
 
