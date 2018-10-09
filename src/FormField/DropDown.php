@@ -161,7 +161,6 @@ class DropDown extends Input
             //$this->template->trySetHtml('BeforeInput', "<input name='{$inputName}' type='hidden'/>");
         }
 
-
         if ($this->dropIcon) {
             $this->template->trySet('DropIcon', $this->dropIcon);
         }

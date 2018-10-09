@@ -50,7 +50,7 @@ class Radio extends Generic
         $this->lister->addHook('beforeRow', function ($lister) use ($value) {
             if ($this->readonly) {
                 $lister->t_row->set('disabled', $value != $lister->model->id ? 'disabled' : '');
-            } else if ($this->disabled) {
+            } elseif ($this->disabled) {
                 $lister->t_row->set('disabled', 'disabled');
             }
 

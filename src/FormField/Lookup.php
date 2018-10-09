@@ -290,10 +290,10 @@ class Lookup extends Input
     public function getInput()
     {
         return $this->app->getTag('input', [
-            'name' => $this->short_name,
-            'type' => 'hidden',
-            'id'    => $this->id.'_input',
-            'value' => $this->getValue(),
+            'name'        => $this->short_name,
+            'type'        => 'hidden',
+            'id'          => $this->id.'_input',
+            'value'       => $this->getValue(),
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
         ]);

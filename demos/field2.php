@@ -38,15 +38,16 @@ $g->addField('d_disb', [new \atk4\ui\FormField\DropDown(['values' => $values]), 
 
 $g = $f->addGroup('Radio');
 
-$g->addField('radio_norm',['Radio'], ['enum'=>['one', 'two', 'three']])->set('two');
-$g->addField('radio_read',['Radio', 'readonly' => true ], ['enum'=>['one', 'two', 'three']])->set('two');
-$g->addField('radio_disb',['Radio', 'disabled' => true ], ['enum'=>['one', 'two', 'three']])->set('two');
-
+$g->addField('radio_norm', ['Radio'], ['enum'=>['one', 'two', 'three']])->set('two');
+$g->addField('radio_read', ['Radio', 'readonly' => true], ['enum'=>['one', 'two', 'three']])->set('two');
+$g->addField('radio_disb', ['Radio', 'disabled' => true], ['enum'=>['one', 'two', 'three']])->set('two');
 
 $g = $f->addGroup('File upload');
 
-$onDelete = function(){return;};
-$onUpload = function(){return;};
+$onDelete = function () {
+};
+$onUpload = function () {
+};
 
 $field = $g->addField('file_norm', ['Upload', ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg');
 $field->onDelete($onDelete);
