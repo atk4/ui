@@ -25,6 +25,9 @@ class Radio extends Generic
      */
     public $values = [];
 
+    /**
+     * Initialization.
+     */
     public function init()
     {
         parent::init();
@@ -33,12 +36,11 @@ class Radio extends Generic
         $this->lister->t_row['_name'] = $this->short_name;
     }
 
+    /**
+     * Renders view.
+     */
     public function renderView()
     {
-        if ($this->disabled) {
-            $this->addClass('disabled');
-        }
-
         if (!$this->model) {
             $p = new \atk4\data\Persistence_Static($this->values);
             $this->setModel(new \atk4\data\Model($p));
@@ -47,11 +49,16 @@ class Radio extends Generic
         $value = $this->field ? $this->field->get() : $this->content;
 
         $this->lister->setModel($this->model);
+
+        // take care of readonly and disabled statuses
+        if ($this->disabled) {
+            $this->addClass('disabled');
+        }
         $this->lister->addHook('beforeRow', function ($lister) use ($value) {
             if ($this->readonly) {
-                $lister->t_row->set('disabled', $value != $lister->model->id ? 'disabled' : '');
+                $lister->t_row->set('disabled', $value != $lister->model->id ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {
-                $lister->t_row->set('disabled', 'disabled');
+                $lister->t_row->set('disabled', 'disabled="disabled"');
             }
 
             $lister->t_row->set('checked', $value == $lister->model->id ? 'checked' : '');
