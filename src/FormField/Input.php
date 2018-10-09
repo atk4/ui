@@ -24,9 +24,6 @@ class Input extends Generic
 
     public $iconLeft = null;
 
-    public $disabled = false;
-    public $readonly = false;
-
     /**
      * Specify left / right. If you use "true" will default to the right side.
      */
@@ -62,6 +59,8 @@ class Input extends Generic
      * to target the "input" element.
      *
      * $field->jsInput(true)->val(123);
+     *
+     * @return jQuery
      */
     public function jsInput($when = null, $action = null)
     {
@@ -70,6 +69,8 @@ class Input extends Generic
 
     /**
      * Returns presentable value to be inserted into input tag.
+     *
+     * @return mixed
      */
     public function getValue()
     {
@@ -77,7 +78,9 @@ class Input extends Generic
     }
 
     /**
-     * returns <input .../> tag.
+     * Returns <input .../> tag.
+     *
+     * @return string
      */
     public function getInput()
     {
@@ -87,8 +90,8 @@ class Input extends Generic
             'placeholder' => $this->placeholder,
             'id'          => $this->id.'_input',
             'value'       => $this->getValue(),
-            'readonly'    => $this->readonly,
-            'disabled'    => $this->disabled,
+            'readonly'    => $this->readonly ? 'readonly' : false,
+            'disabled'    => $this->disabled ? 'disabled' : false,
         ]);
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
@@ -138,6 +141,9 @@ class Input extends Generic
         return $button;
     }
 
+    /**
+     * Renders view.
+     */
     public function renderView()
     {
         // TODO: I don't think we need the loading state at all.
@@ -153,7 +159,7 @@ class Input extends Generic
             }
         }
 
-        //state
+        // disabled state
         if ($this->disabled) {
             $this->addClass('disabled');
         }
@@ -205,6 +211,13 @@ class Input extends Generic
         parent::renderView();
     }
 
+    /**
+     * Adds new action button.
+     *
+     * @param array $defaults
+     *
+     * @return Button
+     */
     public function addAction($defaults = [])
     {
         if (!is_array($defaults)) {

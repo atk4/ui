@@ -16,9 +16,17 @@ class CheckBox extends Generic
     /**
      * Label appears to the right of the checkbox. If label is not set specifically
      * then the $caption property will be displayed as a label instead.
+     *
+     * @var string
      */
     public $label = null;
 
+    /**
+     * Constructor.
+     *
+     * @param string $label
+     * @param string $class
+     */
     public function __construct($label = null, $class = null)
     {
         $this->label = $label;
@@ -28,6 +36,9 @@ class CheckBox extends Generic
         }
     }
 
+    /**
+     * Initialization.
+     */
     public function init()
     {
         parent::init();
@@ -42,6 +53,12 @@ class CheckBox extends Generic
         }
     }
 
+    /**
+     * Set field value.
+     *
+     * @param bool  $value
+     * @param mixed $junk
+     */
     public function set($value = null, $junk = null)
     {
         if (!is_bool($value)) {
@@ -51,6 +68,9 @@ class CheckBox extends Generic
         parent::set($value);
     }
 
+    /**
+     * Render view.
+     */
     public function renderView()
     {
         $this->template['label'] = $this->label ?: $this->caption;
@@ -59,14 +79,13 @@ class CheckBox extends Generic
             $this->template->set('checked', 'checked');
         }
 
-        /*
-         * We don't want this displayed, because it can only affect "checked" status anyway
-         */
+        // We don't want this displayed, because it can only affect "checked" status anyway
         $this->content = null;
 
         $this->js(true)->checkbox();
 
         $this->content = null; // no content again
+
         return parent::renderView();
     }
 }

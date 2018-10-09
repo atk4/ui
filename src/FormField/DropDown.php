@@ -81,6 +81,9 @@ class DropDown extends Input
      */
     public $isMultiple = false;
 
+    /**
+     * Initialization.
+     */
     public function init()
     {
         parent::init();
@@ -95,6 +98,8 @@ class DropDown extends Input
 
     /**
      * returns <input .../> tag.
+     *
+     * @return string
      */
     public function getInput()
     {
@@ -105,16 +110,16 @@ class DropDown extends Input
             'type'        => $this->inputType,
             'id'          => $this->id.'_input',
             'value'       => $value,
-            'readonly'    => $this->readonly,
-            'disabled'    => $this->disabled,
+            'readonly'    => $this->readonly ? 'readonly' : false,
+            'disabled'    => $this->disabled ? 'disabled' : false,
         ]);
     }
 
     /**
      * Set js dropdown() specific option;.
      *
-     * @param $option
-     * @param $value
+     * @param string $option
+     * @param mixed  $value
      */
     public function setDropdownOption($option, $value)
     {
@@ -124,13 +129,16 @@ class DropDown extends Input
     /**
      * Set js dropdown() options.
      *
-     * @param $options
+     * @param array $options
      */
     public function setDropdownOptions($options)
     {
         $this->dropdownOptions = $options;
     }
 
+    /**
+     * Renders view.
+     */
     public function renderView()
     {
         $this->js(true)->dropdown($this->dropdownOptions);

@@ -4,6 +4,42 @@
  */
 require 'init.php';
 
+
+
+
+$app->add(['Header', 'Disabled and read only form fields (normal / readonly / disabled)']);
+
+$f = $app->add('Form');
+
+// Test all kinds of input fields
+$g = $f->addGroup('Line');
+$g->addField('line_norm')->set('editable');
+$g->addField('line_read', ['readonly' => true])->set('read only');
+$g->addField('line_disb', ['disabled' => true])->set('disabled');
+
+$g = $f->addGroup('Text Area');
+$g->addField('text_norm', [new \atk4\ui\FormField\TextArea()])->set('editable');
+$g->addField('text_read', [new \atk4\ui\FormField\TextArea(), 'readonly' => true])->set('read only');
+$g->addField('text_disb', [new \atk4\ui\FormField\TextArea(), 'disabled' => true])->set('disabled');
+
+$g = $f->addGroup('Checkbox');
+$g->addField('c_norm', [new \atk4\ui\FormField\CheckBox()])->set(true);
+$g->addField('c_read', [new \atk4\ui\FormField\CheckBox(), 'readonly' => true])->set(true); // allows to change value
+$g->addField('c_disb', [new \atk4\ui\FormField\CheckBox(), 'disabled' => true])->set(true); // input is not disabled
+
+$g = $f->addGroup('DropDown');
+$values = [
+            'tag'        => ['Tag', 'icon' => 'tag icon'],
+            'globe'      => ['Globe', 'icon' => 'globe icon'],
+            'registered' => ['Registered', 'icon' => 'registered icon'],
+            'file'       => ['File', 'icon' => 'file icon'],
+        ];
+$g->addField('d_norm', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'width'=>'three'])->set('globe');
+$g->addField('d_read', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'readonly' => true, 'width'=>'three'])->set('globe'); // allows to change value
+$g->addField('d_disb', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'disabled' => true, 'width'=>'three'])->set('globe'); // css disabled, but can focus with Tab and change value
+
+
+
 $app->add(['Header', 'Stand Alone Line']);
 // you can pass values to button
 $field = $app->add(new \atk4\ui\FormField\Line());
@@ -12,6 +48,8 @@ $field->set('hello world');
 
 $button = $field->addAction('check value');
 $button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [$field->jsInput()->val()]));
+
+
 
 $app->add(['Header', 'Line in a Form']);
 $form = $app->add('Form');
@@ -31,6 +69,8 @@ $form->onSubmit(function ($f) {
     return $f->model['name'];
 });
 
+
+
 $app->add(['Header', 'Multiple Form Layouts']);
 
 $form = $app->add('Form');
@@ -46,6 +86,8 @@ $form_page->addField('age', new \atk4\ui\FormField\Line());
 $form->onSubmit(function ($f) {
     return $f->model['name'].' has age '.$f->model['age'];
 });
+
+
 
 $app->add(['Header', 'onChange event', 'subHeader'=>'see in browser console']);
 
