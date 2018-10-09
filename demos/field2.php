@@ -85,6 +85,12 @@ $g->addField('Lookup_disb', [
     'disabled'    => true,
 ])->set($m->loadAny()->id);
 
+$g = $f->addGroup('Calendar');
+
+$g->addField('calendar_norm', ['Calendar', 'type' => 'date'])->set(date($app->ui_persistence->date_format));
+$g->addField('calendar_read', ['Calendar', 'type' => 'date', 'readonly' => true])->set(date($app->ui_persistence->date_format));
+$g->addField('calendar_disb', ['Calendar', 'type' => 'date', 'disabled' => true])->set(date($app->ui_persistence->date_format));
+
 $app->add(['Header', 'Stand Alone Line']);
 // you can pass values to button
 $field = $app->add(new \atk4\ui\FormField\Line());

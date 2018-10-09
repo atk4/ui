@@ -457,11 +457,15 @@ class Lookup extends Input
 
         if ($this->disabled) {
             $this->settings['showOnFocus'] = false;
+            $this->settings['allowTab'] = false;
+
             $this->template->set('disabled', 'disabled');
         }
 
         if ($this->readonly) {
             $this->settings['showOnFocus'] = false;
+            $this->settings['allowTab'] = false;
+            $this->template->set('readonly', 'readonly');
         }
 
         if ($this->filters) {
