@@ -4,9 +4,6 @@
  */
 require 'init.php';
 
-
-
-
 $app->add(['Header', 'Disabled and read only form fields (normal / readonly / disabled)']);
 
 $f = $app->add('Form');
@@ -38,8 +35,6 @@ $g->addField('d_norm', [new \atk4\ui\FormField\DropDown(['values' => $values]), 
 $g->addField('d_read', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'readonly' => true, 'width'=>'three'])->set('globe'); // allows to change value
 $g->addField('d_disb', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'disabled' => true, 'width'=>'three'])->set('globe'); // css disabled, but can focus with Tab and change value
 
-
-
 $app->add(['Header', 'Stand Alone Line']);
 // you can pass values to button
 $field = $app->add(new \atk4\ui\FormField\Line());
@@ -48,8 +43,6 @@ $field->set('hello world');
 
 $button = $field->addAction('check value');
 $button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [$field->jsInput()->val()]));
-
-
 
 $app->add(['Header', 'Line in a Form']);
 $form = $app->add('Form');
@@ -69,8 +62,6 @@ $form->onSubmit(function ($f) {
     return $f->model['name'];
 });
 
-
-
 $app->add(['Header', 'Multiple Form Layouts']);
 
 $form = $app->add('Form');
@@ -86,8 +77,6 @@ $form_page->addField('age', new \atk4\ui\FormField\Line());
 $form->onSubmit(function ($f) {
     return $f->model['name'].' has age '.$f->model['age'];
 });
-
-
 
 $app->add(['Header', 'onChange event', 'subHeader'=>'see in browser console']);
 
