@@ -132,7 +132,7 @@ class Lookup extends Input
         $this->template->set('place_holder', $this->placeholder);
 
         if ($this->plus) {
-            $this->action = $this->factory(['Button', is_string($this->plus) ? $this->plus : 'Add new']);
+            $this->action = $this->factory(['Button', is_string($this->plus) ? $this->plus : 'Add new', 'disabled' => ($this->disabled || $this->readonly)]);
         }
         //var_Dump($this->model->get());
         if ($this->form) {
@@ -292,9 +292,10 @@ class Lookup extends Input
         return $this->app->getTag('input', [
             'name' => $this->short_name,
             'type' => 'hidden',
-            /*'placeholder'=> $this->placeholder,*/
             'id'    => $this->id.'_input',
             'value' => $this->getValue(),
+            'readonly'    => $this->readonly ? 'readonly' : false,
+            'disabled'    => $this->disabled ? 'disabled' : false,
         ]);
     }
 
@@ -453,6 +454,15 @@ class Lookup extends Input
     {
         $this->callback = $this->add('Callback');
         $this->callback->set([$this, 'getData']);
+
+        if ($this->disabled) {
+            $this->settings['showOnFocus'] = false;
+            $this->template->set('disabled', 'disabled');
+        }
+
+        if ($this->readonly) {
+            $this->settings['showOnFocus'] = false;
+        }
 
         if ($this->filters) {
             $this->fieldClass = 'ui segment';

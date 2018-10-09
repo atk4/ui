@@ -3,6 +3,8 @@
 namespace atk4\ui\FormField;
 
 use atk4\ui\Form;
+use atk4\ui\jsExpression;
+use atk4\ui\jsFunction;
 
 /**
  * Input element for a form field.
@@ -141,6 +143,17 @@ class DropDown extends Input
      */
     public function renderView()
     {
+        $this->addClass($this->defaultClass);
+
+        if ($this->readonly || $this->disabled) {
+            $this->setDropdownOption('showOnFocus', false);
+            $this->removeClass('search');
+        }
+
+        if ($this->readonly) {
+            $this->setDropdownOption('onShow', new jsFunction([new jsExpression('return false')]));
+        }
+
         $this->js(true)->dropdown($this->dropdownOptions);
 
         if ($this->isMultiple) {
@@ -148,7 +161,6 @@ class DropDown extends Input
             //$this->template->trySetHtml('BeforeInput', "<input name='{$inputName}' type='hidden'/>");
         }
 
-        $this->addClass($this->defaultClass);
 
         if ($this->dropIcon) {
             $this->template->trySet('DropIcon', $this->dropIcon);

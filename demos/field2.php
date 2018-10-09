@@ -3,6 +3,7 @@
  * Demonstrates how to use fields with form.
  */
 require 'init.php';
+require 'database.php';
 
 $app->add(['Header', 'Disabled and read only form fields (normal / readonly / disabled)']);
 
@@ -34,6 +35,54 @@ $values = [
 $g->addField('d_norm', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'width'=>'three'])->set('globe');
 $g->addField('d_read', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'readonly' => true, 'width'=>'three'])->set('globe'); // allows to change value
 $g->addField('d_disb', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'disabled' => true, 'width'=>'three'])->set('globe'); // css disabled, but can focus with Tab and change value
+
+$g = $f->addGroup('Radio');
+
+$g->addField('radio_norm',['Radio'], ['enum'=>['one', 'two', 'three']])->set('two');
+$g->addField('radio_read',['Radio', 'readonly' => true ], ['enum'=>['one', 'two', 'three']])->set('two');
+$g->addField('radio_disb',['Radio', 'disabled' => true ], ['enum'=>['one', 'two', 'three']])->set('two');
+
+
+$g = $f->addGroup('File upload');
+
+$onDelete = function(){return;};
+$onUpload = function(){return;};
+
+$field = $g->addField('file_norm', ['Upload', ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg');
+$field->onDelete($onDelete);
+$field->onUpload($onUpload);
+
+$field = $g->addField('file_read', ['Upload', ['accept' => ['.png', '.jpg'], 'readonly'=> true]])->set('readonly', 'readonly.jpg');
+$field->onDelete($onDelete);
+$field->onUpload($onUpload);
+
+$field = $g->addField('file_disb', ['Upload', ['accept' => ['.png', '.jpg'], 'disabled'=> true]])->set('disabled', 'disabled.jpg');
+$field->onDelete($onDelete);
+$field->onUpload($onUpload);
+
+$g = $f->addGroup('Lookup');
+
+$m = new Country($db);
+
+$g->addField('Lookup_norm', [
+    'Lookup',
+    'model'       => $m,
+    'plus'        => true,
+])->set($m->loadAny()->id);
+
+$g->addField('Lookup_read', [
+    'Lookup',
+    'model'       => $m,
+    'plus'        => true,
+    'readonly'    => true,
+])->set($m->loadAny()->id);
+
+$g->addField('Lookup_disb', [
+    'Lookup',
+    'model'       => $m,
+    'plus'        => true,
+    'disabled'    => true,
+])->set($m->loadAny()->id);
 
 $app->add(['Header', 'Stand Alone Line']);
 // you can pass values to button
