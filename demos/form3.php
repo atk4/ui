@@ -31,9 +31,11 @@ $form->setModel(
 $form->onSubmit(function ($form) {
     $errors = [];
     foreach ($form->model->dirty as $field => $value) {
-        if ($form->model->getElement($field)->never_persist) {
+        /*
+        if (!$form->model->getElement($field)->isEditable()) {
             continue;
         }
+        */
         $errors[] = $form->error($field, 'Value was changed, '.json_encode($value).' to '.json_encode($form->model[$field]));
     }
 
