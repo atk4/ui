@@ -3,6 +3,8 @@
 namespace atk4\ui\FormField;
 
 use atk4\ui\Form;
+use atk4\ui\jsExpression;
+use atk4\ui\jsFunction;
 
 /**
  * Input element for a form field.
@@ -81,6 +83,9 @@ class DropDown extends Input
      */
     public $isMultiple = false;
 
+    /**
+     * Initialization.
+     */
     public function init()
     {
         parent::init();
@@ -95,24 +100,28 @@ class DropDown extends Input
 
     /**
      * returns <input .../> tag.
+     *
+     * @return string
      */
     public function getInput()
     {
         $value = isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: '';
 
         return $this->app->getTag('input', [
-            'name'  => $this->short_name,
-            'type'  => $this->inputType,
-            'id'    => $this->id.'_input',
-            'value' => $value,
+            'name'        => $this->short_name,
+            'type'        => $this->inputType,
+            'id'          => $this->id.'_input',
+            'value'       => $value,
+            'readonly'    => $this->readonly ? 'readonly' : false,
+            'disabled'    => $this->disabled ? 'disabled' : false,
         ]);
     }
 
     /**
      * Set js dropdown() specific option;.
      *
-     * @param $option
-     * @param $value
+     * @param string $option
+     * @param mixed  $value
      */
     public function setDropdownOption($option, $value)
     {
@@ -122,23 +131,37 @@ class DropDown extends Input
     /**
      * Set js dropdown() options.
      *
-     * @param $options
+     * @param array $options
      */
     public function setDropdownOptions($options)
     {
         $this->dropdownOptions = $options;
     }
 
+    /**
+     * Renders view.
+     */
     public function renderView()
     {
+        $this->addClass($this->defaultClass);
+
+        if ($this->readonly || $this->disabled) {
+            $this->setDropdownOption('showOnFocus', false);
+            $this->setDropdownOption('allowTab', false);
+            $this->removeClass('search');
+        }
+
+        if ($this->readonly) {
+            $this->setDropdownOption('allowTab', false);
+            $this->setDropdownOption('onShow', new jsFunction([new jsExpression('return false')]));
+        }
+
         $this->js(true)->dropdown($this->dropdownOptions);
 
         if ($this->isMultiple) {
             $this->defaultClass = $this->defaultClass.' multiple';
             //$this->template->trySetHtml('BeforeInput', "<input name='{$inputName}' type='hidden'/>");
         }
-
-        $this->addClass($this->defaultClass);
 
         if ($this->dropIcon) {
             $this->template->trySet('DropIcon', $this->dropIcon);

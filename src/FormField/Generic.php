@@ -20,6 +20,7 @@ class Generic extends View
      */
     public $field;
 
+    /** @var string Field class */
     public $fieldClass = '';
 
     /**
@@ -48,6 +49,22 @@ class Generic extends View
      * @var string|\atk4\ui\View|array
      */
     public $hint = null;
+
+    /**
+     * Is input field disabled?
+     * Disabled input fields are not editable and will not be submitted.
+     *
+     * @var bool
+     */
+    public $disabled = false;
+
+    /**
+     * Is input field read only?
+     * Read only input fields are not editable, but will be submitted.
+     *
+     * @var bool
+     */
+    public $readonly = false;
 
     /**
      * Initialization.
@@ -121,6 +138,11 @@ class Generic extends View
         $this->on('change', '#'.$this->id.'_input', $expr);
     }
 
+    /**
+     * Return field class.
+     *
+     * @return string
+     */
     public function getFieldClass()
     {
         return $this->fieldClass;

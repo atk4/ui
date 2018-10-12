@@ -422,7 +422,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             try {
                 $value = isset($post[$key]) ? $post[$key] : null;
 
-                $this->model[$key] = $this->app->ui_persistence->typecastLoadField($field->field, $value);
+                // save field value only if field was editable in form at all
+                if (!$field->readonly && !$field->disabled) {
+                    $this->model[$key] = $this->app->ui_persistence->typecastLoadField($field->field, $value);
+                }
             } catch (\atk4\core\Exception $e) {
                 $errors[$key] = $e->getMessage();
             }
@@ -433,6 +436,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
     }
 
+    /**
+     * Renders view.
+     */
     public function renderView()
     {
         $this->ajaxSubmit();
@@ -520,7 +526,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             return $response;
         });
 
-        //var_Dump($cb->getURL());
+        //var_dump($cb->getURL());
         $this->js(true)
             ->api(array_merge(['url' => $cb->getJSURL(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
             ->form(['inline' => true, 'on' => 'blur']);

@@ -9,15 +9,13 @@ use atk4\ui\Form;
  */
 class TextArea extends Input
 {
+    /** @var int Text area vertical size */
     public $rows = 2;
-
-    public function init()
-    {
-        parent::init();
-    }
 
     /**
      * returns <input .../> tag.
+     *
+     * @return string
      */
     public function getInput()
     {
@@ -27,6 +25,8 @@ class TextArea extends Input
             'rows'        => $this->rows,
             'placeholder' => $this->placeholder,
             'id'          => $this->id.'_input',
+            'readonly'    => $this->readonly ? 'readonly' : false,
+            'disabled'    => $this->disabled ? 'disabled' : false,
         ], isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: ''
     );
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';

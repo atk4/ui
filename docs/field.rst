@@ -120,9 +120,22 @@ or you can inject a view with a custom template::
         'Click <a href="http://example.com/" target="_blank">here</a>'
     )]]);
 
+Read only and disabled fields
+-----------------------------
 
-Relatioship with Model
-======================
+.. php:attr: readonly
+
+Read only fields can be seen in form, can be focused and will be submitted, but we don't allow to
+change their value.
+
+.. php:attr: disabled
+
+Disabled fields can be  seend in form, can not be focused and will not be submitted. And of course we
+don't allow to change their value. Disabled form fields are used for read only model fields for example.
+
+
+Relationship with Model
+=======================
 
 In the examples above, we looked at how to create Field Decorator object explicitly.
 The most common use-case in large application is the use with Models. You would need a model, such as
