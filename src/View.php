@@ -940,6 +940,9 @@ class View implements jsExpressionable
             if (is_array($action)) {
                 $urlData = $action;
                 unset($urlData[0]);
+                foreach($urlData as $a) {
+                    $actions[] = $a;
+                }
                 $action = $action[0];
             } else {
                 $urlData = [];
