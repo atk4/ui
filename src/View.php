@@ -925,14 +925,8 @@ class View implements jsExpressionable
         }
 
         $actions = [];
-        $actions['preventDefault'] = true;
-        $actions['stopPropagation'] = true;
-        if (isset($defaults['preventDefault'])) {
-            $actions['preventDefault'] = $defaults['preventDefault'];
-        }
-        if (isset($defaults['stopPropagation'])) {
-            $actions['stopPropagation'] = $defaults['stopPropagation'];
-        }
+        $actions['preventDefault'] = isset($defaults['preventDefault']) ? $defaults['preventDefault'] : true;
+        $actions['stopPropagation'] = isset($defaults['stopPropagation']) ? $defaults['stopPropagation'] : true;
 
         if (is_callable($action) || (is_array($action) && isset($action[0]) && is_callable($action[0]))) {
             // if callable $action is passed, then execute ajaxec()
