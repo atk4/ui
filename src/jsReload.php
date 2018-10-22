@@ -31,7 +31,7 @@ class jsReload implements jsExpressionable
 
     /**
      * Semantic-ui api settings.
-     * ex: ['loadingDuration' => 1000]
+     * ex: ['loadingDuration' => 1000].
      *
      * @var array
      */
