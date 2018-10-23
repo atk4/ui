@@ -29,11 +29,20 @@ class jsReload implements jsExpressionable
      */
     public $args = [];
 
-    public function __construct($view, $args = [], $afterSuccess = null)
+    /**
+     * Semantic-ui api settings.
+     * ex: ['loadingDuration' => 1000].
+     *
+     * @var array
+     */
+    public $apiConfig = [];
+
+    public function __construct($view, $args = [], $afterSuccess = null, $apiConfig = [])
     {
         $this->view = $view;
         $this->args = $args;
         $this->afterSuccess = $afterSuccess;
+        $this->apiConfig = $apiConfig;
     }
 
     public function jsRender()
@@ -44,6 +53,7 @@ class jsReload implements jsExpressionable
                     'uri'          => $this->view->jsURL(['__atk_reload'=>$this->view->name]),
                     'uri_options'  => $this->args,
                     'afterSuccess' => $this->afterSuccess ? $this->afterSuccess->jsRender() : null,
+                    'apiConfig'    => $this->apiConfig,
                 ]
             );
 
