@@ -148,7 +148,14 @@ class App
         }
 
         if ($this->fix_incompatible) {
-            if (PHP_MAJOR_VERSION >= 7) {
+            // PHP 7.0 introduces strict checks for method patterns. But only 7.2 introduced parameter type widening
+            //
+            // https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)#Contravariant_method_argument_type
+            // https://wiki.php.net/rfc/parameter-no-type-variance
+            //
+            // We wish to start using type-hinting more in our classes, but it would break any extends in 3rd party code unless
+            // they are on 7.2.
+            if (version_compare(PHP_VERSION, '7.0.0') >= 0 && version_compare(PHP_VERSION, '7.2.0') < 0) {
                 set_error_handler(function ($errno, $errstr) {
                     return strpos($errstr, 'Declaration of') === 0;
                 }, E_WARNING);
@@ -338,25 +345,20 @@ class App
     }
 
     /**
-     * Create object and associate it with this app.
+     * Add a new object into the app. You will need to have Layout first.
+     *
+     * @param mixed  $seed   New object to add
+     * @param string $region
      *
      * @return object
      */
-    public function add()
+    public function add($seed, $region = null)
     {
-        if ($this->layout) {
-            return call_user_func_array([$this->layout, 'add'], func_get_args());
-        } else {
-            list($obj) = func_get_args();
-
-            if (!is_object($obj)) {
-                throw new Exception(['Incorrect use of App::add. First parameter should be object.']);
-            }
-
-            $obj->app = $this;
-
-            return $obj;
+        if (!$this->layout) {
+            throw new Exception(['If you use $app->add() you should first call $app->setLayout()']);
         }
+
+        return $this->layout->add($seed, $region);
     }
 
     /**
