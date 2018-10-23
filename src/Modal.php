@@ -46,6 +46,14 @@ class Modal extends View
     //now only supported json type response.
     public $type = 'json';
 
+    /*
+     * if true, the <div class="actions"> at the bottom of the modal is
+     * shown. Automatically set to true if any actions are added
+     *
+     * @var bool
+     */
+    public $showActions = false;
+
     /**
      * Set callback function for this modal.
      *
@@ -262,7 +270,7 @@ class Modal extends View
     public function addButtonAction($button)
     {
         $this->add($button, 'actions');
-
+        $this->showActions = true;
         return $this;
     }
 
@@ -290,6 +298,10 @@ class Modal extends View
 
         if (!empty($this->fx)) {
             $data['uri'] = $this->cb->getJSURL();
+        }
+
+        if (!$this->showActions) {
+            $this->template->del('ActionContainer');
         }
 
         // call modal creation first
