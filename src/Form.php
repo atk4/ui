@@ -551,7 +551,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         //var_dump($cb->getURL());
         $this->js(true)
             ->api(array_merge(['url' => $cb->getJSURL(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
-            ->form(array_merge($this->formConfig, ['inline' => true, 'on' => 'blur']));
+            ->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
         $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
     }
