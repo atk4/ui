@@ -191,7 +191,7 @@ class Grid extends View
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
             }
             $this->applySort();
-            
+
             //return the view to reload.
             return $this->container;
         });
@@ -352,7 +352,7 @@ class Grid extends View
      */
     public function applySort()
     {
-        $sortby = isset($_GET[$this->name.'_sort']) ? $_GET[$this->name.'_sort']: null;
+        $sortby = isset($_GET[$this->name.'_sort']) ? $_GET[$this->name.'_sort'] : null;
         $desc = false;
         if ($sortby && $sortby[0] == '-') {
             $desc = true;
@@ -469,7 +469,7 @@ class Grid extends View
      */
     public function recursiveRender()
     {
-        $sortby = isset($_GET[$this->name.'_sort']) ? $_GET[$this->name.'_sort']: null;
+        $sortby = isset($_GET[$this->name.'_sort']) ? $_GET[$this->name.'_sort'] : null;
         // bind with paginator
         if ($this->paginator) {
             if ($sortby) {
