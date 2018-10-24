@@ -26,7 +26,7 @@ $m->hasOne('country2', [new Country(), 'ui' => ['form' => [
 $form->setModel($m);
 
 $form->addField('country3', [
-    'Lookup',
+    'AutoComplete',
     'model'       => new Country($db),
     'placeholder' => 'Search for country by code, LV or UK',
     'search'      => ['name', 'iso', 'iso3'],
