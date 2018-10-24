@@ -352,8 +352,7 @@ class Grid extends View
      */
     public function applySort()
     {
-        //$sortby = $this->app->stickyGET($this->name.'_sort', null);
-        $sortby = $this->stickyGet($this->name.'_sort');
+        $sortby = isset($_GET[$this->name.'_sort']) ? $_GET[$this->name.'_sort']: null;
         $desc = false;
         if ($sortby && $sortby[0] == '-') {
             $desc = true;
@@ -470,14 +469,17 @@ class Grid extends View
      */
     public function recursiveRender()
     {
+        $sortby = isset($_GET[$this->name.'_sort']) ? $_GET[$this->name.'_sort']: null;
         // bind with paginator
         if ($this->paginator) {
-            $this->paginator->reload = $this->container;
+            if ($sortby) {
+                $this->paginator->addReloadArgs([$this->name.'_sort' => $sortby]);
+            }
             $this->setModelLimitFromPaginator();
         }
 
         if ($this->quickSearch instanceof jsSearch) {
-            if ($sortby = $this->stickyGet($this->name.'_sort')) {
+            if ($sortby) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->name.'_sort', $sortby]));
             }
         }

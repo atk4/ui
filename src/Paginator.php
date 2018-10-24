@@ -44,6 +44,14 @@ class Paginator extends View
      */
     public $reload = null;
 
+    /**
+     * Add extra parameter to the reload view
+     * as jsReload uri_options.
+     *
+     * @var array
+     */
+    public $reloadArgs = [];
+
     public $ui = 'pagination menu';
     public $defaultTemplate = 'paginator.html';
 
@@ -169,6 +177,17 @@ class Paginator extends View
     }
 
     /**
+     * Add extra argument to the reload view.
+     * These arguments will be set as uri_options to jsReload.
+     *
+     * @param array $args
+     */
+    public function addReloadArgs($args)
+    {
+        $this->reloadArgs = array_merge($this->reloadArgs, $args);
+    }
+
+    /**
      * Render page item using template $t for the page number $page.
      *
      * @param Template   $t
@@ -208,7 +227,7 @@ class Paginator extends View
         }
 
         if ($this->reload) {
-            $this->on('click', '.item', new jsReload($this->reload, [$this->urlTrigger => new jsExpression('$(this).data("page")')]));
+            $this->on('click', '.item', new jsReload($this->reload, array_merge([$this->urlTrigger => new jsExpression('$(this).data("page")')], $this->reloadArgs)));
         }
 
         parent::renderView();
