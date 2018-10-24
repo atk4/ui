@@ -190,6 +190,8 @@ class Grid extends View
             if ($this->quickSearch instanceof jsSearch) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
             }
+            $this->applySort();
+            
             //return the view to reload.
             return $this->container;
         });
