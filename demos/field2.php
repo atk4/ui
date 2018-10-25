@@ -190,8 +190,6 @@ $r1 = $g->addField('r1', new \atk4\ui\FormField\Radio(['values' => [
 ]));
 $r1->onChange('console.log("r1 changed")');
 
-
-
 $app->add(['Header', 'Line ends of TextArea']);
 
 $f = $app->add('Form');
@@ -205,11 +203,11 @@ $g->addField('m_text_crlf', [new \atk4\ui\FormField\TextArea()], ['type'=>'text'
 $g->addField('m_text_cr', [new \atk4\ui\FormField\TextArea()], ['type'=>'text'])->set("First line\rSecond line");
 $g->addField('m_text_lf', [new \atk4\ui\FormField\TextArea()], ['type'=>'text'])->set("First line\nSecond line");
 
-$f->onSubmit(function($form){
+$f->onSubmit(function ($form) {
     // check what values are submitted
     echo "We're URL encoding submitted values to be able to see what line end is actually submitted.";
     foreach ($form->model->get() as $k=>$v) {
         var_dump([$k => urlencode($v)]);
     }
-    echo "As you can see - without model it submits CRLF, but with model it will normalize all to LF";
+    echo 'As you can see - without model it submits CRLF, but with model it will normalize all to LF';
 });
