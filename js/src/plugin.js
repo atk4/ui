@@ -10,6 +10,7 @@ import jsSearch from "./plugins/jsSearch";
 import jsSortable from "./plugins/jsSortable";
 import conditionalForm from "./plugins/conditionalForm";
 import columnResizer from "./plugins/columnResizer";
+import scroll from "./plugins/scroll";
 
 /**
  * Generate a jQuery plugin
@@ -90,6 +91,7 @@ function createAtkplugins() {
     {name: 'JsSortable', plugin: jsSortable, sh: false},
     {name: 'ConditionalForm', plugin: conditionalForm, sh: true},
     {name: 'ColumnResizer', plugin: columnResizer, sh: false},
+    {name: 'Scroll', plugin: scroll, sh: false},
   ];
 
   atkJqPlugins.forEach((atkJqPlugin) => {

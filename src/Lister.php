@@ -25,6 +25,28 @@ class Lister extends View
     }
 
     /**
+     * Add Dynamic Scroll via Javascript.
+     *
+     * @param $ipp
+     * @param null $container
+     *
+     * @throws Exception
+     */
+    public function addJsScroll($ipp, $container = null)
+    {
+        $scrollable = $this->add(['jsScroll', 'view' => $container]);
+        $scrollable->onScroll(function($p) use ($ipp) {
+            if ($p-1 < ceil($this->model->action('count')->getOne() / $ipp)) {
+                $this->model->setLimit($ipp, ($p - 1) * $ipp);
+                $this->app->terminate($this->renderJSON());
+            } else {
+                $this->app->terminate(json_encode(['success' => true, 'message' => 'done', 'html' => null]));
+            }
+        });
+        $this->model->setLimit($ipp);
+    }
+
+    /**
      * From the current template will extract {row} into $this->t_row.
      *
      * @return void
