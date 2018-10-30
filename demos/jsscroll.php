@@ -31,7 +31,6 @@ $l->addJsScroll(20, $container);
 //    return $container;
 //});
 
-
 /*
 //$app->add(['Header', 'Button reloading segment']);
 //$v = $app->add(['View', 'ui' => 'segment'])->set((string) rand(1, 100));

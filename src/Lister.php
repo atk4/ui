@@ -35,8 +35,8 @@ class Lister extends View
     public function addJsScroll($ipp, $container = null)
     {
         $scrollable = $this->add(['jsScroll', 'view' => $container]);
-        $scrollable->onScroll(function($p) use ($ipp) {
-            if ($p-1 < ceil($this->model->action('count')->getOne() / $ipp)) {
+        $scrollable->onScroll(function ($p) use ($ipp) {
+            if ($p - 1 < ceil($this->model->action('count')->getOne() / $ipp)) {
                 $this->model->setLimit($ipp, ($p - 1) * $ipp);
                 $this->app->terminate($this->renderJSON());
             } else {

@@ -17,7 +17,7 @@ class jsScroll extends jsCallback
         if (!$this->view) {
             $this->view = $this->owner;
         }
-        $this->view->js(true)->atkScroll(['uri'       => $this->getJSURL(),
+        $this->view->js(true)->atkScroll(['uri'             => $this->getJSURL(),
                                               'uri_options' => $this->args,
                                              ]);
     }
@@ -25,6 +25,7 @@ class jsScroll extends jsCallback
     public function jsNextPage($page)
     {
         $this->view->js(true)->atkScroll('nextPage', $page);
+
         return $this;
     }
 
