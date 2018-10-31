@@ -3,7 +3,6 @@
 require 'init.php';
 require 'database.php';
 
-
 $container = $app->add('View');
 
 $v = $container->add(['View', 'template' => new \atk4\ui\Template('
