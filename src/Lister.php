@@ -25,20 +25,24 @@ class Lister extends View
     }
 
     /**
-     * Add Dynamic Scroll via Javascript.
+     * Add Dynamic paginator when scrolling content via Javascript.
+     * Will output x item in lister set per ipp until user scroll content to the end of page.
+     * When this happen, content will be reload x number of items.
      *
-     * @param $ipp
-     * @param null $container
+     * @param $ipp                  //number of item per page
+     * @param null $container       //the container holding the lister for scrolling purpose. Default to view owner.
+     * @param null $scrollRegion    //A specific template region to render. Render output is append to container html element.
+     * @param null $appendTo        //A specific selector name within the container element where content should be append to.
      *
      * @throws Exception
      */
-    public function addJsScroll($ipp, $container = null)
+    public function addJsPaginator($ipp, $container = null, $scrollRegion = null, $appendTo = null)
     {
-        $scrollable = $this->add(['jsScroll', 'view' => $container]);
-        $scrollable->onScroll(function ($p) use ($ipp) {
+        $scrollable = $this->add(['jsPaginator', 'view' => $container, 'appendTo' => $appendTo]);
+        $scrollable->onScroll(function ($p) use ($ipp, $scrollRegion) {
             if ($p - 1 < ceil($this->model->action('count')->getOne() / $ipp)) {
                 $this->model->setLimit($ipp, ($p - 1) * $ipp);
-                $this->app->terminate($this->renderJSON());
+                $this->app->terminate($this->renderJSON(true, $scrollRegion));
             } else {
                 $this->app->terminate(json_encode(['success' => true, 'message' => 'done', 'html' => null]));
             }

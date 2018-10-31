@@ -271,6 +271,21 @@ class Table extends Lister
     }
 
     /**
+     * Add a dynamic paginator, i.e. when user is scrolling content.
+     *
+     * @param $ipp         // number of item per page to start with.
+     *
+     * @return $this|void
+     * @throws Exception
+     */
+    public function addJsPaginator($ipp)
+    {
+        parent::addJsPaginator($ipp, null, 'Body', 'tbody');
+
+        return $this;
+    }
+
+    /**
      * Return array of column decorators for particular column.
      *
      * @param string $name Column name
@@ -468,7 +483,7 @@ class Table extends Lister
                 $this->updateTotals();
             }
 
-            $this->renderRow($this->model);
+            $this->renderRow();
 
             $rows++;
         }

@@ -1,18 +1,30 @@
 import atkPlugin from 'plugins/atkPlugin';
-import debounce from 'debounce';
 import $ from 'jquery';
 import apiService from "../services/ApiService";
+
+/**
+ * Add dynamic scrolling to a View that can accept page argument in URL.
+ *
+ */
 
 export default class scroll extends atkPlugin {
 
   main() {
+    //check if we are initialized already because loading content
+    //can recall this plugin and screw up page number.
+    if (this.$el.data('__atkScroll')) {
+      return false;
+    }
+
     this.isWaiting = false;
-    this.nextPage = this.settings.initialPage;
+    this.nextPage = this.settings.initialPage + 1;
     //check if scroll apply vs Window or inside our element.
     this.isWindow = (this.$el.css('overflow-y') === 'visible');
     this.$scroll = this.isWindow ? $(window): this.$el;
     //is Inner the element itself or it's children.
     this.$inner = this.isWindow ? this.$el : this.$el.children();
+    //the target element within container where new content is appendTo.
+    this.$target = this.settings.appendTo ? this.$inner.find(this.settings.appendTo) : this.$inner;
 
     this.bindScrollEvent(this.$scroll);
   }
@@ -23,7 +35,8 @@ export default class scroll extends atkPlugin {
 
   /**
    * Check if scrolling require adding content.
-   * @param e
+   *
+   * @param e //event
    */
   observe(e) {
     let borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10),
@@ -37,14 +50,16 @@ export default class scroll extends atkPlugin {
         //The total height.
         totalHeight = Math.ceil(topHeight - innerTop + this.$scroll.height() + paddingTop);
 
-    //console.log(Math.ceil(topHeight), Math.ceil(innerTop), totalHeight, Math.ceil(this.$scroll.height()));
-
     if (!this.isWaiting && totalHeight + this.settings.padding >= this.$inner.outerHeight()) {
-      //console.log('scroll need');
       this.loadContent();
     }
   }
 
+  /**
+   * Set Next page to be loaded.
+   *
+   * @param page
+   */
   setNextPage(page) {
     this.nextPage = page;
   }
@@ -54,25 +69,49 @@ export default class scroll extends atkPlugin {
    */
   loadContent() {
     this.isWaiting = true;
+    this.addLoader();
     this.$inner.api({
       on: 'now',
       url: this.settings.uri,
       data: Object.assign({}, this.settings.uri_options, {page: this.nextPage}),
       method: 'GET',
-      onComplete: this.onComplete.bind(this)
+      onComplete: this.onComplete.bind(this),
     });
   }
 
-  onComplete(response, content) {
-    if (response && response.html) {
-      this.$inner.append(response.html);
+  /**
+   * Use response to append content to element and setup next content to be load.
+   * Set response.id to null in order for apiService.onSuccess to bypass
+   * replacing html content. Js return from server response will still be execute.
+   *
+   * @param response
+   * @param element
+   */
+  onComplete(response, element) {
+    this.removeLoader();
+    if (response.success) {
+      if (response && response.html && response.message === "Success") {
+        this.$target.append(response.html);
+        this.isWaiting = false;
+        this.nextPage++;
+      }
+
+      response.id = null;
     }
-    if (response.success && response.message != 'done') {
-      this.isWaiting = false;
-      this.nextPage++;
-    }
-    //set response id to null for apiservice.
-    response.id = null;
+  }
+
+  /**
+   * Add loader.
+   */
+  addLoader(){
+    this.$inner.parent().append($('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
+  }
+
+  /**
+   * Remove loader.
+   */
+  removeLoader() {
+    this.$inner.parent().find('#atkScrollLoader').remove();
   }
 
 }
@@ -80,6 +119,7 @@ export default class scroll extends atkPlugin {
 scroll.DEFAULTS = {
   uri: null,
   uri_options: {},
-  padding: 0,       //Minimum Bottom Space required prior to add content.
-  initialPage: 2,
+  padding: 20,       //Minimum Bottom Space required prior to add content.
+  initialPage: 1,   //Inital page to load.
+  appendTo: null    //The jQuery selector where content should be append to.
 };
