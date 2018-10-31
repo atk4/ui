@@ -16,7 +16,7 @@ class jsPaginator extends jsCallback
 
     /**
      * The html selector where new content should be appendTo.
-     * Ex: For a table, the selector would be tbody
+     * Ex: For a table, the selector would be tbody.
      *
      * @var null|string
      */
@@ -30,14 +30,13 @@ class jsPaginator extends jsCallback
         }
 
         $this->view->js(true)->atkScroll(['uri'             => $this->getJSURL(),
-                                          'uri_options' => $this->args,
-                                          'appendTo' => $this->appendTo,
+                                          'uri_options'     => $this->args,
+                                          'appendTo'        => $this->appendTo,
                                          ]);
-
     }
 
     /**
-     * Generate a js action that will set nextPage to atkScroll plugin,
+     * Generate a js action that will set nextPage to atkScroll plugin,.
      *
      * @param $page
      *
@@ -45,7 +44,7 @@ class jsPaginator extends jsCallback
      */
     public function jsNextPage($page)
     {
-         return $this->view->js(true)->atkScroll('nextPage', $page);
+        return $this->view->js(true)->atkScroll('nextPage', $page);
     }
 
     /**

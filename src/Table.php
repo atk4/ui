@@ -275,8 +275,9 @@ class Table extends Lister
      *
      * @param $ipp         // number of item per page to start with.
      *
-     * @return $this|void
      * @throws Exception
+     *
+     * @return $this|void
      */
     public function addJsPaginator($ipp)
     {

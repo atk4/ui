@@ -714,11 +714,12 @@ class View implements jsExpressionable
     /**
      * Render View using json format.
      *
-     * @param bool $force_echo
-     * @param string $region   //A specific template region to render.
+     * @param bool   $force_echo
+     * @param string $region     //A specific template region to render.
+     *
+     * @throws Exception
      *
      * @return string
-     * @throws Exception
      */
     public function renderJSON($force_echo = true, $region = null)
     {

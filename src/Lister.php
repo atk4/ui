@@ -30,9 +30,9 @@ class Lister extends View
      * When this happen, content will be reload x number of items.
      *
      * @param $ipp                  //number of item per page
-     * @param null $container       //the container holding the lister for scrolling purpose. Default to view owner.
-     * @param null $scrollRegion    //A specific template region to render. Render output is append to container html element.
-     * @param null $appendTo        //A specific selector name within the container element where content should be append to.
+     * @param null $container    //the container holding the lister for scrolling purpose. Default to view owner.
+     * @param null $scrollRegion //A specific template region to render. Render output is append to container html element.
+     * @param null $appendTo     //A specific selector name within the container element where content should be append to.
      *
      * @throws Exception
      */
