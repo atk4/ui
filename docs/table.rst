@@ -441,6 +441,15 @@ Toolbar, Quick-search and Paginator
 
 See :php:class:`Grid`
 
+jsPaginator
+-----------
+
+jsPaginator will load table content dynamically when user scroll the table window on screen.
+
+    $table->addJsPaginator(30);
+
+This method accept one argument which is the number of item per page you wish to load on each page scroll.
+
 Resizable Columns
 -----------------
 

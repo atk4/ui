@@ -120,6 +120,16 @@ Your {row} tempalte may contain few special tags:
  - {$_href} - will point to current page but with ?id=123 extra GET argument.
 
 
+Load page content dynamically when scrolling
+============================================
+
+You can make lister load page content dynamically when user is scrolling page.
+
+    $lister->addJsPaginator(20, $container);
+
+The first parameter is the number of item you wisht to load per page;
+The second paramater is the $container view holding the lister and where scrolling is applicable.
+
 Using without Template
 ======================
 
