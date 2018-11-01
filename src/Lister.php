@@ -31,14 +31,14 @@ class Lister extends View
      *
      * @param $ipp                  //number of item per page
      * @param null $container    //the container holding the lister for scrolling purpose. Default to view owner.
+     * @param $options     // An array with js Scroll plugin options.
      * @param null $scrollRegion //A specific template region to render. Render output is append to container html element.
-     * @param null $appendTo     //A specific selector name within the container element where content should be append to.
      *
      * @throws Exception
      */
-    public function addJsPaginator($ipp, $container = null, $scrollRegion = null, $appendTo = null)
+    public function addJsPaginator($ipp, $container = null, $options = null, $scrollRegion = null)
     {
-        $scrollable = $this->add(['jsPaginator', 'view' => $container, 'appendTo' => $appendTo]);
+        $scrollable = $this->add(['jsPaginator', 'view' => $container, 'options' => $options]);
         $scrollable->onScroll(function ($p) use ($ipp, $scrollRegion) {
             if ($p - 1 < ceil($this->model->action('count')->getOne() / $ipp)) {
                 $this->model->setLimit($ipp, ($p - 1) * $ipp);

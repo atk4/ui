@@ -15,12 +15,18 @@ class jsPaginator extends jsCallback
     public $view = null;
 
     /**
-     * The html selector where new content should be appendTo.
-     * Ex: For a table, the selector would be tbody.
+     * The js scroll plugin options
+     *  - appendTo : he html selector where new content should be appendTo.
+     *              Ex: For a table, the selector would be tbody.
+     *  - padding: Bottom padding need prior to perform a page request.
+     *             Page request will be ask when container is scroll down and reach padding value.
+     *  - initialPage: The initial page load.
+     *                 The next page request will be initialPage + 1.
      *
-     * @var null|string
+     * @var null
      */
-    public $appendTo = null;
+    public $options = [];
+
 
     public function init()
     {
@@ -31,7 +37,7 @@ class jsPaginator extends jsCallback
 
         $this->view->js(true)->atkScroll(['uri'             => $this->getJSURL(),
                                           'uri_options'     => $this->args,
-                                          'appendTo'        => $this->appendTo,
+                                          'options'         => $this->options,
                                          ]);
     }
 

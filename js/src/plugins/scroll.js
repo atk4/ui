@@ -16,15 +16,18 @@ export default class scroll extends atkPlugin {
       return false;
     }
 
+    //set default option if not set.
+    this.settings.options = Object.assign({padding: 20, initialPage: 1, appendTo: null }, this.settings.options);
+
     this.isWaiting = false;
-    this.nextPage = this.settings.initialPage + 1;
+    this.nextPage = this.settings.options.initialPage + 1;
     //check if scroll apply vs Window or inside our element.
     this.isWindow = (this.$el.css('overflow-y') === 'visible');
     this.$scroll = this.isWindow ? $(window): this.$el;
     //is Inner the element itself or it's children.
     this.$inner = this.isWindow ? this.$el : this.$el.children();
     //the target element within container where new content is appendTo.
-    this.$target = this.settings.appendTo ? this.$inner.find(this.settings.appendTo) : this.$inner;
+    this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
 
     this.bindScrollEvent(this.$scroll);
   }
@@ -50,7 +53,7 @@ export default class scroll extends atkPlugin {
         //The total height.
         totalHeight = Math.ceil(topHeight - innerTop + this.$scroll.height() + paddingTop);
 
-    if (!this.isWaiting && totalHeight + this.settings.padding >= this.$inner.outerHeight()) {
+    if (!this.isWaiting && totalHeight + this.settings.options.padding >= this.$inner.outerHeight()) {
       this.loadContent();
     }
   }
@@ -119,7 +122,5 @@ export default class scroll extends atkPlugin {
 scroll.DEFAULTS = {
   uri: null,
   uri_options: {},
-  padding: 20,       //Minimum Bottom Space required prior to add content.
-  initialPage: 1,   //Inital page to load.
-  appendTo: null    //The jQuery selector where content should be append to.
+  options: {}
 };

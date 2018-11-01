@@ -274,14 +274,16 @@ class Table extends Lister
      * Add a dynamic paginator, i.e. when user is scrolling content.
      *
      * @param $ipp         // number of item per page to start with.
+     * @param $options     // An array with js Scroll plugin options.
      *
      * @throws Exception
      *
      * @return $this|void
      */
-    public function addJsPaginator($ipp)
+    public function addJsPaginator($ipp, $options = [])
     {
-        parent::addJsPaginator($ipp, null, 'Body', 'tbody');
+        $options = array_merge($options, ['appendTo' => 'tbody']);
+        parent::addJsPaginator($ipp, null, $options, 'Body');
 
         return $this;
     }
