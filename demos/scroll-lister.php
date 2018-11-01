@@ -3,6 +3,11 @@
 require 'init.php';
 require 'database.php';
 
+$app->add(['Button', 'Dynamic scroll in table', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['scroll-table']);
+
+$app->add(['View', 'ui' => 'ui clearing divider']);
+
 $container = $app->add('View');
 
 $v = $container->add(['View', 'template' => new \atk4\ui\Template('
