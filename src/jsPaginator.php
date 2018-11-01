@@ -27,7 +27,6 @@ class jsPaginator extends jsCallback
      */
     public $options = [];
 
-
     public function init()
     {
         parent::init();
