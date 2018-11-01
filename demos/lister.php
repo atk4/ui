@@ -10,7 +10,7 @@ $app->add(['Lister', 'defaultTemplate'=>'lister.html'])->setSource([
     ['icon'=> 'check', 'title'=>'Sapporo Haru', 'descr'=>'Greenpoint\'s best choice for quick and delicious sushi'],
 ]);
 
-$view = $app->add(['View', 'template' => new \atk4\ui\Template('
+$view = $app->add(['View', 'template' => new \atk4\ui\Template('<div>
 <div class="ui header">Top 5 countries (alphabetically)</div>
 {List}<div class="ui icon label"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</div>{/}
 </div>')]);
