@@ -29,7 +29,7 @@ class Grid extends View
 
     /**
      * Paginator is automatically added below the table and will divide long tables into pages.
-     * 
+     *
      * You can provide your own Paginator object here to customize.
      *
      * @var Paginator|false
