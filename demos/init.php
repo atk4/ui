@@ -73,6 +73,8 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('Dynamic jsModal', ['modal']);
     $basic->addItem('Sticky GET', ['sticky']);
     $basic->addItem('Recursive Views', ['recursive']);
+    $basic->addItem(['Accordion', 'icon'=>'yellow star'], ['accordion']);
+
     //$basic->addItem('Virtual Page', ['virtual']);
 
     $f = basename($_SERVER['PHP_SELF']);
