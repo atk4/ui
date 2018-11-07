@@ -28,8 +28,9 @@ class Grid extends View
     public $quickSearch = null;
 
     /**
-     * Paginator is automatically added below the table and will provide
-     * divide long tables into pages.
+     * Paginator is automatically added below the table and will divide long tables into pages.
+     * 
+     * You can provide your own Paginator object here to customize.
      *
      * @var Paginator|false
      */
