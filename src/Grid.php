@@ -102,6 +102,24 @@ class Grid extends View
     }
 
     /**
+     * Add dynamic scrolling paginator.
+     *
+     * @param integer $ipp Number of item per page.
+     *
+     * @throws Exception
+     */
+    public function addJsPaginator($ipp)
+    {
+        if ($this->paginator) {
+            $this->paginator->destroy();
+        }
+
+        $this->applySort();
+
+        $this->table->addJsPaginator($ipp);
+    }
+
+    /**
      * Add new column to grid. If column with this name already exists,
      * an. Simply calls Table::addColumn(), so check that method out.
      *

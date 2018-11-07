@@ -3,6 +3,9 @@
 require 'init.php';
 require 'database.php';
 
+$app->add(['Button', 'Dynamic scroll in Grid', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['scroll-grid']);
+
 $app->add(['Header', 'Top countries (alphabetically)']);
 
 $scroll_container = $app->add('View')->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);

@@ -5,6 +5,11 @@ import apiService from "../services/ApiService";
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.
  *
+ * default options are:
+ *  padding: 20         The amount of padding needed prior to request a page load.
+ *  initialPage: 1      The initial page load when calling this plugin.
+ *  appendTo: null      The html element where new content should be append to.
+ *  allowJsEval: false  Whether or not javascript send in server response should be evaluate.
  */
 
 export default class scroll extends atkPlugin {
@@ -17,7 +22,7 @@ export default class scroll extends atkPlugin {
     }
 
     //set default option if not set.
-    this.settings.options = Object.assign({padding: 20, initialPage: 1, appendTo: null }, this.settings.options);
+    this.settings.options = Object.assign({padding: 20, initialPage: 1, appendTo: null, allowJsEval: false }, this.settings.options);
 
     this.isWaiting = false;
     this.nextPage = this.settings.options.initialPage + 1;
@@ -32,6 +37,11 @@ export default class scroll extends atkPlugin {
     this.bindScrollEvent(this.$scroll);
   }
 
+  /**
+   * Bind scrolling event to an element.
+   *
+   * @param $el
+   */
   bindScrollEvent($el) {
     $el.on('scroll', this.observe.bind(this));
   }
@@ -100,6 +110,9 @@ export default class scroll extends atkPlugin {
       }
 
       response.id = null;
+      if (!this.settings.options.allowJsEval) {
+        response.atkjs = null;
+      }
     }
   }
 
@@ -107,14 +120,15 @@ export default class scroll extends atkPlugin {
    * Add loader.
    */
   addLoader(){
-    this.$inner.parent().append($('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
+    let $parent = this.$inner.parent().hasClass('atk-overflow-auto') ? this.$inner.parent().parent() : this.$inner.parent();
+    $parent.append($('<div id="atkScrollLoader"><div class="ui section hidden divider"></div><div class="ui active centered inline loader basic segment"></div></div>'));
   }
 
   /**
    * Remove loader.
    */
   removeLoader() {
-    this.$inner.parent().find('#atkScrollLoader').remove();
+    $('#atkScrollLoader').remove();
   }
 
 }
