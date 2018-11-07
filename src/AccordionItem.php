@@ -4,8 +4,6 @@ namespace atk4\ui;
 
 /**
  * An accordion item in Accordion.
- *
- * @package atk4\ui
  */
 class AccordionItem extends View
 {
@@ -26,7 +24,6 @@ class AccordionItem extends View
     public $virtualPage = null;
 
     /**
-     *
      * {@inheritdoc}
      */
     public function renderView()

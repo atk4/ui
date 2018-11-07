@@ -8,8 +8,6 @@ namespace atk4\ui;
  *
  * You can add static content to an accordion item or set a callback
  * for adding content dynamically.
- *
- * @package atk4\ui
  */
 class Accordion extends View
 {
@@ -39,8 +37,9 @@ class Accordion extends View
      * @param $name
      * @param null $callback
      *
-     * @return View
      * @throws Exception
+     *
+     * @return View
      */
     public function addItem($name, $callback = null)
     {
@@ -59,12 +58,12 @@ class Accordion extends View
      */
     public function renderView()
     {
-        if ($this->type){
+        if ($this->type) {
             $this->addClass($this->type);
         }
 
         $settings = array_merge([
-            'onOpening' => new jsFunction([new jsExpression('$(this).atkReloadView({uri:$(this).data("path"), uri_options:{json:1}})')])
+            'onOpening' => new jsFunction([new jsExpression('$(this).atkReloadView({uri:$(this).data("path"), uri_options:{json:1}})')]),
             ], $this->settings);
 
         $this->js(true)->accordion($settings);

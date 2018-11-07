@@ -2,7 +2,7 @@
 
 require 'init.php';
 
-$acc = $app->add(['Accordion', 'type' => ['styled','fluid']]);
+$acc = $app->add(['Accordion', 'type' => ['styled', 'fluid']]);
 
 $i = $acc->addItem('I am a static Item');
 $i->add(['Message', 'This content is added on page loaded']);
