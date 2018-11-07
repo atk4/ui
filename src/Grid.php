@@ -104,7 +104,7 @@ class Grid extends View
     /**
      * Add dynamic scrolling paginator.
      *
-     * @param integer $ipp Number of item per page.
+     * @param int $ipp Number of item per page.
      *
      * @throws Exception
      */
