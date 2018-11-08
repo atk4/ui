@@ -4,7 +4,7 @@ require 'init.php';
 
 $app->add(['Header', 'Accordion\'s item can be control programmatically.']);
 
-$bar = $app->add(['ui' => 'horizontal buttons']);
+$bar = $app->add(['ui' => 'buttons']);
 $b1 = $bar->add(['Button', 'Toggle 1']);
 $b2 = $bar->add(['Button', 'Toggle 2']);
 $b3 = $bar->add(['Button', 'Toggle 3']);

@@ -115,7 +115,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         // where to add your fields.
         $this->initLayout();
     }
-
     /**
      * initialize form layout. You can inject custom layout
      * if you 'layout'=>.. to constructor.
@@ -141,6 +140,45 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         $this->buttonSave->setAttr('tabindex', 0);
         $this->buttonSave->on('click', $this->js()->form('submit'));
         $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#'.$this->name]));
+    }
+
+    /**
+     * Add a View into the form layout.
+     * The newly added view or a sub view of the newly added view
+     * can later be used to add form field to it.
+     *
+     * @param string|array|View     $view
+     * @param boolean               $hasDivider
+     *
+     * @return View
+     * @throws Exception
+     */
+    public function addLayoutView($view, $hasDivider = true)
+    {
+        if ($this->layout === null) {
+            throw new Exception('Layout need to be initialized prior to add View.');
+        }
+
+        $v = $this->layout->add($view);
+        if ($hasDivider) {
+            $this->layout->add(['ui' => 'hidden divider']);
+        }
+
+        return $v;
+    }
+
+    /**
+     * Enable a layout added view to be able to add form field to it.
+     *
+     * @param View   $view   The layout view where field needs to be added.
+     * @param string $layout The layout used to added field in view.
+     *
+     * @return mixed        The form layout where field can be added.
+     * @throws Exception
+     */
+    public function enableAddField($view, $layout = 'FormLayout/Generic')
+    {
+        return $view->add([$layout, 'form' => $this]);
     }
 
     /**
