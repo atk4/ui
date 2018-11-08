@@ -26,7 +26,7 @@ $i3 = $accordion->addItem('Dynamic Form', function ($v) {
     $v->add(['Message', 'Loading a form dynamically.', 'ui' => 'tiny message']);
     $f = $v->add(['Form']);
     $f->addField('Email');
-    $f->onSubmit(function($form){
+    $f->onSubmit(function ($form) {
         return $form->success('Subscribed '.$form->model['Email'].' to newsletter.');
     });
 });

@@ -29,7 +29,7 @@ class Accordion extends View
     public $settings = [];
 
     /**
-     * A collection of AccordionItem in this Accordion;
+     * A collection of AccordionItem in this Accordion;.
      *
      * @var array
      */
@@ -47,9 +47,9 @@ class Accordion extends View
      * You can add static View within your item or pass
      * a callback for dynamic content.
      *
-     * @param string         $title
-     * @param null|Callback  $callback
-     * @param string         $icon
+     * @param string        $title
+     * @param null|callable $callback
+     * @param string        $icon
      *
      * @throws Exception
      *
@@ -111,11 +111,11 @@ class Accordion extends View
      * Return an accordion js behavior command
      * as in Semantic-ui behavior for Accordion module.
      * Ex: toggle an accordion from it's index value.
-     * $accordion->jsBehavior('toggle', 1)
+     * $accordion->jsBehavior('toggle', 1).
      *
-     * @param string     $behavior   The name of the behavior for the module.
-     * @param array      $args       The behaviors argument as an array.
-     * @param bool       $when       When this js action is render.
+     * @param string $behavior The name of the behavior for the module.
+     * @param array  $args     The behaviors argument as an array.
+     * @param bool   $when     When this js action is render.
      *
      * @return mixed
      */
@@ -127,7 +127,7 @@ class Accordion extends View
     /**
      * Return the index of an accordion item in collection.
      *
-     * @param AccordionITem   $item
+     * @param AccordionITem $item
      *
      * @return int|string
      */
@@ -140,6 +140,7 @@ class Accordion extends View
                 break;
             }
         }
+
         return $idx;
     }
 
