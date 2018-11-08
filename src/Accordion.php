@@ -4,9 +4,8 @@ namespace atk4\ui;
 
 /**
  * Accordion is a View holding accordion items.
- * Each accordion item become clickable in order to hide or show it's content.
  *
- * You can add static content to an accordion item or set a callback
+ * You can add static content to an accordion item or pass a callback
  * for adding content dynamically.
  */
 class Accordion extends View
@@ -30,27 +29,118 @@ class Accordion extends View
     public $settings = [];
 
     /**
+     * A collection of AccordionItem in this Accordion;
+     *
+     * @var array
+     */
+    public $items = [];
+
+    /**
+     * The AccordionItem index number to activate on load.
+     *
+     * @var int
+     */
+    public $activeItem = -1;
+
+    /**
      * Add an accordion item.
      * You can add static View within your item or pass
      * a callback for dynamic content.
      *
-     * @param $name
-     * @param null $callback
+     * @param string         $title
+     * @param null|Callback  $callback
+     * @param string         $icon
      *
      * @throws Exception
      *
      * @return View
      */
-    public function addItem($name, $callback = null)
+    public function addItem($title, $callback = null, $icon = 'dropdown')
     {
-        $item = $this->add(['AccordionItem', 'title' => $name]);
+        $item = $this->add(['AccordionItem', 'title' => $title, 'icon' => $icon]);
 
         if ($callback) {
             $item->virtualPage = $item->add(['VirtualPage', 'ui' => '']);
             $item->virtualPage->set($callback);
         }
 
+        $this->items[] = $item;
+
         return $item;
+    }
+
+    /**
+     * Activate or open an accordion item.
+     *
+     * @param AccordionItem $item The item to activate.
+     */
+    public function activate($item)
+    {
+        $this->activeItem = $this->getItemIdx($item);
+    }
+
+    /*
+     * JS Behavior wrapper functions.
+     */
+    public function jsRefresh($when = null)
+    {
+        return $this->jsBehavior('refresh', [], $when);
+    }
+
+    public function jsOpen($item, $when = null)
+    {
+        return $this->jsBehavior('open', [$this->getItemIdx($item)], $when);
+    }
+
+    public function jsCloseOthers($when = null)
+    {
+        return $this->jsBehavior('close others', [], $when);
+    }
+
+    public function jsClose($item, $when = null)
+    {
+        return $this->jsBehavior('close', [$this->getItemIdx($item)], $when);
+    }
+
+    public function jsToggle($item, $when = null)
+    {
+        return $this->jsBehavior('toggle', [$this->getItemIdx($item)], $when);
+    }
+
+    /**
+     * Return an accordion js behavior command
+     * as in Semantic-ui behavior for Accordion module.
+     * Ex: toggle an accordion from it's index value.
+     * $accordion->jsBehavior('toggle', 1)
+     *
+     * @param string     $behavior   The name of the behavior for the module.
+     * @param array      $args       The behaviors argument as an array.
+     * @param bool       $when       When this js action is render.
+     *
+     * @return mixed
+     */
+    public function jsBehavior($behavior, $args, $when = null)
+    {
+        return $this->js($when)->accordion($behavior, ...$args);
+    }
+
+    /**
+     * Return the index of an accordion item in collection.
+     *
+     * @param AccordionITem   $item
+     *
+     * @return int|string
+     */
+    private function getItemIdx($item)
+    {
+        $idx = -1;
+        foreach ($this->items as $key => $accordion_item) {
+            if ($accordion_item->name === $item->name) {
+                $idx = $key;
+                break;
+            }
+        }
+        return $idx;
     }
 
     /**
@@ -62,11 +152,11 @@ class Accordion extends View
             $this->addClass($this->type);
         }
 
-        $settings = array_merge([
-            'onOpening' => new jsFunction([new jsExpression('$(this).atkReloadView({uri:$(this).data("path"), uri_options:{json:1}})')]),
-            ], $this->settings);
+        $this->js(true)->accordion($this->settings);
 
-        $this->js(true)->accordion($settings);
+        if ($this->activeItem > -1) {
+            $this->jsBehavior('open', [$this->activeItem], true);
+        }
 
         parent::renderView();
     }

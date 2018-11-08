@@ -23,12 +23,16 @@ class AccordionItem extends View
      */
     public $virtualPage = null;
 
+    public $icon = 'dropdown';
+
     /**
      * {@inheritdoc}
      */
     public function renderView()
     {
         parent::renderView();
+
+        $this->template->set('icon', $this->icon);
 
         if ($this->title) {
             $this->template->set('title', $this->title);
