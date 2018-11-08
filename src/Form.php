@@ -115,6 +115,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         // where to add your fields.
         $this->initLayout();
     }
+
     /**
      * initialize form layout. You can inject custom layout
      * if you 'layout'=>.. to constructor.
@@ -147,11 +148,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * The newly added view or a sub view of the newly added view
      * can later be used to add form field to it.
      *
-     * @param string|array|View     $view
-     * @param boolean               $hasDivider
+     * @param string|array|View $view
+     * @param bool              $hasDivider
+     *
+     * @throws Exception
      *
      * @return View
-     * @throws Exception
      */
     public function addLayoutView($view, $hasDivider = true)
     {
@@ -173,8 +175,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * @param View   $view   The layout view where field needs to be added.
      * @param string $layout The layout used to added field in view.
      *
-     * @return mixed        The form layout where field can be added.
      * @throws Exception
+     *
+     * @return mixed The form layout where field can be added.
      */
     public function enableAddField($view, $layout = 'FormLayout/Generic')
     {
