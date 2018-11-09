@@ -30,7 +30,6 @@ use atk4\ui\Exception;
  */
 class Flexible extends Generic
 {
-
     /**
      * Add a View into the form layout.
      * The newly added view or a sub view of the newly added view
@@ -39,9 +38,9 @@ class Flexible extends Generic
      * @param string|array|View $view
      * @param bool              $hasDivider
      *
+     * @throws \atk4\ui\Exception
      *
      * @return View
-     * @throws \atk4\ui\Exception
      */
     public function addView($view, $hasDivider = true)
     {
