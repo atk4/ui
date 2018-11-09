@@ -2,6 +2,10 @@
 
 require 'init.php';
 
+$app->add(['Button', 'View Form input split in Accordion section', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['accordion-in-form']);
+$app->add(['ui' => 'clearing divider']);
+
 $app->add(['Header', 'Accordion\'s item can be control programmatically.']);
 
 $bar = $app->add(['ui' => 'buttons']);

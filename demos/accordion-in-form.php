@@ -2,13 +2,13 @@
 
 require 'init.php';
 
-$f = $app->add('Form');
+$f = $app->add(['Form', 'layout' => 'Flexible']);
 
-$acc = $f->addLayoutView(['Accordion', 'type' => ['styled', 'fluid']]);
+$acc = $f->layout->addView(['Accordion', 'type' => ['styled', 'fluid']]);
 
 //Contact field in accordion item 1.
 //Start by enabling addField to accordion item view.
-$acc_item_1 = $f->enableAddField($item_1 = $acc->addItem('Contact'));
+$acc_item_1 = $f->layout->addLayoutSection($item_1 = $acc->addItem('Contact'));
 
 $gr = $acc_item_1->addGroup('Name');
 $gr->addField('first_name', ['width' => 'eight']);
@@ -18,7 +18,7 @@ $gr->addField('email', ['width' => 'sixteen'], ['caption' => 'yourEmail@domain.c
 
 //Address field in accordion item 2.
 //Start by enabling addField to accordion item 2.
-$acc_item_2 = $f->enableAddField($acc->addItem('Address'));
+$acc_item_2 = $f->layout->addLayoutSection($acc->addItem('Address'));
 $gr = $acc_item_2->addGroup('Street and City');
 $gr->addField('address1', ['width' => 'eight']);
 $gr->addField('city', ['width' => 'eight']);

@@ -144,47 +144,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     }
 
     /**
-     * Add a View into the form layout.
-     * The newly added view or a sub view of the newly added view
-     * can later be used to add form field to it.
-     *
-     * @param string|array|View $view
-     * @param bool              $hasDivider
-     *
-     * @throws Exception
-     *
-     * @return View
-     */
-    public function addLayoutView($view, $hasDivider = true)
-    {
-        if ($this->layout === null) {
-            throw new Exception('Layout need to be initialized prior to add View.');
-        }
-
-        $v = $this->layout->add($view);
-        if ($hasDivider) {
-            $this->layout->add(['ui' => 'hidden divider']);
-        }
-
-        return $v;
-    }
-
-    /**
-     * Enable a layout added view to be able to add form field to it.
-     *
-     * @param View   $view   The layout view where field needs to be added.
-     * @param string $layout The layout used to added field in view.
-     *
-     * @throws Exception
-     *
-     * @return mixed The form layout where field can be added.
-     */
-    public function enableAddField($view, $layout = 'FormLayout/Generic')
-    {
-        return $view->add([$layout, 'form' => $this]);
-    }
-
-    /**
      * Setter for field display rules.
      *
      * @param array $rules
