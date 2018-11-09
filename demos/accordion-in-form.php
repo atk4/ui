@@ -11,11 +11,10 @@ $acc = $f->addLayoutView(['Accordion', 'type' => ['styled', 'fluid']]);
 $acc_item_1 = $f->enableAddField($item_1 = $acc->addItem('Contact'));
 
 $gr = $acc_item_1->addGroup('Name');
-$gr->addField('first_name',['width' => 'eight']);
-$gr->addField('last_name',['width' => 'eight']);
+$gr->addField('first_name', ['width' => 'eight']);
+$gr->addField('last_name', ['width' => 'eight']);
 $gr = $acc_item_1->addGroup('Email');
-$gr->addField('email',['width' => 'sixteen'], ['caption' => 'yourEmail@domain.com']);
-
+$gr->addField('email', ['width' => 'sixteen'], ['caption' => 'yourEmail@domain.com']);
 
 //Address field in accordion item 2.
 //Start by enabling addField to accordion item 2.
@@ -25,13 +24,13 @@ $gr->addField('address1', ['width' => 'eight']);
 $gr->addField('city', ['width' => 'eight']);
 
 $gr = $acc_item_2->addGroup('State, Country and Postal Code');
-$gr->addField('state',['width' => 'six']);
-$gr->addField('country',['width' => 'six']);
+$gr->addField('state', ['width' => 'six']);
+$gr->addField('country', ['width' => 'six']);
 $gr->addField('postal', ['width' => 'four']);
 
-$f->addField('term', ['CheckBox', 'caption'=>'Accept terms and conditions',null, 'slider']);
+$f->addField('term', ['CheckBox', 'caption'=>'Accept terms and conditions', null, 'slider']);
 
-$f->onSubmit(function($f) use ($acc, $item_1){
+$f->onSubmit(function ($f) use ($acc, $item_1) {
     if (!$f->model['first_name']) {
         // return field error and open proper accordion item where field is located.
         return [
