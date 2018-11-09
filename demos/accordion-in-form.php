@@ -28,7 +28,7 @@ $f->addField('term', ['CheckBox', 'caption'=>'Accept terms and conditions', null
 
 $f->layout->getAccordion()->activate($f->layout->getSection($contact_section));
 
-$f->onSubmit(function ($f) use ($contact_section){
+$f->onSubmit(function ($f) use ($contact_section) {
     if (!$f->model['first_name']) {
         // return field error and open proper accordion item where field is located.
         return [
@@ -37,4 +37,3 @@ $f->onSubmit(function ($f) use ($contact_section){
             ];
     }
 });
-

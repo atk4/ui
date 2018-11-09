@@ -5,8 +5,6 @@ namespace atk4\ui\FormLayout;
 /**
  * A form layout with Accordion view.
  * Field can be added to each accordion section.
- *
- * @package atk4\ui\FormLayout
  */
 class Accordion extends Generic
 {
@@ -19,6 +17,7 @@ class Accordion extends Generic
 
     /**
      * The Accordion style type.
+     *
      * @var string
      */
     public $type = 'styled fluid';
