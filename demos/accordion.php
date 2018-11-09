@@ -17,16 +17,16 @@ $app->add(['Header', 'Accordion Items']);
 
 $accordion = $app->add(['Accordion', 'type' => ['styled', 'fluid']]);
 
-$i1 = $accordion->addItem('Static Text');
+$i1 = $accordion->addSection('Static Text');
 $i1->add(['Message', 'This content is added on page loaded', 'ui' => 'tiny message']);
 $i1->add(['LoremIpsum', 'size' => 1]);
 
-$i2 = $accordion->addItem('Dynamic Text', function ($v) {
+$i2 = $accordion->addSection('Dynamic Text', function ($v) {
     $v->add(['Message', 'Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
     $v->add(['LoremIpsum', 'size' => 2]);
 });
 
-$i3 = $accordion->addItem('Dynamic Form', function ($v) {
+$i3 = $accordion->addSection('Dynamic Form', function ($v) {
     $v->add(['Message', 'Loading a form dynamically.', 'ui' => 'tiny message']);
     $f = $v->add(['Form']);
     $f->addField('Email');

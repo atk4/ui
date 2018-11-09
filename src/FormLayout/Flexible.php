@@ -15,7 +15,7 @@ use atk4\ui\Exception;
  * $acc = $f->layout->addView(['Accordion', 'type' => ['styled', 'fluid']]);
  *
  * //This line will enable an accordion section view
- * $acc_section = $f->layout->addLayoutSection($acc->addItem('Contact'));
+ * $acc_section = $f->layout->addLayoutSection($acc->addSection('Contact'));
  *
  * // then addfield to this new layout section.
  * $acc_section->addField('Name');

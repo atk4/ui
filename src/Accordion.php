@@ -55,7 +55,7 @@ class Accordion extends View
      *
      * @return View
      */
-    public function addItem($title, $callback = null, $icon = 'dropdown')
+    public function addSection($title, $callback = null, $icon = 'dropdown')
     {
         $section = $this->add(['AccordionSection', 'title' => $title, 'icon' => $icon]);
 
