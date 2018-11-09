@@ -3,9 +3,9 @@
 namespace atk4\ui;
 
 /**
- * Accordion is a View holding accordion items.
+ * Accordion is a View holding accordion sections.
  *
- * You can add static content to an accordion item or pass a callback
+ * You can add static content to an accordion section or pass a callback
  * for adding content dynamically.
  */
 class Accordion extends View
@@ -43,8 +43,8 @@ class Accordion extends View
     public $activeSection = -1;
 
     /**
-     * Add an accordion item.
-     * You can add static View within your item or pass
+     * Add an accordion section.
+     * You can add static View within your section or pass
      * a callback for dynamic content.
      *
      * @param string        $title
@@ -70,9 +70,9 @@ class Accordion extends View
     }
 
     /**
-     * Activate or open an accordion item.
+     * Activate or open an accordion section.
      *
-     * @param AccordionSection $section The item to activate.
+     * @param AccordionSection $section The section to activate.
      */
     public function activate($section)
     {
@@ -125,7 +125,7 @@ class Accordion extends View
     }
 
     /**
-     * Return the index of an accordion item in collection.
+     * Return the index of an accordion section in collection.
      *
      * @param AccordionSection $section
      *
