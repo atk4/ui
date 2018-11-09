@@ -5,7 +5,7 @@ namespace atk4\ui;
 /**
  * An accordion item in Accordion.
  */
-class AccordionItem extends View
+class AccordionSection extends View
 {
     public $defaultTemplate = 'accordion-item.html';
 

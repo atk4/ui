@@ -29,18 +29,18 @@ class Accordion extends View
     public $settings = [];
 
     /**
-     * A collection of AccordionItem in this Accordion;.
+     * A collection of AccordionSection in this Accordion;.
      *
      * @var array
      */
-    public $items = [];
+    public $sections = [];
 
     /**
      * The AccordionItem index number to activate on load.
      *
      * @var int
      */
-    public $activeItem = -1;
+    public $activeSection = -1;
 
     /**
      * Add an accordion item.
@@ -57,26 +57,26 @@ class Accordion extends View
      */
     public function addItem($title, $callback = null, $icon = 'dropdown')
     {
-        $item = $this->add(['AccordionItem', 'title' => $title, 'icon' => $icon]);
+        $section = $this->add(['AccordionSection', 'title' => $title, 'icon' => $icon]);
 
         if ($callback) {
-            $item->virtualPage = $item->add(['VirtualPage', 'ui' => '']);
-            $item->virtualPage->set($callback);
+            $section->virtualPage = $section->add(['VirtualPage', 'ui' => '']);
+            $section->virtualPage->set($callback);
         }
 
-        $this->items[] = $item;
+        $this->sections[] = $section;
 
-        return $item;
+        return $section;
     }
 
     /**
      * Activate or open an accordion item.
      *
-     * @param AccordionItem $item The item to activate.
+     * @param AccordionSection $section The item to activate.
      */
-    public function activate($item)
+    public function activate($section)
     {
-        $this->activeItem = $this->getItemIdx($item);
+        $this->activeSection = $this->getSectionIdx($section);
     }
 
     /*
@@ -87,9 +87,9 @@ class Accordion extends View
         return $this->jsBehavior('refresh', [], $when);
     }
 
-    public function jsOpen($item, $when = null)
+    public function jsOpen($section, $when = null)
     {
-        return $this->jsBehavior('open', [$this->getItemIdx($item)], $when);
+        return $this->jsBehavior('open', [$this->getSectionIdx($section)], $when);
     }
 
     public function jsCloseOthers($when = null)
@@ -97,14 +97,14 @@ class Accordion extends View
         return $this->jsBehavior('close others', [], $when);
     }
 
-    public function jsClose($item, $when = null)
+    public function jsClose($section, $when = null)
     {
-        return $this->jsBehavior('close', [$this->getItemIdx($item)], $when);
+        return $this->jsBehavior('close', [$this->getSectionIdx($section)], $when);
     }
 
-    public function jsToggle($item, $when = null)
+    public function jsToggle($section, $when = null)
     {
-        return $this->jsBehavior('toggle', [$this->getItemIdx($item)], $when);
+        return $this->jsBehavior('toggle', [$this->getSectionIdx($section)], $when);
     }
 
     /**
@@ -127,15 +127,15 @@ class Accordion extends View
     /**
      * Return the index of an accordion item in collection.
      *
-     * @param AccordionITem $item
+     * @param AccordionSection $section
      *
      * @return int|string
      */
-    private function getItemIdx($item)
+    private function getSectionIdx($section)
     {
         $idx = -1;
-        foreach ($this->items as $key => $accordion_item) {
-            if ($accordion_item->name === $item->name) {
+        foreach ($this->sections as $key => $accordion_section) {
+            if ($accordion_section->name === $section->name) {
                 $idx = $key;
                 break;
             }
@@ -155,8 +155,8 @@ class Accordion extends View
 
         $this->js(true)->accordion($this->settings);
 
-        if ($this->activeItem > -1) {
-            $this->jsBehavior('open', [$this->activeItem], true);
+        if ($this->activeSection > -1) {
+            $this->jsBehavior('open', [$this->activeSection], true);
         }
 
         parent::renderView();
