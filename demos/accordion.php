@@ -6,14 +6,14 @@ $app->add(['Button', 'View Form input split in Accordion section', 'small right 
     ->link(['accordion-in-form']);
 $app->add(['ui' => 'clearing divider']);
 
-$app->add(['Header', 'Accordion\'s item can be control programmatically.']);
+$app->add(['Header', 'Accordion\'s section can be control programmatically.']);
 
 $bar = $app->add(['ui' => 'buttons']);
 $b1 = $bar->add(['Button', 'Toggle 1']);
 $b2 = $bar->add(['Button', 'Toggle 2']);
 $b3 = $bar->add(['Button', 'Toggle 3']);
 
-$app->add(['Header', 'Accordion Items']);
+$app->add(['Header', 'Accordion Sections']);
 
 $accordion = $app->add(['Accordion', 'type' => ['styled', 'fluid']]);
 
