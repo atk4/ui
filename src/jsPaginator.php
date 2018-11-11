@@ -10,14 +10,14 @@ class jsPaginator extends jsCallback
     /**
      * The View that trigger scrolling event.
      *
-     * @var null| \atk4\ui\View
+     * @var null|View
      */
     public $view = null;
 
     /**
      * The js scroll plugin options
-     *  - appendTo : he html selector where new content should be appendTo.
-     *              Ex: For a table, the selector would be tbody.
+     *  - appendTo : the html selector where new content should be appendTo.
+     *              Ex: For a table, the selector would be 'tbody'.
      *  - padding: Bottom padding need prior to perform a page request.
      *             Page request will be ask when container is scroll down and reach padding value.
      *  - initialPage: The initial page load.
@@ -31,6 +31,7 @@ class jsPaginator extends jsCallback
     public function init()
     {
         parent::init();
+
         if (!$this->view) {
             $this->view = $this->owner;
         }
@@ -44,9 +45,9 @@ class jsPaginator extends jsCallback
     /**
      * Generate a js action that will set nextPage to atkScroll plugin,.
      *
-     * @param $page
+     * @param int $page
      *
-     * @return $this
+     * @return jQuery
      */
     public function jsNextPage($page)
     {

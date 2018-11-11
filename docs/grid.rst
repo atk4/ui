@@ -85,6 +85,18 @@ You can use $ipp property to specify different number of items per page::
 
     $grid->ipp = 10;
 
+jsPaginator
+-----------
+
+.. php:method:: addJsPaginator($ipp, $options = [])
+
+jsPaginator will load table content dynamically when user scroll the table window on screen.
+
+    $table->addJsPaginator(30);
+
+This method accept one argument which is the number of item per page you wish to load on each page scroll.
+
+
 Actions
 =======
 

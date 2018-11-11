@@ -444,6 +444,8 @@ See :php:class:`Grid`
 jsPaginator
 -----------
 
+.. php:method:: addJsPaginator($ipp, $options = [])
+
 jsPaginator will load table content dynamically when user scroll the table window on screen.
 
     $table->addJsPaginator(30);

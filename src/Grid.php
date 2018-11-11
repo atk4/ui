@@ -104,11 +104,12 @@ class Grid extends View
     /**
      * Add dynamic scrolling paginator.
      *
-     * @param int $ipp Number of item per page.
+     * @param int   $ipp     Number of item per page to start with.
+     * @param array $options An array with js Scroll plugin options.
      *
      * @throws Exception
      */
-    public function addJsPaginator($ipp)
+    public function addJsPaginator($ipp, $options = [])
     {
         if ($this->paginator) {
             $this->paginator->destroy();
@@ -116,7 +117,7 @@ class Grid extends View
 
         $this->applySort();
 
-        $this->table->addJsPaginator($ipp);
+        $this->table->addJsPaginator($ipp, $options);
     }
 
     /**

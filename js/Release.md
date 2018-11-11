@@ -2,7 +2,7 @@
 
 ### version 1.5.0
 
- - add new plugin scroll. This new jQuery plugin allow to use dynamic scrolling to Lister view.
+ - add new plugin scroll. This new jQuery plugin allow to use dynamic scrolling to Lister, Table, Grid views.
 
 ### version 1.4.1
 

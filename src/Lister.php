@@ -29,10 +29,10 @@ class Lister extends View
      * Will output x item in lister set per ipp until user scroll content to the end of page.
      * When this happen, content will be reload x number of items.
      *
-     * @param $ipp                  //number of item per page
-     * @param null $container //the container holding the lister for scrolling purpose. Default to view owner.
-     * @param $options     // An array with js Scroll plugin options.
-     * @param null $scrollRegion //A specific template region to render. Render output is append to container html element.
+     * @param int    $ipp          Number of item per page
+     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
+     * @param array  $options      An array with js Scroll plugin options.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
      *
      * @throws Exception
      */

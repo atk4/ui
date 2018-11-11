@@ -715,7 +715,7 @@ class View implements jsExpressionable
      * Render View using json format.
      *
      * @param bool   $force_echo
-     * @param string $region     //A specific template region to render.
+     * @param string $region     A specific template region to render.
      *
      * @throws Exception
      *
