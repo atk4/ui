@@ -13,7 +13,7 @@ $container = $app->add('View');
 $v = $container->add(['View', 'template' => new \atk4\ui\Template('
 <div class="ui header">Top countries (alphabetically)</div>
 {List}<div class="ui segment" style="height: 60px"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</div>{/}
-{$Content}</div>')]);
+{$Content}')]);
 
 $l = $v->add('Lister', 'List')->addHook('beforeRow', function ($l) {
     $l->current_row['iso'] = strtolower($l->current_row['iso']);
