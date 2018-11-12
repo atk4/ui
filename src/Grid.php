@@ -113,6 +113,8 @@ class Grid extends View
     {
         if ($this->paginator) {
             $this->paginator->destroy();
+            //prevent action(count) to be output twice.
+            $this->paginator = null;
         }
 
         $this->applySort();

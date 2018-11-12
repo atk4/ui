@@ -20,4 +20,4 @@ $l = $lister_container->add('Lister', 'List')->addHook('beforeRow', function ($l
 $l->setModel(new Country($db));
 
 //add dynamic scrolling.
-$l->addJsPaginator(20, $scroll_container);
+$l->addJsPaginator(20, [], $scroll_container);

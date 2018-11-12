@@ -275,17 +275,18 @@ class Table extends Lister
      *
      * @param int   $ipp     Number of item per page to start with.
      * @param array $options An array with js Scroll plugin options.
+     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
      *
      * @throws Exception
      *
      * @return $this|void
      */
-    public function addJsPaginator($ipp, $options = [])
+    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
     {
         $options = array_merge($options, ['appendTo' => 'tbody']);
-        parent::addJsPaginator($ipp, null, $options, 'Body');
 
-        return $this;
+        return parent::addJsPaginator($ipp, $options, $container, $scrollRegion);
     }
 
     /**
