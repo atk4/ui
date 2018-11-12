@@ -80,7 +80,6 @@ class CRUD extends Grid
         if ($this->canCreate) {
             $this->pageCreate = $this->add($this->pageCreate ?: $this->pageDefault, ['short_name'=>'add']);
         }
-
     }
 
     /**
@@ -179,7 +178,7 @@ class CRUD extends Grid
             $this->container->js(true,
                                  $this->itemCreate->js()->on('click.atk_CRUD',
                                  new jsFunction([
-                                     new jsModal('Add new', $this->pageCreate, [$this->name.'_sort' => $this->getSortBy()])
+                                     new jsModal('Add new', $this->pageCreate, [$this->name.'_sort' => $this->getSortBy()]),
                                  ]))
             );
         }
