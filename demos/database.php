@@ -29,7 +29,7 @@ if (!class_exists('Country')) {
             $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string']);
             $this->addField('iso3', ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
             $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
-            $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number']);
+            $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
 
             $this->addHook('beforeSave', function ($m) {
                 if (!$m['sys_name']) {
