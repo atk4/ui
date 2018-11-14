@@ -18,7 +18,7 @@ class Lister extends View
     public $defaultTemplate = null;
 
     /**
-     * A dynamic paginator attach to window srcoll event.
+     * A dynamic paginator attach to window scroll event.
      *
      * @var null|jsPaginator
      */

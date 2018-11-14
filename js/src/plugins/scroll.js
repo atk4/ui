@@ -35,6 +35,11 @@ export default class scroll extends atkPlugin {
     this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
 
     this.bindScrollEvent(this.$scroll);
+
+    // if there is no scrollbar, then try to load next page too
+    if (!this.hasScrollbar(this.$el)) {
+      this.loadContent();
+    }
   }
 
   /**
@@ -66,6 +71,17 @@ export default class scroll extends atkPlugin {
     if (!this.isWaiting && totalHeight + this.settings.options.padding >= this.$inner.outerHeight()) {
       this.loadContent();
     }
+  }
+
+  /**
+   * Check if container element has vertical scrollbar.
+   *
+   * @param $el
+   *
+   * @return bool
+   */
+  hasScrollbar($el) {
+    return false; // @todo - implement this
   }
 
   /**
@@ -110,11 +126,21 @@ export default class scroll extends atkPlugin {
   onComplete(response, element) {
     this.removeLoader();
     if (response && response.success) {
-      if (response.html && (response.message === "Success" || response.message === "Done")) {
-        this.$target.append(response.html);
+      if (response.html) {
+        // Done - no more pages
+        if (response.message === "Done") {
+          this.$target.append(response.html);
+          this.idle()
+        }
+        // Success - will have more pages
         if (response.message === "Success") {
-            this.isWaiting = false;
-            this.nextPage++;
+          this.$target.append(response.html);
+          this.isWaiting = false;
+          this.nextPage++;
+          // if there is no scrollbar, then try to load next page too
+          if (!this.hasScrollbar(this.$el)) {
+            this.loadContent();
+          }
         }
       }
 

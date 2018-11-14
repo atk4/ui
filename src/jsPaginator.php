@@ -56,6 +56,11 @@ class jsPaginator extends jsCallback
         return $this->view->js(true)->atkScroll('setNextPage', $page);
     }
 
+    /**
+     * Set jsPagiantor in idle mode.
+     *
+     * @return jQuery
+     */
     public function jsIdle()
     {
         return $this->view->js(true)->atkScroll('idle');
