@@ -102,11 +102,13 @@ export default class scroll extends atkPlugin {
    */
   onComplete(response, element) {
     this.removeLoader();
-    if (response.success) {
-      if (response && response.html && response.message === "Success") {
+    if (response && response.success) {
+      if (response.html && (response.message === "Success" || response.message === "Done")) {
         this.$target.append(response.html);
-        this.isWaiting = false;
-        this.nextPage++;
+        if (response.message === "Success") {
+            this.isWaiting = false;
+            this.nextPage++;
+        }
       }
 
       response.id = null;

@@ -56,7 +56,7 @@ class Lister extends View
             // if there will be no more pages, then replace message=Success to let JS know that there are no more records
             if ($this->_rendered_rows_count < $ipp) {
                 $json = json_decode($json, true);
-                $json['message'] = 'Done';
+                $json['message'] = 'Done'; // Done status means - no more requests from JS side
                 $json = json_encode($json);
             }
 
