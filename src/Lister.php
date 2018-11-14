@@ -8,8 +8,8 @@ class Lister extends View
 
     /**
      * Lister repeats part of it's template. This property will contain
-     * the repeating part. Clones from {row}. If your tempalte does not
-     * have {row} tag, then entire temlate will be repeated.
+     * the repeating part. Clones from {row}. If your template does not
+     * have {row} tag, then entire template will be repeated.
      *
      * @var Template
      */
@@ -41,15 +41,28 @@ class Lister extends View
     public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = null)
     {
         $scrollable = $this->add(['jsPaginator', 'view' => $container, 'options' => $options]);
-        $scrollable->onScroll(function ($p) use ($ipp, $scrollRegion) {
-            if ($p - 1 < ceil($this->model->action('count')->getOne() / $ipp)) {
-                $this->model->setLimit($ipp, ($p - 1) * $ipp);
-                $this->app->terminate($this->renderJSON(true, $scrollRegion));
-            } else {
-                $this->app->terminate(json_encode(['success' => true, 'message' => 'done', 'html' => null]));
-            }
-        });
+
+        // set initial model limit. can be overwritten by onScroll
         $this->model->setLimit($ipp);
+
+        // add onScroll callback
+        $scrollable->onScroll(function ($p) use ($ipp, $scrollRegion) {
+            // set/overwrite model limit
+            $this->model->setLimit($ipp, ($p - 1) * $ipp);
+
+            // render this View (it will count rendered records !)
+            $json = $this->renderJSON(true, $scrollRegion);
+
+            // if there will be no more pages, then replace message=Success to let JS know that there are no more records
+            if ($this->_rendered_rows_count &&  < $ipp) {
+                $json = json_decode($json, true);
+                $json['message'] = 'Done';
+                $json = json_encode($json);
+            }
+
+            // return json response
+            $this->app->terminate($json);
+        });
 
         return $this;
     }
@@ -72,6 +85,9 @@ class Lister extends View
         }
     }
 
+    /** @var int This will count how many rows are rendered. Needed for jsPaginator for example. */
+    protected $_rendered_rows_count = 0;
+
     public function renderView()
     {
         if (!$this->template) {
@@ -85,6 +101,7 @@ class Lister extends View
             return parent::renderView();
         }
 
+        $this->_rendered_rows_count = 0;
         foreach ($this->model as $this->current_id => $this->current_row) {
             if ($this->hook('beforeRow') === false) {
                 continue;
@@ -100,6 +117,8 @@ class Lister extends View
                 $rowHTML = $this->t_row->set($this->current_row)->render();
                 $this->template->appendHTML('rows', $rowHTML);
             }
+
+            $this->_rendered_rows_count++;
         }
 
         if ($this->t_row == $this->template) {

@@ -36,14 +36,16 @@ class jsPaginator extends jsCallback
             $this->view = $this->owner;
         }
 
-        $this->view->js(true)->atkScroll(['uri'             => $this->getJSURL(),
-                                          'uri_options'     => $this->args,
-                                          'options'         => $this->options,
+        $this->view->js(true)->atkScroll(['uri'         => $this->getJSURL(),
+                                          'uri_options' => $this->args,
+                                          'options'     => $this->options,
                                          ]);
     }
 
     /**
-     * Generate a js action that will set nextPage to atkScroll plugin,.
+     * Generate a js action that will set nextPage to atkScroll plugin.
+     *
+     * Method currently unused.
      *
      * @param int $page
      *
@@ -51,7 +53,7 @@ class jsPaginator extends jsCallback
      */
     public function jsNextPage($page)
     {
-        return $this->view->js(true)->atkScroll('nextPage', $page);
+        return $this->view->js(true)->atkScroll('setNextPage', $page);
     }
 
     /**
