@@ -56,6 +56,11 @@ class jsPaginator extends jsCallback
         return $this->view->js(true)->atkScroll('setNextPage', $page);
     }
 
+    public function jsIdle()
+    {
+        return $this->view->js(true)->atkScroll('idle');
+    }
+
     /**
      * Callback when container has been scroll to bottom.
      *

@@ -78,6 +78,13 @@ export default class scroll extends atkPlugin {
   }
 
   /**
+   * Put scroll in idle mode.
+   */
+  idle(){
+    this.isWaiting = true;
+  }
+
+  /**
    * Ask server for more content.
    */
   loadContent() {

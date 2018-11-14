@@ -501,6 +501,10 @@ class Table extends Lister
         } else {
         }
 
+        if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
+            $this->jsPaginator->jsIdle();
+        }
+
         return View::renderView();
     }
 

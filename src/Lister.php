@@ -2,6 +2,8 @@
 
 namespace atk4\ui;
 
+use phpDocumentor\Reflection\Types\Integer;
+
 class Lister extends View
 {
     use \atk4\core\HookTrait;
@@ -16,6 +18,20 @@ class Lister extends View
     public $t_row = null;
 
     public $defaultTemplate = null;
+
+    /**
+     * A dynamic paginator attach to window srcoll event.
+     *
+     * @var null|jsPaginator
+     */
+    public $jsPaginator = null;
+
+    /**
+     * The number of item per page for jsPaginator.
+     *
+     * @var null|Integer
+     */
+    public $ipp = null;
 
     public function init()
     {
@@ -40,13 +56,14 @@ class Lister extends View
      */
     public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = null)
     {
-        $scrollable = $this->add(['jsPaginator', 'view' => $container, 'options' => $options]);
+        $this->ipp = $ipp;
+        $this->jsPaginator = $this->add(['jsPaginator', 'view' => $container, 'options' => $options]);
 
         // set initial model limit. can be overwritten by onScroll
         $this->model->setLimit($ipp);
 
         // add onScroll callback
-        $scrollable->onScroll(function ($p) use ($ipp, $scrollRegion) {
+        $this->jsPaginator->onScroll(function ($p) use ($ipp, $scrollRegion) {
             // set/overwrite model limit
             $this->model->setLimit($ipp, ($p - 1) * $ipp);
 
@@ -127,6 +144,10 @@ class Lister extends View
 
             // for some reason this does not work:
             //$this->template->set('_top', $rowHTML);
+        }
+
+        if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
+            $this->jsPaginator->jsIdle();
         }
 
         return parent::renderView(); //$this->template->render();
