@@ -67,6 +67,16 @@ class jsPaginator extends jsCallback
     }
 
     /**
+     * Get current page number.
+     *
+     * @return int
+     */
+    public function getPage()
+    {
+        return @$_GET['page'];
+    }
+
+    /**
      * Callback when container has been scroll to bottom.
      *
      * @param null|callable $fx
@@ -75,7 +85,7 @@ class jsPaginator extends jsCallback
     {
         if (is_callable($fx)) {
             if ($this->triggered()) {
-                $page = @$_GET['page'];
+                $page = $this->getPage();
                 $this->set(function () use ($fx, $page) {
                     return call_user_func_array($fx, [$page]);
                 });
