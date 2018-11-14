@@ -2,8 +2,6 @@
 
 namespace atk4\ui;
 
-use phpDocumentor\Reflection\Types\Integer;
-
 class Lister extends View
 {
     use \atk4\core\HookTrait;
@@ -29,7 +27,7 @@ class Lister extends View
     /**
      * The number of item per page for jsPaginator.
      *
-     * @var null|Integer
+     * @var null|int
      */
     public $ipp = null;
 
