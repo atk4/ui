@@ -476,7 +476,7 @@ class Table extends Lister
         $this->t_row->app = $this->app;
 
         // Iterate data rows
-        $rows = 0;
+        $this->_rendered_rows_count = 0;
         foreach ($this->model as $this->current_id => $tmp) {
             $this->current_row = $this->model->get();
             if ($this->hook('beforeRow') === false) {
@@ -489,12 +489,11 @@ class Table extends Lister
 
             $this->renderRow();
 
-            $rows++;
+            $this->_rendered_rows_count++;
         }
-        $this->_rendered_rows_count = $rows; // for jsPaginator, @see Lister->renderView
 
         // Add totals rows or empty message.
-        if (!$rows) {
+        if (!$this->_rendered_rows_count) {
             $this->template->appendHTML('Body', $this->t_empty->render());
         } elseif ($this->totals_plan) {
             $this->t_totals->setHTML('cells', $this->getTotalsRowHTML());
