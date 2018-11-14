@@ -37,7 +37,7 @@ export default class scroll extends atkPlugin {
     this.bindScrollEvent(this.$scroll);
 
     // if there is no scrollbar, then try to load next page too
-    if (!this.hasScrollbar(this.$el)) {
+    if (!this.hasScrollbar()) {
       this.loadContent();
     }
   }
@@ -76,12 +76,10 @@ export default class scroll extends atkPlugin {
   /**
    * Check if container element has vertical scrollbar.
    *
-   * @param $el
-   *
    * @return bool
    */
-  hasScrollbar($el) {
-    return false; // @todo - implement this
+  hasScrollbar() {
+    return this.$el.height() > this.$scroll.height(); // @todo - implement this properly. This way it somehow already works
   }
 
   /**
@@ -138,7 +136,7 @@ export default class scroll extends atkPlugin {
           this.isWaiting = false;
           this.nextPage++;
           // if there is no scrollbar, then try to load next page too
-          if (!this.hasScrollbar(this.$el)) {
+          if (!this.hasScrollbar()) {
             this.loadContent();
           }
         }
