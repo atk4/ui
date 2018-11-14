@@ -9,5 +9,8 @@ $app->add(['Button', 'Dynamic scroll in container', 'small right floated basic b
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
 $table = $app->add(['Table']);
+
 $m = $table->setModel(new Country($db));
+//$m->addCondition('name','like','A%');
+
 $table->addJsPaginator(30);
