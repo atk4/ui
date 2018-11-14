@@ -491,6 +491,7 @@ class Table extends Lister
 
             $rows++;
         }
+        $this->_rendered_rows_count = $rows; // for jsPaginator, @see Lister->renderView
 
         // Add totals rows or empty message.
         if (!$rows) {

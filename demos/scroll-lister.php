@@ -20,7 +20,6 @@ $l = $v->add('Lister', 'List')->addHook('beforeRow', function ($l) {
 });
 
 $m = $l->setModel(new Country($db));
-//$m->addCondition('name','like','A%');
 
 // add dynamic scrolling.
 $l->addJsPaginator(30, [], $container);
