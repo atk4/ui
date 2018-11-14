@@ -494,11 +494,9 @@ class Table extends Lister
 
         // Add totals rows or empty message
         if (!$this->_rendered_rows_count) {
-
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
                 $this->template->appendHTML('Body', $this->t_empty->render());
             }
-
         } elseif ($this->totals_plan) {
             $this->t_totals->setHTML('cells', $this->getTotalsRowHTML());
             $this->template->appendHTML('Foot', $this->t_totals->render());
