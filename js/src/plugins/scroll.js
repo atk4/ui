@@ -21,24 +21,65 @@ export default class scroll extends atkPlugin {
       return false;
     }
 
+    let defaultSettings = {
+      padding: 20,
+      initialPage: 1,
+      appendTo: null,
+      allowJsEval: false ,
+      hasFixTableHeader: false,
+      tableContainerHeight: 400,
+      tableHeaderColor: '#ffffff'
+    };
     //set default option if not set.
-    this.settings.options = Object.assign({padding: 20, initialPage: 1, appendTo: null, allowJsEval: false }, this.settings.options);
+    this.settings.options = Object.assign({}, defaultSettings, this.settings.options);
 
     this.isWaiting = false;
     this.nextPage = this.settings.options.initialPage + 1;
-    //check if scroll apply vs Window or inside our element.
-    this.isWindow = (this.$el.css('overflow-y') === 'visible');
-    this.$scroll = this.isWindow ? $(window): this.$el;
-    //is Inner the element itself or it's children.
-    this.$inner = this.isWindow ? this.$el : this.$el.children();
+
+    if (this.settings.options.hasFixTableHeader) {
+      this.isWindow = false;
+      this.$scroll = this.$el.parent();
+      this.$inner = this.$el;
+      this.setTableHeader();
+    } else {
+      //check if scroll apply vs Window or inside our element.
+      this.isWindow = (this.$el.css('overflow-y') === 'visible');
+      this.$scroll = this.isWindow ? $(window): this.$el;
+      //is Inner the element itself or it's children.
+      this.$inner = this.isWindow ? this.$el : this.$el.children();
+    }
+
     //the target element within container where new content is appendTo.
     this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
 
     this.bindScrollEvent(this.$scroll);
 
+
     // if there is no scrollbar, then try to load next page too
     if (!this.hasScrollbar()) {
       this.loadContent();
+    }
+  }
+
+  /**
+   * Add fix table header.
+   */
+  setTableHeader() {
+    if (this.$el.parent().length > 0) {
+      let $tableCopy;
+      this.$el.parent().height(this.settings.options.tableContainerHeight);
+      this.$el.addClass('fixed');
+      $tableCopy = this.$el.clone(true, true);
+      $tableCopy.attr('id', $tableCopy.attr('id')+'_');
+      $tableCopy.find('tbody, tfoot').remove();
+      $tableCopy.css({
+        'position':'absolute',
+        'background-color' : this.settings.options.tableHeaderColor,
+        'border' : this.$el.find('th').eq(1).css('border-left')
+      });
+      this.$scroll.prepend($tableCopy);
+      this.$el.find('thead').hide();
+      this.$el.css('margin-top', $tableCopy.find('thead').height());
     }
   }
 
@@ -61,12 +102,13 @@ export default class scroll extends atkPlugin {
         borderTopWidthInt = isNaN(borderTopWidth) ? 0 : borderTopWidth,
         //this.$el padding top value.
         paddingTop = parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt,
-        //Either the scroll bar position using window or the element top position otherwise.
-        topHeight = this.isWindow ? $(window).scrollTop() : this.$el.offset().top,
+        //Either the scroll bar position using window or the container element top position otherwise.
+        topHeight = this.isWindow ? $(window).scrollTop() : this.$scroll.offset().top,
         //Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
         innerTop = this.$inner.length ? this.$inner.offset().top : 0,
         //The total height.
         totalHeight = Math.ceil(topHeight - innerTop + this.$scroll.height() + paddingTop);
+
 
     if (!this.isWaiting && totalHeight + this.settings.options.padding >= this.$inner.outerHeight()) {
       this.loadContent();
@@ -119,6 +161,7 @@ export default class scroll extends atkPlugin {
       url: this.settings.uri,
       data: Object.assign({}, this.settings.uri_options, {page: this.nextPage}),
       method: 'GET',
+      stateContext: this.settings.options.hasFixTableHeader ? this.$el : this.$inner,
       onComplete: this.onComplete.bind(this),
     });
   }

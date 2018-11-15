@@ -120,6 +120,27 @@ class Grid extends View
         $this->applySort();
 
         $this->table->addJsPaginator($ipp, $options);
+
+        return $this;
+    }
+
+    /**
+     * @param int         $ipp              Number of item per page to start with.
+     * @param int         $containerHeight  Number of pixel the table container should be.
+     * @param string|null $headerColor      The hexadecimal background color of the table header. default is #ffffff.
+     *
+     * @return Grid
+     * @throws Exception
+     */
+    public function addJsPaginatorInContainer($ipp, $containerHeight, $headerColor = null) {
+        $options = [
+          'hasFixTableHeader' => true,
+          'tableContainerHeight' => $containerHeight,
+        ];
+        if ($headerColor) {
+            $option['tableHeaderColor'] = $headerColor;
+        }
+        return $this->addJsPaginator($ipp, $options);
     }
 
     /**
