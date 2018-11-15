@@ -3,9 +3,12 @@
 
 require 'init.php';
 
-$btn = $app->add('Button')->set('Simple');
+$app->add(['Header', 'Toast']);
 
-$btn->on('click', new \atk4\ui\jsToast('allo'));
+
+$btn = $app->add('Button')->set('Minimal');
+
+$btn->on('click', new \atk4\ui\jsToast('Hi there!'));
 
 $btn = $app->add('Button')->set('Using a title');
 
@@ -21,7 +24,7 @@ $btn = $app->add('Button')->set('Success');
 $btn->on('click', new \atk4\ui\jsToast([
     'title'   => 'Success',
     'message' => 'Well done',
-    'class'   => 'success'
+    'class'   => 'success',
 ]));
 
 $btn = $app->add('Button')->set('Error');
