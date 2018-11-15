@@ -1,18 +1,16 @@
 <?php
 
 namespace atk4\ui;
+
 /**
  * Class jsToast
  * Generate a Fomantic-ui toast module command in js.
- *  $('body').toast({options})
- *
- * @package atk4\ui
+ *  $('body').toast({options}).
  */
-
 class jsToast implements jsExpressionable
 {
     /**
-     * Various setting options as per Fomantic ui toast module
+     * Various setting options as per Fomantic ui toast module.
      *
      * @var array|string
      */
