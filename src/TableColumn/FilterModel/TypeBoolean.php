@@ -2,7 +2,7 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
-class TypeBoolean extends Generic
+class TypeBoolean extends FilterGeneric
 {
     public $noValueField = true;
 
