@@ -88,6 +88,38 @@ class Generic extends _Abstract
         return $this->add(new self($label));
     }
 
+
+    public function addSection($hasDivider = true)
+    {
+        $v = $this->add('View');
+        if ($hasDivider) {
+            $this->add(['ui' => 'hidden divider']);
+        }
+
+        return $v->add(['FormLayout/Generic', 'form' => $this->form]);
+    }
+
+    public function addColumnSection($hasDivider = true)
+    {
+        $v = $this->add(['FormLayout/ColumnSection', 'form' => $this->form]);
+        if ($hasDivider) {
+            $this->add(['ui' => 'hidden divider']);
+        }
+
+        return $v;
+    }
+
+    public function addAccordionSection($hasDivider = true)
+    {
+        $v = $this->add(['FormLayout/AccordionSection', 'form' => $this->form]);
+        if ($hasDivider) {
+            $this->add(['ui' => 'hidden divider']);
+        }
+
+        return $v;
+    }
+
+
     public function recursiveRender()
     {
         $field_input = $this->template->cloneRegion('InputField');
