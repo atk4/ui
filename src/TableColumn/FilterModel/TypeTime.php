@@ -2,7 +2,7 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
-class TypeTime extends Generic
+class TypeTime extends FilterGeneric
 {
     public function init()
     {
