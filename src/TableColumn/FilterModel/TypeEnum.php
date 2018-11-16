@@ -4,7 +4,7 @@ namespace atk4\ui\TableColumn\FilterModel;
 
 use atk4\data\Model;
 
-class TypeEnum extends Generic
+class TypeEnum extends FilterGeneric
 {
     public function init()
     {
