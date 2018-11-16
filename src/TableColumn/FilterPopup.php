@@ -7,7 +7,7 @@ use atk4\ui\Form;
 use atk4\ui\jQuery;
 use atk4\ui\jsReload;
 use atk4\ui\Popup;
-use atk4\ui\TableColumn\FilterModel\Generic;
+use atk4\ui\TableColumn\FilterModel\FilterGeneric;
 
 /**
  * Implement a filterPopup in a table column.
@@ -52,7 +52,7 @@ class FilterPopup extends Popup
         $this->setOption('delay', ['hide' => 1500]);
         $this->setHoverable();
 
-        $m = Generic::factoryType($this->field);
+        $m = FilterGeneric::factoryType($this->field);
 
         $this->form = $this->add('Form')->addClass('');
         $this->form->buttonSave->addClass('');
