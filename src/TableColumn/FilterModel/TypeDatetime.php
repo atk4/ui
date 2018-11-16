@@ -4,7 +4,7 @@ namespace atk4\ui\TableColumn\FilterModel;
 
 use DateTime;
 
-class TypeDatetime extends Generic
+class TypeDatetime extends FilterGeneric
 {
     public function init()
     {
