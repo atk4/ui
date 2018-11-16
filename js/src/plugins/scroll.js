@@ -126,7 +126,7 @@ export default class scroll extends atkPlugin {
     if (this.isWindow) {
       return innerHeight > scrollHeight;
     } else {
-      if ((innerHeight === scrollHeight) || (innerHeight < scrollHeight)){
+      if (innerHeight <= scrollHeight) {
         return false;
       } else {
         return true;
