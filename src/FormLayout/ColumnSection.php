@@ -11,6 +11,6 @@ class ColumnSection extends \atk4\ui\Columns
     {
         $c = parent::addColumn($defaults);
 
-        return $c->add([$this->formLayout,'form' => $this->form]);
+        return $c->add([$this->formLayout, 'form' => $this->form]);
     }
 }

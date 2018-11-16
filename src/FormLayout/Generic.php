@@ -88,7 +88,6 @@ class Generic extends _Abstract
         return $this->add(new self($label));
     }
 
-
     public function addSection($hasDivider = true)
     {
         $v = $this->add('View');
@@ -118,7 +117,6 @@ class Generic extends _Abstract
 
         return $v;
     }
-
 
     public function recursiveRender()
     {

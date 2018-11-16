@@ -4,7 +4,7 @@ namespace atk4\ui\FormLayout;
 
 class AccordionSection extends \atk4\ui\Accordion
 {
-    public $section =  null;
+    public $section = null;
     public $formLayout = 'FormLayout/Generic';
     public $form = null;
 

@@ -8,7 +8,7 @@ $m = new Country($db);
 $m->loadAny();
 
 $f = $app->add('Form');
-$f->setModel($m,false);
+$f->setModel($m, false);
 
 $v = $f->layout->addSection();
 
@@ -28,7 +28,7 @@ $app->add(['ui' => 'divider']);
 ////////////////////////////////
 
 $f = $app->add('Form');
-$f->setModel($m,false);
+$f->setModel($m, false);
 
 $v = $f->layout->addSection();
 
