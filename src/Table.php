@@ -271,25 +271,6 @@ class Table extends Lister
     }
 
     /**
-     * Add a dynamic paginator, i.e. when user is scrolling content.
-     *
-     * @param int    $ipp          Number of item per page to start with.
-     * @param array  $options      An array with js Scroll plugin options.
-     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
-     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
-     *
-     * @throws Exception
-     *
-     * @return $this|void
-     */
-    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
-    {
-        $options = array_merge($options, ['appendTo' => 'tbody']);
-
-        return parent::addJsPaginator($ipp, $options, $container, $scrollRegion);
-    }
-
-    /**
      * Return array of column decorators for particular column.
      *
      * @param string $name Column name
@@ -376,6 +357,25 @@ class Table extends Lister
         $this->js(true, $this->js()->atkColumnResizer($options));
 
         return $this;
+    }
+
+    /**
+     * Add a dynamic paginator, i.e. when user is scrolling content.
+     *
+     * @param int    $ipp          Number of item per page to start with.
+     * @param array  $options      An array with js Scroll plugin options.
+     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     *
+     * @throws Exception
+     *
+     * @return $this|void
+     */
+    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+    {
+        $options = array_merge($options, ['appendTo' => 'tbody']);
+
+        return parent::addJsPaginator($ipp, $options, $container, $scrollRegion);
     }
 
     /**

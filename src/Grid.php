@@ -5,12 +5,12 @@
 namespace atk4\ui;
 
 /**
- * Implements a more sophisticated and interractive Data-Table component.
+ * Implements a more sophisticated and interactive Data-Table component.
  */
 class Grid extends View
 {
     /**
-     * Will be initalized to Menu object, however you can set this to false to disable menu.
+     * Will be initialized to Menu object, however you can set this to false to disable menu.
      *
      * @var Menu|false
      */
@@ -68,7 +68,7 @@ class Grid extends View
     public $sortable = null;
 
     /**
-     * Component that actually renders data rows / coluns and possibly totals.
+     * Component that actually renders data rows / columns and possibly totals.
      *
      * @var Table|false
      */
@@ -99,51 +99,6 @@ class Grid extends View
             $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
             $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator));
         }
-    }
-
-    /**
-     * Add dynamic scrolling paginator.
-     *
-     * @param int   $ipp     Number of item per page to start with.
-     * @param array $options An array with js Scroll plugin options.
-     *
-     * @throws Exception
-     */
-    public function addJsPaginator($ipp, $options = [])
-    {
-        if ($this->paginator) {
-            $this->paginator->destroy();
-            //prevent action(count) to be output twice.
-            $this->paginator = null;
-        }
-
-        $this->applySort();
-
-        $this->table->addJsPaginator($ipp, $options);
-
-        return $this;
-    }
-
-    /**
-     * @param int         $ipp             Number of item per page to start with.
-     * @param int         $containerHeight Number of pixel the table container should be.
-     * @param string|null $headerColor     The hexadecimal background color of the table header. default is #ffffff.
-     *
-     * @throws Exception
-     *
-     * @return Grid
-     */
-    public function addJsPaginatorInContainer($ipp, $containerHeight, $headerColor = null)
-    {
-        $options = [
-          'hasFixTableHeader'    => true,
-          'tableContainerHeight' => $containerHeight,
-        ];
-        if ($headerColor) {
-            $option['tableHeaderColor'] = $headerColor;
-        }
-
-        return $this->addJsPaginator($ipp, $options);
     }
 
     /**
@@ -241,6 +196,57 @@ class Grid extends View
         });
 
         return $this;
+    }
+
+    /**
+     * Add dynamic scrolling paginator.
+     *
+     * @param int   $ipp           Number of item per page to start with.
+     * @param array $options       An array with js Scroll plugin options.
+     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     *
+     * @throws Exception
+     *
+     * @return $this
+     */
+    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+    {
+        if ($this->paginator) {
+            $this->paginator->destroy();
+            //prevent action(count) to be output twice.
+            $this->paginator = null;
+        }
+
+        $this->applySort();
+
+        $this->table->addJsPaginator($ipp, $options, $container, $scrollRegion);
+
+        return $this;
+    }
+
+    /**
+     * Add dynamic scrolling paginator in container.
+     * Use this to make table headers fixed.
+     *
+     * @param int    $ipp             Number of item per page to start with.
+     * @param int    $containerHeight Number of pixel the table container should be.
+     * @param array  $options         An array with js Scroll plugin options.
+     * @param View   $container       The container holding the lister for scrolling purpose. Default to view owner.
+     * @param string $scrollRegion    A specific template region to render. Render output is append to container html element.
+     *
+     * @throws Exception
+     *
+     * @return $this
+     */
+    public function addJsPaginatorInContainer($ipp, $containerHeight, $options = [], $container = null, $scrollRegion = 'Body')
+    {
+        $options = [
+          'hasFixTableHeader'    => true,
+          'tableContainerHeight' => $containerHeight,
+        ];
+
+        return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);
     }
 
     /**

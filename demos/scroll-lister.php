@@ -3,15 +3,17 @@
 require 'init.php';
 require 'database.php';
 
-$app->add(['Button', 'Dynamic scroll in table', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+$app->add(['Button', 'Dynamic scroll in Table', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['scroll-table']);
-
 $app->add(['View', 'ui' => 'ui clearing divider']);
+
+
+
+$app->add(['Header', 'Dynamic scroll in Lister']);
 
 $container = $app->add('View');
 
 $v = $container->add(['View', 'template' => new \atk4\ui\Template('
-<div class="ui header">Top countries (alphabetically)</div>
 {List}<div class="ui segment" style="height: 60px"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</div>{/}
 {$Content}')]);
 

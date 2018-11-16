@@ -3,10 +3,15 @@
 require 'init.php';
 require 'database.php';
 
+$app->add(['Button', 'Dynamic scroll in Table', 'small left floated basic blue', 'icon' => 'left arrow'])
+    ->link(['scroll-table']);
 $app->add(['Button', 'Dynamic scroll in Grid', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['scroll-grid']);
+$app->add(['View', 'ui' => 'ui clearing divider']);
 
-$app->add(['Header', 'Top countries (alphabetically)']);
+
+
+$app->add(['Header', 'Dynamic scroll in Container']);
 
 $scroll_container = $app->add('View')->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
 

@@ -444,13 +444,13 @@ See :php:class:`Grid`
 jsPaginator
 -----------
 
-.. php:method:: addJsPaginator($ipp, $options = [])
+.. php:method:: addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
 
-jsPaginator will load table content dynamically when user scroll the table window on screen.
+jsPaginator will load table content dynamically when user scroll down the table window on screen.
 
     $table->addJsPaginator(30);
 
-This method accept one argument which is the number of item per page you wish to load on each page scroll.
+See also :php:meth:`Lister::addJsPaginator`
 
 Resizable Columns
 -----------------

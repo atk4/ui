@@ -39,6 +39,24 @@ class Lister extends View
     }
 
     /**
+     * From the current template will extract {row} into $this->t_row.
+     *
+     * @return void
+     */
+    public function initChunks()
+    {
+        if (!$this->template) {
+            throw new Exception(['Lister does not have default template. Either supply your own HTML or use "defaultTemplate"=>"lister.html"']);
+        }
+        if ($this->template->hasTag('row')) {
+            $this->t_row = $this->template->cloneRegion('row');
+            $this->template->del('rows');
+        } else {
+            $this->t_row = $this->template;
+        }
+    }
+
+    /**
      * Add Dynamic paginator when scrolling content via Javascript.
      * Will output x item in lister set per ipp until user scroll content to the end of page.
      * When this happen, content will be reload x number of items.
@@ -80,24 +98,6 @@ class Lister extends View
         });
 
         return $this;
-    }
-
-    /**
-     * From the current template will extract {row} into $this->t_row.
-     *
-     * @return void
-     */
-    public function initChunks()
-    {
-        if (!$this->template) {
-            throw new Exception(['Lister does not have default template. Either supply your own HTML or use "defaultTemplate"=>"lister.html"']);
-        }
-        if ($this->template->hasTag('row')) {
-            $this->t_row = $this->template->cloneRegion('row');
-            $this->template->del('rows');
-        } else {
-            $this->t_row = $this->template;
-        }
     }
 
     /** @var int This will count how many rows are rendered. Needed for jsPaginator for example. */

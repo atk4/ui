@@ -123,15 +123,7 @@ export default class scroll extends atkPlugin {
   hasScrollbar() {
     let innerHeight = this.isWindow ? Math.ceil(this.$el.height()) : Math.ceil(this.$inner.height());
     let scrollHeight = Math.ceil(this.$scroll.height());
-    if (this.isWindow) {
-      return innerHeight > scrollHeight;
-    } else {
-      if (innerHeight <= scrollHeight) {
-        return false;
-      } else {
-        return true;
-      }
-    }
+    return innerHeight > scrollHeight;
   }
 
   /**
