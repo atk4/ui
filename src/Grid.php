@@ -184,6 +184,10 @@ class Grid extends View
         $pageLength = $this->paginator->add(['ItemsPerPageSelector', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], 'afterPaginator');
         $this->paginator->template->trySet('PaginatorType', 'ui grid');
 
+        if ($sortBy = $this->getSortBy()) {
+            $pageLength->stickyGet($this->name.'_sort', $sortBy);
+        }
+
         $pageLength->onPageLengthSelect(function ($ipp) use ($pageLength) {
             $this->ipp = $ipp;
             $this->setModelLimitFromPaginator();
@@ -191,6 +195,8 @@ class Grid extends View
             if ($this->quickSearch instanceof jsSearch) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
             }
+            $this->applySort();
+
             //return the view to reload.
             return $this->container;
         });
@@ -398,27 +404,41 @@ class Grid extends View
     }
 
     /**
+     * Get sortBy value from url parameter.
+     *
+     * @return null|string
+     */
+    public function getSortBy()
+    {
+        return isset($_GET[$this->name.'_sort']) ? $_GET[$this->name.'_sort'] : null;
+    }
+
+    /**
      * Apply ordering to the current model as per the sort parameters.
      */
     public function applySort()
     {
-        //$sortby = $this->app->stickyGET($this->name.'_sort', null);
-        $sortby = $this->stickyGet($this->name.'_sort');
+        $sortBy = $this->getSortBy();
+
+        if ($sortBy && $this->paginator) {
+            $this->paginator->addReloadArgs([$this->name.'_sort' => $sortBy]);
+        }
+
         $desc = false;
-        if ($sortby && $sortby[0] == '-') {
+        if ($sortBy && $sortBy[0] == '-') {
             $desc = true;
-            $sortby = substr($sortby, 1);
+            $sortBy = substr($sortBy, 1);
         }
 
         $this->table->sortable = true;
 
         if (
-            $sortby
-            && isset($this->table->columns[$sortby])
-            && $this->model->hasElement($sortby) instanceof \atk4\data\Field
+            $sortBy
+            && isset($this->table->columns[$sortBy])
+            && $this->model->hasElement($sortBy) instanceof \atk4\data\Field
         ) {
-            $this->model->setOrder($sortby, $desc);
-            $this->table->sort_by = $sortby;
+            $this->model->setOrder($sortBy, $desc);
+            $this->table->sort_by = $sortBy;
             $this->table->sort_order = $desc ? 'descending' : 'ascending';
         }
 
@@ -522,13 +542,12 @@ class Grid extends View
     {
         // bind with paginator
         if ($this->paginator) {
-            $this->paginator->reload = $this->container;
             $this->setModelLimitFromPaginator();
         }
 
         if ($this->quickSearch instanceof jsSearch) {
-            if ($sortby = $this->stickyGet($this->name.'_sort')) {
-                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->name.'_sort', $sortby]));
+            if ($sortBy = $this->getSortBy()) {
+                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->name.'_sort', $sortBy]));
             }
         }
 
