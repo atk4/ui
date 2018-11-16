@@ -2,7 +2,7 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
-class TypeString extends Generic
+class TypeString extends FilterGeneric
 {
     public function init()
     {
