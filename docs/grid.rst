@@ -85,6 +85,22 @@ You can use $ipp property to specify different number of items per page::
 
     $grid->ipp = 10;
 
+jsPaginator
+-----------
+
+.. php:method:: addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+
+jsPaginator will load table content dynamically when user scroll down the table window on screen.
+
+    $table->addJsPaginator(30);
+
+See :php:meth:`Table::addJsPaginator`
+
+.. php:method:: addJsPaginatorInContainer($ipp, $containerHeight, $options = [], $container = null, $scrollRegion = 'Body')
+
+Use this method if you want fixed table header when scrolling down table. In this case you have to set
+fixed height of your table container.
+
 Actions
 =======
 

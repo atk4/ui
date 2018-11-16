@@ -714,11 +714,14 @@ class View implements jsExpressionable
     /**
      * Render View using json format.
      *
-     * @param bool $force_echo
+     * @param bool   $force_echo
+     * @param string $region     A specific template region to render.
+     *
+     * @throws Exception
      *
      * @return string
      */
-    public function renderJSON($force_echo = true)
+    public function renderJSON($force_echo = true, $region = null)
     {
         try {
             $this->renderAll();
@@ -726,7 +729,7 @@ class View implements jsExpressionable
             return json_encode(['success' => true,
                                 'message' => 'Success',
                                 'atkjs'   => $this->getJS($force_echo),
-                                'html'    => $this->template->render(),
+                                'html'    => $this->template->render($region),
                                 'id'      => $this->name, ]);
         } catch (\Exception $exception) {
             $this->_rendered = false;

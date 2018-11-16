@@ -72,6 +72,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem(['Pop-up'], ['popup']);
     $basic->addItem(['Modal View'], ['modal2']);
     $basic->addItem('Dynamic jsModal', ['modal']);
+    $basic->addItem(['Dynamic scroll', 'icon'=>'yellow star'], ['scroll-lister']);
     $basic->addItem('Sticky GET', ['sticky']);
     $basic->addItem('Recursive Views', ['recursive']);
     //$basic->addItem('Virtual Page', ['virtual']);
