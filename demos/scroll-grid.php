@@ -9,8 +9,6 @@ $app->add(['Button', 'Dynamic scroll in Grid using Container', 'small right floa
     ->link(['scroll-grid-container']);
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
-
-
 $app->add(['Header', 'Dynamic scroll in Grid']);
 
 $g = $app->add(['Grid', 'menu' => false]);

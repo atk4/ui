@@ -9,8 +9,6 @@ $app->add(['Button', 'Dynamic scroll in Grid', 'small right floated basic blue',
     ->link(['scroll-grid']);
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
-
-
 $app->add(['Header', 'Dynamic scroll in Container']);
 
 $scroll_container = $app->add('View')->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);

@@ -9,8 +9,6 @@ $app->add(['Button', 'Dynamic scroll in Container', 'small right floated basic b
     ->link(['scroll-container']);
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
-
-
 $app->add(['Header', 'Dynamic scroll in Table']);
 
 $table = $app->add(['Table']);

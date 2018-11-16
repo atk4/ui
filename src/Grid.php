@@ -201,8 +201,8 @@ class Grid extends View
     /**
      * Add dynamic scrolling paginator.
      *
-     * @param int   $ipp           Number of item per page to start with.
-     * @param array $options       An array with js Scroll plugin options.
+     * @param int    $ipp          Number of item per page to start with.
+     * @param array  $options      An array with js Scroll plugin options.
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
      *
