@@ -1,6 +1,5 @@
 <?php
 
-
 namespace atk4\ui\FormLayout\Section;
 
 class Tabs extends \atk4\ui\Tabs
