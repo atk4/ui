@@ -55,10 +55,10 @@ $v = $f->layout->addLayout();
 $v->add(['Header', 'Tabs in Form']);
 $v->setModel($m, ['name']);
 
-$acc = $f->layout->addLayout('Tabs');
+$tabs = $f->layout->addLayout('Tabs');
 
-$a1 = $acc->addTab('Tab 1');
-$a1->setModel($m, ['iso', 'iso3']);
+$t1 = $tabs->addTab('Tab 1');
+$t1->setModel($m, ['iso', 'iso3']);
 
-$a2 = $acc->addTab('Tab 2');
-$a2->setModel($m, ['numcode', 'phonecode']);
+$t2 = $tabs->addTab('Tab 2');
+$t2->setModel($m, ['numcode', 'phonecode']);
