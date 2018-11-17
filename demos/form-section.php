@@ -10,12 +10,12 @@ $m->loadAny();
 $f = $app->add('Form');
 $f->setModel($m, false);
 
-$v = $f->layout->addSection();
+$v = $f->layout->addLayout();
 
 $v->add(['Header', 'Column Section in Form']);
 $v->setModel($m, ['name']);
 
-$cols = $f->layout->addColumnSection();
+$cols = $f->layout->addLayout('Column');
 
 $c1 = $cols->addColumn();
 $c1->setModel($m, ['iso', 'iso3']);
@@ -30,12 +30,12 @@ $app->add(['ui' => 'divider']);
 $f = $app->add('Form');
 $f->setModel($m, false);
 
-$v = $f->layout->addSection();
+$v = $f->layout->addLayout();
 
 $v->add(['Header', 'Accordion Section in Form']);
 $v->setModel($m, ['name']);
 
-$acc = $f->layout->addAccordionSection();
+$acc = $f->layout->addLayout('Accordion');
 
 $a1 = $acc->addSection('Section 1');
 $a1->setModel($m, ['iso', 'iso3']);

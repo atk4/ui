@@ -88,29 +88,16 @@ class Generic extends _Abstract
         return $this->add(new self($label));
     }
 
-    public function addSection($hasDivider = true)
+    public function addLayout($type = 'View', $hasDivider = true)
     {
-        $v = $this->add('View');
-        if ($hasDivider) {
-            $this->add(['ui' => 'hidden divider']);
+        $v = null;
+        if ($type === 'View') {
+            $v = $this->add('View');
+            $v = $v->add(['FormLayout/Generic', 'form' => $this->form]);
+        } else {
+            $v = $this->add(['FormLayout/Section/'. $type, 'form' => $this->form]);
         }
 
-        return $v->add(['FormLayout/Generic', 'form' => $this->form]);
-    }
-
-    public function addColumnSection($hasDivider = true)
-    {
-        $v = $this->add(['FormLayout/Section/Column', 'form' => $this->form]);
-        if ($hasDivider) {
-            $this->add(['ui' => 'hidden divider']);
-        }
-
-        return $v;
-    }
-
-    public function addAccordionSection($hasDivider = true)
-    {
-        $v = $this->add(['FormLayout/Section/Accordion', 'form' => $this->form]);
         if ($hasDivider) {
             $this->add(['ui' => 'hidden divider']);
         }
