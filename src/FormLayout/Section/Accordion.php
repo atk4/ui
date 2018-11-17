@@ -1,8 +1,8 @@
 <?php
 
-namespace atk4\ui\FormLayout;
+namespace atk4\ui\FormLayout\Section;
 
-class AccordionSection extends \atk4\ui\Accordion
+class Accordion extends \atk4\ui\Accordion
 {
     public $section = null;
     public $formLayout = 'FormLayout/Generic';

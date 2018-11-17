@@ -1,8 +1,8 @@
 <?php
 
-namespace atk4\ui\FormLayout;
+namespace atk4\ui\FormLayout\Section;
 
-class ColumnSection extends \atk4\ui\Columns
+class Column extends \atk4\ui\Columns
 {
     public $formLayout = 'FormLayout/Generic';
     public $form = null;

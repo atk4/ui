@@ -100,7 +100,7 @@ class Generic extends _Abstract
 
     public function addColumnSection($hasDivider = true)
     {
-        $v = $this->add(['FormLayout/ColumnSection', 'form' => $this->form]);
+        $v = $this->add(['FormLayout/Section/Column', 'form' => $this->form]);
         if ($hasDivider) {
             $this->add(['ui' => 'hidden divider']);
         }
@@ -110,7 +110,7 @@ class Generic extends _Abstract
 
     public function addAccordionSection($hasDivider = true)
     {
-        $v = $this->add(['FormLayout/AccordionSection', 'form' => $this->form]);
+        $v = $this->add(['FormLayout/Section/Accordion', 'form' => $this->form]);
         if ($hasDivider) {
             $this->add(['ui' => 'hidden divider']);
         }
