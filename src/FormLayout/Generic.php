@@ -95,7 +95,7 @@ class Generic extends _Abstract
             $v = $this->add('View');
             $v = $v->add(['FormLayout/Generic', 'form' => $this->form]);
         } else {
-            $v = $this->add(['FormLayout/Section/'. $type, 'form' => $this->form]);
+            $v = $this->add(['FormLayout/Section/'.$type, 'form' => $this->form]);
         }
 
         if ($hasDivider) {
