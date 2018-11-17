@@ -58,7 +58,7 @@ $v->setModel($m, ['name']);
 $tabs = $f->layout->addLayout('Tabs');
 
 $t1 = $tabs->addTab('Tab 1');
-$t1->setModel($m, ['iso', 'iso3']);
+$t1->addGroup('In Group')->setModel($m, ['iso', 'iso3']);
 
 $t2 = $tabs->addTab('Tab 2');
 $t2->setModel($m, ['numcode', 'phonecode']);
