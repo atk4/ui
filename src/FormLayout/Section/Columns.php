@@ -2,7 +2,7 @@
 
 namespace atk4\ui\FormLayout\Section;
 
-class Column extends \atk4\ui\Columns
+class Columns extends \atk4\ui\Columns
 {
     public $formLayout = 'FormLayout/Generic';
     public $form = null;
