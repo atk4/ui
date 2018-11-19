@@ -110,9 +110,10 @@ class Generic extends _Abstract
      * @param null $seed
      * @param bool $hasDivider
      *
-     * @return \atk4\ui\View|null
      * @throws \atk4\core\Exception
      * @throws \atk4\ui\Exception
+     *
+     * @return \atk4\ui\View|null
      */
     public function addLayout($seed = null, $hasDivider = true)
     {
@@ -122,11 +123,10 @@ class Generic extends _Abstract
         if (empty($seed) || $seed === 'View') {
             $v = $this->add('View');
             $v = $v->add(['FormLayout/Generic', 'form'=>$this->form]);
-        } else if((is_array($seed) && $seed[0] === 'View')) {
+        } elseif ((is_array($seed) && $seed[0] === 'View')) {
             $v = $this->add($seed);
             $v = $v->add(['FormLayout/Generic', 'form'=>$this->form]);
-        }
-        else {
+        } else {
             $v = $this->add($this->factory($seed, ['form'=>$this->form], $prefix));
         }
 
