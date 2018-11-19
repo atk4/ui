@@ -73,7 +73,7 @@ $f->setModel($m, false);
 $v = $f->layout->addLayout(['View', 'ui' => 'segment red inverted'], false);
 
 
-$v->add(['View', 'This section in Red', 'ui' => 'dividing header', 'element' => 'h4']);
+$v->add(['View', 'This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
 $v->setModel($m, ['name']);
 
 $v = $f->layout->addLayout(['View', 'ui' => 'segment teal inverted']);
