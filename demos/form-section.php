@@ -62,3 +62,27 @@ $t1->addGroup('In Group')->setModel($m, ['iso', 'iso3']);
 
 $t2 = $tabs->addTab('Tab 2');
 $t2->setModel($m, ['numcode', 'phonecode']);
+
+/////////////////////////////////////////
+
+$app->add(['Header', 'Color in form']);
+
+$f = $app->add('Form');
+$f->setModel($m, false);
+
+$v = $f->layout->addLayout(['View', 'ui' => 'segment red inverted'], false);
+
+
+$v->add(['View', 'This section in Red', 'ui' => 'dividing header', 'element' => 'h4']);
+$v->setModel($m, ['name']);
+
+$v = $f->layout->addLayout(['View', 'ui' => 'segment teal inverted']);
+$cols = $v->addLayout('Columns');
+
+$c1 = $cols->addColumn();
+$c1->setModel($m, ['iso', 'iso3']);
+
+$c2 = $cols->addColumn();
+$c2->setModel($m, ['numcode', 'phonecode']);
+
+$app->add(['ui' => 'divider']);
