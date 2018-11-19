@@ -42,6 +42,7 @@ $tab->add(['Header', 'Comparing Field type vs Decorator class']);
 $form = $tab->add('Form');
 $form->addField('date1', null, ['type' => 'date']);
 $form->addField('date2', ['Calendar', 'type' => 'date']);
+$form->buttonSave->set('Compare Date');
 
 $form->onSubmit(function ($form) {
     echo 'date1 = '.print_r($form->model['date1'], true).' and date2 = '.print_r($form->model['date2'], true);
