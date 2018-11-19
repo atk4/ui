@@ -201,8 +201,6 @@ class Table extends Lister
         if (is_null($name)) {
             $this->columns[] = $columnDecorator;
         } elseif (!is_string($name)) {
-            echo 'about to throw exception.....';
-
             throw new Exception(['Name must be a string', 'name' => $name]);
         } elseif (isset($this->columns[$name])) {
             throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name' => $name]);
@@ -280,11 +278,8 @@ class Table extends Lister
     public function getColumnDecorators($name)
     {
         $dec = $this->columns[$name];
-        if (!is_array($dec)) {
-            $dec = [$dec];
-        }
 
-        return $dec;
+        return is_array($dec) ? $dec : [$dec];
     }
 
     /**
