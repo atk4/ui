@@ -137,7 +137,10 @@ class Table extends Lister
      * cells and will handle other things, like alignment. If you do not specify
      * column, then it will be selected dynamically based on field type.
      *
-     * @param string                   $name            Data model field name
+     * If you don't want table column to be associated with model field, then
+     * pass $name parameter as null.
+     *
+     * @param string|null              $name            Data model field name
      * @param array|string|object|null $columnDecorator
      * @param array|string|object|null $field
      *
@@ -159,21 +162,23 @@ class Table extends Lister
             $field = ['type' => $field];
         }
 
-        if ($name) {
+        if (is_string($name) && $name) {
             $existingField = $this->model->hasElement($name);
         } else {
             $existingField = null;
         }
 
-        if (!$existingField) {
+        if ($existingField === null) {
+            // table column without respective field in model
+            $field = null;
+        } elseif (!$existingField) {
             // Add missing field
             if ($field) {
                 $field = $this->model->addField($name, $field);
-                $field->never_persist = true;
             } else {
                 $field = $this->model->addField($name);
-                $field->never_persist = true;
             }
+            $field->never_persist = true;
         } elseif (is_array($field)) {
             // Add properties to existing field
             $existingField->setDefaults($field);
@@ -184,7 +189,10 @@ class Table extends Lister
             $field = $existingField;
         }
 
-        if (is_array($columnDecorator) || is_string($columnDecorator)) {
+        if ($field === null) {
+            // column is not associated with any model field
+            $columnDecorator =  $this->_add($this->factory($columnDecorator, ['table' => $this], 'TableColumn'));
+        } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, $columnDecorator);
         } elseif (!$columnDecorator) {
             $columnDecorator = $this->decoratorFactory($field);
