@@ -15,8 +15,8 @@ class Accordion extends \atk4\ui\Accordion
         return $this->section->add([$this->formLayout, 'form' => $this->form]);
     }
 
-    public function getSection()
+    public function getSectionIdx($section)
     {
-        return $this->section();
+        return parent::getSectionIdx($section->owner);
     }
 }

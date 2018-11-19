@@ -131,7 +131,7 @@ class Accordion extends View
      *
      * @return int|string
      */
-    private function getSectionIdx($section)
+    public function getSectionIdx($section)
     {
         $idx = -1;
         foreach ($this->sections as $key => $accordion_section) {
