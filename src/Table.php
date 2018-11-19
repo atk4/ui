@@ -191,7 +191,7 @@ class Table extends Lister
 
         if ($field === null) {
             // column is not associated with any model field
-            $columnDecorator =  $this->_add($this->factory($columnDecorator, ['table' => $this], 'TableColumn'));
+            $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this], 'TableColumn'));
         } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, $columnDecorator);
         } elseif (!$columnDecorator) {
@@ -276,7 +276,7 @@ class Table extends Lister
             $this->columns[$name] = [$this->columns[$name]];
         }
         $this->columns[$name][] = $decorator;
-        
+
         return $decorator;
     }
 
