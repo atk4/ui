@@ -35,7 +35,6 @@ $f->addField('term', ['CheckBox', 'caption'=>'Accept terms and conditions', null
 
 $acc->activate($contact_section);
 
-
 $f->onSubmit(function ($f) use ($acc, $contact_section) {
     if (!$f->model['first_name']) {
         // return field error and open proper accordion item where field is located.
