@@ -7,6 +7,9 @@ require 'database.php';
 $m = new Country($db);
 $m->loadAny();
 
+//Prevent form from saving,
+$noSave = function(){return;};
+
 $f = $app->add('Form');
 $f->setModel($m, false);
 
@@ -22,6 +25,8 @@ $c1->setModel($m, ['iso', 'iso3']);
 
 $c2 = $cols->addColumn();
 $c2->setModel($m, ['numcode', 'phonecode']);
+
+$f->onSubmit($noSave);
 
 $app->add(['ui' => 'divider']);
 
@@ -43,6 +48,8 @@ $a1->setModel($m, ['iso', 'iso3']);
 $a2 = $acc->addSection('Section 2');
 $a2->setModel($m, ['numcode', 'phonecode']);
 
+$f->onSubmit($noSave);
+
 $app->add(['ui' => 'divider']);
 
 ////////////////////////////////
@@ -62,6 +69,10 @@ $t1->addGroup('In Group')->setModel($m, ['iso', 'iso3']);
 
 $t2 = $tabs->addTab('Tab 2');
 $t2->setModel($m, ['numcode', 'phonecode']);
+
+$f->onSubmit($noSave);
+
+$app->add(['ui' => 'divider']);
 
 /////////////////////////////////////////
 
@@ -83,5 +94,7 @@ $c1->setModel($m, ['iso', 'iso3']);
 
 $c2 = $cols->addColumn();
 $c2->setModel($m, ['numcode', 'phonecode']);
+
+$f->onSubmit($noSave);
 
 $app->add(['ui' => 'divider']);
