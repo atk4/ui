@@ -252,20 +252,24 @@ class Table extends Lister
     /**
      * Add column Decorator.
      *
-     * @param string                     $name      Column name
-     * @param string|TableColumn/Generic $decorator
+     * @param string $name Column name
+     * @param mixed  $seed Defaults to pass to factory() when decorator is initialized
+     *
+     * @return TableColumn\Generic
      */
-    public function addDecorator($name, $decorator)
+    public function addDecorator($name, $seed)
     {
         if (!$this->columns[$name]) {
             throw new Exception(['No such column, cannot decorate', 'name' => $name]);
         }
-        $decorator = $this->_add($this->factory($decorator, ['table' => $this], 'TableColumn'));
+        $decorator = $this->_add($this->factory($seed, ['table' => $this], 'TableColumn'));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
         }
         $this->columns[$name][] = $decorator;
+        
+        return $decorator;
     }
 
     /**
@@ -287,7 +291,7 @@ class Table extends Lister
      * By default will use default column.
      *
      * @param \atk4\data\Field $f    Data model field
-     * @param array            $seed Defaults to pass to factory() when decorator is initialized
+     * @param mixed            $seed Defaults to pass to factory() when decorator is initialized
      *
      * @return TableColumn\Generic
      */
