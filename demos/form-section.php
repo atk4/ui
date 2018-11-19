@@ -8,7 +8,8 @@ $m = new Country($db);
 $m->loadAny();
 
 //Prevent form from saving,
-$noSave = function(){return;};
+$noSave = function () {
+};
 
 $f = $app->add('Form');
 $f->setModel($m, false);
