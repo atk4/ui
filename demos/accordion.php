@@ -2,11 +2,10 @@
 
 require 'init.php';
 
-/*
-$app->add(['Button', 'View Form input split in Accordion section', 'small right floated basic blue', 'iconRight' => 'right arrow'])
-    ->link(['accordion-in-form']);
+
+$app->add(['Button', 'Nested accordions', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['accordion-nested']);
 $app->add(['ui' => 'clearing divider']);
-*/
 
 $app->add(['Header', 'Accordion\'s section can be control programmatically.']);
 
@@ -18,7 +17,7 @@ $b3 = $bar->add(['Button', 'Toggle Section #3']);
 
 $app->add(['Header', 'Accordion Sections']);
 
-$accordion = $app->add(['Accordion', 'type' => ['styled', 'fluid']]);
+$accordion = $app->add(['Accordion', 'type' => ['styled', 'fluid']/*, 'settings'=>['exclusive'=>false]*/]);
 
 // static section
 $i1 = $accordion->addSection('Static Text');
