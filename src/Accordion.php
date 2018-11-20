@@ -17,7 +17,7 @@ class Accordion extends View
     /**
      * The css class for Fomantic-ui accordion type.
      *
-     * @var arra|string|ynull
+     * @var array|string|null
      */
     public $type = null;
 
@@ -29,14 +29,14 @@ class Accordion extends View
     public $settings = [];
 
     /**
-     * A collection of AccordionSection in this Accordion;.
+     * A collection of AccordionSection in this Accordion.
      *
      * @var array
      */
     public $sections = [];
 
     /**
-     * The AccordionItem index number to activate on load.
+     * The AccordionSection index number to activate on load.
      *
      * @var int
      */
@@ -53,12 +53,13 @@ class Accordion extends View
      *
      * @throws Exception
      *
-     * @return View
+     * @return AccordionSection
      */
     public function addSection($title, $callback = null, $icon = 'dropdown')
     {
         $section = $this->add(['AccordionSection', 'title' => $title, 'icon' => $icon]);
 
+        // if there is callback action, then use VirtualPage
         if ($callback) {
             $section->virtualPage = $section->add(['VirtualPage', 'ui' => '']);
             $section->virtualPage->set($callback);
@@ -129,7 +130,7 @@ class Accordion extends View
      *
      * @param AccordionSection $section
      *
-     * @return int|string
+     * @return int
      */
     public function getSectionIdx($section)
     {
