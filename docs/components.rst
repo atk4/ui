@@ -47,6 +47,7 @@ control over even the small elements.
     image
     message
     tabs
+    accordion
     helloworld
 
 
