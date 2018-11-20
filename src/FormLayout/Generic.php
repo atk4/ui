@@ -88,55 +88,6 @@ class Generic extends _Abstract
         return $this->add(new self($label));
     }
 
-    /**
-     * Add a form layout section to this layout.
-     *
-     * A layout section may be a simple View or
-     * one of the supported Section: Columns, Accordion or Tabs;
-     * Each section may contain other section or group.
-     *
-     * $cols = $f->layout->addLayout('Columns');
-     * $c1 = $cols->addColumn();
-     * $c1->addField('Field');
-     *
-     * $acc = $f->layout->addLayout('Accordion');
-     * $a1 = $acc->addSection('Section 1');
-     * $a1->setModel($m, ['iso', 'iso3']);
-     *
-     * $tabs = $f->layout->addLayout('Tabs');
-     * $t1 = $tabs->addTab('Tab 1');
-     * $t1->addGroup('Group Name')->setModel($m, ['iso', 'iso3']);
-     *
-     * @param null $seed
-     * @param bool $hasDivider
-     *
-     * @throws \atk4\core\Exception
-     * @throws \atk4\ui\Exception
-     *
-     * @return \atk4\ui\View|null
-     */
-    public function addLayout($seed = null, $hasDivider = true)
-    {
-        $v = null;
-        $prefix = '\atk4\ui\FormLayout\Section';
-
-        if (empty($seed) || $seed === 'View') {
-            $v = $this->add('View');
-            $v = $v->add(['FormLayout/Generic', 'form'=>$this->form]);
-        } elseif ((is_array($seed) && $seed[0] === 'View')) {
-            $v = $this->add($seed);
-            $v = $v->add(['FormLayout/Generic', 'form'=>$this->form]);
-        } else {
-            $v = $this->add($this->factory($seed, ['form'=>$this->form], $prefix));
-        }
-
-        if ($hasDivider) {
-            $this->add(['ui' => 'hidden divider']);
-        }
-
-        return $v;
-    }
-
     public function recursiveRender()
     {
         $field_input = $this->template->cloneRegion('InputField');
