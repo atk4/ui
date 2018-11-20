@@ -27,7 +27,7 @@ Adding a static content section is pretty simple::
 
 You can add multiple elements into a single accordion section, like any other view.
 
-.. php:method:: addSection($name, $action = null)
+.. php:method:: addSection($name, $action = null, $icon = 'dropdown')
 
 Use addSection() method to add more section in an Accordion view. First parameter is a title of the section.
 
