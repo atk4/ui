@@ -146,6 +146,11 @@ class Accordion extends View
         return $idx;
     }
 
+    /**
+     * Check if accordion section is dynamic.
+     * 
+     * @return bool
+     */
     public function isDynamicSection()
     {
         return isset($_GET['__atk-dyn-section']);
