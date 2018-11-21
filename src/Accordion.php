@@ -148,7 +148,7 @@ class Accordion extends View
 
     /**
      * Check if accordion section is dynamic.
-     * 
+     *
      * @return bool
      */
     public function isDynamicSection()
