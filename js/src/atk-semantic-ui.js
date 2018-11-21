@@ -4,12 +4,14 @@ import modalService from 'services/ModalService';
 import uploadService from "./services/UploadService";
 import formService from "./services/FormService";
 import popupService from "./services/PopupService";
+import accordionService from "./services/AccordionService";
 
 // setup app service for semantic-ui
 apiService.setService($.fn.api.settings);
 modalService.setModals($.fn.modal.settings);
 formService.setService($.fn.form.settings);
 popupService.setPopups($.fn.popup.settings);
+accordionService.setService($.fn.accordion.settings);
 
 if (typeof FormSerializer != "undefined") {
   //setup jQuery FormSerializer to accept in input name with dash char (-)

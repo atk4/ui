@@ -12,13 +12,14 @@ class Tabs extends View
     public $defaultTemplate = 'tabs.html';
     public $ui = 'tabular menu';
 
+    /** @var string name of active tab */
     public $activeTabName = null;
 
     /**
      * Adds tab in tabs widget.
      *
-     * @param mixed $name     Name of tab or Tab object
-     * @param mixed $callback Callback action or URL (or array with url + parameters)
+     * @param string|Tab $name     Name of tab or Tab object
+     * @param callable   $callback Callback action or URL (or array with url + parameters)
      *
      * @throws Exception
      *
@@ -29,8 +30,8 @@ class Tabs extends View
         $item = $this->addTabMenuItem($name);
         $sub = $this->addSubView($item->name);
 
+        // if there is callback action, then use VirtualPage
         if ($callback) {
-            // if there is callback action, then use VirtualPage
             $vp = $sub->add(['VirtualPage', 'ui' => '']);
             $item->setPath($vp->getJSURL('cut'));
 
@@ -44,7 +45,7 @@ class Tabs extends View
      * Adds dynamic tab in tabs widget which will load a separate
      * page/url when activated.
      *
-     * @param mixed        $name Name of tab or Tab object
+     * @param string|Tab   $name Name of tab or Tab object
      * @param string|array $url  URL to open inside a tab
      *
      * @throws Exception
@@ -60,13 +61,13 @@ class Tabs extends View
     /**
      * Add a tab menu item.
      *
-     * @param string $name Name of tab or Tab object.
+     * @param string|Tab $name Name of tab or Tab object.
      *
      * @throws Exception
      *
      * @return Tab|View Tab menu item view.
      */
-    private function addTabMenuItem($name)
+    protected function addTabMenuItem($name)
     {
         if (is_object($name)) {
             $tab = $name;
@@ -94,7 +95,7 @@ class Tabs extends View
      *
      * @return TabsSubView
      */
-    private function addSubView($name)
+    protected function addSubView($name)
     {
         return $this->add(['TabsSubView', 'dataTabName' => $name], 'Tabs');
     }

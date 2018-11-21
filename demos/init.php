@@ -56,6 +56,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('Menu', ['menu']);
     $basic->addItem('BreadCrumb', ['breadcrumb']);
     $basic->addItem('Tabs', ['tabs']);
+    $basic->addItem(['Accordion', 'icon'=>'yellow star'], ['accordion']);
     $basic->addItem(['Columns'], ['columns']);
     $basic->addItem('Paginator', ['paginator']);
 
@@ -75,6 +76,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem(['Dynamic scroll', 'icon'=>'yellow star'], ['scroll-lister']);
     $basic->addItem('Sticky GET', ['sticky']);
     $basic->addItem('Recursive Views', ['recursive']);
+
     //$basic->addItem('Virtual Page', ['virtual']);
 
     $f = basename($_SERVER['PHP_SELF']);
