@@ -62,6 +62,7 @@ class Accordion extends View
         // if there is callback action, then use VirtualPage
         if ($callback) {
             $section->virtualPage = $section->add(['VirtualPage', 'ui' => '']);
+            $section->virtualPage->stickyGet('__atk-dyn-section', '1');
             $section->virtualPage->set($callback);
         }
 
@@ -145,6 +146,11 @@ class Accordion extends View
         return $idx;
     }
 
+    public function isDynamicSection()
+    {
+        return isset($_GET['__atk-dyn-section']);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -154,7 +160,10 @@ class Accordion extends View
             $this->addClass($this->type);
         }
 
-        $this->js(true)->accordion($this->settings);
+        //Only set Accordion in Top container. Otherwise Nested accordion won't work.
+        if (!$this->owner instanceof AccordionSection && !$this->isDynamicSection()){
+            $this->js(true)->accordion($this->settings);
+        }
 
         if ($this->activeSection > -1) {
             $this->jsBehavior('open', [$this->activeSection], true);
