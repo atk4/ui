@@ -28,16 +28,15 @@ before_script:
     - "sh -e /etc/init.d/xvfb start"
     - "export DISPLAY=:99.0"
     - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.31.0.jar"
-    - "wget http://chromedriver.googlecode.com/files/chromedriver_linux32_23.0.1240.0.zip && unzip chromedriver_linux32_23.0.1240.0.zip && sudo mv chromedriver /usr/bin"
     - "java -jar selenium-server-standalone-2.31.0.jar > /dev/null &"
-    - sleep 5
+    - "wget http://chromedriver.googlecode.com/files/chromedriver_linux32_23.0.1240.0.zip && unzip chromedriver_linux32_23.0.1240.0.zip && sudo mv chromedriver /usr/bin"
       #- "wget http://selenium-release.storage.googleapis.com/3.0-beta3/selenium-server-standalone-3.0.0-beta3.jar -O selenium-server-standalone.jar && sudo mv selenium-server-standalone.jar /usr/local/bin"
       #- "wget http://chromedriver.storage.googleapis.com/2.23/chromedriver_linux64.zip -O chromedriver.zip && unzip chromedriver.zip && sudo mv chromedriver /usr/local/bin"
       #- "java  -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver  -jar /usr/local/bin/selenium-server-standalone.jar &"
       #- sleep 3
       #- sudo whereis google-chrome
 
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then php -S localhost:8888; fi &
+    - php -S localhost:8888
     - mysql -e 'create database atk4;'
     - mysql atk4 < demos/atk4.sql
     - mv demos/db.travis.php demos/db.php
@@ -51,7 +50,7 @@ after_script:
 script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.1" ]]; then NC="--no-coverage"; fi
     - ./vendor/phpunit/phpunit/phpunit $NC #- wget -O - http://localhost:8888/demos/button2.php 
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then bash tools/test.sh; fi
+    - bash tools/test.sh
 
 cache:
   directories:
