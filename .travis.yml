@@ -30,7 +30,13 @@ before_script:
     - "wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar"
     - "java -jar selenium-server-standalone-2.43.1.jar > /dev/null &"
 
-    - "wget http://chromedriver.googlecode.com/files/chromedriver_linux32_23.0.1240.0.zip && unzip chromedriver_linux32_23.0.1240.0.zip && sudo mv chromedriver /usr/bin"
+
+    - wget -N http://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip -P ~/
+    - unzip ~/chromedriver_linux64.zip -d ~/
+    - rm ~/chromedriver_linux64.zip
+    - sudo mv -f ~/chromedriver /usr/local/share/
+    - sudo chmod +x /usr/local/share/chromedriver
+    - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
       #- "wget http://selenium-release.storage.googleapis.com/3.0-beta3/selenium-server-standalone-3.0.0-beta3.jar -O selenium-server-standalone.jar && sudo mv selenium-server-standalone.jar /usr/local/bin"
       #- "wget http://chromedriver.storage.googleapis.com/2.23/chromedriver_linux64.zip -O chromedriver.zip && unzip chromedriver.zip && sudo mv chromedriver /usr/local/bin"
       #- "java  -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver  -jar /usr/local/bin/selenium-server-standalone.jar &"
