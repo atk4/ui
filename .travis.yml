@@ -22,6 +22,7 @@ install:
 
 before_install:
     - npm get prefix
+    - npm install -g lessc uglifyjs
 
 before_script:
 
@@ -47,6 +48,9 @@ before_script:
     - mysql -e 'create database atk4;'
     - mysql atk4 < demos/atk4.sql
     - mv demos/db.travis.php demos/db.php
+    - (cd js; npm install; npm run build)
+    - lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
+    - uglifyjs --compress -- public/agileui.js > public/agileui.min.js
     - composer install
 
 after_script:
