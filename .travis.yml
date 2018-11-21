@@ -22,7 +22,7 @@ install:
 
 before_install:
     - npm get prefix
-    - npm install -g lessc uglifyjs
+    - npm install -g lessc uglify-js
 
 before_script:
 
