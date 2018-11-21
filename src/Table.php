@@ -137,7 +137,10 @@ class Table extends Lister
      * cells and will handle other things, like alignment. If you do not specify
      * column, then it will be selected dynamically based on field type.
      *
-     * @param string                   $name            Data model field name
+     * If you don't want table column to be associated with model field, then
+     * pass $name parameter as null.
+     *
+     * @param string|null              $name            Data model field name
      * @param array|string|object|null $columnDecorator
      * @param array|string|object|null $field
      *
@@ -159,21 +162,23 @@ class Table extends Lister
             $field = ['type' => $field];
         }
 
-        if ($name) {
+        if (is_string($name) && $name) {
             $existingField = $this->model->hasElement($name);
         } else {
             $existingField = null;
         }
 
-        if (!$existingField) {
+        if ($existingField === null) {
+            // table column without respective field in model
+            $field = null;
+        } elseif (!$existingField) {
             // Add missing field
             if ($field) {
                 $field = $this->model->addField($name, $field);
-                $field->never_persist = true;
             } else {
                 $field = $this->model->addField($name);
-                $field->never_persist = true;
             }
+            $field->never_persist = true;
         } elseif (is_array($field)) {
             // Add properties to existing field
             $existingField->setDefaults($field);
@@ -184,7 +189,10 @@ class Table extends Lister
             $field = $existingField;
         }
 
-        if (is_array($columnDecorator) || is_string($columnDecorator)) {
+        if ($field === null) {
+            // column is not associated with any model field
+            $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this], 'TableColumn'));
+        } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, $columnDecorator);
         } elseif (!$columnDecorator) {
             $columnDecorator = $this->decoratorFactory($field);
@@ -201,8 +209,6 @@ class Table extends Lister
         if (is_null($name)) {
             $this->columns[] = $columnDecorator;
         } elseif (!is_string($name)) {
-            echo 'about to throw exception.....';
-
             throw new Exception(['Name must be a string', 'name' => $name]);
         } elseif (isset($this->columns[$name])) {
             throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name' => $name]);
@@ -254,20 +260,24 @@ class Table extends Lister
     /**
      * Add column Decorator.
      *
-     * @param string                     $name      Column name
-     * @param string|TableColumn/Generic $decorator
+     * @param string $name Column name
+     * @param mixed  $seed Defaults to pass to factory() when decorator is initialized
+     *
+     * @return TableColumn\Generic
      */
-    public function addDecorator($name, $decorator)
+    public function addDecorator($name, $seed)
     {
         if (!$this->columns[$name]) {
             throw new Exception(['No such column, cannot decorate', 'name' => $name]);
         }
-        $decorator = $this->_add($this->factory($decorator, ['table' => $this], 'TableColumn'));
+        $decorator = $this->_add($this->factory($seed, ['table' => $this], 'TableColumn'));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
         }
         $this->columns[$name][] = $decorator;
+
+        return $decorator;
     }
 
     /**
@@ -280,11 +290,8 @@ class Table extends Lister
     public function getColumnDecorators($name)
     {
         $dec = $this->columns[$name];
-        if (!is_array($dec)) {
-            $dec = [$dec];
-        }
 
-        return $dec;
+        return is_array($dec) ? $dec : [$dec];
     }
 
     /**
@@ -292,7 +299,7 @@ class Table extends Lister
      * By default will use default column.
      *
      * @param \atk4\data\Field $f    Data model field
-     * @param array            $seed Defaults to pass to factory() when decorator is initialized
+     * @param mixed            $seed Defaults to pass to factory() when decorator is initialized
      *
      * @return TableColumn\Generic
      */

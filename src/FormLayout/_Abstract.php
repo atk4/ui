@@ -20,7 +20,7 @@ abstract class _Abstract extends \atk4\ui\View
      * Places field inside a layout somewhere. Should be called
      * through $form->addField().
      *
-     * @param string|null              $name
+     * @param string                   $name
      * @param array|string|object|null $decorator
      * @param array|string|object|null $field
      *
