@@ -137,7 +137,10 @@ class Table extends Lister
      * cells and will handle other things, like alignment. If you do not specify
      * column, then it will be selected dynamically based on field type.
      *
-     * @param string                   $name            Data model field name
+     * If you don't want table column to be associated with model field, then
+     * pass $name parameter as null.
+     *
+     * @param string|null              $name            Data model field name
      * @param array|string|object|null $columnDecorator
      * @param array|string|object|null $field
      *
@@ -159,21 +162,23 @@ class Table extends Lister
             $field = ['type' => $field];
         }
 
-        if ($name) {
+        if (is_string($name) && $name) {
             $existingField = $this->model->hasElement($name);
         } else {
             $existingField = null;
         }
 
-        if (!$existingField) {
+        if ($existingField === null) {
+            // table column without respective field in model
+            $field = null;
+        } elseif (!$existingField) {
             // Add missing field
             if ($field) {
                 $field = $this->model->addField($name, $field);
-                $field->never_persist = true;
             } else {
                 $field = $this->model->addField($name);
-                $field->never_persist = true;
             }
+            $field->never_persist = true;
         } elseif (is_array($field)) {
             // Add properties to existing field
             $existingField->setDefaults($field);
@@ -184,7 +189,10 @@ class Table extends Lister
             $field = $existingField;
         }
 
-        if (is_array($columnDecorator) || is_string($columnDecorator)) {
+        if ($field === null) {
+            // column is not associated with any model field
+            $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this], 'TableColumn'));
+        } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, $columnDecorator);
         } elseif (!$columnDecorator) {
             $columnDecorator = $this->decoratorFactory($field);
@@ -201,8 +209,6 @@ class Table extends Lister
         if (is_null($name)) {
             $this->columns[] = $columnDecorator;
         } elseif (!is_string($name)) {
-            echo 'about to throw exception.....';
-
             throw new Exception(['Name must be a string', 'name' => $name]);
         } elseif (isset($this->columns[$name])) {
             throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name' => $name]);
@@ -254,20 +260,24 @@ class Table extends Lister
     /**
      * Add column Decorator.
      *
-     * @param string                     $name      Column name
-     * @param string|TableColumn/Generic $decorator
+     * @param string $name Column name
+     * @param mixed  $seed Defaults to pass to factory() when decorator is initialized
+     *
+     * @return TableColumn\Generic
      */
-    public function addDecorator($name, $decorator)
+    public function addDecorator($name, $seed)
     {
         if (!$this->columns[$name]) {
             throw new Exception(['No such column, cannot decorate', 'name' => $name]);
         }
-        $decorator = $this->_add($this->factory($decorator, ['table' => $this], 'TableColumn'));
+        $decorator = $this->_add($this->factory($seed, ['table' => $this], 'TableColumn'));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
         }
         $this->columns[$name][] = $decorator;
+
+        return $decorator;
     }
 
     /**
@@ -280,11 +290,8 @@ class Table extends Lister
     public function getColumnDecorators($name)
     {
         $dec = $this->columns[$name];
-        if (!is_array($dec)) {
-            $dec = [$dec];
-        }
 
-        return $dec;
+        return is_array($dec) ? $dec : [$dec];
     }
 
     /**
@@ -292,7 +299,7 @@ class Table extends Lister
      * By default will use default column.
      *
      * @param \atk4\data\Field $f    Data model field
-     * @param array            $seed Defaults to pass to factory() when decorator is initialized
+     * @param mixed            $seed Defaults to pass to factory() when decorator is initialized
      *
      * @return TableColumn\Generic
      */
@@ -357,6 +364,25 @@ class Table extends Lister
         $this->js(true, $this->js()->atkColumnResizer($options));
 
         return $this;
+    }
+
+    /**
+     * Add a dynamic paginator, i.e. when user is scrolling content.
+     *
+     * @param int    $ipp          Number of item per page to start with.
+     * @param array  $options      An array with js Scroll plugin options.
+     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     *
+     * @throws Exception
+     *
+     * @return $this|void
+     */
+    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+    {
+        $options = array_merge($options, ['appendTo' => 'tbody']);
+
+        return parent::addJsPaginator($ipp, $options, $container, $scrollRegion);
     }
 
     /**
@@ -457,7 +483,7 @@ class Table extends Lister
         $this->t_row->app = $this->app;
 
         // Iterate data rows
-        $rows = 0;
+        $this->_rendered_rows_count = 0;
         foreach ($this->model as $this->current_id => $tmp) {
             $this->current_row = $this->model->get();
             if ($this->hook('beforeRow') === false) {
@@ -468,18 +494,24 @@ class Table extends Lister
                 $this->updateTotals();
             }
 
-            $this->renderRow($this->model);
+            $this->renderRow();
 
-            $rows++;
+            $this->_rendered_rows_count++;
         }
 
-        // Add totals rows or empty message.
-        if (!$rows) {
-            $this->template->appendHTML('Body', $this->t_empty->render());
+        // Add totals rows or empty message
+        if (!$this->_rendered_rows_count) {
+            if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
+                $this->template->appendHTML('Body', $this->t_empty->render());
+            }
         } elseif ($this->totals_plan) {
             $this->t_totals->setHTML('cells', $this->getTotalsRowHTML());
             $this->template->appendHTML('Foot', $this->t_totals->render());
         } else {
+        }
+
+        if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
+            $this->jsPaginator->jsIdle();
         }
 
         return View::renderView();

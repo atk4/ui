@@ -5,12 +5,12 @@
 namespace atk4\ui;
 
 /**
- * Implements a more sophisticated and interractive Data-Table component.
+ * Implements a more sophisticated and interactive Data-Table component.
  */
 class Grid extends View
 {
     /**
-     * Will be initalized to Menu object, however you can set this to false to disable menu.
+     * Will be initialized to Menu object, however you can set this to false to disable menu.
      *
      * @var Menu|false
      */
@@ -28,8 +28,9 @@ class Grid extends View
     public $quickSearch = null;
 
     /**
-     * Paginator is automatically added below the table and will provide
-     * divide long tables into pages.
+     * Paginator is automatically added below the table and will divide long tables into pages.
+     *
+     * You can provide your own Paginator object here to customize.
      *
      * @var Paginator|false
      */
@@ -67,7 +68,7 @@ class Grid extends View
     public $sortable = null;
 
     /**
-     * Component that actually renders data rows / coluns and possibly totals.
+     * Component that actually renders data rows / columns and possibly totals.
      *
      * @var Table|false
      */
@@ -183,6 +184,10 @@ class Grid extends View
         $pageLength = $this->paginator->add(['ItemsPerPageSelector', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], 'afterPaginator');
         $this->paginator->template->trySet('PaginatorType', 'ui grid');
 
+        if ($sortBy = $this->getSortBy()) {
+            $pageLength->stickyGet($this->name.'_sort', $sortBy);
+        }
+
         $pageLength->onPageLengthSelect(function ($ipp) use ($pageLength) {
             $this->ipp = $ipp;
             $this->setModelLimitFromPaginator();
@@ -190,11 +195,64 @@ class Grid extends View
             if ($this->quickSearch instanceof jsSearch) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
             }
+            $this->applySort();
+
             //return the view to reload.
             return $this->container;
         });
 
         return $this;
+    }
+
+    /**
+     * Add dynamic scrolling paginator.
+     *
+     * @param int    $ipp          Number of item per page to start with.
+     * @param array  $options      An array with js Scroll plugin options.
+     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     *
+     * @throws Exception
+     *
+     * @return $this
+     */
+    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+    {
+        if ($this->paginator) {
+            $this->paginator->destroy();
+            //prevent action(count) to be output twice.
+            $this->paginator = null;
+        }
+
+        $this->applySort();
+
+        $this->table->addJsPaginator($ipp, $options, $container, $scrollRegion);
+
+        return $this;
+    }
+
+    /**
+     * Add dynamic scrolling paginator in container.
+     * Use this to make table headers fixed.
+     *
+     * @param int    $ipp             Number of item per page to start with.
+     * @param int    $containerHeight Number of pixel the table container should be.
+     * @param array  $options         An array with js Scroll plugin options.
+     * @param View   $container       The container holding the lister for scrolling purpose. Default to view owner.
+     * @param string $scrollRegion    A specific template region to render. Render output is append to container html element.
+     *
+     * @throws Exception
+     *
+     * @return $this
+     */
+    public function addJsPaginatorInContainer($ipp, $containerHeight, $options = [], $container = null, $scrollRegion = 'Body')
+    {
+        $options = array_merge($options, [
+          'hasFixTableHeader'    => true,
+          'tableContainerHeight' => $containerHeight,
+        ]);
+
+        return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);
     }
 
     /**
@@ -346,27 +404,41 @@ class Grid extends View
     }
 
     /**
+     * Get sortBy value from url parameter.
+     *
+     * @return null|string
+     */
+    public function getSortBy()
+    {
+        return isset($_GET[$this->name.'_sort']) ? $_GET[$this->name.'_sort'] : null;
+    }
+
+    /**
      * Apply ordering to the current model as per the sort parameters.
      */
     public function applySort()
     {
-        //$sortby = $this->app->stickyGET($this->name.'_sort', null);
-        $sortby = $this->stickyGet($this->name.'_sort');
+        $sortBy = $this->getSortBy();
+
+        if ($sortBy && $this->paginator) {
+            $this->paginator->addReloadArgs([$this->name.'_sort' => $sortBy]);
+        }
+
         $desc = false;
-        if ($sortby && $sortby[0] == '-') {
+        if ($sortBy && $sortBy[0] == '-') {
             $desc = true;
-            $sortby = substr($sortby, 1);
+            $sortBy = substr($sortBy, 1);
         }
 
         $this->table->sortable = true;
 
         if (
-            $sortby
-            && isset($this->table->columns[$sortby])
-            && $this->model->hasElement($sortby) instanceof \atk4\data\Field
+            $sortBy
+            && isset($this->table->columns[$sortBy])
+            && $this->model->hasElement($sortBy) instanceof \atk4\data\Field
         ) {
-            $this->model->setOrder($sortby, $desc);
-            $this->table->sort_by = $sortby;
+            $this->model->setOrder($sortBy, $desc);
+            $this->table->sort_by = $sortBy;
             $this->table->sort_order = $desc ? 'descending' : 'ascending';
         }
 
@@ -470,13 +542,12 @@ class Grid extends View
     {
         // bind with paginator
         if ($this->paginator) {
-            $this->paginator->reload = $this->container;
             $this->setModelLimitFromPaginator();
         }
 
         if ($this->quickSearch instanceof jsSearch) {
-            if ($sortby = $this->stickyGet($this->name.'_sort')) {
-                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->name.'_sort', $sortby]));
+            if ($sortBy = $this->getSortBy()) {
+                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->name.'_sort', $sortBy]));
             }
         }
 

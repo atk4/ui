@@ -69,9 +69,11 @@ if (isset($layout->leftMenu)) {
     $basic->addItem(['Loader'], ['loader']);
     $basic->addItem(['Console'], ['console']);
     $basic->addItem('Notifier', ['notify']);
+    $basic->addItem(['Toast', 'icon'=>'yellow star'], ['toast']);
     $basic->addItem(['Pop-up'], ['popup']);
     $basic->addItem(['Modal View'], ['modal2']);
     $basic->addItem('Dynamic jsModal', ['modal']);
+    $basic->addItem(['Dynamic scroll', 'icon'=>'yellow star'], ['scroll-lister']);
     $basic->addItem('Sticky GET', ['sticky']);
     $basic->addItem('Recursive Views', ['recursive']);
 

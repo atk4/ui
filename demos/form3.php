@@ -31,12 +31,10 @@ $form->setModel(
 $form->onSubmit(function ($form) {
     $errors = [];
     foreach ($form->model->dirty as $field => $value) {
-        /*
-        if (!$form->model->getElement($field)->isEditable()) {
-            continue;
+        // we should care only about editable fields
+        if ($form->model->getElement($field)->isEditable()) {
+            $errors[] = $form->error($field, 'Value was changed, '.json_encode($value).' to '.json_encode($form->model[$field]));
         }
-        */
-        $errors[] = $form->error($field, 'Value was changed, '.json_encode($value).' to '.json_encode($form->model[$field]));
     }
 
     return $errors ?: 'No fields were changed';

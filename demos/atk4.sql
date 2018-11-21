@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `country`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `country` (
-  `id` int(11) NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `iso` char(2) NOT NULL,
   `name` varchar(80) NOT NULL,
   `nicename` varchar(80) NOT NULL,

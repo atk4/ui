@@ -8,14 +8,28 @@ class Lister extends View
 
     /**
      * Lister repeats part of it's template. This property will contain
-     * the repeating part. Clones from {row}. If your tempalte does not
-     * have {row} tag, then entire temlate will be repeated.
+     * the repeating part. Clones from {row}. If your template does not
+     * have {row} tag, then entire template will be repeated.
      *
      * @var Template
      */
     public $t_row = null;
 
     public $defaultTemplate = null;
+
+    /**
+     * A dynamic paginator attach to window scroll event.
+     *
+     * @var null|jsPaginator
+     */
+    public $jsPaginator = null;
+
+    /**
+     * The number of item per page for jsPaginator.
+     *
+     * @var null|int
+     */
+    public $ipp = null;
 
     public function init()
     {
@@ -42,6 +56,53 @@ class Lister extends View
         }
     }
 
+    /**
+     * Add Dynamic paginator when scrolling content via Javascript.
+     * Will output x item in lister set per ipp until user scroll content to the end of page.
+     * When this happen, content will be reload x number of items.
+     *
+     * @param int    $ipp          Number of item per page
+     * @param array  $options      An array with js Scroll plugin options.
+     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     *
+     * @throws Exception
+     *
+     * @return $this|void
+     */
+    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = null)
+    {
+        $this->ipp = $ipp;
+        $this->jsPaginator = $this->add(['jsPaginator', 'view' => $container, 'options' => $options]);
+
+        // set initial model limit. can be overwritten by onScroll
+        $this->model->setLimit($ipp);
+
+        // add onScroll callback
+        $this->jsPaginator->onScroll(function ($p) use ($ipp, $scrollRegion) {
+            // set/overwrite model limit
+            $this->model->setLimit($ipp, ($p - 1) * $ipp);
+
+            // render this View (it will count rendered records !)
+            $json = $this->renderJSON(true, $scrollRegion);
+
+            // if there will be no more pages, then replace message=Success to let JS know that there are no more records
+            if ($this->_rendered_rows_count < $ipp) {
+                $json = json_decode($json, true);
+                $json['message'] = 'Done'; // Done status means - no more requests from JS side
+                $json = json_encode($json);
+            }
+
+            // return json response
+            $this->app->terminate($json);
+        });
+
+        return $this;
+    }
+
+    /** @var int This will count how many rows are rendered. Needed for jsPaginator for example. */
+    protected $_rendered_rows_count = 0;
+
     public function renderView()
     {
         if (!$this->template) {
@@ -55,6 +116,7 @@ class Lister extends View
             return parent::renderView();
         }
 
+        $this->_rendered_rows_count = 0;
         foreach ($this->model as $this->current_id => $this->current_row) {
             if ($this->hook('beforeRow') === false) {
                 continue;
@@ -70,6 +132,8 @@ class Lister extends View
                 $rowHTML = $this->t_row->set($this->current_row)->render();
                 $this->template->appendHTML('rows', $rowHTML);
             }
+
+            $this->_rendered_rows_count++;
         }
 
         if ($this->t_row == $this->template) {
@@ -78,6 +142,10 @@ class Lister extends View
 
             // for some reason this does not work:
             //$this->template->set('_top', $rowHTML);
+        }
+
+        if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
+            $this->jsPaginator->jsIdle();
         }
 
         return parent::renderView(); //$this->template->render();

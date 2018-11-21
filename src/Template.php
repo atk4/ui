@@ -350,7 +350,8 @@ class Template implements \ArrayAccess
      *
      * @param mixed        $tag
      * @param string|array $value
-     * @param $this
+     *
+     * @return $this
      */
     public function setHTML($tag, $value = null)
     {
@@ -363,7 +364,8 @@ class Template implements \ArrayAccess
      *
      * @param mixed        $tag
      * @param string|array $value
-     * @param $this
+     *
+     * @return $this
      */
     public function trySetHTML($tag, $value = null)
     {
@@ -377,7 +379,8 @@ class Template implements \ArrayAccess
      * @param mixed        $tag
      * @param string|array $value
      * @param bool         $encode
-     * @param $this
+     *
+     * @return $this
      */
     public function trySet($tag, $value = null, $encode = true)
     {
@@ -394,7 +397,8 @@ class Template implements \ArrayAccess
      * @param mixed        $tag
      * @param string|array $value
      * @param bool         $encode
-     * @param $this
+     *
+     * @return $this
      */
     public function append($tag, $value, $encode = true)
     {
@@ -430,7 +434,7 @@ class Template implements \ArrayAccess
      *
      * @param string $tag
      *
-     * @return $this
+     * @return array
      */
     public function get($tag)
     {
@@ -741,7 +745,7 @@ class Template implements \ArrayAccess
      *
      * @return string
      */
-    protected function recursiveRender(&$template)
+    protected function recursiveRender($template)
     {
         $output = '';
         foreach ($template as $val) {

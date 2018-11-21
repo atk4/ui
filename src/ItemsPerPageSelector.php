@@ -50,27 +50,6 @@ class ItemsPerPageSelector extends View
         //Callback later will give us time to properly render menu item before final output.
         $this->cb = $this->add(new CallbackLater());
 
-        $menuItems = [];
-        foreach ($this->pageLengthItems as $key => $item) {
-            $menuItems[] = ['name' => $item, 'value' => $item];
-        }
-        //set semantic-ui dropdown onChange function.
-        $function = "function(value, text, item){
-                            if (value === undefined || value === '' || value === null) return;
-                            $(this)
-                            .api({
-                                on:'now',
-                                url:'{$this->cb->getURL()}',
-                                data:{ipp:value}
-                                }
-                            );
-                     }";
-
-        $this->js(true)->dropdown([
-                                         'values'   => $menuItems,
-                                         'onChange' => new jsExpression($function),
-                                     ]);
-
         if (!$this->currentIpp) {
             $this->currentIpp = $this->pageLengthItems[0];
         }
@@ -111,5 +90,30 @@ class ItemsPerPageSelector extends View
                 });
             }
         }
+    }
+
+    public function renderView()
+    {
+        $menuItems = [];
+        foreach ($this->pageLengthItems as $key => $item) {
+            $menuItems[] = ['name' => $item, 'value' => $item];
+        }
+        //set semantic-ui dropdown onChange function.
+        $function = "function(value, text, item){
+                            if (value === undefined || value === '' || value === null) return;
+                            $(this)
+                            .api({
+                                on:'now',
+                                url:'{$this->cb->getURL()}',
+                                data:{ipp:value}
+                                }
+                            );
+                     }";
+
+        $this->js(true)->dropdown([
+                                      'values'   => $menuItems,
+                                      'onChange' => new jsExpression($function),
+                                  ]);
+        parent::renderView();
     }
 }
