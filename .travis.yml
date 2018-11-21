@@ -27,8 +27,9 @@ before_script:
 
     - "sh -e /etc/init.d/xvfb start"
     - "export DISPLAY=:99.0"
-    - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.31.0.jar"
-    - "java -jar selenium-server-standalone-2.31.0.jar > /dev/null &"
+    - "wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar"
+    - "java -jar selenium-server-standalone-2.43.1.jar > /dev/null &"
+
     - "wget http://chromedriver.googlecode.com/files/chromedriver_linux32_23.0.1240.0.zip && unzip chromedriver_linux32_23.0.1240.0.zip && sudo mv chromedriver /usr/bin"
       #- "wget http://selenium-release.storage.googleapis.com/3.0-beta3/selenium-server-standalone-3.0.0-beta3.jar -O selenium-server-standalone.jar && sudo mv selenium-server-standalone.jar /usr/local/bin"
       #- "wget http://chromedriver.storage.googleapis.com/2.23/chromedriver_linux64.zip -O chromedriver.zip && unzip chromedriver.zip && sudo mv chromedriver /usr/local/bin"
