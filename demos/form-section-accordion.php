@@ -3,7 +3,7 @@
 require 'init.php';
 
 $app->add(['Button', 'Form Sections', 'small left floated basic blue', 'icon' => 'left arrow'])
-    ->link(['scroll-grid']);
+    ->link(['form-section']);
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
 $f = $app->add('Form');
