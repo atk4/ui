@@ -25,18 +25,21 @@ $noSave = function ($f) {
 $f = $app->add('Form');
 $f->setModel($m, false);
 
-$v = $f->layout->addLayout();
+$sub_layout = $f->layout->addSubLayout('Generic');
 
-$v->add(['Header', 'Column Section in Form']);
-$v->setModel($m, ['name']);
 
-$cols = $f->layout->addLayout('Columns');
+$sub_layout->add(['Header', 'Column Section in Form']);
+$sub_layout->setModel($m, ['name']);
 
-$c1 = $cols->addColumn();
+$cols_layout = $f->layout->addSubLayout('Columns');
+
+$c1 = $cols_layout->addColumn();
 $c1->setModel($m, ['iso', 'iso3']);
 
-$c2 = $cols->addColumn();
-$c2->setModel($m, ['numcode', 'phonecode']);
+$c2 = $cols_layout->addColumn();
+$c2->setModel($m, ['numcode'/*, 'phonecode'*/]);
+
+$f->addField('phonecode');
 
 $f->onSubmit($noSave);
 
@@ -47,17 +50,17 @@ $app->add(['ui' => 'divider']);
 $f = $app->add('Form');
 $f->setModel($m, false);
 
-$v = $f->layout->addLayout();
+$sub_layout = $f->layout->addSubLayout('Generic');
 
-$v->add(['Header', 'Accordion Section in Form']);
-$v->setModel($m, ['name']);
+$sub_layout->add(['Header', 'Accordion Section in Form']);
+$sub_layout->setModel($m, ['name']);
 
-$acc = $f->layout->addLayout('Accordion');
+$accordion_layout = $f->layout->addSubLayout('Accordion');
 
-$a1 = $acc->addSection('Section 1');
+$a1 = $accordion_layout->addSection('Section 1');
 $a1->setModel($m, ['iso', 'iso3']);
 
-$a2 = $acc->addSection('Section 2');
+$a2 = $accordion_layout->addSection('Section 2');
 $a2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);
@@ -69,17 +72,17 @@ $app->add(['ui' => 'divider']);
 $f = $app->add('Form');
 $f->setModel($m, false);
 
-$v = $f->layout->addLayout();
+$sub_layout = $f->layout->addSubLayout('Generic');
 
-$v->add(['Header', 'Tabs in Form']);
-$v->setModel($m, ['name']);
+$sub_layout->add(['Header', 'Tabs in Form']);
+$sub_layout->setModel($m, ['name']);
 
-$tabs = $f->layout->addLayout('Tabs');
+$tabs_layout = $f->layout->addSubLayout('Tabs');
 
-$t1 = $tabs->addTab('Tab 1');
+$t1 = $tabs_layout->addTab('Tab 1');
 $t1->addGroup('In Group')->setModel($m, ['iso', 'iso3']);
 
-$t2 = $tabs->addTab('Tab 2');
+$t2 = $tabs_layout->addTab('Tab 2');
 $t2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);
@@ -93,18 +96,18 @@ $app->add(['Header', 'Color in form']);
 $f = $app->add('Form');
 $f->setModel($m, false);
 
-$v = $f->layout->addLayout(['View', 'ui' => 'segment red inverted'], false);
+$sub_layout = $f->layout->addSubLayout(['Generic', 'ui' => 'segment red inverted'], false);
 
-$v->add(['Header', 'This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
-$v->setModel($m, ['name']);
+$sub_layout->add(['Header', 'This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
+$sub_layout->setModel($m, ['name']);
 
-$v = $f->layout->addLayout(['View', 'ui' => 'segment teal inverted']);
-$cols = $v->addLayout('Columns');
+$sub_layout = $f->layout->addSubLayout(['Generic', 'ui' => 'segment teal inverted']);
+$cols_layout = $sub_layout->addSubLayout('Columns');
 
-$c1 = $cols->addColumn();
+$c1 = $cols_layout->addColumn();
 $c1->setModel($m, ['iso', 'iso3']);
 
-$c2 = $cols->addColumn();
+$c2 = $cols_layout->addColumn();
 $c2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);

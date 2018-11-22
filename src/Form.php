@@ -222,17 +222,46 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     }
 
     /**
+     * Get the field owner base on it's instanceof type.
+     * Will return the object owner if type match otherwise
+     * willl return null.
+     *
+     * @param $object
+     * @param $type
+     *
+     * @return null|Owner Object
+     */
+    public function getFieldOwner($object, $type)
+    {
+        if ($object instanceof $type){
+            return $object;
+        } else if (empty($object)) {
+            return null;
+        } else {
+            return $this->getFieldOwner($object->owner, $type);
+        }
+    }
+
+    /**
      * Causes form to generate error.
      *
-     * @param string $field Field name
-     * @param string $str   Error message
+     * @param string $fieldName Field name
+     * @param string $str       Error message
      *
      * @return jsChain
      */
-    public function error($field, $str)
+    public function error($fieldName, $str)
     {
-        return $this->js()->form('add prompt', $field, $str);
+        $jsError[] = $this->js()->form('add prompt', $fieldName, $str);
+        // if field is part of an accordion section, will open that section.
+        $section = $this->getFieldOwner($this->getField($fieldName), 'atk4\ui\AccordionSection'/*'atk4\ui\FormLayout\Section\Accordion'*/);
+        if ($section) {
+            $jsError[] = $section->owner->jsOpen($section);
+        }
+
+        return $jsError;
     }
+
 
     /**
      * Causes form to generate success message.
@@ -537,7 +566,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 foreach ($val->errors as $field => $error) {
                     $response[] = $this->error($field, $error);
                 }
-                $response = array_merge($response, $this->hook('submit'));
 
                 return $response;
             } catch (\Error $e) {

@@ -97,21 +97,7 @@ class Generic extends _Abstract
     /**
      * Add a form layout section to this layout.
      *
-     * A layout section may be a simple View or
-     * one of the supported Section: Columns, Accordion or Tabs;
      * Each section may contain other section or group.
-     *
-     * $cols = $f->layout->addLayout('Columns');
-     * $c1 = $cols->addColumn();
-     * $c1->addField('Field');
-     *
-     * $acc = $f->layout->addLayout('Accordion');
-     * $a1 = $acc->addSection('Section 1');
-     * $a1->setModel($m, ['iso', 'iso3']);
-     *
-     * $tabs = $f->layout->addLayout('Tabs');
-     * $t1 = $tabs->addTab('Tab 1');
-     * $t1->addGroup('Group Name')->setModel($m, ['iso', 'iso3']);
      *
      * @param mixed $seed
      * @param bool  $hasDivider Should we add divider after this section
@@ -121,33 +107,11 @@ class Generic extends _Abstract
      *
      * @return static
      */
-    public function addLayout($seed = null, $hasDivider = true)
+    public function addSubLayout($seed, $hasDivider = true)
     {
-        /* Imants: tried to make this not depend on 'View' string,but failed so far
-
-        //$seed = empty($seed) ? ['View'] : (!is_object($seed) && !is_array($seed) ? [$seed] : $seed);
-
-        // add seed object
-        $v = $this->add($this->factory($seed, [], 'FormLayout/Section'));
-
-        // if it's not already a form layout, then add generic form layout inside
-        if (
-            !($v instanceof \atk4\ui\FormLayout\Generic)
-            && strpos(get_class($v), 'FormLayout\Section')=== false
-        ) {
-            $v = $v->add(['FormLayout/Generic', 'form' => $this->form]);
-        }
-        $v->form = $this->form;
-        */
-
-        if (empty($seed) || $seed === 'View') {
-            $v = $this->add('View')
-                    ->add(['FormLayout/Generic', 'form'=>$this->form]);
-        } elseif (is_array($seed) && $seed[0] === 'View') {
-            $v = $this->add($seed)
-                    ->add(['FormLayout/Generic', 'form'=>$this->form]);
-        } else {
-            $v = $this->add($this->factory($seed, ['form'=>$this->form], 'FormLayout/Section'));
+        $v = $this->add($this->factory($seed, ['form' => $this->form], 'FormLayout/Section'));
+        if ($v instanceof \atk4\ui\FormLayout\Section\Generic) {
+            $v = $v->addSection();
         }
 
         if ($hasDivider) {

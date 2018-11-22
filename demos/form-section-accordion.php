@@ -8,23 +8,23 @@ $app->add(['View', 'ui' => 'ui clearing divider']);
 
 $f = $app->add('Form');
 
-$v = $f->layout->addLayout();
-$v->add(['Header', 'Please fill all form sections!', 'size' => 4]);
+$sub_layout = $f->layout->addSubLayout('Generic');
+$sub_layout->add(['Header', 'Please fill all form sections!', 'size' => 4]);
 
-$v->addField('company_name');
+$sub_layout->addField('company_name');
 
-$acc = $f->layout->addLayout('Accordion');
+$accordion_layout = $f->layout->addSubLayout(['Accordion', 'settings' => ['exclusive' => false]]);
 
-$contact_section = $acc->addSection('Contact');
+$contact_section = $accordion_layout->addSection('Contact');
 
 $gr = $contact_section->addGroup('Name');
-$gr->addField('first_name', ['width' => 'eight']);
+$gr->addField('first_name', ['width' => 'eight'], ['required'=>true]);
 $gr->addField('last_name', ['width' => 'eight']);
 
 $gr = $contact_section->addGroup('Email');
 $gr->addField('email', ['width' => 'sixteen'], ['caption' => 'yourEmail@domain.com']);
 
-$adr_section = $acc->addSection('Address');
+$adr_section = $accordion_layout->addSection('Address');
 
 $gr = $adr_section->addGroup('Street and City');
 $gr->addField('address1', ['width' => 'eight'], ['required'=>true]); // <-- this is cought first and accordion section don't expand
@@ -37,14 +37,5 @@ $gr->addField('postal', ['width' => 'four']);
 
 $f->addField('term', ['CheckBox', 'caption'=>'Accept terms and conditions', null, 'slider']);
 
-$acc->activate($contact_section);
+$accordion_layout->activate($contact_section);
 
-$f->onSubmit(function ($f) use ($acc, $contact_section) {
-    if (!$f->model['first_name']) {
-        // return field error and open proper accordion item where field is located.
-        return [
-            $f->error('first_name', 'Your first name is required.'),
-            $acc->jsOpen($contact_section),
-        ];
-    }
-});
