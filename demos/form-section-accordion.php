@@ -6,7 +6,6 @@ $app->add(['Button', 'Form Sections', 'small left floated basic blue', 'icon' =>
     ->link(['scroll-grid']);
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
-
 $f = $app->add('Form');
 
 $v = $f->layout->addLayout();

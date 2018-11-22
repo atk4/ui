@@ -9,7 +9,7 @@ use atk4\ui\Form;
  */
 class Generic extends _Abstract
 {
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public $defaultTemplate = 'formlayout/generic.html';
 
     /**
