@@ -124,7 +124,7 @@ class Generic extends _Abstract
     public function addLayout($seed = null, $hasDivider = true)
     {
         /* Imants: tried to make this not depend on 'View' string,but failed so far
-        
+
         //$seed = empty($seed) ? ['View'] : (!is_object($seed) && !is_array($seed) ? [$seed] : $seed);
 
         // add seed object
