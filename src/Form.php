@@ -537,6 +537,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 foreach ($val->errors as $field => $error) {
                     $response[] = $this->error($field, $error);
                 }
+                $response = array_merge($response, $this->hook('submit'));
 
                 return $response;
             } catch (\Error $e) {
