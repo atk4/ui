@@ -1,15 +1,28 @@
 <?php
 
-
 require 'init.php';
 require 'database.php';
+
+$app->add(['Button', 'Accordion in Form', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['form-section-accordion']);
+$app->add(['View', 'ui' => 'ui clearing divider']);
+
+
 
 $m = new Country($db);
 $m->loadAny();
 
-//Prevent form from saving,
-$noSave = function () {
+//Prevent form from saving
+$noSave = function ($f) {
+    return new \atk4\ui\jsToast([
+        'title'   => 'POSTed field values',
+        'message' => '<pre>'.json_encode($f->model->get(), JSON_PRETTY_PRINT).'</pre>',
+        'class'   => 'success',
+        'displayTime' => 5000,
+    ]);
 };
+
+////////////////////////////////
 
 $f = $app->add('Form');
 $f->setModel($m, false);
@@ -84,7 +97,7 @@ $f->setModel($m, false);
 
 $v = $f->layout->addLayout(['View', 'ui' => 'segment red inverted'], false);
 
-$v->add(['View', 'This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
+$v->add(['Header', 'This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
 $v->setModel($m, ['name']);
 
 $v = $f->layout->addLayout(['View', 'ui' => 'segment teal inverted']);

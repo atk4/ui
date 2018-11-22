@@ -9,24 +9,30 @@ use atk4\ui\Form;
  */
 class Generic extends _Abstract
 {
-    // @var inheritdoc
+    /** @inheritdoc */
     public $defaultTemplate = 'formlayout/generic.html';
 
     /**
      * If specified will appear on top of the group. Can be string or Label object.
+     *
+     * @var string
      */
     public $label = null;
 
     /**
      * Specify width of a group in numerical word e.g. 'width'=>'two' as per
      * Semantic UI grid system.
+     *
+     * @var string
      */
     public $width = null;
 
     /**
      * Set true if you want fields to appear in-line.
+     *
+     * @var bool
      */
-    public $inline = null;
+    public $inline = false;
 
     protected function _addField($decorator, $field)
     {
@@ -72,7 +78,7 @@ class Generic extends _Abstract
      *
      * @param string|array $label
      *
-     * @return self
+     * @return static
      */
     public function addGroup($label = null)
     {
@@ -85,7 +91,7 @@ class Generic extends _Abstract
 
         $label['form'] = $this->form;
 
-        return $this->add(new self($label));
+        return $this->add(new static($label));
     }
 
     /**
@@ -107,25 +113,24 @@ class Generic extends _Abstract
      * $t1 = $tabs->addTab('Tab 1');
      * $t1->addGroup('Group Name')->setModel($m, ['iso', 'iso3']);
      *
-     * @param null $seed
-     * @param bool $hasDivider
+     * @param mixed $seed
+     * @param bool  $hasDivider
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\ui\Exception
      *
-     * @return \atk4\ui\View|null
+     * @return \atk4\ui\View
      */
     public function addLayout($seed = null, $hasDivider = true)
     {
-        $v = null;
         $prefix = '\atk4\ui\FormLayout\Section';
 
         if (empty($seed) || $seed === 'View') {
-            $v = $this->add('View');
-            $v = $v->add(['FormLayout/Generic', 'form'=>$this->form]);
-        } elseif ((is_array($seed) && $seed[0] === 'View')) {
-            $v = $this->add($seed);
-            $v = $v->add(['FormLayout/Generic', 'form'=>$this->form]);
+            $v = $this->add('View')
+                    ->add(['FormLayout/Generic', 'form'=>$this->form]);
+        } elseif (is_array($seed) && $seed[0] === 'View') {
+            $v = $this->add($seed)
+                    ->add(['FormLayout/Generic', 'form'=>$this->form]);
         } else {
             $v = $this->add($this->factory($seed, ['form'=>$this->form], $prefix));
         }
@@ -137,6 +142,9 @@ class Generic extends _Abstract
         return $v;
     }
 
+    /**
+     * Recursively renders this view.
+     */
     public function recursiveRender()
     {
         $field_input = $this->template->cloneRegion('InputField');

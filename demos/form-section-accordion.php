@@ -2,6 +2,11 @@
 
 require 'init.php';
 
+$app->add(['Button', 'Form Sections', 'small left floated basic blue', 'icon' => 'left arrow'])
+    ->link(['scroll-grid']);
+$app->add(['View', 'ui' => 'ui clearing divider']);
+
+
 $f = $app->add('Form');
 
 $v = $f->layout->addLayout();
@@ -23,7 +28,7 @@ $gr->addField('email', ['width' => 'sixteen'], ['caption' => 'yourEmail@domain.c
 $adr_section = $acc->addSection('Address');
 
 $gr = $adr_section->addGroup('Street and City');
-$gr->addField('address1', ['width' => 'eight']);
+$gr->addField('address1', ['width' => 'eight'], ['required'=>true]); // <-- this is cought first and accordion section don't expand
 $gr->addField('city', ['width' => 'eight']);
 
 $gr = $adr_section->addGroup('State, Country and Postal Code');
