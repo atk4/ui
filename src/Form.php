@@ -233,10 +233,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function getFieldOwner($object, $type)
     {
-        if ($object instanceof $type){
+        if ($object instanceof $type) {
             return $object;
-        } else if (empty($object)) {
-            return null;
+        } elseif (empty($object)) {
+            return;
         } else {
             return $this->getFieldOwner($object->owner, $type);
         }
@@ -261,7 +261,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         return $jsError;
     }
-
 
     /**
      * Causes form to generate success message.

@@ -27,7 +27,6 @@ $f->setModel($m, false);
 
 $sub_layout = $f->layout->addSubLayout('Generic');
 
-
 $sub_layout->add(['Header', 'Column Section in Form']);
 $sub_layout->setModel($m, ['name']);
 

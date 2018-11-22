@@ -15,8 +15,9 @@ class Accordion extends \atk4\ui\Accordion
      * @param string $title
      * @param string $icon
      *
-     * @return AccordionSection|\atk4\ui\View
      * @throws \atk4\ui\Exception
+     *
+     * @return AccordionSection|\atk4\ui\View
      */
     public function addSection($title, $icon = 'dropdown')
     {

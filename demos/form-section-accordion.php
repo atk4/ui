@@ -38,4 +38,3 @@ $gr->addField('postal', ['width' => 'four']);
 $f->addField('term', ['CheckBox', 'caption'=>'Accept terms and conditions', null, 'slider']);
 
 $accordion_layout->activate($contact_section);
-
