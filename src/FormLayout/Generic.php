@@ -114,16 +114,31 @@ class Generic extends _Abstract
      * $t1->addGroup('Group Name')->setModel($m, ['iso', 'iso3']);
      *
      * @param mixed $seed
-     * @param bool  $hasDivider
+     * @param bool  $hasDivider Should we add divider after this section
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\ui\Exception
      *
-     * @return \atk4\ui\View
+     * @return static
      */
     public function addLayout($seed = null, $hasDivider = true)
     {
-        $prefix = '\atk4\ui\FormLayout\Section';
+        /* Imants: tried to make this not depend on 'View' string,but failed so far
+        
+        //$seed = empty($seed) ? ['View'] : (!is_object($seed) && !is_array($seed) ? [$seed] : $seed);
+
+        // add seed object
+        $v = $this->add($this->factory($seed, [], 'FormLayout/Section'));
+
+        // if it's not already a form layout, then add generic form layout inside
+        if (
+            !($v instanceof \atk4\ui\FormLayout\Generic)
+            && strpos(get_class($v), 'FormLayout\Section')=== false
+        ) {
+            $v = $v->add(['FormLayout/Generic', 'form' => $this->form]);
+        }
+        $v->form = $this->form;
+        */
 
         if (empty($seed) || $seed === 'View') {
             $v = $this->add('View')
@@ -132,7 +147,7 @@ class Generic extends _Abstract
             $v = $this->add($seed)
                     ->add(['FormLayout/Generic', 'form'=>$this->form]);
         } else {
-            $v = $this->add($this->factory($seed, ['form'=>$this->form], $prefix));
+            $v = $this->add($this->factory($seed, ['form'=>$this->form], 'FormLayout/Section'));
         }
 
         if ($hasDivider) {
