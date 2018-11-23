@@ -58,23 +58,21 @@ class Generic extends _Abstract
     }
 
     /**
-     * Create a group with fields.
+     * Adds Header in form layout.
      *
      * @param string $label
      *
      * @return $this
      */
-    public function addHeader($label = null)
+    public function addHeader($label)
     {
-        if ($label) {
-            $this->add(['Header', $label, 'dividing', 'element' => 'h4']);
-        }
+        $this->add(['Header', $label, 'dividing', 'element' => 'h4']);
 
         return $this;
     }
 
     /**
-     * Adds group.
+     * Adds field group in form layout.
      *
      * @param string|array $label
      *
@@ -100,21 +98,21 @@ class Generic extends _Abstract
      * Each section may contain other section or group.
      *
      * @param mixed $seed
-     * @param bool  $hasDivider Should we add divider after this section
+     * @param bool  $addDivider Should we add divider after this section
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\ui\Exception
      *
      * @return static
      */
-    public function addSubLayout($seed, $hasDivider = true)
+    public function addSubLayout($seed = 'Generic', $addDivider = true)
     {
         $v = $this->add($this->factory($seed, ['form' => $this->form], 'FormLayout/Section'));
         if ($v instanceof \atk4\ui\FormLayout\Section\Generic) {
             $v = $v->addSection();
         }
 
-        if ($hasDivider) {
+        if ($addDivider) {
             $this->add(['ui' => 'hidden divider']);
         }
 

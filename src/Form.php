@@ -222,24 +222,49 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     }
 
     /**
-     * Get the field owner base on it's instanceof type.
-     * Will return the object owner if type match otherwise
-     * willl return null.
+     * Get the field owner based on it's instanceof type.
+     * Will return the object owner if class match otherwise
+     * will return null.
      *
-     * @param $object
-     * @param $type
+     * @param \atk4\ui\FormField\Generic $object
+     * @param string                     $class
      *
-     * @return null|Owner Object
+     * @return null|\atk4\ui\View
      */
-    public function getFieldOwner($object, $type)
+    public function getFieldOwner($object, $class)
     {
-        if ($object instanceof $type) {
+        if ($object instanceof $class) {
             return $object;
         } elseif (empty($object)) {
             return;
         } else {
-            return $this->getFieldOwner($object->owner, $type);
+            return $this->getFieldOwner($object->owner, $class);
         }
+    }
+
+    /**
+     * Get objects closest owner which is instance of particular class.
+     *
+     * If there are no such owner (or grand-owner etc.) object, then return.
+     *
+     * Note: This class is generic and maybe should be moved to View class. 
+     *
+     * @param \atk4\ui\FormField\Generic $object
+     * @param string                     $class
+     *
+     * @return null|\atk4\ui\View
+     */
+    public function getClosestOwner($object, $class)
+    {
+        if (!isset($object->owner)) {
+            return null;
+        }
+
+        if ($object->owner instanceof $class) {
+            return $object->owner;
+        }
+
+        return $this->getClosestOwner($object->owner, $class);
     }
 
     /**
@@ -248,13 +273,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * @param string $fieldName Field name
      * @param string $str       Error message
      *
-     * @return jsChain
+     * @return jsChain|array
      */
     public function error($fieldName, $str)
     {
-        $jsError[] = $this->js()->form('add prompt', $fieldName, $str);
+        $jsError = [$this->js()->form('add prompt', $fieldName, $str)];
+
         // if field is part of an accordion section, will open that section.
-        $section = $this->getFieldOwner($this->getField($fieldName), 'atk4\ui\AccordionSection'/*'atk4\ui\FormLayout\Section\Accordion'*/);
+        $section = $this->getFieldOwner($this->getField($fieldName), '\atk4\ui\AccordionSection'/*'\atk4\ui\FormLayout\Section\Accordion'*/);
         if ($section) {
             $jsError[] = $section->owner->jsOpen($section);
         }

@@ -4,8 +4,8 @@ namespace atk4\ui\FormLayout\Section;
 
 class Generic extends \atk4\ui\View
 {
-    public $form = null;
     public $formLayout = 'FormLayout/Generic';
+    public $form = null;
 
     public function addSection()
     {
