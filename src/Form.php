@@ -247,7 +247,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * If there are no such owner (or grand-owner etc.) object, then return.
      *
-     * Note: This class is generic and maybe should be moved to View class. 
+     * Note: This class is generic and maybe should be moved to View class.
      *
      * @param \atk4\ui\FormField\Generic $object
      * @param string                     $class
@@ -257,7 +257,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function getClosestOwner($object, $class)
     {
         if (!isset($object->owner)) {
-            return null;
+            return;
         }
 
         if ($object->owner instanceof $class) {
