@@ -143,6 +143,10 @@ class DropDown extends Input
      */
     public function renderView()
     {
+        if ($this->isMultiple) {
+            $this->defaultClass = $this->defaultClass.' multiple';
+        }
+
         $this->addClass($this->defaultClass);
 
         if ($this->readonly || $this->disabled) {
@@ -157,11 +161,6 @@ class DropDown extends Input
         }
 
         $this->js(true)->dropdown($this->dropdownOptions);
-
-        if ($this->isMultiple) {
-            $this->defaultClass = $this->defaultClass.' multiple';
-            //$this->template->trySetHtml('BeforeInput', "<input name='{$inputName}' type='hidden'/>");
-        }
 
         if ($this->dropIcon) {
             $this->template->trySet('DropIcon', $this->dropIcon);
