@@ -162,7 +162,6 @@ class DropDown extends Input
 
         $this->js(true)->dropdown($this->dropdownOptions);
 
-
         if ($this->dropIcon) {
             $this->template->trySet('DropIcon', $this->dropIcon);
         }
