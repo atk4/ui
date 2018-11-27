@@ -41,7 +41,7 @@ class FeatureContext extends RawMinkContext implements Context
      */
     public function formSubmits()
     {
-        $button = $this->getSession()->wait(5000, "$('.form.success').length");
+        $button = $this->getSession()->wait(5000, "$('.form.success').not('.loading').length");
     }
 
     /**
