@@ -143,6 +143,10 @@ class DropDown extends Input
      */
     public function renderView()
     {
+        if ($this->isMultiple) {
+            $this->defaultClass = $this->defaultClass.' multiple';
+        }
+
         $this->addClass($this->defaultClass);
 
         if ($this->readonly || $this->disabled) {
@@ -158,11 +162,6 @@ class DropDown extends Input
 
         $this->js(true)->dropdown($this->dropdownOptions);
 
-        if ($this->isMultiple) {
-            $this->defaultClass = $this->defaultClass.' multiple';
-            //$this->template->trySetHtml('BeforeInput', "<input name='{$inputName}' type='hidden'/>");
-        }
-
         if ($this->dropIcon) {
             $this->template->trySet('DropIcon', $this->dropIcon);
         }
@@ -171,13 +170,13 @@ class DropDown extends Input
 
         $options = [];
         if (!$this->isValueRequired && !$this->isMultiple) {
-            $options[] = ['div',  'class' => 'item', 'data-value' => '', [$this->empty]];
+            $options[] = ['div',  'class' => 'item', 'data-value' => '', $this->empty || is_numeric($this->empty) ? [$this->empty] : []];
         }
 
         if (isset($this->model)) {
             foreach ($this->model as $key => $row) {
                 $title = $row->getTitle();
-                $item = ['div', 'class' => 'item', 'data-value' => (string) $key, [$title]];
+                $item = ['div', 'class' => 'item', 'data-value' => (string) $key, $title || is_numeric($title) ? [$title] : []];
                 $options[] = $item;
             }
         } else {
@@ -187,14 +186,14 @@ class DropDown extends Input
                         $val = "<i class='{$val['icon']}'></i>{$val[0]}";
                     }
                 }
-                $item = ['div', 'class' => 'item', 'data-value' => (string) $key, [$val]];
+                $item = ['div', 'class' => 'item', 'data-value' => (string) $key, $val || is_numeric($val) ? [$val] : []];
                 $options[] = $item;
             }
         }
 
         $items = $this->app->getTag('div', [
             'class'       => 'menu',
-        ], [[$options]]);
+        ], $options ? [[$options]] : []);
 
         $this->template->trySetHtml('Items', $items);
 

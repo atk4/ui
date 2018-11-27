@@ -243,6 +243,8 @@ class AutoComplete extends Input
         if ($this->readonly) {
             $this->settings['showOnFocus'] = false;
             $this->settings['allowTab'] = false;
+            $this->settings['apiSettings'] = null;
+            $this->settings['onShow'] = new jsFunction([new jsExpression('return false')]);
             $this->template->set('readonly', 'readonly');
         }
 
