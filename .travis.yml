@@ -9,26 +9,59 @@ php:
 services:
     - mysql
 
+
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+install:
+  - export DISPLAY=':99'
+  - Xvfb :99 -screen 0 1280x1024x16 +extension RANDR > /dev/null 2>&1 &
+
 before_install:
-    - npm install -g zombie
     - npm get prefix
+    - npm install -g less less-plugin-clean-css uglify-js
 
 before_script:
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then php -S localhost:8888; fi &
+
+    - "sh -e /etc/init.d/xvfb start"
+    - "export DISPLAY=:99.0"
+    - "wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar"
+    - "java -jar selenium-server-standalone-2.43.1.jar > /dev/null 2>/dev/null &"
+
+
+    - wget -N http://chromedriver.storage.googleapis.com/2.44/chromedriver_linux64.zip -P ~/
+    - unzip ~/chromedriver_linux64.zip -d ~/
+    - rm ~/chromedriver_linux64.zip
+    - sudo mv -f ~/chromedriver /usr/local/share/
+    - sudo chmod +x /usr/local/share/chromedriver
+    - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+      #- "wget http://selenium-release.storage.googleapis.com/3.0-beta3/selenium-server-standalone-3.0.0-beta3.jar -O selenium-server-standalone.jar && sudo mv selenium-server-standalone.jar /usr/local/bin"
+      #- "wget http://chromedriver.storage.googleapis.com/2.23/chromedriver_linux64.zip -O chromedriver.zip && unzip chromedriver.zip && sudo mv chromedriver /usr/local/bin"
+      #- "java  -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver  -jar /usr/local/bin/selenium-server-standalone.jar &"
+      #- sleep 3
+      #- sudo whereis google-chrome
+
+    - php -S localhost:8888 &
     - mysql -e 'create database atk4;'
     - mysql atk4 < demos/atk4.sql
     - mv demos/db.travis.php demos/db.php
+    - (cd js; npm install; npm run build)
+    - lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
+    - uglifyjs --compress -- public/agileui.js > public/agileui.min.js
     - composer install
 
 after_script:
     - echo $TRAVIS_BRANCH
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending codecov report"; bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
 
 script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.1" ]]; then NC="--no-coverage"; fi
     - ./vendor/phpunit/phpunit/phpunit $NC #- wget -O - http://localhost:8888/demos/button2.php 
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then bash tools/test.sh; fi
+    - bash tools/test.sh
 
 cache:
   directories:

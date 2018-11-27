@@ -32,6 +32,7 @@ Scenario:
  Given I am on "js.php"
  And I see button "Callback Test"
  When I press button "Callback Test"
+ And Wait until loading stops
  Then Label changes to a number
 
 #Scenario:

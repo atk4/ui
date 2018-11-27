@@ -37,6 +37,22 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * @When form submits
+     */
+    public function formSubmits()
+    {
+        $button = $this->getSession()->wait(5000, "$('.form.success').not('.loading').length");
+    }
+
+    /**
+     * @When Wait until loading stops
+     */
+    public function untilLoadingStops()
+    {
+        $button = $this->getSession()->wait(5000, "! $('.ui.loading').length");
+    }
+
+    /**
      * @When I press button :arg1
      */
     public function iPressButton($arg1)

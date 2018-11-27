@@ -10,5 +10,13 @@ default:
       base_url:  'http://localhost:8888/demos/'
       sessions:
         default:
-          zombie: 
-            node_modules_path: /usr/local/lib/node_modules/
+          selenium2:
+             browser: chrome
+             wd_host: http://127.0.0.1:4444/wd/hub
+             capabilities:
+               chrome:
+                 switches:
+                   - "--headless"
+                   - "--disable-gpu"
+                   - "--window-size=1920,1080"
+                   - "--no-sandbox"
