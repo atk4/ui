@@ -14,7 +14,7 @@ $sub_layout->add(['Header', 'Please fill all form sections!', 'size' => 4]);
 $sub_layout->addField('company_name');
 
 // Accordion
-$accordion_layout = $f->layout->addSubLayout(['Accordion', 'type' => ['styled','fluid'], 'settings' => ['exclusive' => false]]);
+$accordion_layout = $f->layout->addSubLayout(['Accordion', 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
 
 // Section #1
 $contact_section = $accordion_layout->addSection('Contact');
@@ -39,7 +39,7 @@ $gr->addField('country', ['width' => 'six']);
 $gr->addField('postal', ['width' => 'four']);
 
 // Sub-Accordion
-$sub_accordion_layout = $adr_section->addSubLayout(['Accordion', 'type'=>['styled','fluid'], 'settings' => ['exclusive' => false]]);
+$sub_accordion_layout = $adr_section->addSubLayout(['Accordion', 'type'=>['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
 
 // Sub-Section #1
 $section_1 = $sub_accordion_layout->addSection('Business address');
