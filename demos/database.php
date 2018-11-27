@@ -98,7 +98,7 @@ if (!class_exists('Country')) {
                 $m['currency_symbol'] = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
                  */
 
-                $map = ['EUR' => 'â‚¬', 'USD' => '$', 'GBP' => 'Â£'];
+                $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
                 $m['currency_symbol'] = isset($map[$m['currency']]) ? $map[$m['currency']] : '?';
             });
 
