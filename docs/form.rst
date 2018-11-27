@@ -124,7 +124,7 @@ Then using Form::addField() will rely on that layout to add field View to it and
 You may also supply your own layout when creating your form.
 
 Form layout may contain sub layouts. Each sub layout being just another layout view, it is possible
-to nest them, by adding other sub layout to them. This allows for great flexibility on how to dispose
+to nest them, by adding other sub layout to them. This allows for great flexibility on how to place
 your fields within Form.
 
 Each sub layout may also contain specific section layout like Accordion, Columns or Tabs.
@@ -381,6 +381,8 @@ You may add field to sub layout directly using setModel method on the sub layout
 
 When using setModel() on a sub layout to add fields per sub layout instead of entire layout,
 make sure you pass false as second argument when setting the model on the Form itself, like above.
+Otherwise all model fields will be automatically added in Forms main layout and you will not be
+able to add them again in sub-layouts.
 
 Loading Values
 --------------

@@ -405,6 +405,9 @@ class View implements jsExpressionable
      *
      * If there are no such owner (or grand-owner etc.) object, then return.
      *
+     * Note: this is internal method, but should be public because other objects
+     *       should be able to call it.
+     *
      * @param \atk4\ui\View $object
      * @param string        $class
      *
