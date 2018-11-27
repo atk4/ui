@@ -166,7 +166,7 @@ class Accordion extends View
         }
 
         //Only set Accordion in Top container. Otherwise Nested accordion won't work.
-        if (!$this->owner instanceof AccordionSection && !$this->isDynamicSection()) {
+        if (!$this->getClosestOwner($this, '\atk4\ui\AccordionSection') && !$this->isDynamicSection()) {
             $this->js(true)->accordion($this->settings);
         }
 

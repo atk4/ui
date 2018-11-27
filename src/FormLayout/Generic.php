@@ -9,24 +9,30 @@ use atk4\ui\Form;
  */
 class Generic extends _Abstract
 {
-    // @var inheritdoc
+    /** {@inheritdoc} */
     public $defaultTemplate = 'formlayout/generic.html';
 
     /**
      * If specified will appear on top of the group. Can be string or Label object.
+     *
+     * @var string
      */
     public $label = null;
 
     /**
      * Specify width of a group in numerical word e.g. 'width'=>'two' as per
      * Semantic UI grid system.
+     *
+     * @var string
      */
     public $width = null;
 
     /**
      * Set true if you want fields to appear in-line.
+     *
+     * @var bool
      */
-    public $inline = null;
+    public $inline = false;
 
     protected function _addField($decorator, $field)
     {
@@ -52,27 +58,25 @@ class Generic extends _Abstract
     }
 
     /**
-     * Create a group with fields.
+     * Adds Header in form layout.
      *
      * @param string $label
      *
      * @return $this
      */
-    public function addHeader($label = null)
+    public function addHeader($label)
     {
-        if ($label) {
-            $this->add(['Header', $label, 'dividing', 'element' => 'h4']);
-        }
+        $this->add(['Header', $label, 'dividing', 'element' => 'h4']);
 
         return $this;
     }
 
     /**
-     * Adds group.
+     * Adds field group in form layout.
      *
      * @param string|array $label
      *
-     * @return self
+     * @return static
      */
     public function addGroup($label = null)
     {
@@ -85,9 +89,39 @@ class Generic extends _Abstract
 
         $label['form'] = $this->form;
 
-        return $this->add(new self($label));
+        return $this->add(new static($label));
     }
 
+    /**
+     * Add a form layout section to this layout.
+     *
+     * Each section may contain other section or group.
+     *
+     * @param mixed $seed
+     * @param bool  $addDivider Should we add divider after this section
+     *
+     * @throws \atk4\core\Exception
+     * @throws \atk4\ui\Exception
+     *
+     * @return static
+     */
+    public function addSubLayout($seed = 'Generic', $addDivider = true)
+    {
+        $v = $this->add($this->factory($seed, ['form' => $this->form], 'FormLayout/Section'));
+        if ($v instanceof \atk4\ui\FormLayout\Section\Generic) {
+            $v = $v->addSection();
+        }
+
+        if ($addDivider) {
+            $this->add(['ui' => 'hidden divider']);
+        }
+
+        return $v;
+    }
+
+    /**
+     * Recursively renders this view.
+     */
     public function recursiveRender()
     {
         $field_input = $this->template->cloneRegion('InputField');

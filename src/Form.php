@@ -224,14 +224,21 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Causes form to generate error.
      *
-     * @param string $field Field name
-     * @param string $str   Error message
+     * @param string $fieldName Field name
+     * @param string $str       Error message
      *
-     * @return jsChain
+     * @return jsChain|array
      */
-    public function error($field, $str)
+    public function error($fieldName, $str)
     {
-        return $this->js()->form('add prompt', $field, $str);
+        // by using this hook you can overwrite default behavior of this method
+        if ($this->hookHasCallbacks('displayError')) {
+            return $this->hook('displayError', [$fieldName, $str]);
+        }
+
+        $jsError = [$this->js()->form('add prompt', $fieldName, $str)];
+
+        return $jsError;
     }
 
     /**
@@ -244,8 +251,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function success($str = 'Success', $sub_header = null)
     {
-        /*
-         * below code works, but polutes output with bad id=xx
+        // by using this hook you can overwrite default behavior of this method
+        if ($this->hookHasCallbacks('displaySuccess')) {
+            return $this->hook('displaySuccess', [$str, $sub_header]);
+        }
+
+        /* below code works, but pollutes output with bad id=xx
         $success = new Message([$str, 'id'=>false, 'type'=>'success', 'icon'=>'check']);
         $success->app = $this->app;
         $success->init();

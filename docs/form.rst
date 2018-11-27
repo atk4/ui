@@ -21,14 +21,14 @@ implements the following 4 major features:
   for date/time, auto-complete and even file upload.
 
 - Loading data from database and storing it back. Any persistence (SQL, NoSQL) supported by
-  ATK Data (http://agile-data.readthedocs.io/en/develop/persistence.html) can be used. 
-  
+  ATK Data (http://agile-data.readthedocs.io/en/develop/persistence.html) can be used.
+
 - Support for Events and Actions on fields, buttons and form callback. (:ref:`js`) Automatic
   execution of PHP-based Submit Handler passing all the collected data (:ref:`callback`)
 
 So if looking for a PHP Form class, ATK Form has the most complete implementation which does
 not require to fall-back into HTML / JS, perform any data conversion, load / store data and
-implement any advanced interacitons such as file uploads.
+implement any advanced interactions such as file uploads.
 
 Basic Usage
 ===========
@@ -91,7 +91,7 @@ All of the above works auto-magically, but you can tweak it even more:
  - Provide custom submission handler
  - Specify which fields and in which order to display on the form
  - Override labels, decorator classes
- - Froup fields or use custom layout template
+ - Group fields or use custom layout template
  - Mix standard model fields with your own
  - Add JS Actions around fields
  - Split up form into multiple tabs
@@ -104,7 +104,7 @@ Extensions
 
 Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some extensions like:
 
- - Capcha decorator
+ - Captcha decorator
  - File Upload field (see https://github.com/atk4/filestore)
  - Multi-record form
  - Multi-tab form
@@ -112,6 +112,24 @@ Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some
 If you develop feature like that, please let me know so that I can include it in the documentation
 and give you credit.
 
+Layout and Fields
+=================
+
+Although Form extends the View class, fields are not added into Form directly but rather use
+a View layout for it in order to create their html element. In other words, layout attached to the form
+is responsible of rendering html for fields.
+
+When Form is first initialized, it will provide and set a default Generic layout within the form.
+Then using Form::addField() will rely on that layout to add field View to it and render it properly.
+You may also supply your own layout when creating your form.
+
+Form layout may contain sub layouts. Each sub layout being just another layout view, it is possible
+to nest them, by adding other sub layout to them. This allows for great flexibility on how to place
+your fields within Form.
+
+Each sub layout may also contain specific section layout like Accordion, Columns or Tabs.
+
+More on Form layout and sub layout below.
 
 Adding Fields
 =============
@@ -132,7 +150,7 @@ specific field type::
     $form = $app->add('Form');
     $form->setModel(new User($db), ['email', 'gender', 'terms']);
 
-Field Decorator does not have to be added directly into the form. You can use a separate 
+Field Decorator does not have to be added directly into the form. You can use a separate
 :php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`FormField\Generic::$form`::
 
     $myview = $form->add(['defaultTemplate'=>'./mytemplate.html']);
@@ -159,7 +177,7 @@ Field Decorator
 To avoid term miss-use, we use "Field" to refer to ``\atk4\data\Field``. This class
 is documented here: http://agile-data.readthedocs.io/en/develop/fields.html
 
-Form uses a small UI components to vizualize HTML input fields associated with
+Form uses a small UI components to visualize HTML input fields associated with
 the respective Model Field. We call this object "Field Decorator". All field
 decorators extend from class :php:class:`FormField::Generic`.
 
@@ -271,7 +289,7 @@ Type vs Decorator Class
 Sometimes you may wonder - should you pass decorator class ('CheckBox') or
 a data field type (['type' => 'boolean']);
 
-I always to recommend use of field type, because it will take care of type-casting
+It is always recommended to use data field type, because it will take care of type-casting
 for you. Here is an example with date::
 
     $form = $app->add('Form');
@@ -285,8 +303,8 @@ for you. Here is an example with date::
 Field ``date1`` is defined inside a :php:class:`ProxyModel` as a date field and will
 be automatically converted into DateTime object by Persistence typecasting.
 
-Field ``date2`` has no type and therefore Persistence typecasting will not modify it's
-value and it's stored inside model as a string.
+Field ``date2`` has no data type, do not confuse with ui type=>date pass as second argument for Calendar field,
+and therefore Persistence typecasting will not modify it's value and it's stored inside model as a string.
 
 The above code result in the following output::
 
@@ -296,13 +314,13 @@ Seeding Decorator from Model
 ----------------------------
 
 In a large projects, you most likely will not be setting individual fields for each Form, instead
-you would simply use ``addModel()`` to populate all defined fields inside a model. Form does
-have a pretty good guess about Decorator based on field type, but what if you want to
+you would simply use ``setModel()`` to populate all defined fields inside a model. Form does
+have a pretty good guess about Decorator based on their data field type, but what if you want to
 use a custom decorator?
 
 This is where ``$field->ui`` comes in (http://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui).
 
-You can specify ``'ui'=>['form' => $decorator_seed]`` for your model field::
+You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model field inside your Model::
 
     class User extends \atk4\data\Model {
         public $table = 'user';
@@ -323,9 +341,9 @@ stored as a regular date. Obviously you can also specify decorator class::
 
     $this->add('birth_year', ['ui'=>['Calendar', 'type'=>'month']);
 
-Without the 'type' propoerty, now the calendar selection will be stored as text.
+Without the data 'type' property, now the calendar selection will be stored as text.
 
-using setModel()
+Using setModel()
 ----------------
 
 Although there were many examples above for the use of setModel() this method
@@ -335,16 +353,36 @@ needs a bit more info:
 
 .. php:method:: setModel($model, [$fields])
 
-Associate field with existing model object and import all editable fields
+Associate fields with existing model object and import all editable fields
 in the order in which they were defined inside model's init() method.
 
 You can specify which fields to import and their order by simply listing
 field names through second argument.
 
 Specifying "false" or empty array as a second argument will import no fields,
-so you can then use `addField` to import fields individually.
+so you can then use :php:meth:`Form::addField` to import fields individually.
+
+Note that :php:meth:`Form::setModel` also delegate adding field to the form layout
+by using `Form->layout->setModel()` internally.
 
 See also: http://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable
+
+Using setModel() on a sub layout
+--------------------------------
+
+You may add field to sub layout directly using setModel method on the sub layout itself.::
+
+    $f = $app->add('Form');
+    $f->setModel($m, false);
+
+    $sub_layout = $f->layout->addSubLayout();
+    $sub_layout->setModel($m, ['first_name', 'last_name']);
+
+
+When using setModel() on a sub layout to add fields per sub layout instead of entire layout,
+make sure you pass false as second argument when setting the model on the Form itself, like above.
+Otherwise all model fields will be automatically added in Forms main layout and you will not be
+able to add them again in sub-layouts.
 
 Loading Values
 --------------
@@ -436,7 +474,6 @@ Example use of Model's validate() method::
     }
 
 
-
 We can now populate form fields based around the data fields defined in the model::
 
     $app->add('Form')
@@ -467,7 +504,8 @@ Form Submit Handling
 .. php:method:: setApiConfing($config)
 
     Add additional parameters to Semantic UI .api function which does the AJAX submission of the form.
-For example, if you want the loading overlay at a different HTML element, you can define it with $form->setApiConfig(['stateContext' => 'my-JQuery-selector']);
+For example, if you want the loading overlay at a different HTML element, you can define it with
+$form->setApiConfig(['stateContext' => 'my-JQuery-selector']);
 All available parameters can be found here: https://semantic-ui.com/behaviors/api.html#/settings
 
 .. php:attr:: successTemplate
@@ -489,9 +527,9 @@ that would perform the check, display error or success message::
     });
 
 Callback function can return one or multiple JavaScript actions. Methods such as
-:php:meth:`error()` or :php:meth:`success()` will help initialize those actions for your form. Here is a code
-that can be used to output multiple errors at once. I intentionally didn't want to group
-errors with a message about terms and conditions::
+:php:meth:`error()` or :php:meth:`success()` will help initialize those actions for your form.
+Here is a code that can be used to output multiple errors at once. I intentionally didn't want
+to group errors with a message about terms and conditions::
 
     $form->onSubmit(function($form) {
         $errors = [];
@@ -531,11 +569,11 @@ Core Exceptions may contain some sensitive information in parameters or back-tra
 will not be included in response for security reasons.
 
 
-Form Layout
------------
+Form Layout and sub layout
+--------------------------
 
-When you create a Form object and start adding fields through either :php:meth:`addField()` or
-:php:meth:`setModel()`, they will appear one under each-other. This arrangement of fields as
+As stated above, when you create a Form object and start adding fields through either :php:meth:`addField()`
+or :php:meth:`setModel()`, they will appear one under each-other. This arrangement of fields as
 well as display of labels and structure around the fields themselves is not done by a form,
 but another object - "Form Layout". This object is responsible for the field flow, presence
 of labels etc.
@@ -573,6 +611,17 @@ of labels etc.
     Same as :php:class:`Form::addField()` but will place a field inside this specific layout
     or sub-layout.
 
+Form group layout and sub layout
+--------------------------------
+
+Fields can be organized in groups, using method `addGroup()` or as sub section using `addSubLayout()` method.
+
+Using group
+-----------
+
+Group will create a sub layout for you where fields added to the group will be placed side by side in one line
+and where you can setup specific width for each field.
+
 My next example will add multiple fields on the same line::
 
     $form->setModel(new User($db), false);  // will not populate any fields automatically
@@ -601,6 +650,45 @@ the error messages appearing on the right from the field::
     $gr->addField('first_name', ['width'=>'eight']);
     $gr->addField('middle_name', ['width'=>'three', 'disabled'=>true]);
     $gr->addField('last_name', ['width'=>'five']);
+
+Using Sub layout
+----------------
+
+There are four specific sub layout views that you can add to your existing form layout: Generic, Accordion, Tabs and Columns.
+
+Generic sub layout is simply another layout view added to your existing form layout view. You add fields
+the same way as you would do for :php:class:`FormLayout\Generic`.
+
+Sub layout section like Accordion, Tabs or Columns will create layout specific section where you can
+organize fields in either accordion, tabs or columns.
+
+The following example will show how to organize fields using regular sub layout and accordion sections::
+
+    $f = $app->add('Form');
+    $f->setModel($m, false);
+
+    $sub_layout = $f->layout->addSubLayout('Generic');
+
+    $sub_layout->add(['Header', 'Accordion Section in Form']);
+    $sub_layout->setModel($m, ['name']);
+
+    $accordion_layout = $f->layout->addSubLayout('Accordion');
+
+    $a1 = $accordion_layout->addSection('Section 1');
+    $a1->setModel($m, ['iso', 'iso3']);
+
+    $a2 = $accordion_layout->addSection('Section 2');
+    $a2->setModel($m, ['numcode', 'phonecode']);
+
+In the example above, we first add a Generic sub layout to the existing layout of the form where one
+field, name, is added to this sub layout.
+
+Then we add another layout to the form layout. In this case it's specific Accordion layout. This sub layout
+is further separated in two accordion sections and fields are added to each section:
+`$a1->setModel($m, ['iso', 'iso3']);` and `$a2->setModel($m, ['numcode', 'phonecode']);`
+
+Sub layout gives you greater control on how to display fields within your form. For more examples on
+sub layouts please visit demo page: https://github.com/atk4/ui/blob/develop/demos/form-section.php
 
 Semantic UI modifiers
 ---------------------
@@ -637,10 +725,10 @@ Conditional Form
 
 .. php:method:: setFieldsDisplayRules()
 
-So far we had to present form with a set of fields while initializing. Sometimes 
+So far we had to present form with a set of fields while initializing. Sometimes
 you would want to hide/display fields while user enters the data.
 
-The logic is based aroung passing a declarative array::
+The logic is based around passing a declarative array::
 
     $form = $app->add('Form');
     $form->addField('phone1');
@@ -724,6 +812,6 @@ Instead of defining rules for fields individually you can hide/show entire group
     // Show group where 'language' belong when dev is checked.
 
     $f_group->setGroupDisplayRules([
-        'php' => ['dev' => 'checked'], 
+        'php' => ['dev' => 'checked'],
         'language'=>['dev'=>'checked']
     ]);
