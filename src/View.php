@@ -400,6 +400,29 @@ class View implements jsExpressionable
         return $object;
     }
 
+    /**
+     * Get objects closest owner which is instance of particular class.
+     *
+     * If there are no such owner (or grand-owner etc.) object, then return.
+     *
+     * @param \atk4\ui\View $object
+     * @param string        $class
+     *
+     * @return null|\atk4\ui\View
+     */
+    public function getClosestOwner($object, $class)
+    {
+        if (!isset($object->owner)) {
+            return;
+        }
+
+        if ($object->owner instanceof $class) {
+            return $object->owner;
+        }
+
+        return $this->getClosestOwner($object->owner, $class);
+    }
+
     // }}}
 
     // {{{ Manipulating classes and view properties

@@ -41,6 +41,16 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public $buttonSave;
 
     /**
+     * When form is submitted successfully, this template is used by method
+     * success() to replace form contents.
+     *
+     * WARNING: may be removed in the future as we refactor into using Message class
+     *
+     * @var string
+     */
+    public $successTemplate = 'form-success.html';
+
+    /**
      * Collection of field's conditions for displaying a target field on the form.
      *
      * Specifying a condition for showing a target field required the name of the target field
@@ -212,31 +222,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     }
 
     /**
-     * Get objects closest owner which is instance of particular class.
-     *
-     * If there are no such owner (or grand-owner etc.) object, then return.
-     *
-     * Note: This class is generic and maybe should be moved to View class.
-     *
-     * @param \atk4\ui\View $object
-     * @param string        $class
-     *
-     * @return null|\atk4\ui\View
-     */
-    public function getClosestOwner($object, $class)
-    {
-        if (!isset($object->owner)) {
-            return;
-        }
-
-        if ($object->owner instanceof $class) {
-            return $object->owner;
-        }
-
-        return $this->getClosestOwner($object->owner, $class);
-    }
-
-    /**
      * Causes form to generate error.
      *
      * @param string $fieldName Field name
@@ -271,13 +256,23 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             return $this->hook('displaySuccess', [$str, $sub_header]);
         }
 
-        // Success message
-        $js = new \atk4\ui\jsToast([
-            'title'       => $str,
-            'message'     => $sub_header,
-            'class'       => 'success',
-            'displayTime' => 3000,
-        ]);
+        /* below code works, but pollutes output with bad id=xx
+        $success = new Message([$str, 'id'=>false, 'type'=>'success', 'icon'=>'check']);
+        $success->app = $this->app;
+        $success->init();
+        $success->text->addParagraph($sub_header);
+         */
+        $success = $this->app->loadTemplate($this->successTemplate);
+        $success['header'] = $str;
+
+        if ($sub_header) {
+            $success['message'] = $sub_header;
+        } else {
+            $success->del('p');
+        }
+
+        $js = $this->js()
+            ->html($success->render());
 
         return $js;
     }
