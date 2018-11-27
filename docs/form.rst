@@ -106,8 +106,8 @@ Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some
 
  - Captcha decorator
  - File Upload field (see https://github.com/atk4/filestore)
- - Multi-record form (see https://github.com/atk4/mastercrud)
- - Multi-tab form (see https://github.com/atk4/mastercrud)
+ - Multi-record form
+ - Multi-tab form
 
 If you develop feature like that, please let me know so that I can include it in the documentation
 and give you credit.

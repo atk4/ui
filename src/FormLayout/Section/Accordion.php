@@ -41,7 +41,7 @@ class Accordion extends \atk4\ui\Accordion
      *
      * @throws \atk4\ui\Exception
      *
-     * @return AccordionSection|\atk4\ui\View
+     * @return \atk4\ui\FormLayout\Generic
      */
     public function addSection($title, $callback = null, $icon = 'dropdown')
     {
@@ -61,8 +61,8 @@ class Accordion extends \atk4\ui\Accordion
     {
         if ($section instanceof \atk4\ui\AccordionSection) {
             return parent::getSectionIdx($section);
-        } else {
-            return parent::getSectionIdx($section->owner);
         }
+
+        return parent::getSectionIdx($section->owner);
     }
 }
