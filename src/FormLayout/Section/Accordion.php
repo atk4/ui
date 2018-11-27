@@ -10,6 +10,29 @@ class Accordion extends \atk4\ui\Accordion
     public $form = null;
 
     /**
+     * Initialization.
+     *
+     * Adds hook which in case of field error expands respective accordion sections.
+     */
+    public function init()
+    {
+        parent::init();
+
+        $this->form->addHook('displayError', function ($form, $fieldName, $str) {
+            // default behavior
+            $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
+
+            // if field is part of an accordion section, will open that section.
+            $section = $form->getClosestOwner($form->getField($fieldName), '\atk4\ui\AccordionSection');
+            if ($section) {
+                $jsError[] = $section->owner->jsOpen($section);
+            }
+
+            return $jsError;
+        });
+    }
+
+    /**
      * Return an accordion section with a form layout associate with a form.
      *
      * @param string $title
@@ -35,7 +58,7 @@ class Accordion extends \atk4\ui\Accordion
      */
     public function getSectionIdx($section)
     {
-        if ($section instanceof AccordionSection) {
+        if ($section instanceof \atk4\ui\AccordionSection) {
             return parent::getSectionIdx($section);
         } else {
             return parent::getSectionIdx($section->owner);

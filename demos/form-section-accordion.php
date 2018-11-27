@@ -38,3 +38,7 @@ $gr->addField('postal', ['width' => 'four']);
 $f->addField('term', ['CheckBox', 'caption'=>'Accept terms and conditions', null, 'slider']);
 
 $accordion_layout->activate($contact_section);
+
+$f->onSubmit(function($form){
+    return $form->success('Yey!', 'You did well by filling out this form');
+});
