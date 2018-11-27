@@ -35,16 +35,17 @@ class Accordion extends \atk4\ui\Accordion
     /**
      * Return an accordion section with a form layout associate with a form.
      *
-     * @param string $title
-     * @param string $icon
+     * @param string        $title
+     * @param null|callable $callback
+     * @param string        $icon
      *
      * @throws \atk4\ui\Exception
      *
      * @return AccordionSection|\atk4\ui\View
      */
-    public function addSection($title, $icon = 'dropdown')
+    public function addSection($title, $callback = null, $icon = 'dropdown')
     {
-        $section = parent::addSection($title, null, $icon);
+        $section = parent::addSection($title, $callback, $icon);
 
         return $section->add([$this->formLayout, 'form' => $this->form]);
     }
