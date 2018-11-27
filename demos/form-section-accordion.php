@@ -30,7 +30,7 @@ $gr->addField('email', ['width' => 'sixteen'], ['caption' => 'yourEmail@domain.c
 $adr_section = $accordion_layout->addSection('Address');
 
 $gr = $adr_section->addGroup('Street and City');
-$gr->addField('address1', ['width' => 'eight'], ['required'=>true]); // <-- this is cought first and accordion section don't expand
+$gr->addField('address1', ['width' => 'eight'], ['required'=>true]);
 $gr->addField('city', ['width' => 'eight']);
 
 $gr = $adr_section->addGroup('State, Country and Postal Code');
@@ -47,7 +47,7 @@ $section_1->addField('business_address');
 
 // Sub-Section #2
 $section_2 = $sub_accordion_layout->addSection('Delivery address');
-$section_2->addField('delivery_address', [], ['required'=>true]);
+$section_2->addField('delivery_address', []);
 
 // Terms field
 $f->addField('term', ['CheckBox', 'caption'=>'Accept terms and conditions', null, 'slider']);
