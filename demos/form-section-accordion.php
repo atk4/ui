@@ -47,7 +47,7 @@ $section_1->addField('business_address');
 
 // Sub-Section #2
 $section_2 = $sub_accordion_layout->addSection('Delivery address');
-$section_2->addField('delivery_address', ['required'=>true]);
+$section_2->addField('delivery_address', [], ['required'=>true]);
 
 // Terms field
 $f->addField('term', ['CheckBox', 'caption'=>'Accept terms and conditions', null, 'slider']);
