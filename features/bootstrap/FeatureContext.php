@@ -89,10 +89,9 @@ class FeatureContext extends RawMinkContext implements Context
     {
         $field = $this->assertSession()->fieldExists($field);
 
-        if(0 !== strpos($field->getValue(), $value)) {
+        if (0 !== strpos($field->getValue(), $value)) {
             throw new \Exception('Field value '.$field->getValue().' does not start with '.$value);
         }
-
     }
 
     /**
