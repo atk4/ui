@@ -7,6 +7,7 @@ use SebastianBergmann\CodeCoverage\CodeCoverage;
 $coverage = new CodeCoverage();
 
 $coverage->filter()->addDirectoryToWhitelist('../src');
+$coverage->filter()->addDirectoryToWhitelist('src');
 
 register_shutdown_function(function () use ($coverage) {
     $coverage->stop();
