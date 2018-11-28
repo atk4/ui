@@ -62,13 +62,15 @@ $form->onSubmit(function ($form) {
 $tab->add(['Header', '..or success message']);
 $form = $tab->add('Form');
 $form->addField('email2');
+$form->buttonSave->set('Save2');
 $form->onSubmit(function ($form) {
     return $form->success('form was successful');
 });
 
 $tab->add(['Header', 'Any other view can be output']);
 $form = $tab->add('Form');
-$form->addField('email');
+$form->addField('email3');
+$form->buttonSave->set('Save3');
 $form->onSubmit(function ($form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
@@ -79,7 +81,8 @@ $form->onSubmit(function ($form) {
 
 $tab->add(['Header', 'jsAction can be used too']);
 $form = $tab->add('Form');
-$field = $form->addField('email');
+$field = $form->addField('email4');
+$form->buttonSave->set('Save4');
 $form->onSubmit(function ($form) use ($field) {
     return $field->jsInput()->val('random is '.rand(1, 100));
 });

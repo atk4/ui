@@ -13,3 +13,22 @@ Scenario:
  And form submits
  Then I should see "some error action"
 
+Scenario:
+ When I fill in "email2" with "foo@bar"
+ And I press button "Save2"
+ And form submits
+ Then I should see "form was successful"
+
+Scenario:
+ When I fill in "email3" with "foo@bar"
+ And I press button "Save3"
+ And form submits
+ Then I should see "some header"
+ And I should see "some text"
+
+Scenario:
+ When I fill in "email4" with "foo@bar"
+ And I press button "Save4"
+ And form submits
+ Then the "email4" field should start with "random is"
+

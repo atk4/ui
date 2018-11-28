@@ -83,6 +83,19 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * @Then The :field field should start with :value
+     */
+    public function fieldShouldContain($field, $value)
+    {
+        $field = $this->assertSession()->fieldExists($field);
+
+        if(0 !== strpos($field->getValue(), $value)) {
+            throw new \Exception('Field value '.$field->getValue().' does not start with '.$value);
+        }
+
+    }
+
+    /**
      * @Then dump :arg1
      */
     public function dump($arg1)
