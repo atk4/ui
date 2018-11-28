@@ -53,14 +53,15 @@ $tab = $tabs->addTab('Handler Output');
 
 $tab->add(['Header', 'Form can respond with manually generated error']);
 $form = $tab->add('Form');
-$form->addField('email');
+$form->addField('email1');
+$form->buttonSave->set('Save1');
 $form->onSubmit(function ($form) {
-    return $form->error('email', 'some error action '.rand(1, 100));
+    return $form->error('email1', 'some error action '.rand(1, 100));
 });
 
 $tab->add(['Header', '..or success message']);
 $form = $tab->add('Form');
-$form->addField('email');
+$form->addField('email2');
 $form->onSubmit(function ($form) {
     return $form->success('form was successful');
 });

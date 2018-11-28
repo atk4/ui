@@ -62,6 +62,16 @@ class FeatureContext extends RawMinkContext implements Context
         $button->click();
     }
 
+
+    /**
+     * @Given I click link :arg1
+     */
+    public function iClickLink($arg1)
+    {
+        $link = $this->getSession()->getPage()->find('xpath', '//a[text()="'.$arg1.'"]');
+        $link->click();
+    }
+
     /**
      * @Then I see button :arg1
      */
