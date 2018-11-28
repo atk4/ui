@@ -62,7 +62,6 @@ class FeatureContext extends RawMinkContext implements Context
         $button->click();
     }
 
-
     /**
      * @Given I click link :arg1
      */
