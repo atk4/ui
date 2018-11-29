@@ -56,7 +56,7 @@ before_script:
 after_script:
     - echo $TRAVIS_BRANCH
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -s coverage -f '*.xml'; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash); fi
 
 script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.1" ]]; then NC="--no-coverage"; fi
