@@ -6,7 +6,7 @@ use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 $coverage = new CodeCoverage();
 
-//$coverage->filter()->addDirectoryToWhitelist(dirname(realpath(__FILE__)).'/src');
+$coverage->filter()->addDirectoryToWhitelist('/');
 
 register_shutdown_function(function () use ($coverage) {
     $coverage->stop();
