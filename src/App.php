@@ -189,7 +189,7 @@ class App
                     }
                 }
 
-                $this->exit();
+                $this->callExit();
             });
         }
 
