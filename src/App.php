@@ -199,7 +199,8 @@ class App
         }
     }
 
-    function exit() {
+    public function exit()
+    {
         if (!$this->exit_called) {
             $this->exit_called = true;
             $this->hook('beforeExit');
