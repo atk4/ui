@@ -6,7 +6,8 @@ use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 $coverage = new CodeCoverage();
 
-$coverage->filter()->addDirectoryToWhitelist(dirname(dirname(realpath(__FILE__)).'/src'));
+$coverage->filter()->addDirectoryToWhitelist('../src');
+//$coverage->filter()->addDirectoryToWhitelist(dirname(dirname(realpath(__FILE__)).'/src'));
 
 register_shutdown_function(function () use ($coverage) {
     $coverage->stop();
