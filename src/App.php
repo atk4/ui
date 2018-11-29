@@ -199,8 +199,7 @@ class App
         }
     }
 
-    public function exit()
-    {
+    public function callExit() {
         if (!$this->exit_called) {
             $this->exit_called = true;
             $this->hook('beforeExit');
@@ -240,7 +239,7 @@ class App
             $l->run();
             $this->run_called = true;
         }
-        $this->exit();
+        $this->callExit();
     }
 
     /**
@@ -284,7 +283,7 @@ class App
             echo $output;
         }
         $this->run_called = true; // prevent shutdown function from triggering.
-        $this->exit();
+        $this->callExit();
     }
 
     /**
@@ -623,7 +622,7 @@ class App
         header('Location: '.$this->url($page));
 
         $this->run_called = true; // prevent shutdown function from triggering.
-        $this->exit();
+        $this->callExit();
     }
 
     /**
