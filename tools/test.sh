@@ -12,12 +12,12 @@ echo "Running UI tests"
 ./vendor/bin/behat || exit -1
 
 
-sleep 3
+#sleep 3
 
-mv phpunit.cov coverage/
+#mv phpunit.cov coverage/
 ls -l coverage/
 #mv coverage build/
-./vendor/bin/phpcov  merge coverage/ --clover clover.xml
+#./vendor/bin/phpcov  merge coverage/ --clover clover.xml
 
 #wc -l clover.xml
 #rm demos/coverage.php
