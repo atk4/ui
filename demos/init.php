@@ -10,6 +10,12 @@ if (file_exists('coverage.php')) {
 
 $app = new \atk4\ui\App();
 
+if (file_exists('coverage.php')) {
+    $app->addHook('beforeExit', function () {
+        coverage();
+    });
+}
+
 $app->title = 'Agile UI Demo v'.$app->version;
 
 if (file_exists('../public/atkjs-ui.min.js')) {

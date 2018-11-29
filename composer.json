@@ -26,8 +26,7 @@
         "codeclimate/php-test-reporter": "*",
         "behat/behat": "^3.4",
         "behat/mink-extension": "^2.2",
-        "fzaninotto/faker": "*",
-        "behat/mink-zombie-driver": "^1.4"
+        "fzaninotto/faker": "*"
     },
     "autoload": {
         "psr-4": {"atk4\\ui\\":"src/"}

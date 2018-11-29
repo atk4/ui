@@ -63,6 +63,15 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * @Given I click link :arg1
+     */
+    public function iClickLink($arg1)
+    {
+        $link = $this->getSession()->getPage()->find('xpath', '//a[text()="'.$arg1.'"]');
+        $link->click();
+    }
+
+    /**
      * @Then I see button :arg1
      */
     public function iSee($arg1)
@@ -70,6 +79,18 @@ class FeatureContext extends RawMinkContext implements Context
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
         if ($element->getAttribute('style')) {
             throw new \Exception("Element with text \"$arg1\" must be invisible");
+        }
+    }
+
+    /**
+     * @Then The :field field should start with :value
+     */
+    public function fieldShouldContain($field, $value)
+    {
+        $field = $this->assertSession()->fieldExists($field);
+
+        if (0 !== strpos($field->getValue(), $value)) {
+            throw new \Exception('Field value '.$field->getValue().' does not start with '.$value);
         }
     }
 
