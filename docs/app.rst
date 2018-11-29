@@ -335,7 +335,11 @@ and the following hooks are available:
 
  - beforeRender
  - beforeOutput
+ - beforeExit
 
+Hook beforeExit is called just when application is about to be terminated. If you are
+using :php:attr:`App::$always_run` = true, then this hook is guaranteed to execute always
+after output was sent. ATK will avoid calling this hook multiple times.
 
 .. note:: beforeOutput and beforeRender are not executed if $app->terminate() is called, even
     if parameter is passed.

@@ -188,11 +188,8 @@ class App
                         $this->caughtException($e);
                     }
                 }
-                if (!$this->exit_called) {
-                    $this->exit_called = true;
-                    $this->hook('beforeExit');
-                }
-                exit;
+
+                $this->exit();
             });
         }
 
@@ -200,6 +197,14 @@ class App
         if (!isset($this->ui_persistence)) {
             $this->ui_persistence = new Persistence\UI();
         }
+    }
+
+    function exit() {
+        if (!$this->exit_called) {
+            $this->exit_called = true;
+            $this->hook('beforeExit');
+        }
+        exit;
     }
 
     /**
@@ -234,11 +239,7 @@ class App
             $l->run();
             $this->run_called = true;
         }
-        if (!$this->exit_called) {
-            $this->exit_called = true;
-            $this->hook('beforeExit');
-        }
-        exit;
+        $this->exit();
     }
 
     /**
@@ -282,11 +283,7 @@ class App
             echo $output;
         }
         $this->run_called = true; // prevent shutdown function from triggering.
-        if (!$this->exit_called) {
-            $this->exit_called = true;
-            $this->hook('beforeExit');
-        }
-        exit;
+        $this->exit();
     }
 
     /**
@@ -625,11 +622,7 @@ class App
         header('Location: '.$this->url($page));
 
         $this->run_called = true; // prevent shutdown function from triggering.
-        if (!$this->exit_called) {
-            $this->exit_called = true;
-            $this->hook('beforeExit');
-        }
-        exit;
+        $this->exit();
     }
 
     /**
