@@ -13,8 +13,7 @@ register_shutdown_function(function () use ($coverage) {
 
     $writer = new \SebastianBergmann\CodeCoverage\Report\PHP();
 
-    $output = $writer->process($coverage, null);
-    file_put_contents(dirname(realpath(__FILE__)).'/../coverage/'.basename($_SERVER['SCRIPT_NAME'], '.php').'-'.uniqid().'.cov', $output);
+    $output = $writer->process($coverage, dirname(realpath(__FILE__)).'/../coverage/'.basename($_SERVER['SCRIPT_NAME'], '.php').'-'.uniqid().'.cov');
 });
 
 $coverage->start($_SERVER['SCRIPT_NAME']);
