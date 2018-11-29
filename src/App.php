@@ -180,6 +180,7 @@ class App
                         $this->caughtException($e);
                     }
                 }
+                $this->hook('beforeExit');
                 exit;
             });
         }
@@ -222,6 +223,7 @@ class App
             $l->run();
             $this->run_called = true;
         }
+        $this->hook('beforeExit');
         exit;
     }
 
@@ -266,6 +268,7 @@ class App
             echo $output;
         }
         $this->run_called = true; // prevent shutdown function from triggering.
+        $this->hook('beforeExit');
         exit;
     }
 
@@ -605,6 +608,7 @@ class App
         header('Location: '.$this->url($page));
 
         $this->run_called = true; // prevent shutdown function from triggering.
+        $this->hook('beforeExit');
         exit;
     }
 
