@@ -66,6 +66,14 @@ class App
      */
     public $run_called = false;
 
+    /**
+     * Will be set to true, when exit is called. Sometimes exit is intercepted by shutdown
+     * handler and we don't want to execute 'beforeExit' multiple times.
+     *
+     * @var bool
+     */
+    public $exit_called = false;
+
     // @var bool
     public $_cwd_restore = true;
 
@@ -180,7 +188,10 @@ class App
                         $this->caughtException($e);
                     }
                 }
-                $this->hook('beforeExit');
+                if (!$this->exit_called) {
+                    $this->exit_called = true;
+                    $this->hook('beforeExit');
+                }
                 exit;
             });
         }
@@ -223,7 +234,10 @@ class App
             $l->run();
             $this->run_called = true;
         }
-        $this->hook('beforeExit');
+        if (!$this->exit_called) {
+            $this->exit_called = true;
+            $this->hook('beforeExit');
+        }
         exit;
     }
 
@@ -268,7 +282,10 @@ class App
             echo $output;
         }
         $this->run_called = true; // prevent shutdown function from triggering.
-        $this->hook('beforeExit');
+        if (!$this->exit_called) {
+            $this->exit_called = true;
+            $this->hook('beforeExit');
+        }
         exit;
     }
 
@@ -608,7 +625,10 @@ class App
         header('Location: '.$this->url($page));
 
         $this->run_called = true; // prevent shutdown function from triggering.
-        $this->hook('beforeExit');
+        if (!$this->exit_called) {
+            $this->exit_called = true;
+            $this->hook('beforeExit');
+        }
         exit;
     }
 
