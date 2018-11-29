@@ -11,7 +11,7 @@ if (file_exists('coverage.php')) {
 $app = new \atk4\ui\App();
 
 if (file_exists('coverage.php')) {
-    $app->addHook('beforeExit', function() {
+    $app->addHook('beforeExit', function () {
         coverage();
     });
 }
