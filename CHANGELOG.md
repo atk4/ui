@@ -44,6 +44,7 @@ $l->addFilter('language', 'Lang');
 $l->setModel(new City($db));
 ```
 
+## 1.6.0
 
 **Closed issues:**
 
@@ -72,6 +73,51 @@ $l->setModel(new City($db));
 - Feature/support for serialized fields [\#548](https://github.com/atk4/ui/pull/548) (@romaninsh)
 - Implements FormField-\>onChange method [\#547](https://github.com/atk4/ui/pull/547) (@DarkSide666)
 - console-\>set\(\) captures executon info/output. [\#546](https://github.com/atk4/ui/pull/546) (@romaninsh)
+
+## 1.6.1
+
+Adding new form layouts, toast and switching to selenium for UI tests. Fixed readonly fields, added many tests
+and upgraded Fomantic-UI version. 
+
+
+**Closed issues:**
+
+- Can not tick CheckBox field when it is in group [\#593](https://github.com/atk4/ui/issues/593)
+- Message view Icon placement is strange [\#592](https://github.com/atk4/ui/issues/592)
+- Modal without any action buttons at the bottom still shows action div [\#583](https://github.com/atk4/ui/issues/583)
+- DropDown doesn't open when having showOnFocus=false [\#580](https://github.com/atk4/ui/issues/580)
+- Feature Request: JsReload should be able to set .api parameters \(like Form does\) [\#578](https://github.com/atk4/ui/issues/578)
+- Disabled fields can still be focused and edited [\#575](https://github.com/atk4/ui/issues/575)
+- Grid sorting memorizes previous sort order in URL [\#573](https://github.com/atk4/ui/issues/573)
+- Columns not sorting if added after setModel [\#544](https://github.com/atk4/ui/issues/544)
+- Calendar form field on\('change'\) event handler not working [\#521](https://github.com/atk4/ui/issues/521)
+- Upload FormField: Setting placeholder via placeholder does not work [\#483](https://github.com/atk4/ui/issues/483)
+- Placeholder is not picked up from Model field ui\[placeholder\] property [\#468](https://github.com/atk4/ui/issues/468)
+- type='money' is no longer using 'Money' column decorarot [\#414](https://github.com/atk4/ui/issues/414)
+
+**Merged pull requests:**
+
+- fix DropDown field HTML markup \(getTag usage\) [\#604](https://github.com/atk4/ui/pull/604) (@DarkSide666)
+- fix/Readonly state for Lookup and Autocomplete [\#603](https://github.com/atk4/ui/pull/603) (@ibelar)
+- fix/Dropdown multiple value [\#602](https://github.com/atk4/ui/pull/602) (@ibelar)
+- Feature/form section [\#600](https://github.com/atk4/ui/pull/600) (@ibelar)
+- Feature/accordion only [\#599](https://github.com/atk4/ui/pull/599) (@ibelar)
+- Feature/fix add column [\#597](https://github.com/atk4/ui/pull/597) (@DarkSide666)
+- don't show never\_persist fields as changed - that's confusing [\#596](https://github.com/atk4/ui/pull/596) (@DarkSide666)
+- Switched to selenium... and it works, YEY [\#595](https://github.com/atk4/ui/pull/595) (@romaninsh)
+- Feature/Toast Module - Fomantic 2.6.4 Release [\#594](https://github.com/atk4/ui/pull/594) (@ibelar)
+- fix demo database [\#591](https://github.com/atk4/ui/pull/591) (@DarkSide666)
+- fix/lister demo template [\#588](https://github.com/atk4/ui/pull/588) (@ibelar)
+- Feature/dynamic scroll [\#587](https://github.com/atk4/ui/pull/587) (@ibelar)
+- Feature/demo lineend bug [\#586](https://github.com/atk4/ui/pull/586) (@DarkSide666)
+- Fix/\#573 Memorize url [\#585](https://github.com/atk4/ui/pull/585) (@ibelar)
+- Only show action \<div\> if there are actions [\#584](https://github.com/atk4/ui/pull/584) (@PhilippGrashoff)
+- Feature/jsReload with semantic configurable api options. [\#582](https://github.com/atk4/ui/pull/582) (@ibelar)
+- add formConfig to pass parameters to FUI .form\(\) [\#581](https://github.com/atk4/ui/pull/581) (@PhilippGrashoff)
+- Allow PHP 7.2+ to check method signatures [\#579](https://github.com/atk4/ui/pull/579) (@romaninsh)
+- View::on now takes callback and JS actions [\#577](https://github.com/atk4/ui/pull/577) (@PhilippGrashoff)
+- fix/ set input attribute to readonly or disable. [\#576](https://github.com/atk4/ui/pull/576) (@ibelar)
+- Sorting should happen later. Fix \#544 [\#574](https://github.com/atk4/ui/pull/574) (@DarkSide666)
 
 # 1.5 Release
 
