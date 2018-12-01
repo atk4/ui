@@ -1,13 +1,19 @@
 <div id="{$_id}" class="{_ui}ui{/} {$class} {_class}list{/}" style="{$style}" {$attributes}>
-| {rows}
-.ui.list
+  | {rows}
+  .ui.list
     | {row}
     .item
-        i(class="{$icon} icon")
-        .content
-            a.header(href="{$_href}") {$_title}
-            .description
-                | {descr}Value of "descr" column appears here. See docs on how to override Lister template{/}
-    | {/}
-| {/}
+      i(class="{$icon} icon")
+      .content
+        a.header(href="{$_href}") {$_title}
+        .description
+          | {descr}Value of "descr" column appears here. See docs on how to override Lister template{/}
+    | {/row}
+    | {empty}
+    .item
+      .content
+        .description
+          | No records
+    | {/empty}
+  | {/rows}
 </div>

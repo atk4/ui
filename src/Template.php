@@ -201,7 +201,7 @@ class Template implements \ArrayAccess
         }
 
         if ($this->isTopTag($tag)) {
-            $template = &$this->template;
+            $template = &$this->template; // BUG IS HERE - THIS DOESN'T RETURN REFERENCE TO THIS->TEMPLATE !!!
 
             return false;
         }

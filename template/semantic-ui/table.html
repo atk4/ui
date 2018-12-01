@@ -1,4 +1,4 @@
-<table id="{$_id}" class="{_ui}ui{/} {$class} {_class}{/}" style="{$style}" {$attributes}>
+<table id="{$_id}" class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
 <thead>{Head}
   <tr>{$cells}</tr>
   {/}
@@ -14,14 +14,13 @@
     <td colspan="{$columns}">No records.</td>
   </tr>
   {/}
-  {/tbody}
+  {/Body}
 </tbody>{has_foot}
 <tfoot>
   {Foot}
   {Totals}
   <tr>{$cells}</tr>
   {/}
-  {Paginator}
-  {/}
+  {$Paginator}
   {/}
 </tfoot>{/}</table>

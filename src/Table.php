@@ -118,10 +118,34 @@ class Table extends Lister
      */
     public $sort_order = null;
 
+    /**
+     * Constructor.
+     *
+     * @param null|string $class CSS class to add
+     */
     public function __construct($class = null)
     {
         if ($class) {
             $this->addClass($class);
+        }
+    }
+
+    /**
+     * initChunks method will create one column object that will be used to render
+     * all columns in the table unless you have specified a different
+     * column object.
+     */
+    public function initChunks()
+    {
+        if (!$this->t_head) {
+            $this->t_head = $this->template->cloneRegion('Head');
+            $this->t_row_master = $this->template->cloneRegion('Row');
+            $this->t_totals = $this->template->cloneRegion('Totals');
+            $this->t_empty = $this->template->cloneRegion('Empty');
+
+            $this->template->del('Head');
+            $this->template->del('Body');
+            $this->template->del('Foot');
         }
     }
 
@@ -401,25 +425,6 @@ class Table extends Lister
     }
 
     /**
-     * initChunks method will create one column object that will be used to render
-     * all columns in the table unless you have specified a different
-     * column object.
-     */
-    public function initChunks()
-    {
-        if (!$this->t_head) {
-            $this->t_head = $this->template->cloneRegion('Head');
-            $this->t_row_master = $this->template->cloneRegion('Row');
-            $this->t_totals = $this->template->cloneRegion('Totals');
-            $this->t_empty = $this->template->cloneRegion('Empty');
-
-            $this->template->del('Head');
-            $this->template->del('Body');
-            $this->template->del('Foot');
-        }
-    }
-
-    /**
      * Sets data Model of Table.
      *
      * If $columns is not defined, then automatically will add columns for all
@@ -510,6 +515,7 @@ class Table extends Lister
         } else {
         }
 
+        // stop jsPaginator if there are no more records to fetch
         if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
             $this->jsPaginator->jsIdle();
         }
