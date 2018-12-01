@@ -172,7 +172,6 @@ class Lister extends View
             //$this->template->set('_top', $rowHTML);
         }
 
-
         // stop jsPaginator if there are no more records to fetch
         if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
             $this->jsPaginator->jsIdle();

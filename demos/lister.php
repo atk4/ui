@@ -8,11 +8,10 @@ include 'database.php';
 $app->add('Header')->set('Default lister');
 $app->add(['Lister', 'defaultTemplate'=>'lister.html'])->setSource([
     ['icon'=>'map marker', 'title'=>'Krolewskie Jadlo', 'descr'=>'An excellent polish restaurant, quick delivery and hearty, filling meals'],
-    ['icon'=>'map marker', 'title'=>'Xian Famous Foods', 'descr'=>'A taste of Shaanxi\'s delicious culinary traditions, with delights like spicy cold noodles and lamb burgers.'],
-    ['icon'=>'check', 'title'=>'Sapporo Haru', 'descr'=>'Greenpoint\'s best choice for quick and delicious sushi'],
+    ['icon'=> 'map marker', 'title'=>'Xian Famous Foods', 'descr'=>'A taste of Shaanxi\'s delicious culinary traditions, with delights like spicy cold noodles and lamb burgers.'],
+    ['icon'=> 'check', 'title'=>'Sapporo Haru', 'descr'=>'Greenpoint\'s best choice for quick and delicious sushi'],
 ]);
 $app->add(['ui' => 'clearing divider']);
-
 
 // lister with custom template
 $view = $app->add(['View', 'template' => new \atk4\ui\Template('<div>
@@ -28,7 +27,6 @@ $view->add('Lister', 'List')
     ->setLimit(20);
 
 $app->add(['ui' => 'clearing divider']);
-
 
 // empty lister with default template
 $app->add('Header')->set('Empty default lister');
@@ -46,4 +44,4 @@ $view->add('Lister', 'List')
         $l->current_row['iso'] = strtolower($l->current_row['iso']);
     })
     ->setModel(new Country($db))
-    ->addCondition('id',-1); // no such records so model will be empty
+    ->addCondition('id', -1); // no such records so model will be empty
