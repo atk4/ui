@@ -171,10 +171,10 @@ class Template implements \ArrayAccess
      *
      * {greeting}hello{/},  {greeting}world{/}
      *
-     * calling getTagRefList('greeting',$template) will point
-     * second argument towards array(&array('hello'),&array('world'));
+     * calling $template =& getTagRefList('greeting') will point
+     * $template towards array(&array('hello'),&array('world'));
      *
-     * If $tag is specified as array, then $templates will
+     * If $tag is specified as an array, then $template will
      * contain all occurrences of all tags from the array.
      *
      * @param string|array $tag
@@ -192,7 +192,6 @@ class Template implements \ArrayAccess
                 }
             }
 
-=======
             return $res;
         }
 
@@ -222,53 +221,6 @@ class Template implements \ArrayAccess
         //return [&$this->tags[$tag][$ref - 1]];
         return $this->tags[$tag][$ref - 1];
     }
-
-    /*
-    public function getTagRefList($tag, &$template)
-    {
-        if (is_array($tag)) {
-            // TODO: test
-            $res = [];
-            foreach ($tag as $t) {
-                $template = [];
-                $this->getTagRefList($t, $template);
-
-                foreach ($template as &$tpl) {
-                    $res[] = &$tpl;
-                }
-
-                return true;
-            }
-        }
-
-        if ($this->isTopTag($tag)) {
-            $template =& $this->template; // BUG IS HERE - THIS DOESN'T RETURN REFERENCE TO THIS->TEMPLATE !!!
-
-            return false;
-        }
-
-        $a = explode('#', $tag);
-        $tag = array_shift($a);
-        $ref = array_shift($a);
-        if (!$ref) {
-            if (!isset($this->tags[$tag])) {
-                throw $this->exception('Tag not found in Template')
-                    ->addMoreInfo('tag', $tag);
-            }
-            $template = $this->tags[$tag];
-
-            return true;
-        }
-
-        if (!isset($this->tags[$tag][$ref - 1])) {
-            throw $this->exception('Tag not found in Template')
-                ->addMoreInfo('tag', $tag);
-        }
-        $template = [&$this->tags[$tag][$ref - 1]];
-
-        return true;
-    }
-    */
 
     /**
      * Checks if template has defined a specified tag.
