@@ -32,19 +32,19 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         // top tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $t1 =& $t->getTagRef('_top');
-        $this->assertEquals(['','foo#1'=>['hello'],', cruel ','bar#1'=>['world'],'. ','foo#2'=>['hello']], $t1);
+        $t1 = &$t->getTagRef('_top');
+        $this->assertEquals(['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']], $t1);
 
         $t1 = ['good bye']; // will change $t->template because it's by reference
         $this->assertEquals(['good bye'], $t->template);
 
         // any tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $t2 =& $t->getTagRef('foo');
+        $t2 = &$t->getTagRef('foo');
         $this->assertEquals(['hello'], $t2);
 
         $t2 = ['good bye']; // will change $t->template because it's by reference
-        $this->assertEquals(['','foo#1'=>['good bye'],', cruel ','bar#1'=>['world'],'. ','foo#2'=>['hello']], $t->template);
+        $this->assertEquals(['', 'foo#1'=>['good bye'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']], $t->template);
     }
 
     /**

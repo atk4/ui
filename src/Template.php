@@ -194,11 +194,12 @@ class Template implements \ArrayAccess
                     $res[] = &$tpl;
                 }
             }
+
             return true;
         }
 
         if ($this->isTopTag($tag)) {
-            $template =& $this->template; // BUG IS HERE - THIS DOESN'T RETURN REFERENCE TO THIS->TEMPLATE !!!
+            $template = &$this->template; // BUG IS HERE - THIS DOESN'T RETURN REFERENCE TO THIS->TEMPLATE !!!
 
             return false;
         }
@@ -224,6 +225,7 @@ class Template implements \ArrayAccess
 
         return true;
     }
+
     /*
     public function getTagRefList($tag, &$template)
     {
@@ -270,6 +272,7 @@ class Template implements \ArrayAccess
         return true;
     }
     */
+
     /**
      * Checks if template has defined a specified tag.
      *
