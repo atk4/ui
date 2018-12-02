@@ -127,8 +127,8 @@ class Template implements \ArrayAccess
     }
 
     /**
-     * This is a helper method which populates an array pointing
-     * to the place in the template referenced by a said tag.
+     * This is a helper method which returns reference to element of template
+     * array referenced by a said tag.
      *
      * Because there might be multiple tags and getTagRef is
      * returning only one template, it will return the first
@@ -136,20 +136,16 @@ class Template implements \ArrayAccess
      *
      * {greeting}hello{/},  {greeting}world{/}
      *
-     * calling getTagRef('greeting',$template) will point
-     * second argument towards &array('hello');
+     * calling &getTagRef('greeting') will return reference to &array('hello');
      *
      * @param string $tag
-     * @param array  $template
      *
-     * @return $this
+     * @return &array
      */
-    public function getTagRef($tag, &$template)
+    public function &getTagRef($tag)
     {
         if ($this->isTopTag($tag)) {
-            $template = &$this->template;
-
-            return $this;
+            return $this->template;
         }
 
         $a = explode('#', $tag);
@@ -160,9 +156,11 @@ class Template implements \ArrayAccess
                 ->addMoreInfo('tag', $tag)
                 ->addMoreInfo('tags', implode(', ', array_keys($this->tags)));
         }
-        $template = reset($this->tags[$tag]);
 
-        return $this;
+        reset($this->tags[$tag]);
+        $key = key($this->tags[$tag]) !== null ? key($this->tags[$tag]) : null;
+
+        return $this->tags[$tag][$key];
     }
 
     /**
@@ -190,18 +188,17 @@ class Template implements \ArrayAccess
             $res = [];
             foreach ($tag as $t) {
                 $template = [];
-                $this->getTagRefList($t, $te);
+                $this->getTagRefList($t, $template);
 
                 foreach ($template as &$tpl) {
                     $res[] = &$tpl;
                 }
-
-                return true;
             }
+            return true;
         }
 
         if ($this->isTopTag($tag)) {
-            $template = &$this->template; // BUG IS HERE - THIS DOESN'T RETURN REFERENCE TO THIS->TEMPLATE !!!
+            $template =& $this->template; // BUG IS HERE - THIS DOESN'T RETURN REFERENCE TO THIS->TEMPLATE !!!
 
             return false;
         }
@@ -218,6 +215,7 @@ class Template implements \ArrayAccess
 
             return true;
         }
+
         if (!isset($this->tags[$tag][$ref - 1])) {
             throw $this->exception('Tag not found in Template')
                 ->addMoreInfo('tag', $tag);
@@ -226,7 +224,52 @@ class Template implements \ArrayAccess
 
         return true;
     }
+    /*
+    public function getTagRefList($tag, &$template)
+    {
+        if (is_array($tag)) {
+            // TODO: test
+            $res = [];
+            foreach ($tag as $t) {
+                $template = [];
+                $this->getTagRefList($t, $template);
 
+                foreach ($template as &$tpl) {
+                    $res[] = &$tpl;
+                }
+
+                return true;
+            }
+        }
+
+        if ($this->isTopTag($tag)) {
+            $template =& $this->template; // BUG IS HERE - THIS DOESN'T RETURN REFERENCE TO THIS->TEMPLATE !!!
+
+            return false;
+        }
+
+        $a = explode('#', $tag);
+        $tag = array_shift($a);
+        $ref = array_shift($a);
+        if (!$ref) {
+            if (!isset($this->tags[$tag])) {
+                throw $this->exception('Tag not found in Template')
+                    ->addMoreInfo('tag', $tag);
+            }
+            $template = $this->tags[$tag];
+
+            return true;
+        }
+
+        if (!isset($this->tags[$tag][$ref - 1])) {
+            throw $this->exception('Tag not found in Template')
+                ->addMoreInfo('tag', $tag);
+        }
+        $template = [&$this->tags[$tag][$ref - 1]];
+
+        return true;
+    }
+    */
     /**
      * Checks if template has defined a specified tag.
      *
@@ -438,10 +481,7 @@ class Template implements \ArrayAccess
      */
     public function get($tag)
     {
-        $template = [];
-        $this->getTagRef($tag, $template);
-
-        return $template;
+        return /*&*/$this->getTagRef($tag); // return array not referenced to it
     }
 
     /**
@@ -465,6 +505,7 @@ class Template implements \ArrayAccess
 
             return $this;
         }
+
         if ($this->isTopTag($tag)) {
             $this->loadTemplateFromString('');
 
@@ -766,7 +807,7 @@ class Template implements \ArrayAccess
     /*
      * Returns HTML-formatted code with all tags
      *
-    public function _getDumpTags(&$template)
+    public function _getDumpTags($template)
     {
         $s = '';
         foreach ($template as $key => $val) {
