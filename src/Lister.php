@@ -180,7 +180,7 @@ class Lister extends View
 
         $html = $this->t_row->render();
         if ($this->template->hasTag('rows')) {
-            $this->template->appendHTML('rows',$html);
+            $this->template->appendHTML('rows', $html);
         } else {
             $this->template->appendHTML('_top', $html);
         }

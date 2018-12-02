@@ -55,7 +55,7 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         // top tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t1 = $t->getTagRefList('_top');
-        $this->assertEquals([ ['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']] ], $t1);
+        $this->assertEquals([['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']]], $t1);
 
         $t1[0] = ['good bye']; // will change $t->template because it's by reference
         $this->assertEquals(['good bye'], $t->template);
