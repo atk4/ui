@@ -49,7 +49,7 @@ class Lister extends View
     }
 
     /**
-     * From the current template will extract {row} into $this->t_row and {empty} into $this->t_empty.
+     * From the current template will extract {row} into $this->t_row_master and {empty} into $this->t_empty.
      */
     public function initChunks()
     {
@@ -65,10 +65,11 @@ class Lister extends View
 
         // data row template
         if ($this->template->hasTag('row')) {
-            $this->t_row = $this->template->cloneRegion('row');
+            $this->t_row_master = $this->template->cloneRegion('row');
             $this->template->del('rows');
         } else {
-            $this->t_row = $this->template;
+            $this->t_row_master = clone $this->template;
+            $this->template->del('_top');
         }
     }
 
@@ -125,13 +126,16 @@ class Lister extends View
             throw new Exception(['Lister requires you to specify template explicitly']);
         }
 
-        $this->t_row->trySet('_id', $this->name);
-
         // if no model is set, don't show anything (even warning)
         if (!$this->model) {
             return parent::renderView();
         }
 
+        // Generate template for data row
+        $this->t_row_master->trySet('_id', $this->name);
+        $this->t_row = clone $this->t_row_master;
+
+        // Iterate data rows
         $this->_rendered_rows_count = 0;
         foreach ($this->model as $this->current_id => $this->current_row) {
             if ($this->hook('beforeRow') === false) {
@@ -146,10 +150,10 @@ class Lister extends View
         // empty message
         if (!$this->_rendered_rows_count) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
-                if ($this->t_row == $this->template) {
-                    $this->template->appendHTML('_top', $this->t_empty->render());
-                } else {
+                if ($this->template->hasTag('rows')) {
                     $this->template->appendHTML('rows', $this->t_empty->render());
+                } else {
+                    $this->template->appendHTML('_top', $this->t_empty->render());
                 }
             }
         }
@@ -168,17 +172,17 @@ class Lister extends View
      */
     public function renderRow()
     {
-        //$this->t_row->set($this->model);
+        $this->t_row->set($this->current_row);
 
         $this->t_row->trySet('_title', $this->model->getTitle());
         $this->t_row->trySet('_href', $this->url(['id'=>$this->current_id]));
         $this->t_row->trySet('_id', $this->current_id);
 
-        $html = $this->t_row->set($this->current_row)->render();
-        if ($this->t_row == $this->template) {
-            $this->template->appendHTML('_top', $html);
+        $html = $this->t_row->render();
+        if ($this->template->hasTag('rows')) {
+            $this->template->appendHTML('rows',$html);
         } else {
-            $this->template->appendHTML('rows', $html);
+            $this->template->appendHTML('_top', $html);
         }
     }
 }
