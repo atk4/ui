@@ -186,7 +186,7 @@ class Template implements \ArrayAccess
         if (is_array($tag)) {
             $res = [];
             foreach ($tag as $t) {
-                $list =& $this->getTagRefList($t);
+                $list = &$this->getTagRefList($t);
                 foreach ($list as &$tpl) {
                     $res[] = &$tpl;
                 }
@@ -331,7 +331,7 @@ class Template implements \ArrayAccess
             $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
         }
 
-        $template =& $this->getTagRefList($tag);
+        $template = &$this->getTagRefList($tag);
         foreach ($template as &$ref) {
             $ref = [$value];
         }
@@ -401,7 +401,7 @@ class Template implements \ArrayAccess
             $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
         }
 
-        $template =& $this->getTagRefList($tag);
+        $template = &$this->getTagRefList($tag);
         foreach ($template as &$ref) {
             $ref[] = $value;
         }
@@ -464,7 +464,7 @@ class Template implements \ArrayAccess
             return $this;
         }
 
-        $template =& $this->getTagRefList($tag);
+        $template = &$this->getTagRefList($tag);
         foreach ($template as &$ref) {
             $ref = [];
         }
@@ -529,7 +529,7 @@ class Template implements \ArrayAccess
             return $this;
         }
 
-        $template =& $this->getTagRefList($tag);
+        $template = &$this->getTagRefList($tag);
         if ($template != $this->template) {
             foreach ($template as $key => $templ) {
                 $ref = $tag.'#'.($key + 1);
