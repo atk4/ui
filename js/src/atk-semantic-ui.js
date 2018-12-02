@@ -29,4 +29,4 @@ let atkSemantic = {
   formService: formService
 };
 
-module.exports = atkSemantic;
+export default atkSemantic;
