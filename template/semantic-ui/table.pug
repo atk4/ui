@@ -1,4 +1,4 @@
-<table id="{$_id}" class="{_ui}ui{/} {$class} {_class}{/}" style="{$style}" {$attributes}>
+<table id="{$_id}" class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
 thead
 
     //- Defines how header is rendered
@@ -23,7 +23,7 @@ tbody
         td(colspan="{$columns}") No records.
     | {/}
 
-    | {/tbody}
+    | {/Body}
 
 | {has_foot}
 tfoot
@@ -35,8 +35,7 @@ tfoot
     | {/}
 
     //- Paginator is used by a separate class
-    | {Paginator}
-    | {/}
+    | {$Paginator}
 
     | {/}
 | {/}
