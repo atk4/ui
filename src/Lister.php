@@ -178,7 +178,7 @@ class Lister extends View
         if ($this->t_row == $this->template) {
             $this->template->appendHTML('_top', $html);
         } else {
-            $this->template->appendHTML('rows',$html);
+            $this->template->appendHTML('rows', $html);
         }
     }
 }
