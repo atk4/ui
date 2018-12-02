@@ -132,23 +132,13 @@ class Lister extends View
             return parent::renderView();
         }
 
-        $rowHTML = '';
         $this->_rendered_rows_count = 0;
         foreach ($this->model as $this->current_id => $this->current_row) {
             if ($this->hook('beforeRow') === false) {
                 continue;
             }
 
-            $this->t_row->trySet('_title', $this->model->getTitle());
-            $this->t_row->trySet('_href', $this->url(['id'=>$this->current_id]));
-            $this->t_row->trySet('_id', $this->current_id);
-
-            if ($this->t_row == $this->template) {
-                $rowHTML .= $this->t_row->set($this->current_row)->render();
-            } else {
-                $rowHTML = $this->t_row->set($this->current_row)->render();
-                $this->template->appendHTML('rows', $rowHTML);
-            }
+            $this->renderRow();
 
             $this->_rendered_rows_count++;
         }
@@ -157,19 +147,11 @@ class Lister extends View
         if (!$this->_rendered_rows_count) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
                 if ($this->t_row == $this->template) {
-                    $rowHTML = $this->t_empty->render();
+                    $this->template->appendHTML('_top', $this->t_empty->render());
                 } else {
                     $this->template->appendHTML('rows', $this->t_empty->render());
                 }
             }
-        }
-
-        if ($this->t_row == $this->template) {
-            $this->template = new Template('{$c}');
-            $this->template->setHTML('c', $rowHTML);
-
-            // for some reason this does not work:
-            //$this->template->set('_top', $rowHTML);
         }
 
         // stop jsPaginator if there are no more records to fetch
@@ -178,5 +160,25 @@ class Lister extends View
         }
 
         return parent::renderView(); //$this->template->render();
+    }
+
+    /**
+     * Render individual row. Override this method if you want to do more
+     * decoration.
+     */
+    public function renderRow()
+    {
+        //$this->t_row->set($this->model);
+
+        $this->t_row->trySet('_title', $this->model->getTitle());
+        $this->t_row->trySet('_href', $this->url(['id'=>$this->current_id]));
+        $this->t_row->trySet('_id', $this->current_id);
+
+        $html = $this->t_row->set($this->current_row)->render();
+        if ($this->t_row == $this->template) {
+            $this->template->appendHTML('_top', $html);
+        } else {
+            $this->template->appendHTML('rows',$html);
+        }
     }
 }
