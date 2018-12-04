@@ -1,55 +1,78 @@
-/*global __dirname, require, module*/
-
+/*global __dirname:true, require:true*/
+/**
+ * Webpack v4 configuration file.
+ *
+ * Use mode from env variable pass to webpack in order to
+ * differentiate build mode.
+ * Use a function that return configuration object based
+ * on env variable.
+ *
+ * Using Development
+ *  - set webpack config mode to development
+ *  - devtools will use source-map under atk name;
+ *
+ * Using Production
+ *  - set webpack config mode to production
+ *  - change name of output file by adding .min
+ *
+ * Module export will output default value
+ * using libraryExport : 'default' for backward
+ * compatibility with previous release of the library.
+ *
+ * @type {webpack}
+ */
 const webpack = require('webpack');
-const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
-const env  = require('yargs').argv.env; // use --env with webpack 2
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const packageVersion = require("./package.json").version;
 
-let libraryName = 'atk';
+module.exports = env => {
+  // determine which mode
+  const isProduction = env.production;
+  const srcDir = path.resolve(__dirname, './src');
+  const publicDir = path.resolve(__dirname, '../public');
+  const libraryName = 'atk';
+  const filename = isProduction ? libraryName + 'js-ui.min.js' : libraryName + 'js-ui.js';
 
-let plugins = [
-  new webpack.DefinePlugin({
-    _ATKVERSION_ : JSON.stringify(require("./package.json").version)
-  })
-], outputFile;
-
-if (env === 'build') {
-  plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = libraryName + 'js-ui.min.js';
-} else {
-  outputFile = libraryName + 'js-ui.js';
-}
-
-const config = {
-  entry: __dirname + '/src/agile-toolkit-ui.js',
-  devtool: 'source-map',
-  output: {
-    path: __dirname + '/../public',
-    filename: outputFile,
-    library: libraryName,
-    libraryTarget: 'umd',
-    umdNamedDefine: true,
-  },
-  module: {
-    rules: [
-      {
-        test: /(\.jsx|\.js)$/,
-        loader: 'babel-loader',
-        exclude: /(node_modules|bower_components)/
-      }//,
-      // {
-      //   test: /(\.jsx|\.js)$/,
-      //   loader: "eslint-loader",
-      //   exclude: /node_modules/
-      // }
+  return {
+    entry: srcDir + '/agile-toolkit-ui.js',
+    mode: isProduction ? 'production' : 'development',
+    devtool: isProduction ? false : 'source-map',
+    output: {
+      path: publicDir,
+      filename: filename,
+      library: libraryName,
+      libraryTarget: 'umd',
+      libraryExport: 'default',
+      umdNamedDefine: true,
+    },
+    optimization: {
+      minimizer: [new UglifyJsPlugin()]
+    },
+    module: {
+      rules: [
+        {
+          test: /(\.jsx|\.js)$/,
+          loader: 'babel-loader',
+          exclude: /(node_modules|bower_components)/
+        }
+      ]
+    },
+    externals: {jquery: 'jQuery', draggable: 'Draggable'},
+    resolve: {
+      modules: [
+        path.resolve('./src'),
+        path.join(__dirname, 'node_modules')
+      ],
+      extensions: [
+        '.json',
+        '.js'
+      ],
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        _ATKVERSION_ : JSON.stringify(packageVersion)
+      })
     ]
-  },
-  externals: {jquery: 'jQuery', draggable: 'Draggable'},
-  resolve: {
-    modules: [path.resolve('./src'), path.join(__dirname, 'node_modules')],
-    extensions: ['.json', '.js'],
-  },
-  plugins: plugins
+  };
 };
-
-module.exports = config;

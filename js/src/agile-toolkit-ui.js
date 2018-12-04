@@ -1,3 +1,5 @@
+/*global _ATKVERSION_:true */
+
 import atk from 'atk-semantic-ui';
 import 'helpers/addParams';
 import {plugin, createAtkplugins} from "./plugin";
@@ -22,4 +24,4 @@ atk.phpDate = date;
  *  import atk from atk4JS;
  *  atk.uploadService.fileUpload();
  */
-module.exports = atk;
+export default atk;

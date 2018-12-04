@@ -1,5 +1,17 @@
 ## Release note
 
+### version 1.6.0
+
+Maintenance release.
+ - upgrade webpack to verson 4 (4.26.1);
+ - upgrade babel to version 7;
+ - upgrade eslint to version 5;
+ - remove unneccessary dependencies;
+ - add package-lock file for newer npm release;
+ - update webpack configuration to newer version;
+ - remove old babel preset env dependency;
+ - remove all vulnerabilities issue on npm install;
+
 ### version 1.5.0
 
  - add new plugin scroll. This new jQuery plugin allow to use dynamic scrolling to Lister, Table, Grid views.
