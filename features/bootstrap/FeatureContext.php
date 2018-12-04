@@ -154,19 +154,17 @@ class FeatureContext extends RawMinkContext implements Context
     public function iSelectInDropdown($select_option, $css_selector)
     {
 
-
         // TODO: not sure if initial wait is needed
         $dropdown_arrow = $this->webDriver->wait(5)->until(
             \WebDriverExpectedCondition::elementToBeClickable(\WebDriverBy::cssSelector($css_selector.' i.dropdown.icon'))
         );
         usleep(100000);
 
-
         // expand the menu
         $dropdown_arrow->click();
 
         // wait until options are visible
-        $this->webDriver->wait(5,200)->until(
+        $this->webDriver->wait(5, 200)->until(
             \WebDriverExpectedCondition::visibilityOfElementLocated(\WebDriverBy::cssSelector($css_selector.' div.menu.visible'))
         );
 
@@ -180,14 +178,14 @@ class FeatureContext extends RawMinkContext implements Context
 
         //if no option to select was specified, select some which is not
         //empty and not selected yet
-        if($select_option === null)  {
-            foreach($dropdown_options as $option) {
+        if ($select_option === null) {
+            foreach ($dropdown_options as $option) {
                 //do not select the show all option (....)
-                if($option->getAttribute('data-value') == '') {
+                if ($option->getAttribute('data-value') == '') {
                     continue;
                 }
                 //do not select the option already active
-                if(strpos($option->getAttribute('class'), 'selected') !== false) {
+                if (strpos($option->getAttribute('class'), 'selected') !== false) {
                     continue;
                 }
                 $option_selected = $option->getAttribute('data-value');
@@ -204,9 +202,8 @@ class FeatureContext extends RawMinkContext implements Context
         }
 
         // wait for dropdown menu to disappear
-        if($wait_menu_disappear) {
+        if ($wait_menu_disappear) {
             $this->waitUntilInvisible($css_selector.' div.menu.visible');
         }
     }
-
 }
