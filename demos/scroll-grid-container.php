@@ -9,7 +9,18 @@ $app->add(['View', 'ui' => 'ui clearing divider']);
 
 $app->add(['Header', 'Dynamic scroll in Grid with fixed column headers']);
 
-$g = $app->add(['Grid', 'menu' => false]);
-$m = $g->setModel(new Country($db));
+$c = $app->add('Columns');
 
-$g->addJsPaginatorInContainer(30, 400);
+$c1 = $c->addColumn();
+$g1 = $c1->add(['Grid', 'menu' => false]);
+$m1 = $g1->setModel(new Country($db));
+$g1->addJsPaginatorInContainer(30, 400);
+
+$c2 = $c->addColumn();
+$g2 = $c2->add(['Grid', 'menu' => false]);
+$m2 = $g2->setModel(new Country($db));
+$g2->addJsPaginatorInContainer(20, 200);
+
+$g3 = $c2->add(['Grid', 'menu' => false]);
+$m3 = $g3->setModel(new Country($db));
+$g3->addJsPaginatorInContainer(10, 150);
