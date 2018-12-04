@@ -160,13 +160,17 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Set display rule for a group collection.
      *
-     * @param array  $rules
-     * @param string $selector
+     * @param array         $rules
+     * @param string|object $selector
      *
      * @return $this
      */
     public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
     {
+        if (is_object($selector) && isset($selector->name)) {
+            $selector = '#'.$selector->name;
+        }
+
         $this->fieldsDisplayRules = $rules;
         $this->fieldDisplaySelector = $selector;
 
