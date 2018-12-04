@@ -13,6 +13,7 @@ class Lister extends View
      *
      * @var Template
      */
+    public $t_row_master = null;
     public $t_row = null;
 
     /**
