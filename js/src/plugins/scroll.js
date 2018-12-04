@@ -10,6 +10,8 @@ import apiService from "../services/ApiService";
  *  initialPage: 1      The initial page load when calling this plugin.
  *  appendTo: null      The html element where new content should be append to.
  *  allowJsEval: false  Whether or not javascript send in server response should be evaluate.
+ *  stateContext: null  A jQuery selector, where you would like fomantic-ui, to apply the stateContext to during the api call.
+ *                        if null, then a default loader will be apply to the bottom of the $inner element.
  */
 
 export default class scroll extends atkPlugin {
@@ -28,7 +30,8 @@ export default class scroll extends atkPlugin {
       allowJsEval: false ,
       hasFixTableHeader: false,
       tableContainerHeight: 400,
-      tableHeaderColor: '#ffffff'
+      tableHeaderColor: '#ffffff',
+      stateContext: null,
     };
     //set default option if not set.
     this.settings.options = Object.assign({}, defaultSettings, this.settings.options);
@@ -146,14 +149,17 @@ export default class scroll extends atkPlugin {
    * Ask server for more content.
    */
   loadContent() {
+    if (!this.settings.options.stateContext) {
+      this.addLoader();
+    }
+
     this.isWaiting = true;
-    this.addLoader();
     this.$inner.api({
       on: 'now',
       url: this.settings.uri,
       data: Object.assign({}, this.settings.uri_options, {page: this.nextPage}),
       method: 'GET',
-      stateContext: this.settings.options.hasFixTableHeader ? this.$el : this.$inner,
+      stateContext: this.settings.options.stateContext,
       onComplete: this.onComplete.bind(this),
     });
   }

@@ -11,7 +11,9 @@ $app->add(['View', 'ui' => 'ui clearing divider']);
 
 $app->add(['Header', 'Dynamic scroll in Container']);
 
-$scroll_container = $app->add('View')->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
+$v = $app->add('View')->addClass('ui basic segment atk-scroller');
+
+$scroll_container = $v->add('View')->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
 
 $lister_template = '<div id="{$_id}">{List}<div id="{$_id}" class="ui segment" style="height: 60px"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</div>{/}{$Content}</div>';
 
@@ -23,4 +25,4 @@ $l = $lister_container->add('Lister', 'List')->addHook('beforeRow', function ($l
 $l->setModel(new Country($db));
 
 //add dynamic scrolling.
-$l->addJsPaginator(20, [], $scroll_container);
+$l->addJsPaginator(20, ['stateContext' => '.atk-scroller'], $scroll_container);
