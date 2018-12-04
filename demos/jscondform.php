@@ -88,6 +88,7 @@ $g_other->addField('favorite_pet', ['width' => 'four']);
 $f_group->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language'=>['dev'=>'checked']]);
 
 //////////////////////////////////////////////////////////
+/*
 $app->add(['Header', 'Hide or show accordion section', 'size'=>2]);
 
 $f_acc = $app->add(new \atk4\ui\Form(['segment']));
@@ -138,3 +139,4 @@ $f_acc->setGroupDisplayRules(
     , $ship_section->owner    // this way we set selector to accordion section title block - so what? we still can't do anything about it
     //                       // BUT there is no way how to show/hide all accordion section including title and content
 );
+*/
