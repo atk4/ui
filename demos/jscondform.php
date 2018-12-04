@@ -2,8 +2,6 @@
 
 require 'init.php';
 
-
-
 //////////////////////////////////////////////////////////
 $app->add(['Header', 'Phone', 'size'=>2]);
 
@@ -21,8 +19,6 @@ $f_phone->setFieldsDisplayRules([
     'phone3' => ['phone2' => ['number', 'minLength[5]'], 'phone1' => ['number', 'minLength[5]']],
     'phone4' => ['phone3' => ['number', 'minLength[5]'], 'phone2' => ['number', 'minLength[5]'], 'phone1' => ['number', 'minLength[5]']],
 ]);
-
-
 
 //////////////////////////////////////////////////////////
 $app->add(['Header', 'Optional subscription', 'size'=>2]);
@@ -47,8 +43,6 @@ $f_sub->setFieldsDisplayRules([
     'f_gift'=> ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
 ]);
 
-
-
 //////////////////////////////////////////////////////////
 $app->add(['Header', 'Dog registration', 'size'=>2]);
 
@@ -64,8 +58,6 @@ $f_dog->addField('hair_cut', ['DropDown', 'values' => ['Short', 'Long']]);
 $f_dog->setFieldsDisplayRules([
     'hair_cut' => [['race' => 'contains[poodle]', 'age'=>'integer[1..5]'], ['race' => 'isExactly[bichon]']],
 ]);
-
-
 
 //////////////////////////////////////////////////////////
 $app->add(['Header', 'Hide or show group', 'size'=>2]);
@@ -94,8 +86,6 @@ $g_other->addField('favorite_pet', ['width' => 'four']);
 // Show group where 'php' belong when dev is checked.
 // Show group where 'language' belong when dev is checked.
 $f_group->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language'=>['dev'=>'checked']]);
-
-
 
 //////////////////////////////////////////////////////////
 $app->add(['Header', 'Hide or show accordion section', 'size'=>2]);
@@ -145,6 +135,6 @@ $f_acc->setGroupDisplayRules(
     // JS selector of container
     //,'.atk-form-group'     // this will hide group
     //,'.content'            // this will hide content of 2nd accordion section
-    ,$ship_section->owner    // this way we set selector to accordion section title block - so what? we still can't do anything about it
+    , $ship_section->owner    // this way we set selector to accordion section title block - so what? we still can't do anything about it
     //                       // BUT there is no way how to show/hide all accordion section including title and content
 );
