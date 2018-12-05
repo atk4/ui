@@ -130,8 +130,9 @@ class FeatureContext extends RawMinkContext implements Context
      */
     public function modalOpensWithText($arg1)
     {
+        $this->jqueryWait(20000);
         $modal = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
-        if ($modal->getAttribute('class') != 'ui modal visible active') {
+        if (!$modal || $modal->getText() !== $arg1) {
             throw new \Exception('No such modal');
         }
     }
@@ -144,6 +145,47 @@ class FeatureContext extends RawMinkContext implements Context
         /*$element =*/ $this->getSession()->getPage()->find('css', '.bar');
         //TODO: zombiejs does not support sse :(
         //var_dump($element->getOuterHtml());
+    }
+
+    /**
+     * @Then I select value :arg1 in lookup :arg2
+     *
+     * Find a value in a lookup field server response.
+     */
+    public function iSelectValueInLookup($arg1, $arg2)
+    {
+        $field = $this->getSession()->getPage()->find('css', 'input[name=country2]');
+        if ($field === null) {
+            throw new \Exception('Field not found: '.$arg2);
+        }
+        //get dropdown item from semantic ui
+        $lookup = $field->getParent();
+
+        //open dropdown from semantic-ui command. (just a click is not triggering it)
+        $script = '$("#'.$lookup->getAttribute('id').'").dropdown("show")';
+        $this->getSession()->evaluateScript($script);
+        $this->jqueryWait(20000);
+
+        //value should be available.
+        $value = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
+        if ($value === null ) {
+            throw new \Exception('Country not found: '.$arg1);
+        }
+    }
+
+    /**
+     * @Then I should see the dynamic modal
+     *
+     * Check if Lorem Ipsum dynamic modal open with dynamic content.
+     */
+    public function iShouldSeeTheDynamicModal()
+    {
+        $arg1 = "Color";
+        $this->jqueryWait(20000);
+        $label = $this->getSession()->getPage()->find('xpath', '//label[text()="'.$arg1.'"]');
+        if (!$label || $label->getText() !== $arg1) {
+            throw new \Exception('No such dynamic modal');
+        }
     }
 
     /**
@@ -205,5 +247,23 @@ class FeatureContext extends RawMinkContext implements Context
         if ($wait_menu_disappear) {
             $this->waitUntilInvisible($css_selector.' div.menu.visible');
         }
+    }
+
+    /**
+     * @Then I test javascript
+     */
+    public function iTestJavascript() {
+        $title = $this->getSession()->evaluateScript("return window.document.title;");
+        echo 'I\'m correctly on the webpage entitled "'.$title.'"';
+    }
+
+    /**
+     * Wait till jquery ajax request finished and no animation is perform.
+     *
+     * @param int $duration The maximum time to wait for the function.
+*/
+    protected function jqueryWait($duration = 1000)
+    {
+        $this->getSession()->wait($duration, '(0 === jQuery.active && 0 === jQuery(\':animated\').length)');
     }
 }

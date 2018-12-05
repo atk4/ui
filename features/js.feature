@@ -5,13 +5,13 @@ Feature: JS
 
 Scenario:
  Given I am on "js.php"
- Then I don't see button "Hidden Button" 
+ Then I don't see button "Hidden Button"
 
 Scenario:
  Given I am on "js.php"
  And I see button "Hide on click Button"
  When I press button "Hide on click Button"
- Then I don't see button "Hide on click Button" 
+ Then I don't see button "Hide on click Button"
 
 Scenario:
  Given I am on "js.php"
@@ -20,7 +20,7 @@ Scenario:
  Then I don't see button "B"
  And I don't see button "Hide button B"
 
- 
+
 Scenario:
  Given I am on "js.php"
  And I see button "C"
@@ -35,8 +35,8 @@ Scenario:
  And Wait until loading stops
  Then Label changes to a number
 
-#Scenario:
- #Given I am on "js.php"
- #When I press button "failure"
- #Then Modal opens with text "Everything is bad"
+Scenario:
+ Given I am on "js.php"
+ When I press button "failure"
+ Then Modal opens with text "Everything is bad"
 

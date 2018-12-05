@@ -78,7 +78,7 @@ $form->add(['Label', 'Input new country information here', 'top attached'], 'Abo
 $c = new Country($db);
 $c->addExpression('letter1', 'concat("Ends with ", substring([name], -1))');
 
-$form->addField('country1', [
+$form->addField('country_a', [
     'Lookup',
     'model'       => new Country($db),
     'hint'        => 'Lookup field is just like AutoComplete, supports all the same options.',
@@ -86,7 +86,7 @@ $form->addField('country1', [
     'search'      => ['name', 'iso', 'iso3'],
 ]);
 
-$lookup = $form->addField('country2', [
+$lookup = $form->addField('country_b', [
     'Lookup',
     'model'       => $c,
     'hint'        => 'However one or few "filtering" options can be added narrowing down the final result set',
