@@ -168,7 +168,7 @@ class FeatureContext extends RawMinkContext implements Context
 
         //value should be available.
         $value = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
-        if ($value === null ) {
+        if ($value === null) {
             throw new \Exception('Country not found: '.$arg1);
         }
     }
@@ -180,7 +180,7 @@ class FeatureContext extends RawMinkContext implements Context
      */
     public function iShouldSeeTheDynamicModal()
     {
-        $arg1 = "Color";
+        $arg1 = 'Color';
         $this->jqueryWait(20000);
         $label = $this->getSession()->getPage()->find('xpath', '//label[text()="'.$arg1.'"]');
         if (!$label || $label->getText() !== $arg1) {
@@ -252,8 +252,9 @@ class FeatureContext extends RawMinkContext implements Context
     /**
      * @Then I test javascript
      */
-    public function iTestJavascript() {
-        $title = $this->getSession()->evaluateScript("return window.document.title;");
+    public function iTestJavascript()
+    {
+        $title = $this->getSession()->evaluateScript('return window.document.title;');
         echo 'I\'m correctly on the webpage entitled "'.$title.'"';
     }
 
@@ -261,7 +262,7 @@ class FeatureContext extends RawMinkContext implements Context
      * Wait till jquery ajax request finished and no animation is perform.
      *
      * @param int $duration The maximum time to wait for the function.
-*/
+     */
     protected function jqueryWait($duration = 1000)
     {
         $this->getSession()->wait($duration, '(0 === jQuery.active && 0 === jQuery(\':animated\').length)');
