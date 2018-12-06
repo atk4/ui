@@ -180,7 +180,7 @@ class FeatureContext extends RawMinkContext implements Context
         $this->getSession()->wait(20000, '$("#'.$lookup->getAttribute('id').'").hasClass("visible")');
         //value should be available.
         $value = $lookup->find('xpath', '//div[text()="'.$arg1.'"]');
-        if (!$value && $value->getText() != $arg1) {
+        if (!$value || $value->getText() != $arg1) {
             throw new \Exception('Value not found: '.$arg1);
         }
         //When value are loaded, hide dropdown and select value from javascript.
