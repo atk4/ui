@@ -175,11 +175,13 @@ class FeatureContext extends RawMinkContext implements Context
         //open dropdown from semantic-ui command. (just a click is not triggering it)
         $script = '$("#'.$lookup->getAttribute('id').'").dropdown("show")';
         $this->getSession()->executeScript($script);
+        //Wait till dropdown is visible
+        //Cannot call jqueryWait because calling it will return prior from dropdown to fire ajax request.
         $this->getSession()->wait(20000, '$("#'.$lookup->getAttribute('id').'").hasClass("visible")');
         //value should be available.
         $value = $lookup->find('xpath', '//div[text()="'.$arg1.'"]');
-        if ($value === null) {
-            throw new \Exception('Country not found: '.$arg1);
+        if (!$value && $value->getText() != $arg1) {
+            throw new \Exception('Value not found: '.$arg1);
         }
         //When value are loaded, hide dropdown and select value from javascript.
         $script =  '$("#'.$lookup->getAttribute("id").'").dropdown("hide");';
