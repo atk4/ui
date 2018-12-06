@@ -41,7 +41,7 @@ class FeatureContext extends RawMinkContext implements Context
      */
     public function formSubmits()
     {
-        $button = $this->getSession()->wait(5000, "$('.form.success').not('.loading').length");
+        $this->jqueryWait(20000);
     }
 
     /**
@@ -127,12 +127,24 @@ class FeatureContext extends RawMinkContext implements Context
 
     /**
      * @Then Modal opens with text :arg1
+     *
+     * Check if text is present in modal or dynamic modal.
      */
     public function modalOpensWithText($arg1)
     {
-        $modal = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
-        if ($modal->getAttribute('class') != 'ui modal visible active') {
-            throw new \Exception('No such modal');
+        //wait until modal open
+        $this->getSession()->wait(2000, '$(".modal.transition.visible.active.top").length');
+        //wait for dynamic modal
+        $this->jqueryWait(10000);
+        //get modal
+        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.top');
+        if ($modal === null) {
+            throw new \Exception('No modal found');
+        }
+        //find text in modal
+        $text = $modal->find('xpath', '//div[text()="'.$arg1.'"]');
+        if (!$text || $text->getText() != $arg1) {
+            throw new \Exception('No such text in modal');
         }
     }
 
@@ -144,5 +156,55 @@ class FeatureContext extends RawMinkContext implements Context
         /*$element =*/ $this->getSession()->getPage()->find('css', '.bar');
         //TODO: zombiejs does not support sse :(
         //var_dump($element->getOuterHtml());
+    }
+
+    /**
+     * @Then I select value :arg1 in lookup :arg2
+     *
+     * Select a value in a lookup field.
+     */
+    public function iSelectValueInLookup($arg1, $arg2)
+    {
+        $field = $this->getSession()->getPage()->find('css', 'input[name='.$arg2.']');
+        if ($field === null) {
+            throw new \Exception('Field not found: '.$arg2);
+        }
+        //get dropdown item from semantic ui which is direct parent of input name field.
+        $lookup = $field->getParent();
+
+        //open dropdown from semantic-ui command. (just a click is not triggering it)
+        $script = '$("#'.$lookup->getAttribute('id').'").dropdown("show")';
+        $this->getSession()->executeScript($script);
+        //Wait till dropdown is visible
+        //Cannot call jqueryWait because calling it will return prior from dropdown to fire ajax request.
+        $this->getSession()->wait(20000, '$("#'.$lookup->getAttribute('id').'").hasClass("visible")');
+        //value should be available.
+        $value = $lookup->find('xpath', '//div[text()="'.$arg1.'"]');
+        if (!$value || $value->getText() != $arg1) {
+            throw new \Exception('Value not found: '.$arg1);
+        }
+        //When value are loaded, hide dropdown and select value from javascript.
+        $script = '$("#'.$lookup->getAttribute('id').'").dropdown("hide");';
+        $script .= '$("#'.$lookup->getAttribute('id').'").dropdown("set selected", '.$value->getAttribute('data-value').');';
+        $this->getSession()->executeScript($script);
+    }
+
+    /**
+     * @Then I test javascript
+     */
+    public function iTestJavascript()
+    {
+        $title = $this->getSession()->evaluateScript('return window.document.title;');
+        echo 'I\'m correctly on the webpage entitled "'.$title.'"';
+    }
+
+    /**
+     * Wait till jquery ajax request finished and no animation is perform.
+     *
+     * @param int $duration The maximum time to wait for the function.
+     */
+    protected function jqueryWait($duration = 1000)
+    {
+        $this->getSession()->wait($duration, '(0 === jQuery.active && 0 === jQuery(\':animated\').length)');
     }
 }
