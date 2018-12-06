@@ -41,7 +41,7 @@ class FeatureContext extends RawMinkContext implements Context
      */
     public function formSubmits()
     {
-        $button = $this->getSession()->wait(5000, "$('.form.success').not('.loading').length");
+        $this->jqueryWait(20000);
     }
 
     /**
@@ -127,13 +127,24 @@ class FeatureContext extends RawMinkContext implements Context
 
     /**
      * @Then Modal opens with text :arg1
+     *
+     * Check if text is present in modal or dynamic modal.
      */
     public function modalOpensWithText($arg1)
     {
-        $this->jqueryWait(20000);
-        $modal = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
-        if (!$modal || $modal->getText() !== $arg1) {
-            throw new \Exception('No such modal');
+        //wait until modal open
+        $this->getSession()->wait(2000, '$(".modal.transition.visible.active.top").length');
+        //wait for dynamic modal
+        $this->jqueryWait(10000);
+        //get modal
+        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.top');
+        if($modal === null) {
+            throw new \Exception('No modal found');
+        }
+        //find text in modal
+        $text = $modal->find('xpath', '//div[text()="'.$arg1.'"]');
+        if (!$text || $text->getText() != $arg1) {
+            throw new \Exception('No such text in modal');
         }
     }
 
@@ -150,103 +161,30 @@ class FeatureContext extends RawMinkContext implements Context
     /**
      * @Then I select value :arg1 in lookup :arg2
      *
-     * Find a value in a lookup field server response.
+     * Select a value in a lookup field.
      */
     public function iSelectValueInLookup($arg1, $arg2)
     {
-        $field = $this->getSession()->getPage()->find('css', 'input[name=country2]');
+        $field = $this->getSession()->getPage()->find('css', 'input[name='.$arg2.']');
         if ($field === null) {
             throw new \Exception('Field not found: '.$arg2);
         }
-        //get dropdown item from semantic ui
+        //get dropdown item from semantic ui which is direct parent of input name field.
         $lookup = $field->getParent();
 
         //open dropdown from semantic-ui command. (just a click is not triggering it)
         $script = '$("#'.$lookup->getAttribute('id').'").dropdown("show")';
-        $this->getSession()->evaluateScript($script);
-        $this->jqueryWait(20000);
-
+        $this->getSession()->executeScript($script);
+        $this->getSession()->wait(20000, '$("#'.$lookup->getAttribute('id').'").hasClass("visible")');
         //value should be available.
-        $value = $this->getSession()->getPage()->find('xpath', '//div[text()="'.$arg1.'"]');
+        $value = $lookup->find('xpath', '//div[text()="'.$arg1.'"]');
         if ($value === null) {
             throw new \Exception('Country not found: '.$arg1);
         }
-    }
-
-    /**
-     * @Then I should see the dynamic modal
-     *
-     * Check if Lorem Ipsum dynamic modal open with dynamic content.
-     */
-    public function iShouldSeeTheDynamicModal()
-    {
-        $arg1 = 'Color';
-        $this->jqueryWait(20000);
-        $label = $this->getSession()->getPage()->find('xpath', '//label[text()="'.$arg1.'"]');
-        if (!$label || $label->getText() !== $arg1) {
-            throw new \Exception('No such dynamic modal');
-        }
-    }
-
-    /**
-     * @Then I select :arg1 in dropdown :arg2
-     *
-     * Finds a dropdown, opens it, waits, selects specified value and waits for it to close
-     */
-    public function iSelectInDropdown($select_option, $css_selector)
-    {
-
-        // TODO: not sure if initial wait is needed
-        $dropdown_arrow = $this->webDriver->wait(5)->until(
-            \WebDriverExpectedCondition::elementToBeClickable(\WebDriverBy::cssSelector($css_selector.' i.dropdown.icon'))
-        );
-        usleep(100000);
-
-        // expand the menu
-        $dropdown_arrow->click();
-
-        // wait until options are visible
-        $this->webDriver->wait(5, 200)->until(
-            \WebDriverExpectedCondition::visibilityOfElementLocated(\WebDriverBy::cssSelector($css_selector.' div.menu.visible'))
-        );
-
-        //store current value for later rollback
-        // TODO: probably not needed for our tests
-        $this->dropDownInitiallySelected = $this->webDriver->findElement(\WebDriverBy::cssSelector($css_selector.' div.menu div.selected'))->getAttribute('data-value');
-
-        //select a non-selected element
-        $dropdown_options = $this->webDriver->findElements(\WebDriverBy::cssSelector($css_selector.' div.menu div'));
-        $option_selected = false;
-
-        //if no option to select was specified, select some which is not
-        //empty and not selected yet
-        if ($select_option === null) {
-            foreach ($dropdown_options as $option) {
-                //do not select the show all option (....)
-                if ($option->getAttribute('data-value') == '') {
-                    continue;
-                }
-                //do not select the option already active
-                if (strpos($option->getAttribute('class'), 'selected') !== false) {
-                    continue;
-                }
-                $option_selected = $option->getAttribute('data-value');
-                $option->click();
-                break;
-            }
-        } else {
-            //select specific value
-            $option = $this->webDriver->findElement(\WebDriverBy::cssSelector($css_selector.' div.menu div[data-value="'.$select_option.'"]'));
-            $option_selected = $option->getAttribute('data-value');
-            $option->click();
-
-            // TODO - need to assert that option exists here
-        }
-
-        // wait for dropdown menu to disappear
-        if ($wait_menu_disappear) {
-            $this->waitUntilInvisible($css_selector.' div.menu.visible');
-        }
+        //When value are loaded, hide dropdown and select value from javascript.
+        $script =  '$("#'.$lookup->getAttribute("id").'").dropdown("hide");';
+        $script .= '$("#'.$lookup->getAttribute("id").'").dropdown("set selected", '.$value->getAttribute('data-value').');';
+        $this->getSession()->executeScript($script);
     }
 
     /**

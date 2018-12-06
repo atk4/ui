@@ -32,11 +32,14 @@ $form->addField('country3', [
     'search'      => ['name', 'iso', 'iso3'],
 ]);
 
-//$acc = $form->getField('country_id');
-//$acc->actionRight = ['Button', 'Hello htere'];
 
 $form->onSubmit(function ($f) use ($db) {
-    return $f->model->ref('country1')['name'].' / '.$f->model->ref('country2')['name'].' / '.(new Country($db))->load($f->model['country3'])->get('name');
+    $str = $f->model->ref('country1')['name'].' '.$f->model->ref('country2')['name'].' '.(new Country($db))->tryLoad($f->model['country3'])->get('name');
+    $view = new \atk4\ui\Message('Select:'); // need in behat test.
+    $view->init();
+    $view->text->addParagraph($str);
+
+    return $view;
 });
 
 $app->add(['Header', 'Labels']);
@@ -94,3 +97,5 @@ $lookup = $form->addField('country_b', [
     'search'      => ['name', 'iso', 'iso3'],
 ]);
 $lookup->addFilter('letter1');
+
+$form->buttonSave->set('Add Countries');

@@ -40,6 +40,7 @@ $modal_vp3->set(function ($modal) {
 //When $modal_vp1->show() is activate, it will dynamically add this content to it.
 $modal_vp1->set(function ($modal) use ($modal_vp2) {
     $modal->add(new \atk4\ui\tests\ViewTester());
+    $modal->add(['View', 'Showing lorem ipsum']); //need in behat test.
     $modal->add(['LoremIpsum', 'size' => 2]);
     $form = $modal->add('Form');
     $form->addField('color', null, ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);

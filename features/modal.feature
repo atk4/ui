@@ -3,7 +3,8 @@ Feature: Modal
   As a developper
   I need to be able to test javascript
 
+
   Scenario:
     Given I am on "modal2.php"
     And I press button "Open Lorem Ipsum"
-    Then I should see the dynamic modal
+    Then Modal opens with text "Showing lorem ipsum"
