@@ -138,7 +138,7 @@ class FeatureContext extends RawMinkContext implements Context
         $this->jqueryWait(10000);
         //get modal
         $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.top');
-        if($modal === null) {
+        if ($modal === null) {
             throw new \Exception('No modal found');
         }
         //find text in modal
@@ -184,8 +184,8 @@ class FeatureContext extends RawMinkContext implements Context
             throw new \Exception('Value not found: '.$arg1);
         }
         //When value are loaded, hide dropdown and select value from javascript.
-        $script =  '$("#'.$lookup->getAttribute("id").'").dropdown("hide");';
-        $script .= '$("#'.$lookup->getAttribute("id").'").dropdown("set selected", '.$value->getAttribute('data-value').');';
+        $script = '$("#'.$lookup->getAttribute('id').'").dropdown("hide");';
+        $script .= '$("#'.$lookup->getAttribute('id').'").dropdown("set selected", '.$value->getAttribute('data-value').');';
         $this->getSession()->executeScript($script);
     }
 
