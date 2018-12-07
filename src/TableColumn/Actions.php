@@ -12,7 +12,7 @@ class Actions extends Generic
     public function init()
     {
         parent::init();
-        $this->addClass('right aligned collapsing');
+        $this->addClass('right aligned');
     }
 
     /**
@@ -55,6 +55,18 @@ class Actions extends Generic
         });
 
         return $this->addAction($button, $modal->show([$this->name=>$this->owner->jsRow()->data('id')]));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTag($position, $value, $attr = [])
+    {
+        if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
+            $attr['class'][] = 'collapsing';
+        }
+
+        return parent::getTag($position, $value, $attr);
     }
 
     public function getDataCellTemplate(\atk4\data\Field $f = null)

@@ -247,6 +247,7 @@ class Grid extends View
      */
     public function addJsPaginatorInContainer($ipp, $containerHeight, $options = [], $container = null, $scrollRegion = 'Body')
     {
+        $this->table->hasCollapsingCssActionColumn = false;
         $options = array_merge($options, [
           'hasFixTableHeader'    => true,
           'tableContainerHeight' => $containerHeight,

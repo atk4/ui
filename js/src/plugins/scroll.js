@@ -78,7 +78,8 @@ export default class scroll extends atkPlugin {
       $tableCopy.css({
         'position':'absolute',
         'background-color' : this.settings.options.tableHeaderColor,
-        'border' : this.$el.find('th').eq(1).css('border-left')
+        'border' : this.$el.find('th').eq(1).css('border-left'),
+        'z-index': 1
       });
       this.$scroll.prepend($tableCopy);
       this.$el.find('thead').hide();
