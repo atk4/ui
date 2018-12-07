@@ -119,6 +119,16 @@ class Table extends Lister
     public $sort_order = null;
 
     /**
+     * Make action columns in table use
+     * the collapsing css class.
+     * An action cell that is collapsing will
+     * only uses as much space as required.
+     *
+     * @var bool
+     */
+    public $hasCollapsingCssActionColumn = true;
+
+    /**
      * Constructor.
      *
      * @param null|string $class CSS class to add
