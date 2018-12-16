@@ -106,10 +106,9 @@ class DropDown extends Input
     public function getInput()
     {
         //fix for https://github.com/atk4/ui/issues/618
-        if(isset($this->field)) {
+        if (isset($this->field)) {
             $value = $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
-        }
-        else {
+        } else {
             $value = $this->content ?: '';
         }
 
