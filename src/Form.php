@@ -450,7 +450,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $fallback_seed = ['MultiLine', 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
         } elseif ($f->type != 'boolean') {
             if ($f->enum) {
-                $fallback_seed = ['DropDown', 'values' => array_combine($f->enum, $f->enum)];
+                $fallback_seed = ['DropDown'];
+                if (array_keys($f->enum) === range(0, count($f->enum) - 1)) {
+                    $fallback_seed['values'] = array_combine($f->enum, $f->enum);
+                } else {
+                    $fallback_seed['values'] = array_flip($f->enum);
+                }
             } elseif ($f->values) {
                 $fallback_seed = ['DropDown', 'values' => $f->values];
             } elseif (isset($f->reference)) {
