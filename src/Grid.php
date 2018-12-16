@@ -358,7 +358,8 @@ class Grid extends View
 
         $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
 
-        if ($q = $this->stickyGet('_q')) {
+        $q = trim($this->stickyGet('_q'));
+        if ($q !== '') {
             $cond = [];
             foreach ($fields as $field) {
                 $cond[] = [$field, 'like', '%'.$q.'%'];
