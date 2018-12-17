@@ -23,7 +23,7 @@ class Lookup extends Input
      *
      * @var string
      */
-    public $empty = '...';
+    public $empty = "\u{00a0}"; // Unicode NBSP
 
     /**
      * Either set this to array of fields which must be searched (e.g. "name", "surname"), or define this
