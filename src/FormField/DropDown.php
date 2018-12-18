@@ -175,13 +175,13 @@ class DropDown extends Input
 
         $options = [];
         if (!$this->isValueRequired && !$this->isMultiple) {
-            $options[] = ['div',  'class' => 'item', 'data-value' => '', $this->empty || is_numeric($this->empty) ? [$this->empty] : []];
+            $options[] = ['div',  'class' => 'item', 'data-value' => '', $this->empty || is_numeric($this->empty) ? [(string) $this->empty] : []];
         }
 
         if (isset($this->model)) {
             foreach ($this->model as $key => $row) {
                 $title = $row->getTitle();
-                $item = ['div', 'class' => 'item', 'data-value' => (string) $key, $title || is_numeric($title) ? [$title] : []];
+                $item = ['div', 'class' => 'item', 'data-value' => (string) $key, $title || is_numeric($title) ? [(string) $title] : []];
                 $options[] = $item;
             }
         } else {
@@ -191,7 +191,7 @@ class DropDown extends Input
                         $val = "<i class='{$val['icon']}'></i>{$val[0]}";
                     }
                 }
-                $item = ['div', 'class' => 'item', 'data-value' => (string) $key, $val || is_numeric($val) ? [$val] : []];
+                $item = ['div', 'class' => 'item', 'data-value' => (string) $key, $val || is_numeric($val) ? [(string) $val] : []];
                 $options[] = $item;
             }
         }

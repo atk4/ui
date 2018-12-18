@@ -200,11 +200,15 @@ class Lookup extends Input
 
         $data = [];
         foreach ($this->model as $junk) {
-            $data[] = ['id' => $this->model[$id_field], 'name' => $this->model[$title_field]];
+            // IMPORTANT: always convert data to string, otherwise numbers can be rounded by JS
+            $data[] = [
+                'id'   => (string) $this->model[$id_field],
+                'name' => (string) $this->model[$title_field],
+            ];
         }
 
         if ($this->empty) {
-            array_unshift($data, ['id' => 0, 'name' => $this->empty]);
+            array_unshift($data, ['id' => '0', 'name' => (string) $this->empty]);
         }
 
         $this->app->terminate(json_encode([
@@ -513,7 +517,9 @@ class Lookup extends Input
                 $this->field->set(null);
             } else {
                 $chain = new jQuery('#'.$this->name.'-ac');
-                $chain->dropdown('set value', $this->model[$id_field])->dropdown('set text', $this->model[$title_field]);
+                // IMPORTANT: always convert data to string, otherwise numbers can be rounded by JS
+                $chain->dropdown('set value', (string) $this->model[$id_field])
+                        ->dropdown('set text', (string) $this->model[$title_field]);
                 $this->js(true, $chain);
             }
         }
