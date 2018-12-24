@@ -1,6 +1,5 @@
 <?php
 
-
 // A very basic file that sets up Agile Data to be used in some demonstrations
 try {
     if (file_exists('db.php')) {
