@@ -1,5 +1,6 @@
 <?php
 
+
 // A very basic file that sets up Agile Data to be used in some demonstrations
 try {
     if (file_exists('db.php')) {
@@ -98,7 +99,7 @@ if (!class_exists('Country')) {
                 $m['currency_symbol'] = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
                  */
 
-                $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
+                $map = ['EUR' => 'â‚¬', 'USD' => '$', 'GBP' => 'Â£'];
                 $m['currency_symbol'] = isset($map[$m['currency']]) ? $map[$m['currency']] : '?';
             });
 
