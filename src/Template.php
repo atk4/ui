@@ -298,10 +298,11 @@ class Template implements \ArrayAccess
      * @param string             $value
      * @param bool               $encode Should we HTML encode content
      * @param bool               $append Should we append value instead of changing it?
+     * @param bool               $strict Should we throw exception if tag not found?
      *
      * @return $this
      */
-    protected function _setOrAppend($tag, $value = null, $encode = true, $append = false)
+    protected function _setOrAppend($tag, $value = null, $encode = true, $append = false, $strict = true)
     {
         // check tag
         if ($tag instanceof Model) {
@@ -309,10 +310,10 @@ class Template implements \ArrayAccess
         }
 
         // $tag passed as associative array [tag=>value]
-        // in this case we don't throw exception in tags don't exist
+        // in this case we don't throw exception if tags don't exist
         if (is_array($tag) && $value === null) {
             foreach ($tag as $t => $v) {
-                $this->_trySetOrAppend($t, $v, $encode, $append);
+                $this->_setOrAppend($t, $v, $encode, $append, false);
             }
 
             return $this;
@@ -320,6 +321,11 @@ class Template implements \ArrayAccess
 
         if (!$tag) {
             throw new Exception(['Tag is not set', 'tag' => $tag, 'value' => $value]);
+        }
+
+        // ignore not existent tags
+        if (!$strict && !$this->hasTag($tag)) {
+            return $this;
         }
 
         // check value
@@ -346,30 +352,6 @@ class Template implements \ArrayAccess
     }
 
     /**
-     * Same as _setOrAppend() but will not throw exception if tag doesn't exist.
-     *
-     * @param string|array|Model $tag
-     * @param string             $value
-     * @param bool               $encode Should we HTML encode content
-     * @param bool               $append Should we append value instead of changing it?
-     *
-     * @return $this
-     */
-    protected function _trySetOrAppend($tag, $value = null, $encode = true, $append = false)
-    {
-        // check tag
-        if ($tag instanceof Model) {
-            $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
-        }
-
-        if (!$tag) {
-            throw new Exception(['Tag is not set', 'tag' => $tag, 'value' => $value]);
-        }
-
-        return $this->hasTag($tag) ? $this->_setOrAppend($tag, $value, $encode, $append) : $this;
-    }
-
-    /**
      * This function will replace region referred by $tag to a new content.
      *
      * If tag is found inside template several times, all occurrences are
@@ -391,7 +373,7 @@ class Template implements \ArrayAccess
      */
     public function set($tag, $value = null, $encode = true)
     {
-        return $this->_setOrAppend($tag, $value, $encode, false);
+        return $this->_setOrAppend($tag, $value, $encode, false, true);
     }
 
 
@@ -407,7 +389,7 @@ class Template implements \ArrayAccess
      */
     public function trySet($tag, $value = null, $encode = true)
     {
-        return $this->_trySetOrAppend($tag, $value, $encode, false);
+        return $this->_setOrAppend($tag, $value, $encode, false, false);
     }
 
     /**
@@ -421,7 +403,7 @@ class Template implements \ArrayAccess
      */
     public function setHTML($tag, $value = null)
     {
-        return $this->_setOrAppend($tag, $value, false, false);
+        return $this->_setOrAppend($tag, $value, false, false, true);
     }
 
     /**
@@ -435,7 +417,7 @@ class Template implements \ArrayAccess
      */
     public function trySetHTML($tag, $value = null)
     {
-        return $this->_trySetOrAppend($tag, $value, false, false);
+        return $this->_setOrAppend($tag, $value, false, false, false);
     }
 
     /**
@@ -449,7 +431,7 @@ class Template implements \ArrayAccess
      */
     public function append($tag, $value, $encode = true)
     {
-        return $this->_setOrAppend($tag, $value, $encode, true);
+        return $this->_setOrAppend($tag, $value, $encode, true, true);
     }
 
     /**
@@ -464,7 +446,7 @@ class Template implements \ArrayAccess
      */
     public function tryAppend($tag, $value, $encode = true)
     {
-        return $this->_trySetOrAppend($tag, $value, $encode, true);
+        return $this->_setOrAppend($tag, $value, $encode, true, false);
     }
 
     /**
@@ -478,7 +460,7 @@ class Template implements \ArrayAccess
      */
     public function appendHTML($tag, $value)
     {
-        return $this->_setOrAppend($tag, $value, false, true);
+        return $this->_setOrAppend($tag, $value, false, true, true);
     }
 
     /**
@@ -492,7 +474,7 @@ class Template implements \ArrayAccess
      */
     public function tryAppendHTML($tag, $value)
     {
-        return $this->_trySetOrAppend($tag, $value, false, true);
+        return $this->_setOrAppend($tag, $value, false, true, false);
     }
 
     /**
