@@ -5,7 +5,6 @@
 namespace atk4\ui;
 
 use atk4\data\Model;
-use atk4\ui\Exception;
 
 /**
  * This class is a lightweight template engine. It's based around operating with
@@ -375,7 +374,6 @@ class Template implements \ArrayAccess
     {
         return $this->_setOrAppend($tag, $value, $encode, false, true);
     }
-
 
     /**
      * Same as set(), but won't generate exception for non-existing
