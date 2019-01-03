@@ -308,22 +308,23 @@ class Template implements \ArrayAccess
             $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
         }
 
+        // $tag passed as associative array [tag=>value]
+        // in this case we don't throw exception in tags don't exist
+        if (is_array($tag) && $value === null) {
+            foreach ($tag as $t => $v) {
+                $this->_trySetOrAppend($t, $v, $encode, $append);
+            }
+
+            return $this;
+        }
+
         if (!$tag) {
             throw new Exception(['Tag is not set', 'tag' => $tag, 'value' => $value]);
         }
 
         // check value
-        if (!is_string($value)) {
-            throw new Exception(['Value should be string', 'tag' => $tag, 'value' => $value]);
-        }
-
-        // $tag passed as associative array [tag=>value]
-        if (is_array($tag) && $value === null) {
-            foreach ($tag as $t => $v) {
-                $this->_setOrAppend($t, $v, $encode, $append);
-            }
-
-            return $this;
+        if (!is_scalar($value) && $value !== null) {
+            throw new Exception(['Value should be scalar', 'tag' => $tag, 'value' => $value]);
         }
 
         // encode value
