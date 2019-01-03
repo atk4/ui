@@ -543,9 +543,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                         $this->model->save();
 
                         return $this->success('Form data has been saved');
-                    } else {
-                        return new jsExpression('console.log([])', ['Form submission is not handled']);
                     }
+
+                    return new jsExpression('console.log([])', ['Form submission is not handled']);
                 }
             } catch (\atk4\data\ValidationException $val) {
                 $response = [];

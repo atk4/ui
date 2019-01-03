@@ -718,7 +718,6 @@ class App
                     // OH a bunch of tags
                     $output = '';
                     foreach ($tmp as $subtag) {
-                        //var_dump($subtag);
                         $output .= $this->getTag($subtag);
                     }
 
@@ -752,11 +751,7 @@ class App
         } elseif (is_array($value)) {
             $result = [];
             foreach ($value as $v) {
-                if (is_array($v)) {
-                    $result[] = $this->getTag(...$v);
-                } else {
-                    $result[] = $v;
-                }
+                $result[] = is_array($v) ? $this->getTag(...$v) : $v;
             }
             $value = implode('', $result);
         }
@@ -769,11 +764,7 @@ class App
             $tag = substr($tag, 0, -1);
             $postfix = '/';
         } elseif (substr($tag, 0, 1) == '/') {
-            if (isset($attr[0])) {
-                return '</'.$attr[0].'>';
-            }
-
-            return '<'.$tag.'>';
+            return isset($attr[0]) ? '</'.$attr[0].'>' : '<'.$tag.'>';
         } else {
             $postfix = '';
         }
