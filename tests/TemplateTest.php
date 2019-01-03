@@ -106,12 +106,12 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
     public function testHasTag()
     {
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        $this->assertTrue($t->hasTag(['foo','bar'])); // all tags exist
-        $this->assertFalse($t->hasTag(['foo','bar','qwe'])); // qwe tag does not exist
+        $this->assertTrue($t->hasTag(['foo', 'bar'])); // all tags exist
+        $this->assertFalse($t->hasTag(['foo', 'bar', 'qwe'])); // qwe tag does not exist
     }
 
     /**
-     * Test set() exception
+     * Test set() exception.
      *
      * @expectedException Exception
      */
@@ -122,7 +122,7 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
     }
 
     /**
-     * Test set() exception
+     * Test set() exception.
      *
      * @expectedException Exception
      */
@@ -133,7 +133,7 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
     }
 
     /**
-     * Test set, append, tryAppend, tryAppendHTML, del, tryDel
+     * Test set, append, tryAppend, tryAppendHTML, del, tryDel.
      */
     public function testSetAppendDel()
     {
@@ -150,16 +150,16 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         // set and append tests
         $t->set('foo', 'Hello');
         $t->set('foo', 'Hi'); // overwrites
-        $t->setHTML('foo','<b>Hi</b>'); // overwrites
-        $t->trySet('qwe','ignore this'); // ignores
-        $t->trySetHTML('qwe','<b>ignore</b> this'); // ignores
+        $t->setHTML('foo', '<b>Hi</b>'); // overwrites
+        $t->trySet('qwe', 'ignore this'); // ignores
+        $t->trySetHTML('qwe', '<b>ignore</b> this'); // ignores
 
-        $t->append('foo',' and'); // appends
-        $t->appendHTML('foo',' <b>welcome</b> my'); // appends
-        $t->tryAppend('foo',' dear'); // appends
-        $t->tryAppend('qwe','ignore this'); // ignores
-        $t->tryAppendHTML('foo',' and <b>smart</b>'); // appends html
-        $t->tryAppendHTML('qwe','<b>ignore</b> this'); // ignores
+        $t->append('foo', ' and'); // appends
+        $t->appendHTML('foo', ' <b>welcome</b> my'); // appends
+        $t->tryAppend('foo', ' dear'); // appends
+        $t->tryAppend('qwe', 'ignore this'); // ignores
+        $t->tryAppendHTML('foo', ' and <b>smart</b>'); // appends html
+        $t->tryAppendHTML('qwe', '<b>ignore</b> this'); // ignores
 
         $this->assertEquals('<b>Hi</b> and <b>welcome</b> my dear and <b>smart</b> guys', $t->render());
     }
@@ -190,15 +190,20 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         $t = new \atk4\ui\Template('{foo}hello{/}, {how}cruel{/how} {bar}world{/}. {foo}welcome{/}');
 
         // don't throw exception if tag does not exist
-        $t->eachTag('ignore', function(){});
+        $t->eachTag('ignore', function () {
+        });
 
         // replace values in these tags
-        $t->eachTag(['foo', 'bar'], function($value, $tag){return strtoupper($value);});
+        $t->eachTag(['foo', 'bar'], function ($value, $tag) {
+            return strtoupper($value);
+        });
         $this->assertEquals('HELLO, cruel WORLD. WELCOME', $t->render());
 
         // tag contains all template (for example in Lister)
         $t = new \atk4\ui\Template('{foo}hello{/}');
-        $t->eachTag('foo', function($value, $tag){return strtoupper($value);});
+        $t->eachTag('foo', function ($value, $tag) {
+            return strtoupper($value);
+        });
         $this->assertEquals('HELLO', $t->render());
     }
 
