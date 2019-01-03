@@ -581,6 +581,16 @@ class Template implements \ArrayAccess
             return $this;
         }
 
+        // array support
+        if (is_array($tag)) {
+            foreach ($tag as $t) {
+                $this->eachTag($t, $callable);
+            }
+
+            return $this;
+        }
+
+        // $tag should be string here
         $template = $this->getTagRefList($tag);
         if ($template != $this->template) {
             foreach ($template as $key => $templ) {
