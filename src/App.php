@@ -426,9 +426,9 @@ class App
      *
      * @param string $name
      *
-     * @return Template
-     *
      * @throws Exception
+     *
+     * @return Template
      */
     public function loadTemplate($name)
     {

@@ -575,9 +575,9 @@ class Template implements \ArrayAccess
      *
      * @param string $filename Template file name
      *
-     * @return $this
-     *
      * @throws Exception
+     *
+     * @return $this
      */
     public function load($filename)
     {
@@ -607,7 +607,7 @@ class Template implements \ArrayAccess
 
             return $this;
         }
-        
+
         return false;
     }
 
