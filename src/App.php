@@ -31,7 +31,11 @@ class App
     // @var Layout\Generic
     public $layout = null; // the top-most view object
 
-    // @var string
+    /**
+     * Set one or more directories where templates should reside.
+     *
+     * @var string|array
+     */
     public $template_dir = null;
 
     // @var string Name of skin
@@ -105,6 +109,9 @@ class App
      * @var LoggerInterface, target for objects with DebugTrait
      */
     public $logger = null;
+
+    // @var \atk4\data\Persistence
+    public $db = null;
 
     /**
      * Constructor.
@@ -415,27 +422,46 @@ class App
     }
 
     /**
-     * Load template.
+     * Load template by template file name.
      *
      * @param string $name
      *
      * @return Template
+     *
+     * @throws Exception
      */
     public function loadTemplate($name)
     {
         $template = new Template();
         $template->app = $this;
+
         if (in_array($name[0], ['.', '/', '\\']) || strpos($name, ':\\') !== false) {
-            $template->load($name);
+            return $template->load($name);
         } else {
-            $template->load($this->template_dir.'/'.$name);
+            $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
+            foreach ($dir as $td) {
+                if ($t = $template->tryLoad($td.'/'.$name)) {
+                    return $t;
+                }
+            }
         }
 
-        return $template;
+        throw new Exception(['Can not find template file', 'name'=>$name, 'template_dir'=>$this->template_dir]);
     }
 
-    public $db = null;
-
+    /**
+     * Connects database.
+     *
+     * @param string $dsn      Format as PDO DSN or use "mysql://user:pass@host/db;option=blah", leaving user and password arguments = null
+     * @param string $user
+     * @param string $password
+     * @param array  $args
+     *
+     * @throws \atk4\data\Exception
+     * @throws \atk4\dsql\Exception
+     *
+     * @return \atk4\data\Persistence
+     */
     public function dbConnect($dsn, $user = null, $password = null, $args = [])
     {
         return $this->db = $this->add(\atk4\data\Persistence::connect($dsn, $user, $password, $args));

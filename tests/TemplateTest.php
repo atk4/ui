@@ -77,4 +77,24 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         $t2[2] = ['planet'];   // will change $t->template "bar" tag because it's by reference too
         $this->assertEquals(['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['planet'], '. ', 'foo#2'=>['good bye']], $t->template);
     }
+    
+    /**
+     * Non existant template - throw exception
+     *
+     * @expectedException Exception
+     */
+     public function testBadTemplate1()
+     {
+        $t = new \atk4\ui\Template();
+        $t->load('bad_template_file');
+     }
+
+    /**
+     * Non existant template - no exception
+     */
+     public function testBadTemplate2()
+     {
+        $t = new \atk4\ui\Template();
+        $this->assertFalse($t->tryLoad('bad_template_file'));
+     }
 }
