@@ -71,7 +71,7 @@ $app->add(new \atk4\ui\FormField\Line(['iconLeft' => 'search',  'action' => $dd]
 
 // double actions are not supported but you can add them yourself
 $dd = new \atk4\ui\DropDown(['Articles', 'compact selection']);
-$dd->setSource(['All', ['name' => 'Articles', 'active' => true], 'Products']);
+$dd->setSource(['All', 'Services', 'Products']);
 $app->add(new \atk4\ui\FormField\Line(['iconLeft' => 'search',  'action' => $dd]))
     ->add(new \atk4\ui\Button('Search'), 'AfterAfterInput');
 

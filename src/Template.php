@@ -4,6 +4,8 @@
 
 namespace atk4\ui;
 
+use atk4\data\Model;
+
 /**
  * This class is a lightweight template engine. It's based around operating with
  * chunks of HTML code and the main aims are:.
@@ -224,6 +226,7 @@ class Template implements \ArrayAccess
 
     /**
      * Checks if template has defined a specified tag.
+     * If multiple tags are passed in as array, then return true if all of them exist.
      *
      * @param string|array $tag
      *
@@ -231,10 +234,18 @@ class Template implements \ArrayAccess
      */
     public function hasTag($tag)
     {
+        // check if all tags exist
         if (is_array($tag)) {
+            foreach ($tag as $t) {
+                if (!$this->hasTag($t)) {
+                    return false;
+                }
+            }
+
             return true;
         }
 
+        // check if tag exist
         $a = explode('#', $tag);
         $tag = array_shift($a);
         //$ref = array_shift($a); // unused
@@ -280,6 +291,66 @@ class Template implements \ArrayAccess
     // {{{ Manipulating contents of tags
 
     /**
+     * Internal method for setting or appending content in $tag.
+     *
+     * @param string|array|Model $tag
+     * @param string             $value
+     * @param bool               $encode Should we HTML encode content
+     * @param bool               $append Should we append value instead of changing it?
+     * @param bool               $strict Should we throw exception if tag not found?
+     *
+     * @return $this
+     */
+    protected function _setOrAppend($tag, $value = null, $encode = true, $append = false, $strict = true)
+    {
+        // check tag
+        if ($tag instanceof Model) {
+            $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
+        }
+
+        // $tag passed as associative array [tag=>value]
+        // in this case we don't throw exception if tags don't exist
+        if (is_array($tag) && $value === null) {
+            foreach ($tag as $t => $v) {
+                $this->_setOrAppend($t, $v, $encode, $append, false);
+            }
+
+            return $this;
+        }
+
+        if (!$tag) {
+            throw new Exception(['Tag is not set', 'tag' => $tag, 'value' => $value]);
+        }
+
+        // ignore not existent tags
+        if (!$strict && !$this->hasTag($tag)) {
+            return $this;
+        }
+
+        // check value
+        if (!is_scalar($value) && $value !== null) {
+            throw new Exception(['Value should be scalar', 'tag' => $tag, 'value' => $value]);
+        }
+
+        // encode value
+        if ($encode) {
+            $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+        }
+
+        // set or append value
+        $template = $this->getTagRefList($tag);
+        foreach ($template as &$ref) {
+            if ($append) {
+                $ref[] = $value;
+            } else {
+                $ref = [$value];
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * This function will replace region referred by $tag to a new content.
      *
      * If tag is found inside template several times, all occurrences are
@@ -293,135 +364,115 @@ class Template implements \ArrayAccess
      *
      * would read and set multiple region values from $_GET array.
      *
-     * @param mixed        $tag
-     * @param string|array $value
-     * @param bool         $encode
+     * @param string|array|Model $tag
+     * @param string             $value
+     * @param bool               $encode Should we HTML encode content
      *
      * @return $this
      */
     public function set($tag, $value = null, $encode = true)
     {
-        if (!$tag) {
-            return $this;
-        }
-
-        if (is_object($tag)) {
-            $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
-        }
-
-        if (is_array($tag)) {
-            if (is_null($value)) {
-                foreach ($tag as $s => $v) {
-                    $this->trySet($s, $v, $encode);
-                }
-
-                return $this;
-            }
-        }
-
-        if (is_array($value)) {
-            return $this;
-        }
-
-        if (is_object($value)) {
-            throw new Exception(['Value should not be an object', 'value'=>$value]);
-        }
-
-        if ($encode) {
-            $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
-        }
-
-        $template = $this->getTagRefList($tag);
-        foreach ($template as &$ref) {
-            $ref = [$value];
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set value of a tag to a HTML content. The value is set without
-     * encoding, so you must be sure to sanitize.
-     *
-     * @param mixed        $tag
-     * @param string|array $value
-     *
-     * @return $this
-     */
-    public function setHTML($tag, $value = null)
-    {
-        return $this->set($tag, $value, false);
-    }
-
-    /**
-     * See setHTML() but won't generate exception for non-existing
-     * $tag.
-     *
-     * @param mixed        $tag
-     * @param string|array $value
-     *
-     * @return $this
-     */
-    public function trySetHTML($tag, $value = null)
-    {
-        return $this->trySet($tag, $value, false);
+        return $this->_setOrAppend($tag, $value, $encode, false, true);
     }
 
     /**
      * Same as set(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param mixed        $tag
-     * @param string|array $value
-     * @param bool         $encode
+     * @param string|array|Model $tag
+     * @param string             $value
+     * @param bool               $encode
      *
      * @return $this
      */
     public function trySet($tag, $value = null, $encode = true)
     {
-        if (is_array($tag)) {
-            return $this->set($tag, $value, $encode);
-        }
+        return $this->_setOrAppend($tag, $value, $encode, false, false);
+    }
 
-        return $this->hasTag($tag) ? $this->set($tag, $value, $encode) : $this;
+    /**
+     * Set value of a tag to a HTML content. The value is set without
+     * encoding, so you must be sure to sanitize.
+     *
+     * @param string|array|Model $tag
+     * @param string             $value
+     *
+     * @return $this
+     */
+    public function setHTML($tag, $value = null)
+    {
+        return $this->_setOrAppend($tag, $value, false, false, true);
+    }
+
+    /**
+     * See setHTML() but won't generate exception for non-existing
+     * $tag.
+     *
+     * @param string|array|Model $tag
+     * @param string             $value
+     *
+     * @return $this
+     */
+    public function trySetHTML($tag, $value = null)
+    {
+        return $this->_setOrAppend($tag, $value, false, false, false);
     }
 
     /**
      * Add more content inside a tag.
      *
-     * @param mixed        $tag
-     * @param string|array $value
-     * @param bool         $encode
+     * @param string|array|Model $tag
+     * @param string             $value
+     * @param bool               $encode
      *
      * @return $this
      */
     public function append($tag, $value, $encode = true)
     {
-        if ($encode) {
-            $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
-        }
+        return $this->_setOrAppend($tag, $value, $encode, true, true);
+    }
 
-        $template = $this->getTagRefList($tag);
-
-        foreach ($template as &$ref) {
-            $ref[] = $value;
-        }
-
-        return $this;
+    /**
+     * Same as append(), but won't generate exception for non-existing
+     * $tag.
+     *
+     * @param string|array|Model $tag
+     * @param string             $value
+     * @param bool               $encode
+     *
+     * @return $this
+     */
+    public function tryAppend($tag, $value, $encode = true)
+    {
+        return $this->_setOrAppend($tag, $value, $encode, true, false);
     }
 
     /**
      * Add more content inside a tag. The content is appended without
      * encoding, so you must be sure to sanitize.
      *
-     * @param mixed        $tag
-     * @param string|array $value
+     * @param string|array|Model $tag
+     * @param string             $value
      *
      * @return $this
      */
     public function appendHTML($tag, $value)
     {
-        return $this->append($tag, $value, false);
+        return $this->_setOrAppend($tag, $value, false, true, true);
+    }
+
+    /**
+     * Same as append(), but won't generate exception for non-existing
+     * $tag.
+     *
+     * @param string|array|Model $tag
+     * @param string             $value
+     *
+     * @return $this
+     */
+    public function tryAppendHTML($tag, $value)
+    {
+        return $this->_setOrAppend($tag, $value, false, true, false);
     }
 
     /**
@@ -530,6 +581,16 @@ class Template implements \ArrayAccess
             return $this;
         }
 
+        // array support
+        if (is_array($tag)) {
+            foreach ($tag as $t) {
+                $this->eachTag($t, $callable);
+            }
+
+            return $this;
+        }
+
+        // $tag should be string here
         $template = $this->getTagRefList($tag);
         if ($template != $this->template) {
             foreach ($template as $key => $templ) {
