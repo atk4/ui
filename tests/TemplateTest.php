@@ -108,6 +108,7 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         $t = new \atk4\ui\Template();
         $this->assertFalse($t->tryLoad('bad_template_file'));
     }
+
     /**
      * Exception in getTagRefList().
      *

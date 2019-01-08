@@ -5,7 +5,7 @@ date_default_timezone_set('UTC');
 require '../vendor/autoload.php';
 
 if (file_exists('coverage.php')) {
-    include 'coverage.php';
+    include_once 'coverage.php';
 }
 
 $app = new \atk4\ui\App();
