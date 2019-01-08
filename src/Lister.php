@@ -173,7 +173,7 @@ class Lister extends View
      */
     public function renderRow()
     {
-        $this->t_row->set($this->current_row);
+        $this->t_row->trySet($this->current_row);
 
         $this->t_row->trySet('_title', $this->model->getTitle());
         $this->t_row->trySet('_href', $this->url(['id'=>$this->current_id]));

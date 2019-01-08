@@ -27,6 +27,6 @@ $form->addField('test_checked', ['CheckBox'])->set(true);
 $form->addField('also_checked', 'Hello World', 'boolean')->set(true);
 
     $app->add(new \atk4\ui\View(['ui' => 'divider']));
-    $c = new \atk4\ui\FormField\CheckBox(['Selected checkbox by default']);
+    $c = new \atk4\ui\FormField\CheckBox('Selected checkbox by default');
     $c->set(true);
     $app->add($c);

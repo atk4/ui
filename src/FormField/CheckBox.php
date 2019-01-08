@@ -24,16 +24,15 @@ class CheckBox extends Generic
     /**
      * Constructor.
      *
-     * @param string $label
-     * @param string $class
+     * @param string|array $label
+     * @param string|array $class
      */
     public function __construct($label = null, $class = null)
     {
-        $this->label = $label;
+        parent::__construct($label, $class);
 
-        if ($class) {
-            $this->addClass($class);
-        }
+        $this->label = $this->content;
+        $this->content = null;
     }
 
     /**
