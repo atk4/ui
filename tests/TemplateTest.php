@@ -90,6 +90,26 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
     }
 
     /**
+     * Non existant template - throw exception.
+     *
+     * @expectedException Exception
+     */
+    public function testBadTemplate1()
+    {
+        $t = new \atk4\ui\Template();
+        $t->load('bad_template_file');
+    }
+
+    /**
+     * Non existant template - no exception.
+     */
+    public function testBadTemplate2()
+    {
+        $t = new \atk4\ui\Template();
+        $this->assertFalse($t->tryLoad('bad_template_file'));
+    }
+
+    /**
      * Exception in getTagRefList().
      *
      * @expectedException Exception

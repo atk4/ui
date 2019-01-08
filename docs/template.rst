@@ -138,6 +138,11 @@ Alternatively, if you wish to load template from a file:
 
     Read file and load contents as a template.
 
+.. php:method:: tryLoad($file)
+
+    Try loading the template. Returns false if template couldn't be loaded. This can be used
+    if you attempt to load template from various locations.
+
 .. php:method:: loadTemplateFromString($string)
 
     Same as using constructor.
