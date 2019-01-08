@@ -328,6 +328,9 @@ Changing template contents
 
     Similar to append, but will not escape.
 
+.. php:method:: tryAppendHTML(tag, value)
+
+    Attempts to append non-escaped value, but will do nothing if tag does not exist.
 
 Example::
 
