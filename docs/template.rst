@@ -320,6 +320,10 @@ Changing template contents
 
     Escape and add value to existing tag.
 
+.. php:method:: tryAppend(tag, value)
+
+    Attempts to append value to existing but will do nothing if tag does not exist.
+
 .. php:method:: appendHTML(tag, value)
 
     Similar to append, but will not escape.
