@@ -56,7 +56,7 @@ class View implements jsExpressionable
      * UI element. If you set this variable value to string, it will
      * be appended at the end of the element class.
      *
-     * @var bool
+     * @var bool|string
      */
     public $ui = false;
 
