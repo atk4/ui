@@ -33,10 +33,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public $content = false;
 
     /**
-     * Will point to the Save button. If you don't want to have save, destroy
-     * it. Initialized by setLayout().
+     * Will point to the Save button. If you don't want to have save button, then set this to false
+     * or destroy it. Initialized by setLayout().
      *
-     * @var Button
+     * @var Button|false
      */
     public $buttonSave;
 
@@ -137,10 +137,13 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         // Layout needs to have a save button
-        $this->buttonSave = $this->layout->addButton(['Save', 'primary']);
-        $this->buttonSave->setAttr('tabindex', 0);
-        $this->buttonSave->on('click', $this->js()->form('submit'));
-        $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#'.$this->name]));
+        if ($this->buttonSave === null) {
+            // set default save button
+            $this->buttonSave = $this->layout->addButton(['Save', 'primary']);
+            $this->buttonSave->setAttr('tabindex', 0);
+            $this->buttonSave->on('click', $this->js()->form('submit'));
+            $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#'.$this->name]));
+        }
     }
 
     /**
