@@ -151,10 +151,11 @@ class Lister extends View
         // empty message
         if (!$this->_rendered_rows_count) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
+                $empty = isset($this->t_empty) ? $this->t_empty->render() : '';
                 if ($this->template->hasTag('rows')) {
-                    $this->template->appendHTML('rows', $this->t_empty->render());
+                    $this->template->appendHTML('rows', $empty);
                 } else {
-                    $this->template->appendHTML('_top', $this->t_empty->render());
+                    $this->template->appendHTML('_top', $empty);
                 }
             }
         }
