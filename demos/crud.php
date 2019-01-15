@@ -15,8 +15,8 @@ $cc = $c->addColumn(0, 'ui blue segment');
 $cc->add(['Header', 'Configured CRUD']);
 $crud = $cc->add([
     'CRUD',
-    'fieldsDefault'=> ['name'],
-    'fieldsCreate' => ['iso', 'iso3', 'name', 'phonecode'],
+    'fieldsCreate' => ['name', 'iso', 'iso3', 'numcode', 'phonecode'], // when creating then show more fields
+    'fieldsDefault'=> ['name'], // when updating then only allow to update name
     'ipp'          => 5,
     'paginator'    => ['range'=>2, 'class'=>['blue inverted']],  // reduce range on the paginator
     'menu'         => ['class'=>['green inverted']],
@@ -26,6 +26,14 @@ $crud = $cc->add([
 // Condition on the model can be applied on a model
 $m = new Country($db);
 $m->addCondition('numcode', '<', 200);
+$m->addHook('validate', function ($m2, $intent) {
+    $err = [];
+    if ($m2->get('numcode') >= 200) {
+        $err['numcode'] = 'Should be less than 200';
+    }
+
+    return $err;
+});
 $crud->setModel($m);
 
 // Because CRUD inherits Grid, you can also define custom actions
