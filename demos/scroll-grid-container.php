@@ -13,9 +13,8 @@ $c = $app->add('Columns');
 
 $c1 = $c->addColumn();
 $g1 = $c1->add(['CRUD']);
-$m1 = $g1->setModel(new Country($db), ['name', 'iso']);
+$m1 = $g1->setModel(new Country($db));//, ['name', 'iso']);
 $g1->addQuickSearch(['name', 'iso']);
-$g1->addJsPaginatorInContainer(30, 350);
 
 // demo for additional action buttons in CRUD + jsPaginator
 $g1->addModalAction(['icon'=>'cogs'], 'Details', function ($p, $id) use ($g1) {
@@ -24,6 +23,8 @@ $g1->addModalAction(['icon'=>'cogs'], 'Details', function ($p, $id) use ($g1) {
 $g1->addAction('red', function ($js) {
     return $js->closest('tr')->css('color', 'red');
 });
+// THIS SHOULD GO AFTER YOU CALL addAction() !!!
+$g1->addJsPaginatorInContainer(30, 350);
 
 $c2 = $c->addColumn();
 $g2 = $c2->add(['Grid', 'menu' => false]);
