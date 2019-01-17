@@ -13,7 +13,7 @@ $c = $app->add('Columns');
 
 $c1 = $c->addColumn();
 $g1 = $c1->add(['CRUD']);
-$m1 = $g1->setModel(new Country($db));//, ['name', 'iso']);
+$m1 = $g1->setModel(new Country($db)); //, ['name', 'iso']);
 $g1->addQuickSearch(['name', 'iso']);
 
 // demo for additional action buttons in CRUD + jsPaginator
