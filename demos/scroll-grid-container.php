@@ -14,6 +14,7 @@ $c = $app->add('Columns');
 $c1 = $c->addColumn();
 $g1 = $c1->add(['CRUD']);
 $m1 = $g1->setModel(new Country($db), ['name', 'iso']);
+$g1->addQuickSearch(['name','iso']);
 $g1->addJsPaginatorInContainer(30, 350);
 
 $c2 = $c->addColumn();
