@@ -428,6 +428,10 @@ class Grid extends View
      */
     public function applySort()
     {
+        if ($this->sortable === false) {
+            return;
+        }
+
         $sortBy = $this->getSortBy();
 
         if ($sortBy && $this->paginator) {
@@ -535,12 +539,7 @@ class Grid extends View
     public function renderView()
     {
         // take care of sorting
-        if ($this->sortable === null) {
-            $this->sortable = true;
-        }
-        if ($this->sortable) {
-            $this->applySort();
-        }
+        $this->applySort();
 
         return parent::renderView();
     }
