@@ -53,6 +53,10 @@ of it. Form uses :php:class:`Button` that you can tweak to your liking::
     $form->buttonSave->set('Subscribe');
     $form->buttonSave->icon = 'mail';
 
+or you can tweak it when you create form like this::
+
+    $form = $app->add(['Form', 'buttonSave'=>[null, 'Subscribe', 'icon'=>'mail']]);
+
 Form also relies on a ``atk4\ui\FormLayout`` class and displays fields through
 decorators defined at ``atk4\ui\FormField``. See dedicated documentation for:
 
@@ -120,7 +124,7 @@ a View layout for it in order to create their html element. In other words, layo
 is responsible of rendering html for fields.
 
 When Form is first initialized, it will provide and set a default Generic layout within the form.
-Then using Form::addField() will rely on that layout to add field View to it and render it properly.
+Then using :php:meth:`Form::addField()` will rely on that layout to add field View to it and render it properly.
 You may also supply your own layout when creating your form.
 
 Form layout may contain sub layouts. Each sub layout being just another layout view, it is possible
