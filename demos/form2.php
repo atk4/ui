@@ -10,6 +10,10 @@ $app->add(['Header', 'Database-driven form with an enjoyable layout']);
 
 // create form
 $form = $app->add(new \atk4\ui\Form(['segment']));
+//$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>false]));
+//$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>new \atk4\ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]));
+//$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]));
+//$form = $app->add(['Form', 'segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
 $form->add(['Label', 'Input new country information here', 'top attached'], 'AboveFields');
 
 $form->setModel(new Country($db), false);

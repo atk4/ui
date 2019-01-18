@@ -42,19 +42,13 @@ class Generic extends _Abstract
     /**
      * Adds Button.
      *
-     * @param array|string $button
+     * @param Button|array|string $seed
      *
      * @return \atk4\ui\Button
      */
-    public function addButton($button)
+    public function addButton($seed)
     {
-        if (is_array($button)) {
-            array_unshift($button, 'Button');
-        } elseif (is_string($button)) {
-            $button = ['Button', $button];
-        }
-
-        return $this->_add($button);
+        return $this->add($this->mergeSeeds(['Button'], $seed), 'Buttons');
     }
 
     /**

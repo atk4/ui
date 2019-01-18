@@ -176,9 +176,9 @@ abstract class _Abstract extends \atk4\ui\View
     /**
      * Adds Button into form layout.
      *
-     * @param array|string $button
+     * @param Button|array|string $seed
      *
      * @return \atk4\ui\Button
      */
-    abstract public function addButton($button);
+    abstract public function addButton($seed);
 }

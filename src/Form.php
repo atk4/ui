@@ -36,9 +36,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * Will point to the Save button. If you don't want to have save button, then set this to false
      * or destroy it. Initialized by setLayout().
      *
-     * @var Button|false
+     * @var Button|array|false Button object, seed or false to not show button at all
      */
-    public $buttonSave;
+    public $buttonSave = ['Button', 'Save', 'primary'];
 
     /**
      * When form is submitted successfully, this template is used by method
@@ -100,13 +100,31 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     // {{{ Base Methods
 
-    public function __construct($class = null)
+    /**
+     * Constructor.
+     *
+     * @param mixed $defaults CSS class or seed array
+     *
+     * @todo this should also call parent::__construct, but we have to refactor View::__construct method parameters too
+     */
+    public function __construct($defaults = [])
     {
-        if ($class) {
-            $this->addClass($class);
+        if (!is_array($defaults)) {
+            $defaults = [$defaults];
         }
+
+        // CSS class
+        if (array_key_exists(0, $defaults)) {
+            $this->addClass($defaults[0]);
+            unset($defaults[0]);
+        }
+
+        $this->setDefaults($defaults);
     }
 
+    /**
+     * Initialization.
+     */
     public function init()
     {
         parent::init();
@@ -136,10 +154,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             throw new Exception(['Unsupported specification of form layout. Can be array, string or object', 'layout' => $this->layout]);
         }
 
-        // Layout needs to have a save button
-        if ($this->buttonSave === null) {
-            // set default save button
-            $this->buttonSave = $this->layout->addButton(['Save', 'primary']);
+        // Add save button in layout
+        if ($this->buttonSave) {
+            $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
             $this->buttonSave->on('click', $this->js()->form('submit'));
             $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#'.$this->name]));

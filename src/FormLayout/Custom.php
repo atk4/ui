@@ -22,12 +22,12 @@ class Custom extends _Abstract
     /**
      * Adds Button into {$Buttons}.
      *
-     * @param array|string $button
+     * @param Button|array|string $seed
      *
      * @return \atk4\ui\Button
      */
-    public function addButton($button)
+    public function addButton($seed)
     {
-        return $this->add($this->mergeSeeds(['Button'], $button), 'Buttons');
+        return $this->add($this->mergeSeeds(['Button'], $seed), 'Buttons');
     }
 }
