@@ -224,6 +224,9 @@ class Grid extends View
             $this->paginator = null;
         }
 
+        if ($sortBy = $this->getSortBy()) {
+            $this->stickyGet($this->name.'_sort', $sortBy);
+        }
         $this->applySort();
 
         $this->table->addJsPaginator($ipp, $options, $container, $scrollRegion);
@@ -271,6 +274,10 @@ class Grid extends View
      */
     public function addQuickSearch($fields = [], $hasAutoQuery = false)
     {
+        if (!$this->model) {
+            throw new Exception(['Call setModel() before addQuickSearch()']);
+        }
+
         if (!$fields) {
             $fields = [$this->model->title_field];
         }
@@ -421,6 +428,10 @@ class Grid extends View
      */
     public function applySort()
     {
+        if ($this->sortable === false) {
+            return;
+        }
+
         $sortBy = $this->getSortBy();
 
         if ($sortBy && $this->paginator) {
@@ -528,12 +539,7 @@ class Grid extends View
     public function renderView()
     {
         // take care of sorting
-        if ($this->sortable === null) {
-            $this->sortable = true;
-        }
-        if ($this->sortable) {
-            $this->applySort();
-        }
+        $this->applySort();
 
         return parent::renderView();
     }
