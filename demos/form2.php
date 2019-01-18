@@ -68,30 +68,34 @@ $form->onSubmit(function ($f) {
     );
 });
 
-    class Person extends \atk4\data\Model
+// ============================================================================
+
+class Person extends \atk4\data\Model
+{
+    public $table = 'person';
+
+    public function init()
     {
-        public $table = 'person';
-
-        public function init()
-        {
-            parent::init();
-            $this->addField('name', ['required' => true]);
-            $this->addField('surname', ['ui'=>['placeholder'=>'e.g. Smith']]);
-            $this->addField('gender', ['enum' => ['M', 'F']]);
-        }
-
-        public function validate($intent = null)
-        {
-            $errors = parent::validate();
-
-            if ($this['name'] == $this['surname']) {
-                $errors['surname'] = 'Your surname cannot be same as the name';
-            }
-
-            return $errors;
-        }
+        parent::init();
+        $this->addField('name', ['required' => true]);
+        $this->addField('surname', ['ui'=>['placeholder'=>'e.g. Smith']]);
+        $this->addField('gender', ['enum' => ['M', 'F']]);
+        $this->hasOne('country_1_id', new Country());
+        $this->hasOne('country_2_id', [new Country(), 'ui'=>['form'=>new \atk4\ui\FormField\Lookup()]]);
     }
 
-    $app->add('Form')
-      ->addClass('segment')
-        ->setModel(new Person($db));
+    public function validate($intent = null)
+    {
+        $errors = parent::validate();
+
+        if ($this['name'] == $this['surname']) {
+            $errors['surname'] = 'Your surname cannot be same as the name';
+        }
+
+        return $errors;
+    }
+}
+
+$app->add('Form')
+  ->addClass('segment')
+    ->setModel(new Person($db));
