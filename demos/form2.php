@@ -80,7 +80,8 @@ class Person extends \atk4\data\Model
         $this->addField('name', ['required' => true]);
         $this->addField('surname', ['ui'=>['placeholder'=>'e.g. Smith']]);
         $this->addField('gender', ['enum' => ['M', 'F']]);
-        $this->hasOne('country_id', new Country());
+        $this->hasOne('country_lookup_id', new Country()); // this works fast
+        $this->hasOne('country_dropdown_id', [new Country(), 'ui'=>['form'=>new \atk4\ui\FormField\DropDown()]]); // this works slow
     }
 
     public function validate($intent = null)
