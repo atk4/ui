@@ -406,7 +406,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             } elseif ($f->values) {
                 $fallback_seed = ['DropDown', 'values' => $f->values];
             } elseif (isset($f->reference)) {
-                $fallback_seed = ['DropDown', 'model' => $f->reference->refModel()];
+                $fallback_seed = ['Lookup', 'model' => $f->reference->refModel()];
             }
         }
 
