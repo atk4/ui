@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "atk4/data": "dev-feature/add-array-ref-test",
+        "atk4/data": "dev-develop",
         "atk4/core": "dev-develop",
         "php": ">=5.6.0"
     },
