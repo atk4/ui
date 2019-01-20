@@ -52,6 +52,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem(['Column Filters'], ['tablefilter']);
     $form->addItem('Grid - Table+Bar+Search+Paginator', ['grid']);
     $form->addItem('CRUD - Full editing solution', ['crud']);
+    $form->addItem('CRUD with Array Persistence', ['crud3', 'icon' => 'star']);
 
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon' => 'cubes']);
     $basic->addItem('View', ['view']);
