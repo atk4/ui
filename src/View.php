@@ -997,6 +997,12 @@ class View implements jsExpressionable
         $chain = new jQuery();
         $actions[] = $chain;
 
+        if (isset($defaults['confirm'])) {
+            array_unshift($actions,
+                new jsExpression('if(!confirm([])){return;}', [$defaults['confirm']])
+            );
+        }
+
         $action = new jsFunction($actions);
 
         if ($selector) {
