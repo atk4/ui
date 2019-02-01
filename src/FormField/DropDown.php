@@ -84,6 +84,25 @@ class DropDown extends Input
     public $isMultiple = false;
 
     /**
+     * When using a model, here a custom function for creating the html
+     * of each dropdown option can be defined. The function gets each
+     * record of the model as parameter.
+     * Has to return array of format:
+     * ['htmlelement', 'class' => 'cssclasses', 'data-value' => 'someid', ['sometitle']]
+     * e.g. ['div', 'class' => 'item', 'data-value' => (string) $model->get($model->id_field), [$model->get($model->title_field)]]
+     * also compare to renderView() function
+     *
+     * Can be used to add Icon for example:
+     * function($row) {
+     *     $icon = $row->get('role') === 'admin' ? 'user cog' : 'user';
+     *     return ['div', 'class' => 'item', 'data-value' => (string) $model->get($model->id_field), ['<i class="'.$icon.'"></i>'.$model->get($model->title_field)]];
+     * }
+     *
+     * @var callable
+     */
+    public $renderRowFunction;
+
+    /**
      * Initialization.
      */
     public function init()
@@ -179,10 +198,22 @@ class DropDown extends Input
         }
 
         if (isset($this->model)) {
-            foreach ($this->model as $key => $row) {
-                $title = $row->getTitle();
-                $item = ['div', 'class' => 'item', 'data-value' => (string) $key, $title || is_numeric($title) ? [(string) $title] : []];
-                $options[] = $item;
+            //if callback is defined, use all model fields and pass each
+            //record to callback
+            if (is_callable($this->renderRowFunction)) {
+                foreach ($this->model as $key => $row) {
+                    $options[] = call_user_func($this->renderRowFunction, $row);
+                }
+            }
+            else {
+                //clone model to use only id_field and title_field
+                $m = clone $this->model;
+                $m->onlyFields([$m->id_field, $m->title_field]);
+                foreach ($m as $key => $row) {
+                    $title = $row->getTitle();
+                    $item = ['div', 'class' => 'item', 'data-value' => (string) $key, [$title]];
+                    $options[] = $item;
+                }
             }
         } else {
             foreach ($this->values as $key => $val) {
