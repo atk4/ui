@@ -119,6 +119,53 @@ and upgraded Fomantic-UI version.
 - fix/ set input attribute to readonly or disable. [\#576](https://github.com/atk4/ui/pull/576) (@ibelar)
 - Sorting should happen later. Fix \#544 [\#574](https://github.com/atk4/ui/pull/574) (@DarkSide666)
 
+## 1.6.2
+
+**Closed issues:**
+
+- dev-develop branches should require other dev-develop branches for all atk/\* repositories [\#641](https://github.com/atk4/ui/issues/641)
+- mink-selenium2-driver [\#638](https://github.com/atk4/ui/issues/638)
+- hasOne relation should use Lookup field instead of DropDown by default [\#636](https://github.com/atk4/ui/issues/636)
+- Template: tryAppend\(\) and tryAppendHTML\(\) woud be nice [\#626](https://github.com/atk4/ui/issues/626)
+- Possible Restriction Solution: custom templates must be defined in vendor atk4/ui  [\#625](https://github.com/atk4/ui/issues/625)
+- CRUD and read\_only field [\#620](https://github.com/atk4/ui/issues/620)
+- Ternary operator messes up integer with value = 0 in DropDown::getInput\(\) [\#618](https://github.com/atk4/ui/issues/618)
+- Template \_top tag doesn't work [\#610](https://github.com/atk4/ui/issues/610)
+- Multiple Modals: Closing second modal by clicking dimmer does not work everywhere in dimmer if second modal is smaller than first one [\#609](https://github.com/atk4/ui/issues/609)
+- Lister need {empty} ability in it's template [\#606](https://github.com/atk4/ui/issues/606)
+- confirm in View-\>on\(\) only works with Callback, not with jsReload for example [\#503](https://github.com/atk4/ui/issues/503)
+- Font size on tablet screen [\#485](https://github.com/atk4/ui/issues/485)
+- Implement a simple template routing in Agile UI [\#440](https://github.com/atk4/ui/issues/440)
+- Nested Modals [\#436](https://github.com/atk4/ui/issues/436)
+- Integrate ATK with Zend3 [\#384](https://github.com/atk4/ui/issues/384)
+
+**Merged pull requests:**
+
+- Add "confirm" option support for js-\>on\(\) case [\#642](https://github.com/atk4/ui/pull/642) (@DarkSide666)
+- Feature/test persist array [\#640](https://github.com/atk4/ui/pull/640) (@DarkSide666)
+- fix \#638 [\#639](https://github.com/atk4/ui/pull/639) (@DarkSide666)
+- Use Lookup field for hasOne, fix \#636 [\#637](https://github.com/atk4/ui/pull/637) (@DarkSide666)
+- Don't apply sorting in case sortable=false. [\#635](https://github.com/atk4/ui/pull/635) (@DarkSide666)
+- Feature/fix paginator plus sort [\#634](https://github.com/atk4/ui/pull/634) (@DarkSide666)
+- Feature/upd crud demo [\#633](https://github.com/atk4/ui/pull/633) (@DarkSide666)
+- fix in case you don't have {empty} tag in your Lister template [\#632](https://github.com/atk4/ui/pull/632) (@DarkSide666)
+- add ability to set buttonSave=false to not create it [\#631](https://github.com/atk4/ui/pull/631) (@DarkSide666)
+- comment fix [\#630](https://github.com/atk4/ui/pull/630) (@DarkSide666)
+- Feature/allow to set multiple template paths [\#628](https://github.com/atk4/ui/pull/628) (@DarkSide666)
+- Refactor Template set, append, implement tryAppend, add tests. [\#627](https://github.com/atk4/ui/pull/627) (@DarkSide666)
+- Fix UTF-8 [\#624](https://github.com/atk4/ui/pull/624) (@mvorisek)
+- Critical bug fix: always convert Dropdown/Autocomplete/Lookup values to string [\#623](https://github.com/atk4/ui/pull/623) (@mvorisek)
+- Fixes \#618: Process fields with integer value 0 correctly [\#619](https://github.com/atk4/ui/pull/619) (@PhilippGrashoff)
+- Feature/dynamic scroll crud [\#617](https://github.com/atk4/ui/pull/617) (@DarkSide666)
+- Make demo for dynamic scroll in container better [\#616](https://github.com/atk4/ui/pull/616) (@DarkSide666)
+- Feature/cond form fixes [\#615](https://github.com/atk4/ui/pull/615) (@DarkSide666)
+- Feature/add dropdown tests [\#614](https://github.com/atk4/ui/pull/614) (@romaninsh)
+- feature/upgrade js package dependencies [\#613](https://github.com/atk4/ui/pull/613) (@ibelar)
+- Feature/refactor template [\#612](https://github.com/atk4/ui/pull/612) (@DarkSide666)
+- Implements {empty} tag in Lister [\#611](https://github.com/atk4/ui/pull/611) (@DarkSide666)
+- Fix mobile layout [\#608](https://github.com/atk4/ui/pull/608) (@skondakov)
+- Catch coverage usage from callback handlers executed from php shutdown [\#607](https://github.com/atk4/ui/pull/607) (@romaninsh)
+
 # 1.5 Release
 
 *Improved Admin Layout*: now is fully flexible and more responsive.
