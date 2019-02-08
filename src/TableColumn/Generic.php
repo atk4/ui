@@ -45,8 +45,6 @@ class Generic
      */
     public $hasHeaderAction = false;
 
-    public $headerAction = null;
-
     /**
      * The tag value required for getTag when using an header action.
      *
@@ -96,7 +94,7 @@ class Generic
      */
     public function setHeaderPopup($popup, $icon = 'caret square down')
     {
-        $this->headerAction = true;
+        $this->hasHeaderAction = true;
         $id = $this->name.'_ac';
 
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
@@ -172,7 +170,7 @@ class Generic
      */
     public function setHeaderDropdown($items, $icon = 'caret square down', $menuId = null)
     {
-        $this->headerAction = true;
+        $this->hasHeaderAction = true;
         $id = $this->name.'_ac';
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
@@ -189,8 +187,8 @@ class Generic
                             if (value === undefined || value === '' || value === null) return;
                             $(this)
                             .api({
-                                on:'now', 
-                                url:'{$cb->getJSURL()}', 
+                                on:'now',
+                                url:'{$cb->getJSURL()}',
                                 data:{item:value, id:$(this).data('menu-id')}
                                 }
                             );
@@ -322,7 +320,7 @@ class Generic
             }
         }
 
-        if ($this->headerAction) {
+        if ($this->hasHeaderAction) {
             $attr = array_merge($attr, ['id' => $this->name.'_th']);
             $tag = $this->getTag(
                 'head',
@@ -378,7 +376,7 @@ class Generic
 
     /**
      * Provided with a field definition will return a string containing a "Template"
-     * that would produce CONTENS OF <td> cell when rendered. Example output:.
+     * that would produce CONTENTS OF <td> cell when rendered. Example output:.
      *
      *   <b>{$name}</b>
      *
