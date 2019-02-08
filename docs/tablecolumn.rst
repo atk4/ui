@@ -12,7 +12,7 @@ contents themselves. Instead they rely on Column Decorator class to position con
 cell.
 
 This is in contrast to :php:class:`View` and :php:class:`Lister` which do not
-use Table/Cell and therefore Column decorator is not required. 
+use Table/Cell and therefore Column decorator is not required.
 
 
 All column decorators in Agile UI have a base class :php:class:`TableColumn\\Generic`. Decorators will often
@@ -21,12 +21,12 @@ only if monetary value is less than zero. The value is taken from Model's Field 
 
 Column decorators can also function without associated value. :php:class:`Template` may have no
 fields or perhaps display multiple field values. :php:class:`Action` displays interractie buttons
-in the table. :php:class:`CheckBox` makes grid rows selectable. :php:class:`Ordering` displays 
+in the table. :php:class:`CheckBox` makes grid rows selectable. :php:class:`Ordering` displays
 a draggable handle for re-ordering rows within the table.
 
 A final mention is about :php:class:`Multiformat`, which is a column decorator that can swap-in
 any other decorator based on condition. This allows you to change button [Archive] for active records,
-but if record is already archived, use a template "Archived on {$archive_date}". 
+but if record is already archived, use a template "Archived on {$archive_date}".
 
 Generic Column Decorator
 ========================
@@ -103,10 +103,10 @@ are two usage patterns. With the first you can specify full URL as a string::
 The URL may also be specified as an array. It will be passed to App::url() which will encode arguments::
 
     $table->addColumn('name', ['Link', ['details', 'id'=>123, 'q'=>$anything]]);
-    
+
 In this case even if `$anything = '{$name}'` the substitution will not take place for safety reasons. To
 pass on some values from your model, use second argument to constructor::
-    
+
     $table->addColumn('name', ['Link', ['details', 'id'=>123], ['q'=>'name']]);
 
 
@@ -160,6 +160,15 @@ Template may incorporate values from multiple fields in a data row, but current 
 will only work if you asign it to a primary column (by passing 1st argument to addColumn).
 
 (In the future it may be optional with the ability to specify caption).
+
+Image
+-----
+
+.. php:class:: TableColumn\Image
+
+This column is suitable if you wish to have image in your table cell.
+
+    $table->addColumn('image_url', new \atk4\ui\TableColumn\Image);
 
 
 Interractive Derorators
@@ -287,7 +296,7 @@ To create a popup, you need to get the column decorator object. This must be the
 is responsible for rendering of the TH box. If you are adding column manually, :php:meth:`atk4\\ui\\Table::addColumn()`
 will return it. When using model, use :php:meth:`atk4\\ui\\Table::getColumnDecorators`::
 
-    
+
     $table = $app->add(['Table', 'celled' => true]);
     $table->setModel(new Country($app->db));
 

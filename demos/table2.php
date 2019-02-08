@@ -3,8 +3,6 @@
 date_default_timezone_set('UTC');
 include 'init.php';
 
-$app->add(['Header', 'Table with various headers', 'subHeader'=>'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon'=>'table']);
-
 $data = [
     ['id'=>1, 'action'=>'Salary', 'amount'=>200],
     ['id'=> 2, 'action'=>'Purchase goods', 'amount'=>-120],
@@ -13,6 +11,9 @@ $data = [
 
 $m = new \atk4\data\Model(new \atk4\data\Persistence_Static($data));
 $m->getElement('amount')->type = 'money';
+
+// ========================================================
+$app->add(['Header', 'Table with various headers', 'subHeader'=>'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon'=>'table']);
 
 $table = $app->add('Table');
 $table->setModel($m, ['action']);
@@ -38,13 +39,14 @@ $table->addHook('beforeRow', function ($table) {
 $table->template->appendHTML('Foot', '<tr class="center aligned"><td colspan=2>This will appear above totals</th></tr>');
 $table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
 
+// ========================================================
 $app->add(['Header', 'Columns with multiple formats', 'subHeader'=>'Single column can use logic to swap out formatters', 'icon'=>'table']);
 
 $table = $app->add('Table');
 $table->setModel($m, ['action']);
 
 // copy of amount through a PHP callback
-$m->addField('amount_copy', ['Callback', function ($m) {
+$m->addExpression('amount_copy', [function ($m) {
     return $m['amount'];
 }, 'type'=>'money']);
 
@@ -71,6 +73,7 @@ $table->addColumn('amount_copy', ['Multiformat', function ($a, $b) {
     return 'Money';
 }, 'attr'=>['all'=>['class'=>['right aligned singel line']]]]);
 
+// ========================================================
 $app->add(['Header', 'Table with resizable columns', 'subHeader'=>'Just drag column header to resize', 'icon'=>'table']);
 
 $table = $app->add('Table');

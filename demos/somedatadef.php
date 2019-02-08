@@ -20,6 +20,7 @@ if (!class_exists('SomeData')) {
             $m->addField('surname', ['actual' => 'name']);
             $m->addField('date', ['type' => 'date']);
             $m->addField('salary', ['type' => 'money', 'actual' => 'randomNumber']);
+            $m->addField('logo_url');
         }
     }
 
@@ -71,7 +72,11 @@ if (!class_exists('SomeData')) {
                         $type = $actual;
                     }
 
-                    $row[$field] = $this->faker->$type;
+                    if ($type == 'logo_url') {
+                        $row[$field] = 'images/'.['default.png', 'logo.png'][rand(0, 1)]; // one of these
+                    } else {
+                        $row[$field] = $this->faker->$type;
+                    }
                 }
                 $data[] = $row;
             }
