@@ -35,8 +35,6 @@ $table->addHook('getHTMLTags', function ($table, $row) {
 
 $table->addTotals(['name' => 'Totals:', 'salary' => ['sum']]);
 
-
-
 // ========================================================
 $my_array = [
     ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => new \DateTime('1973-02-03')],
