@@ -151,6 +151,8 @@ class App
         // Set up template folder
         if ($this->template_dir === null) {
             $this->template_dir = [];
+        } elseif (!is_array($this->template_dir)) {
+            $this->template_dir = [$this->template_dir];
         }
         $this->template_dir[] = __DIR__.'/../template/'.$this->skin;
 
