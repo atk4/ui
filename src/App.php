@@ -149,7 +149,12 @@ class App
          */
 
         // Set up template folder
-        $this->template_dir = __DIR__.'/../template/'.$this->skin;
+        if ($this->template_dir === null) {
+            $this->template_dir = [];
+        } elseif (!is_array($this->template_dir)) {
+            $this->template_dir = [$this->template_dir];
+        }
+        $this->template_dir[] = __DIR__.'/../template/'.$this->skin;
 
         // Set our exception handler
         if ($this->catch_exceptions) {
