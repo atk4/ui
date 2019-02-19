@@ -756,13 +756,12 @@ class Template implements \ArrayAccess
                 case '$':
                     
                     $tag = substr($tag, 1);
+                    
                     $full_tag = $this->regTag($tag);
-                    
                     $template[$full_tag] = '';  // empty value
-                    
                     $this->tags[$tag][] = &$template[$full_tag];
                     
-                    // recurse
+                    // eat next chunk
                     $chunk = current($input);next($input);
                     if ($chunk !== false && $chunk !== null) {
                         $template[] = $chunk;
@@ -776,7 +775,6 @@ class Template implements \ArrayAccess
                     $full_tag = $this->regTag($tag);
                     
                     $prefix = current($input);next($input);
-                    
                     $template[$full_tag] = $prefix ? [$prefix] : [];
                     
                     $this->tags[$tag][] = &$template[$full_tag];
