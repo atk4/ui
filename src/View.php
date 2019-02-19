@@ -933,6 +933,7 @@ class View implements jsExpressionable
      */
     public function on($event, $selector = null, $action = null, $defaults = null)
     {
+        $cb = null;
         // second argument may be omitted
         if (!is_string($selector) && (is_null($action) || is_array($action))) {
             $defaults = $action;
@@ -997,7 +998,7 @@ class View implements jsExpressionable
         $chain = new jQuery();
         $actions[] = $chain;
 
-        if (isset($defaults['confirm']) && $defaults['confirm']) {
+        if (isset($defaults['confirm']) && $defaults['confirm'] && !$cb) {
             array_unshift($actions,
                 new jsExpression('if(!confirm([])){return;}', [$defaults['confirm']])
             );
