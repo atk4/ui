@@ -982,10 +982,6 @@ class View implements jsExpressionable
                 return call_user_func_array($action, $args);
             }, $arguments);
 
-            if (isset($defaults['confirm'])) {
-                $cb->setConfirm($defaults['confirm']);
-            }
-
             $actions[] = $cb;
         //$thisAction->api(['on'=>'now', 'url'=>$cb->getJSURL(), 'urlData'=>$urlData, 'obj'=>new jsExpression('this')]);
         } elseif (is_array($action)) {
@@ -998,10 +994,15 @@ class View implements jsExpressionable
         $chain = new jQuery();
         $actions[] = $chain;
 
-        if (isset($defaults['confirm']) && $defaults['confirm'] && !$cb) {
-            array_unshift($actions,
-                new jsExpression('if(!confirm([])){return;}', [$defaults['confirm']])
-            );
+        // Do we need confirm action.
+        if (isset($defaults['confirm']) && $defaults['confirm']) {
+            if (isset($cb)) {
+                $cb->setConfirm($defaults['confirm']);
+            } else {
+                array_unshift($actions,
+                              new jsExpression('if(!confirm([])){return;}', [$defaults['confirm']])
+                );
+            }
         }
 
         $action = new jsFunction($actions);
