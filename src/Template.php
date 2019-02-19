@@ -774,6 +774,7 @@ class Template implements \ArrayAccess
                     
                     $full_tag = $this->regTag($tag);
                     
+                    // next would be prefix
                     $prefix = current($input);next($input);
                     $template[$full_tag] = $prefix ? [$prefix] : [];
                     
