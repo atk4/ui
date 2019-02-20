@@ -130,6 +130,8 @@ class App
      */
     public function __construct($defaults = [])
     {
+        ini_set('display_errors',false);
+        
         $this->app = $this;
         
         // Process defaults
@@ -193,30 +195,124 @@ class App
                 }
             }
             
-            $type = 'Unknown Error';
+            // Practical to solve the issue of continuos looping and no errors out
+            // we must have TOTAL control over error_handling
+            //
+            // this is all the $error_types
+            // we can now bypass some of this
+            // like :
+            // - deprecated is set to full ignore
+            // - notice is set to ignore only when debug trait is not used
+            // - warning is set to ignore only when debug trait is not used
+            //
+            // @TODO ignoring means that will output a ugly modal window without any text
+            // just test more before go to production and....
+            // Obviously 5 minutes later new errors will come up, because we like to lose weekends ;)
             
-            switch ( $errno ) {
-                case E_USER_ERROR:
-                    $type = 'Fatal Error';
-                break;
-                case E_USER_WARNING:
+            $isDebugActive = (isset($this->_debugTrait));
+            
+            $errName = '';
+            
+            $ignoreError = false;
+            
+            $ignoreDeprecated = true;
+            $ignoreNotice = !$isDebugActive;
+            $ignoreWarning = !$isDebugActive;
+            
+            /**
+             * if we ignore some errors, this doesn't mean that will not log it
+             *
+             * when debug is active, ignored error will be logged
+             */
+            $logIgnoredError = $isDebugActive;
+            
+            switch ($errno) {
+                
+                case E_ERROR:
+                    $errName = 'E_ERROR';
+                break;    // 1
+                
                 case E_WARNING:
-                    $type = 'Warning';
-                break;
-                case E_USER_NOTICE:
+                    $errName = 'E_WARNING';
+                    $ignoreError = $ignoreWarning;
+                break;  // 2
+                
+                case E_PARSE:
+                    $errName = 'E_PARSE';
+                break;    // 4
+                
                 case E_NOTICE:
+                    $errName = 'E_NOTICE';
+                break;   // 8
+                
+                case E_CORE_ERROR:
+                    $errName = 'E_CORE_ERROR';
+                break;   // 16
+                
+                case E_CORE_WARNING:
+                    $errName = 'E_CORE_WARNING';
+                    $ignoreError = $ignoreWarning;
+                break; // 32
+                
+                case E_COMPILE_ERROR:
+                    $errName = 'E_COMPILE_ERROR';
+                break;    // 64
+                
+                case E_COMPILE_WARNING:
+                    $errName = 'E_COMPILE_WARNING';
+                    $ignoreError = $ignoreWarning;
+                break;  // 128
+                
+                case E_USER_ERROR:
+                    $errName = 'E_USER_ERROR';
+                break;   // 256
+                
+                case E_USER_WARNING:
+                    $errName = 'E_USER_WARNING';
+                    $ignoreError = $ignoreWarning;
+                break; // 512
+                
+                case E_USER_NOTICE:
+                    $errName = 'E_USER_NOTICE';
+                    $ignoreError = $ignoreNotice;
+                break;  // 1024
+                
                 case E_STRICT:
-                    $type = 'Notice';
-                break;
+                    $errName = 'E_STRICT';
+                break;   // 2048
+                
                 case E_RECOVERABLE_ERROR:
-                    $type = 'Catchable';
-                break;
+                    $errName = 'E_RECOVERABLE_ERROR';
+                break;    // 4096
+                
+                case E_DEPRECATED:
+                    $errName = 'E_DEPRECATED';
+                    $ignoreError = $ignoreDeprecated;
+                break;   // 8192
+                
+                case E_USER_DEPRECATED:
+                    $errName = 'E_USER_DEPRECATED';
+                    $ignoreError = $ignoreDeprecated;
+                break;  // 16384
             }
             
-            throw new \ErrorException($type . ':' . $errstr,0,$errno,$errfile,$errline);
+            if($ignoreError)
+            {
+                if($logIgnoredError)
+                {
+                    $this->logThrowable(new \ErrorException($errstr, $errno, $errno, $errfile, $errline));
+                }
+            } else {
+                throw new \ErrorException($errstr, $errno, $errno, $errfile, $errline);
+            }
             
-            //return true; no return to stop the execution
-        },E_WARNING);
+            /**
+             * @see http://php.net/manual/en/function.set-error-handler.php
+             * If the function returns FALSE then the normal error handler continues.
+             *
+             */
+            return true;
+        },E_ALL);
         
         // Always run app on shutdown
         if ($this->always_run) {
@@ -881,36 +977,52 @@ class App
         $l            = new $AppClassName(['is_catch_throwable' => true]);
         $l->initLayout('Centered');
         
+        $this->logThrowable($e);
+        
         //check for error type.
         if($e instanceof \Exception)
         {
-            $exception = $e;
-            if ($exception instanceof \atk4\dsql\Exception)
+            if ($e instanceof \atk4\core\Exception)
             {
-                $l->layout->template->setHTML('Content', $exception->getHTML());
-                //$params = $exception->getParams();
-            }
-            elseif ($exception instanceof \atk4\core\Exception)
-            {
-                $l->layout->template->setHTML('Content', $exception->getHTML());
+                $l->layout->template->setHTML('Content', $e->getHTML());
             }
             else
             {
-                $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+                // to give a more readable and small trace output
+                // i get the current working dir and the absolute dir of this file
+                // transform both in arrays and intersect the two to get a common path for replace
+                $cwd = explode(DIRECTORY_SEPARATOR,getcwd());
+                $dir = explode(DIRECTORY_SEPARATOR,__DIR__);
+                $commonPath = implode(DIRECTORY_SEPARATOR,array_intersect($cwd,$dir)).DIRECTORY_SEPARATOR;
+                
+                $message = $l->layout->add(['Message', get_class($e),'icon' => 'triangle exclamation'])->addClass('error')->removeClass('padded');
+                $message->text->addParagraph($e->getMessage());
+                $message->text->addParagraph('in ' . $e->getFile() . '(' . $e->getLine() . ')');
+                
+                $l->layout->add(['Text', '<hr/>']);
+                $l->layout->add(['Text', nl2br(str_replace($commonPath,'',$e->getTraceAsString()))]);
             }
         }
         
         if($e instanceof \Error)
         {
-            $error = $e;
-            if ($error instanceof \Error)
+            if ($e instanceof \Error)
             {
-                $l->layout->add(['Message', get_class($error).': ' . $error->getMessage().' (in '.$error->getFile().':'.$error->getLine().')', 'error']);
-                $l->layout->add(['Text', nl2br($error->getTraceAsString())]);
+                /**
+                 * this is a repetition of the exception format block but Error is not an Exception
+                 */
+                $cwd = explode(DIRECTORY_SEPARATOR,getcwd());
+                $dir = explode(DIRECTORY_SEPARATOR,__DIR__);
+                $commonPath = implode(DIRECTORY_SEPARATOR,array_intersect($cwd,$dir)).DIRECTORY_SEPARATOR;
+                
+                $message = $l->layout->add(['Message', get_class($e),'icon' => 'exclamation'])->addClass('error')->removeClass('padded');
+                $message->text->addParagraph($e->getMessage());
+                $message->text->addParagraph('in ' . $e->getFile() . '(' . $e->getLine() . ')');
+                
+                $l->layout->add(['Text', '<hr/>']);
+                $l->layout->add(['Text', nl2br(str_replace($commonPath,'',$e->getTraceAsString()))]);
             }
         }
-        
-        $this->logThrowable($e);
         
         $l->layout->template->tryDel('Header');
         
@@ -939,20 +1051,32 @@ class App
      */
     private function logThrowable(\Throwable $t)
     {
-        if($this->_debugTrait ?? false == true)
+        $canLog = $this->_debugTrait ?? false;
+        if($canLog === false) return;
+        
+        $debugMsg = 'UNDEFINED ERROR'; // <-- Impossible to output
+        
+        if ($t instanceof \atk4\core\Exception)
+        {
+            $debugMsg = $t->getColorfulText();
+        }
+        else
         {
             $debugMsg = [
                 ' ====================================== ',
-                ' ERROR : [' . $t->getCode() . '] ' . $t->getMessage(),
+                ' TYPE : ' . get_class($t),
+                ' MSG  : [' . $t->getCode() . '] ' . $t->getMessage(),
                 ' ============== DEBUG ================= ',
-                ' FILE:' . $t->getFile(),
-                ' LINE:' . $t->getLine(),
+                ' FILE :' . $t->getFile(),
+                ' LINE :' . $t->getLine(),
                 ' ============== TRACE ================= ',
                 $t->getTraceAsString(),
                 ' ====================================== ',
             ];
             
-            $this->debug( PHP_EOL . implode(PHP_EOL, $debugMsg) . PHP_EOL);
+            $debugMsg = implode(PHP_EOL, $debugMsg);
         }
+        
+        $this->debug(PHP_EOL . $debugMsg . PHP_EOL);
     }
 }
