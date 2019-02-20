@@ -735,6 +735,10 @@ class Template implements \ArrayAccess
      */
     protected function parseTemplateRecursive(&$input, &$template)
     {
+        if (!is_array($input) || empty($input)) {
+            return;
+        }
+        
         while (true) {
             
             $tag = current($input);next($input);
@@ -776,7 +780,7 @@ class Template implements \ArrayAccess
                     
                     // next would be prefix
                     $prefix = current($input);next($input);
-                    $template[$full_tag] = $prefix ? [$prefix] : [];
+                    $template[$full_tag] = ($prefix===false || $prefix===null) ? [] : [$prefix];
                     
                     $this->tags[$tag][] = &$template[$full_tag];
                     
