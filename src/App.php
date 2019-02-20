@@ -169,7 +169,7 @@ class App
         // Set our exception handler
         if ($this->catch_exceptions) {
             set_exception_handler(function ($exception) {
-                return $this->caughtException($exception);
+                return $this->caughtThrowable($exception);
             });
         }
         
@@ -193,10 +193,30 @@ class App
                 }
             }
             
-            throw new \ErrorException($errstr,$errno,1,$errfile,$errline);
+            $type = 'Unknown Error';
             
-            return true;
-        }, E_ALL);
+            switch ( $errno ) {
+                case E_USER_ERROR:
+                    $type = 'Fatal Error';
+                break;
+                case E_USER_WARNING:
+                case E_WARNING:
+                    $type = 'Warning';
+                break;
+                case E_USER_NOTICE:
+                case E_NOTICE:
+                case E_STRICT:
+                    $type = 'Notice';
+                break;
+                case E_RECOVERABLE_ERROR:
+                    $type = 'Catchable';
+                break;
+            }
+            
+            throw new \ErrorException($type . ':' . $errstr,0,$errno,$errfile,$errline);
+            
+            //return true; no return to stop the execution
+        },E_WARNING);
         
         // Always run app on shutdown
         if ($this->always_run) {
@@ -209,6 +229,13 @@ class App
                 
                 if (is_string($this->_cwd_restore)) {
                     chdir($this->_cwd_restore);
+                }
+                
+                $e = error_get_last();
+                if(!is_null($e))
+                {
+                    $error = new \ErrorException($e['message'],$e['type'],E_ERROR,$e['file'],$e['line']);
+                    $this->caughtThrowable($error);
                 }
                 
                 if (!$this->run_called) {
@@ -841,6 +868,9 @@ class App
         // @TODO add a flag for level of verbosity of errors dispay to user
         $this->catch_runaway_callbacks = false;
         
+        // run_called moved here because is used on any case
+        $this->run_called = true;
+        
         // if class App was extended
         // we get the right class to call
         // if not we get wrong data like : title => Agile Toolkit - untitled
@@ -855,16 +885,10 @@ class App
         if($e instanceof \Exception)
         {
             $exception = $e;
-            
             if ($exception instanceof \atk4\dsql\Exception)
             {
                 $l->layout->template->setHTML('Content', $exception->getHTML());
-                $params = $exception->getParams();
-                
-                if (array_key_exists('query', $params))
-                {
-                    $l->layout->template->appendHTML('Content', nl2br($params['query']));
-                }
+                //$params = $exception->getParams();
             }
             elseif ($exception instanceof \atk4\core\Exception)
             {
@@ -879,7 +903,6 @@ class App
         if($e instanceof \Error)
         {
             $error = $e;
-            
             if ($error instanceof \Error)
             {
                 $l->layout->add(['Message', get_class($error).': ' . $error->getMessage().' (in '.$error->getFile().':'.$error->getLine().')', 'error']);
@@ -904,12 +927,9 @@ class App
         {
             $l->catch_runaway_callbacks = false;
             $l->run();
-            $this->run_called = true;
         }
         
         $this->callExit();
-        
-        return true;
     }
     
     /**
