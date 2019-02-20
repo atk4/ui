@@ -7,13 +7,13 @@ class App
     use \atk4\core\InitializerTrait {
         init as _init;
     }
-
+    
     use \atk4\core\HookTrait;
     use \atk4\core\DynamicMethodTrait;
     use \atk4\core\FactoryTrait;
     use \atk4\core\AppScopeTrait;
     use \atk4\core\DIContainerTrait;
-
+    
     // @var array|false Location where to load JS/CSS files
     public $cdn = [
         'atk'              => 'https://cdn.rawgit.com/atk4/ui/1.6.2/public',
@@ -21,47 +21,47 @@ class App
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.6.4/dist',
     ];
-
+    
     // @var string Version of Agile UI
     public $version = '1.6.2';
-
+    
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
-
+    
     // @var Layout\Generic
     public $layout = null; // the top-most view object
-
+    
     /**
      * Set one or more directories where templates should reside.
      *
      * @var string|array
      */
     public $template_dir = null;
-
+    
     // @var string Name of skin
     public $skin = 'semantic-ui';
-
+    
     /**
      * Will replace an exception handler with our own, that will output errors nicely.
      *
      * @var bool
      */
     public $catch_exceptions = true;
-
+    
     /**
      * Will display error if callback wasn't triggered.
      *
      * @var bool
      */
     public $catch_runaway_callbacks = true;
-
+    
     /**
      * Will always run application even if developer didn't explicitly executed run();.
      *
      * @var bool
      */
     public $always_run = true;
-
+    
     /**
      * Will be set to true after app->run() is called, which may be done automatically
      * on exit.
@@ -69,7 +69,7 @@ class App
      * @var bool
      */
     public $run_called = false;
-
+    
     /**
      * Will be set to true, when exit is called. Sometimes exit is intercepted by shutdown
      * handler and we don't want to execute 'beforeExit' multiple times.
@@ -77,10 +77,10 @@ class App
      * @var bool
      */
     public $exit_called = false;
-
+    
     // @var bool
     public $_cwd_restore = true;
-
+    
     /**
      * function setModel(MyModel $m);.
      *
@@ -93,26 +93,36 @@ class App
      * @var bool
      */
     public $fix_incompatible = true;
-
+    
     // @var bool
     public $is_rendering = false;
-
+    
     // @var Persistence\UI
     public $ui_persistence = null;
-
+    
     /**
      * @var View For internal use
      */
     public $html = null;
-
+    
     /**
      * @var LoggerInterface, target for objects with DebugTrait
      */
     public $logger = null;
-
+    
     // @var \atk4\data\Persistence
     public $db = null;
-
+    
+    /**
+     * After catch a throwable (Error or Exception)
+     * Application will call a new instance of itself with this flag setted to true
+     * When this flag is active, you can disable functions
+     * like routing or other functionality that will make this go in a loop or break output
+     *
+     * @var bool
+     */
+    public $is_catch_throwable = false;
+    
     /**
      * Constructor.
      *
@@ -121,17 +131,17 @@ class App
     public function __construct($defaults = [])
     {
         $this->app = $this;
-
+        
         // Process defaults
         if (is_string($defaults)) {
             $defaults = ['title' => $defaults];
         }
-
+        
         if (isset($defaults[0])) {
             $defaults['title'] = $defaults[0];
             unset($defaults[0]);
         }
-
+        
         /*
         if (is_array($defaults)) {
             throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
@@ -147,7 +157,7 @@ class App
             }
         }
          */
-
+        
         // Set up template folder
         if ($this->template_dir === null) {
             $this->template_dir = [];
@@ -155,62 +165,67 @@ class App
             $this->template_dir = [$this->template_dir];
         }
         $this->template_dir[] = __DIR__.'/../template/'.$this->skin;
-
+        
         // Set our exception handler
         if ($this->catch_exceptions) {
             set_exception_handler(function ($exception) {
                 return $this->caughtException($exception);
             });
         }
-
+        
         if (!$this->_initialized) {
             //$this->init();
         }
-
-        if ($this->fix_incompatible) {
-            // PHP 7.0 introduces strict checks for method patterns. But only 7.2 introduced parameter type widening
-            //
-            // https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)#Contravariant_method_argument_type
-            // https://wiki.php.net/rfc/parameter-no-type-variance
-            //
-            // We wish to start using type-hinting more in our classes, but it would break any extends in 3rd party code unless
-            // they are on 7.2.
-            if (version_compare(PHP_VERSION, '7.0.0') >= 0 && version_compare(PHP_VERSION, '7.2.0') < 0) {
-                set_error_handler(function ($errno, $errstr) {
+        
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+            
+            if ($this->fix_incompatible) {
+                // PHP 7.0 introduces strict checks for method patterns. But only 7.2 introduced parameter type widening
+                //
+                // https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)#Contravariant_method_argument_type
+                // https://wiki.php.net/rfc/parameter-no-type-variance
+                //
+                // We wish to start using type-hinting more in our classes, but it would break any extends in 3rd party code unless
+                // they are on 7.2.
+                
+                if (version_compare(PHP_VERSION, '7.0.0') >= 0 && version_compare(PHP_VERSION, '7.2.0') < 0) {
                     return strpos($errstr, 'Declaration of') === 0;
-                }, E_WARNING);
+                }
             }
-        }
-
+            
+            throw new \ErrorException($errstr,$errno,1,$errfile,$errline);
+            
+            return true;
+        }, E_ALL);
+        
         // Always run app on shutdown
         if ($this->always_run) {
+            
             if ($this->_cwd_restore) {
                 $this->_cwd_restore = getcwd();
             }
-
+            
             register_shutdown_function(function () {
+                
                 if (is_string($this->_cwd_restore)) {
                     chdir($this->_cwd_restore);
                 }
-
+                
                 if (!$this->run_called) {
-                    try {
-                        $this->run();
-                    } catch (\Exception $e) {
-                        $this->caughtException($e);
-                    }
+                    // try/catch moved to run method to catch direct calls
+                    $this->run();
                 }
-
+                
                 $this->callExit();
             });
         }
-
+        
         // Set up UI persistence
         if (!isset($this->ui_persistence)) {
             $this->ui_persistence = new Persistence\UI();
         }
     }
-
+    
     public function callExit()
     {
         if (!$this->exit_called) {
@@ -219,42 +234,7 @@ class App
         }
         exit;
     }
-
-    /**
-     * Catch exception.
-     *
-     * @param mixed $exception
-     */
-    public function caughtException($exception)
-    {
-        $this->catch_runaway_callbacks = false;
-
-        $l = new \atk4\ui\App();
-        $l->initLayout('Centered');
-
-        //check for error type.
-        if ($exception instanceof \atk4\core\Exception) {
-            $l->layout->template->setHTML('Content', $exception->getHTML());
-        } elseif ($exception instanceof \Error) {
-            $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
-            $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
-        } else {
-            $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
-        }
-        $l->layout->template->tryDel('Header');
-
-        if ($this->isJsonRequest()) {
-            echo json_encode(['success'   => false,
-                                'message' => $l->layout->getHtml(),
-                             ]);
-        } else {
-            $l->catch_runaway_callbacks = false;
-            $l->run();
-            $this->run_called = true;
-        }
-        $this->callExit();
-    }
-
+    
     /**
      * Most of the ajax request will require sending exception in json
      * instead of html, except for tab.
@@ -264,15 +244,15 @@ class App
     protected function isJsonRequest()
     {
         $ajax = false;
-
+        
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-           && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             $ajax = true;
         }
-
+        
         return $ajax && !isset($_GET['__atk_tab']);
     }
-
+    
     /**
      * Outputs debug info.
      *
@@ -282,7 +262,7 @@ class App
     {
         echo 'DEBUG:'.$str.'<br/>';
     }
-
+    
     /**
      * Will perform a preemptive output and terminate. Do not use this
      * directly, instead call it form Callback, jsCallback or similar
@@ -298,7 +278,7 @@ class App
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
     }
-
+    
     /**
      * Initializes layout.
      *
@@ -310,20 +290,20 @@ class App
     {
         $layout = $this->factory($seed, null, 'Layout');
         $layout->app = $this;
-
+        
         if (!$this->html) {
             $this->html = new View(['defaultTemplate' => 'html.html']);
             $this->html->app = $this;
             $this->html->init();
         }
-
+        
         $this->layout = $this->html->add($layout);
-
+        
         $this->initIncludes();
-
+        
         return $this;
     }
-
+    
     /**
      * Initialize JS and CSS includes.
      */
@@ -332,22 +312,22 @@ class App
         // jQuery
         $url = isset($this->cdn['jquery']) ? $this->cdn['jquery'] : '../public';
         $this->requireJS($url.'/jquery.min.js');
-
+        
         // Semantic UI
         $url = isset($this->cdn['semantic-ui']) ? $this->cdn['semantic-ui'] : '../public';
         $this->requireJS($url.'/semantic.min.js');
         $this->requireCSS($url.'/semantic.min.css');
-
+        
         // Serialize Object
         $url = isset($this->cdn['serialize-object']) ? $this->cdn['serialize-object'] : '../public';
         $this->requireJS($url.'/jquery.serialize-object.min.js');
-
+        
         // Agile UI
         $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
         $this->requireJS($url.'/atkjs-ui.min.js');
         $this->requireCSS($url.'/agileui.css');
     }
-
+    
     /**
      * Adds a <style> block to the HTML Header. Not escaped. Try to avoid
      * and use file include instead.
@@ -361,7 +341,7 @@ class App
         }
         $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
     }
-
+    
     /**
      * Normalizes class name.
      *
@@ -373,7 +353,7 @@ class App
     {
         return '\\'.__NAMESPACE__.'\\'.$name;
     }
-
+    
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
@@ -387,37 +367,47 @@ class App
         if (!$this->layout) {
             throw new Exception(['If you use $app->add() you should first call $app->setLayout()']);
         }
-
+        
         return $this->layout->add($seed, $region);
     }
-
+    
     /**
      * Runs app and echo rendered template.
      */
     public function run()
     {
-        $this->run_called = true;
-        $this->hook('beforeRender');
-        $this->is_rendering = true;
-
-        // if no App layout set
-        if (!isset($this->html)) {
-            throw new Exception(['App layout should be set.']);
+        try {
+            
+            $this->run_called = true;
+            $this->hook('beforeRender');
+            $this->is_rendering = true;
+            
+            // if no App layout set
+            if (!isset($this->html)) {
+                throw new Exception(['App layout should be set.']);
+            }
+            
+            $this->html->template->set('title', $this->title);
+            $this->html->renderAll();
+            $this->html->template->appendHTML('HEAD', $this->html->getJS());
+            $this->is_rendering = false;
+            $this->hook('beforeOutput');
+            
+            if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
+                $this->terminate('!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']);
+            }
+            
+            echo $this->html->template->render();
+            
+        } catch (\Throwable $e) {
+            
+            // in PHP 7.0 Error and Exception are throwable
+            // catching only Exception, never catch Errors
+            
+            $this->caughtThrowable($e);
         }
-
-        $this->html->template->set('title', $this->title);
-        $this->html->renderAll();
-        $this->html->template->appendHTML('HEAD', $this->html->getJS());
-        $this->is_rendering = false;
-        $this->hook('beforeOutput');
-
-        if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
-            $this->terminate('!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']);
-        }
-
-        echo $this->html->template->render();
     }
-
+    
     /**
      * Initialize app.
      */
@@ -425,7 +415,7 @@ class App
     {
         $this->_init();
     }
-
+    
     /**
      * Load template by template file name.
      *
@@ -439,7 +429,7 @@ class App
     {
         $template = new Template();
         $template->app = $this;
-
+        
         if (in_array($name[0], ['.', '/', '\\']) || strpos($name, ':\\') !== false) {
             return $template->load($name);
         } else {
@@ -450,10 +440,10 @@ class App
                 }
             }
         }
-
+        
         throw new Exception(['Can not find template file', 'name'=>$name, 'template_dir'=>$this->template_dir]);
     }
-
+    
     /**
      * Connects database.
      *
@@ -471,7 +461,7 @@ class App
     {
         return $this->db = $this->add(\atk4\data\Persistence::connect($dsn, $user, $password, $args));
     }
-
+    
     protected function getRequestURI()
     {
         if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
@@ -480,20 +470,20 @@ class App
             $request_uri = $_SERVER['REQUEST_URI'];
         } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
             $request_uri = $_SERVER['ORIG_PATH_INFO'];
-        // This one comes without QUERY string
+            // This one comes without QUERY string
         } else {
             $request_uri = '';
         }
         $request_uri = explode('?', $request_uri, 2);
-
+        
         return $request_uri[0];
     }
-
+    
     /**
      * @var null
      */
     public $page = null;
-
+    
     /**
      * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
      * mechanism for NON-HTML response.
@@ -508,7 +498,7 @@ class App
     {
         return $this->url($page, $needRequestUri, $extra_args);
     }
-
+    
     /**
      * Build a URL that application can use for loading HTML data.
      *
@@ -523,30 +513,30 @@ class App
         if ($needRequestUri) {
             return $_SERVER['REQUEST_URI'];
         }
-
+        
         $sticky = $this->sticky_get_arguments;
         $result = $extra_args;
-
+        
         if ($this->page === null) {
             $uri = $this->getRequestURI();
-
+            
             if (substr($uri, -1, 1) == '/') {
                 $this->page = 'index';
             } else {
                 $this->page = basename($uri, '.php');
             }
         }
-
+        
         // if page passed as string, then simply use it
         if (is_string($page)) {
             return $page;
         }
-
+        
         // use current page by default
         if (!isset($page[0])) {
             $page[0] = $this->page;
         }
-
+        
         //add sticky arguments
         if (is_array($sticky) && !empty($sticky)) {
             foreach ($sticky as $key => $val) {
@@ -562,27 +552,27 @@ class App
                 }
             }
         }
-
+        
         // add arguments
         foreach ($page as $arg => $val) {
             if ($arg === 0) {
                 continue;
             }
-
+            
             if ($val === null || $val === false) {
                 unset($result[$arg]);
             } else {
                 $result[$arg] = $val;
             }
         }
-
+        
         // put URL together
         $args = http_build_query($result);
         $url = ($page[0] ? $page[0].'.php' : '').($args ? '?'.$args : '');
-
+        
         return $url;
     }
-
+    
     /**
      * Make current get argument with specified name automatically appended to all generated URLs.
      *
@@ -594,16 +584,16 @@ class App
     {
         if (isset($_GET[$name])) {
             $this->sticky_get_arguments[$name] = $_GET[$name];
-
+            
             return $_GET[$name];
         }
     }
-
+    
     /**
      * @var array global sticky arguments
      */
     protected $sticky_get_arguments = [];
-
+    
     /**
      * Remove sticky GET which was set by stickyGET.
      *
@@ -613,7 +603,7 @@ class App
     {
         unset($this->sticky_get_arguments[$name]);
     }
-
+    
     /**
      * Adds additional JS script include in aplication template.
      *
@@ -626,10 +616,10 @@ class App
     public function requireJS($url, $isAsync = false, $isDefer = false)
     {
         $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '')."\n");
-
+        
         return $this;
     }
-
+    
     /**
      * Adds additional CSS stylesheet include in aplication template.
      *
@@ -640,10 +630,10 @@ class App
     public function requireCSS($url)
     {
         $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url])."\n");
-
+        
         return $this;
     }
-
+    
     /**
      * A convenient wrapper for sending user to another page.
      *
@@ -652,11 +642,11 @@ class App
     public function redirect($page)
     {
         header('Location: '.$this->url($page));
-
+        
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
     }
-
+    
     /**
      * Generate action for redirecting user to another page.
      *
@@ -666,7 +656,7 @@ class App
     {
         return new jsExpression('document.location = []', [$this->url($page)]);
     }
-
+    
     /**
      * Construct HTML tag with supplied attributes.
      *
@@ -741,32 +731,32 @@ class App
             $tag = 'div';
         } elseif (is_array($tag)) {
             $tmp = $tag;
-
+            
             if (isset($tmp[0])) {
                 $tag = $tmp[0];
-
+                
                 if (is_array($tag)) {
                     // OH a bunch of tags
                     $output = '';
                     foreach ($tmp as $subtag) {
                         $output .= $this->getTag($subtag);
                     }
-
+                    
                     return $output;
                 }
-
+                
                 unset($tmp[0]);
             } else {
                 $tag = 'div';
             }
-
+            
             if (isset($tmp[1])) {
                 $value = $tmp[1];
                 unset($tmp[1]);
             } else {
                 $value = null;
             }
-
+            
             $attr = $tmp;
         }
         if ($tag[0] === '<') {
@@ -776,7 +766,7 @@ class App
             $value = $attr;
             $attr = null;
         }
-
+        
         if (is_string($value)) {
             $value = $this->encodeHTML($value);
         } elseif (is_array($value)) {
@@ -786,7 +776,7 @@ class App
             }
             $value = implode('', $result);
         }
-
+        
         if (!$attr) {
             return "<$tag>".($value !== null ? $value."</$tag>" : '');
         }
@@ -811,10 +801,10 @@ class App
                 $tmp[] = "$key=\"".$this->encodeAttribute($val).'"';
             }
         }
-
+        
         return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value !== null ? $value."</$tag>" : '');
     }
-
+    
     /**
      * Encodes string - removes HTML special chars.
      *
@@ -826,7 +816,7 @@ class App
     {
         return htmlspecialchars($val);
     }
-
+    
     /**
      * Encodes string - removes HTML entities.
      *
@@ -837,5 +827,112 @@ class App
     public function encodeHTML($val)
     {
         return htmlentities($val);
+    }
+    
+    /**
+     * handle catch of throwable
+     *
+     * @param \Throwable $e
+     *
+     * @return bool
+     */
+    public function caughtThrowable(\Throwable $e)
+    {
+        // @TODO add a flag for level of verbosity of errors dispay to user
+        $this->catch_runaway_callbacks = false;
+        
+        // if class App was extended
+        // we get the right class to call
+        // if not we get wrong data like : title => Agile Toolkit - untitled
+        $AppClassName = get_class($this);
+        
+        // we valorize flag is_catch_throwable to true
+        // to notice that this instance is an error
+        $l            = new $AppClassName(['is_catch_throwable' => true]);
+        $l->initLayout('Centered');
+        
+        //check for error type.
+        if($e instanceof \Exception)
+        {
+            $exception = $e;
+            
+            if ($exception instanceof \atk4\dsql\Exception)
+            {
+                $l->layout->template->setHTML('Content', $exception->getHTML());
+                $params = $exception->getParams();
+                
+                if (array_key_exists('query', $params))
+                {
+                    $l->layout->template->appendHTML('Content', nl2br($params['query']));
+                }
+            }
+            elseif ($exception instanceof \atk4\core\Exception)
+            {
+                $l->layout->template->setHTML('Content', $exception->getHTML());
+            }
+            else
+            {
+                $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+            }
+        }
+        
+        if($e instanceof \Error)
+        {
+            $error = $e;
+            
+            if ($error instanceof \Error)
+            {
+                $l->layout->add(['Message', get_class($error).': ' . $error->getMessage().' (in '.$error->getFile().':'.$error->getLine().')', 'error']);
+                $l->layout->add(['Text', nl2br($error->getTraceAsString())]);
+            }
+        }
+        
+        $this->logThrowable($e);
+        
+        $l->layout->template->tryDel('Header');
+        
+        if ($this->isJsonRequest())
+        {
+            $jsonData = [
+                'success'   => false,
+                'message' => $l->layout->getHtml(),
+            ];
+            
+            echo json_encode($jsonData);
+        }
+        else
+        {
+            $l->catch_runaway_callbacks = false;
+            $l->run();
+            $this->run_called = true;
+        }
+        
+        $this->callExit();
+        
+        return true;
+    }
+    
+    /**
+     * if debug is active log throwable
+     *
+     * @param \Throwable $t
+     */
+    private function logThrowable(\Throwable $t)
+    {
+        if($this->_debugTrait ?? false == true)
+        {
+            $debugMsg = [
+                ' ====================================== ',
+                ' ERROR : [' . $t->getCode() . '] ' . $t->getMessage(),
+                ' ============== DEBUG ================= ',
+                ' FILE:' . $t->getFile(),
+                ' LINE:' . $t->getLine(),
+                ' ============== TRACE ================= ',
+                $t->getTraceAsString(),
+                ' ====================================== ',
+            ];
+            
+            $this->debug( PHP_EOL . implode(PHP_EOL, $debugMsg) . PHP_EOL);
+        }
     }
 }
