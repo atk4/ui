@@ -195,115 +195,122 @@ class App
                 }
             }
             
-            // Practical to solve the issue of continuos looping and no errors out
+            // Practical to solve the issue of continuous looping and no errors out
             // we must have TOTAL control over error_handling
             //
             // this is all the $error_types
-            // we can now bypass some of this
-            // like :
-            // - deprecated is set to full ignore
-            // - notice is set to ignore only when debug trait is not used
-            // - warning is set to ignore only when debug trait is not used
+            // we can now mute/suppress displaying errors on some of this :
+            // DISPLAY ERRORS :
+            // - deprecated is ignored
+            // - notice is ignored
+            // - warning is ignored only when debug trait is not used
+            // LOG ERRORS
+            // - ANY errors is not ignored when debug trait is used
+            // logging will be triggered or in this function or in the catch exeception
             //
-            // @TODO ignoring means that will output a ugly modal window without any text
+            // @TODO need to remove suppression (@) on other files, notice at now must be set to ignore
+            //
+            // Ignoring means that will output a ugly modal window without any text
+            //
             // just test more before go to production and....
             // Obviously 5 minutes later new errors will come up, because we like to lose weekends ;)
             
-            $isDebugActive = (isset($this->_debugTrait));
+            $is_debug_active = (isset($this->_debugTrait));
             
-            $errName = '';
+            $error_name = '';
             
-            $ignoreError = false;
-            
-            $ignoreDeprecated = true;
-            $ignoreNotice = !$isDebugActive;
-            $ignoreWarning = !$isDebugActive;
+            $mute_deprecated = true;
+            $mute_notice = true;
+            $mute_warning = !$is_debug_active;
             
             /**
              * if we ignore some errors, this doesn't mean that will not log it
              *
              * when debug is active, ignored error will be logged
              */
-            $logIgnoredError = $isDebugActive;
+            $log_muted_errors = $is_debug_active;
             
+            
+            $mute_this_error = false;
             switch ($errno) {
                 
                 case E_ERROR:
-                    $errName = 'E_ERROR';
+                    $error_name = 'E_ERROR';
                 break;    // 1
                 
                 case E_WARNING:
-                    $errName = 'E_WARNING';
-                    $ignoreError = $ignoreWarning;
+                    $error_name = 'E_WARNING';
+                    $mute_this_error = $mute_warning;
                 break;  // 2
                 
                 case E_PARSE:
-                    $errName = 'E_PARSE';
+                    $error_name = 'E_PARSE';
                 break;    // 4
                 
                 case E_NOTICE:
-                    $errName = 'E_NOTICE';
+                    $error_name = 'E_NOTICE';
+                    $mute_this_error = $mute_notice;
                 break;   // 8
                 
                 case E_CORE_ERROR:
-                    $errName = 'E_CORE_ERROR';
+                    $error_name = 'E_CORE_ERROR';
                 break;   // 16
                 
                 case E_CORE_WARNING:
-                    $errName = 'E_CORE_WARNING';
-                    $ignoreError = $ignoreWarning;
+                    $error_name = 'E_CORE_WARNING';
+                    $mute_this_error = $mute_warning;
                 break; // 32
                 
                 case E_COMPILE_ERROR:
-                    $errName = 'E_COMPILE_ERROR';
+                    $error_name = 'E_COMPILE_ERROR';
                 break;    // 64
                 
                 case E_COMPILE_WARNING:
-                    $errName = 'E_COMPILE_WARNING';
-                    $ignoreError = $ignoreWarning;
+                    $error_name = 'E_COMPILE_WARNING';
+                    $mute_this_error = $mute_warning;
                 break;  // 128
                 
                 case E_USER_ERROR:
-                    $errName = 'E_USER_ERROR';
+                    $error_name = 'E_USER_ERROR';
                 break;   // 256
                 
                 case E_USER_WARNING:
-                    $errName = 'E_USER_WARNING';
-                    $ignoreError = $ignoreWarning;
+                    $error_name = 'E_USER_WARNING';
+                    $mute_this_error = $mute_warning;
                 break; // 512
                 
                 case E_USER_NOTICE:
-                    $errName = 'E_USER_NOTICE';
-                    $ignoreError = $ignoreNotice;
+                    $error_name = 'E_USER_NOTICE';
+                    $mute_this_error = $mute_notice;
                 break;  // 1024
                 
                 case E_STRICT:
-                    $errName = 'E_STRICT';
+                    $error_name = 'E_STRICT';
                 break;   // 2048
                 
                 case E_RECOVERABLE_ERROR:
-                    $errName = 'E_RECOVERABLE_ERROR';
+                    $error_name = 'E_RECOVERABLE_ERROR';
                 break;    // 4096
                 
                 case E_DEPRECATED:
-                    $errName = 'E_DEPRECATED';
-                    $ignoreError = $ignoreDeprecated;
+                    $error_name = 'E_DEPRECATED';
+                    $mute_this_error = $mute_deprecated;
                 break;   // 8192
                 
                 case E_USER_DEPRECATED:
-                    $errName = 'E_USER_DEPRECATED';
-                    $ignoreError = $ignoreDeprecated;
+                    $error_name = 'E_USER_DEPRECATED';
+                    $mute_this_error = $mute_deprecated;
                 break;  // 16384
             }
             
-            if($ignoreError)
+            if($mute_this_error)
             {
-                if($logIgnoredError)
+                if($log_muted_errors)
                 {
-                    $this->logThrowable(new \ErrorException($errstr, $errno, $errno, $errfile, $errline));
+                    $this->logThrowable(new \ErrorException($error_name .':' . $errstr, $errno, $errno, $errfile, $errline));
                 }
             } else {
-                throw new \ErrorException($errstr, $errno, $errno, $errfile, $errline);
+                throw new \ErrorException($error_name .':' . $errstr, $errno, $errno, $errfile, $errline);
             }
             
             /**
@@ -993,17 +1000,19 @@ class App
                 // transform both in arrays and intersect the two to get a common path for replace
                 $cwd = explode(DIRECTORY_SEPARATOR,getcwd());
                 $dir = explode(DIRECTORY_SEPARATOR,__DIR__);
-                $commonPath = implode(DIRECTORY_SEPARATOR,array_intersect($cwd,$dir)).DIRECTORY_SEPARATOR;
+                $common_path = implode(DIRECTORY_SEPARATOR,array_intersect($cwd,$dir)).DIRECTORY_SEPARATOR;
                 
                 $message = $l->layout->add(['Message', get_class($e),'icon' => 'triangle exclamation'])->addClass('error')->removeClass('padded');
                 $message->text->addParagraph($e->getMessage());
                 $message->text->addParagraph('in ' . $e->getFile() . '(' . $e->getLine() . ')');
                 
                 $l->layout->add(['Text', '<hr/>']);
-                $l->layout->add(['Text', nl2br(str_replace($commonPath,'',$e->getTraceAsString()))]);
+                $l->layout->add(['Text', nl2br(str_replace($common_path,'',$e->getTraceAsString()))]);
             }
         }
         
+        // @TODO i think this is clearly a duplicate \Error or \Exception not from atk4 need the same work, non sense make a duplicate
+        // @TODO check if an \Error or an \Exception can be casted to \atk4\core\Exception ? if we find this code will be 3/4 lines, and error output will we uniform
         if($e instanceof \Error)
         {
             if ($e instanceof \Error)
@@ -1013,14 +1022,14 @@ class App
                  */
                 $cwd = explode(DIRECTORY_SEPARATOR,getcwd());
                 $dir = explode(DIRECTORY_SEPARATOR,__DIR__);
-                $commonPath = implode(DIRECTORY_SEPARATOR,array_intersect($cwd,$dir)).DIRECTORY_SEPARATOR;
+                $common_path = implode(DIRECTORY_SEPARATOR,array_intersect($cwd,$dir)).DIRECTORY_SEPARATOR;
                 
                 $message = $l->layout->add(['Message', get_class($e),'icon' => 'exclamation'])->addClass('error')->removeClass('padded');
                 $message->text->addParagraph($e->getMessage());
                 $message->text->addParagraph('in ' . $e->getFile() . '(' . $e->getLine() . ')');
                 
                 $l->layout->add(['Text', '<hr/>']);
-                $l->layout->add(['Text', nl2br(str_replace($commonPath,'',$e->getTraceAsString()))]);
+                $l->layout->add(['Text', nl2br(str_replace($common_path,'',$e->getTraceAsString()))]);
             }
         }
         
@@ -1051,18 +1060,18 @@ class App
      */
     private function logThrowable(\Throwable $t)
     {
-        $canLog = $this->_debugTrait ?? false;
-        if($canLog === false) return;
+        $can_log = $this->_debugTrait ?? false;
+        if($can_log === false) return;
         
-        $debugMsg = 'UNDEFINED ERROR'; // <-- Impossible to output
+        $debug_msg = 'UNDEFINED ERROR'; // <-- Impossible to output
         
         if ($t instanceof \atk4\core\Exception)
         {
-            $debugMsg = $t->getColorfulText();
+            $debug_msg = $t->getColorfulText();
         }
         else
         {
-            $debugMsg = [
+            $debug_msg = [
                 ' ====================================== ',
                 ' TYPE : ' . get_class($t),
                 ' MSG  : [' . $t->getCode() . '] ' . $t->getMessage(),
@@ -1074,9 +1083,9 @@ class App
                 ' ====================================== ',
             ];
             
-            $debugMsg = implode(PHP_EOL, $debugMsg);
+            $debug_msg = implode(PHP_EOL, $debug_msg);
         }
         
-        $this->debug(PHP_EOL . $debugMsg . PHP_EOL);
+        $this->debug(PHP_EOL . $debug_msg . PHP_EOL);
     }
 }
