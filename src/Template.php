@@ -738,59 +738,58 @@ class Template implements \ArrayAccess
         if (!is_array($input) || empty($input)) {
             return;
         }
-        
+
         while (true) {
-            
-            $tag = current($input);next($input);
-            
-            if($tag === false) {
+            $tag = current($input);
+            next($input);
+
+            if ($tag === false) {
                 break;
             }
-            
-            $firstChar = substr($tag,0,1);
-            
-            switch($firstChar)
-            {
+
+            $firstChar = substr($tag, 0, 1);
+
+            switch ($firstChar) {
                 // is closing TAG
                 case '/':
                     return substr($tag, 1);
                 break;
-                
+
                 // is TAG
                 case '$':
-                    
+
                     $tag = substr($tag, 1);
-                    
+
                     $full_tag = $this->regTag($tag);
                     $template[$full_tag] = '';  // empty value
                     $this->tags[$tag][] = &$template[$full_tag];
-                    
+
                     // eat next chunk
-                    $chunk = current($input);next($input);
+                    $chunk = current($input); next($input);
                     if ($chunk !== false && $chunk !== null) {
                         $template[] = $chunk;
                     }
-                
+
                 break;
-                
+
                 // recurse
-                default :
-                    
+                default:
+
                     $full_tag = $this->regTag($tag);
-                    
+
                     // next would be prefix
-                    $prefix = current($input);next($input);
-                    $template[$full_tag] = ($prefix===false || $prefix===null) ? [] : [$prefix];
-                    
+                    $prefix = current($input); next($input);
+                    $template[$full_tag] = ($prefix === false || $prefix === null) ? [] : [$prefix];
+
                     $this->tags[$tag][] = &$template[$full_tag];
-                    
+
                     $this->parseTemplateRecursive($input, $template[$full_tag]);
-                    
-                    $chunk = current($input);next($input);
+
+                    $chunk = current($input); next($input);
                     if ($chunk !== false && !empty($chunk)) {
                         $template[] = $chunk;
                     }
-                
+
                 break;
             }
         }
@@ -804,12 +803,13 @@ class Template implements \ArrayAccess
     protected function parseTemplate($str)
     {
         $tag = '/{([\/$]?[-_:\w]*)}/';
-        
+
         $input = preg_split($tag, $str, -1, PREG_SPLIT_DELIM_CAPTURE);
-        
-        $prefix = current($input);next($input);
+
+        $prefix = current($input);
+        next($input);
         $this->template = [$prefix];
-        
+
         $this->parseTemplateRecursive($input, $this->template);
     }
 
