@@ -33,6 +33,9 @@ class UI extends \atk4\data\Persistence
     public $firstDayOfWeek = 0;
 
     public $currency = '€';
+    
+    public $yes = 'Yes';
+    public $no = 'No';
 
     /**
      * This method contains the logic of casting generic values into user-friendly format.
@@ -49,7 +52,7 @@ class UI extends \atk4\data\Persistence
 
         switch ($f->type) {
         case 'boolean':
-            return $v ? 'Yes' : 'No';
+            return $v ? $this->yes : $this->no;
         case 'money':
             return ($this->currency ? $this->currency.' ' : '').number_format($v, 2);
         case 'date':
