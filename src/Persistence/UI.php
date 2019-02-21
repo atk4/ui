@@ -33,7 +33,7 @@ class UI extends \atk4\data\Persistence
     public $firstDayOfWeek = 0;
 
     public $currency = '€';
-    
+
     public $yes = 'Yes';
     public $no = 'No';
 
