@@ -166,6 +166,23 @@ and upgraded Fomantic-UI version.
 - Fix mobile layout [\#608](https://github.com/atk4/ui/pull/608) (@skondakov)
 - Catch coverage usage from callback handlers executed from php shutdown [\#607](https://github.com/atk4/ui/pull/607) (@romaninsh)
 
+## 1.6.3
+
+**Closed issues:**
+
+- Table using setSource\(\): Ability to add custom headline [\#650](https://github.com/atk4/ui/issues/650)
+- Double confirm alert [\#649](https://github.com/atk4/ui/issues/649)
+- Form - create "read-only" field [\#486](https://github.com/atk4/ui/issues/486)
+
+**Merged pull requests:**
+
+- Update UI.php to let dev decide about naming [\#657](https://github.com/atk4/ui/pull/657) (@FabulousGee)
+- Removed deprecated each functions from template parsing [\#654](https://github.com/atk4/ui/pull/654) (@abbadon1334)
+- fix/\#649 Double Confirm [\#653](https://github.com/atk4/ui/pull/653) (@ibelar)
+- make templates-dir easier to customize [\#648](https://github.com/atk4/ui/pull/648) (@DarkSide666)
+- Atk4/ui/table column image [\#645](https://github.com/atk4/ui/pull/645) (@skondakov)
+- bugfix for confirm [\#644](https://github.com/atk4/ui/pull/644) (@DarkSide666)
+
 # 1.5 Release
 
 *Improved Admin Layout*: now is fully flexible and more responsive.
