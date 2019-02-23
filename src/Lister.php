@@ -14,7 +14,7 @@ class Lister extends View
      * @var Template
      */
     public $t_row = null;
-    
+
     /**
      * Temporary property containing $t_row in render phase.
      *
