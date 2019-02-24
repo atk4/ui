@@ -13,8 +13,14 @@ class Lister extends View
      *
      * @var Template
      */
-    public $t_row_master = null;
     public $t_row = null;
+
+    /**
+     * Temporary property containing $t_row in render phase.
+     *
+     * @var Template
+     */
+    protected $t_row_clone = null;
 
     /**
      * Lister use this part of template in case there are no elements in it.
@@ -66,10 +72,10 @@ class Lister extends View
 
         // data row template
         if ($this->template->hasTag('row')) {
-            $this->t_row_master = $this->template->cloneRegion('row');
+            $this->t_row = $this->template->cloneRegion('row');
             $this->template->del('rows');
         } else {
-            $this->t_row_master = clone $this->template;
+            $this->t_row = clone $this->template;
             $this->template->del('_top');
         }
     }
@@ -133,8 +139,9 @@ class Lister extends View
         }
 
         // Generate template for data row
-        $this->t_row_master->trySet('_id', $this->name);
-        $this->t_row = clone $this->t_row_master;
+        $this->t_row->trySet('_id', $this->name);
+        $this->t_row_clone = new Template($this->t_row->render());
+        $this->t_row_clone->app = $this->app;
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
@@ -174,13 +181,13 @@ class Lister extends View
      */
     public function renderRow()
     {
-        $this->t_row->trySet($this->current_row);
+        $this->t_row_clone->trySet($this->current_row);
 
-        $this->t_row->trySet('_title', $this->model->getTitle());
-        $this->t_row->trySet('_href', $this->url(['id'=>$this->current_id]));
-        $this->t_row->trySet('_id', $this->current_id);
+        $this->t_row_clone->trySet('_title', $this->model->getTitle());
+        $this->t_row_clone->trySet('_href', $this->url(['id'=>$this->current_id]));
+        $this->t_row_clone->trySet('_id', $this->current_id);
 
-        $html = $this->t_row->render();
+        $html = $this->t_row_clone->render();
         if ($this->template->hasTag('rows')) {
             $this->template->appendHTML('rows', $html);
         } else {
