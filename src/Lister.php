@@ -140,8 +140,7 @@ class Lister extends View
 
         // Generate template for data row
         $this->t_row->trySet('_id', $this->name);
-        $this->t_row_clone = new Template($this->t_row->render());
-        $this->t_row_clone->app = $this->app;
+        $this->t_row_clone = clone $this->t_row;
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
