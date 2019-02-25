@@ -183,6 +183,14 @@ and upgraded Fomantic-UI version.
 - Atk4/ui/table column image [\#645](https://github.com/atk4/ui/pull/645) (@skondakov)
 - bugfix for confirm [\#644](https://github.com/atk4/ui/pull/644) (@DarkSide666)
 
+## 1.6.4
+
+**Merged pull requests:**
+
+- Feature/implement grid layout [\#662](https://github.com/atk4/ui/pull/662) (@DarkSide666)
+- fix Lister [\#660](https://github.com/atk4/ui/pull/660) (@DarkSide666)
+- Feature/fix lister render [\#659](https://github.com/atk4/ui/pull/659) (@DarkSide666)
+
 # 1.5 Release
 
 *Improved Admin Layout*: now is fully flexible and more responsive.
