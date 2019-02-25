@@ -36,7 +36,7 @@ class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
         $v->init();
         $l = $v->add(['Lister', 'defaultTemplate'=>'lister.html']);
         $l->setSource(['foo', 'bar']);
-        $this->assertRegExp('|<div class="content"><a class="header" href="\?id=1">bar</a>|i', $l->render());
+        $this->assertRegExp('|<div class="content"><a class="header" href="foo">bar</a>|i', $l->render());
     }
 
     /**
