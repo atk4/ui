@@ -106,23 +106,23 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
   virtual.php
   wizard.php
 ');
-  /* DO NOT WORK
-  jssearch.php. 
-  jssortable.php
-  label.php
-  layouts.php
-  layouts_admin.php
-  layouts_error.php
-  layouts_manual.php
-  layouts_nolayout.php
-  lister.php
-  lister-ipp.php
-  loader2.php
-  loader.php
-  modal2.php
-  popup.php
-  tablefilter.php
-  */
+        /* DO NOT WORK
+        jssearch.php.
+        jssortable.php
+        label.php
+        layouts.php
+        layouts_admin.php
+        layouts_error.php
+        layouts_manual.php
+        layouts_nolayout.php
+        lister.php
+        lister-ipp.php
+        loader2.php
+        loader.php
+        modal2.php
+        popup.php
+        tablefilter.php
+        */
         $copy_paste = explode("\n", $copy_paste);
         $copy_paste = array_map(function ($i) {
             return [trim($i)];
