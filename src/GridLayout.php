@@ -2,8 +2,6 @@
 
 namespace atk4\ui;
 
-use atk4\ui\Template;
-
 class GridLayout extends View
 {
     /** @var int Number of rows */
@@ -15,7 +13,7 @@ class GridLayout extends View
     /** @var array Array of columns css wide classes */
     protected $words = [
         '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
-        'thirteen','fourteen', 'fifteen', 'sixteen',
+        'thirteen', 'fourteen', 'fifteen', 'sixteen',
     ];
 
     /**
@@ -77,12 +75,10 @@ class GridLayout extends View
         $this->t_wrap->del('rows');
         $this->t_wrap->appendHTML('rows', '{rows}');
 
-        for ($row=1; $row<=$this->rows; $row++) {
-
+        for ($row = 1; $row <= $this->rows; $row++) {
             $this->t_row->del('column');
 
-            for ($col=1; $col<=$this->columns; $col++) {
-
+            for ($col = 1; $col <= $this->columns; $col++) {
                 $this->t_col->set('Content', '{$r'.$row.'c'.$col.'}');
 
                 $this->t_row->appendHTML('column', $this->t_col->render());
