@@ -16,13 +16,6 @@ class Lister extends View
     public $t_row = null;
 
     /**
-     * Temporary property containing $t_row in render phase.
-     *
-     * @var Template
-     */
-    protected $t_row_clone = null;
-
-    /**
      * Lister use this part of template in case there are no elements in it.
      *
      * @var null|Template
@@ -140,7 +133,6 @@ class Lister extends View
 
         // Generate template for data row
         $this->t_row->trySet('_id', $this->name);
-        $this->t_row_clone = clone $this->t_row;
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
@@ -180,13 +172,13 @@ class Lister extends View
      */
     public function renderRow()
     {
-        $this->t_row_clone->trySet($this->current_row);
+        $this->t_row->trySet($this->current_row);
 
-        $this->t_row_clone->trySet('_title', $this->model->getTitle());
-        $this->t_row_clone->trySet('_href', $this->url(['id'=>$this->current_id]));
-        $this->t_row_clone->trySet('_id', $this->current_id);
+        $this->t_row->trySet('_title', $this->model->getTitle());
+        $this->t_row->trySet('_href', $this->url(['id'=>$this->current_id]));
+        $this->t_row->trySet('_id', $this->current_id);
 
-        $html = $this->t_row_clone->render();
+        $html = $this->t_row->render();
         if ($this->template->hasTag('rows')) {
             $this->template->appendHTML('rows', $html);
         } else {
