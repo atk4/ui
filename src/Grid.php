@@ -83,6 +83,9 @@ class Grid extends View
 
     public $defaultTemplate = 'grid.html';
 
+    // Defines which Table Decorator to use for Actions
+    protected $actionDecorator = 'Actions';
+
     public function init()
     {
         parent::init();
@@ -324,7 +327,7 @@ class Grid extends View
     public function addAction($button, $action, $confirm = false)
     {
         if (!$this->actions) {
-            $this->actions = $this->table->addColumn(null, 'Actions');
+            $this->actions = $this->table->addColumn(null, $this->actionDecorator);
         }
 
         return $this->actions->addAction($button, $action, $confirm);

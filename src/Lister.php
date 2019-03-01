@@ -13,7 +13,6 @@ class Lister extends View
      *
      * @var Template
      */
-    public $t_row_master = null;
     public $t_row = null;
 
     /**
@@ -66,10 +65,10 @@ class Lister extends View
 
         // data row template
         if ($this->template->hasTag('row')) {
-            $this->t_row_master = $this->template->cloneRegion('row');
+            $this->t_row = $this->template->cloneRegion('row');
             $this->template->del('rows');
         } else {
-            $this->t_row_master = clone $this->template;
+            $this->t_row = clone $this->template;
             $this->template->del('_top');
         }
     }
@@ -133,8 +132,7 @@ class Lister extends View
         }
 
         // Generate template for data row
-        $this->t_row_master->trySet('_id', $this->name);
-        $this->t_row = clone $this->t_row_master;
+        $this->t_row->trySet('_id', $this->name);
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
