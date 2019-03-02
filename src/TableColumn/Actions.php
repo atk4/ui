@@ -74,7 +74,7 @@ class Actions extends Generic
         if (!$this->actions) {
             return '';
         }
-    
+
         // render our actions
         $output = '';
         foreach ($this->actions as $action) {
