@@ -71,14 +71,17 @@ class Actions extends Generic
 
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        $output = '';
-
+        if (!$this->actions) {
+            return '';
+        }
+    
         // render our actions
+        $output = '';
         foreach ($this->actions as $action) {
             $output .= $action->getHTML();
         }
 
-        return $output;
+        return '<div class="ui buttons">'.$output.'</div>';
     }
 
     // rest will be implemented for crud
