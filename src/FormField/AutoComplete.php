@@ -3,6 +3,8 @@
 namespace atk4\ui\FormField;
 
 use atk4\ui\jQuery;
+use atk4\ui\jsExpression;
+use atk4\ui\jsFunction;
 
 class AutoComplete extends Input
 {
@@ -135,6 +137,9 @@ class AutoComplete extends Input
         if ($this->action) {
             $this->action->js('click', new \atk4\ui\jsModal('Adding New Record', $vp));
         }
+
+        $this->settings['forceSelection'] = false;
+
     }
 
     /**
