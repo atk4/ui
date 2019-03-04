@@ -33,7 +33,7 @@ class Radio extends Generic
         parent::init();
 
         $this->lister = $this->add('Lister', 'Radio');
-        $this->lister->t_row_master['_name'] = $this->short_name;
+        $this->lister->t_row['_name'] = $this->short_name;
     }
 
     /**
