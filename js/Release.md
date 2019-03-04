@@ -1,5 +1,10 @@
 ## Release note
 
+### version 1.6.1
+
+- fix/notify plugin for fomantic v.2.7.2
+  This version require notify element to have transition hidden set.
+
 ### version 1.6.0
 
 Maintenance release.
