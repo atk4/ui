@@ -295,6 +295,8 @@ class Modal extends View
         if (!empty($this->title)) {
             $this->template->trySet('title', $this->title);
             $this->template->trySet('headerCss', $this->headerCss);
+        } else {
+            $this->template->tryDel('Header');
         }
 
         if (!empty($this->fx)) {
