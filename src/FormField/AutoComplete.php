@@ -139,7 +139,6 @@ class AutoComplete extends Input
         }
 
         $this->settings['forceSelection'] = false;
-
     }
 
     /**
