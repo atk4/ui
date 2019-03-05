@@ -5,9 +5,9 @@
 | </div>
 | {/FilterContainer}
 | {Dropdown}
-| <div id="{$_id}" class="{_ui}ui field{/} {$class} {$_class}" style="{$style}" {$attributes}>
+| <div id="{$_id}" class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
 | {$BeforeInput}{$AfterBeforeInput}
-| <label>{$FilterLabel}</label>
+| {FilterLabelContainer}<label>{$FilterLabel}</label>{/FilterLabelContainer}
 | <div id="{$input_id}" class="ui search selection dropdown {$filterClass} {$disabled}" style="width:100%">
 | {Input}<input class={$input_class} type="{input_type}text{/}" {$input_attributes}/>{/}
 | <i class="dropdown icon"></i>

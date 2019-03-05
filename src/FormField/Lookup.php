@@ -162,6 +162,8 @@ class Lookup extends Input
         if ($this->action) {
             $this->action->js('click', new \atk4\ui\jsModal('Adding New Record', $vp));
         }
+
+        $this->settings['forceSelection'] = false;
     }
 
     /**
@@ -503,6 +505,7 @@ class Lookup extends Input
             $this->js(true, $this->onJsFilterChanged());
         } else {
             $this->template->del('FilterContainer');
+            $this->template->del('FilterLabelContainer');
         }
 
         $this->js(true, $this->getJsDropdown());
