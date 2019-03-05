@@ -27,7 +27,6 @@ export default class notify extends atkPlugin {
 
         this.notify.on('click', '.icon.close', {self:this}, this.removeNotifier);
 
-
         this.notify.appendTo(domElement);
 
         this.notify.transition(this.settings.openTransition);
@@ -45,7 +44,7 @@ export default class notify extends atkPlugin {
      * @returns {string}
      */
     getNotifier(options) {
-      return `<div class="atk-notify"> 
+      return `<div class="atk-notify transition hidden"> 
                 <div class="ui ${options.color} ${options.size} inverted segment" style="overflow: auto; display: block !important">
                     <i class="close icon" style="float:right"></i>
                     <div class="content">
