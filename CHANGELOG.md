@@ -191,6 +191,25 @@ and upgraded Fomantic-UI version.
 - fix Lister [\#660](https://github.com/atk4/ui/pull/660) (@DarkSide666)
 - Feature/fix lister render [\#659](https://github.com/atk4/ui/pull/659) (@DarkSide666)
 
+## 1.6.5
+
+**Closed issues:**
+
+- Bad icon and text button vertical alignment [\#668](https://github.com/atk4/ui/issues/668)
+- Incorrect ids for elements [\#667](https://github.com/atk4/ui/issues/667)
+- Width is not applied correctly to elements [\#656](https://github.com/atk4/ui/issues/656)
+- Improvements to Console [\#392](https://github.com/atk4/ui/issues/392)
+
+**Merged pull requests:**
+
+- Feature/Fomantic Update [\#675](https://github.com/atk4/ui/pull/675) (@ibelar)
+- fix/Radio Input Field [\#674](https://github.com/atk4/ui/pull/674) (@ibelar)
+- fix/jsNotifier Transition [\#673](https://github.com/atk4/ui/pull/673) (@ibelar)
+- fix/Lookup Autocomplete fixes [\#671](https://github.com/atk4/ui/pull/671) (@ibelar)
+- Add container for action buttons [\#669](https://github.com/atk4/ui/pull/669) (@DarkSide666)
+- revert lister template changes [\#666](https://github.com/atk4/ui/pull/666) (@DarkSide666)
+- Defines which Table Decorator to use for Actions [\#665](https://github.com/atk4/ui/pull/665) (@gowrav-vishwakarma)
+
 # 1.5 Release
 
 *Improved Admin Layout*: now is fully flexible and more responsive.
