@@ -37,6 +37,7 @@ prev_version=$(git log --tags --simplify-by-decoration --pretty="format:%d" | gr
 
 echo "Releasing $prev_version -> $version"
 
+gcg
 vimr CHANGELOG.md
 
 # Compute diffs
