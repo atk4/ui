@@ -40,8 +40,9 @@ class Lookup extends Input
      *
      * true = will use "Add new" label
      * string = will use your string
+     * array = will use your array as defaults for button
      *
-     * @var null|bool|string
+     * @var null|bool|string|array
      */
     public $plus = false;
 
@@ -132,7 +133,7 @@ class Lookup extends Input
         $this->template->set('place_holder', $this->placeholder);
 
         if ($this->plus) {
-            $this->action = $this->factory(['Button', is_string($this->plus) ? $this->plus : 'Add new', 'disabled' => ($this->disabled || $this->readonly)]);
+            $this->action = $this->factory(['Button', is_array($this->plus) || is_string($this->plus) ? $this->plus : 'Add new', 'disabled' => ($this->disabled || $this->readonly)]);
         }
         //var_Dump($this->model->get());
         if ($this->form) {
