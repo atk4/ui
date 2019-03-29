@@ -45,10 +45,10 @@ class InlineEdit extends View
 
     /**
      * Default css for the input div.
-     * 
+     *
      * @var string
      */
-    public $inputCss = "ui right icon input";
+    public $inputCss = 'ui right icon input';
 
     /**
      * Initialization.
@@ -73,11 +73,12 @@ class InlineEdit extends View
         if ($this->autoSave && $this->model->loaded()) {
             $field = $this->modelField ? $this->modelField : $this->model->title_field;
             if ($this->cb->triggered()) {
-                $value  = $_POST['value'] ?$_POST['value'] : null;
-                $this->cb->set(function () use ($value, $field){
+                $value = $_POST['value'] ? $_POST['value'] : null;
+                $this->cb->set(function () use ($value, $field) {
                     try {
                         $this->model[$field] = $value;
                         $this->model->save();
+
                         return $this->jsSuccess('Update successfully');
                     } catch (\atk4\data\Exception $e) {
                         return $this->jsError($e->getMessage());
@@ -105,7 +106,7 @@ class InlineEdit extends View
         if (is_callable($fx)) {
             if ($this->cb->triggered()) {
                 $id = $_POST['id'] ? $_POST['id'] : null;
-                $value= $_POST['value'] ? $_POST['value'] : null;
+                $value = $_POST['value'] ? $_POST['value'] : null;
                 $this->cb->set(function () use ($fx, $id, $value) {
                     return call_user_func($fx, $id, $value);
                 });
@@ -159,10 +160,10 @@ class InlineEdit extends View
             '#'.$this->name,
             'atk-inline-edit',
             [
-                'initialValue' =>  $this->model->loaded()? $this->model->getTitle() : '',
-                'id' => $this->model->loaded() ? intval($this->model['id']): null,
-                'url' => $this->cb->getJSURL(),
-                'saveOnBlur' => $this->saveOnBlur,
+                'initialValue' => $this->model->loaded() ? $this->model->getTitle() : '',
+                'id'           => $this->model->loaded() ? intval($this->model['id']) : null,
+                'url'          => $this->cb->getJSURL(),
+                'saveOnBlur'   => $this->saveOnBlur,
             ]
         ));
     }
