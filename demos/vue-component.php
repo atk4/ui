@@ -1,7 +1,7 @@
 <?php
+
 require 'init.php';
 require 'database.php';
-
 
 $app->add(['Header', 'Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
 $app->add(['ui' => 'divider']);
@@ -14,14 +14,13 @@ $m->loadAny();
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
 $app->add(['Header', 'Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
-
 $inline_edit = $app->add(['Component/InlineEdit']);
 $inline_edit->setModel($m);
 
-$inline_edit->onChange(function ($id, $value){
+$inline_edit->onChange(function ($id, $value) {
     return new \atk4\ui\jsToast([
           'title'       => 'Saving',
-          'message'     => 'Country : { '.$id. ' : '.$value.' }',
+          'message'     => 'Country : { '.$id.' : '.$value.' }',
           'class'       => 'success',
           'displayTime' => 5000,
     ]);

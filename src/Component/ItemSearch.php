@@ -7,7 +7,6 @@ use atk4\ui\View;
 
 /**
  * Will send query with define callback and reload a specific view.
- *
  */
 class ItemSearch extends View
 {
@@ -61,6 +60,7 @@ class ItemSearch extends View
 
     /**
      * Set model condition base on search request.
+     *
      * @param $m
      *
      * @return mixed
@@ -68,9 +68,10 @@ class ItemSearch extends View
     public function setModelCondition($m)
     {
         $q = $this->getQuery();
-        if ($q  && ($_GET['__atk_reload'] ? $_GET['__atk_reload'] : null) === $this->reload->name) {
+        if ($q && ($_GET['__atk_reload'] ? $_GET['__atk_reload'] : null) === $this->reload->name) {
             $m->addCondition('name', 'like', '%'.$q.'%');
         }
+
         return $m;
     }
 
@@ -87,7 +88,6 @@ class ItemSearch extends View
         } else {
             $reloadId = $this->reload;
         }
-
 
         $this->js(true, (new jsVueService())->createAtkVue('#'.$this->name,
                                                       'atk-item-search',
