@@ -1,5 +1,5 @@
-import atkPlugin from 'plugins/atkPlugin';
-import apiService from '../services/ApiService';
+import atkPlugin from './atk.plugin';
+import apiService from '../services/api.service';
 
 export default class serverEvent extends atkPlugin {
 

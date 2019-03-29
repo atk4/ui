@@ -1,16 +1,16 @@
 import $ from 'jquery';
-import spinner from "./plugins/spinner";
-import serverEvent from "./plugins/serverEvent";
-import reloadView from "./plugins/reloadView";
-import ajaxec from "./plugins/ajaxec";
-import createModal from "./plugins/createModal";
-import notify from "./plugins/notify";
-import fileUpload from "./plugins/fileUpload";
-import jsSearch from "./plugins/jsSearch";
-import jsSortable from "./plugins/jsSortable";
-import conditionalForm from "./plugins/conditionalForm";
-import columnResizer from "./plugins/columnResizer";
-import scroll from "./plugins/scroll";
+import spinner from "./plugins/spinner.plugin";
+import serverEvent from "./plugins/server-event.plugin";
+import reloadView from "./plugins/reload-view.plugin";
+import ajaxec from "./plugins/ajaxec.plugin";
+import createModal from "./plugins/create-modal.plugin";
+import notify from "./plugins/notify.plugin";
+import fileUpload from "./plugins/file-upload.plugin";
+import jsSearch from "./plugins/js-search.plugin";
+import jsSortable from "./plugins/js-sortable.plugin";
+import conditionalForm from "./plugins/conditional-form.pluing";
+import columnResizer from "./plugins/column-resizer.plugin";
+import scroll from "./plugins/scroll.plugin";
 
 /**
  * Generate a jQuery plugin

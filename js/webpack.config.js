@@ -60,6 +60,7 @@ module.exports = env => {
     },
     externals: {jquery: 'jQuery', draggable: 'Draggable'},
     resolve: {
+      alias: {'vue$' : 'vue/dist/vue.esm.js'},
       modules: [
         path.resolve('./src'),
         path.join(__dirname, 'node_modules')

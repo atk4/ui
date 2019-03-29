@@ -1,5 +1,13 @@
 ## Release note
 
+### version 1.6.2
+
+ - Refactored js file name;
+ - add Vue js service for creating Vue component;
+ - Add some vue component:
+    - inline-edit;
+    - item-search;
+
 ### version 1.6.1
 
 - fix/notify plugin for fomantic v.2.7.2

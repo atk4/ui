@@ -1,5 +1,5 @@
-import atkPlugin from 'plugins/atkPlugin';
-import uploadService from "../services/UploadService";
+import atkPlugin from './atk.plugin';
+import uploadService from "../services/upload.service";
 
 export default class fileUpload extends atkPlugin {
 

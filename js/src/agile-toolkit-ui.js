@@ -1,9 +1,10 @@
 /*global _ATKVERSION_:true */
 
 import atk from 'atk-semantic-ui';
-import 'helpers/addParams';
+import 'helpers/add-params.helper';
 import {plugin, createAtkplugins} from "./plugin";
 import date from 'locutus/php/datetime/date';
+import vueService from './services/vue.service';
 
 // Create atk plugins.
 createAtkplugins();
@@ -13,6 +14,7 @@ atk.version = function(){return _ATKVERSION_};
 atk.registerPlugin = plugin;
 
 atk.phpDate = date;
+atk.vueService = vueService;
 
 
 /**

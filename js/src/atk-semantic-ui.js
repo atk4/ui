@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import apiService from 'services/ApiService';
-import modalService from 'services/ModalService';
-import uploadService from "./services/UploadService";
-import formService from "./services/FormService";
-import popupService from "./services/PopupService";
-import accordionService from "./services/AccordionService";
+import apiService from 'services/api.service';
+import modalService from 'services/modal.service';
+import uploadService from "./services/upload.service";
+import formService from "./services/form.service";
+import popupService from "./services/popup.service";
+import accordionService from "./services/accordion.service";
 
 // setup app service for semantic-ui
 apiService.setService($.fn.api.settings);

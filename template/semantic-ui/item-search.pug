@@ -1,0 +1,6 @@
+div(id="{$_id}", class="{$_class} {$class}")
+    atk-item-search(v-bind="item" inline-template)
+        div(class="atk-item-search {$inputCss}")
+            input.ui(v-model="query" type='text', placeholder='Search...' @keyup="onChange" @keyup.esc="onEscape")
+            i(class="atk-search-icon" :class="classIcon")
+            span(style="width:12px;cursor:pointer" @click="onClear")

@@ -1,5 +1,5 @@
 import $ from "jquery";
-import atkPlugin from 'plugins/atkPlugin';
+import atkPlugin from './atk.plugin';
 import Resizer from 'column-resizer';
 
 /**

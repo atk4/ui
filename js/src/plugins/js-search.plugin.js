@@ -1,4 +1,4 @@
-import atkPlugin from 'plugins/atkPlugin';
+import atkPlugin from './atk.plugin';
 import debounce from 'debounce';
 import $ from 'jquery';
 
