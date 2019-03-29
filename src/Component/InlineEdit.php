@@ -45,7 +45,7 @@ class InlineEdit extends View
 
     /**
      * Default css for the input div.
-     * 
+     *
      * @var string
      */
     public $inputCss = "ui right icon input";
@@ -66,7 +66,7 @@ class InlineEdit extends View
      *
      * @return \atk4\data\Model
      */
-    public function setModel($model)
+    public function setModel(\atk4\data\Model $model)
     {
         parent::setModel($model);
 
