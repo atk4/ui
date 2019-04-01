@@ -76,7 +76,7 @@ class FeatureContext extends RawMinkContext implements Context
      */
     public function iWaitForSendActionUsing($arg1)
     {
-        $this->getSession()->wait(5000, "$('{$arg1}').length" );
+        $this->getSession()->wait(5000, "$('{$arg1}').length");
     }
 
     /**
