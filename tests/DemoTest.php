@@ -104,7 +104,6 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
   upload.php
   view.php
   virtual.php
-  vue-component.php
   wizard.php
 ');
         /* DO NOT WORK
@@ -123,6 +122,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
         modal2.php
         popup.php
         tablefilter.php
+        vue-component.php
         */
         $copy_paste = explode("\n", $copy_paste);
         $copy_paste = array_map(function ($i) {
