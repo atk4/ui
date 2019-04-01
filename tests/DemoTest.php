@@ -104,6 +104,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
   upload.php
   view.php
   virtual.php
+  vue-component.php
   wizard.php
 ');
         /* DO NOT WORK

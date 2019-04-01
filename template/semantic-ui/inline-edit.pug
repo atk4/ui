@@ -1,5 +1,5 @@
 div(id="{$_id}", class="{$_class} {$class}", style="{$style}")
     atk-inline-edit(v-bind="item" inline-template)
         div(class="{$inputCss}")
-            input(name="{$fieldName}" class="{$inlineEditClass}" type="text" v-model="value" @keyup.esc="onEscape" @keyup.enter="onEnter" @focus="onFocus" @blur="onBlur")
+            input(name="{$fieldName}" class="{$inlineEditClass}" type="{$fieldType}" v-model="value" @keyup.esc="onEscape" @keyup.enter="onEnter" @focus="onFocus" @blur="onBlur")
             i.icon

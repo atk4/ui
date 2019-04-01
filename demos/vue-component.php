@@ -18,12 +18,10 @@ $inline_edit = $app->add(['Component/InlineEdit']);
 $inline_edit->setModel($m);
 
 $inline_edit->onChange(function ($id, $value) {
-    return new \atk4\ui\jsToast([
-          'title'       => 'Saving',
-          'message'     => 'Country : { '.$id.' : '.$value.' }',
-          'class'       => 'success',
-          'displayTime' => 5000,
-    ]);
+    $view = new \atk4\ui\Message();
+    $view->init();
+    $view->text->addParagraph('new value: '.$value);
+    return $view;
 });
 
 $app->add(['ui' => 'divider']);

@@ -5,6 +5,7 @@
 
 namespace atk4\ui\Component;
 
+use atk4\ui\Exception;
 use atk4\ui\jsVueService;
 use atk4\ui\View;
 
@@ -22,17 +23,18 @@ class InlineEdit extends View
     /**
      * Whether callback should save value to db automatically or not.
      * Default to using onChange handler.
-     * If set to true, then saving to db will be done when model get set.
+     * If set to true, then saving to db will be done when model get set
+     * and if model is loaded already.
      *
      * @var bool
      */
     public $autoSave = false;
 
     /**
-     * The actual db field that need to be saved.
+     * The actual db field name that need to be saved.
      * Default to title field when model is set.
      *
-     * @var null
+     * @var null|string The name of the field.
      */
     public $modelField = null;
 
@@ -69,14 +71,13 @@ class InlineEdit extends View
     public function setModel(\atk4\data\Model $model)
     {
         parent::setModel($model);
-
+        $this->modelField = $this->modelField ? $this->modelField : $this->model->title_field;
         if ($this->autoSave && $this->model->loaded()) {
-            $field = $this->modelField ? $this->modelField : $this->model->title_field;
             if ($this->cb->triggered()) {
                 $value = $_POST['value'] ? $_POST['value'] : null;
-                $this->cb->set(function () use ($value, $field) {
+                $this->cb->set(function () use ($value) {
                     try {
-                        $this->model[$field] = $value;
+                        $this->model[$this->modelField] = $value;
                         $this->model->save();
 
                         return $this->jsSuccess('Update successfully');
@@ -103,7 +104,7 @@ class InlineEdit extends View
      */
     public function onChange($fx)
     {
-        if (is_callable($fx)) {
+        if (is_callable($fx) && !$this->autoSave) {
             if ($this->cb->triggered()) {
                 $id = $_POST['id'] ? $_POST['id'] : null;
                 $value = $_POST['value'] ? $_POST['value'] : null;
@@ -153,14 +154,22 @@ class InlineEdit extends View
     {
         parent::renderView();
 
+        $type = ($this->model && $this->modelField) ? $this->model->elements[$this->modelField]->type : 'text';
+        $type = ($type === 'string') ? 'text' : $type;
+
+        if($type != 'text' && $type != 'number') {
+            throw new Exception('Error: Only string or number field can be edited inline. Field Type = ' .$type);
+        }
+
         $this->template->set('inputCss', $this->inputCss);
         $this->template->trySet('fieldName', $this->modelField);
+        $this->template->trySet('fieldType', $type);
 
         $this->js(true, (new jsVueService())->createAtkVue(
             '#'.$this->name,
             'atk-inline-edit',
             [
-                'initialValue' => $this->model->loaded() ? $this->model->getTitle() : '',
+                'initialValue' => $this->model->loaded() ? $this->model->get($this->modelField) : '',
                 'id'           => $this->model->loaded() ? intval($this->model['id']) : null,
                 'url'          => $this->cb->getJSURL(),
                 'saveOnBlur'   => $this->saveOnBlur,
