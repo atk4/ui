@@ -39,6 +39,8 @@ class ItemSearch extends View
      */
     public $context = null;
 
+    public $queryArg = null;
+
     public $defaultTemplate = 'item-search.html';
 
     public function init()
@@ -48,6 +50,10 @@ class ItemSearch extends View
         if (!$this->q) {
             $this->q = $this->getQuery();
         }
+
+        if (!$this->queryArg) {
+            $this->queryArg = 'q_'.$this->name;
+        }
     }
 
     /**
@@ -55,7 +61,8 @@ class ItemSearch extends View
      */
     public function getQuery()
     {
-        return $_GET['_q'] ? $_GET['_q'] : null;
+        $arg = 'q_'.$this->name;
+        return $_GET[$arg] ? $_GET[$arg] : null;
     }
 
     /**
@@ -93,6 +100,7 @@ class ItemSearch extends View
                                                       'atk-item-search',
                                                       [
                                                           'reload'   => $reloadId,
+                                                          'queryArg' => $this->queryArg,
                                                           'url'      => $this->reload->jsURL(),
                                                           'q'        => $this->q,
                                                           'context'  => $this->context,

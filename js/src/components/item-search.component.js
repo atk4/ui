@@ -25,6 +25,7 @@ export default {
     url: String,
     q: String,
     reload: String,
+    queryArg: String,
   },
   data: function () {
     return { query: this.q, temp: this.q, isActive: false, extraQuery: null};
@@ -68,7 +69,7 @@ export default {
     },
     sendQuery: function() {
       const that = this;
-      const options = $.extend({}, this.extraQuery, {__atk_reload: this.reload, '_q' : this.query});
+      const options = $.extend({}, this.extraQuery, {__atk_reload: this.reload, [this.queryArg] : this.query});
       const $reload = $('#'+this.reload);
       this.isActive = true;
       $reload.api({

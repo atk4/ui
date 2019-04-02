@@ -17,7 +17,7 @@ $app->add(['Header', 'Inline editing.', 'size' => 3, 'subHeader' => $subHeader])
 $inline_edit = $app->add(['Component/InlineEdit']);
 $inline_edit->setModel($m);
 
-$inline_edit->onChange(function ($id, $value) {
+$inline_edit->onChange(function ($value) {
     $view = new \atk4\ui\Message();
     $view->init();
     $view->text->addParagraph('new value: '.$value);
@@ -34,11 +34,6 @@ $app->add(['Header', 'Search using a Vue component', 'subHeader' => $subHeader])
 
 $m = new Country($db);
 
-//Search query will be set in _q
-$q = $_GET['_q'] ? $_GET['_q'] : null;
-if ($q) {
-    $m->addCondition('name', 'like', '%'.$q.'%');
-}
 
 $lister_template = new atk4\ui\Template('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{/}</div>');
 
@@ -50,5 +45,5 @@ $lister = $lister_container->add('Lister', 'List')
                 $l->current_row['iso'] = strtolower($l->current_row['iso']);
             });
 
-$lister->setModel($m)->setLimit(100);
 $search->reload = $lister_container;
+$lister->setModel($search->setModelCondition($m))->setLimit(100);

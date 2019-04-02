@@ -1,8 +1,10 @@
 
 <div class="{$_class} {$class}" id="{$_id}" style="{$style}">
   <atk-inline-edit v-bind="item" inline-template="inline-template">
-    <div class="{$inputCss}">
-      <input class="{$inlineEditClass}" name="{$fieldName}" type="{$fieldType}" v-model="value" @keyup.esc="onEscape" @keyup.enter="onEnter" @focus="onFocus" @blur="onBlur"/><i class="icon"></i>
+    <div class="inline field">
+      <div class="{$inputCss}" :class="{error: hasError, loading : isLoading}">
+        <input class="{$inlineEditClass}" name="{$fieldName}" type="{$fieldType}" v-model="value" @keyup="onKeyUp" @focus="onFocus" @blur="onBlur"/><i class="icon"></i>
+      </div>
     </div>
   </atk-inline-edit>
 </div>

@@ -5,7 +5,9 @@
 
 namespace atk4\ui\Component;
 
+use atk4\data\ValidationException;
 use atk4\ui\Exception;
+use atk4\ui\jsToast;
 use atk4\ui\jsVueService;
 use atk4\ui\View;
 
@@ -19,6 +21,13 @@ class InlineEdit extends View
      * @var null
      */
     public $cb = null;
+
+    /**
+     * Input initial value.
+     *
+     * @var null
+     */
+    public $initValue = null;
 
     /**
      * Whether callback should save value to db automatically or not.
@@ -36,10 +45,15 @@ class InlineEdit extends View
      *
      * @var null|string The name of the field.
      */
-    public $modelField = null;
+    public $field = null;
 
     /**
      * Whether component should save it's value when input get blur.
+     * Using this option will trigger callback when user is moving out of the
+     * inline edit field, like pressing tab for example.
+     *
+     *  Otherwise, callback is fire when pressing Enter key,
+     *  while inside the inline input field, only.
      *
      * @var bool
      */
@@ -53,12 +67,35 @@ class InlineEdit extends View
     public $inputCss = 'ui right icon input';
 
     /**
+     *
+     * The validation error msg function.
+     * This function is call when a validation error occur and
+     * give you a chance to format the error msg display inside
+     * errorNotifier.
+     *
+     * A default one is supply if this is null.
+     * It receive the error ($e) as parameter.
+     *
+     * @var null | callable
+     */
+    public $formatErrorMsg = null;
+
+    /**
      * Initialization.
      */
     public function init()
     {
         parent::init();
         $this->cb = $this->add('jsCallback');
+
+        // Set default validation error handler.
+        if (!$this->formatErrorMsg || !is_callable($this->formatErrorMsg)) {
+            $this->formatErrorMsg = function($e, $value) {
+                $caption = $this->model->getElement($this->field)->getCaption();
+
+                return "{$caption} - {$e->getMessage()}. <br>Trying to set this value: '{$value}'";
+            };
+        }
     }
 
     /**
@@ -71,20 +108,22 @@ class InlineEdit extends View
     public function setModel(\atk4\data\Model $model)
     {
         parent::setModel($model);
-        $this->modelField = $this->modelField ? $this->modelField : $this->model->title_field;
+        $this->field = $this->field ? $this->field : $this->model->title_field;
         if ($this->autoSave && $this->model->loaded()) {
             if ($this->cb->triggered()) {
                 $value = $_POST['value'] ? $_POST['value'] : null;
                 $this->cb->set(function () use ($value) {
                     try {
-                        $this->model[$this->modelField] = $value;
+                        $this->model[$this->field] = $this->app->ui_persistence->typecastLoadField($this->model->getElement($this->field), $value);
                         $this->model->save();
 
                         return $this->jsSuccess('Update successfully');
-                    } catch (\atk4\data\Exception $e) {
-                        return $this->jsError($e->getMessage());
-                    } catch (\Error $e) {
-                        return $this->jsError($e->getMessage());
+                    } catch (ValidationException $e) {
+                        $this->app->terminate(json_encode([
+                              'success'            => true,
+                              'hasValidationError' => true,
+                              'atkjs'              => $this->jsError(call_user_func($this->formatErrorMsg, $e, $value))->jsRender()
+                          ]));
                     }
                 });
             }
@@ -96,8 +135,7 @@ class InlineEdit extends View
     /**
      * onChange handler.
      * You may supply your own function to handle update.
-     * The function will receive two params:
-     *  id: The record id;
+     * The function will receive one param:
      *  value:  the new input value.
      *
      * @param callable $fx
@@ -106,17 +144,16 @@ class InlineEdit extends View
     {
         if (is_callable($fx) && !$this->autoSave) {
             if ($this->cb->triggered()) {
-                $id = $_POST['id'] ? $_POST['id'] : null;
                 $value = $_POST['value'] ? $_POST['value'] : null;
-                $this->cb->set(function () use ($fx, $id, $value) {
-                    return call_user_func($fx, $id, $value);
+                $this->cb->set(function () use ($fx, $value) {
+                    return call_user_func($fx, $value);
                 });
             }
         }
     }
 
     /**
-     * On success message.
+     * On success notifier.
      *
      * @param string $message
      *
@@ -124,15 +161,16 @@ class InlineEdit extends View
      */
     public function jsSuccess($message)
     {
-        return new \atk4\ui\jsToast([
-                                        'title'   => 'Success',
-                                        'message' => $message,
-                                        'class'   => 'success',
-                                    ]);
+
+        return new jsToast([
+           'title'   => 'Success',
+           'message' => $message,
+           'class'   => 'success',
+       ]);
     }
 
     /**
-     * On error message.
+     * On validation error notifier.
      *
      * @param string $message
      *
@@ -140,11 +178,14 @@ class InlineEdit extends View
      */
     public function jsError($message)
     {
-        return new \atk4\ui\jsToast([
-                                        'title'   => 'Error',
-                                        'message' => $message,
-                                        'class'   => 'error',
-                                    ]);
+
+        return new jsToast([
+           'title'          => 'Validation error:',
+           'displayTime'    => 8000,
+           'showIcon'       => 'exclamation',
+           'message'        => $message,
+           'class'          => 'error',
+       ]);
     }
 
     /**
@@ -154,25 +195,32 @@ class InlineEdit extends View
     {
         parent::renderView();
 
-        $type = ($this->model && $this->modelField) ? $this->model->elements[$this->modelField]->type : 'text';
+        $type = ($this->model && $this->field) ? $this->model->elements[$this->field]->type : 'text';
         $type = ($type === 'string') ? 'text' : $type;
 
         if ($type != 'text' && $type != 'number') {
             throw new Exception('Error: Only string or number field can be edited inline. Field Type = '.$type);
         }
 
+        if ($this->model && $this->model->loaded()) {
+            $initValue = $this->model->get($this->field);
+        } else {
+            $initValue = $this->initValue;
+        }
+
+        $fieldName = $this->field ? $this->field : 'name';
+
         $this->template->set('inputCss', $this->inputCss);
-        $this->template->trySet('fieldName', $this->modelField);
+        $this->template->trySet('fieldName', $fieldName);
         $this->template->trySet('fieldType', $type);
 
         $this->js(true, (new jsVueService())->createAtkVue(
             '#'.$this->name,
             'atk-inline-edit',
             [
-                'initialValue' => $this->model->loaded() ? $this->model->get($this->modelField) : '',
-                'id'           => $this->model->loaded() ? intval($this->model['id']) : null,
-                'url'          => $this->cb->getJSURL(),
-                'saveOnBlur'   => $this->saveOnBlur,
+                'initValue'     => $initValue,
+                'url'           => $this->cb->getJSURL(),
+                'saveOnBlur'    => $this->saveOnBlur,
             ]
         ));
     }

@@ -19,12 +19,11 @@ export default {
   name: 'atk-inline-edit',
   props: {
     url: String,
-    initialValue: String,
-    id: Number,
+    initValue: String,
     saveOnBlur: {type: Boolean, default: true},
   },
   data: function() {
-    return {value: this.initialValue, temp: this.initialValue};
+    return {value: this.initValue, temp: this.initValue, hasError: null, isLoading: false};
   },
   computed: {
     isDirty: function() {
@@ -33,12 +32,24 @@ export default {
   },
   methods: {
     onFocus: function() {
-      this.temp = this.value;
+      if (this.hasError) {
+        this.clearError();
+      } else {
+        this.temp = this.value;
+      }
+    },
+    onKeyUp: function(e) {
+      const key  = e.keyCode;
+      this.clearError();
+      if (key === 13) {
+        this.onEnter(e);
+      } else if (key === 27) {
+        this.onEscape();
+      }
     },
     onBlur: function() {
-      if (this.isDirty && this.saveOnBlur) {
+      if (this.isDirty && this.saveOnBlur && !this.hasError) {
         this.update();
-        this.temp = this.value;
       } else {
         this.value = this.temp;
       }
@@ -50,20 +61,37 @@ export default {
     onEnter: function(e){
       if (this.isDirty) {
         this.update();
-        this.temp = this.value;
       }
-      this.$el.querySelector('input').blur();
+    },
+    clearError: function() {
+      this.hasError = false;
+    },
+    flashError: function(count = 4) {
+      if (count  === 0) {
+        this.hasError = false;
+        return;
+      }
+      this.hasError = !this.hasError;
+      setTimeout(() => {
+        this.flashError(count - 1);
+      }, 300)
     },
     update: function() {
+      const that = this;
       const $obj = $(this.$el);
+      this.isLoading = true;
       $obj.api({
         on: 'now',
         url: this.url,
-        data: {id: this.id, value: this.value},
+        data: {value: this.value},
         method: 'POST',
-        context: this.$el.parentElement,
-        obj: $obj,
         onComplete: function(r,e) {
+          if (r.hasValidationError) {
+            that.hasError = true;
+          } else {
+            that.temp = that.value;
+          }
+          that.isLoading = false;
         }
       });
     }
