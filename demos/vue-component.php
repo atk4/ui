@@ -34,7 +34,6 @@ $app->add(['Header', 'Search using a Vue component', 'subHeader' => $subHeader])
 
 $m = new Country($db);
 
-
 $lister_template = new atk4\ui\Template('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{/}</div>');
 
 $view = $app->add('View');

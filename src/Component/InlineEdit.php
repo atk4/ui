@@ -67,7 +67,6 @@ class InlineEdit extends View
     public $inputCss = 'ui right icon input';
 
     /**
-     *
      * The validation error msg function.
      * This function is call when a validation error occur and
      * give you a chance to format the error msg display inside
@@ -90,7 +89,7 @@ class InlineEdit extends View
 
         // Set default validation error handler.
         if (!$this->formatErrorMsg || !is_callable($this->formatErrorMsg)) {
-            $this->formatErrorMsg = function($e, $value) {
+            $this->formatErrorMsg = function ($e, $value) {
                 $caption = $this->model->getElement($this->field)->getCaption();
 
                 return "{$caption} - {$e->getMessage()}. <br>Trying to set this value: '{$value}'";
@@ -122,7 +121,7 @@ class InlineEdit extends View
                         $this->app->terminate(json_encode([
                               'success'            => true,
                               'hasValidationError' => true,
-                              'atkjs'              => $this->jsError(call_user_func($this->formatErrorMsg, $e, $value))->jsRender()
+                              'atkjs'              => $this->jsError(call_user_func($this->formatErrorMsg, $e, $value))->jsRender(),
                           ]));
                     }
                 });
@@ -161,7 +160,6 @@ class InlineEdit extends View
      */
     public function jsSuccess($message)
     {
-
         return new jsToast([
            'title'   => 'Success',
            'message' => $message,
@@ -178,7 +176,6 @@ class InlineEdit extends View
      */
     public function jsError($message)
     {
-
         return new jsToast([
            'title'          => 'Validation error:',
            'displayTime'    => 8000,

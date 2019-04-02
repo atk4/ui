@@ -62,6 +62,7 @@ class ItemSearch extends View
     public function getQuery()
     {
         $arg = 'q_'.$this->name;
+
         return $_GET[$arg] ? $_GET[$arg] : null;
     }
 
