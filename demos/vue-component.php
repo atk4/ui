@@ -55,7 +55,7 @@ $app->add(['Header', 'External Component', 'subHeader' => 'Creating component us
 $app->requireJS('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min');
 
 // Injecting template but normally you would create a template file.
-$clock_template =  new \atk4\ui\Template('
+$clock_template = new \atk4\ui\Template('
     <div id="{$_id}" class="ui center aligned segment">
     <my-clock inline-template v-bind="item">
         <div>

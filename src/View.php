@@ -890,13 +890,13 @@ class View implements jsExpressionable
      * atkjs-ui.js build.
      *
      *
-     * @param string          $component            The component name;
-     * @param array           $data                 The component properties passed as the item prop.
-     *                                              This is the initial data pass to your component via the item bind property
-     *                                              of the vue component instance created via the vueService.
-     * @param null|string     $componentDefinition  The name of the js var holding a component definition object.
-     *                                              This var must be defined and accessible in window object. window['var_name']
-     * @param null            $selector             The selector for creating the base root object in Vue.
+     * @param string      $component           The component name;
+     * @param array       $data                The component properties passed as the item prop.
+     *                                         This is the initial data pass to your component via the item bind property
+     *                                         of the vue component instance created via the vueService.
+     * @param null|string $componentDefinition The name of the js var holding a component definition object.
+     *                                         This var must be defined and accessible in window object. window['var_name']
+     * @param null        $selector            The selector for creating the base root object in Vue.
      *
      * @return $this
      */
