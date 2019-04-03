@@ -64,7 +64,6 @@ class VueService {
    * @param data
    */
   createVue(name, componentName, component, data) {
-    console.log(window[component]);
     this.vues.push({name: name, instance: new Vue({
           el: name,
           components: {[componentName]: window[component]},
