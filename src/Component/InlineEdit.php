@@ -211,7 +211,7 @@ class InlineEdit extends View
         $this->template->trySet('fieldName', $fieldName);
         $this->template->trySet('fieldType', $type);
 
-        $this->vue('atk-inline-edit',  [
+        $this->vue('atk-inline-edit', [
             'initValue'     => $initValue,
             'url'           => $this->cb->getJSURL(),
             'saveOnBlur'    => $this->saveOnBlur,
