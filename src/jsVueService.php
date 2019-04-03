@@ -51,9 +51,9 @@ class jsVueService
      *
      * @return mixed
      */
-    public function createVue($id, $component, $data = [])
+    public function createVue($id, $componentName, $component, $data = [])
     {
-        return $this->service->createVue($id, $component, $data);
+        return $this->service->createVue($id, $componentName, $component, $data);
     }
 
     /**

@@ -63,10 +63,11 @@ class VueService {
    * @param component
    * @param data
    */
-  createVue(name, component, data) {
+  createVue(name, componentName, component, data) {
+    console.log(window[component]);
     this.vues.push({name: name, instance: new Vue({
           el: name,
-          components: {[component]: component},
+          components: {[componentName]: window[component]},
           data: {item:data},
           methods: {
             getData: function() {
@@ -94,6 +95,11 @@ class VueService {
    */
   emitEvent(event, data = {}) {
     this.eventBus.$emit(event, data);
+  }
+
+
+  getVue() {
+    return Vue;
   }
 }
 

@@ -878,6 +878,26 @@ class View implements jsExpressionable
         return $chain;
     }
 
+
+    public function vue($component, $data, $componentDefinition = null, $selector = null)
+    {
+        if (!$selector) {
+            $selector = '#'.$this->name;
+        }
+
+        if ($componentDefinition) {
+            $chain = (new jsVueService())->createVue($selector, $component, $componentDefinition, $data);
+        } else {
+            $chain = (new jsVueService())->createAtkVue($selector, $component, $data);
+        }
+
+        $this->_js_actions[true][] = $chain;
+
+        return $this;
+    }
+
+
+
     /**
      * Returns JS for reloading View.
      *

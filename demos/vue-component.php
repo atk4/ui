@@ -46,3 +46,34 @@ $lister = $lister_container->add('Lister', 'List')
 
 $search->reload = $lister_container;
 $lister->setModel($search->setModelCondition($m))->setLimit(100);
+
+//****** CREATING CUSTOM VUE USING EXTERNAL COMPONENT *****************************
+
+$app->requireJS('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min');
+
+$clock_template =  new \atk4\ui\Template('<div id="{$_id}" class="ui center aligned segment"><my-clock inline-template v-bind="item"><div><clock :color="color" :border="border" :bg="bg"></clock></div></my-clock></div>{$script}');
+
+$clock_script = "
+    <script>
+        //Register clock component from vue-clock2 to use with myClock.
+        atk.vueService.getVue().component('clock', Clock.default);
+
+        var myClock = {
+          props : {clock: Object},
+          data: function() {
+            return {color : this.clock.color, border: this.clock.border, bg: this.clock.bg}
+          },
+          name: 'my-clock',
+        } 
+    </script>";
+
+$clock = $app->add(['View', 'template' => $clock_template]);
+$clock->template->trySetHtml('script', $clock_script);
+
+$clock_attr = [
+    'color' => '#4AB7BD',
+    'border' => '',
+    'bg' => 'none'
+];
+
+$clock->vue('my-clock', ['clock' => $clock_attr], 'myClock');

@@ -211,14 +211,20 @@ class InlineEdit extends View
         $this->template->trySet('fieldName', $fieldName);
         $this->template->trySet('fieldType', $type);
 
-        $this->js(true, (new jsVueService())->createAtkVue(
-            '#'.$this->name,
-            'atk-inline-edit',
-            [
-                'initValue'     => $initValue,
-                'url'           => $this->cb->getJSURL(),
-                'saveOnBlur'    => $this->saveOnBlur,
-            ]
-        ));
+        $this->vue('atk-inline-edit',  [
+            'initValue'     => $initValue,
+            'url'           => $this->cb->getJSURL(),
+            'saveOnBlur'    => $this->saveOnBlur,
+        ]);
+
+//        $this->js(true, (new jsVueService())->createAtkVue(
+//            '#'.$this->name,
+//            'atk-inline-edit',
+//            [
+//                'initValue'     => $initValue,
+//                'url'           => $this->cb->getJSURL(),
+//                'saveOnBlur'    => $this->saveOnBlur,
+//            ]
+//        ));
     }
 }
