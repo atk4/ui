@@ -159,11 +159,6 @@ class Input extends Generic
             }
         }
 
-        // disabled state
-        if ($this->disabled) {
-            $this->addClass('disabled');
-        }
-
         // icons
         if ($this->icon && !is_object($this->icon)) {
             $this->icon = $this->add(new Icon($this->icon), 'AfterInput');

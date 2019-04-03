@@ -223,7 +223,12 @@ class Upload extends Input
      */
     public function renderView()
     {
+        //need before parent rendering.
+        if ($this->disabled) {
+            $this->addClass('disabled');
+        }
         parent::renderView();
+
         if (!$this->hasUploadCb || !$this->hasDeleteCb) {
             throw new Exception('onUpload and onDelete callback must be called to use file upload');
         }
