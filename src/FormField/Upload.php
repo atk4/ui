@@ -251,6 +251,5 @@ class Upload extends Input
             'hasFocus' => $this->hasFocusEnable,
             'submit'   => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
         ]);
-
     }
 }
