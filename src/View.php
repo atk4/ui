@@ -878,8 +878,29 @@ class View implements jsExpressionable
         return $chain;
     }
 
-
-    public function vue($component, $data, $componentDefinition = null, $selector = null)
+    /**
+     * Create Vue.js instance.
+     * Vue.js instance can be create from atk4\ui\View.
+     *
+     * Component managed and defined by atk does not need componentDefinition variable name
+     * because these are already loaded within the atk js namespace.
+     * When creating your own component externally, you must supply the variable name holding
+     * your Vue component definition. This definition must be also accessible within the window javascript
+     * object. This way, you do not need to load Vue js file since it has already being include within
+     * atkjs-ui.js build.
+     *
+     *
+     * @param string          $component            The component name;
+     * @param array           $data                 The component properties passed as the item prop.
+     *                                              This is the initial data pass to your component via the item bind property
+     *                                              of the vue component instance created via the vueService.
+     * @param null|string     $componentDefinition  The name of the js var holding a component definition object.
+     *                                              This var must be defined and accessible in window object. window['var_name']
+     * @param null            $selector             The selector for creating the base root object in Vue.
+     *
+     * @return $this
+     */
+    public function vue($component, $data = [], $componentDefinition = null, $selector = null)
     {
         if (!$selector) {
             $selector = '#'.$this->name;
@@ -895,8 +916,6 @@ class View implements jsExpressionable
 
         return $this;
     }
-
-
 
     /**
      * Returns JS for reloading View.
