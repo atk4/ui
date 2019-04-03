@@ -160,6 +160,10 @@ class DropDown extends Input
             $this->removeClass('search');
         }
 
+        if ($this->disabled) {
+            $this->addClass('disabled');
+        }
+
         if ($this->readonly) {
             $this->setDropdownOption('allowTab', false);
             $this->setDropdownOption('onShow', new jsFunction([new jsExpression('return false')]));
