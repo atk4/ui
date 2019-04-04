@@ -44,12 +44,12 @@ $lister = $lister_container->add('Lister', 'List')
                 $l->ipp++;
                 $l->current_row['iso'] = strtolower($l->current_row['iso']);
                 if ($l->ipp === $l->model->limit[0]) {
-                    $l->t_row->setHtml('end', '<span>...</span>');
+                    $l->t_row->setHtml('end', '<div class="ui circular basic label"> ...</div>');
                 }
             });
 
 $search->reload = $lister_container;
-$lister->setModel($search->setModelCondition($m))->setLimit(100);
+$lister->setModel($search->setModelCondition($m))->setLimit(50);
 
 $app->add(['ui' => 'divider']);
 
