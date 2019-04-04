@@ -889,10 +889,15 @@ class View implements jsExpressionable
      * object. This way, you do not need to load Vue js file since it has already being include within
      * atkjs-ui.js build.
      *
+     * If the external component use other components, it is possible to register them using
+     * vueService getVue() method. This method return the current Vue object.
+     * ex: atk.vueService.getVue().component('external_component', externalComponent). This is the same
+     * as Vue.component() method. 
+     *
      *
      * @param string      $component           The component name;
-     * @param array       $data                The component properties passed as the item prop.
-     *                                         This is the initial data pass to your component via the item bind property
+     * @param array       $initData            The component properties passed as the initData prop.
+     *                                         This is the initial data pass to your main component via the initData bind property
      *                                         of the vue component instance created via the vueService.
      * @param null|string $componentDefinition The name of the js var holding a component definition object.
      *                                         This var must be defined and accessible in window object. window['var_name']
@@ -900,16 +905,16 @@ class View implements jsExpressionable
      *
      * @return $this
      */
-    public function vue($component, $data = [], $componentDefinition = null, $selector = null)
+    public function vue($component, $initData = [], $componentDefinition = null, $selector = null)
     {
         if (!$selector) {
             $selector = '#'.$this->name;
         }
 
         if ($componentDefinition) {
-            $chain = (new jsVueService())->createVue($selector, $component, $componentDefinition, $data);
+            $chain = (new jsVueService())->createVue($selector, $component, $componentDefinition, $initData);
         } else {
-            $chain = (new jsVueService())->createAtkVue($selector, $component, $data);
+            $chain = (new jsVueService())->createAtkVue($selector, $component, $initData);
         }
 
         $this->_js_actions[true][] = $chain;

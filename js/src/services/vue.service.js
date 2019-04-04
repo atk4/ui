@@ -38,7 +38,7 @@ class VueService {
     this.vues.push({name: name, instance: new Vue({
           el: name,
           components: {[component]: atkComponents[component]},
-          data: {item:data},
+          data: {initData:data},
           methods: {
             getData: function() {
               return this.item
@@ -67,7 +67,7 @@ class VueService {
     this.vues.push({name: name, instance: new Vue({
           el: name,
           components: {[componentName]: window[component]},
-          data: {item:data},
+          data: {initData:data},
           methods: {
             getData: function() {
               return this.item

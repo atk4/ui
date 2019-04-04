@@ -1,6 +1,6 @@
 
 <div class="{$_class} {$class}" id="{$_id}">
-  <atk-item-search v-bind="item" inline-template="inline-template">
+  <atk-item-search v-bind="initData" inline-template="inline-template">
     <div class="atk-item-search {$inputCss}">
       <input class="ui" v-model="query" type="text" placeholder="Search..." @keyup="onChange" @keyup.esc="onEscape" name="atk-vue-search"/><i class="atk-search-icon" :class="classIcon"></i><span style="width:12px;cursor:pointer" @click="onClear"></span>
     </div>

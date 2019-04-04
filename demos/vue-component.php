@@ -57,7 +57,7 @@ $app->requireJS('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min');
 // Injecting template but normally you would create a template file.
 $clock_template = new \atk4\ui\Template('
     <div id="{$_id}" class="ui center aligned segment">
-    <my-clock inline-template v-bind="item">
+    <my-clock inline-template v-bind="initData">
         <div>
             <clock :color="color" :border="border" :bg="bg"></clock>
             <div class="ui basic segment inline"><div class="ui button primary" @click="onChangeStyle">Change Style</div></div>

@@ -1,5 +1,5 @@
 div(id="{$_id}", class="{$_class} {$class}")
-    atk-item-search(v-bind="item" inline-template)
+    atk-item-search(v-bind="initData" inline-template)
         div(class="atk-item-search {$inputCss}")
             input.ui(v-model="query" type='text', placeholder='Search...' @keyup="onChange" @keyup.esc="onEscape" name="atk-vue-search")
             i(class="atk-search-icon" :class="classIcon")
