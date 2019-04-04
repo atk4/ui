@@ -943,8 +943,8 @@ class View implements jsExpressionable
      *      });
      *
      *
-     * @param string            $eventName   The event name the will be emit.
-     * @param array $eventData  $eventData   The data passed with the event.
+     * @param string $eventName The event name the will be emit.
+     * @param array  $eventData $eventData   The data passed with the event.
      *
      * @return mixed
      */
