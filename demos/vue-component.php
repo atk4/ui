@@ -130,4 +130,4 @@ $clock->vue('my-clock', ['clock' => $clock_style], 'myClock');
 
 $btn = $app->add(['Button', 'Change Style']);
 $btn->on('click', $clock->jsVueEmit('change-style'));
-$app->add(['View', 'element' => 'p', 'I am not part of the component but I still can change style using the eventBus.']);
+$app->add(['View', 'element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);
