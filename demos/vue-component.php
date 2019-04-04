@@ -34,14 +34,18 @@ $app->add(['Header', 'Search using a Vue component', 'subHeader' => $subHeader])
 
 $m = new Country($db);
 
-$lister_template = new atk4\ui\Template('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{/}</div>');
+$lister_template = new atk4\ui\Template('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{$end}{/}</div>');
 
 $view = $app->add('View');
 $search = $view->add(['Component/ItemSearch', 'q' => $q, 'ui' => 'ui compact segment']);
 $lister_container = $view->add(['View', 'template' => $lister_template]);
 $lister = $lister_container->add('Lister', 'List')
             ->addHook('beforeRow', function ($l) {
+                $l->ipp++;
                 $l->current_row['iso'] = strtolower($l->current_row['iso']);
+                if ($l->ipp === $l->model->limit[0]) {
+                    $l->t_row->setHtml('end', '<span>...</span>');
+                }
             });
 
 $search->reload = $lister_container;
