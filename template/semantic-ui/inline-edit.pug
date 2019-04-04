@@ -1,0 +1,6 @@
+div(id="{$_id}", class="{$_class} {$class}", style="{$style}")
+    atk-inline-edit(v-bind="initData" inline-template)
+        .inline.field
+            div(class="{$inputCss}" :class="{error: hasError, loading : isLoading}")
+                input(name="{$fieldName}" class="{$inlineEditClass}" type="{$fieldType}" v-model="value" @keyup="onKeyUp" @focus="onFocus" @blur="onBlur")
+                i.icon

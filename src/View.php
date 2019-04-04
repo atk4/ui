@@ -879,6 +879,87 @@ class View implements jsExpressionable
     }
 
     /**
+     * Create Vue.js instance.
+     * Vue.js instance can be create from atk4\ui\View.
+     *
+     * Component managed and defined by atk does not need componentDefinition variable name
+     * because these are already loaded within the atk js namespace.
+     * When creating your own component externally, you must supply the variable name holding
+     * your Vue component definition. This definition must be also accessible within the window javascript
+     * object. This way, you do not need to load Vue js file since it has already being include within
+     * atkjs-ui.js build.
+     *
+     * If the external component use other components, it is possible to register them using
+     * vueService getVue() method. This method return the current Vue object.
+     * ex: atk.vueService.getVue().component('external_component', externalComponent). This is the same
+     * as Vue.component() method.
+     *
+     *
+     * @param string      $component           The component name;
+     * @param array       $initData            The component properties passed as the initData prop.
+     *                                         This is the initial data pass to your main component via the initData bind property
+     *                                         of the vue component instance created via the vueService.
+     * @param null|string $componentDefinition The name of the js var holding a component definition object.
+     *                                         This var must be defined and accessible in window object. window['var_name']
+     * @param null        $selector            The selector for creating the base root object in Vue.
+     *
+     * @return $this
+     */
+    public function vue($component, $initData = [], $componentDefinition = null, $selector = null)
+    {
+        if (!$selector) {
+            $selector = '#'.$this->name;
+        }
+
+        if ($componentDefinition) {
+            $chain = (new jsVueService())->createVue($selector, $component, $componentDefinition, $initData);
+        } else {
+            $chain = (new jsVueService())->createAtkVue($selector, $component, $initData);
+        }
+
+        $this->_js_actions[true][] = $chain;
+
+        return $this;
+    }
+
+    /**
+     * Emit an event on the Vue event bus.
+     * vueService has a dedicated Vue instance for registering
+     * event that allow communication between external view like button,
+     * or even separate vue component, in order to communicate to each other.
+     *
+     * Once a component is set for listening to a particular event,
+     * you can emit the event using this function.
+     *
+     * Adding a listener is generally done via the created component method.
+     *
+     * example of adding a listener inside the created method.
+     *
+     *      atk.vueService.eventBus.$on('eventName', (data) => {
+     *          // make sure we are talking to the right component.
+     *          if (this.$parent.$el.id === data.id) {
+     *              this.doSomething();
+     *          }
+     *      });
+     *
+     *
+     * @param string $eventName The event name the will be emit.
+     * @param array  $eventData $eventData   The data passed with the event.
+     *
+     * @return mixed
+     */
+    public function jsVueEmit($eventName, $eventData = [])
+    {
+        // adding this view id to data.
+        // Usually, you would check if the event is emit for the right component.
+        if (!$eventData['id']) {
+            $eventData['id'] = $this->name;
+        }
+
+        return (new jsVueService())->emitEvent($eventName, $eventData);
+    }
+
+    /**
      * Returns JS for reloading View.
      *
      * @param array $args

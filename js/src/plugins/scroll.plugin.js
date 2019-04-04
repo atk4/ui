@@ -1,6 +1,5 @@
-import atkPlugin from 'plugins/atkPlugin';
+import atkPlugin from './atk.plugin';
 import $ from 'jquery';
-import apiService from "../services/ApiService";
 
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.

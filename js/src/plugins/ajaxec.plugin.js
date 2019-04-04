@@ -1,4 +1,4 @@
-import atkPlugin from 'plugins/atkPlugin';
+import atkPlugin from './atk.plugin';
 
 
 export default class ajaxec extends atkPlugin {

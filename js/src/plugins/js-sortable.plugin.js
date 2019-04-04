@@ -1,4 +1,4 @@
-import atkPlugin from 'plugins/atkPlugin';
+import atkPlugin from './atk.plugin';
 import $ from 'jquery';
 import 'draggable';
 
