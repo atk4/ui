@@ -892,7 +892,7 @@ class View implements jsExpressionable
      * If the external component use other components, it is possible to register them using
      * vueService getVue() method. This method return the current Vue object.
      * ex: atk.vueService.getVue().component('external_component', externalComponent). This is the same
-     * as Vue.component() method. 
+     * as Vue.component() method.
      *
      *
      * @param string      $component           The component name;
