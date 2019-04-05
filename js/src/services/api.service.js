@@ -72,6 +72,15 @@ class ApiService {
     try {
       if (response.success) {
         if (response && response.html && response.id) {
+          // prevent modal duplication.
+          let modalIDs = [];
+          $(response.html).find(".ui.modal[id]").each((i, e) => {
+            modalIDs.push('#' + $(e).attr('id'));
+          });
+
+          if (modalIDs.length) {
+           $('.ui.dimmer.modals.page').find(modalIDs.join(', ')).remove();
+          }
           result = $('#'+response.id).replaceWith(response.html);
           if (!result.length) {
             //TODO Find a better solution for long term.
