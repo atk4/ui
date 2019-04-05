@@ -110,15 +110,15 @@ One of the fundamental features of ATK is Callback - ability to dynamically gene
 
 ``` php
 $tabs = $app->add('Tabs');
-$tab->addTab('Intro')->add(['Message', 'Other tabs are loaded dynamically!']);
+$tabs->addTab('Intro')->add(['Message', 'Other tabs are loaded dynamically!']);
 
-$tab->addTab('Users', function($p) use($app) {
+$tabs->addTab('Users', function($p) use($app) {
     
     // This tab is loaded dynamically, but also contains dynamic component
     $p->add('CRUD')->setModel(new User($app->db));
 });
 
-$tab->addTab('Settings', function($p) use($app) {
+$tabs->addTab('Settings', function($p) use($app) {
     
     // Second tab contains an AJAX form that stores itself back to DB.
     $m = new Settings($app->db);
