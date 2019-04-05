@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.6.3
+
+ - Prevent Modal duplication in apiService.
+
 ### version 1.6.2
 
  - Refactored js file name;
