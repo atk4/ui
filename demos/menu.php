@@ -10,7 +10,7 @@ $m->addItem('bar');
 $m->addItem('baz');
 $d = $m->add(['DropDown', 'With Callback', 'js' => ['on' => 'hover']]);
 $d->setSource(['a', 'b', 'c']);
-$d->onChange(function($item) {
+$d->onChange(function ($item) {
     return 'New seleced item: '.$item;
 });
 
