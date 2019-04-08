@@ -174,9 +174,9 @@ Grid and CRUD
 As mentioned before, UI Components in Agile Toolkit are often interchangeable, you can swap one for
 another. In our example replace right column (label 17) with the following code::
 
-    $grid = $col->addColumn()->add(['CRUD', 'paginator'=>false, 'ops'=>[    // 18
-        'c'=>false, 'd'=>false                              // 19
-    ]]);
+    $grid = $col->addColumn()->add(['CRUD', 'paginator'=>false, // 18
+        'canCreate'=>false, 'canDelete'=>false              // 19
+    ]);
     $grid->setModel(new ToDoItem($s));
 
     $grid->menu->addItem('Complete Selected',               // 20
