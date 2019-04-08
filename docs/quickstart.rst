@@ -174,18 +174,20 @@ Grid and CRUD
 As mentioned before, UI Components in Agile Toolkit are often interchangeable, you can swap one for
 another. In our example replace right column (label 17) with the following code::
 
-    $grid = $col->addColumn()->add(['CRUD', 'paginator'=>false]); // 18
+    $grid = $col->addColumn()->add(['CRUD', 'paginator'=>false, // 18
+        'canCreate'=>false, 'canDelete'=>false              // 19
+    ]);
     $grid->setModel(new ToDoItem($s));
 
-    $grid->menu->addItem('Complete Selected',               // 19
-        new \atk4\ui\jsReload($grid->table, [               // 20
-            'delete'=>$grid->addSelection()->jsChecked()    // 21
+    $grid->menu->addItem('Complete Selected',               // 20
+        new \atk4\ui\jsReload($grid->table, [               // 21
+            'delete'=>$grid->addSelection()->jsChecked()    // 22
         ])
     );
 
-    if (isset($_GET['delete'])) {                           // 22
+    if (isset($_GET['delete'])) {                           // 23
         foreach(explode(',', $_GET['delete']) as $id) {
-            $grid->model->delete($id);                      // 23
+            $grid->model->delete($id);                      // 25
         }
     }
 
@@ -194,6 +196,8 @@ another. In our example replace right column (label 17) with the following code:
 .. [#] We replace 'Table' with a 'CRUD'. This is much more advanced component, that wraps
     'Table' component by providing support for editing operations and other features like
     pagination, quick-search, etc.
+
+.. [#] Disable create and delete features, since we have other ways to invoke that (form and checkboxes)
 
 .. [#] Grid comes with menu, where we can add items.
 
