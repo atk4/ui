@@ -169,7 +169,7 @@ Through the course of this example, I am performing several core actions:
     and :php:class:`Button`.
 
 
-To sum this up Agile UI in more technical terms:
+To sum up Agile UI in more technical terms:
 
  - Fully utilizes abstraction of Web technologies through components.
  - Contains concise syntax to define UI layouts in PHP.
