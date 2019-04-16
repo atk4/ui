@@ -511,11 +511,11 @@ class Table extends Lister
 
             $this->renderRow();
             
+            $this->_rendered_rows_count++;
+            
             if ($this->hook('afterRow') === false) {
                 continue;
             }
-
-            $this->_rendered_rows_count++;
         }
 
         // Add totals rows or empty message
