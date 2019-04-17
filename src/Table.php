@@ -510,9 +510,9 @@ class Table extends Lister
             }
 
             $this->renderRow();
-            
+
             $this->_rendered_rows_count++;
-            
+
             if ($this->hook('afterRow') === false) {
                 continue;
             }
