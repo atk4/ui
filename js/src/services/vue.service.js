@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import atkInlineEdit from '../components/inline-edit.component';
 import itemSearch from '../components/item-search.component';
-import atkTable from '../components/table/table.component';
 import atkClickOutside from '../directives/click-outside.directive';
 import {focus} from '../directives/commons.directive';
 
@@ -9,7 +8,6 @@ import {focus} from '../directives/commons.directive';
 let atkComponents = {
   'atk-inline-edit' : atkInlineEdit,
   'atk-item-search' : itemSearch,
-  'atk-table-edit'  : atkTable
 };
 
 
