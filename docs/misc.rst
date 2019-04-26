@@ -27,7 +27,7 @@ By default width is equally divided by columns. You may specify a custom width e
     $c->addColumn(10)->add(['LoremIpsum', 2]);  // wider column, more filler
 
 You can specify how many columns are expected in a grid, but if you do you can't specify widths of individual
-columns. This seem like a limitation of Semantic UI::
+columns. This seem like a limitation of Fomantic UI::
 
     $c = $page->add(new \atk4\ui\Columns(['width'=>4]));
     $c->addColumn()->add(new Box(['red']));
@@ -52,7 +52,7 @@ row. To improve and controll the flow of rows better, you can specify addRow()::
     $r->addColumn(2)->add(['Icon', 'huge trash']);
 
 This example also uses custom class for Columns ('internally celled') that adds dividers between columns and rows.
-For more information on available classes, see https://semantic-ui.com/collections/grid.html.
+For more information on available classes, see https://fomantic-ui.com/collections/grid.html.
 
 Responsiveness and Performance
 ------------------------------

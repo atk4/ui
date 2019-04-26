@@ -9,7 +9,7 @@ Image
 
 .. php:class:: Image
 
-Implements Image around https://semantic-ui.com/elements/image.html.
+Implements Image around https://fomantic-ui.com/elements/image.html.
 
 Basic Usage
 ===========

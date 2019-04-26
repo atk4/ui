@@ -116,7 +116,7 @@ Money
 .. php:class:: TableColumn\Money
 
 Helps decorating monetary values. Will align value to the right and if value is less than zero will also
-use red text (td class "negative" for semantic ui). The money cells are not wrapped.
+use red text (td class "negative" for Fomantic ui). The money cells are not wrapped.
 
 For the actual number formatting, see :ref:`ui_persistence`
 

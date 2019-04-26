@@ -8,7 +8,7 @@ BreadCrumb
 .. php:namespace:: atk4\ui
 .. php:class:: BreadCrumb
 
-Implement navigational BreadCrumb, by using https://semantic-ui.com/collections/breadcrumb.html
+Implement navigational BreadCrumb, by using https://fomantic-ui.com/collections/breadcrumb.html
 
 Basic Usage
 ===========

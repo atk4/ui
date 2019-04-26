@@ -13,7 +13,7 @@ Forms
 One of the most important components of ATK UI is the "Form". Class :php:class:`Form`
 implements the following 4 major features:
 
-- Form Rendering using Semantic UI HTML/CSS (https://semantic-ui.com/collections/form.html):
+- Form Rendering using Fomantic UI HTML/CSS (https://fomantic-ui.com/collections/form.html):
 
     .. image:: images/form.png
 
@@ -507,10 +507,10 @@ Form Submit Handling
 
 .. php:method:: setApiConfing($config)
 
-    Add additional parameters to Semantic UI .api function which does the AJAX submission of the form.
+    Add additional parameters to Fomantic UI .api function which does the AJAX submission of the form.
 For example, if you want the loading overlay at a different HTML element, you can define it with
 $form->setApiConfig(['stateContext' => 'my-JQuery-selector']);
-All available parameters can be found here: https://semantic-ui.com/behaviors/api.html#/settings
+All available parameters can be found here: https://fomantic-ui.com/behaviors/api.html#/settings
 
 .. php:attr:: successTemplate
 
@@ -694,10 +694,10 @@ is further separated in two accordion sections and fields are added to each sect
 Sub layout gives you greater control on how to display fields within your form. For more examples on
 sub layouts please visit demo page: https://github.com/atk4/ui/blob/develop/demos/form-section.php
 
-Semantic UI modifiers
+Fomantic UI modifiers
 ---------------------
 
-There are many other classes Semantic UI allow you to use on a form. The next code will produce
+There are many other classes Fomantic UI allow you to use on a form. The next code will produce
 form inside a segment (outline) and will make fields appear smaller::
 
     $f = new \atk4\ui\Form(['small segment']));
@@ -746,8 +746,8 @@ The logic is based around passing a declarative array::
         'phone4'=>['phone1'=>'empty', 'phone2'=>'empty', 'phone3'=>'empty'],
     ]);
 
-The only catch here is that "empty" means "not empty". ATK UI relies on rules defined by SemanticUI
-https://semantic-ui.com/behaviors/form.html, so you can use any of the conditions there.
+The only catch here is that "empty" means "not empty". ATK UI relies on rules defined by FomanticUI
+https://fomantic-ui.com/behaviors/form.html, so you can use any of the conditions there.
 
 Here is a more advanced example::
 

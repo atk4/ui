@@ -6,7 +6,7 @@ Header
 
 Can be used for page or section headers.
 
-Based around: https://semantic-ui.com/elements/header.html.
+Based around: https://fomantic-ui.com/elements/header.html.
 
 Demo:  https://ui.agiletoolkit.org/demos/header.php
 

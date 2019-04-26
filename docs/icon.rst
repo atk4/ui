@@ -28,9 +28,9 @@ You can, of course, create instance of an Icon yourself::
     $b1 = new \atk4\ui\Button(['Click Me', 'icon'=>$icon]);
 
 You do not need to add an icon into the render tree when specifying like that. The icon is selected
-through class. To find out what icons are available, refer to Semantic-UI icon documentation:
+through class. To find out what icons are available, refer to Fomantic-UI icon documentation:
 
-https://semantic-ui.com/elements/icon.html
+https://fomantic-ui.com/elements/icon.html
 
 You can also use States, Variations by passing classes to your button::
 
@@ -62,7 +62,7 @@ You can use icon on the following components: :php:class:`Button`, :php:class:`L
 Groups
 ======
 
-Semantic UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
+Fomantic UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
 icon::
 
     $app->add(new \atk4\ui\Icon(['template'=>new \atk4\ui\Template('<i class="huge icons">

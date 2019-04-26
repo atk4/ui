@@ -9,7 +9,7 @@ Message
 
 .. php:class:: Message
 
-Outputs a rectangular segment with a distinctive color to convey message to the user, based around: https://semantic-ui.com/collections/message.html
+Outputs a rectangular segment with a distinctive color to convey message to the user, based around: https://fomantic-ui.com/collections/message.html
 
 Demo: https://ui.agiletoolkit.org/demos/message.php
 

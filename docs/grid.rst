@@ -34,14 +34,14 @@ Adding Menu Items
 
 .. php:method: addButton($label)
 
-Grid top-bar which contains QuickSearch is implemented using Semantic UI "ui menu". With that
+Grid top-bar which contains QuickSearch is implemented using Fomantic UI "ui menu". With that
 you can add additional items and use all features of a regular :php:class:`Menu`::
 
     $sub = $grid->menu->addMenu('Drop-down');
     $sub->addItem('Test123');
 
 For compatibility grid supports addition of the buttons to the menu, but there are several
-Semantic UI limitations that wouldn't allow to format buttons nicely::
+Fomantic UI limitations that wouldn't allow to format buttons nicely::
 
     $grid->addButton('Hello');
 

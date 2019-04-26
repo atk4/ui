@@ -26,7 +26,7 @@ Alternatvie syntax if you wish to initialize object yourself::
     $app->add($button);
 
 
-You can refer to the Semantic UI documentation for Button to find out more about available classes: https://semantic-ui.com/elements/button.html.
+You can refer to the Fomantic UI documentation for Button to find out more about available classes: https://fomantic-ui.com/elements/button.html.
 
 Demo: https://ui.agiletoolkit.org/demos/button.php
 
@@ -116,7 +116,7 @@ Complex Buttons
 
 
 
-Knowledge of the Semantic UI button (https://semantic-ui.com/elements/button.html) can help you
+Knowledge of the Fomantic UI button (https://fomantic-ui.com/elements/button.html) can help you
 in creating more complex buttons::
 
     $forks = new Button(['labeled'=> true]); // Button, not Buttons!

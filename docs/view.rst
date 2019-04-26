@@ -352,7 +352,7 @@ relative to a current file::
     $app->add(['defaultTemplate'=>__DIR__.'/../templates/mytpl.httml']);
 
 Agile UI does not currently provide advanced search path for templates, by default the
-template is loaded from folder `vendor/atk4/ui/templates/semantic-ui/`. To change this
+template is loaded from folder `vendor/atk4/ui/template/semantic-ui/`. To change this
 behaviour, see :php:class:`App::loadTemplate()`.
 
 .. php:attr:: region

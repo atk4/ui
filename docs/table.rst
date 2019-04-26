@@ -20,7 +20,7 @@ please see :php:class:`Lister`
 Various composite components use Table as a building block, see :php:class:`Grid` and :php:class:`CRUD`.
 Main features of Table class are:
 
- - Tabular rendering using column headers on top of markup of https://semantic-ui.com/collections/table.html.
+ - Tabular rendering using column headers on top of markup of https://fomantic-ui.com/collections/table.html.
  - Support for data decorating. (money, dates, etc)
  - Column decorators, icons, buttons, links and color.
  - Support for "Totals" row.
@@ -249,7 +249,7 @@ JavaScript Sorting
 You can make your table sortable through JavaScript inside your browser. This won't work well if
 your data is paginated, because only the current page will be sorted::
 
-    $table->app->includeJS('https://semantic-ui.com/javascript/library/tablesort.js');
+    $table->app->includeJS('https://fomantic-ui.com/javascript/library/tablesort.js');
     $table->js(true)->tablesort();
 
 For more information see https://github.com/kylefox/jquery-tablesort

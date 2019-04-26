@@ -7,7 +7,7 @@
 Tabs
 ====
 
-Tabs implement a yet another way to organise your data. The implementation is based on: https://semantic-ui.com/elements/icon.html.
+Tabs implement a yet another way to organise your data. The implementation is based on: https://fomantic-ui.com/elements/icon.html.
 
 
 Demo: https://ui.agiletoolkit.org/demos/tabs.php

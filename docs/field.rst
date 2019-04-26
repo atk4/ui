@@ -89,7 +89,7 @@ properly:
 
  - Generic (abstract, extends View) - Use this if field is NOT based on `<input>`
  - Input (abstract, extends Generic) - Easiest since it alrady implements `<input>` and various
-   ways to attach button to the input with markup of Semantic UI field.
+   ways to attach button to the input with markup of Fomantic UI field.
 
 Hints
 -----
@@ -97,7 +97,7 @@ Hints
 .. php:attr: hint
 
 When Field appears in a Form, then you can specify a Hint also. It appears below the field and
-although it intends to be "extra info" or "extra help" due to current limitation of Semantic UI
+although it intends to be "extra info" or "extra help" due to current limitation of Fomantic UI
 the only way we can display hint is using a gray bubble. In the future version of Agile UI we
 will update to use a more suitable control.
 
@@ -207,7 +207,7 @@ Line Input Field
 
 .. php:class:: Input
 
-    Implements View for presenting Input fields. Based around https://semantic-ui.com/elements/input.html.
+    Implements View for presenting Input fields. Based around https://fomantic-ui.com/elements/input.html.
 
 Similar to other views, Input has various properties that you can specify directly
 or inject through constructor. Those properties will affect the look of the input

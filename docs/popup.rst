@@ -47,5 +47,5 @@ Like many other Views of ATK, popup is an interractive element. It can load it's
 
 Demo: https://ui.agiletoolkit.org/demos/popup.php
 
-Semantic UI: https://semantic-ui.com/modules/popup.html
+Fomantic UI: https://fomantic-ui.com/modules/popup.html
 

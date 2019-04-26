@@ -427,8 +427,8 @@ Modal
 .. php:method:: show()
 .. php:method:: hide()
 
-This class allows you to open modal dialogs and close them easily. It's based around Semantic UI
-`.modal(), <https://semantic-ui.com/modules/modal.html>`_ but integrates PHP callback for dynamically
+This class allows you to open modal dialogs and close them easily. It's based around Fomantic UI
+`.modal(), <https://fomantic-ui.com/modules/modal.html>`_ but integrates PHP callback for dynamically
 producing content of your dialog::
 
 
@@ -479,7 +479,7 @@ jsNotify
 Implementation for dynamic notifier, which you can use to display operation status::
 
     $app->add(['Button', 'Test'])->on(
-        'click', 
+        'click',
         (new \atk4\ui\jsNotify('Not yet implemented'))
             ->setColor('red')
     );
@@ -559,7 +559,7 @@ Background Tasks
 ================
 
 Agile UI has addressed one of the big shortcoming with the PHP language - ability to execute running / background
-processes. It's best illustrated with example. 
+processes. It's best illustrated with example.
 
 Say you need to process a large image, resize, find face, watermark, create thumbnails and store externally. For
 the average image this could take 5-10 seconds, so you'd like to user updated about the process. There are

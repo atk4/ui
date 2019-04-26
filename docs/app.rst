@@ -172,7 +172,7 @@ that implements tighter integration with the host application or full-stack fram
 Method to include additional JavaScript file in page::
 
     $app->requireJS('https://code.jquery.com/jquery-3.1.1.js');
-    $app->requireJS('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js');
+    $app->requireJS('https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.7.4/semantic.min.js');
 
 Using of CDN servers is always better than storing external libraries locally.
 Most of the time CDN servers are faster (cached) and more reliable.
@@ -181,7 +181,7 @@ Most of the time CDN servers are faster (cached) and more reliable.
 
 Method to include additional CSS stylesheet in page::
 
-    $app->requireCSS('//semantic-ui.com/dist/semantic.css');
+    $app->requireCSS('//fomantic-ui.com/dist/semantic.css');
 
 .. php:method:: initIncludes()
 
@@ -198,7 +198,7 @@ Loading Templates for Views
 .. php:method:: loadTemplate($name)
 
 Views use :php:attr:`View::$defaultTemplate` to specify which template they are using. By default
-those are loaded from `vendor/atk4/ui/templates/semantic-ui` however by overriding this method,
+those are loaded from `vendor/atk4/ui/template/semantic-ui` however by overriding this method,
 you can specify extended logic.
 
 You may override this method if you are using a different CSS framework.
@@ -457,7 +457,7 @@ You should be able to find 3rd party Layout implementations that may even be com
 some custom templates and views. The concept of a "Theme" in Agile UI consists of
 offering of the following 3 things:
 
- - custom CSS build from Semantic UI
+ - custom CSS build from Fomantic UI
  - custom Layout(s) along with documentation
  - additional or tweaked Views
 

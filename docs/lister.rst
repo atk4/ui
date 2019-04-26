@@ -96,8 +96,8 @@ Tweaking the output
 Output is formatted using the standard :ref:`ui_persistence` routine, but you can also fine-tune the content
 of your tags like this::
 
-    $lister->addHook('beforeRow', function($l){ 
-        $l->current_row['iso']=strtolower($l->current_row['iso']); 
+    $lister->addHook('beforeRow', function($l){
+        $l->current_row['iso']=strtolower($l->current_row['iso']);
     })
 
 Model vs Static Source
@@ -140,5 +140,5 @@ you can specify it explicitly::
 
     $app->add(['Lister', 'defaultTemplate'=>'lister.html']);
 
-This should display a list nicely formatted by Semantic UI, with header, links, icons and description area.
+This should display a list nicely formatted by Fomantic UI, with header, links, icons and description area.
 

@@ -13,7 +13,7 @@ Label
 Labels can be used in many different cases, either as a stand-alone objects, inside tables or inside
 other components.
 
-To see what possible classes you can use on the Label, see: https://semantic-ui.com/elements/label.html.
+To see what possible classes you can use on the Label, see: https://fomantic-ui.com/elements/label.html.
 
 Demo: https://ui.agiletoolkit.org/demos/label.php
 
@@ -88,7 +88,7 @@ composition::
 Combining classes
 =================
 
-Based on Semantic UI documentation, you can add more classes to your labels::
+Based on Fomantic UI documentation, you can add more classes to your labels::
 
     $columns = $app->add('Columns');
 
