@@ -61,9 +61,9 @@ page and the following HTML is now produced::
       </div>
     </div>
 
-The markup that surronds the button which includes Label and formatting is produced by 
+The markup that surronds the button which includes Label and formatting is produced by
 :php:class:`atk4\\ui\\FormLayout\\Generic`, which does draw some of the information from the Field
-itself. 
+itself.
 
 Using in Form Layouts
 ---------------------
@@ -87,7 +87,7 @@ This is further explained in documentation for :php:class:`atk4\\ui\\FormLayout\
 however if you do plan on adding your own field types, it's important that you extend it
 properly:
 
- - Generic (abstract, extends View) - Use this if field is NOT based on `<input>` 
+ - Generic (abstract, extends View) - Use this if field is NOT based on `<input>`
  - Input (abstract, extends Generic) - Easiest since it alrady implements `<input>` and various
    ways to attach button to the input with markup of Semantic UI field.
 
@@ -111,13 +111,13 @@ Hint can be specified either inside field decorator seed or inside the Field::ui
 Text will have HTML characters escaped. You may also specify hint value as an object::
 
     $form->addField('name', ['hint'=>new \atk4\ui\Text(
-        'Click <a href="http://example.com/" target="_blank">here</a>'
+        'Click <a href="https://example.com/" target="_blank">here</a>'
     )]);
 
 or you can inject a view with a custom template::
 
     $form->addField('name', ['hint'=>['template'=>new \atk4\ui\Template(
-        'Click <a href="http://example.com/" target="_blank">here</a>'
+        'Click <a href="https://example.com/" target="_blank">here</a>'
     )]]);
 
 Read only and disabled fields
@@ -140,7 +140,7 @@ Relationship with Model
 In the examples above, we looked at how to create Field Decorator object explicitly.
 The most common use-case in large application is the use with Models. You would need a model, such as
 `Country` model (see demos/database.php) as well as
-`Persistence $db <http://agile-data.readthedocs.io/en/develop/persistence.html>`_::
+`Persistence $db <https://agile-data.readthedocs.io/en/develop/persistence.html>`_::
 
     class Country extends \atk4\data\Model
     {
@@ -170,12 +170,12 @@ or rely on :ref:`field_visibility`.
 
 When Form fields are populated, then :php:meth:`\atk4\ui\Form::_decoratorFactory` is
 consulted to make a decision on how to translate
-`Model Field <http://agile-data.readthedocs.io/en/develop/fields.html>`_ into
+`Model Field <https://agile-data.readthedocs.io/en/develop/fields.html>`_ into
 Form Field Decorator.
 
 The rules are rather straightforward but may change in future versions of Agile UI:
 
- - if `enum <http://agile-data.readthedocs.io/en/develop/fields.html#Field::$enum>`_ is defined, use :php:class:`DropDown`
+ - if `enum <https://agile-data.readthedocs.io/en/develop/fields.html#Field::$enum>`_ is defined, use :php:class:`DropDown`
  - consult :php:attr:`\atk4\ui\Form::$typeToDecorator` property for type-to-seed association
  - type=password will use :php:class:`Password`
 
@@ -207,7 +207,7 @@ Line Input Field
 
 .. php:class:: Input
 
-    Implements View for presenting Input fields. Based around http://semantic-ui.com/elements/input.html.
+    Implements View for presenting Input fields. Based around https://semantic-ui.com/elements/input.html.
 
 Similar to other views, Input has various properties that you can specify directly
 or inject through constructor. Those properties will affect the look of the input

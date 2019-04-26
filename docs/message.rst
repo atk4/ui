@@ -11,7 +11,7 @@ Message
 
 Outputs a rectangular segment with a distinctive color to convey message to the user, based around: https://semantic-ui.com/collections/message.html
 
-Demo: http://ui.agiletoolkit.org/demos/message.php
+Demo: https://ui.agiletoolkit.org/demos/message.php
 
 Basic Usage
 ===========
@@ -52,8 +52,8 @@ Message Icon
 You can specify icon also::
 
     $message = $app->add([
-        'Message', 
-        'Battery low', 
+        'Message',
+        'Battery low',
         'red',
         'icon'=>'battery low'
     ])->text->addParagraph('Your battery is getting low. Recharge your Web App');

@@ -31,9 +31,9 @@ The Callback class
 Callback is not a View. This class does not extend any other class but it does implement several important
 traits:
 
- - `TrackableTrait <http://agile-core.readthedocs.io/en/develop/container.html?highlight=trackable#trackable-trait>`_
- - `AppScopeTrait <http://agile-core.readthedocs.io/en/develop/appscope.html>`_
- - `DIContainerTrait <http://agile-core.readthedocs.io/en/develop/di.html>`_
+ - `TrackableTrait <https://agile-core.readthedocs.io/en/develop/container.html?highlight=trackable#trackable-trait>`_
+ - `AppScopeTrait <https://agile-core.readthedocs.io/en/develop/appscope.html>`_
+ - `DIContainerTrait <https://agile-core.readthedocs.io/en/develop/di.html>`_
 
 To create a new callback, do this::
 

@@ -46,7 +46,7 @@ Using on other Components
 You can use icon on the following components: :php:class:`Button`, :php:class:`Label`, :php:class:`Header`
 :php:class:`Message`, :php:class:`Menu` and possibly some others. Here are some examples::
 
-    
+
     $app->add(new \atk4\ui\Header(['Header', 'red', 'icon'=>'flipped question']));
     $app->add(new \atk4\ui\Button(['Button', 'red', 'icon'=>'flipped question']));
 
@@ -180,4 +180,4 @@ Here is the code with comments::
 
     // Finally provide custom icon and make the button clickable.
     $app->add(new SocialAdd(['facebook', 'icon'=>'facebook f']))
-        ->link('http://facebook.com');
+        ->link('https://facebook.com');

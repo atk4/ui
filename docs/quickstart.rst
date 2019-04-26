@@ -80,7 +80,7 @@ create the application::
     $app->initLayout('Centered');
 
 All components of Agile Data are database-agnostic and will not concern themselve with the way how you store data.
-I will start the session and connect `persistence <http://agile-data.readthedocs.io/en/develop/persistence.html>`_
+I will start the session and connect `persistence <https://agile-data.readthedocs.io/en/develop/persistence.html>`_
 with it::
 
     session_start();
@@ -89,7 +89,7 @@ with it::
 Data Model
 ==========
 
-We need a class `Task` which decribes `data model <http://agile-data.readthedocs.io/en/develop/model.html>`_ for the
+We need a class `Task` which decribes `data model <https://agile-data.readthedocs.io/en/develop/model.html>`_ for the
 single ToDo item::
 
 

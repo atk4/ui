@@ -261,7 +261,7 @@ Database Connection
 
 .. php:method:: dbConnect(dsn, $user = null, $password = null, $args = [])
 
-(Arguments are identical to `Persistence::connect <http://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`_.
+(Arguments are identical to `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`_.
 
 This method should be used instead of manually calling Persistence::connect. This will
 properly propogate Persistence's "api" property to $this, so that you can refrence::
@@ -330,7 +330,7 @@ This will be used by components that rely on external JavaScript libraries.
 Hooks
 -----
 
-Application implements HookTrait (http://agile-core.readthedocs.io/en/develop/hook.html)
+Application implements HookTrait (https://agile-core.readthedocs.io/en/develop/hook.html)
 and the following hooks are available:
 
  - beforeRender
@@ -363,7 +363,7 @@ Having composition of multiple components will allow them to share the app objec
 
 All of the objects created above - button, grid, toolbar and paginator will share the same
 value for the 'app' property. This value is carried into new objects through AppScopeTrait
-(http://agile-core.readthedocs.io/en/develop/appscope.html).
+(https://agile-core.readthedocs.io/en/develop/appscope.html).
 
 Adding the App
 --------------

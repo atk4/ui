@@ -93,7 +93,7 @@ Calculations
 
 Apart from adding columns that reflect currrent values of your database, there are several ways
 how you can calculate additional values. You must know the capabilities of your database server
-if you want to execute some calculation there. (See http://agile-data.readthedocs.io/en/develop/expressions.html)
+if you want to execute some calculation there. (See https://agile-data.readthedocs.io/en/develop/expressions.html)
 
 It's always a good idea to calculate column inside datababase. Lets create "total" column  which will
 multiply "price" and "amount" values. Use ``addExpression`` to provide in-line definition for this
@@ -249,7 +249,7 @@ JavaScript Sorting
 You can make your table sortable through JavaScript inside your browser. This won't work well if
 your data is paginated, because only the current page will be sorted::
 
-    $table->app->includeJS('http://semantic-ui.com/javascript/library/tablesort.js');
+    $table->app->includeJS('https://semantic-ui.com/javascript/library/tablesort.js');
     $table->js(true)->tablesort();
 
 For more information see https://github.com/kylefox/jquery-tablesort

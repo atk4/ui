@@ -9,7 +9,7 @@ Agile UI is a PHP component framework for building User Interfaces entirely in P
 Although the components of Agile UI will typically use HTML, JavaScript, jQuery and
 CSS; the goal of Agile UI is to abstract them away behind easy-to-use component objects.
 
-As a framework it's closely coupled with Agile Data (http://agile-data.readthedocs.io)
+As a framework it's closely coupled with Agile Data (https://agile-data.readthedocs.io)
 which abstracts away database interaction operations. The default UI template set
 uses Semantic UI (https://semantic-ui.com) for presentation.
 
@@ -17,7 +17,7 @@ At a glance, Agile UI consists of the following:
 
 .. figure:: images/all-atk-classes.png
 
-Agile UI is designed and built for the Agile Toolkit (http://agiletoolkit.org/) platform,
+Agile UI is designed and built for the Agile Toolkit (https://agiletoolkit.org/) platform,
 with the goal of providing a user-friendly experience when creating data-heavy API / UI
 backends.
 
@@ -148,7 +148,7 @@ Through the course of this example, I am performing several core actions:
     For a :ref:`component` the Persistence class provides data storage abstraction
     through the use of a Model class.
 
-    Agile Data has full documentation at http://agile-data.readthedocs.io.
+    Agile Data has full documentation at https://agile-data.readthedocs.io.
 
   - `Offer` is a Model - a database-agnostic declaration of your business entity.
     Model object represents a data-set for specific persistence and conditions.
@@ -260,7 +260,7 @@ resolved to namespace `atk4\\ui`; however the application class can fine-tune th
 search.
 
 Using a factory is optional. For more information see:
-http://agile-core.readthedocs.io/en/develop/factory.html
+https://agile-core.readthedocs.io/en/develop/factory.html
 
 Templates
 ---------
@@ -311,7 +311,7 @@ See: :php:meth:`App::requireJS`
 Events and Actions
 ------------------
 Agile UI allows you to initiate some JavaScript actions from within PHP. The amount
-of code involvment is quite narrow and is only intended for binding events inside 
+of code involvment is quite narrow and is only intended for binding events inside
 your component without involving developers who use and implement your component.
 
 Callbacks
@@ -397,7 +397,7 @@ have a basic understanding of "code" and some familiarity with the PHP language.
 
 
 If you are not interested in UI and only need the Rest API, we recommend that you look
-into documentation for Agile Data (http://agile-data.readthedocs.io) and the
+into documentation for Agile Data (https://agile-data.readthedocs.io) and the
 Rest API extension (coming soon).
 
 Application Tutorials

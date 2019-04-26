@@ -25,7 +25,7 @@ Popup can also operate with dynamic content::
 Pop-up should be added into a viewport which will define boundaries of a pop-up, but it will
 be positioned relative to the $button. Popup remains invisible until it's triggered by event of $button.
 
-If second argument in the :ref:`seed` is of class :php:class:`Button`, :php:class:`Menu`, 
+If second argument in the :ref:`seed` is of class :php:class:`Button`, :php:class:`Menu`,
 :php:class:`Item` or :php:class:`DropDown` (note - NOT FormField!), pop-up will also bind itself
 to that element. The above example will automatically bind "click" event of a button to open a pop-up.
 
@@ -45,7 +45,7 @@ Like many other Views of ATK, popup is an interractive element. It can load it's
         $popup->add(['Label', 'Random value', 'detail'=>rand(1,100)]);
     });
 
-Demo: http://ui.agiletoolkit.org/demos/popup.php
+Demo: https://ui.agiletoolkit.org/demos/popup.php
 
 Semantic UI: https://semantic-ui.com/modules/popup.html
 

@@ -21,7 +21,7 @@ implements the following 4 major features:
   for date/time, auto-complete and even file upload.
 
 - Loading data from database and storing it back. Any persistence (SQL, NoSQL) supported by
-  ATK Data (http://agile-data.readthedocs.io/en/develop/persistence.html) can be used.
+  ATK Data (https://agile-data.readthedocs.io/en/develop/persistence.html) can be used.
 
 - Support for Events and Actions on fields, buttons and form callback. (:ref:`js`) Automatic
   execution of PHP-based Submit Handler passing all the collected data (:ref:`callback`)
@@ -69,7 +69,7 @@ integration with front-end, integration with Model, error handling etc.
 Usage with Model
 ----------------
 
-A most common use of form is if you have a working Model (http://agile-data.readthedocs.io/en/develop/model.html)::
+A most common use of form is if you have a working Model (https://agile-data.readthedocs.io/en/develop/model.html)::
 
     // Form will automatically add a new user and save into the database
     $form = $app->add('Form');
@@ -81,12 +81,12 @@ The basic 2-line syntax will extract all the required logic from the Model inclu
  - Display of default values in the form
  - Depending on field type, a decorator will be selected from FormField/Generic
  - Using :php:class:`FormLayout::Columns` can make form more compact by splitting it into columns
- - Field captions, placeholders, hints and other elements defined in Field::ui are respected (http://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
- - Fields that are not editable by default will not appear on the form (http://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
+ - Field captions, placeholders, hints and other elements defined in Field::ui are respected (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
+ - Fields that are not editable by default will not appear on the form (https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
  - Field typecasting will be invoked such as for converting dates
- - Reference fields (http://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as DropDown
+ - Reference fields (https://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as DropDown
  - Booleans are displayed as checkboxes but stored as defined by the model field
- - Mandatory and Required fields will be visually highlighted (http://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$mandatory)
+ - Mandatory and Required fields will be visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$mandatory)
  - Validation will be performed and errors will appear on the form (NEED LINK)
  - Unless you specify a submission handler, form will save the model ``User`` into ``$db`` on successful submission.
 
@@ -179,7 +179,7 @@ Field Decorator
 ---------------
 
 To avoid term miss-use, we use "Field" to refer to ``\atk4\data\Field``. This class
-is documented here: http://agile-data.readthedocs.io/en/develop/fields.html
+is documented here: https://agile-data.readthedocs.io/en/develop/fields.html
 
 Form uses a small UI components to visualize HTML input fields associated with
 the respective Model Field. We call this object "Field Decorator". All field
@@ -195,7 +195,7 @@ Agile UI comes with at least the following decorators:
 - Radio
 - Money
 
-For some examples see: http://ui.agiletoolkit.org/demos/form3.php
+For some examples see: https://ui.agiletoolkit.org/demos/form3.php
 
 Field Decorator can be passed to ``addField`` using 'string', :php:ref:`seed` or 'object'::
 
@@ -237,7 +237,7 @@ argument) by replacing '_' with spaces and uppercasing words (accept_terms
 becomes "Accept Terms")
 
 Specifying array will use the same syntax as the 2nd argument for ``\atk4\data\Model::addField()``.
-(http://agile-data.readthedocs.io/en/develop/model.html#Model::addField)
+(https://agile-data.readthedocs.io/en/develop/model.html#Model::addField)
 
 If field already exist inside model, then values of $field will be merged into
 existing field properties. This example make email field mandatory for the form::
@@ -251,7 +251,7 @@ addField into Existing Model
 ----------------------------
 
 If your form is using a model and you add additional field, then it will automatically
-be marked as "never_persist" (http://agile-data.readthedocs.io/en/develop/fields.html#Field::$never_persist).
+be marked as "never_persist" (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$never_persist).
 
 This is to make sure that custom fields wouldn't go directly into database. Next
 example displays a registration form for a User::
@@ -322,7 +322,7 @@ you would simply use ``setModel()`` to populate all defined fields inside a mode
 have a pretty good guess about Decorator based on their data field type, but what if you want to
 use a custom decorator?
 
-This is where ``$field->ui`` comes in (http://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui).
+This is where ``$field->ui`` comes in (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui).
 
 You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model field inside your Model::
 
@@ -369,7 +369,7 @@ so you can then use :php:meth:`Form::addField` to import fields individually.
 Note that :php:meth:`Form::setModel` also delegate adding field to the form layout
 by using `Form->layout->setModel()` internally.
 
-See also: http://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable
+See also: https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable
 
 Using setModel() on a sub layout
 --------------------------------
@@ -407,8 +407,8 @@ Submitting this form will automatically store values back to the database. Form 
 POST data to submit itself and will re-use the query-string, so you can also safely
 use any GET arguments for passing record $id. You may also perform model load after
 record association. This gives the benefit of not loading any other fileds, unless
-it's marked as System (http://agile-data.readthedocs.io/en/develop/fields.html#Field::$system),
-see http://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::onlyFields::
+it's marked as System (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$system),
+see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::onlyFields::
 
     $form = $app->add('Form');
     $form->setModel(new User($db), ['email', 'name']);
@@ -422,7 +422,7 @@ Validating
 
 Topic of Validation in web apps is quite extensive. You should start by reading what Agile Data
 has to say about validation:
-http://agile-data.readthedocs.io/en/develop/persistence.html#validation
+https://agile-data.readthedocs.io/en/develop/persistence.html#validation
 
 TL;DR - sometimes validation needed when storing field value inside model (e.g. setting boolean
 to "blah") and sometimes validation should be performed only when storing model data into
@@ -442,10 +442,10 @@ As far as form is concerned:
 - Decorators must be able to parse entered values. For instance DropDown will make sure that
   value entered is one of the available values (by key)
 
-- Form will rely on Agile Data Typecasting (http://agile-data.readthedocs.io/en/develop/typecasting.html)
+- Form will rely on Agile Data Typecasting (https://agile-data.readthedocs.io/en/develop/typecasting.html)
   to load values from POST data and store them in model.
 
-- Form submit handler will rely on ``Model::save()`` (http://agile-data.readthedocs.io/en/develop/persistence.html#Model::save)
+- Form submit handler will rely on ``Model::save()`` (https://agile-data.readthedocs.io/en/develop/persistence.html#Model::save)
   not to throw validation exception.
 
 - Form submit handler will also interpret use of :php:meth:`Form::error` by displaying errors that

@@ -26,9 +26,9 @@ Alternatvie syntax if you wish to initialize object yourself::
     $app->add($button);
 
 
-You can refer to the Semantic UI documentation for Button to find out more about available classes: http://semantic-ui.com/elements/button.html.
+You can refer to the Semantic UI documentation for Button to find out more about available classes: https://semantic-ui.com/elements/button.html.
 
-Demo: http://ui.agiletoolkit.org/demos/button.php
+Demo: https://ui.agiletoolkit.org/demos/button.php
 
 Button Icon
 -----------
@@ -101,7 +101,7 @@ Linking
 
 Will link button to a destination URL or page::
 
-    $button->link('http://google.com/');
+    $button->link('https://google.com/');
     // or
     $button->link(['details', 'id'=>123]);
 
@@ -116,7 +116,7 @@ Complex Buttons
 
 
 
-Knowledge of the Semantic UI button (http://semantic-ui.com/elements/button.html) can help you
+Knowledge of the Semantic UI button (https://semantic-ui.com/elements/button.html) can help you
 in creating more complex buttons::
 
     $forks = new Button(['labeled'=> true]); // Button, not Buttons!

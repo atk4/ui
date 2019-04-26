@@ -52,7 +52,7 @@ row. To improve and controll the flow of rows better, you can specify addRow()::
     $r->addColumn(2)->add(['Icon', 'huge trash']);
 
 This example also uses custom class for Columns ('internally celled') that adds dividers between columns and rows.
-For more information on available classes, see http://semantic-ui.com/collections/grid.html.
+For more information on available classes, see https://semantic-ui.com/collections/grid.html.
 
 Responsiveness and Performance
 ------------------------------

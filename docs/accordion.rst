@@ -7,10 +7,10 @@
 Accordion
 =========
 
-Accordion implement another way to organise your data. The implementation is based on: http://semantic-ui.com/modules/accordion.html.
+Accordion implement another way to organise your data. The implementation is based on: https://semantic-ui.com/modules/accordion.html.
 
 
-Demo: http://ui.agiletoolkit.org/demos/accordion.php
+Demo: https://ui.agiletoolkit.org/demos/accordion.php
 
 
 Basic Usage

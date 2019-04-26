@@ -13,9 +13,9 @@ Label
 Labels can be used in many different cases, either as a stand-alone objects, inside tables or inside
 other components.
 
-To see what possible classes you can use on the Label, see: http://semantic-ui.com/elements/label.html.
+To see what possible classes you can use on the Label, see: https://semantic-ui.com/elements/label.html.
 
-Demo: http://ui.agiletoolkit.org/demos/label.php
+Demo: https://ui.agiletoolkit.org/demos/label.php
 
 Basic Usage
 ===========
@@ -25,7 +25,7 @@ appear on the label::
 
     $label = $app->add(['Label', 'hello world']);
 
-    // or 
+    // or
 
     $label = new \atk4\ui\Label('hello world');
     $app->add($label);
@@ -113,7 +113,7 @@ Based on Semantic UI documentation, you can add more classes to your labels::
     // some content
     $col->add(['LoremIpsum', 'size'=>1]);
 
-    // right bottom corner label 
+    // right bottom corner label
     $col->add(['Label', 'Ipsum', 'orange bottom right attached', 'icon'=>'cut']);
 
 Added labels into Table

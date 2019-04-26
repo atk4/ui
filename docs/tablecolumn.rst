@@ -98,7 +98,7 @@ Link
 Put `<a href..` link over the value of the cell. The page property can be specified to constructor. There
 are two usage patterns. With the first you can specify full URL as a string::
 
-    $table->addColumn('name', ['Link', 'http://google.com/?q={$name}']);
+    $table->addColumn('name', ['Link', 'https://google.com/?q={$name}']);
 
 The URL may also be specified as an array. It will be passed to App::url() which will encode arguments::
 
@@ -265,7 +265,7 @@ Multiple decorators will be created and merged.
 Column Menus and Popups
 =======================
 
-Table column may have a menu as seen in http://ui.agiletoolkit.org/demos/tablecolumnmenu.php. Menu is added
+Table column may have a menu as seen in https://ui.agiletoolkit.org/demos/tablecolumnmenu.php. Menu is added
 into table column and can be linked with Popup or Menu.
 
 Basic Use
