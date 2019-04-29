@@ -75,10 +75,10 @@ class jsVueService
     /**
      * Make Vue aware of externally loaded components.
      * The component name must be accessible in javascript using the window namespace.
-     * ex: window['SemanticUIVue']
+     * ex: window['SemanticUIVue'].
      *
-     * @param string $component  The component name to use with Vue.
-
+     * @param string $component The component name to use with Vue.
+     *
      * @return mixed
      */
     public function useComponent($component)
