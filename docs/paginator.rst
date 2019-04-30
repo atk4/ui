@@ -64,8 +64,8 @@ Returns number of current page.
 Template
 ========
 
-Paginator uses Semantic UI `ui pagination menu` so if you are unhappy with the styling (e.g: active element is not
-sufficiently highlighted), you should refer to Semantic UI or use alternative theme.
+Paginator uses Fomantic UI `ui pagination menu` so if you are unhappy with the styling (e.g: active element is not
+sufficiently highlighted), you should refer to Fomantic UI or use alternative theme.
 
 The template for Paginator uses custom logic:
 

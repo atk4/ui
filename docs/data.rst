@@ -18,7 +18,7 @@ data sources. The rest of this chapter will explain how you can map various data
 Static Data Arrays
 ------------------
 
-Agile Data contains Persistence_Array (http://agile-data.readthedocs.io/en/develop/design.html?highlight=array#domain-model-actions)
+Agile Data contains Persistence_Array (https://agile-data.readthedocs.io/en/develop/design.html?highlight=array#domain-model-actions)
 implementation that load and store data in a regular PHP arrays. For the "quick and easy" solution Agile UI Views provide a
 method :php:meth:`View::setSource` which will work-around complexities and give you a syntax::
 
@@ -27,7 +27,7 @@ method :php:meth:`View::setSource` which will work-around complexities and give 
         2 => ['name'=>'Sarah', 'surname'=>'Kelly', 'age'=>20],
     ]);
 
-.. note:: 
+.. note::
     Dynamic views will not be able to identify that you are working with static data, and some features may not work properly.
     There are no plans in Agile UI to improve ways of using "setSource", instead, you should learn more how to use Agile Data
     for expressing your native data source. Agile UI is not optimized for setSource so its performance will generally be

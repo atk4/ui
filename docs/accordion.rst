@@ -7,10 +7,10 @@
 Accordion
 =========
 
-Accordion implement another way to organise your data. The implementation is based on: http://semantic-ui.com/modules/accordion.html.
+Accordion implement another way to organise your data. The implementation is based on: https://fomantic-ui.com/modules/accordion.html.
 
 
-Demo: http://ui.agiletoolkit.org/demos/accordion.php
+Demo: https://ui.agiletoolkit.org/demos/accordion.php
 
 
 Basic Usage
@@ -85,4 +85,4 @@ It is possible to change Accordion module settings via the settings property.::
 
     $app->add(['Accordion', 'settings' => []]);
 
-For a complete list of all settings for the Accordion module, please visit: https://semantic-ui.com/modules/accordion.html#/settings
+For a complete list of all settings for the Accordion module, please visit: https://fomantic-ui.com/modules/accordion.html#/settings

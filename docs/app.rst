@@ -172,7 +172,7 @@ that implements tighter integration with the host application or full-stack fram
 Method to include additional JavaScript file in page::
 
     $app->requireJS('https://code.jquery.com/jquery-3.1.1.js');
-    $app->requireJS('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js');
+    $app->requireJS('https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.7.4/semantic.min.js');
 
 Using of CDN servers is always better than storing external libraries locally.
 Most of the time CDN servers are faster (cached) and more reliable.
@@ -181,7 +181,7 @@ Most of the time CDN servers are faster (cached) and more reliable.
 
 Method to include additional CSS stylesheet in page::
 
-    $app->requireCSS('//semantic-ui.com/dist/semantic.css');
+    $app->requireCSS('//fomantic-ui.com/dist/semantic.css');
 
 .. php:method:: initIncludes()
 
@@ -198,7 +198,7 @@ Loading Templates for Views
 .. php:method:: loadTemplate($name)
 
 Views use :php:attr:`View::$defaultTemplate` to specify which template they are using. By default
-those are loaded from `vendor/atk4/ui/templates/semantic-ui` however by overriding this method,
+those are loaded from `vendor/atk4/ui/template/semantic-ui` however by overriding this method,
 you can specify extended logic.
 
 You may override this method if you are using a different CSS framework.
@@ -261,7 +261,7 @@ Database Connection
 
 .. php:method:: dbConnect(dsn, $user = null, $password = null, $args = [])
 
-(Arguments are identical to `Persistence::connect <http://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`_.
+(Arguments are identical to `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`_.
 
 This method should be used instead of manually calling Persistence::connect. This will
 properly propogate Persistence's "api" property to $this, so that you can refrence::
@@ -330,7 +330,7 @@ This will be used by components that rely on external JavaScript libraries.
 Hooks
 -----
 
-Application implements HookTrait (http://agile-core.readthedocs.io/en/develop/hook.html)
+Application implements HookTrait (https://agile-core.readthedocs.io/en/develop/hook.html)
 and the following hooks are available:
 
  - beforeRender
@@ -363,7 +363,7 @@ Having composition of multiple components will allow them to share the app objec
 
 All of the objects created above - button, grid, toolbar and paginator will share the same
 value for the 'app' property. This value is carried into new objects through AppScopeTrait
-(http://agile-core.readthedocs.io/en/develop/appscope.html).
+(https://agile-core.readthedocs.io/en/develop/appscope.html).
 
 Adding the App
 --------------
@@ -457,7 +457,7 @@ You should be able to find 3rd party Layout implementations that may even be com
 some custom templates and views. The concept of a "Theme" in Agile UI consists of
 offering of the following 3 things:
 
- - custom CSS build from Semantic UI
+ - custom CSS build from Fomantic UI
  - custom Layout(s) along with documentation
  - additional or tweaked Views
 

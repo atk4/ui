@@ -7,7 +7,7 @@ File Upload
 
 Upload (and UploadImg) classes implement Form Field that can be used to upload files or images.
 Implementation of :php:class:`Form` in Agile UI submits data using JavaScript request and
-therefore files should be uploaded before form submission. Process used can be described 
+therefore files should be uploaded before form submission. Process used can be described
 in steps:
 
  1. User arrives at the page with a form
@@ -66,7 +66,7 @@ onUpload
 --------
 
 The onUpload callback get called as soon as the upload process is finished. This callback
-function will receive the `$_FILES['upfile']` array as function parameter (see http://php.net/manual/en/features.file-upload.php),
+function will receive the `$_FILES['upfile']` array as function parameter (see https://php.net/manual/en/features.file-upload.php),
 or '$error' string if there was problem during upload.
 
 The onUpload callback function is a good place to:

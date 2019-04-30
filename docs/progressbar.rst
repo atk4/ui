@@ -8,9 +8,9 @@ ProgressBar
 ===========
 
 ProgressBar is actually a quite simple element, but it can be made quite interractive along with
-:php:class:`jsSSE`. 
+:php:class:`jsSSE`.
 
-Demo: http://ui.agiletoolkit.org/demos/progressbar.php
+Demo: https://ui.agiletoolkit.org/demos/progressbar.php
 
 
 Basic Usage
@@ -39,7 +39,7 @@ Updating Progress in RealTime
 You can use real-time element such as jsSSE or Console (which relies on jsSSE) to execute
 jsValue() of your progress bar and adjust the display value.
 
-Demo: http://ui.agiletoolkit.org/demos/progressbar.php
+Demo: https://ui.agiletoolkit.org/demos/progressbar.php
 
 :php:class:`Console` also implements method :php:meth:`Console::send`  so you can use it to send progress
 updates of your progress-bar.

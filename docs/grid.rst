@@ -34,14 +34,14 @@ Adding Menu Items
 
 .. php:method: addButton($label)
 
-Grid top-bar which contains QuickSearch is implemented using Semantic UI "ui menu". With that
+Grid top-bar which contains QuickSearch is implemented using Fomantic UI "ui menu". With that
 you can add additional items and use all features of a regular :php:class:`Menu`::
 
     $sub = $grid->menu->addMenu('Drop-down');
     $sub->addItem('Test123');
 
 For compatibility grid supports addition of the buttons to the menu, but there are several
-Semantic UI limitations that wouldn't allow to format buttons nicely::
+Fomantic UI limitations that wouldn't allow to format buttons nicely::
 
     $grid->addButton('Hello');
 
@@ -62,7 +62,7 @@ include quick-search component::
     $grid->addQuickSearch(['name', 'surname']);
 
 If you don't specify argument, then search will be done by a models title field.
-(http://agile-data.readthedocs.io/en/develop/model.html#title-field)
+(https://agile-data.readthedocs.io/en/develop/model.html#title-field)
 
 By default, quick search input field will query server when user press the Enter key. However, it is possible to make it
 querying the server automatically, i.e. after the user has finished typing, by setting the auto query parameter::
@@ -144,7 +144,7 @@ Column Menus
 
 .. php:method:: addPopup($columnName, $popup = null, $icon = 'caret square down')
 
-Methods addDropdown and addPopup provide a wrapper for :php:meth:`atk4\\ui\\TableColumn\\addDropdown` and 
+Methods addDropdown and addPopup provide a wrapper for :php:meth:`atk4\\ui\\TableColumn\\addDropdown` and
 :php:meth:`atk4\\ui\\TableColumn\\addPopup` methods.
 
 Selection

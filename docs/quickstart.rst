@@ -80,7 +80,7 @@ create the application::
     $app->initLayout('Centered');
 
 All components of Agile Data are database-agnostic and will not concern themselve with the way how you store data.
-I will start the session and connect `persistence <http://agile-data.readthedocs.io/en/develop/persistence.html>`_
+I will start the session and connect `persistence <https://agile-data.readthedocs.io/en/develop/persistence.html>`_
 with it::
 
     session_start();
@@ -89,7 +89,7 @@ with it::
 Data Model
 ==========
 
-We need a class `Task` which decribes `data model <http://agile-data.readthedocs.io/en/develop/model.html>`_ for the
+We need a class `Task` which decribes `data model <https://agile-data.readthedocs.io/en/develop/model.html>`_ for the
 single ToDo item::
 
 
@@ -143,7 +143,7 @@ Next we need to add Components that are capable of manipulating the data::
 .. rubric:: Clarifications
 
 .. [#] We wish to position Form and Table side-by-side, so we use 'Columns' component and
-    inject a Semantic UI CSS class "divided" that will appear as a vertical separation line.
+    inject a Fomantic UI CSS class "divided" that will appear as a vertical separation line.
 
 .. [#] $col_reload is a speciall object which we call :ref:`js_action`. It represents a Browser-event
     that will cause both columns to be reloaded from the server. To use this action we still have

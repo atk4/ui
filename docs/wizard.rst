@@ -14,7 +14,7 @@ simple syntax for building UI and display a lovely UI for you.
     .. image:: images/wizard.png
 
 
-Demo: http://ui.agiletoolkit.org/demos/wizard.php
+Demo: https://ui.agiletoolkit.org/demos/wizard.php
 
 Introduced in UI v1.4
 
@@ -44,8 +44,8 @@ Your callback will also receive `$wizard` as the first argument. Method addStep 
 which is described below. You can also provide first argument to addStep as a seed or an object::
 
     $wizard->addStep([
-        'Set DSN', 
-        'icon'=>'configure', 
+        'Set DSN',
+        'icon'=>'configure',
         'description'=>'Database Connection String'
     ], function ($p) {
         // some code here
@@ -72,9 +72,9 @@ Step Tracking
 .. php:attr:: stepCallback
 
 Wizard employs :php:class:`Callback` to maintain which step you currently are on. All steps are numbered
-started with 0. 
+started with 0.
 
-.. important:: Wizard currently does not enforce step completion. Changing step number in the URL manually can 
+.. important:: Wizard currently does not enforce step completion. Changing step number in the URL manually can
     take you to any step. You can also go backwards and re-do steps. Section below explains how to make wizard
     enforce some restrictions.
 

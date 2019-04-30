@@ -52,7 +52,7 @@ through a GET argument, then VirtualPage will change it's rendering technique. L
     $label->link($vp->cb->getURL());
 
 This code will only show the link containing a URL, but will not show LoremIpsum text.  If you do follow the link, you'll
-see only the 'LoremIpsum' text. 
+see only the 'LoremIpsum' text.
 
 .. php:attr:: $urlTrigger
 
@@ -152,7 +152,7 @@ while a spinner is shown to a user::
 
 
 A good use-case example would be a dashboard graph. Unlike VirtualPage which is not visible to a regular render,
-Loader needs to occupy some space. 
+Loader needs to occupy some space.
 
 .. php:attr:: $shim
 
@@ -173,7 +173,7 @@ Triggering Loader
 ^^^^^^^^^^^^^^^^^
 
 By default, Loader will display a spinner and will start loading it's contents as soon as DOM Ready() event fires.
-Sometimes you want to control the event. 
+Sometimes you want to control the event.
 
 .. php:method:: jsLoad($args = [])
 
@@ -205,7 +205,7 @@ To indicate how custom binding works::
 
     $app->add(['Button', 'Load data'])->on('click', $loader->js()->trigger('kaboom'));
 
-This approach allow you to trigger loader from inside JavaScript easily. See also: http://api.jquery.com/trigger/
+This approach allow you to trigger loader from inside JavaScript easily. See also: https://api.jquery.com/trigger/
 
 Reloading
 ^^^^^^^^^
@@ -228,7 +228,7 @@ Next example will display DataTable, but will allow you to repalce data with a f
 
     $box->add(['Button', 'Edit Data Settings'])->on('click', $loader->js()->trigger('edit'));
 
-    $loader->set(function($p) use($loader) { 
+    $loader->set(function($p) use($loader) {
         $form = $p->add('Form');
         $form->addField('year');
 

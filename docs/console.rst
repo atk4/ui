@@ -12,7 +12,7 @@ With console you can output real-time information to the user directly from PHP.
 be used do direct output from slow method or even execute commands on the server (such as `ping`).
 
 
-Demo: http://ui.agiletoolkit.org/demos/console.php
+Demo: https://ui.agiletoolkit.org/demos/console.php
 
 
 Basic Usage
@@ -43,7 +43,7 @@ Console uses :ref:`sse` which works pretty much out-of-the-box with the modern b
 do not require you to set up additional ports on the server. JavaScript in a browser captures real-time
 events and displays it on a black background.
 
-Console integrates nicely with DebugTrait (http://agile-core.readthedocs.io/en/develop/debug.html?highlight=debug),
+Console integrates nicely with DebugTrait (https://agile-core.readthedocs.io/en/develop/debug.html?highlight=debug),
 and also allows you to execute shell process on the server while redirecting output in real-time.
 
 Using With Object
@@ -96,7 +96,7 @@ real-time then display it on the console using color. Console does not support A
 
 Method exec can be executed directly on the $console or inside the callback::
 
-    $console->set(function($console){ 
+    $console->set(function($console){
 
         $console->eval();
 
@@ -105,7 +105,7 @@ Method exec can be executed directly on the $console or inside the callback::
 Without call-back, eval will wrap itself into a callback but you can only execute a single command. When using callback
 form, you can execute multiple commands::
 
-    $app->add('Console')->set(function($c){ 
+    $app->add('Console')->set(function($c){
         $c
             ->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1'])
             ->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8'])
@@ -124,7 +124,7 @@ NOTE that for each invocation `exec` will spawn a new process, but if you want t
 can wrap them into `bash -c`::
 
     $app->add('Console')->exec('bash', [
-        '-c', 
+        '-c',
         'cd ..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"'
     ]);
 
