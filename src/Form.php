@@ -322,7 +322,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         return $this->layout->addField($name, $decorator, $field);
     }
-    
+
     /**
      * Add more than one field in one shot.
      *
@@ -339,7 +339,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 $this->addField($field);
             }
         }
-    
+
         return $this;
     }
 
