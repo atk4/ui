@@ -144,7 +144,7 @@ Create a new field on a form::
 
     $form = $app->add('Form');
     $form->addField('email');
-    $form->addField('gender', ['DropDown', 'values'=>['Female', 'Male']);
+    $form->addField('gender', ['DropDown', 'values'=>['Female', 'Male']]);
     $form->addField('terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']);
 
 Create a new field on a form using Model does not require you to describe each field.
@@ -159,6 +159,17 @@ Field Decorator does not have to be added directly into the form. You can use a 
 
     $myview = $form->add(['defaultTemplate'=>'./mytemplate.html']);
     $myview->add(['FormField\Dropdown', 'form'=>$form]);
+
+.. php:method:: addFields($fields)
+
+Similar to :php:meth:`Form::addField()`, but allows to add multiple fields in one method call.
+
+    $form = $app->add('Form');
+    $form->addFields([
+        'email',
+        ['gender', ['DropDown', 'values'=>['Female', 'Male']]],
+        ['terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']],
+    ]);
 
 Adding new fields
 -----------------
