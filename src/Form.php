@@ -322,6 +322,26 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         return $this->layout->addField($name, $decorator, $field);
     }
+    
+    /**
+     * Add more than one field in one shot.
+     *
+     * @param array $fields
+     *
+     * @return $this
+     */
+    public function addFields($fields)
+    {
+        foreach ($fields as $field) {
+            if (is_array($field)) {
+                $this->addField(...$field);
+            } else {
+                $this->addField($field);
+            }
+        }
+    
+        return $this;
+    }
 
     /**
      * Add header into the form, which appears as a separator.
