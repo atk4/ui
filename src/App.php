@@ -114,6 +114,11 @@ class App
     public $db = null;
 
     /**
+     * @var bool Whether or not semantic-ui vue has been initialised.
+     */
+    private $is_sui_init = false;
+
+    /**
      * Constructor.
      *
      * @param array $defaults
@@ -837,5 +842,19 @@ class App
     public function encodeHTML($val)
     {
         return htmlentities($val);
+    }
+
+    /**
+     * Allow to use semantic-ui-vue components.
+     *
+     * https://semantic-ui-vue.github.io
+     */
+    public function useSuiVue()
+    {
+        if (!$this->is_sui_init) {
+            $this->requireJS('https://unpkg.com/semantic-ui-vue/dist/umd/semantic-ui-vue.min.js');
+            $this->layout->js(true, (new jsVueService())->useComponent('SemanticUIVue'));
+            $this->is_sui_init = true;
+        }
     }
 }

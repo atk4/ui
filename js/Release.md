@@ -1,5 +1,13 @@
 ## Release note
 
+### version 1.6.4
+
+ - Add directives to Vue component;
+ - Allow uses of Semantic Ui Vue;
+ - Update packages version;
+ - Configure babel in order to use Async - Await
+ - New suiFetch() method for server callback in api service.
+
 ### version 1.6.3
 
  - Prevent Modal duplication in apiService.
