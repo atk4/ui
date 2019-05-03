@@ -462,7 +462,7 @@ class MultiLine extends Generic
      *
      * @return Model
      */
-    public function setModel($model, $fields = [], $modelRef = null, $linkField = null)
+    public function setModel(\atk4\data\Model $model, $fields = [], $modelRef = null, $linkField = null)
     {
         //remove our self from model
         if ($model->hasElement($this->short_name)) {
