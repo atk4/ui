@@ -28,9 +28,9 @@ $inventory = new InventoryItem(new \atk4\data\Persistence_Array($data));
 
 // Populate some data.
 $total = 0;
-for($i = 1; $i < 3; $i++){
+for ($i = 1; $i < 3; $i++) {
     $inventory['id'] = $i;
-    $inventory['item'] = 'item_' . $i;
+    $inventory['item'] = 'item_'.$i;
     $inventory['qty'] = rand(10, 100);
     $inventory['box'] = rand(1, 10);
     $total = $total + ($inventory['qty'] * $inventory['box']);
