@@ -62,7 +62,6 @@
  *     $ml->saveRows();
  *     return new \atk4\ui\jsToast('Saved!');
  * });
- *
  */
 
 namespace atk4\ui\FormField;
@@ -79,12 +78,14 @@ class MultiLine extends Generic
 {
     /**
      * Layout view as is within form layout.
+     *
      * @var bool
      */
     public $layoutWrap = false;
 
     /**
      * The template need for the multiline view.
+     *
      * @var null
      */
     public $multiLineTemplate = null;
@@ -179,7 +180,7 @@ class MultiLine extends Generic
         $this->cb = $this->add('jsCallback');
 
         //load data associate with this input and validate it.
-        $this->form->addHook('loadPOST', function($form){
+        $this->form->addHook('loadPOST', function ($form) {
             $this->rowData = json_decode($_POST[$this->short_name], true);
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
@@ -190,7 +191,7 @@ class MultiLine extends Generic
         });
 
         // Change form error handling.
-        $this->form->addHook('displayError', function($form, $fieldName, $str) {
+        $this->form->addHook('displayError', function ($form, $fieldName, $str) {
             // When error are coming from this multiline field then advice multiline component about these errors.
             // otherwise use normal field error.
             if ($fieldName === $this->short_name) {
@@ -210,7 +211,7 @@ class MultiLine extends Generic
      * for all fields changed.
      *
      * @param array|\atk4\ui\FormField\jsExpression|callable|string $fx
-     * @param null $fields
+     * @param null                                                  $fields
      *
      * @throws Exception
      */
@@ -229,8 +230,9 @@ class MultiLine extends Generic
     /**
      * Input field collecting multiple rows of data.
      *
-     * @return string
      * @throws \atk4\core\Exception
+     *
+     * @return string
      */
     public function getInput()
     {
@@ -248,8 +250,9 @@ class MultiLine extends Generic
      * output data rows as json string value.
      *
      *
-     * @return false|string
      * @throws \atk4\core\Exception
+     *
+     * @return false|string
      */
     public function getValue()
     {
@@ -259,7 +262,7 @@ class MultiLine extends Generic
         //set model according to model reference if set; or simply the model pass to it.
         if ($this->model->loaded() && $this->modelRef) {
             $m = $this->model->ref($this->modelRef);
-        } else if (!$this->modelRef) {
+        } elseif (!$this->modelRef) {
             $m = $this->model;
         }
         if ($m) {
@@ -286,8 +289,9 @@ class MultiLine extends Generic
      *
      * @param $rows
      *
-     * @return array|null
      * @throws \atk4\core\Exception
+     *
+     * @return array|null
      */
     public function validate($rows)
     {
@@ -298,17 +302,17 @@ class MultiLine extends Generic
             $rowId = $this->getMlRowId($cols);
             foreach ($cols as $col) {
                 $fieldName = key($col);
-                if ($fieldName === '__atkml' ||  $fieldName === $m->id_field ) {
+                if ($fieldName === '__atkml' || $fieldName === $m->id_field) {
                     continue;
                 }
                 $value = $col[$fieldName];
+
                 try {
                     $field = $m->getElement($fieldName);
                     // save field value only if field was editable in form at all
                     if (!$field->read_only) {
                         $m[$fieldName] = $this->app->ui_persistence->typecastLoadField($field, $value);
                     }
-
                 } catch (\atk4\core\Exception $e) {
                     $rowErrors[$rowId][] = ['field' => $fieldName, 'msg' => $e->getMessage()];
                 }
@@ -319,8 +323,6 @@ class MultiLine extends Generic
         if ($rowErrors) {
             return $rowErrors;
         }
-
-        return null;
     }
 
     /**
@@ -349,7 +351,7 @@ class MultiLine extends Generic
 
         foreach ($this->rowData as $row => $cols) {
             $rowId = $this->getMlRowId($cols);
-            if($this->modelRef && $this->linkField) {
+            if ($this->modelRef && $this->linkField) {
                 $model[$this->linkField] = $this->model->get('id');
             }
             foreach ($cols as $col) {
@@ -368,16 +370,16 @@ class MultiLine extends Generic
                     $field->set($value);
                 }
             }
-            $id = $model->save()->get($model->id_field);//->unload();
+            $id = $model->save()->get($model->id_field); //->unload();
             $k = array_search($id, $currentIds);
-            if ( $k > -1) {
+            if ($k > -1) {
                 unset($currentIds[$k]);
             }
 
             $model->unload();
         }
         // if currentId are still there, then delete them.
-        forEach ($currentIds as $id) {
+        foreach ($currentIds as $id) {
             $model->delete($id);
         }
     }
@@ -419,8 +421,11 @@ class MultiLine extends Generic
                     $rowId = $value;
                 }
             }
-            if ($rowId) break;
+            if ($rowId) {
+                break;
+            }
         }
+
         return $rowId;
     }
 
@@ -428,8 +433,9 @@ class MultiLine extends Generic
      * Will return a model reference if reference was set
      * in setModel, Otherwise, will return main model.
      *
-     * @return Model
      * @throws \atk4\core\Exception
+     *
+     * @return Model
      */
     public function getModel()
     {
@@ -448,17 +454,18 @@ class MultiLine extends Generic
      *
      * @param Model $m
      * @param array $fields
-     * @param null $modelRef
-     * @param null $linkField
+     * @param null  $modelRef
+     * @param null  $linkField
      *
-     * @return Model
      * @throws Exception
      * @throws \atk4\core\Exception
+     *
+     * @return Model
      */
     public function setModel($model, $fields = [], $modelRef = null, $linkField = null)
     {
         //remove our self from model
-        if ($model->hasElement($this->short_name)){
+        if ($model->hasElement($this->short_name)) {
             $model->getElement($this->short_name)->never_persist = true;
         }
         $m = parent::setModel($model);
@@ -483,7 +490,7 @@ class MultiLine extends Generic
             if (!$field instanceof \atk4\data\Field) {
                 continue;
             }
-            $type = $field->type ?  $field->type : 'string';
+            $type = $field->type ? $field->type : 'string';
 
             if (isset($field->ui['form'])) {
                 $type = $field->ui['form'][0];
@@ -498,7 +505,6 @@ class MultiLine extends Generic
                 'isHidden'    => $field->isHidden(),
                 'isVisible'   => $field->isVisible(),
             ];
-
         }
 
         return $m;
@@ -534,8 +540,8 @@ class MultiLine extends Generic
             throw new Exception('Multiline field needs to have it\'s model setup.');
         }
 
-        if ($this->cb->triggered()){
-            $this->cb->set(function() {
+        if ($this->cb->triggered()) {
+            $this->cb->set(function () {
                 try {
                     return $this->renderCallback();
                 } catch (\atk4\Core\Exception $e) {
@@ -557,8 +563,8 @@ class MultiLine extends Generic
                                       'idField'     => $this->getModel()->id_field,
                                       'url'         => $this->cb->getJSURL(),
                                       'eventFields' => $this->eventFields,
-                                      'hasChangeCb' => $this->changeCb ? true: false,
-                                  ]
+                                      'hasChangeCb' => $this->changeCb ? true : false,
+                                  ],
                               ]);
     }
 
@@ -580,7 +586,7 @@ class MultiLine extends Generic
         switch ($action) {
             case 'update-row':
                 $m = $this->setDummyModelValue(clone $this->getModel());
-                $expressionValues = array_merge($this->getExpressionValues($m),  $this->getCallbackValues($m));
+                $expressionValues = array_merge($this->getExpressionValues($m), $this->getCallbackValues($m));
                 $this->app->terminate(json_encode(array_merge($response, ['expressions' => $expressionValues])));
                 break;
             case 'on-change':
@@ -588,7 +594,6 @@ class MultiLine extends Generic
                 return call_user_func($this->changeCb, json_decode($_POST['rows'], true));
                 break;
         }
-        return;
     }
 
     /**
@@ -600,7 +605,7 @@ class MultiLine extends Generic
      */
     private function getCallbackValues($model)
     {
-        $values =[];
+        $values = [];
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['field'];
             if ($fieldName === $model->id_field) {
@@ -615,6 +620,7 @@ class MultiLine extends Generic
 
         return $values;
     }
+
     /**
      * Looks inside the POST of the request and loads data into model.
      * Allow to Run expression base on rowData value.
@@ -638,6 +644,7 @@ class MultiLine extends Generic
                 }
             }
         }
+
         return $model;
     }
 
@@ -646,9 +653,10 @@ class MultiLine extends Generic
      *
      * @param $m
      *
-     * @return array
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
+     *
+     * @return array
      */
     private function getExpressionValues($m)
     {
@@ -704,8 +712,9 @@ class MultiLine extends Generic
      *
      * @param $expr
      *
-     * @return mixed
      * @throws \atk4\core\Exception
+     *
+     * @return mixed
      */
     private function getDummyExpression($exprField, $model)
     {
@@ -738,7 +747,7 @@ class MultiLine extends Generic
      */
     private function getValueForExpression($exprField, $fieldName, $model)
     {
-        switch($exprField->type) {
+        switch ($exprField->type) {
             case 'money':
             case 'integer':
             case 'number':
