@@ -519,7 +519,7 @@ class MultiLine extends Generic
                 'isEditable'  => $field->isEditable(),
                 'isHidden'    => $field->isHidden(),
                 'isVisible'   => $field->isVisible(),
-                'width'       => $field->ui['multiline']['width'] ? $field->ui['multiline']['width'] : null
+                'width'       => $field->ui['multiline']['width'] ? $field->ui['multiline']['width'] : null,
             ];
         }
 
