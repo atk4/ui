@@ -575,7 +575,7 @@ class MultiLine extends Generic
                                       'url'         => $this->cb->getJSURL(),
                                       'eventFields' => $this->eventFields,
                                       'hasChangeCb' => $this->changeCb ? true : false,
-                                      'options'     => $this->options
+                                      'options'     => $this->options,
                                   ],
                               ]);
     }
