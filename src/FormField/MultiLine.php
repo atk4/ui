@@ -393,6 +393,8 @@ class MultiLine extends Generic
         foreach ($currentIds as $id) {
             $model->delete($id);
         }
+
+        return $this;
     }
 
     /**
