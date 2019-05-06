@@ -14,7 +14,7 @@ export default {
   template: `
     <sui-table-row :verticalAlign="'middle'">
         <sui-table-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></input></sui-table-cell>
-        <sui-table-cell :state="getErrorState(column)" v-for="(column, idx) in columns" :key="idx" :style="{overflow: 'visible'}" v-if="column.isVisible" :textAlign="getTextAlign(column)">
+        <sui-table-cell  v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" :style="{overflow: 'visible'}" v-if="column.isVisible" :textAlign="getTextAlign(column)">
          <atk-multiline-cell 
            :fieldType="getFieldType(column)" 
            :cellData="column" 

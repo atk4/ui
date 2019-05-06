@@ -62,6 +62,9 @@
  *     $ml->saveRows();
  *     return new \atk4\ui\jsToast('Saved!');
  * });
+ *
+ * 2019-05-06 - now check if field isEditable instead of just expression when saving row(line 376).
+ * 2019=05-06 - Add options property for table css options
  */
 
 namespace atk4\ui\FormField;
@@ -97,6 +100,14 @@ class MultiLine extends Generic
      * @var null
      */
     private $multiLine = null;
+
+    /**
+     * An array of options for sui-table property.
+     * example: ['celled' => true] will render column line in table.
+     *
+     * @var array
+     */
+    public $options = [];
 
     /**
      * The definition of each fields used in each multiline row.
@@ -366,7 +377,7 @@ class MultiLine extends Generic
 
                 $field = $model->getElement($fieldName);
 
-                if (!$field instanceof Field_SQL_Expression) {
+                if ($field->isEditable()) {
                     $field->set($value);
                 }
             }
@@ -564,6 +575,7 @@ class MultiLine extends Generic
                                       'url'         => $this->cb->getJSURL(),
                                       'eventFields' => $this->eventFields,
                                       'hasChangeCb' => $this->changeCb ? true : false,
+                                      'options'     => $this->options
                                   ],
                               ]);
     }

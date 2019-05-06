@@ -4,7 +4,7 @@ import multilineHeader from './multiline/multiline-header.component';
 export default {
   name: 'atk-multiline',
   template: `<div >
-                <sui-table celled size="small" compact="very" fixed>
+                <sui-table v-bind="tableProp">
                   <atk-multiline-header :fields="fieldData" :state="getMainToggleState" :errors="errors"></atk-multiline-header>
                   <atk-multiline-body :fieldDefs="fieldData" :rowData="rowData" :rowIdField="idField" :deletables="getDeletables" :errors="errors"></atk-multiline-body>
                   <sui-table-footer>
@@ -32,7 +32,19 @@ export default {
       eventFields : this.data.eventFields,
       deletables: [],
       hasChangeCb: this.data.hasChangeCb,
-      errors: {}
+      errors: {},
+      tableProp: Object.assign({}, this.tableDefault, this.data.options),
+      tableDefault : {
+        basic: false,
+        celled: false,
+        size: null,
+        compact: null,
+        collapsing: false,
+        stackable: false,
+        inverted: false,
+        color: null,
+        columns: null
+      }
     }
   },
   components: {
