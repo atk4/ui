@@ -406,7 +406,7 @@ class MultiLine extends Generic
      *
      * @return mixed
      */
-    private function addModelValidateErrors($errors, $rowId, $model)
+    protected function addModelValidateErrors($errors, $rowId, $model)
     {
         $e = $model->validate();
         if ($e) {
@@ -419,6 +419,8 @@ class MultiLine extends Generic
     }
 
     /**
+     * for javascript use - changing this method may brake js functionality.
+     *
      * Return MultiLine row id in a row of data.
      *
      * @param $row
@@ -517,6 +519,7 @@ class MultiLine extends Generic
                 'isEditable'  => $field->isEditable(),
                 'isHidden'    => $field->isHidden(),
                 'isVisible'   => $field->isVisible(),
+                'width'       => $field->ui['multiline']['width'] ? $field->ui['multiline']['width'] : null
             ];
         }
 
@@ -583,6 +586,8 @@ class MultiLine extends Generic
     }
 
     /**
+     * for javascript use - changing these methods may brake js functionality.
+     *
      * Render callback.
      *
      * @throws ValidationException
@@ -611,6 +616,8 @@ class MultiLine extends Generic
     }
 
     /**
+     * for javascript use - changing this method may brake js functionality.
+     *
      * return values associate with callback field.
      *
      * @param $model
@@ -636,6 +643,8 @@ class MultiLine extends Generic
     }
 
     /**
+     * for javascript use - changing this method may brake js functionality.
+     *
      * Looks inside the POST of the request and loads data into model.
      * Allow to Run expression base on rowData value.
      */
@@ -663,6 +672,8 @@ class MultiLine extends Generic
     }
 
     /**
+     * for javascript use - changing this method may brake js functionality.
+     *
      * Return values associated to field expression.
      *
      * @param $m
@@ -700,6 +711,8 @@ class MultiLine extends Generic
     }
 
     /**
+     * for javascript use - changing this method may brake js functionality.
+     *
      * Get all field expression in model.
      * But only evaluate expression used in rowFields.
      *
@@ -720,6 +733,8 @@ class MultiLine extends Generic
     }
 
     /**
+     * for javascript use - changing this method may brake js functionality.
+     *
      * Return expression where field are replace with their current or default value.
      * ex: total field expression = [qty] * [price] will return 4 * 100
      * where qty and price current value are 4 and 100 respectively.
@@ -751,6 +766,8 @@ class MultiLine extends Generic
     }
 
     /**
+     * for javascript use - changing this method may brake js functionality.
+     *
      * Return a value according to field use in expression and the expression type.
      * If field use in expression is null , the default value is return.
      *
