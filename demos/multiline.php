@@ -61,6 +61,7 @@ $ml->onChange(function ($rows) use ($f_total) {
     return $f_total->jsInput()->val($total);
 }, ['qty', 'box']);
 
-$f->onSubmit(function ($f) {
-    return new \atk4\ui\jsToast('All good!');
+$f->onSubmit(function ($f) use($ml) {
+    $rows = $ml->saveRows()->getModel()->export();
+    return new \atk4\ui\jsToast(json_encode(array_values($rows)));
 });
