@@ -217,23 +217,20 @@ class MultiLine extends Generic
 
     /**
      * Add a callback when fields are changed.
-     * It is possible to supply fields that will trigger the
-     * callback when changed. If no fields are supply then callback will trigger
-     * for all fields changed.
+     * You must supply array of fields that will trigger the
+     * callback when changed.
      *
      * @param array|\atk4\ui\FormField\jsExpression|callable|string $fx
-     * @param null                                                  $fields
+     * @param arra                                                  $fields
      *
      * @throws Exception
      */
-    public function onChange($fx, $fields = null)
+    public function onChange($fx, $fields)
     {
         if (!is_callable($fx)) {
             throw new Exception('Function is required for onChange event.');
         }
-        if ($fields) {
-            $this->eventFields = $fields;
-        }
+        $this->eventFields = $fields;
 
         $this->changeCb = $fx;
     }
