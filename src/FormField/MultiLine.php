@@ -226,7 +226,7 @@ class MultiLine extends Generic
      *
      * @throws Exception
      */
-    public function onChange($fx, $fields)
+    public function onLineChange($fx, $fields)
     {
         if (!is_callable($fx)) {
             throw new Exception('Function is required for onChange event.');
