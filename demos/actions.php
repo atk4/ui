@@ -13,5 +13,3 @@ $files = new File($app->db);
 $files->addAction('Import From Filesystem', 'importFromFilesystem', ['string'], ['scope'=>atk4\data\UserAction\Action::NO_RECORDS]);
 
 $app->add(['CRUD', 'ipp'=>5])->setModel($files);
-
-
