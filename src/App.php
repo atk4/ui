@@ -379,6 +379,7 @@ class App
         if (class_exists('\\'.__NAMESPACE__.'\\'.$name)) {
             return '\\'.__NAMESPACE__.'\\'.$name;
         }
+
         return $name;
     }
 
