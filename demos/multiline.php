@@ -50,7 +50,7 @@ $c = $sub_layout->addColumn(4);
 $f_total = $c->addField('total', ['readonly' => true])->set($total);
 
 // Update total when qty and box value in any row has changed.
-$ml->onChange(function ($rows) use ($f_total) {
+$ml->onChange(function ($rows, $form) use ($f_total) {
     $total = 0;
     foreach ($rows as $row => $cols) {
         $qty = array_column($cols, 'qty')[0];

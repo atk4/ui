@@ -63,8 +63,9 @@
  *     return new \atk4\ui\jsToast('Saved!');
  * });
  *
- * 2019-05-06 - now check if field isEditable instead of just expression when saving row(line 376).
- * 2019=05-06 - Add options property for table css options
+ * 2019-05-06   - now check if field isEditable instead of just expression when saving row(line 376).
+ *              - Add options property for table css options.
+ * 2019-05-07   - add form as parameter to the onChange callback. This allow to perform calculation at form model level.
  */
 
 namespace atk4\ui\FormField;
@@ -607,7 +608,7 @@ class MultiLine extends Generic
                 break;
             case 'on-change':
                 // let regular callback render output.
-                return call_user_func($this->changeCb, json_decode($_POST['rows'], true));
+                return call_user_func_array($this->changeCb, [json_decode($_POST['rows'], true), $this->form]);
                 break;
         }
     }
