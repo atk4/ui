@@ -64,7 +64,7 @@ Image
 
 Image cannot be specified at the same time with the icon, but you can use PNG/GIF/JPG image on your label::
 
-    $img = 'https://cdn.rawgit.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+    $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
     $app->add(['Label', 'Coded in PHP', 'image'=>$img]);
 
 Detail
