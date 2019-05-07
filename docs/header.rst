@@ -61,7 +61,7 @@ Header may specify icon or image::
 
 Here you can also specify seed for the image::
 
-    $img = 'https://cdn.rawgit.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+    $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
     $seg->add([
         'Header',
         'Center-aligned header',
