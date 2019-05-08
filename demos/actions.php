@@ -22,7 +22,12 @@ $action = $files->addAction(
     ]
 );
 
-//$app->add(['CRUD', 'ipp'=>5])->setModel($files);
+$files->addAction('download', function($m){
+    $len = strlen(file_get_contents($m['name']));
+    return "$len bytes downloaded..";
+} );
+
+
 
 $app->add($grid = new \atk4\ui\GridLayout(['columns'=>3]));
 
@@ -52,3 +57,6 @@ $executor->setArguments(['path'=>'.']);
 $executor->addHook('afterExecute', function ($x, $ret) {
     return new \atk4\ui\jsToast('Files imported: '.$ret);
 });
+
+$app->add(['CRUD', 'ipp'=>5])->setModel($files);
+

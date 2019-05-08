@@ -4,6 +4,8 @@
 
 namespace atk4\ui;
 
+use atk4\data\UserAction\Action;
+
 /**
  * Implements a more sophisticated and interactive Data-Table component.
  */
@@ -415,6 +417,24 @@ class Grid extends View
 
         return $this->actions->addModal($button, $title, $callback, $this);
     }
+
+    /**
+     * Find out more about the nature of the action from the supplied object, use addAction()
+     */
+    public function addUserAction(Action $action)
+    {
+        $button = $action->caption;
+
+        $this->addModalAction($button, $button, function($page, $id) use($action) {
+            $page->add($executor = new ActionExecutor\Basic());
+
+            $action->owner->load($id);
+
+            $executor->setAction($action);
+        });
+
+    }
+
 
     /**
      * Get sortBy value from url parameter.

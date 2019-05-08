@@ -4,6 +4,8 @@
 
 namespace atk4\ui;
 
+use atk4\data\UserAction\Action;
+
 /**
  * Implements a more sophisticated and interractive Data-Table component.
  */
@@ -119,6 +121,10 @@ class CRUD extends Grid
 
         if ($this->canDelete) {
             $this->initDelete();
+        }
+
+        foreach($m->getActions(Action::SINGLE_RECORD) as $single_record_action) {
+           $this->addUserAction($single_record_action);
         }
 
         return $this->model;
