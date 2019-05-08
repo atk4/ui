@@ -280,7 +280,7 @@ export default {
         on: 'now',
         url: this.data.url,
         method: 'post',
-        data: {action: 'on-change', rows: JSON.stringify(this.rowData)}
+        data: {__atkml_action: 'on-change', rows: JSON.stringify(this.rowData)}
       });
     },
     postData: async function(row) {
@@ -292,7 +292,7 @@ export default {
         data[field] = row.filter(item => field in item)[0][field];
       });
       //console.log(data);
-      data.action = 'update-row';
+      data.__atkml_action = 'update-row';
       try {
         let response = await atk.apiService.suiFetch(this.data.url, {data: data, method: 'post', stateContext:context});
         return response;

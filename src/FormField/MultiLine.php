@@ -180,7 +180,7 @@ class MultiLine extends Generic
         parent::init();
 
         $this->app->useSuiVue();
-        
+
         if (!$this->multiLineTemplate) {
             $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline>{$Input}</div>');
         }
@@ -592,7 +592,7 @@ class MultiLine extends Generic
      */
     private function renderCallback()
     {
-        $action = isset($_POST['action']) ? $_POST['action'] : null;
+        $action = isset($_POST['__atkml_action']) ? $_POST['__atkml_action'] : null;
         $response = [
             'success' => true,
             'message' => 'Success',
