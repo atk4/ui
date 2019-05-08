@@ -22,12 +22,11 @@ $action = $files->addAction(
     ]
 );
 
-$files->addAction('download', function($m){
+$files->addAction('download', function ($m) {
     $len = strlen(file_get_contents($m['name']));
+
     return "$len bytes downloaded..";
-} );
-
-
+});
 
 $app->add($grid = new \atk4\ui\GridLayout(['columns'=>3]));
 
@@ -59,4 +58,3 @@ $executor->addHook('afterExecute', function ($x, $ret) {
 });
 
 $app->add(['CRUD', 'ipp'=>5])->setModel($files);
-

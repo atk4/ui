@@ -123,8 +123,8 @@ class CRUD extends Grid
             $this->initDelete();
         }
 
-        foreach($m->getActions(Action::SINGLE_RECORD) as $single_record_action) {
-           $this->addUserAction($single_record_action);
+        foreach ($m->getActions(Action::SINGLE_RECORD) as $single_record_action) {
+            $this->addUserAction($single_record_action);
         }
 
         return $this->model;

@@ -419,22 +419,20 @@ class Grid extends View
     }
 
     /**
-     * Find out more about the nature of the action from the supplied object, use addAction()
+     * Find out more about the nature of the action from the supplied object, use addAction().
      */
     public function addUserAction(Action $action)
     {
         $button = $action->caption;
 
-        $this->addModalAction($button, $button, function($page, $id) use($action) {
+        $this->addModalAction($button, $button, function ($page, $id) use ($action) {
             $page->add($executor = new ActionExecutor\Basic());
 
             $action->owner->load($id);
 
             $executor->setAction($action);
         });
-
     }
-
 
     /**
      * Get sortBy value from url parameter.
