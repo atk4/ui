@@ -10,8 +10,33 @@ $app->add(['Header', 'Extensions to ATK Data Actions', 'subHeader'=>'Demonstrate
 $files = new File($app->db);
 
 // This action must appear on top of the CRUD
-$files->addAction('Import From Filesystem', 'importFromFilesystem', ['string'], ['scope'=>atk4\data\UserAction\Action::NO_RECORDS]);
+$action = $files->addAction(
+    'import_from_filesystem',
+    [
+        'callback'=>'importFromFilesystem',
+        'args'=>['path'=>'string'],
+        'scope'=>atk4\data\UserAction\Action::NO_RECORDS
+    ]
+);
 
-$app->add(['CRUD', 'ipp'=>5])->setModel($files);
+//$app->add(['CRUD', 'ipp'=>5])->setModel($files);
+
+$app->add($grid = new \atk4\ui\GridLayout(['columns'=>3]));
+
+$grid->add($executor = new \atk4\ui\ActionExecutor\basic(), 'r1c1');
+
+$executor->setAction($action);
+$executor->ui='segment';
+$executor->description = 'Execute action using "Basic" executor and path="." argument';
+$executor->setArguments(['path'=>'.']);
+$executor->addHook('afterExecute', function($x, $ret) { return new \atk4\ui\jsToast('Files imported: '. $ret); });
+
+
+$grid->add($executor = new \atk4\ui\ActionExecutor\ArgumentForm(), 'r1c2');
+
+$executor->setAction($action);
+$executor->description = 'ArgumentForm executor will ask user about arguments';
+$executor->ui='segment';
+$executor->addHook('afterExecute', function($x, $ret) { return new \atk4\ui\jsToast('Files imported: '. $ret); });
 
 
