@@ -180,9 +180,7 @@ class MultiLine extends Generic
         parent::init();
 
         $this->app->useSuiVue();
-
-        $this->app->requireJS('../public/atk-invoice.js');
-
+        
         if (!$this->multiLineTemplate) {
             $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline>{$Input}</div>');
         }
