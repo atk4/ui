@@ -180,7 +180,7 @@ class MultiLine extends Generic
         parent::init();
 
         $this->app->useSuiVue();
-        
+
         if (!$this->multiLineTemplate) {
             $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline>{$Input}</div>');
         }
