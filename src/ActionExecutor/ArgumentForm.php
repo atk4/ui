@@ -1,4 +1,5 @@
 <?php
+
 namespace atk4\ui\ActionExecutor;
 
 use atk4\ui\Exception;
@@ -9,10 +10,8 @@ use atk4\ui\Form;
  *
  * ArgumentForm will ask user to fill in the blanks
  */
-
 class ArgumentForm extends Basic
 {
-
     /**
      * @var Form
      */
@@ -34,7 +33,7 @@ class ArgumentForm extends Basic
         $this->add(['Header', $this->action->caption, 'subHeader'=>$this->action->getDescription()]);
         $this->form = $this->add('Form');
 
-        foreach($this->action->args as $key=>$val) {
+        foreach ($this->action->args as $key=>$val) {
             if (is_numeric($key)) {
                 throw new Exception(['Action arguments must be named', 'args'=>$this->actions->args]);
             }
@@ -48,12 +47,12 @@ class ArgumentForm extends Basic
 
         $this->form->buttonSave->set('Run');
 
-        $this->form->onSubmit(function($f) {
+        $this->form->onSubmit(function ($f) {
 
             // set arguments from the model
             $this->setArguments($f->model->get());
 
-            return $this->jsExecute();;
+            return $this->jsExecute();
 
             //return [$this->console->js()->show(), $this->console->sse];
         });

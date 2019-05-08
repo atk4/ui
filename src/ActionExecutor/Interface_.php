@@ -18,18 +18,16 @@ namespace atk4\ui\ActionExecutor;
  *
  *  - ArgumentForm\Preview. extends Argument form by adding a "Preview" area to the right of the form. By default will
  *      treat $preview as text, but can also use a more specific view, such as a Pie Chart
- *
  */
-interface Interface_ {
-
+interface Interface_
+{
     /** Generate UI which is presented to the user before action is executed */
-    function init();
+    public function init();
 
     /**
      * Will associate executor with the action.
      *
      * @param \atk4\data\UserAction\Action $action
      */
-    function setAction(\atk4\data\UserAction\Action $action);
-
+    public function setAction(\atk4\data\UserAction\Action $action);
 }

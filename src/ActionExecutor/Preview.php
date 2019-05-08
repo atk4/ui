@@ -1,14 +1,11 @@
 <?php
 
-
 namespace atk4\ui\ActionExecutor;
-
 
 use atk4\ui\View;
 
 class Preview extends Basic
 {
-
     /** @var View */
     public $preview;
 
@@ -19,19 +16,17 @@ class Preview extends Basic
 
     public function initPreview()
     {
-
         if (!$this->hasAllArguments()) {
             $this->add(['Message', 'type'=>'error', 'Insufficient arguments']);
+
             return;
         }
 
         $this->add(['Header', $this->action->caption, 'subHeader'=>$this->description ?: $this->action->getDescription()]);
 
-
-
         $text = $this->executePreview();
 
-        switch($this->previewType) {
+        switch ($this->previewType) {
             case 'console':
                 $this->preview = $this->add(['ui'=>'inverted black segment', 'element'=>'pre']);
                 $this->preview->set($text);
@@ -46,11 +41,13 @@ class Preview extends Basic
                 break;
         }
 
-        $this->add(['Button', 'Confirm', 'primary'])->on('click', function() { return $this->jsExecute(); });
-
+        $this->add(['Button', 'Confirm', 'primary'])->on('click', function () {
+            return $this->jsExecute();
+        });
     }
 
-    function executePreview() {
+    public function executePreview()
+    {
         $args = [];
 
         foreach ($this->action->args as $key => $val) {
@@ -59,5 +56,4 @@ class Preview extends Basic
 
         return $this->action->preview(...$args);
     }
-
 }

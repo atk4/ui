@@ -7,11 +7,8 @@ use atk4\ui\Exception;
 use atk4\ui\jsExpressionable;
 use atk4\ui\jsToast;
 
-/**
- *
- */
-class Basic extends \atk4\ui\View implements Interface_ {
-
+class Basic extends \atk4\ui\View implements Interface_
+{
     use HookTrait;
 
     /**
@@ -37,28 +34,28 @@ class Basic extends \atk4\ui\View implements Interface_ {
     protected $jsSuccess = null;
 
     /**
-     * Associate executor with action
+     * Associate executor with action.
      *
      * @param \atk4\data\UserAction\Action $action
      */
-    function setAction(\atk4\data\UserAction\Action $action)
+    public function setAction(\atk4\data\UserAction\Action $action)
     {
         $this->action = $action;
-
     }
 
     /**
-     * Provide values for named arguments
+     * Provide values for named arguments.
      *
      * @param array $arguments
      */
-    function setArguments(array $arguments) {
+    public function setArguments(array $arguments)
+    {
         // TODO: implement mechanism for validating arguments based on definition
 
-        $this->arguments = array_merge ($this->arguments, $arguments);
+        $this->arguments = array_merge($this->arguments, $arguments);
     }
 
-    function recursiveRender()
+    public function recursiveRender()
     {
         if (!$this->action) {
             throw new \atk4\ui\Exception(['Action is not set. Use setAction()']);
@@ -69,6 +66,7 @@ class Basic extends \atk4\ui\View implements Interface_ {
             $this->initPreview();
         } else {
             $this->add(['Message', 'type'=>'error', 'Action is disabled and cannot be executed']);
+
             return;
         }
 
@@ -76,11 +74,10 @@ class Basic extends \atk4\ui\View implements Interface_ {
     }
 
     /**
-     * Check if all argument values have been provided
+     * Check if all argument values have been provided.
      */
     public function hasAllArguments()
     {
-
         foreach ($this->action->args as $key => $val) {
             if (!isset($this->arguments[$key])) {
                 throw new Exception(['Argument is not provided', 'argument'=>$key]);
@@ -93,16 +90,18 @@ class Basic extends \atk4\ui\View implements Interface_ {
     protected function initPreview()
     {
 
-
         // lets make sure that all arguments are supplied
         if (!$this->hasAllArguments()) {
             $this->add(['Message', 'type'=>'error', 'Insufficient arguments']);
+
             return;
         }
 
         $this->add(['Header', $this->action->caption, 'subHeader'=>$this->description ?: $this->action->getDescription()]);
 
-        $this->add(['Button', 'Confirm', 'primary'])->on('click', function() { return $this->jsExecute(); });
+        $this->add(['Button', 'Confirm', 'primary'])->on('click', function () {
+            return $this->jsExecute();
+        });
     }
 
     /**
@@ -118,6 +117,6 @@ class Basic extends \atk4\ui\View implements Interface_ {
 
         $return = $this->action->execute(...$args);
 
-        return $this->hook('afterExecute', [$return]) ?: $this->jsSuccess ?: new jsToast('Success'. (is_string($return)?(': '.$return):''));
+        return $this->hook('afterExecute', [$return]) ?: $this->jsSuccess ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
     }
 }
