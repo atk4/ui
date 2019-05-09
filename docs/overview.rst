@@ -398,7 +398,7 @@ have a basic understanding of "code" and some familiarity with the PHP language.
 
 If you are not interested in UI and only need the Rest API, we recommend that you look
 into documentation for Agile Data (https://agile-data.readthedocs.io) and the
-Rest API extension (coming soon).
+Rest API extension (https://github.com/atk4/api) which is a work in progress.
 
 Application Tutorials
 ---------------------

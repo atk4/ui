@@ -112,6 +112,49 @@ class ApiService {
   }
 
   /**
+   * Will wrap semantic ui api call into a Promise.
+   * Can be used to retrieve json data from the server.
+   * Using this will bypass regular successTest i.e. any
+   * atkjs (javascript) return from server will not be evaluated.
+   *
+   * Make sure to control the server output when using
+   * this function. It must at least return {success: true} in order for
+   * the Promise to resolve properly, will reject otherwise.
+   *
+   * ex: $app->terminate(json_encode(['success' => true, 'data' => $data]));
+   *
+   * @param url        // the url to fetch data
+   * @param settings   // the Semantic api settings object.
+   * @param el         // the element to apply Semantic Ui context.
+   *
+   * @returns {Promise<any>}
+   */
+  suiFetch( url, settings = {}, el = 'body',) {
+    const $el = $(el);
+    const apiSettings = Object.assign(settings);
+
+    if(!('on' in apiSettings)) {
+      apiSettings.on = 'now';
+    }
+
+    if(!('method' in apiSettings)) {
+      apiSettings.method = 'get';
+    }
+
+    apiSettings.url = url;
+
+    return new Promise(function(resolve, reject){
+      apiSettings.onFailure = function (r) {
+        reject (r);
+      };
+      apiSettings.onSuccess = function(r, e) {
+        resolve (r);
+      };
+      $el.api(apiSettings)
+    });
+  }
+
+  /**
    * Accumulate callbacks function to run after onSuccess.
    * Callback is a string containing code to be eval.
    *

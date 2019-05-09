@@ -16,7 +16,7 @@ class App
 
     // @var array|false Location where to load JS/CSS files
     public $cdn = [
-        'atk'              => 'https://cdn.rawgit.com/atk4/ui/1.6.5/public',
+        'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@1.6.5/public',
         'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.2/dist',
@@ -112,6 +112,11 @@ class App
 
     // @var \atk4\data\Persistence
     public $db = null;
+
+    /**
+     * @var bool Whether or not semantic-ui vue has been initialised.
+     */
+    private $is_sui_init = false;
 
     /**
      * Constructor.
@@ -837,5 +842,19 @@ class App
     public function encodeHTML($val)
     {
         return htmlentities($val);
+    }
+
+    /**
+     * Allow to use semantic-ui-vue components.
+     *
+     * https://semantic-ui-vue.github.io
+     */
+    public function useSuiVue()
+    {
+        if (!$this->is_sui_init) {
+            $this->requireJS('https://unpkg.com/semantic-ui-vue/dist/umd/semantic-ui-vue.min.js');
+            $this->layout->js(true, (new jsVueService())->useComponent('SemanticUIVue'));
+            $this->is_sui_init = true;
+        }
     }
 }

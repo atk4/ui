@@ -113,7 +113,7 @@ Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some
  - Multi-record form
  - Multi-tab form
 
-If you develop feature like that, please let me know so that I can include it in the documentation
+If you develop such a feature please let me know so that I can include it in the documentation
 and give you credit.
 
 Layout and Fields
@@ -144,7 +144,7 @@ Create a new field on a form::
 
     $form = $app->add('Form');
     $form->addField('email');
-    $form->addField('gender', ['DropDown', 'values'=>['Female', 'Male']);
+    $form->addField('gender', ['DropDown', 'values'=>['Female', 'Male']]);
     $form->addField('terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']);
 
 Create a new field on a form using Model does not require you to describe each field.
@@ -159,6 +159,17 @@ Field Decorator does not have to be added directly into the form. You can use a 
 
     $myview = $form->add(['defaultTemplate'=>'./mytemplate.html']);
     $myview->add(['FormField\Dropdown', 'form'=>$form]);
+
+.. php:method:: addFields($fields)
+
+Similar to :php:meth:`Form::addField()`, but allows to add multiple fields in one method call.
+
+    $form = $app->add('Form');
+    $form->addFields([
+        'email',
+        ['gender', ['DropDown', 'values'=>['Female', 'Male']]],
+        ['terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']],
+    ]);
 
 Adding new fields
 -----------------
@@ -181,7 +192,7 @@ Field Decorator
 To avoid term miss-use, we use "Field" to refer to ``\atk4\data\Field``. This class
 is documented here: https://agile-data.readthedocs.io/en/develop/fields.html
 
-Form uses a small UI components to visualize HTML input fields associated with
+Form uses a small UI component to visualize HTML input fields associated with
 the respective Model Field. We call this object "Field Decorator". All field
 decorators extend from class :php:class:`FormField::Generic`.
 
@@ -317,8 +328,8 @@ The above code result in the following output::
 Seeding Decorator from Model
 ----------------------------
 
-In a large projects, you most likely will not be setting individual fields for each Form, instead
-you would simply use ``setModel()`` to populate all defined fields inside a model. Form does
+In large projects you most likely won't be setting individual fields for each Form. Instead
+you can simply use ``setModel()`` to populate all defined fields inside a model. Form does
 have a pretty good guess about Decorator based on their data field type, but what if you want to
 use a custom decorator?
 
@@ -404,10 +415,10 @@ you can create a form to change profile of a currently logged user::
     $form->setModel($user);
 
 Submitting this form will automatically store values back to the database. Form uses
-POST data to submit itself and will re-use the query-string, so you can also safely
+POST data to submit itself and will re-use the querystring, so you can also safely
 use any GET arguments for passing record $id. You may also perform model load after
-record association. This gives the benefit of not loading any other fileds, unless
-it's marked as System (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$system),
+record association. This gives the benefit of not loading any other fields, unless
+they're marked as System (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$system),
 see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::onlyFields::
 
     $form = $app->add('Form');
@@ -420,21 +431,21 @@ using onlyFields restriction rather then `never_persist`.
 Validating
 ----------
 
-Topic of Validation in web apps is quite extensive. You should start by reading what Agile Data
+The topic of validation in web apps is quite extensive. You should start by reading what Agile Data
 has to say about validation:
 https://agile-data.readthedocs.io/en/develop/persistence.html#validation
 
-TL;DR - sometimes validation needed when storing field value inside model (e.g. setting boolean
+Sometimes validation is needed when storing field value inside a model (e.g. setting boolean
 to "blah") and sometimes validation should be performed only when storing model data into
-database.
+the database.
 
-Here are few questions:
+Here are a few questions:
 
 - If user specified incorrect value into field, can it be stored inside model and then
   re-displayed in the field again? If user must enter "date of birth" and he picks date
   in the future, should we reset field value or simply indicate error?
 
-- If you have a multi-step form with a complex logic, it may need to run validation before
+- If you have a multi-step form with complex logic, it may need to run validation before
   record status changes from "draft" to "submitted".
 
 As far as form is concerned:
@@ -644,7 +655,7 @@ proportions manually::
 
 or you can divide space equally between fields. I am also omitting header for this group::
 
-    $gr = $f->addGroup(['n'=>'two']);
+    $gr = $f->addGroup(['width'=>'two']);
     $gr->addFields(['city', 'country']);
 
 You can also use in-line form groups. Fields in such a group will display header on the left and
