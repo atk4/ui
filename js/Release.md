@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.6.5
+
+ - Add multiline component for MultiLine form field.
+
 ### version 1.6.4
 
  - Add directives to Vue component;
