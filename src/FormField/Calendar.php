@@ -88,8 +88,7 @@ class Calendar extends Input
      * $field->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|jsExpression|array $expr
-     * @param bool $useDefault
-     *
+     * @param bool                      $useDefault
      */
     public function onChange($expr, $useDefault = true)
     {
