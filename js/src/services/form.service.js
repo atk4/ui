@@ -16,6 +16,19 @@ class FormService {
     if (!this.instance) {
       this.instance = this;
       this.formSettings = $.fn.form.settings;
+      // A collection of jQuery form object where preventLeave is set.
+      this.prevents = [];
+      window.onbeforeunload = function (event) {
+        $('form').each(function(){
+          if ($(this).data('__atkCheckDirty') && $(this).data('isDirty')) {
+            let message = "unsaved";
+            if (event) {
+              event.returnValue = message;
+            }
+            return message;
+          }
+        });
+      };
     }
     return this.instance;
   }
@@ -28,6 +41,43 @@ class FormService {
     settings.rules.isVisible = this.isVisible;
     settings.rules.notEmpty = settings.rules.empty;
     settings.rules.isEqual = this.isEqual;
+    settings.onSuccess = this.onSuccess;
+  }
+
+  /**
+   * Form onSuccess handler when submit.
+   */
+  onSuccess() {
+    formService.clearDirtyForm($(this).attr('id'));
+    return true;
+  }
+
+  /**
+   * Set form in order to detect
+   * input changed before leaving page.
+   *
+   * @param id
+   */
+  preventFormLeave(id) {
+    const $form =  $('#'+id);
+    $form.data('__atkCheckDirty', true);
+    $form.on('change.__atkCanLeave', 'input', function(){
+      $form.data('isDirty', true);
+    });
+    this.prevents.push($form);
+  }
+
+  /**
+   * Clear Form from being dirty.
+   * Use this function if you define your own onSuccess handler.
+   *
+   * @param id
+   */
+  clearDirtyForm(id) {
+    const forms = this.prevents.filter($form => $form.attr('id') === id);
+    forms.forEach( $form => {
+      $form.data('isDirty', false);
+    });
   }
 
   /**
