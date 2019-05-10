@@ -633,7 +633,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         if (!$this->canLeave) {
             $this->js(true, (new jsChain('atk.formService'))->preventFormLeave($this->name));
         }
-
     }
 
     // }}}
