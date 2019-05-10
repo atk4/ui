@@ -1,5 +1,10 @@
 ## Release note
 
+### version 1.6.6
+
+ - FormService changed: Add ability to prevent user from leaving page when form is not submit.
+ - Fix conditional-form plugin file name.
+
 ### version 1.6.5
 
  - Add multiline component for MultiLine form field.

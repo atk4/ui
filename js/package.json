@@ -1,6 +1,6 @@
 {
   "name": "atkjs-ui",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "description": "Agile Toolkit Javascript library.",
   "main": "lib/atkjs-ui.js",
   "scripts": {

@@ -80,12 +80,16 @@ class Radio extends Generic
      * $field->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|jsExpression|array|callable $expr
+     * @param bool                               $useDefault
      */
-    public function onChange($expr)
+    public function onChange($expr, $useDefault = true)
     {
         if (is_string($expr)) {
             $expr = new \atk4\ui\jsExpression($expr);
         }
-        $this->on('change', 'input', $expr);
+        $default['preventDefault'] = $useDefault;
+        $default['stopPropagation'] = $useDefault;
+
+        $this->on('change', 'input', $expr, $default);
     }
 }

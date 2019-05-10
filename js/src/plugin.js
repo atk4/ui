@@ -8,7 +8,7 @@ import notify from "./plugins/notify.plugin";
 import fileUpload from "./plugins/file-upload.plugin";
 import jsSearch from "./plugins/js-search.plugin";
 import jsSortable from "./plugins/js-sortable.plugin";
-import conditionalForm from "./plugins/conditional-form.pluing";
+import conditionalForm from "./plugins/conditional-form.plugin";
 import columnResizer from "./plugins/column-resizer.plugin";
 import scroll from "./plugins/scroll.plugin";
 
