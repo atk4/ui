@@ -88,8 +88,10 @@ class Calendar extends Input
      * $field->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|jsExpression|array $expr
+     * @param bool $useDefault
+     *
      */
-    public function onChange($expr)
+    public function onChange($expr, $useDefault = true)
     {
         if (is_string($expr)) {
             $expr = new \atk4\ui\jsExpression($expr);
@@ -98,7 +100,10 @@ class Calendar extends Input
             $expr = [$expr];
         }
 
+        $default['preventDefault'] = $useDefault;
+        $default['stopPropagation'] = $useDefault;
+
         // Semantic-UI Calendar have different approach for on change event
-        $this->options['onChange'] = new \atk4\ui\jsFunction(['date', 'text', 'mode'], $expr);
+        $this->options['onChange'] = new \atk4\ui\jsFunction(['date', 'text', 'mode'], $expr, $default);
     }
 }
