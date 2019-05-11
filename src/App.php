@@ -125,8 +125,7 @@ class App
      * Remove and re-add the extension of the file during parsing requests and building urls
      */
     protected $url_building_ext = '.php';
-    
-    
+
     /**
      * Constructor.
      *
