@@ -126,6 +126,7 @@ class App
      */
     protected $url_building_ext = '.php';
     
+    
     /**
      * Constructor.
      *
