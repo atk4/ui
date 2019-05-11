@@ -118,6 +118,7 @@ class App
      */
     private $is_sui_init = false;
 
+    protected $url_building_ext = ".php";
     /**
      * Constructor.
      *
@@ -538,7 +539,7 @@ class App
             if (substr($uri, -1, 1) == '/') {
                 $this->page = 'index';
             } else {
-                $this->page = basename($uri, '.php');
+                $this->page = basename($uri, $this->url_building_ext);
             }
         }
 
@@ -583,7 +584,7 @@ class App
 
         // put URL together
         $args = http_build_query($result);
-        $url = ($page[0] ? $page[0].'.php' : '').($args ? '?'.$args : '');
+        $url = ($page[0] ? $page[0] . $this->url_building_ext : '').($args ? '?'.$args : '');
 
         return $url;
     }
