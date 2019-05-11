@@ -118,7 +118,14 @@ class App
      */
     private $is_sui_init = false;
 
+    /**
+     * @var string used in method App::url to build the url
+     *
+     * Used only in method App::url
+     * Remove and re-add the extension of the file during parsing requests and building urls
+     */
     protected $url_building_ext = ".php";
+    
     /**
      * Constructor.
      *
