@@ -124,7 +124,7 @@ class App
      * Used only in method App::url
      * Remove and re-add the extension of the file during parsing requests and building urls
      */
-    protected $url_building_ext = ".php";
+    protected $url_building_ext = '.php';
     
     /**
      * Constructor.
@@ -591,7 +591,7 @@ class App
 
         // put URL together
         $args = http_build_query($result);
-        $url = ($page[0] ? $page[0] . $this->url_building_ext : '').($args ? '?'.$args : '');
+        $url = ($page[0] ? $page[0].$this->url_building_ext : '').($args ? '?'.$args : '');
 
         return $url;
     }
