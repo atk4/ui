@@ -1,7 +1,7 @@
 /*global _ATKVERSION_:true */
 
 import atk from 'atk-semantic-ui';
-import 'helpers/add-params.helper';
+import 'helpers/url.helper';
 import {plugin, createAtkplugins} from "./plugin";
 import date from 'locutus/php/datetime/date';
 import vueService from './services/vue.service';
