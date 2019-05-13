@@ -81,7 +81,6 @@ class Grid extends View
      */
     public $table = null;
 
-
     /**
      * The container for table and paginator.
      *
