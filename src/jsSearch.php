@@ -32,6 +32,33 @@ class jsSearch extends View
      */
     public $placeHolder = 'Search';
 
+    /**
+     * The initial value to display in search
+     * input field.
+     * Atn: This is not reloading the view but
+     * rather display in initial input value.
+     * Make sure the model results set match the initial value.
+     * Mostly use when not using ajax reload.
+     *
+     * @var null
+     */
+    public $initValue = null;
+
+    /**
+     * Whether or not this search will reload a view
+     * or the entire page.
+     * If search query need to be control via an url parameter only
+     * set this to false.
+     *
+     * @var bool  Default to true.
+     */
+    public $useAjax = true;
+
+    public function link($url)
+    {
+        return parent::link($url);
+    }
+
     public $defaultTemplate = 'js-search.html';
 
     /** @var string ui css classes */
@@ -67,6 +94,8 @@ class jsSearch extends View
                 'uri'         => $this->reload->jsURL(),
                 'uri_options' => array_merge(['__atk_reload'=>$this->reload->name], $this->args),
                 'autoQuery'   => $this->autoQuery,
+                'q'           => $this->initValue,
+                'useAjax'     => $this->useAjax,
             ]);
 
         parent::renderView();

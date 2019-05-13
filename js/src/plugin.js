@@ -57,6 +57,8 @@ function plugin(name, className, shortHand = false) {
                 if (this.data(dataName) && typeof this.data(dataName)[option] === 'function') {
                     return this.data(dataName)['call'](option, args);
                 }
+                //return if trying to call a plugin method prior to instantiate it.
+                return;
             }
 
             return this.each(function () {

@@ -1,5 +1,20 @@
 ## Release note
 
+### version 1.6.7
+   
+- plugin.js
+   - fix: Prevent plugin from being create if a plugin method is called prior to the plugin
+   instantiation. Was causing unexpected result when plugin was create using a method call, since
+   there was no setting. 
+- atkJsSearch plugin
+  - Now support initial display setup value.
+  - Add support for reloading page via window.location and not using ajax. 
+- url.helpers, previously add-param.helpers
+  - Add new plugin function: atkRemoveParam. 
+  You can use this function for removing an url query parameter from an url string.
+  ex: $.atkRemoveParam('test.php?sort=2&id=3', 'sort') will output:  test.php?id=3
+   
+
 ### version 1.6.6
 
  - FormService changed: Add ability to prevent user from leaving page when form is not submit.
