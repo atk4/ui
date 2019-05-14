@@ -305,7 +305,7 @@ class Generic
         }
 
         // if $this->caption is empty, header caption will be overriden by linked field definition
-        if(empty($this->caption)) {
+        if (empty($this->caption)) {
             $caption = $f->getCaption();
         }
 
