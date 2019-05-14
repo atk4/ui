@@ -303,6 +303,11 @@ class Generic
         if ($f === null) {
             return $this->getTag('head', $this->caption ?: '', $this->table->sortable ? ['class' => ['disabled']] : []);
         }
+        
+        // if $this->caption is empty, header caption will be overriden by linked field definition
+        if(empty($this->caption)) {
+            $caption = $f->getCaption();
+        }
 
         // If table is being sorted by THIS column, set the proper class
         $attr = [];
@@ -324,7 +329,7 @@ class Generic
             $attr = array_merge($attr, ['id' => $this->name.'_th']);
             $tag = $this->getTag(
                 'head',
-                [$f->getCaption(),
+                [$caption,
                     $this->headerActionTag,
                 ],
                 $attr
@@ -332,7 +337,7 @@ class Generic
         } else {
             $tag = $this->getTag(
                 'head',
-                $f->getCaption(),
+                $caption,
                 $attr
             );
         }
