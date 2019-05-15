@@ -98,8 +98,6 @@ $t = $tt->addTab('composer update', function ($t) {
     $b->on('click', $c->jsExecute());
 });
 
-
-
 $t = $tt->addTab('Use after form submit', function ($t) {
     $t->add([
         'Header',
@@ -114,7 +112,7 @@ $t = $tt->addTab('Use after form submit', function ($t) {
     $f->addFields(['foo', 'bar']);
 
     $c = $t->add(['Console', 'event'=>false]);
-    $c->set(function($c){
+    $c->set(function ($c) {
         $m = $_SESSION['data'];
         $c->output('Executing process...');
         $c->info(var_export($m->get(), true));
@@ -123,7 +121,7 @@ $t = $tt->addTab('Use after form submit', function ($t) {
     });
     $c->js(true)->hide();
 
-    $f->onSubmit(function($ff)use($c){
+    $f->onSubmit(function ($ff) use ($c) {
         $_SESSION['data'] = $ff->model; // only option is to store model in session here in demo
         return [
             $c->js()->show(),
