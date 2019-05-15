@@ -97,3 +97,37 @@ $t = $tt->addTab('composer update', function ($t) {
 
     $b->on('click', $c->jsExecute());
 });
+
+
+
+$t = $tt->addTab('Use after form submit', function ($t) {
+    $t->add([
+        'Header',
+        'icon' => 'terminal',
+        'How to log form submit process',
+        'subHeader'=> 'Sometimes you can have long running process after form submit and want to show progress for user...',
+    ]);
+
+    session_start();
+
+    $f = $t->add('Form');
+    $f->addFields(['foo', 'bar']);
+
+    $c = $t->add(['Console', 'event'=>false]);
+    $c->set(function($c){
+        $m = $_SESSION['data'];
+        $c->output('Executing process...');
+        $c->info(var_export($m->get(), true));
+        sleep(3);
+        $c->output('Process finished');
+    });
+    $c->js(true)->hide();
+
+    $f->onSubmit(function($ff)use($c){
+        $_SESSION['data'] = $ff->model; // only option is to store model in session here in demo
+        return [
+            $c->js()->show(),
+            $c->jsExecute(),
+        ];
+    });
+});
