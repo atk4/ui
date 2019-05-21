@@ -84,23 +84,63 @@ class DropDown extends Input
     public $isMultiple = false;
 
     /**
-     * When using a model, here a custom function for creating the html
-     * of each dropdown option can be defined. The function gets each
-     * record of the model as parameter.
-     * Has to return array of format:
-     * ['htmlelement', 'class' => 'cssclasses', 'data-value' => 'someid', ['sometitle']]
-     * e.g. ['div', 'class' => 'item', 'data-value' => (string) $model->get($model->id_field), [$model->get($model->title_field)]]
-     * also compare to renderView() function
+     * Here a custom function for creating the html of each dropdown option
+     * can be defined. The function gets each row of the model/values property as first parameter.
+     * if used with $values property, gets the key of this element as second parameter.
+     * When using with a model, the second parameter is null and can be ignored.
+     * Must return an array with at least 'value' and 'caption' elements set.
+     * Use additional 'icon' element to add an icon to this row.
      *
-     * Can be used to add Icon for example:
+     * Example 1 with Model: Title in Uppercase
      * function($row) {
-     *     $icon = $row->get('role') === 'admin' ? 'user cog' : 'user';
-     *     return ['div', 'class' => 'item', 'data-value' => (string) $model->get($model->id_field), ['<i class="'.$icon.'"></i>'.$model->get($model->title_field)]];
+     *     return [
+     *         'value' => $row->id,
+     *         'title' => strtoupper($row->getTitle()),
+     *     ];
+     *  }
+     *
+     * Example 2 with Model: Add an icon
+     * function($row) {
+     *     return [
+     *         'value'   => $row->id,
+     *         'title'   => $row->getTitle(),
+     *         'icon'    => $row->get('amount') > 1000 ? 'money' : '',
+     *     ];
      * }
      *
+     * Example 3 with Model: Combine Title from model fields
+     * function($row) {
+     *     return [
+     *         'value'   => $row->id,
+     *         'title'   => $row->getTitle().' ('.$row->get('title2').')',
+     *     ];
+     * }
+     *
+     * Example 4 with $values property Array:
+     * function($value, $key) {
+     *     return [
+     *        'value' => $key,
+     *        'title' => strtoupper($value),
+     *        'icon'  => strpos('Month', $value) !== false ? 'calendar' : '',
+     *     ];
+     * }
      * @var callable
      */
     public $renderRowFunction;
+
+    /**
+     * Subtemplate for a single dropdown item
+     *
+     * @var object
+     */
+    protected $_tItem;
+
+    /**
+     * Subtemplate for an icon for a single dropdown item
+     *
+     * @var object;
+     */
+    protected $_tIcon;
 
     /**
      * Initialization.
@@ -115,6 +155,11 @@ class DropDown extends Input
         if (isset($this->field) && $this->field->required) {
             $this->isValueRequired = true;
         }
+
+        $this->_tItem = $this->template->cloneRegion('Item');
+        $this->template->del('Item');
+        $this->_tIcon = $this->_tItem->cloneRegion('Icon');
+        $this->_tItem->del('Icon');
     }
 
     /**
@@ -192,47 +237,101 @@ class DropDown extends Input
 
         $this->template->trySet('DefaultText', $this->empty);
 
-        $options = [];
+        /*
+         * render dropdown options
+         */
+        //add selection only if no value is required and Dropdown has no multiple selections enabled
         if (!$this->isValueRequired && !$this->isMultiple) {
-            $options[] = ['div',  'class' => 'item', 'data-value' => '', $this->empty || is_numeric($this->empty) ? [(string) $this->empty] : []];
+            $this->_tItem->set('value', '');
+            $this->_tItem->set('title', $this->empty || is_numeric($this->empty) ? (string) $this->empty : '');
+            $this->template->appendHTML('Item', $this->_tItem->render());
         }
 
-        if (isset($this->model)) {
-            //if callback is defined, use all model fields and pass each
-            //record to callback
-            if (is_callable($this->renderRowFunction)) {
-                foreach ($this->model as $key => $row) {
-                    $options[] = call_user_func($this->renderRowFunction, $row);
-                }
+        //model set? use this, else values property
+        if(isset($this->model)) {
+            if(!is_callable($this->renderRowFunction)) {
+                //for standard model rendering, only load id and title field
+                $this->model->only_fields = [$this->model->title_field, $this->model->id_field];
+                $this->_renderItemsForModel();
             }
             else {
-                //clone model to use only id_field and title_field
-                $m = clone $this->model;
-                $m->onlyFields([$m->id_field, $m->title_field]);
-                foreach ($m as $key => $row) {
-                    $title = $row->getTitle();
-                    $item = ['div', 'class' => 'item', 'data-value' => (string) $key, [$title]];
-                    $options[] = $item;
+                foreach($this->model as $row) {
+                    $this->_addCallBackRow($row);
                 }
             }
-        } else {
-            foreach ($this->values as $key => $val) {
-                if (is_array($val)) {
-                    if (array_key_exists('icon', $val)) {
-                        $val = "<i class='{$val['icon']}'></i>{$val[0]}";
-                    }
+        }
+        else {
+            if(!is_callable($this->renderRowFunction)) {
+                $this->_renderItemsForValues();
+            }
+            else {
+                foreach($this->values as $key => $value) {
+                    $this->_addCallBackRow($value, $key);
                 }
-                $item = ['div', 'class' => 'item', 'data-value' => (string) $key, $val || is_numeric($val) ? [(string) $val] : []];
-                $options[] = $item;
             }
         }
 
-        $items = $this->app->getTag('div', [
-            'class'       => 'menu',
-        ], $options ? [[$options]] : []);
-
-        $this->template->trySetHtml('Items', $items);
-
         parent::renderView();
+    }
+
+    /*
+     * Sets the dropdown items to the template if a model is used
+     */
+    protected function _renderItemsForModel() {
+        foreach ($this->model as $key => $row) {
+            $title = $row->getTitle();
+            $this->_tItem->set('value', (string) $key);
+            $this->_tItem->set('title',  $title || is_numeric($title) ? (string) $title : '');
+            //add item to template
+            $this->template->appendHTML('Item', $this->_tItem->render());
+        }
+    }
+
+    /*
+     * sets the dropdown items from $this->values array
+     */
+    protected function _renderItemsForValues() {
+        foreach ($this->values as $key => $val) {
+            $this->_tItem->set('value', (string) $key);
+            if (is_array($val)) {
+                if (array_key_exists('icon', $val)) {
+                    $this->_tIcon->set('icon', $val['icon']);
+                    $this->_tItem->appendHTML('Icon', $this->_tIcon->render());
+                }
+                else {
+                    $this->_tItem->del('Icon');
+                }
+                $this->_tItem->set('title', $val[0] || is_numeric($val[0]) ? (string) $val[0] : '');
+            }
+            else {
+                $this->_tItem->set('title', $val || is_numeric($val) ? (string) $val : '');
+            }
+
+            //add item to template
+            $this->template->appendHTML('Item', $this->_tItem->render());
+        }
+    }
+
+    /*
+     * used when a custom callback is defined for row rendering. Sets
+     * values to row tempalte and appends it to main template
+     */
+    protected function _addCallBackRow($row, $key = null) {
+        $res = call_user_func($this->renderRowFunction, $row, $key);
+        $this->_tItem->set('value', (string) $res['value']);
+        $this->_tItem->set('title', $res['title']);
+
+        //Icon
+        $this->_tItem->del('Icon');
+        if(isset($res['icon'])
+        && $res['icon']) {
+            //compatibility with how $values property works on icons: 'icon'
+            //is defined in there
+            $this->_tIcon->set('icon', 'icon '.$res['icon']);
+            $this->_tItem->appendHTML('Icon', $this->_tIcon->render());
+        }
+
+        //add item to template
+        $this->template->appendHTML('Item', $this->_tItem->render());
     }
 }
