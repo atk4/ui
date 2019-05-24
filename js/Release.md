@@ -4,7 +4,7 @@
 
 - Babel configuration.
     - fix core.js warning during build. 
-- create-modal.pluing
+- create-modal.plugin
     - fix: now allow to pass css class name to create modal. 
     Useful when need to create modal with full width for example.
 - file-upload.plugin
