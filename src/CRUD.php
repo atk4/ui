@@ -133,7 +133,7 @@ class CRUD extends Grid
     {
         // setting itemCreate manually is possible.
         if (!$this->itemCreate) {
-            if (!$this > menu) {
+            if (!$this-> menu) {
                 throw new Exception('Can not add create button without menu');
             }
             $this->itemCreate = $this->menu->addItem(['Add new '.$this->model->getModelCaption(), 'icon' => 'plus']);
