@@ -311,6 +311,12 @@ $expression argument can be string, jsExpression, array of jsExpressions or even
 
 DropDown
 ========
+A DropDown is not used as default Form Field decorator ($model->hasOne() uses Lookup), but in your Model, you can define that UI should render a Field as DropDown. For example this makes sense when a hasOne() relationship only has a very limited amount (like 20) of records to display: DropDown renders all records when the paged is rendered, while Lookup always sents an additional request to the server.
+Lookup on the other hand is the better choice if there is lots of records (like more than 50).
+
+To render a model field as DropDown, use the ui property of the field:
+$model->addField('someField', ['ui' => ['form' =>['DropDown']]]);
+
 
 .. php:class:: DropDown
 
