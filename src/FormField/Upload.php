@@ -34,8 +34,11 @@ class Upload extends Input
      * default to true.
      *
      * @var bool
+     * @obsolete
+     * hasFocusEnable has been disable in js plugin and this property will be removed.
+     * Upload field is only using click handler now.
      */
-    public $hasFocusEnable = true;
+    public $hasFocusEnable = false;
 
     /**
      * The input default template.

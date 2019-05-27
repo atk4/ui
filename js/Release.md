@@ -1,5 +1,17 @@
 ## Release note
 
+### version 1.6.8
+
+- Babel configuration.
+    - fix core.js warning during build. 
+- create-modal.plugin
+    - fix: now allow to pass css class name to create modal. 
+    Useful when need to create modal with full width for example.
+- file-upload.plugin
+    - remove support for opening file dialog when input get focus. Because File dialog
+    will remove blur and focus input field again, this was causing the file dialog to open
+    multiple time. Now only open when input or button is clicked.
+
 ### version 1.6.7
    
 - plugin.js
