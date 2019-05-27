@@ -150,6 +150,10 @@ class Grid extends View
      */
     public function addButton($text)
     {
+        if (!$this->menu) {
+            throw new Exception(['Unable to add Button without Menu']);
+        }
+
         return $this->menu->addItem()->add(new Button($text));
     }
 
@@ -357,6 +361,9 @@ class Grid extends View
      */
     public function addFilterColumn($names = null)
     {
+        if (!$this->menu) {
+            throw new Exception(['Unable to add Filter Column without Menu']);
+        }
         $this->menu->addItem(['Clear Filters'], new \atk4\ui\jsReload($this->table->reload, ['atk_clear_filter' => 1]));
         $this->table->setFilterColumn($names);
 
