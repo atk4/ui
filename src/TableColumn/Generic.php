@@ -305,9 +305,7 @@ class Generic
         }
 
         // if $this->caption is empty, header caption will be overriden by linked field definition
-        if (empty($this->caption)) {
-            $caption = $f->getCaption();
-        }
+        $caption = empty($this->caption) ? $f->getCaption() : $this->caption;
 
         // If table is being sorted by THIS column, set the proper class
         $attr = [];
