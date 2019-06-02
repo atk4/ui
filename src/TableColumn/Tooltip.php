@@ -56,23 +56,14 @@ class Tooltip extends Generic
             $extra_tags['class'] = implode(' ', $extra_tags['class']);
         }
 
-        return $this->app->getTag(
-            'td',
-            $extra_tags,
-            [
-                ' {$' . $f->short_name . '}' .
-                $this->app->getTag(
-                    'span',
-                    [
+        return $this->app->getTag('td', $extra_tags, [
+                ' {$' . $f->short_name . '}' . $this->app->getTag('span', [
                         'class'        => 'ui icon link {$_' . $f->short_name . '_data_visible_class}',
                         'data-tooltip' => '{$_' . $f->short_name . '_data_tooltip}'
-                    ],
-                    [
+                    ], [
                         ['i', ['class' => 'ui icon {$_' . $f->short_name . '_icon}']]
-                    ]
-                )
-            ]
-        );
+                    ])
+            ]);
     }
 
     public function getHTMLTags($row, $field)
