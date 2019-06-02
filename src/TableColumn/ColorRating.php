@@ -2,6 +2,7 @@
 
 namespace atk4\ui\TableColumn;
 
+use atk4\data\Field;
 use atk4\ui\Exception;
 
 /**
@@ -27,14 +28,8 @@ class ColorRating extends Generic
 {
     /** @var float */
     public $min;
-
     /** @var float */
     public $max;
-    /**
-     * @var float
-     */
-    private $delta;
-
     /**
      * Step between colors
      *
@@ -48,6 +43,10 @@ class ColorRating extends Generic
     public $gradients = [];
 
     public  $gradients_count = 0;
+    /**
+     * @var float
+     */
+    private $delta;
     private $more_than_max_no_color;
     private $less_than_min_no_color;
 
@@ -86,58 +85,6 @@ class ColorRating extends Generic
 
         // count one time the gradients and reuse
         $this->gradients_count = count($this->gradients) - 1;
-    }
-
-    public function getTagAttributes($position, $attr = [])
-    {
-        $attr['style'] = $attr['style'] ?? '';
-        $attr['style'] .= '{$_' . $this->short_name . '_color_rating};';
-
-        return parent::getTagAttributes($position, $attr);
-    }
-
-
-    public function getDataCellHTML(\atk4\data\Field $f = NULL, $extra_tags = [])
-    {
-        if ($f === NULL) {
-            throw new Exception(['ColorRating can be used only with model field']);
-        }
-
-        return $this->getTag('body', '{$' . $f->short_name . '}', $extra_tags);
-    }
-
-    static $count = 1;
-
-    public function getHTMLTags($row, $field)
-    {
-        $value = $field->get();
-        if (is_null($value) || (int)$value < $this->min || (int)$value > $this->max) {
-            return parent::getHTMLTags($row, $field);
-        }
-
-        $color = $this->getColorFromValue($value);
-
-        return [
-            '_' . $this->short_name . '_color_rating' => 'background-color:' . $color
-        ];
-    }
-
-    private function getColorFromValue(float $value)
-    {
-        if ($this->less_than_min_no_color && $value < $this->min) {
-            return $this->gradients[0];
-        }
-
-        if ($this->more_than_max_no_color && $value > $this->max) {
-            return end($this->gradients);
-        }
-
-        $refValue = ($value - $this->min) / $this->delta;
-        $refIndex = $this->gradients_count * $refValue;
-
-        $index = floor($refIndex);
-
-        return $this->gradients[$index];
     }
 
     private function createGradients()
@@ -191,5 +138,54 @@ class ColorRating extends Generic
 
             $gradients[] = "#" . implode(NULL, $HexRGB);
         }
+    }
+
+    public function getTagAttributes($position, $attr = [])
+    {
+        $attr['style'] = $attr['style'] ?? '';
+        $attr['style'] .= '{$_' . $this->short_name . '_color_rating};';
+
+        return parent::getTagAttributes($position, $attr);
+    }
+
+    public function getDataCellHTML(Field $f = NULL, $extra_tags = [])
+    {
+        if ($f === NULL) {
+            throw new Exception(['ColorRating can be used only with model field']);
+        }
+
+        return $this->getTag('body', '{$' . $f->short_name . '}', $extra_tags);
+    }
+
+    public function getHTMLTags($row, $field)
+    {
+        $value = $field->get();
+        if (is_null($value) || (int)$value < $this->min || (int)$value > $this->max) {
+            return parent::getHTMLTags($row, $field);
+        }
+
+        $color = $this->getColorFromValue($value);
+
+        return [
+            '_' . $this->short_name . '_color_rating' => 'background-color:' . $color
+        ];
+    }
+
+    private function getColorFromValue(float $value)
+    {
+        if ($this->less_than_min_no_color && $value < $this->min) {
+            return $this->gradients[0];
+        }
+
+        if ($this->more_than_max_no_color && $value > $this->max) {
+            return end($this->gradients);
+        }
+
+        $refValue = ($value - $this->min) / $this->delta;
+        $refIndex = $this->gradients_count * $refValue;
+
+        $index = floor($refIndex);
+
+        return $this->gradients[$index];
     }
 }
