@@ -137,7 +137,7 @@ class Generic extends View
      *
      * @throws \atk4\ui\Exception
      */
-    public function onChange($expr, $useDefault = true)
+    public function onChange($expr, $useDefault = true, $defaults = [])
     {
         if (is_string($expr)) {
             $expr = new \atk4\ui\jsExpression($expr);
@@ -146,7 +146,7 @@ class Generic extends View
         $default['preventDefault'] = $useDefault;
         $default['stopPropagation'] = $useDefault;
 
-        $this->on('change', '#'.$this->id.'_input', $expr, $default);
+        $this->on('change', '#'.$this->id.'_input', $expr, $defaults);
     }
 
     /**
