@@ -89,9 +89,9 @@ class Calendar extends Input
      *
      * @param string|jsExpression|array $expr
      * @param bool                      $useDefault
-     * @param array                     $defaults
+     * @param array                     $default
      */
-    public function onChange($expr, $useDefault = true, $defaults = [])
+    public function onChange($expr, $useDefault = true, $default = [])
     {
         if (is_string($expr)) {
             $expr = new \atk4\ui\jsExpression($expr);
@@ -104,6 +104,6 @@ class Calendar extends Input
         $default['stopPropagation'] = $useDefault;
 
         // Semantic-UI Calendar have different approach for on change event
-        $this->options['onChange'] = new \atk4\ui\jsFunction(['date', 'text', 'mode'], $expr, $defaults);
+        $this->options['onChange'] = new \atk4\ui\jsFunction(['date', 'text', 'mode'], $expr, $default);
     }
 }
