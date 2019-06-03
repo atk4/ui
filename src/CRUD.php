@@ -159,7 +159,7 @@ class CRUD extends Grid
                 $this->formCreate->stickyGet($this->name.'_sort', $sortBy);
             }
 
-            $this->hook('pageCreateInit');
+            $this->hook('pageCreateInit', [$this->formCreate]);
 
             // set save handler with reload trigger
             // adds default submit hook if it is not already set for this form
@@ -226,7 +226,7 @@ class CRUD extends Grid
                 $this->formUpdate->stickyGet($this->name.'_sort', $sortBy);
             }
 
-            $this->hook('pageUpdateInit');
+            $this->hook('pageUpdateInit', [$this->formUpdate]);
 
             // set save handler with reload trigger
             // adds default submit hook if it is not already set for this form
