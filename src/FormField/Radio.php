@@ -81,8 +81,9 @@ class Radio extends Generic
      *
      * @param string|jsExpression|array|callable $expr
      * @param bool                               $useDefault
+     * @param array                              $default
      */
-    public function onChange($expr, $useDefault = true)
+    public function onChange($expr, $useDefault = true, $default = [])
     {
         if (is_string($expr)) {
             $expr = new \atk4\ui\jsExpression($expr);
