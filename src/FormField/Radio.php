@@ -80,7 +80,7 @@ class Radio extends Generic
      * $field->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|jsExpression|array|callable $expr
-     * @param array|boolean                      $default
+     * @param array|bool                         $default
      */
     public function onChange($expr, $default = [])
     {

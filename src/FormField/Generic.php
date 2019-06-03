@@ -133,7 +133,7 @@ class Generic extends View
      * $field->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|jsExpression|array|callable $expr
-     * @param array|boolean                      $default
+     * @param array|bool                         $default
      *
      * @throws \atk4\ui\Exception
      */
