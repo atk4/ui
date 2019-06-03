@@ -4,11 +4,15 @@
 
 namespace atk4\ui;
 
+use atk4\core\HookTrait;
+
 /**
  * Implements a more sophisticated and interractive Data-Table component.
  */
 class CRUD extends Grid
 {
+    use HookTrait;
+
     /** @var array of fields to show */
     public $fieldsDefault = null;
 
@@ -155,6 +159,8 @@ class CRUD extends Grid
                 $this->formCreate->stickyGet($this->name.'_sort', $sortBy);
             }
 
+            $this->hook('pageCreateInit');
+
             // set save handler with reload trigger
             // adds default submit hook if it is not already set for this form
             if (!$this->formCreate->hookHasCallbacks('submit')) {
@@ -219,6 +225,8 @@ class CRUD extends Grid
             if ($sortBy = $this->getSortBy()) {
                 $this->formUpdate->stickyGet($this->name.'_sort', $sortBy);
             }
+
+            $this->hook('pageUpdateInit');
 
             // set save handler with reload trigger
             // adds default submit hook if it is not already set for this form
