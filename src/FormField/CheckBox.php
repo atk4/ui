@@ -2,8 +2,8 @@
 
 namespace atk4\ui\FormField;
 
-use atk4\ui\Form;
 use atk4\ui\Exception;
+use atk4\ui\Form;
 
 /**
  * Input element for a form field.
