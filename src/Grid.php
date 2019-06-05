@@ -4,7 +4,8 @@
 
 namespace atk4\ui;
 
-use atk4\data\UserAction\Action;
+use atk4\data\UserAction\Generic;
+use atk4\ui\ActionExecutor\Basic;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -75,6 +76,8 @@ class Grid extends View
      * @var Table|false
      */
     public $table = null;
+
+    public $executor_class = Basic::class;
 
     /**
      * The container for table and paginator.
@@ -421,12 +424,13 @@ class Grid extends View
     /**
      * Find out more about the nature of the action from the supplied object, use addAction()
      */
-    public function addUserAction(Action $action)
+    public function addUserAction(Generic $action)
     {
         $button = $action->caption;
 
         $this->addModalAction($button, $button, function($page, $id) use($action) {
-            $page->add($executor = new ActionExecutor\Basic());
+            $class = $this->executor_class;
+            $page->add($executor = new $class());
 
             $action->owner->load($id);
 

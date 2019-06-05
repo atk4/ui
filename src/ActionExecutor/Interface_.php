@@ -29,5 +29,5 @@ interface Interface_
      *
      * @param \atk4\data\UserAction\Action $action
      */
-    public function setAction(\atk4\data\UserAction\Action $action);
+    public function setAction(\atk4\data\UserAction\Generic $action);
 }

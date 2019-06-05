@@ -17,8 +17,10 @@ $action = $files->addAction(
         'preview' => function ($model, $path) {
             return 'Considering path: '.$path;
         },
-        'args' => ['path'=>['type'=>'string', 'required'=>true]],
-        'scope'=> atk4\data\UserAction\Action::NO_RECORDS,
+        'args' => [
+            'path'=>['type'=>'string', 'required'=>true],
+        ],
+        'scope'=> atk4\data\UserAction\Generic::NO_RECORDS,
     ]
 );
 
@@ -26,6 +28,8 @@ $files->addAction('download', function($m){
     $len = strlen(file_get_contents($m['name']));
     return "$len bytes downloaded..";
 } );
+
+#$files->getAction('download')->system = true;
 
 
 
