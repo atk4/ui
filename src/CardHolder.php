@@ -11,10 +11,10 @@ class CardHolder extends View
 
     public $defaultTemplate = 'card-holder.html';
 
-    /** @var null|View   A View that hold the image. */
+    /** @var null|View A View that hold the image. */
     public $imageContainer = null;
 
-    /** @var null|string|Image  A path to the image src or the image view. */
+    /** @var null|string|Image A path to the image src or the image view. */
     public $image = null;
 
     /** @var null|View A View for displaying main content of the card. */
@@ -66,7 +66,6 @@ class CardHolder extends View
         if (!$this->buttons) {
             $this->addButton($this->buttons);
         }
-
     }
 
     /**
@@ -74,8 +73,9 @@ class CardHolder extends View
      *
      * @param View $view
      *
-     * @return View|null
      * @throws Exception
+     *
+     * @return View|null
      */
     public function addContent(View $view)
     {
@@ -92,10 +92,11 @@ class CardHolder extends View
      * Set model.
      *
      * @param \atk4\data\Model $m
-     * @param array $column
+     * @param array            $column
+     *
+     * @throws Exception
      *
      * @return \atk4\data\Model|void
-     * @throws Exception
      */
     public function setModel($m, $column = [])
     {
@@ -112,8 +113,9 @@ class CardHolder extends View
      *
      * @param string|View $description
      *
-     * @return View|string|null The description to add.
      * @throws Exception
+     *
+     * @return View|string|null The description to add.
      */
     public function addDescription($description)
     {
@@ -123,9 +125,9 @@ class CardHolder extends View
             throw new Exception('Description can be added to Card content only. Setup card content property.');
         }
 
-        if (is_string($description)){
+        if (is_string($description)) {
             $view = $this->cardContent->add(new View([$description, 'class' => ['description']]));
-        } else if ($description instanceof View){
+        } elseif ($description instanceof View) {
             $view = $this->cardContent->add($description)->addClass('description');
         }
 
@@ -138,8 +140,9 @@ class CardHolder extends View
      *
      * @param View $view
      *
-     * @return View
      * @throws Exception
+     *
+     * @return View
      */
     public function addExtraContent(View $view)
     {
@@ -155,8 +158,9 @@ class CardHolder extends View
      *
      * @param string|Image $img
      *
-     * @return View|null
      * @throws Exception
+     *
+     * @return View|null
      */
     public function addImage($img)
     {
@@ -176,11 +180,12 @@ class CardHolder extends View
     /**
      * Add button(s) to card.
      *
-     * @param array|Button      $buttons A Button or array of Button.
-     * @param bool              $isFluid Make the buttons spread evenly in Card.
+     * @param array|Button $buttons A Button or array of Button.
+     * @param bool         $isFluid Make the buttons spread evenly in Card.
+     *
+     * @throws Exception
      *
      * @return View|null
-     * @throws Exception
      */
     public function addButton($buttons, $isFluid = true)
     {
@@ -208,5 +213,4 @@ class CardHolder extends View
 
         return $this->btnContainer;
     }
-
 }

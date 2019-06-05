@@ -19,7 +19,6 @@ $card->addButton(new \atk4\ui\Button(['Email']));
 
 $card->addExtraContent(new \atk4\ui\View(['Copyright notice: Image from Semantic-UI (Fomantic-UI)', 'element' => 'span']));
 
-
 //**** Card with Data ***/
 
 $card_h = $app->add('CardHolder');
