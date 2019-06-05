@@ -484,6 +484,7 @@ class App
     {
         $this->db = \atk4\data\Persistence::connect($dsn, $user, $password, $args);
         $this->db->app = $this;
+
         return $this->db;
     }
 
