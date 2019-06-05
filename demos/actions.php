@@ -18,7 +18,7 @@ $action = $files->addAction(
             return 'Considering path: '.$path;
         },
         'args' => [
-            'path'=>['type'=>'string', 'required'=>true],
+            'path'=> ['type'=>'string', 'required'=>true],
         ],
         'scope'=> atk4\data\UserAction\Generic::NO_RECORDS,
     ]
@@ -26,10 +26,11 @@ $action = $files->addAction(
 
 $files->addAction('download', function ($m) {
     $len = strlen(file_get_contents($m['name']));
-    return "$len bytes downloaded..";
-} );
 
-#$files->getAction('download')->system = true;
+    return "$len bytes downloaded..";
+});
+
+//$files->getAction('download')->system = true;
 
 $app->add($grid = new \atk4\ui\GridLayout(['columns'=>3]));
 

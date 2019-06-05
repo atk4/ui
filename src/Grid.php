@@ -428,7 +428,7 @@ class Grid extends View
     {
         $button = $action->caption;
 
-        $this->addModalAction($button, $button, function($page, $id) use($action) {
+        $this->addModalAction($button, $button, function ($page, $id) use ($action) {
             $class = $this->executor_class;
             $page->add($executor = new $class());
 
