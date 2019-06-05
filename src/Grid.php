@@ -422,7 +422,7 @@ class Grid extends View
     }
 
     /**
-     * Find out more about the nature of the action from the supplied object, use addAction()
+     * Find out more about the nature of the action from the supplied object, use addAction().
      */
     public function addUserAction(Generic $action)
     {
@@ -436,9 +436,7 @@ class Grid extends View
 
             $executor->setAction($action);
         });
-
     }
-
 
     /**
      * Get sortBy value from url parameter.
