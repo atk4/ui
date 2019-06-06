@@ -5,6 +5,8 @@
 
 namespace atk4\ui;
 
+use atk4\data\Model;
+
 class CardHolder extends View
 {
     public $ui = 'card';
@@ -32,7 +34,11 @@ class CardHolder extends View
     /** @var null|View The button Container for Button */
     public $btnContainer = null;
 
+    /** @var string Table css class */
     public $tableClass = 'ui fixed small';
+
+    /** @var bool Display model field as table inside card holder content */
+    public $useTable = false;
 
     /** @var array Array of columns css wide classes */
     protected $words = [
@@ -63,7 +69,7 @@ class CardHolder extends View
             $this->addImage($this->image);
         }
 
-        if (!$this->buttons) {
+        if ($this->buttons) {
             $this->addButton($this->buttons);
         }
     }
@@ -91,22 +97,84 @@ class CardHolder extends View
     /**
      * Set model.
      *
-     * @param \atk4\data\Model $m
-     * @param array            $column
+     * @param \atk4\data\Model $m           The model.
+     * @param array            $columns     An array of fields name to display in content.
+     * @paran array            $extras      An array of fields name to display in extra content.
      *
      * @throws Exception
      *
      * @return \atk4\data\Model|void
      */
-    public function setModel($m, $column = [])
+    public function setModel(Model $m, $columns = [], $extras = [])
     {
         $m = parent::setModel($m);
+        if (!$m->loaded()) {
+            throw new Exception('Model need to be loaded.');
+        }
+
+        if ($this->useTable) {
+            $m = $this->setCardModel($m, $columns);
+        } else {
+            $this->setContentModel($m, $columns);
+        }
+
+        if (!empty($extras)) {
+            $this->setExtra($m, $extras);
+        }
+
+        return $m;
+    }
+
+    /**
+     * Set content using model field.
+     *
+     * @param Model $m          The model
+     * @param array $columns    An array of fields name.
+     *
+     * @throws Exception
+     */
+    private function setContentModel($m, $columns)
+    {
+        $this->addContent(new Header([$m->getTitle()]));
+
+        foreach ($columns as $column) {
+            $this->addDescription($m->get($column));
+        }
+
+    }
+
+    /**
+     * Set content using table Card View model field.
+     *
+     * @param Model $m          The model
+     * @param array $columns    An array of fields name.
+     *
+     * @return Model
+     * @throws Exception
+     */
+    private function setCardModel($m, $columns)
+    {
         $c = new Card(['class' => $this->tableClass]);
         $c->init();
-        $m = $c->setModel($m, $column);
+        $m = $c->setModel($m, $columns);
         $this->addContent($c);
 
         return $m;
+    }
+
+    /**
+     * Set extra content using model field.
+     *
+     * @param Model $m          The model
+     * @param array $extras     An array of fields name.
+     *
+     * @throws Exception
+     */
+    private function setExtra($m, $extras)
+    {
+        foreach ($extras as $extra) {
+            $this->addExtraContent(new View([$m->get($extra)]));
+        }
     }
 
     /**
