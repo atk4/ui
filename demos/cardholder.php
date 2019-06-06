@@ -33,15 +33,14 @@ $country->addCalculatedField('desc', function ($m) {
     return 'The country of '.$name.' has more than '.$number.' habitants';
 });
 
-$country->setLimit(6);
-
 // Card Deck //
 $deck = $app->add(['ui' => 'cards']);
 
-foreach ($country as $m) {
+$country->setLimit(8);
+$country->each(function($m) use ($deck) {
     $c = $deck->add('CardHolder');
     $c->setModel($m, ['desc'], ['extra']);
-}
+});
 
 //**** Card with Table ***/
 $app->add(['Header', 'CardHolder can display model content in a table.', 'size' => 3]);
