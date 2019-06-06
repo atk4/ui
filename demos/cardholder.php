@@ -23,8 +23,6 @@ $card->addExtraContent(new \atk4\ui\View(['Copyright notice: Image from Semantic
 $app->add(['Header', 'CardHolder can display model content.', 'size' => 3]);
 
 $country = new Country($db);
-
-// in model
 $country->addExpression('extra', 'concat("iso: ", [iso])');
 $country->addCalculatedField('desc', function ($m) {
     $name = $m->getTitle();
