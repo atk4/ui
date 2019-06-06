@@ -37,7 +37,7 @@ $country->addCalculatedField('desc', function ($m) {
 $deck = $app->add(['ui' => 'cards']);
 
 $country->setLimit(8);
-$country->each(function($m) use ($deck) {
+$country->each(function ($m) use ($deck) {
     $c = $deck->add('CardHolder');
     $c->setModel($m, ['desc'], ['extra']);
 });
