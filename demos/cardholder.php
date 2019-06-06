@@ -29,7 +29,6 @@ $content->add($header = new \atk4\ui\Header(['Kristy']));
 $card->addContent($content);
 $card->addDescription('Friend of Bob');
 
-
 // Card with model ** /
 $app->add(['Header', 'CardHolder can display model content.', 'size' => 3]);
 
