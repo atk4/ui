@@ -3,8 +3,10 @@
 require 'init.php';
 require 'database.php';
 
+$app->add(['Header', 'CardHolder.', 'size' => 1, 'subHeader' => 'Component based on Fomantic-Ui Card view.']);
+
 //*** Simple Card **/
-$app->add(['Header', 'Card can be defined manually.', 'size' => 3]);
+$app->add(['Header', 'CardHolder can be defined manually.', 'size' => 3]);
 
 $card = $app->add('CardHolder');
 
@@ -18,7 +20,7 @@ $card->addButton(new \atk4\ui\Button(['Email']));
 $card->addExtraContent(new \atk4\ui\View(['Copyright notice: Image from Semantic-UI (Fomantic-UI)', 'element' => 'span']));
 
 // Card with model ** /
-$app->add(['Header', 'Card can display model content.', 'size' => 3]);
+$app->add(['Header', 'CardHolder can display model content.', 'size' => 3]);
 
 $country = new Country($db);
 
@@ -28,7 +30,7 @@ $country->addCalculatedField('desc', function ($m) {
     $name = $m->getTitle();
     $number = number_format(rand(1000000, 10000000));
 
-    return 'The country of '.$name.' has more than '.$number.' habitants';
+    return "The country of " . $name . ' has more than ' . $number . ' habitants';
 });
 
 $country->setLimit(6);
@@ -42,7 +44,7 @@ foreach ($country as $m) {
 }
 
 //**** Card with Table ***/
-$app->add(['Header', 'Card can display model content in a table.', 'size' => 3]);
+$app->add(['Header', 'CardHolder can display model content in a table.', 'size' => 3]);
 
 $card_s = $app->add(['CardHolder', 'useTable' => true]);
 $card_s->addContent(new \atk4\ui\Header(['Project Info']));
