@@ -100,6 +100,7 @@ class CardHolder extends View
      */
     public function setModel($m, $column = [])
     {
+        $m = parent::setModel($m);
         $c = new Card(['class' => $this->tableClass]);
         $c->init();
         $m = $c->setModel($m, $column);
