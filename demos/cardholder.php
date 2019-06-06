@@ -27,7 +27,8 @@ $country->addExpression('extra', 'concat("iso: ", [iso])');
 $country->addCalculatedField('desc', function ($m) {
     $name = $m->getTitle();
     $number = number_format(rand(1000000, 10000000));
-    return "The country of " . $name . ' has more than ' . $number . ' habitants';
+
+    return 'The country of '.$name.' has more than '.$number.' habitants';
 });
 
 $country->setLimit(6);
@@ -42,7 +43,6 @@ foreach ($country as $m) {
 
 //**** Card with Table ***/
 $app->add(['Header', 'Card can display model content in a table.', 'size' => 3]);
-
 
 $card_s = $app->add(['CardHolder', 'useTable' => true]);
 $card_s->addContent(new \atk4\ui\Header(['Project Info']));

@@ -97,8 +97,8 @@ class CardHolder extends View
     /**
      * Set model.
      *
-     * @param \atk4\data\Model $m           The model.
-     * @param array            $columns     An array of fields name to display in content.
+     * @param \atk4\data\Model $m       The model.
+     * @param array            $columns An array of fields name to display in content.
      * @paran array            $extras      An array of fields name to display in extra content.
      *
      * @throws Exception
@@ -128,8 +128,8 @@ class CardHolder extends View
     /**
      * Set content using model field.
      *
-     * @param Model $m          The model
-     * @param array $columns    An array of fields name.
+     * @param Model $m       The model
+     * @param array $columns An array of fields name.
      *
      * @throws Exception
      */
@@ -140,17 +140,17 @@ class CardHolder extends View
         foreach ($columns as $column) {
             $this->addDescription($m->get($column));
         }
-
     }
 
     /**
      * Set content using table Card View model field.
      *
-     * @param Model $m          The model
-     * @param array $columns    An array of fields name.
+     * @param Model $m       The model
+     * @param array $columns An array of fields name.
+     *
+     * @throws Exception
      *
      * @return Model
-     * @throws Exception
      */
     private function setCardModel($m, $columns)
     {
@@ -165,8 +165,8 @@ class CardHolder extends View
     /**
      * Set extra content using model field.
      *
-     * @param Model $m          The model
-     * @param array $extras     An array of fields name.
+     * @param Model $m      The model
+     * @param array $extras An array of fields name.
      *
      * @throws Exception
      */
