@@ -40,6 +40,12 @@ class CardHolder extends View
     /** @var bool Display model field as table inside card holder content */
     public $useTable = false;
 
+    /** @var bool Use Field label with value data */
+    public $useLabel = false;
+
+    /** @var string Glue between label and value */
+    public $glue = ': ';
+
     /** @var array Array of columns css wide classes */
     protected $words = [
         '', 'fluid', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
@@ -138,7 +144,13 @@ class CardHolder extends View
         $this->addContent(new Header([$m->getTitle()]));
 
         foreach ($columns as $column) {
-            $this->addDescription($m->get($column));
+            $label = $m->getField($column)->getCaption();
+            $value = $m->get($column);
+            if ($this->useLabel) {
+                $value = $label.$this->glue.$value;
+            }
+
+            $this->addDescription($value);
         }
     }
 
