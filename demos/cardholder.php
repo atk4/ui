@@ -30,7 +30,7 @@ $country->addCalculatedField('desc', function ($m) {
     $name = $m->getTitle();
     $number = number_format(rand(1000000, 10000000));
 
-    return "The country of " . $name . ' has more than ' . $number . ' habitants';
+    return 'The country of '.$name.' has more than '.$number.' habitants';
 });
 
 $country->setLimit(6);
