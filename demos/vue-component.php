@@ -37,7 +37,8 @@ $m = new Country($db);
 $lister_template = new atk4\ui\Template('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{$end}{/}</div>');
 
 $view = $app->add('View');
-$search = $view->add(['Component/ItemSearch', 'q' => $q, 'ui' => 'ui compact segment']);
+
+$search = $view->add(['Component/ItemSearch', 'ui' => 'ui compact segment']);
 $lister_container = $view->add(['View', 'template' => $lister_template]);
 $lister = $lister_container->add('Lister', 'List')
             ->addHook('beforeRow', function ($l) {

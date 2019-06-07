@@ -4,7 +4,7 @@ Purpose of the Seed
 
 .. php:namespace:: atk4\ui
 
-Agile UI relies on wide varietty of objects. For example :php:class:`Button` relies on
+Agile UI relies on wide variety of objects. For example :php:class:`Button` relies on
 :php:class:`Icon` object for its rendering. As a developer can create Icon object first,
 then pass it to the button::
 
@@ -12,14 +12,14 @@ then pass it to the button::
     $button = new Button('Hello');
     $button->icon = $icon;
 
-or you can divert icon creation until later by using Array / String for :php:attr:`Button::$icon` 
+or you can divert icon creation until later by using Array / String for :php:attr:`Button::$icon`
 property::
 
     $button = new Button('Hello');
     $button->icon = 'book';
 
 When you don't provide an object - string/array value is called "Seed" and will be used to
-locate and load class dynamically just when it's needed. 
+locate and load class dynamically just when it's needed.
 
 Seed has many advantages:
 
@@ -48,9 +48,9 @@ Seed, Object and Render Tree
 ----------------------------
 
 When calling :php:meth:`View::add()` not only your seed becomes an object, but it is also added to
-the :ref:`render tree`. 
+the :ref:`render tree`.
 
-Seeed Components
+Seed Components
 ================
 
 For more information about seeds, merging seeds, factories and namespaces, see https://agile-core.readthedocs.io/.
@@ -63,7 +63,7 @@ are:
 
  - Element with index 0 is name of the class mapped into namespace \atk4\ui (by default).
  - Elements with numeric indexes 'hello' and 'big red' are passed to constructor of Button
- - Elements with named arguments are asigned to properties after invocation of constructor
+ - Elements with named arguments are assigned to properties after invocation of constructor
 
 Alternative ways to use Seed
 ----------------------------
