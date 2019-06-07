@@ -16,14 +16,14 @@ class App
 
     // @var array|false Location where to load JS/CSS files
     public $cdn = [
-        'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@1.6.5/public',
+        'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@1.7.0/public',
         'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.2/dist',
     ];
 
     // @var string Version of Agile UI
-    public $version = '1.6.5';
+    public $version = '1.7.0';
 
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
@@ -318,6 +318,7 @@ class App
      * @param string|Layout\Generic|array $seed
      *
      * @return $this
+     * @throws \atk4\core\Exception
      */
     public function initLayout($seed)
     {
@@ -366,6 +367,8 @@ class App
      * and use file include instead.
      *
      * @param string $style CSS rules, like ".foo { background: red }".
+     *
+     * @throws Exception
      */
     public function addStyle($style)
     {
@@ -385,34 +388,37 @@ class App
     public function normalizeClassNameApp($name)
     {
         /**
-         * use ascii chr in place of string to avoid errors.
+         * use ascii chr in place of string to avoid errors
          */
         $NS_SEPA_REVERSE = chr(47);
-        $NS_SEPA_CHAR = chr(92);
+        $NS_SEPA_CHAR    = chr(92);
 
         /**
          * @see https://agile-core.readthedocs.io/en/develop/factory.html#FactoryTrait::normalizeClassName
          * replacing / to \
          */
-        $checkClass = str_replace($NS_SEPA_REVERSE, $NS_SEPA_CHAR, $name);
+        $checkClass = str_replace($NS_SEPA_REVERSE,$NS_SEPA_CHAR,$name);
 
         // check FQCN existence prepending FQNS \atk4\ui
         // @case $name = "FormField/AutoComplete"
-        $testClass = $NS_SEPA_CHAR.__NAMESPACE__.$NS_SEPA_CHAR.$checkClass;
-        if (class_exists($testClass)) {
+        $testClass = $NS_SEPA_CHAR . __NAMESPACE__ . $NS_SEPA_CHAR . $checkClass;
+        if(class_exists($testClass))
+        {
             return $testClass;
         }
 
         // check FQCN existence prepending \
         // @case $name = "externalNamespace\\className"
-        $testClass = $NS_SEPA_CHAR.$checkClass;
-        if (class_exists($testClass)) {
+        $testClass = $NS_SEPA_CHAR . $checkClass;
+        if(class_exists($testClass))
+        {
             return $testClass;
         }
 
         // check FQCN existence without prepend \\
         // @case $name = "\\externalNamespace\\className"
-        if (class_exists($checkClass)) {
+        if(class_exists($checkClass))
+        {
             return $checkClass;
         }
 
@@ -515,7 +521,10 @@ class App
      */
     public function dbConnect($dsn, $user = null, $password = null, $args = [])
     {
-        return $this->db = $this->add(\atk4\data\Persistence::connect($dsn, $user, $password, $args));
+        $this->db = \atk4\data\Persistence::connect($dsn, $user, $password, $args);
+        $this->db->app = $this;
+
+        return $this->db;
     }
 
     protected function getRequestURI()
@@ -707,6 +716,8 @@ class App
      * Generate action for redirecting user to another page.
      *
      * @param string|array $page Destination URL or page/arguments
+     *
+     * @return jsExpression
      */
     public function jsRedirect($page)
     {
