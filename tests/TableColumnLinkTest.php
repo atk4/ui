@@ -221,7 +221,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testLink6()
     {
-        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'],'force_download' => true]);
+        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'], 'force_download' => true]);
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1" download="true" >bar</a></td><td>ref123</td></tr>',
@@ -231,7 +231,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testLink7()
     {
-        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'],'target' => '_blank']);
+        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'], 'target' => '_blank']);
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1" target="_blank" >bar</a></td><td>ref123</td></tr>',
@@ -241,7 +241,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testLink8()
     {
-        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'],'icon' => 'info']);
+        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'], 'icon' => 'info']);
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1"><i class="icon info"></i>bar</a></td><td>ref123</td></tr>',
@@ -251,7 +251,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testLink9()
     {
-        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'],'use_label' => false]);
+        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'], 'use_label' => false]);
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1"></a></td><td>ref123</td></tr>',
@@ -280,17 +280,15 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-
     public function testLink11()
     {
-        $this->table->addDecorator('name', ['Tooltip',['tooltip_field' => 'ref']]);
+        $this->table->addDecorator('name', ['Tooltip', ['tooltip_field' => 'ref']]);
 
         $this->assertEquals(
             '<tr data-id="1"><td class=""> bar<span class="ui icon link " data-tooltip="ref123"><i class="ui icon info circle"></span></td><td>ref123</td></tr>',
             $this->extract($this->table->render())
         );
     }
-
 
     /*
     function testLink1() {

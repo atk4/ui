@@ -6,7 +6,7 @@ use atk4\data\Field;
 use atk4\ui\Exception;
 
 /**
- * Class KeyValue
+ * Class KeyValue.
  *
  * if field have values without a relation
  * like a status or a coded state of a process
@@ -41,9 +41,6 @@ use atk4\ui\Exception;
  * ]
  * ],
  * ]);
- *
- *
- * @package atk4\ui\TableColumn
  */
 class KeyValue extends Generic
 {
@@ -52,15 +49,15 @@ class KeyValue extends Generic
     public function init()
     {
         parent::init();
-
     }
 
     /**
      * @param array $row
      * @param Field $field
      *
-     * @return array|void
      * @throws Exception
+     *
+     * @return array|void
      */
     public function getHTMLTags($row, $field)
     {
@@ -77,7 +74,7 @@ class KeyValue extends Generic
         }
 
         $keyValues = $values;
-        $key       = $field->get();
+        $key = $field->get();
 
         $value = '';
         if (isset($keyValues[$key])) {

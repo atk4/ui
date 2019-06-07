@@ -20,9 +20,7 @@ use atk4\ui\Exception;
  *      '#00FF00'
  *      ]
  *   ]
- * ]
- *
- * @package atk4\ui\TableColumn
+ * ].
  */
 class ColorRating extends Generic
 {
@@ -31,7 +29,7 @@ class ColorRating extends Generic
     /** @var float */
     public $max;
     /**
-     * Step between colors
+     * Step between colors.
      *
      * @var int
      */
@@ -42,7 +40,7 @@ class ColorRating extends Generic
 
     public $gradients = [];
 
-    public  $gradients_count = 0;
+    public $gradients_count = 0;
     /**
      * @var float
      */
@@ -55,8 +53,8 @@ class ColorRating extends Generic
         parent::init();
 
         // cast type of properties
-        $this->min   = (float)$this->min;
-        $this->max   = (float)$this->max;
+        $this->min = (float) $this->min;
+        $this->max = (float) $this->max;
         $this->delta = $this->max - $this->min;
 
         // Preconditions : min - max
@@ -113,7 +111,7 @@ class ColorRating extends Generic
     private function createGradientSingle(&$gradients, $hexFrom, $hexTo, $steps)
     {
         $hexFrom = trim($hexFrom, '#');
-        $hexTo   = trim($hexTo, '#');
+        $hexTo = trim($hexTo, '#');
 
         $FromRGB['r'] = hexdec(substr($hexFrom, 0, 2));
         $FromRGB['g'] = hexdec(substr($hexFrom, 2, 2));
@@ -136,38 +134,38 @@ class ColorRating extends Generic
             $HexRGB['g'] = sprintf('%02x', ($RGB['g']));
             $HexRGB['b'] = sprintf('%02x', ($RGB['b']));
 
-            $gradients[] = "#" . implode(NULL, $HexRGB);
+            $gradients[] = '#'.implode(null, $HexRGB);
         }
     }
 
     public function getTagAttributes($position, $attr = [])
     {
         $attr['style'] = $attr['style'] ?? '';
-        $attr['style'] .= '{$_' . $this->short_name . '_color_rating};';
+        $attr['style'] .= '{$_'.$this->short_name.'_color_rating};';
 
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHTML(Field $f = NULL, $extra_tags = [])
+    public function getDataCellHTML(Field $f = null, $extra_tags = [])
     {
-        if ($f === NULL) {
+        if ($f === null) {
             throw new Exception(['ColorRating can be used only with model field']);
         }
 
-        return $this->getTag('body', '{$' . $f->short_name . '}', $extra_tags);
+        return $this->getTag('body', '{$'.$f->short_name.'}', $extra_tags);
     }
 
     public function getHTMLTags($row, $field)
     {
         $value = $field->get();
-        if (is_null($value) || (int)$value < $this->min || (int)$value > $this->max) {
+        if (is_null($value) || (int) $value < $this->min || (int) $value > $this->max) {
             return parent::getHTMLTags($row, $field);
         }
 
         $color = $this->getColorFromValue($value);
 
         return [
-            '_' . $this->short_name . '_color_rating' => 'background-color:' . $color
+            '_'.$this->short_name.'_color_rating' => 'background-color:'.$color,
         ];
     }
 

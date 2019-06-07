@@ -3,7 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 /**
- * Class NoValue
+ * Class NoValue.
  *
  * sometime we need null values in db
  *
@@ -21,9 +21,6 @@ namespace atk4\ui\TableColumn;
  *          ]
  *      ]
  * ]);
- *
- *
- * @package atk4\ui\TableColumn
  */
 class NoValue extends Generic
 {
