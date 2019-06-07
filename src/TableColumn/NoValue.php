@@ -27,12 +27,8 @@ namespace atk4\ui\TableColumn;
  */
 class NoValue extends Generic
 {
-    public $no_value = NULL;
-
-    public function __construct($no_value = NULL)
-    {
-        $this->no_value = $no_value;
-    }
+    /** @var string */
+    public $no_value = ' --- ';
 
     public function getHTMLTags($row, $field)
     {
