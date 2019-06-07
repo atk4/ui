@@ -3,9 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 /**
- * Class NoValue
- *
- * sometime we need null values in db
+ * Used when we need to set the display value when is null.
  *
  * when we display values we have holes
  * with NoValue decorator we can show a display value for column null value
@@ -21,9 +19,6 @@ namespace atk4\ui\TableColumn;
  *          ]
  *      ]
  * ]);
- *
- *
- * @package atk4\ui\TableColumn
  */
 class NoValue extends Generic
 {

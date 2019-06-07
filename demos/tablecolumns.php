@@ -17,10 +17,10 @@ class ModelColor extends \atk4\data\Model
                     'Tooltip',
                     [
                         'tooltip_field' => 'note',
-                        'icon' => 'info circle blue'
-                    ]
-                ]
-            ]
+                        'icon'          => 'info circle blue',
+                    ],
+                ],
+            ],
         ]);
 
         $this->addField('value_not_always_present', [
@@ -29,10 +29,10 @@ class ModelColor extends \atk4\data\Model
                 'table' => [
                     'NoValue',
                     [
-                        'no_value' => ' no value '
-                    ]
-                ]
-            ]
+                        'no_value' => ' no value ',
+                    ],
+                ],
+            ],
         ]);
 
         $this->addField('key_value', [
@@ -42,37 +42,27 @@ class ModelColor extends \atk4\data\Model
                 '2nd val',
                 '3rd val',
                 '4th val',
-            ],
-            'ui'   => [
-                'table' => [
-                    'KeyValue'
-                ]
             ]
         ]);
 
 
         $this->addField('key_value_string', [
-            'type' => 'string',
+            'type'   => 'string',
             'values' => [
-                'one' => '1st val',
-                'two' => '2nd val',
+                'one'   => '1st val',
+                'two'   => '2nd val',
                 'three' => '3rd val',
-                'four' => '4th val',
-            ],
-            'ui'   => [
-                'table' => [
-                    'KeyValue'
-                ]
+                'four'  => '4th val',
             ]
         ]);
 
         $this->addField('interests', [
             'type' => 'string',
             'ui'   => [
-              'table' => [
-                  'Labels'
-              ]
-            ]
+                'table' => [
+                    'Labels',
+                ],
+            ],
         ]);
 
         $this->addField('rating', [
@@ -87,11 +77,11 @@ class ModelColor extends \atk4\data\Model
                         'colors' => [
                             '#FF0000',
                             '#FFFF00',
-                            '#00FF00'
-                        ]
-                    ]
-                ]
-            ]
+                            '#00FF00',
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
         $this->addField('note',['system' => true]);
@@ -102,23 +92,22 @@ $key_value_string = [
     1 => 'one',
     'two',
     'three',
-    'four'
+    'four',
 ];
 
-$m                             = new ModelColor(new \atk4\data\Persistence\Static_([]));
-foreach(range(1,50) as $id)
-{
+$m = new ModelColor(new \atk4\data\Persistence\Static_([]));
+foreach (range(1,50) as $id) {
     $key_value = rand(1,4);
 
     $m->insert([
-        'id' => $id,
-        'name' => 'name ' . $id,
-        'key_value' => $key_value,
-        'key_value_string' => $key_value_string[$key_value],
-        'value_not_always_present' => rand(0,100) > 50 ? 'have value' : '',
-        'interests' => '1st label, 2nd label',
-        'rating' => rand(100,300) / 100,
-        'note' => 'lorem ipsum lorem dorem lorem'
+        'id'                       => $id,
+        'name'                     => 'name ' . $id,
+        'key_value'                => $key_value,
+        'key_value_string'         => $key_value_string[$key_value],
+        'value_not_always_present' => rand(0, 100) > 50 ? 'have value' : '',
+        'interests'                => '1st label, 2nd label',
+        'rating'                   => rand(100, 300) / 100,
+        'note'                     => 'lorem ipsum lorem dorem lorem',
     ]);
 }
 

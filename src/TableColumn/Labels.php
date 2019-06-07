@@ -3,13 +3,11 @@
 namespace atk4\ui\TableColumn;
 
 /**
- * Class Labels
+ * Class Labels.
  *
  * take the fieldValue separated by commas and transforms into SemanticUI labels
  *
  * from => label1,label2 | to => div.ui.label[label1] div.ui.label[label2]
- *
- * @package atk4\ui\TableColumn
  */
 class Labels extends Generic
 {
@@ -22,7 +20,7 @@ class Labels extends Generic
             $value = trim($value);
 
             if (!empty($value)) {
-                $processed[] = $this->app->getTag('div', ['class' => "ui label"], $value);
+                $processed[] = $this->app->getTag('div', ['class' => 'ui label'], $value);
             }
         }
 

@@ -413,8 +413,8 @@ class Generic
     public function getHTMLTags($row, $field)
     {
         $values = $field->values ?? [];
-        $value  = $field->get();
-        $value  = $values[$value] ?? $value;
+        $value = $field->get();
+        $value = $values[$value] ?? $value;
 
         if ($field) {
             return [$field->short_name => $value];

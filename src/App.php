@@ -385,37 +385,34 @@ class App
     public function normalizeClassNameApp($name)
     {
         /**
-         * use ascii chr in place of string to avoid errors
+         * use ascii chr in place of string to avoid errors.
          */
         $NS_SEPA_REVERSE = chr(47);
-        $NS_SEPA_CHAR    = chr(92);
+        $NS_SEPA_CHAR = chr(92);
 
         /**
          * @see https://agile-core.readthedocs.io/en/develop/factory.html#FactoryTrait::normalizeClassName
          * replacing / to \
          */
-        $checkClass = str_replace($NS_SEPA_REVERSE,$NS_SEPA_CHAR,$name);
+        $checkClass = str_replace($NS_SEPA_REVERSE, $NS_SEPA_CHAR, $name);
 
         // check FQCN existence prepending FQNS \atk4\ui
         // @case $name = "FormField/AutoComplete"
-        $testClass = $NS_SEPA_CHAR . __NAMESPACE__ . $NS_SEPA_CHAR . $checkClass;
-        if(class_exists($testClass))
-        {
+        $testClass = $NS_SEPA_CHAR.__NAMESPACE__.$NS_SEPA_CHAR.$checkClass;
+        if (class_exists($testClass)) {
             return $testClass;
         }
 
         // check FQCN existence prepending \
         // @case $name = "externalNamespace\\className"
-        $testClass = $NS_SEPA_CHAR . $checkClass;
-        if(class_exists($testClass))
-        {
+        $testClass = $NS_SEPA_CHAR.$checkClass;
+        if (class_exists($testClass)) {
             return $testClass;
         }
 
         // check FQCN existence without prepend \\
         // @case $name = "\\externalNamespace\\className"
-        if(class_exists($checkClass))
-        {
+        if (class_exists($checkClass)) {
             return $checkClass;
         }
 
@@ -425,10 +422,11 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param mixed  $seed   New object to add
+     * @param mixed  $seed New object to add
      * @param string $region
      *
      * @return object
+     * @throws Exception
      */
     public function add($seed, $region = null)
     {
