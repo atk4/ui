@@ -3,6 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
+use atk4\ui\Exception;
 
 /**
  * Class Tooltip
@@ -22,24 +23,27 @@ class Tooltip extends Generic
      *
      * @var string $field_tooltip
      */
-    public $icon = [];
+    public $icon;
 
     /**
      *
      * @var string $tooltip_field
      */
-    public $tooltip_field = [];
+    public $tooltip_field;
 
-    /**
-     * Pass argument of tooltip field
-     *
-     * @param string $field_tooltip
-     * @param string $icon
-     */
-    public function __construct($field_tooltip = NULL, $icon = 'info circle blue')
+    public function init()
     {
-        $this->tooltip_field = $field_tooltip;
-        $this->icon          = $icon;
+        parent::init();
+
+        if(!$this->icon)
+        {
+            $this->icon = 'info circle';
+        }
+
+        if(!$this->tooltip_field)
+        {
+            throw new Exception('Tooltip field must be defined');
+        }
     }
 
     public function getDataCellHTML(Field $f = NULL, $extra_tags = [])
