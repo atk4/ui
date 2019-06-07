@@ -385,29 +385,35 @@ class App
     public function normalizeClassNameApp($name)
     {
         /**
+         * use ascii chr in place of string to avoid errors
+         */
+        $NS_SEPA_REVERSE = chr(47);
+        $NS_SEPA_CHAR    = chr(92);
+
+        /**
          * @see https://agile-core.readthedocs.io/en/develop/factory.html#FactoryTrait::normalizeClassName
          * replacing / to \
          */
-        $checkClass = str_replace("/","\\",$name);
+        $checkClass = str_replace($NS_SEPA_REVERSE,$NS_SEPA_CHAR,$name);
+
+        // check FQCN existence prepending FQNS \atk4\ui
+        // @case $name = "FormField/AutoComplete"
+        $testClass = $NS_SEPA_CHAR . __NAMESPACE__ . $NS_SEPA_CHAR . $checkClass;
+        if(class_exists($testClass))
+        {
+            return $testClass;
+        }
+
+        // check FQCN existence prepending \
+        // @case $name = "externalNamespace\\className"
+        $testClass = $NS_SEPA_CHAR . $checkClass;
+        if(class_exists($testClass))
+        {
+            return $testClass;
+        }
 
         // check FQCN existence without prepend \\
         // @case $name = "\\externalNamespace\\className"
-        if(class_exists($checkClass))
-        {
-            return $checkClass;
-        }
-
-        $checkClass = "\\" . $checkClass;
-        // check FQCN existence prepending \
-        // @case $name = "externalNamespace\\className"
-        if(class_exists($checkClass))
-        {
-            return $checkClass;
-        }
-
-        $checkClass = "\\" . __NAMESPACE__ . $checkClass;
-        // check FQCN existence prepending FQNS \atk4\ui
-        // @case $name = "FormField/AutoComplete"
         if(class_exists($checkClass))
         {
             return $checkClass;
