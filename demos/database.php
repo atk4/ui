@@ -9,8 +9,8 @@ try {
     }
 } catch (PDOException $e) {
     throw new \atk4\ui\Exception([
-        'This demo requires access to the database. See "demos/database.php"',
-    ], null, $e);
+                                     'This demo requires access to the database. See "demos/database.php"',
+                                 ], null, $e);
 }
 
 $app->db = $db;
@@ -72,13 +72,14 @@ if (!class_exists('Country')) {
             parent::init();
 
             $this->addFields(['project_name', 'project_code'], ['type' => 'string']);
+            $this->title_field = 'project_name';
             //$this->addField('description', ['ui'=>['form'=>['FormField/TextArea', 'rows'=>5]]]);
             $this->addField('description', ['type' => 'text']);
             $this->addField('client_name', ['type' => 'string']);
             $this->addField('client_address', ['type' => 'string', 'ui' => ['form' => [new \atk4\ui\FormField\TextArea(), 'rows' => 4]]]);
 
             $this->hasOne('client_country_iso', [
-            new Country(),
+                new Country(),
                 'their_field' => 'iso',
                 'ui'          => [
                     'display' => [
@@ -86,7 +87,7 @@ if (!class_exists('Country')) {
                     ],
                 ],
             ])
-            ->addField('client_country', 'name');
+                 ->addField('client_country', 'name');
 
             $this->addField('is_commercial', ['type' => 'boolean']);
             $this->addField('currency', ['enum' => ['EUR', 'USD', 'GBP']]);
@@ -135,10 +136,10 @@ if (!class_exists('Country')) {
             $this->addField('is_folder', ['type' => 'boolean']);
 
             $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
-            ->addField('count', ['aggregate' => 'count', 'field' => $this->expr('*')]);
+                 ->addField('count', ['aggregate' => 'count', 'field' => $this->expr('*')]);
 
             $this->hasOne('parent_folder_id', new self())
-            ->addTitle();
+                 ->addTitle();
         }
 
         /**
@@ -147,7 +148,6 @@ if (!class_exists('Country')) {
         public function importFromFilesystem($path)
         {
             $dir = new DirectoryIterator($path);
-            $imported = 0;
             foreach ($dir as $fileinfo) {
                 if ($fileinfo->getFilename()[0] === '.') {
                     continue;
@@ -159,18 +159,15 @@ if (!class_exists('Country')) {
                 $this->unload();
 
                 $this->save([
-                    'name'      => $fileinfo->getFilename(),
-                    'is_folder' => $fileinfo->isDir(),
-                    'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
-                ]);
-                $imported++;
+                                'name'      => $fileinfo->getFilename(),
+                                'is_folder' => $fileinfo->isDir(),
+                                'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
+                            ]);
 
                 if ($fileinfo->isDir()) {
-                    $imported += $this->ref('SubFolder')->importFromFilesystem($path.'/'.$fileinfo->getFilename());
+                    $this->ref('SubFolder')->importFromFilesystem($path.'/'.$fileinfo->getFilename());
                 }
             }
-
-            return $imported;
         }
     }
 }
