@@ -125,7 +125,6 @@ class CardHolder extends View
             $this->setContentModel($m, $columns);
         }
 
-
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
             $this->addUserAction($single_record_action);
         }
@@ -137,7 +136,6 @@ class CardHolder extends View
         return $m;
     }
 
-
     public function addUserAction($action)
     {
         $btn = $this->addButton(new Button([$action->caption]));
@@ -146,10 +144,9 @@ class CardHolder extends View
 
         $btn->on('click', new jsModal($action->caption, $page));
 
-        $page->set(function($p){
-           $p->add('View')->set('allo');
+        $page->set(function ($p) {
+            $p->add('View')->set('allo');
         });
-
     }
 
     /**
@@ -282,8 +279,8 @@ class CardHolder extends View
     /**
      * Add button(s) to card.
      *
-     * @param Button    $button     A Button.
-     * @param bool      $isFluid    Make the buttons spread evenly in Card.
+     * @param Button $button  A Button.
+     * @param bool   $isFluid Make the buttons spread evenly in Card.
      *
      * @throws Exception
      *
@@ -308,7 +305,6 @@ class CardHolder extends View
 
         return $btn;
     }
-
 
     public function addButtons($buttons, $isFluid = true)
     {
