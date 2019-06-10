@@ -376,8 +376,30 @@ class App
      */
     public function normalizeClassNameApp($name)
     {
-        if (class_exists('\\'.__NAMESPACE__.'\\'.$name)) {
-            return '\\'.__NAMESPACE__.'\\'.$name;
+        /**
+         * @see https://agile-core.readthedocs.io/en/develop/factory.html#FactoryTrait::normalizeClassName
+         * replacing / to \
+         */
+        $checkClass = str_replace('/', '\\', $name);
+
+        // check FQCN existence without prepend \\
+        // @case $name = "\\externalNamespace\\className"
+        if (class_exists($checkClass)) {
+            return $checkClass;
+        }
+
+        $checkClass = '\\'.$checkClass;
+        // check FQCN existence prepending \
+        // @case $name = "externalNamespace\\className"
+        if (class_exists($checkClass)) {
+            return $checkClass;
+        }
+
+        $checkClass = '\\'.__NAMESPACE__.$checkClass;
+        // check FQCN existence prepending FQNS \atk4\ui
+        // @case $name = "FormField/AutoComplete"
+        if (class_exists($checkClass)) {
+            return $checkClass;
         }
 
         return $name;
