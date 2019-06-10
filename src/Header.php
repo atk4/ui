@@ -58,8 +58,8 @@ class Header extends View
     public function renderView()
     {
         if ($this->size) {
-            if (is_int($this->size)) {
-                $this->element = 'h'.$this->size;
+            if (is_numeric($this->size)) {
+                $this->setElement('h'.$this->size);
             } else {
                 $this->addClass($this->size);
             }
