@@ -9,7 +9,6 @@ const presets = [
     "@babel/env",
     {
       targets: "> 1% , not dead",
-      "corejs": "2",
       "useBuiltIns": "usage"
     },
   ],

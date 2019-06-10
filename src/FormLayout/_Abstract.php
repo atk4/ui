@@ -90,26 +90,6 @@ abstract class _Abstract extends \atk4\ui\View
     }
 
     /**
-     * Add more than one field in one shot.
-     *
-     * @param array $fields
-     *
-     * @return $this
-     */
-    public function addFields($fields)
-    {
-        foreach ($fields as $field) {
-            if (is_array($field)) {
-                $this->addField(...$field);
-            } else {
-                $this->addField($field);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Returns array of names of fields to automatically include them in form.
      * This includes all editable or visible fields of the model.
      *

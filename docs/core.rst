@@ -4,15 +4,15 @@ Core Concepts
 
 .. php:namespace:: atk4\ui
 
-Agile Toolkit and Agile UI are built upon specific core concepts. Understanding those
+Agile Toolkit and Agile UI is built by following the core concepts. Understanding the
 concepts is very important especially if you plan to write and distribute your own
 add-ons.
 
 App
 ===
 
-In any Agile UI application you will always need to have an App class. Even if you do not
-create this class explicitly, components generally will do it for you. The common pattern
+In any Agile UI application you would always need to have an App class. Even if you do not
+create this class explicitly, components generally, will do it for you, however the common pattern
 is::
 
     $app = new \atk4\ui\App('My App');
@@ -27,7 +27,7 @@ is::
 Seed
 ====
 Agile UI is developed to be easy to read and with simple and concise syntax. We make use of
-PHP's dynamic nature, therefore two syntax patterns are supported everywhere::
+dynamic nature of PHP, therefore two syntax patterns are supported everywhere::
 
     $app->add(new \atk4\ui\Button('Hello'));
 
@@ -35,7 +35,7 @@ PHP's dynamic nature, therefore two syntax patterns are supported everywhere::
 
     $app->add(['Button', 'Hello']);
 
-Method add() supports arguments in various formats and we call that "Seed". The same format
+Method add() supports arguments in a various formats and we call that "Seed". The same format
 can be used elsewhere, for example::
 
     $button->icon = 'book';
@@ -50,7 +50,7 @@ We call this format 'Seed'. This section will explain how and where it is used.
 
 Render Tree
 ===========
-Agile Toolkit allows you to create components hierarchically. Once complete, the component
+Agile Toolkit is allows you to create components hierarchically. Once complete, the component
 hierarchy will render itself and will present HTML output that would appear to user.
 
 You can create and link multiple UI objects together before linking them with other chunks of your UI::
@@ -78,7 +78,7 @@ declare "sticky GET arguments". Here is example::
 
 The code is simple - if you click the button, page will appear with the message just above, however
 there is a potential problem here. What if "Message" wanted to perform a :ref:`Callback`? What if
-we use :php:class:`Console` instead, which must display an interactive data stream?
+we use :php:class:`Console` instead, which must display an interractive data stream?
 
 In Agile UI you can request that some $_GET arguments are preserved and included into callback urls::
 
@@ -98,11 +98,11 @@ Type Presentation
 =================
 
 Several components are too complex to be implemented in a single class. :php:class:`Table`, for example,
-has the ability to format columns by utilizing type-specific column classes. Another example is :php:class:`Form`
+has ability to format columns by utilising type-specific column classes. Another example is :php:class:`Form`
 which relies on Field-specific FormField component.
 
-Agile UI uses a specific pattern for those definitions, which makes the overall structure more extensible
-by having the ability to introduce new types with consistent support throughout the UI.
+Agile UI uses a specific pattern for those definitions, which makes overal structure more extensible
+by having an ability to introduce new types with consistent support throughout the UI.
 
 .. toctree::
     type-presentation
@@ -115,7 +115,7 @@ Agile UI components store their HTML inside `*.html` template files. Those files
 and manipulated by a Template class.
 
 To learn more on how to create a custom template or how to change global template
-behavior see:
+behaviour see:
 
 .. toctree::
     template

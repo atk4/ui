@@ -147,6 +147,7 @@ if (!class_exists('Country')) {
         public function importFromFilesystem($path)
         {
             $dir = new DirectoryIterator($path);
+            $imported = 0;
             foreach ($dir as $fileinfo) {
                 if ($fileinfo->getFilename()[0] === '.') {
                     continue;
@@ -158,15 +159,18 @@ if (!class_exists('Country')) {
                 $this->unload();
 
                 $this->save([
-                'name'      => $fileinfo->getFilename(),
-                'is_folder' => $fileinfo->isDir(),
-                'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
-            ]);
+                    'name'      => $fileinfo->getFilename(),
+                    'is_folder' => $fileinfo->isDir(),
+                    'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
+                ]);
+                $imported++;
 
                 if ($fileinfo->isDir()) {
-                    $this->ref('SubFolder')->importFromFilesystem($path.'/'.$fileinfo->getFilename());
+                    $imported += $this->ref('SubFolder')->importFromFilesystem($path.'/'.$fileinfo->getFilename());
                 }
             }
+
+            return $imported;
         }
     }
 }

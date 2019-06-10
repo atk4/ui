@@ -149,6 +149,5 @@ class jsSSE extends jsCallback
         header('Cache-Control: private');
         header('Content-Encoding: none');
         header('Pragma: no-cache');
-        header('X-Accel-Buffering: no'); // nginx @http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
     }
 }

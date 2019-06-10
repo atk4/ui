@@ -7,7 +7,7 @@ Quickstart
 
 In this section we will demonstrate how to build a very simple web application with just
 under 50 lines of PHP code. The important consideration here is that those are the ONLY
-lines you need to write. There is no additional code "generated" for you.
+lines you need to write. There are no additional code "generated" for you.
 
 At this point you might not understand some concept, so I will provide referenced deeper
 into the documentation, but I suggest you to come back to this QuickStart to finish
@@ -24,7 +24,7 @@ work without persistent database.
 Installing
 ==========
 
-Create a directory which is accessible by you web server. Start your command-line,
+Create a directory wich is accessible by you web server. Start your command-line,
 enter this directory and execute composer command::
 
     composer require atk4/ui
@@ -50,7 +50,7 @@ Open a new file `index.php` and enter the following code::
 
 .. [#f2] Inclusion of `autoload.php` is a standard thing to do when working with PHP / Composer.
 
-.. [#f3] The `App` class represents your web application. This line may change if you integrate Agile UI with another framework.
+.. [#f3] `App` class is represents your web application. This line may change if you integrate Agile UI with other framework.
 
 .. [#f4] Specifies default page layout for your application. Try changing between 'Centered' and 'Admin'
 
@@ -60,7 +60,7 @@ You should see the following output:
 
 .. image:: images/helloworld.png
 
-Instead of manually outputting a text "Hello, World!" we have used a standard component. This actually brilliantly
+Instead of manually outputing a text "Hello, World!" we have used a standard component. This actually brilliantly
 demonstrates a core purpose of Agile Toolkit. Instead of doing a lot of things yourself, you can rely on
 components that do things for you.
 
@@ -79,7 +79,7 @@ create the application::
     $app = new \atk4\ui\App('ToDo List');
     $app->initLayout('Centered');
 
-All components of Agile Data are database-agnostic and will not concern themselves with the way how you store data.
+All components of Agile Data are database-agnostic and will not concern themselve with the way how you store data.
 I will start the session and connect `persistence <https://agile-data.readthedocs.io/en/develop/persistence.html>`_
 with it::
 
@@ -89,7 +89,7 @@ with it::
 Data Model
 ==========
 
-We need a class `Task` which describes `data model <https://agile-data.readthedocs.io/en/develop/model.html>`_ for the
+We need a class `Task` which decribes `data model <https://agile-data.readthedocs.io/en/develop/model.html>`_ for the
 single ToDo item::
 
 
@@ -145,7 +145,7 @@ Next we need to add Components that are capable of manipulating the data::
 .. [#] We wish to position Form and Table side-by-side, so we use 'Columns' component and
     inject a Fomantic UI CSS class "divided" that will appear as a vertical separation line.
 
-.. [#] $col_reload is a special object which we call :ref:`js_action`. It represents a Browser-event
+.. [#] $col_reload is a speciall object which we call :ref:`js_action`. It represents a Browser-event
     that will cause both columns to be reloaded from the server. To use this action we still have
     to bind it.
 
@@ -202,17 +202,17 @@ another. In our example replace right column (label 17) with the following code:
 .. [#] Grid comes with menu, where we can add items.
 
 .. [#] You are already familiar with jsReload action. This time we only wish to reload Grid's Table as
-    we wouldn't want to lose any form content.
+    we wouldn't want to loose any form content.
 
 .. [#] Grid's `addSelection` method will add checkbox column. Implemented through TableColumn\CheckBox
     this object has method jsChecked() which will return another Action for collecting selected checkboxes.
     This demonstrates how Actions can be used as JavaScript expressions augmented by Components.
 
-.. [#] Reload events will execute same originating PHP script but will pass additional arguments. In this
+.. [#] Reload events will execute same originating PHP script but will pass aditional arguments. In this
     case, 'delete' get argument is passed.
 
 .. [#] We use the IDs to dispose of completed tasks. Since that happens during the Reload event, the
-    App class will carry on with triggering the necessary code to render new HTML for the $grid->table,
+    App class will carry on with trigering the necessary code to render new HTML for the $grid->table,
     so it will reflect removal of the items.
 
 
