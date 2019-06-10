@@ -72,7 +72,7 @@ $card_s->setModel($stats, ['project_name', 'project_code', 'client_name']);
 
 $card_s->addButton(new \atk4\ui\Button(['Email Client']));
 
-//**** Card with Table ***/
+//**** Card display horizontally ***/
 $app->add(['Header', 'CardHolder can be display horizontally and/or centered.', 'size' => 3]);
 
 $card = $app->add('CardHolder')->addClass('horizontal centered');
