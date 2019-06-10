@@ -62,7 +62,7 @@ $stats = (new Stat($db))->tryLoadAny();
 
 $card_s->setModel($stats, ['project_name', 'project_code', 'client_name']);
 
-$card_s->addButton(new \atk4\ui\Button(['Email Client']));
+$btn = $card_s->addButton(new \atk4\ui\Button(['Email Client']));
 
 $card_s = $deck->add(['CardHolder', 'useLabel' => true]);
 $card_s->addContent(new \atk4\ui\Header(['Project Info']));

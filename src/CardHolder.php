@@ -6,6 +6,7 @@
 namespace atk4\ui;
 
 use atk4\data\Model;
+use atk4\data\UserAction\Generic;
 
 class CardHolder extends View
 {
@@ -119,9 +120,14 @@ class CardHolder extends View
         }
 
         if ($this->useTable) {
-            $m = $this->setCardModel($m, $columns);
+            $this->setCardModel($m, $columns);
         } else {
             $this->setContentModel($m, $columns);
+        }
+
+
+        foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
+            $this->addUserAction($single_record_action);
         }
 
         if (!empty($extras)) {
@@ -129,6 +135,21 @@ class CardHolder extends View
         }
 
         return $m;
+    }
+
+
+    public function addUserAction($action)
+    {
+        $btn = $this->addButton(new Button([$action->caption]));
+
+        $page = $this->add(new VirtualPage());
+
+        $btn->on('click', new jsModal($action->caption, $page));
+
+        $page->set(function($p){
+           $p->add('View')->set('allo');
+        });
+
     }
 
     /**
@@ -261,14 +282,14 @@ class CardHolder extends View
     /**
      * Add button(s) to card.
      *
-     * @param array|Button $buttons A Button or array of Button.
-     * @param bool         $isFluid Make the buttons spread evenly in Card.
+     * @param Button    $button     A Button.
+     * @param bool      $isFluid    Make the buttons spread evenly in Card.
      *
      * @throws Exception
      *
      * @return View|null
      */
-    public function addButton($buttons, $isFluid = true)
+    public function addButton($button, $isFluid = true)
     {
         if (!$this->btnContainer) {
             $this->btnContainer = $this->addExtraContent(new View(['ui' => 'buttons']));
@@ -278,18 +299,21 @@ class CardHolder extends View
             $this->btnContainer->removeClass($this->words[$this->btnCount]);
         }
 
-        if (is_array($buttons)) {
-            foreach ($buttons as $btn) {
-                $this->btnContainer->add($btn);
-                $this->btnCount++;
-            }
-        } else {
-            $this->btnContainer->add($buttons);
-            $this->btnCount++;
-        }
+        $btn = $this->btnContainer->add($button);
+        $this->btnCount++;
 
         if ($isFluid && $this->btnCount > 0) {
             $this->btnContainer->addClass($this->words[$this->btnCount]);
+        }
+
+        return $btn;
+    }
+
+
+    public function addButtons($buttons, $isFluid = true)
+    {
+        foreach ($buttons as $btn) {
+            $btn = $this->addButton($btn, $isFluid);
         }
 
         return $this->btnContainer;
