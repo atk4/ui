@@ -140,12 +140,10 @@ class CRUD extends Grid
     {
         // setting itemCreate manually is possible.
         if (!$this->itemCreate) {
-            if (!$this->menu) {
-                throw new Exception('Can not add create button without menu');
-            }
-            $this->itemCreate = $this->menu->addItem(['Add new '.$this->model->getModelCaption(), 'icon' => 'plus']);
+            $this->itemCreate = $this->menu->addItem($this->itemCreate ?: ['Add new', 'icon' => 'plus']);
+            $this->itemCreate->on('click.atk_CRUD', new jsModal('Add new', $this->pageCreate, [$this->name.'_sort' => $this->getSortBy()]));
+            $this->itemCreate->set('Add New '.$this->model->getModelCaption());
         }
-        $this->itemCreate->on('click.atk_CRUD', new jsModal('Add new', $this->pageCreate, [$this->name.'_sort' => $this->getSortBy()]));
 
         // setting callback for the page
         $this->pageCreate->set(function () {

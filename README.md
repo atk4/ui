@@ -67,7 +67,7 @@ $app = new \atk4\ui\App('hello world');
 $app->initLayout('Admin');
 $app->dbConnect('mysql://user:pass@localhost/atk')
 
-$app->add('CRUD')->setModel(new User($app->db));
+$app->add(new CRUD())->setModel(new User($app->db));
 ```
 
 ATK Data allows you to set up relations between models:
@@ -185,7 +185,7 @@ It's really easy to put together a complex Admin system. Add this code to a new 
       }
   }
 
-  $app->add('CRUD')->setModel(new User($app->db));
+  $app->add('CRUD')->setModel(new User($db));
 ```
 
 The result is here:

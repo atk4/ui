@@ -338,7 +338,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * @param string|callable $method
      * @param array           $args
      *
-     * @return $this
+     * @return \atk4\data\Model
      */
     public function runMethod($object, $method, $args = [])
     {

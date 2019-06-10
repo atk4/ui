@@ -22,15 +22,15 @@ As you add one component into another, they will automatically inherit reference
 class is an ideal place to have all your environment configured and all the dependencies defined that
 other parts of your applications may require.
 
-Most standard classes, however, will refrain from having too much assumptions about the App class,
-to keep overall code portable.
+Most standard classes, however, will refrain from having too much asumptions about the App class,
+to keep overal code portable.
 
 There may be some cases, when it's necessary to have multiple $app objects, for example if you are
 executing unit-tests, you may want to create new App instance. If your application encounters
 exception, it will catch it and create a new App instance to display error message ensuring that the
 error is not repeated.
 
-Using App for Injecting Dependencies
+Using App for Injecting Depedencies
 -----------------------------------
 Since App class becomes available for all objects and components of Agile Toolkit, you may add
 properties into the App class::
@@ -43,12 +43,12 @@ properties into the App class::
 
 .. IMPORTANT:: $app->db is NOT a standard property. If you use this property, that's your own convention.
 
-Using App for Injecting Behavior
+Using App for Injecting Behaviour
 ---------------------------------
-You may use App class hook to impact behavior of your application:
+You may use App class hook to impact behaviour of your application:
 
  - using hooks to globally impact object initialization
- - override methods to create different behavior, for example url() method may use advanced router logic
+ - override methods to create different behaviour, for example url() method may use advanced router logic
    to create beautiful URLs.
  - you may re-define set-up of :php:class:`Persistence\UI` and affect how data is loaded from UI.
  - load templates from different files
@@ -123,7 +123,7 @@ add the UI elements using a procedural approach::
     $app->add('HelloWorld');
 
 There is another approach in which your application will determine which Page class should be used for
-executing the request, subsequently creating setting it up and letting it populate UI (This behavior is
+executing the request, subsequently creating setting it up and letting it populate UI (This behaviour is
 similar to Agile Toolkit prior to 4.3).
 
 In Agile UI this pattern is implemented through a 3rd party add-on for :ref:`page_manager` and routing. See also
@@ -224,7 +224,7 @@ Sticky GET Arguments
 Problem: sometimes certain PHP code will only be executed when GET arguments are passed. For example,
 you may have a file `detail.php` which expects `order_id` parameter and would contain a `CRUD` component.
 
-Since the `CRUD` component is interactive, it may want to generate requests to itself, but it must also
+Since `CRUD` component is interractive, it may want to generate request to itself, but it must also
 include `order_id` otherwise the scope will be incomplete. Agile UI solves that with StickyGet arguments::
 
     $order_id = $app->stickyGet('order_id');
@@ -264,7 +264,7 @@ Database Connection
 (Arguments are identical to `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`_.
 
 This method should be used instead of manually calling Persistence::connect. This will
-properly propagate Persistence's "api" property to $this, so that you can refrence::
+properly propogate Persistence's "api" property to $this, so that you can refrence::
 
     $this->app->...
 
@@ -306,7 +306,7 @@ This method must respond with a properly formatted url, such as::
     contact.php?from=John+Smith
 
 If value with key 0 is specified ('contact') it will be used as the name of the page. By
-default url() will use page as "contact.php?.." however you can define different behavior
+default url() will use page as "contact.php?.." however you can define different behaviour
 through :ref:`page_manager`.
 
 The url() method will automatically append values of arguments mentioned to `stickyGet()`,
@@ -356,7 +356,7 @@ Having composition of multiple components will allow them to share the app objec
 
     $grid = new \atk4\ui\Grid();
     $grid->setModel($user);
-    $grid->addPaginator();          // initialize and populate paginator
+    $grid->addPaginator();          // initialize and populare paginator
     $grid->addButton('Test');       // initialize and populate toolbar
 
     echo $grid->render();
@@ -398,7 +398,7 @@ The first view is a HTML boilerplate - containing HEAD / BODY tags but not the b
 contents. It is a standard html5 doctype template.
 
 The layout will be selected based on your choice - 'Centered', 'Admin' etc. This will
-not only change the overall page outline, but will also introduce some additional views.
+not only change the overal page outline, but will also introduce some additional views.
 
 Each layout, depending on it's content, may come with several views that you can populate.
 
@@ -407,8 +407,8 @@ Admin Layout
 .. php:namespace:: atk4\ui\Layout
 .. php:class:: Admin
 
-Agile Toolkit comes with a ready to use admin layout for your application. The layout is built
-with top, left and right menu objects.
+Agile Toolkit comes with a ready to use admin layout for your application. The layout is build
+with top, left and right menu object.
 
 .. php:attr:: menuLeft
 

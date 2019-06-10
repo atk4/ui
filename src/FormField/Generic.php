@@ -123,32 +123,19 @@ class Generic extends View
      * If $expr is string or jsExpression, then it will execute it instantly.
      * If $expr is callback method, then it'll make additional request to webserver.
      *
-     * Could be preferable to set useDefault to false. For example when
-     * needing to clear form error or when form canLeave property is false.
-     * Otherwise, change handler will not be propagate to all handlers.
-     *
      * Examples:
      * $field->onChange('console.log("changed")');
      * $field->onChange(new \atk4\ui\jsExpression('console.log("changed")'));
      * $field->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|jsExpression|array|callable $expr
-     * @param array|bool                         $default
-     *
-     * @throws \atk4\ui\Exception
      */
-    public function onChange($expr, $default = [])
+    public function onChange($expr)
     {
         if (is_string($expr)) {
             $expr = new \atk4\ui\jsExpression($expr);
         }
-
-        if (is_bool($default)) {
-            $default['preventDefault'] = $default;
-            $default['stopPropagation'] = $default;
-        }
-
-        $this->on('change', '#'.$this->id.'_input', $expr, $default);
+        $this->on('change', '#'.$this->id.'_input', $expr);
     }
 
     /**

@@ -10,7 +10,7 @@ export default class createModal extends atkPlugin {
           options.uri_options = {};
       }
       // create modal and add it to the DOM
-      let $m = $('<div class="atk-modal ui modal"/>')
+      let $m = $('<div class="atk-modal ui modal scrolling"/>')
           .appendTo('body')
           .html(this.getDialogHtml(options.title));
 
@@ -19,13 +19,12 @@ export default class createModal extends atkPlugin {
 
       //call semantic-ui modal
       $m.modal(options.modal).modal('show');
-      $m.addClass(this.settings.modalCss);
   }
 
   getDialogHtml(title) {
     return `<i class="icon close"></i>
           <div class="${this.settings.headerCss}">${title}</div>
-          <div class="${this.settings.contentCss} content atk-dialog-content">
+          <div class="image content atk-dialog-content">
             </div>
           </div>`;
   }
@@ -36,8 +35,6 @@ createModal.DEFAULTS = {
   uri: null,
   uri_options: {},
   headerCss: 'header',
-  modalCss: 'scrolling',
-  contentCss: 'image',
   label: 'Loading...',
   modal: {
       duration: 100

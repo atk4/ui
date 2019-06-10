@@ -72,7 +72,6 @@ if (!class_exists('Country')) {
             parent::init();
 
             $this->addFields(['project_name', 'project_code'], ['type' => 'string']);
-            $this->title_field = 'project_name';
             //$this->addField('description', ['ui'=>['form'=>['FormField/TextArea', 'rows'=>5]]]);
             $this->addField('description', ['type' => 'text']);
             $this->addField('client_name', ['type' => 'string']);
