@@ -27,12 +27,12 @@ export default class fileUpload extends atkPlugin {
         percent: '{percent}%',
         active: '{percent}%',
       }
-    })
-      .hide();
+    }).hide();
 
     this.$el.data().fileId = this.settings.file.id;
     this.hiddenInput.val(this.settings.file.id);
     this.textInput.val(this.settings.file.name);
+    this.textInput.data('isTouch', false);
     if (this.settings.file.id) {
       this.setState('delete');
     }
@@ -60,17 +60,11 @@ export default class fileUpload extends atkPlugin {
    */
   setEventHandler() {
     const that = this;
-    // Open file dialog on focus.
-    if (this.settings.hasFocus) {
-      this.textInput.on('focus', function(e) {
-        if (!e.target.value) {
-          that.fileInput.click();
-        }
-      });
-    }
+
     this.textInput.on('click', function(e) {
-      this.blur();
-      this.focus();
+      if (!e.target.value) {
+        that.fileInput.click();
+      }
     });
 
     // add event handler to action button.
@@ -212,7 +206,6 @@ fileUpload.DEFAULTS = {
   uri: null,
   file: {id: null, name: null},
   uri_options: {},
-  hasFocus: true,
   action: null,
   completeLabel: '100%',
   submit: null

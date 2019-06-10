@@ -17,7 +17,7 @@ export default class jsSearch extends atkPlugin {
     this.setInputAction();
     this.setSearchAction();
 
-    //Set input initial value if available.
+    //Set input initial value.
     if (this.settings.q) {
       this.setFilter(this.settings.q);
     }
@@ -43,13 +43,13 @@ export default class jsSearch extends atkPlugin {
     const that = this;
     this.textInput.on('keyup', debounce(function(e){
       if (e.target.value === '' || e.keyCode === 27) {
-        that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options), function(){
+        that.doSearch(that.settings.uri, null, $.extend({}, that.urlArgs, that.settings.uri_options), function(){
           that.setButtonState(false);
           that.setFilterState(false);
           that.textInput.val('');
         });
       } else if (e.target.value != that.$el.data('preValue')){
-        that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options, {'_q' : e.target.value}), function(){
+        that.doSearch(that.settings.uri, e.target.value, $.extend({}, that.urlArgs, that.settings.uri_options/*, {'_q' : e.target.value}*/), function(){
           that.setButtonState(true);
           that.setFilterState(true);
         });
@@ -65,13 +65,13 @@ export default class jsSearch extends atkPlugin {
     const that = this;
     this.textInput.on('keyup', function(e) {
       if (e.keyCode === 13 && e.target.value) {
-        that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options, {'_q' : e.target.value}), function(){
+        that.doSearch(that.settings.uri, e.target.value, $.extend({}, that.urlArgs, that.settings.uri_options), function(){
           that.setButtonState(true);
           that.setFilterState(true);
         });
         that.$el.data('preValue', e.target.value);
       } else if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
-        that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options), function(){
+        that.doSearch(that.settings.uri, null, $.extend({}, that.urlArgs, that.settings.uri_options), function(){
           that.setButtonState(false);
           that.setFilterState(false);
         });
@@ -92,15 +92,16 @@ export default class jsSearch extends atkPlugin {
     const that = this;
     this.searchAction.on('click', function(e){
       if (that.state.button){
-        that.doSearch(that.settings.uri, $.extend({}, that.urlArgs, that.settings.uri_options), function() {
+        that.doSearch(that.settings.uri, null, $.extend({}, that.urlArgs, that.settings.uri_options), function() {
           that.setButtonState(false);
           that.setFilterState(false);
         });
         that.textInput.val('');
+        that.$el.data('preValue', '');
       }
 
       if (!that.state.button && that.textInput.val()) {
-        that.doSearch(that.settings.uri,  $.extend({}, that.urlArgs, that.settings.uri_options, {'_q' : that.textInput.val()}), function() {
+        that.doSearch(that.settings.uri,  that.textInput.val(), $.extend({}, that.urlArgs, that.settings.uri_options), function() {
           that.setButtonState(true);
           that.setFilterState(true);
         });
@@ -130,7 +131,7 @@ export default class jsSearch extends atkPlugin {
   setFilter(text){
     this.textInput.val(text);
     this.setButtonState(true);
-    this,this.setFilterState(true);
+    this.setFilterState(true);
     this.$el.data('preValue', text);
   }
 
@@ -141,7 +142,8 @@ export default class jsSearch extends atkPlugin {
    * @param value
    */
   setUrlArgs(arg, value) {
-    this.urlArgs[arg] = value;
+    this.urlArgs = Object.assign(this.urlArgs,{[arg] : value});
+    return;
   }
 
   /**
@@ -180,7 +182,22 @@ export default class jsSearch extends atkPlugin {
    * @param uri
    * @param options
    */
-  doSearch(uri, options, cb = function(){}) {
+  doSearch(uri, query, options, cb = function(){}) {
+    if (query) {
+      options = $.extend(options, {'_q' : query});
+    }
+    //if we are not using ajax simply reload page.
+    if (!this.settings.useAjax) {
+      uri = $.atkRemoveParam(uri, '_q');
+      delete options.__atk_reload;
+
+      // if (query) {
+      //   uri = $.atkAddParams(uri, {'_q': query});
+      // }
+      uri = $.atkAddParams(uri, options);
+      window.location = uri;
+      return;
+    }
     this.$el.api({
       on: 'now',
       url: uri,
@@ -199,4 +216,5 @@ jsSearch.DEFAULTS = {
   q: null,
   autoQuery: false,
   timeOut: 500,
+  useAjax: true
 };

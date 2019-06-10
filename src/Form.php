@@ -17,6 +17,26 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public $defaultTemplate = 'form.html';
 
     /**
+     * Set this to false in order to
+     * prevent from leaving
+     * page if form is not submit.
+     *
+     * Note:
+     * When using your own change handler
+     * on an input field, set useDefault parameter to false.
+     * ex: $input->onChange('console.log(), false)
+     * Otherwise, change event is not propagate to all event handler
+     * and leaving page might not be prevent.
+     *
+     * Form using Calendar field
+     * will still leave page when a calendar
+     * input value is changed.
+     *
+     * @var bool
+     */
+    public $canLeave = true;
+
+    /**
      * A current layout of a form, needed if you call $form->addField().
      *
      * @var \atk4\ui\FormLayout\Generic
@@ -609,6 +629,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             ->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
         $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
+
+        if (!$this->canLeave) {
+            $this->js(true, (new jsChain('atk.formService'))->preventFormLeave($this->name));
+        }
     }
 
     // }}}

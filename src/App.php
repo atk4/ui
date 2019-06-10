@@ -16,14 +16,14 @@ class App
 
     // @var array|false Location where to load JS/CSS files
     public $cdn = [
-        'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@1.6.5/public',
+        'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@1.7.0/public',
         'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.2/dist',
     ];
 
     // @var string Version of Agile UI
-    public $version = '1.6.5';
+    public $version = '1.7.0';
 
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
@@ -117,6 +117,14 @@ class App
      * @var bool Whether or not semantic-ui vue has been initialised.
      */
     private $is_sui_init = false;
+
+    /**
+     * @var string used in method App::url to build the url
+     *
+     * Used only in method App::url
+     * Remove and re-add the extension of the file during parsing requests and building urls
+     */
+    protected $url_building_ext = '.php';
 
     /**
      * Constructor.
@@ -376,8 +384,30 @@ class App
      */
     public function normalizeClassNameApp($name)
     {
-        if (class_exists('\\'.__NAMESPACE__.'\\'.$name)) {
-            return '\\'.__NAMESPACE__.'\\'.$name;
+        /**
+         * @see https://agile-core.readthedocs.io/en/develop/factory.html#FactoryTrait::normalizeClassName
+         * replacing / to \
+         */
+        $checkClass = str_replace('/', '\\', $name);
+
+        // check FQCN existence without prepend \\
+        // @case $name = "\\externalNamespace\\className"
+        if (class_exists($checkClass)) {
+            return $checkClass;
+        }
+
+        $checkClass = '\\'.$checkClass;
+        // check FQCN existence prepending \
+        // @case $name = "externalNamespace\\className"
+        if (class_exists($checkClass)) {
+            return $checkClass;
+        }
+
+        $checkClass = '\\'.__NAMESPACE__.$checkClass;
+        // check FQCN existence prepending FQNS \atk4\ui
+        // @case $name = "FormField/AutoComplete"
+        if (class_exists($checkClass)) {
+            return $checkClass;
         }
 
         return $name;
@@ -478,7 +508,10 @@ class App
      */
     public function dbConnect($dsn, $user = null, $password = null, $args = [])
     {
-        return $this->db = $this->add(\atk4\data\Persistence::connect($dsn, $user, $password, $args));
+        $this->db = \atk4\data\Persistence::connect($dsn, $user, $password, $args);
+        $this->db->app = $this;
+
+        return $this->db;
     }
 
     protected function getRequestURI()
@@ -542,7 +575,7 @@ class App
             if (substr($uri, -1, 1) == '/') {
                 $this->page = 'index';
             } else {
-                $this->page = basename($uri, '.php');
+                $this->page = basename($uri, $this->url_building_ext);
             }
         }
 
@@ -587,7 +620,7 @@ class App
 
         // put URL together
         $args = http_build_query($result);
-        $url = ($page[0] ? $page[0].'.php' : '').($args ? '?'.$args : '');
+        $url = ($page[0] ? $page[0].$this->url_building_ext : '').($args ? '?'.$args : '');
 
         return $url;
     }

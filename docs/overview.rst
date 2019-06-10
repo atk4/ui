@@ -7,10 +7,10 @@ Overview of Agile UI
 
 Agile UI is a PHP component framework for building User Interfaces entirely in PHP.
 Although the components of Agile UI will typically use HTML, JavaScript, jQuery and
-CSS; the goal of Agile UI is to abstract them away behind easy-to-use component objects.
+CSS, the goal of Agile UI is to abstract them away behind easy-to-use component objects.
 
 As a framework it's closely coupled with Agile Data (https://agile-data.readthedocs.io)
-which abstracts away database interaction operations. The default UI template set
+which abstracts database interaction operations. The default UI template set
 uses Fomantic UI (https://fomantic-ui.com) for presentation.
 
 At a glance, Agile UI consists of the following:
@@ -24,8 +24,8 @@ backends.
 Agile UI Design Goals
 =====================
 
-Our goal is offer a free UI framework which you can use to easily develop the most complex
-business application UI in just a few hours; without diving deep into HTML/JS specifics.
+Our goal is to offer a free UI framework which can be used to easily develop the most complex
+business application UI in just a few hours, without diving deep into HTML/JS specifics.
 
 1. Out of the box experience
 ----------------------------
@@ -33,12 +33,12 @@ business application UI in just a few hours; without diving deep into HTML/JS sp
 Sample scenario:
 
     If during the .COM boom you purchased 1000 good-looking .COM domains and are now selling
-    them; you will need to track offers from buyers. You could use Excel, but what if your
+    them, you will need to track offers from buyers. You could use Excel, but what if your
     staff needs to access the data, or you need to implement business operations such
     as accepting offers?
 
 Agile UI is ideal for such a scenario. By simply describing your data model, relations,
-and operations; you will get a fully working UI and API with minimal setup.
+and operations you will get a fully working UI and API with minimal setup.
 
 2. Compact and easy to integrate
 --------------------------------
@@ -96,7 +96,7 @@ clarifications::
 
 
     <?php
-    require'vendor/autoload.php';
+    require 'vendor/autoload.php';
 
     // Define your data structure
     class Offer extends \atk4\data\Model {
@@ -119,14 +119,14 @@ clarifications::
     $app = new \atk4\ui\App('Offer tracking system');
     $app->initLayout('Admin');
 
-    // Connect to database and place a fully-interractive CRUD
+    // Connect to database and place a fully-interactive CRUD
     $db = new \atk4\data\Persistence_SQL($dsn);
     $app->add(new \atk4\ui\CRUD())
         ->setModel(new Offer($db));
 
-Through the course of this example, I am performing several core actions:
+Through the course of this example, We are performing several core actions:
 
-  - `$app` is an object representing your Web Application and abstracting
+  - `$app` is an object representing our Web Application and abstracting
     all the input, output, error-handling, and other technical implementation
     details of a standard web application.
 
@@ -142,7 +142,7 @@ Through the course of this example, I am performing several core actions:
   - `$db` this is a database persistence object. It may be a Database which is
     either SQL or NoSQL but can also be RestAPI, a cache, or a pseudo-persistence.
 
-    I have used Persistence_SQL class, which takes advantage of a standard-compliant
+    We used Persistence_SQL class, which takes advantage of a standard-compliant
     database server to speed up aggregation, multi-table, and multi-record operations.
 
     For a :ref:`component` the Persistence class provides data storage abstraction
@@ -174,7 +174,7 @@ To sum up Agile UI in more technical terms:
  - Fully utilizes abstraction of Web technologies through components.
  - Contains concise syntax to define UI layouts in PHP.
  - Has built-in security and safety.
- - Decouples from data storage/retrievel mechanism.
+ - Decouples from data storage/retrieval mechanism.
  - Designed to be integrated into full-stack frameworks.
  - Abstains from duplicating field names, types, or validation logic outside of Model
    class.
@@ -202,7 +202,7 @@ self-sufficient and creating a class instance is enough to make a component work
 
 That means that components may rely on each other and even though some may appear
 very basic to you, they are relied on by some other components for maximum
-felxibility. The next example adds a "Cancel" button to a form::
+flexibility. The next example adds a "Cancel" button to a form::
 
     $button = $form->add(new \atk4\ui\Button([
         'Cancel',
@@ -275,14 +275,14 @@ Layouts
     :width: 40%
     :align: right
 
-Using App class will utilise a minimum of 2 templates:
+Using App class will utilize a minimum of 2 templates:
 
  - html.html - boilerplate HTML code (<head>, <script>, <meta> and empty <body>)
  - layout/admin.html - responsive layout containing page elements (menu, footer, etc)
 
 As you add more components, they will appear inside your layout.
 
-You'll also find that a layout class such as :php:class:`Layout\Admin` will initialise
+You'll also find that a layout class such as :php:class:`Layout\Admin` will initialize
 some components on its own - sidebar menu, top menu.
 
 .. image:: images/admin-layout.png
@@ -311,7 +311,7 @@ See: :php:meth:`App::requireJS`
 Events and Actions
 ------------------
 Agile UI allows you to initiate some JavaScript actions from within PHP. The amount
-of code involvment is quite narrow and is only intended for binding events inside
+of code involvement is quite narrow and is only intended for binding events inside
 your component without involving developers who use and implement your component.
 
 Callbacks
@@ -356,7 +356,7 @@ you will need to have a backend.
 
 Agile Data is a very powerful framework for defining data-driven business
 models and Agile UI offers a very straightforward extension to attach your
-data to a wide range of stardard UI widgets.
+data to a wide range of standard UI widgets.
 
 With this approach, even the most complex business apps can be implemented
 in just one day.
@@ -418,7 +418,7 @@ Commercial Project Strategy
 ---------------------------
 
 If you maintain a legacy PHP application, and would like to have a free chat with
-us about some support and assistance, plesse do not hesitate to reach out.
+us about some support and assistance, please do not hesitate to reach out.
 
 
 Things Agile UI simplifies

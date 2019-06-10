@@ -71,6 +71,13 @@ class Grid extends View
     public $sortable = null;
 
     /**
+     * Set this if you want GET argument name to look beautifully for sorting.
+     *
+     * @var null|string
+     */
+    public $sortTrigger = null;
+
+    /**
      * Component that actually renders data rows / columns and possibly totals.
      *
      * @var Table|false
@@ -96,6 +103,10 @@ class Grid extends View
         parent::init();
         $this->container = $this->add(['View', 'template' => $this->template->cloneRegion('Container')]);
         $this->template->del('Container');
+
+        if (!$this->sortTrigger) {
+            $this->sortTrigger = $this->name.'_sort';
+        }
 
         if ($this->menu !== false) {
             $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu), 'Menu');
@@ -144,6 +155,10 @@ class Grid extends View
      */
     public function addButton($text)
     {
+        if (!$this->menu) {
+            throw new Exception(['Unable to add Button without Menu']);
+        }
+
         return $this->menu->addItem()->add(new Button($text));
     }
 
@@ -193,7 +208,7 @@ class Grid extends View
         $this->paginator->template->trySet('PaginatorType', 'ui grid');
 
         if ($sortBy = $this->getSortBy()) {
-            $pageLength->stickyGet($this->name.'_sort', $sortBy);
+            $pageLength->stickyGet($this->sortTrigger, $sortBy);
         }
 
         $pageLength->onPageLengthSelect(function ($ipp) use ($pageLength) {
@@ -233,7 +248,7 @@ class Grid extends View
         }
 
         if ($sortBy = $this->getSortBy()) {
-            $this->stickyGet($this->name.'_sort', $sortBy);
+            $this->stickyGet($this->sortTrigger, $sortBy);
         }
         $this->applySort();
 
@@ -351,6 +366,9 @@ class Grid extends View
      */
     public function addFilterColumn($names = null)
     {
+        if (!$this->menu) {
+            throw new Exception(['Unable to add Filter Column without Menu']);
+        }
         $this->menu->addItem(['Clear Filters'], new \atk4\ui\jsReload($this->table->reload, ['atk_clear_filter' => 1]));
         $this->table->setFilterColumn($names);
 
@@ -445,7 +463,7 @@ class Grid extends View
      */
     public function getSortBy()
     {
-        return isset($_GET[$this->name.'_sort']) ? $_GET[$this->name.'_sort'] : null;
+        return isset($_GET[$this->sortTrigger]) ? $_GET[$this->sortTrigger] : null;
     }
 
     /**
@@ -460,7 +478,7 @@ class Grid extends View
         $sortBy = $this->getSortBy();
 
         if ($sortBy && $this->paginator) {
-            $this->paginator->addReloadArgs([$this->name.'_sort' => $sortBy]);
+            $this->paginator->addReloadArgs([$this->sortTrigger => $sortBy]);
         }
 
         $desc = false;
@@ -484,7 +502,7 @@ class Grid extends View
         $this->table->on(
             'click',
             'thead>tr>th',
-            new jsReload($this->container, [$this->name.'_sort' => (new jQuery())->data('column')])
+            new jsReload($this->container, [$this->sortTrigger => (new jQuery())->data('column')])
         );
     }
 
@@ -580,7 +598,7 @@ class Grid extends View
 
         if ($this->quickSearch instanceof jsSearch) {
             if ($sortBy = $this->getSortBy()) {
-                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->name.'_sort', $sortBy]));
+                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->sortTrigger, $sortBy]));
             }
         }
 

@@ -26,14 +26,16 @@ class Card extends Table
 
         $data = [];
 
-        $ui_values = $this->app->ui_persistence->typecastSaveRow($m, $m->get());
+        $ui_values = $this->app ? $this->app->ui_persistence->typecastSaveRow($m, $m->get()) : $m->get();
 
         foreach ($m->get() as $key => $value) {
-            $data[] = [
-                'id'   => $key,
-                'field'=> $m->getElement($key)->getCaption(),
-                'value'=> $ui_values[$key],
-            ];
+            if (!$columndef || ($columndef && in_array($key, $columndef))) {
+                $data[] = [
+                    'id'   => $key,
+                    'field'=> $m->getElement($key)->getCaption(),
+                    'value'=> $ui_values[$key],
+                ];
+            }
         }
 
         $this->_bypass = true;
