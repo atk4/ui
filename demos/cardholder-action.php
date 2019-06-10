@@ -26,10 +26,9 @@ $data = [
 ];
 $plan = new Plans(new \atk4\data\Persistence\Array_($data));
 
-
 $deck = $app->add(['ui' => 'cards']);
 
-$plan->each(function($m) use ($deck) {
-   $c = $deck->add(['CardHolder', 'useLabel' => true]);
-   $c->setModel($m, ['name', 'apps', 'space']);
+$plan->each(function ($m) use ($deck) {
+    $c = $deck->add(['CardHolder', 'useLabel' => true]);
+    $c->setModel($m, ['name', 'apps', 'space']);
 });
