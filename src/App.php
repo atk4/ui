@@ -385,7 +385,7 @@ class App
 
         // if we have prefix, then use it - it's there for a purpose
         if ($prefix) {
-            $checkClass = $prefix . '\\' . $checkClass;
+            $checkClass = $prefix.'\\'.$checkClass;
         }
 
         // check FQCN existence without prepend \\
