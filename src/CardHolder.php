@@ -147,14 +147,14 @@ class CardHolder extends View
      * as target.
      *
      * @param Generic $action
-     * @param null $button
+     * @param null    $button
      *
      * @throws Exception
      */
     public function addClickAction(Generic $action, $button = null)
     {
         if (!$button) {
-             $button = new Button([$action->caption]);
+            $button = new Button([$action->caption]);
         }
 
         $executor = $this->add(new Event(['target' => $button, 'modelId' => $this->model->get('id')]));
