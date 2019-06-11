@@ -75,16 +75,15 @@ class Event extends Basic
 
         $id = isset($_POST['atk_event_id']) ? $_POST['atk_event_id'] : null;
 
-        if ($id && $this->hasAllArguments()) {
-            $this->action->owner->load($id);
+        if ($this->hasAllArguments()) {
+            if ($id) {
+                $this->action->owner->load($id);
+            }
             $return = $this->action->execute(...$args);
 
             return $this->hook('afterExecute', [$return]) ?: $this->jsSuccess ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
         } else {
             $error = '';
-            if (!$id) {
-                $error .= 'No model id was provided.';
-            }
             if (!$this->hasAllArguments()) {
                 $error .= 'Insufficient arguments';
             }
