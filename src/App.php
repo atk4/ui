@@ -371,16 +371,22 @@ class App
      * Normalizes class name.
      *
      * @param string $name
+     * @param string $prefix
      *
      * @return string
      */
-    public function normalizeClassNameApp($name)
+    public function normalizeClassNameApp($name, $prefix = null)
     {
         /**
          * @see https://agile-core.readthedocs.io/en/develop/factory.html#FactoryTrait::normalizeClassName
          * replacing / to \
          */
         $checkClass = str_replace('/', '\\', $name);
+
+        // if we have prefix, then use it - it's there for a purpose
+        if ($prefix) {
+            $checkClass = $prefix . '\\' . $checkClass;
+        }
 
         // check FQCN existence without prepend \\
         // @case $name = "\\externalNamespace\\className"
