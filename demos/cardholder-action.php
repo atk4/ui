@@ -3,32 +3,28 @@
 require 'init.php';
 require 'database.php';
 
-class Plans extends \atk4\data\Model
-{
-    public function init()
-    {
-        parent::init();
-        $this->addField('name');
-        $this->addField('apps', ['type' => 'integer', 'caption' => 'Apps']);
-        $this->addField('space', ['caption' => 'Gb space']);
+$app->add(['Button', 'CardHolder', 'small left floated basic blue', 'icon' => 'left arrow'])
+    ->link(['cardholder']);
+$app->add(['View', 'ui' => 'ui clearing divider']);
 
-        $this->addAction('Sign Up', function ($m) {
-            $len = strlen(file_get_contents($m['name']));
+$app->add(['Header', 'Actions', 'size' => 1, 'subHeader' => 'CardHolder may contain model action.']);
 
-            return "$len bytes downloaded..";
-        });
-    }
-}
-$data = [
-    ['id' => 1, 'name' => 'Hobbyist', 'apps' => 1, 'space' => 10],
-    ['id' => 2, 'name' => 'Developer', 'apps' => 3, 'space' => 100],
-    ['id' => 3, 'name' => 'Enterprise', 'apps' => 3, 'space' => 100],
-];
-$plan = new Plans(new \atk4\data\Persistence\Array_($data));
+
+$countries = new Country($db);
+$countries->addCalculatedField('Cost', function ($m) {
+    return '$ '.number_format(rand(500, 1500));
+});
+
+$countries->getField('Cost')->type = 'money';
+$countries->addAction('Visit', function($m) {
+    return "Your request to visit ".$m->get('name'). " was sent!";
+});
+
+$countries->setLimit(4);
 
 $deck = $app->add(['ui' => 'cards']);
 
-$plan->each(function ($m) use ($deck) {
+$countries->each(function ($m) use ($deck) {
     $c = $deck->add(['CardHolder', 'useLabel' => true]);
-    $c->setModel($m, ['name', 'apps', 'space']);
+    $c->setModel($m, ['name', 'Cost']);
 });

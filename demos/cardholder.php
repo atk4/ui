@@ -3,6 +3,10 @@
 require 'init.php';
 require 'database.php';
 
+$app->add(['Button', 'CardHolder actions', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['cardholder-action']);
+$app->add(['View', 'ui' => 'ui clearing divider']);
+
 $app->add(['Header', 'CardHolder.', 'size' => 1, 'subHeader' => 'Component based on Fomantic-Ui Card view.']);
 
 //*** Simple Card **/
