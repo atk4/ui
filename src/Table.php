@@ -353,7 +353,7 @@ class Table extends Lister
         'password' => 'Password',
         'money'    => 'Money',
         'text'     => 'Text',
-        'boolean'  => ['Status', ['positive' => [true], 'negative' => ['false']]],
+        'boolean'  => ['Status', ['positive' => [true], 'negative' => [false]]],
     ];
 
     /**
