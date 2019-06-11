@@ -6,7 +6,7 @@
  * It needs to be add to the render tree for callback action to work.
  *
  * ex:
- * $executor = new Event(['target' => new Button(['click me'], 'modelId' => $id]);
+ * $executor = $app->add(new Event(['target' => new Button(['click me'], 'modelId' => $id]));
  * $executor->setAction($modelAction);
  * $app->add($executor->target);
  */
