@@ -18,7 +18,7 @@ use atk4\ui\View;
 
 class Event extends Basic
 {
-    /** @var null|View  The target object where event is assign. */
+    /** @var null|View The target object where event is assign. */
     public $target = null;
 
     /** @var string The event assign to target. */
