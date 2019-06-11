@@ -24,10 +24,10 @@ class Event extends Basic
     /** @var string The event assign to target. */
     public $event = 'click';
 
-    /** @var null The model id to load when object is click. */
+    /** @var null The model id to load when target object event is trigger. */
     public $modelId = null;
 
-    /** @var string The css class name to disable clickable object. */
+    /** @var string The css class name to disable the target object. */
     public $disabled = 'disabled';
 
     /**
