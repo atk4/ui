@@ -9,7 +9,6 @@
  * $executor = new Event(['target' => new Button(['click me'], 'modelId' => $id]);
  * $executor->setAction($modelAction);
  * $app->add($executor->target);
- *
  */
 
 namespace atk4\ui\ActionExecutor;
@@ -19,7 +18,7 @@ use atk4\ui\View;
 
 class Event extends Basic
 {
-    /** @var null|View  A clickable object. */
+    /** @var null|View A clickable object. */
     public $target = null;
 
     /** @var string The event assign to target. */
@@ -50,7 +49,7 @@ class Event extends Basic
         $this->initPreview();
         // check if action can be called
         if (!$this->action->enabled) {
-           $this->target->addClass($this->disabled);
+            $this->target->addClass($this->disabled);
         }
 
         View::recursiveRender();
@@ -58,11 +57,9 @@ class Event extends Basic
 
     protected function initPreview()
     {
-
         $this->target->on($this->event, null, function () {
             return $this->jsExecute();
         }, ['args' => ['atk_event_id' => $this->modelId]]);
-
     }
 
     /**
@@ -78,7 +75,7 @@ class Event extends Basic
 
         $id = isset($_POST['atk_event_id']) ? $_POST['atk_event_id'] : null;
 
-        if ($id && $this->hasAllArguments()){
+        if ($id && $this->hasAllArguments()) {
             $this->action->owner->load($id);
             $return = $this->action->execute(...$args);
 
@@ -91,6 +88,7 @@ class Event extends Basic
             if (!$this->hasAllArguments()) {
                 $error .= 'Insufficient arguments';
             }
+
             return new jsToast([
                                    'title'   => 'Error',
                                    'message' => $error,
