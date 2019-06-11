@@ -7,6 +7,7 @@ namespace atk4\ui;
 
 use atk4\data\Model;
 use atk4\data\UserAction\Generic;
+use atk4\ui\ActionExecutor\Event;
 
 class CardHolder extends View
 {
@@ -41,8 +42,11 @@ class CardHolder extends View
     /** @var bool Display model field as table inside card holder content */
     public $useTable = false;
 
-    /** @var bool Use Field label with value data */
+    /** @var bool Use Field label with value data. */
     public $useLabel = false;
+
+    /** @var bool Use model action by default. */
+    public $useModelAction = true;
 
     /** @var string Glue between label and value */
     public $glue = ': ';
@@ -125,8 +129,10 @@ class CardHolder extends View
             $this->setContentModel($m, $columns);
         }
 
-        foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            $this->addUserAction($single_record_action);
+        if ($this->useModelAction) {
+            foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
+                $this->addClickAction($single_record_action);
+            }
         }
 
         if (!empty($extras)) {
@@ -136,17 +142,25 @@ class CardHolder extends View
         return $m;
     }
 
-    public function addUserAction($action)
+    /**
+     * Add an Event action executor of type 'click' using a button
+     * as target.
+     *
+     * @param Generic $action
+     * @param null $button
+     *
+     * @throws Exception
+     */
+    public function addClickAction(Generic $action, $button = null)
     {
-        $btn = $this->addButton(new Button([$action->caption]));
+        if (!$button) {
+             $button = new Button([$action->caption]);
+        }
 
-        $page = $this->add(new VirtualPage());
+        $executor = $this->add(new Event(['target' => $button, 'modelId' => $this->model->get('id')]));
+        $executor->setAction($action);
 
-        $btn->on('click', new jsModal($action->caption, $page));
-
-        $page->set(function ($p) {
-            $p->add('View')->set('allo');
-        });
+        $this->addButton($executor->target);
     }
 
     /**
