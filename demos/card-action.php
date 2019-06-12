@@ -39,4 +39,3 @@ $c->setModel($stats, ['client_name', 'description']);
 $c->addSection('Project: ', $stats, ['start_date', 'finish_date'], true);
 
 $c->addSection('Client Country:', $stats->ref('client_country_iso'), ['iso', 'numcode', 'phonecode'], true);
-

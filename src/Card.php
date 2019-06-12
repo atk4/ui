@@ -18,7 +18,6 @@
  * When using model or models, the first model that get set via setModel method
  * will have it's id_field set as data-id html attribute for the card. Thus making
  * the id available via javascript (new jQuery())->data('id')
- *
  */
 
 namespace atk4\ui;
@@ -62,7 +61,7 @@ class Card extends View
     public $btnContainer = null;
 
     /** @var string Table css class */
-   // public $tableClass = 'ui fixed small';
+    // public $tableClass = 'ui fixed small';
 
     /** @var bool Display model field as table inside card holder content */
     public $useTable = false;
@@ -72,7 +71,6 @@ class Card extends View
 
     /** @var string Default executor class. */
     public $executor = ArgumentForm::class;
-
 
     /** @var array Array of columns css wide classes */
     protected $words = [
@@ -107,8 +105,9 @@ class Card extends View
     /**
      * Get main section of this card.
      *
-     * @return CardSection|View|null
      * @throws Exception
+     *
+     * @return CardSection|View|null
      */
     public function getSection()
     {
@@ -122,8 +121,9 @@ class Card extends View
     /**
      * Get the image container of this card.
      *
-     * @return View|null
      * @throws Exception
+     *
+     * @return View|null
      */
     public function getImageContainer()
     {
@@ -137,8 +137,9 @@ class Card extends View
     /**
      * Get the ExtraContainer of this card.
      *
-     * @return View|null
      * @throws Exception
+     *
+     * @return View|null
      */
     public function getExtraContainer()
     {
@@ -152,8 +153,9 @@ class Card extends View
     /**
      * Get the button container of this card.
      *
-     * @return View|null
      * @throws Exception
+     *
+     * @return View|null
      */
     public function getButtonContainer()
     {
@@ -184,12 +186,13 @@ class Card extends View
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
-     * @param \atk4\data\Model $m The model.
-     * @param array $fields An array of fields name to display in content.
+     * @param \atk4\data\Model $m      The model.
+     * @param array            $fields An array of fields name to display in content.
      *
-     * @return \atk4\data\Model|void
      * @throws Exception
      * @throws \atk4\data\Exception
+     *
+     * @return \atk4\data\Model|void
      */
     public function setModel(Model $m, $fields = null)
     {
@@ -259,21 +262,21 @@ class Card extends View
                 $this->addAction($action, $this->executor);
             }
         }
-
     }
 
     /**
      * Add a CardSection to this card.
      *
      * @param string|null $title
-     * @param Model|null $model
-     * @param array|null $fields
-     * @param bool $useTable
-     * @param bool $useLabel
+     * @param Model|null  $model
+     * @param array|null  $fields
+     * @param bool        $useTable
+     * @param bool        $useLabel
      *
-     * @return View
      * @throws Exception
      * @throws \atk4\data\Exception
+     *
+     * @return View
      */
     public function addSection(string $title = null, Model $model = null, array $fields = null, bool $useTable = false, bool $useLabel = false)
     {
@@ -307,7 +310,7 @@ class Card extends View
         }
         $btn = $this->addButton($button);
 
-        $vp =$this->add('VirtualPage')->set(function($page) use ($executor, $action) {
+        $vp = $this->add('VirtualPage')->set(function ($page) use ($executor, $action) {
             $id = $this->stickyGet($this->name);
 
             $page->add($executor = new $executor());
@@ -315,10 +318,9 @@ class Card extends View
             $action->owner->load($id);
 
             $executor->setAction($action);
-        });;
+        });
 
         $btn->on('click', new jsModal($action->caption, $vp, [$this->name => (new jQuery())->parents('.atk-card')->data('id')]));
-
     }
 
     /**
@@ -346,9 +348,9 @@ class Card extends View
     /**
      * Set extra content using model field.
      *
-     * @param Model $m The model
-     * @param array $fields An array of fields name.
-     * @param string $glue A separator string between each field.
+     * @param Model  $m      The model
+     * @param array  $fields An array of fields name.
+     * @param string $glue   A separator string between each field.
      *
      * @throws Exception
      * @throws \atk4\data\Exception
@@ -365,7 +367,6 @@ class Card extends View
             }
             $extra = rtrim($extra, $glue);
             $this->addExtraContent(new View([$extra]));
-
         } else {
             foreach ($fields as $field) {
                 $this->addExtraContent(new View([$m->get($field)]));
@@ -453,8 +454,9 @@ class Card extends View
      *
      * @param $buttons
      *
-     * @return View|null
      * @throws Exception
+     *
+     * @return View|null
      */
     public function addButtons($buttons)
     {

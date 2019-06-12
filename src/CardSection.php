@@ -9,7 +9,6 @@ use atk4\data\Model;
 
 class CardSection extends View
 {
-
     public $card = null;
 
     public $useTableField = false;
@@ -51,8 +50,8 @@ class CardSection extends View
      *
      * @param Model $m
      * @param array $fields
-     * @param bool $useLabel
-     * @param bool $useTable
+     * @param bool  $useLabel
+     * @param bool  $useTable
      *
      * @throws Exception
      * @throws \atk4\data\Exception
@@ -75,7 +74,7 @@ class CardSection extends View
      *
      * @param Model $m
      * @param array $fields
-     * @param bool $useLabel
+     * @param bool  $useLabel
      *
      * @throws Exception
      * @throws \atk4\data\Exception
@@ -107,6 +106,5 @@ class CardSection extends View
         $c->init();
         $m = $c->setModel($m, $fields);
         $this->add($c);
-
     }
 }
