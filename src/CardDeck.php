@@ -20,7 +20,7 @@ class CardDeck extends View
 
     public $useAction = true;
 
-    public function setModel(Model $model, array $fields, array $extra = null)
+    public function setModel(Model $model, array $fields = null, array $extra = null)
     {
         $model->each(function ($m) use ($fields, $extra) {
             $c = $this->add($this->card);
