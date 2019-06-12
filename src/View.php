@@ -952,7 +952,7 @@ class View implements jsExpressionable
     {
         // adding this view id to data.
         // Usually, you would check if the event is emit for the right component.
-        if (!$eventData['id']) {
+        if (!isset($eventData['id'])) {
             $eventData['id'] = $this->name;
         }
 
