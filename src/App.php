@@ -242,7 +242,7 @@ class App
     {
         $this->catch_runaway_callbacks = false;
 
-        $l = new \atk4\ui\App();
+        $l = new self();
         $l->initLayout('Centered');
 
         //check for error type.
