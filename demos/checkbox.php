@@ -7,7 +7,7 @@ require 'init.php';
 use atk4\ui\FormField\CheckBox;
 use atk4\ui\View;
 
-    $app->add(['Header', 'CheckBoxes', 'size'=>2]);
+$app->add(['Header', 'CheckBoxes', 'size'=>2]);
 
     $app->add(new CheckBox('Make my profile visible'));
     $app->add(new CheckBox('Make my profile visible ticked'))->set(true);
