@@ -65,11 +65,13 @@ class KeyValue extends Generic
 
         if (!is_array($values)) {
             throw new Exception('KeyValues Column need values in field definition');
+
             return;
         }
 
         if (count($values) === 0) {
             throw new Exception('KeyValues Column values must have elements');
+
             return;
         }
 
