@@ -50,6 +50,38 @@ class Link extends Generic
      */
     public $args = [];
 
+    /** @var bool use value as label of the link */
+    public $use_label = true;
+
+    /**
+     * set element class.
+     *
+     * @var string|null
+     */
+    public $class;
+
+    /**
+     * Use icon as label of the link.
+     *
+     * @var string|null
+     */
+    public $icon;
+
+    /**
+     * set html5 target attribute in tag
+     * possible values : _blank | _parent | _self | _top | frame#name.
+     *
+     * @var string!null
+     */
+    public $target;
+
+    /**
+     * add download in the tag to force download from the url.
+     *
+     * @var bool
+     */
+    public $force_download = false;
+
     public function __construct($page = null, $args = [])
     {
         if (is_array($page)) {
@@ -88,7 +120,26 @@ class Link extends Generic
 
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        return '<a href="{$c_'.$this->short_name.'}">'.($f ? ('{$'.$f->short_name.'}') : '[Link]').'</a>';
+        $download = $this->force_download ? ' download="true" ' : '';
+        $external = $this->target ? ' target="'.$this->target.'" ' : '';
+
+        $icon = '';
+
+        if ($this->icon) {
+            $icon = '<i class="icon '.$this->icon.'"></i>';
+        }
+
+        $label = '';
+        if ($this->use_label) {
+            $label = $f ? ('{$'.$f->short_name.'}') : '[Link]';
+        }
+
+        $class = '';
+        if ($this->class) {
+            $class = ' class="'.$this->class.'" ';
+        }
+
+        return '<a href="{$c_'.$this->short_name.'}"'.$external.$class.$download.'>'.$icon.''.$label.'</a>';
     }
 
     public function getHTMLTags($row, $field)

@@ -11,7 +11,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
     public function setUp()
     {
         $arr = ['table' => [1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123]]];
-        $db = new \atk4\data\Persistence_Array($arr);
+        $db = new \atk4\data\Persistence\Array_($arr);
         $m = new \atk4\data\Model($db, 'table');
         $m->addField('name');
         $m->addField('ref');
@@ -215,6 +215,77 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1">bar</a></td><td>ref123</td></tr>',
+            $this->extract($this->table->render())
+        );
+    }
+
+    public function testLink6()
+    {
+        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'], 'force_download' => true]);
+
+        $this->assertEquals(
+            '<tr data-id="1"><td><a href="example.php?test=1" download="true" >bar</a></td><td>ref123</td></tr>',
+            $this->extract($this->table->render())
+        );
+    }
+
+    public function testLink7()
+    {
+        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'], 'target' => '_blank']);
+
+        $this->assertEquals(
+            '<tr data-id="1"><td><a href="example.php?test=1" target="_blank" >bar</a></td><td>ref123</td></tr>',
+            $this->extract($this->table->render())
+        );
+    }
+
+    public function testLink8()
+    {
+        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'], 'icon' => 'info']);
+
+        $this->assertEquals(
+            '<tr data-id="1"><td><a href="example.php?test=1"><i class="icon info"></i>bar</a></td><td>ref123</td></tr>',
+            $this->extract($this->table->render())
+        );
+    }
+
+    public function testLink9()
+    {
+        $this->table->addDecorator('name', ['Link', ['example'], ['test' => 'id'], 'use_label' => false]);
+
+        $this->assertEquals(
+            '<tr data-id="1"><td><a href="example.php?test=1"></a></td><td>ref123</td></tr>',
+            $this->extract($this->table->render())
+        );
+    }
+
+    public function testLink10()
+    {
+        // need to reset all to set a nulled value in field name model
+        $arr = ['table' => [1 => ['id' => 1, 'name' => '', 'ref' => 'ref123', 'salary' => -123]]];
+        $db = new \atk4\data\Persistence\Array_($arr);
+        $m = new \atk4\data\Model($db, 'table');
+        $m->addField('name');
+        $m->addField('ref');
+        $m->addField('salary');
+        $this->table = new \atk4\ui\Table();
+        $this->table->init();
+        $this->table->setModel($m, ['name', 'ref']);
+
+        $this->table->addDecorator('name', ['NoValue', ['no_value' => ' --- ']]);
+
+        $this->assertEquals(
+            '<tr data-id="1"><td> --- </td><td>ref123</td></tr>',
+            $this->extract($this->table->render())
+        );
+    }
+
+    public function testLink11()
+    {
+        $this->table->addDecorator('name', ['Tooltip', ['tooltip_field' => 'ref']]);
+
+        $this->assertEquals(
+            '<tr data-id="1"><td class=""> bar<span class="ui icon link " data-tooltip="ref123"><i class="ui icon info circle"></span></td><td>ref123</td></tr>',
             $this->extract($this->table->render())
         );
     }
