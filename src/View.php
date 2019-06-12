@@ -392,7 +392,7 @@ class View implements jsExpressionable
         }
 
         // Create object first
-        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region);
+        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region, 'atk4\ui');
 
         // Will call init() of the object
         $object = $this->_add($object, $args);

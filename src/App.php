@@ -321,7 +321,7 @@ class App
      */
     public function initLayout($seed)
     {
-        $layout = $this->factory($seed, null, 'Layout');
+        $layout = $this->factory($seed, null, 'atk4\ui\Layout');
         $layout->app = $this;
 
         if (!$this->html) {
@@ -382,9 +382,9 @@ class App
      *
      * @return string
      */
-    public function normalizeClassNameApp($name)
+    public function normalizeClassNameApp($name, $prefix = '')
     {
-        return '\\'.__NAMESPACE__.'\\'.$name;
+        //return '\\'.__NAMESPACE__.'\\'.$name;
     }
 
     /**

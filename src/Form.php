@@ -165,7 +165,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
-            $this->layout = $this->factory($this->layout, ['form'=>$this], 'FormLayout');
+            $this->layout = $this->factory($this->layout, ['form'=>$this], 'atk4\ui\FormLayout');
             $this->layout = $this->add($this->layout);
         } elseif (is_object($this->layout)) {
             $this->layout->form = $this;
@@ -471,7 +471,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             'short_name' => $f->short_name,
         ];
 
-        return $this->factory($seed, $defaults, 'FormField');
+        /** @var TYPE_NAME $this */
+        return $this->factory($seed, $defaults, 'atk4\ui\FormField');
     }
 
     /**

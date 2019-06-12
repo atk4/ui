@@ -96,7 +96,7 @@ class Wizard extends View
             'wizard'  => $this,
             'template'=> clone $this->stepTemplate,
             'sequence'=> count($this->steps),
-        ], $name);
+        ], $name, 'atk4\ui');
 
         // add tabs menu item
         $this->steps[] = $this->add($step, 'Step');

@@ -124,10 +124,10 @@ $form = $app->add('Form');
 $tabs = $form->add('Tabs', 'AboveFields');
 $form->add(['ui' => 'divider'], 'AboveFields');
 
-$form_page = $tabs->addTab('Basic Info')->add(['FormLayout\Generic', 'form' => $form]);
+$form_page = $tabs->addTab('Basic Info')->add(['FormLayout/Generic', 'form' => $form]);
 $form_page->addField('name', new \atk4\ui\FormField\Line());
 
-$form_page = $tabs->addTab('Other Info')->add(['FormLayout\Generic', 'form' => $form]);
+$form_page = $tabs->addTab('Other Info')->add(['FormLayout/Generic', 'form' => $form]);
 $form_page->addField('age', new \atk4\ui\FormField\Line());
 
 $form->onSubmit(function ($f) {

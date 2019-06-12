@@ -133,7 +133,7 @@ class Lookup extends Input
         $this->template->set('place_holder', $this->placeholder);
 
         if ($this->plus) {
-            $this->action = $this->factory(['Button', is_array($this->plus) || is_string($this->plus) ? $this->plus : 'Add new', 'disabled' => ($this->disabled || $this->readonly)]);
+            $this->action = $this->factory(['Button', is_array($this->plus) || is_string($this->plus) ? $this->plus : 'Add new', 'disabled' => ($this->disabled || $this->readonly)], null, 'atk4\ui');
         }
         //var_Dump($this->model->get());
         if ($this->form) {
