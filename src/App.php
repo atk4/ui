@@ -409,7 +409,7 @@ class App
         }
 
         // Backward compatibility with legacy version
-        $testClass = "\\atk4\ui\\" . $prefix . $checkClass;
+        $testClass = "\\atk4\ui\\".$prefix.$checkClass;
         if (class_exists($testClass)) {
             return $testClass;
         }
