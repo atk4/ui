@@ -1,0 +1,4 @@
+#unreleased-only=true
+#since-tag=1.5.7
+usernames-as-github-logins=true
+#base=CHANGELOG.md
