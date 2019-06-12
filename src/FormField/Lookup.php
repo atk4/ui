@@ -528,6 +528,6 @@ class Lookup extends Input
             }
         }
 
-        Parent::renderView();
+        parent::renderView();
     }
 }
