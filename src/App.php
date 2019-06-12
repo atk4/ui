@@ -385,7 +385,7 @@ class App
 
         // if we have prefix, then use it - it's there for a purpose
         if ($prefix) {
-            $checkClass = $prefix.'\\'.$checkClass;
+            $checkClass = str_replace('/', '\\', $prefix).'\\'.$checkClass;
         }
 
         // check FQCN existence without prepend \\
@@ -406,6 +406,12 @@ class App
         // @case $name = "FormField/AutoComplete"
         if (class_exists($checkClass)) {
             return $checkClass;
+        }
+
+        // Backward compatibility with legacy version
+        $testClass = "\\atk4\ui\\" . $prefix . $checkClass;
+        if (class_exists($testClass)) {
+            return $testClass;
         }
 
         return $name;
