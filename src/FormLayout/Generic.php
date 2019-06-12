@@ -133,7 +133,7 @@ class Generic extends _Abstract
                 continue;
             }
 
-            if ($el instanceof \atk4\ui\FormLayout\Generic) {
+            if ($el instanceof self) {
                 if ($el->label && !$el->inline) {
                     $template = $labeled_group;
                     $template->set('label', $el->label);

@@ -1,7 +1,6 @@
 <?php
 /**
  * A collection of Card set from a model.
- *
  */
 
 namespace atk4\ui;
