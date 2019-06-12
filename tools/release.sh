@@ -38,8 +38,8 @@ prev_version=$(git log --tags --simplify-by-decoration --pretty="format:%d" | gr
 
 echo "Releasing $prev_version -> $version"
 
-gcg
-vimr CHANGELOG.md
+#gcg
+#vimr CHANGELOG.md
 
 # Compute diffs
 #git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative $prev_version...
@@ -52,9 +52,9 @@ vimr CHANGELOG.md
 open "https://github.com/atk4/$product/compare/$prev_version...$head"
 
 # Update dependency versions
-sed -i "" -e '|atk4.*dev-$head|d' composer.json
+sed -i "" -e '/atk4.*dev-legacy/d' composer.json
 composer update
-composer require atk4/core:<2 atk4/data:<2
+composer require 'atk4/core:<2' 'atk4/data:<2'
 
 composer update
 ./vendor/phpunit/phpunit/phpunit  --no-coverage
