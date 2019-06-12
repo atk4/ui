@@ -15,8 +15,8 @@
         }
     ],
     "require": {
-        "atk4/data": "dev-develop",
-        "atk4/core": "dev-develop",
+        "atk4/data": "dev-legacy/v1",
+        "atk4/core": "dev-legacy/v1",
         "php": ">=5.6.0"
     },
     "require-dev": {
