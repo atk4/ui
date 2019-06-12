@@ -15,9 +15,9 @@
         }
     ],
     "require": {
-        "atk4/data": "dev-legacy/v1",
-        "atk4/core": "dev-legacy/v1",
-        "php": ">=5.6.0"
+        "php": ">=5.6.0",
+        "atk4/core": "<2",
+        "atk4/data": "<2"
     },
     "require-dev": {
         "phpunit/phpunit": "<6",
