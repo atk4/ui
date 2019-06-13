@@ -114,6 +114,7 @@ $form = $tab->add('Form');
 $form->addField('email');
 $form->onSubmit(function ($form) {
     throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
+
     return 'somehow it did not crash';
 });
 
@@ -123,6 +124,7 @@ $form->add(['Button', 'Modal Test', 'secondary'])->on('click', $form->add('Modal
                                                                         $form->addField('email');
                                                                         $form->onSubmit(function ($form) {
                                                                             throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
+
                                                                             return 'somehow it did not crash';
                                                                         });
                                                                     })->show());

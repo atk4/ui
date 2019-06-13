@@ -2,6 +2,7 @@
 
 namespace atk4\ui\FormField;
 
+use atk4\ui\Exception;
 use atk4\ui\Form;
 
 /**
@@ -57,6 +58,8 @@ class CheckBox extends Generic
      *
      * @param bool  $value
      * @param mixed $junk
+     *
+     * @throws Exception
      */
     public function set($value = null, $junk = null)
     {

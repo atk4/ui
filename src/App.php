@@ -16,14 +16,14 @@ class App
 
     // @var array|false Location where to load JS/CSS files
     public $cdn = [
-        'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@1.6.5/public',
+        'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@1.7.1/public',
         'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.2/dist',
     ];
 
     // @var string Version of Agile UI
-    public $version = '1.6.5';
+    public $version = '2.0.0';
 
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
@@ -242,7 +242,7 @@ class App
     {
         $this->catch_runaway_callbacks = false;
 
-        $l = new \atk4\ui\App();
+        $l = new self();
         $l->initLayout('Centered');
 
         //check for error type.
@@ -321,7 +321,7 @@ class App
      */
     public function initLayout($seed)
     {
-        $layout = $this->factory($seed, null, 'Layout');
+        $layout = $this->factory($seed, null, 'atk4\ui\Layout');
         $layout->app = $this;
 
         if (!$this->html) {
@@ -382,9 +382,9 @@ class App
      *
      * @return string
      */
-    public function normalizeClassNameApp($name)
+    public function normalizeClassNameApp($name, $prefix = '')
     {
-        return '\\'.__NAMESPACE__.'\\'.$name;
+        //return '\\'.__NAMESPACE__.'\\'.$name;
     }
 
     /**
@@ -482,7 +482,10 @@ class App
      */
     public function dbConnect($dsn, $user = null, $password = null, $args = [])
     {
-        return $this->db = $this->add(\atk4\data\Persistence::connect($dsn, $user, $password, $args));
+        $this->db = \atk4\data\Persistence::connect($dsn, $user, $password, $args);
+        $this->db->app = $this;
+
+        return $this->db;
     }
 
     protected function getRequestURI()

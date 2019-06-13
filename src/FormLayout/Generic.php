@@ -101,7 +101,7 @@ class Generic extends _Abstract
      */
     public function addSubLayout($seed = 'Generic', $addDivider = true)
     {
-        $v = $this->add($this->factory($seed, ['form' => $this->form], 'FormLayout/Section'));
+        $v = $this->add($this->factory($seed, ['form' => $this->form], 'atk4\ui\FormLayout\Section'));
         if ($v instanceof \atk4\ui\FormLayout\Section\Generic) {
             $v = $v->addSection();
         }
@@ -133,7 +133,7 @@ class Generic extends _Abstract
                 continue;
             }
 
-            if ($el instanceof \atk4\ui\FormLayout\Generic) {
+            if ($el instanceof self) {
                 if ($el->label && !$el->inline) {
                     $template = $labeled_group;
                     $template->set('label', $el->label);

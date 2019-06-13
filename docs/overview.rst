@@ -96,7 +96,7 @@ clarifications::
 
 
     <?php
-    require'vendor/autoload.php';
+    require 'vendor/autoload.php';
 
     // Define your data structure
     class Offer extends \atk4\data\Model {
@@ -119,7 +119,7 @@ clarifications::
     $app = new \atk4\ui\App('Offer tracking system');
     $app->initLayout('Admin');
 
-    // Connect to database and place a fully-interractive CRUD
+    // Connect to database and place a fully-interactive CRUD
     $db = new \atk4\data\Persistence_SQL($dsn);
     $app->add(new \atk4\ui\CRUD())
         ->setModel(new Offer($db));

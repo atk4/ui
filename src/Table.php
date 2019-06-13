@@ -225,7 +225,7 @@ class Table extends Lister
 
         if ($field === null) {
             // column is not associated with any model field
-            $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this], 'TableColumn'));
+            $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this], 'atk4\ui\TableColumn'));
         } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, $columnDecorator);
         } elseif (!$columnDecorator) {
@@ -304,7 +304,7 @@ class Table extends Lister
         if (!$this->columns[$name]) {
             throw new Exception(['No such column, cannot decorate', 'name' => $name]);
         }
-        $decorator = $this->_add($this->factory($seed, ['table' => $this], 'TableColumn'));
+        $decorator = $this->_add($this->factory($seed, ['table' => $this], 'atk4\ui\TableColumn'));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
@@ -346,14 +346,14 @@ class Table extends Lister
             [$this->default_column ? $this->default_column : 'Generic']
         );
 
-        return $this->_add($this->factory($seed, ['table' => $this], 'TableColumn'));
+        return $this->_add($this->factory($seed, ['table' => $this], 'atk4\ui\TableColumn'));
     }
 
     protected $typeToDecorator = [
         'password' => 'Password',
         'money'    => 'Money',
         'text'     => 'Text',
-        'boolean'  => ['Status', ['positive' => [true], 'negative' => ['false']]],
+        'boolean'  => ['Status', ['positive' => [true], 'negative' => [false]]],
     ];
 
     /**

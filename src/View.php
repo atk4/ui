@@ -392,7 +392,7 @@ class View implements jsExpressionable
         }
 
         // Create object first
-        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region);
+        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region, 'atk4\ui');
 
         // Will call init() of the object
         $object = $this->_add($object, $args);
@@ -952,7 +952,7 @@ class View implements jsExpressionable
     {
         // adding this view id to data.
         // Usually, you would check if the event is emit for the right component.
-        if (!$eventData['id']) {
+        if (!isset($eventData['id'])) {
             $eventData['id'] = $this->name;
         }
 

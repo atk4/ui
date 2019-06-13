@@ -133,18 +133,20 @@ class Generic extends View
      * $field->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|jsExpression|array|callable $expr
-     * @param bool                               $useDefault
+     * @param array|bool                         $default
      *
      * @throws \atk4\ui\Exception
      */
-    public function onChange($expr, $useDefault = true)
+    public function onChange($expr, $default = [])
     {
         if (is_string($expr)) {
             $expr = new \atk4\ui\jsExpression($expr);
         }
 
-        $default['preventDefault'] = $useDefault;
-        $default['stopPropagation'] = $useDefault;
+        if (is_bool($default)) {
+            $default['preventDefault'] = $default;
+            $default['stopPropagation'] = $default;
+        }
 
         $this->on('change', '#'.$this->id.'_input', $expr, $default);
     }
