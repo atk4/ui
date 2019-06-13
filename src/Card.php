@@ -280,14 +280,13 @@ class Card extends View
      */
     public function addSection(string $title = null, Model $model = null, array $fields = null, bool $useTable = false, bool $useLabel = false)
     {
-        $this->setModel($model);
-
         $section = $this->add([$this->cardSection, 'card' => $this], 'Section');
         if ($title) {
             $section->add(['View', $title, ['class' => 'header']]);
         }
 
         if ($model && $fields) {
+            $this->setModel($model);
             $section->addFields($model, $fields, $useTable, $useLabel);
         }
 
