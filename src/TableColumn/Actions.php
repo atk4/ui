@@ -2,6 +2,8 @@
 
 namespace atk4\ui\TableColumn;
 
+use atk4\ui\Icon;
+
 /**
  * Formatting action buttons column.
  */
@@ -28,6 +30,18 @@ class Actions extends Generic
             $button = new \atk4\ui\Button($button);
         }
         $button->app = $this->table->app;
+        if (!$button->_initialized) {
+            $button->init();
+            $button->id = null;
+        }
+
+        if ($button->icon) {
+            if (!is_object($button->icon)) {
+                $button->icon = new Icon($button->icon);
+                $button->icon->init();
+                $button->icon->id = null;
+            }
+        }
 
         $this->actions[$name] = $button;
         $button->addClass('b_'.$name);
