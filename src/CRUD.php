@@ -46,7 +46,7 @@ class CRUD extends Grid
     public $itemCreate = null;
 
     /** @var array Default action to perform when adding or editing is successful * */
-    public $notifyDefault = ['jsNotify', 'content' => 'Data is saved!', 'color'   => 'green'];
+    public $notifyDefault = ['atk4\ui\jsNotify', 'content' => 'Data is saved!', 'color'   => 'green'];
 
     /** @var array Action to perform when adding is successful * */
     public $notifyCreate = null;
