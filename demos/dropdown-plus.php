@@ -33,7 +33,7 @@ $form->addField('withModel2',
                     'renderRowFunction' => function($row) {
                         return [
                           'value' => $row->id,
-                          'title' => $row->getTitle(),,
+                          'title' => $row->getTitle(),
                           'icon'  => $row->get('is_folder') ? 'folder' : 'file',
                         ];
                     }
