@@ -26,7 +26,7 @@ $form->addField('withModel2',
                 ]);
 
 //custom callback: add icon
-$form->addField('withModel2',
+$form->addField('withModel3',
                 ['DropDown',
                     'caption' => 'DropDown with data from Model',
                     'model'   => new File($db),
