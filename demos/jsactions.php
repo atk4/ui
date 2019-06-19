@@ -11,7 +11,7 @@ $app->add(['Header', 'Extensions to ATK Data Actions', 'subHeader'=>'Model actio
 
 $country = new Country($db);
 
-$c_action = $country->addAction('Email', function($m) {
+$c_action = $country->addAction('Email', function ($m) {
     return 'Email to Kristy in '.$m->get('name').' has been sent!';
 });
 
@@ -42,7 +42,7 @@ $f_action = $files->addAction(
     'import_from_filesystem',
     [
         'callback'=> 'importFromFilesystem',
-        'args' => [
+        'args'    => [
             'path'=> '.',
         ],
         'scope'=> atk4\data\UserAction\Generic::NO_RECORDS,
@@ -51,10 +51,9 @@ $f_action = $files->addAction(
 
 $btn = $app->add(['Button', 'Import File']);
 $executor = new \atk4\ui\ActionExecutor\jsEvent($btn, $f_action, null, ['path' => '.']);
-$executor->addHook('afterExecute', function($t, $m){
+$executor->addHook('afterExecute', function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');
 });
 $executor->setConfirm('This will import a lot of file. Are you sure?');
 
 $btn->on('click', $executor);
-

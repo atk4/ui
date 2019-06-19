@@ -11,13 +11,13 @@
 namespace atk4\ui\ActionExecutor;
 
 use atk4\core\HookTrait;
+use atk4\data\UserAction\Generic;
 use atk4\ui\Exception;
 use atk4\ui\jQuery;
 use atk4\ui\jsCallback;
 use atk4\ui\jsExpressionable;
 use atk4\ui\jsToast;
 use atk4\ui\View;
-use atk4\data\UserAction\Generic;
 
 class jsEvent implements jsExpressionable
 {
@@ -25,7 +25,7 @@ class jsEvent implements jsExpressionable
 
     /**
      * @var View The View where Fomantic api context is applied.
-     * It is also the html element that will get the loading css class during callback execution.
+     *           It is also the html element that will get the loading css class during callback execution.
      */
     public $context;
 
@@ -41,15 +41,15 @@ class jsEvent implements jsExpressionable
     /** @var jsCallback */
     public $cb;
 
-    /** @var string|null  The confirmation message.*/
+    /** @var string|null The confirmation message. */
     public $confirm = null;
 
     public function __construct(View $context, Generic $action, $modelId = null, array $args = [])
     {
         $this->context = $context;
-        $this->action  = $action;
+        $this->action = $action;
         $this->modelId = $modelId;
-        $this->args    = $args;
+        $this->args = $args;
 
         if (!$this->context->app) {
             throw new Exception('Context must be part of a render tree. Missing app property.');
@@ -93,8 +93,7 @@ class jsEvent implements jsExpressionable
 
     public function jsRender()
     {
-        $this->cb->set(function() {
-
+        $this->cb->set(function () {
             $id = $_POST['atk_event_id'] ?? null;
 
             if ($id && $this->action->scope === 'single') {
@@ -102,7 +101,7 @@ class jsEvent implements jsExpressionable
             }
 
             if ($errors = $this->hasAllArguments()) {
-                $js =  new jsToast(['title' => 'Error', 'message' => 'Missing Arguments: '.implode(', ', $errors), 'class' => 'error']);
+                $js = new jsToast(['title' => 'Error', 'message' => 'Missing Arguments: '.implode(', ', $errors), 'class' => 'error']);
             } else {
                 $args = [];
                 foreach ($this->action->args as $key => $val) {
@@ -121,7 +120,7 @@ class jsEvent implements jsExpressionable
             ->atkAjaxec([
                 'uri'           => $this->cb->getJSURL(),
                 'uri_options'   => array_merge(['atk_event_id' => $this->modelId], $this->args),
-                'confirm'       => $this->confirm
+                'confirm'       => $this->confirm,
         ]);
 
         return $final->jsRender();
