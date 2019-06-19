@@ -15,6 +15,10 @@ class Centered extends Generic
 
     public $defaultTemplate = 'layout/centered.html';
 
+    // Default atk4 logo
+    public $image = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+    public $image_alt = 'Logo';
+
     public function init()
     {
         parent::init();
@@ -22,5 +26,12 @@ class Centered extends Generic
         // set application's title
 
         $this->template->trySet('title', $this->app->title);
+    }
+
+    public function renderView() {
+        if ($this->image) {
+            $this->template->trySetHTML('HeaderImage', '<img class="ui image" src="'.$this->image.'" alt="'.$this->image_alt.'" />');
+        }
+        parent::renderView();
     }
 }

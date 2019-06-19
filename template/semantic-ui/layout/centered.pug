@@ -1,10 +1,10 @@
 //- vim:ts=2:sw=2:et
 .ui.middle.aligned.grid.container(style="min-height: 100%")
   .column
-    | {Header}
+    | {$BeforeHeaderContent}{Header}
     h1.ui.center.aligned.header
-      img.ui.image(src="https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png")
+      | {$HeaderImage}
       .content {$title}
-    | {/}
+    | {/}{$AfterHeaderContent}
     .ui.piled.segment
       | {$Content}
