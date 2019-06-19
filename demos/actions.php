@@ -3,6 +3,10 @@
 require 'init.php';
 require 'database.php';
 
+$app->add(['Button', 'js Event Executor', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['jsactions']);
+$app->add(['View', 'ui' => 'ui clearing divider']);
+
 $app->add(['Header', 'Extensions to ATK Data Actions', 'subHeader'=>'Demonstrate how to augment your models with actions and vizualize those inside UI']);
 
 // Actions can be added easily to the model
