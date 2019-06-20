@@ -59,7 +59,7 @@ class jsEvent implements jsExpressionable
             $this->context->addClass('disabled');
         }
 
-        $this->cb = $this->context->app->add('jsCallback');
+        $this->cb = $this->context->add('jsCallback');
     }
 
     /**
