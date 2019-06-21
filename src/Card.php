@@ -26,6 +26,7 @@ use atk4\data\Model;
 use atk4\data\UserAction\Generic;
 use atk4\ui\ActionExecutor\ArgumentForm;
 use atk4\ui\ActionExecutor\Event;
+use atk4\ui\ActionExecutor\jsEvent;
 
 class Card extends View
 {
@@ -331,17 +332,21 @@ class Card extends View
      *
      * @throws Exception
      */
-    public function addClickAction(Generic $action, $executor = 'ArgumentForm', $button = null)
+    public function addClickAction(Generic $action, $button = null, $args = [], $confirm = null)
     {
         if (!$button) {
             $button = new Button([$action->caption]);
         }
-        // add jsModal or jsAction depending on argument of action
+        $btn = $this->addButton($button);
 
-        $executor = $this->add(new Event(['target' => $button, 'modelId' => $this->model->get('id')]));
-        $executor->setAction($action);
+        $id = $this->model ? $this->model[$this->model->id_field] : null;
 
-        $this->addButton($executor->target);
+        $btn->on('click', $executor = new jsEvent($btn, $action, $id, $args));
+        if ($confirm) {
+            $executor->setConfirm($confirm);
+        }
+
+        return $this;
     }
 
     /**
