@@ -124,19 +124,20 @@ class DropDown extends Input
      *        'icon'  => strpos('Month', $value) !== false ? 'calendar' : '',
      *     ];
      * }
+     *
      * @var callable
      */
     public $renderRowFunction;
 
     /**
-     * Subtemplate for a single dropdown item
+     * Subtemplate for a single dropdown item.
      *
      * @var object
      */
     protected $_tItem;
 
     /**
-     * Subtemplate for an icon for a single dropdown item
+     * Subtemplate for an icon for a single dropdown item.
      *
      * @var object;
      */
@@ -252,24 +253,21 @@ class DropDown extends Input
         }
 
         //model set? use this, else values property
-        if(isset($this->model)) {
-            if(!is_callable($this->renderRowFunction)) {
+        if (isset($this->model)) {
+            if (!is_callable($this->renderRowFunction)) {
                 //for standard model rendering, only load id and title field
                 $this->model->only_fields = [$this->model->title_field, $this->model->id_field];
                 $this->_renderItemsForModel();
-            }
-            else {
-                foreach($this->model as $row) {
+            } else {
+                foreach ($this->model as $row) {
                     $this->_addCallBackRow($row);
                 }
             }
-        }
-        else {
-            if(!is_callable($this->renderRowFunction)) {
+        } else {
+            if (!is_callable($this->renderRowFunction)) {
                 $this->_renderItemsForValues();
-            }
-            else {
-                foreach($this->values as $key => $value) {
+            } else {
+                foreach ($this->values as $key => $value) {
                     $this->_addCallBackRow($value, $key);
                 }
             }
@@ -281,11 +279,12 @@ class DropDown extends Input
     /*
      * Sets the dropdown items to the template if a model is used
      */
-    protected function _renderItemsForModel() {
+    protected function _renderItemsForModel()
+    {
         foreach ($this->model as $key => $row) {
             $title = $row->getTitle();
             $this->_tItem->set('value', (string) $key);
-            $this->_tItem->set('title',  $title || is_numeric($title) ? (string) $title : '');
+            $this->_tItem->set('title', $title || is_numeric($title) ? (string) $title : '');
             //add item to template
             $this->template->appendHTML('Item', $this->_tItem->render());
         }
@@ -294,20 +293,19 @@ class DropDown extends Input
     /*
      * sets the dropdown items from $this->values array
      */
-    protected function _renderItemsForValues() {
+    protected function _renderItemsForValues()
+    {
         foreach ($this->values as $key => $val) {
             $this->_tItem->set('value', (string) $key);
             if (is_array($val)) {
                 if (array_key_exists('icon', $val)) {
                     $this->_tIcon->set('icon', $val['icon']);
                     $this->_tItem->appendHTML('Icon', $this->_tIcon->render());
-                }
-                else {
+                } else {
                     $this->_tItem->del('Icon');
                 }
                 $this->_tItem->set('title', $val[0] || is_numeric($val[0]) ? (string) $val[0] : '');
-            }
-            else {
+            } else {
                 $this->_tItem->set('title', $val || is_numeric($val) ? (string) $val : '');
             }
 
@@ -320,14 +318,15 @@ class DropDown extends Input
      * used when a custom callback is defined for row rendering. Sets
      * values to row tempalte and appends it to main template
      */
-    protected function _addCallBackRow($row, $key = null) {
+    protected function _addCallBackRow($row, $key = null)
+    {
         $res = call_user_func($this->renderRowFunction, $row, $key);
         $this->_tItem->set('value', (string) $res['value']);
         $this->_tItem->set('title', $res['title']);
 
         //Icon
         $this->_tItem->del('Icon');
-        if(isset($res['icon'])
+        if (isset($res['icon'])
         && $res['icon']) {
             //compatibility with how $values property works on icons: 'icon'
             //is defined in there

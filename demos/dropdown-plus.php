@@ -15,31 +15,29 @@ $form->addField('withModel',
 //custom callback: alter title
 $form->addField('withModel2',
                 ['DropDown',
-                    'caption' => 'DropDown with data from Model',
-                    'model'   => new Country($db),
-                    'renderRowFunction' => function($row) {
+                    'caption'           => 'DropDown with data from Model',
+                    'model'             => new Country($db),
+                    'renderRowFunction' => function ($row) {
                         return [
                           'value' => $row->id,
                           'title' => $row->getTitle().' ('.$row->get('iso3').')',
                         ];
-                    }
+                    },
                 ]);
 
 //custom callback: add icon
 $form->addField('withModel3',
                 ['DropDown',
-                    'caption' => 'DropDown with data from Model',
-                    'model'   => new File($db),
-                    'renderRowFunction' => function($row) {
+                    'caption'           => 'DropDown with data from Model',
+                    'model'             => new File($db),
+                    'renderRowFunction' => function ($row) {
                         return [
                           'value' => $row->id,
                           'title' => $row->getTitle(),
                           'icon'  => $row->get('is_folder') ? 'folder' : 'file',
                         ];
-                    }
+                    },
                 ]);
-
-
 
 $form->addField('enum',
                 ['DropDown',
