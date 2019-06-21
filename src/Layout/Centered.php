@@ -28,7 +28,8 @@ class Centered extends Generic
         $this->template->trySet('title', $this->app->title);
     }
 
-    public function renderView() {
+    public function renderView() 
+    {
         if ($this->image) {
             $this->template->trySetHTML('HeaderImage', '<img class="ui image" src="'.$this->image.'" alt="'.$this->image_alt.'" />');
         }
