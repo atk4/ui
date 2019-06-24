@@ -15,13 +15,21 @@ class Centered extends Generic
 
     public $defaultTemplate = 'layout/centered.html';
 
-    // Default atk4 logo
-    public $image = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+    /**
+     * @see \atk4\ui\App::$cdn
+     * @var null|string
+     */
+    public $image = null;
     public $image_alt = 'Logo';
 
     public function init()
     {
         parent::init();
+
+        // If image is still unset load it when layout is initialized from the App
+        if ($this->image === null && $this->app && $this->app->cdn['atk-logo']) {
+            $this->image = $this->app->cdn['atk-logo'];
+        }
 
         // set application's title
 
