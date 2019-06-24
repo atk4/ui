@@ -17,6 +17,7 @@ class Centered extends Generic
 
     /**
      * @see \atk4\ui\App::$cdn
+     *
      * @var null|string
      */
     public $image = null;
