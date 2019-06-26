@@ -15,38 +15,76 @@ use atk4\ui\Exception;
  *      'max'     => 3,
  *      'steps'   => 3,
  *      'colors'  => [
- *      '#FF0000',
- *      '#FFFF00',
- *      '#00FF00'
+ *          '#FF0000',
+ *          '#FFFF00',
+ *          '#00FF00'
  *      ]
  *   ]
  * ].
  */
 class ColorRating extends Generic
 {
-    /** @var float */
+    /**
+     * Minimum value of the gradient.
+     *
+     * @var float
+     */
     public $min;
-    /** @var float */
+
+    /**
+     * Maximum value of the gradient.
+     *
+     * @var float
+     */
     public $max;
     /**
-     * Step between colors.
+     * Step to be calculated between colors, must be greater than 1.
      *
      * @var int
      */
     public $steps = 1;
 
-    /** @var array */
-    public $colors = [];
-
-    public $gradients = [];
-
-    public $gradients_count = 0;
     /**
+     * Hex colors ['#FF0000','#00FF00'] from red to green
+     *
+     * @var array
+     */
+    public $colors = ['#FF0000','#00FF00'];
+
+    /**
+     * Store the generated Hex color based on the number of steps
+     *
+     * @var array
+     */
+    protected $gradients = [];
+
+    /**
+     * Number of gradient, used internally
+     *
+     * @var int
+     */
+    protected $gradients_count = 0;
+
+    /**
+     * Internally used to avoid calc on every call
+     *
      * @var float
      */
-    private $delta;
-    private $more_than_max_no_color;
-    private $less_than_min_no_color;
+    protected $delta;
+
+    /**
+     * Define if values greater than max have no color.
+     *
+     * @var bool
+     */
+    public $more_than_max_no_color = false;
+
+    /**
+     * Define if values lesser than min have no color.
+     *
+     * @var bool
+     */
+    public $less_than_min_no_color = false;
 
     public function init()
     {
@@ -141,7 +179,7 @@ class ColorRating extends Generic
     public function getTagAttributes($position, $attr = [])
     {
         $attr['style'] = $attr['style'] ?? '';
-        $attr['style'] .= '{$_'.$this->short_name.'_color_rating};';
+        $attr['style'] .= '{$_'.$this->short_name.'_color_rating}';
 
         return parent::getTagAttributes($position, $attr);
     }
@@ -158,25 +196,29 @@ class ColorRating extends Generic
     public function getHTMLTags($row, $field)
     {
         $value = $field->get();
-        if (is_null($value) || (int) $value < $this->min || (int) $value > $this->max) {
+        if (is_null($value)) {
             return parent::getHTMLTags($row, $field);
         }
 
         $color = $this->getColorFromValue($value);
 
+        if (is_null($color)) {
+            return parent::getHTMLTags($row, $field);
+        }
+
         return [
-            '_'.$this->short_name.'_color_rating' => 'background-color:'.$color,
+            '_'.$this->short_name.'_color_rating' => 'background-color:'.$color.';',
         ];
     }
 
     private function getColorFromValue(float $value)
     {
-        if ($this->less_than_min_no_color && $value < $this->min) {
-            return $this->gradients[0];
+        if ($value <= $this->min) {
+            return $this->less_than_min_no_color ? null : $this->gradients[0];
         }
 
-        if ($this->more_than_max_no_color && $value > $this->max) {
-            return end($this->gradients);
+        if ($value >= $this->max) {
+            return $this->more_than_max_no_color ? null : end($this->gradients);
         }
 
         $refValue = ($value - $this->min) / $this->delta;
@@ -184,6 +226,6 @@ class ColorRating extends Generic
 
         $index = floor($refIndex);
 
-        return $this->gradients[$index];
+        return $this->gradients[(int) $index];
     }
 }
