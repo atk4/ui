@@ -99,6 +99,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
   table.php
   table2.php
   tablecolumnmenu.php
+  tablecolumns.php
   tabs.php
   toast.php
   upload.php
