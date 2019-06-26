@@ -1,6 +1,5 @@
 <?php
 
-
 namespace atk4\ui\tests;
 
 use atk4\ui\Table;

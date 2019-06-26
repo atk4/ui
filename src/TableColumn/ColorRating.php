@@ -49,7 +49,7 @@ class ColorRating extends Generic
      *
      * @var array
      */
-    public $colors = ['#FF0000','#00FF00'];
+    public $colors = ['#FF0000', '#00FF00'];
 
     /**
      * Store the generated Hex color based on the number of steps.
