@@ -45,28 +45,28 @@ class ColorRating extends Generic
     public $steps = 1;
 
     /**
-     * Hex colors ['#FF0000','#00FF00'] from red to green
+     * Hex colors ['#FF0000','#00FF00'] from red to green.
      *
      * @var array
      */
     public $colors = ['#FF0000','#00FF00'];
 
     /**
-     * Store the generated Hex color based on the number of steps
+     * Store the generated Hex color based on the number of steps.
      *
      * @var array
      */
     protected $gradients = [];
 
     /**
-     * Number of gradient, used internally
+     * Number of gradient, used internally.
      *
      * @var int
      */
     protected $gradients_count = 0;
 
     /**
-     * Internally used to avoid calc on every call
+     * Internally used to avoid calc on every call.
      *
      * @var float
      */

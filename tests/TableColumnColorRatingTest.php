@@ -4,7 +4,6 @@
 namespace atk4\ui\tests;
 
 use atk4\ui\Table;
-use atk4\ui\TableColumn\ColorRating;
 
 class TableColumnColorRatingTest extends \atk4\core\PHPUnit_AgileTestCase
 {
@@ -26,9 +25,9 @@ class TableColumnColorRatingTest extends \atk4\core\PHPUnit_AgileTestCase
         $arr = [
             'table' => [
                 1 => [
-                    'id' => 1,
-                    'name' => 'bar',
-                    'ref' => 'ref123',
+                    'id'     => 1,
+                    'name'   => 'bar',
+                    'ref'    => 'ref123',
                     'rating' => 3,
                 ],
             ],
@@ -56,7 +55,7 @@ class TableColumnColorRatingTest extends \atk4\core\PHPUnit_AgileTestCase
                     '#FF0000',
                     '#FFFF00',
                     '#00FF00',
-                ]
+                ],
             ],
         ]);
 
@@ -84,7 +83,7 @@ class TableColumnColorRatingTest extends \atk4\core\PHPUnit_AgileTestCase
                     '#FFFF00',
                     '#00FF00',
                 ],
-                'more_than_max_no_color' => true
+                'more_than_max_no_color' => true,
             ],
         ]);
 
@@ -134,7 +133,7 @@ class TableColumnColorRatingTest extends \atk4\core\PHPUnit_AgileTestCase
                     '#FFFF00',
                     '#00FF00',
                 ],
-                'less_than_min_no_color' => true
+                'less_than_min_no_color' => true,
             ],
         ]);
 
