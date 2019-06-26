@@ -185,6 +185,10 @@ class MultiLine extends Generic
             $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline>{$Input}</div>');
         }
 
+        if ($this->model) {
+            $this->setModel($this->model);
+        }
+
         $this->multiLine = $this->add(['View', 'template' => $this->multiLineTemplate]);
 
         $this->cb = $this->add('jsCallback');
@@ -569,7 +573,7 @@ class MultiLine extends Generic
             });
         }
 
-        $this->multiLine->template->setHTML('Input', $this->getInput());
+        $this->multiLine->template->trySetHTML('Input', $this->getInput());
         parent::renderView();
 
         $this->multiLine->vue('atk-multiline',

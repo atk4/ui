@@ -24,7 +24,7 @@ $app->add(['Header', 'MultiLine form field', 'icon' => 'database', 'subHeader' =
 
 $data = [];
 
-$inventory = new InventoryItem(new \atk4\data\Persistence_Array($data));
+$inventory = new InventoryItem(new \atk4\data\Persistence\Array_($data));
 
 // Populate some data.
 $total = 0;
