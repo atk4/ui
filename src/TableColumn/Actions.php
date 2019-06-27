@@ -2,13 +2,16 @@
 
 namespace atk4\ui\TableColumn;
 
-use atk4\ui\Icon;
+use atk4\core\FactoryTrait;
+use atk4\ui\Button;
 
 /**
  * Formatting action buttons column.
  */
 class Actions extends Generic
 {
+    use FactoryTrait;
+
     public $actions = [];
 
     public function init()
@@ -27,8 +30,12 @@ class Actions extends Generic
         $name = $this->name.'_action_'.(count($this->actions) + 1);
 
         if (!is_object($button)) {
-            $button = new \atk4\ui\Button($button);
+            $button = $this->factory('Button', [$button, 'id' => false], 'atk4\ui');
         }
+        if ($button->icon && !is_object($button->icon )) {
+            $button->icon = $this->factory('Icon', [$button->icon, 'id' => false], 'atk4\ui');
+        }
+
         $button->app = $this->table->app;
         if (!$button->_initialized) {
             $button->init();

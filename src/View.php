@@ -295,14 +295,11 @@ class View implements jsExpressionable
      */
     public function init()
     {
-        // set name and id of view
-        if (!$this->name) {
-            if (!$this->id) {
-                $this->id = $this->name = 'atk';
-            } else {
-                $this->name = $this->id;
-            }
-        } elseif (!$this->id) {
+        if ($this->name === null) {
+            $this->name = 'atk';
+        }
+
+        if ($this->id === null) {
             $this->id = $this->name;
         }
 
