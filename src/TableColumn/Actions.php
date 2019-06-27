@@ -37,18 +37,6 @@ class Actions extends Generic
         }
 
         $button->app = $this->table->app;
-        if (!$button->_initialized) {
-            $button->init();
-            $button->id = null;
-        }
-
-        if ($button->icon) {
-            if (!is_object($button->icon)) {
-                $button->icon = new Icon($button->icon);
-                $button->icon->init();
-                $button->icon->id = null;
-            }
-        }
 
         $this->actions[$name] = $button;
         $button->addClass('b_'.$name);
