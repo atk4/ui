@@ -28,8 +28,11 @@ class Centered extends Generic
         parent::init();
 
         // If image is still unset load it when layout is initialized from the App
-        if ($this->image === null && $this->app && $this->app->cdn['atk-logo']) {
-            $this->image = $this->app->cdn['atk-logo'];
+        if ($this->image === null && $this->app) {
+            if (isset($this->app->cdn['layout-logo']))
+                $this->image = $this->app->cdn['layout-logo'];
+            else
+                $this->image = $this->app->cdn['atk'] . '/logo.png';
         }
 
         // set application's title
