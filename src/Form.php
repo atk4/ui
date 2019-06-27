@@ -288,13 +288,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Causes form to generate success message.
      *
-     * @param View|string $success  Success message or a View to display in modal
-     * @param string $sub_header    Sub-header
-     * @param bool   $useTemplate   Backward compatibility
+     * @param View|string $success     Success message or a View to display in modal
+     * @param string      $sub_header  Sub-header
+     * @param bool        $useTemplate Backward compatibility
      *
-     * @return jsChain
      * @throws Exception
      * @throws \atk4\core\Exception
+     *
+     * @return jsChain
      */
     public function success($success = 'Success', $sub_header = null, $useTemplate = true)
     {
@@ -306,7 +307,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         if ($success instanceof View) {
             $response = $success;
-        } else if ($useTemplate) {
+        } elseif ($useTemplate) {
             $response = $this->app->loadTemplate($this->successTemplate);
             $response['header'] = $success;
 
