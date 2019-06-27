@@ -32,7 +32,7 @@ class Centered extends Generic
             if (isset($this->app->cdn['layout-logo'])) {
                 $this->image = $this->app->cdn['layout-logo'];
             } else {
-                $this->image = $this->app->cdn['atk'] . '/logo.png';
+                $this->image = $this->app->cdn['atk'].'/logo.png';
             }
         }
 
