@@ -37,7 +37,6 @@ $g = $form->addGroup(['width' => 'three']);
 $g->addField('name');
 $g->addField('surname');
 $g->addField('gender', ['DropDown', 'values' => ['Female', 'Male']]);
-$form->addField('description', ['TextArea'])->set(0); // testing 0 value
 
 $tab->add(['Header', 'Comparing Field type vs Decorator class']);
 $form = $tab->add('Form');
