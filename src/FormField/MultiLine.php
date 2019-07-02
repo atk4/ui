@@ -508,8 +508,8 @@ class MultiLine extends Generic
             }
 
             $width = null;
-            if (!(empty($field->ui))) {
-                $width = $field->ui['multiline']['width'] ? $field->ui['multiline']['width'] : null;
+            if (!empty($field->ui)) {
+                $width = isset($field->ui['multiline']['width']) ? $field->ui['multiline']['width'] : null;
             }
 
             $this->fieldDefs[] = [
