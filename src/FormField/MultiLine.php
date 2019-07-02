@@ -507,10 +507,7 @@ class MultiLine extends Generic
                 $type = $field->ui['form'][0];
             }
 
-            $width = null;
-            if (!empty($field->ui)) {
-                $width = isset($field->ui['multiline']['width']) ? $field->ui['multiline']['width'] : null;
-            }
+            $width = $field->ui['multiline']['width'] ?? null;
 
             $this->fieldDefs[] = [
                 'field'       => $field->short_name,
