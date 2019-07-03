@@ -205,7 +205,7 @@ class DropDown extends Input
      */
     public function setDropdownOptions($options)
     {
-        $this->dropdownOptions = $options;
+        $this->dropdownOptions = array_merge($this->dropdownOptions, $options);
     }
 
     /**
