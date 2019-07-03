@@ -1,6 +1,6 @@
 <?php
 /**
- * Action form executor
+ * Action form executor.
  */
 
 namespace atk4\ui\ActionExecutor;
@@ -20,7 +20,6 @@ class Form extends Basic
      */
     public function initPreview()
     {
-
         $this->addHeader();
 
         if (!$this->form) {
@@ -32,8 +31,7 @@ class Form extends Basic
             $this->form->setModel($this->action->owner, $this->action->fields);
         }
 
-        $this->form->onSubmit(function($f) {
-
+        $this->form->onSubmit(function ($f) {
             return $this->jsExecute();
         });
     }

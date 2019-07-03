@@ -6,9 +6,7 @@ namespace atk4\ui;
 
 use atk4\core\HookTrait;
 use atk4\data\UserAction\Generic;
-use atk4\ui\ActionExecutor\ArgumentForm;
 use atk4\ui\ActionExecutor\Basic;
-use atk4\ui\ActionExecutor\jsEvent;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -434,9 +432,9 @@ class Grid extends View
      * with the $title and $callback is executed through VirtualPage.
      *
      * @param string|array|View $button
-     * @param string $title
-     * @param callable $callback function($page){ . .}
-     * @param array $args Extra url argument for callback.
+     * @param string            $title
+     * @param callable          $callback function($page){ . .}
+     * @param array             $args     Extra url argument for callback.
      *
      * @return object
      */
@@ -452,13 +450,13 @@ class Grid extends View
     /**
      * Find out more about the nature of the action from the supplied object, use addAction().
      *
-     * @param Generic               $action          The generic action.
+     * @param Generic $action The generic action.
      */
     public function addUserAction(Generic $action)
     {
         $executor = null;
         $args = [];
-        $title  = $action->caption;
+        $title = $action->caption;
         $button = $action->caption;
 
         if ($action->ui['Grid']['Button'] ?? null) {

@@ -35,7 +35,6 @@ class Basic extends \atk4\ui\View implements Interface_
      */
     protected $jsSuccess = null;
 
-
     /**
      * Associate executor with action.
      *
@@ -125,6 +124,7 @@ class Basic extends \atk4\ui\View implements Interface_
 
     /**
      * Will add header if set.
+     *
      * @throws Exception
      */
     public function addHeader()
