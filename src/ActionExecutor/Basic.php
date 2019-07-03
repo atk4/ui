@@ -16,6 +16,8 @@ class Basic extends \atk4\ui\View implements Interface_
      */
     public $action = null;
 
+    public $hasHeader = true;
+
     /**
      * @var array
      */
@@ -32,6 +34,7 @@ class Basic extends \atk4\ui\View implements Interface_
      * @var jsExpressionable|array jsExpression to return if action was successful, e.g "new jsToast('Tahnk you')"
      */
     protected $jsSuccess = null;
+
 
     /**
      * Associate executor with action.
@@ -97,7 +100,7 @@ class Basic extends \atk4\ui\View implements Interface_
             return;
         }
 
-        $this->add(['Header', $this->action->caption, 'subHeader'=>$this->description ?: $this->action->getDescription()]);
+        $this->addHeader();
 
         $this->add(['Button', 'Confirm', 'primary'])->on('click', function () {
             return $this->jsExecute();
@@ -118,5 +121,16 @@ class Basic extends \atk4\ui\View implements Interface_
         $return = $this->action->execute(...$args);
 
         return $this->hook('afterExecute', [$return]) ?: $this->jsSuccess ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
+    }
+
+    /**
+     * Will add header if set.
+     * @throws Exception
+     */
+    public function addHeader()
+    {
+        if ($this->hasHeader) {
+            $this->add(['Header', $this->action->caption, 'subHeader'=>$this->description ?: $this->action->getDescription()]);
+        }
     }
 }

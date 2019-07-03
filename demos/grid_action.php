@@ -1,0 +1,53 @@
+<?php
+
+require 'init.php';
+require 'database.php';
+
+$country = new Country($db);
+
+$g = $app->add('Grid');
+
+$edit_executor = new atk4\ui\ActionExecutor\Form([
+    'hasHeader' => false,
+    'jsSuccess' => [
+        new atk4\ui\jsExpression('$(".atk-dialog-content").parent().modal("hide")'),
+        new atk4\ui\jsToast('Action Complete with success!'),
+        $g->container->jsReload([$g->name.'_sort' => $g->getSortBy()])
+    ]
+]);
+
+$edit_action = $country->addAction('edit', [
+    'callback' => [$country, 'save'],
+    'ui' => ['Grid' => ['Executor' => $edit_executor, 'Button' => ['icon' => 'edit']]]
+]);
+
+$del_executor = new atk4\ui\ActionExecutor\Preview([
+    'previewType' => 'text',
+    'hasHeader' => false,
+    'jsSuccess' => [
+    new atk4\ui\jsExpression('$(".atk-dialog-content").parent().modal("hide")'),
+    new atk4\ui\jsToast('Record Delete with success!'),
+    $g->container->jsReload([$g->name.'_sort' => $g->getSortBy()])
+]]);
+
+$del_action = $country->addAction('delete', [
+    'callback' => function($m) {
+        $m->delete();
+    },
+    'preview' => function($m) {
+        return 'Will delete record: '.$m->getTitle();
+    },
+    'ui' => ['Grid' => ['Executor' => $del_executor, 'Button' => ['icon' => 'delete']]]
+]);
+
+$g->setModel($country);
+$g->ipp = 10;
+
+$g->addUserAction($edit_action);
+$g->addUserAction($del_action);
+
+//$g->addHook('onUserAction', function($g, $page, $executor) {
+//    $executor->form = $page->add('Form');
+//    $executor->form->addField('test');
+//});
+

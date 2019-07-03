@@ -22,7 +22,7 @@ class Preview extends Basic
             return;
         }
 
-        $this->add(['Header', $this->action->caption, 'subHeader'=>$this->description ?: $this->action->getDescription()]);
+        $this->addHeader();
 
         $text = $this->executePreview();
 

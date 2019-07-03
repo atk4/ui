@@ -71,11 +71,6 @@ class CRUD extends Grid
     {
         parent::init();
 
-        if ($this->paginator) {
-            $this->stickyGet($this->paginator->name);
-        }
-        $this->stickyGet('_q');
-
         if ($this->canUpdate) {
             $this->pageUpdate = $this->add($this->pageUpdate ?: $this->pageDefault, ['short_name'=>'edit']);
         }
