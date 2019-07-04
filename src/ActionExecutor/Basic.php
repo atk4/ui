@@ -31,7 +31,7 @@ class Basic extends \atk4\ui\View implements Interface_
     protected $validArguments = [];
 
     /**
-     * @var jsExpressionable|array jsExpression to return if action was successful, e.g "new jsToast('Tahnk you')"
+     * @var jsExpressionable|array|callable jsExpression to return if action was successful, e.g "new jsToast('Thank you')"
      */
     protected $jsSuccess = null;
 
@@ -119,7 +119,9 @@ class Basic extends \atk4\ui\View implements Interface_
 
         $return = $this->action->execute(...$args);
 
-        return $this->hook('afterExecute', [$return]) ?: $this->jsSuccess ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
+        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner]): $this->jsSuccess;
+
+        return $this->hook('afterExecute', [$return]) ?: $success ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
     }
 
     /**
