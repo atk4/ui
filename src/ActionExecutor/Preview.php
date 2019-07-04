@@ -41,7 +41,7 @@ class Preview extends Basic
                 break;
         }
 
-        $this->add(['Button', 'Confirm', 'primary'])->on('click', function () {
+        $this->add($this->executorButton)->on('click', function () {
             return $this->jsExecute();
         });
     }
