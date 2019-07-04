@@ -18,6 +18,7 @@ $edit_executor = new atk4\ui\ActionExecutor\Form([
 
 $edit_action = $country->addAction('edit', [
     'callback' => [$country, 'save'],
+    //'fields' => ['name', 'iso'],
     'ui' => ['Grid' => ['Executor' => $edit_executor, 'Button' => ['icon' => 'edit']]]
 ]);
 
@@ -26,7 +27,7 @@ $del_executor = new atk4\ui\ActionExecutor\Preview([
     'hasHeader' => false,
     'jsSuccess' => [
     new atk4\ui\jsExpression('$(".atk-dialog-content").parent().modal("hide")'),
-    new atk4\ui\jsToast('Record Delete with success!'),
+    new atk4\ui\jsToast('Record deleted with success!'),
     $g->container->jsReload([$g->name.'_sort' => $g->getSortBy()])
 ]]);
 
