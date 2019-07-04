@@ -25,11 +25,11 @@ $edit_action = $country->addAction('edit', [
 $del_executor = new atk4\ui\ActionExecutor\Preview([
     'previewType' => 'text',
     'hasHeader'   => false,
-    'jsSuccess'   => function($ex, $model) use ($g) {
+    'jsSuccess'   => function ($ex, $model) use ($g) {
         return [
             new atk4\ui\jsExpression('$(".atk-dialog-content").parent().modal("hide")'),
             new atk4\ui\jsToast('Record deleted with success!'),
-            $g->table->jsRemoveRow($model->get('id'))
+            $g->table->jsRemoveRow($model->get('id')),
         ];
     },
    ]

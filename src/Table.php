@@ -610,8 +610,8 @@ class Table extends Lister
     /**
      * Remove a row in table using javascript using a model id.
      *
-     * @param string $id           The model id where row need to be removed.
-     * @param string $transition   The transition effect.
+     * @param string $id         The model id where row need to be removed.
+     * @param string $transition The transition effect.
      *
      * @return mixed
      */
