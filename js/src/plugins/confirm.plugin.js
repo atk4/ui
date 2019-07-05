@@ -5,13 +5,22 @@ export default class confirm extends atkPlugin {
 
   main() {
 
-    let $m = $('<div class="ui tiny modal"/>')
+    let context = this;
+    const that = this;
+    let $m = $('<div class="ui modal"/>')
       .appendTo('body')
-      .html(this.getDialogHtml(this.settings.title));
+      .html(this.getDialogHtml(this.settings.message));
+
+    $m.addClass(this.settings.size);
 
     let options = {};
+
+    if (this.settings.context) {
+      context = this.settings.context;
+    }
+
     if (this.settings.onApprove) {
-      options.onApprove = this.settings.onApprove;
+      options.onApprove = function(){that.settings.onApprove.call(context)};
     }
     if (this.settings.onDeny) {
       options.onDeny = this.settings.onDeny;
@@ -32,8 +41,10 @@ export default class confirm extends atkPlugin {
 
 
 confirm.DEFAULTS = {
-  title: null,
+  message: null,
+  size: 'tiny',
   onApprove: null,
   onDeny: null,
-  options: {button: {ok : 'Ok', cancel: 'Cancel'}}
+  options: {button: {ok : 'Ok', cancel: 'Cancel'}},
+  context: null
 };

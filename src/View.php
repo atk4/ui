@@ -1081,11 +1081,11 @@ class View implements jsExpressionable
 
         // Do we need confirm action.
         if ($defaults['confirm'] ?? null) {
-            array_unshift($event_stmts, new jsExpression('$.atkConfirm({title:[confirm], onApprove: [action], options: {button:{ok:[ok], cancel:[cancel]}}})', [
+            array_unshift($event_stmts, new jsExpression('$.atkConfirm({message:[confirm], onApprove: [action], options: {button:{ok:[ok], cancel:[cancel]}}, context:this})', [
                                           'confirm' => $defaults['confirm'],
                                           'action'  => new jsFunction($actions),
                                           'ok'      => $defaults['ok'] ?? 'Ok',
-                                          'cancel'  => $defaults['cancel'] ?? 'Cancel'
+                                          'cancel'  => $defaults['cancel'] ?? 'Cancel',
                                       ]));
         } else {
             $event_stmts = array_merge($event_stmts, $actions);
