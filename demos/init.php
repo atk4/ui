@@ -41,6 +41,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem('Form Multi-column layout', ['form3']);
     $form->addItem(['Integration with Columns'], ['form5']);
     $form->addItem(['AutoComplete Field', 'icon'=>'yellow star'], ['autocomplete']);
+    $form->addItem(['DropDown Field'], ['dropdown-plus']);
     $form->addItem(['Value Selectors'], ['form6']);
     $form->addItem(['Conditional Fields'], ['jscondform']);
 

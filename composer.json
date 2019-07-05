@@ -17,7 +17,7 @@
     "require": {
         "atk4/data": "dev-develop",
         "atk4/core": "dev-develop",
-        "php": ">=5.6.0"
+        "php": ">=7.2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "<6",

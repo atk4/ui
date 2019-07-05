@@ -311,13 +311,118 @@ $expression argument can be string, jsExpression, array of jsExpressions or even
 
 DropDown
 ========
+DropDown uses Fomantic UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A DropDown can be used in two ways:
+1) Set a Model to $model property. The DropDown will render all records of the model that matchs the model's conditions.
+2) You can define $values property to create custom DropDown items.
 
-.. php:class:: DropDown
+Usage with a Model
+------------------
+A DropDown is not used as default Form Field decorator (`$model->hasOne()` uses Lookup), but in your Model, you can define that UI should render a Field as DropDown. For example this makes sense when a `hasOne()` relationship only has a very limited amount (like 20) of records to display: DropDown renders all records when the paged is rendered, while Lookup always sents an additional request to the server.
+Lookup on the other hand is the better choice if there is lots of records (like more than 50).
 
-.. php:attr:: $values
+To render a model field as DropDown, use the ui property of the field::
+    $model->addField('someField', ['ui' => ['form' =>['DropDown']]]);
 
-.. php:attr:: $empty
+..  Customizing how a Model's records are displayed in DropDown
+As default, DropDown will use the $model->id_field as value, and $model->title_field as title for each menu item.
+If you want to customize how a record is displayed and/or add an icon, DropDown has the renderRowFunction to do this: This function is called with each model record and needs to return an array::
+    $dropdown->renderRowFunction = function($record) {
+        return [
+            'value' => $record->id_field,
+            'title' => $record->getTitle().' ('.$record->get('subtitle').')',
+        ];
+    }
+    
+You can also use this function to add an Icon to a record::
+    $dropdown->renderRowFunction = function($record) {
+        return [
+            'value' => $record->id_field,
+            'title' => $record->getTitle().' ('.$record->get('subtitle').')',
+            'icon'  => $record->get('value') > 100 ? 'money' : 'coins',
+        ];
+    }
 
+If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the DropDown class and create an own template with the complex HTML::
+
+    class MyDropDown extends \atk4\ui\DropDown {
+        
+        public $defaultTemplate = 'my_dropdown.html';
+        
+        /*
+         * used when a custom callback is defined for row rendering. Sets
+         * values to item template and appends it to main template
+         */
+        protected function _addCallBackRow($row, $key = null) {
+            $res = call_user_func($this->renderRowFunction, $row, $key);
+            $this->_tItem->set('value', (string) $res['value']);
+            $this->_tItem->set('title', $res['title']);
+            $this->_tItem->set('someOtherField', $res['someOtherField]);
+            $this->_tItem->set('someOtherField2', $res['someOtherField2]);
+            //add item to template
+            $this->template->appendHTML('Item', $this->_tItem->render());
+       }
+   }
+
+
+With the according renderRowFunction::
+    function($record) {
+        return [
+            'value' => $record->id,
+            'title' => $record->getTitle,
+            'icon'  => $record->value > 100 ? 'money' : 'coins',
+            'someOtherField' => $record->get('SomeOtherField'),
+            'someOtherField2' => $record->get('SomeOtherField2'),
+        ];
+    }
+
+Of course, the tags `value`, `title`, `icon`, `someOtherField` and `SomeOtherField2` need to be set in my_dropdown.html.
+
+
+Usage with $values property
+------------------
+If not used with a model, you can define the DropDown values in $values array. The pattern is value => title::
+    $dropdown->values = [
+        'decline'   => 'No thanks',
+        'postprone' => 'Maybe later',
+        'accept'    => 'Yes, I want to!',
+    ];
+    
+ You can also define an Icon right away::
+     $dropdown->values = [
+         'tag'        => ['Tag', 'icon' => 'tag icon'],
+         'globe'      => ['Globe', 'icon' => 'globe icon'],
+         'registered' => ['Registered', 'icon' => 'registered icon'],
+         'file'       => ['File', 'icon' => 'file icon']
+     ].
+
+If using $values property, you can also use the renderRowFunction, though there usually is no need for it. If you use it, use the second parameter as well, its the array key::
+    function($row, $key) {
+        return [
+            'value' => $key,
+            'title' => strtoupper($row),
+        ];
+    }
+
+
+DropDown Settings
+-----------------
+There's a bunch of settings to influence DropDown behaviour:
+
+.. php:attr:: empty
+Define a string for the empty option (no selection). Standard is ...
+
+.. php:attr:: isValueRequired 
+Whether or not this dropdown required a value. When set to true, $empty is shown on page load but is not selectable once a value has been choosen.
+
+..php:attr:: dropdownOptions
+Here you can pass an array of Fomantic UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
+    $dropdown = new DropDown(['dropdownOptions' => [
+        'selectOnKeydown' => false,
+    ]]);
+    
+ ..php:attr:: isMultiple
+ If set to true, multiple items can be selected in DropDown. They will be sent comma seperated (value1,value2,value3) on form submit.
+ 
 
 AutoComplete
 ============

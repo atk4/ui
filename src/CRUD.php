@@ -266,7 +266,7 @@ class CRUD extends Grid
             new jsExpression('$(".atk-dialog-content").trigger("close")'),
 
             // display notification
-            $this->factory($notifier),
+            $this->factory($notifier, null, 'atk4\ui'),
 
             // reload Grid Container.
             $this->container->jsReload([$this->name.'_sort' => $this->getSortBy()]),

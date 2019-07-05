@@ -68,6 +68,13 @@ class View implements jsExpressionable
     public $id = null;
 
     /**
+     * Default name of the element.
+     *
+     * @var string
+     */
+    public $defaultName = 'atk';
+
+    /**
      * List of classes that needs to be added.
      *
      * @var array
@@ -295,14 +302,11 @@ class View implements jsExpressionable
      */
     public function init()
     {
-        // set name and id of view
-        if (!$this->name) {
-            if (!$this->id) {
-                $this->id = $this->name = 'atk';
-            } else {
-                $this->name = $this->id;
-            }
-        } elseif (!$this->id) {
+        if ($this->name === null) {
+            $this->name = $this->defaultName;
+        }
+
+        if ($this->id === null) {
             $this->id = $this->name;
         }
 
