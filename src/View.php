@@ -966,9 +966,9 @@ class View implements jsExpressionable
     /**
      * Returns JS for reloading View.
      *
-     * @param array $args
+     * @param array             $args
      * @param jsExpression|null $afterSuccess
-     * @param array $apiConfig
+     * @param array             $apiConfig
      *
      * @return \atk4\ui\jsReload
      */
