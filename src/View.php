@@ -1074,7 +1074,6 @@ class View implements jsExpressionable
             }, $arguments);
 
             $actions[] = $cb;
-
         } elseif (is_array($action)) {
             $actions = array_merge($actions, $action);
         } elseif ($action) {

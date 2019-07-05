@@ -328,12 +328,13 @@ class Card extends View
      * as target.
      *
      * @param Generic $action
-     * @param null $button
+     * @param null    $button
      * @param []      $args    The action argument
-     * @param string $confirm The confirmation message.
+     * @param string  $confirm The confirmation message.
+     *
+     * @throws Exception
      *
      * @return Card
-     * @throws Exception
      */
     public function addClickAction(Generic $action, $button = null, $args = [], $confirm = null)
     {
