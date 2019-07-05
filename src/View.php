@@ -1022,6 +1022,8 @@ class View implements jsExpressionable
 
         $cb = null;
         $actions = [];
+        $chain = new jQuery();
+        $actions[] = $chain;
 
         // second argument may be omitted
         if (!is_string($selector) && (is_null($action) || is_array($action))) {
@@ -1099,7 +1101,7 @@ class View implements jsExpressionable
             $this->js(true)->on($event, $event_function);
         }
 
-        return new jQuery();
+        return $chain;
     }
 
     /**

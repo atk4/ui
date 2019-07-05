@@ -6,12 +6,12 @@ export default class ajaxec extends atkPlugin {
     main() {
         //Allow user to confirm if available.
         if(this.settings.confirm){
-            const that = this;
-            $.atkConfirm({message: this.settings.confirm, onApprove: function(){that.doExecute()}});
-
+            if(confirm(this.settings.confirm)) {
+                this.doExecute();
+            }
         } else {
             if (!this.$el.hasClass('loading')){
-              this.doExecute();
+                this.doExecute();
             }
         }
     }

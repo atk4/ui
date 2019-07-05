@@ -1,6 +1,12 @@
 import atkPlugin from './atk.plugin';
 
-
+/**
+ * A Fomantic UI Modal dialog for confirming an action.
+ *
+ * Will execute onApprove function when user click ok button;
+ * Will execute onDeny function when user click cancel button.
+ *
+ */
 export default class confirm extends atkPlugin {
 
   main() {
@@ -19,11 +25,12 @@ export default class confirm extends atkPlugin {
       context = this.settings.context;
     }
 
+    //Create wrapper function for using proper "this" context.
     if (this.settings.onApprove) {
       options.onApprove = function(){that.settings.onApprove.call(context)};
     }
     if (this.settings.onDeny) {
-      options.onDeny = this.settings.onDeny;
+      options.onDeny = function(){that.settings.onDeny.call(context)};
     }
     $m.data('needRemove', true).modal(options).modal('show');
   }
@@ -38,7 +45,6 @@ export default class confirm extends atkPlugin {
           `;
   }
 }
-
 
 confirm.DEFAULTS = {
   message: null,
