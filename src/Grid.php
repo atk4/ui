@@ -328,12 +328,14 @@ class Grid extends View
      * Returns JS for reloading View.
      *
      * @param array $args
+     * @param jsExpression|null $afterSuccess
+     * @param array $apiConfig
      *
      * @return \atk4\ui\jsReload
      */
-    public function jsReload($args = [])
+    public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
     {
-        return new jsReload($this->container, $args);
+        return new jsReload($this->container, $args, $afterSuccess, $apiConfig);
     }
 
     /**
