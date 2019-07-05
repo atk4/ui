@@ -1056,7 +1056,7 @@ class View implements jsExpressionable
                 $urlData = $action;
                 unset($urlData[0]);
                 foreach ($urlData as $a) {
-                    $event_stmts[] = $a;
+                    $actions[] = $a;
                 }
                 $action = $action[0];
             } else {
