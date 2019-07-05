@@ -6,6 +6,9 @@ import atkPlugin from './atk.plugin';
  * Will execute onApprove function when user click ok button;
  * Will execute onDeny function when user click cancel button.
  *
+ * Fomantic UI modal option can be pass using modalOptions object.
+ * Setting onApprove and onDeny function within modalOptions object will override
+ * onApprove and onDeny current setting. 
  */
 export default class confirm extends atkPlugin {
 
@@ -32,6 +35,9 @@ export default class confirm extends atkPlugin {
     if (this.settings.onDeny) {
       options.onDeny = function(){that.settings.onDeny.call(context)};
     }
+
+    options = Object.assign(options, this.settings.modalOptions);
+
     $m.data('needRemove', true).modal(options).modal('show');
   }
 
@@ -52,5 +58,6 @@ confirm.DEFAULTS = {
   onApprove: null,
   onDeny: null,
   options: {button: {ok : 'Ok', cancel: 'Cancel'}},
+  modalOptions: {closable: false},
   context: null
 };
