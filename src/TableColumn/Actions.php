@@ -50,7 +50,7 @@ class Actions extends Generic
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      */
-    public function addModal($button, $title, $callback, $owner = null)
+    public function addModal($button, $title, $callback, $owner = null, $args = [])
     {
         if (!$owner) {
             $modal = $this->owner->owner->add(['Modal', 'title'=>$title]);
@@ -63,7 +63,7 @@ class Actions extends Generic
             call_user_func($callback, $t, $this->app->stickyGet($this->name));
         });
 
-        return $this->addAction($button, $modal->show([$this->name=>$this->owner->jsRow()->data('id')]));
+        return $this->addAction($button, $modal->show(array_merge([$this->name=>$this->owner->jsRow()->data('id')], $args)));
     }
 
     /**

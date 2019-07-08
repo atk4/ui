@@ -608,6 +608,19 @@ class Table extends Lister
     }
 
     /**
+     * Remove a row in table using javascript using a model id.
+     *
+     * @param string $id         The model id where row need to be removed.
+     * @param string $transition The transition effect.
+     *
+     * @return mixed
+     */
+    public function jsRemoveRow($id, $transition = 'fade left')
+    {
+        return $this->js()->find("tr[data-id={$id}]")->transition($transition);
+    }
+
+    /**
      * Executed for each row if "totals" are enabled to add up values.
      */
     public function updateTotals()

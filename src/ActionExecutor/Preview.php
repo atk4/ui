@@ -22,7 +22,7 @@ class Preview extends Basic
             return;
         }
 
-        $this->add(['Header', $this->action->caption, 'subHeader'=>$this->description ?: $this->action->getDescription()]);
+        $this->addHeader();
 
         $text = $this->executePreview();
 
@@ -41,7 +41,7 @@ class Preview extends Basic
                 break;
         }
 
-        $this->add(['Button', 'Confirm', 'primary'])->on('click', function () {
+        $this->add($this->executorButton)->on('click', function () {
             return $this->jsExecute();
         });
     }
