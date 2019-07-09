@@ -90,7 +90,7 @@ class MultiLine extends Generic
     /**
      * The template need for the multiline view.
      *
-     * @var null
+     * @var Template
      */
     public $multiLineTemplate = null;
 
@@ -98,7 +98,7 @@ class MultiLine extends Generic
      * The multiline View.
      * Assign on init.
      *
-     * @var null
+     * @var View
      */
     private $multiLine = null;
 
@@ -113,14 +113,14 @@ class MultiLine extends Generic
     /**
      * The definition of each fields used in each multiline row.
      *
-     * @var null
+     * @var array
      */
     private $fieldDefs = null;
 
     /**
      * The js callback.
      *
-     * @var null
+     * @var jsCallback
      */
     private $cb = null;
 
@@ -128,7 +128,7 @@ class MultiLine extends Generic
      * The callback function trigger when field
      * are changed or row are delete.
      *
-     * @var null
+     * @var callable
      */
     public $changeCb = null;
 
@@ -136,42 +136,42 @@ class MultiLine extends Generic
      * An array of fields name that will trigger
      * the change callback when field are changed.
      *
-     * @var null
+     * @var array
      */
     public $eventFields = null;
 
     /**
      * Collection of field errors.
      *
-     * @var null
+     * @var array
      */
     private $rowErrors = null;
 
     /**
-     * The model reference use for multi line input.
+     * The model reference name used for multi line input.
      *
-     * @var null
+     * @var string
      */
     public $modelRef = null;
 
     /**
      * The link field used for reference.
      *
-     * @var null
+     * @var string
      */
     public $linkField = null;
 
     /**
      * The fields use in each line.
      *
-     * @var null
+     * @var array
      */
     public $rowFields = null;
 
     /**
      * The data sent for each line.
      *
-     * @var null
+     * @var array
      */
     public $rowData = null;
 
@@ -199,7 +199,7 @@ class MultiLine extends Generic
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
-                    throw new ValidationException([$this->short_name => 'multine error']);
+                    throw new ValidationException([$this->short_name => 'multiline error']);
                 }
             }
         });
@@ -223,15 +223,15 @@ class MultiLine extends Generic
      * You must supply array of fields that will trigger the
      * callback when changed.
      *
-     * @param array|\atk4\ui\FormField\jsExpression|callable|string $fx
-     * @param arra                                                  $fields
+     * @param callable $fx
+     * @param array    $fields
      *
      * @throws Exception
      */
     public function onLineChange($fx, $fields)
     {
         if (!is_callable($fx)) {
-            throw new Exception('Function is required for onChange event.');
+            throw new Exception('Function is required for onLineChange event.');
         }
         $this->eventFields = $fields;
 
@@ -260,7 +260,6 @@ class MultiLine extends Generic
      * Value is based on model set and will
      * output data rows as json string value.
      *
-     *
      * @throws \atk4\core\Exception
      *
      * @return false|string
@@ -271,6 +270,7 @@ class MultiLine extends Generic
         $data = [];
 
         //set model according to model reference if set; or simply the model pass to it.
+        //@todo Why not using $this->getModel() here?
         if ($this->model->loaded() && $this->modelRef) {
             $m = $this->model->ref($this->modelRef);
         } elseif (!$this->modelRef) {
@@ -466,7 +466,6 @@ class MultiLine extends Generic
      * Set view model.
      * If modelRef is used then getModel will return proper model.
      *
-     *
      * @param Model $m
      * @param array $fields
      * @param null  $modelRef
@@ -505,16 +504,13 @@ class MultiLine extends Generic
             if (!$field instanceof \atk4\data\Field) {
                 continue;
             }
-            $type = $field->type ? $field->type : 'string';
+            $type = $field->type ?: 'string';
 
             if (isset($field->ui['form'])) {
                 $type = $field->ui['form'][0];
             }
 
-            $width = null;
-            if (!(empty($field->ui))) {
-                $width = $field->ui['multiline']['width'] ? $field->ui['multiline']['width'] : null;
-            }
+            $width = $field->ui['multiline']['width'] ?? null;
 
             $this->fieldDefs[] = [
                 'field'       => $field->short_name,
@@ -786,7 +782,7 @@ class MultiLine extends Generic
         switch ($exprField->type) {
             case 'money':
             case 'integer':
-            case 'number':
+            case 'float':
                 //Value is 0 or the field value.
                 $value = $model[$fieldName] ? $model[$fieldName] : 0;
                 break;

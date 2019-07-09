@@ -12,11 +12,11 @@ class InventoryItem extends \atk4\data\Model
         parent::init();
 
         $this->addField('item', ['required' => true, 'default' => 'item']);
-        $this->addField('qty', ['type' => 'number', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-        $this->addField('box', ['type' => 'number', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
+        $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
+        $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addExpression('total', ['expr' => function ($row) {
             return $row['qty'] * $row['box'];
-        }, 'type' => 'number']);
+        }, 'type' => 'integer']);
     }
 }
 

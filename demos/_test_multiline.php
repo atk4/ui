@@ -45,3 +45,7 @@ $m->load(3);
 $f = $app->add('Form');
 
 $f->setModel($m);
+
+//exports DB data without typecasting - to see what's actually stored in DB
+$app->add('View')->setElement('pre')->addStyle(['border'=>'1px solid blue', 'overflow'=>'auto'])
+    ->set(var_export($m->export(null,null,false), true));
