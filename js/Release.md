@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.7.0
+
+- New atkConfirm plugin. Will display a user confirmaton dialog using fomantic ui modal.
+
 ### version 1.6.8
 
 - Babel configuration.

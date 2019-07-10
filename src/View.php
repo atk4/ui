@@ -1020,7 +1020,13 @@ class View implements jsExpressionable
      */
     public function on($event, $selector = null, $action = null, $defaults = null)
     {
+        $event_stmts = [];
+
         $cb = null;
+        $actions = [];
+        $chain = new jQuery();
+        $actions[] = $chain;
+
         // second argument may be omitted
         if (!is_string($selector) && (is_null($action) || is_array($action))) {
             $defaults = $action;
@@ -1028,6 +1034,7 @@ class View implements jsExpressionable
             $selector = null;
         }
 
+        // check for arguments.
         $arguments = isset($defaults['args']) ? $defaults['args'] : [];
         if (is_null($defaults)) {
             $defaults = [];
@@ -1041,13 +1048,12 @@ class View implements jsExpressionable
             }
         }
 
-        $actions = [];
-        $actions['preventDefault'] = isset($defaults['preventDefault']) ? $defaults['preventDefault'] : true;
-        $actions['stopPropagation'] = isset($defaults['stopPropagation']) ? $defaults['stopPropagation'] : true;
+        // set event stmts to use preventDefault and/or stopPropagation
+        $event_stmts['preventDefault'] = $defaults['preventDefault'] ?? true;
+        $event_stmts['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
+        // Dealing with callback action.
         if (is_callable($action) || (is_array($action) && isset($action[0]) && is_callable($action[0]))) {
-            // if callable $action is passed, then execute ajaxec()
-
             if (is_array($action)) {
                 $urlData = $action;
                 unset($urlData[0]);
@@ -1070,34 +1076,30 @@ class View implements jsExpressionable
             }, $arguments);
 
             $actions[] = $cb;
-        //$thisAction->api(['on'=>'now', 'url'=>$cb->getJSURL(), 'urlData'=>$urlData, 'obj'=>new jsExpression('this')]);
         } elseif (is_array($action)) {
             $actions = array_merge($actions, $action);
         } elseif ($action) {
-            // otherwise include
             $actions[] = $action;
         }
 
-        $chain = new jQuery();
-        $actions[] = $chain;
-
         // Do we need confirm action.
-        if (isset($defaults['confirm']) && $defaults['confirm']) {
-            if (isset($cb)) {
-                $cb->setConfirm($defaults['confirm']);
-            } else {
-                array_unshift($actions,
-                              new jsExpression('if(!confirm([])){return;}', [$defaults['confirm']])
-                );
-            }
+        if ($defaults['confirm'] ?? null) {
+            array_unshift($event_stmts, new jsExpression('$.atkConfirm({message:[confirm], onApprove: [action], options: {button:{ok:[ok], cancel:[cancel]}}, context:this})', [
+                                          'confirm' => $defaults['confirm'],
+                                          'action'  => new jsFunction($actions),
+                                          'ok'      => $defaults['ok'] ?? 'Ok',
+                                          'cancel'  => $defaults['cancel'] ?? 'Cancel',
+                                      ]));
+        } else {
+            $event_stmts = array_merge($event_stmts, $actions);
         }
 
-        $action = new jsFunction($actions);
+        $event_function = new jsFunction($event_stmts);
 
         if ($selector) {
-            $this->js(true)->on($event, $selector, $action);
+            $this->js(true)->on($event, $selector, $event_function);
         } else {
-            $this->js(true)->on($event, $action);
+            $this->js(true)->on($event, $event_function);
         }
 
         return $chain;

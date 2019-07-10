@@ -329,11 +329,16 @@ class Card extends View
      *
      * @param Generic $action
      * @param null    $button
+     * @param []      $args    The action argument
+     * @param string  $confirm The confirmation message.
      *
      * @throws Exception
+     *
+     * @return Card
      */
     public function addClickAction(Generic $action, $button = null, $args = [], $confirm = null)
     {
+        $defaults = [];
         if (!$button) {
             $button = new Button([$action->caption]);
         }
@@ -341,10 +346,11 @@ class Card extends View
 
         $id = $this->model ? $this->model[$this->model->id_field] : null;
 
-        $btn->on('click', $executor = new jsEvent($btn, $action, $id, $args));
         if ($confirm) {
-            $executor->setConfirm($confirm);
+            $defaults['confirm'] = $confirm;
         }
+
+        $btn->on('click', $executor = new jsEvent($btn, $action, $id, $args), $defaults);
 
         return $this;
     }
