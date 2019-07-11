@@ -384,6 +384,7 @@ class App
      */
     public function normalizeClassNameApp($name, $prefix = '')
     {
+        return $prefix.$name;
         //return '\\'.__NAMESPACE__.'\\'.$name;
     }
 
