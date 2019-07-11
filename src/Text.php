@@ -25,14 +25,15 @@ class Text extends View
      * Adds HTML paragraph.
      *
      * @param string $text
+     * @param bool   $allow_html
      *
      * @return $this
      */
-    public function addParagraph($text)
+    public function addParagraph($text, $allow_html = false)
     {
         $this->content .= isset($this->app)
             ? $this->app->getTag('p', $text)
-            : '<p>'.htmlspecialchars($text).'</p>';
+            : '<p>'.($allow_html ? $text : htmlspecialchars($text)).'</p>';
 
         return $this;
     }
