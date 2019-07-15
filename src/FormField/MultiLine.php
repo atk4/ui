@@ -276,7 +276,7 @@ class MultiLine extends Generic
             foreach ($m as $id => $row) {
                 $d_row = [];
                 foreach ($this->rowFields as $fieldName) {
-                    $field = $m->getElement($fieldName);
+                    $field = $m->getField($fieldName);
                     if ($field->isEditable()) {
                         $value = $row->get($field);
                     } else {
@@ -315,7 +315,7 @@ class MultiLine extends Generic
                 $value = $col[$fieldName];
 
                 try {
-                    $field = $m->getElement($fieldName);
+                    $field = $m->getField($fieldName);
                     // save field value only if field was editable in form at all
                     if (!$field->read_only) {
                         $m[$fieldName] = $this->app->ui_persistence->typecastLoadField($field, $value);
@@ -371,7 +371,7 @@ class MultiLine extends Generic
                     $model->load($value);
                 }
 
-                $field = $model->getElement($fieldName);
+                $field = $model->getField($fieldName);
 
                 if ($field->isEditable()) {
                     $field->set($value);
@@ -476,8 +476,8 @@ class MultiLine extends Generic
     public function setModel(\atk4\data\Model $model, $fields = [], $modelRef = null, $linkField = null)
     {
         //remove our self from model
-        if ($model->hasElement($this->short_name)) {
-            $model->getElement($this->short_name)->never_persist = true;
+        if ($model->hasField($this->short_name)) {
+            $model->getField($this->short_name)->never_persist = true;
         }
         $m = parent::setModel($model);
 
@@ -496,7 +496,7 @@ class MultiLine extends Generic
         $this->rowFields = array_merge([$m->id_field], $fields);
 
         foreach ($this->rowFields as $fieldName) {
-            $field = $m->getElement($fieldName);
+            $field = $m->getField($fieldName);
 
             if (!$field instanceof \atk4\data\Field) {
                 continue;
@@ -619,7 +619,7 @@ class MultiLine extends Generic
             if ($fieldName === $model->id_field) {
                 continue;
             }
-            $field = $model->getElement($fieldName);
+            $field = $model->getField($fieldName);
             if ($field instanceof Callback) {
                 $value = call_user_func($field->expr, $model);
                 $values[$fieldName] = $this->app->ui_persistence->_typecastSaveField($field, $value);
@@ -646,7 +646,7 @@ class MultiLine extends Generic
             }
 
             $value = isset($post[$fieldName]) ? $post[$fieldName] : null;
-            if ($model->getElement($fieldName)->isEditable()) {
+            if ($model->getField($fieldName)->isEditable()) {
                 try {
                     $model[$fieldName] = $value;
                 } catch (ValidationException $e) {
@@ -683,13 +683,13 @@ class MultiLine extends Generic
         if (!empty($dummyFields)) {
             $dummyModel = new Model($m->persistence, ['table' => $m->table]);
             foreach ($dummyFields as $f) {
-                $dummyModel->addExpression($f['name'], ['expr'=>$f['expr'], 'type' => $m->getElement($f['name'])->type]);
+                $dummyModel->addExpression($f['name'], ['expr'=>$f['expr'], 'type' => $m->getField($f['name'])->type]);
             }
             $values = $dummyModel->loadAny()->get();
             unset($values[$m->id_field]);
 
             foreach ($values as $f => $value) {
-                $field = $m->getElement($f);
+                $field = $m->getField($f);
                 $formatValues[$f] = $this->app->ui_persistence->_typecastSaveField($field, $value);
             }
         }
@@ -741,7 +741,7 @@ class MultiLine extends Generic
 
         foreach ($matches[0] as $match) {
             $fieldName = substr($match, 1, -1);
-            $field = $model->getElement($fieldName);
+            $field = $model->getField($fieldName);
             if ($field instanceof Field_SQL_Expression) {
                 $expr = str_replace($match, $this->getDummyExpression($field, $model), $expr);
             } else {

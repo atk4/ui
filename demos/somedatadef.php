@@ -65,7 +65,7 @@ if (!class_exists('SomeData')) {
                         continue;
                     }
 
-                    $actual = $m->getElement($field)->actual;
+                    $actual = $m->getField($field)->actual;
                     if ($actual) {
                         $type = $actual;
                     }

@@ -525,7 +525,7 @@ class Grid extends View
         if (
             $sortBy
             && isset($this->table->columns[$sortBy])
-            && $this->model->hasElement($sortBy) instanceof \atk4\data\Field
+            && $this->model->hasField($sortBy)
         ) {
             $this->model->setOrder($sortBy, $desc);
             $this->table->sort_by = $sortBy;

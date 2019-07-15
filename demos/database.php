@@ -108,8 +108,8 @@ if (!class_exists('Country')) {
             $this->addFields(['project_hours_est', 'project_hours_reported'], ['type' => 'integer']);
 
             $this->addFields(['project_expenses_est', 'project_expenses'], ['type' => 'money']);
-            $this->add(new Percent(), 'project_mgmt_cost_pct');
-            $this->add(new Percent(), 'project_qa_cost_pct');
+            $this->addField('project_mgmt_cost_pct', new Percent());
+            $this->addField('project_qa_cost_pct', new Percent());
 
             $this->addFields(['start_date', 'finish_date'], ['type' => 'date']);
             $this->addField('finish_time', ['type' => 'time']);

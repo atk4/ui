@@ -156,7 +156,7 @@ class Link extends Generic
                 $key = $val;
             }
 
-            if ($row->hasElement($val)) {
+            if ($row->hasField($val)) {
                 $p[$key] = $row[$val];
             }
         }

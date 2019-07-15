@@ -197,7 +197,7 @@ class Table extends Lister
         }
 
         if (is_string($name) && $name) {
-            $existingField = $this->model->hasElement($name);
+            $existingField = $this->model->hasField($name);
         } else {
             $existingField = null;
         }
@@ -280,7 +280,7 @@ class Table extends Lister
         foreach ($cols as $colName) {
             $col = $this->columns[$colName];
             if ($col) {
-                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getElement($colName), 'reload' => $this->reload, 'colTrigger' => '#'.$col->name.'_ac']));
+                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#'.$col->name.'_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('green caret square down') : null;
                 $pop->form->onSubmit(function ($f) use ($pop) {
                     return new jsReload($this->reload);
@@ -550,7 +550,7 @@ class Table extends Lister
                 if (!is_array($columns)) {
                     $columns = [$columns];
                 }
-                $field = $this->model->hasElement($name);
+                $field = $this->model->hasField($name);
                 foreach ($columns as $column) {
                     if (!method_exists($column, 'getHTMLTags')) {
                         continue;
@@ -676,7 +676,7 @@ class Table extends Lister
             }
 
             if (!is_int($name)) {
-                $field = $this->model->getElement($name);
+                $field = $this->model->getField($name);
 
                 $output[] = $column->getHeaderCellHTML($field);
             } else {
@@ -706,7 +706,7 @@ class Table extends Lister
             // if totals plan is set as array, then show formatted value
             if (is_array($this->totals_plan[$name])) {
                 // todo - format
-                $field = $this->model->getElement($name);
+                $field = $this->model->getField($name);
                 $output[] = $column->getTotalsCellHTML($field, $this->totals[$name]);
                 continue;
             }
@@ -731,7 +731,7 @@ class Table extends Lister
             // If multiple formatters are defined, use the first for the header cell
 
             if (!is_int($name)) {
-                $field = $this->model->getElement($name);
+                $field = $this->model->getField($name);
             } else {
                 $field = null;
             }

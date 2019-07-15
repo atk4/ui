@@ -10,7 +10,7 @@ $data = [
 ];
 
 $m = new \atk4\data\Model(new \atk4\data\Persistence_Static($data));
-$m->getElement('amount')->type = 'money';
+$m->getField('amount')->type = 'money';
 
 // ========================================================
 $app->add(['Header', 'Table with various headers', 'subHeader'=>'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon'=>'table']);

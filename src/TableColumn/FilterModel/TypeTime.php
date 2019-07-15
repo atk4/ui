@@ -32,13 +32,13 @@ class TypeTime extends Generic
                     $d1 = $filter['value'];
                     $d2 = $filter['range'];
                     if ($d2 >= $d1) {
-                        $value = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d1);
-                        $value2 = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d2);
+                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
+                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
                     } else {
-                        $value = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d2);
-                        $value2 = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d1);
+                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
+                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
                     }
-                    $m->addCondition($m->expr('[field] between [value] and [value2]', ['field' => $m->getElement($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $m->addCondition($m->expr('[field] between [value] and [value2]', ['field' => $m->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
                     break;
                 default:
                     $m->addCondition($filter['name'], $filter['op'], $filter['value']);

@@ -90,7 +90,7 @@ class InlineEdit extends View
         // Set default validation error handler.
         if (!$this->formatErrorMsg || !is_callable($this->formatErrorMsg)) {
             $this->formatErrorMsg = function ($e, $value) {
-                $caption = $this->model->getElement($this->field)->getCaption();
+                $caption = $this->model->getField($this->field)->getCaption();
 
                 return "{$caption} - {$e->getMessage()}. <br>Trying to set this value: '{$value}'";
             };
@@ -113,7 +113,7 @@ class InlineEdit extends View
                 $value = $_POST['value'] ? $_POST['value'] : null;
                 $this->cb->set(function () use ($value) {
                     try {
-                        $this->model[$this->field] = $this->app->ui_persistence->typecastLoadField($this->model->getElement($this->field), $value);
+                        $this->model[$this->field] = $this->app->ui_persistence->typecastLoadField($this->model->getField($this->field), $value);
                         $this->model->save();
 
                         return $this->jsSuccess('Update successfully');

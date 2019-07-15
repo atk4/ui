@@ -170,7 +170,7 @@ class UI extends \atk4\data\Persistence
         foreach ($row as $key => $value) {
 
             // Look up field object
-            $f = $m->hasElement($key);
+            $f = $m->hasField($key);
 
             // Figure out the name of the destination field
             $field = $key;

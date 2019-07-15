@@ -32,7 +32,7 @@ class CardTable extends Table
             if (!$columndef || ($columndef && in_array($key, $columndef))) {
                 $data[] = [
                     'id'   => $key,
-                    'field'=> $m->getElement($key)->getCaption(),
+                    'field'=> $m->getField($key)->getCaption(),
                     'value'=> $ui_values[$key],
                 ];
             }
@@ -41,7 +41,7 @@ class CardTable extends Table
         $this->_bypass = true;
         $mm = parent::setSource($data);
         $this->addDecorator('value', ['Multiformat', function ($row, $field) use ($m) {
-            $field = $m->getElement($row->data['id']);
+            $field = $m->getField($row->data['id']);
             $ret = $this->decoratorFactory($field);
             if ($ret instanceof \atk4\ui\TableColumn\Money) {
                 $ret->attr['all']['class'] = ['single line'];
