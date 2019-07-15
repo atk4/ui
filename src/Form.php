@@ -626,6 +626,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 return $caught($e, false);
             } catch (\Exception $e) {
                 return $caught($e, true);
+            } finally {
+                ob_end_flush();
             }
 
             return $response;
