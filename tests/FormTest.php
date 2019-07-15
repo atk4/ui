@@ -62,6 +62,7 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $f->render();
         unset($f);
+        $_POST = [];
 
         $this->assertTrue($submit_called);
     }
