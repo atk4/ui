@@ -58,9 +58,6 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
             $this->assertEquals(false, $f->model['is_admin']);
 
             $submit_called = true;
-
-            // prevent default submission handler from outputing and terminating
-            throw new MyException();
         });
 
         $f->render();
