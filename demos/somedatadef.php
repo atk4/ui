@@ -49,10 +49,8 @@ if (!class_exists('SomeData')) {
         public function export($m, $fields = [])
         {
             if (!$fields) {
-                foreach ($m->elements as $name => $e) {
-                    if ($e instanceof \atk4\data\Field) {
-                        $fields[] = $name;
-                    }
+                foreach ($m->getFields() as $name => $e) {
+                    $fields[] = $name;
                 }
             }
 

@@ -11,11 +11,7 @@ class POST extends \atk4\data\Persistence
         // carefully copy stuff from $_POST into the model
         $data = [];
 
-        foreach ($m->elements as $field => $def) {
-            if (!$def instanceof \atk4\data\Field) {
-                continue;
-            }
-
+        foreach ($m->getFields() as $field => $def) {
             if ($def->type === 'boolean') {
                 $data[$field] = isset($_POST[$field]);
                 continue;

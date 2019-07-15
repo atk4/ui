@@ -119,18 +119,7 @@ abstract class _Abstract extends \atk4\ui\View
      */
     protected function getModelFields(\atk4\data\Model $model)
     {
-        $fields = [];
-        foreach ($model->elements as $f) {
-            if (!$f instanceof \atk4\data\Field) {
-                continue;
-            }
-
-            if ($f->isEditable() || $f->isVisible()) {
-                $fields[] = $f->short_name;
-            }
-        }
-
-        return $fields;
+        return array_keys($model->getFields('editable'));
     }
 
     /**

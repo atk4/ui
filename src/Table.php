@@ -269,7 +269,7 @@ class Table extends Lister
 
         // set filter to all column when null.
         if (!$cols) {
-            foreach ($this->model->elements as $key => $field) {
+            foreach ($this->model->getFields() as $key => $field) {
                 if (isset($this->columns[$key]) && $this->columns[$key]) {
                     $cols[] = $field->short_name;
                 }
@@ -451,16 +451,7 @@ class Table extends Lister
         parent::setModel($m);
 
         if ($columns === null) {
-            $columns = [];
-            foreach ($m->elements as $name => $element) {
-                if (!$element instanceof \atk4\data\Field) {
-                    continue;
-                }
-
-                if ($element->isVisible()) {
-                    $columns[] = $name;
-                }
-            }
+            $columns = array_keys($m->getFields('visible'));
         } elseif ($columns === false) {
             return $this->model;
         }
