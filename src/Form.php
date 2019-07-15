@@ -595,7 +595,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 $this->loadPOST();
                 ob_start();
                 $response = $this->hook('submit');
-                $output = ob_get_clean();
+                $output = ob_get_contents();
 
                 if ($output) {
                     $message = new Message('Direct Output Detected');
@@ -626,6 +626,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 return $caught($e, false);
             } catch (\Exception $e) {
                 return $caught($e, true);
+            } finally {
+                ob_end_flush();
             }
 
             return $response;
