@@ -25,7 +25,7 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
     public function testFormSubmit()
     {
         $f = new Form();
-        $f->app = new AppMock([
+        $f->app = new AppMockFT([
             'catch_exceptions'        => false,
             'always_run'              => false,
             'catch_runaway_callbacks' => false,
@@ -67,7 +67,7 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
     }
 }
 
-class AppMock extends App
+class AppMockFT extends App
 {
     public function terminate($output = null)
     {
