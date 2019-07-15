@@ -30,7 +30,7 @@ class TypeNumber extends Generic
             switch ($filter['op']) {
                 case 'between':
                     $m->addCondition(
-                        $m->expr('[field] between [value] and [range]', ['field' => $m->getElement($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
+                        $m->expr('[field] between [value] and [range]', ['field' => $m->getField($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
                     );
                     break;
                 default:
