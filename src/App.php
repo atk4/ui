@@ -178,6 +178,7 @@ class App
         } elseif (!is_array($this->template_dir)) {
             $this->template_dir = [$this->template_dir];
         }
+
         $this->template_dir[] = __DIR__.'/../template/'.$this->skin;
 
         // Set our exception handler
@@ -191,46 +192,9 @@ class App
             );
         }
 
-        if (!$this->_initialized) {
-            //$this->init();
-        }
-
-        if ($this->fix_incompatible) {
-            // PHP 7.0 introduces strict checks for method patterns. But only 7.2 introduced parameter type widening
-            //
-            // https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)#Contravariant_method_argument_type
-            // https://wiki.php.net/rfc/parameter-no-type-variance
-            //
-            // We wish to start using type-hinting more in our classes, but it would break any extends in 3rd party code unless
-            // they are on 7.2.
-            if (version_compare(PHP_VERSION, '7.0.0') >= 0 && version_compare(PHP_VERSION, '7.2.0') < 0) {
-                set_error_handler(function ($errno, $errstr) {
-                    return strpos($errstr, 'Declaration of') === 0;
-                }, E_WARNING);
-            }
-        }
-
         // Always run app on shutdown
         if ($this->always_run) {
-            if ($this->_cwd_restore) {
-                $this->_cwd_restore = getcwd();
-            }
-
-            register_shutdown_function(function () {
-                if (is_string($this->_cwd_restore)) {
-                    chdir($this->_cwd_restore);
-                }
-
-                if (!$this->run_called) {
-                    try {
-                        $this->run();
-                    } catch (\Exception $e) {
-                        $this->caughtException($e);
-                    }
-                }
-
-                $this->callExit();
-            });
+            $this->setupAlwaysRun();
         }
 
         // Set up UI persistence
@@ -270,27 +234,41 @@ class App
         $l = new static();
         $l->initLayout('Centered');
 
-        //check for error type.
-        if ($exception instanceof \atk4\core\Exception) {
-            $l->layout->template->setHTML('Content', $exception->getHTML());
-        } elseif ($exception instanceof \Error) {
-            $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
-            $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
-        } else {
-            $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+        // -- CHECK ERROR BY TYPE
+
+        switch(true)
+        {
+            case $exception instanceof \atk4\core\Exception:
+                $l->layout->template->setHTML('Content', $exception->getHTML());
+                break;
+
+            case $exception instanceof Error:
+                $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
+                $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
+                break;
+
+            default:
+                $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+                break;
         }
+
+        // remove header
         $l->layout->template->tryDel('Header');
 
         if ($this->isJsonRequest()) {
-            echo json_encode(['success'   => false,
-                                'message' => $l->layout->getHtml(),
-                             ]);
+            echo json_encode([
+                'success'   => false,
+                'message' => $l->layout->getHtml(),
+            ]);
         } else {
             $l->catch_runaway_callbacks = false;
             $l->run();
             $this->run_called = true;
         }
+
         $this->callExit();
+
+        return true;
     }
 
     /**
@@ -903,5 +881,30 @@ class App
             $this->layout->js(true, (new jsVueService())->useComponent('SemanticUIVue'));
             $this->is_sui_init = true;
         }
+    }
+
+    public function setupAlwaysRun(): void
+    {
+        if ($this->_cwd_restore) {
+            $this->_cwd_restore = getcwd();
+        }
+
+        register_shutdown_function(
+            function () {
+                if (is_string($this->_cwd_restore)) {
+                    chdir($this->_cwd_restore);
+                }
+
+                if (!$this->run_called) {
+                    try {
+                        $this->run();
+                    } catch (Throwable $e) {
+                        $this->caughtException($e);
+                    }
+                }
+
+                $this->callExit();
+            }
+        );
     }
 }
