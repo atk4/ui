@@ -264,7 +264,10 @@ class App
     {
         $this->catch_runaway_callbacks = false;
 
-        $l = new self();
+        // must be static to support extended App
+        // if not the App will use default value
+        // e.g. Title = 'Agile UI - Untitled Application'
+        $l = new static();
         $l->initLayout('Centered');
 
         //check for error type.
