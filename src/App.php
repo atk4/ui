@@ -182,9 +182,13 @@ class App
 
         // Set our exception handler
         if ($this->catch_exceptions) {
-            set_exception_handler(function ($exception) {
-                return $this->caughtException($exception);
-            });
+            set_exception_handler(Closure::fromCallable([$this,'caughtException']));
+            set_error_handler(
+                function($err_severity, $err_msg, $err_file, $err_line, array $err_context) {
+                    throw new ErrorException($err_msg, 0, $err_severity, $err_file, $err_line);
+                },
+                E_ALL
+            );
         }
 
         if (!$this->_initialized) {
