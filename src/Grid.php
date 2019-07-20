@@ -181,11 +181,9 @@ class Grid extends View
     {
         if (is_array($ipp)) {
             $this->addItemsPerPageSelector($ipp, $label);
-            if (@$_GET['ipp']) {
-                $this->ipp = $_GET['ipp'];
-            } else {
-                $this->ipp = $ipp[0];
-            }
+
+            $this->ipp = $_GET['ipp'] ?? $ipp[0];
+
         } else {
             $this->ipp = $ipp;
         }

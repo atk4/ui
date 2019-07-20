@@ -20,7 +20,10 @@ class jsSSE extends jsCallback
     public function init()
     {
         parent::init();
-        if (@$_GET['event'] === 'sse') {
+
+        $event = $_GET['event'] ?? null;
+
+        if ($event === 'sse') {
             $this->browserSupport = true;
             $this->initSse();
         }
