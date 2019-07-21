@@ -183,7 +183,6 @@ class Grid extends View
             $this->addItemsPerPageSelector($ipp, $label);
 
             $this->ipp = $_GET['ipp'] ?? $ipp[0];
-
         } else {
             $this->ipp = $ipp;
         }

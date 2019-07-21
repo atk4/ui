@@ -183,9 +183,9 @@ class App
 
         // Set our exception handler
         if ($this->catch_exceptions) {
-            set_exception_handler(Closure::fromCallable([$this,'caughtException']));
+            set_exception_handler(Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(
-                function($err_severity, $err_msg, $err_file, $err_line, array $err_context) {
+                function ($err_severity, $err_msg, $err_file, $err_line, array $err_context) {
                     throw new ErrorException($err_msg, 0, $err_severity, $err_file, $err_line);
                 },
                 E_ALL
@@ -220,9 +220,9 @@ class App
      *
      * @param Throwable $exception
      *
-     * @return bool
-     *
      * @throws \atk4\core\Exception
+     *
+     * @return bool
      */
     public function caughtException(Throwable $exception)
     {
@@ -236,8 +236,7 @@ class App
 
         // -- CHECK ERROR BY TYPE
 
-        switch(true)
-        {
+        switch (true) {
             case $exception instanceof \atk4\core\Exception:
                 $l->layout->template->setHTML('Content', $exception->getHTML());
                 break;
@@ -258,7 +257,7 @@ class App
         if ($this->isJsonRequest()) {
             echo json_encode([
                 'success'   => false,
-                'message' => $l->layout->getHtml(),
+                'message'   => $l->layout->getHtml(),
             ]);
         } else {
             $l->catch_runaway_callbacks = false;
@@ -305,6 +304,7 @@ class App
      * other classes.
      *
      * @param string $output
+     *
      * @throws \atk4\core\Exception
      */
     public function terminate($output = null)
@@ -321,9 +321,10 @@ class App
      *
      * @param string|Layout\Generic|array $seed
      *
-     * @return $this
      * @throws Exception
      * @throws \atk4\core\Exception
+     *
+     * @return $this
      */
     public function initLayout($seed)
     {
@@ -372,6 +373,7 @@ class App
      * and use file include instead.
      *
      * @param string $style CSS rules, like ".foo { background: red }".
+     *
      * @throws Exception
      */
     public function addStyle($style)
@@ -398,11 +400,12 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param mixed $seed New object to add
+     * @param mixed  $seed New object to add
      * @param string $region
      *
-     * @return object
      * @throws Exception
+     *
+     * @return object
      */
     public function add($seed, $region = null)
     {
@@ -415,6 +418,7 @@ class App
 
     /**
      * Runs app and echo rendered template.
+     *
      * @throws \atk4\core\Exception
      */
     public function run()
@@ -676,6 +680,7 @@ class App
      * A convenient wrapper for sending user to another page.
      *
      * @param array|string $page Destination page
+     *
      * @throws \atk4\core\Exception
      */
     public function redirect($page)
@@ -690,6 +695,7 @@ class App
      * Generate action for redirecting user to another page.
      *
      * @param string|array $page Destination URL or page/arguments
+     *
      * @return jsExpression
      */
     public function jsRedirect($page)
