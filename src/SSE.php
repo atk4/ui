@@ -48,7 +48,7 @@ class SSE
      * Executes user-specified action when call-back is triggered.
      *
      * @param callable $callback
-     * @param array $args
+     * @param array    $args
      *
      * @throws Exception
      *
@@ -116,7 +116,7 @@ class SSE
         $this->initSse();
         $this->setStart(time());
 
-        $this->send("retry: ".$this->clientReconnect * 1000 ."\n");
+        $this->send('retry: '.$this->clientReconnect * 1000 ."\n");
 
         $this->sendBlock('1000', $this->view->renderJSON(), null);
     }
@@ -185,7 +185,7 @@ class SSE
      */
     public function sleep()
     {
-        $sleepTime = $this->defaults["sleep_time"] ?? $this->sleepTime;
+        $sleepTime = $this->defaults['sleep_time'] ?? $this->sleepTime;
 
         usleep($sleepTime * 1000000);
     }
@@ -213,6 +213,7 @@ class SSE
     public function isTick()
     {
         $keepAliveTime = $this->defaults['keep_alive_time'] ?? $this->keepAliveTime;
+
         return $this->getUptime() % $keepAliveTime === 0;
     }
 

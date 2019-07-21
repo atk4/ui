@@ -206,6 +206,7 @@ class App
 
     /**
      * @param bool $from_shutdown
+     *
      * @throws ExitApplicationException
      * @throws \atk4\core\Exception
      */
@@ -216,13 +217,12 @@ class App
             $this->hook('beforeExit');
         }
 
-        if($from_shutdown) {
+        if ($from_shutdown) {
             return;
         }
 
         if (defined('UNIT_TESTING')) {
             throw new ExitApplicationException();
-            return;
         }
 
         exit(0);
@@ -902,7 +902,7 @@ class App
         }
     }
 
-    public function setupAlwaysRun(): void
+    protected function setupAlwaysRun(): void
     {
         if ($this->_cwd_restore) {
             $this->_cwd_restore = getcwd();

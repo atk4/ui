@@ -31,7 +31,7 @@ class DemoTest extends TestCase
     {
         $app = null;
 
-        $_SERVER['REQUEST_URI'] = '/ui/' . $file;
+        $_SERVER['REQUEST_URI'] = '/ui/'.$file;
 
         $_GET = $get ?? [];
         $_POST = $post ?? [];
@@ -101,145 +101,145 @@ class DemoTest extends TestCase
     {
         $files = [];
 
-        $files[] = ["accordion.php"];
-        $files[] = ["accordion-nested.php"];
-        $files[] = ["autocomplete.php"];
-        $files[] = ["breadcrumb.php"];
-        $files[] = ["button.php"];
-        $files[] = ["card.php"];
-        $files[] = ["checkbox.php"];
-        $files[] = ["columns.php"];
-        $files[] = ["console.php"];
-        $files[] = ["crud.php"];
-        $files[] = ["crud2.php"];
-        $files[] = ["crud3.php"];
-        $files[] = ["dropdown-plus.php"];
-        $files[] = ["field.php"];
-        $files[] = ["field2.php"];
-        $files[] = ["form.php"];
-        $files[] = ["form2.php"];
-        $files[] = ["form3.php"];
-        $files[] = ["form4.php"];
-        $files[] = ["form5.php"];
-        $files[] = ["form6.php"];
-        $files[] = ["form-custom-layout.php"];
-        $files[] = ["form-section.php"];
-        $files[] = ["form-section-accordion.php"];
-        $files[] = ["grid.php"];
-        $files[] = ["grid-layout.php"];
-        $files[] = ["header.php"];
-        $files[] = ["index.php"];
-        $files[] = ["init.php"];
-        $files[] = ["js.php"];
-        $files[] = ["jscondform.php"];
-        $files[] = ["menu.php"];
-        $files[] = ["message.php"];
-        $files[] = ["modal.php"];
-        $files[] = ["multitable.php"];
-        $files[] = ["notify.php"];
-        $files[] = ["notify2.php"];
-        $files[] = ["paginator.php"];
-        $files[] = ["progress.php"];
-        $files[] = ["recursive.php"];
-        $files[] = ["reloading.php"];
-        $files[] = ["scroll-container.php"];
-        $files[] = ["scroll-grid.php"];
-        $files[] = ["scroll-grid-container.php"];
-        $files[] = ["scroll-lister.php"];
-        $files[] = ["scroll-table.php"];
+        $files[] = ['accordion.php'];
+        $files[] = ['accordion-nested.php'];
+        $files[] = ['autocomplete.php'];
+        $files[] = ['breadcrumb.php'];
+        $files[] = ['button.php'];
+        $files[] = ['card.php'];
+        $files[] = ['checkbox.php'];
+        $files[] = ['columns.php'];
+        $files[] = ['console.php'];
+        $files[] = ['crud.php'];
+        $files[] = ['crud2.php'];
+        $files[] = ['crud3.php'];
+        $files[] = ['dropdown-plus.php'];
+        $files[] = ['field.php'];
+        $files[] = ['field2.php'];
+        $files[] = ['form.php'];
+        $files[] = ['form2.php'];
+        $files[] = ['form3.php'];
+        $files[] = ['form4.php'];
+        $files[] = ['form5.php'];
+        $files[] = ['form6.php'];
+        $files[] = ['form-custom-layout.php'];
+        $files[] = ['form-section.php'];
+        $files[] = ['form-section-accordion.php'];
+        $files[] = ['grid.php'];
+        $files[] = ['grid-layout.php'];
+        $files[] = ['header.php'];
+        $files[] = ['index.php'];
+        $files[] = ['init.php'];
+        $files[] = ['js.php'];
+        $files[] = ['jscondform.php'];
+        $files[] = ['menu.php'];
+        $files[] = ['message.php'];
+        $files[] = ['modal.php'];
+        $files[] = ['multitable.php'];
+        $files[] = ['notify.php'];
+        $files[] = ['notify2.php'];
+        $files[] = ['paginator.php'];
+        $files[] = ['progress.php'];
+        $files[] = ['recursive.php'];
+        $files[] = ['reloading.php'];
+        $files[] = ['scroll-container.php'];
+        $files[] = ['scroll-grid.php'];
+        $files[] = ['scroll-grid-container.php'];
+        $files[] = ['scroll-lister.php'];
+        $files[] = ['scroll-table.php'];
 
-        $files[] = ["sse.php"];
+        $files[] = ['sse.php'];
 
-        $files[] = ["sticky.php"];
+        $files[] = ['sticky.php'];
         $files[] = [
-            "sticky.php",
+            'sticky.php',
             [
-                "c" => "OHO",
+                'c' => 'OHO',
             ],
         ];
 
-        $files[] = ["sticky2.php"];
+        $files[] = ['sticky2.php'];
 
-        $files[] = ["table.php"];
-        $files[] = ["table2.php"];
-        $files[] = ["tablecolumnmenu.php"];
-        $files[] = ["tablecolumns.php"];
-        $files[] = ["tabs.php"];
-        $files[] = ["toast.php"];
-        $files[] = ["upload.php"];
-        $files[] = ["view.php"];
+        $files[] = ['table.php'];
+        $files[] = ['table2.php'];
+        $files[] = ['tablecolumnmenu.php'];
+        $files[] = ['tablecolumns.php'];
+        $files[] = ['tabs.php'];
+        $files[] = ['toast.php'];
+        $files[] = ['upload.php'];
+        $files[] = ['view.php'];
 
-        $files[] = ["virtual.php"];
+        $files[] = ['virtual.php'];
 
         $files[] = [
-            "virtual.php",
+            'virtual.php',
             [
-                "atk_admin_virtualpage" => "callback",
-                "__atk_callback"        => 1,
+                'atk_admin_virtualpage' => 'callback',
+                '__atk_callback'        => 1,
             ],
         ];
 
-        $files[] = ["wizard.php"];
+        $files[] = ['wizard.php'];
 
         $files[] = [
-            "wizard.php",
+            'wizard.php',
             [
-                "atk_admin_wizard" => 1,
-                "__atk_callback"   => 1,
+                'atk_admin_wizard' => 1,
+                '__atk_callback'   => 1,
             ],
         ];
 
         $files[] = [
-            "wizard.php",
+            'wizard.php',
             [
-                "atk_admin_wizard" => 2,
-                "__atk_callback"   => 1,
+                'atk_admin_wizard' => 2,
+                '__atk_callback'   => 1,
             ],
         ];
 
         /* need session
-        $files[]=["wizard.php", [
-                "atk_admin_wizard"=>2,
-                "name" => "Country"
+        $files[]=['wizard.php', [
+                'atk_admin_wizard'=>2,
+                'name' => 'Country'
             ]
         ];
         */
 
         $files[] = [
-            "wizard.php",
+            'wizard.php',
             [
-                "atk_admin_wizard" => 3,
-                "__atk_callback"   => 1,
+                'atk_admin_wizard' => 3,
+                '__atk_callback'   => 1,
             ],
         ];
 
         $files[] = [
-            "wizard.php",
+            'wizard.php',
             [
-                "atk_admin_wizard" => 4,
-                "__atk_callback"   => 1,
+                'atk_admin_wizard' => 4,
+                '__atk_callback'   => 1,
             ],
         ];
 
-        //$files[]="jssearch.php"; // this call Method Grid->addJsSearch which not exists
+        //$files[]='jssearch.php'; // this call Method Grid->addJsSearch which not exists
 
-        $files[] = ["jssortable.php"];
-        $files[] = ["label.php"];
-        $files[] = ["layouts.php"];
-        $files[] = ["layouts_admin.php"];
+        $files[] = ['jssortable.php'];
+        $files[] = ['label.php'];
+        $files[] = ['layouts.php'];
+        $files[] = ['layouts_admin.php'];
 
-        //$files[]="layouts_error.php"; // intended to raise exception and display nicely
-        //$files[]="layouts_manual.php"; // doesn't use $app and gives error in DemoTest->inc
-        //$files[]="layouts_nolayout.php"; // doesn't use $app and gives error in DemoTest->inc
+        //$files[]='layouts_error.php'; // intended to raise exception and display nicely
+        //$files[]='layouts_manual.php'; // doesn't use $app and gives error in DemoTest->inc
+        //$files[]='layouts_nolayout.php'; // doesn't use $app and gives error in DemoTest->inc
 
-        $files[] = ["lister.php"];
-        $files[] = ["lister-ipp.php"];
-        $files[] = ["loader2.php"];
-        $files[] = ["loader.php"];
-        $files[] = ["modal2.php"];
-        $files[] = ["popup.php"];
-        $files[] = ["tablefilter.php"];
-        $files[] = ["vue-component.php"];
+        $files[] = ['lister.php'];
+        $files[] = ['lister-ipp.php'];
+        $files[] = ['loader2.php'];
+        $files[] = ['loader.php'];
+        $files[] = ['modal2.php'];
+        $files[] = ['popup.php'];
+        $files[] = ['tablefilter.php'];
+        $files[] = ['vue-component.php'];
 
         return $files;
     }
@@ -263,7 +263,7 @@ class DemoTest extends TestCase
     public function layoutDataProvider()
     {
         return [
-            ["layouts_manual.php"],
+            ['layouts_manual.php'],
         ];
     }
 
@@ -300,38 +300,38 @@ class DemoTest extends TestCase
         $files = [];
 
         $files[] = [
-            "sticky2.php",
+            'sticky2.php',
             [
-                "__atk_reload" => "atk_admin_button",
+                '__atk_reload' => 'atk_admin_button',
             ],
         ];
 
         $files[] = [
-            "sticky2.php",
+            'sticky2.php',
             [
-                "atk_admin_loader_callback" => "ajax",
-                "__atk_callback"            => "1",
+                'atk_admin_loader_callback' => 'ajax',
+                '__atk_callback'            => '1',
             ],
         ];
 
         $files[] = [
-            "virtual.php",
+            'virtual.php',
             [
-                "atk_admin_label_2_click" => "ajax",
-                "__atk_callback"          => "1",
+                'atk_admin_label_2_click' => 'ajax',
+                '__atk_callback'          => '1',
             ],
         ];
 
         $files[] = [
-            "wizard.php",
+            'wizard.php',
             [
-                "atk_admin_wizard"             => 1,
-                "atk_admin_wizard_form_submit" => "ajax",
-                "__atk_callback"               => 1,
+                'atk_admin_wizard'             => 1,
+                'atk_admin_wizard_form_submit' => 'ajax',
+                '__atk_callback'               => 1,
             ],
             [
-                "dsn"                          => "mysql://root:root@localhost/atk4",
-                "atk_admin_wizard_form_submit" => "submit",
+                'dsn'                          => 'mysql://root:root@localhost/atk4',
+                'atk_admin_wizard_form_submit' => 'submit',
             ],
         ];
 
@@ -390,52 +390,52 @@ class DemoTest extends TestCase
         $files = [];
 
         $files[] = [
-            "sse.php",
+            'sse.php',
             [
-                "atk_admin_jssse" => "ajax",
-                "__atk_callback"  => "1",
-                "event"           => "sse",
+                'atk_admin_jssse' => 'ajax',
+                '__atk_callback'  => '1',
+                'event'           => 'sse',
             ],
         ];
 
         /*
         // Cannot be done need previous steps
         // and session opened
-        $files[]=["wizard.php", [
-                "atk_admin_wizard"=>3,
-                "atk_admin_wizard_console_jssse"=>"ajax",
-                "__atk_callback"=>1,
-                "event"=>"sse"
+        $files[]=['wizard.php', [
+                'atk_admin_wizard'=>3,
+                'atk_admin_wizard_console_jssse'=>'ajax',
+                '__atk_callback'=>1,
+                'event'=>'sse'
             ]
         ];
         */
 
         $files[] = [
-            "console.php",
+            'console.php',
             [
-                "atk_admin_tabs_tabssubview_console_jssse" => "ajax",
-                "__atk_callback"                           => "1",
-                "event"                                    => "sse",
+                'atk_admin_tabs_tabssubview_console_jssse' => 'ajax',
+                '__atk_callback'                           => '1',
+                'event'                                    => 'sse',
             ],
         ];
 
         $files[] = [
-            "console.php",
+            'console.php',
             [
-                "atk_admin_tabs_tabssubview_2_virtualpage"               => "cut",
-                "atk_admin_tabs_tabssubview_2_virtualpage_console_jssse" => "ajax",
-                "__atk_callback"                                         => 1,
-                "event"                                                  => "sse",
+                'atk_admin_tabs_tabssubview_2_virtualpage'               => 'cut',
+                'atk_admin_tabs_tabssubview_2_virtualpage_console_jssse' => 'ajax',
+                '__atk_callback'                                         => 1,
+                'event'                                                  => 'sse',
             ],
         ];
 
         $files[] = [
-            "console.php",
+            'console.php',
             [
-                "atk_admin_tabs_tabssubview_3_virtualpage"               => "cut",
-                "atk_admin_tabs_tabssubview_3_virtualpage_console_jssse" => "ajax",
-                "__atk_callback"                                         => 1,
-                "event"                                                  => "sse",
+                'atk_admin_tabs_tabssubview_3_virtualpage'               => 'cut',
+                'atk_admin_tabs_tabssubview_3_virtualpage_console_jssse' => 'ajax',
+                '__atk_callback'                                         => 1,
+                'event'                                                  => 'sse',
             ],
         ];
 

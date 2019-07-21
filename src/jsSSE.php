@@ -149,7 +149,7 @@ class jsSSE extends jsCallback
     protected function sendHeaders()
     {
         @ini_set('zlib.output_compression', 0);
-        @ini_set('output_buffering',false);
+        @ini_set('output_buffering', false);
         @ini_set('implicit_flush', 1);
 
         header('Content-Type: text/event-stream');
