@@ -352,6 +352,7 @@ class DemoTest extends TestCase
         ob_start();
 
         $exit_correctly = false;
+
         try {
             $app = $this->inc($page, $get, $post);
             $app->run();
