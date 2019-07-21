@@ -9,6 +9,7 @@ use atk4\core\FactoryTrait;
 use atk4\core\HookTrait;
 use atk4\core\InitializerTrait;
 use atk4\data\Persistence;
+use atk4\ui\Exception\ExitApplicationException;
 use atk4\ui\Layout\Generic;
 use atk4\ui\Persistence\UI;
 use Closure;
@@ -212,7 +213,17 @@ class App
             $this->exit_called = true;
             $this->hook('beforeExit');
         }
-        exit;
+
+        if($from_shutdown) {
+            return;
+        }
+
+        if (defined('UNIT_TESTING')) {
+            throw new ExitApplicationException();
+            return;
+        }
+
+        exit(0);
     }
 
     /**
