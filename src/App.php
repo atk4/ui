@@ -400,7 +400,7 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param mixed  $seed New object to add
+     * @param mixed  $seed   New object to add
      * @param string $region
      *
      * @throws Exception
