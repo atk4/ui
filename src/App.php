@@ -189,7 +189,7 @@ class App
                 function ($err_severity, $err_msg, $err_file, $err_line, array $err_context) {
                     throw new ErrorException($err_msg, 0, $err_severity, $err_file, $err_line);
                 },
-                E_ALL
+                E_ALL & ~E_NOTICE
             );
         }
 
@@ -205,9 +205,11 @@ class App
     }
 
     /**
+     * @param bool $from_shutdown
+     * @throws ExitApplicationException
      * @throws \atk4\core\Exception
      */
-    public function callExit()
+    public function callExit($from_shutdown = false)
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
@@ -235,7 +237,7 @@ class App
      *
      * @return bool
      */
-    public function caughtException(Throwable $exception)
+    protected function caughtException(Throwable $exception)
     {
         $this->catch_runaway_callbacks = false;
 
@@ -920,7 +922,7 @@ class App
                     }
                 }
 
-                $this->callExit();
+                $this->callExit(true);
             }
         );
     }
