@@ -75,7 +75,6 @@ class jsSSE extends jsCallback
     public function sendEvent($id, $data, $eventName)
     {
         $this->sendBlock($id, $data, $eventName);
-        $this->flush();
     }
 
     /**
@@ -93,6 +92,10 @@ class jsSSE extends jsCallback
      */
     private function output($content)
     {
+        if (!headers_sent()) {
+            $this->sendHeaders();
+        }
+
         if ($this->echoFunction) {
             call_user_func($this->echoFunction, $content);
         } else {
@@ -114,7 +117,7 @@ class jsSSE extends jsCallback
             $this->output("event: {$name}\n");
         }
         $this->output($this->wrapData($data)."\n\n");
-        flush();
+        $this->flush();
     }
 
     /**
@@ -132,26 +135,33 @@ class jsSSE extends jsCallback
     protected function initSse()
     {
         @set_time_limit(0); // Disable time limit
-        if (ob_get_level()) {
-            ob_end_clean();
-        }
 
         // Prevent buffering
         if (function_exists('apache_setenv')) {
             @apache_setenv('no-gzip', 1);
         }
+
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+    }
+
+    protected function sendHeaders()
+    {
         @ini_set('zlib.output_compression', 0);
+        @ini_set('output_buffering',false);
         @ini_set('implicit_flush', 1);
-        //while (ob_get_level() != 0) {
-        //ob_end_flush();
-        //}
-        //ob_implicit_flush(1);
-        //Somehow header has to be set right away.
+
         header('Content-Type: text/event-stream');
+
         header('Cache-Control: no-cache');
         header('Cache-Control: private');
-        header('Content-Encoding: none');
+        //header('Connection: keep-alive');
+        //header('Content-Encoding: none;');
+
         header('Pragma: no-cache');
-        header('X-Accel-Buffering: no'); // nginx @http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
+
+        // nginx @http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
+        header('X-Accel-Buffering: no');
     }
 }
