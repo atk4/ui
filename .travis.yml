@@ -13,7 +13,7 @@ env:
     - SELENIUM_MAJ_VER=3.141
     - SELENIUM_VER=${SELENIUM_MAJ_VER}.59
     - SELENIUM_JAR=selenium-server-standalone-${SELENIUM_VER}.jar
-    - CHROME_DRIVER_VER=75.0.3770.90
+    - CHROME_DRIVER_VER=2.44
 
 addons:
   apt:
