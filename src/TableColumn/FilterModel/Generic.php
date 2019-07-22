@@ -54,7 +54,7 @@ class Generic extends Model
     public static function factoryType($field)
     {
         $data = [];
-        $persistence = new Persistence_Array($data);
+        $persistence = new Persistence\Array_($data);
         $filterDomain = 'atk4\\ui\\TableColumn\\FilterModel\Type';
 
         // check if field as a type and use string as default
@@ -102,8 +102,7 @@ class Generic extends Model
             // create a name for our filter model to save as session data.
             $this->name = 'filter_model_'.$this->lookupField->short_name;
 
-            $atk_clear_filter = $_GET['atk_clear_filter'] ?? false;
-            if ($atk_clear_filter) {
+            if ($_GET['atk_clear_filter'] ?? false) {
                 $this->forget();
             }
 

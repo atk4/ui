@@ -106,8 +106,7 @@ class Generic
         $popup->popOptions = array_merge($popup->popOptions, ['on' =>'click', 'position' => 'bottom right', 'movePopup' => false]);
         $popup->stopClickEvent = true;
 
-        $need_reload = $_GET['__atk_reload'] ?? false;
-        if ($need_reload) {
+        if ($_GET['__atk_reload'] ?? false) {
             //This is part of a reload, need to reactivate popup.
             $this->table->js(true, $popup->jsPopup());
         }
