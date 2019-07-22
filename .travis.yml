@@ -8,6 +8,12 @@ services:
     - mysql
     - xvfb
 
+env:
+  global:
+    - SELENIUM_MAJ_VER=3.141
+    - SELENIUM_VER=${SELENIUM_MAJ_VER}.59
+    - SELENIUM_JAR=selenium-server-standalone-${SELENIUM_VER}.jar
+    - CHROME_DRIVER_VER=75.0.3770.90
 
 addons:
   apt:
@@ -27,9 +33,10 @@ before_script:
 
      #- "sh -e /etc/init.d/xvfb start"
      #- "export DISPLAY=:99.0"
-    - "wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar"
-    - "java -jar selenium-server-standalone-2.43.1.jar > /dev/null 2>/dev/null &"
 
+    # Setup selenium
+    - wget  https://selenium-release.storage.googleapis.com/${SELENIUM_MAJ_VER}/${SELENIUM_JAR}
+    - java -jar ${SELENIUM_JAR} > /dev/null 2>&1 &
 
     - wget -N http://chromedriver.storage.googleapis.com/2.44/chromedriver_linux64.zip -P ~/
     - unzip ~/chromedriver_linux64.zip -d ~/
@@ -54,8 +61,8 @@ before_script:
 
 after_script:
     - echo $TRAVIS_BRANCH
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
+      #- if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
+      #- if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
 
 script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.1" ]]; then NC="--no-coverage"; fi
