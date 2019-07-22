@@ -6,7 +6,6 @@ use atk4\core\SessionTrait;
 use atk4\data\Field;
 use atk4\data\Model;
 use atk4\data\Persistence;
-use atk4\data\Persistence_Array;
 
 /**
  * Implement a generic Type model for filtering data.
