@@ -11,7 +11,7 @@ export default class ajaxec extends atkPlugin {
             }
         } else {
             if (!this.$el.hasClass('loading')){
-              this.doExecute();
+                this.doExecute();
             }
         }
     }

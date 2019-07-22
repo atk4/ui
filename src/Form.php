@@ -291,37 +291,44 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Causes form to generate success message.
      *
-     * @param string $str        Success message
-     * @param string $sub_header Sub-header
+     * @param View|string $success     Success message or a View to display in modal
+     * @param string      $sub_header  Sub-header
+     * @param bool        $useTemplate Backward compatibility
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
      *
      * @return jsChain
      */
-    public function success($str = 'Success', $sub_header = null)
+    public function success($success = 'Success', $sub_header = null, $useTemplate = true)
     {
+        $response = null;
         // by using this hook you can overwrite default behavior of this method
         if ($this->hookHasCallbacks('displaySuccess')) {
-            return $this->hook('displaySuccess', [$str, $sub_header]);
+            return $this->hook('displaySuccess', [$success, $sub_header]);
         }
 
-        /* below code works, but pollutes output with bad id=xx
-        $success = new Message([$str, 'id'=>false, 'type'=>'success', 'icon'=>'check']);
-        $success->app = $this->app;
-        $success->init();
-        $success->text->addParagraph($sub_header);
-         */
-        $success = $this->app->loadTemplate($this->successTemplate);
-        $success['header'] = $str;
+        if ($success instanceof View) {
+            $response = $success;
+        } elseif ($useTemplate) {
+            $response = $this->app->loadTemplate($this->successTemplate);
+            $response['header'] = $success;
 
-        if ($sub_header) {
-            $success['message'] = $sub_header;
+            if ($sub_header) {
+                $response['message'] = $sub_header;
+            } else {
+                $response->del('p');
+            }
+
+            $response = $this->js()->html($response->render());
         } else {
-            $success->del('p');
+            $response = new Message([$success, 'type'=>'success', 'icon'=>'check']);
+            $response->app = $this->app;
+            $response->init();
+            $response->text->addParagraph($sub_header);
         }
 
-        $js = $this->js()
-            ->html($success->render());
-
-        return $js;
+        return $response;
     }
 
     // }}}
@@ -600,7 +607,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 $this->loadPOST();
                 ob_start();
                 $response = $this->hook('submit');
-                $output = ob_get_clean();
+                $output = ob_get_contents();
 
                 if ($output) {
                     $message = new Message('Direct Output Detected');
@@ -631,6 +638,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 return $caught($e, false);
             } catch (\Exception $e) {
                 return $caught($e, true);
+            } finally {
+                ob_end_flush();
             }
 
             return $response;

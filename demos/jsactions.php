@@ -54,6 +54,5 @@ $executor = new \atk4\ui\ActionExecutor\jsEvent($btn, $f_action, null, ['path' =
 $executor->addHook('afterExecute', function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');
 });
-$executor->setConfirm('This will import a lot of file. Are you sure?');
 
-$btn->on('click', $executor);
+$btn->on('click', $executor, ['confirm'=> 'This will import a lot of file. Are you sure?']);

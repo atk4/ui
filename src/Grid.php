@@ -4,6 +4,7 @@
 
 namespace atk4\ui;
 
+use atk4\core\HookTrait;
 use atk4\data\UserAction\Generic;
 use atk4\ui\ActionExecutor\Basic;
 
@@ -12,6 +13,7 @@ use atk4\ui\ActionExecutor\Basic;
  */
 class Grid extends View
 {
+    use HookTrait;
     /**
      * Will be initialized to Menu object, however you can set this to false to disable menu.
      *
@@ -117,7 +119,10 @@ class Grid extends View
         if ($this->paginator !== false) {
             $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
             $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator, 'atk4\ui'));
+            $this->stickyGet($this->paginator->name);
         }
+
+        $this->stickyGet('_q');
     }
 
     /**
@@ -327,13 +332,15 @@ class Grid extends View
     /**
      * Returns JS for reloading View.
      *
-     * @param array $args
+     * @param array             $args
+     * @param jsExpression|null $afterSuccess
+     * @param array             $apiConfig
      *
      * @return \atk4\ui\jsReload
      */
-    public function jsReload($args = [])
+    public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
     {
-        return new jsReload($this->container, $args);
+        return new jsReload($this->container, $args, $afterSuccess, $apiConfig);
     }
 
     /**
@@ -429,31 +436,57 @@ class Grid extends View
      * @param string|array|View $button
      * @param string            $title
      * @param callable          $callback function($page){ . .}
+     * @param array             $args     Extra url argument for callback.
+     *
+     * @return object
      */
-    public function addModalAction($button, $title, $callback)
+    public function addModalAction($button, $title, $callback, $args = [])
     {
         if (!$this->actions) {
             $this->actions = $this->table->addColumn(null, 'Actions');
         }
 
-        return $this->actions->addModal($button, $title, $callback, $this);
+        return $this->actions->addModal($button, $title, $callback, $this, $args);
     }
 
     /**
      * Find out more about the nature of the action from the supplied object, use addAction().
+     *
+     * @param Generic $action The generic action.
      */
     public function addUserAction(Generic $action)
     {
+        $executor = null;
+        $args = [];
+        $title = $action->caption;
         $button = $action->caption;
 
-        $this->addModalAction($button, $button, function ($page, $id) use ($action) {
-            $class = $this->executor_class;
-            $page->add($executor = new $class());
+        if ($action->ui['Grid']['Button'] ?? null) {
+            $button = $action->ui['Grid']['Button'];
+        }
+
+        if ($action->ui['Grid']['Executor'] ?? null) {
+            $executor = $action->ui['Grid']['Executor'];
+        }
+
+        if (!$executor || is_string($executor)) {
+            $class = $executor ?? $this->executor_class;
+            $executor = new $class();
+        }
+
+        if ($this->paginator) {
+            $args[$this->paginator->name] = $this->paginator->getCurrentPage();
+        }
+
+        $this->addModalAction($button, $title, function ($page, $id) use ($action, $executor) {
+            $page->add($executor);
+
+            $this->hook('onUserAction', [$page, $executor]);
 
             $action->owner->load($id);
 
             $executor->setAction($action);
-        });
+        }, $args);
     }
 
     /**
@@ -492,7 +525,7 @@ class Grid extends View
         if (
             $sortBy
             && isset($this->table->columns[$sortBy])
-            && $this->model->hasElement($sortBy) instanceof \atk4\data\Field
+            && $this->model->hasField($sortBy)
         ) {
             $this->model->setOrder($sortBy, $desc);
             $this->table->sort_by = $sortBy;

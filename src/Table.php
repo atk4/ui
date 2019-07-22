@@ -197,7 +197,7 @@ class Table extends Lister
         }
 
         if (is_string($name) && $name) {
-            $existingField = $this->model->hasElement($name);
+            $existingField = $this->model->hasField($name);
         } else {
             $existingField = null;
         }
@@ -269,7 +269,7 @@ class Table extends Lister
 
         // set filter to all column when null.
         if (!$cols) {
-            foreach ($this->model->elements as $key => $field) {
+            foreach ($this->model->getFields() as $key => $field) {
                 if (isset($this->columns[$key]) && $this->columns[$key]) {
                     $cols[] = $field->short_name;
                 }
@@ -280,7 +280,7 @@ class Table extends Lister
         foreach ($cols as $colName) {
             $col = $this->columns[$colName];
             if ($col) {
-                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getElement($colName), 'reload' => $this->reload, 'colTrigger' => '#'.$col->name.'_ac']));
+                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#'.$col->name.'_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('green caret square down') : null;
                 $pop->form->onSubmit(function ($f) use ($pop) {
                     return new jsReload($this->reload);
@@ -451,16 +451,7 @@ class Table extends Lister
         parent::setModel($m);
 
         if ($columns === null) {
-            $columns = [];
-            foreach ($m->elements as $name => $element) {
-                if (!$element instanceof \atk4\data\Field) {
-                    continue;
-                }
-
-                if ($element->isVisible()) {
-                    $columns[] = $name;
-                }
-            }
+            $columns = array_keys($m->getFields('visible'));
         } elseif ($columns === false) {
             return $this->model;
         }
@@ -559,7 +550,7 @@ class Table extends Lister
                 if (!is_array($columns)) {
                     $columns = [$columns];
                 }
-                $field = $this->model->hasElement($name);
+                $field = $this->model->hasField($name);
                 foreach ($columns as $column) {
                     if (!method_exists($column, 'getHTMLTags')) {
                         continue;
@@ -605,6 +596,19 @@ class Table extends Lister
     public function jsRow()
     {
         return (new jQuery(new jsExpression('this')))->closest('tr');
+    }
+
+    /**
+     * Remove a row in table using javascript using a model id.
+     *
+     * @param string $id         The model id where row need to be removed.
+     * @param string $transition The transition effect.
+     *
+     * @return mixed
+     */
+    public function jsRemoveRow($id, $transition = 'fade left')
+    {
+        return $this->js()->find("tr[data-id={$id}]")->transition($transition);
     }
 
     /**
@@ -672,7 +676,7 @@ class Table extends Lister
             }
 
             if (!is_int($name)) {
-                $field = $this->model->getElement($name);
+                $field = $this->model->getField($name);
 
                 $output[] = $column->getHeaderCellHTML($field);
             } else {
@@ -702,7 +706,7 @@ class Table extends Lister
             // if totals plan is set as array, then show formatted value
             if (is_array($this->totals_plan[$name])) {
                 // todo - format
-                $field = $this->model->getElement($name);
+                $field = $this->model->getField($name);
                 $output[] = $column->getTotalsCellHTML($field, $this->totals[$name]);
                 continue;
             }
@@ -727,7 +731,7 @@ class Table extends Lister
             // If multiple formatters are defined, use the first for the header cell
 
             if (!is_int($name)) {
-                $field = $this->model->getElement($name);
+                $field = $this->model->getField($name);
             } else {
                 $field = null;
             }

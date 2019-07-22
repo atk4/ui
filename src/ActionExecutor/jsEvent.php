@@ -6,6 +6,10 @@
  *
  * Usage:
  * $btn->on('click', new jsEvent($btn, $action, $actionArgs));
+ *
+ * You can add confirmation via the on handler.
+ *
+ * $btn->on('click', new jsEvent($btn, $action, $actionArgs), ['confirm' => 'Sure?']);
  */
 
 namespace atk4\ui\ActionExecutor;
@@ -41,9 +45,6 @@ class jsEvent implements jsExpressionable
     /** @var jsCallback */
     public $cb;
 
-    /** @var string|null The confirmation message. */
-    public $confirm = null;
-
     public function __construct(View $context, Generic $action, $modelId = null, array $args = [])
     {
         $this->context = $context;
@@ -77,20 +78,6 @@ class jsEvent implements jsExpressionable
         return $errors;
     }
 
-    /**
-     * Ask for confirmation prior to add an action.
-     *
-     * @param string $text
-     *
-     * @return $this
-     */
-    public function setConfirm($text = 'Are you sure')
-    {
-        $this->confirm = $text;
-
-        return $this;
-    }
-
     public function jsRender()
     {
         $this->cb->set(function () {
@@ -120,7 +107,6 @@ class jsEvent implements jsExpressionable
             ->atkAjaxec([
                 'uri'           => $this->cb->getJSURL(),
                 'uri_options'   => array_merge(['atk_event_id' => $this->modelId], $this->args),
-                'confirm'       => $this->confirm,
         ]);
 
         return $final->jsRender();

@@ -82,27 +82,27 @@ class TypeDatetime extends Generic
                     $d1 = $this->getDatetime($filter['value'])->setTime(0, 0, 0);
                     $d2 = $this->getDatetime($filter['range'])->setTime(23, 59, 59);
                     if ($d2 >= $d1) {
-                        $value = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d1);
-                        $value2 = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d2);
+                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
+                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
                     } else {
-                        $value = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d2);
-                        $value2 = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d1);
+                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
+                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
                     }
-                    $m->addCondition($m->expr('[field] between [value] and [value2]', ['field' => $m->getElement($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $m->addCondition($m->expr('[field] between [value] and [value2]', ['field' => $m->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
                     break;
                 case '!=':
                 case '=':
                     $d1 = $this->getDatetime($filter['value'])->setTime(0, 0, 0);
                     $d2 = $this->getDatetime($filter['value'])->setTime(23, 59, 59);
                     if ($d2 >= $d1) {
-                        $value = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d1);
-                        $value2 = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d2);
+                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
+                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
                     } else {
-                        $value = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d2);
-                        $value2 = $m->persistence->typecastSaveField($m->getElement($filter['name']), $d1);
+                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
+                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
                     }
                     $between_condition = $filter['op'] == '!=' ? 'not between' : 'between';
-                    $m->addCondition($m->expr("[field] {$between_condition} [value] and [value2]", ['field' => $m->getElement($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $m->addCondition($m->expr("[field] {$between_condition} [value] and [value2]", ['field' => $m->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
                     break;
                 case '>':
                 case '<=':

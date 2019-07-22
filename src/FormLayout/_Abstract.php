@@ -41,7 +41,7 @@ abstract class _Abstract extends \atk4\ui\View
         }
 
         if ($name) {
-            $existingField = $this->form->model->hasElement($name);
+            $existingField = $this->form->model->hasField($name);
         }
 
         try {
@@ -119,18 +119,7 @@ abstract class _Abstract extends \atk4\ui\View
      */
     protected function getModelFields(\atk4\data\Model $model)
     {
-        $fields = [];
-        foreach ($model->elements as $f) {
-            if (!$f instanceof \atk4\data\Field) {
-                continue;
-            }
-
-            if ($f->isEditable() || $f->isVisible()) {
-                $fields[] = $f->short_name;
-            }
-        }
-
-        return $fields;
+        return array_keys($model->getFields('editable'));
     }
 
     /**
@@ -156,7 +145,7 @@ abstract class _Abstract extends \atk4\ui\View
         // prepare array of fields - check if fields are editable or read_only/disabled
         $add_fields = [];
         foreach ($fields as $field) {
-            $f = $model->getElement($field);
+            $f = $model->getField($field);
 
             if ($f->isEditable()) {
                 $add_fields[] = [$f->short_name];
