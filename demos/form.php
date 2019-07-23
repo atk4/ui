@@ -51,10 +51,6 @@ $form->onSubmit(function ($form) {
     return (new \atk4\ui\jsNotify(json_encode($form->model->get())))->setDuration(0);
 });
 
-
-
-
-
 $tab->add(['Header', 'Comparing Field type vs Decorator class']);
 $form = $tab->add('Form');
 $form->addField('date1', null, ['type' => 'date']);
