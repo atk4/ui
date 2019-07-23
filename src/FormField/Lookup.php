@@ -251,12 +251,13 @@ class Lookup extends Input
     public function applyFilters()
     {
         if ($this->filters) {
+            $requested_filter = $_GET['filter'] ?? null;
             foreach ($this->filters as $k => $filter) {
                 if (
                     isset($_GET[$filter['field']]) &&
                     !empty($_GET[$filter['field']]) &&
                     $_GET[$filter['field']] != $this->filterEmpty &&
-                    @$_GET['filter'] != $filter['field']
+                    $requested_filter != $filter['field']
                 ) {
                     $this->model->addCondition($filter['field'], $_GET[$filter['field']]);
                 }

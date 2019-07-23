@@ -18,7 +18,7 @@ class jsHeader extends jsCallback
     {
         if (is_callable($fx)) {
             if ($this->triggered()) {
-                $param = [$_GET['id'],  @$_GET['item']];
+                $param = [$_GET['id'],  $_GET['item'] ?? null];
                 $this->set(function () use ($fx, $param) {
                     return call_user_func_array($fx, $param);
                 });

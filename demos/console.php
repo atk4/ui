@@ -2,23 +2,25 @@
 
 require 'init.php';
 
-class Test extends \atk4\data\Model
-{
-    use \atk4\core\DebugTrait;
-
-    public function generateReport()
+if (!class_exists('TestConsole')) {
+    class TestConsole extends \atk4\data\Model
     {
-        $this->log('info', 'Console will automatically pick up output from all DebugTrait objects');
-        $this->debug('debug {foo}', ['foo'=>'bar']);
-        $this->emergency('emergency {foo}', ['foo'=>'bar']);
-        $this->alert('alert {foo}', ['foo'=>'bar']);
-        $this->critical('critical {foo}', ['foo'=>'bar']);
-        $this->error('error {foo}', ['foo'=>'bar']);
-        $this->warning('warning {foo}', ['foo'=>'bar']);
-        $this->notice('notice {foo}', ['foo'=>'bar']);
-        $this->info('info {foo}', ['foo'=>'bar']);
+        use \atk4\core\DebugTrait;
 
-        return 123;
+        public function generateReport()
+        {
+            $this->log('info', 'Console will automatically pick up output from all DebugTrait objects');
+            $this->debug('debug {foo}', ['foo' => 'bar']);
+            $this->emergency('emergency {foo}', ['foo' => 'bar']);
+            $this->alert('alert {foo}', ['foo' => 'bar']);
+            $this->critical('critical {foo}', ['foo' => 'bar']);
+            $this->error('error {foo}', ['foo' => 'bar']);
+            $this->warning('warning {foo}', ['foo' => 'bar']);
+            $this->notice('notice {foo}', ['foo' => 'bar']);
+            $this->info('info {foo}', ['foo' => 'bar']);
+
+            return 123;
+        }
     }
 }
 
@@ -38,7 +40,7 @@ $t->add('Console')->set(function ($console) {
     sleep(1);
     echo 'direct output is captured';
 
-    throw new \atk4\data\Exception('BOOM - exceptions are caught');
+    throw new \atk4\core\Exception('BOOM - exceptions are caught');
 });
 
 $t = $tt->addTab('runMethod()', function ($t) {
@@ -48,7 +50,7 @@ $t = $tt->addTab('runMethod()', function ($t) {
         'Non-interractive method invocation',
         'subHeader'=> 'console can invoke a method, which normaly would be non-interractive and can still capture debug output',
     ]);
-    $t->add('Console')->runMethod($t->add(new Test()), 'generateReport');
+    $t->add('Console')->runMethod($t->add(new TestConsole()), 'generateReport');
 });
 
 $t = $tt->addTab('exec() single', function ($t) {
@@ -116,6 +118,8 @@ $t = $tt->addTab('Use after form submit', function ($t) {
         $m = $_SESSION['data'];
         $c->output('Executing process...');
         $c->info(var_export($m->get(), true));
+        sleep(1);
+        $c->output('Wait...');
         sleep(3);
         $c->output('Process finished');
     });
