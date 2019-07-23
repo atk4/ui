@@ -2,7 +2,8 @@
 
 ### version 1.7.1 (2019-07-23)
 
-- Update multiline Vue component in order to support containsMany field in form. 
+- Update multiline Vue component in order to support containsMany field in form.
+- Update multiline Vue component in order to set a limit number of row data.
 
 ### version 1.7.0
 

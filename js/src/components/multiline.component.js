@@ -19,7 +19,7 @@ export default {
                         <sui-table-header-cell/>
                         <sui-table-header-cell :colspan="getSpan" textAlign="right">
                         <div is="sui-button-group">
-                         <sui-button size="small" @click.stop.prevent="onAdd" icon="plus" ref="addBtn"></sui-button>
+                         <sui-button size="small" @click.stop.prevent="onAdd" icon="plus" ref="addBtn" :disabled="isLimitReach"></sui-button>
                          <sui-button size="small" @click.stop.prevent="onDelete" icon="trash" :disabled="isDeleteDisable"></sui-button>                        
                          </div>
                         </sui-table-header-cell>
@@ -364,6 +364,18 @@ export default {
      */
     isDeleteDisable() {
       return !this.deletables.length > 0;
+    },
+    /**
+     * Check if record limit is reach.
+     * return false if not.
+     *
+     * @returns {boolean}
+     */
+    isLimitReach() {
+      if (this.data.rowLimit === 0) {
+        return false;
+      }
+      return this.data.rowLimit < this.rowData.length + 1;
     }
   }
 }

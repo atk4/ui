@@ -6,6 +6,7 @@ namespace atk4\ui;
 
 use atk4\data\Model;
 use atk4\data\Reference\ContainsMany;
+use atk4\data\Reference\ContainsOne;
 
 /**
  * Implements a form.
@@ -450,9 +451,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         $fallback_seed = ['Line'];
 
-        if ($f->type === 'array' && $f->reference instanceof ContainsMany) {
+        if ($f->type === 'array') {
+            $limit = ($f->reference instanceof ContainsMany) ? 0 : 1;
             $model = $f->reference->refModel();
-            $fallback_seed = ['MultiLine', 'model' => $model];
+            $fallback_seed = ['MultiLine', 'model' => $model, 'rowLimit' => $limit];
         } elseif ($f->type != 'boolean') {
             if ($f->enum) {
                 $fallback_seed = ['DropDown', 'values' => array_combine($f->enum, $f->enum)];

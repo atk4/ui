@@ -184,6 +184,14 @@ class MultiLine extends Generic
      */
     public $rowData = null;
 
+    /**
+     * The max number of record.
+     * 0 means no limit.
+     *
+     * @var int
+     */
+    public $rowLimit = 0;
+
     public function init()
     {
         parent::init();
@@ -579,6 +587,7 @@ class MultiLine extends Generic
                                       'eventFields' => $this->eventFields,
                                       'hasChangeCb' => $this->changeCb ? true : false,
                                       'options'     => $this->options,
+                                      'rowLimit'    => $this->rowLimit,
                                   ],
                               ]);
     }
