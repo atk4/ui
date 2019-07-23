@@ -28,6 +28,6 @@ $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     // non-SSE way
     return [
         $bar->jsValue(100),
-        $button->js()->removeClass('disabled')
+        $button->js()->removeClass('disabled'),
     ];
 }));
