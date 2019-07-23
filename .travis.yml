@@ -62,11 +62,11 @@ before_script:
 
 after_script:
     - echo $TRAVIS_BRANCH
-      #- if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
-      #- if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.2" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.2" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
 
 script:
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.1" ]]; then NC="--no-coverage"; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.2" ]]; then NC="--no-coverage"; fi
     - ./vendor/phpunit/phpunit/phpunit $NC #- wget -O - http://localhost:8888/demos/button2.php 
     - bash tools/test.sh
 
