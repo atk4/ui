@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.7.1 (2019-07-23)
+
+- Update multiline Vue component in order to support containsMany field in form. 
+
 ### version 1.7.0
 
 - New atkConfirm plugin. Will display a user confirmaton dialog using fomantic ui modal.

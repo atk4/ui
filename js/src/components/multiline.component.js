@@ -1,6 +1,13 @@
 import multilineBody from './multiline/multiline-body.component';
 import multilineHeader from './multiline/multiline-header.component';
 
+/**
+ * MultiLine component.
+ *
+ * 2019-07-23 - add support for containsMany.
+ *  - updateLinesField method now return one level data row, {id:4, field1: 'value1'}
+ *  - getInitData method now handle one level data row.
+ */
 export default {
   name: 'atk-multiline',
   template: `<div >
@@ -215,7 +222,17 @@ export default {
      */
     updateLinesField: function() {
       const field = document.getElementsByName(this.linesField)[0];
-      field.value = JSON.stringify(this.rowData);
+
+      let data = this.rowData.map(item => {
+        let newItem = {};
+        for (let i=0; i<item.length; i++) {
+          const key = Object.keys(item[i])[0];
+          newItem[key] = Object.values(item[i])[0];
+        }
+        return {...newItem}
+      });
+
+      field.value = JSON.stringify(data);
     },
     /**
      * Get initial rowData value.
@@ -228,7 +245,10 @@ export default {
       let field = document.getElementsByName(this.linesField)[0];
       if (field) {
         //Map value to our rowData.
-        rows = JSON.parse(field.value).map(fields => {
+        let values = JSON.parse(field.value);
+        values = Array.isArray(values) ? values : [];
+
+        rows = values.map(fields => {
           let data = Object.keys(fields).map(field => {
             return {[field]:fields[field]};
           });

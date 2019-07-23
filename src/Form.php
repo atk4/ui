@@ -5,6 +5,7 @@
 namespace atk4\ui;
 
 use atk4\data\Model;
+use atk4\data\Persistence\ArrayOfStrings;
 use atk4\data\Reference\ContainsMany;
 
 /**
@@ -452,11 +453,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         if ($f->type === 'array' && $f->reference instanceof ContainsMany) {
             $model = $f->reference->refModel();
-
-//            $model = $f->reference->model;
-//            if (is_string($f->reference->model)){
-//                $model = $f->reference->refModel();
-//            }
             $fallback_seed = ['MultiLine', 'model' => $model];
         } elseif ($f->type != 'boolean') {
             if ($f->enum) {
@@ -604,8 +600,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             };
 
             try {
-                $this->loadPOST();
                 ob_start();
+                $this->loadPOST();
                 $response = $this->hook('submit');
                 $output = ob_get_contents();
 

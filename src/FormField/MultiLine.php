@@ -1,5 +1,19 @@
 <?php
 /**
+ *
+ * 2019-07-23    - add support for containsMany.
+ *               containsMany field is saved and load directly within form Model using regular form->model->save().
+ *               No need to explicitly saveRows when using containsMany in your form model.
+ *               containsMany record will have __atkml value add within each row.
+ *               Note: Until atk4/Data is update, you will need to set field property system to false in order to be include in your form.
+ *               Ex: $m->addField('References', [Reference::class, 'system' => false])
+ *
+ * 2019-05-07   - add form as parameter to the onChange callback. This allow to perform calculation at form model level.
+ *
+ * 2019-05-06   - now check if field isEditable instead of just expression when saving row(line 376).
+ *              - Add options property for table css options.
+ *
+ *
  * Create a multiple line input field.
  * Allow to add/edit multiple row of a data table.
  * If model define in Multiline contains expression, these expression
@@ -63,9 +77,7 @@
  *     return new \atk4\ui\jsToast('Saved!');
  * });
  *
- * 2019-05-06   - now check if field isEditable instead of just expression when saving row(line 376).
- *              - Add options property for table css options.
- * 2019-05-07   - add form as parameter to the onChange callback. This allow to perform calculation at form model level.
+ *
  */
 
 namespace atk4\ui\FormField;
@@ -267,32 +279,36 @@ class MultiLine extends Generic
     public function getValue()
     {
         $m = null;
-        $data = [];
+        // will load data when using containsMany.
+        $data =  $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
 
-        //set model according to model reference if set; or simply the model pass to it.
-        //@todo Why not using $this->getModel() here?
-        if ($this->model->loaded() && $this->modelRef) {
-            $m = $this->model->ref($this->modelRef);
-        } elseif (!$this->modelRef) {
-            $m = $this->model;
-        }
-        if ($m) {
-            foreach ($m as $id => $row) {
-                $d_row = [];
-                foreach ($this->rowFields as $fieldName) {
-                    $field = $m->getField($fieldName);
-                    if ($field->isEditable()) {
-                        $value = $row->get($field);
-                    } else {
-                        $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field));
-                    }
-                    $d_row[$fieldName] = $value;
-                }
-                $data[] = $d_row;
+        //if data is empty try to load model data directly. - For hasMany model or array model already populated with data.
+        if (empty($data)) {
+            //set model according to model reference if set; or simply the model pass to it.
+            if ($this->model->loaded() && $this->modelRef) {
+                $m = $this->model->ref($this->modelRef);
+            } elseif (!$this->modelRef) {
+                $m = $this->model;
             }
+            if ($m) {
+                foreach ($m as $id => $row) {
+                    $d_row = [];
+                    foreach ($this->rowFields as $fieldName) {
+                        $field = $m->getField($fieldName);
+                        if ($field->isEditable()) {
+                            $value = $row->get($field);
+                        } else {
+                            $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field));
+                        }
+                        $d_row[$fieldName] = $value;
+                    }
+                    $data[] = $d_row;
+                }
+            }
+            $data = json_encode($data, JSON_UNESCAPED_UNICODE);
         }
 
-        return json_encode($data, JSON_UNESCAPED_UNICODE);
+        return $data;
     }
 
     /**
@@ -311,12 +327,10 @@ class MultiLine extends Generic
 
         foreach ($rows as $row => $cols) {
             $rowId = $this->getMlRowId($cols);
-            foreach ($cols as $col) {
-                $fieldName = key($col);
+            foreach ($cols as $fieldName => $value) {
                 if ($fieldName === '__atkml' || $fieldName === $m->id_field) {
                     continue;
                 }
-                $value = $col[$fieldName];
 
                 try {
                     $field = $m->getField($fieldName);
@@ -338,6 +352,8 @@ class MultiLine extends Generic
 
     /**
      * Save rows.
+     * This method need to be invoked with model set as hasMany reference.
+     * Will save each row as separate db record in reference table.
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -360,23 +376,21 @@ class MultiLine extends Generic
             $currentIds[] = $id;
         }
 
-        foreach ($this->rowData as $row => $cols) {
-            $rowId = $this->getMlRowId($cols);
+        foreach ($this->rowData as $row) {
             if ($this->modelRef && $this->linkField) {
                 $model[$this->linkField] = $this->model->get('id');
             }
-            foreach ($cols as $col) {
-                $fieldName = key($col);
+
+            foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
                 }
-                $value = $col[$fieldName];
+
                 if ($fieldName === $model->id_field && $value) {
                     $model->load($value);
                 }
 
                 $field = $model->getField($fieldName);
-
                 if ($field->isEditable()) {
                     $field->set($value);
                 }
@@ -389,6 +403,7 @@ class MultiLine extends Generic
 
             $model->unload();
         }
+
         // if currentId are still there, then delete them.
         foreach ($currentIds as $id) {
             $model->delete($id);
@@ -430,13 +445,9 @@ class MultiLine extends Generic
     private function getMlRowId($row)
     {
         $rowId = null;
-        foreach ($row as $k => $col) {
-            foreach ($col as $fieldName => $value) {
-                if ($fieldName === '__atkml') {
-                    $rowId = $value;
-                }
-            }
-            if ($rowId) {
+        foreach ($row as $col => $value) {
+            if ($col === '__atkml') {
+                $rowId = $value;
                 break;
             }
         }
