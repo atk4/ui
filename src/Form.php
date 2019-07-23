@@ -6,7 +6,6 @@ namespace atk4\ui;
 
 use atk4\data\Model;
 use atk4\data\Reference\ContainsMany;
-use atk4\data\Reference\ContainsOne;
 
 /**
  * Implements a form.
