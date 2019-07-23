@@ -50,6 +50,8 @@ class SSE
      * @param callable $callback
      * @param array    $args
      *
+     * @throws Exception
+     *
      * @return mixed|null
      */
     public function set($callback, $args = [])
@@ -60,9 +62,7 @@ class SSE
 
         $this->view = $this->owner;
 
-        if (isset($_GET[$this->name])) {
-            $this->triggered = $_GET[$this->name];
-
+        if ($this->triggered()) {
             $this->app->run_called = true;
             $this->app->stickyGet($this->name);
             $ret = call_user_func_array($callback, $args);
@@ -88,7 +88,7 @@ class SSE
      */
     public function triggered()
     {
-        return isset($_GET[$this->name]) ? $_GET[$this->name] : false;
+        return $_GET[$this->name] ?? false;
     }
 
     /**
@@ -115,16 +115,10 @@ class SSE
     {
         $this->initSse();
         $this->setStart(time());
-        header('Content-Type: text/event-stream');
-        header('Cache-Control: no-cache');
-        header('Cache-Control: private');
-        //header('Content-Encoding: none;');
-        header('Pragma: no-cache');
 
-        echo 'retry: '.$this->clientReconnect * 1000 ."\n";
+        $this->send('retry: '.$this->clientReconnect * 1000 ."\n");
 
         $this->sendBlock('1000', $this->view->renderJSON(), null);
-        $this->flush();
     }
 
     /**
@@ -132,8 +126,14 @@ class SSE
      */
     public function flush()
     {
-        @ob_flush();
-        @flush();
+        // do not flush if is in testing
+        if (defined('UNIT_TESTING')) {
+            return;
+        }
+
+        if (ob_get_level() > 0) {
+            ob_end_flush();
+        }
     }
 
     /**
@@ -143,7 +143,13 @@ class SSE
      */
     private function send($content)
     {
+        if (!headers_sent()) {
+            $this->sendHeaders();
+        }
+
         echo $content;
+
+        $this->flush();
     }
 
     /**
@@ -179,7 +185,9 @@ class SSE
      */
     public function sleep()
     {
-        usleep($this->defaults[sleep_time] * 1000000);
+        $sleepTime = $this->defaults['sleep_time'] ?? $this->sleepTime;
+
+        usleep($sleepTime * 1000000);
     }
 
     public function setStart($time)
@@ -204,21 +212,39 @@ class SSE
      */
     public function isTick()
     {
-        return $this->getUptime() % $this->defaults[keep_alive_time] === 0;
+        $keepAliveTime = $this->defaults['keep_alive_time'] ?? $this->keepAliveTime;
+
+        return $this->getUptime() % $keepAliveTime === 0;
     }
 
     protected function initSse()
     {
         @set_time_limit(0); // Disable time limit
+
         // Prevent buffering
         if (function_exists('apache_setenv')) {
             @apache_setenv('no-gzip', 1);
         }
-        @ini_set('zlib.output_compression', 0);
-        @ini_set('implicit_flush', 1);
-        while (ob_get_level() != 0) {
-            ob_end_flush();
+
+        if (ob_get_level()) {
+            ob_end_clean();
         }
-        ob_implicit_flush(1);
+    }
+
+    protected function sendHeaders()
+    {
+        @ini_set('zlib.output_compression', 0);
+
+        header('Content-Type: text/event-stream');
+
+        header('Cache-Control: no-cache');
+        header('Cache-Control: private');
+
+        //header('Content-Encoding: none;');
+
+        header('Pragma: no-cache');
+
+        // nginx @http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
+        header('X-Accel-Buffering: no');
     }
 }

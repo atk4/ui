@@ -173,8 +173,9 @@ class Upload extends Input
     {
         if (is_callable($fx)) {
             $this->hasDeleteCb = true;
-            if ($this->cb->triggered() && @$_POST['action'] === 'delete') {
-                $fileName = @$_POST['f_name'];
+            $action = $_POST['action'] ?? null;
+            if ($this->cb->triggered() && $action === 'delete') {
+                $fileName = $_POST['f_name'] ?? null;
                 $this->cb->set(function () use ($fx, $fileName) {
                     $this->addJsAction(call_user_func_array($fx, [$fileName]));
 
@@ -195,8 +196,9 @@ class Upload extends Input
         if (is_callable($fx)) {
             $this->hasUploadCb = true;
             if ($this->cb->triggered()) {
-                $action = @$_POST['action'];
-                if ($files = @$_FILES) {
+                $action = $_POST['action'] ?? null;
+                $files = $_FILES ?? null;
+                if ($files) {
                     //set fileId to file name as default.
                     $this->fileId = $files['file']['name'];
                     // display file name to user as default.

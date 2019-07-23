@@ -76,7 +76,7 @@ class jsPaginator extends jsCallback
      */
     public function getPage()
     {
-        return @$_GET['page'];
+        return (int) ($_GET['page'] ?? 0);
     }
 
     /**

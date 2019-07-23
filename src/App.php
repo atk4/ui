@@ -2,17 +2,33 @@
 
 namespace atk4\ui;
 
+use atk4\core\AppScopeTrait;
+use atk4\core\DIContainerTrait;
+use atk4\core\DynamicMethodTrait;
+use atk4\core\FactoryTrait;
+use atk4\core\HookTrait;
+use atk4\core\InitializerTrait;
+use atk4\data\Persistence;
+use atk4\ui\Exception\ExitApplicationException;
+use atk4\ui\Layout\Generic;
+use atk4\ui\Persistence\UI;
+use Closure;
+use Error;
+use ErrorException;
+use Psr\Log\LoggerInterface;
+use Throwable;
+
 class App
 {
-    use \atk4\core\InitializerTrait {
+    use InitializerTrait {
         init as _init;
     }
 
-    use \atk4\core\HookTrait;
-    use \atk4\core\DynamicMethodTrait;
-    use \atk4\core\FactoryTrait;
-    use \atk4\core\AppScopeTrait;
-    use \atk4\core\DIContainerTrait;
+    use HookTrait;
+    use DynamicMethodTrait;
+    use FactoryTrait;
+    use AppScopeTrait;
+    use DIContainerTrait;
 
     // @var array|false Location where to load JS/CSS files
     public $cdn = [
@@ -28,7 +44,7 @@ class App
     // @var string Name of application
     public $title = 'Agile UI - Untitled Application';
 
-    // @var Layout\Generic
+    /** @var Generic */
     public $layout = null; // the top-most view object
 
     /**
@@ -38,7 +54,7 @@ class App
      */
     public $template_dir = null;
 
-    // @var string Name of skin
+    /** @var string Name of skin */
     public $skin = 'semantic-ui';
 
     /**
@@ -78,7 +94,7 @@ class App
      */
     public $exit_called = false;
 
-    // @var bool
+    /** @var bool */
     public $_cwd_restore = true;
 
     /**
@@ -94,23 +110,19 @@ class App
      */
     public $fix_incompatible = true;
 
-    // @var bool
+    /** @var bool */
     public $is_rendering = false;
 
-    // @var Persistence\UI
+    /** @var UI */
     public $ui_persistence = null;
 
-    /**
-     * @var View For internal use
-     */
+    /** @var View For internal use */
     public $html = null;
 
-    /**
-     * @var LoggerInterface, target for objects with DebugTrait
-     */
+    /** @var LoggerInterface, target for objects with DebugTrait */
     public $logger = null;
 
-    // @var \atk4\data\Persistence
+    /** @var Persistence */
     public $db = null;
 
     /**
@@ -167,105 +179,108 @@ class App
         } elseif (!is_array($this->template_dir)) {
             $this->template_dir = [$this->template_dir];
         }
+
         $this->template_dir[] = __DIR__.'/../template/'.$this->skin;
 
         // Set our exception handler
         if ($this->catch_exceptions) {
-            set_exception_handler(function ($exception) {
-                return $this->caughtException($exception);
-            });
-        }
-
-        if (!$this->_initialized) {
-            //$this->init();
-        }
-
-        if ($this->fix_incompatible) {
-            // PHP 7.0 introduces strict checks for method patterns. But only 7.2 introduced parameter type widening
-            //
-            // https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)#Contravariant_method_argument_type
-            // https://wiki.php.net/rfc/parameter-no-type-variance
-            //
-            // We wish to start using type-hinting more in our classes, but it would break any extends in 3rd party code unless
-            // they are on 7.2.
-            if (version_compare(PHP_VERSION, '7.0.0') >= 0 && version_compare(PHP_VERSION, '7.2.0') < 0) {
-                set_error_handler(function ($errno, $errstr) {
-                    return strpos($errstr, 'Declaration of') === 0;
-                }, E_WARNING);
-            }
+            set_exception_handler(Closure::fromCallable([$this, 'caughtException']));
+            set_error_handler(
+                function ($err_severity, $err_msg, $err_file, $err_line, array $err_context) {
+                    throw new ErrorException($err_msg, 0, $err_severity, $err_file, $err_line);
+                },
+                E_ALL & ~E_NOTICE
+            );
         }
 
         // Always run app on shutdown
         if ($this->always_run) {
-            if ($this->_cwd_restore) {
-                $this->_cwd_restore = getcwd();
-            }
-
-            register_shutdown_function(function () {
-                if (is_string($this->_cwd_restore)) {
-                    chdir($this->_cwd_restore);
-                }
-
-                if (!$this->run_called) {
-                    try {
-                        $this->run();
-                    } catch (\Exception $e) {
-                        $this->caughtException($e);
-                    }
-                }
-
-                $this->callExit();
-            });
+            $this->setupAlwaysRun();
         }
 
         // Set up UI persistence
         if (!isset($this->ui_persistence)) {
-            $this->ui_persistence = new Persistence\UI();
+            $this->ui_persistence = new UI();
         }
     }
 
-    public function callExit()
+    /**
+     * @param bool $from_shutdown
+     *
+     * @throws ExitApplicationException
+     * @throws \atk4\core\Exception
+     */
+    public function callExit($from_shutdown = false)
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
             $this->hook('beforeExit');
         }
-        exit;
+
+        if ($from_shutdown) {
+            return;
+        }
+
+        if (defined('UNIT_TESTING')) {
+            throw new ExitApplicationException();
+        }
+
+        exit(0);
     }
 
     /**
      * Catch exception.
      *
-     * @param mixed $exception
+     * @param Throwable $exception
+     *
+     * @throws \atk4\core\Exception
+     *
+     * @return bool
      */
-    public function caughtException($exception)
+    protected function caughtException(Throwable $exception)
     {
         $this->catch_runaway_callbacks = false;
 
-        $l = new self();
+        // must be static to support extended App
+        // if not the App will use default value
+        // e.g. Title = 'Agile UI - Untitled Application'
+        $l = new static();
         $l->initLayout('Centered');
 
-        //check for error type.
-        if ($exception instanceof \atk4\core\Exception) {
-            $l->layout->template->setHTML('Content', $exception->getHTML());
-        } elseif ($exception instanceof \Error) {
-            $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
-            $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
-        } else {
-            $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+        // -- CHECK ERROR BY TYPE
+
+        switch (true) {
+            case $exception instanceof \atk4\core\Exception:
+                $l->layout->template->setHTML('Content', $exception->getHTML());
+                break;
+
+            case $exception instanceof Error:
+                $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
+                $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
+                break;
+
+            default:
+                $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+                break;
         }
+
+        // remove header
         $l->layout->template->tryDel('Header');
 
         if ($this->isJsonRequest()) {
-            echo json_encode(['success'   => false,
-                                'message' => $l->layout->getHtml(),
-                             ]);
+            echo json_encode([
+                'success'   => false,
+                'message'   => $l->layout->getHtml(),
+            ]);
         } else {
             $l->catch_runaway_callbacks = false;
             $l->run();
             $this->run_called = true;
         }
+
         $this->callExit();
+
+        return true;
     }
 
     /**
@@ -302,6 +317,8 @@ class App
      * other classes.
      *
      * @param string $output
+     *
+     * @throws \atk4\core\Exception
      */
     public function terminate($output = null)
     {
@@ -316,6 +333,9 @@ class App
      * Initializes layout.
      *
      * @param string|Layout\Generic|array $seed
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
      *
      * @return $this
      */
@@ -366,6 +386,8 @@ class App
      * and use file include instead.
      *
      * @param string $style CSS rules, like ".foo { background: red }".
+     *
+     * @throws Exception
      */
     public function addStyle($style)
     {
@@ -380,11 +402,12 @@ class App
      *
      * @param string $name
      *
-     * @return string
+     * @return string|null
      */
-    public function normalizeClassNameApp($name, $prefix = '')
+    public function normalizeClassNameApp($name, $prefix = '') : ?string
     {
         //return '\\'.__NAMESPACE__.'\\'.$name;
+        return null;
     }
 
     /**
@@ -392,6 +415,8 @@ class App
      *
      * @param mixed  $seed   New object to add
      * @param string $region
+     *
+     * @throws Exception
      *
      * @return object
      */
@@ -406,6 +431,8 @@ class App
 
     /**
      * Runs app and echo rendered template.
+     *
+     * @throws \atk4\core\Exception
      */
     public function run()
     {
@@ -478,11 +505,11 @@ class App
      * @throws \atk4\data\Exception
      * @throws \atk4\dsql\Exception
      *
-     * @return \atk4\data\Persistence
+     * @return Persistence
      */
     public function dbConnect($dsn, $user = null, $password = null, $args = [])
     {
-        $this->db = \atk4\data\Persistence::connect($dsn, $user, $password, $args);
+        $this->db = Persistence::connect($dsn, $user, $password, $args);
         $this->db->app = $this;
 
         return $this->db;
@@ -606,13 +633,15 @@ class App
      *
      * @return string|null
      */
-    public function stickyGet($name)
+    public function stickyGet($name) :?string
     {
         if (isset($_GET[$name])) {
             $this->sticky_get_arguments[$name] = $_GET[$name];
 
             return $_GET[$name];
         }
+
+        return null;
     }
 
     /**
@@ -664,6 +693,8 @@ class App
      * A convenient wrapper for sending user to another page.
      *
      * @param array|string $page Destination page
+     *
+     * @throws \atk4\core\Exception
      */
     public function redirect($page)
     {
@@ -677,6 +708,8 @@ class App
      * Generate action for redirecting user to another page.
      *
      * @param string|array $page Destination URL or page/arguments
+     *
+     * @return jsExpression
      */
     public function jsRedirect($page)
     {
@@ -867,5 +900,30 @@ class App
             $this->layout->js(true, (new jsVueService())->useComponent('SemanticUIVue'));
             $this->is_sui_init = true;
         }
+    }
+
+    protected function setupAlwaysRun(): void
+    {
+        if ($this->_cwd_restore) {
+            $this->_cwd_restore = getcwd();
+        }
+
+        register_shutdown_function(
+            function () {
+                if (is_string($this->_cwd_restore)) {
+                    chdir($this->_cwd_restore);
+                }
+
+                if (!$this->run_called) {
+                    try {
+                        $this->run();
+                    } catch (Throwable $e) {
+                        $this->caughtException($e);
+                    }
+                }
+
+                $this->callExit(true);
+            }
+        );
     }
 }

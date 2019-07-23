@@ -80,7 +80,7 @@ class ItemsPerPageSelector extends View
         if (is_callable($fx)) {
             if ($this->cb->triggered()) {
                 $this->cb->set(function () use ($fx) {
-                    $ipp = @$_GET['ipp'];
+                    $ipp = $_GET['ipp'] ?? null;
                     //$this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
                     $this->set($ipp);
                     $reload = call_user_func($fx, $ipp);
