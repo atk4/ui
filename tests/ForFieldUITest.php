@@ -18,8 +18,13 @@ class MyTestModel extends Model
 
 }
 
+/**
+ * Test is designed to verify that field which is explicitly editable should appear and be editable
+ * even if 'never_persist' is set to true.
+ */
 class ForFieldUITest extends \atk4\core\PHPUnit_AgileTestCase
 {
+    /** @var Model */
     public $m;
 
     public function setUp()
@@ -27,6 +32,12 @@ class ForFieldUITest extends \atk4\core\PHPUnit_AgileTestCase
         $a = [];
         $p = new Persistence\Array_($a);
         $this->m = new MyTestModel($p);
+    }
+
+    public function testModelLevel()
+    {
+
+        $this->assertTrue($this->m->getField('no_persist_but_show_in_ui')->isEditable());
     }
 
     public function testRegularField()
@@ -41,7 +52,7 @@ class ForFieldUITest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $f = new \atk4\ui\Form();
         $f->init();
-        $f->setModel($this->m);
+        $f->setModel($this->m, ['just_for_data']);
         $this->assertTrue($f->getField('just_for_data')->readonly);
     }
 
