@@ -191,7 +191,7 @@ class MultiLine extends Generic
         $this->app->useSuiVue();
 
         if (!$this->multiLineTemplate) {
-            $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline>{$Input}</div>');
+            $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
         if ($this->model) {
