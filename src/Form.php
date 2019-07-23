@@ -5,7 +5,6 @@
 namespace atk4\ui;
 
 use atk4\data\Model;
-use atk4\data\Persistence\ArrayOfStrings;
 use atk4\data\Reference\ContainsMany;
 
 /**

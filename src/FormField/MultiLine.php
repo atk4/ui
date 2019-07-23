@@ -1,12 +1,11 @@
 <?php
 /**
- *
  * 2019-07-23    - add support for containsMany.
  *               containsMany field is saved and load directly within form Model using regular form->model->save().
  *               No need to explicitly saveRows when using containsMany in your form model.
  *               containsMany record will have __atkml value add within each row.
  *               Note: Until atk4/Data is update, you will need to set field property system to false in order to be include in your form.
- *               Ex: $m->addField('References', [Reference::class, 'system' => false])
+ *               Ex: $m->addField('References', [Reference::class, 'system' => false]).
  *
  * 2019-05-07   - add form as parameter to the onChange callback. This allow to perform calculation at form model level.
  *
@@ -76,8 +75,6 @@
  *     $ml->saveRows();
  *     return new \atk4\ui\jsToast('Saved!');
  * });
- *
- *
  */
 
 namespace atk4\ui\FormField;
@@ -280,7 +277,7 @@ class MultiLine extends Generic
     {
         $m = null;
         // will load data when using containsMany.
-        $data =  $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
+        $data = $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
 
         //if data is empty try to load model data directly. - For hasMany model or array model already populated with data.
         if (empty($data)) {
