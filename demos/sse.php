@@ -13,7 +13,6 @@ $button = $app->add(['Button', 'Turn On']);
 $sse = $app->add(['jsSSE', 'showLoader' => true]);
 
 $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
-
     $sse->send($button->js()->addClass('disabled'));
 
     $sse->send($bar->jsValue(20));
