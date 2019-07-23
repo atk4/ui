@@ -38,6 +38,23 @@ $g->addField('name');
 $g->addField('surname');
 $g->addField('gender', ['DropDown', 'values' => ['Female', 'Male']]);
 
+// testing 0 value
+$values = [0 => 'noob', 1 => 'pro', 2 => 'dev'];
+$form->addField('description', ['TextArea'])->set(0);
+$form->addField('status_optional', ['DropDown', 'values' =>$values]);
+$form->addField('status_string_required', ['DropDown'], ['type'=>'string', 'values' => $values, 'required'=>true]);
+$form->addField('status_integer_required', ['DropDown'], ['type'=>'integer', 'values' => $values, 'required'=>true]);
+$form->addField('status_string_mandatory', ['DropDown'], ['type'=>'string', 'values' => $values, 'mandatory'=>true]);
+$form->addField('status_integer_mandatory', ['DropDown'], ['type'=>'integer', 'values' => $values, 'mandatory'=>true]);
+
+$form->onSubmit(function ($form) {
+    return (new \atk4\ui\jsNotify(json_encode($form->model->get())))->setDuration(0);
+});
+
+
+
+
+
 $tab->add(['Header', 'Comparing Field type vs Decorator class']);
 $form = $tab->add('Form');
 $form->addField('date1', null, ['type' => 'date']);
