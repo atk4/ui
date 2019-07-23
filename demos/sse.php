@@ -12,7 +12,10 @@ $button = $app->add(['Button', 'Turn On']);
 
 $sse = $app->add(['jsSSE', 'showLoader' => true]);
 
-$button->on('click', $sse->set(function () use ($sse, $bar) {
+$button->on('click', $sse->set(function () use ($button, $sse, $bar) {
+
+    $sse->send($button->js()->addClass('disabled'));
+
     $sse->send($bar->jsValue(20));
     sleep(1);
     $sse->send($bar->jsValue(40));
@@ -23,5 +26,8 @@ $button->on('click', $sse->set(function () use ($sse, $bar) {
     sleep(1);
 
     // non-SSE way
-    return $bar->jsValue(100);
+    return [
+        $bar->jsValue(100),
+        $button->js()->removeClass('disabled')
+    ];
 }));
