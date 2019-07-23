@@ -12,10 +12,9 @@ class MyTestModel extends Model
         parent::init();
 
         $this->addField('regular_field');
-        $this->addField('just_for_data',['never_persist'=>true]);
-        $this->addField('no_persist_but_show_in_ui',['never_persist'=>true,'ui'=>['editable'=>true]]);
+        $this->addField('just_for_data', ['never_persist'=>true]);
+        $this->addField('no_persist_but_show_in_ui', ['never_persist'=>true, 'ui'=>['editable'=>true]]);
     }
-
 }
 
 /**
@@ -36,7 +35,6 @@ class ForFieldUITest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function testModelLevel()
     {
-
         $this->assertTrue($this->m->getField('no_persist_but_show_in_ui')->isEditable());
     }
 
@@ -63,5 +61,4 @@ class ForFieldUITest extends \atk4\core\PHPUnit_AgileTestCase
         $f->setModel($this->m);
         $this->assertFalse($f->getField('no_persist_but_show_in_ui')->readonly);
     }
-
 }
