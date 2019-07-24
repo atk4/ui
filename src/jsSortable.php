@@ -79,10 +79,10 @@ class jsSortable extends jsCallback
     {
         if (is_callable($fx)) {
             if ($this->triggered()) {
-                $sortOrders = explode(',', @$_POST['order']);
-                $source = @$_POST['source'];
-                $newIdx = @$_POST['new_idx'];
-                $orgIdx = @$_POST['org_idx'];
+                $sortOrders = explode(',', $_POST['order'] ?? '');
+                $source = $_POST['source'] ?? null;
+                $newIdx = $_POST['new_idx'] ?? null;
+                $orgIdx = $_POST['org_idx'] ?? null;
                 $this->set(function () use ($fx, $sortOrders, $source, $newIdx, $orgIdx) {
                     return call_user_func_array($fx, [$sortOrders, $source, $newIdx, $orgIdx]);
                 });

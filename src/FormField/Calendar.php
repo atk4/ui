@@ -25,7 +25,7 @@ class Calendar extends Input
 
     /**
      * Any other options you'd like to pass to calendar JS.
-     * See https://github.com/mdehoog/Semantic-UI-Calendar for all possible options.
+     * See https://fomantic-ui.com/modules/calendar.html#/settings for all possible options.
      */
     public $options = [];
 
@@ -69,6 +69,12 @@ class Calendar extends Input
 
         if ($dayOfWeek = $this->app->ui_persistence->firstDayOfWeek) {
             $this->options['firstDayOfWeek'] = $dayOfWeek;
+        }
+
+        if ($options = $this->app->ui_persistence->calendar_options) {
+            foreach ($options as $k => $v) {
+                $this->options[$k] = $v;
+            }
         }
 
         $this->js(true)->calendar($this->options);
