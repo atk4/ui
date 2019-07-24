@@ -1,4 +1,4 @@
-import multilineCell from './multiline-cell.component'
+import multilineCell from './multiline-cell.component';
 
 /**
  * A row component.
@@ -20,7 +20,7 @@ export default {
            :cellData="column" 
            @update-value="onUpdateValue" 
            @post-value="onPostRow"
-           :fieldValue="getValue(column)">{{getReadOnlyValue(column)}}</atk-multiline-cell>
+           :fieldValue="getValue(column)"></atk-multiline-cell>
         </sui-table-cell>
     </sui-table-row>
   `,
@@ -95,10 +95,13 @@ export default {
     getFieldType: function (column) {
       let type = 'sui-input';
       if (!column.isEditable){
-        type = 'div';
+        type = 'atk-multiline-readonly';
       }
       if (column.type === 'boolean') {
         type = 'sui-checkbox'
+      }
+      if (column.type === 'enum') {
+        type = 'sui-dropdown';
       }
       return type;
     },

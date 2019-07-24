@@ -1,18 +1,5 @@
 <?php
 /**
- * 2019-07-23    - add support for containsMany.
- *               containsMany field is saved and load directly within form Model using regular form->model->save().
- *               No need to explicitly saveRows when using containsMany in your form model.
- *               containsMany record will have __atkml value add within each row.
- *               Note: Until atk4/Data is update, you will need to set field property system to false in order to be include in your form.
- *               Ex: $m->addField('References', [Reference::class, 'system' => false]).
- *
- * 2019-05-07   - add form as parameter to the onChange callback. This allow to perform calculation at form model level.
- *
- * 2019-05-06   - now check if field isEditable instead of just expression when saving row(line 376).
- *              - Add options property for table css options.
- *
- *
  * Create a multiple line input field.
  * Allow to add/edit multiple row of a data table.
  * If model define in Multiline contains expression, these expression
@@ -75,6 +62,10 @@
  *     $ml->saveRows();
  *     return new \atk4\ui\jsToast('Saved!');
  * });
+ *
+ * 2019-05-06   - now check if field isEditable instead of just expression when saving row(line 376).
+ *              - Add options property for table css options.
+ * 2019-05-07   - add form as parameter to the onChange callback. This allow to perform calculation at form model level.
  */
 
 namespace atk4\ui\FormField;
@@ -191,6 +182,15 @@ class MultiLine extends Generic
      * @var int
      */
     public $rowLimit = 0;
+
+    /**
+     * Model max row limit to use in enum field.
+     * Enum field are display as Dropdown input.
+     * This limit is set on model reference use by a field.
+     *
+     * @var int
+     */
+    public $enumLimit = 100;
 
     public function init()
     {
@@ -357,8 +357,6 @@ class MultiLine extends Generic
 
     /**
      * Save rows.
-     * This method need to be invoked with model set as hasMany reference.
-     * Will save each row as separate db record in reference table.
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -515,12 +513,17 @@ class MultiLine extends Generic
         $this->rowFields = array_merge([$m->id_field], $fields);
 
         foreach ($this->rowFields as $fieldName) {
+            $enumValues = null;
             $field = $m->getField($fieldName);
 
             if (!$field instanceof \atk4\data\Field) {
                 continue;
             }
-            $type = $field->type ?: 'string';
+
+            $type = $this->getFieldType($field);
+            if ($type === 'enum') {
+                $enumValues = $this->getFieldEnumValues($field);
+            }
 
             if (isset($field->ui['form'])) {
                 $type = $field->ui['form'][0];
@@ -536,11 +539,58 @@ class MultiLine extends Generic
                 'isEditable'  => $field->isEditable(),
                 'isHidden'    => $field->isHidden(),
                 'isVisible'   => $field->isVisible(),
+                'options'     => $enumValues,
                 'width'       => $width,
             ];
         }
 
         return $m;
+    }
+
+    /**
+     * Return field type to use in multiline component.
+     *
+     * @param $field
+     *
+     * @return string
+     */
+    public function getFieldType($field)
+    {
+        $type = 'string';
+        if ($field->type) {
+            $type = $field->type;
+        } elseif ($field->enum || $field->reference || $field->values) {
+            $type = 'enum';
+        }
+
+        return $type;
+    }
+
+    /**
+     * Get value for enum field type.
+     *
+     * @param $field
+     *
+     * @return array|false|null
+     */
+    public function getFieldEnumValues($field)
+    {
+        $values = null;
+
+        if ($field->enum) {
+            $values = array_combine($field->enum, $field->enum);
+        } elseif ($field->values) {
+            $values = $field->values;
+        } elseif ($field->reference) {
+            $m = $field->reference->refModel()->setLimit($this->enumLimit);
+
+            $values = [];
+            foreach ($m->export([$m->id_field, $m->title_field]) as $item) {
+                $values[$item[$m->id_field]] = $item[$m->title_field];
+            };
+        }
+
+        return $values;
     }
 
     /**
