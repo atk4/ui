@@ -27,7 +27,7 @@
         "behat/behat": "^3.4",
         "behat/mink-selenium2-driver": "^1.3",
         "behat/mink-extension": "^2.2",
-        "fzaninotto/faker": "*",
+        "fzaninotto/faker": "*"
     },
     "autoload": {
         "psr-4": {"atk4\\ui\\":"src/"}
