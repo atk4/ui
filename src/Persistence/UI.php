@@ -36,7 +36,6 @@ class UI extends \atk4\data\Persistence
 
     public $yes = 'Yes';
     public $no = 'No';
-    
     public $calendar_options = [];
 
     /**
