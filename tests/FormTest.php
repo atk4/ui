@@ -39,39 +39,36 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertInstanceOf(\atk4\ui\FormField\Generic::class, $f->layout->getField('test'));
     }
 
-    public function assertSubmit(array $post_data, callable $submit = null, callable $check_expected_error = null) {
-
+    public function assertSubmit(array $post_data, callable $submit = null, callable $check_expected_error = null)
+    {
         $submit_called = false;
         $_POST = $post_data;
-        $_POST['atk_submit']='ajax';
+        $_POST['atk_submit'] = 'ajax';
 
         $this->f->onSubmit(function ($f) use (&$submit_called, $submit) {
             $submit_called = true;
-            if($submit) {
+            if ($submit) {
                 call_user_func($submit, $f->model);
             }
         });
-
 
         $this->f->render();
         $res = json_decode($this->f->app->output, true);
 
         if ($check_expected_error) {
-
             $this->assertFalse($submit_called, 'Expected submission to fail, but it was successful!');
-            $this->assertNotEquals("", $res['atkjs']); // will output useful error
+            $this->assertNotEquals('', $res['atkjs']); // will output useful error
             $this->f_error = $res['atkjs'];
 
             call_user_func($check_expected_error, $res['atkjs']);
         } else {
             $this->assertTrue($submit_called, 'Expected submission to be successful but it failed');
-            $this->assertEquals("", $res['atkjs']); // will output useful error
+            $this->assertEquals('', $res['atkjs']); // will output useful error
         }
 
         unset($this->f);   // we shouldn't submit from twice!
 
         $_POST = [];
-
     }
 
     public function testFormSubmit()
@@ -88,7 +85,7 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertEquals('John', $f->model->get('name'));
 
         // fake some POST data
-        $this->assertSubmit(['email'=>'john@yahoo.com', 'is_admin'=>'1'], function($m){
+        $this->assertSubmit(['email'=>'john@yahoo.com', 'is_admin'=>'1'], function ($m) {
 
             // field has default, but form didn't send value back
             $this->assertEquals(null, $m['name']);
@@ -97,21 +94,19 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
 
             // security check, unspecified field must not be changed
             $this->assertEquals(false, $m['is_admin']);
-
         });
     }
 
     public function testTextArea()
     {
         $this->f->addField('TextArea');
-        $this->assertSubmit(['TextArea'=>'0'], function($m){
-
+        $this->assertSubmit(['TextArea'=>'0'], function ($m) {
             $this->assertSame('0', $m['TextArea']);
-
         });
     }
 
-    public function assertSubmitError(array $post, callable $error_callback) {
+    public function assertSubmitError(array $post, callable $error_callback)
+    {
         $this->assertSubmit($post, null, $error_callback);
     }
 
@@ -119,13 +114,12 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $matched = false;
 
-        preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function($matches) use ($error, $field, &$matched) {
+        preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($error, $field, &$matched) {
             if ($matches[1] == $field) {
                 $this->assertContains($error, $matches[2], 'Regarding field '.$field.' error message');
 
                 $matched = true;
             }
-
         }, $this->f_error);
 
         $this->assertTrue($matched, 'Field '.$field.' did not produce error');
@@ -133,11 +127,10 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function assertFieldNoErrors(string $field)
     {
-        preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function($matches) use ($field, &$matched) {
+        preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($field, &$matched) {
             if ($matches[1] == $field) {
                 $this->fail('Field '.$field.' unexpected error: '.$matches[2]);
             }
-
         }, $this->f_error);
     }
 
@@ -153,16 +146,14 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
         //$m->addField('opt3_zerotest', ['values'=>$options, 'required'=>true]);
         $m->addField('opt4', ['values'=>$options, 'mandatory'=>true]);
 
-
         $this->f->setModel($m);
-        $this->assertSubmitError(['opt1'=>'2', 'opt3_zerotest'=>'0'], function($error) {
+        $this->assertSubmitError(['opt1'=>'2', 'opt3_zerotest'=>'0'], function ($error) {
 
             // dropdown validates to make sure option is proper
             $this->assertFieldError('opt1', 'not one of the allowed values');
 
             // user didn't select any option here
             $this->assertFieldNoErrors('opt2');
-
 
             // dropdown insists for value to be there
             $this->assertFieldError('opt3', 'Must not be null');
@@ -173,15 +164,14 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
 
             // mandatory will error during save(), but form does not care about it
             $this->assertFieldNoErrors('opt4');
-
         });
-
     }
 }
 
 class AppMockFT extends App
 {
     public $output;
+
     public function terminate($output = null)
     {
         $this->output = $output;
