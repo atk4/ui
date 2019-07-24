@@ -587,7 +587,7 @@ class MultiLine extends Generic
             $values = [];
             foreach ($m->export([$m->id_field, $m->title_field]) as $item) {
                 $values[$item[$m->id_field]] = $item[$m->title_field];
-            };
+            }
         }
 
         return $values;
