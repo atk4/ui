@@ -37,7 +37,7 @@ class UI extends \atk4\data\Persistence
     public $yes = 'Yes';
     public $no = 'No';
     
-    public $options = array();
+    public $calendar_options = array();
 
     /**
      * This method contains the logic of casting generic values into user-friendly format.
