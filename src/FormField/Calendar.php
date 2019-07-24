@@ -71,11 +71,11 @@ class Calendar extends Input
             $this->options['firstDayOfWeek'] = $dayOfWeek;
         }
 
-		if ($options = $this->app->ui_persistence->options) {
-			foreach ($options as $k => $v) {
-				$this->options[$k] = $v;
-			}
-		}
+        if ($options = $this->app->ui_persistence->options) {
+            foreach ($options as $k => $v) {
+                $this->options[$k] = $v;
+            }
+        }
 
         $this->js(true)->calendar($this->options);
 
