@@ -1,9 +1,10 @@
 ## Release note
 
-### version 1.7.1 (2019-07-23)
+### version 1.8.0 (2019-07-23)
 
-- Update multiline Vue component in order to support containsMany field in form.
-- Update multiline Vue component in order to set a limit number of row data.
+- Multiline Vue component now support containsMany / containsOne.
+- Multiline Vue component now support limiting number of row data.
+- Multiline Vue component now support Dropdown as a field type.
 
 ### version 1.7.0
 

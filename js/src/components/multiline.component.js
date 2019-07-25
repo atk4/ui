@@ -236,11 +236,18 @@ export default {
     },
     /**
      * Get initial rowData value.
+     * We need to compare fields return by model vs what values give us because it could differ.
+     * For example if a field was add or remove from model after a value was saved. Specially for
+     * array type field like containsMany / containsOne.
+     * In other word, rowData must match fields definition.
      *
      * @returns {Array}
      */
     getInitData: function() {
       let rows = [], value = '';
+      // Get field name.
+      const fields = this.data.fields.map(item => item.field);
+
       // check if input containing data is set and initialized.
       let field = document.getElementsByName(this.linesField)[0];
       if (field) {
@@ -248,14 +255,15 @@ export default {
         let values = JSON.parse(field.value);
         values = Array.isArray(values) ? values : [];
 
-        rows = values.map(fields => {
-          let data = Object.keys(fields).map(field => {
-            return {[field]:fields[field]};
+        values.forEach(value => {
+          const data = fields.map(field => {
+            return {[field]: value[field] ? value[field] : null}
           });
-          data.push({__atkml:this.getUUID()});
-          return data;
+          data.push({__atkml: this.getUUID()});
+          rows.push(data);
         });
       }
+
       return rows;
     },
     /**
@@ -306,12 +314,10 @@ export default {
     postData: async function(row) {
       let data = {};
       const context = this.$refs['addBtn'].$el;
-      //console.log(context);
       let fields = this.fieldData.map( field => field.field);
       fields.forEach( field => {
         data[field] = row.filter(item => field in item)[0][field];
       });
-      //console.log(data);
       data.__atkml_action = 'update-row';
       try {
         let response = await atk.apiService.suiFetch(this.data.url, {data: data, method: 'post', stateContext:context});
