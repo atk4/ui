@@ -536,7 +536,7 @@ class MultiLine extends Generic
                 $type = $field->ui['form'][0];
             }
 
-            $width = $field->ui['multiline']['width'] ?? null;
+            $options = $field->ui['multiline'] ?? null;
 
             $this->fieldDefs[] = [
                 'field'       => $field->short_name,
@@ -546,8 +546,8 @@ class MultiLine extends Generic
                 'isEditable'  => $field->isEditable(),
                 'isHidden'    => $field->isHidden(),
                 'isVisible'   => $field->isVisible(),
-                'options'     => $enumValues,
-                'width'       => $width,
+                'values'      => $enumValues,
+                'fieldOptions'=> $options,
             ];
         }
 

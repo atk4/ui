@@ -14,13 +14,14 @@ export default {
   template: `
     <sui-table-row :verticalAlign="'middle'">
         <sui-table-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></input></sui-table-cell>
-        <sui-table-cell  v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" :width="column.width" :style="{overflow: 'visible'}" v-if="column.isVisible" :textAlign="getTextAlign(column)">
+        <sui-table-cell  v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" :width="getColumnWidth(column)" :style="{overflow: 'visible'}" v-if="column.isVisible" :textAlign="getTextAlign(column)">
          <atk-multiline-cell 
            :fieldType="getFieldType(column)" 
            :cellData="column" 
            @update-value="onUpdateValue" 
            @post-value="onPostRow"
-           :fieldValue="getValue(column)"></atk-multiline-cell>
+           :fieldValue="getValue(column)"
+           :fieldProps="getFieldProps(column)"></atk-multiline-cell>
         </sui-table-cell>
     </sui-table-row>
   `,
@@ -58,6 +59,9 @@ export default {
       }
       return null;
     },
+    getColumnWidth: function(column) {
+      return column.fieldOptions ? column.fieldOptions.width : null;
+    },
     onEdit: function () {
       this.isEditing = true;
     },
@@ -84,6 +88,42 @@ export default {
         }
       });
       return temp;
+    },
+    /**
+     * Return component specific props.
+     * When dropdown is use for example.
+     *
+     * @param column
+     */
+    getFieldProps: function(column) {
+      let props = {};
+      if (column.type === 'enum') {
+         const userOptions = column.fieldOptions ? column.fieldOptions.enum : {};
+         const defaultOptions = {
+           floating : true,
+           closeOnBlur : true,
+           openOnFocus : false,
+           selection: true,
+         };
+         props = Object.assign(defaultOptions, userOptions);
+         props.options = this.getEnumValues(column.values);
+      }
+      return props;
+    },
+    /**
+     * Map values for Sui Dropdown.
+     * Values are possible value for dropdown.
+     *
+     * @param values
+     * @returns {{text: *, value: string, key: string}[]}
+     */
+    getEnumValues: function(values){
+      if(values) {
+        return Object.keys(values).map(key => {
+          return {key: key, value: key, text: values[key]}
+        });
+
+      }
     },
     /**
      * Setup component according to field type.

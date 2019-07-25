@@ -5,11 +5,7 @@ export default {
   template: ` 
     <component :is="fieldType"
         :type="inputType"
-        :fluid="true" 
-        :closeOnBlur="true" 
-        :openOnFocus="false" 
-        :selection="true"
-        :floating="true"
+        :fluid="true"  
         class="fluid" 
         @blur="onBlur"
         @input="onInput"
@@ -17,18 +13,16 @@ export default {
         :readOnlyValue="fieldValue"
         :name="fieldName"
         ref="cell"
-        :options="enumValues"></component>
+        v-bind="fieldProps"></component>
   `,
   components: {
     'atk-multiline-readonly': multilineReadOnly,
   },
-  props: ['cellData', 'fieldType', 'fieldValue', 'options'],
+  props: ['cellData', 'fieldType', 'fieldValue', 'options', 'fieldProps'],
   data() {
     return {
       field: this.cellData.field,
       type: this.cellData.type,
-      enumValues : this.getEnumValues(this.cellData.options),
-      //this field name will not get serialized and sent on form submit.
       fieldName: '-'+this.cellData.field,
       inputValue: this.fieldValue,
       dirtyValue: this.fieldValue,
@@ -67,21 +61,6 @@ export default {
       if (this.isDirty) {
         this.$emit('post-value', this.field);
         this.dirtyValue = this.inputValue;
-      }
-    },
-    /**
-     * Map values for Sui Dropdown.
-     * Values are possible value for dropdown.
-     *
-     * @param values
-     * @returns {{text: *, value: string, key: string}[]}
-     */
-    getEnumValues: function(values){
-      if(values) {
-        return Object.keys(values).map(key => {
-          return {key: key, value: key, text: values[key]}
-        });
-
       }
     },
     /**
