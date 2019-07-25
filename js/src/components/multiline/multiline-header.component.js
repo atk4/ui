@@ -54,7 +54,6 @@ export default {
       return Object.keys(this.errors).length > 0;
     },
     hasCaption: function() {
-      console.log(this.caption);
       return this.caption;
     },
     getErrorMsg: function(column) {
