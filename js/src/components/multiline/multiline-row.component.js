@@ -98,7 +98,7 @@ export default {
     getFieldProps: function(column) {
       let props = {};
       if (column.type === 'enum') {
-         const userOptions = column.fieldOptions ? column.fieldOptions.enum : {};
+         const userOptions = column.fieldOptions ? column.fieldOptions.dropdown : {};
          const defaultOptions = {
            floating : true,
            closeOnBlur : true,
