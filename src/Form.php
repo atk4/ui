@@ -453,7 +453,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         if ($f->type === 'array') {
             $limit = ($f->reference instanceof ContainsMany) ? 0 : 1;
             $model = $f->reference->refModel();
-            $fallback_seed = ['MultiLine', 'model' => $model, 'rowLimit' => $limit];
+            $fallback_seed = ['MultiLine', 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
         } elseif ($f->type != 'boolean') {
             if ($f->enum) {
                 $fallback_seed = ['DropDown', 'values' => array_combine($f->enum, $f->enum)];

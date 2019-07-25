@@ -192,6 +192,13 @@ class MultiLine extends Generic
      */
     public $enumLimit = 100;
 
+    /**
+     * Multiline caption.
+     *
+     * @var string
+     */
+    public $caption = null;
+
     public function init()
     {
         parent::init();
@@ -638,6 +645,7 @@ class MultiLine extends Generic
                                       'hasChangeCb' => $this->changeCb ? true : false,
                                       'options'     => $this->options,
                                       'rowLimit'    => $this->rowLimit,
+                                      'caption'     => $this->caption,
                                   ],
                               ]);
     }

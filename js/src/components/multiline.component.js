@@ -12,7 +12,7 @@ export default {
   name: 'atk-multiline',
   template: `<div >
                 <sui-table v-bind="tableProp">
-                  <atk-multiline-header :fields="fieldData" :state="getMainToggleState" :errors="errors"></atk-multiline-header>
+                  <atk-multiline-header :fields="fieldData" :state="getMainToggleState" :errors="errors" :caption="caption"></atk-multiline-header>
                   <atk-multiline-body :fieldDefs="fieldData" :rowData="rowData" :rowIdField="idField" :deletables="getDeletables" :errors="errors"></atk-multiline-body>
                   <sui-table-footer>
                     <sui-table-row>
@@ -40,6 +40,7 @@ export default {
       deletables: [],
       hasChangeCb: this.data.hasChangeCb,
       errors: {},
+      caption: this.data.caption ? this.data.caption : null,
       tableProp: Object.assign({}, this.tableDefault, this.data.options),
       tableDefault : {
         basic: false,
@@ -50,7 +51,7 @@ export default {
         stackable: false,
         inverted: false,
         color: null,
-        columns: null
+        columns: null,
       }
     }
   },
