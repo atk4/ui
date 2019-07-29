@@ -544,16 +544,12 @@ class View implements jsExpressionable
      *
      * @todo Think about difference between setStyle and addStyle
      */
-    public function setStyle($property, $style = null)
+    public function setStyle($property, ?string $style = null)
     {
-        if (is_array($property) && $style === null) {
-            foreach ($property as $k => $v) {
-                $this->addStyle($k, $v);
-            }
-
-            return $this;
-        }
-        $this->style[$property] = $style;
+        $this->style = array_merge(
+            $this->style,
+            is_array($property) ? $property : [$property => $style]
+        );
 
         return $this;
     }
@@ -566,7 +562,7 @@ class View implements jsExpressionable
      *
      * @see setStyle()
      */
-    public function addStyle($property, $style = null)
+    public function addStyle($property, ?string $style = null)
     {
         return $this->setStyle($property, $style);
     }
