@@ -243,7 +243,7 @@ class App
 
         // Use new App() instead of static() to prevent broken exception
         // message display due to conflict with existing layout
-        $l = new App();
+        $l = new self();
         $l->title = 'L'.$exception->getLine().': '.$exception->getMessage();
         $l->catch_runaway_callbacks = false; // Allow exceptions within modals
         $l->initLayout('Centered');
