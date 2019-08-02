@@ -7,7 +7,7 @@ namespace atk4\ui;
  *
  * @method jQuery append()
  * @method jQuery appendTo()
- * @method jQuery bind()
+ * @method jQuery bind(...$args)
  * @method jQuery click()
  * @method jQuery on($a=null,$b=null,$c=null)
  * @method jQuery attr()
