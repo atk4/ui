@@ -205,19 +205,19 @@ class App
     }
 
     /**
-     * @param bool $from_shutdown
+     * @param bool $for_shutdown if true will not pass in caughtException method.
      *
      * @throws ExitApplicationException
      * @throws \atk4\core\Exception
      */
-    public function callExit($from_shutdown = false)
+    public function callExit($for_shutdown = false)
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
             $this->hook('beforeExit');
         }
 
-        if ($from_shutdown) {
+        if ($for_shutdown) {
             return;
         }
 
@@ -232,6 +232,7 @@ class App
      * @param Throwable $exception
      *
      * @throws \atk4\core\Exception
+     * @throws ExitApplicationException
      *
      * @return bool
      */
@@ -253,7 +254,6 @@ class App
         $l->initLayout('Centered');
 
         // -- CHECK ERROR BY TYPE
-
         switch (true) {
 
             case $exception instanceof \atk4\core\Exception:
@@ -284,7 +284,7 @@ class App
             $this->run_called = true;
         }
 
-        $this->callExit();
+        $this->callExit(true);
 
         return true;
     }
