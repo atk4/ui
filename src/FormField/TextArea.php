@@ -27,8 +27,7 @@ class TextArea extends Input
             'id'          => $this->id.'_input',
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
-        ], $this->getValue()
-    );
-        //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
+        ], (string) $this->getValue() // need to cast to string to avoid null values which break html markup
+        );
     }
 }
