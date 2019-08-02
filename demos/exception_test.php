@@ -6,7 +6,7 @@ require 'init.php';
 
 $modal = $app->add(['Modal']);
 
-$modal->set(function($m) use ($modal) {
+$modal->set(function ($m) use ($modal) {
     throw new \Exception("TEST!");
 });
 
@@ -15,7 +15,7 @@ $button->on('click', $modal->show());
 
 $modal2 = $app->add(['Modal']);
 
-$modal2->set(function($m) use ($modal2) {
+$modal2->set(function ($m) use ($modal2) {
     trigger_error("error triggered");
 });
 

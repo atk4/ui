@@ -7,12 +7,12 @@ namespace atk4\ui;
 use atk4\core\AppScopeTrait;
 use atk4\core\ContainerTrait;
 use atk4\core\DIContainerTrait;
+use atk4\core\Exception;
 use atk4\core\FactoryTrait;
 use atk4\core\InitializerTrait;
 use atk4\core\TrackableTrait;
 use atk4\data\Model;
 use atk4\data\Persistence\Static_;
-use atk4\core\Exception;
 
 /**
  * Implements a most core view, which all of the other components descend
@@ -377,7 +377,7 @@ class View implements jsExpressionable
      * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
      *
-     * @param mixed  $seed New object to add
+     * @param mixed  $seed   New object to add
      * @param string $region
      *
      * @throws Exception
@@ -432,10 +432,10 @@ class View implements jsExpressionable
      *
      * @return null|View
      */
-    public function getClosestOwner(View $object, $class)
+    public function getClosestOwner(self $object, $class)
     {
         if (!isset($object->owner)) {
-            return null;
+            return;
         }
 
         if ($object->owner instanceof $class) {
@@ -1130,6 +1130,7 @@ class View implements jsExpressionable
      * @param bool $force_echo
      *
      * @throws Exception
+     *
      * @return string
      */
     public function getJS($force_echo = false)

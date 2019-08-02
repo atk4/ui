@@ -264,6 +264,7 @@ class DemoTest extends TestCase
     }
 
     /**
+     * @runInSeparateProcess
      * @dataProvider JSONResponseDataProvider
      *
      * @param string     $page

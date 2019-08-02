@@ -240,7 +240,7 @@ class App
     {
         // if the intent is to exiut from application
         // catch Exit Exception and return
-        if($exception instanceof ExitApplicationException) {
+        if ($exception instanceof ExitApplicationException) {
             return true;
         }
 
@@ -459,7 +459,7 @@ class App
 
         if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
             $this->terminate(
-                '!! Callback requested, but never reached. You may be missing some arguments in ' . $_SERVER['REQUEST_URI']
+                '!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']
             );
         }
 

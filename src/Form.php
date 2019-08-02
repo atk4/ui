@@ -600,7 +600,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 if ($output) {
                     throw new Exception([
                         'Direct Output Detected',
-                        'output' => $output
+                        'output' => $output,
                     ]);
                 }
 
