@@ -221,11 +221,9 @@ class App
             return;
         }
 
-        if (defined('UNIT_TESTING')) {
-            throw new ExitApplicationException();
-        }
-
-        exit(0);
+        // Throw this special exception
+        // to stop process further code in the app
+        throw new ExitApplicationException();
     }
 
     /**
@@ -239,6 +237,12 @@ class App
      */
     protected function caughtException(Throwable $exception)
     {
+        // if the intent is to exiut from application
+        // catch Exit Exception and return
+        if($exception instanceof ExitApplicationException) {
+            return true;
+        }
+
         $this->catch_runaway_callbacks = false;
 
         // Use new App() instead of static() to prevent broken exception
@@ -251,6 +255,7 @@ class App
         // -- CHECK ERROR BY TYPE
 
         switch (true) {
+
             case $exception instanceof \atk4\core\Exception:
                 $l->layout->template->setHTML('Content', $exception->getHTML());
                 break;
@@ -453,7 +458,9 @@ class App
         $this->hook('beforeOutput');
 
         if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
-            $this->terminate('!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']);
+            $this->terminate(
+                '!! Callback requested, but never reached. You may be missing some arguments in ' . $_SERVER['REQUEST_URI']
+            );
         }
 
         echo $this->html->template->render();
