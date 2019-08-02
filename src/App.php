@@ -241,10 +241,11 @@ class App
     {
         $this->catch_runaway_callbacks = false;
 
-        // must be static to support extended App
-        // if not the App will use default value
-        // e.g. Title = 'Agile UI - Untitled Application'
-        $l = new static();
+        // Use new App() instead of static() to prevent broken exception
+        // message display due to conflict with existing layout
+        $l = new self();
+        $l->title = 'L'.$exception->getLine().': '.$exception->getMessage();
+        $l->catch_runaway_callbacks = false; // Allow exceptions within modals
         $l->initLayout('Centered');
 
         // -- CHECK ERROR BY TYPE
