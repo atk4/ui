@@ -15,10 +15,6 @@ class DemoTest extends TestCase
 {
     public function setUp()
     {
-        if (!defined('UNIT_TESTING')) {
-            define('UNIT_TESTING', 'atk4');
-        }
-
         chdir('demos');
     }
 
