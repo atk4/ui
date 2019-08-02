@@ -595,15 +595,13 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 $this->loadPOST();
                 ob_start();
                 $response = $this->hook('submit');
-                $output = ob_get_contents();
+                $output = ob_get_clean();
 
                 if ($output) {
-                    $message = new Message('Direct Output Detected');
-                    $message->init();
-                    $message->addClass('error');
-                    $message->text->set($output);
-
-                    return $message;
+                    throw new Exception([
+                        'Direct Output Detected',
+                        'output' => $output
+                    ]);
                 }
 
                 if (!$response) {
@@ -622,12 +620,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 }
 
                 return $response;
-            } catch (\Error $e) {
-                return $caught($e, false);
-            } catch (\Exception $e) {
-                return $caught($e, true);
-            } finally {
-                ob_end_flush();
             }
 
             return $response;
