@@ -1246,18 +1246,11 @@ class View implements jsExpressionable
      *
      * @return null|string
      */
-    public function stickyGet($name, $newValue = null)
+    public function stickyGet($name, $newValue = null) : ?string
     {
-        if ($newValue) {
-            $this->stickyArgs[$name] = $newValue;
+        $this->stickyArgs[$name] = $newValue ?? $_GET[$name] ?? null;
 
-            return $newValue;
-        }
-        if (isset($_GET[$name])) {
-            $this->stickyArgs[$name] = $_GET[$name];
-
-            return $_GET[$name];
-        }
+        return $this->stickyArgs[$name];
     }
 
     // }}}
