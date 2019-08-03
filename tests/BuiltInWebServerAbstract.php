@@ -25,7 +25,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
     public static function setUpBeforeClass()
     {
         if (!file_exists(getcwd().'/coverage/')) {
-            mkdir(getcwd().'/coverage/',0777,true);
+            mkdir(getcwd().'/coverage/', 0777, true);
         }
 
         if (!file_exists(getcwd().'/demos/coverage.php')) {
