@@ -227,9 +227,13 @@ class App
             return;
         }
 
-        // Throw this special exception
-        // to stop process further code in the app
-        throw new ExitApplicationException();
+        if (!$this->call_exit) {
+            // Throw this special exception
+            // to stop process further code in the app
+            throw new ExitApplicationException();
+        }
+
+        exit;
     }
 
     /**
@@ -244,12 +248,6 @@ class App
      */
     protected function caughtException(Throwable $exception)
     {
-        // if the intent is to exiut from application
-        // catch Exit Exception and return
-        if ($exception instanceof ExitApplicationException) {
-            return true;
-        }
-
         $this->catch_runaway_callbacks = false;
 
         // Use new App() instead of static() to prevent broken exception
@@ -331,12 +329,14 @@ class App
      * @param string $output
      *
      * @throws \atk4\core\Exception
+     * @throws ExitApplicationException
      */
     public function terminate($output = null)
     {
         if ($output !== null) {
             echo $output;
         }
+
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
     }
@@ -448,28 +448,33 @@ class App
      */
     public function run()
     {
-        $this->run_called = true;
-        $this->hook('beforeRender');
-        $this->is_rendering = true;
+        try {
+            $this->run_called = true;
+            $this->hook('beforeRender');
+            $this->is_rendering = true;
 
-        // if no App layout set
-        if (!isset($this->html)) {
-            throw new Exception(['App layout should be set.']);
+            // if no App layout set
+            if (!isset($this->html)) {
+                throw new Exception(['App layout should be set.']);
+            }
+
+            $this->html->template->set('title', $this->title);
+            $this->html->renderAll();
+            $this->html->template->appendHTML('HEAD', $this->html->getJS());
+            $this->is_rendering = false;
+            $this->hook('beforeOutput');
+
+            if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
+                $this->terminate(
+                    '!! Callback requested, but never reached. You may be missing some arguments in ' . $_SERVER['REQUEST_URI']
+                );
+            }
+
+            echo $this->html->template->render();
+        } catch(ExitApplicationException $e)
+        {
+
         }
-
-        $this->html->template->set('title', $this->title);
-        $this->html->renderAll();
-        $this->html->template->appendHTML('HEAD', $this->html->getJS());
-        $this->is_rendering = false;
-        $this->hook('beforeOutput');
-
-        if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
-            $this->terminate(
-                '!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']
-            );
-        }
-
-        echo $this->html->template->render();
     }
 
     /**
@@ -929,14 +934,8 @@ class App
                 }
 
                 if (!$this->run_called) {
-                    try {
-                        $this->run();
-                    } catch (Throwable $e) {
-                        $this->caughtException($e);
-                    }
+                    $this->run();
                 }
-
-                $this->callExit(true);
             }
         );
     }
