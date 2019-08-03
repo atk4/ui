@@ -215,9 +215,8 @@ class App
         }
 
         if (!$this->call_exit) {
-            // Throw this special exception
-            // to stop process further code in the app
             throw new ExitApplicationException();
+            // stop execution here
         }
 
         exit;
@@ -333,7 +332,6 @@ class App
      *
      * @param string|Layout\Generic|array $seed
      *
-     * @throws Exception
      * @throws \atk4\core\Exception
      *
      * @return $this
@@ -412,10 +410,11 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param mixed  $seed   New object to add
+     * @param mixed  $seed New object to add
      * @param string $region
      *
      * @throws Exception
+     * @throws \atk4\core\Exception
      *
      * @return object
      */
@@ -701,6 +700,7 @@ class App
      * @param array|string $page Destination page
      *
      * @throws \atk4\core\Exception
+     * @throws ExitApplicationException
      */
     public function redirect($page)
     {
@@ -898,6 +898,8 @@ class App
      * Allow to use semantic-ui-vue components.
      *
      * https://semantic-ui-vue.github.io
+     *
+     * @throws \atk4\core\Exception
      */
     public function useSuiVue()
     {
