@@ -6,8 +6,6 @@ namespace atk4\ui;
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
 
-use atk4\ui\Exception\ExitApplicationException;
-
 class jsSSE extends jsCallback
 {
     // Allows us to fall-back to standard functionality of jsCallback if browser does not support SSE
@@ -55,24 +53,19 @@ class jsSSE extends jsCallback
 
     public function terminate($ajaxec, $msg = null, $success = true)
     {
-        try {
-            if ($this->browserSupport) {
-                if ($ajaxec) {
-                    $this->sendEvent(
-                        'js', json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
-                        'jsAction'
-                    );
-                }
-
-                // no further output please
-                $this->app->terminate();
+        if ($this->browserSupport) {
+            if ($ajaxec) {
+                $this->sendEvent(
+                    'js', json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
+                    'jsAction'
+                );
             }
 
-            $this->app->terminate(json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]));
-        } catch (ExitApplicationException $e)
-        {
-            throw $e;
+            // no further output please
+            $this->app->terminate();
         }
+
+        $this->app->terminate(json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]));
     }
 
     /**
