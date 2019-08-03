@@ -24,8 +24,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     public static function setUpBeforeClass()
     {
-        if(!file_exists(getcwd().'/coverage/'))
-        {
+        if (!file_exists(getcwd().'/coverage/')) {
             mkdir(getcwd().'/coverage/',0777,true);
         }
 
@@ -85,6 +84,6 @@ abstract class BuiltInWebServerAbstract extends TestCase
         $path .= strpos($path, '?') === false ? '?' : '&';
         $path .= 'APP_CALL_EXIT='.((int) self::$app_def_call_exit).'&APP_CATCH_EXCEPTIONS='.((int) self::$app_def_call_exit);
 
-        return self::$webserver_root . $path;
+        return self::$webserver_root.$path;
     }
 }
