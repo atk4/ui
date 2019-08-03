@@ -139,6 +139,12 @@ class App
     protected $url_building_ext = '.php';
 
     /**
+     * Call exit in place of throw Exception when Application need to exit
+     * @var bool
+     */
+    public $call_exit = true;
+
+    /**
      * Constructor.
      *
      * @param array $defaults
