@@ -36,7 +36,9 @@ abstract class BuiltInWebServerAbstract extends TestCase
             );
         }
 
-        if(getenv('TRAVIS_BRANCH')) return;
+        if (getenv('TRAVIS_BRANCH')) {
+            return;
+        }
 
         // The command to spin up the server
         self::$process = Process::fromShellCommandline('php -S '.self::$host.':'.self::$port.' -t '.getcwd());
@@ -52,8 +54,9 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     public static function tearDownAfterClass()
     {
-
-        if(!getenv('TRAVIS_BRANCH')) self::$process->stop();
+        if (!getenv('TRAVIS_BRANCH')) {
+            self::$process->stop();
+        }
 
         if (file_exists(getcwd().'/demos/coverage.php')) {
             unlink(getcwd().'/demos/coverage.php');
