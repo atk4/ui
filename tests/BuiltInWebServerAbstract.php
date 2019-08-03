@@ -11,8 +11,8 @@ abstract class BuiltInWebServerAbstract extends TestCase
 {
     protected static $process;
 
-    const HOST = '127.0.0.1';
-    const PORT = 9876; // Adjust this to a port you're sure is free
+    protected static $host = '127.0.0.1';
+    protected static $port = 8888;
 
     /** @var bool set the app->call_exit in demo */
     protected static $app_def_call_exit = true;
@@ -20,7 +20,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
     /** @var bool set the app->caught_exception in demo */
     protected static $app_def_caught_exception = true;
 
-    protected static $webserver_root = 'demos';
+    protected static $webserver_root = 'demos/';
 
     public static function setUpBeforeClass()
     {
@@ -31,11 +31,13 @@ abstract class BuiltInWebServerAbstract extends TestCase
             );
         }
 
+        if(defined('TRAVIS_BRANCH')) return;
+
         // The command to spin up the server
-        self::$process = new Process(['php -S '.self::HOST.':'.self::PORT.' -t '.getcwd().DIRECTORY_SEPARATOR.self::$webserver_root]);
+        self::$process = Process::fromShellCommandline('php -S '.self::$host.':'.self::$port.' -t '.getcwd());
 
         // Disabling the output, otherwise the process might hang after too much output
-        self::$process->disableOutput();
+        //self::$process->disableOutput();
         // Actually execute the command and start the process
 
         self::$process->start();
@@ -45,7 +47,8 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     public static function tearDownAfterClass()
     {
-        self::$process->stop();
+
+        if(!defined('TRAVIS_BRANCH')) self::$process->stop();
 
         if (file_exists(getcwd().'/demos/coverage.php')) {
             unlink(getcwd().'/demos/coverage.php');
@@ -56,7 +59,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
     {
         // Creating a Guzzle Client with the base_uri, so we can use a relative
         // path for the requests.
-        return new Client(['base_uri' => 'http://127.0.0.1:'.self::PORT]);
+        return new Client(['base_uri' => 'http://localhost:'.self::$port]);
     }
 
     protected function getResponseFromRequestFormPOST($path, $data): ResponseInterface
@@ -74,6 +77,6 @@ abstract class BuiltInWebServerAbstract extends TestCase
         $path .= strpos($path, '?') === false ? '?' : '&';
         $path .= 'APP_CALL_EXIT='.((int) self::$app_def_call_exit).'&APP_CATCH_EXCEPTIONS='.((int) self::$app_def_call_exit);
 
-        return $path;
+        return self::$webserver_root . $path;
     }
 }
