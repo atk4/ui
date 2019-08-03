@@ -24,6 +24,11 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     public static function setUpBeforeClass()
     {
+        if(!file_exists(getcwd().'/coverage/'))
+        {
+            mkdir(getcwd().'/coverage/',0777,true);
+        }
+
         if (!file_exists(getcwd().'/demos/coverage.php')) {
             file_put_contents(
                 getcwd().'/demos/coverage.php',
@@ -31,7 +36,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
             );
         }
 
-        if(defined('TRAVIS_BRANCH')) return;
+        if(getenv('TRAVIS_BRANCH')) return;
 
         // The command to spin up the server
         self::$process = Process::fromShellCommandline('php -S '.self::$host.':'.self::$port.' -t '.getcwd());
@@ -48,7 +53,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
     public static function tearDownAfterClass()
     {
 
-        if(!defined('TRAVIS_BRANCH')) self::$process->stop();
+        if(!getenv('TRAVIS_BRANCH')) self::$process->stop();
 
         if (file_exists(getcwd().'/demos/coverage.php')) {
             unlink(getcwd().'/demos/coverage.php');
