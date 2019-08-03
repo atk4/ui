@@ -127,6 +127,7 @@ class App
 
     /**
      * Call exit in place of throw Exception when Application need to exit.
+     *
      * @var bool
      */
     public $call_exit = true;
@@ -434,7 +435,6 @@ class App
     public function run()
     {
         try {
-
             $this->run_called = true;
             $this->hook('beforeRender');
             $this->is_rendering = true;
@@ -457,7 +457,6 @@ class App
             }
 
             echo $this->html->template->render();
-
         } catch (ExitApplicationException $e) {
             $this->callExit();
         } catch (\Throwable $e) {

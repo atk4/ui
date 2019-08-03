@@ -61,18 +61,19 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     protected function getResponseFromRequestFormPOST($path, $data): ResponseInterface
     {
-        return $this->getClient()->request('POST', $path, ['form_params' => $data]);
+        return $this->getClient()->request('POST', $this->getPathWithAppVars($path), ['form_params' => $data]);
     }
 
     protected function getResponseFromRequestGET($path): ResponseInterface
     {
-        return $this->getClient()->request('GET', $path);
+        return $this->getClient()->request('GET', $this->getPathWithAppVars($path));
     }
 
     private function getPathWithAppVars($path)
     {
-        $path .= strpos($path,'?') === false ? '?' : '&';
+        $path .= strpos($path, '?') === false ? '?' : '&';
         $path .= 'APP_CALL_EXIT='.((int) self::$app_def_call_exit).'&APP_CATCH_EXCEPTIONS='.((int) self::$app_def_call_exit);
+
         return $path;
     }
 }
