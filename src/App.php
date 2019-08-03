@@ -236,42 +236,40 @@ class App
     {
         $this->catch_runaway_callbacks = false;
 
-        // Use new App() instead of static() to prevent broken exception
-        // message display due to conflict with existing layout
-        $l = new self();
-        $l->title = 'L'.$exception->getLine().': '.$exception->getMessage();
-        $l->catch_runaway_callbacks = false; // Allow exceptions within modals
-        $l->initLayout('Centered');
+        // just replace layout to avoid any extended App->_construct problems
+        // it will maintain everything as in the original app StickyGet, logger, Events
+        $this->html = null;
+        $this->initLayout('Centered');
+        // change title to added an error
+        $this->add('Header')->set('L'.$exception->getLine().': '.$exception->getMessage());
 
         // -- CHECK ERROR BY TYPE
         switch (true) {
 
             case $exception instanceof \atk4\core\Exception:
-                $l->layout->template->setHTML('Content', $exception->getHTML());
+                $this->layout->template->setHTML('Content', $exception->getHTML());
                 break;
 
             case $exception instanceof Error:
-                $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
-                $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
+                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
+                $this->layout->add(['Text', nl2br($exception->getTraceAsString())]);
                 break;
 
             default:
-                $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
                 break;
         }
 
         // remove header
-        $l->layout->template->tryDel('Header');
+        $this->layout->template->tryDel('Header');
 
         if ($this->isJsonRequest()) {
             echo json_encode([
                 'success'   => false,
-                'message'   => $l->layout->getHtml(),
+                'message'   => $this->layout->getHtml(),
             ]);
         } else {
-            $l->catch_runaway_callbacks = false;
-            $l->run();
-            $this->run_called = true;
+            $this->run();
         }
 
         $this->callExit(true);
