@@ -14,3 +14,4 @@ docs/build
 *.codekit3
 yarn.lock
 run_local.sh
+/coverage
