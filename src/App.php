@@ -97,19 +97,6 @@ class App
     /** @var bool */
     public $_cwd_restore = true;
 
-    /**
-     * function setModel(MyModel $m);.
-     *
-     * is considered 'WARNING' even though MyModel descends from the parent class. This
-     * is not an incompatible class. We want to write clean PHP code and therefore this
-     * warning is disabled by default until it's fixed correctly in PHP.
-     *
-     * See: http://stackoverflow.com/a/42840762/204819
-     *
-     * @var bool
-     */
-    public $fix_incompatible = true;
-
     /** @var bool */
     public $is_rendering = false;
 
