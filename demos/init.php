@@ -8,7 +8,10 @@ if (file_exists('coverage.php')) {
     include_once 'coverage.php';
 }
 
-$app = new \atk4\ui\App();
+$app = new \atk4\ui\App([
+    'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
+    'catch_exceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
+]);
 
 if (file_exists('coverage.php')) {
     $app->addHook('beforeExit', function () {

@@ -15,6 +15,12 @@ abstract class BuiltInWebServerAbstract extends TestCase
     const HOST = "127.0.0.1";
     const PORT = 9876; // Adjust this to a port you're sure is free
 
+    /** @var bool set the app->call_exit in demo */
+    protected static $app_def_call_exit  = true;
+
+    /** @var bool set the app->caught_exception in demo */
+    protected static $app_def_caught_exception  = true;
+
     protected static $webserver_root = 'demos';
 
     public static function setUpBeforeClass()
@@ -27,7 +33,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
         }
 
         // The command to spin up the server
-        self::$process = new Process(['php --coverage-clover -d xdebug.remote_enable=1 -d xdebug.coverage_enable=1 -S ' . self::HOST . ':' . self::PORT . ' -t ' . getcwd() . DIRECTORY_SEPARATOR . self::$webserver_root]);
+        self::$process = new Process(['php -S ' . self::HOST . ':' . self::PORT . ' -t ' . getcwd() . DIRECTORY_SEPARATOR . self::$webserver_root]);
 
         // Disabling the output, otherwise the process might hang after too much output
         self::$process->disableOutput();
@@ -62,5 +68,12 @@ abstract class BuiltInWebServerAbstract extends TestCase
     protected function getResponseFromRequestGET($path): ResponseInterface
     {
         return $this->getClient()->request('GET', $path);
+    }
+
+    private function getPathWithAppVars($path)
+    {
+        $path .= strpos($path,'?') === false ? '?' : '&';
+        $path .= 'APP_CALL_EXIT='.((integer)self::$app_def_call_exit).'&APP_CATCH_EXCEPTIONS='.((integer)self::$app_def_call_exit);
+        return $path;
     }
 }
