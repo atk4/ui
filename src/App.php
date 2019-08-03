@@ -126,7 +126,7 @@ class App
     protected $url_building_ext = '.php';
 
     /**
-     * Call exit in place of throw Exception when Application need to exit
+     * Call exit in place of throw Exception when Application need to exit.
      * @var bool
      */
     public $call_exit = true;
@@ -408,7 +408,7 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param mixed  $seed New object to add
+     * @param mixed  $seed   New object to add
      * @param string $region
      *
      * @throws Exception
@@ -452,7 +452,7 @@ class App
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 $this->terminate(
-                    '!! Callback requested, but never reached. You may be missing some arguments in ' . $_SERVER['REQUEST_URI']
+                    '!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']
                 );
             }
 

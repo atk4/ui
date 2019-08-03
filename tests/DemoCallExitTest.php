@@ -25,12 +25,12 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
   \A (?&json) \Z
   /six   
 ';
-    private $regexSSE  = '/^[data|id|event].*$/m';
+    private $regexSSE = '/^[data|id|event].*$/m';
 
     public function testableDemoFilesdataProvider()
     {
         $files = [];
-        foreach (scandir(getcwd() . DIRECTORY_SEPARATOR . 'demos') as $file) {
+        foreach (scandir(getcwd().DIRECTORY_SEPARATOR.'demos') as $file) {
             if (is_dir($file) || substr($file, -3) !== 'php') {
                 continue;
             }
@@ -42,7 +42,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
                 case 'db.travis.php': // exclude - is a setup file
                 case 'somedatadef.php': // exclude - is a setup file
                 case 'layouts_nolayout.php': // exclude - output only text
-                    continue(2);
+                    continue 2;
                     break;
             }
 
@@ -60,8 +60,8 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoHTMLStatusAndResponse(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertRegExp($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertEquals(200, $response->getStatusCode(), ' Status error on '.$uri);
+        $this->assertRegExp($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on '.$uri);
     }
 
     /**
@@ -72,14 +72,13 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoGet(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertRegExp($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertEquals(200, $response->getStatusCode(), ' Status error on '.$uri);
+        $this->assertRegExp($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on '.$uri);
     }
 
     public function casesDemoGETDataProvider()
     {
         $files = [];
-
         $files[] = ['sticky.php?xx=YEY'];
         $files[] = ['sticky.php?c=OHO'];
         $files[] = ['sticky.php?xx=YEY&c=OHO'];
@@ -116,14 +115,13 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoAssertJSONResponse(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertRegExp($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertEquals(200, $response->getStatusCode(), ' Status error on '.$uri);
+        $this->assertRegExp($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on '.$uri);
     }
 
     public function JSONResponseDataProvider()
     {
         $files = [];
-
         $files[] = ['sticky2.php?__atk_reload=atk_admin_button'];
         $files[] = ['sticky2.php?atk_admin_loader_callback=ajax&__atk_callback1'];
         $files[] = ['virtual.php?atk_admin_label_2_click=ajax&__atk_callback=1'];
@@ -139,11 +137,11 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoAssertSSEResponse(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertEquals(200, $response->getStatusCode(), ' Status error on '.$uri);
 
         $output_rows = explode(PHP_EOL, $response->getBody()->getContents());
 
-        $this->assertGreaterThan(0, count($output_rows), ' Response is empty on ' . $uri);
+        $this->assertGreaterThan(0, count($output_rows), ' Response is empty on '.$uri);
         // check SSE Syntax
         foreach ($output_rows as $index => $sse_line) {
             if (empty($sse_line) || $sse_line === null) {
@@ -153,14 +151,14 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
             preg_match('/^[id|event|data].*$/', $sse_line, $matches);
             $this->assertEquals(
                 $sse_line, $matches[0] ?? 'error',
-                ' Testing SSE response line ' . $index . ' with content ' . $sse_line . ' on ' . $uri
+                ' Testing SSE response line '.$index.' with content '.$sse_line.' on '.$uri
             );
         }
     }
 
     public function SSEResponseDataProvider()
     {
-        $files   = [];
+        $files = [];
         $files[] = ['sse.php?atk_admin_jssse=ajax&__atk_callback=1&event=sse'];
         $files[] = ['console.php?atk_admin_tabs_tabssubview_console_jssse=ajax&__atk_callback=1&event=sse'];
         $files[] = ['console.php?atk_admin_tabs_tabssubview_2_virtualpage=cut&atk_admin_tabs_tabssubview_2_virtualpage_console_jssse=ajax&__atk_callback=1&event=sse'];
