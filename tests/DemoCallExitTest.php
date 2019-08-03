@@ -8,9 +8,8 @@ use atk4\core\Exception;
  * Making sure demo pages don't throw exceptions and coverage is
  * handled.
  */
-class DemoTest extends BuiltInWebServerAbstract
+class DemoCallExitTest extends BuiltInWebServerAbstract
 {
-
     private $regexHTML = '/^..DOCTYPE/';
     private $regexJSON = '
   /
