@@ -431,10 +431,12 @@ class App
      * Runs app and echo rendered template.
      *
      * @throws \atk4\core\Exception
+     * @throws ExitApplicationException
      */
     public function run()
     {
         try {
+
             $this->run_called = true;
             $this->hook('beforeRender');
             $this->is_rendering = true;
@@ -457,9 +459,11 @@ class App
             }
 
             echo $this->html->template->render();
-        } catch(ExitApplicationException $e)
-        {
 
+        } catch (ExitApplicationException $e) {
+            $this->callExit();
+        } catch (\Throwable $e) {
+            $this->caughtException($e);
         }
     }
 
@@ -923,7 +927,16 @@ class App
                 }
 
                 if (!$this->run_called) {
-                    $this->run();
+                    try {
+                        $this->run();
+                    } catch (ExitApplicationException $e) {
+                        // already in shutdown
+                    } catch (\Exception $e) {
+                        $this->caughtException($e);
+                    }
+
+                    // call with true to trigger beforeExit event
+                    $this->callExit(true);
                 }
             }
         );
