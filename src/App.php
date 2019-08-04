@@ -242,7 +242,7 @@ class App
         $this->html = null;
         $this->initLayout('Centered');
         // change title to added an error
-        $this->add('Header')->set('L'.$exception->getLine().': '.$exception->getMessage());
+        //$this->layout->add('Header', 'Header')->set('L'.$exception->getLine().': '.$exception->getMessage());
 
         // -- CHECK ERROR BY TYPE
         switch (true) {
@@ -265,7 +265,7 @@ class App
         $this->layout->template->tryDel('Header');
 
         if ($this->isJsonRequest()) {
-            echo json_encode([
+            $this->outputResponseJSON([
                 'success'   => false,
                 'message'   => $this->layout->getHtml(),
             ]);
@@ -319,7 +319,12 @@ class App
     public function terminate($output = null)
     {
         if ($output !== null) {
-            echo $output;
+            if($this->isJsonRequest())
+            {
+                $this->outputResponseJSON($output);
+            } else {
+                $this->outputResponseHTML($output);
+            }
         }
 
         $this->run_called = true; // prevent shutdown function from triggering.
@@ -435,6 +440,7 @@ class App
     public function run()
     {
         try {
+            ob_start();
             $this->run_called = true;
             $this->hook('beforeRender');
             $this->is_rendering = true;
@@ -455,11 +461,13 @@ class App
                     '!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']
                 );
             }
-
             echo $this->html->template->render();
+            $this->terminate(ob_get_clean());
         } catch (ExitApplicationException $e) {
+            ob_clean();
             $this->callExit();
         } catch (\Throwable $e) {
+            ob_clean();
             $this->caughtException($e);
         }
     }
@@ -937,5 +945,48 @@ class App
                 }
             }
         );
+    }
+
+    /* RESPONSES */
+    /**
+     * Output Response to the client with custom headers.
+     *
+     * This can be overridden for future PSR-7 implementation
+     *
+     * @TODO SSE is a "Header in Header" case, it works, but must be checked
+     *
+     * @param array $headers
+     * @param       $content
+     */
+    protected function outputResponse(array $headers, $content)
+    {
+        foreach($headers as $header => $replace)
+        {
+            header($header, $replace);
+        }
+
+        echo $content;
+    }
+
+    /**
+     * Output JSON response to the client.
+     *
+     * @param string|array $data
+     */
+    public function outputResponseJSON($data)
+    {
+        $data = is_array($data) ? json_encode($data) : $data;
+
+        $this->outputResponse(['Content-Type : application/json' => true], $data);
+    }
+
+    /**
+     * Output HTML response to the client.
+     *
+     * @param string $data
+     */
+    public function outputResponseHTML(string $data)
+    {
+        $this->outputResponse(['Content-Type : text/html' => true], $data);
     }
 }
