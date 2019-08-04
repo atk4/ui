@@ -141,6 +141,10 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = ['notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&json=true'];
         $files[] = ['scroll-lister.php?atk_admin_view_2_view_lister_jspaginator=ajax&__atk_callback=1&page=2'];
 
+        // test catch exceptions
+        $files[] = ['exception_test.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&json=true'];
+        $files[] = ['exception_test.php?__atk_m=atk_admin_modal_2&atk_admin_modal_2_view_callbacklater=ajax&__atk_callback=1&json=true'];
+
         return $files;
     }
 
