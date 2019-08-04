@@ -106,7 +106,6 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     }
 
     /**
-     * @runInSeparateProcess
      * @dataProvider JSONResponseDataProvider
      *
      * @param string $uri
@@ -175,8 +174,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
      * @dataProvider JSONResponsePOSTDataProvider
      *
      * @param string $uri
-     *
-     * @throws Exception
+     * @param array  $post_data
      */
     public function testDemoAssertJSONResponsePOST(string $uri, array $post_data)
     {
