@@ -603,6 +603,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                     $message->init();
                     $message->addClass('error');
                     $message->text->set($output);
+
                     return $message;
                 }
 

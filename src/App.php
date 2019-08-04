@@ -290,8 +290,7 @@ class App
             return false;
         }
 
-        $is_json = $_GET['json'] ?? false;
-        if ($is_json) {
+        if (isset($_GET['json'])) {
             return true;
         }
 
@@ -327,8 +326,7 @@ class App
     public function terminate($output = null)
     {
         if ($output !== null) {
-            if($this->isJsonRequest())
-            {
+            if ($this->isJsonRequest()) {
                 $this->outputResponseJSON($output);
             } else {
                 $this->outputResponseHTML($output);
@@ -956,6 +954,7 @@ class App
     }
 
     /* RESPONSES */
+
     /**
      * Output Response to the client with custom headers.
      *
@@ -968,8 +967,7 @@ class App
      */
     protected function outputResponse(array $headers, $content)
     {
-        foreach($headers as $header => $replace)
-        {
+        foreach ($headers as $header => $replace) {
             header($header, $replace);
         }
 
