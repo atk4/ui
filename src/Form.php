@@ -592,8 +592,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             };
 
             try {
-                $this->loadPOST();
                 ob_start();
+                $this->loadPOST();
                 $response = $this->hook('submit');
                 $output = ob_get_contents();
 
