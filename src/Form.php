@@ -598,10 +598,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 $output = ob_get_clean();
 
                 if ($output) {
-                    throw new Exception([
-                        'Direct Output Detected',
-                        'output' => $output,
-                    ]);
+
+                    $message = new Message('Direct Output Detected');
+                    $message->init();
+                    $message->addClass('error');
+                    $message->text->set($output);
+                    return $message;
                 }
 
                 if (!$response) {
