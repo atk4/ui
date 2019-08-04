@@ -41,7 +41,7 @@ $g->addField('gender', ['DropDown', 'values' => ['Female', 'Male']]);
 // testing 0 value
 $values = [0 => 'noob', 1 => 'pro', 2 => 'dev'];
 $form->addField('description', ['TextArea'])->set(0);
-$form->addField('no_description', ['TextArea'])->set(null); // THIS BREAKS HTML MARKUP !!!
+$form->addField('no_description', ['TextArea'])->set(null);
 $form->addField('status_optional', ['DropDown', 'values' =>$values]);
 $form->addField('status_string_required', ['DropDown'], ['type'=>'string', 'values' => $values, 'required'=>true]);
 $form->addField('status_integer_required', ['DropDown'], ['type'=>'integer', 'values' => $values, 'required'=>true]);
