@@ -43,7 +43,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
         self::$process = Process::fromShellCommandline('php -S '.self::$host.':'.self::$port.' -t '.getcwd());
 
         // Disabling the output, otherwise the process might hang after too much output
-        //self::$process->disableOutput();
+        self::$process->disableOutput();
         // Actually execute the command and start the process
 
         self::$process->start();
