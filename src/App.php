@@ -286,14 +286,22 @@ class App
      */
     protected function isJsonRequest()
     {
-        $ajax = false;
+        if (isset($_GET['__atk_tab'])) {
+            return false;
+        }
 
+        $is_json = $_GET['json'] ?? false;
+        if ($is_json) {
+            return true;
+        }
+
+        $ajax = false;
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
            && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             $ajax = true;
         }
 
-        return $ajax && !isset($_GET['__atk_tab']);
+        return $ajax;
     }
 
     /**
