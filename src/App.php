@@ -972,6 +972,7 @@ class App
         }
 
         echo $content;
+        @flush();
     }
 
     /**
