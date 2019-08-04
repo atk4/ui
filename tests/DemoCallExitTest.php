@@ -27,6 +27,17 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 ';
     private $regexSSE = '/^[data|id|event].*$/m';
 
+    /**
+     * No test done here.
+     * this will trigger import of needed files to populate data in model Files
+     * if not it will trigger error later for record not found
+     */
+    public function testSetupDataForFutureCalls()
+    {
+        $this->getResponseFromRequestFormPOST('actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1',[]);
+        $this->addToAssertionCount(1);
+    }
+
     public function testableDemoFilesdataProvider()
     {
         $files = [];
