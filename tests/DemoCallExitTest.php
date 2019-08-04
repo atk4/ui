@@ -39,9 +39,10 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
                 case 'Session.php': // exclude - is a setup file
                 case 'database.php': // exclude - is a setup file
                 case 'db.example.php': // exclude - is a setup file
+                case 'db.php': // exclude - is a setup file
                 case 'db.travis.php': // exclude - is a setup file
                 case 'somedatadef.php': // exclude - is a setup file
-                case 'layouts_nolayout.php': // exclude - output only text
+                case 'layouts_nolayout.php': // exclude - output only a partial html
                     continue 2;
                     break;
             }
