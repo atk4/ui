@@ -477,9 +477,6 @@ class App
         } catch (ExitApplicationException $e) {
             ob_clean();
             $this->callExit();
-        } catch (\Throwable $e) {
-            ob_clean();
-            $this->caughtException($e);
         }
     }
 
