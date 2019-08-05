@@ -3,7 +3,6 @@
 namespace atk4\ui\tests;
 
 use atk4\core\Exception;
-use atk4\ui\App;
 
 /**
  * Making sure demo pages don't throw exceptions and coverage is
