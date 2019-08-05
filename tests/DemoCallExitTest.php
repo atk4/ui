@@ -3,6 +3,7 @@
 namespace atk4\ui\tests;
 
 use atk4\core\Exception;
+use atk4\ui\App;
 
 /**
  * Making sure demo pages don't throw exceptions and coverage is
@@ -29,12 +30,18 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
     /**
      * No test done here.
-     * this will trigger import of needed files to populate data in model Files
+     * Only populate data in model \File
      * if not it will trigger error later for record not found.
      */
     public function testSetupDataForFutureCalls()
     {
-        $this->getResponseFromRequestFormPOST('actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1', []);
+        $app = new App();
+
+        require 'demos/database.php';
+
+        $file = new \File($app->db);
+        $file->importFromFilesystem(getcwd().DIRECTORY_SEPARATOR.'demos');
+
         $this->addToAssertionCount(1);
     }
 
