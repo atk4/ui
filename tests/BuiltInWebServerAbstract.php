@@ -12,7 +12,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
     protected static $process;
 
     protected static $host = '127.0.0.1';
-    protected static $port = 8888;
+    protected static $port = 9687;
 
     /** @var bool set the app->call_exit in demo */
     protected static $app_def_call_exit = true;
@@ -35,10 +35,6 @@ abstract class BuiltInWebServerAbstract extends TestCase
             );
         }
 
-        if (getenv('TRAVIS_BRANCH')) {
-            return;
-        }
-
         // The command to spin up the server
         self::$process = Process::fromShellCommandline('php -S '.self::$host.':'.self::$port.' -t '.getcwd());
 
@@ -53,10 +49,6 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     public static function tearDownAfterClass()
     {
-        if (!getenv('TRAVIS_BRANCH')) {
-            self::$process->stop();
-        }
-
         if (file_exists(getcwd().'/demos/coverage.php')) {
             unlink(getcwd().'/demos/coverage.php');
         }
