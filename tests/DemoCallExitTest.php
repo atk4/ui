@@ -33,8 +33,10 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
      * Only populate data in model \File
      * if not it will trigger error later for record not found.
      */
-    public function testSetupDataForFutureCalls()
+    public static function setUpBeforeClass()
     {
+        parent::setUpBeforeClass();
+
         $old_cwd = getcwd();
         chdir(getcwd().DIRECTORY_SEPARATOR.'demos');
         $app = new App();
@@ -43,8 +45,6 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
         $file = new \File($app->db);
         $file->importFromFilesystem(getcwd());
-
-        $this->addToAssertionCount(1);
         chdir($old_cwd);
     }
 

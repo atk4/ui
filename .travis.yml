@@ -53,7 +53,7 @@ before_script:
       #- sleep 3
       #- sudo whereis google-chrome
 
-    - php -S localhost:8888 &
+    - php -S localhost:8888 > /dev/null 2>&1&
     - mysql -e 'create database atk4;'
     - mysql atk4 < demos/atk4.sql
     - mv demos/db.travis.php demos/db.php
