@@ -220,7 +220,9 @@ class App
             // App as already done everything
             // App need to stop output
             // set_handler to catch/trap any exception
-            set_exception_handler(function(Throwable $t) { return true; });
+            set_exception_handler(function (Throwable $t) {
+                return true;
+            });
             // raise exception to be trapped and stop execution
             throw new ExitApplicationException();
         }
@@ -452,7 +454,8 @@ class App
      */
     public function run()
     {
-        $is_exit = false;
+        $is_exit_exception = false;
+
         try {
             ob_start();
             $this->run_called = true;
@@ -477,7 +480,7 @@ class App
             }
             echo $this->html->template->render();
         } catch (ExitApplicationException $e) {
-            $is_exit = true;
+            $is_exit_exception = true;
         }
 
         $output = ob_get_clean();
@@ -487,7 +490,7 @@ class App
             $this->outputResponseHTML($output);
         }
 
-        if($is_exit) {
+        if ($is_exit_exception) {
             $this->callExit();
         }
     }
