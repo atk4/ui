@@ -28,27 +28,6 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 ';
     private $regexSSE = '/^[data|id|event].*$/m';
 
-    /**
-     * No test done here.
-     * Only populate data in model \File
-     * if not it will trigger error later for record not found.
-     */
-    public static function setUpBeforeClass()
-    {
-        parent::setUpBeforeClass();
-
-        $old_cwd = getcwd();
-        chdir(getcwd().DIRECTORY_SEPARATOR.'./demos');
-        $app = new App();
-        $app->initLayout('Generic');
-
-        require 'database.php';
-
-        $file = new \File($app->db);
-        $file->importFromFilesystem(getcwd());
-        chdir($old_cwd);
-    }
-
     public function testableDemoFilesdataProvider()
     {
         $files = [];
@@ -148,6 +127,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = ['sticky2.php?__atk_reload=atk_admin_button'];
         $files[] = ['sticky2.php?atk_admin_loader_callback=ajax&__atk_callback1'];
         $files[] = ['virtual.php?atk_admin_label_2_click=ajax&__atk_callback=1'];
+        $files[] = ['actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1']; // need to call this before calls other actions to fill model files
         $files[] = ['actions.php?__atk_m=atk_admin_crud_modal&atk_admin_crud_modal_view_callbacklater=ajax&__atk_callback=1&atk_admin_crud_view_table_actions=1&atk_admin_crud_view_view_paginator=1&json=true'];
         $files[] = ['actions.php?atk_admin_crud_edit=cut&__atk_callback=1&atk_admin_crud=1&atk_admin_crud_sort=&json=true'];
         $files[] = ['notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&json=true'];
@@ -216,6 +196,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files = [];
 
         // IMPORT FROM FILESYSTEM
+        // this is needed to populate grid for later calls to row actions
         $files[] = [
             'actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1',
             [],
@@ -233,13 +214,6 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
             'actions.php?atk_admin_gridlayout_preview_button_click=ajax&__atk_callback=1',
             [],
         ]; // btn confirm (console)
-
-        $files[] = [
-            'actions.php?atk_admin_crud_view_view_paginator=1&__atk_m=atk_admin_crud_modal&atk_admin_crud_modal_view_callbacklater=ajax&atk_admin_crud_modal_view_basic_button_click=ajax&atk_admin_crud_view_table_actions=1&__atk_callback=1',
-            [
-
-            ],
-        ];
 
         // Grid buttons
         $files[] = [
