@@ -468,7 +468,12 @@ class App
                 );
             }
             echo $this->html->template->render();
-            $this->terminate(ob_get_clean());
+            $output = ob_get_clean();
+            if ($this->isJsonRequest()) {
+                $this->outputResponseJSON($output);
+            } else {
+                $this->outputResponseHTML($output);
+            }
         } catch (ExitApplicationException $e) {
             ob_clean();
             $this->callExit();
