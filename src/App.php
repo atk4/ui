@@ -969,8 +969,13 @@ class App
      */
     protected function outputResponse(array $headers, $content)
     {
-        foreach ($headers as $header => $replace) {
-            header($header, $replace);
+        // if header already sent don't send header
+        // @TODO check this, because in theory multiple header sent
+        // can be a symptom of wrong usage
+        if (!headers_sent()) {
+            foreach ($headers as $header => $replace) {
+                header($header, $replace);
+            }
         }
 
         echo $content;
