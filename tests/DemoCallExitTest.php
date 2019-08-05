@@ -35,14 +35,17 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
      */
     public function testSetupDataForFutureCalls()
     {
+        $old_cwd = getcwd();
+        chdir(getcwd().DIRECTORY_SEPARATOR.'demos');
         $app = new App();
 
-        require 'demos/database.php';
+        require 'database.php';
 
         $file = new \File($app->db);
-        $file->importFromFilesystem(getcwd().DIRECTORY_SEPARATOR.'demos');
+        $file->importFromFilesystem(getcwd());
 
         $this->addToAssertionCount(1);
+        chdir($old_cwd);
     }
 
     public function testableDemoFilesdataProvider()
