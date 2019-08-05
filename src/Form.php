@@ -616,6 +616,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                     return new jsExpression('console.log([])', ['Form submission is not handled']);
                 }
             } catch (\atk4\data\ValidationException $val) {
+                ob_get_clean(); // not close output buffer on exceptions
                 $response = [];
                 foreach ($val->errors as $field => $error) {
                     $response[] = $this->error($field, $error);
