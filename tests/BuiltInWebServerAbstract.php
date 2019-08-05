@@ -82,7 +82,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
     private function getPathWithAppVars($path)
     {
         $path .= strpos($path, '?') === false ? '?' : '&';
-        $path .= 'APP_CALL_EXIT='.((int) self::$app_def_call_exit).'&APP_CATCH_EXCEPTIONS='.((int) self::$app_def_call_exit);
+        $path .= 'APP_CALL_EXIT='.((int) static::$app_def_call_exit).'&APP_CATCH_EXCEPTIONS='.((int) static::$app_def_caught_exception);
 
         return self::$webserver_root.$path;
     }
