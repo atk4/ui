@@ -216,8 +216,13 @@ class App
         }
 
         if (!$this->call_exit) {
+            // case process is not in shutdown mode
+            // App as already done everything
+            // App need to stop output
+            // set_handler to catch/trap any exception
+            set_exception_handler(function(Throwable $t) { return true; });
+            // raise exception to be trapped and stop execution
             throw new ExitApplicationException();
-            // stop execution here
         }
 
         exit;
@@ -273,6 +278,8 @@ class App
             $this->run();
         }
 
+        // Process is already in shutdown/stop
+        // no need of call exit function
         $this->callExit(true);
 
         return true;
@@ -445,6 +452,7 @@ class App
      */
     public function run()
     {
+        $is_exit = false;
         try {
             ob_start();
             $this->run_called = true;
@@ -468,14 +476,18 @@ class App
                 );
             }
             echo $this->html->template->render();
-            $output = ob_get_clean();
-            if ($this->isJsonRequest()) {
-                $this->outputResponseJSON($output);
-            } else {
-                $this->outputResponseHTML($output);
-            }
         } catch (ExitApplicationException $e) {
-            ob_clean();
+            $is_exit = true;
+        }
+
+        $output = ob_get_clean();
+        if ($this->isJsonRequest()) {
+            $this->outputResponseJSON($output);
+        } else {
+            $this->outputResponseHTML($output);
+        }
+
+        if($is_exit) {
             $this->callExit();
         }
     }
@@ -943,8 +955,10 @@ class App
                     try {
                         $this->run();
                     } catch (ExitApplicationException $e) {
-                        // already in shutdown
-                    } catch (\Exception $e) {
+                        // let the process go and stop on ->callExit below
+                    } catch (\Throwable $e) {
+                        // process is already in shutdown
+                        // must be forced to catch exception
                         $this->caughtException($e);
                     }
 
