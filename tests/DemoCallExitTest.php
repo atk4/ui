@@ -38,8 +38,9 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         parent::setUpBeforeClass();
 
         $old_cwd = getcwd();
-        chdir(getcwd().DIRECTORY_SEPARATOR.'demos');
+        chdir(getcwd().DIRECTORY_SEPARATOR.'./demos');
         $app = new App();
+        $app->initLayout('Generic');
 
         require 'database.php';
 
