@@ -276,18 +276,22 @@ class View implements jsExpressionable
      * Makes view into a "<a>" element with a link.
      *
      * @param string|array $url
+     * @param string $target
      *
      * @return $this
      */
-    public function link($url)
+    public function link($url, $target = null)
     {
         $this->element = 'a';
         if (is_string($url)) {
             $this->setAttr('href', $url);
-
-            return $this;
+        } else {
+            $this->setAttr('href', $this->url($url));
         }
-        $this->setAttr('href', $this->url($url));
+
+        if ($target !== null) {
+            $this->setAttr('target', $target);
+        }
 
         return $this;
     }

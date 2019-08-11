@@ -54,9 +54,9 @@ class jsSearch extends View
      */
     public $useAjax = true;
 
-    public function link($url)
+    public function link($url, $target = null)
     {
-        return parent::link($url);
+        return parent::link($url, $target);
     }
 
     public $defaultTemplate = 'js-search.html';
