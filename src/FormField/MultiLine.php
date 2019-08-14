@@ -483,7 +483,6 @@ class MultiLine extends Generic
         return $m;
     }
 
-   
     /**
      * Set view model.
      * If modelRef is used then getModel will return proper model.
@@ -533,7 +532,7 @@ class MultiLine extends Generic
      * input
      * dropdown
      * checkbox
-     * textarea
+     * textarea.
      *
      * Depending on the component, additional data is set to fieldOptions
      * (dropdpwn needs values, input needs type)
@@ -548,20 +547,20 @@ class MultiLine extends Generic
         $component = 'input';
 
         //first check Field->ui['multiline'] setting if there are settings for specially for multiline display
-        if(isset($field->ui['multiline'][0])) {
+        if (isset($field->ui['multiline'][0])) {
             $component = $this->_mapComponent($field->ui['multiline'][0]);
         }
         //next, check if there is a 'standard' UI seed set
-        elseif(isset($field->ui['form'][0])) {
+        elseif (isset($field->ui['form'][0])) {
             $component = $this->_mapComponent($field->ui['form'][0]);
         }
         //in case values or enum property is set, display a dropdown
-        elseif($field->enum || $field->values) {
+        elseif ($field->enum || $field->values) {
             $component = 'dropdown';
         }
         //figure UI FormField type by field type.
         //TODO: Form already does this, maybe use that somehow?
-        elseif($field->type) {
+        elseif ($field->type) {
             $component = $this->_mapComponent($field->type);
         }
 
@@ -580,9 +579,10 @@ class MultiLine extends Generic
     /*
      * Maps into input, checkbox, dropdown or textarea, defaults into input
      */
-    protected function _mapComponent($field_type):string {
-        if(is_string($field_type)) {
-            switch(strtolower($field_type)) {
+    protected function _mapComponent($field_type):string
+    {
+        if (is_string($field_type)) {
+            switch (strtolower($field_type)) {
                 case 'dropdown':
                 case 'enum':
                     return 'dropdown';
@@ -597,7 +597,7 @@ class MultiLine extends Generic
         }
 
         //an object could be passed theoretically, use its classname as string
-        elseif(is_object($field_type)) {
+        elseif (is_object($field_type)) {
             return $this->_mapComponent((new \ReflectionClass($field_type))->getShortName());
         }
 
@@ -613,32 +613,31 @@ class MultiLine extends Generic
         $options = [];
 
         //if additional options are defined for field, add them. Drop first item
-        if(isset($field->ui['multiline']) && is_array($field->ui['multiline'])) {
+        if (isset($field->ui['multiline']) && is_array($field->ui['multiline'])) {
             $add_options = $field->ui['multiline'];
-            if(isset($add_options[0])) {
+            if (isset($add_options[0])) {
                 unset($add_options[0]);
             }
             $options = array_merge($options, $add_options);
-        }
-        elseif(isset($field->ui['form']) && is_array($field->ui['form'])) {
+        } elseif (isset($field->ui['form']) && is_array($field->ui['form'])) {
             $add_options = $field->ui['form'];
-            if(isset($add_options[0])) {
+            if (isset($add_options[0])) {
                 unset($add_options[0]);
             }
             $options = array_merge($options, $add_options);
         }
 
         //some input types need additional options set, make sure they are there
-        switch($component) {
+        switch ($component) {
             //input needs type set (text, number, date etc)
             case 'input':
-                if(!isset($options['type']))  {
+                if (!isset($options['type'])) {
                     $options['type'] = $this->_addTypeOption($field);
                 }
                 break;
             //dropdown needs values set
             case 'dropdown':
-                if(!isset($options['values'])) {
+                if (!isset($options['values'])) {
                     $options['values'] = $this->_addValuesOption($field);
                 }
                 break;
@@ -653,7 +652,7 @@ class MultiLine extends Generic
      */
     protected function _addTypeOption(\atk4\data\Field $field):string
     {
-        switch($field->type) {
+        switch ($field->type) {
             case 'integer':
                 return 'number';
             //case 'date':
@@ -669,19 +668,19 @@ class MultiLine extends Generic
      */
     protected function _addValuesOption(\atk4\data\Field $field):array
     {
-        if($field->enum) {
+        if ($field->enum) {
             return array_combine($field->enum, $field->enum);
         }
-        if($field->values && is_array($field->values)) {
+        if ($field->values && is_array($field->values)) {
             return $field->values;
-        }
-        elseif($field->reference) {
+        } elseif ($field->reference) {
             $m = $field->reference->refModel()->setLimit($this->enumLimit);
 
             $values = [];
             foreach ($m->export([$m->id_field, $m->title_field]) as $item) {
                 $values[$item[$m->id_field]] = $item[$m->title_field];
             }
+
             return $values;
         }
 
