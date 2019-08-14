@@ -483,6 +483,7 @@ class MultiLine extends Generic
         return $m;
     }
 
+   
     /**
      * Set view model.
      * If modelRef is used then getModel will return proper model.
@@ -515,104 +516,181 @@ class MultiLine extends Generic
         }
 
         if (!$fields) {
-            $fields = $this->getModelFields($m);
+            $fields = array_keys($m->getFields('not system'));
         }
         $this->rowFields = array_merge([$m->id_field], $fields);
 
         foreach ($this->rowFields as $fieldName) {
-            $enumValues = null;
-            $field = $m->getField($fieldName);
-
-            if (!$field instanceof \atk4\data\Field) {
-                continue;
-            }
-
-            $type = $this->getFieldType($field);
-            if ($type === 'enum') {
-                $enumValues = $this->getFieldEnumValues($field);
-            }
-
-            if (isset($field->ui['form'])) {
-                $type = $field->ui['form'][0];
-            }
-
-            $options = $field->ui['multiline'] ?? null;
-
-            $this->fieldDefs[] = [
-                'field'       => $field->short_name,
-                'type'        => $type,
-                'caption'     => $field->getCaption(),
-                'default'     => $field->default,
-                'isEditable'  => $field->isEditable(),
-                'isHidden'    => $field->isHidden(),
-                'isVisible'   => $field->isVisible(),
-                'values'      => $enumValues,
-                'fieldOptions'=> $options,
-            ];
+            $this->fieldDefs[] = $this->getFieldDef($m->getField($fieldName));
         }
 
         return $m;
     }
 
     /**
-     * Return field type to use in multiline component.
+     * Return the field definition to use in JS for rendering this field.
+     * $compoment is one of the following html input types:
+     * input
+     * dropdown
+     * checkbox
+     * textarea
+     *
+     * Depending on the component, additional data is set to fieldOptions
+     * (dropdpwn needs values, input needs type)
      *
      * @param $field
      *
-     * @return string
+     * @return array
      */
-    public function getFieldType($field)
+    public function getFieldDef(\atk4\data\Field $field):array
     {
-        $type = 'string';
-        if ($field->type) {
-            $type = $field->type;
-        } elseif ($field->enum || $field->reference || $field->values) {
-            $type = 'enum';
+        //default is input
+        $component = 'input';
+
+        //first check Field->ui['multiline'] setting if there are settings for specially for multiline display
+        if(isset($field->ui['multiline'][0])) {
+            $component = $this->_mapComponent($field->ui['multiline'][0]);
+        }
+        //next, check if there is a 'standard' UI seed set
+        elseif(isset($field->ui['form'][0])) {
+            $component = $this->_mapComponent($field->ui['form'][0]);
+        }
+        //in case values or enum property is set, display a dropdown
+        elseif($field->enum || $field->values) {
+            $component = 'dropdown';
+        }
+        //figure UI FormField type by field type.
+        //TODO: Form already does this, maybe use that somehow?
+        elseif($field->type) {
+            $component = $this->_mapComponent($field->type);
         }
 
-        return $type;
+        return [
+            'field'       => $field->short_name,
+            'component'   => $component,
+            'caption'     => $field->getCaption(),
+            'default'     => $field->default,
+            'isEditable'  => $field->isEditable(),
+            'isHidden'    => $field->isHidden(),
+            'isVisible'   => $field->isVisible(),
+            'fieldOptions'=> $this->_getFieldOptions($field, $component),
+        ];
     }
 
-    /**
-     * Get value for enum field type.
-     *
-     * @param $field
-     *
-     * @return array|false|null
+    /*
+     * Maps into input, checkbox, dropdown or textarea, defaults into input
      */
-    public function getFieldEnumValues($field)
-    {
-        $values = null;
+    protected function _mapComponent($field_type):string {
+        if(is_string($field_type)) {
+            switch(strtolower($field_type)) {
+                case 'dropdown':
+                case 'enum':
+                    return 'dropdown';
+                case 'boolean':
+                case 'checkbox':
+                    return 'checkbox';
+                case 'text':
+                case 'textarea':
+                    return 'textarea';
+                default: return 'input';
+            }
+        }
 
-        if ($field->enum) {
-            $values = array_combine($field->enum, $field->enum);
-        } elseif ($field->values) {
-            $values = $field->values;
-        } elseif ($field->reference) {
+        //an object could be passed theoretically, use its classname as string
+        elseif(is_object($field_type)) {
+            return $this->_mapComponent((new \ReflectionClass($field_type))->getShortName());
+        }
+
+        //default: input
+        return 'input';
+    }
+
+    /*
+     *
+     */
+    protected function _getFieldOptions(\atk4\data\Field $field, string $component):array
+    {
+        $options = [];
+
+        //if additional options are defined for field, add them. Drop first item
+        if(isset($field->ui['multiline']) && is_array($field->ui['multiline'])) {
+            $add_options = $field->ui['multiline'];
+            if(isset($add_options[0])) {
+                unset($add_options[0]);
+            }
+            $options = array_merge($options, $add_options);
+        }
+        elseif(isset($field->ui['form']) && is_array($field->ui['form'])) {
+            $add_options = $field->ui['form'];
+            if(isset($add_options[0])) {
+                unset($add_options[0]);
+            }
+            $options = array_merge($options, $add_options);
+        }
+
+        //some input types need additional options set, make sure they are there
+        switch($component) {
+            //input needs type set (text, number, date etc)
+            case 'input':
+                if(!isset($options['type']))  {
+                    $options['type'] = $this->_addTypeOption($field);
+                }
+                break;
+            //dropdown needs values set
+            case 'dropdown':
+                if(!isset($options['values'])) {
+                    $options['values'] = $this->_addValuesOption($field);
+                }
+                break;
+        }
+
+        return $options;
+    }
+
+    /*
+     * HTML input field needs type property set, if it wasnt found in $field->ui,
+     * determine from rest
+     */
+    protected function _addTypeOption(\atk4\data\Field $field):string
+    {
+        switch($field->type) {
+            case 'integer':
+                return 'number';
+            //case 'date':
+                //return 'date';
+            default:
+                return 'text';
+        }
+    }
+
+    /*
+     * DropDown field needs values set. If it wasnt found in $field->ui, determine
+     * from rest
+     */
+    protected function _addValuesOption(\atk4\data\Field $field):array
+    {
+        if($field->enum) {
+            return array_combine($field->enum, $field->enum);
+        }
+        if($field->values && is_array($field->values)) {
+            return $field->values;
+        }
+        elseif($field->reference) {
             $m = $field->reference->refModel()->setLimit($this->enumLimit);
 
             $values = [];
             foreach ($m->export([$m->id_field, $m->title_field]) as $item) {
                 $values[$item[$m->id_field]] = $item[$m->title_field];
             }
+            return $values;
         }
 
-        return $values;
+        return [];
     }
 
-    /**
-     * Returns array of names of fields to automatically include them in form.
-     * This includes all editable or visible fields of the model.
+    /*
      *
-     * @param \atk4\data\Model $model
-     *
-     * @return array
      */
-    protected function getModelFields(\atk4\data\Model $model)
-    {
-        return array_keys($model->getFields('not system'));
-    }
-
     public function renderView()
     {
         if (!$this->getModel()) {
