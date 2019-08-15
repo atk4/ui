@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Setting up coverage logging";
-mkdir coverage
+mkdir -p coverage
 chmod 777 coverage
 cp behat-travis.yml behat.yml
 cp tools/coverage.php demos/coverage.php

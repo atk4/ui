@@ -4,17 +4,30 @@ date_default_timezone_set('UTC');
 
 require '../vendor/autoload.php';
 
+/* START - PHPUNIT & COVERAGE SETUP */
 if (file_exists('coverage.php')) {
     include_once 'coverage.php';
 }
 
-$app = new \atk4\ui\App();
+$app = new \atk4\ui\App([
+    'call_exit'        => isset($_GET['APP_CALL_EXIT']) && $_GET['APP_CALL_EXIT'] == 0 ? false : true,
+    'catch_exceptions' => isset($_GET['APP_CATCH_EXCEPTIONS']) && $_GET['APP_CATCH_EXCEPTIONS'] == 0 ? false : true,
+]);
+
+if ($app->call_exit !== true) {
+    $app->stickyGet('APP_CALL_EXIT');
+}
+
+if ($app->catch_exceptions !== true) {
+    $app->stickyGet('APP_CATCH_EXCEPTIONS');
+}
 
 if (file_exists('coverage.php')) {
     $app->addHook('beforeExit', function () {
         coverage();
     });
 }
+/* END - PHPUNIT & COVERAGE SETUP */
 
 $app->title = 'Agile UI Demo v'.$app->version;
 

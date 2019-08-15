@@ -97,19 +97,6 @@ class App
     /** @var bool */
     public $_cwd_restore = true;
 
-    /**
-     * function setModel(MyModel $m);.
-     *
-     * is considered 'WARNING' even though MyModel descends from the parent class. This
-     * is not an incompatible class. We want to write clean PHP code and therefore this
-     * warning is disabled by default until it's fixed correctly in PHP.
-     *
-     * See: http://stackoverflow.com/a/42840762/204819
-     *
-     * @var bool
-     */
-    public $fix_incompatible = true;
-
     /** @var bool */
     public $is_rendering = false;
 
@@ -137,6 +124,13 @@ class App
      * Remove and re-add the extension of the file during parsing requests and building urls
      */
     protected $url_building_ext = '.php';
+
+    /**
+     * Call exit in place of throw Exception when Application need to exit.
+     *
+     * @var bool
+     */
+    public $call_exit = true;
 
     /**
      * Constructor.
@@ -205,27 +199,35 @@ class App
     }
 
     /**
-     * @param bool $from_shutdown
+     * @param bool $for_shutdown if true will not pass in caughtException method.
      *
      * @throws ExitApplicationException
      * @throws \atk4\core\Exception
      */
-    public function callExit($from_shutdown = false)
+    public function callExit($for_shutdown = false)
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
             $this->hook('beforeExit');
         }
 
-        if ($from_shutdown) {
+        if ($for_shutdown) {
             return;
         }
 
-        if (defined('UNIT_TESTING')) {
+        if (!$this->call_exit) {
+            // case process is not in shutdown mode
+            // App as already done everything
+            // App need to stop output
+            // set_handler to catch/trap any exception
+            set_exception_handler(function (Throwable $t) {
+                return true;
+            });
+            // raise exception to be trapped and stop execution
             throw new ExitApplicationException();
         }
 
-        exit(0);
+        exit;
     }
 
     /**
@@ -234,6 +236,7 @@ class App
      * @param Throwable $exception
      *
      * @throws \atk4\core\Exception
+     * @throws ExitApplicationException
      *
      * @return bool
      */
@@ -241,45 +244,45 @@ class App
     {
         $this->catch_runaway_callbacks = false;
 
-        // Use new App() instead of static() to prevent broken exception
-        // message display due to conflict with existing layout
-        $l = new self();
-        $l->title = 'L'.$exception->getLine().': '.$exception->getMessage();
-        $l->catch_runaway_callbacks = false; // Allow exceptions within modals
-        $l->initLayout('Centered');
+        // just replace layout to avoid any extended App->_construct problems
+        // it will maintain everything as in the original app StickyGet, logger, Events
+        $this->html = null;
+        $this->initLayout('Centered');
+        // change title to added an error
+        //$this->layout->add('Header', 'Header')->set('L'.$exception->getLine().': '.$exception->getMessage());
 
         // -- CHECK ERROR BY TYPE
-
         switch (true) {
+
             case $exception instanceof \atk4\core\Exception:
-                $l->layout->template->setHTML('Content', $exception->getHTML());
+                $this->layout->template->setHTML('Content', $exception->getHTML());
                 break;
 
             case $exception instanceof Error:
-                $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
-                $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
+                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
+                $this->layout->add(['Text', nl2br($exception->getTraceAsString())]);
                 break;
 
             default:
-                $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
                 break;
         }
 
         // remove header
-        $l->layout->template->tryDel('Header');
+        $this->layout->template->tryDel('Header');
 
         if ($this->isJsonRequest()) {
-            echo json_encode([
+            $this->outputResponseJSON([
                 'success'   => false,
-                'message'   => $l->layout->getHtml(),
+                'message'   => $this->layout->getHtml(),
             ]);
         } else {
-            $l->catch_runaway_callbacks = false;
-            $l->run();
-            $this->run_called = true;
+            $this->run();
         }
 
-        $this->callExit();
+        // Process is already in shutdown/stop
+        // no need of call exit function
+        $this->callExit(true);
 
         return true;
     }
@@ -292,14 +295,21 @@ class App
      */
     protected function isJsonRequest()
     {
-        $ajax = false;
+        if (isset($_GET['__atk_tab'])) {
+            return false;
+        }
 
+        if (isset($_GET['json'])) {
+            return true;
+        }
+
+        $ajax = false;
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
            && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             $ajax = true;
         }
 
-        return $ajax && !isset($_GET['__atk_tab']);
+        return $ajax;
     }
 
     /**
@@ -320,12 +330,18 @@ class App
      * @param string $output
      *
      * @throws \atk4\core\Exception
+     * @throws ExitApplicationException
      */
     public function terminate($output = null)
     {
         if ($output !== null) {
-            echo $output;
+            if ($this->isJsonRequest()) {
+                $this->outputResponseJSON($output);
+            } else {
+                $this->outputResponseHTML($output);
+            }
         }
+
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
     }
@@ -335,7 +351,6 @@ class App
      *
      * @param string|Layout\Generic|array $seed
      *
-     * @throws Exception
      * @throws \atk4\core\Exception
      *
      * @return $this
@@ -418,6 +433,7 @@ class App
      * @param string $region
      *
      * @throws Exception
+     * @throws \atk4\core\Exception
      *
      * @return object
      */
@@ -434,29 +450,49 @@ class App
      * Runs app and echo rendered template.
      *
      * @throws \atk4\core\Exception
+     * @throws ExitApplicationException
      */
     public function run()
     {
-        $this->run_called = true;
-        $this->hook('beforeRender');
-        $this->is_rendering = true;
+        $is_exit_exception = false;
 
-        // if no App layout set
-        if (!isset($this->html)) {
-            throw new Exception(['App layout should be set.']);
+        try {
+            ob_start();
+            $this->run_called = true;
+            $this->hook('beforeRender');
+            $this->is_rendering = true;
+
+            // if no App layout set
+            if (!isset($this->html)) {
+                throw new Exception(['App layout should be set.']);
+            }
+
+            $this->html->template->set('title', $this->title);
+            $this->html->renderAll();
+            $this->html->template->appendHTML('HEAD', $this->html->getJS());
+            $this->is_rendering = false;
+            $this->hook('beforeOutput');
+
+            if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
+                $this->terminate(
+                    '!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']
+                );
+            }
+            echo $this->html->template->render();
+        } catch (ExitApplicationException $e) {
+            $is_exit_exception = true;
         }
 
-        $this->html->template->set('title', $this->title);
-        $this->html->renderAll();
-        $this->html->template->appendHTML('HEAD', $this->html->getJS());
-        $this->is_rendering = false;
-        $this->hook('beforeOutput');
-
-        if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
-            $this->terminate('!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']);
+        $output = ob_get_clean();
+        if ($this->isJsonRequest()) {
+            $this->outputResponseJSON($output);
+        } else {
+            $this->outputResponseHTML($output);
         }
 
-        echo $this->html->template->render();
+        if ($is_exit_exception) {
+            $this->callExit();
+        }
     }
 
     /**
@@ -696,6 +732,7 @@ class App
      * @param array|string $page Destination page
      *
      * @throws \atk4\core\Exception
+     * @throws ExitApplicationException
      */
     public function redirect($page)
     {
@@ -893,6 +930,8 @@ class App
      * Allow to use semantic-ui-vue components.
      *
      * https://semantic-ui-vue.github.io
+     *
+     * @throws \atk4\core\Exception
      */
     public function useSuiVue()
     {
@@ -918,13 +957,66 @@ class App
                 if (!$this->run_called) {
                     try {
                         $this->run();
-                    } catch (Throwable $e) {
+                    } catch (ExitApplicationException $e) {
+                        // let the process go and stop on ->callExit below
+                    } catch (\Throwable $e) {
+                        // process is already in shutdown
+                        // must be forced to catch exception
                         $this->caughtException($e);
                     }
-                }
 
-                $this->callExit(true);
+                    // call with true to trigger beforeExit event
+                    $this->callExit(true);
+                }
             }
         );
+    }
+
+    /* RESPONSES */
+
+    /**
+     * Output Response to the client with custom headers.
+     *
+     * This can be overridden for future PSR-7 implementation
+     *
+     * @TODO SSE is a "Header in Header" case, it works, but must be checked
+     *
+     * @param array $headers
+     * @param       $content
+     */
+    protected function outputResponse(array $headers, $content)
+    {
+        // if header already sent don't send header
+        // @TODO check this, because in theory multiple header sent
+        // can be a symptom of wrong usage
+        if (!headers_sent()) {
+            foreach ($headers as $header => $replace) {
+                header($header, $replace);
+            }
+        }
+
+        echo $content;
+    }
+
+    /**
+     * Output JSON response to the client.
+     *
+     * @param string|array $data
+     */
+    public function outputResponseJSON($data)
+    {
+        $data = is_array($data) ? json_encode($data) : $data;
+
+        $this->outputResponse(['Content-Type : application/json' => true], $data);
+    }
+
+    /**
+     * Output HTML response to the client.
+     *
+     * @param string $data
+     */
+    public function outputResponseHTML(string $data)
+    {
+        $this->outputResponse(['Content-Type : text/html' => true], $data);
     }
 }
