@@ -73,6 +73,7 @@ namespace atk4\ui\FormField;
 use atk4\data\Field\Callback;
 use atk4\data\Field_SQL_Expression;
 use atk4\data\Model;
+use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
 use atk4\ui\jsVueService;
@@ -528,14 +529,15 @@ class MultiLine extends Generic
 
     /**
      * Return the field definition to use in JS for rendering this field.
-     * $compoment is one of the following html input types:
+     * $component is one of the following html input types:
      * input
      * dropdown
      * checkbox
      * textarea.
      *
      * Depending on the component, additional data is set to fieldOptions
-     * (dropdpwn needs values, input needs type)
+     * (dropdown needs values, input needs type)
+     *
      *
      * @param $field
      *
@@ -547,6 +549,7 @@ class MultiLine extends Generic
         $component = 'input';
 
         //first check Field->ui['multiline'] setting if there are settings for specially for multiline display
+        //$test = $field->ui['multiline'];
         if (isset($field->ui['multiline'][0])) {
             $component = $this->_mapComponent($field->ui['multiline'][0]);
         }
@@ -555,7 +558,7 @@ class MultiLine extends Generic
             $component = $this->_mapComponent($field->ui['form'][0]);
         }
         //in case values or enum property is set, display a dropdown
-        elseif ($field->enum || $field->values) {
+        elseif ($field->enum || $field->values || $field->reference instanceof HasOne) {
             $component = 'dropdown';
         }
         //figure UI FormField type by field type.
@@ -612,13 +615,14 @@ class MultiLine extends Generic
     {
         $options = [];
 
-        //if additional options are defined for field, add them. Drop first item
+        //if additional options are defined for field, add them.
         if (isset($field->ui['multiline']) && is_array($field->ui['multiline'])) {
             $add_options = $field->ui['multiline'];
-            if (isset($add_options[0])) {
-                unset($add_options[0]);
+            if (isset($add_options[0]) && is_array($add_options[0])) {
+               $options = array_merge($options, $add_options[0]);
+            }  else if (isset($add_options[1]) && is_array($add_options[1])){
+                $options = array_merge($options, $add_options[1]);
             }
-            $options = array_merge($options, $add_options);
         } elseif (isset($field->ui['form']) && is_array($field->ui['form'])) {
             $add_options = $field->ui['form'];
             if (isset($add_options[0])) {

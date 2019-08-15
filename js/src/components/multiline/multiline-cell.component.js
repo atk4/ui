@@ -1,10 +1,10 @@
 import multilineReadOnly from './multiline-readonly.component';
+import multilineTextarea from './multiline-textarea.component';
 
 export default {
   name: 'atk-multiline-cell',
   template: ` 
-    <component :is="fieldType"
-        :type="inputType"
+    <component :is="componentName"
         :fluid="true"  
         class="fluid" 
         @blur="onBlur"
@@ -13,12 +13,13 @@ export default {
         :readOnlyValue="fieldValue"
         :name="fieldName"
         ref="cell"
-        v-bind="fieldProps"></component>
+        v-bind="componentProps"></component>
   `,
   components: {
     'atk-multiline-readonly': multilineReadOnly,
+    'atk-multiline-textarea': multilineTextarea
   },
-  props: ['cellData', 'fieldType', 'fieldValue', 'options', 'fieldProps'],
+  props: ['cellData', 'componentName', 'fieldValue', 'options', 'componentProps'],
   data() {
     return {
       field: this.cellData.field,
@@ -29,20 +30,6 @@ export default {
     }
   },
   computed: {
-    inputType() {
-      let type = this.cellData.type;
-      switch (type) {
-        case 'string':
-          type = 'text';
-          break;
-        case 'integer':
-        case 'money':
-          type = 'number';
-          break;
-      }
-
-      return type;
-    },
     isDirty() {
       return this.dirtyValue != this.inputValue;
     }
