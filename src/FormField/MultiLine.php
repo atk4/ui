@@ -619,8 +619,8 @@ class MultiLine extends Generic
         if (isset($field->ui['multiline']) && is_array($field->ui['multiline'])) {
             $add_options = $field->ui['multiline'];
             if (isset($add_options[0]) && is_array($add_options[0])) {
-               $options = array_merge($options, $add_options[0]);
-            }  else if (isset($add_options[1]) && is_array($add_options[1])){
+                $options = array_merge($options, $add_options[0]);
+            } elseif (isset($add_options[1]) && is_array($add_options[1])) {
                 $options = array_merge($options, $add_options[1]);
             }
         } elseif (isset($field->ui['form']) && is_array($field->ui['form'])) {
