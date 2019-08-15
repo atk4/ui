@@ -572,6 +572,7 @@ class MultiLine extends Generic
             'component'   => $component,
             'caption'     => $field->getCaption(),
             'default'     => $field->default,
+            'isExpr'      => isset($field->expr) ? true : false,
             'isEditable'  => $field->isEditable(),
             'isHidden'    => $field->isHidden(),
             'isVisible'   => $field->isVisible(),

@@ -70,7 +70,13 @@ export default {
     });
 
     this.$root.$on('post-row', (rowId, field) => {
-      this.postRow(rowId, field);
+      if (this.hasExpression()) {
+        this.postRow(rowId, field);
+      }
+      // fire change callback if set and field is part of it.
+      if (this.hasChangeCb && (this.eventFields.indexOf(field) > -1 ) ) {
+        this.postRaw();
+      }
     });
 
     this.$root.$on('toggle-delete', (id) => {
@@ -166,10 +172,6 @@ export default {
         fields.forEach(field => {
           this.updateFieldInRow(idx, field, resp.expressions[field]);
         });
-      }
-      // fire change callback if set and field is part of it.
-      if (this.hasChangeCb && (this.eventFields.indexOf(field) > -1 ) ) {
-        this.postRaw();
       }
     },
     /**
@@ -297,6 +299,17 @@ export default {
         }
       });
       return id;
+    },
+    /**
+     * Check if one of the field use expression.
+     *
+     * @returns {boolean}
+     */
+    hasExpression: function() {
+      let useExpr = false;
+      let fields = this.fieldData.filter(field => field.isExpr);
+      
+      return fields.length > 0;
     },
     /**
      * Post raw data.
