@@ -603,7 +603,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 ob_start();
                 $this->loadPOST();
                 $response = $this->hook('submit');
-                $output = ob_get_contents();
+                $output = ob_get_clean();
 
                 if ($output) {
                     $message = new Message('Direct Output Detected');
@@ -624,18 +624,13 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                     return new jsExpression('console.log([])', ['Form submission is not handled']);
                 }
             } catch (\atk4\data\ValidationException $val) {
+                ob_get_clean(); // not close output buffer on exceptions
                 $response = [];
                 foreach ($val->errors as $field => $error) {
                     $response[] = $this->error($field, $error);
                 }
 
                 return $response;
-            } catch (\Error $e) {
-                return $caught($e, false);
-            } catch (\Exception $e) {
-                return $caught($e, true);
-            } finally {
-                ob_end_flush();
             }
 
             return $response;

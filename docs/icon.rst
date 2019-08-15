@@ -165,11 +165,6 @@ Here is the code with comments::
             // Add icon into render tree
             $this->add($this->icon, 'Icon');
         }
-
-        function link($url) {
-            $this->setAttr('target', '_blank');
-            return parent::link($url);
-        }
     }
 
     // Usage Examples. Start with the most basic usage
@@ -180,4 +175,4 @@ Here is the code with comments::
 
     // Finally provide custom icon and make the button clickable.
     $app->add(new SocialAdd(['facebook', 'icon'=>'facebook f']))
-        ->link('https://facebook.com');
+        ->link('https://facebook.com', '_blank');

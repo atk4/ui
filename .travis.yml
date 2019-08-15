@@ -33,7 +33,9 @@ before_script:
 
      #- "sh -e /etc/init.d/xvfb start"
      #- "export DISPLAY=:99.0"
-
+    # prepare dir for coverage
+    - mkdir -p coverage
+    - chmod 777 coverage
     # Setup selenium
     - wget  https://selenium-release.storage.googleapis.com/${SELENIUM_MAJ_VER}/${SELENIUM_JAR}
     - java -jar ${SELENIUM_JAR} > /dev/null 2>&1 &
@@ -51,7 +53,7 @@ before_script:
       #- sleep 3
       #- sudo whereis google-chrome
 
-    - php -S localhost:8888 &
+    - php -S localhost:8888 > /dev/null 2>&1&
     - mysql -e 'create database atk4;'
     - mysql atk4 < demos/atk4.sql
     - mv demos/db.travis.php demos/db.php
@@ -67,7 +69,7 @@ after_script:
 
 script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.2" ]]; then NC="--no-coverage"; fi
-    - ./vendor/phpunit/phpunit/phpunit $NC #- wget -O - http://localhost:8888/demos/button2.php 
+    - ./vendor/phpunit/phpunit/phpunit $NC #- wget -O - http://localhost:8888/demos/button2.php
     - bash tools/test.sh
 
 cache:

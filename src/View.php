@@ -4,22 +4,32 @@
 
 namespace atk4\ui;
 
+use atk4\core\AppScopeTrait;
+use atk4\core\ContainerTrait;
+use atk4\core\DIContainerTrait;
+use atk4\core\Exception;
+use atk4\core\FactoryTrait;
+use atk4\core\InitializerTrait;
+use atk4\core\TrackableTrait;
+use atk4\data\Model;
+use atk4\data\Persistence\Static_;
+
 /**
  * Implements a most core view, which all of the other components descend
  * form.
  */
 class View implements jsExpressionable
 {
-    use \atk4\core\ContainerTrait {
+    use ContainerTrait {
         add as _add;
     }
-    use \atk4\core\InitializerTrait {
+    use InitializerTrait {
         init as _init;
     }
-    use \atk4\core\TrackableTrait;
-    use \atk4\core\AppScopeTrait;
-    use \atk4\core\FactoryTrait;
-    use \atk4\core\DIContainerTrait {
+    use TrackableTrait;
+    use AppScopeTrait;
+    use FactoryTrait;
+    use DIContainerTrait {
         setMissingProperty as _setMissingProperty;
     }
 
@@ -39,7 +49,7 @@ class View implements jsExpressionable
     /**
      * Data model.
      *
-     * @var \atk4\data\Model
+     * @var Model
      */
     public $model;
 
@@ -201,11 +211,11 @@ class View implements jsExpressionable
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
      *
-     * @param \atk4\data\Model $m
+     * @param Model $m
      *
-     * @return \atk4\data\Model
+     * @return Model
      */
-    public function setModel(\atk4\data\Model $m)
+    public function setModel(Model $m)
     {
         $this->model = $m;
 
@@ -218,11 +228,13 @@ class View implements jsExpressionable
      * @param array $data   Array of data
      * @param array $fields Limit model to particular fields
      *
-     * @return \atk4\data\Model
+     * @throws \atk4\data\Exception
+     *
+     * @return Model
      */
     public function setSource(array $data, $fields = null)
     {
-        $this->setModel(new \atk4\data\Model(new \atk4\data\Persistence_Static($data)), $fields);
+        return $this->setModel(new Model(new Static_($data)), $fields);
     }
 
     /**
@@ -276,18 +288,22 @@ class View implements jsExpressionable
      * Makes view into a "<a>" element with a link.
      *
      * @param string|array $url
+     * @param string       $target
      *
      * @return $this
      */
-    public function link($url)
+    public function link($url, $target = null)
     {
         $this->element = 'a';
         if (is_string($url)) {
             $this->setAttr('href', $url);
-
-            return $this;
+        } else {
+            $this->setAttr('href', $this->url($url));
         }
-        $this->setAttr('href', $this->url($url));
+
+        if ($target !== null) {
+            $this->setAttr('target', $target);
+        }
 
         return $this;
     }
@@ -299,6 +315,8 @@ class View implements jsExpressionable
     /**
      * Called when view becomes part of render tree. You can override it but avoid
      * placing any "heavy processing" here.
+     *
+     * @throws Exception
      */
     public function init()
     {
@@ -367,6 +385,7 @@ class View implements jsExpressionable
      * @param string $region
      *
      * @throws Exception
+     * @throws \atk4\core\Exception
      *
      * @return View
      */
@@ -412,12 +431,12 @@ class View implements jsExpressionable
      * Note: this is internal method, but should be public because other objects
      *       should be able to call it.
      *
-     * @param \atk4\ui\View $object
-     * @param string        $class
+     * @param View   $object
+     * @param string $class
      *
-     * @return null|\atk4\ui\View
+     * @return null|View
      */
-    public function getClosestOwner($object, $class)
+    public function getClosestOwner(self $object, $class)
     {
         if (!isset($object->owner)) {
             return;
@@ -493,6 +512,8 @@ class View implements jsExpressionable
      *
      * @param string|array $class CSS class name or array of class names
      *
+     * @throws Exception
+     *
      * @return $this
      */
     public function addClass($class)
@@ -544,16 +565,12 @@ class View implements jsExpressionable
      *
      * @todo Think about difference between setStyle and addStyle
      */
-    public function setStyle($property, $style = null)
+    public function setStyle($property, ?string $style = null)
     {
-        if (is_array($property) && $style === null) {
-            foreach ($property as $k => $v) {
-                $this->addStyle($k, $v);
-            }
-
-            return $this;
-        }
-        $this->style[$property] = $style;
+        $this->style = array_merge(
+            $this->style,
+            is_array($property) ? $property : [$property => $style]
+        );
 
         return $this;
     }
@@ -566,7 +583,7 @@ class View implements jsExpressionable
      *
      * @see setStyle()
      */
-    public function addStyle($property, $style = null)
+    public function addStyle($property, ?string $style = null)
     {
         return $this->setStyle($property, $style);
     }
@@ -709,6 +726,8 @@ class View implements jsExpressionable
     /**
      * Render everything recursively, render ourselves but don't return
      * anything just yet.
+     *
+     * @throws Exception
      */
     public function renderAll()
     {
@@ -729,6 +748,8 @@ class View implements jsExpressionable
      * view and grab HTML himself.
      *
      * @param bool $force_echo
+     *
+     * @throws Exception
      *
      * @return string
      */
@@ -753,36 +774,21 @@ class View implements jsExpressionable
      */
     public function renderJSON($force_echo = true, $region = null)
     {
-        try {
-            $this->renderAll();
+        $this->renderAll();
 
-            return json_encode(['success' => true,
-                                'message' => 'Success',
-                                'atkjs'   => $this->getJS($force_echo),
-                                'html'    => $this->template->render($region),
-                                'id'      => $this->name, ]);
-        } catch (\Exception $exception) {
-            $this->_rendered = false;
-            $l = $this->add(new self());
-            if ($exception instanceof \atk4\core\Exception) {
-                $l->template->setHTML('Content', $exception->getHTML());
-            } elseif ($exception instanceof \Error) {
-                $l->add(new self(['ui' => 'message', get_class($exception).': '.
-                                                            $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
-                    'error', ]));
-                $l->add(new Text())->set(nl2br($exception->getTraceAsString()));
-            } else {
-                $l->add(new self(['ui' => 'message', get_class($exception).': '.$exception->getMessage(), 'error']));
-            }
-
-            return json_encode(['success' => false,
-                                'message' => $l->getHTML(), ]);
-        }
+        return json_encode(['success' => true,
+                            'message' => 'Success',
+                            'atkjs'   => $this->getJS($force_echo),
+                            'html'    => $this->template->render($region),
+                            'id'      => $this->name, ]);
     }
 
     /**
      * Created for recursive rendering or when you want to only get HTML of
      * this object (not javascript).
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
      *
      * @return string
      */
@@ -847,6 +853,8 @@ class View implements jsExpressionable
      * @param string|bool|null $when     Event when chain will be executed
      * @param jsExpression     $action   JavaScript action
      * @param string           $selector If you wish to override jQuery($selector)
+     *
+     * @throws Exception
      *
      * @return jQuery
      */
@@ -970,7 +978,7 @@ class View implements jsExpressionable
      * @param jsExpression|null $afterSuccess
      * @param array             $apiConfig
      *
-     * @return \atk4\ui\jsReload
+     * @return jsReload
      */
     public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
     {
@@ -1015,6 +1023,7 @@ class View implements jsExpressionable
      * @param array            $defaults Options
      *
      * @throws Exception
+     * @throws \atk4\core\Exception
      *
      * @return jQuery
      */
@@ -1061,8 +1070,6 @@ class View implements jsExpressionable
                     $actions[] = $a;
                 }
                 $action = $action[0];
-            } else {
-                $urlData = [];
             }
 
             // create callback, that will include event as part of the full name
@@ -1125,6 +1132,8 @@ class View implements jsExpressionable
      * Get JavaScript objects from this render tree.
      *
      * @param bool $force_echo
+     *
+     * @throws Exception
      *
      * @return string
      */
@@ -1240,20 +1249,13 @@ class View implements jsExpressionable
      * @param string $name
      * @param string $newValue
      *
-     * @return string
+     * @return null|string
      */
-    public function stickyGet($name, $newValue = null)
+    public function stickyGet($name, $newValue = null) : ?string
     {
-        if ($newValue) {
-            $this->stickyArgs[$name] = $newValue;
+        $this->stickyArgs[$name] = $newValue ?? $_GET[$name] ?? null;
 
-            return $newValue;
-        }
-        if (isset($_GET[$name])) {
-            $this->stickyArgs[$name] = $_GET[$name];
-
-            return $_GET[$name];
-        }
+        return $this->stickyArgs[$name];
     }
 
     // }}}
