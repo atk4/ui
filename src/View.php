@@ -288,7 +288,7 @@ class View implements jsExpressionable
      * Makes view into a "<a>" element with a link.
      *
      * @param string|array $url
-     * @param string $target
+     * @param string       $target
      *
      * @return $this
      */
