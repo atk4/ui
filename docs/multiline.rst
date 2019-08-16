@@ -4,17 +4,17 @@
 .. php:class:: MultiLine
 
 
-====================
+=====
 Multiline Form Field
-====================
+=====
 
 
 The Multiline Form Field is not a single field, but is used to edit several Model records.
 A good example is a user who can have many addresses. In this example, the Model `User` containsMany `Addresses`.
-This means that the addresses are not stored into a separate database table but into the field `addresses` of user table:
+This means that the addresses are not stored into a separate database table but into the field `addresses` of user table::
 
     /**
-     * User model.
+     * User model
      */
     class User extends \atk4\data\Model
     {
@@ -50,7 +50,6 @@ This means that the addresses are not stored into a separate database table but 
         }
     }
 
-
     //Create some sample record of user Model
     $user_data = [];
     $user = new User(new \atk4\data\Persistence\Array_($user_data));
@@ -65,7 +64,7 @@ This means that the addresses are not stored into a separate database table but 
 
 This leads to a Multiline component automatically rendered for adding, editing and deleting Addresses of the user:
 
----- SCREENSHOT HERE ---
+.. image:: images/multiline_user_addresses.png
 
 You can also check LINK_TO_DEMO/multiline.php for this example
 
@@ -78,8 +77,7 @@ Manually setting up Multiline
 
 Multiline FormField is used by default if a Model `containsMany()` or `containsOne()` other Model, but you can set up the multiline component manually. For example, if you wish to edit
 a `hasMany()` relation of a Model along with the Model itself. (In contrary to containsMany(), the records of the related Model are stored in a separate table). Lets say a User can have many email addresses,
-but you want to store them in a separate table. Uncomment the line `//$this->hasMany('Email', [Email::class]);` in User Model to use it.
-
+but you want to store them in a separate table. Uncomment the line `//$this->hasMany('Email', [Email::class]);` in User Model to use it::
 
     /**
      * Email Model
@@ -99,7 +97,7 @@ but you want to store them in a separate table. Uncomment the line `//$this->has
     }
 
 Now when we use a Form for User records, it won't automatically add a Multiline to edit the email addresses.
-If you want to edit them along with the user, Multiline is set up in a few lines:
+If you want to edit them along with the user, Multiline is set up in a few lines::
 
     //Create some sample record of user Model
     $user_data = [];
@@ -126,8 +124,7 @@ If you want to edit them along with the user, Multiline is set up in a few lines
 
 Now, there is another MultiLine FormField to add, edit or delete the users email addresses:
 
-SCREENSHOT
-
+.. image:: images/multiline_email_addresses.png
 
 
 Multiline and Expressions
