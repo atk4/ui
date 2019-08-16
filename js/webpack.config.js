@@ -34,10 +34,18 @@ module.exports = env => {
   const libraryName = 'atk';
   const filename = isProduction ? libraryName + 'js-ui.min.js' : libraryName + 'js-ui.js';
 
+  const prodPerformance = {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000
+  };
+
+
   return {
     entry: srcDir + '/agile-toolkit-ui.js',
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? false : 'source-map',
+    performance: isProduction ? prodPerformance : {},
     output: {
       path: publicDir,
       filename: filename,
