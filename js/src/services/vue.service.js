@@ -1,9 +1,13 @@
 import Vue from 'vue';
+import SuiVue from 'semantic-ui-vue';
+
 import atkInlineEdit from '../components/inline-edit.component';
 import itemSearch from '../components/item-search.component';
 import multiLine from '../components/multiline.component'
 import atkClickOutside from '../directives/click-outside.directive';
 import {focus} from '../directives/commons.directive';
+
+Vue.use(SuiVue);
 
 let atkComponents = {
   'atk-inline-edit' : atkInlineEdit,
