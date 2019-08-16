@@ -306,10 +306,7 @@ export default {
      * @returns {boolean}
      */
     hasExpression: function() {
-      let useExpr = false;
-      let fields = this.fieldData.filter(field => field.isExpr);
-      
-      return fields.length > 0;
+      return this.fieldData.filter(field => field.isExpr).length > 0;
     },
     /**
      * Post raw data.
