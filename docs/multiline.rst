@@ -124,7 +124,7 @@ If you want to edit them along with the user, Multiline is set up in a few lines
 
 Now, there is another MultiLine FormField to add, edit or delete the users email addresses:
 
-.. image:: images/multiline_email_addresses.png
+.. image:: images/multiline_email_address.png
 
 
 Multiline and Expressions
