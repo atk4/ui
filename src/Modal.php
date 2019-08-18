@@ -46,6 +46,13 @@ class Modal extends View
     //now only supported json type response.
     public $type = 'json';
 
+    /**
+     * Add ability to add css classes to "content" div
+     *
+     * @var array
+     */
+    public $contentCss = ['img', 'content', 'atk-dialog-content'];
+
     /*
      * if true, the <div class="actions"> at the bottom of the modal is
      * shown. Automatically set to true if any actions are added
@@ -96,6 +103,18 @@ class Modal extends View
                 $this->app->terminate($this->cb_view->renderJSON());
             }
         });
+    }
+
+    /**
+     * Add CSS classes to "content" div
+     */
+    public function addContentCss($class) {
+        if(is_string($class)) {
+            $this->contentCss = array_merge($this->contentCss, [$class]);
+        }
+        elseif(is_array($class)) {
+            $this->contentCss = array_merge($this->contentCss, $class);
+        }
     }
 
     /**
@@ -180,7 +199,7 @@ class Modal extends View
      */
     public function addScrolling()
     {
-        $this->addClass('scrolling');
+        $this->addContentCss('scrolling');
 
         return $this;
     }
@@ -295,6 +314,10 @@ class Modal extends View
         if (!empty($this->title)) {
             $this->template->trySet('title', $this->title);
             $this->template->trySet('headerCss', $this->headerCss);
+        }
+
+        if($this->contentCss) {
+            $this->template->trySet('contentCss', implode(' ', $this->contentCss));
         }
 
         if (!empty($this->fx)) {
