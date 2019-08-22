@@ -129,7 +129,7 @@ Now, there is another MultiLine FormField to add, edit or delete the users email
 
 Multiline and Expressions
 =========================
-If a Model has Expressions, they automatically get updated when a field value is changed. A loading icon on the '+' sign indicates that the expression values are updated.
+If a Model has Expressions, they automatically get updated when a field value is changed. A loading icon on the ``+`` sign indicates that the expression values are updated.
 Lets use the example of demos/multiline.php::
 
     class InventoryItem extends \atk4\data\Model
@@ -151,7 +151,7 @@ The 'total' expression will get updated on each field change automatically when 
 
 Manually adding actions on a field value change
 ===============================================
-If you want to define a callback which gets executed if a field value is changed, you can do so using the onLineChange() method. The first parameter is the callback, the second one an array including the field names which trigger the callback when changed. You can return a single jsExpressionable or an array of jsExpressionables which then will be sent to the browser. In this case we display a Toast with some message::
+If you want to define a callback which gets executed if a field value is changed, you can do so using the ``onLineChange()`` method. The first parameter is the callback, the second one an array including the field names which trigger the callback when changed. You can return a single jsExpressionable or an array of jsExpressionables which then will be sent to the browser. In this case we display a Toast with some message::
 
     $multiline->onLineChange(function ($rows, $form) {
         $total = 0;
@@ -170,12 +170,13 @@ Changing appearance of Multiline
 Header
 ------
 - The header uses the field's caption by default. 
-- You can edit it by setting the $header property. 
-- If you want to hide the header, set the $header property to an empty string ''.
+- You can edit it by setting the ``header`` property. 
+- If you want to hide the header, set the ``$header`` property to an empty string ``''``.
 
 Changing how fields are displayed
 ---------------------------------
 If you want to change how single inputs are displayed in the multiline, you can use field's ui property::
+
     $model->addFields([
         ['name', 'type' => 'string', 'ui' => ['multiline' => []]], TODO 
         ['value', 'type' => 'string', 'ui' => ['multiline' => []]], TODO
