@@ -129,8 +129,39 @@ Now, there is another MultiLine FormField to add, edit or delete the users email
 
 Multiline and Expressions
 =========================
-Use Invoice/Line sample code here as this has sensible expressions
+If a Model has Expressions, they automatically get updated when a field value is changed. A loading icon on the '+' sign indicates that the expression values are updated.
+Lets use the example of demos/multiline.php::
 
+    class InventoryItem extends \atk4\data\Model
+    {
+        public function init()
+        {
+            parent::init();
+            $this->addField('item', ['required' => true, 'default' => 'item']);
+            $this->addField('qty', ['type' => 'number', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
+            $this->addField('box', ['type' => 'number', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
+            $this->addExpression('total', ['expr' => function ($row) {
+                return $row['qty'] * $row['box'];
+            }, 'type' => 'number']);
+        }
+    }
+    
+The 'total' expression will get updated on each field change automatically when InventoryItem is set as model to Multiline.
+
+
+Manually adding actions on a field value change
+===============================================
+If you want to define a callback which gets executed if a field value is changed, you can do so using the onLineChange() method. The first parameter is the callback, the second one an array including the field names which trigger the callback when changed. You can return a single jsExpressionable or an array of jsExpressionables which then will be sent to the browser. In this case we display a Toast with some message::
+
+    $multiline->onLineChange(function ($rows, $form) {
+        $total = 0;
+        foreach ($rows as $row => $cols) {
+            $qty = array_column($cols, 'qty')[0];
+            $box = array_column($cols, 'box')[0];
+            $total = $total + ($qty * $box);
+        }
+        return new jsToast('The new Total is '.number_format($total, 2));
+    }, ['field1', 'field2']);
 
 
 Changing appearance of Multiline
@@ -143,4 +174,3 @@ Parts of multiline component
     - (pass args to Field->ui['multiline'] to edit the way they are displayed)
 - Footer
     - if additional expressions are defined, they are shown here (provide example)
-
