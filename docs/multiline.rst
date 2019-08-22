@@ -167,10 +167,28 @@ If you want to define a callback which gets executed if a field value is changed
 Changing appearance of Multiline
 ================================
 
-Parts of multiline component
-- header
-    - uses FormFields caption, if caption is empty string its hidden
-- Data rows with inputs
-    - (pass args to Field->ui['multiline'] to edit the way they are displayed)
-- Footer
-    - if additional expressions are defined, they are shown here (provide example)
+Header
+------
+- The header uses the field's caption by default. 
+- You can edit it by setting the $header property. 
+- If you want to hide the header, set the $header property to an empty string ''.
+
+Changing how fields are displayed
+---------------------------------
+If you want to change how single inputs are displayed in the multiline, you can use field's ui property::
+    $model->addFields([
+        ['name', 'type' => 'string', 'ui' => ['multiline' => []]], TODO 
+        ['value', 'type' => 'string', 'ui' => ['multiline' => []]], TODO
+    ]);
+    
+Footer
+------
+You can add a footer to Multiline FormField by adding a sublayout to it. In this example, we add a footer containing a read-only input which could get the value from ``onLineChange`` callback (see above)::
+   
+    $ml = $form->addField('ml', ['MultiLine', 'options' => ['color' => 'blue']]);
+    $ml->setModel($inventory);
+    // Add sublayout with total field.
+    $sub_layout = $f->layout->addSublayout('Columns');
+    $sub_layout->addColumn(12);
+    $c = $sub_layout->addColumn(4);
+    $f_total = $c->addField('total', ['readonly' => true])->set($total);
