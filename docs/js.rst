@@ -426,6 +426,10 @@ Modal
 .. php:method:: set(callback)
 .. php:method:: show()
 .. php:method:: hide()
+.. php:method:: addContentCss()
+.. php:method:: addScrolling()
+.. php:method:: setOption()
+.. php:method:: setOptions()
 
 This class allows you to open modal dialogs and close them easily. It's based around Fomantic UI
 `.modal(), <https://fomantic-ui.com/modules/modal.html>`_ but integrates PHP callback for dynamically
@@ -451,6 +455,8 @@ Modal will render as a `<div>` block but will be hidden. Alternatively you can u
 
 This way it's more convenient for holding static content, such as Terms of Service.
 
+You can customize the CSS classes of both header and content section of the modal using the properties `headerCss` or `contentCss` or use the method `addContentCss()`. See the Fomantic UI modal documentation for further information.
+
 
 jsModal
 =======
@@ -459,7 +465,7 @@ jsModal
 
 This is alternative implementation to :php:class:`Modal` and is convenient for situations
 when you do not know in advance that you migth need to open Dialog box. This class is not
-a component, but rathen an Action so you mustn't add it into Render Tree::
+a component, but rather an Action so you mustn't add it into Render Tree::
 
     $vp = $app->add('VirtualPage');
     $vp->add(['LoremIpsum', 'size' => 2]);
