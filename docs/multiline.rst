@@ -178,10 +178,26 @@ Changing how fields are displayed
 If you want to change how single inputs are displayed in the multiline, you can use field's ui property::
 
     $model->addFields([
-        ['name', 'type' => 'string', 'ui' => ['multiline' => []]], TODO 
-        ['value', 'type' => 'string', 'ui' => ['multiline' => []]], TODO
+        ['name', 'type' => 'string', 'ui' => ['multiline' => ['input', ['icon' => 'user', 'type' => 'text']]]],
+        ['value', 'type' => 'string', 'ui' => ['multiline' => ['input', ['type' => 'number']]]],
+        ['description', 'type' => 'string', 'ui' => ['multiline' => ['textarea']]],
     ]);
     
+This above will display a name, value and description field within a multiline form field. The value field input will use the html attribute type set to number and the
+description field will be display as a textarea input.
+
+The `$ui['multiline']` property can be set using an array. The first element of the array is the field type to render as html in multiline form field and should contains a string value. The supported field type are input, textarea, dropdown or checkbox.
+The second element of the array represent the options associated with the field type and should contains an array.
+Since Multiline form field used some of Semantic-ui Vue component to render the field type in html, the options accepted
+are based on Semantic-ui vue supported property. For example, input field type, or component in Semantic-ui Vue can have it's html type attribute set using the type option, like the value field set above.
+
+You may see each option you can use by looking at Semantic-ui vue component property:
+- `input <https://semantic-ui-vue.github.io/#/elements/input>`_
+- `dropdown <https://semantic-ui-vue.github.io/#/modules/dropdown>`_
+- `checkbox <https://semantic-ui-vue.github.io/#/modules/checkbox>`_
+
+Note: There is no option available for textarea.
+
 Footer
 ------
 You can add a footer to Multiline FormField by adding a sublayout to it. In this example, we add a footer containing a read-only input which could get the value from ``onLineChange`` callback (see above)::
