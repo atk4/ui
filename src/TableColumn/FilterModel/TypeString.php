@@ -21,7 +21,7 @@ class TypeString extends Generic
                     $model->addCondition($filter['name'], $filter['value']);
                     break;
                 case 'is not':
-                    $model->addCondition($filter['name'], '!=' ,$filter['value']);
+                    $model->addCondition($filter['name'], '!=', $filter['value']);
                     break;
                 case 'contains':
                     $model->addCondition($filter['name'], 'LIKE', '%'.$filter['value'].'%');
