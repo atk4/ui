@@ -2,7 +2,7 @@
 
 namespace atk4\ui;
 
-/**
+/**h
  * This class add modal dialog to a page.
  *
  * Modal are added to the layout but their content is hidden by default.
@@ -36,7 +36,7 @@ class Modal extends View
      */
     public $title = 'Modal title';
     public $loading_label = 'Loading...';
-    public $headerCss = 'header';
+    public $headerCSS = 'header';
     public $ui = 'modal';
     public $fx = [];
     public $cb = null;
@@ -51,7 +51,7 @@ class Modal extends View
      *
      * @var array
      */
-    public $contentCss = ['img', 'content', 'atk-dialog-content'];
+    public $contentCSS = ['img', 'content', 'atk-dialog-content'];
 
     /*
      * if true, the <div class="actions"> at the bottom of the modal is
@@ -108,12 +108,12 @@ class Modal extends View
     /**
      * Add CSS classes to "content" div
      */
-    public function addContentCss($class) {
+    public function addContentCSS($class) {
         if(is_string($class)) {
-            $this->contentCss = array_merge($this->contentCss, [$class]);
+            $this->contentCSS = array_merge($this->contentCSS, [$class]);
         }
         elseif(is_array($class)) {
-            $this->contentCss = array_merge($this->contentCss, $class);
+            $this->contentCSS = array_merge($this->contentCSS, $class);
         }
     }
 
@@ -199,7 +199,7 @@ class Modal extends View
      */
     public function addScrolling()
     {
-        $this->addContentCss('scrolling');
+        $this->addContentCSS('scrolling');
 
         return $this;
     }
@@ -313,11 +313,11 @@ class Modal extends View
 
         if (!empty($this->title)) {
             $this->template->trySet('title', $this->title);
-            $this->template->trySet('headerCss', $this->headerCss);
+            $this->template->trySet('headerCSS', $this->headerCSS);
         }
 
-        if($this->contentCss) {
-            $this->template->trySet('contentCss', implode(' ', $this->contentCss));
+        if($this->contentCSS) {
+            $this->template->trySet('contentCSS', implode(' ', $this->contentCSS));
         }
 
         if (!empty($this->fx)) {
