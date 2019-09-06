@@ -15,8 +15,16 @@ $noTitle = $app->add(['Modal', 'title' => false]);
 $noTitle->add('LoremIpsum');
 $noTitle->add(['Button', 'Hide'])->on('click', $noTitle->hide());
 
+$scrolling = $app->add(['Modal', 'title' => 'Long Content that Scrolls inside Modal']);
+$scrolling->addScrolling();
+$scrolling->add('LoremIpsum');
+$scrolling->add('LoremIpsum');
+$scrolling->add('LoremIpsum');
+$scrolling->add(['Button', 'Hide'])->on('click', $scrolling->hide());
+
 $bar->add(['Button', 'Show'])->on('click', $modal->show());
 $bar->add(['Button', 'No Title'])->on('click', $noTitle->show());
+$bar->add(['Button', 'Scrolling Content'])->on('click', $scrolling->show());
 
 if (!class_exists('Counter')) {
     class Counter extends \atk4\ui\FormField\Line
