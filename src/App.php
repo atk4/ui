@@ -926,22 +926,6 @@ class App
         return htmlentities($val);
     }
 
-    /**
-     * Allow to use semantic-ui-vue components.
-     *
-     * https://semantic-ui-vue.github.io
-     *
-     * @throws \atk4\core\Exception
-     */
-    public function useSuiVue()
-    {
-        if (!$this->is_sui_init) {
-            $this->requireJS('https://unpkg.com/semantic-ui-vue/dist/umd/semantic-ui-vue.min.js');
-            $this->layout->js(true, (new jsVueService())->useComponent('SemanticUIVue'));
-            $this->is_sui_init = true;
-        }
-    }
-
     protected function setupAlwaysRun(): void
     {
         if ($this->_cwd_restore) {
