@@ -10,6 +10,7 @@ use atk4\core\HookTrait;
 use atk4\core\InitializerTrait;
 use atk4\data\Persistence;
 use atk4\ui\Exception\ExitApplicationException;
+use atk4\ui\Layout\Centered;
 use atk4\ui\Layout\Generic;
 use atk4\ui\Persistence\UI;
 use Closure;
@@ -247,7 +248,7 @@ class App
         // just replace layout to avoid any extended App->_construct problems
         // it will maintain everything as in the original app StickyGet, logger, Events
         $this->html = null;
-        $this->initLayout('Centered');
+        $this->initLayout(Centered::class);
         // change title to added an error
         //$this->layout->add('Header', 'Header')->set('L'.$exception->getLine().': '.$exception->getMessage());
 
