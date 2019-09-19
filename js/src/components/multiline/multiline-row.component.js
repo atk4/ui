@@ -1,4 +1,4 @@
-import multilineCell from './multiline-cell.component'
+import multilineCell from './multiline-cell.component';
 
 /**
  * A row component.
@@ -14,13 +14,14 @@ export default {
   template: `
     <sui-table-row :verticalAlign="'middle'">
         <sui-table-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></input></sui-table-cell>
-        <sui-table-cell  v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" :width="column.width" :style="{overflow: 'visible'}" v-if="column.isVisible" :textAlign="getTextAlign(column)">
+        <sui-table-cell  v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" :width="getColumnWidth(column)" :style="{overflow: 'visible'}" v-if="column.isVisible" :textAlign="getTextAlign(column)">
          <atk-multiline-cell 
-           :fieldType="getFieldType(column)" 
+           :componentName="getMapComponent(column)" 
            :cellData="column" 
            @update-value="onUpdateValue" 
            @post-value="onPostRow"
-           :fieldValue="getValue(column)">{{getReadOnlyValue(column)}}</atk-multiline-cell>
+           :fieldValue="getValue(column)"
+           :componentProps="getComponentProps(column)"></atk-multiline-cell>
         </sui-table-cell>
     </sui-table-row>
   `,
@@ -58,6 +59,9 @@ export default {
       }
       return null;
     },
+    getColumnWidth: function(column) {
+      return column.fieldOptions ? column.fieldOptions.width : null;
+    },
     onEdit: function () {
       this.isEditing = true;
     },
@@ -86,21 +90,69 @@ export default {
       return temp;
     },
     /**
-     * Setup component according to field type.
-     * For now support input - checkbox.
+     * Return component specific props.
+     * When dropdown is use for example.
+     *
+     * @param column
+     */
+    getComponentProps: function(column) {
+      let props = {};
+      if (column.component === 'dropdown') {
+        const values = column.fieldOptions ? column.fieldOptions.values : null;
+        const userOptions = column.fieldOptions ? column.fieldOptions : {};
+        const defaultOptions = {
+          floating : true,
+          closeOnBlur : true,
+          openOnFocus : false,
+          selection: true,
+         };
+        props = Object.assign(defaultOptions, userOptions);
+        props.options = this.getEnumValues(values);
+      } else {
+        props = Object.assign(props, column.fieldOptions);
+      }
+      return props;
+    },
+    /**
+     * Map values for Sui Dropdown.
+     * Values are possible value for dropdown.
+     *
+     * @param values
+     * @returns {{text: *, value: string, key: string}[]}
+     */
+    getEnumValues: function(values){
+      if(values) {
+        return Object.keys(values).map(key => {
+          return {key: key, value: key, text: values[key]}
+        });
+
+      }
+    },
+    /**
+     * Return proper component name based on component set.
      *
      * @param column
      * @returns {string}
      */
-    getFieldType: function (column) {
-      let type = 'sui-input';
+    getMapComponent: function (column) {
+      let component;
       if (!column.isEditable){
-        type = 'div';
+        component = 'atk-multiline-readonly';
+      } else {
+        switch (column.component) {
+          case 'input':
+          case 'dropdown':
+          case 'checkbox':
+            component = 'sui-'+ column.component;
+            break;
+          case 'textarea':
+            component = 'atk-multiline-textarea';
+            break;
+          default:
+            component = 'sui-input';
+        }
       }
-      if (column.type === 'boolean') {
-        type = 'sui-checkbox'
-      }
-      return type;
+      return component;
     },
     /**
      * return text alignement for cell depending on field type.
@@ -110,7 +162,8 @@ export default {
      */
     getTextAlign(column) {
       let align;
-      switch(column.type) {
+      let type = column.fieldOptions ? column.fieldOptions.type : 'text';
+      switch(type) {
         case 'money':
         case 'integer':
         case 'number':

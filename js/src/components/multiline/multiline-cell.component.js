@@ -1,43 +1,35 @@
+import multilineReadOnly from './multiline-readonly.component';
+import multilineTextarea from './multiline-textarea.component';
 
 export default {
   name: 'atk-multiline-cell',
   template: ` 
-    <component :is="fieldType"
-        :type="inputType"
-        :fluid="true" 
+    <component :is="componentName"
+        :fluid="true"  
         class="fluid" 
         @blur="onBlur"
         @input="onInput"
         v-model="inputValue"
+        :readOnlyValue="fieldValue"
         :name="fieldName"
-        ref="cell"><slot></slot></component>
+        ref="cell"
+        v-bind="componentProps"></component>
   `,
-  props: ['cellData', 'fieldType', 'fieldValue'],
+  components: {
+    'atk-multiline-readonly': multilineReadOnly,
+    'atk-multiline-textarea': multilineTextarea
+  },
+  props: ['cellData', 'componentName', 'fieldValue', 'options', 'componentProps'],
   data() {
     return {
       field: this.cellData.field,
       type: this.cellData.type,
-      //this field name will not get serialized and sent on form submit.
       fieldName: '-'+this.cellData.field,
       inputValue: this.fieldValue,
       dirtyValue: this.fieldValue,
     }
   },
   computed: {
-    inputType() {
-      let type = this.cellData.type;
-      switch (type) {
-        case 'string':
-          type = 'text';
-          break;
-        case 'integer':
-        case 'money':
-          type = 'number';
-          break;
-      }
-
-      return type;
-    },
     isDirty() {
       return this.dirtyValue != this.inputValue;
     }

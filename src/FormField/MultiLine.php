@@ -73,6 +73,7 @@ namespace atk4\ui\FormField;
 use atk4\data\Field\Callback;
 use atk4\data\Field_SQL_Expression;
 use atk4\data\Model;
+use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
 use atk4\ui\jsVueService;
@@ -90,7 +91,7 @@ class MultiLine extends Generic
     /**
      * The template need for the multiline view.
      *
-     * @var null
+     * @var Template
      */
     public $multiLineTemplate = null;
 
@@ -98,7 +99,7 @@ class MultiLine extends Generic
      * The multiline View.
      * Assign on init.
      *
-     * @var null
+     * @var View
      */
     private $multiLine = null;
 
@@ -113,14 +114,14 @@ class MultiLine extends Generic
     /**
      * The definition of each fields used in each multiline row.
      *
-     * @var null
+     * @var array
      */
     private $fieldDefs = null;
 
     /**
      * The js callback.
      *
-     * @var null
+     * @var jsCallback
      */
     private $cb = null;
 
@@ -128,7 +129,7 @@ class MultiLine extends Generic
      * The callback function trigger when field
      * are changed or row are delete.
      *
-     * @var null
+     * @var callable
      */
     public $changeCb = null;
 
@@ -136,53 +137,79 @@ class MultiLine extends Generic
      * An array of fields name that will trigger
      * the change callback when field are changed.
      *
-     * @var null
+     * @var array
      */
     public $eventFields = null;
 
     /**
      * Collection of field errors.
      *
-     * @var null
+     * @var array
      */
     private $rowErrors = null;
 
     /**
-     * The model reference use for multi line input.
+     * The model reference name used for multi line input.
      *
-     * @var null
+     * @var string
      */
     public $modelRef = null;
 
     /**
      * The link field used for reference.
      *
-     * @var null
+     * @var string
      */
     public $linkField = null;
 
     /**
      * The fields use in each line.
      *
-     * @var null
+     * @var array
      */
     public $rowFields = null;
 
     /**
      * The data sent for each line.
      *
-     * @var null
+     * @var array
      */
     public $rowData = null;
+
+    /**
+     * The max number of record.
+     * 0 means no limit.
+     *
+     * @var int
+     */
+    public $rowLimit = 0;
+
+    /**
+     * Model max row limit to use in enum field.
+     * Enum field are display as Dropdown input.
+     * This limit is set on model reference use by a field.
+     *
+     * @var int
+     */
+    public $enumLimit = 100;
+
+    /**
+     * Multiline caption.
+     *
+     * @var string
+     */
+    public $caption = null;
 
     public function init()
     {
         parent::init();
 
-        $this->app->useSuiVue();
-
         if (!$this->multiLineTemplate) {
-            $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline>{$Input}</div>');
+            $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
+        }
+
+        if ($this->model) {
+            $this->setModel($this->model);
         }
 
         $this->multiLine = $this->add(['View', 'template' => $this->multiLineTemplate]);
@@ -195,7 +222,7 @@ class MultiLine extends Generic
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
-                    throw new ValidationException([$this->short_name => 'multine error']);
+                    throw new ValidationException([$this->short_name => 'multiline error']);
                 }
             }
         });
@@ -219,15 +246,15 @@ class MultiLine extends Generic
      * You must supply array of fields that will trigger the
      * callback when changed.
      *
-     * @param array|\atk4\ui\FormField\jsExpression|callable|string $fx
-     * @param arra                                                  $fields
+     * @param callable $fx
+     * @param array    $fields
      *
      * @throws Exception
      */
     public function onLineChange($fx, $fields)
     {
         if (!is_callable($fx)) {
-            throw new Exception('Function is required for onChange event.');
+            throw new Exception('Function is required for onLineChange event.');
         }
         $this->eventFields = $fields;
 
@@ -256,7 +283,6 @@ class MultiLine extends Generic
      * Value is based on model set and will
      * output data rows as json string value.
      *
-     *
      * @throws \atk4\core\Exception
      *
      * @return false|string
@@ -264,31 +290,36 @@ class MultiLine extends Generic
     public function getValue()
     {
         $m = null;
-        $data = [];
+        // will load data when using containsMany.
+        $data = $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
 
-        //set model according to model reference if set; or simply the model pass to it.
-        if ($this->model->loaded() && $this->modelRef) {
-            $m = $this->model->ref($this->modelRef);
-        } elseif (!$this->modelRef) {
-            $m = $this->model;
-        }
-        if ($m) {
-            foreach ($m as $id => $row) {
-                $d_row = [];
-                foreach ($this->rowFields as $fieldName) {
-                    $field = $m->getField($fieldName);
-                    if ($field->isEditable()) {
-                        $value = $row->get($field);
-                    } else {
-                        $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field));
-                    }
-                    $d_row[$fieldName] = $value;
-                }
-                $data[] = $d_row;
+        //if data is empty try to load model data directly. - For hasMany model or array model already populated with data.
+        if (empty($data)) {
+            //set model according to model reference if set; or simply the model pass to it.
+            if ($this->model->loaded() && $this->modelRef) {
+                $m = $this->model->ref($this->modelRef);
+            } elseif (!$this->modelRef) {
+                $m = $this->model;
             }
+            if ($m) {
+                foreach ($m as $id => $row) {
+                    $d_row = [];
+                    foreach ($this->rowFields as $fieldName) {
+                        $field = $m->getField($fieldName);
+                        if ($field->isEditable()) {
+                            $value = $row->get($field);
+                        } else {
+                            $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field));
+                        }
+                        $d_row[$fieldName] = $value;
+                    }
+                    $data[] = $d_row;
+                }
+            }
+            $data = json_encode($data, JSON_UNESCAPED_UNICODE);
         }
 
-        return json_encode($data, JSON_UNESCAPED_UNICODE);
+        return $data;
     }
 
     /**
@@ -307,12 +338,10 @@ class MultiLine extends Generic
 
         foreach ($rows as $row => $cols) {
             $rowId = $this->getMlRowId($cols);
-            foreach ($cols as $col) {
-                $fieldName = key($col);
+            foreach ($cols as $fieldName => $value) {
                 if ($fieldName === '__atkml' || $fieldName === $m->id_field) {
                     continue;
                 }
-                $value = $col[$fieldName];
 
                 try {
                     $field = $m->getField($fieldName);
@@ -356,23 +385,21 @@ class MultiLine extends Generic
             $currentIds[] = $id;
         }
 
-        foreach ($this->rowData as $row => $cols) {
-            $rowId = $this->getMlRowId($cols);
+        foreach ($this->rowData as $row) {
             if ($this->modelRef && $this->linkField) {
                 $model[$this->linkField] = $this->model->get('id');
             }
-            foreach ($cols as $col) {
-                $fieldName = key($col);
+
+            foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
                 }
-                $value = $col[$fieldName];
+
                 if ($fieldName === $model->id_field && $value) {
                     $model->load($value);
                 }
 
                 $field = $model->getField($fieldName);
-
                 if ($field->isEditable()) {
                     $field->set($value);
                 }
@@ -385,6 +412,7 @@ class MultiLine extends Generic
 
             $model->unload();
         }
+
         // if currentId are still there, then delete them.
         foreach ($currentIds as $id) {
             $model->delete($id);
@@ -426,13 +454,9 @@ class MultiLine extends Generic
     private function getMlRowId($row)
     {
         $rowId = null;
-        foreach ($row as $k => $col) {
-            foreach ($col as $fieldName => $value) {
-                if ($fieldName === '__atkml') {
-                    $rowId = $value;
-                }
-            }
-            if ($rowId) {
+        foreach ($row as $col => $value) {
+            if ($col === '__atkml') {
+                $rowId = $value;
                 break;
             }
         }
@@ -462,7 +486,6 @@ class MultiLine extends Generic
      * Set view model.
      * If modelRef is used then getModel will return proper model.
      *
-     *
      * @param Model $m
      * @param array $fields
      * @param null  $modelRef
@@ -491,52 +514,190 @@ class MultiLine extends Generic
         }
 
         if (!$fields) {
-            $fields = $this->getModelFields($m);
+            $fields = array_keys($m->getFields('not system'));
         }
         $this->rowFields = array_merge([$m->id_field], $fields);
 
         foreach ($this->rowFields as $fieldName) {
-            $field = $m->getField($fieldName);
-
-            if (!$field instanceof \atk4\data\Field) {
-                continue;
-            }
-            $type = $field->type ? $field->type : 'string';
-
-            if (isset($field->ui['form'])) {
-                $type = $field->ui['form'][0];
-            }
-
-            $width = $field->ui['multiline']['width'] ?? null;
-
-            $this->fieldDefs[] = [
-                'field'       => $field->short_name,
-                'type'        => $type,
-                'caption'     => $field->getCaption(),
-                'default'     => $field->default,
-                'isEditable'  => $field->isEditable(),
-                'isHidden'    => $field->isHidden(),
-                'isVisible'   => $field->isVisible(),
-                'width'       => $width,
-            ];
+            $this->fieldDefs[] = $this->getFieldDef($m->getField($fieldName));
         }
 
         return $m;
     }
 
     /**
-     * Returns array of names of fields to automatically include them in form.
-     * This includes all editable or visible fields of the model.
+     * Return the field definition to use in JS for rendering this field.
+     * $component is one of the following html input types:
+     * input
+     * dropdown
+     * checkbox
+     * textarea.
      *
-     * @param \atk4\data\Model $model
+     * Depending on the component, additional data is set to fieldOptions
+     * (dropdown needs values, input needs type)
+     *
+     *
+     * @param $field
      *
      * @return array
      */
-    protected function getModelFields(\atk4\data\Model $model)
+    public function getFieldDef(\atk4\data\Field $field):array
     {
-        return array_keys($model->getFields('not system'));
+        //default is input
+        $component = 'input';
+
+        //first check Field->ui['multiline'] setting if there are settings for specially for multiline display
+        //$test = $field->ui['multiline'];
+        if (isset($field->ui['multiline'][0])) {
+            $component = $this->_mapComponent($field->ui['multiline'][0]);
+        }
+        //next, check if there is a 'standard' UI seed set
+        elseif (isset($field->ui['form'][0])) {
+            $component = $this->_mapComponent($field->ui['form'][0]);
+        }
+        //in case values or enum property is set, display a dropdown
+        elseif ($field->enum || $field->values || $field->reference instanceof HasOne) {
+            $component = 'dropdown';
+        }
+        //figure UI FormField type by field type.
+        //TODO: Form already does this, maybe use that somehow?
+        elseif ($field->type) {
+            $component = $this->_mapComponent($field->type);
+        }
+
+        return [
+            'field'       => $field->short_name,
+            'component'   => $component,
+            'caption'     => $field->getCaption(),
+            'default'     => $field->default,
+            'isExpr'      => isset($field->expr) ? true : false,
+            'isEditable'  => $field->isEditable(),
+            'isHidden'    => $field->isHidden(),
+            'isVisible'   => $field->isVisible(),
+            'fieldOptions'=> $this->_getFieldOptions($field, $component),
+        ];
     }
 
+    /*
+     * Maps into input, checkbox, dropdown or textarea, defaults into input
+     */
+    protected function _mapComponent($field_type):string
+    {
+        if (is_string($field_type)) {
+            switch (strtolower($field_type)) {
+                case 'dropdown':
+                case 'enum':
+                    return 'dropdown';
+                case 'boolean':
+                case 'checkbox':
+                    return 'checkbox';
+                case 'text':
+                case 'textarea':
+                    return 'textarea';
+                default: return 'input';
+            }
+        }
+
+        //an object could be passed theoretically, use its classname as string
+        elseif (is_object($field_type)) {
+            return $this->_mapComponent((new \ReflectionClass($field_type))->getShortName());
+        }
+
+        //default: input
+        return 'input';
+    }
+
+    /*
+     *
+     */
+    protected function _getFieldOptions(\atk4\data\Field $field, string $component):array
+    {
+        $options = [];
+
+        //if additional options are defined for field, add them.
+        if (isset($field->ui['multiline']) && is_array($field->ui['multiline'])) {
+            $add_options = $field->ui['multiline'];
+            if (isset($add_options[0])) {
+                if (is_array($add_options[0])) {
+                    $options = array_merge($options, $add_options[0]);
+                }
+                if (isset($add_options[1]) && is_array($add_options[1])) {
+                    $options = array_merge($options, $add_options[1]);
+                }
+            } else {
+                $options = array_merge($options, $add_options);
+            }
+        } elseif (isset($field->ui['form']) && is_array($field->ui['form'])) {
+            $add_options = $field->ui['form'];
+            if (isset($add_options[0])) {
+                unset($add_options[0]);
+            }
+            $options = array_merge($options, $add_options);
+        }
+
+        //some input types need additional options set, make sure they are there
+        switch ($component) {
+            //input needs type set (text, number, date etc)
+            case 'input':
+                if (!isset($options['type'])) {
+                    $options['type'] = $this->_addTypeOption($field);
+                }
+                break;
+            //dropdown needs values set
+            case 'dropdown':
+                if (!isset($options['values'])) {
+                    $options['values'] = $this->_addValuesOption($field);
+                }
+                break;
+        }
+
+        return $options;
+    }
+
+    /*
+     * HTML input field needs type property set, if it wasnt found in $field->ui,
+     * determine from rest
+     */
+    protected function _addTypeOption(\atk4\data\Field $field):string
+    {
+        switch ($field->type) {
+            case 'integer':
+                return 'number';
+            //case 'date':
+                //return 'date';
+            default:
+                return 'text';
+        }
+    }
+
+    /*
+     * DropDown field needs values set. If it wasnt found in $field->ui, determine
+     * from rest
+     */
+    protected function _addValuesOption(\atk4\data\Field $field):array
+    {
+        if ($field->enum) {
+            return array_combine($field->enum, $field->enum);
+        }
+        if ($field->values && is_array($field->values)) {
+            return $field->values;
+        } elseif ($field->reference) {
+            $m = $field->reference->refModel()->setLimit($this->enumLimit);
+
+            $values = [];
+            foreach ($m->export([$m->id_field, $m->title_field]) as $item) {
+                $values[$item[$m->id_field]] = $item[$m->title_field];
+            }
+
+            return $values;
+        }
+
+        return [];
+    }
+
+    /*
+     *
+     */
     public function renderView()
     {
         if (!$this->getModel()) {
@@ -555,7 +716,7 @@ class MultiLine extends Generic
             });
         }
 
-        $this->multiLine->template->setHTML('Input', $this->getInput());
+        $this->multiLine->template->trySetHTML('Input', $this->getInput());
         parent::renderView();
 
         $this->multiLine->vue('atk-multiline',
@@ -568,6 +729,8 @@ class MultiLine extends Generic
                                       'eventFields' => $this->eventFields,
                                       'hasChangeCb' => $this->changeCb ? true : false,
                                       'options'     => $this->options,
+                                      'rowLimit'    => $this->rowLimit,
+                                      'caption'     => $this->caption,
                                   ],
                               ]);
     }
@@ -768,7 +931,7 @@ class MultiLine extends Generic
         switch ($exprField->type) {
             case 'money':
             case 'integer':
-            case 'number':
+            case 'float':
                 //Value is 0 or the field value.
                 $value = $model[$fieldName] ? $model[$fieldName] : 0;
                 break;

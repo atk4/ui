@@ -7,6 +7,9 @@ export default {
         <sui-table-cell :style="{background:'none'}"></sui-table-cell>
         <sui-table-cell :style="{background:'none'}" state="error" v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)"><sui-icon name="attention" v-if="getErrorMsg(column)"></sui-icon>{{getErrorMsg(column)}}</sui-table-cell>
       </sui-table-row>
+       <sui-table-row v-if="hasCaption()">
+        <sui-table-headerCell :colspan="getVisibleColumns()">{{caption}}</sui-table-headerCell>
+       </sui-table-row>
         <sui-table-row :verticalAlign="'top'">
         <sui-table-header-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDeleteAll" :checked.prop="isChecked" :indeterminate.prop="isIndeterminate" ref="check"></input></sui-table-header-cell>
         <sui-table-header-cell v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)">
@@ -16,7 +19,7 @@ export default {
       </sui-table-row>
     </sui-table-header>
   `,
-  props: ['fields', 'state', 'errors'],
+  props: ['fields', 'state', 'errors', 'caption'],
   data() {
     return {columns: this.fields, isDeleteAll: false}
   },
@@ -26,7 +29,7 @@ export default {
         this.$root.$emit('toggle-delete-all', this.$refs['check'].checked);
       });
     },
-    getTextAlign(column) {
+    getTextAlign: function(column) {
       let align = 'left';
       if (!column.isEditable) {
         switch(column.type) {
@@ -40,8 +43,18 @@ export default {
 
       return align;
     },
-    hasError() {
+    getVisibleColumns: function() {
+      let count = 1; // add deletable column;
+      this.columns.forEach(field => {
+        count = field.isVisible ? count + 1 : count;
+      });
+      return count;
+    },
+    hasError: function() {
       return Object.keys(this.errors).length > 0;
+    },
+    hasCaption: function() {
+      return this.caption;
     },
     getErrorMsg: function(column) {
       if (this.hasError()) {

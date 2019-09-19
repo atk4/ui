@@ -1,5 +1,19 @@
 ## Release note
 
+### version 1.9.0 (2019-08-16)
+
+- Add textarea support in Multiline Vue Component
+- Add input options support in Multiline Vue Component
+
+- Include semantic-ui-vue in bundle.
+    - atkjs-ui.min.js bundle file now include semantic-ui-vue package so there is no need to explicitly load it.
+
+### version 1.8.0 (2019-07-23)
+
+- Multiline Vue component now support containsMany / containsOne.
+- Multiline Vue component now support limiting number of row data.
+- Multiline Vue component now support Dropdown as a field type.
+
 ### version 1.7.0
 
 - New atkConfirm plugin. Will display a user confirmaton dialog using fomantic ui modal.

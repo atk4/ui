@@ -1,18 +1,25 @@
 import multilineBody from './multiline/multiline-body.component';
 import multilineHeader from './multiline/multiline-header.component';
 
+/**
+ * MultiLine component.
+ *
+ * 2019-07-23 - add support for containsMany.
+ *  - updateLinesField method now return one level data row, {id:4, field1: 'value1'}
+ *  - getInitData method now handle one level data row.
+ */
 export default {
   name: 'atk-multiline',
   template: `<div >
                 <sui-table v-bind="tableProp">
-                  <atk-multiline-header :fields="fieldData" :state="getMainToggleState" :errors="errors"></atk-multiline-header>
+                  <atk-multiline-header :fields="fieldData" :state="getMainToggleState" :errors="errors" :caption="caption"></atk-multiline-header>
                   <atk-multiline-body :fieldDefs="fieldData" :rowData="rowData" :rowIdField="idField" :deletables="getDeletables" :errors="errors"></atk-multiline-body>
                   <sui-table-footer>
                     <sui-table-row>
                         <sui-table-header-cell/>
                         <sui-table-header-cell :colspan="getSpan" textAlign="right">
                         <div is="sui-button-group">
-                         <sui-button size="small" @click.stop.prevent="onAdd" icon="plus" ref="addBtn"></sui-button>
+                         <sui-button size="small" @click.stop.prevent="onAdd" icon="plus" ref="addBtn" :disabled="isLimitReached"></sui-button>
                          <sui-button size="small" @click.stop.prevent="onDelete" icon="trash" :disabled="isDeleteDisable"></sui-button>                        
                          </div>
                         </sui-table-header-cell>
@@ -33,6 +40,7 @@ export default {
       deletables: [],
       hasChangeCb: this.data.hasChangeCb,
       errors: {},
+      caption: this.data.caption ? this.data.caption : null,
       tableProp: Object.assign({}, this.tableDefault, this.data.options),
       tableDefault : {
         basic: false,
@@ -43,7 +51,7 @@ export default {
         stackable: false,
         inverted: false,
         color: null,
-        columns: null
+        columns: null,
       }
     }
   },
@@ -62,7 +70,13 @@ export default {
     });
 
     this.$root.$on('post-row', (rowId, field) => {
-      this.postRow(rowId, field);
+      if (this.hasExpression()) {
+        this.postRow(rowId, field);
+      }
+      // fire change callback if set and field is part of it.
+      if (this.hasChangeCb && (this.eventFields.indexOf(field) > -1 ) ) {
+        this.postRaw();
+      }
     });
 
     this.$root.$on('toggle-delete', (id) => {
@@ -159,10 +173,6 @@ export default {
           this.updateFieldInRow(idx, field, resp.expressions[field]);
         });
       }
-      // fire change callback if set and field is part of it.
-      if (this.hasChangeCb && (this.eventFields.indexOf(field) > -1 ) ) {
-        this.postRaw();
-      }
     },
     /**
      * Update row with proper data value.
@@ -215,27 +225,48 @@ export default {
      */
     updateLinesField: function() {
       const field = document.getElementsByName(this.linesField)[0];
-      field.value = JSON.stringify(this.rowData);
+
+      let data = this.rowData.map(item => {
+        let newItem = {};
+        for (let i=0; i<item.length; i++) {
+          const key = Object.keys(item[i])[0];
+          newItem[key] = Object.values(item[i])[0];
+        }
+        return {...newItem}
+      });
+
+      field.value = JSON.stringify(data);
     },
     /**
      * Get initial rowData value.
+     * We need to compare fields return by model vs what values give us because it could differ.
+     * For example if a field was add or remove from model after a value was saved. Specially for
+     * array type field like containsMany / containsOne.
+     * In other word, rowData must match fields definition.
      *
      * @returns {Array}
      */
     getInitData: function() {
       let rows = [], value = '';
+      // Get field name.
+      const fields = this.data.fields.map(item => item.field);
+
       // check if input containing data is set and initialized.
       let field = document.getElementsByName(this.linesField)[0];
       if (field) {
         //Map value to our rowData.
-        rows = JSON.parse(field.value).map(fields => {
-          let data = Object.keys(fields).map(field => {
-            return {[field]:fields[field]};
+        let values = JSON.parse(field.value);
+        values = Array.isArray(values) ? values : [];
+
+        values.forEach(value => {
+          const data = fields.map(field => {
+            return {[field]: value[field] ? value[field] : null}
           });
-          data.push({__atkml:this.getUUID()});
-          return data;
+          data.push({__atkml: this.getUUID()});
+          rows.push(data);
         });
       }
+
       return rows;
     },
     /**
@@ -270,6 +301,14 @@ export default {
       return id;
     },
     /**
+     * Check if one of the field use expression.
+     *
+     * @returns {boolean}
+     */
+    hasExpression: function() {
+      return this.fieldData.filter(field => field.isExpr).length > 0;
+    },
+    /**
      * Post raw data.
      *
      * Use regular api call in order
@@ -286,12 +325,10 @@ export default {
     postData: async function(row) {
       let data = {};
       const context = this.$refs['addBtn'].$el;
-      //console.log(context);
       let fields = this.fieldData.map( field => field.field);
       fields.forEach( field => {
         data[field] = row.filter(item => field in item)[0][field];
       });
-      //console.log(data);
       data.__atkml_action = 'update-row';
       try {
         let response = await atk.apiService.suiFetch(this.data.url, {data: data, method: 'post', stateContext:context});
@@ -344,6 +381,18 @@ export default {
      */
     isDeleteDisable() {
       return !this.deletables.length > 0;
+    },
+    /**
+     * Check if record limit is reach.
+     * return false if not.
+     *
+     * @returns {boolean}
+     */
+    isLimitReached() {
+      if (this.data.rowLimit === 0) {
+        return false;
+      }
+      return this.data.rowLimit < this.rowData.length + 1;
     }
   }
 }

@@ -4,6 +4,9 @@
 
 namespace atk4\ui;
 
+use atk4\data\Model;
+use atk4\data\Reference\ContainsMany;
+
 /**
  * Implements a form.
  */
@@ -447,7 +450,11 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         $fallback_seed = ['Line'];
 
-        if ($f->type != 'boolean') {
+        if ($f->type === 'array') {
+            $limit = ($f->reference instanceof ContainsMany) ? 0 : 1;
+            $model = $f->reference->refModel();
+            $fallback_seed = ['MultiLine', 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
+        } elseif ($f->type != 'boolean') {
             if ($f->enum) {
                 $fallback_seed = ['DropDown', 'values' => array_combine($f->enum, $f->enum)];
             } elseif ($f->values) {
@@ -493,6 +500,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         'string'   => 'Line',
         'password' => 'Password',
         'datetime' => 'Calendar',
+        'array'    => 'MultiLine',
         'date'     => ['Calendar', 'type' => 'date'],
         'time'     => ['Calendar', 'type' => 'time', 'ampm' => false],
         'money'    => 'Money',
