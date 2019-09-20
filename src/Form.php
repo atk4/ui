@@ -450,7 +450,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         $fallback_seed = ['Line'];
 
-        if ($f->type === 'array') {
+        if ($f->type === 'array' && $f->reference) {
             $limit = ($f->reference instanceof ContainsMany) ? 0 : 1;
             $model = $f->reference->refModel();
             $fallback_seed = ['MultiLine', 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
@@ -500,7 +500,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         'string'   => 'Line',
         'password' => 'Password',
         'datetime' => 'Calendar',
-        'array'    => 'MultiLine',
         'date'     => ['Calendar', 'type' => 'date'],
         'time'     => ['Calendar', 'type' => 'time', 'ampm' => false],
         'money'    => 'Money',
