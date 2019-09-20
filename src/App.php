@@ -134,6 +134,13 @@ class App
     public $call_exit = true;
 
     /**
+     * Error types to be in set_error_handler.
+     *
+     * @var int
+     */
+    protected $catch_error_types = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED;
+
+    /**
      * Constructor.
      *
      * @param array $defaults
@@ -184,7 +191,7 @@ class App
                 function ($err_severity, $err_msg, $err_file, $err_line, array $err_context) {
                     throw new ErrorException($err_msg, 0, $err_severity, $err_file, $err_line);
                 },
-                E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED
+                $this->catch_error_types
             );
         }
 
