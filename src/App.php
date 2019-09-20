@@ -184,7 +184,7 @@ class App
                 function ($err_severity, $err_msg, $err_file, $err_line, array $err_context) {
                     throw new ErrorException($err_msg, 0, $err_severity, $err_file, $err_line);
                 },
-                E_ALL & ~E_NOTICE
+                E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED
             );
         }
 
