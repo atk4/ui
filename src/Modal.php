@@ -2,7 +2,7 @@
 
 namespace atk4\ui;
 
-/**
+/**h
  * This class add modal dialog to a page.
  *
  * Modal are added to the layout but their content is hidden by default.
@@ -36,7 +36,7 @@ class Modal extends View
      */
     public $title = 'Modal title';
     public $loading_label = 'Loading...';
-    public $headerCss = 'header';
+    public $headerCSS = 'header';
     public $ui = 'modal';
     public $fx = [];
     public $cb = null;
@@ -45,6 +45,13 @@ class Modal extends View
 
     //now only supported json type response.
     public $type = 'json';
+
+    /**
+     * Add ability to add css classes to "content" div
+     *
+     * @var array
+     */
+    public $contentCSS = ['img', 'content', 'atk-dialog-content'];
 
     /*
      * if true, the <div class="actions"> at the bottom of the modal is
@@ -96,6 +103,18 @@ class Modal extends View
                 $this->app->terminate($this->cb_view->renderJSON());
             }
         });
+    }
+
+    /**
+     * Add CSS classes to "content" div
+     */
+    public function addContentCSS($class) {
+        if(is_string($class)) {
+            $this->contentCSS = array_merge($this->contentCSS, [$class]);
+        }
+        elseif(is_array($class)) {
+            $this->contentCSS = array_merge($this->contentCSS, $class);
+        }
     }
 
     /**
@@ -180,7 +199,7 @@ class Modal extends View
      */
     public function addScrolling()
     {
-        $this->addClass('scrolling');
+        $this->addContentCSS('scrolling');
 
         return $this;
     }
@@ -294,7 +313,11 @@ class Modal extends View
 
         if (!empty($this->title)) {
             $this->template->trySet('title', $this->title);
-            $this->template->trySet('headerCss', $this->headerCss);
+            $this->template->trySet('headerCSS', $this->headerCSS);
+        }
+
+        if($this->contentCSS) {
+            $this->template->trySet('contentCSS', implode(' ', $this->contentCSS));
         }
 
         if (!empty($this->fx)) {
