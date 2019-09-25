@@ -47,7 +47,7 @@ class Modal extends View
     public $type = 'json';
 
     /**
-     * Add ability to add css classes to "content" div
+     * Add ability to add css classes to "content" div.
      *
      * @var array
      */
@@ -106,13 +106,13 @@ class Modal extends View
     }
 
     /**
-     * Add CSS classes to "content" div
+     * Add CSS classes to "content" div.
      */
-    public function addContentCSS($class) {
-        if(is_string($class)) {
+    public function addContentCSS($class)
+    {
+        if (is_string($class)) {
             $this->contentCSS = array_merge($this->contentCSS, [$class]);
-        }
-        elseif(is_array($class)) {
+        } elseif (is_array($class)) {
             $this->contentCSS = array_merge($this->contentCSS, $class);
         }
     }
@@ -316,7 +316,7 @@ class Modal extends View
             $this->template->trySet('headerCSS', $this->headerCSS);
         }
 
-        if($this->contentCSS) {
+        if ($this->contentCSS) {
             $this->template->trySet('contentCSS', implode(' ', $this->contentCSS));
         }
 
