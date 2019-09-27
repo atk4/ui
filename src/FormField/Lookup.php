@@ -297,14 +297,14 @@ class Lookup extends Input
      */
     public function getInput()
     {
-        return $this->app->getTag('input', [
+        return $this->app->getTag('input', array_merge([
             'name'        => $this->short_name,
             'type'        => 'hidden',
             'id'          => $this->id.'_input',
             'value'       => $this->getValue(),
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
-        ]);
+        ], $this->inputAttr));
     }
 
     public function getFilterInput($name, $id, $value = null)

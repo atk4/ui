@@ -19,7 +19,7 @@ class TextArea extends Input
      */
     public function getInput()
     {
-        return $this->app->getTag('textarea', [
+        return $this->app->getTag('textarea', array_merge([
             'name'        => $this->short_name,
             'type'        => $this->inputType,
             'rows'        => $this->rows,
@@ -27,7 +27,7 @@ class TextArea extends Input
             'id'          => $this->id.'_input',
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
-        ], (string) $this->getValue() // need to cast to string to avoid null values which break html markup
+        ], $this->inputAttr), (string) $this->getValue() // need to cast to string to avoid null values which break html markup
         );
     }
 }

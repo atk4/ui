@@ -55,6 +55,38 @@ class Input extends Generic
     public $width = null;
 
     /**
+     * here additional attributes directly for the <input> tag can be added:
+     * ['attribute_name' => 'attribute_value'], e.g.
+     * ['autocomplete' => 'new-password'].
+     *
+     * Use setInputAttr() to fill this array
+     *
+     * @var array
+     */
+    public $inputAttr = [];
+
+    /**
+     * Set attribute which is added directly to the <input> tag, not the surrounding <div>.
+     *
+     * @param string|array $attr  Attribute name or hash
+     * @param string       $value Attribute value
+     *
+     * @return $this
+     */
+    public function setInputAttr($attr, $value = null)
+    {
+        if (is_array($attr)) {
+            $this->inputAttr = array_merge($this->inputAttr, $attr);
+
+            return $this;
+        }
+
+        $this->inputAttr[$attr] = $value;
+
+        return $this;
+    }
+
+    /**
      * Method similar to View::js() however will adjust selector
      * to target the "input" element.
      *
@@ -84,7 +116,7 @@ class Input extends Generic
      */
     public function getInput()
     {
-        return $this->app->getTag('input', [
+        return $this->app->getTag('input', array_merge([
             'name'        => $this->short_name,
             'type'        => $this->inputType,
             'placeholder' => $this->placeholder,
@@ -92,7 +124,7 @@ class Input extends Generic
             'value'       => $this->getValue(),
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
-        ]);
+        ], $this->inputAttr));
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
 

@@ -170,14 +170,14 @@ class DropDown extends Input
      */
     public function getInput()
     {
-        return $this->app->getTag('input', [
+        return $this->app->getTag('input', array_merge([
             'name'        => $this->short_name,
             'type'        => $this->inputType,
             'id'          => $this->id.'_input',
             'value'       => $this->getValue(),
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
-        ]);
+        ], $this->inputAttr));
     }
 
     /**
