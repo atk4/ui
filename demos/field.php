@@ -93,3 +93,5 @@ $app->add(new \atk4\ui\FormField\Line(['icon' => 'search', 'mini' => true, 'plac
 $app->add(new \atk4\ui\Header(['Custom HTML attributes for <input> tag', 'size' => 2]));
 $l = $app->add(new \atk4\ui\FormField\Line(['placeholder' => 'maxlength attribute set to 10']));
 $l->setInputAttr('maxlength', '10');
+$l = $app->add(new \atk4\ui\FormField\Line(['fluid' => true, 'placeholder' => 'overwrite existing attribute (type="number")']));
+$l->setInputAttr(['type' => 'number']);
