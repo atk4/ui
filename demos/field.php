@@ -89,3 +89,7 @@ $app->add(new \atk4\ui\FormField\Line(['icon' => 'search', 'transparent' => true
 $app->add(new \atk4\ui\FormField\Line(['icon' => 'search', 'fluid' => true, 'placeholder' => 'fluid']));
 
 $app->add(new \atk4\ui\FormField\Line(['icon' => 'search', 'mini' => true, 'placeholder' => 'mini']));
+
+$app->add(new \atk4\ui\Header(['Custom HTML attributes for <input> tag', 'size' => 2]));
+$l = $app->add(new \atk4\ui\FormField\Line(['placeholder' => 'maxlength attribute set to 10']));
+$l->setInputAttr('maxlength', '10');
