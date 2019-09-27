@@ -57,7 +57,7 @@ class Input extends Generic
     /**
      * here additional attributes directly for the <input> tag can be added:
      * ['attribute_name' => 'attribute_value'], e.g.
-     * ['autocomplete' => 'new-password']
+     * ['autocomplete' => 'new-password'].
      *
      * Use setInputAttr() to fill this array
      *
@@ -66,7 +66,7 @@ class Input extends Generic
     public $inputAttr = [];
 
     /**
-     * Set attribute which is added directly to the <input> tag, not the surrounding <div>
+     * Set attribute which is added directly to the <input> tag, not the surrounding <div>.
      *
      * @param string|array $attr  Attribute name or hash
      * @param string       $value Attribute value
