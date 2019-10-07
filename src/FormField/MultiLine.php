@@ -227,7 +227,6 @@ class MultiLine extends Generic
      * The function is execute after mulitline component finish deleting rows.
      * The function also receive the row vaue as an array.
      * ex: $jsAfterDelete = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
-     *
      */
     public $jsAfterDelete = null;
 

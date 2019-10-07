@@ -46,7 +46,6 @@ $f->addField('test');
 $ml = $f->addField('ml', ['MultiLine', 'options' => ['color' => 'blue'], 'rowLimit' => 4, 'addOnTab' => true]);
 $ml->setModel($inventory);
 
-
 // Add total field.
 $sub_layout = $f->layout->addSublayout('Columns');
 $sub_layout->addColumn(12);
@@ -65,8 +64,8 @@ $ml->onLineChange(function ($rows, $form) use ($f_total) {
     return $f_total->jsInput()->val($total);
 }, ['qty', 'box']);
 
-$ml->jsAfterAdd = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
-$ml->jsAfterDelete = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
+$ml->jsAfterAdd = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
+$ml->jsAfterDelete = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 
 $f->onSubmit(function ($f) use ($ml) {
     $rows = $ml->saveRows()->getModel()->export();
