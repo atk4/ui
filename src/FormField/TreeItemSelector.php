@@ -10,8 +10,8 @@
  * Only item id are store within the input field.
  *
  * see demos/tree-item-selector.php to see how tree items are build.
- *
  */
+
 namespace atk4\ui\FormField;
 
 use atk4\ui\jsCallback;
@@ -67,7 +67,7 @@ class TreeItemSelector extends Generic
     public $treeItems = [];
 
     /**
-     * Callback for onTreeChange
+     * Callback for onTreeChange.
      *
      * @var null | jsCallback
      */
@@ -93,18 +93,20 @@ class TreeItemSelector extends Generic
      *
      * @param $fx Callable The function to execute when callback is fired.
      *
-     * @return $this
      * @throws \atk4\core\Exception
      * @throws \atk4\ui\Exception
+     *
+     * @return $this
      */
-    public function onItem($fx) {
-
+    public function onItem($fx)
+    {
         if (!is_callable($fx)) {
             throw new Exception('Function is required for onTreeChange event.');
         }
 
-        $this->cb = $this->add('jsCallback')->set(function($j, $data) use ($fx) {
-            $value = $this->allowMultiple ?  json_decode($data, true) :  json_decode($data, true)[0];
+        $this->cb = $this->add('jsCallback')->set(function ($j, $data) use ($fx) {
+            $value = $this->allowMultiple ? json_decode($data, true) : json_decode($data, true)[0];
+
             return call_user_func($fx, $value);
         }, ['data' => 'value']);
 
@@ -163,7 +165,7 @@ class TreeItemSelector extends Generic
                         'mode'    => $this->allowMultiple ? 'multiple' : 'single',
                         'url'     => $this->cb ? $this->cb->getJSURL() : null,
                         'loader'  => $this->loaderCssName,
-                ]
+                ],
         ]);
     }
 }

@@ -4,27 +4,27 @@ require 'init.php';
 
 $items = [
     [
-        'name' => 'Electronics',
+        'name'  => 'Electronics',
         'nodes' => [
             [
-                'name' => 'Phone',
+                'name'  => 'Phone',
                 'nodes' => [
                     [
                         'name' => 'iPhone',
-                        'id' => 502,
+                        'id'   => 502,
                     ],
                     [
                         'name' => 'Google Pixels',
-                        'id' => 503,
-                    ]
-                ]
+                        'id'   => 503,
+                    ],
+                ],
             ],
-            ['name' => 'Tv' , 'id' => 501, 'nodes' => []],
-            ['name' => 'Radio' , 'id' => 601, 'nodes' => []]
-        ]
+            ['name' => 'Tv', 'id' => 501, 'nodes' => []],
+            ['name' => 'Radio', 'id' => 601, 'nodes' => []],
+        ],
     ],
-    ['name' => 'Cleaner' , 'id' => 201, 'nodes' => []],
-    ['name' => 'Appliances' , 'id' => 301, 'nodes' => []]
+    ['name' => 'Cleaner', 'id' => 201, 'nodes' => []],
+    ['name' => 'Appliances', 'id' => 301, 'nodes' => []],
 ];
 
 $empty = [];
@@ -46,11 +46,11 @@ $field1->set(502);
 //    return new jsToast('Received 1');
 //});
 
-$f->onSubmit(function($f) {
+$f->onSubmit(function ($f) {
     $resp = [
         'multiple' => $f->model->get('tree'),
-        'single'   => $f->model->get('tree1')
+        'single'   => $f->model->get('tree1'),
     ];
+
     return new \atk4\ui\jsToast(json_encode($resp));
 });
-
