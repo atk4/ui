@@ -119,12 +119,18 @@ export default {
     onAdd: function(){
       this.rowData.push(this.newDataRow());
       this.updateLinesField();
+      if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
+        this.data.afterAdd(JSON.parse(this.getInputElement().value));
+      }
     },
     onDelete: function() {
       this.deletables.forEach( id => {
         this.deleteRow(id);
       });
       this.deletables = [];
+      if (this.data.afterDelete && typeof this.data.afterDelete === 'function') {
+        this.data.afterDelete(JSON.parse(this.getInputElement().value));
+      }
     },
     deleteRow: function(id){
       //find proper row index using id.
@@ -337,6 +343,9 @@ export default {
         console.error(e);
       }
     },
+    getInputElement: function () {
+      return document.getElementsByName(this.linesField)[0];
+    }
   },
   computed: {
     rowData: {

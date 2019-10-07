@@ -76,6 +76,8 @@ use atk4\data\Model;
 use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
+use atk4\ui\jsExpression;
+use atk4\ui\jsFunction;
 use atk4\ui\jsVueService;
 use atk4\ui\Template;
 
@@ -199,6 +201,27 @@ class MultiLine extends Generic
      * @var string
      */
     public $caption = null;
+
+    /**
+     * @var null | jsFunction
+     *
+     * A jsFunction to execute when Multiline add(+) button is clicked.
+     * The function is execute after mulitline component finish adding a row of fields.
+     * The function also receive the row vaue as an array.
+     * ex: $jsAfterAdd = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
+     */
+    public $jsAfterAdd = null;
+
+    /**
+     * @var null | jsFunction
+     *
+     * A jsFunction to execute when Multiline delete button is clicked.
+     * The function is execute after mulitline component finish deleting rows.
+     * The function also receive the row vaue as an array.
+     * ex: $jsAfterDelete = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
+     *
+     */
+    public $jsAfterDelete = null;
 
     public function init()
     {
@@ -731,6 +754,8 @@ class MultiLine extends Generic
                                       'options'     => $this->options,
                                       'rowLimit'    => $this->rowLimit,
                                       'caption'     => $this->caption,
+                                      'afterAdd'    => $this->jsAfterAdd,
+                                      'afterDelete' => $this->jsAfterDelete,
                                   ],
                               ]);
     }

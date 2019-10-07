@@ -1,5 +1,8 @@
 <?php
 
+use atk4\ui\jsExpression;
+use atk4\ui\jsFunction;
+
 require 'init.php';
 
 /**
@@ -38,10 +41,11 @@ for ($i = 1; $i < 3; $i++) {
 }
 
 $f = $app->add('Form');
-
+$f->addField('test');
 // Add multiline field and set model.
 $ml = $f->addField('ml', ['MultiLine', 'options' => ['color' => 'blue']]);
 $ml->setModel($inventory);
+
 
 // Add total field.
 $sub_layout = $f->layout->addSublayout('Columns');
@@ -60,6 +64,9 @@ $ml->onLineChange(function ($rows, $form) use ($f_total) {
 
     return $f_total->jsInput()->val($total);
 }, ['qty', 'box']);
+
+$ml->jsAfterAdd = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
+$ml->jsAfterDelete = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
 
 $f->onSubmit(function ($f) use ($ml) {
     $rows = $ml->saveRows()->getModel()->export();
