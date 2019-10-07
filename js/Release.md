@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.10.0 (2019-10-07)
+
+- Add new component TreeItemSelector.
+
 ### version 1.9.0 (2019-08-16)
 
 - Add textarea support in Multiline Vue Component
