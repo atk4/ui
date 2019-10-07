@@ -43,7 +43,7 @@ for ($i = 1; $i < 3; $i++) {
 $f = $app->add('Form');
 $f->addField('test');
 // Add multiline field and set model.
-$ml = $f->addField('ml', ['MultiLine', 'options' => ['color' => 'blue']]);
+$ml = $f->addField('ml', ['MultiLine', 'options' => ['color' => 'blue'], 'rowLimit' => 4, 'addOnTab' => true]);
 $ml->setModel($inventory);
 
 

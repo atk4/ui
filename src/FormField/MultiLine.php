@@ -114,6 +114,14 @@ class MultiLine extends Generic
     public $options = [];
 
     /**
+     * When true, tabbing out of the last column in last row of data
+     * will automatically add a new row of record.
+     *
+     * @var bool
+     */
+    public $addOnTab = false;
+
+    /**
      * The definition of each fields used in each multiline row.
      *
      * @var array
@@ -756,6 +764,7 @@ class MultiLine extends Generic
                                       'caption'     => $this->caption,
                                       'afterAdd'    => $this->jsAfterAdd,
                                       'afterDelete' => $this->jsAfterDelete,
+                                      'addOnTab'    => $this->addOnTab,
                                   ],
                               ]);
     }

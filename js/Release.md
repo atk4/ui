@@ -1,5 +1,12 @@
 ## Release note
 
+### version 1.9.1 (2019-10-06)
+
+- fix issue where new row is added pressing Enter key in form.
+- Add new option in order to add row automatically when tabbing out of 
+the last column and last row.
+- Add ability to execute javascript when adding or deleting a row.
+
 ### version 1.9.0 (2019-08-16)
 
 - Add textarea support in Multiline Vue Component
