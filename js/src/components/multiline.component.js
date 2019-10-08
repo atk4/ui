@@ -10,17 +10,17 @@ import multilineHeader from './multiline/multiline-header.component';
  */
 export default {
   name: 'atk-multiline',
-  template: `<div >
+  template: `<div>
                 <sui-table v-bind="tableProp">
                   <atk-multiline-header :fields="fieldData" :state="getMainToggleState" :errors="errors" :caption="caption"></atk-multiline-header>
-                  <atk-multiline-body :fieldDefs="fieldData" :rowData="rowData" :rowIdField="idField" :deletables="getDeletables" :errors="errors"></atk-multiline-body>
+                  <atk-multiline-body @onTabLastRow="onTabLastRow" :fieldDefs="fieldData" :rowData="rowData" :rowIdField="idField" :deletables="getDeletables" :errors="errors"></atk-multiline-body>
                   <sui-table-footer>
                     <sui-table-row>
                         <sui-table-header-cell/>
                         <sui-table-header-cell :colspan="getSpan" textAlign="right">
                         <div is="sui-button-group">
-                         <sui-button size="small" @click.stop.prevent="onAdd" icon="plus" ref="addBtn" :disabled="isLimitReached"></sui-button>
-                         <sui-button size="small" @click.stop.prevent="onDelete" icon="trash" :disabled="isDeleteDisable"></sui-button>                        
+                         <sui-button size="small" @click.stop.prevent="onAdd" type="button" icon="plus" ref="addBtn" :disabled="isLimitReached"></sui-button>
+                         <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon="trash" :disabled="isDeleteDisable"></sui-button>                        
                          </div>
                         </sui-table-header-cell>
                     </sui-table-row>
@@ -119,12 +119,18 @@ export default {
     onAdd: function(){
       this.rowData.push(this.newDataRow());
       this.updateLinesField();
+      if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
+        this.data.afterAdd(JSON.parse(this.getInputElement().value));
+      }
     },
     onDelete: function() {
       this.deletables.forEach( id => {
         this.deleteRow(id);
       });
       this.deletables = [];
+      if (this.data.afterDelete && typeof this.data.afterDelete === 'function') {
+        this.data.afterDelete(JSON.parse(this.getInputElement().value));
+      }
     },
     deleteRow: function(id){
       //find proper row index using id.
@@ -337,6 +343,14 @@ export default {
         console.error(e);
       }
     },
+    getInputElement: function () {
+      return document.getElementsByName(this.linesField)[0];
+    },
+    onTabLastRow: function() {
+      if (!this.isLimitReached && this.data.addOnTab) {
+        this.onAdd();
+      }
+    }
   },
   computed: {
     rowData: {
