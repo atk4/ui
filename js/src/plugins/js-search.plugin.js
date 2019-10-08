@@ -16,6 +16,7 @@ export default class jsSearch extends atkPlugin {
 
     this.setInputAction();
     this.setSearchAction();
+    this.onEscapeKeyAction();
 
     //Set input initial value.
     if (this.settings.q) {
@@ -79,6 +80,22 @@ export default class jsSearch extends atkPlugin {
         that.textInput.val('');
       } else if (that.$el.data('preValue') !== e.target.value) {
         that.setButtonState(false);
+      }
+    });
+  }
+
+  /**
+   * When Search has the focus and the Escape key is pressed, clear Search text.
+   * When Search text is already empty the event will bubble up normally.
+   */
+  onEscapeKeyAction() {
+    const that = this;
+    this.textInput.keydown(function(e) {
+      if (that.textInput.val() != '' && e.key === 'Escape') {
+        that.setButtonState(false);
+        that.setFilterState(false);
+        that.textInput.val('');
+        return false;
       }
     });
   }
