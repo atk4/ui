@@ -21,7 +21,6 @@ $vp_add = $app->add(['VirtualPage']);
 $form = new Form();
 $form->addHook('formInit', function($f) {
     // setup special form content.
-    $t = 't';
 });
 
 $btn_edit->on('click', new jsArgumentForm($country->getAction('edit'), $vp_edit, $field->jsInput()->val(), $form));
