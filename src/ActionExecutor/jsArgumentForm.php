@@ -31,7 +31,7 @@ class jsArgumentForm extends jsModal
 
     public function initVp()
     {
-        $this->vp->set(function($p) {
+        $this->vp->set(function ($p) {
             $form = null;
             if (!is_object($this->form) || !$this->form->_initialized) {
                 $form = $p->add($this->form ?: 'Form');
@@ -48,13 +48,13 @@ class jsArgumentForm extends jsModal
 
             $form->hook('formInit');
 
-            $form->onSubmit(function($f) {
+            $form->onSubmit(function ($f) {
                 $this->action->fields = array_keys($f->model->getFields('editable'));
                 $return = $this->action->execute();
 
                 $js = [
                     new jsExpression('$(".atk-dialog-content").trigger("close")'),
-                    $this->hook('afterExecute', [$return]) ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''))
+                    $this->hook('afterExecute', [$return]) ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : '')),
                 ];
 
                 return $js;
