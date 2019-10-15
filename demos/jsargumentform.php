@@ -51,22 +51,37 @@ class jsAction extends \atk4\ui\jsExpression
     {
         if ($action->args) {
             // popup code
+            $arg_view = atk4\ui\ActionExecutor\ArgumentForm::class;
+        } else {
+            $arg_view = null;
         }
 
         if ($action->preview) {
-            // will need to display preview
+            $preview_view = atk4\ui\ActionExecutor\Preview::class;
+        // will need to display preview
+        } else {
+            $preview_view = null;
         }
 
+//        $virtual_page->add(new $executor_class());
         //parent::__construct($template, $args);
     }
 }
 
 foreach ($country->getActions() as $action) {
+
     $ex = $app->add(new \atk4\ui\ActionExecutor\UserAction())->setAction($action);
     $ex->assignTrigger($buttons->add(['Button', $action->getDescription()]));
     //$buttons->add(['Button', $action->getDescription()])->on('click', $ex->jsTrigger());
 }
 
+//$field = $form->addField('age');
+//$button->on('click', jsAction($country->getAction('test4'), ['age'=>$field->jsInput()->js()->val()]));
+
+/*
+$app->add(new \atk4\ui\Header(['Enter Country model id', 'size' => 4]));
+$field = $app->add(new \atk4\ui\FormField\Line(['caption' => 'Enter model id']))->set(12);
+>>>>>>> 0203a7c1d6f6ccb69edcb6762dd18401c7c54290
 
 //$app->add(new \atk4\ui\Header(['Enter Country model id', 'size' => 4]));
 //$field = $app->add(new \atk4\ui\FormField\Line(['caption' => 'Enter model id']))->set(12);
