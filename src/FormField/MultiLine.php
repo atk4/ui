@@ -559,7 +559,7 @@ class MultiLine extends Generic
      * Depending on the component, additional data is set to fieldOptions
      * (dropdown needs values, input needs type)
      *
-     * @param $field
+     * @param \atk4\data\Field $field
      *
      * @return array
      */
@@ -601,7 +601,11 @@ class MultiLine extends Generic
     }
 
     /**
-     * Maps into input, checkbox, dropdown or textarea, defaults into input
+     * Maps into input, checkbox, dropdown or textarea, defaults into input.
+     *
+     * @param string|object $field_type
+     *
+     * @return string
      */
     protected function _mapComponent($field_type):string
     {
