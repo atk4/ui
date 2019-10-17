@@ -94,6 +94,7 @@ class ModalService {
 
     addModal(modal) {
         const that = this;
+        //todo check if modal already added prior to push it.
         this.modals.push(modal);
 
         this.setCloseTriggerEventInModals();

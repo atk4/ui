@@ -37,12 +37,15 @@ class jsReload implements jsExpressionable
      */
     public $apiConfig = [];
 
-    public function __construct($view, $args = [], $afterSuccess = null, $apiConfig = [])
+    public $includeStorage = false;
+
+    public function __construct($view, $args = [], $afterSuccess = null, $apiConfig = ['method' => 'post'], $includeStorage = false)
     {
         $this->view = $view;
         $this->args = $args;
         $this->afterSuccess = $afterSuccess;
         $this->apiConfig = $apiConfig;
+        $this->includeStorage = $includeStorage;
     }
 
     public function jsRender()
@@ -51,9 +54,10 @@ class jsReload implements jsExpressionable
             ->atkReloadView(
                 [
                     'uri'          => $this->view->jsURL(['__atk_reload'=>$this->view->name]),
-                    'uri_options'  => $this->args,
+                    'uri_options'  => !empty($this->args) ? $this->args : null,
                     'afterSuccess' => $this->afterSuccess ? $this->afterSuccess->jsRender() : null,
-                    'apiConfig'    => $this->apiConfig,
+                    'apiConfig'    => !empty($this->apiConfig) ? $this->apiConfig : null,
+                    'storage'      => $this->includeStorage ? $this->view->name : null,
                 ]
             );
 

@@ -971,6 +971,32 @@ class View implements jsExpressionable
         return (new jsVueService())->emitEvent($eventName, $eventData);
     }
 
+    public function getJsStoreData()
+    {
+        $data['local'] = json_decode($_GET[$this->name.'_local_store'] ?? $_POST[$this->name.'_local_store'] ?? null, true);
+        $data['session'] = json_decode($_GET[$this->name.'_session_store'] ?? $_POST[$this->name.'_session_store'] ?? null, true);
+        return $data;
+    }
+
+    public function jsStoreData($data, $useLocal = true)
+    {
+        $chain = null;
+
+        if (!$name = $this->name) {
+            throw new \atk4\ui\Exception('View property name needs to be set.');
+        }
+
+        if ($useLocal) {
+            $chain = (new jsChain('atk.dataService'))->setLocalData($name, json_encode($data));
+        } else {
+            $chain = (new jsChain('atk.dataService'))->setSessionData($name, json_encode($data));
+        }
+
+        $this->js(true, $chain);
+
+        return $chain;
+    }
+
     /**
      * Returns JS for reloading View.
      *

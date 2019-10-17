@@ -22,8 +22,6 @@ class Preview extends Basic
             return;
         }
 
-        $this->addHeader();
-
         $text = $this->executePreview();
 
         switch ($this->previewType) {

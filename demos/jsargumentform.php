@@ -5,6 +5,7 @@ require 'database.php';
 
 use atk4\ui\ActionExecutor\jsArgumentForm;
 use atk4\ui\Form;
+$field = $app->add(new \atk4\ui\FormField\Line(['caption' => 'Enter model id']))->set(12);
 
 $country = new Country($db);
 
@@ -26,8 +27,8 @@ $country->addAction('test3', ['enabled'=> false, 'callback'=>function () {
 }]);
 
 // invoking this action requires argument "age" (integer). User should be prompted, end would return age in response
-$country->addAction('test4', ['args'=> ['age'=>'int'], 'callback'=>function ($age) {
-    return 'age='.$age;
+$country->addAction('test4', ['args'=> ['age'=>['type'=>'integer', 'required' => true]], 'callback'=>function ($m) {
+    return 'age=';
 }]);
 
 // user can edit 'iso3' field before action is invoked (will be blank, since it's not loaded but should show proper label). NOT SAVING! but will still show 'ok' in toast
@@ -40,40 +41,27 @@ $country->addAction('test6', ['callback'=> function () {
     throw new \atk4\ui\Exception('ouch');
 }]);
 
+$country->addAction('do_all', ['args'=> ['age'=>['type'=>'integer', 'required'=> true]], 'fields'=> ['iso3'], 'callback'=> function () {
+    return 'ok';
+}, 'preview'=> function () {
+    return 'show this on preview screen';
+}]);
+
 // action may require confirmation, before activating
 //$country->addAction('test7', ['confirm'=>'Call action?', 'callback'=>function(){ return 'ok'; }]);
 
 $buttons = $app->add(['ui'=>'vertical basic buttons']);
 
-class jsAction extends \atk4\ui\jsExpression
-{
-    public function __construct(atk4\data\UserAction\Generic $action)
-    {
-        if ($action->args) {
-            // popup code
-            $arg_view = atk4\ui\ActionExecutor\ArgumentForm::class;
-        } else {
-            $arg_view = null;
-        }
+$my_action = $country->getAction('do_all');
+$ex = $app->add(new \atk4\ui\ActionExecutor\UserAction())->setAction($my_action);
+$ex->assignTrigger($buttons->add(['Button', $my_action->getDescription()]), [$ex->name => $field->jsInput()->val()]);
 
-        if ($action->preview) {
-            $preview_view = atk4\ui\ActionExecutor\Preview::class;
-        // will need to display preview
-        } else {
-            $preview_view = null;
-        }
-
-//        $virtual_page->add(new $executor_class());
-        //parent::__construct($template, $args);
-    }
-}
-
-foreach ($country->getActions() as $action) {
-
-    $ex = $app->add(new \atk4\ui\ActionExecutor\UserAction())->setAction($action);
-    $ex->assignTrigger($buttons->add(['Button', $action->getDescription()]));
-    //$buttons->add(['Button', $action->getDescription()])->on('click', $ex->jsTrigger());
-}
+//foreach ($country->getActions() as $action) {
+//
+//    $ex = $app->add(new \atk4\ui\ActionExecutor\UserAction())->setAction($action);
+//    $ex->assignTrigger($buttons->add(['Button', $action->getDescription()]));
+//    //$buttons->add(['Button', $action->getDescription()])->on('click', $ex->jsTrigger());
+//}
 
 //$field = $form->addField('age');
 //$button->on('click', jsAction($country->getAction('test4'), ['age'=>$field->jsInput()->js()->val()]));
@@ -99,6 +87,4 @@ $field = $app->add(new \atk4\ui\FormField\Line(['caption' => 'Enter model id']))
 //
 //$btn_edit->on('click', new jsArgumentForm($country->getAction('edit'), $vp_edit, $field->jsInput()->val(), $form));
 //$btn_add->on('click', new jsArgumentForm($country->getAction('add'), $vp_add));
-
-
-
+*/
