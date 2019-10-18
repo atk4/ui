@@ -589,15 +589,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             ->setStyle(['display' => 'none']);
 
         $cb->set(function () {
-            $caught = function ($e, $useWindow) {
-                $html = '<div class="header"> '.
-                        htmlspecialchars(get_class($e)).
-                        ' </div> <div class="content"> '.
-                        ($e instanceof \atk4\core\Exception ? $e->getHTML() : nl2br(htmlspecialchars($e->getMessage()))).
-                        ' </div>';
-                $this->app->terminate(json_encode(['success' => false, 'message' => $html, 'useWindow' => $useWindow]));
-            };
-
+            
             try {
                 ob_start();
                 $this->loadPOST();
