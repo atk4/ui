@@ -589,7 +589,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             ->setStyle(['display' => 'none']);
 
         $cb->set(function () {
-            
             try {
                 ob_start();
                 $this->loadPOST();
