@@ -1,9 +1,9 @@
 <?php
 
-namespace atk4\data\tests;
+namespace atk4\ui\tests;
 
-use atk4\data\Exception;
-use atk4\data\Locale;
+use atk4\ui\Exception;
+use atk4\ui\Locale;
 
 class LocaleTest extends \PHPUnit_Framework_TestCase
 {
