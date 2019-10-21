@@ -8,17 +8,29 @@
 namespace atk4\ui\ActionExecutor;
 
 use atk4\core\HookTrait;
+use atk4\data\UserAction\Generic;
 use atk4\ui\Button;
 use atk4\ui\Form;
 use atk4\ui\Exception;
 use atk4\ui\jsExpression;
+use atk4\ui\jsExpressionable;
 use atk4\ui\jsFunction;
 use atk4\ui\jsToast;
+use atk4\ui\Loader;
 use atk4\ui\Modal;
+use atk4\ui\View;
 
 class UserAction extends Modal implements Interface_
 {
     use HookTrait;
+
+    /**
+     * @var jsExpressionable array|callable jsExpression to return if action was successful, e.g "new jsToast('Thank you')"
+     */
+    public $jsSuccess = null;
+
+    protected $actionData = [];
+    protected $actionInitialized = false;
 
     public $action = null;
     public $currentAction = null;
@@ -27,50 +39,63 @@ class UserAction extends Modal implements Interface_
 
     public $preview = null;
 
-    public $prevAction = null;
-    public $nextAction = null;
+    public $prevStepBtn = null;
+    public $nextStepBtn = null;
+    public $execActionBtn = null;
+    public $btns = null;
 
     /**
      * @var string can be "console", "text", or "html"
      */
     public $previewType = 'html';
-    public $form = null;
 
     public $argsTitle = 'Fill in require arguments:';
+
+    public $loader = null;
+    public $loaderUi = 'ui basic segment';
+    public $loaderShim = [];
 
     public function init()
     {
         parent::init();
         $this->observeChanges();
+
         //Add buttons to modal for next and previous.
-        $btns = new \atk4\ui\View(['ui' => 'buttons']);
-        $this->prevAction = $btns->add(new Button(['Prev']));
-        $this->nextAction = $btns->add(new Button(['Next']));
+        $this->btns        = new \atk4\ui\View(['ui' => 'buttons']);
+        $this->prevStepBtn = $this->btns->add(new Button(['Prev']));
+        $this->nextStepBtn = $this->btns->add(new Button(['Next']));
+        $this->addButtonAction($this->btns);
 
-        $this->addButtonAction($btns);
-
-        $this->jsStoreData(['allo' => 'bonjour', 'blbl' => 'youljjj']);
-
+        $this->loader  = $this->add(['Loader', 'ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader->loadEvent = false;
+        $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
     /**
      * Will associate executor with the action.
      *
-     * @param \atk4\data\UserAction\Action $action
+     * @param Generic $action
+     *
+     * @return UserAction
+     * @throws \atk4\core\Exception
+     * @throws \atk4\data\Exception
      */
-    public function setAction(\atk4\data\UserAction\Generic $action)
+    public function setAction(Generic $action)
     {
         $this->action = $action;
+        $this->steps = $this->getSteps($action);
+        $this->addButtonAction($this->execActionBtn = (new Button([$this->action->caption, 'blue']))->addStyle(['float' => 'left !important']));
+
         // get current step.
-        $this->step = $this->stickyGet('step');
+        $this->step = $this->stickyGet('step') ?? $this->steps[0];
+        // set initial button state
+        $this->jsSetBtnState($this, $this->step);
 
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->scope === 'single') {
             $this->action->owner->tryLoad($id);
         }
         $this->currentAction = $this->stickyGet(('action'));
-
-        $this->setSteps();
 
         switch ($this->step) {
             case 'args':
@@ -82,33 +107,73 @@ class UserAction extends Modal implements Interface_
             case 'fields':
                 $this->doFields();
                 break;
+            case 'final':
+                $this->doAction();
+                break;
         }
 
+        $this->actionInitialized = true;
         return $this;
     }
 
-    public function setSteps()
+    /**
+     * Assign a Button that will fire action execution.
+     *
+     * @param Button $btn
+     * @param array $args
+     * @param string $when
+     *
+     * @throws \atk4\core\Exception
+     */
+    public function assignTrigger(Button $btn, array $args = [], string $when = 'click')
     {
-        if ($this->action->args) {
-            $this->steps[] = 'args';
-        }
-        if ($this->action->preview) {
-            $this->steps[] ='preview';
-        }
-        if ($this->action->fields) {
-            $this->steps[] = 'fields';
+        if (!$this->actionInitialized) {
+            throw new Exception('Action must be set prior to assign trigger.');
         }
 
-        if (!$this->step) {
-            $this->step = $this->steps[0];
-        } else if ($this->currentAction === $this->action->name && !$this->isLastStep($this->step)) {
+        $args['step'] = $this->step;
+        $args['action'] = $this->action->short_name;
+        if (!$this->action) {
+            throw new Exception('Action need to be setup prior to assing trigger.');
+        }
+
+        if ($this->action->enabled) {
+            $btn->on($when, [$this->show(), $this->loader->jsLoad($args)]);
+        } else {
+            $btn->addClass('disabled');
+        }
+    }
+
+
+    public function getSteps($action)
+    {
+        $steps = null;
+        if ($action->args) {
+            $steps[] = 'args';
+        }
+        if ($action->fields) {
+            $steps[] = 'fields';
+        }
+        if ($action->preview) {
+            $steps[] = 'preview';
+        }
+
+        return $steps;
+    }
+
+    public function getNextStep($step)
+    {
+        $next = null;
+        if (!$this->isLastStep($step)) {
             foreach ($this->steps as $k => $s) {
-                if ($this->step === $s) {
-                    $this->step = $this->steps[$k + 1];
+                if ($step === $s) {
+                    $next = $this->steps[$k + 1];
                     break;
                 }
             }
         }
+
+        return $next;
     }
 
     public function isLastStep($step)
@@ -130,25 +195,50 @@ class UserAction extends Modal implements Interface_
         return $step === $this->steps[0];
     }
 
-    public function doFields()
+    /**
+     * Generate js for setting Buttons state based on current step.
+     *
+     * @param $view
+     * @param $step
+     */
+    public function jsSetBtnState($view, $step)
     {
-        $this->set(function($modal) {
-            $f = $modal->add('Form');
+        $view->js(true, $this->jsSetPrevNextState($step));
+        $view->js(true, $this->jsSetExecState($step));
+        $view->js(true, $this->execActionBtn->js(true)->off());
+        $view->js(true, $this->nextStepBtn->js(true)->off());
+        $view->js(true, $this->prevStepBtn->js(true)->off());
+    }
 
-            if (is_bool($this->action->fields)) {
-                $this->action->fields = array_keys($this->action->owner->getFields('editable'));
-            }
-            $f->setModel($this->action->owner, $this->action->fields);
+    public function jsSetPrevNextState($step) {
+        $chain = null;
 
-            $f->onSubmit(function ($f) {
-                //return $this->jsExecute();
-            });
-        });
+        if ($this->isLastStep($step)) {
+//            return $this->btns->js(true)->hide();
+        }
+
+        if ($this->isFirstStep($step)) {
+            $chain =  $this->prevStepBtn->js(true)->addClass('disabled');
+        } else {
+            $chain = $this->prevStepBtn->js(true)->removeClass('disabled');
+        }
+
+        return $chain;
+    }
+
+    public function jsSetExecState($step)
+    {
+        if ($this->isLastStep($step)) {
+            return $this->execActionBtn->js(true)->removeClass('disabled');
+        } else {
+            return $this->execActionBtn->js(true)->addClass('disabled');
+        }
     }
 
     public function doArgs()
     {
-        $this->set(function($modal) {
+        $this->loader->set(function($modal) {
+            $this->jsSetBtnState($modal, $this->step);
             $modal->add(['Header', $this->argsTitle, 'size' => 4,]);
             $f = $modal->add(['form']);
 
@@ -166,64 +256,130 @@ class UserAction extends Modal implements Interface_
 
             $f->buttonSave->destroy();
 
-            if ($this->isFirstStep($this->step)) {
-                $modal->js(true, $this->prevAction->js(true)->hide());
+            if ($this->isLastStep($this->step)) {
+                $modal->js(true, $this->execActionBtn->js()->on('click', new jsFunction([$f->js()->form('submit')])));
+            } else {
+                // submit on next
+                $modal->js(true, $this->nextStepBtn->js()->on('click', new jsFunction([$f->js()->form('submit')])));
             }
 
-            if (!$this->getNextStep($this->step)) {
-                $modal->js(true, $this->nextAction->js(true)->text($this->action->caption));
+            $f->onSubmit(function ($f) use ($modal) {
+
+                // collect arguments.
+                $this->actionData['args'] = $f->model->get();
+
+                if ($this->isLastStep($this->step)) {
+                    // Execute action.
+                    $return = $this->action->execute(...$this->actionData['args']);
+
+                    $js = [
+                        $this->hide(),
+//                        $this->execActionBtn->js()->off(),
+//                        $this->nextStepBtn->js()->off(),
+                        $this->hook('afterExecute', [$return]) ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : '')),
+                    ];
+
+                } else {
+                    // move to next step.
+//                    $js[] = $this->nextStepBtn->js()->off();
+                    $js[] = $this->loader->jsAddStoreData($this->actionData, true);
+
+                    $js[] = $this->loader->jsload([
+                                                      'action'    => $this->action->short_name,
+                                                      'step'      => $this->getNextStep($this->step),
+                                                      $this->name => $this->action->owner->get('id')
+                                                  ],
+                                                  ['method' => 'post'], $this->loader->name
+                    );
+                }
+
+                return $js;
+            });
+        });
+    }
+
+    public function doFields()
+    {
+        $this->loader->set(function($modal) {
+            $this->jsSetBtnState($modal, $this->step);
+
+            $f = $modal->add('Form');
+
+            if (is_bool($this->action->fields)) {
+                $this->action->fields = array_keys($this->action->owner->getFields('editable'));
             }
 
-            $modal->js(true, $this->nextAction->js()->on('click', new jsFunction([$f->js()->form('submit')])));
+            $f->setModel($this->action->owner, $this->action->fields);
+            $f->buttonSave->destroy();
+
+            if ($this->isLastStep($this->step)) {
+                $modal->js(true, $this->execActionBtn->js()->on('click', new jsFunction([$f->js()->form('submit')])));
+            } else {
+                // submit on next
+                $modal->js(true, $this->nextStepBtn->js()->on('click', new jsFunction([$f->js()->form('submit')])));
+            }
+
 
             $f->onSubmit(function ($f) {
 
-                if ($this->isLastStep($this->step)) {
-                    // collect argument
-                    $args = [];
-                    $form_args = $f->model->get();
+                // collect fields.
+                $form_fields = $f->model->get();
 
-                    foreach ($this->action->args as $key => $val) {
-                        $args[] = $form_args[$key];
-                    }
+                foreach ($this->action->fields as $key => $field) {
+                    $this->actionData['fields'][$field] = $form_fields[$field];
+                }
+
+                if ($this->isLastStep($this->step)) {
+                    // collect argument and execute action.
+                    $args = [];
 
                     $return = $this->action->execute(...$args);
 
                     $js = [
                         $this->hide(),
+                        $this->execActionBtn->js()->off(),
+                        $this->nextStepBtn->js()->off(),
                         $this->hook('afterExecute', [$return]) ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : '')),
                     ];
 
-                    return $js;
+                } else {
+                    $js[] = $this->nextStepBtn->js()->off();
+                    $js[] = $this->loader->jsAddStoreData($this->actionData, true);
+                    $js[] = $this->loader->jsload([
+                                                      'action'    => $this->action->short_name,
+                                                      'step'      => $this->getNextStep($this->step),
+                                                      $this->name => $this->action->owner->get('id')
+                                                  ], ['method' => 'post'], $this->loader->name);
                 }
 
-                $js[] = $this->jsReload(['action' => $this->action->short_name, 'step' => $this->getNextStep($this->step), $this->name => $this->action->owner->get('id')]);
                 return $js;
             });
-
-            $this->js(true)->modal('refresh');
         });
-    }
-
-    public function getNextStep($step)
-    {
-        $next = null;
-        if (!$this->isLastStep($step)) {
-            foreach ($this->steps as $k => $s) {
-                if ($step === $s) {
-                    $next = $this->steps[$k + 1];
-                    break;
-                }
-            }
-        }
-
-        return $next;
     }
 
     public function doPreview()
     {
-
-        $this->set(function($modal) {
+        $this->loader->set(function($modal) {
+            $this->jsSetBtnState($modal, $this->step);
+            $modal->js(
+                true,
+                $this->execActionBtn->js()->on(
+                   'click',
+                   new jsFunction(
+                       [
+                           $this->loader->jsload(
+                               [
+                                'action'    => $this->action->short_name,
+                                'step'      => 'final',
+                                $this->name => $this->action->owner->get('id')
+                                ],
+                                ['method' => 'post'],
+                                $this->loader->name
+                           ),
+                       ]
+                   )
+                )
+            );
 
             $text = $this->getActionPreview();
 
@@ -242,33 +398,54 @@ class UserAction extends Modal implements Interface_
                     break;
             }
         });
-        $this->js(true)->modal('show');
     }
+
+    public function doAction()
+    {
+        $this->loader->set(function($modal) {
+            $args = [];
+
+            foreach ($this->action->args as $key => $val) {
+                $args[] = $this->actionData['args'][$key];
+            }
+
+            foreach ($this->actionData['fields'] as $field => $value) {
+                $this->action->owner[$field] = $value;
+            }
+
+            $return = $this->action->execute(...$args);
+
+            $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner]) : $this->jsSuccess;
+
+
+            $js = $this->hook('afterExecute', [$return]) ?: $success ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
+
+            $this->jsSequencer($modal, $js);
+            $modal->js(true, $this->hide());
+        });
+    }
+
+    private function jsSequencer($view, $js)
+    {
+        if (is_array($js)) {
+            foreach ($js as $jq) {
+                $this->jsSequencer($view, $jq);
+            }
+        } else {
+            $view->js(true, $js);
+        }
+    }
+
 
     public function getActionPreview()
     {
         $args = [];
 
         foreach ($this->action->args as $key => $val) {
-//            $args[] = $this->arguments[$key];
+            $args[] = $this->actionData['args'][$key];
         }
 
         return $this->action->preview(...$args);
     }
 
-    public function assignTrigger($btn, $arg = [], $when = 'click')
-    {
-        if ($this->action->enabled) {
-            $btn->on($when, $this->jsTrigger($arg));
-        } else {
-            $btn->addClass('disabled');
-        }
-    }
-
-    public function jsTrigger($arg = [])
-    {
-        $arg['step'] = $this->step;
-        $arg['action'] = $this->action->short_name;
-        return $this->show($arg);
-    }
 }

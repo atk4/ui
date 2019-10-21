@@ -18,7 +18,7 @@ $country->addAction('test1', ['callback'=> function () {
 $country->addAction('test2', ['preview'=> function () {
     return 'show this on preview screen';
 }, 'callback'=>function () {
-    return 'ok';
+    return 'this is ok';
 }]);
 
 // clicking button no effect, because action is disabled
@@ -27,8 +27,8 @@ $country->addAction('test3', ['enabled'=> false, 'callback'=>function () {
 }]);
 
 // invoking this action requires argument "age" (integer). User should be prompted, end would return age in response
-$country->addAction('test4', ['args'=> ['age'=>['type'=>'integer', 'required' => true]], 'callback'=>function ($m) {
-    return 'age=';
+$country->addAction('test4', ['args'=> ['age'=>['type'=>'integer', 'required' => true]], 'callback'=>function ($m, $age) {
+    return 'age = '.$age;
 }]);
 
 // user can edit 'iso3' field before action is invoked (will be blank, since it's not loaded but should show proper label). NOT SAVING! but will still show 'ok' in toast
@@ -41,10 +41,10 @@ $country->addAction('test6', ['callback'=> function () {
     throw new \atk4\ui\Exception('ouch');
 }]);
 
-$country->addAction('do_all', ['args'=> ['age'=>['type'=>'integer', 'required'=> true]], 'fields'=> ['iso3'], 'callback'=> function () {
+$country->addAction('do_all', ['args'=> ['age'=>['type'=>'integer', 'required'=> true], 'gender' => ['type'=> 'string', 'required'=>true]], 'fields'=> ['iso3'], 'callback'=> function ($m, $age, $gender) {
     return 'ok';
-}, 'preview'=> function () {
-    return 'show this on preview screen';
+}, 'preview'=> function ($m, $age, $gender) {
+    return 'Gender = '.$gender. ' / Age = '. $age;
 }]);
 
 // action may require confirmation, before activating
@@ -53,7 +53,11 @@ $country->addAction('do_all', ['args'=> ['age'=>['type'=>'integer', 'required'=>
 $buttons = $app->add(['ui'=>'vertical basic buttons']);
 
 $my_action = $country->getAction('do_all');
-$ex = $app->add(new \atk4\ui\ActionExecutor\UserAction())->setAction($my_action);
+$ex = $app->add(new \atk4\ui\ActionExecutor\UserAction());;
+//$ex->addHook('afterExecute', function ($x, $ret) {
+//    return [new \atk4\ui\jsToast('Files imported: '), new \atk4\ui\jsExpression('console.log("yahoo")')];
+//});
+$ex->setAction($my_action);
 $ex->assignTrigger($buttons->add(['Button', $my_action->getDescription()]), [$ex->name => $field->jsInput()->val()]);
 
 //foreach ($country->getActions() as $action) {

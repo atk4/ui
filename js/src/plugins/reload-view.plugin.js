@@ -11,13 +11,13 @@ export default class reloadView extends atkPlugin {
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
         const uriOptions = this.settings.uri_options ? this.settings.uri_options : {};
         // let data = {};
-        let localStore = null;
-        let sessionStore = null;
+        let localData = null;
+        let sessionData = null;
         let store = {};
 
-        if (this.settings.storage) {
-          localStore = atk.dataService.getLocalData(this.settings.storage);
-          sessionStore = atk.dataService.getSessionData(this.settings.storage);
+        if (this.settings.storeName) {
+          localData = atk.dataService.getData(this.settings.storeName, 'local');
+          sessionData = atk.dataService.getData(this.settings.storeName, 'session');
         }
 
         // merge user settings
@@ -34,11 +34,11 @@ export default class reloadView extends atkPlugin {
           }
         }, userConfig);
 
-        if (localStore) {
-          store[this.settings.storage + '_local_store'] = localStore;
+        if (localData) {
+          store[this.settings.storeName + '_local_store'] = localData;
         }
-        if (sessionStore) {
-          store[this.settings.storage + '_session_store'] = sessionStore;
+        if (sessionData) {
+          store[this.settings.storeName + '_session_store'] = sessionData;
         }
 
         if (settings.method.toLowerCase() === 'post') {
@@ -60,5 +60,5 @@ reloadView.DEFAULTS = {
     uri_options: null,
     afterSuccess: null,
     apiConfig: null,
-    storage: null,
+    storeName: null,
 };

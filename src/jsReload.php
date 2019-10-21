@@ -57,7 +57,7 @@ class jsReload implements jsExpressionable
                     'uri_options'  => !empty($this->args) ? $this->args : null,
                     'afterSuccess' => $this->afterSuccess ? $this->afterSuccess->jsRender() : null,
                     'apiConfig'    => !empty($this->apiConfig) ? $this->apiConfig : null,
-                    'storage'      => $this->includeStorage ? $this->view->name : null,
+                    'storeName'    => $this->includeStorage ? $this->view->name : null,
                 ]
             );
 
