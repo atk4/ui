@@ -50,6 +50,21 @@ class DataService {
     }
   }
 
+  /**
+   * Check for valide json string.
+   * @param str
+   * @returns {boolean}
+   */
+  isJsonString(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      console.error('Invalid json strign supply.');
+      return false;
+    }
+    return true;
+  }
+
   setData(item, value, type = 'local') {
       if (this.hasStorage) {
         this.storage[type].setItem(item, value);
@@ -58,7 +73,23 @@ class DataService {
       }
   }
 
-  addData(item, value, type = 'local') {
+  setJsonData(item, value, type = 'local') {
+    if (!this.isJsonString(value)) {
+      return;
+    }
+
+    if (this.hasStorage) {
+      this.storage[type].setItem(item, value);
+    }  else {
+      console.error('Session storage is not available in your Browser.')
+    }
+  }
+
+  addJsonData(item, value, type = 'local') {
+    if (!this.isJsonString(value)) {
+      return;
+    }
+
     if (this.hasStorage) {
       let previousData = JSON.parse(this.storage[type].getItem(item));
       if (previousData) {
@@ -83,75 +114,6 @@ class DataService {
     this.storage[type].removeItem(item);
   }
 
-  // addSessionData(item, value) {
-  //   if (this.hasSession) {
-  //     let previousData = JSON.parse(this.getSessionData(item));
-  //     if (previousData) {
-  //       this.setSessionData(item, JSON.stringify(Object.assign(previousData, JSON.parse(value))));
-  //     } else {
-  //       this.setSessionData(item, value);
-  //     }
-  //   } else {
-  //     console.error('Session storage is not available in your Browser.')
-  //   }
-  // }
-  //
-  // setSessionData(item, value) {
-  //   if (this.hasSession) {
-  //     sessionStorage.setItem(item, value);
-  //   } else {
-  //     console.error('Session storage is not available in your Browser.')
-  //   }
-  // }
-  //
-  // getSessionData(item) {
-  //   let value = null;
-  //   if (this.hasSession) {
-  //     value = sessionStorage.getItem(item);
-  //   }
-  //   return value;
-  // }
-  //
-  // removeSessionItem(item) {
-  //   if (this.hasSession) {
-  //     sessionStorage.removeItem(item);
-  //   }
-  // }
-  //
-  // addLocalData(item, value) {
-  //   if (this.hasSession) {
-  //     let previousData = JSON.parse(this.getLocalData(item));
-  //     if (previousData) {
-  //       this.setLocalData(item, JSON.stringify( Object.assign(previousData, JSON.parse(value))));
-  //     } else {
-  //       this.setLocalData(item, value);
-  //     }
-  //   } else {
-  //     console.error('Session storage is not available in your Browser.')
-  //   }
-  // }
-  //
-  // setLocalData(item, value) {
-  //   if (this.hasLocal) {
-  //     localStorage.setItem(item, value);
-  //   } else {
-  //     console.error('Local storage is not available in your Browser.')
-  //   }
-  // }
-  //
-  // getLocalData(item) {
-  //   let value = null;
-  //   if (this.hasLocal) {
-  //     value = localStorage.getItem(item);
-  //   }
-  //   return value;
-  // }
-  //
-  // removeLocalItem(item) {
-  //   if (this.hasLocal) {
-  //     localStorage.removeItem(item);
-  //   }
-  // }
 }
 
 const dataService = new DataService();
