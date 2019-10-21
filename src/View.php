@@ -981,6 +981,7 @@ class View implements jsExpressionable
     {
         $data['local'] = json_decode($_GET[$this->name.'_local_store'] ?? $_POST[$this->name.'_local_store'] ?? null, true);
         $data['session'] = json_decode($_GET[$this->name.'_session_store'] ?? $_POST[$this->name.'_session_store'] ?? null, true);
+
         return $data;
     }
 
@@ -989,8 +990,9 @@ class View implements jsExpressionable
      *
      * @param bool $useSession
      *
-     * @return mixed
      * @throws \atk4\ui\Exception
+     *
+     * @return mixed
      */
     public function jsClearStoreData($useSession = false)
     {
@@ -1017,8 +1019,9 @@ class View implements jsExpressionable
      * @param array $data
      * @param bool  $useSession
      *
-     * @return mixed
      * @throws \atk4\ui\Exception
+     *
+     * @return mixed
      */
     public function jsAddStoreData(array $data, $useSession = false)
     {
