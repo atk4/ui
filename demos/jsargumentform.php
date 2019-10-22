@@ -47,7 +47,7 @@ $country->addAction('confirm', ['ui' => ['confirm'=>'Call action?'], 'callback'=
 
 
 // action may require confirmation, before activating
-$country->addAction('multi_step', ['args'=> ['age'=>['type'=>'integer', 'required'=> true], 'gender' => ['type'=> 'string', 'required'=>true]], 'fields'=> ['iso3'], 'callback'=> function ($m, $age, $gender) {
+$country->addAction('multi_step', ['args'=> ['age'=>['type'=>'integer', 'required'=> true], 'gender' => ['type'=> 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required'=>true]], 'fields'=> ['iso3'], 'callback'=> function ($m, $age, $gender) {
 //    $m->save();
     return 'ok';
 }, 'preview'=> function ($m, $age, $gender) {
