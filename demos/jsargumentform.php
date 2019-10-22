@@ -32,6 +32,13 @@ $country->addAction('edit_argument', ['args'=> ['age'=>['type'=>'integer', 'requ
     return 'age = '.$age;
 }]);
 
+// invoking this action requires argument "age" (integer). User should be prompted, end would return age in response
+$country->addAction('edit_argument_prev', ['args'=> ['age'=>['type'=>'integer', 'required' => true]], 'preview'=> function ($m, $age) {
+    return 'You age is: '.$age;
+}, 'callback'=>function ($m, $age) {
+    return 'age = '.$age;
+}]);
+
 // user can edit 'iso3' field before action is invoked (will be blank, since it's not loaded but should show proper label). NOT SAVING! but will still show 'ok' in toast
 $country->addAction('edit_iso', ['fields'=> ['iso3'], 'callback'=>function () {
     return 'ok';

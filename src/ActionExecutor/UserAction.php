@@ -435,7 +435,7 @@ class UserAction extends Modal implements Interface_
         $step_count = count($this->steps);
         foreach ($this->steps as $k => $s) {
             if ($s === $step) {
-                $isLast = $k === $step_count - 1 ? true : false;
+                $isLast = $k === $step_count - 1;
                 break;
             }
         }
