@@ -458,12 +458,13 @@ class UserAction extends Modal implements Interface_
     /**
      * Will add field into form based on $fields array.
      *
-     * @param Form       $form
-     * @param array      $fields
-     * @param string     $step
+     * @param Form   $form
+     * @param array  $fields
+     * @param string $step
+     *
+     * @throws \atk4\core\Exception
      *
      * @return Form
-     * @throws \atk4\core\Exception
      */
     protected function setFormField(Form $form, array $fields, string $step) :Form
     {
@@ -503,7 +504,7 @@ class UserAction extends Modal implements Interface_
                                               'action'    => $this->action->short_name,
                                               'step'      => $this->getNextStep($step),
                                               $this->name => $this->action->owner->get('id'),
-                                          ], ['method' => 'post'], $this->loader->name)
+                                          ], ['method' => 'post'], $this->loader->name),
             ];
         }
 
@@ -579,7 +580,7 @@ class UserAction extends Modal implements Interface_
         if ($this->isLastStep($step)) {
             return $this->execActionBtn->js(true)->removeClass('disabled');
         } else {
-           return  $this->execActionBtn->js(true)->addClass('disabled');
+            return  $this->execActionBtn->js(true)->addClass('disabled');
         }
     }
 
@@ -630,8 +631,9 @@ class UserAction extends Modal implements Interface_
      *
      * @param View $view
      *
-     * @return Form |null
      * @throws \atk4\core\Exception
+     *
+     * @return Form |null
      */
     protected function addFormTo(View $view) :Form
     {
