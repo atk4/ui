@@ -43,15 +43,16 @@ $country->addAction('Ouch', ['callback'=> function () {
 }]);
 
 // action may require confirmation, before activating
-$country->addAction('confirm', ['ui' => ['confirm'=>'Call action?'], 'callback'=>function(){ return 'Confirm ok'; }]);
-
+$country->addAction('confirm', ['ui' => ['confirm'=>'Call action?'], 'callback'=>function () {
+    return 'Confirm ok';
+}]);
 
 // action may require confirmation, before activating
 $country->addAction('multi_step', ['args'=> ['age'=>['type'=>'integer', 'required'=> true], 'gender' => ['type'=> 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required'=>true]], 'fields'=> ['iso3'], 'callback'=> function ($m, $age, $gender) {
 //    $m->save();
     return 'ok';
 }, 'preview'=> function ($m, $age, $gender) {
-    return 'Gender = '.$gender. ' / Age = '. $age;
+    return 'Gender = '.$gender.' / Age = '.$age;
 }]);
 
 $buttons = $app->add(['ui'=>'vertical basic buttons']);
