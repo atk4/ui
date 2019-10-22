@@ -14,6 +14,7 @@ use atk4\ui\jsExpressionable;
 use atk4\ui\jsFunction;
 use atk4\ui\jsToast;
 use atk4\ui\Modal;
+use atk4\ui\View;
 
 class UserAction extends Modal implements Interface_
 {
@@ -108,7 +109,7 @@ class UserAction extends Modal implements Interface_
      *
      * @return UserAction
      */
-    public function setAction(Generic $action)
+    public function setAction(Generic $action) :View
     {
         $this->action = $action;
         // get necessary step need prior to execute action.
@@ -166,9 +167,9 @@ class UserAction extends Modal implements Interface_
      *
      * @throws \atk4\core\Exception
      *
-     * @return UserAction
+     * @return View
      */
-    public function assignTrigger(Button $btn, array $urlArgs = [], string $when = 'click')
+    public function assignTrigger(Button $btn, array $urlArgs = [], string $when = 'click') :View
     {
         if (!$this->actionInitialized) {
             throw new Exception('Action must be set prior to assign trigger.');
@@ -177,7 +178,6 @@ class UserAction extends Modal implements Interface_
         if ($this->steps) {
             // use modal for stepping action.
             $urlArgs['step'] = $this->step;
-            $urlArgs['action'] = $this->action->short_name;
             if ($this->action->enabled) {
                 $btn->on($when, [$this->show(), $this->loader->jsLoad($urlArgs)]);
             } else {
@@ -196,11 +196,12 @@ class UserAction extends Modal implements Interface_
      *
      * Will ask user to fill in arguments.
      *
-     * @param $modal
+     * @param View $modal
      *
      * @throws Exception
+     * @throws \atk4\core\Exception
      */
-    protected function doArgs($modal)
+    protected function doArgs(View $modal)
     {
         $this->_addStepTitle($modal, $this->step);
 
@@ -218,15 +219,10 @@ class UserAction extends Modal implements Interface_
         }
 
         // set args value if available.
-        $this->setFormField($f, $this->actionData['args'] ?? null, $this->step);
+        $this->setFormField($f, $this->actionData['args'] ?? [], $this->step);
 
         // setup exec, next and prev button handler for this step.
-        if ($this->isLastStep($this->step)) {
-            $modal->js(true, $this->execActionBtn->js()->on('click', new jsFunction([$f->js()->form('submit')])));
-        } else {
-            // submit on next
-            $modal->js(true, $this->nextStepBtn->js()->on('click', new jsFunction([$f->js()->form('submit')])));
-        }
+        $this->jsSetSubmitBtn($modal, $f, $this->step);
         $this->jsSetPrevHandler($modal, $this->step);
 
         $f->onSubmit(function ($f) use ($modal) {
@@ -240,11 +236,12 @@ class UserAction extends Modal implements Interface_
     /**
      * Do action Fields step.
      *
-     * @param $modal
+     * @param View $modal
      *
      * @throws Exception
+     * @throws \atk4\core\Exception
      */
-    protected function doFields($modal)
+    protected function doFields(View $modal)
     {
         $this->_addStepTitle($modal, $this->step);
         $f = $this->addFormTo($modal);
@@ -255,15 +252,10 @@ class UserAction extends Modal implements Interface_
 
         $f->setModel($this->action->owner, $this->action->fields);
         // set Fields value if set from another step.
-        $this->setFormField($f, $this->actionData['fields'] ?? null, $this->step);
+        $this->setFormField($f, $this->actionData['fields'] ?? [], $this->step);
 
-        // setup next and prev handler for this step.
-        if ($this->isLastStep($this->step)) {
-            $modal->js(true, $this->execActionBtn->js()->on('click', new jsFunction([$f->js()->form('submit')])));
-        } else {
-            // submit on next
-            $modal->js(true, $this->nextStepBtn->js()->on('click', new jsFunction([$f->js()->form('submit')])));
-        }
+        // setup exec, next and prev button handler for this step.
+        $this->jsSetSubmitBtn($modal, $f, $this->step);
         $this->jsSetPrevHandler($modal, $this->step);
 
         $f->onSubmit(function ($f) {
@@ -280,11 +272,12 @@ class UserAction extends Modal implements Interface_
     /**
      * Do action preview step.
      *
-     * @param $modal
+     * @param View $modal
      *
      * @throws Exception
+     * @throws \atk4\core\Exception
      */
-    protected function doPreview($modal)
+    protected function doPreview(View $modal)
     {
         $this->_addStepTitle($modal, $this->step);
 
@@ -340,17 +333,17 @@ class UserAction extends Modal implements Interface_
     /**
      * Execute action when all step are completed.
      *
-     * @param $modal
+     * @param View $modal
      *
      * @throws \atk4\core\Exception
      */
-    protected function doFinal($modal)
+    protected function doFinal(View $modal)
     {
         foreach ($this->actionData['fields'] ?? [] as $field => $value) {
             $this->action->owner[$field] = $value;
         }
 
-        $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? null));
+        $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
 
         $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner]) : $this->jsSuccess;
 
@@ -364,11 +357,11 @@ class UserAction extends Modal implements Interface_
     /**
      * Get how many steps is required for this action.
      *
-     * @param $action
+     * @param Generic $action The Model action.
      *
      * @return array|null
      */
-    protected function getSteps($action)
+    protected function getSteps(Generic $action) :?array
     {
         $steps = null;
         if ($action->args) {
@@ -387,11 +380,11 @@ class UserAction extends Modal implements Interface_
     /**
      * Get next step after $step.
      *
-     * @param $step
+     * @param string $step
      *
-     * @return mixed|null
+     * @return string|null
      */
-    protected function getNextStep($step)
+    protected function getNextStep(string $step) :?string
     {
         $next = null;
         if (!$this->isLastStep($step)) {
@@ -409,11 +402,11 @@ class UserAction extends Modal implements Interface_
     /**
      * Get previous step before $step.
      *
-     * @param $step
+     * @param string $step
      *
-     * @return mixed|null
+     * @return string|null
      */
-    protected function getPreviousStep($step)
+    protected function getPreviousStep(string $step) :?string
     {
         $prev = null;
 
@@ -432,11 +425,11 @@ class UserAction extends Modal implements Interface_
     /**
      * Check if $step is last one.
      *
-     * @param $step
+     * @param string $step
      *
      * @return bool
      */
-    protected function isLastStep($step)
+    protected function isLastStep(string $step) :bool
     {
         $isLast = false;
         $step_count = count($this->steps);
@@ -453,11 +446,11 @@ class UserAction extends Modal implements Interface_
     /**
      * Check if step is first one.
      *
-     * @param $step
+     * @param string $step
      *
      * @return bool
      */
-    protected function isFirstStep($step)
+    protected function isFirstStep(string $step) :bool
     {
         return $step === $this->steps[0];
     }
@@ -465,18 +458,17 @@ class UserAction extends Modal implements Interface_
     /**
      * Will add field into form based on $fields array.
      *
-     * @param $form
-     * @param $fields
-     * @param $step
+     * @param Form       $form
+     * @param array      $fields
+     * @param string     $step
      *
-     * @return mixed
+     * @return Form
+     * @throws \atk4\core\Exception
      */
-    protected function setFormField($form, $fields, $step)
+    protected function setFormField(Form $form, array $fields, string $step) :Form
     {
-        if ($fields) {
-            foreach ($fields as $k => $val) {
-                $form->getField($k)->set($val);
-            }
+        foreach ($fields as $k => $val) {
+            $form->getField($k)->set($val);
         }
 
         $form->hook('onStep', [$step]);
@@ -487,13 +479,13 @@ class UserAction extends Modal implements Interface_
     /**
      * Get proper js after submitting a form in step.
      *
-     * @param $step
+     * @param string $step
      *
      * @throws \atk4\core\Exception
      *
      * @return array
      */
-    protected function jsStepSubmit($step)
+    protected function jsStepSubmit(string $step) :array
     {
         if ($this->isLastStep($step)) {
             // collect argument and execute action.
@@ -504,13 +496,15 @@ class UserAction extends Modal implements Interface_
                 $this->hook('afterExecute', [$return]) ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : '')),
             ];
         } else {
-            // store data.
-            $js[] = $this->loader->jsAddStoreData($this->actionData, true);
-            $js[] = $this->loader->jsload([
+            // store data and setup reload.
+            $js = [
+                $this->loader->jsAddStoreData($this->actionData, true),
+                $this->loader->jsload([
                                               'action'    => $this->action->short_name,
                                               'step'      => $this->getNextStep($step),
                                               $this->name => $this->action->owner->get('id'),
-                                          ], ['method' => 'post'], $this->loader->name);
+                                          ], ['method' => 'post'], $this->loader->name)
+            ];
         }
 
         return $js;
@@ -519,10 +513,12 @@ class UserAction extends Modal implements Interface_
     /**
      * Generate js for setting Buttons state based on current step.
      *
-     * @param $view
-     * @param $step
+     * @param View   $view
+     * @param string $step
+     *
+     * @throws \atk4\core\Exception
      */
-    protected function jsSetBtnState($view, $step)
+    protected function jsSetBtnState(View $view, string $step)
     {
         if (count($this->steps) === 1) {
             $view->js(true, $this->prevStepBtn->js()->hide());
@@ -542,68 +538,81 @@ class UserAction extends Modal implements Interface_
     /**
      * Generate js for Next btn state.
      *
-     * @param $step
+     * @param string $step
      *
-     * @return |null
+     * @return jsExpressionable
      */
-    protected function jsSetNextState($step)
+    protected function jsSetNextState(string $step) :jsExpressionable
     {
-        $chain = null;
-
         if ($this->isLastStep($step)) {
-            $chain = $this->nextStepBtn->js(true)->addClass('disabled');
+            return $this->nextStepBtn->js(true)->addClass('disabled');
         } else {
-            $chain = $this->nextStepBtn->js(true)->removeClass('disabled');
+            return $this->nextStepBtn->js(true)->removeClass('disabled');
         }
-
-        return $chain;
     }
 
     /**
      * Generated js for Prev btn state.
      *
-     * @param $step
+     * @param string $step
      *
-     * @return |null
+     * @return jsExpressionable
      */
-    protected function jsSetPrevState($step)
+    protected function jsSetPrevState(string $step) :jsExpressionable
     {
-        $chain = null;
-
         if ($this->isFirstStep($step)) {
-            $chain = $this->prevStepBtn->js(true)->addClass('disabled');
+            return $this->prevStepBtn->js(true)->addClass('disabled');
         } else {
-            $chain = $this->prevStepBtn->js(true)->removeClass('disabled');
+            return $this->prevStepBtn->js(true)->removeClass('disabled');
         }
-
-        return $chain;
     }
 
     /**
      * Generate js for Exec button state.
      *
-     * @param $step
+     * @param string $step
      *
-     * @return mixed
+     * @return jsExpressionable
      */
-    protected function jsSetExecState($step)
+    protected function jsSetExecState(string $step) :jsExpressionable
     {
         if ($this->isLastStep($step)) {
             return $this->execActionBtn->js(true)->removeClass('disabled');
         } else {
-            return $this->execActionBtn->js(true)->addClass('disabled');
+           return  $this->execActionBtn->js(true)->addClass('disabled');
+        }
+    }
+
+    /**
+     * Determine which button is responsible for submitting form on a specific step.
+     *
+     * @param View   $view
+     * @param Form   $form
+     * @param string $step
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     */
+    protected function jsSetSubmitBtn(View $view, Form $form, string $step)
+    {
+        if ($this->isLastStep($step)) {
+            $view->js(true, $this->execActionBtn->js()->on('click', new jsFunction([$form->js()->form('submit')])));
+        } else {
+            // submit on next
+            $view->js(true, $this->nextStepBtn->js()->on('click', new jsFunction([$form->js()->form('submit')])));
         }
     }
 
     /**
      * Generate js function for Previous button.
      *
-     * @param $view
-     * @param $step
+     * @param View   $view
+     * @param string $step
      *
      * @throws Exception
+     * @throws \atk4\core\Exception
      */
-    protected function jsSetPrevHandler($view, $step)
+    protected function jsSetPrevHandler(View $view, string $step)
     {
         if ($prev = $this->getPreviousStep($step)) {
             $chain = $this->loader->jsload([
@@ -619,18 +628,14 @@ class UserAction extends Modal implements Interface_
     /**
      * Utility for setting form in each step.
      *
-     * @param $view
+     * @param View $view
      *
-     * @return |null
+     * @return Form |null
+     * @throws \atk4\core\Exception
      */
-    protected function addFormTo($view)
+    protected function addFormTo(View $view) :Form
     {
-        $f = null;
-        if ($this->form) {
-            $f = $view->add($this->form);
-        } else {
-            $f = $view->add('Form');
-        }
+        $f = $view->add($this->form);
         $f->buttonSave->destroy();
 
         return $f;
@@ -639,10 +644,12 @@ class UserAction extends Modal implements Interface_
     /**
      * Utility for setting Title for each step.
      *
-     * @param $view
-     * @param $step
+     * @param View   $view
+     * @param string $step
+     *
+     * @throws \atk4\core\Exception
      */
-    private function _addStepTitle($view, $step)
+    private function _addStepTitle(View $view, string $step)
     {
         if ($title = $this->stepTitle[$step] ?? null) {
             $view->add($title);
@@ -652,11 +659,11 @@ class UserAction extends Modal implements Interface_
     /**
      * Utility for retrieving Argument.
      *
-     * @param $data
+     * @param array $data
      *
      * @return array
      */
-    private function _getActionArgs($data)
+    private function _getActionArgs(array $data) :array
     {
         $args = [];
 
@@ -670,10 +677,12 @@ class UserAction extends Modal implements Interface_
     /**
      * Create a sequence of js statement for a view.
      *
-     * @param $view
-     * @param $js
+     * @param View                   $view
+     * @param array|jsExpressionable $js
+     *
+     * @throws \atk4\core\Exception
      */
-    private function _jsSequencer($view, $js)
+    private function _jsSequencer(View $view, $js)
     {
         if (is_array($js)) {
             foreach ($js as $jq) {
