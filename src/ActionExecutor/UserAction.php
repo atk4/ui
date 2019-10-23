@@ -157,7 +157,6 @@ class UserAction extends Modal implements Interface_
         });
 
         parent::renderView();
-
     }
 
     /**
@@ -170,16 +169,16 @@ class UserAction extends Modal implements Interface_
      *
      * When using a jsEvent executor, it might require a different stateContext.
      *
-     * @param View $view
-     * @param array $urlArgs
+     * @param View   $view
+     * @param array  $urlArgs
      * @param string $when
+     * @param null   $selector
+     * @param null   $context
      *
-     * @param null $selector
-     * @param null $context
-     *
-     * @return View|jsExpressionable
      * @throws Exception
      * @throws \atk4\core\Exception
+     *
+     * @return View|jsExpressionable
      */
     public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', $selector = null, $context = null)
     {
@@ -199,15 +198,16 @@ class UserAction extends Modal implements Interface_
             } else {
                 $view->addClass('disabled');
             }
+
             return $this->executor = $this;
         } else {
             $this->executor = new jsEvent($view, $this->action, $urlArgs[$this->name], [], $context);
             if ($selector) {
                 $view->on($when, $selector, $this->executor, ['confirm' => $this->action->ui['confirm'] ?? 'Are you sure?']);
-
             } else {
                 $view->on($when, $this->executor, ['confirm' => $this->action->ui['confirm'] ?? 'Are you sure?']);
             }
+
             return $this->executor;
         }
     }
@@ -375,8 +375,9 @@ class UserAction extends Modal implements Interface_
      * @param $obj
      * @param $id
      *
-     * @return array
      * @throws \atk4\core\Exception
+     *
+     * @return array
      */
     protected function jsGetExecute($obj, $id)
     {
@@ -385,7 +386,7 @@ class UserAction extends Modal implements Interface_
         return [
             $this->hide(),
             $this->hook('afterExecute', [$obj, $id]) ?: $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
-            $this->loader->jsClearStoreData(true)
+            $this->loader->jsClearStoreData(true),
         ];
     }
 
