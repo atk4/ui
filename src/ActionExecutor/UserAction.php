@@ -201,7 +201,7 @@ class UserAction extends Modal implements Interface_
 
             return $this->executor = $this;
         } else {
-            $this->executor = new jsEvent($view, $this->action, $urlArgs[$this->name], [], $context);
+            $this->executor = new jsEvent($view, $this->action, $urlArgs[$this->name] ?? null, [], $context);
             if ($selector) {
                 $view->on($when, $selector, $this->executor, ['confirm' => $this->action->ui['confirm'] ?? 'Are you sure?']);
             } else {
