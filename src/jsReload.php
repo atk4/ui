@@ -39,7 +39,7 @@ class jsReload implements jsExpressionable
 
     public $includeStorage = false;
 
-    public function __construct($view, $args = [], $afterSuccess = null, $apiConfig = ['method' => 'post'], $includeStorage = false)
+    public function __construct($view, $args = [], $afterSuccess = null, $apiConfig = [], $includeStorage = false)
     {
         $this->view = $view;
         $this->args = $args;

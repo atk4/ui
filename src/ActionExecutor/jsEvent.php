@@ -33,6 +33,8 @@ class jsEvent implements jsExpressionable
      */
     public $context;
 
+    public $stateContext;
+
     /** @var @var Generic The model user action */
     public $action;
 
@@ -45,12 +47,15 @@ class jsEvent implements jsExpressionable
     /** @var jsCallback */
     public $cb;
 
-    public function __construct(View $context, Generic $action, $modelId = null, array $args = [])
+    public $jsSuccess = null;
+
+    public function __construct(View $context, Generic $action, $modelId = null, array $args = [], $stateContext = null)
     {
         $this->context = $context;
         $this->action = $action;
         $this->modelId = $modelId;
         $this->args = $args;
+        $this->stateContext = $stateContext;
 
         if (!$this->context->app) {
             throw new Exception('Context must be part of a render tree. Missing app property.');
@@ -96,8 +101,9 @@ class jsEvent implements jsExpressionable
                 }
 
                 $return = $this->action->execute(...$args);
+                $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
 
-                $js = $this->hook('afterExecute', [$return]) ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
+                $js = $this->hook('afterExecute', [$return, $id]) ?: $success ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
             }
 
             return $js;
@@ -107,6 +113,7 @@ class jsEvent implements jsExpressionable
             ->atkAjaxec([
                 'uri'           => $this->cb->getJSURL(),
                 'uri_options'   => array_merge(['atk_event_id' => $this->modelId], $this->args),
+                'apiConfig'     => ['stateContext' => $this->stateContext]
         ]);
 
         return $final->jsRender();

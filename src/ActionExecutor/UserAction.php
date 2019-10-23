@@ -82,6 +82,7 @@ class UserAction extends Modal implements Interface_
     public $loader = null;
     public $loaderUi = 'ui basic segment';
     public $loaderShim = [];
+    public $executor = null;
 
     public function init()
     {
@@ -112,6 +113,7 @@ class UserAction extends Modal implements Interface_
     public function setAction(Generic $action) :View
     {
         $this->action = $action;
+
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
             $this->title = $this->action->owner->getModelCaption();
@@ -122,35 +124,40 @@ class UserAction extends Modal implements Interface_
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
             // set initial button state
             $this->jsSetBtnState($this, $this->step);
-
-            $id = $this->stickyGet($this->name);
-            if ($id && $this->action->scope === 'single') {
-                $this->action->owner->tryLoad($id);
-            }
-
-            $this->loader->set(function ($modal) {
-                $this->jsSetBtnState($modal, $this->step);
-
-                switch ($this->step) {
-                    case 'args':
-                        $this->doArgs($modal);
-                        break;
-                    case 'preview':
-                        $this->doPreview($modal);
-                        break;
-                    case 'fields':
-                        $this->doFields($modal);
-                        break;
-                    case 'final':
-                        $this->doFinal($modal);
-                        break;
-                }
-            });
         }
 
         $this->actionInitialized = true;
 
         return $this;
+    }
+
+    public function renderView()
+    {
+        $id = $this->stickyGet($this->name);
+        if ($id && $this->action->scope === 'single') {
+            $this->action->owner->tryLoad($id);
+        }
+        $this->loader->set(function ($modal) {
+            $this->jsSetBtnState($modal, $this->step);
+
+            switch ($this->step) {
+                case 'args':
+                    $this->doArgs($modal);
+                    break;
+                case 'preview':
+                    $this->doPreview($modal);
+                    break;
+                case 'fields':
+                    $this->doFields($modal);
+                    break;
+                case 'final':
+                    $this->doFinal($modal);
+                    break;
+            }
+        });
+
+        parent::renderView();
+
     }
 
     /**
@@ -161,15 +168,20 @@ class UserAction extends Modal implements Interface_
      * If action does not require any step, then it will assign
      * a jsEvent executor to button.
      *
-     * @param Button $btn
-     * @param array  $urlArgs
+     * When using a jsEvent executor, it might require a different stateContext.
+     *
+     * @param View $view
+     * @param array $urlArgs
      * @param string $when
      *
-     * @throws \atk4\core\Exception
+     * @param null $selector
+     * @param null $context
      *
-     * @return View
+     * @return View|jsExpressionable
+     * @throws Exception
+     * @throws \atk4\core\Exception
      */
-    public function assignTrigger(Button $btn, array $urlArgs = [], string $when = 'click') :View
+    public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', $selector = null, $context = null)
     {
         if (!$this->actionInitialized) {
             throw new Exception('Action must be set prior to assign trigger.');
@@ -179,16 +191,25 @@ class UserAction extends Modal implements Interface_
             // use modal for stepping action.
             $urlArgs['step'] = $this->step;
             if ($this->action->enabled) {
-                $btn->on($when, [$this->show(), $this->loader->jsLoad($urlArgs)]);
+                if ($selector) {
+                    $view->on($when, $selector, [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
+                } else {
+                    $view->on($when, [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
+                }
             } else {
-                $btn->addClass('disabled');
+                $view->addClass('disabled');
             }
+            return $this->executor = $this;
         } else {
-            $executor = new \atk4\ui\ActionExecutor\jsEvent($btn, $this->action, $urlArgs, $this->action->args);
-            $btn->on('click', $executor, ['confirm'=> $this->action->ui['confirm'] ?? 'Are you sure?']);
-        }
+            $this->executor = new jsEvent($view, $this->action, $urlArgs[$this->name], [], $context);
+            if ($selector) {
+                $view->on($when, $selector, $this->executor, ['confirm' => $this->action->ui['confirm'] ?? 'Are you sure?']);
 
-        return $this;
+            } else {
+                $view->on($when, $this->executor, ['confirm' => $this->action->ui['confirm'] ?? 'Are you sure?']);
+            }
+            return $this->executor;
+        }
     }
 
     /**
@@ -345,13 +366,27 @@ class UserAction extends Modal implements Interface_
 
         $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
 
-        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner]) : $this->jsSuccess;
+        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->owner->id));
+    }
 
-        $js = $this->hook('afterExecute', [$return]) ?: $success ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
+    /**
+     * Return proper js statement need after action execution.
+     *
+     * @param $obj
+     * @param $id
+     *
+     * @return array
+     * @throws \atk4\core\Exception
+     */
+    protected function jsGetExecute($obj, $id)
+    {
+        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
 
-        $this->_jsSequencer($modal, $js);
-        $modal->js(true, $this->hide());
-        $modal->js(true, $this->loader->jsClearStoreData(true));
+        return [
+            $this->hide(),
+            $this->hook('afterExecute', [$obj, $id]) ?: $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
+            $this->loader->jsClearStoreData(true)
+        ];
     }
 
     /**
@@ -491,11 +526,7 @@ class UserAction extends Modal implements Interface_
         if ($this->isLastStep($step)) {
             // collect argument and execute action.
             $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
-
-            $js = [
-                $this->hide(),
-                $this->hook('afterExecute', [$return]) ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : '')),
-            ];
+            $js = $this->jsGetExecute($return, $this->action->owner->id);
         } else {
             // store data and setup reload.
             $js = [
