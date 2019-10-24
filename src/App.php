@@ -31,7 +31,7 @@ class App
     use AppScopeTrait;
     use DIContainerTrait;
 
-    // @var array|false Location where to load JS/CSS files
+    /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
         'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@1.7.1/public',
         'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
@@ -39,10 +39,10 @@ class App
         'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.2/dist',
     ];
 
-    // @var string Version of Agile UI
+    /** @var string Version of Agile UI */
     public $version = '2.0.0';
 
-    // @var string Name of application
+    /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
 
     /** @var Generic */
