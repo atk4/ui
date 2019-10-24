@@ -147,7 +147,7 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
         $m->addField('opt4', ['values'=>$options, 'mandatory'=>true]);
 
         $this->f->setModel($m);
-        $this->assertSubmitError(['opt1'=>'2', 'opt3_zerotest'=>'0'], function ($error) {
+        $this->assertSubmitError(['opt1'=>'2', 'opt3'=>'', 'opt3_zerotest'=>'0'], function ($error) {
 
             // dropdown validates to make sure option is proper
             $this->assertFieldError('opt1', 'not one of the allowed values');
@@ -156,13 +156,14 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
             $this->assertFieldNoErrors('opt2');
 
             // dropdown insists for value to be there
-            $this->assertFieldError('opt3', 'Must not be null');
+            $this->assertFieldError('opt3', 'Must not be empty');
 
             // value with '0' is valid selection
             // TODO: currently fails!! See https://github.com/atk4/ui/issues/781
             //$this->assertFieldNoErrors('opt3_zerotest');
 
-            // mandatory will error during save(), but form does not care about it
+            // mandatory will error during save(), but form does not care about it. This is normal
+            // as there may be further changes to this field on beforeSave hook...
             $this->assertFieldNoErrors('opt4');
         });
     }
