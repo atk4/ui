@@ -14,7 +14,7 @@ class App
     use \atk4\core\AppScopeTrait;
     use \atk4\core\DIContainerTrait;
 
-    // @var array|false Location where to load JS/CSS files
+    /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
         'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@1.7.1/public',
         'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
@@ -22,13 +22,13 @@ class App
         'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.2/dist',
     ];
 
-    // @var string Version of Agile UI
+    /** @var string Version of Agile UI */
     public $version = '1.7.1';
 
-    // @var string Name of application
+    /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
 
-    // @var Layout\Generic
+    /** @var Layout\Generic */
     public $layout = null; // the top-most view object
 
     /**
@@ -38,7 +38,7 @@ class App
      */
     public $template_dir = null;
 
-    // @var string Name of skin
+    /** @var string Name of skin */
     public $skin = 'semantic-ui';
 
     /**
@@ -78,7 +78,7 @@ class App
      */
     public $exit_called = false;
 
-    // @var bool
+    /** @var bool */
     public $_cwd_restore = true;
 
     /**
@@ -94,10 +94,10 @@ class App
      */
     public $fix_incompatible = true;
 
-    // @var bool
+    /** @var bool */
     public $is_rendering = false;
 
-    // @var Persistence\UI
+    /** @var Persistence\UI */
     public $ui_persistence = null;
 
     /**
@@ -106,11 +106,11 @@ class App
     public $html = null;
 
     /**
-     * @var LoggerInterface, target for objects with DebugTrait
+     * @var \Psr\log\LoggerInterface, target for objects with DebugTrait
      */
     public $logger = null;
 
-    // @var \atk4\data\Persistence
+    /** @var \atk4\data\Persistence */
     public $db = null;
 
     /**
