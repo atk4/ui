@@ -108,6 +108,28 @@ class DataService {
   }
 
   /**
+   * Return store data for an item or empty object.
+   *
+   * @param item
+   * @returns {{session: *, local: *}}
+   */
+  getStoreData(name) {
+    let store = {};
+    if (name) {
+      const localData = this.getData(name, 'local');
+      if (localData) {
+        store[name + '_local_store'] = localData;
+      }
+      const sessionData = this.getData(name, 'session');
+      if (sessionData) {
+        store[name + '_session_store'] = sessionData;
+      }
+    }
+
+    return store;
+  }
+
+  /**
    * Similar to set data but make sure that value is
    * a valid json string prior to set data.
    *

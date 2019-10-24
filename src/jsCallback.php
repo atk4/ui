@@ -19,6 +19,20 @@ class jsCallback extends Callback implements jsExpressionable
     public $confirm = null;
 
     /**
+     * Use this apiConfig variable to pass API settings to Semantic UI in .api().
+     *
+     * @var array|null
+     */
+    public $apiConfig = null;
+
+    /**
+     * Include web storage data item (key) value to be include in the request.
+     *
+     * @var null|string
+     */
+    public $storeName = null;
+
+    /**
      * When multiple jsExpressionable's are collected inside an array and may
      * have some degree of nesting, convert it into a one-dimensional array,
      * so that it's easier for us to wrap it into a function body.
@@ -52,6 +66,8 @@ class jsCallback extends Callback implements jsExpressionable
             'uri'         => $this->getJSURL(),
             'uri_options' => $this->args,
             'confirm'     => $this->confirm,
+            'apiConfig'   => $this->apiConfig,
+            'storeName'   => $this->storeName,
         ])->jsRender();
     }
 
