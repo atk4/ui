@@ -7,7 +7,7 @@ namespace atk4\ui\FormLayout;
  */
 class Custom extends _Abstract
 {
-    // @var inheritdoc
+    /** @var {@inheritdoc} */
     public $defaultTemplate = null;
 
     public function init()
