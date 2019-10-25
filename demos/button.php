@@ -4,7 +4,6 @@
  */
 require 'init.php';
 use atk4\ui\Button;
-use atk4\ui\Header;
 use atk4\ui\Icon;
 use atk4\ui\Label;
 use atk4\ui\Template;
