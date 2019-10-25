@@ -11,6 +11,12 @@
     Can include web storage in api request,
     Possible to set specific Fomantic api settings    
     
+- Update url.helpers 
+
+Fix
+- issue #487 - Avoid Multi modal
+  Update modal service in order to refresh current modal when top modal is close.
+
 ### version 1.9.1 (2019-10-06)
 
 - fix issue where new row is added pressing Enter key in form.

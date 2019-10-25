@@ -133,6 +133,7 @@ class ModalService {
         if (this.modals.length > 0 ) {
            modal.css('position', '');
            this.modals[this.modals.length - 1].css('opacity', '');
+           this.modals[this.modals.length - 1].modal('refresh');
         }
 
         if (this.modals.length === 0 ) {
