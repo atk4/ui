@@ -35,15 +35,6 @@ class DropDown extends Input
     public $empty = '...';
 
     /**
-     * Whether or not this dropdown required a value.
-     *  when set to true, $empty is shown on page load
-     *  but is not selectable once a value has been choosen.
-     *
-     * @var bool
-     */
-    public $isValueRequired = false;
-
-    /**
      * The html template associate whit this dropdown.
      *
      * @var string
@@ -153,10 +144,6 @@ class DropDown extends Input
         $this->ui = ' ';
         $this->inputType = 'hidden';
 
-        if (isset($this->field) && $this->field->required) {
-            $this->isValueRequired = true;
-        }
-
         $this->_tItem = $this->template->cloneRegion('Item');
         $this->template->del('Item');
         $this->_tIcon = $this->_tItem->cloneRegion('Icon');
@@ -239,7 +226,7 @@ class DropDown extends Input
          * render dropdown options
          */
         //add selection only if no value is required and Dropdown has no multiple selections enabled
-        if (!$this->isValueRequired && !$this->isMultiple) {
+        if (!$this->field->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
             $this->_tItem->set('title', $this->empty || is_numeric($this->empty) ? (string) $this->empty : '');
             $this->template->appendHTML('Item', $this->_tItem->render());
