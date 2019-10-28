@@ -23,7 +23,8 @@ export default class ajaxec extends atkPlugin {
 
     doExecute() {
 
-        const that  = this;
+        // userConfig callback can use that in order to refer to this plugin.
+        const that = this;
         const url = $.atk.getUrl(this.settings.uri);
         const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
 
@@ -32,11 +33,9 @@ export default class ajaxec extends atkPlugin {
 
         // retrieve param from url.
         let urlParam = $.atkGetQueryParam(this.settings.uri);
-        //Object.assign($.atkGetQueryParam(this.settings.uri), this.settings.uri_options ? this.settings.uri_options : {});
 
         // get store object.
         let store = atk.dataService.getStoreData(this.settings.storeName);
-
 
         let settings = Object.assign({
             on: 'now',
