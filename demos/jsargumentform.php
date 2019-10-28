@@ -3,12 +3,14 @@
 require 'init.php';
 require 'database.php';
 
+$country = new Country($db);
+$id = $country->tryLoadAny()->get('id');
+$country->unload();
+
 $app->add(new \atk4\ui\Header(['Enter Country model id', 'size' => 4]));
-$field = $app->add(new \atk4\ui\FormField\Line(['caption' => 'Enter model id']))->set(12);
+$field = $app->add(new \atk4\ui\FormField\Line(['caption' => 'Enter model id']))->set($id);
 
 $app->add(['ui' => 'ui divider']);
-
-$country = new Country($db);
 
 // clicking button should simply display toast ok
 $country->addAction('callback', ['callback'=> function () {
