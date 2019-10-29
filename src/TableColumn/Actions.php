@@ -24,11 +24,14 @@ class Actions extends Generic
      * Adds a new button which will execute $callback when clicked.
      *
      * Returns button object
+     *
      * @param $button
      * @param $callback
      * @param bool $confirm
-     * @return object
+     *
      * @throws \atk4\core\Exception
+     *
+     * @return object
      */
     public function addAction($button, $callback, $confirm = false)
     {

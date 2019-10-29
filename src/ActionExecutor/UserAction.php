@@ -207,8 +207,9 @@ class UserAction extends Modal implements Interface_
      *
      * @param array $urlArgs
      *
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function jsExecute(array $urlArgs = [])
     {
