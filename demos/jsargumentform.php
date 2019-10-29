@@ -47,7 +47,7 @@ $ac = $country->addAction('disabled_action', ['enabled'=> false, 'callback'=>fun
     return 'ok';
 }]);
 $ex = new jsEvent($btn = $buttons->add(['Button', $ac->getDescription()]), $ac, $field->jsInput()->val());
-$btn->addClass('disabled');
+$btn->on('click', $ex);
 
 // invoking this action requires argument "age" (integer). User should be prompted, end would return age in response
 $ac = $country->addAction('edit_argument', ['args'=> ['age'=>['type'=>'integer', 'required' => true]], 'callback'=>function ($m, $age) {
