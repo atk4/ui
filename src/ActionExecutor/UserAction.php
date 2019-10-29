@@ -83,7 +83,6 @@ class UserAction extends Modal implements Interface_
     public $loader = null;
     public $loaderUi = 'ui basic segment';
     public $loaderShim = [];
-    public $executor = null;
 
     public function init()
     {
@@ -161,27 +160,21 @@ class UserAction extends Modal implements Interface_
     }
 
     /**
-     * Assign a Button that will fire action execution.
+     * Assign a View that will fire action execution.
      * If action require steps, it will automatically initialize
      * proper step to execute first.
-     *
-     * If action does not require any step, then it will assign
-     * a jsEvent executor to button.
-     *
-     * When using a jsEvent executor, it might require a different stateContext.
      *
      * @param View   $view
      * @param array  $urlArgs
      * @param string $when
      * @param null   $selector
-     * @param null   $context
      *
      * @throws Exception
      * @throws \atk4\core\Exception
      *
-     * @return View|jsExpressionable
+     * @return View
      */
-    public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', $selector = null, $context = null)
+    public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', $selector = null)
     {
         if (!$this->actionInitialized) {
             throw new Exception('Action must be set prior to assign trigger.');
@@ -199,18 +192,9 @@ class UserAction extends Modal implements Interface_
             } else {
                 $view->addClass('disabled');
             }
-
-            return $this->executor = $this;
-        } else {
-            $this->executor = new jsEvent($view, $this->action, $urlArgs[$this->name] ?? null, [], $context);
-            if ($selector) {
-                $view->on($when, $selector, $this->executor, ['confirm' => $this->action->ui['confirm'] ?? 'Are you sure?']);
-            } else {
-                $view->on($when, $this->executor, ['confirm' => $this->action->ui['confirm'] ?? 'Are you sure?']);
-            }
-
-            return $this->executor;
         }
+
+        return $this;
     }
 
     /**
