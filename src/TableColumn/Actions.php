@@ -24,6 +24,11 @@ class Actions extends Generic
      * Adds a new button which will execute $callback when clicked.
      *
      * Returns button object
+     * @param $button
+     * @param $callback
+     * @param bool $confirm
+     * @return object
+     * @throws \atk4\core\Exception
      */
     public function addAction($button, $callback, $confirm = false)
     {
@@ -32,6 +37,7 @@ class Actions extends Generic
         if (!is_object($button)) {
             $button = $this->factory('Button', [$button, 'id' => false], 'atk4\ui');
         }
+
         if ($button->icon && !is_object($button->icon)) {
             $button->icon = $this->factory('Icon', [$button->icon, 'id' => false], 'atk4\ui');
         }
