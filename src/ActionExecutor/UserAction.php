@@ -202,6 +202,14 @@ class UserAction extends Modal implements Interface_
         return $this;
     }
 
+    /**
+     * Generate js for triggering action.
+     *
+     * @param array $urlArgs
+     *
+     * @return array
+     * @throws Exception
+     */
     public function jsExecute(array $urlArgs = [])
     {
         if (!$this->actionInitialized) {
@@ -251,15 +259,7 @@ class UserAction extends Modal implements Interface_
             // collect arguments.
             $this->actionData['args'] = $f->model->get();
 
-            try {
-                return $this->jsStepSubmit($this->step);
-            } catch (\Exception $e) {
-                $m = new Message('Error executing '.$this->action->caption, 'red');
-                $m->init();
-                $m->text->content = $e->getHTML();
-
-                return $m;
-            }
+            return $this->jsStepSubmit($this->step);
         });
     }
 
@@ -529,24 +529,32 @@ class UserAction extends Modal implements Interface_
      *
      * @return array
      */
-    protected function jsStepSubmit(string $step) :array
+    protected function jsStepSubmit(string $step)
     {
-        if ($this->isLastStep($step)) {
-            // collect argument and execute action.
-            $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
-            $js = $this->jsGetExecute($return, $this->action->owner->id);
-        } else {
-            // store data and setup reload.
-            $js = [
-                $this->loader->jsAddStoreData($this->actionData, true),
-                $this->loader->jsload([
+        try {
+            if ($this->isLastStep($step)) {
+                // collect argument and execute action.
+                $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
+                $js = $this->jsGetExecute($return, $this->action->owner->id);
+            } else {
+                // store data and setup reload.
+                $js = [
+                    $this->loader->jsAddStoreData($this->actionData, true),
+                    $this->loader->jsload([
                                               'step'      => $this->getNextStep($step),
                                               $this->name => $this->action->owner->get('id'),
                                           ], ['method' => 'post'], $this->loader->name),
-            ];
-        }
+                ];
+            }
 
-        return $js;
+            return $js;
+        } catch (\Exception $e) {
+            $m = new Message('Error executing '.$this->action->caption, 'red');
+            $m->init();
+            $m->text->content = $e->getHTML();
+
+            return $m;
+        }
     }
 
     /**
