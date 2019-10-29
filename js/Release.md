@@ -1,7 +1,25 @@
 ## Release note
 
+### version 1.11.0 (2019-10-24)
+
+- Add DataService. 
+    Enable usage of web storage: local or session.
+- Update atk.reloadView jQuery plugin.
+    Can include web storage in api request,
+    Possible to set specific Fomantic api settings
+- Update atk.ajaxExec jQuery plugin.
+    Can include web storage in api request,
+    Possible to set specific Fomantic api settings    
+    
+- Update url.helpers 
+
+Fix
+- issue #487 - Avoid Multi modal
+  Update modal service in order to refresh current modal when top modal is close.
+
 ### version 1.10.0 (2019-10-07)
 - Add new component TreeItemSelector.
+
 
 ### version 1.9.1 (2019-10-06)
 

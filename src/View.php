@@ -972,6 +972,69 @@ class View implements jsExpressionable
     }
 
     /**
+     * Get Local and Session web storage associated with this view.
+     * Web storage can be retrieve using a $view->jsReload() request.
+     *
+     * @return mixed
+     */
+    public function jsGetStoreData()
+    {
+        $data['local'] = json_decode($_GET[$this->name.'_local_store'] ?? $_POST[$this->name.'_local_store'] ?? null, true);
+        $data['session'] = json_decode($_GET[$this->name.'_session_store'] ?? $_POST[$this->name.'_session_store'] ?? null, true);
+
+        return $data;
+    }
+
+    /**
+     * Clear Web storage data associated with this view.
+     *
+     * @param bool $useSession
+     *
+     * @throws \atk4\ui\Exception
+     *
+     * @return mixed
+     */
+    public function jsClearStoreData($useSession = false)
+    {
+        $type = $useSession ? 'session' : 'local';
+
+        if (!$name = $this->name) {
+            throw new \atk4\ui\Exception('View property name needs to be set.');
+        }
+
+        return (new jsChain('atk.dataService'))->clearData($name, $type);
+    }
+
+    /**
+     * Add Web storage for this specific view.
+     * Data will be store as json value where key name
+     * will be the name of this view.
+     *
+     * Data added to web storage is merge against previous value.
+     *  $v->jsAddStoreData(['args' => ['path' => '.']]);
+     *  $v->jsAddStoreData(['args' => ['path' => '/'], 'fields' => ['name' => 'test']]]);
+     *
+     *  Final store value will be: ['args' => ['path' => '/'], 'fields' => ['name' => 'test']];
+     *
+     * @param array $data
+     * @param bool  $useSession
+     *
+     * @throws \atk4\ui\Exception
+     *
+     * @return mixed
+     */
+    public function jsAddStoreData(array $data, $useSession = false)
+    {
+        $type = $useSession ? 'session' : 'local';
+
+        if (!$name = $this->name) {
+            throw new \atk4\ui\Exception('View property name needs to be set.');
+        }
+
+        return (new jsChain('atk.dataService'))->addJsonData($name, json_encode($data), $type);
+    }
+
+    /**
      * Returns JS for reloading View.
      *
      * @param array             $args

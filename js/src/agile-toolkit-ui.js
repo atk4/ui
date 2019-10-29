@@ -5,6 +5,7 @@ import 'helpers/url.helper';
 import {plugin, createAtkplugins} from "./plugin";
 import date from 'locutus/php/datetime/date';
 import vueService from './services/vue.service';
+import dataService from "./services/data.service";
 
 // Create atk plugins.
 createAtkplugins();
@@ -15,6 +16,7 @@ atk.registerPlugin = plugin;
 
 atk.phpDate = date;
 atk.vueService = vueService;
+atk.dataService = dataService;
 
 
 /**
