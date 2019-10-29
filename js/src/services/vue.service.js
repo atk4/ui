@@ -4,6 +4,7 @@ import SuiVue from 'semantic-ui-vue';
 import atkInlineEdit from '../components/inline-edit.component';
 import itemSearch from '../components/item-search.component';
 import multiLine from '../components/multiline.component'
+import treeItemSelector from '../components/tree-item-selector/tree-item-selector.component';
 import atkClickOutside from '../directives/click-outside.directive';
 import {focus} from '../directives/commons.directive';
 
@@ -13,8 +14,8 @@ let atkComponents = {
   'atk-inline-edit' : atkInlineEdit,
   'atk-item-search' : itemSearch,
   'atk-multiline'   : multiLine,
+  'atk-tree-item-selector' : treeItemSelector,
 };
-
 
 // setup atk custom directives.
 let atkDirectives = [{name: 'click-outside', def: atkClickOutside}, {name: 'focus', def: focus}];

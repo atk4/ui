@@ -1,5 +1,8 @@
 ## Release note
 
+### version 1.10.0 (2019-10-07)
+- Add new component TreeItemSelector.
+
 ### version 1.9.1 (2019-10-06)
 
 - fix issue where new row is added pressing Enter key in form.
