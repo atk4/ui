@@ -16,7 +16,11 @@ $app->add(['ui' => 'ui divider']);
 $buttons = $app->add(['ui'=>'vertical basic buttons']);
 
 $ex = $app->add(new UserAction())->setAction($ac = $country->getAction('add'));
-$ex->assignTrigger($buttons->add(['Button', $ac->getDescription()]), [$ex->name => $field->jsInput()->val()]);
+
+$add_button = $buttons->add(['Button', $ac->getDescription()]);
+$add_button->on('click', $ex->jsExecute());
+
+//$ex->assignTrigger($add_button, [$ex->name => $field->jsInput()->val()]);
 
 $ex = $app->add(new UserAction())->setAction($ac = $country->getAction('edit'));
 $ex->assignTrigger($buttons->add(['Button', $ac->getDescription()]), [$ex->name => $field->jsInput()->val()]);

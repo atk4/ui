@@ -13,6 +13,7 @@ use atk4\ui\Form;
 use atk4\ui\jsExpressionable;
 use atk4\ui\jsFunction;
 use atk4\ui\jsToast;
+use atk4\ui\Message;
 use atk4\ui\Modal;
 use atk4\ui\View;
 
@@ -155,7 +156,7 @@ class UserAction extends Modal implements Interface_
                         $this->doFinal($modal);
                         break;
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->_handleException($e, $modal, $this->step);
             }
         });
@@ -191,7 +192,7 @@ class UserAction extends Modal implements Interface_
                 if ($selector) {
                     $view->on($when, $selector, [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
                 } else {
-                    $view->on($when, [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
+                    $view->on($when,            [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
                 }
             } else {
                 $view->addClass('disabled');
@@ -199,6 +200,16 @@ class UserAction extends Modal implements Interface_
         }
 
         return $this;
+    }
+
+    public function jsExecute(array $urlArgs = [])
+    {
+        if (!$this->actionInitialized) {
+            throw new Exception('Action must be set prior to assign trigger.');
+        }
+
+        $urlArgs['step'] = $this->step;
+        return [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];
     }
 
     /**
@@ -239,7 +250,14 @@ class UserAction extends Modal implements Interface_
             // collect arguments.
             $this->actionData['args'] = $f->model->get();
 
-            return $this->jsStepSubmit($this->step);
+            try {
+                return $this->jsStepSubmit($this->step);
+            } catch (\Exception $e) {
+                $m = new Message('Error executing '.$this->action->caption, 'red');
+                $m->init();
+                $m->text->content = $e->getHTML();
+                return $m;
+            }
         });
     }
 
