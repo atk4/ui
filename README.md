@@ -14,6 +14,8 @@ ATK UI began 2 years ago as a project to wrap CSS framework into PHP objects. We
 
 Quick-Links: [Documentation](https://agile-ui.readthedocs.io). [Namespaces](https://www.agiletoolkit.org/dox/namespaces.html). [Demo-site](https://ui.agiletoolkit.org). [ATK Data](https://github.com/atk4/data). [Forum](https://forum.agiletoolkit.org/). [Chat](https://gitter.im/atk4/atk4). [Commercial support](https://www.agiletoolkit.org/contact). [Udemy Course](https://forum.agiletoolkit.org/t/udemy-com-atk-course-early-access-limited-time-free/413).
 
+Our localization is done using the amazing services of [Lokalise.com](https://www.lokalise.com) (Thanks)
+
 ## ATK UI is simple and really saves time
 
 Some of you "live to code". For everyone else - ATK UI is a great fit. Easy to learn and saves loads of time.
