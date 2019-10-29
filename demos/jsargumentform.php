@@ -73,11 +73,13 @@ $ex = $app->add(new UserAction(['stepTitle' => ['fields' => ['Header', 'Fields:'
 $ex->assignTrigger($buttons->add(['Button', $ac->getDescription()]), [$ex->name => $field->jsInput()->val()]);
 
 // if action throws exception, need to properly display to user
-//$ac = $country->addAction('Ouch', ['callback'=> function () {
-//    throw new \atk4\ui\Exception('ouch');
-//}]);
-//$ex = $app->add(new UserAction())->setAction($ac);
-//$ex->assignTrigger($buttons->add(['Button', $ac->getDescription()]), [$ex->name => $field->jsInput()->val()]);
+$ac = $country->addAction('Ouch', ['args'=> ['age'=>['type'=>'integer']], 'preview'=> function () {
+    return 'Be careful with this action.';
+}, 'callback'=> function () {
+    throw new \atk4\ui\Exception('Told you, didn\'t I?');
+}]);
+$ex = $app->add(new UserAction())->setAction($ac);
+$ex->assignTrigger($buttons->add(['Button', $ac->getDescription()]), [$ex->name => $field->jsInput()->val()]);
 
 // action may require confirmation, before activating
 $ac = $country->addAction('confirm', ['ui' => ['confirm'=>'Call action?'], 'callback'=>function () {

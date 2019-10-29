@@ -140,20 +140,25 @@ class UserAction extends Modal implements Interface_
         $this->loader->set(function ($modal) {
             $this->jsSetBtnState($modal, $this->step);
 
-            switch ($this->step) {
-                case 'args':
-                    $this->doArgs($modal);
-                    break;
-                case 'preview':
-                    $this->doPreview($modal);
-                    break;
-                case 'fields':
-                    $this->doFields($modal);
-                    break;
-                case 'final':
-                    $this->doFinal($modal);
-                    break;
+            try {
+                switch ($this->step) {
+                    case 'args':
+                        $this->doArgs($modal);
+                        break;
+                    case 'preview':
+                        $this->doPreview($modal);
+                        break;
+                    case 'fields':
+                        $this->doFields($modal);
+                        break;
+                    case 'final':
+                        $this->doFinal($modal);
+                        break;
+                }
+            } catch (Exception $e) {
+                $this->_handleException($e, $modal, $this->step);
             }
+
         });
 
         parent::renderView();
@@ -548,6 +553,8 @@ class UserAction extends Modal implements Interface_
         $view->js(true, $this->execActionBtn->js(true)->off());
         $view->js(true, $this->nextStepBtn->js(true)->off());
         $view->js(true, $this->prevStepBtn->js(true)->off());
+        $view->js(true, $this->nextStepBtn->js()->removeClass('disabled'));
+        $view->js(true, $this->execActionBtn->js()->removeClass('disabled'));
     }
 
     /**
@@ -672,6 +679,22 @@ class UserAction extends Modal implements Interface_
     }
 
     /**
+     * Get action preview based on it's argument.
+     *
+     * @return mixed
+     */
+    protected function getActionPreview()
+    {
+        $args = [];
+
+        foreach ($this->action->args as $key => $val) {
+            $args[] = $this->actionData['args'][$key];
+        }
+
+        return $this->action->preview(...$args);
+    }
+
+    /**
      * Utility for retrieving Argument.
      *
      * @param array $data
@@ -709,18 +732,28 @@ class UserAction extends Modal implements Interface_
     }
 
     /**
-     * Get action preview based on it's argument.
+     * Handle exception.
      *
-     * @return mixed
+     * @param $e
+     * @param $view
+     * @param $step
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
      */
-    protected function getActionPreview()
+    private function _handleException($e, $view, $step)
     {
-        $args = [];
-
-        foreach ($this->action->args as $key => $val) {
-            $args[] = $this->actionData['args'][$key];
+        $msg = $view->add(['Message', 'Error:', 'type' => 'error']);
+        $msg->text->addParagraph($e->getMessage());
+        $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
+        if (!$this->isFirstStep($step)) {
+            $this->jsSetPrevHandler($view, $step);
         }
-
-        return $this->action->preview(...$args);
+        if ($this->isLastStep($step)) {
+            $view->js(true, $this->execActionBtn->js()->addClass('disabled'));
+        }
+        if ($step === 'final') {
+            $this->jsSetPrevHandler($view, $this->steps[count($this->steps) - 1]);
+        }
     }
 }
