@@ -54,6 +54,7 @@ class UserAction extends Modal implements Interface_
     private $prevStepBtn = null;
     private $nextStepBtn = null;
     private $execActionBtn = null;
+    private $btns = null;
 
     /**
      * A form for action argument and fields user entry.
@@ -90,10 +91,10 @@ class UserAction extends Modal implements Interface_
         $this->observeChanges();
 
         //Add buttons to modal for next and previous.
-        $btns = (new \atk4\ui\View(['ui' => 'buttons']))->addStyle(['min-height' => '24px']);
-        $this->prevStepBtn = $btns->add(new Button(['Prev']));
-        $this->nextStepBtn = $btns->add(new Button(['Next']));
-        $this->addButtonAction($btns);
+        $this->btns = (new View())->addStyle(['min-height' => '24px']);
+        $this->prevStepBtn = $this->btns->add(new Button(['Prev']))->addStyle(['float' => 'left !important']);
+        $this->nextStepBtn = $this->btns->add(new Button(['Next', 'blue']));
+        $this->addButtonAction($this->btns);
 
         $this->loader = $this->add(['Loader', 'ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
@@ -118,7 +119,7 @@ class UserAction extends Modal implements Interface_
         if ($this->steps = $this->getSteps($action)) {
             $this->title = $this->action->owner->getModelCaption();
 
-            $this->addButtonAction($this->execActionBtn = (new Button([$this->action->caption, 'blue']))->addStyle(['float' => 'left !important']));
+            $this->btns->add($this->execActionBtn = (new Button([$this->action->caption, 'blue'])));
 
             // get current step.
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
@@ -304,7 +305,6 @@ class UserAction extends Modal implements Interface_
 
         if ($prev = $this->getPreviousStep($this->step)) {
             $chain = $this->loader->jsload([
-                                               'action'    => $this->action->short_name,
                                                'step'      => $prev,
                                                $this->name => $this->action->owner->get('id'),
                                            ], ['method' => 'post'], $this->loader->name);
@@ -321,7 +321,6 @@ class UserAction extends Modal implements Interface_
                     [
                         $this->loader->jsload(
                             [
-                                'action'    => $this->action->short_name,
                                 'step'      => 'final',
                                 $this->name => $this->action->owner->get('id'),
                             ],
@@ -533,7 +532,6 @@ class UserAction extends Modal implements Interface_
             $js = [
                 $this->loader->jsAddStoreData($this->actionData, true),
                 $this->loader->jsload([
-                                              'action'    => $this->action->short_name,
                                               'step'      => $this->getNextStep($step),
                                               $this->name => $this->action->owner->get('id'),
                                           ], ['method' => 'post'], $this->loader->name),
@@ -578,9 +576,9 @@ class UserAction extends Modal implements Interface_
     protected function jsSetNextState(string $step) :jsExpressionable
     {
         if ($this->isLastStep($step)) {
-            return $this->nextStepBtn->js(true)->addClass('disabled');
+            return $this->nextStepBtn->js(true)->hide();
         } else {
-            return $this->nextStepBtn->js(true)->removeClass('disabled');
+            return $this->nextStepBtn->js(true)->show();
         }
     }
 
@@ -594,9 +592,9 @@ class UserAction extends Modal implements Interface_
     protected function jsSetPrevState(string $step) :jsExpressionable
     {
         if ($this->isFirstStep($step)) {
-            return $this->prevStepBtn->js(true)->addClass('disabled');
+            return $this->prevStepBtn->js(true)->hide();
         } else {
-            return $this->prevStepBtn->js(true)->removeClass('disabled');
+            return $this->prevStepBtn->js(true)->show();
         }
     }
 
@@ -610,9 +608,9 @@ class UserAction extends Modal implements Interface_
     protected function jsSetExecState(string $step) :jsExpressionable
     {
         if ($this->isLastStep($step)) {
-            return $this->execActionBtn->js(true)->removeClass('disabled');
+            return $this->execActionBtn->js(true)->show();
         } else {
-            return  $this->execActionBtn->js(true)->addClass('disabled');
+            return $this->execActionBtn->js(true)->hide();
         }
     }
 
@@ -649,7 +647,6 @@ class UserAction extends Modal implements Interface_
     {
         if ($prev = $this->getPreviousStep($step)) {
             $chain = $this->loader->jsload([
-                                               'action'    => $this->action->short_name,
                                                'step'      => $prev,
                                                $this->name => $this->action->owner->get('id'),
                                            ], ['method' => 'post'], $this->loader->name);
