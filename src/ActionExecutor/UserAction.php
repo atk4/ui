@@ -158,7 +158,6 @@ class UserAction extends Modal implements Interface_
             } catch (Exception $e) {
                 $this->_handleException($e, $modal, $this->step);
             }
-
         });
 
         parent::renderView();
