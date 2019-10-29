@@ -192,7 +192,7 @@ class UserAction extends Modal implements Interface_
                 if ($selector) {
                     $view->on($when, $selector, [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
                 } else {
-                    $view->on($when,            [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
+                    $view->on($when, [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])]);
                 }
             } else {
                 $view->addClass('disabled');
@@ -209,6 +209,7 @@ class UserAction extends Modal implements Interface_
         }
 
         $urlArgs['step'] = $this->step;
+
         return [$this->show(), $this->loader->jsLoad($urlArgs, ['method' => 'post'])];
     }
 
@@ -256,6 +257,7 @@ class UserAction extends Modal implements Interface_
                 $m = new Message('Error executing '.$this->action->caption, 'red');
                 $m->init();
                 $m->text->content = $e->getHTML();
+
                 return $m;
             }
         });
