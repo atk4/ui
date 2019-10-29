@@ -2,8 +2,8 @@
 
 require 'init.php';
 require 'database.php';
-use \atk4\ui\ActionExecutor\UserAction;
-use \atk4\ui\ActionExecutor\jsEvent;
+use atk4\ui\ActionExecutor\jsEvent;
+use atk4\ui\ActionExecutor\UserAction;
 
 $country = new Country($db);
 $id = $country->tryLoadAny()->get('id');
@@ -24,7 +24,6 @@ $ex->assignTrigger($buttons->add(['Button', $ac->getDescription()]), [$ex->name 
 $ac = $country->getAction('delete');
 $ex = new jsEvent($btn = $buttons->add(['Button', $ac->getDescription()]), $ac, $field->jsInput()->val());
 $btn->on('click', $ex, ['confirm' => 'This will delete record. Sure?']);
-
 
 // clicking button should simply display toast ok
 $ac = $country->addAction('callback', ['callback'=> function () {
@@ -96,7 +95,6 @@ $ac = $country->addAction('multi_step', ['args'=> ['age'=>['type'=>'integer', 'r
 }]);
 $ex = $app->add(new UserAction(['stepTitle' => ['args' => ['Header', 'Fill in argument:', 'size' => 5]]]))->setAction($ac);
 $ex->assignTrigger($buttons->add(['Button', $ac->getDescription()]), [$ex->name => $field->jsInput()->val()]);
-
 
 //foreach ($country->getActions() as $action) {
 //    $ex = $app->add(new \atk4\ui\ActionExecutor\UserAction(['stepTitle' => ['args' => ['Header', 'Fill in argument:', 'size' => 5]]]))->setAction($action);
