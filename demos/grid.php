@@ -4,7 +4,9 @@ require 'init.php';
 require 'database.php';
 
 $g = $app->add(['Grid']);
-$g->setModel(new Country($db));
+$m = new Country($db);
+$m->addAction('test', function() { return 'test was successful!'; });
+$g->setModel($m);
 
 //Adding Quicksearch on Name field using auto query.
 $g->addQuickSearch(['name'], true);
@@ -17,6 +19,8 @@ $g->addColumn(null, ['Template', 'hello<b>world</b>']);
 //$g->addColumn('name', ['TableColumn/Link', 'page2']);
 $g->addColumn(null, 'Delete');
 
+$g->addAction('test');
+
 $g->addAction('Say HI', function ($j, $id) use ($g) {
     return 'Loaded "'.$g->model->load($id)['name'].'" from ID='.$id;
 });
@@ -24,6 +28,7 @@ $g->addAction('Say HI', function ($j, $id) use ($g) {
 $g->addModalAction(['icon'=>'external'], 'Modal Test', function ($p, $id) {
     $p->add(['Message', 'Clicked on ID='.$id]);
 });
+
 
 $sel = $g->addSelection();
 $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
