@@ -27,7 +27,7 @@ $btn->on('click', $ac, ['confirm' => 'This will delete record. Sure?']);
 
 // clicking button should simply display toast ok with model title
 $ac = $country->addAction('callback', ['callback'=> function ($m) {
-    return 'ok '. $m->getTitle();
+    return 'ok '.$m->getTitle();
 }]);
 $btn = $buttons->add(['Button', $ac->getDescription()]);
 $btn->on('click', $ac, ['args' => ['id' => $id]]);
@@ -96,4 +96,3 @@ $ac = $country->addAction('multi_step', ['args'=> ['age'=>['type'=>'integer', 'r
 }]);
 $btn = $buttons->add(['Button', $ac->getDescription()]);
 $btn->on('click', $ac, ['args' => ['id' =>$id]]);
-

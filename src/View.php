@@ -14,7 +14,6 @@ use atk4\core\TrackableTrait;
 use atk4\data\Model;
 use atk4\data\Persistence\Static_;
 use atk4\data\UserAction\Generic;
-use atk4\ui\ActionExecutor\Interface_;
 use atk4\ui\ActionExecutor\jsEvent;
 use atk4\ui\ActionExecutor\jsInterface_;
 use atk4\ui\ActionExecutor\UserAction;
@@ -1085,10 +1084,10 @@ class View implements jsExpressionable
      *
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string                    $event    JavaScript event
-     * @param string                    $selector Optional jQuery-style selector
-     * @param jsChain|callable|Generic  $action   code to execute or atk4\Data\UserAction
-     * @param array                     $defaults Options
+     * @param string                   $event    JavaScript event
+     * @param string                   $selector Optional jQuery-style selector
+     * @param jsChain|callable|Generic $action   code to execute or atk4\Data\UserAction
+     * @param array                    $defaults Options
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -1143,8 +1142,8 @@ class View implements jsExpressionable
             // create callback, that will include event as part of the full name
             $this->_add($cb = new jsCallback(), ['desired_name' => $event]);
 
-            $cb->set(function() use ($action) {
-                $args    = func_get_args();
+            $cb->set(function () use ($action) {
+                $args = func_get_args();
                 $args[0] = new jQuery(new jsExpression('this'));
 
                 return call_user_func_array($action, $args);
@@ -1155,13 +1154,13 @@ class View implements jsExpressionable
             // Setup UserAction executor.
             if ($action->ui['executor'] ?? null) {
                 $class = $action->ui['executor'];
-            } else if (!$action->args && !$action->fields && !$action->preview ) {
+            } elseif (!$action->args && !$action->fields && !$action->preview) {
                 $class = jsEvent::class;
             } else {
                 $class = UserAction::class;
             }
             $ex = new $class();
-            if ($ex instanceof View && $ex instanceof jsInterface_) {
+            if ($ex instanceof self && $ex instanceof jsInterface_) {
                 $ex = $this->app->add($ex)->setAction($action);
                 if ($arguments['id'] ?? null) {
                     $arguments[$ex->name] = $arguments['id'];
@@ -1173,7 +1172,7 @@ class View implements jsExpressionable
                 } else {
                     $actions[] = $ex_actions;
                 }
-            } else if ($ex instanceof jsEvent) {
+            } elseif ($ex instanceof jsEvent) {
                 $ex->setContext($this);
                 $ex->setAction($action);
                 $ex->setModelId($arguments['id'] ?? null);
