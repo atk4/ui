@@ -17,7 +17,7 @@ use atk4\ui\Message;
 use atk4\ui\Modal;
 use atk4\ui\View;
 
-class UserAction extends Modal implements Interface_
+class UserAction extends Modal implements Interface_, jsInterface_
 {
     use HookTrait;
 
