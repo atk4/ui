@@ -33,6 +33,11 @@ class jsEvent implements jsExpressionable
      */
     public $context;
 
+    /**
+     * The selector for where api call will apply loading context.
+     *
+     * @var string
+     */
     public $stateContext;
 
     /** @var @var Generic The model user action */
@@ -47,25 +52,58 @@ class jsEvent implements jsExpressionable
     /** @var jsCallback */
     public $cb;
 
+    /**
+     * js executable to run after action successfully execute.
+     *
+     * @var jsExpressionable
+     */
     public $jsSuccess = null;
 
-    public function __construct(View $context, Generic $action, $modelId = null, array $args = [], $stateContext = null)
+    public function __construct(View $context = null, Generic $action = null, $modelId = null, array $args = [], $stateContext = null)
+    {
+        $this->setContext($context);
+        if ($action) {
+            $this->setAction($action);
+        }
+        $this->setModelId($modelId);
+        $this->setArgs($args);
+        $this->setStateContext($stateContext);
+    }
+
+    public function setContext($context)
     {
         $this->context = $context;
-        $this->action = $action;
-        $this->modelId = $modelId;
-        $this->args = $args;
-        $this->stateContext = $stateContext;
+        if ($this->context) {
+            if (!$context->app) {
+                throw new Exception('Context must be part of a render tree. Missing app property.');
+            }
 
-        if (!$this->context->app) {
-            throw new Exception('Context must be part of a render tree. Missing app property.');
+            $this->cb = $this->context->add('jsCallback');
         }
+    }
 
-        if (!$this->action->enabled) {
+    public function setAction(Generic $action)
+    {
+        $this->action = $action;
+
+        if (!$this->action->enabled && $this->context) {
             $this->context->addClass('disabled');
         }
+    }
 
-        $this->cb = $this->context->add('jsCallback');
+    public function setModelId($id)
+    {
+        $this->modelId = $id;
+    }
+
+    public function setArgs($args)
+    {
+        $this->args = $args;
+    }
+
+    public function setStateContext($stateContext)
+    {
+        $this->stateContext = $stateContext;
     }
 
     /**

@@ -13,6 +13,10 @@ use atk4\core\InitializerTrait;
 use atk4\core\TrackableTrait;
 use atk4\data\Model;
 use atk4\data\Persistence\Static_;
+use atk4\data\UserAction\Generic;
+use atk4\ui\ActionExecutor\jsEvent;
+use atk4\ui\ActionExecutor\jsInterface_;
+use atk4\ui\ActionExecutor\UserAction;
 
 /**
  * Implements a most core view, which all of the other components descend
@@ -1080,10 +1084,10 @@ class View implements jsExpressionable
      *
      * @link http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string           $event    JavaScript event
-     * @param string           $selector Optional jQuery-style selector
-     * @param jsChain|callable $action   code to execute
-     * @param array            $defaults Options
+     * @param string                   $event    JavaScript event
+     * @param string                   $selector Optional jQuery-style selector
+     * @param jsChain|callable|Generic $action   code to execute or atk4\Data\UserAction
+     * @param array                    $defaults Options
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -1107,7 +1111,7 @@ class View implements jsExpressionable
         }
 
         // check for arguments.
-        $arguments = isset($defaults['args']) ? $defaults['args'] : [];
+        $arguments = $defaults['args'] ?? [];
         if (is_null($defaults)) {
             $defaults = [];
         }
@@ -1146,6 +1150,37 @@ class View implements jsExpressionable
             }, $arguments);
 
             $actions[] = $cb;
+        } elseif ($action instanceof Generic) {
+            // Setup UserAction executor.
+            if ($action->ui['executor'] ?? null) {
+                $class = $action->ui['executor'];
+            } elseif (!$action->args && !$action->fields && !$action->preview) {
+                $class = jsEvent::class;
+            } else {
+                $class = UserAction::class;
+            }
+            $ex = new $class();
+            if ($ex instanceof self && $ex instanceof jsInterface_) {
+                $ex = $this->app->add($ex)->setAction($action);
+                if ($arguments['id'] ?? null) {
+                    $arguments[$ex->name] = $arguments['id'];
+                    unset($arguments['id']);
+                }
+                $ex_actions = $ex->jsExecute($arguments);
+                if (is_array($ex_actions)) {
+                    $actions = $ex_actions;
+                } else {
+                    $actions[] = $ex_actions;
+                }
+            } elseif ($ex instanceof jsEvent) {
+                $ex->setContext($this);
+                $ex->setAction($action);
+                $ex->setModelId($arguments['id'] ?? null);
+                $ex->setStateContext($arguments['stateContext'] ?? null);
+                $actions[] = $ex;
+            } else {
+                throw new \atk4\ui\Exception('Executor class must be of type jsEvent or extends View and implement jsInterface_');
+            }
         } elseif (is_array($action)) {
             $actions = array_merge($actions, $action);
         } elseif ($action) {
