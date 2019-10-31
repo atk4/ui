@@ -5,11 +5,13 @@
  * Will execute a model action using a js Event.
  *
  * Usage:
- * $btn->on('click', new jsEvent($btn, $action, $actionArgs));
+ * When use with View::on method, then jsUserAction executor is automatically create.
+ *  $btn->on('click', $model->getAction('delete') , [4, 'confirm'=> 'This will delete record with id 4. Are you sure?']);
  *
- * You can add confirmation via the on handler.
- *
- * $btn->on('click', new jsEvent($btn, $action, $actionArgs), ['confirm' => 'Sure?']);
+ * Manual setup.
+ * $action = $model->getAction('delete')
+ * $ex = $app->add(new jsUserAction())->setAction($action, [4])
+ * $btn->on('click', $ex, ['confirm'=> 'This will delete record with id 4. Are you sure?']);
  */
 
 namespace atk4\ui\ActionExecutor;
