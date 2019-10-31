@@ -33,7 +33,6 @@ class jsUserAction extends jsCallback implements Interface_
      */
     protected $jsSuccess = null;
 
-
     public function setAction(Generic $action, $urlArgs = null)
     {
         $this->action = $action;
@@ -42,7 +41,6 @@ class jsUserAction extends jsCallback implements Interface_
         }
 
         $this->set(function ($j, $id = null) {
-
             if ($id && $this->action->scope === 'single') {
                 $this->action->owner->tryLoad($id);
             }

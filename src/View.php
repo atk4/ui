@@ -15,7 +15,6 @@ use atk4\data\Model;
 use atk4\data\Persistence\Static_;
 use atk4\data\UserAction\Generic;
 use atk4\ui\ActionExecutor\Interface_;
-use atk4\ui\ActionExecutor\jsEvent;
 use atk4\ui\ActionExecutor\jsInterface_;
 use atk4\ui\ActionExecutor\jsUserAction;
 use atk4\ui\ActionExecutor\UserAction;
@@ -1174,7 +1173,7 @@ class View implements jsExpressionable
                 } else {
                     $actions[] = $ex_actions;
                 }
-            } else if ($ex instanceof jsUserAction) {
+            } elseif ($ex instanceof jsUserAction) {
                 $ex = $this->add($ex)->setAction($action, $arguments);
                 $actions[] = $ex;
             } else {

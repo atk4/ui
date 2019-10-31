@@ -26,7 +26,6 @@ use atk4\data\Model;
 use atk4\data\UserAction\Generic;
 use atk4\ui\ActionExecutor\ArgumentForm;
 use atk4\ui\ActionExecutor\Event;
-use atk4\ui\ActionExecutor\jsEvent;
 
 class Card extends View
 {
