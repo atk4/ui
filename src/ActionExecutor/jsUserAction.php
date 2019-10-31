@@ -55,8 +55,9 @@ class jsUserAction extends jsCallback implements Interface_
      * @param Generic $action
      * @param array   $urlArgs url Argument to pass when callback is trigger.
      *
-     * @return $this
      * @throws Exception
+     *
+     * @return $this
      */
     public function setAction(Generic $action, $urlArgs = [])
     {
