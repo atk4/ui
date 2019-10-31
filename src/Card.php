@@ -350,7 +350,7 @@ class Card extends View
             $defaults['confirm'] = $confirm;
         }
 
-        $btn->on('click', $executor = new jsEvent($btn, $action, $id, $args), $defaults);
+        $btn->on('click', $action, $defaults);
 
         return $this;
     }

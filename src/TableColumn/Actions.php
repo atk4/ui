@@ -55,8 +55,6 @@ class Actions extends Generic
             $button->icon = $this->factory('Icon', [$button->icon, 'id' => false], 'atk4\ui');
         }
 
-        $button->app = $this->table->app;
-
         $this->actions[$name] = $button;
         $button->addClass('b_'.$name);
         $button->addClass('compact');

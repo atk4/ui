@@ -5,8 +5,8 @@ require 'database.php';
 
 $g = $app->add(['Grid']);
 $m = new Country($db);
-$m->addAction('test', function () {
-    return 'test was successful!';
+$m->addAction('test', function ($m) {
+    return 'test from '.$m->getTitle().' was successful!';
 });
 $g->setModel($m);
 
