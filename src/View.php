@@ -1177,7 +1177,7 @@ class View implements jsExpressionable
                 $ex = $this->add($ex)->setAction($action, $arguments);
                 $actions[] = $ex;
             } else {
-                throw new \atk4\ui\Exception('Executor class must be of type jsEvent or extends View and implement jsInterface_');
+                throw new \atk4\ui\Exception('Executor class must be of type jsUserAction or extends View and implement both Interface_ and jsInterface_');
             }
         } elseif (is_array($action)) {
             $actions = array_merge($actions, $action);
