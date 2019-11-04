@@ -33,8 +33,18 @@ class Actions extends Generic
      *
      * @return object
      */
-    public function addAction($button, $callback, $confirm = false)
+    public function addAction($button, $callback = null, $confirm = false)
     {
+        // If action is not specified, perhaps it is defined in the model
+        if ($callback === null) {
+            if (is_string($button)) {
+                $button = $this->table->model->getAction($button);
+            }
+
+            $callback = $button;
+            $button = $callback->caption;
+        }
+
         $name = $this->name.'_action_'.(count($this->actions) + 1);
 
         if (!is_object($button)) {
@@ -44,8 +54,6 @@ class Actions extends Generic
         if ($button->icon && !is_object($button->icon)) {
             $button->icon = $this->factory('Icon', [$button->icon, 'id' => false], 'atk4\ui');
         }
-
-        $button->app = $this->table->app;
 
         $this->actions[$name] = $button;
         $button->addClass('b_'.$name);

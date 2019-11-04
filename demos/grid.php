@@ -4,7 +4,11 @@ require 'init.php';
 require 'database.php';
 
 $g = $app->add(['Grid']);
-$g->setModel(new Country($db));
+$m = new Country($db);
+$m->addAction('test', function ($m) {
+    return 'test from '.$m->getTitle().' was successful!';
+});
+$g->setModel($m);
 
 //Adding Quicksearch on Name field using auto query.
 $g->addQuickSearch(['name'], true);
@@ -16,6 +20,8 @@ $g->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
 $g->addColumn(null, ['Template', 'hello<b>world</b>']);
 //$g->addColumn('name', ['TableColumn/Link', 'page2']);
 $g->addColumn(null, 'Delete');
+
+$g->addAction('test');
 
 $g->addAction('Say HI', function ($j, $id) use ($g) {
     return 'Loaded "'.$g->model->load($id)['name'].'" from ID='.$id;

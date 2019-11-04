@@ -14,8 +14,9 @@ use atk4\core\TrackableTrait;
 use atk4\data\Model;
 use atk4\data\Persistence\Static_;
 use atk4\data\UserAction\Generic;
-use atk4\ui\ActionExecutor\jsEvent;
+use atk4\ui\ActionExecutor\Interface_;
 use atk4\ui\ActionExecutor\jsInterface_;
+use atk4\ui\ActionExecutor\jsUserAction;
 use atk4\ui\ActionExecutor\UserAction;
 
 /**
@@ -1155,12 +1156,12 @@ class View implements jsExpressionable
             if ($action->ui['executor'] ?? null) {
                 $class = $action->ui['executor'];
             } elseif (!$action->args && !$action->fields && !$action->preview) {
-                $class = jsEvent::class;
+                $class = jsUserAction::class;
             } else {
                 $class = UserAction::class;
             }
             $ex = new $class();
-            if ($ex instanceof self && $ex instanceof jsInterface_) {
+            if ($ex instanceof self && $ex instanceof Interface_ && $ex instanceof jsInterface_) {
                 $ex = $this->app->add($ex)->setAction($action);
                 if ($arguments['id'] ?? null) {
                     $arguments[$ex->name] = $arguments['id'];
@@ -1176,14 +1177,11 @@ class View implements jsExpressionable
                 } else {
                     $actions[] = $ex_actions;
                 }
-            } elseif ($ex instanceof jsEvent) {
-                $ex->setContext($this);
-                $ex->setAction($action);
-                $ex->setModelId($arguments['id'] ?? null);
-                $ex->setStateContext($arguments['stateContext'] ?? null);
+            } elseif ($ex instanceof jsUserAction) {
+                $ex = $this->add($ex)->setAction($action, $arguments);
                 $actions[] = $ex;
             } else {
-                throw new \atk4\ui\Exception('Executor class must be of type jsEvent or extends View and implement jsInterface_');
+                throw new \atk4\ui\Exception('Executor class must be of type jsUserAction or extends View and implement both Interface_ and jsInterface_');
             }
         } elseif (is_array($action)) {
             $actions = array_merge($actions, $action);

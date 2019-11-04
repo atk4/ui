@@ -236,17 +236,15 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         */
         // JS ACTIONS
         $files[] = [
-            'jsactions.php?atk_admin_button_2_jscallback=ajax&__atk_callback=1',
+            'jsactions.php?atk_admin_jsuseraction=ajax&__atk_callback=1',
             [
-                'atk_event_id' => '',
                 'path'         => '.',
             ],
         ];
 
         $files[] = [
-            'jsactions.php?atk_admin_card_view_view_button_jscallback=ajax&__atk_callback=1',
+            'jsactions.php?atk_admin_card_view_view_button_jsuseraction=ajax&__atk_callback=1',
             [
-                'atk_event_id' => '',
             ],
         ];
 
