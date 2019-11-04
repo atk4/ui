@@ -28,21 +28,32 @@ class Actions extends Generic
      * @param $button
      * @param $callback
      * @param bool $confirm
-     *
-     * @throws \atk4\core\Exception
+     * @param bool $isDisabled
      *
      * @return object
+     * @throws \atk4\core\Exception
+     * @throws \atk4\data\Exception
      */
-    public function addAction($button, $callback = null, $confirm = false)
+    public function addAction($button, $callback = null, $confirm = false, $isDisabled = false)
     {
         // If action is not specified, perhaps it is defined in the model
-        if ($callback === null) {
-            if (is_string($button)) {
-                $button = $this->table->model->getAction($button);
+        if (!$callback && is_string($button)) {
+            $model_action = $this->table->model->getAction($button);
+            if ($model_action) {
+                $isDisabled = !$model_action->enabled;
+                $callback = $model_action;
+                $button = $callback->caption;
+                if ($model_action->ui['confirm'] ?? null) {
+                    $confirm = $model_action->ui['confirm'];
+                }
             }
-
+        } elseif (!$callback && $button instanceof \atk4\data\UserAction\Generic) {
+            $isDisabled = !$button->enabled;
+            if ($button->ui['confirm'] ?? null) {
+                $confirm = $button->ui['confirm'];
+            }
             $callback = $button;
-            $button = $callback->caption;
+            $button = $button->caption;
         }
 
         $name = $this->name.'_action_'.(count($this->actions) + 1);
@@ -65,9 +76,14 @@ class Actions extends Generic
             $button->icon = $this->factory('Icon', [$button->icon, 'id' => false], 'atk4\ui');
         }
 
+        $button->app = $this->table->app;
+
         $this->actions[$name] = $button;
         $button->addClass('b_'.$name);
         $button->addClass('compact');
+        if ($isDisabled) {
+            $button->addClass('disabled');
+        }
         $this->table->on('click', '.b_'.$name, $callback, [$this->table->jsRow()->data('id'), 'confirm' => $confirm]);
 
         return $button;
