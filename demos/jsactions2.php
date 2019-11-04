@@ -30,7 +30,7 @@ $ac = $country->addAction('callback', ['callback'=> function ($m) {
     return 'ok '.$m->getTitle();
 }]);
 $btn = $buttons->add(['Button', $ac->getDescription()]);
-$btn->on('click', $ac, ['args' => ['id' => $id]]);
+$btn->on('click', $ac, [$id]);
 
 // clicking button should show preview window wiht OK. If OK is pressed should close window and display toast OK
 $ac = $country->addAction('preview', ['preview'=> function ($m) {
@@ -81,11 +81,11 @@ $btn = $buttons->add(['Button', $ac->getDescription()]);
 $btn->on('click', $ac, ['args' => ['id' => $id]]);
 
 // action may require confirmation, before activating
-$ac = $country->addAction('confirm', ['ui' => ['confirm'=>'Call action?'], 'callback'=>function () {
-    return 'Confirm ok';
+$ac = $country->addAction('confirm', ['ui' => ['confirm'=>'Call action?'], 'callback'=>function ($m) {
+    return 'Confirm ok '.$m->getTitle();
 }]);
 $btn = $buttons->add(['Button', $ac->getDescription()]);
-$btn->on('click', $ac, ['args' => ['id' => $id], 'confirm' => $ac->ui['confirm']]);
+$btn->on('click', $ac, [$id, 'confirm' => $ac->ui['confirm']]);
 
 // action may require confirmation, before activating
 $ac = $country->addAction('multi_step', ['args'=> ['age'=>['type'=>'integer', 'required'=> true], 'gender' => ['type'=> 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required'=>true]], 'fields'=> ['iso3'], 'callback'=> function ($m, $age, $gender) {

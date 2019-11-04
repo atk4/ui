@@ -26,7 +26,6 @@ use atk4\data\Model;
 use atk4\data\UserAction\Generic;
 use atk4\ui\ActionExecutor\ArgumentForm;
 use atk4\ui\ActionExecutor\Event;
-use atk4\ui\ActionExecutor\jsEvent;
 
 class Card extends View
 {
@@ -350,7 +349,7 @@ class Card extends View
             $defaults['confirm'] = $confirm;
         }
 
-        $btn->on('click', $executor = new jsEvent($btn, $action, $id, $args), $defaults);
+        $btn->on('click', $action, $defaults);
 
         return $this;
     }

@@ -348,7 +348,7 @@ class Grid extends View
      * @param jsExpressionable|callable $action  JavaScript action or callback
      * @param bool|string               $confirm Should we display confirmation "Are you sure?"
      */
-    public function addAction($button, $action, $confirm = false)
+    public function addAction($button, $action = null, $confirm = false)
     {
         if (!$this->actions) {
             $this->actions = $this->table->addColumn(null, $this->actionDecorator);
