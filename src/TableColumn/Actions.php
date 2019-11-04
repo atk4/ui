@@ -30,9 +30,10 @@ class Actions extends Generic
      * @param bool $confirm
      * @param bool $isDisabled
      *
-     * @return object
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
+     *
+     * @return object
      */
     public function addAction($button, $callback = null, $confirm = false, $isDisabled = false)
     {

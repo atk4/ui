@@ -35,7 +35,7 @@ class ActionMenu extends Generic
     public $ui = 'ui small floating dropdown button';
 
     /**
-     * The dropdown module option setting as per Fomantic-ui
+     * The dropdown module option setting as per Fomantic-ui.
      *
      * @var array
      */
@@ -70,9 +70,10 @@ class ActionMenu extends Generic
      * @param null $confirm
      * @param bool $isDisabled
      *
-     * @return object|string
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
+     *
+     * @return object|string
      */
     public function addActionMenuItem($item, $callback = null, $confirm = null, $isDisabled = false)
     {
@@ -119,6 +120,7 @@ class ActionMenu extends Generic
     public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown($this->options);
+
         return parent::getHeaderCellHTML($f, $value);
     }
 

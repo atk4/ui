@@ -58,7 +58,7 @@ class Grid extends View
 
     /**
      * Calling addAction will add a new column inside $table with dropdown menu,
-     * and will be re-used for next addActionMenuItem()
+     * and will be re-used for next addActionMenuItem().
      *
      * @var null
      */
@@ -107,7 +107,7 @@ class Grid extends View
 
     /**
      * TableColumn\Action seed.
-     * Defines which Table Decorator to use for Actions
+     * Defines which Table Decorator to use for Actions.
      *
      * @var string
      */
@@ -232,11 +232,12 @@ class Grid extends View
     /**
      * Add ItemsPerPageSelector View in grid menu or paginator in order to dynamically setup number of item per page.
      *
-     * @param array $items An array of item's per page value.
+     * @param array  $items An array of item's per page value.
      * @param string $label The memu item label.
      *
-     * @return $this
      * @throws \atk4\core\Exception
+     *
+     * @return $this
      */
     public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Item per pages:')
     {
@@ -331,8 +332,8 @@ class Grid extends View
      * By default, will query server when using Enter key on input search field.
      * You can change it to query server on each keystroke by passing $autoQuery true,.
      *
-     * @param array $fields The list of fields to search for.
-     * @param bool $hasAutoQuery Will query server on each key pressed.
+     * @param array $fields       The list of fields to search for.
+     * @param bool  $hasAutoQuery Will query server on each key pressed.
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -384,14 +385,15 @@ class Grid extends View
      * Adds a new button into the action column on the right. For CRUD this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array|View $button Label text, object or seed for the Button
-     * @param jsExpressionable|callable $action JavaScript action or callback
-     * @param bool|string $confirm Should we display confirmation "Are you sure?"
+     * @param string|array|View         $button  Label text, object or seed for the Button
+     * @param jsExpressionable|callable $action  JavaScript action or callback
+     * @param bool|string               $confirm Should we display confirmation "Are you sure?"
      *
-     * @return object
      * @throws Exception
      * @throws Exception\NoRenderTree
      * @throws \atk4\core\Exception
+     *
+     * @return object
      */
     public function addAction($button, $action = null, $confirm = false, $isDisabeld = false)
     {
@@ -411,9 +413,10 @@ class Grid extends View
      * @param bool $confirm
      * @param bool $isDisabeld
      *
-     * @return mixed
      * @throws Exception
      * @throws Exception\NoRenderTree
+     *
+     * @return mixed
      */
     public function addActionMenuItem($view, $action = null, $confirm = false, $isDisabeld = false)
     {
