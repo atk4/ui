@@ -57,6 +57,14 @@ class Grid extends View
     public $actions = null;
 
     /**
+     * Calling addAction will add a new column inside $table with dropdown menu,
+     * and will be re-used for next addActionMenuItem()
+     *
+     * @var null
+     */
+    public $actionMenu = null;
+
+    /**
      * Calling addSelection will add a new column inside $table, containing checkboxes.
      * This column will be stored here, in case you want to access it.
      *
@@ -97,8 +105,21 @@ class Grid extends View
 
     public $defaultTemplate = 'grid.html';
 
-    // Defines which Table Decorator to use for Actions
+    /**
+     * TableColumn\Action seed.
+     * Defines which Table Decorator to use for Actions
+     *
+     * @var string
+     */
     protected $actionDecorator = 'Actions';
+
+    /**
+     * TableColumn\ActionMenu seed.
+     * Defines which Table Decorator to use for ActionMenu.
+     *
+     * @var array
+     */
+    protected $actionMenuDecorator = ['ActionMenu', 'label' => 'Actions...'];
 
     public function init()
     {
@@ -123,6 +144,26 @@ class Grid extends View
         }
 
         $this->stickyGet('_q');
+    }
+
+    /**
+     * Set TableColumn\Actions seed.
+     *
+     * @param $seed
+     */
+    public function setActionDecorator($seed)
+    {
+        $this->actionDecorator = $seed;
+    }
+
+    /**
+     * Set TableColumn\ActionMenu seed.
+     *
+     * @param $seed
+     */
+    public function setActionMenuDecorator($seed)
+    {
+        $this->actionMenuDecorator = $seed;
     }
 
     /**
@@ -191,12 +232,11 @@ class Grid extends View
     /**
      * Add ItemsPerPageSelector View in grid menu or paginator in order to dynamically setup number of item per page.
      *
-     * @param array  $items An array of item's per page value.
+     * @param array $items An array of item's per page value.
      * @param string $label The memu item label.
      *
-     * @throws Exception
-     *
      * @return $this
+     * @throws \atk4\core\Exception
      */
     public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Item per pages:')
     {
@@ -277,8 +317,8 @@ class Grid extends View
     {
         $this->table->hasCollapsingCssActionColumn = false;
         $options = array_merge($options, [
-          'hasFixTableHeader'    => true,
-          'tableContainerHeight' => $containerHeight,
+            'hasFixTableHeader'    => true,
+            'tableContainerHeight' => $containerHeight,
         ]);
         //adding a state context to js scroll plugin.
         $options = array_merge(['stateContext' => '#'.$this->container->name], $options);
@@ -291,11 +331,11 @@ class Grid extends View
      * By default, will query server when using Enter key on input search field.
      * You can change it to query server on each keystroke by passing $autoQuery true,.
      *
-     * @param array $fields       The list of fields to search for.
-     * @param bool  $hasAutoQuery Will query server on each key pressed.
+     * @param array $fields The list of fields to search for.
+     * @param bool $hasAutoQuery Will query server on each key pressed.
      *
      * @throws Exception
-     * @throws \atk4\data\Exception
+     * @throws \atk4\core\Exception
      */
     public function addQuickSearch($fields = [], $hasAutoQuery = false)
     {
@@ -344,17 +384,44 @@ class Grid extends View
      * Adds a new button into the action column on the right. For CRUD this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array|View         $button  Label text, object or seed for the Button
-     * @param jsExpressionable|callable $action  JavaScript action or callback
-     * @param bool|string               $confirm Should we display confirmation "Are you sure?"
+     * @param string|array|View $button Label text, object or seed for the Button
+     * @param jsExpressionable|callable $action JavaScript action or callback
+     * @param bool|string $confirm Should we display confirmation "Are you sure?"
+     *
+     * @return object
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     * @throws \atk4\core\Exception
      */
-    public function addAction($button, $action = null, $confirm = false)
+    public function addAction($button, $action = null, $confirm = false, $isDisabeld = false)
     {
         if (!$this->actions) {
             $this->actions = $this->table->addColumn(null, $this->actionDecorator);
         }
 
-        return $this->actions->addAction($button, $action, $confirm);
+        return $this->actions->addAction($button, $action, $confirm, $isDisabeld);
+    }
+
+    /**
+     * Similar to addAction. Will add Button that when click will display
+     * a Dropdown menu.
+     *
+     * @param $view
+     * @param null $action
+     * @param bool $confirm
+     * @param bool $isDisabeld
+     *
+     * @return mixed
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     */
+    public function addActionMenuItem($view, $action = null, $confirm = false, $isDisabeld = false)
+    {
+        if (!$this->actionMenu) {
+            $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
+        }
+
+        return $this->actionMenu->addActionMenuItem($view, $action, $confirm, $isDisabeld);
     }
 
     /**
