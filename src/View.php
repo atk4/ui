@@ -1165,6 +1165,10 @@ class View implements jsExpressionable
                 if ($arguments['id'] ?? null) {
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
+                } else if ($arguments[0] ?? null) {
+                    // if id is not specify we assume arguments[0] is the model id.
+                    $arguments[$ex->name] = $arguments[0];
+                    unset($arguments[0]);
                 }
                 $ex_actions = $ex->jsExecute($arguments);
                 if (is_array($ex_actions)) {
