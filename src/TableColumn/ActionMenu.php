@@ -7,6 +7,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\core\FactoryTrait;
+use atk4\ui\jQuery;
 
 class ActionMenu extends Generic
 {
@@ -109,7 +110,10 @@ class ActionMenu extends Generic
             $item->addClass('disabled');
         }
 
-        $this->table->on('click', '.i_'.$name, $callback, [$this->table->jsRow()->data('id'), 'confirm' => $confirm]);
+        // set executor context.
+        $context = (new jQuery())->closest('.ui.button');
+
+        $this->table->on('click', '.i_'.$name, $callback, [$this->table->jsRow()->data('id'), 'confirm' => $confirm, 'apiConfig' => ['stateContext' => $context]]);
 
         return $item;
     }
