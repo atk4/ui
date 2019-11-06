@@ -42,12 +42,21 @@ $country->addAction('confirm', ['ui' => ['confirm'=>'Call action?'], 'callback'=
     return 'Confirm ok '.$m->getTitle();
 }]);
 
-$country->addAction('multi_step', ['args'=> ['age'=>['type'=>'integer', 'required'=> true], 'gender' => ['type'=> 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required'=>true]], 'fields'=> ['iso3'], 'callback'=> function ($m, $age, $gender) {
-    //    $m->save();
-    return 'ok';
-}, 'preview'=> function ($m, $age, $gender) {
-    return 'Gender = '.$gender.' / Age = '.$age;
-}]);
+$country->addAction('multi_step',
+    [
+        'args'  => [
+            'age'    => ['type'=>'integer', 'required'=> true],
+            'gender' => ['type'=> 'enum', 'values' => ['Male' => 'Male', 'Female' => 'Female'], 'required'=>true]
+        ],
+        'fields'=> ['iso3'],
+        'preview'=> function ($m, $age, $gender) {
+            return 'Gender = '.$gender.' / Age = '.$age;
+        },
+        'callback'=> function ($m, $age, $gender) {
+            return 'You are a '.$gender. 'of age '.$age. ' who want to visit '.$m->getTitle();
+        }
+    ]
+);
 
 $g = $app->add(['Grid']);
 $g->setModel($country);
@@ -62,4 +71,4 @@ $g->addActionMenuItem('Ouch');
 $g->addActionMenuItem('confirm');
 $g->addActionMenuItem('multi_step');
 
-$g->ipp = 10;
+$g->ipp = 100;
