@@ -9,8 +9,6 @@ namespace atk4\ui\TableColumn;
 use atk4\core\FactoryTrait;
 use atk4\ui\jQuery;
 use atk4\ui\jsChain;
-use atk4\ui\jsExpression;
-use atk4\ui\jsFunction;
 
 class ActionMenu extends Generic
 {
@@ -130,10 +128,10 @@ class ActionMenu extends Generic
             array_merge(
                 $this->options,
                 [
-                    'direction' => 'auto',  // direction need to be auto.
+                    'direction'  => 'auto',  // direction need to be auto.
                     'transition' => 'none', // no transition.
-                    'onShow' => (new jsChain('atk.tableDropdown.onShow')),
-                    'onHide' => (new jsChain('atk.tableDropdown.onHide'))
+                    'onShow'     => (new jsChain('atk.tableDropdown.onShow')),
+                    'onHide'     => (new jsChain('atk.tableDropdown.onHide')),
                 ]
             )
         );

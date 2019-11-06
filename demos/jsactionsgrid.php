@@ -46,15 +46,15 @@ $country->addAction('multi_step',
     [
         'args'  => [
             'age'    => ['type'=>'integer', 'required'=> true],
-            'gender' => ['type'=> 'enum', 'values' => ['Male' => 'Male', 'Female' => 'Female'], 'required'=>true]
+            'gender' => ['type'=> 'enum', 'values' => ['Male' => 'Male', 'Female' => 'Female'], 'required'=>true],
         ],
-        'fields'=> ['iso3'],
+        'fields' => ['iso3'],
         'preview'=> function ($m, $age, $gender) {
             return 'Gender = '.$gender.' / Age = '.$age;
         },
         'callback'=> function ($m, $age, $gender) {
-            return 'You are a '.$gender. 'of age '.$age. ' who want to visit '.$m->getTitle();
-        }
+            return 'You are a '.$gender.'of age '.$age.' who want to visit '.$m->getTitle();
+        },
     ]
 );
 
