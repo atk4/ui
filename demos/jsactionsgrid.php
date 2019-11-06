@@ -53,7 +53,7 @@ $country->addAction('multi_step',
             return 'Gender = '.$gender.' / Age = '.$age;
         },
         'callback'=> function ($m, $age, $gender) {
-            return 'You are a '.$gender.'of age '.$age.' who want to visit '.$m->getTitle();
+            return 'You are a '.$gender.' of age '.$age.' who want to visit '.$m->getTitle();
         },
     ]
 );
