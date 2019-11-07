@@ -3,9 +3,13 @@
 require 'init.php';
 require 'database.php';
 
+$app->add(['Button', 'Actions in Grid', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['jsactionsgrid']);
+
 $app->add(['Button', 'Actions', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['actions']);
 $app->add(['View', 'ui' => 'ui clearing divider']);
+
 
 $app->add(['Header', 'Extensions to ATK Data Actions', 'subHeader'=>'Model action can be trigger using js Event']);
 

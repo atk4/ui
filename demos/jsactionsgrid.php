@@ -3,6 +3,10 @@
 require 'init.php';
 require 'database.php';
 
+$app->add(['Button', 'Js Event', 'small left floated basic blue', 'icon' => 'left arrow'])
+    ->link(['jsactions']);
+$app->add(['View', 'ui' => 'ui clearing divider']);
+
 $country = new Country($db);
 
 $country->addAction('callback', ['callback'=> function ($m) {
@@ -58,17 +62,38 @@ $country->addAction('multi_step',
     ]
 );
 
-$g = $app->add(['Grid']);
+$g = $app->add(['Grid', 'menu' => false]);
 $g->setModel($country);
 
-$g->addActionMenuItem('callback');
-$g->addActionMenuItem('preview');
-$g->addActionMenuItem('disabled_action');
-$g->addActionMenuItem('edit_argument');
-$g->addActionMenuItem('edit_argument_prev');
-$g->addActionMenuItem('edit_iso');
-$g->addActionMenuItem('Ouch');
-$g->addActionMenuItem('confirm');
-$g->addActionMenuItem('multi_step');
 
-$g->ipp = 100;
+$divider = $app->factory('View', ['id' => false, 'class' => ['divider'], 'content' => ''], 'atk4\ui');
+
+$model_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'content' => 'Model Actions'], 'atk4\ui');
+$model_header->add(['Icon', 'content' => 'database']);
+
+$js_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'content' => 'Js Actions'], 'atk4\ui');
+$js_header->add(['Icon', 'content' => 'file code']);
+
+$g->addActionMenuItem($js_header);
+$g->addActionMenuItem('Js Callback', function() {
+   return (new \atk4\ui\View())->set('Js Callback done!');
+});
+
+$g->addActionMenuItem($divider);
+
+$g->addActionMenuItem($model_header);
+$g->addActionMenuItems(
+    [
+       'callback',
+       'preview',
+       'disabled_action',
+       'edit_argument',
+       'edit_argument_prev',
+       'edit_iso',
+       'Ouch',
+       'confirm',
+       'multi_step'
+   ]
+);
+
+$g->ipp = 10;
