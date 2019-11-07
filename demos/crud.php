@@ -15,7 +15,7 @@ $cc = $c->addColumn(0, 'ui blue segment');
 $cc->add(['Header', 'Configured CRUD']);
 $crud = $cc->add([
     'CRUD',
-    'fieldsCreate' => ['name', 'iso', 'iso3', 'numcode', 'phonecode'], // when creating then show more fields
+    //'fieldsCreate' => ['name', 'iso', 'iso3', 'numcode', 'phonecode'], // when creating then show more fields
     'fieldsDefault'=> ['name'], // when updating then only allow to update name
     'ipp'          => 5,
     'paginator'    => ['range'=>2, 'class'=>['blue inverted']],  // reduce range on the paginator
@@ -83,7 +83,7 @@ $crud = $cc->add([
     'CRUD',
     'canCreate'       => false,
     'canDelete'       => false,
-    'pageUpdate'      => ['\MyVP'],
+    //'pageUpdate'      => ['\MyVP'],
     'ipp'             => 5,
 ]);
 
