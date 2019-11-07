@@ -65,7 +65,6 @@ $country->addAction('multi_step',
 $g = $app->add(['Grid', 'menu' => false]);
 $g->setModel($country);
 
-
 $divider = $app->factory('View', ['id' => false, 'class' => ['divider'], 'content' => ''], 'atk4\ui');
 
 $model_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'content' => 'Model Actions'], 'atk4\ui');
@@ -75,8 +74,8 @@ $js_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'conte
 $js_header->add(['Icon', 'content' => 'file code']);
 
 $g->addActionMenuItem($js_header);
-$g->addActionMenuItem('Js Callback', function() {
-   return (new \atk4\ui\View())->set('Js Callback done!');
+$g->addActionMenuItem('Js Callback', function () {
+    return (new \atk4\ui\View())->set('Js Callback done!');
 });
 
 $g->addActionMenuItem($divider);
@@ -92,7 +91,7 @@ $g->addActionMenuItems(
        'edit_iso',
        'Ouch',
        'confirm',
-       'multi_step'
+       'multi_step',
    ]
 );
 
