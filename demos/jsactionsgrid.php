@@ -3,8 +3,8 @@
 require 'init.php';
 require 'database.php';
 
-$app->add(['Button', 'Js Event', 'small left floated basic blue', 'icon' => 'left arrow'])
-    ->link(['jsactions']);
+$app->add(['Button', 'Actions from jsEvent', 'small left floated basic blue', 'icon' => 'left arrow'])
+    ->link(['jsactions2']);
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
 $country = new Country($db);
