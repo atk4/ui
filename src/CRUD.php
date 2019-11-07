@@ -120,7 +120,7 @@ class CRUD extends Grid
         }
 
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            $this->addUserAction($single_record_action);
+            $this->addAction($single_record_action);
         }
 
         return $this->model;

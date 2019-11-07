@@ -1163,6 +1163,9 @@ class View implements jsExpressionable
             $ex = new $class();
             if ($ex instanceof self && $ex instanceof Interface_ && $ex instanceof jsInterface_) {
                 $ex = $this->app->add($ex)->setAction($action);
+                if (isset($arguments[0])) {
+                    $arguments[$ex->name] = $arguments[0];
+                }
                 if ($arguments['id'] ?? null) {
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
