@@ -57,6 +57,14 @@ class Grid extends View
     public $actions = null;
 
     /**
+     * Calling addAction will add a new column inside $table with dropdown menu,
+     * and will be re-used for next addActionMenuItem().
+     *
+     * @var null
+     */
+    public $actionMenu = null;
+
+    /**
      * Calling addSelection will add a new column inside $table, containing checkboxes.
      * This column will be stored here, in case you want to access it.
      *
@@ -97,8 +105,21 @@ class Grid extends View
 
     public $defaultTemplate = 'grid.html';
 
-    // Defines which Table Decorator to use for Actions
+    /**
+     * TableColumn\Action seed.
+     * Defines which Table Decorator to use for Actions.
+     *
+     * @var string
+     */
     protected $actionDecorator = 'Actions';
+
+    /**
+     * TableColumn\ActionMenu seed.
+     * Defines which Table Decorator to use for ActionMenu.
+     *
+     * @var array
+     */
+    protected $actionMenuDecorator = ['ActionMenu', 'label' => 'Actions...'];
 
     public function init()
     {
@@ -114,7 +135,7 @@ class Grid extends View
             $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu, 'atk4\ui'), 'Menu');
         }
 
-        $this->table = $this->container->add($this->factory(['Table', 'very compact very basic striped single line', 'reload' => $this->container], $this->table, 'atk4\ui'), 'Table');
+        $this->table = $this->container->add($this->factory(['Table', 'very  compact basic striped single line', 'reload' => $this->container], $this->table, 'atk4\ui'), 'Table');
 
         if ($this->paginator !== false) {
             $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
@@ -123,6 +144,26 @@ class Grid extends View
         }
 
         $this->stickyGet('_q');
+    }
+
+    /**
+     * Set TableColumn\Actions seed.
+     *
+     * @param $seed
+     */
+    public function setActionDecorator($seed)
+    {
+        $this->actionDecorator = $seed;
+    }
+
+    /**
+     * Set TableColumn\ActionMenu seed.
+     *
+     * @param $seed
+     */
+    public function setActionMenuDecorator($seed)
+    {
+        $this->actionMenuDecorator = $seed;
     }
 
     /**
@@ -194,7 +235,7 @@ class Grid extends View
      * @param array  $items An array of item's per page value.
      * @param string $label The memu item label.
      *
-     * @throws Exception
+     * @throws \atk4\core\Exception
      *
      * @return $this
      */
@@ -277,8 +318,8 @@ class Grid extends View
     {
         $this->table->hasCollapsingCssActionColumn = false;
         $options = array_merge($options, [
-          'hasFixTableHeader'    => true,
-          'tableContainerHeight' => $containerHeight,
+            'hasFixTableHeader'    => true,
+            'tableContainerHeight' => $containerHeight,
         ]);
         //adding a state context to js scroll plugin.
         $options = array_merge(['stateContext' => '#'.$this->container->name], $options);
@@ -295,7 +336,7 @@ class Grid extends View
      * @param bool  $hasAutoQuery Will query server on each key pressed.
      *
      * @throws Exception
-     * @throws \atk4\data\Exception
+     * @throws \atk4\core\Exception
      */
     public function addQuickSearch($fields = [], $hasAutoQuery = false)
     {
@@ -347,14 +388,79 @@ class Grid extends View
      * @param string|array|View         $button  Label text, object or seed for the Button
      * @param jsExpressionable|callable $action  JavaScript action or callback
      * @param bool|string               $confirm Should we display confirmation "Are you sure?"
+     *
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     * @throws \atk4\core\Exception
+     *
+     * @return object
      */
-    public function addAction($button, $action = null, $confirm = false)
+    public function addAction($button, $action = null, $confirm = false, $isDisabeld = false)
     {
         if (!$this->actions) {
             $this->actions = $this->table->addColumn(null, $this->actionDecorator);
         }
 
-        return $this->actions->addAction($button, $action, $confirm);
+        return $this->actions->addAction($button, $action, $confirm, $isDisabeld);
+    }
+
+    /**
+     * Similar to addAction. Will add Button that when click will display
+     * a Dropdown menu.
+     *
+     * @param $view
+     * @param null $action
+     * @param bool $confirm
+     * @param bool $isDisabeld
+     *
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     *
+     * @return mixed
+     */
+    public function addActionMenuItem($view, $action = null, $confirm = false, $isDisabeld = false)
+    {
+        if (!$this->actionMenu) {
+            $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
+        }
+
+        return $this->actionMenu->addActionMenuItem($view, $action, $confirm, $isDisabeld);
+    }
+
+    /**
+     * Add action menu item using an array.
+     *
+     * @param array $actions
+     *
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     */
+    public function addActionMenuItems(array $actions = [])
+    {
+        foreach ($actions as $action) {
+            $this->addActionMenuItem($action);
+        }
+    }
+
+    /**
+     * Add action menu items using Model.
+     * You may specify the scope of actions to be added.
+     *
+     * @param string|null $scope The scope of model action.
+     *
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     * @throws \atk4\core\Exception
+     */
+    public function addActionMenuFromModel(string $scope = null)
+    {
+        if (!$this->model) {
+            throw new Exception('Error: Model not set. Set model prior to add item.');
+        }
+
+        foreach ($this->model->getActions($scope) as $action) {
+            $this->addActionMenuItem($action);
+        }
     }
 
     /**

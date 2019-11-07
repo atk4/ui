@@ -1,5 +1,10 @@
 ## Release note
 
+### version 1.12.0 (2019-11-06)
+
+- add table-dropdown-helper.js 
+    Utlity to dipslay Fomantic ui drodown as a table column.
+
 ### version 1.11.0 (2019-10-24)
 
 - Add DataService. 

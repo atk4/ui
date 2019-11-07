@@ -1142,6 +1142,9 @@ class View implements jsExpressionable
 
             // create callback, that will include event as part of the full name
             $this->_add($cb = new jsCallback(), ['desired_name' => $event]);
+            if ($defaults['apiConfig'] ?? null) {
+                $cb->apiConfig = $defaults['apiConfig'];
+            }
 
             $cb->set(function () use ($action) {
                 $args = func_get_args();
@@ -1166,6 +1169,10 @@ class View implements jsExpressionable
                 if ($arguments['id'] ?? null) {
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
+                } elseif ($arguments[0] ?? null) {
+                    // if id is not specify we assume arguments[0] is the model id.
+                    $arguments[$ex->name] = $arguments[0];
+                    unset($arguments[0]);
                 }
                 $ex_actions = $ex->jsExecute($arguments);
                 if (is_array($ex_actions)) {
@@ -1175,6 +1182,9 @@ class View implements jsExpressionable
                 }
             } elseif ($ex instanceof jsUserAction) {
                 $ex = $this->add($ex)->setAction($action, $arguments);
+                if ($defaults['apiConfig'] ?? null) {
+                    $ex->apiConfig = $defaults['apiConfig'];
+                }
                 $actions[] = $ex;
             } else {
                 throw new \atk4\ui\Exception('Executor class must be of type jsUserAction or extends View and implement both Interface_ and jsInterface_');

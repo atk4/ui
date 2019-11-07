@@ -3,6 +3,9 @@
 require 'init.php';
 require 'database.php';
 
+$app->add(['Button', 'Actions from jsEvent', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['jsactions2']);
+
 $app->add(['Button', 'Actions', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['actions']);
 $app->add(['View', 'ui' => 'ui clearing divider']);

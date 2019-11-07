@@ -4,10 +4,25 @@ require 'init.php';
 require 'database.php';
 
 $country = new Country($db);
-$id = $country->tryLoadAny()->get('id');
-$country->unload();
+$ct = $country->tryLoadAny();
+$id = $ct->get('id');
+$country_name = $ct->getTitle();
 
-$buttons = $app->add(['ui'=>'vertical basic buttons']);
+$app->add(['Button', 'Actions in Grid', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['jsactionsgrid']);
+
+$app->add(['Button', 'Action from Js Event', 'small left floated basic blue', 'icon' => 'left arrow'])
+    ->link(['jsactions']);
+$app->add(['View', 'ui' => 'ui clearing divider']);
+
+$gl = $app->add(['GridLayout', 'rows' => 1, 'columns' => 2]);
+$c = $gl->add(['Card', 'useLabel' => true], 'r1c1');
+$c->addContent(new \atk4\ui\Header(['Using country: ']));
+$c->setModel($country, ['iso', 'iso3', 'phonecode']);
+
+$buttons = $gl->add(['ui'=>'vertical basic buttons'], 'r1c2');
+
+$country->unload();
 
 /*
 // For demonstration purpose with add, edit and delete action.
@@ -81,7 +96,7 @@ $btn = $buttons->add(['Button', $ac->getDescription()]);
 $btn->on('click', $ac, ['args' => ['id' => $id]]);
 
 // action may require confirmation, before activating
-$ac = $country->addAction('confirm', ['ui' => ['confirm'=>'Call action?'], 'callback'=>function ($m) {
+$ac = $country->addAction('confirm', ['ui' => ['confirm'=>'Perform action on '.$country_name.'?'], 'callback'=>function ($m) {
     return 'Confirm ok '.$m->getTitle();
 }]);
 $btn = $buttons->add(['Button', $ac->getDescription()]);
