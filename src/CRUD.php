@@ -6,7 +6,6 @@ namespace atk4\ui;
 
 use atk4\data\UserAction\Action;
 use atk4\data\UserAction\Generic;
-use atk4\ui\ActionExecutor\jsEvent;
 
 /**
  * Implements a more sophisticated and interractive Data-Table component.
@@ -32,11 +31,12 @@ class CRUD extends Grid
      * Sets data model of CRUD.
      *
      * @param \atk4\data\Model $m
-     * @param array $defaultFields
+     * @param array            $defaultFields
      *
-     * @return \atk4\data\Model
      * @throws Exception
      * @throws \atk4\core\Exception
+     *
+     * @return \atk4\data\Model
      */
     public function setModel(\atk4\data\Model $m, $defaultFields = null)
     {
