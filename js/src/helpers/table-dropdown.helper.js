@@ -20,7 +20,7 @@ function showTableDropdown() {
    *
    * @returns {boolean}
    */
-  function hasPlaceBelow() {
+  function canFitBelow() {
     return $menu.outerHeight() < $(window).height() - $that[0].getBoundingClientRect().bottom;
   }
 
@@ -31,7 +31,7 @@ function showTableDropdown() {
     // console.log(position.top, $that.scrollTop());
     let top, left;
     // check if we need to place menu above or down button.
-    if (hasPlaceBelow()) {
+    if (canFitBelow()) {
       top = position.top + $that.outerHeight();
       top = hasFloating ? top + 5 : top;
     } else {
