@@ -48,6 +48,7 @@ class CRUD extends Grid
         $this->model->unload();
 
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
+            //$single_record_action->ui['executor'] = 'huj';
             $this->addAction($single_record_action);
         }
 

@@ -1155,12 +1155,15 @@ class View implements jsExpressionable
             // Setup UserAction executor.
             if ($action->ui['executor'] ?? null) {
                 $class = $action->ui['executor'];
+            } elseif (isset($defaults['executor'])) {
+                $class = $defaults['executor'];
             } elseif (!$action->args && !$action->fields && !$action->preview) {
                 $class = jsUserAction::class;
             } else {
                 $class = UserAction::class;
             }
-            $ex = new $class();
+            $ex = $this->factory($class);
+            //$ex = new $class();
             if ($ex instanceof self && $ex instanceof Interface_ && $ex instanceof jsInterface_) {
                 $ex = $this->app->add($ex)->setAction($action);
                 if (isset($arguments[0])) {
