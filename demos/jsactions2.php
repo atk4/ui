@@ -5,9 +5,22 @@ require 'database.php';
 
 $country = new Country($db);
 $id = $country->tryLoadAny()->get('id');
-$country->unload();
 
-$buttons = $app->add(['ui'=>'vertical basic buttons']);
+$app->add(['Button', 'Actions in Grid', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+    ->link(['jsactionsgrid']);
+
+$app->add(['Button', 'Action from Js Event', 'small left floated basic blue', 'icon' => 'left arrow'])
+    ->link(['jsactions']);
+$app->add(['View', 'ui' => 'ui clearing divider']);
+
+$gl = $app->add(['GridLayout', 'rows' => 1, 'columns' => 2]);
+$c = $gl->add(['Card', 'useLabel' => true], 'r1c1');
+$c->setModel($country, ['name', 'iso', 'iso3', 'phonecode']);
+
+$buttons = $gl->add(['ui'=>'vertical basic buttons'], 'r1c2');
+
+
+$country->unload();
 
 /*
 // For demonstration purpose with add, edit and delete action.
