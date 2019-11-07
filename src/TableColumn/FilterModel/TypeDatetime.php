@@ -92,7 +92,7 @@ class TypeDatetime extends Generic
                     break;
                 case '!=':
                 case '=':
-                    $d1 = $this->getDatetime($filter['value'])->setTime(0, 0, 0);
+                    $d1 = clone ($this->getDatetime($filter['value'])->setTime(0, 0, 0));
                     $d2 = $this->getDatetime($filter['value'])->setTime(23, 59, 59);
                     if ($d2 >= $d1) {
                         $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
