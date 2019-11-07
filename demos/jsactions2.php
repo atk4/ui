@@ -19,7 +19,6 @@ $c->setModel($country, ['name', 'iso', 'iso3', 'phonecode']);
 
 $buttons = $gl->add(['ui'=>'vertical basic buttons'], 'r1c2');
 
-
 $country->unload();
 
 /*
