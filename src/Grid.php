@@ -428,6 +428,42 @@ class Grid extends View
     }
 
     /**
+     * Add action menu item using an array.
+     *
+     * @param array $actions
+     *
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     */
+    public function addActionMenuItems(array $actions = [])
+    {
+        foreach ($actions as $action) {
+            $this->addActionMenuItem($action);
+        }
+    }
+
+    /**
+     * Add action menu items using Model.
+     * You may specify the scope of actions to be added.
+     *
+     * @param string|null $scope The scope of model action.
+     *
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     * @throws \atk4\core\Exception
+     */
+    public function addActionMenuFromModel(string $scope = null)
+    {
+        if (!$this->model) {
+            throw new Exception('Error: Model not set. Set model prior to add item.');
+        }
+
+        foreach ($this->model->getActions($scope) as $action) {
+            $this->addActionMenuItem($action);
+        }
+    }
+
+    /**
      * An array of column name where filter is needed.
      * Leave empty to include all column in grid.
      *

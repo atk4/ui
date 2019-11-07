@@ -7,8 +7,10 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\core\FactoryTrait;
+use atk4\ui\Exception;
 use atk4\ui\jQuery;
 use atk4\ui\jsChain;
+use atk4\ui\View;
 
 class ActionMenu extends Generic
 {
@@ -19,7 +21,7 @@ class ActionMenu extends Generic
      *
      * @var array
      */
-    public $actions = [];
+    protected $actions = [];
 
     /**
      * Dropdown label.
@@ -67,10 +69,10 @@ class ActionMenu extends Generic
     /**
      * Add a menu item in Dropdown.
      *
-     * @param $item
-     * @param null $callback
-     * @param null $confirm
-     * @param bool $isDisabled
+     * @param View|string       $item     View
+     * @param null|Callable     $callback
+     * @param null|string       $confirm
+     * @param bool              $isDisabled
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
