@@ -10,7 +10,6 @@ $app->add(['Button', 'Actions', 'small left floated basic blue', 'icon' => 'left
     ->link(['actions']);
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
-
 $app->add(['Header', 'Extensions to ATK Data Actions', 'subHeader'=>'Model action can be trigger using js Event']);
 
 $country = new Country($db);
