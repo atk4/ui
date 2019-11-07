@@ -91,8 +91,12 @@ $g->addActionMenuItems(
        'edit_iso',
        'Ouch',
        'confirm',
-       'multi_step',
    ]
 );
+
+$special_item = $app->factory('View', ['id' => false, 'class' => ['item'], 'content' => 'Multi Step'], 'atk4\ui');
+$special_item->add(['Icon', 'content' => 'window maximize outline']);
+
+$g->addActionMenuItem($special_item, $country->getAction('multi_step'));
 
 $g->ipp = 10;
