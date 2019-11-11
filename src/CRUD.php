@@ -6,6 +6,8 @@ namespace atk4\ui;
 
 use atk4\data\UserAction\Action;
 use atk4\data\UserAction\Generic;
+use atk4\ui\ActionExecutor\jsEvent;
+use atk4\ui\ActionExecutor\UserAction;
 
 /**
  * Implements a more sophisticated and interractive Data-Table component.
@@ -48,7 +50,14 @@ class CRUD extends Grid
         $this->model->unload();
 
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            //$single_record_action->ui['executor'] = 'huj';
+            $executor = $this->owner->add(UserAction::class);
+            $executor->addHook('afterExecute', function($x) {
+                return $this->container->jsReload();
+                //var_dump($x);
+            });
+
+
+            //$single_record_action->ui['executor'] = [UserAction::class, 'jsSuccess'=>];
             $this->addAction($single_record_action);
         }
 
