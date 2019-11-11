@@ -6,6 +6,7 @@ namespace atk4\ui;
 
 use atk4\data\UserAction\Action;
 use atk4\data\UserAction\Generic;
+use atk4\ui\ActionExecutor\jsUserAction;
 use atk4\ui\ActionExecutor\UserAction;
 
 /**
@@ -49,34 +50,46 @@ class CRUD extends Grid
         $this->model->unload();
 
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            $executor = $this->owner->factory($single_record_action->ui['executor'] ?? UserAction::class);
-            $executor->addHook('afterExecute', function ($x) {
-                return $this->container->jsReload();
-                //var_dump($x);
-            });
+            if ($single_record_action->short_name === 'edit') {
+                // if edit then this executor is ok.
+                $executor = $this->owner->factory($single_record_action->ui['executor'] ?? UserAction::class);
 
-            $single_record_action->ui['executor'] = $executor;
+                $single_record_action->ui['executor'] = $executor;
+                $executor->addHook('afterExecute', function ($x) {
+                    return $this->jsSave($this->notifyDefault);
+                });
 
-            //$single_record_action->ui['executor'] = [UserAction::class, 'jsSuccess'=>];
+            } elseif($single_record_action->short_name === 'delete') {
+                // if delete then we need this executor.
+                $executor = $this->owner->factory($single_record_action->ui['executor'] ?? jsUserAction::class);
+                $single_record_action->ui['executor'] = $executor;
+
+                $executor->addHook('afterExecute', function ($x) {
+                    return (new jQuery())->closest('tr')->transition('fade left');
+                });
+            }
+
+
             $this->addAction($single_record_action);
+
         }
 
-        foreach ($m->getActions(Generic::NO_RECORDS) as $single_record_action) {
-            $executor = $this->owner->add($single_record_action->ui['executor'] ?? UserAction::class);
-            $executor->addHook('afterExecute', function ($x, $action_result) {
-                if ($action_result === []) {
-                    // row was deleted
-                } else {
-                    return $this->container->jsReload();
-                }
-            });
-            $executor->setAction($single_record_action);
-
-            $this->menu->addItem('add')->on('click', $single_record_action);
-
-            //$single_record_action->ui['executor'] = [UserAction::class, 'jsSuccess'=>];
-            //$this->addAction($single_record_action);
-        }
+//        foreach ($m->getActions(Generic::NO_RECORDS) as $single_record_action) {
+//            $executor = $this->owner->add($single_record_action->ui['executor'] ?? UserAction::class);
+//            $executor->addHook('afterExecute', function ($x, $action_result) {
+//                if ($action_result === []) {
+//                    // row was deleted
+//                } else {
+//                    return $this->container->jsReload();
+//                }
+//            });
+//            $executor->setAction($single_record_action);
+//
+//            $this->menu->addItem('add')->on('click', $single_record_action);
+//
+//            //$single_record_action->ui['executor'] = [UserAction::class, 'jsSuccess'=>];
+//            //$this->addAction($single_record_action);
+//        }
 
         return $this->model;
     }
@@ -99,4 +112,26 @@ class CRUD extends Grid
             );
         }
     }
+
+    /**
+     * Default js action when saving form.
+     *
+     * @throws \atk4\core\Exception
+     *
+     * @return array
+     */
+    public function jsSave($notifier)
+    {
+        return [
+            // close modal
+//            new jsExpression('$(".atk-dialog-content").trigger("close")'),
+
+            // display notification
+            $this->factory($notifier, null, 'atk4\ui'),
+
+            // reload Grid Container.
+            $this->container->jsReload([$this->name.'_sort' => $this->getSortBy()]),
+        ];
+    }
+
 }

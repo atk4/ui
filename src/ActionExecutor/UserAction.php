@@ -391,13 +391,13 @@ class UserAction extends Modal implements Interface_, jsInterface_
     {
         $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
 
-        if (is_array($success) || $success instanceof jsExpressionable) {
-            return $success;
-        }
+//        if (is_array($success) || $success instanceof jsExpressionable) {
+//            return $success;
+//        }
 
         return [
             $this->hide(),
-            $this->hook('afterExecute', [$obj, $id]),
+            $this->hook('afterExecute', [$obj, $id]) ?:
             $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
             $this->loader->jsClearStoreData(true),
         ];
