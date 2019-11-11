@@ -397,7 +397,8 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         return [
             $this->hide(),
-            $this->hook('afterExecute', [$obj, $id]) ?: $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
+            $this->hook('afterExecute', [$obj, $id]),
+            $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
             $this->loader->jsClearStoreData(true),
         ];
     }

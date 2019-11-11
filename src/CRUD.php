@@ -50,7 +50,7 @@ class CRUD extends Grid
         $this->model->unload();
 
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            $executor = $this->owner->add(UserAction::class);
+            $executor = $this->owner->add( $single_record_action->ui['executor'] ?? UserAction::class);
             $executor->addHook('afterExecute', function($x) {
                 return $this->container->jsReload();
                 //var_dump($x);
