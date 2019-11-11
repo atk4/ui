@@ -2,6 +2,7 @@
 
 import atk from 'atk-semantic-ui';
 import 'helpers/url.helper';
+import {tableDropdown} from "./helpers/table-dropdown.helper";
 import {plugin, createAtkplugins} from "./plugin";
 import date from 'locutus/php/datetime/date';
 import vueService from './services/vue.service';
@@ -17,6 +18,7 @@ atk.registerPlugin = plugin;
 atk.phpDate = date;
 atk.vueService = vueService;
 atk.dataService = dataService;
+atk.tableDropdown = tableDropdown;
 
 
 /**

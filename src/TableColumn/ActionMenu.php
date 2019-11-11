@@ -8,6 +8,9 @@ namespace atk4\ui\TableColumn;
 
 use atk4\core\FactoryTrait;
 use atk4\ui\jQuery;
+use atk4\ui\jsChain;
+use atk4\ui\jsExpression;
+use atk4\ui\jsFunction;
 
 class ActionMenu extends Generic
 {
@@ -123,7 +126,17 @@ class ActionMenu extends Generic
      */
     public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
     {
-        $this->table->js(true)->find('.atk-action-menu')->dropdown($this->options);
+        $this->table->js(true)->find('.atk-action-menu')->dropdown(
+            array_merge(
+                $this->options,
+                [
+                    'direction' => 'auto',  // direction need to be auto.
+                    'transition' => 'none', // no transition.
+                    'onShow' => (new jsChain('atk.tableDropdown.onShow')),
+                    'onHide' => (new jsChain('atk.tableDropdown.onHide'))
+                ]
+            )
+        );
 
         return parent::getHeaderCellHTML($f, $value);
     }
