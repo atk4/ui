@@ -58,8 +58,7 @@ class CRUD extends Grid
                 $executor->addHook('afterExecute', function ($x) {
                     return $this->jsSave($this->notifyDefault);
                 });
-
-            } elseif($single_record_action->short_name === 'delete') {
+            } elseif ($single_record_action->short_name === 'delete') {
                 // if delete then we need this executor.
                 $executor = $this->owner->factory($single_record_action->ui['executor'] ?? jsUserAction::class);
                 $single_record_action->ui['executor'] = $executor;
@@ -69,9 +68,7 @@ class CRUD extends Grid
                 });
             }
 
-
             $this->addAction($single_record_action);
-
         }
 
 //        foreach ($m->getActions(Generic::NO_RECORDS) as $single_record_action) {
@@ -133,5 +130,4 @@ class CRUD extends Grid
             $this->container->jsReload([$this->name.'_sort' => $this->getSortBy()]),
         ];
     }
-
 }
