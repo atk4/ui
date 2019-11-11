@@ -50,15 +50,33 @@ class CRUD extends Grid
         $this->model->unload();
 
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            $executor = $this->owner->add( $single_record_action->ui['executor'] ?? UserAction::class);
+            $executor = $this->owner->factory( $single_record_action->ui['executor'] ?? UserAction::class);
             $executor->addHook('afterExecute', function($x) {
                 return $this->container->jsReload();
                 //var_dump($x);
             });
 
+            $single_record_action->ui['executor'] = $executor;
 
             //$single_record_action->ui['executor'] = [UserAction::class, 'jsSuccess'=>];
             $this->addAction($single_record_action);
+        }
+
+        foreach ($m->getActions(Generic::NO_RECORDS) as $single_record_action) {
+            $executor = $this->owner->add( $single_record_action->ui['executor'] ?? UserAction::class);
+            $executor->addHook('afterExecute', function($x, $action_result) {
+                if ($action_result === []) {
+                    // row was deleted
+                } else {
+                    return $this->container->jsReload();
+                }
+            });
+            $executor->setAction($single_record_action);
+
+            $this->menu->addItem('add')->on('click', $single_record_action);
+
+            //$single_record_action->ui['executor'] = [UserAction::class, 'jsSuccess'=>];
+            //$this->addAction($single_record_action);
         }
 
         return $this->model;
