@@ -6,7 +6,6 @@ namespace atk4\ui;
 
 use atk4\data\UserAction\Action;
 use atk4\data\UserAction\Generic;
-use atk4\ui\ActionExecutor\jsEvent;
 use atk4\ui\ActionExecutor\UserAction;
 
 /**
@@ -50,8 +49,8 @@ class CRUD extends Grid
         $this->model->unload();
 
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            $executor = $this->owner->factory( $single_record_action->ui['executor'] ?? UserAction::class);
-            $executor->addHook('afterExecute', function($x) {
+            $executor = $this->owner->factory($single_record_action->ui['executor'] ?? UserAction::class);
+            $executor->addHook('afterExecute', function ($x) {
                 return $this->container->jsReload();
                 //var_dump($x);
             });
@@ -63,8 +62,8 @@ class CRUD extends Grid
         }
 
         foreach ($m->getActions(Generic::NO_RECORDS) as $single_record_action) {
-            $executor = $this->owner->add( $single_record_action->ui['executor'] ?? UserAction::class);
-            $executor->addHook('afterExecute', function($x, $action_result) {
+            $executor = $this->owner->add($single_record_action->ui['executor'] ?? UserAction::class);
+            $executor->addHook('afterExecute', function ($x, $action_result) {
                 if ($action_result === []) {
                     // row was deleted
                 } else {
