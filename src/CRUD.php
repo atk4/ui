@@ -49,11 +49,12 @@ class CRUD extends Grid
             $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->fieldsDefault ?? true;
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
-                if ($m->loaded()){
-                    $js =  $this->jsSave($this->notifyDefault);
+                if ($m->loaded()) {
+                    $js = $this->jsSave($this->notifyDefault);
                 } else {
                     $js = $this->jsDelete();
                 }
+
                 return $js;
             });
             $this->addAction($single_record_action);
@@ -64,9 +65,10 @@ class CRUD extends Grid
             $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->fieldsDefault ?? true;
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
-                if ($m->loaded()){
-                    $js =  $this->jsSave($this->notifyDefault);
+                if ($m->loaded()) {
+                    $js = $this->jsSave($this->notifyDefault);
                 }
+
                 return $js;
             });
             $btn = $this->menu->addItem(['Add new '.$this->model->getModelCaption(), 'icon' => 'plus']);
@@ -92,7 +94,6 @@ class CRUD extends Grid
     public function applySort()
     {
         parent::applySort();
-
     }
 
     /**
