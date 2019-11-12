@@ -22,7 +22,6 @@ class CRUD extends Grid
 
     public $jsExecutor = jsUserAction::class;
     public $executor = UserAction::class;
-    public $deleteMsg = 'Are you sure?';
 
     /**
      * Sets data model of CRUD.
@@ -46,47 +45,45 @@ class CRUD extends Grid
         $this->model->unload();
 
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            if ($single_record_action->short_name === 'edit') {
-                $executor = $this->owner->factory($single_record_action->ui['executor'] ?? $this->executor);
-
-                $single_record_action->ui['executor'] = $executor;
-                $single_record_action->fields = $this->fieldsDefault ?? true;
-                $executor->addHook('afterExecute', function ($x) {
-                    return $this->jsSave($this->notifyDefault);
-                });
-                $this->addAction(['icon'=>'edit'], $single_record_action);
-            } elseif ($single_record_action->short_name === 'delete') {
-                $executor = $this->owner->factory($single_record_action->ui['executor'] ?? $this->jsExecutor);
-                $single_record_action->ui['executor'] = $executor;
-                $single_record_action->ui['confirm'] = $this->deleteMsg;
-
-                $executor->addHook('afterExecute', function ($x) {
-                    return (new jQuery())->closest('tr')->transition('fade left');
-                });
-                $this->addAction(['icon'=>'trash'], $single_record_action);
-            } else {
-                $this->addActionMenuItem($single_record_action);
-            }
+            $executor = $this->factory($this->getActionExecutor($single_record_action));
+            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->fieldsDefault ?? true;
+            $single_record_action->ui['executor'] = $executor;
+            $executor->addHook('afterExecute', function ($x, $m, $id) {
+                if ($m->loaded()){
+                    $js =  $this->jsSave($this->notifyDefault);
+                } else {
+                    $js = $this->jsDelete();
+                }
+                return $js;
+            });
+            $this->addAction($single_record_action);
         }
 
         foreach ($m->getActions(Generic::NO_RECORDS) as $single_record_action) {
-            if ($single_record_action->short_name === 'add') {
-                if (!$this->menu) {
-                    throw new Exception('Can not add create button without menu');
+            $executor = $this->factory($this->getActionExecutor($single_record_action));
+            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->fieldsDefault ?? true;
+            $single_record_action->ui['executor'] = $executor;
+            $executor->addHook('afterExecute', function ($x, $m, $id) {
+                if ($m->loaded()){
+                    $js =  $this->jsSave($this->notifyDefault);
                 }
-                $executor = $this->owner->factory($single_record_action->ui['executor'] ?? $this->executor);
-                $single_record_action->ui['executor'] = $executor;
-                $single_record_action->fields = $this->fieldsDefault ?? true;
-                $executor->addHook('afterExecute', function ($x) {
-                    return $this->jsSave($this->notifyDefault);
-                });
-
-                $btn = $this->menu->addItem(['Add new '.$this->model->getModelCaption(), 'icon' => 'plus']);
-                $btn->on('click.atk_CRUD', $single_record_action, [$this->name.'_sort' => $this->getSortBy()]);
-            }
+                return $js;
+            });
+            $btn = $this->menu->addItem(['Add new '.$this->model->getModelCaption(), 'icon' => 'plus']);
+            $btn->on('click.atk_CRUD', $single_record_action, [$this->name.'_sort' => $this->getSortBy()]);
         }
 
         return $this->model;
+    }
+
+    protected function getActionExecutor($action)
+    {
+        $executor = $this->factory($this->executor);
+        if (!$action->args && !$action->fields && !$action->preview) {
+            $executor = $this->factory($this->jsExecutor);
+        }
+
+        return $executor;
     }
 
     /**
@@ -96,16 +93,6 @@ class CRUD extends Grid
     {
         parent::applySort();
 
-        if ($this->getSortBy() && $this->itemCreate) {
-            //Remove previous click handler to Add new Item button and attach new one using sort argument.
-            $this->container->js(true, $this->itemCreate->js()->off('click.atk_CRUD'));
-            $this->container->js(true,
-                                 $this->itemCreate->js()->on('click.atk_CRUD',
-                                 new jsFunction([
-                                     new jsModal('Add new', $this->pageCreate, [$this->name.'_sort' => $this->getSortBy()]),
-                                 ]))
-            );
-        }
     }
 
     /**
@@ -118,14 +105,14 @@ class CRUD extends Grid
     public function jsSave($notifier)
     {
         return [
-            // close modal
-//            new jsExpression('$(".atk-dialog-content").trigger("close")'),
-
-            // display notification
             $this->factory($notifier, null, 'atk4\ui'),
-
             // reload Grid Container.
             $this->container->jsReload([$this->name.'_sort' => $this->getSortBy()]),
         ];
+    }
+
+    public function jsDelete()
+    {
+        return (new jQuery())->closest('tr')->transition('fade left');
     }
 }
