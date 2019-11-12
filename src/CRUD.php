@@ -22,7 +22,7 @@ class CRUD extends Grid
 
     public $jsExecutor = jsUserAction::class;
     public $executor = UserAction::class;
-    public $deleteConfirm = 'Are you sure?';
+    public $deleteMsg = 'Are you sure?';
 
     /**
      * Sets data model of CRUD.
@@ -58,7 +58,7 @@ class CRUD extends Grid
             } elseif ($single_record_action->short_name === 'delete') {
                 $executor = $this->owner->factory($single_record_action->ui['executor'] ?? $this->jsExecutor);
                 $single_record_action->ui['executor'] = $executor;
-                $single_record_action->ui['confirm'] = $this->deleteConfirm;
+                $single_record_action->ui['confirm'] = $this->deleteMsg;
 
                 $executor->addHook('afterExecute', function ($x) {
                     return (new jQuery())->closest('tr')->transition('fade left');
