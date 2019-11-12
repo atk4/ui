@@ -17,17 +17,12 @@ class CRUD extends Grid
     /** @var array of fields to show */
     public $fieldsDefault = null;
 
-    /** @var array of fields to show in grid */
-    public $fieldsRead = null;
-
     /** @var array Default action to perform when adding or editing is successful * */
-    public $notifyDefault = ['jsNotify', 'content' => 'Data is saved!', 'color'   => 'green'];
+    public $notifyDefault = ['jsToast', 'settings'=> ['message' => 'Data is saved!', 'class' => 'success']];
 
-    /** @var array Action to perform when adding is successful * */
-    public $notifyCreate = null;
-
-    /** @var array Action to perform when editing is successful * */
-    public $notifyUpdate = null;
+    public $jsExecutor = jsUserAction::class;
+    public $executor   = UserAction::class;
+    public $deleteConfirm = 'Are you sure?';
 
     /**
      * Sets data model of CRUD.
@@ -46,49 +41,52 @@ class CRUD extends Grid
             $this->fieldsDefault = $defaultFields;
         }
 
-        parent::setModel($m, $this->fieldsRead ?: $this->fieldsDefault);
+        parent::setModel($m);
+
         $this->model->unload();
 
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
             if ($single_record_action->short_name === 'edit') {
-                // if edit then this executor is ok.
-                $executor = $this->owner->factory($single_record_action->ui['executor'] ?? UserAction::class);
+                $executor = $this->owner->factory($single_record_action->ui['executor'] ?? $this->executor);
 
                 $single_record_action->ui['executor'] = $executor;
+                $single_record_action->fields = $this->fieldsDefault ?? true;
                 $executor->addHook('afterExecute', function ($x) {
                     return $this->jsSave($this->notifyDefault);
                 });
+                $this->addAction(['icon'=>'edit'], $single_record_action);
             } elseif ($single_record_action->short_name === 'delete') {
-                // if delete then we need this executor.
-                $executor = $this->owner->factory($single_record_action->ui['executor'] ?? jsUserAction::class);
+                $executor = $this->owner->factory($single_record_action->ui['executor'] ?? $this->jsExecutor);
                 $single_record_action->ui['executor'] = $executor;
+                $single_record_action->ui['confirm']  = $this->deleteConfirm;
 
                 $executor->addHook('afterExecute', function ($x) {
                     return (new jQuery())->closest('tr')->transition('fade left');
                 });
+                $this->addAction(['icon'=>'trash'], $single_record_action);
+            } else {
+                $this->addActionMenuItem($single_record_action);
             }
-
-            $this->addAction($single_record_action);
         }
 
-//        foreach ($m->getActions(Generic::NO_RECORDS) as $single_record_action) {
-//            $executor = $this->owner->add($single_record_action->ui['executor'] ?? UserAction::class);
-//            $executor->addHook('afterExecute', function ($x, $action_result) {
-//                if ($action_result === []) {
-//                    // row was deleted
-//                } else {
-//                    return $this->container->jsReload();
-//                }
-//            });
-//            $executor->setAction($single_record_action);
-//
-//            $this->menu->addItem('add')->on('click', $single_record_action);
-//
-//            //$single_record_action->ui['executor'] = [UserAction::class, 'jsSuccess'=>];
-//            //$this->addAction($single_record_action);
-//        }
+        foreach ($m->getActions(Generic::NO_RECORDS) as $single_record_action) {
+            if ($single_record_action->short_name === 'add') {
+                if (!$this->menu) {
+                    throw new Exception('Can not add create button without menu');
+                }
+                $executor = $this->owner->factory($single_record_action->ui['executor'] ?? $this->executor);
+                $single_record_action->ui['executor'] = $executor;
+                $single_record_action->fields = $this->fieldsDefault ?? true;
+                $executor->addHook('afterExecute', function ($x) {
+                    return $this->jsSave($this->notifyDefault);
+                });
 
-        return $this->model;
+                $btn = $this->menu->addItem(['Add new '.$this->model->getModelCaption(), 'icon' => 'plus']);
+                $btn->on('click.atk_CRUD', $single_record_action, [$this->name.'_sort' => $this->getSortBy()]);
+            }
+        }
+
+            return $this->model;
     }
 
     /**

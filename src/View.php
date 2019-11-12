@@ -1156,7 +1156,7 @@ class View implements jsExpressionable
             $actions[] = $cb;
         } elseif ($action instanceof Generic) {
             // Setup UserAction executor.
-            if ($action->ui['executor'] ?? null) {
+            if (isset($action->ui['executor'])) {
                 $class = $action->ui['executor'];
             } elseif (isset($defaults['executor'])) {
                 $class = $defaults['executor'];
@@ -1172,10 +1172,10 @@ class View implements jsExpressionable
                 if (isset($arguments[0])) {
                     $arguments[$ex->name] = $arguments[0];
                 }
-                if ($arguments['id'] ?? null) {
+                if (isset($arguments['id'])) {
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
-                } elseif ($arguments[0] ?? null) {
+                } elseif (isset($arguments[0])) {
                     // if id is not specify we assume arguments[0] is the model id.
                     $arguments[$ex->name] = $arguments[0];
                     unset($arguments[0]);
