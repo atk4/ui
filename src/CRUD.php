@@ -80,12 +80,9 @@ class CRUD extends Grid
 
     protected function getActionExecutor($action)
     {
-        $executor = $this->factory($this->executor);
-        if (!$action->args && !$action->fields && !$action->preview) {
-            $executor = $this->factory($this->jsExecutor);
-        }
+        $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
 
-        return $executor;
+        return $this->factory($executor);
     }
 
     /**
