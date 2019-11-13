@@ -79,8 +79,9 @@ class CRUD extends Grid
      *
      * @param $action
      *
-     * @return object
      * @throws \atk4\core\Exception
+     *
+     * @return object
      */
     protected function getActionExecutor($action)
     {
