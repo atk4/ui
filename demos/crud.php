@@ -3,11 +3,15 @@
 require 'init.php';
 require 'database.php';
 $m = new Country($db);
+$m->addAction('test', ['ui'=>['button'=>['icon'=>'pencil']]]);
+$m->addAction('test1');
+$m->addAction('test2');
 //$m->getAction('edit')->system =true;
 //$m->getAction('delete')->system =true;
 
 $g = $app->add(['CRUD', 'ipp'=>5]);
 $g->setModel($m);
+
 
 // callback for model action edit form.
 $g->onEditAction(function ($form) {

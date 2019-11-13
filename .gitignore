@@ -16,3 +16,4 @@ yarn.lock
 run_local.sh
 /coverage
 /demos/test/
+package-lock.json

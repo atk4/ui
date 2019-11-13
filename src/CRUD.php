@@ -29,6 +29,9 @@ class CRUD extends Grid
     /** @var string default action executor class in UI for model action. */
     public $executor = UserAction::class;
 
+    /** @var boolean|null should we use drop-down menu to display user actions? */
+    public $useMenuActions = null;
+
     /**
      * Sets data model of CRUD.
      *
@@ -50,6 +53,9 @@ class CRUD extends Grid
 
         $this->model->unload();
 
+        if (is_null($this->useMenuActions)) {
+            $this->useMenuActions = count($m->getActions()) > 4;
+        };
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
             $executor = $this->factory($this->getActionExecutor($single_record_action));
             $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->editFields ?? true;
@@ -57,7 +63,11 @@ class CRUD extends Grid
             $executor->addHook('afterExecute', function ($x, $m, $id) {
                 return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
             });
-            $this->addAction($single_record_action);
+            if ($this->useMenuActions) {
+                $this->addActionMenuItem($single_record_action);
+            } else {
+                $this->addAction($single_record_action);
+            }
         }
 
         foreach ($m->getActions(Generic::NO_RECORDS) as $single_record_action) {
