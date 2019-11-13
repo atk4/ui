@@ -113,7 +113,8 @@ class CRUD extends Grid
     }
 
     /**
-     * Default js action when saving
+     * Default js action when saving.
+     *
      * @throws \atk4\core\Exception
      *
      * @return array
