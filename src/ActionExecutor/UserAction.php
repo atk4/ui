@@ -35,7 +35,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * The action to execute.
      *
-     * @var null
+     * @var Generic
      */
     public $action = null;
 

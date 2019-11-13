@@ -95,6 +95,10 @@ class CRUD extends Grid
      */
     protected function getActionExecutor($action)
     {
+        if (isset($action->ui['executor'])) {
+            return $this->factory($action->ui['executor']);
+        }
+
         $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
 
         return $this->factory($executor);
@@ -109,8 +113,7 @@ class CRUD extends Grid
     }
 
     /**
-     * Default js action when saving form.
-     *
+     * Default js action when saving
      * @throws \atk4\core\Exception
      *
      * @return array
