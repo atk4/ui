@@ -17,7 +17,7 @@ class Money extends Input
             return;
         }
 
-        return number_format($v, 2);
+        return number_format($v, $this->app->ui_persistence->currency_decimals);
     }
 
     public function renderView()
