@@ -36,8 +36,8 @@ class UI extends \atk4\data\Persistence
 
     /**
      * Default decimal count for type 'money'
-     *  Used directly in number_format() second parameter
-     * 
+     *  Used directly in number_format() second parameter.
+     *
      * @var int
      */
     public $currency_decimals = 2;
