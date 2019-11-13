@@ -168,8 +168,8 @@ class CRUD extends Grid
     /**
      * Set onAction callback using UserAction executor.
      *
-     * @param callable  $fx
-     * @param string    $actionName
+     * @param callable $fx
+     * @param string   $actionName
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -183,7 +183,7 @@ class CRUD extends Grid
 
         $ex = $this->model->getAction($actionName)->ui['executor'];
         if ($ex && $ex instanceof UserAction) {
-            $ex->addHook('onStep', function($ex, $step, $form) use ($fx) {
+            $ex->addHook('onStep', function ($ex, $step, $form) use ($fx) {
                 if ($step === 'fields') {
                     return call_user_func($fx, $form, $ex);
                 }

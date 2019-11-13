@@ -10,22 +10,21 @@ $g = $app->add(['CRUD', 'ipp'=>5]);
 $g->setModel($m);
 
 // callback for model action edit form.
-$g->onEditAction(function($form) {
+$g->onEditAction(function ($form) {
     $form->js(true, $form->getField('name')->jsInput()->attr('readonly', true));
 });
 
 // callback for model action add form.
-$g->onAddAction(function($form) {
+$g->onAddAction(function ($form) {
     $form->js(true, $form->getField('iso')->jsInput()->val('WW'));
 });
 
 // callback for both model action edit and add.
-$g->onAction(function($form, $ex) {
+$g->onAction(function ($form, $ex) {
     $form->onSubmit(function ($f) use ($ex) {
         return [$ex->hide(), new \atk4\ui\jsToast('Submit all right! This demo does not saved data.')];
     });
 });
-
 
 $app->add(['ui'=>'divider']);
 
