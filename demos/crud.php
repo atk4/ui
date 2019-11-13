@@ -12,7 +12,6 @@ $m->addAction('test2');
 $g = $app->add(['CRUD', 'ipp'=>5]);
 $g->setModel($m);
 
-
 // callback for model action edit form.
 $g->onEditAction(function ($form) {
     $form->js(true, $form->getField('name')->jsInput()->attr('readonly', true));
