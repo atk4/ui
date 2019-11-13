@@ -289,15 +289,17 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->jsSetSubmitBtn($modal, $f, $this->step);
         $this->jsSetPrevHandler($modal, $this->step);
 
-        $f->onSubmit(function ($f) {
-            // collect fields.
-            $form_fields = $f->model->get();
-            foreach ($this->action->fields as $key => $field) {
-                $this->actionData['fields'][$field] = $form_fields[$field];
-            }
+        if (!$f->hookHasCallbacks('submit')) {
+            $f->onSubmit(function ($f) {
+                // collect fields.
+                $form_fields = $f->model->get();
+                foreach ($this->action->fields as $key => $field) {
+                    $this->actionData['fields'][$field] = $form_fields[$field];
+                }
 
-            return $this->jsStepSubmit($this->step);
-        });
+                return $this->jsStepSubmit($this->step);
+            });
+        }
     }
 
     /**
@@ -390,10 +392,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
     protected function jsGetExecute($obj, $id)
     {
         $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
-
-//        if (is_array($success) || $success instanceof jsExpressionable) {
-//            return $success;
-//        }
 
         return [
             $this->hide(),
@@ -520,8 +518,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         foreach ($fields as $k => $val) {
             $form->getField($k)->set($val);
         }
-
-        $form->hook('onStep', [$step]);
+        $this->hook('onStep', [$step, $form]);
 
         return $form;
     }

@@ -20,7 +20,7 @@ class CRUD extends Grid
     /** @var array of fields to edit in Form */
     public $editFields = null;
 
-    /** @var array Default action to perform when adding or editing is successful * */
+    /** @var array Default notifier to perform when adding or editing is successful * */
     public $notifyDefault = ['jsToast', 'settings'=> ['message' => 'Data is saved!', 'class' => 'success']];
 
     /** @var string default js action executor class in UI for model action. */
@@ -123,5 +123,71 @@ class CRUD extends Grid
     public function jsDelete()
     {
         return (new jQuery())->closest('tr')->transition('fade left');
+    }
+
+    /**
+     * Set callback for edit action in CRUD.
+     * Callback function will receive the Edit Form and Executor as param.
+     *
+     * @param callable $fx
+     *
+     * @throws Exception
+     */
+    public function onEditAction(callable $fx)
+    {
+        $this->setOnActionForm($fx, 'edit');
+    }
+
+    /**
+     * Set callback for add action in CRUD.
+     * Callback function will receive the Edit Form and Executor as param.
+     *
+     * @param callable $fx
+     *
+     * @throws Exception
+     */
+    public function onAddAction(callable $fx)
+    {
+        $this->setOnActionForm($fx, 'add');
+    }
+
+    /**
+     * Set callback for both edit and add action form.
+     * Callback function will receive Forms and Executor as param.
+     *
+     * @param callable $fx
+     *
+     * @throws Exception
+     */
+    public function onAction(callable $fx)
+    {
+        $this->onEditAction($fx);
+        $this->onAddAction($fx);
+    }
+
+    /**
+     * Set onAction callback using UserAction executor.
+     *
+     * @param callable  $fx
+     * @param string    $actionName
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     * @throws \atk4\data\Exception
+     */
+    public function setOnActionForm(callable $fx, string $actionName)
+    {
+        if (!$this->model) {
+            throw new Exception('Model need to be set prior to use on Form');
+        }
+
+        $ex = $this->model->getAction($actionName)->ui['executor'];
+        if ($ex && $ex instanceof UserAction) {
+            $ex->addHook('onStep', function($ex, $step, $form) use ($fx) {
+                if ($step === 'fields') {
+                    return call_user_func($fx, $form, $ex);
+                }
+            });
+        }
     }
 }
