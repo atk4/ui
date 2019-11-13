@@ -55,13 +55,7 @@ class CRUD extends Grid
             $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->editFields ?? true;
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
-                if ($m->loaded()) {
-                    $js = $this->jsSave($this->notifyDefault);
-                } else {
-                    $js = $this->jsDelete();
-                }
-
-                return $js;
+                return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
             });
             $this->addAction($single_record_action);
         }
@@ -71,11 +65,7 @@ class CRUD extends Grid
             $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->editFields ?? true;
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
-                if ($m->loaded()) {
-                    $js = $this->jsSave($this->notifyDefault);
-                }
-
-                return $js;
+                return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
             });
             $btn = $this->menu->addItem(['Add new '.$this->model->getModelCaption(), 'icon' => 'plus']);
             $btn->on('click.atk_CRUD', $single_record_action, [$this->name.'_sort' => $this->getSortBy()]);
