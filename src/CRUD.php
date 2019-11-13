@@ -14,39 +14,45 @@ use atk4\ui\ActionExecutor\UserAction;
  */
 class CRUD extends Grid
 {
-    /** @var array of fields to show */
-    public $fieldsDefault = null;
+    /** @var array of fields to display in Grid */
+    public $displayFields = null;
+
+    /** @var array of fields to edit in Form */
+    public $editFields = null;
 
     /** @var array Default action to perform when adding or editing is successful * */
     public $notifyDefault = ['jsToast', 'settings'=> ['message' => 'Data is saved!', 'class' => 'success']];
 
+    /** @var string default js action executor class in UI for model action. */
     public $jsExecutor = jsUserAction::class;
+
+    /** @var string default action executor class in UI for model action. */
     public $executor = UserAction::class;
 
     /**
      * Sets data model of CRUD.
      *
      * @param \atk4\data\Model $m
-     * @param array            $defaultFields
+     * @param array            $fields
      *
      * @throws Exception
      * @throws \atk4\core\Exception
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $m, $defaultFields = null)
+    public function setModel(\atk4\data\Model $m, $fields = null)
     {
-        if ($defaultFields !== null) {
-            $this->fieldsDefault = $defaultFields;
+        if ($fields !== null) {
+            $this->displayFields = $fields;
         }
 
-        parent::setModel($m);
+        parent::setModel($m, $this->displayFields);
 
         $this->model->unload();
 
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
             $executor = $this->factory($this->getActionExecutor($single_record_action));
-            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->fieldsDefault ?? true;
+            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->editFields ?? true;
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
                 if ($m->loaded()) {
@@ -62,7 +68,7 @@ class CRUD extends Grid
 
         foreach ($m->getActions(Generic::NO_RECORDS) as $single_record_action) {
             $executor = $this->factory($this->getActionExecutor($single_record_action));
-            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->fieldsDefault ?? true;
+            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->editFields ?? true;
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
                 if ($m->loaded()) {
@@ -78,6 +84,14 @@ class CRUD extends Grid
         return $this->model;
     }
 
+    /**
+     * Return proper action executor base on model action.
+     *
+     * @param $action
+     *
+     * @return object
+     * @throws \atk4\core\Exception
+     */
     protected function getActionExecutor($action)
     {
         $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
@@ -109,6 +123,12 @@ class CRUD extends Grid
         ];
     }
 
+    /**
+     *  Return js statement necessary to remove a row in Grid when
+     *  use in $(this) context.
+     *
+     * @return mixed
+     */
     public function jsDelete()
     {
         return (new jQuery())->closest('tr')->transition('fade left');

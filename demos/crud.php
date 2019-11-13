@@ -2,9 +2,12 @@
 
 require 'init.php';
 require 'database.php';
+$m = new Country($db);
+//$m->getAction('edit')->system =true;
+//$m->getAction('delete')->system =true;
 
 $g = $app->add(['CRUD', 'ipp'=>5]);
-$g->setModel(new Country($db));
+$g->setModel($m);
 
 $app->add(['ui'=>'divider']);
 
@@ -16,13 +19,13 @@ $cc->add(['Header', 'Configured CRUD']);
 $crud = $cc->add([
     'CRUD',
     //'fieldsCreate' => ['name', 'iso', 'iso3', 'numcode', 'phonecode'], // when creating then show more fields
-    'fieldsDefault'=> ['name'], // when updating then only allow to update name
+    'displayFields'=> ['name'], // when updating then only allow to update name
+    'editFields'   => ['name', 'iso', 'iso3'],
     'ipp'          => 5,
     'paginator'    => ['range'=>2, 'class'=>['blue inverted']],  // reduce range on the paginator
     'menu'         => ['class'=>['green inverted']],
     'table'        => ['class'=>['red inverted']],
 ]);
-
 // Condition on the model can be applied on a model
 $m = new Country($db);
 $m->addCondition('numcode', '<', 200);
