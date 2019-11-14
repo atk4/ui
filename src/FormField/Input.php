@@ -165,6 +165,20 @@ class Input extends Generic
         if (!is_object($button)) {
             $button = new Button($button);
         }
+        if($button instanceof \atk4\data\UserAction\Generic) {
+            $action = $button;
+            $button = $this->add(new Button($action->caption), $spot);
+            $this->addClass('action');
+            if ($action->args) {
+                $val_as_arg = array_keys($action->args)[0];
+
+                $button->on('click', $action, [$val_as_arg => $this->jsInput()->js()->val()]);
+            } else {
+                $button->on('click', $action);
+
+            }
+
+        }
         if (!$button->_initialized) {
             $this->add($button, $spot);
             $this->addClass('action');

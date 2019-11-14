@@ -9,6 +9,27 @@ if (file_exists('coverage.php')) {
     include_once 'coverage.php';
 }
 
+class Demo extends \atk4\ui\Columns {
+
+    public $left;
+    public $right;
+
+    function init() {
+        parent::init();
+        $this->addClass('celled');
+
+        $this->left = $this->addColumn();
+        $this->right = $this->addColumn();
+    }
+    function setCode($code) {
+        $this->left->add(['element'=>'pre'])->set($code);
+        $app = $this->right;
+        $app->db = $this->app->db;
+        eval($code);
+    }
+}
+
+
 $app = new \atk4\ui\App([
     'call_exit'        => isset($_GET['APP_CALL_EXIT']) && $_GET['APP_CALL_EXIT'] == 0 ? false : true,
     'catch_exceptions' => isset($_GET['APP_CATCH_EXCEPTIONS']) && $_GET['APP_CATCH_EXCEPTIONS'] == 0 ? false : true,
@@ -40,7 +61,7 @@ $app->initLayout($app->stickyGET('layout') ?: 'Admin');
 $layout = $app->layout;
 
 if (isset($layout->leftMenu)) {
-    $layout->leftMenu->addItem(['Welcome Page', 'icon' => 'gift'], ['index']);
+    $layout->leftMenu->addItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['index']);
     $layout->leftMenu->addItem(['Layouts', 'icon' => 'object group'], ['layouts']);
 
     $form = $layout->leftMenu->addGroup(['Form', 'icon' => 'edit']);
