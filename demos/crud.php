@@ -69,7 +69,7 @@ $cc->add(['Header', 'Cutomizations']);
 
 class MyExecutor extends atk4\ui\ActionExecutor\UserAction
 {
-    function addFormTo(\atk4\ui\View $view): \atk4\ui\Form
+    public function addFormTo(\atk4\ui\View $view): \atk4\ui\Form
     {
         /** @var \atk4\ui\Columns $columns */
         $columns = $view->add('Columns');
