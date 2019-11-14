@@ -9,26 +9,28 @@ if (file_exists('coverage.php')) {
     include_once 'coverage.php';
 }
 
-class Demo extends \atk4\ui\Columns {
-
+class Demo extends \atk4\ui\Columns
+{
     public $left;
     public $right;
 
-    function init() {
+    public function init()
+    {
         parent::init();
         $this->addClass('celled');
 
         $this->left = $this->addColumn();
         $this->right = $this->addColumn();
     }
-    function setCode($code) {
+
+    public function setCode($code)
+    {
         $this->left->add(['element'=>'pre'])->set($code);
         $app = $this->right;
         $app->db = $this->app->db;
         eval($code);
     }
 }
-
 
 $app = new \atk4\ui\App([
     'call_exit'        => isset($_GET['APP_CALL_EXIT']) && $_GET['APP_CALL_EXIT'] == 0 ? false : true,

@@ -41,11 +41,13 @@ class Text extends View
      * Adds some HTML code.
      *
      * @param $html
+     *
      * @return $this
      */
     public function addHTML($html)
     {
         $this->content .= $html;
+
         return $this;
     }
 }
