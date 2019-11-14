@@ -18,18 +18,17 @@ use atk4\ui\View;
 
 class UserConfirmation extends Modal implements jsInterface_, Interface_
 {
-
     use HookTrait;
 
     /** @var null|Generic Action to execute */
     public $action = null;
 
-    /** @var null|Loader Loader to add content to modal.  */
+    /** @var null|Loader Loader to add content to modal. */
     public $loader = null;
 
     /** @var string css class for loader. */
     public $loaderUi = 'ui basic segment';
-    /** @var null|array|View  Loader shim object or seed. */
+    /** @var null|array|View Loader shim object or seed. */
     public $loaderShim = null;
     /** @var jsExpressionable */
     public $jsSuccess = null;
@@ -65,8 +64,9 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
      *
      * @param array $urlArgs
      *
-     * @return mixed
      * @throws Exception
+     *
+     * @return mixed
      */
     public function jsExecute(array $urlArgs)
     {
@@ -149,7 +149,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
                 'click',
                 new jsFunction(
                     [
-                        $this->hide()
+                        $this->hide(),
                     ]
                 )
             )
@@ -180,7 +180,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
         $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->owner->id));
     }
 
-
     protected function jsGetExecute($obj, $id)
     {
         $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
@@ -189,7 +188,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
             $this->hide(),
             $this->ok->js(true)->off(),
             $this->cancel->js(true)->off(),
-            $this->hook('afterExecute', [$obj, $id]) ?: $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : ''))
+            $this->hook('afterExecute', [$obj, $id]) ?: $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
         ];
     }
 
