@@ -8,6 +8,7 @@ use atk4\data\UserAction\Action;
 use atk4\data\UserAction\Generic;
 use atk4\ui\ActionExecutor\jsUserAction;
 use atk4\ui\ActionExecutor\UserAction;
+use atk4\ui\ActionExecutor\UserConfirmation;
 
 /**
  * Implements a more sophisticated and interractive Data-Table component.
@@ -58,7 +59,7 @@ class CRUD extends Grid
         }
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
             $executor = $this->factory($this->getActionExecutor($single_record_action));
-            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->editFields ?? true;
+            $single_record_action->fields = ($executor instanceof jsUserAction || $executor instanceof UserConfirmation) ? false : $this->editFields ?? true;
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
                 return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
