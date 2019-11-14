@@ -4,6 +4,7 @@ require 'init.php';
 require 'database.php';
 
 $wizard = $app->add('Wizard');
+$app->stickyGet($wizard->name);
 
 $wizard->addStep('Actions in Agile Data', function ($page) {
     /** @var \atk4\ui\Text $t */
@@ -148,6 +149,13 @@ $wizard->addStep('CRUD integration', function ($page) {
     $t->addParagraph(<<< 'EOF'
 TODO: add example of crud
 EOF
+    );
+
+    $page->add(new Demo())->setCode(<<<'CODE'
+$country = new Country($app->app->db);
+$crud = $app->add(['CRUD', 'ipp'=>5]);
+$crud->setModel($country);
+CODE
     );
 });
 
