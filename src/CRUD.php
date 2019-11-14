@@ -77,8 +77,8 @@ class CRUD extends Grid
             $executor->addHook('afterExecute', function ($x, $m, $id) {
                 return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
             });
-            $btn = $this->menu->addItem(['Add new '.$this->model->getModelCaption(), 'icon' => 'plus']);
-            $btn->on('click.atk_CRUD', $single_record_action, [$this->name.'_sort' => $this->getSortBy()]);
+            $btn = $this->menu->addItem([$single_record_action->getDescription(), 'icon' => 'plus']);
+            $btn->on('click.atk_CRUD', $single_record_action, ['args' => [$this->name.'_sort' => $this->getSortBy()]]);
         }
 
         return $this->model;

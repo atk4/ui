@@ -1166,7 +1166,6 @@ class View implements jsExpressionable
                 $class = UserAction::class;
             }
             $ex = $this->factory($class);
-            //$ex = new $class();
             if ($ex instanceof self && $ex instanceof Interface_ && $ex instanceof jsInterface_) {
                 $ex = $this->app->add($ex)->setAction($action);
                 if (isset($arguments[0])) {
@@ -1188,6 +1187,9 @@ class View implements jsExpressionable
                 }
             } elseif ($ex instanceof jsUserAction) {
                 $ex = $this->add($ex)->setAction($action, $arguments);
+                if ($conf = $action->getConfirmation()) {
+                    $defaults['confirm'] = $conf;
+                }
                 if ($defaults['apiConfig'] ?? null) {
                     $ex->apiConfig = $defaults['apiConfig'];
                 }
