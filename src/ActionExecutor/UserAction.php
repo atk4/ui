@@ -89,6 +89,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     {
         parent::init();
         $this->observeChanges();
+        $this->addClass('atk-data-action');
 
         //Add buttons to modal for next and previous.
         $this->btns = (new View())->addStyle(['min-height' => '24px']);

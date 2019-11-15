@@ -33,6 +33,9 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /** @var jsExpressionable */
     public $jsSuccess = null;
 
+    /** @var string css class for modal size. */
+    public $size = 'tiny';
+
     /** @var string|null */
     private $step = null;
     private $actionInitialized = false;
@@ -46,7 +49,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     {
         parent::init();
         $this->observeChanges();
-        $this->addClass('tiny');
+        $this->addClass($this->size.' atk-data-action');
 
         //Add buttons to modal for next and previous.
         $btns = (new View())->addStyle(['min-height' => '24px']);
