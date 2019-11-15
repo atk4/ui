@@ -49,7 +49,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     {
         parent::init();
         $this->observeChanges();
-        $this->addClass($this->size.' atk-data-action');
+        $this->addClass($this->size);
 
         //Add buttons to modal for next and previous.
         $btns = (new View())->addStyle(['min-height' => '24px']);
@@ -60,6 +60,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 
         $this->loader = $this->add(['Loader', 'ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
+        $this->loader->addClass('atk-hide-loading-content');
     }
 
     /**
