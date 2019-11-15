@@ -19,59 +19,73 @@ a means of allowing data types and parameters within data models to be utilized 
 global properties affecting formatting and output.
 
 
-Global Properties
-=================
+Class Properties
+================
 
-.. php:attr:: $date_format = 'M d, Y'
+.. php:attr:: date_format
 
 Output format for date fields::
 
-    $this->ui_persistence->date_format = 'Y-m-d';
+    $this->ui_persistence->date_format = 'M d, Y'; // Default
+    $this->ui_persistence->date_format = 'Y-m-d';  // International Standard
 
-.. php:attr:: $time_format = 'H:i'
+
+.. php:attr:: time_format
 
 Output format for time fields::
 
-    $this->ui_persistence->time_format = 'h:ia';
+    $this->ui_persistence->time_format = 'H:i'; // Default
 
-.. php:attr:: $datetime_format = 'M d, Y H:i:s'
+
+.. php:attr:: datetime_format
 
 Output format for datetime fields::
 
+    $this->ui_persistence->datetime_format = 'M d, Y H:i:s' // Default
     $this->ui_persistence->datetime_format = 'Y-m-d h:ia';
 
-.. php:attr:: $firstDayOfWeek = 0
 
-For calendars, Monday is 1, Sunday is 0.
+.. php:attr:: firstDayOfWeek
 
-.. php:attr:: $currency = '€'
+For calendars, Monday is 1, Sunday is 0 (Default).
 
-Field type :php:class:`\\atk4\ui\Persistence\Money` use this as a prefix in output, or tag on
+
+.. php:attr:: currency
+
+Field type :php:class:`\\atk4\\ui\\Persistence\\Money` use this as a prefix in output, or tag on
 form input fields::
 
+    $this->ui_persistence->currency = '€';   // Default 
     $this->ui_persistence->currency = '';    // No prefix
-    $this->ui_persistence->currency = '$';   // Generic dollar prefix
-    $this->ui_persistence->currency = 'NOK'; // Currrency specific prefix
+    $this->ui_persistence->currency = '$';
+    $this->ui_persistence->currency = 'NOK';
 
-.. php:attr:: $currency_decimals = 2;
 
-Field type :php:class:`\\atk4\ui\Persistence\Money` use this value as decimal count for
+.. php:attr:: currency_decimals
+
+Field type :php:class:`\\atk4\\ui\\Persistence\\Money` use this value as decimal count for
 number_format() in forms and data output::
 
+    $this->ui_persistence->currency_decimals = 2;  // 2,000,000.43 (Default)
     $this->ui_persistence->currency_decimals = 0;  // 2,000,000
     $this->ui_persistence->currency_decimals = 4;  // 2,000,000.4321
 
 
-.. php:attr:: $yes = 'Yes';
+.. php:attr:: yes
 
+string 'Yes'
 Documentation Needed.
 
-.. php:attr:: $no = 'No';
 
+.. php:attr:: no
+
+string 'No'
 Documentation Needed.
 
-.. php:attr:: $calendar_options = [];
 
+.. php:attr:: calendar_options
+
+array []
 Documentation Needed.
 
 
@@ -100,7 +114,7 @@ in the data model::
     $data_model->addFields([
 
         // Local cost is exact and uses defaults
-        ['local_extact_cost', type => 'money'],
+        ['local_cost', type => 'money'],
 
         // Foreign cost is an estimate, uses no fractions and sets currency prefix
         [

@@ -106,6 +106,7 @@ by having the ability to introduce new types with consistent support throughout 
 
 .. toctree::
     type-presentation
+    ui_persistence
 
 
 
