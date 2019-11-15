@@ -17,13 +17,23 @@ class Money extends Input
             return;
         }
 
-        return number_format($v, $this->app->ui_persistence->currency_decimals);
+        // Override global ui_persistence with value defined in data model field ui[persistence][currency_decimnals]
+        $currency_decimals = isset($this->field->ui['persistence']['currency_decimals'])
+            ? $this->field->ui['persistence']['currency_decimals']
+            : $this->app->ui_persistence->currency_decimals;
+
+        return number_format($v, $currency_decimals);
     }
 
     public function renderView()
     {
+        // Override global ui_persistence with value defined in data model field ui[persistence][currency]
+        $currency = isset($this->field->ui['persistence']['currency'])
+            ? $this->field->ui['persistence']['currency']
+            : $this->app->ui_persistence->currency;
+
         if ($this->label === null) {
-            $this->label = $this->app->ui_persistence->currency;
+            $this->label = $currency;
         }
 
         parent::renderView();
