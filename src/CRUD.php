@@ -171,8 +171,7 @@ class CRUD extends Grid
         return [
             $this->factory($notifier, null, 'atk4\ui'),
             // reload Grid Container.
-//            $this->container->jsReload([$this->name.'_sort' => $this->getSortBy()]),
-            new jsReload($this->container, [$this->name.'_sort' => $this->getSortBy()], null, null, true),
+            $this->container->jsReload([$this->name.'_sort' => $this->getSortBy()]),
         ];
     }
 
