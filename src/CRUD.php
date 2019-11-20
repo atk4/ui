@@ -42,7 +42,7 @@ class CRUD extends Grid
         parent::init();
 
         if ($sortBy = $this->getSortBy()) {
-            $this->app->stickyGet($this->name . '_sort', $sortBy);
+            $this->app->stickyGet($this->name.'_sort', $sortBy);
         }
     }
 
@@ -50,12 +50,12 @@ class CRUD extends Grid
      * Sets data model of CRUD.
      *
      * @param \atk4\data\Model $m
-     * @param array $fields
+     * @param array            $fields
+     *
+     * @throws \atk4\core\Exception
+     * @throws Exception
      *
      * @return \atk4\data\Model
-     * @throws \atk4\core\Exception
-     *
-     * @throws Exception
      */
     public function setModel(\atk4\data\Model $m, $fields = null)
     {
@@ -71,16 +71,15 @@ class CRUD extends Grid
             $this->useMenuActions = count($m->getActions()) > 4;
         }
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            $executor                             = $this->factory($this->getActionExecutor($single_record_action));
-            $single_record_action->fields         = ($executor instanceof jsUserAction || $executor instanceof UserConfirmation) ? false : $this->editFields ?? true;
+            $executor = $this->factory($this->getActionExecutor($single_record_action));
+            $single_record_action->fields = ($executor instanceof jsUserAction || $executor instanceof UserConfirmation) ? false : $this->editFields ?? true;
             $single_record_action->ui['executor'] = $executor;
-            $executor->addHook('afterExecute', function($x, $m, $id) {
+            $executor->addHook('afterExecute', function ($x, $m, $id) {
                 return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
             });
             if ($this->useMenuActions) {
                 $this->addActionMenuItem($single_record_action);
-            }
-            else {
+            } else {
                 $this->addAction($single_record_action);
             }
         }
@@ -88,14 +87,14 @@ class CRUD extends Grid
         foreach ($m->getActions(Generic::NO_RECORDS) as $k => $single_record_action) {
             $executor = $this->factory($this->getActionExecutor($single_record_action));
             if ($executor instanceof View) {
-                $executor->stickyGet($this->name . '_sort', $this->getSortBy());
+                $executor->stickyGet($this->name.'_sort', $this->getSortBy());
             }
             $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->editFields ?? true;
             $single_record_action->ui['executor'] = $executor;
-            $executor->addHook('afterExecute', function($x, $m, $id) {
+            $executor->addHook('afterExecute', function ($x, $m, $id) {
                 return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
             });
-            $this->menuItems[$k]['item']   = $this->menu->addItem([$single_record_action->getDescription(), 'icon' => 'plus']);
+            $this->menuItems[$k]['item'] = $this->menu->addItem([$single_record_action->getDescription(), 'icon' => 'plus']);
             $this->menuItems[$k]['action'] = $single_record_action;
         }
         $this->setItemsAction();
@@ -153,8 +152,8 @@ class CRUD extends Grid
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
                 $ex = $item['action']->ui['executor'];
                 if ($ex instanceof jsInterface_) {
-                    $ex->stickyGet($this->name . '_sort', $this->getSortBy());
-                    $this->container->js(true, $item['item']->js()->on('click.atk_crud_item',  new jsFunction($ex->jsExecute())));
+                    $ex->stickyGet($this->name.'_sort', $this->getSortBy());
+                    $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new jsFunction($ex->jsExecute())));
                 }
             }
         }
@@ -173,7 +172,7 @@ class CRUD extends Grid
             $this->factory($notifier, null, 'atk4\ui'),
             // reload Grid Container.
 //            $this->container->jsReload([$this->name.'_sort' => $this->getSortBy()]),
-            new jsReload($this->container, [$this->name.'_sort' => $this->getSortBy()], null, null, true)
+            new jsReload($this->container, [$this->name.'_sort' => $this->getSortBy()], null, null, true),
         ];
     }
 
