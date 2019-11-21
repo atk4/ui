@@ -172,7 +172,7 @@ class Input extends Generic
             if ($action->args) {
                 $val_as_arg = array_keys($action->args)[0];
 
-                $button->on('click', $action, [$val_as_arg => $this->jsInput()->js()->val()]);
+                $button->on('click', $action, ['args' => [$val_as_arg => $this->jsInput()->val()]]);
             } else {
                 $button->on('click', $action);
             }
