@@ -61,7 +61,6 @@ $executor->addHook('afterExecute', function ($t, $m) {
 
 $btn->on('click', $executor, ['confirm'=> 'This will import a lot of file. Are you sure?']);
 
-
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
 $app->add(['Header', 'Action can be applied to an input button.', 'size' => 4]);
@@ -70,15 +69,15 @@ $app->add(['Header', 'Action can be applied to an input button.', 'size' => 4]);
 // as the action args.
 $country->addAction('greet', [
     'args'=> [
-        'age'=>[
-            'type'=>'integer',
-            'required' => true
-        ]
+        'age'=> [
+            'type'     => 'integer',
+            'required' => true,
+        ],
     ],
-    'ui' => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
-    'callback'=>function ($m, $age) {
+    'ui'      => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
+    'callback'=> function ($m, $age) {
         return 'Age is '.$age;
-    }
+    },
 ]);
 
 $app->add(new \atk4\ui\FormField\Line(['action' => $country->getAction('greet')]));
