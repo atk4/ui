@@ -71,7 +71,7 @@ class CRUD extends Grid
             $this->useMenuActions = count($m->getActions()) > 4;
         }
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            $executor = $this->factory($this->getActionExecutor($single_record_action));
+            $executor = $this->getActionExecutor($single_record_action);
             $single_record_action->fields = ($executor instanceof jsUserAction || $executor instanceof UserConfirmation) ? false : $this->editFields ?? true;
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
