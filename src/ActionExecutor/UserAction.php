@@ -35,7 +35,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * The action to execute.
      *
-     * @var null
+     * @var Generic
      */
     public $action = null;
 
@@ -98,6 +98,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         $this->loader = $this->add(['Loader', 'ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
+        $this->loader->addClass('atk-hide-loading-content');
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
@@ -289,15 +290,17 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->jsSetSubmitBtn($modal, $f, $this->step);
         $this->jsSetPrevHandler($modal, $this->step);
 
-        $f->onSubmit(function ($f) {
-            // collect fields.
-            $form_fields = $f->model->get();
-            foreach ($this->action->fields as $key => $field) {
-                $this->actionData['fields'][$field] = $form_fields[$field];
-            }
+        if (!$f->hookHasCallbacks('submit')) {
+            $f->onSubmit(function ($f) {
+                // collect fields.
+                $form_fields = $f->model->get();
+                foreach ($this->action->fields as $key => $field) {
+                    $this->actionData['fields'][$field] = $form_fields[$field];
+                }
 
-            return $this->jsStepSubmit($this->step);
-        });
+                return $this->jsStepSubmit($this->step);
+            });
+        }
     }
 
     /**
@@ -393,7 +396,8 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         return [
             $this->hide(),
-            $this->hook('afterExecute', [$obj, $id]) ?: $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
+            $this->hook('afterExecute', [$obj, $id]) ?:
+            $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
             $this->loader->jsClearStoreData(true),
         ];
     }
@@ -515,8 +519,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         foreach ($fields as $k => $val) {
             $form->getField($k)->set($val);
         }
-
-        $form->hook('onStep', [$step]);
+        $this->hook('onStep', [$step, $form]);
 
         return $form;
     }

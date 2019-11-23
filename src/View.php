@@ -1156,20 +1156,25 @@ class View implements jsExpressionable
             $actions[] = $cb;
         } elseif ($action instanceof Generic) {
             // Setup UserAction executor.
-            if ($action->ui['executor'] ?? null) {
+            if (isset($action->ui['executor'])) {
                 $class = $action->ui['executor'];
+            } elseif (isset($defaults['executor'])) {
+                $class = $defaults['executor'];
             } elseif (!$action->args && !$action->fields && !$action->preview) {
                 $class = jsUserAction::class;
             } else {
                 $class = UserAction::class;
             }
-            $ex = new $class();
+            $ex = $this->factory($class);
             if ($ex instanceof self && $ex instanceof Interface_ && $ex instanceof jsInterface_) {
                 $ex = $this->app->add($ex)->setAction($action);
-                if ($arguments['id'] ?? null) {
+                if (isset($arguments[0])) {
+                    $arguments[$ex->name] = $arguments[0];
+                }
+                if (isset($arguments['id'])) {
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
-                } elseif ($arguments[0] ?? null) {
+                } elseif (isset($arguments[0])) {
                     // if id is not specify we assume arguments[0] is the model id.
                     $arguments[$ex->name] = $arguments[0];
                     unset($arguments[0]);
@@ -1182,6 +1187,9 @@ class View implements jsExpressionable
                 }
             } elseif ($ex instanceof jsUserAction) {
                 $ex = $this->add($ex)->setAction($action, $arguments);
+                if ($conf = $action->getConfirmation()) {
+                    $defaults['confirm'] = $conf;
+                }
                 if ($defaults['apiConfig'] ?? null) {
                     $ex->apiConfig = $defaults['apiConfig'];
                 }

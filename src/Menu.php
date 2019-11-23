@@ -4,6 +4,8 @@
 
 namespace atk4\ui;
 
+use atk4\data\UserAction\Generic;
+
 /**
  * Place menu.
  */
@@ -61,6 +63,10 @@ class Menu extends View
 
         if ($action instanceof jsExpressionable) {
             $item->js('click', $action);
+        }
+
+        if ($action instanceof Generic) {
+            $item->on('click', $action);
         }
 
         return $item;

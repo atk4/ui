@@ -59,6 +59,16 @@ class Actions extends Generic
 
         $name = $this->name.'_action_'.(count($this->actions) + 1);
 
+        if ($callback instanceof \atk4\data\UserAction\Generic) {
+            if (isset($callback->ui['button'])) {
+                $button = $callback->ui['button'];
+            }
+
+            if (isset($callback->ui['confirm'])) {
+                $confirm = $callback->ui['confirm'];
+            }
+        }
+
         if (!is_object($button)) {
             $button = $this->factory('Button', [$button, 'id' => false], 'atk4\ui');
         }

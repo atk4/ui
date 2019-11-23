@@ -35,7 +35,7 @@ class ActionMenu extends Generic
      *
      * @var string
      */
-    public $ui = 'ui small floating dropdown button';
+    public $ui = 'ui small dropdown button';
 
     /**
      * The dropdown module option setting as per Fomantic-ui.

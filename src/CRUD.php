@@ -6,169 +6,137 @@ namespace atk4\ui;
 
 use atk4\data\UserAction\Action;
 use atk4\data\UserAction\Generic;
+use atk4\ui\ActionExecutor\jsInterface_;
+use atk4\ui\ActionExecutor\jsUserAction;
+use atk4\ui\ActionExecutor\UserAction;
+use atk4\ui\ActionExecutor\UserConfirmation;
 
 /**
  * Implements a more sophisticated and interractive Data-Table component.
  */
 class CRUD extends Grid
 {
-    /** @var array of fields to show */
-    public $fieldsDefault = null;
+    /** @var array of fields to display in Grid */
+    public $displayFields = null;
 
-    /** @var array of fields to show in grid */
-    public $fieldsRead = null;
+    /** @var array of fields to edit in Form */
+    public $editFields = null;
 
-    /** @var array of fields to show on form when adding new record */
-    public $fieldsCreate = null;
+    /** @var array Default notifier to perform when adding or editing is successful * */
+    public $notifyDefault = ['jsToast', 'settings' => ['message' => 'Data is saved!', 'class' => 'success']];
 
-    /** @var array of fields to show on form when editing a record */
-    public $fieldsUpdate = null;
+    /** @var string default js action executor class in UI for model action. */
+    public $jsExecutor = jsUserAction::class;
 
-    /** @var array|Form Seed for form that is used by default * */
-    public $formDefault = ['Form', 'layout' => 'Columns'];
+    /** @var string default action executor class in UI for model action. */
+    public $executor = UserAction::class;
 
-    /** @var array|Form Seed for form that is used when adding * */
-    public $formCreate = null;
+    /** @var bool|null should we use drop-down menu to display user actions? */
+    public $useMenuActions = null;
 
-    /** @var array|Form Seed for form that is used when editing * */
-    public $formUpdate = null;
-
-    /** @var array|View Seed for VirtualPage to use in modal * */
-    public $pageDefault = ['VirtualPage'];
-
-    /** @var array|View Seed for virtual page when adding * */
-    public $pageCreate = null;
-
-    /** @var array|View Seed for virtual page when editing * */
-    public $pageUpdate = null;
-
-    /** @var Item Will be set to menu item for new record add action * */
-    public $itemCreate = null;
-
-    /** @var array Default action to perform when adding or editing is successful * */
-    public $notifyDefault = ['jsNotify', 'content' => 'Data is saved!', 'color'   => 'green'];
-
-    /** @var array Action to perform when adding is successful * */
-    public $notifyCreate = null;
-
-    /** @var array Action to perform when editing is successful * */
-    public $notifyUpdate = null;
-
-    /**
-     * Permitted operations. You can add more of your own.
-     *
-     * @var bool if 'true' user can create records
-     */
-    public $canCreate = true;
-
-    /** @var bool If 'true' then user can update records * */
-    public $canUpdate = true;
-
-    /** @var bool If 'true' user can delete records * */
-    public $canDelete = true;
+    /** @var array Collection of NO_RECORDS Scope Model action menu item */
+    private $menuItems = [];
 
     public function init()
     {
         parent::init();
 
-        if ($this->canUpdate) {
-            $this->pageUpdate = $this->add($this->pageUpdate ?: $this->pageDefault, ['short_name'=>'edit']);
+        if ($sortBy = $this->getSortBy()) {
+            $this->app->stickyGet($this->name.'_sort', $sortBy);
         }
-
-        if ($this->canCreate) {
-            $this->pageCreate = $this->add($this->pageCreate ?: $this->pageDefault, ['short_name'=>'add']);
-        }
-    }
-
-    /**
-     * @deprecated 1.4 use $canCreate, $canDelete etc
-     *
-     * @param mixed $operation
-     */
-    public function can($operation)
-    {
-        throw new Exception('Please simply check $crud->canCreate or similar property directly');
     }
 
     /**
      * Sets data model of CRUD.
      *
      * @param \atk4\data\Model $m
-     * @param array            $defaultFields
+     * @param array            $fields
+     *
+     * @throws \atk4\core\Exception
+     * @throws Exception
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $m, $defaultFields = null)
+    public function setModel(\atk4\data\Model $m, $fields = null)
     {
-        if ($defaultFields !== null) {
-            $this->fieldsDefault = $defaultFields;
+        if ($fields !== null) {
+            $this->displayFields = $fields;
         }
 
-        parent::setModel($m, $this->fieldsRead ?: $this->fieldsDefault);
+        parent::setModel($m, $this->displayFields);
+
         $this->model->unload();
 
-        if ($this->canCreate) {
-            $this->initCreate();
+        if (is_null($this->useMenuActions)) {
+            $this->useMenuActions = count($m->getActions()) > 4;
         }
-
-        if ($this->canUpdate) {
-            $this->initUpdate();
-        }
-
-        if ($this->canDelete) {
-            $this->initDelete();
-        }
-
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            $this->addUserAction($single_record_action);
+            $executor = $this->getActionExecutor($single_record_action);
+            $single_record_action->fields = ($executor instanceof jsUserAction || $executor instanceof UserConfirmation) ? false : $this->editFields ?? true;
+            $single_record_action->ui['executor'] = $executor;
+            $executor->addHook('afterExecute', function ($x, $m, $id) {
+                return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
+            });
+            if ($this->useMenuActions) {
+                $this->addActionMenuItem($single_record_action);
+            } else {
+                $this->addAction($single_record_action);
+            }
         }
+
+        foreach ($m->getActions(Generic::NO_RECORDS) as $k => $single_record_action) {
+            $executor = $this->factory($this->getActionExecutor($single_record_action));
+            if ($executor instanceof View) {
+                $executor->stickyGet($this->name.'_sort', $this->getSortBy());
+            }
+            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->editFields ?? true;
+            $single_record_action->ui['executor'] = $executor;
+            $executor->addHook('afterExecute', function ($x, $m, $id) {
+                return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
+            });
+            $this->menuItems[$k]['item'] = $this->menu->addItem([$single_record_action->getDescription(), 'icon' => 'plus']);
+            $this->menuItems[$k]['action'] = $single_record_action;
+        }
+        $this->setItemsAction();
 
         return $this->model;
     }
 
     /**
-     * Initializes interface elements for new record creation.
+     * Setup js for firing action.
      *
-     * @return array|jsExpression
+     * @throws \atk4\core\Exception
      */
-    public function initCreate()
+    protected function setItemsAction()
     {
-        // setting itemCreate manually is possible.
-        if (!$this->itemCreate) {
-            if (!$this->menu) {
-                throw new Exception('Can not add create button without menu');
-            }
-            $this->itemCreate = $this->menu->addItem(['Add new '.$this->model->getModelCaption(), 'icon' => 'plus']);
+        foreach ($this->menuItems as $k => $item) {
+            $this->container->js(true, $item['item']->on('click.atk_crud_item', $item['action']));
         }
-        $this->itemCreate->on('click.atk_CRUD', new jsModal('Add new', $this->pageCreate, [$this->name.'_sort' => $this->getSortBy()]));
+    }
 
-        // setting callback for the page
-        $this->pageCreate->set(function () {
+    public function renderView()
+    {
+        return parent::renderView(); // TODO: Change the autogenerated stub
+    }
 
-            // formCreate may already be an object added inside pageCreate
-            if (!is_object($this->formCreate) || !$this->formCreate->_initialized) {
-                $this->formCreate = $this->pageCreate->add($this->formCreate ?: $this->formDefault);
-            }
+    /**
+     * Return proper action executor base on model action.
+     *
+     * @param $action
+     *
+     * @throws \atk4\core\Exception
+     *
+     * @return object
+     */
+    protected function getActionExecutor($action)
+    {
+        if (isset($action->ui['executor'])) {
+            return $this->factory($action->ui['executor']);
+        }
 
-            // $form = $page->add($this->formCreate ?: ['Form', 'layout' => 'FormLayout/Columns']);
-            $this->formCreate->setModel($this->model, $this->fieldsCreate ?: $this->fieldsDefault);
+        $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
 
-            if ($sortBy = $this->getSortBy()) {
-                $this->formCreate->stickyGet($this->name.'_sort', $sortBy);
-            }
-
-            // set save handler with reload trigger
-            // adds default submit hook if it is not already set for this form
-            if (!$this->formCreate->hookHasCallbacks('submit')) {
-                $this->formCreate->onSubmit(function ($form) {
-                    $form->model->save();
-
-                    return $this->jsSaveCreate();
-                });
-            }
-        });
-
-        // now go over other actions and link them with executors
+        return $this->factory($executor);
     }
 
     /**
@@ -178,77 +146,21 @@ class CRUD extends Grid
     {
         parent::applySort();
 
-        if ($this->getSortBy() && $this->itemCreate) {
-            //Remove previous click handler to Add new Item button and attach new one using sort argument.
-            $this->container->js(true, $this->itemCreate->js()->off('click.atk_CRUD'));
-            $this->container->js(true,
-                                 $this->itemCreate->js()->on('click.atk_CRUD',
-                                 new jsFunction([
-                                     new jsModal('Add new', $this->pageCreate, [$this->name.'_sort' => $this->getSortBy()]),
-                                 ]))
-            );
+        if ($this->getSortBy() && !empty($this->menuItems)) {
+            foreach ($this->menuItems as $k => $item) {
+                //Remove previous click handler and attach new one using sort argument.
+                $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
+                $ex = $item['action']->ui['executor'];
+                if ($ex instanceof jsInterface_) {
+                    $ex->stickyGet($this->name.'_sort', $this->getSortBy());
+                    $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new jsFunction($ex->jsExecute())));
+                }
+            }
         }
     }
 
     /**
-     * Method to override to create a custom JavaScript action to execute
-     * when submitting create form.
-     *
-     * @return array|jsExpression
-     */
-    public function jsSaveCreate()
-    {
-        return $this->jsSave($this->notifyCreate ?: $this->notifyDefault);
-    }
-
-    /**
-     * Initializes interface elements for editing records.
-     *
-     * @return array|jsExpression
-     */
-    public function initUpdate()
-    {
-        $this->addAction(['icon' => 'edit'], new jsModal('Edit', $this->pageUpdate, [$this->name => $this->jsRow()->data('id'), $this->name.'_sort' => $this->getSortBy()]));
-
-        $this->pageUpdate->set(function () {
-            $this->model->load($this->app->stickyGet($this->name));
-
-            // Maybe developer has already created form
-            if (!is_object($this->formUpdate) || !$this->formUpdate->_initialized) {
-                $this->formUpdate = $this->pageUpdate->add($this->formUpdate ?: $this->formDefault);
-            }
-
-            $this->formUpdate->setModel($this->model, $this->fieldsUpdate ?: $this->fieldsDefault);
-
-            if ($sortBy = $this->getSortBy()) {
-                $this->formUpdate->stickyGet($this->name.'_sort', $sortBy);
-            }
-
-            // set save handler with reload trigger
-            // adds default submit hook if it is not already set for this form
-            if (!$this->formUpdate->hookHasCallbacks('submit')) {
-                $this->formUpdate->onSubmit(function ($form) {
-                    $form->model->save();
-
-                    return $this->jsSaveUpdate();
-                });
-            }
-        });
-    }
-
-    /**
-     * Method to override to create a custom JavaScript action to execute
-     * when submitting update form.
-     *
-     * @return array|jsExpression
-     */
-    public function jsSaveUpdate()
-    {
-        return $this->jsSave($this->notifyUpdate ?: $this->notifyDefault);
-    }
-
-    /**
-     * Default js action when saving form.
+     * Default js action when saving.
      *
      * @throws \atk4\core\Exception
      *
@@ -257,26 +169,86 @@ class CRUD extends Grid
     public function jsSave($notifier)
     {
         return [
-            // close modal
-            new jsExpression('$(".atk-dialog-content").trigger("close")'),
-
-            // display notification
             $this->factory($notifier, null, 'atk4\ui'),
-
             // reload Grid Container.
             $this->container->jsReload([$this->name.'_sort' => $this->getSortBy()]),
         ];
     }
 
     /**
-     * Initialize UI for deleting records.
+     *  Return js statement necessary to remove a row in Grid when
+     *  use in $(this) context.
+     *
+     * @return mixed
      */
-    public function initDelete()
+    public function jsDelete()
     {
-        $this->addAction(['icon' => 'red trash'], function ($jschain, $id) {
-            $this->model->load($id)->delete();
+        return (new jQuery())->closest('tr')->transition('fade left');
+    }
 
-            return $jschain->closest('tr')->transition('fade left');
-        }, 'Are you sure?');
+    /**
+     * Set callback for edit action in CRUD.
+     * Callback function will receive the Edit Form and Executor as param.
+     *
+     * @param callable $fx
+     *
+     * @throws Exception
+     */
+    public function onEditAction(callable $fx)
+    {
+        $this->setOnActionForm($fx, 'edit');
+    }
+
+    /**
+     * Set callback for add action in CRUD.
+     * Callback function will receive the Edit Form and Executor as param.
+     *
+     * @param callable $fx
+     *
+     * @throws Exception
+     */
+    public function onAddAction(callable $fx)
+    {
+        $this->setOnActionForm($fx, 'add');
+    }
+
+    /**
+     * Set callback for both edit and add action form.
+     * Callback function will receive Forms and Executor as param.
+     *
+     * @param callable $fx
+     *
+     * @throws Exception
+     */
+    public function onAction(callable $fx)
+    {
+        $this->onEditAction($fx);
+        $this->onAddAction($fx);
+    }
+
+    /**
+     * Set onAction callback using UserAction executor.
+     *
+     * @param callable $fx
+     * @param string   $actionName
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     * @throws \atk4\data\Exception
+     */
+    public function setOnActionForm(callable $fx, string $actionName)
+    {
+        if (!$this->model) {
+            throw new Exception('Model need to be set prior to use on Form');
+        }
+
+        $ex = $this->model->getAction($actionName)->ui['executor'];
+        if ($ex && $ex instanceof UserAction) {
+            $ex->addHook('onStep', function ($ex, $step, $form) use ($fx) {
+                if ($step === 'fields') {
+                    return call_user_func($fx, $form, $ex);
+                }
+            });
+        }
     }
 }

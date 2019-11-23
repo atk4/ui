@@ -135,7 +135,7 @@ class Grid extends View
             $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu, 'atk4\ui'), 'Menu');
         }
 
-        $this->table = $this->container->add($this->factory(['Table', 'very  compact basic striped single line', 'reload' => $this->container], $this->table, 'atk4\ui'), 'Table');
+        $this->table = $this->container->add($this->factory(['Table', 'very compact very basic striped single line', 'reload' => $this->container], $this->table, 'atk4\ui'), 'Table');
 
         if ($this->paginator !== false) {
             $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
