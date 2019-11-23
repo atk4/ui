@@ -34,6 +34,14 @@ class UI extends \atk4\data\Persistence
 
     public $currency = '€';
 
+    /**
+     * Default decimal count for type 'money'
+     *  Used directly in number_format() second parameter.
+     *
+     * @var int
+     */
+    public $currency_decimals = 2;
+
     public $yes = 'Yes';
     public $no = 'No';
 
@@ -56,7 +64,7 @@ class UI extends \atk4\data\Persistence
         case 'boolean':
             return $v ? $this->yes : $this->no;
         case 'money':
-            return ($this->currency ? $this->currency.' ' : '').number_format($v, 2);
+            return ($this->currency ? $this->currency.' ' : '').number_format($v, $this->currency_decimals);
         case 'date':
         case 'datetime':
         case 'time':
