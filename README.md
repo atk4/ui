@@ -1,12 +1,8 @@
 # Agile UI - User Interface framework for Agile Toolkit
 
-[Agile Toolkit](https://agiletoolkit.org/) is a Low Code framework written
-in PHP. Agile UI implement server side rendering engine and
-over 50 UI generic components for interacting with your Data Model.
+[Agile Toolkit](https://agiletoolkit.org/) is a Low Code framework written in PHP. Agile UI implement server side rendering engine and over 50 UI generic components for interacting with your Data Model.
 
-Agile UI is quickest way for building back-end UI, admin interfaces,
-data management systems for medium and large projects designed around
-roles, complex logic, formulas.
+Agile UI is quickest way for building back-end UI, admin interfaces, data management systems for medium and large projects designed around roles, complex logic, formulas.
 
  - Agile UI relies on abstract data. It could be stored in SQL, NoSQL or in external API.
  - Agile UI adjusts to your data model. If you change your model structure, UI will reflect that.
@@ -33,10 +29,10 @@ three steps involved:
  1. Define your "Data Model" through [Agile Data Framework](https://github.com/atk4/data) and associate with SQL, NoSQL or API.
  2. Initialize UI components, connecting them to Data Model to build User Interface for your application.
  3. If needed - Use [Agile API](https://github.com/atk4/api) to provide API access for your Mobile/React app or IoT devices.
- 
+
 Agile Data allows you to define models, fields, relations, formulas, aggregates, expressions, user action and
 access control rules. Both Agile UI and Agile API will follow those rules. 
- 
+
 ### Integrations and Apps using Agile UI
 
 Agile UI can integrate with frameworks like Laravel or Symfony, has integration with Wordpress and there are several
