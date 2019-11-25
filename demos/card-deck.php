@@ -19,8 +19,6 @@ $action = $countries->addAction('Book', function ($m, $city) {
 
 $action->args = ['city' => ['type'=>'string', 'required'=>true, 'caption' => 'Which City']];
 
-$countries->setLimit(4);
-
 $deck = $app->add('CardDeck');
 
 $deck->setModel($countries, ['Cost']);
