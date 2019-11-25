@@ -1188,7 +1188,6 @@ class View implements jsExpressionable
                 } else {
                     $actions[] = $ex_actions;
                 }
-
             } elseif ($ex instanceof jsUserAction) {
                 $ex = $this->add($ex)->setAction($action, $arguments);
                 if ($conf = $action->getConfirmation()) {

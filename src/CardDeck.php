@@ -20,7 +20,7 @@ class CardDeck extends View
     /** @var bool Whether card should use table display or not. */
     public $useTable = false;
 
-    /** @var bool Whether card should use label display or not.  */
+    /** @var bool Whether card should use label display or not. */
     public $useLabel = false;
 
     /** @var null|string If using extra field in Card, glue, join them using extra glue. */
@@ -38,7 +38,7 @@ class CardDeck extends View
     /** @var int The number of card to be display per page. */
     public $ipp = 6;
 
-    /** @var null|integer The current page number. */
+    /** @var null|int The current page number. */
     private $page = null;
 
     /** @var string Default executor class. */
@@ -52,7 +52,6 @@ class CardDeck extends View
 
     public $saveMsg = 'Record has been saved!';
     public $deleteMsg = 'Record has been deleted!';
-
 
     public function init()
     {
@@ -76,7 +75,7 @@ class CardDeck extends View
         $this->_setModelLimitFromPaginator();
 
         $this->model->each(function ($m) use ($fields, $extra) {
-            /** @var  $c Card*/
+            /** @var $c Card */
             $c = $this->cardHolder->add([$this->card]);
             $c->setModel($m);
             $c->addSection($m->getTitle(), $m, $fields, $this->useLabel, $this->useTable);
@@ -93,15 +92,16 @@ class CardDeck extends View
                             // set action response depending on the return
                             if (is_string($return)) {
                                 $this->setNotifierMsg($return);
+
                                 return  $this->getJsNotify($return);
-                            } elseif(is_array($return) || $return instanceof jsExpressionable) {
+                            } elseif (is_array($return) || $return instanceof jsExpressionable) {
                                 return $return;
                             } elseif ($return instanceof Model) {
                                 return $m->loaded() ? $this->jsRespond($this->saveMsg) : $this->jsRespond($this->deleteMsg);
                             }
                         };
                         if ($ex instanceof jsUserAction) {
-                            $id_arg[0] =  (new jQuery())->parents('.atk-card')->data('id');
+                            $id_arg[0] = (new jQuery())->parents('.atk-card')->data('id');
                         }
                         $action->ui['executor'] = $ex;
                         $c->addClickAction($action, null, array_merge($id_arg, $page_arg));
@@ -146,13 +146,14 @@ class CardDeck extends View
         return [
 //            $this->factory($this->notifyDefault, null, 'atk4\ui'),
             $this->getJsNotify($msg),
-            $this->container->jsReload([$this->paginator->name => $this->page])
+            $this->container->jsReload([$this->paginator->name => $this->page]),
         ];
     }
 
     public function getJsNotify($msg)
     {
         $this->setNotifierMsg($msg);
+
         return $this->factory($this->notifyDefault, null, 'atk4\ui');
     }
 

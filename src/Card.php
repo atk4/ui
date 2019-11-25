@@ -24,9 +24,7 @@ namespace atk4\ui;
 
 use atk4\data\Model;
 use atk4\data\UserAction\Generic;
-use atk4\ui\ActionExecutor\ArgumentForm;
 use atk4\ui\ActionExecutor\Event;
-use atk4\ui\ActionExecutor\jsUserAction;
 use atk4\ui\ActionExecutor\UserAction;
 
 class Card extends View
@@ -275,15 +273,16 @@ class Card extends View
      * Add a CardSection to this card.
      *
      * @param string|null $title
-     * @param Model|null $model
-     * @param array|null $fields
-     * @param bool $useTable
-     * @param bool $useLabel
+     * @param Model|null  $model
+     * @param array|null  $fields
+     * @param bool        $useTable
+     * @param bool        $useLabel
      *
-     * @return View
      * @throws Exception
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception *@throws \atk4\core\Exception
+     *
+     * @return View
      */
     public function addSection(string $title = null, Model $model = null, array $fields = null, bool $useTable = false, bool $useLabel = false)
     {
@@ -365,7 +364,7 @@ class Card extends View
 
         if ($confirm) {
             $defaults['confirm'] = $confirm;
-        } else if(isset($action->ui['confirm'])) {
+        } elseif (isset($action->ui['confirm'])) {
             $defaults['confirm'] = $action->ui['confirm'];
         }
 
