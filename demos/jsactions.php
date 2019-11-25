@@ -19,7 +19,7 @@ $c_action = $country->addAction('Email', function ($m) {
 });
 
 $country->tryLoadAny();
-/** @var  $card \atk4\ui\Card*/
+/** @var $card \atk4\ui\Card */
 $card = $app->add('Card');
 $content = new \atk4\ui\View(['class' => ['content']]);
 $content->add($img = new \atk4\ui\Image(['images/kristy.png']));
