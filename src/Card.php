@@ -26,6 +26,8 @@ use atk4\data\Model;
 use atk4\data\UserAction\Generic;
 use atk4\ui\ActionExecutor\ArgumentForm;
 use atk4\ui\ActionExecutor\Event;
+use atk4\ui\ActionExecutor\jsUserAction;
+use atk4\ui\ActionExecutor\UserAction;
 
 class Card extends View
 {
@@ -35,6 +37,9 @@ class Card extends View
 
     /** @var null|View A View that hold the image. */
     public $imageContainer = null;
+
+    /** @var string Card box type. */
+    public $cardCss = 'segment';
 
     /** @var null|string|Image A path to the image src or the image view. */
     public $image = null;
@@ -70,7 +75,7 @@ class Card extends View
     public $useLabel = false;
 
     /** @var string Default executor class. */
-    public $executor = ArgumentForm::class;
+    public $executor = UserAction::class;
 
     /** @var array Array of columns css wide classes */
     protected $words = [
@@ -85,6 +90,7 @@ class Card extends View
     {
         parent::init();
 
+        $this->addClass($this->cardCss);
         if ($this->imageContainer) {
             $this->add($this->imageContainer, 'Image');
         }
@@ -202,8 +208,9 @@ class Card extends View
 
         if (!$this->model) {
             $m = parent::setModel($m);
-            $this->setDataId($this->model->get($this->model->id_field));
         }
+
+        $this->setDataId($this->model->get($this->model->id_field));
 
         if ($fields && is_array($fields)) {
             $this->getSection()->add(['View', $m->getTitle(), ['class' => 'header']]);
@@ -268,15 +275,15 @@ class Card extends View
      * Add a CardSection to this card.
      *
      * @param string|null $title
-     * @param Model|null  $model
-     * @param array|null  $fields
-     * @param bool        $useTable
-     * @param bool        $useLabel
-     *
-     * @throws Exception
-     * @throws \atk4\data\Exception
+     * @param Model|null $model
+     * @param array|null $fields
+     * @param bool $useTable
+     * @param bool $useLabel
      *
      * @return View
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     * @throws \atk4\data\Exception *@throws \atk4\core\Exception
      */
     public function addSection(string $title = null, Model $model = null, array $fields = null, bool $useTable = false, bool $useLabel = false)
     {
@@ -339,14 +346,27 @@ class Card extends View
     {
         $defaults = [];
         if (!$button) {
-            $button = new Button([$action->caption]);
+            if (isset($action->ui['button'])) {
+                $button = $action->ui['button'];
+            } else {
+                $button = new Button([$action->caption]);
+            }
         }
         $btn = $this->addButton($button);
 
-        $id = $this->model ? $this->model[$this->model->id_field] : null;
+        // Setting arg for model id. $args[0] is consider to hold a model id, i.e. as a js expression.
+        if ($this->model && $this->model->loaded() && !isset($args[0])) {
+            $defaults[] = $this->model->id;
+        }
+
+        if (!empty($args)) {
+            $defaults['args'] = $args;
+        }
 
         if ($confirm) {
             $defaults['confirm'] = $confirm;
+        } else if(isset($action->ui['confirm'])) {
+            $defaults['confirm'] = $action->ui['confirm'];
         }
 
         $btn->on('click', $action, $defaults);
@@ -446,6 +466,10 @@ class Card extends View
     {
         if ($this->hasFluidButton && $this->btnCount > 0) {
             $this->getButtonContainer()->removeClass($this->words[$this->btnCount]);
+        }
+
+        if (!is_object($button)) {
+            $button = $this->factory(Button::class, [$button]);
         }
 
         $btn = $this->getButtonContainer()->add($button);
