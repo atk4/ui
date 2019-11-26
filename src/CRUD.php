@@ -12,7 +12,7 @@ use atk4\ui\ActionExecutor\UserAction;
 use atk4\ui\ActionExecutor\UserConfirmation;
 
 /**
- * Implements a more sophisticated and interractive Data-Table component.
+ * Implements a more sophisticated and interactive Data-Table component.
  */
 class CRUD extends Grid
 {
@@ -50,14 +50,14 @@ class CRUD extends Grid
      * Sets data model of CRUD.
      *
      * @param \atk4\data\Model $m
-     * @param array            $fields
+     * @param null|array       $fields
      *
      * @throws \atk4\core\Exception
      * @throws Exception
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $m, $fields = null)
+    public function setModel(\atk4\data\Model $m, $fields = null) : \atk4\data\Model
     {
         if ($fields !== null) {
             $this->displayFields = $fields;
@@ -70,9 +70,10 @@ class CRUD extends Grid
         if (is_null($this->useMenuActions)) {
             $this->useMenuActions = count($m->getActions()) > 4;
         }
+
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
             $executor = $this->getActionExecutor($single_record_action);
-            $single_record_action->fields = ($executor instanceof jsUserAction || $executor instanceof UserConfirmation) ? false : $this->editFields ?? true;
+            $single_record_action->fields = ($executor instanceof jsUserAction || $executor instanceof UserConfirmation) ? false : ($this->editFields ?? true);
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
                 return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
@@ -89,7 +90,7 @@ class CRUD extends Grid
             if ($executor instanceof View) {
                 $executor->stickyGet($this->name.'_sort', $this->getSortBy());
             }
-            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->editFields ?? true;
+            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : ($this->editFields ?? true);
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
                 return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
@@ -122,13 +123,13 @@ class CRUD extends Grid
     /**
      * Return proper action executor base on model action.
      *
-     * @param $action
+     * @param \atk4\data\UserAction\Generic $action
      *
      * @throws \atk4\core\Exception
      *
      * @return object
      */
-    protected function getActionExecutor($action)
+    protected function getActionExecutor(\atk4\data\UserAction\Generic $action)
     {
         if (isset($action->ui['executor'])) {
             return $this->factory($action->ui['executor']);
@@ -162,11 +163,13 @@ class CRUD extends Grid
     /**
      * Default js action when saving.
      *
+     * @param mixed $notifier
+     *
      * @throws \atk4\core\Exception
      *
      * @return array
      */
-    public function jsSave($notifier)
+    public function jsSave($notifier) : array
     {
         return [
             $this->factory($notifier, null, 'atk4\ui'),
@@ -179,9 +182,9 @@ class CRUD extends Grid
      *  Return js statement necessary to remove a row in Grid when
      *  use in $(this) context.
      *
-     * @return mixed
+     * @return jQuery
      */
-    public function jsDelete()
+    public function jsDelete() : jQuery
     {
         return (new jQuery())->closest('tr')->transition('fade left');
     }
@@ -235,6 +238,8 @@ class CRUD extends Grid
      * @throws Exception
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
+     *
+     * @return null|mixed
      */
     public function setOnActionForm(callable $fx, string $actionName)
     {
