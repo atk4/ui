@@ -73,7 +73,7 @@ class CRUD extends Grid
 
         foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
             $executor = $this->getActionExecutor($single_record_action);
-            $single_record_action->fields = ($executor instanceof jsUserAction || $executor instanceof UserConfirmation) ? false : ($this->editFields ?? true);
+            $single_record_action->fields = ($executor instanceof jsUserAction || $executor instanceof UserConfirmation) ? false : ($this->editFields ?? []);
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
                 return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
@@ -90,7 +90,7 @@ class CRUD extends Grid
             if ($executor instanceof View) {
                 $executor->stickyGet($this->name.'_sort', $this->getSortBy());
             }
-            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : ($this->editFields ?? true);
+            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : ($this->editFields ?? []);
             $single_record_action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
                 return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
