@@ -41,7 +41,7 @@ class CardDeck extends View
     /** @var int The number of card to be display per page. */
     public $ipp = 6;
 
-    /** @var array  */
+    /** @var array */
     public $menu = null;
 
     public $menuBtnStyle = 'primary';
@@ -105,12 +105,12 @@ class CardDeck extends View
                         $ex->jsSuccess = function ($x, $m, $id, $return) use ($action, $c) {
                             // set action response depending on the return
                             if (is_string($return)) {
-
                                 return  $this->getJsNotify($this->notifyDefault, $return, $action);
                             } elseif (is_array($return) || $return instanceof jsExpressionable) {
                                 return $return;
                             } elseif ($return instanceof Model) {
                                 $msg = $m->loaded() ? $this->saveMsg : $this->deleteMsg;
+
                                 return $this->jsRespond($this->getJsNotify($this->notifyDefault, $msg, $action));
                             }
                         };
@@ -132,12 +132,12 @@ class CardDeck extends View
                 $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
                     // set action response depending on the return
                     if (is_string($return)) {
-
                         return  $this->getJsNotify($this->notifyDefault, $return, $action);
                     } elseif (is_array($return) || $return instanceof jsExpressionable) {
                         return $return;
                     } elseif ($return instanceof Model) {
                         $msg = $return->loaded() ? $this->saveMsg : 'Done!';
+
                         return $this->jsRespond($this->getJsNotify($this->notifyDefault, $msg, $action));
                     }
                 });
@@ -151,14 +151,15 @@ class CardDeck extends View
     /**
      * Add button to menu bar on top of deck card.
      *
-     * @param Button|string|Generic                  $button    A button object, a model action or a string representing a model action.
-     * @param null|Generic|jsExpressionable|Callable $callback  An model action, js expression or callback function.
-     * @param bool $confirm
-     * @param bool $isDisabled
+     * @param Button|string|Generic                  $button     A button object, a model action or a string representing a model action.
+     * @param null|Generic|jsExpressionable|callable $callback   An model action, js expression or callback function.
+     * @param bool                                   $confirm
+     * @param bool                                   $isDisabled
      *
-     * @return mixed
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
+     *
+     * @return mixed
      */
     public function addMenuButton($button, $callback = null, $confirm = false, $isDisabled = false)
     {
@@ -256,12 +257,13 @@ class CardDeck extends View
      * @param null|string  $msg           The message to display.
      * @param null|Generic $action        The action short name.
      *
-     * @return object
      * @throws \atk4\core\Exception
+     *
+     * @return object
      */
     public function getJsNotify($notifier_seed, $msg = null, $action = null)
     {
-        $notifier =  $this->factory($notifier_seed, null, 'atk4\ui');
+        $notifier = $this->factory($notifier_seed, null, 'atk4\ui');
         if ($msg) {
             $notifier->setMessage($msg);
         }

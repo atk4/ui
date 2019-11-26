@@ -18,7 +18,7 @@ $action = $countries->addAction('book', [
     'callback' => function ($m, $city) {
         return 'Your request to visit '.ucwords($city).' in '.$m->get('name').' was sent!';
     },
-    'ui' => ['button'=>[null, 'icon'=>'plane']]
+    'ui' => ['button'=>[null, 'icon'=>'plane']],
 ]);
 
 $action->args = ['city' => ['type'=>'string', 'required'=>true, 'caption' => 'Arrive at which city:']];
@@ -28,11 +28,9 @@ $countries->addAction('book_all', [
         return 'Your request to visit all coutries was sent!';
     },
     'scope' => 'none',
-    'ui' => ['button' => ['Request All','ui' => 'button primary', 'icon' => 'plane'], 'confirm' => 'Are you sure?'],
+    'ui'    => ['button' => ['Request All', 'ui' => 'button primary', 'icon' => 'plane'], 'confirm' => 'Are you sure?'],
     ]);
-
 
 $deck = $app->add('CardDeck');
 
 $deck->setModel($countries, ['Cost'], ['iso', 'iso3']);
-
