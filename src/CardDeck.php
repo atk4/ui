@@ -153,7 +153,7 @@ class CardDeck extends View
      *
      * @param Button|string|Generic                  $button     A button object, a model action or a string representing a model action.
      * @param null|Generic|jsExpressionable|callable $callback   An model action, js expression or callback function.
-     * @param bool                                   $confirm
+     * @param string|array                           $confirm    A confirmation string or View::on method defaults when passed has an array,
      * @param bool                                   $isDisabled
      *
      * @throws \atk4\core\Exception
@@ -161,8 +161,14 @@ class CardDeck extends View
      *
      * @return mixed
      */
-    public function addMenuButton($button, $callback = null, $confirm = false, $isDisabled = false)
+    public function addMenuButton($button, $callback = null, $confirm = '', $isDisabled = false)
     {
+        $defaults = is_array($confirm) ? $confirm : [];
+
+        if ($confirm) {
+            $defaults['confirm'] = $confirm;
+        }
+
         // If action is not specified, perhaps it is defined in the model
         if (!$callback && is_string($button)) {
             $model_action = $this->model->getAction($button);
@@ -171,13 +177,13 @@ class CardDeck extends View
                 $callback = $model_action;
                 $button = $callback->caption;
                 if ($model_action->ui['confirm'] ?? null) {
-                    $confirm = $model_action->ui['confirm'];
+                    $defaults['confirm'] = $model_action->ui['confirm'];
                 }
             }
         } elseif (!$callback && $button instanceof \atk4\data\UserAction\Generic) {
             $isDisabled = !$button->enabled;
             if ($button->ui['confirm'] ?? null) {
-                $confirm = $button->ui['confirm'];
+                $defaults['confirm'] = $button->ui['confirm'];
             }
             $callback = $button;
             $button = $button->caption;
@@ -189,7 +195,7 @@ class CardDeck extends View
             }
 
             if (isset($callback->ui['confirm'])) {
-                $confirm = $callback->ui['confirm'];
+                $defaults['confirm'] = $callback->ui['confirm'];
             }
         }
 
@@ -209,7 +215,7 @@ class CardDeck extends View
         }
 
         $btn = $this->btns->add($button);
-        $btn->on('click', $callback, ['confirm' => $confirm]);
+        $btn->on('click', $callback, $defaults);
 
         return $btn;
     }
