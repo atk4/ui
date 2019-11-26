@@ -27,8 +27,6 @@ $action = $files->addAction(
         'scope'=> atk4\data\UserAction\Generic::NO_RECORDS,
     ]
 );
-//$app->add(['Button', 'click me'])->on('click', $action);
-//exit;
 
 $files->addAction('download', function ($m) {
     $len = strlen(file_get_contents($m['name']));
@@ -68,6 +66,3 @@ $executor->addHook('afterExecute', function ($x, $ret) {
 });
 
 $app->add(['CRUD', 'ipp'=>5])->setModel($files);
-
-// @todo after CRUD->setModel() it sets fields=true, but data\UserAction don't support such value for fields
-//var_dump($files->getAction('import_from_filesystem')->fields);
