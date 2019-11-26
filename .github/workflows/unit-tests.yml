@@ -1,0 +1,53 @@
+name: Unit Testing
+
+on:
+  pull_request
+
+jobs:
+  unit-test:
+    name: Unit Testing
+    runs-on: ubuntu-latest
+    container:
+      image: atk4/image:latest # https://github.com/atk4/image
+    strategy:
+      matrix:
+        php: ['7.3']
+    steps:
+      - uses: actions/checkout@v1
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      - name: Install dependencies and SQL
+        run: |
+          mkdir -p coverage
+          mysql -uroot -ppassword -h mysql -e 'CREATE DATABASE atk4;'
+          mysql -uroot -ppaswword -h mysql atk4 < demos/atk4.sql
+
+          mv demos/db.github.php demos/db.php
+          (cd js; npm install; npm run build)
+          lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
+          uglifyjs --compress -- public/agileui.js > public/agileui.min.js
+
+      - name: SQLite Testing
+
+        run: vendor/bin/phpunit --configuration phpunit.xml --coverage-text
+
+#      - name: Merge coverage logs
+#        run: vendor/bin/phpcov merge build/logs/ --clover build/logs/cc.xml;
+#
+#      - uses: codecov/codecov-action@v1
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#          file: build/logs/cc.xml
+
+
