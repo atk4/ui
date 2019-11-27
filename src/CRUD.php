@@ -111,7 +111,7 @@ class CRUD extends Grid
             $action->fields = $this->_getActionFields($action);
             $action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
-                return $this->getJsExecute($return, $action);
+                return $this->jsExecute($return, $action);
             });
             if ($this->useMenuActions) {
                 $this->addActionMenuItem($action);
@@ -129,7 +129,7 @@ class CRUD extends Grid
                 $action->fields = $this->_getActionFields($action);
                 $action->ui['executor'] = $executor;
                 $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
-                    return $this->getJsExecute($return, $action);
+                    return $this->jsExecute($return, $action);
                 });
                 $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
                 $this->menuItems[$k]['action'] = $action;
@@ -150,7 +150,7 @@ class CRUD extends Grid
      * @return array|object
      * @throws \atk4\core\Exception
      */
-    protected function getJsExecute($return, $action)
+    protected function jsExecute($return, $action)
     {
         if (is_string($return)) {
             return  $this->getJsNotify($this->notifyDefault, $return, $action);
