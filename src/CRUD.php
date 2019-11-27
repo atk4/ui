@@ -36,7 +36,7 @@ class CRUD extends Grid
     /** @var array Collection of NO_RECORDS Scope Model action menu item */
     private $menuItems = [];
 
-    /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty.*/
+    /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty. */
     public $singleScopeActions = [];
 
     /** @var array Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
@@ -58,7 +58,6 @@ class CRUD extends Grid
         if ($sortBy = $this->getSortBy()) {
             $this->app->stickyGet($this->name.'_sort', $sortBy);
         }
-
     }
 
     /**
@@ -147,8 +146,9 @@ class CRUD extends Grid
      * @param $return
      * @param $action
      *
-     * @return array|object
      * @throws \atk4\core\Exception
+     *
+     * @return array|object
      */
     protected function getJsExecute($return, $action)
     {
@@ -158,6 +158,7 @@ class CRUD extends Grid
             return $return;
         } elseif ($return instanceof Model) {
             $msg = $return->loaded() ? $this->saveMsg : ($action->scope === Generic::SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
+
             return $this->jsModelReturn($action, $msg);
         } else {
             return $this->getJsNotify($this->notifyDefault, $this->defaultMsg, $action);
@@ -189,12 +190,13 @@ class CRUD extends Grid
     /**
      * js expression return when action afterHook executor return a Model.
      *
-     * @param Model $model
-     * @param null $action
+     * @param Model  $model
+     * @param null   $action
      * @param string $msg
      *
-     * @return array
      * @throws \atk4\core\Exception
+     *
+     * @return array
      */
     protected function jsModelReturn(Generic $action = null, $msg = 'Done!')
     {
@@ -254,6 +256,7 @@ class CRUD extends Grid
         } elseif ($action->fields === true) {
             $fields = true;
         }
+
         return $fields;
     }
 
@@ -264,7 +267,7 @@ class CRUD extends Grid
      */
     private function _getReloadArgs()
     {
-        $args[$this->name.'_sort'] =  $this->getSortBy();
+        $args[$this->name.'_sort'] = $this->getSortBy();
         if ($this->paginator) {
             $args[$this->paginator->name] = $this->paginator->getCurrentPage();
         }
@@ -277,20 +280,21 @@ class CRUD extends Grid
      *
      * @param string $scope
      *
-     * @return array
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
+     *
+     * @return array
      */
     private function _getModelActions(string $scope) : array
     {
         $actions = [];
         if ($scope === Generic::SINGLE_RECORD && !empty($this->singleScopeActions)) {
             foreach ($this->singleScopeActions as $action) {
-                $actions[]  = $this->model->getAction($action);
+                $actions[] = $this->model->getAction($action);
             }
         } elseif ($scope === Generic::NO_RECORDS && !empty($this->noRecordScopeActions)) {
             foreach ($this->noRecordScopeActions as $action) {
-                $actions[]  = $this->model->getAction($action);
+                $actions[] = $this->model->getAction($action);
             }
         } else {
             $actions = $this->model->getActions($scope);
