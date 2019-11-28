@@ -7,6 +7,7 @@ namespace atk4\ui;
 
 use atk4\data\Model;
 use atk4\data\UserAction\Generic;
+use atk4\ui\ActionExecutor\jsInterface_;
 use atk4\ui\ActionExecutor\jsUserAction;
 use atk4\ui\ActionExecutor\UserAction;
 
@@ -41,12 +42,14 @@ class CardDeck extends View
     /** @var int The number of card to be display per page. */
     public $ipp = 6;
 
-    /** @var array */
+    /** @var null|array A menu seed for displaying button inside. */
     public $menu = null;
 
-    public $menuBtnStyle = 'primary';
+    /** @var null A view container for buttons. Added into menu when menu is set. */
+    private $btns = null;
 
-    public $btns = null;
+    /** @var string Button css class for menu. */
+    public $menuBtnStyle = 'primary';
 
     /** @var null|int The current page number. */
     private $page = null;
@@ -58,10 +61,25 @@ class CardDeck extends View
     public $jsExecutor = jsUserAction::class;
 
     /** @var array Default notifier to perform when model action is successful * */
-    public $notifyDefault = ['jsToast'];
+    public $notifyDefault = ['jsToast', 'settings' => ['displayTime' => 5000]];
 
+    /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty. */
+    public $singleScopeActions = [];
+
+    /** @var array Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
+    public $noRecordScopeActions = [];
+
+    /** @var string Message to display when record is add or edit successfully. */
     public $saveMsg = 'Record has been saved!';
+
+    /** @var string Message to display when record is delete successfully. */
     public $deleteMsg = 'Record has been deleted!';
+
+    /** @var string Generic display message for no record scope action where model is not loaded. */
+    public $defaultMsg = 'Done!';
+
+    /** @var array A collection of menu button added in Menu. */
+    private $menuActions = [];
 
     public function init()
     {
@@ -97,55 +115,159 @@ class CardDeck extends View
                 $c->addExtraFields($m, $extra, $this->extraGlue);
             }
             if ($this->useAction) {
-                if ($singleActions = $m->getActions(Generic::SINGLE_RECORD)) {
-                    $page_arg = [$this->paginator->name => $this->page];
+                if ($singleActions = $this->_getModelActions(Generic::SINGLE_RECORD)) {
+                    $args = $this->_getReloadArgs();
                     $id_arg = [];
                     foreach ($singleActions as $action) {
-                        $ex = $this->getActionExecutor($action);
-                        $ex->jsSuccess = function ($x, $m, $id, $return) use ($action, $c) {
-                            // set action response depending on the return
-                            if (is_string($return)) {
-                                return  $this->getJsNotify($this->notifyDefault, $return, $action);
-                            } elseif (is_array($return) || $return instanceof jsExpressionable) {
-                                return $return;
-                            } elseif ($return instanceof Model) {
-                                $msg = $m->loaded() ? $this->saveMsg : $this->deleteMsg;
-
-                                return $this->jsRespond($this->getJsNotify($this->notifyDefault, $msg, $action));
-                            }
-                        };
-                        if ($ex instanceof jsUserAction) {
+                        $action->ui['executor'] = $this->initActionExecutor($action);
+                        if ($action->ui['executor'] instanceof jsUserAction) {
                             $id_arg[0] = (new jQuery())->parents('.atk-card')->data('id');
                         }
-                        $action->ui['executor'] = $ex;
-                        $c->addClickAction($action, null, array_merge($id_arg, $page_arg));
+                        $c->addClickAction($action, null, array_merge($id_arg, $args));
                     }
                 }
             }
         });
 
         // add no record scope action to menu
-        if ($this->useAction && $this->menu && $no_records_actions = $model->getActions(Generic::NO_RECORDS)) {
-            foreach ($no_records_actions as $action) {
-                $executor = $this->factory($this->getActionExecutor($action));
-                $action->ui['executor'] = $executor;
-                $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
-                    // set action response depending on the return
-                    if (is_string($return)) {
-                        return  $this->getJsNotify($this->notifyDefault, $return, $action);
-                    } elseif (is_array($return) || $return instanceof jsExpressionable) {
-                        return $return;
-                    } elseif ($return instanceof Model) {
-                        $msg = $return->loaded() ? $this->saveMsg : 'Done!';
-
-                        return $this->jsRespond($this->getJsNotify($this->notifyDefault, $msg, $action));
-                    }
-                });
-                $this->addMenuButton($action);
+        if ($this->useAction && $this->menu) {
+            foreach ($this->_getModelActions(Generic::NO_RECORDS) as $k => $action) {
+                $action->ui['executor'] = $this->initActionExecutor($action);
+                $this->menuActions[$k]['btn'] = $this->addMenuButton($action);
+                $this->menuActions[$k]['action']= $action;
             }
         }
 
         return $this->model;
+    }
+
+    /**
+     * Reset Menu button js event when reloading occur in order
+     * to have their arguments always in sync after container reload.
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     */
+    protected function applyReload()
+    {
+        foreach ($this->menuActions as $k => $menuAction) {
+            $ex = $menuAction['action']->ui['executor'];
+            if ($ex instanceof jsInterface_) {
+                $this->container->js(true, $menuAction['btn']->js()->off('click'));
+                $this->container->js(true, $menuAction['btn']->js()->on('click', new jsFunction($ex->jsExecute($this->_getReloadArgs()))));
+            }
+        }
+    }
+
+    /**
+     * Setup executor for an action.
+     * First determine what fields action needs,
+     * then setup executor based on action fields, args and/or preview.
+     *
+     * @param Generic $action
+     *
+     * @throws \atk4\core\Exception
+     *
+     * @return object
+     */
+    protected function initActionExecutor(Generic $action)
+    {
+        $action->fields = $this->editFields ?? $action->fields;
+        $executor = $this->getExecutor($action);
+        if ($action->scope === Generic::SINGLE_RECORD) {
+            $executor->jsSuccess = function ($x, $m, $id, $return) use ($action) {
+                return $this->jsExecute($return, $action);
+            };
+        } else {
+            $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
+                return $this->jsExecute($return, $action);
+            });
+        }
+
+
+        return $executor;
+    }
+
+    /**
+     * Return proper js statement for afterExecute hook on action executor
+     * depending on return type, model loaded and action scope.
+     *
+     * @param $return
+     * @param $action
+     *
+     * @throws \atk4\core\Exception
+     *
+     * @return array|object
+     */
+    protected function jsExecute($return, $action)
+    {
+        if (is_string($return)) {
+            return  $this->getNotifier($return, $action);
+        } elseif (is_array($return) || $return instanceof jsExpressionable) {
+            return $return;
+        } elseif ($return instanceof Model) {
+            $msg = $return->loaded() ? $this->saveMsg : ($action->scope === Generic::SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
+
+            return $this->jsModelReturn($action, $msg);
+        } else {
+            return $this->getNotifier($this->defaultMsg, $action);
+        }
+    }
+
+    /**
+     * Return jsNotifier object.
+     * Override this method for setting notifier based on action or model value.
+     *
+     * @param null|string  $msg    The message to display.
+     * @param null|Generic $action The model action.
+     *
+     * @throws \atk4\core\Exception
+     *
+     * @return object
+     */
+    protected function getNotifier($msg = null, $action = null)
+    {
+        $notifier = $this->factory($this->notifyDefault, null, 'atk4\ui');
+        if ($msg) {
+            $notifier->setMessage($msg);
+        }
+
+        return $notifier;
+    }
+
+    /**
+     * js expression return when action afterHook executor return a Model.
+     *
+     * @param Generic $action
+     * @param string  $msg
+     *
+     * @throws \atk4\core\Exception
+     *
+     * @return array
+     */
+    protected function jsModelReturn(Generic $action = null, string $msg = 'Done!') :array
+    {
+        $js[] = $this->getNotifier($msg, $action);
+        if (!$action->owner->loaded()) {
+            $js[] = (new jQuery())->closest('.atk-card')->transition('scale');
+        }
+        $js[] = $this->container->jsReload($this->_getReloadArgs());
+
+        return $js;
+    }
+
+    /**
+     * Return reload argument based on CRUD condition.
+     *
+     * @return mixed
+     */
+    private function _getReloadArgs()
+    {
+        if ($this->paginator) {
+            $args[$this->paginator->name] = $this->page;
+        }
+
+        return $args;
     }
 
     /**
@@ -223,13 +345,13 @@ class CardDeck extends View
     /**
      * Return proper action executor base on model action.
      *
-     * @param $action
+     * @param Generic $action
      *
-     * @throws \atk4\core\Exception
+     *@throws \atk4\core\Exception
      *
      * @return object
      */
-    protected function getActionExecutor($action)
+    protected function getExecutor(Generic $action)
     {
         if (isset($action->ui['executor'])) {
             return $this->factory($action->ui['executor']);
@@ -240,49 +362,44 @@ class CardDeck extends View
         return $this->factory($executor);
     }
 
+    public function renderView()
+    {
+        if ($this->menu && count($this->menuActions) > 0) {
+            $this->menu->add(['ui' => 'divider']);
+        }
+
+        if (($_GET['__atk_reload'] ?? null) === $this->container->name) {
+            $this->applyReload();
+        }
+        parent::renderView();
+    }
+
     /**
-     * Default js action when saving.
+     * Return proper action need to setup menu or action column.
+     *
+     * @param string $scope
      *
      * @throws \atk4\core\Exception
+     * @throws \atk4\data\Exception
      *
      * @return array
      */
-    public function jsRespond($notifier)
+    private function _getModelActions(string $scope) : array
     {
-        return [
-            $notifier,
-            $this->container->jsReload([$this->paginator->name => $this->page]),
-        ];
-    }
-
-    /**
-     * Return jsNotifier object.
-     * Override this method for setting notifier based on action or model value.
-     *
-     * @param array        $notifier_seed Notifier Object seed.
-     * @param null|string  $msg           The message to display.
-     * @param null|Generic $action        The action short name.
-     *
-     * @throws \atk4\core\Exception
-     *
-     * @return object
-     */
-    public function getJsNotify($notifier_seed, $msg = null, $action = null)
-    {
-        $notifier = $this->factory($notifier_seed, null, 'atk4\ui');
-        if ($msg) {
-            $notifier->setMessage($msg);
+        $actions = [];
+        if ($scope === Generic::SINGLE_RECORD && !empty($this->singleScopeActions)) {
+            foreach ($this->singleScopeActions as $action) {
+                $actions[] = $this->model->getAction($action);
+            }
+        } elseif ($scope === Generic::NO_RECORDS && !empty($this->noRecordScopeActions)) {
+            foreach ($this->noRecordScopeActions as $action) {
+                $actions[] = $this->model->getAction($action);
+            }
+        } else {
+            $actions = $this->model->getActions($scope);
         }
 
-        return $notifier;
-    }
-
-    public function renderView()
-    {
-        if ($this->menu) {
-            $this->menu->add(['ui' => 'divider']);
-        }
-        parent::renderView();
+        return $actions;
     }
 
     /**

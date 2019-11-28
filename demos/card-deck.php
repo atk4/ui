@@ -15,22 +15,28 @@ $countries->addCalculatedField('Cost', function ($m) {
 });
 
 $action = $countries->addAction('book', [
-    'callback' => function ($m, $city) {
-        return 'Your request to visit '.ucwords($city).' in '.$m->get('name').' was sent!';
+    'callback' => function ($m, $city, $email) {
+        return 'Your request to visit '.ucwords($city).' in '.$m->get('name').' was sent to: '.$email;
     },
     'ui' => ['button'=>[null, 'icon'=>'plane']],
 ]);
 
-$action->args = ['city' => ['type'=>'string', 'required'=>true, 'caption' => 'Arrive at which city:']];
+$action->args = [
+    'email' => ['type'=>'email', 'required'=>true, 'caption' => 'Please let us know your email address:'],
+    'city' => ['type'=>'string', 'required'=>true, 'caption' => 'Arrive at which city:']
+];
 
-$countries->addAction('book_all', [
-    'callback' => function ($m) {
-        return 'Your request to visit all coutries was sent!';
+$info_action = $countries->addAction('request_info', [
+
+    'callback' => function ($m, $email) {
+        return 'Your request for information was sent to email: '.$email;
     },
     'scope' => 'none',
-    'ui'    => ['button' => ['Request All', 'ui' => 'button primary', 'icon' => 'plane'], 'confirm' => 'Are you sure?'],
+    'ui'    => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => 'mail']],
     ]);
 
-$deck = $app->add('CardDeck');
+$info_action->args = ['email' => ['type'=>'email', 'required'=>true, 'caption' => 'Please let us know your email address:']];
+
+$deck = $app->add(['CardDeck', 'noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);
 
 $deck->setModel($countries, ['Cost'], ['iso', 'iso3']);
