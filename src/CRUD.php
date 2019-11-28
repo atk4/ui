@@ -137,7 +137,7 @@ class CRUD extends Grid
      */
     protected function setActionExecutor(Generic $action)
     {
-        $action->fields = $this->_getActionFields($action);
+        $action->fields = $this->editFields ?? $action->fields;
         $executor = $this->getActionExecutor($action);
         $action->ui['executor'] = $executor;
         $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
@@ -239,28 +239,6 @@ class CRUD extends Grid
         $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
 
         return $this->factory($executor);
-    }
-
-    /**
-     * Set proper action fields based on executor and action.
-     * Prioritizing $this->editFields over action->field.
-     *
-     * @param $action
-     *
-     * @return array|bool
-     */
-    private function _getActionFields($action)
-    {
-        $fields = false;
-        if ($this->editFields) {
-            $fields = $this->editFields;
-        } elseif (is_array($action->fields) && !empty($action->fields)) {
-            $fields = $action->fields;
-        } elseif ($action->fields === true) {
-            $fields = true;
-        }
-
-        return $fields;
     }
 
     /**
