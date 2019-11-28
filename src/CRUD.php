@@ -56,7 +56,7 @@ class CRUD extends Grid
         parent::init();
 
         if ($sortBy = $this->getSortBy()) {
-            $this->app->stickyGet($this->name.'_sort', $sortBy);
+            $this->app ? $this->app->stickyGet($this->name.'_sort', $sortBy) : $this->stickyGet($this->name.'_sort', $sortBy);
         }
     }
 
@@ -106,12 +106,7 @@ class CRUD extends Grid
         }
 
         foreach ($this->_getModelActions(Generic::SINGLE_RECORD) as $action) {
-            $action->fields = $this->_getActionFields($action);
-            $executor = $this->getActionExecutor($action);
-            $action->ui['executor'] = $executor;
-            $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
-                return $this->jsExecute($return, $action);
-            });
+            $this->setActionExecutor($action);
             if ($this->useMenuActions) {
                 $this->addActionMenuItem($action);
             } else {
@@ -121,15 +116,7 @@ class CRUD extends Grid
 
         if ($this->menu) {
             foreach ($this->_getModelActions(Generic::NO_RECORDS) as $k => $action) {
-                $action->fields = $this->_getActionFields($action);
-                $executor = $this->getActionExecutor($action);
-                if ($executor instanceof View) {
-                    $executor->stickyGet($this->name.'_sort', $this->getSortBy());
-                }
-                $action->ui['executor'] = $executor;
-                $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
-                    return $this->jsExecute($return, $action);
-                });
+                $this->setActionExecutor($action);
                 $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
                 $this->menuItems[$k]['action'] = $action;
             }
@@ -137,6 +124,25 @@ class CRUD extends Grid
         }
 
         return $this->model;
+    }
+
+    /**
+     * Setup executor for an action.
+     * First determine what fields action needed,
+     * then setup executor based on action field, args and/or preview.
+     *
+     * @param Generic $action
+     *
+     * @throws \atk4\core\Exception
+     */
+    protected function setActionExecutor(Generic $action)
+    {
+        $action->fields = $this->_getActionFields($action);
+        $executor = $this->getActionExecutor($action);
+        $action->ui['executor'] = $executor;
+        $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
+            return $this->jsExecute($return, $action);
+        });
     }
 
     /**
@@ -169,9 +175,8 @@ class CRUD extends Grid
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      *
-     * @param array        $notifier_seed Notifier Object seed.
      * @param null|string  $msg           The message to display.
-     * @param null|Generic $action        The action short name.
+     * @param null|Generic $action        The model action.
      *
      * @throws \atk4\core\Exception
      *
@@ -190,15 +195,13 @@ class CRUD extends Grid
     /**
      * js expression return when action afterHook executor return a Model.
      *
-     * @param Model  $model
-     * @param null   $action
+     * @param Generic $action
      * @param string $msg
      *
-     * @throws \atk4\core\Exception
-     *
      * @return array
+     * @throws \atk4\core\Exception
      */
-    protected function jsModelReturn(Generic $action = null, $msg = 'Done!')
+    protected function jsModelReturn(Generic $action = null, string $msg = 'Done!') :array
     {
         $js[] = $this->getNotifier($msg, $action);
         $js[] = $action->owner->loaded() ? $this->container->jsReload($this->_getReloadArgs()) : (new jQuery())->closest('tr')->transition('fade left');
@@ -221,13 +224,13 @@ class CRUD extends Grid
     /**
      * Return proper action executor base on model action.
      *
-     * @param \atk4\data\UserAction\Generic $action
-     *
-     * @throws \atk4\core\Exception
+     * @param Generic $action
      *
      * @return object
+     *@throws \atk4\core\Exception
+     *
      */
-    protected function getActionExecutor(\atk4\data\UserAction\Generic $action)
+    protected function getActionExecutor(Generic $action)
     {
         if (isset($action->ui['executor'])) {
             return $this->factory($action->ui['executor']);
