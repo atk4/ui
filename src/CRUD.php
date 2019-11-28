@@ -175,8 +175,8 @@ class CRUD extends Grid
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      *
-     * @param null|string  $msg           The message to display.
-     * @param null|Generic $action        The model action.
+     * @param null|string  $msg    The message to display.
+     * @param null|Generic $action The model action.
      *
      * @throws \atk4\core\Exception
      *
@@ -196,10 +196,11 @@ class CRUD extends Grid
      * js expression return when action afterHook executor return a Model.
      *
      * @param Generic $action
-     * @param string $msg
+     * @param string  $msg
+     *
+     * @throws \atk4\core\Exception
      *
      * @return array
-     * @throws \atk4\core\Exception
      */
     protected function jsModelReturn(Generic $action = null, string $msg = 'Done!') :array
     {
@@ -226,9 +227,9 @@ class CRUD extends Grid
      *
      * @param Generic $action
      *
-     * @return object
      *@throws \atk4\core\Exception
      *
+     * @return object
      */
     protected function getActionExecutor(Generic $action)
     {
