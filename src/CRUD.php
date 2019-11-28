@@ -30,7 +30,7 @@ class CRUD extends Grid
     /** @var string default action executor class in UI for model action. */
     public $executor = UserAction::class;
 
-    /** @var bool|null should we use drop-down menu to display user actions? */
+    /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions = null;
 
     /** @var array Collection of NO_RECORDS Scope Model action menu item */
@@ -128,8 +128,8 @@ class CRUD extends Grid
 
     /**
      * Setup executor for an action.
-     * First determine what fields action needed,
-     * then setup executor based on action field, args and/or preview.
+     * First determine what fields action needs,
+     * then setup executor based on action fields, args and/or preview.
      *
      * @param Generic $action
      *
@@ -139,7 +139,6 @@ class CRUD extends Grid
     {
         $action->fields = $this->editFields ?? $action->fields;
         $executor = $this->getActionExecutor($action);
-        $action->ui['executor'] = $executor;
         $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
             return $this->jsExecute($return, $action);
         });
