@@ -106,7 +106,7 @@ class CRUD extends Grid
         }
 
         foreach ($this->_getModelActions(Generic::SINGLE_RECORD) as $action) {
-            $this->setActionExecutor($action);
+            $action->ui['executor'] = $this->initActionExecutor($action);
             if ($this->useMenuActions) {
                 $this->addActionMenuItem($action);
             } else {
@@ -116,7 +116,7 @@ class CRUD extends Grid
 
         if ($this->menu) {
             foreach ($this->_getModelActions(Generic::NO_RECORDS) as $k => $action) {
-                $this->setActionExecutor($action);
+                $action->ui['executor'] = $this->initActionExecutor($action);
                 $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
                 $this->menuItems[$k]['action'] = $action;
             }
@@ -133,15 +133,18 @@ class CRUD extends Grid
      *
      * @param Generic $action
      *
+     * @return object
      * @throws \atk4\core\Exception
      */
-    protected function setActionExecutor(Generic $action)
+    protected function initActionExecutor(Generic $action)
     {
         $action->fields = $this->editFields ?? $action->fields;
-        $executor = $this->getActionExecutor($action);
+        $executor = $this->getExecutor($action);
         $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
             return $this->jsExecute($return, $action);
         });
+
+        return $executor;
     }
 
     /**
@@ -230,7 +233,7 @@ class CRUD extends Grid
      *
      * @return object
      */
-    protected function getActionExecutor(Generic $action)
+    protected function getExecutor(Generic $action)
     {
         if (isset($action->ui['executor'])) {
             return $this->factory($action->ui['executor']);
