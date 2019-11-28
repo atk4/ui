@@ -134,7 +134,7 @@ class CardDeck extends View
             foreach ($this->_getModelActions(Generic::NO_RECORDS) as $k => $action) {
                 $action->ui['executor'] = $this->initActionExecutor($action);
                 $this->menuActions[$k]['btn'] = $this->addMenuButton($action);
-                $this->menuActions[$k]['action']= $action;
+                $this->menuActions[$k]['action'] = $action;
             }
         }
 
@@ -183,7 +183,6 @@ class CardDeck extends View
                 return $this->jsExecute($return, $action);
             });
         }
-
 
         return $executor;
     }

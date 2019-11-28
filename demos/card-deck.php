@@ -23,7 +23,7 @@ $action = $countries->addAction('book', [
 
 $action->args = [
     'email' => ['type'=>'email', 'required'=>true, 'caption' => 'Please let us know your email address:'],
-    'city' => ['type'=>'string', 'required'=>true, 'caption' => 'Arrive at which city:']
+    'city'  => ['type'=>'string', 'required'=>true, 'caption' => 'Arrive at which city:'],
 ];
 
 $info_action = $countries->addAction('request_info', [
