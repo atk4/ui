@@ -153,7 +153,7 @@ class CRUD extends Grid
     protected function jsExecute($return, $action)
     {
         if (is_string($return)) {
-            return  $this->getJsNotify($this->notifyDefault, $return, $action);
+            return  $this->getNotifier($return, $action);
         } elseif (is_array($return) || $return instanceof jsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
@@ -161,7 +161,7 @@ class CRUD extends Grid
 
             return $this->jsModelReturn($action, $msg);
         } else {
-            return $this->getJsNotify($this->notifyDefault, $this->defaultMsg, $action);
+            return $this->getNotifier($this->defaultMsg, $action);
         }
     }
 
@@ -177,9 +177,9 @@ class CRUD extends Grid
      *
      * @return object
      */
-    protected function getJsNotify($notifier_seed, $msg = null, $action = null)
+    protected function getNotifier($msg = null, $action = null)
     {
-        $notifier = $this->factory($notifier_seed, null, 'atk4\ui');
+        $notifier = $this->factory($this->notifyDefault, null, 'atk4\ui');
         if ($msg) {
             $notifier->setMessage($msg);
         }
@@ -200,7 +200,7 @@ class CRUD extends Grid
      */
     protected function jsModelReturn(Generic $action = null, $msg = 'Done!')
     {
-        $js[] = $this->getJsNotify($this->notifyDefault, $msg, $action);
+        $js[] = $this->getNotifier($msg, $action);
         $js[] = $action->owner->loaded() ? $this->container->jsReload($this->_getReloadArgs()) : (new jQuery())->closest('tr')->transition('fade left');
 
         return $js;

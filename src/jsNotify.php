@@ -26,6 +26,18 @@ class jsNotify implements jsExpressionable
     }
 
     /**
+     * Set notify message.
+     *
+     * @param $msg
+     *
+     * @return $this
+     */
+    public function setMessage($msg)
+    {
+        return $this->setContent($msg);
+    }
+
+    /**
      * Set notifier option by specifying option name.
      *
      * @param $option
