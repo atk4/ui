@@ -106,8 +106,8 @@ class CRUD extends Grid
         }
 
         foreach ($this->_getModelActions(Generic::SINGLE_RECORD) as $action) {
-            $executor = $this->getActionExecutor($action);
             $action->fields = $this->_getActionFields($action);
+            $executor = $this->getActionExecutor($action);
             $action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
                 return $this->jsExecute($return, $action);
@@ -121,11 +121,11 @@ class CRUD extends Grid
 
         if ($this->menu) {
             foreach ($this->_getModelActions(Generic::NO_RECORDS) as $k => $action) {
+                $action->fields = $this->_getActionFields($action);
                 $executor = $this->getActionExecutor($action);
                 if ($executor instanceof View) {
                     $executor->stickyGet($this->name.'_sort', $this->getSortBy());
                 }
-                $action->fields = $this->_getActionFields($action);
                 $action->ui['executor'] = $executor;
                 $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
                     return $this->jsExecute($return, $action);
