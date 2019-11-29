@@ -13,6 +13,8 @@ class Demo extends \atk4\ui\Columns
 {
     public $left;
     public $right;
+    public static $isInitialized = false;
+    public $highlightDefaultStyle = 'dark';
 
     public function init()
     {
@@ -25,10 +27,21 @@ class Demo extends \atk4\ui\Columns
 
     public function setCode($code)
     {
-        $this->left->add(['element'=>'pre'])->set($code);
+        $this->highLightCode();
+        $this->left->add(['element'=>'pre'])->add(['element' => 'code'])->addClass('php')->set($code);
         $app = $this->right;
         $app->db = $this->app->db;
         eval($code);
+    }
+
+    public function highLightCode()
+    {
+        if (!Self::$isInitialized) {
+            $this->app->requireCSS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/'.$this->highlightDefaultStyle .'.min.css');
+            $this->app->requireJS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js');
+            $this->js(true, (new \atk4\ui\jsChain('hljs'))->initHighlighting());
+            Self::$isInitialized = true;
+        }
     }
 }
 
