@@ -25,10 +25,10 @@ class Demo extends \atk4\ui\Columns
         $this->right = $this->addColumn();
     }
 
-    public function setCode($code)
+    public function setCode($code, $lang = 'php')
     {
         $this->highLightCode();
-        $this->left->add(['element'=>'pre'])->add(['element' => 'code'])->addClass('php')->set($code);
+        $this->left->add(['element'=>'pre'])->add(['element' => 'code'])->addClass($lang)->set($code);
         $app = $this->right;
         $app->db = $this->app->db;
         eval($code);
