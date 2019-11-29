@@ -35,7 +35,10 @@ $info_action = $countries->addAction('request_info', [
     'ui'    => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => 'mail']],
     ]);
 
-$info_action->args = ['email' => ['type'=>'email', 'required'=>true, 'caption' => 'Please let us know your email address:']];
+$info_action->args = [
+    'email' => ['type'=>'email', 'required'=>true, 'caption' => 'Please let us know your email address:'],
+    'country'=> ['required' => true, 'ui' => ['form' => ['AutoComplete', 'model'=> new Country($db), 'placeholder' => 'Please select country.']]]
+];
 
 $deck = $app->add(['CardDeck', 'noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);
 
