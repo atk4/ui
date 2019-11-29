@@ -36,11 +36,11 @@ class Demo extends \atk4\ui\Columns
 
     public function highLightCode()
     {
-        if (!Self::$isInitialized) {
-            $this->app->requireCSS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/'.$this->highlightDefaultStyle .'.min.css');
+        if (!self::$isInitialized) {
+            $this->app->requireCSS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/'.$this->highlightDefaultStyle.'.min.css');
             $this->app->requireJS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js');
             $this->js(true, (new \atk4\ui\jsChain('hljs'))->initHighlighting());
-            Self::$isInitialized = true;
+            self::$isInitialized = true;
         }
     }
 }
