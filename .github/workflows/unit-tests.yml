@@ -38,6 +38,7 @@ jobs:
         run: |
           mkdir -p coverage
           apk add npm
+          npm install -g less clean-css uglify-js
           mysql -uroot -ppassword -h mysql -e 'CREATE DATABASE atk4;'
           mysql -uroot -ppassword -h mysql atk4 < demos/atk4.sql
 
