@@ -84,7 +84,7 @@ class CRUD extends Grid
             }
         }
 
-        foreach ($m->getActions(Generic::NO_RECORDS) as $k => $single_record_action) {
+        foreach ($this->menu? $m->getActions(Generic::NO_RECORDS): [] as $k => $single_record_action) {
             $executor = $this->factory($this->getActionExecutor($single_record_action));
             if ($executor instanceof View) {
                 $executor->stickyGet($this->name.'_sort', $this->getSortBy());
