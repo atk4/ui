@@ -37,6 +37,7 @@ jobs:
       - name: Install dependencies and SQL
         run: |
           mkdir -p coverage
+          apk add nodejs
           mysql -uroot -ppassword -h mysql -e 'CREATE DATABASE atk4;'
           mysql -uroot -ppassword -h mysql atk4 < demos/atk4.sql
 
