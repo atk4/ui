@@ -38,7 +38,7 @@ jobs:
         run: |
           mkdir -p coverage
           mysql -uroot -ppassword -h mysql -e 'CREATE DATABASE atk4;'
-          mysql -uroot -ppaswword -h mysql atk4 < demos/atk4.sql
+          mysql -uroot -ppassword -h mysql atk4 < demos/atk4.sql
 
           mv demos/db.github.php demos/db.php
           (cd js; npm install; npm run build)
