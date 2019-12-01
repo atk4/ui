@@ -118,7 +118,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
-            $this->title = $this->action->owner->getModelCaption();
+            $this->title = $action->caption . ' ' . $this->action->owner->getModelCaption();
 
             $this->btns->add($this->execActionBtn = (new Button([$this->action->caption, 'blue'])));
 
