@@ -44,8 +44,8 @@ jobs:
 
           mv demos/db.github.php demos/db.php
           (cd js; npm install; npm run build)
-          lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
-          uglifyjs --compress -- public/agileui.js > public/agileui.min.js
+          #lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
+          #uglifyjs --compress -- public/agileui.js > public/agileui.min.js
 
       - name: SQLite Testing
 
