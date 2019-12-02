@@ -42,7 +42,7 @@ class Radio extends Generic
     public function renderView()
     {
         if (!$this->model) {
-            $p = new \atk4\data\Persistence_Static($this->values);
+            $p = new \atk4\data\Persistence\Static_($this->values);
             $this->setModel(new \atk4\data\Model($p));
         }
 
