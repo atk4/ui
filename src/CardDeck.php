@@ -41,7 +41,7 @@ class CardDeck extends View
     public $paginator = null;
 
     /** @var int The number of card to be display per page. */
-    public $ipp = 6;
+    public $ipp = 8;
 
     /** @var null|array A menu seed for displaying button inside. */
     public $menu = ['ui' => 'stackable grid'];
@@ -97,25 +97,45 @@ class CardDeck extends View
         $this->container = $this->add(['View', 'ui'=> 'basic segment']);
 
         if ($this->menu !== false) {
-            $this->menu = $this->add($this->factory(View::class, $this->menu), 'Menu');
-
-            $left = $this->menu->add(['ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
-            $this->btns = $left->add(['ui' => 'buttons']);
-            if ($this->search !== false) {
-                $right = $this->menu->add(['ui' => 'four wide column']);
-                $this->search = $right->add($this->factory(ItemSearch::class, array_merge($this->search, ['context' => '#'.$this->container->name])));
-                $this->search->reload = $this->container;
-                $this->query = $this->app->stickyGet($this->search->queryArg);
-            }
+            $this->addMenuBar();
         }
 
         $this->cardHolder = $this->container->add(['ui' => 'cards']);
 
         if ($this->paginator !== false) {
-            $seg = $this->container->add(['View', 'ui'=> 'basic segment']/*, 'Paginator'*/)->addStyle('text-align', 'center');
-            $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator, 'atk4\ui'));
-            $this->page = $this->app->stickyGet($this->paginator->name);
+           $this->addPaginator();
         }
+    }
+
+    /**
+     * Add menu bar view to CardDeck.
+     *
+     * @throws \atk4\core\Exception
+     */
+    protected function addMenuBar()
+    {
+        $this->menu = $this->add($this->factory(View::class, $this->menu), 'Menu');
+
+        $left = $this->menu->add(['ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
+        $this->btns = $left->add(['ui' => 'buttons']);
+        if ($this->search !== false) {
+            $right = $this->menu->add(['ui' => 'four wide column']);
+            $this->search = $right->add($this->factory(ItemSearch::class, array_merge($this->search, ['context' => '#'.$this->container->name])));
+            $this->search->reload = $this->container;
+            $this->query = $this->app->stickyGet($this->search->queryArg);
+        }
+    }
+
+    /**
+     * Add Paginator view to card deck.
+     *
+     * @throws \atk4\core\Exception
+     */
+    protected function addPaginator()
+    {
+        $seg = $this->container->add(['View', 'ui'=> 'basic segment'])->addStyle('text-align', 'center');
+        $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator, 'atk4\ui'));
+        $this->page = $this->app->stickyGet($this->paginator->name);
     }
 
     public function setModel(Model $model, array $fields = null, array $extra = null)
@@ -288,7 +308,8 @@ class CardDeck extends View
      */
     private function _getReloadArgs()
     {
-        if ($this->paginator) {
+        $args = [];
+        if ($this->paginator !== false) {
             $args[$this->paginator->name] = $this->page;
         }
         if ($this->search !== false) {
