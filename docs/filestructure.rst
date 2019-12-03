@@ -21,45 +21,52 @@ Feel free to experiment with it and find the ideal file structure for your proje
 
 * public_html
 
-    * vendor (contains all needed composer modules - don't touch them)
+    * images
 
-        * atk4
+    * index.php
 
-            * ...
+    * init.php
 
-        * autoload.php
+    * admin.php (if needed)
+
+* projectfolder (could be named "app" for example)
+
+    * Forms
+
+        * ExampleForm1.php
+
+        * ExampleForm2.php
+
+        * UserDetailForm.php
+
+    * Models
+
+        * ExampleClass1.php
+
+        * ExampleClass2.php
+
+        * LoadAllUsers.php
+
+    * Views
+
+        * View1.php
+
+        * View2.php
+
+        * GridUserList.php
+
+* vendor (contains all needed composer modules - don't touch them)
+
+    * atk4
 
         * ...
 
-    * projectfolder
+    * autoload.php
 
-        * forms
+    * ...
 
-            * exampleForm1.php
+* composer.json
 
-            * exampleForm2.php
-
-        * models
-
-            * exampleClass1.php
-
-            * exampleClass2.php
-
-        * views
-
-            * View1.php
-
-            * View2.php
-
-        * images
-
-        * index.php
-
-        * init.php
-
-        * admin.php (if needed)
-
-    * composer.json
 
 
 Composer configuration
@@ -74,7 +81,7 @@ Your composer.json could look like this::
     },
     "autoload": {
       "psr-4": {
-          "myProject\\": "projectfolder/"
+          "MyProject\\": "projectfolder/"
       }
     }
   }
@@ -89,7 +96,7 @@ Read below how to load the autoload.php into your project.
 The "require" section within composer.json loads plublically available composer packages from the server.
 
 The "autoload" section within composer.json loads your individual project files (that are saved locally on your computer).
-"myProject" defines the namespace you are using in your classes later on.
+"MyProject" defines the namespace you are using in your classes later on.
 
 
 Why "public_html"?
@@ -183,17 +190,17 @@ Following the PSR-4 specifiations all class names and file names have to corresp
 
 If we want to create a class called "myFirstClass" we have to save it to a file called "myFirstClass.php".
 
-Let's do our first class. Please create a new file in the directory "projectfolder/views" and call it "View1.php".
+Let's do our first class. Please create a new file in the directory "projectfolder/Views" and call it "View1.php".
 
 Now comes a tricky part: you have to define a namespace within your class file that corresponds with the namespace you have
 defined in your composer.json.
-Do you remember? - If no, take a look at the beginning of this document. We defined there "myProject" as our namespace for
+Do you remember? - If no, take a look at the beginning of this document. We defined there "MyProject" as our namespace for
 the directory "projectfolder".
 
 Open the created file "View1.php" in your editor and add the following lines::
 
   <?php
-  namespace myProject\views;
+  namespace MyProject\Views;
 
   class View1 extends \atk4\data\View {
       function init() {
@@ -203,8 +210,8 @@ Open the created file "View1.php" in your editor and add the following lines::
       }
   }
 
-"namespace myProject\\views;" defines the namespace to use. It reflects the folder structure of the app.
-The file located in "projectfolder/views/View1.php" becomes "myProject\\views\\View1" in the namespace.
+"namespace MyProject\\Views;" defines the namespace to use. It reflects the folder structure of the app.
+The file located in "projectfolder/Views/View1.php" becomes "MyProject\\Views\\View1" in the namespace.
 
 For each of your classes create a separate file. As long as you follow the name conventions all your class
 files will be autoloaded by Composer.
@@ -219,9 +226,9 @@ To use our class in our app, we have to include it into our app. This can be don
 
 Please add the following lines into your index.php::
 
-  $app->add(new myProject\views\View1());
+  $app->add(new MyProject\Views\View1());
 
-or if you have added at the beginning of your index.php "use myProject\\views\\View1;" you can write::
+or if you have added at the beginning of your index.php "use MyProject\\Views\\View1;" you can write::
 
   $app->add(new View1());
 
