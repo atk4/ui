@@ -54,7 +54,6 @@ class ItemSearch extends View
         if (!$this->q) {
             $this->q = $this->getQuery();
         }
-
     }
 
     /**

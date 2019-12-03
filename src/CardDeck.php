@@ -46,7 +46,7 @@ class CardDeck extends View
     /** @var null|array A menu seed for displaying button inside. */
     public $menu = ['ui' => 'stackable grid'];
 
-    /** @var array  */
+    /** @var array */
     public $search = ['ui' => 'ui compact basic segment'];
 
     /** @var null A view container for buttons. Added into menu when menu is set. */
@@ -85,7 +85,7 @@ class CardDeck extends View
     /** @var null|int The current page number. */
     private $page = null;
 
-    /** @var null|string The current search query string.  */
+    /** @var null|string The current search query string. */
     private $query;
 
     public function init()
@@ -96,7 +96,7 @@ class CardDeck extends View
         if ($this->menu !== false) {
             $this->menu = $this->add($this->factory(View::class, $this->menu), 'Menu');
 
-            $left = $this->menu->add(['ui' => $this->search !== false ? 'twelve wide column': 'sixteen wide column']);
+            $left = $this->menu->add(['ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
             $this->btns = $left->add(['ui' => 'buttons']);
             if ($this->search !== false) {
                 $right = $this->menu->add(['ui' => 'four wide column']);
@@ -105,7 +105,6 @@ class CardDeck extends View
                 $this->query = $this->app->stickyGet($this->search->queryArg);
             }
         }
-
 
         $this->cardHolder = $this->container->add(['ui' => 'cards']);
 
@@ -124,7 +123,6 @@ class CardDeck extends View
             $this->model = $this->search->setModelCondition($this->model);
         }
         $this->_setModelLimitFromPaginator();
-
 
         $this->model->each(function ($m) use ($fields, $extra) {
             $c = $this->cardHolder->add([$this->card]);
@@ -389,7 +387,7 @@ class CardDeck extends View
 
     public function renderView()
     {
-        if (($this->menu && count($this->menuActions) > 0) || $this->search !== false ) {
+        if (($this->menu && count($this->menuActions) > 0) || $this->search !== false) {
             $this->add(['ui' => 'divider'], 'Divider');
         }
 
