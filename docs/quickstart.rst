@@ -64,6 +64,35 @@ Instead of manually outputting a text "Hello, World!" we have used a standard co
 demonstrates a core purpose of Agile Toolkit. Instead of doing a lot of things yourself, you can rely on
 components that do things for you.
 
+
+.. _using-namespaces:
+
+Using namespaces
+================
+
+By using namespaces you will be able to write less code for classes you use more often by using namespace references and
+writing clearer code.
+
+By using namespaces you will make out of this::
+
+    <?php
+    $app = new \atk4\ui\App('My First App');
+
+this::
+
+    <?php
+    use \atk4\ui\App; // just declared once at the top of your file
+
+    $app = new App('My First App');
+
+This is helpful, if you use in this case "new App('...');" several times in your code (hint: normally you use "new App()" just
+once in your project, but other classes could be used more often in one file)
+
+If you call it only once in a file, just use::
+
+    <?php
+    $app = new \atk4\ui\App('My First App');
+
 Data Persistence
 ================
 
@@ -83,8 +112,24 @@ All components of Agile Data are database-agnostic and will not concern themselv
 I will start the session and connect `persistence <https://agile-data.readthedocs.io/en/develop/persistence.html>`_
 with it::
 
+    <?php
     session_start();
     $s = new \atk4\data\Persistence_Array($_SESSION);
+
+If you're establishing a database connection that should be used throughout your whole application and in many classes,
+you can define it in the $app->db class::
+
+    <?php
+    use atk4\data\Persistence;
+    use atk4\ui\App;
+
+    $db = Persistence::connect(DB_URI,DB_USR, DB_PWD);
+
+    $app = new App([
+    "title" => "Erp v." . ERP_VER,
+    "db" => $db,
+    "call_exit" => false
+    ]);
 
 Data Model
 ==========
@@ -241,5 +286,3 @@ more UI components:
 
  - https://github.com/atk4/money-lending-tutorial
  - (Demo: https://money-lending-tutorial.herokuapp.com)
-
-
