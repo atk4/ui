@@ -41,7 +41,7 @@ class CardDeck extends View
     public $paginator = null;
 
     /** @var int The number of card to be display per page. */
-    public $ipp = 1;
+    public $ipp = 6;
 
     /** @var null|array A menu seed for displaying button inside. */
     public $menu = ['ui' => 'stackable grid'];
@@ -78,6 +78,9 @@ class CardDeck extends View
 
     /** @var string Generic display message for no record scope action where model is not loaded. */
     public $defaultMsg = 'Done!';
+
+    /** @var array seed to create View for displaying when search result is empty. */
+    public $noRecordDisplay = [Message::class, 'content' => 'Result empty!', 'icon' => 'info circle', 'text' => 'Your search did not return any record or there is no record available.'];
 
     /** @var array A collection of menu button added in Menu. */
     private $menuActions = [];
@@ -122,29 +125,35 @@ class CardDeck extends View
         if ($this->search !== false) {
             $this->model = $this->search->setModelCondition($this->model);
         }
-        $this->_setModelLimitFromPaginator();
+        $count = $this->model->action('count')->getOne();
+        $this->_setPaginator($count);
 
-        $this->model->each(function ($m) use ($fields, $extra) {
-            $c = $this->cardHolder->add([$this->card]);
-            $c->setModel($m);
-            $c->addSection($m->getTitle(), $m, $fields, $this->useLabel, $this->useTable);
-            if ($extra) {
-                $c->addExtraFields($m, $extra, $this->extraGlue);
-            }
-            if ($this->useAction) {
-                if ($singleActions = $this->_getModelActions(Generic::SINGLE_RECORD)) {
-                    $args = $this->_getReloadArgs();
-                    $id_arg = [];
-                    foreach ($singleActions as $action) {
-                        $action->ui['executor'] = $this->initActionExecutor($action);
-                        if ($action->ui['executor'] instanceof jsUserAction) {
-                            $id_arg[0] = (new jQuery())->parents('.atk-card')->data('id');
+        if ($count) {
+            $this->model->each(function ($m) use ($fields, $extra) {
+                $c = $this->cardHolder->add([$this->card]);
+                $c->setModel($m);
+                $c->addSection($m->getTitle(), $m, $fields, $this->useLabel, $this->useTable);
+                if ($extra) {
+                    $c->addExtraFields($m, $extra, $this->extraGlue);
+                }
+                if ($this->useAction) {
+                    if ($singleActions = $this->_getModelActions(Generic::SINGLE_RECORD)) {
+                        $args = $this->_getReloadArgs();
+                        $id_arg = [];
+                        foreach ($singleActions as $action) {
+                            $action->ui['executor'] = $this->initActionExecutor($action);
+                            if ($action->ui['executor'] instanceof jsUserAction) {
+                                $id_arg[0] = (new jQuery())->parents('.atk-card')->data('id');
+                            }
+                            $c->addClickAction($action, null, array_merge($id_arg, $args));
                         }
-                        $c->addClickAction($action, null, array_merge($id_arg, $args));
                     }
                 }
-            }
-        });
+            });
+        } else {
+            $this->cardHolder->addClass('centered')->add($this->factory($this->noRecordDisplay));
+        }
+
 
         // add no record scope action to menu
         if ($this->useAction && $this->menu) {
@@ -431,11 +440,15 @@ class CardDeck extends View
      * @throws \atk4\data\Exception
      * @throws \atk4\dsql\Exception
      */
-    private function _setModelLimitFromPaginator()
+    private function _setPaginator($count)
     {
         if ($this->paginator) {
-            $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
-            $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
+            if ($count > 0) {
+                $this->paginator->setTotal(ceil($count / $this->ipp));
+                $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
+            } else {
+                $this->paginator->destroy();
+            }
         }
     }
 }
