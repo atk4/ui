@@ -174,7 +174,6 @@ class CardDeck extends View
             $this->cardHolder->addClass('centered')->add($this->factory($this->noRecordDisplay));
         }
 
-
         // add no record scope action to menu
         if ($this->useAction && $this->menu) {
             foreach ($this->_getModelActions(Generic::NO_RECORDS) as $k => $action) {
