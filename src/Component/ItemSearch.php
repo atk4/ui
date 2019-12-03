@@ -47,13 +47,14 @@ class ItemSearch extends View
     {
         parent::init();
 
+        if (!$this->queryArg) {
+            $this->queryArg = $this->name;
+        }
+
         if (!$this->q) {
             $this->q = $this->getQuery();
         }
 
-        if (!$this->queryArg) {
-            $this->queryArg = 'q_'.$this->name;
-        }
     }
 
     /**
@@ -61,14 +62,7 @@ class ItemSearch extends View
      */
     public function getQuery()
     {
-        $q = null;
-        $arg = 'q_'.$this->name;
-
-        if (isset($_GET[$arg])) {
-            $q = $_GET[$arg];
-        }
-
-        return $q;
+        return $_GET[$this->queryArg] ?? null;
     }
 
     /**
@@ -81,7 +75,7 @@ class ItemSearch extends View
     public function setModelCondition($m)
     {
         $q = $this->getQuery();
-        if ($q && ($_GET['__atk_reload'] ? $_GET['__atk_reload'] : null) === $this->reload->name) {
+        if ($q && ($_GET['__atk_reload'] ?? null) === $this->reload->name) {
             $m->addCondition('name', 'like', '%'.$q.'%');
         }
 

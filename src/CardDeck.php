@@ -10,6 +10,7 @@ use atk4\data\UserAction\Generic;
 use atk4\ui\ActionExecutor\jsInterface_;
 use atk4\ui\ActionExecutor\jsUserAction;
 use atk4\ui\ActionExecutor\UserAction;
+use atk4\ui\Component\ItemSearch;
 
 class CardDeck extends View
 {
@@ -18,8 +19,8 @@ class CardDeck extends View
     /** @var string Card type inside this deck. */
     public $card = Card::class;
 
-    /** @var string Template file for card container. */
-    public $cardDeckTemplate = 'card-deck.html';
+    /** @var string default template file. */
+    public $defaultTemplate = 'card-deck.html';
 
     /** @var bool Whether card should use table display or not. */
     public $useTable = false;
@@ -40,19 +41,19 @@ class CardDeck extends View
     public $paginator = null;
 
     /** @var int The number of card to be display per page. */
-    public $ipp = 6;
+    public $ipp = 1;
 
     /** @var null|array A menu seed for displaying button inside. */
-    public $menu = null;
+    public $menu = ['ui' => 'stackable grid'];
+
+    /** @var array  */
+    public $search = ['ui' => 'ui compact basic segment'];
 
     /** @var null A view container for buttons. Added into menu when menu is set. */
     private $btns = null;
 
     /** @var string Button css class for menu. */
     public $menuBtnStyle = 'primary';
-
-    /** @var null|int The current page number. */
-    private $page = null;
 
     /** @var string Default executor class. */
     public $executor = UserAction::class;
@@ -81,21 +82,35 @@ class CardDeck extends View
     /** @var array A collection of menu button added in Menu. */
     private $menuActions = [];
 
+    /** @var null|int The current page number. */
+    private $page = null;
+
+    /** @var null|string The current search query string.  */
+    private $query;
+
     public function init()
     {
         parent::init();
+        $this->container = $this->add(['View', 'ui'=> 'basic segment']);
 
         if ($this->menu !== false) {
-            $this->menu = $this->add($this->factory(['View'], $this->menu, 'atk4\ui'));
-            $this->btns = $this->menu->add(['ui' => 'buttons']);
+            $this->menu = $this->add($this->factory(View::class, $this->menu), 'Menu');
+
+            $left = $this->menu->add(['ui' => $this->search !== false ? 'twelve wide column': 'sixteen wide column']);
+            $this->btns = $left->add(['ui' => 'buttons']);
+            if ($this->search !== false) {
+                $right = $this->menu->add(['ui' => 'four wide column']);
+                $this->search = $right->add($this->factory(ItemSearch::class, array_merge($this->search, ['context' => '#'.$this->container->name])));
+                $this->search->reload = $this->container;
+                $this->query = $this->app->stickyGet($this->search->queryArg);
+            }
         }
 
-        $this->container = $this->add(['defaultTemplate' => $this->cardDeckTemplate]);
 
         $this->cardHolder = $this->container->add(['ui' => 'cards']);
 
         if ($this->paginator !== false) {
-            $seg = $this->container->add(['View', 'ui'=> 'basic segment'], 'Paginator')->addStyle('text-align', 'center');
+            $seg = $this->container->add(['View', 'ui'=> 'basic segment']/*, 'Paginator'*/)->addStyle('text-align', 'center');
             $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator, 'atk4\ui'));
             $this->page = $this->app->stickyGet($this->paginator->name);
         }
@@ -105,7 +120,11 @@ class CardDeck extends View
     {
         parent::setModel($model);
 
+        if ($this->search !== false) {
+            $this->model = $this->search->setModelCondition($this->model);
+        }
         $this->_setModelLimitFromPaginator();
+
 
         $this->model->each(function ($m) use ($fields, $extra) {
             $c = $this->cardHolder->add([$this->card]);
@@ -133,7 +152,7 @@ class CardDeck extends View
         if ($this->useAction && $this->menu) {
             foreach ($this->_getModelActions(Generic::NO_RECORDS) as $k => $action) {
                 $action->ui['executor'] = $this->initActionExecutor($action);
-                $this->menuActions[$k]['btn'] = $this->addMenuButton($action);
+                $this->menuActions[$k]['btn'] = $this->addMenuButton($action, null, false, $this->_getReloadArgs());
                 $this->menuActions[$k]['action'] = $action;
             }
         }
@@ -256,7 +275,7 @@ class CardDeck extends View
     }
 
     /**
-     * Return reload argument based on CRUD condition.
+     * Return reload argument based on Deck condition.
      *
      * @return mixed
      */
@@ -264,6 +283,9 @@ class CardDeck extends View
     {
         if ($this->paginator) {
             $args[$this->paginator->name] = $this->page;
+        }
+        if ($this->search !== false) {
+            $args[$this->search->queryArg] = $this->query;
         }
 
         return $args;
@@ -282,12 +304,16 @@ class CardDeck extends View
      *
      * @return mixed
      */
-    public function addMenuButton($button, $callback = null, $confirm = '', $isDisabled = false)
+    public function addMenuButton($button, $callback = null, $confirm = null, $isDisabled = false, $args = null)
     {
-        $defaults = is_array($confirm) ? $confirm : [];
+        $defaults = [];
 
         if ($confirm) {
             $defaults['confirm'] = $confirm;
+        }
+
+        if ($args) {
+            $defaults['args'] = $args;
         }
 
         // If action is not specified, perhaps it is defined in the model
@@ -363,8 +389,8 @@ class CardDeck extends View
 
     public function renderView()
     {
-        if ($this->menu && count($this->menuActions) > 0) {
-            $this->menu->add(['ui' => 'divider']);
+        if (($this->menu && count($this->menuActions) > 0) || $this->search !== false ) {
+            $this->add(['ui' => 'divider'], 'Divider');
         }
 
         if (($_GET['__atk_reload'] ?? null) === $this->container->name) {
