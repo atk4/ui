@@ -39,6 +39,7 @@ class ItemSearch extends View
      */
     public $context = null;
 
+    /** @var null|string The URL argument name use for query. If null, then $this->>name will be assiged. */
     public $queryArg = null;
 
     public $defaultTemplate = 'item-search.html';
@@ -73,8 +74,7 @@ class ItemSearch extends View
      */
     public function setModelCondition($m)
     {
-        $q = $this->getQuery();
-        if ($q && ($_GET['__atk_reload'] ?? null) === $this->reload->name) {
+        if ($q = $this->getQuery()) {
             $m->addCondition('name', 'like', '%'.$q.'%');
         }
 

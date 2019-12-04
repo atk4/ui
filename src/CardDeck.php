@@ -46,7 +46,7 @@ class CardDeck extends View
     /** @var null|array A menu seed for displaying button inside. */
     public $menu = ['ui' => 'stackable grid'];
 
-    /** @var array */
+    /** @var array|ItemSearch */
     public $search = ['ui' => 'ui compact basic segment'];
 
     /** @var null A view container for buttons. Added into menu when menu is set. */
@@ -134,7 +134,7 @@ class CardDeck extends View
     protected function addPaginator()
     {
         $seg = $this->container->add(['View', 'ui'=> 'basic segment'])->addStyle('text-align', 'center');
-        $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator, 'atk4\ui'));
+        $this->paginator = $seg->add($this->factory([Paginator::class, 'reload' => $this->container], $this->paginator, 'atk4\ui'));
         $this->page = $this->app->stickyGet($this->paginator->name);
     }
 
@@ -145,12 +145,14 @@ class CardDeck extends View
         if ($this->search !== false) {
             $this->model = $this->search->setModelCondition($this->model);
         }
-        $count = $this->model->action('count')->getOne();
-        $this->_setPaginator($count);
+
+        $count = $this->_initPaginator();
 
         if ($count) {
             $this->model->each(function ($m) use ($fields, $extra) {
-                $c = $this->cardHolder->add([$this->card]);
+                // need model clone in order to keep it's loaded values.
+                $m = clone($m);
+                $c = $this->cardHolder->add([$this->card])->addClass('segment');
                 $c->setModel($m);
                 $c->addSection($m->getTitle(), $m, $fields, $this->useLabel, $this->useTable);
                 if ($extra) {
@@ -165,7 +167,7 @@ class CardDeck extends View
                             if ($action->ui['executor'] instanceof jsUserAction) {
                                 $id_arg[0] = (new jQuery())->parents('.atk-card')->data('id');
                             }
-                            $c->addClickAction($action, null, array_merge($id_arg, $args));
+                            $c->addClickAction($action, null, array_merge($id_arg, $args, ['__atk_deck_id' => $m->get($m->id_field)]));
                         }
                     }
                 }
@@ -292,12 +294,48 @@ class CardDeck extends View
     protected function jsModelReturn(Generic $action = null, string $msg = 'Done!') :array
     {
         $js[] = $this->getNotifier($msg, $action);
-        if (!$action->owner->loaded()) {
-            $js[] = (new jQuery())->closest('.atk-card')->transition('scale');
+        if ($action->owner->loaded() && $card =  $this->findCard($action->owner)) {
+            $js[] = $card->jsReload($this->_getReloadArgs());
+        } else {
+            $js[] = $this->container->jsReload($this->_getReloadArgs());
         }
-        $js[] = $this->container->jsReload($this->_getReloadArgs());
 
         return $js;
+    }
+
+    /**
+     * Check if a card is still in current set and
+     * return it. Otherwise return null.
+     * After an action is execute and data is saved, the result
+     * set might be different than previous one display on page.
+     *
+     * For example, editing a card which does not fulfill search requirement after it has been saved.
+     * Or when adding one.
+     * Therefore if card, that was just save, is not present in result set or deck return null.
+     *
+     * @param Model $model
+     *
+     * @return mixed|null
+     * @throws \atk4\data\Exception
+     */
+    protected function findCard(Model $model)
+    {
+        $mapResults = function($a) use ($model) {
+            return $a[$model->id_field];
+        };
+        $deck = [];
+        foreach ($this->cardHolder->elements as $v => $element) {
+            if ($element instanceof $this->card) {
+                $deck[$element->model->id] = $element;
+            }
+        }
+
+        if (in_array($model->id, array_map($mapResults, $model->export([$model->id_field])))) {
+            // might be in result set but not in deck, for example when adding a card.
+            return $deck[$model->id] ?? null;
+        }
+
+        return null;
     }
 
     /**
@@ -460,8 +498,9 @@ class CardDeck extends View
      * @throws \atk4\data\Exception
      * @throws \atk4\dsql\Exception
      */
-    private function _setPaginator($count)
+    private function _initPaginator()
     {
+        $count = $this->model->action('count')->getOne();
         if ($this->paginator) {
             if ($count > 0) {
                 $this->paginator->setTotal(ceil($count / $this->ipp));
@@ -470,5 +509,6 @@ class CardDeck extends View
                 $this->paginator->destroy();
             }
         }
+        return $count;
     }
 }
