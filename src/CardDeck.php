@@ -167,7 +167,7 @@ class CardDeck extends View
                             if ($action->ui['executor'] instanceof jsUserAction) {
                                 $id_arg[0] = (new jQuery())->parents('.atk-card')->data('id');
                             }
-                            $c->addClickAction($action, null, array_merge($id_arg, $args, ['__atk_deck_id' => $m->get($m->id_field)]));
+                            $c->addClickAction($action, null, array_merge($id_arg, $args));
                         }
                     }
                 }
