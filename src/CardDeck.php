@@ -151,7 +151,7 @@ class CardDeck extends View
         if ($count) {
             $this->model->each(function ($m) use ($fields, $extra) {
                 // need model clone in order to keep it's loaded values.
-                $m = clone($m);
+                $m = clone $m;
                 $c = $this->cardHolder->add([$this->card])->addClass('segment');
                 $c->setModel($m);
                 $c->addSection($m->getTitle(), $m, $fields, $this->useLabel, $this->useTable);
@@ -294,7 +294,7 @@ class CardDeck extends View
     protected function jsModelReturn(Generic $action = null, string $msg = 'Done!') :array
     {
         $js[] = $this->getNotifier($msg, $action);
-        if ($action->owner->loaded() && $card =  $this->findCard($action->owner)) {
+        if ($action->owner->loaded() && $card = $this->findCard($action->owner)) {
             $js[] = $card->jsReload($this->_getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->_getReloadArgs());
@@ -315,12 +315,13 @@ class CardDeck extends View
      *
      * @param Model $model
      *
-     * @return mixed|null
      * @throws \atk4\data\Exception
+     *
+     * @return mixed|null
      */
     protected function findCard(Model $model)
     {
-        $mapResults = function($a) use ($model) {
+        $mapResults = function ($a) use ($model) {
             return $a[$model->id_field];
         };
         $deck = [];
@@ -334,8 +335,6 @@ class CardDeck extends View
             // might be in result set but not in deck, for example when adding a card.
             return $deck[$model->id] ?? null;
         }
-
-        return null;
     }
 
     /**
@@ -509,6 +508,7 @@ class CardDeck extends View
                 $this->paginator->destroy();
             }
         }
+
         return $count;
     }
 }
