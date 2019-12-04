@@ -103,7 +103,7 @@ class CardDeck extends View
         $this->cardHolder = $this->container->add(['ui' => 'cards']);
 
         if ($this->paginator !== false) {
-           $this->addPaginator();
+            $this->addPaginator();
         }
     }
 
