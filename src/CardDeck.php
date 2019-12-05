@@ -91,6 +91,9 @@ class CardDeck extends View
     /** @var null|string The current search query string. */
     private $query;
 
+    /** @var View The view containing Cards. */
+    protected $cardHolder;
+
     public function init()
     {
         parent::init();
@@ -100,11 +103,24 @@ class CardDeck extends View
             $this->addMenuBar();
         }
 
-        $this->cardHolder = $this->container->add(['ui' => 'cards']);
+        $this->setCardHolder();
 
         if ($this->paginator !== false) {
             $this->addPaginator();
         }
+    }
+
+    /**
+     * Set CardHolder View.
+     *
+     * @return $this
+     * @throws \atk4\core\Exception
+     */
+    public function setCardHolder()
+    {
+        $this->cardHolder = $this->container->add(['ui' => 'cards']);
+
+        return $this;
     }
 
     /**
@@ -146,9 +162,7 @@ class CardDeck extends View
             $this->model = $this->search->setModelCondition($this->model);
         }
 
-        $count = $this->_initPaginator();
-
-        if ($count) {
+        if ($count = $this->initPaginator()) {
             $this->model->each(function ($m) use ($fields, $extra) {
                 // need model clone in order to keep it's loaded values.
                 $m = clone $m;
@@ -210,6 +224,10 @@ class CardDeck extends View
      * Setup executor for an action.
      * First determine what fields action needs,
      * then setup executor based on action fields, args and/or preview.
+     *
+     * Single record scope action use jsSuccess instead of afterExecute hook
+     * because hook will keep adding for every cards, thus repeating jsExecute multiple time,
+     * i.e. once for each card, unless hook is break.
      *
      * @param Generic $action
      *
@@ -306,12 +324,13 @@ class CardDeck extends View
     /**
      * Check if a card is still in current set and
      * return it. Otherwise return null.
-     * After an action is execute and data is saved, the result
-     * set might be different than previous one display on page.
+     * After an action is execute and data is saved, the db result
+     * set might be different than previous one, which represent cards displayed on page.
      *
      * For example, editing a card which does not fulfill search requirement after it has been saved.
-     * Or when adding one.
-     * Therefore if card, that was just save, is not present in result set or deck return null.
+     * Or when adding a new one.
+     * Therefore if card, that was just save, is not present in db result set or deck then return null
+     * otherwise return Card view.
      *
      * @param Model $model
      *
@@ -497,7 +516,7 @@ class CardDeck extends View
      * @throws \atk4\data\Exception
      * @throws \atk4\dsql\Exception
      */
-    private function _initPaginator()
+    protected function initPaginator()
     {
         $count = $this->model->action('count')->getOne();
         if ($this->paginator) {
