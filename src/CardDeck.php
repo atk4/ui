@@ -34,8 +34,11 @@ class CardDeck extends View
     /** @var bool If each card should use action or not. */
     public $useAction = true;
 
-    /** @var null|View The container view. */
-    public $container = null;
+    /** @var null|View The container view. The view that is reload when page or data changed. */
+    public $container = ['ui'=> 'basic segment'];
+
+    /** @var View The view containing Cards. */
+    public $cardHolder = ['ui' => 'cards'];
 
     /** @var null|View The paginator view. */
     public $paginator = null;
@@ -91,37 +94,20 @@ class CardDeck extends View
     /** @var null|string The current search query string. */
     private $query;
 
-    /** @var View The view containing Cards. */
-    protected $cardHolder;
-
     public function init()
     {
         parent::init();
-        $this->container = $this->add(['View', 'ui'=> 'basic segment']);
+        $this->container = $this->add($this->container);
 
         if ($this->menu !== false) {
             $this->addMenuBar();
         }
 
-        $this->setCardHolder();
+        $this->cardHolder = $this->container->add($this->cardHolder);
 
         if ($this->paginator !== false) {
             $this->addPaginator();
         }
-    }
-
-    /**
-     * Set CardHolder View.
-     *
-     * @throws \atk4\core\Exception
-     *
-     * @return $this
-     */
-    public function setCardHolder()
-    {
-        $this->cardHolder = $this->container->add(['ui' => 'cards']);
-
-        return $this;
     }
 
     /**
