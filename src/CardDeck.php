@@ -113,8 +113,9 @@ class CardDeck extends View
     /**
      * Set CardHolder View.
      *
-     * @return $this
      * @throws \atk4\core\Exception
+     *
+     * @return $this
      */
     public function setCardHolder()
     {
