@@ -11,7 +11,7 @@ jobs:
       image: atk4/image:latest # https://github.com/atk4/image
     strategy:
       matrix:
-        php: ['7.3']
+        php: ['7.2', '7.3', 'latest']
     services:
       mysql:
         image: mysql:5.7
