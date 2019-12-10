@@ -30,8 +30,8 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
         if (!file_exists(getcwd().'/demos/coverage.php')) {
             file_put_contents(
-                getcwd().'/demos/coverage.php',
-                file_get_contents(getcwd().'/tools/coverage.php')
+                implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'demos', 'coverage.php']),
+                file_get_contents(implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'tools', 'coverage.php']))
             );
         }
 
