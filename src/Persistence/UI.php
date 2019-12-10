@@ -71,6 +71,7 @@ class UI extends \atk4\data\Persistence
             $currency_decimals = isset($f->ui['persistence']['currency_decimals'])
                 ? $f->ui['persistence']['currency_decimals']
                 : $this->currency_decimals;
+
             return ($currency ? $currency.' ' : '').number_format($v, $currency_decimals);
         case 'date':
         case 'datetime':
