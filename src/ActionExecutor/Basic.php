@@ -13,7 +13,7 @@ class Basic extends \atk4\ui\View implements Interface_
     use HookTrait;
 
     /**
-     * @var \atk4\data\UserAction\Action
+     * @var \atk4\data\UserAction\Generic
      */
     public $action = null;
 
@@ -60,9 +60,9 @@ class Basic extends \atk4\ui\View implements Interface_
     /**
      * Associate executor with action.
      *
-     * @param \atk4\data\UserAction\Action $action
+     * @param \atk4\data\UserAction\Generic $action
      */
-    public function setAction(\atk4\data\UserAction\Generic $action)
+    public function setAction(\atk4\data\UserAction\Generic $action) : void
     {
         $this->action = $action;
     }
@@ -130,6 +130,7 @@ class Basic extends \atk4\ui\View implements Interface_
 
     /**
      * Will call $action->execute() with the correct arguments.
+     * @throws \atk4\core\Exception
      */
     public function jsExecute()
     {
@@ -149,7 +150,7 @@ class Basic extends \atk4\ui\View implements Interface_
     /**
      * Will add header if set.
      *
-     * @throws Exception
+     * @throws \atk4\core\Exception
      */
     public function addHeader()
     {
