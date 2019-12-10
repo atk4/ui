@@ -280,7 +280,7 @@ class Card extends View
      *
      * @throws Exception
      * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception *@throws \atk4\core\Exception
+     * @throws \atk4\data\Exception
      *
      * @return View
      */
@@ -345,11 +345,7 @@ class Card extends View
     {
         $defaults = [];
         if (!$button) {
-            if (isset($action->ui['button'])) {
-                $button = $action->ui['button'];
-            } else {
-                $button = new Button([$action->caption]);
-            }
+            $button = $action->ui['button'] ?? new Button([$action->caption]);
         }
         $btn = $this->addButton($button);
 

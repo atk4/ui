@@ -141,7 +141,7 @@ class CardDeck extends View
         $this->page = $this->app->stickyGet($this->paginator->name);
     }
 
-    public function setModel(Model $model, array $fields = null, array $extra = null)
+    public function setModel(Model $model, array $fields = null, array $extra = null) : Model
     {
         parent::setModel($model);
 
@@ -442,7 +442,7 @@ class CardDeck extends View
      *
      * @param Generic $action
      *
-     *@throws \atk4\core\Exception
+     * @throws \atk4\core\Exception
      *
      * @return object
      */
