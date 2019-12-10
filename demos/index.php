@@ -19,7 +19,7 @@ if (!$app->stickyget('begin')) {
     $app->add(['Button', 'Learn about User Actions', 'huge basic primary fluid', 'iconRight' => 'right arrow'])
         ->link(['tutorial_actions', 'layout' => 'Centered', 'begin' => true]);
 
-    exit;
+    $app->callExit();
 }
 
 /** @var \atk4\ui\Wizard $wizard */
