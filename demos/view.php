@@ -27,6 +27,7 @@ foreach (str_split('Click me!!') as $letter) {
 }
 
 $app->add(['Header', 'View load HTML from string or file']);
+/** @var \atk4\ui\View $plane */
 $plane = $app->add(['View', 'template' => new \atk4\ui\Template('<div id="{$_id}" class="ui statistic">
     <div class="value">
       <i class="plane icon"></i> {$num}

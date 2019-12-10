@@ -1,0 +1,28 @@
+name: Bundler
+
+on:
+  create:
+    branches:
+      - 'release/*'
+
+jobs:
+  autocommit:
+    runs-on: ubuntu-latest
+    container:
+      image: atk4/image:latest # https://github.com/atk4/image
+    steps:
+      - uses: actions/checkout@master
+      - run: |
+          sed -i -e '/atk4\/data/d' composer.json
+          sed -i -e '/atk4\/core/d' composer.json
+          cat composer.json
+          composer require atk4/core atk4/data
+          composer update
+
+      - uses: teaminkling/autocommit@master
+        with:
+          commit-message: Setting current dependencies
+      - uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ github.ref }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
