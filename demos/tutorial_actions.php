@@ -3,6 +3,7 @@
 require 'init.php';
 require 'database.php';
 
+/** @var \atk4\ui\View $wizard */
 $wizard = $app->add('Wizard');
 $app->stickyGet($wizard->name);
 

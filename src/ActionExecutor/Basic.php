@@ -35,7 +35,7 @@ class Basic extends \atk4\ui\View implements Interface_
     /**
      * @var Button | array  Button that trigger the action. Either as an array seed or object
      */
-    public $executorButton = ['Button', 'Confirm', 'primary'];
+    public $executorButton = [Button::class, 'Confirm', 'primary'];
 
     /**
      * @var array
@@ -82,7 +82,7 @@ class Basic extends \atk4\ui\View implements Interface_
     public function recursiveRender()
     {
         if (!$this->action) {
-            throw new \atk4\ui\Exception(['Action is not set. Use setAction()']);
+            throw new Exception(['Action is not set. Use setAction()']);
         }
 
         // check action can be called
@@ -99,6 +99,10 @@ class Basic extends \atk4\ui\View implements Interface_
 
     /**
      * Check if all argument values have been provided.
+     *
+     * @throws Exception
+     *
+     * @return true
      */
     public function hasAllArguments()
     {
@@ -113,7 +117,6 @@ class Basic extends \atk4\ui\View implements Interface_
 
     protected function initPreview()
     {
-
         // lets make sure that all arguments are supplied
         if (!$this->hasAllArguments()) {
             $this->add(['Message', 'type'=>'error', $this->missingArgsMsg]);
@@ -132,6 +135,8 @@ class Basic extends \atk4\ui\View implements Interface_
      * Will call $action->execute() with the correct arguments.
      *
      * @throws \atk4\core\Exception
+     *
+     * @return mixed
      */
     public function jsExecute()
     {
@@ -145,7 +150,7 @@ class Basic extends \atk4\ui\View implements Interface_
 
         $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner]) : $this->jsSuccess;
 
-        return $this->hook('afterExecute', [$return]) ?: $success ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
+        return ($this->hook('afterExecute', [$return]) ?: $success) ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
     }
 
     /**

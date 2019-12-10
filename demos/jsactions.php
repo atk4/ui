@@ -19,7 +19,7 @@ $c_action = $country->addAction('Email', function ($m) {
 });
 
 $country->tryLoadAny();
-
+/** @var $card \atk4\ui\Card */
 $card = $app->add('Card');
 $content = new \atk4\ui\View(['class' => ['content']]);
 $content->add($img = new \atk4\ui\Image(['images/kristy.png']));
@@ -59,4 +59,4 @@ $executor->addHook('afterExecute', function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');
 });
 
-$btn->on('click', $executor, ['confirm'=> 'This will import a lot of file. Are you sure?']);
+$btn->on('click', $executor, ['confirm'=> 'This will import a lot of files. Are you sure?']);
