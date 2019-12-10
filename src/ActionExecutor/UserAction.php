@@ -392,7 +392,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      */
     protected function jsGetExecute($obj, $id)
     {
-        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
+        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $obj]) : $this->jsSuccess;
 
         return [
             $this->hide(),
