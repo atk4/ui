@@ -30,7 +30,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testableDemoFilesdataProvider()
     {
         $files = [];
-        foreach (scandir(getcwd().DIRECTORY_SEPARATOR.'demos') as $file) {
+        foreach (scandir(dirname(__DIR__).DIRECTORY_SEPARATOR.'demos') as $file) {
             if (is_dir($file) || substr($file, -3) !== 'php') {
                 continue;
             }
@@ -41,6 +41,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
                 case 'db.example.php': // exclude - is a setup file
                 case 'db.php': // exclude - is a setup file
                 case 'db.travis.php': // exclude - is a setup file
+                case 'db.github.php': // exclude - is a setup file
                 case 'coverage.php': // exclude - is the coverage file
                 case 'somedatadef.php': // exclude - is a setup file
                 case 'layouts_nolayout.php': // exclude - output only a partial html
