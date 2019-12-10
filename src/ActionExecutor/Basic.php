@@ -62,7 +62,7 @@ class Basic extends \atk4\ui\View implements Interface_
      *
      * @param \atk4\data\UserAction\Generic $action
      */
-    public function setAction(\atk4\data\UserAction\Generic $action)
+    public function setAction(\atk4\data\UserAction\Generic $action) : void
     {
         $this->action = $action;
     }
@@ -134,6 +134,8 @@ class Basic extends \atk4\ui\View implements Interface_
     /**
      * Will call $action->execute() with the correct arguments.
      *
+     * @throws \atk4\core\Exception
+     *
      * @return mixed
      */
     public function jsExecute()
@@ -154,7 +156,7 @@ class Basic extends \atk4\ui\View implements Interface_
     /**
      * Will add header if set.
      *
-     * @throws Exception
+     * @throws \atk4\core\Exception
      */
     public function addHeader()
     {
