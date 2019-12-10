@@ -72,7 +72,9 @@ class jsUserAction extends jsCallback implements Interface_
             $this->owner->addClass('disabled');
         }
 
-        $this->set(function ($j, $id = null) {
+        $this->set(function ($j) {
+            //may be id is pass within $post args.
+            $id = $_POST['c0'] ?? $_POST[$this->action->owner->id_field] ?? null;
             if ($id && $this->action->scope === 'single') {
                 $this->action->owner->tryLoad($id);
             }

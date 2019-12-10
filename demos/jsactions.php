@@ -59,4 +59,25 @@ $executor->addHook('afterExecute', function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');
 });
 
-$btn->on('click', $executor, ['confirm'=> 'This will import a lot of files. Are you sure?']);
+$btn->on('click', $executor, ['confirm'=> 'This will import a lot of file. Are you sure?']);
+
+$app->add(['View', 'ui' => 'ui clearing divider']);
+
+$app->add(['Header', 'Action can be applied to an input button.', 'size' => 4]);
+
+// Note here that we explicitly required a jsUserAction executor because we want to use the input value
+// as the action args.
+$country->addAction('greet', [
+    'args'=> [
+        'age'=> [
+            'type'     => 'integer',
+            'required' => true,
+        ],
+    ],
+    'ui'      => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
+    'callback'=> function ($m, $age) {
+        return 'Age is '.$age;
+    },
+]);
+
+$app->add(new \atk4\ui\FormField\Line(['action' => $country->getAction('greet')]));
