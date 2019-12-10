@@ -118,14 +118,14 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     }
 
     /**
-     * Set modal for diplaying confirmation msg.
+     * Set modal for displaying confirmation message.
      *
-     * @param $modal
+     * @param View $modal
      *
      * @throws Exception
      * @throws \atk4\core\Exception
      */
-    public function doConfirmation($modal)
+    public function doConfirmation(View $modal)
     {
         $this->addConfirmation($modal);
 
@@ -163,9 +163,9 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /**
      * Add confirmation message to modal.
      *
-     * @param $view
+     * @param View $view
      */
-    protected function addConfirmation($view)
+    protected function addConfirmation(View $view)
     {
         $view->add(['Text'])->set($this->action->getConfirmation());
     }

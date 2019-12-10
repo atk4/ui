@@ -39,6 +39,7 @@ class ItemSearch extends View
      */
     public $context = null;
 
+    /** @var null|string The URL argument name use for query. If null, then $this->>name will be assiged. */
     public $queryArg = null;
 
     public $defaultTemplate = 'item-search.html';
@@ -47,12 +48,12 @@ class ItemSearch extends View
     {
         parent::init();
 
-        if (!$this->q) {
-            $this->q = $this->getQuery();
+        if (!$this->queryArg) {
+            $this->queryArg = $this->name;
         }
 
-        if (!$this->queryArg) {
-            $this->queryArg = 'q_'.$this->name;
+        if (!$this->q) {
+            $this->q = $this->getQuery();
         }
     }
 
@@ -61,14 +62,7 @@ class ItemSearch extends View
      */
     public function getQuery()
     {
-        $q = null;
-        $arg = 'q_'.$this->name;
-
-        if (isset($_GET[$arg])) {
-            $q = $_GET[$arg];
-        }
-
-        return $q;
+        return $_GET[$this->queryArg] ?? null;
     }
 
     /**
@@ -80,8 +74,7 @@ class ItemSearch extends View
      */
     public function setModelCondition($m)
     {
-        $q = $this->getQuery();
-        if ($q && ($_GET['__atk_reload'] ? $_GET['__atk_reload'] : null) === $this->reload->name) {
+        if ($q = $this->getQuery()) {
             $m->addCondition('name', 'like', '%'.$q.'%');
         }
 
