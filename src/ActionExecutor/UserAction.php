@@ -120,7 +120,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         if ($this->steps = $this->getSteps($action)) {
             $this->title = $this->action->owner->getModelCaption();
 
-            $this->btns->add($this->execActionBtn = $this->action->ui['execButton']?? (new Button([$this->action->caption, 'blue'])));
+            $this->btns->add($this->execActionBtn = $this->factory($this->action->ui['execButton']?? ['Button', $this->action->caption, 'blue'], [], 'atk4\ui'));
 
             // get current step.
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
