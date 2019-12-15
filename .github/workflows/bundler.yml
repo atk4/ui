@@ -89,7 +89,7 @@ jobs:
       - name: pull-request
         uses: romaninsh/pull-request@master
         with:
-          source_branch: "release/{{ env.version }}"
+          source_branch: "release/${{ env.version }}"
           destination_branch: "master"          # If blank, default: master
           pr_title: "Releasing ${{ github.ref }} into master"
           pr_body: |
