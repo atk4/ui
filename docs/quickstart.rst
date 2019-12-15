@@ -20,6 +20,8 @@ Agile Toolkit will work anywhere where PHP can. Find a suitable guide on how to 
 PHP on your platform. Having a local database is a plus, but our initial application will
 work without persistent database.
 
+Requirements
+============
 
 Installing
 ==========
@@ -141,6 +143,7 @@ Class App use `DIContainerTrait` which allow us to inject dependency directly in
         "db" => $db,
         "logger" => $logger
     ]);
+
 
 
 Form and CRUD Components
