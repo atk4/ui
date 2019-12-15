@@ -11,53 +11,93 @@ jobs:
       image: atk4/image:latest # https://github.com/atk4/image
     steps:
       - uses: actions/checkout@master
-      - name: Update CDN versions
+      - name: Update CDN destination
         run: |
           v=$(echo ${{ github.ref }} | cut -d / -f 4)
-          echo $v
+          echo "::set-env name=version::$v"
+
           git branch
           sed -i "s|'https://cdn.jsdelivr.net/gh/atk4/ui.*|'https://cdn.jsdelivr.net/gh/atk4/ui@$v/public',|" src/App.php
           sed -i "s|public \$version.*|public \$version = '$v';|" src/App.php
-      - name: Update to stable dependencies
-        run: |
-          jq 'del(."minimum-stability")|del(.require["atk4/data"])' < composer.json > tmp && mv tmp composer.json
-          composer require atk4/data
-          composer update
 
       - uses: teaminkling/autocommit@master
         with:
-          commit-message: Setting current dependencies
+          commit-message: Update versions for develop
+      - uses: ad-m/github-push-action@master
+        with:
+          branch: feature/${{ env.version }}-cdn-update
+          force: true # in case of repeat run
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: pull-request
+        uses: romaninsh/pull-request@master
+        with:
+          source_branch: feature/${{ env.version }}-cdn-update
+          destination_branch: develop
+          pr_title: "Updating CDN link to use @${{ env.version }}"
+          pr_body: |
+            Compiled JS files from last release are here:
+
+              https://cdn.jsdelivr.net/gh/atk4/ui@${{ env.version }}/public/
+
+          pr_reviewer: "romaninsh"
+          pr_assignee: "romaninsh"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+      - name: Update to stable dependencies
+        run: |
+          jq 'del(."minimum-stability")|del(.require["atk4/data"])' < composer.json > tmp && mv tmp composer.json
+          composer require atk4/data --no-progress
+          composer update --no-progress
+
+      - name: Compile JS files for CDN
+        run: |
+          npm install -g less-plugin-clean-css
+          lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
+          uglifyjs --compress -- public/agileui.js > public/agileui.min.js
+          echo '!agileui.css' >> public/.gitignore
+          echo '!agileui.css.map' >> public/.gitignore
+          echo '!agileui.min.js' >> public/.gitignore
+          echo '!atkjs-ui.js' >> public/.gitignore
+          echo '!atkjs-ui.min.js' >> public/.gitignore
+          git add public
+
+      - uses: teaminkling/autocommit@master
+        with:
+          commit-message: Setting current dependencies and complied JS
       - uses: ad-m/github-push-action@master
         with:
           branch: ${{ github.ref }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: pull-request-action
-        uses: vsoch/pull-request-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PULL_REQUEST_BRANCH: "master"
-          PULL_REQUEST_TITLE: "Releasing ${{ github.ref }} into master"
-          PULL_REQUEST_BODY: |
-            - [ ] Review changes (must include stable dependencies)
-            - [ ] Merge this PR into master (will delete ${{ github.ref }})
-            - [ ] Go to Releases and create TAG from master
-
-            Do not merge master into develop
-
-
-#      - name: pull-request
-#        uses: repo-sync/pull-request@v2
-#        with:
-#          source_branch: ""                     # If blank, default: triggered branch
-#          destination_branch: "master"          # If blank, default: master
-#          pr_title: "Releasing ${{ github.ref }} into master"
-#          pr_body: |
+#      - name: pull-request-action
+#        uses: vsoch/pull-request-action@master
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          PULL_REQUEST_BRANCH: "master"
+#          PULL_REQUEST_TITLE: "Releasing ${{ github.ref }} into master"
+#          PULL_REQUEST_BODY: |
 #            - [ ] Review changes (must include stable dependencies)
 #            - [ ] Merge this PR into master (will delete ${{ github.ref }})
 #            - [ ] Go to Releases and create TAG from master
+#
 #            Do not merge master into develop
-#          pr_reviewer: "romaninsh"
-#          pr_assignee: "romaninsh"
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#
+
+      - name: pull-request
+        uses: romaninsh/pull-request@master
+        with:
+          source_branch: "release/${{ env.version }}"
+          destination_branch: "master"          # If blank, default: master
+          pr_title: "Releasing ${{ github.ref }} into master"
+          pr_body: |
+            - [ ] Review changes (must include stable dependencies)
+            - [ ] Merge this PR into master (will delete ${{ github.ref }})
+            - [ ] Go to Releases and create TAG from master
+            Do not merge master into develop
+          pr_reviewer: "romaninsh"
+          pr_assignee: "romaninsh"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 #
