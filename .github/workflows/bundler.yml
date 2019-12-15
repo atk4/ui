@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Hack around git branches
-      - run: |
+        run: |
           v=$(echo ${{ github.ref }} | cut -d / -f 4)
           echo $v
           git branch release/$v
