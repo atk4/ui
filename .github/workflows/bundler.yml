@@ -11,11 +11,13 @@ jobs:
       image: atk4/image:latest # https://github.com/atk4/image
     steps:
       - uses: actions/checkout@master
-      - name: Hack around git branches
+      - name: Update CDN versions
         run: |
           v=$(echo ${{ github.ref }} | cut -d / -f 4)
           echo $v
           git branch
+          sed -i "" "s|'https://cdn.jsdelivr.net/gh/atk4/ui.*|'https://cdn.jsdelivr.net/gh/atk4/ui@$v/public',|" src/App.php
+          sed -i "" "s|public \$version.*|public \$version = '$v';|" src/App.php
       - name: Update to stable dependencies
         run: |
           jq 'del(."minimum-stability")|del(.require["atk4/data"])' < composer.json > tmp && mv tmp composer.json
