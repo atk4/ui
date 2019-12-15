@@ -23,26 +23,26 @@ jobs:
       - uses: teaminkling/autocommit@master
         with:
           commit-message: Update versions for develop
-#      - uses: ad-m/github-push-action@master
-#        with:
-#          branch: feature/${{ env.version }}-cdn-update
-#          force: true # in case of repeat run
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: pull-request
-#        uses: romaninsh/pull-request@master
-#        with:
-#          source_branch: feature/${{ env.version }}-cdn-update
-#          destination_branch: develop
-#          pr_title: "Updating CDN link to use @${{ env.version }}"
-#          pr_body: |
-#            Compiled JS files from last release are here:
-#
-#              https://cdn.jsdelivr.net/gh/atk4/ui@${{ env.version }}/public/
-#
-#          pr_reviewer: "romaninsh"
-#          pr_assignee: "romaninsh"
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ad-m/github-push-action@master
+        with:
+          branch: feature/${{ env.version }}-cdn-update
+          force: true # in case of repeat run
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: pull-request
+        uses: romaninsh/pull-request@master
+        with:
+          source_branch: feature/${{ env.version }}-cdn-update
+          destination_branch: develop
+          pr_title: "Updating CDN link to use @${{ env.version }}"
+          pr_body: |
+            Compiled JS files from last release are here:
+
+              https://cdn.jsdelivr.net/gh/atk4/ui@${{ env.version }}/public/
+
+          pr_reviewer: "romaninsh"
+          pr_assignee: "romaninsh"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update to stable dependencies
         run: |
