@@ -26,6 +26,7 @@ jobs:
       - uses: ad-m/github-push-action@master
         with:
           branch: feature/${{ env.version }}-cdn-update
+          force: true # in case of repeat run
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: pull-request
@@ -53,6 +54,7 @@ jobs:
 
       - name: Compile JS files for CDN
         run: |
+          npm install -g less-plugin-clean-css
           lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
           uglifyjs --compress -- public/agileui.js > public/agileui.min.js
           echo '!agileui.css' >> public/.gitignore
