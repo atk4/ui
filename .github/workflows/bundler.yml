@@ -1,22 +1,21 @@
 name: Bundler
 
-on:
-  create:
-    branches:
-      - 'release/*'
+on: create
 
 jobs:
   autocommit:
+    name: Update to stable dependencies
+    if: startsWith(github.ref, 'refs/heads/release/')
     runs-on: ubuntu-latest
     container:
       image: atk4/image:latest # https://github.com/atk4/image
     steps:
       - uses: actions/checkout@master
-      - run: |
-          sed -i -e '/atk4\/data/d' composer.json
-          sed -i -e '/atk4\/core/d' composer.json
-          cat composer.json
-          composer require atk4/core atk4/data
+      - run: echo ${{ github.ref }}
+      - name: Update to stable dependencies
+        run: |
+          jq 'del(.require["atk4/data"])' < composer.json > tmp && mv tmp composer.json
+          composer require atk4/data
           composer update
 
       - uses: teaminkling/autocommit@master
@@ -26,3 +25,19 @@ jobs:
         with:
           branch: ${{ github.ref }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: pull-request
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: ""                     # If blank, default: triggered branch
+          destination_branch: "master"          # If blank, default: master
+          pr_title: "Releasing ${{ github.ref }} into master"
+          pr_body: |
+            - [ ] Review changes (must include stable dependencies)
+            - [ ] Merge this PR into master (will delete ${{ github.ref }})
+            - [ ] Go to Releases and create TAG from master
+            Do not merge master into develop
+          pr_reviewer: "romaninsh"
+          pr_assignee: "romaninsh"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
