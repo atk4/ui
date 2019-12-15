@@ -17,7 +17,6 @@
     "require": {
         "php": ">=7.2.0",
         "ext-json": "*",
-        "atk4/core": "dev-develop",
         "atk4/data": "dev-develop"
     },
     "require-dev": {
