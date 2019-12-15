@@ -11,11 +11,13 @@ jobs:
       image: atk4/image:latest # https://github.com/atk4/image
     steps:
       - uses: actions/checkout@master
-      - name: Hack around git branches
+      - name: Update CDN versions
         run: |
           v=$(echo ${{ github.ref }} | cut -d / -f 4)
           echo $v
           git branch
+          sed -i "s|'https://cdn.jsdelivr.net/gh/atk4/ui.*|'https://cdn.jsdelivr.net/gh/atk4/ui@$v/public',|" src/App.php
+          sed -i "s|public \$version.*|public \$version = '$v';|" src/App.php
       - name: Update to stable dependencies
         run: |
           jq 'del(."minimum-stability")|del(.require["atk4/data"])' < composer.json > tmp && mv tmp composer.json
@@ -30,18 +32,32 @@ jobs:
           branch: ${{ github.ref }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: pull-request
-        uses: repo-sync/pull-request@v2
-        with:
-          source_branch: ""                     # If blank, default: triggered branch
-          destination_branch: "master"          # If blank, default: master
-          pr_title: "Releasing ${{ github.ref }} into master"
-          pr_body: |
+      - name: pull-request-action
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_REQUEST_BRANCH: "master"
+          PULL_REQUEST_TITLE: "Releasing ${{ github.ref }} into master"
+          PULL_REQUEST_BODY: |
             - [ ] Review changes (must include stable dependencies)
             - [ ] Merge this PR into master (will delete ${{ github.ref }})
             - [ ] Go to Releases and create TAG from master
-            Do not merge master into develop
-          pr_reviewer: "romaninsh"
-          pr_assignee: "romaninsh"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 
+            Do not merge master into develop
+
+
+#      - name: pull-request
+#        uses: repo-sync/pull-request@v2
+#        with:
+#          source_branch: ""                     # If blank, default: triggered branch
+#          destination_branch: "master"          # If blank, default: master
+#          pr_title: "Releasing ${{ github.ref }} into master"
+#          pr_body: |
+#            - [ ] Review changes (must include stable dependencies)
+#            - [ ] Merge this PR into master (will delete ${{ github.ref }})
+#            - [ ] Go to Releases and create TAG from master
+#            Do not merge master into develop
+#          pr_reviewer: "romaninsh"
+#          pr_assignee: "romaninsh"
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#

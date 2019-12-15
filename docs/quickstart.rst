@@ -20,6 +20,8 @@ Agile Toolkit will work anywhere where PHP can. Find a suitable guide on how to 
 PHP on your platform. Having a local database is a plus, but our initial application will
 work without persistent database.
 
+Requirements
+============
 
 Installing
 ==========
@@ -119,6 +121,30 @@ single ToDo item::
 .. [#f9] Business Model is always using native PHP types, regardless of where data is stored.
 
 As you might have noted already, Persistence and Model are defined independently from each-other.
+
+Instantiate App using DIContainerTrait (Dependency Injection)
+=============================================================
+
+Class App use `DIContainerTrait` which allow us to inject dependency directly in constructor::
+
+    use Monolog\Logger;
+    use Monolog\Handler\StreamHandler;
+
+    // create a log channel
+    $logger = new Logger('name');
+    $logger->pushHandler(new StreamHandler('path/to/your.log', Logger::WARNING));
+
+    use atk4\data\Persistence;
+    use atk4\ui\App;
+    $db = Persistence::connect("mysql://localhost:3306/database_name", "user", "password");
+
+    $app = new App([
+        "title" => "Your application title",
+        "db" => $db,
+        "logger" => $logger
+    ]);
+
+
 
 Form and CRUD Components
 ========================
