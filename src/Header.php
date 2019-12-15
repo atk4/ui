@@ -16,8 +16,6 @@ namespace atk4\ui;
  */
 class Header extends View
 {
-    // @inheritdoc
-    public $ui = 'header';
     /**
      * Set to 1, 2, .. 5 for page-headers or small/medium/large for content headers.
      *
@@ -53,17 +51,15 @@ class Header extends View
      */
     public $aligned = null;
 
-    // @inheritdoc
+    public $ui = 'header';
+
     public $defaultTemplate = 'header.html';
 
-    /**
-     * {@inheritdoc}
-     */
     public function renderView()
     {
         if ($this->size) {
-            if (is_int($this->size)) {
-                $this->element = 'h'.$this->size;
+            if (is_numeric($this->size)) {
+                $this->setElement('h'.$this->size);
             } else {
                 $this->addClass($this->size);
             }
@@ -94,6 +90,6 @@ class Header extends View
             $this->template->set('title', $this->content);
         }
 
-        parent::renderView();
+        return parent::renderView();
     }
 }

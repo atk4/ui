@@ -1,33 +1,40 @@
 <?php
 
-date_default_timezone_set('UTC');
-include 'init.php';
+require 'init.php';
+require 'database.php';
 
-$bb = $layout->add('Buttons');
-$bb->add(['Button', 'Refresh Grid', 'icon'=>'refresh']);
+$g = $app->add(['Grid']);
+$m = new Country($db);
+$m->addAction('test', function ($m) {
+    return 'test from '.$m->getTitle().' was successful!';
+});
+$g->setModel($m);
 
-$g = $layout->add(['Grid', 'celled'=>true]);
+//Adding Quicksearch on Name field using auto query.
+$g->addQuickSearch(['name'], true);
 
-$bb->on('click', $g->js()->reload());
+$g->menu->addItem(['Add Country', 'icon' => 'add square'], new \atk4\ui\jsExpression('alert(123)'));
+$g->menu->addItem(['Re-Import', 'icon' => 'power'], new \atk4\ui\jsReload($g));
+$g->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
 
-$g->setModel(new SomeData(), false);
+$g->addColumn(null, ['Template', 'hello<b>world</b>']);
+//$g->addColumn('name', ['TableColumn/Link', 'page2']);
+$g->addColumn(null, 'Delete');
 
-$g->addColumn('name', new \atk4\ui\Column\Link(['details', 'id'=>'{$id}']));
-$g->addColumn('surname', new \atk4\ui\Column\Template('<td class="warning">{$surname}</td>'));
-$g->addColumn('title', new \atk4\ui\Column\Status([
-    'positive'=> ['Prof.'],
-    'negative'=> ['Dr.'],
-]));
+$g->addAction('test');
 
-$g->addColumn('date');
-$g->addColumn('salary', new \atk4\ui\Column\Money()); //->addClass('right aligned single line', 'all'));
-
-$g->addHook('getHTMLTags', function ($grid, $row) {
-    if ($row->id == 1) {
-        return [
-            'name'=> $grid->app->getTag('div', ['class'=>'ui ribbon label'], $row['name']),
-        ];
-    }
+$g->addAction('Say HI', function ($j, $id) use ($g) {
+    return 'Loaded "'.$g->model->load($id)['name'].'" from ID='.$id;
 });
 
-$g->addTotals(['name'=>'Totals:', 'salary'=>['sum']]);
+$g->addModalAction(['icon'=>'external'], 'Modal Test', function ($p, $id) {
+    $p->add(['Message', 'Clicked on ID='.$id]);
+});
+
+$sel = $g->addSelection();
+$g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
+    'alert("Selected: "+[])', [$sel->jsChecked()]
+));
+
+//Setting ipp with an array will add an ItemPerPageSelector to paginator.
+$g->setIpp([10, 25, 50, 100]);

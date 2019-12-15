@@ -7,6 +7,8 @@ namespace atk4\ui;
  */
 class jsExpression implements jsExpressionable
 {
+    use \atk4\core\DIContainerTrait;
+
     /**
      * @var string
      */
@@ -51,12 +53,17 @@ class jsExpression implements jsExpressionable
                 if (!isset($this->args[$identifier])) {
                     throw new Exception([
                         'Tag not defined in template for jsExpression',
-                        'tag'     => $identifier,
-                        'template'=> $this->template,
+                        'tag'      => $identifier,
+                        'template' => $this->template,
                     ]);
                 }
 
                 $value = $this->args[$identifier];
+
+                // No escaping for {}
+                if ($matches[0][0] === '{') {
+                    return $value;
+                }
 
                 if (is_object($value) && $value instanceof jsExpressionable) {
                     $value = '('.$value->jsRender().')';
@@ -95,7 +102,7 @@ class jsExpression implements jsExpressionable
 
                 return $result;
             } else {
-                throw new Exception(['Not sure how to represent this object in JSON', 'obj'=>$arg]);
+                throw new Exception(['Not sure how to represent this object in JSON', 'obj' => $arg]);
             }
         } elseif (is_array($arg)) {
             $array = [];
@@ -126,7 +133,7 @@ class jsExpression implements jsExpressionable
         } elseif (is_null($arg)) {
             $string = json_encode($arg);
         } else {
-            throw new Exception(['Unable to json_encode value - unknown type', 'arg'=>var_export($arg, true)]);
+            throw new Exception(['Unable to json_encode value - unknown type', 'arg' => var_export($arg, true)]);
         }
 
         return $string;
@@ -134,12 +141,16 @@ class jsExpression implements jsExpressionable
 
     /**
      * TODO: Escapes the string, but needs a reference to where this code has been from.
+     *
+     * @internal
+     *
+     * @param string $str
      */
     public function _safe_js_string($str)
     {
         $length = strlen($str);
         $ret = '';
-        for ($i = 0; $i < $length; ++$i) {
+        for ($i = 0; $i < $length; $i++) {
             switch ($str[$i]) {
                 case "\r":
                     $ret .= '\\r';

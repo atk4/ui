@@ -1,112 +1,64 @@
 
 
-.. php:namespace: atk4\\ui
-
-==================
-Miscelaneous Views
-==================
-
-There are a lot of Views in Agile Toolkit that all behave similar and can be
-summarized together. Those views share the following properties:
-
- - Extend directly from View
- - Use single HTML element or a very simple element structure
- - Do not benefit from setModel other than setting the title
- - May contain other misc elements
+.. php:namespace:: atk4\ui
 
 
-.. php:class:: Icon
+Columns
+=======
 
-Icon
-====
+This class implements CSS Grid or ability to divide your elements into columns. If you are an expert
+designer with knowledge of HTML/CSS we recommend you to create your own layouts and templates, but
+if you are not sure how to do that, then using "Columns" class might be a good alternative for some
+basic content arrangements.
 
-Probably the simplest element, Icon is often a single element as depicted on http://semantic-ui.com/elements/icon.html. 
-To add icon inside your application::
+.. php:method:: addColumn()
 
-    $this->add('Icon', 'bomb');
+When you add new component to the page it will typically consume 100% width of its container. Columns
+will break down width into chunks that can be used by other elements::
 
-The :ref:`seed` is used as an icon class. It may contain spaces to separate multiple classes. You can add additional classes or remove them
-through :php:meth:`View::addClass` :php:meth:`View::removeClass`::
+    $c = $page->add(new \atk4\ui\Columns());
+    $c->addColumn()->add(['LoremIpsum', 1]);
+    $c->addColumn()->add(['LoremIpsum', 1]);
 
-    $this->add('Icon', 'flag')->addClass('outline');
+By default width is equally divided by columns. You may specify a custom width expressed as fraction of 16::
 
-If you are not ready to add 'Icon' into a render-tree, you can use `new`::
+    $c = $page->add(new \atk4\ui\Columns());
+    $c->addColumn(6)->add(['LoremIpsum', 1]);
+    $c->addColumn(10)->add(['LoremIpsum', 2]);  // wider column, more filler
 
-    $icon = new Icon('battery low');
+You can specify how many columns are expected in a grid, but if you do you can't specify widths of individual
+columns. This seem like a limitation of Fomantic UI::
 
-Special Icons
--------------
+    $c = $page->add(new \atk4\ui\Columns(['width'=>4]));
+    $c->addColumn()->add(new Box(['red']));
+    $c->addColumn([null, 'right floated'])->add(new Box(['blue']));
 
-You may add additional classes to your icon for size, positioning, disabling, rotation, decorating. Consult documentation
-on Semantic UI, since Agile UI will not perform any special treatment on those classes::
+Rows
+----
 
-    $icon = new Icon('circular inverted teal users');
+When you add columns for a total width which is more than permitted, columns will stack below and form a second
+row. To improve and controll the flow of rows better, you can specify addRow()::
 
-    $no_users = new View([null, 'huge icons']);
-    $no_users->add(new Icon('big red dont'));
-    $no_users->add(new Icon('black user icon'));
+    $c = $page->add(new \atk4\ui\Columns(['internally celled']));
 
-    $chainsaw = new View([null, 'huge icons']);
-    $chainsaw->add(new Icon('big loading sun'));
-    $chainsaw->add(new Icon('user'));
+    $r = $c->addRow();
+    $r->addColumn([2, 'right aligned'])->add(['Icon', 'huge home']);
+    $r->addColumn(12)->add(['LoremIpsum', 1]);
+    $r->addColumn(2)->add(['Icon', 'huge trash']);
 
-Agile UI does not implement a special class for 'Icons' because it has not much custom properties and can easily used
-through a generic View class. The next example demonstrates how to integrate 'corner icon' into a header::
+    $r = $c->addRow();
+    $r->addColumn([2, 'right aligned'])->add(['Icon', 'huge home']);
+    $r->addColumn(12)->add(['LoremIpsum', 1]);
+    $r->addColumn(2)->add(['Icon', 'huge trash']);
 
-    $tw = new View([null, 'large icons']);
-    $tw->add(new Icon('twitter'));
-    $tw->add(new Icon('inverted corner add'));
+This example also uses custom class for Columns ('internally celled') that adds dividers between columns and rows.
+For more information on available classes, see https://fomantic-ui.com/collections/grid.html.
 
-    $h = new Header(['Add on Twitter', ['icon'=>$tw]);
+Responsiveness and Performance
+------------------------------
 
-As a part of
-------------
+Although you can use responsiveness with the Column class to some degree, we recommend that you create your own
+component template where you can have greater control over all classes.
 
-Icon class is often used as a part of another view. For instance a Button may have an icon defined::
-
-    $b = new Button(['Learn', 'icon'=>'book');
-
-This format is identical but cleaner than passing the object (also saves the work until rendering phase)::
-
-    $b = new Button(['Learn', 'icon'=>new Icon('book'));
-
-    // or
-
-    $button = new Button('Learn');
-    $button -> icon = 'book';
-
-Most other use the following pattern to decode 'icon' property. If you are designing a component
-that may contain one or several icons, use the following rules:
-
- - define each icon positioning separatly. (icon, leftIcon, etc)
- - the main icon properly should be caled 'icon'
- - icon may be string, array or an object
-
-The code placed in renderView will look like this::
-
-    if ($this->icon) {
-        if (!is_object($this->icon)) {
-            $this->icon = new Icon($this->icon);
-        }
-        $this->add($this->icon, 'Icon');
-    }
-
-Following this pattern will make sure that developer who uses your component is able to inject an
-alternative object for an icon yet has the ability to use short format. Additionally between the
-init and :php:meth:`View::renderView` other logic may intervene and perform actions with the icon.
-
-Some elements will also add an extra class when icon is used, for example when adding 'icon' property
-with the button, it will add 'labeled' class.
-
-.. php:class:: Label
-
-Label
-=====
-
-Implementing http://semantic-ui.com/elements/label.html for Agile UI, Label is a very basic view,
-that can be used on it's own or as part of another UI view (such as menu item).
-
-Basic Usage
------------
-
-First argument of constructor or first element in array passed to constructor is considered 
+Similarly if you intend to output a lot of data, we recommend you to use :php:class:`Lister` instead with a custom
+template.

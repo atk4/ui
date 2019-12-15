@@ -8,18 +8,11 @@ Contents:
     :maxdepth: 4
 
     overview
-    core
     quickstart
-    template
-    view
+    core
+    components
     js
-    callbacks
-    button
-    field
-    form
-    grid
-    misc
-
+    advanced
 
 
 ..
@@ -28,11 +21,14 @@ Contents:
     core
     layouts
     building-components
+    menu
     lister
-    tree
+    table
+    paginator
     grid
     form
     crud
+    tree
     virtual-page
     console
 

@@ -4,6 +4,8 @@
 
 namespace atk4\ui;
 
+use atk4\data\Model;
+
 /**
  * This class is a lightweight template engine. It's based around operating with
  * chunks of HTML code and the main aims are:.
@@ -127,8 +129,8 @@ class Template implements \ArrayAccess
     }
 
     /**
-     * This is a helper method which populates an array pointing
-     * to the place in the template referenced by a said tag.
+     * This is a helper method which returns reference to element of template
+     * array referenced by a said tag.
      *
      * Because there might be multiple tags and getTagRef is
      * returning only one template, it will return the first
@@ -136,31 +138,32 @@ class Template implements \ArrayAccess
      *
      * {greeting}hello{/},  {greeting}world{/}
      *
-     * calling getTagRef('greeting',$template) will point
-     * second argument towards &array('hello');
+     * calling &getTagRef('greeting') will return reference to &array('hello');
      *
      * @param string $tag
-     * @param array  $template
      *
-     * @return $this
+     * @return &array
      */
-    public function getTagRef($tag, &$template)
+    public function &getTagRef($tag)
     {
         if ($this->isTopTag($tag)) {
-            $template = &$this->template;
-
-            return $this;
+            return $this->template;
         }
 
-        @list($tag, $ref) = explode('#', $tag);
+        $a = explode('#', $tag);
+        $tag = array_shift($a);
+        //$ref = array_shift($a); // unused
         if (!isset($this->tags[$tag])) {
             throw $this->exception('Tag not found in Template')
                 ->addMoreInfo('tag', $tag)
                 ->addMoreInfo('tags', implode(', ', array_keys($this->tags)));
         }
-        $template = reset($this->tags[$tag]);
 
-        return $this;
+        // return first array element only
+        reset($this->tags[$tag]);
+        $key = key($this->tags[$tag]) !== null ? key($this->tags[$tag]) : null;
+
+        return $this->tags[$tag][$key];
     }
 
     /**
@@ -170,61 +173,60 @@ class Template implements \ArrayAccess
      *
      * {greeting}hello{/},  {greeting}world{/}
      *
-     * calling getTagRefList('greeting',$template) will point
-     * second argument towards array(&array('hello'),&array('world'));
+     * calling $template =& getTagRefList('greeting') will point
+     * $template towards array(&array('hello'),&array('world'));
      *
-     * If $tag is specified as array, then $templates will
+     * If $tag is specified as an array, then $template will
      * contain all occurrences of all tags from the array.
      *
-     * @param string $tag
-     * @param array  $template
+     * @param string|array $tag
      *
-     * @return bool
+     * @return array of references to template tags
      */
-    public function getTagRefList($tag, &$template)
+    public function getTagRefList($tag)
     {
         if (is_array($tag)) {
-            // TODO: test
             $res = [];
             foreach ($tag as $t) {
-                $template = [];
-                $this->getTagRefList($t, $te);
-
-                foreach ($template as &$tpl) {
+                $list = $this->getTagRefList($t);
+                foreach ($list as &$tpl) {
                     $res[] = &$tpl;
                 }
-
-                return true;
             }
+
+            return $res;
         }
 
         if ($this->isTopTag($tag)) {
-            $template = &$this->template;
-
-            return false;
+            return [&$this->template];
         }
 
-        @list($tag, $ref) = explode('#', $tag);
+        $a = explode('#', $tag);
+        $tag = array_shift($a);
+        $ref = array_shift($a);
         if (!$ref) {
             if (!isset($this->tags[$tag])) {
                 throw $this->exception('Tag not found in Template')
-                    ->addMoreInfo('tag', $tag);
+                    ->addMoreInfo('tag', $tag)
+                    ->addMoreInfo('tags', implode(', ', array_keys($this->tags)));
             }
-            $template = $this->tags[$tag];
 
-            return true;
+            return $this->tags[$tag];
         }
+
         if (!isset($this->tags[$tag][$ref - 1])) {
             throw $this->exception('Tag not found in Template')
-                ->addMoreInfo('tag', $tag);
+                ->addMoreInfo('tag', $tag)
+                ->addMoreInfo('tags', implode(', ', array_keys($this->tags)));
         }
-        $template = [&$this->tags[$tag][$ref - 1]];
 
-        return true;
+        //return [&$this->tags[$tag][$ref - 1]];
+        return $this->tags[$tag][$ref - 1];
     }
 
     /**
      * Checks if template has defined a specified tag.
+     * If multiple tags are passed in as array, then return true if all of them exist.
      *
      * @param string|array $tag
      *
@@ -232,11 +234,21 @@ class Template implements \ArrayAccess
      */
     public function hasTag($tag)
     {
+        // check if all tags exist
         if (is_array($tag)) {
+            foreach ($tag as $t) {
+                if (!$this->hasTag($t)) {
+                    return false;
+                }
+            }
+
             return true;
         }
 
-        @list($tag, $ref) = explode('#', $tag);
+        // check if tag exist
+        $a = explode('#', $tag);
+        $tag = array_shift($a);
+        //$ref = array_shift($a); // unused
 
         return isset($this->tags[$tag]) || $this->isTopTag($tag);
     }
@@ -263,7 +275,9 @@ class Template implements \ArrayAccess
                 continue;
             }
 
-            @list($key, $ref) = explode('#', $tag);
+            $a = explode('#', $tag);
+            $key = array_shift($a);
+            $ref = array_shift($a);
 
             $this->tags[$key][$ref] = &$val;
             if (is_array($val)) {
@@ -275,6 +289,66 @@ class Template implements \ArrayAccess
     // }}}
 
     // {{{ Manipulating contents of tags
+
+    /**
+     * Internal method for setting or appending content in $tag.
+     *
+     * @param string|array|Model $tag
+     * @param string             $value
+     * @param bool               $encode Should we HTML encode content
+     * @param bool               $append Should we append value instead of changing it?
+     * @param bool               $strict Should we throw exception if tag not found?
+     *
+     * @return $this
+     */
+    protected function _setOrAppend($tag, $value = null, $encode = true, $append = false, $strict = true)
+    {
+        // check tag
+        if ($tag instanceof Model) {
+            $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
+        }
+
+        // $tag passed as associative array [tag=>value]
+        // in this case we don't throw exception if tags don't exist
+        if (is_array($tag) && $value === null) {
+            foreach ($tag as $t => $v) {
+                $this->_setOrAppend($t, $v, $encode, $append, false);
+            }
+
+            return $this;
+        }
+
+        if (!$tag) {
+            throw new Exception(['Tag is not set', 'tag' => $tag, 'value' => $value]);
+        }
+
+        // ignore not existent tags
+        if (!$strict && !$this->hasTag($tag)) {
+            return $this;
+        }
+
+        // check value
+        if (!is_scalar($value) && $value !== null) {
+            throw new Exception(['Value should be scalar', 'tag' => $tag, 'value' => $value]);
+        }
+
+        // encode value
+        if ($encode) {
+            $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+        }
+
+        // set or append value
+        $template = $this->getTagRefList($tag);
+        foreach ($template as &$ref) {
+            if ($append) {
+                $ref[] = $value;
+            } else {
+                $ref = [$value];
+            }
+        }
+
+        return $this;
+    }
 
     /**
      * This function will replace region referred by $tag to a new content.
@@ -290,130 +364,115 @@ class Template implements \ArrayAccess
      *
      * would read and set multiple region values from $_GET array.
      *
-     * @param mixed        $tag
-     * @param string|array $value
-     * @param bool         $encode
+     * @param string|array|Model $tag
+     * @param string             $value
+     * @param bool               $encode Should we HTML encode content
      *
      * @return $this
      */
     public function set($tag, $value = null, $encode = true)
     {
-        if (!$tag) {
-            return $this;
-        }
-
-        if (is_object($tag)) {
-            $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
-        }
-
-        if (is_array($tag)) {
-            if (is_null($value)) {
-                foreach ($tag as $s => $v) {
-                    $this->trySet($s, $v, $encode);
-                }
-
-                return $this;
-            }
-        }
-
-        if (is_array($value)) {
-            return $this;
-        }
-
-        if ($encode) {
-            $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
-        }
-
-        $this->getTagRefList($tag, $template);
-        foreach ($template as $key => &$ref) {
-            $ref = [$value];
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set value of a tag to a HTML content. The value is set without
-     * encoding, so you must be sure to sanitize.
-     *
-     * @param mixed        $tag
-     * @param string|array $value
-     * @param $this
-     */
-    public function setHTML($tag, $value = null)
-    {
-        return $this->set($tag, $value, false);
-    }
-
-    /**
-     * See setHTML() but won't generate exception for non-existing
-     * $tag.
-     *
-     * @param mixed        $tag
-     * @param string|array $value
-     * @param $this
-     */
-    public function trySetHTML($tag, $value = null)
-    {
-        return $this->trySet($tag, $value, false);
+        return $this->_setOrAppend($tag, $value, $encode, false, true);
     }
 
     /**
      * Same as set(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param mixed        $tag
-     * @param string|array $value
-     * @param bool         $encode
-     * @param $this
+     * @param string|array|Model $tag
+     * @param string             $value
+     * @param bool               $encode
+     *
+     * @return $this
      */
     public function trySet($tag, $value = null, $encode = true)
     {
-        if (is_array($tag)) {
-            return $this->set($tag, $value, $encode);
-        }
+        return $this->_setOrAppend($tag, $value, $encode, false, false);
+    }
 
-        return $this->hasTag($tag) ? $this->set($tag, $value, $encode) : $this;
+    /**
+     * Set value of a tag to a HTML content. The value is set without
+     * encoding, so you must be sure to sanitize.
+     *
+     * @param string|array|Model $tag
+     * @param string             $value
+     *
+     * @return $this
+     */
+    public function setHTML($tag, $value = null)
+    {
+        return $this->_setOrAppend($tag, $value, false, false, true);
+    }
+
+    /**
+     * See setHTML() but won't generate exception for non-existing
+     * $tag.
+     *
+     * @param string|array|Model $tag
+     * @param string             $value
+     *
+     * @return $this
+     */
+    public function trySetHTML($tag, $value = null)
+    {
+        return $this->_setOrAppend($tag, $value, false, false, false);
     }
 
     /**
      * Add more content inside a tag.
      *
-     * @param mixed        $tag
-     * @param string|array $value
-     * @param bool         $encode
-     * @param $this
+     * @param string|array|Model $tag
+     * @param string             $value
+     * @param bool               $encode
+     *
+     * @return $this
      */
     public function append($tag, $value, $encode = true)
     {
-        if ($value instanceof URL) {
-            $value = $value->__toString();
-        }
+        return $this->_setOrAppend($tag, $value, $encode, true, true);
+    }
 
-        if ($encode) {
-            $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
-        }
-
-        $this->getTagRefList($tag, $template);
-        foreach ($template as $key => &$ref) {
-            $ref[] = $value;
-        }
-
-        return $this;
+    /**
+     * Same as append(), but won't generate exception for non-existing
+     * $tag.
+     *
+     * @param string|array|Model $tag
+     * @param string             $value
+     * @param bool               $encode
+     *
+     * @return $this
+     */
+    public function tryAppend($tag, $value, $encode = true)
+    {
+        return $this->_setOrAppend($tag, $value, $encode, true, false);
     }
 
     /**
      * Add more content inside a tag. The content is appended without
      * encoding, so you must be sure to sanitize.
      *
-     * @param mixed        $tag
-     * @param string|array $value
+     * @param string|array|Model $tag
+     * @param string             $value
      *
      * @return $this
      */
     public function appendHTML($tag, $value)
     {
-        return $this->append($tag, $value, false);
+        return $this->_setOrAppend($tag, $value, false, true, true);
+    }
+
+    /**
+     * Same as append(), but won't generate exception for non-existing
+     * $tag.
+     *
+     * @param string|array|Model $tag
+     * @param string             $value
+     *
+     * @return $this
+     */
+    public function tryAppendHTML($tag, $value)
+    {
+        return $this->_setOrAppend($tag, $value, false, true, false);
     }
 
     /**
@@ -422,14 +481,11 @@ class Template implements \ArrayAccess
      *
      * @param string $tag
      *
-     * @return $this
+     * @return array
      */
     public function get($tag)
     {
-        $template = [];
-        $this->getTagRef($tag, $template);
-
-        return $template;
+        return /*&*/$this->getTagRef($tag); // return array not referenced to it
     }
 
     /**
@@ -453,13 +509,14 @@ class Template implements \ArrayAccess
 
             return $this;
         }
+
         if ($this->isTopTag($tag)) {
             $this->loadTemplateFromString('');
 
             return $this;
         }
 
-        $this->getTagRefList($tag, $template);
+        $template = $this->getTagRefList($tag);
         foreach ($template as &$ref) {
             $ref = [];
         }
@@ -524,7 +581,18 @@ class Template implements \ArrayAccess
             return $this;
         }
 
-        if ($this->getTagRefList($tag, $template)) {
+        // array support
+        if (is_array($tag)) {
+            foreach ($tag as $t) {
+                $this->eachTag($t, $callable);
+            }
+
+            return $this;
+        }
+
+        // $tag should be string here
+        $template = $this->getTagRefList($tag);
+        if ($template != $this->template) {
             foreach ($template as $key => $templ) {
                 $ref = $tag.'#'.($key + 1);
                 $this->tags[$tag][$key] = [call_user_func($callable, $this->recursiveRender($templ), $ref)];
@@ -568,20 +636,40 @@ class Template implements \ArrayAccess
      *
      * @param string $filename Template file name
      *
+     * @throws Exception
+     *
      * @return $this
      */
     public function load($filename)
     {
-        if (!is_readable($filename)) {
-            throw new Exception([
-                'Unable to read template from file',
-                'file'=> $filename,
-            ]);
+        if ($t = $this->tryLoad($filename)) {
+            return $t;
         }
-        $this->loadTemplateFromString(file_get_contents($filename));
-        $this->source = 'loaded from file: '.$filename;
 
-        return $this;
+        throw new Exception([
+            'Unable to read template from file',
+            'cwd'  => getcwd(),
+            'file' => $filename,
+        ]);
+    }
+
+    /**
+     * Same as load(), but will not throw exception.
+     *
+     * @param string $filename Template file name
+     *
+     * @return $this|false
+     */
+    public function tryLoad($filename)
+    {
+        if (is_readable($filename) && is_file($filename)) {
+            $this->loadTemplateFromString(file_get_contents($filename));
+            $this->source = 'loaded from file: '.$filename;
+
+            return $this;
+        }
+
+        return false;
     }
 
     /**
@@ -601,7 +689,7 @@ class Template implements \ArrayAccess
         $this->tag_cnt = [];
 
         /* First expand self-closing tags {$tag} -> {tag}{/tag} */
-        $str = preg_replace('/{\$([\w]+)}/', '{\1}{/\1}', $str);
+        $str = preg_replace('/{\$([-_:\w]+)}/', '{\1}{/\1}', $str);
 
         $this->parseTemplate($str);
 
@@ -612,8 +700,22 @@ class Template implements \ArrayAccess
 
     // {{{ Template Parsing Engine
 
+    /**
+     * Used for adding unique tag alternatives. E.g. if your template has
+     * {$name}{$name}, then first would become 'name#1' and second 'name#2', but
+     * both would still respond to 'name' tag.
+     *
+     * @var array
+     */
     private $tag_cnt = [];
 
+    /**
+     * Register tags and return unique tag name.
+     *
+     * @param string $tag tag name
+     *
+     * @return string unique tag name
+     */
     protected function regTag($tag)
     {
         if (!isset($this->tag_cnt[$tag])) {
@@ -633,41 +735,62 @@ class Template implements \ArrayAccess
      */
     protected function parseTemplateRecursive(&$input, &$template)
     {
-        while (list(, $tag) = each($input)) {
+        if (!is_array($input) || empty($input)) {
+            return;
+        }
 
-            // Closing tag
-            if ($tag[0] == '/') {
-                return substr($tag, 1);
+        while (true) {
+            $tag = current($input);
+            next($input);
+
+            if ($tag === false) {
+                break;
             }
 
-            if ($tag[0] == '$') {
-                $tag = substr($tag, 1);
-                $full_tag = $this->regTag($tag);
-                $template[$full_tag] = '';  // empty value
-                $this->tags[$tag][] = &$template[$full_tag];
+            $firstChar = substr($tag, 0, 1);
 
-                // eat next chunk
-                $chunk = each($input);
-                if ($chunk[1]) {
-                    $template[] = $chunk[1];
-                }
+            switch ($firstChar) {
+                // is closing TAG
+                case '/':
+                    return substr($tag, 1);
+                break;
 
-                continue;
-            }
+                // is TAG
+                case '$':
 
-            $full_tag = $this->regTag($tag);
+                    $tag = substr($tag, 1);
 
-            // Next would be prefix
-            list(, $prefix) = each($input);
-            $template[$full_tag] = $prefix ? [$prefix] : [];
+                    $full_tag = $this->regTag($tag);
+                    $template[$full_tag] = '';  // empty value
+                    $this->tags[$tag][] = &$template[$full_tag];
 
-            $this->tags[$tag][] = &$template[$full_tag];
+                    // eat next chunk
+                    $chunk = current($input); next($input);
+                    if ($chunk !== false && $chunk !== null) {
+                        $template[] = $chunk;
+                    }
 
-            $rtag = $this->parseTemplateRecursive($input, $template[$full_tag]);
+                break;
 
-            $chunk = each($input);
-            if ($chunk[1]) {
-                $template[] = $chunk[1];
+                // recurse
+                default:
+
+                    $full_tag = $this->regTag($tag);
+
+                    // next would be prefix
+                    $prefix = current($input); next($input);
+                    $template[$full_tag] = ($prefix === false || $prefix === null) ? [] : [$prefix];
+
+                    $this->tags[$tag][] = &$template[$full_tag];
+
+                    $this->parseTemplateRecursive($input, $template[$full_tag]);
+
+                    $chunk = current($input); next($input);
+                    if ($chunk !== false && !empty($chunk)) {
+                        $template[] = $chunk;
+                    }
+
+                break;
             }
         }
     }
@@ -679,11 +802,12 @@ class Template implements \ArrayAccess
      */
     protected function parseTemplate($str)
     {
-        $tag = '/{([\/$]?[-_\w]*)}/';
+        $tag = '/{([\/$]?[-_:\w]*)}/';
 
         $input = preg_split($tag, $str, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-        list(, $prefix) = each($input);
+        $prefix = current($input);
+        next($input);
         $this->template = [$prefix];
 
         $this->parseTemplateRecursive($input, $this->template);
@@ -718,7 +842,7 @@ class Template implements \ArrayAccess
      *
      * @return string
      */
-    protected function recursiveRender(&$template)
+    protected function recursiveRender($template)
     {
         $output = '';
         foreach ($template as $val) {
@@ -739,7 +863,7 @@ class Template implements \ArrayAccess
     /*
      * Returns HTML-formatted code with all tags
      *
-    public function _getDumpTags(&$template)
+    public function _getDumpTags($template)
     {
         $s = '';
         foreach ($template as $key => $val) {

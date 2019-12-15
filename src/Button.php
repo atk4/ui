@@ -21,15 +21,10 @@ class Button extends View
     /**
      * Additional icon that can appear on the right of the button.
      *
-     * @var [type]
+     * @var string|array|Icon
      */
     public $iconRight = null;
 
-    /**
-     * $icon property will end up a button icon.
-     *
-     * {@inheritdoc}
-     */
     public function renderView()
     {
         if ($this->icon) {
@@ -50,8 +45,8 @@ class Button extends View
             if ($this->icon) {
                 throw new Exception([
                     'Cannot use icon and iconRight simultaniously',
-                    'icon'     => $this->icon,
-                    'iconRight'=> $this->iconRight,
+                    'icon'      => $this->icon,
+                    'iconRight' => $this->iconRight,
                 ]);
             }
 
@@ -69,25 +64,5 @@ class Button extends View
         }
 
         parent::renderView();
-    }
-
-    /**
-     * Makes button into a "<a>" element with a link.
-     *
-     * @param string $url
-     *
-     * @return $this
-     */
-    public function link($url)
-    {
-        $this->element = 'a';
-        if (is_string($url)) {
-            $this->setAttr('href', $url);
-
-            return $this;
-        }
-        $this->setAttr('href', $this->app->url($url));
-
-        return $this;
     }
 }

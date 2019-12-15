@@ -2,9 +2,8 @@
 
 .. _Template:
 
-========
-Template
-========
+Introduction
+============
 
 Agile UI relies on a lightweigt built-in template engine to manipulate templates.
 The design goals of a template engine are:
@@ -138,6 +137,11 @@ Alternatively, if you wish to load template from a file:
 .. php:method:: load($file)
 
     Read file and load contents as a template.
+
+.. php:method:: tryLoad($file)
+
+    Try loading the template. Returns false if template couldn't be loaded. This can be used
+    if you attempt to load template from various locations.
 
 .. php:method:: loadTemplateFromString($string)
 
@@ -321,10 +325,17 @@ Changing template contents
 
     Escape and add value to existing tag.
 
+.. php:method:: tryAppend(tag, value)
+
+    Attempts to append value to existing but will do nothing if tag does not exist.
+
 .. php:method:: appendHTML(tag, value)
 
     Similar to append, but will not escape.
 
+.. php:method:: tryAppendHTML(tag, value)
+
+    Attempts to append non-escaped value, but will do nothing if tag does not exist.
 
 Example::
 

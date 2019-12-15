@@ -1,27 +1,76 @@
 language: php
 
 php:
-    - '5.6'
-    - '7.0'
-    - '7.1'
+    - '7.2'
+    - '7.3'
 
-#services:
-#    - mysql
+services:
+    - mysql
+    - xvfb
+
+env:
+  global:
+    - SELENIUM_MAJ_VER=3.141
+    - SELENIUM_VER=${SELENIUM_MAJ_VER}.59
+    - SELENIUM_JAR=selenium-server-standalone-${SELENIUM_VER}.jar
+    - CHROME_DRIVER_VER=2.44
+
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+install:
+  #- export DISPLAY=':99'
+  - Xvfb :99 -screen 0 1280x1024x16 +extension RANDR > /dev/null 2>&1 &
+
+before_install:
+    - npm get prefix
+    - npm install -g less less-plugin-clean-css uglify-js
 
 before_script:
-    - php -S localhost:8888 &
+
+     #- "sh -e /etc/init.d/xvfb start"
+     #- "export DISPLAY=:99.0"
+    # prepare dir for coverage
+    - mkdir -p coverage
+    - chmod 777 coverage
+    # Setup selenium
+    - wget  https://selenium-release.storage.googleapis.com/${SELENIUM_MAJ_VER}/${SELENIUM_JAR}
+    - java -jar ${SELENIUM_JAR} > /dev/null 2>&1 &
+
+    # Setup chromedriver
+    - wget http://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VER}/chromedriver_linux64.zip -P ~/
+    - unzip ~/chromedriver_linux64.zip -d ~/
+    - rm ~/chromedriver_linux64.zip
+    - sudo mv -f ~/chromedriver /usr/local/share/
+    - sudo chmod +x /usr/local/share/chromedriver
+    - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+      #- "wget http://selenium-release.storage.googleapis.com/3.0-beta3/selenium-server-standalone-3.0.0-beta3.jar -O selenium-server-standalone.jar && sudo mv selenium-server-standalone.jar /usr/local/bin"
+      #- "wget http://chromedriver.storage.googleapis.com/2.23/chromedriver_linux64.zip -O chromedriver.zip && unzip chromedriver.zip && sudo mv chromedriver /usr/local/bin"
+      #- "java  -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver  -jar /usr/local/bin/selenium-server-standalone.jar &"
+      #- sleep 3
+      #- sudo whereis google-chrome
+
+    - php -S localhost:8888 > /dev/null 2>&1&
+    - mysql -e 'create database atk4;'
+    - mysql atk4 < demos/atk4.sql
+    - mv demos/db.travis.php demos/db.php
+    - (cd js; npm install; npm run build)
+    - lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
+    - uglifyjs --compress -- public/agileui.js > public/agileui.min.js
     - composer install
-#    - mysql -e 'create database dsql_test;'
 
 after_script:
     - echo $TRAVIS_BRANCH
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.2" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.2" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
 
 script:
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then NC="--no-coverage"; fi
-    - wget -O - http://localhost:8888/demos/button2.php 
-    - ./vendor/phpunit/phpunit/phpunit $NC
-
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.2" ]]; then NC="--no-coverage"; fi
+    - ./vendor/phpunit/phpunit/phpunit $NC #- wget -O - http://localhost:8888/demos/button2.php
+    - bash tools/test.sh
 
 cache:
   directories:
@@ -36,11 +85,3 @@ notifications:
     on_start: never     # options: [always|never|change] default: always
 
     email: false
-
-addons:
-  browserstack:
-    username: "romansmalinovski1"
-    forcelocal: true
-    only: localhost,80,0
-    access_key:
-      secure: "MH+pRFR53eQHQuWY6a+LXEi0YY3tbvUeyKHrl3OUAgDdCm/6ztN/n9qv2iOKzHNwNAlhqz6R4rzUBkNIElaoTyXifo29/kLF8Pxg/1ggoMSzpRv5cb3iSLAhjqwIUYQxsd6rJA6q1XvN+LrvrnIc0BfsMwBN97kH5btiI1grvk6q5At7hcpu3ydxBnFfn+O9kCugEHgRrjt3i4t/J+JOD1BeIy6xUDWwOyqvweuIbBixcOdJvAoUGWhLoZc9CBgnpsWxyJGgeyJ5iGKlM2qd+b36t3dqo+6rfWCYRqTCy/OMnqVKbkVDc3VkXrNkAN0k9ZuXA125MIFTFCopeBClfdbjZjS/h3tszrE5/qkyy+x000ptA4NTbP2wOyIKaPtC5h470gWv9B7xJTHGU4kx2+y7poNwCTEMCKv4vrD1If4lTBZ0NfZjd8klblj8NPFN2VWOcwMz8Xyex7oAJfFglYnX4mhvbt7jpozp/oq3b9ADtHZqDRrv36iYeG5RGNl78bGIB+gPyHIhKNif1DlZoH0+EWx09xuG9DPo2CKAFjhTB8Ct8C6Nk7IdY9o6Yb78G4r7GQliDor2kcP9erycUkA8/Rd6oTN/x5eqCMM800D1Kool77+HW7cg0PgXQGROUxvvV5Rwdi0T0WXIMNWqxAylOCQTNFoGFLWqgQWnoB4="

@@ -9,20 +9,13 @@ namespace atk4\ui;
  */
 class Text extends View
 {
-    // @inheritdoc
     public $defaultTemplate = false;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function render()
+    public function render($force_echo = true)
     {
         return $this->content;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getHTML()
     {
         return $this->content;
@@ -38,8 +31,22 @@ class Text extends View
     public function addParagraph($text)
     {
         $this->content .= isset($this->app)
-            ? $this->app->getTag('p', $this->app->encodeAttribute($text))
+            ? $this->app->getTag('p', $text)
             : '<p>'.htmlspecialchars($text).'</p>';
+
+        return $this;
+    }
+
+    /**
+     * Adds some HTML code.
+     *
+     * @param $html
+     *
+     * @return $this
+     */
+    public function addHTML($html)
+    {
+        $this->content .= $html;
 
         return $this;
     }

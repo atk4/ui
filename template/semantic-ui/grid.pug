@@ -1,0 +1,11 @@
+<{_element}div{/} id="{$_id}" class="{_ui}ui{/} {$class} {_class}{/}" style="{$style}" {$attributes}>
+| {$Menu}
+| {$Content}
+| {Container}
+div(id="{$_id}" class="ui vertical segment")
+    div(class="ui atk-overflow-auto")
+        |{$Table}
+        |{$Content}
+    |{$Paginator}
+| {/Container}
+</{_element}div{/}>

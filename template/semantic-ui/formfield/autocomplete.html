@@ -1,0 +1,11 @@
+
+<div id="{$_id}" class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
+{$BeforeInput}{$AfterBeforeInput}
+<div id="{$input_id}" class="ui search selection dropdown {$disabled}" style="width:100%">
+{Input}<input class={$input_class} type="{input_type}text{/}" {$input_attributes}/>{/}
+<i class="dropdown icon"></i>
+<div class="default text">{$place_holder}</div>
+<input class="search" value="{$value}" {$readonly} {$disabled} style="width:100%"/>
+</div>
+{$AfterInput}{$AfterAfterInput}
+</div>

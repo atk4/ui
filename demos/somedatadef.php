@@ -17,9 +17,10 @@ if (!class_exists('SomeData')) {
 
             $m->addField('title');
             $m->addField('name');
-            $m->addField('surname', ['actual'=>'name']);
-            $m->addField('date', ['type'=>'date']);
-            $m->addField('salary', ['type'=>'money', 'actual'=>'randomNumber']);
+            $m->addField('surname', ['actual' => 'name']);
+            $m->addField('date', ['type' => 'date']);
+            $m->addField('salary', ['type' => 'money', 'actual' => 'randomNumber']);
+            $m->addField('logo_url');
         }
     }
 
@@ -27,7 +28,7 @@ if (!class_exists('SomeData')) {
     {
         public $faker = null;
 
-        public $count = 50;
+        public $count = 5;
 
         public function __construct($opts = [])
         {
@@ -48,10 +49,8 @@ if (!class_exists('SomeData')) {
         public function export($m, $fields = [])
         {
             if (!$fields) {
-                foreach ($m->elements as $name=>$e) {
-                    if ($e instanceof \atk4\data\Field) {
-                        $fields[] = $name;
-                    }
+                foreach ($m->getFields() as $name => $e) {
+                    $fields[] = $name;
                 }
             }
 
@@ -66,12 +65,16 @@ if (!class_exists('SomeData')) {
                         continue;
                     }
 
-                    $actual = $m->getElement($field)->actual;
+                    $actual = $m->getField($field)->actual;
                     if ($actual) {
                         $type = $actual;
                     }
 
-                    $row[$field] = $this->faker->$type;
+                    if ($type == 'logo_url') {
+                        $row[$field] = 'images/'.['default.png', 'logo.png'][rand(0, 1)]; // one of these
+                    } else {
+                        $row[$field] = $this->faker->$type;
+                    }
                 }
                 $data[] = $row;
             }

@@ -1,9 +1,9 @@
 
-<div class="ui middle aligned grid container" style="height: 100%">
-  <div class="column">{Header}
-    <h1 class="ui center aligned header"><img class="ui image" src="https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png"/>
+<div class="ui middle aligned grid container" style="min-height: 100%; padding: 2rem 0;">
+  <div class="column">{$BeforeHeaderContent}{Header}
+    <h1 class="ui center aligned header">{$HeaderImage}
       <div class="content">{$title}</div>
-    </h1>{/}
+    </h1>{/}{$AfterHeaderContent}
     <div class="ui piled segment">{$Content}</div>
   </div>
 </div>

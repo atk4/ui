@@ -3,7 +3,6 @@
 namespace atk4\ui\tests;
 
 use atk4\ui\Button;
-use atk4\ui\Icon;
 
 class ButtonTest extends \atk4\core\PHPUnit_AgileTestCase
 {
@@ -12,7 +11,7 @@ class ButtonTest extends \atk4\core\PHPUnit_AgileTestCase
      */
     public function testButtonIcon()
     {
-        $b = new Button(['Load', 'icon'=>'pause']);
+        $b = new Button(['Load', 'icon' => 'pause']);
         $b->render();
     }
 }

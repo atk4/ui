@@ -1,0 +1,15 @@
+
+<div id="{$_id}" class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
+{$BeforeInput}
+{$AfterBeforeInput}
+{Input}<input type="{input_type}text{/}" {$input_attributes}/>{/}
+<i class="{DropIcon}dropdown icon{/}"></i>
+<div class="default text">{DefaultText}...{/}</div>
+<div class="menu">
+{Item}
+<div class="item" data-value="{$value}">{Icon}<i class="{$icon}"></i>{/Icon}{$title}</div>
+{/Item}
+</div>
+{$AfterInput}
+{$AfterAfterInput}
+</div>

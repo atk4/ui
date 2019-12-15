@@ -1,0 +1,6 @@
+div(id="{$_id}" class="title")
+    i(class="{$icon} icon")
+    | {title}Title{/}
+div(class="content ui basic segment", data-path="{$path}", style="min-height: 60px")
+    div(id="{$item_id}")
+        | {$Content}

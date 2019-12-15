@@ -9,7 +9,8 @@ Views
 Agile UI is a component framework, which follows a software patterns known as
 `Render Tree` and `Two pass HTML rendering`.
 
-.. php:namespace: atk4\\ui
+.. php:namespace:: atk4\ui
+
 .. php:class:: View
 
     A View is a most fundamental object that can take part in the Render tree. All
@@ -39,11 +40,11 @@ Each of the views will automatically render all of the child views.
 
 
 
-Initializing Tree
-=================
+Initializing Render Tree
+========================
 
-Views use a principle of ``delayed init``, which allow you to manipulate View objects
-in any way you wish, before they will actuallized:.
+Views use a principle of `delayed init`, which allow you to manipulate View objects
+in any way you wish, before they will actuallized.
 
 .. php:method:: add($object, $region = 'Content')
 
@@ -56,8 +57,8 @@ in any way you wish, before they will actuallized:.
 
     If this object is initialized, will also initialize $object
 
-    :param $object:
-    :param $region:
+    :param $object: Object or :ref:`seed` to add into render tree.
+    :param $region: When outputing HTML, which region in :php:attr:`View::$template` to use.
 
 
 .. php:method:: init()
@@ -111,7 +112,7 @@ Finally, if you prefer a more consise code, you can also use the following forma
 The rest of documentaiton will use thi sconsise code to keep things readable, however if
 you value type-hinting of your IDE, you can keep using "new" keyword. I must also
 mention that if you specify first argument to add() as a string it will be passed
-to `$app->factory()`, which will be responsible of instantiating the actual object. 
+to `$app->factory()`, which will be responsible of instantiating the actual object.
 
 (TODO: link to App:Factory)
 
@@ -191,22 +192,22 @@ UI Role and Classes
 
 
 A constructor of a view often maps into a ``<div>`` tag that has a specific role
-in a CSS framework. According to the principles of Agile UI, we support a 
-wide varietty of roles. In some cases, a dedicated object will exist, for 
+in a CSS framework. According to the principles of Agile UI, we support a
+wide varietty of roles. In some cases, a dedicated object will exist, for
 example a Button. In other cases, you can use a View and specify a UI role
 explicitly::
 
-    $view = $layout->add('View', ['ui'=>'segment']);
+    $view = $app->add('View', ['ui'=>'segment']);
 
 If you happen to pass more key/values to the constructor or as second argument
 to add() they will be treated as default values for the properties of that
 specific view::
 
-    $view = $layout->add('View', ['ui'=>'segment', 'id'=>'test-id']);
+    $view = $app->add('View', ['ui'=>'segment', 'id'=>'test-id']);
 
 For a more IDE-friendly format, however, I recommend to use the following syntax::
 
-    $view = $layout->add('View', ['ui'=>'segment']);
+    $view = $app->add('View', ['ui'=>'segment']);
     $view->id = 'test-id';
 
 You must be aware of a difference here - passing array to constructor will
@@ -220,7 +221,7 @@ which syntax you are using.
 If you are don't specify key for the properties, they will be considered an
 extra class for a view::
 
-    $view = $layout->add('View', ['inverted', 'orange', 'ui'=>'segment']);
+    $view = $app->add('View', ['inverted', 'orange', 'ui'=>'segment']);
     $view->id = 'test-id';
 
 You can either specify multiple classes one-by-one or as a single string
@@ -261,11 +262,11 @@ by creating instance of \atk4\ui\Icon() inside the button.
 
 The same pattern can be used for other scenarios::
 
-    $button = $layout->add('Button', ['icon'=>'book']);
+    $button = $app->add('Button', ['icon'=>'book']);
 
 This code will have same effect as::
 
-    $button = $layout->add('Button');
+    $button = $app->add('Button');
     $button->icon = 'book';
 
 During the Render of a button, the following code will be executed::
@@ -275,7 +276,7 @@ During the Render of a button, the following code will be executed::
 If you wish to use a different icon-set, you can change Factory's route for 'Icon'
 to your own implementation OR you can pass icon as a view::
 
-    $button = $layout->add('Button', ['icon'=>new MyAwesomeIcon('book'));
+    $button = $app->add('Button', ['icon'=>new MyAwesomeIcon('book'));
 
 
 Rendering of a Tree
@@ -311,24 +312,53 @@ The most suitable location for that is inside ``renderView`` method.
 
 .. php:method:: renderView()
 
-    Perform necessary changes in the $template property according to the presentation logic
-    of this view.
+Perform necessary changes in the $template property according to the presentation logic
+of this view.
 
-    You should override this method when necessary and don't forget to execute parent::renderView().
+You should override this method when necessary and don't forget to execute parent::renderView()::
 
+    function renderView() {
+        if (str_len($this->info) > 100) {
+             $this->addClass('tiny');
+        }
+
+        parent::renderView();
+    }
+
+It's important when you call parent. You wouldn't be able to affect template of a current view
+anymore after calling renderView.
+
+Also, note that child classes are rendered already before invocation of rederView. If you wish
+to do something before child render, override method :php:meth:`View::recursiveRender()`
 
 .. php:attr:: template
 
-    Template of a current view. The default value is 'element.html', however various UI
-    classes will override this to use a different template, such as 'button.html'.
+Template of a current view. This attribute contains an object of a class :php:class:`Template`.
+You may secify this value explicitly::
 
-    Before executing init() the template will be resolved and an appropriate Template object
-    will assigned to this property. If null, will clone owner's $region.
+    $app->add(['template'=>new \atk4\ui\Template('<b>hello</b>')]);
+
+.. php:attr:: defaultTemplate
+
+By default, if value of :php:attr:`View::$template` is not set, then it is loaded from class
+specified in `defaultTemplate`::
+
+    $app->add(['defaultTemplate'=>'./mytpl.html']);
+
+You should specify defaultTemplate using relative path to your project root or, for add-ons,
+relative to a current file::
+
+    // in Add-on
+    $app->add(['defaultTemplate'=>__DIR__.'/../templates/mytpl.httml']);
+
+Agile UI does not currently provide advanced search path for templates, by default the
+template is loaded from folder `vendor/atk4/ui/template/semantic-ui/`. To change this
+behaviour, see :php:class:`App::loadTemplate()`.
 
 .. php:attr:: region
 
-    Name of the region in the owner's template where this object
-    will output itself. By default 'Content'.
+Name of the region in the owner's template where this object
+will output itself. By default 'Content'.
 
 
 Here is a best practice for using custom template::
@@ -348,16 +378,16 @@ Here is a best practice for using custom template::
 As soon as the view becomes part of a render-tree, the Template object will also be allocated.
 At this point it's also possible to override default template::
 
-    $layout->add(new MyView(), ['template'=>$layout->template->cloneRegion('MyRegion')]);
+    $app->add(new MyView(), ['template'=>$template->cloneRegion('MyRegion')]);
 
 Or you can set $template into object inside your constructor, in which case it will be left as-is.
 
 On other hand, if your 'template' property is null, then the process of adding View inside RenderTree
-will automatically clone region of a parent. 
+will automatically clone region of a parent.
 
 ``Lister`` is a class that has no default template, and therefore you can add it like this::
 
-    $profile = $layout->add('View', ['template'=>'myview.html']);
+    $profile = $app->add('View', ['template'=>'myview.html']);
     $profile->setModel($user);
     $profile->add('Lister', 'Tags')->setModel($user->ref('Tags'));
 
@@ -422,6 +452,26 @@ Example::
     $butt = $layout->add('Button', ['name'=>'bar']);o
 
     echo $butt->getJSID();  // foo_bar
+
+
+Reloading a View
+================
+
+.. php:method:: jsReload($get_arguments)
+
+Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::jsReload(),
+which will respond with JavaScript Action for reloading the view::
+
+    $b1 = $app->add(['Button', 'Click me']);
+    $b2 = $app->add(['Button', 'Rand: '.rand(1,100)]);
+
+    $b1->on('click', $b2->jsReload());
+
+    // Previously:
+    // $b1->on('click', new \atk4\ui\jsReload($b2));
+
+
+
 
 Modifying Basic Elements
 ========================

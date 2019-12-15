@@ -17,27 +17,54 @@ use atk4\ui\Exception;
  */
 class UI extends \atk4\data\Persistence
 {
-    public $date_format = 'd/m/Y';
+    public $date_format = 'M d, Y';
 
-    public $time_format = 'h:i:S';
+    public $time_format = 'H:i';
 
-    public $datetime_format = 'D, d M Y H:i:s O';
+    public $datetime_format = 'M d, Y H:i:s';
+    // 'D, d M Y H:i:s O';
+
+    /**
+     * Calendar input first day of week.
+     *  0 = sunday;.
+     *
+     * @var int
+     */
+    public $firstDayOfWeek = 0;
 
     public $currency = '€';
+
+    /**
+     * Default decimal count for type 'money'
+     *  Used directly in number_format() second parameter.
+     *
+     * @var int
+     */
+    public $currency_decimals = 2;
+
+    public $yes = 'Yes';
+    public $no = 'No';
+
+    public $calendar_options = [];
 
     /**
      * This method contains the logic of casting generic values into user-friendly format.
      */
     public function _typecastSaveField(\atk4\data\Field $f, $value)
     {
+        // serialize if we explicitly want that
+        if ($f->serialize) {
+            $value = $this->serializeSaveField($f, $value);
+        }
+
         // work only on copied value not real one !!!
         $v = is_object($value) ? clone $value : $value;
 
         switch ($f->type) {
         case 'boolean':
-            return $v ? 'Yes' : 'No';
+            return $v ? $this->yes : $this->no;
         case 'money':
-            return ($this->currency ? $this->currency.' ' : '').number_format($v, 2);
+            return ($this->currency ? $this->currency.' ' : '').number_format($v, $this->currency_decimals);
         case 'date':
         case 'datetime':
         case 'time':
@@ -70,7 +97,27 @@ class UI extends \atk4\data\Persistence
      */
     public function _typecastLoadField(\atk4\data\Field $f, $value)
     {
+        // serialize if we explicitly want that
+        if ($f->serialize && $value) {
+            try {
+                $new_value = $this->serializeLoadField($f, $value);
+            } catch (\Exception $e) {
+                throw new Exception([
+                    'Value must be '.$f->serialize,
+                    'serializator'=> $f->serialize,
+                    'value'       => $value,
+                    'field'       => $f,
+                ]);
+            }
+            $value = $new_value;
+        }
+
         switch ($f->type) {
+        case 'string':
+        case 'text':
+            // Normalize line breaks
+            $value = str_replace(["\r\n", "\r"], "\n", $value);
+            break;
         case 'boolean':
             $value = (bool) $value;
             break;
@@ -83,7 +130,7 @@ class UI extends \atk4\data\Persistence
             $tz_class = isset($f->dateTimeZoneClass) ? $f->dateTimeZoneClass : 'DateTimeZone';
 
             // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
-            $format = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
+            $format = ['date' => '!+'.$this->date_format, 'datetime' => '!+'.$this->datetime_format, 'time' => '!+'.$this->time_format];
             $format = $f->persist_format ?: $format[$f->type];
 
             // datetime only - set from persisting timezone
@@ -107,6 +154,12 @@ class UI extends \atk4\data\Persistence
             break;
         }
 
+        if (isset($f->reference)) {
+            if (empty($value)) {
+                $value = null;
+            }
+        }
+
         return $value;
     }
 
@@ -127,7 +180,7 @@ class UI extends \atk4\data\Persistence
         foreach ($row as $key => $value) {
 
             // Look up field object
-            $f = $m->hasElement($key);
+            $f = $m->hasField($key);
 
             // Figure out the name of the destination field
             $field = $key;

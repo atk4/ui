@@ -3,34 +3,8 @@
   <head>
     <title>{title}Agile UI - Untitled Project{/}</title>{$meta}
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="http://semantic-ui.com/dist/semantic.css">
-    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js"></script>
-    <script src="http://semantic-ui.com/dist/semantic.js"></script>
-    <script>
-      $.fn.api.settings.successTest = function(response) {
-        if(response && response.eval) {
-            try {
-              var result = function(){ eval(response.eval); }.call(this.obj);
-            } catch (e) {
-              //alert(e);
-            }
-        }
-        return true;
-      }
-      
-      $.fn.api.settings.onFailure = function(response) {
-          w=window.open(null,'Error in JSON response','height=1000,width=1100,location=no,menubar=no,scrollbars=yes,status=no,titlebar=no,toolbar=no');
-          if(w){
-              w.document.write('<h5>Error in JSON response</h5>');
-              w.document.write(response);
-              w.document.write('<center><input type=button onclick="window.close()" value="Close"></center>');
-          }else{
-              alert("Error in ajaxec response"+response);
-          }
-      }
-    </script>{$HEAD}
-    <style type="text/css">| {$style}</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">{$HEAD}
+    <style type="text/css">{$style}</style>
   </head>
   <body class="{$class}">{$Content}</body>
 </html>

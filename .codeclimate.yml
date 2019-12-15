@@ -1,65 +1,120 @@
-engines:
-  duplication:
-    enabled: true
+version: "2"
+plugins:
+  # Disabling plugins until there is a reasonable way to sanitize their output
+  phpcodesniffer:
+    enabled: false
     config:
-      languages:
-        php:
-          mass_threshold: 50
-  fixme:
-    enabled: true
+      standard: "PSR1,PSR2"
+      ignore_warnings: true
+      encoding: utf-8
   phpmd:
-    enabled: true
-    exclude_fingerprints:
-    - 908ad3f93985ff14c44615cee6966c72  # View have a lot of public methods. Deal with it.
-    - 81ca5382dedb709060ec70ffea74e157  # allow exit in a call-back inside app constructor
-    - 409aa7b6ded69296360c17d5c267c8dc  # Grid::renderView iterates method
-    - a4801fad2cfbf1b485de61cca855955d  # Grid calls View::renderView() bypassing Lister.
-    - 5030329ed016f46a2791c854caacb39c  # Grid::getHTMLTags passes $row / $field, but $row is not used by money column
-    - 113c8195220e554776225802db7021d6  # Persistence_Faker: Allow static access to class Faker\Factory in __construct
-    checks:
-      CleanCode/ElseExpression:
-        enabled: false      # gives many incorrect suggestions
-      Controversial/CamelCaseClassName:
-        enabled: false      # because jQuery.php and similar class names
-      Controversial/CamelCaseMethodName:
-        enabled: false      # methods start with _xx for private methods (that must remain public)
-      Controversial/CamelCaseParameterName:
-        enabled: false      # allow parameter names to not use camelCase notation
-      Controversial/CamelCasePropertyName:
-        enabled: false      # becasue we use _xx for private properties (that must remain public)
-      Controversial/CamelCaseVariableName:
-        enabled: false      # because we call variables $f_login, $m_user for better readability.
-      Controversial/Superglobals:
-        enabled: false      # yes we use superglobals and that's OK
-      CyclomaticComplexity:
-        enabled: false      # our code is complex so that your code wouldn't be!
-      CleanCode/BooleanArgumentFlag:
-        enabled: false      # sometimes it is meaningful to pass boolean arguments to methods
-      Design/CouplingBetweenObjects:
-        enabled: false      # because we always allow to inject overrides!
-      Design/LongMethod:
-        enabled: false      # our code is long so that your code wouldn't be!
-      Design/NpathComplexity:
-        enabled: false      # our code is complex so that your code wouldn't be!
-      Design/TooManyMethods:
-        enabled: false      # methods never should be to many
-      Design/TooManyPublicMethods:
-        enabled: false      # it is OK that some classes have more than 12 public methods
-      Design/WeightedMethodCount:
-        enabled: false      # because we solve complex task, our classes may be complex
-      Naming/ShortMethodName:
-        enabled: false      # because of on() and js() and $ui
-      Naming/ShortVariable:
-        enabled: false      # because of on() and js() and $ui
-      # THERE IS MUCH TO MUCH OF THESE ERRORS - TEMPORARILY DISABLE THIS CHECK
-      UnusedFormalParameter:
-        enabled: false
-  radon:
-    enabled: true
-ratings:
-  paths:
-  - "src/**"
-exclude_paths:
-- "docs/**"
-- "tests/**"
-- "vendor/**"
+    enabled: false
+  sonar-php:
+    enabled: false
+
+checks:
+  argument-count:
+    config:
+      threshold: 5
+  complex-logic:
+    config:
+      threshold: 4
+  file-lines:
+    config:
+      threshold: 1000
+  method-complexity:
+    config:
+      threshold: 50
+  method-count:
+    config:
+      threshold: 40
+  method-lines:
+    config:
+      threshold: 100
+  nested-control-flow:
+    config:
+      threshold: 4
+  return-statements:
+    config:
+      threshold: 7
+  similar-code:
+    config:
+      threshold: 100
+  identical-code:
+    config:
+      threshold: 150
+
+
+#engines:
+#  duplication:
+#    enabled: true
+#    config:
+#      languages:
+#        php:
+#          mass_threshold: 50
+#  fixme:
+#    enabled: true
+#  phpmd:
+#    enabled: true
+#    exclude_fingerprints:
+#    - 9d462b7c90c564bf28007ee399340fad # table() NPath is too complex.
+#    - 7c90035f65bb3bdbd2c03c648a705aac # we use static for factory, so it's good
+#    - 80ef7f404dd4f054ca51d9ee12d9e9dd # we exit from toStrign() because it can't throw exceptions
+#    - ae61f5e0cda0328c140f3b7298dbb8af # don't complain about call to static connection, as it's a fallback
+#    - e71149b967391adfaf3347a53d3c0023 # don't complain about $junk used in foreach when we only need keys
+#    checks:
+#      CyclomaticComplexity:            # because we solve complex stuff
+#        enabled: false
+#      Naming/LongVariable:             # because we have variable naming patterns
+#        enabled: false
+#      UnusedFormalParameter:           # because when we extend methods/hooks we wish to keep unified method call interface
+#        enabled: false
+#      Design/TooManyPublicMethods:     # because we follow our internal design patters
+#        enabled: false
+#      Design/TooManyMethods:           # because we solve complex stuff
+#        enabled: false
+#      Design/LongMethod:               # because methods are as long as we need them to be
+#        enabled: false
+#      ExcessivePublicCount:            # because Model has too many public methods
+#        enabled: false
+#      Design/TooManyFields:            # because we solve complex things
+#        enabled: false
+#      Design/NpathComplexity:          # because splitting up complex stuff into methods makes things even more complex
+#        enabled: false
+#      Design/WeightedMethodCount:      # because we we solve complex stuff
+#        enabled: false
+#      Design/LongClass:                # because we design carefully what is native and what is extension
+#        enabled: false
+#      Controversial/CamelCaseMethodName:    # because we need certain method naming patterns, render_blah for rendering [blah]
+#        enabled: false
+#      Controversial/CamelCaseParameterName: #
+#        enabled: false
+#      Controversial/CamelCasePropertyName:  # because we use _better_dont_change properties
+#        enabled: false
+#      Controversial/CamelCaseVariableName:  #
+#        enabled: false
+#      Controversial/CamelCaseClassName:     # Because we use Join_SQL where we specifically include _
+#        enabled: false
+#      Naming/ShortVariable:             # because sometimes variables should be short
+#        enabled: false
+#      CleanCode/ElseExpression:         # because following this makes code more complex
+#        enabled: false
+#
+#  radon:
+#    enabled: true
+#ratings:
+#  paths:
+#  - "src/**"
+#exclude_paths:
+#- "docs/**"
+#- "tests/**"
+#- "vendor/**"
+## exclude obsolete classes
+#- "src/Field_Many.php"
+#- "src/Field_One.php"
+#- "src/Field_SQL_One.php"
+#- "src/Relation_Many.php"
+#- "src/Relation_One.php"
+#- "src/Relation_SQL_One.php"
+## exclude classes completely inherited from other repos
+#- "src/Exception.php"

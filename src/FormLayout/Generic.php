@@ -3,116 +3,79 @@
 namespace atk4\ui\FormLayout;
 
 use atk4\ui\Form;
-use atk4\ui\View;
 
 /**
  * Generic Layout for a form.
  */
-class Generic extends View
+class Generic extends _Abstract
 {
-    /**
-     * Links layout to the form.
-     */
-    public $form = null;
-
-    // @var inheritdoc
+    /** {@inheritdoc} */
     public $defaultTemplate = 'formlayout/generic.html';
 
     /**
      * If specified will appear on top of the group. Can be string or Label object.
+     *
+     * @var string
      */
     public $label = null;
 
     /**
      * Specify width of a group in numerical word e.g. 'width'=>'two' as per
      * Semantic UI grid system.
+     *
+     * @var string
      */
     public $width = null;
 
     /**
      * Set true if you want fields to appear in-line.
+     *
+     * @var bool
      */
-    public $inline = null;
+    public $inline = false;
 
-    /**
-     * Places field inside a layout somewhere.
-     *
-     * @param \atk4\ui\FormField\Generic|array $field
-     * @param array|string                     $args
-     *
-     * @return \atk4\ui\FormField\Generic
-     */
-    public function addField($field, $args = [])
+    protected function _addField($decorator, $field)
     {
-        if (is_string($args)) {
-            $args = ['caption' => $args];
-        } elseif (is_array($args) && isset($args[0])) {
-            $args['caption'] = $args[0];
-            unset($args[0]);
-        }
-
-        /*
-        if (isset($args[1]) && is_string($args[1])) {
-            $args[1] = ['ui'=>['caption'=>$args[1]]];
-        }
-         */
-
-        if (is_array($field)) {
-            $field = $this->form->fieldFactory(...$field);
-        } elseif (!$field instanceof \atk4\ui\FormField\Generic) {
-            $field = $this->form->fieldFactory($field);
-        }
-
-        if (isset($args['caption'])) {
-            $field->field->ui['caption'] = $args['caption'];
-        }
-
-        if (isset($args['width'])) {
-            $field->field->ui['width'] = $args['width'];
-        }
-
-        return $this->_add($field, ['name'=>$field->short_name]);
+        return $this->_add($decorator, ['desired_name' => $field->short_name]);
     }
 
     /**
      * Adds Button.
      *
-     * @param \atk4\ui\Button $button
+     * @param Button|array|string $seed
      *
      * @return \atk4\ui\Button
      */
-    public function addButton(\atk4\ui\Button $button)
+    public function addButton($seed)
     {
-        return $this->_add($button);
+        return $this->add($this->mergeSeeds(['Button'], $seed), 'Buttons');
     }
 
     /**
-     * Create a group with fields.
+     * Adds Header in form layout.
      *
      * @param string $label
      *
      * @return $this
      */
-    public function addHeader($label = null)
+    public function addHeader($label)
     {
-        if ($label) {
-            $this->add(new View([$label, 'ui'=>'dividing header', 'element'=>'h4']));
-        }
+        $this->add(['Header', $label, 'dividing', 'element' => 'h4']);
 
         return $this;
     }
 
     /**
-     * Adds group.
+     * Adds field group in form layout.
      *
      * @param string|array $label
      *
-     * @return self
+     * @return static
      */
     public function addGroup($label = null)
     {
         if (!is_array($label)) {
-            $label = ['label'=>$label];
+            $label = ['label' => $label];
         } elseif (isset($label[0])) {
             $label['label'] = $label[0];
             unset($label[0]);
@@ -120,11 +83,38 @@ class Generic extends View
 
         $label['form'] = $this->form;
 
-        return $this->add(new self($label));
+        return $this->add(new static($label));
     }
 
     /**
-     * {@inheritdoc}
+     * Add a form layout section to this layout.
+     *
+     * Each section may contain other section or group.
+     *
+     * @param mixed $seed
+     * @param bool  $addDivider Should we add divider after this section
+     *
+     * @throws \atk4\core\Exception
+     * @throws \atk4\ui\Exception
+     *
+     * @return static
+     */
+    public function addSubLayout($seed = 'Generic', $addDivider = true)
+    {
+        $v = $this->add($this->factory($seed, ['form' => $this->form], 'atk4\ui\FormLayout\Section'));
+        if ($v instanceof \atk4\ui\FormLayout\Section\Generic) {
+            $v = $v->addSection();
+        }
+
+        if ($addDivider) {
+            $this->add(['ui' => 'hidden divider']);
+        }
+
+        return $v;
+    }
+
+    /**
+     * Recursively renders this view.
      */
     public function recursiveRender()
     {
@@ -143,7 +133,7 @@ class Generic extends View
                 continue;
             }
 
-            if ($el instanceof \atk4\ui\FormLayout\Generic) {
+            if ($el instanceof self) {
                 if ($el->label && !$el->inline) {
                     $template = $labeled_group;
                     $template->set('label', $el->label);
@@ -164,18 +154,17 @@ class Generic extends View
                 continue;
             }
 
-            // Anything but fields gets inserted directly
-            if (!$el instanceof \atk4\ui\FormField\Generic) {
+            // Anything but fields or explicitly defined fields gets inserted directly
+            if (!$el instanceof \atk4\ui\FormField\Generic || !$el->layoutWrap) {
                 $this->template->appendHTML('Content', $el->getHTML());
                 continue;
             }
 
             $template = $field_input;
-            $label = isset($el->field->ui['caption']) ?
-                $el->field->ui['caption'] : ucwords(str_replace('_', ' ', $el->field->short_name));
+            $label = $el->caption ?: $el->field->getCaption();
 
             // Anything but fields gets inserted directly
-            if ($el instanceof \atk4\ui\FormField\Checkbox) {
+            if ($el instanceof \atk4\ui\FormField\CheckBox) {
                 $template = $field_no_label;
                 $el->template->set('Content', $label);
                 /*
@@ -198,9 +187,26 @@ class Generic extends View
             $template->setHTML('Input', $el->getHTML());
             $template->trySet('label', $label);
             $template->trySet('label_for', $el->id.'_input');
+            $template->set('field_class', $el->getFieldClass());
 
-            if (isset($el->field->ui['width'])) {
-                $template->set('field_class', $el->field->ui['width'].' wide');
+            if ($el->field->required) {
+                $template->append('field_class', 'required ');
+            }
+
+            if (isset($el->width)) {
+                $template->append('field_class', $el->width.' wide ');
+            }
+
+            if ($el->hint && $template->hasTag('Hint')) {
+                $hint = new \atk4\ui\Label([null, 'pointing', 'id'=>$el->id.'_hint']);
+                if (is_object($el->hint) || is_array($el->hint)) {
+                    $hint->add($el->hint);
+                } else {
+                    $hint->set($el->hint);
+                }
+                $template->setHTML('Hint', $hint->getHTML());
+            } elseif ($template->hasTag('Hint')) {
+                $template->del('Hint');
             }
 
             $this->template->appendHTML('Content', $template->render());

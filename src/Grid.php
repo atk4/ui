@@ -4,196 +4,642 @@
 
 namespace atk4\ui;
 
-class Grid extends Lister
+use atk4\core\HookTrait;
+use atk4\data\UserAction\Generic;
+use atk4\ui\ActionExecutor\Basic;
+
+/**
+ * Implements a more sophisticated and interactive Data-Table component.
+ */
+class Grid extends View
 {
-    use \atk4\core\HookTrait;
+    use HookTrait;
+    /**
+     * Will be initialized to Menu object, however you can set this to false to disable menu.
+     *
+     * @var Menu|false
+     */
+    public $menu = null;
 
-    // Overrides
+    /**
+     * Calling addQuickSearch will create a form with a field inside $menu to perform quick searches.
+     *
+     * If you pass this property as array of field names while creating Grid, then when you will call
+     * setModel() QuickSearch object will be created automatically and these model fields will be used
+     * for filtering.
+     *
+     * @var array|FormField\Generic
+     */
+    public $quickSearch = null;
+
+    /**
+     * Paginator is automatically added below the table and will divide long tables into pages.
+     *
+     * You can provide your own Paginator object here to customize.
+     *
+     * @var Paginator|false
+     */
+    public $paginator = null;
+
+    /**
+     * Number of items per page to display.
+     *
+     * @var int
+     */
+    public $ipp = 50;
+
+    /**
+     * Calling addAction will add a new column inside $table, and will be re-used
+     * for next addAction().
+     *
+     * @var TableColumn\Actions
+     */
+    public $actions = null;
+
+    /**
+     * Calling addAction will add a new column inside $table with dropdown menu,
+     * and will be re-used for next addActionMenuItem().
+     *
+     * @var null
+     */
+    public $actionMenu = null;
+
+    /**
+     * Calling addSelection will add a new column inside $table, containing checkboxes.
+     * This column will be stored here, in case you want to access it.
+     *
+     * @var TableColumn\CheckBox
+     */
+    public $selection = null;
+
+    /**
+     * Grid can be sorted by clicking on column headers. This will be automatically enabled
+     * if Model supports ordering. You may override by setting true/false.
+     *
+     * @var bool
+     */
+    public $sortable = null;
+
+    /**
+     * Set this if you want GET argument name to look beautifully for sorting.
+     *
+     * @var null|string
+     */
+    public $sortTrigger = null;
+
+    /**
+     * Component that actually renders data rows / columns and possibly totals.
+     *
+     * @var Table|false
+     */
+    public $table = null;
+
+    public $executor_class = Basic::class;
+
+    /**
+     * The container for table and paginator.
+     *
+     * @var View
+     */
+    public $container = null;
+
     public $defaultTemplate = 'grid.html';
-    public $ui = 'table';
-    public $content = false;
 
     /**
-     * Column objects can service multiple columns. You can use it for your advancage by re-using the object
-     * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
-     * used.
+     * TableColumn\Action seed.
+     * Defines which Table Decorator to use for Actions.
      *
-     * @var Column\Generic
+     * @var string
      */
-    public $default_column = null;
+    protected $actionDecorator = 'Actions';
 
     /**
-     * Contains list of declared columns. Value will always be a column object.
+     * TableColumn\ActionMenu seed.
+     * Defines which Table Decorator to use for ActionMenu.
      *
      * @var array
      */
-    public $columns = [];
+    protected $actionMenuDecorator = ['ActionMenu', 'label' => 'Actions...'];
 
-    /**
-     * Allows you to inject HTML into grid using getHTMLTags hook and column call-backs.
-     * Switch this feature off to increase performance at expense of some row-specific HTML.
-     *
-     * @var bool
-     */
-    public $use_html_tags = true;
-
-    /**
-     * Determines a strategy on how totals will be calculated. Do not touch those fields
-     * direcly, instead use addTotals().
-     *
-     * @var bool
-     */
-    public $totals_plan = false;
-
-    /**
-     * Setting this to false will hide header row.
-     *
-     * @var bool
-     */
-    public $header = true;
-
-    /**
-     * Contains list of totals accumulated during the render process.
-     *
-     * @var array
-     */
-    public $totals = [];
-
-    /**
-     * Contain the template for the "Head" type row.
-     *
-     * @var Template
-     */
-    protected $t_head;
-
-    /**
-     * Contain the template for the "Body" type row.
-     *
-     * @var Template
-     */
-    protected $t_row;
-
-    /**
-     * Contain the template for the "Foot" type row.
-     *
-     * @var Template
-     */
-    protected $t_totals;
-
-    /**
-     * Contains the output to show if table contains no rows.
-     *
-     * @var Template
-     */
-    protected $t_empty;
-
-    /**
-     * Defines a new column for this field. You need two objects for field to
-     * work.
-     *
-     * First is being Model field. If your Grid is already associated with
-     * the model, it will automatically pick one by looking up element
-     * corresponding to the $name.
-     *
-     * The other object is a Column. This object know how to produce HTML for
-     * cells and will handle other things like alignment. If you do not specify
-     * column, then it will be selected dynamically based on field type
-     *
-     * And third object is a Field. You can use it in case your current data
-     * model doesn't already have such field.
-     *
-     * @param string         $name      Data model field name
-     * @param Column\Generic $columnDef
-     * @param array          $fieldDef  Array of defaults for new Model field
-     *
-     * @return Column\Generic
-     */
-    public function addColumn($name, $columnDef = null, $fieldDef = [])
-    {
-        if (!$this->model) {
-            $this->model = new \atk4\ui\misc\ProxyModel();
-        }
-
-        $field = $this->model->hasElement($name);
-        if (!$field) {
-            $field = $this->model->addField($name, $fieldDef);
-        }
-
-        if ($columnDef === null) {
-            $columnDef = $this->_columnFactory($field);
-        } elseif (is_string($columnDef) || is_array($columnDef)) {
-            if (!$this->app) {
-                throw new Exception(['You can only specify column type by name if Grid is in a render-tree']);
-            }
-
-            $columnDef = $this->add($columnDef, $name);
-        } else {
-            $this->add($columnDef, $name);
-        }
-
-        $columnDef->grid = $this;
-        $this->columns[$name] = $columnDef;
-
-        return $columnDef;
-    }
-
-    /**
-     * Will come up with a column object based on the field object supplied.
-     * By default will use default column.
-     *
-     * @param \atk4\data\Field $f Data model field
-     *
-     * @return Column\Generic
-     */
-    public function _columnFactory(\atk4\data\Field $f)
-    {
-        switch ($f->type) {
-        //case 'boolean':
-            //return $this->add(new Column\Checkbox());
-
-        default:
-            if (!$this->default_column) {
-                $this->default_column = $this->add(new Column\Generic());
-            }
-
-            return $this->default_column;
-        }
-    }
-
-    /**
-     * Overrides work like this:.
-     * [
-     *   'name'=>'Totals for {$num} rows:',
-     *   'price'=>'--',
-     *   'total'=>['sum']
-     * ].
-     *
-     * @param array $plan
-     */
-    public function addTotals($plan = [])
-    {
-        $this->totals_plan = $plan;
-    }
-
-    /**
-     * Init method will create one column object that will be used to render
-     * all columns in the grid unless you have specified a different
-     * column object.
-     */
     public function init()
     {
         parent::init();
+        $this->container = $this->add(['View', 'template' => $this->template->cloneRegion('Container')]);
+        $this->template->del('Container');
 
-        if (!$this->t_head) {
-            $this->t_head = $this->template->cloneRegion('Head');
-            $this->t_row_master = $this->template->cloneRegion('Row');
-            $this->t_totals = $this->template->cloneRegion('Totals');
-            $this->t_empty = $this->template->cloneRegion('Empty');
-
-            $this->template->del('Head');
-            $this->template->del('Body');
-            $this->template->del('Foot');
+        if (!$this->sortTrigger) {
+            $this->sortTrigger = $this->name.'_sort';
         }
+
+        if ($this->menu !== false) {
+            $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu, 'atk4\ui'), 'Menu');
+        }
+
+        $this->table = $this->container->add($this->factory(['Table', 'very compact very basic striped single line', 'reload' => $this->container], $this->table, 'atk4\ui'), 'Table');
+
+        if ($this->paginator !== false) {
+            $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
+            $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator, 'atk4\ui'));
+            $this->app ? $this->app->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
+        }
+
+        $this->stickyGet('_q');
+    }
+
+    /**
+     * Set TableColumn\Actions seed.
+     *
+     * @param $seed
+     */
+    public function setActionDecorator($seed)
+    {
+        $this->actionDecorator = $seed;
+    }
+
+    /**
+     * Set TableColumn\ActionMenu seed.
+     *
+     * @param $seed
+     */
+    public function setActionMenuDecorator($seed)
+    {
+        $this->actionMenuDecorator = $seed;
+    }
+
+    /**
+     * Add new column to grid. If column with this name already exists,
+     * an. Simply calls Table::addColumn(), so check that method out.
+     *
+     * @param string                   $name            Data model field name
+     * @param array|string|object|null $columnDecorator
+     * @param array|string|object|null $field
+     *
+     * @return TableColumn\Generic
+     */
+    public function addColumn($name, $columnDecorator = null, $field = null)
+    {
+        return $this->table->addColumn($name, $columnDecorator, $field);
+    }
+
+    /**
+     * Add additional decorator for existing column.
+     *
+     * @param string                    $name      Column name
+     * @param TableColumn\Generic|array $decorator Seed or object of the decorator
+     */
+    public function addDecorator($name, $decorator)
+    {
+        return $this->table->addDecorator($name, $decorator);
+    }
+
+    /**
+     * Add a new buton to the Grid Menu with a given text.
+     *
+     * WARNING: needs to be reviewed!
+     *
+     * @param mixed $text
+     */
+    public function addButton($text)
+    {
+        if (!$this->menu) {
+            throw new Exception(['Unable to add Button without Menu']);
+        }
+
+        return $this->menu->addItem()->add(new Button($text));
+    }
+
+    /**
+     * Set item per page value.
+     *
+     * if an array is passed, it will also add an ItemPerPageSelector to paginator.
+     *
+     * @param int|array $ipp
+     * @param string    $label
+     *
+     * @throws Exception
+     */
+    public function setIpp($ipp, $label = 'Item per pages:')
+    {
+        if (is_array($ipp)) {
+            $this->addItemsPerPageSelector($ipp, $label);
+
+            $this->ipp = $_GET['ipp'] ?? $ipp[0];
+        } else {
+            $this->ipp = $ipp;
+        }
+    }
+
+    /**
+     * Add ItemsPerPageSelector View in grid menu or paginator in order to dynamically setup number of item per page.
+     *
+     * @param array  $items An array of item's per page value.
+     * @param string $label The memu item label.
+     *
+     * @throws \atk4\core\Exception
+     *
+     * @return $this
+     */
+    public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Item per pages:')
+    {
+        if ($ipp = $this->container->stickyGet('ipp')) {
+            $this->ipp = $ipp;
+        } else {
+            $this->ipp = $items[0];
+        }
+
+        $pageLength = $this->paginator->add(['ItemsPerPageSelector', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], 'afterPaginator');
+        $this->paginator->template->trySet('PaginatorType', 'ui grid');
+
+        if ($sortBy = $this->getSortBy()) {
+            $pageLength->stickyGet($this->sortTrigger, $sortBy);
+        }
+
+        $pageLength->onPageLengthSelect(function ($ipp) use ($pageLength) {
+            $this->ipp = $ipp;
+            $this->setModelLimitFromPaginator();
+            //add ipp to quicksearch
+            if ($this->quickSearch instanceof jsSearch) {
+                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
+            }
+            $this->applySort();
+
+            //return the view to reload.
+            return $this->container;
+        });
+
+        return $this;
+    }
+
+    /**
+     * Add dynamic scrolling paginator.
+     *
+     * @param int    $ipp          Number of item per page to start with.
+     * @param array  $options      An array with js Scroll plugin options.
+     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     *
+     * @throws Exception
+     *
+     * @return $this
+     */
+    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+    {
+        if ($this->paginator) {
+            $this->paginator->destroy();
+            //prevent action(count) to be output twice.
+            $this->paginator = null;
+        }
+
+        if ($sortBy = $this->getSortBy()) {
+            $this->stickyGet($this->sortTrigger, $sortBy);
+        }
+        $this->applySort();
+
+        $this->table->addJsPaginator($ipp, $options, $container, $scrollRegion);
+
+        return $this;
+    }
+
+    /**
+     * Add dynamic scrolling paginator in container.
+     * Use this to make table headers fixed.
+     *
+     * @param int    $ipp             Number of item per page to start with.
+     * @param int    $containerHeight Number of pixel the table container should be.
+     * @param array  $options         An array with js Scroll plugin options.
+     * @param View   $container       The container holding the lister for scrolling purpose. Default to view owner.
+     * @param string $scrollRegion    A specific template region to render. Render output is append to container html element.
+     *
+     * @throws Exception
+     *
+     * @return $this
+     */
+    public function addJsPaginatorInContainer($ipp, $containerHeight, $options = [], $container = null, $scrollRegion = 'Body')
+    {
+        $this->table->hasCollapsingCssActionColumn = false;
+        $options = array_merge($options, [
+            'hasFixTableHeader'    => true,
+            'tableContainerHeight' => $containerHeight,
+        ]);
+        //adding a state context to js scroll plugin.
+        $options = array_merge(['stateContext' => '#'.$this->container->name], $options);
+
+        return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);
+    }
+
+    /**
+     * Add Search input field using js action.
+     * By default, will query server when using Enter key on input search field.
+     * You can change it to query server on each keystroke by passing $autoQuery true,.
+     *
+     * @param array $fields       The list of fields to search for.
+     * @param bool  $hasAutoQuery Will query server on each key pressed.
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     */
+    public function addQuickSearch($fields = [], $hasAutoQuery = false)
+    {
+        if (!$this->model) {
+            throw new Exception(['Call setModel() before addQuickSearch()']);
+        }
+
+        if (!$fields) {
+            $fields = [$this->model->title_field];
+        }
+
+        if (!$this->menu) {
+            throw new Exception(['Unable to add QuickSearch without Menu']);
+        }
+
+        $view = $this->menu
+            ->addMenuRight()->addItem()->setElement('div')
+            ->add('View');
+
+        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
+
+        if ($q = $this->stickyGet('_q')) {
+            $cond = [];
+            foreach ($fields as $field) {
+                $cond[] = [$field, 'like', '%'.$q.'%'];
+            }
+            $this->model->addCondition($cond);
+        }
+    }
+
+    /**
+     * Returns JS for reloading View.
+     *
+     * @param array             $args
+     * @param jsExpression|null $afterSuccess
+     * @param array             $apiConfig
+     *
+     * @return \atk4\ui\jsReload
+     */
+    public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
+    {
+        return new jsReload($this->container, $args, $afterSuccess, $apiConfig);
+    }
+
+    /**
+     * Adds a new button into the action column on the right. For CRUD this
+     * column will already contain "delete" and "edit" buttons.
+     *
+     * @param string|array|View         $button  Label text, object or seed for the Button
+     * @param jsExpressionable|callable $action  JavaScript action or callback
+     * @param bool|string               $confirm Should we display confirmation "Are you sure?"
+     *
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     * @throws \atk4\core\Exception
+     *
+     * @return object
+     */
+    public function addAction($button, $action = null, $confirm = false, $isDisabeld = false)
+    {
+        if (!$this->actions) {
+            $this->actions = $this->table->addColumn(null, $this->actionDecorator);
+        }
+
+        return $this->actions->addAction($button, $action, $confirm, $isDisabeld);
+    }
+
+    /**
+     * Similar to addAction. Will add Button that when click will display
+     * a Dropdown menu.
+     *
+     * @param $view
+     * @param null $action
+     * @param bool $confirm
+     * @param bool $isDisabeld
+     *
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     *
+     * @return mixed
+     */
+    public function addActionMenuItem($view, $action = null, $confirm = false, $isDisabeld = false)
+    {
+        if (!$this->actionMenu) {
+            $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
+        }
+
+        return $this->actionMenu->addActionMenuItem($view, $action, $confirm, $isDisabeld);
+    }
+
+    /**
+     * Add action menu item using an array.
+     *
+     * @param array $actions
+     *
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     */
+    public function addActionMenuItems(array $actions = [])
+    {
+        foreach ($actions as $action) {
+            $this->addActionMenuItem($action);
+        }
+    }
+
+    /**
+     * Add action menu items using Model.
+     * You may specify the scope of actions to be added.
+     *
+     * @param string|null $scope The scope of model action.
+     *
+     * @throws Exception
+     * @throws Exception\NoRenderTree
+     * @throws \atk4\core\Exception
+     */
+    public function addActionMenuFromModel(string $scope = null)
+    {
+        if (!$this->model) {
+            throw new Exception('Error: Model not set. Set model prior to add item.');
+        }
+
+        foreach ($this->model->getActions($scope) as $action) {
+            $this->addActionMenuItem($action);
+        }
+    }
+
+    /**
+     * An array of column name where filter is needed.
+     * Leave empty to include all column in grid.
+     *
+     * @param array|null $names An array with the name of column.
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     *
+     * @return $this
+     */
+    public function addFilterColumn($names = null)
+    {
+        if (!$this->menu) {
+            throw new Exception(['Unable to add Filter Column without Menu']);
+        }
+        $this->menu->addItem(['Clear Filters'], new \atk4\ui\jsReload($this->table->reload, ['atk_clear_filter' => 1]));
+        $this->table->setFilterColumn($names);
+
+        return $this;
+    }
+
+    /**
+     * Add a dropdown menu to header column.
+     *
+     * @param string   $columnName The name of column where to add dropdown.
+     * @param array    $items      The menu items to add.
+     * @param callable $fx         The callback function to execute when an item is selected.
+     * @param string   $icon       The icon.
+     * @param string   $menuId     The menu id return by callback.
+     *
+     * @throws Exception
+     */
+    public function addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
+    {
+        $column = $this->table->columns[$columnName];
+        if (!isset($column)) {
+            throw new Exception('The column where you want to add dropdown does not exist: '.$columnName);
+        }
+        if (!$menuId) {
+            $menuId = $columnName;
+        }
+
+        $column->addDropdown($items, function ($item) use ($fx) {
+            return call_user_func($fx, [$item]);
+        }, $icon, $menuId);
+    }
+
+    /**
+     * Add a popup to header column.
+     *
+     * @param string $columnName The name of column where to add popup.
+     * @param Popup  $popup      Popup view.
+     * @param string $icon       The icon.
+     *
+     * @throws Exception
+     *
+     * @return mixed
+     */
+    public function addPopup($columnName, $popup = null, $icon = 'caret square down')
+    {
+        $column = $this->table->columns[$columnName];
+        if (!isset($column)) {
+            throw new Exception('The column where you want to add popup does not exist: '.$columnName);
+        }
+
+        return $column->addPopup($popup, $icon);
+    }
+
+    /**
+     * Similar to addAction but when button is clicked, modal is displayed
+     * with the $title and $callback is executed through VirtualPage.
+     *
+     * @param string|array|View $button
+     * @param string            $title
+     * @param callable          $callback function($page){ . .}
+     * @param array             $args     Extra url argument for callback.
+     *
+     * @return object
+     */
+    public function addModalAction($button, $title, $callback, $args = [])
+    {
+        if (!$this->actions) {
+            $this->actions = $this->table->addColumn(null, 'Actions');
+        }
+
+        return $this->actions->addModal($button, $title, $callback, $this, $args);
+    }
+
+    /**
+     * Find out more about the nature of the action from the supplied object, use addAction().
+     *
+     * @param Generic $action The generic action.
+     */
+    public function addUserAction(Generic $action)
+    {
+        $executor = null;
+        $args = [];
+        $title = $action->caption;
+        $button = $action->caption;
+
+        if ($action->ui['Grid']['Button'] ?? null) {
+            $button = $action->ui['Grid']['Button'];
+        }
+
+        if ($action->ui['Grid']['Executor'] ?? null) {
+            $executor = $action->ui['Grid']['Executor'];
+        }
+
+        if (!$executor || is_string($executor)) {
+            $class = $executor ?? $this->executor_class;
+            $executor = new $class();
+        }
+
+        if ($this->paginator) {
+            $args[$this->paginator->name] = $this->paginator->getCurrentPage();
+        }
+
+        $this->addModalAction($button, $title, function ($page, $id) use ($action, $executor) {
+            $page->add($executor);
+
+            $this->hook('onUserAction', [$page, $executor]);
+
+            $action->owner->load($id);
+
+            $executor->setAction($action);
+        }, $args);
+    }
+
+    /**
+     * Get sortBy value from url parameter.
+     *
+     * @return null|string
+     */
+    public function getSortBy()
+    {
+        return isset($_GET[$this->sortTrigger]) ? $_GET[$this->sortTrigger] : null;
+    }
+
+    /**
+     * Apply ordering to the current model as per the sort parameters.
+     */
+    public function applySort()
+    {
+        if ($this->sortable === false) {
+            return;
+        }
+
+        $sortBy = $this->getSortBy();
+
+        if ($sortBy && $this->paginator) {
+            $this->paginator->addReloadArgs([$this->sortTrigger => $sortBy]);
+        }
+
+        $desc = false;
+        if ($sortBy && $sortBy[0] == '-') {
+            $desc = true;
+            $sortBy = substr($sortBy, 1);
+        }
+
+        $this->table->sortable = true;
+
+        if (
+            $sortBy
+            && isset($this->table->columns[$sortBy])
+            && $this->model->hasField($sortBy)
+        ) {
+            $this->model->setOrder($sortBy, $desc);
+            $this->table->sort_by = $sortBy;
+            $this->table->sort_order = $desc ? 'descending' : 'ascending';
+        }
+
+        $this->table->on(
+            'click',
+            'thead>tr>th',
+            new jsReload($this->container, [$this->sortTrigger => (new jQuery())->data('column')])
+        );
     }
 
     /**
@@ -208,182 +654,100 @@ class Grid extends Lister
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $m, $columns = null)
+    public function setModel(\atk4\data\Model $model, $columns = null)
     {
-        parent::setModel($m);
+        $this->model = $this->table->setModel($model, $columns);
 
-        if ($columns === null) {
-            $columns = [];
-            foreach ($m->elements as $name => $element) {
-                if (!$element instanceof \atk4\data\Field) {
-                    continue;
-                }
-
-                if ($element->isVisible()) {
-                    $columns[] = $name;
-                }
-            }
-        } elseif ($columns === false) {
-            return;
+        if ($this->quickSearch && is_array($this->quickSearch)) {
+            $this->addQuickSearch($this->quickSearch);
         }
 
-        foreach ($columns as $column) {
-            $this->addColumn($column);
-        }
+        return $this->model;
     }
 
     /**
-     * {@inheritdoc}
+     * Makes rows of this grid selectable by creating new column on the left with
+     * checkboxes.
+     *
+     * @return TableColumn\CheckBox
+     */
+    public function addSelection()
+    {
+        $this->selection = $this->table->addColumn(null, 'CheckBox');
+
+        // Move element to the beginning
+        $k = array_search($this->selection, $this->table->columns);
+        $this->table->columns = [$k => $this->table->columns[$k]] + $this->table->columns;
+
+        return $this->selection;
+    }
+
+    /**
+     * Add column with drag handler on each row.
+     * Drag handler allow to reorder table via drag n drop.
+     *
+     * @return TableColumn\Generic
+     */
+    public function addDragHandler()
+    {
+        $handler = $this->table->addColumn(null, 'DragHandler');
+        // Move last column to the beginning in table column array.
+        array_unshift($this->table->columns, array_pop($this->table->columns));
+
+        return $handler;
+    }
+
+    /**
+     * Will set model limit according to paginator value.
+     *
+     * @throws \atk4\data\Exception
+     * @throws \atk4\dsql\Exception
+     */
+    private function setModelLimitFromPaginator()
+    {
+        $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
+        $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
+    }
+
+    /**
+     * Renders view.
+     *
+     * Before rendering take care of data sorting.
      */
     public function renderView()
     {
-        if (!$this->columns) {
-            throw new Exception(['Grid does not have any columns defined', 'columns'=>$this->columns]);
-        }
+        // take care of sorting
+        $this->applySort();
 
-        // Generate Header Row
-        if ($this->header) {
-            $this->t_head->setHTML('cells', $this->renderHeaderCells());
-            $this->template->setHTML('Head', $this->t_head->render());
-        }
-
-        // Generate template for data row
-        $this->t_row_master->setHTML('cells', $this->getRowTemplate());
-        $this->t_row_master['_id'] = '{$_id}';
-        $this->t_row = new Template($this->t_row_master->render());
-        $this->t_row->app = $this->app;
-
-        // Iterate data rows
-        $rows = 0;
-        foreach ($this->model as $this->current_id => $tmp) {
-            $this->current_row = $this->model->get();
-
-            if ($this->totals_plan) {
-                $this->updateTotals();
-            }
-
-            $this->t_row->set($this->model);
-
-            if ($this->use_html_tags) {
-                // Prepare row-specific HTML tags.
-                $html_tags = [];
-
-                foreach ($this->hook('getHTMLTags', [$this->model]) as $ret) {
-                    if (is_array($ret)) {
-                        $html_tags = array_merge($html_tags, $ret);
-                    }
-                }
-
-                foreach ($this->columns as $name => $column) {
-                    if (!method_exists($column, 'getHTMLTags')) {
-                        continue;
-                    }
-                    $field = $this->model->hasElement($name);
-                    $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
-                }
-
-                // Render row and add to body
-                $this->t_row->setHTML($html_tags);
-                $this->t_row->set('_id', $this->model->id);
-                $this->template->appendHTML('Body', $this->t_row->render());
-                $this->t_row->del(array_keys($html_tags));
-            } else {
-                $this->template->appendHTML('Body', $this->t_row->render());
-            }
-
-            $rows++;
-        }
-
-        // Add totals rows or empty message.
-        if (!$rows) {
-            $this->template->appendHTML('Body', $this->t_empty->render());
-        } elseif ($this->totals_plan) {
-            $this->t_totals->setHTML('cells', $this->renderTotalsCells());
-            $this->template->appendHTML('Foot', $this->t_totals->render());
-        } else {
-        }
-
-        return View::renderView();
+        return parent::renderView();
     }
 
     /**
-     * Executed for each row if "totals" are enabled to add up values.
+     * Recursively renders view.
      */
-    public function updateTotals()
+    public function recursiveRender()
     {
-        foreach ($this->totals_plan as $key=>$val) {
-            if (is_array($val)) {
-                switch ($val[0]) {
-                case 'sum':
-                    if (!isset($this->totals[$key])) {
-                        $this->totals[$key] = 0;
-                    }
-                    $this->totals[$key] += $this->model[$key];
-                }
+        // bind with paginator
+        if ($this->paginator) {
+            $this->setModelLimitFromPaginator();
+        }
+
+        if ($this->quickSearch instanceof jsSearch) {
+            if ($sortBy = $this->getSortBy()) {
+                $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->sortTrigger, $sortBy]));
             }
         }
+
+        return parent::recursiveRender();
     }
 
     /**
-     * Responds with the HTML to be inserted in the header row that would
-     * contain captions of all columns.
+     * Proxy function for Table::jsRow().
      *
-     * @return string
+     * @return jQuery
      */
-    public function renderHeaderCells()
+    public function jsRow()
     {
-        $output = [];
-        foreach ($this->columns as $name => $column) {
-            $field = $this->model->hasElement($name);
-
-            $output[] = $column->getHeaderCell($field);
-        }
-
-        return implode('', $output);
-    }
-
-    /**
-     * Responsd with HTML to be inserted in the footer row that would
-     * contain totals fro all columns.
-     *
-     * @return string
-     */
-    public function renderTotalsCells()
-    {
-        $output = [];
-        foreach ($this->columns as $name => $column) {
-            if (!isset($this->totals_plan[$name])) {
-                $output[] = $this->app->getTag('th', '-');
-                continue;
-            }
-
-            if (is_array($this->totals_plan[$name])) {
-                // todo - format
-                $field = $this->model->getElement($name);
-                $output[] = $column->getTotalsCell($field, $this->totals[$name]);
-                continue;
-            }
-
-            $output[] = $this->app->getTag('th', [], $this->totals_plan[$name]);
-        }
-
-        return implode('', $output);
-    }
-
-    /**
-     * Collects cell templates from all the columns and combine them into row template.
-     *
-     * @return string
-     */
-    public function getRowTemplate()
-    {
-        $output = [];
-        foreach ($this->columns as $name => $column) {
-            $field = $this->model->hasElement($name);
-
-            $output[] = $column->getCellTemplate($field);
-        }
-
-        return implode('', $output);
+        return $this->table->jsRow();
     }
 }
