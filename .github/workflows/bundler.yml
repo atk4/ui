@@ -46,6 +46,7 @@ jobs:
 
 
 
+
       - name: Update to stable dependencies
         run: |
           jq 'del(."minimum-stability")|del(.require["atk4/data"])' < composer.json > tmp && mv tmp composer.json
@@ -55,6 +56,7 @@ jobs:
       - name: Compile JS files for CDN
         run: |
           npm install -g less-plugin-clean-css
+          (cd js; npm install; npm run build; cd ..)
           lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
           uglifyjs --compress -- public/agileui.js > public/agileui.min.js
           echo '!agileui.css' >> public/.gitignore
