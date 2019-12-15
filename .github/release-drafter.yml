@@ -2,6 +2,7 @@ categories:
   - title: "Documentation enhancements"
     labels:
       - Documentation 📚
+      - Documentation
 template: |
   ## What’s Changed
 
