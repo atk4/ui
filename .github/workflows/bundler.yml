@@ -11,7 +11,12 @@ jobs:
       image: atk4/image:latest # https://github.com/atk4/image
     steps:
       - uses: actions/checkout@master
-      - run: echo ${{ github.ref }}
+      - name: Hack around git branches
+      - run: |
+          v=$(echo ${{ github.ref }} | cut -d / -f 4)
+          echo $v
+          git branch release/$v
+          git checkout release/$v
       - name: Update to stable dependencies
         run: |
           jq 'del(.require["atk4/data"])' < composer.json > tmp && mv tmp composer.json
