@@ -10,7 +10,7 @@ jobs:
     container:
       image: atk4/image:latest # https://github.com/atk4/image
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
       - name: Hack around git branches
         run: |
           v=$(echo ${{ github.ref }} | cut -d / -f 4)
@@ -18,7 +18,7 @@ jobs:
           git branch
       - name: Update to stable dependencies
         run: |
-          jq 'del(.require["atk4/data"])' < composer.json > tmp && mv tmp composer.json
+          jq 'del(."minimum-stability")|del(.require["atk4/data"])' < composer.json > tmp && mv tmp composer.json
           composer require atk4/data
           composer update
 
