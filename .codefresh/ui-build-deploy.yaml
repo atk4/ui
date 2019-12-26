@@ -8,6 +8,7 @@ steps:
   main_clone:
     type: git-clone
     stage: clone
+    repo: atk4/ui
   build:
     type: build
     stage: build
