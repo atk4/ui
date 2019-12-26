@@ -8,4 +8,5 @@ updateDocsWhiteList:
 updateDocsTargetFiles:
   - README.md
   - docs/
+  - demos/
 
