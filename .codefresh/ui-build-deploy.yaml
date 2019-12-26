@@ -23,5 +23,9 @@ steps:
     tags:
       - "${{CF_BRANCH_TAG_NORMALIZED}}"
       - "${{CF_REVISION}}"
-
+  deploy:
+    type: deploy
+    stage: deploy
+    kind: kubernetes
+    service:
 
