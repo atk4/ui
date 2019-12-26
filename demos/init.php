@@ -15,8 +15,8 @@ class Demo extends \atk4\ui\Columns
     public $right;
     public static $isInitialized = false;
     public $highlightDefaultStyle = 'dark';
-    public $left_width = 6;
-    public $right_width = 6;
+    public $left_width = 8;
+    public $right_width = 8;
 
     public function init()
     {
