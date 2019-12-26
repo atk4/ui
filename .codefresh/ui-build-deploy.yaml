@@ -9,6 +9,7 @@ steps:
     type: git-clone
     stage: clone
     repo: atk4/ui
+    revision: "${{CF_BRANCH}}"
   build:
     type: build
     stage: build
