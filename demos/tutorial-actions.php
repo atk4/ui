@@ -16,7 +16,7 @@ Historically any other interaction required tinkering with UI layer.
 EOF
     );
 
-    $t->addParagraph(<<<EOF
+    $t->addParagraph(<<<'EOF'
 Agile Toolkit 2.0 allows you to define more "User Actions" directly inside your Model definition:
 EOF
     );
@@ -60,7 +60,6 @@ CODE
     );
 });
 
-
 /*
 $model = new atk4\data\Model($app->db, 'test');
 // $model->removeAction('delete');
@@ -80,7 +79,6 @@ $model->addAction('soft_delete', [
 $app->add(['element'=>'pre'])
     ->set(json_encode(array_keys($model->getActions())));
     */
-
 
 $wizard->addStep('UI Integration', function ($page) {
     /** @var \atk4\ui\Text $t */
@@ -115,7 +113,6 @@ $menu->addItem('Hello');
 $menu->addItem('World', $country->getAction('edit'));
 CODE
     );
-
 });
 
 $wizard->addStep('Arguments', function ($page) {
@@ -160,7 +157,6 @@ $wizard->addStep('More Ways', function ($page) {
 TODO: add example of card deck, table and grid
 EOF
     );
-
 
     $page->add(new Demo(['left_width'=>5, 'right_width'=>11]))->setCode(<<<'CODE'
 $app->add('CardDeck')

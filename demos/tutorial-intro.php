@@ -6,13 +6,13 @@ include 'init.php';
 $wizard = $app->add('Wizard');
 
 $wizard->addStep('User Interface', function ($page) {
-/** @var \atk4\ui\Text $t */
-$t = $page->add('Text');
-$t->addParagraph(<<< 'EOF'
+    /** @var \atk4\ui\Text $t */
+    $t = $page->add('Text');
+    $t->addParagraph(<<< 'EOF'
 Agile Toolkit is a "Low Code Framework" written in PHP. It is designed to simplify all aspects of web application creation:
 EOF
 );
-$t->addHTML(<<< 'HTML'
+    $t->addHTML(<<< 'HTML'
 <ul>
     <li>No front-end coding necessary (like JavaScript)</li>
     <li>No Database coding required (like SQL)</li>
@@ -24,9 +24,9 @@ $t->addHTML(<<< 'HTML'
 HTML
 );
 
-$t->addParagraph('Your ATK code instead takes a more declarative approach. You work with things like:');
+    $t->addParagraph('Your ATK code instead takes a more declarative approach. You work with things like:');
 
-$t->addHTML(<<< 'HTML'
+    $t->addHTML(<<< 'HTML'
 <ul>
     <li>Models and fields</li>
     <li>Model User actions</li>
@@ -38,28 +38,28 @@ $t->addHTML(<<< 'HTML'
 HTML
 );
 
-$t->addParagraph(<<< 'EOF'
+    $t->addParagraph(<<< 'EOF'
 Since 2017 our collection of built-in widgets, add-ons have grown significantly and today Agile Toolkit is a mature
 and production ready framework.
 EOF
 );
 
-$t->addParagraph('It all has started with a "Button" though:');
+    $t->addParagraph('It all has started with a "Button" though:');
 
-$page->add(new Demo())->setCode('$app->add(["Button", "Hello from the button!"]);');
+    $page->add(new Demo())->setCode('$app->add(["Button", "Hello from the button!"]);');
 });
 
 $wizard->addStep('Interactivity', function ($page) {
 
 /** @var \atk4\ui\Text $t */
-$t = $page->add('Text');
-$t->addParagraph(<<< 'EOF'
+    $t = $page->add('Text');
+    $t->addParagraph(<<< 'EOF'
 PHP is a server-side language. That prompted us to implement server-side UI actions. They are very easy to define -
 no need to create any routes or custom routines, simply define a PHP closure like this:
 EOF
 );
 
-$page->add(new Demo())->setCode(<<<'CODE'
+    $page->add(new Demo())->setCode(<<<'CODE'
 $button = $app->add(['Button', "Click for the greeting!"]);
 $button->on('click', function() {
     return 'Hello World! rand='.rand(1,100);
@@ -68,14 +68,14 @@ $button->on('click', function() {
 CODE
 );
 
-$t = $page->add('Text');
-$t->addParagraph(<<< 'EOF'
+    $t = $page->add('Text');
+    $t->addParagraph(<<< 'EOF'
 A component of Agile Toolkit (callback) enables seamless communication between the frontend components (which are often
 written in VueJS) and the backend. We also support seamless reloading of any UI widget:
 EOF
 );
 
-$page->add(new Demo())->setCode(<<<'CODE'
+    $page->add(new Demo())->setCode(<<<'CODE'
 
 $seg = $app->add(['ui'=>'segment']);
 
@@ -97,8 +97,8 @@ for($i=1; $i <= ($_GET['count'] ?? 1); $i++) {
 CODE
 );
 
-$t = $page->add('Text');
-$t->addParagraph(<<< 'EOF'
+    $t = $page->add('Text');
+    $t->addParagraph(<<< 'EOF'
 This demo also shows you how to create composite views. The '$seg' above contains text, paginator, divider and some
 buttons. Interestingly, Paginator view also consists of buttons and Agile Toolkit renders everything reliably.
 EOF
@@ -108,14 +108,14 @@ EOF
 $wizard->addStep('Business Model', function ($page) {
 
 /** @var \atk4\ui\Text $t */
-$t = $page->add('Text');
-$t->addParagraph(<<< 'EOF'
+    $t = $page->add('Text');
+    $t->addParagraph(<<< 'EOF'
 One major benefit of Server Side Rendered applications is ability to directly interact with data. In other applications
 you may need to manually process data but in Agile Toolkit we use our own data mapping framework.
 EOF
 );
 
-$page->add(new Demo())->setCode(<<<'CODE'
+    $page->add(new Demo())->setCode(<<<'CODE'
 
 class Invoice extends \atk4\data\Model {
     public $title_field = 'reference';
@@ -141,12 +141,12 @@ $app->add(['Button', 'Refresh', 'icon'=>'refresh'])
 CODE
 );
 
-$t = $page->add('Text');
-$t->addParagraph(<<< 'EOF'
+    $t = $page->add('Text');
+    $t->addParagraph(<<< 'EOF'
 This code shows you a combination of 3 objects:
 EOF
 );
-$t->addHTML(<<< 'HTML'
+    $t->addHTML(<<< 'HTML'
 <ul>
     <li>Form - a generic view that can display and handle any form</li>
     <li>Model - defines fields for a business object</li>
@@ -155,7 +155,7 @@ $t->addHTML(<<< 'HTML'
 
 HTML
 );
-$t->addParagraph(<<< 'EOF'
+    $t->addParagraph(<<< 'EOF'
 All three are combined by "setModel()" function and that is consistent throughout all the views.
 EOF
 );
