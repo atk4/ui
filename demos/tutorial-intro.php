@@ -51,7 +51,7 @@ EOF
 
 $wizard->addStep('Interactivity', function ($page) {
 
-/** @var \atk4\ui\Text $t */
+    /** @var \atk4\ui\Text $t */
     $t = $page->add('Text');
     $t->addParagraph(<<< 'EOF'
 PHP is a server-side language. That prompted us to implement server-side UI actions. They are very easy to define -
@@ -107,7 +107,7 @@ EOF
 
 $wizard->addStep('Business Model', function ($page) {
 
-/** @var \atk4\ui\Text $t */
+    /** @var \atk4\ui\Text $t */
     $t = $page->add('Text');
     $t->addParagraph(<<< 'EOF'
 One major benefit of Server Side Rendered applications is ability to directly interact with data. In other applications
