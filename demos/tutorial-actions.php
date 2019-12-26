@@ -7,12 +7,17 @@ require 'database.php';
 $wizard = $app->add('Wizard');
 $app->stickyGet($wizard->name);
 
-$wizard->addStep('Actions in Agile Data', function ($page) {
+$wizard->addStep('Define User Action', function ($page) {
     /** @var \atk4\ui\Text $t */
     $t = $page->add('Text');
     $t->addParagraph(<<< 'EOF'
-Models of Agile Data has always supported 3 basic actions: "save" (for new and existing records) and "delete". In
-version 1.4 of Agile Data "User Actions" were included.
+Models of Agile Data has always supported 3 basic actions: "save" (for new and existing records) and "delete". 
+Historically any other interaction required tinkering with UI layer.
+EOF
+    );
+
+    $t->addParagraph(<<<EOF
+Agile Toolkit 2.0 allows you to define more "User Actions" directly inside your Model definition:
 EOF
     );
 
@@ -20,41 +25,51 @@ EOF
 $country = new Country($app->app->db);
 
 $country->addAction('send_message');
-
-$app->add(['element'=>'pre'])
-    // todo: add dumping!
-    ->set(get_class($country->getAction('send_message')));
 CODE
     );
 
     $t = $page->add('Text');
     $t->addParagraph(<<< 'EOF'
-Just like "addField" describes a model field that user can see and interact through Table, Grid, Form or CRUD, method
-"addAction" describes an action that user can trigger through Grid, Card, CRUD and Button.
-EOF
-    );
-
-    $t->addParagraph(<<< 'EOF'
-Each action can have caption, be declared system and have many other properties that can be recognized by generic UI
+User Actions are very similar to Model Fields. Once defied - they will be visible in UI - Form, Grid, CRUD and CardDeck
+all support actions! Each action can have caption, be declared system and have many other properties that can be recognized by generic UI
 and API adapters.
 EOF
     );
 
     $t->addParagraph(<<< 'EOF'
-Finally Agile Data 2.0 declares three actions for each model: "add", "edit" and "delete" just to keep everything
-consistent. And actions are really flexible - you can remove them or add them.
+Finally Agile Data 2.0 now declares "add", "edit" and "delete" using User Actions - so you have full control over
+them and they are consistent.
 EOF
     );
 
     $page->add(new Demo())->setCode(<<<'CODE'
+
+$country = new Country($app->app->db);
+
+$country->addAction('send_message', function() { 
+    return 'sent'; 
+});
+$country->tryLoadAny();
+
+$card = $app->add('Card');
+$card->setModel($country, ['iso']);
+// TODO, introduce 2nd argument to setModel()
+$card->addClickAction($country->getAction('send_message'));
+
+CODE
+    );
+});
+
+
+/*
 $model = new atk4\data\Model($app->db, 'test');
 // $model->removeAction('delete');
 $model->getAction('delete')->enabled = false;
 $model->addAction('soft_delete', [
     'scope' => \atk4\data\UserAction\Generic::SINGLE_RECORD,
     'ui'    => [
-        'icon'=>'trash', 
-        'button'=>[null, 'icon'=>'red trash'], 
+        'icon'=>'trash',
+        'button'=>[null, 'icon'=>'red trash'],
         'confirm'=>'Are you sure?'
     ],
     'callback' => function ($m) {
@@ -64,11 +79,10 @@ $model->addAction('soft_delete', [
 ]);
 $app->add(['element'=>'pre'])
     ->set(json_encode(array_keys($model->getActions())));
-CODE
-    );
-});
+    */
 
-$wizard->addStep('UI for Actions', function ($page) {
+
+$wizard->addStep('UI Integration', function ($page) {
     /** @var \atk4\ui\Text $t */
     $t = $page->add('Text');
     $t->addParagraph(<<< 'EOF'
@@ -102,6 +116,9 @@ $menu->addItem('World', $country->getAction('edit'));
 CODE
     );
 
+});
+
+$wizard->addStep('Arguments', function ($page) {
     $t = $page->add('Text');
     $t->addParagraph(<<< 'EOF'
 When action requires an argument, you can either specify it directly or through jsExpression. If you do not do that,
@@ -124,6 +141,7 @@ $model->addAction('greet', [
 ]);
 
 $app->add(new \atk4\ui\FormField\Line([
+    // TODO - how to specify watermark here?
     'action' => $model->getAction('greet'),
 ]));
 
@@ -141,6 +159,16 @@ $wizard->addStep('More Ways', function ($page) {
     $t->addParagraph(<<< 'EOF'
 TODO: add example of card deck, table and grid
 EOF
+    );
+
+
+    $page->add(new Demo(['left_width'=>5, 'right_width'=>11]))->setCode(<<<'CODE'
+$app->add('CardDeck')
+    ->setModel(
+        new Stat($app->db), 
+        ['description']
+    );
+CODE
     );
 });
 

@@ -15,14 +15,16 @@ class Demo extends \atk4\ui\Columns
     public $right;
     public static $isInitialized = false;
     public $highlightDefaultStyle = 'dark';
+    public $left_width = 6;
+    public $right_width = 6;
 
     public function init()
     {
         parent::init();
         $this->addClass('celled');
 
-        $this->left = $this->addColumn();
-        $this->right = $this->addColumn();
+        $this->left = $this->addColumn($this->left_width);
+        $this->right = $this->addColumn($this->right_width);
     }
 
     public function setCode($code, $lang = 'php')
