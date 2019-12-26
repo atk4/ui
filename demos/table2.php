@@ -9,7 +9,7 @@ $data = [
     ['id'=> 3, 'action'=>'Tax', 'amount'=>-40],
 ];
 
-$m = new \atk4\data\Model(new \atk4\data\Persistence_Static($data));
+$m = new \atk4\data\Model(new \atk4\data\Persistence\Static_($data));
 $m->getField('amount')->type = 'money';
 
 // ========================================================

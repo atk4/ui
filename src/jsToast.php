@@ -29,6 +29,20 @@ class jsToast implements jsExpressionable
         }
     }
 
+    /**
+     * Set message to display in Toast.
+     *
+     * @param $msg
+     *
+     * @return $this
+     */
+    public function setMessage($msg)
+    {
+        $this->settings['message'] = $msg;
+
+        return $this;
+    }
+
     public function jsRender()
     {
         return (new jQuery('body'))->toast($this->settings)->jsRender();
