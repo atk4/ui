@@ -20,7 +20,14 @@ class ActionMenu extends Generic
      *
      * @var array
      */
-    protected $actions = [];
+    protected $items = [];
+    
+    /**
+     * Callbacks as defined in $action->enabled for evaluating row-specific if an action is enabled
+     *
+     * @var array
+     */
+    protected $callbacks = [];
 
     /**
      * Dropdown label.
@@ -78,36 +85,42 @@ class ActionMenu extends Generic
      *
      * @return object|string
      */
-    public function addActionMenuItem($item, $callback = null, $confirm = null, $isDisabled = false)
+    public function addActionMenuItem($item, $action = null, $confirm = null, $isDisabled = false)
     {
         // If action is not specified, perhaps it is defined in the model
-        if (!$callback && is_string($item)) {
-            $model_action = $this->table->model->getAction($item);
-            if ($model_action) {
-                $isDisabled = !$model_action->enabled;
-                $callback = $model_action;
-                $item = $callback->caption;
-                if ($model_action->ui['confirm'] ?? null) {
-                    $confirm = $model_action->ui['confirm'];
-                }
+        if (! $action) {
+            if (is_string($item)) {
+                $action = $this->table->model->getAction($item);
             }
-        } elseif (!$callback && $item instanceof \atk4\data\UserAction\Generic) {
-            $isDisabled = !$item->enabled;
-            if ($item->ui['confirm'] ?? null) {
-                $confirm = $item->ui['confirm'];
+            elseif ($item instanceof \atk4\data\UserAction\Generic){
+                $action = $item;
             }
-            $callback = $item;
-            $item = $item->caption;
+            
+            if ($action) {
+                $item = $action->caption;
+            }
         }
+        
+        $name = $this->name.'_action_'.(count($this->items) + 1);
 
-        $name = $this->name.'_action_'.(count($this->actions) + 1);
-
+        if ($action instanceof \atk4\data\UserAction\Generic) {
+            $confirm = $action->ui['confirm'] ?? $confirm;
+            
+            $isDisabled = ! $action->enabled;
+            
+            if (is_callable($action->enabled)) {
+                $this->callbacks[$name] = $action->enabled;
+            }
+        }
+        
         if (!is_object($item)) {
             $item = $this->factory('View', ['id' => false, 'ui' => 'item', 'content' => $item], 'atk4\ui');
         }
 
-        $this->actions[] = $item;
-        $item->addClass('i_'.$name);
+        $this->items[] = $item;
+        
+        $item->addClass('{$_'.$name.'_disabled} i_'.$name);
+        
         if ($isDisabled) {
             $item->addClass('disabled');
         }
@@ -115,7 +128,7 @@ class ActionMenu extends Generic
         // set executor context.
         $context = (new jQuery())->closest('.ui.button');
 
-        $this->table->on('click', '.i_'.$name, $callback, [$this->table->jsRow()->data('id'), 'confirm' => $confirm, 'apiConfig' => ['stateContext' => $context]]);
+        $this->table->on('click', '.i_'.$name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirm, 'apiConfig' => ['stateContext' => $context]]);
 
         return $item;
     }
@@ -145,13 +158,13 @@ class ActionMenu extends Generic
      */
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        if (!$this->actions) {
+        if (!$this->items) {
             return '';
         }
 
         // render our menus
         $output = '';
-        foreach ($this->actions as $item) {
+        foreach ($this->items as $item) {
             $output .= $item->getHTML();
         }
 
@@ -163,5 +176,18 @@ class ActionMenu extends Generic
         $s .= '</div></div>';
 
         return $s;
+    }
+
+    public function getHTMLTags($row, $field)
+    {
+        $tags = [];
+        foreach ($this->callbacks as $name => $callback) {
+            // if action is enabled then do not set disabled class
+            if ($callback($row)) continue;
+            
+            $tags['_'.$name.'_disabled'] = 'disabled';
+        }
+        
+        return $tags;
     }
 }

@@ -70,32 +70,32 @@ class CRUD extends Grid
         if (is_null($this->useMenuActions)) {
             $this->useMenuActions = count($m->getActions()) > 4;
         }
-        foreach ($m->getActions(Generic::SINGLE_RECORD) as $single_record_action) {
-            $executor = $this->getActionExecutor($single_record_action);
-            $single_record_action->fields = ($executor instanceof jsUserAction || $executor instanceof UserConfirmation) ? false : $this->editFields ?? true;
-            $single_record_action->ui['executor'] = $executor;
+        foreach ($m->getActions(Generic::SINGLE_RECORD) as $action) {
+            $executor = $this->getActionExecutor($action);
+            $action->fields = ($executor instanceof jsUserAction || $executor instanceof UserConfirmation) ? false : $this->editFields ?? true;
+            $action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
                 return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
             });
             if ($this->useMenuActions) {
-                $this->addActionMenuItem($single_record_action);
+                $this->addActionMenuItem($action);
             } else {
-                $this->addAction($single_record_action);
+                $this->addActionButton($action);
             }
         }
 
-        foreach ($m->getActions(Generic::NO_RECORDS) as $k => $single_record_action) {
-            $executor = $this->factory($this->getActionExecutor($single_record_action));
+        foreach ($m->getActions(Generic::NO_RECORDS) as $k => $action) {
+            $executor = $this->factory($this->getActionExecutor($action));
             if ($executor instanceof View) {
                 $executor->stickyGet($this->name.'_sort', $this->getSortBy());
             }
-            $single_record_action->fields = ($executor instanceof jsUserAction) ? false : $this->editFields ?? true;
-            $single_record_action->ui['executor'] = $executor;
+            $action->fields = ($executor instanceof jsUserAction) ? false : $this->editFields ?? true;
+            $action->ui['executor'] = $executor;
             $executor->addHook('afterExecute', function ($x, $m, $id) {
                 return $m->loaded() ? $this->jsSave($this->notifyDefault) : $this->jsDelete();
             });
-            $this->menuItems[$k]['item'] = $this->menu->addItem([$single_record_action->getDescription(), 'icon' => 'plus']);
-            $this->menuItems[$k]['action'] = $single_record_action;
+            $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
+            $this->menuItems[$k]['action'] = $action;
         }
         $this->setItemsAction();
 

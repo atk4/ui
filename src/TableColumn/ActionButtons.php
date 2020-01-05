@@ -3,16 +3,22 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\core\FactoryTrait;
-use atk4\ui\Button;
 
 /**
  * Formatting action buttons column.
  */
-class Actions extends Generic
+class ActionButtons extends Generic
 {
     use FactoryTrait;
 
-    public $actions = [];
+    public $buttons = [];
+    
+    /**
+     * Callbacks as defined in $action->enabled for evaluating row-specific if an action is enabled
+     * 
+     * @var array
+     */
+    protected $callbacks = [];
 
     public function init()
     {
@@ -35,37 +41,33 @@ class Actions extends Generic
      *
      * @return object
      */
-    public function addAction($button, $callback = null, $confirm = false, $isDisabled = false)
+    public function addButton($button, $action = null, $confirm = false, $isDisabled = false)
     {
         // If action is not specified, perhaps it is defined in the model
-        if (!$callback && is_string($button)) {
-            $model_action = $this->table->model->getAction($button);
-            if ($model_action) {
-                $isDisabled = !$model_action->enabled;
-                $callback = $model_action;
-                $button = $callback->caption;
-                if ($model_action->ui['confirm'] ?? null) {
-                    $confirm = $model_action->ui['confirm'];
-                }
+        if (! $action) {
+            if (is_string($button)) {
+                $action = $this->table->model->getAction($button);
             }
-        } elseif (!$callback && $button instanceof \atk4\data\UserAction\Generic) {
-            $isDisabled = !$button->enabled;
-            if ($button->ui['confirm'] ?? null) {
-                $confirm = $button->ui['confirm'];
+            elseif ($button instanceof \atk4\data\UserAction\Generic){
+                $action = $button;
             }
-            $callback = $button;
-            $button = $button->caption;
+            
+            if ($action) {                
+                $button = $action->caption;
+            }
         }
+        
+        $name = $this->name.'_button_'.(count($this->buttons) + 1);
 
-        $name = $this->name.'_action_'.(count($this->actions) + 1);
-
-        if ($callback instanceof \atk4\data\UserAction\Generic) {
-            if (isset($callback->ui['button'])) {
-                $button = $callback->ui['button'];
-            }
-
-            if (isset($callback->ui['confirm'])) {
-                $confirm = $callback->ui['confirm'];
+        if ($action instanceof \atk4\data\UserAction\Generic) {            
+            $button = $action->ui['button'] ?? $button;
+            
+            $confirm = $action->ui['confirm'] ?? $confirm;
+            
+            $isDisabled = ! $action->enabled;
+            
+            if (is_callable($action->enabled)) {
+                $this->callbacks[$name] = $action->enabled;
             }
         }
 
@@ -78,14 +80,13 @@ class Actions extends Generic
         }
 
         $button->app = $this->table->app;
-
-        $this->actions[$name] = $button;
-        $button->addClass('b_'.$name);
-        $button->addClass('compact');
+        
+        $this->buttons[$name] = $button->addClass('{$_'.$name.'_disabled} compact b_'.$name);
+        
         if ($isDisabled) {
             $button->addClass('disabled');
         }
-        $this->table->on('click', '.b_'.$name, $callback, [$this->table->jsRow()->data('id'), 'confirm' => $confirm]);
+        $this->table->on('click', '.b_'.$name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirm]);
 
         return $button;
     }
@@ -96,18 +97,17 @@ class Actions extends Generic
      */
     public function addModal($button, $title, $callback, $owner = null, $args = [])
     {
-        if (!$owner) {
-            $modal = $this->owner->owner->add(['Modal', 'title'=>$title]);
-        } else {
-            $modal = $owner->add(['Modal', 'title'=>$title]);
-        }
+    	$owner = $owner?: $this->owner->owner;
+        
+    	$modal = $owner->add(['Modal', compact('title')]);
+
         $modal->observeChanges(); // adds scrollbar if needed
 
         $modal->set(function ($t) use ($callback) {
             call_user_func($callback, $t, $this->app->stickyGet($this->name));
         });
 
-        return $this->addAction($button, $modal->show(array_merge([$this->name=>$this->owner->jsRow()->data('id')], $args)));
+        return $this->addButton($button, $modal->show(array_merge([$this->name=>$this->owner->jsRow()->data('id')], $args)));
     }
 
     /**
@@ -124,17 +124,30 @@ class Actions extends Generic
 
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        if (!$this->actions) {
+        if (!$this->buttons) {
             return '';
         }
 
-        // render our actions
+        // render our buttons
         $output = '';
-        foreach ($this->actions as $action) {
-            $output .= $action->getHTML();
+        foreach ($this->buttons as $button) {
+            $output .= $button->getHTML();
         }
 
         return '<div class="ui buttons">'.$output.'</div>';
+    }
+    
+    public function getHTMLTags($row, $field)
+    {
+        $tags = [];
+        foreach ($this->callbacks as $name => $callback) {
+            // if action is enabled then do not set disabled class
+            if ($callback($row)) continue;
+            
+            $tags['_'.$name.'_disabled'] = 'disabled';
+        }
+        
+        return $tags;
     }
 
     // rest will be implemented for crud
