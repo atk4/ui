@@ -34,7 +34,7 @@ class jsUserAction extends jsCallback implements Interface_
     /**
      * @var jsExpressionable array|callable jsExpression to return if action was successful, e.g "new jsToast('Thank you')"
      */
-    protected $jsSuccess = null;
+    public $jsSuccess = null;
 
     /**
      * Set action to be execute.
@@ -72,7 +72,9 @@ class jsUserAction extends jsCallback implements Interface_
             $this->owner->addClass('disabled');
         }
 
-        $this->set(function ($j, $id = null) {
+        $this->set(function ($j) {
+            //may be id is pass within $post args.
+            $id = $_POST['c0'] ?? $_POST[$this->action->owner->id_field] ?? null;
             if ($id && $this->action->scope === 'single') {
                 $this->action->owner->tryLoad($id);
             }
@@ -86,7 +88,7 @@ class jsUserAction extends jsCallback implements Interface_
                 }
 
                 $return = $this->action->execute(...$args);
-                $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
+                $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $return]) : $this->jsSuccess;
 
                 $js = $this->hook('afterExecute', [$return, $id]) ?: $success ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
             }

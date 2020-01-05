@@ -3,7 +3,7 @@
 require 'init.php';
 require 'database.php';
 
-$app->add(['Button', 'Card model and actions', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+$app->add(['Button', 'Card Model', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['card-action']);
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
@@ -35,20 +35,6 @@ $content->add($header = new \atk4\ui\Header(['Kristy']));
 
 $card->addContent($content);
 $card->addDescription('Friend of Bob');
-
-//**** Card with model using CardDeck ** /
-$app->add(['Header', 'Card can display model content.', 'size' => 3]);
-
-$country = new Country($db);
-$country->addExpression('extra', 'concat("iso: ", [iso])');
-$country->addCalculatedField('desc', function ($m) {
-    $name = $m->getTitle();
-    $number = number_format(rand(1000000, 10000000));
-
-    return 'The country of '.$name.' has more than '.$number.' habitants';
-});
-
-$app->add(['CardDeck'])->setModel($country->setLimit(8), ['iso', 'desc'], ['phonecode']);
 
 //**** Card with Table and Label***/
 

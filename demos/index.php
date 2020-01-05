@@ -17,9 +17,9 @@ if (!$app->stickyget('begin')) {
     $t->addParagraph('In this version of Agile Toolkit we introduce "User Actions"!');
 
     $app->add(['Button', 'Learn about User Actions', 'huge basic primary fluid', 'iconRight' => 'right arrow'])
-        ->link(['actions', 'layout' => 'Centered', 'begin' => true]);
+        ->link(['tutorial_actions', 'layout' => 'Centered', 'begin' => true]);
 
-    exit;
+    $app->callExit();
 }
 
 /** @var \atk4\ui\Wizard $wizard */

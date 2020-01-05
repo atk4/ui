@@ -1,0 +1,21 @@
+name: ZIP file builder
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  autocommit:
+    name: Update to stable dependencies
+    if: startsWith(github.ref, 'refs/heads/release/')
+    runs-on: ubuntu-latest
+    container:
+      image: atk4/image:latest # https://github.com/atk4/image
+    steps:
+      - uses: actions/checkout@master
+      - name: Hack around git branches
+        run: |
+          v=$(echo ${{ github.ref }} | cut -d / -f 4)
+          echo $v
+          git branch

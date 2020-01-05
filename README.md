@@ -7,6 +7,7 @@ ATK UI began 2 years ago as a project to wrap CSS framework into PHP objects. We
 **ATK UI helps you create modern Web UI without writing HTML/CSS/JS. Bundled with over 30 interactive UI components that seamlessly integrate with your SQL, NoSQL or API backend, ATK UI brings consistent and easy-to-use interface into your custom projects or popular web apps**
 
 [![Build Status](https://travis-ci.org/atk4/ui.png?branch=develop)](https://travis-ci.org/atk4/ui)
+![Build](https://github.com/atk4/ui/workflows/Unit%20Testing/badge.svg)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
 [![StyleCI](https://styleci.io/repos/68417565/shield)](https://styleci.io/repos/68417565)
 [![codecov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)

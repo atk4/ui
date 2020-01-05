@@ -118,9 +118,9 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
-            $this->title = $this->action->owner->getModelCaption();
+            $this->title = trim($action->caption.' '.$this->action->owner->getModelCaption());
 
-            $this->btns->add($this->execActionBtn = (new Button([$this->action->caption, 'blue'])));
+            $this->btns->add($this->execActionBtn = $this->factory($this->action->ui['execButton'] ?? ['Button', $this->action->caption, 'blue'], [], 'atk4\ui'));
 
             // get current step.
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
@@ -392,7 +392,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      */
     protected function jsGetExecute($obj, $id)
     {
-        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
+        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $obj]) : $this->jsSuccess;
 
         return [
             $this->hide(),

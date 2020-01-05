@@ -30,7 +30,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testableDemoFilesdataProvider()
     {
         $files = [];
-        foreach (scandir(getcwd().DIRECTORY_SEPARATOR.'demos') as $file) {
+        foreach (scandir(dirname(__DIR__).DIRECTORY_SEPARATOR.'demos') as $file) {
             if (is_dir($file) || substr($file, -3) !== 'php') {
                 continue;
             }
@@ -41,6 +41,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
                 case 'db.example.php': // exclude - is a setup file
                 case 'db.php': // exclude - is a setup file
                 case 'db.travis.php': // exclude - is a setup file
+                case 'db.github.php': // exclude - is a setup file
                 case 'coverage.php': // exclude - is the coverage file
                 case 'somedatadef.php': // exclude - is a setup file
                 case 'layouts_nolayout.php': // exclude - output only a partial html
@@ -127,8 +128,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = ['sticky2.php?atk_admin_loader_callback=ajax&__atk_callback1'];
         $files[] = ['virtual.php?atk_admin_label_2_click=ajax&__atk_callback=1'];
         $files[] = ['actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1']; // need to call this before calls other actions to fill model files
-        $files[] = ['actions.php?__atk_m=atk_admin_crud_modal&atk_admin_crud_modal_view_callbacklater=ajax&__atk_callback=1&atk_admin_crud_view_table_actions=1&atk_admin_crud_view_view_paginator=1&json=true'];
-        $files[] = ['actions.php?atk_admin_crud_edit=cut&__atk_callback=1&atk_admin_crud=1&atk_admin_crud_sort=&json=true'];
+        $files[] = ['actions.php?atk_admin_useraction_loader_callback=ajax&__atk_callback=1&atk_admin_useraction=1&step=fields'];
         $files[] = ['notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&json=true'];
         $files[] = ['scroll-lister.php?atk_admin_view_2_view_lister_jspaginator=ajax&__atk_callback=1&page=2'];
 
