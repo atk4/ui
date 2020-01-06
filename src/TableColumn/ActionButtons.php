@@ -31,10 +31,10 @@ class ActionButtons extends Generic
      *
      * Returns button object
      *
-     * @param $button
-     * @param $callback
-     * @param bool $confirm
-     * @param bool $isDisabled
+     * @param View|string                                   $button
+     * @param null|callable|atk4\data\UserAction\Generic    $action
+     * @param bool                                          $confirm
+     * @param bool                                          $isDisabled
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
