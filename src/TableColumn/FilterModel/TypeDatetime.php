@@ -25,31 +25,32 @@ class TypeDatetime extends Generic
 
         // the date value to operate on.
         $this->value->values = [
-            'today'          => 'Today',
-            'tomorrow'       => 'Tomorrow',
-            'yesterday'      => 'Yesterday',
-            '-1 week'        => 'One week ago',
-            '+1 week'        => 'One week from now',
-            '-1 month'       => 'One month ago',
-            '+1 month'       => 'One month from now',
-            'x_day_ago'      => 'Numbers of days ago',
-            'x_day_now'      => 'Number of days from now',
-            'exact'          => 'Exact date',
+            'today'     => 'Today',
+            'tomorrow'  => 'Tomorrow',
+            'yesterday' => 'Yesterday',
+            '-1 week'   => 'One week ago',
+            '+1 week'   => 'One week from now',
+            '-1 month'  => 'One month ago',
+            '+1 month'  => 'One month from now',
+            'x_day_ago' => 'Numbers of days ago',
+            'x_day_now' => 'Number of days from now',
+            'exact'     => 'Exact date',
         ];
 
         // The range value field use when within is select.
-        $this->addField('range',
-                        ['ui'        => ['caption' => ''],
-                            'values' => [
-                                '-1 week'      => 'The past week',
-                                '-1 month'     => 'The past month',
-                                '-1 year'      => 'The past year',
-                                '+1 week'      => 'The next week',
-                                '+1 month'     => 'The next month',
-                                '+1 year'      => 'The next year',
-                                'x_day_before' => 'The next numbers of days before',
-                                'x_day_after'  => 'The next number of days after',
-                            ], ]);
+        $this->addField('range', [
+            'ui' => ['caption' => ''],
+            'values' => [
+                '-1 week'      => 'The past week',
+                '-1 month'     => 'The past month',
+                '-1 year'      => 'The past year',
+                '+1 week'      => 'The next week',
+                '+1 month'     => 'The next month',
+                '+1 year'      => 'The next year',
+                'x_day_before' => 'The next numbers of days before',
+                'x_day_after'  => 'The next number of days after',
+            ],
+        ]);
 
         // The exact date field input when exact is select as input value.
         $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);

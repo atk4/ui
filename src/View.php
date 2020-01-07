@@ -781,11 +781,13 @@ class View implements jsExpressionable
     {
         $this->renderAll();
 
-        return json_encode(['success' => true,
-            'message'                 => 'Success',
-            'atkjs'                   => $this->getJS($force_echo),
-            'html'                    => $this->template->render($region),
-            'id'                      => $this->name, ]);
+        return json_encode([
+            'success' => true,
+            'message' => 'Success',
+            'atkjs'   => $this->getJS($force_echo),
+            'html'    => $this->template->render($region),
+            'id'      => $this->name,
+        ]);
     }
 
     /**

@@ -384,16 +384,17 @@ class Lookup extends Input
             $f_name = $this->name.'-ac_f'.$k;
             $chain = new jQuery('#'.$f_name);
             $options = [
-                'fields'       => ['name' => 'name', 'value' => 'id'],
-                'match'        => 'value',
-                'apiSettings'  => ['url'         => $this->getCallbackURL().'&q={query}',
-                    'cache'                      => false,
-                    'data'                       => array_merge($this->getFilterQuery(), ['filter' => $filter['field']]),
-                    'onResponse'                 => new jsFunction(['resp'], [
+                'fields'      => ['name' => 'name', 'value' => 'id'],
+                'match'       => 'value',
+                'apiSettings' => [
+                    'url'        => $this->getCallbackURL().'&q={query}',
+                    'cache'      => false,
+                    'data'       => array_merge($this->getFilterQuery(), ['filter' => $filter['field']]),
+                    'onResponse' => new jsFunction(['resp'], [
                         new jsExpression('if (!resp.success){atk.apiService.atkSuccessTest(resp);}'),
                     ]),
                 ],
-                'onChange'    => new jsFunction([
+                'onChange'   => new jsFunction([
                     (new jQuery())->trigger('filterChanged'),
                     $this->getJsDropdown(),
                 ]),
