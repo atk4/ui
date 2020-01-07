@@ -11,6 +11,11 @@ class ActionButtons extends Generic
 {
     use FactoryTrait;
 
+    /**
+     * Stores all the buttons that have been added
+     * 
+     * @var array
+     */
     public $buttons = [];
     
     /**
@@ -39,7 +44,7 @@ class ActionButtons extends Generic
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
      *
-     * @return object
+     * @return View
      */
     public function addButton($button, $action = null, $confirm = false, $isDisabled = false)
     {
@@ -91,9 +96,18 @@ class ActionButtons extends Generic
         return $button;
     }
 
+    
     /**
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
+     *
+     * @param View|string   $button
+     * @param string        $title
+     * @param callable      $callback
+     * @param View          $owner
+     * @param array         $args
+     * 
+     * @return View
      */
     public function addModal($button, $title, $callback, $owner = null, $args = [])
     {
