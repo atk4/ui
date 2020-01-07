@@ -39,7 +39,7 @@ class TypeDatetime extends Generic
 
         // The range value field use when within is select.
         $this->addField('range', [
-            'ui' => ['caption' => ''],
+            'ui'     => ['caption' => ''],
             'values' => [
                 '-1 week'      => 'The past week',
                 '-1 month'     => 'The past month',
