@@ -27,11 +27,11 @@ $g->addField('c_disb', [new \atk4\ui\FormField\CheckBox(), 'disabled' => true])-
 
 $g = $f->addGroup('DropDown');
 $values = [
-            'tag'        => ['Tag', 'icon' => 'tag icon'],
-            'globe'      => ['Globe', 'icon' => 'globe icon'],
-            'registered' => ['Registered', 'icon' => 'registered icon'],
-            'file'       => ['File', 'icon' => 'file icon'],
-        ];
+    'tag'        => ['Tag', 'icon' => 'tag icon'],
+    'globe'      => ['Globe', 'icon' => 'globe icon'],
+    'registered' => ['Registered', 'icon' => 'registered icon'],
+    'file'       => ['File', 'icon' => 'file icon'],
+];
 $g->addField('d_norm', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'width'=>'three'])->set('globe');
 $g->addField('d_read', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'readonly' => true, 'width'=>'three'])->set('globe'); // allows to change value
 $g->addField('d_disb', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'disabled' => true, 'width'=>'three'])->set('globe'); // css disabled, but can focus with Tab and change value
@@ -172,21 +172,21 @@ $b1->onChange('console.log("b1 changed")');
 
 $g = $form->addGroup('DropDown');
 $d1 = $g->addField('d1', new \atk4\ui\FormField\DropDown(['values' => [
-            'tag'        => ['Tag', 'icon' => 'tag icon'],
-            'globe'      => ['Globe', 'icon' => 'globe icon'],
-            'registered' => ['Registered', 'icon' => 'registered icon'],
-            'file'       => ['File', 'icon' => 'file icon'],
-        ],
+    'tag'        => ['Tag', 'icon' => 'tag icon'],
+    'globe'      => ['Globe', 'icon' => 'globe icon'],
+    'registered' => ['Registered', 'icon' => 'registered icon'],
+    'file'       => ['File', 'icon' => 'file icon'],
+],
 ]));
 $d1->onChange('console.log("d1 changed")');
 
 $g = $form->addGroup('Radio');
 $r1 = $g->addField('r1', new \atk4\ui\FormField\Radio(['values' => [
-            'Tag',
-            'Globe',
-            'Registered',
-            'File',
-        ],
+    'Tag',
+    'Globe',
+    'Registered',
+    'File',
+],
 ]));
 $r1->onChange('console.log("r1 changed")');
 

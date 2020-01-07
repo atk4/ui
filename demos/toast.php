@@ -80,7 +80,7 @@ $btn->on('click', new \atk4\ui\jsToast([
 
 $btn = $app->add('Button')->set('With progress bar');
 $btn->on('click', new \atk4\ui\jsToast([
-   'title'        => 'Awesome',
-   'message'      => 'See how long I will last',
-   'showProgress' => 'bottom',
+    'title'        => 'Awesome',
+    'message'      => 'See how long I will last',
+    'showProgress' => 'bottom',
 ]));

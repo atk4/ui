@@ -39,17 +39,17 @@ class TypeDate extends Generic
 
         // The range value field use when within is select.
         $this->addField('range',
-                        ['ui'     => ['caption' => ''],
-                         'values' => [
-                             '-1 week'      => 'The past week',
-                             '-1 month'     => 'The past month',
-                             '-1 year'      => 'The past year',
-                             '+1 week'      => 'The next week',
-                             '+1 month'     => 'The next month',
-                             '+1 year'      => 'The next year',
-                             'x_day_before' => 'The next numbers of days before',
-                             'x_day_after'  => 'The next number of days after',
-                         ], ]);
+                        ['ui'        => ['caption' => ''],
+                            'values' => [
+                                '-1 week'      => 'The past week',
+                                '-1 month'     => 'The past month',
+                                '-1 year'      => 'The past year',
+                                '+1 week'      => 'The next week',
+                                '+1 month'     => 'The next month',
+                                '+1 year'      => 'The next year',
+                                'x_day_before' => 'The next numbers of days before',
+                                'x_day_after'  => 'The next number of days after',
+                            ], ]);
 
         // The exact date field input when exact is select as input value.
         $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);

@@ -165,7 +165,7 @@ class TreeItemSelector extends Generic
                         'mode'    => $this->allowMultiple ? 'multiple' : 'single',
                         'url'     => $this->cb ? $this->cb->getJSURL() : null,
                         'loader'  => $this->loaderCssName,
-                ],
-        ]);
+                    ],
+                ]);
     }
 }

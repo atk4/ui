@@ -215,9 +215,9 @@ class Lookup extends Input
         }
 
         $this->app->terminate(json_encode([
-                                              'success' => true,
-                                              'results' => $data,
-                                          ]));
+            'success' => true,
+            'results' => $data,
+        ]));
     }
 
     /**
@@ -286,9 +286,9 @@ class Lookup extends Input
             array_unshift($data, ['id' => -1, 'name' => $this->filterEmpty]);
 
             $this->app->terminate(json_encode([
-                                                  'success' => true,
-                                                  'results' => $data,
-                                              ]));
+                'success' => true,
+                'results' => $data,
+            ]));
         }
     }
 
@@ -341,9 +341,9 @@ class Lookup extends Input
     protected function initDropdown($chain)
     {
         $settings = array_merge([
-                                    'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
-                                    'apiSettings' => array_merge(['url' => $this->getCallbackURL().'&q={query}'], $this->apiConfig),
-                                ], $this->settings);
+            'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
+            'apiSettings' => array_merge(['url' => $this->getCallbackURL().'&q={query}'], $this->apiConfig),
+        ], $this->settings);
 
         $chain->dropdown($settings);
     }
@@ -387,16 +387,16 @@ class Lookup extends Input
                 'fields'       => ['name' => 'name', 'value' => 'id'],
                 'match'        => 'value',
                 'apiSettings'  => ['url'         => $this->getCallbackURL().'&q={query}',
-                                  'cache'        => false,
-                                  'data'         => array_merge($this->getFilterQuery(), ['filter' => $filter['field']]),
-                                  'onResponse'   => new jsFunction(['resp'], [
-                                      new jsExpression('if (!resp.success){atk.apiService.atkSuccessTest(resp);}'),
-                                  ]),
+                    'cache'                      => false,
+                    'data'                       => array_merge($this->getFilterQuery(), ['filter' => $filter['field']]),
+                    'onResponse'                 => new jsFunction(['resp'], [
+                        new jsExpression('if (!resp.success){atk.apiService.atkSuccessTest(resp);}'),
+                    ]),
                 ],
                 'onChange'    => new jsFunction([
-                                                    (new jQuery())->trigger('filterChanged'),
-                                                    $this->getJsDropdown(),
-                                                ]),
+                    (new jQuery())->trigger('filterChanged'),
+                    $this->getJsDropdown(),
+                ]),
             ];
 
             $this->js(true, $chain->dropdown($options));

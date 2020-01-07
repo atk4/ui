@@ -61,13 +61,13 @@ class jsSortable extends jsCallback
         $this->app->requireJS('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.5/lib/draggable.bundle.js');
 
         $this->view->js(true)->atkJsSortable(['uri'                 => $this->getJSURL(),
-                                                      'uri_options' => $this->args,
-                                                      'container'   => $this->container,
-                                                      'draggable'   => $this->draggable,
-                                                      'handleClass' => $this->handleClass,
-                                                      'dataLabel'   => $this->dataLabel,
-                                                      'autoFireCb'  => $this->autoFireCb,
-                                              ]);
+            'uri_options'                                           => $this->args,
+            'container'                                             => $this->container,
+            'draggable'                                             => $this->draggable,
+            'handleClass'                                           => $this->handleClass,
+            'dataLabel'                                             => $this->dataLabel,
+            'autoFireCb'                                            => $this->autoFireCb,
+        ]);
     }
 
     /**
