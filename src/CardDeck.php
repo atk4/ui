@@ -141,7 +141,7 @@ class CardDeck extends View
         $this->page = $this->app->stickyGet($this->paginator->name);
     }
 
-    public function setModel(Model $model, array $fields = null, array $extra = null) : Model
+    public function setModel(Model $model, array $fields = null, array $extra = null): Model
     {
         parent::setModel($model);
 
@@ -296,7 +296,7 @@ class CardDeck extends View
      *
      * @return array
      */
-    protected function jsModelReturn(Generic $action = null, string $msg = 'Done!') :array
+    protected function jsModelReturn(Generic $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
         if ($action->owner->loaded() && $card = $this->findCard($action->owner)) {
@@ -479,7 +479,7 @@ class CardDeck extends View
      *
      * @return array
      */
-    private function _getModelActions(string $scope) : array
+    private function _getModelActions(string $scope): array
     {
         $actions = [];
         if ($scope === Generic::SINGLE_RECORD && !empty($this->singleScopeActions)) {

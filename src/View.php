@@ -781,11 +781,13 @@ class View implements jsExpressionable
     {
         $this->renderAll();
 
-        return json_encode(['success' => true,
-                            'message' => 'Success',
-                            'atkjs'   => $this->getJS($force_echo),
-                            'html'    => $this->template->render($region),
-                            'id'      => $this->name, ]);
+        return json_encode([
+            'success' => true,
+            'message' => 'Success',
+            'atkjs'   => $this->getJS($force_echo),
+            'html'    => $this->template->render($region),
+            'id'      => $this->name,
+        ]);
     }
 
     /**
@@ -1209,11 +1211,11 @@ class View implements jsExpressionable
         // Do we need confirm action.
         if ($defaults['confirm'] ?? null) {
             array_unshift($event_stmts, new jsExpression('$.atkConfirm({message:[confirm], onApprove: [action], options: {button:{ok:[ok], cancel:[cancel]}}, context:this})', [
-                                          'confirm' => $defaults['confirm'],
-                                          'action'  => new jsFunction($actions),
-                                          'ok'      => $defaults['ok'] ?? 'Ok',
-                                          'cancel'  => $defaults['cancel'] ?? 'Cancel',
-                                      ]));
+                'confirm' => $defaults['confirm'],
+                'action'  => new jsFunction($actions),
+                'ok'      => $defaults['ok'] ?? 'Ok',
+                'cancel'  => $defaults['cancel'] ?? 'Cancel',
+            ]));
         } else {
             $event_stmts = array_merge($event_stmts, $actions);
         }
@@ -1368,7 +1370,7 @@ class View implements jsExpressionable
      *
      * @return null|string
      */
-    public function stickyGet($name, $newValue = null) : ?string
+    public function stickyGet($name, $newValue = null): ?string
     {
         $this->stickyArgs[$name] = $newValue ?? $_GET[$name] ?? null;
 

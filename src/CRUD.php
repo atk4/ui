@@ -91,7 +91,7 @@ class CRUD extends Grid
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $m, $fields = null) : \atk4\data\Model
+    public function setModel(\atk4\data\Model $m, $fields = null): \atk4\data\Model
     {
         if ($fields !== null) {
             $this->displayFields = $fields;
@@ -205,7 +205,7 @@ class CRUD extends Grid
      *
      * @return array
      */
-    protected function jsModelReturn(Generic $action = null, string $msg = 'Done!') :array
+    protected function jsModelReturn(Generic $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
         $js[] = $action->owner->loaded() ? $this->container->jsReload($this->_getReloadArgs()) : (new jQuery())->closest('tr')->transition('fade left');
@@ -270,7 +270,7 @@ class CRUD extends Grid
      *
      * @return array
      */
-    private function _getModelActions(string $scope) : array
+    private function _getModelActions(string $scope): array
     {
         $actions = [];
         if ($scope === Generic::SINGLE_RECORD && !empty($this->singleScopeActions)) {

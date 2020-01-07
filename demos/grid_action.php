@@ -32,7 +32,7 @@ $del_executor = new atk4\ui\ActionExecutor\Preview([
             $g->table->jsRemoveRow($model->get('id')),
         ];
     },
-   ]
+]
 );
 
 $del_action = $country->addAction('delete', [

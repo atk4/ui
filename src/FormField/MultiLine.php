@@ -563,7 +563,7 @@ class MultiLine extends Generic
      *
      * @return array
      */
-    public function getFieldDef(\atk4\data\Field $field):array
+    public function getFieldDef(\atk4\data\Field $field): array
     {
         // Default is input
         $component = 'input';
@@ -607,7 +607,7 @@ class MultiLine extends Generic
      *
      * @return string
      */
-    protected function _mapComponent($field_type):string
+    protected function _mapComponent($field_type): string
     {
         if (is_string($field_type)) {
             switch (strtolower($field_type)) {
@@ -632,7 +632,7 @@ class MultiLine extends Generic
         return 'input';
     }
 
-    protected function _getFieldOptions(\atk4\data\Field $field, string $component):array
+    protected function _getFieldOptions(\atk4\data\Field $field, string $component): array
     {
         $options = [];
 
@@ -680,7 +680,7 @@ class MultiLine extends Generic
      * HTML input field needs type property set. If it wasnt found in $field->ui,
      * determine from rest.
      */
-    protected function _addTypeOption(\atk4\data\Field $field):string
+    protected function _addTypeOption(\atk4\data\Field $field): string
     {
         switch ($field->type) {
             case 'integer':
@@ -696,7 +696,7 @@ class MultiLine extends Generic
      * DropDown field needs values set. If it wasnt found in $field->ui, determine
      * from rest.
      */
-    protected function _addValuesOption(\atk4\data\Field $field):array
+    protected function _addValuesOption(\atk4\data\Field $field): array
     {
         if ($field->enum) {
             return array_combine($field->enum, $field->enum);

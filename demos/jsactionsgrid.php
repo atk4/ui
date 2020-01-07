@@ -83,15 +83,15 @@ $g->addActionMenuItem($divider);
 $g->addActionMenuItem($model_header);
 $g->addActionMenuItems(
     [
-       'callback',
-       'preview',
-       'disabled_action',
-       'edit_argument',
-       'edit_argument_prev',
-       'edit_iso',
-       'Ouch',
-       'confirm',
-   ]
+        'callback',
+        'preview',
+        'disabled_action',
+        'edit_argument',
+        'edit_argument_prev',
+        'edit_iso',
+        'Ouch',
+        'confirm',
+    ]
 );
 
 $special_item = $app->factory('View', ['id' => false, 'class' => ['item'], 'content' => 'Multi Step'], 'atk4\ui');
