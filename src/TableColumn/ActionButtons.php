@@ -156,7 +156,7 @@ class ActionButtons extends Generic
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {
             // if action is enabled then do not set disabled class
-            if ($callback($row)) continue;
+            if (call_user_func($callback, $row)) continue;
             
             $tags['_'.$name.'_disabled'] = 'disabled';
         }
