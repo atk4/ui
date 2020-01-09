@@ -12,15 +12,15 @@ class ActionButtons extends Generic
     use FactoryTrait;
 
     /**
-     * Stores all the buttons that have been added
-     * 
+     * Stores all the buttons that have been added.
+     *
      * @var array
      */
     public $buttons = [];
-    
+
     /**
-     * Callbacks as defined in $action->enabled for evaluating row-specific if an action is enabled
-     * 
+     * Callbacks as defined in $action->enabled for evaluating row-specific if an action is enabled.
+     *
      * @var array
      */
     protected $callbacks = [];
@@ -36,10 +36,10 @@ class ActionButtons extends Generic
      *
      * Returns button object
      *
-     * @param View|string                                   $button
-     * @param null|callable|atk4\data\UserAction\Generic    $action
-     * @param bool                                          $confirm
-     * @param bool                                          $isDisabled
+     * @param View|string                                $button
+     * @param null|callable|atk4\data\UserAction\Generic $action
+     * @param bool                                       $confirm
+     * @param bool                                       $isDisabled
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
@@ -49,28 +49,27 @@ class ActionButtons extends Generic
     public function addButton($button, $action = null, $confirm = false, $isDisabled = false)
     {
         // If action is not specified, perhaps it is defined in the model
-        if (! $action) {
+        if (!$action) {
             if (is_string($button)) {
                 $action = $this->table->model->getAction($button);
-            }
-            elseif ($button instanceof \atk4\data\UserAction\Generic){
+            } elseif ($button instanceof \atk4\data\UserAction\Generic) {
                 $action = $button;
             }
-            
-            if ($action) {                
+
+            if ($action) {
                 $button = $action->caption;
             }
         }
-        
+
         $name = $this->name.'_button_'.(count($this->buttons) + 1);
 
-        if ($action instanceof \atk4\data\UserAction\Generic) {            
+        if ($action instanceof \atk4\data\UserAction\Generic) {
             $button = $action->ui['button'] ?? $button;
-            
+
             $confirm = $action->ui['confirm'] ?? $confirm;
-            
-            $isDisabled = ! $action->enabled;
-            
+
+            $isDisabled = !$action->enabled;
+
             if (is_callable($action->enabled)) {
                 $this->callbacks[$name] = $action->enabled;
             }
@@ -85,9 +84,9 @@ class ActionButtons extends Generic
         }
 
         $button->app = $this->table->app;
-        
+
         $this->buttons[$name] = $button->addClass('{$_'.$name.'_disabled} compact b_'.$name);
-        
+
         if ($isDisabled) {
             $button->addClass('disabled');
         }
@@ -96,24 +95,23 @@ class ActionButtons extends Generic
         return $button;
     }
 
-    
     /**
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      *
-     * @param View|string   $button
-     * @param string        $title
-     * @param callable      $callback
-     * @param View          $owner
-     * @param array         $args
-     * 
+     * @param View|string $button
+     * @param string      $title
+     * @param callable    $callback
+     * @param View        $owner
+     * @param array       $args
+     *
      * @return View
      */
     public function addModal($button, $title, $callback, $owner = null, $args = [])
     {
-    	$owner = $owner?: $this->owner->owner;
-        
-    	$modal = $owner->add(['Modal', compact('title')]);
+        $owner = $owner ?: $this->owner->owner;
+
+        $modal = $owner->add(['Modal', compact('title')]);
 
         $modal->observeChanges(); // adds scrollbar if needed
 
@@ -150,7 +148,7 @@ class ActionButtons extends Generic
 
         return '<div class="ui buttons">'.$output.'</div>';
     }
-    
+
     public function getHTMLTags($row, $field)
     {
         $tags = [];
@@ -160,7 +158,7 @@ class ActionButtons extends Generic
             
             $tags['_'.$name.'_disabled'] = 'disabled';
         }
-        
+
         return $tags;
     }
 
