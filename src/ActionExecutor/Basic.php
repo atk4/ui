@@ -62,7 +62,7 @@ class Basic extends \atk4\ui\View implements Interface_
      *
      * @param \atk4\data\UserAction\Generic $action
      */
-    public function setAction(\atk4\data\UserAction\Generic $action) : void
+    public function setAction(\atk4\data\UserAction\Generic $action): void
     {
         $this->action = $action;
     }

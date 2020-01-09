@@ -33,7 +33,7 @@ $info_action = $countries->addAction('request_info', [
     },
     'scope' => 'none',
     'ui'    => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => 'mail']],
-    ]);
+]);
 
 $info_action->args = [
     'email'  => ['type'=>'email', 'required'=>true, 'caption' => 'Please let us know your email address:'],

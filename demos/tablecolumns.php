@@ -67,9 +67,9 @@ class ModelColor extends \atk4\data\Model
         $this->addField('interests', [
             'type' => 'string',
             'ui'   => [
-              'table' => [
-                  'Labels',
-              ],
+                'table' => [
+                    'Labels',
+                ],
             ],
         ]);
 

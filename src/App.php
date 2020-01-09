@@ -428,7 +428,7 @@ class App
      *
      * @return string|null
      */
-    public function normalizeClassNameApp($name, $prefix = '') : ?string
+    public function normalizeClassNameApp($name, $prefix = ''): ?string
     {
         //return '\\'.__NAMESPACE__.'\\'.$name;
         return null;
@@ -678,7 +678,7 @@ class App
      *
      * @return string|null
      */
-    public function stickyGet($name) :?string
+    public function stickyGet($name): ?string
     {
         if (isset($_GET[$name])) {
             $this->sticky_get_arguments[$name] = $_GET[$name];
