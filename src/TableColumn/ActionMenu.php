@@ -21,9 +21,9 @@ class ActionMenu extends Generic
      * @var array
      */
     protected $items = [];
-    
+
     /**
-     * Callbacks as defined in $action->enabled for evaluating row-specific if an action is enabled
+     * Callbacks as defined in $action->enabled for evaluating row-specific if an action is enabled.
      *
      * @var array
      */
@@ -75,10 +75,10 @@ class ActionMenu extends Generic
     /**
      * Add a menu item in Dropdown.
      *
-     * @param View|string                                   $item
-     * @param null|callable|atk4\data\UserAction\Generic    $action
-     * @param null|string                                   $confirm
-     * @param bool                                          $isDisabled
+     * @param View|string                                $item
+     * @param null|callable|atk4\data\UserAction\Generic $action
+     * @param null|string                                $confirm
+     * @param bool                                       $isDisabled
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
@@ -88,39 +88,38 @@ class ActionMenu extends Generic
     public function addActionMenuItem($item, $action = null, $confirm = null, $isDisabled = false)
     {
         // If action is not specified, perhaps it is defined in the model
-        if (! $action) {
+        if (!$action) {
             if (is_string($item)) {
                 $action = $this->table->model->getAction($item);
-            }
-            elseif ($item instanceof \atk4\data\UserAction\Generic){
+            } elseif ($item instanceof \atk4\data\UserAction\Generic) {
                 $action = $item;
             }
-            
+
             if ($action) {
                 $item = $action->caption;
             }
         }
-        
+
         $name = $this->name.'_action_'.(count($this->items) + 1);
 
         if ($action instanceof \atk4\data\UserAction\Generic) {
             $confirm = $action->ui['confirm'] ?? $confirm;
-            
-            $isDisabled = ! $action->enabled;
-            
+
+            $isDisabled = !$action->enabled;
+
             if (is_callable($action->enabled)) {
                 $this->callbacks[$name] = $action->enabled;
             }
         }
-        
+
         if (!is_object($item)) {
             $item = $this->factory('View', ['id' => false, 'ui' => 'item', 'content' => $item], 'atk4\ui');
         }
 
         $this->items[] = $item;
-        
+
         $item->addClass('{$_'.$name.'_disabled} i_'.$name);
-        
+
         if ($isDisabled) {
             $item->addClass('disabled');
         }
@@ -183,11 +182,13 @@ class ActionMenu extends Generic
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {
             // if action is enabled then do not set disabled class
-            if ($callback($row)) continue;
-            
+            if ($callback($row)) {
+                continue;
+            }
+
             $tags['_'.$name.'_disabled'] = 'disabled';
         }
-        
+
         return $tags;
     }
 }
