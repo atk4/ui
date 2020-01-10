@@ -133,6 +133,8 @@ class App
      */
     public $call_exit = true;
 
+    public $modals = [];
+
     /**
      * Error types to be in set_error_handler.
      *
@@ -401,7 +403,7 @@ class App
 
         // Agile UI
         $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
-        $this->requireJS($url.'/atkjs-ui.min.js');
+        $this->requireJS($url.'/atkjs-ui.js');
         $this->requireCSS($url.'/agileui.css');
     }
 
@@ -990,6 +992,11 @@ class App
         echo $content;
     }
 
+    public function addModal($modal)
+    {
+        $this->modals[] = $modal;
+    }
+
     /**
      * Output JSON response to the client.
      *
@@ -997,9 +1004,45 @@ class App
      */
     public function outputResponseJSON($data)
     {
+
+//        if (!is_array($data)) {
+//            throw new Exception('Output json require an array.');
+//        }
+//        $modal = (new Modal(['Allo']))->addClass('_atk_json_modal');
+//        $modal->add(['View', 'testing']);
+//        $data['modals']['html'] = $modal->getHtml();
+//
+//        foreach ($modal->_js_actions as $eventActions) {
+//            foreach ($eventActions as $action) {
+//                $actions[] = $action->jsRender();
+//            }
+//        }
+//        $data['modals']['js'] = implode(';', $actions);
+//        if (is_string($data)) {
+//            $data = json_decode($data, true);
+//        }
+
         $data = is_array($data) ? json_encode($data) : $data;
 
         $this->outputResponse(['Content-Type:application/json' => true], $data);
+    }
+
+    public function getModals()
+    {
+        $modals = [];
+        foreach ($this->html->elements as $view) {
+            if ($view instanceof Modal) {
+                $modals[$view->name]['html'] = $view->getHTML();
+                foreach ($view->_js_actions as $eventActions) {
+                    foreach ($eventActions as $action) {
+                        $actions[] = $action->jsRender();
+                    }
+                }
+                $modals[$view->name]['js'] = implode(';', $actions);
+            }
+        }
+
+        return $modals;
     }
 
     /**

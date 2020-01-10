@@ -33,7 +33,7 @@ class VirtualPage extends View
         parent::init();
 
         $this->cb = $this->_add([Callback::class, 'urlTrigger'=>$this->urlTrigger ?: $this->name]);
-        $this->stickyGet($this->name);
+        $this->app->stickyGet($this->name);
     }
 
     /**

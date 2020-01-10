@@ -48,6 +48,17 @@ class ApiService {
     settings.onAbort = this.onAbort;
   }
 
+  // removeModalDuplicate(html) {
+  //   let modalIDs = [];
+  //   $(html).find(".ui.modal[id]").each((i, e) => {
+  //     modalIDs.push('#' + $(e).attr('id'));
+  //   });
+  //
+  //   if (modalIDs.length) {
+  //     $('.ui.dimmer.modals.page').find(modalIDs.join(', ')).remove();
+  //   }
+  // }
+
   onAbort(message) {
     console.log(message);
   }
@@ -73,6 +84,7 @@ class ApiService {
       if (response.success) {
         if (response && response.html && response.id) {
           // prevent modal duplication.
+          // apiService.removeModalDuplicate(response.html);
           let modalIDs = [];
           $(response.html).find(".ui.modal[id]").each((i, e) => {
             modalIDs.push('#' + $(e).attr('id'));
@@ -89,6 +101,21 @@ class ApiService {
             console.log('Unable to replace element with id: '+ response.id);
             //throw({message:'Unable to replace element with id: '+ response.id});
           }
+        }
+        if (response && response.modals) {
+          const modals = Object.keys(response.modals);
+          console.log(modals);
+          // const modalsID = modals.map(modal => '#'.modal);
+          // $('.ui.dimmer.modals.page').find(modalsID.join(', ')).remove();
+          modals.forEach(function(modal) {
+            const m = $('.ui.dimmer.modals.page').find('#'+modal);
+            if (m.length === 0) {
+              $(document.body).append(response.modals[modal].html);
+              apiService.evalResponse(response.modals[modal].js, jQuery);
+            }
+            // console.log(response.modals[modal].html);
+            //console.log(response.modals[modal].js);
+          });
         }
         if (response && response.atkjs) {
           // Call evalResponse with proper context, js code and jQuery as $ var.
