@@ -168,6 +168,16 @@ class View implements jsExpressionable
      */
     protected $_rendered = false;
 
+    public function setRendered($state)
+    {
+        $this->_rendered = $state;
+    }
+
+    public function getRendered()
+    {
+        return $this->_rendered;
+    }
+
     // }}}
 
     // {{{ Setting Things up
@@ -1170,9 +1180,12 @@ class View implements jsExpressionable
             $ex = $this->factory($class);
             if ($ex instanceof self && $ex instanceof Interface_ && $ex instanceof jsInterface_) {
                 //Executor may already had been add to layout. Like in CardDeck.
-                if (!isset($this->app->layout->elements[$ex->short_name])) {
-                    $ex = $this->app->add($ex)->setAction($action);
+                if (!isset($this->app->html->elements[$ex->short_name])) {
+                    $ex = $this->app->html->add($ex)->setAction($action);
+                    $this->app->addModal($ex);
                 }
+//                $this->app->addModal($ex);
+//                $ex->setAction($action);
                 if (isset($arguments[0])) {
                     $arguments[$ex->name] = $arguments[0];
                 }

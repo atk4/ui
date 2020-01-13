@@ -353,4 +353,28 @@ class Modal extends View
 
         parent::renderView();
     }
+
+//    public function getHTML()
+//    {
+//        $html = parent::getHTML();
+//        if (!isset(App::$modals[$view->name])) {
+//            App::$modals[$this->name]['html'] = $html;
+//            foreach ($this->_js_actions as $eventActions) {
+//                foreach ($eventActions as $action) {
+//                    $actions[] = $action->jsRender();
+//                }
+//            }
+//            App::$modals[$this->name]['js'] = implode(';', $actions);
+//        }
+////        $this->renderAll();
+//////        $js = $this->jsRender();
+////        $html = $this->template->render();
+////
+////        if ($this->app) {
+////            App::$modals[$this->name]['html'] = $html;
+////            App::$modals[$this->name]['js'] = $this->jsRender();;
+////        }
+//
+//        return $html;
+//    }
 }

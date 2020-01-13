@@ -297,13 +297,20 @@ class App
         return true;
     }
 
+    public function addModal(Modal $modal): Modal
+    {
+//        $modal->init();
+        $this->modals[$modal->name] = $modal;
+        return $modal;
+    }
+
     /**
      * Most of the ajax request will require sending exception in json
      * instead of html, except for tab.
      *
      * @return bool
      */
-    protected function isJsonRequest()
+    public function isJsonRequest()
     {
         if (isset($_GET['__atk_tab'])) {
             return false;
@@ -346,6 +353,17 @@ class App
     {
         if ($output !== null) {
             if ($this->isJsonRequest()) {
+//                $this->getModals();
+                if (!empty($this->modals)) {
+                    if (is_string($output)) {
+                        $decode = json_decode($output, true);
+                        if (json_last_error() === JSON_ERROR_NONE) {
+
+                            $decode['modals'] = $this->renderModals();
+                            $output = $decode;
+                        }
+                    }
+                }
                 $this->outputResponseJSON($output);
             } else {
                 $this->outputResponseHTML($output);
@@ -355,6 +373,49 @@ class App
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
     }
+
+        public function renderModals()
+        {
+//            return self::$modals;
+
+            $rendered_modals = [];
+            foreach ($this->modals as $modal) {
+                $rendered_modals[$modal->name]['html'] = $modal->getHtml();
+                foreach ($modal->_js_actions as $eventActions) {
+                    foreach ($eventActions as $action) {
+                        $actions[] = $action->jsRender();
+                    }
+                }
+                $rendered_modals[$modal->name]['js'] = implode(';', $actions);
+            }
+//                if ($view instanceof Modal) {
+////                    $view->renderAll();
+//                    if (!isset(self::$modals[$view->name])) {
+//                        self::$modals[$view->name]['html'] = $view->getHTML();
+//                        foreach ($view->_js_actions as $eventActions) {
+//                            foreach ($eventActions as $action) {
+//                                $actions[] = $action->jsRender();
+//                            }
+//                        }
+//                        self::$modals[$view->name]['js'] = implode(';', $actions);
+//                    }
+//                    if (!$view->getRendered()) {
+//                        $modals[$view->name]['html'] = $view->getHTML();
+//                        foreach ($view->_js_actions as $eventActions) {
+//                            foreach ($eventActions as $action) {
+//                                $actions[] = $action->jsRender();
+//                            }
+//                        }
+//                        $modals[$view->name]['js'] = implode(';', $actions);
+//                        $view->setRendered(true);
+//                        $t = 't';
+//                    }
+
+//                }
+//            }
+
+            return $rendered_modals;
+        }
 
     /**
      * Initializes layout.
@@ -403,7 +464,7 @@ class App
 
         // Agile UI
         $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
-        $this->requireJS($url.'/atkjs-ui.min.js');
+        $this->requireJS($url.'/atkjs-ui.js');
         $this->requireCSS($url.'/agileui.css');
     }
 
@@ -476,6 +537,7 @@ class App
             if (!isset($this->html)) {
                 throw new Exception(['App layout should be set.']);
             }
+
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
@@ -992,10 +1054,10 @@ class App
         echo $content;
     }
 
-    public function addModal($modal)
-    {
-        $this->modals[] = $modal;
-    }
+//    public function addModal($modal)
+//    {
+//        $this->modals[] = $modal;
+//    }
 
     /**
      * Output JSON response to the client.
@@ -1027,23 +1089,25 @@ class App
         $this->outputResponse(['Content-Type:application/json' => true], $data);
     }
 
-    public function getModals()
-    {
-        $modals = [];
-        foreach ($this->html->elements as $view) {
-            if ($view instanceof Modal) {
-                $modals[$view->name]['html'] = $view->getHTML();
-                foreach ($view->_js_actions as $eventActions) {
-                    foreach ($eventActions as $action) {
-                        $actions[] = $action->jsRender();
-                    }
-                }
-                $modals[$view->name]['js'] = implode(';', $actions);
-            }
-        }
-
-        return $modals;
-    }
+//    public function getModals()
+//    {
+//        $modals = [];
+//        foreach ($this->html->elements as $view) {
+//            if ($view instanceof Modal) {
+//                $t = $view->render();
+//
+//                $modals[$view->name]['html'] = $view->template->render();
+//                foreach ($view->_js_actions as $eventActions) {
+//                    foreach ($eventActions as $action) {
+//                        $actions[] = $action->jsRender();
+//                    }
+//                }
+//                $modals[$view->name]['js'] = implode(';', $actions);
+//            }
+//        }
+//
+//        return $modals;
+//    }
 
     /**
      * Output HTML response to the client.
