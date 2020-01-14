@@ -769,7 +769,6 @@ class View implements jsExpressionable
 
     /**
      * This method is to render view to place inside a Fomantic-UI Tab.
-     *
      */
     public function renderTab()
     {
@@ -777,9 +776,8 @@ class View implements jsExpressionable
 
         return [
             'atkjs' => $this->getJsRenderActions(),
-            'html'  =>  $this->template->render()
+            'html'  => $this->template->render(),
         ];
-
     }
 
     /**
@@ -1267,7 +1265,7 @@ class View implements jsExpressionable
      *
      * @return string
      */
-    public function getJsRenderActions() :string
+    public function getJsRenderActions(): string
     {
         $actions = [];
 
@@ -1277,7 +1275,7 @@ class View implements jsExpressionable
             }
         }
 
-        return implode(';',$actions);
+        return implode(';', $actions);
     }
 
     /**

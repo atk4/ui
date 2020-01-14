@@ -350,7 +350,7 @@ class App
                         $decode['modals'] = $this->getRenderedModals();
                         $output = $decode;
                     }
-                } else if (is_array($output)) {
+                } elseif (is_array($output)) {
                     $output['modals'] = $this->getRenderedModals();
                 }
                 $this->outputResponseJSON($output);
@@ -370,9 +370,8 @@ class App
                     $ids = implode(',', $keys);
                     $remove_function = "$('.ui.dimmer.modals.page').find('${ids}').remove();";
                 }
-                $output = "<script>jQuery(function() {". $remove_function. $output['atkjs']. '});</script>'. $output['html'];
+                $output = '<script>jQuery(function() {'.$remove_function.$output['atkjs'].'});</script>'.$output['html'];
                 $this->outputResponseHtml($output);
-
             } else {
                 $this->outputResponseHTML($output);
             }
@@ -1033,8 +1032,9 @@ class App
     /**
      * Generated html and js for modals attached to $html view.
      *
-     * @return array
      * @throws \atk4\core\Exception
+     *
+     * @return array
      */
     public function getRenderedModals()
     {

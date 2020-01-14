@@ -365,7 +365,5 @@ class Modal extends View
         }
 
         return $html;
-
     }
-
 }
