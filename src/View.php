@@ -753,7 +753,7 @@ class View implements jsExpressionable
         if (!$this->_rendered) {
             $this->renderView();
 
-            $this->recursiveRender();
+                $this->recursiveRender();
             $this->_rendered = true;
         }
     }
@@ -1182,10 +1182,7 @@ class View implements jsExpressionable
                 //Executor may already had been add to layout. Like in CardDeck.
                 if (!isset($this->app->html->elements[$ex->short_name])) {
                     $ex = $this->app->html->add($ex)->setAction($action);
-                    $this->app->addModal($ex);
                 }
-//                $this->app->addModal($ex);
-//                $ex->setAction($action);
                 if (isset($arguments[0])) {
                     $arguments[$ex->name] = $arguments[0];
                 }

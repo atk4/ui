@@ -353,15 +353,12 @@ class App
     {
         if ($output !== null) {
             if ($this->isJsonRequest()) {
-//                $this->getModals();
-                if (!empty($this->modals)) {
-                    if (is_string($output)) {
-                        $decode = json_decode($output, true);
-                        if (json_last_error() === JSON_ERROR_NONE) {
-
-                            $decode['modals'] = $this->renderModals();
-                            $output = $decode;
-                        }
+                $rendered_modals = $this->getModals();
+                if (is_string($output)) {
+                    $decode = json_decode($output, true);
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        $decode['modals'] = $rendered_modals;
+                        $output = $decode;
                     }
                 }
                 $this->outputResponseJSON($output);
