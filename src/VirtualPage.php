@@ -127,7 +127,7 @@ class VirtualPage extends View
                 }
 
                 // render and terminate
-                if (isset($_GET['json']) /*|| $type === 'cut'*/) {
+                if (isset($_GET['json'])) {
                     $this->app->terminate($this->renderJSON());
                 }
 
