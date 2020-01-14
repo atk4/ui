@@ -163,7 +163,7 @@ class Generic extends View
     {
         return $this->js($when, $action, '#'.$this->id.'_input');
     }
-    
+
     /**
      * Return field class.
      *
