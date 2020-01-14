@@ -48,17 +48,6 @@ class ApiService {
     settings.onAbort = this.onAbort;
   }
 
-  // removeModalDuplicate(html) {
-  //   let modalIDs = [];
-  //   $(html).find(".ui.modal[id]").each((i, e) => {
-  //     modalIDs.push('#' + $(e).attr('id'));
-  //   });
-  //
-  //   if (modalIDs.length) {
-  //     $('.ui.dimmer.modals.page').find(modalIDs.join(', ')).remove();
-  //   }
-  // }
-
   onAbort(message) {
     console.log(message);
   }
@@ -103,18 +92,14 @@ class ApiService {
           }
         }
         if (response && response.modals) {
+          // Create app modal from json response.
           const modals = Object.keys(response.modals);
-          console.log(modals);
-          // const modalsID = modals.map(modal => '#'.modal);
-          // $('.ui.dimmer.modals.page').find(modalsID.join(', ')).remove();
           modals.forEach(function(modal) {
             const m = $('.ui.dimmer.modals.page').find('#'+modal);
             if (m.length === 0) {
               $(document.body).append(response.modals[modal].html);
               apiService.evalResponse(response.modals[modal].js, jQuery);
             }
-            // console.log(response.modals[modal].html);
-            //console.log(response.modals[modal].js);
           });
         }
         if (response && response.atkjs) {

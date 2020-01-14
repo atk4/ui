@@ -133,8 +133,6 @@ class App
      */
     public $call_exit = true;
 
-    public $modals = [];
-
     /**
      * Error types to be in set_error_handler.
      *
@@ -297,20 +295,13 @@ class App
         return true;
     }
 
-    public function addModal(Modal $modal): Modal
-    {
-//        $modal->init();
-        $this->modals[$modal->name] = $modal;
-        return $modal;
-    }
-
     /**
      * Most of the ajax request will require sending exception in json
      * instead of html, except for tab.
      *
      * @return bool
      */
-    public function isJsonRequest()
+    protected function isJsonRequest()
     {
         if (isset($_GET['__atk_tab'])) {
             return false;
@@ -353,15 +344,35 @@ class App
     {
         if ($output !== null) {
             if ($this->isJsonRequest()) {
-                $rendered_modals = $this->getModals();
                 if (is_string($output)) {
                     $decode = json_decode($output, true);
                     if (json_last_error() === JSON_ERROR_NONE) {
-                        $decode['modals'] = $rendered_modals;
+                        $decode['modals'] = $this->getRenderedModals();
                         $output = $decode;
                     }
+                } else if (is_array($output)) {
+                    $output['modals'] = $this->getRenderedModals();
                 }
                 $this->outputResponseJSON($output);
+            } elseif (isset($_GET['__atk_tab'])) {
+                // ugly hack for TABS
+                // because fomantic ui tab only deal with html and not JSON
+                // we need to hack output to include app modal.
+                $keys = null;
+                $remove_function = '';
+                foreach ($this->getRenderedModals() as $key => $modal) {
+                    // add modal rendering to output
+                    $keys[] = '#'.$key;
+                    $output['atkjs'] = $output['atkjs'].';'.$modal['js'];
+                    $output['html'] = $output['html'].$modal['html'];
+                }
+                if ($keys) {
+                    $ids = implode(',', $keys);
+                    $remove_function = "$('.ui.dimmer.modals.page').find('${ids}').remove();";
+                }
+                $output = "<script>jQuery(function() {". $remove_function. $output['atkjs']. '});</script>'. $output['html'];
+                $this->outputResponseHtml($output);
+
             } else {
                 $this->outputResponseHTML($output);
             }
@@ -370,49 +381,6 @@ class App
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
     }
-
-        public function renderModals()
-        {
-//            return self::$modals;
-
-            $rendered_modals = [];
-            foreach ($this->modals as $modal) {
-                $rendered_modals[$modal->name]['html'] = $modal->getHtml();
-                foreach ($modal->_js_actions as $eventActions) {
-                    foreach ($eventActions as $action) {
-                        $actions[] = $action->jsRender();
-                    }
-                }
-                $rendered_modals[$modal->name]['js'] = implode(';', $actions);
-            }
-//                if ($view instanceof Modal) {
-////                    $view->renderAll();
-//                    if (!isset(self::$modals[$view->name])) {
-//                        self::$modals[$view->name]['html'] = $view->getHTML();
-//                        foreach ($view->_js_actions as $eventActions) {
-//                            foreach ($eventActions as $action) {
-//                                $actions[] = $action->jsRender();
-//                            }
-//                        }
-//                        self::$modals[$view->name]['js'] = implode(';', $actions);
-//                    }
-//                    if (!$view->getRendered()) {
-//                        $modals[$view->name]['html'] = $view->getHTML();
-//                        foreach ($view->_js_actions as $eventActions) {
-//                            foreach ($eventActions as $action) {
-//                                $actions[] = $action->jsRender();
-//                            }
-//                        }
-//                        $modals[$view->name]['js'] = implode(';', $actions);
-//                        $view->setRendered(true);
-//                        $t = 't';
-//                    }
-
-//                }
-//            }
-
-            return $rendered_modals;
-        }
 
     /**
      * Initializes layout.
@@ -461,7 +429,7 @@ class App
 
         // Agile UI
         $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
-        $this->requireJS($url.'/atkjs-ui.js');
+        $this->requireJS($url.'/atkjs-ui.min.js');
         $this->requireCSS($url.'/agileui.css');
     }
 
@@ -534,7 +502,6 @@ class App
             if (!isset($this->html)) {
                 throw new Exception(['App layout should be set.']);
             }
-
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
@@ -1051,11 +1018,6 @@ class App
         echo $content;
     }
 
-//    public function addModal($modal)
-//    {
-//        $this->modals[] = $modal;
-//    }
-
     /**
      * Output JSON response to the client.
      *
@@ -1063,37 +1025,23 @@ class App
      */
     public function outputResponseJSON($data)
     {
-
-//        if (!is_array($data)) {
-//            throw new Exception('Output json require an array.');
-//        }
-//        $modal = (new Modal(['Allo']))->addClass('_atk_json_modal');
-//        $modal->add(['View', 'testing']);
-//        $data['modals']['html'] = $modal->getHtml();
-//
-//        foreach ($modal->_js_actions as $eventActions) {
-//            foreach ($eventActions as $action) {
-//                $actions[] = $action->jsRender();
-//            }
-//        }
-//        $data['modals']['js'] = implode(';', $actions);
-//        if (is_string($data)) {
-//            $data = json_decode($data, true);
-//        }
-
         $data = is_array($data) ? json_encode($data) : $data;
 
         $this->outputResponse(['Content-Type:application/json' => true], $data);
     }
 
-    public function getModals()
+    /**
+     * Generated html and js for modals attached to $html view.
+     *
+     * @return array
+     * @throws \atk4\core\Exception
+     */
+    public function getRenderedModals()
     {
         $modals = [];
         foreach ($this->html->elements as $view) {
             if ($view instanceof Modal) {
-                $t = $view->render();
-
-                $modals[$view->name]['html'] = $view->template->render();
+                $modals[$view->name]['html'] = $view->getHTML();
                 foreach ($view->_js_actions as $eventActions) {
                     foreach ($eventActions as $action) {
                         $actions[] = $action->jsRender();

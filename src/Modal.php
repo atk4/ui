@@ -29,6 +29,8 @@ class Modal extends View
 {
     public $defaultTemplate = 'modal.html';
 
+    protected $hasBeenRendered = false;
+
     /**
      * Set to empty or false for no header.
      *
@@ -353,4 +355,17 @@ class Modal extends View
 
         parent::renderView();
     }
+
+    public function renderMe()
+    {
+        $html = null;
+        if (!$this->hasBeenRendered) {
+            $html = $this->getHTML();
+            $this->hasBeenRendered = true;
+        }
+
+        return $html;
+
+    }
+
 }

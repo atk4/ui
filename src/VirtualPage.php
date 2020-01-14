@@ -127,8 +127,12 @@ class VirtualPage extends View
                 }
 
                 // render and terminate
-                if (isset($_GET['json'])) {
+                if (isset($_GET['json']) /*|| $type === 'cut'*/) {
                     $this->app->terminate($this->renderJSON());
+                }
+
+                if (isset($_GET['__atk_tab'])) {
+                    $this->app->terminate($this->renderTab());
                 }
 
                 // do not terminate if callback supplied (no cutting)

@@ -15,7 +15,7 @@ $countries->addCalculatedField('Cost', function ($m) {
 });
 
 $action = $countries->addAction('book', [
-    'callback' => function ($m, $city, $email) {
+    'callback' => function ($m, $email, $city) {
         return 'Your request to visit '.ucwords($city).' in '.$m->get('name').' was sent to: '.$email;
     },
     'ui' => ['button'=>[null, 'icon'=>'plane']],

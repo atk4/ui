@@ -168,16 +168,6 @@ class View implements jsExpressionable
      */
     protected $_rendered = false;
 
-    public function setRendered($state)
-    {
-        $this->_rendered = $state;
-    }
-
-    public function getRendered()
-    {
-        return $this->_rendered;
-    }
-
     // }}}
 
     // {{{ Setting Things up
@@ -753,7 +743,7 @@ class View implements jsExpressionable
         if (!$this->_rendered) {
             $this->renderView();
 
-                $this->recursiveRender();
+            $this->recursiveRender();
             $this->_rendered = true;
         }
     }
@@ -775,6 +765,21 @@ class View implements jsExpressionable
         return
             $this->getJS($force_echo).
             $this->template->render();
+    }
+
+    /**
+     * This method is to render view to place inside a Fomantic-UI Tab.
+     *
+     */
+    public function renderTab()
+    {
+        $this->renderAll();
+
+        return [
+            'atkjs' => $this->getJsRenderActions(),
+            'html'  =>  $this->template->render()
+        ];
+
     }
 
     /**
@@ -1255,6 +1260,24 @@ class View implements jsExpressionable
         }
 
         return json_encode('#'.$this->id);
+    }
+
+    /**
+     * Return an array of js actions.
+     *
+     * @return string
+     */
+    public function getJsRenderActions() :string
+    {
+        $actions = [];
+
+        foreach ($this->_js_actions as $eventActions) {
+            foreach ($eventActions as $action) {
+                $actions[] = $action->jsRender();
+            }
+        }
+
+        return implode(';',$actions);
     }
 
     /**
