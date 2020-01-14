@@ -1086,25 +1086,25 @@ class App
         $this->outputResponse(['Content-Type:application/json' => true], $data);
     }
 
-//    public function getModals()
-//    {
-//        $modals = [];
-//        foreach ($this->html->elements as $view) {
-//            if ($view instanceof Modal) {
-//                $t = $view->render();
-//
-//                $modals[$view->name]['html'] = $view->template->render();
-//                foreach ($view->_js_actions as $eventActions) {
-//                    foreach ($eventActions as $action) {
-//                        $actions[] = $action->jsRender();
-//                    }
-//                }
-//                $modals[$view->name]['js'] = implode(';', $actions);
-//            }
-//        }
-//
-//        return $modals;
-//    }
+    public function getModals()
+    {
+        $modals = [];
+        foreach ($this->html->elements as $view) {
+            if ($view instanceof Modal) {
+                $t = $view->render();
+
+                $modals[$view->name]['html'] = $view->template->render();
+                foreach ($view->_js_actions as $eventActions) {
+                    foreach ($eventActions as $action) {
+                        $actions[] = $action->jsRender();
+                    }
+                }
+                $modals[$view->name]['js'] = implode(';', $actions);
+            }
+        }
+
+        return $modals;
+    }
 
     /**
      * Output HTML response to the client.
