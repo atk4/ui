@@ -167,7 +167,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
                 $this->_handleException($e, $modal, $this->step);
             }
         });
-
     }
 
     /**
