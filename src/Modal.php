@@ -28,7 +28,7 @@ namespace atk4\ui;
 class Modal extends View
 {
     public $defaultTemplate = 'modal.html';
-    
+
     /**
      * Set to empty or false for no header.
      *
