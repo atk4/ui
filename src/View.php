@@ -1261,7 +1261,7 @@ class View implements jsExpressionable
     }
 
     /**
-     * Return an array of js actions.
+     * Return rendered js actions as a string.
      *
      * @return string
      */
