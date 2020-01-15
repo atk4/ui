@@ -428,7 +428,7 @@ class App
 
         // Agile UI
         $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
-        $this->requireJS($url.'/atkjs-ui.min.js');
+        $this->requireJS($url.'/atkjs-ui.js');
         $this->requireCSS($url.'/agileui.css');
     }
 
@@ -1042,12 +1042,7 @@ class App
         foreach ($this->html->elements as $view) {
             if ($view instanceof Modal) {
                 $modals[$view->name]['html'] = $view->getHTML();
-                foreach ($view->_js_actions as $eventActions) {
-                    foreach ($eventActions as $action) {
-                        $actions[] = $action->jsRender();
-                    }
-                }
-                $modals[$view->name]['js'] = implode(';', $actions);
+                $modals[$view->name]['js'] = $view->getJsRenderActions();
             }
         }
 
