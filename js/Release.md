@@ -1,5 +1,10 @@
 ## Release note
 
+### version 1.12.1 (2020-01-14)
+
+- update api service to generate modals in json request.
+- update npm dependencies.
+
 ### version 1.12.0 (2019-11-06)
 
 - add table-dropdown-helper.js 

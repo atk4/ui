@@ -344,7 +344,34 @@ class App
     {
         if ($output !== null) {
             if ($this->isJsonRequest()) {
+                if (is_string($output)) {
+                    $decode = json_decode($output, true);
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        $decode['modals'] = $this->getRenderedModals();
+                        $output = $decode;
+                    }
+                } elseif (is_array($output)) {
+                    $output['modals'] = $this->getRenderedModals();
+                }
                 $this->outputResponseJSON($output);
+            } elseif (isset($_GET['__atk_tab'])) {
+                // ugly hack for TABS
+                // because fomantic ui tab only deal with html and not JSON
+                // we need to hack output to include app modal.
+                $keys = null;
+                $remove_function = '';
+                foreach ($this->getRenderedModals() as $key => $modal) {
+                    // add modal rendering to output
+                    $keys[] = '#'.$key;
+                    $output['atkjs'] = $output['atkjs'].';'.$modal['js'];
+                    $output['html'] = $output['html'].$modal['html'];
+                }
+                if ($keys) {
+                    $ids = implode(',', $keys);
+                    $remove_function = "$('.ui.dimmer.modals.page').find('${ids}').remove();";
+                }
+                $output = '<script>jQuery(function() {'.$remove_function.$output['atkjs'].'});</script>'.$output['html'];
+                $this->outputResponseHtml($output);
             } else {
                 $this->outputResponseHTML($output);
             }
@@ -1000,6 +1027,26 @@ class App
         $data = is_array($data) ? json_encode($data) : $data;
 
         $this->outputResponse(['Content-Type:application/json' => true], $data);
+    }
+
+    /**
+     * Generated html and js for modals attached to $html view.
+     *
+     * @throws \atk4\core\Exception
+     *
+     * @return array
+     */
+    public function getRenderedModals()
+    {
+        $modals = [];
+        foreach ($this->html->elements as $view) {
+            if ($view instanceof Modal) {
+                $modals[$view->name]['html'] = $view->getHTML();
+                $modals[$view->name]['js'] = $view->getJsRenderActions();
+            }
+        }
+
+        return $modals;
     }
 
     /**

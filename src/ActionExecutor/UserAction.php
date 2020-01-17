@@ -126,6 +126,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
             // set initial button state
             $this->jsSetBtnState($this, $this->step);
+            $this->doSteps();
         }
 
         $this->actionInitialized = true;
@@ -133,7 +134,12 @@ class UserAction extends Modal implements Interface_, jsInterface_
         return $this;
     }
 
-    public function renderView()
+    /**
+     * Perform action steps.
+     *
+     * @throws \atk4\data\Exception
+     */
+    public function doSteps()
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->scope === 'single') {
@@ -161,8 +167,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
                 $this->_handleException($e, $modal, $this->step);
             }
         });
-
-        parent::renderView();
     }
 
     /**
