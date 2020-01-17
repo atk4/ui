@@ -9,8 +9,8 @@ try {
     }
 } catch (PDOException $e) {
     throw new \atk4\ui\Exception([
-                                     'This demo requires access to the database. See "demos/database.php"',
-                                 ], null, $e);
+        'This demo requires access to the database. See "demos/database.php"',
+    ], null, $e);
 }
 
 $app->db = $db;
@@ -159,10 +159,10 @@ if (!class_exists('Country')) {
                 $this->unload();
 
                 $this->save([
-                                'name'      => $fileinfo->getFilename(),
-                                'is_folder' => $fileinfo->isDir(),
-                                'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
-                            ]);
+                    'name'      => $fileinfo->getFilename(),
+                    'is_folder' => $fileinfo->isDir(),
+                    'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
+                ]);
 
                 if ($fileinfo->isDir()) {
                     $this->ref('SubFolder')->importFromFilesystem($path.'/'.$fileinfo->getFilename());

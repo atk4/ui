@@ -44,9 +44,6 @@ jobs:
           pr_assignee: "romaninsh"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-
-
-
       - name: Update to stable dependencies
         run: |
           jq 'del(."minimum-stability")|del(.require["atk4/data"])' < composer.json > tmp && mv tmp composer.json

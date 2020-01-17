@@ -101,4 +101,14 @@ class CheckBox extends Generic
 
         return parent::renderView();
     }
+
+    /**
+     * Will return jQuery expression to get checkbox checked state.
+     *
+     * @return jQuery
+     */
+    public function jsChecked($when = null, $action = null)
+    {
+        return $this->jsInput($when, $action)->get(0)->checked;
+    }
 }

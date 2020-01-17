@@ -80,7 +80,7 @@ $app->add(new \atk4\ui\FormField\Line(['action' => new \atk4\ui\Button([
 ])]));
 
 $app->add(new \atk4\ui\FormField\Line(['action' => new \atk4\ui\Button([
-   'icon' => 'search',
+    'icon' => 'search',
 ])]));
 
 $app->add(new \atk4\ui\Header(['Modifiers', 'size' => 2]));

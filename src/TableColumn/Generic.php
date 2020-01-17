@@ -196,10 +196,10 @@ class Generic
 
         $chain = new jQuery('#'.$id);
         $chain->dropdown([
-                             'action'   => 'hide',
-                             'values'   => $items,
-                             'onChange' => new jsExpression($function),
-                         ]);
+            'action'   => 'hide',
+            'values'   => $items,
+            'onChange' => new jsExpression($function),
+        ]);
 
         //will stop grid column from being sorted.
         $chain->on('click', new jsExpression('function(e){e.stopPropagation();}'));
