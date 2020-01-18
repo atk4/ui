@@ -75,10 +75,10 @@ class ActionMenu extends Generic
     /**
      * Add a menu item in Dropdown.
      *
-     * @param View|string                                   $item
-     * @param null|callable|\atk4\data\UserAction\Generic   $action
-     * @param null|string                                   $confirm
-     * @param bool                                          $isDisabled
+     * @param View|string                                 $item
+     * @param null|callable|\atk4\data\UserAction\Generic $action
+     * @param null|string                                 $confirm
+     * @param bool                                        $isDisabled
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
