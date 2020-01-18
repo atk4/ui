@@ -36,10 +36,10 @@ class ActionButtons extends Generic
      *
      * Returns button object
      *
-     * @param \atk4\ui\View|string                          $button
-     * @param null|callable|\atk4\data\UserAction\Generic   $action
-     * @param bool                                          $confirm
-     * @param bool                                          $isDisabled
+     * @param \atk4\ui\View|string                        $button
+     * @param null|callable|\atk4\data\UserAction\Generic $action
+     * @param bool                                        $confirm
+     * @param bool                                        $isDisabled
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
@@ -99,11 +99,11 @@ class ActionButtons extends Generic
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      *
-     * @param \atk4\ui\View|string  $button
-     * @param string                $title
-     * @param callable              $callback
-     * @param \atk4\ui\View         $owner
-     * @param array                 $args
+     * @param \atk4\ui\View|string $button
+     * @param string               $title
+     * @param callable             $callback
+     * @param \atk4\ui\View        $owner
+     * @param array                $args
      *
      * @return \atk4\ui\View
      */
