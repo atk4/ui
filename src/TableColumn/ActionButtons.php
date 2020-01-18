@@ -36,15 +36,15 @@ class ActionButtons extends Generic
      *
      * Returns button object
      *
-     * @param View|string                                $button
-     * @param null|callable|atk4\data\UserAction\Generic $action
-     * @param bool                                       $confirm
-     * @param bool                                       $isDisabled
+     * @param \atk4\ui\View|string                          $button
+     * @param null|callable|\atk4\data\UserAction\Generic   $action
+     * @param bool                                          $confirm
+     * @param bool                                          $isDisabled
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
      *
-     * @return View
+     * @return \atk4\ui\View
      */
     public function addButton($button, $action = null, $confirm = false, $isDisabled = false)
     {
@@ -99,13 +99,13 @@ class ActionButtons extends Generic
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      *
-     * @param View|string $button
-     * @param string      $title
-     * @param callable    $callback
-     * @param View        $owner
-     * @param array       $args
+     * @param \atk4\ui\View|string  $button
+     * @param string                $title
+     * @param callable              $callback
+     * @param \atk4\ui\View         $owner
+     * @param array                 $args
      *
-     * @return View
+     * @return \atk4\ui\View
      */
     public function addModal($button, $title, $callback, $owner = null, $args = [])
     {
