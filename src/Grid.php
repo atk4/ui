@@ -144,7 +144,7 @@ class Grid extends View
         }
 
         $this->stickyGet('_q');
-        
+
         // allow for injecting the model with a seed
         if ($this->model) {
             $this->setModel($this->model);
