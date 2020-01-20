@@ -365,6 +365,11 @@ class View implements jsExpressionable
         }
 
         $this->_add_later = [];
+
+        // allow for injecting the model with a seed
+        if ($this->model) {
+            $this->setModel($this->model);
+        }
     }
 
     /**
