@@ -110,7 +110,7 @@ class CRUD extends Grid
             if ($this->useMenuActions) {
                 $this->addActionMenuItem($action);
             } else {
-                $this->addAction($action);
+                $this->addActionButton($action);
             }
         }
 

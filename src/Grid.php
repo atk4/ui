@@ -49,12 +49,12 @@ class Grid extends View
     public $ipp = 50;
 
     /**
-     * Calling addAction will add a new column inside $table, and will be re-used
-     * for next addAction().
+     * Calling addActionButton will add a new column inside $table, and will be re-used
+     * for next addActionButton().
      *
-     * @var TableColumn\Actions
+     * @var TableColumn\ActionButtons
      */
-    public $actions = null;
+    public $actionButtons = null;
 
     /**
      * Calling addAction will add a new column inside $table with dropdown menu,
@@ -106,12 +106,12 @@ class Grid extends View
     public $defaultTemplate = 'grid.html';
 
     /**
-     * TableColumn\Action seed.
-     * Defines which Table Decorator to use for Actions.
+     * TableColumn\ActionButtons seed.
+     * Defines which Table Decorator to use for ActionButtons.
      *
      * @var string
      */
-    protected $actionDecorator = 'Actions';
+    protected $actionButtonsDecorator = 'ActionButtons';
 
     /**
      * TableColumn\ActionMenu seed.
@@ -153,7 +153,7 @@ class Grid extends View
      */
     public function setActionDecorator($seed)
     {
-        $this->actionDecorator = $seed;
+        $this->actionButtonsDecorator = $seed;
     }
 
     /**
@@ -395,13 +395,13 @@ class Grid extends View
      *
      * @return object
      */
-    public function addAction($button, $action = null, $confirm = false, $isDisabeld = false)
+    public function addActionButton($button, $action = null, $confirm = false, $isDisabeld = false)
     {
-        if (!$this->actions) {
-            $this->actions = $this->table->addColumn(null, $this->actionDecorator);
+        if (!$this->actionButtons) {
+            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actions->addAction($button, $action, $confirm, $isDisabeld);
+        return $this->actionButtons->addButton($button, $action, $confirm, $isDisabeld);
     }
 
     /**
@@ -545,11 +545,11 @@ class Grid extends View
      */
     public function addModalAction($button, $title, $callback, $args = [])
     {
-        if (!$this->actions) {
-            $this->actions = $this->table->addColumn(null, 'Actions');
+        if (!$this->actionButtons) {
+            $this->actionButtons = $this->table->addColumn(null, 'Actions');
         }
 
-        return $this->actions->addModal($button, $title, $callback, $this, $args);
+        return $this->actionButtons->addModal($button, $title, $callback, $this, $args);
     }
 
     /**
