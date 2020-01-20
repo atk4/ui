@@ -559,7 +559,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         } catch (\Exception $e) {
             $m = new Message('Error executing '.$this->action->caption, 'red');
             $m->init();
-            $m->text->content = $e->getHTML();
+            $m->text->content = ($e instanceof \atk4\core\Exception ? $e->getHTML() : $e->getMessage());
 
             return $m;
         }
