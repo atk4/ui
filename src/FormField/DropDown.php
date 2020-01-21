@@ -280,7 +280,7 @@ class DropDown extends Input
             if (is_array($val)) {
                 if (array_key_exists('icon', $val)) {
                     $this->_tIcon->set('icon', $val['icon']);
-                    $this->_tItem->appendHTML('Icon', $this->_tIcon->render());
+                    $this->_tItem->setHTML('Icon', $this->_tIcon->render());
                 } else {
                     $this->_tItem->del('Icon');
                 }
