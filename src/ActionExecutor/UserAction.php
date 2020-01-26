@@ -96,7 +96,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->nextStepBtn = $this->btns->add(new Button(['Next', 'blue']));
         $this->addButtonAction($this->btns);
 
-        $this->loader = $this->add(['Loader', 'ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = $this->add(['Loader', 'ui'   => $this->loaderUi, 'shim' => $this->loaderShim, 'appStickyCb' => true]);
         $this->loader->loadEvent = false;
         $this->loader->addClass('atk-hide-loading-content');
         $this->actionData = $this->loader->jsGetStoreData()['session'];
