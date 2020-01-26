@@ -157,7 +157,7 @@ class CRUD extends Grid
             foreach ($this->onActions as $k => $onAction) {
                 $executor->addHook('onStep', function ($ex, $step, $form) use ($onAction, $action) {
                     $key = key($onAction);
-                    if ($key === $action->short_name && $step === 'fields' ) {
+                    if ($key === $action->short_name && $step === 'fields') {
                         return call_user_func($onAction[$key], $form, $ex);
                     }
                 });
