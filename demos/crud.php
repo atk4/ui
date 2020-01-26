@@ -9,25 +9,29 @@ $m->addAction('test2');
 //$m->getAction('edit')->system =true;
 //$m->getAction('delete')->system =true;
 
-$g = $app->add(['CRUD', 'ipp'=>5]);
-$g->setModel($m);
+$g = $app->add(['CRUD', 'ipp'=>10]);
+
+// callback for model action add form.
+$g->onFormAdd(function ($form, $t) {
+    $form->js(true, $form->getField('name')->jsInput()->val('Entering value via javascript'));
+});
 
 // callback for model action edit form.
-$g->onEditAction(function ($form) {
+$g->onFormEdit(function ($form) {
     $form->js(true, $form->getField('name')->jsInput()->attr('readonly', true));
 });
 
-// callback for model action add form.
-$g->onAddAction(function ($form) {
-    $form->js(true, $form->getField('iso')->jsInput()->val('WW'));
-});
-
 // callback for both model action edit and add.
-$g->onAction(function ($form, $ex) {
+$g->onFormAddEdit(function ($form, $ex) {
     $form->onSubmit(function ($f) use ($ex) {
         return [$ex->hide(), new \atk4\ui\jsToast('Submit all right! This demo does not saved data.')];
     });
 });
+
+$g->setModel($m);
+
+$g->addDecorator($m->title_field, ['Link', ['test' => false, 'path' => 'interfaces/page'], ['_id'=>'id']]);
+
 
 $app->add(['ui'=>'divider']);
 

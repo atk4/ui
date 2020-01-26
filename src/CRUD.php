@@ -51,6 +51,9 @@ class CRUD extends Grid
     /** @var string Generic display message for no record scope action where model is not loaded. */
     public $defaultMsg = 'Done!';
 
+    /** @var array Callback containers for model action. */
+    public $onActions = [];
+
     public function init()
     {
         parent::init();
@@ -131,6 +134,11 @@ class CRUD extends Grid
      * First determine what fields action needs,
      * then setup executor based on action fields, args and/or preview.
      *
+     * Add hook for onStep 'fields'" Hook can call a callback function
+     * for UserAction onStep field. Callback will receive executor form where you
+     * can setup Input field via javascript prior to display form or change form submit event
+     * handler.
+     *
      * @param Generic $action
      *
      * @throws \atk4\core\Exception
@@ -144,6 +152,17 @@ class CRUD extends Grid
         $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
             return $this->jsExecute($return, $action);
         });
+
+        if ($executor instanceof UserAction) {
+            foreach ($this->onActions as $k => $onAction) {
+                $executor->addHook('onStep', function ($ex, $step, $form) use ($onAction, $action) {
+                    $key = key($onAction);
+                    if ($key === $action->short_name && $step === 'fields' ) {
+                        return call_user_func($onAction[$key], $form, $ex);
+                    }
+                });
+            }
+        }
 
         return $executor;
     }
@@ -298,14 +317,14 @@ class CRUD extends Grid
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
      */
-    public function onEditAction(callable $fx)
+    public function onFormEdit(callable $fx)
     {
-        $this->setOnActionForm($fx, 'edit');
+        $this->setOnActions('edit', $fx);
     }
 
     /**
      * Set callback for add action in CRUD.
-     * Callback function will receive the Edit Form and Executor as param.
+     * Callback function will receive the Add Form and Executor as param.
      *
      * @param callable $fx
      *
@@ -313,9 +332,9 @@ class CRUD extends Grid
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
      */
-    public function onAddAction(callable $fx)
+    public function onFormAdd(callable $fx)
     {
-        $this->setOnActionForm($fx, 'add');
+        $this->setOnActions('add', $fx);
     }
 
     /**
@@ -328,14 +347,14 @@ class CRUD extends Grid
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
      */
-    public function onAction(callable $fx)
+    public function onFormAddEdit(callable $fx)
     {
-        $this->onEditAction($fx);
-        $this->onAddAction($fx);
+        $this->onFormEdit($fx);
+        $this->onFormAdd($fx);
     }
 
     /**
-     * Set onAction callback using UserAction executor.
+     * Set onActions.
      *
      * @param callable $fx
      * @param string   $actionName
@@ -346,19 +365,8 @@ class CRUD extends Grid
      *
      * @return null|mixed
      */
-    public function setOnActionForm(callable $fx, string $actionName)
+    public function setOnActions(string $actionName, callable $fx)
     {
-        if (!$this->model) {
-            throw new Exception('Model need to be set prior to use on Form');
-        }
-
-        $ex = $this->model->getAction($actionName)->ui['executor'];
-        if ($ex && $ex instanceof UserAction) {
-            $ex->addHook('onStep', function ($ex, $step, $form) use ($fx) {
-                if ($step === 'fields') {
-                    return call_user_func($fx, $form, $ex);
-                }
-            });
-        }
+        $this->onActions[] = [$actionName => $fx];
     }
 }
