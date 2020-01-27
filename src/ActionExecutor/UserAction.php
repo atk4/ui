@@ -544,16 +544,15 @@ class UserAction extends Modal implements Interface_, jsInterface_
             if ($this->isLastStep($step)) {
                 // collect argument and execute action.
                 $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
-                $js     = $this->jsGetExecute($return, $this->action->owner->id);
-            }
-            else {
+                $js = $this->jsGetExecute($return, $this->action->owner->id);
+            } else {
                 // store data and setup reload.
                 $js = [
                     $this->loader->jsAddStoreData($this->actionData, true),
                     $this->loader->jsload([
-                                              'step'      => $this->getNextStep($step),
-                                              $this->name => $this->action->owner->get('id'),
-                                          ], ['method' => 'post'], $this->loader->name),
+                        'step'      => $this->getNextStep($step),
+                        $this->name => $this->action->owner->get('id'),
+                    ], ['method' => 'post'], $this->loader->name),
                 ];
             }
 
