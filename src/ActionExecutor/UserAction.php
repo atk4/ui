@@ -7,6 +7,7 @@ namespace atk4\ui\ActionExecutor;
 
 use atk4\core\HookTrait;
 use atk4\data\UserAction\Generic;
+use atk4\data\ValidationException;
 use atk4\ui\Button;
 use atk4\ui\Exception;
 use atk4\ui\Form;
@@ -543,19 +544,22 @@ class UserAction extends Modal implements Interface_, jsInterface_
             if ($this->isLastStep($step)) {
                 // collect argument and execute action.
                 $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
-                $js = $this->jsGetExecute($return, $this->action->owner->id);
-            } else {
+                $js     = $this->jsGetExecute($return, $this->action->owner->id);
+            }
+            else {
                 // store data and setup reload.
                 $js = [
                     $this->loader->jsAddStoreData($this->actionData, true),
                     $this->loader->jsload([
-                        'step'      => $this->getNextStep($step),
-                        $this->name => $this->action->owner->get('id'),
-                    ], ['method' => 'post'], $this->loader->name),
+                                              'step'      => $this->getNextStep($step),
+                                              $this->name => $this->action->owner->get('id'),
+                                          ], ['method' => 'post'], $this->loader->name),
                 ];
             }
 
             return $js;
+        } catch (ValidationException $e) {
+            throw $e;
         } catch (\Exception $e) {
             $m = new Message('Error executing '.$this->action->caption, 'red');
             $m->init();
