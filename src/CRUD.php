@@ -119,11 +119,18 @@ class CRUD extends Grid
 
         if ($this->menu) {
             foreach ($this->_getModelActions(Generic::NO_RECORDS) as $k => $action) {
-                $action->ui['executor'] = $this->initActionExecutor($action);
-                $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
-                $this->menuItems[$k]['action'] = $action;
+                if ($action->enabled) {
+                    $action->ui['executor'] = $this->initActionExecutor($action);
+                    $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
+                    $this->menuItems[$k]['action'] = $action;
+                }
             }
             $this->setItemsAction();
+
+            // if no menuItems at all, then remove menu element
+            if (!$this->menuItems) {
+                $this->menu->destroy();
+            }
         }
 
         return $this->model;
