@@ -638,7 +638,7 @@ class Grid extends View
         $this->table->on(
             'click',
             'thead>tr>th',
-            new jsReload($this->container, [$this->sortTrigger => (new jQuery())->data('column')])
+            new jsReload($this->container, [$this->sortTrigger => (new jQuery())->data('sort')])
         );
     }
 
