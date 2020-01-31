@@ -336,6 +336,11 @@ class Template implements \ArrayAccess
         if ($encode) {
             $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
         }
+        
+        // remove conditional regions if any
+        if (!$value) {
+            $this->tryDel($tag.'?');
+        }
 
         // set or append value
         $template = $this->getTagRefList($tag);
@@ -802,7 +807,7 @@ class Template implements \ArrayAccess
      */
     protected function parseTemplate($str)
     {
-        $tag = '/{([\/$]?[-_:\w]*)}/';
+        $tag = '/{([\/$]?[-_:\w]*[\?]?)}/';
 
         $input = preg_split($tag, $str, -1, PREG_SPLIT_DELIM_CAPTURE);
 

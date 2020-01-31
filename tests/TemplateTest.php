@@ -46,6 +46,51 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         $t2 = ['good bye']; // will change $t->template because it's by reference
         $this->assertEquals(['', 'foo#1'=>['good bye'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']], $t->template);
     }
+    
+    /**
+     * Test conditional tag.
+     */
+    public function testConditionalTags()
+    {
+        $s = 'My {email?}e-mail {$email}{/email?} {phone?}phone {$phone}{/?}. Contact me!';
+        $t = new \atk4\ui\Template($s);
+        
+        $t1 = &$t->getTagRef('_top');
+        $this->assertEquals([
+            0 => 'My ',
+            'email?#1' => [
+                0 => 'e-mail ',
+                'email#1' => [''],
+            ],
+            1 => ' ',
+            'phone?#1' => [
+                0 => 'phone ',
+                'phone#1' => [''],
+            ],
+            2 => '. Contact me!',
+        ], $t1);
+
+        // test filled values
+        $t = new \atk4\ui\Template($s);
+        $t->set('email', 'test@example.com');
+        $t->set('phone', 123);
+        $this->assertEquals('My e-mail test@example.com phone 123. Contact me!', $t->render());
+
+        $t = new \atk4\ui\Template($s);
+        $t->set('email', null);
+        $t->set('phone', 123);
+        $this->assertEquals('My  phone 123. Contact me!', $t->render());
+
+        $t = new \atk4\ui\Template($s);
+        $t->set('email', '');
+        $t->set('phone', 123);
+        $this->assertEquals('My  phone 123. Contact me!', $t->render());
+
+        $t = new \atk4\ui\Template($s);
+        $t->set('email', false);
+        $t->set('phone', 0);
+        $this->assertEquals('My  . Contact me!', $t->render());
+    }
 
     /**
      * Exception in getTagRef().
