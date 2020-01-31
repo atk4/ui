@@ -336,7 +336,7 @@ class Template implements \ArrayAccess
         if ($encode) {
             $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
         }
-        
+
         // remove conditional regions if any
         if (!$value) {
             $this->tryDel($tag.'?');
