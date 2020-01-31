@@ -4,7 +4,6 @@ namespace atk4\ui\TableColumn;
 
 use atk4\ui\Exception;
 use atk4\ui\jQuery;
-use atk4\ui\jsChain;
 use atk4\ui\jsExpression;
 use atk4\ui\Popup;
 
@@ -74,8 +73,8 @@ class Generic
      * Add popup to header.
      * Use ColumnName for better popup positioning.
      *
-     * @param Popup $popup
-     * @param string $icon The css class for filter icon.
+     * @param Popup  $popup
+     * @param string $icon  The css class for filter icon.
      *
      * @return mixed
      */
@@ -90,13 +89,13 @@ class Generic
         $popup->triggerBy = '#'.$id;
         $popup->popOptions = array_merge(
             $popup->popOptions, [
-            'on' =>'click',
-            'position' => 'bottom left',
-            'movePopup' => $this->columnData ? true : false,
-            'target'    => $this->columnData ? "th[data-column={$this->columnData}]" : false,
-            'distanceAway' => 10,
-                'offset' => -2
-        ]);
+                'on'           => 'click',
+                'position'     => 'bottom left',
+                'movePopup'    => $this->columnData ? true : false,
+                'target'       => $this->columnData ? "th[data-column={$this->columnData}]" : false,
+                'distanceAway' => 10,
+                'offset'       => -2,
+            ]);
         $popup->stopClickEvent = true;
 
         return $popup;
@@ -108,7 +107,7 @@ class Generic
      * @param string $class The css class for filter icon.
      * @param $id
      */
-    public function setHeaderPopup($class = 'table-filter-off icon', $id)
+    public function setHeaderPopup($class, $id)
     {
         $this->hasHeaderAction = true;
 
@@ -320,7 +319,7 @@ class Generic
         if ($this->table->sortable) {
             $attr['data-sort'] = $f->short_name;
             if ($this->table->sort_by === $f->short_name) {
-                $captionHtmlTag[1]['class'] = $captionHtmlTag[1]['class']. ' '.'sorted '.$this->table->sort_order;
+                $captionHtmlTag[1]['class'] = $captionHtmlTag[1]['class'].' '.'sorted '.$this->table->sort_order;
 
                 if ($this->table->sort_order === 'ascending') {
                     $attr['data-sort'] = '-'.$f->short_name;

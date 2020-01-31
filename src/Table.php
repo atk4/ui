@@ -243,7 +243,6 @@ class Table extends Lister
             throw new Exception(['Value of $columnDecorator argument is incorrect', 'columnDecorator' => $columnDecorator]);
         }
 
-
         if (is_null($name)) {
             $this->columns[] = $columnDecorator;
         } elseif (!is_string($name)) {
