@@ -368,7 +368,7 @@ class App
                 }
                 if ($keys) {
                     $ids = implode(',', $keys);
-                    $remove_function = "$('.ui.dimmer.modals.page').find('${ids}').remove();";
+                    $remove_function = '$(\'.ui.dimmer.modals.page\').find(\''.$ids.'\').remove();';
                 }
                 $output = '<script>jQuery(function() {'.$remove_function.$output['atkjs'].'});</script>'.$output['html'];
                 $this->outputResponseHtml($output);
