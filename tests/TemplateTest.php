@@ -111,6 +111,29 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
     }
 
     /**
+     * Conditional tag usage example - VAT usage.
+     */
+    public function testConditionalTagsVAT()
+    {
+        $s = '{vat_applied?}VAT is {$vat}%{/?}'.
+             '{vat_zero?}VAT is zero{/?}'.
+             '{vat_not_applied?}VAT is not applied{/?}';
+
+        $f = function ($vat) use ($s) {
+            return (new \atk4\ui\Template($s))->set([
+                'vat_applied' => !empty($vat),
+                'vat_zero' => ($vat === 0),
+                'vat_not_applied' => ($vat===null),
+                'vat' => $vat,
+            ]);
+        };
+
+        $this->assertEquals('VAT is 21%', $f(21)->render());
+        $this->assertEquals('VAT is zero', $f(0)->render());
+        $this->assertEquals('VAT is not applied', $f(null)->render());
+    }
+
+    /**
      * Exception in getTagRef().
      *
      * @expectedException Exception

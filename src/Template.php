@@ -321,12 +321,7 @@ class Template implements \ArrayAccess
         if (!$tag) {
             throw new Exception(['Tag is not set', 'tag' => $tag, 'value' => $value]);
         }
-
-        // ignore not existent tags
-        if (!$strict && !$this->hasTag($tag)) {
-            return $this;
-        }
-
+        
         // check value
         if (!is_scalar($value) && $value !== null) {
             throw new Exception(['Value should be scalar', 'tag' => $tag, 'value' => $value]);
@@ -337,9 +332,14 @@ class Template implements \ArrayAccess
             $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
         }
 
-        // remove conditional regions if any
-        if (strlen((string) $value) == 0) {
-            $this->tryDel($tag.'?');
+        // if no value, then set respective conditional regions to empty string
+        if (substr($tag, -1) != '?' && ($value === false || !strlen((string)$value))) {
+            $this->trySet($tag.'?', '');
+        }
+
+        // ignore not existent tags
+        if (!$strict && !$this->hasTag($tag)) {
+            return $this;
         }
 
         // set or append value
@@ -733,10 +733,8 @@ class Template implements \ArrayAccess
     /**
      * Recursively find nested tags inside a string, converting them to array.
      *
-     * @param array $input
-     * @param array $template
-     *
-     * @return string|null
+     * @param array &$input
+     * @param array &$template
      */
     protected function parseTemplateRecursive(&$input, &$template)
     {
@@ -850,7 +848,8 @@ class Template implements \ArrayAccess
     protected function recursiveRender($template)
     {
         $output = '';
-        foreach ($template as $val) {
+        foreach ($template as $tag => $val) {
+//var_dump($tag,$val);
             if (is_array($val)) {
                 $output .= $this->recursiveRender($val);
             } else {
