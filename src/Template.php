@@ -848,8 +848,7 @@ class Template implements \ArrayAccess
     protected function recursiveRender($template)
     {
         $output = '';
-        foreach ($template as $tag => $val) {
-            //var_dump($tag,$val);
+        foreach ($template as $val) {
             if (is_array($val)) {
                 $output .= $this->recursiveRender($val);
             } else {
