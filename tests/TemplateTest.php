@@ -125,12 +125,12 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
                 'vat_zero'        => ($vat === 0),
                 'vat_not_applied' => ($vat === null),
                 'vat'             => $vat,
-            ]);
+            ])->render();
         };
 
-        $this->assertEquals('VAT is 21%', $f(21)->render());
-        $this->assertEquals('VAT is zero', $f(0)->render());
-        $this->assertEquals('VAT is not applied', $f(null)->render());
+        $this->assertEquals('VAT is 21%', $f(21));
+        $this->assertEquals('VAT is zero', $f(0));
+        $this->assertEquals('VAT is not applied', $f(null));
     }
 
     /**
