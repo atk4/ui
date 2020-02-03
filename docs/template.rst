@@ -442,7 +442,7 @@ have used my own View object with some more sophisticated presentation logic.
 The only affect on the example would be name of the class, the rest of
 presentation logic would be abstracted inside view's ``render()`` method.
 
-Other opreations with tags
+Other operations with tags
 --------------------------
 
 .. php:method:: del(tag)
@@ -504,6 +504,26 @@ your template::
 See also: :ref:`templates and views`
 
 .. todo:: fix this reference
+
+Conditional tags
+----------------
+
+Agile Toolkit template engine allows you to use socalled conditional tags
+which will automatically remove template regions if tag value is empty.
+Conditional tags notation is trailing question mark symbol.
+
+Consider this example::
+
+    My {email?}e-mail {$email}{/email?} {phone?}phone {$phone}{/?}.
+
+This will only show text "e-mail" and email address if email tag value is
+set to not empty value. Same for "phone" tag.
+So if you execute ``set('email',null)`` and ``set('phone',123)`` then this
+template will automatically render as::
+
+    My  phone 123.
+
+Note that zero value is treated as not empty value!
 
 Views and Templates
 ===================
