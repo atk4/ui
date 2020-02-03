@@ -338,7 +338,7 @@ class Template implements \ArrayAccess
         }
 
         // remove conditional regions if any
-        if (!$value) {
+        if (strlen((string) $value) == 0) {
             $this->tryDel($tag.'?');
         }
 

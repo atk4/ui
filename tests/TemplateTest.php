@@ -89,7 +89,7 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         $t = new \atk4\ui\Template($s);
         $t->set('email', false);
         $t->set('phone', 0);
-        $this->assertEquals('My  . Contact me!', $t->render());
+        $this->assertEquals('My  phone 0. Contact me!', $t->render());
 
         // nested conditional tags (renders comma only when both values are provided)
         $s = 'My {email?}e-mail {$email}{/email?}{email?}{phone?}, {/?}{/?}{phone?}phone {$phone}{/?}. Contact me!';
@@ -107,7 +107,7 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         $t = new \atk4\ui\Template($s);
         $t->set('email', false);
         $t->set('phone', 0);
-        $this->assertEquals('My . Contact me!', $t->render());
+        $this->assertEquals('My phone 0. Contact me!', $t->render());
     }
 
     /**
