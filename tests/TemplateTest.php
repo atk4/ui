@@ -121,10 +121,10 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $f = function ($vat) use ($s) {
             return (new \atk4\ui\Template($s))->set([
-                'vat_applied' => !empty($vat),
-                'vat_zero' => ($vat === 0),
-                'vat_not_applied' => ($vat===null),
-                'vat' => $vat,
+                'vat_applied'     => !empty($vat),
+                'vat_zero'        => ($vat === 0),
+                'vat_not_applied' => ($vat === null),
+                'vat'             => $vat,
             ]);
         };
 

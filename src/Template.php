@@ -321,7 +321,7 @@ class Template implements \ArrayAccess
         if (!$tag) {
             throw new Exception(['Tag is not set', 'tag' => $tag, 'value' => $value]);
         }
-        
+
         // check value
         if (!is_scalar($value) && $value !== null) {
             throw new Exception(['Value should be scalar', 'tag' => $tag, 'value' => $value]);
@@ -333,7 +333,7 @@ class Template implements \ArrayAccess
         }
 
         // if no value, then set respective conditional regions to empty string
-        if (substr($tag, -1) != '?' && ($value === false || !strlen((string)$value))) {
+        if (substr($tag, -1) != '?' && ($value === false || !strlen((string) $value))) {
             $this->trySet($tag.'?', '');
         }
 
@@ -849,7 +849,7 @@ class Template implements \ArrayAccess
     {
         $output = '';
         foreach ($template as $tag => $val) {
-//var_dump($tag,$val);
+            //var_dump($tag,$val);
             if (is_array($val)) {
                 $output .= $this->recursiveRender($val);
             } else {
