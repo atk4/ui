@@ -523,6 +523,7 @@ template will automatically render as::
 
     My  phone 123.
 
+Note that zero value is treated as not empty value!
 
 Views and Templates
 ===================
