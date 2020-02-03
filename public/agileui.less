@@ -73,15 +73,56 @@ footer.atk-footer {
 
 // table dropdown menu
 .atk-table-dropdown {
-  display: inline;
-  float: right;
+  margin-top: -10px;
+  i {
+    opacity: 0.3;
+    vertical-align: bottom;
+  }
+  i.table-filter-on {
+    &:after {
+      content: '\f150';
+      color: dodgerblue;
+    }
+  }
+  i.table-filter-off {
+    &:after {
+      content: '\f150';
+    }
+  }
+  .dropdown {
+    .menu {
+      margin: 1em -10px 0 !important;
+    }
+  }
 }
 
-.atk-table-dropdown i {
-  opacity: 0.3;
-  vertical-align: bottom;
+.atk-table-column-header {
+  padding-bottom: 4px;
+    &:after {
+      //display: none;
+      font-style: normal;
+      font-weight: normal;
+      text-decoration: inherit;
+      content: '';
+      height: 1em;
+      width: auto;
+      opacity: 0.8;
+      margin: 0em 0em 0em 0.5em;
+      font-family: 'Icons';
+      float: right;
+  }
+}
+.atk-table-column-header.ascending {
+  &:after {
+    content: '\f0d8';
+  }
 }
 
+.atk-table-column-header.descending {
+  &:after {
+    content: '\f0d7';
+  }
+}
 
 // Components
 

@@ -39,6 +39,13 @@ class Generic
     public $caption = null;
 
     /**
+     * The data-column attribute value for Table th tag.
+     *
+     * @var null
+     */
+    public $columnData = null;
+
+    /**
      * Include header action tag in rendering or not.
      *
      * @var bool
@@ -64,24 +71,32 @@ class Generic
 
     /**
      * Add popup to header.
+     * Use ColumnName for better popup positioning.
      *
      * @param Popup  $popup
-     * @param string $id
-     * @param string $icon
-     *
-     * @throws Exception
+     * @param string $icon  The css class for filter icon.
      *
      * @return mixed
      */
-    public function addPopup($popup = null, $icon = 'caret square down')
+    public function addPopup($popup = null, $icon = 'table-filter-off icon')
     {
-        if (!$this->app) {
-            throw new Exception('Columns\'s popup need to have a layout.');
-        }
+        $id = $this->name.'_ac';
 
-        $popup = $this->app->add($popup ? $popup : 'Popup')->setHoverable();
+        $popup = $this->table->owner->add($popup ? $popup : 'Popup')->setHoverable();
 
-        $this->setHeaderPopup($popup, $icon);
+        $this->setHeaderPopup($icon, $id);
+
+        $popup->triggerBy = '#'.$id;
+        $popup->popOptions = array_merge(
+            $popup->popOptions, [
+                'on'           => 'click',
+                'position'     => 'bottom left',
+                'movePopup'    => $this->columnData ? true : false,
+                'target'       => $this->columnData ? "th[data-column={$this->columnData}]" : false,
+                'distanceAway' => 10,
+                'offset'       => -2,
+            ]);
+        $popup->stopClickEvent = true;
 
         return $popup;
     }
@@ -89,27 +104,18 @@ class Generic
     /**
      * Setup popup header action.
      *
-     * @param Popup $popup
-     * @param $icon
+     * @param string $class The css class for filter icon.
+     * @param $id
      */
-    public function setHeaderPopup($popup, $icon = 'caret square down')
+    public function setHeaderPopup($class, $id)
     {
         $this->hasHeaderAction = true;
-        $id = $this->name.'_ac';
 
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
-                ['i', ['id' => $id, 'class' => $icon.' icon']],
+                ['i', ['id' => $id, 'class' => $class.' icon']],
             ],
         ];
-        $popup->triggerBy = '#'.$id;
-        $popup->popOptions = array_merge($popup->popOptions, ['on' =>'click', 'position' => 'bottom right', 'movePopup' => false]);
-        $popup->stopClickEvent = true;
-
-        if ($_GET['__atk_reload'] ?? false) {
-            //This is part of a reload, need to reactivate popup.
-            $this->table->js(true, $popup->jsPopup());
-        }
     }
 
     /**
@@ -175,7 +181,7 @@ class Generic
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
                 [
-                    'div', ['id' => $id, 'class'=>'ui top right pointing dropdown', 'data-menu-id' => $menuId],
+                    'div', ['id' => $id, 'class'=>'ui top left pointing dropdown', 'data-menu-id' => $menuId],
                     [['i', ['class' => $icon.' icon']]],
                 ],
             ],
@@ -292,6 +298,7 @@ class Generic
      */
     public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
     {
+        $attr = [];
         if (!$this->table) {
             throw new \atk4\ui\Exception(['How $table could not be set??', 'f' => $f, 'value' => $value]);
         }
@@ -305,20 +312,19 @@ class Generic
         }
 
         // if $this->caption is empty, header caption will be overriden by linked field definition
-        $caption = empty($this->caption) ? $f->getCaption() : $this->caption;
+        $captionHtmlTag = ['div', ['class' => 'atk-table-column-header'], empty($this->caption) ? $f->getCaption() : $this->caption];
 
         // If table is being sorted by THIS column, set the proper class
-        $attr = [];
+        $attr['data-column'] = $this->columnData;
         if ($this->table->sortable) {
-            $attr['data-column'] = $f->short_name;
-
+            $attr['data-sort'] = $f->short_name;
             if ($this->table->sort_by === $f->short_name) {
-                $attr['class'][] = 'sorted '.$this->table->sort_order;
+                $captionHtmlTag[1]['class'] = $captionHtmlTag[1]['class'].' '.'sorted '.$this->table->sort_order;
 
                 if ($this->table->sort_order === 'ascending') {
-                    $attr['data-column'] = '-'.$f->short_name;
+                    $attr['data-sort'] = '-'.$f->short_name;
                 } elseif ($this->table->sort_order === 'descending') {
-                    $attr['data-column'] = '';
+                    $attr['data-sort'] = '';
                 }
             }
         }
@@ -327,7 +333,7 @@ class Generic
             $attr = array_merge($attr, ['id' => $this->name.'_th']);
             $tag = $this->getTag(
                 'head',
-                [$caption,
+                [$captionHtmlTag,
                     $this->headerActionTag,
                 ],
                 $attr
@@ -335,7 +341,7 @@ class Generic
         } else {
             $tag = $this->getTag(
                 'head',
-                $caption,
+                [$captionHtmlTag],
                 $attr
             );
         }
