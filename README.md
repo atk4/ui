@@ -192,22 +192,22 @@ It's really easy to put together a complex Admin system. Add this code to a new 
 ``` php
 <?php
 
-  $app = new \atk4\ui\App('My App');
-  $app->initLayout('Admin');
-  $app->dbConnect('mysql://user:pass@localhost/yourdb');
+$app = new \atk4\ui\App('My App');
+$app->initLayout('Admin');
+$app->dbConnect('mysql://user:pass@localhost/yourdb');
 
-  class User extends \atk4\data\Model {
-      public $table = 'user';
-      function init() {
-          parent::init();
+class User extends \atk4\data\Model {
+    public $table = 'user';
+    function init() {
+        parent::init();
 
-          $this->addField('name');
-          $this->addField('email', ['required'=>true]);
-          $this->addField('password', ['type'=>'password']);
-      }
-  }
+        $this->addField('name');
+        $this->addField('email', ['required'=>true]);
+        $this->addField('password', ['type'=>'password']);
+    }
+}
 
-  $app->add('CRUD')->setModel(new User($app->db));
+$app->add('CRUD')->setModel(new User($app->db));
 ```
 
 The result is here:
