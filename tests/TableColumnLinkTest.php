@@ -4,6 +4,8 @@ namespace atk4\ui\tests;
 
 class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 {
+    use Concerns\HandlesTable;
+
     public $db;
     public $table;
     public $column;
@@ -27,7 +29,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td>bar</td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -39,7 +41,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><b>bar</b></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -54,7 +56,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td class="negative right aligned single line">-123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -70,7 +72,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td class="negative right aligned single line"><b>-123</b></td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -87,7 +89,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td class=" right aligned single line">bar</td><td>ref123</td><td class="negative right aligned single line"><b>-123</b></td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -105,16 +107,8 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><u><b>bar</b></u></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
-    }
-
-    public function extract($val)
-    {
-        // extract only <tr> out
-        preg_match('/<.*data-id="1".*/m', $val, $matches);
-
-        return $matches[0];
     }
 
     public function testRender1()
@@ -126,7 +120,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><u><b>bar</b></u></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -143,7 +137,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td>hello<b>world</b></td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -158,7 +152,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -173,7 +167,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -185,7 +179,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?id=%7B%24id%7D">bar</a></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -195,7 +189,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?id=1">bar</a></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -205,7 +199,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1">bar</a></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -215,7 +209,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1">bar</a></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -225,7 +219,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1" download="true" >bar</a></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -235,7 +229,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1" target="_blank" >bar</a></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -245,7 +239,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1"><i class="icon info"></i>bar</a></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -255,7 +249,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td><a href="example.php?test=1"></a></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -276,7 +270,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td> --- </td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -286,7 +280,7 @@ class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td class=""> bar<span class="ui icon link " data-tooltip="ref123"><i class="ui icon info circle"></span></td><td>ref123</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
