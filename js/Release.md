@@ -1,5 +1,12 @@
 ## Release note
 
+### version 1.12.2 (2020-02-04)
+
+- Fix https://github.com/atk4/ui/issues/902 
+   Throwing error on server was not clearing api.data object, thus keeping
+   old value with new server request. This fix make sure api.data gets clear
+   on all server response, successful or not.
+
 ### version 1.12.1 (2020-01-14)
 
 - update api service to generate modals in json request.
