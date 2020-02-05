@@ -226,7 +226,7 @@ class DropDown extends Input
          * render dropdown options
          */
         //add selection only if no value is required and Dropdown has no multiple selections enabled
-        if (!$this->field->required && !$this->isMultiple) {
+        if ($this->field !== null && !$this->field->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
             $this->_tItem->set('title', $this->empty || is_numeric($this->empty) ? (string) $this->empty : '');
             $this->template->appendHTML('Item', $this->_tItem->render());
