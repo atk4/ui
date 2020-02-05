@@ -133,7 +133,7 @@ class Modal extends View
             $js_chain->data(['args' => $args]);
         }
 
-        return $js_chain->modal('show');
+        return $js_chain->modal(['autofocus' => false])->blur()->modal('show'); // show modal, but prevent autofocus, as it can open dropdown and cover a lot of controls
     }
 
     /**
