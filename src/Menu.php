@@ -183,7 +183,21 @@ class Menu extends View
         foreach ($m as $m) {
         }
     }
+    */
+
+    /**
+     * {@inheritdoc}
      */
+    public function getHTML()
+    {
+        // if menu don't have a single element or content, then destroy it
+        if (empty($this->elements) && !$this->content) {
+            $this->destroy();
+            return '';
+        }
+
+        return parent::getHTML();
+    }
 
     /**
      * {@inheritdoc}

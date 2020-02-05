@@ -48,3 +48,6 @@ $i->add(['View', 'element' => 'P'])->set('Check out our promotions');
 //$m = $app->add('Menu');
 //$i->addItem()->add('FormField/Input');
 //$i->add(['View', 'element'=>'P'])->set('Check out our promotions');
+
+// menu without any item should not show
+$app->add('Menu');
