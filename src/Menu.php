@@ -193,6 +193,7 @@ class Menu extends View
         // if menu don't have a single element or content, then destroy it
         if (empty($this->elements) && !$this->content) {
             $this->destroy();
+
             return '';
         }
 
