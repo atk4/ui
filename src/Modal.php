@@ -132,7 +132,8 @@ class Modal extends View
             $js_chain->data(['args' => $args]);
         }
 
-        return $js_chain->modal('show');
+        // @TODO we should set focus, but only prevent dropdown to open immediatelly
+        return $js_chain->modal(['autofocus' => false])->blur()->modal('show'); // prevent autofocus, as it can open dropdown
     }
 
     /**
