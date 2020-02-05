@@ -6,18 +6,12 @@ use atk4\ui\Table;
 
 class TableColumnColorRatingTest extends \atk4\core\PHPUnit_AgileTestCase
 {
+    use Concerns\HandlesTable;
+
     public $db;
     /** @var Table */
     public $table;
     public $column;
-
-    protected function extract($val)
-    {
-        // extract only <tr> out
-        preg_match('/<.*data-id="1".*/m', $val, $matches);
-
-        return $matches[0];
-    }
 
     public function setUp()
     {
@@ -65,7 +59,7 @@ class TableColumnColorRatingTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color:#00ff00;">3</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -88,7 +82,7 @@ class TableColumnColorRatingTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="">3</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -115,7 +109,7 @@ class TableColumnColorRatingTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color:#ff0000;">3</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
@@ -138,7 +132,7 @@ class TableColumnColorRatingTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $this->assertEquals(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="">3</td></tr>',
-            $this->extract($this->table->render())
+            $this->extractTableRow($this->table)
         );
     }
 
