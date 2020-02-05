@@ -631,7 +631,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             ->api(array_merge(['url' => $cb->getJSURL(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
             ->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
-        $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
+        $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
 
         if (!$this->canLeave) {
             $this->js(true, (new jsChain('atk.formService'))->preventFormLeave($this->name));
