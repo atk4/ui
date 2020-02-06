@@ -46,12 +46,11 @@ class AutoComplete extends Input
     public $plus = false;
 
     /**
-     * Sets the max. amount of records that are loaded. The default 10
-     * displays nicely in UI.
+     * Sets the max. amount of records that are loaded.
      *
      * @var int
      */
-    public $limit = 10;
+    public $limit = 100;
 
     /**
      * Set custom model field here to use it's value as ID in dropdown instead of default model ID field.
