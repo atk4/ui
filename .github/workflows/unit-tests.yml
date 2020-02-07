@@ -35,15 +35,15 @@ jobs:
       - run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
       - name: Install dependencies and SQL
-        run: |
-          mkdir -p coverage
-          apk add npm
-          npm install -g less clean-css uglify-js
-          mysql -uroot -ppassword -h mysql -e 'CREATE DATABASE atk4;'
-          mysql -uroot -ppassword -h mysql atk4 < demos/atk4.sql
+        run:
+          - mkdir -p coverage
+          - apk add npm
+          - npm install -g less clean-css uglify-js
+          - mysql -uroot -ppassword -h mysql -e 'CREATE DATABASE atk4;'
+          - mysql -uroot -ppassword -h mysql atk4 < demos/atk4.sql
 
-          mv demos/db.github.php demos/db.php
-          (cd js; npm install; npm run build)
+          - mv demos/db.github.php demos/db.php
+          - (cd js; npm install; npm run build)
           #lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
           #uglifyjs --compress -- public/agileui.js > public/agileui.min.js
 
