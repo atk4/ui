@@ -154,7 +154,9 @@ class CRUD extends Grid
      */
     protected function initActionExecutor(Generic $action)
     {
-        $action->fields = $this->editFields ?? $action->fields;
+        if ( $action->fields === true || is_array($action->fields)) {
+            $action->fields = $this->editFields ?? $action->fields;
+        }
         $executor = $this->getExecutor($action);
         $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
             return $this->jsExecute($return, $action);
