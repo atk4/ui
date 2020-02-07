@@ -1,0 +1,7 @@
+<ruleset>
+    <file>.</file>
+    <exclude-pattern>/vendor/*$</exclude-pattern>
+    <exclude-pattern>/*\.js$</exclude-pattern>
+
+    <rule ref="PSR12" />
+</ruleset>
