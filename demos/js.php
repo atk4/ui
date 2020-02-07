@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Demonstrates how to use interractive buttons.
  */
+
 include 'init.php';
 
 use atk4\ui\Button;
@@ -18,10 +20,10 @@ $b->js(true)->hide();
 $b = $app->add(new Button(['id' => 'b2']))->set('Hide on click Button');
 $b->js('click')->hide();
 
-$app->add(['Button', 'Redirect'])->on('click', $app->jsRedirect(['foo'=>'bar']));
+$app->add(['Button', 'Redirect'])->on('click', $app->jsRedirect(['foo' => 'bar']));
 
 if (isset($_GET['foo']) && $_GET['foo'] == 'bar') {
-    $app->redirect(['foo'=>'baz']);
+    $app->redirect(['foo' => 'baz']);
 }
 
 $app->add(new Header('js() method'));

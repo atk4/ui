@@ -172,14 +172,14 @@ class ColorRating extends Generic
             $HexRGB['g'] = sprintf('%02x', ($RGB['g']));
             $HexRGB['b'] = sprintf('%02x', ($RGB['b']));
 
-            $gradients[] = '#'.implode(null, $HexRGB);
+            $gradients[] = '#' . implode(null, $HexRGB);
         }
     }
 
     public function getTagAttributes($position, $attr = [])
     {
         $attr['style'] = $attr['style'] ?? '';
-        $attr['style'] .= '{$_'.$this->short_name.'_color_rating}';
+        $attr['style'] .= '{$_' . $this->short_name . '_color_rating}';
 
         return parent::getTagAttributes($position, $attr);
     }
@@ -190,7 +190,7 @@ class ColorRating extends Generic
             throw new Exception(['ColorRating can be used only with model field']);
         }
 
-        return $this->getTag('body', '{$'.$f->short_name.'}', $extra_tags);
+        return $this->getTag('body', '{$' . $f->short_name . '}', $extra_tags);
     }
 
     public function getHTMLTags($row, $field)
@@ -207,7 +207,7 @@ class ColorRating extends Generic
         }
 
         return [
-            '_'.$this->short_name.'_color_rating' => 'background-color:'.$color.';',
+            '_' . $this->short_name . '_color_rating' => 'background-color:' . $color . ';',
         ];
     }
 

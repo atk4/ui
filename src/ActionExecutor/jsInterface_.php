@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Add js trigger for executing an action.
  */

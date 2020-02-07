@@ -112,7 +112,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         // simulate triggering
         $_GET[$cb->name] = true;
-        $_GET[$cb->name.'_2'] = true;
+        $_GET[$cb->name . '_2'] = true;
 
         $cb->set(function ($x) use (&$var, $app, &$cbname) {
             $cb2 = $app->add('CallbackLater');
@@ -176,7 +176,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $vp = $app->add(['VirtualPage', 'urlTrigger'=>'bah']);
+        $vp = $app->add(['VirtualPage', 'urlTrigger' => 'bah']);
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });

@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Testing form.
  */
+
 require 'init.php';
 require 'database.php';
 
@@ -46,7 +48,7 @@ $form->onSubmit(function ($f) {
     // In-form validation
     $errors = [];
     if (strlen($f->model['first_name']) < 3) {
-        $errors[] = $f->error('first_name', 'too short, '.$f->model['first_name']);
+        $errors[] = $f->error('first_name', 'too short, ' . $f->model['first_name']);
     }
     if (strlen($f->model['last_name']) < 5) {
         $errors[] = $f->error('last_name', 'too short');
@@ -64,7 +66,7 @@ $form->onSubmit(function ($f) {
 
     return $f->success(
         'Record Added',
-        'there are now '.$f->model->action('count')->getOne().' records in DB'
+        'there are now ' . $f->model->action('count')->getOne() . ' records in DB'
     );
 });
 
@@ -78,10 +80,10 @@ class Person extends \atk4\data\Model
     {
         parent::init();
         $this->addField('name', ['required' => true]);
-        $this->addField('surname', ['ui'=>['placeholder'=>'e.g. Smith']]);
+        $this->addField('surname', ['ui' => ['placeholder' => 'e.g. Smith']]);
         $this->addField('gender', ['enum' => ['M', 'F']]);
         $this->hasOne('country_lookup_id', new Country()); // this works fast
-        $this->hasOne('country_dropdown_id', [new Country(), 'ui'=>['form'=>new \atk4\ui\FormField\DropDown()]]); // this works slow
+        $this->hasOne('country_dropdown_id', [new Country(), 'ui' => ['form' => new \atk4\ui\FormField\DropDown()]]); // this works slow
     }
 
     public function validate($intent = null)

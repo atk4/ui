@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Display items in a hierarchical (tree) view structure.
  *
@@ -156,8 +157,8 @@ class TreeItemSelector extends Generic
         $this->itemSelector->template->trySetHTML('Input', $this->getInput());
 
         $this->itemSelector->vue(
-    'atk-tree-item-selector',
-                [
+            'atk-tree-item-selector',
+            [
                     'item'    => ['id' => 'atk-root', 'nodes' => $this->treeItems],
                     'values'  => [], //need empty for Vue reactivity.
                     'field'   => $this->short_name,
@@ -166,6 +167,7 @@ class TreeItemSelector extends Generic
                         'url'     => $this->cb ? $this->cb->getJSURL() : null,
                         'loader'  => $this->loaderCssName,
                     ],
-                ]);
+            ]
+        );
     }
 }

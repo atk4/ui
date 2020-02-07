@@ -116,9 +116,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
                     $this->outputHTML($line);
                 }
             } catch (\Error $e) {
-                $this->output('Error: '.$e->getMessage());
+                $this->output('Error: ' . $e->getMessage());
             } catch (\Exception $e) {
-                $this->output('Exception: '.$e->getMessage());
+                $this->output('Exception: ' . $e->getMessage());
             }
 
             if (isset($this->app)) {
@@ -178,11 +178,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
 
             // don't change the original message
-            return '{'.$match[1].'}';
+            return '{' . $match[1] . '}';
         }, $message);
 
         $this->_output_bypass = true;
-        $this->sse->send($this->js()->append($message.'<br/>'));
+        $this->sse->send($this->js()->append($message . '<br/>'));
         $this->_output_bypass = false;
 
         return $this;
@@ -230,12 +230,12 @@ class Console extends View implements \Psr\Log\LoggerInterface
     {
         if (!$this->sseInProgress) {
             $this->set(function () use ($exec, $args) {
-                $a = $args ? (' with '.count($args).' arguments') : '';
-                $this->output('--[ Executing '.$exec.$a.' ]--------------');
+                $a = $args ? (' with ' . count($args) . ' arguments') : '';
+                $this->output('--[ Executing ' . $exec . $a . ' ]--------------');
 
                 $this->exec($exec, $args);
 
-                $this->output('--[ Exit code: '.$this->last_exit_code.' ]------------');
+                $this->output('--[ Exit code: ' . $this->last_exit_code . ' ]------------');
             });
 
             return;
@@ -286,17 +286,17 @@ class Console extends View implements \Psr\Log\LoggerInterface
         // Escape arguments
         foreach ($args as $key => $val) {
             if (!is_scalar($val)) {
-                throw new Exception(['Arguments must be scalar', 'arg'=>$val]);
+                throw new Exception(['Arguments must be scalar', 'arg' => $val]);
             }
             $args[$key] = escapeshellarg($val);
         }
 
         $exec = escapeshellcmd($exec);
-        $spec = [1=>['pipe', 'w'], 2=>['pipe', 'w']]; // we want stdout and stderr
+        $spec = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']]; // we want stdout and stderr
         $pipes = null;
-        $proc = proc_open($exec.' '.implode(' ', $args), $spec, $pipes);
+        $proc = proc_open($exec . ' ' . implode(' ', $args), $spec, $pipes);
         if (!is_resource($proc)) {
-            throw new Exception(['Command failed to execute', 'exec'=>$exec, 'args'=>$args]);
+            throw new Exception(['Command failed to execute', 'exec' => $exec, 'args' => $args]);
         }
 
         return [$proc, $pipes];
@@ -356,17 +356,17 @@ class Console extends View implements \Psr\Log\LoggerInterface
         }
 
         if (is_object($object)) {
-            $this->output('--[ Executing '.get_class($object).'->'.$method.' ]--------------');
+            $this->output('--[ Executing ' . get_class($object) . '->' . $method . ' ]--------------');
             $object->debug = true;
             $result = call_user_func_array([$object, $method], $args);
         } elseif (is_string($object)) {
-            $static = $object.'::'.$method;
-            $this->output('--[ Executing '.$static.' ]--------------');
-            $result = call_user_func_array($object.'::'.$method, $args);
+            $static = $object . '::' . $method;
+            $this->output('--[ Executing ' . $static . ' ]--------------');
+            $result = call_user_func_array($object . '::' . $method, $args);
         } else {
-            throw new Exception(['Incorrect value for an object', 'object'=>$object]);
+            throw new Exception(['Incorrect value for an object', 'object' => $object]);
         }
-        $this->output('--[ Result: '.json_encode($result).' ]------------');
+        $this->output('--[ Result: ' . json_encode($result) . ' ]------------');
 
         if (isset($object->app)) {
             $object->app->logger = $old_logger;
@@ -385,7 +385,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function emergency($message, array $context = [])
     {
-        $this->outputHTML("<font color='pink'>".htmlspecialchars($message).'</font>', $context);
+        $this->outputHTML("<font color='pink'>" . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -396,7 +396,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function alert($message, array $context = [])
     {
-        $this->outputHTML("<font color='pink'>".htmlspecialchars($message).'</font>', $context);
+        $this->outputHTML("<font color='pink'>" . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -407,7 +407,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function critical($message, array $context = [])
     {
-        $this->outputHTML("<font color='pink'>".htmlspecialchars($message).'</font>', $context);
+        $this->outputHTML("<font color='pink'>" . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -419,7 +419,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function error($message, array $context = [])
     {
-        $this->outputHTML("<font color='pink'>".htmlspecialchars($message).'</font>', $context);
+        $this->outputHTML("<font color='pink'>" . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -430,7 +430,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function warning($message, array $context = [])
     {
-        $this->outputHTML("<font color='pink'>".htmlspecialchars($message).'</font>', $context);
+        $this->outputHTML("<font color='pink'>" . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -441,7 +441,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function notice($message, array $context = [])
     {
-        $this->outputHTML("<font color='yellow'>".htmlspecialchars($message).'</font>', $context);
+        $this->outputHTML("<font color='yellow'>" . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -452,7 +452,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function info($message, array $context = [])
     {
-        $this->outputHTML("<font color='gray'>".htmlspecialchars($message).'</font>', $context);
+        $this->outputHTML("<font color='gray'>" . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -463,7 +463,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function debug($message, array $context = [])
     {
-        $this->outputHTML("<font color='cyan'>".htmlspecialchars($message).'</font>', $context);
+        $this->outputHTML("<font color='cyan'>" . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**

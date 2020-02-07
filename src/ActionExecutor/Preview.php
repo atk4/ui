@@ -17,7 +17,7 @@ class Preview extends Basic
     public function initPreview()
     {
         if (!$this->hasAllArguments()) {
-            $this->add(['Message', 'type'=>'error', 'Insufficient arguments']);
+            $this->add(['Message', 'type' => 'error', 'Insufficient arguments']);
 
             return;
         }
@@ -26,15 +26,15 @@ class Preview extends Basic
 
         switch ($this->previewType) {
             case 'console':
-                $this->preview = $this->add(['ui'=>'inverted black segment', 'element'=>'pre']);
+                $this->preview = $this->add(['ui' => 'inverted black segment', 'element' => 'pre']);
                 $this->preview->set($text);
                 break;
             case 'text':
-                $this->preview = $this->add(['ui'=>'segment']);
+                $this->preview = $this->add(['ui' => 'segment']);
                 $this->preview->set($text);
                 break;
             case 'html':
-                $this->preview = $this->add(['ui'=>'segment']);
+                $this->preview = $this->add(['ui' => 'segment']);
                 $this->preview->template->setHTML('Content', $text);
                 break;
         }

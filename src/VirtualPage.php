@@ -32,7 +32,7 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = $this->_add([Callback::class, 'urlTrigger'=>$this->urlTrigger ?: $this->name]);
+        $this->cb = $this->_add([Callback::class, 'urlTrigger' => $this->urlTrigger ?: $this->name]);
         $this->app->stickyGet($this->name);
     }
 
@@ -111,7 +111,6 @@ class VirtualPage extends View
 
             // if virtual page callback is triggered
             if ($type = $this->cb->triggered()) {
-
                 // process callback
                 if ($this->fx) {
                     call_user_func($this->fx, $this);

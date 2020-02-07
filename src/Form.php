@@ -168,7 +168,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
-            $this->layout = $this->factory($this->layout, ['form'=>$this], 'atk4\ui\FormLayout');
+            $this->layout = $this->factory($this->layout, ['form' => $this], 'atk4\ui\FormLayout');
             $this->layout = $this->add($this->layout);
         } elseif (is_object($this->layout)) {
             $this->layout->form = $this;
@@ -182,7 +182,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
             $this->buttonSave->on('click', $this->js()->form('submit'));
-            $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#'.$this->name]));
+            $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#' . $this->name]));
         }
     }
 
@@ -211,7 +211,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
     {
         if (is_object($selector) && isset($selector->name)) {
-            $selector = '#'.$selector->name;
+            $selector = '#' . $selector->name;
         }
 
         $this->fieldsDisplayRules = $rules;
@@ -322,7 +322,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
             $response = $this->js()->html($response->render());
         } else {
-            $response = new Message([$success, 'type'=>'success', 'icon'=>'check']);
+            $response = new Message([$success, 'type' => 'success', 'icon' => 'check']);
             $response->app = $this->app;
             $response->init();
             $response->text->addParagraph($sub_header);

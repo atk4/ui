@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Apart from demonstrating the form, this example uses an alternative way of rendering the layouts.
  * Here we don't create application object explicitly, instead we use our custom template
@@ -10,6 +11,7 @@
  * This approach will also prevent your application from registering shutdown handler or catching error,
  * so we will need to do a bit of work about that too.
  */
+
 require 'init.php';
 
 $tabs = $app->add('Tabs');
@@ -24,7 +26,7 @@ $form->addField('email');
 $form->onSubmit(function ($form) {
     // implement subscribe here
 
-    return $form->success('Subscribed '.$form->model['email'].' to newsletter.');
+    return $form->success('Subscribed ' . $form->model['email'] . ' to newsletter.');
 });
 
 $form->buttonSave->set('Subscribe');
@@ -42,11 +44,11 @@ $g->addField('gender', ['DropDown', 'values' => ['Female', 'Male']]);
 $values = [0 => 'noob', 1 => 'pro', 2 => 'dev'];
 $form->addField('description', ['TextArea'])->set(0);
 $form->addField('no_description', ['TextArea'])->set(null);
-$form->addField('status_optional', ['DropDown', 'values' =>$values]);
-$form->addField('status_string_required', ['DropDown'], ['type'=>'string', 'values' => $values, 'required'=>true]);
-$form->addField('status_integer_required', ['DropDown'], ['type'=>'integer', 'values' => $values, 'required'=>true]);
-$form->addField('status_string_mandatory', ['DropDown'], ['type'=>'string', 'values' => $values, 'mandatory'=>true]);
-$form->addField('status_integer_mandatory', ['DropDown'], ['type'=>'integer', 'values' => $values, 'mandatory'=>true]);
+$form->addField('status_optional', ['DropDown', 'values' => $values]);
+$form->addField('status_string_required', ['DropDown'], ['type' => 'string', 'values' => $values, 'required' => true]);
+$form->addField('status_integer_required', ['DropDown'], ['type' => 'integer', 'values' => $values, 'required' => true]);
+$form->addField('status_string_mandatory', ['DropDown'], ['type' => 'string', 'values' => $values, 'mandatory' => true]);
+$form->addField('status_integer_mandatory', ['DropDown'], ['type' => 'integer', 'values' => $values, 'mandatory' => true]);
 
 $form->onSubmit(function ($form) {
     return (new \atk4\ui\jsNotify(json_encode($form->model->get())))->setDuration(0);
@@ -59,7 +61,7 @@ $form->addField('date2', ['Calendar', 'type' => 'date']);
 $form->buttonSave->set('Compare Date');
 
 $form->onSubmit(function ($form) {
-    echo 'date1 = '.print_r($form->model['date1'], true).' and date2 = '.print_r($form->model['date2'], true);
+    echo 'date1 = ' . print_r($form->model['date1'], true) . ' and date2 = ' . print_r($form->model['date2'], true);
 });
 
 ////////////////////////////////////////////////////////////
@@ -70,7 +72,7 @@ $form = $tab->add('Form');
 $form->addField('email1');
 $form->buttonSave->set('Save1');
 $form->onSubmit(function ($form) {
-    return $form->error('email1', 'some error action '.rand(1, 100));
+    return $form->error('email1', 'some error action ' . rand(1, 100));
 });
 
 $tab->add(['Header', '..or success message']);
@@ -88,7 +90,7 @@ $form->buttonSave->set('Save3');
 $form->onSubmit(function ($form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
-    $view->text->addParagraph('some text '.rand(1, 100));
+    $view->text->addParagraph('some text ' . rand(1, 100));
 
     return $view;
 });
@@ -98,7 +100,7 @@ $form = $tab->add('Form');
 $field = $form->addField('email4');
 $form->buttonSave->set('Save4');
 $form->onSubmit(function ($form) use ($field) {
-    return $field->jsInput()->val('random is '.rand(1, 100));
+    return $field->jsInput()->val('random is ' . rand(1, 100));
 });
 
 /////////////////////////////////////////////////////////////////////
@@ -127,7 +129,7 @@ $tab->add(['Header', 'Form shows Agile exceptions', 'size' => 2]);
 $form = $tab->add('Form');
 $form->addField('email');
 $form->onSubmit(function ($form) {
-    throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
+    throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
 
     return 'somehow it did not crash';
 });
@@ -137,7 +139,7 @@ $form->add(['Button', 'Modal Test', 'secondary'])->on('click', $form->add('Modal
                                                                         $form = $p->add('Form');
                                                                         $form->addField('email');
                                                                         $form->onSubmit(function ($form) {
-                                                                            throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
+                                                                            throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
 
                                                                             return 'somehow it did not crash';
                                                                         });
@@ -159,7 +161,7 @@ $f->setModel($m_register);
 
 $f->onSubmit(function ($f) {
     if ($f->model['name'] != 'John') {
-        return $f->error('name', 'Your name is not John! It is "'.$f->model['name'].'". It should be John. Pleeease!');
+        return $f->error('name', 'Your name is not John! It is "' . $f->model['name'] . '". It should be John. Pleeease!');
     } else {
         return [
             $f->jsInput('email')->val('john@gmail.com'),
@@ -203,7 +205,7 @@ $f->onSubmit(function ($f) {
         }
 
         if ($f->model[$name] != 'a') {
-            $errors[] = $f->error($name, 'Field '.$name.' should contain exactly "a", but contains '.$f->model[$name]);
+            $errors[] = $f->error($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $f->model[$name]);
         }
     }
 

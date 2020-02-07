@@ -48,7 +48,7 @@ class ProgressBar extends View
 
     public function renderView()
     {
-        $this->js(true)->progress(['percent'=>$this->value]);
+        $this->js(true)->progress(['percent' => $this->value]);
 
         return parent::renderView();
     }
@@ -72,6 +72,6 @@ class ProgressBar extends View
      */
     public function jsValue($value)
     {
-        return $this->js()->progress(['percent'=>(int) $value]);
+        return $this->js()->progress(['percent' => (int) $value]);
     }
 }

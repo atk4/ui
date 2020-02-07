@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Testing fields.
  */
+
 require 'init.php';
 
 $app->add(['Header', 'Types', 'size' => 2]);

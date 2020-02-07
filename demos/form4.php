@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Testing form.
  */
+
 require 'init.php';
 require 'database.php';
 

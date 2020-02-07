@@ -28,7 +28,7 @@ class Demo extends \atk4\ui\Columns
     public function setCode($code, $lang = 'php')
     {
         $this->highLightCode();
-        $this->left->add(['element'=>'pre'])->add(['element' => 'code'])->addClass($lang)->set($code);
+        $this->left->add(['element' => 'pre'])->add(['element' => 'code'])->addClass($lang)->set($code);
         $app = $this->right;
         $app->db = $this->app->db;
         eval($code);
@@ -37,7 +37,7 @@ class Demo extends \atk4\ui\Columns
     public function highLightCode()
     {
         if (!self::$isInitialized) {
-            $this->app->requireCSS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/'.$this->highlightDefaultStyle.'.min.css');
+            $this->app->requireCSS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/' . $this->highlightDefaultStyle . '.min.css');
             $this->app->requireJS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js');
             $this->js(true, (new \atk4\ui\jsChain('hljs'))->initHighlighting());
             self::$isInitialized = true;
@@ -65,7 +65,7 @@ if (file_exists('coverage.php')) {
 }
 /* END - PHPUNIT & COVERAGE SETUP */
 
-$app->title = 'Agile UI Demo v'.$app->version;
+$app->title = 'Agile UI Demo v' . $app->version;
 
 if (file_exists('../public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = '../public';
@@ -81,22 +81,22 @@ if (isset($layout->leftMenu)) {
 
     $form = $layout->leftMenu->addGroup(['Form', 'icon' => 'edit']);
     $form->addItem('Basics and Layouting', ['form']);
-    $form->addItem(['Form Sections', 'icon'=>'yellow star'], ['form-section']);
-    $form->addItem(['Input Fields', 'icon'=>'yellow star'], ['field2']);
+    $form->addItem(['Form Sections', 'icon' => 'yellow star'], ['form-section']);
+    $form->addItem(['Input Fields', 'icon' => 'yellow star'], ['field2']);
     $form->addItem('Input Field Decoration', ['field']);
     $form->addItem(['File Uploading'], ['upload']);
     $form->addItem(['Checkboxes'], ['checkbox']);
     $form->addItem('Data Integration', ['form2']);
     $form->addItem('Form Multi-column layout', ['form3']);
     $form->addItem(['Integration with Columns'], ['form5']);
-    $form->addItem(['AutoComplete Field', 'icon'=>'yellow star'], ['autocomplete']);
+    $form->addItem(['AutoComplete Field', 'icon' => 'yellow star'], ['autocomplete']);
     $form->addItem(['DropDown Field'], ['dropdown-plus']);
     $form->addItem(['Value Selectors'], ['form6']);
     $form->addItem(['Conditional Fields'], ['jscondform']);
 
     $form = $layout->leftMenu->addGroup(['Grid and Table', 'icon' => 'table']);
     $form->addItem('Data table with formatted columns', ['table']);
-    $form->addItem(['Advanced table examples', 'icon'=>'yellow star'], ['table2']);
+    $form->addItem(['Advanced table examples', 'icon' => 'yellow star'], ['table2']);
     $form->addItem('Table interractions', ['multitable']);
     $form->addItem(['Column Menus'], ['tablecolumnmenu']);
     $form->addItem(['Column Filters'], ['tablefilter']);
@@ -104,7 +104,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem('CRUD - Full editing solution', ['crud']);
     $form->addItem(['CRUD with Array Persistence', 'icon' => 'yellow star'], ['crud3']);
     $form->addItem(['Grid Layout', 'icon' => 'yellow star'], ['grid-layout']);
-    $form->addItem(['Actions - Integration Examples', 'icon'=>'yellow star'], ['actions']);
+    $form->addItem(['Actions - Integration Examples', 'icon' => 'yellow star'], ['actions']);
 
     $basic = $layout->leftMenu->addGroup(['Basics', 'icon' => 'cubes']);
     $basic->addItem('View', ['view']);
@@ -116,7 +116,7 @@ if (isset($layout->leftMenu)) {
     $basic->addItem('Menu', ['menu']);
     $basic->addItem('BreadCrumb', ['breadcrumb']);
     $basic->addItem('Tabs', ['tabs']);
-    $basic->addItem(['Accordion', 'icon'=>'yellow star'], ['accordion']);
+    $basic->addItem(['Accordion', 'icon' => 'yellow star'], ['accordion']);
     $basic->addItem(['Columns'], ['columns']);
     $basic->addItem('Paginator', ['paginator']);
 
@@ -129,11 +129,11 @@ if (isset($layout->leftMenu)) {
     $basic->addItem(['Loader'], ['loader']);
     $basic->addItem(['Console'], ['console']);
     $basic->addItem('Notifier', ['notify']);
-    $basic->addItem(['Toast', 'icon'=>'yellow star'], ['toast']);
+    $basic->addItem(['Toast', 'icon' => 'yellow star'], ['toast']);
     $basic->addItem(['Pop-up'], ['popup']);
     $basic->addItem(['Modal View'], ['modal2']);
     $basic->addItem('Dynamic jsModal', ['modal']);
-    $basic->addItem(['Dynamic scroll', 'icon'=>'yellow star'], ['scroll-lister']);
+    $basic->addItem(['Dynamic scroll', 'icon' => 'yellow star'], ['scroll-lister']);
     $basic->addItem('Sticky GET', ['sticky']);
     $basic->addItem('Recursive Views', ['recursive']);
 
@@ -146,7 +146,7 @@ if (isset($layout->leftMenu)) {
 
     // Would be nice if this would be a link.
     $layout->menu->addItem()->add(['Button', 'View Source', 'teal', 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url.$f]));
+        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url . $f]));
 
     $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }

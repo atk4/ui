@@ -80,22 +80,24 @@ class Generic
      */
     public function addPopup($popup = null, $icon = 'table-filter-off icon')
     {
-        $id = $this->name.'_ac';
+        $id = $this->name . '_ac';
 
         $popup = $this->table->owner->add($popup ? $popup : 'Popup')->setHoverable();
 
         $this->setHeaderPopup($icon, $id);
 
-        $popup->triggerBy = '#'.$id;
+        $popup->triggerBy = '#' . $id;
         $popup->popOptions = array_merge(
-            $popup->popOptions, [
+            $popup->popOptions,
+            [
                 'on'           => 'click',
                 'position'     => 'bottom left',
                 'movePopup'    => $this->columnData ? true : false,
                 'target'       => $this->columnData ? "th[data-column={$this->columnData}]" : false,
                 'distanceAway' => 10,
                 'offset'       => -2,
-            ]);
+            ]
+        );
         $popup->stopClickEvent = true;
 
         return $popup;
@@ -111,9 +113,9 @@ class Generic
     {
         $this->hasHeaderAction = true;
 
-        $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
+        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
             [
-                ['i', ['id' => $id, 'class' => $class.' icon']],
+                ['i', ['id' => $id, 'class' => $class . ' icon']],
             ],
         ];
     }
@@ -125,10 +127,10 @@ class Generic
      */
     public function setHeaderPopupIcon($icon)
     {
-        $id = $this->name.'_ac';
-        $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
+        $id = $this->name . '_ac';
+        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
             [
-                ['i', ['id' => $id, 'class' => $icon.' icon']],
+                ['i', ['id' => $id, 'class' => $icon . ' icon']],
             ],
         ];
     }
@@ -177,12 +179,12 @@ class Generic
     public function setHeaderDropdown($items, $icon = 'caret square down', $menuId = null)
     {
         $this->hasHeaderAction = true;
-        $id = $this->name.'_ac';
-        $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
+        $id = $this->name . '_ac';
+        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
             [
                 [
-                    'div', ['id' => $id, 'class'=>'ui top left pointing dropdown', 'data-menu-id' => $menuId],
-                    [['i', ['class' => $icon.' icon']]],
+                    'div', ['id' => $id, 'class' => 'ui top left pointing dropdown', 'data-menu-id' => $menuId],
+                    [['i', ['class' => $icon . ' icon']]],
                 ],
             ],
         ];
@@ -200,7 +202,7 @@ class Generic
                             );
                      }";
 
-        $chain = new jQuery('#'.$id);
+        $chain = new jQuery('#' . $id);
         $chain->dropdown([
             'action'   => 'hide',
             'values'   => $items,
@@ -319,10 +321,10 @@ class Generic
         if ($this->table->sortable) {
             $attr['data-sort'] = $f->short_name;
             if ($this->table->sort_by === $f->short_name) {
-                $captionHtmlTag[1]['class'] = $captionHtmlTag[1]['class'].' '.'sorted '.$this->table->sort_order;
+                $captionHtmlTag[1]['class'] = $captionHtmlTag[1]['class'] . ' ' . 'sorted ' . $this->table->sort_order;
 
                 if ($this->table->sort_order === 'ascending') {
-                    $attr['data-sort'] = '-'.$f->short_name;
+                    $attr['data-sort'] = '-' . $f->short_name;
                 } elseif ($this->table->sort_order === 'descending') {
                     $attr['data-sort'] = '';
                 }
@@ -330,7 +332,7 @@ class Generic
         }
 
         if ($this->hasHeaderAction) {
-            $attr = array_merge($attr, ['id' => $this->name.'_th']);
+            $attr = array_merge($attr, ['id' => $this->name . '_th']);
             $tag = $this->getTag(
                 'head',
                 [$captionHtmlTag,
@@ -401,9 +403,9 @@ class Generic
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
         if ($f) {
-            return '{$'.$f->short_name.'}';
+            return '{$' . $f->short_name . '}';
         } else {
-            return '{_$'.$this->short_name.'}';
+            return '{_$' . $this->short_name . '}';
         }
     }
 

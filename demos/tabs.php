@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Demonstrates how to use tabs.
  */
+
 require 'init.php';
 
 $t = $app->add('Tabs');
@@ -41,7 +43,7 @@ $t->addTab('Dynamic Form', function ($tab) {
     $f->setModel($m_register);
     $f->onSubmit(function ($f) {
         if ($f->model['name'] != 'John') {
-            return $f->error('name', 'Your name is not John! It is "'.$f->model['name'].'". It should be John. Pleeease!');
+            return $f->error('name', 'Your name is not John! It is "' . $f->model['name'] . '". It should be John. Pleeease!');
         }
     });
 });

@@ -199,7 +199,7 @@ EOF
             parent::init();
 
             $this->addField('reference');
-            $this->addField('date', ['type'=>'date']);
+            $this->addField('date', ['type' => 'date']);
         }
     }
     session_start();
@@ -240,21 +240,21 @@ EOF
 HTML
     );
 
-    $gl = $page->add(new \atk4\ui\GridLayout([null, 'stackable divided', 'columns'=>4]));
-    $gl->add(['Button', 'Explore UI components', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c1')
+    $gl = $page->add(new \atk4\ui\GridLayout([null, 'stackable divided', 'columns' => 4]));
+    $gl->add(['Button', 'Explore UI components', 'primary basic fluid', 'iconRight' => 'right arrow'], 'r1c1')
         ->link('https://github.com/atk4/ui/#bundled-and-planned-components');
-    $gl->add(['Button', 'Try out interactive features', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c2')
-        ->link(['loader', 'begin'=>false, 'layout'=>false]);
-    $gl->add(['Button', 'Dive into Agile Data', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c3')
+    $gl->add(['Button', 'Try out interactive features', 'primary basic fluid', 'iconRight' => 'right arrow'], 'r1c2')
+        ->link(['loader', 'begin' => false, 'layout' => false]);
+    $gl->add(['Button', 'Dive into Agile Data', 'primary basic fluid', 'iconRight' => 'right arrow'], 'r1c3')
         ->link('https://git.io/ad');
-    $gl->add(['Button', 'More ATK Add-ons', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c4')
+    $gl->add(['Button', 'More ATK Add-ons', 'primary basic fluid', 'iconRight' => 'right arrow'], 'r1c4')
         ->link('https://github.com/atk4/ui/#add-ons-and-integrations');
 
-    $wizard->add(['Button', 'Exit demo', 'primary', 'icon'=>'left arrow'], 'Left')
-        ->link(['begin'=>false, 'layout'=>false]);
+    $wizard->add(['Button', 'Exit demo', 'primary', 'icon' => 'left arrow'], 'Left')
+        ->link(['begin' => false, 'layout' => false]);
 
-    $page->add(['ui'=>'divider']);
+    $page->add(['ui' => 'divider']);
 
-    $page->add(['Message', 'Cool fact!', 'info', 'icon'=>'book'])->text
+    $page->add(['Message', 'Cool fact!', 'info', 'icon' => 'book'])->text
         ->addParagraph('This entire demo is coded in Agile Toolkit and takes up less than 300 lines of very simple code code!');
 });

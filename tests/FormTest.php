@@ -76,16 +76,16 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
         $f = $this->f;
 
         $m = new Model();
-        $m->addField('name', ['default'=>'John']);
-        $m->addField('email', ['required'=>true]);
-        $m->addField('is_admin', ['default'=>false]);
+        $m->addField('name', ['default' => 'John']);
+        $m->addField('email', ['required' => true]);
+        $m->addField('is_admin', ['default' => false]);
 
         $f->setModel($m, ['name', 'email']);
 
         $this->assertEquals('John', $f->model->get('name'));
 
         // fake some POST data
-        $this->assertSubmit(['email'=>'john@yahoo.com', 'is_admin'=>'1'], function ($m) {
+        $this->assertSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function ($m) {
 
             // field has default, but form didn't send value back
             $this->assertEquals(null, $m['name']);
@@ -100,7 +100,7 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
     public function testTextArea()
     {
         $this->f->addField('TextArea');
-        $this->assertSubmit(['TextArea'=>'0'], function ($m) {
+        $this->assertSubmit(['TextArea' => '0'], function ($m) {
             $this->assertSame('0', $m['TextArea']);
         });
     }
@@ -116,20 +116,20 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
 
         preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($error, $field, &$matched) {
             if ($matches[1] == $field) {
-                $this->assertContains($error, $matches[2], 'Regarding field '.$field.' error message');
+                $this->assertContains($error, $matches[2], 'Regarding field ' . $field . ' error message');
 
                 $matched = true;
             }
         }, $this->f_error);
 
-        $this->assertTrue($matched, 'Field '.$field.' did not produce error');
+        $this->assertTrue($matched, 'Field ' . $field . ' did not produce error');
     }
 
     public function assertFieldNoErrors(string $field)
     {
         preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($field, &$matched) {
             if ($matches[1] == $field) {
-                $this->fail('Field '.$field.' unexpected error: '.$matches[2]);
+                $this->fail('Field ' . $field . ' unexpected error: ' . $matches[2]);
             }
         }, $this->f_error);
     }
@@ -138,16 +138,16 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $m = new Model();
 
-        $options = ['0'=>'yes please', '1'=>'woot'];
+        $options = ['0' => 'yes please', '1' => 'woot'];
 
-        $m->addField('opt1', ['values'=>$options]);
-        $m->addField('opt2', ['values'=>$options]);
-        $m->addField('opt3', ['values'=>$options, 'required'=>true]);
+        $m->addField('opt1', ['values' => $options]);
+        $m->addField('opt2', ['values' => $options]);
+        $m->addField('opt3', ['values' => $options, 'required' => true]);
         //$m->addField('opt3_zerotest', ['values'=>$options, 'required'=>true]);
-        $m->addField('opt4', ['values'=>$options, 'mandatory'=>true]);
+        $m->addField('opt4', ['values' => $options, 'mandatory' => true]);
 
         $this->f->setModel($m);
-        $this->assertSubmitError(['opt1'=>'2', 'opt3'=>'', 'opt3_zerotest'=>'0'], function ($error) {
+        $this->assertSubmitError(['opt1' => '2', 'opt3' => '', 'opt3_zerotest' => '0'], function ($error) {
 
             // dropdown validates to make sure option is proper
             $this->assertFieldError('opt1', 'not one of the allowed values');

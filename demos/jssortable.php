@@ -20,8 +20,7 @@ $view = $app->add(['View', 'template' => new \atk4\ui\Template('
         <ul>
             {List}<li class="ui icon label" data-name="{$name}"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</li>{/}
         </ul>
-    </div>'
-)]);
+    </div>')]);
 
 $view->add('Lister', 'List')
      ->addHook('beforeRow', function ($l) {
@@ -35,7 +34,7 @@ $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
     if (@$_GET['btn']) {
         return new \atk4\ui\jsNotify(implode(' - ', $order));
     } else {
-        return new \atk4\ui\jsNotify($src.' moved from position '.$oldPos.' to '.$pos);
+        return new \atk4\ui\jsNotify($src . ' moved from position ' . $oldPos . ' to ' . $pos);
     }
 });
 

@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Demonstrates how to use a wizard.
  */
+
 require 'init.php';
 
 $t = $app->add('Wizard');
@@ -19,10 +21,10 @@ $t->addStep('Welcome', function ($p) {
 // form on "Next" button click, performing validation and submission. You do not need
 // to return any action from form's onSubmit callback. You may also use memorize()
 // to store wizard-specific variables
-$t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection String'], function ($p) {
+$t->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connection String'], function ($p) {
     $f = $p->add('Form');
 
-    $f->addField('dsn', 'Connect DSN', ['required'=>true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
+    $f->addField('dsn', 'Connect DSN', ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
     $f->onSubmit(function ($f) use ($p) {
         $p->memorize('dsn', $f->model['dsn']);
 
@@ -33,16 +35,16 @@ $t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection
 // Alternatvely, you may access buttonNext , buttonPrev properties of a wizard
 // and set a custom js action or even set a different link. You can use recall()
 // to access some values that were recorded on another steps.
-$t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'table'], function ($p) {
+$t->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon' => 'table'], function ($p) {
     if (isset($_GET['name'])) {
         $p->memorize('model', $_GET['name']);
-        header('Location: '.$p->urlNext());
+        header('Location: ' . $p->urlNext());
         $p->app->terminate();
     }
 
     $c = $p->add('Columns');
 
-    $t = $c->addColumn()->add(['Grid', 'paginator'=>false, 'menu'=>false]);
+    $t = $c->addColumn()->add(['Grid', 'paginator' => false, 'menu' => false]);
     $c->addColumn()->add(['Message', 'Information', 'info'])->text
         ->addParagraph('Selecting which model you would like to import into your DSN. If corresponding table already exist, we might add extra fields into it. No tables, columns or rows will be deleted.');
 
@@ -59,7 +61,7 @@ $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'tabl
 // Steps may contain interractive elements. You can disable navigational buttons
 // and enable them as you see fit. Use handy js method to trigger advancement to
 // the next step.
-$t->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'database'], function ($p) {
+$t->addStep(['Migration', 'description' => 'Create or update table', 'icon' => 'database'], function ($p) {
     $c = $p->add('Console');
     $p->buttonFinish->addClass('disabled');
 
@@ -69,9 +71,9 @@ $t->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'data
 
         $c->output('please wait');
         sleep(1);
-        $c->output('connecting to "'.$dsn.'" (well not really, this is only a demo)');
+        $c->output('connecting to "' . $dsn . '" (well not really, this is only a demo)');
         sleep(2);
-        $c->output('initializing table for model "'.$model.'" (again - tricking you)');
+        $c->output('initializing table for model "' . $model . '" (again - tricking you)');
         sleep(1);
         $c->output('DONE');
 

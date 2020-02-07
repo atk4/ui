@@ -21,7 +21,7 @@ class CardTable extends Table
         }
 
         if (!$m->loaded()) {
-            throw new Exception(['Model must be loaded', 'model'=>$m]);
+            throw new Exception(['Model must be loaded', 'model' => $m]);
         }
 
         $data = [];
@@ -32,8 +32,8 @@ class CardTable extends Table
             if (!$columndef || ($columndef && in_array($key, $columndef))) {
                 $data[] = [
                     'id'   => $key,
-                    'field'=> $m->getField($key)->getCaption(),
-                    'value'=> $ui_values[$key],
+                    'field' => $m->getField($key)->getCaption(),
+                    'value' => $ui_values[$key],
                 ];
             }
         }

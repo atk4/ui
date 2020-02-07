@@ -23,7 +23,7 @@ $table->addColumn('title', new \atk4\ui\TableColumn\Status([
 
 $table->addColumn('date');
 $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
-$table->addColumn('logo_url', [new \atk4\ui\TableColumn\Image()], ['caption'=>'Our Logo']);
+$table->addColumn('logo_url', [new \atk4\ui\TableColumn\Image()], ['caption' => 'Our Logo']);
 
 $table->addHook('getHTMLTags', function ($table, $row) {
     if ($row->id == 1) {

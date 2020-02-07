@@ -30,7 +30,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testableDemoFilesdataProvider()
     {
         $files = [];
-        foreach (scandir(dirname(__DIR__).DIRECTORY_SEPARATOR.'demos') as $file) {
+        foreach (scandir(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'demos') as $file) {
             if (is_dir($file) || substr($file, -3) !== 'php') {
                 continue;
             }
@@ -63,8 +63,8 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoHTMLStatusAndResponse(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on '.$uri);
-        $this->assertRegExp($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on '.$uri);
+        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertRegExp($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     /**
@@ -75,8 +75,8 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoGet(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on '.$uri);
-        $this->assertRegExp($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on '.$uri);
+        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertRegExp($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     public function casesDemoGETDataProvider()
@@ -117,8 +117,8 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoAssertJSONResponse(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on '.$uri);
-        $this->assertRegExp($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on '.$uri);
+        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertRegExp($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     public function JSONResponseDataProvider()
@@ -147,11 +147,11 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoAssertSSEResponse(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on '.$uri);
+        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
 
         $output_rows = explode(PHP_EOL, $response->getBody()->getContents());
 
-        $this->assertGreaterThan(0, count($output_rows), ' Response is empty on '.$uri);
+        $this->assertGreaterThan(0, count($output_rows), ' Response is empty on ' . $uri);
         // check SSE Syntax
         foreach ($output_rows as $index => $sse_line) {
             if (empty($sse_line) || $sse_line === null) {
@@ -160,8 +160,9 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
             preg_match('/^[id|event|data].*$/', $sse_line, $matches);
             $this->assertEquals(
-                $sse_line, $matches[0] ?? 'error',
-                ' Testing SSE response line '.$index.' with content '.$sse_line.' on '.$uri
+                $sse_line,
+                $matches[0] ?? 'error',
+                ' Testing SSE response line ' . $index . ' with content ' . $sse_line . ' on ' . $uri
             );
         }
     }
@@ -186,8 +187,8 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoAssertJSONResponsePOST(string $uri, array $post_data)
     {
         $response = $this->getResponseFromRequestFormPOST($uri, $post_data);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on '.$uri);
-        $this->assertRegExp($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on '.$uri);
+        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertRegExp($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     public function JSONResponsePOSTDataProvider()

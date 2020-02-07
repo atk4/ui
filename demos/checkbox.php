@@ -1,13 +1,15 @@
 <?php
+
 /**
  * Testing fields.
  */
+
 require 'init.php';
 
 use atk4\ui\FormField\CheckBox;
 use atk4\ui\View;
 
-$app->add(['Header', 'CheckBoxes', 'size'=>2]);
+$app->add(['Header', 'CheckBoxes', 'size' => 2]);
 
     $app->add(new CheckBox('Make my profile visible'));
     $app->add(new CheckBox('Make my profile visible ticked'))->set(true);
@@ -23,7 +25,7 @@ $app->add(['Header', 'CheckBoxes', 'size'=>2]);
     $app->add(new View(['ui' => 'divider']));
     $app->add(['FormField/CheckBox', 'Custom setting?'])->js(true)->checkbox('set indeterminate');
 
-    $app->add(['Header', 'CheckBoxes in a form', 'size'=>2]);
+    $app->add(['Header', 'CheckBoxes in a form', 'size' => 2]);
 $form = $app->add('Form');
 $form->addField('test', ['CheckBox']);
 $form->addField('test_checked', ['CheckBox'])->set(true);

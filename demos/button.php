@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Demonstrates how to use buttons.
  */
+
 require 'init.php';
 use atk4\ui\Button;
 use atk4\ui\Icon;
@@ -21,12 +23,12 @@ $b1->link(['index']);
 
 $app->add(['Header', 'Properties', 'size' => 2]);
 $app->add(['Button', 'Primary button', 'primary']);
-$app->add(['Button', 'Load', 'labeled', 'icon'=>'pause']);
-$app->add(['Button', 'Next', 'iconRight'=>'right arrow']);
-$app->add(['Button', null, 'circular', 'icon'=>'settings']);
+$app->add(['Button', 'Load', 'labeled', 'icon' => 'pause']);
+$app->add(['Button', 'Next', 'iconRight' => 'right arrow']);
+$app->add(['Button', null, 'circular', 'icon' => 'settings']);
 
 $app->add(['Header', 'Big Button', 'size' => 2]);
-$app->add(['Button', 'Click me', 'big primary', 'icon'=>'check']);
+$app->add(['Button', 'Click me', 'big primary', 'icon' => 'check']);
 
 $app->add(['Header', 'Button Intent', 'size' => 2]);
 $app->add(['Button', 'Yes', 'positive basic']);
@@ -41,9 +43,9 @@ $bar->add(['Button', 'Shuffle', 'icon' => 'shuffle']);
 
 $app->add(['Header', 'Icon Bar', 'size' => 2]);
 $bar = $app->add(['ui' => 'big blue buttons']);
-$bar->add(['Button', 'icon'=>'file']);
-$bar->add(['Button', 'icon'=>'yellow save']);
-$bar->add(['Button', 'icon'=>'upload', 'disabled'=>true]);
+$bar->add(['Button', 'icon' => 'file']);
+$bar->add(['Button', 'icon' => 'yellow save']);
+$bar->add(['Button', 'icon' => 'upload', 'disabled' => true]);
 
 $app->add(['Header', 'Forks Button Component', 'size' => 2]);
 

@@ -10,12 +10,12 @@ $app->add(['Button', 'Actions', 'small left floated basic blue', 'icon' => 'left
     ->link(['actions']);
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
-$app->add(['Header', 'Extensions to ATK Data Actions', 'subHeader'=>'Model action can be trigger using js Event']);
+$app->add(['Header', 'Extensions to ATK Data Actions', 'subHeader' => 'Model action can be trigger using js Event']);
 
 $country = new Country($db);
 
 $c_action = $country->addAction('Email', function ($m) {
-    return 'Email to Kristy in '.$m->get('name').' has been sent!';
+    return 'Email to Kristy in ' . $m->get('name') . ' has been sent!';
 });
 
 $country->tryLoadAny();
@@ -44,11 +44,11 @@ $files = new File($app->db);
 $f_action = $files->addAction(
     'import_from_filesystem',
     [
-        'callback'=> 'importFromFilesystem',
+        'callback' => 'importFromFilesystem',
         'args'    => [
-            'path'=> '.',
+            'path' => '.',
         ],
-        'scope'=> atk4\data\UserAction\Generic::NO_RECORDS,
+        'scope' => atk4\data\UserAction\Generic::NO_RECORDS,
     ]
 );
 
@@ -59,7 +59,7 @@ $executor->addHook('afterExecute', function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');
 });
 
-$btn->on('click', $executor, ['confirm'=> 'This will import a lot of file. Are you sure?']);
+$btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
 
 $app->add(['View', 'ui' => 'ui clearing divider']);
 
@@ -68,15 +68,15 @@ $app->add(['Header', 'Action can be applied to an input button.', 'size' => 4]);
 // Note here that we explicitly required a jsUserAction executor because we want to use the input value
 // as the action args.
 $country->addAction('greet', [
-    'args'=> [
-        'age'=> [
+    'args' => [
+        'age' => [
             'type'     => 'integer',
             'required' => true,
         ],
     ],
     'ui'      => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
-    'callback'=> function ($m, $age) {
-        return 'Age is '.$age;
+    'callback' => function ($m, $age) {
+        return 'Age is ' . $age;
     },
 ]);
 

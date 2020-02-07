@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Testing form.
  */
+
 require 'init.php';
 require 'database.php';
 
@@ -26,14 +28,14 @@ $form->setModel(
         $_GET['m'] == 'country' ? new Country($db) : (
             $_GET['m'] == 'file' ? new File($db) : new Stat($db)
         )) : new Stat($db)
-    )->tryLoadAny();
+)->tryLoadAny();
 
 $form->onSubmit(function ($form) {
     $errors = [];
     foreach ($form->model->dirty as $field => $value) {
         // we should care only about editable fields
         if ($form->model->getField($field)->isEditable()) {
-            $errors[] = $form->error($field, 'Value was changed, '.json_encode($value).' to '.json_encode($form->model[$field]));
+            $errors[] = $form->error($field, 'Value was changed, ' . json_encode($value) . ' to ' . json_encode($form->model[$field]));
         }
     }
 

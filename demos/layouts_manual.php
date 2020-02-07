@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Demonstrates how to use layouts.
  */
+
 require '../vendor/autoload.php';
 require 'somedatadef.php';
 date_default_timezone_set('UTC');

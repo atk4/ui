@@ -33,7 +33,7 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         // top tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t1 = &$t->getTagRef('_top');
-        $this->assertEquals(['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']], $t1);
+        $this->assertEquals(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']], $t1);
 
         $t1 = ['good bye']; // will change $t->template because it's by reference
         $this->assertEquals(['good bye'], $t->template);
@@ -44,7 +44,7 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertEquals(['hello'], $t2);
 
         $t2 = ['good bye']; // will change $t->template because it's by reference
-        $this->assertEquals(['', 'foo#1'=>['good bye'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']], $t->template);
+        $this->assertEquals(['', 'foo#1' => ['good bye'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']], $t->template);
     }
 
     /**
@@ -115,8 +115,8 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
      */
     public function testConditionalTagsVAT()
     {
-        $s = '{vat_applied?}VAT is {$vat}%{/?}'.
-             '{vat_zero?}VAT is zero{/?}'.
+        $s = '{vat_applied?}VAT is {$vat}%{/?}' .
+             '{vat_zero?}VAT is zero{/?}' .
              '{vat_not_applied?}VAT is not applied{/?}';
 
         $f = function ($vat) use ($s) {
@@ -152,7 +152,7 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         // top tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t1 = $t->getTagRefList('_top');
-        $this->assertEquals([['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']]], $t1);
+        $this->assertEquals([['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']]], $t1);
 
         $t1[0] = ['good bye']; // will change $t->template because it's by reference
         $this->assertEquals(['good bye'], $t->template);
@@ -163,7 +163,7 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertEquals([['hello'], ['hello']], $t2);
 
         $t2[1] = ['good bye']; // will change $t->template last "foo" tag because it's by reference
-        $this->assertEquals(['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['good bye']], $t->template);
+        $this->assertEquals(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['good bye']], $t->template);
 
         // array of tags
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
@@ -172,7 +172,7 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $t2[1] = ['good bye']; // will change $t->template last "foo" tag because it's by reference
         $t2[2] = ['planet'];   // will change $t->template "bar" tag because it's by reference too
-        $this->assertEquals(['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['planet'], '. ', 'foo#2'=>['good bye']], $t->template);
+        $this->assertEquals(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['planet'], '. ', 'foo#2' => ['good bye']], $t->template);
     }
 
     /**

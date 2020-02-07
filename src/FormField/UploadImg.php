@@ -37,7 +37,7 @@ class UploadImg extends Upload
         }
 
         if (!$this->thumbnail) {
-            $this->thumbnail = (new View(['element'=>'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]))
+            $this->thumbnail = (new View(['element' => 'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]))
                                     ->setAttr(['width' => '36px', 'height' => '36px']);
         }
 

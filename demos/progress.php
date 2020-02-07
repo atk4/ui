@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Demonstrates how to use tabs.
  */
+
 require 'init.php';
 
 $p = $app->add(['ProgressBar', 20]);

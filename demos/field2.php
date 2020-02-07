@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Demonstrates how to use fields with form.
  */
+
 require 'init.php';
 require 'database.php';
 
@@ -32,15 +34,15 @@ $values = [
     'registered' => ['Registered', 'icon' => 'registered icon'],
     'file'       => ['File', 'icon' => 'file icon'],
 ];
-$g->addField('d_norm', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'width'=>'three'])->set('globe');
-$g->addField('d_read', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'readonly' => true, 'width'=>'three'])->set('globe'); // allows to change value
-$g->addField('d_disb', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'disabled' => true, 'width'=>'three'])->set('globe'); // css disabled, but can focus with Tab and change value
+$g->addField('d_norm', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'width' => 'three'])->set('globe');
+$g->addField('d_read', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'readonly' => true, 'width' => 'three'])->set('globe'); // allows to change value
+$g->addField('d_disb', [new \atk4\ui\FormField\DropDown(['values' => $values]), 'disabled' => true, 'width' => 'three'])->set('globe'); // css disabled, but can focus with Tab and change value
 
 $g = $f->addGroup('Radio');
 
-$g->addField('radio_norm', ['Radio'], ['enum'=>['one', 'two', 'three']])->set('two');
-$g->addField('radio_read', ['Radio', 'readonly' => true], ['enum'=>['one', 'two', 'three']])->set('two');
-$g->addField('radio_disb', ['Radio', 'disabled' => true], ['enum'=>['one', 'two', 'three']])->set('two');
+$g->addField('radio_norm', ['Radio'], ['enum' => ['one', 'two', 'three']])->set('two');
+$g->addField('radio_read', ['Radio', 'readonly' => true], ['enum' => ['one', 'two', 'three']])->set('two');
+$g->addField('radio_disb', ['Radio', 'disabled' => true], ['enum' => ['one', 'two', 'three']])->set('two');
 
 $g = $f->addGroup('File upload');
 
@@ -53,11 +55,11 @@ $field = $g->addField('file_norm', ['Upload', ['accept' => ['.png', '.jpg']]])->
 $field->onDelete($onDelete);
 $field->onUpload($onUpload);
 
-$field = $g->addField('file_read', ['Upload', ['accept' => ['.png', '.jpg'], 'readonly'=> true]])->set('readonly', 'readonly.jpg');
+$field = $g->addField('file_read', ['Upload', ['accept' => ['.png', '.jpg'], 'readonly' => true]])->set('readonly', 'readonly.jpg');
 $field->onDelete($onDelete);
 $field->onUpload($onUpload);
 
-$field = $g->addField('file_disb', ['Upload', ['accept' => ['.png', '.jpg'], 'disabled'=> true]])->set('disabled', 'disabled.jpg');
+$field = $g->addField('file_disb', ['Upload', ['accept' => ['.png', '.jpg'], 'disabled' => true]])->set('disabled', 'disabled.jpg');
 $field->onDelete($onDelete);
 $field->onUpload($onUpload);
 
@@ -103,13 +105,13 @@ $button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [
 $app->add(['Header', 'Line in a Form']);
 $form = $app->add('Form');
 
-$field = $form->addField('Title', null, ['values'=>['Mr', 'Mrs', 'Miss'], 'ui'=>['hint'=>'select one']]);
+$field = $form->addField('Title', null, ['values' => ['Mr', 'Mrs', 'Miss'], 'ui' => ['hint' => 'select one']]);
 
-$field = $form->addField('name', ['Line', 'hint'=>'this is sample hint that escapes <html> characters']);
+$field = $form->addField('name', ['Line', 'hint' => 'this is sample hint that escapes <html> characters']);
 $field->set('value in a form');
 
 $field = $form->addField('surname', new \atk4\ui\FormField\Line([
-    'hint'=> ['template'=> new \atk4\ui\Template(
+    'hint' => ['template' => new \atk4\ui\Template(
         'Click <a href="http://example.com/" target="_blank">here</a>'
     )],
 ]));
@@ -131,17 +133,17 @@ $form_page = $tabs->addTab('Other Info')->add(['FormLayout/Generic', 'form' => $
 $form_page->addField('age', new \atk4\ui\FormField\Line());
 
 $form->onSubmit(function ($f) {
-    return $f->model['name'].' has age '.$f->model['age'];
+    return $f->model['name'] . ' has age ' . $f->model['age'];
 });
 
-$app->add(['Header', 'onChange event', 'subHeader'=>'see in browser console']);
+$app->add(['Header', 'onChange event', 'subHeader' => 'see in browser console']);
 
 $form = $app->add('Form');
 
 $g = $form->addGroup('Calendar');
-$c1 = $g->addField('c1', new \atk4\ui\FormField\Calendar(['type'=>'date']));
-$c2 = $g->addField('c2', new \atk4\ui\FormField\Calendar(['type'=>'date']));
-$c3 = $g->addField('c3', new \atk4\ui\FormField\Calendar(['type'=>'date']));
+$c1 = $g->addField('c1', new \atk4\ui\FormField\Calendar(['type' => 'date']));
+$c2 = $g->addField('c2', new \atk4\ui\FormField\Calendar(['type' => 'date']));
+$c3 = $g->addField('c3', new \atk4\ui\FormField\Calendar(['type' => 'date']));
 
 $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
 $c2->onChange(new \atk4\ui\jsExpression('console.log("c2 changed: "+date+","+text+","+mode)'));
@@ -199,14 +201,14 @@ $g->addField('text_cr', [new \atk4\ui\FormField\TextArea()])->set("First line\rS
 $g->addField('text_lf', [new \atk4\ui\FormField\TextArea()])->set("First line\nSecond line");
 
 $g = $f->addGroup('With model');
-$g->addField('m_text_crlf', [new \atk4\ui\FormField\TextArea()], ['type'=>'text'])->set("First line\r\nSecond line");
-$g->addField('m_text_cr', [new \atk4\ui\FormField\TextArea()], ['type'=>'text'])->set("First line\rSecond line");
-$g->addField('m_text_lf', [new \atk4\ui\FormField\TextArea()], ['type'=>'text'])->set("First line\nSecond line");
+$g->addField('m_text_crlf', [new \atk4\ui\FormField\TextArea()], ['type' => 'text'])->set("First line\r\nSecond line");
+$g->addField('m_text_cr', [new \atk4\ui\FormField\TextArea()], ['type' => 'text'])->set("First line\rSecond line");
+$g->addField('m_text_lf', [new \atk4\ui\FormField\TextArea()], ['type' => 'text'])->set("First line\nSecond line");
 
 $f->onSubmit(function ($form) {
     // check what values are submitted
     echo "We're URL encoding submitted values to be able to see what line end is actually submitted.";
-    foreach ($form->model->get() as $k=>$v) {
+    foreach ($form->model->get() as $k => $v) {
         var_dump([$k => urlencode($v)]);
     }
     echo 'As you can see - without model it submits CRLF, but with model it will normalize all to LF';

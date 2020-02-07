@@ -34,7 +34,7 @@ class Status extends Generic
 
         $attr = $this->getTagAttributes('body');
 
-        $extra_tags = array_merge_recursive($attr, $extra_tags, ['class' => '{$_'.$f->short_name.'_status}']);
+        $extra_tags = array_merge_recursive($attr, $extra_tags, ['class' => '{$_' . $f->short_name . '_status}']);
 
         if (isset($extra_tags['class']) && is_array($extra_tags['class'])) {
             $extra_tags['class'] = implode(' ', $extra_tags['class']);
@@ -43,8 +43,8 @@ class Status extends Generic
         return $this->app->getTag(
             'td',
             $extra_tags,
-            [$this->app->getTag('i', ['class' => 'icon {$_'.$f->short_name.'_icon}'], '').
-            ' {$'.$f->short_name.'}', ]
+            [$this->app->getTag('i', ['class' => 'icon {$_' . $f->short_name . '_icon}'], '') .
+            ' {$' . $f->short_name . '}', ]
         );
     }
 
@@ -65,23 +65,22 @@ class Status extends Generic
         }
 
         switch ($cl) {
-        case 'positive':
-            $ic = 'checkmark';
-            break;
-        case 'negative':
-            $ic = 'close';
-            break;
-        case 'default':
-            $ic = 'question';
-            break;
-        default:
-            $ic = '';
-
+            case 'positive':
+                $ic = 'checkmark';
+                break;
+            case 'negative':
+                $ic = 'close';
+                break;
+            case 'default':
+                $ic = 'question';
+                break;
+            default:
+                $ic = '';
         }
 
         return [
-            '_'.$field->short_name.'_status' => $cl.' single line',
-            '_'.$field->short_name.'_icon'   => $ic,
+            '_' . $field->short_name . '_status' => $cl . ' single line',
+            '_' . $field->short_name . '_icon'   => $ic,
         ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Creates a Multiline field within a table, which allows adding/editing multiple
  * data rows.
@@ -596,7 +597,7 @@ class MultiLine extends Generic
             'isEditable'  => $field->isEditable(),
             'isHidden'    => $field->isHidden(),
             'isVisible'   => $field->isVisible(),
-            'fieldOptions'=> $this->_getFieldOptions($field, $component),
+            'fieldOptions' => $this->_getFieldOptions($field, $component),
         ];
     }
 
@@ -620,7 +621,8 @@ class MultiLine extends Generic
                 case 'text':
                 case 'textarea':
                     return 'textarea';
-                default: return 'input';
+                default:
+                    return 'input';
             }
         }
 
@@ -738,8 +740,9 @@ class MultiLine extends Generic
         $this->multiLine->template->trySetHTML('Input', $this->getInput());
         parent::renderView();
 
-        $this->multiLine->vue('atk-multiline',
-                              [
+        $this->multiLine->vue(
+            'atk-multiline',
+            [
                                   'data' => [
                                       'linesField'  => $this->short_name,
                                       'fields'      => $this->fieldDefs,
@@ -754,7 +757,8 @@ class MultiLine extends Generic
                                       'afterDelete' => $this->jsAfterDelete,
                                       'addOnTab'    => $this->addOnTab,
                                   ],
-                              ]);
+            ]
+        );
     }
 
     /**
@@ -868,7 +872,7 @@ class MultiLine extends Generic
         if (!empty($dummyFields)) {
             $dummyModel = new Model($m->persistence, ['table' => $m->table]);
             foreach ($dummyFields as $f) {
-                $dummyModel->addExpression($f['name'], ['expr'=>$f['expr'], 'type' => $m->getField($f['name'])->type]);
+                $dummyModel->addExpression($f['name'], ['expr' => $f['expr'], 'type' => $m->getField($f['name'])->type]);
             }
             $values = $dummyModel->loadAny()->get();
             unset($values[$m->id_field]);
@@ -959,7 +963,7 @@ class MultiLine extends Generic
                 break;
             default:
                 // Value is "" or field value enclosed in bracket: "value"
-                $value = $model[$fieldName] ? '"'.$model[$fieldName].'"' : '""';
+                $value = $model[$fieldName] ? '"' . $model[$fieldName] . '"' : '""';
         }
 
         return $value;

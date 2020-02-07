@@ -16,7 +16,7 @@ class CheckBox extends Generic
      */
     public function jsChecked()
     {
-        return new \atk4\ui\jsExpression(' $('.$this->table->jsRender().").find('.checked.".$this->class."').closest('tr').map(function(){ ".
+        return new \atk4\ui\jsExpression(' $(' . $this->table->jsRender() . ").find('.checked." . $this->class . "').closest('tr').map(function(){ " .
             "return $(this).data('id');}).get().join(',')");
     }
 
@@ -24,7 +24,7 @@ class CheckBox extends Generic
     {
         parent::init();
         if (!$this->class) {
-            $this->class = 'cb_'.$this->short_name;
+            $this->class = 'cb_' . $this->short_name;
         }
     }
 
@@ -33,13 +33,13 @@ class CheckBox extends Generic
         if (isset($f)) {
             throw new \atk4\ui\Exception(['CheckBox must be placed in an empty column. Don\'t specify any field.', 'field' => $f]);
         }
-        $this->table->js(true)->find('.'.$this->class)->checkbox();
+        $this->table->js(true)->find('.' . $this->class)->checkbox();
 
         return parent::getHeaderCellHTML($f);
     }
 
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        return $this->app->getTag('div', ['class' => 'ui checkbox '.$this->class], [['input', ['type' => 'checkbox']]]);
+        return $this->app->getTag('div', ['class' => 'ui checkbox ' . $this->class], [['input', ['type' => 'checkbox']]]);
     }
 }

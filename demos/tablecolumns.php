@@ -109,7 +109,7 @@ foreach (range(1, 50) as $id) {
 
     $m->insert([
         'id'                       => $id,
-        'name'                     => 'name '.$id,
+        'name'                     => 'name ' . $id,
         'key_value'                => $key_value,
         'key_value_string'         => $key_value_string[$key_value],
         'value_not_always_present' => rand(0, 100) > 50 ? 'have value' : '',

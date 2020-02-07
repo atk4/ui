@@ -150,7 +150,7 @@ abstract class _Abstract extends \atk4\ui\View
             if ($f->isEditable()) {
                 $add_fields[] = [$f->short_name];
             } elseif ($f->isVisible()) {
-                $add_fields[] = [$f->short_name, ['readonly'=>true]];
+                $add_fields[] = [$f->short_name, ['readonly' => true]];
             }
         }
 

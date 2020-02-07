@@ -62,7 +62,7 @@ class Wizard extends View
     public function init()
     {
         parent::init();
-        $this->stepCallback = $this->add(['Callback', 'urlTrigger'=>$this->name]);
+        $this->stepCallback = $this->add(['Callback', 'urlTrigger' => $this->name]);
 
         $this->currentStep = $this->stepCallback->triggered() ?: 0;
 
@@ -94,8 +94,8 @@ class Wizard extends View
         $step = $this->factory([
             'Step',
             'wizard'  => $this,
-            'template'=> clone $this->stepTemplate,
-            'sequence'=> count($this->steps),
+            'template' => clone $this->stepTemplate,
+            'sequence' => count($this->steps),
         ], $name, 'atk4\ui');
 
         // add tabs menu item
@@ -180,8 +180,8 @@ class Wizard extends View
     public function recursiveRender()
     {
         if (!$this->steps) {
-            $this->addStep(['No Steps Defined', 'icon'=>'configure', 'description'=>'use $wizard->addStep() now'], function ($p) {
-                $p->add(['Message', 'Step content will appear here', 'type'=>'error', 'text'=>'Specify callback to addStep() which would populate this area.']);
+            $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function ($p) {
+                $p->add(['Message', 'Step content will appear here', 'type' => 'error', 'text' => 'Specify callback to addStep() which would populate this area.']);
             });
         }
 
@@ -197,7 +197,7 @@ class Wizard extends View
         // Set proper width to the wizard
         $c = count($this->steps);
         $enumeration = ['one', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
-        $this->ui = $enumeration[$c].' '.$this->ui;
+        $this->ui = $enumeration[$c] . ' ' . $this->ui;
 
         if ($c > 6) {
             $this->addClass('mini');

@@ -29,9 +29,9 @@ $tt = $app->add('Tabs');
 $t = $tt->addTab('set()');
 $t->add([
     'Header',
-    'icon'=> 'terminal',
+    'icon' => 'terminal',
     'Console output streaming',
-    'subHeader'=> 'any output your PHP script produces through console is displayed to user in real-time',
+    'subHeader' => 'any output your PHP script produces through console is displayed to user in real-time',
 ]);
 $t->add('Console')->set(function ($console) {
     $console->output('Executing test process...');
@@ -46,9 +46,9 @@ $t->add('Console')->set(function ($console) {
 $t = $tt->addTab('runMethod()', function ($t) {
     $t->add([
         'Header',
-        'icon'=> 'terminal',
+        'icon' => 'terminal',
         'Non-interractive method invocation',
-        'subHeader'=> 'console can invoke a method, which normaly would be non-interractive and can still capture debug output',
+        'subHeader' => 'console can invoke a method, which normaly would be non-interractive and can still capture debug output',
     ]);
     $t->add('Console')->runMethod($t->add(new TestConsole()), 'generateReport');
 });
@@ -56,9 +56,9 @@ $t = $tt->addTab('runMethod()', function ($t) {
 $t = $tt->addTab('exec() single', function ($t) {
     $t->add([
         'Header',
-        'icon'=> 'terminal',
+        'icon' => 'terminal',
         'Command execution',
-        'subHeader'=> 'it is easy to run server-side commands and stream output through console',
+        'subHeader' => 'it is easy to run server-side commands and stream output through console',
     ]);
     $w = $t->add(['Message', 'This demo may not work', 'warning']);
     $w->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
@@ -68,9 +68,9 @@ $t = $tt->addTab('exec() single', function ($t) {
 $t = $tt->addTab('exec() chain', function ($t) {
     $t->add([
         'Header',
-        'icon'=> 'terminal',
+        'icon' => 'terminal',
         'Command execution',
-        'subHeader'=> 'it is easy to run server-side commands and stream output through console',
+        'subHeader' => 'it is easy to run server-side commands and stream output through console',
     ]);
     $w = $t->add(['Message', 'This demo may not work', 'warning']);
     $w->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
@@ -84,9 +84,9 @@ $t = $tt->addTab('exec() chain', function ($t) {
 $t = $tt->addTab('composer update', function ($t) {
     $t->add([
         'Header',
-        'icon'=> 'terminal',
+        'icon' => 'terminal',
         'Command execution',
-        'subHeader'=> 'it is easy to run server-side commands and stream output through console',
+        'subHeader' => 'it is easy to run server-side commands and stream output through console',
     ]);
 
     $w = $t->add(['Message', 'This demo may not work', 'warning']);
@@ -94,7 +94,7 @@ $t = $tt->addTab('composer update', function ($t) {
 
     $b = $w->add(['Button', 'I understand, proceed anyway', 'primary big']);
 
-    $c = $t->add(['Console', 'event'=>false]);
+    $c = $t->add(['Console', 'event' => false]);
     $c->exec('bash', ['-c', 'cd ..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
 
     $b->on('click', $c->jsExecute());
@@ -105,7 +105,7 @@ $t = $tt->addTab('Use after form submit', function ($t) {
         'Header',
         'icon' => 'terminal',
         'How to log form submit process',
-        'subHeader'=> 'Sometimes you can have long running process after form submit and want to show progress for user...',
+        'subHeader' => 'Sometimes you can have long running process after form submit and want to show progress for user...',
     ]);
 
     session_start();
@@ -113,7 +113,7 @@ $t = $tt->addTab('Use after form submit', function ($t) {
     $f = $t->add('Form');
     $f->addFields(['foo', 'bar']);
 
-    $c = $t->add(['Console', 'event'=>false]);
+    $c = $t->add(['Console', 'event' => false]);
     $c->set(function ($c) {
         $m = $_SESSION['data'];
         $c->output('Executing process...');

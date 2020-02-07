@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Testing Columns.
  */
+
 require 'init.php';
 
 // some custom style needed for our "highlight" to work. You don't need this on

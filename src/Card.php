@@ -1,4 +1,5 @@
 <?php
+
 /**
  * A Card container.
  *
@@ -391,10 +392,10 @@ class Card extends View
         if ($glue) {
             $extra = '';
             foreach ($fields as $field) {
-                $extra .= $m->get($field).$glue;
+                $extra .= $m->get($field) . $glue;
             }
             $extra = rtrim($extra, $glue);
-            $this->addExtraContent(new View([$extra, 'ui'=>'ui basic fitted segment']));
+            $this->addExtraContent(new View([$extra, 'ui' => 'ui basic fitted segment']));
         } else {
             foreach ($fields as $field) {
                 $this->addExtraContent(new View([$m->get($field), 'ui basic fitted segment']));

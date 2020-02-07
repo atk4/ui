@@ -283,7 +283,7 @@ class Table extends Lister
         foreach ($cols as $colName) {
             $col = $this->columns[$colName];
             if ($col) {
-                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#'.$col->name.'_ac']));
+                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
                 $pop->form->onSubmit(function ($f) use ($pop) {
                     return new jsReload($this->reload);
@@ -384,7 +384,7 @@ class Table extends Lister
         $options = [];
         if ($fx && is_callable($fx)) {
             $cb = $this->add('jsCallBack');
-            $cb->set($fx, ['widths'=>'widths']);
+            $cb->set($fx, ['widths' => 'widths']);
             $options['uri'] = $cb->getJSURL();
         } elseif ($fx && is_array($fx)) {
             $widths = $fx;
@@ -620,7 +620,6 @@ class Table extends Lister
     public function updateTotals()
     {
         foreach ($this->totals_plan as $key => $val) {
-
             // if value is array, then we treat it as built-in or callable aggregate method
             if (is_array($val)) {
                 $f = $val[0]; // shortcut
@@ -672,7 +671,6 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-
             // If multiple formatters are defined, use the first for the header cell
             if (is_array($column)) {
                 $column = $column[0];
@@ -730,7 +728,6 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-
             // If multiple formatters are defined, use the first for the header cell
 
             if (!is_int($name)) {
@@ -759,9 +756,9 @@ class Table extends Lister
                 if ($cell) {
                     if ($name) {
                         // if name is set, we can wrap things
-                        $cell = str_replace('{$'.$name.'}', $cell, $html);
+                        $cell = str_replace('{$' . $name . '}', $cell, $html);
                     } else {
-                        $cell = $cell.' '.$html;
+                        $cell = $cell . ' ' . $html;
                     }
                 } else {
                     $cell = $html;

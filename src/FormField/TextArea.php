@@ -24,10 +24,9 @@ class TextArea extends Input
             'type'        => $this->inputType,
             'rows'        => $this->rows,
             'placeholder' => $this->placeholder,
-            'id'          => $this->id.'_input',
+            'id'          => $this->id . '_input',
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
-        ], $this->inputAttr), (string) $this->getValue() // need to cast to string to avoid null values which break html markup
-        );
+        ], $this->inputAttr), (string) $this->getValue()); // need to cast to string to avoid null values which break html markup
     }
 }

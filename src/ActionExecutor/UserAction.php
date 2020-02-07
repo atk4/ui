@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Modal executor for action.
  */
@@ -118,7 +119,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
-            $this->title = trim($action->caption.' '.$this->action->owner->getModelCaption());
+            $this->title = trim($action->caption . ' ' . $this->action->owner->getModelCaption());
 
             $this->btns->add($this->execActionBtn = $this->factory($this->action->ui['execButton'] ?? ['Button', $this->action->caption, 'blue'], [], 'atk4\ui'));
 
@@ -242,7 +243,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->_addStepTitle($modal, $this->step);
 
         $f = $this->addFormTo($modal);
-        foreach ($this->action->args as $key=>$val) {
+        foreach ($this->action->args as $key => $val) {
             if (is_numeric($key)) {
                 throw new Exception(['Action arguments must be named', 'args' => $this->actions->args]);
             }
@@ -352,15 +353,15 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         switch ($this->previewType) {
             case 'console':
-                $preview = $modal->add(['ui'=>'inverted black segment', 'element'=>'pre']);
+                $preview = $modal->add(['ui' => 'inverted black segment', 'element' => 'pre']);
                 $preview->set($text);
                 break;
             case 'text':
-                $preview = $modal->add(['ui'=>'basic segment']);
+                $preview = $modal->add(['ui' => 'basic segment']);
                 $preview->set($text);
                 break;
             case 'html':
-                $preview = $modal->add(['ui'=>'basic segment']);
+                $preview = $modal->add(['ui' => 'basic segment']);
                 $preview->template->setHTML('Content', $text);
                 break;
         }
@@ -401,7 +402,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         return [
             $this->hide(),
             $this->hook('afterExecute', [$obj, $id]) ?:
-            $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
+            $success ?: new jsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
             $this->loader->jsClearStoreData(true),
         ];
     }
@@ -557,7 +558,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
             return $js;
         } catch (\Exception $e) {
-            $m = new Message('Error executing '.$this->action->caption, 'red');
+            $m = new Message('Error executing ' . $this->action->caption, 'red');
             $m->init();
             $m->text->content = ($e instanceof \atk4\core\Exception ? $e->getHTML() : $e->getMessage());
 

@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Demonstrates how to use BreadCrumb.
  */
+
 require 'init.php';
 require 'database.php';
 
@@ -9,14 +11,13 @@ $crumb = $app->add('BreadCrumb');
 $crumb->addCrumb('UI Demo', ['index']);
 $crumb->addCrumb('BreadCrumb Demo', ['breadcrumb']);
 
-$app->add(['ui'=>'divider']);
+$app->add(['ui' => 'divider']);
 
 $crumb->addCrumb('Countries', []);
 
 $m = new Country($db);
 
 if ($id = $app->stickyGet('country_id')) {
-
     // perhaps we edit individual country?
     $m->load($id);
     $crumb->addCrumb($m['name'], []);
@@ -25,11 +26,10 @@ if ($id = $app->stickyGet('country_id')) {
 
     $app->add('Form')->setModel($m);
 } else {
-
     // display list of countries
     $table = $app->add('Table');
     $table->setModel($m);
-    $table->addDecorator('name', ['Link', [], ['country_id'=>'id']]);
+    $table->addDecorator('name', ['Link', [], ['country_id' => 'id']]);
 }
 
 $crumb->popTitle();

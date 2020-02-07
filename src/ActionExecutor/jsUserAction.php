@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Javascript Action executor.
  *
@@ -80,7 +81,7 @@ class jsUserAction extends jsCallback implements Interface_
             }
 
             if ($errors = $this->_hasAllArguments()) {
-                $js = new jsToast(['title' => 'Error', 'message' => 'Missing Arguments: '.implode(', ', $errors), 'class' => 'error']);
+                $js = new jsToast(['title' => 'Error', 'message' => 'Missing Arguments: ' . implode(', ', $errors), 'class' => 'error']);
             } else {
                 $args = [];
                 foreach ($this->action->args as $key => $val) {
@@ -90,7 +91,7 @@ class jsUserAction extends jsCallback implements Interface_
                 $return = $this->action->execute(...$args);
                 $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $return]) : $this->jsSuccess;
 
-                $js = $this->hook('afterExecute', [$return, $id]) ?: $success ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
+                $js = $this->hook('afterExecute', [$return, $id]) ?: $success ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
             }
 
             return $js;

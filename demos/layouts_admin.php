@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Demonstrates how to use layouts.
  */
+
 require '../vendor/autoload.php';
 
 try {
@@ -53,7 +55,7 @@ try {
 
         foreach (['first_name', 'last_name', 'address'] as $field) {
             if (!$f->model[$field]) {
-                $errors[] = $f->error($field, 'Field '.$field.' is mandatory');
+                $errors[] = $f->error($field, 'Field ' . $field . ' is mandatory');
             }
         }
 

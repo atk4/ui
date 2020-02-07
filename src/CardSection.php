@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Display a card section within a Card View.
  */
@@ -85,7 +86,7 @@ class CardSection extends View
             $label = $m->getField($field)->getCaption();
             $value = $this->app ? $this->app->ui_persistence->typecastSaveField($m->getField($field), $m->get($field)) : $m->get($field);
             if ($useLabel) {
-                $value = $label.$this->glue.$value;
+                $value = $label . $this->glue . $value;
             }
 
             $this->addDescription($value);

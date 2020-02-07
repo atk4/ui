@@ -1,4 +1,5 @@
 <?php
+
 /**
  * A collection of Card set from a model.
  */
@@ -35,7 +36,7 @@ class CardDeck extends View
     public $useAction = true;
 
     /** @var null|View The container view. The view that is reload when page or data changed. */
-    public $container = ['ui'=> 'basic segment'];
+    public $container = ['ui' => 'basic segment'];
 
     /** @var View The view containing Cards. */
     public $cardHolder = ['ui' => 'cards'];
@@ -123,7 +124,7 @@ class CardDeck extends View
         $this->btns = $left->add(['ui' => 'buttons']);
         if ($this->search !== false) {
             $right = $this->menu->add(['ui' => 'four wide column']);
-            $this->search = $right->add($this->factory(ItemSearch::class, array_merge($this->search, ['context' => '#'.$this->container->name])));
+            $this->search = $right->add($this->factory(ItemSearch::class, array_merge($this->search, ['context' => '#' . $this->container->name])));
             $this->search->reload = $this->container;
             $this->query = $this->app->stickyGet($this->search->queryArg);
         }
@@ -136,7 +137,7 @@ class CardDeck extends View
      */
     protected function addPaginator()
     {
-        $seg = $this->container->add(['View', 'ui'=> 'basic segment'])->addStyle('text-align', 'center');
+        $seg = $this->container->add(['View', 'ui' => 'basic segment'])->addStyle('text-align', 'center');
         $this->paginator = $seg->add($this->factory([Paginator::class, 'reload' => $this->container], $this->paginator, 'atk4\ui'));
         $this->page = $this->app->stickyGet($this->paginator->name);
     }
@@ -418,7 +419,7 @@ class CardDeck extends View
 
         if (!is_object($button)) {
             if (is_string($button)) {
-                $button = [$button, 'ui' => 'button '.$this->menuBtnStyle];
+                $button = [$button, 'ui' => 'button ' . $this->menuBtnStyle];
             }
             $button = $this->factory('Button', $button, 'atk4\ui');
         }

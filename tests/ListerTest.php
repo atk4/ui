@@ -11,7 +11,7 @@ class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $v = new \atk4\ui\View();
         $v->init();
-        $l = $v->add(['Lister', 'defaultTemplate'=>'lister.html']);
+        $l = $v->add(['Lister', 'defaultTemplate' => 'lister.html']);
         $l->setSource(['foo', 'bar']);
     }
 
@@ -20,7 +20,7 @@ class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
      */
     public function testListerRender2()
     {
-        $v = new \atk4\ui\View(['template'=>new \atk4\ui\Template('hello{list}, world{/list}')]);
+        $v = new \atk4\ui\View(['template' => new \atk4\ui\Template('hello{list}, world{/list}')]);
         $v->init();
         $l = $v->add(['Lister'], 'list');
         $l->setSource(['foo', 'bar']);
@@ -36,9 +36,9 @@ class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $this->markTestIncomplete('Very strange test.');
 
-        $v = new \atk4\ui\View(['template'=>new \atk4\ui\Template('hello{list}, world{/list}')]);
+        $v = new \atk4\ui\View(['template' => new \atk4\ui\Template('hello{list}, world{/list}')]);
         $v->init();
-        $l = $v->add(['Lister', 'defaultTemplate'=>'lister.html']);
+        $l = $v->add(['Lister', 'defaultTemplate' => 'lister.html']);
         $l->setSource(['foo', 'bar']);
         $this->assertRegExp('|<div class="content"><a class="header" href="foo">bar</a>|i', $l->render());
     }

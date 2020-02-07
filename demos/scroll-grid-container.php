@@ -17,7 +17,7 @@ $m1 = $g1->setModel(new Country($db)); //, ['name', 'iso']);
 $g1->addQuickSearch(['name', 'iso']);
 
 // demo for additional action buttons in CRUD + jsPaginator
-$g1->addModalAction(['icon'=>'cogs'], 'Details', function ($p, $id) use ($g1) {
+$g1->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($g1) {
     $p->add(['Card'])->setModel($g1->model->load($id));
 });
 $g1->addAction('red', function ($js) {

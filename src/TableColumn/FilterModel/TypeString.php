@@ -24,13 +24,13 @@ class TypeString extends Generic
                     $model->addCondition($filter['name'], '!=', $filter['value']);
                     break;
                 case 'contains':
-                    $model->addCondition($filter['name'], 'LIKE', '%'.$filter['value'].'%');
+                    $model->addCondition($filter['name'], 'LIKE', '%' . $filter['value'] . '%');
                     break;
                 case 'start':
-                    $model->addCondition($filter['name'], 'LIKE', $filter['value'].'%');
+                    $model->addCondition($filter['name'], 'LIKE', $filter['value'] . '%');
                     break;
                 case 'end':
-                    $model->addCondition($filter['name'], 'LIKE', '%'.$filter['value']);
+                    $model->addCondition($filter['name'], 'LIKE', '%' . $filter['value']);
                     break;
             }
         }

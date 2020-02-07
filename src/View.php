@@ -413,12 +413,12 @@ class View implements jsExpressionable
         if (is_array($region)) {
             $args = $region;
             if (isset($args['region'])) {
-                $region = ['region'=>$args['region']];
+                $region = ['region' => $args['region']];
                 unset($args['region']);
             }
         } elseif ($region) {
             $args = null;
-            $region = ['region'=>$region];
+            $region = ['region' => $region];
         } else {
             $args = null;
             $region = null;
@@ -477,7 +477,6 @@ class View implements jsExpressionable
     public function set($arg1 = null, $arg2 = null)
     {
         if (is_string($arg1) && $arg2 !== null) {
-
             // must be initialized
             $this->template->set($arg1, $arg2);
 
@@ -679,7 +678,7 @@ class View implements jsExpressionable
             array_walk(
                 $style,
                 function (&$item, $key) {
-                    $item = $key.':'.$item;
+                    $item = $key . ':' . $item;
                 }
             );
             $this->template->append('style', implode(';', $style));
@@ -704,7 +703,7 @@ class View implements jsExpressionable
         if ($this->attr) {
             $tmp = [];
             foreach ($this->attr as $attr => $val) {
-                $tmp[] = $attr.'="'.$this->app->encodeAttribute($val).'"';
+                $tmp[] = $attr . '="' . $this->app->encodeAttribute($val) . '"';
             }
             $this->template->setHTML('attributes', implode(' ', $tmp));
         }
@@ -768,7 +767,7 @@ class View implements jsExpressionable
         $this->renderAll();
 
         return
-            $this->getJS($force_echo).
+            $this->getJS($force_echo) .
             $this->template->render();
     }
 
@@ -945,7 +944,7 @@ class View implements jsExpressionable
     public function vue($component, $initData = [], $componentDefinition = null, $selector = null)
     {
         if (!$selector) {
-            $selector = '#'.$this->name;
+            $selector = '#' . $this->name;
         }
 
         if ($componentDefinition) {
@@ -1004,8 +1003,8 @@ class View implements jsExpressionable
      */
     public function jsGetStoreData()
     {
-        $data['local'] = json_decode($_GET[$this->name.'_local_store'] ?? $_POST[$this->name.'_local_store'] ?? null, true);
-        $data['session'] = json_decode($_GET[$this->name.'_session_store'] ?? $_POST[$this->name.'_session_store'] ?? null, true);
+        $data['local'] = json_decode($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? null, true);
+        $data['session'] = json_decode($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? null, true);
 
         return $data;
     }
@@ -1262,7 +1261,7 @@ class View implements jsExpressionable
             throw new Exception('Render tree must be initialized before materializing jsChains.');
         }
 
-        return json_encode('#'.$this->id);
+        return json_encode('#' . $this->id);
     }
 
     /**
@@ -1321,8 +1320,8 @@ class View implements jsExpressionable
 
         $ready = new jsFunction($actions);
 
-        return "<script>\n".
-            (new jQuery($ready))->jsRender().
+        return "<script>\n" .
+            (new jQuery($ready))->jsRender() .
             '</script>';
     }
 

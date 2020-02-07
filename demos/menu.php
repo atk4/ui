@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Demonstrates how to use menu.
  */
+
 require 'init.php';
 
 $m = $app->add('Menu');
@@ -11,7 +13,7 @@ $m->addItem('baz');
 $d = $m->add(['DropDown', 'With Callback', 'js' => ['on' => 'hover']]);
 $d->setSource(['a', 'b', 'c']);
 $d->onChange(function ($item) {
-    return 'New seleced item: '.$item;
+    return 'New seleced item: ' . $item;
 });
 
 $sm = $m->addMenu('Sub-menu');

@@ -150,7 +150,7 @@ class Callback
      */
     public function getJSURL($mode = 'ajax')
     {
-        return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
+        return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback' => 1], (bool) $this->postTrigger);
     }
 
     /**
@@ -163,6 +163,6 @@ class Callback
      */
     public function getURL($mode = 'callback')
     {
-        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
+        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback' => 1], (bool) $this->postTrigger);
     }
 }

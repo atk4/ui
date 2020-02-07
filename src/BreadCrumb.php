@@ -32,7 +32,7 @@ class BreadCrumb extends Lister
         if (is_array($link)) {
             $link = $this->url($link);
         }
-        $this->path[] = ['section'=>$section, 'link'=>$link, 'divider'=>$this->dividerClass];
+        $this->path[] = ['section' => $section, 'link' => $link, 'divider' => $this->dividerClass];
     }
 
     /**
@@ -57,7 +57,7 @@ class BreadCrumb extends Lister
      */
     public function addCrumbReverse($section = null, $link = null)
     {
-        array_unshift($this->path, ['section'=>$section, 'link'=>$link]);
+        array_unshift($this->path, ['section' => $section, 'link' => $link]);
     }
 
     /**

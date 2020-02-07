@@ -6,10 +6,10 @@ include 'database.php';
 
 // default lister
 $app->add('Header')->set('Default lister');
-$app->add(['Lister', 'defaultTemplate'=>'lister.html'])->setSource([
-    ['icon'=>'map marker', 'title'=>'Krolewskie Jadlo', 'descr'=>'An excellent polish restaurant, quick delivery and hearty, filling meals'],
-    ['icon'=> 'map marker', 'title'=>'Xian Famous Foods', 'descr'=>'A taste of Shaanxi\'s delicious culinary traditions, with delights like spicy cold noodles and lamb burgers.'],
-    ['icon'=> 'check', 'title'=>'Sapporo Haru', 'descr'=>'Greenpoint\'s best choice for quick and delicious sushi'],
+$app->add(['Lister', 'defaultTemplate' => 'lister.html'])->setSource([
+    ['icon' => 'map marker', 'title' => 'Krolewskie Jadlo', 'descr' => 'An excellent polish restaurant, quick delivery and hearty, filling meals'],
+    ['icon' => 'map marker', 'title' => 'Xian Famous Foods', 'descr' => 'A taste of Shaanxi\'s delicious culinary traditions, with delights like spicy cold noodles and lamb burgers.'],
+    ['icon' => 'check', 'title' => 'Sapporo Haru', 'descr' => 'Greenpoint\'s best choice for quick and delicious sushi'],
 ]);
 $app->add(['ui' => 'clearing divider']);
 
@@ -30,7 +30,7 @@ $app->add(['ui' => 'clearing divider']);
 
 // empty lister with default template
 $app->add('Header')->set('Empty default lister');
-$app->add(['Lister', 'defaultTemplate'=>'lister.html'])->setSource([]);
+$app->add(['Lister', 'defaultTemplate' => 'lister.html'])->setSource([]);
 $app->add(['ui' => 'clearing divider']);
 
 // empty lister with custom template

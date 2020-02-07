@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Table column action menu.
  * Will create a dropdown menu within table column.
@@ -100,7 +101,7 @@ class ActionMenu extends Generic
             }
         }
 
-        $name = $this->name.'_action_'.(count($this->items) + 1);
+        $name = $this->name . '_action_' . (count($this->items) + 1);
 
         if ($action instanceof \atk4\data\UserAction\Generic) {
             $confirm = $action->ui['confirm'] ?? $confirm;
@@ -118,7 +119,7 @@ class ActionMenu extends Generic
 
         $this->items[] = $item;
 
-        $item->addClass('{$_'.$name.'_disabled} i_'.$name);
+        $item->addClass('{$_' . $name . '_disabled} i_' . $name);
 
         if ($isDisabled) {
             $item->addClass('disabled');
@@ -127,7 +128,7 @@ class ActionMenu extends Generic
         // set executor context.
         $context = (new jQuery())->closest('.ui.button');
 
-        $this->table->on('click', '.i_'.$name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirm, 'apiConfig' => ['stateContext' => $context]]);
+        $this->table->on('click', '.i_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirm, 'apiConfig' => ['stateContext' => $context]]);
 
         return $item;
     }
@@ -167,9 +168,9 @@ class ActionMenu extends Generic
             $output .= $item->getHTML();
         }
 
-        $s = '<div class="'.$this->ui.' atk-action-menu">';
-        $s .= '<div class="text">'.$this->label.'</div>';
-        $s .= $this->icon ? '<i class="'.$this->icon.'"></i>' : '';
+        $s = '<div class="' . $this->ui . ' atk-action-menu">';
+        $s .= '<div class="text">' . $this->label . '</div>';
+        $s .= $this->icon ? '<i class="' . $this->icon . '"></i>' : '';
         $s .= '<div class="menu">';
         $s .= $output;
         $s .= '</div></div>';
@@ -186,7 +187,7 @@ class ActionMenu extends Generic
                 continue;
             }
 
-            $tags['_'.$name.'_disabled'] = 'disabled';
+            $tags['_' . $name . '_disabled'] = 'disabled';
         }
 
         return $tags;

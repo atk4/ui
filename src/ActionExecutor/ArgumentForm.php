@@ -30,12 +30,12 @@ class ArgumentForm extends Basic
 
         */
 
-        $this->add(['Header', $this->action->caption, 'subHeader'=>$this->action->getDescription()]);
+        $this->add(['Header', $this->action->caption, 'subHeader' => $this->action->getDescription()]);
         $this->form = $this->add('Form');
 
-        foreach ($this->action->args as $key=>$val) {
+        foreach ($this->action->args as $key => $val) {
             if (is_numeric($key)) {
-                throw new Exception(['Action arguments must be named', 'args'=>$this->actions->args]);
+                throw new Exception(['Action arguments must be named', 'args' => $this->actions->args]);
             }
 
             if ($val instanceof \atk4\data\Model) {

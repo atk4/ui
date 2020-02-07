@@ -160,7 +160,7 @@ class DropDown extends Input
         return $this->app->getTag('input', array_merge([
             'name'        => $this->short_name,
             'type'        => $this->inputType,
-            'id'          => $this->id.'_input',
+            'id'          => $this->id . '_input',
             'value'       => $this->getValue(),
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
@@ -194,7 +194,7 @@ class DropDown extends Input
     public function renderView()
     {
         if ($this->isMultiple) {
-            $this->defaultClass = $this->defaultClass.' multiple';
+            $this->defaultClass = $this->defaultClass . ' multiple';
         }
 
         $this->addClass($this->defaultClass);
@@ -306,11 +306,13 @@ class DropDown extends Input
 
         //Icon
         $this->_tItem->del('Icon');
-        if (isset($res['icon'])
-        && $res['icon']) {
+        if (
+            isset($res['icon'])
+            && $res['icon']
+        ) {
             //compatibility with how $values property works on icons: 'icon'
             //is defined in there
-            $this->_tIcon->set('icon', 'icon '.$res['icon']);
+            $this->_tIcon->set('icon', 'icon ' . $res['icon']);
             $this->_tItem->appendHTML('Icon', $this->_tIcon->render());
         }
 

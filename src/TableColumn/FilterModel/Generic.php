@@ -60,7 +60,7 @@ class Generic extends Model
         if (empty($type = $field->type)) {
             $type = 'string';
         }
-        $class = $filterDomain.ucfirst($type);
+        $class = $filterDomain . ucfirst($type);
 
         /*
          * You can set your own filter model condition by extending
@@ -95,11 +95,11 @@ class Generic extends Model
      */
     public function afterInit()
     {
-        $this->addField('name', ['default'=> $this->lookupField->short_name, 'system' => true]);
+        $this->addField('name', ['default' => $this->lookupField->short_name, 'system' => true]);
 
         if (isset($this->_sessionTrait) && $this->_sessionTrait) {
             // create a name for our filter model to save as session data.
-            $this->name = 'filter_model_'.$this->lookupField->short_name;
+            $this->name = 'filter_model_' . $this->lookupField->short_name;
 
             if ($_GET['atk_clear_filter'] ?? false) {
                 $this->forget();

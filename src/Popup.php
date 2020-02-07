@@ -127,7 +127,7 @@ class Popup extends View
         ) {
             throw new Exception([
                 'Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"',
-                'owner'=> $this->owner,
+                'owner' => $this->owner,
             ]);
         }
 
@@ -146,10 +146,10 @@ class Popup extends View
         }
 
         $this->popOptions = array_merge($this->popOptions, [
-            'popup'    => '#'.$this->name,
+            'popup'    => '#' . $this->name,
             'on'       => $this->triggerOn,
             'position' => $this->position,
-            'target'   => ($this->target) ? '#'.$this->target->name : false,
+            'target'   => ($this->target) ? '#' . $this->target->name : false,
         ]);
     }
 
@@ -274,9 +274,9 @@ class Popup extends View
     {
         $name = $this->triggerBy;
         if (!is_string($this->triggerBy)) {
-            $name = '#'.$this->triggerBy->name;
+            $name = '#' . $this->triggerBy->name;
             if ($this->triggerBy instanceof FormField\Generic) {
-                $name = '#'.$this->triggerBy->name.'_input';
+                $name = '#' . $this->triggerBy->name . '_input';
             }
         }
         $chain = new jQuery($name);

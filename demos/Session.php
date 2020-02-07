@@ -59,7 +59,8 @@ class Session
             $this->initializeSession(false);
         }
 
-        if (!isset($_SESSION['o'][$this->name][$key])
+        if (
+            !isset($_SESSION['o'][$this->name][$key])
             || is_null($_SESSION['o'][$this->name][$key])
         ) {
             if (is_callable($default)) {
@@ -112,7 +113,8 @@ class Session
             $this->initializeSession(false);
         }
 
-        if (!isset($_SESSION['o'][$this->name][$key])
+        if (
+            !isset($_SESSION['o'][$this->name][$key])
             || is_null($_SESSION['o'][$this->name][$key])
         ) {
             if (!isset($_SESSION['s'][$this->name][$key])) {

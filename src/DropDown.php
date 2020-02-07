@@ -54,7 +54,7 @@ class DropDown extends Lister
         $this->js['onChange'] = new jsFunction(['name', 'value', 't'], [
             new jsExpression(
                 "if($(this).data('currentValue') != value){\$(this).atkAjaxec({uri:[uri], uri_options:{item:value}});$(this).data('currentValue', value)}",
-                ['uri'=> $this->cb->getJSURL()]
+                ['uri' => $this->cb->getJSURL()]
             ), ]);
 
         $this->cb->set(function ($j, $item) use ($fx) {
