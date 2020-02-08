@@ -2,8 +2,8 @@
 /**
  * Demonstrates how to use fields with form.
  */
-require __DIR__ . '/init.php';
-require __DIR__ . '/database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $app->add(['Header', 'Custom Form Layout']);
 

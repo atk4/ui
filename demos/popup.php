@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/init.php';
+require_once __DIR__ . '/init.php';
 
 /**
  * Example implementation of a dynamic view which support session.

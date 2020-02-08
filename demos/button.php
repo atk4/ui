@@ -2,7 +2,7 @@
 /**
  * Demonstrates how to use buttons.
  */
-require __DIR__ . '/init.php';
+require_once __DIR__ . '/init.php';
 use atk4\ui\Button;
 use atk4\ui\Icon;
 use atk4\ui\Label;

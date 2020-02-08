@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/init.php';
+require_once __DIR__ . '/init.php';
 
 $app->add(['Button', 'Form Sections', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['form-section']);

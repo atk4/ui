@@ -2,7 +2,7 @@
 
 date_default_timezone_set('UTC');
 
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 /* START - PHPUNIT & COVERAGE SETUP */
 if (file_exists('coverage.php')) {

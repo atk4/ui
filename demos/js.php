@@ -2,7 +2,7 @@
 /**
  * Demonstrates how to use interractive buttons.
  */
-include __DIR__ . '/init.php';
+include_once __DIR__ . '/init.php';
 
 use atk4\ui\Button;
 use atk4\ui\Buttons;

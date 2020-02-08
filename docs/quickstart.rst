@@ -38,7 +38,7 @@ Coding "Hello, World"
 Open a new file `index.php` and enter the following code::
 
     <?php                                    // 1
-    require __DIR__ . '/vendor/autoload.php';           // 2
+    require_once __DIR__ . '/vendor/autoload.php';           // 2
 
     $app = new \atk4\ui\App('My First App'); // 3
     $app->initLayout('Centered');            // 4
@@ -105,7 +105,7 @@ To be able to actually run this example, create a new file todo.php in the same 
 create the application::
 
     <?php
-    require __DIR__ . '/vendor/autoload.php';
+    require_once __DIR__ . '/vendor/autoload.php';
 
     $app = new \atk4\ui\App('ToDo List');
     $app->initLayout('Centered');

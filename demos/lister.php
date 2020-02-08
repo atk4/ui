@@ -1,8 +1,8 @@
 <?php
 
 date_default_timezone_set('UTC');
-include __DIR__ . '/init.php';
-include __DIR__ . '/database.php';
+include_once __DIR__ . '/init.php';
+include_once __DIR__ . '/database.php';
 
 // default lister
 $app->add('Header')->set('Default lister');

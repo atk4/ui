@@ -1,7 +1,7 @@
 <?php
 
 date_default_timezone_set('UTC');
-include __DIR__ . '/init.php';
+include_once __DIR__ . '/init.php';
 
 $data = [
     ['id'=>1, 'action'=>'Salary', 'amount'=>200],

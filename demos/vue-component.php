@@ -1,7 +1,7 @@
 <?php
 
-require __DIR__ . '/init.php';
-require __DIR__ . '/database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $app->add(['Header', 'Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
 $app->add(['ui' => 'divider']);

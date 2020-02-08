@@ -2,8 +2,8 @@
 /**
  * Testing form.
  */
-require __DIR__ . '/init.php';
-require __DIR__ . '/database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 // create header
 $app->add(['Header', 'Database-driven form with an enjoyable layout']);

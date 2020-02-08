@@ -1,7 +1,7 @@
 <?php
 
-require __DIR__ . '/init.php';
-require __DIR__ . '/database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $app->add(['Button', 'Card Model', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['card-action']);

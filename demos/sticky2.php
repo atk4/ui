@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/init.php';
+require_once __DIR__ . '/init.php';
 
 // This demo shows a local impact of a sticky parameters.
 

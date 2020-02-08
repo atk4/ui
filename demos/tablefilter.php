@@ -1,7 +1,7 @@
 <?php
 
-require __DIR__ . '/init.php';
-require __DIR__ . '/database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 //For popup positioning to work correctly, table need to be inside a view segment.
 $view = $app->add('View', ['ui' => 'basic segment']);

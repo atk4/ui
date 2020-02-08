@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/init.php';
+require_once __DIR__ . '/init.php';
 
 $app->add(['Button', 'Nested accordions', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['accordion-nested']);

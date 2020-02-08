@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/init.php';
+require_once __DIR__ . '/init.php';
 
 /*
 $app->add(['Button', 'View Form input split in Accordion section', 'small right floated basic blue', 'iconRight' => 'right arrow'])

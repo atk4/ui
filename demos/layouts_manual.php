@@ -2,8 +2,8 @@
 /**
  * Demonstrates how to use layouts.
  */
-require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/somedatadef.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/somedatadef.php';
 date_default_timezone_set('UTC');
 
 $layout = new \atk4\ui\Layout\Generic(['defaultTemplate' => './templates/layout1.html']);

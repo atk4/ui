@@ -2,7 +2,7 @@
 /**
  * Demonstrates how to use layouts.
  */
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 try {
     $app = new \atk4\ui\App('Agile Toolkit Demo App');

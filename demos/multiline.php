@@ -3,7 +3,7 @@
 use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
 
-require __DIR__ . '/init.php';
+require_once __DIR__ . '/init.php';
 
 /**
  * Class Inventory Item.

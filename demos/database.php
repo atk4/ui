@@ -3,7 +3,7 @@
 // A very basic file that sets up Agile Data to be used in some demonstrations
 try {
     if (file_exists('db.php')) {
-        include __DIR__ . '/db.php';
+        include_once __DIR__ . '/db.php';
     } else {
         $db = new \atk4\data\Persistence\SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
     }

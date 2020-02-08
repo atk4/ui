@@ -1,6 +1,6 @@
 <?php
 
-include __DIR__ . '/vendor/autoload.php';
+include_once __DIR__ . '/vendor/autoload.php';
 class GetAssets extends \atk4\ui\App
 {
     public $always_run = false;
