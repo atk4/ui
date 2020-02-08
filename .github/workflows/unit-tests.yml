@@ -10,6 +10,7 @@ jobs:
     container:
       image: atk4/image:latest # https://github.com/atk4/image
     strategy:
+      fail-fast: false
       matrix:
         php: ['7.2', '7.3', 'latest']
     services:
