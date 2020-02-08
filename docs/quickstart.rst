@@ -37,13 +37,13 @@ Coding "Hello, World"
 
 Open a new file `index.php` and enter the following code::
 
-    <?php                                    // 1
-    require_once __DIR__ . '/vendor/autoload.php';           // 2
+    <?php                                          // 1
+    require_once __DIR__ . '/vendor/autoload.php'; // 2
 
-    $app = new \atk4\ui\App('My First App'); // 3
-    $app->initLayout('Centered');            // 4
+    $app = new \atk4\ui\App('My First App');       // 3
+    $app->initLayout('Centered');                  // 4
 
-    $app->add('HelloWorld');                 // 5
+    $app->add('HelloWorld');                       // 5
 
 .. rubric:: Clarifications
 
@@ -141,16 +141,16 @@ single ToDo item::
 
 
     class ToDoItem extends \atk4\data\Model {
-        public $table = 'todo_item';        // 6
+        public $table = 'todo_item';               // 6
         function init() {
             parent::init();
 
             $this->addField('name', ['caption'=>'Task Name', 'required'=>true]);
-                                            // 7
+                                                   // 7
             $this->addField('due', [
-              'type'=>'date',               // 8
+              'type'=>'date',                      // 8
               'caption'=>'Due Date',
-              'default'=>new \DateTime('+1 week')   // 9
+              'default'=>new \DateTime('+1 week')  // 9
             ]);
         }
     }
@@ -246,19 +246,19 @@ As mentioned before, UI Components in Agile Toolkit are often interchangeable, y
 another. In our example replace right column (label 17) with the following code::
 
     $grid = $col->addColumn()->add(['CRUD', 'paginator'=>false, // 18
-        'canCreate'=>false, 'canDelete'=>false              // 19
+        'canCreate'=>false, 'canDelete'=>false                  // 19
     ]);
     $grid->setModel(new ToDoItem($s));
 
-    $grid->menu->addItem('Complete Selected',               // 20
-        new \atk4\ui\jsReload($grid->table, [               // 21
-            'delete'=>$grid->addSelection()->jsChecked()    // 22
+    $grid->menu->addItem('Complete Selected',                   // 20
+        new \atk4\ui\jsReload($grid->table, [                   // 21
+            'delete'=>$grid->addSelection()->jsChecked()        // 22
         ])
     );
 
-    if (isset($_GET['delete'])) {                           // 23
+    if (isset($_GET['delete'])) {                               // 23
         foreach(explode(',', $_GET['delete']) as $id) {
-            $grid->model->delete($id);                      // 25
+            $grid->model->delete($id);                          // 25
         }
     }
 
