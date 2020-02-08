@@ -1,6 +1,6 @@
 <?php
 
-require 'init.php';
+require __DIR__ . '/init.php';
 // Re-usable component implementing counter
 
 $app->add(['Header', 'Static Modal Dialog']);

@@ -1,7 +1,7 @@
 <?php
 
 date_default_timezone_set('UTC');
-include 'init.php';
+include __DIR__ . '/init.php';
 
 // Paginator which tracks its own position
 $app->add(['Header', 'Paginator tracks its own position']);

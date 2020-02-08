@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require __DIR__ . '/init.php';
+require __DIR__ . '/database.php';
 $m = new Country($db);
 $m->addAction('test', ['ui'=>['button'=>['icon'=>'pencil']]]);
 $m->addAction('test1');

@@ -1,6 +1,6 @@
 <?php
 
-include '../vendor/autoload.php';
+include __DIR__ . '/../vendor/autoload.php';
 
 // nothing to do with Agile UI - will not use any Layout
 $a = new \atk4\ui\LoremIpsum();

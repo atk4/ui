@@ -1,6 +1,6 @@
 <?php
 
-require 'init.php';
+require __DIR__ . '/init.php';
 
 $app->add(new \atk4\ui\View([
     'Forms below demonstrate how to work with multi-value selectors',

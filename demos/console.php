@@ -1,6 +1,6 @@
 <?php
 
-require 'init.php';
+require __DIR__ . '/init.php';
 
 if (!class_exists('TestConsole')) {
     class TestConsole extends \atk4\data\Model

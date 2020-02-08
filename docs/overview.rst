@@ -96,7 +96,7 @@ clarifications::
 
 
     <?php
-    require 'vendor/autoload.php';
+    require __DIR__ . '/vendor/autoload.php';
 
     // Define your data structure
     class Offer extends \atk4\data\Model {

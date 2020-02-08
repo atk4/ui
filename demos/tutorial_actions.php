@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require __DIR__ . '/init.php';
+require __DIR__ . '/database.php';
 
 /** @var \atk4\ui\View $wizard */
 $wizard = $app->add('Wizard');

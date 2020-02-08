@@ -1,6 +1,6 @@
 <?php
 
-include 'init.php';
+include __DIR__ . '/init.php';
 
 $vp = $layout->add('VirtualPage');
 $vp->add('LoremIpsum');

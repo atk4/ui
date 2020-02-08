@@ -1,6 +1,6 @@
 <?php
 
-require 'init.php';
+require __DIR__ . '/init.php';
 
 use atk4\ui\Button;
 

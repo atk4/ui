@@ -1,6 +1,6 @@
 <?php
 
-include 'init.php';
+include __DIR__ . '/init.php';
 
 class MySwitcher extends \atk4\ui\View
 {

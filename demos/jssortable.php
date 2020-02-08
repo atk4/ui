@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require __DIR__ . '/init.php';
+require __DIR__ . '/database.php';
 
 $g = $app->add(['Grid']);
 $g->setModel(new Country($db));

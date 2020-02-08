@@ -2,7 +2,7 @@
 /**
  * Demonstrates how to use tabs.
  */
-require 'init.php';
+require __DIR__ . '/init.php';
 
 $p = $app->add(['ProgressBar', 20]);
 

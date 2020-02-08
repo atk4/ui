@@ -2,7 +2,7 @@
 /**
  * Testing fields.
  */
-require 'init.php';
+require __DIR__ . '/init.php';
 
 $app->add(['Header', 'Types', 'size' => 2]);
 

@@ -1,6 +1,6 @@
 <?php
 
-include 'init.php';
+include __DIR__ . '/init.php';
 
 if (!$app->stickyget('begin')) {
     $app->add('Header')->set('Welcome to Agile Toolkit Demo!!');

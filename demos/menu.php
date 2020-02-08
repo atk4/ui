@@ -2,7 +2,7 @@
 /**
  * Demonstrates how to use menu.
  */
-require 'init.php';
+require __DIR__ . '/init.php';
 
 $m = $app->add('Menu');
 $m->addItem('foo', 'foo.php');

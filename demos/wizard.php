@@ -2,7 +2,7 @@
 /**
  * Demonstrates how to use a wizard.
  */
-require 'init.php';
+require __DIR__ . '/init.php';
 
 $t = $app->add('Wizard');
 

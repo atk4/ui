@@ -1,7 +1,7 @@
 <?php
 
-require 'Session.php';
-require 'init.php';
+require __DIR__ . '/Session.php';
+require __DIR__ . '/init.php';
 
 $app->add(['Header', 'Modal View']);
 

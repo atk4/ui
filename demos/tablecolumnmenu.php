@@ -1,8 +1,8 @@
 <?php
 
 date_default_timezone_set('UTC');
-include 'init.php';
-require 'database.php';
+include __DIR__ . '/init.php';
+require __DIR__ . '/database.php';
 
 $app->add(['Header', 'Table column may contains popup or dropdown menu.']);
 

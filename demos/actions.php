@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require __DIR__ . '/init.php';
+require __DIR__ . '/database.php';
 
 $app->add(['Button', 'js Event Executor', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['jsactions']);

@@ -2,8 +2,8 @@
 /**
  * Demonstrates how to use BreadCrumb.
  */
-require 'init.php';
-require 'database.php';
+require __DIR__ . '/init.php';
+require __DIR__ . '/database.php';
 
 $crumb = $app->add('BreadCrumb');
 $crumb->addCrumb('UI Demo', ['index']);

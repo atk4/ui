@@ -2,11 +2,11 @@
 
 date_default_timezone_set('UTC');
 
-require '../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 /* START - PHPUNIT & COVERAGE SETUP */
 if (file_exists('coverage.php')) {
-    include_once 'coverage.php';
+    include_once __DIR__ . '/coverage.php';
 }
 
 class Demo extends \atk4\ui\Columns
@@ -151,4 +151,4 @@ if (isset($layout->leftMenu)) {
     $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }
 
-require_once 'somedatadef.php';
+require_once __DIR__ . '/somedatadef.php';

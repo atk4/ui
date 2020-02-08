@@ -1,7 +1,7 @@
 <?php
 
-include 'init.php';
-include 'database.php';
+include __DIR__ . '/init.php';
+include __DIR__ . '/database.php';
 
 $app->add(['Header', 'Card displays read-only data of a single record']);
 
