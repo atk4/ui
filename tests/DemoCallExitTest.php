@@ -271,22 +271,22 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         ];
 
         $files[] = [
-            'tablefilter.php?atk_admin_filterpopup_5_form_submit=ajax&__atk_callback=1',
+            'tablefilter.php?atk_admin_view_grid_view_filterpopup_5_form_submit=ajax&__atk_callback=1',
             [
                 'op'                                  => '=',
                 'value'                               => '374',
                 'range'                               => '',
-                'atk_admin_filterpopup_5_form_submit' => 'submit',
+                'atk_admin_view_grid_view_filterpopup_5_form_submit' => 'submit',
             ],
         ];
 
         $files[] = [
-            'tablefilter.php?atk_admin_filterpopup_4_form_submit=ajax&__atk_callback=1',
+            'tablefilter.php?atk_admin_view_grid_view_filterpopup_4_form_submit=ajax&__atk_callback=1',
             [
                 'op'                                  => 'between',
                 'value'                               => '10',
                 'range'                               => '20',
-                'atk_admin_filterpopup_5_form_submit' => 'submit',
+                'atk_admin_view_grid_view_filterpopup_4_form_submit' => 'submit',
             ],
         ];
 
