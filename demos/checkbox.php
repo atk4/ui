@@ -2,7 +2,7 @@
 /**
  * Testing fields.
  */
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
 use atk4\ui\FormField\CheckBox;
 use atk4\ui\View;

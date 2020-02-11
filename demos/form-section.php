@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $app->add(['Button', 'Accordion in Form', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['form-section-accordion']);

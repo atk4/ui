@@ -55,7 +55,7 @@ Create "index.php" file with:
 
 ``` php
 <?php
-require 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $app = new \atk4\ui\App();   // That's your UI application
 $app->initLayout('Centered');

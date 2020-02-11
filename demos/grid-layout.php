@@ -1,6 +1,6 @@
 <?php
 
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
 // create layout
 $g = $app->add(new \atk4\ui\GridLayout(['columns'=>4, 'rows'=>2]));
