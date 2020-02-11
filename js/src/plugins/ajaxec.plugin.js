@@ -32,7 +32,7 @@ export default class ajaxec extends atkPlugin {
         const data = this.settings.uri_options ? this.settings.uri_options : {};
 
         // retrieve param from url.
-        let urlParam = $.atkGetQueryParam(this.settings.uri);
+        let urlParam = $.atkGetQueryParam(decodeURIComponent(this.settings.uri));
 
         // get store object.
         let store = atk.dataService.getStoreData(this.settings.storeName);
