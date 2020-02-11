@@ -14,7 +14,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     private $regexJSON = '
   /
   (?(DEFINE)
-     (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )    
+     (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
      (?<boolean>   true | false | null )
      (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
      (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
@@ -23,7 +23,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
      (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
   )
   \A (?&json) \Z
-  /six   
+  /six
 ';
     private $regexSSE = '/^[data|id|event].*$/m';
 
@@ -31,7 +31,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $files = [];
         foreach (scandir(dirname(__DIR__).DIRECTORY_SEPARATOR.'demos') as $file) {
-            if (is_dir($file) || substr($file, -3) !== 'php') {
+            if (substr($file, -3) !== 'php' || is_dir($file)) {
                 continue;
             }
 
