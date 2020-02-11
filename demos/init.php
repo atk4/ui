@@ -5,7 +5,7 @@ date_default_timezone_set('UTC');
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /* START - PHPUNIT & COVERAGE SETUP */
-if (file_exists('coverage.php')) {
+if (file_exists(__DIR__ . '/coverage.php')) {
     include_once __DIR__ . '/coverage.php';
 }
 
