@@ -18,8 +18,11 @@ class CRUD extends Grid
     /** @var array of fields to display in Grid */
     public $displayFields = null;
 
-    /** @var null|array of fields to edit in Form */
+    /** @var null|array of fields to edit in Form for Model edit action */
     public $editFields = null;
+
+    /** @var null|array of fields to edit in Form for Model add action */
+    public $addFields = null;
 
     /** @var array Default notifier to perform when adding or editing is successful * */
     public $notifyDefault = ['jsToast'];
@@ -154,7 +157,6 @@ class CRUD extends Grid
      */
     protected function initActionExecutor(Generic $action)
     {
-        $action->fields = $this->editFields ?? $action->fields;
         $executor = $this->getExecutor($action);
         $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
             return $this->jsExecute($return, $action);
@@ -266,6 +268,17 @@ class CRUD extends Grid
             return $this->factory($action->ui['executor']);
         }
 
+        // prioritize CRUD addFields over action->fields for Model add action.
+        if ($action->short_name === 'add' && $this->addFields) {
+            $action->fields = $this->addFields;
+        }
+
+        // prioritize CRUD editFields over action->fields for Model edit action.
+        if ($action->short_name === 'edit' && $this->editFields) {
+            $action->fields = $this->editFields;
+        }
+
+        // setting right action fields is based on action fields.
         $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
 
         return $this->factory($executor);

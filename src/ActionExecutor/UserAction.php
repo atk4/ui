@@ -145,6 +145,11 @@ class UserAction extends Modal implements Interface_, jsInterface_
         if ($id && $this->action->scope === 'single') {
             $this->action->owner->tryLoad($id);
         }
+
+        if ($this->action->fields === true) {
+            $this->action->fields = array_keys($this->action->getModel()->getFields('editable'));
+        }
+
         $this->loader->set(function ($modal) {
             $this->jsSetBtnState($modal, $this->step);
 
@@ -281,10 +286,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
     {
         $this->_addStepTitle($modal, $this->step);
         $f = $this->addFormTo($modal);
-
-        if (is_bool($this->action->fields)) {
-            $this->action->fields = array_keys($this->action->owner->getFields('editable'));
-        }
 
         $f->setModel($this->action->owner, $this->action->fields);
         // set Fields value if set from another step.
