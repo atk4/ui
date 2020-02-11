@@ -32,7 +32,7 @@ class DropDown extends Input
      *
      * @var string
      */
-    public $empty = '...';
+    public $empty = "\u{00a0}"; // Unicode NBSP
 
     /**
      * The html template associate whit this dropdown.
