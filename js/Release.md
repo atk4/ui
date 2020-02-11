@@ -1,5 +1,10 @@
 ## Release note
 
+### version 1.12.3 (2020-02-11)
+
+- Fix duplicate url encoding for reload-view and ajaxec plugins.
+   see https://github.com/atk4/ui/issues/924
+
 ### version 1.12.2 (2020-02-04)
 
 - Fix https://github.com/atk4/ui/issues/902 

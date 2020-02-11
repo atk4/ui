@@ -1,7 +1,12 @@
 name: Unit Testing
 
 on:
-  pull_request
+  pull_request:
+    branches: '*'
+  push:
+    branches:
+      - master
+      - develop
 
 jobs:
   unit-test:
@@ -10,6 +15,7 @@ jobs:
     container:
       image: atk4/image:latest # https://github.com/atk4/image
     strategy:
+      fail-fast: false
       matrix:
         php: ['7.2', '7.3', 'latest']
     services:
@@ -56,6 +62,6 @@ jobs:
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: covearge.xml
+          file: coverage.xml
 
 

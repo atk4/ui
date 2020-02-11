@@ -35,7 +35,7 @@
      */
     $.atk['getQueryParams'] = function(str) {
         if (str.split('?')[1]) {
-            return str.split('?')[1].split("&").map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
+            return decodeURIComponent(str.split('?')[1]).split("&").map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
         } else {
             return {};
         }

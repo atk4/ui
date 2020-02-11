@@ -14,7 +14,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     private $regexJSON = '
   /
   (?(DEFINE)
-     (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )    
+     (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
      (?<boolean>   true | false | null )
      (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
      (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
@@ -23,7 +23,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
      (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
   )
   \A (?&json) \Z
-  /six   
+  /six
 ';
     private $regexSSE = '/^[data|id|event].*$/m';
 
@@ -31,7 +31,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $files = [];
         foreach (scandir(dirname(__DIR__).DIRECTORY_SEPARATOR.'demos') as $file) {
-            if (is_dir($file) || substr($file, -3) !== 'php') {
+            if (substr($file, -3) !== 'php' || is_dir($file)) {
                 continue;
             }
 
@@ -271,22 +271,22 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         ];
 
         $files[] = [
-            'tablefilter.php?atk_admin_filterpopup_5_form_submit=ajax&__atk_callback=1',
+            'tablefilter.php?atk_admin_view_grid_view_filterpopup_5_form_submit=ajax&__atk_callback=1',
             [
                 'op'                                  => '=',
                 'value'                               => '374',
                 'range'                               => '',
-                'atk_admin_filterpopup_5_form_submit' => 'submit',
+                'atk_admin_view_grid_view_filterpopup_5_form_submit' => 'submit',
             ],
         ];
 
         $files[] = [
-            'tablefilter.php?atk_admin_filterpopup_4_form_submit=ajax&__atk_callback=1',
+            'tablefilter.php?atk_admin_view_grid_view_filterpopup_4_form_submit=ajax&__atk_callback=1',
             [
                 'op'                                  => 'between',
                 'value'                               => '10',
                 'range'                               => '20',
-                'atk_admin_filterpopup_5_form_submit' => 'submit',
+                'atk_admin_view_grid_view_filterpopup_4_form_submit' => 'submit',
             ],
         ];
 
