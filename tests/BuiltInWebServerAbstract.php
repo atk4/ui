@@ -57,16 +57,16 @@ abstract class BuiltInWebServerAbstract extends TestCase
     /**
      * Generates absolute file or directory path based on package root directory
      * Returns absolute path to package root durectory if no arguments
-     * 
+     *
      * @param string $directory
      * @param string $_
-     * 
+     *
      * @return string
      */
     private static function getPackagePath($directory = null, $_ = null): string
     {
         $route = func_get_args();
-        
+
         $baseDir = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
 
         array_unshift($route, $baseDir);
