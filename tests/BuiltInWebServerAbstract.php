@@ -24,19 +24,19 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     public static function setUpBeforeClass()
     {
-        if (!file_exists(getcwd().'/coverage/')) {
-            mkdir(getcwd().'/coverage/', 0777, true);
+        if (!file_exists($coverage = self::getAbsolutePath('coverage'))) {
+            mkdir($coverage, 0777, true);
         }
 
-        if (!file_exists(getcwd().'/demos/coverage.php')) {
+        if (!file_exists($demosCoverage = self::getAbsolutePath('demos', 'coverage'))) {
             file_put_contents(
-                implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'demos', 'coverage.php']),
-                file_get_contents(implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'tools', 'coverage.php']))
+                $demosCoverage,
+                file_get_contents(self::getAbsolutePath('tools', 'coverage.php'))
             );
         }
 
         // The command to spin up the server
-        self::$process = Process::fromShellCommandline('php -S '.self::$host.':'.self::$port.' -t '.getcwd());
+        self::$process = Process::fromShellCommandline('php -S '.self::$host.':'.self::$port.' -t '. self::getBaseDirectory());
 
         // Disabling the output, otherwise the process might hang after too much output
         self::$process->disableOutput();
@@ -49,11 +49,25 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     public static function tearDownAfterClass()
     {
-        if (file_exists(getcwd().'/demos/coverage.php')) {
-            unlink(getcwd().'/demos/coverage.php');
+        if (file_exists($file = self::getAbsolutePath('demos', 'coverage.php'))) {
+            unlink($file);
         }
     }
 
+    private static function getAbsolutePath($directory, $_ = null): string
+    {
+        $route = func_get_args();
+        
+        array_unshift($route, self::getBaseDirectory());
+        
+        return implode(DIRECTORY_SEPARATOR, $route);
+    }
+    
+    private static function getBaseDirectory()
+    {
+        return realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
+    }
+    
     private function getClient(): Client
     {
         // Creating a Guzzle Client with the base_uri, so we can use a relative
