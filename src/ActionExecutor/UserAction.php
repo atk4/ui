@@ -7,6 +7,7 @@ namespace atk4\ui\ActionExecutor;
 
 use atk4\core\HookTrait;
 use atk4\data\UserAction\Generic;
+use atk4\data\ValidationException;
 use atk4\ui\Button;
 use atk4\ui\Exception;
 use atk4\ui\Form;
@@ -557,6 +558,8 @@ class UserAction extends Modal implements Interface_, jsInterface_
             }
 
             return $js;
+        } catch (ValidationException $e) {
+            throw $e;
         } catch (\Exception $e) {
             $m = new Message('Error executing '.$this->action->caption, 'red');
             $m->init();
