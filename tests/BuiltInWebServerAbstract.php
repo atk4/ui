@@ -24,19 +24,19 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     public static function setUpBeforeClass()
     {
-        if (!file_exists($coverage = self::getAbsolutePath('coverage'))) {
+        if (!file_exists($coverage = self::getPackagePath('coverage'))) {
             mkdir($coverage, 0777, true);
         }
 
-        if (!file_exists($demosCoverage = self::getAbsolutePath('demos', 'coverage.php'))) {
+        if (!file_exists($demosCoverage = self::getPackagePath('demos', 'coverage.php'))) {
             file_put_contents(
                 $demosCoverage,
-                file_get_contents(self::getAbsolutePath('tools', 'coverage.php'))
+                file_get_contents(self::getPackagePath('tools', 'coverage.php'))
             );
         }
 
         // The command to spin up the server
-        self::$process = Process::fromShellCommandline('php -S '.self::$host.':'.self::$port.' -t '. self::getBaseDirectory());
+        self::$process = Process::fromShellCommandline('php -S '.self::$host.':'.self::$port.' -t '. self::getPackagePath());
 
         // Disabling the output, otherwise the process might hang after too much output
         self::$process->disableOutput();
@@ -49,23 +49,29 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     public static function tearDownAfterClass()
     {
-        if (file_exists($file = self::getAbsolutePath('demos', 'coverage.php'))) {
+        if (file_exists($file = self::getPackagePath('demos', 'coverage.php'))) {
             unlink($file);
         }
     }
 
-    private static function getAbsolutePath($directory, $_ = null): string
+    /**
+     * Generates absolute file or directory path based on package root directory
+     * Returns absolute path to package root durectory if no arguments
+     * 
+     * @param string $directory
+     * @param string $_
+     * 
+     * @return string
+     */
+    private static function getPackagePath($directory = null, $_ = null): string
     {
         $route = func_get_args();
+        
+        $baseDir = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
 
-        array_unshift($route, self::getBaseDirectory());
+        array_unshift($route, $baseDir);
 
         return implode(DIRECTORY_SEPARATOR, $route);
-    }
-
-    private static function getBaseDirectory()
-    {
-        return realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
     }
 
     private function getClient(): Client
