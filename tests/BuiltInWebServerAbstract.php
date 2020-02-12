@@ -57,17 +57,17 @@ abstract class BuiltInWebServerAbstract extends TestCase
     private static function getAbsolutePath($directory, $_ = null): string
     {
         $route = func_get_args();
-        
+
         array_unshift($route, self::getBaseDirectory());
-        
+
         return implode(DIRECTORY_SEPARATOR, $route);
     }
-    
+
     private static function getBaseDirectory()
     {
         return realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
     }
-    
+
     private function getClient(): Client
     {
         // Creating a Guzzle Client with the base_uri, so we can use a relative
