@@ -28,7 +28,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
             mkdir($coverage, 0777, true);
         }
 
-        if (!file_exists($demosCoverage = self::getAbsolutePath('demos', 'coverage'))) {
+        if (!file_exists($demosCoverage = self::getAbsolutePath('demos', 'coverage.php'))) {
             file_put_contents(
                 $demosCoverage,
                 file_get_contents(self::getAbsolutePath('tools', 'coverage.php'))
