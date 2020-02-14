@@ -60,7 +60,8 @@ or you can tweak it when you create form like this::
 To set the default values in the fields of the form you can use the model property of the form.
 Even if model not explicitly set (see section below) each form has an underlying model which is automatically generated::
 
-	$form->model->set('email', 'some@email.com'); // single field
+	// single field
+	$form->model->set('email', 'some@email.com');
 
 	// or multiple fields
 	$form->model->set([
