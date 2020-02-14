@@ -57,6 +57,17 @@ or you can tweak it when you create form like this::
 
     $form = $app->add(['Form', 'buttonSave'=>[null, 'Subscribe', 'icon'=>'mail']]);
 
+To set the default values in the fields of the form you can use the model property of the form.
+Even if model not explicitly set (see section below) each form has an underlying model which is automatically generated::
+
+	$form->model->set('email', 'some@email.com'); // single field
+
+	// or multiple fields
+	$form->model->set([
+		'name'	=> 'John',
+		'email' => 'some@email.com'
+	]);
+
 Form also relies on a ``atk4\ui\FormLayout`` class and displays fields through
 decorators defined at ``atk4\ui\FormField``. See dedicated documentation for:
 
