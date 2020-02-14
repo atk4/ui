@@ -12,12 +12,12 @@ class AutoComplete extends Input
     public $ui = 'input';
 
     /**
-     * Declare this property so AutoComplete is consistent as decorator to replace FormField\DropDown
-     * 
+     * Declare this property so AutoComplete is consistent as decorator to replace FormField\DropDown.
+     *
      * @var array
      */
     public $values = [];
-    
+
     /**
      * Object used to capture requests from the browser.
      *
@@ -48,12 +48,12 @@ class AutoComplete extends Input
      * This allows for generating different option lists depending on dirty form values
      * E.g if we have a dropdown field 'country' we can add to the form an AutoComplete field 'state'
      * with dependency
-     * Then model of the 'state' field can be limited to states of the currently selected 'country'
+     * Then model of the 'state' field can be limited to states of the currently selected 'country'.
      *
      * @var callable
      */
     public $dependency;
-    
+
     /**
      * Set this to create right-aligned button for adding a new a new record.
      *
@@ -118,12 +118,12 @@ class AutoComplete extends Input
 
     /**
      * Define callback for generating the row data
-     * If left empty default callback AutoComplete::defaultRenderRow is used
+     * If left empty default callback AutoComplete::defaultRenderRow is used.
      *
      * @var null|callable
      */
     public $renderRowFunction;
-    
+
     /**
      * Whether or not to accept multiple value.
      *   Multiple values are sent using a string with comma as value delimiter.
@@ -132,21 +132,21 @@ class AutoComplete extends Input
      * @var bool
      */
     public $multiple = false;
-    
+
     public function init()
     {
         parent::init();
 
         $this->template->set([
-            'input_id' => $this->name.'-ac',
-            'placeholder' => $this->placeholder
+            'input_id'    => $this->name.'-ac',
+            'placeholder' => $this->placeholder,
         ]);
-        
+
         $this->initQuickNewRecord();
-        
+
         $this->settings['forceSelection'] = false;
     }
-    
+
     /**
      * Returns URL which would respond with first 50 matching records.
      */
@@ -154,69 +154,69 @@ class AutoComplete extends Input
     {
         return $this->callback->getJSURL();
     }
-    
+
     /**
-     * Generate API response
+     * Generate API response.
      */
     public function outputApiResponse()
     {
         $this->app->terminate(json_encode([
             'success' => true,
-            'results' => $this->getData()
+            'results' => $this->getData(),
         ]));
     }
-    
+
     /**
-     * Generate autocomplete data
-     * 
-     * @param boolean $limit
-     * 
+     * Generate autocomplete data.
+     *
+     * @param bool $limit
+     *
      * @return array
      */
     public function getData($limit = true)
     {
-        if (! $this->model) {
+        if (!$this->model) {
             return [['value' => '-1', 'title' => 'Model must be set for AutoComplete']];
         }
-        
+
         $this->applyLimit($limit);
-        
+
         $this->applySearchConditions();
-        
+
         $this->applyDependencyConditions();
-        
+
         $data = [];
         foreach ($this->model as $row) {
             $data[] = $this->renderRow($row);
         }
-        
-        if (! $this->multiple && $this->empty) {
+
+        if (!$this->multiple && $this->empty) {
             array_unshift($data, ['value' => '0', 'title' => (string) $this->empty]);
         }
-        
+
         return $data;
     }
-    
+
     /**
      * Renders the autocomplete row depending on properties set.
-     * 
+     *
      * @param array $row
-     * 
+     *
      * @return mixed
      */
     public function renderRow($row)
     {
         $renderRowFunction = is_callable($this->renderRowFunction) ? $this->renderRowFunction : [__CLASS__, 'defaultRenderRow'];
-        
+
         return call_user_func($renderRowFunction, $this, $row);
     }
- 
+
     /**
-     * Default callback for generating data row
+     * Default callback for generating data row.
      *
-     * @param AutoComplete      $field
-     * @param \atk4\data\Model  $row
-     * @param string            $key
+     * @param AutoComplete     $field
+     * @param \atk4\data\Model $row
+     * @param string           $key
      *
      * @return string[]
      */
@@ -228,29 +228,31 @@ class AutoComplete extends Input
         // IMPORTANT: always convert data to string, otherwise numbers can be rounded by JS
         return [
             'value' => (string) $row[$id_field],
-            'title' => (string) $row[$title_field]
+            'title' => (string) $row[$title_field],
         ];
     }
-    
+
     /**
-     * Add button for new record
+     * Add button for new record.
      */
     protected function initQuickNewRecord()
     {
-        if (! $this->plus) return;
-        
-        $this->plus = is_bool($this->plus)? 'Add New': $this->plus;
-        
-        $this->plus = is_string($this->plus)? ['button' => $this->plus]: $this->plus;
-        
+        if (!$this->plus) {
+            return;
+        }
+
+        $this->plus = is_bool($this->plus) ? 'Add New' : $this->plus;
+
+        $this->plus = is_string($this->plus) ? ['button' => $this->plus] : $this->plus;
+
         $buttonSeed = $this->plus['button'] ?? [];
-        
-        $buttonSeed = is_string($buttonSeed)? ['content' => $buttonSeed]: $buttonSeed;
-        
+
+        $buttonSeed = is_string($buttonSeed) ? ['content' => $buttonSeed] : $buttonSeed;
+
         $defaultSeed = ['Button', 'disabled' => ($this->disabled || $this->readonly)];
-        
+
         $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed), null, 'atk4\ui');
-        
+
         if ($this->form) {
             $vp = $this->form->add('VirtualPage');
         } else {
@@ -259,51 +261,55 @@ class AutoComplete extends Input
 
         $vp->set(function ($page) {
             $form = $page->add('Form');
-            
+
             $model = clone $this->model;
-            
+
             $form->setModel($model->onlyFields($this->plus['fields'] ?? []));
-            
+
             $form->onSubmit(function ($form) {
                 $form->model->save();
-                
+
                 $ret = [
-                        (new jQuery('.atk-modal'))->modal('hide')
+                    (new jQuery('.atk-modal'))->modal('hide'),
                 ];
-                
+
                 if ($row = $this->renderRow($form->model)) {
                     $chain = new jQuery('#'.$this->name.'-ac');
                     $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-                    
+
                     $ret[] = $chain;
                 }
-                
+
                 return $ret;
             });
         });
-            
-        $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
-            
+
+        $caption = $this->plus['caption'] ?? 'Add New '.$this->model->getModelCaption();
+
         $this->action->js('click', new \atk4\ui\jsModal($caption, $vp));
     }
-    
+
     /**
-     * Apply limit to model
+     * Apply limit to model.
      */
     protected function applyLimit($limit = true)
     {
-        if (! $limit) return;
-        
-        $this->model->setLimit(is_numeric($limit) ? $limit: $this->limit);
+        if (!$limit) {
+            return;
+        }
+
+        $this->model->setLimit(is_numeric($limit) ? $limit : $this->limit);
     }
-    
+
     /**
-     * Apply conditions to model based on search string
+     * Apply conditions to model based on search string.
      */
     protected function applySearchConditions()
     {
-        if (! isset($_GET['q'])) return;
-        
+        if (!isset($_GET['q'])) {
+            return;
+        }
+
         if ($this->search instanceof \Closure) {
             $this->search($this->model, $_GET['q']);
         } elseif ($this->search && is_array($this->search)) {
@@ -312,44 +318,44 @@ class AutoComplete extends Input
             }, $this->search));
         } else {
             $title_field = $this->title_field ?: $this->model->title_field;
-            
+
             $this->model->addCondition($title_field, 'like', '%'.$_GET['q'].'%');
         }
     }
-    
+
     /**
-     * Apply conditions to model based on dependency
+     * Apply conditions to model based on dependency.
      */
     protected function applyDependencyConditions()
     {
-        if (! is_callable($this->dependency)) return;
-        
+        if (!is_callable($this->dependency)) {
+            return;
+        }
+
         $data = [];
         if (isset($_GET['form'])) {
             parse_str($_GET['form'], $data);
-        }
-        elseif ($this->form) {
+        } elseif ($this->form) {
             $data = $this->form->model->get();
-        }
-        else {
+        } else {
             return;
         }
-        
+
         call_user_func($this->dependency, $this->model, $data);
     }
-        
+
     /**
      * returns <input .../> tag.
      */
     public function getInput()
     {
         return $this->app->getTag('input', array_merge([
-            'name' => $this->short_name,
-            'type' => 'hidden',
-            'id' => $this->id . '_input',
-            'value' => $this->getValue(),
+            'name'     => $this->short_name,
+            'type'     => 'hidden',
+            'id'       => $this->id.'_input',
+            'value'    => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
-            'disabled' => $this->disabled ? 'disabled' : false
+            'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
     }
 
@@ -411,7 +417,7 @@ class AutoComplete extends Input
                 'form' => new jsFunction([new jsExpression('return []', [$this->js()->closest('form')->serialize()])]),
             ], $this->apiConfig['data'] ?? []);
         }
-        
+
         $chain = new jQuery('#'.$this->name.'-ac');
 
         $this->initDropdown($chain);
@@ -420,31 +426,32 @@ class AutoComplete extends Input
             $id_field = $this->id_field ?: $this->model->id_field;
 
             $this->model->tryLoadBy($id_field, $this->field->get());
-            
+
             if ($this->model->loaded()) {
                 $row = $this->renderRow($this->model);
-                
+
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
             } else {
                 $this->field->set(null);
             }
         }
-        
+
         $this->js(true, $chain);
 
         parent::renderView();
     }
-    
+
     /**
-     * Convert value to expected comma separated list before setting it
+     * Convert value to expected comma separated list before setting it.
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
+     *
      * @see \atk4\ui\FormField\Generic::set()
      */
     public function set($value = null, $junk = null)
     {
         $value = implode(',', (array) $value);
-        
+
         return parent::set($value, $junk);
     }
 }

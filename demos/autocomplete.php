@@ -109,7 +109,7 @@ $form->addField('starts_with', [
     'values'       => [
         'a' => 'Letter A',
         'b' => 'Letter B',
-        'c' => 'Letter C'
+        'c' => 'Letter C',
     ],
     'isMultiple'  => true,
     'hint'        => 'Select start letter that auto-complete selection of Country will depend on.',
@@ -125,24 +125,24 @@ $form->addField('contains', [
 $lookup = $form->addField('country', [
     'AutoComplete',
     'model'       => new Country($db),
-    'dependency' => function($model, $data) {
+    'dependency'  => function ($model, $data) {
         $conditions = [];
         foreach (explode(',', $data['starts_with'] ?? '') as $letter) {
-            $conditions[] = ['name', 'like', $letter . '%'];            
+            $conditions[] = ['name', 'like', $letter.'%'];
         }
-            
+
         if ($conditions) {
             $model->addCondition($conditions);
         }
-                
-        isset($data['contains']) ? $model->addCondition('name', 'like', '%' . $data['contains'] . '%') : null;
+
+        isset($data['contains']) ? $model->addCondition('name', 'like', '%'.$data['contains'].'%') : null;
     },
     'placeholder' => 'Selection depends on DropDown above',
     'search'      => ['name', 'iso', 'iso3'],
 ]);
 
 $form->onSubmit(function ($form) {
-    return 'Submitted: ' . print_r($form->model->get(), true);
+    return 'Submitted: '.print_r($form->model->get(), true);
 });
 
 $app->add(['Header', 'Auto-complete multiple values']);
@@ -155,7 +155,7 @@ $form->addField('ends_with', [
     'values'       => [
         'a' => 'Letter A',
         'b' => 'Letter B',
-        'c' => 'Letter C'
+        'c' => 'Letter C',
     ],
     'hint'        => 'Select end letter that auto-complete selection of Country will depend on.',
     'placeholder' => 'Search for country ending with ...',
@@ -164,13 +164,13 @@ $form->addField('ends_with', [
 $lookup = $form->addField('country', [
     'AutoComplete',
     'model'       => new Country($db),
-    'dependency' => function($model, $data) {
-        isset($data['ends_with']) ? $model->addCondition('name', 'like', '%' . $data['ends_with']) : null;
+    'dependency'  => function ($model, $data) {
+        isset($data['ends_with']) ? $model->addCondition('name', 'like', '%'.$data['ends_with']) : null;
     },
     'multiple'    => true,
     'search'      => ['name', 'iso', 'iso3'],
 ]);
 
 $form->onSubmit(function ($form) {
-    return 'Submitted: ' . print_r($form->model->get(), true);
+    return 'Submitted: '.print_r($form->model->get(), true);
 });
