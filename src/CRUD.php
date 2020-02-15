@@ -60,7 +60,7 @@ class CRUD extends Grid
     /** @var array Action name container that will reload Table after executing */
     public $reloadTableActions = [];
 
-    /** @var array Action name container that will remove corresponding table row after executing */
+    /** @var array Action name container that will remove the corresponding table row after executing */
     public $removeRowActions = [];
 
     public function init()
