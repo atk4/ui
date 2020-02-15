@@ -244,7 +244,7 @@ class CRUD extends Grid
         $js[] = $this->getNotifier($msg, $action);
         if (in_array($action->short_name, $this->reloadTableActions)) {
             $js[] =  $this->container->jsReload($this->_getReloadArgs());
-        } else if (in_array($action->short_name, $this->removeRowActions)) {
+        } elseif (in_array($action->short_name, $this->removeRowActions)) {
             $js[] = (new jQuery())->closest('tr')->transition('fade left');
         } else {
             $js[] = $action->owner->loaded() ? $this->container->jsReload($this->_getReloadArgs()) : (new jQuery())->closest('tr')->transition('fade left');
