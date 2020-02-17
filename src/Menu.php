@@ -36,16 +36,18 @@ class Menu extends View
     /**
      * $seed can also be name here.
      *
-     * @param string|array $item
+     * @param string|array|Item $item
      * @param string|array $action
      *
      * @return Item
      */
     public function addItem($item = null, $action = null)
     {
-        $item = (array) $item;
+        if (!is_object($item)) {
+            $item = (array) $item;
 
-        array_unshift($item, 'Item');
+            array_unshift($item, 'Item');
+        }
 
         $item = $this->add($item)->setElement('a');
 
