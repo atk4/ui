@@ -129,11 +129,6 @@ class CRUD extends Grid
                 }
             }
             $this->setItemsAction();
-
-            // if no menuItems at all, then remove menu element
-            if (!$this->menuItems) {
-                $this->menu->destroy();
-            }
         }
 
         return $this->model;
