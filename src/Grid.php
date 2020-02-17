@@ -131,7 +131,8 @@ class Grid extends View
             $this->sortTrigger = $this->name.'_sort';
         }
 
-        if ($this->menu !== false) {
+        // if menu not disabled ot not already assigned as existing object
+        if ($this->menu !== false && !is_object($this->menu)) {
             $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu, 'atk4\ui'), 'Menu');
         }
 
