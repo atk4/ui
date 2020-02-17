@@ -154,13 +154,19 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $this->assertGreaterThan(0, count($output_rows), ' Response is empty on '.$uri);
         // check SSE Syntax
         foreach ($output_rows as $index => $sse_line) {
-            if (empty($sse_line) || $sse_line === null) {
+            if (empty($sse_line)) {
                 continue;
             }
 
-            preg_match('/^[id|event|data].*$/', $sse_line, $matches);
+            $matches = [];
+
+            preg_match_all('/^(id|event|data).*$/m', $sse_line, $matches);
+
+            $sse_string = str_ireplace(["\r", "\n"], '', $sse_line);
+            $format_match_string = implode('', $matches[0] ?? ['error']);
+
             $this->assertEquals(
-                $sse_line, $matches[0] ?? 'error',
+                $sse_string, $format_match_string,
                 ' Testing SSE response line '.$index.' with content '.$sse_line.' on '.$uri
             );
         }
