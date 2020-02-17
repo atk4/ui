@@ -363,11 +363,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function addFields($fields)
     {
         foreach ($fields as $field) {
-            if (is_array($field)) {
-                $this->addField(...$field);
-            } else {
-                $this->addField($field);
-            }
+            $this->addField(...(array) $field);
         }
 
         return $this;
@@ -474,8 +470,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         $seed = $this->mergeSeeds(
             $seed,
-            isset($f->ui['form']) ? $f->ui['form'] : null,
-            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
+            $f->ui['form'] ?? null,
+            $this->typeToDecorator[$f->type] ?? null,
             $fallback_seed
         );
 
@@ -517,10 +513,10 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         foreach ($this->fields as $key => $field) {
             try {
-                $value = isset($post[$key]) ? $post[$key] : null;
-
                 // save field value only if field was editable in form at all
                 if (!$field->readonly && !$field->disabled) {
+                    $value = $post[$key] ?? null;
+
                     $this->model[$key] = $this->app->ui_persistence->typecastLoadField($field->field, $value);
                 }
             } catch (\atk4\core\Exception $e) {
