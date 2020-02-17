@@ -12,11 +12,11 @@ use atk4\ui\Exception;
  * like a status or a coded state of a process
  * Ex :
  * Machine state :
- * 0 => off
- * 1 => powerup
- * 2 => on
- * 3 => resetting
- * 4 => error
+ *  0 => off
+ *  1 => powerup
+ *  2 => on
+ *  3 => resetting
+ *  4 => error
  *
  * we don't need a table to define this, cause are defined in project
  *
@@ -24,22 +24,18 @@ use atk4\ui\Exception;
  * need to be defined in field like this :
  *
  * $this->addField('course_payment_status', [
- * 'caption' => __('Payment Status'),
- * 'default' => 0,
- * 'values' => [
- * 0 => __('not invoiceable'),
- * 1 => __('ready to invoice'),
- * 2 => __('invoiced'),
- * 3 => __('paid'),
- * ],
- * 'ui'      => [
- * 'form' => [
- * 'DropDown'
- * ],
- * 'table' => [
- * 'KeyValue'
- * ]
- * ],
+ *  'caption' => __('Payment Status'),
+ *  'default' => 0,
+ *  'values' => [
+ *      0 => __('not invoiceable'),
+ *      1 => __('ready to invoice'),
+ *      2 => __('invoiced'),
+ *      3 => __('paid'),
+ *  ],
+ *  'ui'      => [
+ *      'form' => ['DropDown'],
+ *      'table' => ['KeyValue'],
+ *  ],
  * ]);
  */
 class KeyValue extends Generic
@@ -59,7 +55,7 @@ class KeyValue extends Generic
      *
      * @return array|void
      */
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(array $row, Field $field)
     {
         $values = $field->values;
 
@@ -75,13 +71,8 @@ class KeyValue extends Generic
             return;
         }
 
-        $keyValues = $values;
         $key = $field->get();
-
-        $value = '';
-        if (isset($keyValues[$key])) {
-            $value = $keyValues[$key];
-        }
+        $value = $values[$key] ?? '';
 
         return [$field->short_name => $value];
     }
