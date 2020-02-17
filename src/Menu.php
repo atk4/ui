@@ -95,7 +95,9 @@ class Menu extends View
 
         $name = (array) $name;
 
-        if ($label = $name['title'] ?? $name['label'] ?? $name['name'] ?? $name[0] ?? '') {
+        $label = $name['title'] ?? $name['label'] ?? $name['name'] ?? $name[0] ?? null;
+
+        if (isset($label)) {
             $subMenu->set('label', $label);
         }
 
@@ -123,7 +125,9 @@ class Menu extends View
 
         $name = (array) $name;
 
-        if ($title = $name['title'] ?? $name['label'] ?? $name['name'] ?? $name[0] ?? '') {
+        $title = $name['title'] ?? $name['label'] ?? $name['name'] ?? $name[0] ?? null;
+
+        if (isset($title)) {
             $group->set('title', $title);
         }
 
