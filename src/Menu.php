@@ -43,13 +43,9 @@ class Menu extends View
      */
     public function addItem($item = null, $action = null)
     {
-        if (is_string($item)) {
-            $item = ['Item', $item];
-        } elseif (is_array($item)) {
-            array_unshift($item, 'Item');
-        } elseif (!$item) {
-            $item = ['Item'];
-        }
+        $item = (array) $item;
+
+        array_unshift($item, 'Item');
 
         $item = $this->add($item)->setElement('a');
 
@@ -93,45 +89,44 @@ class Menu extends View
      */
     public function addMenu($name)
     {
-        if (is_array($name)) {
-            $label = $name[0];
-            unset($name[0]);
-        } else {
-            $label = $name;
-            $name = [];
+        $subMenu = $this->add([new self(), 'defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
+
+        $name = (array) $name;
+
+        if ($label = $name['title'] ?? $name['label'] ?? $name['name'] ?? $name[0] ?? '') {
+            $subMenu->set('label', $label);
         }
 
-        $sub_menu = $this->add([new self(), 'defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
-        $sub_menu->set('label', $label);
-
-        if (isset($name['icon']) && $name['icon']) {
-            $sub_menu->add(new Icon($name['icon']), 'Icon')->removeClass('item');
+        if (!empty($name['icon'])) {
+            $subMenu->add(new Icon($name['icon']), 'Icon')->removeClass('item');
         }
 
         if (!$this->in_dropdown) {
-            $sub_menu->js(true)->dropdown(['on' => 'hover', 'action' => 'hide']);
+            $subMenu->js(true)->dropdown(['on' => 'hover', 'action' => 'hide']);
         }
 
-        return $sub_menu;
+        return $subMenu;
     }
 
     /**
      * Adds menu group.
      *
-     * @param string|array $title
+     * @param string|array $name
      *
      * @return Menu
      */
-    public function addGroup($title)
+    public function addGroup($name)
     {
         $group = $this->add([new self(), 'defaultTemplate' => 'menugroup.html', 'ui' => false]);
-        if (is_string($title)) {
+
+        $name = (array) $name;
+
+        if ($title = $name['title'] ?? $name['label'] ?? $name['name'] ?? $name[0] ?? '') {
             $group->set('title', $title);
-        } else {
-            if (isset($title['icon']) && $title['icon']) {
-                $group->add(new Icon($title['icon']), 'Icon')->removeClass('item');
-            }
-            $group->set('title', $title[0]);
+        }
+
+        if (!empty($name['icon'])) {
+            $group->add(new Icon($name['icon']), 'Icon')->removeClass('item');
         }
 
         return $group;
@@ -144,10 +139,7 @@ class Menu extends View
      */
     public function addMenuRight()
     {
-        $menu = $this->add([new self(), 'ui' => false], 'RightMenu');
-        $menu->removeClass('item')->addClass('right menu');
-
-        return $menu;
+        return $this->add([new self(), 'ui' => false], 'RightMenu')->removeClass('item')->addClass('right menu');
     }
 
     /**
@@ -160,10 +152,7 @@ class Menu extends View
      */
     public function add($object, $region = null)
     {
-        $item = parent::add($object, $region);
-        $item->addClass('item');
-
-        return $item;
+        return parent::add($object, $region)->addClass('item');
     }
 
     /**
@@ -173,9 +162,7 @@ class Menu extends View
      */
     public function addDivider()
     {
-        $item = parent::add(['class' => ['divider']]);
-
-        return $item;
+        return parent::add(['class' => ['divider']]);
     }
 
     /*
