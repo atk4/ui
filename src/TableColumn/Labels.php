@@ -15,28 +15,31 @@ use atk4\ui\Exception;
  */
 class Labels extends Generic
 {
+    /** @var array Array of allowed values. This have precedence over $field->values */
+    public $values;
+
     /**
-     * @param array $row
-     * @param Field $field
+     * @param Model|array $row
+     * @param Field|null  $field
      *
      * @return array|void
      */
-    public function getHTMLTags(array $row, Field $field)
+    public function getHTMLTags($row, $field)
     {
-        $values = $field->get();
-        $values = is_string($values) ? explode(',', $values) : $values;
+        $values = $this->values ?? $field->values;
+
+        $v = $field->get();
+        $v = is_string($v) ? explode(',', $v) : $v;
 
         $labels= [];
-        foreach ($values as $value) {
-            $value = trim($value);
+        foreach ($v as $id) {
+            $id = trim($id);
 
             // if field values is set, then use titles instead of IDs
-            if ($field->values && isset($field->values[$value])) {
-                $value = $field->values[$value];
-            }
+            $id = $values[$id] ?? $id;
 
-            if (!empty($value)) {
-                $labels[] = $this->app->getTag('div', ['class' => 'ui label'], $value);
+            if (!empty($id)) {
+                $labels[] = $this->app->getTag('div', ['class' => 'ui label'], $id);
             }
         }
 

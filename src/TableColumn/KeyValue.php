@@ -48,14 +48,14 @@ class KeyValue extends Generic
     }
 
     /**
-     * @param array $row
-     * @param Field $field
+     * @param Model|array $row
+     * @param Field|null  $field
      *
      * @throws Exception
      *
      * @return array|void
      */
-    public function getHTMLTags(array $row, Field $field)
+    public function getHTMLTags($row, $field)
     {
         $values = $field->values;
 

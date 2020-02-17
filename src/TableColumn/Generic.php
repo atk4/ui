@@ -6,6 +6,8 @@ use atk4\ui\Exception;
 use atk4\ui\jQuery;
 use atk4\ui\jsExpression;
 use atk4\ui\Popup;
+use atk4\data\Field;
+use atk4\data\Model;
 
 /**
  * Implements Column helper for table.
@@ -292,11 +294,11 @@ class Generic
      * Provided with a field definition (from a model) will return a header
      * cell, fully formatted to be included in a Table. (<th>).
      *
-     * @param \atk4\data\Field $f
+     * @param Field $f
      *
      * @return string
      */
-    public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
+    public function getHeaderCellHTML(Field $f = null, $value = null)
     {
         $attr = [];
         if (!$this->table) {
@@ -352,12 +354,12 @@ class Generic
     /**
      * Return HTML for a total value of a specific field.
      *
-     * @param \atk4\data\Field $f
-     * @param mixed            $value
+     * @param Field $f
+     * @param mixed $value
      *
      * @return string
      */
-    public function getTotalsCellHTML(\atk4\data\Field $f, $value)
+    public function getTotalsCellHTML(Field $f, $value)
     {
         return $this->getTag('foot', $this->app->ui_persistence->typecastSaveField($f, $value));
     }
@@ -374,11 +376,11 @@ class Generic
      * This method will be executed only once per table rendering, if you need to format data manually,
      * you should use $this->table->addHook('formatRow');
      *
-     * @param \atk4\data\Field $f
+     * @param Field $f
      *
      * @return string
      */
-    public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
+    public function getDataCellHTML(Field $f = null, $extra_tags = [])
     {
         return $this->getTag('body', [$this->getDataCellTemplate($f)], $extra_tags);
     }
@@ -394,11 +396,11 @@ class Generic
      * applied to the same column. The first one to be applied is executed first, then
      * a subsequent ones are executed.
      *
-     * @param \atk4\data\Field $f
+     * @param Field $f
      *
      * @return string
      */
-    public function getDataCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(Field $f = null)
     {
         if ($f) {
             return '{$'.$f->short_name.'}';
@@ -411,8 +413,8 @@ class Generic
      * Return associative array of tags to be filled with pre-rendered HTML on
      * a column-basis. Will not be invoked if html-output is turned off for the table.
      *
-     * @param array  $row   link to row data
-     * @param string $field field being rendered
+     * @param Model|array $row   link to row data
+     * @param Field|null  $field field being rendered
      *
      * @return array Associative array with tags and their HTML values.
      */
