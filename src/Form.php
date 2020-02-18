@@ -515,9 +515,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             try {
                 // save field value only if field was editable in form at all
                 if (!$field->readonly && !$field->disabled) {
-                    $value = $post[$key] ?? null;
-
-                    $this->model[$key] = $this->app->ui_persistence->typecastLoadField($field->field, $value);
+                    $field->set($post[$key] ?? null);
                 }
             } catch (\atk4\core\Exception $e) {
                 $errors[$key] = $e->getMessage();
