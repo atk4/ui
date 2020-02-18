@@ -331,22 +331,16 @@ class Generic
 
         if ($this->hasHeaderAction) {
             $attr = array_merge($attr, ['id' => $this->name.'_th']);
-            $tag = $this->getTag(
-                'head',
-                [$captionHtmlTag,
-                    $this->headerActionTag,
-                ],
-                $attr
-            );
-        } else {
-            $tag = $this->getTag(
-                'head',
-                [$captionHtmlTag],
-                $attr
-            );
+
+            //add the action tag to the caption
+            $captionHtmlTag[2] = [$captionHtmlTag[2], $this->headerActionTag];
         }
 
-        return $tag;
+        return $this->getTag(
+            'head',
+            [$captionHtmlTag],
+            $attr
+        );
     }
 
     /**
