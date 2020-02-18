@@ -6,6 +6,7 @@ use atk4\ui\Exception;
 use atk4\ui\jQuery;
 use atk4\ui\jsExpression;
 use atk4\ui\Popup;
+use atk4\data\Field;
 
 /**
  * Implements Column helper for table.
@@ -285,12 +286,12 @@ class Generic
      * Provided with a field definition (from a model) will return a header
      * cell, fully formatted to be included in a Table. (<th>).
      *
-     * @param \atk4\data\Field $field
+     * @param Field $field
      * @param mixed $value
      *
      * @return string
      */
-    public function getHeaderCellHTML(\atk4\data\Field $field = null, $value = null)
+    public function getHeaderCellHTML(Field $field = null, $value = null)
     {
         if (!$this->table) {
             throw new \atk4\ui\Exception(['How $table could not be set??', 'field' => $field, 'value' => $value]);
@@ -340,12 +341,12 @@ class Generic
     /**
      * Return HTML for a total value of a specific field.
      *
-     * @param \atk4\data\Field $field
+     * @param Field $field
      * @param mixed            $value
      *
      * @return string
      */
-    public function getTotalsCellHTML(\atk4\data\Field $field, $value)
+    public function getTotalsCellHTML(Field $field, $value)
     {
         return $this->getTag('foot', $this->app->ui_persistence->typecastSaveField($field, $value));
     }
@@ -362,11 +363,11 @@ class Generic
      * This method will be executed only once per table rendering, if you need to format data manually,
      * you should use $this->table->addHook('formatRow');
      *
-     * @param \atk4\data\Field $field
+     * @param Field $field
      *
      * @return string
      */
-    public function getDataCellHTML(\atk4\data\Field $field = null, $extra_tags = [])
+    public function getDataCellHTML(Field $field = null, $extra_tags = [])
     {
         return $this->getTag('body', [$this->getDataCellTemplate($field)], $extra_tags);
     }
@@ -382,11 +383,11 @@ class Generic
      * applied to the same column. The first one to be applied is executed first, then
      * a subsequent ones are executed.
      *
-     * @param \atk4\data\Field $field
+     * @param Field $field
      *
      * @return string
      */
-    public function getDataCellTemplate(\atk4\data\Field $field = null)
+    public function getDataCellTemplate(Field $field = null)
     {
         if ($field) {
             return '{$'.$field->short_name.'}';
