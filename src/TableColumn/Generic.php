@@ -128,7 +128,7 @@ class Generic
     {
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
-                ['i', ['id' => $this->name.'_ac', 'class' => $icon.' icon']. ''],
+                ['i', ['id' => $this->name.'_ac', 'class' => $icon.' icon'], ''],
             ],
         ];
     }
