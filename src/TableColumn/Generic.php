@@ -292,7 +292,6 @@ class Generic
      */
     public function getHeaderCellHTML(\atk4\data\Field $field = null, $value = null)
     {
-        $attr = [];
         if (!$this->table) {
             throw new \atk4\ui\Exception(['How $table could not be set??', 'field' => $field, 'value' => $value]);
         }
@@ -306,14 +305,26 @@ class Generic
         }
 
         // if $this->caption is empty, header caption will be overriden by linked field definition
-        $captionHtmlTag = ['div', ['class' => 'atk-table-column-header'], empty($this->caption) ? $field->getCaption() : $this->caption];
+        $caption = $this->caption ?: $field->getCaption();
+
+        $attr = [
+            'data-column' => $this->columnData
+        ];
+
+        $class = 'atk-table-column-header';
+
+        if ($this->hasHeaderAction) {
+            $attr['id'] = $this->name.'_th';
+
+            //add the action tag to the caption
+            $caption = [$caption, $this->headerActionTag];
+        }
 
         // If table is being sorted by THIS column, set the proper class
-        $attr['data-column'] = $this->columnData;
         if ($this->table->sortable) {
             $attr['data-sort'] = $field->short_name;
             if ($this->table->sort_by === $field->short_name) {
-                $captionHtmlTag[1]['class'] = $captionHtmlTag[1]['class'].' '.'sorted '.$this->table->sort_order;
+                $class .= ' sorted '.$this->table->sort_order;
 
                 if ($this->table->sort_order === 'ascending') {
                     $attr['data-sort'] = '-'.$field->short_name;
@@ -323,18 +334,7 @@ class Generic
             }
         }
 
-        if ($this->hasHeaderAction) {
-            $attr = array_merge($attr, ['id' => $this->name.'_th']);
-
-            //add the action tag to the caption
-            $captionHtmlTag[2] = [$captionHtmlTag[2], $this->headerActionTag];
-        }
-
-        return $this->getTag(
-            'head',
-            [$captionHtmlTag],
-            $attr
-        );
+        return $this->getTag('head', [['div', compact('class'), $caption]], $attr);
     }
 
     /**
