@@ -82,7 +82,7 @@ class Generic
     {
         $id = $this->name.'_ac';
 
-        $popup = $this->table->owner->add($popup ? $popup : 'Popup')->setHoverable();
+        $popup = $this->table->owner->add($popup ?: 'Popup')->setHoverable();
 
         $this->setHeaderPopup($icon, $id);
 
@@ -125,10 +125,9 @@ class Generic
      */
     public function setHeaderPopupIcon($icon)
     {
-        $id = $this->name.'_ac';
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
-                ['i', ['id' => $id, 'class' => $icon.' icon']],
+                ['i', ['id' => $this->name.'_ac', 'class' => $icon.' icon']],
             ],
         ];
     }
@@ -145,16 +144,12 @@ class Generic
      */
     public function addDropdown($items, $fx, $icon = 'caret square down', $menuId = null)
     {
-        $menuITems = [];
+        $menuItems = [];
         foreach ($items as $key => $item) {
-            if (is_int($key)) {
-                $menuITems[] = ['name' => $item, 'value' => $item];
-            } else {
-                $menuITems[] = ['name' => $key, 'value' => $item];
-            }
+            $menuItems[] = ['name' => is_int($key) ? $item : $key, 'value' => $item];
         }
 
-        $cb = $this->setHeaderDropdown($menuITems, $icon, $menuId);
+        $cb = $this->setHeaderDropdown($menuItems, $icon, $menuId);
 
         $cb->onSelectItem(function ($menu, $item) use ($fx) {
             return call_user_func($fx, $item, $menu);
@@ -255,13 +250,11 @@ class Generic
     public function getTagAttributes($position, $attr = [])
     {
         // "all" applies on all positions
-        if (isset($this->attr['all'])) {
-            $attr = array_merge_recursive($attr, $this->attr['all']);
-        }
-
-        // specific position classes
-        if (isset($this->attr[$position])) {
-            $attr = array_merge_recursive($attr, $this->attr[$position]);
+        // $position is for specific position classes
+        foreach (['all', $position] as $key) {
+            if (isset($this->attr[$key])) {
+                $attr = array_merge_recursive($attr, $this->attr[$key]);
+            }
         }
 
         return $attr;
@@ -292,37 +285,38 @@ class Generic
      * Provided with a field definition (from a model) will return a header
      * cell, fully formatted to be included in a Table. (<th>).
      *
-     * @param \atk4\data\Field $f
+     * @param \atk4\data\Field $field
+     * @param mixed $value
      *
      * @return string
      */
-    public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
+    public function getHeaderCellHTML(\atk4\data\Field $field = null, $value = null)
     {
         $attr = [];
         if (!$this->table) {
-            throw new \atk4\ui\Exception(['How $table could not be set??', 'f' => $f, 'value' => $value]);
+            throw new \atk4\ui\Exception(['How $table could not be set??', 'field' => $field, 'value' => $value]);
         }
 
-        if ($tag = $this->table->hook('getColumnHeaderCell', [$this, $f, $value])) {
+        if ($tag = $this->table->hook('getColumnHeaderCell', [$this, $field, $value])) {
             return $tag[0];
         }
 
-        if ($f === null) {
+        if ($field === null) {
             return $this->getTag('head', $this->caption ?: '', $this->table->sortable ? ['class' => ['disabled']] : []);
         }
 
         // if $this->caption is empty, header caption will be overriden by linked field definition
-        $captionHtmlTag = ['div', ['class' => 'atk-table-column-header'], empty($this->caption) ? $f->getCaption() : $this->caption];
+        $captionHtmlTag = ['div', ['class' => 'atk-table-column-header'], empty($this->caption) ? $field->getCaption() : $this->caption];
 
         // If table is being sorted by THIS column, set the proper class
         $attr['data-column'] = $this->columnData;
         if ($this->table->sortable) {
-            $attr['data-sort'] = $f->short_name;
-            if ($this->table->sort_by === $f->short_name) {
+            $attr['data-sort'] = $field->short_name;
+            if ($this->table->sort_by === $field->short_name) {
                 $captionHtmlTag[1]['class'] = $captionHtmlTag[1]['class'].' '.'sorted '.$this->table->sort_order;
 
                 if ($this->table->sort_order === 'ascending') {
-                    $attr['data-sort'] = '-'.$f->short_name;
+                    $attr['data-sort'] = '-'.$field->short_name;
                 } elseif ($this->table->sort_order === 'descending') {
                     $attr['data-sort'] = '';
                 }
@@ -346,14 +340,14 @@ class Generic
     /**
      * Return HTML for a total value of a specific field.
      *
-     * @param \atk4\data\Field $f
+     * @param \atk4\data\Field $field
      * @param mixed            $value
      *
      * @return string
      */
-    public function getTotalsCellHTML(\atk4\data\Field $f, $value)
+    public function getTotalsCellHTML(\atk4\data\Field $field, $value)
     {
-        return $this->getTag('foot', $this->app->ui_persistence->typecastSaveField($f, $value));
+        return $this->getTag('foot', $this->app->ui_persistence->typecastSaveField($field, $value));
     }
 
     /**
@@ -368,13 +362,13 @@ class Generic
      * This method will be executed only once per table rendering, if you need to format data manually,
      * you should use $this->table->addHook('formatRow');
      *
-     * @param \atk4\data\Field $f
+     * @param \atk4\data\Field $field
      *
      * @return string
      */
-    public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
+    public function getDataCellHTML(\atk4\data\Field $field = null, $extra_tags = [])
     {
-        return $this->getTag('body', [$this->getDataCellTemplate($f)], $extra_tags);
+        return $this->getTag('body', [$this->getDataCellTemplate($field)], $extra_tags);
     }
 
     /**
@@ -388,14 +382,14 @@ class Generic
      * applied to the same column. The first one to be applied is executed first, then
      * a subsequent ones are executed.
      *
-     * @param \atk4\data\Field $f
+     * @param \atk4\data\Field $field
      *
      * @return string
      */
-    public function getDataCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(\atk4\data\Field $field = null)
     {
-        if ($f) {
-            return '{$'.$f->short_name.'}';
+        if ($field) {
+            return '{$'.$field->short_name.'}';
         } else {
             return '{_$'.$this->short_name.'}';
         }
