@@ -57,6 +57,12 @@ class CRUD extends Grid
     /** @var array Callback containers for model action. */
     public $onActions = [];
 
+    /** @var array Action name container that will reload Table after executing */
+    public $reloadTableActions = [];
+
+    /** @var array Action name container that will remove the corresponding table row after executing */
+    public $removeRowActions = [];
+
     public function init()
     {
         parent::init();
@@ -129,11 +135,6 @@ class CRUD extends Grid
                 }
             }
             $this->setItemsAction();
-
-            // if no menuItems at all, then remove menu element
-            if (!$this->menuItems) {
-                $this->menu->destroy();
-            }
         }
 
         return $this->model;
@@ -236,7 +237,13 @@ class CRUD extends Grid
     protected function jsModelReturn(Generic $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
-        $js[] = $action->owner->loaded() ? $this->container->jsReload($this->_getReloadArgs()) : (new jQuery())->closest('tr')->transition('fade left');
+        if (in_array($action->short_name, $this->reloadTableActions)) {
+            $js[] =  $this->container->jsReload($this->_getReloadArgs());
+        } elseif (in_array($action->short_name, $this->removeRowActions)) {
+            $js[] = (new jQuery())->closest('tr')->transition('fade left');
+        } else {
+            $js[] = $action->owner->loaded() ? $this->container->jsReload($this->_getReloadArgs()) : (new jQuery())->closest('tr')->transition('fade left');
+        }
 
         return $js;
     }
