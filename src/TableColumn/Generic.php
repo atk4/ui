@@ -79,7 +79,7 @@ class Generic
      *
      * @return mixed
      */
-    public function addPopup($popup = null, $icon = 'table-filter-off icon')
+    public function addPopup($popup = null, $icon = 'table-filter-off')
     {
         $id = $this->name.'_ac';
 
@@ -114,7 +114,7 @@ class Generic
 
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
-                ['i', ['id' => $id, 'class' => $class.' icon']],
+                ['i', ['id' => $id, 'class' => $class.' icon'], ''],
             ],
         ];
     }
@@ -128,7 +128,7 @@ class Generic
     {
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
-                ['i', ['id' => $this->name.'_ac', 'class' => $icon.' icon']],
+                ['i', ['id' => $this->name.'_ac', 'class' => $icon.' icon']. ''],
             ],
         ];
     }
@@ -178,7 +178,7 @@ class Generic
             [
                 [
                     'div', ['id' => $id, 'class'=>'ui top left pointing dropdown', 'data-menu-id' => $menuId],
-                    [['i', ['class' => $icon.' icon']]],
+                    [['i', ['class' => $icon.' icon'], '']],
                 ],
             ],
         ];
@@ -318,7 +318,7 @@ class Generic
             $attr['id'] = $this->name.'_th';
 
             //add the action tag to the caption
-            $caption = [$caption, $this->headerActionTag];
+            $caption = [$this->headerActionTag, $caption];
         }
 
         // If table is being sorted by THIS column, set the proper class
