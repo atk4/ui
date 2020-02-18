@@ -400,8 +400,8 @@ class Generic
      * Return associative array of tags to be filled with pre-rendered HTML on
      * a column-basis. Will not be invoked if html-output is turned off for the table.
      *
-     * @param array  $row   link to row data
-     * @param string $field field being rendered
+     * @param Model|array $row   link to row data
+     * @param Field|null  $field field being rendered
      *
      * @return array Associative array with tags and their HTML values.
      */
