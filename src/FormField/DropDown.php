@@ -168,6 +168,43 @@ class DropDown extends Input
     }
 
     /**
+     * Returns presentable value to be inserted into input tag.
+     *
+     * DropDown input tag accepts only CSV formatted list of IDs.
+     *
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return isset($this->field)
+            ? (is_array($this->field->get()) ? join(',', $this->field->get()) : $this->field->get())
+            : parent::getValue();
+    }
+
+    /**
+     * Sets the value of this field. If field is a part of the form and is associated with
+     * the model, then the model's value will also be affected.
+     *
+     * @param mixed $value
+     * @param mixed $junk
+     *
+     * @return $this
+     */
+    public function set($value = null, $junk = null)
+    {
+        if ($this->field) {
+            if ($this->field->type == 'array' && is_string($value)) {
+                $value = explode(',', $value);
+            }
+            $this->field->set($value);
+
+            return $this;
+        }
+
+        return parent::set($value, $junk);
+    }
+
+    /**
      * Set js dropdown() specific option;.
      *
      * @param string $option
