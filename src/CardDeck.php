@@ -231,7 +231,7 @@ class CardDeck extends View
                 return $this->jsExecute($return, $action);
             };
         } else {
-            $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
+            $executor->onHook('afterExecute', function ($ex, $return, $id) use ($action) {
                 return $this->jsExecute($return, $action);
             });
         }

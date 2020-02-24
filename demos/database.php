@@ -31,7 +31,7 @@ if (!class_exists('Country')) {
             $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
             $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
 
-            $this->addHook('beforeSave', function ($m) {
+            $this->onHook('beforeSave', function ($m) {
                 if (!$m['sys_name']) {
                     $m['sys_name'] = strtoupper($m['name']);
                 }
@@ -92,7 +92,7 @@ if (!class_exists('Country')) {
             $this->addField('is_commercial', ['type' => 'boolean']);
             $this->addField('currency', ['enum' => ['EUR', 'USD', 'GBP']]);
             $this->addField('currency_symbol', ['never_persist' => true]);
-            $this->addHook('afterLoad', function ($m) {
+            $this->onHook('afterLoad', function ($m) {
                 /* implementation for "intl"
                 $locale='en-UK';
                 $fmt = new \NumberFormatter( $locale."@currency=".$m['currency'], NumberFormatter::CURRENCY );

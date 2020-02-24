@@ -41,7 +41,7 @@ $view = $app->add('View');
 $search = $view->add(['Component/ItemSearch', 'ui' => 'ui compact segment']);
 $lister_container = $view->add(['View', 'template' => $lister_template]);
 $lister = $lister_container->add('Lister', 'List')
-            ->addHook('beforeRow', function ($l) {
+            ->onHook('beforeRow', function ($l) {
                 $l->ipp++;
                 $l->current_row['iso'] = strtolower($l->current_row['iso']);
                 if ($l->ipp === $l->model->limit[0]) {

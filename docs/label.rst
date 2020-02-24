@@ -122,7 +122,7 @@ Added labels into Table
 You can even use label inside a table, but because table renders itself by repeating periodically, then
 the following code is needed::
 
-    $table->addHook('getHTMLTags', function ($table, $row) {
+    $table->onHook('getHTMLTags', function ($table, $row) {
         if ($row->id == 1) {
             return [
                 'name'=> $table->app->getTag('div', ['class'=>'ui ribbon label'], $row['name']),

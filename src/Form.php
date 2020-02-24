@@ -252,7 +252,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function onSubmit($callback)
     {
-        $this->addHook('submit', $callback);
+        $this->onHook('submit', $callback);
 
         return $this;
     }

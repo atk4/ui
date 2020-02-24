@@ -52,7 +52,7 @@ $crud = $cc->add([
 // Condition on the model can be applied on a model
 $m = new Country($db);
 $m->addCondition('numcode', '<', 200);
-$m->addHook('validate', function ($m2, $intent) {
+$m->onHook('validate', function ($m2, $intent) {
     $err = [];
     if ($m2->get('numcode') >= 200) {
         $err['numcode'] = 'Should be less than 200';

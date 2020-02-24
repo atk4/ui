@@ -96,7 +96,7 @@ Tweaking the output
 Output is formatted using the standard :ref:`ui_persistence` routine, but you can also fine-tune the content
 of your tags like this::
 
-    $lister->addHook('beforeRow', function($l){
+    $lister->onHook('beforeRow', function($l){
         $l->current_row['iso']=strtolower($l->current_row['iso']);
     })
 

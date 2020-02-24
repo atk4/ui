@@ -47,7 +47,7 @@ class CheckBox extends Generic
         // not ticked. We assume they are ticked and sent boolean "false" as a
         // workaround. Otherwise send boolean "true".
         if ($this->form) {
-            $this->form->addHook('loadPOST', function ($form, &$post) {
+            $this->form->onHook('loadPOST', function ($form, &$post) {
                 $post[$this->field->short_name] = isset($post[$this->field->short_name]);
             });
         }
