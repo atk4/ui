@@ -54,7 +54,7 @@ $country->addAction('multi_step',
         ],
         'fields' => ['iso3'],
         'preview'=> function ($m, $age, $gender) {
-            return 'Gender = '.$gender.' / Age = '.$age;
+            return 'Gender = '.$gender.' / Age = '.$age .' / '.$m->get('iso3');
         },
         'callback'=> function ($m, $age, $gender) {
             return 'You are a '.$gender.' of age '.$age.' who want to visit '.$m->getTitle();
