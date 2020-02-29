@@ -38,7 +38,7 @@ class Generic
      * @var string
      */
     public $caption = null;
-    
+
     /**
      * Is column sortable?
      *
