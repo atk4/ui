@@ -38,6 +38,13 @@ class Generic
      * @var string
      */
     public $caption = null;
+    
+    /**
+     * Is column sortable?
+     *
+     * @var boolean
+     */
+    public $sortable = true;
 
     /**
      * The data-column attribute value for Table th tag.
@@ -309,7 +316,7 @@ class Generic
         $caption = $this->caption ?: $field->getCaption();
 
         $attr = [
-            'data-column' => $this->columnData
+            'data-column' => $this->columnData,
         ];
 
         $class = 'atk-table-column-header';
@@ -321,9 +328,14 @@ class Generic
             $caption = [$this->headerActionTag, $caption];
         }
 
-        // If table is being sorted by THIS column, set the proper class
         if ($this->table->sortable) {
             $attr['data-sort'] = $field->short_name;
+
+            if ($this->sortable) {
+                $attr['class'] = ['sortable'];
+            }
+
+            // If table is being sorted by THIS column, set the proper class
             if ($this->table->sort_by === $field->short_name) {
                 $class .= ' sorted '.$this->table->sort_order;
 
