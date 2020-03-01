@@ -601,7 +601,7 @@ class Grid extends View
      */
     public function getSortBy()
     {
-        return isset($_GET[$this->sortTrigger]) ? $_GET[$this->sortTrigger] : null;
+        return $_GET[$this->sortTrigger] ?? null;
     }
 
     /**
@@ -639,7 +639,7 @@ class Grid extends View
 
         $this->table->on(
             'click',
-            'thead>tr>th',
+            'thead>tr>th.sortable',
             new jsReload($this->container, [$this->sortTrigger => (new jQuery())->data('sort')])
         );
     }
