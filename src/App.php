@@ -475,7 +475,7 @@ class App
     public function add($seed, $region = null)
     {
         if (!$this->layout) {
-            throw new Exception(['If you use $app->add() you should first call $app->setLayout()']);
+            throw new Exception(['If you use $app->add() you should first call $app->initLayout()']);
         }
 
         return $this->layout->add($seed, $region);
