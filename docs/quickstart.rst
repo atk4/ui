@@ -20,9 +20,6 @@ Agile Toolkit will work anywhere where PHP can. Find a suitable guide on how to 
 PHP on your platform. Having a local database is a plus, but our initial application will
 work without persistent database.
 
-Requirements
-============
-
 Installing
 ==========
 
@@ -99,7 +96,7 @@ Data Persistence
 ================
 
 To build our "ToDo" application, we need a good location to store list of tasks. We don't really want to mess with
-the actual database and instead will use "SESSION" for storing data.
+the actual database and instead will use "$_SESSION" for storing data.
 
 To be able to actually run this example, create a new file todo.php in the same directory as index.php and
 create the application::
@@ -258,7 +255,7 @@ another. In our example replace right column (label 17) with the following code:
 
     if (isset($_GET['delete'])) {                               // 23
         foreach(explode(',', $_GET['delete']) as $id) {
-            $grid->model->delete($id);                          // 25
+            $grid->model->delete($id);                          // 24
         }
     }
 
