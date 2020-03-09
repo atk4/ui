@@ -85,7 +85,7 @@ is executed it will be impossible to determine each view's position inside rende
     // Still not sure if finished adding
 
     $app = new \atk4\ui\App('My App');
-    $app->setLayout($top);
+    $app->initLayout($top);
 
     // Calls init() for all elements recursively.
 
@@ -94,7 +94,7 @@ child elements. To make your execution more straightforward we recommend you to 
 App class first and then continue with Layout initialization::
 
     $app = new \atk4\ui\App('My App');
-    $top = $app->setLayout(new \atk4\ui\View(['ui'=>'segments']));
+    $top = $app->initLayout(new \atk4\ui\View(['ui'=>'segments']));
 
     $middle = $top->add(new \atk4\ui\View(['ui'=>'segment', 'red']);
 
@@ -103,7 +103,7 @@ App class first and then continue with Layout initialization::
 Finally, if you prefer a more consise code, you can also use the following format::
 
     $app = new \atk4\ui\App('My App');
-    $top = $app->setLayout('View', ['ui'=>'segments']);
+    $top = $app->initLayout('View', ['ui'=>'segments']);
 
     $middle = $top->add('View', ['ui'=>'segment', 'red']);
 

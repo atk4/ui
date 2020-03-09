@@ -57,7 +57,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     /**
      * Will point to the Save button. If you don't want to have save button, then set this to false
-     * or destroy it. Initialized by setLayout().
+     * or destroy it. Initialized by initLayout().
      *
      * @var Button|array|false Button object, seed or false to not show button at all
      */
