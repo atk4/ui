@@ -1,5 +1,5 @@
 {
-  "name": "atk4/ui",
+  "name": "mahalux/atk4-ui-cust",
   "type": "library",
   "description": "Agile UI - Web Component Framework written in PHP",
   "keywords": [
@@ -24,8 +24,12 @@
       "name": "Romans Malinovskis",
       "email": "romans@agiletoolkit.org",
       "homepage": "https://nearly.guru/"
-    }
+    },
+    {"name": "Michael Voříšek", "email": "mvorisek@mvorisek.cz"}
   ],
+  "replace": {
+    "atk4/ui": "~2.0"
+  },
   "require": {
     "php": ">=7.2.0",
     "atk4/core": "dev-develop",
