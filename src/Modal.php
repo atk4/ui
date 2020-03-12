@@ -29,12 +29,8 @@ class Modal extends View
 {
     public $defaultTemplate = 'modal.html';
 
-    /**
-     * Set to empty or false for no header.
-     *
-     * @var string
-     */
-    public $title = 'Modal title';
+    /** @var null|string Set null for no title  */
+    public $title = null;
     public $loading_label = 'Loading...';
     public $headerCSS = 'header';
     public $ui = 'modal';

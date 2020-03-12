@@ -605,7 +605,7 @@ well as display of labels and structure around the fields themselves is not done
 but another object - "Form Layout". This object is responsible for the field flow, presence
 of labels etc.
 
-.. php:method:: setLayout(FormLayout\Generic $layout)
+.. php:method:: initLayout(FormLayout\Generic $layout)
 
     Sets a custom FormLayout object for a form. If not specified then form will automatically
     use FormLayout\Generic.

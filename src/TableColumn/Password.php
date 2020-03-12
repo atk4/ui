@@ -7,6 +7,8 @@ namespace atk4\ui\TableColumn;
  */
 class Password extends Generic
 {
+    public $sortable = false;
+
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
         return '***';

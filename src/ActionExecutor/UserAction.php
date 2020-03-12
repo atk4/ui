@@ -119,7 +119,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
-            $this->title = trim($action->caption.' '.$this->action->owner->getModelCaption());
+            $this->title = $this->title ?? trim($action->caption.' '.$this->action->owner->getModelCaption());
 
             $this->btns->add($this->execActionBtn = $this->factory($this->action->ui['execButton'] ?? ['Button', $this->action->caption, 'blue'], [], 'atk4\ui'));
 
@@ -159,11 +159,11 @@ class UserAction extends Modal implements Interface_, jsInterface_
                     case 'args':
                         $this->doArgs($modal);
                         break;
-                    case 'preview':
-                        $this->doPreview($modal);
-                        break;
                     case 'fields':
                         $this->doFields($modal);
+                        break;
+                    case 'preview':
+                        $this->doPreview($modal);
                         break;
                     case 'final':
                         $this->doFinal($modal);
@@ -320,6 +320,10 @@ class UserAction extends Modal implements Interface_, jsInterface_
     protected function doPreview(View $modal)
     {
         $this->_addStepTitle($modal, $this->step);
+
+        if ($fields = $this->actionData['fields'] ?? null) {
+            $this->action->getModel()->set($fields);
+        }
 
         if ($prev = $this->getPreviousStep($this->step)) {
             $chain = $this->loader->jsload([

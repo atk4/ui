@@ -26,7 +26,8 @@ jobs:
           DB_DATABASE: db
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+      - run: php --version
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
