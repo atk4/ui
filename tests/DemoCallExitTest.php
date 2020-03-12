@@ -14,7 +14,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     private $regexJSON = '
   /
   (?(DEFINE)
-     (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )    
+     (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
      (?<boolean>   true | false | null )
      (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
      (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
@@ -23,7 +23,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
      (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
   )
   \A (?&json) \Z
-  /six   
+  /six
 ';
     private $regexSSE = '/^[data|id|event].*$/m';
 
@@ -31,7 +31,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $files = [];
         foreach (scandir(dirname(__DIR__).DIRECTORY_SEPARATOR.'demos') as $file) {
-            if (is_dir($file) || substr($file, -3) !== 'php') {
+            if (substr($file, -3) !== 'php' || is_dir($file)) {
                 continue;
             }
 
@@ -154,13 +154,19 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $this->assertGreaterThan(0, count($output_rows), ' Response is empty on '.$uri);
         // check SSE Syntax
         foreach ($output_rows as $index => $sse_line) {
-            if (empty($sse_line) || $sse_line === null) {
+            if (empty($sse_line)) {
                 continue;
             }
 
-            preg_match('/^[id|event|data].*$/', $sse_line, $matches);
+            $matches = [];
+
+            preg_match_all('/^(id|event|data).*$/m', $sse_line, $matches);
+
+            $sse_string = str_ireplace(["\r", "\n"], '', $sse_line);
+            $format_match_string = implode('', $matches[0] ?? ['error']);
+
             $this->assertEquals(
-                $sse_line, $matches[0] ?? 'error',
+                $sse_string, $format_match_string,
                 ' Testing SSE response line '.$index.' with content '.$sse_line.' on '.$uri
             );
         }
@@ -271,22 +277,22 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         ];
 
         $files[] = [
-            'tablefilter.php?atk_admin_filterpopup_5_form_submit=ajax&__atk_callback=1',
+            'tablefilter.php?atk_admin_view_grid_view_filterpopup_5_form_submit=ajax&__atk_callback=1',
             [
                 'op'                                  => '=',
                 'value'                               => '374',
                 'range'                               => '',
-                'atk_admin_filterpopup_5_form_submit' => 'submit',
+                'atk_admin_view_grid_view_filterpopup_5_form_submit' => 'submit',
             ],
         ];
 
         $files[] = [
-            'tablefilter.php?atk_admin_filterpopup_4_form_submit=ajax&__atk_callback=1',
+            'tablefilter.php?atk_admin_view_grid_view_filterpopup_4_form_submit=ajax&__atk_callback=1',
             [
                 'op'                                  => 'between',
                 'value'                               => '10',
                 'range'                               => '20',
-                'atk_admin_filterpopup_5_form_submit' => 'submit',
+                'atk_admin_view_grid_view_filterpopup_4_form_submit' => 'submit',
             ],
         ];
 

@@ -1,12 +1,14 @@
 <?php
 
 date_default_timezone_set('UTC');
-include 'init.php';
-require 'database.php';
+include_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $app->add(['Header', 'Table column may contains popup or dropdown menu.']);
 
-$table = $app->add(['Table', 'celled' => true]);
+// Better Popup positionning when Popup are inside a container.
+$container = $app->add(['ui' => 'vertical segment']);
+$table = $container->add(['Table', 'celled' => true]);
 $table->setModel(new SomeData(), false);
 
 //will add popup to this column.
@@ -38,7 +40,7 @@ $col_title->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
 
 $app->add(['Header', 'Grid column may contains popup or dropdown menu.']);
 
-//For popup positioning to work correctly, grid need to be inside a view segment.
+//Table in Grid are already inside a container.
 $g = $app->add(['Grid']);
 $g->setModel(new Country($db));
 $g->ipp = 5;
@@ -50,4 +52,4 @@ $g->addDropdown('name', ['Rename', 'Delete'], function ($item) {
 
 //Adding a popup view to the column 'iso'
 $pop = $g->addPopup('iso');
-$pop->add('View')->set('Grid column popup');
+$pop->add('Text')->set('Grid column popup');

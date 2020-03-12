@@ -1,6 +1,6 @@
 <?php
 
-include 'init.php';
+include_once __DIR__ . '/init.php';
 
 // buttons configuration: [page, title]
 $buttons = [

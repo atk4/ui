@@ -232,9 +232,11 @@ class MultiLine extends Generic
             $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
+        /* No need for this anymore. See: https://github.com/atk4/ui/commit/8ec4d22cf9dcbd4969d9c88d8f09b705ca8798a6
         if ($this->model) {
             $this->setModel($this->model);
         }
+        */
 
         $this->multiLine = $this->add(['View', 'template' => $this->multiLineTemplate]);
 

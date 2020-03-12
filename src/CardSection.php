@@ -36,7 +36,7 @@ class CardSection extends View
     {
         $view = null;
 
-        if (is_string($description)) {
+        if (is_scalar($description)) {
             $view = $this->add(new View([$description, 'class' => ['description']]));
         } elseif ($description instanceof View) {
             $view = $this->add($description)->addClass('description');

@@ -2,7 +2,7 @@
 /**
  * Testing Columns.
  */
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
 // some custom style needed for our "highlight" to work. You don't need this on
 // your page and it's bad style to include CSS like this!

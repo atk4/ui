@@ -2,7 +2,7 @@
 /**
  * Demonstrates how to use tabs.
  */
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
 $t = $app->add('Tabs');
 

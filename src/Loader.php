@@ -29,7 +29,11 @@ class Loader extends View
      */
     public $loadEvent = true;
 
+    /** @var string defautl css class */
     public $ui = 'ui segment';
+
+    /** @var bool Make callback url argument stick to application or view. */
+    public $appStickyCb = false;
 
     /** @var callable for triggering */
     protected $cb;
@@ -42,7 +46,7 @@ class Loader extends View
             $this->shim = ['View', 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
         }
 
-        $this->cb = $this->add('Callback');
+        $this->cb = $this->add(['Callback', 'appSticky' => $this->appStickyCb]);
     }
 
     /**

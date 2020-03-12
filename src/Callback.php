@@ -55,6 +55,9 @@ class Callback
      */
     public $urlTrigger = null;
 
+    /** @var bool stick callback url argument to view or application. */
+    public $appSticky = false;
+
     /**
      * Initialize object and set default properties.
      *
@@ -72,6 +75,10 @@ class Callback
     {
         $this->_init();
 
+        if (!$this->app) {
+            throw new Exception(['Call-back must be part of a RenderTree']);
+        }
+
         if (!$this->urlTrigger) {
             $this->urlTrigger = $this->name;
         }
@@ -80,11 +87,7 @@ class Callback
             $this->postTrigger = $this->name;
         }
 
-        $this->owner->stickyGet($this->urlTrigger);
-
-        if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
-        }
+        $this->appSticky ? $this->app->stickyGet($this->urlTrigger) : $this->owner->stickyGet($this->urlTrigger);
     }
 
     /**

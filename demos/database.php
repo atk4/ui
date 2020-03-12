@@ -3,7 +3,7 @@
 // A very basic file that sets up Agile Data to be used in some demonstrations
 try {
     if (file_exists('db.php')) {
-        include 'db.php';
+        include_once __DIR__ . '/db.php';
     } else {
         $db = new \atk4\data\Persistence\SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
     }
@@ -26,7 +26,7 @@ if (!class_exists('Country')) {
             $this->addField('name', ['actual' => 'nicename', 'required' => true, 'type' => 'string']);
             $this->addField('sys_name', ['actual' => 'name', 'system' => true]);
 
-            $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string']);
+            $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string', 'ui'=>['table'=>['sortable'=>false]]]);
             $this->addField('iso3', ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
             $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
             $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);

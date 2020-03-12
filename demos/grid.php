@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $g = $app->add(['Grid']);
 $m = new Country($db);
@@ -21,9 +21,9 @@ $g->addColumn(null, ['Template', 'hello<b>world</b>']);
 //$g->addColumn('name', ['TableColumn/Link', 'page2']);
 $g->addColumn(null, 'Delete');
 
-$g->addAction('test');
+$g->addActionButton('test');
 
-$g->addAction('Say HI', function ($j, $id) use ($g) {
+$g->addActionButton('Say HI', function ($j, $id) use ($g) {
     return 'Loaded "'.$g->model->load($id)['name'].'" from ID='.$id;
 });
 

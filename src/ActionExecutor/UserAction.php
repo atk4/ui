@@ -7,6 +7,7 @@ namespace atk4\ui\ActionExecutor;
 
 use atk4\core\HookTrait;
 use atk4\data\UserAction\Generic;
+use atk4\data\ValidationException;
 use atk4\ui\Button;
 use atk4\ui\Exception;
 use atk4\ui\Form;
@@ -118,7 +119,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
-            $this->title = trim($action->caption.' '.$this->action->owner->getModelCaption());
+            $this->title = $this->title ?? trim($action->caption.' '.$this->action->owner->getModelCaption());
 
             $this->btns->add($this->execActionBtn = $this->factory($this->action->ui['execButton'] ?? ['Button', $this->action->caption, 'blue'], [], 'atk4\ui'));
 
@@ -145,6 +146,11 @@ class UserAction extends Modal implements Interface_, jsInterface_
         if ($id && $this->action->scope === 'single') {
             $this->action->owner->tryLoad($id);
         }
+
+        if ($this->action->fields === true) {
+            $this->action->fields = array_keys($this->action->getModel()->getFields('editable'));
+        }
+
         $this->loader->set(function ($modal) {
             $this->jsSetBtnState($modal, $this->step);
 
@@ -153,11 +159,11 @@ class UserAction extends Modal implements Interface_, jsInterface_
                     case 'args':
                         $this->doArgs($modal);
                         break;
-                    case 'preview':
-                        $this->doPreview($modal);
-                        break;
                     case 'fields':
                         $this->doFields($modal);
+                        break;
+                    case 'preview':
+                        $this->doPreview($modal);
                         break;
                     case 'final':
                         $this->doFinal($modal);
@@ -282,10 +288,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->_addStepTitle($modal, $this->step);
         $f = $this->addFormTo($modal);
 
-        if (is_bool($this->action->fields)) {
-            $this->action->fields = array_keys($this->action->owner->getFields('editable'));
-        }
-
         $f->setModel($this->action->owner, $this->action->fields);
         // set Fields value if set from another step.
         $this->setFormField($f, $this->actionData['fields'] ?? [], $this->step);
@@ -318,6 +320,10 @@ class UserAction extends Modal implements Interface_, jsInterface_
     protected function doPreview(View $modal)
     {
         $this->_addStepTitle($modal, $this->step);
+
+        if ($fields = $this->actionData['fields'] ?? null) {
+            $this->action->getModel()->set($fields);
+        }
 
         if ($prev = $this->getPreviousStep($this->step)) {
             $chain = $this->loader->jsload([
@@ -556,10 +562,12 @@ class UserAction extends Modal implements Interface_, jsInterface_
             }
 
             return $js;
+        } catch (ValidationException $e) {
+            throw $e;
         } catch (\Exception $e) {
             $m = new Message('Error executing '.$this->action->caption, 'red');
             $m->init();
-            $m->text->content = $e->getHTML();
+            $m->text->content = ($e instanceof \atk4\core\Exception ? $e->getHTML() : $e->getMessage());
 
             return $m;
         }

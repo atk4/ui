@@ -147,14 +147,14 @@ In this file we load up our app (later) and load the database configuration::
 
   <?php
   $rootdir = "../";    // the public_html directory
-  include $rootdir."../config/db.php";  // contains database configuration outside the public_html directory
+  require_once $rootdir."../config/db.php";  // contains database configuration outside the public_html directory
 
 Load Composer autoload.php (which loads up atk4) in init.php
 ------------------------------------------------------------
 
 ::
 
-  include $rootdir."vendor/autoload.php";   // loads up atk4 and our project files from Composer
+  require_once $rootdir."vendor/autoload.php";   // loads up atk4 and our project files from Composer
 
 Initialize the app class in init.php
 ------------------------------------
@@ -171,14 +171,14 @@ If you want to write an app with a backend, create a file called "admin.php"::
 
   <?php
   $rootdir = "../";
-  include "init.php";
+  require_once __DIR__ . "init.php";
   $app->initLayout('Admin');
 
 If you want to write an app with a frontend, create a file called "index.php"::
 
   <?php
   $rootdir = "../";
-  include "init.php";
+  require_once __DIR__ . "init.php";
   $app->initLayout('Centered');
 
 

@@ -208,6 +208,10 @@ class Card extends View
             $m = parent::setModel($m);
         }
 
+        if (!$fields) {
+            $fields = array_keys($this->model->getFields(['editable', 'visible']));
+        }
+
         $this->setDataId($this->model->get($this->model->id_field));
 
         if ($fields && is_array($fields)) {

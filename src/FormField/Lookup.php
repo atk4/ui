@@ -23,7 +23,7 @@ class Lookup extends Input
      *
      * @var string
      */
-    public $empty = '...';
+    public $empty = "\u{00a0}"; // Unicode NBSP
 
     /**
      * Either set this to array of fields which must be searched (e.g. "name", "surname"), or define this
@@ -47,12 +47,11 @@ class Lookup extends Input
     public $plus = false;
 
     /**
-     * Sets the max. amount of records that are loaded. The default 10
-     * displays nicely in UI.
+     * Sets the max. amount of records that are loaded.
      *
      * @var int
      */
-    public $limit = 10;
+    public $limit = 100;
 
     /**
      * Set custom model field here to use it's value as ID in dropdown instead of default model ID field.

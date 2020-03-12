@@ -48,6 +48,92 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
     }
 
     /**
+     * Test conditional tag.
+     */
+    public function testConditionalTags()
+    {
+        $s = 'My {email?}e-mail {$email}{/email?} {phone?}phone {$phone}{/?}. Contact me!';
+        $t = new \atk4\ui\Template($s);
+
+        $t1 = &$t->getTagRef('_top');
+        $this->assertEquals([
+            0          => 'My ',
+            'email?#1' => [
+                0         => 'e-mail ',
+                'email#1' => [''],
+            ],
+            1          => ' ',
+            'phone?#1' => [
+                0         => 'phone ',
+                'phone#1' => [''],
+            ],
+            2 => '. Contact me!',
+        ], $t1);
+
+        // test filled values
+        $t = new \atk4\ui\Template($s);
+        $t->set('email', 'test@example.com');
+        $t->set('phone', 123);
+        $this->assertEquals('My e-mail test@example.com phone 123. Contact me!', $t->render());
+
+        $t = new \atk4\ui\Template($s);
+        $t->set('email', null);
+        $t->set('phone', 123);
+        $this->assertEquals('My  phone 123. Contact me!', $t->render());
+
+        $t = new \atk4\ui\Template($s);
+        $t->set('email', '');
+        $t->set('phone', 123);
+        $this->assertEquals('My  phone 123. Contact me!', $t->render());
+
+        $t = new \atk4\ui\Template($s);
+        $t->set('email', false);
+        $t->set('phone', 0);
+        $this->assertEquals('My  phone 0. Contact me!', $t->render());
+
+        // nested conditional tags (renders comma only when both values are provided)
+        $s = 'My {email?}e-mail {$email}{/email?}{email?}{phone?}, {/?}{/?}{phone?}phone {$phone}{/?}. Contact me!';
+
+        $t = new \atk4\ui\Template($s);
+        $t->set('email', 'test@example.com');
+        $t->set('phone', 123);
+        $this->assertEquals('My e-mail test@example.com, phone 123. Contact me!', $t->render());
+
+        $t = new \atk4\ui\Template($s);
+        $t->set('email', null);
+        $t->set('phone', 123);
+        $this->assertEquals('My phone 123. Contact me!', $t->render());
+
+        $t = new \atk4\ui\Template($s);
+        $t->set('email', false);
+        $t->set('phone', 0);
+        $this->assertEquals('My phone 0. Contact me!', $t->render());
+    }
+
+    /**
+     * Conditional tag usage example - VAT usage.
+     */
+    public function testConditionalTagsVAT()
+    {
+        $s = '{vat_applied?}VAT is {$vat}%{/?}'.
+             '{vat_zero?}VAT is zero{/?}'.
+             '{vat_not_applied?}VAT is not applied{/?}';
+
+        $f = function ($vat) use ($s) {
+            return (new \atk4\ui\Template($s))->set([
+                'vat_applied'     => !empty($vat),
+                'vat_zero'        => ($vat === 0),
+                'vat_not_applied' => ($vat === null),
+                'vat'             => $vat,
+            ])->render();
+        };
+
+        $this->assertEquals('VAT is 21%', $f(21));
+        $this->assertEquals('VAT is zero', $f(0));
+        $this->assertEquals('VAT is not applied', $f(null));
+    }
+
+    /**
      * Exception in getTagRef().
      *
      * @expectedException Exception

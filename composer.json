@@ -17,6 +17,7 @@
   ],
   "homepage": "https://agiletoolkit.org/ui",
   "license": "MIT",
+  "minimum-stability": "dev",
   "prefer-stable": true,
   "authors": [
     {
@@ -27,8 +28,13 @@
   ],
   "require": {
     "php": ">=7.2.0",
-    "ext-json": "*",
-    "atk4/data": "^2.0"
+    "atk4/data": "dev-develop",
+    "ext-json": "*"
+  },
+  "require-release": {
+    "php": ">=7.2.0",
+    "atk4/data": "^2.0",
+    "ext-json": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "<6",

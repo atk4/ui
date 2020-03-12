@@ -177,15 +177,15 @@ class ApiService {
   }
 
   /**
-   * Check server response
+   * Check server response and clear api.data object.
    *  - return true will call onSuccess
    *  - return false will call onFailure
    * @param response
    * @returns {boolean}
    */
   successTest(response) {
+    this.data = {};
     if (response.success) {
-      this.data = {};
       return true;
     } else {
       return false;

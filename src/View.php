@@ -365,6 +365,11 @@ class View implements jsExpressionable
         }
 
         $this->_add_later = [];
+
+        // allow for injecting the model with a seed
+        if ($this->model) {
+            $this->setModel($this->model);
+        }
     }
 
     /**
@@ -880,11 +885,7 @@ class View implements jsExpressionable
      */
     public function js($when = null, $action = null, $selector = null)
     {
-        if ($selector) {
-            $chain = new jQuery($selector);
-        } else {
-            $chain = new jQuery($this);
-        }
+        $chain = new jQuery($selector ?: $this);
 
         // Substitute $when to make it better work as a array key
         if ($when === true) {

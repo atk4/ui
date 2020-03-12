@@ -368,7 +368,7 @@ class App
                 }
                 if ($keys) {
                     $ids = implode(',', $keys);
-                    $remove_function = "$('.ui.dimmer.modals.page').find('${ids}').remove();";
+                    $remove_function = '$(\'.ui.dimmer.modals.page\').find(\''.$ids.'\').remove();';
                 }
                 $output = '<script>jQuery(function() {'.$remove_function.$output['atkjs'].'});</script>'.$output['html'];
                 $this->outputResponseHtml($output);
@@ -475,7 +475,8 @@ class App
     public function add($seed, $region = null)
     {
         if (!$this->layout) {
-            throw new Exception(['If you use $app->add() you should first call $app->setLayout()']);
+            throw (new Exception('App layout is missing'))
+                    ->addSolution('If you use $app->add() you should first call $app->initLayout()');
         }
 
         return $this->layout->add($seed, $region);
