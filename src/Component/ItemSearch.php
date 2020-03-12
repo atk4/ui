@@ -75,7 +75,7 @@ class ItemSearch extends View
     public function setModelCondition($m)
     {
         if ($q = $this->getQuery()) {
-            $m->addCondition('name', 'like', '%'.$q.'%');
+            $m->addCondition('name', 'like', '%' . $q . '%');
         }
 
         return $m;
@@ -95,9 +95,12 @@ class ItemSearch extends View
             $reloadId = $this->reload;
         }
 
-        $this->js(true, (new jsVueService())->createAtkVue('#'.$this->name,
-                                                      'atk-item-search',
-                                                      [
+        $this->js(
+            true,
+            (new jsVueService())->createAtkVue(
+            '#' . $this->name,
+            'atk-item-search',
+            [
                                                           'reload'   => $reloadId,
                                                           'queryArg' => $this->queryArg,
                                                           'url'      => $this->reload->jsURL(),

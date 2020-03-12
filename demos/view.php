@@ -12,7 +12,7 @@ $app->add(['View', 'ui' => 'segment', 'raised'])->set('Segment');
 $app->add(['Header', 'View can contain stuff']);
 $app->add(['View', 'ui' => 'segment'])
     ->addClass('inverted red circular')
-    ->add(['Header', 'Buy', 'inverted', 'subHeader' => '$'.(rand(100, 1000) / 100)]);
+    ->add(['Header', 'Buy', 'inverted', 'subHeader' => '$' . (rand(100, 1000) / 100)]);
 
 $app->add(['Header', 'View can use JavaScript']);
 $app->add(['View', 'ui' => 'heart rating'])

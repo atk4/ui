@@ -186,7 +186,7 @@ class Generic extends _Abstract
             // Fields get extra pampering
             $template->setHTML('Input', $el->getHTML());
             $template->trySet('label', $label);
-            $template->trySet('label_for', $el->id.'_input');
+            $template->trySet('label_for', $el->id . '_input');
             $template->set('field_class', $el->getFieldClass());
 
             if ($el->field->required) {
@@ -194,11 +194,11 @@ class Generic extends _Abstract
             }
 
             if (isset($el->width)) {
-                $template->append('field_class', $el->width.' wide ');
+                $template->append('field_class', $el->width . ' wide ');
             }
 
             if ($el->hint && $template->hasTag('Hint')) {
-                $hint = new \atk4\ui\Label([null, 'pointing', 'id'=>$el->id.'_hint']);
+                $hint = new \atk4\ui\Label([null, 'pointing', 'id'=>$el->id . '_hint']);
                 if (is_object($el->hint) || is_array($el->hint)) {
                     $hint->add($el->hint);
                 } else {

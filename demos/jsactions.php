@@ -15,7 +15,7 @@ $app->add(['Header', 'Extensions to ATK Data Actions', 'subHeader'=>'Model actio
 $country = new Country($db);
 
 $c_action = $country->addAction('Email', function ($m) {
-    return 'Email to Kristy in '.$m->get('name').' has been sent!';
+    return 'Email to Kristy in ' . $m->get('name') . ' has been sent!';
 });
 
 $country->tryLoadAny();
@@ -76,7 +76,7 @@ $country->addAction('greet', [
     ],
     'ui'      => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
     'callback'=> function ($m, $age) {
-        return 'Age is '.$age;
+        return 'Age is ' . $age;
     },
 ]);
 

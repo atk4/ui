@@ -128,7 +128,7 @@ class Grid extends View
         $this->template->del('Container');
 
         if (!$this->sortTrigger) {
-            $this->sortTrigger = $this->name.'_sort';
+            $this->sortTrigger = $this->name . '_sort';
         }
 
         // if menu not disabled ot not already assigned as existing object
@@ -323,7 +323,7 @@ class Grid extends View
             'tableContainerHeight' => $containerHeight,
         ]);
         //adding a state context to js scroll plugin.
-        $options = array_merge(['stateContext' => '#'.$this->container->name], $options);
+        $options = array_merge(['stateContext' => '#' . $this->container->name], $options);
 
         return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);
     }
@@ -363,7 +363,7 @@ class Grid extends View
         if ($q !== '') {
             $cond = [];
             foreach ($fields as $field) {
-                $cond[] = [$field, 'like', '%'.$q.'%'];
+                $cond[] = [$field, 'like', '%' . $q . '%'];
             }
             $this->model->addCondition($cond);
         }
@@ -502,7 +502,7 @@ class Grid extends View
     {
         $column = $this->table->columns[$columnName];
         if (!isset($column)) {
-            throw new Exception('The column where you want to add dropdown does not exist: '.$columnName);
+            throw new Exception('The column where you want to add dropdown does not exist: ' . $columnName);
         }
         if (!$menuId) {
             $menuId = $columnName;
@@ -528,7 +528,7 @@ class Grid extends View
     {
         $column = $this->table->columns[$columnName];
         if (!isset($column)) {
-            throw new Exception('The column where you want to add popup does not exist: '.$columnName);
+            throw new Exception('The column where you want to add popup does not exist: ' . $columnName);
         }
 
         return $column->addPopup($popup, $icon);

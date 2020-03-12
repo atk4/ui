@@ -182,7 +182,7 @@ class App
             $this->template_dir = [$this->template_dir];
         }
 
-        $this->template_dir[] = __DIR__.'/../template/'.$this->skin;
+        $this->template_dir[] = __DIR__ . '/../template/' . $this->skin;
 
         // Set our exception handler
         if ($this->catch_exceptions) {
@@ -267,12 +267,12 @@ class App
                 break;
 
             case $exception instanceof Error:
-                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
+                $this->layout->add(['Message', get_class($exception) . ': ' . $exception->getMessage() . ' (in ' . $exception->getFile() . ':' . $exception->getLine() . ')', 'error']);
                 $this->layout->add(['Text', nl2br($exception->getTraceAsString())]);
                 break;
 
             default:
-                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+                $this->layout->add(['Message', get_class($exception) . ': ' . $exception->getMessage(), 'error']);
                 break;
         }
 
@@ -327,7 +327,7 @@ class App
      */
     public function outputDebug($str)
     {
-        echo 'DEBUG:'.$str.'<br/>';
+        echo 'DEBUG:' . $str . '<br/>';
     }
 
     /**
@@ -362,15 +362,15 @@ class App
                 $remove_function = '';
                 foreach ($this->getRenderedModals() as $key => $modal) {
                     // add modal rendering to output
-                    $keys[] = '#'.$key;
-                    $output['atkjs'] = $output['atkjs'].';'.$modal['js'];
-                    $output['html'] = $output['html'].$modal['html'];
+                    $keys[] = '#' . $key;
+                    $output['atkjs'] = $output['atkjs'] . ';' . $modal['js'];
+                    $output['html'] = $output['html'] . $modal['html'];
                 }
                 if ($keys) {
                     $ids = implode(',', $keys);
-                    $remove_function = '$(\'.ui.dimmer.modals.page\').find(\''.$ids.'\').remove();';
+                    $remove_function = '$(\'.ui.dimmer.modals.page\').find(\'' . $ids . '\').remove();';
                 }
-                $output = '<script>jQuery(function() {'.$remove_function.$output['atkjs'].'});</script>'.$output['html'];
+                $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
                 $this->outputResponseHtml($output);
             } else {
                 $this->outputResponseHTML($output);
@@ -415,21 +415,21 @@ class App
     {
         // jQuery
         $url = isset($this->cdn['jquery']) ? $this->cdn['jquery'] : '../public';
-        $this->requireJS($url.'/jquery.min.js');
+        $this->requireJS($url . '/jquery.min.js');
 
         // Semantic UI
         $url = isset($this->cdn['semantic-ui']) ? $this->cdn['semantic-ui'] : '../public';
-        $this->requireJS($url.'/semantic.min.js');
-        $this->requireCSS($url.'/semantic.min.css');
+        $this->requireJS($url . '/semantic.min.js');
+        $this->requireCSS($url . '/semantic.min.css');
 
         // Serialize Object
         $url = isset($this->cdn['serialize-object']) ? $this->cdn['serialize-object'] : '../public';
-        $this->requireJS($url.'/jquery.serialize-object.min.js');
+        $this->requireJS($url . '/jquery.serialize-object.min.js');
 
         // Agile UI
         $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
-        $this->requireJS($url.'/atkjs-ui.min.js');
-        $this->requireCSS($url.'/agileui.css');
+        $this->requireJS($url . '/atkjs-ui.min.js');
+        $this->requireCSS($url . '/agileui.css');
     }
 
     /**
@@ -511,7 +511,7 @@ class App
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 $this->terminate(
-                    '!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']
+                    '!! Callback requested, but never reached. You may be missing some arguments in ' . $_SERVER['REQUEST_URI']
                 );
             }
             echo $this->html->template->render();
@@ -558,7 +558,7 @@ class App
         } else {
             $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
             foreach ($dir as $td) {
-                if ($t = $template->tryLoad($td.'/'.$name)) {
+                if ($t = $template->tryLoad($td . '/' . $name)) {
                     return $t;
                 }
             }
@@ -694,7 +694,7 @@ class App
 
         // put URL together
         $args = http_build_query($result);
-        $url = ($page[0] ? $page[0].$this->url_building_ext : '').($args ? '?'.$args : '');
+        $url = ($page[0] ? $page[0] . $this->url_building_ext : '') . ($args ? '?' . $args : '');
 
         return $url;
     }
@@ -743,7 +743,7 @@ class App
      */
     public function requireJS($url, $isAsync = false, $isDefer = false)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '')."\n");
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
 
         return $this;
     }
@@ -757,7 +757,7 @@ class App
      */
     public function requireCSS($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url])."\n");
+        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
 
         return $this;
     }
@@ -772,7 +772,7 @@ class App
      */
     public function redirect($page)
     {
-        header('Location: '.$this->url($page));
+        header('Location: ' . $this->url($page));
 
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
@@ -911,14 +911,14 @@ class App
         }
 
         if (!$attr) {
-            return "<$tag>".($value !== null ? $value."</$tag>" : '');
+            return "<$tag>" . ($value !== null ? $value . "</$tag>" : '');
         }
         $tmp = [];
         if (substr($tag, -1) == '/') {
             $tag = substr($tag, 0, -1);
             $postfix = '/';
         } elseif (substr($tag, 0, 1) == '/') {
-            return isset($attr[0]) ? '</'.$attr[0].'>' : '<'.$tag.'>';
+            return isset($attr[0]) ? '</' . $attr[0] . '>' : '<' . $tag . '>';
         } else {
             $postfix = '';
         }
@@ -931,11 +931,11 @@ class App
             } elseif ($key === 0) {
                 $tag = $val;
             } else {
-                $tmp[] = "$key=\"".$this->encodeAttribute($val).'"';
+                $tmp[] = "$key=\"" . $this->encodeAttribute($val) . '"';
             }
         }
 
-        return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value !== null ? $value."</$tag>" : '');
+        return "<$tag" . ($tmp ? (' ' . implode(' ', $tmp)) : '') . $postfix . '>' . ($value !== null ? $value . "</$tag>" : '');
     }
 
     /**

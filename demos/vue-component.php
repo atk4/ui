@@ -20,7 +20,7 @@ $inline_edit->setModel($m);
 $inline_edit->onChange(function ($value) {
     $view = new \atk4\ui\Message();
     $view->init();
-    $view->text->addParagraph('new value: '.$value);
+    $view->text->addParagraph('new value: ' . $value);
 
     return $view;
 });

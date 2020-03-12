@@ -64,7 +64,7 @@ $crud->setModel($m);
 
 // Because CRUD inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon'=>'cogs'], 'Details', function ($p, $id) use ($crud) {
-    $p->add(['Message', 'Details for: '.$crud->model->load($id)['name'].' (id: '.$id.')']);
+    $p->add(['Message', 'Details for: ' . $crud->model->load($id)['name'] . ' (id: ' . $id . ')']);
 });
 
 $cc = $c->addColumn();

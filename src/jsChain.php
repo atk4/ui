@@ -143,14 +143,14 @@ class jsChain extends jsExpression
      */
     private function _renderArgs($args = [])
     {
-        return '('.
+        return '(' .
             implode(',', array_map(function ($arg) {
                 if ($arg instanceof jsExpressionable) {
                     return $arg->jsRender();
                 }
 
                 return $this->_json_encode($arg);
-            }, $args)).
+            }, $args)) .
             ')';
     }
 
@@ -174,11 +174,11 @@ class jsChain extends jsExpression
         // next we do same with the calls
         foreach ($this->_chain as $chain) {
             if (is_array($chain)) {
-                $ret .= '.'.$chain[0].$this->_renderArgs($chain[1]);
+                $ret .= '.' . $chain[0] . $this->_renderArgs($chain[1]);
             } elseif (is_numeric($chain)) {
-                $ret .= '['.$chain.']';
+                $ret .= '[' . $chain . ']';
             } else {
-                $ret .= '.'.$chain;
+                $ret .= '.' . $chain;
             }
         }
 

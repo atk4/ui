@@ -10,13 +10,13 @@ $app->add(['View', 'ui' => 'ui clearing divider']);
 $country = new Country($db);
 
 $country->addAction('callback', ['callback'=> function ($m) {
-    return 'ok '.$m->getTitle();
+    return 'ok ' . $m->getTitle();
 }]);
 
 $country->addAction('preview', ['preview'=> function ($m) {
-    return 'Previewing country '.$m->getTitle();
+    return 'Previewing country ' . $m->getTitle();
 }, 'callback'=>function ($m) {
-    return 'Done previewing '.$m->getTitle();
+    return 'Done previewing ' . $m->getTitle();
 }]);
 
 $country->addAction('disabled_action', ['enabled'=> false, 'callback'=>function () {
@@ -24,13 +24,13 @@ $country->addAction('disabled_action', ['enabled'=> false, 'callback'=>function 
 }]);
 
 $country->addAction('edit_argument', ['args'=> ['age'=>['type'=>'integer', 'required' => true]], 'callback'=>function ($m, $age) {
-    return 'Proper age to visit '.$m->getTitle().' is '.$age;
+    return 'Proper age to visit ' . $m->getTitle() . ' is ' . $age;
 }]);
 
 $country->addAction('edit_argument_prev', ['args'=> ['age'=>['type'=>'integer', 'required' => true]], 'preview'=> function ($m, $age) {
-    return 'You age is: '.$age;
+    return 'You age is: ' . $age;
 }, 'callback'=>function ($m, $age) {
-    return 'age = '.$age;
+    return 'age = ' . $age;
 }]);
 
 $country->addAction('edit_iso', ['fields'=> ['iso3'], 'callback'=>function () {
@@ -43,10 +43,11 @@ $country->addAction('Ouch', ['args'=> ['age'=>['type'=>'integer']], 'preview'=> 
     throw new \atk4\ui\Exception('Told you, didn\'t I?');
 }]);
 $country->addAction('confirm', ['ui' => ['confirm'=>'Call action?'], 'callback'=>function ($m) {
-    return 'Confirm ok '.$m->getTitle();
+    return 'Confirm ok ' . $m->getTitle();
 }]);
 
-$country->addAction('multi_step',
+$country->addAction(
+    'multi_step',
     [
         'args'  => [
             'age'    => ['type'=>'integer', 'required'=> true],
@@ -54,10 +55,10 @@ $country->addAction('multi_step',
         ],
         'fields' => ['iso3'],
         'preview'=> function ($m, $age, $gender) {
-            return 'Gender = '.$gender.' / Age = '.$age .' / '.$m->get('iso3');
+            return 'Gender = ' . $gender . ' / Age = ' . $age . ' / ' . $m->get('iso3');
         },
         'callback'=> function ($m, $age, $gender) {
-            return 'You are a '.$gender.' of age '.$age.' who want to visit '.$m->getTitle();
+            return 'You are a ' . $gender . ' of age ' . $age . ' who want to visit ' . $m->getTitle();
         },
     ]
 );

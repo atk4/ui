@@ -12,7 +12,7 @@ $edit_executor = new atk4\ui\ActionExecutor\Form([
     'jsSuccess' => [
         new atk4\ui\jsExpression('$(".atk-dialog-content").parent().modal("hide")'),
         new atk4\ui\jsToast('Action Complete with success!'),
-        $g->container->jsReload([$g->getName().'_sort' => $g->getSortBy()]),
+        $g->container->jsReload([$g->getName() . '_sort' => $g->getSortBy()]),
     ],
 ]);
 
@@ -22,7 +22,8 @@ $edit_action = $country->addAction('edit', [
     'ui' => ['Grid' => ['Executor' => $edit_executor, 'Button' => ['icon' => 'edit']]],
 ]);
 
-$del_executor = new atk4\ui\ActionExecutor\Preview([
+$del_executor = new atk4\ui\ActionExecutor\Preview(
+    [
     'previewType' => 'text',
     'hasHeader'   => false,
     'jsSuccess'   => function ($ex, $model) use ($g) {
@@ -40,7 +41,7 @@ $del_action = $country->addAction('delete', [
         //$m->delete();
     },
     'preview' => function ($m) {
-        return 'Will delete record: '.$m->getTitle();
+        return 'Will delete record: ' . $m->getTitle();
     },
     'ui' => ['Grid' => ['Executor' => $del_executor, 'Button' => ['icon' => 'delete']]],
 ]);

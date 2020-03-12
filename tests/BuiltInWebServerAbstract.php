@@ -36,7 +36,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
         }
 
         // The command to spin up the server
-        self::$process = Process::fromShellCommandline('php -S '.self::$host.':'.self::$port.' -t '. self::getPackagePath());
+        self::$process = Process::fromShellCommandline('php -S ' . self::$host . ':' . self::$port . ' -t ' . self::getPackagePath());
 
         // Disabling the output, otherwise the process might hang after too much output
         self::$process->disableOutput();
@@ -78,7 +78,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
     {
         // Creating a Guzzle Client with the base_uri, so we can use a relative
         // path for the requests.
-        return new Client(['base_uri' => 'http://localhost:'.self::$port]);
+        return new Client(['base_uri' => 'http://localhost:' . self::$port]);
     }
 
     protected function getResponseFromRequestFormPOST($path, $data): ResponseInterface
@@ -94,8 +94,8 @@ abstract class BuiltInWebServerAbstract extends TestCase
     private function getPathWithAppVars($path)
     {
         $path .= strpos($path, '?') === false ? '?' : '&';
-        $path .= 'APP_CALL_EXIT='.((int) static::$app_def_call_exit).'&APP_CATCH_EXCEPTIONS='.((int) static::$app_def_caught_exception);
+        $path .= 'APP_CALL_EXIT=' . ((int) static::$app_def_call_exit) . '&APP_CATCH_EXCEPTIONS=' . ((int) static::$app_def_caught_exception);
 
-        return self::$webserver_root.$path;
+        return self::$webserver_root . $path;
     }
 }
