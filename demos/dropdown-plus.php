@@ -19,8 +19,8 @@ $form->addField('withModel2',
                     'model'             => new Country($db),
                     'renderRowFunction' => function ($row) {
                         return [
-                          'value' => $row->id,
-                          'title' => $row->getTitle().' ('.$row->get('iso3').')',
+                            'value' => $row->id,
+                            'title' => $row->getTitle().' ('.$row->get('iso3').')',
                         ];
                     },
                 ]);
@@ -32,9 +32,9 @@ $form->addField('withModel3',
                     'model'             => new File($db),
                     'renderRowFunction' => function ($row) {
                         return [
-                          'value' => $row->id,
-                          'title' => $row->getTitle(),
-                          'icon'  => $row->get('is_folder') ? 'folder' : 'file',
+                            'value' => $row->id,
+                            'title' => $row->getTitle(),
+                            'icon'  => $row->get('is_folder') ? 'folder' : 'file',
                         ];
                     },
                 ]);

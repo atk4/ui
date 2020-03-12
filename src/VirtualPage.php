@@ -33,7 +33,7 @@ class VirtualPage extends View
         parent::init();
 
         $this->cb = $this->_add([Callback::class, 'urlTrigger'=>$this->urlTrigger ?: $this->name]);
-        $this->stickyGet($this->name);
+        $this->app->stickyGet($this->name);
     }
 
     /**
@@ -129,6 +129,10 @@ class VirtualPage extends View
                 // render and terminate
                 if (isset($_GET['json'])) {
                     $this->app->terminate($this->renderJSON());
+                }
+
+                if (isset($_GET['__atk_tab'])) {
+                    $this->app->terminate($this->renderTab());
                 }
 
                 // do not terminate if callback supplied (no cutting)

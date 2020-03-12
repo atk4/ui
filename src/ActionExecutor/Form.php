@@ -54,11 +54,7 @@ class Form extends Basic
     protected function getModelFields(Model $model)
     {
         $fields = [];
-        foreach ($model->elements as $f) {
-            if (!$f instanceof Field) {
-                continue;
-            }
-
+        foreach ($model->getFields() as $f) {
             if ($f->isEditable() || $f->isVisible()) {
                 $fields[] = $f->short_name;
             }

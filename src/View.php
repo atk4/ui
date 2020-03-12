@@ -768,6 +768,19 @@ class View implements jsExpressionable
     }
 
     /**
+     * This method is to render view to place inside a Fomantic-UI Tab.
+     */
+    public function renderTab()
+    {
+        $this->renderAll();
+
+        return [
+            'atkjs' => $this->getJsRenderActions(),
+            'html'  => $this->template->render(),
+        ];
+    }
+
+    /**
      * Render View using json format.
      *
      * @param bool   $force_echo
@@ -781,11 +794,13 @@ class View implements jsExpressionable
     {
         $this->renderAll();
 
-        return json_encode(['success' => true,
-                            'message' => 'Success',
-                            'atkjs'   => $this->getJS($force_echo),
-                            'html'    => $this->template->render($region),
-                            'id'      => $this->name, ]);
+        return json_encode([
+            'success' => true,
+            'message' => 'Success',
+            'atkjs'   => $this->getJS($force_echo),
+            'html'    => $this->template->render($region),
+            'id'      => $this->name,
+        ]);
     }
 
     /**
@@ -1168,8 +1183,8 @@ class View implements jsExpressionable
             $ex = $this->factory($class);
             if ($ex instanceof self && $ex instanceof Interface_ && $ex instanceof jsInterface_) {
                 //Executor may already had been add to layout. Like in CardDeck.
-                if (!isset($this->app->layout->elements[$ex->short_name])) {
-                    $ex = $this->app->add($ex)->setAction($action);
+                if (!isset($this->app->html->elements[$ex->short_name])) {
+                    $ex = $this->app->html->add($ex)->setAction($action);
                 }
                 if (isset($arguments[0])) {
                     $arguments[$ex->name] = $arguments[0];
@@ -1209,11 +1224,11 @@ class View implements jsExpressionable
         // Do we need confirm action.
         if ($defaults['confirm'] ?? null) {
             array_unshift($event_stmts, new jsExpression('$.atkConfirm({message:[confirm], onApprove: [action], options: {button:{ok:[ok], cancel:[cancel]}}, context:this})', [
-                                          'confirm' => $defaults['confirm'],
-                                          'action'  => new jsFunction($actions),
-                                          'ok'      => $defaults['ok'] ?? 'Ok',
-                                          'cancel'  => $defaults['cancel'] ?? 'Cancel',
-                                      ]));
+                'confirm' => $defaults['confirm'],
+                'action'  => new jsFunction($actions),
+                'ok'      => $defaults['ok'] ?? 'Ok',
+                'cancel'  => $defaults['cancel'] ?? 'Cancel',
+            ]));
         } else {
             $event_stmts = array_merge($event_stmts, $actions);
         }
@@ -1243,6 +1258,24 @@ class View implements jsExpressionable
         }
 
         return json_encode('#'.$this->id);
+    }
+
+    /**
+     * Return rendered js actions as a string.
+     *
+     * @return string
+     */
+    public function getJsRenderActions(): string
+    {
+        $actions = [];
+
+        foreach ($this->_js_actions as $eventActions) {
+            foreach ($eventActions as $action) {
+                $actions[] = $action->jsRender();
+            }
+        }
+
+        return implode(';', $actions);
     }
 
     /**
@@ -1368,7 +1401,7 @@ class View implements jsExpressionable
      *
      * @return null|string
      */
-    public function stickyGet($name, $newValue = null) : ?string
+    public function stickyGet($name, $newValue = null): ?string
     {
         $this->stickyArgs[$name] = $newValue ?? $_GET[$name] ?? null;
 
