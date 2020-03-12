@@ -36,7 +36,7 @@ class App
         'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@2.0.3/public',
         'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.3/dist',
+        'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.4/dist',
     ];
 
     /** @var string Version of Agile UI */
