@@ -119,7 +119,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
-            $this->title = $this->title ?? trim($action->caption.' '.$this->action->owner->getModelCaption());
+            $this->title = $this->title ?? trim($action->caption . ' ' . $this->action->owner->getModelCaption());
 
             $this->btns->add($this->execActionBtn = $this->factory($this->action->ui['execButton'] ?? ['Button', $this->action->caption, 'blue'], [], 'atk4\ui'));
 
@@ -407,7 +407,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         return [
             $this->hide(),
             $this->hook('afterExecute', [$obj, $id]) ?:
-            $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
+            $success ?: new jsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
             $this->loader->jsClearStoreData(true),
         ];
     }
@@ -565,7 +565,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {
-            $m = new Message('Error executing '.$this->action->caption, 'red');
+            $m = new Message('Error executing ' . $this->action->caption, 'red');
             $m->init();
             $m->text->content = ($e instanceof \atk4\core\Exception ? $e->getHTML() : $e->getMessage());
 

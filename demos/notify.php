@@ -19,7 +19,7 @@ $modal->set(function ($p) use ($modal) {
         } else {
             return [
                 $modal->hide(),
-                new \atk4\ui\jsNotify('Thank you '.$f->model['name']),
+                new \atk4\ui\jsNotify('Thank you ' . $f->model['name']),
             ];
         }
     });

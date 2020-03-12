@@ -33,7 +33,7 @@ $col_surname->addPopup()->set(function ($pop) {
 
 //Another dropdown menu.
 $col_title->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
-    return 'Title item: '.$item;
+    return 'Title item: ' . $item;
 });
 
 ////////////////////////////////////////////////

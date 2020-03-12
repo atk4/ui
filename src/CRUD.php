@@ -68,7 +68,7 @@ class CRUD extends Grid
         parent::init();
 
         if ($sortBy = $this->getSortBy()) {
-            $this->app ? $this->app->stickyGet($this->name.'_sort', $sortBy) : $this->stickyGet($this->name.'_sort', $sortBy);
+            $this->app ? $this->app->stickyGet($this->name . '_sort', $sortBy) : $this->stickyGet($this->name . '_sort', $sortBy);
         }
     }
 
@@ -85,7 +85,7 @@ class CRUD extends Grid
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
                 $ex = $item['action']->ui['executor'];
                 if ($ex instanceof jsInterface_) {
-                    $ex->stickyGet($this->name.'_sort', $this->getSortBy());
+                    $ex->stickyGet($this->name . '_sort', $this->getSortBy());
                     $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new jsFunction($ex->jsExecute())));
                 }
             }
@@ -298,7 +298,7 @@ class CRUD extends Grid
      */
     private function _getReloadArgs()
     {
-        $args[$this->name.'_sort'] = $this->getSortBy();
+        $args[$this->name . '_sort'] = $this->getSortBy();
         if ($this->paginator) {
             $args[$this->paginator->name] = $this->paginator->getCurrentPage();
         }

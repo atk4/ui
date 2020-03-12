@@ -64,7 +64,7 @@ class UI extends \atk4\data\Persistence
         case 'boolean':
             return $v ? $this->yes : $this->no;
         case 'money':
-            return ($this->currency ? $this->currency.' ' : '').number_format($v, $this->currency_decimals);
+            return ($this->currency ? $this->currency . ' ' : '') . number_format($v, $this->currency_decimals);
         case 'date':
         case 'datetime':
         case 'time':
@@ -103,7 +103,7 @@ class UI extends \atk4\data\Persistence
                 $new_value = $this->serializeLoadField($f, $value);
             } catch (\Exception $e) {
                 throw new Exception([
-                    'Value must be '.$f->serialize,
+                    'Value must be ' . $f->serialize,
                     'serializator'=> $f->serialize,
                     'value'       => $value,
                     'field'       => $f,
@@ -130,7 +130,7 @@ class UI extends \atk4\data\Persistence
             $tz_class = isset($f->dateTimeZoneClass) ? $f->dateTimeZoneClass : 'DateTimeZone';
 
             // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
-            $format = ['date' => '!+'.$this->date_format, 'datetime' => '!+'.$this->datetime_format, 'time' => '!+'.$this->time_format];
+            $format = ['date' => '!+' . $this->date_format, 'datetime' => '!+' . $this->datetime_format, 'time' => '!+' . $this->time_format];
             $format = $f->persist_format ?: $format[$f->type];
 
             // datetime only - set from persisting timezone

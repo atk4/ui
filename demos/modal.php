@@ -63,12 +63,12 @@ $bar = $app->add(['View', 'ui' => 'buttons']);
 $bar->add('Button')->set('Open in Pop-up')->on('click', new \atk4\ui\jsExpression('window.open([], "", "width=800,height=500")', [$vp->getURL('popup')]));
 $bar->add('Button')->set('Load in Modal')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getJSURL('cut')));
 
-$bar->add('Button')->set('Simulate slow load')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getJSURL('cut').'&slow=true'));
+$bar->add('Button')->set('Simulate slow load')->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getJSURL('cut') . '&slow=true'));
 if (isset($_GET['slow'])) {
     sleep(1);
 }
 
-$bar->add('Button')->set('No title')->on('click', new \atk4\ui\jsModal(null, $vp->getJSURL('cut').'&slow=true'));
+$bar->add('Button')->set('No title')->on('click', new \atk4\ui\jsModal(null, $vp->getJSURL('cut') . '&slow=true'));
 if (isset($_GET['slow'])) {
     sleep(1);
 }
@@ -79,7 +79,7 @@ $t->setModel(new SomeData());
 
 $frame = $app->add('VirtualPage');
 $frame->set(function ($frame) {
-    $frame->add(['Header', 'Clicked row with ID = '.$_GET['id']]);
+    $frame->add(['Header', 'Clicked row with ID = ' . $_GET['id']]);
 });
 
 $t->onRowClick(new \atk4\ui\jsModal('Row Clicked', $frame, ['id' => $t->jsRow()->data('id')]));

@@ -22,14 +22,16 @@ $c->setModel($stats, ['client_name', 'description']);
 $c->addSection('Project: ', $stats, ['start_date', 'finish_date'], true);
 
 $client = $stats->ref('client_country_iso')->loadAny();
-$notify = $client->addAction('Notify',
-                   ['args' => [
+$notify = $client->addAction(
+    'Notify',
+    ['args' => [
                        'note'=> ['type'=>'string', 'required'=>true],
                    ],
                        'callback' => function ($m) {
                            return 'Note to client is sent.';
                        },
-                   ]);
+                   ]
+);
 
 $c->addSection('Client Country:', $client, ['iso', 'numcode', 'phonecode'], true);
 

@@ -22,18 +22,18 @@ class Cart extends \atk4\ui\Lister
         $this->items = $this->recall('items', []);
 
         // Clicking on any URL produced by this Lister will carry on an extra GET argument
-        $this->stickyGet($this->name.'_remove', true);
+        $this->stickyGet($this->name . '_remove', true);
 
         // Set default description for our row template. Normally this is replaced by the 'descr' field
         // of a model, but we don't have it, so it will stay like this.
         $this->t_row['descr'] = 'click on link to remove item';
 
         // We link to ourselves with this special GET argument to indicate that item must be removed.
-        if (isset($_GET[$this->name.'_remove'])) {
+        if (isset($_GET[$this->name . '_remove'])) {
             $this->removeItem($_GET['id']);
 
             // redirect again, since we don't want this to stay in the URL
-            $this->app->redirect([$this->name.'_remove'=>false]);
+            $this->app->redirect([$this->name . '_remove'=>false]);
         }
     }
 
@@ -218,7 +218,7 @@ $signup->set(function ($pop) {
 
     // contetn of the popup will be different depending on this condition.
     if (isset($_GET['logged'])) {
-        $pop->add(['Message', 'You are already logged in as '.$_GET['logged']]);
+        $pop->add(['Message', 'You are already logged in as ' . $_GET['logged']]);
         $pop->add(['Button', 'Logout', 'primary', 'icon'=>'sign out'])
             ->link($pop->app->url());
     } else {

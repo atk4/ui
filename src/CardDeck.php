@@ -123,7 +123,7 @@ class CardDeck extends View
         $this->btns = $left->add(['ui' => 'buttons']);
         if ($this->search !== false) {
             $right = $this->menu->add(['ui' => 'four wide column']);
-            $this->search = $right->add($this->factory(ItemSearch::class, array_merge($this->search, ['context' => '#'.$this->container->name])));
+            $this->search = $right->add($this->factory(ItemSearch::class, array_merge($this->search, ['context' => '#' . $this->container->name])));
             $this->search->reload = $this->container;
             $this->query = $this->app->stickyGet($this->search->queryArg);
         }
@@ -418,7 +418,7 @@ class CardDeck extends View
 
         if (!is_object($button)) {
             if (is_string($button)) {
-                $button = [$button, 'ui' => 'button '.$this->menuBtnStyle];
+                $button = [$button, 'ui' => 'button ' . $this->menuBtnStyle];
             }
             $button = $this->factory('Button', $button, 'atk4\ui');
         }

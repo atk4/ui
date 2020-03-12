@@ -19,7 +19,7 @@ $action = $files->addAction(
     [
         'callback'=> 'importFromFilesystem',
         'preview' => function ($model, $path) {
-            return 'Considering path: '.$path;
+            return 'Considering path: ' . $path;
         },
         'args' => [
             'path'=> ['type'=>'string', 'required'=>true],
@@ -44,7 +44,7 @@ $executor->ui = 'segment';
 $executor->description = 'Execute action using "Basic" executor and path="." argument';
 $executor->setArguments(['path'=>'.']);
 $executor->addHook('afterExecute', function ($x, $ret) {
-    return new \atk4\ui\jsToast('Files imported: '.$ret);
+    return new \atk4\ui\jsToast('Files imported: ' . $ret);
 });
 
 $grid->add($executor = new \atk4\ui\ActionExecutor\ArgumentForm(), 'r1c2');
@@ -52,7 +52,7 @@ $executor->setAction($action);
 $executor->description = 'ArgumentForm executor will ask user about arguments';
 $executor->ui = 'segment';
 $executor->addHook('afterExecute', function ($x, $ret) {
-    return new \atk4\ui\jsToast('Files imported: '.$ret);
+    return new \atk4\ui\jsToast('Files imported: ' . $ret);
 });
 
 $grid->add($executor = new \atk4\ui\ActionExecutor\Preview(), 'r1c3');
@@ -62,7 +62,7 @@ $executor->previewType = 'console';
 $executor->description = 'Displays preview in console prior to executing';
 $executor->setArguments(['path'=>'.']);
 $executor->addHook('afterExecute', function ($x, $ret) {
-    return new \atk4\ui\jsToast('Files imported: '.$ret);
+    return new \atk4\ui\jsToast('Files imported: ' . $ret);
 });
 
 $app->add(['CRUD', 'ipp'=>5])->setModel($files);

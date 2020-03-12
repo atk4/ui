@@ -32,7 +32,7 @@ class Centered extends Generic
             if (isset($this->app->cdn['layout-logo'])) {
                 $this->image = $this->app->cdn['layout-logo'];
             } else {
-                $this->image = $this->app->cdn['atk'].'/logo.png';
+                $this->image = $this->app->cdn['atk'] . '/logo.png';
             }
         }
 
@@ -44,7 +44,7 @@ class Centered extends Generic
     public function renderView()
     {
         if ($this->image) {
-            $this->template->trySetHTML('HeaderImage', '<img class="ui image" src="'.$this->image.'" alt="'.$this->image_alt.'" />');
+            $this->template->trySetHTML('HeaderImage', '<img class="ui image" src="' . $this->image . '" alt="' . $this->image_alt . '" />');
         }
         parent::renderView();
     }

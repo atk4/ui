@@ -11,12 +11,12 @@ $app->add(['Header', 'Card Deck', 'size' => 1, 'subHeader' => 'Card can be displ
 
 $countries = new Country($db);
 $countries->addCalculatedField('Cost', function ($m) {
-    return '$ '.number_format(rand(500, 1500));
+    return '$ ' . number_format(rand(500, 1500));
 });
 
 $action = $countries->addAction('book', [
     'callback' => function ($m, $email, $city) {
-        return 'Your request to visit '.ucwords($city).' in '.$m->get('name').' was sent to: '.$email;
+        return 'Your request to visit ' . ucwords($city) . ' in ' . $m->get('name') . ' was sent to: ' . $email;
     },
     'ui' => ['button'=>[null, 'icon'=>'plane']],
 ]);
@@ -29,7 +29,7 @@ $action->args = [
 $info_action = $countries->addAction('request_info', [
 
     'callback' => function ($m, $email) {
-        return 'Your request for information was sent to email: '.$email;
+        return 'Your request for information was sent to email: ' . $email;
     },
     'scope' => 'none',
     'ui'    => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => 'mail']],
