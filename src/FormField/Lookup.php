@@ -453,9 +453,9 @@ class Lookup extends Input
             ->on(
                 'filterChanged',
                 new jsFunction(array_merge(
-                     [new jsExpression('let dropdowns = $(".atk-filter-dropdown")')],
-                     [new jsExpression('dropdowns.each(function(){const value = $(this).dropdown("get text"); $(this).dropdown([chain]); $(this).dropdown("set text", value); $(this).dropdown("refresh");})', ['chain' => $this->filterChain])]
-                 ))
+                    [new jsExpression('let dropdowns = $(".atk-filter-dropdown")')],
+                    [new jsExpression('dropdowns.each(function(){const value = $(this).dropdown("get text"); $(this).dropdown([chain]); $(this).dropdown("set text", value); $(this).dropdown("refresh");})', ['chain' => $this->filterChain])]
+                ))
             );
     }
 
