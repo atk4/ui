@@ -391,10 +391,9 @@ class View implements jsExpressionable
      * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
      *
-     * @param mixed  $seed   New object to add
-     * @param string $region
+     * @param View|string|array $seed   New object to add
+     * @param string|array|null $region
      *
-     * @throws Exception
      * @throws \atk4\core\Exception
      *
      * @return View
