@@ -10,6 +10,7 @@ use atk4\core\DIContainerTrait;
 use atk4\core\Exception;
 use atk4\core\FactoryTrait;
 use atk4\core\InitializerTrait;
+use atk4\core\StaticAddToTrait;
 use atk4\core\TrackableTrait;
 use atk4\data\Model;
 use atk4\data\Persistence\Static_;
@@ -37,6 +38,7 @@ class View implements jsExpressionable
     use DIContainerTrait {
         setMissingProperty as _setMissingProperty;
     }
+    use StaticAddToTrait;
 
     // {{{ Properties of the class
 
@@ -400,9 +402,14 @@ class View implements jsExpressionable
      */
     public function add($seed, $region = null)
     {
+        if (func_num_args() > 2) { // prevent bad usage
+            throw new \Error(['Too many method arguments']);
+        }
+
         if ($this->_rendered) {
             throw new Exception('You cannot add anything into the view after it was rendered');
         }
+
         if (!$this->app) {
             $this->_add_later[] = [$seed, $region];
 
