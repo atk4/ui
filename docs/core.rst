@@ -134,7 +134,7 @@ have to worry over the details::
     $user = new User($db);
     $user->load(1);
 
-    $view = $app->add(['template'=>'Hello, {$name}, your balance is {$balance}']);
+    $view = $app->add(['View', 'template'=>'Hello, {$name}, your balance is {$balance}']);
     $view->setModel($user);
 
 Next section will explain you how the Agile UI interacts with the data layer and how it outputs or

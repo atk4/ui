@@ -122,7 +122,7 @@ $app->add(['Header', 'Multiple Form Layouts']);
 
 $form = $app->add('Form');
 $tabs = $form->add('Tabs', 'AboveFields');
-$form->add(['ui' => 'divider'], 'AboveFields');
+$form->add(['View', 'ui' => 'divider'], 'AboveFields');
 
 $form_page = $tabs->addTab('Basic Info')->add(['FormLayout/Generic', 'form' => $form]);
 $form_page->addField('name', new \atk4\ui\FormField\Line());

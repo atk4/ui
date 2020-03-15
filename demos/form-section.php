@@ -42,7 +42,7 @@ $f->addField('phonecode');
 
 $f->onSubmit($noSave);
 
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);
 
 ////////////////////////////////
 
@@ -64,7 +64,7 @@ $a2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);
 
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);
 
 ////////////////////////////////
 
@@ -86,7 +86,7 @@ $t2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);
 
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);
 
 /////////////////////////////////////////
 
@@ -111,4 +111,4 @@ $c2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);
 
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);

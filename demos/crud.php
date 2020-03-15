@@ -32,7 +32,7 @@ $g->setModel($m);
 
 $g->addDecorator($m->title_field, ['Link', ['test' => false, 'path' => 'interfaces/page'], ['_id'=>'id']]);
 
-$app->add(['ui'=>'divider']);
+$app->add(['View', 'ui'=>'divider']);
 
 $c = $app->add('Columns');
 $cc = $c->addColumn(0, 'ui blue segment');

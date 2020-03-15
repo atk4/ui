@@ -358,15 +358,15 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         switch ($this->previewType) {
             case 'console':
-                $preview = $modal->add(['ui'=>'inverted black segment', 'element'=>'pre']);
+                $preview = $modal->add(['View', 'ui'=>'inverted black segment', 'element'=>'pre']);
                 $preview->set($text);
                 break;
             case 'text':
-                $preview = $modal->add(['ui'=>'basic segment']);
+                $preview = $modal->add(['View', 'ui'=>'basic segment']);
                 $preview->set($text);
                 break;
             case 'html':
-                $preview = $modal->add(['ui'=>'basic segment']);
+                $preview = $modal->add(['View', 'ui'=>'basic segment']);
                 $preview->template->setHTML('Content', $text);
                 break;
         }

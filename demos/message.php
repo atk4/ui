@@ -6,9 +6,9 @@ $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/
 
 $app->add(['Header', 'Message Types']);
 
-$seg = $app->add(['ui' => 'raised segment']);
+$seg = $app->add(['View', 'ui' => 'raised segment']);
 
-$bar_type = $seg->add(['ui' => ' basic buttons']);
+$bar_type = $seg->add(['View', 'ui' => ' basic buttons']);
 
 $msg = $seg->add([
     'Message',

@@ -27,7 +27,7 @@ items. If your HTML looks like this::
 
 you should put that into file `myview.html` then use it with a view::
 
-    $view = $app->add(['template'=>'myview.html']);
+    $view = $app->add(['View', 'template'=>'myview.html']);
 
 Now your application should contain list of 3 sample countires as you have specified in HTML, but next
 we need to add some tags into your template::

@@ -163,7 +163,7 @@ know about :php:class:`jsReload` already?
 
 Here is example of jsReload::
 
-    $view = $app->add(['ui'=>'tertiary green inverted segment']);
+    $view = $app->add(['View', 'ui'=>'tertiary green inverted segment']);
     $button = $app->add(['Button', 'Reload Lorem']);
 
     $button->on('click', new \atk4\ui\jsReload($view));

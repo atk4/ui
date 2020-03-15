@@ -4,7 +4,7 @@ require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
 $app->add(['Header', 'Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);
 
 //****** Inline Edit *****************************
 
@@ -25,7 +25,7 @@ $inline_edit->onChange(function ($value) {
     return $view;
 });
 
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);
 
 //****** ITEM SEARCH *****************************
 
@@ -52,7 +52,7 @@ $lister = $lister_container->add('Lister', 'List')
 $search->reload = $lister_container;
 $lister->setModel($search->setModelCondition($m))->setLimit(50);
 
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);
 
 //****** CREATING CUSTOM VUE USING EXTERNAL COMPONENT *****************************
 $app->add(['Header', 'External Component', 'subHeader' => 'Creating component using an external component definition.']);
@@ -112,7 +112,7 @@ $clock_script = "
               }
             }
           },
-        } 
+        }
     </script>";
 
 // Creating the clock view and injecting js.

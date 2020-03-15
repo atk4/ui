@@ -119,10 +119,10 @@ class CardDeck extends View
     {
         $this->menu = $this->add($this->factory(View::class, $this->menu), 'Menu');
 
-        $left = $this->menu->add(['ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
-        $this->btns = $left->add(['ui' => 'buttons']);
+        $left = $this->menu->add(['View', 'ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
+        $this->btns = $left->add(['View', 'ui' => 'buttons']);
         if ($this->search !== false) {
-            $right = $this->menu->add(['ui' => 'four wide column']);
+            $right = $this->menu->add(['View', 'ui' => 'four wide column']);
             $this->search = $right->add($this->factory(ItemSearch::class, array_merge($this->search, ['context' => '#'.$this->container->name])));
             $this->search->reload = $this->container;
             $this->query = $this->app->stickyGet($this->search->queryArg);
@@ -460,7 +460,7 @@ class CardDeck extends View
     public function renderView()
     {
         if (($this->menu && count($this->menuActions) > 0) || $this->search !== false) {
-            $this->add(['ui' => 'divider'], 'Divider');
+            $this->add(['View', 'ui' => 'divider'], 'Divider');
         }
 
         if (($_GET['__atk_reload'] ?? null) === $this->container->name) {

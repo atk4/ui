@@ -11,7 +11,7 @@ $app->add(['Lister', 'defaultTemplate'=>'lister.html'])->setSource([
     ['icon'=> 'map marker', 'title'=>'Xian Famous Foods', 'descr'=>'A taste of Shaanxi\'s delicious culinary traditions, with delights like spicy cold noodles and lamb burgers.'],
     ['icon'=> 'check', 'title'=>'Sapporo Haru', 'descr'=>'Greenpoint\'s best choice for quick and delicious sushi'],
 ]);
-$app->add(['ui' => 'clearing divider']);
+$app->add(['View', 'ui' => 'clearing divider']);
 
 // lister with custom template
 $view = $app->add(['View', 'template' => new \atk4\ui\Template('<div>
@@ -26,12 +26,12 @@ $view->add('Lister', 'List')
     ->setModel(new Country($db))
     ->setLimit(20);
 
-$app->add(['ui' => 'clearing divider']);
+$app->add(['View', 'ui' => 'clearing divider']);
 
 // empty lister with default template
 $app->add('Header')->set('Empty default lister');
 $app->add(['Lister', 'defaultTemplate'=>'lister.html'])->setSource([]);
-$app->add(['ui' => 'clearing divider']);
+$app->add(['View', 'ui' => 'clearing divider']);
 
 // empty lister with custom template
 $view = $app->add(['View', 'template' => new \atk4\ui\Template('<div>
