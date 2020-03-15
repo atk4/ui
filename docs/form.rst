@@ -355,10 +355,10 @@ You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model f
         function init() {
             parent::init();
 
-            $this->add('email');
-            $this->add('password', ['type'=>'password']);
+            $this->addField('email');
+            $this->addField('password', ['type'=>'password']);
 
-            $this->add('birth_year', ['type'=>'date', 'ui'=>['type'=>'month']);
+            $this->addField('birth_year', ['type'=>'date', 'ui'=>['type'=>'month']);
         }
     }
 
@@ -366,7 +366,7 @@ The seed for the UI will be combined with the default overriding :php:attr:`Form
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class::
 
-    $this->add('birth_year', ['ui'=>['Calendar', 'type'=>'month']);
+    $this->addField('birth_year', ['ui'=>['Calendar', 'type'=>'month']);
 
 Without the data 'type' property, now the calendar selection will be stored as text.
 
