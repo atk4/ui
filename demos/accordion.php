@@ -4,12 +4,12 @@ require_once __DIR__ . '/init.php';
 
 $app->add(['Button', 'Nested accordions', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['accordion-nested']);
-$app->add(['ui' => 'clearing divider']);
+$app->add(['View', 'ui' => 'clearing divider']);
 
 $app->add(['Header', 'Accordion\'s section can be control programmatically.']);
 
 // toggle menu
-$bar = $app->add(['ui' => 'buttons']);
+$bar = $app->add(['View', 'ui' => 'buttons']);
 $b1 = $bar->add(['Button', 'Toggle Section #1']);
 $b2 = $bar->add(['Button', 'Toggle Section #2']);
 $b3 = $bar->add(['Button', 'Toggle Section #3']);

@@ -40,7 +40,7 @@ $card->addDescription('Friend of Bob');
 
 $app->add(['Header', 'Card can display model label in a table or in line.', 'size' => 3]);
 
-$deck = $app->add(['ui' => 'cards']);
+$deck = $app->add(['View', 'ui' => 'cards']);
 
 $card_s = $deck->add(['Card', 'useTable' => true]);
 $card_s->addContent(new \atk4\ui\Header(['Project Info']));

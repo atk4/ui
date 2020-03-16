@@ -219,7 +219,7 @@ Inline Editing Example
 Next example will display DataTable, but will allow you to repalce data with a form temporarily::
 
 
-    $box = $app->add(['ui'=>'segment']);
+    $box = $app->add(['View', 'ui'=>'segment']);
 
     $loader = $box->add(['Loader', 'loadEvent'=>'edit']);
     $loader->add('Table')

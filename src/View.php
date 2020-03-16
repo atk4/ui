@@ -10,6 +10,7 @@ use atk4\core\DIContainerTrait;
 use atk4\core\Exception;
 use atk4\core\FactoryTrait;
 use atk4\core\InitializerTrait;
+use atk4\core\StaticAddToTrait;
 use atk4\core\TrackableTrait;
 use atk4\data\Model;
 use atk4\data\Persistence\Static_;
@@ -37,6 +38,7 @@ class View implements jsExpressionable
     use DIContainerTrait {
         setMissingProperty as _setMissingProperty;
     }
+    use StaticAddToTrait;
 
     // {{{ Properties of the class
 
@@ -391,44 +393,73 @@ class View implements jsExpressionable
      * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
      *
-     * @param mixed  $seed   New object to add
-     * @param string $region
+     * @param View              $object
+     * @param string|array|null $region
      *
-     * @throws Exception
      * @throws \atk4\core\Exception
      *
      * @return View
      */
-    public function add($seed, $region = null)
+    public function add($object, $region = null)
     {
+        if (func_num_args() > 2) { // prevent bad usage
+            throw new \Error('Too many method arguments');
+        }
+
         if ($this->_rendered) {
             throw new Exception('You cannot add anything into the view after it was rendered');
         }
-        if (!$this->app) {
-            $this->_add_later[] = [$seed, $region];
 
-            return $seed;
+        if (!is_object($object)) {
+            // for BC do not throw
+            // later consider to accept strictly objects only
+
+            // for BC allow relative class names from "atk4/ui" namespace
+            if (is_string($object)) {
+                $object = [$object];
+            }
+            if (is_string(reset($object)) && key($object) === 0) {
+                $object[key($object)] = $this->normalizeClassName($object[key($object)], 'atk4\ui');
+            }
+
+            $object = self::addToWithClassNameUnsafe($this, $object, [], true);
+        }
+
+        if (!$this->app) {
+            $this->_add_later[] = [$object, $region];
+
+            return $object;
         }
 
         if (is_array($region)) {
             $args = $region;
-            if (isset($args['region'])) {
-                $region = ['region'=>$args['region']];
-                unset($args['region']);
-            }
-        } elseif ($region) {
-            $args = null;
-            $region = ['region'=>$region];
+            $region = $args['region'] ?? null;
+            unset($args['region']);
         } else {
             $args = null;
-            $region = null;
         }
 
-        // Create object first
-        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region, 'atk4\ui');
+        // set region
+        if ($region !== null) {
+            if (!is_string($region)) {
+                throw (new Exception('Region must be a string'))
+                        ->addMoreInfo('region_type', gettype($region));
+            }
 
-        // Will call init() of the object
-        $object = $this->_add($object, $args);
+            if (isset($object->_DIContainerTrait)) {
+                $object->setDefaults(['region' => $region]);
+            } else {
+                if (!property_exists($object, 'region')) {
+                    throw (new Exception('Region property is not defined'))
+                            ->addMoreInfo('object_class', get_class($object));
+                }
+
+                $object->region = $region;
+            }
+        }
+
+        // will call init() of the object
+        $this->_add($object, $args);
 
         return $object;
     }

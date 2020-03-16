@@ -75,7 +75,7 @@ exclusive to Icon, but I'm adding a few examples here, just for your convenience
 
 Let's start with a View that contains your custom HTML loaded from file or embedded like this::
 
-    $view = $app->add(['template'=>new \atk4\ui\Template('<div>Hello my {Icon}<i class="huge icons">
+    $view = $app->add(['View', 'template'=>new \atk4\ui\Template('<div>Hello my {Icon}<i class="huge icons">
       <i class="big thin circle icon"></i>
       <i class="{Content}user{/} icon"></i>
     </i>{/}, It is me</div>')]);

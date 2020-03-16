@@ -169,7 +169,7 @@ specific field type::
 Field Decorator does not have to be added directly into the form. You can use a separate
 :php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`FormField\Generic::$form`::
 
-    $myview = $form->add(['defaultTemplate'=>'./mytemplate.html']);
+    $myview = $form->add(['View', 'defaultTemplate'=>'./mytemplate.html']);
     $myview->add(['FormField\Dropdown', 'form'=>$form]);
 
 .. php:method:: addFields($fields)

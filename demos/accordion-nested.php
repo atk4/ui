@@ -5,7 +5,7 @@ require_once __DIR__ . '/init.php';
 /*
 $app->add(['Button', 'View Form input split in Accordion section', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['accordion-in-form']);
-$app->add(['ui' => 'clearing divider']);
+$app->add(['View', 'ui' => 'clearing divider']);
 */
 
 $app->add(['Header', 'Nested accordions']);

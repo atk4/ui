@@ -21,7 +21,7 @@ $country = new Country($app->app->db);
 
 $country->addAction('send_message');
 
-$app->add(['element'=>'pre'])
+$app->add(['View', 'element'=>'pre'])
     // todo: add dumping!
     ->set(get_class($country->getAction('send_message')));
 CODE
@@ -53,8 +53,8 @@ $model->getAction('delete')->enabled = false;
 $model->addAction('soft_delete', [
     'scope' => \atk4\data\UserAction\Generic::SINGLE_RECORD,
     'ui'    => [
-        'icon'=>'trash', 
-        'button'=>[null, 'icon'=>'red trash'], 
+        'icon'=>'trash',
+        'button'=>[null, 'icon'=>'red trash'],
         'confirm'=>'Are you sure?'
     ],
     'callback' => function ($m) {
@@ -62,7 +62,7 @@ $model->addAction('soft_delete', [
         $m->saveAndUnload();
     },
 ]);
-$app->add(['element'=>'pre'])
+$app->add(['View', 'element'=>'pre'])
     ->set(json_encode(array_keys($model->getActions())));
 CODE
     );
@@ -114,10 +114,10 @@ $model = new \atk4\data\Model($app->db, 'test');
 $model->addAction('greet', [
     'args'=> [
         'age'=>[
-            'type'=>'integer', 
+            'type'=>'integer',
             'required' => true
         ]
-    ], 
+    ],
     'callback'=>function ($m, $age) {
         return 'Age is '.$age;
     }
@@ -127,7 +127,7 @@ $app->add(new \atk4\ui\FormField\Line([
     'action' => $model->getAction('greet'),
 ]));
 
-$app->add(['ui'=>'divider']);
+$app->add(['View', 'ui'=>'divider']);
 
 $app->add(['Button', 'Greet without Age argument'])
     ->on('click', $model->getAction('greet'));

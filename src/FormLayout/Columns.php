@@ -67,7 +67,7 @@ class Columns extends Generic
             $cc->add(['FormLayout/Generic', 'form' => $this->form])->setModel($model, $chunk);
         }
 
-        $this->add(['ui' => 'clearing hidden divider']);
+        $this->add(['View', 'ui' => 'clearing hidden divider']);
 
         return $model;
     }

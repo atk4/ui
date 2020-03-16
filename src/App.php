@@ -464,13 +464,12 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param mixed  $seed   New object to add
-     * @param string $region
+     * @param View|string|array $seed   New object to add
+     * @param string|array|null $region
      *
-     * @throws Exception
      * @throws \atk4\core\Exception
      *
-     * @return object
+     * @return View
      */
     public function add($seed, $region = null)
     {

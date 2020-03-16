@@ -67,7 +67,7 @@ Button Bar
 Buttons can be aranged into a bar. You would need to create a :php:class:`View` component
 with property ``ui='buttons'`` and add your other buttons inside::
 
-    $bar = $app->add(['ui'=>'vertical buttons']);
+    $bar = $app->add(['View', 'ui'=>'vertical buttons']);
 
     $bar->add(['Button', 'Play', 'icon'=>'play']);
     $bar->add(['Button', 'Pause', 'icon'=>'pause']);
