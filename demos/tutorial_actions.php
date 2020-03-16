@@ -3,13 +3,11 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-/** @var \atk4\ui\View $wizard */
-$wizard = $app->add('Wizard');
+$wizard = \atk4\ui\View::addTo($app);
 $app->stickyGet($wizard->name);
 
 $wizard->addStep('Actions in Agile Data', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Models of Agile Data has always supported 3 basic actions: "save" (for new and existing records) and "delete". In
 version 1.4 of Agile Data "User Actions" were included.
@@ -69,8 +67,7 @@ CODE
 });
 
 $wizard->addStep('UI for Actions', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 With all that meta-information the Agile UI framework can now fully integrate actions everywhere! Traditionally,
 let us start with a button.
@@ -136,8 +133,7 @@ CODE
 });
 
 $wizard->addStep('More Ways', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 TODO: add example of card deck, table and grid
 EOF
@@ -145,8 +141,7 @@ EOF
 });
 
 $wizard->addStep('CRUD integration', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 TODO: add example of crud
 EOF

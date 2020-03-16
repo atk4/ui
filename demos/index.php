@@ -22,12 +22,10 @@ if (!$app->stickyget('begin')) {
     $app->callExit();
 }
 
-/** @var \atk4\ui\Wizard $wizard */
-$wizard = $app->add('Wizard');
+$wizard = \atk4\ui\Wizard::addTo($app);
 
 $wizard->addStep('User Interface', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Agile Toolkit is a "Low Code Framework" written in PHP. It is designed to simplify all aspects of web application creation:
 EOF
@@ -70,9 +68,7 @@ EOF
 });
 
 $wizard->addStep('Interactivity', function ($page) {
-
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 PHP is a server-side language. That prompted us to implement server-side UI actions. They are very easy to define -
 no need to create any routes or custom routines, simply define a PHP closure like this:
@@ -126,9 +122,7 @@ EOF
 });
 
 $wizard->addStep('Business Model', function ($page) {
-
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 One major benefit of Server Side Rendered applications is ability to directly interact with data. In other applications
 you may need to manually process data but in Agile Toolkit we use data mapping framework.
@@ -182,9 +176,7 @@ EOF
 });
 
 $wizard->addStep('Persistence', function ($page) {
-
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Once your model is defined, it can be re-used later with any generic view:
 EOF

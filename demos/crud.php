@@ -74,8 +74,7 @@ class MyExecutor extends atk4\ui\ActionExecutor\UserAction
 {
     public function addFormTo(\atk4\ui\View $view): \atk4\ui\Form
     {
-        /** @var \atk4\ui\Columns $columns */
-        $columns = $view->add('Columns');
+        $columns = \atk4\ui\Columns::addTo($view);
         $left = $columns->addColumn();
         $right = $columns->addColumn();
 
