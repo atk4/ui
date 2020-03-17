@@ -99,7 +99,7 @@ class ItemSearch extends View
         }
 
         $this->js(true, (new jsVueService())->createAtkVue(
-            '#'.$this->name,
+            '#' . $this->name,
             'atk-item-search',
             [
                 'reload'   => $reloadId,
