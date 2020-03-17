@@ -31,4 +31,5 @@ class MySwitcher extends \atk4\ui\View
     }
 }
 
-$app->add(['View', 'ui' => 'segment'])->add(new MySwitcher());
+$view = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
+MySwitcher::addTo($view);

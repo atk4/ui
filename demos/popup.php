@@ -133,13 +133,13 @@ $m = $app->add('Menu');
 $browse = $m->add(['DropDown', 'Browse']);
 
 // Add cart item into the menu, with a popup inside
-$cart_item = $m->addItem(['Cart', 'icon'=>'cart']);
+$cart_item = $m->addItem([Cart::class, 'icon'=>'cart']);
 
 $cart_popup = $app->add(['Popup', $cart_item, 'position'=>'bottom left']);
 // Popup won't dissapear as you hover over it.
 $cart_popup->setHoverable();
 
-$shelf = $app->add(new ItemShelf());
+$shelf = ItemShelf::addTo($app);
 
 // Here we are facing a pretty interesting problem. If you attempt to put "Cart" object inside a popup directly,
 // it won't work, because it will be located inside the menu item's DOM tree and, although hidden, will be
@@ -159,7 +159,7 @@ $shelf = $app->add(new ItemShelf());
 // as i would be in the application. That's also impacts under which key 'memorize' is storing data - having
 // two different objects won't work, since they won't share session data.
 
-$cart = $app->add(new Cart());
+$cart = Cart::addTo($app);
 
 // Next I am calling destroy. This won't actually destroy the cart, but it will remove it from the application.
 // If i add unset($cart) afterwards, garbage collector will trigger destructor. Instead I'm passing $cart
@@ -199,7 +199,7 @@ $shelf->linkCart($cart, [
 $pop = $app->add(['Popup', $browse, 'position' => 'bottom left', 'minWidth'=>'500px'])
            ->setHoverable()
            ->setOption('delay', ['show' => 100, 'hide' => 400]);
-$shelf2 = $pop->add(new ItemShelf());
+$shelf2 = ItemShelf::addTo($pop);
 //$shelf2->linkCart($cart, $cart_item->jsReload());
 
 //////////////////////////////////////////////////////////////////////////////

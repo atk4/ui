@@ -64,7 +64,7 @@ EOF
 
     $t->addParagraph('It all has started with a "Button" though:');
 
-    $page->add(new Demo())->setCode('$app->add(["Button", "Hello from the button!"]);');
+    Demo::addTo($page)->setCode('$app->add(["Button", "Hello from the button!"]);');
 });
 
 $wizard->addStep('Interactivity', function ($page) {
@@ -75,7 +75,7 @@ no need to create any routes or custom routines, simply define a PHP closure lik
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $button = $app->add(['Button', "Click for the greeting!"]);
 $button->on('click', function() {
     return 'Hello World!';
@@ -91,7 +91,7 @@ written in VueJS) and the backend. We also support seamless reloading of any UI 
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 
 $seg = $app->add(['View', 'ui'=>'segment']);
 
@@ -129,7 +129,7 @@ you may need to manually process data but in Agile Toolkit we use data mapping f
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 
 class Invoice extends \atk4\data\Model {
     public $title_field = 'reference';
@@ -196,7 +196,7 @@ EOF
     }
     session_start();
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $session = new atk4\data\Persistence\Array_($_SESSION['x']);
 
 $model = new Invoice($session);

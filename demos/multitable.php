@@ -81,6 +81,6 @@ $vp = $app->add('VirtualPage')->set(function ($vp) use ($m) {
 
 $app->add(['Button', 'Re-Import From Filesystem', 'top attached'])->on('click', new \atk4\ui\jsModal('Now importing ... ', $vp));
 
-$app->add(new Finder('bottom attached'))
+Finder::addTo($app, 'bottom attached')
     ->addClass('top attached segment')
     ->setModel($m, ['SubFolder']);

@@ -58,7 +58,7 @@ class ForkButton extends Button
     }
 }
 
-$app->add(new ForkButton(1234 + rand(1, 100)));
+ForkButton::addTo($app, 1234 + rand(1, 100));
 
 $app->add(['Header', 'Custom Template', 'size' => 2]);
 

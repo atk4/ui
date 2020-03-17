@@ -21,10 +21,10 @@ class MyButton extends \atk4\ui\Button
 }
 
 // Buttons
-$app->add(new MyButton($app->url()));
-$app->add(new MyButton($app->url(['xx' => 'YEY'])));
-$app->add(new MyButton($app->url(['c' => 'OHO'])));
-$app->add(new MyButton($app->url(['xx' => 'YEY', 'c' => 'OHO'])));
+MyButton::addTo($app, $app->url());
+MyButton::addTo($app, $app->url(['xx' => 'YEY']));
+MyButton::addTo($app, $app->url(['c' => 'OHO']));
+MyButton::addTo($app, $app->url(['xx' => 'YEY', 'c' => 'OHO']));
 
 // URLs presented by a blank app
 $app->add(new \atk4\ui\Header('URLs presented by a blank app'));

@@ -14,7 +14,7 @@ version 1.4 of Agile Data "User Actions" were included.
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $country = new Country($app->app->db);
 
 $country->addAction('send_message');
@@ -44,7 +44,7 @@ consistent. And actions are really flexible - you can remove them or add them.
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $model = new atk4\data\Model($app->db, 'test');
 // $model->removeAction('delete');
 $model->getAction('delete')->enabled = false;
@@ -74,7 +74,7 @@ let us start with a button.
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $country = new Country($app->app->db);
 $country->loadAny();
 
@@ -89,7 +89,7 @@ Any view can actually pass action as a callback, not only the button. Here is an
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $country = new Country($app->app->db);
 $country->loadAny();
 
@@ -106,7 +106,7 @@ user will be asked to enter the missing arguments.
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $model = new \atk4\data\Model($app->db, 'test');
 $model->addAction('greet', [
     'args'=> [
@@ -147,7 +147,7 @@ TODO: add example of crud
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $country = new Country($app->app->db);
 $crud = $app->add(['CRUD', 'ipp'=>5]);
 $crud->setModel($country);
