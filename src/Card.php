@@ -191,7 +191,7 @@ class Card extends View
      * to the main section of this card.
      *
      * @param \atk4\data\Model $m      The model.
-     * @param array            $fields An array of fields name to display in content.
+     * @param array|false      $fields An array of fields name to display in content.
      *
      * @throws Exception
      * @throws \atk4\data\Exception
@@ -208,8 +208,10 @@ class Card extends View
             $m = parent::setModel($m);
         }
 
-        if (!$fields) {
+        if ($fields === null) {
             $fields = array_keys($this->model->getFields(['editable', 'visible']));
+        } elseif ($fields === false) {
+            $fields = [];
         }
 
         $this->setDataId($this->model->get($this->model->id_field));
@@ -296,7 +298,7 @@ class Card extends View
         }
 
         if ($model && $fields) {
-            $this->setModel($model);
+            $section->setModel($model);
             $section->addFields($model, $fields, $useTable, $useLabel);
         }
 
@@ -385,7 +387,7 @@ class Card extends View
      */
     public function addExtraFields($m, $fields, $glue = null)
     {
-        $this->setModel($m);
+        $this->setModel($m, false);
 
         // display extra field in line.
         if ($glue) {

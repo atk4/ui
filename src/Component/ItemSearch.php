@@ -2,6 +2,7 @@
 
 namespace atk4\ui\Component;
 
+use atk4\data\Model;
 use atk4\ui\jsVueService;
 use atk4\ui\View;
 
@@ -20,7 +21,7 @@ class ItemSearch extends View
     /**
      * The initial query.
      *
-     * @var null
+     * @var string
      */
     public $q = null;
 
@@ -59,6 +60,8 @@ class ItemSearch extends View
 
     /**
      * Return query string sent by request.
+     *
+     * @return string
      */
     public function getQuery()
     {
@@ -68,11 +71,11 @@ class ItemSearch extends View
     /**
      * Set model condition base on search request.
      *
-     * @param $m
+     * @param Model $m
      *
-     * @return mixed
+     * @return Model
      */
-    public function setModelCondition($m)
+    public function setModelCondition(Model $m): Model
     {
         if ($q = $this->getQuery()) {
             $m->addCondition('name', 'like', '%'.$q.'%');
@@ -104,7 +107,6 @@ class ItemSearch extends View
                                                           'q'        => $this->q,
                                                           'context'  => $this->context,
                                                       ]
-        )
-        );
+        ));
     }
 }

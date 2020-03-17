@@ -16,8 +16,8 @@ class CardDeck extends View
 {
     public $ui = '';
 
-    /** @var string Card type inside this deck. */
-    public $card = Card::class;
+    /** @var string|View Card type inside this deck. */
+    public $card = [Card::class];
 
     /** @var string default template file. */
     public $defaultTemplate = 'card-deck.html';
@@ -35,24 +35,24 @@ class CardDeck extends View
     public $useAction = true;
 
     /** @var null|View The container view. The view that is reload when page or data changed. */
-    public $container = ['View', 'ui'=> 'basic segment'];
+    public $container = [View::class, 'ui' => 'basic segment'];
 
     /** @var View The view containing Cards. */
-    public $cardHolder = ['View', 'ui' => 'cards'];
+    public $cardHolder = [View::class, 'ui' => 'cards'];
 
     /** @var null|View The paginator view. */
-    public $paginator = null;
+    public $paginator = [Paginator::class];
 
-    /** @var int The number of card to be display per page. */
-    public $ipp = 8;
+    /** @var int The number of cards to be displayed per page. */
+    public $ipp = 9;
 
     /** @var null|array A menu seed for displaying button inside. */
-    public $menu = ['View', 'ui' => 'stackable grid'];
+    public $menu = [View::class, 'ui' => 'stackable grid'];
 
     /** @var array|ItemSearch */
-    public $search = ['View', 'ui' => 'ui compact basic segment'];
+    public $search = [ItemSearch::class, 'ui' => 'ui compact basic segment'];
 
-    /** @var null A view container for buttons. Added into menu when menu is set. */
+    /** @var null|View A view container for buttons. Added into menu when menu is set. */
     private $btns = null;
 
     /** @var string Button css class for menu. */
@@ -65,7 +65,7 @@ class CardDeck extends View
     public $jsExecutor = jsUserAction::class;
 
     /** @var array Default notifier to perform when model action is successful * */
-    public $notifyDefault = ['jsToast', 'settings' => ['displayTime' => 5000]];
+    public $notifyDefault = [jsToast::class, 'settings' => ['displayTime' => 5000]];
 
     /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty. */
     public $singleScopeActions = [];
@@ -83,7 +83,12 @@ class CardDeck extends View
     public $defaultMsg = 'Done!';
 
     /** @var array seed to create View for displaying when search result is empty. */
-    public $noRecordDisplay = [Message::class, 'content' => 'Result empty!', 'icon' => 'info circle', 'text' => 'Your search did not return any record or there is no record available.'];
+    public $noRecordDisplay = [
+                Message::class,
+                'content' => 'Result empty!',
+                'icon' => 'info circle',
+                'text' => 'Your search did not return any record or there is no record available.',
+    ];
 
     /** @var array A collection of menu button added in Menu. */
     private $menuActions = [];
@@ -117,13 +122,14 @@ class CardDeck extends View
      */
     protected function addMenuBar()
     {
-        $this->menu = $this->add($this->factory(View::class, $this->menu), 'Menu');
+        $this->menu = $this->add($this->factory($this->menu), 'Menu');
 
         $left = $this->menu->add(['View', 'ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
         $this->btns = $left->add(['View', 'ui' => 'buttons']);
+
         if ($this->search !== false) {
             $right = $this->menu->add(['View', 'ui' => 'four wide column']);
-            $this->search = $right->add($this->factory(ItemSearch::class, array_merge($this->search, ['context' => '#'.$this->container->name])));
+            $this->search = $right->add($this->factory($this->search, ['context' => '#'.$this->container->name]));
             $this->search->reload = $this->container;
             $this->query = $this->app->stickyGet($this->search->queryArg);
         }
@@ -137,7 +143,7 @@ class CardDeck extends View
     protected function addPaginator()
     {
         $seg = $this->container->add(['View', 'ui'=> 'basic segment'])->addStyle('text-align', 'center');
-        $this->paginator = $seg->add($this->factory([Paginator::class, 'reload' => $this->container], $this->paginator, 'atk4\ui'));
+        $this->paginator = $seg->add($this->factory($this->paginator, ['reload' => $this->container]));
         $this->page = $this->app->stickyGet($this->paginator->name);
     }
 
@@ -151,11 +157,10 @@ class CardDeck extends View
 
         if ($count = $this->initPaginator()) {
             $this->model->each(function ($m) use ($fields, $extra) {
-                // need model clone in order to keep it's loaded values.
+                // need model clone in order to keep it's loaded values
                 $m = clone $m;
-                $c = $this->cardHolder->add([$this->card])->addClass('segment');
-                $c->setModel($m);
-                $c->addSection($m->getTitle(), $m, $fields, $this->useLabel, $this->useTable);
+                $c = $this->cardHolder->add($this->factory($this->card, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]))->addClass('segment');
+                $c->setModel($m, $fields);
                 if ($extra) {
                     $c->addExtraFields($m, $extra, $this->extraGlue);
                 }
