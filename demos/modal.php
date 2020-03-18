@@ -50,7 +50,7 @@ $app->add(['Header', 'Virtual Page Logic']);
 $vp = $app->add('VirtualPage'); // this page will not be visible unless you trigger it specifically
 $vp->add(['Header', 'Contens of your pop-up here']);
 $vp->add(['LoremIpsum', 'size' => 2]);
-$vp->add(new Counter());
+Counter::addTo($vp);
 
 $bar = $app->add(['View', 'ui' => 'buttons']);
 $bar->add('Button')->set('Inside current layout')->link($vp->getURL());

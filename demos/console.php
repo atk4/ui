@@ -6,6 +6,7 @@ if (!class_exists('TestConsole')) {
     class TestConsole extends \atk4\data\Model
     {
         use \atk4\core\DebugTrait;
+        use \atk4\core\StaticAddToTrait;
 
         public function generateReport()
         {
@@ -50,7 +51,7 @@ $t = $tt->addTab('runMethod()', function ($t) {
         'Non-interractive method invocation',
         'subHeader'=> 'console can invoke a method, which normaly would be non-interractive and can still capture debug output',
     ]);
-    $t->add('Console')->runMethod($t->add(new TestConsole()), 'generateReport');
+    $t->add('Console')->runMethod(TestConsole::addTo($t), 'generateReport');
 });
 
 $t = $tt->addTab('exec() single', function ($t) {

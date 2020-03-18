@@ -6,7 +6,7 @@ $app->add(['Button', 'Loader Examples - Page 2', 'small right floated basic blue
     ->link(['loader2']);
 
 // ViewTester will perform callback to self.
-$app->add(new \atk4\ui\tests\ViewTester());
+\atk4\ui\tests\ViewTester::addTo($app);
 
 // Example 1 - Basic usage of a Loader.
 $app->add('Loader')->set(function ($p) {
@@ -16,7 +16,7 @@ $app->add('Loader')->set(function ($p) {
     $p->add(new \atk4\ui\LoremIpsum(['size' => 1]));
 
     // Any dynamic views can perform call-backs just fine
-    $p->add(new \atk4\ui\tests\ViewTester());
+    \atk4\ui\tests\ViewTester::addTo($p);
 
     // Loader may be inside another loader, works fine.
     $loader = $p->add('Loader');
@@ -32,7 +32,7 @@ $app->add('Loader')->set(function ($p) {
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:
         $p->app->stickyGet('color');
-        $p->add(new \atk4\ui\tests\ViewTester());
+        \atk4\ui\tests\ViewTester::addTo($p);
 
         // This loader takes 5s to load because it needs to go through 2 sleep statements.
     });

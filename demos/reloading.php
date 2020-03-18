@@ -44,9 +44,9 @@ if (!class_exists('Counter')) {
 }
 
 // Add 3 counters
-$seg->add(new Counter());
-$seg->add(new Counter('40'));
-$seg->add(new Counter('-20'));
+Counter::addTo($seg);
+Counter::addTo($seg, '40');
+Counter::addTo($seg, '-20');
 
 // Add button to reload all counters
 $bar = $app->add(['View', 'ui' => 'buttons']);

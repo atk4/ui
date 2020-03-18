@@ -15,7 +15,7 @@ $session = new Session();
 
 $modal_simple = $app->add(['Modal', 'title' => 'Simple modal']);
 $modal_simple->add('Message')->set('Modal message here.');
-$modal_simple->add(new \atk4\ui\tests\ViewTester());
+\atk4\ui\tests\ViewTester::addTo($modal_simple);
 
 $menu_bar = $app->add(['View', 'ui' => 'buttons']);
 $b = $menu_bar->add('Button')->set('Show Modal');
@@ -39,7 +39,7 @@ $modal_vp3->set(function ($modal) {
 
 //When $modal_vp1->show() is activate, it will dynamically add this content to it.
 $modal_vp1->set(function ($modal) use ($modal_vp2) {
-    $modal->add(new \atk4\ui\tests\ViewTester());
+    \atk4\ui\tests\ViewTester::addTo($modal);
     $modal->add(['View', 'Showing lorem ipsum']); //need in behat test.
     $modal->add(['LoremIpsum', 'size' => 2]);
     $form = $modal->add('Form');
@@ -51,7 +51,7 @@ $modal_vp1->set(function ($modal) use ($modal_vp2) {
 
 //When $modal_vp2->show() is activate, it will dynamically add this content to it.
 $modal_vp2->set(function ($modal) use ($modal_vp3) {
-    //$modal->add(new \atk4\ui\tests\ViewTester());
+    //\atk4\ui\tests\ViewTester::addTo($modal);
     $modal->add(['Message', 'Message', @$_GET['color']])->text->addParagraph('This text is loaded using a second modal.');
     $modal->add('Button')->set('Third modal')->on('click', $modal_vp3->show());
 });
