@@ -8,6 +8,7 @@
     - @babel/preset-env from 7.8.3 to 7.8.7
     - @babel/polyfill from 7.8.3 to 7.8.7
     - webpack from 4.35.3 to 4.42.0
+- Update Babel config in order to use corejs v3
 
 ### version 1.12.3 (2020-02-11)
 
