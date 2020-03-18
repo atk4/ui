@@ -79,15 +79,15 @@ if (!class_exists('Country')) {
             $this->addField('client_address', ['type' => 'string', 'ui' => ['form' => [new \atk4\ui\FormField\TextArea(), 'rows' => 4]]]);
 
             $this->hasOne('client_country_iso', [
-                new Country(),
-                'their_field' => 'iso',
-                'ui'          => [
-                    'display' => [
-                        'form' => 'Line',
+                    new Country(),
+                    'their_field' => 'iso',
+                    'ui'          => [
+                        'display' => [
+                            'form' => 'Line',
+                        ],
                     ],
-                ],
-            ])
-                 ->addField('client_country', 'name');
+                ])
+                ->addField('client_country', 'name');
 
             $this->addField('is_commercial', ['type' => 'boolean']);
             $this->addField('currency', ['enum' => ['EUR', 'USD', 'GBP']]);
@@ -165,7 +165,7 @@ if (!class_exists('Country')) {
                 ]);
 
                 if ($fileinfo->isDir()) {
-                    $this->ref('SubFolder')->importFromFilesystem($path.'/'.$fileinfo->getFilename());
+                    $this->ref('SubFolder')->importFromFilesystem($path . '/' . $fileinfo->getFilename());
                 }
             }
         }
