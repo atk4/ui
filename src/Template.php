@@ -29,6 +29,7 @@ use atk4\data\Model;
 class Template implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
+    use \atk4\core\StaticAddToTrait;
 
     // {{{ Properties of a template
 
