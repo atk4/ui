@@ -7,6 +7,8 @@ use atk4\ui\TableColumn\Template;
 
 class GridTest extends \atk4\core\PHPUnit_AgileTestCase
 {
+    use Concerns\HandlesTable;
+
     public $m;
 
     public function setUp()
@@ -15,7 +17,7 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
         $a[1] = ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'];
         $a[2] = ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'];
 
-        $this->m = new MyModel(new \atk4\data\Persistence_Array($a));
+        $this->m = new MyModel(new \atk4\data\Persistence\Array_($a));
     }
 
     public function test1()
@@ -30,7 +32,7 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertEquals('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHTML());
         $this->assertEquals(
             '<tr data-id="1"><td>test@test.com</td><td>password=abc123</td></tr>',
-            $this->extract($t)
+            $this->extractTableRow($t)
         );
     }
 
@@ -46,7 +48,7 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertEquals('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
         $this->assertEquals(
             '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
-            $this->extract($t)
+            $this->extractTableRow($t)
         );
     }
 
@@ -60,7 +62,7 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertEquals('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="delete"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHTML());
         $this->assertEquals(
             '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="delete"><i class="ui red trash icon"></i>Delete</a></td></tr>',
-            $this->extract($t)
+            $this->extractTableRow($t)
         );
     }
 
@@ -74,17 +76,8 @@ class GridTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertEquals('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
         $this->assertEquals(
             '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
-            $this->extract($t)
+            $this->extractTableRow($t)
         );
-    }
-
-    public function extract($t)
-    {
-        // extract only <tr> out
-        $val = $t->render();
-        preg_match('/<.*data-id="1".*/m', $val, $matches);
-
-        return $matches[0];
     }
 }
 

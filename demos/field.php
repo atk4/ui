@@ -2,7 +2,7 @@
 /**
  * Testing fields.
  */
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
 $app->add(['Header', 'Types', 'size' => 2]);
 
@@ -80,7 +80,7 @@ $app->add(new \atk4\ui\FormField\Line(['action' => new \atk4\ui\Button([
 ])]));
 
 $app->add(new \atk4\ui\FormField\Line(['action' => new \atk4\ui\Button([
-   'icon' => 'search',
+    'icon' => 'search',
 ])]));
 
 $app->add(new \atk4\ui\Header(['Modifiers', 'size' => 2]));

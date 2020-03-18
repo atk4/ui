@@ -10,7 +10,7 @@
  * This approach will also prevent your application from registering shutdown handler or catching error,
  * so we will need to do a bit of work about that too.
  */
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
 $tabs = $app->add('Tabs');
 
@@ -197,7 +197,7 @@ $gr->addField('last_name', ['width' => 'five']);
 $f->onSubmit(function ($f) {
     $errors = [];
 
-    foreach ($f->model->elements as $name => $ff) {
+    foreach ($f->model->getFields() as $name => $ff) {
         if ($name == 'id') {
             continue;
         }

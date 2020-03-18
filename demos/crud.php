@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 $m = new Country($db);
 $m->addAction('test', ['ui'=>['button'=>['icon'=>'pencil']]]);
 $m->addAction('test1');
@@ -9,27 +9,30 @@ $m->addAction('test2');
 //$m->getAction('edit')->system =true;
 //$m->getAction('delete')->system =true;
 
-$g = $app->add(['CRUD', 'ipp'=>5]);
-$g->setModel($m);
+$g = $app->add(['CRUD', 'ipp'=>10]);
+
+// callback for model action add form.
+$g->onFormAdd(function ($form, $t) {
+    $form->js(true, $form->getField('name')->jsInput()->val('Entering value via javascript'));
+});
 
 // callback for model action edit form.
-$g->onEditAction(function ($form) {
+$g->onFormEdit(function ($form) {
     $form->js(true, $form->getField('name')->jsInput()->attr('readonly', true));
 });
 
-// callback for model action add form.
-$g->onAddAction(function ($form) {
-    $form->js(true, $form->getField('iso')->jsInput()->val('WW'));
-});
-
 // callback for both model action edit and add.
-$g->onAction(function ($form, $ex) {
+$g->onFormAddEdit(function ($form, $ex) {
     $form->onSubmit(function ($f) use ($ex) {
         return [$ex->hide(), new \atk4\ui\jsToast('Submit all right! This demo does not saved data.')];
     });
 });
 
-$app->add(['ui'=>'divider']);
+$g->setModel($m);
+
+$g->addDecorator($m->title_field, ['Link', ['test' => false, 'path' => 'interfaces/page'], ['_id'=>'id']]);
+
+$app->add(['View', 'ui'=>'divider']);
 
 $c = $app->add('Columns');
 $cc = $c->addColumn(0, 'ui blue segment');
@@ -49,7 +52,7 @@ $crud = $cc->add([
 // Condition on the model can be applied on a model
 $m = new Country($db);
 $m->addCondition('numcode', '<', 200);
-$m->addHook('validate', function ($m2, $intent) {
+$m->onHook('validate', function ($m2, $intent) {
     $err = [];
     if ($m2->get('numcode') >= 200) {
         $err['numcode'] = 'Should be less than 200';

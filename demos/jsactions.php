@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $app->add(['Button', 'Actions from jsEvent', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['jsactions2']);
@@ -55,7 +55,7 @@ $f_action = $files->addAction(
 $btn = $app->add(['Button', 'Import File']);
 $executor = $app->add(new \atk4\ui\ActionExecutor\jsUserAction());
 $executor->setAction($f_action, ['path' => '.']);
-$executor->addHook('afterExecute', function ($t, $m) {
+$executor->onHook('afterExecute', function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');
 });
 

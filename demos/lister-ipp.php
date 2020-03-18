@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $container = $app->add('View');
 
@@ -10,7 +10,7 @@ $v = $container->add(['View', 'template' => new \atk4\ui\Template('<div>
 {List}<li class="ui icon label"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</li>{/}
 </ul>{$Content}</div>')]);
 
-$l = $v->add('Lister', 'List')->addHook('beforeRow', function ($l) {
+$l = $v->add('Lister', 'List')->onHook('beforeRow', function ($l) {
     $l->current_row['iso'] = strtolower($l->current_row['iso']);
 });
 

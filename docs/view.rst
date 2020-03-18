@@ -85,7 +85,7 @@ is executed it will be impossible to determine each view's position inside rende
     // Still not sure if finished adding
 
     $app = new \atk4\ui\App('My App');
-    $app->setLayout($top);
+    $app->initLayout($top);
 
     // Calls init() for all elements recursively.
 
@@ -94,7 +94,7 @@ child elements. To make your execution more straightforward we recommend you to 
 App class first and then continue with Layout initialization::
 
     $app = new \atk4\ui\App('My App');
-    $top = $app->setLayout(new \atk4\ui\View(['ui'=>'segments']));
+    $top = $app->initLayout(new \atk4\ui\View(['ui'=>'segments']));
 
     $middle = $top->add(new \atk4\ui\View(['ui'=>'segment', 'red']);
 
@@ -103,7 +103,7 @@ App class first and then continue with Layout initialization::
 Finally, if you prefer a more consise code, you can also use the following format::
 
     $app = new \atk4\ui\App('My App');
-    $top = $app->setLayout('View', ['ui'=>'segments']);
+    $top = $app->initLayout('View', ['ui'=>'segments']);
 
     $middle = $top->add('View', ['ui'=>'segment', 'red']);
 
@@ -336,20 +336,20 @@ to do something before child render, override method :php:meth:`View::recursiveR
 Template of a current view. This attribute contains an object of a class :php:class:`Template`.
 You may secify this value explicitly::
 
-    $app->add(['template'=>new \atk4\ui\Template('<b>hello</b>')]);
+    $app->add(['View', 'template'=>new \atk4\ui\Template('<b>hello</b>')]);
 
 .. php:attr:: defaultTemplate
 
 By default, if value of :php:attr:`View::$template` is not set, then it is loaded from class
 specified in `defaultTemplate`::
 
-    $app->add(['defaultTemplate'=>'./mytpl.html']);
+    $app->add(['View', 'defaultTemplate'=>'./mytpl.html']);
 
 You should specify defaultTemplate using relative path to your project root or, for add-ons,
 relative to a current file::
 
     // in Add-on
-    $app->add(['defaultTemplate'=>__DIR__.'/../templates/mytpl.httml']);
+    $app->add(['View', 'defaultTemplate'=>__DIR__.'/../templates/mytpl.httml']);
 
 Agile UI does not currently provide advanced search path for templates, by default the
 template is loaded from folder `vendor/atk4/ui/template/semantic-ui/`. To change this

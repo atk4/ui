@@ -2,14 +2,14 @@
 /**
  * Demonstrates how to use BreadCrumb.
  */
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $crumb = $app->add('BreadCrumb');
 $crumb->addCrumb('UI Demo', ['index']);
 $crumb->addCrumb('BreadCrumb Demo', ['breadcrumb']);
 
-$app->add(['ui'=>'divider']);
+$app->add(['View', 'ui'=>'divider']);
 
 $crumb->addCrumb('Countries', []);
 

@@ -57,6 +57,18 @@ or you can tweak it when you create form like this::
 
     $form = $app->add(['Form', 'buttonSave'=>[null, 'Subscribe', 'icon'=>'mail']]);
 
+To set the default values in the fields of the form you can use the model property of the form.
+Even if model not explicitly set (see section below) each form has an underlying model which is automatically generated::
+
+	// single field
+	$form->model->set('email', 'some@email.com');
+
+	// or multiple fields
+	$form->model->set([
+		'name'	=> 'John',
+		'email' => 'some@email.com'
+	]);
+
 Form also relies on a ``atk4\ui\FormLayout`` class and displays fields through
 decorators defined at ``atk4\ui\FormField``. See dedicated documentation for:
 
@@ -157,7 +169,7 @@ specific field type::
 Field Decorator does not have to be added directly into the form. You can use a separate
 :php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`FormField\Generic::$form`::
 
-    $myview = $form->add(['defaultTemplate'=>'./mytemplate.html']);
+    $myview = $form->add(['View', 'defaultTemplate'=>'./mytemplate.html']);
     $myview->add(['FormField\Dropdown', 'form'=>$form]);
 
 .. php:method:: addFields($fields)
@@ -343,10 +355,10 @@ You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model f
         function init() {
             parent::init();
 
-            $this->add('email');
-            $this->add('password', ['type'=>'password']);
+            $this->addField('email');
+            $this->addField('password', ['type'=>'password']);
 
-            $this->add('birth_year', ['type'=>'date', 'ui'=>['type'=>'month']);
+            $this->addField('birth_year', ['type'=>'date', 'ui'=>['type'=>'month']);
         }
     }
 
@@ -354,7 +366,7 @@ The seed for the UI will be combined with the default overriding :php:attr:`Form
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class::
 
-    $this->add('birth_year', ['ui'=>['Calendar', 'type'=>'month']);
+    $this->addField('birth_year', ['ui'=>['Calendar', 'type'=>'month']);
 
 Without the data 'type' property, now the calendar selection will be stored as text.
 
@@ -593,7 +605,7 @@ well as display of labels and structure around the fields themselves is not done
 but another object - "Form Layout". This object is responsible for the field flow, presence
 of labels etc.
 
-.. php:method:: setLayout(FormLayout\Generic $layout)
+.. php:method:: initLayout(FormLayout\Generic $layout)
 
     Sets a custom FormLayout object for a form. If not specified then form will automatically
     use FormLayout\Generic.

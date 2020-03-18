@@ -1,7 +1,7 @@
 <?php
 
 date_default_timezone_set('UTC');
-include 'init.php';
+include_once __DIR__ . '/init.php';
 
 // Paginator which tracks its own position
 $app->add(['Header', 'Paginator tracks its own position']);
@@ -24,9 +24,9 @@ $day = $seg->stickyGet('day') ?: 1;
 
 // we intentionally left 31 days here and do not calculate number of days in particular month to keep example simple
 $month_paginator = $seg->add(['Paginator', 'total' => 12, 'range' => 3, 'urlTrigger' => 'month']);
-$seg->add(['ui'=>'hidden divider']);
+$seg->add(['View', 'ui'=>'hidden divider']);
 $day_paginator = $seg->add(['Paginator', 'total' => 31, 'range' => 3, 'urlTrigger' => 'day']);
-$seg->add(['ui'=>'hidden divider']);
+$seg->add(['View', 'ui'=>'hidden divider']);
 
 $label = $seg->add(['Label']);
 $label->addClass('orange');

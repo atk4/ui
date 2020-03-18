@@ -73,6 +73,7 @@ class ApiService {
       if (response.success) {
         if (response && response.html && response.id) {
           // prevent modal duplication.
+          // apiService.removeModalDuplicate(response.html);
           let modalIDs = [];
           $(response.html).find(".ui.modal[id]").each((i, e) => {
             modalIDs.push('#' + $(e).attr('id'));
@@ -89,6 +90,17 @@ class ApiService {
             console.log('Unable to replace element with id: '+ response.id);
             //throw({message:'Unable to replace element with id: '+ response.id});
           }
+        }
+        if (response && response.modals) {
+          // Create app modal from json response.
+          const modals = Object.keys(response.modals);
+          modals.forEach(function(modal) {
+            const m = $('.ui.dimmer.modals.page').find('#'+modal);
+            if (m.length === 0) {
+              $(document.body).append(response.modals[modal].html);
+              apiService.evalResponse(response.modals[modal].js, jQuery);
+            }
+          });
         }
         if (response && response.atkjs) {
           // Call evalResponse with proper context, js code and jQuery as $ var.
@@ -165,15 +177,15 @@ class ApiService {
   }
 
   /**
-   * Check server response
+   * Check server response and clear api.data object.
    *  - return true will call onSuccess
    *  - return false will call onFailure
    * @param response
    * @returns {boolean}
    */
   successTest(response) {
+    this.data = {};
     if (response.success) {
-      this.data = {};
       return true;
     } else {
       return false;

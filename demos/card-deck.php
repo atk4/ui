@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $app->add(['Button', 'Card Model', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['card-action']);
@@ -15,7 +15,7 @@ $countries->addCalculatedField('Cost', function ($m) {
 });
 
 $action = $countries->addAction('book', [
-    'callback' => function ($m, $city, $email) {
+    'callback' => function ($m, $email, $city) {
         return 'Your request to visit '.ucwords($city).' in '.$m->get('name').' was sent to: '.$email;
     },
     'ui' => ['button'=>[null, 'icon'=>'plane']],
@@ -33,7 +33,7 @@ $info_action = $countries->addAction('request_info', [
     },
     'scope' => 'none',
     'ui'    => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => 'mail']],
-    ]);
+]);
 
 $info_action->args = [
     'email'  => ['type'=>'email', 'required'=>true, 'caption' => 'Please let us know your email address:'],

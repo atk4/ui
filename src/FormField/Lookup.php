@@ -23,7 +23,7 @@ class Lookup extends Input
      *
      * @var string
      */
-    public $empty = '...';
+    public $empty = "\u{00a0}"; // Unicode NBSP
 
     /**
      * Either set this to array of fields which must be searched (e.g. "name", "surname"), or define this
@@ -47,12 +47,11 @@ class Lookup extends Input
     public $plus = false;
 
     /**
-     * Sets the max. amount of records that are loaded. The default 10
-     * displays nicely in UI.
+     * Sets the max. amount of records that are loaded.
      *
      * @var int
      */
-    public $limit = 10;
+    public $limit = 100;
 
     /**
      * Set custom model field here to use it's value as ID in dropdown instead of default model ID field.
@@ -215,9 +214,9 @@ class Lookup extends Input
         }
 
         $this->app->terminate(json_encode([
-                                              'success' => true,
-                                              'results' => $data,
-                                          ]));
+            'success' => true,
+            'results' => $data,
+        ]));
     }
 
     /**
@@ -286,9 +285,9 @@ class Lookup extends Input
             array_unshift($data, ['id' => -1, 'name' => $this->filterEmpty]);
 
             $this->app->terminate(json_encode([
-                                                  'success' => true,
-                                                  'results' => $data,
-                                              ]));
+                'success' => true,
+                'results' => $data,
+            ]));
         }
     }
 
@@ -341,9 +340,9 @@ class Lookup extends Input
     protected function initDropdown($chain)
     {
         $settings = array_merge([
-                                    'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
-                                    'apiSettings' => array_merge(['url' => $this->getCallbackURL().'&q={query}'], $this->apiConfig),
-                                ], $this->settings);
+            'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
+            'apiSettings' => array_merge(['url' => $this->getCallbackURL().'&q={query}'], $this->apiConfig),
+        ], $this->settings);
 
         $chain->dropdown($settings);
     }
@@ -384,19 +383,20 @@ class Lookup extends Input
             $f_name = $this->name.'-ac_f'.$k;
             $chain = new jQuery('#'.$f_name);
             $options = [
-                'fields'       => ['name' => 'name', 'value' => 'id'],
-                'match'        => 'value',
-                'apiSettings'  => ['url'         => $this->getCallbackURL().'&q={query}',
-                                  'cache'        => false,
-                                  'data'         => array_merge($this->getFilterQuery(), ['filter' => $filter['field']]),
-                                  'onResponse'   => new jsFunction(['resp'], [
-                                      new jsExpression('if (!resp.success){atk.apiService.atkSuccessTest(resp);}'),
-                                  ]),
+                'fields'      => ['name' => 'name', 'value' => 'id'],
+                'match'       => 'value',
+                'apiSettings' => [
+                    'url'        => $this->getCallbackURL().'&q={query}',
+                    'cache'      => false,
+                    'data'       => array_merge($this->getFilterQuery(), ['filter' => $filter['field']]),
+                    'onResponse' => new jsFunction(['resp'], [
+                        new jsExpression('if (!resp.success){atk.apiService.atkSuccessTest(resp);}'),
+                    ]),
                 ],
-                'onChange'    => new jsFunction([
-                                                    (new jQuery())->trigger('filterChanged'),
-                                                    $this->getJsDropdown(),
-                                                ]),
+                'onChange'   => new jsFunction([
+                    (new jQuery())->trigger('filterChanged'),
+                    $this->getJsDropdown(),
+                ]),
             ];
 
             $this->js(true, $chain->dropdown($options));

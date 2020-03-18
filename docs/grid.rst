@@ -167,8 +167,8 @@ Sorting
 When grid is associated with a model that supports order, it will automatically make itself sortable. You can
 override this behaviour by setting $sortable property to `true` or `false`.
 
-Additionally you may set list of sortable fields to a sortable property if you wish that your grid would be
-sortable only for those columns.
+You can also set $sortable property for each table column decorator. That way you can enable/disable sorting
+of particular columns.
 
 See also :php:attr:`Table::$sortable`.
 

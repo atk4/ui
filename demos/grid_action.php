@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $country = new Country($db);
 
@@ -32,7 +32,7 @@ $del_executor = new atk4\ui\ActionExecutor\Preview([
             $g->table->jsRemoveRow($model->get('id')),
         ];
     },
-   ]
+]
 );
 
 $del_action = $country->addAction('delete', [
@@ -51,7 +51,7 @@ $g->ipp = 10;
 $g->addUserAction($edit_action);
 $g->addUserAction($del_action);
 
-//$g->addHook('onUserAction', function($g, $page, $executor) {
+//$g->onHook('onUserAction', function($g, $page, $executor) {
 //    $executor->form = $page->add('Form');
 //    $executor->form->addField('test');
 //});

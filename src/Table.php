@@ -207,11 +207,8 @@ class Table extends Lister
             $field = null;
         } elseif (!$existingField) {
             // Add missing field
-            if ($field) {
-                $field = $this->model->addField($name, $field);
-            } else {
-                $field = $this->model->addField($name);
-            }
+            $field = $this->model->addField($name, $field ?: []);
+
             $field->never_persist = true;
         } elseif (is_array($field)) {
             // Add properties to existing field
@@ -227,14 +224,17 @@ class Table extends Lister
             // column is not associated with any model field
             $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this], 'atk4\ui\TableColumn'));
         } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
-            $columnDecorator = $this->decoratorFactory($field, $columnDecorator);
+            $columnDecorator = $this->decoratorFactory($field, array_merge(['columnData' => $name], is_string($columnDecorator) ? [$columnDecorator] : $columnDecorator));
         } elseif (!$columnDecorator) {
-            $columnDecorator = $this->decoratorFactory($field);
+            $columnDecorator = $this->decoratorFactory($field, ['columnData' => $name]);
         } elseif (is_object($columnDecorator)) {
             if (!$columnDecorator instanceof \atk4\ui\TableColumn\Generic) {
                 throw new Exception(['Column decorator must descend from \atk4\ui\TableColumn\Generic', 'columnDecorator' => $columnDecorator]);
             }
             $columnDecorator->table = $this;
+            if (!$columnDecorator->columnData) {
+                $columnDecorator->columnData = $name;
+            }
             $this->_add($columnDecorator);
         } else {
             throw new Exception(['Value of $columnDecorator argument is incorrect', 'columnDecorator' => $columnDecorator]);
@@ -270,7 +270,7 @@ class Table extends Lister
         // set filter to all column when null.
         if (!$cols) {
             foreach ($this->model->getFields() as $key => $field) {
-                if (isset($this->columns[$key]) && $this->columns[$key]) {
+                if (! empty($this->columns[$key])) {
                     $cols[] = $field->short_name;
                 }
             }
@@ -281,7 +281,7 @@ class Table extends Lister
             $col = $this->columns[$colName];
             if ($col) {
                 $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#'.$col->name.'_ac']));
-                $pop->isFilterOn() ? $col->setHeaderPopupIcon('green caret square down') : null;
+                $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
                 $pop->form->onSubmit(function ($f) use ($pop) {
                     return new jsReload($this->reload);
                 });
@@ -332,17 +332,17 @@ class Table extends Lister
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param \atk4\data\Field $f    Data model field
+     * @param \atk4\data\Field $field    Data model field
      * @param mixed            $seed Defaults to pass to factory() when decorator is initialized
      *
      * @return TableColumn\Generic
      */
-    public function decoratorFactory(\atk4\data\Field $f, $seed = [])
+    public function decoratorFactory(\atk4\data\Field $field, $seed = [])
     {
         $seed = $this->mergeSeeds(
             $seed,
-            isset($f->ui['table']) ? $f->ui['table'] : null,
-            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
+            $field->ui['table'] ?? null,
+            $this->typeToDecorator[$field->type] ?? null,
             [$this->default_column ? $this->default_column : 'Generic']
         );
 
@@ -729,12 +729,7 @@ class Table extends Lister
         foreach ($this->columns as $name => $column) {
 
             // If multiple formatters are defined, use the first for the header cell
-
-            if (!is_int($name)) {
-                $field = $this->model->getField($name);
-            } else {
-                $field = null;
-            }
+            $field = !is_int($name) ? $this->model->getField($name) : null;
 
             if (!is_array($column)) {
                 $column = [$column];

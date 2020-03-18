@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $country = new Country($db);
 $ct = $country->tryLoadAny();
@@ -20,7 +20,7 @@ $c = $gl->add(['Card', 'useLabel' => true], 'r1c1');
 $c->addContent(new \atk4\ui\Header(['Using country: ']));
 $c->setModel($country, ['iso', 'iso3', 'phonecode']);
 
-$buttons = $gl->add(['ui'=>'vertical basic buttons'], 'r1c2');
+$buttons = $gl->add(['View', 'ui'=>'vertical basic buttons'], 'r1c2');
 
 $country->unload();
 
@@ -107,7 +107,7 @@ $ac = $country->addAction('multi_step', ['args'=> ['age'=>['type'=>'integer', 'r
 //    $m->save();
     return 'ok';
 }, 'preview'=> function ($m, $age, $gender) {
-    return 'Gender = '.$gender.' / Age = '.$age;
+    return 'Gender = '.$gender.' / Age = '.$age . ' / '.$m->get('iso3');
 }]);
 $btn = $buttons->add(['Button', $ac->getDescription()]);
 $btn->on('click', $ac, ['args' => ['id' =>$id]]);

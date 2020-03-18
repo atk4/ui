@@ -152,7 +152,7 @@ class jsEvent implements jsExpressionable
                 'uri'           => $this->cb->getJSURL(),
                 'uri_options'   => array_merge(['atk_event_id' => $this->modelId], $this->args),
                 'apiConfig'     => ['stateContext' => $this->stateContext],
-        ]);
+            ]);
 
         return $final->jsRender();
     }

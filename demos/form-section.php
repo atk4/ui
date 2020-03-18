@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $app->add(['Button', 'Accordion in Form', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['form-section-accordion']);
@@ -42,7 +42,7 @@ $f->addField('phonecode');
 
 $f->onSubmit($noSave);
 
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);
 
 ////////////////////////////////
 
@@ -64,7 +64,7 @@ $a2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);
 
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);
 
 ////////////////////////////////
 
@@ -86,7 +86,7 @@ $t2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);
 
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);
 
 /////////////////////////////////////////
 
@@ -111,4 +111,4 @@ $c2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);
 
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);

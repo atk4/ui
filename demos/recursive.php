@@ -1,6 +1,6 @@
 <?php
 
-include 'init.php';
+include_once __DIR__ . '/init.php';
 
 class MySwitcher extends \atk4\ui\View
 {
@@ -10,7 +10,7 @@ class MySwitcher extends \atk4\ui\View
 
         $this->add(['Header', 'My name is '.$this->name, 'red']);
 
-        $buttons = $this->add(['ui' => 'basic buttons']);
+        $buttons = $this->add(['View', 'ui' => 'basic buttons']);
         $buttons->add(['Button', 'Yellow'])->setAttr('data-id', 'yellow');
         $buttons->add(['Button', 'Blue'])->setAttr('data-id', 'blue');
         $buttons->add(['Button', 'Button'])->setAttr('data-id', 'button');
@@ -19,16 +19,16 @@ class MySwitcher extends \atk4\ui\View
 
         switch ($this->app->stickyGet($this->name)) {
         case 'yellow':
-            $this->add(['ui' => 'yellow segment'])->add(new self());
+            $this->add(['View', 'ui' => 'yellow segment'])->add(new self());
             break;
         case 'blue':
-            $this->add(['ui' => 'blue segment'])->add(new self());
+            $this->add(['View', 'ui' => 'blue segment'])->add(new self());
             break;
         case 'button':
-            $this->add(['ui' => 'green segment'])->add(['Button', 'Refresh page'])->link([]);
+            $this->add(['View', 'ui' => 'green segment'])->add(['Button', 'Refresh page'])->link([]);
             break;
         }
     }
 }
 
-$app->add(['ui' => 'segment'])->add(new MySwitcher());
+$app->add(['View', 'ui' => 'segment'])->add(new MySwitcher());

@@ -1,7 +1,7 @@
 <?php
 
 date_default_timezone_set('UTC');
-include 'init.php';
+include_once __DIR__ . '/init.php';
 
 $data = [
     ['id'=>1, 'action'=>'Salary', 'amount'=>200],
@@ -24,7 +24,7 @@ $table->template->appendHTML('SubHead', '<tr class="center aligned"><th colspan=
 $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This is part of body, goes before other rows</td></tr>');
 
 // Hook can be used to display data before row. You can also inject and format extra rows.
-$table->addHook('beforeRow', function ($table) {
+$table->onHook('beforeRow', function ($table) {
     if ($table->current_id == 2) {
         $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 ('.$table->current_row['action'].')</th></tr>');
     } elseif ($table->current_row['action'] == 'Tax') {

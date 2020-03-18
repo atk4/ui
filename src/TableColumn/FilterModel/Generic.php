@@ -110,7 +110,7 @@ class Generic extends Model
             }
 
             // Add hook in order to persist data in session.
-            $this->addHook('afterSave', function ($m) {
+            $this->onHook('afterSave', function ($m) {
                 $this->memorize('data', $m->get());
             });
         }

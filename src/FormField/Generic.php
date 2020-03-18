@@ -93,6 +93,7 @@ class Generic extends View
     public function set($value = null, $junk = null)
     {
         if ($this->field) {
+            $value = $this->app->ui_persistence->typecastLoadField($this->field, $value);
             $this->field->set($value);
 
             return $this;
@@ -149,6 +150,19 @@ class Generic extends View
         }
 
         $this->on('change', '#'.$this->id.'_input', $expr, $default);
+    }
+
+    /**
+     * Method similar to View::js() however will adjust selector
+     * to target the "input" element.
+     *
+     * $field->jsInput(true)->val(123);
+     *
+     * @return jQuery
+     */
+    public function jsInput($when = null, $action = null)
+    {
+        return $this->js($when, $action, '#'.$this->id.'_input');
     }
 
     /**

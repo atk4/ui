@@ -1,6 +1,6 @@
 <?php
 
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
 $app->add(['Button', 'Loader Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['loader2']);
@@ -28,7 +28,7 @@ $app->add('Loader')->set(function ($p) {
         // You may pass arguments to the loader, in this case it's "color"
         sleep(3);
         $p->add(['Header', 'Loader #1b - '.$_GET['color']]);
-        $p->add(['ui' => $_GET['color'].' segment'])->add(new \atk4\ui\LoremIpsum(['size' => 1]));
+        $p->add(['View', 'ui' => $_GET['color'].' segment'])->add(new \atk4\ui\LoremIpsum(['size' => 1]));
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:
         $p->app->stickyGet('color');

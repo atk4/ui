@@ -87,26 +87,15 @@ class Input extends Generic
     }
 
     /**
-     * Method similar to View::js() however will adjust selector
-     * to target the "input" element.
-     *
-     * $field->jsInput(true)->val(123);
-     *
-     * @return jQuery
-     */
-    public function jsInput($when = null, $action = null)
-    {
-        return $this->js($when, $action, '#'.$this->id.'_input');
-    }
-
-    /**
      * Returns presentable value to be inserted into input tag.
      *
      * @return mixed
      */
     public function getValue()
     {
-        return isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : (isset($this->content) ? $this->content : '');
+        return isset($this->field)
+                    ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get())
+                    : ($this->content ?? '');
     }
 
     /**

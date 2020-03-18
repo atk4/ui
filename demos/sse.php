@@ -1,6 +1,6 @@
 <?php
 
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
 $app->add(['Header', 'SSE with ProgressBar']);
 
@@ -31,7 +31,7 @@ $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     ];
 }));
 
-$app->add(['ui' => 'divider']);
+$app->add(['View', 'ui' => 'divider']);
 $app->add(['Header', 'SSE operation with user confirmation']);
 
 $sse = $app->add(['jsSSE']);

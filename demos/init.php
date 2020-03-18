@@ -2,11 +2,11 @@
 
 date_default_timezone_set('UTC');
 
-require '../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 /* START - PHPUNIT & COVERAGE SETUP */
-if (file_exists('coverage.php')) {
-    include_once 'coverage.php';
+if (file_exists(__DIR__ . '/coverage.php')) {
+    include_once __DIR__ . '/coverage.php';
 }
 
 class Demo extends \atk4\ui\Columns
@@ -28,7 +28,7 @@ class Demo extends \atk4\ui\Columns
     public function setCode($code, $lang = 'php')
     {
         $this->highLightCode();
-        $this->left->add(['element'=>'pre'])->add(['element' => 'code'])->addClass($lang)->set($code);
+        $this->left->add(['View', 'element'=>'pre'])->add(['View', 'element' => 'code'])->addClass($lang)->set($code);
         $app = $this->right;
         $app->db = $this->app->db;
         eval($code);
@@ -59,7 +59,7 @@ if ($app->catch_exceptions !== true) {
 }
 
 if (file_exists('coverage.php')) {
-    $app->addHook('beforeExit', function () {
+    $app->onHook('beforeExit', function () {
         coverage();
     });
 }
@@ -151,4 +151,4 @@ if (isset($layout->leftMenu)) {
     $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }
 
-require_once 'somedatadef.php';
+require_once __DIR__ . '/somedatadef.php';

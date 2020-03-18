@@ -3,14 +3,14 @@
 // A very basic file that sets up Agile Data to be used in some demonstrations
 try {
     if (file_exists('db.php')) {
-        include 'db.php';
+        include_once __DIR__ . '/db.php';
     } else {
         $db = new \atk4\data\Persistence\SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
     }
 } catch (PDOException $e) {
     throw new \atk4\ui\Exception([
-                                     'This demo requires access to the database. See "demos/database.php"',
-                                 ], null, $e);
+        'This demo requires access to the database. See "demos/database.php"',
+    ], null, $e);
 }
 
 $app->db = $db;
@@ -26,12 +26,12 @@ if (!class_exists('Country')) {
             $this->addField('name', ['actual' => 'nicename', 'required' => true, 'type' => 'string']);
             $this->addField('sys_name', ['actual' => 'name', 'system' => true]);
 
-            $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string']);
+            $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string', 'ui'=>['table'=>['sortable'=>false]]]);
             $this->addField('iso3', ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
             $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
             $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
 
-            $this->addHook('beforeSave', function ($m) {
+            $this->onHook('beforeSave', function ($m) {
                 if (!$m['sys_name']) {
                     $m['sys_name'] = strtoupper($m['name']);
                 }
@@ -79,20 +79,20 @@ if (!class_exists('Country')) {
             $this->addField('client_address', ['type' => 'string', 'ui' => ['form' => [new \atk4\ui\FormField\TextArea(), 'rows' => 4]]]);
 
             $this->hasOne('client_country_iso', [
-                new Country(),
-                'their_field' => 'iso',
-                'ui'          => [
-                    'display' => [
-                        'form' => 'Line',
+                    new Country(),
+                    'their_field' => 'iso',
+                    'ui'          => [
+                        'display' => [
+                            'form' => 'Line',
+                        ],
                     ],
-                ],
-            ])
-                 ->addField('client_country', 'name');
+                ])
+                ->addField('client_country', 'name');
 
             $this->addField('is_commercial', ['type' => 'boolean']);
             $this->addField('currency', ['enum' => ['EUR', 'USD', 'GBP']]);
             $this->addField('currency_symbol', ['never_persist' => true]);
-            $this->addHook('afterLoad', function ($m) {
+            $this->onHook('afterLoad', function ($m) {
                 /* implementation for "intl"
                 $locale='en-UK';
                 $fmt = new \NumberFormatter( $locale."@currency=".$m['currency'], NumberFormatter::CURRENCY );
@@ -159,13 +159,13 @@ if (!class_exists('Country')) {
                 $this->unload();
 
                 $this->save([
-                                'name'      => $fileinfo->getFilename(),
-                                'is_folder' => $fileinfo->isDir(),
-                                'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
-                            ]);
+                    'name'      => $fileinfo->getFilename(),
+                    'is_folder' => $fileinfo->isDir(),
+                    'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
+                ]);
 
                 if ($fileinfo->isDir()) {
-                    $this->ref('SubFolder')->importFromFilesystem($path.'/'.$fileinfo->getFilename());
+                    $this->ref('SubFolder')->importFromFilesystem($path . '/' . $fileinfo->getFilename());
                 }
             }
         }
