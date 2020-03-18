@@ -81,31 +81,31 @@ class ItemShelf extends \atk4\ui\View
     public function init()
     {
         parent::init();
-        $v = $this->add('View', ['ui'=>'fluid']);
-        $cols = $v->add('Columns', ['ui' => 'relaxed divided grid']);
+        $v = $this->add(['View', 'ui'=>'fluid']);
+        $cols = $v->add(['Columns', 'ui' => 'relaxed divided grid']);
 
         $c1 = $cols->addColumn();
-        $c1->add('Header', ['size' => 'small'])->set('Snacks');
-        $l1 = $c1->add('View', ['ui' => 'list']);
-        $l1->add('Item', ['content'=>'Crisps', 'ui' => 'item'])->setElement('a');
-        $l1->add('Item', ['content'=>'Pork Scratchings', 'ui' => 'item'])->setElement('a');
-        $l1->add('Item', ['content'=>'Candies', 'ui' => 'item'])->setElement('a');
-        $l1->add('Item', ['content'=>'Sweets', 'ui' => 'item'])->setElement('a');
+        $c1->add(['Header', 'size' => 'small'])->set('Snacks');
+        $l1 = $c1->add(['View', 'ui' => 'list']);
+        $l1->add(['Item', 'content'=>'Crisps', 'ui' => 'item'])->setElement('a');
+        $l1->add(['Item', 'content'=>'Pork Scratchings', 'ui' => 'item'])->setElement('a');
+        $l1->add(['Item', 'content'=>'Candies', 'ui' => 'item'])->setElement('a');
+        $l1->add(['Item', 'content'=>'Sweets', 'ui' => 'item'])->setElement('a');
 
         $c2 = $cols->addColumn();
-        $c2->add('Header', ['size' => 'small'])->set('Drinks');
-        $l2 = $c2->add('View', ['ui' => 'list']);
-        $l2->add('Item', ['content'=>'Fizzy Drink', 'ui' => 'item'])->setElement('a');
-        $l2->add('Item', ['content'=>'Hot Latte', 'ui' => 'item'])->setElement('a');
-        $l2->add('Item', ['content'=>'Water', 'ui' => 'item'])->setElement('a');
-        $l2->add('Item', ['content'=>'Apple Juice', 'ui' => 'item'])->setElement('a');
+        $c2->add(['Header', 'size' => 'small'])->set('Drinks');
+        $l2 = $c2->add(['View', 'ui' => 'list']);
+        $l2->add(['Item', 'content'=>'Fizzy Drink', 'ui' => 'item'])->setElement('a');
+        $l2->add(['Item', 'content'=>'Hot Latte', 'ui' => 'item'])->setElement('a');
+        $l2->add(['Item', 'content'=>'Water', 'ui' => 'item'])->setElement('a');
+        $l2->add(['Item', 'content'=>'Apple Juice', 'ui' => 'item'])->setElement('a');
 
         $c3 = $cols->addColumn();
-        $c3->add('Header', ['size' => 'small'])->set('Mains');
-        $l3 = $c3->add('View', ['ui' => 'list']);
-        $l3->add('Item', ['content'=>'Chicken Tikka', 'ui' => 'item'])->setElement('a');
-        $l3->add('Item', ['content'=>'Green Curry', 'ui' => 'item'])->setElement('a');
-        $l3->add('Item', ['content'=>'Pastries', 'ui' => 'item'])->setElement('a');
+        $c3->add(['Header', 'size' => 'small'])->set('Mains');
+        $l3 = $c3->add(['View', 'ui' => 'list']);
+        $l3->add(['Item', 'content'=>'Chicken Tikka', 'ui' => 'item'])->setElement('a');
+        $l3->add(['Item', 'content'=>'Green Curry', 'ui' => 'item'])->setElement('a');
+        $l3->add(['Item', 'content'=>'Pastries', 'ui' => 'item'])->setElement('a');
     }
 
     /**
