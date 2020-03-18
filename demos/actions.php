@@ -43,7 +43,7 @@ $executor->setAction($action);
 $executor->ui = 'segment';
 $executor->description = 'Execute action using "Basic" executor and path="." argument';
 $executor->setArguments(['path'=>'.']);
-$executor->addHook('afterExecute', function ($x, $ret) {
+$executor->onHook('afterExecute', function ($x, $ret) {
     return new \atk4\ui\jsToast('Files imported: '.$ret);
 });
 
@@ -51,7 +51,7 @@ $grid->add($executor = new \atk4\ui\ActionExecutor\ArgumentForm(), 'r1c2');
 $executor->setAction($action);
 $executor->description = 'ArgumentForm executor will ask user about arguments';
 $executor->ui = 'segment';
-$executor->addHook('afterExecute', function ($x, $ret) {
+$executor->onHook('afterExecute', function ($x, $ret) {
     return new \atk4\ui\jsToast('Files imported: '.$ret);
 });
 
@@ -61,7 +61,7 @@ $executor->ui = 'segment';
 $executor->previewType = 'console';
 $executor->description = 'Displays preview in console prior to executing';
 $executor->setArguments(['path'=>'.']);
-$executor->addHook('afterExecute', function ($x, $ret) {
+$executor->onHook('afterExecute', function ($x, $ret) {
     return new \atk4\ui\jsToast('Files imported: '.$ret);
 });
 

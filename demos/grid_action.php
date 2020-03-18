@@ -51,7 +51,7 @@ $g->ipp = 10;
 $g->addUserAction($edit_action);
 $g->addUserAction($del_action);
 
-//$g->addHook('onUserAction', function($g, $page, $executor) {
+//$g->onHook('onUserAction', function($g, $page, $executor) {
 //    $executor->form = $page->add('Form');
 //    $executor->form->addField('test');
 //});

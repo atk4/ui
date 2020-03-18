@@ -59,7 +59,7 @@ if ($app->catch_exceptions !== true) {
 }
 
 if (file_exists('coverage.php')) {
-    $app->addHook('beforeExit', function () {
+    $app->onHook('beforeExit', function () {
         coverage();
     });
 }

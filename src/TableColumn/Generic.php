@@ -373,7 +373,7 @@ class Generic
      * will also be formatted before inserting, see UI Persistence formatting in the documentation.
      *
      * This method will be executed only once per table rendering, if you need to format data manually,
-     * you should use $this->table->addHook('formatRow');
+     * you should use $this->table->onHook('formatRow');
      *
      * @param Field $field
      *
