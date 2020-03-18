@@ -98,3 +98,79 @@ $lookup = $form->addField('country_b', [
 $lookup->addFilter('letter1');
 
 $form->buttonSave->set('Add Countries');
+
+$app->add(['Header', 'Auto-complete dependency']);
+
+$form = $app->add(new \atk4\ui\Form(['segment']));
+$form->add(['Label', 'Input information here', 'top attached'], 'AboveFields');
+
+$form->addField('starts_with', [
+    'DropDown',
+    'values'       => [
+        'a' => 'Letter A',
+        'b' => 'Letter B',
+        'c' => 'Letter C',
+    ],
+    'isMultiple'  => true,
+    'hint'        => 'Select start letter that auto-complete selection of Country will depend on.',
+    'placeholder' => 'Search for country starting with ...',
+]);
+
+$form->addField('contains', [
+    'Line',
+    'hint'        => 'Select string that auto-complete selection of Country will depend on.',
+    'placeholder' => 'Search for country containing ...',
+]);
+
+$lookup = $form->addField('country', [
+    'AutoComplete',
+    'model'       => new Country($db),
+    'dependency'  => function ($model, $data) {
+        $conditions = [];
+        foreach (explode(',', $data['starts_with'] ?? '') as $letter) {
+            $conditions[] = ['name', 'like', $letter.'%'];
+        }
+
+        if ($conditions) {
+            $model->addCondition($conditions);
+        }
+
+        isset($data['contains']) ? $model->addCondition('name', 'like', '%'.$data['contains'].'%') : null;
+    },
+    'placeholder' => 'Selection depends on DropDown above',
+    'search'      => ['name', 'iso', 'iso3'],
+]);
+
+$form->onSubmit(function ($form) {
+    return 'Submitted: '.print_r($form->model->get(), true);
+});
+
+$app->add(['Header', 'Auto-complete multiple values']);
+
+$form = $app->add(new \atk4\ui\Form(['segment']));
+$form->add(['Label', 'Input information here', 'top attached'], 'AboveFields');
+
+$form->addField('ends_with', [
+    'DropDown',
+    'values'       => [
+        'a' => 'Letter A',
+        'b' => 'Letter B',
+        'c' => 'Letter C',
+    ],
+    'hint'        => 'Select end letter that auto-complete selection of Country will depend on.',
+    'placeholder' => 'Search for country ending with ...',
+]);
+
+$lookup = $form->addField('country', [
+    'AutoComplete',
+    'model'       => new Country($db),
+    'dependency'  => function ($model, $data) {
+        isset($data['ends_with']) ? $model->addCondition('name', 'like', '%'.$data['ends_with']) : null;
+    },
+    'multiple'    => true,
+    'search'      => ['name', 'iso', 'iso3'],
+]);
+
+$form->onSubmit(function ($form) {
+    return 'Submitted: '.print_r($form->model->get(), true);
+});
