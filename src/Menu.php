@@ -151,14 +151,14 @@ class Menu extends View
     /**
      * Add Item.
      *
-     * @param View|string  $object New object to add
-     * @param string|array $region (or array for full set of defaults)
+     * @param View|string|array $seed   New object to add
+     * @param string|array|null $region
      *
      * @return View
      */
-    public function add($object, $region = null)
+    public function add($seed, $region = null)
     {
-        return parent::add($object, $region)->addClass('item');
+        return parent::add($seed, $region)->addClass('item');
     }
 
     /**
@@ -168,7 +168,7 @@ class Menu extends View
      */
     public function addDivider()
     {
-        return parent::add(['class' => ['divider']]);
+        return parent::add(['View', 'class' => ['divider']]);
     }
 
     /*

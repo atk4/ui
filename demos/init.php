@@ -28,7 +28,7 @@ class Demo extends \atk4\ui\Columns
     public function setCode($code, $lang = 'php')
     {
         $this->highLightCode();
-        $this->left->add(['element'=>'pre'])->add(['element' => 'code'])->addClass($lang)->set($code);
+        $this->left->add(['View', 'element'=>'pre'])->add(['View', 'element' => 'code'])->addClass($lang)->set($code);
         $app = $this->right;
         $app->db = $this->app->db;
         eval($code);
@@ -59,7 +59,7 @@ if ($app->catch_exceptions !== true) {
 }
 
 if (file_exists('coverage.php')) {
-    $app->addHook('beforeExit', function () {
+    $app->onHook('beforeExit', function () {
         coverage();
     });
 }

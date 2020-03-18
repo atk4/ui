@@ -107,7 +107,7 @@ class Generic extends _Abstract
         }
 
         if ($addDivider) {
-            $this->add(['ui' => 'hidden divider']);
+            $this->add(['View', 'ui' => 'hidden divider']);
         }
 
         return $v;

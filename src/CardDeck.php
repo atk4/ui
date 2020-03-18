@@ -35,10 +35,10 @@ class CardDeck extends View
     public $useAction = true;
 
     /** @var null|View The container view. The view that is reload when page or data changed. */
-    public $container = ['ui'=> 'basic segment'];
+    public $container = ['View', 'ui'=> 'basic segment'];
 
     /** @var View The view containing Cards. */
-    public $cardHolder = ['ui' => 'cards'];
+    public $cardHolder = ['View', 'ui' => 'cards'];
 
     /** @var null|View The paginator view. */
     public $paginator = null;
@@ -47,10 +47,10 @@ class CardDeck extends View
     public $ipp = 8;
 
     /** @var null|array A menu seed for displaying button inside. */
-    public $menu = ['ui' => 'stackable grid'];
+    public $menu = ['View', 'ui' => 'stackable grid'];
 
     /** @var array|ItemSearch */
-    public $search = ['ui' => 'ui compact basic segment'];
+    public $search = ['View', 'ui' => 'ui compact basic segment'];
 
     /** @var null A view container for buttons. Added into menu when menu is set. */
     private $btns = null;
@@ -119,10 +119,10 @@ class CardDeck extends View
     {
         $this->menu = $this->add($this->factory(View::class, $this->menu), 'Menu');
 
-        $left = $this->menu->add(['ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
-        $this->btns = $left->add(['ui' => 'buttons']);
+        $left = $this->menu->add(['View', 'ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
+        $this->btns = $left->add(['View', 'ui' => 'buttons']);
         if ($this->search !== false) {
-            $right = $this->menu->add(['ui' => 'four wide column']);
+            $right = $this->menu->add(['View', 'ui' => 'four wide column']);
             $this->search = $right->add($this->factory(ItemSearch::class, array_merge($this->search, ['context' => '#'.$this->container->name])));
             $this->search->reload = $this->container;
             $this->query = $this->app->stickyGet($this->search->queryArg);
@@ -231,7 +231,7 @@ class CardDeck extends View
                 return $this->jsExecute($return, $action);
             };
         } else {
-            $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
+            $executor->onHook('afterExecute', function ($ex, $return, $id) use ($action) {
                 return $this->jsExecute($return, $action);
             });
         }
@@ -460,7 +460,7 @@ class CardDeck extends View
     public function renderView()
     {
         if (($this->menu && count($this->menuActions) > 0) || $this->search !== false) {
-            $this->add(['ui' => 'divider'], 'Divider');
+            $this->add(['View', 'ui' => 'divider'], 'Divider');
         }
 
         if (($_GET['__atk_reload'] ?? null) === $this->container->name) {

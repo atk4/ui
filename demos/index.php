@@ -74,7 +74,7 @@ $wizard->addStep('Interactivity', function ($page) {
     /** @var \atk4\ui\Text $t */
     $t = $page->add('Text');
     $t->addParagraph(<<< 'EOF'
-PHP is a server-side language. That prompted us to implement server-side UI actions. They are very easy to define - 
+PHP is a server-side language. That prompted us to implement server-side UI actions. They are very easy to define -
 no need to create any routes or custom routines, simply define a PHP closure like this:
 EOF
     );
@@ -96,19 +96,19 @@ EOF
     );
 
     $page->add(new Demo())->setCode(<<<'CODE'
-    
-$seg = $app->add(['ui'=>'segment']);
+
+$seg = $app->add(['View', 'ui'=>'segment']);
 
 $seg->add('Text')->set('Number of buttons: ');
 
 $paginator = $seg->add([
-    'Paginator', 
-    'total'=>5, 
+    'Paginator',
+    'total'=>5,
     'reload'=>$seg,
     'urlTrigger'=>'count'
 ]);
 
-$seg->add(['ui'=>'divider']);
+$seg->add(['View', 'ui'=>'divider']);
 
 for($i=1; $i <= ($_GET['count'] ?? 1); $i++) {
     $seg->add(['Button', $i]);
@@ -141,7 +141,7 @@ class Invoice extends \atk4\data\Model {
     public $title_field = 'reference';
     function init() {
         parent::init();
-        
+
         $this->addField('reference');
         $this->addField('date', ['type'=>'date']);
     }
@@ -154,7 +154,7 @@ $form = $app->add('Form');
 $form->setModel(new Invoice($session))
     ->tryLoad(1);
 
-$app->add(['ui'=>'divider']);
+$app->add(['View', 'ui'=>'divider']);
 $app->add(['Button', 'Refresh', 'icon'=>'refresh'])
     ->on('click', $app->jsReload());
 
@@ -163,7 +163,7 @@ CODE
 
     $t = $page->add('Text');
     $t->addParagraph(<<< 'EOF'
-This code shows you a combination of 3 objects: 
+This code shows you a combination of 3 objects:
 EOF
     );
     $t->addHTML(<<< 'HTML'
@@ -253,7 +253,7 @@ HTML
     $wizard->add(['Button', 'Exit demo', 'primary', 'icon'=>'left arrow'], 'Left')
         ->link(['begin'=>false, 'layout'=>false]);
 
-    $page->add(['ui'=>'divider']);
+    $page->add(['View', 'ui'=>'divider']);
 
     $page->add(['Message', 'Cool fact!', 'info', 'icon'=>'book'])->text
         ->addParagraph('This entire demo is coded in Agile Toolkit and takes up less than 300 lines of very simple code code!');

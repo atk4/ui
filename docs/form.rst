@@ -169,7 +169,7 @@ specific field type::
 Field Decorator does not have to be added directly into the form. You can use a separate
 :php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`FormField\Generic::$form`::
 
-    $myview = $form->add(['defaultTemplate'=>'./mytemplate.html']);
+    $myview = $form->add(['View', 'defaultTemplate'=>'./mytemplate.html']);
     $myview->add(['FormField\Dropdown', 'form'=>$form]);
 
 .. php:method:: addFields($fields)
@@ -355,10 +355,10 @@ You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model f
         function init() {
             parent::init();
 
-            $this->add('email');
-            $this->add('password', ['type'=>'password']);
+            $this->addField('email');
+            $this->addField('password', ['type'=>'password']);
 
-            $this->add('birth_year', ['type'=>'date', 'ui'=>['type'=>'month']);
+            $this->addField('birth_year', ['type'=>'date', 'ui'=>['type'=>'month']);
         }
     }
 
@@ -366,7 +366,7 @@ The seed for the UI will be combined with the default overriding :php:attr:`Form
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class::
 
-    $this->add('birth_year', ['ui'=>['Calendar', 'type'=>'month']);
+    $this->addField('birth_year', ['ui'=>['Calendar', 'type'=>'month']);
 
 Without the data 'type' property, now the calendar selection will be stored as text.
 

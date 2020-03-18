@@ -7,7 +7,7 @@ require_once __DIR__ . '/database.php';
 $app->add(['Header', 'Table column may contains popup or dropdown menu.']);
 
 // Better Popup positionning when Popup are inside a container.
-$container = $app->add(['ui' => 'vertical segment']);
+$container = $app->add(['View', 'ui' => 'vertical segment']);
 $table = $container->add(['Table', 'celled' => true]);
 $table->setModel(new SomeData(), false);
 

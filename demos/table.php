@@ -25,7 +25,7 @@ $table->addColumn('date');
 $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 $table->addColumn('logo_url', [new \atk4\ui\TableColumn\Image()], ['caption'=>'Our Logo']);
 
-$table->addHook('getHTMLTags', function ($table, $row) {
+$table->onHook('getHTMLTags', function ($table, $row) {
     if ($row->id == 1) {
         return [
             'name' => $table->app->getTag('div', ['class' => 'ui ribbon label'], $row['name']),

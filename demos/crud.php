@@ -32,7 +32,7 @@ $g->setModel($m);
 
 $g->addDecorator($m->title_field, ['Link', ['test' => false, 'path' => 'interfaces/page'], ['_id'=>'id']]);
 
-$app->add(['ui'=>'divider']);
+$app->add(['View', 'ui'=>'divider']);
 
 $c = $app->add('Columns');
 $cc = $c->addColumn(0, 'ui blue segment');
@@ -52,7 +52,7 @@ $crud = $cc->add([
 // Condition on the model can be applied on a model
 $m = new Country($db);
 $m->addCondition('numcode', '<', 200);
-$m->addHook('validate', function ($m2, $intent) {
+$m->onHook('validate', function ($m2, $intent) {
     $err = [];
     if ($m2->get('numcode') >= 200) {
         $err['numcode'] = 'Should be less than 200';

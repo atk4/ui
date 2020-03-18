@@ -243,7 +243,7 @@ class MultiLine extends Generic
         $this->cb = $this->add('jsCallback');
 
         // load the data associated with this input and validate it.
-        $this->form->addHook('loadPOST', function ($form) {
+        $this->form->onHook('loadPOST', function ($form) {
             $this->rowData = json_decode($_POST[$this->short_name], true);
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
@@ -254,7 +254,7 @@ class MultiLine extends Generic
         });
 
         // Change form error handling.
-        $this->form->addHook('displayError', function ($form, $fieldName, $str) {
+        $this->form->onHook('displayError', function ($form, $fieldName, $str) {
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
             if ($fieldName === $this->short_name) {

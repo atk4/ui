@@ -5,6 +5,7 @@ namespace atk4\ui;
 use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
 use atk4\core\InitializerTrait;
+use atk4\core\StaticAddToTrait;
 use atk4\core\TrackableTrait;
 
 /**
@@ -29,6 +30,7 @@ class Callback
     use InitializerTrait {
         init as _init;
     }
+    use StaticAddToTrait;
 
     /**
      * Will look for trigger in the POST data. Will not care about URL, but

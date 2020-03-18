@@ -9,7 +9,7 @@ $crumb = $app->add('BreadCrumb');
 $crumb->addCrumb('UI Demo', ['index']);
 $crumb->addCrumb('BreadCrumb Demo', ['breadcrumb']);
 
-$app->add(['ui'=>'divider']);
+$app->add(['View', 'ui'=>'divider']);
 
 $crumb->addCrumb('Countries', []);
 

@@ -668,7 +668,8 @@ class Template implements \ArrayAccess
     public function tryLoad($filename)
     {
         if (is_readable($filename) && is_file($filename)) {
-            $this->loadTemplateFromString(file_get_contents($filename));
+            $str = preg_replace('~(?:\r\n?|\n)$~s', '', file_get_contents($filename)); // load file and trim end NL
+            $this->loadTemplateFromString($str);
             $this->source = 'loaded from file: '.$filename;
 
             return $this;

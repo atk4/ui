@@ -109,7 +109,7 @@ $field = $form->addField('name', ['Line', 'hint'=>'this is sample hint that esca
 $field->set('value in a form');
 
 $field = $form->addField('surname', new \atk4\ui\FormField\Line([
-    'hint'=> ['template'=> new \atk4\ui\Template(
+    'hint'=> ['View', 'template'=> new \atk4\ui\Template(
         'Click <a href="http://example.com/" target="_blank">here</a>'
     )],
 ]));
@@ -122,7 +122,7 @@ $app->add(['Header', 'Multiple Form Layouts']);
 
 $form = $app->add('Form');
 $tabs = $form->add('Tabs', 'AboveFields');
-$form->add(['ui' => 'divider'], 'AboveFields');
+$form->add(['View', 'ui' => 'divider'], 'AboveFields');
 
 $form_page = $tabs->addTab('Basic Info')->add(['FormLayout/Generic', 'form' => $form]);
 $form_page->addField('name', new \atk4\ui\FormField\Line());

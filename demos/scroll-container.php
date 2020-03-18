@@ -19,7 +19,7 @@ $lister_template = '<div id="{$_id}">{List}<div id="{$_id}" class="ui segment" s
 
 $lister_container = $scroll_container->add(['View', 'template' => new \atk4\ui\Template($lister_template)]);
 
-$l = $lister_container->add('Lister', 'List')->addHook('beforeRow', function ($l) {
+$l = $lister_container->add('Lister', 'List')->onHook('beforeRow', function ($l) {
     $l->current_row['iso'] = strtolower($l->current_row['iso']);
 });
 $l->setModel(new Country($db));
