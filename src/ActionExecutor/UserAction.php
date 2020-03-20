@@ -259,9 +259,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
             }
 
             if (isset($val['model'])) {
-                if (is_string($val['model'])) {
-                    $val['model'] = $this->factory($val['model']);
-                }
+                $val['model'] = $this->factory($val['model']);
                 $f->addField($key, ['Lookup'])->setModel($val['model']);
             } else {
                 $f->addField($key, null, $val);

@@ -44,9 +44,7 @@ class ArgumentForm extends Basic
             }
 
             if (isset($val['model'])) {
-                if (is_string($val['model'])) {
-                    $val['model'] = $this->factory($val['model']);
-                }
+                $val['model'] = $this->factory($val['model']);
                 $this->form->addField($key, ['Lookup'])->setModel($val['model']);
             } else {
                 $this->form->addField($key, null, $val);
