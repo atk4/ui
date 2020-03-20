@@ -6,6 +6,7 @@
 namespace atk4\ui\ActionExecutor;
 
 use atk4\core\HookTrait;
+use atk4\data\Model;
 use atk4\data\UserAction\Generic;
 use atk4\data\ValidationException;
 use atk4\ui\Button;
@@ -253,8 +254,15 @@ class UserAction extends Modal implements Interface_, jsInterface_
                 throw new Exception(['Action arguments must be named', 'args' => $this->actions->args]);
             }
 
-            if ($val instanceof \atk4\data\Model) {
-                $f->addField($key, ['AutoComplete'])->setModel($val);
+            if ($val instanceof Model) {
+                $val = ['model' => $val];
+            }
+
+            if (isset($val['model'])) {
+                if (is_string($val['model'])) {
+                    $val['model'] = $this->factory($val['model']);
+                }
+                $f->addField($key, ['Lookup'])->setModel($val['model']);
             } else {
                 $f->addField($key, null, $val);
             }
