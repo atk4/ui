@@ -2,6 +2,7 @@
 
 namespace atk4\ui\ActionExecutor;
 
+use atk4\data\Model;
 use atk4\ui\Exception;
 use atk4\ui\Form;
 
@@ -38,8 +39,13 @@ class ArgumentForm extends Basic
                 throw new Exception(['Action arguments must be named', 'args'=>$this->actions->args]);
             }
 
-            if ($val instanceof \atk4\data\Model) {
-                $this->form->addField($key, ['AutoComplete'])->setModel($val);
+            if ($val instanceof Model) {
+                $val = ['model' => $val];
+            }
+
+            if (isset($val['model'])) {
+                $val['model'] = $this->factory($val['model']);
+                $this->form->addField($key, ['Lookup'])->setModel($val['model']);
             } else {
                 $this->form->addField($key, null, $val);
             }
@@ -69,7 +75,7 @@ class ArgumentForm extends Basic
 
                 if (is_callable($val)) {
                     $val = $val($this->model, $this->method, $data);
-                } elseif ($val instanceof \atk4\data\Model) {
+                } elseif ($val instanceof Model) {
                     $val->load($data[$key]);
                 } else {
                     $val = $data[$key];
