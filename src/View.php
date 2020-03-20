@@ -418,8 +418,11 @@ class View implements jsExpressionable
             if (is_string($object)) {
                 $object = [$object];
             }
-            if (is_string(reset($object)) && key($object) === 0) {
-                $object[key($object)] = $this->normalizeClassName($object[key($object)], 'atk4\ui');
+            if (!isset($object[0])) {
+                $object[0] = self::class; // self here, BC compatibility !
+            }
+            if (isset($object[0]) && is_string($object[0])) {
+                $object[0] = $this->normalizeClassName($object[0], 'atk4\ui');
             }
 
             $object = self::addToWithClassNameUnsafe($this, $object, [], true);
