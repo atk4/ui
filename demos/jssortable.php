@@ -14,8 +14,8 @@ $dragHandler->onReorder(function ($order) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-$view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('
-    <div class="ui header">Click and drag country to reorder</div>
+$view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template(
+    '<div class="ui header">Click and drag country to reorder</div>
     <div id="{$_id}" style="cursor: pointer">
         <ul>
             {List}<li class="ui icon label" data-name="{$name}"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</li>{/}
@@ -36,7 +36,7 @@ $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
     if (@$_GET['btn']) {
         return new \atk4\ui\jsNotify(implode(' - ', $order));
     } else {
-        return new \atk4\ui\jsNotify($src.' moved from position '.$oldPos.' to '.$pos);
+        return new \atk4\ui\jsNotify($src . ' moved from position ' . $oldPos . ' to ' . $pos);
     }
 });
 

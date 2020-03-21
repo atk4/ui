@@ -21,8 +21,8 @@ $view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div>
 
 $lister = \atk4\ui\Lister::addTo($view, [], ['List']);
 $lister->onHook('beforeRow', function ($l) {
-        $l->current_row['iso'] = strtolower($l->current_row['iso']);
-    });
+    $l->current_row['iso'] = strtolower($l->current_row['iso']);
+});
 $lister->setModel(new Country($db))
     ->setLimit(20);
 
