@@ -70,7 +70,7 @@ class Admin extends Generic
         }
 
         if ($this->menuLeft === null) {
-            $this->menuLeft = $this->add(new Menu('left vertical inverted labeled sidebar'), 'LeftMenu');
+            $this->menuLeft = Menu::addTo($this, ['left vertical inverted labeled sidebar'], ['LeftMenu']);
             $this->leftMenu = $this->menuLeft;
 
             $closeIcon = \atk4\ui\View::addTo($this->menuLeft, ['template' => new Template('<a id="{$_id}" href="#" onclick="return false;" class="{$class} item atk-leftMenuClose"><i class="close icon"></i></a>')]);

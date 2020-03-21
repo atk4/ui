@@ -9,8 +9,8 @@ use atk4\ui\View;
 
 \atk4\ui\Header::addTo($app, ['CheckBoxes', 'size'=>2]);
 
-    $app->add(new CheckBox('Make my profile visible'));
-    $app->add(new CheckBox('Make my profile visible ticked'))->set(true);
+    CheckBox::addTo($app, ['Make my profile visible']);
+    CheckBox::addTo($app, ['Make my profile visible ticked'])->set(true);
 
     View::addTo($app, ['ui' => 'divider']);
     CheckBox::addTo($app, ['Accept terms and conditions', 'slider']);

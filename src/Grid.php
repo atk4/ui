@@ -206,7 +206,7 @@ class Grid extends View
             throw new Exception(['Unable to add Button without Menu']);
         }
 
-        return $this->menu->addItem()->add(new Button($text));
+        return Button::addTo($this->menu->addItem(), [$text]);
     }
 
     /**

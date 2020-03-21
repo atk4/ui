@@ -27,34 +27,34 @@ MyButton::addTo($app, $app->url(['c' => 'OHO']));
 MyButton::addTo($app, $app->url(['xx' => 'YEY', 'c' => 'OHO']));
 
 // URLs presented by a blank app
-$app->add(new \atk4\ui\Header('URLs presented by a blank app'));
-$app->add(new Button($app->url()));
-$app->add(new Button($app->url(['b' => 2])));
-$app->add(new Button($app->url(['b' => 2, 'c' => false])));
-$app->add(new Button($app->url(['b' => 2, 'c' => null])));
-$app->add(new Button($app->url(['b' => 2, 'c' => 'abc'])));
+\atk4\ui\Header::addTo($app, ['URLs presented by a blank app']);
+Button::addTo($app, [$app->url()]);
+Button::addTo($app, [$app->url(['b' => 2])]);
+Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
+Button::addTo($app, [$app->url(['b' => 2, 'c' => null])]);
+Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
 // Sticky for xx=
-$app->add(new \atk4\ui\Header('Now add sticky for xx='.$app->stickyGET('xx')));
-$app->add(new Button($app->url()));
-$app->add(new Button($app->url(['b' => 2])));
-$app->add(new Button($app->url(['b' => 2, 'c' => false])));
-$app->add(new Button($app->url(['b' => 2, 'c' => null])));
-$app->add(new Button($app->url(['b' => 2, 'c' => 'abc'])));
+\atk4\ui\Header::addTo($app, ['Now add sticky for xx='.$app->stickyGET('xx')]);
+Button::addTo($app, [$app->url()]);
+Button::addTo($app, [$app->url(['b' => 2])]);
+Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
+Button::addTo($app, [$app->url(['b' => 2, 'c' => null])]);
+Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
 // Sticky for c=
-$app->add(new \atk4\ui\Header('Now also add sticky for c='.$app->stickyGET('c')));
-$app->add(new Button($app->url()));
-$app->add(new Button($app->url(['b' => 2])));
-$app->add(new Button($app->url(['b' => 2, 'c' => false])));
-$app->add(new Button($app->url(['b' => 2, 'c' => null])));
-$app->add(new Button($app->url(['b' => 2, 'c' => 'abc'])));
+\atk4\ui\Header::addTo($app, ['Now also add sticky for c='.$app->stickyGET('c')]);
+Button::addTo($app, [$app->url()]);
+Button::addTo($app, [$app->url(['b' => 2])]);
+Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
+Button::addTo($app, [$app->url(['b' => 2, 'c' => null])]);
+Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
 // Various ways to build links
-$app->add(new \atk4\ui\Header('Various ways to build links'));
-$app->add(new Button($app->url()));
-$app->add(new Button($app->url('other.php')));
-$app->add(new Button($app->url('other')));
-$app->add(new Button($app->url(['other', 'b' => 2])));
-$app->add(new Button($app->url('http://yahoo.com/')));
-$app->add(new Button($app->url('http://yahoo.com/?q=abc')));
+\atk4\ui\Header::addTo($app, ['Various ways to build links']);
+Button::addTo($app, [$app->url()]);
+Button::addTo($app, [$app->url('other.php')]);
+Button::addTo($app, [$app->url('other')]);
+Button::addTo($app, [$app->url(['other', 'b' => 2])]);
+Button::addTo($app, [$app->url('http://yahoo.com/')]);
+Button::addTo($app, [$app->url('http://yahoo.com/?q=abc')]);

@@ -83,7 +83,7 @@ class Generic extends _Abstract
 
         $label['form'] = $this->form;
 
-        return $this->add(new static($label));
+        return static::addTo($this, [$label]);
     }
 
     /**

@@ -41,7 +41,7 @@ $dd->setSource(['.com', '.net', '.org']);
 // left/right corner is not supported, but here is work-around:
 $label = new \atk4\ui\Label();
 $label->addClass('left corner');
-$label->add(new \atk4\ui\Icon('asterisk'));
+\atk4\ui\Icon::addTo($label, ['asterisk']);
 
 \atk4\ui\FormField\Line::addTo($app, [
     'label' => $label,
@@ -49,7 +49,7 @@ $label->add(new \atk4\ui\Icon('asterisk'));
 
 $label = new \atk4\ui\Label();
 $label->addClass('corner');
-$label->add(new \atk4\ui\Icon('asterisk'));
+\atk4\ui\Icon::addTo($label, ['asterisk']);
 
 \atk4\ui\FormField\Line::addTo($app, [
     'label' => $label,
@@ -72,8 +72,7 @@ $dd->setSource(['This Organisation', 'Entire Site']);
 // double actions are not supported but you can add them yourself
 $dd = new \atk4\ui\DropDown(['Articles', 'compact selection']);
 $dd->setSource(['All', 'Services', 'Products']);
-\atk4\ui\FormField\Line::addTo($app, ['iconLeft' => 'search',  'action' => $dd])
-    ->add(new \atk4\ui\Button('Search'), 'AfterAfterInput');
+\atk4\ui\Button::addTo(\atk4\ui\FormField\Line::addTo($app, ['iconLeft' => 'search',  'action' => $dd]), ['Search'], ['AfterAfterInput']);
 
 \atk4\ui\FormField\Line::addTo($app, ['action' => new \atk4\ui\Button([
     'Copy', 'iconRight' => 'copy', 'teal',

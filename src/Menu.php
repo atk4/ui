@@ -79,7 +79,7 @@ class Menu extends View
      */
     public function addHeader($name)
     {
-        return $this->add(new Item($name))->addClass('header');
+        return Item::addTo($this, [$name])->addClass('header');
     }
 
     /**
@@ -102,7 +102,7 @@ class Menu extends View
         }
 
         if (!empty($name['icon'])) {
-            $subMenu->add(new Icon($name['icon']), 'Icon')->removeClass('item');
+            Icon::addTo($subMenu, [$name['icon']], ['Icon'])->removeClass('item');
         }
 
         if (!$this->in_dropdown) {
@@ -132,7 +132,7 @@ class Menu extends View
         }
 
         if (!empty($name['icon'])) {
-            $group->add(new Icon($name['icon']), 'Icon')->removeClass('item');
+            Icon::addTo($group, [$name['icon']], ['Icon'])->removeClass('item');
         }
 
         return $group;

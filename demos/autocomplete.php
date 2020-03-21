@@ -58,7 +58,7 @@ $form->onSubmit(function ($f) use ($db) {
 // left/right corner is not supported, but here is work-around:
 $label = new \atk4\ui\Label();
 $label->addClass('left corner');
-$label->add(new \atk4\ui\Icon('asterisk'));
+\atk4\ui\Icon::addTo($label, ['asterisk']);
 
 \atk4\ui\FormField\AutoComplete::addTo($app, [
     'label' => $label,

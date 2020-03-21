@@ -52,7 +52,7 @@ class ForkButton extends Button
 {
     public function __construct($n)
     {
-        Button::addTo($this, ['Forks', 'blue'])->add(new Icon('fork'));
+        Icon::addTo(Button::addTo($this, ['Forks', 'blue']), ['fork']);
         Label::addTo($this, [number_format($n), 'basic blue left pointing']);
         parent::__construct(null, 'labeled');
     }
@@ -64,7 +64,7 @@ ForkButton::addTo($app, 1234 + rand(1, 100));
 
 $view = \atk4\ui\View::addTo($app, ['template' => new Template('Hello, {$tag1}, my name is {$tag2}')]);
 
-$view->add(new Button('World'), 'tag1');
+Button::addTo($view, ['World'], ['tag1']);
 Button::addTo($view, ['Agile UI', 'blue'], ['tag2']);
 
 \atk4\ui\Header::addTo($app, ['Attaching', 'size' => 2]);

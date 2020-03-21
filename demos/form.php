@@ -171,9 +171,9 @@ $f->onSubmit(function ($f) {
 ////////////////////////////////////////
 $tab = $tabs->addTab('Layout Control');
 
-$tab->add(new \atk4\ui\Header('Shows example of grouping and multiple errors'));
+\atk4\ui\Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
-$f = $tab->add(new \atk4\ui\Form('segment'));
+$f = \atk4\ui\Form::addTo($tab, ['segment']);
 $f->setModel(new \atk4\data\Model());
 
 $f->addHeader('Example fields added one-by-one');
