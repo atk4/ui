@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/init.php';
 
-$form = $app->add('Form');
+$form = \atk4\ui\Form::addTo($app);
 $img = $form->addField('img', ['UploadImg', ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
 
 //$img->set('a_new_token', 'an-img-file-name');

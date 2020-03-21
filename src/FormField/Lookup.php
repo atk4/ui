@@ -136,13 +136,13 @@ class Lookup extends Input
         }
         //var_Dump($this->model->get());
         if ($this->form) {
-            $vp = $this->form->add('VirtualPage');
+            $vp = \atk4\ui\VirtualPage::addTo($this->form);
         } else {
-            $vp = $this->owner->add('VirtualPage');
+            $vp = \atk4\ui\VirtualPage::addTo($this->owner);
         }
 
         $vp->set(function ($p) {
-            $f = $p->add('Form');
+            $f = \atk4\ui\Form::addTo($p);
             $f->setModel($this->model);
 
             $f->onSubmit(function ($f) {
@@ -460,7 +460,7 @@ class Lookup extends Input
 
     public function renderView()
     {
-        $this->callback = $this->add('Callback');
+        $this->callback = \atk4\ui\Callback::addTo($this);
         $this->callback->set([$this, 'getData']);
 
         if ($this->disabled) {

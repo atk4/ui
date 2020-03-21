@@ -3,20 +3,20 @@
 include_once __DIR__ . '/init.php';
 
 if (!$app->stickyget('begin')) {
-    $app->add('Header')->set('Welcome to Agile Toolkit Demo!!');
+    \atk4\ui\Header::addTo($app)->set('Welcome to Agile Toolkit Demo!!');
 
-    $t = $app->add(['View', false, 'green', 'ui' => 'segment'])->add('Text');
+    $t = \atk4\ui\Text::addTo(\atk4\ui\View::addTo($app, [false, 'green', 'ui' => 'segment']));
     $t->addParagraph('Take a quick stroll through some of the amazing features of Agile Toolkit.');
 
-    $app->add(['Button', 'Begin the demo..', 'huge primary fluid', 'iconRight' => 'right arrow'])
+    \atk4\ui\Button::addTo($app, ['Begin the demo..', 'huge primary fluid', 'iconRight' => 'right arrow'])
         ->link(['layout' => 'Centered', 'begin' => true]);
 
-    $app->add('Header')->set('What is new in Agile Toolkit 2.0');
+    \atk4\ui\Header::addTo($app)->set('What is new in Agile Toolkit 2.0');
 
-    $t = $app->add(['View', false, 'green', 'ui' => 'segment'])->add('Text');
+    $t = \atk4\ui\Text::addTo(\atk4\ui\View::addTo($app, [false, 'green', 'ui' => 'segment']));
     $t->addParagraph('In this version of Agile Toolkit we introduce "User Actions"!');
 
-    $app->add(['Button', 'Learn about User Actions', 'huge basic primary fluid', 'iconRight' => 'right arrow'])
+    \atk4\ui\Button::addTo($app, ['Learn about User Actions', 'huge basic primary fluid', 'iconRight' => 'right arrow'])
         ->link(['tutorial_actions', 'layout' => 'Centered', 'begin' => true]);
 
     $app->callExit();
@@ -84,7 +84,7 @@ $button->on('click', function() {
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 A component of Agile Toolkit (callback) enables seamless communication between the frontend components (which are often
 written in VueJS) and the backend. We also support seamless reloading of any UI widget:
@@ -113,7 +113,7 @@ for($i=1; $i <= ($_GET['count'] ?? 1); $i++) {
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 This demo also shows you how to create composite views. The '$seg' above contains text, paginator, divider and some
 buttons. Interestingly, Paginator view also consists of buttons and Agile Toolkit renders everything reliably.
@@ -155,7 +155,7 @@ $app->add(['Button', 'Refresh', 'icon'=>'refresh'])
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 This code shows you a combination of 3 objects:
 EOF
@@ -206,7 +206,7 @@ $app->add('Card')->setModel($model, ['date']);
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Re-use of your Business Model code, generic and interactive views and principles of composition and a simple PHP
 code offers a most efficient way of constructing Web Applications.
@@ -215,7 +215,7 @@ EOF
 });
 
 $wizard->addFinish(function ($page) use ($wizard) {
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Agile Toolkit base package includes:
 EOF
@@ -233,20 +233,20 @@ HTML
     );
 
     $gl = $page->add(new \atk4\ui\GridLayout([null, 'stackable divided', 'columns'=>4]));
-    $gl->add(['Button', 'Explore UI components', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c1')
+    \atk4\ui\Button::addTo($gl, ['Explore UI components', 'primary basic fluid', 'iconRight'=>'right arrow'], ['r1c1'])
         ->link('https://github.com/atk4/ui/#bundled-and-planned-components');
-    $gl->add(['Button', 'Try out interactive features', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c2')
+    \atk4\ui\Button::addTo($gl, ['Try out interactive features', 'primary basic fluid', 'iconRight'=>'right arrow'], ['r1c2'])
         ->link(['loader', 'begin'=>false, 'layout'=>false]);
-    $gl->add(['Button', 'Dive into Agile Data', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c3')
+    \atk4\ui\Button::addTo($gl, ['Dive into Agile Data', 'primary basic fluid', 'iconRight'=>'right arrow'], ['r1c3'])
         ->link('https://git.io/ad');
-    $gl->add(['Button', 'More ATK Add-ons', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c4')
+    \atk4\ui\Button::addTo($gl, ['More ATK Add-ons', 'primary basic fluid', 'iconRight'=>'right arrow'], ['r1c4'])
         ->link('https://github.com/atk4/ui/#add-ons-and-integrations');
 
-    $wizard->add(['Button', 'Exit demo', 'primary', 'icon'=>'left arrow'], 'Left')
+    \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon'=>'left arrow'], ['Left'])
         ->link(['begin'=>false, 'layout'=>false]);
 
-    $page->add(['View', 'ui'=>'divider']);
+    \atk4\ui\View::addTo($page, ['ui'=>'divider']);
 
-    $page->add(['Message', 'Cool fact!', 'info', 'icon'=>'book'])->text
+    \atk4\ui\Message::addTo($page, ['Cool fact!', 'info', 'icon'=>'book'])->text
         ->addParagraph('This entire demo is coded in Agile Toolkit and takes up less than 300 lines of very simple code code!');
 });

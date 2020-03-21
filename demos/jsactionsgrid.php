@@ -3,9 +3,9 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$app->add(['Button', 'Actions from jsEvent', 'small left floated basic blue', 'icon' => 'left arrow'])
+\atk4\ui\Button::addTo($app, ['Actions from jsEvent', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['jsactions2']);
-$app->add(['View', 'ui' => 'ui clearing divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
 $country = new Country($db);
 
@@ -62,16 +62,16 @@ $country->addAction('multi_step',
     ]
 );
 
-$g = $app->add(['Grid', 'menu' => false]);
+$g = \atk4\ui\Grid::addTo($app, ['menu' => false]);
 $g->setModel($country);
 
 $divider = $app->factory('View', ['id' => false, 'class' => ['divider'], 'content' => ''], 'atk4\ui');
 
 $model_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'content' => 'Model Actions'], 'atk4\ui');
-$model_header->add(['Icon', 'content' => 'database']);
+\atk4\ui\Icon::addTo($model_header, ['content' => 'database']);
 
 $js_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'content' => 'Js Actions'], 'atk4\ui');
-$js_header->add(['Icon', 'content' => 'file code']);
+\atk4\ui\Icon::addTo($js_header, ['content' => 'file code']);
 
 $g->addActionMenuItem($js_header);
 $g->addActionMenuItem('Js Callback', function () {
@@ -95,7 +95,7 @@ $g->addActionMenuItems(
 );
 
 $special_item = $app->factory('View', ['id' => false, 'class' => ['item'], 'content' => 'Multi Step'], 'atk4\ui');
-$special_item->add(['Icon', 'content' => 'window maximize outline']);
+\atk4\ui\Icon::addTo($special_item, ['content' => 'window maximize outline']);
 
 $g->addActionMenuItem($special_item, $country->getAction('multi_step'));
 

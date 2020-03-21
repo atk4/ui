@@ -3,7 +3,7 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$g = $app->add(['Grid']);
+$g = \atk4\ui\Grid::addTo($app);
 $g->setModel(new Country($db));
 $g->ipp = 6;
 
@@ -14,7 +14,7 @@ $dragHandler->onReorder(function ($order) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-$view = $app->add(['View', 'template' => new \atk4\ui\Template('
+$view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('
     <div class="ui header">Click and drag country to reorder</div>
     <div id="{$_id}" style="cursor: pointer">
         <ul>
@@ -23,13 +23,13 @@ $view = $app->add(['View', 'template' => new \atk4\ui\Template('
     </div>'
 )]);
 
-$view->add('Lister', 'List')
+\atk4\ui\Lister::addTo($view, [], ['List'])
      ->onHook('beforeRow', function ($l) {
          $l->current_row['iso'] = strtolower($l->current_row['iso']);
      })->setModel(new Country($db))
      ->setLimit(20);
 
-$sortable = $view->add(['jsSortable', 'container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
+$sortable = \atk4\ui\jsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
 $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
     if (@$_GET['btn']) {
@@ -39,5 +39,5 @@ $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
     }
 });
 
-$button = $app->add('Button')->set('Get countries order');
+$button = \atk4\ui\Button::addTo($app)->set('Get countries order');
 $button->js('click', $sortable->jsGetOrders(['btn' => '1']));

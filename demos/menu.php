@@ -4,11 +4,11 @@
  */
 require_once __DIR__ . '/init.php';
 
-$m = $app->add('Menu');
+$m = \atk4\ui\Menu::addTo($app);
 $m->addItem('foo', 'foo.php');
 $m->addItem('bar');
 $m->addItem('baz');
-$d = $m->add(['DropDown', 'With Callback', 'js' => ['on' => 'hover']]);
+$d = \atk4\ui\DropDown::addTo($m, ['With Callback', 'js' => ['on' => 'hover']]);
 $d->setSource(['a', 'b', 'c']);
 $d->onChange(function ($item) {
     return 'New seleced item: '.$item;
@@ -22,16 +22,16 @@ $sm = $sm->addMenu('Sub-menu');
 $sm->addItem('one');
 $sm->addItem('two');
 
-$m = $app->add(['Menu', 'vertical pointing']);
+$m = \atk4\ui\Menu::addTo($app, ['vertical pointing']);
 $m->addItem(['Inbox', 'label' => ['123', 'teal left pointing']]);
 $m->addItem('Spam');
 $m->addItem()->add(new \atk4\ui\FormField\Input(['placeholder' => 'Search', 'icon' => 'search']))->addClass('transparent');
 
-$m = $app->add(['Menu', 'secondary vertical pointing']);
+$m = \atk4\ui\Menu::addTo($app, ['secondary vertical pointing']);
 $m->addItem(['Inbox', 'label' => ['123', 'teal left pointing']]);
 $m->addItem('Spam');
 $m->addItem()->add(new \atk4\ui\FormField\Input(['placeholder' => 'Search', 'icon' => 'search']))->addClass('transparent');
-$m = $app->add(['Menu', 'vertical']);
+$m = \atk4\ui\Menu::addTo($app, ['vertical']);
 $gr = $m->addGroup('Products');
 $gr->addItem('Enterprise');
 $gr->addItem('Consumer');
@@ -40,14 +40,14 @@ $gr = $m->addGroup('Hosting');
 $gr->addItem('Shared');
 $gr->addItem('Dedicated');
 
-$m = $app->add(['Menu', 'vertical']);
+$m = \atk4\ui\Menu::addTo($app, ['vertical']);
 $i = $m->addItem();
-$i->add(['Header', 'size' => 4])->set('Promotions');
-$i->add(['View', 'element' => 'P'])->set('Check out our promotions');
+\atk4\ui\Header::addTo($i, ['size' => 4])->set('Promotions');
+\atk4\ui\View::addTo($i, ['element' => 'P'])->set('Check out our promotions');
 
 //$m = $app->add('Menu');
 //$i->addItem()->add('FormField/Input');
 //$i->add(['View', 'element'=>'P'])->set('Check out our promotions');
 
 // menu without any item should not show
-$app->add('Menu');
+\atk4\ui\Menu::addTo($app);

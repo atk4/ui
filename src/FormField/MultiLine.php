@@ -238,9 +238,9 @@ class MultiLine extends Generic
         }
         */
 
-        $this->multiLine = $this->add(['View', 'template' => $this->multiLineTemplate]);
+        $this->multiLine = \atk4\ui\View::addTo($this, ['template' => $this->multiLineTemplate]);
 
-        $this->cb = $this->add('jsCallback');
+        $this->cb = \atk4\ui\jsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
         $this->form->onHook('loadPOST', function ($form) {

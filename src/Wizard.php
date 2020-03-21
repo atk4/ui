@@ -62,7 +62,7 @@ class Wizard extends View
     public function init()
     {
         parent::init();
-        $this->stepCallback = $this->add(['Callback', 'urlTrigger'=>$this->name]);
+        $this->stepCallback = Callback::addTo($this, ['urlTrigger'=>$this->name]);
 
         $this->currentStep = $this->stepCallback->triggered() ?: 0;
 
@@ -71,12 +71,12 @@ class Wizard extends View
 
         // add buttons
         if ($this->currentStep) {
-            $this->buttonPrev = $this->add(['Button', 'Back', 'basic'], 'Left');
+            $this->buttonPrev = Button::addTo($this, ['Back', 'basic'], ['Left']);
             $this->buttonPrev->link($this->stepCallback->getURL($this->currentStep - 1));
         }
 
-        $this->buttonNext = $this->add(['Button', 'Next', 'primary'], 'Right');
-        $this->buttonFinish = $this->add(['Button', 'Finish', 'primary'], 'Right');
+        $this->buttonNext = Button::addTo($this, ['Next', 'primary'], ['Right']);
+        $this->buttonFinish = Button::addTo($this, ['Finish', 'primary'], ['Right']);
 
         $this->buttonNext->link($this->stepCallback->getURL($this->currentStep + 1));
     }
@@ -181,7 +181,7 @@ class Wizard extends View
     {
         if (!$this->steps) {
             $this->addStep(['No Steps Defined', 'icon'=>'configure', 'description'=>'use $wizard->addStep() now'], function ($p) {
-                $p->add(['Message', 'Step content will appear here', 'type'=>'error', 'text'=>'Specify callback to addStep() which would populate this area.']);
+                Message::addTo($p, ['Step content will appear here', 'type'=>'error', 'text'=>'Specify callback to addStep() which would populate this area.']);
             });
         }
 

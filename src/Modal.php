@@ -86,9 +86,9 @@ class Modal extends View
      */
     public function enableCallback()
     {
-        $this->cb_view = $this->add('View');
+        $this->cb_view = View::addTo($this);
         $this->cb_view->stickyGet('__atk_m', $this->name);
-        $this->cb = $this->cb_view->add('CallbackLater');
+        $this->cb = CallbackLater::addTo($this->cb_view);
 
         $this->cb->set(function () {
             if ($this->cb->triggered() && $this->fx) {

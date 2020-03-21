@@ -32,7 +32,7 @@ class Radio extends Generic
     {
         parent::init();
 
-        $this->lister = $this->add('Lister', 'Radio');
+        $this->lister = \atk4\ui\Lister::addTo($this, [], ['Radio']);
         $this->lister->t_row['_name'] = $this->short_name;
     }
 

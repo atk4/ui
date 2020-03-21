@@ -267,12 +267,12 @@ class App
                 break;
 
             case $exception instanceof Error:
-                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
-                $this->layout->add(['Text', nl2br($exception->getTraceAsString())]);
+                Message::addTo($this->layout, [get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
+                Text::addTo($this->layout, [nl2br($exception->getTraceAsString())]);
                 break;
 
             default:
-                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+                Message::addTo($this->layout, [get_class($exception).': '.$exception->getMessage(), 'error']);
                 break;
         }
 

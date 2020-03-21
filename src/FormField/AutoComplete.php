@@ -254,13 +254,13 @@ class AutoComplete extends Input
         $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed), null, 'atk4\ui');
 
         if ($this->form) {
-            $vp = $this->form->add('VirtualPage');
+            $vp = \atk4\ui\VirtualPage::addTo($this->form);
         } else {
-            $vp = $this->owner->add('VirtualPage');
+            $vp = \atk4\ui\VirtualPage::addTo($this->owner);
         }
 
         $vp->set(function ($page) {
-            $form = $page->add('Form');
+            $form = \atk4\ui\Form::addTo($page);
 
             $model = clone $this->model;
 
@@ -390,7 +390,7 @@ class AutoComplete extends Input
 
     public function renderView()
     {
-        $this->callback = $this->add('Callback');
+        $this->callback = \atk4\ui\Callback::addTo($this);
         $this->callback->set([$this, 'outputApiResponse']);
 
         if ($this->multiple) {

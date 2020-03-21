@@ -7,7 +7,7 @@ $app->add(new \atk4\ui\View([
     'ui' => 'ignored warning message',
 ]));
 
-$cc = $app->add('Columns');
+$cc = \atk4\ui\Columns::addTo($app);
 $f = $cc->addColumn()->add(new \atk4\ui\Form());
 
 // adding field without model creates a regular line

@@ -54,7 +54,7 @@ class FilterPopup extends Popup
 
         $m = Generic::factoryType($this->field);
 
-        $this->form = $this->add('Form')->addClass('');
+        $this->form = Form::addTo($this)->addClass('');
         $this->form->buttonSave->addClass('');
         $this->form->addGroup("Where {$this->field->getCaption()} :");
 
@@ -72,7 +72,7 @@ class FilterPopup extends Popup
             return (new jQuery($this->triggerBy))->trigger('click');
         });
 
-        $this->form->add(['Button', 'Clear', 'clear '])->on('click', function ($f) use ($m) {
+        \atk4\ui\Button::addTo($this->form, ['Clear', 'clear '])->on('click', function ($f) use ($m) {
             $m->clearData();
 
             return [

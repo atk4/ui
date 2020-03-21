@@ -58,7 +58,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
         $this->add($btns, 'actions');
         $this->showActions = true;
 
-        $this->loader = $this->add(['Loader', 'ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = Loader::addTo($this, ['ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
         $this->loader->addClass('atk-hide-loading-content');
     }
@@ -167,7 +167,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
      */
     protected function addConfirmation(View $view)
     {
-        $view->add(['Text'])->set($this->action->getConfirmation());
+        \atk4\ui\Text::addTo($view)->set($this->action->getConfirmation());
     }
 
     /**

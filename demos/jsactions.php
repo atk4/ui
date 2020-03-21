@@ -3,14 +3,14 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$app->add(['Button', 'Actions from jsEvent', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\atk4\ui\Button::addTo($app, ['Actions from jsEvent', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['jsactions2']);
 
-$app->add(['Button', 'Actions', 'small left floated basic blue', 'icon' => 'left arrow'])
+\atk4\ui\Button::addTo($app, ['Actions', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['actions']);
-$app->add(['View', 'ui' => 'ui clearing divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$app->add(['Header', 'Extensions to ATK Data Actions', 'subHeader'=>'Model action can be trigger using js Event']);
+\atk4\ui\Header::addTo($app, ['Extensions to ATK Data Actions', 'subHeader'=>'Model action can be trigger using js Event']);
 
 $country = new Country($db);
 
@@ -35,9 +35,9 @@ $card->addClickAction($c_action);
 
 ///////////////////////////////////////////
 
-$app->add(['View', 'ui' => 'ui clearing divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$app->add(['Header', 'Action can ask for confirmation before executing', 'size' => 4]);
+\atk4\ui\Header::addTo($app, ['Action can ask for confirmation before executing', 'size' => 4]);
 
 $files = new File($app->db);
 $f_action = $files->addAction(
@@ -51,7 +51,7 @@ $f_action = $files->addAction(
     ]
 );
 
-$btn = $app->add(['Button', 'Import File']);
+$btn = \atk4\ui\Button::addTo($app, ['Import File']);
 $executor = $app->add(new \atk4\ui\ActionExecutor\jsUserAction());
 $executor->setAction($f_action, ['path' => '.']);
 $executor->onHook('afterExecute', function ($t, $m) {
@@ -60,9 +60,9 @@ $executor->onHook('afterExecute', function ($t, $m) {
 
 $btn->on('click', $executor, ['confirm'=> 'This will import a lot of file. Are you sure?']);
 
-$app->add(['View', 'ui' => 'ui clearing divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$app->add(['Header', 'Action can be applied to an input button.', 'size' => 4]);
+\atk4\ui\Header::addTo($app, ['Action can be applied to an input button.', 'size' => 4]);
 
 // Note here that we explicitly required a jsUserAction executor because we want to use the input value
 // as the action args.

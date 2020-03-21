@@ -25,7 +25,7 @@ $app->add(['View', 'element'=>'pre'])
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Just like "addField" describes a model field that user can see and interact through Table, Grid, Form or CRUD, method
 "addAction" describes an action that user can trigger through Grid, Card, CRUD and Button.
@@ -83,7 +83,7 @@ $app->add(['Button', 'Edit some country'])
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Any view can actually pass action as a callback, not only the button. Here is another demo:
 EOF
@@ -99,7 +99,7 @@ $menu->addItem('World', $country->getAction('edit'));
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 When action requires an argument, you can either specify it directly or through jsExpression. If you do not do that,
 user will be asked to enter the missing arguments.

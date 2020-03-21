@@ -5,7 +5,7 @@ require_once __DIR__ . '/database.php';
 
 $country = new Country($db);
 
-$g = $app->add('Grid');
+$g = \atk4\ui\Grid::addTo($app);
 
 $edit_executor = new atk4\ui\ActionExecutor\Form([
     'hasHeader' => false,

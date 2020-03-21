@@ -25,16 +25,15 @@ if (!class_exists('TestConsole')) {
     }
 }
 
-$tt = $app->add('Tabs');
+$tt = \atk4\ui\Tabs::addTo($app);
 
 $t = $tt->addTab('set()');
-$t->add([
-    'Header',
+\atk4\ui\Header::addTo($t, [
     'icon'=> 'terminal',
     'Console output streaming',
     'subHeader'=> 'any output your PHP script produces through console is displayed to user in real-time',
 ]);
-$t->add('Console')->set(function ($console) {
+\atk4\ui\Console::addTo($t)->set(function ($console) {
     $console->output('Executing test process...');
     sleep(1);
     $console->output('Now trying something dangerous..');
@@ -45,37 +44,34 @@ $t->add('Console')->set(function ($console) {
 });
 
 $t = $tt->addTab('runMethod()', function ($t) {
-    $t->add([
-        'Header',
+    \atk4\ui\Header::addTo($t, [
         'icon'=> 'terminal',
         'Non-interractive method invocation',
         'subHeader'=> 'console can invoke a method, which normaly would be non-interractive and can still capture debug output',
     ]);
-    $t->add('Console')->runMethod(TestConsole::addTo($t), 'generateReport');
+    \atk4\ui\Console::addTo($t)->runMethod(TestConsole::addTo($t), 'generateReport');
 });
 
 $t = $tt->addTab('exec() single', function ($t) {
-    $t->add([
-        'Header',
+    \atk4\ui\Header::addTo($t, [
         'icon'=> 'terminal',
         'Command execution',
         'subHeader'=> 'it is easy to run server-side commands and stream output through console',
     ]);
-    $w = $t->add(['Message', 'This demo may not work', 'warning']);
+    $w = \atk4\ui\Message::addTo($t, ['This demo may not work', 'warning']);
     $w->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
-    $t->add('Console')->exec('/bin/pwd');
+    \atk4\ui\Console::addTo($t)->exec('/bin/pwd');
 });
 
 $t = $tt->addTab('exec() chain', function ($t) {
-    $t->add([
-        'Header',
+    \atk4\ui\Header::addTo($t, [
         'icon'=> 'terminal',
         'Command execution',
         'subHeader'=> 'it is easy to run server-side commands and stream output through console',
     ]);
-    $w = $t->add(['Message', 'This demo may not work', 'warning']);
+    $w = \atk4\ui\Message::addTo($t, ['This demo may not work', 'warning']);
     $w->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
-    $t->add('Console')->set(function ($c) {
+    \atk4\ui\Console::addTo($t)->set(function ($c) {
         $c->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1']);
         $c->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8']);
         $c->exec('/bin/no-such-command');
@@ -83,27 +79,25 @@ $t = $tt->addTab('exec() chain', function ($t) {
 });
 
 $t = $tt->addTab('composer update', function ($t) {
-    $t->add([
-        'Header',
+    \atk4\ui\Header::addTo($t, [
         'icon'=> 'terminal',
         'Command execution',
         'subHeader'=> 'it is easy to run server-side commands and stream output through console',
     ]);
 
-    $w = $t->add(['Message', 'This demo may not work', 'warning']);
+    $w = \atk4\ui\Message::addTo($t, ['This demo may not work', 'warning']);
     $w->text->addParagraph('This demo requires you to have "bash" and "composer" installed and may display error if the process running PHP does not have write access to the "vendor" folder and "composer.*".');
 
-    $b = $w->add(['Button', 'I understand, proceed anyway', 'primary big']);
+    $b = \atk4\ui\Button::addTo($w, ['I understand, proceed anyway', 'primary big']);
 
-    $c = $t->add(['Console', 'event'=>false]);
+    $c = \atk4\ui\Console::addTo($t, ['event'=>false]);
     $c->exec('bash', ['-c', 'cd ..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
 
     $b->on('click', $c->jsExecute());
 });
 
 $t = $tt->addTab('Use after form submit', function ($t) {
-    $t->add([
-        'Header',
+    \atk4\ui\Header::addTo($t, [
         'icon' => 'terminal',
         'How to log form submit process',
         'subHeader'=> 'Sometimes you can have long running process after form submit and want to show progress for user...',
@@ -111,10 +105,10 @@ $t = $tt->addTab('Use after form submit', function ($t) {
 
     session_start();
 
-    $f = $t->add('Form');
+    $f = \atk4\ui\Form::addTo($t);
     $f->addFields(['foo', 'bar']);
 
-    $c = $t->add(['Console', 'event'=>false]);
+    $c = \atk4\ui\Console::addTo($t, ['event'=>false]);
     $c->set(function ($c) {
         $m = $_SESSION['data'];
         $c->output('Executing process...');

@@ -380,7 +380,7 @@ class Table extends Lister
     {
         $options = [];
         if ($fx && is_callable($fx)) {
-            $cb = $this->add('jsCallback');
+            $cb = jsCallback::addTo($this);
             $cb->set($fx, ['widths'=>'widths']);
             $options['uri'] = $cb->getJSURL();
         } elseif ($fx && is_array($fx)) {

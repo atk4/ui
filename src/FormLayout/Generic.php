@@ -60,7 +60,7 @@ class Generic extends _Abstract
      */
     public function addHeader($label)
     {
-        $this->add(['Header', $label, 'dividing', 'element' => 'h4']);
+        \atk4\ui\Header::addTo($this, [$label, 'dividing', 'element' => 'h4']);
 
         return $this;
     }
@@ -107,7 +107,7 @@ class Generic extends _Abstract
         }
 
         if ($addDivider) {
-            $this->add(['View', 'ui' => 'hidden divider']);
+            \atk4\ui\View::addTo($this, ['ui' => 'hidden divider']);
         }
 
         return $v;

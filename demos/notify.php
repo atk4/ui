@@ -2,15 +2,15 @@
 
 require_once __DIR__ . '/init.php';
 
-$app->add(['Button', 'Notify Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\atk4\ui\Button::addTo($app, ['Notify Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['notify2']);
 
-$app->add(['Button', 'Test'])->on('click', (new \atk4\ui\jsNotify('Not yet implemented'))->setColor('red'));
+\atk4\ui\Button::addTo($app, ['Test'])->on('click', (new \atk4\ui\jsNotify('Not yet implemented'))->setColor('red'));
 
-$modal = $app->add(['Modal', 'Modal Title']);
+$modal = \atk4\ui\Modal::addTo($app, ['Modal Title']);
 
 $modal->set(function ($p) use ($modal) {
-    $form = $p->add('Form');
+    $form = \atk4\ui\Form::addTo($p);
     $form->addField('name', null, ['caption' => 'Add your name']);
 
     $form->onSubmit(function ($f) use ($modal) {
@@ -25,4 +25,4 @@ $modal->set(function ($p) use ($modal) {
     });
 });
 
-$app->add(['Button', 'Open Modal'])->on('click', $modal->show());
+\atk4\ui\Button::addTo($app, ['Open Modal'])->on('click', $modal->show());

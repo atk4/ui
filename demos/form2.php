@@ -6,7 +6,7 @@ require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
 // create header
-$app->add(['Header', 'Database-driven form with an enjoyable layout']);
+\atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
 
 // create form
 $form = $app->add(new \atk4\ui\Form(['segment']));
@@ -14,7 +14,7 @@ $form = $app->add(new \atk4\ui\Form(['segment']));
 //$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>new \atk4\ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]));
 //$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]));
 //$form = $app->add(['Form', 'segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
-$form->add(['Label', 'Input new country information here', 'top attached'], 'AboveFields');
+\atk4\ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveFields']);
 
 $form->setModel(new Country($db), false);
 
@@ -96,6 +96,6 @@ class Person extends \atk4\data\Model
     }
 }
 
-$app->add('Form')
+\atk4\ui\Form::addTo($app)
   ->addClass('segment')
     ->setModel(new Person($db));

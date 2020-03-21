@@ -3,9 +3,9 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$app->add(['Button', 'Accordion in Form', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\atk4\ui\Button::addTo($app, ['Accordion in Form', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['form-section-accordion']);
-$app->add(['View', 'ui' => 'ui clearing divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
 $m = new Country($db);
 $m->loadAny();
@@ -22,12 +22,12 @@ $noSave = function ($f) {
 
 ////////////////////////////////
 
-$f = $app->add('Form');
+$f = \atk4\ui\Form::addTo($app);
 $f->setModel($m, false);
 
 $sub_layout = $f->layout->addSubLayout('Generic');
 
-$sub_layout->add(['Header', 'Column Section in Form']);
+\atk4\ui\Header::addTo($sub_layout, ['Column Section in Form']);
 $sub_layout->setModel($m, ['name']);
 
 $cols_layout = $f->layout->addSubLayout('Columns');
@@ -42,16 +42,16 @@ $f->addField('phonecode');
 
 $f->onSubmit($noSave);
 
-$app->add(['View', 'ui' => 'divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
 ////////////////////////////////
 
-$f = $app->add('Form');
+$f = \atk4\ui\Form::addTo($app);
 $f->setModel($m, false);
 
 $sub_layout = $f->layout->addSubLayout('Generic');
 
-$sub_layout->add(['Header', 'Accordion Section in Form']);
+\atk4\ui\Header::addTo($sub_layout, ['Accordion Section in Form']);
 $sub_layout->setModel($m, ['name']);
 
 $accordion_layout = $f->layout->addSubLayout('Accordion');
@@ -64,16 +64,16 @@ $a2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);
 
-$app->add(['View', 'ui' => 'divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
 ////////////////////////////////
 
-$f = $app->add('Form');
+$f = \atk4\ui\Form::addTo($app);
 $f->setModel($m, false);
 
 $sub_layout = $f->layout->addSubLayout('Generic');
 
-$sub_layout->add(['Header', 'Tabs in Form']);
+\atk4\ui\Header::addTo($sub_layout, ['Tabs in Form']);
 $sub_layout->setModel($m, ['name']);
 
 $tabs_layout = $f->layout->addSubLayout('Tabs');
@@ -86,18 +86,18 @@ $t2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);
 
-$app->add(['View', 'ui' => 'divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
 /////////////////////////////////////////
 
-$app->add(['Header', 'Color in form']);
+\atk4\ui\Header::addTo($app, ['Color in form']);
 
-$f = $app->add('Form');
+$f = \atk4\ui\Form::addTo($app);
 $f->setModel($m, false);
 
 $sub_layout = $f->layout->addSubLayout(['Generic', 'ui' => 'segment red inverted'], false);
 
-$sub_layout->add(['Header', 'This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
+\atk4\ui\Header::addTo($sub_layout, ['This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
 $sub_layout->setModel($m, ['name']);
 
 $sub_layout = $f->layout->addSubLayout(['Generic', 'ui' => 'segment teal inverted']);
@@ -111,4 +111,4 @@ $c2->setModel($m, ['numcode', 'phonecode']);
 
 $f->onSubmit($noSave);
 
-$app->add(['View', 'ui' => 'divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'divider']);
