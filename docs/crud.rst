@@ -24,7 +24,7 @@ Using CRUD
 
 The basic usage of CRUD is::
 
-    $app->add('CRUD')->setModel(new Country($app->db));
+    CRUD::addTo($app)->setModel(new Country($app->db));
 
 Users are now able to fully interract with the table. There are ways to restrict which "rows" and which "columns" user
 can access. First we can only allow user to read, manage and delete only countries that are part of European Union::
@@ -32,7 +32,7 @@ can access. First we can only allow user to read, manage and delete only countri
     $eu_countries = new Country($app->db);
     $eu_countries->addCondition('is_eu', true);
 
-    $app->add('CRUD')->setModel($eu_countries);
+    CRUD::addTo($app)->setModel($eu_countries);
 
 After that column `is_eu` will not be editable to the user anymore as it will be marked `system` by `addCondition`.
 

@@ -7,7 +7,7 @@ all the UI components that will contribute to the HTML generation. Render tree i
 
     $view = new \atk4\ui\View();
 
-    $view->add(new Button('test'));
+    \atk4\ui\Button::addTo($view, ['test']);
 
     echo $view->render();
 
@@ -59,7 +59,7 @@ When you create an application and select a Layout, the layout is automatically 
 
 After that, adding any objects into app (into layout) will initialize those objects too::
 
-    $b = $app->add(new Button('Test1'));
+    $b = \atk4\ui\Button::addTo($app, ['Test1']);
 
     echo $b->name; // present, because button was added into initialized object.
 
@@ -67,7 +67,7 @@ If object cannot determine the path to the application, then it will remain unin
 "Late initialization"::
 
     $v = new Buttons();
-    $b2 = $v->add(new Button('Test2'));
+    $b2 = \atk4\ui\Button::addTo($v, ['Test2']);
 
     echo $b2->name; // not set!! Not part of render tree
 
@@ -113,7 +113,7 @@ Unique Name
 Through adding objects into render tree (even if those are not Views) objects can assume unique names. When you create
 your application, then any object you add into your app will have a unique `name` property::
 
-    $b = $app->add('Button');
+    $b = \atk4\ui\Button::addTo($app);
     echo $b->name;
 
 The other property of the name is that it's also "permanent". Refreshing the page guarantees your object to have the same
@@ -124,10 +124,10 @@ name. Ultimately, you can create a View that uses it's name to store some inform
             parent::init();
 
             if ($_GET[$this->name]) {
-                $this->add(['Label', 'Secret info is', 'big red', 'detail'=>$_GET[$this->name]]);
+                \atk4\ui\Label::addTo($this, ['Secret info is', 'big red', 'detail'=>$_GET[$this->name]]);
             }
 
-            $this->add(['Button', 'Send info to ourselves'])
+            \atk4\ui\Button::addTo($this, ['Send info to ourselves'])
                 ->link([$this->name => 'secret_info']);
         }
     }

@@ -7,7 +7,7 @@
  * model is a reference to your form's model, the form model should be saved prior
  * to calling saveRows().
  *
- * $f = $app->add('Form');
+ * $f = \atk4\ui\Form::addTo($app);
  * $f->setModel($invoice, false);
  * // Add Form fields
  *
@@ -54,7 +54,7 @@
  * model. Be aware that in the example below all User records will be displayed.
  * If your model contains a lot of records, you should handle their limit somehow.
  *
- * $f = $app->add('Form');
+ * $f = \atk4\ui\Form::addTo($app);
  * $ml = $f->addField('ml', ['MultiLine']);
  * $ml->setModel($user, ['name','is_vip']);
  *

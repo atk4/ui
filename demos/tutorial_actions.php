@@ -19,7 +19,7 @@ $country = new Country($app->app->db);
 
 $country->addAction('send_message');
 
-$app->add(['View', 'element'=>'pre'])
+\atk4\ui\View::addTo($app, ['element'=>'pre'])
     // todo: add dumping!
     ->set(get_class($country->getAction('send_message')));
 CODE
@@ -60,7 +60,7 @@ $model->addAction('soft_delete', [
         $m->saveAndUnload();
     },
 ]);
-$app->add(['View', 'element'=>'pre'])
+\atk4\ui\View::addTo($app, ['element'=>'pre'])
     ->set(json_encode(array_keys($model->getActions())));
 CODE
     );
@@ -78,7 +78,7 @@ EOF
 $country = new Country($app->app->db);
 $country->loadAny();
 
-$app->add(['Button', 'Edit some country'])
+\atk4\ui\Button::addTo($app, ['Edit some country'])
     ->on('click', $country->getAction('edit'));
 CODE
     );
@@ -93,7 +93,7 @@ EOF
 $country = new Country($app->app->db);
 $country->loadAny();
 
-$menu = $app->add('Menu');
+$menu = \atk4\ui\Menu::addTo($app);
 $menu->addItem('Hello');
 $menu->addItem('World', $country->getAction('edit'));
 CODE
@@ -120,13 +120,13 @@ $model->addAction('greet', [
     }
 ]);
 
-$app->add(new \atk4\ui\FormField\Line([
+\atk4\ui\FormField\Line::addTo($app, [
     'action' => $model->getAction('greet'),
-]));
+]);
 
-$app->add(['View', 'ui'=>'divider']);
+\atk4\ui\View::addTo($app, ['ui'=>'divider']);
 
-$app->add(['Button', 'Greet without Age argument'])
+\atk4\ui\Button::addTo($app, ['Greet without Age argument'])
     ->on('click', $model->getAction('greet'));
 CODE
     );
@@ -149,7 +149,7 @@ EOF
 
     Demo::addTo($page)->setCode(<<<'CODE'
 $country = new Country($app->app->db);
-$crud = $app->add(['CRUD', 'ipp'=>5]);
+$crud = \atk4\ui\CRUD::addTo($app, ['ipp'=>5]);
 $crud->setModel($country);
 CODE
     );

@@ -296,23 +296,23 @@ is responsible for rendering of the TH box. If you are adding column manually, :
 will return it. When using model, use :php:meth:`atk4\\ui\\Table::getColumnDecorators`::
 
 
-    $table = $app->add(['Table', 'celled' => true]);
+    $table = Table::addTo($app, ['celled' => true]);
     $table->setModel(new Country($app->db));
 
     $name_column = $table->getColumnDecorators('name');
-    $name_column[0]->addPopup()->add('LoremIpsum');
+    LoremIpsum::addTo($name_column[0]->addPopup());
 
 .. important:: If content of a pop-up is too large, it may not be possible to display it on-screen. Watch for warning.
 
 You may also use :php:meth:`atk4\\ui\\Popup::set` method to dynamically load the content::
 
 
-    $table = $app->add(['Table', 'celled' => true]);
+    $table = Table::addTo($app, ['celled' => true]);
     $table->setModel(new Country($app->db));
 
     $name_column = $table->getColumnDecorators('name');
     $name_column[0]->addPopup()->set(function($p) {
-        $p->add('HelloWorld');
+        HelloWorld::addTo($p);
     });
 
 Dropdown Menus

@@ -373,7 +373,7 @@ will return contents of the template without tags::
 
     $result=$template->render();
 
-    $this->add('Text')->set($result);
+    \atk4\ui\Text::addTo($this)->set($result);
     // Will output "Hello, World"
 
 
@@ -425,10 +425,10 @@ You can use the following code to manipulate the template above::
 
 Same thing using Agile Toolkit Views::
 
-    $envelope = $this->add('View',null,null, ['envelope']);
+    $envelope = \atk4\ui\View::addTo($this, [], [null],null, ['envelope']);
 
-    $sender    = $envelope->add('View', null, 'Sender',    'Sender');
-    $recipient = $envelope->add('View', null, 'Recipient', 'Recipient');
+    $sender    = \atk4\ui\View::addTo($envelope, [], [null], 'Sender',    'Sender');
+    $recipient = \atk4\ui\View::addTo($envelope, [], [null], 'Recipient', 'Recipient');
 
     $sender    ->tempalte->set($sender_data);
     $recipient ->tempalte->set($recipient_data);
@@ -574,7 +574,7 @@ Template is available by the time ``init()`` is called and you can
 access it from inside the object or from outside through "template"
 property::
 
-    $grid=$this->add('Grid',null,null,array('grid_with_hint'));
+    $grid=\atk4\ui\Grid::addTo($this, [], [null],null,array('grid_with_hint'));
     $grid->template->trySet('my_hint','Changing value of a grid hint here!');
 
 In this example we have instructed to use a different template for grid,
@@ -600,11 +600,11 @@ implemented using generic views.
 
 ::
 
-    $envelope=$this->add('View',null,null,array('envelope'));
+    $envelope=\atk4\ui\View::addTo($this, [], [null],null,array('envelope'));
 
     // 3rd argument is output region, 4th is template location
-    $sender=$envelope->add('View',null,'Sender','Sender');
-    $receiver=$envelope->add('View',null,'Receiver','Receiver');
+    $sender=\atk4\ui\View::addTo($envelope, [], [null],'Sender','Sender');
+    $receiver=\atk4\ui\View::addTo($envelope, [], [null],'Receiver','Receiver');
 
     $sender->template->trySet($sender_data);
     $receiver->template->trySet($receiver_data);
@@ -619,7 +619,7 @@ in combination to achieve the result. The example which was previously
 mentioned under :php:meth:`GiTemplate::eachTag`::
 
     $view->template->eachTag('include', function($content, $tag) use($view) {
-        $view->add('View', null, $tag, [$content]);
+        \atk4\ui\View::addTo($view, [], [null], $tag, [$content]);
     });
 
 

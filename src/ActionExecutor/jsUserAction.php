@@ -10,7 +10,7 @@
  *
  * Manual setup.
  * $action = $model->getAction('delete')
- * $ex = $app->add(new jsUserAction())->setAction($action, [4])
+ * $ex = jsUserAction::addTo($app)->setAction($action, [4])
  * $btn->on('click', $ex, ['confirm'=> 'This will delete record with id 4. Are you sure?']);
  */
 
@@ -43,8 +43,8 @@ class jsUserAction extends jsCallback implements Interface_
      * consider as the model Id to be loaded with the action owner model.
      *
      * Ex.
-     *      $btn = $app->add(['Button', 'Import File']);
-     *      $ex = $app->add(new \atk4\ui\ActionExecutor\jsUserAction());
+     *      $btn = \atk4\ui\Button::addTo($app, ['Import File']);
+     *      $ex = jsUserAction::addTo($app);
      *      $ex->setAction($f_action, [8, 'path' => '.']);
      *
      *      $btn->on('click', $ex, ['confirm'=> 'This will import a lot of file. Are you sure?']);

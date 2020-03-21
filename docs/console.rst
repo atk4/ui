@@ -25,7 +25,7 @@ Basic Usage
 
 After adding a console to your :ref:`render_tree`, you just need to set a call-back::
 
-    $console = $app->add('Console');
+    $console = Console::addTo($app);
     $console->set(function($console) {
 
         // This will be executed through SSE request
@@ -105,7 +105,7 @@ Method exec can be executed directly on the $console or inside the callback::
 Without call-back, eval will wrap itself into a callback but you can only execute a single command. When using callback
 form, you can execute multiple commands::
 
-    $app->add('Console')->set(function($c){
+    Console::addTo($app)->set(function($c){
         $c
             ->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1'])
             ->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8'])
@@ -123,7 +123,7 @@ Normally it's safe to chain `exec` which ensures that execution will stack. Shou
 NOTE that for each invocation `exec` will spawn a new process, but if you want to execute multiple processes, you
 can wrap them into `bash -c`::
 
-    $app->add('Console')->exec('bash', [
+    Console::addTo($app)->exec('bash', [
         '-c',
         'cd ..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"'
     ]);

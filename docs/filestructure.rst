@@ -206,7 +206,7 @@ Open the created file "View1.php" in your editor and add the following lines::
       function init() {
           parent::init();
 
-          $text = $this->app->add(['Text', 'here goes some text']);
+          $text = \atk4\ui\Text::addTo($this->app, ['here goes some text']);
       }
   }
 

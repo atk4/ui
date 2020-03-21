@@ -18,7 +18,7 @@ Basic Usage
 
 Here is a simple usage::
 
-    $crumb = $app->add('BreadCrumb');
+    $crumb = BreadCrumb::addTo($app);
     $crumb->addCrumb('User', ['user']);
     $crumb->addCrumb('Preferences', ['user_preferences']);
     $crumb->set('Change Password');
@@ -51,7 +51,7 @@ Calling addCrumb adds more elements into the $path property. Each element there 
 By default `divider` is set to :php:attr:`BreadCrumb::dividerClass`. You may also manipulate $path array yourself.
 For example the next code will use some logic::
 
-    $crumb = $app->add('BreadCrumb');
+    $crumb = BreadCrumb::addTo($app);
     $crumb->addCrumb('Users', []);
 
     $m = new User($app->db);
@@ -66,11 +66,11 @@ For example the next code will use some logic::
         // here we can check for additional criteria and display a deeper level on the crumb
 
 
-        $app->add('Form')->setModel($m);
+        Form::addTo($app)->setModel($m);
     } else {
 
         // display list of users
-        $table = $app->add('Table');
+        $table = Table::addTo($app);
         $table->setModel($m);
         $table->addDecorator(['name', ['Link', [], ['user_id'=>'id']);
     }

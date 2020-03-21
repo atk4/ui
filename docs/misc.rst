@@ -16,20 +16,20 @@ basic content arrangements.
 When you add new component to the page it will typically consume 100% width of its container. Columns
 will break down width into chunks that can be used by other elements::
 
-    $c = $page->add(new \atk4\ui\Columns());
-    $c->addColumn()->add(['LoremIpsum', 1]);
-    $c->addColumn()->add(['LoremIpsum', 1]);
+    $c = Columns::addTo($page);
+    LoremIpsum::addTo($c->addColumn(), [1]);
+    LoremIpsum::addTo($c->addColumn(), [1]);
 
 By default width is equally divided by columns. You may specify a custom width expressed as fraction of 16::
 
-    $c = $page->add(new \atk4\ui\Columns());
-    $c->addColumn(6)->add(['LoremIpsum', 1]);
-    $c->addColumn(10)->add(['LoremIpsum', 2]);  // wider column, more filler
+    $c = Columns::addTo($page);
+    LoremIpsum::addTo($c->addColumn(6), [1]);
+    LoremIpsum::addTo($c->addColumn(10), [2]);  // wider column, more filler
 
 You can specify how many columns are expected in a grid, but if you do you can't specify widths of individual
 columns. This seem like a limitation of Fomantic UI::
 
-    $c = $page->add(new \atk4\ui\Columns(['width'=>4]));
+    $c = Columns::addTo($page, ['width'=>4]);
     Box::addTo($c->addColumn(), ['red']);
     Box::addTo($c->addColumn([null, 'right floated']), ['blue']);
 
@@ -39,17 +39,17 @@ Rows
 When you add columns for a total width which is more than permitted, columns will stack below and form a second
 row. To improve and controll the flow of rows better, you can specify addRow()::
 
-    $c = $page->add(new \atk4\ui\Columns(['internally celled']));
+    $c = Columns::addTo($page, ['internally celled']);
 
     $r = $c->addRow();
-    $r->addColumn([2, 'right aligned'])->add(['Icon', 'huge home']);
-    $r->addColumn(12)->add(['LoremIpsum', 1]);
-    $r->addColumn(2)->add(['Icon', 'huge trash']);
+    Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
+    LoremIpsum::addTo($r->addColumn(12), [1]);
+    Icon::addTo($r->addColumn(2), ['huge trash']);
 
     $r = $c->addRow();
-    $r->addColumn([2, 'right aligned'])->add(['Icon', 'huge home']);
-    $r->addColumn(12)->add(['LoremIpsum', 1]);
-    $r->addColumn(2)->add(['Icon', 'huge trash']);
+    Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
+    LoremIpsum::addTo($r->addColumn(12), [1]);
+    Icon::addTo($r->addColumn(2), ['huge trash']);
 
 This example also uses custom class for Columns ('internally celled') that adds dividers between columns and rows.
 For more information on available classes, see https://fomantic-ui.com/collections/grid.html.

@@ -18,7 +18,7 @@ Basic Usage
 
 To add a "Hello, World" message::
 
-    $app->add('HelloWorld');
+    HelloWorld::addTo($app);
 
 There are no additional features on this component, it is intentionally left simple. For a more
 sophisticated "Hello, World" implementation look into Hello World add-on. 

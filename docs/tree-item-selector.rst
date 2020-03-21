@@ -75,7 +75,7 @@ Adding a TreeItemSelector Field to a Form::
     ];
 
 
-    $f = $app->add('Form');
+    $f = \atk4\ui\Form::addTo($app);
     $field = $f->addField('tree', [new TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'array', 'serialize' => 'json']);
     $field->set([201, 301, 503]);
 

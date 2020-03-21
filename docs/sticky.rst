@@ -68,15 +68,15 @@ defined as sticky globally.
 
 Consider this code::
 
-    $b1 = $app->add('Button');
+    $b1 = \atk4\ui\Button::addTo($app);
     $b1->set($b1->url());
 
     Loader::addTo($app)->set(function($page) {
-        $b2 = $page->add('Button');
+        $b2 = \atk4\ui\Button::addTo($page);
         $b2->set($b2->url());
     });
 
-    $b3 = $app->add('Button');
+    $b3 = \atk4\ui\Button::addTo($app);
     $b3->set($b3->url());
 
 This will display 3 buttons and each button will contain a URL which needs to be opened in order for

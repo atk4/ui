@@ -321,10 +321,10 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * it inside console.
      *
      * // Runs $user_model->generateReport('pdf')
-     * $app->add('Console')->runMethod($user_model, 'generateReports', ['pdf']);
+     * Console::addTo($app)->runMethod($user_model, 'generateReports', ['pdf']);
      *
      * // Runs PainFactory::lastStaticMethod()
-     * $app->add('Console')->runMethod('PainFactory', 'lastStaticMethod');
+     * Console::addTo($app)->runMethod('PainFactory', 'lastStaticMethod');
      *
      * To produce output:
      *  - use $this->debug() or $this->info() (see documentation on DebugTrait)

@@ -11,11 +11,11 @@ Icon
 
 Implements basic icon::
 
-    $icon = $app->add(new \atk4\ui\Icon('book'));
+    $icon = Icon::addTo($app, ['book']);
 
 Alternatively::
 
-    $icon = $app->add('Icon', 'flag')->addClass('outline');
+    $icon = Icon::addTo($app, [], ['flag'])->addClass('outline');
 
 Most commonly icon class is used for embedded icons on a :php:class:`Button`
 or inside other components (see :ref:`icon_other_comp`)::
@@ -34,9 +34,9 @@ https://fomantic-ui.com/elements/icon.html
 
 You can also use States, Variations by passing classes to your button::
 
-    $app->add(new \atk4\ui\Button(['Click Me', 'red', 'icon'=>'flipped big question']));
+    Button::addTo($app, ['Click Me', 'red', 'icon'=>'flipped big question']);
 
-    $app->add(new \atk4\ui\Label(['Battery Low', 'green', 'icon'=>'battery low']));
+    Label::addTo($app, ['Battery Low', 'green', 'icon'=>'battery low']);
 
 .. _icon_other_comp:
 
@@ -47,15 +47,15 @@ You can use icon on the following components: :php:class:`Button`, :php:class:`L
 :php:class:`Message`, :php:class:`Menu` and possibly some others. Here are some examples::
 
 
-    $app->add(new \atk4\ui\Header(['Header', 'red', 'icon'=>'flipped question']));
-    $app->add(new \atk4\ui\Button(['Button', 'red', 'icon'=>'flipped question']));
+    Header::addTo($app, ['Header', 'red', 'icon'=>'flipped question']);
+    Button::addTo($app, ['Button', 'red', 'icon'=>'flipped question']);
 
-    $menu = $app->add(new \atk4\ui\Menu());
+    $menu = Menu::addTo($app);
     $menu->addItem(['Menu Item', 'icon'=>'flipped question']);
     $sub_menu = $menu->addMenu(['Sub-menu', 'icon'=>'flipped question']);
     $sub_menu->addItem(['Sub Item', 'icon'=>'flipped question']);
 
-    $app->add(new \atk4\ui\Label(['Label', 'right ribbon red', 'icon'=>'flipped question']));
+    Label::addTo($app, ['Label', 'right ribbon red', 'icon'=>'flipped question']);
 
 
 
@@ -65,17 +65,17 @@ Groups
 Fomantic UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
 icon::
 
-    $app->add(new \atk4\ui\Icon(['template'=>new \atk4\ui\Template('<i class="huge icons">
+    Icon::addTo($app, ['template'=>new \atk4\ui\Template('<i class="huge icons">
       <i class="big thin circle icon"></i>
       <i class="user icon"></i>
-    </i>'), false]));
+    </i>'), false]);
 
 However there are several other options you can use when working with your custom HTML. This is not
 exclusive to Icon, but I'm adding a few examples here, just for your convenience.
 
 Let's start with a View that contains your custom HTML loaded from file or embedded like this::
 
-    $view = $app->add(['View', 'template'=>new \atk4\ui\Template('<div>Hello my {Icon}<i class="huge icons">
+    $view = View::addTo($app, ['template'=>new \atk4\ui\Template('<div>Hello my {Icon}<i class="huge icons">
       <i class="big thin circle icon"></i>
       <i class="{Content}user{/} icon"></i>
     </i>{/}, It is me</div>')]);
@@ -85,7 +85,7 @@ a text message with a user icon in a circle. You can replace this region by pass
 into Icon class. For that you need to disable a standard Icon template and specify a correct Spot
 when adding::
 
-    $icon = $view->add(new \atk4\ui\Icon(['red book', 'template'=>false]), 'Icon');
+    $icon = Icon::addTo($view, ['red book', 'template'=>false], ['Icon']);
 
 This technique may be helpful for you if you are creating re-usable elements and you wish to store
 Icon object in one of your public properties.
@@ -96,8 +96,8 @@ Composing
 Composing offers you another way to deal with Group icons::
 
     $no_users = new \atk4\ui\View([null, 'huge icons', 'element'=>'i']);
-    $no_users->add(new \atk4\ui\Icon('big red dont'));
-    $no_users->add(new \atk4\ui\Icon('black user icon'));
+    Icon::addTo($no_users, ['big red dont']);
+    Icon::addTo($no_users, ['black user icon']);
 
     $app->add($no_users);
 

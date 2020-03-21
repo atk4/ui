@@ -21,7 +21,7 @@ Adding and Using
 Place paginator in a designated spot on your page. You also should specify what's the total number of pages
 paginator should have::
 
-    $paginator = $app->add('Paginator');
+    $paginator = Paginator::addTo($app);
     $paginator->total = 20;
 
 Paginator will not display links to all the 20 pages, instead it will show first, last, current page and few
@@ -31,10 +31,10 @@ pages around the current page. Paginator will automatically place links back to 
 After initializing paginator you can use it's properties to determine current page. Quite often you'll need
 to display current page BEFORE the paginator on your page::
 
-    $h = $page->add('Header');
-    $page->add('LoremIpsum'); // some content here
+    $h = Header::addTo($page);
+    LoremIpsum::addTo($page); // some content here
 
-    $p = $page->add('Paginator');
+    $p = Paginator::addTo($page);
     $h->set('Page '.$p->page.' from '.$p->total);
 
 Remember that values of 'page' and 'total' are integers, so you may need to do type-casting::

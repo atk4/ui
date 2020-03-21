@@ -18,12 +18,12 @@ Basic Usage
 
 Once you create an Accordion container you can then mix and match static and dynamic accodion section::
 
-    $acc = $app->add('Accordion');
+    $acc = Accordion::addTo($app);
 
 
 Adding a static content section is pretty simple::
 
-    $acc->addSection('Static Tab')->add('LoremIpsum');
+    LoremIpsum::addTo($acc->addSection('Static Tab'));
 
 You can add multiple elements into a single accordion section, like any other view.
 
@@ -36,14 +36,14 @@ You should pass callable action as a second parameter.
 
 Example::
 
-    $t = $layout->add('Accordion');
+    $t = Accordion::addTo($layout);
 
     // add static section
-    $t->addSection('Static Content')->add('HelloWorld');
+    HelloWorld::addTo($t->addSection('Static Content'));
 
     // add dynamic section
     $t->addSection('Dynamically Loading', function ($section) {
-        $section->add('LoremIpsum');
+        LoremIpsum::addTo($section);
     });
 
 Dynamic Accordion Section
@@ -52,11 +52,11 @@ Dynamic Accordion Section
 Dynamic sections are based around implementation of :php:class:`VirtualPage` and allow you
 to pass a call-back which will be triggered when user clicks on the section title.::
 
-    $acc = $app->add('Accordion');
+    $acc = Accordion::addTo($app);
 
     // dynamic section
     $acc->addSection('Dynamic Lorem Ipsum', function ($section) {
-        $section->add(['LoremIpsum', 'size'=>2]);
+        LoremIpsum::addTo($section, ['size'=>2]);
     });
 
 Controlling Accordion Section via Javascript
@@ -70,11 +70,11 @@ Accordion class has some wrapper method in order to control the accordion module
 
 For example, you can set a button that, when clicked, will toggle an accordion section::
 
-    $btn = $bar->add(['Button', 'Toggle Section 1']);
+    $btn = Button::addTo($bar, ['Toggle Section 1']);
 
-    $acc = $app->add(['Accordion', 'type' => ['styled', 'fluid']]);
-    $section1 = $acc->addSection('Static Text')->add('LoremIpsum');
-    $section2 = $acc->addSection('Static Text')->add('LoremIpsum');
+    $acc = Accordion::addTo($app, ['type' => ['styled', 'fluid']]);
+    $section1 = LoremIpsum::addTo($acc->addSection('Static Text'));
+    $section2 = LoremIpsum::addTo($acc->addSection('Static Text'));
 
     $btn->on('click', $acc->jsToggle($section_1));
 
@@ -83,6 +83,6 @@ Accordion Module settings
 
 It is possible to change Accordion module settings via the settings property.::
 
-    $app->add(['Accordion', 'settings' => []]);
+    Accordion::addTo($app, ['settings' => []]);
 
 For a complete list of all settings for the Accordion module, please visit: https://fomantic-ui.com/modules/accordion.html#/settings

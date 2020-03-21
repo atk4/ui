@@ -20,7 +20,7 @@ Agile UI is a component framework, which follows a software patterns known as
 View object is recursive. You can take one view and add another View inside of it::
 
     $v = new \atk4\ui\View(['ui'=>'segment', 'inverted']);
-    $v->add(new \atk4\ui\Button(['Orange', 'inverted orange']));
+    Button::addTo($v, ['Orange', 'inverted orange']);
 
 The above code will produce the following HTML block:
 
@@ -96,18 +96,18 @@ App class first and then continue with Layout initialization::
     $app = new \atk4\ui\App('My App');
     $top = $app->initLayout(new \atk4\ui\View(['ui'=>'segments']));
 
-    $middle = $top->add(new \atk4\ui\View(['ui'=>'segment', 'red']));
+    $middle = View::addTo($top, ['ui'=>'segment', 'red']);
 
-    $bottom = $middle->add(new \atk4\ui\Button(['Hello World', 'orange']));
+    $bottom = Button::addTo($middle, ['Hello World', 'orange']);
 
 Finally, if you prefer a more consise code, you can also use the following format::
 
     $app = new \atk4\ui\App('My App');
     $top = $app->initLayout('View', ['ui'=>'segments']);
 
-    $middle = $top->add('View', ['ui'=>'segment', 'red']);
+    $middle = View::addTo($top, [], [['ui'=>'segment', 'red']]);
 
-    $bottom = $middle->add('Button', ['Hello World', 'orange']);
+    $bottom = Button::addTo($middle, [], [['Hello World', 'orange']]);
 
 The rest of documentaiton will use thi sconsise code to keep things readable, however if
 you value type-hinting of your IDE, you can keep using "new" keyword. I must also
@@ -197,17 +197,17 @@ wide varietty of roles. In some cases, a dedicated object will exist, for
 example a Button. In other cases, you can use a View and specify a UI role
 explicitly::
 
-    $view = $app->add('View', ['ui'=>'segment']);
+    $view = View::addTo($app, [], [['ui'=>'segment']]);
 
 If you happen to pass more key/values to the constructor or as second argument
 to add() they will be treated as default values for the properties of that
 specific view::
 
-    $view = $app->add('View', ['ui'=>'segment', 'id'=>'test-id']);
+    $view = View::addTo($app, [], [['ui'=>'segment', 'id'=>'test-id']]);
 
 For a more IDE-friendly format, however, I recommend to use the following syntax::
 
-    $view = $app->add('View', ['ui'=>'segment']);
+    $view = View::addTo($app, [], [['ui'=>'segment']]);
     $view->id = 'test-id';
 
 You must be aware of a difference here - passing array to constructor will
@@ -221,7 +221,7 @@ which syntax you are using.
 If you are don't specify key for the properties, they will be considered an
 extra class for a view::
 
-    $view = $app->add('View', ['inverted', 'orange', 'ui'=>'segment']);
+    $view = View::addTo($app, [], [['inverted', 'orange', 'ui'=>'segment']]);
     $view->id = 'test-id';
 
 You can either specify multiple classes one-by-one or as a single string
@@ -262,21 +262,21 @@ by creating instance of \atk4\ui\Icon() inside the button.
 
 The same pattern can be used for other scenarios::
 
-    $button = $app->add('Button', ['icon'=>'book']);
+    $button = Button::addTo($app, [], [['icon'=>'book']]);
 
 This code will have same effect as::
 
-    $button = $app->add('Button');
+    $button = Button::addTo($app);
     $button->icon = 'book';
 
 During the Render of a button, the following code will be executed::
 
-    $button->add('Icon', ['book']);
+    Icon::addTo($button, [], [['book']]);
 
 If you wish to use a different icon-set, you can change Factory's route for 'Icon'
 to your own implementation OR you can pass icon as a view::
 
-    $button = $app->add('Button', ['icon'=>new MyAwesomeIcon('book')]);
+    $button = Button::addTo($app, [], [['icon'=>new MyAwesomeIcon('book')]]);
 
 
 Rendering of a Tree
@@ -336,20 +336,20 @@ to do something before child render, override method :php:meth:`View::recursiveR
 Template of a current view. This attribute contains an object of a class :php:class:`Template`.
 You may secify this value explicitly::
 
-    $app->add(['View', 'template'=>new \atk4\ui\Template('<b>hello</b>')]);
+    View::addTo($app, ['template'=>new \atk4\ui\Template('<b>hello</b>')]);
 
 .. php:attr:: defaultTemplate
 
 By default, if value of :php:attr:`View::$template` is not set, then it is loaded from class
 specified in `defaultTemplate`::
 
-    $app->add(['View', 'defaultTemplate'=>'./mytpl.html']);
+    View::addTo($app, ['defaultTemplate'=>'./mytpl.html']);
 
 You should specify defaultTemplate using relative path to your project root or, for add-ons,
 relative to a current file::
 
     // in Add-on
-    $app->add(['View', 'defaultTemplate'=>__DIR__.'/../templates/mytpl.httml']);
+    View::addTo($app, ['defaultTemplate'=>__DIR__.'/../templates/mytpl.httml']);
 
 Agile UI does not currently provide advanced search path for templates, by default the
 template is loaded from folder `vendor/atk4/ui/template/semantic-ui/`. To change this
@@ -387,9 +387,9 @@ will automatically clone region of a parent.
 
 ``Lister`` is a class that has no default template, and therefore you can add it like this::
 
-    $profile = $app->add('View', ['template'=>'myview.html']);
+    $profile = View::addTo($app, [], [['template'=>'myview.html']]);
     $profile->setModel($user);
-    $profile->add('Lister', 'Tags')->setModel($user->ref('Tags'));
+    Lister::addTo($profile, [], ['Tags'])->setModel($user->ref('Tags'));
 
 In this set-up a template ``myview.html`` will be populated with fields from ``$user`` model. Next,
 a Lister is added inside Tags region which will use the contents of a given tag as a default
@@ -449,7 +449,7 @@ the name of the field will be used instead of the role. This is done by setting 
 Example::
 
     $layout = new \atk4\ui\Layout(['id'=>'foo'])
-    $butt = $layout->add('Button', ['name'=>'bar']);o
+    $butt = Button::addTo($layout, [], [['name'=>'bar']]);o
 
     echo $butt->getJSID();  // foo_bar
 
@@ -462,8 +462,8 @@ Reloading a View
 Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::jsReload(),
 which will respond with JavaScript Action for reloading the view::
 
-    $b1 = $app->add(['Button', 'Click me']);
-    $b2 = $app->add(['Button', 'Rand: '.rand(1,100)]);
+    $b1 = Button::addTo($app, ['Click me']);
+    $b2 = Button::addTo($app, ['Rand: '.rand(1,100)]);
 
     $b1->on('click', $b2->jsReload());
 
