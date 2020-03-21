@@ -30,8 +30,8 @@ You can specify how many columns are expected in a grid, but if you do you can't
 columns. This seem like a limitation of Fomantic UI::
 
     $c = $page->add(new \atk4\ui\Columns(['width'=>4]));
-    $c->addColumn()->add(new Box(['red']));
-    $c->addColumn([null, 'right floated'])->add(new Box(['blue']));
+    Box::addTo($c->addColumn(), ['red']);
+    Box::addTo($c->addColumn([null, 'right floated']), ['blue']);
 
 Rows
 ----

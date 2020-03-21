@@ -75,10 +75,10 @@ into multiple Tabs or detach field groups or even create nested layouts::
     $tabs = $form->add('Tabs', 'AboveFields');
     $form->add(['View', 'ui'=>'divider'], 'AboveFields');
 
-    $form_page = $tabs->addTab('Basic Info')->add(['FormLayout\Generic', 'form'=>$form]);
+    $form_page = $tabs->addTab('Basic Info')->add(['Generic', 'form'=>$form]);
     $form_page->addField('name', new \atk4\ui\FormField\Line());
 
-    $form_page = $tabs->addTab('Other Info')->add(['FormLayout\Generic', 'form'=>$form]);
+    $form_page = $tabs->addTab('Other Info')->add(['Generic', 'form'=>$form]);
     $form_page->addField('age', new \atk4\ui\FormField\Line());
 
     $form->onSubmit(function($f) {  return $f->model['name'].' has age '.$f->model['age']; });
@@ -222,7 +222,7 @@ element. For example, `icon` property:
 Here are few ways to specify `icon` to an Input::
 
     // compact
-    $page->add(new \atk4\ui\FormField\Line('icon'=>'search'));
+    $page->add(new \atk4\ui\FormField\Line(['icon'=>'search']));
 
     // Type-hinting friendly
     $line = new \atk4\ui\FormField\Line();

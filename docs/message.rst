@@ -28,7 +28,7 @@ Although typically you would want to specify what type of message is that::
 
 Here is the alternative syntax::
 
-    $message = $app->add(['Message', 'Warning Message Title', 'warning']));
+    $message = $app->add(['Message', 'Warning Message Title', 'warning']);
 
 Adding message text
 ===================

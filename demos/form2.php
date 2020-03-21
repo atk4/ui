@@ -10,10 +10,9 @@ require_once __DIR__ . '/database.php';
 
 // create form
 $form = \atk4\ui\Form::addTo($app, ['segment']);
-//$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>false]));
-//$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>new \atk4\ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]));
-//$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]));
-//$form = $app->add(['Form', 'segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
+//$form = \atk4\ui\Form::addTo($app, ['segment', 'buttonSave'=>false]);
+//$form = \atk4\ui\Form::addTo($app, ['segment', 'buttonSave'=>new \atk4\ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]);
+//$form = \atk4\ui\Form::addTo($app, ['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
 \atk4\ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveFields']);
 
 $form->setModel(new Country($db), false);

@@ -170,7 +170,7 @@ Field Decorator does not have to be added directly into the form. You can use a 
 :php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`FormField\Generic::$form`::
 
     $myview = $form->add(['View', 'defaultTemplate'=>'./mytemplate.html']);
-    $myview->add(['FormField\Dropdown', 'form'=>$form]);
+    $myview->add(['\atk4\ui\FormField\DropDown', 'form'=>$form]);
 
 .. php:method:: addFields($fields)
 

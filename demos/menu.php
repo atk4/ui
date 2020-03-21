@@ -45,9 +45,5 @@ $i = $m->addItem();
 \atk4\ui\Header::addTo($i, ['size' => 4])->set('Promotions');
 \atk4\ui\View::addTo($i, ['element' => 'P'])->set('Check out our promotions');
 
-//$m = $app->add('Menu');
-//$i->addItem()->add('FormField/Input');
-//$i->add(['View', 'element'=>'P'])->set('Check out our promotions');
-
 // menu without any item should not show
 \atk4\ui\Menu::addTo($app);

@@ -52,6 +52,6 @@ $g->addUserAction($edit_action);
 $g->addUserAction($del_action);
 
 //$g->onHook('onUserAction', function($g, $page, $executor) {
-//    $executor->form = $page->add('Form');
+//    $executor->form = \atk4\ui\Form::addTo($page);
 //    $executor->form->addField('test');
 //});

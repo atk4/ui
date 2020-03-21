@@ -1,5 +1,5 @@
 
-.. php:namespace:: atk4\\ui
+.. php:namespace:: atk4\ui
 
 .. php:class:: ProgressBar
 

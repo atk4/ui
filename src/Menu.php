@@ -91,7 +91,7 @@ class Menu extends View
      */
     public function addMenu($name)
     {
-        $subMenu = $this->add([new self(), 'defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
+        $subMenu = static::addTo($this, ['defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
 
         $name = (array) $name;
 
@@ -121,7 +121,7 @@ class Menu extends View
      */
     public function addGroup($name)
     {
-        $group = $this->add([new self(), 'defaultTemplate' => 'menugroup.html', 'ui' => false]);
+        $group = static::addTo($this, ['defaultTemplate' => 'menugroup.html', 'ui' => false]);
 
         $name = (array) $name;
 
@@ -145,7 +145,7 @@ class Menu extends View
      */
     public function addMenuRight()
     {
-        return $this->add([new self(), 'ui' => false], 'RightMenu')->removeClass('item')->addClass('right menu');
+        return static::addTo($this, ['ui' => false], ['RightMenu'])->removeClass('item')->addClass('right menu');
     }
 
     /**

@@ -40,7 +40,7 @@ Like many other Views of ATK, popup is an interractive element. It can load it's
 
     $m = $app->add('Menu');
     $item = $m->addItem('HoverMe');
-    $app->add(['Popup', $item])->set(function($popup) {
+    Popup::addTo($app, [$item])->set(function($popup) {
         $popup->add('Text')->set('Appears when you hover a menu item');
         $popup->add(['Label', 'Random value', 'detail'=>rand(1,100)]);
     });

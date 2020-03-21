@@ -101,7 +101,7 @@ To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the foll
     $t = $layout->add('Tabs');
 
     $t->addTab('Tab1')->add('LoremIpsum'); // regular tab
-    $t->addTab('Tab2', function($p){ $p->add('LoremIpsum'); }); // dynamic tab
+    $t->addTab('Tab2', function($p){ \atk4\ui\LoremIpsum::addTo($p); }); // dynamic tab
 
 .. php:method:: getURL($html_wrapping)
 
@@ -159,7 +159,7 @@ Loader needs to occupy some space.
 By default it will display a white segment with 7em height, but you can specify any other view thorugh $shim
 property::
 
-    $loader = $app->add(['Loader', 'shim'=>['Message', 'Please wait until we load LoremIpsum...', 'red']);
+    $loader = $app->add(['Loader', 'shim'=>['Message', 'Please wait until we load LoremIpsum...', 'red']]);
     $loader->set(function($p) {
 
         // Simulate slow-loading component

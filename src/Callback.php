@@ -14,8 +14,7 @@ use atk4\core\TrackableTrait;
  *
  * $button = $layout->add('Button');
  * $button->set('Click to do something')->link(
- *      $button
- *          ->add('Callback')
+ *      Callback::addTo($button)
  *          ->set(function(){
  *              do_something();
  *          })

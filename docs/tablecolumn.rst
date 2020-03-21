@@ -273,8 +273,7 @@ Basic Use
 
 The simplest way to use Menus and Popups is through a wrappers: :php:meth:`atk4\\ui\\Grid::addDropdown` and :php:meth:`atk4\\ui\\Grid::addPopup`::
 
-    $grid->addPopup('iso')
-        ->add('View')
+    View::addTo($grid->addPopup('iso'))
         ->set('Grid column popup text');
 
     // OR

@@ -1,7 +1,7 @@
 Implementation of `<new feature>` (see ticket #..). Simple use:
 
 ``` php
-$app->add(['new component']);
+Component::addTo($app);
 ..
 ```
 

@@ -126,7 +126,7 @@ class Basic extends \atk4\ui\View implements Interface_
 
         $this->addHeader();
 
-        $this->add($this->executorButton)->on('click', function () {
+        \atk4\ui\Button::addToWithClassName($this, $this->executorButton)->on('click', function () {
             return $this->jsExecute();
         });
     }

@@ -64,7 +64,7 @@ EOF
 
     $t->addParagraph('It all has started with a "Button" though:');
 
-    Demo::addTo($page)->setCode('$app->add(["Button", "Hello from the button!"]);');
+    Demo::addTo($page)->setCode('\atk4\ui\Button::addTo($app, [\'Hello from the button!\']);');
 });
 
 $wizard->addStep('Interactivity', function ($page) {

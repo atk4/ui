@@ -168,11 +168,11 @@ Here is the code with comments::
     }
 
     // Usage Examples. Start with the most basic usage
-    $app->add(new SocialAdd('instagram'));
+    SocialAdd::addTo($app, ['instagram']);
 
     // Next specify label and separatly name of social network
-    $app->add(new SocialAdd(['Follow on Twitter', 'social'=>'twitter']));
+    SocialAdd::addTo($app, ['Follow on Twitter', 'social'=>'twitter']);
 
     // Finally provide custom icon and make the button clickable.
-    $app->add(new SocialAdd(['facebook', 'icon'=>'facebook f']))
+    SocialAdd::addTo($app, ['facebook', 'icon'=>'facebook f'])
         ->link('https://facebook.com', '_blank');

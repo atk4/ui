@@ -257,7 +257,7 @@ class App
         $this->html = null;
         $this->initLayout(Centered::class);
         // change title to added an error
-        //$this->layout->add('Header', 'Header')->set('L'.$exception->getLine().': '.$exception->getMessage());
+        //Header::addTo($this->layout, ['Header'])->set('L'.$exception->getLine().': '.$exception->getMessage());
 
         // -- CHECK ERROR BY TYPE
         switch (true) {

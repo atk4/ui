@@ -294,7 +294,7 @@ Template can be loaded from either file or string by using one of
 following commands::
 
 
-    $template = $this->add('GiTemplate');
+    $template = GiTemplate::addTo($this);
 
     $template->loadTemplateFromString('Hello, {name}world{/}');
 
@@ -339,7 +339,7 @@ Changing template contents
 
 Example::
 
-    $template = $this->add('GiTemplate');
+    $template = GiTemplate::addTo($this);
 
     $template->loadTemplateFromString('Hello, {name}world{/}');
 
@@ -405,7 +405,7 @@ Let's assume you have the following template in ``template/envelope.html``::
 
 You can use the following code to manipulate the template above::
 
-    $template = $this->add('GiTemplate');
+    $template = GiTemplate::addTo($this);
     $template->loadTemplate('envelope');        // templates/envelope.html
 
     // Split into multiple objects for processing
@@ -565,7 +565,7 @@ some pages. If you frequently use view with a different template, it
 might be better to define a new View class and re-define
 ``defaultTemplate()`` method instead::
 
-    $this->add('MyObject',null,null,array('greeting'));
+    MyObject::addTo($this, ['greeting']);
 
 Accessing view's template
 -------------------------

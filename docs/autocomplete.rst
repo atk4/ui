@@ -5,7 +5,7 @@
 AutoComplete Field
 =================
 
-.. php:namespace:: atk4\\ui\\FormField
+.. php:namespace:: atk4\ui\FormField
 .. php:class:: AutoComplete
 
 Agile UI uses "FormField\Dropdown" by default on the form, but there is also implementation

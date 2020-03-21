@@ -96,9 +96,9 @@ App class first and then continue with Layout initialization::
     $app = new \atk4\ui\App('My App');
     $top = $app->initLayout(new \atk4\ui\View(['ui'=>'segments']));
 
-    $middle = $top->add(new \atk4\ui\View(['ui'=>'segment', 'red']);
+    $middle = $top->add(new \atk4\ui\View(['ui'=>'segment', 'red']));
 
-    $bottom = $middle->add(new \atk4\ui\Button(['Hello World', 'orange']);
+    $bottom = $middle->add(new \atk4\ui\Button(['Hello World', 'orange']));
 
 Finally, if you prefer a more consise code, you can also use the following format::
 
@@ -276,7 +276,7 @@ During the Render of a button, the following code will be executed::
 If you wish to use a different icon-set, you can change Factory's route for 'Icon'
 to your own implementation OR you can pass icon as a view::
 
-    $button = $app->add('Button', ['icon'=>new MyAwesomeIcon('book'));
+    $button = $app->add('Button', ['icon'=>new MyAwesomeIcon('book')]);
 
 
 Rendering of a Tree
@@ -378,7 +378,7 @@ Here is a best practice for using custom template::
 As soon as the view becomes part of a render-tree, the Template object will also be allocated.
 At this point it's also possible to override default template::
 
-    $app->add(new MyView(), ['template'=>$template->cloneRegion('MyRegion')]);
+    MyView::addTo($app, ['template'=>$template->cloneRegion('MyRegion')]);
 
 Or you can set $template into object inside your constructor, in which case it will be left as-is.
 
