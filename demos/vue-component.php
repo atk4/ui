@@ -20,7 +20,7 @@ $inline_edit->setModel($m);
 $inline_edit->onChange(function ($value) {
     $view = new \atk4\ui\Message();
     $view->init();
-    $view->text->addParagraph('new value: '.$value);
+    $view->text->addParagraph('new value: ' . $value);
 
     return $view;
 });
@@ -40,14 +40,14 @@ $view = \atk4\ui\View::addTo($app);
 
 $search = \atk4\ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
 $lister_container = \atk4\ui\View::addTo($view, ['template' => $lister_template]);
-$lister = \atk4\ui\Lister::addTo($lister_container, [], ['List'])
-            ->onHook('beforeRow', function ($l) {
-                $l->ipp++;
-                $l->current_row['iso'] = strtolower($l->current_row['iso']);
-                if ($l->ipp === $l->model->limit[0]) {
-                    $l->t_row->setHtml('end', '<div class="ui circular basic label"> ...</div>');
-                }
-            });
+$lister = \atk4\ui\Lister::addTo($lister_container, [], ['List']);
+$lister->onHook('beforeRow', function ($l) {
+    $l->ipp++;
+    $l->current_row['iso'] = strtolower($l->current_row['iso']);
+    if ($l->ipp === $l->model->limit[0]) {
+        $l->t_row->setHtml('end', '<div class="ui circular basic label"> ...</div>');
+    }
+});
 
 $search->reload = $lister_container;
 $lister->setModel($search->setModelCondition($m))->setLimit(50);

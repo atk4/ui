@@ -19,11 +19,11 @@ $view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div>
 {List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{/}
 </div>')]);
 
-\atk4\ui\Lister::addTo($view, [], ['List'])
-    ->onHook('beforeRow', function ($l) {
-        $l->current_row['iso'] = strtolower($l->current_row['iso']);
-    })
-    ->setModel(new Country($db))
+$lister = \atk4\ui\Lister::addTo($view, [], ['List']);
+$lister->onHook('beforeRow', function ($l) {
+    $l->current_row['iso'] = strtolower($l->current_row['iso']);
+});
+$lister->setModel(new Country($db))
     ->setLimit(20);
 
 \atk4\ui\View::addTo($app, ['ui' => 'clearing divider']);
@@ -39,9 +39,9 @@ $view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div>
 {List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{empty}no flags to show here{/}{/}
 </div>')]);
 
-\atk4\ui\Lister::addTo($view, [], ['List'])
-    ->onHook('beforeRow', function ($l) {
-        $l->current_row['iso'] = strtolower($l->current_row['iso']);
-    })
-    ->setModel(new Country($db))
+$lister = \atk4\ui\Lister::addTo($view, [], ['List']);
+$lister->onHook('beforeRow', function ($l) {
+    $l->current_row['iso'] = strtolower($l->current_row['iso']);
+});
+$lister->setModel(new Country($db))
     ->addCondition('id', -1); // no such records so model will be empty

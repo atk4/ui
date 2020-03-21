@@ -10,7 +10,8 @@ $v = \atk4\ui\View::addTo($container, ['template' => new \atk4\ui\Template('<div
 {List}<li class="ui icon label"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</li>{/}
 </ul>{$Content}</div>')]);
 
-$l = \atk4\ui\Lister::addTo($v, [], ['List'])->onHook('beforeRow', function ($l) {
+$l = \atk4\ui\Lister::addTo($v, [], ['List']);
+$l->onHook('beforeRow', function ($l) {
     $l->current_row['iso'] = strtolower($l->current_row['iso']);
 });
 
