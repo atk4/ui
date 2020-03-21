@@ -105,9 +105,9 @@ Finally, if you prefer a more consise code, you can also use the following forma
     $app = new \atk4\ui\App('My App');
     $top = $app->initLayout('View', ['ui'=>'segments']);
 
-    $middle = View::addTo($top, [], [['ui'=>'segment', 'red']]);
+    $middle = View::addTo($top, ['ui'=>'segment', 'red']);
 
-    $bottom = Button::addTo($middle, [], [['Hello World', 'orange']]);
+    $bottom = Button::addTo($middle, ['Hello World', 'orange']);
 
 The rest of documentaiton will use thi sconsise code to keep things readable, however if
 you value type-hinting of your IDE, you can keep using "new" keyword. I must also
@@ -197,17 +197,17 @@ wide varietty of roles. In some cases, a dedicated object will exist, for
 example a Button. In other cases, you can use a View and specify a UI role
 explicitly::
 
-    $view = View::addTo($app, [], [['ui'=>'segment']]);
+    $view = View::addTo($app, ['ui'=>'segment']);
 
 If you happen to pass more key/values to the constructor or as second argument
 to add() they will be treated as default values for the properties of that
 specific view::
 
-    $view = View::addTo($app, [], [['ui'=>'segment', 'id'=>'test-id']]);
+    $view = View::addTo($app, ['ui'=>'segment', 'id'=>'test-id']);
 
 For a more IDE-friendly format, however, I recommend to use the following syntax::
 
-    $view = View::addTo($app, [], [['ui'=>'segment']]);
+    $view = View::addTo($app, ['ui'=>'segment']);
     $view->id = 'test-id';
 
 You must be aware of a difference here - passing array to constructor will
@@ -221,7 +221,7 @@ which syntax you are using.
 If you are don't specify key for the properties, they will be considered an
 extra class for a view::
 
-    $view = View::addTo($app, [], [['inverted', 'orange', 'ui'=>'segment']]);
+    $view = View::addTo($app, ['inverted', 'orange', 'ui'=>'segment']);
     $view->id = 'test-id';
 
 You can either specify multiple classes one-by-one or as a single string
@@ -262,7 +262,7 @@ by creating instance of \atk4\ui\Icon() inside the button.
 
 The same pattern can be used for other scenarios::
 
-    $button = Button::addTo($app, [], [['icon'=>'book']]);
+    $button = Button::addTo($app, ['icon'=>'book']);
 
 This code will have same effect as::
 
@@ -271,12 +271,12 @@ This code will have same effect as::
 
 During the Render of a button, the following code will be executed::
 
-    Icon::addTo($button, [], [['book']]);
+    Icon::addTo($button, ['book']);
 
 If you wish to use a different icon-set, you can change Factory's route for 'Icon'
 to your own implementation OR you can pass icon as a view::
 
-    $button = Button::addTo($app, [], [['icon'=>new MyAwesomeIcon('book')]]);
+    $button = Button::addTo($app, ['icon'=>new MyAwesomeIcon('book')]);
 
 
 Rendering of a Tree
@@ -387,7 +387,7 @@ will automatically clone region of a parent.
 
 ``Lister`` is a class that has no default template, and therefore you can add it like this::
 
-    $profile = View::addTo($app, [], [['template'=>'myview.html']]);
+    $profile = View::addTo($app, ['template'=>'myview.html']);
     $profile->setModel($user);
     Lister::addTo($profile, [], ['Tags'])->setModel($user->ref('Tags'));
 
@@ -449,7 +449,7 @@ the name of the field will be used instead of the role. This is done by setting 
 Example::
 
     $layout = new \atk4\ui\Layout(['id'=>'foo'])
-    $butt = Button::addTo($layout, [], [['name'=>'bar']]);o
+    $butt = Button::addTo($layout, ['name'=>'bar']);
 
     echo $butt->getJSID();  // foo_bar
 

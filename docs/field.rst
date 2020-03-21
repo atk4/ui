@@ -230,7 +230,7 @@ Here are few ways to specify `icon` to an Input::
     $page->add($line);
 
     // using class factory
-    Line::addTo($page, [], [['icon'=>'search']]);
+    Line::addTo($page, ['icon'=>'search']);
 
 The 'icon' property can be either string or a View. The string is for convenience and will
 be automatically substituted with `new Icon($icon)`. If you wish to be more specifc
