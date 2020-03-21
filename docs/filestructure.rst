@@ -206,7 +206,7 @@ Open the created file "View1.php" in your editor and add the following lines::
       function init() {
           parent::init();
 
-          $text = $this->app->add(['Text', 'here goes some text']);
+          $text = \atk4\ui\Text::addTo($this->app, ['here goes some text']);
       }
   }
 
@@ -226,10 +226,10 @@ To use our class in our app, we have to include it into our app. This can be don
 
 Please add the following lines into your index.php::
 
-  $app->add(new MyProject\Views\View1());
+  \MyProject\Views\View1::addTo($app);
 
 or if you have added at the beginning of your index.php "use MyProject\\Views\\View1;" you can write::
 
-  $app->add(new View1());
+  View1::addTo($app);
 
 See also :ref:`using-namespaces` on this topic...

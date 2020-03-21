@@ -64,7 +64,7 @@ EOF
 
     $t->addParagraph('It all has started with a "Button" though:');
 
-    Demo::addTo($page)->setCode('$app->add(["Button", "Hello from the button!"]);');
+    Demo::addTo($page)->setCode('\atk4\ui\Button::addTo($app, [\'Hello from the button!\']);');
 });
 
 $wizard->addStep('Interactivity', function ($page) {
@@ -76,7 +76,7 @@ EOF
     );
 
     Demo::addTo($page)->setCode(<<<'CODE'
-$button = $app->add(['Button', "Click for the greeting!"]);
+$button = \atk4\ui\Button::addTo($app, ["Click for the greeting!"]);
 $button->on('click', function() {
     return 'Hello World!';
 });
@@ -93,21 +93,20 @@ EOF
 
     Demo::addTo($page)->setCode(<<<'CODE'
 
-$seg = $app->add(['View', 'ui'=>'segment']);
+$seg = \atk4\ui\View::addTo($app, ['ui'=>'segment']);
 
-$seg->add('Text')->set('Number of buttons: ');
+\atk4\ui\Text::addTo($seg)->set('Number of buttons: ');
 
-$paginator = $seg->add([
-    'Paginator',
+$paginator = \atk4\ui\Paginator::addTo($seg, [
     'total'=>5,
     'reload'=>$seg,
     'urlTrigger'=>'count'
 ]);
 
-$seg->add(['View', 'ui'=>'divider']);
+\atk4\ui\View::addTo($seg, ['ui'=>'divider']);
 
 for($i=1; $i <= ($_GET['count'] ?? 1); $i++) {
-    $seg->add(['Button', $i]);
+    \atk4\ui\Button::addTo($seg, [$i]);
 }
 
 CODE
@@ -144,12 +143,12 @@ class Invoice extends \atk4\data\Model {
 session_start();
 $session = new atk4\data\Persistence\Array_($_SESSION['x']);
 
-$form = $app->add('Form');
+$form = \atk4\ui\Form::addTo($app);
 $form->setModel(new Invoice($session))
     ->tryLoad(1);
 
-$app->add(['View', 'ui'=>'divider']);
-$app->add(['Button', 'Refresh', 'icon'=>'refresh'])
+\atk4\ui\View::addTo($app, ['ui'=>'divider']);
+\atk4\ui\Button::addTo($app, ['Refresh', 'icon'=>'refresh'])
     ->on('click', $app->jsReload());
 
 CODE
@@ -201,7 +200,7 @@ $session = new atk4\data\Persistence\Array_($_SESSION['x']);
 
 $model = new Invoice($session);
 $model->tryLoad(1);
-$app->add('Card')->setModel($model, ['date']);
+\atk4\ui\Card::addTo($app)->setModel($model, ['date']);
 
 CODE
     );

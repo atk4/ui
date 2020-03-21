@@ -89,10 +89,10 @@ $f_group->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language'=>['dev
 
 //////////////////////////////////////////////////////////
 /*
-$app->add(['Header', 'Hide or show accordion section', 'size'=>2]);
+\atk4\ui\Header::addTo($app, ['Hide or show accordion section', 'size'=>2]);
 
-$f_acc = $app->add(new \atk4\ui\Form(['segment']));
-$f_acc->add(['Label', 'Work on section layouts too.', 'top attached'], 'AboveFields');
+$f_acc = \atk4\ui\Form::addTo($app, ['segment']);
+\atk4\ui\Label::addTo($f_acc, ['Work on section layouts too.', 'top attached'], ['AboveFields']);
 
 // Accordion
 $accordion_layout = $f_acc->layout->addSubLayout(['Accordion', 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);

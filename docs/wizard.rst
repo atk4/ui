@@ -27,13 +27,13 @@ Basic Usage
 
 Start by creating Wizard inside your render tree::
 
-    $wizard = $app->add('Wizard');
+    $wizard = Wizard::addTo($app);
 
 Next add as many steps as you need specifying title and a PHP callback code for each::
 
     $wizard->addStep('Welcome', function ($wizard) {
 
-        $wizard->add(['Message', 'Welcome to wizard demonstration'])->text
+        Message::addTo($wizard, ['Welcome to wizard demonstration'])->text
             ->addParagraph('Use button "Next" to advance')
             ->addParagraph('You can specify your existing database connection string which will be used
             to create a table for model of your choice');
@@ -54,7 +54,7 @@ which is described below. You can also provide first argument to addStep as a se
 You may also specify a single Finish callback, which will be used when wizard is complete::
 
     $wizard->addFinish(function ($wizard) {
-        $wizard->add(['Header', 'You are DONE', 'huge centered']);
+        Header::addTo($wizard, ['You are DONE', 'huge centered']);
     });
 
 Properties

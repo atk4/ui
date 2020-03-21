@@ -23,7 +23,7 @@ Basic Usage
 First argument of constructor or first element in array passed to constructor will be the text that will
 appear on the label::
 
-    $label = $app->add(['Label', 'hello world']);
+    $label = Label::addTo($app, ['hello world']);
 
     // or
 
@@ -50,12 +50,12 @@ Icons
 
 There are two properties (icon, iconRight) but you can set only one at a time::
 
-    $app->add(['Label', '23', 'icon'=>'mail']);
-    $app->add(['Label', 'new', 'iconRight'=>'delete']);
+    Label::addTo($app, ['23', 'icon'=>'mail']);
+    Label::addTo($app, ['new', 'iconRight'=>'delete']);
 
 You can also specify icon as an object::
 
-    $app->add(['Label', 'new', 'iconRight'=>new \atk4\ui\Icon('delete')]);
+    Label::addTo($app, ['new', 'iconRight'=>new \atk4\ui\Icon('delete')]);
 
 For more information, see: :php:class:`Icon`
 
@@ -65,14 +65,14 @@ Image
 Image cannot be specified at the same time with the icon, but you can use PNG/GIF/JPG image on your label::
 
     $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
-    $app->add(['Label', 'Coded in PHP', 'image'=>$img]);
+    Label::addTo($app, ['Coded in PHP', 'image'=>$img]);
 
 Detail
 ======
 
 You can specify "detail" component to your label::
 
-    $app->add(['Label', 'Number of lines', 'detail'=>'33']);
+    Label::addTo($app, ['Number of lines', 'detail'=>'33']);
 
 Groups
 ======
@@ -80,41 +80,41 @@ Groups
 Label can be part of the group, but you would need to either use custom HTML template or
 composition::
 
-    $group = $app->add(['View', false, 'blue tag', 'ui'=>'labels']);
-    $group->add(['Label', '$9.99']);
-    $group->add(['Label', '$19.99', 'red tag']);
-    $group->add(['Label', '$24.99']);
+    $group = View::addTo($app, [false, 'blue tag', 'ui'=>'labels']);
+    Label::addTo($group, ['$9.99']);
+    Label::addTo($group, ['$19.99', 'red tag']);
+    Label::addTo($group, ['$24.99']);
 
 Combining classes
 =================
 
 Based on Fomantic UI documentation, you can add more classes to your labels::
 
-    $columns = $app->add('Columns');
+    $columns = Columns::addTo($app);
 
     $c = $columns->addColumn();
-    $col = $c->add(['View', 'ui'=>'raised segment']);
+    $col = View::addTo($c, ['ui'=>'raised segment']);
 
     // attach label to the top of left column
-    $col->add(['Label', 'Left Column', 'top attached', 'icon'=>'book']);
+    Label::addTo($col, ['Left Column', 'top attached', 'icon'=>'book']);
 
     // ribbon around left column
-    $col->add(['Label', 'Lorem', 'red ribbon', 'icon'=>'cut']);
+    Label::addTo($col, ['Lorem', 'red ribbon', 'icon'=>'cut']);
 
     // add some content inside column
-    $col->add(['LoremIpsum', 'size'=>1]);
+    LoremIpsum::addTo($col, ['size'=>1]);
 
     $c = $columns->addColumn();
-    $col = $c->add(['View', 'ui'=>'raised segment']);
+    $col = View::addTo($c, ['ui'=>'raised segment']);
 
     // attach label to the top of right column
-    $col->add(['Label', 'Right Column', 'top attached', 'icon'=>'book']);
+    Label::addTo($col, ['Right Column', 'top attached', 'icon'=>'book']);
 
     // some content
-    $col->add(['LoremIpsum', 'size'=>1]);
+    LoremIpsum::addTo($col, ['size'=>1]);
 
     // right bottom corner label
-    $col->add(['Label', 'Ipsum', 'orange bottom right attached', 'icon'=>'cut']);
+    Label::addTo($col, ['Ipsum', 'orange bottom right attached', 'icon'=>'cut']);
 
 Added labels into Table
 =======================

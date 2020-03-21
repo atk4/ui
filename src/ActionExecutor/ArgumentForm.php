@@ -26,7 +26,7 @@ class ArgumentForm extends Basic
         /*
          * We might want console later!
          *
-        $this->console = $this->add(['Console', 'event'=>false]);//->addStyle('display', 'none');
+        $this->console = \atk4\ui\Console::addTo($this, ['event'=>false]);//->addStyle('display', 'none');
         $this->console->addStyle('max-height', '50em')->addStyle('overflow', 'scroll');
 
         */

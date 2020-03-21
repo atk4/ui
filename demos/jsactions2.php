@@ -28,15 +28,15 @@ $country->unload();
 // For demonstration purpose with add, edit and delete action.
 
 $ac = $country->getAction('add');
-$add_button = $buttons->add(['Button', $ac->getDescription()]);
+$add_button = \atk4\ui\Button::addTo($buttons, [$ac->getDescription()]);
 $add_button->on('click', $ac);
 
 $ac = $country->getAction('edit');
-$btn = $buttons->add(['Button', $ac->getDescription()]);
+$btn = \atk4\ui\Button::addTo($buttons, [$ac->getDescription()]);
 $btn->on('click', $ac, ['args' => ['id' => $field->jsInput()->val()]]);
 
 $ac = $country->getAction('delete');
-$btn = $buttons->add(['Button', $ac->getDescription()]);
+$btn = \atk4\ui\Button::addTo($buttons, [$ac->getDescription()]);
 $btn->on('click', $ac, ['confirm' => 'This will delete record. Sure?']);
 */
 

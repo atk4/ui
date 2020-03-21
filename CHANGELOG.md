@@ -5,7 +5,7 @@
 In 1.7 we now rely on VueJS for new components and the first component to make use of VieJS is the MultiLine edit.
 
 ``` php
-$f = $app->add('Form');
+$f = \atk4\ui\Form::addTo($app);
 
 // Add multiline field and set model.
 $ml = $f->addField('ml', ['MultiLine', 'options' => ['color' => 'blue']]);
@@ -103,8 +103,8 @@ part of AutoComplete.
 
 ``` php
 
-$form = $app->add(new \atk4\ui\Form(['segment']));
-$form->add(['Label', 'Add city', 'top attached'], 'AboveFields');
+$form = \atk4\ui\Form::addTo($app, ['segment']);
+\atk4\ui\Label::addTo($form, ['Add city', 'top attached'], ['AboveFields']);
 
 $l = $form->addField('city',['Lookup']);
 
@@ -620,11 +620,11 @@ Loader (#246, #250) is a component that calls itself back to load its content. W
 your user will see a spinner animation:
 
 ``` php
-$loader = $app->add('Loader');
+$loader = \atk4\ui\Loader::addTo($app);
 
 $loader->set(function($p) {
     sleep(2);  // or any other slow-loading code.
-    $p->add('LoremIpsum');
+    \atk4\ui\LoremIpsum::addTo($p);
 });
 ```
 
@@ -636,11 +636,11 @@ look into [Loader Documentation](http://agile-ui.readthedocs.io/en/latest/virtua
 Next we thought - why not also load content [dynamically inside a Modal dialog](http://ui.agiletoolkit.org/demos/modal2.php), so we added this:
 
 ``` php
-$modal = $app->add(['Modal', 'title' => 'Lorem Ipsum load dynamically']);
+$modal = \atk4\ui\Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
 
 $modal->set(function ($p) {
     sleep(2);  // or any other slow-loading code.
-    $p->add('LoremIpsum');
+    \atk4\ui\LoremIpsum::addTo($p);
 });
 ```
 

@@ -15,7 +15,7 @@ import 'draggable';
  *
  *  Defaut container is set to table boddy (tbody), using table row(tr) as reoderable element.
  *     To use other container, simply set container and draggable accordingly.
- *      $sortable = $lister->add(['jsSortable', 'container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
+ *      $sortable = \atk4\ui\jsSortable::addTo($lister, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
  *
  *  Element containing specific css class can be used as the handle for dragging element, if null
  *  is pass, than the entire element is used.

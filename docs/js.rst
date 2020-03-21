@@ -1,4 +1,4 @@
-.. php:namespace: atk4\\ui
+.. php:namespace: atk4\ui
 
 .. _js:
 
@@ -96,9 +96,9 @@ multiple elements::
 
     $buttons = new Buttons();
 
-    $buttons->add(new Button('One'));
-    $buttons->add(new Button('Two'));
-    $buttons->add(new Button('Three'));
+    \atk4\ui\Button::addTo($buttons, ['One']);
+    \atk4\ui\Button::addTo($buttons, ['Two']);
+    \atk4\ui\Button::addTo($buttons, ['Three']);
 
     $buttons->on('click', '.button')->hide();
 
@@ -248,9 +248,9 @@ The following code will show 3 buttons and clicking any button will hide itself.
 
     $buttons = Buttons();
 
-    $buttons->add(new Button('One'));
-    $buttons->add(new Button('Two'));
-    $buttons->add(new Button('Three'));
+    \atk4\ui\Button::addTo($buttons, ['One']);
+    \atk4\ui\Button::addTo($buttons, ['Two']);
+    \atk4\ui\Button::addTo($buttons, ['Three']);
 
     $buttons->on('click', '.button')->hide();
 
@@ -268,9 +268,9 @@ The best example would be a :php:class:`Lister` with interractive elements::
 
     $buttons = Buttons();
 
-    $b1 = $buttons->add(new Button('One'));
-    $b2 = $buttons->add(new Button('Two'));
-    $b3 = $buttons->add(new Button('Three'));
+    $b1 = \atk4\ui\Button::addTo($buttons, ['One']);
+    $b2 = \atk4\ui\Button::addTo($buttons, ['Two']);
+    $b3 = \atk4\ui\Button::addTo($buttons, ['Three']);
 
     $buttons->on('click', '.button', $b3->js()->hide());
 
@@ -285,9 +285,9 @@ You can use both actions together. The next example will allow only one button t
 
     $buttons = Buttons();
 
-    $b1 = $buttons->add(new Button('One'));
-    $b2 = $buttons->add(new Button('Two'));
-    $b3 = $buttons->add(new Button('Three'));
+    $b1 = \atk4\ui\Button::addTo($buttons, ['One']);
+    $b2 = \atk4\ui\Button::addTo($buttons, ['Two']);
+    $b3 = \atk4\ui\Button::addTo($buttons, ['Three']);
 
     $buttons->on('click', '.button', $b3->js()->hide());
 
@@ -436,22 +436,22 @@ This class allows you to open modal dialogs and close them easily. It's based ar
 producing content of your dialog::
 
 
-    $modal = $app->add(['Modal', 'title' => 'Simple title']);
+    $modal = \atk4\ui\Modal::addTo($app, ['title' => 'Simple title']);
     $modal->set(function ($p) use ($modal) {
-        $p->add('LoremIpsum');
+        \atk4\ui\LoremIpsum::addTo($p);
 
-        $p->add(['Button', 'Hide'])->on('click', $modal->hide());
+        \atk4\ui\Button::addTo($p, ['Hide'])->on('click', $modal->hide());
     });
 
-    $app->add(['Button', 'Show'])->on('click', $modal->show());
+    \atk4\ui\Button::addTo($app, ['Show'])->on('click', $modal->show());
 
 Modal will render as a `<div>` block but will be hidden. Alternatively you can use Modal without loadable content::
 
-    $modal = $app->add(['Modal', 'title' => 'Add a name']);
-    $modal->add('LoremIpsum');
-    $modal->add(['Button', 'Hide'])->on('click', $modal->hide());
+    $modal = \atk4\ui\Modal::addTo($app, ['title' => 'Add a name']);
+    \atk4\ui\LoremIpsum::addTo($modal);
+    \atk4\ui\Button::addTo($modal, ['Hide'])->on('click', $modal->hide());
 
-    $app->add(['Button', 'Show'])->on('click', $modal->show());
+    \atk4\ui\Button::addTo($app, ['Show'])->on('click', $modal->show());
 
 This way it's more convenient for holding static content, such as Terms of Service.
 
@@ -467,10 +467,10 @@ This is alternative implementation to :php:class:`Modal` and is convenient for s
 when you do not know in advance that you migth need to open Dialog box. This class is not
 a component, but rather an Action so you mustn't add it into Render Tree::
 
-    $vp = $app->add('VirtualPage');
-    $vp->add(['LoremIpsum', 'size' => 2]);
+    $vp = \atk4\ui\VirtualPage::addTo($app);
+    \atk4\ui\LoremIpsum::addTo($vp, ['size' => 2]);
 
-    $app->add(['Button', 'Dynamic Modal'])
+    \atk4\ui\Button::addTo($app, ['Dynamic Modal'])
         ->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut')));
 
 If compare this with example for :php:class:`Modal`, you'll notice that Modal div is always
@@ -484,7 +484,7 @@ jsNotify
 
 Implementation for dynamic notifier, which you can use to display operation status::
 
-    $app->add(['Button', 'Test'])->on(
+    \atk4\ui\Button::addTo($app, ['Test'])->on(
         'click',
         (new \atk4\ui\jsNotify('Not yet implemented'))
             ->setColor('red')
@@ -495,10 +495,10 @@ A typical use case would be to provide visual feedback of an action after used p
 a Modal window with a Form. When user submits a form, it's Submit handler will close modal, so to leave
 some feedback to the user jsNotify can display a bar on top of the screen for some time::
 
-    $modal = $app->add(['Modal', 'Modal Title']);
+    $modal = \atk4\ui\Modal::addTo($app, ['Modal Title']);
 
     $modal->set(function ($p) use ($modal) {
-        $form = $p->add('Form');
+        $form = \atk4\ui\Form::addTo($p);
         $form->addField('name', null, ['caption'=>'Add your name']);
 
         $form->onSubmit(function ($f) use ($modal) {
@@ -513,7 +513,7 @@ some feedback to the user jsNotify can display a bar on top of the screen for so
         });
     });
 
-    $app->add(['Button', 'Open Modal'])->on('click', $modal->show());
+    \atk4\ui\Button::addTo($app, ['Open Modal'])->on('click', $modal->show());
 
 .. php:method:: setIcon(color)
 .. php:method:: setTransition(openTransition, closeTransition)
@@ -546,8 +546,8 @@ other view::
 
     $m_book = new Book($db);
 
-    $f = $app->add('Form');
-    $t = $app->add('Table');
+    $f = \atk4\ui\Form::addTo($app);
+    $t = \atk4\ui\Table::addTo($app);
 
     $f->setModel($m_book);
 
@@ -573,7 +573,7 @@ various ways to do so.
 
 The most basic approach you could probably figure out already::
 
-    $button = $app->add(['Button', 'Process the image']);
+    $button = \atk4\ui\Button::addTo($app, ['Process the image']);
     $button->on('click', function() use($button, $image) {
 
         sleep(1); // $image->resize();
@@ -599,9 +599,9 @@ Server Sent Event (jsSSE)
 This class implements ability for your PHP code to send messages to the browser in the middle of the process
 execution::
 
-    $button = $app->add(['Button', 'Process the image']);
+    $button = \atk4\ui\Button::addTo($app, ['Process the image']);
 
-    $sse = $app->add(['jsSSE']);
+    $sse = \atk4\ui\jsSSE::addTo($app);
 
     $button->on('click', $sse->set(function() use($sse, $button, $image) {
 

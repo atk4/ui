@@ -3,9 +3,9 @@
 require_once __DIR__ . '/init.php';
 
 /*
-$app->add(['Button', 'View Form input split in Accordion section', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\atk4\ui\Button::addTo($app, ['View Form input split in Accordion section', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['accordion-in-form']);
-$app->add(['View', 'ui' => 'clearing divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'clearing divider']);
 */
 
 \atk4\ui\Header::addTo($app, ['Nested accordions']);

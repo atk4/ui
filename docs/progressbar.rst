@@ -1,5 +1,5 @@
 
-.. php:namespace:: atk4\\ui
+.. php:namespace:: atk4\ui
 
 .. php:class:: ProgressBar
 
@@ -21,17 +21,17 @@ Basic Usage
 After adding a console to your :ref:`render_tree`, you just need to set a call-back::
 
     // Add progressbar showing 0 (out of 100)
-    $bar = $app->add('ProgressBar');
+    $bar = ProgressBar::addTo($app);
 
     // Add with some other value of 20% and label
-    $bar2 = $app->add(['ProgressBar', 20, '% Battery']);
+    $bar2 = ProgressBar::addTo($app, [20, '% Battery']);
 
 The value of the progress bar can be changed either before rendering, inside PHP, or after rendering
 with JavaScript::
 
     $bar->value = 5;  // sets this value instead of 0
 
-    $app->add(['Button', 'charge up the battery'])->on('click', $bar2->jsValue(100));
+    Button::addTo($app, ['charge up the battery'])->on('click', $bar2->jsValue(100));
 
 Updating Progress in RealTime
 =============================

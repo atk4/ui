@@ -32,7 +32,7 @@ Basic Usage
 
 The simplest way to create a table is when you use it with Agile Data model::
 
-    $table = $app->add('Table');
+    $table = Table::addTo($app);
     $table->setModel(new Order($db));
 
 The table will be able to automatically determine all the fields defined in your "Order" model, map them to
@@ -51,7 +51,7 @@ You can also use Table with Array data source like this::
         ['name'=>'Brett', 'surname'=>'Bird', 'birthdate'=>new \DateTime('1988-12-20')],
     ];
 
-    $table = $app->add('Table');
+    $table = Table::addTo($app);
     $table->setSource($my_array);
 
     $table->addColumn('name');
@@ -72,7 +72,7 @@ Adding Columns
 To change the order or explicitly specify which field columns must appear, if you pass list of those
 fields as second argument to setModel::
 
-    $table = $app->add('Table');
+    $table = Table::addTo($app);
     $table->setModel(new Order($db), ['name', 'price', 'amount', 'status']);
 
 Table will make use of "Only Fields" feature in Agile Data to adjust query for fetching only the necessary
@@ -99,7 +99,7 @@ It's always a good idea to calculate column inside datababase. Lets create "tota
 multiply "price" and "amount" values. Use ``addExpression`` to provide in-line definition for this
 field if it's not alrady defined in ``Order::init()``::
 
-    $table = $app->add('Table');
+    $table = Table::addTo($app);
     $order = new Order($db);
 
     $order->addExpression('total', '[price]*[amount]')->type = 'money';
@@ -116,7 +116,7 @@ Table object does not contain any information about your fields (such as caption
 consult your Model for the necessary field information. If you are willing to define the type but also
 specify the caption, you can use code like this::
 
-    $table = $app->add('Table');
+    $table = Table::addTo($app);
     $order = new Order($db);
 
     $order->addExpression('total', [
@@ -183,7 +183,7 @@ method will rely on 3rd argument to create a new field for you. Here is example 
 the "total" column value (as above) but using PHP math instead of doing it inside database::
 
 
-    $table = $app->add('Table');
+    $table = Table::addTo($app);
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount', 'status']);
@@ -195,7 +195,7 @@ the "total" column value (as above) but using PHP math instead of doing it insid
 If you execute this code, you'll notice that the "total" column is now displayed last. If you
 wish to position it before status, you can use the final format of addColumn()::
 
-    $table = $app->add('Table');
+    $table = Table::addTo($app);
     $order = new Order($db);
 
     $table->setModel($order, ['name', 'price', 'amount']);
@@ -298,14 +298,14 @@ of issues from your Github repository::
     $dropbox = \atk4\dropbox\Persistence($db_config);
     $files = new \atk4\dropbox\Model\File($dropbox);
 
-    $app->add('Table')->setModel($files);
+    Table::addTo($app)->setModel($files);
 
 
     // Show contents of dropbox
     $github = \atk4\github\Persistence_Issues($github_api_config);
     $issues = new \atk4\github\Model\Issue($github);
 
-    $app->add('Table')->setModel($issues);
+    Table::addTo($app)->setModel($issues);
 
 This example demonstrates that by selecting a 3rd party persistence implementation, you can access
 virtually any API, Database or SQL resource and it will always take care of formatting for you as well

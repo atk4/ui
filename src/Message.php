@@ -7,8 +7,7 @@ namespace atk4\ui;
  *
  * Specify type = info | warning | error | success
  *
- * $page->add([
- *  'Message',
+ * Message::addTo($page, [
  *  'type' => 'error',
  *  'text' => 'Unable to save your document',
  *  ])

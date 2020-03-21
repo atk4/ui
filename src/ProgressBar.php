@@ -5,8 +5,7 @@ namespace atk4\ui;
 /**
  * Class implements ProgressBar.
  *
- * $bar = $app->add([
- *  'ProgressBar',
+ * $bar = ProgressBar::addTo($app, [
  *  10,
  *  'label' => 'Processing files',
  *  ]);
@@ -26,7 +25,7 @@ class ProgressBar extends View
 
     /**
      * Value that appears on a progress bar. Set it through constructor, e.g.
-     * $app->add(['ProgressBar', 20]);.
+     * ProgressBar::addTo($app, [20]);.
      *
      * @var int
      */

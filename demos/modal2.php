@@ -34,7 +34,7 @@ $modal_vp2 = \atk4\ui\Modal::addTo($app, ['title' => 'Text message load dynamica
 $modal_vp3 = \atk4\ui\Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
 $modal_vp3->set(function ($modal) {
     \atk4\ui\Text::addTo($modal)->set('This is yet another modal');
-    //$modal->add(['LoremIpsum', 'size' => 2]);
+    \atk4\ui\LoremIpsum::addTo($modal, ['size' => 2]);
 });
 
 //When $modal_vp1->show() is activate, it will dynamically add this content to it.

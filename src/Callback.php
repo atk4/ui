@@ -12,10 +12,9 @@ use atk4\core\TrackableTrait;
  * Add this object to your render tree and it will expose a unique URL which, when
  * executed directly will perform a PHP callback that you set().
  *
- * $button = $layout->add('Button');
+ * $button = Button::addTo($layout);
  * $button->set('Click to do something')->link(
- *      $button
- *          ->add('Callback')
+ *      Callback::addTo($button)
  *          ->set(function(){
  *              do_something();
  *          })
