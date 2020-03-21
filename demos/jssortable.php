@@ -23,11 +23,12 @@ $view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('
     </div>'
 )]);
 
-\atk4\ui\Lister::addTo($view, [], ['List'])
-     ->onHook('beforeRow', function ($l) {
-         $l->current_row['iso'] = strtolower($l->current_row['iso']);
-     })->setModel(new Country($db))
-     ->setLimit(20);
+$lister = \atk4\ui\Lister::addTo($view, [], ['List']);
+$lister->onHook('beforeRow', function ($l) {
+    $l->current_row['iso'] = strtolower($l->current_row['iso']);
+});
+$lister->setModel(new Country($db))
+    ->setLimit(20);
 
 $sortable = \atk4\ui\jsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
