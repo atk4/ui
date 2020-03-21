@@ -304,8 +304,8 @@ class Generic
             throw new \atk4\ui\Exception(['How $table could not be set??', 'field' => $field, 'value' => $value]);
         }
 
-        if ($tag = $this->table->hook('getColumnHeaderCell', [$this, $field, $value])) {
-            return $tag[0];
+        if ($tags = $this->table->hook('getColumnHeaderCell', [$this, $field, $value])) {
+            return reset($tags);
         }
 
         if ($field === null) {
