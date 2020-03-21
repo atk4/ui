@@ -6,7 +6,7 @@ require_once __DIR__ . '/init.php';
 
 \atk4\ui\Header::addTo($app, ['Types', 'size' => 2]);
 
-$app->add(new \atk4\ui\FormField\Line())->setDefaults(['placeholder' => 'Search']);
+\atk4\ui\FormField\Line::addTo($app)->setDefaults(['placeholder' => 'Search']);
 $app->add(new \atk4\ui\FormField\Line(['placeholder' => 'Search', 'loading' => true]));
 $app->add(new \atk4\ui\FormField\Line(['placeholder' => 'Search', 'loading' => 'left']));
 $app->add(new \atk4\ui\FormField\Line(['placeholder' => 'Search', 'icon' => 'search', 'disabled' => true]));

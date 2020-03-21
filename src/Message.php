@@ -49,7 +49,7 @@ class Message extends View
             if ($this->text) {
                 $this->text = $this->add(new Text($this->text));
             } else {
-                $this->text = $this->add(new Text());
+                $this->text = Text::addTo($this);
             }
         }
     }

@@ -19,10 +19,10 @@ class MySwitcher extends \atk4\ui\View
 
         switch ($this->app->stickyGet($this->name)) {
         case 'yellow':
-            \atk4\ui\View::addTo($this, ['ui' => 'yellow segment'])->add(new self());
+            self::addTo(\atk4\ui\View::addTo($this, ['ui' => 'yellow segment']));
             break;
         case 'blue':
-            \atk4\ui\View::addTo($this, ['ui' => 'blue segment'])->add(new self());
+            self::addTo(\atk4\ui\View::addTo($this, ['ui' => 'blue segment']));
             break;
         case 'button':
             \atk4\ui\Button::addTo(\atk4\ui\View::addTo($this, ['ui' => 'green segment']), ['Refresh page'])->link([]);

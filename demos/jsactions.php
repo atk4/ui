@@ -52,7 +52,7 @@ $f_action = $files->addAction(
 );
 
 $btn = \atk4\ui\Button::addTo($app, ['Import File']);
-$executor = $app->add(new \atk4\ui\ActionExecutor\jsUserAction());
+$executor = \atk4\ui\ActionExecutor\jsUserAction::addTo($app);
 $executor->setAction($f_action, ['path' => '.']);
 $executor->onHook('afterExecute', function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');

@@ -48,7 +48,7 @@ class ItemsPerPageSelector extends View
         $this->template->tryset('Label', $this->label);
 
         //Callback later will give us time to properly render menu item before final output.
-        $this->cb = $this->add(new CallbackLater());
+        $this->cb = CallbackLater::addTo($this);
 
         if (!$this->currentIpp) {
             $this->currentIpp = $this->pageLengthItems[0];

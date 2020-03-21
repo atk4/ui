@@ -9,7 +9,7 @@ date_default_timezone_set('UTC');
 $layout = new \atk4\ui\Layout\Generic(['defaultTemplate' => './templates/layout1.html']);
 
 try {
-    $layout->add(new \atk4\ui\Lister(), 'Report')
+    \atk4\ui\Lister::addTo($layout, [], ['Report'])
         ->setModel(new Somedata());
 
     echo $layout->render();

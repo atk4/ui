@@ -8,7 +8,7 @@ $app->add(new \atk4\ui\View([
 ]));
 
 $cc = \atk4\ui\Columns::addTo($app);
-$f = $cc->addColumn()->add(new \atk4\ui\Form());
+$f = \atk4\ui\Form::addTo($cc->addColumn());
 
 $f->addField('one', null, ['enum'=>['female', 'male']])->set('male');
 $f->addField('two', ['Radio'], ['enum'=>['female', 'male']])->set('male');

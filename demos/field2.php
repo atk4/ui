@@ -93,7 +93,7 @@ $g->addField('calendar_disb', ['Calendar', 'type' => 'date', 'disabled' => true]
 
 \atk4\ui\Header::addTo($app, ['Stand Alone Line']);
 // you can pass values to button
-$field = $app->add(new \atk4\ui\FormField\Line());
+$field = \atk4\ui\FormField\Line::addTo($app);
 
 $field->set('hello world');
 

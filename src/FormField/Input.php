@@ -128,7 +128,7 @@ class Input extends Generic
     protected function prepareRenderLabel($label, $spot)
     {
         if (!is_object($label)) {
-            $label = $this->add(new Label(), $spot)
+            $label = Label::addTo($this, [], [$spot])
                 ->set($label);
         } else {
             $this->add($label, $spot);

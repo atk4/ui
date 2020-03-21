@@ -21,7 +21,7 @@ $page = \atk4\ui\View::addTo($app, ['id' => 'example']);
 
 \atk4\ui\Header::addTo($page, ['Basic Usage']);
 
-$c = $page->add(new \atk4\ui\Columns());
+$c = \atk4\ui\Columns::addTo($page);
 \atk4\ui\LoremIpsum::addTo($c->addColumn(), [1]);
 \atk4\ui\LoremIpsum::addTo($c->addColumn(), [1]);
 \atk4\ui\LoremIpsum::addTo($c->addColumn(), [1]);
