@@ -72,7 +72,7 @@ class Multiformat extends Generic
             $html_tags = array_merge($c->getHTMLTags($row, $field), $html_tags);
         }
 
-        $template = $this->owner->add(['Template', $cell]);
+        $template = \atk4\ui\Template::addTo($this->owner, [$cell]);
         $template->set($row);
         $template->setHTML($html_tags);
 

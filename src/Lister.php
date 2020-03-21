@@ -90,7 +90,7 @@ class Lister extends View
     public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = null)
     {
         $this->ipp = $ipp;
-        $this->jsPaginator = $this->add(['jsPaginator', 'view' => $container, 'options' => $options]);
+        $this->jsPaginator = jsPaginator::addTo($this, ['view' => $container, 'options' => $options]);
 
         // set initial model limit. can be overwritten by onScroll
         $this->model->setLimit($ipp);

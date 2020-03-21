@@ -89,7 +89,7 @@ class Basic extends \atk4\ui\View implements Interface_
         if ($this->action->enabled) {
             $this->initPreview();
         } else {
-            $this->add(['Message', 'type'=>'error', $this->disableMsg]);
+            \atk4\ui\Message::addTo($this, ['type'=>'error', $this->disableMsg]);
 
             return;
         }
@@ -119,7 +119,7 @@ class Basic extends \atk4\ui\View implements Interface_
     {
         // lets make sure that all arguments are supplied
         if (!$this->hasAllArguments()) {
-            $this->add(['Message', 'type'=>'error', $this->missingArgsMsg]);
+            \atk4\ui\Message::addTo($this, ['type'=>'error', $this->missingArgsMsg]);
 
             return;
         }
@@ -161,7 +161,7 @@ class Basic extends \atk4\ui\View implements Interface_
     public function addHeader()
     {
         if ($this->hasHeader) {
-            $this->add(['Header', $this->action->caption, 'subHeader'=>$this->description ?: $this->action->getDescription()]);
+            \atk4\ui\Header::addTo($this, [$this->action->caption, 'subHeader'=>$this->description ?: $this->action->getDescription()]);
         }
     }
 }

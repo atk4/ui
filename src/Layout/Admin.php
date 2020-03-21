@@ -55,25 +55,25 @@ class Admin extends Generic
         parent::init();
 
         if ($this->menu === null) {
-            $this->menu = $this->add(['Menu', 'atk-topMenu inverted fixed horizontal', 'element' => 'header'], 'TopMenu');
+            $this->menu = Menu::addTo($this, ['atk-topMenu inverted fixed horizontal', 'element' => 'header'], ['TopMenu']);
             $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']]);
             $this->burger->on('click', [
                 (new jQuery('.ui.left.sidebar'))->toggleClass('visible'),
                 (new jQuery('body'))->toggleClass('atk-leftMenu-visible'),
             ]);
-            $this->burger->add(['Icon', 'content']);
+            \atk4\ui\Icon::addTo($this->burger, ['content']);
         }
 
         if ($this->menuRight === null) {
-            $this->menuRight = $this->menu->add(new Menu(['ui' => false]), 'RightMenu')
+            $this->menuRight = Menu::addTo($this->menu, ['ui' => false], ['RightMenu'])
                 ->addClass('right menu')->removeClass('item');
         }
 
         if ($this->menuLeft === null) {
-            $this->menuLeft = $this->add(new Menu('left vertical inverted labeled sidebar'), 'LeftMenu');
+            $this->menuLeft = Menu::addTo($this, ['left vertical inverted labeled sidebar'], ['LeftMenu']);
             $this->leftMenu = $this->menuLeft;
 
-            $closeIcon = $this->menuLeft->add(['View', 'template' => new Template('<a id="{$_id}" href="#" onclick="return false;" class="{$class} item atk-leftMenuClose"><i class="close icon"></i></a>')]);
+            $closeIcon = \atk4\ui\View::addTo($this->menuLeft, ['template' => new Template('<a id="{$_id}" href="#" onclick="return false;" class="{$class} item atk-leftMenuClose"><i class="close icon"></i></a>')]);
             $closeIcon->on('click', (new jQuery('body'))->removeClass('atk-leftMenu-visible'));
 
             $this->menuLeft->addHeader($this->app->title);

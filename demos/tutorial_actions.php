@@ -3,20 +3,18 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-/** @var \atk4\ui\View $wizard */
-$wizard = $app->add('Wizard');
+$wizard = \atk4\ui\View::addTo($app);
 $app->stickyGet($wizard->name);
 
 $wizard->addStep('Actions in Agile Data', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Models of Agile Data has always supported 3 basic actions: "save" (for new and existing records) and "delete". In
 version 1.4 of Agile Data "User Actions" were included.
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $country = new Country($app->app->db);
 
 $country->addAction('send_message');
@@ -27,7 +25,7 @@ $app->add(['View', 'element'=>'pre'])
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Just like "addField" describes a model field that user can see and interact through Table, Grid, Form or CRUD, method
 "addAction" describes an action that user can trigger through Grid, Card, CRUD and Button.
@@ -46,7 +44,7 @@ consistent. And actions are really flexible - you can remove them or add them.
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $model = new atk4\data\Model($app->db, 'test');
 // $model->removeAction('delete');
 $model->getAction('delete')->enabled = false;
@@ -69,15 +67,14 @@ CODE
 });
 
 $wizard->addStep('UI for Actions', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 With all that meta-information the Agile UI framework can now fully integrate actions everywhere! Traditionally,
 let us start with a button.
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $country = new Country($app->app->db);
 $country->loadAny();
 
@@ -86,13 +83,13 @@ $app->add(['Button', 'Edit some country'])
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Any view can actually pass action as a callback, not only the button. Here is another demo:
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $country = new Country($app->app->db);
 $country->loadAny();
 
@@ -102,14 +99,14 @@ $menu->addItem('World', $country->getAction('edit'));
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 When action requires an argument, you can either specify it directly or through jsExpression. If you do not do that,
 user will be asked to enter the missing arguments.
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $model = new \atk4\data\Model($app->db, 'test');
 $model->addAction('greet', [
     'args'=> [
@@ -136,8 +133,7 @@ CODE
 });
 
 $wizard->addStep('More Ways', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 TODO: add example of card deck, table and grid
 EOF
@@ -145,14 +141,13 @@ EOF
 });
 
 $wizard->addStep('CRUD integration', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 TODO: add example of crud
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $country = new Country($app->app->db);
 $crud = $app->add(['CRUD', 'ipp'=>5]);
 $crud->setModel($country);

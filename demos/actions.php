@@ -3,11 +3,11 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$app->add(['Button', 'js Event Executor', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\atk4\ui\Button::addTo($app, ['js Event Executor', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['jsactions']);
-$app->add(['View', 'ui' => 'ui clearing divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$app->add(['Header', 'Extensions to ATK Data Actions', 'subHeader'=>'Demonstrate how to augment your models with actions and vizualize those inside UI']);
+\atk4\ui\Header::addTo($app, ['Extensions to ATK Data Actions', 'subHeader'=>'Demonstrate how to augment your models with actions and vizualize those inside UI']);
 
 // Actions can be added easily to the model
 
@@ -65,4 +65,4 @@ $executor->onHook('afterExecute', function ($x, $ret) {
     return new \atk4\ui\jsToast('Files imported: '.$ret);
 });
 
-$app->add(['CRUD', 'ipp'=>5])->setModel($files);
+\atk4\ui\CRUD::addTo($app, ['ipp'=>5])->setModel($files);

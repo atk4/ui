@@ -19,8 +19,8 @@ class jsIntegrationTest extends \atk4\core\PHPUnit_AgileTestCase
     public function testIDIntegrity2()
     {
         $v = new View(['ui' => 'buttons']);
-        $b1 = $v->add(new Button());
-        $b2 = $v->add(new Button());
+        $b1 = Button::addTo($v);
+        $b2 = Button::addTo($v);
         $html = $v->render();
 
         $this->assertNotEquals($b1->id, $b2->id);
@@ -76,8 +76,8 @@ $(function() {
     public function testBasicChain4()
     {
         $bb = new View(['ui' => 'buttons']);
-        $b1 = $bb->add(new Button(['id' => 'b1']));
-        $b2 = $bb->add(new Button(['id' => 'b2']));
+        $b1 = Button::addTo($bb, ['id' => 'b1']);
+        $b2 = Button::addTo($bb, ['id' => 'b2']);
 
         $b1->on('click', $b2->js()->hide());
         $bb->getHTML();

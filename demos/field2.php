@@ -5,9 +5,9 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$app->add(['Header', 'Disabled and read only form fields (normal / readonly / disabled)']);
+\atk4\ui\Header::addTo($app, ['Disabled and read only form fields (normal / readonly / disabled)']);
 
-$f = $app->add('Form');
+$f = \atk4\ui\Form::addTo($app);
 
 // Test all kinds of input fields
 $g = $f->addGroup('Line');
@@ -91,17 +91,17 @@ $g->addField('calendar_norm', ['Calendar', 'type' => 'date'])->set(date($app->ui
 $g->addField('calendar_read', ['Calendar', 'type' => 'date', 'readonly' => true])->set(date($app->ui_persistence->date_format));
 $g->addField('calendar_disb', ['Calendar', 'type' => 'date', 'disabled' => true])->set(date($app->ui_persistence->date_format));
 
-$app->add(['Header', 'Stand Alone Line']);
+\atk4\ui\Header::addTo($app, ['Stand Alone Line']);
 // you can pass values to button
-$field = $app->add(new \atk4\ui\FormField\Line());
+$field = \atk4\ui\FormField\Line::addTo($app);
 
 $field->set('hello world');
 
 $button = $field->addAction('check value');
 $button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [$field->jsInput()->val()]));
 
-$app->add(['Header', 'Line in a Form']);
-$form = $app->add('Form');
+\atk4\ui\Header::addTo($app, ['Line in a Form']);
+$form = \atk4\ui\Form::addTo($app);
 
 $field = $form->addField('Title', null, ['values'=>['Mr', 'Mrs', 'Miss'], 'ui'=>['hint'=>'select one']]);
 
@@ -118,25 +118,25 @@ $form->onSubmit(function ($f) {
     return $f->model['name'];
 });
 
-$app->add(['Header', 'Multiple Form Layouts']);
+\atk4\ui\Header::addTo($app, ['Multiple Form Layouts']);
 
-$form = $app->add('Form');
-$tabs = $form->add('Tabs', 'AboveFields');
-$form->add(['View', 'ui' => 'divider'], 'AboveFields');
+$form = \atk4\ui\Form::addTo($app);
+$tabs = \atk4\ui\Tabs::addTo($form, [], ['AboveFields']);
+\atk4\ui\View::addTo($form, ['ui' => 'divider'], ['AboveFields']);
 
-$form_page = $tabs->addTab('Basic Info')->add(['FormLayout/Generic', 'form' => $form]);
+$form_page = \atk4\ui\FormLayout\Generic::addTo($tabs->addTab('Basic Info'), ['form' => $form]);
 $form_page->addField('name', new \atk4\ui\FormField\Line());
 
-$form_page = $tabs->addTab('Other Info')->add(['FormLayout/Generic', 'form' => $form]);
+$form_page = \atk4\ui\FormLayout\Generic::addTo($tabs->addTab('Other Info'), ['form' => $form]);
 $form_page->addField('age', new \atk4\ui\FormField\Line());
 
 $form->onSubmit(function ($f) {
     return $f->model['name'].' has age '.$f->model['age'];
 });
 
-$app->add(['Header', 'onChange event', 'subHeader'=>'see in browser console']);
+\atk4\ui\Header::addTo($app, ['onChange event', 'subHeader'=>'see in browser console']);
 
-$form = $app->add('Form');
+$form = \atk4\ui\Form::addTo($app);
 
 $g = $form->addGroup('Calendar');
 $c1 = $g->addField('c1', new \atk4\ui\FormField\Calendar(['type'=>'date']));
@@ -190,9 +190,9 @@ $r1 = $g->addField('r1', new \atk4\ui\FormField\Radio(['values' => [
 ]));
 $r1->onChange('console.log("r1 changed")');
 
-$app->add(['Header', 'Line ends of TextArea']);
+\atk4\ui\Header::addTo($app, ['Line ends of TextArea']);
 
-$f = $app->add('Form');
+$f = \atk4\ui\Form::addTo($app);
 $g = $f->addGroup('Without model');
 $g->addField('text_crlf', [new \atk4\ui\FormField\TextArea()])->set("First line\r\nSecond line");
 $g->addField('text_cr', [new \atk4\ui\FormField\TextArea()])->set("First line\rSecond line");

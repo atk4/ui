@@ -78,7 +78,7 @@ class jsEvent implements jsExpressionable
                 throw new Exception('Context must be part of a render tree. Missing app property.');
             }
 
-            $this->cb = $this->context->add('jsCallback');
+            $this->cb = jsCallback::addTo($this->context);
         }
     }
 

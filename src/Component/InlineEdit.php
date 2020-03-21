@@ -85,7 +85,7 @@ class InlineEdit extends View
     public function init()
     {
         parent::init();
-        $this->cb = $this->add('jsCallback');
+        $this->cb = \atk4\ui\jsCallback::addTo($this);
 
         // Set default validation error handler.
         if (!$this->formatErrorMsg || !is_callable($this->formatErrorMsg)) {

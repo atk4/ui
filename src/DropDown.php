@@ -27,7 +27,7 @@ class DropDown extends Lister
         parent::init();
 
         if (!$this->cb) {
-            $this->cb = $this->add(['jsCallback', 'postTrigger' => 'item']);
+            $this->cb = jsCallback::addTo($this, ['postTrigger' => 'item']);
         }
     }
 

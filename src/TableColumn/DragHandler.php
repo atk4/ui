@@ -18,7 +18,7 @@ class DragHandler extends Generic
         if (!$this->class) {
             $this->class = 'content icon';
         }
-        $this->cb = $this->table->add(['jsSortable', 'handleClass' => 'atk-handle']);
+        $this->cb = \atk4\ui\jsSortable::addTo($this->table, ['handleClass' => 'atk-handle']);
     }
 
     /**

@@ -190,7 +190,7 @@ class Generic
             ],
         ];
 
-        $cb = $this->table->add(new jsHeader());
+        $cb = jsHeader::addTo($this->table);
 
         $function = "function(value, text, item){
                             if (value === undefined || value === '' || value === null) return;

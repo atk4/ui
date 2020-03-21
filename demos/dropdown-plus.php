@@ -3,7 +3,7 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$form = $app->add('Form');
+$form = \atk4\ui\Form::addTo($app);
 
 //standard with model: use id_field as Value, title_field as Title for each DropDown option
 $form->addField('withModel',

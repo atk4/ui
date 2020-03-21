@@ -3,19 +3,19 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$app->add(['Button', 'Dynamic scroll in Table', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\atk4\ui\Button::addTo($app, ['Dynamic scroll in Table', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['scroll-table']);
-$app->add(['View', 'ui' => 'ui clearing divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$app->add(['Header', 'Dynamic scroll in Lister']);
+\atk4\ui\Header::addTo($app, ['Dynamic scroll in Lister']);
 
-$container = $app->add('View');
+$container = \atk4\ui\View::addTo($app);
 
-$v = $container->add(['View', 'template' => new \atk4\ui\Template('
+$v = \atk4\ui\View::addTo($container, ['template' => new \atk4\ui\Template('
 {List}<div class="ui segment" style="height: 60px"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</div>{/}
 {$Content}')]);
 
-$l = $v->add('Lister', 'List')->onHook('beforeRow', function ($l) {
+$l = \atk4\ui\Lister::addTo($v, [], ['List'])->onHook('beforeRow', function ($l) {
     $l->current_row['iso'] = strtolower($l->current_row['iso']);
 });
 

@@ -23,7 +23,7 @@ class InventoryItem extends \atk4\data\Model
     }
 }
 
-$app->add(['Header', 'MultiLine form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
+\atk4\ui\Header::addTo($app, ['MultiLine form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
 $data = [];
 
@@ -40,7 +40,7 @@ for ($i = 1; $i < 3; $i++) {
     $inventory->saveAndUnload();
 }
 
-$f = $app->add('Form');
+$f = \atk4\ui\Form::addTo($app);
 $f->addField('test');
 // Add multiline field and set model.
 $ml = $f->addField('ml', ['MultiLine', 'options' => ['color' => 'blue'], 'rowLimit' => 4, 'addOnTab' => true]);

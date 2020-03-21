@@ -3,11 +3,11 @@
 date_default_timezone_set('UTC');
 include_once __DIR__ . '/init.php';
 
-$bb = $app->add(['View', 'ui' => 'buttons']);
+$bb = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 
 // ========================================================
-$table = $app->add(['Table', 'celled' => true]);
-$bb->add(['Button', 'Refresh Table', 'icon' => 'refresh'])
+$table = \atk4\ui\Table::addTo($app, ['celled' => true]);
+\atk4\ui\Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
     ->on('click', new \atk4\ui\jsReload($table));
 
 $bb->on('click', $table->js()->reload());
@@ -43,7 +43,7 @@ $my_array = [
     ['name' => 'Brett', 'surname' => 'Bird', 'birthdate' => new \DateTime('1988-12-20')],
 ];
 
-$table = $app->add('Table');
+$table = \atk4\ui\Table::addTo($app);
 $table->setSource($my_array, ['name']);
 
 //$table->addColumn('name');

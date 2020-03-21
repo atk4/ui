@@ -31,8 +31,8 @@ class ArgumentForm extends Basic
 
         */
 
-        $this->add(['Header', $this->action->caption, 'subHeader'=>$this->action->getDescription()]);
-        $this->form = $this->add('Form');
+        \atk4\ui\Header::addTo($this, [$this->action->caption, 'subHeader'=>$this->action->getDescription()]);
+        $this->form = Form::addTo($this);
 
         foreach ($this->action->args as $key=>$val) {
             if (is_numeric($key)) {

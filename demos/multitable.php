@@ -15,7 +15,7 @@ class Finder extends \atk4\ui\Columns
         $this->addClass('internally celled');
 
         // lets add our first table here
-        $table = $this->addColumn()->add(['Table', 'header' => false, 'very basic selectable'])->addStyle('cursor', 'pointer');
+        $table = \atk4\ui\Table::addTo($this->addColumn(), ['header' => false, 'very basic selectable'])->addStyle('cursor', 'pointer');
         $table->setModel($model, [$model->title_field]);
 
         $selections = isset($_GET[$this->name]) ? explode(',', $_GET[$this->name]) : [];
@@ -48,7 +48,7 @@ class Finder extends \atk4\ui\Columns
 
             $model = $model->ref($ref);
 
-            $table = $this->addColumn()->add(['Table', 'header' => false, 'very basic selectable'])->addStyle('cursor', 'pointer');
+            $table = \atk4\ui\Table::addTo($this->addColumn(), ['header' => false, 'very basic selectable'])->addStyle('cursor', 'pointer');
             $table->setModel($model, [$model->title_field]);
 
             if ($selections) {
@@ -70,17 +70,17 @@ $m = new File($db);
 $m->addCondition('parent_folder_id', null);
 $m->setOrder('is_folder desc, name');
 
-$app->add(['Header', 'MacOS File Finder', 'subHeader' => 'Component built around Table, Columns and jsReload']);
+\atk4\ui\Header::addTo($app, ['MacOS File Finder', 'subHeader' => 'Component built around Table, Columns and jsReload']);
 
-$vp = $app->add('VirtualPage')->set(function ($vp) use ($m) {
+$vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($vp) use ($m) {
     $m->action('delete')->execute();
     $m->importFromFilesystem(dirname(dirname(__FILE__)));
-    $vp->add(['Button', 'Import Complete', 'big green fluid'])->link('multitable.php');
+    \atk4\ui\Button::addTo($vp, ['Import Complete', 'big green fluid'])->link('multitable.php');
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });
 
-$app->add(['Button', 'Re-Import From Filesystem', 'top attached'])->on('click', new \atk4\ui\jsModal('Now importing ... ', $vp));
+\atk4\ui\Button::addTo($app, ['Re-Import From Filesystem', 'top attached'])->on('click', new \atk4\ui\jsModal('Now importing ... ', $vp));
 
-$app->add(new Finder('bottom attached'))
+Finder::addTo($app, 'bottom attached')
     ->addClass('top attached segment')
     ->setModel($m, ['SubFolder']);

@@ -57,11 +57,11 @@ class Accordion extends View
      */
     public function addSection($title, $callback = null, $icon = 'dropdown')
     {
-        $section = $this->add(['AccordionSection', 'title' => $title, 'icon' => $icon]);
+        $section = AccordionSection::addTo($this, ['title' => $title, 'icon' => $icon]);
 
         // if there is callback action, then use VirtualPage
         if ($callback) {
-            $section->virtualPage = $section->add(['VirtualPage', 'ui' => '']);
+            $section->virtualPage = VirtualPage::addTo($section, ['ui' => '']);
             $section->virtualPage->stickyGet('__atk-dyn-section', '1');
             $section->virtualPage->set($callback);
         }

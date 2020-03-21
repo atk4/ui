@@ -34,9 +34,9 @@ try {
 
     $app->layout->template['Footer'] = 'ATK is awesome';
 
-    $app->add(['Header', 'Basic Form Example']);
+    \atk4\ui\Header::addTo($app, ['Basic Form Example']);
 
-    $f = $app->add(new \atk4\ui\Form(['segment']));
+    $f = \atk4\ui\Form::addTo($app, ['segment']);
     $f->setModel(new \atk4\data\Model());
 
     $f_group = $f->addGroup('Name');

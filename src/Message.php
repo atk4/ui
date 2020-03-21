@@ -47,9 +47,9 @@ class Message extends View
 
         if ($this->text !== false) {
             if ($this->text) {
-                $this->text = $this->add(new Text($this->text));
+                $this->text = Text::addTo($this, [$this->text]);
             } else {
-                $this->text = $this->add(new Text());
+                $this->text = Text::addTo($this);
             }
         }
     }

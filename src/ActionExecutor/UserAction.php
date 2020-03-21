@@ -94,11 +94,11 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         //Add buttons to modal for next and previous.
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
-        $this->prevStepBtn = $this->btns->add(new Button(['Prev']))->addStyle(['float' => 'left !important']);
-        $this->nextStepBtn = $this->btns->add(new Button(['Next', 'blue']));
+        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
+        $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
         $this->addButtonAction($this->btns);
 
-        $this->loader = $this->add(['Loader', 'ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = \atk4\ui\Loader::addTo($this, ['ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
         $this->loader->addClass('atk-hide-loading-content');
         $this->actionData = $this->loader->jsGetStoreData()['session'];
@@ -364,15 +364,15 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         switch ($this->previewType) {
             case 'console':
-                $preview = $modal->add(['View', 'ui'=>'inverted black segment', 'element'=>'pre']);
+                $preview = View::addTo($modal, ['ui'=>'inverted black segment', 'element'=>'pre']);
                 $preview->set($text);
                 break;
             case 'text':
-                $preview = $modal->add(['View', 'ui'=>'basic segment']);
+                $preview = View::addTo($modal, ['ui'=>'basic segment']);
                 $preview->set($text);
                 break;
             case 'html':
-                $preview = $modal->add(['View', 'ui'=>'basic segment']);
+                $preview = View::addTo($modal, ['ui'=>'basic segment']);
                 $preview->template->setHTML('Content', $text);
                 break;
         }
@@ -792,7 +792,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      */
     private function _handleException($e, $view, $step)
     {
-        $msg = $view->add(['Message', 'Error:', 'type' => 'error']);
+        $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
         $msg->text->addParagraph($e->getMessage());
         $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
         if (!$this->isFirstStep($step)) {

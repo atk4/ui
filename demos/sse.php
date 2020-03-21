@@ -2,15 +2,15 @@
 
 require_once __DIR__ . '/init.php';
 
-$app->add(['Header', 'SSE with ProgressBar']);
+\atk4\ui\Header::addTo($app, ['SSE with ProgressBar']);
 
-$bar = $app->add(['ProgressBar']);
+$bar = \atk4\ui\ProgressBar::addTo($app);
 
-$button = $app->add(['Button', 'Turn On']);
+$button = \atk4\ui\Button::addTo($app, ['Turn On']);
 // non-SSE way
 //$button->on('click', $bar->js()->progress(['percent'=> 40]));
 
-$sse = $app->add(['jsSSE', 'showLoader' => true]);
+$sse = \atk4\ui\jsSSE::addTo($app, ['showLoader' => true]);
 
 $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     $sse->send($button->js()->addClass('disabled'));
@@ -31,11 +31,11 @@ $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     ];
 }));
 
-$app->add(['View', 'ui' => 'divider']);
-$app->add(['Header', 'SSE operation with user confirmation']);
+\atk4\ui\View::addTo($app, ['ui' => 'divider']);
+\atk4\ui\Header::addTo($app, ['SSE operation with user confirmation']);
 
-$sse = $app->add(['jsSSE']);
-$button = $app->add(['Button', 'Click me to change my text']);
+$sse = \atk4\ui\jsSSE::addTo($app);
+$button = \atk4\ui\Button::addTo($app, ['Click me to change my text']);
 
 $button->on('click', $sse->set(function ($jsChain) use ($sse, $button) {
     $sse->send($button->js()->text('Please wait for 2 seconds...'));

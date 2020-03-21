@@ -172,7 +172,7 @@ class Popup extends View
             throw new Exception('Only one argument is needed by Popup::set()');
         }
 
-        $this->cb = $this->add('Callback');
+        $this->cb = Callback::addTo($this);
 
         if (!$this->minWidth) {
             $this->minWidth = '120px';
