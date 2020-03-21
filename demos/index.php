@@ -232,7 +232,7 @@ EOF
 HTML
     );
 
-    $gl = $page->add(new \atk4\ui\GridLayout([null, 'stackable divided', 'columns'=>4]));
+    $gl = \atk4\ui\GridLayout::addTo($page, [null, 'stackable divided', 'columns'=>4]);
     \atk4\ui\Button::addTo($gl, ['Explore UI components', 'primary basic fluid', 'iconRight'=>'right arrow'], ['r1c1'])
         ->link('https://github.com/atk4/ui/#bundled-and-planned-components');
     \atk4\ui\Button::addTo($gl, ['Try out interactive features', 'primary basic fluid', 'iconRight'=>'right arrow'], ['r1c2'])

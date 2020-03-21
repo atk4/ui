@@ -2,10 +2,10 @@
 
 require_once __DIR__ . '/init.php';
 
-$app->add(new \atk4\ui\View([
+\atk4\ui\View::addTo($app, [
     'Forms below focus on Data integration and automated layouts',
     'ui' => 'ignored warning message',
-]));
+]);
 
 $cc = \atk4\ui\Columns::addTo($app);
 $f = \atk4\ui\Form::addTo($cc->addColumn());

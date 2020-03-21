@@ -76,8 +76,8 @@ $(function() {
     public function testBasicChain4()
     {
         $bb = new View(['ui' => 'buttons']);
-        $b1 = $bb->add(new Button(['id' => 'b1']));
-        $b2 = $bb->add(new Button(['id' => 'b2']));
+        $b1 = Button::addTo($bb, ['id' => 'b1']);
+        $b2 = Button::addTo($bb, ['id' => 'b2']);
 
         $b1->on('click', $b2->js()->hide());
         $bb->getHTML();

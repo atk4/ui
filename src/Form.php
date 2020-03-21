@@ -577,7 +577,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     {
         $this->_add($cb = new jsCallback(), ['desired_name' => 'submit', 'postTrigger' => true]);
 
-        $this->add(new View(['element' => 'input']))
+        View::addTo($this, ['element' => 'input'])
             ->setAttr('name', $cb->postTrigger)
             ->setAttr('value', 'submit')
             ->setStyle(['display' => 'none']);

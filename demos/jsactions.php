@@ -79,4 +79,4 @@ $country->addAction('greet', [
     },
 ]);
 
-$app->add(new \atk4\ui\FormField\Line(['action' => $country->getAction('greet')]));
+\atk4\ui\FormField\Line::addTo($app, ['action' => $country->getAction('greet')]);

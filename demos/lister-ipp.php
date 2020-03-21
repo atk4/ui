@@ -16,7 +16,7 @@ $l = \atk4\ui\Lister::addTo($v, [], ['List'])->onHook('beforeRow', function ($l)
 
 $m = $l->setModel(new Country($db))->setLimit(12);
 
-$ipp = $v->add(new atk4\ui\ItemsPerPageSelector(['label' => 'Select how many countries:', 'pageLengthItems' => [12, 24, 36]]), 'Content');
+$ipp = \atk4\ui\ItemsPerPageSelector::addTo($v, ['label' => 'Select how many countries:', 'pageLengthItems' => [12, 24, 36]], ['Content']);
 
 $ipp->onPageLengthSelect(function ($ipp) use ($m, $container) {
     $m->setLimit($ipp);

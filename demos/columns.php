@@ -29,7 +29,7 @@ $c = \atk4\ui\Columns::addTo($page);
 \atk4\ui\Header::addTo($page, ['Specifying widths, using rows or automatic flow']);
 
 // highlight class will show cells as boxes, even though they contain nothing
-$c = $page->add(new \atk4\ui\Columns([null, 'highlight']));
+$c = \atk4\ui\Columns::addTo($page, [null, 'highlight']);
 $c->addColumn(3);
 $c->addColumn(5);
 $c->addColumn(2);
@@ -45,7 +45,7 @@ $r->addColumn();
 $r->addColumn();
 
 \atk4\ui\Header::addTo($page, ['Content Outline']);
-$c = $page->add(new \atk4\ui\Columns(['internally celled']));
+$c = \atk4\ui\Columns::addTo($page, ['internally celled']);
 
 $r = $c->addRow();
 \atk4\ui\Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
@@ -75,6 +75,6 @@ class Box extends \atk4\ui\View
     }
 }
 
-$c = $page->add(new \atk4\ui\Columns(['width' => 4]));
+$c = \atk4\ui\Columns::addTo($page, ['width' => 4]);
 Box::addTo($c->addColumn(), [null, 'red']);
 Box::addTo($c->addColumn([null, null, 'right floated']), [null, 'blue']);

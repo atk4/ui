@@ -37,7 +37,7 @@ $t->addTab('Dynamic Form', function ($tab) {
     $m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_($a));
     $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
 
-    $f = $tab->add(new \atk4\ui\Form(['segment' => true]));
+    $f = \atk4\ui\Form::addTo($tab, ['segment' => true]);
     $f->setModel($m_register);
     $f->onSubmit(function ($f) {
         if ($f->model['name'] != 'John') {

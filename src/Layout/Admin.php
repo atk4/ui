@@ -65,7 +65,7 @@ class Admin extends Generic
         }
 
         if ($this->menuRight === null) {
-            $this->menuRight = $this->menu->add(new Menu(['ui' => false]), 'RightMenu')
+            $this->menuRight = Menu::addTo($this->menu, ['ui' => false], ['RightMenu'])
                 ->addClass('right menu')->removeClass('item');
         }
 

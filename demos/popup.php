@@ -252,7 +252,7 @@ $b_pop = \atk4\ui\Popup::addTo($app, [$button]);
 \atk4\ui\Header::addTo($b_pop)->set('Using click events');
 \atk4\ui\View::addTo($b_pop)->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
 
-$input = $app->add(new \atk4\ui\FormField\Line(['placeholder' => 'Search users', 'icon' => 'circular search link']));
+$input = \atk4\ui\FormField\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'circular search link']);
 
 $i_pop = \atk4\ui\Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
 \atk4\ui\View::addTo($i_pop)->set('You can use this field to search data.');

@@ -94,8 +94,8 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         //Add buttons to modal for next and previous.
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
-        $this->prevStepBtn = $this->btns->add(new Button(['Prev']))->addStyle(['float' => 'left !important']);
-        $this->nextStepBtn = $this->btns->add(new Button(['Next', 'blue']));
+        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
+        $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
         $this->addButtonAction($this->btns);
 
         $this->loader = \atk4\ui\Loader::addTo($this, ['ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);

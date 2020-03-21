@@ -9,7 +9,7 @@ require_once __DIR__ . '/database.php';
 \atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
 
 // create form
-$form = $app->add(new \atk4\ui\Form(['segment']));
+$form = \atk4\ui\Form::addTo($app, ['segment']);
 //$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>false]));
 //$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>new \atk4\ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]));
 //$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]));

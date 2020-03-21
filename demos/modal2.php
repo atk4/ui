@@ -158,7 +158,7 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
         $m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_($a));
         $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $f = $modal->add(new \atk4\ui\Form(['segment' => true]));
+        $f = \atk4\ui\Form::addTo($modal, ['segment' => true]);
         $f->setModel($m_register);
 
         $f->onSubmit(function ($f) use ($next_action, $session) {

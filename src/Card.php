@@ -445,7 +445,7 @@ class Card extends View
     public function addImage($img)
     {
         if (is_string($img)) {
-            $img = $this->getImageContainer()->add(new Image([$img]));
+            $img = Image::addTo($this->getImageContainer(), [$img]);
         } else {
             $img = $this->getImageContainer()->add($img);
         }

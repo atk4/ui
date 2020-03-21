@@ -154,7 +154,7 @@ $m_register->addField('name');
 $m_register->addField('email');
 $m_register->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
 
-$f = $tab->add(new \atk4\ui\Form(['segment' => true]));
+$f = \atk4\ui\Form::addTo($tab, ['segment' => true]);
 $f->setModel($m_register);
 
 $f->onSubmit(function ($f) {

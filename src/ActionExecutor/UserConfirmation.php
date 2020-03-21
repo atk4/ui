@@ -53,8 +53,8 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 
         //Add buttons to modal for next and previous.
         $btns = (new View())->addStyle(['min-height' => '24px']);
-        $this->ok = $btns->add(new Button(['Ok', 'blue']));
-        $this->cancel = $btns->add(new Button(['Cancel']));
+        $this->ok = Button::addTo($btns, ['Ok', 'blue']);
+        $this->cancel = Button::addTo($btns, ['Cancel']);
         $this->add($btns, 'actions');
         $this->showActions = true;
 

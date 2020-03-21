@@ -6,10 +6,10 @@ require_once __DIR__ . '/database.php';
 // create header
 \atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
 
-$app->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'label' => 'http://']))->setModel(new Country($app->db));
+\atk4\ui\FormField\AutoComplete::addTo($app, ['placeholder' => 'Search users', 'label' => 'http://'])->setModel(new Country($app->db));
 
 // create form
-$form = $app->add(new \atk4\ui\Form(['segment']));
+$form = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveFields']);
 
 $m = new \atk4\data\Model($db, 'test');
@@ -47,34 +47,34 @@ $form->onSubmit(function ($f) use ($db) {
 \atk4\ui\FormField\AutoComplete::addTo($app, ['placeholder' => 'Search users', 'label' => 'http://'])->setModel(new Country($app->db));
 
 // through constructor
-$app->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Weight', 'labelRight' => new \atk4\ui\Label(['kg', 'basic'])]));
-$app->add(new \atk4\ui\FormField\AutoComplete(['label' => '$', 'labelRight' => new \atk4\ui\Label(['.00', 'basic'])]));
+\atk4\ui\FormField\AutoComplete::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new \atk4\ui\Label(['kg', 'basic'])]);
+\atk4\ui\FormField\AutoComplete::addTo($app, ['label' => '$', 'labelRight' => new \atk4\ui\Label(['.00', 'basic'])]);
 
-$app->add(new \atk4\ui\FormField\AutoComplete([
+\atk4\ui\FormField\AutoComplete::addTo($app, [
     'iconLeft'   => 'tags',
     'labelRight' => new \atk4\ui\Label(['Add Tag', 'tag']),
-]));
+]);
 
 // left/right corner is not supported, but here is work-around:
 $label = new \atk4\ui\Label();
 $label->addClass('left corner');
 $label->add(new \atk4\ui\Icon('asterisk'));
 
-$app->add(new \atk4\ui\FormField\AutoComplete([
+\atk4\ui\FormField\AutoComplete::addTo($app, [
     'label' => $label,
-]))->addClass('left corner');
+])->addClass('left corner');
 
 \atk4\ui\Header::addTo($app, ['Auto-complete inside modal']);
 
 $modal = \atk4\ui\Modal::addTo($app)->set(function ($p) {
-    $a = $p->add(new \atk4\ui\FormField\AutoComplete(['placeholder' => 'Search users', 'label' => 'http://']));
+    $a = \atk4\ui\FormField\AutoComplete::addTo($p, ['placeholder' => 'Search users', 'label' => 'http://']);
     $a->setModel(new Country($p->app->db));
 });
 \atk4\ui\Button::addTo($app, ['Open autocomplete on a Modal window'])->on('click', $modal->show());
 
 \atk4\ui\Header::addTo($app, ['New Lookup field']);
 
-$form = $app->add(new \atk4\ui\Form(['segment']));
+$form = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveFields']);
 
 $c = new Country($db);
@@ -101,7 +101,7 @@ $form->buttonSave->set('Add Countries');
 
 \atk4\ui\Header::addTo($app, ['Auto-complete dependency']);
 
-$form = $app->add(new \atk4\ui\Form(['segment']));
+$form = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveFields']);
 
 $form->addField('starts_with', [
@@ -147,7 +147,7 @@ $form->onSubmit(function ($form) {
 
 \atk4\ui\Header::addTo($app, ['Auto-complete multiple values']);
 
-$form = $app->add(new \atk4\ui\Form(['segment']));
+$form = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveFields']);
 
 $form->addField('ends_with', [

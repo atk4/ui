@@ -4,10 +4,10 @@ require_once __DIR__ . '/init.php';
 
 use atk4\ui\Button;
 
-$app->add(new \atk4\ui\View([
+\atk4\ui\View::addTo($app, [
     'Sticky GET allows us to preserve some GET arguments',
     'ui' => 'ignored info message',
-]));
+]);
 
 class MyButton extends \atk4\ui\Button
 {
