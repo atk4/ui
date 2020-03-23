@@ -248,7 +248,7 @@ class App
      *
      * @return bool
      */
-    protected function caughtException(Throwable $exception)
+    public function caughtException(Throwable $exception)
     {
         $this->catch_runaway_callbacks = false;
 
