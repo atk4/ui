@@ -1,6 +1,6 @@
+import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 import debounce from 'debounce';
-import $ from 'jquery';
 
 export default class jsSearch extends atkPlugin {
 

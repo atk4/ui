@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 import apiService from '../services/api.service';
 
