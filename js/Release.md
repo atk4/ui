@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.12.5 (2020-03-24)
+
+- make sure $ var is assign to jQuery ($ = jQuery) in all module by adding missing import statement.
+  
 ### version 1.12.4 (2020-03-18)
 
 - Update dependencie package
