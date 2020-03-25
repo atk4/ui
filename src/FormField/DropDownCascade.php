@@ -49,7 +49,7 @@ class DropDownCascade extends DropDown
         $this->model = $this->cascadeInput->model ? $this->cascadeInput->model->ref($this->reference) : null;
 
         $expr = [
-            function($t) {
+            function ($t) {
                 return [
                     $this->js()->dropdown('change values', $this->getNewValues($this->cascadeInputValue)),
                     $this->js()->removeClass('loading')
@@ -76,7 +76,7 @@ class DropDownCascade extends DropDown
             return [['value' => '', 'text' => '...', 'name' => '...']];
         }
 
-        $mapValue = function($a) {
+        $mapValue = function ($a) {
             return ['value'=>$a['id'], 'text'=>$a['name'], 'name'=>$a['name']];
         };
 
