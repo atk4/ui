@@ -54,5 +54,5 @@ $f->addField('sub_category_id', [\atk4\ui\FormField\DropDownCascade::class, 'cas
 $f->addField('product_id', [\atk4\ui\FormField\DropDownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
 
 $f->onSubmit(function($f){
-    echo print_r($f->model->get());
+    echo print_r($f->model->get(), true);
 });
