@@ -18,10 +18,10 @@ use atk4\ui\Exception;
 
 class DropDownCascade extends DropDown
 {
-    /** @var null|string|Generic the form input to use for setting to base this dropdown list values from. */
+    /** @var null|string|Generic the form input to use for setting this dropdown list values from. */
     public $cascadeFrom = null;
 
-    /** @var null|string|Model the reference model that will generated value for this dropdown list. Should be a model hasMany reference of cascadeInput model*/
+    /** @var null|string|Model the hasMany reference model that will generated value for this dropdown list.*/
     public $reference = null;
 
     /** @var null The form input create by cascadeFrom field*/
@@ -73,18 +73,27 @@ class DropDownCascade extends DropDown
     public function getNewValues($id)
     {
         if (!$id) {
-            return [['value' => '', 'text' => '...', 'name' => '...']];
+            return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
         }
 
-        $mapValue = function ($a) {
-            return ['value'=>$a['id'], 'text'=>$a['name'], 'name'=>$a['name']];
-        };
+        $values = [];
+        foreach ($this->cascadeInput->model->load($id)->ref($this->reference) as $k => $row) {
+            if ($this->renderRowFunction && is_callable($this->renderRowFunction)) {
+                $res = call_user_func($this->renderRowFunction, $row, $k);
+                $values[] = ['value' => $res['value'], 'text' => $row['name'], 'name' => $res['title']];
+            } else {
+                $values[] = ['value' => $row['id'], 'text' => $row['name'], 'name' => $row['name']];
+            }
+        }
 
-        return array_map($mapValue, $this->cascadeInput->model->load($id)->ref($this->reference)->export());
+        return $values;
     }
 
     public function renderView()
     {
+        // can't be multiple selection.
+        $this->isMultiple = false;
+
         parent::renderView();
         // set value on initial load if cascadeInput model is not loaded.
         if (!$this->cascadeInput->model->loaded()) {

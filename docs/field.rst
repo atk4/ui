@@ -447,6 +447,33 @@ See this example from Model class init method::
         ],
     ]);
 
+DropDownCascade
+===============
+
+DropDownCascade input are extend from DropDown input. They rely on `cascadeFrom` and `reference` property.
+For example, it could be useful when you need to narrow a product selection base on a category and a sub category.
+User will select a Category from a list, then sub category input will automatically load sub category values based on
+user category selection. Same with product list values based on sub category selection and etc.
+
+.. php:attr:: cascadeFrom
+
+This property represent an input field, mostly another DropDown or DropDownCascade field.
+The list values of this field will be build base off the selected value of cascadeFrom input.
+
+.. php:attr:: reference
+
+This property represent a model hasMany reference and should be an hasMany reference of the cascadeFrom input model.
+In other word, the model that will generated list value for this dropdown input is an hasMany reference of the cascadeFrom
+input model.
+
+Assume that each data model are defined and model Category has many Sub-Category and Sub-Category has many Product::
+
+    $f = \atk4\ui\Form::addTo($app);
+    $f->addField('category_id', [DropDown::class, 'model' => new Category($db)]);
+    $f->addField('sub_category_id', [DropDownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
+    $f->addField('product_id', [DropDownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
+
+
 AutoComplete
 ============
 

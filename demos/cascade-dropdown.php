@@ -29,7 +29,6 @@ class SubCategory extends \atk4\data\Model
 
         $this->hasOne('category_id', new Category());
         $this->hasMany('Products', new Product());
-
     }
 }
 
