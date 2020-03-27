@@ -60,8 +60,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 $app = new \atk4\ui\App();   // That's your UI application
 $app->initLayout('Centered');
 
-$form = new \atk4\ui\Form(); // Yeah, that's a form!
-$app->add($form);
+$form = \atk4\ui\Form::addTo($app); // Yeah, that's a form!
 
 $form->addField('email');    // adds field
 $form->onSubmit(function ($form) {
