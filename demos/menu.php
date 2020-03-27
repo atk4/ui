@@ -11,7 +11,7 @@ $m->addItem('baz');
 $d = \atk4\ui\DropDown::addTo($m, ['With Callback', 'js' => ['on' => 'hover']]);
 $d->setSource(['a', 'b', 'c']);
 $d->onChange(function ($item) {
-    return 'New seleced item: '.$item;
+    return 'New seleced item: ' . $item;
 });
 
 $sm = $m->addMenu('Sub-menu');

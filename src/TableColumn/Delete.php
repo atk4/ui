@@ -23,14 +23,14 @@ class Delete extends Generic
 
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        $this->table->on('click', 'a.'.$this->short_name, null, ['confirm' => (new \atk4\ui\jQuery())->attr('title')])->atkAjaxec([
+        $this->table->on('click', 'a.' . $this->short_name, null, ['confirm' => (new \atk4\ui\jQuery())->attr('title')])->atkAjaxec([
             'uri'         => $this->vp->getJSURL(),
             'uri_options' => [$this->name => $this->table->jsRow()->data('id')],
         ]);
 
         return $this->app->getTag(
             'a',
-            ['href' => '#', 'title' => 'Delete {$'.$this->table->model->title_field.'}?', 'class' => $this->short_name],
+            ['href' => '#', 'title' => 'Delete {$' . $this->table->model->title_field . '}?', 'class' => $this->short_name],
             [
                 ['i', ['class' => 'ui red trash icon'], ''],
                 'Delete',

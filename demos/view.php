@@ -11,7 +11,7 @@ $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/
 
 \atk4\ui\Header::addTo($app, ['View can contain stuff']);
 \atk4\ui\Header::addTo(\atk4\ui\View::addTo($app, ['ui' => 'segment'])
-    ->addClass('inverted red circular'), ['Buy', 'inverted', 'subHeader' => '$'.(rand(100, 1000) / 100)]);
+    ->addClass('inverted red circular'), ['Buy', 'inverted', 'subHeader' => '$' . (rand(100, 1000) / 100)]);
 
 \atk4\ui\Header::addTo($app, ['View can use JavaScript']);
 \atk4\ui\View::addTo($app, ['ui' => 'heart rating'])

@@ -17,7 +17,7 @@ class SeleniumTest extends \PHPUnit_Framework_TestCase
         $this->user_id = $_ENV['BROWSERSTACK_USER'];
 
         $this->security_key = $_ENV['BROWSERSTACK_ACCESSKEY'];
-        $this->url = 'https://'.$this->user_id.':'.$this->security_key.'@hub-cloud.browserstack.com/wd/hub';
+        $this->url = 'https://' . $this->user_id . ':' . $this->security_key . '@hub-cloud.browserstack.com/wd/hub';
         $this->demos = $_ENV['URL'];
     }
 
@@ -35,7 +35,7 @@ class SeleniumTest extends \PHPUnit_Framework_TestCase
             $this->url,
             $caps
         );
-        $web_driver->get($this->demos.'/button2.php');
+        $web_driver->get($this->demos . '/button2.php');
 
         $this->assertFalse($web_driver->executeScript("return $('#b1').is(':visible')"));
 

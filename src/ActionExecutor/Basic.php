@@ -150,7 +150,7 @@ class Basic extends \atk4\ui\View implements Interface_
 
         $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner]) : $this->jsSuccess;
 
-        return ($this->hook('afterExecute', [$return]) ?: $success) ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
+        return ($this->hook('afterExecute', [$return]) ?: $success) ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
     }
 
     /**

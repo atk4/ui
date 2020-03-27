@@ -6,7 +6,7 @@ require_once __DIR__ . '/database.php';
 $g = \atk4\ui\Grid::addTo($app);
 $m = new Country($db);
 $m->addAction('test', function ($m) {
-    return 'test from '.$m->getTitle().' was successful!';
+    return 'test from ' . $m->getTitle() . ' was successful!';
 });
 $g->setModel($m);
 
@@ -24,11 +24,11 @@ $g->addColumn(null, 'Delete');
 $g->addActionButton('test');
 
 $g->addActionButton('Say HI', function ($j, $id) use ($g) {
-    return 'Loaded "'.$g->model->load($id)['name'].'" from ID='.$id;
+    return 'Loaded "' . $g->model->load($id)['name'] . '" from ID=' . $id;
 });
 
 $g->addModalAction(['icon'=>'external'], 'Modal Test', function ($p, $id) {
-    \atk4\ui\Message::addTo($p, ['Clicked on ID='.$id]);
+    \atk4\ui\Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 
 $sel = $g->addSelection();

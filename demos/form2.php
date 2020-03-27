@@ -45,7 +45,7 @@ $form->onSubmit(function ($f) {
     // In-form validation
     $errors = [];
     if (strlen($f->model['first_name']) < 3) {
-        $errors[] = $f->error('first_name', 'too short, '.$f->model['first_name']);
+        $errors[] = $f->error('first_name', 'too short, ' . $f->model['first_name']);
     }
     if (strlen($f->model['last_name']) < 5) {
         $errors[] = $f->error('last_name', 'too short');
@@ -63,7 +63,7 @@ $form->onSubmit(function ($f) {
 
     return $f->success(
         'Record Added',
-        'there are now '.$f->model->action('count')->getOne().' records in DB'
+        'there are now ' . $f->model->action('count')->getOne() . ' records in DB'
     );
 });
 

@@ -109,7 +109,7 @@ class Input extends Generic
             'name'        => $this->short_name,
             'type'        => $this->inputType,
             'placeholder' => $this->placeholder,
-            'id'          => $this->id.'_input',
+            'id'          => $this->id . '_input',
             'value'       => $this->getValue(),
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
@@ -219,7 +219,7 @@ class Input extends Generic
 
         // width
         if ($this->width) {
-            $this->addClass($this->width.' wide');
+            $this->addClass($this->width . ' wide');
         }
 
         // actions
