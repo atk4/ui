@@ -155,22 +155,13 @@ class jsCallback extends Callback implements jsExpressionable
         if (is_array($response)) {
             $response = $this->flatternArray($response);
             foreach ($response as $r) {
-                if ($r instanceof View) {
-                    $actions[] = $this->_jsRenderIntoModal($r);
-                } else if (is_string($r)) {
-                    $actions[] = new jsExpression('alert([])', [$r]);
-                } elseif ($r instanceof jsExpressionable) {
-                    $actions[] = $r;
-                } elseif ($r === null) {
+                if ($r === null) {
                     continue;
-                } else {
-                    throw new Exception(['Incorrect callback. Must be string or action.', 'r' => $r]);
                 }
+                $actions[] = $this->_getProperAction($r);
             }
-        } else if ($response instanceof View) {
-            $actions[] = $this->_jsRenderIntoModal($response);
-        } else if ($response instanceof jsExpressionable) {
-            $actions[] = $response;
+        } else {
+            $actions[] = $this->_getProperAction($response);
         }
 
         $ajaxec = implode(";\n", array_map(function (jsExpressionable $r) {
@@ -186,8 +177,33 @@ class jsCallback extends Callback implements jsExpressionable
     }
 
     /**
+     * Transform response into proper js Action and return it.
+     *
+     * @param $response
+     *
+     * @return jsExpression|jsExpressionable|null
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     */
+    private function _getProperAction($response)
+    {
+        $action = null;
+        if ($response instanceof View) {
+            $action = $this->_jsRenderIntoModal($response);
+        } else if (is_string($response)) {
+            $action = new jsExpression('alert([])', [$response]);
+        } else if ($response instanceof jsExpressionable) {
+            $action = $response;
+        } else {
+            throw new Exception(['Incorrect callback. Response must be of type jsExpressionable, View, or String.', 'r' => $response]);
+        }
+
+        return $action;
+    }
+
+    /**
      * Render View into modal.
-     * 
+     *
      * @param View $response
      *
      * @return jsExpression
