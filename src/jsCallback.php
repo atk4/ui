@@ -122,11 +122,13 @@ class jsCallback extends Callback implements jsExpressionable
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      *
-     * @param array|jsExpressionable $ajaxec  Array of jsExpressionable
-     * @param string                 $msg     General message, typically won't be displayed
-     * @param bool                   $success Was request successful or not
+     * @param array|jsExpressionable $ajaxec Array of jsExpressionable
+     * @param string $msg General message, typically won't be displayed
+     * @param bool $success Was request successful or not
      *
-     * @return [type] [description]
+     * @return void [type] [description]
+     * @throws Exception\ExitApplicationException
+     * @throws \atk4\core\Exception
      */
     public function terminate($ajaxec, $msg = null, $success = true)
     {
@@ -137,44 +139,38 @@ class jsCallback extends Callback implements jsExpressionable
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
      * @param array|jsExpressionable $response response from callbacks,
-     * @param string                 $chain    JavaScript string
+     * @param string $chain JavaScript string
+     *
+     * @return string
+     * @throws Exception
      */
     public function getAjaxec($response, $chain = null)
     {
-        if (is_array($response) && $response[0] instanceof View) {
-            $response = $response[0];
-        }
-
-        if ($response instanceof View) {
-            $response = new jsExpression('$([html]).modal("show").data("needRemove", true)', [
-                'html' => '<div class="ui modal"> <i class="close icon"></i>  <div class="content atk-content"> '.
-                $response->render()
-                .' </div> </div>',
-            ]);
-        }
-
-        if ($response === $chain) {
-            $response = null;
-        }
-
         $actions = [];
 
         if ($chain && $chain->_chain) {
             $actions[] = $chain;
         }
 
-        $response = $this->flatternArray($response);
-
-        foreach ($response as $r) {
-            if (is_string($r)) {
-                $actions[] = new jsExpression('alert([])', [$r]);
-            } elseif ($r instanceof jsExpressionable) {
-                $actions[] = $r;
-            } elseif ($r === null) {
-                continue;
-            } else {
-                throw new Exception(['Incorrect callback. Must be string or action.', 'r' => $r]);
+        if (is_array($response)) {
+            $response = $this->flatternArray($response);
+            foreach ($response as $r) {
+                if ($r instanceof View) {
+                    $actions[] = $this->_jsRenderIntoModal($r);
+                } else if (is_string($r)) {
+                    $actions[] = new jsExpression('alert([])', [$r]);
+                } elseif ($r instanceof jsExpressionable) {
+                    $actions[] = $r;
+                } elseif ($r === null) {
+                    continue;
+                } else {
+                    throw new Exception(['Incorrect callback. Must be string or action.', 'r' => $r]);
+                }
             }
+        } else if ($response instanceof View) {
+            $actions[] = $this->_jsRenderIntoModal($response);
+        } else if ($response instanceof jsExpressionable) {
+            $actions[] = $response;
         }
 
         $ajaxec = implode(";\n", array_map(function (jsExpressionable $r) {
@@ -187,5 +183,15 @@ class jsCallback extends Callback implements jsExpressionable
     public function getURL($mode = 'callback')
     {
         throw new Exception('Do not use getURL on jsCallback, use getJSURL()');
+    }
+
+
+    private function _jsRenderIntoModal($response)
+    {
+        $html = '<div class="ui modal"> <i class="close icon"></i>  <div class="content atk-content"> ';
+        $html .= $response->render();
+        $html .= ' </div> </div>';
+
+        return new jsExpression('$([html]).modal("show").data("needRemove", true)', ['html' => $html]);
     }
 }
