@@ -1,19 +1,10 @@
-| {FilterContainer}
-| <div class="ui basic secondary segment">
-| <span class="">{$FilterHeaderLabel}</span><hr>
-| {$Filters}
-| </div>
-| {/FilterContainer}
-| {Dropdown}
 | <div id="{$_id}" class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
 | {$BeforeInput}{$AfterBeforeInput}
-| {FilterLabelContainer}<label>{$FilterLabel}</label>{/FilterLabelContainer}
-| <div id="{$input_id}" class="ui search selection dropdown {$filterClass} {$disabled}" style="width:100%">
+| <div id="{$input_id}" class="ui {$multiple} search selection dropdown {$disabled}" style="width:100%">
 | {Input}<input class={$input_class} type="{input_type}text{/}" {$input_attributes}/>{/}
 | <i class="dropdown icon"></i>
-| <div class="default text">{$place_holder}</div>
-| <input class="search" value="{$value}" {$readonly} {$disabled} style="width:100%">
+| <div class="default text">{$placeholder}</div>
+| <input class="search" value="{$value}" {$readonly} {$disabled} style="width:100%"/>
 | </div>
 | {$AfterInput}{$AfterAfterInput}
 | </div>
-| {/Dropdown}
