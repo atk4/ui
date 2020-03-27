@@ -115,8 +115,8 @@ class TemplateTest extends \atk4\core\PHPUnit_AgileTestCase
      */
     public function testConditionalTagsVAT()
     {
-        $s = '{vat_applied?}VAT is {$vat}%{/?}'.
-             '{vat_zero?}VAT is zero{/?}'.
+        $s = '{vat_applied?}VAT is {$vat}%{/?}' .
+             '{vat_zero?}VAT is zero{/?}' .
              '{vat_not_applied?}VAT is not applied{/?}';
 
         $f = function ($vat) use ($s) {

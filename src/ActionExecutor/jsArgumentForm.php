@@ -54,7 +54,7 @@ class jsArgumentForm extends jsModal
 
                 $js = [
                     new jsExpression('$(".atk-dialog-content").trigger("close")'),
-                    $this->hook('afterExecute', [$return]) ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : '')),
+                    $this->hook('afterExecute', [$return]) ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : '')),
                 ];
 
                 return $js;

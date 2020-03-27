@@ -119,7 +119,7 @@ class jsSSE extends jsCallback
         if (strlen($name) && $name !== null) {
             $this->output("event: {$name}\n");
         }
-        $this->output($this->wrapData($data)."\n\n");
+        $this->output($this->wrapData($data) . "\n\n");
         $this->flush();
     }
 
@@ -132,7 +132,7 @@ class jsSSE extends jsCallback
      */
     private function wrapData($string)
     {
-        return 'data:'.str_replace("\n", "\ndata: ", $string);
+        return 'data:' . str_replace("\n", "\ndata: ", $string);
     }
 
     protected function initSse()

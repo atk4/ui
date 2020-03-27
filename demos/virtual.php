@@ -14,5 +14,5 @@ $label->link($vp->cb->getURL());
 $label = \atk4\ui\Label::addTo($layout, ['Callback test']);
 
 $label->on('click', function ($j, $arg1) {
-    return 'width is '.$arg1;
+    return 'width is ' . $arg1;
 }, [new \atk4\ui\jsExpression('$(window).width()')]);

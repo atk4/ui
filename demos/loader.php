@@ -27,8 +27,8 @@ require_once __DIR__ . '/init.php';
 
         // You may pass arguments to the loader, in this case it's "color"
         sleep(3);
-        \atk4\ui\Header::addTo($p, ['Loader #1b - '.$_GET['color']]);
-        \atk4\ui\LoremIpsum::addTo(\atk4\ui\View::addTo($p, ['ui' => $_GET['color'].' segment']), ['size' => 1]);
+        \atk4\ui\Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
+        \atk4\ui\LoremIpsum::addTo(\atk4\ui\View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:
         $p->app->stickyGet('color');

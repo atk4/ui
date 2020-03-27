@@ -24,7 +24,7 @@ $form->addField('email');
 $form->onSubmit(function ($form) {
     // implement subscribe here
 
-    return $form->success('Subscribed '.$form->model['email'].' to newsletter.');
+    return $form->success('Subscribed ' . $form->model['email'] . ' to newsletter.');
 });
 
 $form->buttonSave->set('Subscribe');
@@ -59,7 +59,7 @@ $form->addField('date2', ['Calendar', 'type' => 'date']);
 $form->buttonSave->set('Compare Date');
 
 $form->onSubmit(function ($form) {
-    echo 'date1 = '.print_r($form->model['date1'], true).' and date2 = '.print_r($form->model['date2'], true);
+    echo 'date1 = ' . print_r($form->model['date1'], true) . ' and date2 = ' . print_r($form->model['date2'], true);
 });
 
 ////////////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email1');
 $form->buttonSave->set('Save1');
 $form->onSubmit(function ($form) {
-    return $form->error('email1', 'some error action '.rand(1, 100));
+    return $form->error('email1', 'some error action ' . rand(1, 100));
 });
 
 \atk4\ui\Header::addTo($tab, ['..or success message']);
@@ -88,7 +88,7 @@ $form->buttonSave->set('Save3');
 $form->onSubmit(function ($form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
-    $view->text->addParagraph('some text '.rand(1, 100));
+    $view->text->addParagraph('some text ' . rand(1, 100));
 
     return $view;
 });
@@ -98,7 +98,7 @@ $form = \atk4\ui\Form::addTo($tab);
 $field = $form->addField('email4');
 $form->buttonSave->set('Save4');
 $form->onSubmit(function ($form) use ($field) {
-    return $field->jsInput()->val('random is '.rand(1, 100));
+    return $field->jsInput()->val('random is ' . rand(1, 100));
 });
 
 /////////////////////////////////////////////////////////////////////
@@ -159,7 +159,7 @@ $f->setModel($m_register);
 
 $f->onSubmit(function ($f) {
     if ($f->model['name'] != 'John') {
-        return $f->error('name', 'Your name is not John! It is "'.$f->model['name'].'". It should be John. Pleeease!');
+        return $f->error('name', 'Your name is not John! It is "' . $f->model['name'] . '". It should be John. Pleeease!');
     } else {
         return [
             $f->jsInput('email')->val('john@gmail.com'),
@@ -203,7 +203,7 @@ $f->onSubmit(function ($f) {
         }
 
         if ($f->model[$name] != 'a') {
-            $errors[] = $f->error($name, 'Field '.$name.' should contain exactly "a", but contains '.$f->model[$name]);
+            $errors[] = $f->error($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $f->model[$name]);
         }
     }
 

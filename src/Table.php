@@ -280,7 +280,7 @@ class Table extends Lister
         foreach ($cols as $colName) {
             $col = $this->columns[$colName];
             if ($col) {
-                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#'.$col->name.'_ac']));
+                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
                 $pop->form->onSubmit(function ($f) use ($pop) {
                     return new jsReload($this->reload);
@@ -751,9 +751,9 @@ class Table extends Lister
                 if ($cell) {
                     if ($name) {
                         // if name is set, we can wrap things
-                        $cell = str_replace('{$'.$name.'}', $cell, $html);
+                        $cell = str_replace('{$' . $name . '}', $cell, $html);
                     } else {
-                        $cell = $cell.' '.$html;
+                        $cell = $cell . ' ' . $html;
                     }
                 } else {
                     $cell = $html;

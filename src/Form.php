@@ -182,7 +182,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
             $this->buttonSave->on('click', $this->js()->form('submit'));
-            $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#'.$this->name]));
+            $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#' . $this->name]));
         }
     }
 
@@ -211,7 +211,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
     {
         if (is_object($selector) && isset($selector->name)) {
-            $selector = '#'.$selector->name;
+            $selector = '#' . $selector->name;
         }
 
         $this->fieldsDisplayRules = $rules;

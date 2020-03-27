@@ -15,7 +15,7 @@ class Money extends Generic
 
     public function getTagAttributes($position, $attr = [])
     {
-        $attr = array_merge_recursive($attr, ['class' => ['{$_'.$this->short_name.'_class}']]);
+        $attr = array_merge_recursive($attr, ['class' => ['{$_' . $this->short_name . '_class}']]);
 
         return parent::getTagAttributes($position, $attr);
     }
@@ -28,7 +28,7 @@ class Money extends Generic
 
         return $this->getTag(
             'body',
-            '{$'.$f->short_name.'}',
+            '{$' . $f->short_name . '}',
             $extra_tags
         );
     }
@@ -36,11 +36,11 @@ class Money extends Generic
     public function getHTMLTags($row, $field)
     {
         if ($field->get() < 0) {
-            return ['_'.$this->short_name.'_class' => 'negative'];
+            return ['_' . $this->short_name . '_class' => 'negative'];
         } elseif (!$this->show_zero_values && $field->get() == 0) {
-            return ['_'.$this->short_name.'_class' => '', $field->short_name => '-'];
+            return ['_' . $this->short_name . '_class' => '', $field->short_name => '-'];
         }
 
-        return ['_'.$this->short_name.'_class' => ''];
+        return ['_' . $this->short_name . '_class' => ''];
     }
 }

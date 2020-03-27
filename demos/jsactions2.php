@@ -42,16 +42,16 @@ $btn->on('click', $ac, ['confirm' => 'This will delete record. Sure?']);
 
 // clicking button should simply display toast ok with model title
 $ac = $country->addAction('callback', ['callback'=> function ($m) {
-    return 'ok '.$m->getTitle();
+    return 'ok ' . $m->getTitle();
 }]);
 $btn = \atk4\ui\Button::addTo($buttons, [$ac->getDescription()]);
 $btn->on('click', $ac, [$id]);
 
 // clicking button should show preview window wiht OK. If OK is pressed should close window and display toast OK
 $ac = $country->addAction('preview', ['preview'=> function ($m) {
-    return 'Previewing country '.$m->getTitle();
+    return 'Previewing country ' . $m->getTitle();
 }, 'callback'=>function ($m) {
-    return 'Done previewing '.$m->getTitle();
+    return 'Done previewing ' . $m->getTitle();
 }]);
 $btn = \atk4\ui\Button::addTo($buttons, [$ac->getDescription()]);
 $btn->on('click', $ac, ['args' => ['id' => $id]]);
@@ -65,16 +65,16 @@ $btn->on('click', $ac, ['args' => ['id' => $id]]);
 
 // invoking this action requires argument "age" (integer). User should be prompted, end would return age in response
 $ac = $country->addAction('edit_argument', ['args'=> ['age'=>['type'=>'integer', 'required' => true]], 'callback'=>function ($m, $age) {
-    return 'Proper age to visit '.$m->getTitle().' is '.$age;
+    return 'Proper age to visit ' . $m->getTitle() . ' is ' . $age;
 }]);
 $btn = \atk4\ui\Button::addTo($buttons, [$ac->getDescription()]);
 $btn->on('click', $ac, ['args' => ['id' => $id]]);
 
 // invoking this action requires argument "age" (integer). User should be prompted, end would return age in response
 $ac = $country->addAction('edit_argument_prev', ['args'=> ['age'=>['type'=>'integer', 'required' => true]], 'preview'=> function ($m, $age) {
-    return 'You age is: '.$age;
+    return 'You age is: ' . $age;
 }, 'callback'=>function ($m, $age) {
-    return 'age = '.$age;
+    return 'age = ' . $age;
 }]);
 $btn = \atk4\ui\Button::addTo($buttons, [$ac->getDescription()]);
 $btn->on('click', $ac, ['args' => ['id' => $id]]);
@@ -96,8 +96,8 @@ $btn = \atk4\ui\Button::addTo($buttons, [$ac->getDescription()]);
 $btn->on('click', $ac, ['args' => ['id' => $id]]);
 
 // action may require confirmation, before activating
-$ac = $country->addAction('confirm', ['ui' => ['confirm'=>'Perform action on '.$country_name.'?'], 'callback'=>function ($m) {
-    return 'Confirm ok '.$m->getTitle();
+$ac = $country->addAction('confirm', ['ui' => ['confirm'=>'Perform action on ' . $country_name . '?'], 'callback'=>function ($m) {
+    return 'Confirm ok ' . $m->getTitle();
 }]);
 $btn = \atk4\ui\Button::addTo($buttons, [$ac->getDescription()]);
 $btn->on('click', $ac, [$id, 'confirm' => $ac->ui['confirm']]);
@@ -107,7 +107,7 @@ $ac = $country->addAction('multi_step', ['args'=> ['age'=>['type'=>'integer', 'r
 //    $m->save();
     return 'ok';
 }, 'preview'=> function ($m, $age, $gender) {
-    return 'Gender = '.$gender.' / Age = '.$age . ' / '.$m->get('iso3');
+    return 'Gender = ' . $gender . ' / Age = ' . $age . ' / ' . $m->get('iso3');
 }]);
 $btn = \atk4\ui\Button::addTo($buttons, [$ac->getDescription()]);
 $btn->on('click', $ac, ['args' => ['id' =>$id]]);

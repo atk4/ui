@@ -61,7 +61,7 @@ class ActionButtons extends Generic
             }
         }
 
-        $name = $this->name.'_button_'.(count($this->buttons) + 1);
+        $name = $this->name . '_button_' . (count($this->buttons) + 1);
 
         if ($action instanceof \atk4\data\UserAction\Generic) {
             $button = $action->ui['button'] ?? $button;
@@ -85,12 +85,12 @@ class ActionButtons extends Generic
 
         $button->app = $this->table->app;
 
-        $this->buttons[$name] = $button->addClass('{$_'.$name.'_disabled} compact b_'.$name);
+        $this->buttons[$name] = $button->addClass('{$_' . $name . '_disabled} compact b_' . $name);
 
         if ($isDisabled) {
             $button->addClass('disabled');
         }
-        $this->table->on('click', '.b_'.$name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirm]);
+        $this->table->on('click', '.b_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirm]);
 
         return $button;
     }
@@ -146,7 +146,7 @@ class ActionButtons extends Generic
             $output .= $button->getHTML();
         }
 
-        return '<div class="ui buttons">'.$output.'</div>';
+        return '<div class="ui buttons">' . $output . '</div>';
     }
 
     public function getHTMLTags($row, $field)
@@ -158,7 +158,7 @@ class ActionButtons extends Generic
                 continue;
             }
 
-            $tags['_'.$name.'_disabled'] = 'disabled';
+            $tags['_' . $name . '_disabled'] = 'disabled';
         }
 
         return $tags;
