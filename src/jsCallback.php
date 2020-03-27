@@ -185,7 +185,14 @@ class jsCallback extends Callback implements jsExpressionable
         throw new Exception('Do not use getURL on jsCallback, use getJSURL()');
     }
 
-
+    /**
+     * Render View into modal.
+     * 
+     * @param View $response
+     *
+     * @return jsExpression
+     * @throws \atk4\core\Exception
+     */
     private function _jsRenderIntoModal($response)
     {
         $html = '<div class="ui modal"> <i class="close icon"></i>  <div class="content atk-content"> ';
