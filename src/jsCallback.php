@@ -2,6 +2,8 @@
 
 namespace atk4\ui;
 
+use atk4\ui\Modal;
+
 class jsCallback extends Callback implements jsExpressionable
 {
     /**
@@ -37,9 +39,9 @@ class jsCallback extends Callback implements jsExpressionable
      * have some degree of nesting, convert it into a one-dimensional array,
      * so that it's easier for us to wrap it into a function body.
      *
-     * @param [type] $response [description]
+     * @param array $response
      *
-     * @return [type] [description]
+     * @return array
      */
     public function flatternArray($response)
     {
@@ -126,7 +128,7 @@ class jsCallback extends Callback implements jsExpressionable
      * @param string $msg General message, typically won't be displayed
      * @param bool $success Was request successful or not
      *
-     * @return void [type] [description]
+     * @return void
      * @throws Exception\ExitApplicationException
      * @throws \atk4\core\Exception
      */
@@ -143,6 +145,7 @@ class jsCallback extends Callback implements jsExpressionable
      *
      * @return string
      * @throws Exception
+     * @throws \atk4\core\Exception
      */
     public function getAjaxec($response, $chain = null)
     {
@@ -211,9 +214,13 @@ class jsCallback extends Callback implements jsExpressionable
      */
     private function _jsRenderIntoModal($response)
     {
-        $html = '<div class="ui modal"> <i class="close icon"></i>  <div class="content atk-content"> ';
-        $html .= $response->render();
-        $html .= ' </div> </div>';
+        if (!$response instanceof Modal) {
+            $modal = new Modal();
+            $modal->add($response);
+            $html = $modal->getHTML();
+        } else {
+            $html = $response->getHTML();
+        }
 
         return new jsExpression('$([html]).modal("show").data("needRemove", true)', ['html' => $html]);
     }
