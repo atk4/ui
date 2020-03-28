@@ -60,8 +60,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 $app = new \atk4\ui\App();   // That's your UI application
 $app->initLayout('Centered');
 
-$form = new \atk4\ui\Form(); // Yeah, that's a form!
-$app->add($form);
+$form = \atk4\ui\Form::addTo($app); // Yeah, that's a form!
 
 $form->addField('email');    // adds field
 $form->onSubmit(function ($form) {
@@ -94,7 +93,7 @@ $app = new \atk4\ui\App('hello world');
 $app->initLayout('Admin');
 $app->dbConnect('mysql://user:pass@localhost/atk')
 
-$app->add('CRUD')->setModel(new User($app->db));
+\atk4\ui\CRUD::addTo($app)->setModel(new User($app->db));
 ```
 
 ATK Data allows you to set up relations between models:
@@ -118,7 +117,7 @@ use \atk4\mastercrud\MasterCRUD;
 
 // set up $app here
 
-$master_crud = $app->add(new MasterCRUD());
+$master_crud = MasterCRUD::addTo($app);
 $master_crud->setModel(new User($app->db), [
   'Purchases'=>[]
 ]);
@@ -151,13 +150,13 @@ Agile UI has some unique features:
 One of the fundamental features of ATK is Callback - ability to dynamically generate a route then have JS part of the component invoke it. Thanks to this approach, code can be fluid, simple and readable:
 
 ``` php
-$tabs = $app->add('Tabs');
-$tabs->addTab('Intro')->add(['Message', 'Other tabs are loaded dynamically!']);
+$tabs = \atk4\ui\Tabs::addTo($app);
+\atk4\ui\Message::addTo($tabs->addTab('Intro'), ['Other tabs are loaded dynamically!']);
 
 $tabs->addTab('Users', function($p) use($app) {
 
     // This tab is loaded dynamically, but also contains dynamic component
-    $p->add('CRUD')->setModel(new User($app->db));
+    \atk4\ui\CRUD::addTo($p)->setModel(new User($app->db));
 });
 
 $tabs->addTab('Settings', function($p) use($app) {
@@ -165,7 +164,7 @@ $tabs->addTab('Settings', function($p) use($app) {
     // Second tab contains an AJAX form that stores itself back to DB.
     $m = new Settings($app->db);
     $m->load(2);
-    $p->add('Form')->setModel($m);
+    \atk4\ui\Form::addTo($p)->setModel($m);
 });
 ```
 
@@ -207,7 +206,7 @@ class User extends \atk4\data\Model {
     }
 }
 
-$app->add('CRUD')->setModel(new User($app->db));
+\atk4\ui\CRUD::addTo($app)->setModel(new User($app->db));
 ```
 
 The result is here:

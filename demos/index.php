@@ -3,31 +3,29 @@
 include_once __DIR__ . '/init.php';
 
 if (!$app->stickyget('begin')) {
-    $app->add('Header')->set('Welcome to Agile Toolkit Demo!!');
+    \atk4\ui\Header::addTo($app)->set('Welcome to Agile Toolkit Demo!!');
 
-    $t = $app->add(['View', false, 'green', 'ui' => 'segment'])->add('Text');
+    $t = \atk4\ui\Text::addTo(\atk4\ui\View::addTo($app, [false, 'green', 'ui' => 'segment']));
     $t->addParagraph('Take a quick stroll through some of the amazing features of Agile Toolkit.');
 
-    $app->add(['Button', 'Begin the demo..', 'huge primary fluid', 'iconRight' => 'right arrow'])
+    \atk4\ui\Button::addTo($app, ['Begin the demo..', 'huge primary fluid', 'iconRight' => 'right arrow'])
         ->link(['layout' => 'Centered', 'begin' => true]);
 
-    $app->add('Header')->set('What is new in Agile Toolkit 2.0');
+    \atk4\ui\Header::addTo($app)->set('What is new in Agile Toolkit 2.0');
 
-    $t = $app->add(['View', false, 'green', 'ui' => 'segment'])->add('Text');
+    $t = \atk4\ui\Text::addTo(\atk4\ui\View::addTo($app, [false, 'green', 'ui' => 'segment']));
     $t->addParagraph('In this version of Agile Toolkit we introduce "User Actions"!');
 
-    $app->add(['Button', 'Learn about User Actions', 'huge basic primary fluid', 'iconRight' => 'right arrow'])
+    \atk4\ui\Button::addTo($app, ['Learn about User Actions', 'huge basic primary fluid', 'iconRight' => 'right arrow'])
         ->link(['tutorial_actions', 'layout' => 'Centered', 'begin' => true]);
 
     $app->callExit();
 }
 
-/** @var \atk4\ui\Wizard $wizard */
-$wizard = $app->add('Wizard');
+$wizard = \atk4\ui\Wizard::addTo($app);
 
 $wizard->addStep('User Interface', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Agile Toolkit is a "Low Code Framework" written in PHP. It is designed to simplify all aspects of web application creation:
 EOF
@@ -66,21 +64,19 @@ EOF
 
     $t->addParagraph('It all has started with a "Button" though:');
 
-    $page->add(new Demo())->setCode('$app->add(["Button", "Hello from the button!"]);');
+    Demo::addTo($page)->setCode('\atk4\ui\Button::addTo($app, [\'Hello from the button!\']);');
 });
 
 $wizard->addStep('Interactivity', function ($page) {
-
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 PHP is a server-side language. That prompted us to implement server-side UI actions. They are very easy to define -
 no need to create any routes or custom routines, simply define a PHP closure like this:
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
-$button = $app->add(['Button', "Click for the greeting!"]);
+    Demo::addTo($page)->setCode(<<<'CODE'
+$button = \atk4\ui\Button::addTo($app, ["Click for the greeting!"]);
 $button->on('click', function() {
     return 'Hello World!';
 });
@@ -88,36 +84,35 @@ $button->on('click', function() {
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 A component of Agile Toolkit (callback) enables seamless communication between the frontend components (which are often
 written in VueJS) and the backend. We also support seamless reloading of any UI widget:
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 
-$seg = $app->add(['View', 'ui'=>'segment']);
+$seg = \atk4\ui\View::addTo($app, ['ui'=>'segment']);
 
-$seg->add('Text')->set('Number of buttons: ');
+\atk4\ui\Text::addTo($seg)->set('Number of buttons: ');
 
-$paginator = $seg->add([
-    'Paginator',
+$paginator = \atk4\ui\Paginator::addTo($seg, [
     'total'=>5,
     'reload'=>$seg,
     'urlTrigger'=>'count'
 ]);
 
-$seg->add(['View', 'ui'=>'divider']);
+\atk4\ui\View::addTo($seg, ['ui'=>'divider']);
 
 for($i=1; $i <= ($_GET['count'] ?? 1); $i++) {
-    $seg->add(['Button', $i]);
+    \atk4\ui\Button::addTo($seg, [$i]);
 }
 
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 This demo also shows you how to create composite views. The '$seg' above contains text, paginator, divider and some
 buttons. Interestingly, Paginator view also consists of buttons and Agile Toolkit renders everything reliably.
@@ -126,16 +121,14 @@ EOF
 });
 
 $wizard->addStep('Business Model', function ($page) {
-
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 One major benefit of Server Side Rendered applications is ability to directly interact with data. In other applications
 you may need to manually process data but in Agile Toolkit we use data mapping framework.
 EOF
     );
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 
 class Invoice extends \atk4\data\Model {
     public $title_field = 'reference';
@@ -150,18 +143,18 @@ class Invoice extends \atk4\data\Model {
 session_start();
 $session = new atk4\data\Persistence\Array_($_SESSION['x']);
 
-$form = $app->add('Form');
+$form = \atk4\ui\Form::addTo($app);
 $form->setModel(new Invoice($session))
     ->tryLoad(1);
 
-$app->add(['View', 'ui'=>'divider']);
-$app->add(['Button', 'Refresh', 'icon'=>'refresh'])
+\atk4\ui\View::addTo($app, ['ui'=>'divider']);
+\atk4\ui\Button::addTo($app, ['Refresh', 'icon'=>'refresh'])
     ->on('click', $app->jsReload());
 
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 This code shows you a combination of 3 objects:
 EOF
@@ -182,9 +175,7 @@ EOF
 });
 
 $wizard->addStep('Persistence', function ($page) {
-
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Once your model is defined, it can be re-used later with any generic view:
 EOF
@@ -204,17 +195,17 @@ EOF
     }
     session_start();
 
-    $page->add(new Demo())->setCode(<<<'CODE'
+    Demo::addTo($page)->setCode(<<<'CODE'
 $session = new atk4\data\Persistence\Array_($_SESSION['x']);
 
 $model = new Invoice($session);
 $model->tryLoad(1);
-$app->add('Card')->setModel($model, ['date']);
+\atk4\ui\Card::addTo($app)->setModel($model, ['date']);
 
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Re-use of your Business Model code, generic and interactive views and principles of composition and a simple PHP
 code offers a most efficient way of constructing Web Applications.
@@ -223,7 +214,7 @@ EOF
 });
 
 $wizard->addFinish(function ($page) use ($wizard) {
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(<<< 'EOF'
 Agile Toolkit base package includes:
 EOF
@@ -240,21 +231,21 @@ EOF
 HTML
     );
 
-    $gl = $page->add(new \atk4\ui\GridLayout([null, 'stackable divided', 'columns'=>4]));
-    $gl->add(['Button', 'Explore UI components', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c1')
+    $gl = \atk4\ui\GridLayout::addTo($page, [null, 'stackable divided', 'columns'=>4]);
+    \atk4\ui\Button::addTo($gl, ['Explore UI components', 'primary basic fluid', 'iconRight'=>'right arrow'], ['r1c1'])
         ->link('https://github.com/atk4/ui/#bundled-and-planned-components');
-    $gl->add(['Button', 'Try out interactive features', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c2')
+    \atk4\ui\Button::addTo($gl, ['Try out interactive features', 'primary basic fluid', 'iconRight'=>'right arrow'], ['r1c2'])
         ->link(['loader', 'begin'=>false, 'layout'=>false]);
-    $gl->add(['Button', 'Dive into Agile Data', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c3')
+    \atk4\ui\Button::addTo($gl, ['Dive into Agile Data', 'primary basic fluid', 'iconRight'=>'right arrow'], ['r1c3'])
         ->link('https://git.io/ad');
-    $gl->add(['Button', 'More ATK Add-ons', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c4')
+    \atk4\ui\Button::addTo($gl, ['More ATK Add-ons', 'primary basic fluid', 'iconRight'=>'right arrow'], ['r1c4'])
         ->link('https://github.com/atk4/ui/#add-ons-and-integrations');
 
-    $wizard->add(['Button', 'Exit demo', 'primary', 'icon'=>'left arrow'], 'Left')
+    \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon'=>'left arrow'], ['Left'])
         ->link(['begin'=>false, 'layout'=>false]);
 
-    $page->add(['View', 'ui'=>'divider']);
+    \atk4\ui\View::addTo($page, ['ui'=>'divider']);
 
-    $page->add(['Message', 'Cool fact!', 'info', 'icon'=>'book'])->text
+    \atk4\ui\Message::addTo($page, ['Cool fact!', 'info', 'icon'=>'book'])->text
         ->addParagraph('This entire demo is coded in Agile Toolkit and takes up less than 300 lines of very simple code code!');
 });

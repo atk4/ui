@@ -8,27 +8,28 @@ class MySwitcher extends \atk4\ui\View
     {
         parent::init();
 
-        $this->add(['Header', 'My name is '.$this->name, 'red']);
+        \atk4\ui\Header::addTo($this, ['My name is ' . $this->name, 'red']);
 
-        $buttons = $this->add(['View', 'ui' => 'basic buttons']);
-        $buttons->add(['Button', 'Yellow'])->setAttr('data-id', 'yellow');
-        $buttons->add(['Button', 'Blue'])->setAttr('data-id', 'blue');
-        $buttons->add(['Button', 'Button'])->setAttr('data-id', 'button');
+        $buttons = \atk4\ui\View::addTo($this, ['ui' => 'basic buttons']);
+        \atk4\ui\Button::addTo($buttons, ['Yellow'])->setAttr('data-id', 'yellow');
+        \atk4\ui\Button::addTo($buttons, ['Blue'])->setAttr('data-id', 'blue');
+        \atk4\ui\Button::addTo($buttons, ['Button'])->setAttr('data-id', 'button');
 
         $buttons->on('click', '.button', new \atk4\ui\jsReload($this, [$this->name => (new \atk4\ui\jQuery())->data('id')]));
 
         switch ($this->app->stickyGet($this->name)) {
         case 'yellow':
-            $this->add(['View', 'ui' => 'yellow segment'])->add(new self());
+            self::addTo(\atk4\ui\View::addTo($this, ['ui' => 'yellow segment']));
             break;
         case 'blue':
-            $this->add(['View', 'ui' => 'blue segment'])->add(new self());
+            self::addTo(\atk4\ui\View::addTo($this, ['ui' => 'blue segment']));
             break;
         case 'button':
-            $this->add(['View', 'ui' => 'green segment'])->add(['Button', 'Refresh page'])->link([]);
+            \atk4\ui\Button::addTo(\atk4\ui\View::addTo($this, ['ui' => 'green segment']), ['Refresh page'])->link([]);
             break;
         }
     }
 }
 
-$app->add(['View', 'ui' => 'segment'])->add(new MySwitcher());
+$view = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
+MySwitcher::addTo($view);

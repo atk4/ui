@@ -27,7 +27,7 @@ class Form extends Basic
         $this->addHeader();
 
         if (!$this->form) {
-            $this->form = $this->add('Form');
+            $this->form = \atk4\ui\Form::addTo($this);
         }
 
         // Setup form model using action fields.

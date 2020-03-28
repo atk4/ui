@@ -87,7 +87,7 @@ class Upload extends Input
 
         //$this->inputType = 'hidden';
 
-        $this->cb = $this->add('jsCallback');
+        $this->cb = \atk4\ui\jsCallback::addTo($this);
 
         if (!$this->action) {
             $this->action = new \atk4\ui\Button(['icon' => 'upload', 'disabled'=> ($this->disabled || $this->readonly)]);

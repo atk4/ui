@@ -2,13 +2,13 @@
 
 require_once __DIR__ . '/init.php';
 
-$app->add(new \atk4\ui\View([
+\atk4\ui\View::addTo($app, [
     'Forms below demonstrate how to work with multi-value selectors',
     'ui' => 'ignored warning message',
-]));
+]);
 
-$cc = $app->add('Columns');
-$f = $cc->addColumn()->add(new \atk4\ui\Form());
+$cc = \atk4\ui\Columns::addTo($app);
+$f = \atk4\ui\Form::addTo($cc->addColumn());
 
 $f->addField('one', null, ['enum'=>['female', 'male']])->set('male');
 $f->addField('two', ['Radio'], ['enum'=>['female', 'male']])->set('male');

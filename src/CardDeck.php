@@ -124,11 +124,11 @@ class CardDeck extends View
     {
         $this->menu = $this->add($this->factory($this->menu), 'Menu');
 
-        $left = $this->menu->add(['View', 'ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
-        $this->btns = $left->add(['View', 'ui' => 'buttons']);
+        $left = View::addTo($this->menu, ['ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
+        $this->btns = View::addTo($left, ['ui' => 'buttons']);
 
         if ($this->search !== false) {
-            $right = $this->menu->add(['View', 'ui' => 'four wide column']);
+            $right = View::addTo($this->menu, ['ui' => 'four wide column']);
             $this->search = $right->add($this->factory($this->search, ['context' => '#' . $this->container->name]));
             $this->search->reload = $this->container;
             $this->query = $this->app->stickyGet($this->search->queryArg);
@@ -142,7 +142,7 @@ class CardDeck extends View
      */
     protected function addPaginator()
     {
-        $seg = $this->container->add(['View', 'ui'=> 'basic segment'])->addStyle('text-align', 'center');
+        $seg = View::addTo($this->container, ['ui'=> 'basic segment'])->addStyle('text-align', 'center');
         $this->paginator = $seg->add($this->factory($this->paginator, ['reload' => $this->container]));
         $this->page = $this->app->stickyGet($this->paginator->name);
     }
@@ -465,7 +465,7 @@ class CardDeck extends View
     public function renderView()
     {
         if (($this->menu && count($this->menuActions) > 0) || $this->search !== false) {
-            $this->add(['View', 'ui' => 'divider'], 'Divider');
+            View::addTo($this, ['ui' => 'divider'], ['Divider']);
         }
 
         if (($_GET['__atk_reload'] ?? null) === $this->container->name) {

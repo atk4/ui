@@ -2,13 +2,13 @@
 
 require_once __DIR__ . '/init.php';
 
-$app->add(new \atk4\ui\View([
+\atk4\ui\View::addTo($app, [
     'Forms below focus on Data integration and automated layouts',
     'ui' => 'ignored warning message',
-]));
+]);
 
-$cc = $app->add('Columns');
-$f = $cc->addColumn()->add(new \atk4\ui\Form());
+$cc = \atk4\ui\Columns::addTo($app);
+$f = \atk4\ui\Form::addTo($cc->addColumn());
 
 // adding field without model creates a regular line
 $f->addField('one');
@@ -49,11 +49,11 @@ $m->addField('five', ['ui' => ['form' => ['CheckBox', 'caption' => 'Caption3']]]
 // Form-specific caption overrides general caption of a field. Also you can specify object instead of seed
 $m->addField('six', ['caption' => 'badcaption', 'ui' => ['form' => new \atk4\ui\FormField\CheckBox(['caption' => 'Caption4'])]]);
 
-$f = $cc->addColumn()->add(new \atk4\ui\Form());
+$f = \atk4\ui\Form::addTo($cc->addColumn());
 $f->setModel($m);
 
 // Next form won't initalize default fields, but we'll add them individually
-$f = $cc->addColumn()->add(new \atk4\ui\Form());
+$f = \atk4\ui\Form::addTo($cc->addColumn());
 $f->setModel($m, false);
 
 // adding that same field but with custom form field seed

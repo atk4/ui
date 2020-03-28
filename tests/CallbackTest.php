@@ -33,7 +33,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add('Callback');
+        $cb = \atk4\ui\Callback::addTo($app);
 
         // simulate triggering
         $_GET[$cb->name] = true;
@@ -51,7 +51,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add('Callback');
+        $cb = \atk4\ui\Callback::addTo($app);
 
         // don't simulate triggering
         $cb->set(function ($x) use (&$var) {
@@ -67,7 +67,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add(['Callback', 'postTrigger' => 'go']);
+        $cb = \atk4\ui\Callback::addTo($app, ['postTrigger' => 'go']);
 
         // simulate triggering
         $_POST['go'] = true;
@@ -85,7 +85,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add('CallbackLater');
+        $cb = \atk4\ui\CallbackLater::addTo($app);
 
         // simulate triggering
         $_GET[$cb->name] = true;
@@ -108,14 +108,14 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add('CallbackLater');
+        $cb = \atk4\ui\CallbackLater::addTo($app);
 
         // simulate triggering
         $_GET[$cb->name] = true;
-        $_GET[$cb->name.'_2'] = true;
+        $_GET[$cb->name . '_2'] = true;
 
         $cb->set(function ($x) use (&$var, $app, &$cbname) {
-            $cb2 = $app->add('CallbackLater');
+            $cb2 = \atk4\ui\CallbackLater::addTo($app);
             $cbname = $cb2->name;
             $cb2->set(function ($y) use (&$var) {
                 $var = $y;
@@ -136,7 +136,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $cb = $app->add('CallbackLater');
+        $cb = \atk4\ui\CallbackLater::addTo($app);
 
         // don't simulate triggering
         $cb->set(function ($x) use (&$var) {
@@ -157,7 +157,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $vp = $app->add('VirtualPage');
+        $vp = \atk4\ui\VirtualPage::addTo($app);
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
@@ -176,7 +176,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $vp = $app->add(['VirtualPage', 'urlTrigger'=>'bah']);
+        $vp = \atk4\ui\VirtualPage::addTo($app, ['urlTrigger'=>'bah']);
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
@@ -202,7 +202,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $app = $this->app;
 
-        $vp = $app->add('VirtualPage');
+        $vp = \atk4\ui\VirtualPage::addTo($app);
         $vp->set([$this, 'callPull230']);
 
         // simulate triggering

@@ -18,7 +18,7 @@ trait HandlesTable
     {
         $matches = [];
 
-        preg_match('/<.*data-id="'.$rowDataId.'".*/m', $table->render(), $matches);
+        preg_match('/<.*data-id="' . $rowDataId . '".*/m', $table->render(), $matches);
 
         return str_replace(["\r", "\n"], '', $matches[0]);
     }

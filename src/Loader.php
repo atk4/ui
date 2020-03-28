@@ -46,7 +46,7 @@ class Loader extends View
             $this->shim = ['View', 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
         }
 
-        $this->cb = $this->add(['Callback', 'appSticky' => $this->appStickyCb]);
+        $this->cb = Callback::addTo($this, ['appSticky' => $this->appStickyCb]);
     }
 
     /**
@@ -54,7 +54,7 @@ class Loader extends View
      *
      * The loader view is pass as an argument to the loader callback function.
      * This allow to easily update the loader view content within the callback.
-     *  $l1 = $layout->add('Loader');
+     *  $l1 = Loader::addTo($layout);
      *  $l1->set(function ($loader_view) {
      *    do_long_processing_action();
      *    $loader_view->set('new content');

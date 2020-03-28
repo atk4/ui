@@ -18,12 +18,12 @@ Basic Usage
 
 Once you create Tabs container you can then mix and match static and dynamic tabs::
 
-    $tabs = $app->add('Tabs');
+    $tabs = Tabs::addTo($app);
 
 
 Adding a static conten is pretty simple::
 
-    $tabs->addTab('Static Tab')->add('LoremIpsum');
+    LoremIpsum::addTo($tabs->addTab('Static Tab'));
 
 You can add multiple elements into a single tab, like any other view.
 
@@ -36,14 +36,14 @@ You should pass callable action as a second parameter.
 
 Example::
 
-    $t = $layout->add('Tabs');
+    $t = Tabs::addTo($layout);
 
     // add static tab
-    $t->addTab('Static Tab')->add('HelloWorld');
+    HelloWorld::addTo($t->addTab('Static Tab'));
 
     // add dynamic tab
     $t->addTab('Dynamically Loading', function ($tab) {
-        $tab->add('LoremIpsum');
+        LoremIpsum::addTo($tab);
     });
 
 Dynamic Tabs
@@ -54,11 +54,11 @@ to pass a call-back which will be triggered when user clicks on the tab.
 
 Note that tab contents are refreshed including any values you put on the form::
 
-    $t = $app->add('Tabs');
+    $t = Tabs::addTo($app);
 
     // dynamic tab
     $t->addTab('Dynamic Lorem Ipsum', function ($tab) {
-        $tab->add(['LoremIpsum', 'size'=>2]);
+        LoremIpsum::addTo($tab, ['size'=>2]);
     });
 
     // dynamic tab
@@ -66,7 +66,7 @@ Note that tab contents are refreshed including any values you put on the form::
         $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
         $m_register->addField('name', ['caption'=>'Please enter your name (John)']);
 
-        $f = $tab->add(new \atk4\ui\Form(['segment'=>true]));
+        $f = Form::addTo($tab, ['segment'=>true]);
         $f->setModel($m_register);
         $f->onSubmit(function ($f) {
             if ($f->model['name'] != 'John') {
@@ -83,7 +83,7 @@ URL Tabs
 
 Tab can load external URL or a different page if you prefer that instead of VirtualPage. This works similar to iframe::
 
-    $t = $app->add('Tabs');
+    $t = Tabs::addTo($app);
 
     $t->addTabURL('Terms and Condition', 'terms.html');
 

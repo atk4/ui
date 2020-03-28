@@ -35,7 +35,7 @@ Basic Usage
 
 It only takes 2 PHP lines to create a fully working form::
 
-    $form = $app->add('Form');
+    $form = Form::addTo($app);
     $form->addField('email');
 
 The form component can be further tweaked by setting a custom call-back handler
@@ -55,7 +55,7 @@ of it. Form uses :php:class:`Button` that you can tweak to your liking::
 
 or you can tweak it when you create form like this::
 
-    $form = $app->add(['Form', 'buttonSave'=>[null, 'Subscribe', 'icon'=>'mail']]);
+    $form = Form::addTo($app, ['buttonSave'=>[null, 'Subscribe', 'icon'=>'mail']]);
 
 To set the default values in the fields of the form you can use the model property of the form.
 Even if model not explicitly set (see section below) each form has an underlying model which is automatically generated::
@@ -84,7 +84,7 @@ Usage with Model
 A most common use of form is if you have a working Model (https://agile-data.readthedocs.io/en/develop/model.html)::
 
     // Form will automatically add a new user and save into the database
-    $form = $app->add('Form');
+    $form = Form::addTo($app);
     $form->setModel(new User($db));
 
 The basic 2-line syntax will extract all the required logic from the Model including:
@@ -154,7 +154,7 @@ Adding Fields
 
 Create a new field on a form::
 
-    $form = $app->add('Form');
+    $form = Form::addTo($app);
     $form->addField('email');
     $form->addField('gender', ['DropDown', 'values'=>['Female', 'Male']]);
     $form->addField('terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']);
@@ -163,20 +163,20 @@ Create a new field on a form using Model does not require you to describe each f
 Form will rely on Model Field Definition and UI meta-values to decide on the best way to handle
 specific field type::
 
-    $form = $app->add('Form');
+    $form = Form::addTo($app);
     $form->setModel(new User($db), ['email', 'gender', 'terms']);
 
 Field Decorator does not have to be added directly into the form. You can use a separate
 :php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`FormField\Generic::$form`::
 
-    $myview = $form->add(['View', 'defaultTemplate'=>'./mytemplate.html']);
-    $myview->add(['FormField\Dropdown', 'form'=>$form]);
+    $myview = View::addTo($form, ['defaultTemplate'=>'./mytemplate.html']);
+    FormField\DropDown::addTo($myview, ['form'=>$form]);
 
 .. php:method:: addFields($fields)
 
 Similar to :php:meth:`Form::addField()`, but allows to add multiple fields in one method call.
 
-    $form = $app->add('Form');
+    $form = Form::addTo($app);
     $form->addFields([
         'email',
         ['gender', ['DropDown', 'values'=>['Female', 'Male']]],
@@ -265,7 +265,7 @@ Specifying array will use the same syntax as the 2nd argument for ``\atk4\data\M
 If field already exist inside model, then values of $field will be merged into
 existing field properties. This example make email field mandatory for the form::
 
-    $form = $app->add('Form');
+    $form = Form::addTo($app);
     $form->setModel(new User($db), false);
 
     $form->addField('email', null, ['required'=>true]);
@@ -289,7 +289,7 @@ example displays a registration form for a User::
         }
     }
 
-    $form = $app->add('Form');
+    $form = Form::addTo($app);
     $form->setModel(new User($db));
 
     // add password verification field
@@ -319,7 +319,7 @@ a data field type (['type' => 'boolean']);
 It is always recommended to use data field type, because it will take care of type-casting
 for you. Here is an example with date::
 
-    $form = $app->add('Form');
+    $form = Form::addTo($app);
     $form->addField('date1', null, ['type'=>'date']);
     $form->addField('date2', ['Calendar', 'type'=>'date']);
 
@@ -399,7 +399,7 @@ Using setModel() on a sub layout
 
 You may add field to sub layout directly using setModel method on the sub layout itself.::
 
-    $f = $app->add('Form');
+    $f = Form::addTo($app);
     $f->setModel($m, false);
 
     $sub_layout = $f->layout->addSubLayout();
@@ -423,7 +423,7 @@ you can create a form to change profile of a currently logged user::
     $user->load($current_user);
 
     // Display all fields (except password) and values
-    $form = $app->add('Form');
+    $form = Form::addTo($app);
     $form->setModel($user);
 
 Submitting this form will automatically store values back to the database. Form uses
@@ -433,7 +433,7 @@ record association. This gives the benefit of not loading any other fields, unle
 they're marked as System (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$system),
 see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::onlyFields::
 
-    $form = $app->add('Form');
+    $form = Form::addTo($app);
     $form->setModel(new User($db), ['email', 'name']);
     $form->model->load($current_user);
 
@@ -503,7 +503,7 @@ Example use of Model's validate() method::
 
 We can now populate form fields based around the data fields defined in the model::
 
-    $app->add('Form')
+    Form::addTo($app)
         ->setModel(new Person($db));
 
 This should display a following form::
@@ -691,12 +691,12 @@ organize fields in either accordion, tabs or columns.
 
 The following example will show how to organize fields using regular sub layout and accordion sections::
 
-    $f = $app->add('Form');
+    $f = Form::addTo($app);
     $f->setModel($m, false);
 
     $sub_layout = $f->layout->addSubLayout('Generic');
 
-    $sub_layout->add(['Header', 'Accordion Section in Form']);
+    Header::addTo($sub_layout, ['Accordion Section in Form']);
     $sub_layout->setModel($m, ['name']);
 
     $accordion_layout = $f->layout->addSubLayout('Accordion');
@@ -757,7 +757,7 @@ you would want to hide/display fields while user enters the data.
 
 The logic is based around passing a declarative array::
 
-    $form = $app->add('Form');
+    $form = Form::addTo($app);
     $form->addField('phone1');
     $form->addField('phone2');
     $form->addField('phone3');
@@ -774,7 +774,7 @@ https://fomantic-ui.com/behaviors/form.html, so you can use any of the condition
 
 Here is a more advanced example::
 
-    $f_sub = $app->add('Form');
+    $f_sub = Form::addTo($app);
     $f_sub->addField('name');
     $f_sub->addField('subscribe', ['CheckBox', 'Subscribe to weekly newsletter', 'toggle']);
     $f_sub->addField('email');
@@ -797,7 +797,7 @@ Here is a more advanced example::
 You may also define multiple conditions for the field to be visible if you wrap them inside and array::
 
 
-    $f_sub = $app->add('Form');
+    $f_sub = Form::addTo($app);
     $f_dog->addField('race', ['Line']);
     $f_dog->addField('age');
     $f_dog->addField('hair_cut', ['DropDown', 'values' => ['Short', 'Long']]);
@@ -814,8 +814,8 @@ Hiding / Showing group of field
 
 Instead of defining rules for fields individually you can hide/show entire group::
 
-    $f_group = $app->add(['Form', 'segment']);
-    $f_group->add(['Label', 'Work on form group too.', 'top attached'], 'AboveFields');
+    $f_group = Form::addTo($app, ['segment']);
+    Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveFields']);
 
     $g_basic = $f_group->addGroup(['Basic Information']);
     $g_basic->addField('first_name', ['width' => 'eight']);

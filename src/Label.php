@@ -52,24 +52,24 @@ class Label extends View
     public function renderView()
     {
         if ($this->icon) {
-            $this->icon = $this->add(new Icon($this->icon), 'BeforeContent');
+            $this->icon = Icon::addTo($this, [$this->icon], ['BeforeContent']);
         }
 
         if ($this->image) {
-            $this->image = $this->add(new Image($this->image), 'BeforeContent');
+            $this->image = Image::addTo($this, [$this->image], ['BeforeContent']);
             $this->addClass('image');
         }
 
         if (isset($this->detail)) {
-            $this->detail = $this->add(new View($this->detail), 'AfterContent')->addClass('detail');
+            $this->detail = View::addTo($this, [$this->detail], ['AfterContent'])->addClass('detail');
         }
 
         if ($this->iconRight) {
-            $this->iconRight = $this->add(new Icon($this->iconRight), 'AfterContent');
+            $this->iconRight = Icon::addTo($this, [$this->iconRight], ['AfterContent']);
         }
 
         if ($this->imageRight) {
-            $this->imageRight = $this->add(new Image($this->imageRight), 'AfterContent');
+            $this->imageRight = Image::addTo($this, [$this->imageRight], ['AfterContent']);
             $this->addClass('image');
         }
 

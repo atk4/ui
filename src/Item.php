@@ -26,11 +26,11 @@ class Item extends View
     public function renderView()
     {
         if ($this->label) {
-            $this->add(new Label($this->label));
+            Label::addTo($this, [$this->label]);
         }
 
         if ($this->icon) {
-            $this->add(new Icon($this->icon));
+            Icon::addTo($this, [$this->icon]);
         }
 
         parent::renderView();

@@ -3,7 +3,7 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$form = $app->add('Form');
+$form = \atk4\ui\Form::addTo($app);
 
 //standard with model: use id_field as Value, title_field as Title for each DropDown option
 $form->addField('withModel',
@@ -20,7 +20,7 @@ $form->addField('withModel2',
                     'renderRowFunction' => function ($row) {
                         return [
                             'value' => $row->id,
-                            'title' => $row->getTitle().' ('.$row->get('iso3').')',
+                            'title' => $row->getTitle() . ' (' . $row->get('iso3') . ')',
                         ];
                     },
                 ]);
@@ -68,9 +68,9 @@ $form->addField('multi',
                 ]);
 
 $form->onSubmit(function ($form) {
-    $echo = print_r($form->model['enum'], true).' / ';
-    $echo .= print_r($form->model['values'], true).' / ';
-    $echo .= print_r($form->model['icon'], true).' / ';
+    $echo = print_r($form->model['enum'], true) . ' / ';
+    $echo .= print_r($form->model['values'], true) . ' / ';
+    $echo .= print_r($form->model['icon'], true) . ' / ';
     $echo .= print_r($form->model['multi'], true);
 
     echo $echo;

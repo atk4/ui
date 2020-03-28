@@ -78,7 +78,7 @@ class jsEvent implements jsExpressionable
                 throw new Exception('Context must be part of a render tree. Missing app property.');
             }
 
-            $this->cb = $this->context->add('jsCallback');
+            $this->cb = jsCallback::addTo($this->context);
         }
     }
 
@@ -131,7 +131,7 @@ class jsEvent implements jsExpressionable
             }
 
             if ($errors = $this->hasAllArguments()) {
-                $js = new jsToast(['title' => 'Error', 'message' => 'Missing Arguments: '.implode(', ', $errors), 'class' => 'error']);
+                $js = new jsToast(['title' => 'Error', 'message' => 'Missing Arguments: ' . implode(', ', $errors), 'class' => 'error']);
             } else {
                 $args = [];
                 foreach ($this->action->args as $key => $val) {
@@ -141,7 +141,7 @@ class jsEvent implements jsExpressionable
                 $return = $this->action->execute(...$args);
                 $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
 
-                $js = $this->hook('afterExecute', [$return, $id]) ?: $success ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
+                $js = $this->hook('afterExecute', [$return, $id]) ?: $success ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
             }
 
             return $js;

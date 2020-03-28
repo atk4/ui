@@ -12,27 +12,27 @@
  */
 require_once __DIR__ . '/init.php';
 
-$tabs = $app->add('Tabs');
+$tabs = \atk4\ui\Tabs::addTo($app);
 
 ////////////////////////////////////////////
 $tab = $tabs->addTab('Basic Use');
 
-$tab->add(['Header', 'Very simple form']);
+\atk4\ui\Header::addTo($tab, ['Very simple form']);
 
-$form = $tab->add('Form');
+$form = \atk4\ui\Form::addTo($tab);
 $form->addField('email');
 $form->onSubmit(function ($form) {
     // implement subscribe here
 
-    return $form->success('Subscribed '.$form->model['email'].' to newsletter.');
+    return $form->success('Subscribed ' . $form->model['email'] . ' to newsletter.');
 });
 
 $form->buttonSave->set('Subscribe');
 $form->buttonSave->icon = 'mail';
 
-$tab->add(['Header', 'But very flexible']);
+\atk4\ui\Header::addTo($tab, ['But very flexible']);
 
-$form = $tab->add('Form');
+$form = \atk4\ui\Form::addTo($tab);
 $g = $form->addGroup(['width' => 'three']);
 $g->addField('name');
 $g->addField('surname');
@@ -52,61 +52,61 @@ $form->onSubmit(function ($form) {
     return (new \atk4\ui\jsNotify(json_encode($form->model->get())))->setDuration(0);
 });
 
-$tab->add(['Header', 'Comparing Field type vs Decorator class']);
-$form = $tab->add('Form');
+\atk4\ui\Header::addTo($tab, ['Comparing Field type vs Decorator class']);
+$form = \atk4\ui\Form::addTo($tab);
 $form->addField('date1', null, ['type' => 'date']);
 $form->addField('date2', ['Calendar', 'type' => 'date']);
 $form->buttonSave->set('Compare Date');
 
 $form->onSubmit(function ($form) {
-    echo 'date1 = '.print_r($form->model['date1'], true).' and date2 = '.print_r($form->model['date2'], true);
+    echo 'date1 = ' . print_r($form->model['date1'], true) . ' and date2 = ' . print_r($form->model['date2'], true);
 });
 
 ////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Handler Output');
 
-$tab->add(['Header', 'Form can respond with manually generated error']);
-$form = $tab->add('Form');
+\atk4\ui\Header::addTo($tab, ['Form can respond with manually generated error']);
+$form = \atk4\ui\Form::addTo($tab);
 $form->addField('email1');
 $form->buttonSave->set('Save1');
 $form->onSubmit(function ($form) {
-    return $form->error('email1', 'some error action '.rand(1, 100));
+    return $form->error('email1', 'some error action ' . rand(1, 100));
 });
 
-$tab->add(['Header', '..or success message']);
-$form = $tab->add('Form');
+\atk4\ui\Header::addTo($tab, ['..or success message']);
+$form = \atk4\ui\Form::addTo($tab);
 $form->addField('email2');
 $form->buttonSave->set('Save2');
 $form->onSubmit(function ($form) {
     return $form->success('form was successful');
 });
 
-$tab->add(['Header', 'Any other view can be output']);
-$form = $tab->add('Form');
+\atk4\ui\Header::addTo($tab, ['Any other view can be output']);
+$form = \atk4\ui\Form::addTo($tab);
 $form->addField('email3');
 $form->buttonSave->set('Save3');
 $form->onSubmit(function ($form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
-    $view->text->addParagraph('some text '.rand(1, 100));
+    $view->text->addParagraph('some text ' . rand(1, 100));
 
     return $view;
 });
 
-$tab->add(['Header', 'jsAction can be used too']);
-$form = $tab->add('Form');
+\atk4\ui\Header::addTo($tab, ['jsAction can be used too']);
+$form = \atk4\ui\Form::addTo($tab);
 $field = $form->addField('email4');
 $form->buttonSave->set('Save4');
 $form->onSubmit(function ($form) use ($field) {
-    return $field->jsInput()->val('random is '.rand(1, 100));
+    return $field->jsInput()->val('random is ' . rand(1, 100));
 });
 
 /////////////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Handler Safety');
 
-$tab->add(['Header', 'Form handles errors (PHP 7.0+)', 'size' => 2]);
+\atk4\ui\Header::addTo($tab, ['Form handles errors (PHP 7.0+)', 'size' => 2]);
 
-$form = $tab->add('Form');
+$form = \atk4\ui\Form::addTo($tab);
 $form->addField('email');
 $form->onSubmit(function ($form) {
     $o = new \StdClass();
@@ -114,17 +114,17 @@ $form->onSubmit(function ($form) {
     return $o['abc'];
 });
 
-$tab->add(['Header', 'Form handles random output', 'size' => 2]);
+\atk4\ui\Header::addTo($tab, ['Form handles random output', 'size' => 2]);
 
-$form = $tab->add('Form');
+$form = \atk4\ui\Form::addTo($tab);
 $form->addField('email');
 $form->onSubmit(function ($form) {
     echo 'some output here';
 });
 
-$tab->add(['Header', 'Form shows Agile exceptions', 'size' => 2]);
+\atk4\ui\Header::addTo($tab, ['Form shows Agile exceptions', 'size' => 2]);
 
-$form = $tab->add('Form');
+$form = \atk4\ui\Form::addTo($tab);
 $form->addField('email');
 $form->onSubmit(function ($form) {
     throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
@@ -132,9 +132,9 @@ $form->onSubmit(function ($form) {
     return 'somehow it did not crash';
 });
 
-$form->add(['Button', 'Modal Test', 'secondary'])->on('click', $form->add('Modal')
+\atk4\ui\Button::addTo($form, ['Modal Test', 'secondary'])->on('click', \atk4\ui\Modal::addTo($form)
                                                                     ->set(function ($p) {
-                                                                        $form = $p->add('Form');
+                                                                        $form = \atk4\ui\Form::addTo($p);
                                                                         $form->addField('email');
                                                                         $form->onSubmit(function ($form) {
                                                                             throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
@@ -146,7 +146,7 @@ $form->add(['Button', 'Modal Test', 'secondary'])->on('click', $form->add('Modal
 /////////////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Complex Examples');
 
-$tab->add(['Header', 'Conditional response']);
+\atk4\ui\Header::addTo($tab, ['Conditional response']);
 
 $a = [];
 $m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_($a));
@@ -154,12 +154,12 @@ $m_register->addField('name');
 $m_register->addField('email');
 $m_register->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
 
-$f = $tab->add(new \atk4\ui\Form(['segment' => true]));
+$f = \atk4\ui\Form::addTo($tab, ['segment' => true]);
 $f->setModel($m_register);
 
 $f->onSubmit(function ($f) {
     if ($f->model['name'] != 'John') {
-        return $f->error('name', 'Your name is not John! It is "'.$f->model['name'].'". It should be John. Pleeease!');
+        return $f->error('name', 'Your name is not John! It is "' . $f->model['name'] . '". It should be John. Pleeease!');
     } else {
         return [
             $f->jsInput('email')->val('john@gmail.com'),
@@ -171,9 +171,9 @@ $f->onSubmit(function ($f) {
 ////////////////////////////////////////
 $tab = $tabs->addTab('Layout Control');
 
-$tab->add(new \atk4\ui\Header('Shows example of grouping and multiple errors'));
+\atk4\ui\Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
-$f = $tab->add(new \atk4\ui\Form('segment'));
+$f = \atk4\ui\Form::addTo($tab, ['segment']);
 $f->setModel(new \atk4\data\Model());
 
 $f->addHeader('Example fields added one-by-one');
@@ -203,7 +203,7 @@ $f->onSubmit(function ($f) {
         }
 
         if ($f->model[$name] != 'a') {
-            $errors[] = $f->error($name, 'Field '.$name.' should contain exactly "a", but contains '.$f->model[$name]);
+            $errors[] = $f->error($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $f->model[$name]);
         }
     }
 

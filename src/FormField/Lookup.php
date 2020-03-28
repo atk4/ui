@@ -127,7 +127,7 @@ class Lookup extends Input
 
         $this->label = null;
 
-        $this->template->set('input_id', $this->name.'-ac');
+        $this->template->set('input_id', $this->name . '-ac');
 
         $this->template->set('place_holder', $this->placeholder);
 
@@ -136,13 +136,13 @@ class Lookup extends Input
         }
         //var_Dump($this->model->get());
         if ($this->form) {
-            $vp = $this->form->add('VirtualPage');
+            $vp = \atk4\ui\VirtualPage::addTo($this->form);
         } else {
-            $vp = $this->owner->add('VirtualPage');
+            $vp = \atk4\ui\VirtualPage::addTo($this->owner);
         }
 
         $vp->set(function ($p) {
-            $f = $p->add('Form');
+            $f = \atk4\ui\Form::addTo($p);
             $f->setModel($this->model);
 
             $f->onSubmit(function ($f) {
@@ -150,7 +150,7 @@ class Lookup extends Input
 
                 $modal_chain = new jQuery('.atk-modal');
                 $modal_chain->modal('hide');
-                $ac_chain = new jQuery('#'.$this->name.'-ac');
+                $ac_chain = new jQuery('#' . $this->name . '-ac');
                 $ac_chain->dropdown('set value', $id)->dropdown('set text', $f->model->getTitle());
 
                 return [
@@ -193,10 +193,10 @@ class Lookup extends Input
                 $this->search($this->model, $_GET['q']);
             } elseif ($this->search && is_array($this->search)) {
                 $this->model->addCondition(array_map(function ($field) {
-                    return [$field, 'like', '%'.$_GET['q'].'%'];
+                    return [$field, 'like', '%' . $_GET['q'] . '%'];
                 }, $this->search));
             } else {
-                $this->model->addCondition($title_field, 'like', '%'.$_GET['q'].'%');
+                $this->model->addCondition($title_field, 'like', '%' . $_GET['q'] . '%');
             }
         }
 
@@ -271,7 +271,7 @@ class Lookup extends Input
     {
         if (isset($_GET['filter'])) {
             if (isset($_GET['q'])) {
-                $this->model->addCondition($_GET['filter'], 'like', '%'.$_GET['q'].'%');
+                $this->model->addCondition($_GET['filter'], 'like', '%' . $_GET['q'] . '%');
             }
             // Apply filtering to filter.
             $this->applyFilters();
@@ -299,7 +299,7 @@ class Lookup extends Input
         return $this->app->getTag('input', array_merge([
             'name'        => $this->short_name,
             'type'        => 'hidden',
-            'id'          => $this->id.'_input',
+            'id'          => $this->id . '_input',
             'value'       => $this->getValue(),
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
@@ -341,7 +341,7 @@ class Lookup extends Input
     {
         $settings = array_merge([
             'fields'      => ['name' => 'name', 'value' => 'id'/*, 'text' => 'description'*/],
-            'apiSettings' => array_merge(['url' => $this->getCallbackURL().'&q={query}'], $this->apiConfig),
+            'apiSettings' => array_merge(['url' => $this->getCallbackURL() . '&q={query}'], $this->apiConfig),
         ], $this->settings);
 
         $chain->dropdown($settings);
@@ -380,13 +380,13 @@ class Lookup extends Input
     public function createFilterJsDropdown()
     {
         foreach ($this->filters as $k => $filter) {
-            $f_name = $this->name.'-ac_f'.$k;
-            $chain = new jQuery('#'.$f_name);
+            $f_name = $this->name . '-ac_f' . $k;
+            $chain = new jQuery('#' . $f_name);
             $options = [
                 'fields'      => ['name' => 'name', 'value' => 'id'],
                 'match'       => 'value',
                 'apiSettings' => [
-                    'url'        => $this->getCallbackURL().'&q={query}',
+                    'url'        => $this->getCallbackURL() . '&q={query}',
                     'cache'      => false,
                     'data'       => array_merge($this->getFilterQuery(), ['filter' => $filter['field']]),
                     'onResponse' => new jsFunction(['resp'], [
@@ -413,7 +413,7 @@ class Lookup extends Input
      */
     public function getJsDropdown()
     {
-        $chain = new jQuery('#'.$this->name.'-ac');
+        $chain = new jQuery('#' . $this->name . '-ac');
         $this->initDropdown($chain);
 
         return $chain;
@@ -430,7 +430,7 @@ class Lookup extends Input
     {
         $q = [];
         foreach ($this->filters as $key => $filter) {
-            $q[$filter['field']] = new jsExpression('$([input]).parent().dropdown("get text")', ['input' => 'input[name='.$filter['field'].']']);
+            $q[$filter['field']] = new jsExpression('$([input]).parent().dropdown("get text")', ['input' => 'input[name=' . $filter['field'] . ']']);
         }
 
         return $q;
@@ -460,7 +460,7 @@ class Lookup extends Input
 
     public function renderView()
     {
-        $this->callback = $this->add('Callback');
+        $this->callback = \atk4\ui\Callback::addTo($this);
         $this->callback->set([$this, 'getData']);
 
         if ($this->disabled) {
@@ -490,12 +490,12 @@ class Lookup extends Input
             $html = '';
 
             foreach ($this->filters as $k => $filter) {
-                $f_name = $this->name.'-ac_f'.$k;
+                $f_name = $this->name . '-ac_f' . $k;
                 $ft->set('input_id', $f_name);
                 $ft->set('FilterLabel', $filter['label']);
                 $ft->set('place_holder', $this->filterEmpty);
                 $ft->set('filterClass', 'atk-filter-dropdown');
-                $ft->setHTML('Input', $this->getFilterInput($filter['field'], $filter['field'].'_id'));
+                $ft->setHTML('Input', $this->getFilterInput($filter['field'], $filter['field'] . '_id'));
                 $html .= $ft->render();
             }
             $this->template->setHTML('Filters', $html);
@@ -521,7 +521,7 @@ class Lookup extends Input
             if (!$this->model->loaded()) {
                 $this->field->set(null);
             } else {
-                $chain = new jQuery('#'.$this->name.'-ac');
+                $chain = new jQuery('#' . $this->name . '-ac');
                 // IMPORTANT: always convert data to string, otherwise numbers can be rounded by JS
                 $chain->dropdown('set value', (string) $this->model[$id_field])
                         ->dropdown('set text', (string) $this->model[$title_field]);

@@ -79,7 +79,7 @@ class Menu extends View
      */
     public function addHeader($name)
     {
-        return $this->add(new Item($name))->addClass('header');
+        return Item::addTo($this, [$name])->addClass('header');
     }
 
     /**
@@ -91,7 +91,7 @@ class Menu extends View
      */
     public function addMenu($name)
     {
-        $subMenu = $this->add([new self(), 'defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
+        $subMenu = (self::class)::addTo($this, ['defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
 
         $name = (array) $name;
 
@@ -102,7 +102,7 @@ class Menu extends View
         }
 
         if (!empty($name['icon'])) {
-            $subMenu->add(new Icon($name['icon']), 'Icon')->removeClass('item');
+            Icon::addTo($subMenu, [$name['icon']], ['Icon'])->removeClass('item');
         }
 
         if (!$this->in_dropdown) {
@@ -121,7 +121,7 @@ class Menu extends View
      */
     public function addGroup($name)
     {
-        $group = $this->add([new self(), 'defaultTemplate' => 'menugroup.html', 'ui' => false]);
+        $group = (self::class)::addTo($this, ['defaultTemplate' => 'menugroup.html', 'ui' => false]);
 
         $name = (array) $name;
 
@@ -132,7 +132,7 @@ class Menu extends View
         }
 
         if (!empty($name['icon'])) {
-            $group->add(new Icon($name['icon']), 'Icon')->removeClass('item');
+            Icon::addTo($group, [$name['icon']], ['Icon'])->removeClass('item');
         }
 
         return $group;
@@ -145,7 +145,7 @@ class Menu extends View
      */
     public function addMenuRight()
     {
-        return $this->add([new self(), 'ui' => false], 'RightMenu')->removeClass('item')->addClass('right menu');
+        return (self::class)::addTo($this, ['ui' => false], ['RightMenu'])->removeClass('item')->addClass('right menu');
     }
 
     /**

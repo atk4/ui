@@ -59,26 +59,26 @@ class Header extends View
     {
         if ($this->size) {
             if (is_numeric($this->size)) {
-                $this->setElement('h'.$this->size);
+                $this->setElement('h' . $this->size);
             } else {
                 $this->addClass($this->size);
             }
         }
 
         if ($this->icon) {
-            $this->icon = $this->add(new Icon($this->icon), 'Icon');
+            $this->icon = Icon::addTo($this, [$this->icon], ['Icon']);
         }
 
         if ($this->image) {
-            $this->image = $this->add(new Image($this->image), 'Icon');
+            $this->image = Image::addTo($this, [$this->image], ['Icon']);
         }
 
         if ($this->subHeader) {
-            $this->subHeader = $this->add(new View($this->subHeader), 'SubHeader')->addClass('sub header');
+            $this->subHeader = View::addTo($this, [$this->subHeader], ['SubHeader'])->addClass('sub header');
         }
 
         if ($this->aligned) {
-            $this->addClass($this->aligned.' aligned');
+            $this->addClass($this->aligned . ' aligned');
         }
 
         if ($this->aligned && ($this->icon || $this->image)) {

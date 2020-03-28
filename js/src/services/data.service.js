@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 /**
  * Save and Retrieve Session or Local Web storage data.
  *

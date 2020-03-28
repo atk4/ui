@@ -124,11 +124,11 @@ class Grid extends View
     public function init()
     {
         parent::init();
-        $this->container = $this->add(['View', 'template' => $this->template->cloneRegion('Container')]);
+        $this->container = View::addTo($this, ['template' => $this->template->cloneRegion('Container')]);
         $this->template->del('Container');
 
         if (!$this->sortTrigger) {
-            $this->sortTrigger = $this->name.'_sort';
+            $this->sortTrigger = $this->name . '_sort';
         }
 
         // if menu not disabled ot not already assigned as existing object
@@ -139,7 +139,7 @@ class Grid extends View
         $this->table = $this->container->add($this->factory(['Table', 'very compact very basic striped single line', 'reload' => $this->container], $this->table, 'atk4\ui'), 'Table');
 
         if ($this->paginator !== false) {
-            $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
+            $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
             $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator, 'atk4\ui'));
             $this->app ? $this->app->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
         }
@@ -206,7 +206,7 @@ class Grid extends View
             throw new Exception(['Unable to add Button without Menu']);
         }
 
-        return $this->menu->addItem()->add(new Button($text));
+        return Button::addTo($this->menu->addItem(), [$text]);
     }
 
     /**
@@ -248,7 +248,7 @@ class Grid extends View
             $this->ipp = $items[0];
         }
 
-        $pageLength = $this->paginator->add(['ItemsPerPageSelector', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], 'afterPaginator');
+        $pageLength = ItemsPerPageSelector::addTo($this->paginator, ['pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], ['afterPaginator']);
         $this->paginator->template->trySet('PaginatorType', 'ui grid');
 
         if ($sortBy = $this->getSortBy()) {
@@ -323,7 +323,7 @@ class Grid extends View
             'tableContainerHeight' => $containerHeight,
         ]);
         //adding a state context to js scroll plugin.
-        $options = array_merge(['stateContext' => '#'.$this->container->name], $options);
+        $options = array_merge(['stateContext' => '#' . $this->container->name], $options);
 
         return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);
     }
@@ -353,17 +353,16 @@ class Grid extends View
             throw new Exception(['Unable to add QuickSearch without Menu']);
         }
 
-        $view = $this->menu
-            ->addMenuRight()->addItem()->setElement('div')
-            ->add('View');
+        $view = View::addTo($this->menu
+            ->addMenuRight()->addItem()->setElement('div'));
 
-        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
+        $this->quickSearch = jsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
 
         $q = trim($this->stickyGet('_q'));
         if ($q !== '') {
             $cond = [];
             foreach ($fields as $field) {
-                $cond[] = [$field, 'like', '%'.$q.'%'];
+                $cond[] = [$field, 'like', '%' . $q . '%'];
             }
             $this->model->addCondition($cond);
         }
@@ -502,7 +501,7 @@ class Grid extends View
     {
         $column = $this->table->columns[$columnName];
         if (!isset($column)) {
-            throw new Exception('The column where you want to add dropdown does not exist: '.$columnName);
+            throw new Exception('The column where you want to add dropdown does not exist: ' . $columnName);
         }
         if (!$menuId) {
             $menuId = $columnName;
@@ -528,7 +527,7 @@ class Grid extends View
     {
         $column = $this->table->columns[$columnName];
         if (!isset($column)) {
-            throw new Exception('The column where you want to add popup does not exist: '.$columnName);
+            throw new Exception('The column where you want to add popup does not exist: ' . $columnName);
         }
 
         return $column->addPopup($popup, $icon);

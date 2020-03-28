@@ -7,7 +7,7 @@
  * model is a reference to your form's model, the form model should be saved prior
  * to calling saveRows().
  *
- * $f = $app->add('Form');
+ * $f = \atk4\ui\Form::addTo($app);
  * $f->setModel($invoice, false);
  * // Add Form fields
  *
@@ -54,7 +54,7 @@
  * model. Be aware that in the example below all User records will be displayed.
  * If your model contains a lot of records, you should handle their limit somehow.
  *
- * $f = $app->add('Form');
+ * $f = \atk4\ui\Form::addTo($app);
  * $ml = $f->addField('ml', ['MultiLine']);
  * $ml->setModel($user, ['name','is_vip']);
  *
@@ -238,9 +238,9 @@ class MultiLine extends Generic
         }
         */
 
-        $this->multiLine = $this->add(['View', 'template' => $this->multiLineTemplate]);
+        $this->multiLine = \atk4\ui\View::addTo($this, ['template' => $this->multiLineTemplate]);
 
-        $this->cb = $this->add('jsCallback');
+        $this->cb = \atk4\ui\jsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
         $this->form->onHook('loadPOST', function ($form) {
@@ -961,7 +961,7 @@ class MultiLine extends Generic
                 break;
             default:
                 // Value is "" or field value enclosed in bracket: "value"
-                $value = $model[$fieldName] ? '"'.$model[$fieldName].'"' : '""';
+                $value = $model[$fieldName] ? '"' . $model[$fieldName] . '"' : '""';
         }
 
         return $value;

@@ -60,7 +60,7 @@ class Generic extends _Abstract
      */
     public function addHeader($label)
     {
-        $this->add(['Header', $label, 'dividing', 'element' => 'h4']);
+        \atk4\ui\Header::addTo($this, [$label, 'dividing', 'element' => 'h4']);
 
         return $this;
     }
@@ -83,7 +83,7 @@ class Generic extends _Abstract
 
         $label['form'] = $this->form;
 
-        return $this->add(new static($label));
+        return static::addTo($this, [$label]);
     }
 
     /**
@@ -107,7 +107,7 @@ class Generic extends _Abstract
         }
 
         if ($addDivider) {
-            $this->add(['View', 'ui' => 'hidden divider']);
+            \atk4\ui\View::addTo($this, ['ui' => 'hidden divider']);
         }
 
         return $v;
@@ -186,7 +186,7 @@ class Generic extends _Abstract
             // Fields get extra pampering
             $template->setHTML('Input', $el->getHTML());
             $template->trySet('label', $label);
-            $template->trySet('label_for', $el->id.'_input');
+            $template->trySet('label_for', $el->id . '_input');
             $template->set('field_class', $el->getFieldClass());
 
             if ($el->field->required) {
@@ -194,11 +194,11 @@ class Generic extends _Abstract
             }
 
             if (isset($el->width)) {
-                $template->append('field_class', $el->width.' wide ');
+                $template->append('field_class', $el->width . ' wide ');
             }
 
             if ($el->hint && $template->hasTag('Hint')) {
-                $hint = new \atk4\ui\Label([null, 'pointing', 'id'=>$el->id.'_hint']);
+                $hint = new \atk4\ui\Label([null, 'pointing', 'id'=>$el->id . '_hint']);
                 if (is_object($el->hint) || is_array($el->hint)) {
                     $hint->add($el->hint);
                 } else {

@@ -13,8 +13,8 @@ There is one problem, however. What if View (and the callbacks too) are created 
 
 The next code creates Loader area which will display a console. Result is - nested callback::
 
-    $app->add('Loader')->set(function($page) {
-        $page->add('Console')->set(function($console) {
+    Loader::addTo($app)->set(function($page) {
+        Console::addTo($page)->set(function($console) {
             $console->output('success!');
         });
     });
@@ -26,8 +26,8 @@ Sticky GET is a better approach. It works like this::
 
     $app->stickyGet('client_id');
 
-    $app->add('Loader')->set(function($page) {
-        $page->add('Console')->set(function($console) {
+    Loader::addTo($app)->set(function($page) {
+        Console::addTo($page)->set(function($console) {
             $console->output('client_id = !'. $_GET['client_id']);
         });
     });
@@ -68,15 +68,15 @@ defined as sticky globally.
 
 Consider this code::
 
-    $b1 = $app->add('Button');
+    $b1 = \atk4\ui\Button::addTo($app);
     $b1->set($b1->url());
 
-    $app->add('Loader')->set(function($page) {
-        $b2 = $page->add('Button');
+    Loader::addTo($app)->set(function($page) {
+        $b2 = \atk4\ui\Button::addTo($page);
         $b2->set($b2->url());
     });
 
-    $b3 = $app->add('Button');
+    $b3 = \atk4\ui\Button::addTo($app);
     $b3->set($b3->url());
 
 This will display 3 buttons and each button will contain a URL which needs to be opened in order for

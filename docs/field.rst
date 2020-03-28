@@ -25,14 +25,14 @@ Stand-alone use
 
 Add any field decorator to your application like this::
 
-    $field = $app->add(new \atk4\ui\FormField\Line());
+    $field = Line::addTo($app);
 
 You can set default value and ineract with a field using JavaScript::
 
     $field->set('hello world');
 
 
-    $button = $app->add(['Button', 'check value']);
+    $button = \atk4\ui\Button::addTo($app, ['check value']);
     $button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [$field->jsInput()->val()]));
 
 
@@ -48,7 +48,7 @@ Using in-form
 
 Field can also be used inside a form like this::
 
-    $form = $app->add('Form');
+    $form = \atk4\ui\Form::addTo($app);
     $field = $form->addField('name', new \atk4\ui\FormField\Line());
 
 If you execute this exmple, you'll notice that Feld now has a label, it uses full width of the
@@ -71,14 +71,14 @@ Using in Form Layouts
 Form may have multiple Form Layouts and that's very useful if you need to split up form
 into multiple Tabs or detach field groups or even create nested layouts::
 
-    $form = $app->add('Form');
-    $tabs = $form->add('Tabs', 'AboveFields');
-    $form->add(['View', 'ui'=>'divider'], 'AboveFields');
+    $form = \atk4\ui\Form::addTo($app);
+    $tabs = \atk4\ui\Tabs::addTo($form, [], ['AboveFields']);
+    \atk4\ui\View::addTo($form, ['ui'=>'divider'], ['AboveFields']);
 
-    $form_page = $tabs->addTab('Basic Info')->add(['FormLayout\Generic', 'form'=>$form]);
+    $form_page = Generic::addTo($tabs->addTab('Basic Info'), ['form'=>$form]);
     $form_page->addField('name', new \atk4\ui\FormField\Line());
 
-    $form_page = $tabs->addTab('Other Info')->add(['FormLayout\Generic', 'form'=>$form]);
+    $form_page = Generic::addTo($tabs->addTab('Other Info'), ['form'=>$form]);
     $form_page->addField('age', new \atk4\ui\FormField\Line());
 
     $form->onSubmit(function($f) {  return $f->model['name'].' has age '.$f->model['age']; });
@@ -161,7 +161,7 @@ The most common use-case in large application is the use with Models. You would 
 
 To create a form, the following is sufficient::
 
-    $form = $app->add('Form');
+    $form = \atk4\ui\Form::addTo($app);
     $form->setModel(new Country($db);
 
 The above will populate fields from model into the form automatically. You can use second
@@ -222,7 +222,7 @@ element. For example, `icon` property:
 Here are few ways to specify `icon` to an Input::
 
     // compact
-    $page->add(new \atk4\ui\FormField\Line('icon'=>'search'));
+    Line::addTo($page, ['icon'=>'search']);
 
     // Type-hinting friendly
     $line = new \atk4\ui\FormField\Line();
@@ -230,7 +230,7 @@ Here are few ways to specify `icon` to an Input::
     $page->add($line);
 
     // using class factory
-    $page->add('FormField/Line', ['icon'=>'search']);
+    Line::addTo($page, ['icon'=>'search']);
 
 The 'icon' property can be either string or a View. The string is for convenience and will
 be automatically substituted with `new Icon($icon)`. If you wish to be more specifc

@@ -13,9 +13,9 @@ $m = new \atk4\data\Model(new \atk4\data\Persistence\Static_($data));
 $m->getField('amount')->type = 'money';
 
 // ========================================================
-$app->add(['Header', 'Table with various headers', 'subHeader'=>'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon'=>'table']);
+\atk4\ui\Header::addTo($app, ['Table with various headers', 'subHeader'=>'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon'=>'table']);
 
-$table = $app->add('Table');
+$table = \atk4\ui\Table::addTo($app);
 $table->setModel($m, ['action']);
 $table->addColumn('amount', ['Money']);
 
@@ -26,7 +26,7 @@ $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>T
 // Hook can be used to display data before row. You can also inject and format extra rows.
 $table->onHook('beforeRow', function ($table) {
     if ($table->current_id == 2) {
-        $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 ('.$table->current_row['action'].')</th></tr>');
+        $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row['action'] . ')</th></tr>');
     } elseif ($table->current_row['action'] == 'Tax') {
         // renders current row
         $table->renderRow();
@@ -40,9 +40,9 @@ $table->template->appendHTML('Foot', '<tr class="center aligned"><td colspan=2>T
 $table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
 
 // ========================================================
-$app->add(['Header', 'Columns with multiple formats', 'subHeader'=>'Single column can use logic to swap out formatters', 'icon'=>'table']);
+\atk4\ui\Header::addTo($app, ['Columns with multiple formats', 'subHeader'=>'Single column can use logic to swap out formatters', 'icon'=>'table']);
 
-$table = $app->add('Table');
+$table = \atk4\ui\Table::addTo($app);
 $table->setModel($m, ['action']);
 
 // copy of amount through a PHP callback
@@ -74,8 +74,8 @@ $table->addColumn('amount_copy', ['Multiformat', function ($a, $b) {
 }, 'attr'=>['all'=>['class'=>['right aligned singel line']]]]);
 
 // ========================================================
-$app->add(['Header', 'Table with resizable columns', 'subHeader'=>'Just drag column header to resize', 'icon'=>'table']);
+\atk4\ui\Header::addTo($app, ['Table with resizable columns', 'subHeader'=>'Just drag column header to resize', 'icon'=>'table']);
 
-$table = $app->add('Table');
+$table = \atk4\ui\Table::addTo($app);
 $table->setModel($m);
 $table->addClass('celled')->resizableColumn();

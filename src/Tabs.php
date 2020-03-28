@@ -32,7 +32,7 @@ class Tabs extends View
 
         // if there is callback action, then use VirtualPage
         if ($callback) {
-            $vp = $sub->add(['VirtualPage', 'ui' => '']);
+            $vp = VirtualPage::addTo($sub, ['ui' => '']);
             $item->setPath($vp->getJSURL('cut'));
 
             $vp->set($callback);
@@ -97,7 +97,7 @@ class Tabs extends View
      */
     protected function addSubView($name)
     {
-        return $this->add(['TabsSubView', 'dataTabName' => $name], 'Tabs');
+        return TabsSubView::addTo($this, ['dataTabName' => $name], ['Tabs']);
     }
 
     /**

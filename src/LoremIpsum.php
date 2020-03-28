@@ -73,7 +73,7 @@ class LoremIpsum extends Text
 
             $lorem .= ucfirst($dictionary[array_rand($dictionary)]);
             for ($i = 1; $i < $sentence_length; $i++) {
-                $lorem .= ' '.$dictionary[array_rand($dictionary)];
+                $lorem .= ' ' . $dictionary[array_rand($dictionary)];
             }
 
             $lorem .= $punctuation[array_rand($punctuation)];

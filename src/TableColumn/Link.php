@@ -121,32 +121,32 @@ class Link extends Generic
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
         $download = $this->force_download ? ' download="true" ' : '';
-        $external = $this->target ? ' target="'.$this->target.'" ' : '';
+        $external = $this->target ? ' target="' . $this->target . '" ' : '';
 
         $icon = '';
 
         if ($this->icon) {
-            $icon = '<i class="icon '.$this->icon.'"></i>';
+            $icon = '<i class="icon ' . $this->icon . '"></i>';
         }
 
         $label = '';
         if ($this->use_label) {
-            $label = $f ? ('{$'.$f->short_name.'}') : '[Link]';
+            $label = $f ? ('{$' . $f->short_name . '}') : '[Link]';
         }
 
         $class = '';
         if ($this->class) {
-            $class = ' class="'.$this->class.'" ';
+            $class = ' class="' . $this->class . '" ';
         }
 
-        return '<a href="{$c_'.$this->short_name.'}"'.$external.$class.$download.'>'.$icon.''.$label.'</a>';
+        return '<a href="{$c_' . $this->short_name . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
     }
 
     public function getHTMLTags($row, $field)
     {
         // Decide on the content
         if ($this->url) {
-            return ['c_'.$this->short_name => $this->url->set($row->get())->render()];
+            return ['c_' . $this->short_name => $this->url->set($row->get())->render()];
         }
 
         $p = $this->page ?: [];
@@ -161,6 +161,6 @@ class Link extends Generic
             }
         }
 
-        return ['c_'.$this->short_name => $this->table->url($p)];
+        return ['c_' . $this->short_name => $this->table->url($p)];
     }
 }

@@ -3,7 +3,7 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$g = $app->add('Grid');
+$g = \atk4\ui\Grid::addTo($app);
 $g->setModel(new Country($db));
 $g->addJsSearch();
 

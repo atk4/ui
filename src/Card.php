@@ -132,7 +132,7 @@ class Card extends View
     public function getImageContainer()
     {
         if (!$this->imageContainer) {
-            $this->imageContainer = $this->add(['View', 'class' => ['image']], 'Image');
+            $this->imageContainer = View::addTo($this, ['class' => ['image']], ['Image']);
         }
 
         return $this->imageContainer;
@@ -148,7 +148,7 @@ class Card extends View
     public function getExtraContainer()
     {
         if (!$this->extraContainer) {
-            $this->extraContainer = $this->add(['View', 'class' => ['extra content']], 'ExtraContent');
+            $this->extraContainer = View::addTo($this, ['class' => ['extra content']], ['ExtraContent']);
         }
 
         return $this->extraContainer;
@@ -217,7 +217,7 @@ class Card extends View
         $this->setDataId($this->model->get($this->model->id_field));
 
         if ($fields && is_array($fields)) {
-            $this->getSection()->add(['View', $m->getTitle(), ['class' => 'header']]);
+            View::addTo($this->getSection(), [$m->getTitle(), ['class' => 'header']]);
             $this->getSection()->addFields($m, $fields, $this->useLabel, $this->useTable);
         }
 
@@ -294,7 +294,7 @@ class Card extends View
     {
         $section = $this->add([$this->cardSection, 'card' => $this], 'Section');
         if ($title) {
-            $section->add(['View', $title, ['class' => 'header']]);
+            View::addTo($section, [$title, ['class' => 'header']]);
         }
 
         if ($model && $fields) {
@@ -321,7 +321,7 @@ class Card extends View
         }
         $btn = $this->addButton($button);
 
-        $vp = $this->add('VirtualPage')->set(function ($page) use ($executor, $action) {
+        $vp = VirtualPage::addTo($this)->set(function ($page) use ($executor, $action) {
             $id = $this->stickyGet($this->name);
 
             $page->add($executor = new $executor());
@@ -445,7 +445,7 @@ class Card extends View
     public function addImage($img)
     {
         if (is_string($img)) {
-            $img = $this->getImageContainer()->add(new Image([$img]));
+            $img = Image::addTo($this->getImageContainer(), [$img]);
         } else {
             $img = $this->getImageContainer()->add($img);
         }

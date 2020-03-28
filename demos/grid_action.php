@@ -5,14 +5,14 @@ require_once __DIR__ . '/database.php';
 
 $country = new Country($db);
 
-$g = $app->add('Grid');
+$g = \atk4\ui\Grid::addTo($app);
 
 $edit_executor = new atk4\ui\ActionExecutor\Form([
     'hasHeader' => false,
     'jsSuccess' => [
         new atk4\ui\jsExpression('$(".atk-dialog-content").parent().modal("hide")'),
         new atk4\ui\jsToast('Action Complete with success!'),
-        $g->container->jsReload([$g->getName().'_sort' => $g->getSortBy()]),
+        $g->container->jsReload([$g->getName() . '_sort' => $g->getSortBy()]),
     ],
 ]);
 
@@ -40,7 +40,7 @@ $del_action = $country->addAction('delete', [
         //$m->delete();
     },
     'preview' => function ($m) {
-        return 'Will delete record: '.$m->getTitle();
+        return 'Will delete record: ' . $m->getTitle();
     },
     'ui' => ['Grid' => ['Executor' => $del_executor, 'Button' => ['icon' => 'delete']]],
 ]);
@@ -52,6 +52,6 @@ $g->addUserAction($edit_action);
 $g->addUserAction($del_action);
 
 //$g->onHook('onUserAction', function($g, $page, $executor) {
-//    $executor->form = $page->add('Form');
+//    $executor->form = \atk4\ui\Form::addTo($page);
 //    $executor->form->addField('test');
 //});

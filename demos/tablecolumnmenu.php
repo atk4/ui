@@ -4,11 +4,11 @@ date_default_timezone_set('UTC');
 include_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$app->add(['Header', 'Table column may contains popup or dropdown menu.']);
+\atk4\ui\Header::addTo($app, ['Table column may contains popup or dropdown menu.']);
 
 // Better Popup positionning when Popup are inside a container.
-$container = $app->add(['View', 'ui' => 'vertical segment']);
-$table = $container->add(['Table', 'celled' => true]);
+$container = \atk4\ui\View::addTo($app, ['ui' => 'vertical segment']);
+$table = \atk4\ui\Table::addTo($container, ['celled' => true]);
 $table->setModel(new SomeData(), false);
 
 //will add popup to this column.
@@ -23,25 +23,25 @@ $table->addColumn('date');
 $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 
 //regular popup setup
-$col_name->addPopup()->add('Text')->set('Name popup');
+\atk4\ui\Text::addTo($col_name->addPopup())->set('Name popup');
 
 //dynamic popup setup
 //This popup will add content using the callback function.
 $col_surname->addPopup()->set(function ($pop) {
-    $pop->add('Text')->set('This popup is loaded dynamically');
+    \atk4\ui\Text::addTo($pop)->set('This popup is loaded dynamically');
 });
 
 //Another dropdown menu.
 $col_title->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
-    return 'Title item: '.$item;
+    return 'Title item: ' . $item;
 });
 
 ////////////////////////////////////////////////
 
-$app->add(['Header', 'Grid column may contains popup or dropdown menu.']);
+\atk4\ui\Header::addTo($app, ['Grid column may contains popup or dropdown menu.']);
 
 //Table in Grid are already inside a container.
-$g = $app->add(['Grid']);
+$g = \atk4\ui\Grid::addTo($app);
 $g->setModel(new Country($db));
 $g->ipp = 5;
 
@@ -52,4 +52,4 @@ $g->addDropdown('name', ['Rename', 'Delete'], function ($item) {
 
 //Adding a popup view to the column 'iso'
 $pop = $g->addPopup('iso');
-$pop->add('Text')->set('Grid column popup');
+\atk4\ui\Text::addTo($pop)->set('Grid column popup');

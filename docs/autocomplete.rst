@@ -5,7 +5,7 @@
 AutoComplete Field
 =================
 
-.. php:namespace:: atk4\\ui\\FormField
+.. php:namespace:: atk4\ui\FormField
 .. php:class:: AutoComplete
 
 Agile UI uses "FormField\Dropdown" by default on the form, but there is also implementation
@@ -66,8 +66,8 @@ In 1.6 we have introduced Lookup field, which is identical to AutoComplete but a
 use of Filters::
 
 
-    $form = $app->add(new \atk4\ui\Form(['segment']));
-    $form->add(['Label', 'Add city', 'top attached'], 'AboveFields');
+    $form = \atk4\ui\Form::addTo($app, ['segment']);
+    \atk4\ui\Label::addTo($form, ['Add city', 'top attached'], ['AboveFields']);
 
     $l = $form->addField('city',['Lookup']);
 
