@@ -92,7 +92,7 @@ class jsFunction implements jsExpressionable
                 throw new Exception(['Incorrect statement for jsFunction.', 'statement' => $statement]);
             }
 
-            $output .= "\n" . $this->indent . '  ' . $statement . ';';
+            $output .= "\n" . $this->indent . '  ' . $statement . (!preg_match('~;\s*$~', $statement) ? ';' : '');
         }
 
         $output .= "\n" . $this->indent . '}';
