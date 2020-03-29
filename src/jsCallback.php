@@ -143,11 +143,10 @@ class jsCallback extends Callback implements jsExpressionable
      * @param array|jsExpressionable $response response from callbacks,
      * @param string $chain JavaScript string
      *
-     * @return string
      * @throws Exception
      * @throws \atk4\core\Exception
      */
-    public function getAjaxec($response, $chain = null)
+    public function getAjaxec($response, $chain = null): string
     {
         $actions = [];
 
@@ -182,13 +181,12 @@ class jsCallback extends Callback implements jsExpressionable
     /**
      * Transform response into proper js Action and return it.
      *
-     * @param $response
+     * @param View|string|jsExpressionable $response
      *
-     * @return jsExpression|jsExpressionable|null
      * @throws Exception
      * @throws \atk4\core\Exception
      */
-    private function _getProperAction($response)
+    private function _getProperAction($response): jsExpressionable
     {
         $action = null;
         if ($response instanceof View) {
@@ -207,12 +205,9 @@ class jsCallback extends Callback implements jsExpressionable
     /**
      * Render View into modal.
      *
-     * @param View $response
-     *
-     * @return jsExpression
      * @throws \atk4\core\Exception
      */
-    private function _jsRenderIntoModal($response)
+    private function _jsRenderIntoModal(View $response): jsExpressionable
     {
         if (!$response instanceof Modal) {
             $modal = new Modal();
