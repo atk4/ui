@@ -30,5 +30,4 @@ steps:
       kind: kubernetes
       cluster: atk
       namespace: apps
-      service: ui-agiletoolkit-org
-
+      service: ui-agiletoolkit-org-atk-demo
