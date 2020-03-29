@@ -131,7 +131,7 @@ $form_page = \atk4\ui\FormLayout\Generic::addTo($tabs->addTab('Other Info'), ['f
 $form_page->addField('age', new \atk4\ui\FormField\Line());
 
 $form->onSubmit(function ($f) {
-    return $f->model['name'].' has age '.$f->model['age'];
+    return $f->model['name'] . ' has age ' . $f->model['age'];
 });
 
 \atk4\ui\Header::addTo($app, ['onChange event', 'subHeader'=>'see in browser console']);

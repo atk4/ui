@@ -89,7 +89,7 @@ class jsCallback extends Callback implements jsExpressionable
 
         foreach ($args as $key => $val) {
             if (is_numeric($key)) {
-                $key = 'c'.$key;
+                $key = 'c' . $key;
             }
             $this->args[$key] = $val;
         }

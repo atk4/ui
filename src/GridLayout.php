@@ -79,7 +79,7 @@ class GridLayout extends View
             $this->t_row->del('column');
 
             for ($col = 1; $col <= $this->columns; $col++) {
-                $this->t_col->set('Content', '{$r'.$row.'c'.$col.'}');
+                $this->t_col->set('Content', '{$r' . $row . 'c' . $col . '}');
 
                 $this->t_row->appendHTML('column', $this->t_col->render());
             }
@@ -92,6 +92,6 @@ class GridLayout extends View
         $this->template->template['rows#1'] = $tmp->template['rows#1'];
 
         $this->template->rebuildTags();
-        $this->addClass($this->words[$this->columns].' column');
+        $this->addClass($this->words[$this->columns] . ' column');
     }
 }

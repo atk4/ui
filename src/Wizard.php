@@ -197,7 +197,7 @@ class Wizard extends View
         // Set proper width to the wizard
         $c = count($this->steps);
         $enumeration = ['one', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
-        $this->ui = $enumeration[$c].' '.$this->ui;
+        $this->ui = $enumeration[$c] . ' ' . $this->ui;
 
         if ($c > 6) {
             $this->addClass('mini');

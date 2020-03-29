@@ -36,7 +36,7 @@ $t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection
 $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'table'], function ($p) {
     if (isset($_GET['name'])) {
         $p->memorize('model', $_GET['name']);
-        header('Location: '.$p->urlNext());
+        header('Location: ' . $p->urlNext());
         $p->app->terminate();
     }
 
@@ -69,9 +69,9 @@ $t->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'data
 
         $c->output('please wait');
         sleep(1);
-        $c->output('connecting to "'.$dsn.'" (well not really, this is only a demo)');
+        $c->output('connecting to "' . $dsn . '" (well not really, this is only a demo)');
         sleep(2);
-        $c->output('initializing table for model "'.$model.'" (again - tricking you)');
+        $c->output('initializing table for model "' . $model . '" (again - tricking you)');
         sleep(1);
         $c->output('DONE');
 

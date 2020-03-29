@@ -21,12 +21,12 @@ class Finder extends \atk4\ui\Columns
         $selections = isset($_GET[$this->name]) ? explode(',', $_GET[$this->name]) : [];
 
         if ($selections) {
-            $table->js(true)->find('tr[data-id='.$selections[0].']')->addClass('active');
+            $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
         }
 
         $path = [];
         $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
-            $path ? (implode(',', $path).',') : '',
+            $path ? (implode(',', $path) . ',') : '',
             new \atk4\ui\jsExpression('$(this).data("id")'),
         ])]);
         $table->on('click', 'tr', $js_reload);
@@ -52,11 +52,11 @@ class Finder extends \atk4\ui\Columns
             $table->setModel($model, [$model->title_field]);
 
             if ($selections) {
-                $table->js(true)->find('tr[data-id='.$selections[0].']')->addClass('active');
+                $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
             }
 
             $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
-                $path ? (implode(',', $path).',') : '',
+                $path ? (implode(',', $path) . ',') : '',
                 new \atk4\ui\jsExpression('$(this).data("id")'),
             ])]);
             $table->on('click', 'tr', $js_reload);

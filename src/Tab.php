@@ -24,7 +24,7 @@ class Tab extends Item
         if (!is_string($path)) {
             $path = $this->app->url($path);
         }
-        $this->path = $path.'#';
+        $this->path = $path . '#';
 
         return $this;
     }

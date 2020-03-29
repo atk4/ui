@@ -47,7 +47,8 @@
     "behat/mink-extension": "^2.2",
     "fzaninotto/faker": "*",
     "guzzlehttp/guzzle": "^6.3",
-    "symfony/process": "^4.3"
+    "symfony/process": "^4.3",
+    "friendsofphp/php-cs-fixer": "^2.16"
   },
   "autoload": {
     "psr-4": {

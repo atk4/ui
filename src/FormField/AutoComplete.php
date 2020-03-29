@@ -138,7 +138,7 @@ class AutoComplete extends Input
         parent::init();
 
         $this->template->set([
-            'input_id'    => $this->name.'-ac',
+            'input_id'    => $this->name . '-ac',
             'placeholder' => $this->placeholder,
         ]);
 
@@ -274,7 +274,7 @@ class AutoComplete extends Input
                 ];
 
                 if ($row = $this->renderRow($form->model)) {
-                    $chain = new jQuery('#'.$this->name.'-ac');
+                    $chain = new jQuery('#' . $this->name . '-ac');
                     $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
 
                     $ret[] = $chain;
@@ -284,7 +284,7 @@ class AutoComplete extends Input
             });
         });
 
-        $caption = $this->plus['caption'] ?? 'Add New '.$this->model->getModelCaption();
+        $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
 
         $this->action->js('click', new \atk4\ui\jsModal($caption, $vp));
     }
@@ -314,12 +314,12 @@ class AutoComplete extends Input
             $this->search($this->model, $_GET['q']);
         } elseif ($this->search && is_array($this->search)) {
             $this->model->addCondition(array_map(function ($field) {
-                return [$field, 'like', '%'.$_GET['q'].'%'];
+                return [$field, 'like', '%' . $_GET['q'] . '%'];
             }, $this->search));
         } else {
             $title_field = $this->title_field ?: $this->model->title_field;
 
-            $this->model->addCondition($title_field, 'like', '%'.$_GET['q'].'%');
+            $this->model->addCondition($title_field, 'like', '%' . $_GET['q'] . '%');
         }
     }
 
@@ -352,7 +352,7 @@ class AutoComplete extends Input
         return $this->app->getTag('input', array_merge([
             'name'     => $this->short_name,
             'type'     => 'hidden',
-            'id'       => $this->id.'_input',
+            'id'       => $this->id . '_input',
             'value'    => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
@@ -382,7 +382,7 @@ class AutoComplete extends Input
     {
         $settings = array_merge([
             'fields'      => ['name' => 'title'],
-            'apiSettings' => array_merge(['url' => $this->getCallbackURL().'&q={query}'], $this->apiConfig),
+            'apiSettings' => array_merge(['url' => $this->getCallbackURL() . '&q={query}'], $this->apiConfig),
         ], $this->settings);
 
         $chain->dropdown($settings);
@@ -418,7 +418,7 @@ class AutoComplete extends Input
             ], $this->apiConfig['data'] ?? []);
         }
 
-        $chain = new jQuery('#'.$this->name.'-ac');
+        $chain = new jQuery('#' . $this->name . '-ac');
 
         $this->initDropdown($chain);
 
