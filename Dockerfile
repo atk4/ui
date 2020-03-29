@@ -1,4 +1,4 @@
-FROM atk4:image
+FROM atk4/image:latest
 
 WORKDIR /var/www/html/
 COPY . .
