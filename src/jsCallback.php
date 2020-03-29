@@ -212,11 +212,11 @@ class jsCallback extends Callback implements jsExpressionable
         if ($response instanceof Modal) {
             $html = $response->getHTML();
         } else {
-            $modal = new Modal();
+            $modal = new Modal(['id' =>false]);
             $modal->add($response);
             $html = $modal->getHTML();
         }
 
-        return new jsExpression('$([html]).modal("show").data("needRemove", true)', ['html' => $html]);
+        return new jsExpression('$([html]).modal("show").data("needRemove", true).addClass("atk-callback-response")', ['html' => $html]);
     }
 }
