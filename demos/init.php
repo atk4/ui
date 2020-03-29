@@ -37,7 +37,7 @@ class Demo extends \atk4\ui\Columns
     public function highLightCode()
     {
         if (!self::$isInitialized) {
-            $this->app->requireCSS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/'.$this->highlightDefaultStyle.'.min.css');
+            $this->app->requireCSS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/' . $this->highlightDefaultStyle . '.min.css');
             $this->app->requireJS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js');
             $this->js(true, (new \atk4\ui\jsChain('hljs'))->initHighlighting());
             self::$isInitialized = true;
@@ -65,7 +65,7 @@ if (file_exists('coverage.php')) {
 }
 /* END - PHPUNIT & COVERAGE SETUP */
 
-$app->title = 'Agile UI Demo v'.$app->version;
+$app->title = 'Agile UI Demo v' . $app->version;
 
 if (file_exists('../public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = '../public';
@@ -146,7 +146,7 @@ if (isset($layout->leftMenu)) {
 
     // Would be nice if this would be a link.
     \atk4\ui\Button::addTo($layout->menu->addItem(), ['View Source', 'teal', 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url.$f]));
+        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url . $f]));
 
     $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }

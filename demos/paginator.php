@@ -13,7 +13,7 @@ $seg = \atk4\ui\View::addTo($app, ['ui' => 'blue segment']);
 $label = \atk4\ui\Label::addTo($seg);
 $bb = \atk4\ui\Paginator::addTo($seg, ['total' => 50, 'range' => 2, 'reload' => $seg]);
 $label->addClass('blue ribbon');
-$label->set('Current page: '.$bb->page);
+$label->set('Current page: ' . $bb->page);
 
 // Multiple dependent Paginators
 \atk4\ui\Header::addTo($app, ['Local Sticky Usage']);
@@ -30,4 +30,4 @@ $day_paginator = \atk4\ui\Paginator::addTo($seg, ['total' => 31, 'range' => 3, '
 
 $label = \atk4\ui\Label::addTo($seg);
 $label->addClass('orange');
-$label->set('Month: '.$month.' and Day: '.$day);
+$label->set('Month: ' . $month . ' and Day: ' . $day);

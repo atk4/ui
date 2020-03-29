@@ -112,7 +112,7 @@ class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
 
         // simulate triggering
         $_GET[$cb->name] = true;
-        $_GET[$cb->name.'_2'] = true;
+        $_GET[$cb->name . '_2'] = true;
 
         $cb->set(function ($x) use (&$var, $app, &$cbname) {
             $cb2 = \atk4\ui\CallbackLater::addTo($app);

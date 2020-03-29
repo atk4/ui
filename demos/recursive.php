@@ -8,7 +8,7 @@ class MySwitcher extends \atk4\ui\View
     {
         parent::init();
 
-        \atk4\ui\Header::addTo($this, ['My name is '.$this->name, 'red']);
+        \atk4\ui\Header::addTo($this, ['My name is ' . $this->name, 'red']);
 
         $buttons = \atk4\ui\View::addTo($this, ['ui' => 'basic buttons']);
         \atk4\ui\Button::addTo($buttons, ['Yellow'])->setAttr('data-id', 'yellow');

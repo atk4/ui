@@ -88,13 +88,13 @@ class Generic
      */
     public function addPopup($popup = null, $icon = 'table-filter-off')
     {
-        $id = $this->name.'_ac';
+        $id = $this->name . '_ac';
 
         $popup = $this->table->owner->add($popup ?: 'Popup')->setHoverable();
 
         $this->setHeaderPopup($icon, $id);
 
-        $popup->triggerBy = '#'.$id;
+        $popup->triggerBy = '#' . $id;
         $popup->popOptions = array_merge(
             $popup->popOptions, [
                 'on'           => 'click',
@@ -121,7 +121,7 @@ class Generic
 
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
-                ['i', ['id' => $id, 'class' => $class.' icon'], ''],
+                ['i', ['id' => $id, 'class' => $class . ' icon'], ''],
             ],
         ];
     }
@@ -135,7 +135,7 @@ class Generic
     {
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
-                ['i', ['id' => $this->name.'_ac', 'class' => $icon.' icon'], ''],
+                ['i', ['id' => $this->name . '_ac', 'class' => $icon . ' icon'], ''],
             ],
         ];
     }
@@ -180,12 +180,12 @@ class Generic
     public function setHeaderDropdown($items, $icon = 'caret square down', $menuId = null)
     {
         $this->hasHeaderAction = true;
-        $id = $this->name.'_ac';
+        $id = $this->name . '_ac';
         $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
                 [
                     'div', ['id' => $id, 'class'=>'ui top left pointing dropdown', 'data-menu-id' => $menuId],
-                    [['i', ['class' => $icon.' icon'], '']],
+                    [['i', ['class' => $icon . ' icon'], '']],
                 ],
             ],
         ];
@@ -203,7 +203,7 @@ class Generic
                             );
                      }";
 
-        $chain = new jQuery('#'.$id);
+        $chain = new jQuery('#' . $id);
         $chain->dropdown([
             'action'   => 'hide',
             'values'   => $items,
@@ -322,7 +322,7 @@ class Generic
         $class = 'atk-table-column-header';
 
         if ($this->hasHeaderAction) {
-            $attr['id'] = $this->name.'_th';
+            $attr['id'] = $this->name . '_th';
 
             //add the action tag to the caption
             $caption = [$this->headerActionTag, $caption];
@@ -337,10 +337,10 @@ class Generic
 
             // If table is being sorted by THIS column, set the proper class
             if ($this->table->sort_by === $field->short_name) {
-                $class .= ' sorted '.$this->table->sort_order;
+                $class .= ' sorted ' . $this->table->sort_order;
 
                 if ($this->table->sort_order === 'ascending') {
-                    $attr['data-sort'] = '-'.$field->short_name;
+                    $attr['data-sort'] = '-' . $field->short_name;
                 } elseif ($this->table->sort_order === 'descending') {
                     $attr['data-sort'] = '';
                 }
@@ -402,9 +402,9 @@ class Generic
     public function getDataCellTemplate(Field $field = null)
     {
         if ($field) {
-            return '{$'.$field->short_name.'}';
+            return '{$' . $field->short_name . '}';
         } else {
-            return '{_$'.$this->short_name.'}';
+            return '{_$' . $this->short_name . '}';
         }
     }
 

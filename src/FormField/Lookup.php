@@ -314,7 +314,7 @@ class Lookup extends Input
             $this->search($this->model, $_GET['q']);
         } elseif ($this->search && is_array($this->search)) {
             $this->model->addCondition(array_map(function ($field) {
-                return [$field, 'like', '%'.$_GET['q'].'%'];
+                return [$field, 'like', '%' . $_GET['q'] . '%'];
             }, $this->search));
         } else {
             $title_field = $this->title_field ?: $this->model->title_field;
@@ -352,7 +352,7 @@ class Lookup extends Input
         return $this->app->getTag('input', array_merge([
             'name'     => $this->short_name,
             'type'     => 'hidden',
-            'id'       => $this->id.'_input',
+            'id'       => $this->id . '_input',
             'value'    => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
@@ -382,7 +382,7 @@ class Lookup extends Input
     {
         $settings = array_merge([
             'fields'      => ['name' => 'title'],
-            'apiSettings' => array_merge(['url' => $this->getCallbackURL().'&q={query}'], $this->apiConfig),
+            'apiSettings' => array_merge(['url' => $this->getCallbackURL() . '&q={query}'], $this->apiConfig),
         ], $this->settings);
 
         $chain->dropdown($settings);

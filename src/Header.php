@@ -59,7 +59,7 @@ class Header extends View
     {
         if ($this->size) {
             if (is_numeric($this->size)) {
-                $this->setElement('h'.$this->size);
+                $this->setElement('h' . $this->size);
             } else {
                 $this->addClass($this->size);
             }
@@ -78,7 +78,7 @@ class Header extends View
         }
 
         if ($this->aligned) {
-            $this->addClass($this->aligned.' aligned');
+            $this->addClass($this->aligned . ' aligned');
         }
 
         if ($this->aligned && ($this->icon || $this->image)) {

@@ -32,7 +32,7 @@ class Text extends View
     {
         $this->content .= isset($this->app)
             ? $this->app->getTag('p', $text)
-            : '<p>'.htmlspecialchars($text).'</p>';
+            : '<p>' . htmlspecialchars($text) . '</p>';
 
         return $this;
     }

@@ -961,7 +961,7 @@ class MultiLine extends Generic
                 break;
             default:
                 // Value is "" or field value enclosed in bracket: "value"
-                $value = $model[$fieldName] ? '"'.$model[$fieldName].'"' : '""';
+                $value = $model[$fieldName] ? '"' . $model[$fieldName] . '"' : '""';
         }
 
         return $value;
