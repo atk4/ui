@@ -1,4 +1,11 @@
-FROM atk4/image:latest
+FROM php:apache
+
+RUN apt-get update && apt-get install -y \
+        libicu-dev \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl
+
+RUN apt-get install -y git
 
 WORKDIR /var/www/html/
 COPY . .
