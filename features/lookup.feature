@@ -11,5 +11,6 @@ Feature: Lookup
 #    Then I select value "Albania" in lookup "country3"
     And I press button "Save"
     And form submits
+    Then I wait for send action using ".atk-callback-response"
     Then I should see "Select:"
 #    And I should see "Albania Albania Albania"
