@@ -2,6 +2,8 @@
 
 namespace atk4\ui;
 
+use atk4\ui\Modal;
+
 class jsCallback extends Callback implements jsExpressionable
 {
     /**
@@ -37,9 +39,9 @@ class jsCallback extends Callback implements jsExpressionable
      * have some degree of nesting, convert it into a one-dimensional array,
      * so that it's easier for us to wrap it into a function body.
      *
-     * @param [type] $response [description]
+     * @param array $response
      *
-     * @return [type] [description]
+     * @return array
      */
     public function flatternArray($response)
     {
@@ -122,11 +124,13 @@ class jsCallback extends Callback implements jsExpressionable
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      *
-     * @param array|jsExpressionable $ajaxec  Array of jsExpressionable
-     * @param string                 $msg     General message, typically won't be displayed
-     * @param bool                   $success Was request successful or not
+     * @param array|jsExpressionable $ajaxec Array of jsExpressionable
+     * @param string $msg General message, typically won't be displayed
+     * @param bool $success Was request successful or not
      *
-     * @return [type] [description]
+     * @return void
+     * @throws Exception\ExitApplicationException
+     * @throws \atk4\core\Exception
      */
     public function terminate($ajaxec, $msg = null, $success = true)
     {
@@ -137,44 +141,29 @@ class jsCallback extends Callback implements jsExpressionable
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
      * @param array|jsExpressionable $response response from callbacks,
-     * @param string                 $chain    JavaScript string
+     * @param string $chain JavaScript string
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
      */
-    public function getAjaxec($response, $chain = null)
+    public function getAjaxec($response, $chain = null): string
     {
-        if (is_array($response) && $response[0] instanceof View) {
-            $response = $response[0];
-        }
-
-        if ($response instanceof View) {
-            $response = new jsExpression('$([html]).modal("show").data("needRemove", true)', [
-                'html' => '<div class="ui modal"> <i class="close icon"></i>  <div class="content atk-content"> ' .
-                $response->render()
-                . ' </div> </div>',
-            ]);
-        }
-
-        if ($response === $chain) {
-            $response = null;
-        }
-
         $actions = [];
 
         if ($chain && $chain->_chain) {
             $actions[] = $chain;
         }
 
-        $response = $this->flatternArray($response);
-
-        foreach ($response as $r) {
-            if (is_string($r)) {
-                $actions[] = new jsExpression('alert([])', [$r]);
-            } elseif ($r instanceof jsExpressionable) {
-                $actions[] = $r;
-            } elseif ($r === null) {
-                continue;
-            } else {
-                throw new Exception(['Incorrect callback. Must be string or action.', 'r' => $r]);
+        if (is_array($response)) {
+            $response = $this->flatternArray($response);
+            foreach ($response as $r) {
+                if ($r === null) {
+                    continue;
+                }
+                $actions[] = $this->_getProperAction($r);
             }
+        } else {
+            $actions[] = $this->_getProperAction($response);
         }
 
         $ajaxec = implode(";\n", array_map(function (jsExpressionable $r) {
@@ -187,5 +176,47 @@ class jsCallback extends Callback implements jsExpressionable
     public function getURL($mode = 'callback')
     {
         throw new Exception('Do not use getURL on jsCallback, use getJSURL()');
+    }
+
+    /**
+     * Transform response into proper js Action and return it.
+     *
+     * @param View|string|jsExpressionable $response
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     */
+    private function _getProperAction($response): jsExpressionable
+    {
+        $action = null;
+        if ($response instanceof View) {
+            $action = $this->_jsRenderIntoModal($response);
+        } elseif (is_string($response)) {
+            $action = new jsExpression('alert([])', [$response]);
+        } elseif ($response instanceof jsExpressionable) {
+            $action = $response;
+        } else {
+            throw new Exception(['Incorrect callback. Response must be of type jsExpressionable, View, or String.', 'r' => $response]);
+        }
+
+        return $action;
+    }
+
+    /**
+     * Render View into modal.
+     *
+     * @throws \atk4\core\Exception
+     */
+    private function _jsRenderIntoModal(View $response): jsExpressionable
+    {
+        if ($response instanceof Modal) {
+            $html = $response->getHTML();
+        } else {
+            $modal = new Modal(['id' =>false]);
+            $modal->add($response);
+            $html = $modal->getHTML();
+        }
+
+        return new jsExpression('$([html]).modal("show").data("needRemove", true).addClass("atk-callback-response")', ['html' => $html]);
     }
 }
