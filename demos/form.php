@@ -93,10 +93,24 @@ $form->onSubmit(function ($form) {
     return $view;
 });
 
+\atk4\ui\Header::addTo($tab, ['Modal can be output directly']);
+$form = \atk4\ui\Form::addTo($tab);
+$form->addField('email4');
+$form->buttonSave->set('Save4');
+$form->onSubmit(function ($form) {
+    $view = new \atk4\ui\Message('some header');
+    $view->init();
+    $view->text->addParagraph('some text ' . rand(1, 100));
+
+    $modal = new \atk4\ui\Modal(['title' => 'Something happen', 'ui' => 'ui modal tiny']);
+    $modal->add($view);
+    return $modal;
+});
+
 \atk4\ui\Header::addTo($tab, ['jsAction can be used too']);
 $form = \atk4\ui\Form::addTo($tab);
-$field = $form->addField('email4');
-$form->buttonSave->set('Save4');
+$field = $form->addField('email5');
+$form->buttonSave->set('Save5');
 $form->onSubmit(function ($form) use ($field) {
     return $field->jsInput()->val('random is ' . rand(1, 100));
 });

@@ -607,6 +607,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
                     return new jsExpression('console.log([])', ['Form submission is not handled']);
                 }
+
+                return $response;
             } catch (\atk4\data\ValidationException $val) {
                 ob_get_clean(); // not close output buffer on exceptions
                 $response = [];
@@ -616,8 +618,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
                 return $response;
             }
-
-            return $response;
         });
 
         //var_dump($cb->getURL());
