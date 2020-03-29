@@ -8,4 +8,5 @@
 namespace atk4\ui\FormField;
 
 class AutoComplete extends Lookup
-{}
+{
+}

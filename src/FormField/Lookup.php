@@ -138,7 +138,7 @@ class Lookup extends Input
         parent::init();
 
         $this->template->set([
-            'input_id'    => $this->name.'-ac',
+            'input_id'    => $this->name . '-ac',
             'placeholder' => $this->placeholder,
         ]);
 
@@ -274,7 +274,7 @@ class Lookup extends Input
                 ];
 
                 if ($row = $this->renderRow($form->model)) {
-                    $chain = new jQuery('#'.$this->name.'-ac');
+                    $chain = new jQuery('#' . $this->name . '-ac');
                     $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
 
                     $ret[] = $chain;
@@ -284,7 +284,7 @@ class Lookup extends Input
             });
         });
 
-        $caption = $this->plus['caption'] ?? 'Add New '.$this->model->getModelCaption();
+        $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
 
         $this->action->js('click', new \atk4\ui\jsModal($caption, $vp));
     }
@@ -319,7 +319,7 @@ class Lookup extends Input
         } else {
             $title_field = $this->title_field ?: $this->model->title_field;
 
-            $this->model->addCondition($title_field, 'like', '%'.$_GET['q'].'%');
+            $this->model->addCondition($title_field, 'like', '%' . $_GET['q'] . '%');
         }
     }
 
@@ -418,7 +418,7 @@ class Lookup extends Input
             ], $this->apiConfig['data'] ?? []);
         }
 
-        $chain = new jQuery('#'.$this->name.'-ac');
+        $chain = new jQuery('#' . $this->name . '-ac');
 
         $this->initDropdown($chain);
 
