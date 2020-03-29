@@ -191,9 +191,9 @@ class jsCallback extends Callback implements jsExpressionable
         $action = null;
         if ($response instanceof View) {
             $action = $this->_jsRenderIntoModal($response);
-        } else if (is_string($response)) {
+        } elseif (is_string($response)) {
             $action = new jsExpression('alert([])', [$response]);
-        } else if ($response instanceof jsExpressionable) {
+        } elseif ($response instanceof jsExpressionable) {
             $action = $response;
         } else {
             throw new Exception(['Incorrect callback. Response must be of type jsExpressionable, View, or String.', 'r' => $response]);

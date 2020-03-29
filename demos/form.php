@@ -100,7 +100,7 @@ $form->buttonSave->set('Save4');
 $form->onSubmit(function ($form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
-    $view->text->addParagraph('some text '.rand(1, 100));
+    $view->text->addParagraph('some text ' . rand(1, 100));
 
     $modal = new \atk4\ui\Modal(['title' => 'Something happen', 'ui' => 'ui modal tiny']);
     $modal->add($view);
