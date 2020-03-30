@@ -32,7 +32,7 @@ class Labels extends Generic
         $v = is_string($v) ? explode(',', $v) : $v;
 
         $labels= [];
-        foreach ($v as $id) {
+        foreach ((Array) $v as $id) {
             $id = trim($id);
 
             // if field values is set, then use titles instead of IDs
