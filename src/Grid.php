@@ -547,7 +547,7 @@ class Grid extends View
     public function addModalAction($button, $title, $callback, $args = [])
     {
         if (!$this->actionButtons) {
-            $this->actionButtons = $this->table->addColumn(null, 'Actions');
+            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
         return $this->actionButtons->addModal($button, $title, $callback, $this, $args);
