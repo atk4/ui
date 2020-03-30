@@ -4,7 +4,7 @@ Feature: Lookup
   I need to write tests for our demo pages
 
   Scenario:
-    Given I am on "autocomplete.php"
+    Given I am on "lookup.php"
 #    Need db value to work
 #    Then I select value "Albania" in lookup "country1"
 #    Then I select value "Albania" in lookup "country2"

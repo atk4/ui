@@ -474,8 +474,14 @@ Assume that each data model are defined and model Category has many Sub-Category
     $f->addField('product_id', [DropDownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
 
 
-AutoComplete
-============
+Lookup
+======
 
-.. php:class:: AutoComplete
+.. php:class:: Lookup
+
+Lookup input is also based on Fomantic-UI dropdown module but with ability to dynamically request server for data it's
+data value.
+
+When clicking on a Lookup field, it will send a query to server and start building it's list value. Typing into the
+input field will reload list value according to search criteria.
 

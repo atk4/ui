@@ -25,8 +25,9 @@ $form->setModel(
     isset($_GET['m']) ? (
         $_GET['m'] == 'country' ? new Country($db) : (
             $_GET['m'] == 'file' ? new File($db) : new Stat($db)
-        )) : new Stat($db)
-    )->tryLoadAny();
+        )
+    ) : new Stat($db)
+)->tryLoadAny();
 
 $form->onSubmit(function ($form) {
     $errors = [];
