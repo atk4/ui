@@ -18,7 +18,7 @@ $img->onDelete(function ($fileId) use ($img) {
 
     return new \atk4\ui\jsToast([
         'title'   => 'Delete successfully',
-        'message' =>  $fileId.' has been removed',
+        'message' =>  $fileId . ' has been removed',
         'class'   => 'success',
     ]);
 });
@@ -51,7 +51,7 @@ $img->onUpload(function ($files) use ($form, $img) {
 $field->onDelete(function ($fileId) {
     return new \atk4\ui\jsToast([
         'title'   => 'Delete successfully',
-        'message' => $fileId.' has been removed',
+        'message' => $fileId . ' has been removed',
         'class'   => 'success',
     ]);
 });
