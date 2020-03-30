@@ -396,13 +396,13 @@ class Grid extends View
      *
      * @return object
      */
-    public function addActionButton($button, $action = null, $confirm = false, $isDisabeld = false)
+    public function addActionButton($button, $action = null, $confirm = false, $isDisabled = false)
     {
         if (!$this->actionButtons) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actionButtons->addButton($button, $action, $confirm, $isDisabeld);
+        return $this->actionButtons->addButton($button, $action, $confirm, $isDisabled);
     }
 
     /**
@@ -412,20 +412,20 @@ class Grid extends View
      * @param $view
      * @param null $action
      * @param bool $confirm
-     * @param bool $isDisabeld
+     * @param bool $isDisabled
      *
      * @throws Exception
      * @throws Exception\NoRenderTree
      *
      * @return mixed
      */
-    public function addActionMenuItem($view, $action = null, $confirm = false, $isDisabeld = false)
+    public function addActionMenuItem($view, $action = null, $confirm = false, $isDisabled = false)
     {
         if (!$this->actionMenu) {
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
         }
 
-        return $this->actionMenu->addActionMenuItem($view, $action, $confirm, $isDisabeld);
+        return $this->actionMenu->addActionMenuItem($view, $action, $confirm, $isDisabled);
     }
 
     /**
