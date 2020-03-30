@@ -166,19 +166,6 @@ class Generic extends View
     }
 
     /**
-     * Method similar to View::js() however will adjust selector
-     * to target the "input" element.
-     *
-     * $field->jsInput(true)->val(123);
-     *
-     * @return jQuery
-     */
-    public function jsInput($when = null, $action = null)
-    {
-        return $this->js($when, $action, '#'.$this->id.'_input');
-    }
-
-    /**
      * Return field class.
      *
      * @return string

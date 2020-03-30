@@ -1315,24 +1315,6 @@ class View implements jsExpressionable
     }
 
     /**
-     * Return rendered js actions as a string.
-     *
-     * @return string
-     */
-    public function getJsRenderActions(): string
-    {
-        $actions = [];
-
-        foreach ($this->_js_actions as $eventActions) {
-            foreach ($eventActions as $action) {
-                $actions[] = $action->jsRender();
-            }
-        }
-
-        return implode(';', $actions);
-    }
-
-    /**
      * Get JavaScript objects from this render tree.
      *
      * @param bool $force_echo
