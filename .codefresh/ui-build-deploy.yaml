@@ -1,0 +1,33 @@
+version: "1.0"
+stages:
+  - clone
+  - build
+  - push
+  - deploy
+steps:
+  main_clone:
+    type: git-clone
+    stage: clone
+    repo: atk4/ui
+    revision: "${{CF_BRANCH}}"
+  build:
+    type: build
+    stage: build
+    image_name: atk4/ui
+  push:
+    type: push
+    stage: push
+    image_name: atk4/ui
+    registry: cfcr
+    candidate: "${{build}}"
+    tags:
+      - "${{CF_BRANCH_TAG_NORMALIZED}}"
+      - "${{CF_REVISION}}"
+  deploy:
+    type: deploy
+    stage: deploy
+    arguments:
+      kind: kubernetes
+      cluster: atk
+      namespace: apps
+      service: ui-agiletoolkit-org-atk-demo
