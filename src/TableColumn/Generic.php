@@ -96,14 +96,16 @@ class Generic
 
         $popup->triggerBy = '#' . $id;
         $popup->popOptions = array_merge(
-            $popup->popOptions, [
+            $popup->popOptions,
+            [
                 'on'           => 'click',
                 'position'     => 'bottom left',
                 'movePopup'    => $this->columnData ? true : false,
                 'target'       => $this->columnData ? "th[data-column={$this->columnData}]" : false,
                 'distanceAway' => 10,
                 'offset'       => -2,
-            ]);
+            ]
+        );
         $popup->stopClickEvent = true;
 
         return $popup;

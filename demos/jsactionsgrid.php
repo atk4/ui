@@ -46,7 +46,8 @@ $country->addAction('confirm', ['ui' => ['confirm'=>'Call action?'], 'callback'=
     return 'Confirm ok ' . $m->getTitle();
 }]);
 
-$country->addAction('multi_step',
+$country->addAction(
+    'multi_step',
     [
         'args'  => [
             'age'    => ['type'=>'integer', 'required'=> true],

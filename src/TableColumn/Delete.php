@@ -34,6 +34,7 @@ class Delete extends Generic
             [
                 ['i', ['class' => 'ui red trash icon'], ''],
                 'Delete',
-            ]);
+            ]
+        );
     }
 }

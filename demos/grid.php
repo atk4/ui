@@ -33,7 +33,8 @@ $g->addModalAction(['icon'=>'external'], 'Modal Test', function ($p, $id) {
 
 $sel = $g->addSelection();
 $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
-    'alert("Selected: "+[])', [$sel->jsChecked()]
+    'alert("Selected: "+[])',
+    [$sel->jsChecked()]
 ));
 
 //Setting ipp with an array will add an ItemPerPageSelector to paginator.
