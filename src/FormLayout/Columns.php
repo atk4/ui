@@ -59,15 +59,15 @@ class Columns extends Generic
             $this->form->addClass($size);
         }
 
-        $c = $this->add('Columns');
+        $c = \atk4\ui\Columns::addTo($this);
 
         $chunks = array_chunk($fields, ceil($cnt / $col));
         foreach ($chunks as $chunk) {
             $cc = $c->addColumn();
-            $cc->add(['FormLayout/Generic', 'form' => $this->form])->setModel($model, $chunk);
+            Generic::addTo($cc, ['form' => $this->form])->setModel($model, $chunk);
         }
 
-        $this->add(['ui' => 'clearing hidden divider']);
+        \atk4\ui\View::addTo($this, ['ui' => 'clearing hidden divider']);
 
         return $model;
     }

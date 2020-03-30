@@ -7,7 +7,7 @@
  * model is a reference to your form's model, the form model should be saved prior
  * to calling saveRows().
  *
- * $f = $app->add('Form');
+ * $f = \atk4\ui\Form::addTo($app);
  * $f->setModel($invoice, false);
  * // Add Form fields
  *
@@ -54,7 +54,7 @@
  * model. Be aware that in the example below all User records will be displayed.
  * If your model contains a lot of records, you should handle their limit somehow.
  *
- * $f = $app->add('Form');
+ * $f = \atk4\ui\Form::addTo($app);
  * $ml = $f->addField('ml', ['MultiLine']);
  * $ml->setModel($user, ['name','is_vip']);
  *
@@ -232,16 +232,18 @@ class MultiLine extends Generic
             $this->multiLineTemplate = new Template('<div id="{$_id}" class="ui"><atk-multiline v-bind="initData"></atk-multiline><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
+        /* No need for this anymore. See: https://github.com/atk4/ui/commit/8ec4d22cf9dcbd4969d9c88d8f09b705ca8798a6
         if ($this->model) {
             $this->setModel($this->model);
         }
+        */
 
-        $this->multiLine = $this->add(['View', 'template' => $this->multiLineTemplate]);
+        $this->multiLine = \atk4\ui\View::addTo($this, ['template' => $this->multiLineTemplate]);
 
-        $this->cb = $this->add('jsCallback');
+        $this->cb = \atk4\ui\jsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->addHook('loadPOST', function ($form) {
+        $this->form->onHook('loadPOST', function ($form) {
             $this->rowData = json_decode($_POST[$this->short_name], true);
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
@@ -252,7 +254,7 @@ class MultiLine extends Generic
         });
 
         // Change form error handling.
-        $this->form->addHook('displayError', function ($form, $fieldName, $str) {
+        $this->form->onHook('displayError', function ($form, $fieldName, $str) {
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
             if ($fieldName === $this->short_name) {
@@ -563,7 +565,7 @@ class MultiLine extends Generic
      *
      * @return array
      */
-    public function getFieldDef(\atk4\data\Field $field):array
+    public function getFieldDef(\atk4\data\Field $field): array
     {
         // Default is input
         $component = 'input';
@@ -607,7 +609,7 @@ class MultiLine extends Generic
      *
      * @return string
      */
-    protected function _mapComponent($field_type):string
+    protected function _mapComponent($field_type): string
     {
         if (is_string($field_type)) {
             switch (strtolower($field_type)) {
@@ -632,7 +634,7 @@ class MultiLine extends Generic
         return 'input';
     }
 
-    protected function _getFieldOptions(\atk4\data\Field $field, string $component):array
+    protected function _getFieldOptions(\atk4\data\Field $field, string $component): array
     {
         $options = [];
 
@@ -680,7 +682,7 @@ class MultiLine extends Generic
      * HTML input field needs type property set. If it wasnt found in $field->ui,
      * determine from rest.
      */
-    protected function _addTypeOption(\atk4\data\Field $field):string
+    protected function _addTypeOption(\atk4\data\Field $field): string
     {
         switch ($field->type) {
             case 'integer':
@@ -696,7 +698,7 @@ class MultiLine extends Generic
      * DropDown field needs values set. If it wasnt found in $field->ui, determine
      * from rest.
      */
-    protected function _addValuesOption(\atk4\data\Field $field):array
+    protected function _addValuesOption(\atk4\data\Field $field): array
     {
         if ($field->enum) {
             return array_combine($field->enum, $field->enum);
@@ -738,8 +740,9 @@ class MultiLine extends Generic
         $this->multiLine->template->trySetHTML('Input', $this->getInput());
         parent::renderView();
 
-        $this->multiLine->vue('atk-multiline',
-                              [
+        $this->multiLine->vue(
+            'atk-multiline',
+            [
                                   'data' => [
                                       'linesField'  => $this->short_name,
                                       'fields'      => $this->fieldDefs,
@@ -754,7 +757,8 @@ class MultiLine extends Generic
                                       'afterDelete' => $this->jsAfterDelete,
                                       'addOnTab'    => $this->addOnTab,
                                   ],
-                              ]);
+                              ]
+        );
     }
 
     /**
@@ -959,7 +963,7 @@ class MultiLine extends Generic
                 break;
             default:
                 // Value is "" or field value enclosed in bracket: "value"
-                $value = $model[$fieldName] ? '"'.$model[$fieldName].'"' : '""';
+                $value = $model[$fieldName] ? '"' . $model[$fieldName] . '"' : '""';
         }
 
         return $value;

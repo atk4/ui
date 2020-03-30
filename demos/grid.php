@@ -1,12 +1,12 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
-$g = $app->add(['Grid']);
+$g = \atk4\ui\Grid::addTo($app);
 $m = new Country($db);
 $m->addAction('test', function ($m) {
-    return 'test from '.$m->getTitle().' was successful!';
+    return 'test from ' . $m->getTitle() . ' was successful!';
 });
 $g->setModel($m);
 
@@ -21,19 +21,20 @@ $g->addColumn(null, ['Template', 'hello<b>world</b>']);
 //$g->addColumn('name', ['TableColumn/Link', 'page2']);
 $g->addColumn(null, 'Delete');
 
-$g->addAction('test');
+$g->addActionButton('test');
 
-$g->addAction('Say HI', function ($j, $id) use ($g) {
-    return 'Loaded "'.$g->model->load($id)['name'].'" from ID='.$id;
+$g->addActionButton('Say HI', function ($j, $id) use ($g) {
+    return 'Loaded "' . $g->model->load($id)['name'] . '" from ID=' . $id;
 });
 
 $g->addModalAction(['icon'=>'external'], 'Modal Test', function ($p, $id) {
-    $p->add(['Message', 'Clicked on ID='.$id]);
+    \atk4\ui\Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 
 $sel = $g->addSelection();
 $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
-    'alert("Selected: "+[])', [$sel->jsChecked()]
+    'alert("Selected: "+[])',
+    [$sel->jsChecked()]
 ));
 
 //Setting ipp with an array will add an ItemPerPageSelector to paginator.

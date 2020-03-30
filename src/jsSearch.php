@@ -72,7 +72,7 @@ class jsSearch extends View
     {
         parent::init();
 
-        //$this->input = $this->add(new \atk4\ui\FormField\Line(['iconLeft' => 'filter',  'action' => new \atk4\ui\Button(['icon' => 'search', 'ui' => 'button atk-action'])]));
+        //$this->input = FormField\Line::addTo($this, ['iconLeft' => 'filter',  'action' => new \atk4\ui\Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
     }
 
     public function renderView()
@@ -91,12 +91,12 @@ class jsSearch extends View
         $this->template->set('BtnRemoveIcon', $this->btnRemoveIcon);
 
         $this->js(true)->atkJsSearch([
-                'uri'         => $this->reload->jsURL(),
-                'uri_options' => array_merge(['__atk_reload'=>$this->reload->name], $this->args),
-                'autoQuery'   => $this->autoQuery,
-                'q'           => $this->initValue,
-                'useAjax'     => $this->useAjax,
-            ]);
+            'uri'         => $this->reload->jsURL(),
+            'uri_options' => array_merge(['__atk_reload'=>$this->reload->name], $this->args),
+            'autoQuery'   => $this->autoQuery,
+            'q'           => $this->initValue,
+            'useAjax'     => $this->useAjax,
+        ]);
 
         parent::renderView();
     }

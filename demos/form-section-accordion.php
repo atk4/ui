@@ -1,15 +1,15 @@
 <?php
 
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
-$app->add(['Button', 'Form Sections', 'small left floated basic blue', 'icon' => 'left arrow'])
+\atk4\ui\Button::addTo($app, ['Form Sections', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['form-section']);
-$app->add(['View', 'ui' => 'ui clearing divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$f = $app->add('Form');
+$f = \atk4\ui\Form::addTo($app);
 
 $sub_layout = $f->layout->addSubLayout('Generic');
-$sub_layout->add(['Header', 'Please fill all form sections!', 'size' => 4]);
+\atk4\ui\Header::addTo($sub_layout, ['Please fill all form sections!', 'size' => 4]);
 
 $sub_layout->addField('company_name');
 

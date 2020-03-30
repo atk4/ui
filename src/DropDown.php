@@ -27,7 +27,7 @@ class DropDown extends Lister
         parent::init();
 
         if (!$this->cb) {
-            $this->cb = $this->add(['jsCallback', 'postTrigger' => 'item']);
+            $this->cb = jsCallback::addTo($this, ['postTrigger' => 'item']);
         }
     }
 
@@ -35,7 +35,7 @@ class DropDown extends Lister
      * Handle callback when user select a new item value in dropdown.
      * Callback is fire only when selecting a different item value then the current item value.
      * ex:
-     *      $d = $m->add(['DropDown', 'menu', 'js' => ['on' => 'hover']]);
+     *      $d = DropDown::addTo($m, ['menu', 'js' => ['on' => 'hover']]);
      *      $d->setModel($menuItems);
      *      $d->onChange(function($item) {
      *          return 'New seleced item: '.$item;

@@ -27,7 +27,7 @@ items. If your HTML looks like this::
 
 you should put that into file `myview.html` then use it with a view::
 
-    $view = $app->add(['template'=>'myview.html']);
+    $view = View::addTo($app, ['template'=>'myview.html']);
 
 Now your application should contain list of 3 sample countires as you have specified in HTML, but next
 we need to add some tags into your template::
@@ -50,7 +50,7 @@ should not be affected at all, becuse View clears out all extra template tags.
 
 Next I'll add Lister::
 
-    $view->add('Lister', 'Countries')
+    Lister::addTo($view, [], ['Countries'])
         ->setModel(new Country($db))
         ->setLimit(20);
 
@@ -96,7 +96,7 @@ Tweaking the output
 Output is formatted using the standard :ref:`ui_persistence` routine, but you can also fine-tune the content
 of your tags like this::
 
-    $lister->addHook('beforeRow', function($l){
+    $lister->onHook('beforeRow', function($l){
         $l->current_row['iso']=strtolower($l->current_row['iso']);
     })
 
@@ -138,7 +138,7 @@ Using without Template
 Agile UI comes with a one sample template for your lister, although it's not set by default,
 you can specify it explicitly::
 
-    $app->add(['Lister', 'defaultTemplate'=>'lister.html']);
+    Lister::addTo($app, ['defaultTemplate'=>'lister.html']);
 
 This should display a list nicely formatted by Fomantic UI, with header, links, icons and description area.
 

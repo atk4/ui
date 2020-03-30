@@ -24,19 +24,19 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     public static function setUpBeforeClass()
     {
-        if (!file_exists(getcwd().'/coverage/')) {
-            mkdir(getcwd().'/coverage/', 0777, true);
+        if (!file_exists($coverage = self::getPackagePath('coverage'))) {
+            mkdir($coverage, 0777, true);
         }
 
-        if (!file_exists(getcwd().'/demos/coverage.php')) {
+        if (!file_exists($demosCoverage = self::getPackagePath('demos', 'coverage.php'))) {
             file_put_contents(
-                implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'demos', 'coverage.php']),
-                file_get_contents(implode(DIRECTORY_SEPARATOR, [dirname(__DIR__), 'tools', 'coverage.php']))
+                $demosCoverage,
+                file_get_contents(self::getPackagePath('tools', 'coverage.php'))
             );
         }
 
         // The command to spin up the server
-        self::$process = Process::fromShellCommandline('php -S '.self::$host.':'.self::$port.' -t '.getcwd());
+        self::$process = Process::fromShellCommandline('php -S ' . self::$host . ':' . self::$port . ' -t ' . self::getPackagePath());
 
         // Disabling the output, otherwise the process might hang after too much output
         self::$process->disableOutput();
@@ -49,16 +49,36 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     public static function tearDownAfterClass()
     {
-        if (file_exists(getcwd().'/demos/coverage.php')) {
-            unlink(getcwd().'/demos/coverage.php');
+        if (file_exists($file = self::getPackagePath('demos', 'coverage.php'))) {
+            unlink($file);
         }
+    }
+
+    /**
+     * Generates absolute file or directory path based on package root directory
+     * Returns absolute path to package root durectory if no arguments
+     *
+     * @param string $directory
+     * @param string $_
+     *
+     * @return string
+     */
+    private static function getPackagePath($directory = null, $_ = null): string
+    {
+        $route = func_get_args();
+
+        $baseDir = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
+
+        array_unshift($route, $baseDir);
+
+        return implode(DIRECTORY_SEPARATOR, $route);
     }
 
     private function getClient(): Client
     {
         // Creating a Guzzle Client with the base_uri, so we can use a relative
         // path for the requests.
-        return new Client(['base_uri' => 'http://localhost:'.self::$port]);
+        return new Client(['base_uri' => 'http://localhost:' . self::$port]);
     }
 
     protected function getResponseFromRequestFormPOST($path, $data): ResponseInterface
@@ -74,8 +94,8 @@ abstract class BuiltInWebServerAbstract extends TestCase
     private function getPathWithAppVars($path)
     {
         $path .= strpos($path, '?') === false ? '?' : '&';
-        $path .= 'APP_CALL_EXIT='.((int) static::$app_def_call_exit).'&APP_CATCH_EXCEPTIONS='.((int) static::$app_def_caught_exception);
+        $path .= 'APP_CALL_EXIT=' . ((int) static::$app_def_call_exit) . '&APP_CATCH_EXCEPTIONS=' . ((int) static::$app_def_caught_exception);
 
-        return self::$webserver_root.$path;
+        return self::$webserver_root . $path;
     }
 }

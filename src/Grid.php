@@ -49,12 +49,12 @@ class Grid extends View
     public $ipp = 50;
 
     /**
-     * Calling addAction will add a new column inside $table, and will be re-used
-     * for next addAction().
+     * Calling addActionButton will add a new column inside $table, and will be re-used
+     * for next addActionButton().
      *
-     * @var TableColumn\Actions
+     * @var TableColumn\ActionButtons
      */
-    public $actions = null;
+    public $actionButtons = null;
 
     /**
      * Calling addAction will add a new column inside $table with dropdown menu,
@@ -106,12 +106,12 @@ class Grid extends View
     public $defaultTemplate = 'grid.html';
 
     /**
-     * TableColumn\Action seed.
-     * Defines which Table Decorator to use for Actions.
+     * TableColumn\ActionButtons seed.
+     * Defines which Table Decorator to use for ActionButtons.
      *
      * @var string
      */
-    protected $actionDecorator = 'Actions';
+    protected $actionButtonsDecorator = 'ActionButtons';
 
     /**
      * TableColumn\ActionMenu seed.
@@ -124,21 +124,22 @@ class Grid extends View
     public function init()
     {
         parent::init();
-        $this->container = $this->add(['View', 'template' => $this->template->cloneRegion('Container')]);
+        $this->container = View::addTo($this, ['template' => $this->template->cloneRegion('Container')]);
         $this->template->del('Container');
 
         if (!$this->sortTrigger) {
-            $this->sortTrigger = $this->name.'_sort';
+            $this->sortTrigger = $this->name . '_sort';
         }
 
-        if ($this->menu !== false) {
+        // if menu not disabled ot not already assigned as existing object
+        if ($this->menu !== false && !is_object($this->menu)) {
             $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu, 'atk4\ui'), 'Menu');
         }
 
         $this->table = $this->container->add($this->factory(['Table', 'very compact very basic striped single line', 'reload' => $this->container], $this->table, 'atk4\ui'), 'Table');
 
         if ($this->paginator !== false) {
-            $seg = $this->container->add(['View'], 'Paginator')->addStyle('text-align', 'center');
+            $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
             $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator, 'atk4\ui'));
             $this->app ? $this->app->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
         }
@@ -153,7 +154,7 @@ class Grid extends View
      */
     public function setActionDecorator($seed)
     {
-        $this->actionDecorator = $seed;
+        $this->actionButtonsDecorator = $seed;
     }
 
     /**
@@ -205,7 +206,7 @@ class Grid extends View
             throw new Exception(['Unable to add Button without Menu']);
         }
 
-        return $this->menu->addItem()->add(new Button($text));
+        return Button::addTo($this->menu->addItem(), [$text]);
     }
 
     /**
@@ -247,7 +248,7 @@ class Grid extends View
             $this->ipp = $items[0];
         }
 
-        $pageLength = $this->paginator->add(['ItemsPerPageSelector', 'pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], 'afterPaginator');
+        $pageLength = ItemsPerPageSelector::addTo($this->paginator, ['pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], ['afterPaginator']);
         $this->paginator->template->trySet('PaginatorType', 'ui grid');
 
         if ($sortBy = $this->getSortBy()) {
@@ -322,7 +323,7 @@ class Grid extends View
             'tableContainerHeight' => $containerHeight,
         ]);
         //adding a state context to js scroll plugin.
-        $options = array_merge(['stateContext' => '#'.$this->container->name], $options);
+        $options = array_merge(['stateContext' => '#' . $this->container->name], $options);
 
         return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);
     }
@@ -352,16 +353,16 @@ class Grid extends View
             throw new Exception(['Unable to add QuickSearch without Menu']);
         }
 
-        $view = $this->menu
-            ->addMenuRight()->addItem()->setElement('div')
-            ->add('View');
+        $view = View::addTo($this->menu
+            ->addMenuRight()->addItem()->setElement('div'));
 
-        $this->quickSearch = $view->add(['jsSearch', 'reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
+        $this->quickSearch = jsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
 
-        if ($q = $this->stickyGet('_q')) {
+        $q = trim($this->stickyGet('_q'));
+        if ($q !== '') {
             $cond = [];
             foreach ($fields as $field) {
-                $cond[] = [$field, 'like', '%'.$q.'%'];
+                $cond[] = [$field, 'like', '%' . $q . '%'];
             }
             $this->model->addCondition($cond);
         }
@@ -395,13 +396,13 @@ class Grid extends View
      *
      * @return object
      */
-    public function addAction($button, $action = null, $confirm = false, $isDisabeld = false)
+    public function addActionButton($button, $action = null, $confirm = false, $isDisabled = false)
     {
-        if (!$this->actions) {
-            $this->actions = $this->table->addColumn(null, $this->actionDecorator);
+        if (!$this->actionButtons) {
+            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actions->addAction($button, $action, $confirm, $isDisabeld);
+        return $this->actionButtons->addButton($button, $action, $confirm, $isDisabled);
     }
 
     /**
@@ -411,20 +412,20 @@ class Grid extends View
      * @param $view
      * @param null $action
      * @param bool $confirm
-     * @param bool $isDisabeld
+     * @param bool $isDisabled
      *
      * @throws Exception
      * @throws Exception\NoRenderTree
      *
      * @return mixed
      */
-    public function addActionMenuItem($view, $action = null, $confirm = false, $isDisabeld = false)
+    public function addActionMenuItem($view, $action = null, $confirm = false, $isDisabled = false)
     {
         if (!$this->actionMenu) {
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
         }
 
-        return $this->actionMenu->addActionMenuItem($view, $action, $confirm, $isDisabeld);
+        return $this->actionMenu->addActionMenuItem($view, $action, $confirm, $isDisabled);
     }
 
     /**
@@ -500,7 +501,7 @@ class Grid extends View
     {
         $column = $this->table->columns[$columnName];
         if (!isset($column)) {
-            throw new Exception('The column where you want to add dropdown does not exist: '.$columnName);
+            throw new Exception('The column where you want to add dropdown does not exist: ' . $columnName);
         }
         if (!$menuId) {
             $menuId = $columnName;
@@ -526,7 +527,7 @@ class Grid extends View
     {
         $column = $this->table->columns[$columnName];
         if (!isset($column)) {
-            throw new Exception('The column where you want to add popup does not exist: '.$columnName);
+            throw new Exception('The column where you want to add popup does not exist: ' . $columnName);
         }
 
         return $column->addPopup($popup, $icon);
@@ -545,11 +546,11 @@ class Grid extends View
      */
     public function addModalAction($button, $title, $callback, $args = [])
     {
-        if (!$this->actions) {
-            $this->actions = $this->table->addColumn(null, 'Actions');
+        if (!$this->actionButtons) {
+            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actions->addModal($button, $title, $callback, $this, $args);
+        return $this->actionButtons->addModal($button, $title, $callback, $this, $args);
     }
 
     /**
@@ -599,7 +600,7 @@ class Grid extends View
      */
     public function getSortBy()
     {
-        return isset($_GET[$this->sortTrigger]) ? $_GET[$this->sortTrigger] : null;
+        return $_GET[$this->sortTrigger] ?? null;
     }
 
     /**
@@ -637,8 +638,8 @@ class Grid extends View
 
         $this->table->on(
             'click',
-            'thead>tr>th',
-            new jsReload($this->container, [$this->sortTrigger => (new jQuery())->data('column')])
+            'thead>tr>th.sortable',
+            new jsReload($this->container, [$this->sortTrigger => (new jQuery())->data('sort')])
         );
     }
 
@@ -675,9 +676,8 @@ class Grid extends View
     {
         $this->selection = $this->table->addColumn(null, 'CheckBox');
 
-        // Move element to the beginning
-        $k = array_search($this->selection, $this->table->columns);
-        $this->table->columns = [$k => $this->table->columns[$k]] + $this->table->columns;
+        // Move last column to the beginning in table column array.
+        array_unshift($this->table->columns, array_pop($this->table->columns));
 
         return $this->selection;
     }
@@ -691,6 +691,7 @@ class Grid extends View
     public function addDragHandler()
     {
         $handler = $this->table->addColumn(null, 'DragHandler');
+
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));
 

@@ -1,6 +1,6 @@
 <?php
 
-include 'init.php';
+include_once __DIR__ . '/init.php';
 
 // buttons configuration: [page, title]
 $buttons = [
@@ -12,19 +12,18 @@ $buttons = [
 ];
 
 // layout
-$app->add(['View', 'red' => true,  'ui' => 'segment'])
-    ->add('Text')
+\atk4\ui\Text::addTo(\atk4\ui\View::addTo($app, ['red' => true,  'ui' => 'segment']))
     ->addParagraph('Layouts can be used to wrap your UI elements into HTML / Boilerplate');
 
 // toolbar
-$tb = $app->add('View');
+$tb = \atk4\ui\View::addTo($app);
 
 // iframe
-$i = $app->add(['View', 'green' => true, 'ui' => 'segment'])->setElement('iframe')->setStyle(['width' => '100%', 'height' => '500px']);
+$i = \atk4\ui\View::addTo($app, ['green' => true, 'ui' => 'segment'])->setElement('iframe')->setStyle(['width' => '100%', 'height' => '500px']);
 
 // add buttons in toolbar
 foreach ($buttons as $k => $args) {
-    $tb->add('Button')
+    \atk4\ui\Button::addTo($tb)
         ->set([$args['title'], 'iconRight' => 'down arrow'])
         ->js('click', $i->js()->attr('src', $app->url($args['page'])));
 }

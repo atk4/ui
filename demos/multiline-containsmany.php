@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 class Client extends atk4\data\Model
 {
@@ -34,4 +34,4 @@ class Account extends atk4\data\Model
     }
 }
 
-$app->add(['CRUD'])->setModel(new Client($db));
+\atk4\ui\CRUD::addTo($app)->setModel(new Client($db));

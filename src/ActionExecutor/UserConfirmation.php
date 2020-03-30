@@ -53,12 +53,12 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 
         //Add buttons to modal for next and previous.
         $btns = (new View())->addStyle(['min-height' => '24px']);
-        $this->ok = $btns->add(new Button(['Ok', 'blue']));
-        $this->cancel = $btns->add(new Button(['Cancel']));
+        $this->ok = Button::addTo($btns, ['Ok', 'blue']);
+        $this->cancel = Button::addTo($btns, ['Cancel']);
         $this->add($btns, 'actions');
         $this->showActions = true;
 
-        $this->loader = $this->add(['Loader', 'ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = Loader::addTo($this, ['ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
         $this->loader->addClass('atk-hide-loading-content');
     }
@@ -167,7 +167,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
      */
     protected function addConfirmation(View $view)
     {
-        $view->add(['Text'])->set($this->action->getConfirmation());
+        \atk4\ui\Text::addTo($view)->set($this->action->getConfirmation());
     }
 
     /**
@@ -192,7 +192,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
             $this->hide(),
             $this->ok->js(true)->off(),
             $this->cancel->js(true)->off(),
-            $this->hook('afterExecute', [$obj, $id]) ?: $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
+            $this->hook('afterExecute', [$obj, $id]) ?: $success ?: new jsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
         ];
     }
 

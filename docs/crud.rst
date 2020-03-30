@@ -24,7 +24,7 @@ Using CRUD
 
 The basic usage of CRUD is::
 
-    $app->add('CRUD')->setModel(new Country($app->db));
+    CRUD::addTo($app)->setModel(new Country($app->db));
 
 Users are now able to fully interract with the table. There are ways to restrict which "rows" and which "columns" user
 can access. First we can only allow user to read, manage and delete only countries that are part of European Union::
@@ -32,7 +32,7 @@ can access. First we can only allow user to read, manage and delete only countri
     $eu_countries = new Country($app->db);
     $eu_countries->addCondition('is_eu', true);
 
-    $app->add('CRUD')->setModel($eu_countries);
+    CRUD::addTo($app)->setModel($eu_countries);
 
 After that column `is_eu` will not be editable to the user anymore as it will be marked `system` by `addCondition`.
 
@@ -46,109 +46,61 @@ parameters to CRUD.
 Disabling Actions
 =================
 
-.. php:attr:: canCreate
-.. php:attr:: canUpdate
-.. php:attr:: canDelete
+By default CRUD allows all four operations - creating, reading, updating and deleting. These action is set by default in model
+action. It is possible to disable these default actions by setting their system property to true in your model::
 
-By default CRUD allows all four operations - creating, reading, updating and deleting. CRUD cannot function
-without read operation, but the other operations can be explicitly disabled::
+    $eu_countries->getAction('edit')->sytem = true;
 
-    $app->add(['CRUD', 'canDelete'=>false]);
+Model action using system property set to true, will not be display in Crud. Note that action must be setup prior to use
+`$crud->setModel($eu_countries)`
 
 Specifying Fields
 =================
 
-.. php:attr:: fieldsDefault
-.. php:attr:: fieldsCreate
-.. php:attr:: fieldsRead
-.. php:attr:: fieldsUpdate
+.. php:attr:: $displayFields
 
-Through those properties you can specify which fields to use. setModel() second argument will set `fieldsDefault` but
-if it's not passed, then you can inject fieldsDefault property during creation of setModel. Alternatively
-you can override which fields will be used for the corresponding mode by specifying the property::
+Only fields name set in this property will be display in Grid. Leave empty for all fields.
 
-    $crud=$this->add([
-        'CRUD',
-        'fieldsRead'=>['name'], // only field 'name' will be visible in table
-        'fieldsUpdate'=>['name', 'surname'] // fields 'name' and 'surname' will be accessible in edit form
-    ]);
+.. php:attr:: $editFields
+.. php:attr:: $addFields
 
-Custom Form
-===========
+Through those properties you can specify which fields to use when form is display for add and edit action.
+Field name add here will have priorities over the action fields properties. When set to null, the action fields propery
+will be used.
+
+
+Custom Form Behavior
+====================
 
 :php:class:`Form` in Agile UI allows you to use many different things, such as custom layouts. With CRUD you can
-specify your own form to use, which can be either an object or a seed::
+specify your own form behavior using a callback for action::
 
-    class UserForm extends \atk4\ui\Form {
-        function setModel($m, $fields = null) {
-            parent::setModel($m, false);
+    // callback for model action add form.
+    $g->onFormAdd(function ($form, $ex) {
+        $form->js(true, $form->getField('name')->jsInput()->val('Entering value via javascript'));
+    });
 
-            $gr = $this->addGroup('Name');
-            $gr->addField('first_name');
-            $gr->addField('middle_name');
-            $gr->addField('last_name');
+    // callback for model action edit form.
+    $g->onFormEdit(function ($form, $ex) {
+        $form->js(true, $form->getField('name')->jsInput()->attr('readonly', true));
+    });
 
-            $this->addField('email');
+    // callback for both model action edit and add.
+    $g->onFormAddEdit(function ($form, $ex) {
+        $form->onSubmit(function ($f) use ($ex) {
+            return [$ex->hide(), new \atk4\ui\jsToast('Submit all right! This demo does not saved data.')];
+        });
+    });
 
-            return $this->model;
-        }
-    }
-
-    $crud=$this->add([
-        'CRUD',
-        'formDefault'=>new UserForm();
-    ])->setModel($big_model);
-
-
-Custom Page
-===========
-
-.. php:attr:: pageDefault
-.. php:attr:: pageCreate
-.. php:attr:: pageUpdate
-
-You can also specify a custom class for your Page. Normally it's a :php:class:`VirtualPage` but you
-can extend it to introduce your own style or add more components than just a form::
-
-    class TwoPanels extends \atk4\ui\VirtualPage {
-
-        function add($v, $p = null) {
-
-            // is called with the form
-            $col = parent::add('Columns');
-
-            $col_l = $col->addColumn();
-            $v = $col_l->add($v);
-
-            $col_r = $col->addColumn();
-            $col_r->add('Table')->setModel($this->owner->model->ref('Invoices'));
-
-            return $v;
-        }
-    }
-
-    $crud=$this->add([
-        'CRUD',
-        'pageDefault'=>new TwoPanels();
-    ])->setModel(new Client($app->db));
-
+Callback function will receive the Form and ActionExecutor as arguments.
 
 Notification
 ============
 
 .. php:attr:: notifyDefault
-.. php:attr:: notifyCreate
-.. php:attr:: notifyUpdate
+.. php:attr:: saveMsg
+.. php:attr:: deleteMsg
+.. php:attr:: defaultMsg
 
-When data is saved, properties `$notifyDefault` can contain a custom notification action. By default it uses :php:class:`jsNotify`
-which will display green strip on top of the page. You can either override it or add additional actions::
-
-    $crud=$this->add([
-        'CRUD',
-        'notifyDefault'=>[
-            new \atk4\ui\jsNotify(['Custom Notification', 'color'=>'blue']),
-            $otherview->jsReload();
-            // both actions will be executed
-        ]
-    ])->setModel(new Client($app->db));
-
+When a model action execute in Crud, a notification to user is display. You can specify your notifier default seed using
+`$notifyDefault`. The notifier message may be set via `$saveMsg`, `$deleteMsg` or `$defaultMsg` property.

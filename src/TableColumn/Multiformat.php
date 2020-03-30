@@ -14,7 +14,7 @@ class Multiformat extends Generic
 
     public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
     {
-        return '{$c_'.$this->short_name.'}';
+        return '{$c_' . $this->short_name . '}';
     }
 
     public function __construct($callback)
@@ -59,9 +59,9 @@ class Multiformat extends Generic
             if ($cell) {
                 if ($name) {
                     // if name is set, we can wrap things
-                    $cell = str_replace('{$'.$name.'}', $cell, $html);
+                    $cell = str_replace('{$' . $name . '}', $cell, $html);
                 } else {
-                    $cell = $cell.' '.$html;
+                    $cell = $cell . ' ' . $html;
                 }
             } else {
                 $cell = $html;
@@ -72,12 +72,12 @@ class Multiformat extends Generic
             $html_tags = array_merge($c->getHTMLTags($row, $field), $html_tags);
         }
 
-        $template = $this->owner->add(['Template', $cell]);
+        $template = \atk4\ui\Template::addTo($this->owner, [$cell]);
         $template->set($row);
         $template->setHTML($html_tags);
 
         $val = $template->render();
 
-        return ['c_'.$this->short_name => $val];
+        return ['c_' . $this->short_name => $val];
     }
 }

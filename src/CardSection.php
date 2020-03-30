@@ -36,8 +36,8 @@ class CardSection extends View
     {
         $view = null;
 
-        if (is_string($description)) {
-            $view = $this->add(new View([$description, 'class' => ['description']]));
+        if (is_scalar($description)) {
+            $view = View::addTo($this, [$description, 'class' => ['description']]);
         } elseif ($description instanceof View) {
             $view = $this->add($description)->addClass('description');
         }
@@ -85,7 +85,7 @@ class CardSection extends View
             $label = $m->getField($field)->getCaption();
             $value = $this->app ? $this->app->ui_persistence->typecastSaveField($m->getField($field), $m->get($field)) : $m->get($field);
             if ($useLabel) {
-                $value = $label.$this->glue.$value;
+                $value = $label . $this->glue . $value;
             }
 
             $this->addDescription($value);

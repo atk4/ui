@@ -6,7 +6,9 @@
 namespace atk4\ui\ActionExecutor;
 
 use atk4\core\HookTrait;
+use atk4\data\Model;
 use atk4\data\UserAction\Generic;
+use atk4\data\ValidationException;
 use atk4\ui\Button;
 use atk4\ui\Exception;
 use atk4\ui\Form;
@@ -92,11 +94,11 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         //Add buttons to modal for next and previous.
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
-        $this->prevStepBtn = $this->btns->add(new Button(['Prev']))->addStyle(['float' => 'left !important']);
-        $this->nextStepBtn = $this->btns->add(new Button(['Next', 'blue']));
+        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
+        $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
         $this->addButtonAction($this->btns);
 
-        $this->loader = $this->add(['Loader', 'ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = \atk4\ui\Loader::addTo($this, ['ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
         $this->loader->addClass('atk-hide-loading-content');
         $this->actionData = $this->loader->jsGetStoreData()['session'];
@@ -112,13 +114,13 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return UserAction
      */
-    public function setAction(Generic $action) :View
+    public function setAction(Generic $action): View
     {
         $this->action = $action;
 
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
-            $this->title = trim($action->caption.' '.$this->action->owner->getModelCaption());
+            $this->title = $this->title ?? trim($action->caption . ' ' . $this->action->owner->getModelCaption());
 
             $this->btns->add($this->execActionBtn = $this->factory($this->action->ui['execButton'] ?? ['Button', $this->action->caption, 'blue'], [], 'atk4\ui'));
 
@@ -126,6 +128,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
             // set initial button state
             $this->jsSetBtnState($this, $this->step);
+            $this->doSteps();
         }
 
         $this->actionInitialized = true;
@@ -133,12 +136,22 @@ class UserAction extends Modal implements Interface_, jsInterface_
         return $this;
     }
 
-    public function renderView()
+    /**
+     * Perform action steps.
+     *
+     * @throws \atk4\data\Exception
+     */
+    public function doSteps()
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->scope === 'single') {
             $this->action->owner->tryLoad($id);
         }
+
+        if ($this->action->fields === true) {
+            $this->action->fields = array_keys($this->action->getModel()->getFields('editable'));
+        }
+
         $this->loader->set(function ($modal) {
             $this->jsSetBtnState($modal, $this->step);
 
@@ -147,11 +160,11 @@ class UserAction extends Modal implements Interface_, jsInterface_
                     case 'args':
                         $this->doArgs($modal);
                         break;
-                    case 'preview':
-                        $this->doPreview($modal);
-                        break;
                     case 'fields':
                         $this->doFields($modal);
+                        break;
+                    case 'preview':
+                        $this->doPreview($modal);
                         break;
                     case 'final':
                         $this->doFinal($modal);
@@ -161,8 +174,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
                 $this->_handleException($e, $modal, $this->step);
             }
         });
-
-        parent::renderView();
     }
 
     /**
@@ -243,8 +254,13 @@ class UserAction extends Modal implements Interface_, jsInterface_
                 throw new Exception(['Action arguments must be named', 'args' => $this->actions->args]);
             }
 
-            if ($val instanceof \atk4\data\Model) {
-                $f->addField($key, ['AutoComplete'])->setModel($val);
+            if ($val instanceof Model) {
+                $val = ['model' => $val];
+            }
+
+            if (isset($val['model'])) {
+                $val['model'] = $this->factory($val['model']);
+                $f->addField($key, ['Lookup'])->setModel($val['model']);
             } else {
                 $f->addField($key, null, $val);
             }
@@ -277,10 +293,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
     {
         $this->_addStepTitle($modal, $this->step);
         $f = $this->addFormTo($modal);
-
-        if (is_bool($this->action->fields)) {
-            $this->action->fields = array_keys($this->action->owner->getFields('editable'));
-        }
 
         $f->setModel($this->action->owner, $this->action->fields);
         // set Fields value if set from another step.
@@ -315,11 +327,15 @@ class UserAction extends Modal implements Interface_, jsInterface_
     {
         $this->_addStepTitle($modal, $this->step);
 
+        if ($fields = $this->actionData['fields'] ?? null) {
+            $this->action->getModel()->set($fields);
+        }
+
         if ($prev = $this->getPreviousStep($this->step)) {
             $chain = $this->loader->jsload([
-                                               'step'      => $prev,
-                                               $this->name => $this->action->owner->get('id'),
-                                           ], ['method' => 'post'], $this->loader->name);
+                'step'      => $prev,
+                $this->name => $this->action->owner->get('id'),
+            ], ['method' => 'post'], $this->loader->name);
 
             $modal->js(true, $this->prevStepBtn->js()->on('click', new jsFunction([$chain])));
         }
@@ -348,15 +364,15 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         switch ($this->previewType) {
             case 'console':
-                $preview = $modal->add(['ui'=>'inverted black segment', 'element'=>'pre']);
+                $preview = View::addTo($modal, ['ui'=>'inverted black segment', 'element'=>'pre']);
                 $preview->set($text);
                 break;
             case 'text':
-                $preview = $modal->add(['ui'=>'basic segment']);
+                $preview = View::addTo($modal, ['ui'=>'basic segment']);
                 $preview->set($text);
                 break;
             case 'html':
-                $preview = $modal->add(['ui'=>'basic segment']);
+                $preview = View::addTo($modal, ['ui'=>'basic segment']);
                 $preview->template->setHTML('Content', $text);
                 break;
         }
@@ -397,7 +413,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         return [
             $this->hide(),
             $this->hook('afterExecute', [$obj, $id]) ?:
-            $success ?: new jsToast('Success'.(is_string($obj) ? (': '.$obj) : '')),
+            $success ?: new jsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
             $this->loader->jsClearStoreData(true),
         ];
     }
@@ -409,7 +425,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return array|null
      */
-    protected function getSteps(Generic $action) :?array
+    protected function getSteps(Generic $action): ?array
     {
         $steps = null;
         if ($action->args) {
@@ -432,7 +448,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return string|null
      */
-    protected function getNextStep(string $step) :?string
+    protected function getNextStep(string $step): ?string
     {
         $next = null;
         if (!$this->isLastStep($step)) {
@@ -454,7 +470,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return string|null
      */
-    protected function getPreviousStep(string $step) :?string
+    protected function getPreviousStep(string $step): ?string
     {
         $prev = null;
 
@@ -477,7 +493,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return bool
      */
-    protected function isLastStep(string $step) :bool
+    protected function isLastStep(string $step): bool
     {
         $isLast = false;
         $step_count = count($this->steps);
@@ -498,7 +514,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return bool
      */
-    protected function isFirstStep(string $step) :bool
+    protected function isFirstStep(string $step): bool
     {
         return $step === $this->steps[0];
     }
@@ -514,7 +530,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return Form
      */
-    protected function setFormField(Form $form, array $fields, string $step) :Form
+    protected function setFormField(Form $form, array $fields, string $step): Form
     {
         foreach ($fields as $k => $val) {
             $form->getField($k)->set($val);
@@ -545,17 +561,19 @@ class UserAction extends Modal implements Interface_, jsInterface_
                 $js = [
                     $this->loader->jsAddStoreData($this->actionData, true),
                     $this->loader->jsload([
-                                              'step'      => $this->getNextStep($step),
-                                              $this->name => $this->action->owner->get('id'),
-                                          ], ['method' => 'post'], $this->loader->name),
+                        'step'      => $this->getNextStep($step),
+                        $this->name => $this->action->owner->get('id'),
+                    ], ['method' => 'post'], $this->loader->name),
                 ];
             }
 
             return $js;
+        } catch (ValidationException $e) {
+            throw $e;
         } catch (\Exception $e) {
-            $m = new Message('Error executing '.$this->action->caption, 'red');
+            $m = new Message('Error executing ' . $this->action->caption, 'red');
             $m->init();
-            $m->text->content = $e->getHTML();
+            $m->text->content = ($e instanceof \atk4\core\Exception ? $e->getHTML() : $e->getMessage());
 
             return $m;
         }
@@ -595,7 +613,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return jsExpressionable
      */
-    protected function jsSetNextState(string $step) :jsExpressionable
+    protected function jsSetNextState(string $step): jsExpressionable
     {
         if ($this->isLastStep($step)) {
             return $this->nextStepBtn->js(true)->hide();
@@ -611,7 +629,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return jsExpressionable
      */
-    protected function jsSetPrevState(string $step) :jsExpressionable
+    protected function jsSetPrevState(string $step): jsExpressionable
     {
         if ($this->isFirstStep($step)) {
             return $this->prevStepBtn->js(true)->hide();
@@ -627,7 +645,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return jsExpressionable
      */
-    protected function jsSetExecState(string $step) :jsExpressionable
+    protected function jsSetExecState(string $step): jsExpressionable
     {
         if ($this->isLastStep($step)) {
             return $this->execActionBtn->js(true)->show();
@@ -669,9 +687,9 @@ class UserAction extends Modal implements Interface_, jsInterface_
     {
         if ($prev = $this->getPreviousStep($step)) {
             $chain = $this->loader->jsload([
-                                               'step'      => $prev,
-                                               $this->name => $this->action->owner->get('id'),
-                                           ], ['method' => 'post'], $this->loader->name);
+                'step'      => $prev,
+                $this->name => $this->action->owner->get('id'),
+            ], ['method' => 'post'], $this->loader->name);
 
             $view->js(true, $this->prevStepBtn->js()->on('click', new jsFunction([$chain])));
         }
@@ -686,7 +704,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return Form |null
      */
-    protected function addFormTo(View $view) :Form
+    protected function addFormTo(View $view): Form
     {
         $f = $view->add($this->form);
         $f->buttonSave->destroy();
@@ -732,7 +750,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return array
      */
-    private function _getActionArgs(array $data) :array
+    private function _getActionArgs(array $data): array
     {
         $args = [];
 
@@ -774,7 +792,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      */
     private function _handleException($e, $view, $step)
     {
-        $msg = $view->add(['Message', 'Error:', 'type' => 'error']);
+        $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
         $msg->text->addParagraph($e->getMessage());
         $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
         if (!$this->isFirstStep($step)) {

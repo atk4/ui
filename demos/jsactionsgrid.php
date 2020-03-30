@@ -1,22 +1,22 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
-$app->add(['Button', 'Actions from jsEvent', 'small left floated basic blue', 'icon' => 'left arrow'])
+\atk4\ui\Button::addTo($app, ['Actions from jsEvent', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['jsactions2']);
-$app->add(['View', 'ui' => 'ui clearing divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
 $country = new Country($db);
 
 $country->addAction('callback', ['callback'=> function ($m) {
-    return 'ok '.$m->getTitle();
+    return 'ok ' . $m->getTitle();
 }]);
 
 $country->addAction('preview', ['preview'=> function ($m) {
-    return 'Previewing country '.$m->getTitle();
+    return 'Previewing country ' . $m->getTitle();
 }, 'callback'=>function ($m) {
-    return 'Done previewing '.$m->getTitle();
+    return 'Done previewing ' . $m->getTitle();
 }]);
 
 $country->addAction('disabled_action', ['enabled'=> false, 'callback'=>function () {
@@ -24,13 +24,13 @@ $country->addAction('disabled_action', ['enabled'=> false, 'callback'=>function 
 }]);
 
 $country->addAction('edit_argument', ['args'=> ['age'=>['type'=>'integer', 'required' => true]], 'callback'=>function ($m, $age) {
-    return 'Proper age to visit '.$m->getTitle().' is '.$age;
+    return 'Proper age to visit ' . $m->getTitle() . ' is ' . $age;
 }]);
 
 $country->addAction('edit_argument_prev', ['args'=> ['age'=>['type'=>'integer', 'required' => true]], 'preview'=> function ($m, $age) {
-    return 'You age is: '.$age;
+    return 'You age is: ' . $age;
 }, 'callback'=>function ($m, $age) {
-    return 'age = '.$age;
+    return 'age = ' . $age;
 }]);
 
 $country->addAction('edit_iso', ['fields'=> ['iso3'], 'callback'=>function () {
@@ -43,10 +43,11 @@ $country->addAction('Ouch', ['args'=> ['age'=>['type'=>'integer']], 'preview'=> 
     throw new \atk4\ui\Exception('Told you, didn\'t I?');
 }]);
 $country->addAction('confirm', ['ui' => ['confirm'=>'Call action?'], 'callback'=>function ($m) {
-    return 'Confirm ok '.$m->getTitle();
+    return 'Confirm ok ' . $m->getTitle();
 }]);
 
-$country->addAction('multi_step',
+$country->addAction(
+    'multi_step',
     [
         'args'  => [
             'age'    => ['type'=>'integer', 'required'=> true],
@@ -54,24 +55,24 @@ $country->addAction('multi_step',
         ],
         'fields' => ['iso3'],
         'preview'=> function ($m, $age, $gender) {
-            return 'Gender = '.$gender.' / Age = '.$age;
+            return 'Gender = ' . $gender . ' / Age = ' . $age . ' / ' . $m->get('iso3');
         },
         'callback'=> function ($m, $age, $gender) {
-            return 'You are a '.$gender.' of age '.$age.' who want to visit '.$m->getTitle();
+            return 'You are a ' . $gender . ' of age ' . $age . ' who want to visit ' . $m->getTitle();
         },
     ]
 );
 
-$g = $app->add(['Grid', 'menu' => false]);
+$g = \atk4\ui\Grid::addTo($app, ['menu' => false]);
 $g->setModel($country);
 
 $divider = $app->factory('View', ['id' => false, 'class' => ['divider'], 'content' => ''], 'atk4\ui');
 
 $model_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'content' => 'Model Actions'], 'atk4\ui');
-$model_header->add(['Icon', 'content' => 'database']);
+\atk4\ui\Icon::addTo($model_header, ['content' => 'database']);
 
 $js_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'content' => 'Js Actions'], 'atk4\ui');
-$js_header->add(['Icon', 'content' => 'file code']);
+\atk4\ui\Icon::addTo($js_header, ['content' => 'file code']);
 
 $g->addActionMenuItem($js_header);
 $g->addActionMenuItem('Js Callback', function () {
@@ -83,19 +84,19 @@ $g->addActionMenuItem($divider);
 $g->addActionMenuItem($model_header);
 $g->addActionMenuItems(
     [
-       'callback',
-       'preview',
-       'disabled_action',
-       'edit_argument',
-       'edit_argument_prev',
-       'edit_iso',
-       'Ouch',
-       'confirm',
-   ]
+        'callback',
+        'preview',
+        'disabled_action',
+        'edit_argument',
+        'edit_argument_prev',
+        'edit_iso',
+        'Ouch',
+        'confirm',
+    ]
 );
 
 $special_item = $app->factory('View', ['id' => false, 'class' => ['item'], 'content' => 'Multi Step'], 'atk4\ui');
-$special_item->add(['Icon', 'content' => 'window maximize outline']);
+\atk4\ui\Icon::addTo($special_item, ['content' => 'window maximize outline']);
 
 $g->addActionMenuItem($special_item, $country->getAction('multi_step'));
 

@@ -116,20 +116,20 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
 
         preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($error, $field, &$matched) {
             if ($matches[1] == $field) {
-                $this->assertContains($error, $matches[2], 'Regarding field '.$field.' error message');
+                $this->assertContains($error, $matches[2], 'Regarding field ' . $field . ' error message');
 
                 $matched = true;
             }
         }, $this->f_error);
 
-        $this->assertTrue($matched, 'Field '.$field.' did not produce error');
+        $this->assertTrue($matched, 'Field ' . $field . ' did not produce error');
     }
 
     public function assertFieldNoErrors(string $field)
     {
         preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($field, &$matched) {
             if ($matches[1] == $field) {
-                $this->fail('Field '.$field.' unexpected error: '.$matches[2]);
+                $this->fail('Field ' . $field . ' unexpected error: ' . $matches[2]);
             }
         }, $this->f_error);
     }

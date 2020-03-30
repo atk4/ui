@@ -17,7 +17,7 @@ class Preview extends Basic
     public function initPreview()
     {
         if (!$this->hasAllArguments()) {
-            $this->add(['Message', 'type'=>'error', 'Insufficient arguments']);
+            \atk4\ui\Message::addTo($this, ['type'=>'error', 'Insufficient arguments']);
 
             return;
         }
@@ -26,20 +26,20 @@ class Preview extends Basic
 
         switch ($this->previewType) {
             case 'console':
-                $this->preview = $this->add(['ui'=>'inverted black segment', 'element'=>'pre']);
+                $this->preview = View::addTo($this, ['ui'=>'inverted black segment', 'element'=>'pre']);
                 $this->preview->set($text);
                 break;
             case 'text':
-                $this->preview = $this->add(['ui'=>'segment']);
+                $this->preview = View::addTo($this, ['ui'=>'segment']);
                 $this->preview->set($text);
                 break;
             case 'html':
-                $this->preview = $this->add(['ui'=>'segment']);
+                $this->preview = View::addTo($this, ['ui'=>'segment']);
                 $this->preview->template->setHTML('Content', $text);
                 break;
         }
 
-        $this->add($this->executorButton)->on('click', function () {
+        \atk4\ui\Button::addToWithClassName($this, $this->executorButton)->on('click', function () {
             return $this->jsExecute();
         });
     }

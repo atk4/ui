@@ -83,7 +83,7 @@ class TreeItemSelector extends Generic
             $this->itemSelectorTemplate = new Template('<div id="{$_id}" class="ui list" style="margin-left: 16px"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
-        $this->itemSelector = $this->add(['View', 'template' => $this->itemSelectorTemplate]);
+        $this->itemSelector = \atk4\ui\View::addTo($this, ['template' => $this->itemSelectorTemplate]);
     }
 
     /**
@@ -104,7 +104,7 @@ class TreeItemSelector extends Generic
             throw new Exception('Function is required for onTreeChange event.');
         }
 
-        $this->cb = $this->add('jsCallback')->set(function ($j, $data) use ($fx) {
+        $this->cb = jsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
             $value = $this->allowMultiple ? json_decode($data, true) : json_decode($data, true)[0];
 
             return call_user_func($fx, $value);
@@ -156,8 +156,8 @@ class TreeItemSelector extends Generic
         $this->itemSelector->template->trySetHTML('Input', $this->getInput());
 
         $this->itemSelector->vue(
-    'atk-tree-item-selector',
-                [
+            'atk-tree-item-selector',
+            [
                     'item'    => ['id' => 'atk-root', 'nodes' => $this->treeItems],
                     'values'  => [], //need empty for Vue reactivity.
                     'field'   => $this->short_name,
@@ -165,7 +165,8 @@ class TreeItemSelector extends Generic
                         'mode'    => $this->allowMultiple ? 'multiple' : 'single',
                         'url'     => $this->cb ? $this->cb->getJSURL() : null,
                         'loader'  => $this->loaderCssName,
-                ],
-        ]);
+                    ],
+                ]
+        );
     }
 }

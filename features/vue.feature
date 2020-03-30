@@ -7,6 +7,7 @@ Feature: Vue
     Given I am on "vue-component.php"
     When I fill in "name" with "test"
     And form submits
+    Then I wait for send action using ".atk-callback-response"
     Then I should see "new value: test"
 
   Scenario:

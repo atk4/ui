@@ -27,7 +27,7 @@ class Form extends Basic
         $this->addHeader();
 
         if (!$this->form) {
-            $this->form = $this->add('Form');
+            $this->form = \atk4\ui\Form::addTo($this);
         }
 
         // Setup form model using action fields.
@@ -53,17 +53,6 @@ class Form extends Basic
      */
     protected function getModelFields(Model $model)
     {
-        $fields = [];
-        foreach ($model->elements as $f) {
-            if (!$f instanceof Field) {
-                continue;
-            }
-
-            if ($f->isEditable() || $f->isVisible()) {
-                $fields[] = $f->short_name;
-            }
-        }
-
-        return $fields;
+        return array_keys($model->getFields(['editable', 'visible']));
     }
 }

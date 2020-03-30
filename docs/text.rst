@@ -16,14 +16,14 @@ Basic Usage
 First argument of constructor or first element in array passed to constructor will be the text that will
 appear on the label::
 
-    $text = $app->add(['Text', 'here goes some text']);
+    $text = Text::addTo($app, ['here goes some text']);
 
 Paragraphs
 ==========
 
 You can define multiple paragraphs with text like this::
 
-    $text = $app->add('Text')
+    $text = Text::addTo($app)
         ->addParagraph('First Paragraph')
         ->addParagraph('Second Paragraph');
 
@@ -32,7 +32,7 @@ HTML escaping
 
 By default Text will not escape HTML so this will render as a bold text::
 
-    $text = $app->add(['Text', 'here goes <b>some bold text</b>']);
+    $text = Text::addTo($app, ['here goes <b>some bold text</b>']);
 
 
 .. warning:: If you are using Text for output HTML then you are doing it wrong. You should
@@ -40,7 +40,7 @@ By default Text will not escape HTML so this will render as a bold text::
 
 When you use paragraphs, escaping is performed by default::
 
-    $text = $app->add('Text')
+    $text = Text::addTo($app)
         ->addParagraph('No alerts')
         ->addParagraph('<script>alert(1)</script>');
 
@@ -50,7 +50,7 @@ Usage
 Text is usable in generic components, where you want to leave possibility of text injection. For instance,
 :php:class:`Message` uses text allowing you to add few parapraphs of text::
 
-    $message = $app->add(['Message', 'Message Title']);
+    $message = Message::addTo($app, ['Message Title']);
     $message->addClass('warning');
 
     $message->text->addParagraph('First para');

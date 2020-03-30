@@ -57,7 +57,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     /**
      * Will point to the Save button. If you don't want to have save button, then set this to false
-     * or destroy it. Initialized by setLayout().
+     * or destroy it. Initialized by initLayout().
      *
      * @var Button|array|false Button object, seed or false to not show button at all
      */
@@ -182,7 +182,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
             $this->buttonSave->on('click', $this->js()->form('submit'));
-            $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#'.$this->name]));
+            $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#' . $this->name]));
         }
     }
 
@@ -211,7 +211,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
     {
         if (is_object($selector) && isset($selector->name)) {
-            $selector = '#'.$selector->name;
+            $selector = '#' . $selector->name;
         }
 
         $this->fieldsDisplayRules = $rules;
@@ -252,7 +252,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      */
     public function onSubmit($callback)
     {
-        $this->addHook('submit', $callback);
+        $this->onHook('submit', $callback);
 
         return $this;
     }
@@ -263,7 +263,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * @param string $name Name of the field
      */
-    public function getField($name)
+    public function getField($name): FormField\Generic
     {
         return $this->fields[$name];
     }
@@ -363,11 +363,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function addFields($fields)
     {
         foreach ($fields as $field) {
-            if (is_array($field)) {
-                $this->addField(...$field);
-            } else {
-                $this->addField($field);
-            }
+            $this->addField(...(array) $field);
         }
 
         return $this;
@@ -474,8 +470,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         $seed = $this->mergeSeeds(
             $seed,
-            isset($f->ui['form']) ? $f->ui['form'] : null,
-            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
+            $f->ui['form'] ?? null,
+            $this->typeToDecorator[$f->type] ?? null,
             $fallback_seed
         );
 
@@ -517,11 +513,9 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
         foreach ($this->fields as $key => $field) {
             try {
-                $value = isset($post[$key]) ? $post[$key] : null;
-
                 // save field value only if field was editable in form at all
                 if (!$field->readonly && !$field->disabled) {
-                    $this->model[$key] = $this->app->ui_persistence->typecastLoadField($field->field, $value);
+                    $field->set($post[$key] ?? null);
                 }
             } catch (\atk4\core\Exception $e) {
                 $errors[$key] = $e->getMessage();
@@ -583,7 +577,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     {
         $this->_add($cb = new jsCallback(), ['desired_name' => 'submit', 'postTrigger' => true]);
 
-        $this->add(new View(['element' => 'input']))
+        View::addTo($this, ['element' => 'input'])
             ->setAttr('name', $cb->postTrigger)
             ->setAttr('value', 'submit')
             ->setStyle(['display' => 'none']);
@@ -613,6 +607,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
                     return new jsExpression('console.log([])', ['Form submission is not handled']);
                 }
+
+                return $response;
             } catch (\atk4\data\ValidationException $val) {
                 ob_get_clean(); // not close output buffer on exceptions
                 $response = [];
@@ -622,8 +618,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
                 return $response;
             }
-
-            return $response;
         });
 
         //var_dump($cb->getURL());
@@ -631,7 +625,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             ->api(array_merge(['url' => $cb->getJSURL(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
             ->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
-        $this->on('change', 'input', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
+        $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
 
         if (!$this->canLeave) {
             $this->js(true, (new jsChain('atk.formService'))->preventFormLeave($this->name));

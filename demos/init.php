@@ -2,11 +2,11 @@
 
 date_default_timezone_set('UTC');
 
-require '../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 /* START - PHPUNIT & COVERAGE SETUP */
-if (file_exists('coverage.php')) {
-    include_once 'coverage.php';
+if (file_exists(__DIR__ . '/coverage.php')) {
+    include_once __DIR__ . '/coverage.php';
 }
 
 class Demo extends \atk4\ui\Columns
@@ -30,7 +30,7 @@ class Demo extends \atk4\ui\Columns
     public function setCode($code, $lang = 'php')
     {
         $this->highLightCode();
-        $this->left->add(['element'=>'pre'])->add(['element' => 'code'])->addClass($lang)->set($code);
+        \atk4\ui\View::addTo(\atk4\ui\View::addTo($this->left, ['element'=>'pre']), ['element' => 'code'])->addClass($lang)->set($code);
         $app = $this->right;
         $app->db = $this->app->db;
         eval($code);
@@ -39,7 +39,7 @@ class Demo extends \atk4\ui\Columns
     public function highLightCode()
     {
         if (!self::$isInitialized) {
-            $this->app->requireCSS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/'.$this->highlightDefaultStyle.'.min.css');
+            $this->app->requireCSS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/' . $this->highlightDefaultStyle . '.min.css');
             $this->app->requireJS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js');
             $this->js(true, (new \atk4\ui\jsChain('hljs'))->initHighlighting());
             self::$isInitialized = true;
@@ -61,13 +61,13 @@ if ($app->catch_exceptions !== true) {
 }
 
 if (file_exists('coverage.php')) {
-    $app->addHook('beforeExit', function () {
+    $app->onHook('beforeExit', function () {
         coverage();
     });
 }
 /* END - PHPUNIT & COVERAGE SETUP */
 
-$app->title = 'Agile UI Demo v'.$app->version;
+$app->title = 'Agile UI Demo v' . $app->version;
 
 if (file_exists('../public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = '../public';
@@ -91,7 +91,7 @@ if (isset($layout->leftMenu)) {
     $form->addItem('Data Integration', ['form2']);
     $form->addItem('Form Multi-column layout', ['form3']);
     $form->addItem(['Integration with Columns'], ['form5']);
-    $form->addItem(['AutoComplete Field', 'icon'=>'yellow star'], ['autocomplete']);
+    $form->addItem(['Lookup Field', 'icon'=>'yellow star'], ['lookup']);
     $form->addItem(['DropDown Field'], ['dropdown-plus']);
     $form->addItem(['Value Selectors'], ['form6']);
     $form->addItem(['Conditional Fields'], ['jscondform']);
@@ -147,10 +147,10 @@ if (isset($layout->leftMenu)) {
     $url = 'https://github.com/atk4/ui/blob/develop/demos/';
 
     // Would be nice if this would be a link.
-    $layout->menu->addItem()->add(['Button', 'View Source', 'teal', 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url.$f]));
+    \atk4\ui\Button::addTo($layout->menu->addItem(), ['View Source', 'teal', 'icon' => 'github'])
+        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url . $f]));
 
     $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }
 
-require_once 'somedatadef.php';
+require_once __DIR__ . '/somedatadef.php';

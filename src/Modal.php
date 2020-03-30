@@ -2,19 +2,19 @@
 
 namespace atk4\ui;
 
-/**h
+/**
  * This class add modal dialog to a page.
  *
  * Modal are added to the layout but their content is hidden by default.
  * $modal->show() is the triggered needed to actually display the modal.
  *
  * Modal can be use as a regular view, simply by adding other view to it.
- *  $modal->add(['Message', 'title'=>'Welcome to Agile Toolkit')->text('Your text here').
+ *  Message::addTo($modal, ['title'=>'Welcome to Agile Toolkit'])->text('Your text here');
  *
  * Modal can add content dynamically via CallbackLater.
  *  $modal->set(function ($modal) {
- *     $modal->add('Form');
- * });
+ *     Form::addTo($modal);
+ *  });
  *
  * Modal can use semantic-ui predefine method onApprove or onDeny by passing
  * a jsAction to Modal::addDenyAction or Modal::addApproveAction method. It will not close until the jsAction return true.
@@ -29,12 +29,8 @@ class Modal extends View
 {
     public $defaultTemplate = 'modal.html';
 
-    /**
-     * Set to empty or false for no header.
-     *
-     * @var string
-     */
-    public $title = 'Modal title';
+    /** @var null|string Set null for no title  */
+    public $title = null;
     public $loading_label = 'Loading...';
     public $headerCSS = 'header';
     public $ui = 'modal';
@@ -90,9 +86,9 @@ class Modal extends View
      */
     public function enableCallback()
     {
-        $this->cb_view = $this->add('View');
+        $this->cb_view = View::addTo($this);
         $this->cb_view->stickyGet('__atk_m', $this->name);
-        $this->cb = $this->cb_view->add('CallbackLater');
+        $this->cb = CallbackLater::addTo($this->cb_view);
 
         $this->cb->set(function () {
             if ($this->cb->triggered() && $this->fx) {

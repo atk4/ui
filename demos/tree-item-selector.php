@@ -1,6 +1,6 @@
 <?php
 
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
 $items = [
     [
@@ -29,9 +29,9 @@ $items = [
 
 $empty = [];
 
-$app->add(['Header', 'Item selector']);
+\atk4\ui\Header::addTo($app, ['Item selector']);
 
-$f = $app->add('Form');
+$f = \atk4\ui\Form::addTo($app);
 $field = $f->addField('tree', [new \atk4\ui\FormField\TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'array', 'serialize' => 'json']);
 $field->set([201, 301, 503]);
 

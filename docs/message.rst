@@ -28,7 +28,7 @@ Although typically you would want to specify what type of message is that::
 
 Here is the alternative syntax::
 
-    $message = $app->add(['Message', 'Warning Message Title', 'warning']));
+    $message = Message::addTo($app, ['Warning Message Title', 'warning']);
 
 Adding message text
 ===================
@@ -38,7 +38,7 @@ Adding message text
 Property $text is automatically initialized to :php:class:`Text` so you can call :php:meth:`Text::addParagraph`
 to add more text inside your message::
 
-    $message = $app->add(['Message', 'Message Title']);
+    $message = Message::addTo($app, ['Message Title']);
     $message->addClass('warning');
     $message->text->addParagraph('First para');
     $message->text->addParagraph('Second para');
@@ -51,8 +51,7 @@ Message Icon
 
 You can specify icon also::
 
-    $message = $app->add([
-        'Message',
+    $message = Message::addTo($app, [
         'Battery low',
         'red',
         'icon'=>'battery low'

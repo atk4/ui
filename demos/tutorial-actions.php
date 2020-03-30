@@ -126,6 +126,7 @@ EOF
     $page->add(new Demo())->setCode(<<<'CODE'
 $model = new \atk4\data\Model($app->db, 'test');
 $model->addAction('greet', [
+    'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
     'args'=> [
         'age'=>[
             'type'=>'integer', 
@@ -182,4 +183,41 @@ $crud = $app->add(['CRUD', 'ipp'=>5]);
 $crud->setModel($country);
 CODE
     );
+});
+
+$wizard->addFinish(function ($page) use ($wizard) {
+    $t = $page->add('Text');
+    $t->addParagraph(<<< 'EOF'
+Agile Toolkit base package includes:
+EOF
+    );
+
+    $t->addHTML(<<< 'HTML'
+<ul>
+    <li>Over 40 ready-to-use and nicely styled UI components</li>
+    <li>Over 10 ways to build interraction</li>
+    <li>Over 10 configurable field types, relations, aggregation and much more</li>
+    <li>Over 5 SQL and some NoSQL vendors fully supported</li>
+</ul>
+
+HTML
+    );
+
+    $gl = $page->add(new \atk4\ui\GridLayout([null, 'stackable divided', 'columns'=>4]));
+    $gl->add(['Button', 'Explore UI components', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c1')
+        ->link('https://github.com/atk4/ui/#bundled-and-planned-components');
+    $gl->add(['Button', 'Try out interactive features', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c2')
+        ->link(['loader', 'begin'=>false, 'layout'=>false]);
+    $gl->add(['Button', 'Dive into Agile Data', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c3')
+        ->link('https://git.io/ad');
+    $gl->add(['Button', 'More ATK Add-ons', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c4')
+        ->link('https://github.com/atk4/ui/#add-ons-and-integrations');
+
+    $wizard->add(['Button', 'Exit demo', 'primary', 'icon'=>'left arrow'], 'Left')
+        ->link(['index', 'layout'=>false]);
+
+    $page->add(['ui'=>'divider']);
+
+    $page->add(['Message', 'Cool fact!', 'info', 'icon'=>'book'])->text
+        ->addParagraph('This entire demo is coded in Agile Toolkit and takes up less than 300 lines of very simple code code!');
 });

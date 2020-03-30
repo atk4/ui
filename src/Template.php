@@ -29,6 +29,7 @@ use atk4\data\Model;
 class Template implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
+    use \atk4\core\StaticAddToTrait;
 
     // {{{ Properties of a template
 
@@ -322,11 +323,6 @@ class Template implements \ArrayAccess
             throw new Exception(['Tag is not set', 'tag' => $tag, 'value' => $value]);
         }
 
-        // ignore not existent tags
-        if (!$strict && !$this->hasTag($tag)) {
-            return $this;
-        }
-
         // check value
         if (!is_scalar($value) && $value !== null) {
             throw new Exception(['Value should be scalar', 'tag' => $tag, 'value' => $value]);
@@ -335,6 +331,16 @@ class Template implements \ArrayAccess
         // encode value
         if ($encode) {
             $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+        }
+
+        // if no value, then set respective conditional regions to empty string
+        if (substr($tag, -1) != '?' && ($value === false || !strlen((string) $value))) {
+            $this->trySet($tag . '?', '');
+        }
+
+        // ignore not existent tags
+        if (!$strict && !$this->hasTag($tag)) {
+            return $this;
         }
 
         // set or append value
@@ -594,7 +600,7 @@ class Template implements \ArrayAccess
         $template = $this->getTagRefList($tag);
         if ($template != $this->template) {
             foreach ($template as $key => $templ) {
-                $ref = $tag.'#'.($key + 1);
+                $ref = $tag . '#' . ($key + 1);
                 $this->tags[$tag][$key] = [call_user_func($callable, $this->recursiveRender($templ), $ref)];
             }
         } else {
@@ -622,7 +628,7 @@ class Template implements \ArrayAccess
         $n->app = $this->app;
         $n->template = unserialize(serialize(['_top#1' => $this->get($tag)]));
         $n->rebuildTags();
-        $n->source = 'clone ('.$tag.') of template '.$this->source;
+        $n->source = 'clone (' . $tag . ') of template ' . $this->source;
 
         return $n;
     }
@@ -663,8 +669,9 @@ class Template implements \ArrayAccess
     public function tryLoad($filename)
     {
         if (is_readable($filename) && is_file($filename)) {
-            $this->loadTemplateFromString(file_get_contents($filename));
-            $this->source = 'loaded from file: '.$filename;
+            $str = preg_replace('~(?:\r\n?|\n)$~s', '', file_get_contents($filename)); // load file and trim end NL
+            $this->loadTemplateFromString($str);
+            $this->source = 'loaded from file: ' . $filename;
 
             return $this;
         }
@@ -681,7 +688,7 @@ class Template implements \ArrayAccess
      */
     public function loadTemplateFromString($str)
     {
-        $this->source = 'string: '.$str;
+        $this->source = 'string: ' . $str;
         $this->template = $this->tags = [];
         if (!$str) {
             return;
@@ -722,16 +729,14 @@ class Template implements \ArrayAccess
             $this->tag_cnt[$tag] = 0;
         }
 
-        return $tag.'#'.(++$this->tag_cnt[$tag]);
+        return $tag . '#' . (++$this->tag_cnt[$tag]);
     }
 
     /**
      * Recursively find nested tags inside a string, converting them to array.
      *
-     * @param array $input
-     * @param array $template
-     *
-     * @return string|null
+     * @param array &$input
+     * @param array &$template
      */
     protected function parseTemplateRecursive(&$input, &$template)
     {
@@ -802,7 +807,7 @@ class Template implements \ArrayAccess
      */
     protected function parseTemplate($str)
     {
-        $tag = '/{([\/$]?[-_:\w]*)}/';
+        $tag = '/{([\/$]?[-_:\w]*[\?]?)}/';
 
         $input = preg_split($tag, $str, -1, PREG_SPLIT_DELIM_CAPTURE);
 

@@ -2,14 +2,14 @@
 /**
  * Demonstrates how to use BreadCrumb.
  */
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
-$crumb = $app->add('BreadCrumb');
+$crumb = \atk4\ui\BreadCrumb::addTo($app);
 $crumb->addCrumb('UI Demo', ['index']);
 $crumb->addCrumb('BreadCrumb Demo', ['breadcrumb']);
 
-$app->add(['ui'=>'divider']);
+\atk4\ui\View::addTo($app, ['ui'=>'divider']);
 
 $crumb->addCrumb('Countries', []);
 
@@ -23,11 +23,11 @@ if ($id = $app->stickyGet('country_id')) {
 
     // here we can check for additional criteria and display a deeper level on the crumb
 
-    $app->add('Form')->setModel($m);
+    \atk4\ui\Form::addTo($app)->setModel($m);
 } else {
 
     // display list of countries
-    $table = $app->add('Table');
+    $table = \atk4\ui\Table::addTo($app);
     $table->setModel($m);
     $table->addDecorator('name', ['Link', [], ['country_id'=>'id']]);
 }

@@ -116,7 +116,7 @@ class SSE
         $this->initSse();
         $this->setStart(time());
 
-        $this->send('retry: '.$this->clientReconnect * 1000 ."\n");
+        $this->send('retry: ' . $this->clientReconnect * 1000 . "\n");
 
         $this->sendBlock('1000', $this->view->renderJSON(), null);
     }
@@ -165,7 +165,7 @@ class SSE
         if (strlen($name) && $name !== null) {
             $this->send("event: {$name}\n");
         }
-        $this->send($this->wrapData($data)."\n\n");
+        $this->send($this->wrapData($data) . "\n\n");
     }
 
     /**
@@ -177,7 +177,7 @@ class SSE
      */
     private function wrapData($string)
     {
-        return 'data:'.str_replace("\n", "\ndata: ", $string);
+        return 'data:' . str_replace("\n", "\ndata: ", $string);
     }
 
     /**

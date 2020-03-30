@@ -132,7 +132,7 @@ class Card extends View
     public function getImageContainer()
     {
         if (!$this->imageContainer) {
-            $this->imageContainer = $this->add(['View', 'class' => ['image']], 'Image');
+            $this->imageContainer = View::addTo($this, ['class' => ['image']], ['Image']);
         }
 
         return $this->imageContainer;
@@ -148,7 +148,7 @@ class Card extends View
     public function getExtraContainer()
     {
         if (!$this->extraContainer) {
-            $this->extraContainer = $this->add(['View', 'class' => ['extra content']], 'ExtraContent');
+            $this->extraContainer = View::addTo($this, ['class' => ['extra content']], ['ExtraContent']);
         }
 
         return $this->extraContainer;
@@ -191,7 +191,7 @@ class Card extends View
      * to the main section of this card.
      *
      * @param \atk4\data\Model $m      The model.
-     * @param array            $fields An array of fields name to display in content.
+     * @param array|false      $fields An array of fields name to display in content.
      *
      * @throws Exception
      * @throws \atk4\data\Exception
@@ -208,10 +208,16 @@ class Card extends View
             $m = parent::setModel($m);
         }
 
+        if ($fields === null) {
+            $fields = array_keys($this->model->getFields(['editable', 'visible']));
+        } elseif ($fields === false) {
+            $fields = [];
+        }
+
         $this->setDataId($this->model->get($this->model->id_field));
 
         if ($fields && is_array($fields)) {
-            $this->getSection()->add(['View', $m->getTitle(), ['class' => 'header']]);
+            View::addTo($this->getSection(), [$m->getTitle(), ['class' => 'header']]);
             $this->getSection()->addFields($m, $fields, $this->useLabel, $this->useTable);
         }
 
@@ -288,11 +294,11 @@ class Card extends View
     {
         $section = $this->add([$this->cardSection, 'card' => $this], 'Section');
         if ($title) {
-            $section->add(['View', $title, ['class' => 'header']]);
+            View::addTo($section, [$title, ['class' => 'header']]);
         }
 
         if ($model && $fields) {
-            $this->setModel($model);
+            $section->setModel($model);
             $section->addFields($model, $fields, $useTable, $useLabel);
         }
 
@@ -315,7 +321,7 @@ class Card extends View
         }
         $btn = $this->addButton($button);
 
-        $vp = $this->add('VirtualPage')->set(function ($page) use ($executor, $action) {
+        $vp = VirtualPage::addTo($this)->set(function ($page) use ($executor, $action) {
             $id = $this->stickyGet($this->name);
 
             $page->add($executor = new $executor());
@@ -381,13 +387,13 @@ class Card extends View
      */
     public function addExtraFields($m, $fields, $glue = null)
     {
-        $this->setModel($m);
+        $this->setModel($m, false);
 
         // display extra field in line.
         if ($glue) {
             $extra = '';
             foreach ($fields as $field) {
-                $extra .= $m->get($field).$glue;
+                $extra .= $m->get($field) . $glue;
             }
             $extra = rtrim($extra, $glue);
             $this->addExtraContent(new View([$extra, 'ui'=>'ui basic fitted segment']));
@@ -439,7 +445,7 @@ class Card extends View
     public function addImage($img)
     {
         if (is_string($img)) {
-            $img = $this->getImageContainer()->add(new Image([$img]));
+            $img = Image::addTo($this->getImageContainer(), [$img]);
         } else {
             $img = $this->getImageContainer()->add($img);
         }

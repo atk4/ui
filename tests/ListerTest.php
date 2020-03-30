@@ -11,7 +11,7 @@ class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $v = new \atk4\ui\View();
         $v->init();
-        $l = $v->add(['Lister', 'defaultTemplate'=>'lister.html']);
+        $l = \atk4\ui\Lister::addTo($v, ['defaultTemplate'=>'lister.html']);
         $l->setSource(['foo', 'bar']);
     }
 
@@ -22,7 +22,7 @@ class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $v = new \atk4\ui\View(['template'=>new \atk4\ui\Template('hello{list}, world{/list}')]);
         $v->init();
-        $l = $v->add(['Lister'], 'list');
+        $l = \atk4\ui\Lister::addTo($v, [], ['list']);
         $l->setSource(['foo', 'bar']);
         $this->assertEquals('hello, world, world', $v->render());
     }
@@ -38,7 +38,7 @@ class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
 
         $v = new \atk4\ui\View(['template'=>new \atk4\ui\Template('hello{list}, world{/list}')]);
         $v->init();
-        $l = $v->add(['Lister', 'defaultTemplate'=>'lister.html']);
+        $l = \atk4\ui\Lister::addTo($v, ['defaultTemplate'=>'lister.html']);
         $l->setSource(['foo', 'bar']);
         $this->assertRegExp('|<div class="content"><a class="header" href="foo">bar</a>|i', $l->render());
     }
@@ -50,7 +50,7 @@ class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $v = new \atk4\ui\View();
         $v->init();
-        $l = $v->add('Lister');
+        $l = \atk4\ui\Lister::addTo($v);
         $l->setSource(['foo', 'bar']);
     }
 }

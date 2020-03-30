@@ -44,11 +44,11 @@ class ItemsPerPageSelector extends View
     {
         parent::init();
 
-        $this->add('Icon')->set('dropdown');
+        Icon::addTo($this)->set('dropdown');
         $this->template->tryset('Label', $this->label);
 
         //Callback later will give us time to properly render menu item before final output.
-        $this->cb = $this->add(new CallbackLater());
+        $this->cb = CallbackLater::addTo($this);
 
         if (!$this->currentIpp) {
             $this->currentIpp = $this->pageLengthItems[0];
@@ -111,9 +111,9 @@ class ItemsPerPageSelector extends View
                      }";
 
         $this->js(true)->dropdown([
-                                      'values'   => $menuItems,
-                                      'onChange' => new jsExpression($function),
-                                  ]);
+            'values'   => $menuItems,
+            'onChange' => new jsExpression($function),
+        ]);
         parent::renderView();
     }
 }

@@ -41,7 +41,7 @@ ATK UI classes::
 In most cases you don't need to call factory yourself, methods which accept object/seed combinations
 will do it for you::
 
-    $app->add('Button');
+    Button::addTo($app);
     // app will create instance of class \atk4\ui\Button
 
 Seed, Object and Render Tree

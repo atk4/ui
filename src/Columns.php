@@ -30,7 +30,7 @@ class Columns extends View
      * @var array
      */
     public $sizes = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
-    'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', ];
+        'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', ];
 
     /**
      * Add new vertical column.
@@ -50,7 +50,7 @@ class Columns extends View
         $this->add($column);
 
         if ($size && isset($this->sizes[$size])) {
-            $column->addClass($this->sizes[$size].' wide');
+            $column->addClass($this->sizes[$size] . ' wide');
             $this->calculated_width = false;
         } elseif ($this->calculated_width !== false) {
             $this->calculated_width++;
@@ -68,7 +68,7 @@ class Columns extends View
      */
     public function addRow($width = null)
     {
-        return $this->add(new static([$width, 'ui' => false]))->addClass('row');
+        return static::addTo($this, [$width, 'ui' => false])->addClass('row');
     }
 
     public function renderView()
@@ -80,7 +80,7 @@ class Columns extends View
         }
 
         if (isset($this->sizes[$width])) {
-            $this->addClass($this->sizes[$width].' column');
+            $this->addClass($this->sizes[$width] . ' column');
         }
 
         parent::renderView();

@@ -1,17 +1,17 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
-$app->add(['Button', 'Dynamic scroll in Lister', 'small left floated basic blue', 'icon' => 'left arrow'])
+\atk4\ui\Button::addTo($app, ['Dynamic scroll in Lister', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['scroll-lister']);
-$app->add(['Button', 'Dynamic scroll in Container', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\atk4\ui\Button::addTo($app, ['Dynamic scroll in Container', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['scroll-container']);
-$app->add(['View', 'ui' => 'ui clearing divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$app->add(['Header', 'Dynamic scroll in Table']);
+\atk4\ui\Header::addTo($app, ['Dynamic scroll in Table']);
 
-$table = $app->add(['Table']);
+$table = \atk4\ui\Table::addTo($app);
 
 $m = $table->setModel(new Country($db));
 //$m->addCondition('name','like','A%');

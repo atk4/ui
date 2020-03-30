@@ -1,7 +1,7 @@
 <?php
 
 date_default_timezone_set('UTC');
-include 'init.php';
+include_once __DIR__ . '/init.php';
 
 class ModelColor extends \atk4\data\Model
 {
@@ -67,9 +67,9 @@ class ModelColor extends \atk4\data\Model
         $this->addField('interests', [
             'type' => 'string',
             'ui'   => [
-              'table' => [
-                  'Labels',
-              ],
+                'table' => [
+                    'Labels',
+                ],
             ],
         ]);
 
@@ -109,7 +109,7 @@ foreach (range(1, 50) as $id) {
 
     $m->insert([
         'id'                       => $id,
-        'name'                     => 'name '.$id,
+        'name'                     => 'name ' . $id,
         'key_value'                => $key_value,
         'key_value_string'         => $key_value_string[$key_value],
         'value_not_always_present' => rand(0, 100) > 50 ? 'have value' : '',
@@ -119,5 +119,5 @@ foreach (range(1, 50) as $id) {
     ]);
 }
 
-$table = $app->add(['Table']);
+$table = \atk4\ui\Table::addTo($app);
 $table->setModel($m);

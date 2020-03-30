@@ -2,14 +2,14 @@
 /**
  * Demonstrates how to use a wizard.
  */
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
-$t = $app->add('Wizard');
+$t = \atk4\ui\Wizard::addTo($app);
 
 // First step will automatcally be active when you open page first. It
 // will contain the 'Next' button with a link.
 $t->addStep('Welcome', function ($p) {
-    $p->add(['Message', 'Welcome to wizard demonstration'])->text
+    \atk4\ui\Message::addTo($p, ['Welcome to wizard demonstration'])->text
         ->addParagraph('Use button "Next" to advance')
         ->addParagraph('You can specify your existing database connection string which will be used
         to create a table for model of your choice');
@@ -20,7 +20,7 @@ $t->addStep('Welcome', function ($p) {
 // to return any action from form's onSubmit callback. You may also use memorize()
 // to store wizard-specific variables
 $t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection String'], function ($p) {
-    $f = $p->add('Form');
+    $f = \atk4\ui\Form::addTo($p);
 
     $f->addField('dsn', 'Connect DSN', ['required'=>true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
     $f->onSubmit(function ($f) use ($p) {
@@ -36,14 +36,14 @@ $t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection
 $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'table'], function ($p) {
     if (isset($_GET['name'])) {
         $p->memorize('model', $_GET['name']);
-        header('Location: '.$p->urlNext());
+        header('Location: ' . $p->urlNext());
         $p->app->terminate();
     }
 
-    $c = $p->add('Columns');
+    $c = \atk4\ui\Columns::addTo($p);
 
-    $t = $c->addColumn()->add(['Grid', 'paginator'=>false, 'menu'=>false]);
-    $c->addColumn()->add(['Message', 'Information', 'info'])->text
+    $t = \atk4\ui\Grid::addTo($c->addColumn(), ['paginator'=>false, 'menu'=>false]);
+    \atk4\ui\Message::addTo($c->addColumn(), ['Information', 'info'])->text
         ->addParagraph('Selecting which model you would like to import into your DSN. If corresponding table already exist, we might add extra fields into it. No tables, columns or rows will be deleted.');
 
     $t->setSource(['Country', 'Stat']);
@@ -60,7 +60,7 @@ $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'tabl
 // and enable them as you see fit. Use handy js method to trigger advancement to
 // the next step.
 $t->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'database'], function ($p) {
-    $c = $p->add('Console');
+    $c = \atk4\ui\Console::addTo($p);
     $p->buttonFinish->addClass('disabled');
 
     $c->set(function ($c) use ($p) {
@@ -69,9 +69,9 @@ $t->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'data
 
         $c->output('please wait');
         sleep(1);
-        $c->output('connecting to "'.$dsn.'" (well not really, this is only a demo)');
+        $c->output('connecting to "' . $dsn . '" (well not really, this is only a demo)');
         sleep(2);
-        $c->output('initializing table for model "'.$model.'" (again - tricking you)');
+        $c->output('initializing table for model "' . $model . '" (again - tricking you)');
         sleep(1);
         $c->output('DONE');
 
@@ -84,5 +84,5 @@ $t->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'data
 // because you shouldn't be able to navigate wizard back without restarting it.
 // Only one finish can be added.
 $t->addFinish(function ($p) {
-    $p->add(['Header', 'You are DONE', 'huge centered']);
+    \atk4\ui\Header::addTo($p, ['You are DONE', 'huge centered']);
 });

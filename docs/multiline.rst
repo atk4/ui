@@ -59,7 +59,7 @@ This means that the addresses are not stored into a separate database table but 
 
 
     //Add a Form to the UI and set User as Model
-    $user_form = $app->add('Form');
+    $user_form = \atk4\ui\Form::addTo($app);
     $user_form->setModel($user);
 
 This leads to a Multiline component automatically rendered for adding, editing and deleting Addresses of the user:
@@ -108,7 +108,7 @@ If you want to edit them along with the user, Multiline is set up in a few lines
     $user->save();
 
     //Add a form to UI to edit User record
-    $user_form = $app->add('Form');
+    $user_form = \atk4\ui\Form::addTo($app);
     $user_form->setModel($user);
     $ml = $user_form->addField('email_addresses', ['MultiLine']);
     $ml->setModel($user->ref('Email'));

@@ -5,16 +5,16 @@ namespace atk4\ui;
 use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
 use atk4\core\InitializerTrait;
+use atk4\core\StaticAddToTrait;
 use atk4\core\TrackableTrait;
 
 /**
  * Add this object to your render tree and it will expose a unique URL which, when
  * executed directly will perform a PHP callback that you set().
  *
- * $button = $layout->add('Button');
+ * $button = Button::addTo($layout);
  * $button->set('Click to do something')->link(
- *      $button
- *          ->add('Callback')
+ *      Callback::addTo($button)
  *          ->set(function(){
  *              do_something();
  *          })
@@ -29,6 +29,7 @@ class Callback
     use InitializerTrait {
         init as _init;
     }
+    use StaticAddToTrait;
 
     /**
      * Will look for trigger in the POST data. Will not care about URL, but
@@ -55,6 +56,9 @@ class Callback
      */
     public $urlTrigger = null;
 
+    /** @var bool stick callback url argument to view or application. */
+    public $appSticky = false;
+
     /**
      * Initialize object and set default properties.
      *
@@ -72,6 +76,10 @@ class Callback
     {
         $this->_init();
 
+        if (!$this->app) {
+            throw new Exception(['Call-back must be part of a RenderTree']);
+        }
+
         if (!$this->urlTrigger) {
             $this->urlTrigger = $this->name;
         }
@@ -80,11 +88,7 @@ class Callback
             $this->postTrigger = $this->name;
         }
 
-        $this->owner->stickyGet($this->urlTrigger);
-
-        if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
-        }
+        $this->appSticky ? $this->app->stickyGet($this->urlTrigger) : $this->owner->stickyGet($this->urlTrigger);
     }
 
     /**

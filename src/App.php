@@ -33,14 +33,14 @@ class App
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
-        'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@2.0.3/public',
+        'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@2.0.4/public',
         'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.2/dist',
+        'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.4/dist',
     ];
 
     /** @var string Version of Agile UI */
-    public $version = '2.0.3';
+    public $version = '2.0.4';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -182,7 +182,7 @@ class App
             $this->template_dir = [$this->template_dir];
         }
 
-        $this->template_dir[] = __DIR__.'/../template/'.$this->skin;
+        $this->template_dir[] = __DIR__ . '/../template/' . $this->skin;
 
         // Set our exception handler
         if ($this->catch_exceptions) {
@@ -248,7 +248,7 @@ class App
      *
      * @return bool
      */
-    protected function caughtException(Throwable $exception)
+    public function caughtException(Throwable $exception)
     {
         $this->catch_runaway_callbacks = false;
 
@@ -257,7 +257,7 @@ class App
         $this->html = null;
         $this->initLayout(Centered::class);
         // change title to added an error
-        //$this->layout->add('Header', 'Header')->set('L'.$exception->getLine().': '.$exception->getMessage());
+        //Header::addTo($this->layout, ['Header'])->set('L'.$exception->getLine().': '.$exception->getMessage());
 
         // -- CHECK ERROR BY TYPE
         switch (true) {
@@ -267,12 +267,12 @@ class App
                 break;
 
             case $exception instanceof Error:
-                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')', 'error']);
-                $this->layout->add(['Text', nl2br($exception->getTraceAsString())]);
+                Message::addTo($this->layout, [get_class($exception) . ': ' . $exception->getMessage() . ' (in ' . $exception->getFile() . ':' . $exception->getLine() . ')', 'error']);
+                Text::addTo($this->layout, [nl2br($exception->getTraceAsString())]);
                 break;
 
             default:
-                $this->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+                Message::addTo($this->layout, [get_class($exception) . ': ' . $exception->getMessage(), 'error']);
                 break;
         }
 
@@ -327,7 +327,7 @@ class App
      */
     public function outputDebug($str)
     {
-        echo 'DEBUG:'.$str.'<br/>';
+        echo 'DEBUG:' . $str . '<br/>';
     }
 
     /**
@@ -344,7 +344,34 @@ class App
     {
         if ($output !== null) {
             if ($this->isJsonRequest()) {
+                if (is_string($output)) {
+                    $decode = json_decode($output, true);
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        $decode['modals'] = $this->getRenderedModals();
+                        $output = $decode;
+                    }
+                } elseif (is_array($output)) {
+                    $output['modals'] = $this->getRenderedModals();
+                }
                 $this->outputResponseJSON($output);
+            } elseif (isset($_GET['__atk_tab'])) {
+                // ugly hack for TABS
+                // because fomantic ui tab only deal with html and not JSON
+                // we need to hack output to include app modal.
+                $keys = null;
+                $remove_function = '';
+                foreach ($this->getRenderedModals() as $key => $modal) {
+                    // add modal rendering to output
+                    $keys[] = '#' . $key;
+                    $output['atkjs'] = $output['atkjs'] . ';' . $modal['js'];
+                    $output['html'] = $output['html'] . $modal['html'];
+                }
+                if ($keys) {
+                    $ids = implode(',', $keys);
+                    $remove_function = '$(\'.ui.dimmer.modals.page\').find(\'' . $ids . '\').remove();';
+                }
+                $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
+                $this->outputResponseHtml($output);
             } else {
                 $this->outputResponseHTML($output);
             }
@@ -388,21 +415,21 @@ class App
     {
         // jQuery
         $url = isset($this->cdn['jquery']) ? $this->cdn['jquery'] : '../public';
-        $this->requireJS($url.'/jquery.min.js');
+        $this->requireJS($url . '/jquery.min.js');
 
         // Semantic UI
         $url = isset($this->cdn['semantic-ui']) ? $this->cdn['semantic-ui'] : '../public';
-        $this->requireJS($url.'/semantic.min.js');
-        $this->requireCSS($url.'/semantic.min.css');
+        $this->requireJS($url . '/semantic.min.js');
+        $this->requireCSS($url . '/semantic.min.css');
 
         // Serialize Object
         $url = isset($this->cdn['serialize-object']) ? $this->cdn['serialize-object'] : '../public';
-        $this->requireJS($url.'/jquery.serialize-object.min.js');
+        $this->requireJS($url . '/jquery.serialize-object.min.js');
 
         // Agile UI
         $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
-        $this->requireJS($url.'/atkjs-ui.min.js');
-        $this->requireCSS($url.'/agileui.css');
+        $this->requireJS($url . '/atkjs-ui.min.js');
+        $this->requireCSS($url . '/agileui.css');
     }
 
     /**
@@ -428,7 +455,7 @@ class App
      *
      * @return string|null
      */
-    public function normalizeClassNameApp($name, $prefix = '') : ?string
+    public function normalizeClassNameApp($name, $prefix = ''): ?string
     {
         //return '\\'.__NAMESPACE__.'\\'.$name;
         return null;
@@ -437,18 +464,18 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param mixed  $seed   New object to add
-     * @param string $region
+     * @param View|string|array $seed   New object to add
+     * @param string|array|null $region
      *
-     * @throws Exception
      * @throws \atk4\core\Exception
      *
-     * @return object
+     * @return View
      */
     public function add($seed, $region = null)
     {
         if (!$this->layout) {
-            throw new Exception(['If you use $app->add() you should first call $app->setLayout()']);
+            throw (new Exception('App layout is missing'))
+                    ->addSolution('If you use $app->add() you should first call $app->initLayout()');
         }
 
         return $this->layout->add($seed, $region);
@@ -483,7 +510,7 @@ class App
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 $this->terminate(
-                    '!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']
+                    '!! Callback requested, but never reached. You may be missing some arguments in ' . $_SERVER['REQUEST_URI']
                 );
             }
             echo $this->html->template->render();
@@ -530,7 +557,7 @@ class App
         } else {
             $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
             foreach ($dir as $td) {
-                if ($t = $template->tryLoad($td.'/'.$name)) {
+                if ($t = $template->tryLoad($td . '/' . $name)) {
                     return $t;
                 }
             }
@@ -666,7 +693,7 @@ class App
 
         // put URL together
         $args = http_build_query($result);
-        $url = ($page[0] ? $page[0].$this->url_building_ext : '').($args ? '?'.$args : '');
+        $url = ($page[0] ? $page[0] . $this->url_building_ext : '') . ($args ? '?' . $args : '');
 
         return $url;
     }
@@ -678,7 +705,7 @@ class App
      *
      * @return string|null
      */
-    public function stickyGet($name) :?string
+    public function stickyGet($name): ?string
     {
         if (isset($_GET[$name])) {
             $this->sticky_get_arguments[$name] = $_GET[$name];
@@ -715,7 +742,7 @@ class App
      */
     public function requireJS($url, $isAsync = false, $isDefer = false)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '')."\n");
+        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
 
         return $this;
     }
@@ -729,7 +756,7 @@ class App
      */
     public function requireCSS($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url])."\n");
+        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
 
         return $this;
     }
@@ -744,7 +771,7 @@ class App
      */
     public function redirect($page)
     {
-        header('Location: '.$this->url($page));
+        header('Location: ' . $this->url($page));
 
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
@@ -883,14 +910,14 @@ class App
         }
 
         if (!$attr) {
-            return "<$tag>".($value !== null ? $value."</$tag>" : '');
+            return "<$tag>" . ($value !== null ? $value . "</$tag>" : '');
         }
         $tmp = [];
         if (substr($tag, -1) == '/') {
             $tag = substr($tag, 0, -1);
             $postfix = '/';
         } elseif (substr($tag, 0, 1) == '/') {
-            return isset($attr[0]) ? '</'.$attr[0].'>' : '<'.$tag.'>';
+            return isset($attr[0]) ? '</' . $attr[0] . '>' : '<' . $tag . '>';
         } else {
             $postfix = '';
         }
@@ -903,11 +930,11 @@ class App
             } elseif ($key === 0) {
                 $tag = $val;
             } else {
-                $tmp[] = "$key=\"".$this->encodeAttribute($val).'"';
+                $tmp[] = "$key=\"" . $this->encodeAttribute($val) . '"';
             }
         }
 
-        return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value !== null ? $value."</$tag>" : '');
+        return "<$tag" . ($tmp ? (' ' . implode(' ', $tmp)) : '') . $postfix . '>' . ($value !== null ? $value . "</$tag>" : '');
     }
 
     /**
@@ -1000,6 +1027,26 @@ class App
         $data = is_array($data) ? json_encode($data) : $data;
 
         $this->outputResponse(['Content-Type:application/json' => true], $data);
+    }
+
+    /**
+     * Generated html and js for modals attached to $html view.
+     *
+     * @throws \atk4\core\Exception
+     *
+     * @return array
+     */
+    public function getRenderedModals()
+    {
+        $modals = [];
+        foreach ($this->html->elements as $view) {
+            if ($view instanceof Modal) {
+                $modals[$view->name]['html'] = $view->getHTML();
+                $modals[$view->name]['js'] = $view->getJsRenderActions();
+            }
+        }
+
+        return $modals;
     }
 
     /**

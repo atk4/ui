@@ -47,7 +47,7 @@ class CheckBox extends Generic
         // not ticked. We assume they are ticked and sent boolean "false" as a
         // workaround. Otherwise send boolean "true".
         if ($this->form) {
-            $this->form->addHook('loadPOST', function ($form, &$post) {
+            $this->form->onHook('loadPOST', function ($form, &$post) {
                 $post[$this->field->short_name] = isset($post[$this->field->short_name]);
             });
         }
@@ -100,5 +100,15 @@ class CheckBox extends Generic
         $this->content = null; // no content again
 
         return parent::renderView();
+    }
+
+    /**
+     * Will return jQuery expression to get checkbox checked state.
+     *
+     * @return jQuery
+     */
+    public function jsChecked($when = null, $action = null)
+    {
+        return $this->jsInput($when, $action)->get(0)->checked;
     }
 }

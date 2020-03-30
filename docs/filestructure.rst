@@ -147,14 +147,14 @@ In this file we load up our app (later) and load the database configuration::
 
   <?php
   $rootdir = "../";    // the public_html directory
-  include $rootdir."../config/db.php";  // contains database configuration outside the public_html directory
+  require_once $rootdir."../config/db.php";  // contains database configuration outside the public_html directory
 
 Load Composer autoload.php (which loads up atk4) in init.php
 ------------------------------------------------------------
 
 ::
 
-  include $rootdir."vendor/autoload.php";   // loads up atk4 and our project files from Composer
+  require_once $rootdir."vendor/autoload.php";   // loads up atk4 and our project files from Composer
 
 Initialize the app class in init.php
 ------------------------------------
@@ -171,14 +171,14 @@ If you want to write an app with a backend, create a file called "admin.php"::
 
   <?php
   $rootdir = "../";
-  include "init.php";
+  require_once __DIR__ . "init.php";
   $app->initLayout('Admin');
 
 If you want to write an app with a frontend, create a file called "index.php"::
 
   <?php
   $rootdir = "../";
-  include "init.php";
+  require_once __DIR__ . "init.php";
   $app->initLayout('Centered');
 
 
@@ -206,7 +206,7 @@ Open the created file "View1.php" in your editor and add the following lines::
       function init() {
           parent::init();
 
-          $text = $this->app->add(['Text', 'here goes some text']);
+          $text = \atk4\ui\Text::addTo($this->app, ['here goes some text']);
       }
   }
 
@@ -226,10 +226,10 @@ To use our class in our app, we have to include it into our app. This can be don
 
 Please add the following lines into your index.php::
 
-  $app->add(new MyProject\Views\View1());
+  \MyProject\Views\View1::addTo($app);
 
 or if you have added at the beginning of your index.php "use MyProject\\Views\\View1;" you can write::
 
-  $app->add(new View1());
+  View1::addTo($app);
 
 See also :ref:`using-namespaces` on this topic...

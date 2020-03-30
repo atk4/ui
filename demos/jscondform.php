@@ -1,12 +1,12 @@
 <?php
 
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
 //////////////////////////////////////////////////////////
-$app->add(['Header', 'Phone', 'size'=>2]);
+\atk4\ui\Header::addTo($app, ['Phone', 'size'=>2]);
 
-$f_phone = $app->add(new \atk4\ui\Form(['segment']));
-$f_phone->add(['Label', 'Add other phone field input. Note: phone1 required a number of at least 5 char.', 'top attached'], 'AboveFields');
+$f_phone = \atk4\ui\Form::addTo($app, ['segment']);
+\atk4\ui\Label::addTo($f_phone, ['Add other phone field input. Note: phone1 required a number of at least 5 char.', 'top attached'], ['AboveFields']);
 
 $f_phone->addField('phone1');
 $f_phone->addField('phone2');
@@ -21,10 +21,10 @@ $f_phone->setFieldsDisplayRules([
 ]);
 
 //////////////////////////////////////////////////////////
-$app->add(['Header', 'Optional subscription', 'size'=>2]);
+\atk4\ui\Header::addTo($app, ['Optional subscription', 'size'=>2]);
 
-$f_sub = $app->add(new \atk4\ui\Form(['segment']));
-$f_sub->add(['Label', 'Click on subscribe and add email to receive your gift.', 'top attached'], 'AboveFields');
+$f_sub = \atk4\ui\Form::addTo($app, ['segment']);
+\atk4\ui\Label::addTo($f_sub, ['Click on subscribe and add email to receive your gift.', 'top attached'], ['AboveFields']);
 
 $f_sub->addField('name');
 $f_sub->addField('subscribe', ['CheckBox', 'Subscribe to weekly newsletter', 'toggle']);
@@ -44,10 +44,10 @@ $f_sub->setFieldsDisplayRules([
 ]);
 
 //////////////////////////////////////////////////////////
-$app->add(['Header', 'Dog registration', 'size'=>2]);
+\atk4\ui\Header::addTo($app, ['Dog registration', 'size'=>2]);
 
-$f_dog = $app->add(new \atk4\ui\Form(['segment']));
-$f_dog->add(['Label', 'You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race is exactly "bichon".', 'top attached'], 'AboveFields');
+$f_dog = \atk4\ui\Form::addTo($app, ['segment']);
+\atk4\ui\Label::addTo($f_dog, ['You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race is exactly "bichon".', 'top attached'], ['AboveFields']);
 $f_dog->addField('race', ['Line']);
 $f_dog->addField('age');
 $f_dog->addField('hair_cut', ['DropDown', 'values' => ['Short', 'Long']]);
@@ -60,10 +60,10 @@ $f_dog->setFieldsDisplayRules([
 ]);
 
 //////////////////////////////////////////////////////////
-$app->add(['Header', 'Hide or show group', 'size'=>2]);
+\atk4\ui\Header::addTo($app, ['Hide or show group', 'size'=>2]);
 
-$f_group = $app->add(new \atk4\ui\Form(['segment']));
-$f_group->add(['Label', 'Work on form group too.', 'top attached'], 'AboveFields');
+$f_group = \atk4\ui\Form::addTo($app, ['segment']);
+\atk4\ui\Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveFields']);
 
 $g_basic = $f_group->addGroup(['Basic Information']);
 $g_basic->addField('first_name', ['width' => 'eight']);
@@ -89,10 +89,10 @@ $f_group->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language'=>['dev
 
 //////////////////////////////////////////////////////////
 /*
-$app->add(['Header', 'Hide or show accordion section', 'size'=>2]);
+\atk4\ui\Header::addTo($app, ['Hide or show accordion section', 'size'=>2]);
 
-$f_acc = $app->add(new \atk4\ui\Form(['segment']));
-$f_acc->add(['Label', 'Work on section layouts too.', 'top attached'], 'AboveFields');
+$f_acc = \atk4\ui\Form::addTo($app, ['segment']);
+\atk4\ui\Label::addTo($f_acc, ['Work on section layouts too.', 'top attached'], ['AboveFields']);
 
 // Accordion
 $accordion_layout = $f_acc->layout->addSubLayout(['Accordion', 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);

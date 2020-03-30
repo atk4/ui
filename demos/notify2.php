@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 class Notifier extends \atk4\data\Model
 {
@@ -28,10 +28,10 @@ class Notifier extends \atk4\data\Model
 }
 
  /*** Notification type form ****/
-$head = $app->add(['Header', 'Notification Types']);
+$head = \atk4\ui\Header::addTo($app, ['Notification Types']);
 
-$form = $app->add(new \atk4\ui\Form(['segment']));
-$form->add(['Label', 'Some of notification options that can be set.', 'top attached'], 'AboveFields');
+$form = \atk4\ui\Form::addTo($app, ['segment']);
+\atk4\ui\Label::addTo($form, ['Some of notification options that can be set.', 'top attached'], ['AboveFields']);
 $form->buttonSave->set('Show');
 $form->setModel(new Notifier($db), false);
 

@@ -17,11 +17,11 @@ Using Grid
 
 Here is a simple usage::
 
-    $app->add('Grid')->setModel(new Country($db));
+    Grid::addTo($app)->setModel(new Country($db));
 
 To make your grid look nicer, you might want to add some buttons and enable quicksearch::
 
-    $grid = $app->add('Grid');
+    $grid = Grid::addTo($app);
     $grid->setModel(new Country($db));
 
     $grid->addQuickSearch();
@@ -47,7 +47,7 @@ Fomantic UI limitations that wouldn't allow to format buttons nicely::
 
 If you don't need menu, you can disable menu bar entirely::
 
-    $grid = $app->add(['Grid', 'menu' => false]);
+    $grid = Grid::addTo($app, ['menu' => false]);
 
 Adding Quick Search
 ===================
@@ -79,7 +79,7 @@ Paginator
 Grid comes with a paginator already. You can disable it by setting $paginator property to false. Alternatively you
 can provide seed for the paginator or even entire object::
 
-    $grid = $app->add(['Grid', 'paginator'=>['range'=>2]]);
+    $grid = Grid::addTo($app, ['paginator'=>['range'=>2]]);
 
 You can use $ipp property to specify different number of items per page::
 
@@ -129,7 +129,7 @@ to populate a content::
         // $id of the record which was clicked
         // $grid->model->load($id);
 
-        $p->add('LoremIpsum');
+        LoremIpsum::addTo($p);
     });
 
 Calling this method multiple times will add button into same action column.
@@ -167,8 +167,8 @@ Sorting
 When grid is associated with a model that supports order, it will automatically make itself sortable. You can
 override this behaviour by setting $sortable property to `true` or `false`.
 
-Additionally you may set list of sortable fields to a sortable property if you wish that your grid would be
-sortable only for those columns.
+You can also set $sortable property for each table column decorator. That way you can enable/disable sorting
+of particular columns.
 
 See also :php:attr:`Table::$sortable`.
 

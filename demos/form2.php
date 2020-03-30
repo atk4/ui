@@ -2,19 +2,18 @@
 /**
  * Testing form.
  */
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 // create header
-$app->add(['Header', 'Database-driven form with an enjoyable layout']);
+\atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
 
 // create form
-$form = $app->add(new \atk4\ui\Form(['segment']));
-//$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>false]));
-//$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>new \atk4\ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]));
-//$form = $app->add(new \atk4\ui\Form(['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]));
-//$form = $app->add(['Form', 'segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
-$form->add(['Label', 'Input new country information here', 'top attached'], 'AboveFields');
+$form = \atk4\ui\Form::addTo($app, ['segment']);
+//$form = \atk4\ui\Form::addTo($app, ['segment', 'buttonSave'=>false]);
+//$form = \atk4\ui\Form::addTo($app, ['segment', 'buttonSave'=>new \atk4\ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]);
+//$form = \atk4\ui\Form::addTo($app, ['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
+\atk4\ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveFields']);
 
 $form->setModel(new Country($db), false);
 
@@ -46,7 +45,7 @@ $form->onSubmit(function ($f) {
     // In-form validation
     $errors = [];
     if (strlen($f->model['first_name']) < 3) {
-        $errors[] = $f->error('first_name', 'too short, '.$f->model['first_name']);
+        $errors[] = $f->error('first_name', 'too short, ' . $f->model['first_name']);
     }
     if (strlen($f->model['last_name']) < 5) {
         $errors[] = $f->error('last_name', 'too short');
@@ -64,7 +63,7 @@ $form->onSubmit(function ($f) {
 
     return $f->success(
         'Record Added',
-        'there are now '.$f->model->action('count')->getOne().' records in DB'
+        'there are now ' . $f->model->action('count')->getOne() . ' records in DB'
     );
 });
 
@@ -96,6 +95,6 @@ class Person extends \atk4\data\Model
     }
 }
 
-$app->add('Form')
+\atk4\ui\Form::addTo($app)
   ->addClass('segment')
     ->setModel(new Person($db));

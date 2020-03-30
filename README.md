@@ -1,10 +1,15 @@
-# ATK UI - Collection of interractive Web App UI components
+# Agile UI - User Interface framework for Agile Toolkit
 
-Do you use a CSS framework?
+[Agile Toolkit](https://agiletoolkit.org/) is a Low Code framework written in PHP. Agile UI implement server side rendering engine and over 50 UI generic components for interacting with your Data Model.
 
-ATK UI began 2 years ago as a project to wrap CSS framework into PHP objects. We started with Fields, Forms, Tables and Menus. Then we added callbacks to enable interactivity. Then came layouts. Next we integrated data mapping and persistence frameworks; virtual pages and JavaScript action abstraction; dynamic popups, real-time console and progress-bar. We have even added high-level components such as wizard and dynamic tabs and make them extremely simple to use!
+Agile UI is quickest way for building back-end UI, admin interfaces, data management systems for medium and large projects designed around roles, complex logic, formulas.
 
-**ATK UI helps you create modern Web UI without writing HTML/CSS/JS. Bundled with over 30 interactive UI components that seamlessly integrate with your SQL, NoSQL or API backend, ATK UI brings consistent and easy-to-use interface into your custom projects or popular web apps**
+ - Agile UI relies on abstract data. It could be stored in SQL, NoSQL or in external API.
+ - Agile UI adjusts to your data model. If you change your model structure, UI will reflect that.
+ - Agile UI offers out-of-the-box components, you don't need front-end development experience.
+ - Agile UI is interactive, making it very easy to trigger PHP code on JS events.
+ - Agile UI is compact - single file, several lines of code - that's all it takes.
+ - Agile UI is extensible - integrates VueJS for custom components and interactive behaviours.
 
 [![Build Status](https://travis-ci.org/atk4/ui.png?branch=develop)](https://travis-ci.org/atk4/ui)
 ![Build](https://github.com/atk4/ui/workflows/Unit%20Testing/badge.svg)
@@ -17,27 +22,45 @@ Quick-Links: [Documentation](https://agile-ui.readthedocs.io). [Namespaces](http
 
 Our localization is done using the amazing services of [Lokalise.com](https://www.lokalise.com) (Thanks)
 
-## ATK UI is simple and really saves time
+## How does Agile Toolkit work?
 
-Some of you "live to code". For everyone else - ATK UI is a great fit. Easy to learn and saves loads of time.
+The goal of Agile Toolkit is to reduce amount of coding to build general purpose web applications. There are
+three steps involved:
 
-Watch this free Udemy course if you are a beginner: https://www.udemy.com/web-apps-with-php-and-atk
+ 1. Define your "Data Model" through [Agile Data Framework](https://github.com/atk4/data) and associate with SQL, NoSQL or API.
+ 2. Initialize UI components, connecting them to Data Model to build User Interface for your application.
+ 3. If needed - Use [Agile API](https://github.com/atk4/api) to provide API access for your Mobile/React app or IoT devices.
+
+Agile Data allows you to define models, fields, relations, formulas, aggregates, expressions, user action and
+access control rules. Both Agile UI and Agile API will follow those rules. 
+
+### Integrations and Apps using Agile UI
+
+Agile UI can integrate with frameworks like Laravel or Symfony, has integration with Wordpress and there are several
+high-level projects developed entirely on Agile Toolkit.
+
+### Who uses Agile Toolkit?
+
+Companies use Agile Toolkit to implement admin interface and in some cases even user-facing interface.
+
+ - www.linkedfinance.com
+ - www.sortmybooks.com
+ - If you have a project built with Agile Toolkit - add it here!
 
 ### How does it work?
 
 Download from www.agiletoolkit.org or Install ATK UI with `composer require atk4/ui`
 
-Then you only need to create a single PHP file:
+Create "index.php" file with:
 
 ``` php
 <?php
-require 'vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 $app = new \atk4\ui\App();   // That's your UI application
 $app->initLayout('Centered');
 
-$form = new \atk4\ui\Form(); // Yeah, that's a form!
-$app->add($form);
+$form = \atk4\ui\Form::addTo($app); // Yeah, that's a form!
 
 $form->addField('email');    // adds field
 $form->onSubmit(function ($form) {
@@ -70,7 +93,7 @@ $app = new \atk4\ui\App('hello world');
 $app->initLayout('Admin');
 $app->dbConnect('mysql://user:pass@localhost/atk')
 
-$app->add('CRUD')->setModel(new User($app->db));
+\atk4\ui\CRUD::addTo($app)->setModel(new User($app->db));
 ```
 
 ATK Data allows you to set up relations between models:
@@ -94,31 +117,46 @@ use \atk4\mastercrud\MasterCRUD;
 
 // set up $app here
 
-$master_crud = $app->add(new MasterCRUD());
+$master_crud = MasterCRUD::addTo($app);
 $master_crud->setModel(new User($app->db), [
   'Purchases'=>[]
 ]);
 
 ```
 
-## Styling
+### Agile UI can be styled
 
-ATK UI uses default settings from Formantic-UI but they can be styled. You can create custom application layouts, page layouts and widgets. Here is a screenshot of an application developed using ATK UI:
+It's easy to create your own application styling. Here are some example UI:
 
 ![subscribe](docs/images/saasty.png)
+
+## Actions
+
+As of version 2.0 - Agile Toolkit offers support for User Actions. Those are easy to define in your Data Model declaration:
+
+``` php
+$this->addAction('archive', function($m) { $m['is_archived'] = true; $this->saveAndUnload(); });
+```
+
+User interface such as CRUD or Card will automatically recognize new action and offer user to execute it. You can also
+control who has permission to execute actions through our ACL system.
+
+# Agile UI Feature highlights
+
+Agile UI has some unique features:
 
 ## Callbacks. Callbacks everywhere!
 
 One of the fundamental features of ATK is Callback - ability to dynamically generate a route then have JS part of the component invoke it. Thanks to this approach, code can be fluid, simple and readable:
 
 ``` php
-$tabs = $app->add('Tabs');
-$tabs->addTab('Intro')->add(['Message', 'Other tabs are loaded dynamically!']);
+$tabs = \atk4\ui\Tabs::addTo($app);
+\atk4\ui\Message::addTo($tabs->addTab('Intro'), ['Other tabs are loaded dynamically!']);
 
 $tabs->addTab('Users', function($p) use($app) {
 
     // This tab is loaded dynamically, but also contains dynamic component
-    $p->add('CRUD')->setModel(new User($app->db));
+    \atk4\ui\CRUD::addTo($p)->setModel(new User($app->db));
 });
 
 $tabs->addTab('Settings', function($p) use($app) {
@@ -126,7 +164,7 @@ $tabs->addTab('Settings', function($p) use($app) {
     // Second tab contains an AJAX form that stores itself back to DB.
     $m = new Settings($app->db);
     $m->load(2);
-    $p->add('Form')->setModel($m);
+    \atk4\ui\Form::addTo($p)->setModel($m);
 });
 ```
 
@@ -146,26 +184,6 @@ You get most benefit when you use various ATK UI Components together. Try the fo
 
 With ATK it [takes about 50 lines of PHP code only](https://github.com/atk4/ui/blob/develop/demos/wizard.php) to build it all.
 
-## ATK UI is part of [Agile Toolkit](https://agiletoolkit.org/)
-
-Comparing to some other CRUD / Admin builders, the UI components rely on a very powerful ATK Data framework, which can be also used separately and can be used to power your [RestAPI](https://github.com/atk4/api) end-points.
-
-See how ATK Data compares with other ORM engines and you'll understand why we choose it over some of the alternatives: http://socialcompare.com/en/comparison/php-data-access-libraries-orm-activerecord-persistence
-
-To help you understand the real power behind ATK Data integration, look at this aggregation / reporting addon: https://github.com/atk4/report. Compared to any open-source report suites that you can find for PHP, this is the only implementation that relies on "Model Domain Logic" rather than SQL queries for expressing your report criteria and can be used for ANY component in ATK UI as well as addons, such as [Charts](https://github.com/atk4/chart). There are no performance implications, because all the expressions and aggregations are executed inside your database through the means of SQL.
-
-## ATK is commercially supported
-
-The MIT license gives you absolute freedom, but no warranty. To compliment that, the team who created ATK as well as some early contributors joined together to run a consultancy company. We help you deliver your projects by:
-
--   Fixing bugs in ATK or add-ons - free of charge
--   Building add-ons that extend functionality - moderate hourly rate fee.
--   Integration tasks or building parts of your project - quotation based.
-
-Our motto is to "always give back to open-source community and be fair to our clients". We are hiring PHP and JavaScript developers who are passionate about ATK and are active within our community.
-
-If you need a help, go to [our website](https://www.agiletoolkit.org) and click on "Contact" link.
-
 ## Getting Started: Build your admin
 
 It's really easy to put together a complex Admin system. Add this code to a new PHP file (tweak it with your database details, table and fields):
@@ -173,22 +191,22 @@ It's really easy to put together a complex Admin system. Add this code to a new 
 ``` php
 <?php
 
-  $app = new \atk4\ui\App('My App');
-  $app->initLayout('Admin');
-  $app->dbConnect('mysql://user:pass@localhost/yourdb');
+$app = new \atk4\ui\App('My App');
+$app->initLayout('Admin');
+$app->dbConnect('mysql://user:pass@localhost/yourdb');
 
-  class User extends \atk4\data\Model {
-      public $table = 'user';
-      function init() {
-          parent::init();
+class User extends \atk4\data\Model {
+    public $table = 'user';
+    function init() {
+        parent::init();
 
-          $this->addField('name');
-          $this->addField('email', ['required'=>true]);
-          $this->addField('password', ['type'=>'password']);
-      }
-  }
+        $this->addField('name');
+        $this->addField('email', ['required'=>true]);
+        $this->addField('password', ['type'=>'password']);
+    }
+}
 
-  $app->add('CRUD')->setModel(new User($app->db));
+\atk4\ui\CRUD::addTo($app)->setModel(new User($app->db));
 ```
 
 The result is here:
@@ -224,6 +242,7 @@ Agile UI comes with many built-in components:
 | [Console](https://ui.agiletoolkit.org/demos/console.php)      | Execute server/shell commands and display progress live      | 1.4        |
 | [Items and Lists](https://ui.agiletoolkit.org/demos/lister.php) | Flexible and high-performance way to display lists of items. | 1.4        |
 | [Wizard](https://ui.agiletoolkit.org/demos/wizard.php)        | Multi-step, wizard with temporary data storing.              | 1.4        |
+| [Actions](https://ui.agiletoolkit.org/demos/actions.php)      | Vizualization of user-defined actions              | 2.0        |
 |                                                              |                                                              |            |
 
 ## Add-ons and integrations
@@ -232,7 +251,7 @@ Add-ons:
 
 -   [MasterCRUD](https://github.com/atk4/mastercrud) - Create multi-level CRUD system with BreadCrumb
 -   [Filestore](https://github.com/atk4/filestore) - Integrate your Form with Flysystem, uploading and storing files
--   [User Authentication](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
+-   [User Authentication and ACL](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
 -   [Charts add-on](https://github.com/atk4/chart) - Modern looking and free charts with [chartJS](https://www.chartjs.org/)
 -   [Audit for Models](https://github.com/atk4/audit) - Record all DB operations with Undo/Redo support for Agile Data
 -   [Data for Reports](https://github.com/atk4/report) - Implement data aggregation and union models for Agile Data
@@ -242,9 +261,6 @@ Integrations:
 
 -   [Agile UI for Wordpress](https://github.com/ibelar/atk-wordpress) - Write Wordpress plugin using Agile UI
 -   [Laravel Agile Data](https://github.com/atk4/laravel-ad) - ServiceProvider for Agile Data
--   .. more connectors wanted. If you are working to integrate Agile UI or Agile Data, please list it here (even if incomplete).
-
-
 
 All bundled components are free and licensed under MIT license. They are installed together with Agile UI.
 
@@ -265,6 +281,5 @@ ATK UI makes active use of ATK Core and ATK Data frameworks.
 ## Credits and License
 
 Agile UI, Data and API are projects we develop in our free time and offer you free of charge under terms of MIT license. If you wish to say thanks to our core team or take part in the project, please contact us through our chat on Gitter.
-
 
 [![Gitter](https://img.shields.io/gitter/room/atk4/atk4.svg?maxAge=2592000)](https://gitter.im/atk4/atk4?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)

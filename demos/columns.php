@@ -2,7 +2,7 @@
 /**
  * Testing Columns.
  */
-require 'init.php';
+require_once __DIR__ . '/init.php';
 
 // some custom style needed for our "highlight" to work. You don't need this on
 // your page and it's bad style to include CSS like this!
@@ -17,19 +17,19 @@ $app->addStyle('
 }
 ');
 
-$page = $app->add(['View', 'id' => 'example']);
+$page = \atk4\ui\View::addTo($app, ['id' => 'example']);
 
-$page->add(['Header', 'Basic Usage']);
+\atk4\ui\Header::addTo($page, ['Basic Usage']);
 
-$c = $page->add(new \atk4\ui\Columns());
-$c->addColumn()->add(['LoremIpsum', 1]);
-$c->addColumn()->add(['LoremIpsum', 1]);
-$c->addColumn()->add(['LoremIpsum', 1]);
+$c = \atk4\ui\Columns::addTo($page);
+\atk4\ui\LoremIpsum::addTo($c->addColumn(), [1]);
+\atk4\ui\LoremIpsum::addTo($c->addColumn(), [1]);
+\atk4\ui\LoremIpsum::addTo($c->addColumn(), [1]);
 
-$page->add(['Header', 'Specifying widths, using rows or automatic flow']);
+\atk4\ui\Header::addTo($page, ['Specifying widths, using rows or automatic flow']);
 
 // highlight class will show cells as boxes, even though they contain nothing
-$c = $page->add(new \atk4\ui\Columns([null, 'highlight']));
+$c = \atk4\ui\Columns::addTo($page, [null, 'highlight']);
 $c->addColumn(3);
 $c->addColumn(5);
 $c->addColumn(2);
@@ -44,20 +44,20 @@ $r->addColumn();
 $r->addColumn();
 $r->addColumn();
 
-$page->add(['Header', 'Content Outline']);
-$c = $page->add(new \atk4\ui\Columns(['internally celled']));
+\atk4\ui\Header::addTo($page, ['Content Outline']);
+$c = \atk4\ui\Columns::addTo($page, ['internally celled']);
 
 $r = $c->addRow();
-$r->addColumn([2, 'right aligned'])->add(['Icon', 'huge home']);
-$r->addColumn(12)->add(['LoremIpsum', 1]);
-$r->addColumn(2)->add(['Icon', 'huge trash']);
+\atk4\ui\Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
+\atk4\ui\LoremIpsum::addTo($r->addColumn(12), [1]);
+\atk4\ui\Icon::addTo($r->addColumn(2), ['huge trash']);
 
 $r = $c->addRow();
-$r->addColumn([2, 'right aligned'])->add(['Icon', 'huge home']);
-$r->addColumn(12)->add(['LoremIpsum', 1]);
-$r->addColumn(2)->add(['Icon', 'huge trash']);
+\atk4\ui\Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
+\atk4\ui\LoremIpsum::addTo($r->addColumn(12), [1]);
+\atk4\ui\Icon::addTo($r->addColumn(2), ['huge trash']);
 
-$page->add(['Header', 'Add elements into columns and using classes']);
+\atk4\ui\Header::addTo($page, ['Add elements into columns and using classes']);
 
 /**
  * Example box component with some content, good for putting into columns.
@@ -70,11 +70,11 @@ class Box extends \atk4\ui\View
     public function init()
     {
         parent::init();
-        $this->add(['Table', 'header' => false])
+        \atk4\ui\Table::addTo($this, ['header' => false])
             ->setSource(['One', 'Two', 'Three', 'Four']);
     }
 }
 
-$c = $page->add(new \atk4\ui\Columns(['width' => 4]));
-$c->addColumn()->add(new Box([null, 'red']));
-$c->addColumn([null, null, 'right floated'])->add(new Box([null, 'blue']));
+$c = \atk4\ui\Columns::addTo($page, ['width' => 4]);
+Box::addTo($c->addColumn(), [null, 'red']);
+Box::addTo($c->addColumn([null, null, 'right floated']), [null, 'blue']);

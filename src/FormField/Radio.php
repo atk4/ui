@@ -32,7 +32,7 @@ class Radio extends Generic
     {
         parent::init();
 
-        $this->lister = $this->add('Lister', 'Radio');
+        $this->lister = \atk4\ui\Lister::addTo($this, [], ['Radio']);
         $this->lister->t_row['_name'] = $this->short_name;
     }
 
@@ -54,7 +54,8 @@ class Radio extends Generic
         if ($this->disabled) {
             $this->addClass('disabled');
         }
-        $this->lister->addHook('beforeRow', function ($lister) use ($value) {
+
+        $this->lister->onHook('beforeRow', function ($lister) use ($value) {
             if ($this->readonly) {
                 $lister->t_row->set('disabled', $value != $lister->model->id ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {

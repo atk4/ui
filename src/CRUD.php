@@ -18,8 +18,11 @@ class CRUD extends Grid
     /** @var array of fields to display in Grid */
     public $displayFields = null;
 
-    /** @var null|array of fields to edit in Form */
+    /** @var null|array of fields to edit in Form for Model edit action */
     public $editFields = null;
+
+    /** @var null|array of fields to edit in Form for Model add action */
+    public $addFields = null;
 
     /** @var array Default notifier to perform when adding or editing is successful * */
     public $notifyDefault = ['jsToast'];
@@ -51,12 +54,21 @@ class CRUD extends Grid
     /** @var string Generic display message for no record scope action where model is not loaded. */
     public $defaultMsg = 'Done!';
 
+    /** @var array Callback containers for model action. */
+    public $onActions = [];
+
+    /** @var array Action name container that will reload Table after executing */
+    public $reloadTableActions = [];
+
+    /** @var array Action name container that will remove the corresponding table row after executing */
+    public $removeRowActions = [];
+
     public function init()
     {
         parent::init();
 
         if ($sortBy = $this->getSortBy()) {
-            $this->app ? $this->app->stickyGet($this->name.'_sort', $sortBy) : $this->stickyGet($this->name.'_sort', $sortBy);
+            $this->app ? $this->app->stickyGet($this->name . '_sort', $sortBy) : $this->stickyGet($this->name . '_sort', $sortBy);
         }
     }
 
@@ -73,7 +85,7 @@ class CRUD extends Grid
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
                 $ex = $item['action']->ui['executor'];
                 if ($ex instanceof jsInterface_) {
-                    $ex->stickyGet($this->name.'_sort', $this->getSortBy());
+                    $ex->stickyGet($this->name . '_sort', $this->getSortBy());
                     $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new jsFunction($ex->jsExecute())));
                 }
             }
@@ -91,7 +103,7 @@ class CRUD extends Grid
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $m, $fields = null) : \atk4\data\Model
+    public function setModel(\atk4\data\Model $m, $fields = null): \atk4\data\Model
     {
         if ($fields !== null) {
             $this->displayFields = $fields;
@@ -110,15 +122,17 @@ class CRUD extends Grid
             if ($this->useMenuActions) {
                 $this->addActionMenuItem($action);
             } else {
-                $this->addAction($action);
+                $this->addActionButton($action);
             }
         }
 
         if ($this->menu) {
             foreach ($this->_getModelActions(Generic::NO_RECORDS) as $k => $action) {
-                $action->ui['executor'] = $this->initActionExecutor($action);
-                $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
-                $this->menuItems[$k]['action'] = $action;
+                if ($action->enabled) {
+                    $action->ui['executor'] = $this->initActionExecutor($action);
+                    $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
+                    $this->menuItems[$k]['action'] = $action;
+                }
             }
             $this->setItemsAction();
         }
@@ -131,6 +145,11 @@ class CRUD extends Grid
      * First determine what fields action needs,
      * then setup executor based on action fields, args and/or preview.
      *
+     * Add hook for onStep 'fields'" Hook can call a callback function
+     * for UserAction onStep field. Callback will receive executor form where you
+     * can setup Input field via javascript prior to display form or change form submit event
+     * handler.
+     *
      * @param Generic $action
      *
      * @throws \atk4\core\Exception
@@ -139,11 +158,21 @@ class CRUD extends Grid
      */
     protected function initActionExecutor(Generic $action)
     {
-        $action->fields = $this->editFields ?? $action->fields;
         $executor = $this->getExecutor($action);
-        $executor->addHook('afterExecute', function ($ex, $return, $id) use ($action) {
+        $executor->onHook('afterExecute', function ($ex, $return, $id) use ($action) {
             return $this->jsExecute($return, $action);
         });
+
+        if ($executor instanceof UserAction) {
+            foreach ($this->onActions as $k => $onAction) {
+                $executor->onHook('onStep', function ($ex, $step, $form) use ($onAction, $action) {
+                    $key = key($onAction);
+                    if ($key === $action->short_name && $step === 'fields') {
+                        return call_user_func($onAction[$key], $form, $ex);
+                    }
+                });
+            }
+        }
 
         return $executor;
     }
@@ -205,10 +234,16 @@ class CRUD extends Grid
      *
      * @return array
      */
-    protected function jsModelReturn(Generic $action = null, string $msg = 'Done!') :array
+    protected function jsModelReturn(Generic $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
-        $js[] = $action->owner->loaded() ? $this->container->jsReload($this->_getReloadArgs()) : (new jQuery())->closest('tr')->transition('fade left');
+        if (in_array($action->short_name, $this->reloadTableActions)) {
+            $js[] =  $this->container->jsReload($this->_getReloadArgs());
+        } elseif (in_array($action->short_name, $this->removeRowActions)) {
+            $js[] = (new jQuery())->closest('tr')->transition('fade left');
+        } else {
+            $js[] = $action->owner->loaded() ? $this->container->jsReload($this->_getReloadArgs()) : (new jQuery())->closest('tr')->transition('fade left');
+        }
 
         return $js;
     }
@@ -240,6 +275,17 @@ class CRUD extends Grid
             return $this->factory($action->ui['executor']);
         }
 
+        // prioritize CRUD addFields over action->fields for Model add action.
+        if ($action->short_name === 'add' && $this->addFields) {
+            $action->fields = $this->addFields;
+        }
+
+        // prioritize CRUD editFields over action->fields for Model edit action.
+        if ($action->short_name === 'edit' && $this->editFields) {
+            $action->fields = $this->editFields;
+        }
+
+        // setting right action fields is based on action fields.
         $executor = (!$action->args && !$action->fields && !$action->preview) ? $this->jsExecutor : $this->executor;
 
         return $this->factory($executor);
@@ -252,7 +298,7 @@ class CRUD extends Grid
      */
     private function _getReloadArgs()
     {
-        $args[$this->name.'_sort'] = $this->getSortBy();
+        $args[$this->name . '_sort'] = $this->getSortBy();
         if ($this->paginator) {
             $args[$this->paginator->name] = $this->paginator->getCurrentPage();
         }
@@ -270,7 +316,7 @@ class CRUD extends Grid
      *
      * @return array
      */
-    private function _getModelActions(string $scope) : array
+    private function _getModelActions(string $scope): array
     {
         $actions = [];
         if ($scope === Generic::SINGLE_RECORD && !empty($this->singleScopeActions)) {
@@ -298,14 +344,14 @@ class CRUD extends Grid
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
      */
-    public function onEditAction(callable $fx)
+    public function onFormEdit(callable $fx)
     {
-        $this->setOnActionForm($fx, 'edit');
+        $this->setOnActions('edit', $fx);
     }
 
     /**
      * Set callback for add action in CRUD.
-     * Callback function will receive the Edit Form and Executor as param.
+     * Callback function will receive the Add Form and Executor as param.
      *
      * @param callable $fx
      *
@@ -313,9 +359,9 @@ class CRUD extends Grid
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
      */
-    public function onAddAction(callable $fx)
+    public function onFormAdd(callable $fx)
     {
-        $this->setOnActionForm($fx, 'add');
+        $this->setOnActions('add', $fx);
     }
 
     /**
@@ -328,14 +374,14 @@ class CRUD extends Grid
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
      */
-    public function onAction(callable $fx)
+    public function onFormAddEdit(callable $fx)
     {
-        $this->onEditAction($fx);
-        $this->onAddAction($fx);
+        $this->onFormEdit($fx);
+        $this->onFormAdd($fx);
     }
 
     /**
-     * Set onAction callback using UserAction executor.
+     * Set onActions.
      *
      * @param callable $fx
      * @param string   $actionName
@@ -346,19 +392,8 @@ class CRUD extends Grid
      *
      * @return null|mixed
      */
-    public function setOnActionForm(callable $fx, string $actionName)
+    public function setOnActions(string $actionName, callable $fx)
     {
-        if (!$this->model) {
-            throw new Exception('Model need to be set prior to use on Form');
-        }
-
-        $ex = $this->model->getAction($actionName)->ui['executor'];
-        if ($ex && $ex instanceof UserAction) {
-            $ex->addHook('onStep', function ($ex, $step, $form) use ($fx) {
-                if ($step === 'fields') {
-                    return call_user_func($fx, $form, $ex);
-                }
-            });
-        }
+        $this->onActions[] = [$actionName => $fx];
     }
 }

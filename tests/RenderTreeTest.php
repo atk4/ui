@@ -26,7 +26,7 @@ class RenderTreeTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $b = new View();
 
-        $b2 = $b->add(new View());
+        $b2 = View::addTo($b);
 
         $b->render();
 

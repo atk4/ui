@@ -96,7 +96,7 @@ clarifications::
 
 
     <?php
-    require 'vendor/autoload.php';
+    require_once __DIR__ . '/vendor/autoload.php';
 
     // Define your data structure
     class Offer extends \atk4\data\Model {
@@ -121,7 +121,7 @@ clarifications::
 
     // Connect to database and place a fully-interactive CRUD
     $db = new \atk4\data\Persistence_SQL($dsn);
-    $app->add(new \atk4\ui\CRUD())
+    \atk4\ui\CRUD::addTo($app)
         ->setModel(new Offer($db));
 
 Through the course of this example, We are performing several core actions:
@@ -204,10 +204,10 @@ That means that components may rely on each other and even though some may appea
 very basic to you, they are relied on by some other components for maximum
 flexibility. The next example adds a "Cancel" button to a form::
 
-    $button = $form->add(new \atk4\ui\Button([
+    $button = \atk4\ui\Button::addTo($form, [
         'Cancel',
         'icon'=>new \atk4\ui\Icon('pencil')
-    ]))->link('dashboard.php');
+    ])->link('dashboard.php');
 
 :php:class:`Button` and :php:class:`Icon` are some of the most basic components in
 Agile UI. You will find CRUD / Form / Grid components much more useful:
@@ -220,7 +220,7 @@ Using Components
 Look above at the :ref:`overview_example`, component `GRID` was made part
 of application layout with a line::
 
-    $app->add(new \atk4\ui\CRUD());
+    \atk4\ui\CRUD::addTo($app);
 
 
 To render a component individually and get the HTML and JavaScript use this format::
@@ -252,7 +252,7 @@ Factory is a mechanism which allow you to use shorter syntax for creating object
 The goal of Agile UI is to be simple to read and use; so taking advantage of loose types
 in PHP language allows us to use an alternative shorter syntax::
 
-    $form->add(['Button', 'Cancel', 'icon'=>'pencil'])
+    \atk4\ui\Button::addTo($form, ['Cancel', 'icon'=>'pencil'])
         ->link('dashboard.php');
 
 By default, class names specified as the first array elements passed to the add() method are

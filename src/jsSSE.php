@@ -56,7 +56,8 @@ class jsSSE extends jsCallback
         if ($this->browserSupport) {
             if ($ajaxec) {
                 $this->sendEvent(
-                    'js', json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
+                    'js',
+                    json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
                     'jsAction'
                 );
             }
@@ -119,7 +120,7 @@ class jsSSE extends jsCallback
         if (strlen($name) && $name !== null) {
             $this->output("event: {$name}\n");
         }
-        $this->output($this->wrapData($data)."\n\n");
+        $this->output($this->wrapData($data) . "\n\n");
         $this->flush();
     }
 
@@ -132,7 +133,7 @@ class jsSSE extends jsCallback
      */
     private function wrapData($string)
     {
-        return 'data:'.str_replace("\n", "\ndata: ", $string);
+        return 'data:' . str_replace("\n", "\ndata: ", $string);
     }
 
     protected function initSse()

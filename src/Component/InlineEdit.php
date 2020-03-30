@@ -85,7 +85,7 @@ class InlineEdit extends View
     public function init()
     {
         parent::init();
-        $this->cb = $this->add('jsCallback');
+        $this->cb = \atk4\ui\jsCallback::addTo($this);
 
         // Set default validation error handler.
         if (!$this->formatErrorMsg || !is_callable($this->formatErrorMsg)) {
@@ -119,10 +119,10 @@ class InlineEdit extends View
                         return $this->jsSuccess('Update successfully');
                     } catch (ValidationException $e) {
                         $this->app->terminate(json_encode([
-                              'success'            => true,
-                              'hasValidationError' => true,
-                              'atkjs'              => $this->jsError(call_user_func($this->formatErrorMsg, $e, $value))->jsRender(),
-                          ]));
+                            'success'            => true,
+                            'hasValidationError' => true,
+                            'atkjs'              => $this->jsError(call_user_func($this->formatErrorMsg, $e, $value))->jsRender(),
+                        ]));
                     }
                 });
             }
@@ -161,10 +161,10 @@ class InlineEdit extends View
     public function jsSuccess($message)
     {
         return new jsToast([
-           'title'   => 'Success',
-           'message' => $message,
-           'class'   => 'success',
-       ]);
+            'title'   => 'Success',
+            'message' => $message,
+            'class'   => 'success',
+        ]);
     }
 
     /**
@@ -177,12 +177,12 @@ class InlineEdit extends View
     public function jsError($message)
     {
         return new jsToast([
-           'title'          => 'Validation error:',
-           'displayTime'    => 8000,
-           'showIcon'       => 'exclamation',
-           'message'        => $message,
-           'class'          => 'error',
-       ]);
+            'title'          => 'Validation error:',
+            'displayTime'    => 8000,
+            'showIcon'       => 'exclamation',
+            'message'        => $message,
+            'class'          => 'error',
+        ]);
     }
 
     /**
@@ -196,7 +196,7 @@ class InlineEdit extends View
         $type = ($type === 'string') ? 'text' : $type;
 
         if ($type != 'text' && $type != 'number') {
-            throw new Exception('Error: Only string or number field can be edited inline. Field Type = '.$type);
+            throw new Exception('Error: Only string or number field can be edited inline. Field Type = ' . $type);
         }
 
         if ($this->model && $this->model->loaded()) {

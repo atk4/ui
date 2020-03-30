@@ -46,9 +46,8 @@ jobs:
 
       - name: Update to stable dependencies
         run: |
-          jq 'del(."minimum-stability")|del(.require["atk4/data"])' < composer.json > tmp && mv tmp composer.json
-          composer require atk4/data --no-progress
-          composer update --no-progress
+          # replaces X keys with X-release keys
+          jq '. as $in | reduce (keys_unsorted[] | select(endswith("-release")|not)) as $k ({}; . + {($k) : (($k + "-release") as $kr | $in | if has($kr) then .[$kr] else .[$k] end) } )' < composer.json > tmp && mv tmp composer.json
 
       - name: Compile JS files for CDN
         run: |

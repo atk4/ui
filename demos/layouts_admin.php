@@ -2,7 +2,7 @@
 /**
  * Demonstrates how to use layouts.
  */
-require '../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 try {
     $app = new \atk4\ui\App('Agile Toolkit Demo App');
@@ -34,9 +34,9 @@ try {
 
     $app->layout->template['Footer'] = 'ATK is awesome';
 
-    $app->add(['Header', 'Basic Form Example']);
+    \atk4\ui\Header::addTo($app, ['Basic Form Example']);
 
-    $f = $app->add(new \atk4\ui\Form(['segment']));
+    $f = \atk4\ui\Form::addTo($app, ['segment']);
     $f->setModel(new \atk4\data\Model());
 
     $f_group = $f->addGroup('Name');
@@ -53,7 +53,7 @@ try {
 
         foreach (['first_name', 'last_name', 'address'] as $field) {
             if (!$f->model[$field]) {
-                $errors[] = $f->error($field, 'Field '.$field.' is mandatory');
+                $errors[] = $f->error($field, 'Field ' . $field . ' is mandatory');
             }
         }
 

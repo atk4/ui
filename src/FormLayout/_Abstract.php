@@ -99,11 +99,7 @@ abstract class _Abstract extends \atk4\ui\View
     public function addFields($fields)
     {
         foreach ($fields as $field) {
-            if (is_array($field)) {
-                $this->addField(...$field);
-            } else {
-                $this->addField($field);
-            }
+            $this->addField(...(array) $field);
         }
 
         return $this;

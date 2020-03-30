@@ -7,7 +7,6 @@
 /public/jquery
 /vendor
 docs/build
-/composer.lock
 /demos/db.php
 /build
 .DS_Store

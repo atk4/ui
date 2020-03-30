@@ -36,19 +36,17 @@ class Menu extends View
     /**
      * $seed can also be name here.
      *
-     * @param string|array $item
+     * @param string|array|Item $item
      * @param string|array $action
      *
      * @return Item
      */
     public function addItem($item = null, $action = null)
     {
-        if (is_string($item)) {
-            $item = ['Item', $item];
-        } elseif (is_array($item)) {
+        if (!is_object($item)) {
+            $item = (array) $item;
+
             array_unshift($item, 'Item');
-        } elseif (!$item) {
-            $item = ['Item'];
         }
 
         $item = $this->add($item)->setElement('a');
@@ -81,7 +79,7 @@ class Menu extends View
      */
     public function addHeader($name)
     {
-        return $this->add(new Item($name))->addClass('header');
+        return Item::addTo($this, [$name])->addClass('header');
     }
 
     /**
@@ -93,45 +91,48 @@ class Menu extends View
      */
     public function addMenu($name)
     {
-        if (is_array($name)) {
-            $label = $name[0];
-            unset($name[0]);
-        } else {
-            $label = $name;
-            $name = [];
+        $subMenu = (self::class)::addTo($this, ['defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
+
+        $name = (array) $name;
+
+        $label = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
+
+        if (isset($label)) {
+            $subMenu->set('label', $label);
         }
 
-        $sub_menu = $this->add([new self(), 'defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
-        $sub_menu->set('label', $label);
-
-        if (isset($name['icon']) && $name['icon']) {
-            $sub_menu->add(new Icon($name['icon']), 'Icon')->removeClass('item');
+        if (!empty($name['icon'])) {
+            Icon::addTo($subMenu, [$name['icon']], ['Icon'])->removeClass('item');
         }
 
         if (!$this->in_dropdown) {
-            $sub_menu->js(true)->dropdown(['on' => 'hover', 'action' => 'hide']);
+            $subMenu->js(true)->dropdown(['on' => 'hover', 'action' => 'hide']);
         }
 
-        return $sub_menu;
+        return $subMenu;
     }
 
     /**
      * Adds menu group.
      *
-     * @param string|array $title
+     * @param string|array $name
      *
      * @return Menu
      */
-    public function addGroup($title)
+    public function addGroup($name)
     {
-        $group = $this->add([new self(), 'defaultTemplate' => 'menugroup.html', 'ui' => false]);
-        if (is_string($title)) {
+        $group = (self::class)::addTo($this, ['defaultTemplate' => 'menugroup.html', 'ui' => false]);
+
+        $name = (array) $name;
+
+        $title = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
+
+        if (isset($title)) {
             $group->set('title', $title);
-        } else {
-            if (isset($title['icon']) && $title['icon']) {
-                $group->add(new Icon($title['icon']), 'Icon')->removeClass('item');
-            }
-            $group->set('title', $title[0]);
+        }
+
+        if (!empty($name['icon'])) {
+            Icon::addTo($group, [$name['icon']], ['Icon'])->removeClass('item');
         }
 
         return $group;
@@ -144,26 +145,20 @@ class Menu extends View
      */
     public function addMenuRight()
     {
-        $menu = $this->add([new self(), 'ui' => false], 'RightMenu');
-        $menu->removeClass('item')->addClass('right menu');
-
-        return $menu;
+        return (self::class)::addTo($this, ['ui' => false], ['RightMenu'])->removeClass('item')->addClass('right menu');
     }
 
     /**
      * Add Item.
      *
-     * @param View|string  $object New object to add
-     * @param string|array $region (or array for full set of defaults)
+     * @param View|string|array $seed   New object to add
+     * @param string|array|null $region
      *
      * @return View
      */
-    public function add($object, $region = null)
+    public function add($seed, $region = null)
     {
-        $item = parent::add($object, $region);
-        $item->addClass('item');
-
-        return $item;
+        return parent::add($seed, $region)->addClass('item');
     }
 
     /**
@@ -173,9 +168,7 @@ class Menu extends View
      */
     public function addDivider()
     {
-        $item = parent::add(['class' => ['divider']]);
-
-        return $item;
+        return parent::add(['View', 'class' => ['divider']]);
     }
 
     /*
@@ -183,7 +176,22 @@ class Menu extends View
         foreach ($m as $m) {
         }
     }
+    */
+
+    /**
+     * {@inheritdoc}
      */
+    public function getHTML()
+    {
+        // if menu don't have a single element or content, then destroy it
+        if (empty($this->elements) && !$this->content) {
+            $this->destroy();
+
+            return '';
+        }
+
+        return parent::getHTML();
+    }
 
     /**
      * {@inheritdoc}

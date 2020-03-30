@@ -2,12 +2,12 @@
 /**
  * Testing form.
  */
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
-$app->add(['Header', 'Form automatically decided how many columns to use']);
+\atk4\ui\Header::addTo($app, ['Form automatically decided how many columns to use']);
 
-$form = $app->add(['Form']);
+$form = \atk4\ui\Form::addTo($app);
 $form->setModel(new Country($db));
 
 $form->onSubmit(function ($form) {

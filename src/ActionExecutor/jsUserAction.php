@@ -10,7 +10,7 @@
  *
  * Manual setup.
  * $action = $model->getAction('delete')
- * $ex = $app->add(new jsUserAction())->setAction($action, [4])
+ * $ex = jsUserAction::addTo($app)->setAction($action, [4])
  * $btn->on('click', $ex, ['confirm'=> 'This will delete record with id 4. Are you sure?']);
  */
 
@@ -43,8 +43,8 @@ class jsUserAction extends jsCallback implements Interface_
      * consider as the model Id to be loaded with the action owner model.
      *
      * Ex.
-     *      $btn = $app->add(['Button', 'Import File']);
-     *      $ex = $app->add(new \atk4\ui\ActionExecutor\jsUserAction());
+     *      $btn = \atk4\ui\Button::addTo($app, ['Import File']);
+     *      $ex = jsUserAction::addTo($app);
      *      $ex->setAction($f_action, [8, 'path' => '.']);
      *
      *      $btn->on('click', $ex, ['confirm'=> 'This will import a lot of file. Are you sure?']);
@@ -80,7 +80,7 @@ class jsUserAction extends jsCallback implements Interface_
             }
 
             if ($errors = $this->_hasAllArguments()) {
-                $js = new jsToast(['title' => 'Error', 'message' => 'Missing Arguments: '.implode(', ', $errors), 'class' => 'error']);
+                $js = new jsToast(['title' => 'Error', 'message' => 'Missing Arguments: ' . implode(', ', $errors), 'class' => 'error']);
             } else {
                 $args = [];
                 foreach ($this->action->args as $key => $val) {
@@ -90,7 +90,7 @@ class jsUserAction extends jsCallback implements Interface_
                 $return = $this->action->execute(...$args);
                 $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $return]) : $this->jsSuccess;
 
-                $js = $this->hook('afterExecute', [$return, $id]) ?: $success ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
+                $js = $this->hook('afterExecute', [$return, $id]) ?: $success ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
             }
 
             return $js;

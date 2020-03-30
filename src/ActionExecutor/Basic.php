@@ -62,7 +62,7 @@ class Basic extends \atk4\ui\View implements Interface_
      *
      * @param \atk4\data\UserAction\Generic $action
      */
-    public function setAction(\atk4\data\UserAction\Generic $action) : void
+    public function setAction(\atk4\data\UserAction\Generic $action): void
     {
         $this->action = $action;
     }
@@ -89,7 +89,7 @@ class Basic extends \atk4\ui\View implements Interface_
         if ($this->action->enabled) {
             $this->initPreview();
         } else {
-            $this->add(['Message', 'type'=>'error', $this->disableMsg]);
+            \atk4\ui\Message::addTo($this, ['type'=>'error', $this->disableMsg]);
 
             return;
         }
@@ -119,14 +119,14 @@ class Basic extends \atk4\ui\View implements Interface_
     {
         // lets make sure that all arguments are supplied
         if (!$this->hasAllArguments()) {
-            $this->add(['Message', 'type'=>'error', $this->missingArgsMsg]);
+            \atk4\ui\Message::addTo($this, ['type'=>'error', $this->missingArgsMsg]);
 
             return;
         }
 
         $this->addHeader();
 
-        $this->add($this->executorButton)->on('click', function () {
+        \atk4\ui\Button::addToWithClassName($this, $this->executorButton)->on('click', function () {
             return $this->jsExecute();
         });
     }
@@ -150,7 +150,7 @@ class Basic extends \atk4\ui\View implements Interface_
 
         $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner]) : $this->jsSuccess;
 
-        return ($this->hook('afterExecute', [$return]) ?: $success) ?: new jsToast('Success'.(is_string($return) ? (': '.$return) : ''));
+        return ($this->hook('afterExecute', [$return]) ?: $success) ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
     }
 
     /**
@@ -161,7 +161,7 @@ class Basic extends \atk4\ui\View implements Interface_
     public function addHeader()
     {
         if ($this->hasHeader) {
-            $this->add(['Header', $this->action->caption, 'subHeader'=>$this->description ?: $this->action->getDescription()]);
+            \atk4\ui\Header::addTo($this, [$this->action->caption, 'subHeader'=>$this->description ?: $this->action->getDescription()]);
         }
     }
 }

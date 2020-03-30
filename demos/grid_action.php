@@ -1,18 +1,18 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 $country = new Country($db);
 
-$g = $app->add('Grid');
+$g = \atk4\ui\Grid::addTo($app);
 
 $edit_executor = new atk4\ui\ActionExecutor\Form([
     'hasHeader' => false,
     'jsSuccess' => [
         new atk4\ui\jsExpression('$(".atk-dialog-content").parent().modal("hide")'),
         new atk4\ui\jsToast('Action Complete with success!'),
-        $g->container->jsReload([$g->getName().'_sort' => $g->getSortBy()]),
+        $g->container->jsReload([$g->getName() . '_sort' => $g->getSortBy()]),
     ],
 ]);
 
@@ -22,7 +22,8 @@ $edit_action = $country->addAction('edit', [
     'ui' => ['Grid' => ['Executor' => $edit_executor, 'Button' => ['icon' => 'edit']]],
 ]);
 
-$del_executor = new atk4\ui\ActionExecutor\Preview([
+$del_executor = new atk4\ui\ActionExecutor\Preview(
+    [
     'previewType' => 'text',
     'hasHeader'   => false,
     'jsSuccess'   => function ($ex, $model) use ($g) {
@@ -32,7 +33,7 @@ $del_executor = new atk4\ui\ActionExecutor\Preview([
             $g->table->jsRemoveRow($model->get('id')),
         ];
     },
-   ]
+]
 );
 
 $del_action = $country->addAction('delete', [
@@ -40,7 +41,7 @@ $del_action = $country->addAction('delete', [
         //$m->delete();
     },
     'preview' => function ($m) {
-        return 'Will delete record: '.$m->getTitle();
+        return 'Will delete record: ' . $m->getTitle();
     },
     'ui' => ['Grid' => ['Executor' => $del_executor, 'Button' => ['icon' => 'delete']]],
 ]);
@@ -51,7 +52,7 @@ $g->ipp = 10;
 $g->addUserAction($edit_action);
 $g->addUserAction($del_action);
 
-//$g->addHook('onUserAction', function($g, $page, $executor) {
-//    $executor->form = $page->add('Form');
+//$g->onHook('onUserAction', function($g, $page, $executor) {
+//    $executor->form = \atk4\ui\Form::addTo($page);
 //    $executor->form->addField('test');
 //});

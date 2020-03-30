@@ -1,7 +1,7 @@
 <?php
 
-require 'init.php';
-require 'database.php';
+require_once __DIR__ . '/init.php';
+require_once __DIR__ . '/database.php';
 
 class TestModel extends \atk4\data\Model
 {
@@ -33,6 +33,6 @@ $p = new \atk4\data\Persistence\Array_($data);
 $m = new TestModel($p);
 
 // add CRUD
-$app->add(['Header', 'CRUD with Array Persistence']);
-$c = $app->add(['CRUD', 'ipp'=>5]);
+\atk4\ui\Header::addTo($app, ['CRUD with Array Persistence']);
+$c = \atk4\ui\CRUD::addTo($app, ['ipp'=>5]);
 $c->setModel($m);

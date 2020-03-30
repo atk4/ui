@@ -20,9 +20,6 @@ Agile Toolkit will work anywhere where PHP can. Find a suitable guide on how to 
 PHP on your platform. Having a local database is a plus, but our initial application will
 work without persistent database.
 
-Requirements
-============
-
 Installing
 ==========
 
@@ -37,13 +34,13 @@ Coding "Hello, World"
 
 Open a new file `index.php` and enter the following code::
 
-    <?php                                    // 1
-    require 'vendor/autoload.php';           // 2
+    <?php                                          // 1
+    require_once __DIR__ . '/vendor/autoload.php'; // 2
 
-    $app = new \atk4\ui\App('My First App'); // 3
-    $app->initLayout('Centered');            // 4
+    $app = new \atk4\ui\App('My First App');       // 3
+    $app->initLayout('Centered');                  // 4
 
-    $app->add('HelloWorld');                 // 5
+    \atk4\ui\HelloWorld::addTo($app);                       // 5
 
 .. rubric:: Clarifications
 
@@ -99,13 +96,13 @@ Data Persistence
 ================
 
 To build our "ToDo" application, we need a good location to store list of tasks. We don't really want to mess with
-the actual database and instead will use "SESSION" for storing data.
+the actual database and instead will use "$_SESSION" for storing data.
 
 To be able to actually run this example, create a new file todo.php in the same directory as index.php and
 create the application::
 
     <?php
-    require 'vendor/autoload.php';
+    require_once __DIR__ . '/vendor/autoload.php';
 
     $app = new \atk4\ui\App('ToDo List');
     $app->initLayout('Centered');
@@ -141,16 +138,16 @@ single ToDo item::
 
 
     class ToDoItem extends \atk4\data\Model {
-        public $table = 'todo_item';        // 6
+        public $table = 'todo_item';               // 6
         function init() {
             parent::init();
 
             $this->addField('name', ['caption'=>'Task Name', 'required'=>true]);
-                                            // 7
+                                                   // 7
             $this->addField('due', [
-              'type'=>'date',               // 8
+              'type'=>'date',                      // 8
               'caption'=>'Due Date',
-              'default'=>new \DateTime('+1 week')   // 9
+              'default'=>new \DateTime('+1 week')  // 9
             ]);
         }
     }
@@ -196,10 +193,10 @@ Form and CRUD Components
 
 Next we need to add Components that are capable of manipulating the data::
 
-    $col = $app->add(['Columns', 'divided']);               // 10
+    $col = \atk4\ui\Columns::addTo($app, ['divided']);               // 10
     $col_reload = new \atk4\ui\jsReload($col);              // 11
 
-    $form = $col->addColumn()->add('Form');                 // 12
+    $form = \atk4\ui\Form::addTo($col->addColumn());                 // 12
     $form->setModel(new ToDoItem($s));                      // 13
     $form->onSubmit(function($form) use($col_reload) {      // 14
         $form->model->save();                               // 15
@@ -207,8 +204,7 @@ Next we need to add Components that are capable of manipulating the data::
         return $col_reload;                                 // 16
     });
 
-    $col->addColumn()                                       // 17
-        ->add('Table')
+    \atk4\ui\Table::addTo($col->addColumn())                // 17
         ->setModel(new ToDoItem($s));
 
 .. rubric:: Clarifications
@@ -245,20 +241,20 @@ Grid and CRUD
 As mentioned before, UI Components in Agile Toolkit are often interchangeable, you can swap one for
 another. In our example replace right column (label 17) with the following code::
 
-    $grid = $col->addColumn()->add(['CRUD', 'paginator'=>false, // 18
-        'canCreate'=>false, 'canDelete'=>false              // 19
+    $grid = \atk4\ui\CRUD::addTo($col->addColumn(), ['paginator'=>false, // 18
+        'canCreate'=>false, 'canDelete'=>false                  // 19
     ]);
     $grid->setModel(new ToDoItem($s));
 
-    $grid->menu->addItem('Complete Selected',               // 20
-        new \atk4\ui\jsReload($grid->table, [               // 21
-            'delete'=>$grid->addSelection()->jsChecked()    // 22
+    $grid->menu->addItem('Complete Selected',                   // 20
+        new \atk4\ui\jsReload($grid->table, [                   // 21
+            'delete'=>$grid->addSelection()->jsChecked()        // 22
         ])
     );
 
-    if (isset($_GET['delete'])) {                           // 23
+    if (isset($_GET['delete'])) {                               // 23
         foreach(explode(',', $_GET['delete']) as $id) {
-            $grid->model->delete($id);                      // 25
+            $grid->model->delete($id);                          // 24
         }
     }
 
@@ -298,7 +294,7 @@ All of that in about 50 lines of PHP code. More importantly, this code is portab
 and does not have any complex requirements. In fact, we could wrap it up into an individual Component
 that can be invoked with just one line of code::
 
-    $app->add(new ToDoManager())->setModel(new ToDoItem());
+    ToDoManager::addTo($app)->setModel(new ToDoItem());
 
 Just like that you could be developing more components and re-using existing ones in your current
 or next web application.

@@ -1,5 +1,36 @@
 ## Release note
 
+### version 1.12.5 (2020-03-24)
+
+- make sure $ var is assign to jQuery ($ = jQuery) in all module by adding missing import statement.
+  
+### version 1.12.4 (2020-03-18)
+
+- Update dependencie package
+    - @babel/cli from 7.8.3 to 7.8.7
+    - @bable/core from 7.8.3 to 7.8.7
+    - @babel/preset-env from 7.8.3 to 7.8.7
+    - @babel/polyfill from 7.8.3 to 7.8.7
+    - webpack from 4.35.3 to 4.42.0
+- Update Babel config in order to use corejs v3
+
+### version 1.12.3 (2020-02-11)
+
+- Fix duplicate url encoding for reload-view and ajaxec plugins.
+   see https://github.com/atk4/ui/issues/924
+
+### version 1.12.2 (2020-02-04)
+
+- Fix https://github.com/atk4/ui/issues/902 
+   Throwing error on server was not clearing api.data object, thus keeping
+   old value with new server request. This fix make sure api.data gets clear
+   on all server response, successful or not.
+
+### version 1.12.1 (2020-01-14)
+
+- update api service to generate modals in json request.
+- update npm dependencies.
+
 ### version 1.12.0 (2019-11-06)
 
 - add table-dropdown-helper.js 
