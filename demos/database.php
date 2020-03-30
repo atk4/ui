@@ -115,7 +115,6 @@ if (!class_exists('Country')) {
             $this->addField('finish_time', ['type' => 'time']);
 
             $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => ['Line', 'disabled' => true]]]);
-
         }
     }
 

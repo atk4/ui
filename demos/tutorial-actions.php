@@ -178,7 +178,6 @@ CODE
 
 
 $wizard->addStep('CRUD integration', function ($page) {
-
     $t = $page->add('Text');
     $t->addParagraph(
         <<< 'EOF'

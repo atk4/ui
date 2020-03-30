@@ -47,8 +47,10 @@ class Demo extends \atk4\ui\Columns
     }
 }
 
-class PromotionText extends \atk4\ui\View {
-    function init() {
+class PromotionText extends \atk4\ui\View
+{
+    public function init()
+    {
         parent::init();
 
         $t = \atk4\ui\Text::addTo($this);
@@ -85,7 +87,6 @@ HTML
 
         \atk4\ui\Message::addTo($this, ['Cool fact!', 'info', 'icon'=>'book'])->text
             ->addParagraph('This entire demo is coded in Agile Toolkit and takes up less than 300 lines of very simple code code!');
-
     }
 }
 
