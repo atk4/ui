@@ -81,6 +81,9 @@ class Upload extends Input
 
     public $jsActions = [];
 
+    /** @var bool check if callback is trigger by one of the action. */
+    private $_isCbRunning = false;
+
     public function init()
     {
         parent::init();
@@ -175,6 +178,7 @@ class Upload extends Input
             $this->hasDeleteCb = true;
             $action = $_POST['action'] ?? null;
             if ($this->cb->triggered() && $action === 'delete') {
+                $this->_isCbRunning = true;
                 $fileName = $_POST['f_name'] ?? null;
                 $this->cb->set(function () use ($fx, $fileName) {
                     $this->addJsAction(call_user_func_array($fx, [$fileName]));
@@ -196,6 +200,7 @@ class Upload extends Input
         if (is_callable($fx)) {
             $this->hasUploadCb = true;
             if ($this->cb->triggered()) {
+                $this->_isCbRunning = true;
                 $action = $_POST['action'] ?? null;
                 $files = $_FILES ?? null;
                 if ($files) {
@@ -234,8 +239,8 @@ class Upload extends Input
         }
         parent::renderView();
 
-        if (!$this->hasUploadCb || !$this->hasDeleteCb) {
-            throw new Exception('onUpload and onDelete callback must be called to use file upload');
+        if (!$this->_isCbRunning && (!$this->hasUploadCb || !$this->hasDeleteCb)) {
+            throw new Exception('onUpload and onDelete callback must be called to use file upload. Missing one or both of them.');
         }
         if (!empty($this->accept)) {
             $this->template->trySet('accept', implode(',', $this->accept));
