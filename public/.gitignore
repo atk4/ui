@@ -3,3 +3,8 @@
 !agileui.js
 !agileui.less
 !.gitignore
+!agileui.css
+!agileui.css.map
+!agileui.min.js
+!atkjs-ui.js
+!atkjs-ui.min.js
