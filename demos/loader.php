@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/init.php';
+require_once '../tests/ViewTester.php';
 
 \atk4\ui\Button::addTo($app, ['Loader Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['loader2']);
