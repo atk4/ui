@@ -166,7 +166,8 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
             $format_match_string = implode('', $matches[0] ?? ['error']);
 
             $this->assertEquals(
-                $sse_string, $format_match_string,
+                $sse_string,
+                $format_match_string,
                 ' Testing SSE response line ' . $index . ' with content ' . $sse_line . ' on ' . $uri
             );
         }

@@ -22,7 +22,8 @@ $edit_action = $country->addAction('edit', [
     'ui' => ['Grid' => ['Executor' => $edit_executor, 'Button' => ['icon' => 'edit']]],
 ]);
 
-$del_executor = new atk4\ui\ActionExecutor\Preview([
+$del_executor = new atk4\ui\ActionExecutor\Preview(
+    [
     'previewType' => 'text',
     'hasHeader'   => false,
     'jsSuccess'   => function ($ex, $model) use ($g) {
