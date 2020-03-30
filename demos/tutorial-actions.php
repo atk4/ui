@@ -9,17 +9,25 @@ $app->stickyGet($wizard->name);
 
 $wizard->addStep('Define User Action', function ($page) {
     /** @var \atk4\ui\Text $t */
+
+    \atk4\ui\Header::addTo($page, ['What are Actions?']);
+
     $t = $page->add('Text');
     $t->addParagraph(
         <<< 'EOF'
-Models of Agile Data has always supported 3 basic actions: "save" (for new and existing records) and "delete". 
-Historically any other interaction required tinkering with UI layer.
+Since the early version ATK UI was about building generic UI capable of automatically read information about 
+model Fields and visualising them correctly. Version 2.0 introduces support for "Actions" which can be declared
+in Data layer and can use generic UI for visualising and triggering. Models of Agile Data has always supported 3
+basic actions: "save" (for new and existing records) and "delete". Historically any other interaction required
+tinkering with UI layer. Now ATK implements a generic support for arbitrary actions and then re-implements
+"save", "delete" and "add" on top.
 EOF
     );
 
     $t->addParagraph(
-        <<<'EOF'
-Agile Toolkit 2.0 allows you to define more "User Actions" directly inside your Model definition:
+        <<< 'EOF'
+This enables developer to easily add more actions in the Data layers and have the rest of ATK recognise
+and respect those actions. Actions can be added into the model just like you are adding fields:
 EOF
     );
 
@@ -34,16 +42,17 @@ CODE
     $t = $page->add('Text');
     $t->addParagraph(
         <<< 'EOF'
-User Actions are very similar to Model Fields. Once defied - they will be visible in UI - Form, Grid, CRUD and CardDeck
-all support actions! Each action can have caption, be declared system and have many other properties that can be recognized by generic UI
-and API adapters.
+Once defied - actions will be visualised in the Form, Grid, CRUD and CardDeck. Additionally add-ons will recognise
+your actions - for example 'Login' add-on introduces ACL system capable of enabling/disabling fields or actions
+on per-user basis.
 EOF
     );
 
     $t->addParagraph(
         <<< 'EOF'
-Finally Agile Data 2.0 now declares "add", "edit" and "delete" using User Actions - so you have full control over
-them and they are consistent.
+Any actions you define will automatically appear in the UI. This is consistent with your field definitions. You can
+also "disable" or mark actions as "system". When action is executed, the response will appear to the user as a 
+toast message, but this can also be customised.
 EOF
     );
 
@@ -59,40 +68,20 @@ $country->tryLoadAny();
 
 $card = $app->add('Card');
 $card->setModel($country, ['iso']);
-// TODO, introduce 2nd argument to setModel()
 $card->addClickAction($country->getAction('send_message'));
 
 CODE
     );
 });
 
-/*
-$model = new atk4\data\Model($app->db, 'test');
-// $model->removeAction('delete');
-$model->getAction('delete')->enabled = false;
-$model->addAction('soft_delete', [
-    'scope' => \atk4\data\UserAction\Generic::SINGLE_RECORD,
-    'ui'    => [
-        'icon'=>'trash',
-        'button'=>[null, 'icon'=>'red trash'],
-        'confirm'=>'Are you sure?'
-    ],
-    'callback' => function ($m) {
-        $m['deleted'] = true;
-        $m->saveAndUnload();
-    },
-]);
-$app->add(['element'=>'pre'])
-    ->set(json_encode(array_keys($model->getActions())));
-    */
-
 $wizard->addStep('UI Integration', function ($page) {
     /** @var \atk4\ui\Text $t */
     $t = $page->add('Text');
     $t->addParagraph(
         <<< 'EOF'
-With all that meta-information the Agile UI framework can now fully integrate actions everywhere! Traditionally,
-let us start with a button.
+Agile UI introduces a new set of views called "Action Executors". Their job is to recognise all that meta-information
+that you have specified for the action and requesting it from the user. "edit" action is defined for models by default
+and you can trigger it on button-click with a very simple code:
 EOF
     );
 
@@ -109,7 +98,8 @@ CODE
     $t = $page->add('Text');
     $t->addParagraph(
         <<< 'EOF'
-Any view can actually pass action as a callback, not only the button. Here is another demo:
+It is not only the button, but any view can have "Action" passed as a second step of the on() call. Here the action
+is executed when you click on "World" menu item:
 EOF
     );
 
@@ -129,8 +119,9 @@ $wizard->addStep('Arguments', function ($page) {
     $t = $page->add('Text');
     $t->addParagraph(
         <<< 'EOF'
-When action requires an argument, you can either specify it directly or through jsExpression. If you do not do that,
-user will be asked to enter the missing arguments.
+Next demo defines an action that requires arguments. You can specify action when the action is invoked, but if not
+defined - user will be asked to supply an argument. Action will automatically validate argument types and it uses
+same type system as fields.
 EOF
     );
 
@@ -163,79 +154,61 @@ CODE
     );
 });
 
+/*
 $wizard->addStep('More Ways', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
-    $t->addParagraph(
-        <<< 'EOF'
-TODO: add example of card deck, table and grid
-EOF
-    );
-
     $page->add(new Demo(['left_width'=>5, 'right_width'=>11]))->setCode(
         <<<'CODE'
+$m = new Stat($app->db);
+$m->addAction('mail', [
+    'fields'      => ['currency_field'],
+    'scope'       => \atk4\data\UserAction\Generic::SINGLE_RECORD,
+    'callback'    => function() { return 'testing'; },
+    'description' => 'Email testing',
+]);
 $app->add('CardDeck')
     ->setModel(
-        new Stat($app->db), 
+        $m,
         ['description']
     );
 CODE
     );
 });
+*/
+
+
 
 $wizard->addStep('CRUD integration', function ($page) {
-    /** @var \atk4\ui\Text $t */
+
     $t = $page->add('Text');
     $t->addParagraph(
         <<< 'EOF'
-TODO: add example of crud
+Compared to 1.x versions CRUD implementation has became much more lightweight, however you retain all the same
+functionality and more. Next example shows how you can disable action (add) entirely, or on per-row basis (delete)
+and how you could add your own action with a custom trigger button and even a preview.
 EOF
     );
+
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
 $country = new Country($app->app->db);
+$country->getAction('add')->enabled = false;
+$country->getAction('delete')->enabled = function() { return rand(1,2)>1; };
+$country->addAction('mail', [
+    'scope'       => \atk4\data\UserAction\Generic::SINGLE_RECORD,
+    'preview'    => function($m) { return 'here is email preview for '.$m['name']; },
+    'callback'    => function($m) { return 'email sent to '.$m['name']; },
+    'description' => 'Email testing',
+    'ui'       => ['icon'=>'mail', 'button'=>[null, 'icon'=>'green mail']],
+]);
 $crud = $app->add(['CRUD', 'ipp'=>5]);
-$crud->setModel($country);
+$crud->setModel($country, ['name','iso']);
 CODE
     );
 });
 
 $wizard->addFinish(function ($page) use ($wizard) {
-    $t = $page->add('Text');
-    $t->addParagraph(
-        <<< 'EOF'
-Agile Toolkit base package includes:
-EOF
-    );
-
-    $t->addHTML(
-        <<< 'HTML'
-<ul>
-    <li>Over 40 ready-to-use and nicely styled UI components</li>
-    <li>Over 10 ways to build interraction</li>
-    <li>Over 10 configurable field types, relations, aggregation and much more</li>
-    <li>Over 5 SQL and some NoSQL vendors fully supported</li>
-</ul>
-
-HTML
-    );
-
-    $gl = $page->add(new \atk4\ui\GridLayout([null, 'stackable divided', 'columns'=>4]));
-    $gl->add(['Button', 'Explore UI components', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c1')
-        ->link('https://github.com/atk4/ui/#bundled-and-planned-components');
-    $gl->add(['Button', 'Try out interactive features', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c2')
-        ->link(['loader', 'begin'=>false, 'layout'=>false]);
-    $gl->add(['Button', 'Dive into Agile Data', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c3')
-        ->link('https://git.io/ad');
-    $gl->add(['Button', 'More ATK Add-ons', 'primary basic fluid', 'iconRight'=>'right arrow'], 'r1c4')
-        ->link('https://github.com/atk4/ui/#add-ons-and-integrations');
-
-    $wizard->add(['Button', 'Exit demo', 'primary', 'icon'=>'left arrow'], 'Left')
-        ->link(['index', 'layout'=>false]);
-
-    $page->add(['ui'=>'divider']);
-
-    $page->add(['Message', 'Cool fact!', 'info', 'icon'=>'book'])->text
-        ->addParagraph('This entire demo is coded in Agile Toolkit and takes up less than 300 lines of very simple code code!');
+    PromotionText::addTo($page);
+    \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon'=>'left arrow'], ['Left'])
+        ->link(['begin'=>false, 'layout'=>false]);
 });
