@@ -34,7 +34,7 @@ $table->onHook('getHTMLTags', function ($table, $row) {
     }
     if ($color) {
         return [
-            'name' => $table->app->getTag('div', ['class' => 'ui ribbon '.$color.' label'], $row['name']),
+            'name' => $table->app->getTag('div', ['class' => 'ui ribbon ' . $color . ' label'], $row['name']),
         ];
     }
 });
