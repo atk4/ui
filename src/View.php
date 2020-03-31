@@ -23,6 +23,8 @@ use atk4\ui\ActionExecutor\UserAction;
 /**
  * Implements a most core view, which all of the other components descend
  * form.
+ *
+ * @property View $owner
  */
 class View implements jsExpressionable
 {
