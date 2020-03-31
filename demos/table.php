@@ -26,9 +26,15 @@ $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 $table->addColumn('logo_url', [new \atk4\ui\TableColumn\Image()], ['caption'=>'Our Logo']);
 
 $table->onHook('getHTMLTags', function ($table, $row) {
-    if ($row->id == 1) {
+    switch ($row->id) {
+        case 1: $color = 'yellow'; break;
+        case 2: $color = 'grey'; break;
+        case 3: $color = 'brown'; break;
+        default: $color = '';
+    }
+    if ($color) {
         return [
-            'name' => $table->app->getTag('div', ['class' => 'ui ribbon label'], $row['name']),
+            'name' => $table->app->getTag('div', ['class' => 'ui ribbon '.$color.' label'], $row['name']),
         ];
     }
 });
@@ -37,10 +43,10 @@ $table->addTotals(['name' => 'Totals:', 'salary' => ['sum']]);
 
 // ========================================================
 $my_array = [
-    ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => new \DateTime('1973-02-03')],
-    ['name' => 'Zoe', 'surname' => 'Shatwell', 'birthdate' => new \DateTime('1958-08-21')],
-    ['name' => 'Darcy', 'surname' => 'Wild', 'birthdate' => new \DateTime('1968-11-01')],
-    ['name' => 'Brett', 'surname' => 'Bird', 'birthdate' => new \DateTime('1988-12-20')],
+    ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => '1973-02-03'],
+    ['name' => 'Zoe', 'surname' => 'Shatwell', 'birthdate' => '1958-08-21'],
+    ['name' => 'Darcy', 'surname' => 'Wild', 'birthdate' => '1968-11-01'],
+    ['name' => 'Brett', 'surname' => 'Bird', 'birthdate' => '1988-12-20'],
 ];
 
 $table = \atk4\ui\Table::addTo($app);
