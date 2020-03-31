@@ -38,5 +38,5 @@ Scenario:
 Scenario:
  Given I am on "js.php"
  When I press button "failure"
- Then Modal opens with text "Everything is bad"
-
+ And  wait for callback
+ Then Modal is open with text "Everything is bad"
