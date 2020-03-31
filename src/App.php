@@ -307,17 +307,7 @@ class App
             return false;
         }
 
-        if (isset($_GET['json'])) {
-            return true;
-        }
-
-        $ajax = false;
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-           && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            $ajax = true;
-        }
-
-        return $ajax;
+        return isset($_GET['json']);
     }
 
     /**
