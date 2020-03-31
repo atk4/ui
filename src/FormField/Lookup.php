@@ -21,7 +21,7 @@ class Lookup extends Input
     /**
      * Object used to capture requests from the browser.
      *
-     * @var callable
+     * @var \atk4\ui\Callback
      */
     public $callback;
 
