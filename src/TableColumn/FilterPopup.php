@@ -106,8 +106,6 @@ class FilterPopup extends Popup
     /**
      * Set filter condition base on the field Type model use in this FilterPopup.
      *
-     * @param $tableModel
-     *
      * @return mixed
      */
     public function setFilterCondition($tableModel)

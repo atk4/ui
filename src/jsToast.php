@@ -31,12 +31,8 @@ class jsToast implements jsExpressionable
 
     /**
      * Set message to display in Toast.
-     *
-     * @param $msg
-     *
-     * @return $this
      */
-    public function setMessage($msg)
+    public function setMessage($msg): self
     {
         $this->settings['message'] = $msg;
 

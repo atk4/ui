@@ -24,7 +24,7 @@ class DragHandler extends Generic
     /**
      * Callback when table has been reorder using handle.
      *
-     * @param null $fx
+     * @param callable $fx
      */
     public function onReorder($fx = null)
     {

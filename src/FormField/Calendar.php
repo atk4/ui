@@ -31,9 +31,6 @@ class Calendar extends Input
 
     /**
      * Allow to set Calendar.js function.
-     *
-     * @param $name
-     * @param $value
      */
     public function setOption($name, $value)
     {

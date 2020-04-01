@@ -350,13 +350,11 @@ class MultiLine extends Generic
     /**
      * Validate each row and return errors if found.
      *
-     * @param $rows
-     *
      * @throws \atk4\core\Exception
      *
      * @return array|null
      */
-    public function validate($rows)
+    public function validate(array $rows)
     {
         $rowErrors = [];
         $m = $this->getModel();
@@ -449,10 +447,6 @@ class MultiLine extends Generic
     /**
      * Check for model validate error.
      *
-     * @param $errors
-     * @param $rowId
-     * @param $model
-     *
      * @return mixed
      */
     protected function addModelValidateErrors($errors, $rowId, $model)
@@ -472,11 +466,9 @@ class MultiLine extends Generic
      *
      * Finds and returns MultiLine row id.
      *
-     * @param $row
-     *
      * @return |null
      */
-    private function getMlRowId($row)
+    private function getMlRowId(array $row)
     {
         $rowId = null;
         foreach ($row as $col => $value) {
@@ -513,8 +505,6 @@ class MultiLine extends Generic
      *
      * @param Model $m
      * @param array $fields
-     * @param null  $modelRef
-     * @param null  $linkField
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -796,8 +786,6 @@ class MultiLine extends Generic
      *
      * Return values associated with callback field.
      *
-     * @param $model
-     *
      * @return array
      */
     private function getCallbackValues($model)
@@ -851,8 +839,6 @@ class MultiLine extends Generic
      * For javascript use - changing this method may brake JS functionality.
      *
      * Return values associated to field expression.
-     *
-     * @param $m
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
@@ -915,8 +901,6 @@ class MultiLine extends Generic
      * Ex: total field expression = [qty] * [price] will return 4 * 100
      * where qty and price current value are 4 and 100 respectively.
      *
-     * @param $expr
-     *
      * @throws \atk4\core\Exception
      *
      * @return mixed
@@ -946,9 +930,6 @@ class MultiLine extends Generic
      *
      * Return a value according to field used in expression and the expression type.
      * If field used in expression is null, the default value is returned.
-     *
-     * @param $exprField
-     * @param $fieldName
      *
      * @return int|mixed|string
      */

@@ -130,8 +130,6 @@ class Generic extends Model
      * Method that will set conditions on a model base on $op and $value value.
      * Each FilterModel\TypeModel should override this method.
      *
-     * @param $model
-     *
      * @return mixed
      */
     public function setConditionForModel($model)

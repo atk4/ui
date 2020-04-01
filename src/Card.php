@@ -226,8 +226,6 @@ class Card extends View
 
     /**
      * Set data-id attribute of this card.
-     *
-     * @param $id
      */
     public function setDataId($id)
     {
@@ -308,10 +306,6 @@ class Card extends View
     /**
      * Add action executor to card.
      *
-     * @param $action
-     * @param $executor
-     * @param null $button
-     *
      * @throws Exception
      */
     public function addAction($action, $executor, $button = null)
@@ -338,8 +332,6 @@ class Card extends View
      * Add an Event action executor of type 'click' using a button
      * as target.
      *
-     * @param Generic $action
-     * @param null    $button
      * @param []      $args    The action argument
      * @param string  $confirm The confirmation message.
      *
@@ -486,13 +478,11 @@ class Card extends View
     /**
      * Add a series of buttons to this card.
      *
-     * @param $buttons
-     *
      * @throws Exception
      *
      * @return View|null
      */
-    public function addButtons($buttons)
+    public function addButtons(array $buttons)
     {
         foreach ($buttons as $btn) {
             $btn = $this->addButton($btn);

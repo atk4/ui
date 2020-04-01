@@ -66,8 +66,6 @@ class DropDownCascade extends DropDown
      * Generate new dropdown values based on cascadeInput model selected id.
      * Return an empty value set if id is null.
      *
-     * @param $id
-     *
      * @return array
      */
     public function getNewValues($id)

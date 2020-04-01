@@ -71,10 +71,6 @@ class jsSSE extends jsCallback
 
     /**
      * Output a SSE Event.
-     *
-     * @param $id
-     * @param $data
-     * @param $eventName
      */
     public function sendEvent($id, $data, $eventName)
     {

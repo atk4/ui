@@ -64,8 +64,6 @@ class UploadImg extends Upload
     /**
      * Clear the thumbnail src.
      * You can also supply a default thumbnail src.
-     *
-     * @param null $defaultThumbnail
      */
     public function clearThumbnail($defaultThumbnail = null)
     {

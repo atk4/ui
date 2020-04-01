@@ -184,7 +184,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
      * @param View   $view
      * @param array  $urlArgs
      * @param string $when
-     * @param null   $selector
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -398,9 +397,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Return proper js statement need after action execution.
-     *
-     * @param $obj
-     * @param $id
      *
      * @throws \atk4\core\Exception
      *
@@ -782,10 +778,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Handle exception.
-     *
-     * @param $e
-     * @param $view
-     * @param $step
      *
      * @throws Exception
      * @throws \atk4\core\Exception
