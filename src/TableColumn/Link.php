@@ -19,7 +19,7 @@ class Link extends Generic
      * If $url is set up, we will use pattern-matching to fill-in any part of this
      * with values of the model.
      *
-     * @param string|array $page Destination definition
+     * @var string|array $page Destination definition
      */
     public $url = null;
 
