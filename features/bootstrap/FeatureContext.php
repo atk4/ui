@@ -45,6 +45,14 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * @When wait for callback
+     */
+    public function waitForCallback()
+    {
+        $this->jqueryWait(20000);
+    }
+
+    /**
      * @When Wait until loading stops
      */
     public function untilLoadingStops()
@@ -145,7 +153,26 @@ class FeatureContext extends RawMinkContext implements Context
         //wait for dynamic modal
         $this->jqueryWait(10000);
         //get modal
-        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.top');
+        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
+        if ($modal === null) {
+            throw new \Exception('No modal found');
+        }
+        //find text in modal
+        $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
+        if (!$text || $text->getText() != $arg1) {
+            throw new \Exception('No such text in modal');
+        }
+    }
+
+    /**
+     * @Then Modal is open with text :arg1
+     *
+     * Check if text is present in modal or dynamic modal.
+     */
+    public function modalIsOpenWithText($arg1)
+    {
+        //get modal
+        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new \Exception('No modal found');
         }
@@ -214,5 +241,6 @@ class FeatureContext extends RawMinkContext implements Context
     protected function jqueryWait($duration = 1000)
     {
         $this->getSession()->wait($duration, '(0 === jQuery.active && 0 === jQuery(\':animated\').length)');
+        $this->getSession()->wait(300);
     }
 }
