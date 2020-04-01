@@ -127,7 +127,7 @@ class VirtualPage extends View
                 }
 
                 // render and terminate
-                if (isset($_GET['json'])) {
+                if (isset($_GET['__atk_json'])) {
                     $this->app->terminate($this->renderJSON());
                 }
 

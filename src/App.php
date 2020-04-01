@@ -307,7 +307,7 @@ class App
             return false;
         }
 
-        return isset($_GET['json']);
+        return isset($_GET['__atk_json']);
     }
 
     /**

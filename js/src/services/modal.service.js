@@ -52,7 +52,7 @@ class ModalService {
 
         // check for data type, usually json or html
         if (data && data.type === 'json') {
-            args = $.extend(true, args, {json:true});
+            args = $.extend(true, args, {__atk_json:true});
         }
 
         // does modal content need to be loaded dynamically

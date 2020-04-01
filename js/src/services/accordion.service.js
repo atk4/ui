@@ -24,7 +24,7 @@ class AccordionService {
 
   onOpening() {
     if ($(this).data('path')){
-      $(this).atkReloadView({uri: $(this).data('path'), uri_options:{json:1}});
+      $(this).atkReloadView({uri: $(this).data('path'), uri_options:{__atk_json:1}});
     }
   }
 
