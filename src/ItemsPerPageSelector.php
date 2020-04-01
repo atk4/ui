@@ -36,7 +36,7 @@ class ItemsPerPageSelector extends View
     /**
      * The callback function.
      *
-     * @var callable|null
+     * @var Callback|null
      */
     public $cb = null;
 
