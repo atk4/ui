@@ -20,6 +20,8 @@ use atk4\core\TrackableTrait;
  *          })
  *          ->getURL()
  *  );
+ *
+ * @property View $owner
  */
 class Callback
 {

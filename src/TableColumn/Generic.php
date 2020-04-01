@@ -10,6 +10,8 @@ use atk4\data\Field;
 
 /**
  * Implements Column helper for table.
+ *
+ * @property \atk4\ui\Table $owner
  */
 class Generic
 {
