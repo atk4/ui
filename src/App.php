@@ -279,7 +279,7 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if ($this->isJsonRequest()) {
+        if (isset($_GET['__atk_json'])) {
             $this->outputResponseJSON([
                 'success'   => false,
                 'message'   => $this->layout->getHtml(),
@@ -293,21 +293,6 @@ class App
         $this->callExit(true);
 
         return true;
-    }
-
-    /**
-     * Most of the ajax request will require sending exception in json
-     * instead of html, except for tab.
-     *
-     * @return bool
-     */
-    protected function isJsonRequest()
-    {
-        if (isset($_GET['__atk_tab'])) {
-            return false;
-        }
-
-        return isset($_GET['__atk_json']);
     }
 
     /**
@@ -333,7 +318,7 @@ class App
     public function terminate($output = null)
     {
         if ($output !== null) {
-            if ($this->isJsonRequest()) {
+            if (isset($_GET['__atk_json'])) {
                 if (is_string($output)) {
                     $decode = json_decode($output, true);
                     if (json_last_error() === JSON_ERROR_NONE) {
@@ -361,7 +346,7 @@ class App
                     $remove_function = '$(\'.ui.dimmer.modals.page\').find(\'' . $ids . '\').remove();';
                 }
                 $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
-                $this->outputResponseHtml($output);
+                $this->outputResponseHTML($output);
             } else {
                 $this->outputResponseHTML($output);
             }
@@ -509,7 +494,7 @@ class App
         }
 
         $output = ob_get_clean();
-        if ($this->isJsonRequest()) {
+        if (isset($_GET['__atk_json'])) {
             $this->outputResponseJSON($output);
         } else {
             $this->outputResponseHTML($output);
