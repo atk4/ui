@@ -279,7 +279,7 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if (isset($_GET['__atk_json'])) {
+        if ($this->isJsRequest()) {
             $this->outputResponseJSON([
                 'success'   => false,
                 'message'   => $this->layout->getHtml(),
@@ -318,7 +318,7 @@ class App
     public function terminate($output = null)
     {
         if ($output !== null) {
-            if (isset($_GET['__atk_json'])) {
+            if ($this->isJsRequest()) {
                 if (is_string($output)) {
                     $decode = json_decode($output, true);
                     if (json_last_error() === JSON_ERROR_NONE) {
@@ -494,7 +494,7 @@ class App
         }
 
         $output = ob_get_clean();
-        if (isset($_GET['__atk_json'])) {
+        if ($this->isJsRequest()) {
             $this->outputResponseJSON($output);
         } else {
             $this->outputResponseHTML($output);
@@ -585,47 +585,54 @@ class App
     public $page = null;
 
     /**
-     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
-     * mechanism for NON-HTML response.
-     *
-     * @param array|string $page           URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extra_args     Additional URL arguments
-     *
-     * @return string
+     * @var array global sticky arguments
      */
-    public function jsURL($page = [], $needRequestUri = false, $extra_args = [])
-    {
-        $extra_args = array_merge($extra_args, ['__atk_json' => 1], $extra_args); // append to the end but allow override
+    protected $sticky_get_arguments = [
+        '__atk_json' => false,
+        '__atk_tab' => false,
+    ];
 
-        return $this->url($page, $needRequestUri, $extra_args);
+    /**
+     * Make current get argument with specified name automatically appended to all generated URLs.
+     *
+     * @return string|null
+     */
+    public function stickyGet(string $name, bool $isDeleting = false): ?string
+    {
+        $this->sticky_get_arguments[$name] = !$isDeleting;
+
+        return $_GET[$name] ?? null;
+    }
+
+    /**
+     * Remove sticky GET which was set by stickyGet.
+     */
+    public function stickyForget(string $name)
+    {
+        unset($this->sticky_get_arguments[$name]);
     }
 
     /**
      * Build a URL that application can use for loading HTML data.
      *
-     * @param array|string $page           URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extra_args     Additional URL arguments
+     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUriArgs Additional URL arguments, deleting sticky can delete them.
      *
      * @return string
      */
-    public function url($page = [], $needRequestUri = false, $extra_args = [])
+    public function url($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
     {
         if ($needRequestUri) {
             $page = $_SERVER['REQUEST_URI'];
         }
 
-        $sticky = $this->sticky_get_arguments;
-        $result = $extra_args;
-
         if ($this->page === null) {
-            $uri = $this->getRequestURI();
-
-            if (substr($uri, -1, 1) == '/') {
+            $requestUrl = $this->getRequestURI();
+            if (substr($requestUrl, -1, 1) == '/') {
                 $this->page = 'index';
             } else {
-                $this->page = basename($uri, $this->url_building_ext);
+                $this->page = basename($requestUrl, $this->url_building_ext);
             }
         }
 
@@ -642,77 +649,64 @@ class App
             }
         }
 
-        //add sticky arguments
-        if (is_array($sticky) && !empty($sticky)) {
-            foreach ($sticky as $key => $val) {
-                if ($val === true) {
-                    if (isset($_GET[$key])) {
-                        $val = $_GET[$key];
-                    } else {
-                        continue;
-                    }
-                }
-                if (!isset($result[$key])) {
-                    $result[$key] = $val;
-                }
+        $args = $extraRequestUriArgs;
+
+        // add sticky arguments
+        $args = $extraRequestUriArgs;
+        foreach ($this->sticky_get_arguments as $k => $v) {
+            if ($v && isset($_GET[$k])) {
+                $args[$k] = $_GET[$k];
+            } else {
+                unset($args[$k]);
             }
         }
 
         // add arguments
-        foreach ($page as $arg => $val) {
-            if ($val === null || $val === false) {
-                unset($result[$arg]);
+        foreach ($page as $k => $v) {
+            if ($v === null || $v === false) {
+                unset($args[$k]);
             } else {
-                $result[$arg] = $val;
+                $args[$k] = $v;
             }
         }
 
-        if (!isset($extra_args['__atk_json'])) {
-            unset($result['__atk_json']);
-        }
-
         // put URL together
-        $args = http_build_query($result);
-        $url = $pagePath . ($args ? '?' . $args : '');
+        $pageQuery = http_build_query($args);
+        $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
 
         return $url;
     }
 
     /**
-     * Make current get argument with specified name automatically appended to all generated URLs.
+     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
+     * mechanism for NON-HTML response.
      *
-     * @param string $name
+     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUriArgs Additional URL arguments, deleting sticky can delete them.
      *
-     * @return string|null
+     * @return string
      */
-    public function stickyGet($name): ?string
+    public function jsURL($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
     {
-        if (isset($_GET[$name])) {
-            $this->sticky_get_arguments[$name] = $_GET[$name];
+        // append to the end but allow override
+        $extraRequestUriArgs = array_merge($extraRequestUriArgs, ['__atk_json' => 1], $extraRequestUriArgs);
 
-            return $_GET[$name];
-        }
-
-        return null;
+        return $this->url($page, $needRequestUri, $extraRequestUriArgs);
     }
 
     /**
-     * @var array global sticky arguments
-     */
-    protected $sticky_get_arguments = [];
-
-    /**
-     * Remove sticky GET which was set by stickyGET.
+     * Request was made using jsURL().
      *
-     * @param string $name
+     * @return bool
      */
-    public function stickyForget($name)
+    public function isJsRequest()
     {
-        unset($this->sticky_get_arguments[$name]);
+        return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
     }
 
     /**
-     * Adds additional JS script include in aplication template.
+     * Adds additional JS script include in application template.
      *
      * @param string $url
      * @param bool   $isAsync Whether or not you want Async loading.
@@ -728,7 +722,7 @@ class App
     }
 
     /**
-     * Adds additional CSS stylesheet include in aplication template.
+     * Adds additional CSS stylesheet include in application template.
      *
      * @param string $url
      *
