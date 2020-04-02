@@ -111,7 +111,7 @@ class Lister extends View
             }
 
             // return json response
-            $this->app->terminate($json);
+            $this->app->terminateJSON($json);
         });
 
         return $this;

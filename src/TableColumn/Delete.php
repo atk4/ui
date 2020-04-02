@@ -17,7 +17,7 @@ class Delete extends Generic
 
             $reload = $this->table->reload ?: $this->table;
 
-            $this->table->app->terminate($reload->renderJSON());
+            $this->table->app->terminateJSON($reload);
         });
     }
 

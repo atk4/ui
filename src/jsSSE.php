@@ -51,7 +51,7 @@ class jsSSE extends jsCallback
         } // else ignore event
     }
 
-    public function terminate($ajaxec, $msg = null, $success = true)
+    public function terminateJSON($ajaxec, $msg = null, $success = true)
     {
         if ($this->browserSupport) {
             if ($ajaxec) {
@@ -63,10 +63,10 @@ class jsSSE extends jsCallback
             }
 
             // no further output please
-            $this->app->terminate();
+            $this->app->terminateJSON(null);
         }
 
-        $this->app->terminate(json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]));
+        $this->app->terminateJSON(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]);
     }
 
     /**

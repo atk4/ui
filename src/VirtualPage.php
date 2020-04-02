@@ -118,26 +118,26 @@ class VirtualPage extends View
                 }
 
                 // special treatment for popup
-                if ($type == 'popup') {
+                if ($type === 'popup') {
                     $this->app->html->template->set('title', $this->app->title);
                     $this->app->html->template->setHTML('Content', parent::getHTML());
                     $this->app->html->template->appendHTML('HEAD', $this->getJS());
 
-                    $this->app->terminate($this->app->html->template->render());
+                    $this->app->terminateHTML($this->app->html->template);
                 }
 
                 // render and terminate
                 if (isset($_GET['__atk_json'])) {
-                    $this->app->terminate($this->renderJSON());
+                    $this->app->terminateJSON($this);
                 }
 
                 if (isset($_GET['__atk_tab'])) {
-                    $this->app->terminate($this->renderTab());
+                    $this->app->terminateHTML($this->renderTab());
                 }
 
                 // do not terminate if callback supplied (no cutting)
-                if ($type != 'callback') {
-                    $this->app->terminate($this->render());
+                if ($type !== 'callback') {
+                    $this->app->terminateHTML($this);
                 }
             }
 
@@ -154,7 +154,7 @@ class VirtualPage extends View
             $this->app->html->template->setHTML('Content', $this->app->layout->getHTML());
             $this->app->html->template->appendHTML('HEAD', $this->app->layout->getJS());
 
-            $this->app->terminate($this->app->html->template->render());
+            $this->app->terminateHTML($this->app->html->template);
         });
     }
 }

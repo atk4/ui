@@ -37,7 +37,7 @@ $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'tabl
     if (isset($_GET['name'])) {
         $p->memorize('model', $_GET['name']);
         header('Location: ' . $p->urlNext());
-        $p->app->terminate();
+        $p->app->terminateHTML(null);
     }
 
     $c = \atk4\ui\Columns::addTo($p);
