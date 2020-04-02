@@ -696,12 +696,23 @@ class App
     }
 
     /**
+     * @var bool Set to true to override isJsRequest() when "X-Requested-With" header is equal to "xmlhttprequest".
+     */
+    public $legacyJsRequestDetection = false;
+
+    /**
      * Request was made using jsURL().
      *
      * @return bool
      */
     public function isJsRequest()
     {
+        if ($this->legacyJsRequestDetection) {
+            if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest' && !isset($_GET['__atk_tab'])) {
+                return true;
+            }
+        }
+
         return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
     }
 
