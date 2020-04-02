@@ -1008,7 +1008,7 @@ class App
     {
         $data = is_array($data) ? json_encode($data) : $data;
 
-        $this->outputResponse(['Content-Type:application/json' => true], $data);
+        $this->outputResponse(['Content-Type: application/json' => true], $data);
     }
 
     /**
@@ -1038,6 +1038,6 @@ class App
      */
     public function outputResponseHTML(string $data)
     {
-        $this->outputResponse(['Content-Type:text/html' => true], $data);
+        $this->outputResponse(['Content-Type: text/html' => true], $data);
     }
 }
