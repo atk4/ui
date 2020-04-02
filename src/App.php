@@ -279,7 +279,8 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if ($this->isJsRequest()) {
+        if (($this->isJsRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
+                && !isset($_GET['__atk_tab'])) {
             $this->outputResponseJSON([
                 'success'   => false,
                 'message'   => $this->layout->getHtml(),
@@ -717,23 +718,12 @@ class App
     }
 
     /**
-     * @var bool Set to true to override isJsRequest() when "X-Requested-With" header is equal to "xmlhttprequest".
-     */
-    public $legacyJsRequestDetection = false;
-
-    /**
      * Request was made using App::jsURL().
      *
      * @return bool
      */
     public function isJsRequest()
     {
-        if ($this->legacyJsRequestDetection) {
-            if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest' && !isset($_GET['__atk_tab'])) {
-                return true;
-            }
-        }
-
         return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
     }
 
