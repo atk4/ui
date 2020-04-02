@@ -12,13 +12,13 @@ class jsModal extends jsExpression
      *
      * @param string $title When empty, header will be remove in modal.
      */
-    public function __construct($title, $url, array $args = [], string $mode = 'json')
+    public function __construct($title, $url, array $args = [], string $dataType = 'json')
     {
         if ($url instanceof VirtualPage) {
             $url = $url->getJSURL('cut');
         }
 
-        parent::__construct('$(this).atkCreateModal([arg])', ['arg' => ['uri' => $url, 'title' => $title, 'mode' => $mode, 'uri_options' => $args]]);
+        parent::__construct('$(this).atkCreateModal([arg])', ['arg' => ['uri' => $url, 'title' => $title, 'data_type' => $dataType, 'uri_options' => $args]]);
 
         if (empty($title)) {
             $this->removeHeader();

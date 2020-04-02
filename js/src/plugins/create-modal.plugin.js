@@ -15,7 +15,7 @@ export default class createModal extends atkPlugin {
           .html(this.getDialogHtml(options.title));
 
       //add setting to our modal for modalService
-      $m.data({uri:options.uri, type:options.mode, args:options.uri_options, needRemove:true, needCloseTrigger:true, label: options.label});
+      $m.data({uri:options.uri, type:options.data_type, args:options.uri_options, needRemove:true, needCloseTrigger:true, label: options.label});
 
       //call semantic-ui modal
       $m.modal(options.modal).modal('show');
