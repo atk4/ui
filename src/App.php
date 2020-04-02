@@ -596,6 +596,8 @@ class App
      */
     public function jsURL($page = [], $needRequestUri = false, $extra_args = [])
     {
+        $extra_args = array_merge($extra_args, ['__atk_json' => 1], $extra_args); // append to the end but allow override
+
         return $this->url($page, $needRequestUri, $extra_args);
     }
 
@@ -665,6 +667,8 @@ class App
                 $result[$arg] = $val;
             }
         }
+
+        unset($result['__atk_json']);
 
         // put URL together
         $args = http_build_query($result);
