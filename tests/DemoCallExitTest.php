@@ -119,7 +119,9 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $response = $this->getResponseFromRequestGET($uri);
         $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        // uncomment once response MIME is fixed $this->assertEquals('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
+        if (!($this instanceof DemoCallExitExceptionTest)) { // content type is not set when App->call_exit equals to true
+            $this->assertEquals('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
+        }
         $this->assertRegExp($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
