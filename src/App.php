@@ -311,16 +311,16 @@ class App
      * other classes.
      *
      * @param string|array $output Array type is supported only for JSON response
-     * @param string|null  $contentType Null for HTML/JSON based on App::isJsRequest()
+     * @param string       $contentType
      *
      * @throws \atk4\core\Exception
      * @throws ExitApplicationException
      */
-    public function terminate($output = null, string $contentType = null): void
+    public function terminate($output = null, string $contentType = 'text/html'): void
     {
-        $type = preg_replace('~;.*~', '', strtolower($contentType)) ?: null; // type in LC without charset
+        $type = preg_replace('~;.*~', '', strtolower($contentType)); // type in LC without charset
 
-        if ($type === 'application/json' || ($this->isJsRequest() && $type === null)) {
+        if ($type === 'application/json') {
             if (is_scalar($output) || $output === null) {
                 $decode = json_decode($output, true);
                 if (json_last_error() === JSON_ERROR_NONE) {
@@ -331,7 +331,7 @@ class App
                 $output['modals'] = $this->getRenderedModals();
             }
             $this->outputResponseJSON($output);
-        } elseif (isset($_GET['__atk_tab']) && ($type === 'text/html' || $type === null)) {
+        } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
             // because fomantic ui tab only deal with html and not JSON
             // we need to hack output to include app modal.
