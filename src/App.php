@@ -613,7 +613,7 @@ class App
     public function url($page = [], $needRequestUri = false, $extra_args = [])
     {
         if ($needRequestUri) {
-            return $_SERVER['REQUEST_URI'];
+            $page = $_SERVER['REQUEST_URI'];
         }
 
         $sticky = $this->sticky_get_arguments;
@@ -629,14 +629,17 @@ class App
             }
         }
 
-        // if page passed as string, then simply use it
+        $pagePath = '';
         if (is_string($page)) {
-            return $page;
-        }
-
-        // use current page by default
-        if (!isset($page[0])) {
-            $page[0] = $this->page;
+            $page_arr = explode('?', $page, 2);
+            $pagePath = $page_arr[0];
+            parse_str($page_arr[1] ?? '', $page);
+        } else {
+            $pagePath = $page[0] ?? $this->page; // use current page by default
+            unset($page[0]);
+            if ($pagePath) {
+                $pagePath .= $this->url_building_ext;
+            }
         }
 
         //add sticky arguments
@@ -657,10 +660,6 @@ class App
 
         // add arguments
         foreach ($page as $arg => $val) {
-            if ($arg === 0) {
-                continue;
-            }
-
             if ($val === null || $val === false) {
                 unset($result[$arg]);
             } else {
@@ -668,11 +667,13 @@ class App
             }
         }
 
-        unset($result['__atk_json']);
+        if (!isset($extra_args['__atk_json'])) {
+            unset($result['__atk_json']);
+        }
 
         // put URL together
         $args = http_build_query($result);
-        $url = ($page[0] ? $page[0] . $this->url_building_ext : '') . ($args ? '?' . $args : '');
+        $url = $pagePath . ($args ? '?' . $args : '');
 
         return $url;
     }
