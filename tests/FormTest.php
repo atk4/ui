@@ -173,7 +173,7 @@ class AppMockFT extends App
 {
     public $output;
 
-    public function terminate($output = null)
+    public function terminate($output = null, string $contentType = null): void
     {
         $this->output = $output;
         // do nothing!

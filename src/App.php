@@ -310,50 +310,71 @@ class App
      * directly, instead call it form Callback, jsCallback or similar
      * other classes.
      *
-     * @param string $output
+     * @param string|array $output Array type is supported only for JSON response
+     * @param string|null  $contentType Null for HTML/JSON based on App::isJsRequest()
      *
      * @throws \atk4\core\Exception
      * @throws ExitApplicationException
      */
-    public function terminate($output = null)
+    public function terminate($output = null, string $contentType = null): void
     {
-        if ($output !== null) {
-            if ($this->isJsRequest()) {
-                if (is_string($output)) {
-                    $decode = json_decode($output, true);
-                    if (json_last_error() === JSON_ERROR_NONE) {
-                        $decode['modals'] = $this->getRenderedModals();
-                        $output = $decode;
-                    }
-                } elseif (is_array($output)) {
-                    $output['modals'] = $this->getRenderedModals();
+        $type = preg_replace('~;.*~', '', strtolower($contentType)) ?: null; // type in LC without charset
+
+        if ($type === 'application/json' || ($this->isJsRequest() && $type === null)) {
+            if (is_scalar($output) || $output === null) {
+                $decode = json_decode($output, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $decode['modals'] = $this->getRenderedModals();
+                    $output = $decode;
                 }
-                $this->outputResponseJSON($output);
-            } elseif (isset($_GET['__atk_tab'])) {
-                // ugly hack for TABS
-                // because fomantic ui tab only deal with html and not JSON
-                // we need to hack output to include app modal.
-                $keys = null;
-                $remove_function = '';
-                foreach ($this->getRenderedModals() as $key => $modal) {
-                    // add modal rendering to output
-                    $keys[] = '#' . $key;
-                    $output['atkjs'] = $output['atkjs'] . ';' . $modal['js'];
-                    $output['html'] = $output['html'] . $modal['html'];
-                }
-                if ($keys) {
-                    $ids = implode(',', $keys);
-                    $remove_function = '$(\'.ui.dimmer.modals.page\').find(\'' . $ids . '\').remove();';
-                }
-                $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
-                $this->outputResponseHTML($output);
-            } else {
-                $this->outputResponseHTML($output);
+            } elseif (is_array($output)) {
+                $output['modals'] = $this->getRenderedModals();
             }
+            $this->outputResponseJSON($output);
+        } elseif (isset($_GET['__atk_tab']) && ($type === 'text/html' || $type === null)) {
+            // ugly hack for TABS
+            // because fomantic ui tab only deal with html and not JSON
+            // we need to hack output to include app modal.
+            $keys = null;
+            $remove_function = '';
+            foreach ($this->getRenderedModals() as $key => $modal) {
+                // add modal rendering to output
+                $keys[] = '#' . $key;
+                $output['atkjs'] = $output['atkjs'] . ';' . $modal['js'];
+                $output['html'] = $output['html'] . $modal['html'];
+            }
+            if ($keys) {
+                $ids = implode(',', $keys);
+                $remove_function = '$(\'.ui.dimmer.modals.page\').find(\'' . $ids . '\').remove();';
+            }
+            $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
+            $this->outputResponseHTML($output);
+        } elseif ($type !== null) {
+            $this->outputResponse(['Content-Type: ' . $contentType => true], $output);
+        } else {
+            $this->outputResponseHTML($output);
         }
 
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
+    }
+
+    public function terminateHTML($output): void
+    {
+        if ($output instanceof View) {
+            $output = $output->render();
+        }
+
+        $this->terminate($output, 'text/html');
+    }
+
+    public function terminateJSON($output): void
+    {
+        if ($output instanceof View) {
+            $output = $output->renderJSON();
+        }
+
+        $this->terminate($output, 'application/json');
     }
 
     /**
@@ -701,7 +722,7 @@ class App
     public $legacyJsRequestDetection = false;
 
     /**
-     * Request was made using jsURL().
+     * Request was made using App::jsURL().
      *
      * @return bool
      */
@@ -1004,11 +1025,21 @@ class App
      *
      * @param string|array $data
      */
-    public function outputResponseJSON($data)
+    private function outputResponseJSON($data): void
     {
         $data = is_array($data) ? json_encode($data) : $data;
 
         $this->outputResponse(['Content-Type: application/json' => true], $data);
+    }
+
+    /**
+     * Output HTML response to the client.
+     *
+     * @param string $data
+     */
+    private function outputResponseHTML(string $data): void
+    {
+        $this->outputResponse(['Content-Type: text/html' => true], $data);
     }
 
     /**
@@ -1029,15 +1060,5 @@ class App
         }
 
         return $modals;
-    }
-
-    /**
-     * Output HTML response to the client.
-     *
-     * @param string $data
-     */
-    public function outputResponseHTML(string $data)
-    {
-        $this->outputResponse(['Content-Type: text/html' => true], $data);
     }
 }
