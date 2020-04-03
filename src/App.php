@@ -297,16 +297,6 @@ class App
     }
 
     /**
-     * Outputs debug info.
-     *
-     * @param string $str
-     */
-    public function outputDebug($str)
-    {
-        echo 'DEBUG:' . $str . '<br/>';
-    }
-
-    /**
      * Will perform a preemptive output and terminate. Do not use this
      * directly, instead call it form Callback, jsCallback or similar
      * other classes.
