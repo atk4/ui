@@ -27,6 +27,8 @@ class App
     use AppScopeTrait;
     use DIContainerTrait;
 
+    public const HEADER_STATUS_CODE = 'atk4-status-code';
+
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
         'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@2.1.0/public',
@@ -303,19 +305,45 @@ class App
     }
 
     /**
+     * Normalize headers to associative array with LC keys.
+     *
+     * @param string[] $headers
+     * @return string[]
+     */
+    public function normalizeHeaders(array $headers): array
+    {
+        $res = [];
+        foreach ($headers as $k => $v) {
+            if (is_numeric($k) && ($p = strpos($v, ':')) !== false) {
+                $k = substr($v, 0, $p);
+                $v = substr($v, $p + 1);
+            }
+
+            $res[strtolower(trim($k))] = trim($v);
+        }
+
+        return $res;
+    }
+
+    /**
      * Will perform a preemptive output and terminate. Do not use this
      * directly, instead call it form Callback, jsCallback or similar
      * other classes.
      *
      * @param string|array $output Array type is supported only for JSON response
-     * @param string       $contentType
+     * @param string[]     $headers Content-type header must be always set or consider using App::terminateHTML() or App::terminateJSON() methods.
      *
      * @throws \atk4\core\Exception
      * @throws ExitApplicationException
      */
-    public function terminate($output = null, string $contentType = 'text/html'): void
+    public function terminate($output = null, array $headers = []): void
     {
-        $type = preg_replace('~;.*~', '', strtolower($contentType)); // type in LC without charset
+        $headers = $this->normalizeHeaders($headers);
+        if (empty($headers['content-type'])) {
+            throw new Exception('Content type must be always set');
+        }
+
+        $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
 
         if ($type === 'application/json') {
             if (is_scalar($output) || $output === null) {
@@ -327,7 +355,7 @@ class App
             } elseif (is_array($output)) {
                 $output['modals'] = $this->getRenderedModals();
             }
-            $this->outputResponseJSON($output);
+            $this->outputResponseJSON($output, $headers);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
             // because fomantic ui tab only deal with html and not JSON
@@ -345,18 +373,18 @@ class App
                 $remove_function = '$(\'.ui.dimmer.modals.page\').find(\'' . $ids . '\').remove();';
             }
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
-            $this->outputResponseHTML($output);
+            $this->outputResponseHTML($output, $headers);
         } elseif ($type === 'text/html') {
-            $this->outputResponseHTML($output ?? '');
+            $this->outputResponseHTML($output ?? '', $headers);
         } else {
-            $this->outputResponse(['Content-Type: ' . $contentType => true], $output);
+            $this->outputResponse($output, $headers);
         }
 
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
     }
 
-    public function terminateHTML($output): void
+    public function terminateHTML($output, array $headers = []): void
     {
         if ($output instanceof View) {
             $output = $output->render();
@@ -364,16 +392,22 @@ class App
             $output = $output->render();
         }
 
-        $this->terminate($output, 'text/html');
+        $this->terminate(
+            $output,
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
+        );
     }
 
-    public function terminateJSON($output): void
+    public function terminateJSON($output, array $headers = []): void
     {
         if ($output instanceof View) {
             $output = $output->renderJSON();
         }
 
-        $this->terminate($output, 'application/json');
+        $this->terminate(
+            $output,
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
+        );
     }
 
     /**
@@ -505,7 +539,8 @@ class App
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 $this->terminate(
-                    '!! Callback requested, but never reached. You may be missing some arguments in ' . $_SERVER['REQUEST_URI']
+                    "\n" . '!! Callback requested, but never reached. You may be missing some arguments in ' . $_SERVER['REQUEST_URI'] . '. !!' . "\n",
+                    ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => 500]
                 );
             }
             echo $this->html->template->render();
@@ -987,47 +1022,68 @@ class App
 
     /* RESPONSES */
 
+    /** @var string[] */
+    private static $_sentHeaders = [];
+
     /**
-     * Output Response to the client with custom headers.
+     * Output Response to the client.
      *
      * This can be overridden for future PSR-7 implementation
-     *
-     * @TODO SSE is a "Header in Header" case, it works, but must be checked
      */
-    protected function outputResponse(array $headers, $content)
+    protected function outputResponse(string $data, array $headers): void
     {
-        // if header already sent don't send header
-        // @TODO check this, because in theory multiple header sent
-        // can be a symptom of wrong usage
-        if (!headers_sent()) {
-            foreach ($headers as $header => $replace) {
-                header($header, $replace);
+        $headers = array_diff_assoc($this->normalizeHeaders($headers), self::$_sentHeaders);
+
+        if (count($headers) > 0 && headers_sent()) {
+            echo "\n" . '!! Headers already sent, more headers can not be set at this stage. !!' . "\n";
+        } else {
+            foreach ($headers as $k => $v) {
+                if (strtolower($k) === self::HEADER_STATUS_CODE) {
+                    http_response_code($v);
+                } else {
+                    // convert key to camel case
+                    $k = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($m) {
+                        return strtoupper($m[0]);
+                    }, $k);
+
+                    header($k . ': ' . $v);
+                }
+
+                self::$_sentHeaders[$k] = $v;
             }
+
+            echo $data;
         }
-
-        echo $content;
-    }
-
-    /**
-     * Output JSON response to the client.
-     *
-     * @param string|array $data
-     */
-    private function outputResponseJSON($data): void
-    {
-        $data = is_array($data) ? json_encode($data) : $data;
-
-        $this->outputResponse(['Content-Type: application/json' => true], $data);
     }
 
     /**
      * Output HTML response to the client.
      *
      * @param string $data
+     * @param string[] $headers
      */
-    private function outputResponseHTML(string $data): void
+    private function outputResponseHTML(string $data, array $headers = []): void
     {
-        $this->outputResponse(['Content-Type: text/html' => true], $data);
+        $this->outputResponse(
+            $data,
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
+        );
+    }
+
+    /**
+     * Output JSON response to the client.
+     *
+     * @param string|array $data
+     * @param string[] $headers
+     */
+    private function outputResponseJSON($data, array $headers = []): void
+    {
+        $data = is_array($data) ? json_encode($data) : $data;
+
+        $this->outputResponse(
+            $data,
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
+        );
     }
 
     /**
