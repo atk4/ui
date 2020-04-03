@@ -111,6 +111,9 @@ class App
     /** @var Persistence */
     public $db = null;
 
+    /** @var string[] Extra HTTP headers to send on exit. */
+    protected $response_headers = [];
+
     /**
      * @var bool Whether or not semantic-ui vue has been initialised.
      */
@@ -305,12 +308,12 @@ class App
     }
 
     /**
-     * Normalize headers to associative array with LC keys.
+     * Normalize HTTP headers to associative array with LC keys.
      *
      * @param string[] $headers
      * @return string[]
      */
-    public function normalizeHeaders(array $headers): array
+    protected function normalizeHeaders(array $headers): array
     {
         $res = [];
         foreach ($headers as $k => $v) {
@@ -323,6 +326,34 @@ class App
         }
 
         return $res;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setResponseStatusCode(int $statusCode): self
+    {
+        $this->setResponseHeader(self::HEADER_STATUS_CODE, $statusCode);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setResponseHeader(string $name, string $value): self
+    {
+        $arr = $this->normalizeHeaders([$name => $value]);
+        $value = reset($arr);
+        $name = key($arr);
+
+        if ($value !== '') {
+            $this->response_headers[$name] = $value;
+        } else {
+            unset($this->response_headers[$name]);
+        }
+
+        return $this;
     }
 
     /**
@@ -1032,21 +1063,25 @@ class App
      */
     protected function outputResponse(string $data, array $headers): void
     {
-        $headers = array_diff_assoc($this->normalizeHeaders($headers), self::$_sentHeaders);
+        $this->response_headers = $this->normalizeHeaders($this->response_headers);
+
+        $headers = array_diff_assoc(
+            array_merge($this->response_headers, $this->normalizeHeaders($headers)),
+            self::$_sentHeaders
+        );
 
         if (count($headers) > 0 && headers_sent()) {
             echo "\n" . '!! Headers already sent, more headers can not be set at this stage. !!' . "\n";
         } else {
             foreach ($headers as $k => $v) {
-                if (strtolower($k) === self::HEADER_STATUS_CODE) {
+                if ($k === self::HEADER_STATUS_CODE) {
                     http_response_code($v);
                 } else {
-                    // convert key to camel case
-                    $k = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($m) {
+                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($m) {
                         return strtoupper($m[0]);
                     }, $k);
 
-                    header($k . ': ' . $v);
+                    header($kCamelCase . ': ' . $v);
                 }
 
                 self::$_sentHeaders[$k] = $v;
