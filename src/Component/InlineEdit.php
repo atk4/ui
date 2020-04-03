@@ -118,11 +118,11 @@ class InlineEdit extends View
 
                         return $this->jsSuccess('Update successfully');
                     } catch (ValidationException $e) {
-                        $this->app->terminate(json_encode([
+                        $this->app->terminateJSON([
                             'success'            => true,
                             'hasValidationError' => true,
                             'atkjs'              => $this->jsError(call_user_func($this->formatErrorMsg, $e, $value))->jsRender(),
-                        ]));
+                        ]);
                     }
                 });
             }

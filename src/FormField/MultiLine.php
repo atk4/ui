@@ -720,9 +720,9 @@ class MultiLine extends Generic
                 try {
                     return $this->renderCallback();
                 } catch (\atk4\Core\Exception $e) {
-                    $this->app->terminate(json_encode(['success' => false, 'error' => $e->getMessage()]));
+                    $this->app->terminateJSON(['success' => false, 'error' => $e->getMessage()]);
                 } catch (\Error $e) {
-                    $this->app->terminate(json_encode(['success' => false, 'error' => $e->getMessage()]));
+                    $this->app->terminateJSON(['success' => false, 'error' => $e->getMessage()]);
                 }
             });
         }
@@ -772,7 +772,7 @@ class MultiLine extends Generic
             case 'update-row':
                 $m = $this->setDummyModelValue(clone $this->getModel());
                 $expressionValues = array_merge($this->getExpressionValues($m), $this->getCallbackValues($m));
-                $this->app->terminate(json_encode(array_merge($response, ['expressions' => $expressionValues])));
+                $this->app->terminateJSON(array_merge($response, ['expressions' => $expressionValues]));
                 break;
             case 'on-change':
                 // Let regular callback render output.

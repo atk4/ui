@@ -57,7 +57,7 @@ class Popup extends View
     /**
      * The callback use to generate dynamic content.
      *
-     * @var callable|null
+     * @var Callback|null
      */
     public $cb = null;
 
@@ -69,7 +69,7 @@ class Popup extends View
      *
      * @var View|string
      */
-    public $dynamicContent = 'View';
+    public $dynamicContent = View::class;
 
     /**
      * Whether or not dynamic content is cache.
@@ -188,7 +188,7 @@ class Popup extends View
             $this->cb->set($fx, [$content]);
             //only render our content view.
             //PopupService will replace content with this one.
-            $this->app->terminate($content->renderJSON());
+            $this->app->terminateJSON($content);
         }
     }
 

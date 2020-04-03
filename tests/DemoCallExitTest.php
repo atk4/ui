@@ -76,6 +76,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $response = $this->getResponseFromRequestGET($uri);
         $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertEquals('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
         $this->assertRegExp($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
@@ -118,6 +119,9 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $response = $this->getResponseFromRequestGET($uri);
         $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        if (!($this instanceof DemoCallExitExceptionTest)) { // content type is not set when App->call_exit equals to true
+            $this->assertEquals('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
+        }
         $this->assertRegExp($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
@@ -129,12 +133,12 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = ['virtual.php?atk_admin_label_2_click=ajax&__atk_callback=1'];
         $files[] = ['actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1']; // need to call this before calls other actions to fill model files
         $files[] = ['actions.php?atk_useraction_loader_callback=ajax&__atk_callback=1&atk_useraction=1&step=fields'];
-        $files[] = ['notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&json=true'];
+        $files[] = ['notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
         $files[] = ['scroll-lister.php?atk_admin_view_2_view_lister_jspaginator=ajax&__atk_callback=1&page=2'];
 
         // test catch exceptions
-        $files[] = ['exception_test.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&json=true'];
-        $files[] = ['exception_test.php?__atk_m=atk_admin_modal_2&atk_admin_modal_2_view_callbacklater=ajax&__atk_callback=1&json=true'];
+        $files[] = ['exception_test.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
+        $files[] = ['exception_test.php?__atk_m=atk_admin_modal_2&atk_admin_modal_2_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
 
         return $files;
     }

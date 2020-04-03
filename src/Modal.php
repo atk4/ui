@@ -39,7 +39,7 @@ class Modal extends View
     public $cb_view = null;
     public $args = [];
 
-    //now only supported json type response.
+    /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
 
     /**
@@ -96,7 +96,7 @@ class Modal extends View
             }
             $modalName = isset($_GET['__atk_m']) ? $_GET['__atk_m'] : null;
             if ($modalName === $this->name) {
-                $this->app->terminate($this->cb_view->renderJSON());
+                $this->app->terminateJSON($this->cb_view);
             }
         });
     }

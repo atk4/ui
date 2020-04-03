@@ -133,7 +133,7 @@ class ApiService {
    * this function. It must at least return {success: true} in order for
    * the Promise to resolve properly, will reject otherwise.
    *
-   * ex: $app->terminate(json_encode(['success' => true, 'data' => $data]));
+   * ex: $app->terminateJSON(['success' => true, 'data' => $data]);
    *
    * @param url        // the url to fetch data
    * @param settings   // the Semantic api settings object.

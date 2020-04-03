@@ -53,7 +53,7 @@ class FormTest extends \atk4\core\PHPUnit_AgileTestCase
         });
 
         $this->f->render();
-        $res = json_decode($this->f->app->output, true);
+        $res = $this->f->app->output;
 
         if ($check_expected_error) {
             $this->assertFalse($submit_called, 'Expected submission to fail, but it was successful!');
@@ -173,7 +173,7 @@ class AppMockFT extends App
 {
     public $output;
 
-    public function terminate($output = null)
+    public function terminate($output = null, string $contentType = null): void
     {
         $this->output = $output;
         // do nothing!

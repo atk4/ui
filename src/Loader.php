@@ -81,7 +81,7 @@ class Loader extends View
 
         $this->cb->set(function () use ($fx) {
             call_user_func($fx, $this);
-            $this->app->terminate($this->renderJSON());
+            $this->app->terminateJSON($this);
         });
 
         return $this;

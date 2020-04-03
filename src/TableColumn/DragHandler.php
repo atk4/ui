@@ -9,6 +9,7 @@ class DragHandler extends Generic
 {
     public $class = null;
     public $tag = 'i';
+    /** @var \atk4\ui\jsCallback */
     public $cb = null;
 
     public function init()

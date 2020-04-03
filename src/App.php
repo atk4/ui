@@ -224,13 +224,13 @@ class App
         }
 
         if (!$this->call_exit) {
+            flush(); // important, otherwise content-type header is not flushed
+
             // case process is not in shutdown mode
             // App as already done everything
             // App need to stop output
             // set_handler to catch/trap any exception
-            set_exception_handler(function (Throwable $t) {
-                return true;
-            });
+            set_exception_handler(function (Throwable $t) {});
             // raise exception to be trapped and stop execution
             throw new ExitApplicationException();
         }
@@ -279,7 +279,8 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if ($this->isJsonRequest()) {
+        if (($this->isJsRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
+                && !isset($_GET['__atk_tab'])) {
             $this->outputResponseJSON([
                 'success'   => false,
                 'message'   => $this->layout->getHtml(),
@@ -293,31 +294,6 @@ class App
         $this->callExit(true);
 
         return true;
-    }
-
-    /**
-     * Most of the ajax request will require sending exception in json
-     * instead of html, except for tab.
-     *
-     * @return bool
-     */
-    protected function isJsonRequest()
-    {
-        if (isset($_GET['__atk_tab'])) {
-            return false;
-        }
-
-        if (isset($_GET['json'])) {
-            return true;
-        }
-
-        $ajax = false;
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-           && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            $ajax = true;
-        }
-
-        return $ajax;
     }
 
     /**
@@ -335,50 +311,73 @@ class App
      * directly, instead call it form Callback, jsCallback or similar
      * other classes.
      *
-     * @param string $output
+     * @param string|array $output Array type is supported only for JSON response
+     * @param string       $contentType
      *
      * @throws \atk4\core\Exception
      * @throws ExitApplicationException
      */
-    public function terminate($output = null)
+    public function terminate($output = null, string $contentType = 'text/html'): void
     {
-        if ($output !== null) {
-            if ($this->isJsonRequest()) {
-                if (is_string($output)) {
-                    $decode = json_decode($output, true);
-                    if (json_last_error() === JSON_ERROR_NONE) {
-                        $decode['modals'] = $this->getRenderedModals();
-                        $output = $decode;
-                    }
-                } elseif (is_array($output)) {
-                    $output['modals'] = $this->getRenderedModals();
+        $type = preg_replace('~;.*~', '', strtolower($contentType)); // type in LC without charset
+
+        if ($type === 'application/json') {
+            if (is_scalar($output) || $output === null) {
+                $decode = json_decode($output, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $decode['modals'] = $this->getRenderedModals();
+                    $output = $decode;
                 }
-                $this->outputResponseJSON($output);
-            } elseif (isset($_GET['__atk_tab'])) {
-                // ugly hack for TABS
-                // because fomantic ui tab only deal with html and not JSON
-                // we need to hack output to include app modal.
-                $keys = null;
-                $remove_function = '';
-                foreach ($this->getRenderedModals() as $key => $modal) {
-                    // add modal rendering to output
-                    $keys[] = '#' . $key;
-                    $output['atkjs'] = $output['atkjs'] . ';' . $modal['js'];
-                    $output['html'] = $output['html'] . $modal['html'];
-                }
-                if ($keys) {
-                    $ids = implode(',', $keys);
-                    $remove_function = '$(\'.ui.dimmer.modals.page\').find(\'' . $ids . '\').remove();';
-                }
-                $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
-                $this->outputResponseHtml($output);
-            } else {
-                $this->outputResponseHTML($output);
+            } elseif (is_array($output)) {
+                $output['modals'] = $this->getRenderedModals();
             }
+            $this->outputResponseJSON($output);
+        } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
+            // ugly hack for TABS
+            // because fomantic ui tab only deal with html and not JSON
+            // we need to hack output to include app modal.
+            $keys = null;
+            $remove_function = '';
+            foreach ($this->getRenderedModals() as $key => $modal) {
+                // add modal rendering to output
+                $keys[] = '#' . $key;
+                $output['atkjs'] = $output['atkjs'] . ';' . $modal['js'];
+                $output['html'] = $output['html'] . $modal['html'];
+            }
+            if ($keys) {
+                $ids = implode(',', $keys);
+                $remove_function = '$(\'.ui.dimmer.modals.page\').find(\'' . $ids . '\').remove();';
+            }
+            $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
+            $this->outputResponseHTML($output);
+        } elseif ($type !== null && $type !== 'text/html') {
+            $this->outputResponse(['Content-Type: ' . $contentType => true], $output);
+        } else {
+            $this->outputResponseHTML($output);
         }
 
         $this->run_called = true; // prevent shutdown function from triggering.
         $this->callExit();
+    }
+
+    public function terminateHTML($output): void
+    {
+        if ($output instanceof View) {
+            $output = $output->render();
+        } elseif ($output instanceof Template) {
+            $output = $output->render();
+        }
+
+        $this->terminate($output, 'text/html');
+    }
+
+    public function terminateJSON($output): void
+    {
+        if ($output instanceof View) {
+            $output = $output->renderJSON();
+        }
+
+        $this->terminate($output, 'application/json');
     }
 
     /**
@@ -519,7 +518,7 @@ class App
         }
 
         $output = ob_get_clean();
-        if ($this->isJsonRequest()) {
+        if ($this->isJsRequest()) {
             $this->outputResponseJSON($output);
         } else {
             $this->outputResponseHTML($output);
@@ -610,129 +609,128 @@ class App
     public $page = null;
 
     /**
-     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
-     * mechanism for NON-HTML response.
-     *
-     * @param array|string $page           URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extra_args     Additional URL arguments
-     *
-     * @return string
+     * @var array global sticky arguments
      */
-    public function jsURL($page = [], $needRequestUri = false, $extra_args = [])
-    {
-        return $this->url($page, $needRequestUri, $extra_args);
-    }
-
-    /**
-     * Build a URL that application can use for loading HTML data.
-     *
-     * @param array|string $page           URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extra_args     Additional URL arguments
-     *
-     * @return string
-     */
-    public function url($page = [], $needRequestUri = false, $extra_args = [])
-    {
-        if ($needRequestUri) {
-            return $_SERVER['REQUEST_URI'];
-        }
-
-        $sticky = $this->sticky_get_arguments;
-        $result = $extra_args;
-
-        if ($this->page === null) {
-            $uri = $this->getRequestURI();
-
-            if (substr($uri, -1, 1) == '/') {
-                $this->page = 'index';
-            } else {
-                $this->page = basename($uri, $this->url_building_ext);
-            }
-        }
-
-        // if page passed as string, then simply use it
-        if (is_string($page)) {
-            return $page;
-        }
-
-        // use current page by default
-        if (!isset($page[0])) {
-            $page[0] = $this->page;
-        }
-
-        //add sticky arguments
-        if (is_array($sticky) && !empty($sticky)) {
-            foreach ($sticky as $key => $val) {
-                if ($val === true) {
-                    if (isset($_GET[$key])) {
-                        $val = $_GET[$key];
-                    } else {
-                        continue;
-                    }
-                }
-                if (!isset($result[$key])) {
-                    $result[$key] = $val;
-                }
-            }
-        }
-
-        // add arguments
-        foreach ($page as $arg => $val) {
-            if ($arg === 0) {
-                continue;
-            }
-
-            if ($val === null || $val === false) {
-                unset($result[$arg]);
-            } else {
-                $result[$arg] = $val;
-            }
-        }
-
-        // put URL together
-        $args = http_build_query($result);
-        $url = ($page[0] ? $page[0] . $this->url_building_ext : '') . ($args ? '?' . $args : '');
-
-        return $url;
-    }
+    protected $sticky_get_arguments = [
+        '__atk_json' => false,
+        '__atk_tab' => false,
+    ];
 
     /**
      * Make current get argument with specified name automatically appended to all generated URLs.
      *
-     * @param string $name
-     *
      * @return string|null
      */
-    public function stickyGet($name): ?string
+    public function stickyGet(string $name, bool $isDeleting = false): ?string
     {
-        if (isset($_GET[$name])) {
-            $this->sticky_get_arguments[$name] = $_GET[$name];
+        $this->sticky_get_arguments[$name] = !$isDeleting;
 
-            return $_GET[$name];
-        }
-
-        return null;
+        return $_GET[$name] ?? null;
     }
 
     /**
-     * @var array global sticky arguments
+     * Remove sticky GET which was set by stickyGet.
      */
-    protected $sticky_get_arguments = [];
-
-    /**
-     * Remove sticky GET which was set by stickyGET.
-     *
-     * @param string $name
-     */
-    public function stickyForget($name)
+    public function stickyForget(string $name)
     {
         unset($this->sticky_get_arguments[$name]);
     }
 
     /**
-     * Adds additional JS script include in aplication template.
+     * Build a URL that application can use for loading HTML data.
+     *
+     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUriArgs Additional URL arguments, deleting sticky can delete them.
+     *
+     * @return string
+     */
+    public function url($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
+    {
+        if ($needRequestUri) {
+            $page = $_SERVER['REQUEST_URI'];
+        }
+
+        if ($this->page === null) {
+            $requestUrl = $this->getRequestURI();
+            if (substr($requestUrl, -1, 1) == '/') {
+                $this->page = 'index';
+            } else {
+                $this->page = basename($requestUrl, $this->url_building_ext);
+            }
+        }
+
+        $pagePath = '';
+        if (is_string($page)) {
+            $page_arr = explode('?', $page, 2);
+            $pagePath = $page_arr[0];
+            parse_str($page_arr[1] ?? '', $page);
+        } else {
+            $pagePath = $page[0] ?? $this->page; // use current page by default
+            unset($page[0]);
+            if ($pagePath) {
+                $pagePath .= $this->url_building_ext;
+            }
+        }
+
+        $args = $extraRequestUriArgs;
+
+        // add sticky arguments
+        $args = $extraRequestUriArgs;
+        foreach ($this->sticky_get_arguments as $k => $v) {
+            if ($v && isset($_GET[$k])) {
+                $args[$k] = $_GET[$k];
+            } else {
+                unset($args[$k]);
+            }
+        }
+
+        // add arguments
+        foreach ($page as $k => $v) {
+            if ($v === null || $v === false) {
+                unset($args[$k]);
+            } else {
+                $args[$k] = $v;
+            }
+        }
+
+        // put URL together
+        $pageQuery = http_build_query($args);
+        $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
+
+        return $url;
+    }
+
+    /**
+     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
+     * mechanism for NON-HTML response.
+     *
+     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUriArgs Additional URL arguments, deleting sticky can delete them.
+     *
+     * @return string
+     */
+    public function jsURL($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
+    {
+        // append to the end but allow override
+        $extraRequestUriArgs = array_merge($extraRequestUriArgs, ['__atk_json' => 1], $extraRequestUriArgs);
+
+        return $this->url($page, $needRequestUri, $extraRequestUriArgs);
+    }
+
+    /**
+     * Request was made using App::jsURL().
+     *
+     * @return bool
+     */
+    public function isJsRequest()
+    {
+        return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
+    }
+
+    /**
+     * Adds additional JS script include in application template.
      *
      * @param string $url
      * @param bool   $isAsync Whether or not you want Async loading.
@@ -748,7 +746,7 @@ class App
     }
 
     /**
-     * Adds additional CSS stylesheet include in aplication template.
+     * Adds additional CSS stylesheet include in application template.
      *
      * @param string $url
      *
@@ -1019,11 +1017,21 @@ class App
      *
      * @param string|array $data
      */
-    public function outputResponseJSON($data)
+    private function outputResponseJSON($data): void
     {
         $data = is_array($data) ? json_encode($data) : $data;
 
-        $this->outputResponse(['Content-Type:application/json' => true], $data);
+        $this->outputResponse(['Content-Type: application/json' => true], $data);
+    }
+
+    /**
+     * Output HTML response to the client.
+     *
+     * @param string $data
+     */
+    private function outputResponseHTML(string $data): void
+    {
+        $this->outputResponse(['Content-Type: text/html' => true], $data);
     }
 
     /**
@@ -1044,15 +1052,5 @@ class App
         }
 
         return $modals;
-    }
-
-    /**
-     * Output HTML response to the client.
-     *
-     * @param string $data
-     */
-    public function outputResponseHTML(string $data)
-    {
-        $this->outputResponse(['Content-Type:text/html' => true], $data);
     }
 }

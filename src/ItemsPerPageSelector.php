@@ -36,7 +36,7 @@ class ItemsPerPageSelector extends View
     /**
      * The callback function.
      *
-     * @var callable|null
+     * @var Callback|null
      */
     public $cb = null;
 
@@ -83,7 +83,7 @@ class ItemsPerPageSelector extends View
                     $this->set($ipp);
                     $reload = call_user_func($fx, $ipp);
                     if ($reload) {
-                        $this->app->terminate($reload->renderJSON());
+                        $this->app->terminateJSON($reload);
                     }
                 });
             }

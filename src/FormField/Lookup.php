@@ -160,10 +160,10 @@ class Lookup extends Input
      */
     public function outputApiResponse()
     {
-        $this->app->terminate(json_encode([
+        $this->app->terminateJSON([
             'success' => true,
             'results' => $this->getData(),
-        ]));
+        ]);
     }
 
     /**

@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.12.6 (2020-04-03)
+
+- URL query parameter to force JSON response was renamed from "json" to "__atk_json".
+
 ### version 1.12.5 (2020-03-24)
 
 - make sure $ var is assign to jQuery ($ = jQuery) in all module by adding missing import statement.
