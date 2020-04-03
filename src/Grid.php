@@ -149,8 +149,6 @@ class Grid extends View
 
     /**
      * Set TableColumn\Actions seed.
-     *
-     * @param $seed
      */
     public function setActionDecorator($seed)
     {
@@ -159,8 +157,6 @@ class Grid extends View
 
     /**
      * Set TableColumn\ActionMenu seed.
-     *
-     * @param $seed
      */
     public function setActionMenuDecorator($seed)
     {
@@ -409,17 +405,14 @@ class Grid extends View
      * Similar to addAction. Will add Button that when click will display
      * a Dropdown menu.
      *
-     * @param $view
-     * @param null $action
-     * @param bool $confirm
-     * @param bool $isDisabled
+     * @param View $view
      *
      * @throws Exception
      * @throws Exception\NoRenderTree
      *
      * @return mixed
      */
-    public function addActionMenuItem($view, $action = null, $confirm = false, $isDisabled = false)
+    public function addActionMenuItem($view, $action = null, bool $confirm = false, bool $isDisabled = false)
     {
         if (!$this->actionMenu) {
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);

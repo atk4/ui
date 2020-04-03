@@ -971,7 +971,7 @@ class View implements jsExpressionable
      *                                         of the vue component instance created via the vueService.
      * @param null|string $componentDefinition The name of the js var holding a component definition object.
      *                                         This var must be defined and accessible in window object. window['var_name']
-     * @param null        $selector            The selector for creating the base root object in Vue.
+     * @param string      $selector            The selector for creating the base root object in Vue.
      *
      * @return $this
      */

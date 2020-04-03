@@ -158,7 +158,7 @@ class Popup extends View
      * Callback will reveive a view attach to this popup
      * for adding content to it.
      *
-     * @param $fx
+     * @param callable $fx
      *
      * @throws Exception
      */
@@ -194,8 +194,6 @@ class Popup extends View
 
     /**
      * Set triggerBy.
-     *
-     * @param $trigger
      *
      * @return $this
      */
@@ -237,9 +235,6 @@ class Popup extends View
     /**
      * Set a popup options as defined in semantic-ui popup module.
      *
-     * @param $name
-     * @param $option
-     *
      * @return $this
      */
     public function setOption($name, $option)
@@ -251,8 +246,6 @@ class Popup extends View
 
     /**
      * Setting options using using an array.
-     *
-     * @param $options
      *
      * @return $this
      */

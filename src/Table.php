@@ -368,9 +368,9 @@ class Table extends Lister
      *   });
      *
      *
-     * @param null $fx             A callback function with columns widths as parameter.
-     * @param null $widths         An array of widths value, integer only. ex: [100,200,300,100]
-     * @param null $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
+     * @param callable $fx             A callback function with columns widths as parameter.
+     * @param int[]    $widths         An array of widths value, integer only. ex: [100,200,300,100]
+     * @param array    $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
      *
      * @throws Exception
      *

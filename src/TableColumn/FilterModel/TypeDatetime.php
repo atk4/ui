@@ -62,8 +62,6 @@ class TypeDatetime extends Generic
     /**
      * Set model condition base on filter value.
      *
-     * @param $m
-     *
      * @throws \atk4\data\Exception
      *
      * @return mixed

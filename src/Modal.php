@@ -145,9 +145,6 @@ class Modal extends View
     /**
      * Set modal option.
      *
-     * @param $option
-     * @param $value
-     *
      * @return $this
      */
     public function setOption($option, $value)
@@ -159,8 +156,6 @@ class Modal extends View
 
     /**
      * Set modal options passing an array.
-     *
-     * @param $options
      *
      * @return $this
      */
@@ -203,8 +198,6 @@ class Modal extends View
     /**
      * Set modal transition.
      *
-     * @param $transition_type
-     *
      * @return $this
      */
     public function transition($transition_type)
@@ -217,8 +210,6 @@ class Modal extends View
     /**
      * Set modal transition duration.
      *
-     * @param $time
-     *
      * @return $this
      */
     public function duration($time)
@@ -230,9 +221,6 @@ class Modal extends View
 
     /**
      * Add modal settings.
-     *
-     * @param $setting_option
-     * @param $value
      */
     public function settings($setting_option, $value)
     {
@@ -242,8 +230,7 @@ class Modal extends View
     /**
      * Add a deny action to modal.
      *
-     * @param $label.
-     * @param $jsAction : Javascript action that will run when deny is click.
+     * @param jsExpressionable $jsAction Javascript action that will run when deny is click.
      *
      * @return $this
      */
@@ -260,8 +247,7 @@ class Modal extends View
     /**
      * Add an approve action button to modal.
      *
-     * @param $label.
-     * @param $jsAction : Javascript action that will run when approve is click.
+     * @param jsExpressionable $jsAction Javascript action that will run when deny is click.
      *
      * @return $this
      */
@@ -277,8 +263,6 @@ class Modal extends View
 
     /**
      * Add an action button to modal.
-     *
-     * @param $button
      *
      * @return $this
      */

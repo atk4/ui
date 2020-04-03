@@ -999,9 +999,6 @@ class App
      * This can be overridden for future PSR-7 implementation
      *
      * @TODO SSE is a "Header in Header" case, it works, but must be checked
-     *
-     * @param array $headers
-     * @param       $content
      */
     protected function outputResponse(array $headers, $content)
     {

@@ -28,13 +28,9 @@ class jsVueService
      *
      * This output js: atk.vueService.createAtkVue("id","component",{});
      *
-     * @param $id
-     * @param $component
-     * @param array $data
-     *
      * @return mixed
      */
-    public function createAtkVue($id, $component, $data = [])
+    public function createAtkVue($id, $component, array $data = [])
     {
         return $this->service->createAtkVue($id, $component, $data);
     }
@@ -45,13 +41,9 @@ class jsVueService
      *
      * This output js: atk.vueService.createVue("id","component",{});
      *
-     * @param $id
-     * @param $component
-     * @param array $data
-     *
      * @return mixed
      */
-    public function createVue($id, $componentName, $component, $data = [])
+    public function createVue($id, $componentName, $component, array $data = [])
     {
         return $this->service->createVue($id, $componentName, $component, $data);
     }
@@ -62,12 +54,9 @@ class jsVueService
      *
      * This output js: atk.vueService.emitEvent("eventName", {});
      *
-     * @param $eventName
-     * @param array $data
-     *
      * @return mixed
      */
-    public function emitEvent($eventName, $data = [])
+    public function emitEvent($eventName, array $data = [])
     {
         return $this->service->emitEvent($eventName, $data);
     }

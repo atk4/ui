@@ -122,8 +122,7 @@ class Upload extends Input
     /**
      * Set input field value.
      *
-     * @param $value // The field input value.
-     * @param $junk
+     * @param mixed $value The field input value.
      *
      * @return $this
      */
@@ -144,8 +143,6 @@ class Upload extends Input
 
     /**
      * Set file id.
-     *
-     * @param $id
      */
     public function setFileId($id)
     {
@@ -154,8 +151,6 @@ class Upload extends Input
 
     /**
      * Add a js action to be return to server on callback.
-     *
-     * @param $action
      */
     public function addJSAction($action)
     {

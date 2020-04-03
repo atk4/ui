@@ -59,8 +59,6 @@ class ItemsPerPageSelector extends View
     /**
      * Set label using js action.
      *
-     * @param $ipp
-     *
      * @return jQuery
      */
     public function jsSetLabel($ipp)
@@ -73,7 +71,7 @@ class ItemsPerPageSelector extends View
      * The callback should return a View to be reload after an item
      * has been select.
      *
-     * @param null $fx
+     * @param callable $fx
      */
     public function onPageLengthSelect($fx = null)
     {

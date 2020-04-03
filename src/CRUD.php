@@ -181,9 +181,6 @@ class CRUD extends Grid
      * Return proper js statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
-     * @param $return
-     * @param $action
-     *
      * @throws \atk4\core\Exception
      *
      * @return array|object

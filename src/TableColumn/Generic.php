@@ -117,7 +117,6 @@ class Generic
      * Setup popup header action.
      *
      * @param string $class The css class for filter icon.
-     * @param $id
      */
     public function setHeaderPopup($class, $id)
     {
@@ -132,8 +131,6 @@ class Generic
 
     /**
      * Set header popup icon.
-     *
-     * @param $icon
      */
     public function setHeaderPopupIcon($icon)
     {
@@ -173,15 +170,11 @@ class Generic
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @param             $items
-     * @param string      $icon
-     * @param string|null $menuId The id of the menu.
-     *
      * @throws Exception
      *
      * @return \atk4\ui\jsCallback
      */
-    public function setHeaderDropdown($items, $icon = 'caret square down', $menuId = null)
+    public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null)
     {
         $this->hasHeaderAction = true;
         $id = $this->name . '_ac';

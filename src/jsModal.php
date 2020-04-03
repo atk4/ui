@@ -10,12 +10,9 @@ class jsModal extends jsExpression
     /**
      * jsModal constructor.
      *
-     * @param $title       //When empty, header will be remove in modal.
-     * @param $url
-     * @param array  $args
-     * @param string $mode
+     * @param string $title When empty, header will be remove in modal.
      */
-    public function __construct($title, $url, $args = [], $mode = 'json')
+    public function __construct($title, $url, array $args = [], string $mode = 'json')
     {
         if ($url instanceof VirtualPage) {
             $url = $url->getJSURL('cut');
@@ -50,9 +47,6 @@ class jsModal extends jsExpression
      *       Note: Default to 'image' for backward compatibility.
      *
      * You can set option individually or supply an array.
-     *
-     * @param $options
-     * @param null $value
      *
      * @return $this
      */

@@ -28,8 +28,6 @@ class jsNotify implements jsExpressionable
     /**
      * Set notify message.
      *
-     * @param $msg
-     *
      * @return $this
      */
     public function setMessage($msg)
@@ -39,9 +37,6 @@ class jsNotify implements jsExpressionable
 
     /**
      * Set notifier option by specifying option name.
-     *
-     * @param $option
-     * @param $value
      *
      * @return $this
      */
@@ -54,8 +49,6 @@ class jsNotify implements jsExpressionable
 
     /**
      * Set notifier content.
-     *
-     * @param $content
      *
      * @return $this
      */
@@ -70,8 +63,6 @@ class jsNotify implements jsExpressionable
      * Set notifier color.
      *  - any colors define in semantic-ui can be used.
      *
-     * @param $color
-     *
      * @return $this
      */
     public function setColor($color)
@@ -83,8 +74,6 @@ class jsNotify implements jsExpressionable
 
     /**
      * Add an icon to the notifier.
-     *
-     * @param $icon
      *
      * @return $this
      */
@@ -98,9 +87,6 @@ class jsNotify implements jsExpressionable
     /**
      * Set open and close transition for the notifier.
      *   - any transition define in semantic ui can be used.
-     *
-     * @param $openTransition
-     * @param null $closeTransition
      *
      * @return $this
      */
@@ -120,8 +106,6 @@ class jsNotify implements jsExpressionable
      *  - if you set duration to 0, then notification
      *    will stay forever until close by user.
      *
-     * @param $duration : interger
-     *
      * @return $this
      */
     public function setDuration($duration)
@@ -133,8 +117,6 @@ class jsNotify implements jsExpressionable
 
     /**
      * Set notifier position within the body of the page or within the attach element.
-     *
-     * @param $position
      *
      * @return $this
      */
@@ -148,8 +130,6 @@ class jsNotify implements jsExpressionable
     /**
      * Set the width percentage of the notifier within the body or attached to element.
      *
-     * @param $width: integer
-     *
      * @return $this
      */
     public function setWidth($width)
@@ -162,7 +142,7 @@ class jsNotify implements jsExpressionable
     /**
      * Set the opacity of the notifier.
      *
-     * @param $opacity : range from 0 to 1
+     * @param float $opacity Range from 0 to 1
      *
      * @return $this
      */
@@ -178,8 +158,6 @@ class jsNotify implements jsExpressionable
      *  - position and width of notifier will be relative to this view object.
      *
      * note: notifier is attach to 'body' element by default.
-     *
-     * @param $to
      *
      * @throws Exception
      *
