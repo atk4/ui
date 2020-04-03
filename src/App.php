@@ -371,7 +371,12 @@ class App
     {
         $headers = $this->normalizeHeaders($headers);
         if (empty($headers['content-type'])) {
-            throw new Exception('Content type must be always set');
+            $this->response_headers = $this->normalizeHeaders($this->response_headers);
+            if (empty($this->response_headers['content-type'])) {
+                throw new Exception('Content type must be always set');
+            }
+
+            $headers['content-type'] = $this->response_headers['content-type'];
         }
 
         $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
