@@ -350,10 +350,10 @@ class App
             }
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
             $this->outputResponseHTML($output);
-        } elseif ($type !== null && $type !== 'text/html') {
-            $this->outputResponse(['Content-Type: ' . $contentType => true], $output);
-        } else {
+        } elseif ($type === 'text/html') {
             $this->outputResponseHTML($output);
+        } else {
+            $this->outputResponse(['Content-Type: ' . $contentType => true], $output);
         }
 
         $this->run_called = true; // prevent shutdown function from triggering.
