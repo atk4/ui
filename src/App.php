@@ -350,7 +350,7 @@ class App
             }
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
             $this->outputResponseHTML($output);
-        } elseif ($type !== null) {
+        } elseif ($type !== null && $type !== 'text/html') {
             $this->outputResponse(['Content-Type: ' . $contentType => true], $output);
         } else {
             $this->outputResponseHTML($output);
@@ -363,6 +363,8 @@ class App
     public function terminateHTML($output): void
     {
         if ($output instanceof View) {
+            $output = $output->render();
+        } elseif ($output instanceof Template) {
             $output = $output->render();
         }
 
