@@ -351,7 +351,7 @@ class App
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
             $this->outputResponseHTML($output);
         } elseif ($type === 'text/html') {
-            $this->outputResponseHTML($output);
+            $this->outputResponseHTML($output ?? '');
         } else {
             $this->outputResponse(['Content-Type: ' . $contentType => true], $output);
         }
