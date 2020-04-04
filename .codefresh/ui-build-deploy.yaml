@@ -25,9 +25,10 @@ steps:
       - "${{CF_REVISION}}"
   deploy:
     type: deploy
+    image: codefresh/kubectl:1.13.3
     stage: deploy
-    arguments:
-      kind: kubernetes
-      cluster: atk
-      namespace: atk-demo
-      deployment: atk-demo
+    commands:
+      - echo $CF_KUBECONFIG_PATH
+      - kubectl config get-contexts
+      - kubectl get deploymetns -n atk-demo
+
