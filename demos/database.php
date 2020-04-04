@@ -8,10 +8,10 @@ try {
         $db = new \atk4\data\Persistence\SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
     }
 } catch (PDOException $e) {
-    throw new \atk4\ui\Exception([
+    throw (new \atk4\ui\Exception([
         'This demo requires access to the database. See "demos/database.php"',
         // do not pass $e here unless you can secure DSN!
-    ]);
+    ]))->addMoreInfo('PDO error', $e->getMessage());
 }
 
 $app->db = $db;
