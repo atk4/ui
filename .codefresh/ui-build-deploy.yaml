@@ -29,5 +29,5 @@ steps:
     arguments:
       kind: kubernetes
       cluster: atk
-      namespace: apps
-      service: ui-agiletoolkit-org-atk-demo
+      namespace: atk-demo
+      service: atk-demo
