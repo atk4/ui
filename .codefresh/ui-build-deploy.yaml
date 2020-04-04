@@ -30,4 +30,4 @@ steps:
       kind: kubernetes
       cluster: atk
       namespace: atk-demo
-      service: atk-demo
+      deployment: atk-demo
