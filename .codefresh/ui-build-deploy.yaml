@@ -24,11 +24,11 @@ steps:
       - "${{CF_BRANCH_TAG_NORMALIZED}}"
       - "${{CF_REVISION}}"
   deploy:
-    type: deploy
     image: codefresh/kubectl:1.13.3
     stage: deploy
     commands:
       - echo $CF_KUBECONFIG_PATH
       - kubectl config get-contexts
       - kubectl get deploymetns -n atk-demo
+      - kubectl config use-context "gke-kostisdemo-codefresh-kostis"
 
