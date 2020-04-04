@@ -31,5 +31,5 @@ steps:
       - kubectl config get-contexts
       - kubectl config set-context atk
       - kubectl get deploymetns -n atk-demo
-      - 
+      - kubectl -n atk-demo set image deployment/atk-demo atk-demo="r.cfcr.io/romaninsh/atk4/ui:${{CF_REVISION}}"
 
