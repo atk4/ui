@@ -5,6 +5,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl
 
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+
 RUN apt-get install -y git
 
 WORKDIR /var/www/html/
