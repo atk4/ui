@@ -10,7 +10,7 @@ try {
 } catch (PDOException $e) {
     throw new \atk4\ui\Exception([
         'This demo requires access to the database. See "demos/database.php"',
-    ], null, $e);
+    ], null, defined('SECURE_DSN')?null:$e);
 }
 
 $app->db = $db;
