@@ -1,3 +1,3 @@
 <?php
 
-$db = $app->dbConnect($_ENV);
+$db = $app->dbConnect($_ENV['DSN']);
