@@ -29,6 +29,7 @@ steps:
     commands:
       - echo $CF_KUBECONFIG_PATH
       - kubectl config get-contexts
+      - kubectl config set-context atk
       - kubectl get deploymetns -n atk-demo
-      - kubectl config use-context "gke-kostisdemo-codefresh-kostis"
+      - 
 
