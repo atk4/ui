@@ -10,6 +10,14 @@ class AppMock extends \atk4\ui\App
     {
         $this->terminate = true;
     }
+
+    /**
+     * Overrided to allow multiple App::run() calls, prevent sending headers when headers are already sent.
+     */
+    protected function outputResponse(string $data, array $headers): void
+    {
+        echo $data;
+    }
 }
 
 class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
