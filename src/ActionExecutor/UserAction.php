@@ -1,6 +1,21 @@
 <?php
 /**
  * Modal executor for action.
+ * These are special modal that will divide a model action into steps
+ * and run each step accordingly via a loader setup in modal view.
+ * The step orders are Argument, Field and Preview, prior to execute the model action.
+ *
+ * It will first determine the number of step necessary to run the model
+ * action. When a step is running through the view loader, data collect for each step
+ * are store in browser session storage via javascript. Thus, each request to execute loader,
+ * include step data within the request.
+ *
+ * UserAction modal view may be generated via callbacks.
+ * These modal are added to app->html view if not already added
+ * and the api service take care of generating them when output
+ * in json via callback. It is important that these UserAction modals
+ * stay within the page html content for loader to run each steps properly.
+ *
  */
 
 namespace atk4\ui\ActionExecutor;
