@@ -132,7 +132,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = ['sticky2.php?atk_admin_loader_callback=ajax&__atk_callback1'];
         $files[] = ['virtual.php?atk_admin_label_2_click=ajax&__atk_callback=1'];
         $files[] = ['actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1']; // need to call this before calls other actions to fill model files
-        $files[] = ['actions.php?atk_useraction_loader_callback=ajax&__atk_callback=1&atk_useraction=1&step=fields'];
+        $files[] = ['actions.php?atk_useraction_file_edit_loader_callback=ajax&__atk_callback=1&atk_useraction_file_edit=1&step=fields'];
         $files[] = ['notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
         $files[] = ['scroll-lister.php?atk_admin_view_2_view_lister_jspaginator=ajax&__atk_callback=1&page=2'];
 
