@@ -6,7 +6,7 @@ class AppMock extends \atk4\ui\App
 {
     public $terminated = false;
 
-    public function terminate($output = null, array $headers = []): void
+    public function terminate($output = '', array $headers = []): void
     {
         $this->terminate = true;
     }

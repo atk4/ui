@@ -63,7 +63,7 @@ class jsSSE extends jsCallback
             }
 
             // no further output please
-            $this->app->terminateJSON(null);
+            $this->app->terminateJSON('');
         }
 
         $this->app->terminateJSON(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]);

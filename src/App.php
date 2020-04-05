@@ -336,7 +336,7 @@ class App
      * @throws \atk4\core\Exception
      * @throws ExitApplicationException
      */
-    public function terminate($output = null, array $headers = []): void
+    public function terminate($output = '', array $headers = []): void
     {
         $headers = $this->normalizeHeaders($headers);
         if (empty($headers['content-type'])) {
@@ -346,14 +346,14 @@ class App
         $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
 
         if ($type === 'application/json') {
-            if (is_scalar($output) || $output === null) {
+            if (is_array($output)) {
+                $output['modals'] = $this->getRenderedModals();
+            } else {
                 $decode = json_decode($output, true);
                 if (json_last_error() === JSON_ERROR_NONE) {
                     $decode['modals'] = $this->getRenderedModals();
                     $output = $decode;
                 }
-            } elseif (is_array($output)) {
-                $output['modals'] = $this->getRenderedModals();
             }
             $this->outputResponseJSON($output, $headers);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
@@ -375,7 +375,7 @@ class App
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
             $this->outputResponseHTML($output, $headers);
         } elseif ($type === 'text/html') {
-            $this->outputResponseHTML($output ?? '', $headers);
+            $this->outputResponseHTML($output, $headers);
         } else {
             $this->outputResponse($output, $headers);
         }
