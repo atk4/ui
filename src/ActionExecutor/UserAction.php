@@ -122,7 +122,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      */
     public function afterActionInit(Generic $action)
     {
-        $getTableName = function($arr) {
+        $getTableName = function ($arr) {
             foreach ($arr as $k => $v) {
                 return is_numeric($k) ? $v : $k;
             }
