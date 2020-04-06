@@ -225,8 +225,6 @@ class App
         }
 
         if (!$this->call_exit) {
-            flush(); // important, otherwise content-type header is not flushed
-
             // case process is not in shutdown mode
             // App as already done everything
             // App need to stop output
