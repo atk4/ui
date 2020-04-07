@@ -105,7 +105,7 @@ class App
     /** @var View For internal use */
     public $html = null;
 
-    /** @var LoggerInterface, target for objects with DebugTrait */
+    /** @var LoggerInterface Target for objects with DebugTrait */
     public $logger = null;
 
     /** @var Persistence */
@@ -380,15 +380,11 @@ class App
         $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
 
         if ($type === 'application/json') {
-            if (is_array($output)) {
-                $output['modals'] = $this->getRenderedModals();
-            } else {
-                $decode = json_decode($output, true);
-                if (json_last_error() === JSON_ERROR_NONE) {
-                    $decode['modals'] = $this->getRenderedModals();
-                    $output = $decode;
-                }
+            if (is_string($output)) {
+                $output = $this->decodeJson($output);
             }
+            $output['modals'] = $this->getRenderedModals();
+
             $this->outputResponseJSON($output, $headers);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
@@ -407,6 +403,7 @@ class App
                 $remove_function = '$(\'.ui.dimmer.modals.page\').find(\'' . $ids . '\').remove();';
             }
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
+
             $this->outputResponseHTML($output, $headers);
         } elseif ($type === 'text/html') {
             $this->outputResponseHTML($output, $headers);
@@ -1011,14 +1008,35 @@ class App
 
     /**
      * Encodes string - removes HTML entities.
-     *
-     * @param string $val
-     *
-     * @return string
      */
-    public function encodeHTML($val)
+    public function encodeHTML(string $val): string
     {
         return htmlentities($val);
+    }
+
+    public function decodeJson(string $json)
+    {
+        $data = json_decode($json, true, 512, JSON_BIGINT_AS_STRING);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new Exception('JSON decode error: ' . json_last_error_msg());
+        }
+
+        return $data;
+    }
+
+    public function encodeJson($data, bool $forceObject = false): string
+    {
+        $options = JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT;
+        if ($forceObject) {
+            $options |= JSON_FORCE_OBJECT;
+        }
+
+        $json = json_encode($data, $options, 512);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new Exception('JSON encode error: ' . json_last_error_msg());
+        }
+
+        return $json;
     }
 
     protected function setupAlwaysRun(): void
@@ -1113,7 +1131,9 @@ class App
      */
     private function outputResponseJSON($data, array $headers = []): void
     {
-        $data = is_array($data) ? json_encode($data) : $data;
+        if (!is_string($data)) {
+            $data = $this->encodeJson($data);
+        }
 
         $this->outputResponse(
             $data,

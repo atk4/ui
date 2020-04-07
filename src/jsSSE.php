@@ -47,7 +47,7 @@ class jsSSE extends jsCallback
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'jsAction');
+            $this->sendEvent('js', $this->app->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'jsAction');
         } // else ignore event
     }
 
@@ -57,7 +57,7 @@ class jsSSE extends jsCallback
             if ($ajaxec) {
                 $this->sendEvent(
                     'js',
-                    json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
+                    $this->app->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
                     'jsAction'
                 );
             }
