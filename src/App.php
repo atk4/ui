@@ -27,7 +27,8 @@ class App
     use AppScopeTrait;
     use DIContainerTrait;
 
-    public const HEADER_STATUS_CODE = 'atk4-status-code';
+    /** @const string */
+    protected const HEADER_STATUS_CODE = 'atk4-status-code';
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
@@ -1082,16 +1083,13 @@ class App
     protected function outputResponse(string $data, array $headers): void
     {
         $this->response_headers = $this->normalizeHeaders($this->response_headers);
+        $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
+        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
 
-        $headers = array_diff_assoc(
-            array_merge($this->response_headers, $this->normalizeHeaders($headers)),
-            self::$_sentHeaders
-        );
-
-        if (count($headers) > 0 && headers_sent()) {
+        if (count($headersNew) > 0 && headers_sent()) {
             echo "\n" . '!! ATK4 UI ERROR: Headers already sent, more headers can not be set at this stage. !!' . "\n";
         } else {
-            foreach ($headers as $k => $v) {
+            foreach ($headersNew as $k => $v) {
                 if ($k === self::HEADER_STATUS_CODE) {
                     http_response_code($v);
                 } else {
