@@ -40,6 +40,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
                 case 'database.php': // exclude - is a setup file
                 case 'db.example.php': // exclude - is a setup file
                 case 'db.php': // exclude - is a setup file
+                case 'db.env.php': // exclude - is a setup file
                 case 'db.travis.php': // exclude - is a setup file
                 case 'db.github.php': // exclude - is a setup file
                 case 'coverage.php': // exclude - is the coverage file
