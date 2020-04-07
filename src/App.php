@@ -13,11 +13,7 @@ use atk4\ui\Exception\ExitApplicationException;
 use atk4\ui\Layout\Centered;
 use atk4\ui\Layout\Generic;
 use atk4\ui\Persistence\UI;
-use Closure;
-use Error;
-use ErrorException;
 use Psr\Log\LoggerInterface;
-use Throwable;
 
 class App
 {
@@ -186,10 +182,10 @@ class App
 
         // Set our exception handler
         if ($this->catch_exceptions) {
-            set_exception_handler(Closure::fromCallable([$this, 'caughtException']));
+            set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(
                 static function ($severity, $msg, $file, $line) {
-                    throw new ErrorException($msg, 0, $severity, $file, $line);
+                    throw new \ErrorException($msg, 0, $severity, $file, $line);
                 },
                 $this->catch_error_types
             );
@@ -230,7 +226,7 @@ class App
             // App as already done everything
             // App need to stop output
             // set_handler to catch/trap any exception
-            set_exception_handler(function (Throwable $t) {});
+            set_exception_handler(function (\Throwable $t) {});
             // raise exception to be trapped and stop execution
             throw new ExitApplicationException();
         }
@@ -241,14 +237,14 @@ class App
     /**
      * Catch exception.
      *
-     * @param Throwable $exception
+     * @param \Throwable $exception
      *
      * @throws \atk4\core\Exception
      * @throws ExitApplicationException
      *
      * @return bool
      */
-    public function caughtException(Throwable $exception)
+    public function caughtException(\Throwable $exception)
     {
         $this->catch_runaway_callbacks = false;
 
@@ -266,7 +262,7 @@ class App
                 $this->layout->template->setHTML('Content', $exception->getHTML());
                 break;
 
-            case $exception instanceof Error:
+            case $exception instanceof \Error:
                 Message::addTo($this->layout, [get_class($exception) . ': ' . $exception->getMessage() . ' (in ' . $exception->getFile() . ':' . $exception->getLine() . ')', 'error']);
                 Text::addTo($this->layout, [nl2br($exception->getTraceAsString())]);
                 break;
