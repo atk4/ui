@@ -275,6 +275,7 @@ class App
                 'message' => $this->layout->getHtml(),
             ]);
         } else {
+            $this->setResponseStatusCode(500);
             $this->run();
         }
 
@@ -533,6 +534,7 @@ class App
             $this->hook(self::HOOK_BEFORE_OUTPUT);
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
+                $this->setResponseStatusCode(500);
                 $this->terminate(
                     $this->buildLateErrorStr('Callback requested, but never reached. You may be missing some arguments in request URL.'),
                     ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => 500]
