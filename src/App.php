@@ -573,7 +573,7 @@ class App
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 $this->terminate(
-                    "\n" . '!! Callback requested, but never reached. You may be missing some arguments in ' . $_SERVER['REQUEST_URI'] . '. !!' . "\n",
+                    "\n" . '!! ATK4 UI ERROR: Callback requested, but never reached. You may be missing some arguments in request URL. !!' . "\n",
                     ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => 500]
                 );
             }
@@ -1074,7 +1074,7 @@ class App
         );
 
         if (count($headers) > 0 && headers_sent()) {
-            echo "\n" . '!! Headers already sent, more headers can not be set at this stage. !!' . "\n";
+            echo "\n" . '!! ATK4 UI ERROR: Headers already sent, more headers can not be set at this stage. !!' . "\n";
         } else {
             foreach ($headers as $k => $v) {
                 if ($k === self::HEADER_STATUS_CODE) {
