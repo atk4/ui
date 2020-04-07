@@ -832,12 +832,9 @@ class App
      * @throws \atk4\core\Exception
      * @throws ExitApplicationException
      */
-    public function redirect($page)
+    public function redirect($page, bool $permanent = false): void
     {
-        header('Location: ' . $this->url($page));
-
-        $this->run_called = true; // prevent shutdown function from triggering.
-        $this->callExit();
+        $this->terminateHTML('', ['location' => $this->url($page), self::HEADER_STATUS_CODE => $permanent ? 301 : 302]);
     }
 
     /**

@@ -39,8 +39,7 @@ $t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection
 $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'table'], function (Wizard $w) {
     if (isset($_GET['name'])) {
         $w->memorize('model', $_GET['name']);
-        header('Location: ' . $w->urlNext());
-        $w->app->terminateHTML('');
+        $w->app->redirect($w->urlNext());
     }
 
     $c = \atk4\ui\Columns::addTo($w);
