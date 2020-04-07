@@ -183,8 +183,10 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files = [];
         $files[] = ['sse.php?atk_admin_jssse=ajax&__atk_callback=1&event=sse'];
         $files[] = ['console.php?atk_admin_tabs_tabssubview_console_jssse=ajax&__atk_callback=1&event=sse'];
-        $files[] = ['console.php?atk_admin_tabs_tabssubview_2_virtualpage=cut&atk_admin_tabs_tabssubview_2_virtualpage_console_jssse=ajax&__atk_callback=1&event=sse'];
-        $files[] = ['console.php?atk_admin_tabs_tabssubview_3_virtualpage=cut&atk_admin_tabs_tabssubview_3_virtualpage_console_jssse=ajax&__atk_callback=1&event=sse'];
+        if (!($this instanceof DemoCallExitExceptionTest)) { // ignore content type mismatch when App->call_exit equals to true
+            $files[] = ['console.php?atk_admin_tabs_tabssubview_2_virtualpage=cut&atk_admin_tabs_tabssubview_2_virtualpage_console_jssse=ajax&__atk_callback=1&event=sse'];
+            $files[] = ['console.php?atk_admin_tabs_tabssubview_3_virtualpage=cut&atk_admin_tabs_tabssubview_3_virtualpage_console_jssse=ajax&__atk_callback=1&event=sse'];
+        }
 
         return $files;
     }
