@@ -584,7 +584,7 @@ class MultiLine extends Generic
             'component'   => $component,
             'caption'     => $field->getCaption(),
             'default'     => $field->default,
-            'isExpr'      => isset($field->expr) ? true : false,
+            'isExpr'      => isset($field->expr),
             'isEditable'  => $field->isEditable(),
             'isHidden'    => $field->isHidden(),
             'isVisible'   => $field->isVisible(),
@@ -762,7 +762,7 @@ class MultiLine extends Generic
      */
     private function renderCallback()
     {
-        $action = isset($_POST['__atkml_action']) ? $_POST['__atkml_action'] : null;
+        $action = $_POST['__atkml_action'] ?? null;
         $response = [
             'success' => true,
             'message' => 'Success',
@@ -822,7 +822,7 @@ class MultiLine extends Generic
                 continue;
             }
 
-            $value = isset($post[$fieldName]) ? $post[$fieldName] : null;
+            $value = $post[$fieldName] ?? null;
             if ($model->getField($fieldName)->isEditable()) {
                 try {
                     $model[$fieldName] = $value;

@@ -68,8 +68,8 @@ class UI extends \atk4\data\Persistence
         case 'date':
         case 'datetime':
         case 'time':
-            $dt_class = isset($f->dateTimeClass) ? $f->dateTimeClass : 'DateTime';
-            $tz_class = isset($f->dateTimeZoneClass) ? $f->dateTimeZoneClass : 'DateTimeZone';
+            $dt_class = $f->dateTimeClass ?? \DateTime::class;
+            $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;
 
             if ($v instanceof $dt_class) {
                 $format = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
@@ -126,8 +126,8 @@ class UI extends \atk4\data\Persistence
         case 'date':
         case 'datetime':
         case 'time':
-            $dt_class = isset($f->dateTimeClass) ? $f->dateTimeClass : 'DateTime';
-            $tz_class = isset($f->dateTimeZoneClass) ? $f->dateTimeZoneClass : 'DateTimeZone';
+            $dt_class = $f->dateTimeClass ?? \DateTime::class;
+            $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;
 
             // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
             $format = ['date' => '!+' . $this->date_format, 'datetime' => '!+' . $this->datetime_format, 'time' => '!+' . $this->time_format];
