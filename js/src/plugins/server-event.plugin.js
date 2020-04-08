@@ -10,7 +10,7 @@ export default class serverEvent extends atkPlugin {
     const hasLoader = this.settings.showLoader;
 
     if (typeof(EventSource) !== "undefined") {
-      let source = new EventSource(`${this.settings.uri}&event=${this.settings.event}`);
+      let source = new EventSource(`${this.settings.uri}&__atk_sse=1`);
       if(hasLoader) {
         element.addClass('loading');
       }
@@ -41,5 +41,4 @@ serverEvent.DEFAULTS = {
   uri: null,
   uri_options: {},
   showLoader: false,
-  event: 'sse',
 };

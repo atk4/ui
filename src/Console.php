@@ -42,7 +42,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
     /**
      * Bypass is used internally to capture and wrap direct output, but prevent jsSSE from
-     * triggering output recurlively.
+     * triggering output recursively.
      *
      * @var bool
      */
