@@ -252,24 +252,11 @@ class App
         // it will maintain everything as in the original app StickyGet, logger, Events
         $this->html = null;
         $this->initLayout(Centered::class);
-        // change title to added an error
-        //Header::addTo($this->layout, ['Header'])->set('L'.$exception->getLine().': '.$exception->getMessage());
 
-        // -- CHECK ERROR BY TYPE
-        switch (true) {
-
-            case $exception instanceof \atk4\core\Exception:
-                $this->layout->template->setHTML('Content', $exception->getHTML());
-                break;
-
-            case $exception instanceof \Error:
-                Message::addTo($this->layout, [get_class($exception) . ': ' . $exception->getMessage() . ' (in ' . $exception->getFile() . ':' . $exception->getLine() . ')', 'error']);
-                Text::addTo($this->layout, [nl2br($exception->getTraceAsString())]);
-                break;
-
-            default:
-                Message::addTo($this->layout, [get_class($exception) . ': ' . $exception->getMessage(), 'error']);
-                break;
+        if ($exception instanceof \atk4\core\Exception) {
+            $this->layout->template->setHTML('Content', $exception->getHTML());
+        } else {
+            $this->layout->template->setHTML('Content', (string) new \atk4\core\ExceptionRenderer\HTML($exception));
         }
 
         // remove header
