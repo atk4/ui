@@ -101,7 +101,7 @@ if (!class_exists('Country')) {
                  */
 
                 $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
-                $m['currency_symbol'] = isset($map[$m['currency']]) ? $map[$m['currency']] : '?';
+                $m['currency_symbol'] = $map[$m['currency']] ?? '?';
             });
 
             $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type' => 'money']);

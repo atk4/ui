@@ -100,7 +100,7 @@ class jsCallback extends Callback implements jsExpressionable
 
                 $values = [];
                 foreach ($this->args as $key => $value) {
-                    $values[] = isset($_POST[$key]) ? $_POST[$key] : null;
+                    $values[] = $_POST[$key] ?? null;
                 }
 
                 $response = call_user_func_array($callback, array_merge([$chain], $values));

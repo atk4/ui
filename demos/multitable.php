@@ -18,7 +18,7 @@ class Finder extends \atk4\ui\Columns
         $table = \atk4\ui\Table::addTo($this->addColumn(), ['header' => false, 'very basic selectable'])->addStyle('cursor', 'pointer');
         $table->setModel($model, [$model->title_field]);
 
-        $selections = isset($_GET[$this->name]) ? explode(',', $_GET[$this->name]) : [];
+        $selections = explode(',', $_GET[$this->name] ?? '');
 
         if ($selections) {
             $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');

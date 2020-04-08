@@ -409,20 +409,20 @@ class App
     public function initIncludes()
     {
         // jQuery
-        $url = isset($this->cdn['jquery']) ? $this->cdn['jquery'] : '../public';
+        $url = $this->cdn['jquery'] ?? '../public';
         $this->requireJS($url . '/jquery.min.js');
 
         // Semantic UI
-        $url = isset($this->cdn['semantic-ui']) ? $this->cdn['semantic-ui'] : '../public';
+        $url = $this->cdn['semantic-ui'] ?? '../public';
         $this->requireJS($url . '/semantic.min.js');
         $this->requireCSS($url . '/semantic.min.css');
 
         // Serialize Object
-        $url = isset($this->cdn['serialize-object']) ? $this->cdn['serialize-object'] : '../public';
+        $url = $this->cdn['serialize-object'] ?? '../public';
         $this->requireJS($url . '/jquery.serialize-object.min.js');
 
         // Agile UI
-        $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
+        $url = $this->cdn['atk'] ?? '../public';
         $this->requireJS($url . '/atkjs-ui.min.js');
         $this->requireCSS($url . '/agileui.css');
     }
@@ -911,7 +911,7 @@ class App
             $tag = substr($tag, 0, -1);
             $postfix = '/';
         } elseif (substr($tag, 0, 1) == '/') {
-            return isset($attr[0]) ? '</' . $attr[0] . '>' : '<' . $tag . '>';
+            return '</' . ($attr[0] ?? substr($tag, 1)) . '>';
         } else {
             $postfix = '';
         }
