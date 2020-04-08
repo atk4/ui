@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.12.6 (2020-04-08)
+
+- URL query parameter to enable SSE response was renamed from "event=sse" to "__atk_sse".
+
 ### version 1.12.6 (2020-04-03)
 
 - URL query parameter to force JSON response was renamed from "json" to "__atk_json".
