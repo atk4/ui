@@ -34,6 +34,7 @@ class Slide extends View implements Slidable
     public function init()
     {
         parent::init();
+        $this->addClass('atk-visible');
         $this->addPanelContent(new SlideContent());
     }
 
