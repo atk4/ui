@@ -282,16 +282,6 @@ class App
     }
 
     /**
-     * Outputs debug info.
-     *
-     * @param string $str
-     */
-    public function outputDebug($str)
-    {
-        echo 'DEBUG:' . $str . '<br/>';
-    }
-
-    /**
      * Normalize HTTP headers to associative array with LC keys.
      *
      * @param string[] $headers
