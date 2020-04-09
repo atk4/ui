@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.13.0 (2020-04-09)
+    
+- New PanelService.
+
 ### version 1.12.7 (2020-04-08)
 
 - URL query parameter to enable SSE response was renamed from "event=sse" to "__atk_sse".

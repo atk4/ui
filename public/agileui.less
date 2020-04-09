@@ -1,8 +1,12 @@
-// Variables
+//import default fomantic var.
+@import 'fomantic-default-var';
 
+// Variables
 @leftMenuWidth: 260px;
 @desktopWidth: 992px;
 @tabletWidth: 768px;
+
+@atkSlidePanelColor: @offWhite;
 
 
 // Layout
@@ -84,8 +88,8 @@ footer.atk-footer {
 .atk-slide-panel {
   .transition(box-shadow .2s, right .2s);
   bottom: 0;
-  background-color: whitesmoke;
-  box-shadow: 0 0 0 fade(#000, 0%);
+  background-color: @atkSlidePanelColor;
+  box-shadow: 0 0 0 fade(@black, 0%);
   height: 99%;
   right: -100%;
   overflow-y: auto;
@@ -93,8 +97,19 @@ footer.atk-footer {
   width: 40%;
   z-index: 1000;
   &.atk-visible {
-    box-shadow: 0px 0 5px fade(#000, 20%);
+    box-shadow: 0px 0 5px fade(@black, 20%);
     right: 0%;
+  }
+}
+
+.atk-panel-close {
+  color: @black;
+}
+
+i.atk-panel-warning {
+  color: @atkSlidePanelColor;
+  &.atk-visible {
+    color: @black;
   }
 }
 

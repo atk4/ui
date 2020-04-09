@@ -9,21 +9,21 @@ use atk4\ui\jsCallback;
 
 interface SlidableContent
 {
-    public function getWarningSelector() :string;
-
-    public function getWarningTrigger() :string;
-
-    public function setWarningSelector(string $selector);
-
-    public function setWarningTrigger(string $trigger);
+//    public function getWarningSelector() :string;
+//
+//    public function getWarningTrigger() :string;
+//
+//    public function setWarningSelector(string $selector);
+//
+//    public function setWarningTrigger(string $trigger);
 
     public function setCb(jsCallback $cb);
 
     public function getCallbackUrl() :string;
 
-    public function setCloseSelector(string $selector);
-
-    public function getCloseSelector() :string;
+//    public function setCloseSelector(string $selector);
+//
+//    public function getCloseSelector() :string;
 
     /**
      * Return an array of css class that should be
@@ -44,5 +44,5 @@ interface SlidableContent
      * The content
      * @param bool $state
      */
-    public function jsDisplayWarning(bool $state);
+//    public function jsDisplayWarning(bool $state);
 }

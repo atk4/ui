@@ -7,6 +7,7 @@ namespace atk4\ui\Panel;
 
 use atk4\ui\jQuery;
 use atk4\ui\jsCallback;
+use atk4\ui\jsExpression;
 use atk4\ui\View;
 
 class SlideContent extends View implements SlidableContent
@@ -14,44 +15,44 @@ class SlideContent extends View implements SlidableContent
     public $defaultTemplate = 'panel/slide-content.html';
     public $cb = null;
 
-    protected $warningSelector;
-    protected $warningTrigger;
-
-    protected $closeSelector;
+//    protected $warningSelector;
+//    protected $warningTrigger;
+//
+//    protected $closeSelector;
 
     public function init()
     {
         parent::init();
         $this->addClass('atk-slide-content');
         $this->setCb(new jsCallback(['appSticky' => true]));
-        $this->setWarningSelector('.atk-slide-content-warning');
-        $this->setWarningTrigger('atk-visible');
-        $this->setCloseSelector('.atk-slide-close');
+//        $this->setWarningSelector('.atk-slide-content-warning');
+//        $this->setWarningTrigger('atk-visible');
+//        $this->setCloseSelector('.atk-slide-close');
     }
 
-    public function getWarningSelector() :string
-    {
-        return $this->warningSelector;
-    }
+//    public function getWarningSelector() :string
+//    {
+//        return $this->warningSelector;
+//    }
+//
+//    public function getWarningTrigger() :string
+//    {
+//        return $this->warningTrigger;
+//    }
+//
+//    public function setWarningSelector(string $selector)
+//    {
+//        $this->warningSelector = $selector;
+//    }
+//
+//    public function setWarningTrigger(string $trigger)
+//    {
+//        $this->warningTrigger = $trigger;
+//    }
 
     public function getCallbackUrl() :string
     {
         return $this->cb->getJSURL();
-    }
-
-    public function getWarningTrigger() :string
-    {
-        return $this->warningTrigger;
-    }
-
-    public function setWarningSelector(string $selector)
-    {
-        $this->warningSelector = $selector;
-    }
-
-    public function setWarningTrigger(string $trigger)
-    {
-        $this->warningTrigger = $trigger;
     }
 
     public function setCb(jsCallback $cb)
@@ -59,15 +60,15 @@ class SlideContent extends View implements SlidableContent
         $this->cb = $this->add($cb);
     }
 
-    public function setCloseSelector(string $selector)
-    {
-        $this->closeSelector = $selector;
-    }
-
-    public function getCloseSelector(): string
-    {
-        return $this->closeSelector;
-    }
+//    public function setCloseSelector(string $selector)
+//    {
+//        $this->closeSelector = $selector;
+//    }
+//
+//    public function getCloseSelector(): string
+//    {
+//        return $this->closeSelector;
+//    }
 
     /**
      * Will load content into callback.
@@ -96,19 +97,19 @@ class SlideContent extends View implements SlidableContent
         return ['.atk-slide-content'];
     }
 
-    /**
-     * Display or not a Warning sign in Flyout.
-     *
-     * @param bool   $state
-     * @param string $selector
-     *
-     * @return jQuery
-     */
-    public function jsDisplayWarning(bool $state = true )
-    {
-        $chain = new jQuery('#' . $this->name . ' ' . $this->getWarningSelector());
-
-        return $state ? $chain->addClass($this->getWarningTrigger()) : $chain->removeClass($this->getWarningTrigger());
-    }
+//    /**
+//     * Display or not a Warning sign in Flyout.
+//     *
+//     * @param bool   $state
+//     * @param string $selector
+//     *
+//     * @return jQuery
+//     */
+//    public function jsDisplayWarning(bool $state = true ) :jsExpression
+//    {
+//        $chain = new jQuery('#' . $this->name . ' ' . $this->getWarningSelector());
+//
+//        return $state ? $chain->addClass($this->getWarningTrigger()) : $chain->removeClass($this->getWarningTrigger());
+//    }
 
 }
