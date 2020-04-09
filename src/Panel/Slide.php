@@ -34,7 +34,6 @@ class Slide extends View implements Slidable
     public function init()
     {
         parent::init();
-        $this->addClass('atk-visible');
         $this->addPanelContent(new SlideContent());
     }
 
@@ -67,12 +66,13 @@ class Slide extends View implements Slidable
      *
      * @return mixed
      */
-    public function jsOpen($jsTrigger, $args = [])
+    public function jsOpen($jsTrigger, $args = [], $activeCss = null)
     {
         return $this->service()->openPanel([
                                                 'triggered' => $jsTrigger,
                                                 'reloadArgs' => $args,
                                                 'openId'     => $this->name,
+                                                'activeCSS'  => $activeCss
                                             ]);
     }
 
@@ -163,19 +163,6 @@ class Slide extends View implements Slidable
             $this->service()->doClosePanel($this->name),
             new jsExpression('return true'),
         ]);
-    }
-
-    /**
-     * @deprecated Used onOpen instead.
-     *
-     * @param null $callback
-     * @param null $junk
-     *
-     * @return View|void
-     */
-    public function set($callback = null, $junk = null)
-    {
-        $this->onOpen($callback);
     }
 
     /**

@@ -120,7 +120,7 @@ class PanelService {
    * Open the panel.
    * Params expected the following arguments:
    *   triggered : A string or jQuery object that will triggered panel to open.
-   *   activedCss: Either an object containing a jQuery selector with a css class or css class.
+   *   activeCss: Either an object containing a jQuery selector with a css class or css class.
    *    As an Object:  element: the jQuery selector within the triggered element;
    *                   css:     the css class to applying to the triggered element when panel is open.
    *
@@ -206,15 +206,15 @@ class PanelService {
     this.setPropertyValue(id, 'triggerElement', trigger);
 
     //Do we need to setup css class on triggering element.
-    if (params.activedCSS) {
+    if (params.activeCSS) {
       let element, css;
 
-      if (params.activedCSS instanceof Object) {
-        element = this.getPropertyValue(id, 'triggerElement').find(params.activedCSS.element);
-        css = params.activedCSS.css;
+      if (params.activeCSS instanceof Object) {
+        element = this.getPropertyValue(id, 'triggerElement').find(params.activeCSS.element);
+        css = params.activeCSS.css;
       } else {
         element = trigger;
-        css = params.activedCSS;
+        css = params.activeCSS;
       }
 
       if (this.getPropertyValue(id, 'on')) {
