@@ -154,7 +154,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $response = $this->getResponseFromRequestGET($uri);
         $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
 
-        $output_rows = explode(PHP_EOL, $response->getBody()->getContents());
+        $output_rows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
 
         $this->assertGreaterThan(0, count($output_rows), ' Response is empty on ' . $uri);
         // check SSE Syntax
@@ -167,11 +167,10 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
             preg_match_all('/^(id|event|data).*$/m', $sse_line, $matches);
 
-            $sse_string = str_ireplace(["\r", "\n"], '', $sse_line);
             $format_match_string = implode('', $matches[0] ?? ['error']);
 
             $this->assertEquals(
-                $sse_string,
+                $sse_line,
                 $format_match_string,
                 ' Testing SSE response line ' . $index . ' with content ' . $sse_line . ' on ' . $uri
             );
