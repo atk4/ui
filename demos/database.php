@@ -8,9 +8,10 @@ try {
         $db = new \atk4\data\Persistence\SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
     }
 } catch (PDOException $e) {
-    throw new \atk4\ui\Exception([
+    throw (new \atk4\ui\Exception([
         'This demo requires access to the database. See "demos/database.php"',
-    ], null, $e);
+        // do not pass $e here unless you can secure DSN!
+    ]))->addMoreInfo('PDO error', $e->getMessage());
 }
 
 $app->db = $db;
@@ -100,7 +101,7 @@ if (!class_exists('Country')) {
                  */
 
                 $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
-                $m['currency_symbol'] = isset($map[$m['currency']]) ? $map[$m['currency']] : '?';
+                $m['currency_symbol'] = $map[$m['currency']] ?? '?';
             });
 
             $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type' => 'money']);

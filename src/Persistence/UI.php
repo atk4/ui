@@ -57,39 +57,47 @@ class UI extends \atk4\data\Persistence
             $value = $this->serializeSaveField($f, $value);
         }
 
+        // always normalize string EOL
+        if (is_string($value) && !$f->serialize) {
+            $value = preg_replace('~\r?\n|\r~', "\n", $value);
+        }
+
         // work only on copied value not real one !!!
-        $v = is_object($value) ? clone $value : $value;
+        $value = is_object($value) ? clone $value : $value;
 
         switch ($f->type) {
         case 'boolean':
-            return $v ? $this->yes : $this->no;
+            $value = $value ? $this->yes : $this->no;
+            break;
         case 'money':
-            return ($this->currency ? $this->currency . ' ' : '') . number_format($v, $this->currency_decimals);
+            $value = ($this->currency ? $this->currency . ' ' : '') . number_format($value, $this->currency_decimals);
+            break;
         case 'date':
         case 'datetime':
         case 'time':
-            $dt_class = isset($f->dateTimeClass) ? $f->dateTimeClass : 'DateTime';
-            $tz_class = isset($f->dateTimeZoneClass) ? $f->dateTimeZoneClass : 'DateTimeZone';
+            $dt_class = $f->dateTimeClass ?? \DateTime::class;
+            $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;
 
-            if ($v instanceof $dt_class) {
-                $format = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
-                $format = $f->persist_format ?: $format[$f->type];
+            if ($value instanceof $dt_class || $value instanceof \DateTimeInterface) {
+                $formats = ['date' => $this->date_format, 'datetime' => $this->datetime_format, 'time' => $this->time_format];
+                $format = $f->persist_format ?: $formats[$f->type];
 
                 // datetime only - set to persisting timezone
                 if ($f->type == 'datetime' && isset($f->persist_timezone)) {
-                    $v->setTimezone(new $tz_class($f->persist_timezone));
+                    $value = new $dt_class($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
+                    $value->setTimezone(new $tz_class($f->persist_timezone));
                 }
-                $v = $v->format($format);
+                $value = $value->format($format);
             }
             break;
         case 'array':
         case 'object':
             // don't encode if we already use some kind of serialization
-            $v = $f->serialize ? $v : json_encode($v);
+            $value = $f->serialize ? $value : json_encode($value);
             break;
         }
 
-        return $v;
+        return $value;
     }
 
     /**
@@ -112,43 +120,44 @@ class UI extends \atk4\data\Persistence
             $value = $new_value;
         }
 
+        // always normalize string EOL
+        if (is_string($value) && !$f->serialize) {
+            $value = preg_replace('~\r?\n|\r~', "\n", $value);
+        }
+
         switch ($f->type) {
         case 'string':
         case 'text':
-            // Normalize line breaks
-            $value = str_replace(["\r\n", "\r"], "\n", $value);
             break;
         case 'boolean':
             $value = (bool) $value;
             break;
         case 'money':
-            return str_replace(',', '', $value);
+            $value = str_replace(',', '', $value);
+            break;
         case 'date':
         case 'datetime':
         case 'time':
-            $dt_class = isset($f->dateTimeClass) ? $f->dateTimeClass : 'DateTime';
-            $tz_class = isset($f->dateTimeZoneClass) ? $f->dateTimeZoneClass : 'DateTimeZone';
+            $dt_class = $f->dateTimeClass ?? \DateTime::class;
+            $tz_class = $f->dateTimeZoneClass ?? \DateTimeZone::class;
 
             // ! symbol in date format is essential here to remove time part of DateTime - don't remove, this is not a bug
-            $format = ['date' => '!+' . $this->date_format, 'datetime' => '!+' . $this->datetime_format, 'time' => '!+' . $this->time_format];
-            $format = $f->persist_format ?: $format[$f->type];
+            $formats = ['date' => '!+' . $this->date_format, 'datetime' => '!+' . $this->datetime_format, 'time' => '!+' . $this->time_format];
+            $format = $f->persist_format ?: $formats[$f->type];
 
             // datetime only - set from persisting timezone
+            $valueStr = $value;
             if ($f->type == 'datetime' && isset($f->persist_timezone)) {
-                $v = $dt_class::createFromFormat($format, $value, new $tz_class($f->persist_timezone));
-                if ($v === false) {
-                    throw new Exception(['Incorrectly formatted datetime', 'format' => $format, 'value' => $value, 'field' => $f]);
+                $value = $dt_class::createFromFormat($format, $value, new $tz_class($f->persist_timezone));
+                if ($value === false) {
+                    throw new Exception(['Incorrectly formatted datetime', 'format' => $format, 'value' => $valueStr, 'field' => $f]);
                 }
-                $v->setTimeZone(new $tz_class(date_default_timezone_get()));
-
-                return $v;
+                $value->setTimeZone(new $tz_class(date_default_timezone_get()));
             } else {
-                $v = $dt_class::createFromFormat($format, $value);
-                if ($v === false) {
-                    throw new Exception(['Incorrectly formatted date/time', 'format' => $format, 'value' => $value, 'field' => $f]);
+                $value = $dt_class::createFromFormat($format, $value);
+                if ($value === false) {
+                    throw new Exception(['Incorrectly formatted date/time', 'format' => $format, 'value' => $valueStr, 'field' => $f]);
                 }
-
-                return $v;
             }
 
             break;

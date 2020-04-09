@@ -40,6 +40,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
                 case 'database.php': // exclude - is a setup file
                 case 'db.example.php': // exclude - is a setup file
                 case 'db.php': // exclude - is a setup file
+                case 'db.env.php': // exclude - is a setup file
                 case 'db.travis.php': // exclude - is a setup file
                 case 'db.github.php': // exclude - is a setup file
                 case 'coverage.php': // exclude - is the coverage file
@@ -132,7 +133,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = ['sticky2.php?atk_admin_loader_callback=ajax&__atk_callback1'];
         $files[] = ['virtual.php?atk_admin_label_2_click=ajax&__atk_callback=1'];
         $files[] = ['actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1']; // need to call this before calls other actions to fill model files
-        $files[] = ['actions.php?atk_useraction_loader_callback=ajax&__atk_callback=1&atk_useraction=1&step=fields'];
+        $files[] = ['actions.php?atk_useraction_file_edit_loader_callback=ajax&__atk_callback=1&atk_useraction_file_edit=1&step=fields'];
         $files[] = ['notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
         $files[] = ['scroll-lister.php?atk_admin_view_2_view_lister_jspaginator=ajax&__atk_callback=1&page=2'];
 
@@ -153,7 +154,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $response = $this->getResponseFromRequestGET($uri);
         $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
 
-        $output_rows = explode(PHP_EOL, $response->getBody()->getContents());
+        $output_rows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
 
         $this->assertGreaterThan(0, count($output_rows), ' Response is empty on ' . $uri);
         // check SSE Syntax
@@ -166,11 +167,10 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
             preg_match_all('/^(id|event|data).*$/m', $sse_line, $matches);
 
-            $sse_string = str_ireplace(["\r", "\n"], '', $sse_line);
             $format_match_string = implode('', $matches[0] ?? ['error']);
 
             $this->assertEquals(
-                $sse_string,
+                $sse_line,
                 $format_match_string,
                 ' Testing SSE response line ' . $index . ' with content ' . $sse_line . ' on ' . $uri
             );
@@ -180,10 +180,12 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function SSEResponseDataProvider()
     {
         $files = [];
-        $files[] = ['sse.php?atk_admin_jssse=ajax&__atk_callback=1&event=sse'];
-        $files[] = ['console.php?atk_admin_tabs_tabssubview_console_jssse=ajax&__atk_callback=1&event=sse'];
-        $files[] = ['console.php?atk_admin_tabs_tabssubview_2_virtualpage=cut&atk_admin_tabs_tabssubview_2_virtualpage_console_jssse=ajax&__atk_callback=1&event=sse'];
-        $files[] = ['console.php?atk_admin_tabs_tabssubview_3_virtualpage=cut&atk_admin_tabs_tabssubview_3_virtualpage_console_jssse=ajax&__atk_callback=1&event=sse'];
+        $files[] = ['sse.php?atk_admin_jssse=ajax&__atk_callback=1&__atk_sse=1'];
+        $files[] = ['console.php?atk_admin_tabs_tabssubview_console_jssse=ajax&__atk_callback=1&__atk_sse=1'];
+        if (!($this instanceof DemoCallExitExceptionTest)) { // ignore content type mismatch when App->call_exit equals to true
+            $files[] = ['console.php?atk_admin_tabs_tabssubview_2_virtualpage=cut&atk_admin_tabs_tabssubview_2_virtualpage_console_jssse=ajax&__atk_callback=1&__atk_sse=1'];
+            $files[] = ['console.php?atk_admin_tabs_tabssubview_3_virtualpage=cut&atk_admin_tabs_tabssubview_3_virtualpage_console_jssse=ajax&__atk_callback=1&__atk_sse=1'];
+        }
 
         return $files;
     }

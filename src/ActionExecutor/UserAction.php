@@ -1,6 +1,21 @@
 <?php
 /**
  * Modal executor for action.
+ * These are special modal that will divide a model action into steps
+ * and run each step accordingly via a loader setup in modal view.
+ * The step orders are Argument, Field and Preview, prior to execute the model action.
+ *
+ * It will first determine the number of step necessary to run the model
+ * action. When a step is running through the view loader, data collect for each step
+ * are store in browser session storage via javascript. Thus, each request to execute loader,
+ * include step data within the request.
+ *
+ * UserAction modal view may be generated via callbacks.
+ * These modal are added to app->html view if not already added
+ * and the api service take care of generating them when output
+ * in json via callback. It is important that these UserAction modals
+ * stay within the page html content for loader to run each steps properly.
+ *
  */
 
 namespace atk4\ui\ActionExecutor;
@@ -91,6 +106,32 @@ class UserAction extends Modal implements Interface_, jsInterface_
     {
         parent::init();
         $this->observeChanges();
+    }
+
+    /**
+     * Make sure modal id is unique.
+     * Since User action can be added via callbacks, we need
+     * to make sure that view id is properly set for loader and button
+     * js action to run properly.
+     *
+     *
+     * @param Generic   $action
+     *
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     */
+    public function afterActionInit(Generic $action)
+    {
+        $getTableName = function ($arr) {
+            foreach ($arr as $k => $v) {
+                return is_numeric($k) ? $v : $k;
+            }
+        };
+
+        $table_name = is_array($action->getModel()->table) ? $getTableName($action->getModel()->table) : $action->getModel()->table;
+
+        $this->id = strtolower($this->name . '_' . $table_name . '_' . $action->short_name);
+        $this->name = $this->id;
 
         //Add buttons to modal for next and previous.
         $this->btns = (new View())->addStyle(['min-height' => '24px']);
@@ -117,6 +158,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     public function setAction(Generic $action): View
     {
         $this->action = $action;
+        $this->afterActionInit($action);
 
         // get necessary step need prior to execute action.
         if ($this->steps = $this->getSteps($action)) {
@@ -569,7 +611,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         } catch (\Exception $e) {
             $m = new Message('Error executing ' . $this->action->caption, 'red');
             $m->init();
-            $m->text->content = ($e instanceof \atk4\core\Exception ? $e->getHTML() : $e->getMessage());
+            $m->text->content = $this->app->renderExceptionHTML($e);
 
             return $m;
         }

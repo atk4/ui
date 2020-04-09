@@ -139,7 +139,7 @@ class Callback
      */
     public function triggered()
     {
-        return isset($_GET[$this->urlTrigger]) ? $_GET[$this->urlTrigger] : false;
+        return $_GET[$this->urlTrigger] ?? false;
     }
 
     /**

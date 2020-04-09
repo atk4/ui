@@ -6,9 +6,17 @@ class AppMock extends \atk4\ui\App
 {
     public $terminated = false;
 
-    public function terminate($output = null, string $contentType = 'text/html'): void
+    public function terminate($output = '', array $headers = []): void
     {
         $this->terminate = true;
+    }
+
+    /**
+     * Overrided to allow multiple App::run() calls, prevent sending headers when headers are already sent.
+     */
+    protected function outputResponse(string $data, array $headers): void
+    {
+        echo $data;
     }
 }
 

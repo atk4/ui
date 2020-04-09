@@ -24,10 +24,10 @@ steps:
       - "${{CF_BRANCH_TAG_NORMALIZED}}"
       - "${{CF_REVISION}}"
   deploy:
-    type: deploy
+    image: codefresh/kubectl:1.13.3
     stage: deploy
-    arguments:
-      kind: kubernetes
-      cluster: atk
-      namespace: apps
-      service: ui-agiletoolkit-org-atk-demo
+    commands:
+      - echo $CF_KUBECONFIG_PATH
+      - kubectl config use-context atk
+      - kubectl -n atk-demo set image deployment/atk-demo atk-demo="r.cfcr.io/romaninsh/atk4/ui:${{CF_REVISION}}"
+

@@ -3,9 +3,6 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 $m = new Country($db);
-$m->addAction('test', ['ui'=>['button'=>['icon'=>'pencil']]]);
-$m->addAction('test1');
-$m->addAction('test2');
 //$m->getAction('edit')->system =true;
 //$m->getAction('delete')->system =true;
 
@@ -93,9 +90,6 @@ $file = new File($db);
 $file->getAction('edit')->ui['executor'] = MyExecutor::class;
 
 $crud = \atk4\ui\CRUD::addTo($cc, [
-    'canCreate'       => false,
-    'canDelete'       => false,
-    //'pageUpdate'      => ['\MyVP'],
     'ipp'             => 5,
 ]);
 

@@ -20,6 +20,6 @@ trait HandlesTable
 
         preg_match('/<.*data-id="' . $rowDataId . '".*/m', $table->render(), $matches);
 
-        return str_replace(["\r", "\n"], '', $matches[0]);
+        return preg_replace('~\r?\n|\r~', '', $matches[0]);
     }
 }
