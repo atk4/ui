@@ -94,12 +94,10 @@ class Paginator extends View
     /**
      * Determine and return the current page. You can extend this method for
      * the advanced logic.
-     *
-     * @return int
      */
-    public function getCurrentPage()
+    public function getCurrentPage(): int
     {
-        return isset($_GET[$this->urlTrigger]) ? (int) $_GET[$this->urlTrigger] : 1;
+        return $_GET[$this->urlTrigger] ?? 1;
     }
 
     /**

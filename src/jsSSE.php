@@ -21,9 +21,7 @@ class jsSSE extends jsCallback
     {
         parent::init();
 
-        $event = $_GET['event'] ?? null;
-
-        if ($event === 'sse') {
+        if ($_GET['__atk_sse'] ?? null) {
             $this->browserSupport = true;
             $this->initSse();
         }
@@ -47,23 +45,25 @@ class jsSSE extends jsCallback
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'jsAction');
-        } // else ignore event
+            $this->sendEvent('js', $this->app->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'jsAction');
+        } else {
+            // ignore event
+        }
     }
 
-    public function terminateJSON($ajaxec, $msg = null, $success = true)
+    public function terminate($ajaxec, $msg = null, $success = true)
     {
         if ($this->browserSupport) {
             if ($ajaxec) {
                 $this->sendEvent(
                     'js',
-                    json_encode(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
+                    $this->app->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
                     'jsAction'
                 );
             }
 
             // no further output please
-            $this->app->terminateJSON(null);
+            $this->app->terminate();
         }
 
         $this->app->terminateJSON(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]);
@@ -80,88 +80,69 @@ class jsSSE extends jsCallback
     /**
      * Send Data in buffer to client.
      */
-    public function flush()
+    public function flush(): void
     {
-        @flush();
+        flush();
     }
 
     /**
      * Send Data.
-     *
-     * @param string $content
      */
-    private function output($content)
+    private function output(string $content): void
     {
-        if (!headers_sent()) {
-            $this->sendHeaders();
-        }
-
         if ($this->echoFunction) {
             call_user_func($this->echoFunction, $content);
-        } else {
-            echo $content;
+            return;
         }
+
+        // output headers and content
+        $app = $this->app;
+        \Closure::bind(static function () use ($app, $content): void {
+            $app->outputResponse($content, []);
+        }, null, App::class)();
     }
 
     /**
      * Send a SSE data block.
-     *
-     * @param mixed  $id   Event ID
-     * @param string $data Event Data
-     * @param string $name Event Name
      */
-    public function sendBlock($id, $data, $name = null)
+    public function sendBlock(string $id, string $data, string $name = null): void
     {
-        $this->output("id: {$id}\n");
-        if (strlen($name) && $name !== null) {
-            $this->output("event: {$name}\n");
+        $this->output('id: ' . $id . "\n");
+        if (strlen($name) > 0) {
+            $this->output('event: ' . $name . "\n");
         }
-        $this->output($this->wrapData($data) . "\n\n");
+        $this->output($this->wrapData($data) . "\n");
         $this->flush();
     }
 
     /**
      * Create SSE data string.
-     *
-     * @param string $string data to be processed
-     *
-     * @return string
      */
-    private function wrapData($string)
+    private function wrapData(string $string): string
     {
-        return 'data:' . str_replace("\n", "\ndata: ", $string);
+        return implode('', array_map(function ($v) {
+            return 'data: ' . $v . "\n";
+        }, preg_split('~\r?\n|\r~', $string)));
     }
 
     protected function initSse()
     {
-        @set_time_limit(0); // Disable time limit
+        @set_time_limit(0); // disable time limit
 
-        // Prevent buffering
+        $this->app->setResponseHeader('content-type', 'text/event-stream');
+
+        // disable buffering for nginx, see http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
+        $this->app->setResponseHeader('x-accel-buffering', 'no');
+
+        // disable compression
+        @ini_set('zlib.output_compression', 0);
         if (function_exists('apache_setenv')) {
             @apache_setenv('no-gzip', 1);
         }
 
+        // prevent buffering
         if (ob_get_level()) {
-            ob_end_clean();
+            ob_end_flush();
         }
-    }
-
-    protected function sendHeaders()
-    {
-        @ini_set('zlib.output_compression', 0);
-        @ini_set('output_buffering', false);
-        @ini_set('implicit_flush', 1);
-
-        header('Content-Type: text/event-stream');
-
-        header('Cache-Control: no-cache');
-        header('Cache-Control: private');
-        //header('Connection: keep-alive');
-        //header('Content-Encoding: none;');
-
-        header('Pragma: no-cache');
-
-        // nginx @http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
-        header('X-Accel-Buffering: no');
     }
 }

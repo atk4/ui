@@ -55,7 +55,7 @@ $b = \atk4\ui\Button::addTo($bar, ['Reload counter'])->js('click', new \atk4\ui\
 // Relading with argument
 \atk4\ui\Header::addTo($app, ['We can pass argument to reloader']);
 
-$v = \atk4\ui\View::addTo($app, ['ui' => 'segment'])->set(isset($_GET['val']) ? $_GET['val'] : 'No value');
+$v = \atk4\ui\View::addTo($app, ['ui' => 'segment'])->set($_GET['val'] ?? 'No value');
 
 \atk4\ui\Button::addTo($app, ['Set value to "hello"'])->js('click', new \atk4\ui\jsReload($v, ['val' => 'hello']));
 \atk4\ui\Button::addTo($app, ['Set value to "world"'])->js('click', new \atk4\ui\jsReload($v, ['val' => 'world']));

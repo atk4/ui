@@ -94,7 +94,7 @@ class Modal extends View
             if ($this->cb->triggered() && $this->fx) {
                 $this->fx[0]($this->cb_view);
             }
-            $modalName = isset($_GET['__atk_m']) ? $_GET['__atk_m'] : null;
+            $modalName = $_GET['__atk_m'] ?? null;
             if ($modalName === $this->name) {
                 $this->app->terminateJSON($this->cb_view);
             }
