@@ -113,7 +113,9 @@ class App
     public $db = null;
 
     /** @var string[] Extra HTTP headers to send on exit. */
-    protected $response_headers = [];
+    protected $response_headers = [
+        'cache-control' => 'no-store', // disable caching by default
+    ];
 
     /**
      * @var bool Whether or not semantic-ui vue has been initialised.

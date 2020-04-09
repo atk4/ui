@@ -131,9 +131,7 @@ class jsSSE extends jsCallback
 
         $this->app->setResponseHeader('content-type', 'text/event-stream');
 
-        // disable caching
-        $this->app->setResponseHeader('cache-control', 'no-store');
-        // for nginx, see http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
+        // disable buffering for nginx, see http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
         $this->app->setResponseHeader('x-accel-buffering', 'no');
 
         // disable compression
