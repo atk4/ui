@@ -51,7 +51,7 @@ class PanelService {
         closeSelector: params.closeSelector,
         url: params.url,
         modal: params.modal,
-        preventClosing: false,
+        // preventClosing: false,
         triggerElement: null,
         triggeredActive: {element: null, css: null},
         on: false,
@@ -209,18 +209,6 @@ class PanelService {
     }
   }
 
-
-  // doModalApprove(id) {
-  //   switch (this.getPropertyValue(id, 'modalAction')) {
-  //     case 'close':
-  //       this.doClosePanel(id);
-  //       break;
-  //     case 'load':
-  //       this.doReloadPanel(id);
-  //       break;
-  //   }
-  // }
-
   /**
    * Close panel and cleanup.
    *
@@ -244,23 +232,8 @@ class PanelService {
       triggeredActive.css = null;
       this.setPropertyValue(id, 'triggeredActive', triggeredActive);
       this.setPropertyValue(id, 'triggerElement', null);
-
     }
-
-    // return this.instance;
   }
-
-  // reloadPanel(id)
-  // {
-  //   if (this.needConfirmation(id)) {
-  //     this.doReloadPanel(id);
-  //   } else {
-  //     const $modal = $(this.getPropertyValue(id, 'modal'));
-  //     this.setPropertyValue(id, 'modalAction', 'load');
-  //     $modal.modal('show');
-  //   }
-  // }
-
 
   /**
    * Load panel content.
@@ -268,13 +241,14 @@ class PanelService {
    * @param args
    */
   doReloadPanel(id, args) {
-    this.removeWarning(id);
-    // retrieve url arg passed as params when open.
     const loader = this.getPropertyValue(id, 'loader');
-    this.clearPanelContent(id);
     const $panel = this.getPropertyValue(id, '$panel');
     const url = this.getPropertyValue(id, 'url');
-    // const context = panel.find('.atk-panelLoader');
+
+    // do some cleanup.
+    this.removeWarning(id);
+    this.clearPanelContent(id);
+
     $panel.find(loader.selector).addClass(loader.trigger);
     $panel.api({
       on: 'now',

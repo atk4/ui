@@ -3,7 +3,7 @@
 require_once __DIR__ . '/init.php';
 
 
-$panel_1 = $app->layout->addRightPanel(new \atk4\ui\Panel\Slide(['hasClickAway' => false]));
+$panel_1 = $app->layout->addRightPanel(new \atk4\ui\Panel\Slide(['hasClickAway' => true]));
 //\atk4\ui\LoremIpsum::addTo($panel_1, ['size' => 1, 'words' => 12]);
 
 $panel_1->addConfirmation('oups');
