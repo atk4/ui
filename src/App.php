@@ -259,11 +259,7 @@ class App
         $this->html = null;
         $this->initLayout(Centered::class);
 
-        if ($exception instanceof \atk4\core\Exception) {
-            $this->layout->template->setHTML('Content', $exception->getHTML());
-        } else {
-            $this->layout->template->setHTML('Content', (string) new \atk4\core\ExceptionRenderer\HTML($exception));
-        }
+        $this->layout->template->setHTML('Content', $this->renderExceptionHTML($exception));
 
         // remove header
         $this->layout->template->tryDel('Header');
@@ -1027,6 +1023,29 @@ class App
         }
 
         return $json;
+    }
+
+    /**
+     * Return exception message using HTML block and Semantic UI formatting. It's your job
+     * to put it inside boilerplate HTML and output, e.g:.
+     *
+     *   $l = new \atk4\ui\App();
+     *   $l->initLayout('Centered');
+     *   $l->layout->template->setHTML('Content', $e->getHTML());
+     *   $l->run();
+     *   exit;
+     */
+    public function renderExceptionHTML(\Throwable $exception): string
+    {
+        return (string) new \atk4\core\ExceptionRenderer\HTML($exception);
+    }
+
+    /**
+     * Similar to Exception::getColorfulText() but will use raw HTML for outputting colors.
+     */
+    public function renderExceptionHTMLText(\Throwable $exception): string
+    {
+        return (string) new \atk4\core\ExceptionRenderer\HTMLText($exception);
     }
 
     protected function setupAlwaysRun(): void

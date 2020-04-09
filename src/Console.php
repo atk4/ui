@@ -109,16 +109,12 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 }, 2);
 
                 call_user_func($callback, $this);
-            } catch (\atk4\core\Exception $e) {
-                $lines = explode("\n", $e->getHTMLText());
+            } catch (\Throwable $e) {
+                $lines = explode("\n", $this->app->renderExceptionHTMLText($e));
 
                 foreach ($lines as $line) {
                     $this->outputHTML($line);
                 }
-            } catch (\Error $e) {
-                $this->output('Error: ' . $e->getMessage());
-            } catch (\Exception $e) {
-                $this->output('Exception: ' . $e->getMessage());
             }
 
             if (isset($this->app)) {
