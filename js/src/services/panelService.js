@@ -51,10 +51,8 @@ class PanelService {
         closeSelector: params.closeSelector,
         url: params.url,
         modal: params.modal,
-        // preventClosing: false,
         triggerElement: null,
         triggeredActive: {element: null, css: null},
-        on: false,
         warning: {selector: params.warning.selector, trigger: params.warning.trigger},
         clearable : params.clearable,
         loader: {selector: params.loader.selector, trigger: params.loader.trigger},
@@ -90,6 +88,9 @@ class PanelService {
     const panelId = (params.openId) ? params.openId : Object.keys(this.service.panels[0])[0];
     // save our open param.
     this.service.currentParams = params;
+    if (this.isSameElement(panelId, params.triggered)) {
+      return;
+    }
     this.initOpen(panelId);
 
   }
@@ -169,6 +170,7 @@ class PanelService {
    */
   doOpenPanel(panelId) {
     const params = this.service.currentParams;
+
     let triggerElement = params.triggered;
 
     if (typeof triggerElement === 'string') {
@@ -178,15 +180,14 @@ class PanelService {
     // will apply css class to triggering element if provide.
     if (triggerElement.length > 0) {
       // no need to do anything if we are using the same panel.
-      if (this.getPropertyValue(panelId, 'on') && this.isSameElement(panelId, triggerElement)) {
-        return;
-      }
+      // if (this.getPropertyValue(panelId, 'on') && this.isSameElement(panelId, triggerElement)) {
+      //   return;
+      // }
 
       this.setTriggerElement(panelId, triggerElement, params);
     }
 
     this.getPropertyValue(panelId, '$panel').addClass(this.getPropertyValue(panelId, 'visible'));
-    this.setPropertyValue(panelId, 'on', true);
     this.service.currentVisibleId = panelId;
     if (this.getPropertyValue(panelId, 'hasClickAway')) {
       this.addClickAwayEvent(panelId);
@@ -221,18 +222,16 @@ class PanelService {
 
     //do the actual closing.
     this.getPropertyValue(id, '$panel').removeClass(this.getPropertyValue(id, 'visible'));
+
     // clean up
-    if (this.getPropertyValue(id, 'on')) {
-      const triggeredActive = this.getPropertyValue(id, 'triggeredActive');
-      if (triggeredActive.element && triggeredActive.element.length > 0) {
-        this.deActivated(triggeredActive.element, triggeredActive.css);
-      }
-      this.setPropertyValue(id, 'on', false);
-      triggeredActive.element = null;
-      triggeredActive.css = null;
-      this.setPropertyValue(id, 'triggeredActive', triggeredActive);
-      this.setPropertyValue(id, 'triggerElement', null);
+    const triggeredActive = this.getPropertyValue(id, 'triggeredActive');
+    if (triggeredActive.element && triggeredActive.element.length > 0) {
+      this.deActivated(triggeredActive.element, triggeredActive.css);
     }
+    triggeredActive.element = null;
+    triggeredActive.css = null;
+    this.setPropertyValue(id, 'triggeredActive', triggeredActive);
+    this.setPropertyValue(id, 'triggerElement', null);
   }
 
   /**
@@ -287,9 +286,7 @@ class PanelService {
         css = params.activeCSS;
       }
 
-      if (this.getPropertyValue(id, 'on')) {
-        this.deActivated(this.getPropertyValue(id, 'triggeredActive').element, this.getPropertyValue(id, 'triggeredActive').css);
-      }
+      this.deActivated(this.getPropertyValue(id, 'triggeredActive').element, this.getPropertyValue(id, 'triggeredActive').css);
 
       this.activated(element, css);
       const newTriggeredActive = {element:element, css:css};
@@ -330,7 +327,11 @@ class PanelService {
    */
   isSameElement(id, el) {
     const triggerElement = this.getPropertyValue(id, 'triggerElement');
-    return (el.length == triggerElement.length && el.length == el.filter(triggerElement).length);
+    let isSame = false;
+    if (el && triggerElement) {
+      isSame = (el.length == triggerElement.length && el.length == el.filter(triggerElement).length);
+    }
+    return isSame;
   }
 
   /**
@@ -341,7 +342,9 @@ class PanelService {
    * @param css
    */
   deActivated(element, css) {
-    element.removeClass(css);
+    if (element) {
+      element.removeClass(css);
+    }
   }
 
   /**
@@ -352,7 +355,9 @@ class PanelService {
    * @param css
    */
   activated(element, css) {
-    element.addClass(css);
+    if (element) {
+      element.addClass(css);
+    }
   }
 
   /**

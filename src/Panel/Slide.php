@@ -38,8 +38,13 @@ class Slide extends View implements Slidable
     /** @var string The css selector on where to add close panel event triggering for closing it. */
     public $closeSelector = '.atk-panel-close';
 
+    /** @var string a css selector where warning trigger class will be applied. */
     public $warningSelector = '.atk-panel-warning';
+
+    /** @var string the css class name to apply to element set by warning selector. */
     public $warningTrigger  = 'atk-visible';
+
+    /** @var string the warning icon class */
     public $warningIcon = 'icon exclamation circle';
 
     public function init()
@@ -51,8 +56,9 @@ class Slide extends View implements Slidable
 
     public function addPanelContent(SlidableContent $content)
     {
-        $this->slideContent = $this->add($content);
+        $this->slideContent = $this->add($content, 'LoadContent');
     }
+
 
     public function getSlideContent(): SlidableContent
     {
@@ -117,8 +123,6 @@ class Slide extends View implements Slidable
      * is attached to it and flyoutService detect that the current open flyoutContent has warning on.
      *
      * @param $msg
-     * @param $onApprove
-     * @param null $onDeny
      * @param string $title
      * @param null $okBtn
      * @param null $cancelBtn
@@ -128,19 +132,10 @@ class Slide extends View implements Slidable
      */
     public function addConfirmation(
         string $msg,
-        jsExpression $onApprove = null,
-        jsExpression $onDeny = null,
-        string $title = 'Changes are not saved!',
+        string $title = 'Closing panel!',
         string $okBtn = null,
         string  $cancelBtn = null)
     {
-        if (!$onDeny) {
-            $onDeny = new \atk4\ui\jsExpression('function(){return true;}');
-        }
-
-        if(!$onApprove){
-            $onApprove = $this->jsModalApprove();
-        }
 
         if (!$okBtn) {
             $okBtn = (new Button(['Ok']))->addClass('ok');
@@ -154,24 +149,8 @@ class Slide extends View implements Slidable
         $this->closeModal->addButtonAction($this->factory($okBtn));
         $this->closeModal->addButtonAction($this->factory($cancelBtn));
 
-
-//        $this->closeModal->options['modal_option']['onDeny'] = $onDeny;
-//        $this->closeModal->options['modal_option']['onApprove'] = $onApprove;
-
         $this->closeModal->notClosable();
     }
-
-    /**
-     * Display a warning sign in slideContent view.
-     *
-     * @param bool $state
-     *
-     * @return mixed
-     */
-//    public function jsDisplayWarning(bool $state = true) :jsExpression
-//    {
-//        return $this->getSlideContent()->jsDisplayWarning($state);
-//    }
 
     /**
      * Return proper js for closing panel from modal.
@@ -210,6 +189,11 @@ class Slide extends View implements Slidable
         return $state ? $chain->addClass($this->warningTrigger) : $chain->removeClass($this->warningTrigger);
     }
 
+    /**
+     * Toggle warning sign.
+     *
+     * @return jQuery
+     */
     public function jsToggleWarning()
     {
         return (new jQuery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
@@ -227,13 +211,13 @@ class Slide extends View implements Slidable
             true,
             $this->service()->addPanel([
                 'url'           => $this->getSlideContent()->getCallbackUrl(),
+                'clearable'     => $this->getSlideContent()->getClearSelector(), // an array of css selector to clear when content reload.
+                'loader'        => ['selector' => '.ui.loader', 'trigger' => 'active'], // the css selector and trigger class to activate loader.
                 'modal'         => $this->closeModal ? '#'.$this->closeModal->name : null,
                 'id'            => $this->name,
                 'warning'       => ['selector' => $this->warningSelector, 'trigger' => $this->warningTrigger],
-                'visible'       => 'atk-visible', // the triggering css class that will make this slide panel visible.
+                'visible'       => 'atk-visible', // the triggering css class that will make this panel visible.
                 'closeSelector' => $this->closeSelector, // the css selector to close this flyout.
-                'loader'        => ['selector' => '.ui.loader', 'trigger' => 'active'], // the css selector and trigger class to activate loader.
-                'clearable'     => $this->getSlideContent()->getClearSelector(), // an array of css selector to clear when content reload.
                 'hasClickAway'  => $this->hasClickAway,
             ])
         );
