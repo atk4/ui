@@ -5,14 +5,12 @@
 
 namespace atk4\ui\Panel;
 
-use atk4\ui\jQuery;
 use atk4\ui\jsCallback;
-use atk4\ui\jsExpression;
 use atk4\ui\View;
 
-class SlideContent extends View implements SlidableContent
+class Content extends View implements LoadableContent
 {
-    public $defaultTemplate = 'panel/slide-content.html';
+    public $defaultTemplate = 'panel/content.html';
     public $cb = null;
 
     public function init()
@@ -58,5 +56,4 @@ class SlideContent extends View implements SlidableContent
     {
         return ['.atk-slide-content'];
     }
-
 }

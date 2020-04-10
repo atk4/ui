@@ -17,9 +17,9 @@ use atk4\ui\jsFunction;
 use atk4\ui\Modal;
 use atk4\ui\View;
 
-class Slide extends View implements Slidable
+class Right extends View implements Loadable
 {
-    public $defaultTemplate = 'panel/slide.html';
+    public $defaultTemplate = 'panel/right.html';
 
     /** @var null  */
     public $closeModal = null;
@@ -27,13 +27,13 @@ class Slide extends View implements Slidable
     public $defaultModal = [Modal::class, 'class' => ['mini']];
 
     /** @var View|null The content to display inside flyout */
-    protected $slideContent = null;
+    protected $dynamicContent = null;
 
     /** @var bool can be closed via esc or by clicking outside panel. */
     protected $hasClickAway = true;
 
     /** @var array The default content seed. */
-    public $defaultContent = [SlideContent::class];
+    public $dynamic = [Content::class];
 
     /** @var string The css selector on where to add close panel event triggering for closing it. */
     public $closeSelector = '.atk-panel-close';
@@ -47,22 +47,27 @@ class Slide extends View implements Slidable
     /** @var string the warning icon class */
     public $warningIcon = 'icon exclamation circle';
 
+    /** @var string the close icon class */
+    public $closeIcon = 'icon times';
+
     public function init()
     {
         parent::init();
-        $this->addPanelContent($this->factory($this->defaultContent));
+        if ($this->dynamic) {
+            $this->addDynamicContent($this->factory($this->dynamic));
+        }
     }
 
 
-    public function addPanelContent(SlidableContent $content)
+    public function addDynamicContent(LoadableContent $content)
     {
-        $this->slideContent = $this->add($content, 'LoadContent');
+        $this->dynamicContent = $this->add($content, 'LoadContent');
     }
 
 
-    public function getSlideContent(): SlidableContent
+    public function getDynamicContent(): LoadableContent
     {
-        return $this->slideContent;
+        return $this->dynamicContent;
     }
 
     /**
@@ -171,7 +176,7 @@ class Slide extends View implements Slidable
      */
     public function onOpen(callable $callback)
     {
-        $this->getSlideContent()->onLoad($callback);
+        $this->getDynamicContent()->onLoad($callback);
     }
 
     /**
@@ -199,27 +204,38 @@ class Slide extends View implements Slidable
         return (new jQuery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
     }
 
+    public function getPanelOptions()
+    {
+        $panel_options = [
+            'id'            => $this->name,
+            'loader'        => ['selector' => '.ui.loader', 'trigger' => 'active'], // the css selector and trigger class to activate loader.
+            'modal'         => $this->closeModal ? '#'.$this->closeModal->name : null,
+            'warning'       => ['selector' => $this->warningSelector, 'trigger' => $this->warningTrigger],
+            'visible'       => 'atk-visible', // the triggering css class that will make this panel visible.
+            'closeSelector' => $this->closeSelector, // the css selector to close this flyout.
+            'hasClickAway'  => $this->hasClickAway,
+        ];
+
+        if ($this->dynamicContent) {
+            $panel_options['url'] = $this->getDynamicContent()->getCallbackUrl();
+            $panel_options['clearable'] =  $this->getDynamicContent()->getClearSelector();
+        }
+
+        return $panel_options;
+    }
+
 
     public function renderView()
     {
         $this->template->trySet('WarningIcon', $this->warningIcon);
+        $this->template->trySet('CloseIcon', $this->closeIcon);
 
         parent::renderView();
 
 
         $this->js(
             true,
-            $this->service()->addPanel([
-                'url'           => $this->getSlideContent()->getCallbackUrl(),
-                'clearable'     => $this->getSlideContent()->getClearSelector(), // an array of css selector to clear when content reload.
-                'loader'        => ['selector' => '.ui.loader', 'trigger' => 'active'], // the css selector and trigger class to activate loader.
-                'modal'         => $this->closeModal ? '#'.$this->closeModal->name : null,
-                'id'            => $this->name,
-                'warning'       => ['selector' => $this->warningSelector, 'trigger' => $this->warningTrigger],
-                'visible'       => 'atk-visible', // the triggering css class that will make this panel visible.
-                'closeSelector' => $this->closeSelector, // the css selector to close this flyout.
-                'hasClickAway'  => $this->hasClickAway,
-            ])
+            $this->service()->addPanel($this->getPanelOptions())
         );
     }
 }
