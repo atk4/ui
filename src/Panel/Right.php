@@ -84,7 +84,7 @@ class Right extends View implements Loadable
      *
      * @return mixed
      */
-    public function service() :jsExpression
+    public function service(): jsExpression
     {
         return (new \atk4\ui\jsChain('atk.panelService'));
     }
@@ -99,7 +99,7 @@ class Right extends View implements Loadable
      * @return mixed
      *
      */
-    public function jsOpen( array $args = [], string $activeCss = null, jsExpression $jsTrigger = null) :jsExpression
+    public function jsOpen(array $args = [], string $activeCss = null, jsExpression $jsTrigger = null): jsExpression
     {
         return $this->service()->openPanel([
             'triggered' => $jsTrigger ?? new jQuery(),
@@ -116,7 +116,7 @@ class Right extends View implements Loadable
      *
      * @return mixed
      */
-    public function jsPanelReload(array $args = []) :jsExpression
+    public function jsPanelReload(array $args = []): jsExpression
     {
         return $this->service()->reloadPanel($this->name, $args);
     }
@@ -126,7 +126,7 @@ class Right extends View implements Loadable
      *
      * @return mixed
      */
-    public function jsClose() :jsExpression
+    public function jsClose(): jsExpression
     {
         return $this->service()->closePanel($this->name);
     }
@@ -144,9 +144,8 @@ class Right extends View implements Loadable
      * @throws \atk4\core\Exception
      * @throws \atk4\ui\Exception
      */
-    public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okBtn = null, string  $cancelBtn = null)
+    public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okBtn = null, string $cancelBtn = null)
     {
-
         if (!$okBtn) {
             $okBtn = (new Button(['Ok']))->addClass('ok');
         }
@@ -154,7 +153,7 @@ class Right extends View implements Loadable
         if (!$cancelBtn) {
             $cancelBtn = (new Button(['Cancel']))->addClass('cancel');
         }
-        $this->closeModal = $this->app->add( array_merge($this->defaultModal, ['title' => $title]));
+        $this->closeModal = $this->app->add(array_merge($this->defaultModal, ['title' => $title]));
         $this->closeModal->add([View::class, $msg, 'element' => 'p']);
         $this->closeModal->addButtonAction($this->factory($okBtn));
         $this->closeModal->addButtonAction($this->factory($cancelBtn));
@@ -181,7 +180,7 @@ class Right extends View implements Loadable
      *
      * @return jQuery
      */
-    public function jsDisplayWarning(bool $state = true ) :jsExpression
+    public function jsDisplayWarning(bool $state = true): jsExpression
     {
         $chain = new jQuery('#' . $this->name . ' ' . $this->warningSelector);
 
@@ -193,7 +192,7 @@ class Right extends View implements Loadable
      *
      * @return jQuery
      */
-    public function jsToggleWarning() :jsExpression
+    public function jsToggleWarning(): jsExpression
     {
         return (new jQuery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
     }
@@ -203,12 +202,12 @@ class Right extends View implements Loadable
      *
      * @return array
      */
-    public function getPanelOptions() :array
+    public function getPanelOptions(): array
     {
         $panel_options = [
             'id'            => $this->name,
             'loader'        => ['selector' => '.ui.loader', 'trigger' => 'active'], // the css selector and trigger class to activate loader.
-            'modal'         => $this->closeModal ? '#'.$this->closeModal->name : null,
+            'modal'         => $this->closeModal ? '#' . $this->closeModal->name : null,
             'warning'       => ['selector' => $this->warningSelector, 'trigger' => $this->warningTrigger],
             'visible'       => 'atk-visible', // the triggering css class that will make this panel visible.
             'closeSelector' => $this->closeSelector, // the css selector to close this flyout.

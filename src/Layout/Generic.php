@@ -14,7 +14,7 @@ class Generic extends \atk4\ui\View
      * @return Loadable
      * @throws \atk4\core\Exception
      */
-    public function addRightPanel(Loadable $panel) :Loadable
+    public function addRightPanel(Loadable $panel): Loadable
     {
         return $this->owner->add($panel, 'RightPanel');
     }

@@ -22,7 +22,7 @@ interface LoadableContent
      * Return js Callback url string.
      * @return string
      */
-    public function getCallbackUrl() :string;
+    public function getCallbackUrl(): string;
 
     /**
      * The callback for loading content.

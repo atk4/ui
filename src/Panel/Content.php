@@ -25,7 +25,7 @@ class Content extends View implements LoadableContent
      *
      * @return string
      */
-    public function getCallbackUrl() :string
+    public function getCallbackUrl(): string
     {
         return $this->cb->getJSURL();
     }
@@ -51,7 +51,7 @@ class Content extends View implements LoadableContent
      */
     public function onLoad($callback)
     {
-        $this->cb->set(function() use($callback) {
+        $this->cb->set(function () use ($callback) {
             if ($this->cb->triggered()) {
                 call_user_func($callback, $this);
                 $this->app->terminateJSON($this);
@@ -65,7 +65,7 @@ class Content extends View implements LoadableContent
      *
      * @return array
      */
-    public function getClearSelector() :array
+    public function getClearSelector(): array
     {
         return ['.atk-panel-content'];
     }

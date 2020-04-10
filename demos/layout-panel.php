@@ -26,7 +26,7 @@ $btn = \atk4\ui\Button::addTo($app, ['Button 2']);
 $btn->js(true)->data('btn', '2');
 $btn->on('click', $panel_1->jsOpen(['btn'], 'orange'));
 
-$panel_1->onOpen(function($p) {
+$panel_1->onOpen(function ($p) {
     $btn_number = $_GET['btn'] ?? null;
     $text =  'You loaded panel content using button #' . $btn_number;
     \atk4\ui\Message::addTo($p, ['Panel 1', 'text' => $text]);
@@ -45,10 +45,10 @@ $panel_2->addConfirmation('Changes will be lost. Are you sure?');
 $msg = \atk4\ui\Message::addTo($panel_2, ['Prevent close.']);
 
 $txt = \atk4\ui\Text::addTo($msg);
-$txt->addParagraph('This panel can only be closed via it\'s close icon at top right.' );
+$txt->addParagraph('This panel can only be closed via it\'s close icon at top right.');
 $txt->addParagraph('Try to change dropdown value and close without saving!');
 
-$panel_2->onOpen(function($p) {
+$panel_2->onOpen(function ($p) {
     $f = \atk4\ui\Form::addTo($p);
     $f->addHeader('Settings');
     $f->addField('name', ['DropDown', 'values' => ['1' => 'Option 1', '2' => 'Option 2']])
@@ -56,7 +56,7 @@ $panel_2->onOpen(function($p) {
       ->onChange($p->owner->jsDisplayWarning(true));
 
     $f->onSubmit(function ($f) use ($p) {
-       return [
+        return [
           new \atk4\ui\jsToast('Saved, closing panel.'),
           $p->owner->jsDisplayWarning(false),
           $p->owner->jsClose(),
@@ -81,8 +81,7 @@ foreach ($country as $ct) {
     $c->on('click', $panel_3->jsOpen(['id'], 'orange'));
 }
 
-$panel_3->onOpen(function($p) use ($c_actions, $country, $c_id){
-
+$panel_3->onOpen(function ($p) use ($c_actions, $country, $c_id) {
     $seg = \atk4\ui\View::addTo($p, ['ui' => 'basic segment center aligned']);
     \atk4\ui\Header::addTo($seg, [$country->load($c_id)->getTitle()]);
     $buttons = \atk4\ui\View::addTo($seg, ['ui'=>'vertical basic buttons']);
