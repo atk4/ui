@@ -161,7 +161,6 @@ class PanelService {
       if (params.urlArgs !== 'undefined') {
         $.extend(args, params.urlArgs);
       }
-      this.service.currentUrlArgs = args;
       this.doReloadPanel(id, args);
     }
   }

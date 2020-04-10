@@ -16,15 +16,28 @@ class Content extends View implements LoadableContent
     public function init()
     {
         parent::init();
-        $this->addClass('atk-slide-content');
+        $this->addClass('atk-panel-content');
         $this->setCb(new jsCallback(['appSticky' => true]));
     }
 
+    /**
+     * Return callback url for panel options.
+     *
+     * @return string
+     */
     public function getCallbackUrl() :string
     {
         return $this->cb->getJSURL();
     }
 
+    /**
+     * Set callback for panel.
+     *
+     * @param jsCallback $cb
+     *
+     * @return mixed|void
+     * @throws \atk4\core\Exception
+     */
     public function setCb(jsCallback $cb)
     {
         $this->cb = $this->add($cb);
@@ -54,6 +67,6 @@ class Content extends View implements LoadableContent
      */
     public function getClearSelector() :array
     {
-        return ['.atk-slide-content'];
+        return ['.atk-panel-content'];
     }
 }
