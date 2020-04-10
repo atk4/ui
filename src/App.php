@@ -464,7 +464,7 @@ class App
 
         // Agile UI
         $url = $this->cdn['atk'] ?? '../public';
-        $this->requireJS($url . '/atkjs-ui.js');
+        $this->requireJS($url . '/atkjs-ui.min.js');
         $this->requireCSS($url . '/agileui.css');
     }
 
