@@ -91,6 +91,10 @@ class PanelService {
     if (this.isSameElement(panelId, params.triggered)) {
       return;
     }
+    // first check if current panel can be click away.
+    if (this.service.currentVisibleId && !this.getPropertyValue(this.service.currentVisibleId, 'hasClickAway')) {
+      return;
+    }
     this.initOpen(panelId);
 
   }
@@ -222,6 +226,7 @@ class PanelService {
 
     //do the actual closing.
     this.getPropertyValue(id, '$panel').removeClass(this.getPropertyValue(id, 'visible'));
+    this.service.currentVisibleId = null;
 
     // clean up
     const triggeredActive = this.getPropertyValue(id, 'triggeredActive');

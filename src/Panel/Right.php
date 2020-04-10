@@ -1,10 +1,10 @@
 <?php
 /**
- * Generic Panel implementation.
+ * Right Panel implementation.
  * Opening, closing and loading Panel content is manage
  * via the js panel service.
  *
- * Content is loaded via PanelContent View property.
+ * Content is loaded via a LoadableContent View.
  * This view must implement a callback for content to be add via the callback function.
  */
 
@@ -13,7 +13,6 @@ namespace atk4\ui\Panel;
 use atk4\ui\Button;
 use atk4\ui\jQuery;
 use atk4\ui\jsExpression;
-use atk4\ui\jsFunction;
 use atk4\ui\Modal;
 use atk4\ui\View;
 
@@ -58,13 +57,23 @@ class Right extends View implements Loadable
         }
     }
 
-
+    /**
+     * Set the dynamic content of this view.
+     *
+     * @param LoadableContent $content
+     *
+     * @throws \atk4\core\Exception
+     */
     public function addDynamicContent(LoadableContent $content)
     {
-        $this->dynamicContent = $this->add($content, 'LoadContent');
+        $this->dynamicContent = Content::addTo($this, [], ['LoadContent']);
     }
 
-
+    /**
+     * Get dynamic content for this view.
+     *
+     * @return LoadableContent
+     */
     public function getDynamicContent(): LoadableContent
     {
         return $this->dynamicContent;
@@ -75,7 +84,7 @@ class Right extends View implements Loadable
      *
      * @return mixed
      */
-    public function service()
+    public function service() :jsExpression
     {
         return (new \atk4\ui\jsChain('atk.panelService'));
     }
@@ -83,17 +92,17 @@ class Right extends View implements Loadable
     /**
      * Return js expression need to open panel via js panelService.
      *
-     * @param jsExpression  $jsTrigger  jsExpression that trigger flyout to open.
      * @param array         $args       The data attribute name to include in reload from the triggering element.
      * @param string|null   $activeCss  The css class name to apply on triggering element when panel is open.
+     * @param jsExpression  $jsTrigger  jsExpression that trigger panel to open. Default = $(this).
      *
      * @return mixed
      *
      */
-    public function jsOpen(jsExpression $jsTrigger, array $args = [], string $activeCss = null)
+    public function jsOpen( array $args = [], string $activeCss = null, jsExpression $jsTrigger = null) :jsExpression
     {
         return $this->service()->openPanel([
-            'triggered' => $jsTrigger,
+            'triggered' => $jsTrigger ?? new jQuery(),
             'reloadArgs' => $args,
             'openId'     => $this->name,
             'activeCSS'  => $activeCss
@@ -107,7 +116,7 @@ class Right extends View implements Loadable
      *
      * @return mixed
      */
-    public function jsPanelReload(array $args = [])
+    public function jsPanelReload(array $args = []) :jsExpression
     {
         return $this->service()->reloadPanel($this->name, $args);
     }
@@ -117,7 +126,7 @@ class Right extends View implements Loadable
      *
      * @return mixed
      */
-    public function jsClose()
+    public function jsClose() :jsExpression
     {
         return $this->service()->closePanel($this->name);
     }
@@ -135,11 +144,7 @@ class Right extends View implements Loadable
      * @throws \atk4\core\Exception
      * @throws \atk4\ui\Exception
      */
-    public function addConfirmation(
-        string $msg,
-        string $title = 'Closing panel!',
-        string $okBtn = null,
-        string  $cancelBtn = null)
+    public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okBtn = null, string  $cancelBtn = null)
     {
 
         if (!$okBtn) {
@@ -158,18 +163,7 @@ class Right extends View implements Loadable
     }
 
     /**
-     * Return proper js for closing panel from modal.
-     */
-    public function jsModalApprove()
-    {
-        return new jsFunction([
-            $this->service()->doModalApprove($this->name),
-            new jsExpression('return true'),
-        ]);
-    }
-
-    /**
-     * Callback to execute when flyout open.
+     * Callback to execute when panel open if dynamic content is set.
      * Differ the callback execution to the FlyoutContent.
      *
      * @param callable $callback
@@ -199,12 +193,17 @@ class Right extends View implements Loadable
      *
      * @return jQuery
      */
-    public function jsToggleWarning()
+    public function jsToggleWarning() :jsExpression
     {
         return (new jQuery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
     }
 
-    public function getPanelOptions()
+    /**
+     * Return panel options.
+     *
+     * @return array
+     */
+    public function getPanelOptions() :array
     {
         $panel_options = [
             'id'            => $this->name,
@@ -232,10 +231,6 @@ class Right extends View implements Loadable
 
         parent::renderView();
 
-
-        $this->js(
-            true,
-            $this->service()->addPanel($this->getPanelOptions())
-        );
+        $this->js(true, $this->service()->addPanel($this->getPanelOptions()));
     }
 }

@@ -1,14 +1,15 @@
 <?php
 /**
- * Slidable Interface.
+ * Loadable Interface.
  */
 
 namespace atk4\ui\Panel;
 
 interface Loadable
 {
+    /** Add loadable content to panel. */
+    function addDynamicContent(LoadableContent $content);
 
-    public function addDynamicContent(LoadableContent $content);
-
-    public function getDynamicContent() :LoadableContent;
+    /** Get panel loadable content. */
+    function getDynamicContent() :LoadableContent;
 }
