@@ -7,7 +7,7 @@ import {plugin, createAtkplugins} from "./plugin";
 import date from 'locutus/php/datetime/date';
 import vueService from './services/vue.service';
 import dataService from "./services/data.service";
-import panelService from "./services/panelService";
+import panelService from "./services/panel.service";
 
 // Create atk plugins.
 createAtkplugins();
