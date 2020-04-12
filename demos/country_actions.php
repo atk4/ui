@@ -12,7 +12,7 @@ $c_actions = [];
 
 $c_actions['ac_cb'] = $country->addAction(
     'callback',
-    [
+    [   'description' => 'Callback',
         'callback'=> function ($m) {
             return 'ok ' . $m->getTitle();
         }
@@ -22,6 +22,7 @@ $c_actions['ac_cb'] = $country->addAction(
 $c_actions['ac_preview'] = $country->addAction(
     'preview',
     [
+        'description' => 'Preview',
         'preview' => function ($m) {
             return 'Previewing country ' . $m->getTitle();
         },
@@ -34,6 +35,7 @@ $c_actions['ac_preview'] = $country->addAction(
 $c_actions['ac_disabled'] = $country->addAction(
     'disabled_action',
     [
+        'description' => 'Disabled',
         'enabled' => false,
         'callback' => function () {
             return 'ok';
@@ -44,6 +46,7 @@ $c_actions['ac_disabled'] = $country->addAction(
 $c_actions['ac_edit_arg'] = $country->addAction(
     'edit_argument',
     [
+        'description' => 'Argument',
         'args' => [
             'age' => ['type' => 'integer', 'required' => true]
         ],
@@ -56,6 +59,7 @@ $c_actions['ac_edit_arg'] = $country->addAction(
 $c_actions['ac_edit_arg_preview'] = $country->addAction(
     'edit_argument_prev',
     [
+        'description' => 'Argument/Preview',
         'args' => ['age'=>['type'=>'integer', 'required' => true]],
         'preview' => function ($m, $age) {
             return 'You age is: ' . $age;
@@ -69,6 +73,7 @@ $c_actions['ac_edit_arg_preview'] = $country->addAction(
 $c_actions['ac_edit_iso'] = $country->addAction(
     'edit_iso',
     [
+        'description' => 'Edit ISO3 only',
         'fields' => ['iso3'],
         'callback' => function () {
             return 'ok';
@@ -79,6 +84,7 @@ $c_actions['ac_edit_iso'] = $country->addAction(
 $c_actions['ac_ouch'] = $country->addAction(
     'Ouch',
     [
+        'description' => 'Exception',
         'args' => ['age' => ['type' => 'integer']],
         'preview'=> function () {
             return 'Be careful with this action.';
@@ -92,6 +98,7 @@ $c_actions['ac_ouch'] = $country->addAction(
 $c_actions['ac_confirm'] = $country->addAction(
     'confirm',
     [
+        'description' => 'Confirm',
         'ui' => ['confirm' => 'Perform action on ' . $country_name . '?'],
         'callback' => function ($m) {
             return 'Confirm ok ' . $m->getTitle();
@@ -102,6 +109,7 @@ $c_actions['ac_confirm'] = $country->addAction(
 $c_actions['ac_multi'] = $country->addAction(
     'multi_step',
     [
+        'description' => 'Argument/Field/Preview',
         'args' => [
             'age' => ['type' => 'integer', 'required' => true],
             'gender' => ['type' => 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required' => true],
