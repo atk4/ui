@@ -19,7 +19,7 @@ class FeatureContext extends RawMinkContext implements Context
     {
     }
 
-    protected $button = null;
+//    protected $button = null;
 
     public function getSession($name = null)
     {
@@ -32,7 +32,7 @@ class FeatureContext extends RawMinkContext implements Context
     public function iUseFormWithButton($arg1)
     {
         $button = $this->getSession()->getPage()->find('xpath', '//button[text()="' . $arg1 . '"]');
-        $this->button_id = $button->getAttribute('id');
+//        $this->button_id = $button->getAttribute('id');
         $button->click();
     }
 
@@ -66,7 +66,7 @@ class FeatureContext extends RawMinkContext implements Context
     public function iPressButton($arg1)
     {
         $button = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
-        $this->button_id = $button->getAttribute('id');
+//        $this->button_id = $button->getAttribute('id');
         $button->click();
     }
 
@@ -180,6 +180,51 @@ class FeatureContext extends RawMinkContext implements Context
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() != $arg1) {
             throw new \Exception('No such text in modal');
+        }
+    }
+
+    /**
+     * @Then Modal is showing text :arg1 inside tag :arg2
+     * @param $arg1
+     * @param $arg2
+     *
+     * @throws Exception
+     */
+    public function modalIsShowingText($arg1, $arg2)
+    {
+        //get modal
+        $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
+        if ($modal === null) {
+            throw new \Exception('No modal found');
+        }
+        //find text in modal
+        $text = $modal->find('xpath', '//' . $arg2 . '[text()="' . $arg1 . '"]');
+        if (!$text || $text->getText() != $arg1) {
+            throw new \Exception('No such text in modal');
+        }
+    }
+
+    /**
+     * @Then Toast display should contains text :arg1
+     * @param $arg1
+     *
+     * @throws Exception
+     */
+    public function toastDisplayShouldContainText($arg1)
+    {
+        //get toast
+        $toast = $this->getSession()->getPage()->find('css', '.ui.toast-container');
+        if ($toast === null) {
+            throw new \Exception('No toast found');
+        }
+        $content = $toast->find('css', '.content');
+        if ($content === null) {
+            throw new \Exception('No Content in Toast');
+        }
+        //find text in toast
+        $text = $content->find('xpath', '//div');
+        if (!$text || strpos($text->getText(), $arg1) === false) {
+            throw new \Exception('No such text in toast');
         }
     }
 
