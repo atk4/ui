@@ -1,15 +1,13 @@
 Feature: UserAction
   Testing UI executor UserAction and UserConfirmation modal.
 
-  Background:
+  Scenario: :
     Given I am on "jsactions2.php"
 
-  Scenario: Callback only action
     And I press button "Callback"
     And wait for callback
     Then Toast display should contains text "callback execute using country"
 
-  Scenario: Action using argument
     And I press button "Argument"
     And wait for callback
     Then Modal is showing text "Age" inside tag "label"
@@ -18,7 +16,6 @@ Feature: UserAction
     And wait for callback
     Then Toast display should contains text "22 is old enough to visit"
 
-  Scenario: Action using User Confirmation
     And I press button "User Confirmation"
     And wait for callback
     Then Modal is open with text "A confirmation is required for Country"
@@ -26,7 +23,9 @@ Feature: UserAction
     And wait for callback
     Then Toast display should contains text "Confirm country"
 
-  Scenario: Action using all steps
+#    Need to reload page for this step
+  Scenario: :
+    Given I am on "jsactions2.php"
     And I press button "Argument/Field/Preview"
     And wait for callback
     Then Modal is showing text "Age" inside tag "label"

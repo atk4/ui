@@ -7,9 +7,8 @@ Feature: Vue
     And form submits
     And wait for callback
     Then I should see "new value: test"
+    Then I hide js modal
 
-  Scenario: testing ItemSearch
-    Given I am on "vue-component.php"
     When I fill in "atk-vue-search" with "united kingdom"
     And wait for callback
     And form submits

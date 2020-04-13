@@ -91,8 +91,15 @@ class FeatureContext extends RawMinkContext implements Context
         if (!$link) {
             throw new \Exception("Unable to find tab with title " . $arg1);
         }
-        $link->click();
+
+        $script = '$("#' . $link->getAttribute('id') . '").click()';
+        $this->getSession()->executeScript($script);
+
+
+//        $link->click();
     }
+
+
 
     /**
      * @Then I see button :arg1
@@ -194,6 +201,26 @@ class FeatureContext extends RawMinkContext implements Context
         if (!$text || $text->getText() != $arg1) {
             throw new \Exception('No such text in modal');
         }
+    }
+
+    /**
+     * @Then I hide js modal
+     *
+     * Hide js modal.
+     */
+    public function iHideJsModal()
+    {
+        $script = '$(".modal.atk-callback-response").modal("hide")';
+        $this->getSession()->executeScript($script);
+    }
+
+    /**
+     * @Then I scroll to top
+     */
+    public function iScrollToTop()
+    {
+        $script = 'window.scrollTo(0,0)';
+        $this->getSession()->executeScript($script);
     }
 
     /**
