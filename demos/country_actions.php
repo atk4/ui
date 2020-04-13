@@ -106,7 +106,7 @@ $c_actions['ac_confirm'] = $country->addAction(
         'caption' => 'A confirmation is required for',
         'description' => 'User Confirmation',
         'ui' => ['executor' => \atk4\ui\ActionExecutor\UserConfirmation::class],
-        'confirmation' => function($a) {
+        'confirmation' => function ($a) {
             return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->get('iso3') . ')</b>';
         },
         'callback' => function ($m) {

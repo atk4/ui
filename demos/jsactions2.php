@@ -24,4 +24,3 @@ foreach ($c_actions as $action) {
     $b = \atk4\ui\Button::addTo($buttons, [$action->getDescription()]);
     $b->on('click', $action, ['args' => ['id' => $id]]);
 }
-

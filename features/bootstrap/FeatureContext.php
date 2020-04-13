@@ -253,5 +253,6 @@ class FeatureContext extends RawMinkContext implements Context
 
         if (strpos($field->getValue(), $arg2) === false) {
             throw new \Exception('Field value ' . $field->getValue() . ' does not start with ' . $arg2);
-        }    }
+        }
+    }
 }

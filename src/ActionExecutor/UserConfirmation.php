@@ -113,7 +113,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
      */
-    public function setAction(Generic $action) :Modal
+    public function setAction(Generic $action): Modal
     {
         $this->action = $action;
         $this->afterActionInit($action);
@@ -244,7 +244,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
      * @return array
      * @throws \atk4\core\Exception
      */
-    protected function jsGetExecute($obj, $id) :array
+    protected function jsGetExecute($obj, $id): array
     {
         $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
 
