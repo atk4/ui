@@ -75,6 +75,12 @@ decorators defined at ``atk4\ui\FormField``. See dedicated documentation for:
  - :php:class:`FormLayout::Generic`
  - :php:class:`FormField::Generic`
 
+To tweak the UI properties of an input field use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field::
+
+	$form = $this->add(new \atk4\ui\Form);
+	$form->setModel($m);
+	$form->getField('name')->setInputAttr('maxlength', 20);
+
 The rest of this chapter will focus on Form mechanics, such as submission,
 integration with front-end, integration with Model, error handling etc.
 
@@ -174,7 +180,7 @@ Field Decorator does not have to be added directly into the form. You can use a 
 
 .. php:method:: addFields($fields)
 
-Similar to :php:meth:`Form::addField()`, but allows to add multiple fields in one method call.
+Similar to :php:meth:`Form::addField()`, but allows to add multiple fields in one method call::
 
     $form = Form::addTo($app);
     $form->addFields([
@@ -195,7 +201,7 @@ that below in more detail.
 
 You can specify first argument ``null`` in which case decorator will be added without
 association with field. This will not work with regular fields, but you can add
-custom decorators such as CAPCHA, which does not really need association with a
+custom decorators such as CAPTCHA, which does not really need association with a
 field.
 
 Field Decorator
@@ -531,8 +537,10 @@ Form Submit Handling
 .. php:method:: setApiConfing($config)
 
     Add additional parameters to Fomantic UI .api function which does the AJAX submission of the form.
-For example, if you want the loading overlay at a different HTML element, you can define it with
-$form->setApiConfig(['stateContext' => 'my-JQuery-selector']);
+For example, if you want the loading overlay at a different HTML element, you can define it with::
+
+    $form->setApiConfig(['stateContext' => 'my-JQuery-selector']);
+
 All available parameters can be found here: https://fomantic-ui.com/behaviors/api.html#/settings
 
 .. php:attr:: successTemplate
@@ -711,8 +719,10 @@ In the example above, we first add a Generic sub layout to the existing layout o
 field, name, is added to this sub layout.
 
 Then we add another layout to the form layout. In this case it's specific Accordion layout. This sub layout
-is further separated in two accordion sections and fields are added to each section:
-`$a1->setModel($m, ['iso', 'iso3']);` and `$a2->setModel($m, ['numcode', 'phonecode']);`
+is further separated in two accordion sections and fields are added to each section::
+
+    $a1->setModel($m, ['iso', 'iso3']);
+    $a2->setModel($m, ['numcode', 'phonecode']);
 
 Sub layout gives you greater control on how to display fields within your form. For more examples on
 sub layouts please visit demo page: https://github.com/atk4/ui/blob/develop/demos/form-section.php
