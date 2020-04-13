@@ -721,7 +721,8 @@ field, name, is added to this sub layout.
 Then we add another layout to the form layout. In this case it's specific Accordion layout. This sub layout
 is further separated in two accordion sections and fields are added to each section::
 
-    $a1->setModel($m, ['iso', 'iso3']);` and `$a2->setModel($m, ['numcode', 'phonecode']);
+    $a1->setModel($m, ['iso', 'iso3']);
+    $a2->setModel($m, ['numcode', 'phonecode']);
 
 Sub layout gives you greater control on how to display fields within your form. For more examples on
 sub layouts please visit demo page: https://github.com/atk4/ui/blob/develop/demos/form-section.php
