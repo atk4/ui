@@ -14,7 +14,7 @@ $c_actions['ac_cb'] = $country->addAction(
     'callback',
     [   'description' => 'Callback',
         'callback'=> function ($m) {
-            return 'ok ' . $m->getTitle();
+            return 'callback execute using country ' . $m->getTitle();
         }
     ]
 );
@@ -51,7 +51,12 @@ $c_actions['ac_edit_arg'] = $country->addAction(
             'age' => ['type' => 'integer', 'required' => true]
         ],
         'callback' => function ($m, $age) {
-            return 'Proper age to visit ' . $m->getTitle() . ' is ' . $age;
+            if ($age < 18) {
+                $text = 'Sorry not old enough to visit ' . $m->getTitle();
+            } else {
+                $text = $age . ' is old enough to visit ' . $m->getTitle();
+            }
+            return $text;
         }
     ]
 );
@@ -98,10 +103,14 @@ $c_actions['ac_ouch'] = $country->addAction(
 $c_actions['ac_confirm'] = $country->addAction(
     'confirm',
     [
-        'description' => 'Confirm',
-        'ui' => ['confirm' => 'Perform action on ' . $country_name . '?'],
+        'caption' => 'A confirmation is required for',
+        'description' => 'User Confirmation',
+        'ui' => ['executor' => \atk4\ui\ActionExecutor\UserConfirmation::class],
+        'confirmation' => function ($a) {
+            return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->get('iso3') . ')</b>';
+        },
         'callback' => function ($m) {
-            return 'Confirm ok ' . $m->getTitle();
+            return 'Confirm country ' . $m->getTitle();
         }
     ]
 );
@@ -112,15 +121,17 @@ $c_actions['ac_multi'] = $country->addAction(
         'description' => 'Argument/Field/Preview',
         'args' => [
             'age' => ['type' => 'integer', 'required' => true],
-            'gender' => ['type' => 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required' => true],
+            'city' => [],
+            'gender' => ['type' => 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required' => true, 'default' => 'm'],
         ],
         'fields' => ['iso3'],
-        'callback'=> function ($m, $age, $gender) {
+        'callback'=> function ($m, $age, $city, $gender) {
             //    $m->save();
-            return 'ok';
+            $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
+            return 'Thank you ' . $n . ' at age ' . $age;
         },
-        'preview' => function ($m, $age, $gender) {
-            return 'Gender = ' . $gender . ' / Age = ' . $age . ' / ' . $m->get('iso3');
+        'preview' => function ($m, $age, $city, $gender) {
+            return 'Gender = ' . $gender . ' / Age = ' . $age;
         }
     ]
 );
