@@ -1,7 +1,5 @@
 Feature: Lookup
-  In order to have an awesome PHP UI Framework
-  As a responsible open-source developer
-  I need to write tests for our demo pages
+  Testing Lookup fields
 
   Scenario:
     Given I am on "lookup.php"
@@ -11,6 +9,6 @@ Feature: Lookup
 #    Then I select value "Albania" in lookup "country3"
     And I press button "Save"
     And form submits
-    Then I wait for send action using ".atk-callback-response"
+    And wait for callback
     Then I should see "Select:"
 #    And I should see "Albania Albania Albania"

@@ -1,19 +1,17 @@
 Feature: Vue
-  In order to have an awesome PHP UI Framework
-  As a responsible open-source developer
-  I need to write tests for our demo pages
+  Testing Vue component
 
-  Scenario:
+  Scenario: testing InlineEdit
     Given I am on "vue-component.php"
     When I fill in "name" with "test"
     And form submits
-    Then I wait for send action using ".atk-callback-response"
+    And wait for callback
     Then I should see "new value: test"
 
-  Scenario:
+  Scenario: testing ItemSearch
     Given I am on "vue-component.php"
     When I fill in "atk-vue-search" with "united kingdom"
-    Then I wait for send action using ".atk-item-search.loading"
+    And wait for callback
     And form submits
     Then I should see "United Kingdom"
 
