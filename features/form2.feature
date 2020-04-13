@@ -3,7 +3,7 @@ Feature: Form
 
 Background:
     Given I am on "form.php"
-    And I click link "Handler Output" 
+    And I click link "Handler Output"
 
 Scenario: test form validation
   When I fill in "email1" with "foo@bar"
