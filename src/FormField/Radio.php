@@ -28,7 +28,7 @@ class Radio extends Generic
     /**
      * Initialization.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 

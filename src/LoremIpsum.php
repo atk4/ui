@@ -100,7 +100,7 @@ class LoremIpsum extends Text
         parent::__construct($defaults);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         for ($x = 0; $x < $this->size; $x++) {

@@ -101,7 +101,7 @@ ATK Data allows you to set up relations between models:
 
 ``` php
 class User extends Model {
-    function init() {
+    function init(): void {
         parent::init();
 
         $this->addField('name');
@@ -198,7 +198,7 @@ $app->dbConnect('mysql://user:pass@localhost/yourdb');
 
 class User extends \atk4\data\Model {
     public $table = 'user';
-    function init() {
+    function init(): void {
         parent::init();
 
         $this->addField('name');

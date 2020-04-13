@@ -85,7 +85,7 @@ class MyModel extends \atk4\data\Model
 {
     public $title_field = 'email';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

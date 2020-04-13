@@ -46,7 +46,7 @@ class FilterPopup extends Popup
      */
     public $colTrigger;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->setOption('delay', ['hide' => 1500]);

@@ -129,7 +129,7 @@ Here is the code with comments::
         public $defaultTemplate = null;
         // public $defaultTemplate = __DIR__.'../templates/socialadd.html';
 
-        function init() {
+        function init(): void {
             parent::init();
 
             if (is_null($this->social)) {

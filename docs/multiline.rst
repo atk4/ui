@@ -20,7 +20,7 @@ This means that the addresses are not stored into a separate database table but 
     {
         public $table = 'user';
 
-        public function init()
+        public function init(): void
         {
             parent:: init();
 
@@ -39,7 +39,7 @@ This means that the addresses are not stored into a separate database table but 
     {
         public $table = 'addresses';
 
-        public function init()
+        public function init(): void
         {
             parent::init();
 
@@ -86,7 +86,7 @@ but you want to store them in a separate table. Uncomment the line `//$this->has
     {
         public $table = 'email';
 
-        public function init()
+        public function init(): void
         {
             parent::init();
 
@@ -134,7 +134,7 @@ Lets use the example of demos/multiline.php::
 
     class InventoryItem extends \atk4\data\Model
     {
-        public function init()
+        public function init(): void
         {
             parent::init();
             $this->addField('item', ['required' => true, 'default' => 'item']);

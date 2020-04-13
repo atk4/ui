@@ -120,7 +120,7 @@ The other property of the name is that it's also "permanent". Refreshing the pag
 name. Ultimately, you can create a View that uses it's name to store some information::
 
     class MyView extends View {
-        function init() {
+        function init(): void {
             parent::init();
 
             if ($_GET[$this->name]) {

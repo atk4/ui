@@ -22,7 +22,7 @@ namespace atk4\ui\ActionExecutor;
 interface Interface_
 {
     /** Generate UI which is presented to the user before action is executed */
-    public function init();
+    public function init(): void;
 
     /**
      * Will associate executor with the action.

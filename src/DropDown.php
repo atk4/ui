@@ -22,7 +22,7 @@ class DropDown extends Lister
      */
     public $js;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

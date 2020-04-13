@@ -106,7 +106,7 @@ class Link extends Generic
         parent::setDefaults($properties);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

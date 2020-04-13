@@ -10,7 +10,7 @@ if (!class_exists('SomeData')) {
             parent::__construct($p);
         }
 
-        public function init()
+        public function init(): void
         {
             parent::init();
             $m = $this;

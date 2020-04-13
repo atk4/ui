@@ -6,7 +6,7 @@ use DateTime;
 
 class TypeDate extends Generic
 {
-    public function init()
+    public function init(): void
     {
         parent::init();
 

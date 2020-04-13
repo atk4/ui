@@ -76,7 +76,7 @@ class Generic extends Model
         return new $class($persistence, ['lookupField' => $field]);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->op = $this->addField('op', ['ui' => ['caption' => '']]);

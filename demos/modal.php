@@ -31,7 +31,7 @@ if (!class_exists('Counter')) {
     {
         public $content = 20;
 
-        public function init()
+        public function init(): void
         {
             parent::init();
 

@@ -20,7 +20,7 @@ class CheckBox extends Generic
             "return $(this).data('id');}).get().join(',')");
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         if (!$this->class) {

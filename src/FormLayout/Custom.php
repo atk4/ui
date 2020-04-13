@@ -10,7 +10,7 @@ class Custom extends _Abstract
     /** @var {@inheritdoc} */
     public $defaultTemplate = null;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

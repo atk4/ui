@@ -570,7 +570,7 @@ class App
     /**
      * Initialize app.
      */
-    public function init()
+    public function init(): void
     {
         $this->_init();
     }

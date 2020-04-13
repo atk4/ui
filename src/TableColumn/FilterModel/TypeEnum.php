@@ -6,7 +6,7 @@ use atk4\data\Model;
 
 class TypeEnum extends Generic
 {
-    public function init()
+    public function init(): void
     {
         //bypass parent init since we are not using op and value field but create them from
         //the lookup field value.

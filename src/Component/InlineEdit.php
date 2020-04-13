@@ -82,7 +82,7 @@ class InlineEdit extends View
     /**
      * Initialization.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->cb = \atk4\ui\jsCallback::addTo($this);

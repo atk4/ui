@@ -28,7 +28,7 @@ class UploadImg extends Upload
      */
     public $defaultSrc = null;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

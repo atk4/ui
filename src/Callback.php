@@ -74,7 +74,7 @@ class Callback
     /**
      * Initialization.
      */
-    public function init()
+    public function init(): void
     {
         $this->_init();
 

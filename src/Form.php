@@ -148,7 +148,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Initialization.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
