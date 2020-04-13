@@ -95,7 +95,7 @@ class Link extends Generic
         parent::__construct($page);
     }
 
-    public function setDefaults($properties = [], $strict = false)
+    public function setDefaults(array $properties = [], bool $passively = false)
     {
         if (isset($properties[0])) {
             $this->page = array_shift($properties);
