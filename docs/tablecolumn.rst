@@ -20,7 +20,7 @@ look at the content of the associated value, for example :php:class:`Money` will
 only if monetary value is less than zero. The value is taken from Model's Field object.
 
 Column decorators can also function without associated value. :php:class:`Template` may have no
-fields or perhaps display multiple field values. :php:class:`Action` displays interractie buttons
+fields or perhaps display multiple field values. :php:class:`Action` displays interactive buttons
 in the table. :php:class:`CheckBox` makes grid rows selectable. :php:class:`Ordering` displays
 a draggable handle for re-ordering rows within the table.
 
@@ -166,13 +166,13 @@ Image
 
 .. php:class:: TableColumn\Image
 
-This column is suitable if you wish to have image in your table cell.
+This column is suitable if you wish to have image in your table cell::
 
     $table->addColumn('image_url', new \atk4\ui\TableColumn\Image);
 
 
-Interractive Derorators
-=======================
+Interactive Decorators
+======================
 
 Actions
 -------
@@ -237,11 +237,11 @@ Multiformat
 Sometimes your formatting may change depending on value. For example you may want to place link
 only on certain rows. For this you can use a 'Multiformat' decorator::
 
-    $table->addColumn('amount', ['Multiformat', function($a, $b) {
+    $table->addColumn('amount', ['Multiformat', function($m) {
 
-        if($a['is_invoiced'] > 0) {
+        if ($m['is_invoiced'] > 0) {
             return ['Money', ['Link', 'invoice', ['invoice_id'=>'id']]];
-        } elseif (abs($a['is_refunded']) < 50) {
+        } elseif (abs($m['is_refunded']) < 50) {
             return [['Template', 'Amount was <b>refunded</b>']];
         }
 
