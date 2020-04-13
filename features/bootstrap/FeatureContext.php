@@ -268,7 +268,7 @@ class FeatureContext extends RawMinkContext implements Context
     protected function jqueryWait($duration = 1000)
     {
         $this->getSession()->wait($duration, '(0 === jQuery.active && 0 === jQuery(\':animated\').length)');
-        $this->getSession()->wait(300);
+        $this->getSession()->wait(500);
     }
 
     /**
