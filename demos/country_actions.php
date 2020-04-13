@@ -103,13 +103,14 @@ $c_actions['ac_ouch'] = $country->addAction(
 $c_actions['ac_confirm'] = $country->addAction(
     'confirm',
     [
-        'description' => 'Confirm',
+        'caption' => 'A confirmation is required for',
+        'description' => 'User Confirmation',
         'ui' => ['executor' => \atk4\ui\ActionExecutor\UserConfirmation::class],
-        'confirmation' => function ($m) {
-          return 'test';
+        'confirmation' => function($a) {
+            return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->get('iso3') . ')</b>';
         },
         'callback' => function ($m) {
-            return 'Confirm ok ' . $m->getTitle();
+            return 'Confirm country ' . $m->getTitle();
         }
     ]
 );
@@ -120,15 +121,16 @@ $c_actions['ac_multi'] = $country->addAction(
         'description' => 'Argument/Field/Preview',
         'args' => [
             'age' => ['type' => 'integer', 'required' => true],
-            'gender' => ['type' => 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required' => true],
+            'gender' => ['type' => 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required' => true, 'default' => 'm'],
         ],
         'fields' => ['iso3'],
         'callback'=> function ($m, $age, $gender) {
             //    $m->save();
-            return 'ok';
+            $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
+            return 'Thank you ' . $n . ' at age ' . $age;
         },
         'preview' => function ($m, $age, $gender) {
-            return 'Gender = ' . $gender . ' / Age = ' . $age . ' / ' . $m->get('iso3');
+            return 'Gender = ' . $gender . ' / Age = ' . $age;
         }
     ]
 );

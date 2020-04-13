@@ -19,21 +19,12 @@ class FeatureContext extends RawMinkContext implements Context
     {
     }
 
-//    protected $button = null;
+    /** @var null Temporary store button id when press. Use in js callback test. */
+    protected $buttonId = null;
 
     public function getSession($name = null)
     {
         return $this->getMink()->getSession($name);
-    }
-
-    /**
-     * @When I use form with button :arg1
-     */
-    public function iUseFormWithButton($arg1)
-    {
-        $button = $this->getSession()->getPage()->find('xpath', '//button[text()="' . $arg1 . '"]');
-//        $this->button_id = $button->getAttribute('id');
-        $button->click();
     }
 
     /**
@@ -53,20 +44,13 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
-     * @When Wait until loading stops
-     */
-    public function untilLoadingStops()
-    {
-        $button = $this->getSession()->wait(5000, "! $('.ui.loading').length");
-    }
-
-    /**
      * @When I press button :arg1
      */
     public function iPressButton($arg1)
     {
         $button = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
-//        $this->button_id = $button->getAttribute('id');
+        // store button id.
+        $this->buttonId = $button->getAttribute('id');
         $button->click();
     }
 
@@ -80,14 +64,6 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
-     * @Then I wait for send action using :arg1
-     */
-    public function iWaitForSendActionUsing($arg1)
-    {
-        $this->getSession()->wait(5000, "$('{$arg1}').length");
-    }
-
-    /**
      * @Then I see button :arg1
      */
     public function iSee($arg1)
@@ -95,18 +71,6 @@ class FeatureContext extends RawMinkContext implements Context
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         if ($element->getAttribute('style')) {
             throw new \Exception("Element with text \"$arg1\" must be invisible");
-        }
-    }
-
-    /**
-     * @Then The :field field should start with :value
-     */
-    public function fieldShouldContain($field, $value)
-    {
-        $field = $this->assertSession()->fieldExists($field);
-
-        if (0 !== strpos($field->getValue(), $value)) {
-            throw new \Exception('Field value ' . $field->getValue() . ' does not start with ' . $value);
         }
     }
 
@@ -135,33 +99,30 @@ class FeatureContext extends RawMinkContext implements Context
      */
     public function labelChangesToANumber()
     {
-        $element = $this->getSession()->getPage()->findById($this->button_id);
+        $element = $this->getSession()->getPage()->findById($this->buttonId);
         if (!is_numeric($element->getHtml())) {
             throw new \Exception('Label must be numeric');
         }
     }
 
     /**
-     * @Then Modal opens with text :arg1
+     * @Then I press Modal button :arg
+     * @param $arg
      *
-     * Check if text is present in modal or dynamic modal.
+     * @throws Exception
      */
-    public function modalOpensWithText($arg1)
+    public function iPressModalButton($arg)
     {
-        //wait until modal open
-        $this->getSession()->wait(2000, '$(".modal.transition.visible.active.top").length');
-        //wait for dynamic modal
-        $this->jqueryWait(10000);
-        //get modal
         $modal = $this->getSession()->getPage()->find('css', '.modal.transition.visible.active.front');
         if ($modal === null) {
             throw new \Exception('No modal found');
         }
-        //find text in modal
-        $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if (!$text || $text->getText() != $arg1) {
-            throw new \Exception('No such text in modal');
+        //find button in modal
+        $btn = $modal->find('xpath', '//div[text()="' . $arg . '"]');
+        if (!$btn) {
+            throw new \Exception('Cannot find button in modal');
         }
+        $btn->click();
     }
 
     /**
@@ -229,16 +190,6 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
-     * @Then Progress bar should be go all the way
-     */
-    public function progressBarShouldBeGoAllTheWay()
-    {
-        /*$element =*/ $this->getSession()->getPage()->find('css', '.bar');
-        //TODO: zombiejs does not support sse :(
-        //var_dump($element->getOuterHtml());
-    }
-
-    /**
      * @Then I select value :arg1 in lookup :arg2
      *
      * Select a value in a lookup field.
@@ -288,4 +239,19 @@ class FeatureContext extends RawMinkContext implements Context
         $this->getSession()->wait($duration, '(0 === jQuery.active && 0 === jQuery(\':animated\').length)');
         $this->getSession()->wait(300);
     }
+
+    /**
+     * @Then /^the "([^"]*)"  should start with "([^"]*)"$/
+     */
+    public function theShouldStartWith($arg1, $arg2)
+    {
+        $field = $this->assertSession()->fieldExists($arg1);
+
+        if (!$field) {
+            throw new \Exception('Field' . $arg1 . ' does not exist');
+        }
+
+        if (strpos($field->getValue(), $arg2) === false) {
+            throw new \Exception('Field value ' . $field->getValue() . ' does not start with ' . $arg2);
+        }    }
 }
