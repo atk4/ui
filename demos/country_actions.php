@@ -121,15 +121,16 @@ $c_actions['ac_multi'] = $country->addAction(
         'description' => 'Argument/Field/Preview',
         'args' => [
             'age' => ['type' => 'integer', 'required' => true],
+            'city' => [],
             'gender' => ['type' => 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required' => true, 'default' => 'm'],
         ],
         'fields' => ['iso3'],
-        'callback'=> function ($m, $age, $gender) {
+        'callback'=> function ($m, $age, $city, $gender) {
             //    $m->save();
             $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
             return 'Thank you ' . $n . ' at age ' . $age;
         },
-        'preview' => function ($m, $age, $gender) {
+        'preview' => function ($m, $age, $city, $gender) {
             return 'Gender = ' . $gender . ' / Age = ' . $age;
         }
     ]
