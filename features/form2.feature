@@ -3,6 +3,7 @@ Feature: Form
 
 Background:
     Given I am on "form.php"
+    And I wait 500
     And I click link "Handler Output" 
 
 Scenario: test form validation

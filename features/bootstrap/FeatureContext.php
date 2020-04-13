@@ -28,6 +28,17 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * Wait for a certain time in ms.
+     *
+     * @Then I wait :arg1
+     * @param $arg1
+     */
+    public function iWait($arg1)
+    {
+        $this->getSession()->wait($arg1);
+    }
+
+    /**
      * @When form submits
      */
     public function formSubmits()
@@ -60,6 +71,26 @@ class FeatureContext extends RawMinkContext implements Context
     public function iClickLink($arg1)
     {
         $link = $this->getSession()->getPage()->find('xpath', '//a[text()="' . $arg1 . '"]');
+        $link->click();
+    }
+
+    /**
+     * @Given I click tab with title :arg1
+     * @param $arg1
+     *
+     * @throws Exception
+     */
+    public function iClickTabWithTitle($arg1)
+    {
+        $tabMenu = $this->getSession()->getPage()->find('css', '.ui.tabular.menu');
+        if (!$tabMenu) {
+            throw new \Exception("Unable to find a tab menu.");
+        }
+
+        $link = $tabMenu->find('xpath', '//a[text()="' . $arg1 . '"]');
+        if (!$link) {
+            throw new \Exception("Unable to find tab with title " . $arg1);
+        }
         $link->click();
     }
 
@@ -237,7 +268,7 @@ class FeatureContext extends RawMinkContext implements Context
     protected function jqueryWait($duration = 1000)
     {
         $this->getSession()->wait($duration, '(0 === jQuery.active && 0 === jQuery(\':animated\').length)');
-        $this->getSession()->wait(300);
+        $this->getSession()->wait(500);
     }
 
     /**
