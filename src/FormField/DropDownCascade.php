@@ -50,10 +50,13 @@ class DropDownCascade extends DropDown
 
         $expr = [
             function ($t) {
-                return [
-                    $this->js()->dropdown('change values', $this->getNewValues($this->cascadeInputValue)),
-                    $this->js()->removeClass('loading')
-                ];
+                $value = $this->field->get();
+                $js[] = $this->js()->dropdown('change values', $this->getNewValues($this->cascadeInputValue, $value));
+                if ($value) {
+                    $js[] = $this->js(true)->dropdown('set selected', $value);
+                }
+                $js[] = $this->js()->removeClass('loading');
+                return $js;
             },
             $this->js()->dropdown('clear'),
             $this->js()->addClass('loading'),
@@ -68,14 +71,19 @@ class DropDownCascade extends DropDown
      *
      * @return array
      */
-    public function getNewValues($id)
+    public function getNewValues($id, $refId = null)
     {
         if (!$id) {
             return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
         }
 
+        $model = ($this->cascadeInput->model->load($id)->ref($this->reference);
+        if ($refId) {
+            $model->addCondition('id', $refId);
+        }
+
         $values = [];
-        foreach ($this->cascadeInput->model->load($id)->ref($this->reference) as $k => $row) {
+        foreach ($model as $k => $row) {
             if ($this->renderRowFunction && is_callable($this->renderRowFunction)) {
                 $res = call_user_func($this->renderRowFunction, $row, $k);
                 $values[] = ['value' => $res['value'], 'text' => $row['name'], 'name' => $res['title']];
@@ -91,11 +99,16 @@ class DropDownCascade extends DropDown
     {
         // can't be multiple selection.
         $this->isMultiple = false;
+        // do we have value.
+        $value = $this->field->get();
 
         parent::renderView();
         // set value on initial load if cascadeInput model is not loaded.
         if (!$this->cascadeInput->model->loaded()) {
-            $this->js(true)->dropdown('change values', $this->getNewValues($this->cascadeInputValue));
+            $this->js(true)->dropdown('change values', $this->getNewValues($this->cascadeInputValue, $value));
+            if ($value) {
+                $this->js(true)->dropdown('set selected', $value);
+            }
         }
     }
 }
