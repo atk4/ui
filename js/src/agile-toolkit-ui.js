@@ -1,5 +1,6 @@
 /*global _ATKVERSION_:true */
 
+import 'core-js/stable';
 import atk from 'atk-semantic-ui';
 import 'helpers/url.helper';
 import {tableDropdown} from "./helpers/table-dropdown.helper";
