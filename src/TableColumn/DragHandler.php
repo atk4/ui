@@ -12,7 +12,7 @@ class DragHandler extends Generic
     /** @var \atk4\ui\jsCallback */
     public $cb = null;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

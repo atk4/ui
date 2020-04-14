@@ -30,7 +30,7 @@ if (!class_exists('Counter')) {
     {
         public $content = 20; // default
 
-        public function init()
+        public function init(): void
         {
             parent::init();
 

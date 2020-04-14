@@ -486,14 +486,9 @@ class App
 
     /**
      * Normalizes class name.
-     *
-     * @param string $name
-     *
-     * @return string|null
      */
-    public function normalizeClassNameApp($name, $prefix = ''): ?string
+    public function normalizeClassNameApp(string $name, string $prefix = null): ?string
     {
-        //return '\\'.__NAMESPACE__.'\\'.$name;
         return null;
     }
 
@@ -570,7 +565,7 @@ class App
     /**
      * Initialize app.
      */
-    public function init()
+    public function init(): void
     {
         $this->_init();
     }

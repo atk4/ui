@@ -30,7 +30,7 @@ class DropDownCascade extends DropDown
     /** @var null The casacade input value. */
     protected $cascadeInputValue = null;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

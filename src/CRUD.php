@@ -63,7 +63,7 @@ class CRUD extends Grid
     /** @var array Action name container that will remove the corresponding table row after executing */
     public $removeRowActions = [];
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

@@ -287,7 +287,7 @@ example displays a registration form for a User::
 
     class User extends \atk4\data\Model {
         public $table = 'user';
-        function init() {
+        function init(): void {
             parent::init();
 
             $this->addField('email');
@@ -358,7 +358,7 @@ You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model f
     class User extends \atk4\data\Model {
         public $table = 'user';
 
-        function init() {
+        function init(): void {
             parent::init();
 
             $this->addField('email');
@@ -486,7 +486,7 @@ Example use of Model's validate() method::
     {
         public $table = 'person';
 
-        public function init()
+        public function init(): void
         {
             parent::init();
             $this->addField('name', ['required'=>true]);

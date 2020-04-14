@@ -84,7 +84,7 @@ class Card extends View
     /** @var int The number of buttons */
     private $btnCount = 0;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

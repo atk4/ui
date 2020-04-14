@@ -73,7 +73,7 @@ class Person extends \atk4\data\Model
 {
     public $table = 'person';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->addField('name', ['required' => true]);

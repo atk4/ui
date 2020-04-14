@@ -137,7 +137,7 @@ class DropDown extends Input
     /**
      * Initialization.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 

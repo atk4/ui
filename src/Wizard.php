@@ -59,7 +59,7 @@ class Wizard extends View
      */
     public $defaultIcon = 'empty'; // 'square outline'
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->stepCallback = Callback::addTo($this, ['urlTrigger'=>$this->name]);

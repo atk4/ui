@@ -6,7 +6,7 @@ class TypeBoolean extends Generic
 {
     public $noValueField = true;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

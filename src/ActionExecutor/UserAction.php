@@ -102,7 +102,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     public $loaderUi = 'ui basic segment';
     public $loaderShim = [];
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->observeChanges();

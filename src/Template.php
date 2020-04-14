@@ -96,7 +96,7 @@ class Template implements \ArrayAccess
      *
      * @return Exception
      */
-    public function exception($message = 'Undefined Exception', $code = null)
+    public function exception($message = 'Undefined Exception', $code = 0)
     {
         $arg = [
             $message,

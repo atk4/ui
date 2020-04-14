@@ -23,7 +23,7 @@ class Centered extends Generic
     public $image = null;
     public $image_alt = 'Logo';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

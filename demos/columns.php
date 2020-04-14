@@ -67,7 +67,7 @@ class Box extends \atk4\ui\View
     public $ui = 'segment';
     public $content = false;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         \atk4\ui\Table::addTo($this, ['header' => false])

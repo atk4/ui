@@ -103,7 +103,7 @@ clarifications::
 
         public $table = 'offer';
 
-        function init() {
+        function init(): void {
             parent::init();
 
             // Persistence may not have structure, so we define here

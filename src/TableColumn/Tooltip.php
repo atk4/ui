@@ -27,7 +27,7 @@ class Tooltip extends Generic
      */
     public $tooltip_field;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

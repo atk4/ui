@@ -115,7 +115,7 @@ class Popup extends View
         }
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

@@ -139,7 +139,7 @@ single ToDo item::
 
     class ToDoItem extends \atk4\data\Model {
         public $table = 'todo_item';               // 6
-        function init() {
+        function init(): void {
             parent::init();
 
             $this->addField('name', ['caption'=>'Task Name', 'required'=>true]);

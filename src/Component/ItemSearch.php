@@ -45,7 +45,7 @@ class ItemSearch extends View
 
     public $defaultTemplate = 'item-search.html';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

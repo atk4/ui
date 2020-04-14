@@ -42,7 +42,7 @@ class KeyValue extends Generic
 {
     public $values = [];
 
-    public function init()
+    public function init(): void
     {
         parent::init();
     }

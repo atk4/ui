@@ -86,7 +86,7 @@ class ColorRating extends Generic
      */
     public $less_than_min_no_color = false;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

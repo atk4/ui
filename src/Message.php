@@ -40,7 +40,7 @@ class Message extends View
 
     public $defaultTemplate = 'message.html';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

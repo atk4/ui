@@ -46,7 +46,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /** @var Button Cancel button */
     private $cancel;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->observeChanges();

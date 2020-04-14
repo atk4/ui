@@ -4,7 +4,7 @@ namespace atk4\ui\TableColumn\FilterModel;
 
 class TypeNumber extends Generic
 {
-    public function init()
+    public function init(): void
     {
         parent::init();
 

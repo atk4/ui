@@ -18,7 +18,7 @@ class Demo extends \atk4\ui\Columns
     public $left_width = 8;
     public $right_width = 8;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->addClass('celled');
@@ -49,7 +49,7 @@ class Demo extends \atk4\ui\Columns
 
 class PromotionText extends \atk4\ui\View
 {
-    public function init()
+    public function init(): void
     {
         parent::init();
 

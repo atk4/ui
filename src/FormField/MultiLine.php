@@ -224,7 +224,7 @@ class MultiLine extends Generic
      */
     public $jsAfterDelete = null;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
