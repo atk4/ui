@@ -1,5 +1,9 @@
 ## Release note
 
+### version 1.13.0 (2020-04-14)
+    
+- New PanelService.
+
 ### version 1.12.8 (2020-04-14)
 
 - Import corejs into package for polyfill requirement on older browser.
