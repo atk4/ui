@@ -1,8 +1,5 @@
 Feature: Modal
-  In order to make correct tests
-  As a developper
-  I need to be able to test javascript
-
+  Testing modal view
 
   Scenario:
     Given I am on "modal2.php"
