@@ -362,7 +362,7 @@ class Table extends Lister
      * ex:
      *  $table->resizableColumn(function($j, $w){
      *       //do somethings with columns width
-     *       $columns = json_decode($w);
+     *       $columns = $this->app->decodeJson($w);
      *   });
      *
      *

@@ -244,7 +244,7 @@ class MultiLine extends Generic
 
         // load the data associated with this input and validate it.
         $this->form->onHook('loadPOST', function ($form) {
-            $this->rowData = json_decode($_POST[$this->short_name], true);
+            $this->rowData = $this->app->decodeJson($_POST[$this->short_name]);
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
@@ -776,7 +776,7 @@ class MultiLine extends Generic
                 break;
             case 'on-change':
                 // Let regular callback render output.
-                return call_user_func_array($this->changeCb, [json_decode($_POST['rows'], true), $this->form]);
+                return call_user_func_array($this->changeCb, [$this->app->decodeJson($_POST['rows']), $this->form]);
                 break;
         }
     }

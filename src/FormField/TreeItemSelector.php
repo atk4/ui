@@ -105,7 +105,10 @@ class TreeItemSelector extends Generic
         }
 
         $this->cb = jsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
-            $value = $this->allowMultiple ? json_decode($data, true) : json_decode($data, true)[0];
+            $value = $this->app->decodeJson($data);
+            if (!$this->allowMultiple) {
+                $value = $value[0];
+            }
 
             return call_user_func($fx, $value);
         }, ['data' => 'value']);
