@@ -94,12 +94,7 @@ class FeatureContext extends RawMinkContext implements Context
 
         $script = '$("#' . $link->getAttribute('id') . '").click()';
         $this->getSession()->executeScript($script);
-
-
-//        $link->click();
     }
-
-
 
     /**
      * @Then I see button :arg1
