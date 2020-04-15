@@ -132,9 +132,11 @@ class FeatureContext extends RawMinkContext implements Context
      */
     public function labelChangesToANumber()
     {
+        $this->getSession()->wait(5000, '!$("#' . $this->buttonId . '").hasClass("loading")');
         $element = $this->getSession()->getPage()->findById($this->buttonId);
-        if (!is_numeric($element->getHtml())) {
-            throw new \Exception('Label must be numeric');
+        $value = trim($element->getHtml());
+        if (!is_numeric($value)) {
+            throw new \Exception('Label must be numeric on button: ' . $this->buttonId . ' : ' . $value);
         }
     }
 
