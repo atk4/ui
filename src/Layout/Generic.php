@@ -3,8 +3,9 @@
 namespace atk4\ui\Layout;
 
 use atk4\ui\Panel\Loadable;
+use atk4\ui\View;
 
-class Generic extends \atk4\ui\View
+class Generic extends View
 {
     /**
      * Add a loadable View.
