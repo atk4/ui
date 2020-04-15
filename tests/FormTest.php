@@ -2,11 +2,12 @@
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\data\Model;
 use atk4\ui\App;
 use atk4\ui\Form;
 
-class FormTest extends \atk4\core\PHPUnit_AgileTestCase
+class FormTest extends AtkPhpunit\TestCase
 {
     /** @var Form */
     public $f;

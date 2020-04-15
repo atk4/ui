@@ -2,9 +2,10 @@
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\data\Model;
 
-class PostTest extends \atk4\core\PHPUnit_AgileTestCase
+class PostTest extends AtkPhpunit\TestCase
 {
     public $model;
 

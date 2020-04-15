@@ -2,6 +2,7 @@
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\data\Model;
 use atk4\data\Persistence;
 
@@ -21,7 +22,7 @@ class MyTestModel extends Model
  * Test is designed to verify that field which is explicitly editable should appear and be editable
  * even if 'never_persist' is set to true.
  */
-class ForFieldUITest extends \atk4\core\PHPUnit_AgileTestCase
+class ForFieldUITest extends AtkPhpunit\TestCase
 {
     /** @var Model */
     public $m;

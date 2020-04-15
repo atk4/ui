@@ -2,12 +2,13 @@
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\ui\jQuery;
 use atk4\ui\jsChain;
 use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
 
-class jsTest extends \atk4\core\PHPUnit_AgileTestCase
+class jsTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.

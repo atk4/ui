@@ -2,7 +2,9 @@
 
 namespace atk4\ui\tests;
 
-class PaginatorTest extends \atk4\core\PHPUnit_AgileTestCase
+use atk4\core\AtkPhpunit;
+
+class PaginatorTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.

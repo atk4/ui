@@ -2,7 +2,9 @@
 
 namespace atk4\ui\tests;
 
-class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
+use atk4\core\AtkPhpunit;
+
+class ListerTest extends AtkPhpunit\TestCase
 {
     /**
      * Can use lister with custom template.
