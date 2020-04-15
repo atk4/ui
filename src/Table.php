@@ -1,7 +1,5 @@
 <?php
 
-// vim:ts=4:sw=4:et:fdm=marker:fdl=0
-
 namespace atk4\ui;
 
 use atk4\ui\TableColumn\FilterPopup;
