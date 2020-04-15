@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__ . '/init.php';
-require_once __DIR__ . '/database.php';
 
 class TestModel extends \atk4\data\Model
 {
