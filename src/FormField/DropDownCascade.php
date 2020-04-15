@@ -47,40 +47,21 @@ class DropDownCascade extends DropDown
         $this->cascadeInputValue = $_POST[$this->cascadeInput->name] ?? $this->cascadeInput->field->get('value');
 
         $this->model = $this->cascadeInput->model ? $this->cascadeInput->model->ref($this->reference) : null;
-
-        $expr = [
-            function ($t) {
-                $value = $this->field->get();
-                $js[] = $this->js()->dropdown('change values', $this->getNewValues($this->cascadeInputValue));
-                if ($value) {
-                    $js[] = $this->js(true)->dropdown('set selected', $value);
-                }
-                $js[] = $this->js()->removeClass('loading');
-                return $js;
-            },
-            $this->js()->dropdown('clear'),
-            $this->js()->addClass('loading'),
-        ];
-
-        $this->cascadeInput->onChange($expr, ['args' => [$this->cascadeInput->name => $this->cascadeInput->jsInput()->val()]]);
     }
 
     /**
      * Generate new dropdown values based on cascadeInput model selected id.
      * Return an empty value set if id is null.
      *
+     * @param string $id
+     *
      * @return array
      */
-    public function getNewValues($id)
+    public function getNewValues(string $id): array
     {
         if (!$id) {
             return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
         }
-
-//        $model = $this->cascadeInput->model ? $this->cascadeInput->model->load($id)->ref($this->reference) : [];
-//        if ($refId) {
-//            $model->addCondition('id', $refId);
-//        }
 
         $model = $this->cascadeInput->model->load($id)->ref($this->reference);
         $values = [];
@@ -96,10 +77,19 @@ class DropDownCascade extends DropDown
         return $values;
     }
 
-    private function getJsValues($values, $value)
+    /**
+     *  Will mark current value as selected from a list
+     *  of possible values.
+     *
+     * @param $values    An array of possible values.
+     * @param $value     The current field value.
+     *
+     * @return array
+     */
+    private function getJsValues(array $values, string $value): array
     {
          foreach ($values as $k => $v) {
-             if ($v['value'] === (string) $value) {
+             if ($v['value'] === $value) {
                  $values[$k]['selected'] = true;
              }
          }
@@ -107,17 +97,38 @@ class DropDownCascade extends DropDown
          return $values;
     }
 
+    /**
+     * Call during parent::renderView()
+     *
+     * @return array|mixed
+     * @throws \atk4\core\Exception
+     */
     protected function jsRenderDropdown()
     {
-        $value = $this->field->get();
-//        $values = $this->getNewValues($this->cascadeInputValue, $value);
-        $values = $this->getJsValues($this->getNewValues($this->cascadeInputValue, $value), $value);
+        // setup initial values.
+        $values = $this->getJsValues($this->getNewValues((string) $this->cascadeInputValue), (string) $this->field->get());
         $options = array_merge($this->dropdownOptions, ['values' => $values]);
 
-        return $this->js(true)->dropdown($options);
+        // setup on change handler
+        $expr = [
+            function ($t) {
+                return [
+                    $this->js()->dropdown('change values', $this->getNewValues((string) $this->cascadeInputValue)),
+                    $this->js()->removeClass('loading'),
+                ];
+            },
+            $this->js()->dropdown('clear'),
+            $this->js()->addClass('loading'),
+        ];
+
+        return [
+            $this->js(true)->dropdown($options),
+            $this->cascadeInput->onChange($expr, ['args' => [$this->cascadeInput->name => $this->cascadeInput->jsInput()->val()]]),
+        ];
     }
 
     /**
+     * Call during parent::renderView()
      * Cascade Dropdown values are only render via js.
      */
     protected function htmlRenderValue()
@@ -128,28 +139,6 @@ class DropDownCascade extends DropDown
     {
         // can't be multiple selection.
         $this->isMultiple = false;
-        // do we have value.
-//        $value = $this->field->get();
-
-//        $values = $this->getNewValues($this->cascadeInputValue, $value);
-//        $this->js(true)->dropdown('change values', $this->getNewValues($this->cascadeInputValue, $value));
-//        if ($value) {
-//            $this->js(true)->dropdown('set value', $value);
-//        }
-
         parent::renderView();
-
-//        if ($value) {
-//            $values = $this->getNewValues($this->cascadeInputValue);
-//            $this->js()->dropdown();
-//        }
-        // set value on initial load if cascadeInput model is not loaded.
-//        if (!$this->cascadeInput->model->loaded()) {
-//            $values = $this->getNewValues($this->cascadeInputValue, $value);
-//            $this->js(true)->dropdown('change values', $this->getNewValues($this->cascadeInputValue, $value));
-//            if ($value) {
-//                $this->js(true)->dropdown('set value', $value);
-//            }
-//        }
     }
 }
