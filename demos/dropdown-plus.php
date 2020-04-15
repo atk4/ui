@@ -30,20 +30,20 @@ $form->addField(
 );
 
 //custom callback: add icon
-$form->addField(
-    'withModel3',
-    ['DropDown',
-                    'caption'           => 'DropDown with data from Model',
-                    'model'             => new File($db),
-                    'renderRowFunction' => function ($row) {
-                        return [
-                            'value' => $row->id,
-                            'title' => $row->getTitle(),
-                            'icon'  => $row->get('is_folder') ? 'folder' : 'file',
-                        ];
-                    },
-                ]
-);
+//$form->addField(
+//    'withModel3',
+//    ['DropDown',
+//                    'caption'           => 'DropDown with data from Model',
+//                    'model'             => new File($db),
+//                    'renderRowFunction' => function ($row) {
+//                        return [
+//                            'value' => $row->id,
+//                            'title' => $row->getTitle(),
+//                            'icon'  => $row->get('is_folder') ? 'folder' : 'file',
+//                        ];
+//                    },
+//                ]
+//);
 
 $form->addField(
     'enum',

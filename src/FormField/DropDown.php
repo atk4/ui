@@ -226,42 +226,21 @@ class DropDown extends Input
     }
 
     /**
-     * Renders view.
+     * Render js for dropdown.
+     *
+     * @return mixed
+     * @throws \atk4\core\Exception
      */
-    public function renderView()
+    protected function jsRenderDropdown()
     {
-        if ($this->isMultiple) {
-            $this->defaultClass = $this->defaultClass . ' multiple';
-        }
+        return $this->js(true)->dropdown($this->dropdownOptions);
+    }
 
-        $this->addClass($this->defaultClass);
-
-        if ($this->readonly || $this->disabled) {
-            $this->setDropdownOption('showOnFocus', false);
-            $this->setDropdownOption('allowTab', false);
-            $this->removeClass('search');
-        }
-
-        if ($this->disabled) {
-            $this->addClass('disabled');
-        }
-
-        if ($this->readonly) {
-            $this->setDropdownOption('allowTab', false);
-            $this->setDropdownOption('onShow', new jsFunction([new jsExpression('return false')]));
-        }
-
-        $this->js(true)->dropdown($this->dropdownOptions);
-
-        if ($this->dropIcon) {
-            $this->template->trySet('DropIcon', $this->dropIcon);
-        }
-
-        $this->template->trySet('DefaultText', $this->empty);
-
+    protected function htmlRenderValue()
+    {
         /*
-         * render dropdown options
-         */
+            * render dropdown options
+        */
         //add selection only if no value is required and Dropdown has no multiple selections enabled
         if ($this->field !== null && !$this->field->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
@@ -289,6 +268,44 @@ class DropDown extends Input
                 }
             }
         }
+    }
+
+    /**
+     * Renders view.
+     */
+    public function renderView()
+    {
+        if ($this->isMultiple) {
+            $this->defaultClass = $this->defaultClass . ' multiple';
+        }
+
+        $this->addClass($this->defaultClass);
+
+        if ($this->readonly || $this->disabled) {
+            $this->setDropdownOption('showOnFocus', false);
+            $this->setDropdownOption('allowTab', false);
+            $this->removeClass('search');
+        }
+
+        if ($this->disabled) {
+            $this->addClass('disabled');
+        }
+
+        if ($this->readonly) {
+            $this->setDropdownOption('allowTab', false);
+            $this->setDropdownOption('onShow', new jsFunction([new jsExpression('return false')]));
+        }
+
+
+        if ($this->dropIcon) {
+            $this->template->trySet('DropIcon', $this->dropIcon);
+        }
+
+        $this->template->trySet('DefaultText', $this->empty);
+
+
+        $this->htmlRenderValue();
+        $this->jsRenderDropdown();
 
         parent::renderView();
     }
