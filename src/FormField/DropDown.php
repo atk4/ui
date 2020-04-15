@@ -236,11 +236,12 @@ class DropDown extends Input
         return $this->js(true)->dropdown($this->dropdownOptions);
     }
 
+    /**
+     * Render values as html for DropDown.
+     * 
+     */
     protected function htmlRenderValue()
     {
-        /*
-            * render dropdown options
-        */
         //add selection only if no value is required and Dropdown has no multiple selections enabled
         if ($this->field !== null && !$this->field->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
