@@ -65,7 +65,7 @@ class DropDownCascade extends DropDown
 
         $model = $this->cascadeInput->model->load($id)->ref($this->reference);
         $values = [];
-        foreach ( $model as $k => $row) {
+        foreach ($model as $k => $row) {
             if ($this->renderRowFunction && is_callable($this->renderRowFunction)) {
                 $res = call_user_func($this->renderRowFunction, $row, $k);
                 $values[] = ['value' => $res['value'], 'text' => $row['name'], 'name' => $res['title']];
@@ -88,13 +88,13 @@ class DropDownCascade extends DropDown
      */
     private function getJsValues(array $values, string $value): array
     {
-         foreach ($values as $k => $v) {
-             if ($v['value'] === $value) {
-                 $values[$k]['selected'] = true;
-             }
-         }
+        foreach ($values as $k => $v) {
+            if ($v['value'] === $value) {
+                $values[$k]['selected'] = true;
+            }
+        }
 
-         return $values;
+        return $values;
     }
 
     /**
