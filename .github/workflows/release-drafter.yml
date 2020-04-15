@@ -16,6 +16,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Compile JS files for CDN
+        uses: romaninsh/pull-request@master
         run: |
           npm install -g less-plugin-clean-css
           (cd js; npm install; npm run build; cd ..)
