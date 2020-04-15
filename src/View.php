@@ -327,7 +327,7 @@ class View implements jsExpressionable
      *
      * @throws Exception
      */
-    public function init()
+    public function init(): void
     {
         if ($this->name === null) {
             $this->name = $this->defaultName;

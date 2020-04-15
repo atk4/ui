@@ -40,7 +40,7 @@ class ItemsPerPageSelector extends View
      */
     public $cb = null;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

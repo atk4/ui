@@ -9,7 +9,7 @@ class Category extends \atk4\data\Model
 {
     public $table = 'category';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->addField('name');
@@ -23,7 +23,7 @@ class SubCategory extends \atk4\data\Model
 {
     public $table = 'sub_category';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->addField('name');
@@ -37,7 +37,7 @@ class Product extends \atk4\data\Model
 {
     public $table = 'product';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->addField('name');

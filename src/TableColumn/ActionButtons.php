@@ -25,7 +25,7 @@ class ActionButtons extends Generic
      */
     protected $callbacks = [];
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->addClass('right aligned');

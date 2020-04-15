@@ -82,7 +82,7 @@ class Link extends Generic
      */
     public $force_download = false;
 
-    public function __construct($page = null, $args = [])
+    public function __construct($page = [], $args = [])
     {
         if (is_array($page)) {
             $page = ['page' => $page];
@@ -95,7 +95,7 @@ class Link extends Generic
         parent::__construct($page);
     }
 
-    public function setDefaults($properties = [], $strict = false)
+    public function setDefaults(array $properties, bool $passively = false)
     {
         if (isset($properties[0])) {
             $this->page = array_shift($properties);
@@ -106,7 +106,7 @@ class Link extends Generic
         parent::setDefaults($properties);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

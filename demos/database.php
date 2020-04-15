@@ -21,7 +21,7 @@ if (!class_exists('Country')) {
     {
         public $table = 'country';
 
-        public function init()
+        public function init(): void
         {
             parent::init();
             $this->addField('name', ['actual' => 'nicename', 'required' => true, 'type' => 'string']);
@@ -68,7 +68,7 @@ if (!class_exists('Country')) {
         public $table = 'stats';
         public $title = 'Project Stat';
 
-        public function init()
+        public function init(): void
         {
             parent::init();
 
@@ -128,7 +128,7 @@ if (!class_exists('Country')) {
     {
         public $table = 'file';
 
-        public function init()
+        public function init(): void
         {
             parent::init();
             $this->addField('name');

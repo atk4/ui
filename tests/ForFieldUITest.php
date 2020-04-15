@@ -7,7 +7,7 @@ use atk4\data\Persistence;
 
 class MyTestModel extends Model
 {
-    public function init()
+    public function init(): void
     {
         parent::init();
 

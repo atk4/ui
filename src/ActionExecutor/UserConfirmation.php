@@ -14,6 +14,7 @@ use atk4\ui\jsFunction;
 use atk4\ui\jsToast;
 use atk4\ui\Loader;
 use atk4\ui\Modal;
+use atk4\ui\Text;
 use atk4\ui\View;
 
 class UserConfirmation extends Modal implements jsInterface_, Interface_
@@ -45,11 +46,32 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /** @var Button Cancel button */
     private $cancel;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->observeChanges();
         $this->addClass($this->size);
+    }
+
+    /**
+     * Properly set element id for this modal.
+     *
+     * @param Generic $action
+     *
+     * @throws \atk4\core\Exception
+     */
+    public function afterActionInit(Generic $action)
+    {
+        $getTableName = function ($arr) {
+            foreach ($arr as $k => $v) {
+                return is_numeric($k) ? $v : $k;
+            }
+        };
+
+        $table_name = is_array($action->getModel()->table) ? $getTableName($action->getModel()->table) : $action->getModel()->table;
+
+        $this->id = strtolower($this->name . '_' . $table_name . '_' . $action->short_name);
+        $this->name = $this->id;
 
         //Add buttons to modal for next and previous.
         $btns = (new View())->addStyle(['min-height' => '24px']);
@@ -84,22 +106,35 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /**
      * Will associate executor with the action.
      *
-     * @param \atk4\data\UserAction\Action $action
+     * @param Generic $action
      *
      * @return UserConfirmation
+     * @throws Exception
+     * @throws \atk4\core\Exception
+     * @throws \atk4\data\Exception
      */
-    public function setAction(\atk4\data\UserAction\Generic $action)
+    public function setAction(Generic $action): Modal
     {
         $this->action = $action;
-        $this->title = $this->action->owner->getModelCaption();
+        $this->afterActionInit($action);
+
+        $this->title = $this->title ?? trim($action->caption . ' ' . $this->action->owner->getModelCaption());
         $this->step = $this->stickyGet('step');
 
         $this->actionInitialized = true;
+        $this->jsSetBtnState($this);
+        $this->doSteps();
 
         return $this;
     }
 
-    public function renderView()
+    /**
+     * Perform this action steps.
+     *
+     * @throws Exception
+     * @throws \atk4\data\Exception
+     */
+    public function doSteps()
     {
         $id = $this->stickyGet($this->name);
         if ($id && $this->action->scope === 'single') {
@@ -107,18 +142,32 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
         }
 
         $this->loader->set(function ($modal) {
+            $this->jsSetBtnState($modal);
             if ($this->step === 'exec') {
                 $this->doFinal($modal);
             } else {
                 $this->doConfirmation($modal);
             }
         });
+    }
 
-        parent::renderView();
+    /**
+     * Reset button state.
+     *
+     * @param View $view
+     *
+     * @throws \atk4\core\Exception
+     */
+    protected function jsSetBtnState(View $view)
+    {
+        // reset button handler.
+        $view->js(true, $this->ok->js(true)->off());
+        $view->js(true, $this->cancel->js(true)->off());
     }
 
     /**
      * Set modal for displaying confirmation message.
+     * Also apply proper javascript to each button.
      *
      * @param View $modal
      *
@@ -164,10 +213,12 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
      * Add confirmation message to modal.
      *
      * @param View $view
+     *
+     * @throws \atk4\core\Exception
      */
     protected function addConfirmation(View $view)
     {
-        \atk4\ui\Text::addTo($view)->set($this->action->getConfirmation());
+        Text::addTo($view)->set($this->action->getConfirmation());
     }
 
     /**
@@ -184,7 +235,16 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
         $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->owner->id));
     }
 
-    protected function jsGetExecute($obj, $id)
+    /**
+     * Return proper js statement when action execute.
+     *
+     * @param $obj
+     * @param $id
+     *
+     * @return array
+     * @throws \atk4\core\Exception
+     */
+    protected function jsGetExecute($obj, $id): array
     {
         $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
 

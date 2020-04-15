@@ -1,8 +1,51 @@
-// Variables
 
+/*-------------------
+      Site Colors
+--------------------*/
+
+/*---  Colors  ---*/
+@red              : #DB2828;
+@orange           : #F2711C;
+@yellow           : #FBBD08;
+@olive            : #B5CC18;
+@green            : #21BA45;
+@teal             : #00B5AD;
+@blue             : #2185D0;
+@violet           : #6435C9;
+@purple           : #A333C8;
+@pink             : #E03997;
+@brown            : #A5673F;
+@grey             : #767676;
+@black            : #1B1C1D;
+
+/*---  Light Colors  ---*/
+@lightRed         : #FF695E;
+@lightOrange      : #FF851B;
+@lightYellow      : #FFE21F;
+@lightOlive       : #D9E778;
+@lightGreen       : #2ECC40;
+@lightTeal        : #6DFFFF;
+@lightBlue        : #54C8FF;
+@lightViolet      : #A291FB;
+@lightPurple      : #DC73FF;
+@lightPink        : #FF8EDF;
+@lightBrown       : #D67C1C;
+@lightGrey        : #DCDDDE;
+@lightBlack       : #545454;
+
+/*---   Neutrals  ---*/
+@fullBlack        : #000000;
+@offWhite         : #F9FAFB;
+@darkWhite        : #F3F4F5;
+@midWhite         : #DCDDDE;
+@white            : #FFFFFF;
+
+// Variables
 @leftMenuWidth: 260px;
 @desktopWidth: 992px;
 @tabletWidth: 768px;
+
+@atkSlidePanelColor: @offWhite;
 
 
 // Layout
@@ -68,6 +111,38 @@ footer.atk-footer {
   }
   &.visible {
     // display: none;
+  }
+}
+
+.atk-right-panel {
+  -webkit-transition: box-shadow 0.2s, right 0.2s;
+  -moz-transition: box-shadow 0.2s, right 0.2s;
+  -ms-transition: box-shadow 0.2s, right 0.2s;
+  -o-transition: box-shadow 0.2s, right 0.2s;
+  transition: box-shadow 0.2s, right 0.2s;
+  bottom: 0;
+  background-color: @atkSlidePanelColor;
+  box-shadow: 0 0 0 fade(@black, 0%);
+  height: 99%;
+  right: -100%;
+  overflow-y: auto;
+  position: fixed;
+  width: 40%;
+  z-index: 1000;
+  &.atk-visible {
+    box-shadow: 0px 0 5px fade(@black, 20%);
+    right: 0%;
+  }
+}
+
+.atk-panel-close {
+  color: @black;
+}
+
+i.atk-panel-warning {
+  color: @atkSlidePanelColor;
+  &.atk-visible {
+    color: @orange;
   }
 }
 
@@ -207,6 +282,9 @@ footer.atk-footer {
   body.atk-leftMenu-visible .atk-overlay.pushable {
     opacity: 1;
   }
+  .atk-right-panel {
+    width: 65%;
+  }
 }
 @media (max-width: (@tabletWidth - 1px)) {
   body.atk-leftMenu-visible {
@@ -214,6 +292,9 @@ footer.atk-footer {
   }
   .ui.left.sidebar {
     width: 100%;
+  }
+  .atk-right-panel {
+    width: 95%;
   }
 }
 

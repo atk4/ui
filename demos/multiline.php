@@ -10,7 +10,7 @@ require_once __DIR__ . '/init.php';
  */
 class InventoryItem extends \atk4\data\Model
 {
-    public function init()
+    public function init(): void
     {
         parent::init();
 

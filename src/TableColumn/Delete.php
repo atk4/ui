@@ -7,7 +7,7 @@ namespace atk4\ui\TableColumn;
  */
 class Delete extends Generic
 {
-    public function init()
+    public function init(): void
     {
         parent::init();
 

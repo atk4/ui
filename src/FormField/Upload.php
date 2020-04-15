@@ -84,7 +84,7 @@ class Upload extends Input
     /** @var bool check if callback is trigger by one of the action. */
     private $_isCbRunning = false;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

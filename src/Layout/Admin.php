@@ -50,7 +50,7 @@ class Admin extends Generic
 
     public $defaultTemplate = 'layout/admin.html';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

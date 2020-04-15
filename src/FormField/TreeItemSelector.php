@@ -73,7 +73,7 @@ class TreeItemSelector extends Generic
      */
     private $cb = null;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

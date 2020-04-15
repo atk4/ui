@@ -39,7 +39,7 @@ class CheckBox extends Generic
     /**
      * Initialization.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 

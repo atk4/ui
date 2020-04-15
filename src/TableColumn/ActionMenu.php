@@ -58,7 +58,7 @@ class ActionMenu extends Generic
      */
     public $icon = 'dropdown icon';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
     }

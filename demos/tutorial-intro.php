@@ -130,7 +130,7 @@ EOF
 
 class Invoice extends \atk4\data\Model {
     public $title_field = 'reference';
-        function init() {
+        function init(): void {
         parent::init();
 
         $this->addField('reference');
@@ -189,7 +189,7 @@ EOF
     {
         public $title_field = 'reference';
 
-        public function init()
+        public function init(): void
         {
             parent::init();
 

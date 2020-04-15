@@ -203,7 +203,7 @@ Open the created file "View1.php" in your editor and add the following lines::
   namespace MyProject\Views;
 
   class View1 extends \atk4\data\View {
-      function init() {
+      function init(): void {
           parent::init();
 
           $text = \atk4\ui\Text::addTo($this->app, ['here goes some text']);

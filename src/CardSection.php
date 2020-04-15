@@ -17,7 +17,7 @@ class CardSection extends View
 
     public $tableClass = 'ui fixed small';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->addClass('content');

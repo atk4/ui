@@ -17,7 +17,7 @@ class jsSSE extends jsCallback
      */
     public $echoFunction = null;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 

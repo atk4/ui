@@ -16,7 +16,7 @@ class Cart extends \atk4\ui\Lister
 
     public $defaultTemplate = 'lister.html';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->items = $this->recall('items', []);
@@ -78,7 +78,7 @@ class ItemShelf extends \atk4\ui\View
 {
     public $ui = 'green segment';
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $v = \atk4\ui\View::addTo($this, ['ui'=>'fluid']);

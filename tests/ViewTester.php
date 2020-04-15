@@ -8,7 +8,7 @@ namespace atk4\ui\tests;
  */
 class ViewTester extends \atk4\ui\View
 {
-    public function init()
+    public function init(): void
     {
         parent::init();
 
