@@ -91,6 +91,7 @@ class DropDownCascade extends DropDown
         foreach ($values as $k => $v) {
             if ($v['value'] === $value) {
                 $values[$k]['selected'] = true;
+                break;
             }
         }
 
