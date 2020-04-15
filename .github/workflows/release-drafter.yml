@@ -14,17 +14,3 @@ jobs:
       - uses: toolmantim/release-drafter@v5.6.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Compile JS files for CDN
-        uses: romaninsh/pull-request@master
-        run: |
-          npm install -g less-plugin-clean-css
-          (cd js; npm install; npm run build; cd ..)
-          lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
-          uglifyjs --compress -- public/agileui.js > public/agileui.min.js
-          echo '!agileui.css' >> public/.gitignore
-          echo '!agileui.css.map' >> public/.gitignore
-          echo '!agileui.min.js' >> public/.gitignore
-          echo '!atkjs-ui.js' >> public/.gitignore
-          echo '!atkjs-ui.min.js' >> public/.gitignore
-          git add public
