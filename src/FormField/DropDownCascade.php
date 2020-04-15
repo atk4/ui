@@ -77,7 +77,7 @@ class DropDownCascade extends DropDown
             return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
         }
 
-        $model = ($this->cascadeInput->model->load($id)->ref($this->reference);
+        $model = $this->cascadeInput->model ? $this->cascadeInput->model->load($id)->ref($this->reference) : [];
         if ($refId) {
             $model->addCondition('id', $refId);
         }
@@ -105,9 +105,10 @@ class DropDownCascade extends DropDown
         parent::renderView();
         // set value on initial load if cascadeInput model is not loaded.
         if (!$this->cascadeInput->model->loaded()) {
+            $values = $this->getNewValues($this->cascadeInputValue, $value);
             $this->js(true)->dropdown('change values', $this->getNewValues($this->cascadeInputValue, $value));
             if ($value) {
-                $this->js(true)->dropdown('set selected', $value);
+                $this->js(true)->dropdown('set value', $value);
             }
         }
     }
