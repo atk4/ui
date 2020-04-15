@@ -136,7 +136,7 @@ class FeatureContext extends RawMinkContext implements Context
         $element = $this->getSession()->getPage()->findById($this->buttonId);
         $value = trim($element->getHtml());
         if (!is_numeric($value)) {
-            throw new \Exception('Label must be numeric on button: ' . $this->buttonId . ' : '  . $value);
+            throw new \Exception('Label must be numeric on button: ' . $this->buttonId . ' : ' . $value);
         }
     }
 
