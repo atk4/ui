@@ -1,0 +1,31 @@
+name: Test Release Drafter
+
+on:
+  push:
+    # branches to consider in the event; optional, defaults to all
+    branches:
+      - test-release-drafter
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    container:
+      image: atk4/image:latest # https://github.com/atk4/image
+    steps:
+      # Drafts your next Release notes as Pull Requests are merged into "master"
+      - uses: toolmantim/release-drafter@v5.6.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compile JS files for CDN
+        run: |
+          npm install -g less-plugin-clean-css
+          (cd js; npm install; npm run build; cd ..)
+          lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
+          uglifyjs --compress -- public/agileui.js > public/agileui.min.js
+          echo '!agileui.css' >> public/.gitignore
+          echo '!agileui.css.map' >> public/.gitignore
+          echo '!agileui.min.js' >> public/.gitignore
+          echo '!atkjs-ui.js' >> public/.gitignore
+          echo '!atkjs-ui.min.js' >> public/.gitignore
+          git add public
