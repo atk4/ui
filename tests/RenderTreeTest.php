@@ -2,13 +2,14 @@
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\ui\View;
 
 /**
  * Multiple tests to ensure that adding views through various patterns initializes them
  * nicely still.
  */
-class RenderTreeTest extends \atk4\core\PHPUnit_AgileTestCase
+class RenderTreeTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.

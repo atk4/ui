@@ -2,9 +2,10 @@
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\ui\Table;
 
-class TableColumnColorRatingTest extends \atk4\core\PHPUnit_AgileTestCase
+class TableColumnColorRatingTest extends AtkPhpunit\TestCase
 {
     use Concerns\HandlesTable;
 

@@ -2,7 +2,9 @@
 
 namespace atk4\ui\tests;
 
-class TableColumnLinkTest extends \atk4\core\PHPUnit_AgileTestCase
+use atk4\core\AtkPhpunit;
+
+class TableColumnLinkTest extends AtkPhpunit\TestCase
 {
     use Concerns\HandlesTable;
 

@@ -2,10 +2,11 @@
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\ui\Button;
 use atk4\ui\View;
 
-class jsIntegrationTest extends \atk4\core\PHPUnit_AgileTestCase
+class jsIntegrationTest extends AtkPhpunit\TestCase
 {
     public function testIDIntegrity1()
     {

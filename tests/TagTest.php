@@ -2,7 +2,9 @@
 
 namespace atk4\ui\tests;
 
-class TagTest extends \atk4\core\PHPUnit_AgileTestCase
+use atk4\core\AtkPhpunit;
+
+class TagTest extends AtkPhpunit\TestCase
 {
     public function getApp()
     {

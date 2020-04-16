@@ -2,6 +2,8 @@
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
+
 class AppMock extends \atk4\ui\App
 {
     public $terminated = false;
@@ -20,7 +22,7 @@ class AppMock extends \atk4\ui\App
     }
 }
 
-class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
+class CallbackTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.

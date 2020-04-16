@@ -2,7 +2,9 @@
 
 namespace atk4\ui\tests;
 
-class ViewTest extends \atk4\core\PHPUnit_AgileTestCase
+use atk4\core\AtkPhpunit;
+
+class ViewTest extends AtkPhpunit\TestCase
 {
     /**
      * Test redering multiple times.
