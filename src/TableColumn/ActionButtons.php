@@ -111,7 +111,7 @@ class ActionButtons extends Generic
     {
         $owner = $owner ?: $this->owner->owner;
 
-        $modal = \atk4\ui\Modal::addTo($owner, [compact('title')]);
+        $modal = \atk4\ui\Modal::addTo($owner, [compact('title'), 'appStickyCb' => true]);
 
         $modal->observeChanges(); // adds scrollbar if needed
 
