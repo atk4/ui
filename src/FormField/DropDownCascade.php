@@ -101,10 +101,10 @@ class DropDownCascade extends DropDown
     /**
      * Call during parent::renderView()
      *
-     * @return array|mixed
+     * @return array
      * @throws \atk4\core\Exception
      */
-    protected function jsRenderDropdown()
+    protected function jsRenderDropdown(): array
     {
         // setup initial values.
         $values = $this->getJsValues($this->getNewValues((string) $this->cascadeInputValue), (string) $this->field->get());
