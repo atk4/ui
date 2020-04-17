@@ -146,27 +146,30 @@ if (!class_exists('Country')) {
         /**
          * Perform import from filesystem.
          */
-        public function importFromFilesystem($path)
+        public function importFromFilesystem($path, $isSub = false)
         {
             $dir = new DirectoryIterator($path);
             foreach ($dir as $fileinfo) {
+                $name = $fileinfo->getFilename();
+
+                if ($fileinfo->getFilename() === '.') {
+                    continue;
+                }
                 if ($fileinfo->getFilename()[0] === '.') {
                     continue;
                 }
-                if ($fileinfo->getFilename() === 'vendor') {
-                    continue;
-                }
 
-                $this->unload();
+                if ($fileinfo->getFilename() === 'src' || $fileinfo->getFilename() === 'demos' ||$isSub) {
+                    $this->unload();
+                    $this->save([
+                                    'name'      => $fileinfo->getFilename(),
+                                    'is_folder' => $fileinfo->isDir(),
+                                    'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
+                                ]);
 
-                $this->save([
-                    'name'      => $fileinfo->getFilename(),
-                    'is_folder' => $fileinfo->isDir(),
-                    'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
-                ]);
-
-                if ($fileinfo->isDir()) {
-                    $this->ref('SubFolder')->importFromFilesystem($path . '/' . $fileinfo->getFilename());
+                    if ($fileinfo->isDir()) {
+                        $this->ref('SubFolder')->importFromFilesystem($path . '/' . $fileinfo->getFilename(), true);
+                    }
                 }
             }
         }

@@ -20,7 +20,7 @@ class Finder extends \atk4\ui\Columns
 
         $selections = explode(',', $_GET[$this->name] ?? '');
 
-        if ($selections) {
+        if (!empty($selections[0])) {
             $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
         }
 
@@ -49,7 +49,7 @@ class Finder extends \atk4\ui\Columns
             $model = $model->ref($ref);
 
             $table = \atk4\ui\Table::addTo($this->addColumn(), ['header' => false, 'very basic selectable'])->addStyle('cursor', 'pointer');
-            $table->setModel($model, [$model->title_field]);
+            $table->setModel($model->setLimit(25), [$model->title_field]);
 
             if ($selections) {
                 $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
@@ -83,4 +83,4 @@ $vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($vp) use ($m) {
 
 Finder::addTo($app, 'bottom attached')
     ->addClass('top attached segment')
-    ->setModel($m, ['SubFolder']);
+    ->setModel($m->setLimit(5), ['SubFolder']);

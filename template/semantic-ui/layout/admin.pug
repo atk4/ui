@@ -1,11 +1,9 @@
 .atk-layout
-  | {$LeftMenu}
-  | {$TopMenu}
-  .atk-topMenuGhost.ui.menu
-    .item
-      .ui.button &nbsp;
-  main.atk-mainContainer
-    .atk-mainContainerWrapper
+  .ui.left.vertical.menu.visible.inverted.labeled.sidebar.atk-admin-left-menu
+    | {$LeftMenu}
+  main.atk-mainContainer.atk-admin-wp
+    | {$TopMenu}
+    .atk-mainContainerWrapper.atk-admin-wp
       | {$Content}
   footer.atk-footer
     .ui.divider

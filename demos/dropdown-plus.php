@@ -10,7 +10,7 @@ $form->addField(
     'withModel',
     ['DropDown',
                     'caption' => 'DropDown with data from Model',
-                    'model'   => new Country($db),
+                    'model'   => (new Country($db))->setLimit(25),
                 ]
 );
 
@@ -19,7 +19,7 @@ $form->addField(
     'withModel2',
     ['DropDown',
                     'caption'           => 'DropDown with data from Model',
-                    'model'             => new Country($db),
+                    'model'             => (new Country($db))->setLimit(25),
                     'renderRowFunction' => function ($row) {
                         return [
                             'value' => $row->id,
@@ -34,7 +34,7 @@ $form->addField(
     'withModel3',
     ['DropDown',
                     'caption'           => 'DropDown with data from Model',
-                    'model'             => new File($db),
+                    'model'             => (new File($db))->setLimit(25),
                     'renderRowFunction' => function ($row) {
                         return [
                             'value' => $row->id,

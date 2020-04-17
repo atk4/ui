@@ -44,6 +44,8 @@
 @leftMenuWidth: 260px;
 @desktopWidth: 992px;
 @tabletWidth: 768px;
+@adminMenuHeight: 48px;
+@atkFooterHeight : 50px;
 
 @atkSlidePanelColor: @offWhite;
 
@@ -56,6 +58,7 @@
 .ui.visible.left.sidebar ~ .atk-mainContainer,
 .ui.visible.left.sidebar ~ footer.atk-footer {
   padding-left: @leftMenuWidth;
+  height: @atkFooterHeight;
 }
 
 .atk-dialog-content {
@@ -83,10 +86,14 @@ header.atk-topMenu.ui.fixed.menu ~ .atk-topMenuGhost {
 header.atk-topMenu.ui.menu .item > .label {
   margin-left: 0;
 }
+
 .atk-mainContainer {
   flex: 1;
   .atk-mainContainerWrapper {
     padding: 3em;
+  }
+  &.atk-admin-wp {
+    margin-top: @adminMenuHeight;
   }
 }
 footer.atk-footer {
@@ -97,6 +104,7 @@ footer.atk-footer {
 
   }
 }
+
 .ui.left.sidebar {
   z-index: 103;
   .item.atk-leftMenuClose {
@@ -109,9 +117,9 @@ footer.atk-footer {
       margin-left: 0 !important;
     }
   }
-  &.visible {
-    // display: none;
-  }
+  //&.visible {
+  //  // display: none;
+  //}
 }
 
 .atk-right-panel {
@@ -144,6 +152,19 @@ i.atk-panel-warning {
   &.atk-visible {
     color: @orange;
   }
+}
+
+.atk-admin-left-menu {
+  top: @adminMenuHeight - 1 !important;
+}
+
+.atk-admin-left-menu-content {
+  overflow: auto;
+  height: ~'calc(100% - '@atkFooterHeight + @adminMenuHeight~')';
+}
+
+.ui.left.sidebar.atk-admin-left-menu {
+  width: @leftMenuWidth;
 }
 
 // table dropdown menu
@@ -231,7 +252,7 @@ i.atk-panel-warning {
   opacity: 0;
   pointer-events: none;
   position: fixed;
-  top: 0;
+  top: @adminMenuHeight - 1px;
   width: 100%;
   z-index: 102;
   .pusher {
@@ -278,26 +299,22 @@ i.atk-panel-warning {
     }
   }
 }
-@media (min-width: @tabletWidth) and (max-width: (@desktopWidth - 1px)) {
+@media (max-width: @desktopWidth - 1px) {
   body.atk-leftMenu-visible .atk-overlay.pushable {
     opacity: 1;
   }
+}
+
+@media (min-width: @tabletWidth) and (max-width: (@desktopWidth - 1px)) {
   .atk-right-panel {
     width: 65%;
   }
 }
 @media (max-width: (@tabletWidth - 1px)) {
-  body.atk-leftMenu-visible {
-    overflow: hidden;
-  }
-  .ui.left.sidebar {
-    width: 100%;
-  }
   .atk-right-panel {
     width: 95%;
   }
 }
-
 
 // Print
 
