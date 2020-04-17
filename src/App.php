@@ -481,7 +481,7 @@ class App
         if (!$this->html) {
             throw new Exception(['App does not know how to add style']);
         }
-        $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
+        $this->html->template->appendHTML('HEAD', $this->getTag('style', null, $style, false));
     }
 
     /**
@@ -882,10 +882,11 @@ class App
      * @param string|array $tag
      * @param string       $attr
      * @param string|array $value
+     * @param bool         $encodeValue
      *
      * @return string
      */
-    public function getTag($tag = null, $attr = null, $value = null)
+    public function getTag($tag = null, $attr = null, $value = null, bool $encodeValue = true)
     {
         if ($tag === null) {
             $tag = 'div';
@@ -927,7 +928,7 @@ class App
             $attr = null;
         }
 
-        if (is_string($value)) {
+        if (is_string($value) && $encodeValue) {
             $value = $this->encodeHTML($value);
         } elseif (is_array($value)) {
             $result = [];
