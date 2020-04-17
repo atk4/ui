@@ -41,7 +41,7 @@ header.atk-topMenu.ui.menu .item > .label {
 .atk-mainContainer .atk-mainContainerWrapper {
   padding: 3em;
 }
-.atk-mainContainer.atk-admin-wp {
+.atk-mainContainer.atk-admin-layout {
   margin-top: 48px;
 }
 footer.atk-footer .ui.divider,

@@ -56,7 +56,7 @@ class Admin extends Generic
         parent::init();
 
         if ($this->menu === null) {
-            $this->menu = Menu::addTo($this, ['atk-admin-wp-top-menu-header inverted fixed horizontal', 'element' => 'header'], ['TopMenu']);
+            $this->menu = Menu::addTo($this, ['inverted fixed horizontal', 'element' => 'header'], ['TopMenu']);
             $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']]);
             $this->burger->on('click', [
                 (new jQuery('.atk-admin-left-menu'))->toggleClass('visible'),
