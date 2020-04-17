@@ -115,7 +115,6 @@ if (file_exists('coverage.php')) {
 $app->title = 'Agile UI Demo v' . $app->version;
 
 if (file_exists('../public/atkjs-ui.min.js')) {
-    $test = __DIR__ . '/public';
     $app->cdn['atk'] = '../public';
 }
 
