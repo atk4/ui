@@ -928,8 +928,8 @@ class App
             $attr = null;
         }
 
-        if (is_string($value) && $encodeValue) {
-            $value = $this->encodeHTML($value);
+        if (is_string($value)) {
+            $value = $this->encodeHTML($encodeValue ? $value : strip_tags($value));
         } elseif (is_array($value)) {
             $result = [];
             foreach ($value as $v) {
