@@ -65,7 +65,6 @@ class Admin extends Generic
             Icon::addTo($this->burger, ['content']);
 
             Header::addTo($this->menu, [$this->app->title, 'size' => 4]);
-
         }
 
         if ($this->menuRight === null) {
