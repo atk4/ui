@@ -90,8 +90,8 @@ i.atk-panel-warning {
 i.atk-panel-warning.atk-visible {
   color: #F2711C;
 }
-.atk-admin-left-menu {
-  top: 47px !important;
+.ui.left.sidebar.atk-admin-left-menu {
+  top: 47px;
 }
 .atk-admin-left-menu-content {
   overflow: auto;
