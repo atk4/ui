@@ -42,7 +42,7 @@ class ListerTest extends AtkPhpunit\TestCase
         $v->init();
         $l = \atk4\ui\Lister::addTo($v, ['defaultTemplate'=>'lister.html']);
         $l->setSource(['foo', 'bar']);
-        $this->assertRegExp('|<div class="content"><a class="header" href="foo">bar</a>|i', $l->render());
+        $this->assertMatchesRegularExpression('|<div class="content"><a class="header" href="foo">bar</a>|i', $l->render());
     }
 
     /**

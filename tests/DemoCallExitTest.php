@@ -65,7 +65,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $response = $this->getResponseFromRequestGET($uri);
         $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertRegExp($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     /**
@@ -78,7 +78,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $response = $this->getResponseFromRequestGET($uri);
         $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
         $this->assertEquals('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
-        $this->assertRegExp($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     public function casesDemoGETDataProvider()
@@ -102,11 +102,11 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         );
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertRegExp($this->regexJSON, $response->getBody()->getContents());
+        $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents());
 
         $response = $this->getResponseFromRequestGET('wizard.php?atk_admin_wizard=2&name=Country');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertRegExp($this->regexHTML, $response->getBody()->getContents());
+        $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents());
     }
 
     /**
@@ -123,7 +123,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         if (!($this instanceof DemoCallExitExceptionTest)) { // content type is not set when App->call_exit equals to true
             $this->assertEquals('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
         }
-        $this->assertRegExp($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     public function JSONResponseDataProvider()
@@ -200,7 +200,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $response = $this->getResponseFromRequestFormPOST($uri, $post_data);
         $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertRegExp($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     public function JSONResponsePOSTDataProvider()
