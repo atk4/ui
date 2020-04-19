@@ -123,13 +123,15 @@ $app->initLayout($app->stickyGET('layout') ?: 'Admin');
 $layout = $app->layout;
 
 if (isset($layout->menuLeft)) {
+    $groupTemplate = 'menugroup-admin.html';
+
     $layout->menuLeft->addItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['index']);
 
-    $ly = $layout->menuLeft->addGroup(['Layout', 'icon' => 'object group'])->addClass('atk-admin-left-menu-group');
+    $ly = $layout->menuLeft->addGroup(['Layout', 'icon' => 'object group'], $groupTemplate)->addClass('atk-admin-left-menu-group');
     $ly->addItem(['Layouts'], ['layouts']);
     $ly->addItem(['Panel'], ['layout-panel']);
 
-    $form = $layout->menuLeft->addGroup(['Form', 'icon' => 'edit'])->addClass('atk-admin-left-menu-group');
+    $form = $layout->menuLeft->addGroup(['Form', 'icon' => 'edit'], $groupTemplate)->addClass('atk-admin-left-menu-group');
     $form->addItem('Basics and Layouting', ['form']);
     $form->addItem(['Form Sections'], ['form-section']);
     $form->addItem('Data Integration', ['form2']);
@@ -137,7 +139,7 @@ if (isset($layout->menuLeft)) {
     $form->addItem(['Integration with Columns'], ['form5']);
     $form->addItem(['Conditional Fields'], ['jscondform']);
 
-    $in = $layout->menuLeft->addGroup(['Input', 'icon' => 'keyboard outline'])->addClass('atk-admin-left-menu-group');
+    $in = $layout->menuLeft->addGroup(['Input', 'icon' => 'keyboard outline'], $groupTemplate)->addClass('atk-admin-left-menu-group');
     $in->addItem(['Input Fields'], ['field2']);
     $in->addItem('Input Field Decoration', ['field']);
     $in->addItem(['File Uploading'], ['upload']);
@@ -146,7 +148,7 @@ if (isset($layout->menuLeft)) {
     $in->addItem(['DropDown Field'], ['dropdown-plus']);
     $in->addItem(['Value Selectors'], ['form6']);
 
-    $g_t = $layout->menuLeft->addGroup(['Grid and Table', 'icon' => 'table'])->addClass('atk-admin-left-menu-group');
+    $g_t = $layout->menuLeft->addGroup(['Grid and Table', 'icon' => 'table'], $groupTemplate)->addClass('atk-admin-left-menu-group');
     $g_t->addItem('Data table with formatted columns', ['table']);
     $g_t->addItem(['Advanced table examples'], ['table2']);
     $g_t->addItem('Table interractions', ['multitable']);
@@ -157,7 +159,7 @@ if (isset($layout->menuLeft)) {
     $g_t->addItem(['CRUD with Array Persistence'], ['crud3']);
     $g_t->addItem(['Actions - Integration Examples'], ['actions']);
 
-    $basic = $layout->menuLeft->addGroup(['Basics', 'icon' => 'cubes'])->addClass('atk-admin-left-menu-group');
+    $basic = $layout->menuLeft->addGroup(['Basics', 'icon' => 'cubes'], $groupTemplate)->addClass('atk-admin-left-menu-group');
     $basic->addItem('View', ['view']);
     $basic->addItem('Lister', ['lister']);
     $basic->addItem('Button', ['button']);
@@ -169,7 +171,7 @@ if (isset($layout->menuLeft)) {
     $basic->addItem(['Columns'], ['columns']);
     $basic->addItem(['Grid Layout'], ['grid-layout']);
 
-    $adv = $layout->menuLeft->addGroup(['Interactive', 'icon' => 'talk'])->addClass('atk-admin-left-menu-group');
+    $adv = $layout->menuLeft->addGroup(['Interactive', 'icon' => 'talk'], $groupTemplate)->addClass('atk-admin-left-menu-group');
     $adv->addItem('Tabs', ['tabs']);
     $adv->addItem(['Accordion'], ['accordion']);
     $adv->addItem(['Wizard'], ['wizard']);
@@ -185,20 +187,24 @@ if (isset($layout->menuLeft)) {
     $adv->addItem('Paginator', ['paginator']);
 
 
-    $js = $layout->menuLeft->addGroup(['Javascript', 'icon' => 'code'])->addClass('atk-admin-left-menu-group');
+    $js = $layout->menuLeft->addGroup(['Javascript', 'icon' => 'code'], $groupTemplate)->addClass('atk-admin-left-menu-group');
     $js->addItem('Events', ['js']);
     $js->addItem('Element Reloading', ['reloading']);
     $js->addItem('Vue Integration', ['vue-component']);
 
-    $other = $layout->menuLeft->addGroup(['Others', 'icon' => 'plus'])->addClass('atk-admin-left-menu-group');
+    $other = $layout->menuLeft->addGroup(['Others', 'icon' => 'plus'], $groupTemplate)->addClass('atk-admin-left-menu-group');
     $other->addItem('Sticky GET', ['sticky']);
     $other->addItem('Recursive Views', ['recursive']);
 
-    $layout->js(true, (new \atk4\ui\jQuery('.atk-admin-left-menu-group'))->atkAdminMenu());
 
     //$basic->addItem('Virtual Page', ['virtual']);
 
     $f = basename($_SERVER['PHP_SELF']);
+    $layout
+        ->js(true, (new \atk4\ui\jQuery('.atk-admin-left-menu-group'))
+        ->atkAdminMenu(['base' => $_SERVER['REQUEST_URI']])
+        );
+
 
     //$url = 'https://github.com/atk4/ui/blob/feature/grid-part2/demos/';
     $url = 'https://github.com/atk4/ui/blob/develop/demos/';

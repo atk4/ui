@@ -7,6 +7,11 @@
 .atk-admin-left-menu-group {
   cursor: pointer;
 }
+.atk-group-active > div.header {
+  font-size: larger;
+  font-weight: bold;
+  color: #F2711C;
+}
 .atk-admin-sub-menu-temp > .item {
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -19,10 +24,13 @@
   padding-left: 8px;
   display: block;
 }
-.atk-admin-left-menu-group > i,
-.atk-admin-left-menu-content > a.item > i {
-  float: left !important;
-  margin-right: 20px !important;
+.atk-admin-menu-title > i,
+.atk-admin-menu-title > a.item > i {
+  float: left;
+  margin-right: 20px;
+}
+.ui.menu .item.atk-admin-left-menu-group {
+  padding: 16px;
 }
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
   width: calc(100% -  260px );
