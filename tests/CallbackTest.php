@@ -31,7 +31,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
     public $app;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->app = new AppMock(['always_run' => false]);
         $this->app->initLayout('Centered');

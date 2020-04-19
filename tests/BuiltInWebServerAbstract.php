@@ -22,7 +22,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     protected static $webserver_root = 'demos/';
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!file_exists($coverage = self::getPackagePath('coverage'))) {
             mkdir($coverage, 0777, true);
@@ -47,7 +47,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
         sleep(1);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (file_exists($file = self::getPackagePath('demos', 'coverage.php'))) {
             unlink($file);

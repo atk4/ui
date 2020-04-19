@@ -8,7 +8,7 @@ class SeleniumTest extends \PHPUnit_Framework_TestCase
     protected $user_id;
     protected $security_key;
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!$this->user_id) {
             $this->markTestIncomplete('BROWSERSTACK_USER is not set');
