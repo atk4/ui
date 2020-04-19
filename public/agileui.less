@@ -49,9 +49,35 @@
 
 @atkSlidePanelColor: @offWhite;
 
+// Admin menu
+//.atk-hide-menus {
+//  display: none;
+//}
+
+.atk-admin-left-menu-group {
+  cursor: pointer;
+}
+
+.atk-admin-sub-menu-temp > .item {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.atk-admin-left-menu-group > div.menu {
+  display: none;
+  &.atk-visible {
+    padding-left: 8px;
+    display: block;
+  }
+}
+
+.atk-admin-left-menu-group > i, .atk-admin-left-menu-content > a.item > i {
+  float: left !important;
+  margin-right: 20px !important;
+}
 
 // Layout
-
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
   width: ~'calc(100% - '@leftMenuWidth~')';
 }
@@ -107,18 +133,15 @@ footer.atk-footer {
 
 .ui.left.sidebar {
   z-index: 103;
-  .item.atk-leftMenuClose {
-    display: none;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 999;
-    i.icon {
-      margin-left: 0 !important;
-    }
-  }
-  //&.visible {
-  //  // display: none;
+  //.item.atk-leftMenuClose {
+  //  display: none;
+  //  position: fixed;
+  //  right: 0;
+  //  top: 0;
+  //  z-index: 999;
+  //  i.icon {
+  //    margin-left: 0 !important;
+  //  }
   //}
 }
 
@@ -154,8 +177,8 @@ i.atk-panel-warning {
   }
 }
 
-.atk-admin-left-menu {
-  top: @adminMenuHeight - 1 !important;
+.ui.left.sidebar.atk-admin-left-menu {
+  top: @adminMenuHeight - 1;
 }
 
 .atk-admin-left-menu-content {

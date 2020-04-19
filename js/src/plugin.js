@@ -12,6 +12,7 @@ import conditionalForm from "./plugins/conditional-form.plugin";
 import columnResizer from "./plugins/column-resizer.plugin";
 import scroll from "./plugins/scroll.plugin";
 import confirm from "./plugins/confirm.plugin";
+import adminMenu from "./plugins/admin-menu.plugin"
 
 /**
  * Generate a jQuery plugin
@@ -96,6 +97,7 @@ function createAtkplugins() {
     {name: 'ColumnResizer', plugin: columnResizer, sh: false},
     {name: 'Scroll', plugin: scroll, sh: false},
     {name: 'Confirm', plugin: confirm, sh: true},
+    {name: 'AdminMenu', plugin: adminMenu, sh: false},
   ];
 
   atkJqPlugins.forEach((atkJqPlugin) => {

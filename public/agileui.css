@@ -4,6 +4,26 @@
 /*---  Colors  ---*/
 /*---  Light Colors  ---*/
 /*---   Neutrals  ---*/
+.atk-admin-left-menu-group {
+  cursor: pointer;
+}
+.atk-admin-sub-menu-temp > .item {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.atk-admin-left-menu-group > div.menu {
+  display: none;
+}
+.atk-admin-left-menu-group > div.menu.atk-visible {
+  padding-left: 8px;
+  display: block;
+}
+.atk-admin-left-menu-group > i,
+.atk-admin-left-menu-content > a.item > i {
+  float: left !important;
+  margin-right: 20px !important;
+}
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
   width: calc(100% -  260px );
 }
@@ -51,16 +71,6 @@ footer.atk-footer .ui.segment {
 .ui.left.sidebar {
   z-index: 103;
 }
-.ui.left.sidebar .item.atk-leftMenuClose {
-  display: none;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 999;
-}
-.ui.left.sidebar .item.atk-leftMenuClose i.icon {
-  margin-left: 0 !important;
-}
 .atk-right-panel {
   -webkit-transition: box-shadow 0.2s, right 0.2s;
   -moz-transition: box-shadow 0.2s, right 0.2s;
@@ -90,8 +100,8 @@ i.atk-panel-warning {
 i.atk-panel-warning.atk-visible {
   color: #F2711C;
 }
-.atk-admin-left-menu {
-  top: 47px !important;
+.ui.left.sidebar.atk-admin-left-menu {
+  top: 47px;
 }
 .atk-admin-left-menu-content {
   overflow: auto;
