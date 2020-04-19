@@ -2,12 +2,12 @@
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use GuzzleHttp\Client;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Process\Process;
 
-abstract class BuiltInWebServerAbstract extends TestCase
+abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
 {
     protected static $process;
 
