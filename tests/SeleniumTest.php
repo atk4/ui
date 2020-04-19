@@ -1,9 +1,10 @@
 <?php
 
+use atk4\core\AtkPhpunit;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 
-class SeleniumTest extends \PHPUnit_Framework_TestCase
+class SeleniumTest extends AtkPhpunit\TestCase
 {
     protected $user_id;
     protected $security_key;

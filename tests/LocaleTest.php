@@ -2,10 +2,11 @@
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\ui\Exception;
 use atk4\ui\Locale;
 
-class LocaleTest extends \PHPUnit_Framework_TestCase
+class LocaleTest extends AtkPhpunit\TestCase
 {
     public function testException()
     {
