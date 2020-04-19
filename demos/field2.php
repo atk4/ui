@@ -170,7 +170,7 @@ $g = $form->addGroup('CheckBox');
 $b1 = $g->addField('b1', new \atk4\ui\FormField\CheckBox());
 $b1->onChange('console.log("b1 changed")');
 
-$g = $form->addGroup('DropDown');
+$g = $form->addGroup(['Dropdown', 'width' => 'three']);
 $d1 = $g->addField('d1', new \atk4\ui\FormField\DropDown(['values' => [
     'tag'        => ['Tag', 'icon' => 'tag icon'],
     'globe'      => ['Globe', 'icon' => 'globe icon'],
@@ -178,7 +178,7 @@ $d1 = $g->addField('d1', new \atk4\ui\FormField\DropDown(['values' => [
     'file'       => ['File', 'icon' => 'file icon'],
 ],
 ]));
-$d1->onChange('console.log("d1 changed")');
+$d1->onChange('console.log("Dropdown changed")');
 
 $g = $form->addGroup('Radio');
 $r1 = $g->addField('r1', new \atk4\ui\FormField\Radio(['values' => [
@@ -188,7 +188,7 @@ $r1 = $g->addField('r1', new \atk4\ui\FormField\Radio(['values' => [
     'File',
 ],
 ]));
-$r1->onChange('console.log("r1 changed")');
+$r1->onChange('console.log("radio changed")');
 
 \atk4\ui\Header::addTo($app, ['Line ends of TextArea']);
 
