@@ -35,6 +35,10 @@ class CallbackTest extends AtkPhpunit\TestCase
     {
         $this->app = new AppMock(['always_run' => false]);
         $this->app->initLayout('Centered');
+
+        // reset var, between tests
+        $_GET = [];
+        $_POST = [];
     }
 
     public function testCallback()
