@@ -57,7 +57,7 @@ before_script:
     - composer install --no-progress --no-suggest --prefer-dist
 
 script:
-    - ./vendor/phpunit/phpunit/phpunit --no-coverage
+    - ./vendor/phpunit/phpunit/phpunit --no-coverage -vvv
     - bash tools/test.sh
 
 cache:
