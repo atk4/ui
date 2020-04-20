@@ -117,7 +117,7 @@ class FormTest extends AtkPhpunit\TestCase
 
         preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($error, $field, &$matched) {
             if ($matches[1] == $field) {
-                $this->assertContains($error, $matches[2], 'Regarding field ' . $field . ' error message');
+                $this->assertStringContainsString($error, $matches[2], 'Regarding field ' . $field . ' error message');
 
                 $matched = true;
             }
