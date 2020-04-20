@@ -61,7 +61,7 @@ before_script:
     - (cd js; npm install --loglevel=error; npm run build)
     - lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
     - uglifyjs --compress -- public/agileui.js > public/agileui.min.js
-    - composer install
+    - composer install --no-progress --no-suggest --prefer-dist
 
 after_script:
     - echo $TRAVIS_BRANCH
@@ -70,7 +70,7 @@ after_script:
 
 script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.2" ]]; then NC="--no-coverage"; fi
-    - ./vendor/phpunit/phpunit/phpunit $NC #- wget -O - http://localhost:8888/demos/button2.php
+    - ./vendor/phpunit/phpunit/phpunit $NC
     - bash tools/test.sh
 
 cache:
