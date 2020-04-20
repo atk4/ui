@@ -7,7 +7,7 @@ use atk4\core\AtkPhpunit;
 class ListerTest extends AtkPhpunit\TestCase
 {
     /**
-     * Can use lister with custom template.
+     * @doesNotPerformAssertions
      */
     public function testListerRender()
     {

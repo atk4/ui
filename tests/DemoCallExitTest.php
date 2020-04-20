@@ -27,7 +27,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 ';
     private $regexSSE = '/^[data|id|event].*$/m';
 
-    public function testableDemoFilesdataProvider()
+    public function casesDemoFilesdataProvider()
     {
         $files = [];
         foreach (scandir(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'demos') as $file) {
@@ -57,7 +57,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     }
 
     /**
-     * @dataProvider testableDemoFilesdataProvider
+     * @dataProvider casesDemoFilesdataProvider
      *
      * @param string $uri
      */
