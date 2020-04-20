@@ -19,11 +19,10 @@ class ViewTest extends AtkPhpunit\TestCase
         $this->assertEquals($a, $b);
     }
 
-    /**
-     * @expectedException Exception
-     */
     public function testAddAfterRender()
     {
+        $this->expectException(Exception::class);
+
         $v = new \atk4\ui\View();
         $v->set('foo');
 

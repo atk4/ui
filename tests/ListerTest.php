@@ -3,6 +3,7 @@
 namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
+use atk4\ui\Exception;
 
 class ListerTest extends AtkPhpunit\TestCase
 {
@@ -45,11 +46,9 @@ class ListerTest extends AtkPhpunit\TestCase
         $this->assertMatchesRegularExpression('|<div class="content"><a class="header" href="foo">bar</a>|i', $l->render());
     }
 
-    /**
-     * @expectedException Exception
-     */
     public function testAddAfterRender()
     {
+        $this->expectException(Exception::class);
         $v = new \atk4\ui\View();
         $v->init();
         $l = \atk4\ui\Lister::addTo($v);
