@@ -96,7 +96,7 @@ class jsSSE extends jsCallback
         }
 
         // output headers and content
-       $app = $this->app;
+        $app = $this->app;
         \Closure::bind(static function () use ($app, $content): void {
             $app->outputResponse($content, []);
         }, null, $app)();
