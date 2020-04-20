@@ -1,7 +1,13 @@
 
 <div class="atk-layout">
-  <div class="ui left vertical menu visible inverted labeled sidebar atk-admin-left-menu">{$LeftMenu}</div>
-  <main class="atk-mainContainer atk-admin-layout">{$TopMenu}
+  {$LeftMenu}
+  {$TopMenu}
+  <div class="atk-topMenuGhost ui menu">
+    <div class="item">
+      <div class="ui button">&nbsp;</div>
+    </div>
+  </div>
+  <main class="atk-mainContainer">
     <div class="atk-mainContainerWrapper">{$Content}</div>
   </main>
   <footer class="atk-footer">

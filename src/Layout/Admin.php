@@ -2,10 +2,9 @@
 
 namespace atk4\ui\Layout;
 
-use atk4\ui\Header;
-use atk4\ui\Icon;
 use atk4\ui\jQuery;
 use atk4\ui\Menu;
+use atk4\ui\Template;
 
 /**
  * Implements a classic 100% width admin layout.
@@ -56,24 +55,28 @@ class Admin extends Generic
         parent::init();
 
         if ($this->menu === null) {
-            $this->menu = Menu::addTo($this, ['inverted fixed horizontal', 'element' => 'header'], ['TopMenu']);
+            $this->menu = Menu::addTo($this, ['atk-topMenu inverted fixed horizontal', 'element' => 'header'], ['TopMenu']);
             $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']]);
             $this->burger->on('click', [
-                (new jQuery('.atk-admin-left-menu'))->toggleClass('visible'),
+                (new jQuery('.ui.left.sidebar'))->toggleClass('visible'),
                 (new jQuery('body'))->toggleClass('atk-leftMenu-visible'),
             ]);
-            Icon::addTo($this->burger, ['content']);
-
-            Header::addTo($this->menu, [$this->app->title, 'size' => 4]);
+            \atk4\ui\Icon::addTo($this->burger, ['content']);
         }
 
         if ($this->menuRight === null) {
             $this->menuRight = Menu::addTo($this->menu, ['ui' => false], ['RightMenu'])
-                                   ->addClass('right menu')->removeClass('item');
+                ->addClass('right menu')->removeClass('item');
         }
 
         if ($this->menuLeft === null) {
-            $this->menuLeft = Menu::addTo($this, ['ui' => 'atk-admin-left-menu-content'], ['LeftMenu']);
+            $this->menuLeft = Menu::addTo($this, ['left vertical inverted labeled sidebar'], ['LeftMenu']);
+            $this->leftMenu = $this->menuLeft;
+
+            $closeIcon = \atk4\ui\View::addTo($this->menuLeft, ['template' => new Template('<a id="{$_id}" href="#" onclick="return false;" class="{$class} item atk-leftMenuClose"><i class="close icon"></i></a>')]);
+            $closeIcon->on('click', (new jQuery('body'))->removeClass('atk-leftMenu-visible'));
+
+            $this->menuLeft->addHeader($this->app->title);
         }
 
         $this->template->trySet('version', $this->app->version);
@@ -92,8 +95,8 @@ class Admin extends Generic
             if ($this->isMenuLeftVisible) {
                 $this->menuLeft->addClass('visible');
             }
+            //$this->leftMenu->addItem(['Logout', 'icon'=>'sign out'], ['logout']);
         }
-
         parent::renderView();
     }
 }
