@@ -3,6 +3,7 @@
 namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
+use atk4\ui\Exception;
 
 class ViewTest extends AtkPhpunit\TestCase
 {
