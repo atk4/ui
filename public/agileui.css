@@ -4,57 +4,24 @@
 /*---  Colors  ---*/
 /*---  Light Colors  ---*/
 /*---   Neutrals  ---*/
-.atk-admin-left-menu-group {
-  cursor: pointer;
-  color: white;
+/* ---- Maestro --*/
+.atk-maestro-layout {
+  min-height: 100vh;
 }
-.atk-group-active > div.header {
-  font-size: larger;
-  font-weight: bold;
-  color: #F2711C;
-}
-.atk-admin-sub-menu {
+.atk-maestro-menu-back {
   position: fixed;
-  z-index: 205;
+  top: 0;
+  bottom: -120px;
+  z-index: 1;
+  width: 260px;
+  background-color: #1B1C1D;
 }
-.atk-admin-sub-menu-temp > .item {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-.atk-admin-left-menu-group > div.menu {
-  display: none;
-}
-.atk-admin-left-menu-group > div.menu.atk-visible {
-  padding-left: 8px;
-  display: block;
-}
-.atk-admin-menu-title {
-  padding: 10px 0px;
-}
-.atk-admin-left-menu-group.active > .atk-admin-menu-title {
-  background-color: #2185D0;
-}
-.atk-admin-left-menu-group.active > .atk-admin-menu-title > .header:after {
-  right: 0;
-  border: solid 8px transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  border-right-color: #f1f1f1;
-}
-.atk-admin-left-menu-group.sub-display > .atk-admin-menu-title {
-  background-color: #545454;
-}
-.atk-admin-menu-title > i,
-.atk-admin-menu-title > a.item > i {
+.atk-maestro-menu-content {
+  position: fixed;
   float: left;
-  margin-right: 20px;
-}
-.ui.menu .item.atk-admin-left-menu-group {
-  padding: 16px;
+  z-index: 99;
+  width: 260px;
+  top: 48px;
 }
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
   width: calc(100% -  260px );
