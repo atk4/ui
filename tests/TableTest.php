@@ -7,7 +7,7 @@ use atk4\core\AtkPhpunit;
 class TableTest extends AtkPhpunit\TestCase
 {
     /**
-     * Test constructor.
+     * @doesNotPerformAssertions
      */
     public function testAddColumnWithoutModel()
     {

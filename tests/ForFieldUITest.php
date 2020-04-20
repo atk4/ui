@@ -27,7 +27,7 @@ class ForFieldUITest extends AtkPhpunit\TestCase
     /** @var Model */
     public $m;
 
-    public function setUp()
+    public function setUp(): void
     {
         $a = [];
         $p = new Persistence\Array_($a);

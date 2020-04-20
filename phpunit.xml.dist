@@ -6,11 +6,8 @@
         <var name="DB_DBNAME" value="dsql_test" />
     </php>
     <filter>
-        <blacklist>
-            <directory suffix=".php">./vendor</directory>
-        </blacklist>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
+            <directory suffix=".php">src</directory>
         </whitelist>
     </filter>
     <testsuites>

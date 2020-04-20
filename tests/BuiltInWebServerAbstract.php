@@ -2,12 +2,12 @@
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
 use GuzzleHttp\Client;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Process\Process;
 
-abstract class BuiltInWebServerAbstract extends TestCase
+abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
 {
     protected static $process;
 
@@ -22,7 +22,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
 
     protected static $webserver_root = 'demos/';
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!file_exists($coverage = self::getPackagePath('coverage'))) {
             mkdir($coverage, 0777, true);
@@ -47,7 +47,7 @@ abstract class BuiltInWebServerAbstract extends TestCase
         sleep(1);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (file_exists($file = self::getPackagePath('demos', 'coverage.php'))) {
             unlink($file);

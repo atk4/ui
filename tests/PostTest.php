@@ -9,7 +9,7 @@ class PostTest extends AtkPhpunit\TestCase
 {
     public $model;
 
-    public function setUp()
+    public function setUp(): void
     {
         $_POST = ['name' => 'John', 'is_married' => 'Y'];
         $this->model = new Model();
