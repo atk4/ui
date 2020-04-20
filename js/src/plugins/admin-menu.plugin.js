@@ -5,14 +5,13 @@ export default class ajaxec extends atkPlugin {
 
   main() {
     // grap submenu.
-    console.log(this.$el);
     this.menu = this.$el.find(this.settings.menuItemsSelector);
     this.$copy = this.menu.clone().addClass('ui vertical inverted atk-admin-sub-menu-temp');
 
     this.addClickHandler();
     this.addHoverHandler();
     if (this.hasBase()) {
-      this.$el.addClass('atk-group-active');
+      this.$el.addClass(this.settings.activeClass);
       this.menu.toggleClass(this.settings.visibleCssClass);
     };
   }
@@ -24,7 +23,7 @@ export default class ajaxec extends atkPlugin {
       //console.log(el.href);
       if (el.href.includes(that.settings.base)) {
         hasBase = true;
-        $(el).addClass('active');
+        $(el).addClass(that.settings.activeClass);
       }
     });
     return hasBase;
@@ -32,8 +31,10 @@ export default class ajaxec extends atkPlugin {
 
   displaySideMenu() {
     const that = this;
-    const top = this.menu.parent().position().top + 47;
+    console.log($(window).height(), this.$el.position().top + 47 + this.menu.height());
+    const top = this.$el.position().top + 47;
     const left = this.settings.menuWidth;
+    this.$el.addClass('sub-display');
 
     const style = `
       position: absolute;
@@ -53,12 +54,14 @@ export default class ajaxec extends atkPlugin {
     });
     $('.atk-admin-sub-menu').append(this.$copy);
     this.$copy.css('cssText', style);
+    this.$copy.data('parentId', this.$el.attr('id'));
   }
 
   /**
    * Remove sub copied menu.
    */
   hideSideMenu() {
+    this.$el.removeClass('sub-display');
     this.$copy.remove();
   }
 
@@ -67,6 +70,8 @@ export default class ajaxec extends atkPlugin {
    */
   hideAllSideMenu() {
     $(this.settings.subMenusSelector + ' .atk-admin-sub-menu-temp').each(function(idx, el) {
+      console.log($(el).data('parentId'));
+      $('#' + $(el).data('parentId')).removeClass('sub-display');
       $(el).remove();
     })
   }
@@ -74,8 +79,12 @@ export default class ajaxec extends atkPlugin {
   addHoverHandler() {
     const that = this;
     this.$el.hover(function(e) {
-      clearTimeout(atk.menuOutTimer);
+      console.log('hover in');
       that.hideAllSideMenu();
+      if (that.$el.hasClass('active')) {
+        return;
+      }
+      clearTimeout(atk.menuOutTimer);
       atk.menuInTimer = setTimeout(that.displaySideMenu.bind(that), 250);
     }, function(e) {
       clearTimeout(atk.menuInTimer);
@@ -112,6 +121,7 @@ ajaxec.DEFAULTS = {
   menuItemsSelector : 'div.menu',
   subMenusSelector: '.atk-admin-sub-menu',
   visibleCssClass: 'atk-visible',
+  activeClass: 'active',
   menuWidth: 260,
   subMenuWidth: 120,
 };

@@ -128,10 +128,12 @@ if (isset($layout->menuLeft)) {
     $layout->menuLeft->addItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['index']);
 
     $ly = $layout->menuLeft->addGroup(['Layout', 'icon' => 'object group'], $groupTemplate)->addClass('atk-admin-left-menu-group');
+    $ly->removeClass('item');
     $ly->addItem(['Layouts'], ['layouts']);
     $ly->addItem(['Panel'], ['layout-panel']);
 
     $form = $layout->menuLeft->addGroup(['Form', 'icon' => 'edit'], $groupTemplate)->addClass('atk-admin-left-menu-group');
+    $form->removeClass('item');
     $form->addItem('Basics and Layouting', ['form']);
     $form->addItem(['Form Sections'], ['form-section']);
     $form->addItem('Data Integration', ['form2']);
@@ -140,6 +142,7 @@ if (isset($layout->menuLeft)) {
     $form->addItem(['Conditional Fields'], ['jscondform']);
 
     $in = $layout->menuLeft->addGroup(['Input', 'icon' => 'keyboard outline'], $groupTemplate)->addClass('atk-admin-left-menu-group');
+    $in->removeClass('item');
     $in->addItem(['Input Fields'], ['field2']);
     $in->addItem('Input Field Decoration', ['field']);
     $in->addItem(['File Uploading'], ['upload']);
@@ -149,6 +152,7 @@ if (isset($layout->menuLeft)) {
     $in->addItem(['Value Selectors'], ['form6']);
 
     $g_t = $layout->menuLeft->addGroup(['Grid and Table', 'icon' => 'table'], $groupTemplate)->addClass('atk-admin-left-menu-group');
+    $g_t->removeClass('item');
     $g_t->addItem('Data table with formatted columns', ['table']);
     $g_t->addItem(['Advanced table examples'], ['table2']);
     $g_t->addItem('Table interractions', ['multitable']);
@@ -160,6 +164,7 @@ if (isset($layout->menuLeft)) {
     $g_t->addItem(['Actions - Integration Examples'], ['actions']);
 
     $basic = $layout->menuLeft->addGroup(['Basics', 'icon' => 'cubes'], $groupTemplate)->addClass('atk-admin-left-menu-group');
+    $basic->removeClass('item');
     $basic->addItem('View', ['view']);
     $basic->addItem('Lister', ['lister']);
     $basic->addItem('Button', ['button']);
@@ -172,6 +177,7 @@ if (isset($layout->menuLeft)) {
     $basic->addItem(['Grid Layout'], ['grid-layout']);
 
     $adv = $layout->menuLeft->addGroup(['Interactive', 'icon' => 'talk'], $groupTemplate)->addClass('atk-admin-left-menu-group');
+    $adv->removeClass('item');
     $adv->addItem('Tabs', ['tabs']);
     $adv->addItem(['Accordion'], ['accordion']);
     $adv->addItem(['Wizard'], ['wizard']);
@@ -188,11 +194,13 @@ if (isset($layout->menuLeft)) {
 
 
     $js = $layout->menuLeft->addGroup(['Javascript', 'icon' => 'code'], $groupTemplate)->addClass('atk-admin-left-menu-group');
+    $js->removeClass('item');
     $js->addItem('Events', ['js']);
     $js->addItem('Element Reloading', ['reloading']);
     $js->addItem('Vue Integration', ['vue-component']);
 
     $other = $layout->menuLeft->addGroup(['Others', 'icon' => 'plus'], $groupTemplate)->addClass('atk-admin-left-menu-group');
+    $other->removeClass('item');
     $other->addItem('Sticky GET', ['sticky']);
     $other->addItem('Recursive Views', ['recursive']);
 

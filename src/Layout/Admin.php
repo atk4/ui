@@ -2,6 +2,7 @@
 
 namespace atk4\ui\Layout;
 
+use atk4\ui\Exception;
 use atk4\ui\Header;
 use atk4\ui\Icon;
 use atk4\ui\jQuery;
