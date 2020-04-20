@@ -99,7 +99,7 @@ class jsSSE extends jsCallback
         $app = $this->app;
         \Closure::bind(static function () use ($app, $content): void {
             $app->outputResponse($content, []);
-        }, null, App::class)();
+        }, null, $app)();
     }
 
     /**
