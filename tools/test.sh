@@ -16,7 +16,7 @@ killall -s SIGINT --wait php # flush coverage files
 mv phpunit.cov coverage/
 #ls -l coverage/
 ls -l coverage/ | wc -l
-./vendor/bin/phpcov  merge coverage/ --clover clover.xml
+#./vendor/bin/phpcov  merge coverage/ --clover clover.xml
 
 #wc -l clover.xml
 #rm demos/coverage.php
