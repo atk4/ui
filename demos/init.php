@@ -123,7 +123,6 @@ $app->initLayout($app->stickyGET('layout') ?: 'Maestro');
 $layout = $app->layout;
 
 if ($layout instanceof \atk4\ui\Layout\LeftMenuable) {
-
     $layout->addLeftMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['index']);
 
     $ly = $layout->addLeftMenuGroup(['Layout', 'icon' => 'object group']);//->addClass('atk-admin-left-menu-group');
