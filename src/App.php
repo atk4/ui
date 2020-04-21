@@ -1143,7 +1143,7 @@ class App
     public function getRenderedModals()
     {
         $modals = [];
-        foreach ($this->html->elements as $view) {
+        foreach ($this->html->elements ?? [] as $view) {
             if ($view instanceof Modal) {
                 $modals[$view->name]['html'] = $view->getHTML();
                 $modals[$view->name]['js'] = $view->getJsRenderActions();
