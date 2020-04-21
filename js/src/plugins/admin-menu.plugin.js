@@ -16,9 +16,10 @@ export default class ajaxec extends atkPlugin {
   main() {
     // menu items container.
     this.menu = this.$el.find(this.settings.menuItemsSelector);
+    console.log($.atkGetUrl(this.settings.base));
     if (this.menu.length === 0) {
       // this $el is our single item.
-      if (this.$el[0].href.includes(this.settings.base)){
+      if (this.$el[0].href.includes($.atkGetUrl(this.settings.base))){
         this.$el.addClass(this.settings.menuItemActiveClass);
       }
       return;
@@ -46,7 +47,7 @@ export default class ajaxec extends atkPlugin {
     const that = this;
     let hasBase = false;
     this.menu.find('a').each(function (idx, el) {
-      if (el.href.includes(that.settings.base)) {
+      if (el.href.includes($.atkGetUrl(that.settings.base))) {
         hasBase = true;
         // set active class for this specific menu item.
         $(el).addClass(that.settings.menuItemActiveClass);
