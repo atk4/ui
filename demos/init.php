@@ -118,7 +118,7 @@ if (file_exists('../public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = '../public';
 }
 
-$app->initLayout($app->stickyGET('layout') ?: 'Admin');
+$app->initLayout($app->stickyGET('layout') ?: 'Maestro');
 
 $layout = $app->layout;
 

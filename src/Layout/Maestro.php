@@ -5,6 +5,7 @@
 
 namespace atk4\ui\Layout;
 
+use atk4\ui\Item;
 use atk4\ui\Menu;
 
 class Maestro extends Admin
@@ -19,10 +20,21 @@ class Maestro extends Admin
         return $gr;
     }
 
+    public function addLeftMenuItem($name, $action = null, $group = null): Item
+    {
+        $i = parent::addLeftMenuItem($name, $action, $group);
+        if (!$group) {
+            $i->addClass('atk-maestro-left-menu-group');
+        }
+
+        return $i;
+    }
+
     public function renderView()
     {
         parent::renderView();
 
+        //initialize all menu group at ounce.
         $js = (new \atk4\ui\jQuery('.atk-maestro-left-menu-group'))->atkAdminMenu(['base' => $_SERVER['REQUEST_URI']]);
 
         $this->js(true, $js);

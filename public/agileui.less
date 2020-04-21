@@ -42,6 +42,7 @@
 
 // Variables
 @leftMenuWidth: 260px;
+@maestroSpace: 8px;
 @desktopWidth: 992px;
 @tabletWidth: 768px;
 @adminMenuHeight: 48px;
@@ -49,46 +50,25 @@
 
 @atkSlidePanelColor: @offWhite;
 
-// Admin menu
-//.atk-hide-menus {
-//  display: none;
-//}
+/******* MAESTRO MENU *******/
 
 .atk-maestro-left-menu-group {
   cursor: pointer;
   color: white;
 }
 
-//.atk-group-active > div.header {
-//  font-size: larger;
-//  font-weight: bold;
-//  color: @orange;
-//}
-
-//.atk-admin-sub-menu {
-//  position: fixed;
-//  z-index: 205;
-//}
-
-//.atk-admin-sub-menu-temp > .item {
-//  text-overflow: ellipsis;
-//  white-space: nowrap;
-//  overflow: hidden;
-//}
-
-//todo remove
-//.atk-admin-left-menu-group div.menu {
-//  display: none;
-//  &.atk-visible {
-//    padding-left: 8px;
-//    display: block;
-//  }
-//}
-
 .atk-maestro-left-menu-group > .ui.grid > .atk-maestro-menu-items {
   display: none;
   &.atk-visible {
     display: flex;
+  }
+}
+
+/* Item without a group in menu */
+.ui.inverted.menu a.atk-maestro-left-menu-group.item {
+  margin-right: @maestroSpace;
+  &.active {
+    background-color: @blue;
   }
 }
 
@@ -112,45 +92,24 @@
       padding: 0px;
     }
     .column {
-      padding-top: 8px;
-      padding-bottom: 8px;
+      padding-top: @maestroSpace;
+      padding-bottom: @maestroSpace;
     }
   }
 }
-
-//.atk-admin-left-menu-group .ui.grid .row {
-//  padding: 0px;
-//  .column{
-//    padding-top: 8px;
-//    padding-bottom: 8px;
-//  }
-//}
-
-//.atk-admin-left-menu-group .ui.grid .row .column{
-//  padding-top: 8px;
-//  padding-bottom: 8px;
-//}
-
-//.atk-admin-menu-title.ui.grid {
-//  width: @leftMenuWidth;
-//  padding: 10px 0px 0px 14px;
-//}
 
 .atk-maestro-left-menu-group.active .atk-maestro-menu-title {
   background-color: @blue;
 }
 
-// new
+.atk-maestro-left-menu-group > .ui.grid {
+  width: @leftMenuWidth;
+}
 
 .atk-admin-left-menu-content {
   margin-top: 12px;
   overflow-x: hidden;
   overflow-y: auto;
-}
-
-.atk-maestro-left-menu-group > .ui.grid {
-  //margin: 0px;
-  width: @leftMenuWidth;
 }
 
 /* A selected item in admin menu */
@@ -159,50 +118,6 @@
     background: none;
   }
 }
-
-///* Hide scrollbar for Chrome, Safari and Opera */
-//.ui.sidebar.atk-admin-left-menu::-webkit-scrollbar {
-//  display: none;
-//}
-//
-///* Hide scrollbar for IE and Edge */
-//.ui.sidebar.atk-admin-left-menu {
-//  -ms-overflow-style: none;
-//}
-
-
-//.atk-admin-left-menu-group.active > .atk-admin-menu-title > .header {
-//  &:after {
-//    right: 0;
-//    border: solid 8px transparent;
-//    content: " ";
-//    height: 0;
-//    width: 0;
-//    position: absolute;
-//    pointer-events: none;
-//    border-right-color: #f1f1f1;
-//  }
-//}
-
-
-
-//.atk-admin-left-menu-group.sub-display > .atk-admin-menu-title {
-//  background-color: @lightBlack;
-//}
-
-//.atk-admin-menu-title > i, .atk-admin-menu-title > a.item > i {
-//  float: left;
-//  margin-right: 20px;
-//}
-
-
-//.ui.menu .item.atk-admin-left-menu-group {
-//  padding: 16px;
-//}
-
-//.ui.menu .item.atk-admin-left-menu-group.active {
-//
-//}
 
 // Layout
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
@@ -260,16 +175,6 @@ footer.atk-footer {
 
 .ui.left.sidebar {
   z-index: 103;
-  //.item.atk-leftMenuClose {
-  //  display: none;
-  //  position: fixed;
-  //  right: 0;
-  //  top: 0;
-  //  z-index: 999;
-  //  i.icon {
-  //    margin-left: 0 !important;
-  //  }
-  //}
 }
 
 .atk-right-panel {

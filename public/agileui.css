@@ -4,6 +4,7 @@
 /*---  Colors  ---*/
 /*---  Light Colors  ---*/
 /*---   Neutrals  ---*/
+/******* MAESTRO MENU *******/
 .atk-maestro-left-menu-group {
   cursor: pointer;
   color: white;
@@ -13,6 +14,13 @@
 }
 .atk-maestro-left-menu-group > .ui.grid > .atk-maestro-menu-items.atk-visible {
   display: flex;
+}
+/* Item without a group in menu */
+.ui.inverted.menu a.atk-maestro-left-menu-group.item {
+  margin-right: 8px;
+}
+.ui.inverted.menu a.atk-maestro-left-menu-group.item.active {
+  background-color: #2185D0;
 }
 .atk-maestro-left-menu-group .atk-submenu-toggle div {
   height: 100%;
@@ -34,13 +42,13 @@
 .atk-maestro-left-menu-group.active .atk-maestro-menu-title {
   background-color: #2185D0;
 }
+.atk-maestro-left-menu-group > .ui.grid {
+  width: 260px;
+}
 .atk-admin-left-menu-content {
   margin-top: 12px;
   overflow-x: hidden;
   overflow-y: auto;
-}
-.atk-maestro-left-menu-group > .ui.grid {
-  width: 260px;
 }
 /* A selected item in admin menu */
 .ui.sidebar.atk-admin-left-menu .menu > .item.active {
