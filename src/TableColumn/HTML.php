@@ -6,7 +6,7 @@ use atk4\data\Field;
 
 /**
  * Class HTML
- * 
+ *
  * Use this decorator if you have HTML code that you just want to put into the table cell.
  */
 class HTML extends Generic
@@ -21,7 +21,7 @@ class HTML extends Generic
      */
     public function getDataCellHTML(Field $field = null, $extra_tags = [])
     {
-        return '{$_'.$field->short_name.'}';
+        return '{$_' . $field->short_name . '}';
     }
 
     /**
@@ -34,6 +34,6 @@ class HTML extends Generic
      */
     public function getHTMLTags($row, $field)
     {
-        return ['_'.$field->short_name => '<td>'.$row->get($field).'</td>'];
+        return ['_' . $field->short_name => '<td>' . $row->get($field) . '</td>'];
     }
 }
