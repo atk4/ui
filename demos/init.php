@@ -125,7 +125,7 @@ $layout = $app->layout;
 if ($layout instanceof \atk4\ui\Layout\LeftMenuable) {
     $layout->addLeftMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['index']);
 
-    $ly = $layout->addLeftMenuGroup(['Layout', 'icon' => 'object group']);//->addClass('atk-admin-left-menu-group');
+    $ly = $layout->addLeftMenuGroup(['Layout', 'icon' => 'object group']);
     $layout->addLeftMenuItem(['Layouts'], ['layouts'], $ly);
     $layout->addLeftMenuItem(['Panel'], ['layout-panel'], $ly);
 
@@ -137,7 +137,7 @@ if ($layout instanceof \atk4\ui\Layout\LeftMenuable) {
     $layout->addLeftMenuItem(['Integration with Columns'], ['form5'], $form);
     $layout->addLeftMenuItem(['Conditional Fields'], ['jscondform'], $form);
 
-    $in = $layout->addLeftMenuGroup(['Input', 'icon' => 'keyboard outline']);//->addClass('atk-admin-left-menu-group');
+    $in = $layout->addLeftMenuGroup(['Input', 'icon' => 'keyboard outline']);
     $layout->addLeftMenuItem(['Input Fields'], ['field2'], $in);
     $layout->addLeftMenuItem('Input Field Decoration', ['field'], $in);
     $layout->addLeftMenuItem(['File Uploading'], ['upload'], $in);
@@ -146,7 +146,7 @@ if ($layout instanceof \atk4\ui\Layout\LeftMenuable) {
     $layout->addLeftMenuItem(['DropDown Field'], ['dropdown-plus'], $in);
     $layout->addLeftMenuItem(['Value Selectors'], ['form6'], $in);
 
-    $g_t = $layout->addLeftMenuGroup(['Grid and Table', 'icon' => 'table']);//->addClass('atk-admin-left-menu-group');
+    $g_t = $layout->addLeftMenuGroup(['Grid and Table', 'icon' => 'table']);
     $layout->addLeftMenuItem('Data table with formatted columns', ['table'], $g_t);
     $layout->addLeftMenuItem(['Advanced table examples'], ['table2'], $g_t);
     $layout->addLeftMenuItem('Table interractions', ['multitable'], $g_t);
@@ -157,7 +157,7 @@ if ($layout instanceof \atk4\ui\Layout\LeftMenuable) {
     $layout->addLeftMenuItem(['CRUD with Array Persistence'], ['crud3'], $g_t);
     $layout->addLeftMenuItem(['Actions - Integration Examples'], ['actions'], $g_t);
 
-    $basic = $layout->addLeftMenuGroup(['Basics', 'icon' => 'cubes']);//->addClass('atk-admin-left-menu-group');
+    $basic = $layout->addLeftMenuGroup(['Basics', 'icon' => 'cubes']);
     $layout->addLeftMenuItem('View', ['view'], $basic);
     $layout->addLeftMenuItem('Lister', ['lister'], $basic);
     $layout->addLeftMenuItem('Button', ['button'], $basic);
@@ -169,7 +169,7 @@ if ($layout instanceof \atk4\ui\Layout\LeftMenuable) {
     $layout->addLeftMenuItem(['Columns'], ['columns'], $basic);
     $layout->addLeftMenuItem(['Grid Layout'], ['grid-layout'], $basic);
 
-    $adv = $layout->addLeftMenuGroup(['Interactive', 'icon' => 'talk']);//->addClass('atk-admin-left-menu-group');
+    $adv = $layout->addLeftMenuGroup(['Interactive', 'icon' => 'talk']);
     $layout->addLeftMenuItem('Tabs', ['tabs'], $adv);
     $layout->addLeftMenuItem(['Accordion'], ['accordion'], $adv);
     $layout->addLeftMenuItem(['Wizard'], ['wizard'], $adv);
@@ -184,12 +184,12 @@ if ($layout instanceof \atk4\ui\Layout\LeftMenuable) {
     $layout->addLeftMenuItem(['Toast'], ['toast'], $adv);
     $layout->addLeftMenuItem('Paginator', ['paginator'], $adv);
 
-    $js = $layout->addLeftMenuGroup(['Javascript', 'icon' => 'code'], $groupTemplate);//->addClass('atk-admin-left-menu-group');
+    $js = $layout->addLeftMenuGroup(['Javascript', 'icon' => 'code']);
     $layout->addLeftMenuItem('Events', ['js'], $js);
     $layout->addLeftMenuItem('Element Reloading', ['reloading'], $js);
     $layout->addLeftMenuItem('Vue Integration', ['vue-component'], $js);
 
-    $other = $layout->addLeftMenuGroup(['Others', 'icon' => 'plus'], $groupTemplate);//->addClass('atk-admin-left-menu-group');
+    $other = $layout->addLeftMenuGroup(['Others', 'icon' => 'plus']);
     $layout->addLeftMenuItem('Sticky GET', ['sticky'], $other);
     $layout->addLeftMenuItem('Recursive Views', ['recursive'], $other);
 
