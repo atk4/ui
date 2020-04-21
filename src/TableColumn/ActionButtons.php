@@ -111,8 +111,12 @@ class ActionButtons extends Generic
     {
         $owner = $owner ?: $this->owner->owner;
 
-        $defaults = [is_array($defaults) ? $defaults : ['title' => $defaults], 'appStickyCb' => true];
+        if (is_string($defaults)) {
+            $defaults = ['title' => $defaults];
+        }
 
+        $defaults['appStickyCb'] = true;
+        
         $modal = \atk4\ui\Modal::addTo($owner, $defaults);
 
         $modal->observeChanges(); // adds scrollbar if needed
