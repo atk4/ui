@@ -139,12 +139,6 @@ class Menu extends View
         return $group;
     }
 
-    public function addAdminMenu($name) {
-        $menu = $this->addGroup($name, 'menugroup-admin');
-        $menu->removeClass('item');
-        return $menu;
-    }
-
     /**
      * Add right positioned menu.
      *

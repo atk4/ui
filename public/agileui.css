@@ -36,6 +36,8 @@
 }
 .atk-admin-left-menu-content {
   margin-top: 12px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .atk-admin-left-menu-group > .ui.grid {
   width: 260px;
@@ -43,14 +45,6 @@
 /* A selected item in admin menu */
 .ui.sidebar.atk-admin-left-menu .menu > .item.active {
   background: none;
-}
-/* Hide scrollbar for Chrome, Safari and Opera */
-.ui.sidebar.atk-admin-left-menu::-webkit-scrollbar {
-  display: none;
-}
-/* Hide scrollbar for IE and Edge */
-.ui.sidebar.atk-admin-left-menu {
-  -ms-overflow-style: none;
 }
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
   width: calc(100% -  260px );

@@ -122,96 +122,80 @@ $app->initLayout($app->stickyGET('layout') ?: 'Admin');
 
 $layout = $app->layout;
 
-if (isset($layout->menuLeft)) {
-    $groupTemplate = 'menugroup-admin.html';
+if ($layout instanceof \atk4\ui\Layout\LeftMenuable) {
 
-//    $layout->menuLeft->addItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['index']);
+    $layout->addLeftMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['index']);
 
-    $ly = $layout->menuLeft->addGroup(['Layout', 'icon' => 'object group'], $groupTemplate)->addClass('atk-admin-left-menu-group');
-    $ly->removeClass('item');
-    $ly->addItem(['Layouts'], ['layouts']);
-    $ly->addItem(['Panel'], ['layout-panel']);
+    $ly = $layout->addLeftMenuGroup(['Layout', 'icon' => 'object group']);//->addClass('atk-admin-left-menu-group');
+    $layout->addLeftMenuItem(['Layouts'], ['layouts'], $ly);
+    $layout->addLeftMenuItem(['Panel'], ['layout-panel'], $ly);
 
-    $form = $layout->menuLeft->addGroup(['Form', 'icon' => 'edit'], $groupTemplate)->addClass('atk-admin-left-menu-group');
-    $form->removeClass('item');
-    $form->addItem('Basics and Layouting', ['form']);
-    $form->addItem(['Form Sections'], ['form-section']);
-    $form->addItem('Data Integration', ['form2']);
-    $form->addItem('Form Multi-column layout', ['form3']);
-    $form->addItem(['Integration with Columns'], ['form5']);
-    $form->addItem(['Conditional Fields'], ['jscondform']);
+    $form = $layout->addLeftMenuGroup(['Form', 'icon' => 'edit']);
+    $layout->addLeftMenuItem('Basics and Layouting', ['form'], $form);
+    $layout->addLeftMenuItem(['Form Sections'], ['form-section'], $form);
+    $layout->addLeftMenuItem('Data Integration', ['form2'], $form);
+    $layout->addLeftMenuItem('Form Multi-column layout', ['form3'], $form);
+    $layout->addLeftMenuItem(['Integration with Columns'], ['form5'], $form);
+    $layout->addLeftMenuItem(['Conditional Fields'], ['jscondform'], $form);
 
-    $in = $layout->menuLeft->addGroup(['Input', 'icon' => 'keyboard outline'], $groupTemplate)->addClass('atk-admin-left-menu-group');
-    $in->removeClass('item');
-    $in->addItem(['Input Fields'], ['field2']);
-    $in->addItem('Input Field Decoration', ['field']);
-    $in->addItem(['File Uploading'], ['upload']);
-    $in->addItem(['Checkboxes'], ['checkbox']);
-    $in->addItem(['Lookup Field'], ['lookup']);
-    $in->addItem(['DropDown Field'], ['dropdown-plus']);
-    $in->addItem(['Value Selectors'], ['form6']);
+    $in = $layout->addLeftMenuGroup(['Input', 'icon' => 'keyboard outline']);//->addClass('atk-admin-left-menu-group');
+    $layout->addLeftMenuItem(['Input Fields'], ['field2'], $in);
+    $layout->addLeftMenuItem('Input Field Decoration', ['field'], $in);
+    $layout->addLeftMenuItem(['File Uploading'], ['upload'], $in);
+    $layout->addLeftMenuItem(['Checkboxes'], ['checkbox'], $in);
+    $layout->addLeftMenuItem(['Lookup Field'], ['lookup'], $in);
+    $layout->addLeftMenuItem(['DropDown Field'], ['dropdown-plus'], $in);
+    $layout->addLeftMenuItem(['Value Selectors'], ['form6'], $in);
 
-    $g_t = $layout->menuLeft->addGroup(['Grid and Table', 'icon' => 'table'], $groupTemplate)->addClass('atk-admin-left-menu-group');
-    $g_t->removeClass('item');
-    $g_t->addItem('Data table with formatted columns', ['table']);
-    $g_t->addItem(['Advanced table examples'], ['table2']);
-    $g_t->addItem('Table interractions', ['multitable']);
-    $g_t->addItem(['Column Menus'], ['tablecolumnmenu']);
-    $g_t->addItem(['Column Filters'], ['tablefilter']);
-    $g_t->addItem('Grid - Table+Bar+Search+Paginator', ['grid']);
-    $g_t->addItem('CRUD - Full editing solution', ['crud']);
-    $g_t->addItem(['CRUD with Array Persistence'], ['crud3']);
-    $g_t->addItem(['Actions - Integration Examples'], ['actions']);
+    $g_t = $layout->addLeftMenuGroup(['Grid and Table', 'icon' => 'table']);//->addClass('atk-admin-left-menu-group');
+    $layout->addLeftMenuItem('Data table with formatted columns', ['table'], $g_t);
+    $layout->addLeftMenuItem(['Advanced table examples'], ['table2'], $g_t);
+    $layout->addLeftMenuItem('Table interractions', ['multitable'], $g_t);
+    $layout->addLeftMenuItem(['Column Menus'], ['tablecolumnmenu'], $g_t);
+    $layout->addLeftMenuItem(['Column Filters'], ['tablefilter'], $g_t);
+    $layout->addLeftMenuItem('Grid - Table+Bar+Search+Paginator', ['grid'], $g_t);
+    $layout->addLeftMenuItem('CRUD - Full editing solution', ['crud'], $g_t);
+    $layout->addLeftMenuItem(['CRUD with Array Persistence'], ['crud3'], $g_t);
+    $layout->addLeftMenuItem(['Actions - Integration Examples'], ['actions'], $g_t);
 
-    $basic = $layout->menuLeft->addGroup(['Basics', 'icon' => 'cubes'], $groupTemplate)->addClass('atk-admin-left-menu-group');
-    $basic->removeClass('item');
-    $basic->addItem('View', ['view']);
-    $basic->addItem('Lister', ['lister']);
-    $basic->addItem('Button', ['button']);
-    $basic->addItem('Header', ['header']);
-    $basic->addItem('Message', ['message']);
-    $basic->addItem('Labels', ['label']);
-    $basic->addItem('Menu', ['menu']);
-    $basic->addItem('BreadCrumb', ['breadcrumb']);
-    $basic->addItem(['Columns'], ['columns']);
-    $basic->addItem(['Grid Layout'], ['grid-layout']);
+    $basic = $layout->addLeftMenuGroup(['Basics', 'icon' => 'cubes']);//->addClass('atk-admin-left-menu-group');
+    $layout->addLeftMenuItem('View', ['view'], $basic);
+    $layout->addLeftMenuItem('Lister', ['lister'], $basic);
+    $layout->addLeftMenuItem('Button', ['button'], $basic);
+    $layout->addLeftMenuItem('Header', ['header'], $basic);
+    $layout->addLeftMenuItem('Message', ['message'], $basic);
+    $layout->addLeftMenuItem('Labels', ['label'], $basic);
+    $layout->addLeftMenuItem('Menu', ['menu'], $basic);
+    $layout->addLeftMenuItem('BreadCrumb', ['breadcrumb'], $basic);
+    $layout->addLeftMenuItem(['Columns'], ['columns'], $basic);
+    $layout->addLeftMenuItem(['Grid Layout'], ['grid-layout'], $basic);
 
-    $adv = $layout->menuLeft->addGroup(['Interactive', 'icon' => 'talk'], $groupTemplate)->addClass('atk-admin-left-menu-group');
-    $adv->removeClass('item');
-    $adv->addItem('Tabs', ['tabs']);
-    $adv->addItem(['Accordion'], ['accordion']);
-    $adv->addItem(['Wizard'], ['wizard']);
-    $adv->addItem(['Modal'], ['modal2']);
-    $adv->addItem('Dynamic Modal', ['modal']);
-    $adv->addItem(['Loader'], ['loader']);
-    $adv->addItem(['Console'], ['console']);
-    $adv->addItem(['Dynamic scroll'], ['scroll-lister']);
-    $adv->addItem(['Background PHP Jobs (SSE)'], ['sse']);
-    $adv->addItem(['Progress Bar'], ['progress']);
-    $adv->addItem(['Pop-up'], ['popup']);
-    $adv->addItem(['Toast'], ['toast']);
-    $adv->addItem('Paginator', ['paginator']);
+    $adv = $layout->addLeftMenuGroup(['Interactive', 'icon' => 'talk']);//->addClass('atk-admin-left-menu-group');
+    $layout->addLeftMenuItem('Tabs', ['tabs'], $adv);
+    $layout->addLeftMenuItem(['Accordion'], ['accordion'], $adv);
+    $layout->addLeftMenuItem(['Wizard'], ['wizard'], $adv);
+    $layout->addLeftMenuItem(['Modal'], ['modal2'], $adv);
+    $layout->addLeftMenuItem('Dynamic Modal', ['modal'], $adv);
+    $layout->addLeftMenuItem(['Loader'], ['loader'], $adv);
+    $layout->addLeftMenuItem(['Console'], ['console'], $adv);
+    $layout->addLeftMenuItem(['Dynamic scroll'], ['scroll-lister'], $adv);
+    $layout->addLeftMenuItem(['Background PHP Jobs (SSE)'], ['sse'], $adv);
+    $layout->addLeftMenuItem(['Progress Bar'], ['progress'], $adv);
+    $layout->addLeftMenuItem(['Pop-up'], ['popup'], $adv);
+    $layout->addLeftMenuItem(['Toast'], ['toast'], $adv);
+    $layout->addLeftMenuItem('Paginator', ['paginator'], $adv);
 
+    $js = $layout->addLeftMenuGroup(['Javascript', 'icon' => 'code'], $groupTemplate);//->addClass('atk-admin-left-menu-group');
+    $layout->addLeftMenuItem('Events', ['js'], $js);
+    $layout->addLeftMenuItem('Element Reloading', ['reloading'], $js);
+    $layout->addLeftMenuItem('Vue Integration', ['vue-component'], $js);
 
-    $js = $layout->menuLeft->addGroup(['Javascript', 'icon' => 'code'], $groupTemplate)->addClass('atk-admin-left-menu-group');
-    $js->removeClass('item');
-    $js->addItem('Events', ['js']);
-    $js->addItem('Element Reloading', ['reloading']);
-    $js->addItem('Vue Integration', ['vue-component']);
+    $other = $layout->addLeftMenuGroup(['Others', 'icon' => 'plus'], $groupTemplate);//->addClass('atk-admin-left-menu-group');
+    $layout->addLeftMenuItem('Sticky GET', ['sticky'], $other);
+    $layout->addLeftMenuItem('Recursive Views', ['recursive'], $other);
 
-    $other = $layout->menuLeft->addGroup(['Others', 'icon' => 'plus'], $groupTemplate)->addClass('atk-admin-left-menu-group');
-    $other->removeClass('item');
-    $other->addItem('Sticky GET', ['sticky']);
-    $other->addItem('Recursive Views', ['recursive']);
-
-
-    //$basic->addItem('Virtual Page', ['virtual']);
 
     $f = basename($_SERVER['PHP_SELF']);
-    $layout
-        ->js(true, (new \atk4\ui\jQuery('.atk-admin-left-menu-group'))
-        ->atkAdminMenu(['base' => $_SERVER['REQUEST_URI']])
-        );
 
 
     //$url = 'https://github.com/atk4/ui/blob/feature/grid-part2/demos/';

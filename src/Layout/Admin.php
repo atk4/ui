@@ -5,6 +5,7 @@ namespace atk4\ui\Layout;
 use atk4\ui\Exception;
 use atk4\ui\Header;
 use atk4\ui\Icon;
+use atk4\ui\Item;
 use atk4\ui\jQuery;
 use atk4\ui\Menu;
 
@@ -30,7 +31,7 @@ use atk4\ui\Menu;
  *
  *  - Content
  */
-class Admin extends Generic
+class Admin extends Generic implements LeftMenuable
 {
     public $menuLeft = null;    // vertical menu
     public $menu = null;        // horizontal menu
@@ -38,17 +39,8 @@ class Admin extends Generic
 
     public $burger = true;      // burger menu item
 
-    /*
-     * Whether or not left Menu is visible on Page load.
-     */
+    /** @var bool Whether or not left Menu is visible on Page load. */
     public $isMenuLeftVisible = true;
-
-    /**
-     * Obsolete, use menuLeft.
-     *
-     * @obsolete
-     */
-    public $leftMenu = null;
 
     public $defaultTemplate = 'layout/admin.html';
 
@@ -81,14 +73,46 @@ class Admin extends Generic
     }
 
     /**
+     * Add a group to left menu.
+     *
+     * @param $seed
+     *
+     * @return Menu
+     */
+    public function addLeftMenuGroup($seed): Menu
+    {
+        return $this->menuLeft->addGroup($seed);
+    }
+
+    /**
+     * Add items to left menu.
+     *
+     * @param $name
+     * @param null $action
+     * @param null $group
+     *
+     * @return Item
+     */
+    public function addLeftMenuItem($name, $action = null, $group = null): Item
+    {
+        if ($group) {
+            $i = $group->addItem($name, $action);
+        } else {
+            $i = $this->menuLeft->addItem($name, $action);
+        }
+
+        return $i;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function renderView()
     {
         if ($this->menuLeft) {
-            if (count($this->menuLeft->elements) == 1) {
+            if (count($this->menuLeft->elements) === 0) {
                 // no items were added, so lets add dashboard
-                $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], 'index');
+                $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], ['index']);
             }
             if ($this->isMenuLeftVisible) {
                 $this->menuLeft->addClass('visible');
