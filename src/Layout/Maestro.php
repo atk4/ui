@@ -13,7 +13,7 @@ class Maestro extends Admin
 
     public function addLeftMenuGroup($seed): Menu
     {
-        $gr = $this->menuLeft->addGroup($seed, $this->menuTemplate)->addClass('atk-admin-left-menu-group');
+        $gr = $this->menuLeft->addGroup($seed, $this->menuTemplate)->addClass('atk-maestro-left-menu-group');
         $gr->removeClass('item');
 
         return $gr;
@@ -23,7 +23,7 @@ class Maestro extends Admin
     {
         parent::renderView();
 
-        $js = (new \atk4\ui\jQuery('.atk-admin-left-menu-group'))->atkAdminMenu(['base' => $_SERVER['REQUEST_URI']]);
+        $js = (new \atk4\ui\jQuery('.atk-maestro-left-menu-group'))->atkAdminMenu(['base' => $_SERVER['REQUEST_URI']]);
 
         $this->js(true, $js);
     }

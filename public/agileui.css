@@ -4,34 +4,34 @@
 /*---  Colors  ---*/
 /*---  Light Colors  ---*/
 /*---   Neutrals  ---*/
-.atk-admin-left-menu-group {
+.atk-maestro-left-menu-group {
   cursor: pointer;
   color: white;
 }
-.atk-admin-left-menu-group > .ui.grid > .atk-admin-menu-items {
+.atk-maestro-left-menu-group > .ui.grid > .atk-maestro-menu-items {
   display: none;
 }
-.atk-admin-left-menu-group > .ui.grid > .atk-admin-menu-items.atk-visible {
+.atk-maestro-left-menu-group > .ui.grid > .atk-maestro-menu-items.atk-visible {
   display: flex;
 }
-.atk-admin-left-menu-group .atk-submenu-toggle div {
+.atk-maestro-left-menu-group .atk-submenu-toggle div {
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.atk-admin-left-menu-group:not(active) .atk-submenu-toggle:hover {
+.atk-maestro-left-menu-group:not(active) .atk-submenu-toggle:hover {
   background-color: rgba(255, 255, 255, 0.15);
 }
-.atk-admin-left-menu-group .ui.grid .row {
+.atk-maestro-left-menu-group .ui.grid .row {
   padding: 0px;
 }
-.atk-admin-left-menu-group .ui.grid .column {
+.atk-maestro-left-menu-group .ui.grid .column {
   padding-top: 8px;
   padding-bottom: 8px;
 }
-.atk-admin-left-menu-group.active .atk-admin-menu-title {
+.atk-maestro-left-menu-group.active .atk-maestro-menu-title {
   background-color: #2185D0;
 }
 .atk-admin-left-menu-content {
@@ -39,7 +39,7 @@
   overflow-x: hidden;
   overflow-y: auto;
 }
-.atk-admin-left-menu-group > .ui.grid {
+.atk-maestro-left-menu-group > .ui.grid {
   width: 260px;
 }
 /* A selected item in admin menu */

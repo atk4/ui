@@ -63,7 +63,7 @@ export default class ajaxec extends atkPlugin {
 
 ajaxec.DEFAULTS = {
   base: null, // the url to match a menu item.
-  menuItemsSelector : '.atk-admin-menu-items', // The css selector where menu items are contain.
+  menuItemsSelector : '.atk-maestro-menu-items', // The css selector where menu items are contain.
   toggleSelector: '.atk-submenu-toggle', // the css selector that will show or hide sub menu.
   visibleCssClass: 'atk-visible', // Display an item when this css class is set.
   menuGroupActiveClass: 'active', // the css class to set when a menu group is active.
