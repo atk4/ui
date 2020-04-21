@@ -116,7 +116,7 @@ class ActionButtons extends Generic
         }
 
         $defaults['appStickyCb'] = true;
-        
+
         $modal = \atk4\ui\Modal::addTo($owner, $defaults);
 
         $modal->observeChanges(); // adds scrollbar if needed
