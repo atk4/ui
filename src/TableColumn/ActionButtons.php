@@ -100,7 +100,7 @@ class ActionButtons extends Generic
      * load contents through $callback. Will pass a virtual page.
      *
      * @param \atk4\ui\View|string $button
-     * @param string               $title
+     * @param string|array         $title - model title or model seed array
      * @param callable             $callback
      * @param \atk4\ui\View        $owner
      * @param array                $args
@@ -111,7 +111,7 @@ class ActionButtons extends Generic
     {
         $owner = $owner ?: $this->owner->owner;
 
-        $modal = \atk4\ui\Modal::addTo($owner, [compact('title'), 'appStickyCb' => true]);
+        $modal = \atk4\ui\Modal::addTo($owner, [is_array($title) ? $title : compact('title'), 'appStickyCb' => true]);
 
         $modal->observeChanges(); // adds scrollbar if needed
 
