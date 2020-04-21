@@ -4,124 +4,73 @@ import atkPlugin from './atk.plugin';
 export default class ajaxec extends atkPlugin {
 
   main() {
-    // grap submenu.
+    // grap menu items container.
     this.menu = this.$el.find(this.settings.menuItemsSelector);
-    this.$copy = this.menu.clone().addClass('ui vertical inverted atk-admin-sub-menu-temp');
+    this.toggler = this.$el.find(this.settings.toggleSelector);
 
     this.addClickHandler();
-    this.addHoverHandler();
     if (this.hasBase()) {
-      this.$el.addClass(this.settings.activeClass);
+      // make menu group active.
+      this.$el.addClass(this.settings.menuGroupActiveClass);
+      // make menu group visible.
       this.menu.toggleClass(this.settings.visibleCssClass);
-    };
+    }
+    this.setTogglerIcon(this.settings.icon.selector);
   }
 
+  /**
+   * Check if the url correspond to one of our menu items.
+   * if so, then add the menuItemActiveCSS class and return true.
+   *
+   * @returns {boolean}
+   */
   hasBase() {
     const that = this;
     let hasBase = false;
-    this.menu.children('a').each(function (idx, el) {
-      //console.log(el.href);
+    this.menu.find('a').each(function (idx, el) {
       if (el.href.includes(that.settings.base)) {
         hasBase = true;
-        $(el).addClass(that.settings.activeClass);
+        // set active class for this specific menu item.
+        $(el).addClass(that.settings.menuItemActiveClass);
       }
     });
     return hasBase;
   }
 
-  displaySideMenu() {
-    const that = this;
-    console.log($(window).height(), this.$el.position().top + 47 + this.menu.height());
-    const top = this.$el.position().top + 47;
-    const left = this.settings.menuWidth;
-    this.$el.addClass('sub-display');
-
-    const style = `
-      position: absolute;
-      z-index: 204;
-      top: ${top}px;
-      left: ${left}px;
-      width: ${this.settings.subMenuWidth};
-      height: fit-content;
-    `;
-    // add hover handlers to our copied menu.
-    this.$copy.hover(function(e) {
-      // clear timeout for submenu to stay open.
-      clearTimeout(atk.menuOutTimer);
-    }, function(e) {
-      // hide menu on leave.
-      that.hideSideMenu();
-    });
-    $('.atk-admin-sub-menu').append(this.$copy);
-    this.$copy.css('cssText', style);
-    this.$copy.data('parentId', this.$el.attr('id'));
+  isMenuOn() {
+    return this.menu.hasClass(this.settings.visibleCssClass);
   }
 
-  /**
-   * Remove sub copied menu.
-   */
-  hideSideMenu() {
-    this.$el.removeClass('sub-display');
-    this.$copy.remove();
-  }
-
-  /**
-   * Remove all copied sub-menu left open inside our temp container.
-   */
-  hideAllSideMenu() {
-    $(this.settings.subMenusSelector + ' .atk-admin-sub-menu-temp').each(function(idx, el) {
-      console.log($(el).data('parentId'));
-      $('#' + $(el).data('parentId')).removeClass('sub-display');
-      $(el).remove();
-    })
-  }
-
-  addHoverHandler() {
-    const that = this;
-    this.$el.hover(function(e) {
-      console.log('hover in');
-      that.hideAllSideMenu();
-      if (that.$el.hasClass('active')) {
-        return;
-      }
-      clearTimeout(atk.menuOutTimer);
-      atk.menuInTimer = setTimeout(that.displaySideMenu.bind(that), 250);
-    }, function(e) {
-      clearTimeout(atk.menuInTimer);
-      atk.menuOutTimer = setTimeout(that.hideSideMenu.bind(that), 500);
-    })
+  setTogglerIcon(selector) {
+    this.toggler.find(selector).attr('class', this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on);
   }
 
   addClickHandler() {
     const that = this;
     this.$el.on('click', function(e) {
-      if (that.$copy.is(':visible')) {
-        that.menu.find('a').first()[0].click();
-      } else {
-        that.menu.toggleClass(that.settings.visibleCssClass);
-      }
+      // simulate click event on first menu item in group.
+      that.menu.find('a').first()[0].click();
+      that.menu.toggleClass(that.settings.visibleCssClass);
     });
-    this.menu.find('.item').on('click', function(e) {e.stopPropagation()});
-    this.menu.find('.item').on('hover', function(e) {e.stopPropagation()});
+    this.toggler.on('click', function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      that.menu.toggleClass(that.settings.visibleCssClass);
+      that.setTogglerIcon(that.settings.icon.selector);
+    });
   }
-
-  // hideOthers() {
-  //   const that = this;
-  //   $(this.settings.menuSelector).each(function(idx, el) {
-  //     if (!($(el).attr('id') === that.$el.attr('id'))) {
-  //       $(el).find(that.settings.menuItemsSelector).transition();
-  //     }
-  //   })
-  // }
 }
 
 ajaxec.DEFAULTS = {
-  base: null,
-  menuSelector: '.atk-admin-left-menu',
-  menuItemsSelector : 'div.menu',
-  subMenusSelector: '.atk-admin-sub-menu',
-  visibleCssClass: 'atk-visible',
-  activeClass: 'active',
-  menuWidth: 260,
-  subMenuWidth: 120,
+  base: null, // the url to match a menu item.
+  menuItemsSelector : '.atk-admin-menu-items', // The css selector where menu items are contain.
+  toggleSelector: '.atk-submenu-toggle', // the css selector that will show or hide sub menu.
+  visibleCssClass: 'atk-visible', // Display an item when this css class is set.
+  menuGroupActiveClass: 'active', // the css class to set when a menu group is active.
+  menuItemActiveClass: 'active', // the css class to set when a menu item in a group is active.
+  icon : {
+    selector: 'i',
+    on: 'icon caret right',
+    off: 'icon caret down',
+  },
 };

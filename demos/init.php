@@ -125,7 +125,7 @@ $layout = $app->layout;
 if (isset($layout->menuLeft)) {
     $groupTemplate = 'menugroup-admin.html';
 
-    $layout->menuLeft->addItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['index']);
+//    $layout->menuLeft->addItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['index']);
 
     $ly = $layout->menuLeft->addGroup(['Layout', 'icon' => 'object group'], $groupTemplate)->addClass('atk-admin-left-menu-group');
     $ly->removeClass('item');

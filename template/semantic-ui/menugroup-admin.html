@@ -1,5 +1,19 @@
-<div id="{$_id}" class="{_ui}ui{/}  {$class} {$_class}" style="{$style}" {$attributes}>
-<div class="atk-admin-menu-title">{$Icon}
-  <div class="header">{$title}</div>
+
+<div class="{_ui}{/}  {$class} {$_class}" id="{$_id}" style="{$style}">
+  <div class="ui padded grid">
+    <div class="row atk-admin-menu-title">
+      <div class="column atk-submenu-toggle">
+        <div><i class="icon caret right"></i></div>
+      </div>
+      <div class="eleven wide column">
+        <header>{$title}</header>
+      </div>
+      <div class="three wide column">{$Icon}</div>
+    </div>
+    <div class="row atk-admin-menu-items">
+      <div class="sixteen wide column">
+        <div class="menu">{$Content}</div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="menu">{$Content}</div></div>
