@@ -71,7 +71,7 @@ if (!class_exists('SomeData')) {
                     }
 
                     if ($type == 'logo_url') {
-                        $row[$field] = 'images/' . ['default.png', 'logo.png'][rand(0, 1)]; // one of these
+                        $row[$field] = '../images/' . ['default.png', 'logo.png'][rand(0, 1)]; // one of these
                     } else {
                         $row[$field] = $this->faker->$type;
                     }
