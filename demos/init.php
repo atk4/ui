@@ -174,6 +174,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
 
     $adv = $layout->addMenuGroup(['Interactive', 'icon' => 'talk']);
     $layout->addMenuItem('Tabs', ['tabs'], $adv);
+    $layout->addMenuItem('Card', ['card'], $adv);
     $layout->addMenuItem(['Accordion'], ['accordion'], $adv);
     $layout->addMenuItem(['Wizard'], ['wizard'], $adv);
     $layout->addMenuItem(['Modal'], ['modal2'], $adv);
