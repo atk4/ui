@@ -16,10 +16,9 @@ export default class ajaxec extends atkPlugin {
   main() {
     // menu items container.
     this.menu = this.$el.find(this.settings.menuItemsSelector);
-    console.log($.atkGetUrl(this.settings.base));
     if (this.menu.length === 0) {
       // this $el is our single item.
-      if (this.$el[0].href.includes($.atkGetUrl(this.settings.base))){
+      if (this.urlMatchLocation(this.$el[0].href)){
         this.$el.addClass(this.settings.menuItemActiveClass);
       }
       return;
@@ -47,13 +46,32 @@ export default class ajaxec extends atkPlugin {
     const that = this;
     let hasBase = false;
     this.menu.find('a').each(function (idx, el) {
-      if (el.href.includes($.atkGetUrl(that.settings.base))) {
+      if (that.urlMatchLocation(el.href)) {
         hasBase = true;
         // set active class for this specific menu item.
         $(el).addClass(that.settings.menuItemActiveClass);
       }
     });
     return hasBase;
+  }
+
+  /**
+   * Check if an url match with current window location.
+   * @param refUrl
+   *
+   * @return bool
+   */
+  urlMatchLocation(refUrl) {
+    const url = new URL(refUrl);
+    if (url.pathname === window.location.pathname) {
+      return true;
+    }
+    // try to match base index url
+    if (url.pathname === (window.location.pathname + this.settings.base)) {
+      return true;
+    }
+
+    return false;
   }
 
   /**
@@ -96,7 +114,7 @@ export default class ajaxec extends atkPlugin {
 }
 
 ajaxec.DEFAULTS = {
-  base: null, // a url part to match a menu item.
+  base: 'index.php',
   menuItemsSelector : '.atk-maestro-menu-items', // The css selector where menu items are contain.
   toggleSelector: '.atk-submenu-toggle', // the css selector that will show or hide sub menu.
   visibleCssClass: 'atk-visible', // Display an item when this css class is set.

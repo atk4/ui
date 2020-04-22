@@ -35,7 +35,7 @@ class Maestro extends Admin
         parent::renderView();
 
         //initialize all menu group at ounce.
-        $js = (new \atk4\ui\jQuery('.atk-maestro-left-menu-group'))->atkAdminMenu(['base' => $_SERVER['REQUEST_URI']]);
+        $js = (new \atk4\ui\jQuery('.atk-maestro-left-menu-group'))->atkAdminMenu();
 
         $this->js(true, $js);
     }
