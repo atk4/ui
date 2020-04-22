@@ -2,14 +2,14 @@ Feature: UserAction
   Testing UI executor UserAction and UserConfirmation modal.
 
   Scenario: :
-    Given I am on "jsactions2.php"
+    Given I am on "collection/jsactions2.php"
     And I press button "Callback"
     And wait for callback
     Then Toast display should contains text "callback execute using country"
 
     #    Need to reload page for this step
   Scenario: :
-    Given I am on "jsactions2.php"
+    Given I am on "collection/jsactions2.php"
     And I press button "Argument"
     And wait for callback
     Then Modal is showing text "Age" inside tag "label"
@@ -20,7 +20,7 @@ Feature: UserAction
 
     #    Need to reload page for this step
   Scenario: :
-    Given I am on "jsactions2.php"
+    Given I am on "collection/jsactions2.php"
     And I press button "User Confirmation"
     And wait for callback
     Then Modal is open with text "A confirmation is required for Country"
@@ -30,7 +30,7 @@ Feature: UserAction
 
 #    Need to reload page for this step
   Scenario: :
-    Given I am on "jsactions2.php"
+    Given I am on "collection/jsactions2.php"
     And I press button "Argument/Field/Preview"
     And wait for callback
     Then Modal is showing text "Age" inside tag "label"
