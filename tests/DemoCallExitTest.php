@@ -30,7 +30,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
     public function testableDemoFilesdataProvider()
     {
-        $scanDir = function($dir, $prefix = null) {
+        $scanDir = function ($dir, $prefix = null) {
             $sub_files = [];
             foreach ($dir as $file) {
                 if (substr($file, -3) !== 'php' || is_dir($file)) {
@@ -58,7 +58,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
             return $sub_files;
         };
         $base_path = dirname(__DIR__) . DIRECTORY_SEPARATOR;
-        $files = $scanDir(scandir($base_path. 'demos'));
+        $files = $scanDir(scandir($base_path . 'demos'));
         $files = array_merge($files, $scanDir(scandir($base_path . 'demos/basic'), '/basic/'));
         $files = array_merge($files, $scanDir(scandir($base_path . 'demos/collection'), '/collection/'));
         $files = array_merge($files, $scanDir(scandir($base_path . 'demos/form'), '/form/'));

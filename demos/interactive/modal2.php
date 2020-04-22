@@ -1,4 +1,5 @@
 <?php
+
 chdir('..');
 require_once 'init.php';
 require_once 'database.php';
