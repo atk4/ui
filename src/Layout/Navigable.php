@@ -1,6 +1,6 @@
 <?php
 /**
- * Interface for a Layout using a left menu.
+ * Interface for a Layout using a navigable side menu.
  */
 
 namespace atk4\ui\Layout;
@@ -8,7 +8,7 @@ namespace atk4\ui\Layout;
 use atk4\ui\Item;
 use atk4\ui\Menu;
 
-interface LeftMenuable
+interface Navigable
 {
     /**
      * Add a group to left menu.
@@ -17,7 +17,7 @@ interface LeftMenuable
      *
      * @return Menu
      */
-    public function addLeftMenuGroup($seed): Menu;
+    public function addMenuGroup($seed): Menu;
 
     /**
      * Add items to left menu.
@@ -29,5 +29,5 @@ interface LeftMenuable
      *
      * @return Item
      */
-    public function addLeftMenuItem($name, $action = null, $group = null): Item;
+    public function addMenuItem($name, $action = null, $group = null): Item;
 }

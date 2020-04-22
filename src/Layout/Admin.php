@@ -31,7 +31,7 @@ use atk4\ui\Menu;
  *
  *  - Content
  */
-class Admin extends Generic implements LeftMenuable
+class Admin extends Generic implements Navigable
 {
     public $menuLeft = null;    // vertical menu
     public $menu = null;        // horizontal menu
@@ -79,7 +79,7 @@ class Admin extends Generic implements LeftMenuable
      *
      * @return Menu
      */
-    public function addLeftMenuGroup($seed): Menu
+    public function addMenuGroup($seed): Menu
     {
         return $this->menuLeft->addGroup($seed);
     }
@@ -93,7 +93,7 @@ class Admin extends Generic implements LeftMenuable
      *
      * @return Item
      */
-    public function addLeftMenuItem($name, $action = null, $group = null): Item
+    public function addMenuItem($name, $action = null, $group = null): Item
     {
         if ($group) {
             $i = $group->addItem($name, $action);

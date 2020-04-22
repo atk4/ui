@@ -125,76 +125,76 @@ $layout = $app->layout;
 $layout->name = 'atk_admin';
 $layout->id = $layout->name;
 
-if ($layout instanceof \atk4\ui\Layout\LeftMenuable) {
-    $layout->addLeftMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['index']);
+if ($layout instanceof \atk4\ui\Layout\Navigable) {
+    $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['index']);
 
-    $ly = $layout->addLeftMenuGroup(['Layout', 'icon' => 'object group']);
-    $layout->addLeftMenuItem(['Layouts'], ['layouts'], $ly);
-    $layout->addLeftMenuItem(['Panel'], ['layout-panel'], $ly);
+    $ly = $layout->addMenuGroup(['Layout', 'icon' => 'object group']);
+    $layout->addMenuItem(['Layouts'], ['layouts'], $ly);
+    $layout->addMenuItem(['Panel'], ['layout-panel'], $ly);
 
-    $form = $layout->addLeftMenuGroup(['Form', 'icon' => 'edit']);
-    $layout->addLeftMenuItem('Basics and Layouting', ['form'], $form);
-    $layout->addLeftMenuItem(['Form Sections'], ['form-section'], $form);
-    $layout->addLeftMenuItem('Data Integration', ['form2'], $form);
-    $layout->addLeftMenuItem('Form Multi-column layout', ['form3'], $form);
-    $layout->addLeftMenuItem(['Integration with Columns'], ['form5'], $form);
-    $layout->addLeftMenuItem(['Conditional Fields'], ['jscondform'], $form);
+    $form = $layout->addMenuGroup(['Form', 'icon' => 'edit']);
+    $layout->addMenuItem('Basics and Layouting', ['form'], $form);
+    $layout->addMenuItem(['Form Sections'], ['form-section'], $form);
+    $layout->addMenuItem('Data Integration', ['form2'], $form);
+    $layout->addMenuItem('Form Multi-column layout', ['form3'], $form);
+    $layout->addMenuItem(['Integration with Columns'], ['form5'], $form);
+    $layout->addMenuItem(['Conditional Fields'], ['jscondform'], $form);
 
-    $in = $layout->addLeftMenuGroup(['Input', 'icon' => 'keyboard outline']);
-    $layout->addLeftMenuItem(['Input Fields'], ['field2'], $in);
-    $layout->addLeftMenuItem('Input Field Decoration', ['field'], $in);
-    $layout->addLeftMenuItem(['File Uploading'], ['upload'], $in);
-    $layout->addLeftMenuItem(['Checkboxes'], ['checkbox'], $in);
-    $layout->addLeftMenuItem(['Lookup Field'], ['lookup'], $in);
-    $layout->addLeftMenuItem(['DropDown Field'], ['dropdown-plus'], $in);
-    $layout->addLeftMenuItem(['Value Selectors'], ['form6'], $in);
+    $in = $layout->addMenuGroup(['Input', 'icon' => 'keyboard outline']);
+    $layout->addMenuItem(['Input Fields'], ['field2'], $in);
+    $layout->addMenuItem('Input Field Decoration', ['field'], $in);
+    $layout->addMenuItem(['File Uploading'], ['upload'], $in);
+    $layout->addMenuItem(['Checkboxes'], ['checkbox'], $in);
+    $layout->addMenuItem(['Lookup Field'], ['lookup'], $in);
+    $layout->addMenuItem(['DropDown Field'], ['dropdown-plus'], $in);
+    $layout->addMenuItem(['Value Selectors'], ['form6'], $in);
 
-    $g_t = $layout->addLeftMenuGroup(['Grid and Table', 'icon' => 'table']);
-    $layout->addLeftMenuItem('Data table with formatted columns', ['table'], $g_t);
-    $layout->addLeftMenuItem(['Advanced table examples'], ['table2'], $g_t);
-    $layout->addLeftMenuItem('Table interractions', ['multitable'], $g_t);
-    $layout->addLeftMenuItem(['Column Menus'], ['tablecolumnmenu'], $g_t);
-    $layout->addLeftMenuItem(['Column Filters'], ['tablefilter'], $g_t);
-    $layout->addLeftMenuItem('Grid - Table+Bar+Search+Paginator', ['grid'], $g_t);
-    $layout->addLeftMenuItem('CRUD - Full editing solution', ['crud'], $g_t);
-    $layout->addLeftMenuItem(['CRUD with Array Persistence'], ['crud3'], $g_t);
-    $layout->addLeftMenuItem(['Actions - Integration Examples'], ['actions'], $g_t);
+    $g_t = $layout->addMenuGroup(['Grid and Table', 'icon' => 'table']);
+    $layout->addMenuItem('Data table with formatted columns', ['table'], $g_t);
+    $layout->addMenuItem(['Advanced table examples'], ['table2'], $g_t);
+    $layout->addMenuItem('Table interractions', ['multitable'], $g_t);
+    $layout->addMenuItem(['Column Menus'], ['tablecolumnmenu'], $g_t);
+    $layout->addMenuItem(['Column Filters'], ['tablefilter'], $g_t);
+    $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', ['grid'], $g_t);
+    $layout->addMenuItem('CRUD - Full editing solution', ['crud'], $g_t);
+    $layout->addMenuItem(['CRUD with Array Persistence'], ['crud3'], $g_t);
+    $layout->addMenuItem(['Actions - Integration Examples'], ['actions'], $g_t);
 
-    $basic = $layout->addLeftMenuGroup(['Basics', 'icon' => 'cubes']);
-    $layout->addLeftMenuItem('View', ['view'], $basic);
-    $layout->addLeftMenuItem('Lister', ['lister'], $basic);
-    $layout->addLeftMenuItem('Button', ['button'], $basic);
-    $layout->addLeftMenuItem('Header', ['header'], $basic);
-    $layout->addLeftMenuItem('Message', ['message'], $basic);
-    $layout->addLeftMenuItem('Labels', ['label'], $basic);
-    $layout->addLeftMenuItem('Menu', ['menu'], $basic);
-    $layout->addLeftMenuItem('BreadCrumb', ['breadcrumb'], $basic);
-    $layout->addLeftMenuItem(['Columns'], ['columns'], $basic);
-    $layout->addLeftMenuItem(['Grid Layout'], ['grid-layout'], $basic);
+    $basic = $layout->addMenuGroup(['Basics', 'icon' => 'cubes']);
+    $layout->addMenuItem('View', ['view'], $basic);
+    $layout->addMenuItem('Lister', ['lister'], $basic);
+    $layout->addMenuItem('Button', ['button'], $basic);
+    $layout->addMenuItem('Header', ['header'], $basic);
+    $layout->addMenuItem('Message', ['message'], $basic);
+    $layout->addMenuItem('Labels', ['label'], $basic);
+    $layout->addMenuItem('Menu', ['menu'], $basic);
+    $layout->addMenuItem('BreadCrumb', ['breadcrumb'], $basic);
+    $layout->addMenuItem(['Columns'], ['columns'], $basic);
+    $layout->addMenuItem(['Grid Layout'], ['grid-layout'], $basic);
 
-    $adv = $layout->addLeftMenuGroup(['Interactive', 'icon' => 'talk']);
-    $layout->addLeftMenuItem('Tabs', ['tabs'], $adv);
-    $layout->addLeftMenuItem(['Accordion'], ['accordion'], $adv);
-    $layout->addLeftMenuItem(['Wizard'], ['wizard'], $adv);
-    $layout->addLeftMenuItem(['Modal'], ['modal2'], $adv);
-    $layout->addLeftMenuItem('Dynamic Modal', ['modal'], $adv);
-    $layout->addLeftMenuItem(['Loader'], ['loader'], $adv);
-    $layout->addLeftMenuItem(['Console'], ['console'], $adv);
-    $layout->addLeftMenuItem(['Dynamic scroll'], ['scroll-lister'], $adv);
-    $layout->addLeftMenuItem(['Background PHP Jobs (SSE)'], ['sse'], $adv);
-    $layout->addLeftMenuItem(['Progress Bar'], ['progress'], $adv);
-    $layout->addLeftMenuItem(['Pop-up'], ['popup'], $adv);
-    $layout->addLeftMenuItem(['Toast'], ['toast'], $adv);
-    $layout->addLeftMenuItem('Paginator', ['paginator'], $adv);
+    $adv = $layout->addMenuGroup(['Interactive', 'icon' => 'talk']);
+    $layout->addMenuItem('Tabs', ['tabs'], $adv);
+    $layout->addMenuItem(['Accordion'], ['accordion'], $adv);
+    $layout->addMenuItem(['Wizard'], ['wizard'], $adv);
+    $layout->addMenuItem(['Modal'], ['modal2'], $adv);
+    $layout->addMenuItem('Dynamic Modal', ['modal'], $adv);
+    $layout->addMenuItem(['Loader'], ['loader'], $adv);
+    $layout->addMenuItem(['Console'], ['console'], $adv);
+    $layout->addMenuItem(['Dynamic scroll'], ['scroll-lister'], $adv);
+    $layout->addMenuItem(['Background PHP Jobs (SSE)'], ['sse'], $adv);
+    $layout->addMenuItem(['Progress Bar'], ['progress'], $adv);
+    $layout->addMenuItem(['Pop-up'], ['popup'], $adv);
+    $layout->addMenuItem(['Toast'], ['toast'], $adv);
+    $layout->addMenuItem('Paginator', ['paginator'], $adv);
 
-    $js = $layout->addLeftMenuGroup(['Javascript', 'icon' => 'code']);
-    $layout->addLeftMenuItem('Events', ['js'], $js);
-    $layout->addLeftMenuItem('Element Reloading', ['reloading'], $js);
-    $layout->addLeftMenuItem('Vue Integration', ['vue-component'], $js);
+    $js = $layout->addMenuGroup(['Javascript', 'icon' => 'code']);
+    $layout->addMenuItem('Events', ['js'], $js);
+    $layout->addMenuItem('Element Reloading', ['reloading'], $js);
+    $layout->addMenuItem('Vue Integration', ['vue-component'], $js);
 
-    $other = $layout->addLeftMenuGroup(['Others', 'icon' => 'plus']);
-    $layout->addLeftMenuItem('Sticky GET', ['sticky'], $other);
-    $layout->addLeftMenuItem('Recursive Views', ['recursive'], $other);
+    $other = $layout->addMenuGroup(['Others', 'icon' => 'plus']);
+    $layout->addMenuItem('Sticky GET', ['sticky'], $other);
+    $layout->addMenuItem('Recursive Views', ['recursive'], $other);
 
 
     $f = basename($_SERVER['PHP_SELF']);

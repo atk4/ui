@@ -12,7 +12,7 @@ class Maestro extends Admin
 {
     public $menuTemplate = 'layout/maestro-left-menu.html';
 
-    public function addLeftMenuGroup($seed): Menu
+    public function addMenuGroup($seed): Menu
     {
         $gr = $this->menuLeft->addGroup($seed, $this->menuTemplate)->addClass('atk-maestro-left-menu-group');
         $gr->removeClass('item');
@@ -20,9 +20,9 @@ class Maestro extends Admin
         return $gr;
     }
 
-    public function addLeftMenuItem($name, $action = null, $group = null): Item
+    public function addMenuItem($name, $action = null, $group = null): Item
     {
-        $i = parent::addLeftMenuItem($name, $action, $group);
+        $i = parent::addMenuItem($name, $action, $group);
         if (!$group) {
             $i->addClass('atk-maestro-left-menu-group');
         }
