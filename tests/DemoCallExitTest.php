@@ -25,34 +25,48 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
   \A (?&json) \Z
   /six
 ';
+
     private $regexSSE = '/^[data|id|event].*$/m';
 
     public function testableDemoFilesdataProvider()
     {
-        $files = [];
-        foreach (scandir(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'demos') as $file) {
-            if (substr($file, -3) !== 'php' || is_dir($file)) {
-                continue;
+        $scanDir = function($dir, $prefix = null) {
+            $sub_files = [];
+            foreach ($dir as $file) {
+                if (substr($file, -3) !== 'php' || is_dir($file)) {
+                    continue;
+                }
+                switch ($file) {
+                    case 'Session.php': // exclude - is a setup file
+                    case 'database.php': // exclude - is a setup file
+                    case 'db.example.php': // exclude - is a setup file
+                    case 'db.php': // exclude - is a setup file
+                    case 'db.env.php': // exclude - is a setup file
+                    case 'db.travis.php': // exclude - is a setup file
+                    case 'db.github.php': // exclude - is a setup file
+                    case 'coverage.php': // exclude - is the coverage file
+                    case 'somedatadef.php': // exclude - is a setup file
+                    case 'layouts_nolayout.php': // exclude - output only a partial html
+                    case 'country_actions.php': // exclude actions country file
+                        continue 2;
+                        break;
+                }
+
+                $sub_files[] = [$prefix . $file];
             }
 
-            switch ($file) {
-                case 'Session.php': // exclude - is a setup file
-                case 'database.php': // exclude - is a setup file
-                case 'db.example.php': // exclude - is a setup file
-                case 'db.php': // exclude - is a setup file
-                case 'db.env.php': // exclude - is a setup file
-                case 'db.travis.php': // exclude - is a setup file
-                case 'db.github.php': // exclude - is a setup file
-                case 'coverage.php': // exclude - is the coverage file
-                case 'somedatadef.php': // exclude - is a setup file
-                case 'layouts_nolayout.php': // exclude - output only a partial html
-                case 'country_actions.php': // exclude actions country file
-                    continue 2;
-                    break;
-            }
-
-            $files[] = [$file];
-        }
+            return $sub_files;
+        };
+        $base_path = dirname(__DIR__) . DIRECTORY_SEPARATOR;
+        $files = $scanDir(scandir($base_path. 'demos'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/basic'), '/basic/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/collection'), '/collection/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/form'), '/form/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/input'), '/input/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/interactive'), '/interactive/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/javascript'), '/javascript/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/layout'), '/layout/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/others'), '/others/'));
 
         return $files;
     }
