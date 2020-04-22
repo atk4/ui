@@ -12,5 +12,5 @@ $form = \atk4\ui\Form::addTo($app, ['layout'=>['Custom', 'defaultTemplate'=>__DI
 $form->setModel(new Country($app->db))->loadAny();
 
 $form->onSubmit(function ($f) {
-   return new \atk4\ui\jsToast('Saving is disabled');
+    return new \atk4\ui\jsToast('Saving is disabled');
 });
