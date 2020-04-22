@@ -5,53 +5,53 @@
 /*---  Light Colors  ---*/
 /*---   Neutrals  ---*/
 /******* MAESTRO MENU *******/
-.atk-maestro-left-menu-group {
+.atk-maestro-sidenav {
   cursor: pointer;
   color: white;
 }
-.atk-maestro-left-menu-group > .ui.grid > .atk-maestro-menu-items {
+.atk-maestro-sidenav > .ui.grid > .atk-maestro-menu-items {
   display: none;
 }
-.atk-maestro-left-menu-group > .ui.grid > .atk-maestro-menu-items.atk-visible {
+.atk-maestro-sidenav > .ui.grid > .atk-maestro-menu-items.atk-visible {
   display: flex;
 }
 /* Item without a group in menu */
-.ui.inverted.menu a.atk-maestro-left-menu-group.item {
+.ui.inverted.menu a.atk-maestro-sidenav.item {
   margin-right: 8px;
 }
-.ui.inverted.menu a.atk-maestro-left-menu-group.item.active {
+.ui.inverted.menu a.atk-maestro-sidenav.item.active {
   background-color: #2185D0;
 }
-.atk-maestro-left-menu-group .atk-submenu-toggle div {
+.atk-maestro-sidenav .atk-submenu-toggle div {
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.atk-maestro-left-menu-group:not(active) .atk-submenu-toggle:hover {
+.atk-maestro-sidenav:not(active) .atk-submenu-toggle:hover {
   background-color: rgba(255, 255, 255, 0.15);
 }
-.atk-maestro-left-menu-group .ui.grid .row {
+.atk-maestro-sidenav .ui.grid .row {
   padding: 0px;
 }
-.atk-maestro-left-menu-group .ui.grid .column {
+.atk-maestro-sidenav .ui.grid .column {
   padding-top: 8px;
   padding-bottom: 8px;
 }
-.atk-maestro-left-menu-group.active .atk-maestro-menu-title {
+.atk-maestro-sidenav.active .atk-maestro-menu-title {
   background-color: #2185D0;
 }
-.atk-maestro-left-menu-group > .ui.grid {
+.atk-maestro-sidenav > .ui.grid {
   width: 260px;
 }
-.atk-admin-left-menu-content {
+.atk-sidenav-content {
   margin-top: 12px;
   overflow-x: hidden;
   overflow-y: auto;
 }
 /* A selected item in admin menu */
-.ui.sidebar.atk-admin-left-menu .menu > .item.active {
+.ui.sidebar.atk-sidenav .menu > .item.active {
   background: none;
 }
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
@@ -130,13 +130,13 @@ i.atk-panel-warning {
 i.atk-panel-warning.atk-visible {
   color: #F2711C;
 }
-.ui.left.sidebar.atk-admin-left-menu {
+.ui.left.sidebar.atk-sidenav {
   top: 47px;
 }
-.atk-admin-left-menu-content {
+.atk-sidenav-content {
   height: calc(100% -  98px );
 }
-.ui.left.sidebar.atk-admin-left-menu {
+.ui.left.sidebar.atk-sidenav {
   width: 260px;
 }
 .atk-table-dropdown {
@@ -230,21 +230,21 @@ i.atk-panel-warning.atk-visible {
     transform: translate3d(0, 0, 0);
     visibility: visible;
   }
-  body.atk-leftMenu-visible:after {
+  body.atk-sidenav-visible:after {
     left: 0;
     position: fixed;
     top: 0;
   }
-  body.atk-leftMenu-visible .ui.left.sidebar {
+  body.atk-sidenav-visible .ui.left.sidebar {
     opacity: 1;
     pointer-events: auto;
   }
-  body.atk-leftMenu-visible .ui.left.sidebar .atk-leftMenuClose {
+  body.atk-sidenav-visible .ui.left.sidebar .atk-leftMenuClose {
     display: block;
   }
 }
 @media (max-width: 991px) {
-  body.atk-leftMenu-visible .atk-overlay.pushable {
+  body.atk-sidenav-visible .atk-overlay.pushable {
     opacity: 1;
   }
 }

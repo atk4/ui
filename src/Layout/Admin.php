@@ -50,10 +50,10 @@ class Admin extends Generic implements Navigable
 
         if ($this->menu === null) {
             $this->menu = Menu::addTo($this, ['inverted fixed horizontal', 'element' => 'header'], ['TopMenu']);
-            $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']]);
+            $this->burger = $this->menu->addItem(['class' => ['icon']]);
             $this->burger->on('click', [
-                (new jQuery('.atk-admin-left-menu'))->toggleClass('visible'),
-                (new jQuery('body'))->toggleClass('atk-leftMenu-visible'),
+                (new jQuery('.atk-sidenav'))->toggleClass('visible'),
+                (new jQuery('body'))->toggleClass('atk-sidenav-visible'),
             ]);
             Icon::addTo($this->burger, ['content']);
 
@@ -66,7 +66,7 @@ class Admin extends Generic implements Navigable
         }
 
         if ($this->menuLeft === null) {
-            $this->menuLeft = Menu::addTo($this, ['ui' => 'atk-admin-left-menu-content'], ['LeftMenu']);
+            $this->menuLeft = Menu::addTo($this, ['ui' => 'atk-sidenav-content'], ['LeftMenu']);
         }
 
         $this->template->trySet('version', $this->app->version);

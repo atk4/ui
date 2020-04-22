@@ -52,12 +52,12 @@
 
 /******* MAESTRO MENU *******/
 
-.atk-maestro-left-menu-group {
+.atk-maestro-sidenav {
   cursor: pointer;
   color: white;
 }
 
-.atk-maestro-left-menu-group > .ui.grid > .atk-maestro-menu-items {
+.atk-maestro-sidenav > .ui.grid > .atk-maestro-menu-items {
   display: none;
   &.atk-visible {
     display: flex;
@@ -65,14 +65,14 @@
 }
 
 /* Item without a group in menu */
-.ui.inverted.menu a.atk-maestro-left-menu-group.item {
+.ui.inverted.menu a.atk-maestro-sidenav.item {
   margin-right: @maestroSpace;
   &.active {
     background-color: @blue;
   }
 }
 
-.atk-maestro-left-menu-group {
+.atk-maestro-sidenav {
   .atk-submenu-toggle {
     div {
       height: 100%;
@@ -98,22 +98,22 @@
   }
 }
 
-.atk-maestro-left-menu-group.active .atk-maestro-menu-title {
+.atk-maestro-sidenav.active .atk-maestro-menu-title {
   background-color: @blue;
 }
 
-.atk-maestro-left-menu-group > .ui.grid {
+.atk-maestro-sidenav > .ui.grid {
   width: @leftMenuWidth;
 }
 
-.atk-admin-left-menu-content {
+.atk-sidenav-content {
   margin-top: 12px;
   overflow-x: hidden;
   overflow-y: auto;
 }
 
 /* A selected item in admin menu */
-.ui.sidebar.atk-admin-left-menu {
+.ui.sidebar.atk-sidenav {
   .menu > .item.active {
     background: none;
   }
@@ -209,16 +209,16 @@ i.atk-panel-warning {
   }
 }
 
-.ui.left.sidebar.atk-admin-left-menu {
+.ui.left.sidebar.atk-sidenav {
   top: @adminMenuHeight - 1;
 }
 
-.atk-admin-left-menu-content {
+.atk-sidenav-content {
   //overflow: auto;
   height: ~'calc(100% - '@atkFooterHeight + @adminMenuHeight~')';
 }
 
-.ui.left.sidebar.atk-admin-left-menu {
+.ui.left.sidebar.atk-sidenav {
   width: @leftMenuWidth;
 }
 
@@ -339,7 +339,7 @@ i.atk-panel-warning {
     transform: translate3d(0, 0, 0);
     visibility: visible;
   }
-  body.atk-leftMenu-visible {
+  body.atk-sidenav-visible {
     &:after {
       left: 0;
       position: fixed;
@@ -355,7 +355,7 @@ i.atk-panel-warning {
   }
 }
 @media (max-width: @desktopWidth - 1px) {
-  body.atk-leftMenu-visible .atk-overlay.pushable {
+  body.atk-sidenav-visible .atk-overlay.pushable {
     opacity: 1;
   }
 }

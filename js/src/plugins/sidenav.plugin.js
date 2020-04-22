@@ -2,10 +2,10 @@ import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 
 /**
- * Will expand or collapse an admin layout
- * menu items.
+ * Will expand or collapse menu items for side navigation.
  * Toggling is done when clicking the toggler element.
- *    - when toggled icon class name are supplied and switch ex: caret left to caret down.
+ *    - Toggling icon class name will be switch ex: caret left to caret down,
+ *    when triggered.
  * Clicking on a menu group will simulate a click event on the first menu item in the group.
  *
  * Default value are set for Maestro admin layout.
