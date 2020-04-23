@@ -4,6 +4,10 @@ chdir('..');
 require_once 'init.php';
 require_once 'database.php';
 
+\atk4\ui\Button::addTo($app, ['Loader Example - page 1', 'small left floated basic blue', 'icon' => 'left arrow'])
+               ->link(['loader']);
+\atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+
 $c = \atk4\ui\Columns::addTo($app);
 
 $grid = \atk4\ui\Grid::addTo($c->addColumn(), ['ipp' => 10, 'menu' => false]);
