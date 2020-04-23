@@ -226,6 +226,3 @@ $prev_action->on('click', $modal_step->js()->atkReloadView(
 $menu_bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 $b = \atk4\ui\Button::addTo($menu_bar)->set('Multi Step Modal');
 $b->on('click', $modal_step->show());
-
-
-
