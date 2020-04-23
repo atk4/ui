@@ -74,4 +74,3 @@ $modal = \atk4\ui\Modal::addTo($app)->set(function ($p) {
     $a->setModel(new Country($p->app->db));
 });
 \atk4\ui\Button::addTo($app, ['Open Lookup on a Modal window'])->on('click', $modal->show());
-
