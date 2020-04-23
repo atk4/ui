@@ -17,21 +17,20 @@ try {
 $app->db = $db;
 
 if (!trait_exists('ModelLockTrait')) {
-
     trait ModelLockTrait
     {
         public function init(): void
         {
             parent::init();
 
-            $this->getAction('add')->callback = function($m) {
+            $this->getAction('add')->callback = function ($m) {
                 return new \atk4\ui\jsToast('Form Submit! Data are not save in demo mode.');
             };
-            $this->getAction('edit')->callback = function($m) {
+            $this->getAction('edit')->callback = function ($m) {
                 return new \atk4\ui\jsToast('Form Submit! Data are not save in demo mode.');
             };
 
-            $this->getAction('delete')->callback = function($m) {
+            $this->getAction('delete')->callback = function ($m) {
                 return [
                     (new \atk4\ui\jQuery())->closest('tr')->transition('fade left'),
                     new \atk4\ui\jsToast('Simulating delete in demo mode.')
