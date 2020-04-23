@@ -1,0 +1,43 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->in([__DIR__])
+    ->exclude([
+        'cache',
+        'build',
+        'vendor',
+    ]);
+
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules([
+        '@Symfony' => true,
+        '@Symfony:risky' => true,
+        '@PHP71Migration' => true,
+        'concat_space' => [
+            'spacing' => 'one',
+        ],
+        'no_blank_lines_after_phpdoc' => false,
+        'no_superfluous_phpdoc_tags' => false,
+        'phpdoc_align' => [
+            'align' => 'left',
+        ],
+        'phpdoc_separation' => false,
+        'phpdoc_summary' => false,
+        'single_line_throw' => false,
+        'yoda_style' => [
+            'equal' => false,
+            'identical' => false,
+        ],
+        'native_function_invocation' => false,
+        'non_printable_character' => [
+            'use_escape_sequences_in_strings' => true,
+        ],
+        'psr4' => false,
+        'array_indentation' => true,
+        'no_null_property_initialization' => true,
+        'pow_to_exponentiation' => true,
+        'combine_nested_dirname' => true,
+    ])
+    ->setFinder($finder)
+    ->setCacheFile(__DIR__ . '/build/.php_cs.cache');

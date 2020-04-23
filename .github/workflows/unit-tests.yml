@@ -2,22 +2,30 @@ name: Unit Testing
 
 on:
   pull_request:
-    branches: '*'
+    branches: '**'
   push:
-    branches:
-      - master
-      - develop
+    branches: '**'
+  schedule:
+    - cron: '0 */6 * * *'
 
 jobs:
   unit-test:
-    name: Unit Testing
+    name: Unit
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:latest # https://github.com/atk4/image
+      image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
     strategy:
       fail-fast: false
       matrix:
         php: ['7.2', '7.3', 'latest']
+        type: ['Phpunit']
+        include:
+          - php: 'latest'
+            type: 'Behat'
+          - php: 'latest'
+            type: 'CodingStyle'
+    env:
+      LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == 'latest' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
     services:
       mysql:
         image: mysql:5.7
@@ -26,43 +34,71 @@ jobs:
           DB_DATABASE: db
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
-      - uses: actions/checkout@v2
-      - run: php --version
-      - name: Get Composer Cache Directory
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure PHP
+        run: |
+          if [ -z "$LOG_COVERAGE" ]; then rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; fi
+          php --version
+
+      - name: Setup cache 1/2
         id: composer-cache
         run: |
           echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - uses: actions/cache@v1
+
+      - name: Setup cache 2/2
+        uses: actions/cache@v1
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
+          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+      - name: Install PHP dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
-      - name: Install dependencies and SQL
+      - name: Install JS dependencies (only for Behat)
+        if: matrix.type == 'Behat'
         run: |
-          mkdir -p coverage
           apk add npm
           npm install -g less clean-css uglify-js
-          mysql -uroot -ppassword -h mysql -e 'CREATE DATABASE atk4;'
-          mysql -uroot -ppassword -h mysql atk4 < demos/atk4.sql
 
-          mv demos/db.github.php demos/db.php
+      - name: Build JS files (only for Behat)
+        if: matrix.type == 'Behat'
+        run: |
           (cd js; npm install --loglevel=error; npm run build)
           #lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
           #uglifyjs --compress -- public/agileui.js > public/agileui.min.js
 
-      - name: Unit Testing
-        run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
+      - name: Init
+        run: |
+          mkdir -p coverage
+          mysql -uroot -ppassword -h mysql -e 'CREATE DATABASE atk4;'
+          mysql -uroot -ppassword -h mysql atk4 < demos/atk4.sql
 
-#      - name: Merge coverage logs
-#        run: vendor/bin/phpcov merge build/logs/ --clover build/logs/cc.xml;
+          mv demos/db.github.php demos/db.php
 
-      - uses: codecov/codecov-action@v1
+      - name: "Run tests: Phpunit (only for Phpunit)"
+        if: matrix.type == 'Phpunit'
+        run: "vendor/bin/phpunit \"$(if [ -n \"$LOG_COVERAGE\" ]; then echo '--coverage-text'; else echo '--no-coverage'; fi)\" --coverage-clover=coverage.xml"
+
+      - name: "Run tests: Behat (only for Behat)"
+        if: matrix.type == 'Behat'
+        run: echo "Not migrated from Travis yet"
+
+      - name: Check Coding Style (only for CodingStyle)
+        if: matrix.type == 'CodingStyle'
+        continue-on-error: true # remove once CS is fully fixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --using-cache=yes --cache-file="${{ steps.composer-cache.outputs.dir }}/.php_cs.cache" --diff --diff-format=udiff --verbose --show-progress=dots
+
+#      - name: Merge coverage logs (only for "latest" Phpunit)
+#        if: env.LOG_COVERAGE
+#        run: vendor/bin/phpcov merge build/logs/ --clover build/logs/cc.xml
+
+      - name: Upload coverage logs (only for "latest" Phpunit)
+        if: env.LOG_COVERAGE
+        uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage.xml
-
-

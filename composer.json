@@ -20,12 +20,12 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "authors": [
-    {
-      "name": "Romans Malinovskis",
-      "email": "romans@agiletoolkit.org",
-      "homepage": "https://nearly.guru/"
-    }
+    {"name": "Romans Malinovskis", "email": "romans@agiletoolkit.org", "homepage": "https://nearly.guru/" },
+    {"name": "Michael Voříšek", "homepage": "https://mvorisek.cz/"}
   ],
+  "config": {
+    "sort-packages": true
+  },
   "require": {
     "php": ">=7.2.0",
     "atk4/core": "dev-develop",
@@ -42,14 +42,14 @@
   },
   "require-dev": {
     "phpunit/phpunit": "*",
+    "friendsofphp/php-cs-fixer": "^2.16",
     "phpunit/phpcov": "*",
     "codeclimate/php-test-reporter": "dev-master",
     "behat/behat": "^3.4",
     "behat/mink-selenium2-driver": "^1.3",
     "behat/mink-extension": "^2.2",
     "guzzlehttp/guzzle": "^6.3",
-    "symfony/process": "^4.3 || ^5.0",
-    "friendsofphp/php-cs-fixer": "^2.16"
+    "symfony/process": "^4.3 || ^5.0"
   },
   "autoload": {
     "psr-4": {
