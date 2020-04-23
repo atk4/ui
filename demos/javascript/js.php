@@ -54,3 +54,11 @@ $b = Button::addTo($app, ['failure']);
 $b->on('click', function ($b) {
     throw new \atk4\data\ValidationException(['Everything is bad']);
 });
+
+Header::addTo($app, ['Callbacks on HTML element', 'subHeader' => 'Click on label below.']);
+
+$label = \atk4\ui\Label::addTo($layout, ['Test']);
+
+$label->on('click', function ($j, $arg1) {
+    return 'width is ' . $arg1;
+}, [new \atk4\ui\jsExpression('$(window).width()')]);

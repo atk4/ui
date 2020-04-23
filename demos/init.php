@@ -191,6 +191,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem('Card', [$path . 'card'], $adv);
     $layout->addMenuItem(['Accordion'], [$path . 'accordion'], $adv);
     $layout->addMenuItem(['Wizard'], [$path . 'wizard'], $adv);
+    $layout->addMenuItem(['Virtual Page'], [$path . 'virtual'], $adv);
     $layout->addMenuItem(['Modal'], [$path . 'modal2'], $adv);
     $layout->addMenuItem('Dynamic Modal', [$path . 'modal'], $adv);
     $layout->addMenuItem(['Loader'], [$path . 'loader'], $adv);

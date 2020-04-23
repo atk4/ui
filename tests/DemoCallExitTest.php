@@ -110,7 +110,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testWizard()
     {
         $response = $this->getResponseFromRequestFormPOST(
-            'interactive/wizard.php?atk_admin_wizard=1&atk_admin_wizard_form_submit=ajax&__atk_callback=1',
+            '/interactive/wizard.php?atk_admin_wizard=1&atk_admin_wizard_form_submit=ajax&__atk_callback=1',
             [
                 'dsn'                          => 'mysql://root:root@db-host.example.com/atk4',
                 'atk_admin_wizard_form_submit' => 'submit',
@@ -147,7 +147,6 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files = [];
         $files[] = ['/others/sticky2.php?__atk_reload=atk_admin_button'];
         $files[] = ['/others/sticky2.php?atk_admin_loader_callback=ajax&__atk_callback1'];
-        $files[] = ['virtual.php?atk_admin_label_2_click=ajax&__atk_callback=1'];
         $files[] = ['/collection/actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1']; // need to call this before calls other actions to fill model files
         $files[] = ['/collection/actions.php?atk_useraction_file_edit_loader_callback=ajax&__atk_callback=1&atk_useraction_file_edit=1&step=fields'];
         $files[] = ['/obsolete/notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
