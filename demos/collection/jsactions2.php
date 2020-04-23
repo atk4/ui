@@ -14,6 +14,8 @@ require_once  'country_actions.php';
     ->link(['jsactions']);
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
+\atk4\ui\Header::addTo($app, ['Model Custom Actions', 'subHeader' => 'Execute model action on this country record by clicking on the appropriate button on the right.']);
+
 $gl = \atk4\ui\GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
 $c = \atk4\ui\Card::addTo($gl, ['useLabel' => true], ['r1c1']);
 $c->addContent(new \atk4\ui\Header(['Using country: ']));

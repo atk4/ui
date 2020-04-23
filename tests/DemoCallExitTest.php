@@ -47,8 +47,9 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
                     case 'coverage.php': // exclude - is the coverage file
                     case 'somedatadef.php': // exclude - is a setup file
                     case 'layouts_nolayout.php': // exclude - output only a partial html
-                    case 'country_actions.php': // exclude actions country file
-                        continue 2;
+                    case 'country_actions.php': // exclude - is a setup file
+                    case 'lookup-dep.php': // exclude - is a setup file
+                    continue 2;
                         break;
                 }
 

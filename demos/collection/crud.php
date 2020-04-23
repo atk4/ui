@@ -4,9 +4,7 @@ chdir('..');
 require_once 'init.php';
 require_once 'database.php';
 
-$m = new Country($db);
-//$m->getAction('edit')->system =true;
-//$m->getAction('delete')->system =true;
+$m = new CountryLock($db);
 
 $g = \atk4\ui\CRUD::addTo($app, ['ipp'=>10]);
 
@@ -48,7 +46,7 @@ $crud = \atk4\ui\CRUD::addTo($cc, [
     'table'        => ['class'=>['red inverted']],
 ]);
 // Condition on the model can be applied on a model
-$m = new Country($db);
+$m = new CountryLock($db);
 $m->addCondition('numcode', '<', 200);
 $m->onHook('validate', function ($m2, $intent) {
     $err = [];
@@ -88,7 +86,7 @@ class MyExecutor extends atk4\ui\ActionExecutor\UserAction
         return $result;
     }
 }
-$file = new File($db);
+$file = new FileLock($db);
 $file->getAction('edit')->ui['executor'] = MyExecutor::class;
 
 $crud = \atk4\ui\CRUD::addTo($cc, [

@@ -3,7 +3,7 @@
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 
-$country = new Country($db);
+$country = new CountryLock($db);
 $ct = $country->tryLoadAny();
 $id = $ct->get('id');
 $country_name = $ct->getTitle();
@@ -103,7 +103,7 @@ $c_actions['ac_ouch'] = $country->addAction(
 $c_actions['ac_confirm'] = $country->addAction(
     'confirm',
     [
-        'caption' => 'A confirmation is required for',
+        'caption' => 'Confirm action ',
         'description' => 'User Confirmation',
         'ui' => ['executor' => \atk4\ui\ActionExecutor\UserConfirmation::class],
         'confirmation' => function ($a) {

@@ -135,11 +135,23 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Layouts'], [$path . 'layouts'], $ly);
     $layout->addMenuItem(['Panel'], [$path . 'layout-panel'], $ly);
 
+    $path = '/demos/basic/';
+    $basic = $layout->addMenuGroup(['Basics', 'icon' => 'cubes']);
+    $layout->addMenuItem('View', [$path . 'view'], $basic);
+    $layout->addMenuItem('Button', [$path . 'button'], $basic);
+    $layout->addMenuItem('Header', [$path . 'header'], $basic);
+    $layout->addMenuItem('Message', [$path . 'message'], $basic);
+    $layout->addMenuItem('Labels', [$path . 'label'], $basic);
+    $layout->addMenuItem('Menu', [$path . 'menu'], $basic);
+    $layout->addMenuItem('BreadCrumb', [$path . 'breadcrumb'], $basic);
+    $layout->addMenuItem(['Columns'], [$path . 'columns'], $basic);
+    $layout->addMenuItem(['Grid Layout'], [$path . 'grid-layout'], $basic);
+
     $path = '/demos/form/';
     $form = $layout->addMenuGroup(['Form', 'icon' => 'edit']);
     $layout->addMenuItem('Basics and Layouting', [$path . 'form'], $form);
-    $layout->addMenuItem(['Form Sections'], [$path . 'form-section'], $form);
     $layout->addMenuItem('Data Integration', [$path . 'form2'], $form);
+    $layout->addMenuItem(['Form Sections'], [$path . 'form-section'], $form);
     $layout->addMenuItem('Form Multi-column layout', [$path . 'form3'], $form);
     $layout->addMenuItem(['Integration with Columns'], [$path . 'form5'], $form);
     $layout->addMenuItem(['Custom Layout'], [$path . 'form-custom-layout'], $form);
@@ -149,11 +161,12 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $in = $layout->addMenuGroup(['Input', 'icon' => 'keyboard outline']);
     $layout->addMenuItem(['Input Fields'], [$path . 'field2'], $in);
     $layout->addMenuItem('Input Field Decoration', [$path . 'field'], $in);
-    $layout->addMenuItem(['File Uploading'], [$path . 'upload'], $in);
     $layout->addMenuItem(['Checkboxes'], [$path . 'checkbox'], $in);
-    $layout->addMenuItem(['Lookup Field'], [$path . 'lookup'], $in);
-    $layout->addMenuItem(['DropDown Field'], [$path . 'dropdown-plus'], $in);
     $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $in);
+    $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $in);
+    $layout->addMenuItem(['Lookup Dependency'], [$path . 'lookup-dep'], $in);
+    $layout->addMenuItem(['DropDown'], [$path . 'dropdown-plus'], $in);
+    $layout->addMenuItem(['File Upload'], [$path . 'upload'], $in);
     $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $in);
     $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $in);
 
@@ -171,19 +184,6 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $g_t);
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $g_t);
     $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $g_t);
-
-    $path = '/demos/basic/';
-    $basic = $layout->addMenuGroup(['Basics', 'icon' => 'cubes']);
-    $layout->addMenuItem('View', [$path . 'view'], $basic);
-    $layout->addMenuItem('Lister', [$path . 'lister'], $basic);
-    $layout->addMenuItem('Button', [$path . 'button'], $basic);
-    $layout->addMenuItem('Header', [$path . 'header'], $basic);
-    $layout->addMenuItem('Message', [$path . 'message'], $basic);
-    $layout->addMenuItem('Labels', [$path . 'label'], $basic);
-    $layout->addMenuItem('Menu', [$path . 'menu'], $basic);
-    $layout->addMenuItem('BreadCrumb', [$path . 'breadcrumb'], $basic);
-    $layout->addMenuItem(['Columns'], [$path . 'columns'], $basic);
-    $layout->addMenuItem(['Grid Layout'], [$path . 'grid-layout'], $basic);
 
     $path = '/demos/interactive/';
     $adv = $layout->addMenuGroup(['Interactive', 'icon' => 'talk']);

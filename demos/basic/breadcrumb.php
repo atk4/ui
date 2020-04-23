@@ -15,7 +15,7 @@ $crumb->addCrumb('BreadCrumb Demo', ['breadcrumb']);
 $crumb->addCrumb('Countries', []);
 
 $m = new Country($db);
-$m->setLimit(25);
+$m->setLimit(15);
 
 if ($id = $app->stickyGet('country_id')) {
 
@@ -25,7 +25,12 @@ if ($id = $app->stickyGet('country_id')) {
 
     // here we can check for additional criteria and display a deeper level on the crumb
 
-    \atk4\ui\Form::addTo($app)->setModel($m);
+    $f = \atk4\ui\Form::addTo($app);
+    $f->setModel($m);
+    $f->onSubmit(function($f) {
+        return new \atk4\ui\jsToast('Form Submitted! Data saving is not possible in demo!');
+    });
+
 } else {
 
     // display list of countries
