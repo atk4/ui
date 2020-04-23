@@ -8,7 +8,7 @@ AutoComplete Field
 .. php:namespace:: atk4\ui\FormField
 .. php:class:: AutoComplete
 
-Agile UI uses "FormField\Dropdown" by default on the form, but there is also implementation
+Agile UI uses "FormField\\Dropdown" by default on the form, but there is also implementation
 for AutoComplete field. Although they look similar, there are some differences:
 
  - AutoComplete will perform callback to fetch values.
