@@ -8,7 +8,7 @@ use atk4\ui\Button;
 class ButtonTest extends AtkPhpunit\TestCase
 {
     /**
-     * Test constructor.
+     * @doesNotPerformAssertions
      */
     public function testButtonIcon()
     {

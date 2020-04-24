@@ -155,24 +155,21 @@ of a different class (e.g. 'money'). Value will be initialized after first call 
 
     Contains array of defined columns.
 
-
-
-addColumn adds a new column to the table. This method was explained above but can also be
-used to add colums without field::
+`addColumn` adds a new column to the table. This method was explained above but can also be
+used to add columns without field::
 
     $action = $this->addColumn(null, ['Actions']);
-    $actions->addAction('Test', function() { return 'ok'; });
-
+    $actions->addAction('Delete', function() { return 'ok'; });
 
 The above code will add a new extra column that will only contain 'delete' icon. When clicked
 it will automatically delete the corresponding record.
 
 You have probably noticed, that I have omitted the name for this column. If name is not specified
 (null) then the Column object will not be associated with any model field in
-:php:meth:`TableColumn\Generic::getHeaderCellHTML`, :php:meth:`TableColumn\Generic::getTotalsCellHTML` and
-:php:meth:`TableColumn\Generic::getDataCellHTML`.
+:php:meth:`TableColumn\\Generic::getHeaderCellHTML`, :php:meth:`TableColumn\\Generic::getTotalsCellHTML` and
+:php:meth:`TableColumn\\Generic::getDataCellHTML`.
 
-Some columns require name, such as :php:class:`TableColumn\Generic` will
+Some columns require name, such as :php:class:`TableColumn\\Generic` will
 not be able to cope with this situations, but many other column types are perfectly fine with this.
 
 Some column classes will be able to take some information from a specified column, but will work
@@ -181,7 +178,6 @@ just fine if column is not passed.
 If you do specify a string as a $name for addColumn, but no such field exist in the model, the
 method will rely on 3rd argument to create a new field for you. Here is example that calculates
 the "total" column value (as above) but using PHP math instead of doing it inside database::
-
 
     $table = Table::addTo($app);
     $order = new Order($db);
@@ -261,7 +257,7 @@ For more information see https://github.com/kylefox/jquery-tablesort
 Injecting HTML
 --------------
 
-The tag will override model value. Here is example usage of :php:meth:`TableColumn\Generic::getHTMLTags`::
+The tag will override model value. Here is example usage of :php:meth:`TableColumn\\Generic::getHTMLTags`::
 
 
     class ExpiredColumn extends \atk4\ui\TableColumn\Generic
@@ -383,8 +379,8 @@ There are a few things to note:
 3. output of the 'Money' decorator is used into Link decorator as if it would be value of cell, however
    decorators have access to original value also. Decorator implementation is usually aware of combinations.
 
-:php:meth:`TableColumn\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
-without the <td> cell itself. Subsequently :php:meth:`TableColumn\Link::getDataCellTemplate` is called
+:php:meth:`TableColumn\\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
+without the <td> cell itself. Subsequently :php:meth:`TableColumn\\Link::getDataCellTemplate` is called
 and the '{$salary}' tag from this link is replaced by output from Money column resulting in this
 template::
 
@@ -490,7 +486,7 @@ See also :ref:`js`.
 Static Attributes and classes
 -----------------------------
 
-.. php:class:: TableColumn\Generic
+.. php:class:: TableColumn\\Generic
 
 .. php:method:: addClass($class, $scope = 'body');
 
@@ -523,8 +519,8 @@ For setting an attribute you can use setAttr() method::
 
 Setting a new value to the attribute will override previous value.
 
-Please note that if you are redefining :php:meth:`TableColumn\Generic::getHeaderCellHTML`,
-:php:meth:`TableColumn\Generic::getTotalsCellHTML` or :php:meth:`TableColumn\Generic::getDataCellHTML`
+Please note that if you are redefining :php:meth:`TableColumn\\Generic::getHeaderCellHTML`,
+:php:meth:`TableColumn\\Generic::getTotalsCellHTML` or :php:meth:`TableColumn\\Generic::getDataCellHTML`
 and you wish to preserve functionality of setting custom attributes and
 classes, you should generate your TD/TH tag through getTag method.
 
@@ -544,10 +540,10 @@ You can add column to a table that does not link with field::
 Using dynamic values
 --------------------
 
-Body attributes will be embedded into the template by the default :php:meth:`TableColumn\Generic::getDataCellHTML`,
+Body attributes will be embedded into the template by the default :php:meth:`TableColumn\\Generic::getDataCellHTML`,
 but if you specify attribute (or class) value as a tag, then it will be auto-filled
 with row value or injected HTML.
 
-For further examples of and advanced usage, see implementation of :php:class:`TableColumn\Status`.
+For further examples of and advanced usage, see implementation of :php:class:`TableColumn\\Status`.
 
 

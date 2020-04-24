@@ -368,7 +368,7 @@ You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model f
         }
     }
 
-The seed for the UI will be combined with the default overriding :php:attr:`FormField\Calendar::type`
+The seed for the UI will be combined with the default overriding :php:attr:`FormField\\Calendar::type`
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class::
 
@@ -628,7 +628,7 @@ of labels etc.
 
 .. php:method:: addGroup($header)
 
-    Creates a sub-layout, returning new instance of a :php:class:`FormLayout\Generic` object. You
+    Creates a sub-layout, returning new instance of a :php:class:`FormLayout\\Generic` object. You
     can also specify a header.
 
 .. todo:: MOVE THIS TO SEPARATE FILE

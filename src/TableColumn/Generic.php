@@ -351,7 +351,7 @@ class Generic
      * Return HTML for a total value of a specific field.
      *
      * @param Field $field
-     * @param mixed            $value
+     * @param mixed $value
      *
      * @return string
      */
@@ -373,6 +373,7 @@ class Generic
      * you should use $this->table->onHook('formatRow');
      *
      * @param Field $field
+     * @param array $extra_tags
      *
      * @return string
      */

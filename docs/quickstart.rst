@@ -271,7 +271,7 @@ another. In our example replace right column (label 17) with the following code:
 .. [#] You are already familiar with jsReload action. This time we only wish to reload Grid's Table as
     we wouldn't want to lose any form content.
 
-.. [#] Grid's `addSelection` method will add checkbox column. Implemented through TableColumn\CheckBox
+.. [#] Grid's `addSelection` method will add checkbox column. Implemented through `TableColumn\\CheckBox`
     this object has method jsChecked() which will return another Action for collecting selected checkboxes.
     This demonstrates how Actions can be used as JavaScript expressions augmented by Components.
 
