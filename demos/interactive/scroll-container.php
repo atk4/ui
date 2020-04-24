@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';\atk4\ui\Button::addTo($app, ['Dynamic scroll in Table', 'small left floated basic blue', 'icon' => 'left arrow'])
+\atk4\ui\Button::addTo($app, ['Dynamic scroll in Table', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['scroll-table']);
 \atk4\ui\Button::addTo($app, ['Dynamic scroll in Grid', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['scroll-grid']);

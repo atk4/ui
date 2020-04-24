@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';$img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+$img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 
 \atk4\ui\Header::addTo($app, ['Default view has no styling']);
 \atk4\ui\View::addTo($app)->set('just a <div> element');

@@ -2,8 +2,7 @@
 
 
 chdir('..');
-
-require_once 'atk-init.php';
+require_once 'init.php';
 require_once '_includes/demo-lookup.php';
 
 // create header

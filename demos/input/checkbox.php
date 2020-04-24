@@ -1,12 +1,14 @@
 <?php
+
+chdir('..');
+require_once 'init.php';
+
+use atk4\ui\FormField\CheckBox;
+use atk4\ui\View;
+
 /**
  * Testing fields.
  */
-
-chdir('..');
-
-require_once 'atk-init.php';use atk4\ui\FormField\CheckBox;
-use atk4\ui\View;
 
 \atk4\ui\Header::addTo($app, ['CheckBoxes', 'size'=>2]);
 

@@ -1,8 +1,10 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';/**
+/**
+ *
  * Demonstrates how to use buttons.
  */
 

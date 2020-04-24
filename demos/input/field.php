@@ -4,8 +4,7 @@
  */
 
 chdir('..');
-
-require_once 'atk-init.php';
+require_once 'init.php';
 
 \atk4\ui\Header::addTo($app, ['Types', 'size' => 2]);
 

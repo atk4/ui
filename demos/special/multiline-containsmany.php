@@ -1,12 +1,13 @@
 <?php
 
+chdir('..');
+require_once 'init.php';
+
 /***
- * This demo require spefic Database setup.
+ * This demo require specific Database setup.
  */
 
-chdir('..');
-
-require_once 'atk-init.php';class Client extends atk4\data\Model
+class Client extends atk4\data\Model
 {
     public $table = 'client';
     public $caption = 'Client';

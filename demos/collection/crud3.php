@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';class TestModel extends \atk4\data\Model
+class TestModel extends \atk4\data\Model
 {
     use ModelLockTrait;
 

@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';$form = \atk4\ui\Form::addTo($app);
+$form = \atk4\ui\Form::addTo($app);
 $img = $form->addField('img', ['UploadImg', ['defaultSrc' => '../images/default.png', 'placeholder' => 'Click to add an image.']]);
 $img->cb->appSticky = true;
 //$img->set('a_new_token', 'an-img-file-name');

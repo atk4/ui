@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';/**
+/**
  * Example implementation of a dynamic view which support session.
  *
  * Cart will memorize and restore its items into session. Cart will also

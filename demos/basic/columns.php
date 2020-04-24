@@ -3,8 +3,9 @@
  * Testing Columns.
  */
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';// some custom style needed for our "highlight" to work. You don't need this on
+// some custom style needed for our "highlight" to work. You don't need this on
 // your page and it's bad style to include CSS like this!
 $app->addStyle('
 #example .highlight.grid .column:not(.row):not(.grid):after {

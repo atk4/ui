@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';$form = \atk4\ui\Form::addTo($app);
+$form = \atk4\ui\Form::addTo($app);
 
 //standard with model: use id_field as Value, title_field as Title for each DropDown option
 $form->addField(

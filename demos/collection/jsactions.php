@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';\atk4\ui\Button::addTo($app, ['Actions from jsEvent', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\atk4\ui\Button::addTo($app, ['Actions from jsEvent', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['jsactions2']);
 
 \atk4\ui\Button::addTo($app, ['Actions', 'small left floated basic blue', 'icon' => 'left arrow'])

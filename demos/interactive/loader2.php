@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';\atk4\ui\Button::addTo($app, ['Loader Example - page 1', 'small left floated basic blue', 'icon' => 'left arrow'])
+\atk4\ui\Button::addTo($app, ['Loader Example - page 1', 'small left floated basic blue', 'icon' => 'left arrow'])
                ->link(['loader']);
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 

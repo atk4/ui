@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';\atk4\ui\Button::addTo($app, ['Dynamic scroll in CRUD and Grid', 'small left floated basic blue', 'icon' => 'left arrow'])
+\atk4\ui\Button::addTo($app, ['Dynamic scroll in CRUD and Grid', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['scroll-grid']);
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 

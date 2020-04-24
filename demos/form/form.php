@@ -1,4 +1,8 @@
 <?php
+
+chdir('..');
+require_once 'init.php';
+
 /**
  * Apart from demonstrating the form, this example uses an alternative way of rendering the layouts.
  * Here we don't create application object explicitly, instead we use our custom template
@@ -10,9 +14,8 @@
  * This approach will also prevent your application from registering shutdown handler or catching error,
  * so we will need to do a bit of work about that too.
  */
-chdir('..');
 
-require_once 'atk-init.php';$tabs = \atk4\ui\Tabs::addTo($app);
+$tabs = \atk4\ui\Tabs::addTo($app);
 
 ////////////////////////////////////////////
 $tab = $tabs->addTab('Basic Use');

@@ -1,8 +1,8 @@
 <?php
 
 chdir('..');
+require_once 'init.php';// default lister
 
-require_once 'atk-init.php';// default lister
 \atk4\ui\Header::addTo($app)->set('Default lister');
 \atk4\ui\Lister::addTo($app, ['defaultTemplate'=>'lister.html'])->setSource([
                                                                                 ['icon'=>'map marker', 'title'=>'Krolewskie Jadlo', 'descr'=>'An excellent polish restaurant, quick delivery and hearty, filling meals'],

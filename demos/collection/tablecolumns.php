@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';class ModelColor extends \atk4\data\Model
+class ModelColor extends \atk4\data\Model
 {
     public function init(): void
     {

@@ -1,14 +1,14 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';if ($id = $_GET['id'] ?? null) {
+if ($id = $_GET['id'] ?? null) {
     $app->layout->js(true, new \atk4\ui\jsToast('Details link is in simulation mode.'));
 }
 
 $bb = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 
-//
 $table = \atk4\ui\Table::addTo($app, ['celled' => true]);
 \atk4\ui\Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
     ->on('click', new \atk4\ui\jsReload($table));

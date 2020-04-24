@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';$data = [
+$data = [
     ['id'=>1, 'action'=>'Salary', 'amount'=>200],
     ['id'=> 2, 'action'=>'Purchase goods', 'amount'=>-120],
     ['id'=> 3, 'action'=>'Tax', 'amount'=>-40],
@@ -11,7 +12,6 @@ require_once 'atk-init.php';$data = [
 $m = new \atk4\data\Model(new \atk4\data\Persistence\Static_($data));
 $m->getField('amount')->type = 'money';
 
-//
 \atk4\ui\Header::addTo($app, ['Table with various headers', 'subHeader'=>'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon'=>'table']);
 
 $table = \atk4\ui\Table::addTo($app);

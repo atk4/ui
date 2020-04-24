@@ -1,10 +1,13 @@
 <?php
+
+chdir('..');
+require_once 'init.php';
+
+use atk4\ui\jsReload;
+
 /**
  * Testing form.
  */
-chdir('..');
-
-require_once 'atk-init.php';use atk4\ui\jsReload;
 
 \atk4\ui\Header::addTo($app, ['Form automatically decided how many columns to use']);
 

@@ -1,11 +1,12 @@
 <?php
 
+chdir('..');
+require_once 'init.php';
+
 use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
 
-chdir('..');
-
-require_once 'atk-init.php';/**
+/**
  * Class Inventory Item.
  */
 class InventoryItem extends \atk4\data\Model

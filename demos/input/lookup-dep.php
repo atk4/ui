@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';\atk4\ui\Header::addTo($app, ['Lookup dependency']);
+\atk4\ui\Header::addTo($app, ['Lookup dependency']);
 
 $form = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveFields']);

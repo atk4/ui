@@ -4,7 +4,9 @@
  */
 chdir('..');
 
-require_once 'atk-init.php';$crumb = \atk4\ui\BreadCrumb::addTo($app);
+require_once 'init.php';
+
+$crumb = \atk4\ui\BreadCrumb::addTo($app);
 $crumb->addCrumb('UI Demo', ['index']);
 $crumb->addCrumb('BreadCrumb Demo', ['breadcrumb']);
 

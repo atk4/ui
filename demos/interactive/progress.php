@@ -3,8 +3,9 @@
  * Demonstrates how to use tabs.
  */
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';$p = \atk4\ui\ProgressBar::addTo($app, [20]);
+$p = \atk4\ui\ProgressBar::addTo($app, [20]);
 
 $p = \atk4\ui\ProgressBar::addTo($app, [60, 'indicating progress', 'indicating']);
 \atk4\ui\Button::addTo($app, ['increment'])->on('click', $p->jsIncrement());

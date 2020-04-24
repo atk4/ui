@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';// create layout
+// create layout
 $g = \atk4\ui\GridLayout::addTo($app, ['columns'=>4, 'rows'=>2]);
 
 // add other views in layout spots

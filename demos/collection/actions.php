@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';\atk4\ui\Button::addTo($app, ['js Event Executor', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+\atk4\ui\Button::addTo($app, ['js Event Executor', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['jsactions']);
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 

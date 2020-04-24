@@ -1,12 +1,14 @@
 <?php
 
+chdir('..');
+require_once 'init.php';
+require_once '_includes/Counter.php';
+
 /*
  * Demonstrate the use of Virtual Page.
  */
 
-chdir('..');
-
-require_once 'atk-init.php';// define virtual page.
+// define virtual page.
 $vp = \atk4\ui\VirtualPage::addTo($layout);
 $vp->cb->urlTrigger = 'in';
 
@@ -30,30 +32,14 @@ $btn->link($vp->cb->getUrl() . '&p_id=Car');
 $btn = \atk4\ui\Button::addTo($app, ['More info on Bike']);
 $btn->link($vp->cb->getUrl() . '&p_id=Bike');
 
-if (!class_exists('Counter')) {
-    class Counter extends \atk4\ui\FormField\Line
-    {
-        public $content = 20;
-
-        public function init(): void
-        {
-            parent::init();
-
-            $this->actionLeft = new \atk4\ui\Button(['icon' => 'minus']);
-            $this->action = new \atk4\ui\Button(['icon' => 'plus']);
-
-            $this->actionLeft->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])-1', [$this->jsInput()->val()])));
-            $this->action->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])+1', [$this->jsInput()->val()])));
-        }
-    }
-}
-
 // Test 1 - Basic reloading
 \atk4\ui\Header::addTo($app, ['Virtual Page Logic']);
 
 $vp = \atk4\ui\VirtualPage::addTo($app); // this page will not be visible unless you trigger it specifically
 \atk4\ui\Header::addTo($vp, ['Contens of your pop-up here']);
 \atk4\ui\LoremIpsum::addTo($vp, ['size' => 2]);
+
+// Add counter from '_includes/Counter.php'
 Counter::addTo($vp);
 \atk4\ui\View::addTo($vp, ['ui' => 'hidden divider']);
 \atk4\ui\Button::addTo($vp, ['Back', 'icon' => 'left arrow'])->link('virtual.php');

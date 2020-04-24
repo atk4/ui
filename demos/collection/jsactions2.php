@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'atk-init.php';// Check this file in order to see how model action is defined.
+require_once 'init.php';// Check this file in order to see how model action is defined.
 require_once '_includes/country_actions.php';
 
 \atk4\ui\Button::addTo($app, ['Actions in Grid', 'small right floated basic blue', 'iconRight' => 'right arrow'])

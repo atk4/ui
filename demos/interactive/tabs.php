@@ -3,8 +3,9 @@
  * Demonstrates how to use tabs.
  */
 chdir('..');
+require_once 'init.php';
 
-require_once 'atk-init.php';$t = \atk4\ui\Tabs::addTo($app);
+$t = \atk4\ui\Tabs::addTo($app);
 
 // static tab
 \atk4\ui\HelloWorld::addTo($t->addTab('Hello'));

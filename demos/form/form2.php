@@ -1,10 +1,13 @@
 <?php
+
+chdir('..');
+require_once 'init.php';
+
 /**
  * Testing form.
  */
-chdir('..');
 
-require_once 'atk-init.php';// create header
+// create header
 \atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
 
 // create form

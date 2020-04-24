@@ -1,8 +1,9 @@
 <?php
 
 chdir('..');
+require_once 'init.php';// Test 1 - Basic reloading
+require_once '_includes/Counter.php';
 
-require_once 'atk-init.php';// Test 1 - Basic reloading
 \atk4\ui\Header::addTo($app, ['Button reloading segment']);
 $v = \atk4\ui\View::addTo($app, ['ui' => 'segment'])->set((string) rand(1, 100));
 \atk4\ui\Button::addTo($app, ['Reload random number'])->js('click', new \atk4\ui\jsReload($v, [], new \atk4\ui\jsExpression('console.log("Output with afterSuccess");')));
@@ -24,26 +25,7 @@ $b3->js('click', new \atk4\ui\jsReload($b4));
 \atk4\ui\Header::addTo($app, ['Make sure nested JS bindings are applied too']);
 $seg = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
 
-if (!class_exists('Counter')) {
-    // Re-usable component implementing counter
-    class Counter extends \atk4\ui\FormField\Line
-    {
-        public $content = 20; // default
-
-        public function init(): void
-        {
-            parent::init();
-
-            $this->actionLeft = new \atk4\ui\Button(['icon' => 'minus']);
-            $this->action = new \atk4\ui\Button(['icon' => 'plus']);
-
-            $this->actionLeft->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])-1', [$this->jsInput()->val()])));
-            $this->action->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])+1', [$this->jsInput()->val()])));
-        }
-    }
-}
-
-// Add 3 counters
+// Add 3 counters from '_includes/Counter.php'
 Counter::addTo($seg);
 Counter::addTo($seg, '40');
 Counter::addTo($seg, '-20');

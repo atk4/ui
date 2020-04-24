@@ -1,11 +1,12 @@
 <?php
+
+chdir('..');
+require_once 'init.php';
+
 /***
  * This demo require spefic Database setup.
  */
-
-chdir('..');
-
-require_once 'atk-init.php';/*********** MODEL ***************/
+/*********** MODEL ***************/
 
 class Category extends \atk4\data\Model
 {
