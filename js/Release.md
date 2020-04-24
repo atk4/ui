@@ -1,5 +1,10 @@
 ## Release note
 
+### version 1.14.0 (2020-04-21)
+    
+- Add a jQuery plugin for layout that support side navigation.
+  - sidenav.plugin.js
+
 ### version 1.13.0 (2020-04-14)
     
 - New PanelService.

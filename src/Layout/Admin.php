@@ -2,8 +2,10 @@
 
 namespace atk4\ui\Layout;
 
+use atk4\ui\Exception;
 use atk4\ui\Header;
 use atk4\ui\Icon;
+use atk4\ui\Item;
 use atk4\ui\jQuery;
 use atk4\ui\Menu;
 
@@ -29,7 +31,7 @@ use atk4\ui\Menu;
  *
  *  - Content
  */
-class Admin extends Generic
+class Admin extends Generic implements Navigable
 {
     public $menuLeft = null;    // vertical menu
     public $menu = null;        // horizontal menu
@@ -37,17 +39,8 @@ class Admin extends Generic
 
     public $burger = true;      // burger menu item
 
-    /*
-     * Whether or not left Menu is visible on Page load.
-     */
+    /** @var bool Whether or not left Menu is visible on Page load. */
     public $isMenuLeftVisible = true;
-
-    /**
-     * Obsolete, use menuLeft.
-     *
-     * @obsolete
-     */
-    public $leftMenu = null;
 
     public $defaultTemplate = 'layout/admin.html';
 
@@ -57,10 +50,10 @@ class Admin extends Generic
 
         if ($this->menu === null) {
             $this->menu = Menu::addTo($this, ['inverted fixed horizontal', 'element' => 'header'], ['TopMenu']);
-            $this->burger = $this->menu->addItem(['class' => ['icon atk-leftMenuTrigger']]);
+            $this->burger = $this->menu->addItem(['class' => ['icon']]);
             $this->burger->on('click', [
-                (new jQuery('.atk-admin-left-menu'))->toggleClass('visible'),
-                (new jQuery('body'))->toggleClass('atk-leftMenu-visible'),
+                (new jQuery('.atk-sidenav'))->toggleClass('visible'),
+                (new jQuery('body'))->toggleClass('atk-sidenav-visible'),
             ]);
             Icon::addTo($this->burger, ['content']);
 
@@ -73,10 +66,40 @@ class Admin extends Generic
         }
 
         if ($this->menuLeft === null) {
-            $this->menuLeft = Menu::addTo($this, ['ui' => 'atk-admin-left-menu-content'], ['LeftMenu']);
+            $this->menuLeft = Menu::addTo($this, ['ui' => 'atk-sidenav-content'], ['LeftMenu']);
         }
 
         $this->template->trySet('version', $this->app->version);
+    }
+
+    /**
+     * Add a group to left menu.
+     *
+     * @param $seed
+     *
+     * @return Menu
+     */
+    public function addMenuGroup($seed): Menu
+    {
+        return $this->menuLeft->addGroup($seed);
+    }
+
+    /**
+     * Add items to left menu.
+     *
+     * @param $name
+     * @param null $action
+     * @param null $group
+     *
+     * @return Item
+     */
+    public function addMenuItem($name, $action = null, $group = null): Item
+    {
+        if ($group) {
+            return $group->addItem($name, $action);
+        }
+
+        return $this->menuLeft->addItem($name, $action);
     }
 
     /**
@@ -85,9 +108,9 @@ class Admin extends Generic
     public function renderView()
     {
         if ($this->menuLeft) {
-            if (count($this->menuLeft->elements) == 1) {
+            if (count($this->menuLeft->elements) === 0) {
                 // no items were added, so lets add dashboard
-                $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], 'index');
+                $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], ['index']);
             }
             if ($this->isMenuLeftVisible) {
                 $this->menuLeft->addClass('visible');

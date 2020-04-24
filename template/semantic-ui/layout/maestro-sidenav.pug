@@ -1,0 +1,15 @@
+div(id="{$_id}" class="{_ui}{/} {$class} {$_class}" style="{$style}")
+    .ui.padded.grid
+        .row.atk-maestro-menu-title
+            .column.atk-submenu-toggle
+                div
+                    i.icon.caret.right
+            .eleven.wide.column
+                header
+                    | {$title}
+            .three.wide.column
+                | {$Icon}
+        .row.atk-maestro-menu-items
+            .sixteen.wide.column
+                .menu
+                    | {$Content}

@@ -115,11 +115,14 @@ class Menu extends View
      *
      * @param string|array $name
      *
+     * @param string $template
+     *
      * @return Menu
+     * @throws \atk4\core\Exception
      */
-    public function addGroup($name)
+    public function addGroup($name, string $template = 'menugroup.html')
     {
-        $group = (self::class)::addTo($this, ['defaultTemplate' => 'menugroup.html', 'ui' => false]);
+        $group = (self::class)::addTo($this, ['defaultTemplate' => $template, 'ui' => false]);
 
         $name = (array) $name;
 
