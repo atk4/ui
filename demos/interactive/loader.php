@@ -57,4 +57,4 @@ require_once 'database.php';
     ])->set(function ($p) {
         sleep(1);
         \atk4\ui\LoremIpsum::addTo($p, ['size' => 2]);
-});
+    });

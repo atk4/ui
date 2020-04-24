@@ -46,6 +46,3 @@ $dragHandler = $g->addDragHandler();
 $dragHandler->onReorder(function ($order) {
     return new \atk4\ui\jsToast('New order: ' . implode(' - ', $order));
 });
-
-
-
