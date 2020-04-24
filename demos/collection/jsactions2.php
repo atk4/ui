@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once dirname(__DIR__) . '/atk-init.php';
 // Check this file in order to see how model action is defined.
 require_once  dirname(__DIR__) . '/_includes/country_actions.php';
 

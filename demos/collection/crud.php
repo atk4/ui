@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once dirname(__DIR__) . '/atk-init.php';
 
 $m = new CountryLock($db);
 

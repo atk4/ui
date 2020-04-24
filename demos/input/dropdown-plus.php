@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once dirname(__DIR__) . '/atk-init.php';
 
 $form = \atk4\ui\Form::addTo($app);
 

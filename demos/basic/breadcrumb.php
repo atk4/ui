@@ -3,7 +3,7 @@
  * Demonstrates how to use BreadCrumb.
  */
 chdir('..');
-require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once dirname(__DIR__) . '/atk-init.php';
 
 $crumb = \atk4\ui\BreadCrumb::addTo($app);
 $crumb->addCrumb('UI Demo', ['index']);

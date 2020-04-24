@@ -4,7 +4,7 @@ use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
 
 chdir('..');
-require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once dirname(__DIR__) . '/atk-init.php';
 
 /**
  * Class Inventory Item.
