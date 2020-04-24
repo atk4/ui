@@ -282,7 +282,7 @@ Using App class will utilize a minimum of 2 templates:
 
 As you add more components, they will appear inside your layout.
 
-You'll also find that a layout class such as :php:class:`Layout\Admin` will initialize
+You'll also find that a layout class such as :php:class:`Layout\\Admin` will initialize
 some components on its own - sidebar menu, top menu.
 
 .. image:: images/admin-layout.png
