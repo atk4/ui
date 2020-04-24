@@ -3,7 +3,7 @@
  * Demonstrates how to use menu.
  */
 chdir('..');
-require_once 'atk-init.php';
+require_once dirname(__DIR__) . '/atk-init.php';
 
 $m = \atk4\ui\Menu::addTo($app);
 $m->addItem('foo', 'foo.php');

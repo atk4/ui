@@ -4,8 +4,8 @@
  */
 
 chdir('..');
-require_once 'atk-init.php';
-require_once dirname(__DIR__ ) . '/_includes/demo-lookup.php';
+require_once dirname(__DIR__) . '/atk-init.php';
+require_once dirname(__DIR__) . '/_includes/demo-lookup.php';
 
 \atk4\ui\Header::addTo($app, ['Disabled and read only form fields (normal / readonly / disabled)']);
 

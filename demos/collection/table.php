@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'atk-init.php';
+require_once dirname(__DIR__) . '/atk-init.php';
 
 if ($id = $_GET['id'] ?? null) {
     $app->layout->js(true, new \atk4\ui\jsToast('Details link is in simulation mode.'));

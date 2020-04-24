@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'atk-init.php';
+require_once dirname(__DIR__) . '/atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['Card Model', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['card-action']);

@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'atk-init.php';
+require_once dirname(__DIR__) . '/atk-init.php';
 
 class ModelColor extends \atk4\data\Model
 {

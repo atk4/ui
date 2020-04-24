@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'atk-init.php';
+require_once dirname(__DIR__) . '/atk-init.php';
 
 //For popup positioning to work correctly, table need to be inside a view segment.
 $view = \atk4\ui\View::addTo($app, ['ui' => 'basic segment']);

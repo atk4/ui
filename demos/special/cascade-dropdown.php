@@ -4,7 +4,7 @@
  */
 
 chdir('..');
-require_once 'atk-init.php';
+require_once dirname(__DIR__) . '/atk-init.php';
 
 /*********** MODEL ***************/
 
