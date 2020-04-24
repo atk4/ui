@@ -1,8 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
-require_once 'database.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 // Re-usable component implementing counter
 class Finder extends \atk4\ui\Columns

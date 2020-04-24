@@ -1,8 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
-require_once 'database.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 $g = \atk4\ui\CRUD::addTo($app);
 $g->setModel(new Stat($db));

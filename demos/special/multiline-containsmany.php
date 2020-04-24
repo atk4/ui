@@ -5,8 +5,7 @@
  */
 
 chdir('..');
-require_once 'init.php';
-require_once 'database.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 class Client extends atk4\data\Model
 {

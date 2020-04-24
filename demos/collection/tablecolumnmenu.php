@@ -1,8 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
-require_once 'database.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 \atk4\ui\Header::addTo($app, ['Table column may contains popup or dropdown menu.']);
 

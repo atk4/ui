@@ -4,8 +4,8 @@
  */
 
 chdir('..');
-require_once 'init.php';
-require_once 'database.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once dirname(__DIR__ ) . '/_includes/demo-lookup.php';
 
 \atk4\ui\Header::addTo($app, ['Disabled and read only form fields (normal / readonly / disabled)']);
 
@@ -68,21 +68,21 @@ $g = $f->addGroup('Lookup');
 $m = new Country($db);
 
 $g->addField('Lookup_norm', [
-    'Lookup',
-    'model'       => $m,
+    $demoLookup,  // Special Lookup field that can't save data.
+    'model'       => new CountryLock($db),
     'plus'        => true,
 ])->set($m->loadAny()->id);
 
 $g->addField('Lookup_read', [
     'Lookup',
-    'model'       => $m,
+    'model'       => new CountryLock($db),
     'plus'        => true,
     'readonly'    => true,
 ])->set($m->loadAny()->id);
 
 $g->addField('Lookup_disb', [
     'Lookup',
-    'model'       => $m,
+    'model'       => new CountryLock($db),
     'plus'        => true,
     'disabled'    => true,
 ])->set($m->loadAny()->id);

@@ -1,8 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
-require_once 'database.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['js Event Executor', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['jsactions']);
@@ -12,7 +11,7 @@ require_once 'database.php';
 
 // Actions can be added easily to the model
 
-$files = new FileLock($app->db);
+$files = new FileLock($db);
 
 // This action must appear on top of the CRUD
 $action = $files->addAction(

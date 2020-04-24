@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 if (!class_exists('TestConsole')) {
     class TestConsole extends \atk4\data\Model

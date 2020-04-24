@@ -4,7 +4,7 @@
  */
 
 chdir('..');
-require_once 'init.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 use atk4\ui\FormField\CheckBox;
 use atk4\ui\View;

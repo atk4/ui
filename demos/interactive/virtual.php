@@ -5,7 +5,7 @@
  */
 
 chdir('..');
-require_once 'init.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 // define virtual page.
 $vp = \atk4\ui\VirtualPage::addTo($layout);

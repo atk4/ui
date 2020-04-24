@@ -8,8 +8,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 if (file_exists(__DIR__ . '/coverage.php')) {
     include_once __DIR__ . '/coverage.php';
 }
-
-require_once __DIR__ . '/somedatadef.php';
+require_once __DIR__ . '/_includes/somedatadef.php';
+require_once __DIR__ . '/database.php';
 
 class Demo extends \atk4\ui\Columns
 {

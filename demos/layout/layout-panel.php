@@ -1,7 +1,8 @@
 <?php
 
 chdir('..');
-require_once 'country_actions.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once dirname(__DIR__ ) . '/_includes/country_actions.php';
 
 \atk4\ui\Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);
 

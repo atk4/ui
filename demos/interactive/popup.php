@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 /**
  * Example implementation of a dynamic view which support session.

@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 \atk4\ui\View::addTo($app, [
     'Forms below focus on Data integration and automated layouts',

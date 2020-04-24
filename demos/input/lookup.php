@@ -2,9 +2,8 @@
 
 
 chdir('..');
-require_once 'init.php';
-require_once 'database.php';
-require_once 'demo-lookup.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once dirname(__DIR__ ) . '/_includes/demo-lookup.php';
 
 // create header
 \atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);

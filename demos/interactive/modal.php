@@ -1,10 +1,9 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
-require_once 'database.php';
-require_once '../tests/ViewTester.php';
-require_once 'Session.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once dirname(__DIR__ ) . '/_includes/Session.php';
+require_once dirname(__DIR__ ) . '/../tests/ViewTester.php';
 
 \atk4\ui\Header::addTo($app, ['Modal View']);
 

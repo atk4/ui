@@ -4,7 +4,7 @@
  * Demonstrates how to use a wizard.
  */
 chdir('..');
-require_once 'init.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 use atk4\ui\Wizard;
 
