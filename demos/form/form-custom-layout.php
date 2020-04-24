@@ -3,7 +3,7 @@
  * Demonstrates how to use fields with form.
  */
 chdir('..');
-require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once 'atk-init.php';
 
 \atk4\ui\Header::addTo($app, ['Custom Form Layout']);
 

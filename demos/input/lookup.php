@@ -2,7 +2,7 @@
 
 
 chdir('..');
-require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once 'atk-init.php';
 require_once dirname(__DIR__ ) . '/_includes/demo-lookup.php';
 
 // create header

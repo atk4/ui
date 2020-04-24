@@ -3,7 +3,7 @@
  * Testing form.
  */
 chdir('..');
-require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once 'atk-init.php';
 
 // create header
 \atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);

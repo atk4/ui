@@ -11,7 +11,7 @@
  * so we will need to do a bit of work about that too.
  */
 chdir('..');
-require_once dirname(__DIR__ ) . '/atk-init.php';
+require_once 'atk-init.php';
 
 $tabs = \atk4\ui\Tabs::addTo($app);
 
