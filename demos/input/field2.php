@@ -6,7 +6,7 @@
 chdir('..');
 
 require_once 'atk-init.php';
-require_once dirname(__DIR__ ) . '/_includes/demo-lookup.php';
+require_once '_includes/demo-lookup.php';
 
 
 require_once dirname(__DIR__) . '/_includes/demo-lookup.php';
