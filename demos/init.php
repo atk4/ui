@@ -8,8 +8,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 if (file_exists(__DIR__ . '/coverage.php')) {
     include_once __DIR__ . '/coverage.php';
 }
-require_once __DIR__ . '/_includes/somedatadef.php';
+
 require_once __DIR__ . '/database.php';
+//require_once __DIR__ . '/_includes/somedatadef.php';
+
 
 class Demo extends \atk4\ui\Columns
 {
@@ -215,8 +217,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $other);
 
 
-//    $f = basename($_SERVER['PHP_SELF']);
-
+    $f = basename($_SERVER['PHP_SELF']);
 
     $url = 'https://github.com/atk4/ui/blob/develop';
 
