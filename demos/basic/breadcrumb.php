@@ -3,8 +3,7 @@
  * Demonstrates how to use BreadCrumb.
  */
 chdir('..');
-require_once 'init.php';
-require_once 'database.php';
+require_once dirname(__DIR__ ) . '/atk-init.php';
 
 $crumb = \atk4\ui\BreadCrumb::addTo($app);
 $crumb->addCrumb('UI Demo', ['index']);
@@ -14,7 +13,7 @@ $crumb->addCrumb('BreadCrumb Demo', ['breadcrumb']);
 
 $crumb->addCrumb('Countries', []);
 
-$m = new Country($db);
+$m = new CountryLock($db);
 $m->setLimit(15);
 
 if ($id = $app->stickyGet('country_id')) {
