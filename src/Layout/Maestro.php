@@ -9,6 +9,7 @@
 
 namespace atk4\ui\Layout;
 
+use atk4\ui\jQuery;
 use atk4\ui\Item;
 use atk4\ui\Menu;
 
@@ -40,7 +41,7 @@ class Maestro extends Admin
 
         //initialize all menu group at ounce.
         //since atkSideNav plugin default setting are for Maestro, no need to pass settings to initialize it.
-        $js = (new \atk4\ui\jQuery('.atk-maestro-sidenav'))->atkSidenav();
+        $js = (new jQuery('.atk-maestro-sidenav'))->atkSidenav();
 
         $this->js(true, $js);
     }
