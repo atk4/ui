@@ -12,12 +12,7 @@
  */
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-$tabs = \atk4\ui\Tabs::addTo($app);
+require_once 'atk-init.php';$tabs = \atk4\ui\Tabs::addTo($app);
 
 ////////////////////////////////////////////
 $tab = $tabs->addTab('Basic Use');

@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-use atk4\ui\Button;
+require_once 'atk-init.php';use atk4\ui\Button;
 
 \atk4\ui\View::addTo($app, [
     'Sticky GET allows us to preserve some GET arguments',

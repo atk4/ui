@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-\atk4\ui\Button::addTo($app, ['Notify Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+require_once 'atk-init.php';\atk4\ui\Button::addTo($app, ['Notify Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['notify2']);
 
 \atk4\ui\Button::addTo($app, ['Test'])->on('click', (new \atk4\ui\jsNotify('Not yet implemented'))->setColor('red'));

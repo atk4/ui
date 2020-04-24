@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-//For popup positioning to work correctly, table need to be inside a view segment.
+require_once 'atk-init.php';//For popup positioning to work correctly, table need to be inside a view segment.
 $view = \atk4\ui\View::addTo($app, ['ui' => 'basic segment']);
 $g = \atk4\ui\Grid::addTo($view);
 

@@ -3,8 +3,8 @@
  * Demonstrates how to use layouts.
  */
 chdir('..');
-include_once dirname(__DIR__) . '/../vendor/autoload.php';
-include_once dirname(__DIR__) . '/_includes/somedatadef.php';
+include_once '../vendor/autoload.php';
+include_once '_includes/somedatadef.php';
 
 date_default_timezone_set('UTC');
 

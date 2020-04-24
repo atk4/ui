@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-\atk4\ui\Button::addTo($app, ['Loader Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+require_once 'atk-init.php';\atk4\ui\Button::addTo($app, ['Loader Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['loader2']);
 
 \atk4\ui\View::addTo($app, ['ui' => 'clearing divider']);

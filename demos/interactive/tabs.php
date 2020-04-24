@@ -4,12 +4,7 @@
  */
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-$t = \atk4\ui\Tabs::addTo($app);
+require_once 'atk-init.php';$t = \atk4\ui\Tabs::addTo($app);
 
 // static tab
 \atk4\ui\HelloWorld::addTo($t->addTab('Hello'));

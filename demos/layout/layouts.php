@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-// buttons configuration: [page, title]
+require_once 'atk-init.php';// buttons configuration: [page, title]
 $buttons = [
     ['page' => ['layouts_nolayout'],               'title' => 'HTML without layout'],
     ['page' => ['layouts_manual'],                 'title' => 'Manual layout'],

@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-\atk4\ui\Header::addTo($app, ['Toast']);
+require_once 'atk-init.php';\atk4\ui\Header::addTo($app, ['Toast']);
 
 $btn = \atk4\ui\Button::addTo($app)->set('Minimal');
 

@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-\atk4\ui\Header::addTo($app, ['SSE with ProgressBar']);
+require_once 'atk-init.php';\atk4\ui\Header::addTo($app, ['SSE with ProgressBar']);
 
 $bar = \atk4\ui\ProgressBar::addTo($app);
 

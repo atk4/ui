@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-$items = [
+require_once 'atk-init.php';$items = [
     [
         'name'  => 'Electronics',
         'nodes' => [

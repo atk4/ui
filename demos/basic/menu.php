@@ -4,12 +4,7 @@
  */
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-$m = \atk4\ui\Menu::addTo($app);
+require_once 'atk-init.php';$m = \atk4\ui\Menu::addTo($app);
 $m->addItem('foo', 'foo.php');
 $m->addItem('bar');
 $m->addItem('baz');

@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-// Test 1 - Basic reloading
+require_once 'atk-init.php';// Test 1 - Basic reloading
 \atk4\ui\Header::addTo($app, ['Button reloading segment']);
 $v = \atk4\ui\View::addTo($app, ['ui' => 'segment'])->set((string) rand(1, 100));
 \atk4\ui\Button::addTo($app, ['Reload random number'])->js('click', new \atk4\ui\jsReload($v, [], new \atk4\ui\jsExpression('console.log("Output with afterSuccess");')));

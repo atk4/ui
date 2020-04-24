@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-$img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+require_once 'atk-init.php';$img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 
 $seg = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
 \atk4\ui\Header::addTo($seg, ['H1 Header', 'size' => 1]);

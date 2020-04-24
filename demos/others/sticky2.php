@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-// This demo shows a local impact of a sticky parameters.
+require_once 'atk-init.php';// This demo shows a local impact of a sticky parameters.
 
 if (isset($_GET['name'])) {
 

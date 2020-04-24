@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-$m = new CountryLock($db);
+require_once 'atk-init.php';$m = new CountryLock($db);
 
 $g = \atk4\ui\CRUD::addTo($app, ['ipp'=>10]);
 

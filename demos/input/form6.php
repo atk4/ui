@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-\atk4\ui\View::addTo($app, [
+require_once 'atk-init.php';\atk4\ui\View::addTo($app, [
     'Forms below demonstrate how to work with multi-value selectors',
     'ui' => 'ignored warning message',
 ]);

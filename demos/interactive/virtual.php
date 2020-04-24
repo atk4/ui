@@ -6,12 +6,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-// define virtual page.
+require_once 'atk-init.php';// define virtual page.
 $vp = \atk4\ui\VirtualPage::addTo($layout);
 $vp->cb->urlTrigger = 'in';
 

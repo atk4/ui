@@ -3,11 +3,7 @@
 chdir('..');
 
 require_once 'atk-init.php';
-require_once 'country_actions.php';
-
-
-require_once  dirname(__DIR__) . '/_includes/country_actions.php';
-
+require_once '_includes/country_actions.php';
 
 \atk4\ui\Button::addTo($app, ['Actions from jsEvent', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['jsactions2']);

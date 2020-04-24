@@ -5,12 +5,7 @@
  */
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-use atk4\ui\Wizard;
+require_once 'atk-init.php';use atk4\ui\Wizard;
 
 $t = Wizard::addTo($app);
 

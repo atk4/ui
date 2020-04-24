@@ -4,12 +4,7 @@
  */
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-use atk4\ui\Button;
+require_once 'atk-init.php';use atk4\ui\Button;
 use atk4\ui\Buttons;
 use atk4\ui\Header;
 

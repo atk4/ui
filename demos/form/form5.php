@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-\atk4\ui\View::addTo($app, [
+require_once 'atk-init.php';\atk4\ui\View::addTo($app, [
     'Forms below focus on Data integration and automated layouts',
     'ui' => 'ignored warning message',
 ]);

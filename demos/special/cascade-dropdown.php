@@ -5,12 +5,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-/*********** MODEL ***************/
+require_once 'atk-init.php';/*********** MODEL ***************/
 
 class Category extends \atk4\data\Model
 {

@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-// Re-usable component implementing counter
+require_once 'atk-init.php';// Re-usable component implementing counter
 class Finder extends \atk4\ui\Columns
 {
     public $route = [];

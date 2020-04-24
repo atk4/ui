@@ -7,7 +7,6 @@ chdir('..');
 
 require_once 'atk-init.php';
 
-
 \atk4\ui\Header::addTo($app, ['Types', 'size' => 2]);
 
 \atk4\ui\FormField\Line::addTo($app)->setDefaults(['placeholder' => 'Search']);

@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-\atk4\ui\Header::addTo($app, ['Table column may contains popup or dropdown menu.']);
+require_once 'atk-init.php';\atk4\ui\Header::addTo($app, ['Table column may contains popup or dropdown menu.']);
 
 // Better Popup positionning when Popup are inside a container.
 $container = \atk4\ui\View::addTo($app, ['ui' => 'vertical segment']);

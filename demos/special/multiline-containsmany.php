@@ -6,12 +6,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-class Client extends atk4\data\Model
+require_once 'atk-init.php';class Client extends atk4\data\Model
 {
     public $table = 'client';
     public $caption = 'Client';

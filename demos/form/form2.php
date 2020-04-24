@@ -4,12 +4,7 @@
  */
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-// create header
+require_once 'atk-init.php';// create header
 \atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
 
 // create form

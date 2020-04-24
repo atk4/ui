@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-$data = [
+require_once 'atk-init.php';$data = [
     ['id'=>1, 'action'=>'Salary', 'amount'=>200],
     ['id'=> 2, 'action'=>'Purchase goods', 'amount'=>-120],
     ['id'=> 3, 'action'=>'Tax', 'amount'=>-40],

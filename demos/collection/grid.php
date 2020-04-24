@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-$g = \atk4\ui\Grid::addTo($app);
+require_once 'atk-init.php';$g = \atk4\ui\Grid::addTo($app);
 $m = new CountryLock($db);
 $m->addAction('test', function ($m) {
     return 'test from ' . $m->getTitle() . ' was successful!';

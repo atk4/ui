@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-if (!class_exists('TestConsole')) {
+require_once 'atk-init.php';if (!class_exists('TestConsole')) {
     class TestConsole extends \atk4\data\Model
     {
         use \atk4\core\DebugTrait;

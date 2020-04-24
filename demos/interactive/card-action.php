@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-\atk4\ui\Button::addTo($app, ['Card Deck', 'small right floated basic blue', 'iconRight' => 'right arrow'])
+require_once 'atk-init.php';\atk4\ui\Button::addTo($app, ['Card Deck', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['card-deck']);
 \atk4\ui\Button::addTo($app, ['Card', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['card']);

@@ -2,12 +2,7 @@
 
 chdir('..');
 
-require_once 'atk-init.php';
-
-
-
-
-class MySwitcher extends \atk4\ui\View
+require_once 'atk-init.php';class MySwitcher extends \atk4\ui\View
 {
     public function init(): void
     {
