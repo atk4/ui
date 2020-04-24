@@ -432,7 +432,7 @@ class Lookup extends Input
 
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
             } else {
-                $this->field->owner->data[$this->short_name] = null;
+                $this->field->setNull();
             }
         }
 
