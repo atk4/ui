@@ -96,12 +96,10 @@ class Admin extends Generic implements Navigable
     public function addMenuItem($name, $action = null, $group = null): Item
     {
         if ($group) {
-            $i = $group->addItem($name, $action);
-        } else {
-            $i = $this->menuLeft->addItem($name, $action);
+            return $group->addItem($name, $action);
         }
 
-        return $i;
+        return $this->menuLeft->addItem($name, $action);
     }
 
     /**
