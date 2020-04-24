@@ -19,10 +19,8 @@ $app->db = $db;
 if (!trait_exists('ModelLockTrait')) {
     trait ModelLockTrait
     {
-        public function init(): void
+        public function lock(): void
         {
-            parent::init();
-
             $this->getAction('add')->callback = function ($m) {
                 return new \atk4\ui\jsToast('Form Submit! Data are not save in demo mode.');
             };
@@ -30,7 +28,11 @@ if (!trait_exists('ModelLockTrait')) {
                 return new \atk4\ui\jsToast('Form Submit! Data are not save in demo mode.');
             };
 
-            $this->getAction('delete')->callback = function ($m) {
+            $delete = $this->getAction('delete');
+
+            $delete->confirmation = 'Please go ahead. Demo mode does not really delete data.';
+
+            $delete->callback = function ($m) {
                 return [
                     (new \atk4\ui\jQuery())->closest('tr')->transition('fade left'),
                     new \atk4\ui\jsToast('Simulating delete in demo mode.')
@@ -89,8 +91,13 @@ if (!class_exists('Country')) {
 
     class CountryLock extends Country
     {
-        public $caption = 'Country';
         use ModelLockTrait;
+        public $caption = 'Country';
+        public function init(): void
+        {
+            parent::init();
+            $this->lock();
+        }
     }
 
     class Stat extends \atk4\data\Model
@@ -209,5 +216,11 @@ if (!class_exists('Country')) {
     {
         use ModelLockTrait;
         public $caption = 'File';
+
+        public function init(): void
+        {
+            parent::init();
+            $this->lock();
+        }
     }
 }

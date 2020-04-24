@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Setup Action file for Country model.
+ */
+
 require_once __DIR__ . '/init.php';
 require_once __DIR__ . '/database.php';
 

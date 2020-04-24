@@ -215,20 +215,19 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $other);
 
 
-    $f = basename($_SERVER['PHP_SELF']);
+//    $f = basename($_SERVER['PHP_SELF']);
 
 
-    //$url = 'https://github.com/atk4/ui/blob/feature/grid-part2/demos/';
     $url = 'https://github.com/atk4/ui/blob/develop';
 
     $ex =[
         new \atk4\ui\jsExpression('const baseUrl = []', [$url]),
-        new \atk4\ui\jsExpression('document.location = baseUrl + document.location.pathname'),
+        new \atk4\ui\jsExpression('window.open(baseUrl + document.location.pathname, "_blank")'),
     ];
 
-    // Would be nice if this would be a link.
+    // Send to demos source page in github.
     \atk4\ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', $ex);
+        ->on('click', $ex);
 
     $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }

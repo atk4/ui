@@ -6,6 +6,8 @@ require_once 'database.php';
 
 class TestModel extends \atk4\data\Model
 {
+    use ModelLockTrait;
+
     public $table = 'test';
 
     public function init(): void
@@ -15,6 +17,8 @@ class TestModel extends \atk4\data\Model
         $this->addField('name');
         $this->addField('code');
         $this->addField('country');
+
+        $this->lock();
     }
 }
 

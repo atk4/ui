@@ -1,12 +1,13 @@
 <?php
 
-
 chdir('..');
 require_once 'init.php';
 require_once 'database.php';
 
 \atk4\ui\Button::addTo($app, ['Loader Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['loader2']);
+
+\atk4\ui\View::addTo($app, ['ui' => 'clearing divider']);
 
 // ViewTester will perform callback to self.
 \atk4\ui\tests\ViewTester::addTo($app);
@@ -47,13 +48,13 @@ require_once 'database.php';
 
 // Example 2 - Loader with custom body.
 \atk4\ui\Loader::addTo($app, [
-    'ui'   => '',   // this will prevent "loading spinner" from showing
-    'shim' => [   // shim is displayed while content is leaded
-        'Message',
-        'Generating LoremIpsum, please wait...',
-        'red',
-    ],
-])->set(function ($p) {
-    sleep(1);
-    \atk4\ui\LoremIpsum::addTo($p, ['size' => 2]);
+        'ui'   => '',   // this will prevent "loading spinner" from showing
+        'shim' => [   // shim is displayed while content is leaded
+            'Message',
+            'Generating LoremIpsum, please wait...',
+            'red',
+        ],
+    ])->set(function ($p) {
+        sleep(1);
+        \atk4\ui\LoremIpsum::addTo($p, ['size' => 2]);
 });
