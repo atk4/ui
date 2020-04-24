@@ -1,7 +1,11 @@
 <?php
 
 chdir('..');
-require_once dirname(__DIR__) . '/atk-init.php';
+
+require_once 'atk-init.php';
+
+
+
 
 if ($id = $_GET['id'] ?? null) {
     $app->layout->js(true, new \atk4\ui\jsToast('Details link is in simulation mode.'));
@@ -9,7 +13,7 @@ if ($id = $_GET['id'] ?? null) {
 
 $bb = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 
-// ========================================================
+//
 $table = \atk4\ui\Table::addTo($app, ['celled' => true]);
 \atk4\ui\Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
     ->on('click', new \atk4\ui\jsReload($table));
@@ -45,7 +49,7 @@ $table->onHook('getHTMLTags', function ($table, $row) {
 
 $table->addTotals(['name' => 'Totals:', 'salary' => ['sum']]);
 
-// ========================================================
+//
 $my_array = [
     ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => '1973-02-03', 'cv' => 'I am <strong>BIG</strong> Vinny'],
     ['name' => 'Zoe', 'surname' => 'Shatwell', 'birthdate' => '1958-08-21', 'cv' => null],

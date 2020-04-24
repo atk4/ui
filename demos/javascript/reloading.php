@@ -1,7 +1,11 @@
 <?php
 
 chdir('..');
-require_once dirname(__DIR__) . '/atk-init.php';
+
+require_once 'atk-init.php';
+
+
+
 
 // Test 1 - Basic reloading
 \atk4\ui\Header::addTo($app, ['Button reloading segment']);

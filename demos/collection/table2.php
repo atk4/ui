@@ -1,7 +1,11 @@
 <?php
 
 chdir('..');
-require_once dirname(__DIR__) . '/atk-init.php';
+
+require_once 'atk-init.php';
+
+
+
 
 $data = [
     ['id'=>1, 'action'=>'Salary', 'amount'=>200],
@@ -12,7 +16,7 @@ $data = [
 $m = new \atk4\data\Model(new \atk4\data\Persistence\Static_($data));
 $m->getField('amount')->type = 'money';
 
-// ========================================================
+//
 \atk4\ui\Header::addTo($app, ['Table with various headers', 'subHeader'=>'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon'=>'table']);
 
 $table = \atk4\ui\Table::addTo($app);
@@ -39,7 +43,7 @@ $table->onHook('beforeRow', function ($table) {
 $table->template->appendHTML('Foot', '<tr class="center aligned"><td colspan=2>This will appear above totals</th></tr>');
 $table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
 
-// ========================================================
+//
 \atk4\ui\Header::addTo($app, ['Columns with multiple formats', 'subHeader'=>'Single column can use logic to swap out formatters', 'icon'=>'table']);
 
 $table = \atk4\ui\Table::addTo($app);
@@ -73,7 +77,7 @@ $table->addColumn('amount_copy', ['Multiformat', function ($a, $b) {
     return 'Money';
 }, 'attr'=>['all'=>['class'=>['right aligned singel line']]]]);
 
-// ========================================================
+//
 \atk4\ui\Header::addTo($app, ['Table with resizable columns', 'subHeader'=>'Just drag column header to resize', 'icon'=>'table']);
 
 $table = \atk4\ui\Table::addTo($app);

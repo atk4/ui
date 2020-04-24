@@ -3,7 +3,11 @@
  * Demonstrates how to use interractive buttons.
  */
 chdir('..');
-require_once dirname(__DIR__) . '/atk-init.php';
+
+require_once 'atk-init.php';
+
+
+
 
 use atk4\ui\Button;
 use atk4\ui\Buttons;

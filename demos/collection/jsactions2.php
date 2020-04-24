@@ -1,9 +1,13 @@
 <?php
 
 chdir('..');
-require_once dirname(__DIR__) . '/atk-init.php';
+
+require_once 'atk-init.php';
+
+
+
 // Check this file in order to see how model action is defined.
-require_once  dirname(__DIR__) . '/_includes/country_actions.php';
+require_once 'country_actions.php';
 
 \atk4\ui\Button::addTo($app, ['Actions in Grid', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['jsactionsgrid']);
