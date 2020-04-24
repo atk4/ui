@@ -12,7 +12,9 @@ $vp = \atk4\ui\VirtualPage::addTo($layout);
 $vp->cb->urlTrigger = 'in';
 
 // Add content to virtual page.
-\atk4\ui\Header::addTo($vp, [$_GET['p_id']]);
+if (isset($_GET['p_id'])) {
+    \atk4\ui\Header::addTo($vp, [$_GET['p_id']]);
+}
 \atk4\ui\LoremIpsum::addTo($vp, ['size' => 1]);
 $vp_btn = \atk4\ui\Button::addTo($vp, ['Back', 'icon' => 'left arrow']);
 $vp_btn->link('virtual.php');
