@@ -48,7 +48,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
                     case 'somedatadef.php': // exclude - is a setup file
                     case 'layouts_nolayout.php': // exclude - output only a partial html
                     case 'country_actions.php': // exclude - is a setup file
-                    case 'lookup-dep.php': // exclude - is a setup file
+                    case 'demo-lookup.php': // exclude - is a setup file
                     continue 2;
                         break;
                 }
@@ -120,7 +120,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents());
 
-        $response = $this->getResponseFromRequestGET('wizard.php?atk_admin_wizard=2&name=Country');
+        $response = $this->getResponseFromRequestGET('/interactive/wizard.php?atk_admin_wizard=2&name=Country');
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents());
     }

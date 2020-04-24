@@ -2,6 +2,7 @@
 
 
 /**
+ * Setup file - do not test.
  * Lookup that can not saved data.
  */
 class DemoLookup extends \atk4\ui\FormField\Lookup
