@@ -39,7 +39,7 @@ $card->addClickAction($c_action);
 
 \atk4\ui\Header::addTo($app, ['Action can ask for confirmation before executing', 'size' => 4]);
 
-$files = new File($app->db);
+$files = new File($db);
 $f_action = $files->addAction(
     'import_from_filesystem',
     [

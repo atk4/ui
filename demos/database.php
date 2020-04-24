@@ -14,7 +14,6 @@ try {
     ]))->addMoreInfo('PDO error', $e->getMessage());
 }
 
-//$app->db = $db;
 
 if (!trait_exists('ModelLockTrait')) {
     trait ModelLockTrait

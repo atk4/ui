@@ -81,7 +81,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $response = $this->getResponseFromRequestGET($uri);
         $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri . ' : ' . pathinfo($uri)['dirname']);
+        $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     /**

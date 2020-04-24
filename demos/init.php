@@ -217,7 +217,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $other);
 
 
-    $f = basename($_SERVER['PHP_SELF']);
+//    $f = basename($_SERVER['PHP_SELF']);
 
     $url = 'https://github.com/atk4/ui/blob/develop';
 
