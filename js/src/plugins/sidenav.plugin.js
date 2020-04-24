@@ -11,7 +11,7 @@ import atkPlugin from './atk.plugin';
  * Default value are set for Maestro admin layout.
  */
 
-export default class ajaxec extends atkPlugin {
+export default class sidenav extends atkPlugin {
 
   main() {
     // menu items container.
@@ -101,7 +101,7 @@ export default class ajaxec extends atkPlugin {
     const that = this;
     this.$el.on('click', function(e) {
       // simulate click event on first menu item in group.
-      that.menu.find('a').first()[0].click();
+      that.menu.find(that.settings.firstItemSelector).first()[0].click();
       that.menu.toggleClass(that.settings.visibleCssClass);
     });
     this.toggler.on('click', function(e) {
@@ -113,13 +113,14 @@ export default class ajaxec extends atkPlugin {
   }
 }
 
-ajaxec.DEFAULTS = {
+sidenav.DEFAULTS = {
   base: 'index.php',
   menuItemsSelector : '.atk-maestro-menu-items', // The css selector where menu items are contain.
   toggleSelector: '.atk-submenu-toggle', // the css selector that will show or hide sub menu.
   visibleCssClass: 'atk-visible', // Display an item when this css class is set.
   menuGroupActiveClass: 'active', // the css class to set when a menu group is active.
   menuItemActiveClass: 'active', // the css class to set when a menu item in a group is active.
+  firstItemSelector: 'a', // the selector for the first menu item in a group, where click will be trigger.
   icon : {
     selector: 'i',
     on: 'icon caret right',
