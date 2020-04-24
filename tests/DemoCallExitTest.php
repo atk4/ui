@@ -80,7 +80,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoHTMLStatusAndResponse(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri . ' : ' .getcwd());
+        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri . ' : ' . getcwd());
         $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
