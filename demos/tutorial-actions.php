@@ -1,7 +1,8 @@
 <?php
 
 require 'init.php';
-require 'database.php';
+
+$app->db = $db;
 
 /** @var \atk4\ui\View $wizard */
 $wizard = $app->add('Wizard');

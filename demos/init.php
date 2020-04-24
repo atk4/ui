@@ -9,8 +9,8 @@ if (file_exists(__DIR__ . '/coverage.php')) {
     include_once __DIR__ . '/coverage.php';
 }
 
-//require_once __DIR__ . '/database.php';
-//require_once __DIR__ . '/_includes/somedatadef.php';
+require_once __DIR__ . '/database.php';
+require_once __DIR__ . '/_includes/somedatadef.php';
 
 
 class Demo extends \atk4\ui\Columns
@@ -232,3 +232,4 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
 
     $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }
+
