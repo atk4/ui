@@ -1,6 +1,9 @@
 <?php
 
+chdir('..');
 require 'init.php';
+require_once '_includes/Demo.php';
+require_once '_includes/PromotionText.php';
 
 // require for embeded coded
 $app->db = $db;
@@ -35,7 +38,7 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new Country($app->db);
+$country = new CountryLock($app->db);
 
 $country->addAction('send_message');
 CODE
@@ -61,7 +64,7 @@ EOF
     $page->add(new Demo())->setCode(
         <<<'CODE'
 
-$country = new Country($app->db);
+$country = new CountryLock($app->db);
 
 $country->addAction('send_message', function() { 
     return 'sent'; 
@@ -89,7 +92,7 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new Country($app->db);
+$country = new CountryLock($app->db);
 $country->loadAny();
 
 $app->add(['Button', 'Edit some country'])
@@ -107,7 +110,7 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new Country($app->db);
+$country = new CountryLock($app->db);
 $country->loadAny();
 
 $menu = $app->add('Menu');
@@ -130,7 +133,21 @@ EOF
     $page->add(new Demo())->setCode(
         <<<'CODE'
 $model = new \atk4\data\Model($app->db, 'test');
+
 $model->addAction('greet', [
+    'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
+    'args'=> [
+        'age'=>[
+            'type'=>'string'
+        ]
+    ], 
+    'callback'=>function ($m, $name) {
+        return 'Hi '.$name;
+    },
+    'ui' => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
+]);
+
+$model->addAction('ask_age', [
     'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
     'args'=> [
         'age'=>[
@@ -144,14 +161,13 @@ $model->addAction('greet', [
 ]);
 
 $app->add(new \atk4\ui\FormField\Line([
-    // TODO - how to specify watermark here?
     'action' => $model->getAction('greet'),
 ]));
 
 $app->add(['ui'=>'divider']);
 
-$app->add(['Button', 'Greet without Age argument'])
-    ->on('click', $model->getAction('greet'));
+$app->add(['Button', 'Ask Age'])
+    ->on('click', $model->getAction('ask_age'));
 CODE
     );
 });
@@ -192,7 +208,7 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new Country($app->db);
+$country = new CountryLock($app->db);
 $country->getAction('add')->enabled = false;
 $country->getAction('delete')->enabled = function() { return rand(1,2)>1; };
 $country->addAction('mail', [
@@ -208,8 +224,8 @@ CODE
     );
 });
 
-$wizard->addFinish(function ($page) use ($wizard) {
+$wizard->addFinish(function ($page) use ($wizard, $app) {
     PromotionText::addTo($page);
     \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon'=>'left arrow'], ['Left'])
-        ->link(['begin'=>false, 'layout'=>false]);
+        ->link('/demos/index.php');
 });
