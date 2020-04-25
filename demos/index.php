@@ -1,6 +1,6 @@
 <?php
 
-include_once __DIR__ . '/init.php';
+include_once __DIR__ . 'atk-init.php';
 
 \atk4\ui\Header::addTo($app)->set('Welcome to Agile Toolkit Demo!!');
 
