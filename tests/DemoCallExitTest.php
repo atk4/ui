@@ -61,13 +61,13 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $base_path = dirname(__DIR__) . DIRECTORY_SEPARATOR;
         $files = $scanDir(scandir($base_path . 'demos'));
         $files = array_merge($files, $scanDir(scandir($base_path . 'demos/basic'), '/basic/'));
-//        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/collection'), '/collection/'));
-//        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/form'), '/form/'));
-//        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/input'), '/input/'));
-//        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/interactive'), '/interactive/'));
-//        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/javascript'), '/javascript/'));
-//        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/layout'), '/layout/'));
-//        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/others'), '/others/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/collection'), '/collection/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/form'), '/form/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/input'), '/input/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/interactive'), '/interactive/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/javascript'), '/javascript/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/layout'), '/layout/'));
+        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/others'), '/others/'));
 
         return $files;
     }
