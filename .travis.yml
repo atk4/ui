@@ -61,7 +61,7 @@ before_script:
     - (cd js; npm install --loglevel=error; npm run build)
     - lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
     - uglifyjs --compress -- public/agileui.js > public/agileui.min.js
-    - composer install --no-progress --no-suggest --prefer-dist
+    - composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
 after_script:
     - echo $TRAVIS_BRANCH
@@ -69,9 +69,22 @@ after_script:
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.2" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
 
 script:
+    - mkdir -p coverage
+    - chmod 777 coverage
+    - cp behat-travis.yml behat.yml
+    - cp tools/coverage.php demos/coverage.php
+    - "sed -i \"s|node_modules_path.*|node_modules_path: `npm get prefix`/lib/node_modules|g\" behat.yml"
+    - (cd js; npm install --loglevel=error; npm run build)
+    - vendor/bin/behat || exit -1
+
     - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.2" ]]; then NC="--no-coverage"; fi
-    - ./vendor/phpunit/phpunit/phpunit $NC
-    - bash tools/test.sh
+    - ./vendor/phpunit/phpunit/phpunit $NC # can not be easily removed in favor of GitHub Actions as we need to send a full/merged coverage report
+    - mv phpunit.cov coverage/ || echo ""
+
+    - killall -s SIGINT --wait php # flush coverage files
+    #- ls -l coverage/
+    - ls -l coverage/ | wc -l
+    - vendor/bin/phpcov  merge coverage/ --clover clover.xml
 
 cache:
   directories:
