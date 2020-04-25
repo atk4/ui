@@ -8,24 +8,25 @@ export default class serverEvent extends atkPlugin {
 
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
+    const that = this;
 
     if (typeof(EventSource) !== "undefined") {
-      let source = new EventSource(`${this.settings.uri}&__atk_sse=1`);
+      this.source = new EventSource(`${this.settings.uri}&__atk_sse=1`);
       if(hasLoader) {
         element.addClass('loading');
       }
-      source.onmessage = function (e) {
+      this.source.onmessage = function (e) {
         apiService.atkSuccessTest(JSON.parse(e.data));
       };
-      source.onerror = function (e) {
+      this.source.onerror = function (e) {
           if (e.eventPhase === EventSource.CLOSED) {
             if (hasLoader) {
               element.removeClass('loading');
             }
-            source.close();
+            that.source.close();
           }
       };
-      source.addEventListener("jsAction", function(e) {
+      this.source.addEventListener("jsAction", function(e) {
         apiService.atkSuccessTest(JSON.parse(e.data));
       }, false);
     } else {
@@ -33,6 +34,13 @@ export default class serverEvent extends atkPlugin {
       this.$el.atkReloadView({
         uri: this.settings.uri,
       });
+    }
+  }
+
+  stop() {
+    this.source.close();
+    if (this.settings.showLoader) {
+      this.$el.removeClass('loading');
     }
   }
 }
