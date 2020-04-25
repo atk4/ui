@@ -29,6 +29,9 @@ export default class serverEvent extends atkPlugin {
       this.source.addEventListener("jsAction", function(e) {
         apiService.atkSuccessTest(JSON.parse(e.data));
       }, false);
+      window.addEventListener('beforeunload', function(event) {
+        that.source.close();
+      });
     } else {
       //console.log('server side event not supported fallback to atkReloadView');
       this.$el.atkReloadView({
