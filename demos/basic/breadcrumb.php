@@ -1,10 +1,11 @@
 <?php
+
+chdir('..');
+require_once 'atk-init.php';
+
 /**
  * Demonstrates how to use BreadCrumb.
  */
-chdir('..');
-
-require_once 'init.php';
 
 $crumb = \atk4\ui\BreadCrumb::addTo($app);
 $crumb->addCrumb('UI Demo', ['index']);
