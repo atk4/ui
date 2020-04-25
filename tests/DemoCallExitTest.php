@@ -319,7 +319,14 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         return $files;
     }
 
-    private function getPath($dir)
+    /**
+     * Set directory with proper separator.
+     *
+     * @param $dir
+     *
+     * @return string
+     */
+    private function getPath(string $dir): string
     {
         return DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR;
     }
