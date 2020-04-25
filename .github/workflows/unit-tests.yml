@@ -20,8 +20,8 @@ jobs:
         php: ['7.2', '7.3', 'latest']
         type: ['Phpunit']
         include:
-          - php: 'latest'
-            type: 'Behat'
+#          - php: 'latest'
+#            type: 'Behat'
           - php: 'latest'
             type: 'CodingStyle'
     env:
@@ -83,9 +83,9 @@ jobs:
         if: matrix.type == 'Phpunit'
         run: "vendor/bin/phpunit \"$(if [ -n \"$LOG_COVERAGE\" ]; then echo '--coverage-text'; else echo '--no-coverage'; fi)\" --coverage-clover=coverage.xml"
 
-      - name: "Run tests: Behat (only for Behat)"
-        if: matrix.type == 'Behat'
-        run: echo "Not migrated from Travis yet"
+#      - name: "Run tests: Behat (only for Behat)"
+#        if: matrix.type == 'Behat'
+#        run: TODO migrate from Travis CI
 
       - name: Check Coding Style (only for CodingStyle)
         if: matrix.type == 'CodingStyle'
