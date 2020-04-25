@@ -319,7 +319,8 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         return $files;
     }
 
-    private function getPath($dir) {
+    private function getPath($dir)
+    {
         return DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR;
     }
 }
