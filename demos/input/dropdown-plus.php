@@ -2,8 +2,22 @@
 
 chdir('..');
 require_once 'init.php';
+require_once '_includes/Demo.php';
 
-$form = \atk4\ui\Form::addTo($app);
+$demo = Demo::addTo($app);
+
+\atk4\ui\Header::addTo($demo->left, ['DropDown sample:']);
+\atk4\ui\Header::addTo($demo->right, ['Cascading DropDown']);
+$txt = \atk4\ui\Text::addTo($demo->right);
+$txt->addParagraph('DropDown may also be used in a cascade manner.');
+$txt->addParagraph('You may find more information in DropDownCascade class.');
+$v = \atk4\ui\View::addTo($demo->right, ['ui' => 'column padded centered grid']);
+$btn = \atk4\ui\Button::addTo($v, ['DropDownCascade Class'])
+    ->link('https://github.com/atk4/ui/blob/develop/src/FormField/DropDownCascade.php', '_blank')
+    ->addClass('centered aligned');
+
+
+$form = \atk4\ui\Form::addTo($demo->left);
 
 //standard with model: use id_field as Value, title_field as Title for each DropDown option
 $form->addField(
@@ -90,4 +104,3 @@ $form->onSubmit(function ($form) {
     echo $echo;
 });
 
-//////////////////////////////////////////////////////////

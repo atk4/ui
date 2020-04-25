@@ -6,13 +6,13 @@ require_once 'init.php';
 require_once '_includes/demo-lookup.php';
 
 // create header
-\atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
+\atk4\ui\Header::addTo($app, ['Lookup Input']);
 
 \atk4\ui\FormField\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])->setModel(new Country($app->db));
 
 // create form
 $form = \atk4\ui\Form::addTo($app, ['segment']);
-\atk4\ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveFields']);
+\atk4\ui\Label::addTo($form, ['Lookup countries', 'top attached'], ['AboveFields']);
 
 $m = new \atk4\data\Model($db, 'test');
 
@@ -30,7 +30,7 @@ $form->setModel($m);
 $form->addField('country3', [
     'Lookup',
     'model'       => new Country($db),
-    'placeholder' => 'Search for country by code, LV or UK',
+    'placeholder' => 'Search for country by name or iso value',
     'search'      => ['name', 'iso', 'iso3'],
 ]);
 
@@ -43,10 +43,10 @@ $form->onSubmit(function ($f) use ($db) {
     return $view;
 });
 
-\atk4\ui\Header::addTo($app, ['Labels']);
+\atk4\ui\Header::addTo($app, ['Lookup input using label']);
 
 // from seed
-\atk4\ui\FormField\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])->setModel(new Country($app->db));
+\atk4\ui\FormField\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])->setModel(new Country($db));
 
 // through constructor
 \atk4\ui\FormField\Lookup::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new \atk4\ui\Label(['kg', 'basic'])]);
@@ -66,7 +66,7 @@ $label->addClass('left corner');
     'label' => $label,
 ])->addClass('left corner');
 
-\atk4\ui\Header::addTo($app, ['Auto-complete inside modal']);
+\atk4\ui\Header::addTo($app, ['Lookup input inside modal']);
 
 $modal = \atk4\ui\Modal::addTo($app)->set(function ($p) {
     $a = \atk4\ui\FormField\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country: ']);

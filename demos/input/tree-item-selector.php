@@ -30,17 +30,17 @@ $items = [
 
 $empty = [];
 
-\atk4\ui\Header::addTo($app, ['Item selector']);
+\atk4\ui\Header::addTo($app, ['Tree item selector']);
 
 $f = \atk4\ui\Form::addTo($app);
-$field = $f->addField('tree', [new \atk4\ui\FormField\TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'array', 'serialize' => 'json']);
+$field = $f->addField('tree', [new \atk4\ui\FormField\TreeItemSelector(['treeItems' => $items]), 'caption' => 'Multiple selection:'], ['type' => 'array', 'serialize' => 'json']);
 $field->set(json_encode([201, 301, 503]));
 
 //$field->onItem(function($value) {
 //    return new \atk4\ui\jsToast(json_encode($value));
 //});
 
-$field1 = $f->addField('tree1', [new \atk4\ui\FormField\TreeItemSelector(['treeItems' => $items, 'allowMultiple' => false]), ['type' => 'array', 'caption' => 'Select One item:']]);
+$field1 = $f->addField('tree1', [new \atk4\ui\FormField\TreeItemSelector(['treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']), ['type' => 'array']]);
 $field1->set(502);
 
 //$field1->onItem(function($tree) {
@@ -53,5 +53,5 @@ $f->onSubmit(function ($f) {
         'single'   => $f->model->get('tree1'),
     ];
 
-    return new \atk4\ui\jsToast(json_encode($resp));
+    return print_r(json_encode($resp, JSON_PRETTY_PRINT));
 });

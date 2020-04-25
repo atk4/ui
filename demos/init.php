@@ -31,7 +31,8 @@ if (file_exists('coverage.php')) {
     });
 }
 /* END - PHPUNIT & COVERAGE SETUP */
-
+// set app->db
+$app->db = $db;
 $app->title = 'Agile UI Demo v' . $app->version;
 
 if (file_exists('../public/atkjs-ui.min.js')) {
