@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
+require_once 'atk-init.php';
 
 /**
  * Apart from demonstrating the form, this example uses an alternative way of rendering the layouts.

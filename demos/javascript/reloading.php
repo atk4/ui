@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';// Test 1 - Basic reloading
+require_once 'atk-init.php';// Test 1 - Basic reloading
 require_once '_includes/Counter.php';
 
 \atk4\ui\Header::addTo($app, ['Button reloading segment']);

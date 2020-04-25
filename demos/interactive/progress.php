@@ -3,7 +3,7 @@
  * Demonstrates how to use tabs.
  */
 chdir('..');
-require_once 'init.php';
+require_once 'atk-init.php';
 
 $p = \atk4\ui\ProgressBar::addTo($app, [20]);
 

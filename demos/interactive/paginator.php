@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
+require_once 'atk-init.php';
 
 // Paginator which tracks its own position
 \atk4\ui\Header::addTo($app, ['Paginator tracks its own position']);

@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
+require_once 'atk-init.php';
 
 /***
  * This demo require specific Database setup.

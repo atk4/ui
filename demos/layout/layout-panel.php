@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
+require_once 'atk-init.php';
 require_once '_includes/country_actions.php';
 
 \atk4\ui\Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);

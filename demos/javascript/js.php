@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
+require_once 'atk-init.php';
 
 use atk4\ui\Button;
 use atk4\ui\Buttons;

@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-include 'init.php';
+require_once 'atk-init.php';
 require_once '_includes/Demo.php';
 require_once '_includes/PromotionText.php';
 require_once '_includes/AtkDemoInvoice.php';

@@ -1,7 +1,7 @@
 <?php
 
 chdir('..');
-require_once 'init.php';
+require_once 'atk-init.php';
 
 $view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template(
     '<div class="ui header">Click and drag country to reorder</div>
