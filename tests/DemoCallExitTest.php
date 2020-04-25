@@ -30,27 +30,26 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
     public function casesDemoFilesdataProvider()
     {
-        $scanDir = function ($dir, $prefix = null) {
+        // set demo directory that need to be scanned.
+        $directories = [
+            'basic',
+            'collection',
+            'form',
+            'input',
+            'interactive',
+            'javascript',
+            'layout',
+            'others'
+        ];
+
+        // File that need to be exclude.
+        $excludes = ['layouts_nolayout.php'];
+
+        $scanDir = function ($dir, $prefix = null) use ($excludes) {
             $sub_files = [];
             foreach ($dir as $file) {
-                if (substr($file, -3) !== 'php' || is_dir($file)) {
+                if (substr($file, -3) !== 'php' || is_dir($file) || in_array($file, $excludes)) {
                     continue;
-                }
-                switch ($file) {
-                    case 'Session.php': // exclude - is a setup file
-                    case 'database.php': // exclude - is a setup file
-                    case 'db.example.php': // exclude - is a setup file
-                    case 'db.php': // exclude - is a setup file
-                    case 'db.env.php': // exclude - is a setup file
-                    case 'db.travis.php': // exclude - is a setup file
-                    case 'db.github.php': // exclude - is a setup file
-                    case 'coverage.php': // exclude - is the coverage file
-                    case 'somedatadef.php': // exclude - is a setup file
-                    case 'layouts_nolayout.php': // exclude - output only a partial html
-                    case 'country_actions.php': // exclude - is a setup file
-                    case 'demo-lookup.php': // exclude - is a setup file
-                    continue 2;
-                        break;
                 }
 
                 $sub_files[] = [$prefix . $file];
@@ -58,17 +57,16 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
             return $sub_files;
         };
-        $base_path = dirname(__DIR__) . DIRECTORY_SEPARATOR;
-        $files = $scanDir(scandir($base_path . 'demos'));
-        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/basic'), '/basic/'));
-        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/collection'), '/collection/'));
-        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/form'), '/form/'));
-        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/input'), '/input/'));
-        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/interactive'), '/interactive/'));
-        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/javascript'), '/javascript/'));
-        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/layout'), '/layout/'));
-        $files = array_merge($files, $scanDir(scandir($base_path . 'demos/others'), '/others/'));
+        $files = [];
+        $base_path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'demos';
+        foreach ($directories as $dir) {
+            $dir_path = $base_path . DIRECTORY_SEPARATOR . $dir;
+            $pref = DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR;
+            $files = array_merge($files, $scanDir(scandir($dir_path), $pref));
+        }
 
+        // add index.
+        $files[] = ['index.php'];
         return $files;
     }
 
@@ -100,9 +98,9 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function casesDemoGETDataProvider()
     {
         $files = [];
-        $files[] = ['/others/sticky.php?xx=YEY'];
-        $files[] = ['/others/sticky.php?c=OHO'];
-        $files[] = ['/others/sticky.php?xx=YEY&c=OHO'];
+        $files[] = [$this->getPath('others') . 'sticky.php?xx=YEY'];
+        $files[] = [$this->getPath('others') . 'sticky.php?c=OHO'];
+        $files[] = [$this->getPath('others') . 'sticky.php?xx=YEY&c=OHO'];
 
         return $files;
     }
@@ -110,7 +108,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testWizard()
     {
         $response = $this->getResponseFromRequestFormPOST(
-            '/interactive/wizard.php?atk_admin_wizard=1&atk_admin_wizard_form_submit=ajax&__atk_callback=1',
+            $this->getPath('interactive') . 'wizard.php?atk_admin_wizard=1&atk_admin_wizard_form_submit=ajax&__atk_callback=1',
             [
                 'dsn'                          => 'mysql://root:root@db-host.example.com/atk4',
                 'atk_admin_wizard_form_submit' => 'submit',
@@ -145,16 +143,16 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function JSONResponseDataProvider()
     {
         $files = [];
-        $files[] = ['/others/sticky2.php?__atk_reload=atk_admin_button'];
-        $files[] = ['/others/sticky2.php?atk_admin_loader_callback=ajax&__atk_callback1'];
-        $files[] = ['/collection/actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1']; // need to call this before calls other actions to fill model files
-        $files[] = ['/collection/actions.php?atk_useraction_file_edit_loader_callback=ajax&__atk_callback=1&atk_useraction_file_edit=1&step=fields'];
-        $files[] = ['/obsolete/notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
-        $files[] = ['/interactive/scroll-lister.php?atk_admin_view_2_view_lister_jspaginator=ajax&__atk_callback=1&page=2'];
+        $files[] = [$this->getPath('others') . 'sticky2.php?__atk_reload=atk_admin_button'];
+        $files[] = [$this->getPath('others') . 'sticky2.php?atk_admin_loader_callback=ajax&__atk_callback1'];
+        $files[] = [$this->getPath('collection') . 'actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1']; // need to call this before calls other actions to fill model files
+        $files[] = [$this->getPath('collection') . 'actions.php?atk_useraction_file_edit_loader_callback=ajax&__atk_callback=1&atk_useraction_file_edit=1&step=fields'];
+        $files[] = [$this->getPath('obsolete') . 'notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
+        $files[] = [$this->getPath('interactive') . 'scroll-lister.php?atk_admin_view_2_view_lister_jspaginator=ajax&__atk_callback=1&page=2'];
 
         // test catch exceptions
-        $files[] = ['exception_test.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
-        $files[] = ['exception_test.php?__atk_m=atk_admin_modal_2&atk_admin_modal_2_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
+        $files[] = [$this->getPath('_unit-test') . 'exception_test.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
+        $files[] = [$this->getPath('_unit-test') . 'exception_test.php?__atk_m=atk_admin_modal_2&atk_admin_modal_2_view_callbacklater=ajax&__atk_callback=1&__atk_json=1'];
 
         return $files;
     }
@@ -195,11 +193,11 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function SSEResponseDataProvider()
     {
         $files = [];
-        $files[] = ['/interactive/sse.php?atk_admin_jssse=ajax&__atk_callback=1&__atk_sse=1'];
-        $files[] = ['/interactive/console.php?atk_admin_tabs_tabssubview_console_jssse=ajax&__atk_callback=1&__atk_sse=1'];
+        $files[] = [$this->getPath('interactive') . 'sse.php?atk_admin_jssse=ajax&__atk_callback=1&__atk_sse=1'];
+        $files[] = [$this->getPath('interactive') . 'console.php?atk_admin_tabs_tabssubview_console_jssse=ajax&__atk_callback=1&__atk_sse=1'];
         if (!($this instanceof DemoCallExitExceptionTest)) { // ignore content type mismatch when App->call_exit equals to true
-            $files[] = ['/interactive/console.php?atk_admin_tabs_tabssubview_2_virtualpage=cut&atk_admin_tabs_tabssubview_2_virtualpage_console_jssse=ajax&__atk_callback=1&__atk_sse=1'];
-            $files[] = ['/interactive/console.php?atk_admin_tabs_tabssubview_3_virtualpage=cut&atk_admin_tabs_tabssubview_3_virtualpage_console_jssse=ajax&__atk_callback=1&__atk_sse=1'];
+            $files[] = [$this->getPath('interactive') . 'console.php?atk_admin_tabs_tabssubview_2_virtualpage=cut&atk_admin_tabs_tabssubview_2_virtualpage_console_jssse=ajax&__atk_callback=1&__atk_sse=1'];
+            $files[] = [$this->getPath('interactive') . 'console.php?atk_admin_tabs_tabssubview_3_virtualpage=cut&atk_admin_tabs_tabssubview_3_virtualpage_console_jssse=ajax&__atk_callback=1&__atk_sse=1'];
         }
 
         return $files;
@@ -225,12 +223,12 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         // IMPORT FROM FILESYSTEM
         // this is needed to populate grid for later calls to row actions
         $files[] = [
-            '/collection/actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1',
+            $this->getPath('collection') . 'actions.php?atk_admin_gridlayout_basic_button_click=ajax&__atk_callback=1',
             [],
         ]; // btn confirm
 
         $files[] = [
-            '/collection/actions.php?atk_admin_gridlayout_argumentform_form_submit=ajax&__atk_callback=1',
+            $this->getPath('collection') . 'actions.php?atk_admin_gridlayout_argumentform_form_submit=ajax&__atk_callback=1',
             [
                 'path'                                          => '.',
                 'atk_admin_gridlayout_argumentform_form_submit' => 'submit',
@@ -238,7 +236,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         ]; // btn run
         //
         $files[] = [
-            '/collection/actions.php?atk_admin_gridlayout_preview_button_click=ajax&__atk_callback=1',
+            $this->getPath('collection') . 'actions.php?atk_admin_gridlayout_preview_button_click=ajax&__atk_callback=1',
             [],
         ]; // btn confirm (console)
         // Lines below gives error on Travis
@@ -264,20 +262,20 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         */
         // JS ACTIONS
         $files[] = [
-            '/collection/jsactions.php?atk_admin_jsuseraction=ajax&__atk_callback=1',
+            $this->getPath('collection') . 'jsactions.php?atk_admin_jsuseraction=ajax&__atk_callback=1',
             [
                 'path'         => '.',
             ],
         ];
 
         $files[] = [
-            '/collection/jsactions.php?atk_admin_card_view_view_button_jsuseraction=ajax&__atk_callback=1',
+            $this->getPath('collection') . 'jsactions.php?atk_admin_card_view_view_button_jsuseraction=ajax&__atk_callback=1',
             [
             ],
         ];
 
         $files[] = [
-            '/obsolete/notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&atk_admin_modal_view_form_submit=ajax&__atk_callback=1',
+            $this->getPath('obsolete') . 'notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&atk_admin_modal_view_form_submit=ajax&__atk_callback=1',
             [
                 'name'                             => 'test',
                 'atk_admin_modal_view_form_submit' => 'submit',
@@ -285,7 +283,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         ];
 
         $files[] = [
-            '/obsolete/notify2.php?atk_admin_form_submit=ajax&__atk_callback=1',
+            $this->getPath('obsolete') . 'notify2.php?atk_admin_form_submit=ajax&__atk_callback=1',
             [
                 'text'                  => 'This text will appear in notification',
                 'icon'                  => 'warning sign',
@@ -299,7 +297,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         ];
 
         $files[] = [
-            '/collection/tablefilter.php?atk_admin_view_grid_view_filterpopup_5_form_submit=ajax&__atk_callback=1',
+            $this->getPath('collection') . 'tablefilter.php?atk_admin_view_grid_view_filterpopup_5_form_submit=ajax&__atk_callback=1',
             [
                 'op'                                  => '=',
                 'value'                               => '374',
@@ -309,7 +307,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         ];
 
         $files[] = [
-            '/collection/tablefilter.php?atk_admin_view_grid_view_filterpopup_4_form_submit=ajax&__atk_callback=1',
+            $this->getPath('collection') . 'tablefilter.php?atk_admin_view_grid_view_filterpopup_4_form_submit=ajax&__atk_callback=1',
             [
                 'op'                                  => 'between',
                 'value'                               => '10',
@@ -319,5 +317,9 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         ];
 
         return $files;
+    }
+
+    private function getPath($dir) {
+        return DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__ . '/atk-init.php';
+chdir('..');
+require_once 'atk-init.php';
 
 // JUST TO TEST Exceptions and Error throws
 
