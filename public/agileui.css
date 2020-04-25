@@ -60,7 +60,6 @@
 .ui.visible.left.sidebar ~ .atk-mainContainer,
 .ui.visible.left.sidebar ~ footer.atk-footer {
   padding-left: 260px;
-  height: 50px;
 }
 .atk-dialog-content {
   min-height: 100px;
