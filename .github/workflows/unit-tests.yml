@@ -102,8 +102,9 @@ jobs:
 #      - name: Upload coverage logs 1/2 (only for "latest" Phpunit)
 #        if: env.LOG_COVERAGE
 #        run: vendor/bin/phpcov merge build/logs/ --clover build/logs/cc.xml
-
-      - name: Upload coverage logs 2/2 (only for "latest" Phpunit)
+#
+#      - name: Upload coverage logs 2/2 (only for "latest" Phpunit)
+      - name: Upload coverage logs (only for "latest" Phpunit)
         if: env.LOG_COVERAGE
         uses: codecov/codecov-action@v1
         with:
