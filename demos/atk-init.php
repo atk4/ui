@@ -25,7 +25,7 @@ if ($app->catch_exceptions !== true) {
     $app->stickyGet('APP_CATCH_EXCEPTIONS');
 }
 
-if (file_exists('coverage.php')) {
+if (file_exists(__DIR__ . '/coverage.php')) {
     $app->onHook('beforeExit', function () {
         coverage();
     });
