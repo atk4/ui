@@ -80,10 +80,8 @@ jobs:
       - name: Init
         run: |
           mkdir -p coverage
-          mysql -uroot -ppassword -h mysql -e 'CREATE DATABASE atk4;'
-          mysql -uroot -ppassword -h mysql atk4 < demos/atk4.sql
-
-          mv demos/db.github.php demos/db.php
+          mysql -uatk4_test -patk4_pass -h mysql atk4_test__ui < demos/atk4.sql
+          cp demos/db.example.php demos/db.php
 
       - name: "Run tests: Phpunit (only for Phpunit)"
         if: matrix.type == 'Phpunit'

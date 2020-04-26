@@ -5,7 +5,7 @@ try {
     if (file_exists(__DIR__ . '/db.php')) {
         require_once __DIR__ . '/db.php';
     } else {
-        $db = new \atk4\data\Persistence\SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
+        require_once __DIR__ . '/db.example.php';
     }
 } catch (PDOException $e) {
     throw (new \atk4\ui\Exception([
