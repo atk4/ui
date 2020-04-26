@@ -6,8 +6,12 @@ namespace atk4\ui;
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
 
+use atk4\core\HookTrait;
+
 class jsSSE extends jsCallback
 {
+    use HookTrait;
+
     // Allows us to fall-back to standard functionality of jsCallback if browser does not support SSE
     public $browserSupport = false;
     public $showLoader = false;
@@ -17,12 +21,6 @@ class jsSSE extends jsCallback
 
     /** @var bool Keep execution alive or not if connection is close by user. False mean that execution will stop on user aborted. */
     public $keepAlive = false;
-
-    /** @var null|callable Function that get call when this connection is aborted by user.  */
-    public $onAborted = null;
-
-    /** @var null|mixed Will be sent as parameter with onAborted function. */
-    public $param = null;
 
     /** @var callable - custom function for outputting (instead of echo) */
     public $echoFunction = null;
@@ -41,12 +39,10 @@ class jsSSE extends jsCallback
      * A function that get execute when user aborted this sse.
      *
      * @param callable  $fx
-     * @param mixed     $param
      */
-    public function onAborted(callable $fx, $param)
+    public function onAborted(callable $fx)
     {
-        $this->param = $param;
-        $this->onAborted = $fx;
+        $this->onHook('aborted', $fx);
     }
 
     public function jsRender()
@@ -133,10 +129,8 @@ class jsSSE extends jsCallback
     public function sendBlock(string $id, string $data, string $name = null): void
     {
         if (connection_aborted()) {
-            if ($this->onAborted && is_callable($this->onAborted)) {
-                call_user_func($this->onAborted, $this, $this->param);
-            }
-
+            $this->hook('aborted');
+            
             // stop execution when aborted if not keepAlive.
             if (!$this->keepAlive) {
                 exit();
