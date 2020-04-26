@@ -116,7 +116,7 @@ class jsSSE extends jsCallback
         if (connection_aborted()) {
             exit();
         }
-        
+
         $this->output('id: ' . $id . "\n");
         if (strlen($name) > 0) {
             $this->output('event: ' . $name . "\n");
