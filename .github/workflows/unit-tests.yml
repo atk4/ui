@@ -56,7 +56,10 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
-        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+        run: |
+          if [ "${{ matrix.type }}" != "Phpunit" ]; then composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov codeclimate/php-test-reporter --dev ; fi
+          if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
+          composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
       - name: Install JS dependencies (only for Behat)
         if: matrix.type == 'Behat'
