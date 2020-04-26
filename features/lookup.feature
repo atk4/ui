@@ -2,7 +2,7 @@ Feature: Lookup
   Testing Lookup fields
 
   Scenario:
-    Given I am on "lookup.php"
+    Given I am on "input/lookup.php"
 #    Need db value to work
 #    Then I select value "Albania" in lookup "country1"
 #    Then I select value "Albania" in lookup "country2"
