@@ -21,7 +21,13 @@
   "prefer-stable": true,
   "authors": [
     {"name": "Romans Malinovskis", "email": "romans@agiletoolkit.org", "homepage": "https://nearly.guru/" },
-    {"name": "Michael Voříšek", "homepage": "https://mvorisek.cz/"}
+    {"name": "Alain Belair"},
+    {"name": "Imants Horsts", "homepage": "https://darkside.lv/"},
+    {"name": "Francesco Danti", "homepage": "https://oracoltech.com/"},
+    {"name": "Michael Voříšek", "homepage": "https://mvorisek.cz/"},
+    {"name": "Philipp Grashoff"},
+    {"name": "Alex Cicovic", "homepage": "https://alexcicovic.com/"},
+    {"name": "Georgi Hristov"}
   ],
   "config": {
     "sort-packages": true
