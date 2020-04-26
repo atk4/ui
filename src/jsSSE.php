@@ -15,9 +15,16 @@ class jsSSE extends jsCallback
     /** @var bool add window.beforeunload listener for closing js EventSource. Off by default. */
     public $closeBeforeUnload = false;
 
-    /**
-     * @var callable - custom function for outputting (instead of echo)
-     */
+    /** @var bool Keep connection alive or not if close by user. False mean that execution will stop on user aborted. */
+    public $keepAlive = false;
+
+    /** @var null|callable Function that get call when this connection is aborted by user.  */
+    public $onAborted = null;
+
+    /** @var null|mixed Will be sent as parameter with onAborted function. */
+    public $param = null;
+
+    /** @var callable - custom function for outputting (instead of echo) */
     public $echoFunction = null;
 
     public function init(): void
@@ -28,6 +35,18 @@ class jsSSE extends jsCallback
             $this->browserSupport = true;
             $this->initSse();
         }
+    }
+
+    /**
+     * A function that get execute when user aborted this sse.
+     *
+     * @param callable  $fx
+     * @param mixed     $param
+     */
+    public function onAborted(callable $fx, $param)
+    {
+        $this->param = $param;
+        $this->onAborted = $fx;
     }
 
     public function jsRender()
@@ -114,7 +133,14 @@ class jsSSE extends jsCallback
     public function sendBlock(string $id, string $data, string $name = null): void
     {
         if (connection_aborted()) {
-            exit();
+            if ($this->onAborted && is_callable($this->onAborted)) {
+                call_user_func($this->onAborted, $this, $this->param);
+            }
+            
+            // stop execution when aborted if not keepAlive.
+            if (!$this->keepAlive) {
+                exit();
+            }
         }
 
         $this->output('id: ' . $id . "\n");
