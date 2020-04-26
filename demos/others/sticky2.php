@@ -1,7 +1,6 @@
 <?php
 
-chdir('..');
-require_once 'atk-init.php';
+require_once __DIR__ . '/../atk-init.php';
 
 // This demo shows a local impact of a sticky parameters.
 

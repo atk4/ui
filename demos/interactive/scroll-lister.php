@@ -1,7 +1,6 @@
 <?php
 
-chdir('..');
-require_once 'atk-init.php';
+require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['Dynamic scroll in Table', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['scroll-table']);

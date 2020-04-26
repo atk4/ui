@@ -1,7 +1,6 @@
 <?php
 
-chdir('..');
-require_once 'atk-init.php';
+require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);

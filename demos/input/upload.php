@@ -1,7 +1,6 @@
 <?php
 
-chdir('..');
-require_once 'atk-init.php';
+require_once __DIR__ . '/../atk-init.php';
 
 $form = \atk4\ui\Form::addTo($app);
 $img = $form->addField('img', ['UploadImg', ['defaultSrc' => '../images/default.png', 'placeholder' => 'Click to add an image.']]);

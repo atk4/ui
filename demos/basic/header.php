@@ -1,7 +1,6 @@
 <?php
 
-chdir('..');
-require_once 'atk-init.php';
+require_once __DIR__ . '/../atk-init.php';
 
 $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 

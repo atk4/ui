@@ -1,8 +1,8 @@
 <?php
 
-date_default_timezone_set('UTC');
-
 require_once __DIR__ . '/../vendor/autoload.php';
+
+date_default_timezone_set('UTC');
 
 /* START - PHPUNIT & COVERAGE SETUP */
 if (file_exists(__DIR__ . '/coverage.php')) {
@@ -35,7 +35,8 @@ if (file_exists('coverage.php')) {
 $app->db = $db;
 $app->title = 'Agile UI Demo v' . $app->version;
 
-if (file_exists('../public/atkjs-ui.min.js')) {
+
+if (file_exists(dirname(__DIR__) .'/public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = '/public';
 }
 

@@ -1,7 +1,6 @@
 <?php
 
-chdir('..');
-require_once 'atk-init.php';
+require_once __DIR__ . '/../atk-init.php';
 
 $g = \atk4\ui\Grid::addTo($app);
 $m = new CountryLock($db);

@@ -57,11 +57,12 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
             return $sub_files;
         };
+
         $files = [];
         $base_path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'demos';
         foreach ($directories as $dir) {
-            $dir_path = $base_path . DIRECTORY_SEPARATOR . $dir;
-            $pref = DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR;
+            $dir_path = $base_path . '/' . $dir;
+            $pref = '/' . $dir . '/';
             $files = array_merge($files, $scanDir(scandir($dir_path), $pref));
         }
 
@@ -328,6 +329,6 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
      */
     private function getPath(string $dir): string
     {
-        return DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR;
+        return '/' . $dir . '/';
     }
 }

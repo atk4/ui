@@ -3,8 +3,7 @@
  * Testing fields.
  */
 
-chdir('..');
-require_once 'atk-init.php';
+require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Header::addTo($app, ['Types', 'size' => 2]);
 

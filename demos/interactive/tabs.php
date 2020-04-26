@@ -2,8 +2,7 @@
 /**
  * Demonstrates how to use tabs.
  */
-chdir('..');
-require_once 'atk-init.php';
+require_once __DIR__ . '/../atk-init.php';
 
 $t = \atk4\ui\Tabs::addTo($app);
 

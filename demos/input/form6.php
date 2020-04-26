@@ -1,7 +1,6 @@
 <?php
 
-chdir('..');
-require_once 'atk-init.php';
+require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\View::addTo($app, [
     'Forms below demonstrate how to work with multi-value selectors',

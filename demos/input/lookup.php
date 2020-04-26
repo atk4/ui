@@ -1,9 +1,8 @@
 <?php
 
 
-chdir('..');
-require_once 'atk-init.php';
-require_once '_includes/demo-lookup.php';
+require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../_includes/demo-lookup.php';
 
 // create header
 \atk4\ui\Header::addTo($app, ['Lookup Input']);

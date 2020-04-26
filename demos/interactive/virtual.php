@@ -1,8 +1,7 @@
 <?php
 
-chdir('..');
-require_once 'atk-init.php';
-require_once '_includes/Counter.php';
+require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../_includes/Counter.php';
 
 /*
  * Demonstrate the use of Virtual Page.

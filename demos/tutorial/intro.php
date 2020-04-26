@@ -1,13 +1,9 @@
 <?php
 
-chdir('..');
-require_once 'atk-init.php';
-require_once '_includes/Demo.php';
-require_once '_includes/PromotionText.php';
-require_once '_includes/AtkDemoInvoice.php';
-
-// require for embeded coded
-$app->db = $db;
+require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../_includes/Demo.php';
+require_once __DIR__ . '/../_includes/PromotionText.php';
+require_once __DIR__ . '/../_includes/AtkDemoInvoice.php';
 
 $wizard = \atk4\ui\Wizard::addTo($app);
 

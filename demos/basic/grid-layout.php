@@ -1,7 +1,6 @@
 <?php
 
-chdir('..');
-require_once 'atk-init.php';
+require_once __DIR__ . '/../atk-init.php';
 
 // create layout
 $g = \atk4\ui\GridLayout::addTo($app, ['columns'=>4, 'rows'=>2]);
