@@ -136,7 +136,7 @@ class jsSSE extends jsCallback
             if ($this->onAborted && is_callable($this->onAborted)) {
                 call_user_func($this->onAborted, $this, $this->param);
             }
-            
+
             // stop execution when aborted if not keepAlive.
             if (!$this->keepAlive) {
                 exit();
