@@ -15,9 +15,11 @@ export default class serverEvent extends atkPlugin {
       if(hasLoader) {
         element.addClass('loading');
       }
+
       this.source.onmessage = function (e) {
         apiService.atkSuccessTest(JSON.parse(e.data));
       };
+
       this.source.onerror = function (e) {
           if (e.eventPhase === EventSource.CLOSED) {
             if (hasLoader) {
@@ -26,12 +28,16 @@ export default class serverEvent extends atkPlugin {
             that.source.close();
           }
       };
+
       this.source.addEventListener("jsAction", function(e) {
         apiService.atkSuccessTest(JSON.parse(e.data));
       }, false);
-      window.addEventListener('beforeunload', function(event) {
-        that.source.close();
-      });
+
+      if (this.settings.closeBeforeUnload) {
+        window.addEventListener('beforeunload', function(event) {
+          that.source.close();
+        });
+      }
     } else {
       //console.log('server side event not supported fallback to atkReloadView');
       this.$el.atkReloadView({
@@ -40,6 +46,9 @@ export default class serverEvent extends atkPlugin {
     }
   }
 
+  /**
+   * To close ServerEvent.
+   */
   stop() {
     this.source.close();
     if (this.settings.showLoader) {
@@ -52,4 +61,5 @@ serverEvent.DEFAULTS = {
   uri: null,
   uri_options: {},
   showLoader: false,
+  closeBeforeUnload: false
 };

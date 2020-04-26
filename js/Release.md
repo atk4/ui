@@ -4,6 +4,7 @@
 
 - add stop function to server-event.plugin;
     You can now explicitly stop event.
+    Add option to close event on window beforeUnload
 
 ### version 1.14.0 (2020-04-21)
     

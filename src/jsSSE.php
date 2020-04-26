@@ -12,6 +12,9 @@ class jsSSE extends jsCallback
     public $browserSupport = false;
     public $showLoader = false;
 
+    /** @var bool add window.beforeunload listener for closing js EventSource. Off by default. */
+    public $closeBeforeUnload = false;
+
     /**
      * @var callable - custom function for outputting (instead of echo)
      */
@@ -36,6 +39,9 @@ class jsSSE extends jsCallback
         $options = ['uri' => $this->getJSURL()];
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
+        }
+        if ($this->closeBeforeUnload) {
+            $options['closeBeforeUnload'] = $this->closeBeforeUnload;
         }
 
         return (new jQuery())->atkServerEvent($options)->jsRender();
@@ -107,6 +113,10 @@ class jsSSE extends jsCallback
      */
     public function sendBlock(string $id, string $data, string $name = null): void
     {
+        if (connection_aborted()) {
+            exit();
+        }
+        
         $this->output('id: ' . $id . "\n");
         if (strlen($name) > 0) {
             $this->output('event: ' . $name . "\n");
@@ -128,6 +138,7 @@ class jsSSE extends jsCallback
     protected function initSse()
     {
         @set_time_limit(0); // disable time limit
+        ignore_user_abort(true);
 
         $this->app->setResponseHeader('content-type', 'text/event-stream');
 
