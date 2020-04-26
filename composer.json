@@ -15,7 +15,7 @@
     "grid",
     "crud"
   ],
-  "homepage": "https://agiletoolkit.org/ui",
+  "homepage": "https://github.com/atk4/ui",
   "license": "MIT",
   "minimum-stability": "dev",
   "prefer-stable": true,
