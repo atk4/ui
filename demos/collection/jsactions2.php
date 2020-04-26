@@ -1,7 +1,12 @@
 <?php
 
-require_once __DIR__ . '/../atk-init.php';// Check this file in order to see how model action is defined.
-require_once '_includes/country_actions.php';
+require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../_includes/country_actions.php';
+
+/**
+ * Demo for Model action
+ * Action definition for Country model is located in counrty_actions.php
+ */
 
 \atk4\ui\Button::addTo($app, ['Actions in Grid', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['jsactionsgrid']);
