@@ -5,7 +5,7 @@ require_once __DIR__ . '/../_includes/country_actions.php';
 
 /**
  * Demo for Model action in Grid
- * Action definition for Country model is located in counrty_actions.php
+ * Action definition for Country model is located in country_actions.php
  */
 
 \atk4\ui\Button::addTo($app, ['Actions from jsEvent', 'small left floated basic blue', 'icon' => 'left arrow'])
