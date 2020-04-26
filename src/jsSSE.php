@@ -15,7 +15,7 @@ class jsSSE extends jsCallback
     /** @var bool add window.beforeunload listener for closing js EventSource. Off by default. */
     public $closeBeforeUnload = false;
 
-    /** @var bool Keep connection alive or not if close by user. False mean that execution will stop on user aborted. */
+    /** @var bool Keep execution alive or not if connection is close by user. False mean that execution will stop on user aborted. */
     public $keepAlive = false;
 
     /** @var null|callable Function that get call when this connection is aborted by user.  */
@@ -136,7 +136,7 @@ class jsSSE extends jsCallback
             if ($this->onAborted && is_callable($this->onAborted)) {
                 call_user_func($this->onAborted, $this, $this->param);
             }
-            
+
             // stop execution when aborted if not keepAlive.
             if (!$this->keepAlive) {
                 exit();
