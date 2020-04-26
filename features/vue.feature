@@ -2,7 +2,7 @@ Feature: Vue
   Testing Vue component
 
   Scenario: testing InlineEdit
-    Given I am on "javascript/vue-component.php"
+    Given I am on "vue-component.php"
     When I fill in "name" with "test"
     And form submits
     And wait for callback
@@ -13,3 +13,4 @@ Feature: Vue
     And wait for callback
     And form submits
     Then I should see "United Kingdom"
+

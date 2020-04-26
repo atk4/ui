@@ -2,7 +2,7 @@ Feature: Form
     Testing forms
 
 Scenario: test form response
-  Given I am on "form/form.php"
+  Given I am on "form.php"
   When I fill in "email" with "foo@bar"
   And I press button "Subscribe"
   And form submits

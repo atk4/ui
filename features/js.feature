@@ -2,7 +2,7 @@ Feature: JS
  Test javascript
 
  Scenario:
-  Given I am on "javascript/js.php"
+  Given I am on "js.php"
 
   Then I don't see button "Hidden Button"
 

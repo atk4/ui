@@ -9,8 +9,8 @@
 
 namespace atk4\ui\Layout;
 
-use atk4\ui\Item;
 use atk4\ui\jQuery;
+use atk4\ui\Item;
 use atk4\ui\Menu;
 
 class Maestro extends Admin
