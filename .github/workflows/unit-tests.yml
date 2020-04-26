@@ -87,6 +87,10 @@ jobs:
 #        if: matrix.type == 'Behat'
 #        run: TODO migrate from Travis CI
 
+      - name: Lint / check syntax (only for CodingStyle)
+        if: matrix.type == 'CodingStyle'
+        run: find . \( -type d \( -path './vendor/*' \) \) -prune -o ! -type d -name '*.php' -print0 | xargs -0 -n1 php -l
+
       - name: Check Coding Style (only for CodingStyle)
         if: matrix.type == 'CodingStyle'
         continue-on-error: true # remove once CS is fully fixer
