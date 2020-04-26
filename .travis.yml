@@ -23,7 +23,6 @@ addons:
     update: true
     chrome: stable
 install:
-  #- export DISPLAY=':99'
   - Xvfb :99 -screen 0 1280x1024x16 +extension RANDR > /dev/null 2>&1 &
 
 before_install:
@@ -31,9 +30,6 @@ before_install:
     - npm install -g less less-plugin-clean-css uglify-js
 
 before_script:
-
-     #- "sh -e /etc/init.d/xvfb start"
-     #- "export DISPLAY=:99.0"
     # prepare dir for coverage
     - mkdir -p coverage
     - chmod 777 coverage
@@ -65,7 +61,6 @@ before_script:
 
 after_script:
     - echo $TRAVIS_BRANCH
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
     - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
 
 script:
@@ -80,7 +75,6 @@ script:
     - mv phpunit.cov coverage/ || echo ""
 
     - killall -s SIGINT --wait php # flush coverage files
-    #- ls -l coverage/
     - ls -l coverage/ | wc -l
     - vendor/bin/phpcov  merge coverage/ --clover clover.xml
 

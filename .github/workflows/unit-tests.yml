@@ -57,7 +57,8 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          if [ "${{ matrix.type }}" != "Phpunit" ]; then composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov codeclimate/php-test-reporter --dev ; fi
+          if [ "${{ matrix.type }}" != "Phpunit" ]; then composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev ; fi
+          if [ "${{ matrix.type }}" != "Behat" ]; then composer remove --no-interaction --no-update 'behat/*' --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
