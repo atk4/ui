@@ -919,6 +919,9 @@ class App
 
             $attr = $tmp;
         }
+
+        $tag = strtolower($tag);
+
         if ($tag[0] === '<') {
             return $tag;
         }
@@ -927,12 +930,17 @@ class App
             $attr = null;
         }
 
-        if (is_string($value)) {
-            $value = $this->encodeHTML($value);
-        } elseif (is_array($value)) {
+        if ($value !== null) {
             $result = [];
-            foreach ($value as $v) {
-                $result[] = is_array($v) ? $this->getTag(...$v) : $v;
+            foreach ((array)$value as $v) {
+                if (is_array($v)) {
+                    $result[] = $this->getTag(...$v);
+                } elseif (in_array($tag, ['script', 'style'])) {
+                    // see https://mathiasbynens.be/notes/etago
+                    $result[] = preg_replace('~(?<=<)(?=/\s*' . preg_quote($tag, '~') . '|!--)~', '\\\\', $v);
+                } else {
+                    $result[] = $this->encodeHTML($v);
+                }
             }
             $value = implode('', $result);
         }
