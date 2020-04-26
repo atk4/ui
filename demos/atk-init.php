@@ -36,7 +36,7 @@ $app->db = $db;
 $app->title = 'Agile UI Demo v' . $app->version;
 
 
-if (file_exists(dirname(__DIR__) . '/public/atkjs-ui.min.js')) {
+if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = '/public';
 }
 

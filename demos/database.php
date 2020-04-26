@@ -2,8 +2,8 @@
 
 // A very basic file that sets up Agile Data to be used in some demonstrations
 try {
-    if (file_exists(dirname(__DIR__) . '/demos/db.php')) {
-        require_once dirname(__DIR__) . '/demos/db.php';
+    if (file_exists(__DIR__ . '/db.php')) {
+        require_once __DIR__ . '/db.php';
     } else {
         $db = new \atk4\data\Persistence\SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
     }
