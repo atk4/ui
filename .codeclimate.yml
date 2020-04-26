@@ -4,7 +4,7 @@ plugins:
   phpcodesniffer:
     enabled: false
     config:
-      standard: "PSR1,PSR2"
+      standard: "PSR12"
       ignore_warnings: true
       encoding: utf-8
   phpmd:

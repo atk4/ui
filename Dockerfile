@@ -17,5 +17,3 @@ COPY . .
 ADD demos/db.env.php demos/db.php
 
 RUN composer install --no-dev
-
-
