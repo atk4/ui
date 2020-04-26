@@ -29,7 +29,7 @@ export default class serverEvent extends atkPlugin {
           }
       };
 
-      this.source.addEventListener("jsAction", function(e) {
+      this.source.addEventListener("atk_sse_action", function(e) {
         apiService.atkSuccessTest(JSON.parse(e.data));
       }, false);
 
