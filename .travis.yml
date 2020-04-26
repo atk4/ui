@@ -5,7 +5,7 @@ os:
 
 php:
     - '7.2'
-    - '7.3'
+    - '7.4'
 
 services:
     - mysql
@@ -65,8 +65,8 @@ before_script:
 
 after_script:
     - echo $TRAVIS_BRANCH
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.2" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.2" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]]; then echo "Sending coverage report"; vendor/bin/test-reporter --coverage-report clover.xml; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
 
 script:
     - mkdir -p coverage
@@ -75,7 +75,7 @@ script:
     - cp tools/coverage.php demos/coverage.php
     - vendor/bin/behat || exit -1
 
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.2" ]]; then NC="--no-coverage"; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.4" ]]; then NC="--no-coverage"; fi
     - ./vendor/phpunit/phpunit/phpunit $NC # can not be easily removed in favor of GitHub Actions as we need to send a full/merged coverage report
     - mv phpunit.cov coverage/ || echo ""
 
