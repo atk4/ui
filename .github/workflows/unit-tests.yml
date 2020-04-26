@@ -30,8 +30,10 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: password
-          DB_DATABASE: db
+          MYSQL_ROOT_PASSWORD: atk4_pass
+          MYSQL_USER: atk4_test
+          MYSQL_PASSWORD: atk4_pass
+          MYSQL_DATABASE: atk4_test__ui
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
       - name: Checkout
