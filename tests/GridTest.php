@@ -12,7 +12,7 @@ class GridTest extends AtkPhpunit\TestCase
 
     public $m;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $a = [];
         $a[1] = ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'];

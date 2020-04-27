@@ -14,7 +14,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
     public $table;
     public $column;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $arr = [
             'table' => [

@@ -24,8 +24,8 @@ class TemplateTest extends AtkPhpunit\TestCase
     public function testIsTopTag()
     {
         $t = new \atk4\ui\Template('a{$foo}b');
-        $this->assertEquals(true, $t->isTopTag('_top'));
-        $this->assertEquals(false, $t->isTopTag('foo'));
+        $this->assertTrue($t->isTopTag('_top'));
+        $this->assertFalse($t->isTopTag('foo'));
     }
 
     /**

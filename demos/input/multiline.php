@@ -34,8 +34,8 @@ $total = 0;
 for ($i = 1; $i < 3; ++$i) {
     $inventory['id'] = $i;
     $inventory['item'] = 'item_' . $i;
-    $inventory['qty'] = rand(10, 100);
-    $inventory['box'] = rand(1, 10);
+    $inventory['qty'] = random_int(10, 100);
+    $inventory['box'] = random_int(1, 10);
     $total = $total + ($inventory['qty'] * $inventory['box']);
     $inventory->saveAndUnload();
 }

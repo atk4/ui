@@ -130,7 +130,7 @@ class jsExpression implements jsExpressionable
             $string = json_encode($arg);
         } elseif (is_numeric($arg)) {
             $string = json_encode($arg);
-        } elseif (is_null($arg)) {
+        } elseif ($arg === null) {
             $string = json_encode($arg);
         } else {
             throw new Exception(['Unable to json_encode value - unknown type', 'arg' => var_export($arg, true)]);

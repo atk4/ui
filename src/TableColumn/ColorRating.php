@@ -197,13 +197,13 @@ class ColorRating extends Generic
     public function getHTMLTags($row, $field)
     {
         $value = $field->get();
-        if (is_null($value)) {
+        if ($value === null) {
             return parent::getHTMLTags($row, $field);
         }
 
         $color = $this->getColorFromValue($value);
 
-        if (is_null($color)) {
+        if ($color === null) {
             return parent::getHTMLTags($row, $field);
         }
 

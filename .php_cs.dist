@@ -12,8 +12,8 @@ return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
         '@PhpCsFixer' => true,
-       // '@PhpCsFixer:risky' =>true,
-       // '@PHP71Migration:risky' => true,
+        '@PhpCsFixer:risky' =>true,
+        '@PHP71Migration:risky' => true,
 
         // to be checked manually, @TODO
         'php_unit_fqcn_annotation' => false,

@@ -67,11 +67,11 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
     {
         $route = func_get_args();
 
-        $baseDir = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
+        $baseDir = realpath(__DIR__ . \DIRECTORY_SEPARATOR . '..');
 
         array_unshift($route, $baseDir);
 
-        return implode(DIRECTORY_SEPARATOR, $route);
+        return implode(\DIRECTORY_SEPARATOR, $route);
     }
 
     private function getClient(): Client

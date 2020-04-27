@@ -14,6 +14,6 @@ class Locale
      */
     public static function getPath(): string
     {
-        return dirname(__DIR__) . DIRECTORY_SEPARATOR . 'locale';
+        return dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'locale';
     }
 }

@@ -71,7 +71,7 @@ $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email1');
 $form->buttonSave->set('Save1');
 $form->onSubmit(function ($form) {
-    return $form->error('email1', 'some error action ' . rand(1, 100));
+    return $form->error('email1', 'some error action ' . random_int(1, 100));
 });
 
 \atk4\ui\Header::addTo($tab, ['..or success message']);
@@ -89,7 +89,7 @@ $form->buttonSave->set('Save3');
 $form->onSubmit(function ($form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
-    $view->text->addParagraph('some text ' . rand(1, 100));
+    $view->text->addParagraph('some text ' . random_int(1, 100));
 
     return $view;
 });
@@ -101,7 +101,7 @@ $form->buttonSave->set('Save4');
 $form->onSubmit(function ($form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
-    $view->text->addParagraph('some text ' . rand(1, 100));
+    $view->text->addParagraph('some text ' . random_int(1, 100));
 
     $modal = new \atk4\ui\Modal(['title' => 'Something happen', 'ui' => 'ui modal tiny']);
     $modal->add($view);
@@ -114,7 +114,7 @@ $form = \atk4\ui\Form::addTo($tab);
 $field = $form->addField('email5');
 $form->buttonSave->set('Save5');
 $form->onSubmit(function ($form) use ($field) {
-    return $field->jsInput()->val('random is ' . rand(1, 100));
+    return $field->jsInput()->val('random is ' . random_int(1, 100));
 });
 
 /////////////////////////////////////////////////////////////////////
@@ -150,14 +150,14 @@ $form->onSubmit(function ($form) {
 
 \atk4\ui\Button::addTo($form, ['Modal Test', 'secondary'])->on('click', \atk4\ui\Modal::addTo($form)
     ->set(function ($p) {
-                                                                        $form = \atk4\ui\Form::addTo($p);
-                                                                        $form->addField('email');
-                                                                        $form->onSubmit(function ($form) {
-                                                                            throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
+        $form = \atk4\ui\Form::addTo($p);
+        $form->addField('email');
+        $form->onSubmit(function ($form) {
+            throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
 
-                                                                            return 'somehow it did not crash';
-                                                                        });
-                                                                    })->show());
+            return 'somehow it did not crash';
+        });
+    })->show());
 
 /////////////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Complex Examples');

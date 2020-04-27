@@ -59,7 +59,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         };
 
         $files = [];
-        $base_path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'demos';
+        $base_path = dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'demos';
         foreach ($directories as $dir) {
             $dir_path = $base_path . DIRECTORY_SEPARATOR . $dir;
             $pref = $dir . '/';

@@ -40,7 +40,7 @@ Header::addTo($app, ['Callbacks']);
 // On button click reload it and change it's title
 $b = Button::addTo($app, ['Callback Test']);
 $b->on('click', function ($b) {
-    return $b->text(rand(1, 20));
+    return $b->text(random_int(1, 20));
 });
 
 $b = Button::addTo($app, ['success']);

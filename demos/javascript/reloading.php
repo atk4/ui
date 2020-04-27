@@ -5,7 +5,7 @@ require_once __DIR__ . '/../_includes/Counter.php';
 
 // Test 1 - Basic reloading
 \atk4\ui\Header::addTo($app, ['Button reloading segment']);
-$v = \atk4\ui\View::addTo($app, ['ui' => 'segment'])->set((string) rand(1, 100));
+$v = \atk4\ui\View::addTo($app, ['ui' => 'segment'])->set((string) random_int(1, 100));
 \atk4\ui\Button::addTo($app, ['Reload random number'])->js('click', new \atk4\ui\jsReload($v, [], new \atk4\ui\jsExpression('console.log("Output with afterSuccess");')));
 
 // Test 2 - Reloading self

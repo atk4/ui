@@ -346,7 +346,7 @@ class View implements jsExpressionable
             $this->owner->template->del($this->region);
         } else {
             // set up template
-            if (is_string($this->defaultTemplate) && is_null($this->template)) {
+            if (is_string($this->defaultTemplate) && $this->template === null) {
                 $this->template = $this->app->loadTemplate($this->defaultTemplate);
             }
 
@@ -1150,7 +1150,7 @@ class View implements jsExpressionable
         $actions[] = $chain;
 
         // second argument may be omitted
-        if (!is_string($selector) && (is_null($action) || is_array($action))) {
+        if (!is_string($selector) && ($action === null || is_array($action))) {
             $defaults = $action;
             $action = $selector;
             $selector = null;
@@ -1158,7 +1158,7 @@ class View implements jsExpressionable
 
         // check for arguments.
         $arguments = $defaults['args'] ?? [];
-        if (is_null($defaults)) {
+        if ($defaults === null) {
             $defaults = [];
         }
 

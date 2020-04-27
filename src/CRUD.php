@@ -108,7 +108,7 @@ class CRUD extends Grid
 
         $this->model->unload();
 
-        if (is_null($this->useMenuActions)) {
+        if ($this->useMenuActions === null) {
             $this->useMenuActions = count($m->getActions()) > 4;
         }
 

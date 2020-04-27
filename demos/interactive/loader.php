@@ -52,6 +52,6 @@ require_once __DIR__ . '/../atk-init.php';
         'red',
     ],
 ])->set(function ($p) {
-        sleep(1);
-        \atk4\ui\LoremIpsum::addTo($p, ['size' => 2]);
-    });
+    sleep(1);
+    \atk4\ui\LoremIpsum::addTo($p, ['size' => 2]);
+});

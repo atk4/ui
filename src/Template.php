@@ -82,7 +82,7 @@ class Template implements \ArrayAccess
     {
         $this->template = unserialize(serialize($this->template));
 
-        unset($this->tags);
+        $this->tags = null;
         $this->rebuildTags();
     }
 
@@ -621,7 +621,7 @@ class Template implements \ArrayAccess
             return clone $this;
         }
 
-        $cl = get_class($this);
+        $cl = static::class;
         $n = new $cl();
         $n->app = $this->app;
         $n->template = unserialize(serialize(['_top#1' => $this->get($tag)]));

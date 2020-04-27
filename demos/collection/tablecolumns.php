@@ -106,16 +106,16 @@ $key_value_string = [
 
 $m = new ModelColor(new \atk4\data\Persistence\Static_([]));
 foreach (range(1, 10) as $id) {
-    $key_value = rand(1, 4);
+    $key_value = random_int(1, 4);
 
     $m->insert([
         'id' => $id,
         'name' => 'name ' . $id,
         'key_value' => $key_value,
         'key_value_string' => $key_value_string[$key_value],
-        'value_not_always_present' => rand(0, 100) > 50 ? 'have value' : '',
+        'value_not_always_present' => random_int(0, 100) > 50 ? 'have value' : '',
         'interests' => '1st label, 2nd label',
-        'rating' => rand(100, 300) / 100,
+        'rating' => random_int(100, 300) / 100,
         'note' => 'lorem ipsum lorem dorem lorem',
     ]);
 }

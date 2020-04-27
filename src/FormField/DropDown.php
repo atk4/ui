@@ -176,7 +176,7 @@ class DropDown extends Input
     public function getValue()
     {
         return isset($this->field)
-            ? (is_array($this->field->get()) ? join(',', $this->field->get()) : $this->field->get())
+            ? (is_array($this->field->get()) ? implode(',', $this->field->get()) : $this->field->get())
             : parent::getValue();
     }
 

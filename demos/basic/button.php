@@ -59,7 +59,7 @@ class ForkButton extends Button
     }
 }
 
-ForkButton::addTo($app, 1234 + rand(1, 100));
+ForkButton::addTo($app, 1234 + random_int(1, 100));
 
 \atk4\ui\Header::addTo($app, ['Custom Template', 'size' => 2]);
 

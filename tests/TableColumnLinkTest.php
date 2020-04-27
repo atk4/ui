@@ -12,7 +12,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
     public $table;
     public $column;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $arr = ['table' => [1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123]]];
         $db = new \atk4\data\Persistence\Array_($arr);

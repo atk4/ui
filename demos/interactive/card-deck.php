@@ -10,7 +10,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 $countries = new Country($db);
 $countries->addCalculatedField('Cost', function ($m) {
-    return '$ ' . number_format(rand(500, 1500));
+    return '$ ' . number_format(random_int(500, 1500));
 });
 
 $action = $countries->addAction('book', [

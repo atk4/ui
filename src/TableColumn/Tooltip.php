@@ -69,7 +69,7 @@ class Tooltip extends Generic
         // @TODO remove popup tooltip when null
         $tooltip = $row->data[$this->tooltip_field];
 
-        if (is_null($tooltip) || empty($tooltip)) {
+        if ($tooltip === null || empty($tooltip)) {
             return [
                 '_' . $field->short_name . '_data_visible_class' => 'transition hidden',
                 '_' . $field->short_name . '_data_tooltip' => '',

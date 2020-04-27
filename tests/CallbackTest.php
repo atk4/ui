@@ -31,7 +31,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
     public $app;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->app = new AppMock(['always_run' => false]);
         $this->app->initLayout('Centered');
@@ -72,7 +72,7 @@ class CallbackTest extends AtkPhpunit\TestCase
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(null, $var);
+        $this->assertNull($var);
     }
 
     public function testCallbackPOST()
@@ -108,7 +108,7 @@ class CallbackTest extends AtkPhpunit\TestCase
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(null, $var);
+        $this->assertNull($var);
 
         $this->expectOutputRegex($this->regex);
         $app->run();
@@ -136,7 +136,7 @@ class CallbackTest extends AtkPhpunit\TestCase
             }, [$x]);
         }, [34]);
 
-        $this->assertEquals(null, $var);
+        $this->assertNull($var);
 
         $this->expectOutputRegex($this->regex);
         $app->run();
@@ -157,12 +157,12 @@ class CallbackTest extends AtkPhpunit\TestCase
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(null, $var);
+        $this->assertNull($var);
 
         $this->expectOutputRegex($this->regex);
         $app->run();
 
-        $this->assertEquals(null, $var);
+        $this->assertNull($var);
     }
 
     public function testVirtualPage()
