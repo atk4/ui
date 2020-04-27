@@ -91,7 +91,7 @@ class TreeItemSelector extends Generic
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
      *
-     * @param callable $fx The function to execute when callback is fired.
+     * @param callable $fx the function to execute when callback is fired
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\ui\Exception

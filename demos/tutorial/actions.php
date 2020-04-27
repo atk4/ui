@@ -12,14 +12,12 @@ $wizard = $app->add('Wizard');
 $app->stickyGet($wizard->name);
 
 $wizard->addStep('Define User Action', function ($page) {
-    // @var \atk4\ui\Text $t
-
     \atk4\ui\Header::addTo($page, ['What are Actions?']);
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
-Since the early version ATK UI was about building generic UI capable of automatically read information about 
+Since the early version ATK UI was about building generic UI capable of automatically read information about
 model Fields and visualising them correctly. Version 2.0 introduces support for "Actions" which can be declared
 in Data layer and can use generic UI for visualising and triggering. Models of Agile Data has always supported 3
 basic actions: "save" (for new and existing records) and "delete". Historically any other interaction required
@@ -55,7 +53,7 @@ EOF
     $t->addParagraph(
         <<< 'EOF'
 Any actions you define will automatically appear in the UI. This is consistent with your field definitions. You can
-also "disable" or mark actions as "system". When action is executed, the response will appear to the user as a 
+also "disable" or mark actions as "system". When action is executed, the response will appear to the user as a
 toast message, but this can also be customised.
 EOF
     );
@@ -65,8 +63,8 @@ EOF
 
 $country = new CountryLock($app->db);
 
-$country->addAction('send_message', function() { 
-    return 'sent'; 
+$country->addAction('send_message', function() {
+    return 'sent';
 });
 $country->tryLoadAny();
 
@@ -139,7 +137,7 @@ $model->addAction('greet', [
         'age'=>[
             'type'=>'string'
         ]
-    ], 
+    ],
     'callback'=>function ($m, $name) {
         return 'Hi '.$name;
     },
@@ -150,10 +148,10 @@ $model->addAction('ask_age', [
     'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
     'args'=> [
         'age'=>[
-            'type'=>'integer', 
+            'type'=>'integer',
             'required' => true
         ]
-    ], 
+    ],
     'callback'=>function ($m, $age) {
         return 'Age is '.$age;
     }

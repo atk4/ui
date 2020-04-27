@@ -188,17 +188,17 @@ class CRUD extends Grid
             $msg = $return->loaded() ? $this->saveMsg : ($action->scope === Generic::SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
             return $this->jsModelReturn($action, $msg);
-        } else {
-            return $this->getNotifier($this->defaultMsg, $action);
         }
+
+        return $this->getNotifier($this->defaultMsg, $action);
     }
 
     /**
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      *
-     * @param string|null  $msg    The message to display.
-     * @param Generic|null $action The model action.
+     * @param string|null  $msg    the message to display
+     * @param Generic|null $action the model action
      *
      * @throws \atk4\core\Exception
      *

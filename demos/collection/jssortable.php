@@ -23,9 +23,9 @@ $sortable = \atk4\ui\jsSortable::addTo($view, ['container' => 'ul', 'draggable' 
 $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
     if (@$_GET['btn']) {
         return new \atk4\ui\jsToast(implode(' - ', $order));
-    } else {
-        return new \atk4\ui\jsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
     }
+
+    return new \atk4\ui\jsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
 });
 
 $button = \atk4\ui\Button::addTo($app)->set('Get countries order');

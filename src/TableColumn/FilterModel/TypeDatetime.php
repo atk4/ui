@@ -129,7 +129,7 @@ class TypeDatetime extends Generic
      * Get date object according to it's modifier string.
      * Will construct and return a date object base on constructor string.
      *
-     * @param string $dateModifier The string to pass to generated a date from.
+     * @param string $dateModifier the string to pass to generated a date from
      *
      * @return DateTime
      */

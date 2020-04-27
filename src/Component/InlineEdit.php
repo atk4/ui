@@ -43,7 +43,7 @@ class InlineEdit extends View
      * The actual db field name that need to be saved.
      * Default to title field when model is set.
      *
-     * @var string|null The name of the field.
+     * @var string|null the name of the field
      */
     public $field;
 

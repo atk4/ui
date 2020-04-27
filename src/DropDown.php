@@ -41,7 +41,7 @@ class DropDown extends Lister
      *          return 'New seleced item: '.$item;
      *      });.
      *
-     * @param callable $fx The Handler function where new selected Item value is passed too.
+     * @param callable $fx the Handler function where new selected Item value is passed too
      *
      * @throws Exception
      */

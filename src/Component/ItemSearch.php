@@ -14,7 +14,7 @@ class ItemSearch extends View
     /**
      * View to be reload that contains data to be filtered.
      *
-     * @var View|string The atk4 View to be reload or a jquery id selector string.
+     * @var View|string the atk4 View to be reload or a jquery id selector string
      */
     public $reload;
 

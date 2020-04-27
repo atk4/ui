@@ -15,12 +15,6 @@ return PhpCsFixer\Config::create()
         '@PhpCsFixer:risky' =>true,
         '@PHP71Migration:risky' => true,
 
-        // to be checked manually, @TODO
-        'php_unit_fqcn_annotation' => false,
-        'phpdoc_annotation_without_dot' => false,
-        'no_useless_else' => false, // check/add spacing after manually
-
-
         // required by PSR-12
         'concat_space' => [
             'spacing' => 'one',

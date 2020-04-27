@@ -84,7 +84,7 @@ class Generic
      * Use ColumnName for better popup positioning.
      *
      * @param Popup  $popup
-     * @param string $icon  The css class for filter icon.
+     * @param string $icon  the css class for filter icon
      *
      * @return mixed
      */
@@ -116,7 +116,7 @@ class Generic
     /**
      * Setup popup header action.
      *
-     * @param string $class The css class for filter icon.
+     * @param string $class the css class for filter icon
      */
     public function setHeaderPopup($class, $id)
     {
@@ -147,7 +147,7 @@ class Generic
      * @param array       $items
      * @param callable    $fx
      * @param string      $icon
-     * @param string|null $menuId The menu name.
+     * @param string|null $menuId the menu name
      *
      * @throws Exception
      */
@@ -400,9 +400,9 @@ class Generic
     {
         if ($field) {
             return '{$' . $field->short_name . '}';
-        } else {
-            return '{_$' . $this->short_name . '}';
         }
+
+        return '{_$' . $this->short_name . '}';
     }
 
     /**
@@ -412,7 +412,7 @@ class Generic
      * @param Model|array $row   link to row data
      * @param Field|null  $field field being rendered
      *
-     * @return array Associative array with tags and their HTML values.
+     * @return array associative array with tags and their HTML values
      */
     public function getHTMLTags($row, $field)
     {

@@ -188,8 +188,8 @@ class Card extends View
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
-     * @param \atk4\data\Model $m      The model.
-     * @param array|false      $fields An array of fields name to display in content.
+     * @param \atk4\data\Model $m      the model
+     * @param array|false      $fields an array of fields name to display in content
      *
      * @throws Exception
      * @throws \atk4\data\Exception
@@ -321,7 +321,7 @@ class Card extends View
      * as target.
      *
      * @param []     $args    The action argument
-     * @param string $confirm The confirmation message.
+     * @param string $confirm the confirmation message
      *
      * @throws Exception
      *
@@ -359,8 +359,8 @@ class Card extends View
      * Set extra content using model field.
      *
      * @param Model  $m      The model
-     * @param array  $fields An array of fields name.
-     * @param string $glue   A separator string between each field.
+     * @param array  $fields an array of fields name
+     * @param string $glue   a separator string between each field
      *
      * @throws Exception
      * @throws \atk4\data\Exception
@@ -391,7 +391,7 @@ class Card extends View
      *
      * @throws Exception
      *
-     * @return View|string|null The description to add.
+     * @return View|string|null the description to add
      */
     public function addDescription($description)
     {
@@ -434,8 +434,8 @@ class Card extends View
     /**
      * Add button to card.
      *
-     * @param Button $button  A Button.
-     * @param bool   $isFluid Make the buttons spread evenly in Card.
+     * @param Button $button  a Button
+     * @param bool   $isFluid make the buttons spread evenly in Card
      *
      * @throws Exception
      *

@@ -227,8 +227,8 @@ class Grid extends View
     /**
      * Add ItemsPerPageSelector View in grid menu or paginator in order to dynamically setup number of item per page.
      *
-     * @param array  $items An array of item's per page value.
-     * @param string $label The memu item label.
+     * @param array  $items an array of item's per page value
+     * @param string $label the memu item label
      *
      * @throws \atk4\core\Exception
      *
@@ -268,8 +268,8 @@ class Grid extends View
     /**
      * Add dynamic scrolling paginator.
      *
-     * @param int    $ipp          Number of item per page to start with.
-     * @param array  $options      An array with js Scroll plugin options.
+     * @param int    $ipp          number of item per page to start with
+     * @param array  $options      an array with js Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
      *
@@ -299,9 +299,9 @@ class Grid extends View
      * Add dynamic scrolling paginator in container.
      * Use this to make table headers fixed.
      *
-     * @param int    $ipp             Number of item per page to start with.
-     * @param int    $containerHeight Number of pixel the table container should be.
-     * @param array  $options         An array with js Scroll plugin options.
+     * @param int    $ipp             number of item per page to start with
+     * @param int    $containerHeight number of pixel the table container should be
+     * @param array  $options         an array with js Scroll plugin options
      * @param View   $container       The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion    A specific template region to render. Render output is append to container html element.
      *
@@ -327,8 +327,8 @@ class Grid extends View
      * By default, will query server when using Enter key on input search field.
      * You can change it to query server on each keystroke by passing $autoQuery true,.
      *
-     * @param array $fields       The list of fields to search for.
-     * @param bool  $hasAutoQuery Will query server on each key pressed.
+     * @param array $fields       the list of fields to search for
+     * @param bool  $hasAutoQuery will query server on each key pressed
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -436,7 +436,7 @@ class Grid extends View
      * Add action menu items using Model.
      * You may specify the scope of actions to be added.
      *
-     * @param string|null $scope The scope of model action.
+     * @param string|null $scope the scope of model action
      *
      * @throws Exception
      * @throws Exception\NoRenderTree
@@ -457,7 +457,7 @@ class Grid extends View
      * An array of column name where filter is needed.
      * Leave empty to include all column in grid.
      *
-     * @param array|null $names An array with the name of column.
+     * @param array|null $names an array with the name of column
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -478,11 +478,11 @@ class Grid extends View
     /**
      * Add a dropdown menu to header column.
      *
-     * @param string   $columnName The name of column where to add dropdown.
-     * @param array    $items      The menu items to add.
-     * @param callable $fx         The callback function to execute when an item is selected.
-     * @param string   $icon       The icon.
-     * @param string   $menuId     The menu id return by callback.
+     * @param string   $columnName the name of column where to add dropdown
+     * @param array    $items      the menu items to add
+     * @param callable $fx         the callback function to execute when an item is selected
+     * @param string   $icon       the icon
+     * @param string   $menuId     the menu id return by callback
      *
      * @throws Exception
      */
@@ -504,9 +504,9 @@ class Grid extends View
     /**
      * Add a popup to header column.
      *
-     * @param string $columnName The name of column where to add popup.
-     * @param Popup  $popup      Popup view.
-     * @param string $icon       The icon.
+     * @param string $columnName the name of column where to add popup
+     * @param Popup  $popup      popup view
+     * @param string $icon       the icon
      *
      * @throws Exception
      *
@@ -529,7 +529,7 @@ class Grid extends View
      * @param string|array|View $button
      * @param string            $title
      * @param callable          $callback function($page){ . .}
-     * @param array             $args     Extra url argument for callback.
+     * @param array             $args     extra url argument for callback
      *
      * @return object
      */
@@ -545,7 +545,7 @@ class Grid extends View
     /**
      * Find out more about the nature of the action from the supplied object, use addAction().
      *
-     * @param Generic $action The generic action.
+     * @param Generic $action the generic action
      */
     public function addUserAction(Generic $action)
     {

@@ -24,7 +24,7 @@ class Generic extends View
     public $fieldClass = '';
 
     /**
-     * @var bool - Whether you need this field to be rendered wrap in a form layout or as his.
+     * @var bool - Whether you need this field to be rendered wrap in a form layout or as his
      */
     public $layoutWrap = true;
 

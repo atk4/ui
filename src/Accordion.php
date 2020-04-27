@@ -74,7 +74,7 @@ class Accordion extends View
     /**
      * Activate or open an accordion section.
      *
-     * @param AccordionSection $section The section to activate.
+     * @param AccordionSection $section the section to activate
      */
     public function activate($section)
     {
@@ -113,9 +113,9 @@ class Accordion extends View
      * Ex: toggle an accordion from it's index value.
      * $accordion->jsBehavior('toggle', 1).
      *
-     * @param string $behavior The name of the behavior for the module.
-     * @param array  $args     The behaviors argument as an array.
-     * @param bool   $when     When this js action is render.
+     * @param string $behavior the name of the behavior for the module
+     * @param array  $args     the behaviors argument as an array
+     * @param bool   $when     when this js action is render
      *
      * @return mixed
      */

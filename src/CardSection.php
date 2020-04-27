@@ -30,7 +30,7 @@ class CardSection extends View
      *
      * @throws Exception
      *
-     * @return View|string|null The description to add.
+     * @return View|string|null the description to add
      */
     public function addDescription($description)
     {

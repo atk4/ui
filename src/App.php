@@ -118,7 +118,7 @@ class App
     ];
 
     /**
-     * @var bool Whether or not semantic-ui vue has been initialised.
+     * @var bool whether or not semantic-ui vue has been initialised
      */
     private $is_sui_init = false;
 
@@ -211,7 +211,7 @@ class App
     }
 
     /**
-     * @param bool $for_shutdown if true will not pass in caughtException method.
+     * @param bool $for_shutdown if true will not pass in caughtException method
      *
      * @throws ExitApplicationException
      * @throws \atk4\core\Exception
@@ -335,7 +335,7 @@ class App
      * other classes.
      *
      * @param string|array $output  Array type is supported only for JSON response
-     * @param string[]     $headers Content-type header must be always set or consider using App::terminateHTML() or App::terminateJSON() methods.
+     * @param string[]     $headers content-type header must be always set or consider using App::terminateHTML() or App::terminateJSON() methods
      *
      * @throws \atk4\core\Exception
      * @throws ExitApplicationException
@@ -585,12 +585,12 @@ class App
 
         if (in_array($name[0], ['.', '/', '\\']) || strpos($name, ':\\') !== false) {
             return $template->load($name);
-        } else {
-            $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
-            foreach ($dir as $td) {
-                if ($t = $template->tryLoad($td . '/' . $name)) {
-                    return $t;
-                }
+        }
+
+        $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
+        foreach ($dir as $td) {
+            if ($t = $template->tryLoad($td . '/' . $name)) {
+                return $t;
             }
         }
 
@@ -671,7 +671,7 @@ class App
      *
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUriArgs Additional URL arguments, deleting sticky can delete them.
+     * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
      *
      * @return string
      */
@@ -737,7 +737,7 @@ class App
      *
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUriArgs Additional URL arguments, deleting sticky can delete them.
+     * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
      *
      * @return string
      */
@@ -763,8 +763,8 @@ class App
      * Adds additional JS script include in application template.
      *
      * @param string $url
-     * @param bool   $isAsync Whether or not you want Async loading.
-     * @param bool   $isDefer Whether or not you want Defer loading.
+     * @param bool   $isAsync whether or not you want Async loading
+     * @param bool   $isDefer whether or not you want Defer loading
      *
      * @return $this
      */

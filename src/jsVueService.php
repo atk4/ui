@@ -66,7 +66,7 @@ class jsVueService
      * The component name must be accessible in javascript using the window namespace.
      * ex: window['SemanticUIVue'].
      *
-     * @param string $component The component name to use with Vue.
+     * @param string $component the component name to use with Vue
      *
      * @return mixed
      */

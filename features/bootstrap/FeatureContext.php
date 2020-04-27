@@ -292,7 +292,7 @@ class FeatureContext extends RawMinkContext implements Context
     /**
      * Wait till jquery ajax request finished and no animation is perform.
      *
-     * @param int $duration The maximum time to wait for the function.
+     * @param int $duration the maximum time to wait for the function
      */
     protected function jqueryWait($duration = 1000)
     {

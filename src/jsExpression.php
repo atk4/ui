@@ -101,9 +101,9 @@ class jsExpression implements jsExpressionable
                 $result = $arg->jsRender();
 
                 return $result;
-            } else {
-                throw new Exception(['Not sure how to represent this object in JSON', 'obj' => $arg]);
             }
+
+            throw new Exception(['Not sure how to represent this object in JSON', 'obj' => $arg]);
         } elseif (is_array($arg)) {
             $array = [];
             // is array associative? (hash)

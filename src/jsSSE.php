@@ -44,9 +44,8 @@ class jsSSE extends jsCallback
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
             $this->sendEvent('js', $this->app->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'jsAction');
-        } else {
-            // ignore event
         }
+        // no else - ignore event
     }
 
     public function terminate($ajaxec, $msg = null, $success = true)

@@ -158,7 +158,7 @@ class Wizard extends View
     /**
      * Get URL to next step. Will respect stickyGET.
      *
-     * @return string URL to next step.
+     * @return string URL to next step
      */
     public function urlNext()
     {
@@ -168,7 +168,7 @@ class Wizard extends View
     /**
      * Get URL to previous step. Will respect stickyGET.
      *
-     * @return string URL to previous step.
+     * @return string URL to previous step
      */
     public function jsNext()
     {

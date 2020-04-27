@@ -478,7 +478,6 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             'short_name' => $f->short_name,
         ];
 
-        // @var TYPE_NAME $this
         return $this->factory($seed, $defaults, 'atk4\ui\FormField');
     }
 

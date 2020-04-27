@@ -59,11 +59,11 @@ class Tabs extends View
     /**
      * Add a tab menu item.
      *
-     * @param string|Tab $name Name of tab or Tab object.
+     * @param string|Tab $name name of tab or Tab object
      *
      * @throws Exception
      *
-     * @return Tab|View Tab menu item view.
+     * @return Tab|View tab menu item view
      */
     protected function addTabMenuItem($name)
     {
@@ -87,7 +87,7 @@ class Tabs extends View
     /**
      * Add sub view to tab.
      *
-     * @param string $name name of view.
+     * @param string $name name of view
      *
      * @throws Exception
      *

@@ -16,12 +16,12 @@ $modal->set(function ($p) use ($modal) {
     $form->onSubmit(function ($f) use ($modal) {
         if (empty($f->model['name'])) {
             return $f->error('name', 'Please add a name!');
-        } else {
-            return [
-                $modal->hide(),
-                new \atk4\ui\jsNotify('Thank you ' . $f->model['name']),
-            ];
         }
+
+        return [
+            $modal->hide(),
+            new \atk4\ui\jsNotify('Thank you ' . $f->model['name']),
+        ];
     });
 });
 

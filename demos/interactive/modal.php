@@ -187,14 +187,14 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
         $f->onSubmit(function ($f) use ($next_action, $session) {
             if ($f->model['name'] != 'John') {
                 return $f->error('name', 'Your name is not John! It is "' . $f->model['name'] . '". It should be John. Pleeease!');
-            } else {
-                $session->memorize('success', true);
-                $session->memorize('name', $f->model['name']);
-                $js[] = $f->success('Thank you, ' . $f->model['name'] . ' you can go on!');
-                $js[] = $next_action->js()->removeClass('disabled');
-
-                return $js;
             }
+
+            $session->memorize('success', true);
+            $session->memorize('name', $f->model['name']);
+            $js[] = $f->success('Thank you, ' . $f->model['name'] . ' you can go on!');
+            $js[] = $next_action->js()->removeClass('disabled');
+
+            return $js;
         });
         $modal->js(true, $prev_action->js()->removeClass('disabled'));
         $modal->js(true, $next_action->js(true)->addClass('disabled'));

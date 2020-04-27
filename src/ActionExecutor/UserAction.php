@@ -43,7 +43,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     public $jsSuccess;
 
     /**
-     * @var array Will collect action data while doing action step.
+     * @var array will collect action data while doing action step
      */
     private $actionData = [];
     protected $actionInitialized = false;
@@ -446,7 +446,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * Get how many steps is required for this action.
      *
-     * @param Generic $action The Model action.
+     * @param Generic $action the Model action
      */
     protected function getSteps(Generic $action): ?array
     {
@@ -612,9 +612,9 @@ class UserAction extends Modal implements Interface_, jsInterface_
     {
         if ($this->isLastStep($step)) {
             return $this->nextStepBtn->js(true)->hide();
-        } else {
-            return $this->nextStepBtn->js(true)->show();
         }
+
+        return $this->nextStepBtn->js(true)->show();
     }
 
     /**
@@ -624,9 +624,9 @@ class UserAction extends Modal implements Interface_, jsInterface_
     {
         if ($this->isFirstStep($step)) {
             return $this->prevStepBtn->js(true)->hide();
-        } else {
-            return $this->prevStepBtn->js(true)->show();
         }
+
+        return $this->prevStepBtn->js(true)->show();
     }
 
     /**
@@ -636,9 +636,9 @@ class UserAction extends Modal implements Interface_, jsInterface_
     {
         if ($this->isLastStep($step)) {
             return $this->execActionBtn->js(true)->show();
-        } else {
-            return $this->execActionBtn->js(true)->hide();
         }
+
+        return $this->execActionBtn->js(true)->hide();
     }
 
     /**

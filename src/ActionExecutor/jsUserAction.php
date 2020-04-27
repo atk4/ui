@@ -53,7 +53,7 @@ class jsUserAction extends jsCallback implements Interface_
      * Note: Id can be set using a single value or a jsExpression, like:
      *      $ex->setAction($f_action, [$field->jsInput()->val(), 'path' => '.']);
      *
-     * @param array $urlArgs url Argument to pass when callback is trigger.
+     * @param array $urlArgs url Argument to pass when callback is trigger
      *
      * @throws Exception
      *

@@ -77,8 +77,8 @@ class DropDownCascade extends DropDown
      *  Will mark current value as selected from a list
      *  of possible values.
      *
-     * @param $values    An array of possible values.
-     * @param $value     The current field value.
+     * @param $values    an array of possible values
+     * @param $value     the current field value
      */
     private function getJsValues(array $values, string $value): array
     {

@@ -21,7 +21,7 @@ class Popup extends View
      * Usually the view where popup is attached to,
      * unless target is supply.
      *
-     * @var View|string|null Object view or a string id.
+     * @var View|string|null object view or a string id
      */
     public $triggerBy;
 

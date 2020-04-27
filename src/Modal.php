@@ -233,7 +233,7 @@ class Modal extends View
     /**
      * Add a deny action to modal.
      *
-     * @param jsExpressionable $jsAction Javascript action that will run when deny is click.
+     * @param jsExpressionable $jsAction javascript action that will run when deny is click
      *
      * @return $this
      */
@@ -250,7 +250,7 @@ class Modal extends View
     /**
      * Add an approve action button to modal.
      *
-     * @param jsExpressionable $jsAction Javascript action that will run when deny is click.
+     * @param jsExpressionable $jsAction javascript action that will run when deny is click
      *
      * @return $this
      */

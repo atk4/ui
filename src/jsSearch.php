@@ -50,7 +50,7 @@ class jsSearch extends View
      * If search query need to be control via an url parameter only
      * set this to false.
      *
-     * @var bool Default to true.
+     * @var bool default to true
      */
     public $useAjax = true;
 

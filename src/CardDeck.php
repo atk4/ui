@@ -260,17 +260,17 @@ class CardDeck extends View
             $msg = $return->loaded() ? $this->saveMsg : ($action->scope === Generic::SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
             return $this->jsModelReturn($action, $msg);
-        } else {
-            return $this->getNotifier($this->defaultMsg, $action);
         }
+
+        return $this->getNotifier($this->defaultMsg, $action);
     }
 
     /**
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      *
-     * @param string|null  $msg    The message to display.
-     * @param Generic|null $action The model action.
+     * @param string|null  $msg    the message to display
+     * @param Generic|null $action the model action
      *
      * @throws \atk4\core\Exception
      *
@@ -359,8 +359,8 @@ class CardDeck extends View
     /**
      * Add button to menu bar on top of deck card.
      *
-     * @param Button|string|Generic                  $button     A button object, a model action or a string representing a model action.
-     * @param Generic|jsExpressionable|callable|null $callback   An model action, js expression or callback function.
+     * @param Button|string|Generic                  $button     a button object, a model action or a string representing a model action
+     * @param Generic|jsExpressionable|callable|null $callback   an model action, js expression or callback function
      * @param string|array                           $confirm    A confirmation string or View::on method defaults when passed has an array,
      * @param bool                                   $isDisabled
      *

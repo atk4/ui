@@ -18,17 +18,17 @@ class Basic extends \atk4\ui\View implements Interface_
     public $action;
 
     /**
-     * @var bool Display header or not.
+     * @var bool display header or not
      */
     public $hasHeader = true;
 
     /**
-     * @var null Header description.
+     * @var null header description
      */
     public $description;
 
     /**
-     * @var string Display message when action is disabled.
+     * @var string display message when action is disabled
      */
     public $disableMsg = 'Action is disabled and cannot be executed';
 
@@ -43,7 +43,7 @@ class Basic extends \atk4\ui\View implements Interface_
     protected $arguments = [];
 
     /**
-     * @var string Display message when missing arguments.
+     * @var string display message when missing arguments
      */
     public $missingArgsMsg = 'Insufficient arguments';
 

@@ -88,8 +88,8 @@ class Right extends View implements Loadable
     /**
      * Return js expression need to open panel via js panelService.
      *
-     * @param array        $args      The data attribute name to include in reload from the triggering element.
-     * @param string|null  $activeCss The css class name to apply on triggering element when panel is open.
+     * @param array        $args      the data attribute name to include in reload from the triggering element
+     * @param string|null  $activeCss the css class name to apply on triggering element when panel is open
      * @param jsExpression $jsTrigger jsExpression that trigger panel to open. Default = $(this).
      *
      * @return mixed

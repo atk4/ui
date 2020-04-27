@@ -29,7 +29,7 @@ class HTML extends Generic
      * @param Model|array $row   link to row data
      * @param Field|null  $field field being rendered
      *
-     * @return array Associative array with tags and their HTML values.
+     * @return array associative array with tags and their HTML values
      */
     public function getHTMLTags($row, $field)
     {

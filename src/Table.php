@@ -14,7 +14,7 @@ class Table extends Lister
     /**
      * If table is part of Grid or CRUD, we want to reload that instead of table.
      *
-     * @var View|null Ususally a Grid or Crud view that contains the table.
+     * @var View|null ususally a Grid or Crud view that contains the table
      */
     public $reload;
 
@@ -254,7 +254,7 @@ class Table extends Lister
     /**
      * Set Popup action for columns filtering.
      *
-     * @param array $cols An array with colomns name that need filtering.
+     * @param array $cols an array with colomns name that need filtering
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -365,7 +365,7 @@ class Table extends Lister
      *       $columns = json_decode($w);
      *   });
      *
-     * @param callable $fx             A callback function with columns widths as parameter.
+     * @param callable $fx             a callback function with columns widths as parameter
      * @param int[]    $widths         An array of widths value, integer only. ex: [100,200,300,100]
      * @param array    $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
      *
@@ -400,8 +400,8 @@ class Table extends Lister
     /**
      * Add a dynamic paginator, i.e. when user is scrolling content.
      *
-     * @param int    $ipp          Number of item per page to start with.
-     * @param array  $options      An array with js Scroll plugin options.
+     * @param int    $ipp          number of item per page to start with
+     * @param array  $options      an array with js Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
      *
@@ -514,7 +514,6 @@ class Table extends Lister
         } elseif ($this->totals_plan) {
             $this->t_totals->setHTML('cells', $this->getTotalsRowHTML());
             $this->template->appendHTML('Foot', $this->t_totals->render());
-        } else {
         }
 
         // stop jsPaginator if there are no more records to fetch
@@ -598,8 +597,8 @@ class Table extends Lister
     /**
      * Remove a row in table using javascript using a model id.
      *
-     * @param string $id         The model id where row need to be removed.
-     * @param string $transition The transition effect.
+     * @param string $id         the model id where row need to be removed
+     * @param string $transition the transition effect
      *
      * @return mixed
      */
