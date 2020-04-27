@@ -2,9 +2,7 @@
 
 namespace atk4\ui;
 
-/*
- * Implements a class that can be mapped into arbitrary JavaScript expression.
- */
+// Implements a class that can be mapped into arbitrary JavaScript expression.
 
 class jsSSE extends jsCallback
 {
@@ -15,7 +13,7 @@ class jsSSE extends jsCallback
     /**
      * @var callable - custom function for outputting (instead of echo)
      */
-    public $echoFunction = null;
+    public $echoFunction;
 
     public function init(): void
     {
@@ -92,6 +90,7 @@ class jsSSE extends jsCallback
     {
         if ($this->echoFunction) {
             call_user_func($this->echoFunction, $content);
+
             return;
         }
 

@@ -143,7 +143,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * Output a single line to the console.
      *
      * @param string $message
-     * @param array  $context
      *
      * @return $this
      */
@@ -205,7 +204,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this;
     }
 
-    public $last_exit_code = null;
+    public $last_exit_code;
 
     /**
      * Executes command passing along escaped arguments.
@@ -250,6 +249,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $stat = proc_get_status($proc);
             if (!$stat['running']) {
                 proc_close($proc);
+
                 break;
             }
 
@@ -280,17 +280,17 @@ class Console extends View implements \Psr\Log\LoggerInterface
         // Escape arguments
         foreach ($args as $key => $val) {
             if (!is_scalar($val)) {
-                throw new Exception(['Arguments must be scalar', 'arg'=>$val]);
+                throw new Exception(['Arguments must be scalar', 'arg' => $val]);
             }
             $args[$key] = escapeshellarg($val);
         }
 
         $exec = escapeshellcmd($exec);
-        $spec = [1=>['pipe', 'w'], 2=>['pipe', 'w']]; // we want stdout and stderr
+        $spec = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']]; // we want stdout and stderr
         $pipes = null;
         $proc = proc_open($exec . ' ' . implode(' ', $args), $spec, $pipes);
         if (!is_resource($proc)) {
-            throw new Exception(['Command failed to execute', 'exec'=>$exec, 'args'=>$args]);
+            throw new Exception(['Command failed to execute', 'exec' => $exec, 'args' => $args]);
         }
 
         return [$proc, $pipes];
@@ -358,7 +358,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $this->output('--[ Executing ' . $static . ' ]--------------');
             $result = call_user_func_array($object . '::' . $method, $args);
         } else {
-            throw new Exception(['Incorrect value for an object', 'object'=>$object]);
+            throw new Exception(['Incorrect value for an object', 'object' => $object]);
         }
         $this->output('--[ Result: ' . json_encode($result) . ' ]------------');
 
@@ -375,7 +375,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * System is unusable.
      *
      * @param string $message
-     * @param array  $context
      */
     public function emergency($message, array $context = [])
     {
@@ -386,7 +385,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * Action must be taken immediately.
      *
      * @param string $message
-     * @param array  $context
      */
     public function alert($message, array $context = [])
     {
@@ -397,7 +395,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * Critical conditions.
      *
      * @param string $message
-     * @param array  $context
      */
     public function critical($message, array $context = [])
     {
@@ -409,7 +406,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * be logged and monitored.
      *
      * @param string $message
-     * @param array  $context
      */
     public function error($message, array $context = [])
     {
@@ -420,7 +416,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * Exceptional occurrences that are not errors.
      *
      * @param string $message
-     * @param array  $context
      */
     public function warning($message, array $context = [])
     {
@@ -431,7 +426,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * Normal but significant events.
      *
      * @param string $message
-     * @param array  $context
      */
     public function notice($message, array $context = [])
     {
@@ -442,7 +436,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * Interesting events.
      *
      * @param string $message
-     * @param array  $context
      */
     public function info($message, array $context = [])
     {
@@ -453,7 +446,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * Detailed debug information.
      *
      * @param string $message
-     * @param array  $context
      */
     public function debug($message, array $context = [])
     {
@@ -465,10 +457,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * @param mixed  $level
      * @param string $message
-     * @param array  $context
      */
     public function log($level, $message, array $context = [])
     {
-        $this->$level($message, $context);
+        $this->{$level}($message, $context);
     }
 }

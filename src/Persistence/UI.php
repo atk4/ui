@@ -68,9 +68,11 @@ class UI extends \atk4\data\Persistence
         switch ($f->type) {
         case 'boolean':
             $value = $value ? $this->yes : $this->no;
+
             break;
         case 'money':
             $value = ($this->currency ? $this->currency . ' ' : '') . number_format($value, $this->currency_decimals);
+
             break;
         case 'date':
         case 'datetime':
@@ -89,11 +91,13 @@ class UI extends \atk4\data\Persistence
                 }
                 $value = $value->format($format);
             }
+
             break;
         case 'array':
         case 'object':
             // don't encode if we already use some kind of serialization
             $value = $f->serialize ? $value : json_encode($value);
+
             break;
         }
 
@@ -112,9 +116,9 @@ class UI extends \atk4\data\Persistence
             } catch (\Exception $e) {
                 throw new Exception([
                     'Value must be ' . $f->serialize,
-                    'serializator'=> $f->serialize,
-                    'value'       => $value,
-                    'field'       => $f,
+                    'serializator' => $f->serialize,
+                    'value' => $value,
+                    'field' => $f,
                 ]);
             }
             $value = $new_value;
@@ -131,9 +135,11 @@ class UI extends \atk4\data\Persistence
             break;
         case 'boolean':
             $value = (bool) $value;
+
             break;
         case 'money':
             $value = str_replace(',', '', $value);
+
             break;
         case 'date':
         case 'datetime':
@@ -187,7 +193,6 @@ class UI extends \atk4\data\Persistence
 
         $result = [];
         foreach ($row as $key => $value) {
-
             // Look up field object
             $f = $m->hasField($key);
 
@@ -198,6 +203,7 @@ class UI extends \atk4\data\Persistence
             // we will leave it as-is.
             if (!$f) {
                 $result[$field] = $value;
+
                 continue;
             }
 

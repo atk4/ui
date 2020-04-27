@@ -29,14 +29,14 @@ class Modal extends View
 {
     public $defaultTemplate = 'modal.html';
 
-    /** @var null|string Set null for no title  */
-    public $title = null;
+    /** @var string|null Set null for no title */
+    public $title;
     public $loading_label = 'Loading...';
     public $headerCSS = 'header';
     public $ui = 'modal';
     public $fx = [];
-    public $cb = null;
-    public $cb_view = null;
+    public $cb;
+    public $cb_view;
     public $args = [];
 
     /** @var bool Make callback url argument stick to application or view. */

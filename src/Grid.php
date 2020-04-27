@@ -17,7 +17,7 @@ class Grid extends View
      *
      * @var Menu|false
      */
-    public $menu = null;
+    public $menu;
 
     /**
      * Calling addQuickSearch will create a form with a field inside $menu to perform quick searches.
@@ -28,7 +28,7 @@ class Grid extends View
      *
      * @var array|FormField\Generic
      */
-    public $quickSearch = null;
+    public $quickSearch;
 
     /**
      * Paginator is automatically added below the table and will divide long tables into pages.
@@ -37,7 +37,7 @@ class Grid extends View
      *
      * @var Paginator|false
      */
-    public $paginator = null;
+    public $paginator;
 
     /**
      * Number of items per page to display.
@@ -52,7 +52,7 @@ class Grid extends View
      *
      * @var TableColumn\ActionButtons
      */
-    public $actionButtons = null;
+    public $actionButtons;
 
     /**
      * Calling addAction will add a new column inside $table with dropdown menu,
@@ -60,7 +60,7 @@ class Grid extends View
      *
      * @var null
      */
-    public $actionMenu = null;
+    public $actionMenu;
 
     /**
      * Calling addSelection will add a new column inside $table, containing checkboxes.
@@ -68,7 +68,7 @@ class Grid extends View
      *
      * @var TableColumn\CheckBox
      */
-    public $selection = null;
+    public $selection;
 
     /**
      * Grid can be sorted by clicking on column headers. This will be automatically enabled
@@ -76,21 +76,21 @@ class Grid extends View
      *
      * @var bool
      */
-    public $sortable = null;
+    public $sortable;
 
     /**
      * Set this if you want GET argument name to look beautifully for sorting.
      *
-     * @var null|string
+     * @var string|null
      */
-    public $sortTrigger = null;
+    public $sortTrigger;
 
     /**
      * Component that actually renders data rows / columns and possibly totals.
      *
      * @var Table|false
      */
-    public $table = null;
+    public $table;
 
     public $executor_class = Basic::class;
 
@@ -99,7 +99,7 @@ class Grid extends View
      *
      * @var View
      */
-    public $container = null;
+    public $container;
 
     public $defaultTemplate = 'grid.html';
 
@@ -313,7 +313,7 @@ class Grid extends View
     {
         $this->table->hasCollapsingCssActionColumn = false;
         $options = array_merge($options, [
-            'hasFixTableHeader'    => true,
+            'hasFixTableHeader' => true,
             'tableContainerHeight' => $containerHeight,
         ]);
         //adding a state context to js scroll plugin.
@@ -421,8 +421,6 @@ class Grid extends View
 
     /**
      * Add action menu item using an array.
-     *
-     * @param array $actions
      *
      * @throws Exception
      * @throws Exception\NoRenderTree
@@ -587,7 +585,7 @@ class Grid extends View
     /**
      * Get sortBy value from url parameter.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getSortBy()
     {

@@ -19,21 +19,21 @@ class jsChain extends jsExpression
      *
      * @var string
      */
-    public $_include = null;
+    public $_include;
 
     /**
      * Default version to use.
      *
      * @var string
      */
-    public $_version = null;
+    public $_version;
 
     /**
      * Integrity code of default version of this library.
      *
      * @var string
      */
-    public $_integrity = null;
+    public $_integrity;
 
     /**
      * Set this to the object of your library. Most libraries prefer '$', although you might want to use 'jQuery' or 'new google.maps.Map';.

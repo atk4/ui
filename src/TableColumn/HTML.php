@@ -5,13 +5,12 @@ namespace atk4\ui\TableColumn;
 use atk4\data\Field;
 
 /**
- * Class HTML
+ * Class HTML.
  *
  * Use this decorator if you have HTML code that you just want to put into the table cell.
  */
 class HTML extends Generic
 {
-
     /**
      * Replace parent method.
      *

@@ -2,9 +2,7 @@
 
 require_once __DIR__ . '/../atk-init.php';
 
-/**
- * Testing form.
- */
+// Testing form.
 
 // create header
 \atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
@@ -42,7 +40,6 @@ $f_names->addField('last_name', ['width' => 'five']);
 
 // form on submit
 $form->onSubmit(function ($f) {
-
     // In-form validation
     $errors = [];
     if (strlen($f->model['first_name']) < 3) {
@@ -78,10 +75,10 @@ class Person extends \atk4\data\Model
     {
         parent::init();
         $this->addField('name', ['required' => true]);
-        $this->addField('surname', ['ui'=>['placeholder'=>'e.g. Smith']]);
+        $this->addField('surname', ['ui' => ['placeholder' => 'e.g. Smith']]);
         $this->addField('gender', ['enum' => ['M', 'F']]);
         $this->hasOne('country_lookup_id', new Country()); // this works fast
-        $this->hasOne('country_dropdown_id', [new Country(), 'ui'=>['form'=>new \atk4\ui\FormField\DropDown()]]); // this works slow
+        $this->hasOne('country_dropdown_id', [new Country(), 'ui' => ['form' => new \atk4\ui\FormField\DropDown()]]); // this works slow
     }
 
     public function validate($intent = null)
@@ -97,5 +94,5 @@ class Person extends \atk4\data\Model
 }
 
 \atk4\ui\Form::addTo($app)
-  ->addClass('segment')
+    ->addClass('segment')
     ->setModel(new Person($db));

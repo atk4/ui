@@ -5,7 +5,7 @@ require_once __DIR__ . '/../_includes/country_actions.php';
 
 \atk4\ui\Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);
 
-/**************** PANEL ********************/
+// PANEL
 
 \atk4\ui\Header::addTo($app, ['Static', 'size' => 4, 'subHeader' => 'Panel may have static content only.']);
 $panel = $app->layout->addRightPanel(new \atk4\ui\Panel\Right(['dynamic' => false]));
@@ -14,7 +14,7 @@ $btn = \atk4\ui\Button::addTo($app, ['Open Static']);
 $btn->on('click', $panel->jsOpen());
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
-/**************** PANEL_1 ********************/
+// PANEL_1
 
 \atk4\ui\Header::addTo($app, ['Dynamic', 'size' => 4, 'subHeader' => 'Panel can load content dynamically']);
 $panel_1 = $app->layout->addRightPanel(new \atk4\ui\Panel\Right());
@@ -29,12 +29,12 @@ $btn->on('click', $panel_1->jsOpen(['btn'], 'orange'));
 
 $panel_1->onOpen(function ($p) {
     $btn_number = $_GET['btn'] ?? null;
-    $text =  'You loaded panel content using button #' . $btn_number;
+    $text = 'You loaded panel content using button #' . $btn_number;
     \atk4\ui\Message::addTo($p, ['Panel 1', 'text' => $text]);
 });
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
-/**************** PANEL_2 ********************/
+// PANEL_2
 
 \atk4\ui\Header::addTo($app, ['Closing option', 'size' => 4, 'subHeader' => 'Panel can prevent from closing.']);
 
@@ -53,20 +53,20 @@ $panel_2->onOpen(function ($p) {
     $f = \atk4\ui\Form::addTo($p);
     $f->addHeader('Settings');
     $f->addField('name', ['DropDown', 'values' => ['1' => 'Option 1', '2' => 'Option 2']])
-      ->set('1')
-      ->onChange($p->owner->jsDisplayWarning(true));
+        ->set('1')
+        ->onChange($p->owner->jsDisplayWarning(true));
 
     $f->onSubmit(function ($f) use ($p) {
         return [
-          new \atk4\ui\jsToast('Saved, closing panel.'),
-          $p->owner->jsDisplayWarning(false),
-          $p->owner->jsClose(),
-       ];
+            new \atk4\ui\jsToast('Saved, closing panel.'),
+            $p->owner->jsDisplayWarning(false),
+            $p->owner->jsClose(),
+        ];
     });
 });
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
-/**************** PANEL_3 ********************/
+// PANEL_3
 
 $c_id = $app->stickyGet('id');
 \atk4\ui\Header::addTo($app, ['UserAction Friendly', 'size' => 4, 'subHeader' => 'Panel can run model action.']);
@@ -85,7 +85,7 @@ foreach ($country as $ct) {
 $panel_3->onOpen(function ($p) use ($c_actions, $country, $c_id) {
     $seg = \atk4\ui\View::addTo($p, ['ui' => 'basic segment center aligned']);
     \atk4\ui\Header::addTo($seg, [$country->load($c_id)->getTitle()]);
-    $buttons = \atk4\ui\View::addTo($seg, ['ui'=>'vertical basic buttons']);
+    $buttons = \atk4\ui\View::addTo($seg, ['ui' => 'vertical basic buttons']);
     foreach ($c_actions as $action) {
         $b = \atk4\ui\Button::addTo($buttons, [$action->getDescription()]);
         $b->on('click', $action, ['args' => ['id' => $c_id]]);

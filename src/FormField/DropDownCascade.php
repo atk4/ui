@@ -8,7 +8,7 @@
  *       $f = Form::addTo($app);
  *       $f->addField('category_id', [DropDown::class, 'model' => new Category($db)])->set(3);
  *       $f->addField('sub_category_id', [DropDownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
- *       $f->addField('product_id', [DropDownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
+ *       $f->addField('product_id', [DropDownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);.
  */
 
 namespace atk4\ui\FormField;
@@ -18,17 +18,17 @@ use atk4\ui\Exception;
 
 class DropDownCascade extends DropDown
 {
-    /** @var null|string|Generic the form input to use for setting this dropdown list values from. */
-    public $cascadeFrom = null;
+    /** @var string|Generic|null the form input to use for setting this dropdown list values from. */
+    public $cascadeFrom;
 
-    /** @var null|string|Model the hasMany reference model that will generated value for this dropdown list.*/
-    public $reference = null;
+    /** @var string|Model|null the hasMany reference model that will generated value for this dropdown list. */
+    public $reference;
 
-    /** @var null The form input create by cascadeFrom field*/
-    protected $cascadeInput = null;
+    /** @var null The form input create by cascadeFrom field */
+    protected $cascadeInput;
 
     /** @var null The casacade input value. */
-    protected $cascadeInputValue = null;
+    protected $cascadeInputValue;
 
     public function init(): void
     {
@@ -52,10 +52,6 @@ class DropDownCascade extends DropDown
     /**
      * Generate new dropdown values based on cascadeInput model selected id.
      * Return an empty value set if id is null.
-     *
-     * @param string $id
-     *
-     * @return array
      */
     public function getNewValues(string $id): array
     {
@@ -83,14 +79,13 @@ class DropDownCascade extends DropDown
      *
      * @param $values    An array of possible values.
      * @param $value     The current field value.
-     *
-     * @return array
      */
     private function getJsValues(array $values, string $value): array
     {
         foreach ($values as $k => $v) {
             if ($v['value'] === $value) {
                 $values[$k]['selected'] = true;
+
                 break;
             }
         }
@@ -99,9 +94,8 @@ class DropDownCascade extends DropDown
     }
 
     /**
-     * Call during parent::renderView()
+     * Call during parent::renderView().
      *
-     * @return array
      * @throws \atk4\core\Exception
      */
     protected function jsRenderDropdown(): array

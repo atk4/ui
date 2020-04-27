@@ -1,6 +1,5 @@
 <?php
 
-
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/demo-lookup.php';
 
@@ -28,9 +27,9 @@ $form->setModel($m);
 
 $form->addField('country3', [
     'Lookup',
-    'model'       => new Country($db),
+    'model' => new Country($db),
     'placeholder' => 'Search for country by name or iso value',
-    'search'      => ['name', 'iso', 'iso3'],
+    'search' => ['name', 'iso', 'iso3'],
 ]);
 
 $form->onSubmit(function ($f) use ($db) {
@@ -52,7 +51,7 @@ $form->onSubmit(function ($f) use ($db) {
 \atk4\ui\FormField\Lookup::addTo($app, ['label' => '$', 'labelRight' => new \atk4\ui\Label(['.00', 'basic'])]);
 
 \atk4\ui\FormField\Lookup::addTo($app, [
-    'iconLeft'   => 'tags',
+    'iconLeft' => 'tags',
     'labelRight' => new \atk4\ui\Label(['Add Tag', 'tag']),
 ]);
 

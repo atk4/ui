@@ -17,7 +17,7 @@ class Wizard extends View
      *
      * @var callable
      */
-    public $stepCallback = null;
+    public $stepCallback;
 
     /**
      * List of steps.
@@ -31,21 +31,21 @@ class Wizard extends View
      *
      * @var int
      */
-    public $currentStep = null;
+    public $currentStep;
 
     /**
      * Button for going to previous step.
      *
      * @var Button
      */
-    public $buttonPrev = null;
+    public $buttonPrev;
 
     /**
      * Buttor for going to next step.
      *
      * @var Button
      */
-    public $buttonNext = null;
+    public $buttonNext;
 
     /**
      * Icon that will be used on all steps by default.
@@ -60,7 +60,7 @@ class Wizard extends View
     public function init(): void
     {
         parent::init();
-        $this->stepCallback = Callback::addTo($this, ['urlTrigger'=>$this->name]);
+        $this->stepCallback = Callback::addTo($this, ['urlTrigger' => $this->name]);
 
         $this->currentStep = $this->stepCallback->triggered() ?: 0;
 
@@ -91,9 +91,9 @@ class Wizard extends View
     {
         $step = $this->factory([
             'Step',
-            'wizard'  => $this,
-            'template'=> clone $this->stepTemplate,
-            'sequence'=> count($this->steps),
+            'wizard' => $this,
+            'template' => clone $this->stepTemplate,
+            'sequence' => count($this->steps),
         ], $name, 'atk4\ui');
 
         // add tabs menu item
@@ -178,8 +178,8 @@ class Wizard extends View
     public function recursiveRender()
     {
         if (!$this->steps) {
-            $this->addStep(['No Steps Defined', 'icon'=>'configure', 'description'=>'use $wizard->addStep() now'], function ($p) {
-                Message::addTo($p, ['Step content will appear here', 'type'=>'error', 'text'=>'Specify callback to addStep() which would populate this area.']);
+            $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function ($p) {
+                Message::addTo($p, ['Step content will appear here', 'type' => 'error', 'text' => 'Specify callback to addStep() which would populate this area.']);
             });
         }
 

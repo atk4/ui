@@ -31,7 +31,7 @@ $inventory = new InventoryItem(new \atk4\data\Persistence\Array_($data));
 
 // Populate some data.
 $total = 0;
-for ($i = 1; $i < 3; $i++) {
+for ($i = 1; $i < 3; ++$i) {
     $inventory['id'] = $i;
     $inventory['item'] = 'item_' . $i;
     $inventory['qty'] = rand(10, 100);

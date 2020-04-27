@@ -4,7 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 date_default_timezone_set('UTC');
 
-/* START - PHPUNIT & COVERAGE SETUP */
+// START - PHPUNIT & COVERAGE SETUP
 if (file_exists(__DIR__ . '/coverage.php')) {
     include_once __DIR__ . '/coverage.php';
 }
@@ -13,7 +13,7 @@ require_once __DIR__ . '/database.php';
 require_once __DIR__ . '/_includes/somedatadef.php';
 
 $app = new \atk4\ui\App([
-    'call_exit'        => isset($_GET['APP_CALL_EXIT']) && $_GET['APP_CALL_EXIT'] == 0 ? false : true,
+    'call_exit' => isset($_GET['APP_CALL_EXIT']) && $_GET['APP_CALL_EXIT'] == 0 ? false : true,
     'catch_exceptions' => isset($_GET['APP_CATCH_EXCEPTIONS']) && $_GET['APP_CATCH_EXCEPTIONS'] == 0 ? false : true,
 ]);
 
@@ -30,11 +30,10 @@ if (file_exists(__DIR__ . '/coverage.php')) {
         coverage();
     });
 }
-/* END - PHPUNIT & COVERAGE SETUP */
+// END - PHPUNIT & COVERAGE SETUP
 // set app->db
 $app->db = $db;
 $app->title = 'Agile UI Demo v' . $app->version;
-
 
 if (file_exists(dirname(__DIR__) . '/public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = '/public';
@@ -134,12 +133,11 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem('More Sticky', [$path . 'sticky2'], $other);
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $other);
 
-
 //    $f = basename($_SERVER['PHP_SELF']);
 
     $url = 'https://github.com/atk4/ui/blob/develop';
 
-    $ex =[
+    $ex = [
         new \atk4\ui\jsExpression('const baseUrl = []', [$url]),
         new \atk4\ui\jsExpression('window.open(baseUrl + document.location.pathname, "_blank")'),
     ];

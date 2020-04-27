@@ -7,7 +7,7 @@ class Finder extends \atk4\ui\Columns
 {
     public $route = [];
 
-    public function setModel(\atk4\data\Model $model, $route = [])
+    public function setModel(atk4\data\Model $model, $route = [])
     {
         parent::setModel($model);
 

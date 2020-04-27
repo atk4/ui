@@ -19,7 +19,7 @@ class Accordion extends View
      *
      * @var array|string|null
      */
-    public $type = null;
+    public $type;
 
     /**
      * Settings as per Fomantic-ui accordion settings.
@@ -48,7 +48,7 @@ class Accordion extends View
      * a callback for dynamic content.
      *
      * @param string        $title
-     * @param null|callable $callback
+     * @param callable|null $callback
      * @param string        $icon
      *
      * @throws Exception
@@ -81,9 +81,7 @@ class Accordion extends View
         $this->activeSection = $this->getSectionIdx($section);
     }
 
-    /*
-     * JS Behavior wrapper functions.
-     */
+    // JS Behavior wrapper functions.
     public function jsRefresh($when = null)
     {
         return $this->jsBehavior('refresh', [], $when);
@@ -139,6 +137,7 @@ class Accordion extends View
         foreach ($this->sections as $key => $accordion_section) {
             if ($accordion_section->name === $section->name) {
                 $idx = $key;
+
                 break;
             }
         }

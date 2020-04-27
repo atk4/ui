@@ -20,7 +20,7 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /** @var null Temporary store button id when press. Use in js callback test. */
-    protected $buttonId = null;
+    protected $buttonId;
 
     public function getSession($name = null)
     {
@@ -31,6 +31,7 @@ class FeatureContext extends RawMinkContext implements Context
      * Wait for a certain time in ms.
      *
      * @Then I wait :arg1
+     *
      * @param $arg1
      */
     public function iWait($arg1)
@@ -76,6 +77,7 @@ class FeatureContext extends RawMinkContext implements Context
 
     /**
      * @Given I click tab with title :arg1
+     *
      * @param $arg1
      *
      * @throws Exception
@@ -84,12 +86,12 @@ class FeatureContext extends RawMinkContext implements Context
     {
         $tabMenu = $this->getSession()->getPage()->find('css', '.ui.tabular.menu');
         if (!$tabMenu) {
-            throw new \Exception("Unable to find a tab menu.");
+            throw new \Exception('Unable to find a tab menu.');
         }
 
         $link = $tabMenu->find('xpath', '//a[text()="' . $arg1 . '"]');
         if (!$link) {
-            throw new \Exception("Unable to find tab with title " . $arg1);
+            throw new \Exception('Unable to find tab with title ' . $arg1);
         }
 
         $script = '$("#' . $link->getAttribute('id') . '").click()';
@@ -103,7 +105,7 @@ class FeatureContext extends RawMinkContext implements Context
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         if ($element->getAttribute('style')) {
-            throw new \Exception("Element with text \"$arg1\" must be invisible");
+            throw new \Exception("Element with text \"{$arg1}\" must be invisible");
         }
     }
 
@@ -123,7 +125,7 @@ class FeatureContext extends RawMinkContext implements Context
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (strpos('display: none', $element->getAttribute('style')) !== false) {
-            throw new \Exception("Element with text \"$arg1\" must be invisible");
+            throw new \Exception("Element with text \"{$arg1}\" must be invisible");
         }
     }
 
@@ -142,6 +144,7 @@ class FeatureContext extends RawMinkContext implements Context
 
     /**
      * @Then I press Modal button :arg
+     *
      * @param $arg
      *
      * @throws Exception
@@ -181,6 +184,7 @@ class FeatureContext extends RawMinkContext implements Context
 
     /**
      * @Then Modal is showing text :arg1 inside tag :arg2
+     *
      * @param $arg1
      * @param $arg2
      *
@@ -222,6 +226,7 @@ class FeatureContext extends RawMinkContext implements Context
 
     /**
      * @Then Toast display should contains text :arg1
+     *
      * @param $arg1
      *
      * @throws Exception

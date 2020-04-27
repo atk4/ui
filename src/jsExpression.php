@@ -12,7 +12,7 @@ class jsExpression implements jsExpressionable
     /**
      * @var string
      */
-    public $template = null;
+    public $template;
 
     /**
      * @var array
@@ -53,7 +53,7 @@ class jsExpression implements jsExpressionable
                 if (!isset($this->args[$identifier])) {
                     throw new Exception([
                         'Tag not defined in template for jsExpression',
-                        'tag'      => $identifier,
+                        'tag' => $identifier,
                         'template' => $this->template,
                     ]);
                 }
@@ -150,13 +150,15 @@ class jsExpression implements jsExpressionable
     {
         $length = strlen($str);
         $ret = '';
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             switch ($str[$i]) {
                 case "\r":
                     $ret .= '\\r';
+
                     break;
                 case "\n":
                     $ret .= '\\n';
+
                     break;
                 case '"':
                 case "'":
@@ -165,9 +167,11 @@ class jsExpression implements jsExpressionable
                 case '&':
                 case '\\':
                     $ret .= '\x' . dechex(ord($str[$i]));
+
                     break;
                 default:
                     $ret .= $str[$i];
+
                     break;
             }
         }

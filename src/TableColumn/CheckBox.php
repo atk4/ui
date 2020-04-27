@@ -7,7 +7,7 @@ namespace atk4\ui\TableColumn;
  */
 class CheckBox extends Generic
 {
-    public $class = null;
+    public $class;
 
     /**
      * Return action which will calculate and return array of all CheckBox IDs, e.g.

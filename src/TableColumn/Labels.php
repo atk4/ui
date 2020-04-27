@@ -3,7 +3,6 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
-use atk4\ui\Exception;
 
 /**
  * Class Labels.
@@ -15,7 +14,7 @@ use atk4\ui\Exception;
  */
 class Labels extends Generic
 {
-    /** @var array Array of allowed values. This have precedence over $field->values */
+    /** @var array Array of allowed values. This have precedence over->values */
     public $values;
 
     /**
@@ -31,7 +30,7 @@ class Labels extends Generic
         $v = $field->get();
         $v = is_string($v) ? explode(',', $v) : $v;
 
-        $labels= [];
+        $labels = [];
         foreach ((array) $v as $id) {
             $id = trim($id);
 

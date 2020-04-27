@@ -2,7 +2,6 @@
 /**
  * Counter for certain demos file.
  */
-
 class Counter extends \atk4\ui\FormField\Line
 {
     public $content = 20; // default

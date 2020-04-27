@@ -8,7 +8,7 @@ namespace atk4\ui;
 class Tab extends Item
 {
     /** @var string */
-    public $path = null;
+    public $path;
 
     /**
      * Sets path for tab.

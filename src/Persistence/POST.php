@@ -14,6 +14,7 @@ class POST extends \atk4\data\Persistence
         foreach ($m->getFields() as $field => $def) {
             if ($def->type === 'boolean') {
                 $data[$field] = isset($_POST[$field]);
+
                 continue;
             }
 

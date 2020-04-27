@@ -190,7 +190,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $app = $this->app;
 
-        $vp = \atk4\ui\VirtualPage::addTo($app, ['urlTrigger'=>'bah']);
+        $vp = \atk4\ui\VirtualPage::addTo($app, ['urlTrigger' => 'bah']);
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
@@ -203,7 +203,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertEquals(25, $var);
     }
 
-    public $var = null;
+    public $var;
 
     public function callPull230()
     {

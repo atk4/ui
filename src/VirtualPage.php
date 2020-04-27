@@ -13,14 +13,14 @@ namespace atk4\ui;
  */
 class VirtualPage extends View
 {
-    /** @var Callback */
-    public $cb = null;
+    /** @var callback */
+    public $cb;
 
     /** @var callable Optional callback function of virtual page */
-    public $fx = null;
+    public $fx;
 
     /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */
-    public $urlTrigger = null;
+    public $urlTrigger;
 
     /** @var string UI container class */
     public $ui = 'container';
@@ -32,7 +32,7 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = $this->_add([Callback::class, 'urlTrigger'=>$this->urlTrigger ?: $this->name]);
+        $this->cb = $this->_add([Callback::class, 'urlTrigger' => $this->urlTrigger ?: $this->name]);
         $this->app->stickyGet($this->name);
     }
 
@@ -55,7 +55,7 @@ class VirtualPage extends View
         if ($this->fx) {
             throw new Exception([
                 'Callback for this Virtual Page is already defined',
-                'vp'     => $this,
+                'vp' => $this,
                 'old_fx' => $this->fx,
                 'new_fx' => $fx,
             ]);
@@ -108,10 +108,8 @@ class VirtualPage extends View
     public function getHTML()
     {
         $this->cb->set(function () {
-
             // if virtual page callback is triggered
             if ($type = $this->cb->triggered()) {
-
                 // process callback
                 if ($this->fx) {
                     call_user_func($this->fx, $this);

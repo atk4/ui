@@ -16,7 +16,7 @@ class Table extends Lister
      *
      * @var View|null Ususally a Grid or Crud view that contains the table.
      */
-    public $reload = null;
+    public $reload;
 
     /**
      * Column objects can service multiple columns. You can use it for your advancage by re-using the object
@@ -25,7 +25,7 @@ class Table extends Lister
      *
      * @var TableColumn\Generic
      */
-    public $default_column = null;
+    public $default_column;
 
     /**
      * Contains list of declared columns. Value will always be a column object.
@@ -96,9 +96,9 @@ class Table extends Lister
      * Set this if you want table to appear as sortable. This does not add any
      * mechanic of actual sorting - either implement manually or use Grid.
      *
-     * @var null|bool
+     * @var bool|null
      */
-    public $sortable = null;
+    public $sortable;
 
     /**
      * When $sortable is true, you can specify which column will appear to have
@@ -106,7 +106,7 @@ class Table extends Lister
      *
      * @var string
      */
-    public $sort_by = null;
+    public $sort_by;
 
     /**
      * When $sortable is true, and $sort_by is set, you can set this to
@@ -114,7 +114,7 @@ class Table extends Lister
      *
      * @var string
      */
-    public $sort_order = null;
+    public $sort_order;
 
     /**
      * Make action columns in table use
@@ -129,7 +129,7 @@ class Table extends Lister
     /**
      * Constructor.
      *
-     * @param null|string $class CSS class to add
+     * @param string|null $class CSS class to add
      */
     public function __construct($class = null)
     {
@@ -268,7 +268,7 @@ class Table extends Lister
         // set filter to all column when null.
         if (!$cols) {
             foreach ($this->model->getFields() as $key => $field) {
-                if (! empty($this->columns[$key])) {
+                if (!empty($this->columns[$key])) {
                     $cols[] = $field->short_name;
                 }
             }
@@ -330,8 +330,8 @@ class Table extends Lister
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param \atk4\data\Field $field    Data model field
-     * @param mixed            $seed Defaults to pass to factory() when decorator is initialized
+     * @param \atk4\data\Field $field Data model field
+     * @param mixed            $seed  Defaults to pass to factory() when decorator is initialized
      *
      * @return TableColumn\Generic
      */
@@ -349,9 +349,9 @@ class Table extends Lister
 
     protected $typeToDecorator = [
         'password' => 'Password',
-        'money'    => 'Money',
-        'text'     => 'Text',
-        'boolean'  => ['Status', ['positive' => [true], 'negative' => [false]]],
+        'money' => 'Money',
+        'text' => 'Text',
+        'boolean' => ['Status', ['positive' => [true], 'negative' => [false]]],
     ];
 
     /**
@@ -364,7 +364,6 @@ class Table extends Lister
      *       //do somethings with columns width
      *       $columns = json_decode($w);
      *   });
-     *
      *
      * @param callable $fx             A callback function with columns widths as parameter.
      * @param int[]    $widths         An array of widths value, integer only. ex: [100,200,300,100]
@@ -379,7 +378,7 @@ class Table extends Lister
         $options = [];
         if ($fx && is_callable($fx)) {
             $cb = jsCallback::addTo($this);
-            $cb->set($fx, ['widths'=>'widths']);
+            $cb->set($fx, ['widths' => 'widths']);
             $options['uri'] = $cb->getJSURL();
         } elseif ($fx && is_array($fx)) {
             $widths = $fx;
@@ -500,7 +499,7 @@ class Table extends Lister
 
             $this->renderRow();
 
-            $this->_rendered_rows_count++;
+            ++$this->_rendered_rows_count;
 
             if ($this->hook('afterRow') === false) {
                 continue;
@@ -615,7 +614,6 @@ class Table extends Lister
     public function updateTotals()
     {
         foreach ($this->totals_plan as $key => $val) {
-
             // if value is array, then we treat it as built-in or callable aggregate method
             if (is_array($val)) {
                 $f = $val[0]; // shortcut
@@ -635,19 +633,23 @@ class Table extends Lister
                     switch ($f) {
                         case 'sum':
                             $this->totals[$key] += $this->model[$key];
+
                             break;
                         case 'count':
-                            $this->totals[$key] += 1;
+                            ++$this->totals[$key];
+
                             break;
                         case 'min':
                             if ($this->model[$key] < $this->totals[$key]) {
                                 $this->totals[$key] = $this->model[$key];
                             }
+
                             break;
                         case 'max':
                             if ($this->model[$key] > $this->totals[$key]) {
                                 $this->totals[$key] = $this->model[$key];
                             }
+
                             break;
                         default:
                             throw new Exception(['Aggregation method does not exist', 'method' => $f]);
@@ -667,7 +669,6 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-
             // If multiple formatters are defined, use the first for the header cell
             if (is_array($column)) {
                 $column = $column[0];
@@ -698,6 +699,7 @@ class Table extends Lister
             // if no totals plan, then show dash, but keep column formatting
             if (!isset($this->totals_plan[$name])) {
                 $output[] = $column->getTag('foot', '-');
+
                 continue;
             }
 
@@ -706,6 +708,7 @@ class Table extends Lister
                 // todo - format
                 $field = $this->model->getField($name);
                 $output[] = $column->getTotalsCellHTML($field, $this->totals[$name]);
+
                 continue;
             }
 
@@ -725,7 +728,6 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-
             // If multiple formatters are defined, use the first for the header cell
             $field = !is_int($name) ? $this->model->getField($name) : null;
 

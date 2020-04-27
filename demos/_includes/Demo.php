@@ -21,7 +21,7 @@ class Demo extends \atk4\ui\Columns
     public function setCode($code, $lang = 'php')
     {
         $this->highLightCode();
-        \atk4\ui\View::addTo(\atk4\ui\View::addTo($this->left, ['element'=>'pre']), ['element' => 'code'])->addClass($lang)->set($code);
+        \atk4\ui\View::addTo(\atk4\ui\View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
         $app = $this->right;
         $app->db = $this->app->db;
         eval($code);

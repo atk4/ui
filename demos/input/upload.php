@@ -17,9 +17,9 @@ $img->onDelete(function ($fileId) use ($img) {
     $img->clearThumbnail('./images/default.png');
 
     return new \atk4\ui\jsToast([
-        'title'   => 'Delete successfully',
-        'message' =>  $fileId . ' has been removed',
-        'class'   => 'success',
+        'title' => 'Delete successfully',
+        'message' => $fileId . ' has been removed',
+        'class' => 'success',
     ]);
 });
 
@@ -33,26 +33,26 @@ $img->onUpload(function ($files) use ($form, $img) {
 
     //Do file processing here...
 
-    /* This will get caught by jsCallback and show via modal. */
+    // This will get caught by jsCallback and show via modal.
     //new Blabla();
 
-    /* js Action can be return. */
+    // js Action can be return.
     //if using form, can return an error to form field directly.
     //return $form->error('file', 'Unable to upload file.');
 
     // can also return a notifier.
     return new \atk4\ui\jsToast([
-                                    'title'   => 'Upload success',
-                                    'message' => 'Image is uploaded!',
-                                    'class'   => 'success',
-                                ]);
+        'title' => 'Upload success',
+        'message' => 'Image is uploaded!',
+        'class' => 'success',
+    ]);
 });
 
 $field->onDelete(function ($fileId) {
     return new \atk4\ui\jsToast([
-        'title'   => 'Delete successfully',
+        'title' => 'Delete successfully',
         'message' => $fileId . ' has been removed',
-        'class'   => 'success',
+        'class' => 'success',
     ]);
 });
 
@@ -63,9 +63,9 @@ $field->onUpload(function ($files) use ($form, $field) {
     $field->setFileId('a_token');
 
     return new \atk4\ui\jsToast([
-        'title'   => 'Upload success',
+        'title' => 'Upload success',
         'message' => 'File is uploaded!',
-        'class'   => 'success',
+        'class' => 'success',
     ]);
 });
 

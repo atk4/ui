@@ -4,7 +4,6 @@
  * This layout use jQuery plugin atk-sidenav.plugin.js
  *  Default value for this plugin is set for Maestro layout using maestro-sidenav.html template.
  *  Note that it is possible to change these default value if another template is use.
- *
  */
 
 namespace atk4\ui\Layout;

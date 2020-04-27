@@ -14,7 +14,7 @@ class ListerTest extends AtkPhpunit\TestCase
     {
         $v = new \atk4\ui\View();
         $v->init();
-        $l = \atk4\ui\Lister::addTo($v, ['defaultTemplate'=>'lister.html']);
+        $l = \atk4\ui\Lister::addTo($v, ['defaultTemplate' => 'lister.html']);
         $l->setSource(['foo', 'bar']);
     }
 
@@ -23,7 +23,7 @@ class ListerTest extends AtkPhpunit\TestCase
      */
     public function testListerRender2()
     {
-        $v = new \atk4\ui\View(['template'=>new \atk4\ui\Template('hello{list}, world{/list}')]);
+        $v = new \atk4\ui\View(['template' => new \atk4\ui\Template('hello{list}, world{/list}')]);
         $v->init();
         $l = \atk4\ui\Lister::addTo($v, [], ['list']);
         $l->setSource(['foo', 'bar']);

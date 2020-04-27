@@ -14,13 +14,13 @@ use atk4\ui\ActionExecutor\UserAction;
 class CRUD extends Grid
 {
     /** @var array of fields to display in Grid */
-    public $displayFields = null;
+    public $displayFields;
 
-    /** @var null|array of fields to edit in Form for Model edit action */
-    public $editFields = null;
+    /** @var array|null of fields to edit in Form for Model edit action */
+    public $editFields;
 
-    /** @var null|array of fields to edit in Form for Model add action */
-    public $addFields = null;
+    /** @var array|null of fields to edit in Form for Model add action */
+    public $addFields;
 
     /** @var array Default notifier to perform when adding or editing is successful * */
     public $notifyDefault = ['jsToast'];
@@ -32,7 +32,7 @@ class CRUD extends Grid
     public $executor = UserAction::class;
 
     /** @var bool|null should we use table column drop-down menu to display user actions? */
-    public $useMenuActions = null;
+    public $useMenuActions;
 
     /** @var array Collection of NO_RECORDS Scope Model action menu item */
     private $menuItems = [];
@@ -93,15 +93,12 @@ class CRUD extends Grid
     /**
      * Sets data model of CRUD.
      *
-     * @param \atk4\data\Model $m
-     * @param null|array       $fields
+     * @param array|null $fields
      *
      * @throws \atk4\core\Exception
      * @throws Exception
-     *
-     * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $m, $fields = null): \atk4\data\Model
+    public function setModel(Model $m, $fields = null): Model
     {
         if ($fields !== null) {
             $this->displayFields = $fields;
@@ -147,8 +144,6 @@ class CRUD extends Grid
      * for UserAction onStep field. Callback will receive executor form where you
      * can setup Input field via javascript prior to display form or change form submit event
      * handler.
-     *
-     * @param Generic $action
      *
      * @throws \atk4\core\Exception
      *
@@ -202,8 +197,8 @@ class CRUD extends Grid
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      *
-     * @param null|string  $msg    The message to display.
-     * @param null|Generic $action The model action.
+     * @param string|null  $msg    The message to display.
+     * @param Generic|null $action The model action.
      *
      * @throws \atk4\core\Exception
      *
@@ -223,17 +218,14 @@ class CRUD extends Grid
      * js expression return when action afterHook executor return a Model.
      *
      * @param Generic $action
-     * @param string  $msg
      *
      * @throws \atk4\core\Exception
-     *
-     * @return array
      */
     protected function jsModelReturn(Generic $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
         if (in_array($action->short_name, $this->reloadTableActions)) {
-            $js[] =  $this->container->jsReload($this->_getReloadArgs());
+            $js[] = $this->container->jsReload($this->_getReloadArgs());
         } elseif (in_array($action->short_name, $this->removeRowActions)) {
             $js[] = (new jQuery())->closest('tr')->transition('fade left');
         } else {
@@ -257,8 +249,6 @@ class CRUD extends Grid
 
     /**
      * Return proper action executor base on model action.
-     *
-     * @param Generic $action
      *
      *@throws \atk4\core\Exception
      *
@@ -304,12 +294,8 @@ class CRUD extends Grid
     /**
      * Return proper action need to setup menu or action column.
      *
-     * @param string $scope
-     *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
-     *
-     * @return array
      */
     private function _getModelActions(string $scope): array
     {
@@ -333,8 +319,6 @@ class CRUD extends Grid
      * Set callback for edit action in CRUD.
      * Callback function will receive the Edit Form and Executor as param.
      *
-     * @param callable $fx
-     *
      * @throws Exception
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
@@ -347,8 +331,6 @@ class CRUD extends Grid
     /**
      * Set callback for add action in CRUD.
      * Callback function will receive the Add Form and Executor as param.
-     *
-     * @param callable $fx
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -363,8 +345,6 @@ class CRUD extends Grid
      * Set callback for both edit and add action form.
      * Callback function will receive Forms and Executor as param.
      *
-     * @param callable $fx
-     *
      * @throws Exception
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
@@ -378,14 +358,11 @@ class CRUD extends Grid
     /**
      * Set onActions.
      *
-     * @param callable $fx
-     * @param string   $actionName
-     *
      * @throws Exception
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
      *
-     * @return null|mixed
+     * @return mixed|null
      */
     public function setOnActions(string $actionName, callable $fx)
     {

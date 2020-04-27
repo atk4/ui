@@ -2,10 +2,8 @@
 
 require_once __DIR__ . '/../atk-init.php';
 
-/***
- * This demo require spefic Database setup.
- */
-/*********** MODEL ***************/
+// This demo require spefic Database setup.
+// MODEL
 
 class Category extends \atk4\data\Model
 {

@@ -56,6 +56,7 @@ class Status extends Generic
         foreach ($this->states as $class => $values) {
             if (in_array($field->get(), $values)) {
                 $cl = $class;
+
                 break;
             }
         }
@@ -67,21 +68,23 @@ class Status extends Generic
         switch ($cl) {
         case 'positive':
             $ic = 'checkmark';
+
             break;
         case 'negative':
             $ic = 'close';
+
             break;
         case 'default':
             $ic = 'question';
+
             break;
         default:
             $ic = '';
-
         }
 
         return [
             '_' . $field->short_name . '_status' => $cl . ' single line',
-            '_' . $field->short_name . '_icon'   => $ic,
+            '_' . $field->short_name . '_icon' => $ic,
         ];
     }
 }

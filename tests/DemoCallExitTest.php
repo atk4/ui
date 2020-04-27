@@ -39,7 +39,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
             'interactive',
             'javascript',
             'layout',
-            'others'
+            'others',
         ];
 
         // File that need to be exclude.
@@ -68,13 +68,12 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
         // add index.
         $files[] = ['index.php'];
+
         return $files;
     }
 
     /**
      * @dataProvider casesDemoFilesdataProvider
-     *
-     * @param string $uri
      */
     public function testDemoHTMLStatusAndResponse(string $uri)
     {
@@ -85,8 +84,6 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
     /**
      * @dataProvider casesDemoGETDataProvider
-     *
-     * @param string $uri
      */
     public function testDemoGet(string $uri)
     {
@@ -111,7 +108,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $response = $this->getResponseFromRequestFormPOST(
             'interactive/wizard.php?atk_admin_wizard=1&atk_admin_wizard_form_submit=ajax&__atk_callback=1',
             [
-                'dsn'                          => 'mysql://root:root@db-host.example.com/atk4',
+                'dsn' => 'mysql://root:root@db-host.example.com/atk4',
                 'atk_admin_wizard_form_submit' => 'submit',
             ]
         );
@@ -126,8 +123,6 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
     /**
      * @dataProvider JSONResponseDataProvider
-     *
-     * @param string $uri
      *
      * @throws Exception
      */
@@ -160,8 +155,6 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
     /**
      * @dataProvider SSEResponseDataProvider
-     *
-     * @param string $uri
      */
     public function testDemoAssertSSEResponse(string $uri)
     {
@@ -206,9 +199,6 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
     /**
      * @dataProvider JSONResponsePOSTDataProvider
-     *
-     * @param string $uri
-     * @param array  $post_data
      */
     public function testDemoAssertJSONResponsePOST(string $uri, array $post_data)
     {
@@ -231,7 +221,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = [
             'collection/actions.php?atk_admin_gridlayout_argumentform_form_submit=ajax&__atk_callback=1',
             [
-                'path'                                          => '.',
+                'path' => '.',
                 'atk_admin_gridlayout_argumentform_form_submit' => 'submit',
             ],
         ]; // btn run
@@ -265,7 +255,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = [
             'collection/jsactions.php?atk_admin_jsuseraction=ajax&__atk_callback=1',
             [
-                'path'         => '.',
+                'path' => '.',
             ],
         ];
 
@@ -278,7 +268,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = [
             'obsolete/notify.php?__atk_m=atk_admin_modal&atk_admin_modal_view_callbacklater=ajax&atk_admin_modal_view_form_submit=ajax&__atk_callback=1',
             [
-                'name'                             => 'test',
+                'name' => 'test',
                 'atk_admin_modal_view_form_submit' => 'submit',
             ],
         ];
@@ -286,13 +276,13 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = [
             'obsolete/notify2.php?atk_admin_form_submit=ajax&__atk_callback=1',
             [
-                'text'                  => 'This text will appear in notification',
-                'icon'                  => 'warning sign',
-                'color'                 => 'green',
-                'transition'            => 'jiggle',
-                'width'                 => '25%',
-                'position'              => 'topRight',
-                'attach'                => 'Body',
+                'text' => 'This text will appear in notification',
+                'icon' => 'warning sign',
+                'color' => 'green',
+                'transition' => 'jiggle',
+                'width' => '25%',
+                'position' => 'topRight',
+                'attach' => 'Body',
                 'atk_admin_form_submit' => 'submit',
             ],
         ];
@@ -300,9 +290,9 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = [
             'collection/tablefilter.php?atk_admin_view_grid_view_filterpopup_5_form_submit=ajax&__atk_callback=1',
             [
-                'op'                                  => '=',
-                'value'                               => '374',
-                'range'                               => '',
+                'op' => '=',
+                'value' => '374',
+                'range' => '',
                 'atk_admin_view_grid_view_filterpopup_5_form_submit' => 'submit',
             ],
         ];
@@ -310,9 +300,9 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files[] = [
             'collection/tablefilter.php?atk_admin_view_grid_view_filterpopup_4_form_submit=ajax&__atk_callback=1',
             [
-                'op'                                  => 'between',
-                'value'                               => '10',
-                'range'                               => '20',
+                'op' => 'between',
+                'value' => '10',
+                'range' => '20',
                 'atk_admin_view_grid_view_filterpopup_4_form_submit' => 'submit',
             ],
         ];

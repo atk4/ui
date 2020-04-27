@@ -19,9 +19,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $arr = [
             'table' => [
                 1 => [
-                    'id'     => 1,
-                    'name'   => 'bar',
-                    'ref'    => 'ref123',
+                    'id' => 1,
+                    'name' => 'bar',
+                    'ref' => 'ref123',
                     'rating' => 3,
                 ],
             ],
@@ -42,9 +42,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->table->addDecorator('rating', [
             'ColorRating',
             [
-                'min'    => 0,
-                'max'    => 2,
-                'steps'  => 3,
+                'min' => 0,
+                'max' => 2,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -69,9 +69,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->table->addDecorator('rating', [
             'ColorRating',
             [
-                'min'    => 0,
-                'max'    => 2,
-                'steps'  => 3,
+                'min' => 0,
+                'max' => 2,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -92,9 +92,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->table->addDecorator('rating', [
             'ColorRating',
             [
-                'min'    => 4,
-                'max'    => 10,
-                'steps'  => 3,
+                'min' => 4,
+                'max' => 10,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -119,9 +119,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->table->addDecorator('rating', [
             'ColorRating',
             [
-                'min'    => 4,
-                'max'    => 10,
-                'steps'  => 3,
+                'min' => 4,
+                'max' => 10,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -144,9 +144,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->table->addDecorator('rating', [
             'ColorRating',
             [
-                'min'    => 3,
-                'max'    => 1,
-                'steps'  => 3,
+                'min' => 3,
+                'max' => 1,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -163,9 +163,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->table->addDecorator('rating', [
             'ColorRating',
             [
-                'min'    => 3,
-                'max'    => 3,
-                'steps'  => 3,
+                'min' => 3,
+                'max' => 3,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -182,9 +182,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->table->addDecorator('rating', [
             'ColorRating',
             [
-                'min'    => 1,
-                'max'    => 3,
-                'steps'  => 0,
+                'min' => 1,
+                'max' => 3,
+                'steps' => 0,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -201,9 +201,9 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->table->addDecorator('rating', [
             'ColorRating',
             [
-                'min'    => 1,
-                'max'    => 3,
-                'steps'  => 3,
+                'min' => 1,
+                'max' => 3,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                 ],

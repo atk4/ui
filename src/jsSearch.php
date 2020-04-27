@@ -13,7 +13,7 @@ class jsSearch extends View
      *
      * @var View
      */
-    public $reload = null;
+    public $reload;
 
     public $args = [];
 
@@ -42,7 +42,7 @@ class jsSearch extends View
      *
      * @var null
      */
-    public $initValue = null;
+    public $initValue;
 
     /**
      * Whether or not this search will reload a view
@@ -66,7 +66,7 @@ class jsSearch extends View
     public $filterIcon = 'filter';
     public $btnSearchIcon = 'search';
     public $btnRemoveIcon = 'red remove';
-    public $btnStyle = null;
+    public $btnStyle;
 
     public function init(): void
     {
@@ -91,11 +91,11 @@ class jsSearch extends View
         $this->template->set('BtnRemoveIcon', $this->btnRemoveIcon);
 
         $this->js(true)->atkJsSearch([
-            'uri'         => $this->reload->jsURL(),
-            'uri_options' => array_merge(['__atk_reload'=>$this->reload->name], $this->args),
-            'autoQuery'   => $this->autoQuery,
-            'q'           => $this->initValue,
-            'useAjax'     => $this->useAjax,
+            'uri' => $this->reload->jsURL(),
+            'uri_options' => array_merge(['__atk_reload' => $this->reload->name], $this->args),
+            'autoQuery' => $this->autoQuery,
+            'q' => $this->initValue,
+            'useAjax' => $this->useAjax,
         ]);
 
         parent::renderView();

@@ -9,7 +9,7 @@ use atk4\data\Model;
 
 class CardSection extends View
 {
-    public $card = null;
+    public $card;
 
     public $useTableField = false;
 
@@ -48,10 +48,8 @@ class CardSection extends View
     /**
      * Add Model fields to a card section.
      *
-     * @param Model $m
-     * @param array $fields
-     * @param bool  $useLabel
-     * @param bool  $useTable
+     * @param bool $useLabel
+     * @param bool $useTable
      *
      * @throws Exception
      * @throws \atk4\data\Exception
@@ -72,9 +70,7 @@ class CardSection extends View
     /**
      * Add fields label and value to section.
      *
-     * @param Model $m
-     * @param array $fields
-     * @param bool  $useLabel
+     * @param bool $useLabel
      *
      * @throws Exception
      * @throws \atk4\data\Exception
@@ -94,9 +90,6 @@ class CardSection extends View
 
     /**
      * Add field into section using a CardTable View.
-     *
-     * @param Model $m
-     * @param array $fields
      *
      * @throws Exception
      */

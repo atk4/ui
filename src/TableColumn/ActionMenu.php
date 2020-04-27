@@ -35,7 +35,7 @@ class ActionMenu extends Generic
      *
      * @var null
      */
-    public $label = null;
+    public $label;
 
     /**
      * Dropdown module css class name as per Formantic-ui.
@@ -76,8 +76,8 @@ class ActionMenu extends Generic
      * Add a menu item in Dropdown.
      *
      * @param View|string                                 $item
-     * @param null|callable|\atk4\data\UserAction\Generic $action
-     * @param null|string                                 $confirm
+     * @param callable|\atk4\data\UserAction\Generic|null $action
+     * @param string|null                                 $confirm
      * @param bool                                        $isDisabled
      *
      * @throws \atk4\core\Exception
@@ -141,10 +141,10 @@ class ActionMenu extends Generic
             array_merge(
                 $this->options,
                 [
-                    'direction'  => 'auto',  // direction need to be auto.
+                    'direction' => 'auto',  // direction need to be auto.
                     'transition' => 'none', // no transition.
-                    'onShow'     => (new jsChain('atk.tableDropdown.onShow')),
-                    'onHide'     => (new jsChain('atk.tableDropdown.onHide')),
+                    'onShow' => (new jsChain('atk.tableDropdown.onShow')),
+                    'onHide' => (new jsChain('atk.tableDropdown.onHide')),
                 ]
             )
         );

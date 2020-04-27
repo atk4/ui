@@ -14,8 +14,6 @@ interface Navigable
      * Add a group to left menu.
      *
      * @param $seed
-     *
-     * @return Menu
      */
     public function addMenuGroup($seed): Menu;
 
@@ -26,8 +24,6 @@ interface Navigable
      * @param $name
      * @param null $action
      * @param null $group
-     *
-     * @return Item
      */
     public function addMenuItem($name, $action = null, $group = null): Item;
 }

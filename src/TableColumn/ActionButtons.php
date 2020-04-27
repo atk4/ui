@@ -37,7 +37,7 @@ class ActionButtons extends Generic
      * Returns button object
      *
      * @param \atk4\ui\View|string                        $button
-     * @param null|callable|\atk4\data\UserAction\Generic $action
+     * @param callable|\atk4\data\UserAction\Generic|null $action
      * @param bool                                        $confirm
      * @param bool                                        $isDisabled
      *
@@ -125,7 +125,7 @@ class ActionButtons extends Generic
             call_user_func($callback, $t, $this->app->stickyGet($this->name));
         });
 
-        return $this->addButton($button, $modal->show(array_merge([$this->name=>$this->owner->jsRow()->data('id')], $args)));
+        return $this->addButton($button, $modal->show(array_merge([$this->name => $this->owner->jsRow()->data('id')], $args)));
     }
 
     /**

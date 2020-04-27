@@ -23,14 +23,14 @@ class Popup extends View
      *
      * @var View|string|null Object view or a string id.
      */
-    public $triggerBy = null;
+    public $triggerBy;
 
     /**
      * Js event that trigger the popup.
      *
      * @var string
      */
-    public $triggerOn = null;
+    public $triggerOn;
 
     /**
      * Default position of the popup in relation to target element.
@@ -57,9 +57,9 @@ class Popup extends View
     /**
      * The callback use to generate dynamic content.
      *
-     * @var Callback|null
+     * @var callback|null
      */
-    public $cb = null;
+    public $cb;
 
     /**
      * The dynamic View to load inside the popup
@@ -85,14 +85,14 @@ class Popup extends View
      *
      * @var string
      */
-    public $minWidth = null; //'120px';
+    public $minWidth; //'120px';
 
     /**
      * Min height for a dynamic popup.
      *
      * @var string
      */
-    public $minHeight = null; //'60px';
+    public $minHeight; //'60px';
 
     /**
      * Whether or not the click event triggering popup
@@ -127,7 +127,7 @@ class Popup extends View
         ) {
             throw new Exception([
                 'Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"',
-                'owner'=> $this->owner,
+                'owner' => $this->owner,
             ]);
         }
 
@@ -146,10 +146,10 @@ class Popup extends View
         }
 
         $this->popOptions = array_merge($this->popOptions, [
-            'popup'    => '#' . $this->name,
-            'on'       => $this->triggerOn,
+            'popup' => '#' . $this->name,
+            'on' => $this->triggerOn,
             'position' => $this->position,
-            'target'   => ($this->target) ? '#' . $this->target->name : false,
+            'target' => ($this->target) ? '#' . $this->target->name : false,
         ]);
     }
 

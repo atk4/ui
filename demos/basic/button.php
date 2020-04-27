@@ -2,10 +2,7 @@
 
 require_once __DIR__ . '/../atk-init.php';
 
-/**
- *
- * Demonstrates how to use buttons.
- */
+// Demonstrates how to use buttons.
 
 use atk4\ui\Button;
 use atk4\ui\Icon;
@@ -25,12 +22,12 @@ $b1->link(['index']);
 
 \atk4\ui\Header::addTo($app, ['Properties', 'size' => 2]);
 Button::addTo($app, ['Primary button', 'primary']);
-Button::addTo($app, ['Load', 'labeled', 'icon'=>'pause']);
-Button::addTo($app, ['Next', 'iconRight'=>'right arrow']);
-Button::addTo($app, [null, 'circular', 'icon'=>'settings']);
+Button::addTo($app, ['Load', 'labeled', 'icon' => 'pause']);
+Button::addTo($app, ['Next', 'iconRight' => 'right arrow']);
+Button::addTo($app, [null, 'circular', 'icon' => 'settings']);
 
 \atk4\ui\Header::addTo($app, ['Big Button', 'size' => 2]);
-Button::addTo($app, ['Click me', 'big primary', 'icon'=>'check']);
+Button::addTo($app, ['Click me', 'big primary', 'icon' => 'check']);
 
 \atk4\ui\Header::addTo($app, ['Button Intent', 'size' => 2]);
 Button::addTo($app, ['Yes', 'positive basic']);
@@ -45,9 +42,9 @@ Button::addTo($bar, ['Shuffle', 'icon' => 'shuffle']);
 
 \atk4\ui\Header::addTo($app, ['Icon Bar', 'size' => 2]);
 $bar = \atk4\ui\View::addTo($app, ['ui' => 'big blue buttons']);
-Button::addTo($bar, ['icon'=>'file']);
-Button::addTo($bar, ['icon'=>'yellow save']);
-Button::addTo($bar, ['icon'=>'upload', 'disabled'=>true]);
+Button::addTo($bar, ['icon' => 'file']);
+Button::addTo($bar, ['icon' => 'yellow save']);
+Button::addTo($bar, ['icon' => 'upload', 'disabled' => true]);
 
 \atk4\ui\Header::addTo($app, ['Forks Button Component', 'size' => 2]);
 

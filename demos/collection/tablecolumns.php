@@ -10,12 +10,12 @@ class ModelColor extends \atk4\data\Model
 
         $this->addField('name', [
             'type' => 'string',
-            'ui'   => [
+            'ui' => [
                 'table' => [
                     'Tooltip',
                     [
                         'tooltip_field' => 'note',
-                        'icon'          => 'info circle blue',
+                        'icon' => 'info circle blue',
                     ],
                 ],
             ],
@@ -23,7 +23,7 @@ class ModelColor extends \atk4\data\Model
 
         $this->addField('value_not_always_present', [
             'type' => 'string',
-            'ui'   => [
+            'ui' => [
                 'table' => [
                     'NoValue',
                     [
@@ -34,14 +34,14 @@ class ModelColor extends \atk4\data\Model
         ]);
 
         $this->addField('key_value', [
-            'type'   => 'string',
+            'type' => 'string',
             'values' => [
                 1 => '1st val',
                 '2nd val',
                 '3rd val',
                 '4th val',
             ],
-            'ui'   => [
+            'ui' => [
                 'table' => [
                     'KeyValue',
                 ],
@@ -49,14 +49,14 @@ class ModelColor extends \atk4\data\Model
         ]);
 
         $this->addField('key_value_string', [
-            'type'   => 'string',
+            'type' => 'string',
             'values' => [
-                'one'   => '1st val',
-                'two'   => '2nd val',
+                'one' => '1st val',
+                'two' => '2nd val',
                 'three' => '3rd val',
-                'four'  => '4th val',
+                'four' => '4th val',
             ],
-            'ui'   => [
+            'ui' => [
                 'table' => [
                     'KeyValue',
                 ],
@@ -65,7 +65,7 @@ class ModelColor extends \atk4\data\Model
 
         $this->addField('interests', [
             'type' => 'string',
-            'ui'   => [
+            'ui' => [
                 'table' => [
                     'Labels',
                 ],
@@ -74,13 +74,13 @@ class ModelColor extends \atk4\data\Model
 
         $this->addField('rating', [
             'type' => 'float',
-            'ui'   => [
+            'ui' => [
                 'table' => [
                     'ColorRating',
                     [
-                        'min'    => 1,
-                        'max'    => 3,
-                        'steps'  => 3,
+                        'min' => 1,
+                        'max' => 3,
+                        'steps' => 3,
                         'colors' => [
                             '#FF0000',
                             '#FFFF00',
@@ -109,14 +109,14 @@ foreach (range(1, 10) as $id) {
     $key_value = rand(1, 4);
 
     $m->insert([
-        'id'                       => $id,
-        'name'                     => 'name ' . $id,
-        'key_value'                => $key_value,
-        'key_value_string'         => $key_value_string[$key_value],
+        'id' => $id,
+        'name' => 'name ' . $id,
+        'key_value' => $key_value,
+        'key_value_string' => $key_value_string[$key_value],
         'value_not_always_present' => rand(0, 100) > 50 ? 'have value' : '',
-        'interests'                => '1st label, 2nd label',
-        'rating'                   => rand(100, 300) / 100,
-        'note'                     => 'lorem ipsum lorem dorem lorem',
+        'interests' => '1st label, 2nd label',
+        'rating' => rand(100, 300) / 100,
+        'note' => 'lorem ipsum lorem dorem lorem',
     ]);
 }
 

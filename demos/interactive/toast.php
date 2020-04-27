@@ -11,7 +11,7 @@ $btn->on('click', new \atk4\ui\jsToast('Hi there!'));
 $btn = \atk4\ui\Button::addTo($app)->set('Using a title');
 
 $btn->on('click', new \atk4\ui\jsToast([
-    'title'   => 'Title',
+    'title' => 'Title',
     'message' => 'See I have a title',
 ]));
 
@@ -19,38 +19,38 @@ $btn->on('click', new \atk4\ui\jsToast([
 
 $btn = \atk4\ui\Button::addTo($app)->set('Success');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title'   => 'Success',
+    'title' => 'Success',
     'message' => 'Well done',
-    'class'   => 'success',
+    'class' => 'success',
 ]));
 
 $btn = \atk4\ui\Button::addTo($app)->set('Error');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title'   => 'Error',
+    'title' => 'Error',
     'message' => 'An error occur',
-    'class'   => 'error',
+    'class' => 'error',
 ]));
 
 $btn = \atk4\ui\Button::addTo($app)->set('Warning');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title'   => 'Warning',
+    'title' => 'Warning',
     'message' => 'Behind you!',
-    'class'   => 'warning',
+    'class' => 'warning',
 ]));
 
 \atk4\ui\Header::addTo($app, ['Using different position']);
 
 $btn = \atk4\ui\Button::addTo($app)->set('Bottom Right');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title'    => 'Bottom Left',
-    'message'  => 'Should appear at the bottom on your left',
+    'title' => 'Bottom Left',
+    'message' => 'Should appear at the bottom on your left',
     'position' => 'bottom right',
 ]));
 
 $btn = \atk4\ui\Button::addTo($app)->set('Top Center');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title'    => 'Bottom Left',
-    'message'  => 'Should appear at the bottom on your left',
+    'title' => 'Bottom Left',
+    'message' => 'Should appear at the bottom on your left',
     'position' => 'top center',
 ]));
 
@@ -58,29 +58,29 @@ $btn->on('click', new \atk4\ui\jsToast([
 
 $btn = \atk4\ui\Button::addTo($app)->set('5 seconds');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title'       => 'Bottom Left',
-    'message'     => 'I will stay here for 5 sec.',
+    'title' => 'Bottom Left',
+    'message' => 'I will stay here for 5 sec.',
     'displayTime' => 5000,
 ]));
 
 $btn = \atk4\ui\Button::addTo($app)->set('For ever');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title'       => 'Bottom Left',
-    'message'     => 'I will stay until you click me',
+    'title' => 'Bottom Left',
+    'message' => 'I will stay until you click me',
     'displayTime' => 0,
 ]));
 
 $btn = \atk4\ui\Button::addTo($app)->set('Using Message style');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title'       => 'Awesome',
-    'message'     => 'I got my style from the message class',
-    'class'       => 'purple',
-    'className'   => ['toast' => 'ui message', 'title' => 'ui header'],
+    'title' => 'Awesome',
+    'message' => 'I got my style from the message class',
+    'class' => 'purple',
+    'className' => ['toast' => 'ui message', 'title' => 'ui header'],
 ]));
 
 $btn = \atk4\ui\Button::addTo($app)->set('With progress bar');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title'        => 'Awesome',
-    'message'      => 'See how long I will last',
+    'title' => 'Awesome',
+    'message' => 'See how long I will last',
     'showProgress' => 'bottom',
 ]));

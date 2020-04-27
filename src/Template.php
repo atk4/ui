@@ -52,7 +52,7 @@ class Template implements \ArrayAccess
      *
      * @var string
      */
-    public $source = null;
+    public $source;
 
     /** @var string */
     public $default_exception = 'Exception_Template';
@@ -98,7 +98,7 @@ class Template implements \ArrayAccess
     {
         $arg = [
             $message,
-            'tags'     => implode(', ', array_keys($this->tags)),
+            'tags' => implode(', ', array_keys($this->tags)),
             'template' => $this->template,
         ];
 
@@ -652,7 +652,7 @@ class Template implements \ArrayAccess
 
         throw new Exception([
             'Unable to read template from file',
-            'cwd'  => getcwd(),
+            'cwd' => getcwd(),
             'file' => $filename,
         ]);
     }
@@ -693,7 +693,7 @@ class Template implements \ArrayAccess
         }
         $this->tag_cnt = [];
 
-        /* First expand self-closing tags {$tag} -> {tag}{/tag} */
+        // First expand self-closing tags {$tag} -> {tag}{/tag}
         $str = preg_replace('/{\$([-_:\w]+)}/', '{\1}{/\1}', $str);
 
         $this->parseTemplate($str);
@@ -756,8 +756,8 @@ class Template implements \ArrayAccess
                 // is closing TAG
                 case '/':
                     return substr($tag, 1);
-                break;
 
+                break;
                 // is TAG
                 case '$':
 
@@ -774,7 +774,6 @@ class Template implements \ArrayAccess
                     }
 
                 break;
-
                 // recurse
                 default:
 
@@ -880,7 +879,7 @@ class Template implements \ArrayAccess
 
         return $s;
     }
-    /*** TO BE REFACTORED ***/
+    /*** TO BE REFACTORED */
 
     /*
      * Output all tags
@@ -889,6 +888,6 @@ class Template implements \ArrayAccess
     {
         echo '"'.$this->_getDumpTags($this->template).'"';
     }
-    /*** TO BE REFACTORED ***/
+    /*** TO BE REFACTORED */
     // }}}
 }

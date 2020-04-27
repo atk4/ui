@@ -11,44 +11,44 @@ class TypeDate extends Generic
         parent::init();
 
         $this->op->values = [
-            '='         => 'Is',
-            'within'    => 'Is within',
-            '<'         => 'Is before',
-            '>'         => 'Is after',
-            '<='        => 'Is on or before',
-            '>='        => 'Is on or after',
-            '!='        => 'Is not',
-            'empty'     => 'Is empty',
+            '=' => 'Is',
+            'within' => 'Is within',
+            '<' => 'Is before',
+            '>' => 'Is after',
+            '<=' => 'Is on or before',
+            '>=' => 'Is on or after',
+            '!=' => 'Is not',
+            'empty' => 'Is empty',
             'not empty' => 'Is not empty',
         ];
         $this->op->default = '=';
 
         // the date value to operate on.
         $this->value->values = [
-            'today'     => 'Today',
-            'tomorrow'  => 'Tomorrow',
+            'today' => 'Today',
+            'tomorrow' => 'Tomorrow',
             'yesterday' => 'Yesterday',
-            '-1 week'   => 'One week ago',
-            '+1 week'   => 'One week from now',
-            '-1 month'  => 'One month ago',
-            '+1 month'  => 'One month from now',
+            '-1 week' => 'One week ago',
+            '+1 week' => 'One week from now',
+            '-1 month' => 'One month ago',
+            '+1 month' => 'One month from now',
             'x_day_ago' => 'Numbers of days ago',
             'x_day_now' => 'Number of days from now',
-            'exact'     => 'Exact date',
+            'exact' => 'Exact date',
         ];
 
         // The range value field use when within is select.
         $this->addField('range', [
-            'ui'     => ['caption' => ''],
+            'ui' => ['caption' => ''],
             'values' => [
-                '-1 week'      => 'The past week',
-                '-1 month'     => 'The past month',
-                '-1 year'      => 'The past year',
-                '+1 week'      => 'The next week',
-                '+1 month'     => 'The next month',
-                '+1 year'      => 'The next year',
+                '-1 week' => 'The past week',
+                '-1 month' => 'The past month',
+                '-1 year' => 'The past year',
+                '+1 week' => 'The next week',
+                '+1 month' => 'The next month',
+                '+1 year' => 'The next year',
                 'x_day_before' => 'The next numbers of days before',
-                'x_day_after'  => 'The next number of days after',
+                'x_day_after' => 'The next number of days after',
             ],
         ]);
 
@@ -73,9 +73,11 @@ class TypeDate extends Generic
             switch ($filter['op']) {
                 case 'empty':
                     $m->addCondition($filter['name'], '=', null);
+
                     break;
                 case 'not empty':
                     $m->addCondition($filter['name'], '!=', null);
+
                     break;
                 case 'within':
                     $d1 = $this->getDate($filter['value']);
@@ -88,6 +90,7 @@ class TypeDate extends Generic
                         $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
                     }
                     $m->addCondition($m->expr('[field] between [value] and [value2]', ['field' => $m->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+
                     break;
                 default:
                     $m->addCondition($filter['name'], $filter['op'], $this->getDate($filter['value']));
@@ -110,17 +113,21 @@ class TypeDate extends Generic
         switch ($dateModifier) {
             case 'exact':
                 $date = $this->data['exact_date'];
+
                 break;
             case 'x_day_ago':
             case 'x_day_before':
                 $date = new DateTime('-' . $this->data['number_days'] . ' days');
+
                 break;
             case 'x_day_now':
             case 'x_day_after':
                 $date = new DateTime('+' . $this->data['number_days'] . ' days');
+
                 break;
             default:
                 $date = new DateTime($dateModifier);
+
                 break;
         }
 
@@ -130,8 +137,8 @@ class TypeDate extends Generic
     public function getFormDisplayRules()
     {
         return [
-            'range'       => ['op' => 'isExactly[within]'],
-            'exact_date'  => ['value' => 'isExactly[exact]'],
+            'range' => ['op' => 'isExactly[within]'],
+            'exact_date' => ['value' => 'isExactly[exact]'],
             'number_days' => [['value' => 'isExactly[x_day_ago]'], ['value' => 'isExactly[x_day_now]']],
         ];
     }

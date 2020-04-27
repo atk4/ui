@@ -24,7 +24,7 @@ class Delete extends Generic
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
         $this->table->on('click', 'a.' . $this->short_name, null, ['confirm' => (new \atk4\ui\jQuery())->attr('title')])->atkAjaxec([
-            'uri'         => $this->vp->getJSURL(),
+            'uri' => $this->vp->getJSURL(),
             'uri_options' => [$this->name => $this->table->jsRow()->data('id')],
         ]);
 

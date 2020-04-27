@@ -13,7 +13,6 @@ require_once __DIR__ . '/../atk-init.php';
  * This approach will also prevent your application from registering shutdown handler or catching error,
  * so we will need to do a bit of work about that too.
  */
-
 $tabs = \atk4\ui\Tabs::addTo($app);
 
 ////////////////////////////////////////////
@@ -44,11 +43,11 @@ $g->addField('gender', ['DropDown', 'values' => ['Female', 'Male']]);
 $values = [0 => 'noob', 1 => 'pro', 2 => 'dev'];
 $form->addField('description', ['TextArea'])->set(0);
 $form->addField('no_description', ['TextArea'])->set(null);
-$form->addField('status_optional', ['DropDown', 'values' =>$values]);
-$form->addField('status_string_required', ['DropDown'], ['type'=>'string', 'values' => $values, 'required'=>true]);
-$form->addField('status_integer_required', ['DropDown'], ['type'=>'integer', 'values' => $values, 'required'=>true]);
-$form->addField('status_string_mandatory', ['DropDown'], ['type'=>'string', 'values' => $values, 'mandatory'=>true]);
-$form->addField('status_integer_mandatory', ['DropDown'], ['type'=>'integer', 'values' => $values, 'mandatory'=>true]);
+$form->addField('status_optional', ['DropDown', 'values' => $values]);
+$form->addField('status_string_required', ['DropDown'], ['type' => 'string', 'values' => $values, 'required' => true]);
+$form->addField('status_integer_required', ['DropDown'], ['type' => 'integer', 'values' => $values, 'required' => true]);
+$form->addField('status_string_mandatory', ['DropDown'], ['type' => 'string', 'values' => $values, 'mandatory' => true]);
+$form->addField('status_integer_mandatory', ['DropDown'], ['type' => 'integer', 'values' => $values, 'mandatory' => true]);
 
 $form->onSubmit(function ($form) {
     return (new \atk4\ui\jsNotify(json_encode($form->model->get())))->setDuration(0);
@@ -106,6 +105,7 @@ $form->onSubmit(function ($form) {
 
     $modal = new \atk4\ui\Modal(['title' => 'Something happen', 'ui' => 'ui modal tiny']);
     $modal->add($view);
+
     return $modal;
 });
 
@@ -143,17 +143,17 @@ $form->onSubmit(function ($form) {
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email');
 $form->onSubmit(function ($form) {
-    throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
+    throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
 
     return 'somehow it did not crash';
 });
 
 \atk4\ui\Button::addTo($form, ['Modal Test', 'secondary'])->on('click', \atk4\ui\Modal::addTo($form)
-                                                                    ->set(function ($p) {
+    ->set(function ($p) {
                                                                         $form = \atk4\ui\Form::addTo($p);
                                                                         $form->addField('email');
                                                                         $form->onSubmit(function ($form) {
-                                                                            throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
+                                                                            throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
 
                                                                             return 'somehow it did not crash';
                                                                         });

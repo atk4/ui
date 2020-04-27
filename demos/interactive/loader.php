@@ -26,7 +26,6 @@ require_once __DIR__ . '/../atk-init.php';
     // use loadEvent to prevent manual loading or even specify custom trigger event
     $loader->loadEvent = false;
     $loader->set(function ($p) {
-
         // You may pass arguments to the loader, in this case it's "color"
         sleep(3);
         \atk4\ui\Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
@@ -46,13 +45,13 @@ require_once __DIR__ . '/../atk-init.php';
 
 // Example 2 - Loader with custom body.
 \atk4\ui\Loader::addTo($app, [
-        'ui'   => '',   // this will prevent "loading spinner" from showing
-        'shim' => [   // shim is displayed while content is leaded
-            'Message',
-            'Generating LoremIpsum, please wait...',
-            'red',
-        ],
-    ])->set(function ($p) {
+    'ui' => '',   // this will prevent "loading spinner" from showing
+    'shim' => [   // shim is displayed while content is leaded
+        'Message',
+        'Generating LoremIpsum, please wait...',
+        'red',
+    ],
+])->set(function ($p) {
         sleep(1);
         \atk4\ui\LoremIpsum::addTo($p, ['size' => 2]);
     });

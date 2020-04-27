@@ -17,7 +17,7 @@ class Upload extends Input
      *
      * @var null
      */
-    public $action = null;
+    public $action;
 
     /**
      * The uploaded file id.
@@ -27,7 +27,7 @@ class Upload extends Input
      *
      * @var null
      */
-    public $fileId = null;
+    public $fileId;
 
     /**
      * Whether you need to open file browser dialog using input focus or not.
@@ -53,7 +53,7 @@ class Upload extends Input
      *
      * @var null
      */
-    public $cb = null;
+    public $cb;
 
     /**
      * Allow multiple file or not.
@@ -93,7 +93,7 @@ class Upload extends Input
         $this->cb = \atk4\ui\jsCallback::addTo($this);
 
         if (!$this->action) {
-            $this->action = new \atk4\ui\Button(['icon' => 'upload', 'disabled'=> ($this->disabled || $this->readonly)]);
+            $this->action = new \atk4\ui\Button(['icon' => 'upload', 'disabled' => ($this->disabled || $this->readonly)]);
         }
     }
 
@@ -134,7 +134,7 @@ class Upload extends Input
     /**
      * Get input field value.
      *
-     * @return array|false|mixed|null|string
+     * @return array|false|mixed|string|null
      */
     public function getInputValue()
     {
@@ -250,11 +250,11 @@ class Upload extends Input
 
         //$value = $this->field ? $this->field->get() : $this->content;
         $this->js(true)->atkFileUpload([
-            'uri'      => $this->cb->getJSURL(),
-            'action'   => $this->action->name,
-            'file'     => ['id' => $this->fileId ?: $this->field->get(), 'name' => $this->getInputValue()],
+            'uri' => $this->cb->getJSURL(),
+            'action' => $this->action->name,
+            'file' => ['id' => $this->fileId ?: $this->field->get(), 'name' => $this->getInputValue()],
             'hasFocus' => $this->hasFocusEnable,
-            'submit'   => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
+            'submit' => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,
         ]);
     }
 }

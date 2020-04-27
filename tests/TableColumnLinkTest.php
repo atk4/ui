@@ -97,7 +97,6 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
     public function testTemplateStacking()
     {
-
         // Simplest way to integrate
         $this->table->addDecorator('name', new \atk4\ui\TableColumn\Template('<b>{$name}</b>'));
         $this->table->addDecorator('name', new \atk4\ui\TableColumn\Template('<u>{$name}</u>'));
@@ -115,7 +114,6 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
     public function testRender1()
     {
-
         // Simplest way to integrate
         $this->table->addDecorator('name', new \atk4\ui\TableColumn\Template('<b>{$name}</b>'));
         $this->table->addDecorator('name', new \atk4\ui\TableColumn\Template('<u>{$name}</u>'));
@@ -128,7 +126,6 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
     public function testRender1a()
     {
-
         // Simplest way to integrate
         $this->table->addColumn(null, ['Template', 'hello<b>world</b>']);
 

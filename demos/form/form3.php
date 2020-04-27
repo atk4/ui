@@ -4,9 +4,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 use atk4\ui\jsReload;
 
-/**
- * Testing form.
- */
+// Testing form.
 
 \atk4\ui\Header::addTo($app, ['Form automatically decided how many columns to use']);
 

@@ -7,10 +7,10 @@ namespace atk4\ui\TableColumn;
  */
 class DragHandler extends Generic
 {
-    public $class = null;
+    public $class;
     public $tag = 'i';
     /** @var \atk4\ui\jsCallback */
-    public $cb = null;
+    public $cb;
 
     public function init(): void
     {
@@ -34,6 +34,6 @@ class DragHandler extends Generic
 
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        return $this->app->getTag($this->tag, ['class' => $this->class . ' atk-handle', 'style'=>'cursor:pointer; color: #bcbdbd']);
+        return $this->app->getTag($this->tag, ['class' => $this->class . ' atk-handle', 'style' => 'cursor:pointer; color: #bcbdbd']);
     }
 }

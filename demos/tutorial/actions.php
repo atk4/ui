@@ -12,7 +12,7 @@ $wizard = $app->add('Wizard');
 $app->stickyGet($wizard->name);
 
 $wizard->addStep('Define User Action', function ($page) {
-    /** @var \atk4\ui\Text $t */
+    // @var \atk4\ui\Text $t
 
     \atk4\ui\Header::addTo($page, ['What are Actions?']);
 
@@ -192,8 +192,6 @@ CODE
 });
 */
 
-
-
 $wizard->addStep('CRUD integration', function ($page) {
     $t = $page->add('Text');
     $t->addParagraph(
@@ -203,7 +201,6 @@ functionality and more. Next example shows how you can disable action (add) enti
 and how you could add your own action with a custom trigger button and even a preview.
 EOF
     );
-
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
@@ -225,6 +222,6 @@ CODE
 
 $wizard->addFinish(function ($page) use ($wizard, $app) {
     PromotionText::addTo($page);
-    \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon'=>'left arrow'], ['Left'])
+    \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');
 });

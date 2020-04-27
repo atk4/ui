@@ -36,7 +36,7 @@ class TemplateTest extends AtkPhpunit\TestCase
         // top tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t1 = &$t->getTagRef('_top');
-        $this->assertEquals(['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']], $t1);
+        $this->assertEquals(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']], $t1);
 
         $t1 = ['good bye']; // will change $t->template because it's by reference
         $this->assertEquals(['good bye'], $t->template);
@@ -47,7 +47,7 @@ class TemplateTest extends AtkPhpunit\TestCase
         $this->assertEquals(['hello'], $t2);
 
         $t2 = ['good bye']; // will change $t->template because it's by reference
-        $this->assertEquals(['', 'foo#1'=>['good bye'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']], $t->template);
+        $this->assertEquals(['', 'foo#1' => ['good bye'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']], $t->template);
     }
 
     /**
@@ -60,14 +60,14 @@ class TemplateTest extends AtkPhpunit\TestCase
 
         $t1 = &$t->getTagRef('_top');
         $this->assertEquals([
-            0          => 'My ',
+            0 => 'My ',
             'email?#1' => [
-                0         => 'e-mail ',
+                0 => 'e-mail ',
                 'email#1' => [''],
             ],
-            1          => ' ',
+            1 => ' ',
             'phone?#1' => [
-                0         => 'phone ',
+                0 => 'phone ',
                 'phone#1' => [''],
             ],
             2 => '. Contact me!',
@@ -124,10 +124,10 @@ class TemplateTest extends AtkPhpunit\TestCase
 
         $f = function ($vat) use ($s) {
             return (new \atk4\ui\Template($s))->set([
-                'vat_applied'     => !empty($vat),
-                'vat_zero'        => ($vat === 0),
+                'vat_applied' => !empty($vat),
+                'vat_zero' => ($vat === 0),
                 'vat_not_applied' => ($vat === null),
-                'vat'             => $vat,
+                'vat' => $vat,
             ])->render();
         };
 
@@ -154,7 +154,7 @@ class TemplateTest extends AtkPhpunit\TestCase
         // top tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t1 = $t->getTagRefList('_top');
-        $this->assertEquals([['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']]], $t1);
+        $this->assertEquals([['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']]], $t1);
 
         $t1[0] = ['good bye']; // will change $t->template because it's by reference
         $this->assertEquals(['good bye'], $t->template);
@@ -165,7 +165,7 @@ class TemplateTest extends AtkPhpunit\TestCase
         $this->assertEquals([['hello'], ['hello']], $t2);
 
         $t2[1] = ['good bye']; // will change $t->template last "foo" tag because it's by reference
-        $this->assertEquals(['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['good bye']], $t->template);
+        $this->assertEquals(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['good bye']], $t->template);
 
         // array of tags
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
@@ -174,7 +174,7 @@ class TemplateTest extends AtkPhpunit\TestCase
 
         $t2[1] = ['good bye']; // will change $t->template last "foo" tag because it's by reference
         $t2[2] = ['planet'];   // will change $t->template "bar" tag because it's by reference too
-        $this->assertEquals(['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['planet'], '. ', 'foo#2'=>['good bye']], $t->template);
+        $this->assertEquals(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['planet'], '. ', 'foo#2' => ['good bye']], $t->template);
     }
 
     /**

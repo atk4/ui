@@ -3,15 +3,15 @@
 require_once __DIR__ . '/../atk-init.php';
 
 $data = [
-    ['id'=>1, 'action'=>'Salary', 'amount'=>200],
-    ['id'=> 2, 'action'=>'Purchase goods', 'amount'=>-120],
-    ['id'=> 3, 'action'=>'Tax', 'amount'=>-40],
+    ['id' => 1, 'action' => 'Salary', 'amount' => 200],
+    ['id' => 2, 'action' => 'Purchase goods', 'amount' => -120],
+    ['id' => 3, 'action' => 'Tax', 'amount' => -40],
 ];
 
 $m = new \atk4\data\Model(new \atk4\data\Persistence\Static_($data));
 $m->getField('amount')->type = 'money';
 
-\atk4\ui\Header::addTo($app, ['Table with various headers', 'subHeader'=>'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon'=>'table']);
+\atk4\ui\Header::addTo($app, ['Table with various headers', 'subHeader' => 'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon' => 'table']);
 
 $table = \atk4\ui\Table::addTo($app);
 $table->setModel($m, ['action']);
@@ -30,15 +30,14 @@ $table->onHook('beforeRow', function ($table) {
         $table->renderRow();
 
         // adjusts data for next render
-        $table->model->set(['action'=>'manually injected row after Tax', 'amount'=>-0.02]);
+        $table->model->set(['action' => 'manually injected row after Tax', 'amount' => -0.02]);
     }
 });
 
 $table->template->appendHTML('Foot', '<tr class="center aligned"><td colspan=2>This will appear above totals</th></tr>');
 $table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
 
-//
-\atk4\ui\Header::addTo($app, ['Columns with multiple formats', 'subHeader'=>'Single column can use logic to swap out formatters', 'icon'=>'table']);
+\atk4\ui\Header::addTo($app, ['Columns with multiple formats', 'subHeader' => 'Single column can use logic to swap out formatters', 'icon' => 'table']);
 
 $table = \atk4\ui\Table::addTo($app);
 $table->setModel($m, ['action']);
@@ -46,7 +45,7 @@ $table->setModel($m, ['action']);
 // copy of amount through a PHP callback
 $m->addExpression('amount_copy', [function ($m) {
     return $m['amount'];
-}, 'type'=>'money']);
+}, 'type' => 'money']);
 
 // column with 2 decorators that stack. Money will use red ink and alignment, format will change text.
 $table->addColumn('amount', ['Money']);
@@ -58,7 +57,6 @@ $table->addColumn('amount_copy', ['Multiformat', function ($a, $b) {
         // Two formatters together
         return ['Link', 'Money'];
     } elseif (abs($a['amount_copy']) < 50) {
-
         // One formatter, but inject template and some attributes
         return [[
             'Template',
@@ -69,10 +67,9 @@ $table->addColumn('amount_copy', ['Multiformat', function ($a, $b) {
 
     // Short way is to simply return seed
     return 'Money';
-}, 'attr'=>['all'=>['class'=>['right aligned singel line']]]]);
+}, 'attr' => ['all' => ['class' => ['right aligned singel line']]]]);
 
-//
-\atk4\ui\Header::addTo($app, ['Table with resizable columns', 'subHeader'=>'Just drag column header to resize', 'icon'=>'table']);
+\atk4\ui\Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);
 
 $table = \atk4\ui\Table::addTo($app);
 $table->setModel($m);

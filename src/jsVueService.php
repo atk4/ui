@@ -13,7 +13,7 @@ class jsVueService
      *
      * @var jsChain
      */
-    public $service = null;
+    public $service;
 
     /**
      * jsVueService constructor.

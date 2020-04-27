@@ -66,7 +66,7 @@ class View implements jsExpressionable
      *
      * @var string
      */
-    public $region = null; //'Content';
+    public $region; //'Content';
 
     /**
      * Enables UI keyword for Semantic UI indicating that this is a
@@ -82,7 +82,7 @@ class View implements jsExpressionable
      *
      * @var string
      */
-    public $id = null;
+    public $id;
 
     /**
      * Default name of the element.
@@ -127,7 +127,7 @@ class View implements jsExpressionable
      *
      * @var Template
      */
-    public $template = null;
+    public $template;
 
     /**
      * Specifies how to initialize $template.
@@ -144,14 +144,14 @@ class View implements jsExpressionable
      *
      * @var string|false
      */
-    public $content = null;
+    public $content;
 
     /**
      * Change this if you want to substitute default "div" for something else.
      *
      * @var string
      */
-    public $element = null;
+    public $element;
 
     /**
      * If add() method is called, but current view is not part of render tree yet,
@@ -218,8 +218,6 @@ class View implements jsExpressionable
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
      *
-     * @param Model $m
-     *
      * @return Model
      */
     public function setModel(Model $m)
@@ -271,9 +269,9 @@ class View implements jsExpressionable
 
         throw new Exception([
             'Unable to set property for the object',
-            'object'   => $this,
+            'object' => $this,
             'property' => $key,
-            'value'    => $val,
+            'value' => $val,
         ]);
     }
 
@@ -381,9 +379,9 @@ class View implements jsExpressionable
     protected function initDefaultApp()
     {
         $this->app = new App([
-            'skin'                    => $this->skin,
-            'catch_exceptions'        => false,
-            'always_run'              => false,
+            'skin' => $this->skin,
+            'catch_exceptions' => false,
+            'always_run' => false,
             'catch_runaway_callbacks' => false,
         ]);
         $this->app->init();
@@ -447,7 +445,7 @@ class View implements jsExpressionable
         if ($region !== null) {
             if (!is_string($region)) {
                 throw (new Exception('Region must be a string'))
-                        ->addMoreInfo('region_type', gettype($region));
+                    ->addMoreInfo('region_type', gettype($region));
             }
 
             if (isset($object->_DIContainerTrait)) {
@@ -455,7 +453,7 @@ class View implements jsExpressionable
             } else {
                 if (!property_exists($object, 'region')) {
                     throw (new Exception('Region property is not defined'))
-                            ->addMoreInfo('object_class', get_class($object));
+                        ->addMoreInfo('object_class', get_class($object));
                 }
 
                 $object->region = $region;
@@ -479,7 +477,7 @@ class View implements jsExpressionable
      * @param View   $object
      * @param string $class
      *
-     * @return null|View
+     * @return View|null
      */
     public function getClosestOwner(self $object, $class)
     {
@@ -512,7 +510,6 @@ class View implements jsExpressionable
     public function set($arg1 = null, $arg2 = null)
     {
         if (is_string($arg1) && $arg2 !== null) {
-
             // must be initialized
             $this->template->set($arg1, $arg2);
 
@@ -610,7 +607,7 @@ class View implements jsExpressionable
      *
      * @todo Think about difference between setStyle and addStyle
      */
-    public function setStyle($property, ?string $style = null)
+    public function setStyle($property, string $style = null)
     {
         $this->style = array_merge(
             $this->style,
@@ -628,7 +625,7 @@ class View implements jsExpressionable
      *
      * @see setStyle()
      */
-    public function addStyle($property, ?string $style = null)
+    public function addStyle($property, string $style = null)
     {
         return $this->setStyle($property, $style);
     }
@@ -816,7 +813,7 @@ class View implements jsExpressionable
 
         return [
             'atkjs' => $this->getJsRenderActions(),
-            'html'  => $this->template->render(),
+            'html' => $this->template->render(),
         ];
     }
 
@@ -837,9 +834,9 @@ class View implements jsExpressionable
         return json_encode([
             'success' => true,
             'message' => 'Success',
-            'atkjs'   => $this->getJS($force_echo),
-            'html'    => $this->template->render($region),
-            'id'      => $this->name,
+            'atkjs' => $this->getJS($force_echo),
+            'html' => $this->template->render($region),
+            'id' => $this->name,
         ]);
     }
 
@@ -908,7 +905,7 @@ class View implements jsExpressionable
      *
      * Documentation:
      *
-     * @link http://agile-ui.readthedocs.io/en/latest/js.html
+     * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
      * @param string|bool|null $when     Event when chain will be executed
      * @param jsExpression     $action   JavaScript action
@@ -962,12 +959,11 @@ class View implements jsExpressionable
      * ex: atk.vueService.getVue().component('external_component', externalComponent). This is the same
      * as Vue.component() method.
      *
-     *
      * @param string      $component           The component name;
      * @param array       $initData            The component properties passed as the initData prop.
      *                                         This is the initial data pass to your main component via the initData bind property
      *                                         of the vue component instance created via the vueService.
-     * @param null|string $componentDefinition The name of the js var holding a component definition object.
+     * @param string|null $componentDefinition The name of the js var holding a component definition object.
      *                                         This var must be defined and accessible in window object. window['var_name']
      * @param string      $selector            The selector for creating the base root object in Vue.
      *
@@ -1009,7 +1005,6 @@ class View implements jsExpressionable
      *              this.doSomething();
      *          }
      *      });
-     *
      *
      * @param string $eventName The event name the will be emit.
      * @param array  $eventData $eventData   The data passed with the event.
@@ -1072,8 +1067,7 @@ class View implements jsExpressionable
      *
      *  Final store value will be: ['args' => ['path' => '/'], 'fields' => ['name' => 'test']];
      *
-     * @param array $data
-     * @param bool  $useSession
+     * @param bool $useSession
      *
      * @throws \atk4\ui\Exception
      *
@@ -1134,7 +1128,7 @@ class View implements jsExpressionable
      *
      * For more information on how this works, see documentation:
      *
-     * @link http://agile-ui.readthedocs.io/en/latest/js.html
+     * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
      * @param string                   $event    JavaScript event
      * @param string                   $selector Optional jQuery-style selector
@@ -1261,9 +1255,9 @@ class View implements jsExpressionable
         if ($defaults['confirm'] ?? null) {
             array_unshift($event_stmts, new jsExpression('$.atkConfirm({message:[confirm], onApprove: [action], options: {button:{ok:[ok], cancel:[cancel]}}, context:this})', [
                 'confirm' => $defaults['confirm'],
-                'action'  => new jsFunction($actions),
-                'ok'      => $defaults['ok'] ?? 'Ok',
-                'cancel'  => $defaults['cancel'] ?? 'Cancel',
+                'action' => new jsFunction($actions),
+                'ok' => $defaults['ok'] ?? 'Ok',
+                'cancel' => $defaults['cancel'] ?? 'Cancel',
             ]));
         } else {
             $event_stmts = array_merge($event_stmts, $actions);
@@ -1298,8 +1292,6 @@ class View implements jsExpressionable
 
     /**
      * Return rendered js actions as a string.
-     *
-     * @return string
      */
     public function getJsRenderActions(): string
     {
@@ -1365,7 +1357,7 @@ class View implements jsExpressionable
     public $stickyArgs = [];
 
     /** @var array Cached stickyGet arguments */
-    public $_stickyArgsCached = null;
+    public $_stickyArgsCached;
 
     /**
      * Build an URL which this view can use for js call-backs. It should
@@ -1402,7 +1394,7 @@ class View implements jsExpressionable
      *
      * @var [type]
      */
-    public $_triggerBy = null;
+    public $_triggerBy;
 
     /**
      * Get sticky arguments defined by the view and parents (including API).
@@ -1434,8 +1426,6 @@ class View implements jsExpressionable
      *
      * @param string $name
      * @param string $newValue
-     *
-     * @return null|string
      */
     public function stickyGet($name, $newValue = null): ?string
     {

@@ -16,7 +16,7 @@ class Radio extends Generic
      *
      * @var Lister
      */
-    public $lister = null;
+    public $lister;
 
     /**
      * List of values.

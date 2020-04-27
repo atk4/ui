@@ -11,7 +11,7 @@ class Tabs extends View
     public $ui = 'tabular menu';
 
     /** @var string name of active tab */
-    public $activeTabName = null;
+    public $activeTabName;
 
     /**
      * Adds tab in tabs widget.

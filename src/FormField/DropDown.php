@@ -22,7 +22,6 @@ class DropDown extends Input
      *          'file'       => ['File', 'icon' => 'file icon']
      *          ].
      *
-     *
      * @var array
      */
     public $values = [];
@@ -56,7 +55,7 @@ class DropDown extends Input
      *
      * @var null
      */
-    public $dropIcon = null;
+    public $dropIcon;
 
     /**
      * Dropdown options as per semantic-ui dropdown options.
@@ -158,12 +157,12 @@ class DropDown extends Input
     public function getInput()
     {
         return $this->app->getTag('input', array_merge([
-            'name'        => $this->short_name,
-            'type'        => $this->inputType,
-            'id'          => $this->id . '_input',
-            'value'       => $this->getValue(),
-            'readonly'    => $this->readonly ? 'readonly' : false,
-            'disabled'    => $this->disabled ? 'disabled' : false,
+            'name' => $this->short_name,
+            'type' => $this->inputType,
+            'id' => $this->id . '_input',
+            'value' => $this->getValue(),
+            'readonly' => $this->readonly ? 'readonly' : false,
+            'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
     }
 
@@ -228,8 +227,9 @@ class DropDown extends Input
     /**
      * Render js for dropdown.
      *
-     * @return mixed
      * @throws \atk4\core\Exception
+     *
+     * @return mixed
      */
     protected function jsRenderDropdown()
     {
@@ -238,7 +238,6 @@ class DropDown extends Input
 
     /**
      * Render values as html for DropDown.
-     *
      */
     protected function htmlRenderValue()
     {
@@ -297,13 +296,11 @@ class DropDown extends Input
             $this->setDropdownOption('onShow', new jsFunction([new jsExpression('return false')]));
         }
 
-
         if ($this->dropIcon) {
             $this->template->trySet('DropIcon', $this->dropIcon);
         }
 
         $this->template->trySet('DefaultText', $this->empty);
-
 
         $this->htmlRenderValue();
         $this->jsRenderDropdown();
@@ -311,9 +308,7 @@ class DropDown extends Input
         parent::renderView();
     }
 
-    /*
-     * Sets the dropdown items to the template if a model is used
-     */
+    // Sets the dropdown items to the template if a model is used
     protected function _renderItemsForModel()
     {
         foreach ($this->model as $key => $row) {
@@ -325,9 +320,7 @@ class DropDown extends Input
         }
     }
 
-    /*
-     * sets the dropdown items from $this->values array
-     */
+    // sets the dropdown items from $this->values array
     protected function _renderItemsForValues()
     {
         foreach ($this->values as $key => $val) {

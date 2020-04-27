@@ -12,8 +12,14 @@ return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
         '@PhpCsFixer' => true,
-        '@PhpCsFixer:risky' =>true,
-        '@PHP71Migration:risky' => true,
+       // '@PhpCsFixer:risky' =>true,
+       // '@PHP71Migration:risky' => true,
+
+        // to be checked manually, @TODO
+        'php_unit_fqcn_annotation' => false,
+        'phpdoc_annotation_without_dot' => false,
+        'no_useless_else' => false, // check/add spacing after manually
+
 
         // required by PSR-12
         'concat_space' => [
@@ -27,6 +33,7 @@ return PhpCsFixer\Config::create()
             'null_adjustment' => 'always_last',
             'sort_algorithm' => 'none',
         ],
+        'single_line_throw' => false,
         'yoda_style' => [
             'equal' => false,
             'identical' => false,
@@ -47,6 +54,9 @@ return PhpCsFixer\Config::create()
         'phpdoc_add_missing_param_annotation' => false,
         'return_assignment' => false,
         'comment_to_phpdoc' => false,
+        'nullable_type_declaration_for_default_null_value' => [
+            'use_nullable_type_declaration' => false,
+        ],
 
         // may be fixed/removed later
         'php_unit_strict' => false,
