@@ -133,7 +133,7 @@ class jsSSE extends jsCallback
 
             // stop execution when aborted if not keepAlive.
             if (!$this->keepAlive) {
-                exit();
+                $this->app->callExit();
             }
         }
 
