@@ -97,7 +97,6 @@ jobs:
 
       - name: Check Coding Style (only for CodingStyle)
         if: matrix.type == 'CodingStyle'
-        continue-on-error: true # remove once CS is fully fixer
         run: vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --diff-format=udiff --verbose --show-progress=dots
 
 #      - name: Upload coverage logs 1/2 (only for "latest" Phpunit)
