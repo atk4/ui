@@ -10,6 +10,7 @@ use Symfony\Component\Process\Process;
 abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
 {
     protected static $process;
+    private static $processSessionDir;
 
     protected static $host = '127.0.0.1';
     protected static $port = 9687;
@@ -37,26 +38,32 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
             }
         }
 
-        // Spin up the test server
+        // spin up the test server
         if (php_sapi_name() !== 'cli') {
             throw new \Error('Builtin web server can we started only from CLI'); // prevent to start a process if tests are not run from CLI
+        }
+
+        // setup session storage
+        self::$processSessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
+        if (!file_exists(self::$processSessionDir)) {
+            mkdir(self::$processSessionDir);
         }
 
         $cmdArgs = [
             '-S', static::$host . ':' . static::$port,
             '-t', self::getPackagePath(),
             '-d', 'open_basedir=' . ini_get('open_basedir'),
-            '-d', 'session.save_path=' . ini_get('session.save_path'),
+            '-d', 'session.save_path=' . self::$processSessionDir,
         ];
         self::$process = Process::fromShellCommandline('php  ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
 
-        // Disabling the output, otherwise the process might hang after too much output
+        // disabling the output, otherwise the process might hang after too much output
         self::$process->disableOutput();
-        // Actually execute the command and start the process
 
+        // execute the command and start the process
         self::$process->start();
 
-        sleep(1);
+        sleep(0.1);
     }
 
     public static function tearDownAfterClass(): void
@@ -64,6 +71,14 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         if (file_exists($file = self::getPackagePath('demos', 'coverage.php'))) {
             unlink($file);
         }
+
+        // cleanup session storage
+        foreach (scandir(self::$processSessionDir) as $f) {
+            if (!in_array($f, ['.', '..'], true)) {
+                unlink(self::$processSessionDir . '/' . $f);
+            }
+        }
+        rmdir(self::$processSessionDir);
     }
 
     /**
