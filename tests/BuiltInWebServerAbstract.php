@@ -37,8 +37,18 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
             }
         }
 
-        // The command to spin up the server
-        self::$process = Process::fromShellCommandline('php -S ' . self::$host . ':' . self::$port . ' -t ' . self::getPackagePath());
+        // Spin up the test server
+        if (php_sapi_name() !== 'cli') {
+            throw new \Error('Builtin web server can we started only from CLI'); // prevent to start a process if tests are not run from CLI
+        }
+
+        $cmdArgs = [
+            '-S', static::$host . ':' . static::$port,
+            '-t', self::getPackagePath(),
+            '-d', 'open_basedir=' . ini_get('open_basedir'),
+            '-d', 'session.save_path=' . ini_get('session.save_path'),
+        ];
+        self::$process = Process::fromShellCommandline('php  ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
 
         // Disabling the output, otherwise the process might hang after too much output
         self::$process->disableOutput();
