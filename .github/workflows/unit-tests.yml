@@ -55,9 +55,7 @@ jobs:
           #uglifyjs --compress -- public/agileui.js > public/agileui.min.js
 
       - name: Unit Testing
-        run: |
-          vendor/bin/phpunit --dump-xdebug-filter tools/xdebug-filter.php
-          vendor/bin/phpunit --prepend tools/xdebug-filter.php --coverage-text --coverage-clover=coverage.xml
+        run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
 
 #      - name: Merge coverage logs
 #        run: vendor/bin/phpcov merge build/logs/ --clover build/logs/cc.xml;
