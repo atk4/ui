@@ -43,9 +43,9 @@ class ScopeBuilder extends Generic
      * @var Template
      */
     public $scopeBuilderTemplate;
-    
+
     /**
-     * List of delimiters for auto-detection in order of priority 
+     * List of delimiters for auto-detection in order of priority
      *
      * @var array
      */
@@ -555,12 +555,12 @@ class ScopeBuilder extends Generic
 
         return compact('rule', 'operator', 'value');
     }
-    
+
     /**
-     * Auto-detects a string delimiter based on list of predefined values in ScopeBuilder::$listDelimiters in order of priority 
-     * 
+     * Auto-detects a string delimiter based on list of predefined values in ScopeBuilder::$listDelimiters in order of priority
+     *
      * @param string $value
-     * 
+     *
      * @return string
      */
     public static function detectDelimiter($value)
@@ -569,9 +569,9 @@ class ScopeBuilder extends Generic
         foreach (self::$listDelimiters as $delimiter) {
             $matches[$delimiter] = substr_count($value, $delimiter);
         }
-        
+
         $max = array_keys($matches, max($matches));
-        
+
         return reset($max) ?: reset(self::$listDelimiters);
     }
 }
