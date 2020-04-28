@@ -85,7 +85,7 @@ jobs:
 
       - name: "Run tests: Phpunit (only for Phpunit)"
         if: matrix.type == 'Phpunit'
-        run: "vendor/bin/phpunit \"$(if [ -n \"$LOG_COVERAGE\" ]; then echo '--coverage-text'; else echo '--no-coverage'; fi)\" --coverage-clover=coverage.xml"
+        run: "vendor/bin/phpunit \"$(if [ -n \"$LOG_COVERAGE\" ]; then echo '--coverage-text'; else echo '--no-coverage'; fi)\" --coverage-clover=coverage.xml -v"
 
 #      - name: "Run tests: Behat (only for Behat)"
 #        if: matrix.type == 'Behat'
