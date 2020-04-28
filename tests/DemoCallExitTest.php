@@ -45,25 +45,18 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         // File that need to be exclude.
         $excludes = ['layouts_nolayout.php'];
 
-        $scanDir = function ($dir, $prefix = null) use ($excludes) {
-            $sub_files = [];
-            foreach ($dir as $file) {
-                if (substr($file, -3) !== 'php' || is_dir($file) || in_array($file, $excludes)) {
+        $files = [];
+        $base_path = dirname(__DIR__) . '/demos';
+        foreach ($directories as $dir) {
+            $dir_path = $base_path . '/' . $dir;
+
+            foreach (scandir($dir_path) as $f) {
+                if (substr($f, -4) !== '.php' || is_dir($f) || in_array($f, $excludes)) {
                     continue;
                 }
 
-                $sub_files[] = [$prefix . $file];
+                $files[] = [$dir . '/' . $f];
             }
-
-            return $sub_files;
-        };
-
-        $files = [];
-        $base_path = dirname(__DIR__) . \DIRECTORY_SEPARATOR . 'demos';
-        foreach ($directories as $dir) {
-            $dir_path = $base_path . DIRECTORY_SEPARATOR . $dir;
-            $pref = $dir . '/';
-            $files = array_merge($files, $scanDir(scandir($dir_path), $pref));
         }
 
         // add index.
