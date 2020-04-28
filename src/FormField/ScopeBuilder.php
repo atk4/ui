@@ -43,6 +43,13 @@ class ScopeBuilder extends Generic
      * @var Template
      */
     public $scopeBuilderTemplate;
+    
+    /**
+     * List of delimiters for auto-detection in order of priority 
+     *
+     * @var array
+     */
+    public static $listDelimiters = [';', ',', '|'];
 
     /**
      * The scopebuilder View. Assigned in init().
@@ -436,7 +443,7 @@ class ScopeBuilder extends Generic
 
             case 'is in':
             case 'is not in':
-                $value = explode(',', $value);
+                $value = explode(self::detectDelimiter($value), $value);
                 break;
             default:
 
@@ -547,5 +554,24 @@ class ScopeBuilder extends Generic
         }
 
         return compact('rule', 'operator', 'value');
+    }
+    
+    /**
+     * Auto-detects a string delimiter based on list of predefined values in ScopeBuilder::$listDelimiters in order of priority 
+     * 
+     * @param string $value
+     * 
+     * @return string
+     */
+    public static function detectDelimiter($value)
+    {
+        $matches = [];
+        foreach (self::$listDelimiters as $delimiter) {
+            $matches[$delimiter] = substr_count($value, $delimiter);
+        }
+        
+        $max = array_keys($matches, max($matches));
+        
+        return reset($max) ?: reset(self::$listDelimiters);
     }
 }
