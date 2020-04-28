@@ -5,7 +5,7 @@
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 $coverage = new CodeCoverage();
-$coverage->filter()->addDirectoryToWhitelist(__DIR__ . '/../src');
+//$coverage->filter()->addDirectoryToWhitelist(__DIR__ . '/../src');
 
 function coverage()
 {
