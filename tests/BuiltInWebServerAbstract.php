@@ -39,7 +39,7 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         }
 
         // spin up the test server
-        if (php_sapi_name() !== 'cli') {
+        if (PHP_SAPI !== 'cli') {
             throw new \Error('Builtin web server can we started only from CLI'); // prevent to start a process if tests are not run from CLI
         }
 
@@ -52,9 +52,12 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         $cmdArgs = [
             '-S', static::$host . ':' . static::$port,
             '-t', self::getPackagePath(),
-            '-d', 'open_basedir=' . ini_get('open_basedir'),
             '-d', 'session.save_path=' . self::$processSessionDir,
         ];
+        if (!empty(ini_get('open_basedir'))) {
+            $cmdArgs[] = '-d';
+            $cmdArgs[] = 'open_basedir=' . ini_get('open_basedir');
+        }
         self::$process = Process::fromShellCommandline('php  ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
 
         // disabling the output, otherwise the process might hang after too much output
