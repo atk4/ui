@@ -66,7 +66,7 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         // execute the command and start the process
         self::$process->start();
 
-        sleep(1);
+        usleep(0.25e6);
     }
 
     public static function tearDownAfterClass(): void
