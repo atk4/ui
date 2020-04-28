@@ -107,7 +107,7 @@ class jsExpression implements jsExpressionable
         } elseif (is_array($arg)) {
             $array = [];
             // is array associative? (hash)
-            $assoc = $arg != array_values($arg);
+            $assoc = $arg !== array_values($arg);
 
             foreach ($arg as $key => $value) {
                 $value = $this->_json_encode($value);

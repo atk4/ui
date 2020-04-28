@@ -141,7 +141,7 @@ class VirtualPage extends View
 
             // Remove all elements from inside the Content
             foreach ($this->app->layout->elements as $key => $view) {
-                if ($view instanceof View && $view->region == 'Content') {
+                if ($view instanceof View && $view->region === 'Content') {
                     unset($this->app->layout->elements[$key]);
                 }
             }

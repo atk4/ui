@@ -85,7 +85,7 @@ class UI extends \atk4\data\Persistence
                 $format = $f->persist_format ?: $formats[$f->type];
 
                 // datetime only - set to persisting timezone
-                if ($f->type == 'datetime' && isset($f->persist_timezone)) {
+                if ($f->type === 'datetime' && isset($f->persist_timezone)) {
                     $value = new $dt_class($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
                     $value->setTimezone(new $tz_class($f->persist_timezone));
                 }
@@ -153,7 +153,7 @@ class UI extends \atk4\data\Persistence
 
             // datetime only - set from persisting timezone
             $valueStr = $value;
-            if ($f->type == 'datetime' && isset($f->persist_timezone)) {
+            if ($f->type === 'datetime' && isset($f->persist_timezone)) {
                 $value = $dt_class::createFromFormat($format, $value, new $tz_class($f->persist_timezone));
                 if ($value === false) {
                     throw new Exception(['Incorrectly formatted datetime', 'format' => $format, 'value' => $valueStr, 'field' => $f]);

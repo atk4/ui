@@ -134,7 +134,7 @@ class Input extends Generic
             $this->add($label, $spot);
         }
 
-        if ($label->ui != 'label') {
+        if ($label->ui !== 'label') {
             $label->addClass('label');
         }
 

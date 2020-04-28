@@ -192,7 +192,7 @@ class DropDown extends Input
     public function set($value = null, $junk = null)
     {
         if ($this->field) {
-            if ($this->field->type == 'array' && is_string($value)) {
+            if ($this->field->type === 'array' && is_string($value)) {
                 $value = explode(',', $value);
             }
             $this->field->set($value);

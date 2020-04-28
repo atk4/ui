@@ -21,8 +21,6 @@ return PhpCsFixer\Config::create()
         ],
 
         // disable some too strict rules
-        'strict_comparison' => false,
-        'strict_param' => false,
         'phpdoc_types_order' => [
             'null_adjustment' => 'always_last',
             'sort_algorithm' => 'none',

@@ -134,13 +134,13 @@ class Popup extends View
         if (
             ($this->triggerBy instanceof Item ||
             $this->triggerBy instanceof Menu ||
-            $this->triggerBy instanceof DropDown) && $this->triggerOn == null
+            $this->triggerBy instanceof DropDown) && $this->triggerOn === null
         ) {
             $this->triggerOn = 'hover';
         }
 
         if (
-            $this->triggerBy instanceof Button && $this->triggerOn == null
+            $this->triggerBy instanceof Button && $this->triggerOn === null
         ) {
             $this->triggerOn = 'click';
         }

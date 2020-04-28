@@ -332,7 +332,7 @@ class CardDeck extends View
             }
         }
 
-        if (in_array($model->id, array_map($mapResults, $model->export([$model->id_field])))) {
+        if (in_array($model->id, array_map($mapResults, $model->export([$model->id_field])), true)) {
             // might be in result set but not in deck, for example when adding a card.
             return $deck[$model->id] ?? null;
         }

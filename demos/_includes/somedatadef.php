@@ -60,7 +60,7 @@ if (!class_exists('SomeData')) {
                 foreach ($fields as $field) {
                     $type = $field;
 
-                    if ($field == $m->id_field) {
+                    if ($field === $m->id_field) {
                         $row[$field] = $i + 1;
 
                         continue;
@@ -71,7 +71,7 @@ if (!class_exists('SomeData')) {
                         $type = $actual;
                     }
 
-                    if ($type == 'logo_url') {
+                    if ($type === 'logo_url') {
                         $row[$field] = '../images/' . ['default.png', 'logo.png'][random_int(0, 1)]; // one of these
                     } else {
                         $row[$field] = $this->faker->{$type};

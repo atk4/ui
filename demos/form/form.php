@@ -174,7 +174,7 @@ $f = \atk4\ui\Form::addTo($tab, ['segment' => true]);
 $f->setModel($m_register);
 
 $f->onSubmit(function ($f) {
-    if ($f->model['name'] != 'John') {
+    if ($f->model['name'] !== 'John') {
         return $f->error('name', 'Your name is not John! It is "' . $f->model['name'] . '". It should be John. Pleeease!');
     }
 
@@ -214,11 +214,11 @@ $f->onSubmit(function ($f) {
     $errors = [];
 
     foreach ($f->model->getFields() as $name => $ff) {
-        if ($name == 'id') {
+        if ($name === 'id') {
             continue;
         }
 
-        if ($f->model[$name] != 'a') {
+        if ($f->model[$name] !== 'a') {
             $errors[] = $f->error($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $f->model[$name]);
         }
     }

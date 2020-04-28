@@ -428,7 +428,7 @@ class MultiLine extends Generic
                 }
             }
             $id = $model->save()->get($model->id_field);
-            $k = array_search($id, $currentIds);
+            $k = array_search($id, $currentIds, true);
             if ($k > -1) {
                 unset($currentIds[$k]);
             }
@@ -883,7 +883,7 @@ class MultiLine extends Generic
     {
         $fields = [];
         foreach ($model->getFields() as $f) {
-            if (!$f instanceof Field_SQL_Expression || !in_array($f->short_name, $this->rowFields)) {
+            if (!$f instanceof Field_SQL_Expression || !in_array($f->short_name, $this->rowFields, true)) {
                 continue;
             }
 

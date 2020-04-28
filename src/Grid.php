@@ -608,7 +608,7 @@ class Grid extends View
         }
 
         $desc = false;
-        if ($sortBy && $sortBy[0] == '-') {
+        if ($sortBy && $sortBy[0] === '-') {
             $desc = true;
             $sortBy = substr($sortBy, 1);
         }

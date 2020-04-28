@@ -224,9 +224,9 @@ class CRUD extends Grid
     protected function jsModelReturn(Generic $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
-        if (in_array($action->short_name, $this->reloadTableActions)) {
+        if (in_array($action->short_name, $this->reloadTableActions, true)) {
             $js[] = $this->container->jsReload($this->_getReloadArgs());
-        } elseif (in_array($action->short_name, $this->removeRowActions)) {
+        } elseif (in_array($action->short_name, $this->removeRowActions, true)) {
             $js[] = (new jQuery())->closest('tr')->transition('fade left');
         } else {
             $js[] = $action->owner->loaded() ? $this->container->jsReload($this->_getReloadArgs()) : (new jQuery())->closest('tr')->transition('fade left');

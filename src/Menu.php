@@ -198,7 +198,7 @@ class Menu extends View
      */
     public function renderView()
     {
-        if ($this->activate_on_click && $this->ui == 'menu') {
+        if ($this->activate_on_click && $this->ui === 'menu') {
             // Semantic UI need some JS magic
             $this->on('click', 'a.item', $this->js()->find('.active')->removeClass('active'), ['preventDefault' => false, 'stopPropagation' => false]);
             $this->on('click', 'a.item', null, ['preventDefault' => false, 'stopPropagation' => false])->addClass('active');

@@ -103,7 +103,7 @@ class TypeDatetime extends Generic
                         $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
                         $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
                     }
-                    $between_condition = $filter['op'] == '!=' ? 'not between' : 'between';
+                    $between_condition = $filter['op'] === '!=' ? 'not between' : 'between';
                     $m->addCondition($m->expr("[field] {$between_condition} [value] and [value2]", ['field' => $m->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
 
                     break;

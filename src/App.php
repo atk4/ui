@@ -583,7 +583,7 @@ class App
         $template = new Template();
         $template->app = $this;
 
-        if (in_array($name[0], ['.', '/', '\\']) || strpos($name, ':\\') !== false) {
+        if (in_array($name[0], ['.', '/', '\\'], true) || strpos($name, ':\\') !== false) {
             return $template->load($name);
         }
 
@@ -683,7 +683,7 @@ class App
 
         if ($this->page === null) {
             $requestUrl = $this->getRequestURI();
-            if (substr($requestUrl, -1, 1) == '/') {
+            if (substr($requestUrl, -1, 1) === '/') {
                 $this->page = 'index';
             } else {
                 $this->page = basename($requestUrl, $this->url_building_ext);
@@ -938,10 +938,10 @@ class App
             return "<{$tag}>" . ($value !== null ? $value . "</{$tag}>" : '');
         }
         $tmp = [];
-        if (substr($tag, -1) == '/') {
+        if (substr($tag, -1) === '/') {
             $tag = substr($tag, 0, -1);
             $postfix = '/';
-        } elseif (substr($tag, 0, 1) == '/') {
+        } elseif (substr($tag, 0, 1) === '/') {
             return '</' . ($attr[0] ?? substr($tag, 1)) . '>';
         } else {
             $postfix = '';

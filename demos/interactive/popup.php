@@ -229,7 +229,7 @@ $signup->set(function ($pop) {
         // popup handles callbacks properly, so dynamic element such as form works
         // perfectly inside a popup.
         $f->onSubmit(function ($f) {
-            if ($f->model['password'] != '123') {
+            if ($f->model['password'] !== '123') {
                 return $f->error('password', 'Please use password "123"');
             }
 

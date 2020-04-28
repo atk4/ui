@@ -283,7 +283,7 @@ class Generic
             $attr['class'] = implode(' ', $attr['class']);
         }
 
-        return $this->app->getTag($position == 'body' ? 'td' : 'th', $attr, $value);
+        return $this->app->getTag($position === 'body' ? 'td' : 'th', $attr, $value);
     }
 
     /**

@@ -27,7 +27,7 @@ class CardTable extends Table
         $ui_values = $this->app ? $this->app->ui_persistence->typecastSaveRow($m, $m->get()) : $m->get();
 
         foreach ($m->get() as $key => $value) {
-            if (!$columndef || ($columndef && in_array($key, $columndef))) {
+            if (!$columndef || ($columndef && in_array($key, $columndef, true))) {
                 $data[] = [
                     'id' => $key,
                     'field' => $m->getField($key)->getCaption(),

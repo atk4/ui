@@ -19,7 +19,7 @@ $b->js('click')->hide();
 
 Button::addTo($app, ['Redirect'])->on('click', $app->jsRedirect(['foo' => 'bar']));
 
-if (isset($_GET['foo']) && $_GET['foo'] == 'bar') {
+if (isset($_GET['foo']) && $_GET['foo'] === 'bar') {
     $app->redirect(['foo' => 'baz']);
 }
 

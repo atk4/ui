@@ -54,7 +54,7 @@ class Status extends Generic
 
         // search for a class
         foreach ($this->states as $class => $values) {
-            if (in_array($field->get(), $values)) {
+            if (in_array($field->get(), $values, true)) {
                 $cl = $class;
 
                 break;

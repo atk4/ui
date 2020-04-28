@@ -185,7 +185,7 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
         $f->setModel($m_register);
 
         $f->onSubmit(function ($f) use ($next_action, $session) {
-            if ($f->model['name'] != 'John') {
+            if ($f->model['name'] !== 'John') {
                 return $f->error('name', 'Your name is not John! It is "' . $f->model['name'] . '". It should be John. Pleeease!');
             }
 

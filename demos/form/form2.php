@@ -85,7 +85,7 @@ class Person extends \atk4\data\Model
     {
         $errors = parent::validate();
 
-        if ($this['name'] == $this['surname']) {
+        if ($this['name'] === $this['surname']) {
             $errors['surname'] = 'Your surname cannot be same as the name';
         }
 

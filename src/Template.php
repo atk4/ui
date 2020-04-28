@@ -124,7 +124,7 @@ class Template implements \ArrayAccess
      */
     public function isTopTag($tag)
     {
-        return $tag == '_top';
+        return $tag === '_top';
     }
 
     /**
@@ -332,7 +332,7 @@ class Template implements \ArrayAccess
         }
 
         // if no value, then set respective conditional regions to empty string
-        if (substr($tag, -1) != '?' && ($value === false || !strlen((string) $value))) {
+        if (substr($tag, -1) !== '?' && ($value === false || !strlen((string) $value))) {
             $this->trySet($tag . '?', '');
         }
 
@@ -596,7 +596,7 @@ class Template implements \ArrayAccess
 
         // $tag should be string here
         $template = $this->getTagRefList($tag);
-        if ($template != $this->template) {
+        if ($template !== $this->template) {
             foreach ($template as $key => $templ) {
                 $ref = $tag . '#' . ($key + 1);
                 $this->tags[$tag][$key] = [call_user_func($callable, $this->recursiveRender($templ), $ref)];

@@ -177,7 +177,7 @@ class FeatureContext extends RawMinkContext implements Context
         }
         //find text in modal
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if (!$text || $text->getText() != $arg1) {
+        if (!$text || $text->getText() !== $arg1) {
             throw new \Exception('No such text in modal');
         }
     }
@@ -199,7 +199,7 @@ class FeatureContext extends RawMinkContext implements Context
         }
         //find text in modal
         $text = $modal->find('xpath', '//' . $arg2 . '[text()="' . $arg1 . '"]');
-        if (!$text || $text->getText() != $arg1) {
+        if (!$text || $text->getText() !== $arg1) {
             throw new \Exception('No such text in modal');
         }
     }
@@ -271,7 +271,7 @@ class FeatureContext extends RawMinkContext implements Context
         $this->getSession()->wait(20000, '$("#' . $lookup->getAttribute('id') . '").hasClass("visible")');
         //value should be available.
         $value = $lookup->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if (!$value || $value->getText() != $arg1) {
+        if (!$value || $value->getText() !== $arg1) {
             throw new \Exception('Value not found: ' . $arg1);
         }
         //When value are loaded, hide dropdown and select value from javascript.

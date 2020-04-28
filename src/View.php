@@ -851,7 +851,7 @@ class View implements jsExpressionable
      */
     public function getHTML()
     {
-        if (isset($_GET['__atk_reload']) && $_GET['__atk_reload'] == $this->name) {
+        if (isset($_GET['__atk_reload']) && $_GET['__atk_reload'] === $this->name) {
             $this->app->terminateJSON($this);
         }
 

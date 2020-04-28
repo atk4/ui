@@ -193,7 +193,7 @@ class InlineEdit extends View
         $type = ($this->model && $this->field) ? $this->model->getField($this->field)->type : 'text';
         $type = ($type === 'string') ? 'text' : $type;
 
-        if ($type != 'text' && $type != 'number') {
+        if ($type !== 'text' && $type !== 'number') {
             throw new Exception('Error: Only string or number field can be edited inline. Field Type = ' . $type);
         }
 
