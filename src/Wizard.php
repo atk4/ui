@@ -103,7 +103,7 @@ class Wizard extends View
             $_GET[$this->stepCallback->urlTrigger] = 0;
         }
 
-        if ($step->sequence == $this->currentStep) {
+        if ($step->sequence === $this->currentStep) {
             $step->addClass('active');
 
             $this->stepCallback->set($callback, [$this]);
@@ -111,7 +111,7 @@ class Wizard extends View
             $step->addClass('completed');
         }
 
-        if ($step->icon == null) {
+        if ($step->icon === null) {
             $step->icon = $this->defaultIcon;
         }
 
@@ -126,9 +126,9 @@ class Wizard extends View
      */
     public function addFinish($callback)
     {
-        if (count($this->steps) == $this->currentStep + 1) {
+        if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonFinish->link($this->stepCallback->getURL(count($this->steps)));
-        } elseif ($this->currentStep == count($this->steps)) {
+        } elseif ($this->currentStep === count($this->steps)) {
             $this->buttonPrev->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
             $this->buttonFinish->destroy();
@@ -183,7 +183,7 @@ class Wizard extends View
             });
         }
 
-        if (count($this->steps) == $this->currentStep + 1) {
+        if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonNext->destroy();
         }
 
