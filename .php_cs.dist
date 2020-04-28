@@ -6,7 +6,8 @@ $finder = PhpCsFixer\Finder::create()
         'cache',
         'build',
         'vendor',
-    ]);
+    ])
+    ->notPath('src/Wizard.php'); // @TODO remove once https://github.com/atk4/ui/pull/1143 is fixed
 
 return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
