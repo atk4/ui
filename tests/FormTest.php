@@ -58,13 +58,13 @@ class FormTest extends AtkPhpunit\TestCase
 
         if ($check_expected_error) {
             $this->assertFalse($submit_called, 'Expected submission to fail, but it was successful!');
-            $this->assertNotEquals('', $res['atkjs']); // will output useful error
+            $this->assertNotSame('', $res['atkjs']); // will output useful error
             $this->f_error = $res['atkjs'];
 
             call_user_func($check_expected_error, $res['atkjs']);
         } else {
             $this->assertTrue($submit_called, 'Expected submission to be successful but it failed');
-            $this->assertEquals('', $res['atkjs']); // will output useful error
+            $this->assertSame('', $res['atkjs']); // will output useful error
         }
 
         $this->f = null;   // we shouldn't submit from twice!
@@ -83,14 +83,14 @@ class FormTest extends AtkPhpunit\TestCase
 
         $f->setModel($m, ['name', 'email']);
 
-        $this->assertEquals('John', $f->model->get('name'));
+        $this->assertSame('John', $f->model->get('name'));
 
         // fake some POST data
         $this->assertSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function ($m) {
             // field has default, but form didn't send value back
             $this->assertNull($m['name']);
 
-            $this->assertEquals('john@yahoo.com', $m['email']);
+            $this->assertSame('john@yahoo.com', $m['email']);
 
             // security check, unspecified field must not be changed
             $this->assertFalse($m['is_admin']);

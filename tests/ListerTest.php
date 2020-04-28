@@ -27,7 +27,7 @@ class ListerTest extends AtkPhpunit\TestCase
         $v->init();
         $l = \atk4\ui\Lister::addTo($v, [], ['list']);
         $l->setSource(['foo', 'bar']);
-        $this->assertEquals('hello, world, world', $v->render());
+        $this->assertSame('hello, world, world', $v->render());
     }
 
     public function testAddAfterRender()

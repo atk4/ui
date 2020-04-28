@@ -56,7 +56,7 @@ class CallbackTest extends AtkPhpunit\TestCase
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(34, $var);
+        $this->assertSame(34, $var);
     }
 
     public function testCallbackNotFiring()
@@ -90,7 +90,7 @@ class CallbackTest extends AtkPhpunit\TestCase
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(34, $var);
+        $this->assertSame(34, $var);
     }
 
     public function testCallbackLater()
@@ -113,7 +113,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->expectOutputRegex($this->regex);
         $app->run();
 
-        $this->assertEquals(34, $var);
+        $this->assertSame(34, $var);
     }
 
     public function testCallbackLaterNested()
@@ -141,7 +141,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->expectOutputRegex($this->regex);
         $app->run();
 
-        $this->assertEquals(34, $var);
+        $this->assertSame(34, $var);
     }
 
     public function testCallbackLaterNotFiring()
@@ -181,7 +181,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $app->run();
-        $this->assertEquals(25, $var);
+        $this->assertSame(25, $var);
     }
 
     public function testVirtualPageCustomTrigger()
@@ -200,7 +200,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $app->run();
-        $this->assertEquals(25, $var);
+        $this->assertSame(25, $var);
     }
 
     public $var;
@@ -224,6 +224,6 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $app->run();
-        $this->assertEquals(26, $this->var);
+        $this->assertSame(26, $this->var);
     }
 }

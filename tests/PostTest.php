@@ -29,8 +29,8 @@ class PostTest extends AtkPhpunit\TestCase
 
         $this->model->load(0, $p);
 
-        $this->assertEquals('John', $this->model['name']);
+        $this->assertSame('John', $this->model['name']);
         $this->assertTrue($this->model['is_married']);
-        $this->assertEquals('DefSurname', $this->model['surname']);
+        $this->assertSame('DefSurname', $this->model['surname']);
     }
 }

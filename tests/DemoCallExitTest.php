@@ -71,7 +71,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoHTMLStatusAndResponse(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
@@ -81,8 +81,8 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoGet(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertEquals('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
+        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
         $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
@@ -106,11 +106,11 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
             ]
         );
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
         $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents());
 
         $response = $this->getResponseFromRequestGET('interactive/wizard.php?atk_admin_wizard=2&name=Country');
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
         $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents());
     }
 
@@ -122,9 +122,9 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoAssertJSONResponse(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         if (!($this instanceof DemoCallExitExceptionTest)) { // content type is not set when App->call_exit equals to true
-            $this->assertEquals('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
+            $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
         }
         $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
@@ -152,7 +152,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoAssertSSEResponse(string $uri)
     {
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
 
         $output_rows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
 
@@ -169,7 +169,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
             $format_match_string = implode('', $matches[0] ?? ['error']);
 
-            $this->assertEquals(
+            $this->assertSame(
                 $sse_line,
                 $format_match_string,
                 ' Testing SSE response line ' . $index . ' with content ' . $sse_line . ' on ' . $uri
@@ -196,7 +196,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testDemoAssertJSONResponsePOST(string $uri, array $post_data)
     {
         $response = $this->getResponseFromRequestFormPOST($uri, $post_data);
-        $this->assertEquals(200, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 

@@ -53,12 +53,12 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
             ],
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             '<td>{$name}</td><td>{$ref}</td><td style="{$_colorrating_color_rating}">{$rating}</td>',
             $this->table->getDataRowHTML()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color:#00ff00;">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -81,7 +81,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
             ],
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -103,12 +103,12 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
             ],
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             '<td>{$name}</td><td>{$ref}</td><td style="{$_colorrating_color_rating}">{$rating}</td>',
             $this->table->getDataRowHTML()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color:#ff0000;">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -131,7 +131,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
             ],
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="">3</td></tr>',
             $this->extractTableRow($this->table)
         );
