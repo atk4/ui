@@ -39,7 +39,7 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         }
 
         // spin up the test server
-        if (PHP_SAPI !== 'cli') {
+        if (\PHP_SAPI !== 'cli') {
             throw new \Error('Builtin web server can we started only from CLI'); // prevent to start a process if tests are not run from CLI
         }
 
@@ -66,7 +66,7 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         // execute the command and start the process
         self::$process->start();
 
-        sleep(0.1);
+        sleep(1);
     }
 
     public static function tearDownAfterClass(): void
