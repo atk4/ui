@@ -9,7 +9,7 @@ class PostTest extends AtkPhpunit\TestCase
 {
     public $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $_POST = ['name' => 'John', 'is_married' => 'Y'];
         $this->model = new Model();
@@ -29,8 +29,8 @@ class PostTest extends AtkPhpunit\TestCase
 
         $this->model->load(0, $p);
 
-        $this->assertEquals('John', $this->model['name']);
-        $this->assertEquals(true, $this->model['is_married']);
-        $this->assertEquals('DefSurname', $this->model['surname']);
+        $this->assertSame('John', $this->model['name']);
+        $this->assertTrue($this->model['is_married']);
+        $this->assertSame('DefSurname', $this->model['surname']);
     }
 }

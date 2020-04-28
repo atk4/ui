@@ -56,7 +56,7 @@ class Tooltip extends Generic
 
         return $this->app->getTag('td', $extra_tags, [
             ' {$' . $f->short_name . '}' . $this->app->getTag('span', [
-                'class'        => 'ui icon link {$_' . $f->short_name . '_data_visible_class}',
+                'class' => 'ui icon link {$_' . $f->short_name . '_data_visible_class}',
                 'data-tooltip' => '{$_' . $f->short_name . '_data_tooltip}',
             ], [
                 ['i', ['class' => 'ui icon {$_' . $f->short_name . '_icon}']],
@@ -69,18 +69,18 @@ class Tooltip extends Generic
         // @TODO remove popup tooltip when null
         $tooltip = $row->data[$this->tooltip_field];
 
-        if (is_null($tooltip) || empty($tooltip)) {
+        if ($tooltip === null || empty($tooltip)) {
             return [
                 '_' . $field->short_name . '_data_visible_class' => 'transition hidden',
-                '_' . $field->short_name . '_data_tooltip'       => '',
-                '_' . $field->short_name . '_icon'               => '',
+                '_' . $field->short_name . '_data_tooltip' => '',
+                '_' . $field->short_name . '_icon' => '',
             ];
         }
 
         return [
             '_' . $field->short_name . '_data_visible_class' => '',
-            '_' . $field->short_name . '_data_tooltip'       => $tooltip,
-            '_' . $field->short_name . '_icon'               => $this->icon,
+            '_' . $field->short_name . '_data_tooltip' => $tooltip,
+            '_' . $field->short_name . '_icon' => $this->icon,
         ];
     }
 }

@@ -14,7 +14,7 @@ abstract class _Abstract extends \atk4\ui\View
      *
      * @var \atk4\ui\Form
      */
-    public $form = null;
+    public $form;
 
     /**
      * Places field inside a layout somewhere. Should be called
@@ -109,8 +109,6 @@ abstract class _Abstract extends \atk4\ui\View
      * Returns array of names of fields to automatically include them in form.
      * This includes all editable or visible fields of the model.
      *
-     * @param \atk4\data\Model $model
-     *
      * @return array
      */
     protected function getModelFields(\atk4\data\Model $model)
@@ -121,8 +119,7 @@ abstract class _Abstract extends \atk4\ui\View
     /**
      * Sets form model and adds form fields.
      *
-     * @param \atk4\data\Model $model
-     * @param array|null       $fields
+     * @param array|null $fields
      *
      * @return \atk4\data\Model
      */
@@ -146,7 +143,7 @@ abstract class _Abstract extends \atk4\ui\View
             if ($f->isEditable()) {
                 $add_fields[] = [$f->short_name];
             } elseif ($f->isVisible()) {
-                $add_fields[] = [$f->short_name, ['readonly'=>true]];
+                $add_fields[] = [$f->short_name, ['readonly' => true]];
             }
         }
 

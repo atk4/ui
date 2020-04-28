@@ -42,4 +42,4 @@ $button->on('click', $sse->set(function ($jsChain) use ($sse, $button) {
     sleep(2);
 
     return $button->js()->text($sse->args['newButtonText']);
-}, ['newButtonText'=>'This is my new text!']), ['confirm'=>'Please confirm that you wish to continue']);
+}, ['newButtonText' => 'This is my new text!']), ['confirm' => 'Please confirm that you wish to continue']);

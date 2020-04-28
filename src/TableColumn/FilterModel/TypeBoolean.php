@@ -18,7 +18,7 @@ class TypeBoolean extends Generic
     {
         $filter = $this->tryLoadAny()->get();
         if (isset($filter['id'])) {
-            $model->addCondition($filter['name'], $filter['op'] == 'true');
+            $model->addCondition($filter['name'], $filter['op'] === 'true');
         }
 
         return $model;

@@ -47,7 +47,7 @@ class jsFunction implements jsExpressionable
             if (is_numeric($key)) {
                 $this->fx_statements[] = $value;
             } else {
-                $this->$key = $value;
+                $this->{$key} = $value;
             }
         }
     }

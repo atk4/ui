@@ -11,7 +11,7 @@ class UploadImg extends Upload
      *
      * @var View|null
      */
-    public $thumbnail = null;
+    public $thumbnail;
 
     /**
      * The template region where to add the thumbnail view.
@@ -26,7 +26,7 @@ class UploadImg extends Upload
      *
      * @var null
      */
-    public $defaultSrc = null;
+    public $defaultSrc;
 
     public function init(): void
     {
@@ -37,8 +37,8 @@ class UploadImg extends Upload
         }
 
         if (!$this->thumbnail) {
-            $this->thumbnail = (new View(['element'=>'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]))
-                                    ->setAttr(['width' => '36px', 'height' => '36px']);
+            $this->thumbnail = (new View(['element' => 'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]))
+                ->setAttr(['width' => '36px', 'height' => '36px']);
         }
 
         if ($this->defaultSrc) {

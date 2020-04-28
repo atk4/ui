@@ -75,10 +75,10 @@ class GridLayout extends View
         $this->t_wrap->del('rows');
         $this->t_wrap->appendHTML('rows', '{rows}');
 
-        for ($row = 1; $row <= $this->rows; $row++) {
+        for ($row = 1; $row <= $this->rows; ++$row) {
             $this->t_row->del('column');
 
-            for ($col = 1; $col <= $this->columns; $col++) {
+            for ($col = 1; $col <= $this->columns; ++$col) {
                 $this->t_col->set('Content', '{$r' . $row . 'c' . $col . '}');
 
                 $this->t_row->appendHTML('column', $this->t_col->render());

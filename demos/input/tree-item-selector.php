@@ -4,18 +4,18 @@ require_once __DIR__ . '/../atk-init.php';
 
 $items = [
     [
-        'name'  => 'Electronics',
+        'name' => 'Electronics',
         'nodes' => [
             [
-                'name'  => 'Phone',
+                'name' => 'Phone',
                 'nodes' => [
                     [
                         'name' => 'iPhone',
-                        'id'   => 502,
+                        'id' => 502,
                     ],
                     [
                         'name' => 'Google Pixels',
-                        'id'   => 503,
+                        'id' => 503,
                     ],
                 ],
             ],
@@ -49,7 +49,7 @@ $field1->set(502);
 $f->onSubmit(function ($f) {
     $resp = [
         'multiple' => $f->model->get('tree'),
-        'single'   => $f->model->get('tree1'),
+        'single' => $f->model->get('tree1'),
     ];
 
     return print_r(json_encode($resp, JSON_PRETTY_PRINT));

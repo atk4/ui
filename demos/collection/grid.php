@@ -13,7 +13,7 @@ $ex = new \atk4\ui\ActionExecutor\jsUserAction();
 $ex->onHook('afterExecute', function () {
     return [
         (new \atk4\ui\jQuery())->closest('tr')->transition('fade left'),
-        new \atk4\ui\jsToast('Simulating delete in demo mode.')
+        new \atk4\ui\jsToast('Simulating delete in demo mode.'),
     ];
 });
 $m->getAction('delete')->ui['executor'] = $ex;
@@ -35,13 +35,11 @@ $g->addActionButton('Say HI', function ($j, $id) use ($g) {
     return 'Loaded "' . $g->model->load($id)['name'] . '" from ID=' . $id;
 });
 
-$g->addModalAction(['icon'=>'external'], 'Modal Test', function ($p, $id) {
+$g->addModalAction(['icon' => 'external'], 'Modal Test', function ($p, $id) {
     \atk4\ui\Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 
 $g->addActionButton(['icon' => 'delete'], $m->getAction('delete'));
-
-
 
 $sel = $g->addSelection();
 $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(

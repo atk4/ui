@@ -20,14 +20,14 @@ class InlineEdit extends View
      *
      * @var null
      */
-    public $cb = null;
+    public $cb;
 
     /**
      * Input initial value.
      *
      * @var null
      */
-    public $initValue = null;
+    public $initValue;
 
     /**
      * Whether callback should save value to db automatically or not.
@@ -43,9 +43,9 @@ class InlineEdit extends View
      * The actual db field name that need to be saved.
      * Default to title field when model is set.
      *
-     * @var null|string The name of the field.
+     * @var string|null the name of the field
      */
-    public $field = null;
+    public $field;
 
     /**
      * Whether component should save it's value when input get blur.
@@ -77,7 +77,7 @@ class InlineEdit extends View
      *
      * @var null | callable
      */
-    public $formatErrorMsg = null;
+    public $formatErrorMsg;
 
     /**
      * Initialization.
@@ -100,8 +100,6 @@ class InlineEdit extends View
     /**
      * Set Model of this View.
      *
-     * @param \atk4\data\Model $model
-     *
      * @return \atk4\data\Model
      */
     public function setModel(\atk4\data\Model $model)
@@ -119,9 +117,9 @@ class InlineEdit extends View
                         return $this->jsSuccess('Update successfully');
                     } catch (ValidationException $e) {
                         $this->app->terminateJSON([
-                            'success'            => true,
+                            'success' => true,
                             'hasValidationError' => true,
-                            'atkjs'              => $this->jsError(call_user_func($this->formatErrorMsg, $e, $value))->jsRender(),
+                            'atkjs' => $this->jsError(call_user_func($this->formatErrorMsg, $e, $value))->jsRender(),
                         ]);
                     }
                 });
@@ -161,9 +159,9 @@ class InlineEdit extends View
     public function jsSuccess($message)
     {
         return new jsToast([
-            'title'   => 'Success',
+            'title' => 'Success',
             'message' => $message,
-            'class'   => 'success',
+            'class' => 'success',
         ]);
     }
 
@@ -177,11 +175,11 @@ class InlineEdit extends View
     public function jsError($message)
     {
         return new jsToast([
-            'title'          => 'Validation error:',
-            'displayTime'    => 8000,
-            'showIcon'       => 'exclamation',
-            'message'        => $message,
-            'class'          => 'error',
+            'title' => 'Validation error:',
+            'displayTime' => 8000,
+            'showIcon' => 'exclamation',
+            'message' => $message,
+            'class' => 'error',
         ]);
     }
 
@@ -195,7 +193,7 @@ class InlineEdit extends View
         $type = ($this->model && $this->field) ? $this->model->getField($this->field)->type : 'text';
         $type = ($type === 'string') ? 'text' : $type;
 
-        if ($type != 'text' && $type != 'number') {
+        if ($type !== 'text' && $type !== 'number') {
             throw new Exception('Error: Only string or number field can be edited inline. Field Type = ' . $type);
         }
 
@@ -212,9 +210,9 @@ class InlineEdit extends View
         $this->template->trySet('fieldType', $type);
 
         $this->vue('atk-inline-edit', [
-            'initValue'     => $initValue,
-            'url'           => $this->cb->getJSURL(),
-            'saveOnBlur'    => $this->saveOnBlur,
+            'initValue' => $initValue,
+            'url' => $this->cb->getJSURL(),
+            'saveOnBlur' => $this->saveOnBlur,
         ]);
 
 //        $this->js(true, (new jsVueService())->createAtkVue(

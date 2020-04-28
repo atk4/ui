@@ -2,11 +2,11 @@
 
 namespace atk4\ui\TableColumn;
 
+use atk4\data\Field;
 use atk4\ui\Exception;
 use atk4\ui\jQuery;
 use atk4\ui\jsExpression;
 use atk4\ui\Popup;
-use atk4\data\Field;
 
 /**
  * Implements Column helper for table.
@@ -39,12 +39,12 @@ class Generic
      *
      * @var string
      */
-    public $caption = null;
+    public $caption;
 
     /**
      * Is column sortable?
      *
-     * @var boolean
+     * @var bool
      */
     public $sortable = true;
 
@@ -53,7 +53,7 @@ class Generic
      *
      * @var null
      */
-    public $columnData = null;
+    public $columnData;
 
     /**
      * Include header action tag in rendering or not.
@@ -67,7 +67,7 @@ class Generic
      *
      * @var array|null
      */
-    public $headerActionTag = null;
+    public $headerActionTag;
 
     /**
      * Constructor.
@@ -84,7 +84,7 @@ class Generic
      * Use ColumnName for better popup positioning.
      *
      * @param Popup  $popup
-     * @param string $icon  The css class for filter icon.
+     * @param string $icon  the css class for filter icon
      *
      * @return mixed
      */
@@ -100,12 +100,12 @@ class Generic
         $popup->popOptions = array_merge(
             $popup->popOptions,
             [
-                'on'           => 'click',
-                'position'     => 'bottom left',
-                'movePopup'    => $this->columnData ? true : false,
-                'target'       => $this->columnData ? "th[data-column={$this->columnData}]" : false,
+                'on' => 'click',
+                'position' => 'bottom left',
+                'movePopup' => $this->columnData ? true : false,
+                'target' => $this->columnData ? "th[data-column={$this->columnData}]" : false,
                 'distanceAway' => 10,
-                'offset'       => -2,
+                'offset' => -2,
             ]
         );
         $popup->stopClickEvent = true;
@@ -116,13 +116,13 @@ class Generic
     /**
      * Setup popup header action.
      *
-     * @param string $class The css class for filter icon.
+     * @param string $class the css class for filter icon
      */
     public function setHeaderPopup($class, $id)
     {
         $this->hasHeaderAction = true;
 
-        $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
+        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
             [
                 ['i', ['id' => $id, 'class' => $class . ' icon'], ''],
             ],
@@ -134,7 +134,7 @@ class Generic
      */
     public function setHeaderPopupIcon($icon)
     {
-        $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
+        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
             [
                 ['i', ['id' => $this->name . '_ac', 'class' => $icon . ' icon'], ''],
             ],
@@ -147,7 +147,7 @@ class Generic
      * @param array       $items
      * @param callable    $fx
      * @param string      $icon
-     * @param string|null $menuId The menu name.
+     * @param string|null $menuId the menu name
      *
      * @throws Exception
      */
@@ -178,10 +178,10 @@ class Generic
     {
         $this->hasHeaderAction = true;
         $id = $this->name . '_ac';
-        $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
+        $this->headerActionTag = ['div',  ['class' => 'atk-table-dropdown'],
             [
                 [
-                    'div', ['id' => $id, 'class'=>'ui top left pointing dropdown', 'data-menu-id' => $menuId],
+                    'div', ['id' => $id, 'class' => 'ui top left pointing dropdown', 'data-menu-id' => $menuId],
                     [['i', ['class' => $icon . ' icon'], '']],
                 ],
             ],
@@ -202,8 +202,8 @@ class Generic
 
         $chain = new jQuery('#' . $id);
         $chain->dropdown([
-            'action'   => 'hide',
-            'values'   => $items,
+            'action' => 'hide',
+            'values' => $items,
             'onChange' => new jsExpression($function),
         ]);
 
@@ -283,7 +283,7 @@ class Generic
             $attr['class'] = implode(' ', $attr['class']);
         }
 
-        return $this->app->getTag($position == 'body' ? 'td' : 'th', $attr, $value);
+        return $this->app->getTag($position === 'body' ? 'td' : 'th', $attr, $value);
     }
 
     /**
@@ -350,7 +350,6 @@ class Generic
     /**
      * Return HTML for a total value of a specific field.
      *
-     * @param Field $field
      * @param mixed $value
      *
      * @return string
@@ -401,9 +400,9 @@ class Generic
     {
         if ($field) {
             return '{$' . $field->short_name . '}';
-        } else {
-            return '{_$' . $this->short_name . '}';
         }
+
+        return '{_$' . $this->short_name . '}';
     }
 
     /**
@@ -413,7 +412,7 @@ class Generic
      * @param Model|array $row   link to row data
      * @param Field|null  $field field being rendered
      *
-     * @return array Associative array with tags and their HTML values.
+     * @return array associative array with tags and their HTML values
      */
     public function getHTMLTags($row, $field)
     {

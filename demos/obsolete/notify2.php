@@ -26,7 +26,7 @@ class Notifier extends \atk4\data\Model
     }
 }
 
- /*** Notification type form ****/
+ // Notification type form
 $head = \atk4\ui\Header::addTo($app, ['Notification Types']);
 
 $form = \atk4\ui\Form::addTo($app, ['segment']);
@@ -50,11 +50,11 @@ $f_p2->addField('attach', ['width' => 'four']);
 $form->onSubmit(function ($f) {
     $notifier = new \atk4\ui\jsNotify();
     $notifier->setColor($f->model['color'])
-             ->setPosition($f->model['position'])
-             ->setWidth(rtrim($f->model['width'], '%'))
-             ->setContent($f->model['text'])
-             ->setTransition($f->model['transition'])
-             ->setIcon($f->model['icon']);
+        ->setPosition($f->model['position'])
+        ->setWidth(rtrim($f->model['width'], '%'))
+        ->setContent($f->model['text'])
+        ->setTransition($f->model['transition'])
+        ->setIcon($f->model['icon']);
 
     if ($f->model['attach'] !== 'Body') {
         $notifier->attachTo($f);

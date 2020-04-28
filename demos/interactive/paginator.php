@@ -23,9 +23,9 @@ $day = $seg->stickyGet('day') ?: 1;
 
 // we intentionally left 31 days here and do not calculate number of days in particular month to keep example simple
 $month_paginator = \atk4\ui\Paginator::addTo($seg, ['total' => 12, 'range' => 3, 'urlTrigger' => 'month']);
-\atk4\ui\View::addTo($seg, ['ui'=>'hidden divider']);
+\atk4\ui\View::addTo($seg, ['ui' => 'hidden divider']);
 $day_paginator = \atk4\ui\Paginator::addTo($seg, ['total' => 31, 'range' => 3, 'urlTrigger' => 'day']);
-\atk4\ui\View::addTo($seg, ['ui'=>'hidden divider']);
+\atk4\ui\View::addTo($seg, ['ui' => 'hidden divider']);
 
 $label = \atk4\ui\Label::addTo($seg);
 $label->addClass('orange');

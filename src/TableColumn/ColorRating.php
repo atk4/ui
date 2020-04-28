@@ -131,6 +131,7 @@ class ColorRating extends Generic
             // skip first
             if ($idx === 0) {
                 $colorFrom = $color;
+
                 continue;
             }
 
@@ -163,7 +164,7 @@ class ColorRating extends Generic
         $StepRGB['g'] = ($FromRGB['g'] - $ToRGB['g']) / ($steps);
         $StepRGB['b'] = ($FromRGB['b'] - $ToRGB['b']) / ($steps);
 
-        for ($i = 0; $i <= $steps; $i++) {
+        for ($i = 0; $i <= $steps; ++$i) {
             $RGB['r'] = floor($FromRGB['r'] - ($StepRGB['r'] * $i));
             $RGB['g'] = floor($FromRGB['g'] - ($StepRGB['g'] * $i));
             $RGB['b'] = floor($FromRGB['b'] - ($StepRGB['b'] * $i));
@@ -196,13 +197,13 @@ class ColorRating extends Generic
     public function getHTMLTags($row, $field)
     {
         $value = $field->get();
-        if (is_null($value)) {
+        if ($value === null) {
             return parent::getHTMLTags($row, $field);
         }
 
         $color = $this->getColorFromValue($value);
 
-        if (is_null($color)) {
+        if ($color === null) {
             return parent::getHTMLTags($row, $field);
         }
 

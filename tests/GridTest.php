@@ -12,7 +12,7 @@ class GridTest extends AtkPhpunit\TestCase
 
     public $m;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $a = [];
         $a[1] = ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'];
@@ -30,8 +30,8 @@ class GridTest extends AtkPhpunit\TestCase
         $t->addColumn('email');
         $t->addColumn(null, new Template('password={$password}'));
 
-        $this->assertEquals('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHTML());
-        $this->assertEquals(
+        $this->assertSame('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHTML());
+        $this->assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>password=abc123</td></tr>',
             $this->extractTableRow($t)
         );
@@ -46,8 +46,8 @@ class GridTest extends AtkPhpunit\TestCase
         $t->addColumn('email');
         $t->addColumn('password');
 
-        $this->assertEquals('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
-        $this->assertEquals(
+        $this->assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
+        $this->assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
             $this->extractTableRow($t)
         );
@@ -60,8 +60,8 @@ class GridTest extends AtkPhpunit\TestCase
         $t->setModel($this->m, ['email']);
         $t->addColumn(null, 'Delete');
 
-        $this->assertEquals('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="delete"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHTML());
-        $this->assertEquals(
+        $this->assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="delete"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHTML());
+        $this->assertSame(
             '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="delete"><i class="ui red trash icon"></i>Delete</a></td></tr>',
             $this->extractTableRow($t)
         );
@@ -74,8 +74,8 @@ class GridTest extends AtkPhpunit\TestCase
         $t->setModel($this->m, ['email']);
         $t->addColumn('xtra', null, ['type' => 'password']);
 
-        $this->assertEquals('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
-        $this->assertEquals(
+        $this->assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
+        $this->assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
             $this->extractTableRow($t)
         );

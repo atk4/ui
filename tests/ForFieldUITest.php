@@ -13,8 +13,8 @@ class MyTestModel extends Model
         parent::init();
 
         $this->addField('regular_field');
-        $this->addField('just_for_data', ['never_persist'=>true]);
-        $this->addField('no_persist_but_show_in_ui', ['never_persist'=>true, 'ui'=>['editable'=>true]]);
+        $this->addField('just_for_data', ['never_persist' => true]);
+        $this->addField('no_persist_but_show_in_ui', ['never_persist' => true, 'ui' => ['editable' => true]]);
     }
 }
 
@@ -27,7 +27,7 @@ class ForFieldUITest extends AtkPhpunit\TestCase
     /** @var Model */
     public $m;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $a = [];
         $p = new Persistence\Array_($a);

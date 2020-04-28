@@ -12,7 +12,7 @@ class jsExpression implements jsExpressionable
     /**
      * @var string
      */
-    public $template = null;
+    public $template;
 
     /**
      * @var array
@@ -53,7 +53,7 @@ class jsExpression implements jsExpressionable
                 if (!isset($this->args[$identifier])) {
                     throw new Exception([
                         'Tag not defined in template for jsExpression',
-                        'tag'      => $identifier,
+                        'tag' => $identifier,
                         'template' => $this->template,
                     ]);
                 }
@@ -101,13 +101,13 @@ class jsExpression implements jsExpressionable
                 $result = $arg->jsRender();
 
                 return $result;
-            } else {
-                throw new Exception(['Not sure how to represent this object in JSON', 'obj' => $arg]);
             }
+
+            throw new Exception(['Not sure how to represent this object in JSON', 'obj' => $arg]);
         } elseif (is_array($arg)) {
             $array = [];
             // is array associative? (hash)
-            $assoc = $arg != array_values($arg);
+            $assoc = $arg !== array_values($arg);
 
             foreach ($arg as $key => $value) {
                 $value = $this->_json_encode($value);
@@ -130,7 +130,7 @@ class jsExpression implements jsExpressionable
             $string = json_encode($arg);
         } elseif (is_numeric($arg)) {
             $string = json_encode($arg);
-        } elseif (is_null($arg)) {
+        } elseif ($arg === null) {
             $string = json_encode($arg);
         } else {
             throw new Exception(['Unable to json_encode value - unknown type', 'arg' => var_export($arg, true)]);
@@ -150,13 +150,15 @@ class jsExpression implements jsExpressionable
     {
         $length = strlen($str);
         $ret = '';
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             switch ($str[$i]) {
                 case "\r":
                     $ret .= '\\r';
+
                     break;
                 case "\n":
                     $ret .= '\\n';
+
                     break;
                 case '"':
                 case "'":
@@ -165,9 +167,11 @@ class jsExpression implements jsExpressionable
                 case '&':
                 case '\\':
                     $ret .= '\x' . dechex(ord($str[$i]));
+
                     break;
                 default:
                     $ret .= $str[$i];
+
                     break;
             }
         }

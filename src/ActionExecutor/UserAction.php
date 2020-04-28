@@ -15,7 +15,6 @@
  * and the api service take care of generating them when output
  * in json via callback. It is important that these UserAction modals
  * stay within the page html content for loader to run each steps properly.
- *
  */
 
 namespace atk4\ui\ActionExecutor;
@@ -41,10 +40,10 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * @var jsExpressionable array|callable jsExpression to return if action was successful, e.g "new jsToast('Thank you')"
      */
-    public $jsSuccess = null;
+    public $jsSuccess;
 
     /**
-     * @var array Will collect action data while doing action step.
+     * @var array will collect action data while doing action step
      */
     private $actionData = [];
     protected $actionInitialized = false;
@@ -54,25 +53,25 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @var Generic
      */
-    public $action = null;
+    public $action;
 
     /**
      * The action steps.
      *
      * @var null
      */
-    private $steps = null;
-    private $step = null;
+    private $steps;
+    private $step;
 
     /**
      * The action step button.
      *
      * @var null
      */
-    private $prevStepBtn = null;
-    private $nextStepBtn = null;
-    private $execActionBtn = null;
-    private $btns = null;
+    private $prevStepBtn;
+    private $nextStepBtn;
+    private $execActionBtn;
+    private $btns;
 
     /**
      * A form for action argument and fields user entry.
@@ -98,7 +97,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @var null
      */
-    public $loader = null;
+    public $loader;
     public $loaderUi = 'ui basic segment';
     public $loaderShim = [];
 
@@ -113,9 +112,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
      * Since User action can be added via callbacks, we need
      * to make sure that view id is properly set for loader and button
      * js action to run properly.
-     *
-     *
-     * @param Generic   $action
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -139,7 +135,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'blue']);
         $this->addButtonAction($this->btns);
 
-        $this->loader = \atk4\ui\Loader::addTo($this, ['ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = \atk4\ui\Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
         $this->loader->addClass('atk-hide-loading-content');
         $this->actionData = $this->loader->jsGetStoreData()['session'];
@@ -147,8 +143,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Will associate executor with the action.
-     *
-     * @param Generic $action
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
@@ -201,15 +195,19 @@ class UserAction extends Modal implements Interface_, jsInterface_
                 switch ($this->step) {
                     case 'args':
                         $this->doArgs($modal);
+
                         break;
                     case 'fields':
                         $this->doFields($modal);
+
                         break;
                     case 'preview':
                         $this->doPreview($modal);
+
                         break;
                     case 'final':
                         $this->doFinal($modal);
+
                         break;
                 }
             } catch (\Exception $e) {
@@ -222,10 +220,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
      * Assign a View that will fire action execution.
      * If action require steps, it will automatically initialize
      * proper step to execute first.
-     *
-     * @param View   $view
-     * @param array  $urlArgs
-     * @param string $when
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -258,8 +252,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * Generate js for triggering action.
      *
-     * @param array $urlArgs
-     *
      * @throws Exception
      *
      * @return array
@@ -280,8 +272,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * Will ask user to fill in arguments.
      *
-     * @param View $modal
-     *
      * @throws Exception
      * @throws \atk4\core\Exception
      */
@@ -290,7 +280,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->_addStepTitle($modal, $this->step);
 
         $f = $this->addFormTo($modal);
-        foreach ($this->action->args as $key=>$val) {
+        foreach ($this->action->args as $key => $val) {
             if (is_numeric($key)) {
                 throw new Exception(['Action arguments must be named', 'args' => $this->actions->args]);
             }
@@ -325,8 +315,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * Do action Fields step.
      *
-     * @param View $modal
-     *
      * @throws Exception
      * @throws \atk4\core\Exception
      */
@@ -359,8 +347,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * Do action preview step.
      *
-     * @param View $modal
-     *
      * @throws Exception
      * @throws \atk4\core\Exception
      */
@@ -374,7 +360,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         if ($prev = $this->getPreviousStep($this->step)) {
             $chain = $this->loader->jsload([
-                'step'      => $prev,
+                'step' => $prev,
                 $this->name => $this->action->owner->get('id'),
             ], ['method' => 'post'], $this->loader->name);
 
@@ -390,7 +376,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
                     [
                         $this->loader->jsload(
                             [
-                                'step'      => 'final',
+                                'step' => 'final',
                                 $this->name => $this->action->owner->get('id'),
                             ],
                             ['method' => 'post'],
@@ -405,24 +391,25 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         switch ($this->previewType) {
             case 'console':
-                $preview = View::addTo($modal, ['ui'=>'inverted black segment', 'element'=>'pre']);
+                $preview = View::addTo($modal, ['ui' => 'inverted black segment', 'element' => 'pre']);
                 $preview->set($text);
+
                 break;
             case 'text':
-                $preview = View::addTo($modal, ['ui'=>'basic segment']);
+                $preview = View::addTo($modal, ['ui' => 'basic segment']);
                 $preview->set($text);
+
                 break;
             case 'html':
-                $preview = View::addTo($modal, ['ui'=>'basic segment']);
+                $preview = View::addTo($modal, ['ui' => 'basic segment']);
                 $preview->template->setHTML('Content', $text);
+
                 break;
         }
     }
 
     /**
      * Execute action when all step are completed.
-     *
-     * @param View $modal
      *
      * @throws \atk4\core\Exception
      */
@@ -459,9 +446,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * Get how many steps is required for this action.
      *
-     * @param Generic $action The Model action.
-     *
-     * @return array|null
+     * @param Generic $action the Model action
      */
     protected function getSteps(Generic $action): ?array
     {
@@ -481,10 +466,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Get next step after $step.
-     *
-     * @param string $step
-     *
-     * @return string|null
      */
     protected function getNextStep(string $step): ?string
     {
@@ -493,6 +474,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
             foreach ($this->steps as $k => $s) {
                 if ($step === $s) {
                     $next = $this->steps[$k + 1];
+
                     break;
                 }
             }
@@ -503,10 +485,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Get previous step before $step.
-     *
-     * @param string $step
-     *
-     * @return string|null
      */
     protected function getPreviousStep(string $step): ?string
     {
@@ -516,6 +494,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
             foreach ($this->steps as $k => $s) {
                 if ($s === $step) {
                     $prev = $this->steps[$k - 1];
+
                     break;
                 }
             }
@@ -526,10 +505,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Check if $step is last one.
-     *
-     * @param string $step
-     *
-     * @return bool
      */
     protected function isLastStep(string $step): bool
     {
@@ -538,6 +513,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         foreach ($this->steps as $k => $s) {
             if ($s === $step) {
                 $isLast = $k === $step_count - 1;
+
                 break;
             }
         }
@@ -547,10 +523,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Check if step is first one.
-     *
-     * @param string $step
-     *
-     * @return bool
      */
     protected function isFirstStep(string $step): bool
     {
@@ -560,13 +532,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * Will add field into form based on $fields array.
      *
-     * @param Form   $form
-     * @param array  $fields
-     * @param string $step
-     *
      * @throws \atk4\core\Exception
-     *
-     * @return Form
      */
     protected function setFormField(Form $form, array $fields, string $step): Form
     {
@@ -580,8 +546,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Get proper js after submitting a form in step.
-     *
-     * @param string $step
      *
      * @throws \atk4\core\Exception
      *
@@ -599,7 +563,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
                 $js = [
                     $this->loader->jsAddStoreData($this->actionData, true),
                     $this->loader->jsload([
-                        'step'      => $this->getNextStep($step),
+                        'step' => $this->getNextStep($step),
                         $this->name => $this->action->owner->get('id'),
                     ], ['method' => 'post'], $this->loader->name),
                 ];
@@ -619,9 +583,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Generate js for setting Buttons state based on current step.
-     *
-     * @param View   $view
-     * @param string $step
      *
      * @throws \atk4\core\Exception
      */
@@ -646,58 +607,42 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Generate js for Next btn state.
-     *
-     * @param string $step
-     *
-     * @return jsExpressionable
      */
     protected function jsSetNextState(string $step): jsExpressionable
     {
         if ($this->isLastStep($step)) {
             return $this->nextStepBtn->js(true)->hide();
-        } else {
-            return $this->nextStepBtn->js(true)->show();
         }
+
+        return $this->nextStepBtn->js(true)->show();
     }
 
     /**
      * Generated js for Prev btn state.
-     *
-     * @param string $step
-     *
-     * @return jsExpressionable
      */
     protected function jsSetPrevState(string $step): jsExpressionable
     {
         if ($this->isFirstStep($step)) {
             return $this->prevStepBtn->js(true)->hide();
-        } else {
-            return $this->prevStepBtn->js(true)->show();
         }
+
+        return $this->prevStepBtn->js(true)->show();
     }
 
     /**
      * Generate js for Exec button state.
-     *
-     * @param string $step
-     *
-     * @return jsExpressionable
      */
     protected function jsSetExecState(string $step): jsExpressionable
     {
         if ($this->isLastStep($step)) {
             return $this->execActionBtn->js(true)->show();
-        } else {
-            return $this->execActionBtn->js(true)->hide();
         }
+
+        return $this->execActionBtn->js(true)->hide();
     }
 
     /**
      * Determine which button is responsible for submitting form on a specific step.
-     *
-     * @param View   $view
-     * @param Form   $form
-     * @param string $step
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -715,9 +660,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * Generate js function for Previous button.
      *
-     * @param View   $view
-     * @param string $step
-     *
      * @throws Exception
      * @throws \atk4\core\Exception
      */
@@ -725,7 +667,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     {
         if ($prev = $this->getPreviousStep($step)) {
             $chain = $this->loader->jsload([
-                'step'      => $prev,
+                'step' => $prev,
                 $this->name => $this->action->owner->get('id'),
             ], ['method' => 'post'], $this->loader->name);
 
@@ -735,8 +677,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Utility for setting form in each step.
-     *
-     * @param View $view
      *
      * @throws \atk4\core\Exception
      *
@@ -752,9 +692,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Utility for setting Title for each step.
-     *
-     * @param View   $view
-     * @param string $step
      *
      * @throws \atk4\core\Exception
      */
@@ -783,10 +720,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Utility for retrieving Argument.
-     *
-     * @param array $data
-     *
-     * @return array
      */
     private function _getActionArgs(array $data): array
     {
@@ -802,7 +735,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * Create a sequence of js statement for a view.
      *
-     * @param View                   $view
      * @param array|jsExpressionable $js
      *
      * @throws \atk4\core\Exception

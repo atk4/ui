@@ -14,7 +14,7 @@ class TagTest extends AtkPhpunit\TestCase
     public function assertTagRender($html, $args)
     {
         $app = $this->getApp();
-        $this->assertEquals($html, $app->getTag(...$args));
+        $this->assertSame($html, $app->getTag(...$args));
     }
 
     public function testBasic()
@@ -71,7 +71,7 @@ class TagTest extends AtkPhpunit\TestCase
 
         // this way it doesn't work, because $value of getTag is always encoded if it is a string
         $app = $this->getApp();
-        $this->assertEquals(
+        $this->assertSame(
             '<a href="hello">click <i>italic</i> text</a>',
             $app->getTag('a', ['href' => 'hello'], ['click ', ['i', 'italic'], ' text'])
         );

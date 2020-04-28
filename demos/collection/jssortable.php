@@ -16,16 +16,16 @@ $lister->onHook('beforeRow', function ($l) {
     $l->current_row['iso'] = strtolower($l->current_row['iso']);
 });
 $lister->setModel(new Country($db))
-       ->setLimit(20);
+    ->setLimit(20);
 
 $sortable = \atk4\ui\jsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
 $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
     if (@$_GET['btn']) {
         return new \atk4\ui\jsToast(implode(' - ', $order));
-    } else {
-        return new \atk4\ui\jsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
     }
+
+    return new \atk4\ui\jsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
 });
 
 $button = \atk4\ui\Button::addTo($app)->set('Get countries order');
@@ -37,7 +37,6 @@ $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 
 $g = \atk4\ui\Grid::addTo($app, ['paginator' => false]);
 $g->setModel((new Country($db))->setLimit(6));
-
 
 $dragHandler = $g->addDragHandler();
 $dragHandler->onReorder(function ($order) {

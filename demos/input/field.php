@@ -2,7 +2,6 @@
 /**
  * Testing fields.
  */
-
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Header::addTo($app, ['Types', 'size' => 2]);
@@ -28,14 +27,14 @@ $dd = new \atk4\ui\DropDown('.com');
 $dd->setSource(['.com', '.net', '.org']);
 \atk4\ui\FormField\Line::addTo($app, [
     'placeholder' => 'Find Domain',
-    'labelRight'  => $dd,
+    'labelRight' => $dd,
 ]);
 
 \atk4\ui\FormField\Line::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new \atk4\ui\Label(['kg', 'basic'])]);
 \atk4\ui\FormField\Line::addTo($app, ['label' => '$', 'labelRight' => new \atk4\ui\Label(['.00', 'basic'])]);
 
 \atk4\ui\FormField\Line::addTo($app, [
-    'iconLeft'   => 'tags',
+    'iconLeft' => 'tags',
     'labelRight' => new \atk4\ui\Label(['Add Tag', 'tag']),
 ]);
 

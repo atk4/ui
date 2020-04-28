@@ -9,12 +9,12 @@ class TypeNumber extends Generic
         parent::init();
 
         $this->op->values = [
-            '='       => '=',
-            '!='      => '!=',
-            '<'       => '<',
-            '<='      => '< or equal',
-            '>'       => '>',
-            '>='      => '> or equal',
+            '=' => '=',
+            '!=' => '!=',
+            '<' => '<',
+            '<=' => '< or equal',
+            '>' => '>',
+            '>=' => '> or equal',
             'between' => 'Between',
         ];
         $this->op->default = '=';
@@ -32,6 +32,7 @@ class TypeNumber extends Generic
                     $m->addCondition(
                         $m->expr('[field] between [value] and [range]', ['field' => $m->getField($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
                     );
+
                     break;
                 default:
                     $m->addCondition($filter['name'], $filter['op'], $filter['value']);
@@ -44,7 +45,7 @@ class TypeNumber extends Generic
     public function getFormDisplayRules()
     {
         return [
-            'range'       => ['op' => 'isExactly[between]'],
+            'range' => ['op' => 'isExactly[between]'],
         ];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace atk4\ui\Layout;
 
-use atk4\ui\Exception;
 use atk4\ui\Header;
 use atk4\ui\Icon;
 use atk4\ui\Item;
@@ -33,9 +32,9 @@ use atk4\ui\Menu;
  */
 class Admin extends Generic implements Navigable
 {
-    public $menuLeft = null;    // vertical menu
-    public $menu = null;        // horizontal menu
-    public $menuRight = null;   // vertical pull-down
+    public $menuLeft;    // vertical menu
+    public $menu;        // horizontal menu
+    public $menuRight;   // vertical pull-down
 
     public $burger = true;      // burger menu item
 
@@ -62,7 +61,7 @@ class Admin extends Generic implements Navigable
 
         if ($this->menuRight === null) {
             $this->menuRight = Menu::addTo($this->menu, ['ui' => false], ['RightMenu'])
-                                   ->addClass('right menu')->removeClass('item');
+                ->addClass('right menu')->removeClass('item');
         }
 
         if ($this->menuLeft === null) {
@@ -76,8 +75,6 @@ class Admin extends Generic implements Navigable
      * Add a group to left menu.
      *
      * @param $seed
-     *
-     * @return Menu
      */
     public function addMenuGroup($seed): Menu
     {
@@ -90,8 +87,6 @@ class Admin extends Generic implements Navigable
      * @param $name
      * @param null $action
      * @param null $group
-     *
-     * @return Item
      */
     public function addMenuItem($name, $action = null, $group = null): Item
     {

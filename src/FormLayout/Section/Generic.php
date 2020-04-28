@@ -5,7 +5,7 @@ namespace atk4\ui\FormLayout\Section;
 class Generic extends \atk4\ui\View
 {
     public $formLayout = 'FormLayout/Generic';
-    public $form = null;
+    public $form;
 
     /**
      * Adds sub-layout in existing layout.

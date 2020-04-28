@@ -40,7 +40,7 @@ class Generic extends Model
      *
      * @var null
      */
-    public $lookupField = null;
+    public $lookupField;
 
     /**
      * Factory method that will return a FilerModel Type class.
@@ -95,7 +95,7 @@ class Generic extends Model
      */
     public function afterInit()
     {
-        $this->addField('name', ['default'=> $this->lookupField->short_name, 'system' => true]);
+        $this->addField('name', ['default' => $this->lookupField->short_name, 'system' => true]);
 
         if (isset($this->_sessionTrait) && $this->_sessionTrait) {
             // create a name for our filter model to save as session data.
@@ -141,8 +141,6 @@ class Generic extends Model
      * Method that will set Field display condition in a form.
      * If form filter need to have a field display at certain condition, then
      * override this method in your FilterModel\TypeModel.
-     *
-     * @return null
      */
     public function getFormDisplayRules()
     {

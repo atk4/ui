@@ -9,7 +9,7 @@ require_once __DIR__ . '/../atk-init.php';
     ->link(['actions']);
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-\atk4\ui\Header::addTo($app, ['Extensions to ATK Data Actions', 'subHeader'=>'Model action can be trigger using js Event']);
+\atk4\ui\Header::addTo($app, ['Extensions to ATK Data Actions', 'subHeader' => 'Model action can be trigger using js Event']);
 
 $country = new Country($db);
 
@@ -42,11 +42,11 @@ $files = new File($db);
 $f_action = $files->addAction(
     'import_from_filesystem',
     [
-        'callback'=> 'importFromFilesystem',
-        'args'    => [
-            'path'=> '.',
+        'callback' => 'importFromFilesystem',
+        'args' => [
+            'path' => '.',
         ],
-        'scope'=> atk4\data\UserAction\Generic::NO_RECORDS,
+        'scope' => atk4\data\UserAction\Generic::NO_RECORDS,
     ]
 );
 
@@ -57,7 +57,7 @@ $executor->onHook('afterExecute', function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');
 });
 
-$btn->on('click', $executor, ['confirm'=> 'This will import a lot of file. Are you sure?']);
+$btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
 
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
@@ -66,14 +66,14 @@ $btn->on('click', $executor, ['confirm'=> 'This will import a lot of file. Are y
 // Note here that we explicitly required a jsUserAction executor because we want to use the input value
 // as the action args.
 $country->addAction('greet', [
-    'args'=> [
-        'name'=> [
-            'type'     => 'string',
+    'args' => [
+        'name' => [
+            'type' => 'string',
             'required' => true,
         ],
     ],
-    'ui'      => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
-    'callback'=> function ($m, $name) {
+    'ui' => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
+    'callback' => function ($m, $name) {
         return 'Hello ' . $name;
     },
 ]);

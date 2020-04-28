@@ -10,7 +10,7 @@ class Multiformat extends Generic
     /**
      * @var callable Method to execute which will return array of seeds for decorators
      */
-    public $callback = null;
+    public $callback;
 
     public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
     {
@@ -25,7 +25,7 @@ class Multiformat extends Generic
     public function getHTMLTags($row, $field)
     {
         if (!$this->callback) {
-            throw new \atk4\ui\Exception(['Must specify a callback for column', 'column'=>$this]);
+            throw new \atk4\ui\Exception(['Must specify a callback for column', 'column' => $this]);
         }
 
         $decorators = call_user_func($this->callback, $row, $field);

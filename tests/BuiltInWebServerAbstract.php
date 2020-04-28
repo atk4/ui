@@ -10,6 +10,7 @@ use Symfony\Component\Process\Process;
 abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
 {
     protected static $process;
+    private static $processSessionDir;
 
     protected static $host = '127.0.0.1';
     protected static $port = 9687;
@@ -24,27 +25,48 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
 
     public static function setUpBeforeClass(): void
     {
-        if (!file_exists($coverage = self::getPackagePath('coverage'))) {
-            mkdir($coverage, 0777, true);
+        if (extension_loaded('xdebug') || isset($this) && $this->getResult()->getCodeCoverage() !== null) { // dirty way to skip coverage for phpunit with disabled coverage
+            if (!file_exists($coverage = self::getPackagePath('coverage'))) {
+                mkdir($coverage, 0777, true);
+            }
+
+            if (!file_exists($demosCoverage = self::getPackagePath('demos', 'coverage.php'))) {
+                file_put_contents(
+                    $demosCoverage,
+                    file_get_contents(self::getPackagePath('tools', 'coverage.php'))
+                );
+            }
         }
 
-        if (!file_exists($demosCoverage = self::getPackagePath('demos', 'coverage.php'))) {
-            file_put_contents(
-                $demosCoverage,
-                file_get_contents(self::getPackagePath('tools', 'coverage.php'))
-            );
+        // spin up the test server
+        if (\PHP_SAPI !== 'cli') {
+            throw new \Error('Builtin web server can we started only from CLI'); // prevent to start a process if tests are not run from CLI
         }
 
-        // The command to spin up the server
-        self::$process = Process::fromShellCommandline('php -S ' . self::$host . ':' . self::$port . ' -t ' . self::getPackagePath());
+        // setup session storage
+        self::$processSessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
+        if (!file_exists(self::$processSessionDir)) {
+            mkdir(self::$processSessionDir);
+        }
 
-        // Disabling the output, otherwise the process might hang after too much output
+        $cmdArgs = [
+            '-S', static::$host . ':' . static::$port,
+            '-t', self::getPackagePath(),
+            '-d', 'session.save_path=' . self::$processSessionDir,
+        ];
+        if (!empty(ini_get('open_basedir'))) {
+            $cmdArgs[] = '-d';
+            $cmdArgs[] = 'open_basedir=' . ini_get('open_basedir');
+        }
+        self::$process = Process::fromShellCommandline('php  ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
+
+        // disabling the output, otherwise the process might hang after too much output
         self::$process->disableOutput();
-        // Actually execute the command and start the process
 
+        // execute the command and start the process
         self::$process->start();
 
-        sleep(1);
+        usleep(0.25e6);
     }
 
     public static function tearDownAfterClass(): void
@@ -52,26 +74,32 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         if (file_exists($file = self::getPackagePath('demos', 'coverage.php'))) {
             unlink($file);
         }
+
+        // cleanup session storage
+        foreach (scandir(self::$processSessionDir) as $f) {
+            if (!in_array($f, ['.', '..'], true)) {
+                unlink(self::$processSessionDir . '/' . $f);
+            }
+        }
+        rmdir(self::$processSessionDir);
     }
 
     /**
      * Generates absolute file or directory path based on package root directory
-     * Returns absolute path to package root durectory if no arguments
+     * Returns absolute path to package root durectory if no arguments.
      *
      * @param string $directory
      * @param string $_
-     *
-     * @return string
      */
     private static function getPackagePath($directory = null, $_ = null): string
     {
         $route = func_get_args();
 
-        $baseDir = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..');
+        $baseDir = realpath(__DIR__ . \DIRECTORY_SEPARATOR . '..');
 
         array_unshift($route, $baseDir);
 
-        return implode(DIRECTORY_SEPARATOR, $route);
+        return implode(\DIRECTORY_SEPARATOR, $route);
     }
 
     private function getClient(): Client

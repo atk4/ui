@@ -3,7 +3,6 @@
 /**
  * Setup Action file for Country model.
  */
-
 $country = new CountryLock($db);
 $ct = $country->tryLoadAny();
 $id = $ct->get('id');
@@ -13,10 +12,10 @@ $c_actions = [];
 
 $c_actions['ac_cb'] = $country->addAction(
     'callback',
-    [   'description' => 'Callback',
-        'callback'=> function ($m) {
+    ['description' => 'Callback',
+        'callback' => function ($m) {
             return 'callback execute using country ' . $m->getTitle();
-        }
+        },
     ]
 );
 
@@ -29,7 +28,7 @@ $c_actions['ac_preview'] = $country->addAction(
         },
         'callback' => function ($m) {
             return 'Done previewing ' . $m->getTitle();
-        }
+        },
     ]
 );
 
@@ -40,7 +39,7 @@ $c_actions['ac_disabled'] = $country->addAction(
         'enabled' => false,
         'callback' => function () {
             return 'ok';
-        }
+        },
     ]
 );
 
@@ -49,7 +48,7 @@ $c_actions['ac_edit_arg'] = $country->addAction(
     [
         'description' => 'Argument',
         'args' => [
-            'age' => ['type' => 'integer', 'required' => true]
+            'age' => ['type' => 'integer', 'required' => true],
         ],
         'callback' => function ($m, $age) {
             if ($age < 18) {
@@ -57,8 +56,9 @@ $c_actions['ac_edit_arg'] = $country->addAction(
             } else {
                 $text = $age . ' is old enough to visit ' . $m->getTitle();
             }
+
             return $text;
-        }
+        },
     ]
 );
 
@@ -66,13 +66,13 @@ $c_actions['ac_edit_arg_preview'] = $country->addAction(
     'edit_argument_prev',
     [
         'description' => 'Argument/Preview',
-        'args' => ['age'=>['type'=>'integer', 'required' => true]],
+        'args' => ['age' => ['type' => 'integer', 'required' => true]],
         'preview' => function ($m, $age) {
             return 'You age is: ' . $age;
         },
         'callback' => function ($m, $age) {
             return 'age = ' . $age;
-        }
+        },
     ]
 );
 
@@ -83,7 +83,7 @@ $c_actions['ac_edit_iso'] = $country->addAction(
         'fields' => ['iso3'],
         'callback' => function () {
             return 'ok';
-        }
+        },
     ]
 );
 
@@ -92,12 +92,12 @@ $c_actions['ac_ouch'] = $country->addAction(
     [
         'description' => 'Exception',
         'args' => ['age' => ['type' => 'integer']],
-        'preview'=> function () {
+        'preview' => function () {
             return 'Be careful with this action.';
         },
-        'callback'=> function () {
+        'callback' => function () {
             throw new \atk4\ui\Exception('Told you, didn\'t I?');
-        }
+        },
     ]
 );
 
@@ -112,7 +112,7 @@ $c_actions['ac_confirm'] = $country->addAction(
         },
         'callback' => function ($m) {
             return 'Confirm country ' . $m->getTitle();
-        }
+        },
     ]
 );
 
@@ -126,13 +126,14 @@ $c_actions['ac_multi'] = $country->addAction(
             'gender' => ['type' => 'enum', 'values' => ['m' => 'Male', 'f' => 'Female'], 'required' => true, 'default' => 'm'],
         ],
         'fields' => ['iso3'],
-        'callback'=> function ($m, $age, $city, $gender) {
+        'callback' => function ($m, $age, $city, $gender) {
             //    $m->save();
             $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
+
             return 'Thank you ' . $n . ' at age ' . $age;
         },
         'preview' => function ($m, $age, $city, $gender) {
             return 'Gender = ' . $gender . ' / Age = ' . $age;
-        }
+        },
     ]
 );

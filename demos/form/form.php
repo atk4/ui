@@ -13,7 +13,6 @@ require_once __DIR__ . '/../atk-init.php';
  * This approach will also prevent your application from registering shutdown handler or catching error,
  * so we will need to do a bit of work about that too.
  */
-
 $tabs = \atk4\ui\Tabs::addTo($app);
 
 ////////////////////////////////////////////
@@ -44,11 +43,11 @@ $g->addField('gender', ['DropDown', 'values' => ['Female', 'Male']]);
 $values = [0 => 'noob', 1 => 'pro', 2 => 'dev'];
 $form->addField('description', ['TextArea'])->set(0);
 $form->addField('no_description', ['TextArea'])->set(null);
-$form->addField('status_optional', ['DropDown', 'values' =>$values]);
-$form->addField('status_string_required', ['DropDown'], ['type'=>'string', 'values' => $values, 'required'=>true]);
-$form->addField('status_integer_required', ['DropDown'], ['type'=>'integer', 'values' => $values, 'required'=>true]);
-$form->addField('status_string_mandatory', ['DropDown'], ['type'=>'string', 'values' => $values, 'mandatory'=>true]);
-$form->addField('status_integer_mandatory', ['DropDown'], ['type'=>'integer', 'values' => $values, 'mandatory'=>true]);
+$form->addField('status_optional', ['DropDown', 'values' => $values]);
+$form->addField('status_string_required', ['DropDown'], ['type' => 'string', 'values' => $values, 'required' => true]);
+$form->addField('status_integer_required', ['DropDown'], ['type' => 'integer', 'values' => $values, 'required' => true]);
+$form->addField('status_string_mandatory', ['DropDown'], ['type' => 'string', 'values' => $values, 'mandatory' => true]);
+$form->addField('status_integer_mandatory', ['DropDown'], ['type' => 'integer', 'values' => $values, 'mandatory' => true]);
 
 $form->onSubmit(function ($form) {
     return (new \atk4\ui\jsNotify(json_encode($form->model->get())))->setDuration(0);
@@ -72,7 +71,7 @@ $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email1');
 $form->buttonSave->set('Save1');
 $form->onSubmit(function ($form) {
-    return $form->error('email1', 'some error action ' . rand(1, 100));
+    return $form->error('email1', 'some error action ' . random_int(1, 100));
 });
 
 \atk4\ui\Header::addTo($tab, ['..or success message']);
@@ -90,7 +89,7 @@ $form->buttonSave->set('Save3');
 $form->onSubmit(function ($form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
-    $view->text->addParagraph('some text ' . rand(1, 100));
+    $view->text->addParagraph('some text ' . random_int(1, 100));
 
     return $view;
 });
@@ -102,10 +101,11 @@ $form->buttonSave->set('Save4');
 $form->onSubmit(function ($form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
-    $view->text->addParagraph('some text ' . rand(1, 100));
+    $view->text->addParagraph('some text ' . random_int(1, 100));
 
     $modal = new \atk4\ui\Modal(['title' => 'Something happen', 'ui' => 'ui modal tiny']);
     $modal->add($view);
+
     return $modal;
 });
 
@@ -114,7 +114,7 @@ $form = \atk4\ui\Form::addTo($tab);
 $field = $form->addField('email5');
 $form->buttonSave->set('Save5');
 $form->onSubmit(function ($form) use ($field) {
-    return $field->jsInput()->val('random is ' . rand(1, 100));
+    return $field->jsInput()->val('random is ' . random_int(1, 100));
 });
 
 /////////////////////////////////////////////////////////////////////
@@ -143,21 +143,21 @@ $form->onSubmit(function ($form) {
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email');
 $form->onSubmit(function ($form) {
-    throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
+    throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
 
     return 'somehow it did not crash';
 });
 
 \atk4\ui\Button::addTo($form, ['Modal Test', 'secondary'])->on('click', \atk4\ui\Modal::addTo($form)
-                                                                    ->set(function ($p) {
-                                                                        $form = \atk4\ui\Form::addTo($p);
-                                                                        $form->addField('email');
-                                                                        $form->onSubmit(function ($form) {
-                                                                            throw new \atk4\core\Exception(['testing', 'arg1'=>'val1']);
+    ->set(function ($p) {
+        $form = \atk4\ui\Form::addTo($p);
+        $form->addField('email');
+        $form->onSubmit(function ($form) {
+            throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
 
-                                                                            return 'somehow it did not crash';
-                                                                        });
-                                                                    })->show());
+            return 'somehow it did not crash';
+        });
+    })->show());
 
 /////////////////////////////////////////////////////////////////////
 $tab = $tabs->addTab('Complex Examples');
@@ -174,14 +174,14 @@ $f = \atk4\ui\Form::addTo($tab, ['segment' => true]);
 $f->setModel($m_register);
 
 $f->onSubmit(function ($f) {
-    if ($f->model['name'] != 'John') {
+    if ($f->model['name'] !== 'John') {
         return $f->error('name', 'Your name is not John! It is "' . $f->model['name'] . '". It should be John. Pleeease!');
-    } else {
-        return [
-            $f->jsInput('email')->val('john@gmail.com'),
-            $f->jsField('is_accept_terms')->checkbox('set checked'),
-        ];
     }
+
+    return [
+        $f->jsInput('email')->val('john@gmail.com'),
+        $f->jsField('is_accept_terms')->checkbox('set checked'),
+    ];
 });
 
 ////////////////////////////////////////
@@ -214,11 +214,11 @@ $f->onSubmit(function ($f) {
     $errors = [];
 
     foreach ($f->model->getFields() as $name => $ff) {
-        if ($name == 'id') {
+        if ($name === 'id') {
             continue;
         }
 
-        if ($f->model[$name] != 'a') {
+        if ($f->model[$name] !== 'a') {
             $errors[] = $f->error($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $f->model[$name]);
         }
     }

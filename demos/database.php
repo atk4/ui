@@ -5,7 +5,7 @@ try {
     if (file_exists(__DIR__ . '/db.php')) {
         require_once __DIR__ . '/db.php';
     } else {
-        $db = new \atk4\data\Persistence\SQL('mysql:dbname=atk4;host=localhost', 'root', 'root');
+        require_once __DIR__ . '/db.example.php';
     }
 } catch (PDOException $e) {
     throw (new \atk4\ui\Exception([
@@ -32,7 +32,7 @@ trait ModelLockTrait
         $delete->callback = function ($m) {
             return [
                 (new \atk4\ui\jQuery())->closest('tr')->transition('fade left'),
-                new \atk4\ui\jsToast('Simulating delete in demo mode.')
+                new \atk4\ui\jsToast('Simulating delete in demo mode.'),
             ];
         };
     }
@@ -48,7 +48,7 @@ class Country extends \atk4\data\Model
         $this->addField('name', ['actual' => 'nicename', 'required' => true, 'type' => 'string']);
         $this->addField('sys_name', ['actual' => 'name', 'system' => true]);
 
-        $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string', 'ui'=>['table'=>['sortable'=>false]]]);
+        $this->addField('iso', ['caption' => 'ISO', 'required' => true, 'type' => 'string', 'ui' => ['table' => ['sortable' => false]]]);
         $this->addField('iso3', ['caption' => 'ISO3', 'required' => true, 'type' => 'string']);
         $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
         $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
@@ -76,7 +76,7 @@ class Country extends \atk4\data\Model
         $c = clone $this;
         $c->unload();
         $c->tryLoadBy('name', $this['name']);
-        if ($c->loaded() && $c->id != $this->id) {
+        if ($c->loaded() && $c->id !== $this->id) {
             $errors['name'] = 'Country name must be unique';
         }
 
@@ -88,6 +88,7 @@ class CountryLock extends Country
 {
     use ModelLockTrait;
     public $caption = 'Country';
+
     public function init(): void
     {
         parent::init();
@@ -112,14 +113,14 @@ class Stat extends \atk4\data\Model
         $this->addField('client_address', ['type' => 'string', 'ui' => ['form' => [new \atk4\ui\FormField\TextArea(), 'rows' => 4]]]);
 
         $this->hasOne('client_country_iso', [
-                new Country(),
-                'their_field' => 'iso',
-                'ui'          => [
-                    'display' => [
-                        'form' => 'Line',
-                    ],
+            new Country(),
+            'their_field' => 'iso',
+            'ui' => [
+                'display' => [
+                    'form' => 'Line',
                 ],
-            ])
+            ],
+        ])
             ->addField('client_country', 'name');
 
         $this->addField('is_commercial', ['type' => 'boolean']);
@@ -169,10 +170,10 @@ class File extends \atk4\data\Model
         $this->addField('is_folder', ['type' => 'boolean']);
 
         $this->hasMany('SubFolder', [new self(), 'their_field' => 'parent_folder_id'])
-             ->addField('count', ['aggregate' => 'count', 'field' => $this->expr('*')]);
+            ->addField('count', ['aggregate' => 'count', 'field' => $this->expr('*')]);
 
         $this->hasOne('parent_folder_id', new self())
-             ->addTitle();
+            ->addTitle();
     }
 
     /**
@@ -191,13 +192,13 @@ class File extends \atk4\data\Model
                 continue;
             }
 
-            if ($fileinfo->getFilename() === 'src' || $fileinfo->getFilename() === 'demos' ||$isSub) {
+            if ($fileinfo->getFilename() === 'src' || $fileinfo->getFilename() === 'demos' || $isSub) {
                 $this->unload();
                 $this->save([
-                                'name'      => $fileinfo->getFilename(),
-                                'is_folder' => $fileinfo->isDir(),
-                                'type'      => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
-                            ]);
+                    'name' => $fileinfo->getFilename(),
+                    'is_folder' => $fileinfo->isDir(),
+                    'type' => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
+                ]);
 
                 if ($fileinfo->isDir()) {
                     $this->ref('SubFolder')->importFromFilesystem($path . '/' . $fileinfo->getFilename(), true);

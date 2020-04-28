@@ -10,9 +10,9 @@ class jsPaginator extends jsCallback
     /**
      * The View that trigger scrolling event.
      *
-     * @var null|View
+     * @var View|null
      */
-    public $view = null;
+    public $view;
 
     /**
      * The js scroll plugin options
@@ -40,9 +40,9 @@ class jsPaginator extends jsCallback
         }
 
         $this->view->js(true)->atkScroll([
-            'uri'         => $this->getJSURL(),
+            'uri' => $this->getJSURL(),
             'uri_options' => $this->args,
-            'options'     => $this->options,
+            'options' => $this->options,
         ]);
     }
 
@@ -83,7 +83,7 @@ class jsPaginator extends jsCallback
     /**
      * Callback when container has been scroll to bottom.
      *
-     * @param null|callable $fx
+     * @param callable|null $fx
      */
     public function onScroll($fx = null)
     {

@@ -203,6 +203,6 @@ EOF
 
 $wizard->addFinish(function ($page) use ($wizard) {
     PromotionText::addTo($page);
-    \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon'=>'left arrow'], ['Left'])
-                   ->link('/demos/index.php');
+    \atk4\ui\Button::addTo($wizard, ['Exit demo', 'primary', 'icon' => 'left arrow'], ['Left'])
+        ->link('/demos/index.php');
 });

@@ -32,10 +32,10 @@ class App
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
-        'atk'              => 'https://cdn.jsdelivr.net/gh/atk4/ui@develop/public',
-        'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
+        'atk' => 'https://cdn.jsdelivr.net/gh/atk4/ui@develop/public',
+        'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui'      => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.4/dist',
+        'semantic-ui' => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.4/dist',
     ];
 
     /** @var string Version of Agile UI */
@@ -45,14 +45,14 @@ class App
     public $title = 'Agile UI - Untitled Application';
 
     /** @var Generic */
-    public $layout = null; // the top-most view object
+    public $layout; // the top-most view object
 
     /**
      * Set one or more directories where templates should reside.
      *
      * @var string|array
      */
-    public $template_dir = null;
+    public $template_dir;
 
     /** @var string Name of skin */
     public $skin = 'semantic-ui';
@@ -101,16 +101,16 @@ class App
     public $is_rendering = false;
 
     /** @var UI */
-    public $ui_persistence = null;
+    public $ui_persistence;
 
     /** @var View For internal use */
-    public $html = null;
+    public $html;
 
     /** @var LoggerInterface Target for objects with DebugTrait */
-    public $logger = null;
+    public $logger;
 
     /** @var Persistence */
-    public $db = null;
+    public $db;
 
     /** @var string[] Extra HTTP headers to send on exit. */
     protected $response_headers = [
@@ -118,7 +118,7 @@ class App
     ];
 
     /**
-     * @var bool Whether or not semantic-ui vue has been initialised.
+     * @var bool whether or not semantic-ui vue has been initialised
      */
     private $is_sui_init = false;
 
@@ -211,7 +211,7 @@ class App
     }
 
     /**
-     * @param bool $for_shutdown if true will not pass in caughtException method.
+     * @param bool $for_shutdown if true will not pass in caughtException method
      *
      * @throws ExitApplicationException
      * @throws \atk4\core\Exception
@@ -243,8 +243,6 @@ class App
     /**
      * Catch exception.
      *
-     * @param \Throwable $exception
-     *
      * @throws \atk4\core\Exception
      * @throws ExitApplicationException
      *
@@ -267,8 +265,8 @@ class App
         if (($this->isJsRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
                 && !isset($_GET['__atk_tab'])) {
             $this->outputResponseJSON([
-                'success'   => false,
-                'message'   => $this->layout->getHtml(),
+                'success' => false,
+                'message' => $this->layout->getHtml(),
             ]);
         } else {
             $this->run();
@@ -285,6 +283,7 @@ class App
      * Normalize HTTP headers to associative array with LC keys.
      *
      * @param string[] $headers
+     *
      * @return string[]
      */
     protected function normalizeHeaders(array $headers): array
@@ -335,8 +334,8 @@ class App
      * directly, instead call it form Callback, jsCallback or similar
      * other classes.
      *
-     * @param string|array $output Array type is supported only for JSON response
-     * @param string[]     $headers Content-type header must be always set or consider using App::terminateHTML() or App::terminateJSON() methods.
+     * @param string|array $output  Array type is supported only for JSON response
+     * @param string[]     $headers content-type header must be always set or consider using App::terminateHTML() or App::terminateJSON() methods
      *
      * @throws \atk4\core\Exception
      * @throws ExitApplicationException
@@ -506,7 +505,7 @@ class App
     {
         if (!$this->layout) {
             throw (new Exception('App layout is missing'))
-                    ->addSolution('If you use $app->add() you should first call $app->initLayout()');
+                ->addSolution('If you use $app->add() you should first call $app->initLayout()');
         }
 
         return $this->layout->add($seed, $region);
@@ -584,18 +583,18 @@ class App
         $template = new Template();
         $template->app = $this;
 
-        if (in_array($name[0], ['.', '/', '\\']) || strpos($name, ':\\') !== false) {
+        if (in_array($name[0], ['.', '/', '\\'], true) || strpos($name, ':\\') !== false) {
             return $template->load($name);
-        } else {
-            $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
-            foreach ($dir as $td) {
-                if ($t = $template->tryLoad($td . '/' . $name)) {
-                    return $t;
-                }
+        }
+
+        $dir = is_array($this->template_dir) ? $this->template_dir : [$this->template_dir];
+        foreach ($dir as $td) {
+            if ($t = $template->tryLoad($td . '/' . $name)) {
+                return $t;
             }
         }
 
-        throw new Exception(['Can not find template file', 'name'=>$name, 'template_dir'=>$this->template_dir]);
+        throw new Exception(['Can not find template file', 'name' => $name, 'template_dir' => $this->template_dir]);
     }
 
     /**
@@ -639,7 +638,7 @@ class App
     /**
      * @var null
      */
-    public $page = null;
+    public $page;
 
     /**
      * @var array global sticky arguments
@@ -651,8 +650,6 @@ class App
 
     /**
      * Make current get argument with specified name automatically appended to all generated URLs.
-     *
-     * @return string|null
      */
     public function stickyGet(string $name, bool $isDeleting = false): ?string
     {
@@ -674,7 +671,7 @@ class App
      *
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUriArgs Additional URL arguments, deleting sticky can delete them.
+     * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
      *
      * @return string
      */
@@ -686,7 +683,7 @@ class App
 
         if ($this->page === null) {
             $requestUrl = $this->getRequestURI();
-            if (substr($requestUrl, -1, 1) == '/') {
+            if (substr($requestUrl, -1, 1) === '/') {
                 $this->page = 'index';
             } else {
                 $this->page = basename($requestUrl, $this->url_building_ext);
@@ -740,7 +737,7 @@ class App
      *
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
      * @param bool         $needRequestUri      Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUriArgs Additional URL arguments, deleting sticky can delete them.
+     * @param array        $extraRequestUriArgs additional URL arguments, deleting sticky can delete them
      *
      * @return string
      */
@@ -766,8 +763,8 @@ class App
      * Adds additional JS script include in application template.
      *
      * @param string $url
-     * @param bool   $isAsync Whether or not you want Async loading.
-     * @param bool   $isDefer Whether or not you want Defer loading.
+     * @param bool   $isAsync whether or not you want Async loading
+     * @param bool   $isDefer whether or not you want Defer loading
      *
      * @return $this
      */
@@ -882,7 +879,6 @@ class App
      * @param string|array $tag
      * @param string       $attr
      * @param string|array $value
-     * @param bool         $encodeValue
      *
      * @return string
      */
@@ -939,13 +935,13 @@ class App
         }
 
         if (!$attr) {
-            return "<$tag>" . ($value !== null ? $value . "</$tag>" : '');
+            return "<{$tag}>" . ($value !== null ? $value . "</{$tag}>" : '');
         }
         $tmp = [];
-        if (substr($tag, -1) == '/') {
+        if (substr($tag, -1) === '/') {
             $tag = substr($tag, 0, -1);
             $postfix = '/';
-        } elseif (substr($tag, 0, 1) == '/') {
+        } elseif (substr($tag, 0, 1) === '/') {
             return '</' . ($attr[0] ?? substr($tag, 1)) . '>';
         } else {
             $postfix = '';
@@ -955,15 +951,15 @@ class App
                 continue;
             }
             if ($val === true) {
-                $tmp[] = "$key";
+                $tmp[] = "{$key}";
             } elseif ($key === 0) {
                 $tag = $val;
             } else {
-                $tmp[] = "$key=\"" . $this->encodeAttribute($val) . '"';
+                $tmp[] = "{$key}=\"" . $this->encodeAttribute($val) . '"';
             }
         }
 
-        return "<$tag" . ($tmp ? (' ' . implode(' ', $tmp)) : '') . $postfix . '>' . ($value !== null ? $value . "</$tag>" : '');
+        return "<{$tag}" . ($tmp ? (' ' . implode(' ', $tmp)) : '') . $postfix . '>' . ($value !== null ? $value . "</{$tag}>" : '');
     }
 
     /**
@@ -1064,7 +1060,7 @@ class App
         );
     }
 
-    /* RESPONSES */
+    // RESPONSES
 
     /** @var string[] */
     private static $_sentHeaders = [];
@@ -1104,7 +1100,6 @@ class App
     /**
      * Output HTML response to the client.
      *
-     * @param string $data
      * @param string[] $headers
      */
     private function outputResponseHTML(string $data, array $headers = []): void
@@ -1119,7 +1114,7 @@ class App
      * Output JSON response to the client.
      *
      * @param string|array $data
-     * @param string[] $headers
+     * @param string[]     $headers
      */
     private function outputResponseJSON($data, array $headers = []): void
     {

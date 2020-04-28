@@ -15,7 +15,7 @@ class Columns extends View
      *
      * @var int
      */
-    public $width = null;
+    public $width;
 
     /**
      * Sum of all column widths added so far.
@@ -53,7 +53,7 @@ class Columns extends View
             $column->addClass($this->sizes[$size] . ' wide');
             $this->calculated_width = false;
         } elseif ($this->calculated_width !== false) {
-            $this->calculated_width++;
+            ++$this->calculated_width;
         }
         $column->addClass('column');
 

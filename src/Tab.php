@@ -8,7 +8,7 @@ namespace atk4\ui;
 class Tab extends Item
 {
     /** @var string */
-    public $path = null;
+    public $path;
 
     /**
      * Sets path for tab.
@@ -37,7 +37,7 @@ class Tab extends Item
             $this->js(true)->tab();
         }
 
-        if ($this->owner->activeTabName == $this->name) {
+        if ($this->owner->activeTabName === $this->name) {
             $this->js(true)->click();
         }
 

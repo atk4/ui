@@ -41,7 +41,7 @@ $search = \atk4\ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segme
 $lister_container = \atk4\ui\View::addTo($view, ['template' => $lister_template]);
 $lister = \atk4\ui\Lister::addTo($lister_container, [], ['List']);
 $lister->onHook('beforeRow', function ($l) {
-    $l->ipp++;
+    ++$l->ipp;
     $l->current_row['iso'] = strtolower($l->current_row['iso']);
     if ($l->ipp === $l->model->limit[0]) {
         $l->t_row->setHtml('end', '<div class="ui circular basic label"> ...</div>');

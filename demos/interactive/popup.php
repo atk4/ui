@@ -33,7 +33,7 @@ class Cart extends \atk4\ui\Lister
             $this->removeItem($_GET['id']);
 
             // redirect again, since we don't want this to stay in the URL
-            $this->app->redirect([$this->name . '_remove'=>false]);
+            $this->app->redirect([$this->name . '_remove' => false]);
         }
     }
 
@@ -81,31 +81,31 @@ class ItemShelf extends \atk4\ui\View
     public function init(): void
     {
         parent::init();
-        $v = \atk4\ui\View::addTo($this, ['ui'=>'fluid']);
+        $v = \atk4\ui\View::addTo($this, ['ui' => 'fluid']);
         $cols = \atk4\ui\Columns::addTo($v, ['ui' => 'relaxed divided grid']);
 
         $c1 = $cols->addColumn();
         \atk4\ui\Header::addTo($c1, ['size' => 'small'])->set('Snacks');
         $l1 = \atk4\ui\View::addTo($c1, ['ui' => 'list']);
-        \atk4\ui\Item::addTo($l1, ['content'=>'Crisps', 'ui' => 'item'])->setElement('a');
-        \atk4\ui\Item::addTo($l1, ['content'=>'Pork Scratchings', 'ui' => 'item'])->setElement('a');
-        \atk4\ui\Item::addTo($l1, ['content'=>'Candies', 'ui' => 'item'])->setElement('a');
-        \atk4\ui\Item::addTo($l1, ['content'=>'Sweets', 'ui' => 'item'])->setElement('a');
+        \atk4\ui\Item::addTo($l1, ['content' => 'Crisps', 'ui' => 'item'])->setElement('a');
+        \atk4\ui\Item::addTo($l1, ['content' => 'Pork Scratchings', 'ui' => 'item'])->setElement('a');
+        \atk4\ui\Item::addTo($l1, ['content' => 'Candies', 'ui' => 'item'])->setElement('a');
+        \atk4\ui\Item::addTo($l1, ['content' => 'Sweets', 'ui' => 'item'])->setElement('a');
 
         $c2 = $cols->addColumn();
         \atk4\ui\Header::addTo($c2, ['size' => 'small'])->set('Drinks');
         $l2 = \atk4\ui\View::addTo($c2, ['ui' => 'list']);
-        \atk4\ui\Item::addTo($l2, ['content'=>'Fizzy Drink', 'ui' => 'item'])->setElement('a');
-        \atk4\ui\Item::addTo($l2, ['content'=>'Hot Latte', 'ui' => 'item'])->setElement('a');
-        \atk4\ui\Item::addTo($l2, ['content'=>'Water', 'ui' => 'item'])->setElement('a');
-        \atk4\ui\Item::addTo($l2, ['content'=>'Apple Juice', 'ui' => 'item'])->setElement('a');
+        \atk4\ui\Item::addTo($l2, ['content' => 'Fizzy Drink', 'ui' => 'item'])->setElement('a');
+        \atk4\ui\Item::addTo($l2, ['content' => 'Hot Latte', 'ui' => 'item'])->setElement('a');
+        \atk4\ui\Item::addTo($l2, ['content' => 'Water', 'ui' => 'item'])->setElement('a');
+        \atk4\ui\Item::addTo($l2, ['content' => 'Apple Juice', 'ui' => 'item'])->setElement('a');
 
         $c3 = $cols->addColumn();
         \atk4\ui\Header::addTo($c3, ['size' => 'small'])->set('Mains');
         $l3 = \atk4\ui\View::addTo($c3, ['ui' => 'list']);
-        \atk4\ui\Item::addTo($l3, ['content'=>'Chicken Tikka', 'ui' => 'item'])->setElement('a');
-        \atk4\ui\Item::addTo($l3, ['content'=>'Green Curry', 'ui' => 'item'])->setElement('a');
-        \atk4\ui\Item::addTo($l3, ['content'=>'Pastries', 'ui' => 'item'])->setElement('a');
+        \atk4\ui\Item::addTo($l3, ['content' => 'Chicken Tikka', 'ui' => 'item'])->setElement('a');
+        \atk4\ui\Item::addTo($l3, ['content' => 'Green Curry', 'ui' => 'item'])->setElement('a');
+        \atk4\ui\Item::addTo($l3, ['content' => 'Pastries', 'ui' => 'item'])->setElement('a');
     }
 
     /**
@@ -133,9 +133,9 @@ $m = \atk4\ui\Menu::addTo($app);
 $browse = \atk4\ui\DropDown::addTo($m, ['Browse']);
 
 // Add cart item into the menu, with a popup inside
-$cart_item = $m->addItem([Cart::class, 'icon'=>'cart']);
+$cart_item = $m->addItem([Cart::class, 'icon' => 'cart']);
 
-$cart_popup = \atk4\ui\Popup::addTo($app, [$cart_item, 'position'=>'bottom left']);
+$cart_popup = \atk4\ui\Popup::addTo($app, [$cart_item, 'position' => 'bottom left']);
 // Popup won't dissapear as you hover over it.
 $cart_popup->setHoverable();
 
@@ -196,9 +196,9 @@ $shelf->linkCart($cart, [
 
 // label placed on top of menu item, not in the popup
 
-$pop = \atk4\ui\Popup::addTo($app, [$browse, 'position' => 'bottom left', 'minWidth'=>'500px'])
-           ->setHoverable()
-           ->setOption('delay', ['show' => 100, 'hide' => 400]);
+$pop = \atk4\ui\Popup::addTo($app, [$browse, 'position' => 'bottom left', 'minWidth' => '500px'])
+    ->setHoverable()
+    ->setOption('delay', ['show' => 100, 'hide' => 400]);
 $shelf2 = ItemShelf::addTo($pop);
 //$shelf2->linkCart($cart, $cart_item->jsReload());
 
@@ -206,7 +206,7 @@ $shelf2 = ItemShelf::addTo($pop);
 
 $um = \atk4\ui\Menu::addTo($m, ['ui' => false], ['RightMenu'])
     ->addClass('right menu')->removeClass('item');
-$m_right = $um->addMenu(['', 'icon'=>'user']);
+$m_right = $um->addMenu(['', 'icon' => 'user']);
 
 // If you add popup right inside the view, it will link itself with the element. If you are adding it into other container,
 // you can still manually link it and specify an event.
@@ -215,27 +215,26 @@ $signup = \atk4\ui\Popup::addTo($app, [$m_right, 'position' => 'bottom right'])-
 // This popup will be dynamically loaded.
 $signup->stickyGet('logged');
 $signup->set(function ($pop) {
-
     // contetn of the popup will be different depending on this condition.
     if (isset($_GET['logged'])) {
         \atk4\ui\Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);
-        \atk4\ui\Button::addTo($pop, ['Logout', 'primary', 'icon'=>'sign out'])
+        \atk4\ui\Button::addTo($pop, ['Logout', 'primary', 'icon' => 'sign out'])
             ->link($pop->app->url());
     } else {
         $f = \atk4\ui\Form::addTo($pop);
-        $f->addField('email', null, ['required'=>true]);
-        $f->addField('password', ['Password'], ['required'=>true]);
+        $f->addField('email', null, ['required' => true]);
+        $f->addField('password', ['Password'], ['required' => true]);
         $f->buttonSave->set('Login');
 
         // popup handles callbacks properly, so dynamic element such as form works
         // perfectly inside a popup.
         $f->onSubmit(function ($f) {
-            if ($f->model['password'] != '123') {
+            if ($f->model['password'] !== '123') {
                 return $f->error('password', 'Please use password "123"');
             }
 
             // refreshes entire page
-            return $f->app->jsRedirect(['logged'=>$f->model['email']]);
+            return $f->app->jsRedirect(['logged' => $f->model['email']]);
             //return new atk4\ui\jsExpression('alert([])', ['Thank you '.$f->model['email']]);
         });
     }
@@ -257,7 +256,7 @@ $input = \atk4\ui\FormField\Line::addTo($app, ['placeholder' => 'Search users', 
 $i_pop = \atk4\ui\Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
 \atk4\ui\View::addTo($i_pop)->set('You can use this field to search data.');
 
-$button = \atk4\ui\Button::addTo($app, [null, 'icon'=>'volume down']);
-$b_pop = \atk4\ui\Popup::addTo($app, [$button, 'triggerOn'=>'hover'])->setHoverable();
+$button = \atk4\ui\Button::addTo($app, [null, 'icon' => 'volume down']);
+$b_pop = \atk4\ui\Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();
 
 \atk4\ui\FormField\CheckBox::addTo($b_pop, ['Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));

@@ -31,14 +31,14 @@ class ItemsPerPageSelector extends View
      *
      * @var int
      */
-    public $currentIpp = null;
+    public $currentIpp;
 
     /**
      * The callback function.
      *
-     * @var Callback|null
+     * @var callback|null
      */
-    public $cb = null;
+    public $cb;
 
     public function init(): void
     {
@@ -109,7 +109,7 @@ class ItemsPerPageSelector extends View
                      }";
 
         $this->js(true)->dropdown([
-            'values'   => $menuItems,
+            'values' => $menuItems,
             'onChange' => new jsExpression($function),
         ]);
         parent::renderView();

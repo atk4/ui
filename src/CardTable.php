@@ -19,7 +19,7 @@ class CardTable extends Table
         }
 
         if (!$m->loaded()) {
-            throw new Exception(['Model must be loaded', 'model'=>$m]);
+            throw new Exception(['Model must be loaded', 'model' => $m]);
         }
 
         $data = [];
@@ -27,11 +27,11 @@ class CardTable extends Table
         $ui_values = $this->app ? $this->app->ui_persistence->typecastSaveRow($m, $m->get()) : $m->get();
 
         foreach ($m->get() as $key => $value) {
-            if (!$columndef || ($columndef && in_array($key, $columndef))) {
+            if (!$columndef || ($columndef && in_array($key, $columndef, true))) {
                 $data[] = [
-                    'id'   => $key,
-                    'field'=> $m->getField($key)->getCaption(),
-                    'value'=> $ui_values[$key],
+                    'id' => $key,
+                    'field' => $m->getField($key)->getCaption(),
+                    'value' => $ui_values[$key],
                 ];
             }
         }
