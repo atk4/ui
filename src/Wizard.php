@@ -62,7 +62,7 @@ class Wizard extends View
         parent::init();
         $this->stepCallback = Callback::addTo($this, ['urlTrigger'=>$this->name]);
 
-        $this->currentStep = $this->stepCallback->triggered() ?: 0;
+        $this->currentStep = (int) $this->stepCallback->triggered() ?: 0;
 
         $this->stepTemplate = $this->template->cloneRegion('Step');
         $this->template->del('Step');
