@@ -42,7 +42,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * @var \atk4\ui\FormLayout\Generic
      */
-    public $layout = null;
+    public $layout;
 
     /**
      * List of fields currently registered with this form.
@@ -166,7 +166,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
-            $this->layout = $this->factory($this->layout, ['form'=>$this], 'atk4\ui\FormLayout');
+            $this->layout = $this->factory($this->layout, ['form' => $this], 'atk4\ui\FormLayout');
             $this->layout = $this->add($this->layout);
         } elseif (is_object($this->layout)) {
             $this->layout->form = $this;
@@ -225,12 +225,11 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * If $actualFields are not specified, then all "editable" fields
      * will be added.
      *
-     * @param \atk4\data\Model $model
-     * @param array            $fields
+     * @param array $fields
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $model, $fields = null)
+    public function setModel(Model $model, $fields = null)
     {
         // Model is set for the form and also for the current layout
         try {
@@ -320,7 +319,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
             $response = $this->js()->html($response->render());
         } else {
-            $response = new Message([$success, 'type'=>'success', 'icon'=>'check']);
+            $response = new Message([$success, 'type' => 'success', 'icon' => 'check']);
             $response->app = $this->app;
             $response->init();
             $response->text->addParagraph($sub_header);
@@ -448,7 +447,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             $limit = ($f->reference instanceof ContainsMany) ? 0 : 1;
             $model = $f->reference->refModel();
             $fallback_seed = ['MultiLine', 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
-        } elseif ($f->type != 'boolean') {
+        } elseif ($f->type !== 'boolean') {
             if ($f->enum) {
                 $fallback_seed = ['DropDown', 'values' => array_combine($f->enum, $f->enum)];
             } elseif ($f->values) {
@@ -474,12 +473,11 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         );
 
         $defaults = [
-            'form'       => $this,
-            'field'      => $f,
+            'form' => $this,
+            'field' => $f,
             'short_name' => $f->short_name,
         ];
 
-        /* @var TYPE_NAME $this */
         return $this->factory($seed, $defaults, 'atk4\ui\FormField');
     }
 
@@ -489,14 +487,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * @var array Describes how factory converts type to decorator seed
      */
     protected $typeToDecorator = [
-        'boolean'  => 'CheckBox',
-        'text'     => 'TextArea',
-        'string'   => 'Line',
+        'boolean' => 'CheckBox',
+        'text' => 'TextArea',
+        'string' => 'Line',
         'password' => 'Password',
         'datetime' => 'Calendar',
-        'date'     => ['Calendar', 'type' => 'date'],
-        'time'     => ['Calendar', 'type' => 'time', 'ampm' => false],
-        'money'    => 'Money',
+        'date' => ['Calendar', 'type' => 'date'],
+        'time' => ['Calendar', 'type' => 'time', 'ampm' => false],
+        'money' => 'Money',
     ];
 
     /**

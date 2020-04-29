@@ -12,7 +12,7 @@ class Label extends View
      *
      * @var View|array|string
      */
-    public $icon = null;
+    public $icon;
 
     /**
      * Icon to the right of the label.
@@ -21,14 +21,14 @@ class Label extends View
      *
      * @var View|array|string
      */
-    public $iconRight = null;
+    public $iconRight;
 
     /**
      * Add "Detail" to label.
      *
-     * @var string|null|false
+     * @var string|false|null
      */
-    public $detail = null;
+    public $detail;
 
     /**
      * Image to the left of the label. Cannot be used with label. If string
@@ -36,7 +36,7 @@ class Label extends View
      *
      * @var View|array|string
      */
-    public $image = null;
+    public $image;
 
     /**
      * Image to the right of the label.
@@ -45,7 +45,7 @@ class Label extends View
      *
      * @var View|array|string
      */
-    public $imageRight = null;
+    public $imageRight;
 
     public $defaultTemplate = 'label.html';
 

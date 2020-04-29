@@ -32,11 +32,9 @@ $scrolling->addScrolling();
 \atk4\ui\Button::addTo($bar, ['No Title'])->on('click', $noTitle->show());
 \atk4\ui\Button::addTo($bar, ['Scrolling Content'])->on('click', $scrolling->show());
 
-/*
- * Modal demos.
- */
+// Modal demos.
 
-/********** REGULAR ******************/
+// REGULAR
 
 $modal_simple = \atk4\ui\Modal::addTo($app, ['title' => 'Simple modal']);
 \atk4\ui\Message::addTo($modal_simple)->set('Modal message here.');
@@ -46,7 +44,7 @@ $menu_bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 $b = \atk4\ui\Button::addTo($menu_bar)->set('Show Modal');
 $b->on('click', $modal_simple->show());
 
-/********** DYNAMIC ******************/
+// DYNAMIC
 
 \atk4\ui\Header::addTo($app, ['Three levels of Modal loading dynamic content via callback']);
 
@@ -85,16 +83,16 @@ $bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 $b = \atk4\ui\Button::addTo($bar)->set('Open Lorem Ipsum');
 $b->on('click', $modal_vp1->show());
 
-/********** ANIMATION ***************/
+// ANIMATION
 
 $menu_items = [
-    'scale'  => [],
-    'flip'   => ['horizontal flip', 'vertical flip'],
-    'fade'   => ['fade up', 'fade down', 'fade left', 'fade right'],
-    'drop'   => [],
-    'fly'    => ['fly left', 'fly right', 'fly up', 'fly down'],
-    'swing'  => ['swing left', 'swing right', 'swing up', 'swing down'],
-    'slide'  => ['slide left', 'slide right', 'slide up', 'slide down'],
+    'scale' => [],
+    'flip' => ['horizontal flip', 'vertical flip'],
+    'fade' => ['fade up', 'fade down', 'fade left', 'fade right'],
+    'drop' => [],
+    'fly' => ['fly left', 'fly right', 'fly up', 'fly down'],
+    'swing' => ['swing left', 'swing right', 'swing up', 'swing down'],
+    'slide' => ['slide left', 'slide right', 'slide up', 'slide down'],
     'browse' => ['browse', 'browse right'],
     'static' => ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce'],
 ];
@@ -122,7 +120,7 @@ foreach ($menu_items as $key => $items) {
     }
 }
 
-/************** DENY APPROVE *********/
+// DENY APPROVE
 
 \atk4\ui\Header::addTo($app, ['Modal Options']);
 
@@ -136,7 +134,7 @@ $menu_bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 $b = \atk4\ui\Button::addTo($menu_bar)->set('Show Deny/Approve');
 $b->on('click', $modal_da->show());
 
-/************** MULTI STEP *********/
+// MULTI STEP
 
 \atk4\ui\Header::addTo($app, ['Multiple page modal']);
 
@@ -160,10 +158,10 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
     $success = $session->recall('success', false);
     if (isset($_GET['move'])) {
         if ($_GET['move'] === 'next' && $success) {
-            $page++;
+            ++$page;
         }
         if ($_GET['move'] === 'prev' && $page > 1) {
-            $page--;
+            --$page;
         }
         $session->memorize('success', false);
     } elseif ($page === 2) {
@@ -187,22 +185,22 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
         $f->setModel($m_register);
 
         $f->onSubmit(function ($f) use ($next_action, $session) {
-            if ($f->model['name'] != 'John') {
+            if ($f->model['name'] !== 'John') {
                 return $f->error('name', 'Your name is not John! It is "' . $f->model['name'] . '". It should be John. Pleeease!');
-            } else {
-                $session->memorize('success', true);
-                $session->memorize('name', $f->model['name']);
-                $js[] = $f->success('Thank you, ' . $f->model['name'] . ' you can go on!');
-                $js[] = $next_action->js()->removeClass('disabled');
-
-                return $js;
             }
+
+            $session->memorize('success', true);
+            $session->memorize('name', $f->model['name']);
+            $js[] = $f->success('Thank you, ' . $f->model['name'] . ' you can go on!');
+            $js[] = $next_action->js()->removeClass('disabled');
+
+            return $js;
         });
         $modal->js(true, $prev_action->js()->removeClass('disabled'));
         $modal->js(true, $next_action->js(true)->addClass('disabled'));
     } elseif ($page === 3) {
         $name = $session->recall('name');
-        \atk4\ui\Message::addTo($modal)->set("Thank you ${name} for visiting us! We will be in touch");
+        \atk4\ui\Message::addTo($modal)->set("Thank you {$name} for visiting us! We will be in touch");
         $session->memorize('success', true);
         $modal->js(true, $prev_action->js(true)->hide());
         $modal->js(true, $next_action->js(true)->hide());

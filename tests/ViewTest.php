@@ -17,7 +17,7 @@ class ViewTest extends AtkPhpunit\TestCase
 
         $a = $v->render();
         $b = $v->render();
-        $this->assertEquals($a, $b);
+        $this->assertSame($a, $b);
     }
 
     public function testAddAfterRender()
@@ -30,6 +30,6 @@ class ViewTest extends AtkPhpunit\TestCase
         $a = $v->render();
         \atk4\ui\View::addTo($v);  // this should fail. No adding after rendering.
         $b = $v->render();
-        $this->assertEquals($a, $b);
+        $this->assertSame($a, $b);
     }
 }

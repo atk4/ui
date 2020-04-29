@@ -5,12 +5,11 @@ require_once __DIR__ . '/../atk-init.php';
 /**
  * Demonstrates how to use BreadCrumb.
  */
-
 $crumb = \atk4\ui\BreadCrumb::addTo($app);
 $crumb->addCrumb('UI Demo', ['index']);
 $crumb->addCrumb('BreadCrumb Demo', ['breadcrumb']);
 
-\atk4\ui\View::addTo($app, ['ui'=>'divider']);
+\atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
 $crumb->addCrumb('Countries', []);
 
@@ -18,7 +17,6 @@ $m = new CountryLock($db);
 $m->setLimit(15);
 
 if ($id = $app->stickyGet('country_id')) {
-
     // perhaps we edit individual country?
     $m->load($id);
     $crumb->addCrumb($m['name'], []);
@@ -31,11 +29,10 @@ if ($id = $app->stickyGet('country_id')) {
         return new \atk4\ui\jsToast('Form Submitted! Data saving is not possible in demo!');
     });
 } else {
-
     // display list of countries
     $table = \atk4\ui\Table::addTo($app);
     $table->setModel($m);
-    $table->addDecorator('name', ['Link', [], ['country_id'=>'id']]);
+    $table->addDecorator('name', ['Link', [], ['country_id' => 'id']]);
 }
 
 $crumb->popTitle();

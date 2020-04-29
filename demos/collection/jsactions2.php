@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/country_actions.php';
 
-/**
+/*
  * Demo for Model action
  * Action definition for Country model is located in counrty_actions.php
  */
@@ -22,7 +22,7 @@ $c = \atk4\ui\Card::addTo($gl, ['useLabel' => true], ['r1c1']);
 $c->addContent(new \atk4\ui\Header(['Using country: ']));
 $c->setModel($country, ['iso', 'iso3', 'phonecode']);
 
-$buttons = \atk4\ui\View::addTo($gl, ['ui'=>'vertical basic buttons'], ['r1c2']);
+$buttons = \atk4\ui\View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 
 $country->unload();
 

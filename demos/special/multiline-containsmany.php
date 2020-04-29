@@ -2,9 +2,7 @@
 
 require_once __DIR__ . '/../atk-init.php';
 
-/***
- * This demo require specific Database setup.
- */
+// This demo require specific Database setup.
 
 class Client extends atk4\data\Model
 {

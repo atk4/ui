@@ -113,10 +113,10 @@ class Loader extends View
     public function jsLoad($args = [], $apiConfig = [], $storeName = null)
     {
         return $this->js()->atkReloadView([
-            'uri'         => $this->cb->getJSURL(),
+            'uri' => $this->cb->getJSURL(),
             'uri_options' => $args,
-            'apiConfig'   => !empty($apiConfig) ? $apiConfig : null,
-            'storeName'   => $storeName ? $storeName : null,
+            'apiConfig' => !empty($apiConfig) ? $apiConfig : null,
+            'storeName' => $storeName ? $storeName : null,
         ]);
     }
 }

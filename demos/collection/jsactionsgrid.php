@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/country_actions.php';
 
-/**
+/*
  * Demo for Model action in Grid
  * Action definition for Country model is located in country_actions.php
  */
@@ -13,7 +13,6 @@ require_once __DIR__ . '/../_includes/country_actions.php';
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
 \atk4\ui\Header::addTo($app, ['Model Custom Actions', 'subHeader' => 'Model custom action can be execute from Grid.']);
-
 
 $g = \atk4\ui\Grid::addTo($app, ['menu' => false]);
 $g->setModel($country);

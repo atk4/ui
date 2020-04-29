@@ -28,32 +28,32 @@ class CardDeck extends View
     /** @var bool Whether card should use label display or not. */
     public $useLabel = false;
 
-    /** @var null|string If using extra field in Card, glue, join them using extra glue. */
+    /** @var string|null If using extra field in Card, glue, join them using extra glue. */
     public $extraGlue = ' - ';
 
     /** @var bool If each card should use action or not. */
     public $useAction = true;
 
-    /** @var null|View The container view. The view that is reload when page or data changed. */
+    /** @var View|null The container view. The view that is reload when page or data changed. */
     public $container = [View::class, 'ui' => 'basic segment'];
 
     /** @var View The view containing Cards. */
     public $cardHolder = [View::class, 'ui' => 'cards'];
 
-    /** @var null|View The paginator view. */
+    /** @var View|null The paginator view. */
     public $paginator = [Paginator::class];
 
     /** @var int The number of cards to be displayed per page. */
     public $ipp = 9;
 
-    /** @var null|array A menu seed for displaying button inside. */
+    /** @var array|null A menu seed for displaying button inside. */
     public $menu = [View::class, 'ui' => 'stackable grid'];
 
     /** @var array|ItemSearch */
     public $search = [ItemSearch::class, 'ui' => 'ui compact basic segment'];
 
-    /** @var null|View A view container for buttons. Added into menu when menu is set. */
-    private $btns = null;
+    /** @var View|null A view container for buttons. Added into menu when menu is set. */
+    private $btns;
 
     /** @var string Button css class for menu. */
     public $menuBtnStyle = 'primary';
@@ -84,19 +84,19 @@ class CardDeck extends View
 
     /** @var array seed to create View for displaying when search result is empty. */
     public $noRecordDisplay = [
-                Message::class,
-                'content' => 'Result empty!',
-                'icon' => 'info circle',
-                'text' => 'Your search did not return any record or there is no record available.',
+        Message::class,
+        'content' => 'Result empty!',
+        'icon' => 'info circle',
+        'text' => 'Your search did not return any record or there is no record available.',
     ];
 
     /** @var array A collection of menu button added in Menu. */
     private $menuActions = [];
 
-    /** @var null|int The current page number. */
-    private $page = null;
+    /** @var int|null The current page number. */
+    private $page;
 
-    /** @var null|string The current search query string. */
+    /** @var string|null The current search query string. */
     private $query;
 
     public function init(): void
@@ -142,7 +142,7 @@ class CardDeck extends View
      */
     protected function addPaginator()
     {
-        $seg = View::addTo($this->container, ['ui'=> 'basic segment'])->addStyle('text-align', 'center');
+        $seg = View::addTo($this->container, ['ui' => 'basic segment'])->addStyle('text-align', 'center');
         $this->paginator = $seg->add($this->factory($this->paginator, ['reload' => $this->container]));
         $this->page = $this->app->stickyGet($this->paginator->name);
     }
@@ -221,8 +221,6 @@ class CardDeck extends View
      * because hook will keep adding for every cards, thus repeating jsExecute multiple time,
      * i.e. once for each card, unless hook is break.
      *
-     * @param Generic $action
-     *
      * @throws \atk4\core\Exception
      *
      * @return object
@@ -262,17 +260,17 @@ class CardDeck extends View
             $msg = $return->loaded() ? $this->saveMsg : ($action->scope === Generic::SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
             return $this->jsModelReturn($action, $msg);
-        } else {
-            return $this->getNotifier($this->defaultMsg, $action);
         }
+
+        return $this->getNotifier($this->defaultMsg, $action);
     }
 
     /**
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      *
-     * @param null|string  $msg    The message to display.
-     * @param null|Generic $action The model action.
+     * @param string|null  $msg    the message to display
+     * @param Generic|null $action the model action
      *
      * @throws \atk4\core\Exception
      *
@@ -292,11 +290,8 @@ class CardDeck extends View
      * js expression return when action afterHook executor return a Model.
      *
      * @param Generic $action
-     * @param string  $msg
      *
      * @throws \atk4\core\Exception
-     *
-     * @return array
      */
     protected function jsModelReturn(Generic $action = null, string $msg = 'Done!'): array
     {
@@ -321,8 +316,6 @@ class CardDeck extends View
      * Therefore if card, that was just save, is not present in db result set or deck then return null
      * otherwise return Card view.
      *
-     * @param Model $model
-     *
      * @throws \atk4\data\Exception
      *
      * @return mixed|null
@@ -339,7 +332,7 @@ class CardDeck extends View
             }
         }
 
-        if (in_array($model->id, array_map($mapResults, $model->export([$model->id_field])))) {
+        if (in_array($model->id, array_map($mapResults, $model->export([$model->id_field])), true)) {
             // might be in result set but not in deck, for example when adding a card.
             return $deck[$model->id] ?? null;
         }
@@ -366,8 +359,8 @@ class CardDeck extends View
     /**
      * Add button to menu bar on top of deck card.
      *
-     * @param Button|string|Generic                  $button     A button object, a model action or a string representing a model action.
-     * @param null|Generic|jsExpressionable|callable $callback   An model action, js expression or callback function.
+     * @param Button|string|Generic                  $button     a button object, a model action or a string representing a model action
+     * @param Generic|jsExpressionable|callable|null $callback   an model action, js expression or callback function
      * @param string|array                           $confirm    A confirmation string or View::on method defaults when passed has an array,
      * @param bool                                   $isDisabled
      *
@@ -442,8 +435,6 @@ class CardDeck extends View
     /**
      * Return proper action executor base on model action.
      *
-     * @param Generic $action
-     *
      * @throws \atk4\core\Exception
      *
      * @return object
@@ -465,7 +456,7 @@ class CardDeck extends View
             View::addTo($this, ['ui' => 'divider'], ['Divider']);
         }
 
-        if (($_GET['__atk_reload'] ?? null) === $this->container->name) {
+        if ($this->container->name === ($_GET['__atk_reload'] ?? null)) {
             $this->applyReload();
         }
         parent::renderView();
@@ -474,12 +465,8 @@ class CardDeck extends View
     /**
      * Return proper action need to setup menu or action column.
      *
-     * @param string $scope
-     *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
-     *
-     * @return array
      */
     private function _getModelActions(string $scope): array
     {

@@ -20,14 +20,14 @@ class Input extends Generic
 
     public $defaultTemplate = 'formfield/input.html';
 
-    public $icon = null;
+    public $icon;
 
-    public $iconLeft = null;
+    public $iconLeft;
 
     /**
      * Specify left / right. If you use "true" will default to the right side.
      */
-    public $loading = null;
+    public $loading;
 
     /**
      * Some fields also support $label. For Input the label can be placed to the left or to the right of
@@ -36,23 +36,23 @@ class Input extends Generic
      *
      * @var string|object
      */
-    public $label = null;
+    public $label;
 
     /**
      * Set label that will appear to the right of the input field.
      *
      * @var string|object
      */
-    public $labelRight = null;
+    public $labelRight;
 
-    public $action = null;
+    public $action;
 
-    public $actionLeft = null;
+    public $actionLeft;
 
     /**
      * Specify width for semantic UI grid. For "four wide" use 'four'.
      */
-    public $width = null;
+    public $width;
 
     /**
      * here additional attributes directly for the <input> tag can be added:
@@ -106,13 +106,13 @@ class Input extends Generic
     public function getInput()
     {
         return $this->app->getTag('input', array_merge([
-            'name'        => $this->short_name,
-            'type'        => $this->inputType,
+            'name' => $this->short_name,
+            'type' => $this->inputType,
             'placeholder' => $this->placeholder,
-            'id'          => $this->id . '_input',
-            'value'       => $this->getValue(),
-            'readonly'    => $this->readonly ? 'readonly' : false,
-            'disabled'    => $this->disabled ? 'disabled' : false,
+            'id' => $this->id . '_input',
+            'value' => $this->getValue(),
+            'readonly' => $this->readonly ? 'readonly' : false,
+            'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
@@ -134,7 +134,7 @@ class Input extends Generic
             $this->add($label, $spot);
         }
 
-        if ($label->ui != 'label') {
+        if ($label->ui !== 'label') {
             $label->addClass('label');
         }
 

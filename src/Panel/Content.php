@@ -11,7 +11,7 @@ use atk4\ui\View;
 class Content extends View implements LoadableContent
 {
     public $defaultTemplate = 'panel/content.html';
-    public $cb = null;
+    public $cb;
 
     public function init(): void
     {
@@ -22,8 +22,6 @@ class Content extends View implements LoadableContent
 
     /**
      * Return callback url for panel options.
-     *
-     * @return string
      */
     public function getCallbackUrl(): string
     {
@@ -33,10 +31,9 @@ class Content extends View implements LoadableContent
     /**
      * Set callback for panel.
      *
-     * @param jsCallback $cb
+     * @throws \atk4\core\Exception
      *
      * @return mixed|void
-     * @throws \atk4\core\Exception
      */
     public function setCb(jsCallback $cb)
     {
@@ -62,8 +59,6 @@ class Content extends View implements LoadableContent
     /**
      * Return an array of css selector where content will be
      * cleared on reload.
-     *
-     * @return array
      */
     public function getClearSelector(): array
     {

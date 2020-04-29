@@ -15,7 +15,7 @@ class TemplateTest extends AtkPhpunit\TestCase
         $t = new \atk4\ui\Template('hello, {foo}world{/}');
         $t['foo'] = 'bar';
 
-        $this->assertEquals('hello, bar', $t->render());
+        $this->assertSame('hello, bar', $t->render());
     }
 
     /**
@@ -24,8 +24,8 @@ class TemplateTest extends AtkPhpunit\TestCase
     public function testIsTopTag()
     {
         $t = new \atk4\ui\Template('a{$foo}b');
-        $this->assertEquals(true, $t->isTopTag('_top'));
-        $this->assertEquals(false, $t->isTopTag('foo'));
+        $this->assertTrue($t->isTopTag('_top'));
+        $this->assertFalse($t->isTopTag('foo'));
     }
 
     /**
@@ -36,18 +36,18 @@ class TemplateTest extends AtkPhpunit\TestCase
         // top tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t1 = &$t->getTagRef('_top');
-        $this->assertEquals(['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']], $t1);
+        $this->assertSame(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']], $t1);
 
         $t1 = ['good bye']; // will change $t->template because it's by reference
-        $this->assertEquals(['good bye'], $t->template);
+        $this->assertSame(['good bye'], $t->template);
 
         // any tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t2 = &$t->getTagRef('foo');
-        $this->assertEquals(['hello'], $t2);
+        $this->assertSame(['hello'], $t2);
 
         $t2 = ['good bye']; // will change $t->template because it's by reference
-        $this->assertEquals(['', 'foo#1'=>['good bye'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']], $t->template);
+        $this->assertSame(['', 'foo#1' => ['good bye'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']], $t->template);
     }
 
     /**
@@ -59,15 +59,15 @@ class TemplateTest extends AtkPhpunit\TestCase
         $t = new \atk4\ui\Template($s);
 
         $t1 = &$t->getTagRef('_top');
-        $this->assertEquals([
-            0          => 'My ',
+        $this->assertSame([
+            0 => 'My ',
             'email?#1' => [
-                0         => 'e-mail ',
+                0 => 'e-mail ',
                 'email#1' => [''],
             ],
-            1          => ' ',
+            1 => ' ',
             'phone?#1' => [
-                0         => 'phone ',
+                0 => 'phone ',
                 'phone#1' => [''],
             ],
             2 => '. Contact me!',
@@ -77,22 +77,22 @@ class TemplateTest extends AtkPhpunit\TestCase
         $t = new \atk4\ui\Template($s);
         $t->set('email', 'test@example.com');
         $t->set('phone', 123);
-        $this->assertEquals('My e-mail test@example.com phone 123. Contact me!', $t->render());
+        $this->assertSame('My e-mail test@example.com phone 123. Contact me!', $t->render());
 
         $t = new \atk4\ui\Template($s);
         $t->set('email', null);
         $t->set('phone', 123);
-        $this->assertEquals('My  phone 123. Contact me!', $t->render());
+        $this->assertSame('My  phone 123. Contact me!', $t->render());
 
         $t = new \atk4\ui\Template($s);
         $t->set('email', '');
         $t->set('phone', 123);
-        $this->assertEquals('My  phone 123. Contact me!', $t->render());
+        $this->assertSame('My  phone 123. Contact me!', $t->render());
 
         $t = new \atk4\ui\Template($s);
         $t->set('email', false);
         $t->set('phone', 0);
-        $this->assertEquals('My  phone 0. Contact me!', $t->render());
+        $this->assertSame('My  phone 0. Contact me!', $t->render());
 
         // nested conditional tags (renders comma only when both values are provided)
         $s = 'My {email?}e-mail {$email}{/email?}{email?}{phone?}, {/?}{/?}{phone?}phone {$phone}{/?}. Contact me!';
@@ -100,17 +100,17 @@ class TemplateTest extends AtkPhpunit\TestCase
         $t = new \atk4\ui\Template($s);
         $t->set('email', 'test@example.com');
         $t->set('phone', 123);
-        $this->assertEquals('My e-mail test@example.com, phone 123. Contact me!', $t->render());
+        $this->assertSame('My e-mail test@example.com, phone 123. Contact me!', $t->render());
 
         $t = new \atk4\ui\Template($s);
         $t->set('email', null);
         $t->set('phone', 123);
-        $this->assertEquals('My phone 123. Contact me!', $t->render());
+        $this->assertSame('My phone 123. Contact me!', $t->render());
 
         $t = new \atk4\ui\Template($s);
         $t->set('email', false);
         $t->set('phone', 0);
-        $this->assertEquals('My phone 0. Contact me!', $t->render());
+        $this->assertSame('My phone 0. Contact me!', $t->render());
     }
 
     /**
@@ -124,16 +124,16 @@ class TemplateTest extends AtkPhpunit\TestCase
 
         $f = function ($vat) use ($s) {
             return (new \atk4\ui\Template($s))->set([
-                'vat_applied'     => !empty($vat),
-                'vat_zero'        => ($vat === 0),
+                'vat_applied' => !empty($vat),
+                'vat_zero' => ($vat === 0),
                 'vat_not_applied' => ($vat === null),
-                'vat'             => $vat,
+                'vat' => $vat,
             ])->render();
         };
 
-        $this->assertEquals('VAT is 21%', $f(21));
-        $this->assertEquals('VAT is zero', $f(0));
-        $this->assertEquals('VAT is not applied', $f(null));
+        $this->assertSame('VAT is 21%', $f(21));
+        $this->assertSame('VAT is zero', $f(0));
+        $this->assertSame('VAT is not applied', $f(null));
     }
 
     /**
@@ -154,27 +154,27 @@ class TemplateTest extends AtkPhpunit\TestCase
         // top tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t1 = $t->getTagRefList('_top');
-        $this->assertEquals([['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['hello']]], $t1);
+        $this->assertSame([['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['hello']]], $t1);
 
         $t1[0] = ['good bye']; // will change $t->template because it's by reference
-        $this->assertEquals(['good bye'], $t->template);
+        $this->assertSame(['good bye'], $t->template);
 
         // any tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t2 = $t->getTagRefList('foo');
-        $this->assertEquals([['hello'], ['hello']], $t2);
+        $this->assertSame([['hello'], ['hello']], $t2);
 
         $t2[1] = ['good bye']; // will change $t->template last "foo" tag because it's by reference
-        $this->assertEquals(['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['world'], '. ', 'foo#2'=>['good bye']], $t->template);
+        $this->assertSame(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['world'], '. ', 'foo#2' => ['good bye']], $t->template);
 
         // array of tags
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $t2 = $t->getTagRefList(['foo', 'bar']);
-        $this->assertEquals([['hello'], ['hello'], ['world']], $t2);
+        $this->assertSame([['hello'], ['hello'], ['world']], $t2);
 
         $t2[1] = ['good bye']; // will change $t->template last "foo" tag because it's by reference
         $t2[2] = ['planet'];   // will change $t->template "bar" tag because it's by reference too
-        $this->assertEquals(['', 'foo#1'=>['hello'], ', cruel ', 'bar#1'=>['planet'], '. ', 'foo#2'=>['good bye']], $t->template);
+        $this->assertSame(['', 'foo#1' => ['hello'], ', cruel ', 'bar#1' => ['planet'], '. ', 'foo#2' => ['good bye']], $t->template);
     }
 
     /**
@@ -246,10 +246,10 @@ class TemplateTest extends AtkPhpunit\TestCase
         // del tests
         $t->set('foo', 'Hello');
         $t->del('foo');
-        $this->assertEquals(' guys', $t->render());
+        $this->assertSame(' guys', $t->render());
         $t->set('foo', 'Hello');
         $t->tryDel('qwe'); // non existent tag, ignores
-        $this->assertEquals('Hello guys', $t->render());
+        $this->assertSame('Hello guys', $t->render());
 
         // set and append tests
         $t->set('foo', 'Hello');
@@ -265,7 +265,7 @@ class TemplateTest extends AtkPhpunit\TestCase
         $t->tryAppendHTML('foo', ' and <b>smart</b>'); // appends html
         $t->tryAppendHTML('qwe', '<b>ignore</b> this'); // ignores
 
-        $this->assertEquals('<b>Hi</b> and <b>welcome</b> my dear and <b>smart</b> guys', $t->render());
+        $this->assertSame('<b>Hi</b> and <b>welcome</b> my dear and <b>smart</b> guys', $t->render());
     }
 
     /**
@@ -278,10 +278,10 @@ class TemplateTest extends AtkPhpunit\TestCase
         $this->assertTrue(isset($t['foo']));
 
         $t['foo'] = 'Hi';
-        $this->assertEquals(['Hi'], $t['foo']);
+        $this->assertSame(['Hi'], $t['foo']);
 
         unset($t['foo']);
-        $this->assertEquals([], $t['foo']);
+        $this->assertSame([], $t['foo']);
 
         $this->assertTrue(isset($t['foo'])); // it's still set even after unset - that's specific for Template
     }
@@ -301,14 +301,14 @@ class TemplateTest extends AtkPhpunit\TestCase
         $t->eachTag(['foo', 'bar'], function ($value, $tag) {
             return strtoupper($value);
         });
-        $this->assertEquals('HELLO, cruel WORLD. WELCOME', $t->render());
+        $this->assertSame('HELLO, cruel WORLD. WELCOME', $t->render());
 
         // tag contains all template (for example in Lister)
         $t = new \atk4\ui\Template('{foo}hello{/}');
         $t->eachTag('foo', function ($value, $tag) {
             return strtoupper($value);
         });
-        $this->assertEquals('HELLO', $t->render());
+        $this->assertSame('HELLO', $t->render());
     }
 
     /**
@@ -320,11 +320,11 @@ class TemplateTest extends AtkPhpunit\TestCase
 
         // clone only {foo} region
         $t1 = $t->cloneRegion('foo');
-        $this->assertEquals('hello', $t1->render());
+        $this->assertSame('hello', $t1->render());
 
         // clone all template
         $t1 = $t->cloneRegion('_top');
-        $this->assertEquals('hello guys', $t1->render());
+        $this->assertSame('hello guys', $t1->render());
     }
 
     /**
@@ -343,7 +343,7 @@ class TemplateTest extends AtkPhpunit\TestCase
     public function testRenderRegion()
     {
         $t = new \atk4\ui\Template('{foo}hello{/} guys');
-        $this->assertEquals('hello', $t->render('foo'));
+        $this->assertSame('hello', $t->render('foo'));
     }
 
     public function testDollarTags()
@@ -353,6 +353,6 @@ class TemplateTest extends AtkPhpunit\TestCase
             'foo' => 'Hello',
             'bar' => 'welcome',
         ]);
-        $this->assertEquals('Hello guys and welcome here', $t->render());
+        $this->assertSame('Hello guys and welcome here', $t->render());
     }
 }

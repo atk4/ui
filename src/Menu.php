@@ -35,7 +35,7 @@ class Menu extends View
      * $seed can also be name here.
      *
      * @param string|array|Item $item
-     * @param string|array $action
+     * @param string|array      $action
      *
      * @return Item
      */
@@ -115,10 +115,9 @@ class Menu extends View
      *
      * @param string|array $name
      *
-     * @param string $template
+     * @throws \atk4\core\Exception
      *
      * @return Menu
-     * @throws \atk4\core\Exception
      */
     public function addGroup($name, string $template = 'menugroup.html')
     {
@@ -199,7 +198,7 @@ class Menu extends View
      */
     public function renderView()
     {
-        if ($this->activate_on_click && $this->ui == 'menu') {
+        if ($this->activate_on_click && $this->ui === 'menu') {
             // Semantic UI need some JS magic
             $this->on('click', 'a.item', $this->js()->find('.active')->removeClass('active'), ['preventDefault' => false, 'stopPropagation' => false]);
             $this->on('click', 'a.item', null, ['preventDefault' => false, 'stopPropagation' => false])->addClass('active');

@@ -57,7 +57,7 @@ class jsEvent implements jsExpressionable
      *
      * @var jsExpressionable
      */
-    public $jsSuccess = null;
+    public $jsSuccess;
 
     public function __construct(View $context = null, Generic $action = null, $modelId = null, array $args = [], $stateContext = null)
     {
@@ -149,9 +149,9 @@ class jsEvent implements jsExpressionable
 
         $final = (new jQuery($this->context))
             ->atkAjaxec([
-                'uri'           => $this->cb->getJSURL(),
-                'uri_options'   => array_merge(['atk_event_id' => $this->modelId], $this->args),
-                'apiConfig'     => ['stateContext' => $this->stateContext],
+                'uri' => $this->cb->getJSURL(),
+                'uri_options' => array_merge(['atk_event_id' => $this->modelId], $this->args),
+                'apiConfig' => ['stateContext' => $this->stateContext],
             ]);
 
         return $final->jsRender();

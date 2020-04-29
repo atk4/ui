@@ -25,13 +25,19 @@ $table->addColumn('title', new \atk4\ui\TableColumn\Status([
 
 $table->addColumn('date');
 $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
-$table->addColumn('logo_url', [new \atk4\ui\TableColumn\Image()], ['caption'=>'Our Logo']);
+$table->addColumn('logo_url', [new \atk4\ui\TableColumn\Image()], ['caption' => 'Our Logo']);
 
 $table->onHook('getHTMLTags', function ($table, $row) {
     switch ($row->id) {
-        case 1: $color = 'yellow'; break;
-        case 2: $color = 'grey'; break;
-        case 3: $color = 'brown'; break;
+        case 1: $color = 'yellow';
+
+break;
+        case 2: $color = 'grey';
+
+break;
+        case 3: $color = 'brown';
+
+break;
         default: $color = '';
     }
     if ($color) {
@@ -43,7 +49,6 @@ $table->onHook('getHTMLTags', function ($table, $row) {
 
 $table->addTotals(['name' => 'Totals:', 'salary' => ['sum']]);
 
-//
 $my_array = [
     ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => '1973-02-03', 'cv' => 'I am <strong>BIG</strong> Vinny'],
     ['name' => 'Zoe', 'surname' => 'Shatwell', 'birthdate' => '1958-08-21', 'cv' => null],

@@ -14,9 +14,9 @@ class jsArgumentForm extends jsModal
 {
     use HookTrait;
 
-    public $vp = null;
-    public $action = null;
-    public $form = null;
+    public $vp;
+    public $action;
+    public $form;
 
     public function __construct($action, $page, $modelId = null, $form = null)
     {

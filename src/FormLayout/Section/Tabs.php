@@ -5,7 +5,7 @@ namespace atk4\ui\FormLayout\Section;
 class Tabs extends \atk4\ui\Tabs
 {
     public $formLayout = 'FormLayout/Generic';
-    public $form = null;
+    public $form;
 
     /**
      * Adds tab in tabs widget.

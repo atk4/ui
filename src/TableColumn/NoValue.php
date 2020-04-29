@@ -31,7 +31,7 @@ class NoValue extends Generic
     {
         $actualValue = $field->get();
 
-        if (empty($actualValue) || is_null($actualValue)) {
+        if (empty($actualValue) || $actualValue === null) {
             return [$field->short_name => $this->no_value];
         }
 

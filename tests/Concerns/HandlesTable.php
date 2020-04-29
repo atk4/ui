@@ -9,7 +9,6 @@ trait HandlesTable
     /**
      * Extract only <tr> out from an atk4\ui\Table given the <tr> data-id attribute value.
      *
-     * @param Table  $table
      * @param string $rowDataId
      *
      * @return string

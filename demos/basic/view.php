@@ -12,11 +12,11 @@ $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/
 
 \atk4\ui\Header::addTo($app, ['View can contain stuff']);
 \atk4\ui\Header::addTo(\atk4\ui\View::addTo($app, ['ui' => 'segment'])
-    ->addClass('inverted red circular'), ['Buy', 'inverted', 'subHeader' => '$' . (rand(100, 1000) / 100)]);
+    ->addClass('inverted red circular'), ['Buy', 'inverted', 'subHeader' => '$' . (random_int(100, 1000) / 100)]);
 
 \atk4\ui\Header::addTo($app, ['View can use JavaScript']);
 \atk4\ui\View::addTo($app, ['ui' => 'heart rating'])
-    ->js(true)->rating(['maxRating' => 5, 'initialRating' => rand(1, 5)]);
+    ->js(true)->rating(['maxRating' => 5, 'initialRating' => random_int(1, 5)]);
 
 \atk4\ui\Header::addTo($app, ['View can have events']);
 $bb = \atk4\ui\View::addTo($app, ['ui' => 'large blue buttons']);
@@ -35,7 +35,7 @@ $plane = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div i
       Flights
     </div>
   </div>')]);
-$plane->template->set('num', rand(5, 20));
+$plane->template->set('num', random_int(5, 20));
 
 \atk4\ui\Header::addTo($app, ['Can be rendered into HTML']);
 \atk4\ui\View::addTo($app, ['ui' => 'segment', 'raised', 'element' => 'pre'])->set($plane->render());

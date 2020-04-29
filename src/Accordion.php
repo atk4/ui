@@ -19,7 +19,7 @@ class Accordion extends View
      *
      * @var array|string|null
      */
-    public $type = null;
+    public $type;
 
     /**
      * Settings as per Fomantic-ui accordion settings.
@@ -48,7 +48,7 @@ class Accordion extends View
      * a callback for dynamic content.
      *
      * @param string        $title
-     * @param null|callable $callback
+     * @param callable|null $callback
      * @param string        $icon
      *
      * @throws Exception
@@ -74,16 +74,14 @@ class Accordion extends View
     /**
      * Activate or open an accordion section.
      *
-     * @param AccordionSection $section The section to activate.
+     * @param AccordionSection $section the section to activate
      */
     public function activate($section)
     {
         $this->activeSection = $this->getSectionIdx($section);
     }
 
-    /*
-     * JS Behavior wrapper functions.
-     */
+    // JS Behavior wrapper functions.
     public function jsRefresh($when = null)
     {
         return $this->jsBehavior('refresh', [], $when);
@@ -115,9 +113,9 @@ class Accordion extends View
      * Ex: toggle an accordion from it's index value.
      * $accordion->jsBehavior('toggle', 1).
      *
-     * @param string $behavior The name of the behavior for the module.
-     * @param array  $args     The behaviors argument as an array.
-     * @param bool   $when     When this js action is render.
+     * @param string $behavior the name of the behavior for the module
+     * @param array  $args     the behaviors argument as an array
+     * @param bool   $when     when this js action is render
      *
      * @return mixed
      */
@@ -139,6 +137,7 @@ class Accordion extends View
         foreach ($this->sections as $key => $accordion_section) {
             if ($accordion_section->name === $section->name) {
                 $idx = $key;
+
                 break;
             }
         }

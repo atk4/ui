@@ -60,7 +60,7 @@ class Lookup extends Input
      * true = will use "Add new" label
      * string = will use your string
      *
-     * @var null|bool|string
+     * @var bool|string|null
      */
     public $plus = false;
 
@@ -120,7 +120,7 @@ class Lookup extends Input
      * Define callback for generating the row data
      * If left empty default callback Lookup::defaultRenderRow is used.
      *
-     * @var null|callable
+     * @var callable|null
      */
     public $renderRowFunction;
 
@@ -138,7 +138,7 @@ class Lookup extends Input
         parent::init();
 
         $this->template->set([
-            'input_id'    => $this->name . '-ac',
+            'input_id' => $this->name . '-ac',
             'placeholder' => $this->placeholder,
         ]);
 
@@ -350,10 +350,10 @@ class Lookup extends Input
     public function getInput()
     {
         return $this->app->getTag('input', array_merge([
-            'name'     => $this->short_name,
-            'type'     => 'hidden',
-            'id'       => $this->id . '_input',
-            'value'    => $this->getValue(),
+            'name' => $this->short_name,
+            'type' => 'hidden',
+            'id' => $this->id . '_input',
+            'value' => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
@@ -381,7 +381,7 @@ class Lookup extends Input
     protected function initDropdown($chain)
     {
         $settings = array_merge([
-            'fields'      => ['name' => 'title'],
+            'fields' => ['name' => 'title'],
             'apiSettings' => array_merge(['url' => $this->getCallbackURL() . '&q={query}'], $this->apiConfig),
         ], $this->settings);
 

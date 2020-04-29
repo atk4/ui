@@ -6,9 +6,7 @@ use atk4\ui\Button;
 use atk4\ui\Buttons;
 use atk4\ui\Header;
 
-/**
- * Demonstrates how to use interractive buttons.
- */
+// Demonstrates how to use interractive buttons.
 Header::addTo($app, ['Basic Button']);
 
 // This button hides on page load
@@ -19,10 +17,10 @@ $b->js(true)->hide();
 $b = Button::addTo($app, ['id' => 'b2'])->set('Hide on click Button');
 $b->js('click')->hide();
 
-Button::addTo($app, ['Redirect'])->on('click', $app->jsRedirect(['foo'=>'bar']));
+Button::addTo($app, ['Redirect'])->on('click', $app->jsRedirect(['foo' => 'bar']));
 
-if (isset($_GET['foo']) && $_GET['foo'] == 'bar') {
-    $app->redirect(['foo'=>'baz']);
+if (isset($_GET['foo']) && $_GET['foo'] === 'bar') {
+    $app->redirect(['foo' => 'baz']);
 }
 
 Header::addTo($app, ['js() method']);
@@ -42,7 +40,7 @@ Header::addTo($app, ['Callbacks']);
 // On button click reload it and change it's title
 $b = Button::addTo($app, ['Callback Test']);
 $b->on('click', function ($b) {
-    return $b->text(rand(1, 20));
+    return $b->text(random_int(1, 20));
 });
 
 $b = Button::addTo($app, ['success']);

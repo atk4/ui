@@ -17,7 +17,7 @@ class Generic extends _Abstract
      *
      * @var string
      */
-    public $label = null;
+    public $label;
 
     /**
      * Specify width of a group in numerical word e.g. 'width'=>'two' as per
@@ -25,7 +25,7 @@ class Generic extends _Abstract
      *
      * @var string
      */
-    public $width = null;
+    public $width;
 
     /**
      * Set true if you want fields to appear in-line.
@@ -126,10 +126,10 @@ class Generic extends _Abstract
         $this->template->del('Content');
 
         foreach ($this->elements as $el) {
-
             // Buttons go under Button section
             if ($el instanceof \atk4\ui\Button) {
                 $this->template->appendHTML('Buttons', $el->getHTML());
+
                 continue;
             }
 
@@ -151,12 +151,14 @@ class Generic extends _Abstract
                 $template->setHTML('Content', $el->getHTML());
 
                 $this->template->appendHTML('Content', $template->render());
+
                 continue;
             }
 
             // Anything but fields or explicitly defined fields gets inserted directly
             if (!$el instanceof \atk4\ui\FormField\Generic || !$el->layoutWrap) {
                 $this->template->appendHTML('Content', $el->getHTML());
+
                 continue;
             }
 
@@ -198,7 +200,7 @@ class Generic extends _Abstract
             }
 
             if ($el->hint && $template->hasTag('Hint')) {
-                $hint = new \atk4\ui\Label([null, 'pointing', 'id'=>$el->id . '_hint']);
+                $hint = new \atk4\ui\Label([null, 'pointing', 'id' => $el->id . '_hint']);
                 if (is_object($el->hint) || is_array($el->hint)) {
                     $hint->add($el->hint);
                 } else {

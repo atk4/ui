@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['Loader Example - page 1', 'small left floated basic blue', 'icon' => 'left arrow'])
-               ->link(['loader']);
+    ->link(['loader']);
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
 $c = \atk4\ui\Columns::addTo($app);

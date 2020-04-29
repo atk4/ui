@@ -15,13 +15,13 @@ class jsTest extends AtkPhpunit\TestCase
      */
     public function testBasicExpressions()
     {
-        $this->assertEquals('2+2', (new jsExpression('2+2'))->jsRender());
-        $this->assertEquals('3+4', (new jsExpression('[]+[]', [3, 4]))->jsRender());
+        $this->assertSame('2+2', (new jsExpression('2+2'))->jsRender());
+        $this->assertSame('3+4', (new jsExpression('[]+[]', [3, 4]))->jsRender());
     }
 
     public function testNestedExpressions()
     {
-        $this->assertEquals(
+        $this->assertSame(
             '10-(2+3)',
             (
                 new jsExpression(
@@ -42,14 +42,14 @@ class jsTest extends AtkPhpunit\TestCase
     {
         $c = new jsChain('$myInput');
         $c->getTextInRange('start', 'end');
-        $this->assertEquals('$myInput.getTextInRange("start","end")', $c->jsRender());
+        $this->assertSame('$myInput.getTextInRange("start","end")', $c->jsRender());
     }
 
     public function testChain2()
     {
         $c = new jsChain('$myInput');
         $c->getTextInRange(new jsExpression('getStart()'), 'end');
-        $this->assertEquals('$myInput.getTextInRange(getStart(),"end")', $c->jsRender());
+        $this->assertSame('$myInput.getTextInRange(getStart(),"end")', $c->jsRender());
     }
 
     public function testjQuery()
@@ -57,7 +57,7 @@ class jsTest extends AtkPhpunit\TestCase
         $c = new jQuery('.mytag');
         $c->find('li')->first()->hide();
 
-        $this->assertEquals('$(".mytag").find("li").first().hide()', $c->jsRender());
+        $this->assertSame('$(".mytag").find("li").first().hide()', $c->jsRender());
     }
 
     public function testArgs()
@@ -65,7 +65,7 @@ class jsTest extends AtkPhpunit\TestCase
         $c = new jQuery('.mytag');
         $c->val((new jQuery('.othertag'))->val());
 
-        $this->assertEquals('$(".mytag").val($(".othertag").val())', $c->jsRender());
+        $this->assertSame('$(".mytag").val($(".othertag").val())', $c->jsRender());
     }
 
     public function testComplex1()
@@ -79,7 +79,7 @@ class jsTest extends AtkPhpunit\TestCase
             $b1->height($b2->height()),
         ]));
 
-        $this->assertEquals('$(document).ready(function() {
+        $this->assertSame('$(document).ready(function() {
     $(".box1").height($(".box2").height());
   })', $fx->jsRender());
     }

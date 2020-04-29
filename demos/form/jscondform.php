@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../atk-init.php';
 
 //////////////////////////////////////////////////////////
-\atk4\ui\Header::addTo($app, ['Phone', 'size'=>2]);
+\atk4\ui\Header::addTo($app, ['Phone', 'size' => 2]);
 
 $f_phone = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_phone, ['Add other phone field input. Note: phone1 required a number of at least 5 char.', 'top attached'], ['AboveFields']);
@@ -21,7 +21,7 @@ $f_phone->setFieldsDisplayRules([
 ]);
 
 //////////////////////////////////////////////////////////
-\atk4\ui\Header::addTo($app, ['Optional subscription', 'size'=>2]);
+\atk4\ui\Header::addTo($app, ['Optional subscription', 'size' => 2]);
 
 $f_sub = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_sub, ['Click on subscribe and add email to receive your gift.', 'top attached'], ['AboveFields']);
@@ -29,22 +29,22 @@ $f_sub = \atk4\ui\Form::addTo($app, ['segment']);
 $f_sub->addField('name');
 $f_sub->addField('subscribe', ['CheckBox', 'Subscribe to weekly newsletter', 'toggle']);
 $f_sub->addField('email');
-$f_sub->addField('gender', ['Radio'], ['enum'=>['Female', 'Male']])->set('Female');
-$f_sub->addField('m_gift', ['DropDown', 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
-$f_sub->addField('f_gift', ['DropDown', 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
+$f_sub->addField('gender', ['Radio'], ['enum' => ['Female', 'Male']])->set('Female');
+$f_sub->addField('m_gift', ['DropDown', 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
+$f_sub->addField('f_gift', ['DropDown', 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
 // Show email and gender when subscribe is checked.
 // Show m_gift when gender is exactly equal to 'male' and subscribe is checked.
 // Show f_gift when gender is exactly equal to 'female' and subscribe is checked.
 $f_sub->setFieldsDisplayRules([
     'email' => ['subscribe' => 'checked'],
-    'gender'=> ['subscribe' => 'checked'],
-    'm_gift'=> ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
-    'f_gift'=> ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
+    'gender' => ['subscribe' => 'checked'],
+    'm_gift' => ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
+    'f_gift' => ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
 ]);
 
 //////////////////////////////////////////////////////////
-\atk4\ui\Header::addTo($app, ['Dog registration', 'size'=>2]);
+\atk4\ui\Header::addTo($app, ['Dog registration', 'size' => 2]);
 
 $f_dog = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_dog, ['You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race is exactly "bichon".', 'top attached'], ['AboveFields']);
@@ -56,11 +56,11 @@ $f_dog->addField('hair_cut', ['DropDown', 'values' => ['Short', 'Long']]);
 // OR
 // Show 'hair_cut' when race contains exactly the word 'bichon'
 $f_dog->setFieldsDisplayRules([
-    'hair_cut' => [['race' => 'contains[poodle]', 'age'=>'integer[1..5]'], ['race' => 'isExactly[bichon]']],
+    'hair_cut' => [['race' => 'contains[poodle]', 'age' => 'integer[1..5]'], ['race' => 'isExactly[bichon]']],
 ]);
 
 //////////////////////////////////////////////////////////
-\atk4\ui\Header::addTo($app, ['Hide or show group', 'size'=>2]);
+\atk4\ui\Header::addTo($app, ['Hide or show group', 'size' => 2]);
 
 $f_group = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveFields']);
@@ -85,7 +85,7 @@ $g_other->addField('favorite_pet', ['width' => 'four']);
 //To hide-show group simply select a field in that group.
 // Show group where 'php' belong when dev is checked.
 // Show group where 'language' belong when dev is checked.
-$f_group->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language'=>['dev'=>'checked']]);
+$f_group->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language' => ['dev' => 'checked']]);
 
 //////////////////////////////////////////////////////////
 /*

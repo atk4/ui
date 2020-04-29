@@ -7,7 +7,6 @@ use atk4\ui\Wizard;
 /**
  * Demonstrates how to use a wizard.
  */
-
 $t = Wizard::addTo($app);
 
 // First step will automatcally be active when you open page first. It
@@ -23,10 +22,10 @@ $t->addStep('Welcome', function (Wizard $w) {
 // form on "Next" button click, performing validation and submission. You do not need
 // to return any action from form's onSubmit callback. You may also use memorize()
 // to store wizard-specific variables
-$t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection String'], function (Wizard $w) {
+$t->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connection String'], function (Wizard $w) {
     $f = \atk4\ui\Form::addTo($w);
 
-    $f->addField('dsn', 'Connect DSN', ['required'=>true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
+    $f->addField('dsn', 'Connect DSN', ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
     $f->onSubmit(function ($f) use ($w) {
         $w->memorize('dsn', $f->model['dsn']);
 
@@ -37,7 +36,7 @@ $t->addStep(['Set DSN', 'icon'=>'configure', 'description'=>'Database Connection
 // Alternatvely, you may access buttonNext , buttonPrev properties of a wizard
 // and set a custom js action or even set a different link. You can use recall()
 // to access some values that were recorded on another steps.
-$t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'table'], function (Wizard $w) {
+$t->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon' => 'table'], function (Wizard $w) {
     if (isset($_GET['name'])) {
         $w->memorize('model', $_GET['name']);
         $w->app->redirect($w->urlNext());
@@ -45,7 +44,7 @@ $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'tabl
 
     $c = \atk4\ui\Columns::addTo($w);
 
-    $t = \atk4\ui\Grid::addTo($c->addColumn(), ['paginator'=>false, 'menu'=>false]);
+    $t = \atk4\ui\Grid::addTo($c->addColumn(), ['paginator' => false, 'menu' => false]);
     \atk4\ui\Message::addTo($c->addColumn(), ['Information', 'info'])->text
         ->addParagraph('Selecting which model you would like to import into your DSN. If corresponding table already exist, we might add extra fields into it. No tables, columns or rows will be deleted.');
 
@@ -62,7 +61,7 @@ $t->addStep(['Select Model', 'description'=>'"Country" or "Stat"', 'icon'=>'tabl
 // Steps may contain interractive elements. You can disable navigational buttons
 // and enable them as you see fit. Use handy js method to trigger advancement to
 // the next step.
-$t->addStep(['Migration', 'description'=>'Create or update table', 'icon'=>'database'], function (Wizard $w) {
+$t->addStep(['Migration', 'description' => 'Create or update table', 'icon' => 'database'], function (Wizard $w) {
     $c = \atk4\ui\Console::addTo($w);
     $w->buttonFinish->addClass('disabled');
 

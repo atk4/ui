@@ -3,9 +3,7 @@
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/Counter.php';
 
-/*
- * Demonstrate the use of Virtual Page.
- */
+// Demonstrate the use of Virtual Page.
 
 // define virtual page.
 $vp = \atk4\ui\VirtualPage::addTo($layout);

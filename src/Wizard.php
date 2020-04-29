@@ -17,7 +17,7 @@ class Wizard extends View
      *
      * @var callable
      */
-    public $stepCallback = null;
+    public $stepCallback;
 
     /**
      * List of steps.
@@ -31,21 +31,21 @@ class Wizard extends View
      *
      * @var int
      */
-    public $currentStep = null;
+    public $currentStep;
 
     /**
      * Button for going to previous step.
      *
      * @var Button
      */
-    public $buttonPrev = null;
+    public $buttonPrev;
 
     /**
      * Buttor for going to next step.
      *
      * @var Button
      */
-    public $buttonNext = null;
+    public $buttonNext;
 
     /**
      * Icon that will be used on all steps by default.
@@ -60,9 +60,9 @@ class Wizard extends View
     public function init(): void
     {
         parent::init();
-        $this->stepCallback = Callback::addTo($this, ['urlTrigger'=>$this->name]);
+        $this->stepCallback = Callback::addTo($this, ['urlTrigger' => $this->name]);
 
-        $this->currentStep = $this->stepCallback->triggered() ?: 0;
+        $this->currentStep = (int) $this->stepCallback->triggered() ?: 0;
 
         $this->stepTemplate = $this->template->cloneRegion('Step');
         $this->template->del('Step');
@@ -91,9 +91,9 @@ class Wizard extends View
     {
         $step = $this->factory([
             'Step',
-            'wizard'  => $this,
-            'template'=> clone $this->stepTemplate,
-            'sequence'=> count($this->steps),
+            'wizard' => $this,
+            'template' => clone $this->stepTemplate,
+            'sequence' => count($this->steps),
         ], $name, 'atk4\ui');
 
         // add tabs menu item
@@ -103,7 +103,7 @@ class Wizard extends View
             $_GET[$this->stepCallback->urlTrigger] = 0;
         }
 
-        if ($step->sequence == $this->currentStep) {
+        if ($step->sequence === $this->currentStep) {
             $step->addClass('active');
 
             $this->stepCallback->set($callback, [$this]);
@@ -111,7 +111,7 @@ class Wizard extends View
             $step->addClass('completed');
         }
 
-        if ($step->icon == null) {
+        if ($step->icon === null) {
             $step->icon = $this->defaultIcon;
         }
 
@@ -126,9 +126,9 @@ class Wizard extends View
      */
     public function addFinish($callback)
     {
-        if (count($this->steps) == $this->currentStep + 1) {
+        if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonFinish->link($this->stepCallback->getURL(count($this->steps)));
-        } elseif ($this->currentStep == count($this->steps)) {
+        } elseif ($this->currentStep === count($this->steps)) {
             $this->buttonPrev->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
             $this->buttonFinish->destroy();
@@ -158,7 +158,7 @@ class Wizard extends View
     /**
      * Get URL to next step. Will respect stickyGET.
      *
-     * @return string URL to next step.
+     * @return string URL to next step
      */
     public function urlNext()
     {
@@ -168,7 +168,7 @@ class Wizard extends View
     /**
      * Get URL to previous step. Will respect stickyGET.
      *
-     * @return string URL to previous step.
+     * @return string URL to previous step
      */
     public function jsNext()
     {
@@ -178,12 +178,12 @@ class Wizard extends View
     public function recursiveRender()
     {
         if (!$this->steps) {
-            $this->addStep(['No Steps Defined', 'icon'=>'configure', 'description'=>'use $wizard->addStep() now'], function ($p) {
-                Message::addTo($p, ['Step content will appear here', 'type'=>'error', 'text'=>'Specify callback to addStep() which would populate this area.']);
+            $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function ($p) {
+                Message::addTo($p, ['Step content will appear here', 'type' => 'error', 'text' => 'Specify callback to addStep() which would populate this area.']);
             });
         }
 
-        if (count($this->steps) == $this->currentStep + 1) {
+        if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonNext->destroy();
         }
 

@@ -24,11 +24,11 @@ class Generic extends View
     public $fieldClass = '';
 
     /**
-     * @var bool - Whether you need this field to be rendered wrap in a form layout or as his.
+     * @var bool - Whether you need this field to be rendered wrap in a form layout or as his
      */
     public $layoutWrap = true;
 
-    public $width = null;
+    public $width;
 
     /**
      * Caption is a text that must appear somewhere nearby the field. For a form with layout, this
@@ -40,7 +40,7 @@ class Generic extends View
      *
      * @var string
      */
-    public $caption = null;
+    public $caption;
 
     /**
      * Placed as a pointing label below the field. This only works when FormField appears in a form. You can also
@@ -48,7 +48,7 @@ class Generic extends View
      *
      * @var string|\atk4\ui\View|array
      */
-    public $hint = null;
+    public $hint;
 
     /**
      * Is input field disabled?

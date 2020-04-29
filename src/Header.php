@@ -21,35 +21,35 @@ class Header extends View
      *
      * @var int|string
      */
-    public $size = null;
+    public $size;
 
     /**
      * Specify icon that will be included in a header.
      *
      * @var string
      */
-    public $icon = null;
+    public $icon;
 
     /**
      * Include image with a specified source.
      *
      * @var string
      */
-    public $image = null;
+    public $image;
 
     /**
      * Will include sub-header.
      *
      * @var string
      */
-    public $subHeader = null;
+    public $subHeader;
 
     /**
      * Specify alignment of the header.
      *
      * @var string
      */
-    public $aligned = null;
+    public $aligned;
 
     public $ui = 'header';
 

@@ -13,30 +13,30 @@ class Lister extends View
      *
      * @var Template
      */
-    public $t_row = null;
+    public $t_row;
 
     /**
      * Lister use this part of template in case there are no elements in it.
      *
-     * @var null|Template
+     * @var Template|null
      */
     public $t_empty;
 
-    public $defaultTemplate = null;
+    public $defaultTemplate;
 
     /**
      * A dynamic paginator attach to window scroll event.
      *
-     * @var null|jsPaginator
+     * @var jsPaginator|null
      */
-    public $jsPaginator = null;
+    public $jsPaginator;
 
     /**
      * The number of item per page for jsPaginator.
      *
-     * @var null|int
+     * @var int|null
      */
-    public $ipp = null;
+    public $ipp;
 
     /**
      * Initialization.
@@ -79,7 +79,7 @@ class Lister extends View
      * When this happen, content will be reload x number of items.
      *
      * @param int    $ipp          Number of item per page
-     * @param array  $options      An array with js Scroll plugin options.
+     * @param array  $options      an array with js Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
      *
@@ -143,7 +143,7 @@ class Lister extends View
 
             $this->renderRow();
 
-            $this->_rendered_rows_count++;
+            ++$this->_rendered_rows_count;
         }
 
         // empty message
@@ -175,7 +175,7 @@ class Lister extends View
         $this->t_row->trySet($this->current_row);
 
         $this->t_row->trySet('_title', $this->model->getTitle());
-        $this->t_row->trySet('_href', $this->url(['id'=>$this->current_id]));
+        $this->t_row->trySet('_href', $this->url(['id' => $this->current_id]));
         $this->t_row->trySet('_id', $this->current_id);
 
         $html = $this->t_row->render();

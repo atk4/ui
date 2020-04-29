@@ -37,7 +37,7 @@ class Money extends Generic
     {
         if ($field->get() < 0) {
             return ['_' . $this->short_name . '_class' => 'negative'];
-        } elseif (!$this->show_zero_values && $field->get() == 0) {
+        } elseif (!$this->show_zero_values && (float) $field->get() === 0.0) {
             return ['_' . $this->short_name . '_class' => '', $field->short_name => '-'];
         }
 

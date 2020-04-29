@@ -21,24 +21,24 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 {
     use HookTrait;
 
-    /** @var null|Generic Action to execute */
-    public $action = null;
+    /** @var Generic|null Action to execute */
+    public $action;
 
-    /** @var null|Loader Loader to add content to modal. */
-    public $loader = null;
+    /** @var Loader|null Loader to add content to modal. */
+    public $loader;
 
     /** @var string css class for loader. */
     public $loaderUi = 'ui basic segment';
-    /** @var null|array|View Loader shim object or seed. */
-    public $loaderShim = null;
+    /** @var array|View|null Loader shim object or seed. */
+    public $loaderShim;
     /** @var jsExpressionable */
-    public $jsSuccess = null;
+    public $jsSuccess;
 
     /** @var string css class for modal size. */
     public $size = 'tiny';
 
     /** @var string|null */
-    private $step = null;
+    private $step;
     private $actionInitialized = false;
 
     /** @var Button Ok button */
@@ -55,8 +55,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 
     /**
      * Properly set element id for this modal.
-     *
-     * @param Generic $action
      *
      * @throws \atk4\core\Exception
      */
@@ -80,15 +78,13 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
         $this->add($btns, 'actions');
         $this->showActions = true;
 
-        $this->loader = Loader::addTo($this, ['ui'   => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
         $this->loader->addClass('atk-hide-loading-content');
     }
 
     /**
      * Return js expression that will trigger action executor.
-     *
-     * @param array $urlArgs
      *
      * @throws Exception
      *
@@ -106,12 +102,11 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /**
      * Will associate executor with the action.
      *
-     * @param Generic $action
-     *
-     * @return UserConfirmation
      * @throws Exception
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
+     *
+     * @return UserConfirmation
      */
     public function setAction(Generic $action): Modal
     {
@@ -154,8 +149,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /**
      * Reset button state.
      *
-     * @param View $view
-     *
      * @throws \atk4\core\Exception
      */
     protected function jsSetBtnState(View $view)
@@ -168,8 +161,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /**
      * Set modal for displaying confirmation message.
      * Also apply proper javascript to each button.
-     *
-     * @param View $modal
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -186,7 +177,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
                     [
                         $this->loader->jsload(
                             [
-                                'step'      => 'exec',
+                                'step' => 'exec',
                                 $this->name => $this->action->owner->get('id'),
                             ],
                             ['method' => 'post']
@@ -212,8 +203,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /**
      * Add confirmation message to modal.
      *
-     * @param View $view
-     *
      * @throws \atk4\core\Exception
      */
     protected function addConfirmation(View $view)
@@ -223,8 +212,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 
     /**
      * Execute action when all step are completed.
-     *
-     * @param View $modal
      *
      * @throws \atk4\core\Exception
      */
@@ -241,7 +228,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
      * @param $obj
      * @param $id
      *
-     * @return array
      * @throws \atk4\core\Exception
      */
     protected function jsGetExecute($obj, $id): array
@@ -259,7 +245,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /**
      * Create a sequence of js statement for a view.
      *
-     * @param View                   $view
      * @param array|jsExpressionable $js
      *
      * @throws \atk4\core\Exception

@@ -7,7 +7,7 @@ use atk4\ui\AccordionSection;
 class Accordion extends \atk4\ui\Accordion
 {
     public $formLayout = 'FormLayout/Generic';
-    public $form = null;
+    public $form;
 
     /**
      * Initialization.
@@ -36,7 +36,7 @@ class Accordion extends \atk4\ui\Accordion
      * Return an accordion section with a form layout associate with a form.
      *
      * @param string        $title
-     * @param null|callable $callback
+     * @param callable|null $callback
      * @param string        $icon
      *
      * @throws \atk4\ui\Exception

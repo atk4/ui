@@ -15,20 +15,20 @@ class Basic extends \atk4\ui\View implements Interface_
     /**
      * @var \atk4\data\UserAction\Generic
      */
-    public $action = null;
+    public $action;
 
     /**
-     * @var bool Display header or not.
+     * @var bool display header or not
      */
     public $hasHeader = true;
 
     /**
-     * @var null Header description.
+     * @var null header description
      */
-    public $description = null;
+    public $description;
 
     /**
-     * @var string Display message when action is disabled.
+     * @var string display message when action is disabled
      */
     public $disableMsg = 'Action is disabled and cannot be executed';
 
@@ -43,7 +43,7 @@ class Basic extends \atk4\ui\View implements Interface_
     protected $arguments = [];
 
     /**
-     * @var string Display message when missing arguments.
+     * @var string display message when missing arguments
      */
     public $missingArgsMsg = 'Insufficient arguments';
 
@@ -55,12 +55,10 @@ class Basic extends \atk4\ui\View implements Interface_
     /**
      * @var jsExpressionable array|callable jsExpression to return if action was successful, e.g "new jsToast('Thank you')"
      */
-    protected $jsSuccess = null;
+    protected $jsSuccess;
 
     /**
      * Associate executor with action.
-     *
-     * @param \atk4\data\UserAction\Generic $action
      */
     public function setAction(\atk4\data\UserAction\Generic $action): void
     {
@@ -69,8 +67,6 @@ class Basic extends \atk4\ui\View implements Interface_
 
     /**
      * Provide values for named arguments.
-     *
-     * @param array $arguments
      */
     public function setArguments(array $arguments)
     {
@@ -89,7 +85,7 @@ class Basic extends \atk4\ui\View implements Interface_
         if ($this->action->enabled) {
             $this->initPreview();
         } else {
-            \atk4\ui\Message::addTo($this, ['type'=>'error', $this->disableMsg]);
+            \atk4\ui\Message::addTo($this, ['type' => 'error', $this->disableMsg]);
 
             return;
         }
@@ -108,7 +104,7 @@ class Basic extends \atk4\ui\View implements Interface_
     {
         foreach ($this->action->args as $key => $val) {
             if (!isset($this->arguments[$key])) {
-                throw new Exception(['Argument is not provided', 'argument'=>$key]);
+                throw new Exception(['Argument is not provided', 'argument' => $key]);
             }
         }
 
@@ -119,7 +115,7 @@ class Basic extends \atk4\ui\View implements Interface_
     {
         // lets make sure that all arguments are supplied
         if (!$this->hasAllArguments()) {
-            \atk4\ui\Message::addTo($this, ['type'=>'error', $this->missingArgsMsg]);
+            \atk4\ui\Message::addTo($this, ['type' => 'error', $this->missingArgsMsg]);
 
             return;
         }
@@ -161,7 +157,7 @@ class Basic extends \atk4\ui\View implements Interface_
     public function addHeader()
     {
         if ($this->hasHeader) {
-            \atk4\ui\Header::addTo($this, [$this->action->caption, 'subHeader'=>$this->description ?: $this->action->getDescription()]);
+            \atk4\ui\Header::addTo($this, [$this->action->caption, 'subHeader' => $this->description ?: $this->action->getDescription()]);
         }
     }
 }
