@@ -49,7 +49,7 @@ $layout->id = $layout->name;
 if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $demosUrl = preg_replace('~(?<=/demos/).*~s', '', $_SERVER['REQUEST_URI']);
 
-    $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl]);
+    $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
 
     $path = $demosUrl . 'layout/';
     $ly = $layout->addMenuGroup(['Layout', 'icon' => 'object group']);
