@@ -143,6 +143,4 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
 
     \atk4\ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
         ->on('click', $ex);
-
-    $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }
