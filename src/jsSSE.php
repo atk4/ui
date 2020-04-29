@@ -2,13 +2,12 @@
 
 namespace atk4\ui;
 
+use atk4\core\HookTrait;
+
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  *
  */
-
-use atk4\core\HookTrait;
-
 class jsSSE extends jsCallback
 {
     use HookTrait;
