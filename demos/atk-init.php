@@ -47,7 +47,7 @@ $layout->name = 'atk_admin';
 $layout->id = $layout->name;
 
 if ($layout instanceof \atk4\ui\Layout\Navigable) {
-    $demosUrl = './demos/';
+    $demosUrl = preg_replace('~(?<=/demos/).*~s', '', $_SERVER['REQUEST_URI']);
 
     $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl]);
 
