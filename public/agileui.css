@@ -54,6 +54,9 @@
 .ui.sidebar.atk-sidenav .menu > .item.active {
   background: none;
 }
+header.ui.fixed.horizontal.menu {
+  min-height: 48px;
+}
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
   width: calc(100% -  260px );
 }
