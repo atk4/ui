@@ -13,8 +13,8 @@ require_once __DIR__ . '/database.php';
 require_once __DIR__ . '/_includes/somedatadef.php';
 
 $app = new \atk4\ui\App([
-    'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? ''),
-    'catch_exceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? ''),
+    'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
+    'catch_exceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
 ]);
 
 if ($app->call_exit !== true) {
