@@ -2,9 +2,7 @@
 
 namespace atk4\ui;
 
-/*
- * Implements a class that can be mapped into arbitrary JavaScript expression.
- */
+// Implements a class that can be mapped into arbitrary JavaScript expression.
 
 use atk4\core\HookTrait;
 
@@ -67,8 +65,6 @@ class jsSSE extends jsCallback
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
             $this->sendEvent('js', $this->app->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'atk_sse_action');
-        } else {
-            // ignore event
         }
     }
 
@@ -113,6 +109,7 @@ class jsSSE extends jsCallback
     {
         if ($this->echoFunction) {
             call_user_func($this->echoFunction, $content);
+
             return;
         }
 
