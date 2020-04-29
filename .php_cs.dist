@@ -39,7 +39,6 @@ return PhpCsFixer\Config::create()
         'non_printable_character' => [
             'use_escape_sequences_in_strings' => true,
         ],
-        'declare_strict_types' => false,
         'void_return' => false,
         'combine_consecutive_issets' => false,
         'combine_consecutive_unsets' => false,
