@@ -95,9 +95,13 @@ jobs:
         if: matrix.type == 'CodingStyle'
         run: find . \( -type d \( -path './vendor/*' \) \) -prune -o ! -type d -name '*.php' -print0 | xargs -0 -n1 php -l
 
-      - name: Check Coding Style (only for CodingStyle)
+      - name: Check Coding Style - PHP (only for CodingStyle)
         if: matrix.type == 'CodingStyle'
         run: vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --diff-format=udiff --verbose --show-progress=dots
+
+      - name: Check Coding Style - JS (only for CodingStyle)
+        if: matrix.type == 'CodingStyle'
+        run: TODO
 
 #      - name: Upload coverage logs 1/2 (only for "latest" Phpunit)
 #        if: env.LOG_COVERAGE
