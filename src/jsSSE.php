@@ -6,7 +6,6 @@ use atk4\core\HookTrait;
 
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
- *
  */
 class jsSSE extends jsCallback
 {
