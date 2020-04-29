@@ -21,7 +21,7 @@ class jsSSE extends jsCallback
     public $keepAlive = false;
 
     /** @var callable - custom function for outputting (instead of echo) */
-    public $echoFunction = null;
+    public $echoFunction;
 
     public function init(): void
     {
@@ -35,8 +35,6 @@ class jsSSE extends jsCallback
 
     /**
      * A function that get execute when user aborted this sse.
-     *
-     * @param callable  $fx
      */
     public function onAborted(callable $fx)
     {
