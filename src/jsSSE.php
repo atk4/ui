@@ -2,7 +2,10 @@
 
 namespace atk4\ui;
 
-// Implements a class that can be mapped into arbitrary JavaScript expression.
+/**
+ * Implements a class that can be mapped into arbitrary JavaScript expression.
+ *
+ */
 
 use atk4\core\HookTrait;
 
@@ -10,8 +13,10 @@ class jsSSE extends jsCallback
 {
     use HookTrait;
 
-    // Allows us to fall-back to standard functionality of jsCallback if browser does not support SSE
+    /** @var bool Allows us to fall-back to standard functionality of jsCallback if browser does not support SSE. */
     public $browserSupport = false;
+
+    /** @var bool Show Loader when doing sse. */
     public $showLoader = false;
 
     /** @var bool add window.beforeunload listener for closing js EventSource. Off by default. */
@@ -34,7 +39,7 @@ class jsSSE extends jsCallback
     }
 
     /**
-     * A function that get execute when user aborted this sse.
+     * A function that get execute when user aborted, or disconnect browser, when using this sse.
      */
     public function onAborted(callable $fx)
     {
@@ -58,6 +63,9 @@ class jsSSE extends jsCallback
         return (new jQuery())->atkServerEvent($options)->jsRender();
     }
 
+    /**
+     * Sending an sse action.
+     */
     public function send($action, $success = true)
     {
         if ($this->browserSupport) {
@@ -150,6 +158,10 @@ class jsSSE extends jsCallback
         }, preg_split('~\r?\n|\r~', $string)));
     }
 
+    /**
+     * Initialise this sse.
+     * It will ignore user abort by default.
+     */
     protected function initSse()
     {
         @set_time_limit(0); // disable time limit
