@@ -67,7 +67,7 @@ class FormTest extends AtkPhpunit\TestCase
             $this->assertSame('', $res['atkjs']); // will output useful error
         }
 
-        $this->f = null;   // we shouldn't submit from twice!
+        $this->f = null;   // we shouldn't submit form twice!
 
         $_POST = [];
     }
