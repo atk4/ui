@@ -78,7 +78,7 @@ abstract class _Abstract extends \atk4\ui\View
                 throw new Exception(['Value of $decorator argument is incorrect', 'decorator' => $decorator]);
             }
         } catch (\Throwable $e) {
-            throw new Exception(['Unable to add form field', 'name' => $name, 'decorator' => $decorator, 'field' => $field], null, $e);
+            throw new Exception(['Unable to add form field', 'name' => $name, 'decorator' => $decorator, 'field' => $field], 0, $e);
         }
 
         return $this->_addField($decorator, $field);
