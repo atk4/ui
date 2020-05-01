@@ -51,7 +51,7 @@ class Content extends View implements LoadableContent
         $this->cb->set(function () use ($callback) {
             if ($this->cb->triggered()) {
                 call_user_func($callback, $this);
-                $this->app->terminateJSON($this);
+                $this->cb->terminate();
             }
         });
     }

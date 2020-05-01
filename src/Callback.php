@@ -133,6 +133,27 @@ class Callback
     }
 
     /**
+     * Terminate this callback
+     * by rendering the owner view.
+     */
+    public function terminate()
+    {
+        if ($this->canTerminate()) {
+            $this->app->terminateJSON($this->owner);
+        }
+    }
+
+    /**
+     * Prevent callback from terminating during a reload.
+     */
+    protected function canTerminate(): bool
+    {
+        $reload = $_GET['__atk_reload'] ?? null;
+
+        return !$reload || $this->owner->name === $reload;
+    }
+
+    /**
      * Is callback triggered?
      *
      * @return bool
