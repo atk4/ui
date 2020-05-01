@@ -101,7 +101,7 @@ footer.atk-footer .ui.segment {
   margin: 0;
 }
 .ui.left.sidebar {
-  z-index: 103;
+  z-index: 99;
 }
 .atk-right-panel {
   -webkit-transition: box-shadow 0.2s, right 0.2s;
