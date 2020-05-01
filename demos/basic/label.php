@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../atk-init.php';
 
-$img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+$img = 'https://raw.githubusercontent.com/atk4/ui/2.0.4/public/logo.png';
 
 \atk4\ui\Header::addTo($app, ['Labels']);
 \atk4\ui\Label::addTo($app, ['Hot!']);
