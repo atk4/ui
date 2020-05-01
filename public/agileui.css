@@ -133,7 +133,7 @@ i.atk-panel-warning.atk-visible {
   color: #F2711C;
 }
 .ui.left.sidebar.atk-sidenav {
-  top: 47px;
+  top: 48px;
 }
 .atk-sidenav-content {
   height: calc(100% -  98px );
@@ -206,7 +206,7 @@ i.atk-panel-warning.atk-visible {
   opacity: 0;
   pointer-events: none;
   position: fixed;
-  top: 47px;
+  top: 48px;
   width: 100%;
   z-index: 102;
 }
