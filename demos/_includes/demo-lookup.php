@@ -26,7 +26,7 @@ $demoLookupClass = get_class(new class() extends \atk4\ui\FormField\Lookup {
 
         $defaultSeed = [\atk4\ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
 
-        $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed), null, 'atk4\ui');
+        $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed));
 
         if ($this->form) {
             $vp = \atk4\ui\VirtualPage::addTo($this->form);

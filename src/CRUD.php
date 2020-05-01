@@ -23,7 +23,7 @@ class CRUD extends Grid
     public $addFields;
 
     /** @var array Default notifier to perform when adding or editing is successful * */
-    public $notifyDefault = ['jsToast'];
+    public $notifyDefault = [jsToast::class];
 
     /** @var string default js action executor class in UI for model action. */
     public $jsExecutor = jsUserAction::class;
@@ -253,7 +253,7 @@ class CRUD extends Grid
      */
     protected function getNotifier(string $msg = null)
     {
-        $notifier = $this->factory($this->notifyDefault, null, 'atk4\ui');
+        $notifier = $this->factory($this->notifyDefault);
         if ($msg) {
             $notifier->setMessage($msg);
         }

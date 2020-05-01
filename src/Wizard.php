@@ -90,11 +90,11 @@ class Wizard extends View
     public function addStep($name, $callback)
     {
         $step = $this->factory([
-            'Step',
+            Step::class,
             'wizard' => $this,
             'template' => clone $this->stepTemplate,
             'sequence' => count($this->steps),
-        ], $name, 'atk4\ui');
+        ], $name);
 
         // add tabs menu item
         $this->steps[] = $this->add($step, 'Step');
