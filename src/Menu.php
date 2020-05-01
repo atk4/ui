@@ -44,7 +44,7 @@ class Menu extends View
         if (!is_object($item)) {
             $item = (array) $item;
 
-            array_unshift($item, 'Item');
+            array_unshift($item, Item::class);
         }
 
         $item = $this->add($item)->setElement('a');
