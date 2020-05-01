@@ -112,7 +112,7 @@ $field = $form->addField('name', ['Line', 'hint' => 'this is sample hint that es
 $field->set('value in a form');
 
 $field = $form->addField('surname', new \atk4\ui\FormField\Line([
-    'hint' => ['View', 'template' => new \atk4\ui\Template(
+    'hint' => [\atk4\ui\View::class, 'template' => new \atk4\ui\Template(
         'Click <a href="http://example.com/" target="_blank">here</a>'
     )],
 ]));
