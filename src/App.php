@@ -806,12 +806,10 @@ class App
      * Generate action for redirecting user to another page.
      *
      * @param string|array $page Destination URL or page/arguments
-     *
-     * @return jsExpression
      */
-    public function jsRedirect($page)
+    public function jsRedirect($page, bool $newWindow = false): jsExpression
     {
-        return new jsExpression('document.location = []', [$this->url($page)]);
+        return new jsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
 
     /**
