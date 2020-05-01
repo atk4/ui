@@ -31,30 +31,33 @@ if (file_exists(__DIR__ . '/coverage.php')) {
     });
 }
 // END - PHPUNIT & COVERAGE SETUP
-// set app->db
+
 $app->db = $db;
 $app->title = 'Agile UI Demo v' . $app->version;
 
-if (file_exists(dirname(__DIR__) . '/public/atkjs-ui.min.js')) {
-    $app->cdn['atk'] = '/public';
+[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
+$demosUrl = $rootUrl . 'demos/';
+
+if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
+    $app->cdn['atk'] = $rootUrl . 'public';
 }
 
-$app->initLayout($app->stickyGET('layout') ?: 'Maestro');
+$app->initLayout($app->stickyGET('layout') ?: \atk4\ui\Layout\Maestro::class);
 
 $layout = $app->layout;
-// Need for phpUnit test only for producing right url.
+// Need for phpunit only for producing right url.
 $layout->name = 'atk_admin';
 $layout->id = $layout->name;
 
 if ($layout instanceof \atk4\ui\Layout\Navigable) {
-    $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], ['/demos/index']);
+    $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
 
-    $path = '/demos/layout/';
+    $path = $demosUrl . 'layout/';
     $ly = $layout->addMenuGroup(['Layout', 'icon' => 'object group']);
     $layout->addMenuItem(['Layouts'], [$path . 'layouts'], $ly);
     $layout->addMenuItem(['Panel'], [$path . 'layout-panel'], $ly);
 
-    $path = '/demos/basic/';
+    $path = $demosUrl . 'basic/';
     $basic = $layout->addMenuGroup(['Basics', 'icon' => 'cubes']);
     $layout->addMenuItem('View', [$path . 'view'], $basic);
     $layout->addMenuItem('Button', [$path . 'button'], $basic);
@@ -66,7 +69,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Columns'], [$path . 'columns'], $basic);
     $layout->addMenuItem(['Grid Layout'], [$path . 'grid-layout'], $basic);
 
-    $path = '/demos/form/';
+    $path = $demosUrl . 'form/';
     $form = $layout->addMenuGroup(['Form', 'icon' => 'edit']);
     $layout->addMenuItem('Basics and Layouting', [$path . 'form'], $form);
     $layout->addMenuItem('Data Integration', [$path . 'form2'], $form);
@@ -76,7 +79,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Custom Layout'], [$path . 'form-custom-layout'], $form);
     $layout->addMenuItem(['Conditional Fields'], [$path . 'jscondform'], $form);
 
-    $path = '/demos/input/';
+    $path = $demosUrl . 'input/';
     $in = $layout->addMenuGroup(['Input', 'icon' => 'keyboard outline']);
     $layout->addMenuItem(['Input Fields'], [$path . 'field2'], $in);
     $layout->addMenuItem('Input Field Decoration', [$path . 'field'], $in);
@@ -89,7 +92,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $in);
     $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $in);
 
-    $path = '/demos/collection/';
+    $path = $demosUrl . 'collection/';
     $g_t = $layout->addMenuGroup(['Data Collection', 'icon' => 'table']);
     $layout->addMenuItem(['Actions - Integration Examples'], [$path . 'actions'], $g_t);
     $layout->addMenuItem('Data table with formatted columns', [$path . 'table'], $g_t);
@@ -104,7 +107,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $g_t);
     $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $g_t);
 
-    $path = '/demos/interactive/';
+    $path = $demosUrl . 'interactive/';
     $adv = $layout->addMenuGroup(['Interactive', 'icon' => 'talk']);
     $layout->addMenuItem('Tabs', [$path . 'tabs'], $adv);
     $layout->addMenuItem('Card', [$path . 'card'], $adv);
@@ -121,30 +124,19 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Toast'], [$path . 'toast'], $adv);
     $layout->addMenuItem('Paginator', [$path . 'paginator'], $adv);
 
-    $path = '/demos/javascript/';
+    $path = $demosUrl . 'javascript/';
     $js = $layout->addMenuGroup(['Javascript', 'icon' => 'code']);
     $layout->addMenuItem('Events', [$path . 'js'], $js);
     $layout->addMenuItem('Element Reloading', [$path . 'reloading'], $js);
     $layout->addMenuItem('Vue Integration', [$path . 'vue-component'], $js);
 
-    $path = '/demos/others/';
+    $path = $demosUrl . 'others/';
     $other = $layout->addMenuGroup(['Others', 'icon' => 'plus']);
     $layout->addMenuItem('Sticky GET', [$path . 'sticky'], $other);
     $layout->addMenuItem('More Sticky', [$path . 'sticky2'], $other);
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $other);
 
-//    $f = basename($_SERVER['PHP_SELF']);
-
-    $url = 'https://github.com/atk4/ui/blob/develop';
-
-    $ex = [
-        new \atk4\ui\jsExpression('const baseUrl = []', [$url]),
-        new \atk4\ui\jsExpression('window.open(baseUrl + document.location.pathname, "_blank")'),
-    ];
-
-    // Send to demos source page in github.
+    // view demo source page on Github
     \atk4\ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
-        ->on('click', $ex);
-
-    $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
+        ->on('click', $app->jsRedirect('https://github.com/atk4/ui/blob/develop/' . $relUrl, true));
 }
