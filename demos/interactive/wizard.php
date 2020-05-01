@@ -53,9 +53,9 @@ $t->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon' => '
     $t->setSource(['Country', 'Stat']);
 
     // should work after url() fix
-    $t->addDecorator('name', ['Link', [], ['name']]);
+    $t->addDecorator('name', [\atk4\ui\TableColumn\Link::class, [], ['name']]);
 
-    //$t->addDecorator('name', ['Link', [$w->stepCallback->name=>$w->currentStep], ['name']]);
+    //$t->addDecorator('name', [\atk4\ui\TableColumn\Link::class, [$w->stepCallback->name=>$w->currentStep], ['name']]);
 
     $w->buttonNext->addClass('disabled');
 });

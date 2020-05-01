@@ -57,7 +57,7 @@ $table->addDecorator('amount', ['Template', 'Refunded: {$amount}']);
 $table->addColumn('amount_copy', ['Multiformat', function ($a, $b) {
     if ($a->get('amount_copy') > 0) {
         // Two formatters together
-        return ['Link', 'Money'];
+        return [\atk4\ui\TableColumn\Link::class, atk4\ui\TableColumn\Money::class];
     } elseif (abs($a->get('amount_copy')) < 50) {
         // One formatter, but inject template and some attributes
         return [[

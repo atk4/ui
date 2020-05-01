@@ -299,7 +299,7 @@ example displays a registration form for a User::
     $form->setModel(new User($db));
 
     // add password verification field
-    $form->addField('password_verify', 'Password', 'Type password again');
+    $form->addField('password_verify', \atk4\ui\FormField\Password::class, 'Type password again');
     $form->addField('accept_terms', null, ['type'=>'boolean']);
 
     // submit event

@@ -496,14 +496,14 @@ class Form extends View
      * @var array Describes how factory converts type to decorator seed
      */
     protected $typeToDecorator = [
-        'boolean' => 'CheckBox',
-        'text' => 'TextArea',
-        'string' => 'Line',
-        'password' => 'Password',
-        'datetime' => 'Calendar',
-        'date' => ['Calendar', 'type' => 'date'],
-        'time' => ['Calendar', 'type' => 'time', 'ampm' => false],
-        'money' => 'Money',
+        'boolean' => FormField\CheckBox::class,
+        'text' => FormField\TextArea::class,
+        'string' => FormField\Line::class,
+        'password' => FormField\Password::class,
+        'datetime' => FormField\Calendar::class,
+        'date' => [FormField\Calendar::class, 'type' => 'date'],
+        'time' => [FormField\Calendar::class, 'type' => 'time', 'ampm' => false],
+        'money' => FormField\Money::class,
     ];
 
     /**

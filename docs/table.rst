@@ -55,7 +55,7 @@ You can also use Table with Array data source like this::
     $table->setSource($my_array);
 
     $table->addColumn('name');
-    $table->addColumn('surname', ['Link', 'url'=>'details.php?surname={$surname}']);
+    $table->addColumn('surname', [\atk4\ui\TableColumn\Link::class, 'url'=>'details.php?surname={$surname}']);
     $table->addColumn('birthdate', null, ['type'=>'date']);
 
 .. warning:: I encourage you to seek appropriate Agile Data persistence instead of
