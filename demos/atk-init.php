@@ -35,7 +35,6 @@ if (file_exists(__DIR__ . '/coverage.php')) {
 $app->db = $db;
 $app->title = 'Agile UI Demo v' . $app->version;
 
-
 [$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
 $demosUrl = $rootUrl . 'demos/';
 
@@ -137,12 +136,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem('More Sticky', [$path . 'sticky2'], $other);
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $other);
 
-    // Send to demos source page in github.
-    $ex = [
-        new \atk4\ui\jsExpression('const baseUrl = []', ['https://github.com/atk4/ui/blob/develop']),
-        new \atk4\ui\jsExpression('window.open(baseUrl + document.location.pathname, "_blank")'),
-    ];
-
+    // view demo source page on Github
     \atk4\ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
-        ->on('click', $ex);
+        ->on('click', $app->jsRedirect('https://github.com/atk4/ui/blob/develop/' . $relUrl, true));
 }
