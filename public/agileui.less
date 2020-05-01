@@ -107,9 +107,12 @@
 }
 
 .atk-sidenav-content {
-  margin-top: 12px;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.atk-sidenav-content > .item:first-child::before  {
+  display: initial !important;
 }
 
 /* A selected item in admin menu */
