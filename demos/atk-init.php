@@ -35,11 +35,15 @@ if (file_exists(__DIR__ . '/coverage.php')) {
 $app->db = $db;
 $app->title = 'Agile UI Demo v' . $app->version;
 
-if (file_exists(dirname(__DIR__) . '/public/atkjs-ui.min.js')) {
-    $app->cdn['atk'] = '/public';
+
+[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
+$demosUrl = $rootUrl . 'demos/';
+
+if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
+    $app->cdn['atk'] = $rootUrl . 'public';
 }
 
-$app->initLayout($app->stickyGET('layout') ?: 'Maestro');
+$app->initLayout($app->stickyGET('layout') ?: \atk4\ui\Layout\Maestro::class);
 
 $layout = $app->layout;
 // Need for phpunit only for producing right url.
@@ -47,8 +51,6 @@ $layout->name = 'atk_admin';
 $layout->id = $layout->name;
 
 if ($layout instanceof \atk4\ui\Layout\Navigable) {
-    $demosUrl = preg_replace('~(?<=/demos/).*~s', '', $_SERVER['REQUEST_URI']);
-
     $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
 
     $path = $demosUrl . 'layout/';
