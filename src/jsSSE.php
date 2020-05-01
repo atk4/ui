@@ -72,7 +72,7 @@ class jsSSE extends jsCallback
         }
     }
 
-    public function terminate($ajaxec, $msg = null, $success = true)
+    public function terminateAjax($ajaxec, $msg = null, $success = true)
     {
         if ($this->browserSupport) {
             if ($ajaxec) {
