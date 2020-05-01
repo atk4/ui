@@ -411,7 +411,7 @@ class CardDeck extends View
             if (is_string($button)) {
                 $button = [$button, 'ui' => 'button ' . $this->menuBtnStyle];
             }
-            $button = $this->factory('Button', $button, 'atk4\ui');
+            $button = $this->factory(Button::class, $button, 'atk4\ui');
         }
 
         if ($button->icon && !is_object($button->icon)) {

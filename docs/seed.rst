@@ -57,7 +57,7 @@ For more information about seeds, merging seeds, factories and namespaces, see h
 
 The most important points of a seed such as this one::
 
-    $seed = ['Button', 'hello', 'big red', 'icon'=>['book', 'red']];
+    $seed = [Button::class, 'hello', 'big red', 'icon'=>['book', 'red']];
 
 are:
 

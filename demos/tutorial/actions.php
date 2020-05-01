@@ -94,7 +94,7 @@ EOF
 $country = new CountryLock($app->db);
 $country->loadAny();
 
-$app->add(['Button', 'Edit some country'])
+\atk4\ui\Button::addTo($app, 'Edit some country'])
     ->on('click', $country->getAction('edit'));
 CODE
     );
@@ -165,7 +165,7 @@ $app->add(new \atk4\ui\FormField\Line([
 
 $app->add(['ui'=>'divider']);
 
-$app->add(['Button', 'Ask Age'])
+\atk4\ui\Button::addTo($app, 'Ask Age'])
     ->on('click', $model->getAction('ask_age'));
 CODE
     );

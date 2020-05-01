@@ -77,7 +77,7 @@ class ActionButtons extends Generic
         }
 
         if (!is_object($button)) {
-            $button = $this->factory('Button', [$button, 'id' => false], 'atk4\ui');
+            $button = $this->factory(\atk4\ui\Button::class, [$button, 'id' => false], 'atk4\ui');
         }
 
         if ($button->icon && !is_object($button->icon)) {

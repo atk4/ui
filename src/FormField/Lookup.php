@@ -243,7 +243,7 @@ class Lookup extends Input
 
         $buttonSeed = is_string($buttonSeed) ? ['content' => $buttonSeed] : $buttonSeed;
 
-        $defaultSeed = ['Button', 'disabled' => ($this->disabled || $this->readonly)];
+        $defaultSeed = [\atk4\ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
 
         $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed), null, 'atk4\ui');
 

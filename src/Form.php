@@ -68,7 +68,7 @@ class Form extends View
      *
      * @var Button|array|false Button object, seed or false to not show button at all
      */
-    public $buttonSave = ['Button', 'Save', 'primary'];
+    public $buttonSave = [Button::class, 'Save', 'primary'];
 
     /**
      * When form is submitted successfully, this template is used by method
