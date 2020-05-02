@@ -804,7 +804,7 @@ class Template implements \ArrayAccess
      */
     protected function parseTemplate($str)
     {
-        $tag = '/{([\/$]?[-_:\w]*[\?]?)}/';
+        $tag = '~(?<!\\\\)(?:\\\\\\\\)*+\K{([/$]?[\w\-:]*[\?]?)}~';
 
         $input = preg_split($tag, $str, -1, PREG_SPLIT_DELIM_CAPTURE);
 
