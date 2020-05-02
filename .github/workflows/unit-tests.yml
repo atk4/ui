@@ -68,7 +68,7 @@ jobs:
         if: matrix.type == 'Behat'
         run: |
           apk add npm
-          npm install -g less clean-css uglify-js
+          npm install -g less less-plugin-clean-css uglify-js
           (cd js && npm install --loglevel=error)
 
       - name: Build JS files (only for Behat)
