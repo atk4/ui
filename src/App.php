@@ -32,7 +32,7 @@ class App
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
-        'atk' => 'https://cdn.jsdelivr.net/gh/atk4/ui@develop/public',
+        'atk' => 'https://raw.githubusercontent.com/atk4/ui/develop/public',
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui' => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.4/dist',
