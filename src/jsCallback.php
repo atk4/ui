@@ -105,13 +105,13 @@ class jsCallback extends Callback implements jsExpressionable
 
                 $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
 
-                $this->terminate($ajaxec);
+                $this->terminateAjax($ajaxec);
             } catch (\atk4\data\ValidationException $e) {
                 // Validation exceptions will be presented to user in a friendly way
                 $m = new Message($e->getMessage());
                 $m->addClass('error');
 
-                $this->terminate(null, $m->getHTML(), false);
+                $this->terminateAjax(null, $m->getHTML(), false);
             }
         });
 
@@ -129,9 +129,11 @@ class jsCallback extends Callback implements jsExpressionable
      * @throws Exception\ExitApplicationException
      * @throws \atk4\core\Exception
      */
-    public function terminate($ajaxec, $msg = null, $success = true)
+    public function terminateAjax($ajaxec, $msg = null, $success = true)
     {
-        $this->app->terminateJSON(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+        if ($this->canTerminate()) {
+            $this->app->terminateJSON(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+        }
     }
 
     /**

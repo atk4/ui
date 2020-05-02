@@ -27,11 +27,28 @@ $btn = \atk4\ui\Button::addTo($app, ['Button 2']);
 $btn->js(true)->data('btn', '2');
 $btn->on('click', $panel_1->jsOpen(['btn'], 'orange'));
 
-$panel_1->onOpen(function ($p) {
-    $btn_number = $_GET['btn'] ?? null;
-    $text = 'You loaded panel content using button #' . $btn_number;
-    \atk4\ui\Message::addTo($p, ['Panel 1', 'text' => $text]);
+$view = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
+$text = \atk4\ui\Text::addTo($view);
+$text->set($_GET['txt'] ?? 'Not Complete');
+
+$panel_1->onOpen(function ($p) use ($view) {
+    $panel = \atk4\ui\View::addTo($p, ['ui' => 'basic segment']);
+    $btn_number = $panel->stickyGet('btn');
+
+    $p_text = 'You loaded panel content using button #' . $btn_number;
+    \atk4\ui\Message::addTo($panel, ['Panel 1', 'text' => $p_text]);
+
+    $p_reload = \atk4\ui\Button::addTo($panel, ['Reload Myself']);
+    $p_reload->on('click', new \atk4\ui\jsReload($panel));
+
+    \atk4\ui\View::addTo($panel, ['ui' => 'divider']);
+    $p_btn = \atk4\ui\Button::addTo($panel, ['Complete']);
+    $p_btn->on('click', [
+        $p->owner->jsClose(),
+        new \atk4\ui\jsReload($view, ['txt' => 'Complete using button #' . $btn_number]),
+    ]);
 });
+
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
 // PANEL_2
