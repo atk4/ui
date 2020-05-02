@@ -87,10 +87,8 @@ jobs:
         if: matrix.type == 'Phpunit'
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
-            mkdir -p coverage
             vendor/bin/phpunit --coverage-text -v
-            ls -l coverage | wc -l
-            mv coverage/* build/logs
+            ls -l coverage | wc -l && mv coverage/* build/logs
           else
             vendor/bin/phpunit --no-coverage -v
           fi
