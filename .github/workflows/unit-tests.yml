@@ -68,15 +68,28 @@ jobs:
         if: matrix.type == 'Behat'
         run: |
           apk add npm
-          npm install -g less less-plugin-clean-css uglify-js
+          npm install --loglevel=error -g less less-plugin-clean-css uglify-js
           (cd js && npm install --loglevel=error)
 
       - name: Build JS files (only for Behat)
         if: matrix.type == 'Behat'
         run: |
+          # atk js
+          mv public/atkjs-ui.min.js public/atkjs-ui.min.js.orig
           (cd js && npm run build)
-          lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
+
+          # app css
+          mv public/agileui.css public/agileui.css.orig
+          # release command:
+          # lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
+          lessc public/agileui.less public/agileui.css
+
+          # app js
+          # ignored from git - check syntax only
           uglifyjs --compress -- public/agileui.js > public/agileui.min.js
+
+          diff public/agileui.css.orig public/agileui.css
+          diff public/atkjs-ui.min.js.orig public/atkjs-ui.min.js
 
       - name: Init
         run: |
