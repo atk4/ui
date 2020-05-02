@@ -20,8 +20,8 @@ jobs:
         php: ['7.2', '7.3', 'latest']
         type: ['Phpunit']
         include:
-#          - php: 'latest'
-#            type: 'Behat'
+          - php: 'latest'
+            type: 'Behat'
           - php: 'latest'
             type: 'CodingStyle'
     env:
@@ -69,13 +69,14 @@ jobs:
         run: |
           apk add npm
           npm install -g less clean-css uglify-js
+          (cd js && npm install --loglevel=error)
 
       - name: Build JS files (only for Behat)
         if: matrix.type == 'Behat'
         run: |
-          (cd js; npm install --loglevel=error; npm run build)
-          #lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
-          #uglifyjs --compress -- public/agileui.js > public/agileui.min.js
+          (cd js && npm run build)
+          lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
+          uglifyjs --compress -- public/agileui.js > public/agileui.min.js
 
       - name: Init
         run: |
