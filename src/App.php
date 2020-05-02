@@ -449,22 +449,18 @@ class App
     public function initIncludes()
     {
         // jQuery
-        $url = $this->cdn['jquery'] ?? '../public';
-        $this->requireJS($url . '/jquery.min.js');
+        $this->requireJS($this->cdn['jquery'] . '/jquery.min.js');
 
         // Semantic UI
-        $url = $this->cdn['semantic-ui'] ?? '../public';
-        $this->requireJS($url . '/semantic.min.js');
-        $this->requireCSS($url . '/semantic.min.css');
+        $this->requireJS($this->cdn['semantic-ui'] . '/semantic.min.js');
+        $this->requireCSS($this->cdn['semantic-ui'] . '/semantic.min.css');
 
         // Serialize Object
-        $url = $this->cdn['serialize-object'] ?? '../public';
-        $this->requireJS($url . '/jquery.serialize-object.min.js');
+        $this->requireJS($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
 
         // Agile UI
-        $url = $this->cdn['atk'] ?? '../public';
-        $this->requireJS($url . '/atkjs-ui.min.js');
-        $this->requireCSS($url . '/agileui.css');
+        $this->requireJS($this->cdn['atk'] . '/atkjs-ui.min.js');
+        $this->requireCSS($this->cdn['atk'] . '/agileui.css');
     }
 
     /**
