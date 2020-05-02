@@ -74,7 +74,7 @@ jobs:
         if: matrix.type == 'Behat'
         run: |
           (cd js; npm install --loglevel=error; npm run build)
-          #lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
+          #lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
           #uglifyjs --compress -- public/agileui.js > public/agileui.min.js
 
       - name: Init
