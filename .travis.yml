@@ -67,8 +67,7 @@ script:
     #- mkdir -p coverage
     #- chmod 777 coverage
     #- cp tools/coverage.php demos/coverage.php
-    - cp behat-travis.yml behat.yml
-    - vendor/bin/behat || exit -1
+    - vendor/bin/behat --config behat-travis.yml || exit -1
     #- killall -s SIGINT --wait php # flush coverage files for Behat
     #- ls -l coverage/ | wc -l
     #- vendor/bin/phpcov  merge coverage/ --clover clover.xml
