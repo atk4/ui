@@ -107,9 +107,12 @@
 }
 
 .atk-sidenav-content {
-  margin-top: 12px;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.ui.vertical.menu > .atk-sidenav-content > .item:first-child::before {
+  display: initial !important;
 }
 
 /* A selected item in admin menu */
@@ -120,6 +123,10 @@
 }
 
 // Layout
+header.ui.fixed.horizontal.menu {
+  min-height: 48px;
+}
+
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
   width: ~'calc(100% - '@leftMenuWidth~')';
 }
@@ -173,7 +180,7 @@ footer.atk-footer {
 }
 
 .ui.left.sidebar {
-  z-index: 103;
+  z-index: 99;
 }
 
 .atk-right-panel {
@@ -209,7 +216,7 @@ i.atk-panel-warning {
 }
 
 .ui.left.sidebar.atk-sidenav {
-  top: @adminMenuHeight - 1;
+  top: @adminMenuHeight;
 }
 
 .atk-sidenav-content {
@@ -305,7 +312,7 @@ i.atk-panel-warning {
   opacity: 0;
   pointer-events: none;
   position: fixed;
-  top: @adminMenuHeight - 1px;
+  top: @adminMenuHeight;
   width: 100%;
   z-index: 102;
   .pusher {
