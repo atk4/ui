@@ -13,14 +13,13 @@ steps:
   build:
     type: build
     stage: build
-    image_name: atk4/ui
+    image_name: atk4/ui-demo
     dockerfile: demos/Dockerfile
-    registry: atk4
   push:
     type: push
     stage: push
-    image_name: atk4/ui
-    registry: cfcr
+    image_name: atk4/ui-demo
+    registry: atk4
     candidate: "${{build}}"
     tags:
       - "${{CF_BRANCH_TAG_NORMALIZED}}"
