@@ -17,7 +17,7 @@ jobs:
           echo "::set-env name=version::$v"
 
           git branch
-          sed -i "s|'https://raw.githubusercontent.com/atk4/ui/.*/public',|'https://cdn.jsdelivr.net/gh/atk4/ui@$v/public',|" src/App.php
+          sed -i "s|'https://cdn.jsdelivr.net/gh/atk4/ui.*|'https://cdn.jsdelivr.net/gh/atk4/ui@$v/public',|" src/App.php
           sed -i "s|public \$version.*|public \$version = '$v';|" src/App.php
 
       - uses: teaminkling/autocommit@master
