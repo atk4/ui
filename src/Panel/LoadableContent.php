@@ -5,7 +5,7 @@
 
 namespace atk4\ui\Panel;
 
-use atk4\ui\jsCallback;
+use atk4\ui\Callback;
 
 interface LoadableContent
 {
@@ -14,7 +14,7 @@ interface LoadableContent
      *
      * @return mixed
      */
-    public function setCb(jsCallback $cb);
+    public function setCb(Callback $cb);
 
     /**
      * Return js Callback url string.
