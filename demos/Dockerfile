@@ -8,7 +8,7 @@
 FROM php:apache
 
 RUN apt-get update && apt-get install -y \
-        libicu-dev git \
+        libicu-dev git jq \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-ext-install pdo pdo_mysql
