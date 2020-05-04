@@ -5,7 +5,7 @@
 
 namespace atk4\ui\Panel;
 
-use atk4\ui\jsCallback;
+use atk4\ui\Callback;
 use atk4\ui\View;
 
 class Content extends View implements LoadableContent
@@ -17,7 +17,7 @@ class Content extends View implements LoadableContent
     {
         parent::init();
         $this->addClass('atk-panel-content');
-        $this->setCb(new jsCallback(['appSticky' => true]));
+        $this->setCb(new Callback(['appSticky' => true]));
     }
 
     /**
@@ -35,7 +35,7 @@ class Content extends View implements LoadableContent
      *
      * @return mixed|void
      */
-    public function setCb(jsCallback $cb)
+    public function setCb(Callback $cb)
     {
         $this->cb = $this->add($cb);
     }
