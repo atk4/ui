@@ -79,13 +79,19 @@ jobs:
 
       - name: Init
         run: |
-          mkdir -p coverage
+          mkdir -p build/logs
           mysql -uatk4_test -patk4_pass -h mysql atk4_test__ui < demos/atk4.sql
           cp demos/db.example.php demos/db.php
 
       - name: "Run tests: Phpunit (only for Phpunit)"
         if: matrix.type == 'Phpunit'
-        run: "vendor/bin/phpunit \"$(if [ -n \"$LOG_COVERAGE\" ]; then echo '--coverage-text'; else echo '--no-coverage'; fi)\" --coverage-clover=coverage.xml -v"
+        run: |
+          if [ -n "$LOG_COVERAGE" ]; then
+            vendor/bin/phpunit --coverage-text -v
+            ls -l coverage | wc -l && mv coverage/* build/logs
+          else
+            vendor/bin/phpunit --no-coverage -v
+          fi
 
 #      - name: "Run tests: Behat (only for Behat)"
 #        if: matrix.type == 'Behat'
@@ -99,14 +105,13 @@ jobs:
         if: matrix.type == 'CodingStyle'
         run: vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --diff-format=udiff --verbose --show-progress=dots
 
-#      - name: Upload coverage logs 1/2 (only for "latest" Phpunit)
-#        if: env.LOG_COVERAGE
-#        run: vendor/bin/phpcov merge build/logs/ --clover build/logs/cc.xml
-#
-#      - name: Upload coverage logs 2/2 (only for "latest" Phpunit)
-      - name: Upload coverage logs (only for "latest" Phpunit)
+      - name: Upload coverage logs 1/2 (only for "latest" Phpunit)
+        if: env.LOG_COVERAGE
+        run: vendor/bin/phpcov merge build/logs/ --clover build/logs/cc.xml
+
+      - name: Upload coverage logs 2/2 (only for "latest" Phpunit)
         if: env.LOG_COVERAGE
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage.xml
+          file: build/logs/cc.xml

@@ -4,7 +4,7 @@ os:
     - linux
 
 php:
-    # one Behat version is enought
+    # one version fo Behat is enought
     - '7.4'
 
 services:
@@ -33,9 +33,6 @@ before_install:
     - npm install -g less less-plugin-clean-css uglify-js
 
 before_script:
-    # prepare dir for coverage
-    - mkdir -p coverage
-    - chmod 777 coverage
     # Setup selenium
     - wget --no-verbose https://selenium-release.storage.googleapis.com/${SELENIUM_MAJ_VER}/${SELENIUM_JAR}
     - java -jar ${SELENIUM_JAR} > /dev/null 2>&1 &
@@ -66,26 +63,15 @@ before_script:
     - uglifyjs --compress -- public/agileui.js > public/agileui.min.js
     - composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
-after_script:
-    - echo $TRAVIS_BRANCH
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.4" ]]; then echo "Sending codecov report"; TRAVIS_CMD="" bash <(curl -s https://codecov.io/bash) -f clover.xml; fi
-
 script:
-    - mkdir -p coverage
-    - chmod 777 coverage
-    - cp behat-travis.yml behat.yml
-    - cp tools/coverage.php demos/coverage.php
-    - vendor/bin/behat || exit -1
-
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.4" ]]; then NC="--no-coverage"; fi
-    - ./vendor/phpunit/phpunit/phpunit $NC # can not be easily removed in favor of GitHub Actions as we need to send a full/merged coverage report
-    - mv phpunit.cov coverage/ || echo ""
-
-    - killall -s SIGINT --wait php # flush coverage files
-    - ls -l coverage/ | wc -l
-    - vendor/bin/phpcov  merge coverage/ --clover clover.xml
+    #- mkdir -p coverage
+    #- chmod 777 coverage
+    #- cp tools/coverage.php demos/coverage.php
+    - vendor/bin/behat --config behat-travis.yml || exit -1
+    #- killall -s SIGINT --wait php # flush coverage files for Behat
+    #- ls -l coverage/ | wc -l
+    #- vendor/bin/phpcov  merge coverage/ --clover clover.xml
 
 cache:
   directories:
     - $HOME/.composer/cache
-

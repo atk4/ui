@@ -26,11 +26,13 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
     public static function setUpBeforeClass(): void
     {
         if (extension_loaded('xdebug') || isset($this) && $this->getResult()->getCodeCoverage() !== null) { // dirty way to skip coverage for phpunit with disabled coverage
-            if (!file_exists($coverage = self::getPackagePath('coverage'))) {
+            $coverage = self::getPackagePath('coverage');
+            if (!file_exists($coverage)) {
                 mkdir($coverage, 0777, true);
             }
 
-            if (!file_exists($demosCoverage = self::getPackagePath('demos', 'coverage.php'))) {
+            $demosCoverage = self::getPackagePath('demos', 'coverage.php');
+            if (!file_exists($demosCoverage)) {
                 file_put_contents(
                     $demosCoverage,
                     file_get_contents(self::getPackagePath('tools', 'coverage.php'))
@@ -94,9 +96,7 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
     private static function getPackagePath($directory = null, $_ = null): string
     {
         $route = func_get_args();
-
         $baseDir = realpath(__DIR__ . \DIRECTORY_SEPARATOR . '..');
-
         array_unshift($route, $baseDir);
 
         return implode(\DIRECTORY_SEPARATOR, $route);
