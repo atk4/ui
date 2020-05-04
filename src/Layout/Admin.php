@@ -108,7 +108,7 @@ class Admin extends Generic implements Navigable
                 $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], ['index']);
             }
             if ($this->isMenuLeftVisible) {
-                $this->menuLeft->addClass('visible');
+                $this->menuLeft->js(true)->parent()->addClass('visible');
             }
         }
 

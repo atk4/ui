@@ -27,7 +27,7 @@ $btn->on('click', new \atk4\ui\jsToast([
 $btn = \atk4\ui\Button::addTo($app)->set('Error');
 $btn->on('click', new \atk4\ui\jsToast([
     'title' => 'Error',
-    'message' => 'An error occur',
+    'message' => 'An error occured',
     'class' => 'error',
 ]));
 
@@ -42,15 +42,15 @@ $btn->on('click', new \atk4\ui\jsToast([
 
 $btn = \atk4\ui\Button::addTo($app)->set('Bottom Right');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title' => 'Bottom Left',
-    'message' => 'Should appear at the bottom on your left',
+    'title' => 'Bottom Right',
+    'message' => 'Should appear at the bottom on your right',
     'position' => 'bottom right',
 ]));
 
 $btn = \atk4\ui\Button::addTo($app)->set('Top Center');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title' => 'Bottom Left',
-    'message' => 'Should appear at the bottom on your left',
+    'title' => 'Top Center',
+    'message' => 'Should appear at the top center',
     'position' => 'top center',
 ]));
 
@@ -58,14 +58,14 @@ $btn->on('click', new \atk4\ui\jsToast([
 
 $btn = \atk4\ui\Button::addTo($app)->set('5 seconds');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title' => 'Bottom Left',
+    'title' => 'Timeout',
     'message' => 'I will stay here for 5 sec.',
     'displayTime' => 5000,
 ]));
 
 $btn = \atk4\ui\Button::addTo($app)->set('For ever');
 $btn->on('click', new \atk4\ui\jsToast([
-    'title' => 'Bottom Left',
+    'title' => 'No Timeout',
     'message' => 'I will stay until you click me',
     'displayTime' => 0,
 ]));
