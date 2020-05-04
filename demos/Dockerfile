@@ -8,7 +8,7 @@
 FROM php:apache
 
 RUN apt-get update && apt-get install -y \
-        libicu-dev git jq \
+        libicu-dev git jq unzip \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-ext-install pdo pdo_mysql
@@ -21,6 +21,7 @@ ADD composer.json .
 RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv tmp composer.json \
     && composer install --no-dev
 
+COPY index.php index.php
 COPY src src
 COPY template template
 COPY demos demos
