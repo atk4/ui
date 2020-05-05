@@ -1,5 +1,8 @@
 ## Release note
 
+### version 1.14.2 (2020-05-04)
+ - test release version
+
 ### version 1.14.1 (2020-04-25)
 
 - add stop function to server-event.plugin;
