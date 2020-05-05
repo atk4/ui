@@ -23,7 +23,7 @@ RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv
 
 COPY js js
 COPY public public
-RUN npm install -g less-plugin-clean-css
+RUN npm install -g less clean-css
 RUN (cd js && npm install && npm run build)
 RUN (cd public && lessc agileui.less agileui.css --clean-css="--s1 --advanced --compatibility=ie8")
 
