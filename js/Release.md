@@ -1,7 +1,7 @@
 ## Release note
 
 ### version 1.14.2 (2020-05-04)
- - test release version
+ - Build releases automatically on ui.agiletoolkit.org deploy
 
 ### version 1.14.1 (2020-04-25)
 
