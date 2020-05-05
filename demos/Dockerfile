@@ -8,7 +8,7 @@
 FROM php:apache
 
 RUN apt-get update && apt-get install -y \
-        libicu-dev git jq unzip \
+        libicu-dev git jq unzip npm \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-ext-install pdo pdo_mysql
@@ -21,11 +21,16 @@ ADD composer.json .
 RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv tmp composer.json \
     && composer install --no-dev
 
+COPY js js
+COPY public public
+RUN npm install -g less-plugin-clean-css
+RUN (cd js && npm install && npm run build)
+RUN (cd public && lessc agileui.less agileui.css --clean-css="--s1 --advanced --compatibility=ie8")
+
 COPY index.php index.php
 COPY src src
 COPY template template
 COPY demos demos
-COPY public public
 
 ADD demos/db.example.php demos/db.php
 RUN sed -E "s/\('.+'\);/(\$_ENV['DSN']);/g" -i demos/db.php
