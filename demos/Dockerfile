@@ -20,12 +20,12 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 ADD composer.json .
 RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv tmp composer.json \
     && composer install --no-dev
+RUN npm install -g less clean-css
 
 COPY js js
-COPY public public
-RUN npm install -g less clean-css
 RUN (cd js && npm install && npm run build)
-RUN (cd public && lessc agileui.less agileui.css --clean-css="--s1 --advanced --compatibility=ie8")
+COPY public public
+RUN (cd public && lessc agileui.less agileui.css)
 
 COPY index.php index.php
 COPY src src
