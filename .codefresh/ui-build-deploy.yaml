@@ -13,12 +13,13 @@ steps:
   build:
     type: build
     stage: build
-    image_name: atk4/ui
+    image_name: atk4/ui-demo
+    dockerfile: demos/Dockerfile
   push:
     type: push
     stage: push
-    image_name: atk4/ui
-    registry: cfcr
+    image_name: atk4/ui-demo
+    registry: atk4
     candidate: "${{build}}"
     tags:
       - "${{CF_BRANCH_TAG_NORMALIZED}}"
@@ -29,5 +30,5 @@ steps:
     commands:
       - echo $CF_KUBECONFIG_PATH
       - kubectl config use-context atk
-      - kubectl -n atk-demo set image deployment/atk-demo atk-demo="r.cfcr.io/romaninsh/atk4/ui:${{CF_REVISION}}"
+      - kubectl -n atk-demo set image deployment/atk-demo atk-demo="atk4/ui-demo:${{CF_REVISION}}"
 
