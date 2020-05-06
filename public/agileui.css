@@ -1,0 +1,275 @@
+/*-------------------
+      Site Colors
+--------------------*/
+/*---  Colors  ---*/
+/*---  Light Colors  ---*/
+/*---   Neutrals  ---*/
+/******* MAESTRO MENU *******/
+.atk-maestro-sidenav {
+  cursor: pointer;
+  color: white;
+}
+.atk-maestro-sidenav > .ui.grid > .atk-maestro-menu-items {
+  display: none;
+}
+.atk-maestro-sidenav > .ui.grid > .atk-maestro-menu-items.atk-visible {
+  display: flex;
+}
+/* Item without a group in menu */
+.ui.inverted.menu a.atk-maestro-sidenav.item {
+  margin-right: 8px;
+}
+.ui.inverted.menu a.atk-maestro-sidenav.item.active {
+  background-color: #2185D0;
+}
+.atk-maestro-sidenav .atk-submenu-toggle div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.atk-maestro-sidenav:not(active) .atk-submenu-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.atk-maestro-sidenav .ui.grid .row {
+  padding: 0px;
+}
+.atk-maestro-sidenav .ui.grid .column {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.atk-maestro-sidenav.active .atk-maestro-menu-title {
+  background-color: #2185D0;
+}
+.atk-maestro-sidenav > .ui.grid {
+  width: 260px;
+}
+.atk-sidenav-content {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.ui.vertical.menu > .atk-sidenav-content > .item:first-child::before {
+  display: initial !important;
+}
+/* A selected item in admin menu */
+.ui.sidebar.atk-sidenav .menu > .item.active {
+  background: none;
+}
+header.ui.fixed.horizontal.menu {
+  min-height: 48px;
+}
+.ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
+  width: calc(100% -  260px );
+}
+.ui.visible.left.sidebar ~ .atk-mainContainer,
+.ui.visible.left.sidebar ~ footer.atk-footer {
+  padding-left: 260px;
+}
+.atk-dialog-content {
+  min-height: 100px;
+}
+.atk-hide-loading-content.loading:before {
+  background: rgba(255, 255, 255, 0.98) !important;
+}
+.atk-layout {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+.atk-topMenuGhost.ui.menu {
+  display: none;
+  margin: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+header.atk-topMenu.ui.fixed.menu ~ .atk-topMenuGhost {
+  display: block;
+}
+header.atk-topMenu.ui.menu .item > .label {
+  margin-left: 0;
+}
+.atk-mainContainer {
+  flex: 1;
+}
+.atk-mainContainer .atk-mainContainerWrapper {
+  padding: 3em;
+}
+.atk-mainContainer.atk-admin-layout {
+  margin-top: 48px;
+}
+footer.atk-footer .ui.divider,
+footer.atk-footer .ui.segment {
+  margin: 0;
+}
+.ui.left.sidebar {
+  z-index: 99;
+}
+.atk-right-panel {
+  -webkit-transition: box-shadow 0.2s, right 0.2s;
+  -moz-transition: box-shadow 0.2s, right 0.2s;
+  -ms-transition: box-shadow 0.2s, right 0.2s;
+  -o-transition: box-shadow 0.2s, right 0.2s;
+  transition: box-shadow 0.2s, right 0.2s;
+  bottom: 0;
+  background-color: #F9FAFB;
+  box-shadow: 0 0 0 rgba(27, 28, 29, 0);
+  height: 99%;
+  right: -100%;
+  overflow-y: auto;
+  position: fixed;
+  width: 40%;
+  z-index: 1000;
+}
+.atk-right-panel.atk-visible {
+  box-shadow: 0px 0 5px rgba(27, 28, 29, 0.2);
+  right: 0%;
+}
+.atk-panel-close {
+  color: #1B1C1D;
+}
+i.atk-panel-warning {
+  color: #F9FAFB;
+}
+i.atk-panel-warning.atk-visible {
+  color: #F2711C;
+}
+.ui.left.sidebar.atk-sidenav {
+  top: 48px;
+}
+.atk-sidenav-content {
+  height: calc(100% -  98px );
+}
+.ui.left.sidebar.atk-sidenav {
+  width: 260px;
+}
+.atk-table-dropdown {
+  margin-top: -8px;
+  float: left;
+}
+.atk-table-dropdown i {
+  opacity: 0.3;
+  vertical-align: bottom;
+}
+.atk-table-dropdown i.table-filter-on:after {
+  content: '\f150';
+  color: dodgerblue;
+}
+.atk-table-dropdown i.table-filter-off:after {
+  content: '\f150';
+}
+.atk-table-dropdown .dropdown .menu {
+  margin: 1em -10px 0 !important;
+}
+.atk-table-column-header {
+  white-space: pre-wrap;
+}
+.atk-table-column-header:after {
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  content: '';
+  height: 1em;
+  width: auto;
+  opacity: 0.8;
+  margin: 0em 0em 0em 0.5em;
+  font-family: 'Icons';
+  float: right;
+}
+.atk-table-column-header.ascending:after {
+  content: '\f0d8';
+}
+.atk-table-column-header.descending:after {
+  content: '\f0d7';
+}
+.ui.sortable.table thead th:not(.sortable) {
+  cursor: default;
+}
+.ui.step,
+.ui.steps .step {
+  user-select: none;
+}
+.atk-overflow-auto {
+  overflow: auto;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  margin-bottom: 1em;
+}
+.atk-overflow-auto > .ui.table {
+  margin-top: 0em;
+}
+.atk-cell-expanded {
+  min-width: 320px;
+  max-width: 640px;
+  white-space: normal;
+}
+.atk-overlay.pushable {
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 48px;
+  width: 100%;
+  z-index: 102;
+}
+.atk-overlay.pushable .pusher:after {
+  height: 100%;
+  opacity: 1;
+  width: 100%;
+}
+@media (max-width: 991px) {
+  .ui.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    width: 100% !important;
+  }
+  .ui.visible.left.sidebar ~ .atk-mainContainer,
+  .ui.visible.left.sidebar ~ footer.atk-footer {
+    padding-left: 0;
+  }
+  .ui.left.sidebar {
+    opacity: 0;
+    pointer-events: none;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    visibility: visible;
+  }
+  body.atk-sidenav-visible:after {
+    left: 0;
+    position: fixed;
+    top: 0;
+  }
+  body.atk-sidenav-visible .ui.left.sidebar {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  body.atk-sidenav-visible .ui.left.sidebar .atk-leftMenuClose {
+    display: block;
+  }
+}
+@media (max-width: 991px) {
+  body.atk-sidenav-visible .atk-overlay.pushable {
+    opacity: 1;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .atk-right-panel {
+    width: 65%;
+  }
+}
+@media (max-width: 767px) {
+  .atk-right-panel {
+    width: 95%;
+  }
+}
+@media print {
+  .ui.visible.left.sidebar ~ .atk-mainContainer,
+  .ui.visible.left.sidebar ~ footer.atk-footer {
+    padding-left: 0;
+  }
+  .ui.left.sidebar,
+  .atk-topMenu,
+  .atk-topMenuGhost {
+    display: none !important;
+  }
+}
