@@ -88,9 +88,6 @@ jobs:
           # ignored from git - check syntax only
           uglifyjs --compress -- public/agileui.js > public/agileui.min.js
 
-          diff public/agileui.css.orig public/agileui.css
-          diff public/atkjs-ui.min.js.orig public/atkjs-ui.min.js
-
       - name: Init
         run: |
           mkdir -p build/logs
