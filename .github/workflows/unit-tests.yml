@@ -75,11 +75,8 @@ jobs:
         if: matrix.type == 'Behat'
         run: |
           # atk js
-          mv public/atkjs-ui.min.js public/atkjs-ui.min.js.orig
           (cd js && npm run build)
 
-          # app css
-          mv public/agileui.css public/agileui.css.orig
           # release command:
           # lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
           lessc public/agileui.less public/agileui.css
