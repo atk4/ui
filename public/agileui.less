@@ -50,6 +50,12 @@
 
 @atkSlidePanelColor: @offWhite;
 
+// z-index
+@rightPanelIndex: 201;
+@pushableIndex: 101;
+@sideNavIndex: 201;
+
+
 /******* MAESTRO MENU *******/
 
 .atk-maestro-sidenav {
@@ -180,7 +186,7 @@ footer.atk-footer {
 }
 
 .ui.left.sidebar {
-  z-index: 99;
+  z-index: @sideNavIndex;
 }
 
 .atk-right-panel {
@@ -197,7 +203,7 @@ footer.atk-footer {
   overflow-y: auto;
   position: fixed;
   width: 40%;
-  z-index: 1000;
+  z-index: @rightPanelIndex;
   &.atk-visible {
     box-shadow: 0px 0 5px fade(@black, 20%);
     right: 0%;
@@ -314,7 +320,7 @@ i.atk-panel-warning {
   position: fixed;
   top: @adminMenuHeight;
   width: 100%;
-  z-index: 102;
+  z-index: @pushableIndex;
   .pusher {
     &:after {
       height: 100%;
