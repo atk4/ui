@@ -6,6 +6,8 @@ import itemSearch from '../components/item-search.component';
 import multiLine from '../components/multiline.component'
 import treeItemSelector from '../components/tree-item-selector/tree-item-selector.component';
 import atkClickOutside from '../directives/click-outside.directive';
+import VueQueryBuilder from 'vue-query-builder';
+import 'vue-query-builder/dist/VueQueryBuilder.css';
 import {focus} from '../directives/commons.directive';
 
 Vue.use(SuiVue);
@@ -15,6 +17,7 @@ let atkComponents = {
   'atk-item-search' : itemSearch,
   'atk-multiline'   : multiLine,
   'atk-tree-item-selector' : treeItemSelector,
+  'atk-query-builder' : VueQueryBuilder,
 };
 
 // setup atk custom directives.

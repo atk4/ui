@@ -178,7 +178,7 @@ class ScopeBuilder extends Generic
         parent::init();
 
         if (!$this->scopeBuilderTemplate) {
-            $this->scopeBuilderTemplate = new Template('<div id="{$_id}" class="ui"><vue-query-builder v-bind="initData" v-model="initData.query"></vue-query-builder><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->scopeBuilderTemplate = new Template('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData" v-model="initData.query"></atk-query-builder><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
         $this->scopeBuilderView = \atk4\ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
@@ -363,13 +363,12 @@ class ScopeBuilder extends Generic
         parent::renderView();
 
         $this->scopeBuilderView->vue(
-            'vue-query-builder',
+            'atk-query-builder',
             [
                 'rules' => $this->rules,
                 'maxDepth' => $this->maxDepth,
                 'query' => $this->query,
-            ],
-            'VueQueryBuilder'
+            ]
         );
     }
 

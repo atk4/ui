@@ -63,6 +63,10 @@ module.exports = env => {
           test: /(\.jsx|\.js)$/,
           loader: 'babel-loader',
           exclude: /(node_modules|bower_components)/
+        },
+        {
+            test: /\.css$/i,
+            use: ['style-loader', 'css-loader']
         }
       ]
     },
