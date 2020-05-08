@@ -93,9 +93,6 @@ class CardDeck extends View
     /** @var array A collection of menu button added in Menu. */
     private $menuActions = [];
 
-    /** @var int|null The current page number. */
-    private $page;
-
     /** @var string|null The current search query string. */
     private $query;
 
@@ -144,7 +141,6 @@ class CardDeck extends View
     {
         $seg = View::addTo($this->container, ['ui' => 'basic segment'])->addStyle('text-align', 'center');
         $this->paginator = $seg->add($this->factory($this->paginator, ['reload' => $this->container]));
-        $this->page = $this->app->stickyGet($this->paginator->name);
     }
 
     public function setModel(Model $model, array $fields = null, array $extra = null): Model
@@ -347,7 +343,7 @@ class CardDeck extends View
     {
         $args = [];
         if ($this->paginator !== false) {
-            $args[$this->paginator->name] = $this->page;
+            $args[$this->paginator->name] = $this->paginator->getCurrentPage();
         }
         if ($this->search !== false) {
             $args[$this->search->queryArg] = $this->query;
