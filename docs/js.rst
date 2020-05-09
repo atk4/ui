@@ -90,11 +90,11 @@ Finally, you can specify the name of the JavaScript event::
 Agile UI also provides support for an `on` event binding. This allows to apply events on
 multiple elements::
 
-    $buttons = $app->add('View');
+    $buttons = View::addTo($app, ['ui' => 'basic buttons']);
 
-    $buttons->add(['Button', 'One']);
-    $buttons->add(['Button', 'Two']);
-    $buttons->add(['Button', 'Three']);
+    \atk4\ui\Button::addTo($buttons, ['One']);
+    \atk4\ui\Button::addTo($buttons, ['Two']);
+    \atk4\ui\Button::addTo($buttons, ['Three']);
 
     $buttons->on('click', '.button')->hide();
 
@@ -239,11 +239,11 @@ Several usage cases for plain `js()` method. The most basic scenario is to perfo
 
 The following code will show three buttons and clicking any one will hide it. Only a single action is created::
 
-    $buttons = new \atk4\ui\View;
+    $buttons = View::addTo($app, ['ui' => 'basic buttons']);
 
-    $buttons->add(['Button', 'One']);
-    $buttons->add(['Button', 'Two']);
-    $buttons->add(['Button', 'Three']);
+    \atk4\ui\Button::addTo($buttons, ['One']);
+    \atk4\ui\Button::addTo($buttons, ['Two']);
+    \atk4\ui\Button::addTo($buttons, ['Three']);
 
     $buttons->on('click', '.button')->hide();
 
@@ -259,11 +259,11 @@ The best example would be a :php:class:`Lister` with interactive elements.
 
 You can use both actions together. The next example will allow only one button to be active::
 
-    $buttons = $app->add('View');
+    $buttons = View::addTo($app, ['ui' => 'basic buttons']);
 
-    $b1 = $buttons->add(['Button', 'One']);
-    $b2 = $buttons->add(['Button', 'Two']);
-    $b3 = $buttons->add(['Button', 'Three']);
+    \atk4\ui\Button::addTo($buttons, ['One']);
+    \atk4\ui\Button::addTo($buttons, ['Two']);
+    \atk4\ui\Button::addTo($buttons, ['Three']);
 
     $buttons->on('click', '.button', $b3->js()->hide());
 
@@ -419,21 +419,21 @@ This class allows you to open modal dialogs and close them easily. It's based ar
 `.modal(), <https://fomantic-ui.com/modules/modal.html>`_ but integrates PHP callback for dynamically
 producing content of your dialog::
 
-    $modal = $app->add(['Modal', ['title' => 'Modal Title']]);
+    $modal = \atk4\ui\Modal::addTo($app, ['Modal Title']);
     $modal->set(function ($p) use ($modal) {
-        $p->add('LoremIpsum');
-        $p->add(['Button', 'Hide'])->on('click', $modal->hide());
+        \atk4\ui\LoremIpsum::addTo($p);
+        \atk4\ui\Button::addTo($p, ['Hide'])->on('click', $modal->hide());
     });
 
-    $app->add(['Button', 'Show'])->on('click', $modal->show());
+    \atk4\ui\Button::addTo($app, ['Show'])->on('click', $modal->show());
 
 Modal will render as a HTML `<div>` block but will be hidden. Alternatively you can use Modal without loadable content::
 
-    $modal = $app->add(['Modal', ['title' => 'Modal Title']]);
-    $modal->add('LoremIpsum');
-    $modal->add(['Button', 'Hide'])->on('click', $modal->hide());
+    $modal = \atk4\ui\Modal::addTo($app, ['Modal Title']);
+    \atk4\ui\LoremIpsum::addTo($modal);
+    \atk4\ui\Button::addTo($modal, ['Hide'])->on('click', $modal->hide());
 
-    $app->add(['Button', 'Show'])->on('click', $modal->show());
+    \atk4\ui\Button::addTo($app, ['Show'])->on('click', $modal->show());
 
 The second way is more convenient for creating static content, such as Terms of Service.
 
@@ -450,10 +450,10 @@ when the need to open a dialog box is not known in advance. This class is not
 a component, but rather an Action so you **must not** add it to the Render Tree.
 To accomplish that, use a :ref:`virtualpage`::
 
-    $vp = $app->add('VirtualPage');
-    $vp->add(['LoremIpsum', ['size' => 2]]);
+    $vp = \atk4\ui\VirtualPage::addTo($app);
+    \atk4\ui\LoremIpsum::addTo($vp, ['size' => 2]);
 
-    $app->add(['Button', ['Dynamic Modal']])
+    \atk4\ui\Button::addTo($app, ['Dynamic Modal'])
         ->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut')));
 
 Note that this element is always destroyed as opposed to :php:class:`Modal`,
@@ -471,7 +471,7 @@ jsNotify
 
 Dynamic notifier used to display operation status::
 
-    $app->add(['Button', 'Test'])->on(
+    \atk4\ui\Button::addTo($app, ['Test'])->on(
       'click',
       (new \atk4\ui\jsNotify('Not yet implemented'))->setColor('red')
     );
@@ -480,10 +480,10 @@ A typical use case would be to provide visual feedback of an action after used p
 a Modal window with a Form. When user submits a form, its Submit handler will close modal in order to leave
 some feedback to the user. jsNotify can display a bar on top of the screen for some time::
 
-    $modal = $app->add(['Modal', 'Modal Title']);
+    $modal = \atk4\ui\Modal::addTo($app, ['Modal Title']);
 
     $modal->set(function ($p) use ($modal) {
-        $form = $p->add('Form');
+        $form = \atk4\ui\Form::addTo($p);
         $form->addField('name', null, ['caption'=>'Add your name']);
 
         $form->onSubmit(function ($f) use ($modal) {
@@ -498,7 +498,7 @@ some feedback to the user. jsNotify can display a bar on top of the screen for s
         });
     });
 
-    $app->add(['Button', 'Open Modal'])->on('click', $modal->show());
+    \atk4\ui\Button::addTo($app, ['Open Modal'])->on('click', $modal->show());
 
 .. php:method:: setIcon(color)
 .. php:method:: setTransition(openTransition, closeTransition)
@@ -530,8 +530,8 @@ other view::
 
     $m_book = new Book($db);
 
-    $f = $app->add('Form');
-    $t = $app->add('Table');
+    $f = \atk4\ui\Form::addTo($app);
+    $t = \atk4\ui\Table::addTo($app);
 
     $f->setModel($m_book);
 
@@ -566,14 +566,14 @@ The following will **not** work::
     $m = new myModel;
 
     // jsModal requires its contents to be put into a Virtual Page
-    $vp = $app->add(new \atk4\ui\VirtualPage);
-    $form = $vp->add(new \atk4\ui\Form);
+    $vp = \atk4\ui\VirtualPage::addTo($app);
+    $form = \atk4\ui\Form::addTo($vp);
     $form->setModel(clone $m);
 
-    $table = $app->add(new \atk4\ui\Table);
+    $table = \atk4\ui\Table::addTo($app);
     $table->setModel(clone $m));
 
-    $button = $app->add(['Button', ['Add Item', 'icon'=>'plus']]);
+    $button = \atk4\ui\Button::addTo($app, ['Add Item', 'icon'=>'plus']);
     $button->on('click', new \atk4\ui\jsModal('JSModal Title', $vp));
 
     $form->onSubmit(function($form) use($table) {
@@ -589,15 +589,15 @@ Table needs to be first! The following works::
     $app = new myApp;
     $m = new myModel;
 
-    $table = $app->add(new \atk4\ui\Table);
+    // This needs to be first
+    $table = \atk4\ui\Table::addTo($app);
     $table->setModel(clone $m));
 
-    // jsModal requires its contents to be put into a Virtual Page
-    $vp = $app->add(new \atk4\ui\VirtualPage);
-    $form = $vp->add(new \atk4\ui\Form);
+    $vp = \atk4\ui\VirtualPage::addTo($app);
+    $form = \atk4\ui\Form::addTo($vp);
     $form->setModel(clone $m);
 
-    $button = $app->add(['Button', ['Add Item', 'icon'=>'plus']]);
+    $button = \atk4\ui\Button::addTo($app, ['Add Item', 'icon'=>'plus']);
     $button->on('click', new \atk4\ui\jsModal('JSModal Title', $vp));
 
     $form->onSubmit(function($form) use($table) {
@@ -613,12 +613,12 @@ While rendering, if a reload is caught, the rendering process stops and only ren
 Since VirtualPage is special, when asked to be rendered and it gets triggered, rendering stops and only the
 VirtualPage content is rendered. To force yourself to put things in order you can write the above like this::
 
-    $table = $app->add(new \atk4\ui\Table());
+    $table = \atk4\ui\Table::addTo($app);
     $table->setModel($m);
 
-    $vp = $app->add(new \atk4\ui\VirtualPage());
+    $vp = \atk4\ui\VirtualPage::addTo($app);
     $vp->set(function($p) use ($table, $m) {
-        $form = $p->add(new \atk4\ui\Form);
+        $form = \atk4\ui\Form::addTo($p);
         $form->setModel(clone $m);
         $form->onSubmit(function($form) use($table) {
             $form->model->save();
@@ -629,7 +629,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
         });
     });
 
-    $button = $app->add(['Button', ['Add Item', 'icon'=>'plus']]);
+    $button = \atk4\ui\Button::addTo($app, ['Add Item', 'icon'=>'plus']);
     $button->on('click', new \atk4\ui\jsModal('JSModal Title', $vp));
 
 Note that in no case you will be able to render the button *above* the table (because the button needs a
@@ -647,7 +647,7 @@ average of 5-10 seconds, so you'd like to user updated about the process. There 
 
 The most basic approach is::
 
-    $button = $app->add(['Button', 'Process Image']);
+    $button = \atk4\ui\Button::addTo($app, ['Process Image']);
     $button->on('click', function() use($button, $image) {
 
         sleep(1); // $image->resize();
@@ -673,9 +673,9 @@ Server Sent Event (jsSSE)
 
 This class implements ability for your PHP code to send messages to the browser during process execution::
 
-    $button = $app->add(['Button', 'Process Image']);
+    $button = \atk4\ui\Button::addTo($app, ['Process Image']);
 
-    $sse = $app->add('jsSSE');
+    $sse = \atk4\ui\jsSSE::addTo($app);
 
     $button->on('click', $sse->set(function() use($sse, $button, $image) {
 
