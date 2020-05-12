@@ -146,7 +146,8 @@ class Link extends Generic
     {
         // Decide on the content
         if ($this->url) {
-            return ['c_' . $this->short_name => $this->url->set($row->get())->render()];
+            $rowValues = $this->app->ui_persistence ? $this->app->ui_persistence->typecastSaveRow($row, $row->get()) : $row->get();
+            return ['c_' . $this->short_name => $this->url->set($rowValues)->render()];
         }
 
         $p = $this->page ?: [];
