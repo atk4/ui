@@ -1214,7 +1214,7 @@ class View implements jsExpressionable
             if ($ex instanceof self && $ex instanceof Interface_ && $ex instanceof jsInterface_) {
                 //Executor may already had been add to layout. Like in CardDeck.
                 if (!isset($this->app->html->elements[$ex->short_name])) {
-                    $ex = $this->app->html->add($ex)->setAction($action);
+                    $ex = $this->app->html->add($ex, 'Modals')->setAction($action);
                 }
                 if (isset($arguments[0])) {
                     $arguments[$ex->name] = $arguments[0];

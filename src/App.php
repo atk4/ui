@@ -1130,10 +1130,8 @@ class App
      * Generated html and js for modals attached to $html view.
      *
      * @throws \atk4\core\Exception
-     *
-     * @return array
      */
-    public function getRenderedModals()
+    public function getRenderedModals(): array
     {
         $modals = [];
         foreach ($this->html !== null ? $this->html->elements : [] as $view) {

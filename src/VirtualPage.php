@@ -33,7 +33,7 @@ class VirtualPage extends View
         parent::init();
 
         $this->cb = $this->_add([Callback::class, 'urlTrigger' => $this->urlTrigger ?: $this->name]);
-        $this->app->stickyGet($this->name);
+        $this->app->stickyGet($this->cb->urlTrigger);
     }
 
     /**
@@ -146,10 +146,21 @@ class VirtualPage extends View
                 }
             }
 
+            // Prepare modals in order to include them in VirtualPage.
+            $modalHtml = '';
+            foreach ($this->app->html !== null ? $this->app->html->elements : [] as $view) {
+                if ($view instanceof Modal) {
+                    $modalHtml .= $view->getHTML();
+                    $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $view->_js_actions);
+                }
+            }
+
             $this->app->layout->template->setHTML('Content', parent::getHTML());
             $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $this->_js_actions);
 
             $this->app->html->template->setHTML('Content', $this->app->layout->getHTML());
+            $this->app->html->template->setHtml('Modals', $modalHtml);
+
             $this->app->html->template->appendHTML('HEAD', $this->app->layout->getJS());
 
             $this->app->terminateHTML($this->app->html->template);
