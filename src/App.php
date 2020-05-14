@@ -927,10 +927,10 @@ class App
 
         if ($value !== null) {
             $result = [];
-            foreach ((array)$value as $v) {
+            foreach ((array) $value as $v) {
                 if (is_array($v)) {
                     $result[] = $this->getTag(...$v);
-                } elseif (in_array($tag, ['script', 'style'])) {
+                } elseif (in_array($tag, ['script', 'style'], true)) {
                     // see https://mathiasbynens.be/notes/etago
                     $result[] = preg_replace('~(?<=<)(?=/\s*' . preg_quote($tag, '~') . '|!--)~', '\\\\', $v);
                 } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
