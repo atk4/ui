@@ -480,7 +480,7 @@ class App
         if (!$this->html) {
             throw new Exception(['App does not know how to add style']);
         }
-        $this->html->template->appendHTML('HEAD', $this->getTag('style', null, $style, false));
+        $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
     }
 
     /**
@@ -880,7 +880,7 @@ class App
      *
      * @return string
      */
-    public function getTag($tag = null, $attr = null, $value = null, bool $encodeValue = true)
+    public function getTag($tag = null, $attr = null, $value = null)
     {
         if ($tag === null) {
             $tag = 'div';
@@ -914,6 +914,9 @@ class App
 
             $attr = $tmp;
         }
+
+        $tag = strtolower($tag);
+
         if ($tag[0] === '<') {
             return $tag;
         }
@@ -922,12 +925,19 @@ class App
             $attr = null;
         }
 
-        if (is_string($value)) {
-            $value = $this->encodeHTML($encodeValue ? $value : strip_tags($value));
-        } elseif (is_array($value)) {
+        if ($value !== null) {
             $result = [];
-            foreach ($value as $v) {
-                $result[] = is_array($v) ? $this->getTag(...$v) : $v;
+            foreach ((array)$value as $v) {
+                if (is_array($v)) {
+                    $result[] = $this->getTag(...$v);
+                } elseif (in_array($tag, ['script', 'style'])) {
+                    // see https://mathiasbynens.be/notes/etago
+                    $result[] = preg_replace('~(?<=<)(?=/\s*' . preg_quote($tag, '~') . '|!--)~', '\\\\', $v);
+                } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
+                    $result[] = $v;
+                } else {
+                    $result[] = $this->encodeHTML($v);
+                }
             }
             $value = implode('', $result);
         }
