@@ -276,7 +276,7 @@ class Table extends Lister
 
         // create column popup.
         foreach ($cols as $colName) {
-            $col = $this->columns[$colName];
+            $col = $this->getColumn($colName);
             if ($col) {
                 $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
@@ -324,6 +324,18 @@ class Table extends Lister
         $dec = $this->columns[$name];
 
         return is_array($dec) ? $dec : [$dec];
+    }
+
+    /**
+     * Return column instance or first instance if using decorator.
+     *
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function getColumn($name)
+    {
+        return is_array($this->columns[$name]) ? $this->columns[$name][0] : $this->columns[$name];
     }
 
     /**
