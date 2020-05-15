@@ -43,7 +43,7 @@ class jsExpression implements jsExpressionable
         $res = preg_replace_callback(
             '/\[[a-z0-9_]*\]|{[a-z0-9_]*}/',
             function ($matches) use (&$namelessCount) {
-                $identifier = substr($matches[0], 1, -1);
+                $identifier = mb_substr($matches[0], 1, -1);
 
                 // Allow template to contain []
                 if ($identifier === '') {
@@ -148,7 +148,7 @@ class jsExpression implements jsExpressionable
      */
     public function _safe_js_string($str)
     {
-        $length = strlen($str);
+        $length = mb_strlen($str);
         $ret = '';
         for ($i = 0; $i < $length; ++$i) {
             switch ($str[$i]) {

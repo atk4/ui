@@ -332,7 +332,7 @@ class Template implements \ArrayAccess
         }
 
         // if no value, then set respective conditional regions to empty string
-        if (substr($tag, -1) !== '?' && ($value === false || !strlen((string) $value))) {
+        if (mb_substr($tag, -1) !== '?' && ($value === false || !mb_strlen((string) $value))) {
             $this->trySet($tag . '?', '');
         }
 
@@ -750,18 +750,18 @@ class Template implements \ArrayAccess
                 break;
             }
 
-            $firstChar = substr($tag, 0, 1);
+            $firstChar = mb_substr($tag, 0, 1);
 
             switch ($firstChar) {
                 // is closing TAG
                 case '/':
-                    return substr($tag, 1);
+                    return mb_substr($tag, 1);
 
                 break;
                 // is TAG
                 case '$':
 
-                    $tag = substr($tag, 1);
+                    $tag = mb_substr($tag, 1);
 
                     $full_tag = $this->regTag($tag);
                     $template[$full_tag] = '';  // empty value

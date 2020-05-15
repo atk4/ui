@@ -597,7 +597,7 @@ class MultiLine extends Generic
     protected function _mapComponent($field_type): string
     {
         if (is_string($field_type)) {
-            switch (strtolower($field_type)) {
+            switch (mb_strtolower($field_type)) {
                 case 'dropdown':
                 case 'enum':
                     return 'dropdown';
@@ -912,7 +912,7 @@ class MultiLine extends Generic
         preg_match_all('/\[[a-z0-9_]*\]|{[a-z0-9_]*}/i', $expr, $matches);
 
         foreach ($matches[0] as $match) {
-            $fieldName = substr($match, 1, -1);
+            $fieldName = mb_substr($match, 1, -1);
             $field = $model->getField($fieldName);
             if ($field instanceof Field_SQL_Expression) {
                 $expr = str_replace($match, $this->getDummyExpression($field, $model), $expr);

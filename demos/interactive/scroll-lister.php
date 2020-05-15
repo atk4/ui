@@ -16,7 +16,7 @@ $v = \atk4\ui\View::addTo($container, ['template' => new \atk4\ui\Template('
 
 $l = \atk4\ui\Lister::addTo($v, [], ['List']);
 $l->onHook('beforeRow', function ($l) {
-    $l->current_row['iso'] = strtolower($l->current_row['iso']);
+    $l->current_row['iso'] = mb_strtolower($l->current_row['iso']);
 });
 
 $m = $l->setModel(new Country($db));

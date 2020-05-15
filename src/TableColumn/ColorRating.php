@@ -152,13 +152,13 @@ class ColorRating extends Generic
         $hexFrom = trim($hexFrom, '#');
         $hexTo = trim($hexTo, '#');
 
-        $FromRGB['r'] = hexdec(substr($hexFrom, 0, 2));
-        $FromRGB['g'] = hexdec(substr($hexFrom, 2, 2));
-        $FromRGB['b'] = hexdec(substr($hexFrom, 4, 2));
+        $FromRGB['r'] = hexdec(mb_substr($hexFrom, 0, 2));
+        $FromRGB['g'] = hexdec(mb_substr($hexFrom, 2, 2));
+        $FromRGB['b'] = hexdec(mb_substr($hexFrom, 4, 2));
 
-        $ToRGB['r'] = hexdec(substr($hexTo, 0, 2));
-        $ToRGB['g'] = hexdec(substr($hexTo, 2, 2));
-        $ToRGB['b'] = hexdec(substr($hexTo, 4, 2));
+        $ToRGB['r'] = hexdec(mb_substr($hexTo, 0, 2));
+        $ToRGB['g'] = hexdec(mb_substr($hexTo, 2, 2));
+        $ToRGB['b'] = hexdec(mb_substr($hexTo, 4, 2));
 
         $StepRGB['r'] = ($FromRGB['r'] - $ToRGB['r']) / ($steps);
         $StepRGB['g'] = ($FromRGB['g'] - $ToRGB['g']) / ($steps);

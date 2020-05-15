@@ -55,7 +55,7 @@ class Country extends \atk4\data\Model
 
         $this->onHook('beforeSave', function ($m) {
             if (!$m['sys_name']) {
-                $m['sys_name'] = strtoupper($m['name']);
+                $m['sys_name'] = mb_strtoupper($m['name']);
             }
         });
     }
@@ -64,11 +64,11 @@ class Country extends \atk4\data\Model
     {
         $errors = parent::validate($intent);
 
-        if (strlen($this['iso']) !== 2) {
+        if (mb_strlen($this['iso']) !== 2) {
             $errors['iso'] = 'Must be exactly 2 characters';
         }
 
-        if (strlen($this['iso3']) !== 3) {
+        if (mb_strlen($this['iso3']) !== 3) {
             $errors['iso3'] = 'Must be exactly 3 characters';
         }
 
