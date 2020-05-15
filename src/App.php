@@ -262,7 +262,7 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if (($this->isJsRequest() || mb_strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
+        if (($this->isJsRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
                 && !isset($_GET['__atk_tab'])) {
             $this->outputResponseJSON([
                 'success' => false,
@@ -915,7 +915,7 @@ class App
             $attr = $tmp;
         }
 
-        $tag = mb_strtolower($tag);
+        $tag = strtolower($tag);
 
         if ($tag[0] === '<') {
             return $tag;
@@ -946,11 +946,11 @@ class App
             return "<{$tag}>" . ($value !== null ? $value . "</{$tag}>" : '');
         }
         $tmp = [];
-        if (mb_substr($tag, -1) === '/') {
-            $tag = mb_substr($tag, 0, -1);
+        if (substr($tag, -1) === '/') {
+            $tag = substr($tag, 0, -1);
             $postfix = '/';
-        } elseif (mb_substr($tag, 0, 1) === '/') {
-            return '</' . ($attr[0] ?? mb_substr($tag, 1)) . '>';
+        } elseif (substr($tag, 0, 1) === '/') {
+            return '</' . ($attr[0] ?? substr($tag, 1)) . '>';
         } else {
             $postfix = '';
         }

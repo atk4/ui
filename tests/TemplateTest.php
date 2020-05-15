@@ -299,14 +299,14 @@ class TemplateTest extends AtkPhpunit\TestCase
 
         // replace values in these tags
         $t->eachTag(['foo', 'bar'], function ($value, $tag) {
-            return mb_strtoupper($value);
+            return strtoupper($value);
         });
         $this->assertSame('HELLO, cruel WORLD. WELCOME', $t->render());
 
         // tag contains all template (for example in Lister)
         $t = new \atk4\ui\Template('{foo}hello{/}');
         $t->eachTag('foo', function ($value, $tag) {
-            return mb_strtoupper($value);
+            return strtoupper($value);
         });
         $this->assertSame('HELLO', $t->render());
     }

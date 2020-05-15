@@ -597,7 +597,7 @@ class MultiLine extends Generic
     protected function _mapComponent($field_type): string
     {
         if (is_string($field_type)) {
-            switch (mb_strtolower($field_type)) {
+            switch (strtolower($field_type)) {
                 case 'dropdown':
                 case 'enum':
                     return 'dropdown';

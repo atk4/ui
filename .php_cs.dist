@@ -52,7 +52,6 @@ return PhpCsFixer\Config::create()
         'nullable_type_declaration_for_default_null_value' => [
             'use_nullable_type_declaration' => false,
         ],
-        'mb_str_functions' => true,
     ])
     ->setFinder($finder)
     ->setCacheFile(__DIR__ . '/.php_cs.cache');

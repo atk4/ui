@@ -610,7 +610,7 @@ class Grid extends View
         $desc = false;
         if ($sortBy && $sortBy[0] === '-') {
             $desc = true;
-            $sortBy = mb_substr($sortBy, 1);
+            $sortBy = substr($sortBy, 1);
         }
 
         $this->table->sortable = true;

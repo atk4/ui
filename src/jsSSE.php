@@ -139,7 +139,7 @@ class jsSSE extends jsCallback
         }
 
         $this->output('id: ' . $id . "\n");
-        if (mb_strlen($name) > 0) {
+        if (strlen($name) > 0) {
             $this->output('event: ' . $name . "\n");
         }
         $this->output($this->wrapData($data) . "\n");

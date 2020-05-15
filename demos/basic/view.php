@@ -22,7 +22,7 @@ $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/
 $bb = \atk4\ui\View::addTo($app, ['ui' => 'large blue buttons']);
 $bb->on('click', '.button')->transition('fly up');
 
-foreach (mb_str_split('Click me!!') as $letter) {
+foreach (str_split('Click me!!') as $letter) {
     \atk4\ui\Button::addTo($bb, [$letter]);
 }
 

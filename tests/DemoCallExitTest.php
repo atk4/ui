@@ -51,7 +51,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
             $dir_path = $base_path . '/' . $dir;
 
             foreach (scandir($dir_path) as $f) {
-                if (mb_substr($f, -4) !== '.php' || is_dir($f) || in_array($f, $excludes, true)) {
+                if (substr($f, -4) !== '.php' || is_dir($f) || in_array($f, $excludes, true)) {
                     continue;
                 }
 

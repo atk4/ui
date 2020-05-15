@@ -28,7 +28,7 @@ $action = $files->addAction(
 );
 
 $files->addAction('download', function ($m) {
-    $len = mb_strlen(file_get_contents($m['name']));
+    $len = strlen(file_get_contents($m['name']));
 
     return "{$len} bytes downloaded..";
 });
