@@ -572,12 +572,12 @@ class UserAction extends Modal implements Interface_, jsInterface_
             return $js;
         } catch (ValidationException $e) {
             throw $e;
-        } catch (\Exception $e) {
-            $m = new Message('Error executing ' . $this->action->caption, 'red');
-            $m->init();
-            $m->text->content = $this->app->renderExceptionHTML($e);
+        } catch (\Throwable $e) {
+            $msg = new Message('Error executing ' . $this->action->caption, 'red');
+            $msg->init();
+            $msg->text->content = $this->app->renderExceptionHTML($e);
 
-            return $m;
+            return $msg;
         }
     }
 

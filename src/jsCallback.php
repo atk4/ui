@@ -108,10 +108,10 @@ class jsCallback extends Callback implements jsExpressionable
                 $this->terminateAjax($ajaxec);
             } catch (\atk4\data\ValidationException $e) {
                 // Validation exceptions will be presented to user in a friendly way
-                $m = new Message($e->getMessage());
-                $m->addClass('error');
+                $msg = new Message($e->getMessage());
+                $msg->addClass('error');
 
-                $this->terminateAjax(null, $m->getHTML(), false);
+                $this->terminateAjax(null, $msg->getHTML(), false);
             }
         });
 
