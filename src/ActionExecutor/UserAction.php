@@ -126,7 +126,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         $table_name = is_array($action->getModel()->table) ? $getTableName($action->getModel()->table) : $action->getModel()->table;
 
-        $this->id = strtolower($this->name . '_' . $table_name . '_' . $action->short_name);
+        $this->id = mb_strtolower($this->name . '_' . $table_name . '_' . $action->short_name);
         $this->name = $this->id;
 
         //Add buttons to modal for next and previous.

@@ -124,7 +124,7 @@ class FeatureContext extends RawMinkContext implements Context
     public function iDontSee($arg1)
     {
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
-        if (strpos('display: none', $element->getAttribute('style')) !== false) {
+        if (mb_strpos('display: none', $element->getAttribute('style')) !== false) {
             throw new \Exception("Element with text \"{$arg1}\" must be invisible");
         }
     }
@@ -244,7 +244,7 @@ class FeatureContext extends RawMinkContext implements Context
         }
         //find text in toast
         $text = $content->find('xpath', '//div');
-        if (!$text || strpos($text->getText(), $arg1) === false) {
+        if (!$text || mb_strpos($text->getText(), $arg1) === false) {
             throw new \Exception('No such text in toast');
         }
     }
@@ -311,7 +311,7 @@ class FeatureContext extends RawMinkContext implements Context
             throw new \Exception('Field' . $arg1 . ' does not exist');
         }
 
-        if (strpos($field->getValue(), $arg2) === false) {
+        if (mb_strpos($field->getValue(), $arg2) === false) {
             throw new \Exception('Field value ' . $field->getValue() . ' does not start with ' . $arg2);
         }
     }

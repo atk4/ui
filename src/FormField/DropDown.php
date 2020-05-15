@@ -85,7 +85,7 @@ class DropDown extends Input
      * function($row) {
      *     return [
      *         'value' => $row->id,
-     *         'title' => strtoupper($row->getTitle()),
+     *         'title' => mb_strtoupper($row->getTitle()),
      *     ];
      *  }
      *
@@ -110,7 +110,7 @@ class DropDown extends Input
      * function($value, $key) {
      *     return [
      *        'value' => $key,
-     *        'title' => strtoupper($value),
+     *        'title' => mb_strtoupper($value),
      *        'icon'  => strpos('Month', $value) !== false ? 'calendar' : '',
      *     ];
      * }
