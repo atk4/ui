@@ -111,7 +111,7 @@ class DropDown extends Input
      *     return [
      *        'value' => $key,
      *        'title' => mb_strtoupper($value),
-     *        'icon'  => mb_strpos('Month', $value) !== false ? 'calendar' : '',
+     *        'icon'  => strpos('Month', $value) !== false ? 'calendar' : '',
      *     ];
      * }
      *

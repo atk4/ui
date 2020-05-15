@@ -290,12 +290,12 @@ class App
     {
         $res = [];
         foreach ($headers as $k => $v) {
-            if (is_numeric($k) && ($p = mb_strpos($v, ':')) !== false) {
-                $k = mb_substr($v, 0, $p);
-                $v = mb_substr($v, $p + 1);
+            if (is_numeric($k) && ($p = strpos($v, ':')) !== false) {
+                $k = substr($v, 0, $p);
+                $v = substr($v, $p + 1);
             }
 
-            $res[mb_strtolower(trim($k))] = trim($v);
+            $res[strtolower(trim($k))] = trim($v);
         }
 
         return $res;
@@ -352,7 +352,7 @@ class App
             $headers['content-type'] = $this->response_headers['content-type'];
         }
 
-        $type = preg_replace('~;.*~', '', mb_strtolower($headers['content-type'])); // in LC without charset
+        $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
 
         if ($type === 'application/json') {
             if (is_string($output)) {
@@ -583,7 +583,7 @@ class App
         $template = new Template();
         $template->app = $this;
 
-        if (in_array($name[0], ['.', '/', '\\'], true) || mb_strpos($name, ':\\') !== false) {
+        if (in_array($name[0], ['.', '/', '\\'], true) || strpos($name, ':\\') !== false) {
             return $template->load($name);
         }
 
@@ -683,7 +683,7 @@ class App
 
         if ($this->page === null) {
             $requestUrl = $this->getRequestURI();
-            if (mb_substr($requestUrl, -1, 1) === '/') {
+            if (substr($requestUrl, -1, 1) === '/') {
                 $this->page = 'index';
             } else {
                 $this->page = basename($requestUrl, $this->url_building_ext);
@@ -1092,7 +1092,7 @@ class App
                     http_response_code($v);
                 } else {
                     $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($m) {
-                        return mb_strtoupper($m[0]);
+                        return strtoupper($m[0]);
                     }, $k);
 
                     header($kCamelCase . ': ' . $v);

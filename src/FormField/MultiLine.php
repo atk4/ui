@@ -912,7 +912,7 @@ class MultiLine extends Generic
         preg_match_all('/\[[a-z0-9_]*\]|{[a-z0-9_]*}/i', $expr, $matches);
 
         foreach ($matches[0] as $match) {
-            $fieldName = mb_substr($match, 1, -1);
+            $fieldName = substr($match, 1, -1);
             $field = $model->getField($fieldName);
             if ($field instanceof Field_SQL_Expression) {
                 $expr = str_replace($match, $this->getDummyExpression($field, $model), $expr);
