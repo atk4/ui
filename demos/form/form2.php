@@ -42,10 +42,10 @@ $f_names->addField('last_name', ['width' => 'five']);
 $form->onSubmit(function ($f) {
     // In-form validation
     $errors = [];
-    if (mb_strlen($f->model['first_name']) < 3) {
-        $errors[] = $f->error('first_name', 'too short, ' . $f->model['first_name']);
+    if (mb_strlen($f->model->get('first_name')) < 3) {
+        $errors[] = $f->error('first_name', 'too short, ' . $f->model->get('first_name'));
     }
-    if (mb_strlen($f->model['last_name']) < 5) {
+    if (mb_strlen($f->model->get('last_name')) < 5) {
         $errors[] = $f->error('last_name', 'too short');
     }
     if (isset($f->model->dirty['iso'])) { // restrict to change iso field value

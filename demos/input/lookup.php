@@ -33,7 +33,7 @@ $form->addField('country3', [
 ]);
 
 $form->onSubmit(function ($f) use ($db) {
-    $str = $f->model->ref('country1')['name'] . ' ' . $f->model->ref('country2')['name'] . ' ' . (new Country($db))->tryLoad($f->model['country3'])->get('name');
+    $str = $f->model->ref('country1')['name'] . ' ' . $f->model->ref('country2')['name'] . ' ' . (new Country($db))->tryLoad($f->model->get('country3'))->get('name');
     $view = new \atk4\ui\Message('Select:'); // need in behat test.
     $view->init();
     $view->text->addParagraph($str);

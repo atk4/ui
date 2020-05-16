@@ -71,5 +71,5 @@ $field->onUpload(function ($files) use ($form, $field) {
 
 $form->onSubmit(function ($form) {
     // implement submission here
-    return $form->success('Thanks for submitting file: ' . $form->model['img'] . ' / ' . $form->model['file']);
+    return $form->success('Thanks for submitting file: ' . $form->model->get('img') . ' / ' . $form->model->get('file'));
 });

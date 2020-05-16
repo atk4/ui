@@ -68,7 +68,7 @@ $modal_vp1->set(function ($modal) use ($modal_vp2) {
     $form = \atk4\ui\Form::addTo($modal);
     $form->addField('color', null, ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
     $form->onSubmit(function ($form) use ($modal_vp2) {
-        return $modal_vp2->show(['color' => $form->model['color']]);
+        return $modal_vp2->show(['color' => $form->model->get('color')]);
     });
 });
 
@@ -185,13 +185,13 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
         $f->setModel($m_register);
 
         $f->onSubmit(function ($f) use ($next_action, $session) {
-            if ($f->model['name'] !== 'John') {
-                return $f->error('name', 'Your name is not John! It is "' . $f->model['name'] . '". It should be John. Pleeease!');
+            if ($f->model->get('name') !== 'John') {
+                return $f->error('name', 'Your name is not John! It is "' . $f->model->get('name') . '". It should be John. Pleeease!');
             }
 
             $session->memorize('success', true);
-            $session->memorize('name', $f->model['name']);
-            $js[] = $f->success('Thank you, ' . $f->model['name'] . ' you can go on!');
+            $session->memorize('name', $f->model->get('name'));
+            $js[] = $f->success('Thank you, ' . $f->model->get('name') . ' you can go on!');
             $js[] = $next_action->js()->removeClass('disabled');
 
             return $js;

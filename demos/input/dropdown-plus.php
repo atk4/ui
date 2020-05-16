@@ -94,10 +94,10 @@ $form->addField(
 );
 
 $form->onSubmit(function ($form) {
-    $echo = print_r($form->model['enum'], true) . ' / ';
-    $echo .= print_r($form->model['values'], true) . ' / ';
-    $echo .= print_r($form->model['icon'], true) . ' / ';
-    $echo .= print_r($form->model['multi'], true);
+    $echo = print_r($form->model->get('enum'), true) . ' / ';
+    $echo .= print_r($form->model->get('values'), true) . ' / ';
+    $echo .= print_r($form->model->get('icon'), true) . ' / ';
+    $echo .= print_r($form->model->get('multi'), true);
 
     echo $echo;
 });

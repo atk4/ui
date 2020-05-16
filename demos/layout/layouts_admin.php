@@ -53,7 +53,7 @@ try {
         $errors = [];
 
         foreach (['first_name', 'last_name', 'address'] as $field) {
-            if (!$f->model[$field]) {
+            if (!$f->model->get($field)) {
                 $errors[] = $f->error($field, 'Field ' . $field . ' is mandatory');
             }
         }

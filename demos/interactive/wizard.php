@@ -27,7 +27,7 @@ $t->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connec
 
     $f->addField('dsn', 'Connect DSN', ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
     $f->onSubmit(function ($f) use ($w) {
-        $w->memorize('dsn', $f->model['dsn']);
+        $w->memorize('dsn', $f->model->get('dsn'));
 
         return $w->jsNext();
     });

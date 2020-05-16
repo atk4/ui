@@ -25,7 +25,7 @@ $form->addField('email');
 $form->onSubmit(function ($form) {
     // implement subscribe here
 
-    return $form->success('Subscribed ' . $form->model['email'] . ' to newsletter.');
+    return $form->success('Subscribed ' . $form->model->get('email') . ' to newsletter.');
 });
 
 $form->buttonSave->set('Subscribe');
@@ -60,7 +60,7 @@ $form->addField('date2', ['Calendar', 'type' => 'date']);
 $form->buttonSave->set('Compare Date');
 
 $form->onSubmit(function ($form) {
-    echo 'date1 = ' . print_r($form->model['date1'], true) . ' and date2 = ' . print_r($form->model['date2'], true);
+    echo 'date1 = ' . print_r($form->model->get('date1'), true) . ' and date2 = ' . print_r($form->model->get('date2'), true);
 });
 
 ////////////////////////////////////////////////////////////
@@ -175,7 +175,7 @@ $f->setModel($m_register);
 
 $f->onSubmit(function ($f) {
     if ($f->model['name'] !== 'John') {
-        return $f->error('name', 'Your name is not John! It is "' . $f->model['name'] . '". It should be John. Pleeease!');
+        return $f->error('name', 'Your name is not John! It is "' . $f->model->get('name') . '". It should be John. Pleeease!');
     }
 
     return [
@@ -218,8 +218,8 @@ $f->onSubmit(function ($f) {
             continue;
         }
 
-        if ($f->model[$name] !== 'a') {
-            $errors[] = $f->error($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $f->model[$name]);
+        if ($f->model->get($name) !== 'a') {
+            $errors[] = $f->error($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $f->model->get($name));
         }
     }
 

@@ -25,12 +25,12 @@ class PostTest extends AtkPhpunit\TestCase
     {
         $p = new \atk4\ui\Persistence\POST();
 
-        $this->model['surname'] = 'DefSurname';
+        $this->model->set('surname', 'DefSurname');
 
         $this->model->load(0, $p);
 
-        $this->assertSame('John', $this->model['name']);
-        $this->assertTrue($this->model['is_married']);
-        $this->assertSame('DefSurname', $this->model['surname']);
+        $this->assertSame('John', $this->model->get('name'));
+        $this->assertTrue($this->model->get('is_married'));
+        $this->assertSame('DefSurname', $this->model->get('surname'));
     }
 }

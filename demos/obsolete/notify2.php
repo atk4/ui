@@ -49,14 +49,14 @@ $f_p2->addField('attach', ['width' => 'four']);
 
 $form->onSubmit(function ($f) {
     $notifier = new \atk4\ui\jsNotify();
-    $notifier->setColor($f->model['color'])
-        ->setPosition($f->model['position'])
-        ->setWidth(rtrim($f->model['width'], '%'))
-        ->setContent($f->model['text'])
-        ->setTransition($f->model['transition'])
-        ->setIcon($f->model['icon']);
+    $notifier->setColor($f->model->get('color'))
+        ->setPosition($f->model->get('position'))
+        ->setWidth(rtrim($f->model->get('width'), '%'))
+        ->setContent($f->model->get('text'))
+        ->setTransition($f->model->get('transition'))
+        ->setIcon($f->model->get('icon'));
 
-    if ($f->model['attach'] !== 'Body') {
+    if ($f->model->get('attach') !== 'Body') {
         $notifier->attachTo($f);
     }
 
