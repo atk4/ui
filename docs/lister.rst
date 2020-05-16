@@ -96,8 +96,8 @@ Tweaking the output
 Output is formatted using the standard :ref:`ui_persistence` routine, but you can also fine-tune the content
 of your tags like this::
 
-    $lister->onHook('beforeRow', function($l){
-        $l->current_row['iso']=strtolower($l->current_row['iso']);
+    $lister->onHook('beforeRow', function(\atk4\ui\Lister $lister){
+        $lister->current_row['iso']=strtolower($lister->current_row['iso']);
     })
 
 Model vs Static Source

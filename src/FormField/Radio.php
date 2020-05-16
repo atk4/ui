@@ -55,7 +55,7 @@ class Radio extends Generic
             $this->addClass('disabled');
         }
 
-        $this->lister->onHook('beforeRow', function ($lister) use ($value) {
+        $this->lister->onHook('beforeRow', function (\atk4\ui\Lister $lister) use ($value) {
             if ($this->readonly) {
                 $lister->t_row->set('disabled', $value !== (string) $lister->model->id ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {
