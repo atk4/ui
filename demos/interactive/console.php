@@ -120,7 +120,7 @@ $t = $tt->addTab('Use after form submit', function ($t) {
     });
     $c->js(true)->hide();
 
-    $f->onSubmit(function (\atk4\ui\Form $form) use ($c) {
+    $f->onSubmit(function (atk4\ui\Form $form) use ($c) {
         $_SESSION['data'] = $form->model; // only option is to store model in session here in demo
         return [
             $c->js()->show(),

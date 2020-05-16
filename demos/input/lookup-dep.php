@@ -44,7 +44,7 @@ $lookup = $form->addField('country', [
     'search' => ['name', 'iso', 'iso3'],
 ]);
 
-$form->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (atk4\ui\Form $form) {
     return 'Submitted: ' . print_r($form->model->get(), true);
 });
 
@@ -74,6 +74,6 @@ $lookup = $form->addField('country', [
     'search' => ['name', 'iso', 'iso3'],
 ]);
 
-$form->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (atk4\ui\Form $form) {
     return 'Submitted: ' . print_r($form->model->get(), true);
 });

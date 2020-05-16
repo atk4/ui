@@ -67,7 +67,7 @@ $ml->onLineChange(function ($rows, $form) use ($f_total) {
 $ml->jsAfterAdd = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 $ml->jsAfterDelete = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 
-$f->onSubmit(function (\atk4\ui\Form $form) use ($ml) {
+$f->onSubmit(function (atk4\ui\Form $form) use ($ml) {
     $rows = $ml->saveRows()->getModel()->export();
 
     return new \atk4\ui\jsToast(json_encode(array_values($rows)));

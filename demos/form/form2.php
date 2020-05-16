@@ -39,7 +39,7 @@ $f_names->addField('middle_name', ['width' => 'three']);
 $f_names->addField('last_name', ['width' => 'five']);
 
 // form on submit
-$form->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (atk4\ui\Form $form) {
     // In-form validation
     $errors = [];
     if (mb_strlen($form->model->get('first_name')) < 3) {

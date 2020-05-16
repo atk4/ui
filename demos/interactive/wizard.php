@@ -26,7 +26,7 @@ $t->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connec
     $f = \atk4\ui\Form::addTo($w);
 
     $f->addField('dsn', 'Connect DSN', ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
-    $f->onSubmit(function (\atk4\ui\Form $form) use ($w) {
+    $f->onSubmit(function (atk4\ui\Form $form) use ($w) {
         $w->memorize('dsn', $form->model->get('dsn'));
 
         return $w->jsNext();

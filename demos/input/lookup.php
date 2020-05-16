@@ -32,7 +32,7 @@ $form->addField('country3', [
     'search' => ['name', 'iso', 'iso3'],
 ]);
 
-$form->onSubmit(function (\atk4\ui\Form $form) use ($db) {
+$form->onSubmit(function (atk4\ui\Form $form) use ($db) {
     $str = $form->model->ref('country1')['name'] . ' ' . $form->model->ref('country2')['name'] . ' ' . (new Country($db))->tryLoad($form->model->get('country3'))->get('name');
     $view = new \atk4\ui\Message('Select:'); // need in behat test.
     $view->init();

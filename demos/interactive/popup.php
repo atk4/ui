@@ -228,7 +228,7 @@ $signup->set(function ($pop) {
 
         // popup handles callbacks properly, so dynamic element such as form works
         // perfectly inside a popup.
-        $f->onSubmit(function (\atk4\ui\Form $form) {
+        $f->onSubmit(function (atk4\ui\Form $form) {
             if ($form->model->get('password') !== '123') {
                 return $form->error('password', 'Please use password "123"');
             }

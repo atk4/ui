@@ -65,7 +65,7 @@ class FilterPopup extends Popup
         //load first and only record associate with this popup.
         $this->form->setModel($m->tryLoadAny());
 
-        $this->form->onSubmit(function (\atk4\ui\Form $form) {
+        $this->form->onSubmit(function (Form $form) {
             $form->model->save();
             //trigger click action in order to close popup.
             //otherwise calling ->popup('hide') is not working as expected.

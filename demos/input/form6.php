@@ -22,6 +22,6 @@ $f->addField('six', ['Radio'], ['values' => [5 => 'female', 7 => 'male']])->set(
 $f->addField('seven', null, ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 $f->addField('eight', ['Radio'], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 
-$f->onSubmit(function (\atk4\ui\Form $form) {
+$f->onSubmit(function (atk4\ui\Form $form) {
     echo json_encode($form->model->get());
 });

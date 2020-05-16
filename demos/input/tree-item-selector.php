@@ -46,7 +46,7 @@ $field1->set(502);
 //    return new jsToast('Received 1');
 //});
 
-$f->onSubmit(function (\atk4\ui\Form $form) {
+$f->onSubmit(function (atk4\ui\Form $form) {
     $resp = [
         'multiple' => $form->model->get('tree'),
         'single' => $form->model->get('tree1'),

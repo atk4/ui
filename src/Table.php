@@ -280,7 +280,7 @@ class Table extends Lister
             if ($col) {
                 $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
-                $pop->form->onSubmit(function (\atk4\ui\Form $form) use ($pop) {
+                $pop->form->onSubmit(function (Form $form) use ($pop) {
                     return new jsReload($this->reload);
                 });
                 //apply condition according to popup form.

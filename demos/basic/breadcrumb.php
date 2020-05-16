@@ -25,7 +25,7 @@ if ($id = $app->stickyGet('country_id')) {
 
     $f = \atk4\ui\Form::addTo($app);
     $f->setModel($m);
-    $f->onSubmit(function (\atk4\ui\Form $form) {
+    $f->onSubmit(function (atk4\ui\Form $form) {
         return new \atk4\ui\jsToast('Form Submitted! Data saving is not possible in demo!');
     });
 } else {

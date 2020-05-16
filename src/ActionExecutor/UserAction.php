@@ -304,7 +304,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->jsSetSubmitBtn($modal, $f, $this->step);
         $this->jsSetPrevHandler($modal, $this->step);
 
-        $f->onSubmit(function (\atk4\ui\Form $form) use ($modal) {
+        $f->onSubmit(function (Form $form) use ($modal) {
             // collect arguments.
             $this->actionData['args'] = $form->model->get();
 
@@ -332,7 +332,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->jsSetPrevHandler($modal, $this->step);
 
         if (!$f->hookHasCallbacks('submit')) {
-            $f->onSubmit(function (\atk4\ui\Form $form) {
+            $f->onSubmit(function (Form $form) {
                 // collect fields.
                 $form_fields = $form->model->get();
                 foreach ($this->action->fields as $key => $field) {

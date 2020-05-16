@@ -53,7 +53,7 @@ class ArgumentForm extends Basic
 
         $this->form->buttonSave->set('Run');
 
-        $this->form->onSubmit(function (\atk4\ui\Form $form) {
+        $this->form->onSubmit(function (Form $form) {
             // set arguments from the model
             $this->setArguments($form->model->get());
 

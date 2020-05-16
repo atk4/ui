@@ -69,7 +69,7 @@ $field->onUpload(function ($files) use ($form, $field) {
     ]);
 });
 
-$form->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (atk4\ui\Form $form) {
     // implement submission here
     return $form->success('Thanks for submitting file: ' . $form->model->get('img') . ' / ' . $form->model->get('file'));
 });

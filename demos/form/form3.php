@@ -28,7 +28,7 @@ $form->setModel(
     ) : new Stat($db)
 )->tryLoadAny();
 
-$form->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (atk4\ui\Form $form) {
     $errors = [];
     foreach ($form->model->dirty as $field => $value) {
         // we should care only about editable fields

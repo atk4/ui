@@ -54,6 +54,6 @@ $f->addField('term', ['CheckBox', 'caption' => 'Accept terms and conditions', nu
 
 $accordion_layout->activate($contact_section);
 
-$f->onSubmit(function (\atk4\ui\Form $form) {
+$f->onSubmit(function (atk4\ui\Form $form) {
     return $form->success('Yey!', 'You did well by filling out this form');
 });
