@@ -184,8 +184,8 @@ the "total" column value (as above) but using PHP math instead of doing it insid
 
     $table->setModel($order, ['name', 'price', 'amount', 'status']);
     $table->addColumn('total', new \atk4\data\Field\Calculated(
-        function($row) {
-            return $row['price'] * $row['amount'];
+        function(Model $row) {
+            return $row->get('price') * $row->get('amount');
         }));
 
 If you execute this code, you'll notice that the "total" column is now displayed last. If you
@@ -196,8 +196,8 @@ wish to position it before status, you can use the final format of addColumn()::
 
     $table->setModel($order, ['name', 'price', 'amount']);
     $table->addColumn('total', new \atk4\data\Field\Calculated(
-        function($row) {
-            return $row['price'] * $row['amount'];
+        function(Model $row) {
+            return $row->get('price') * $row->get('amount');
         }));
     $table->addColumn('status');
 

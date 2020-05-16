@@ -17,8 +17,8 @@ class InventoryItem extends \atk4\data\Model
         $this->addField('item', ['required' => true, 'default' => 'item']);
         $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-        $this->addExpression('total', ['expr' => function ($row) {
-            return $row['qty'] * $row['box'];
+        $this->addExpression('total', ['expr' => function (atk4\data\Model $row) {
+            return $row->get('qty') * $row->get('box');
         }, 'type' => 'integer']);
     }
 }

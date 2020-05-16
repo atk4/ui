@@ -24,8 +24,8 @@ $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>T
 // Hook can be used to display data before row. You can also inject and format extra rows.
 $table->onHook('beforeRow', function (atk4\ui\Table $table) {
     if ($table->current_id === 2) {
-        $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row['action'] . ')</th></tr>');
-    } elseif ($table->current_row['action'] === 'Tax') {
+        $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row->get('action') . ')</th></tr>');
+    } elseif ($table->current_row->get('action') === 'Tax') {
         // renders current row
         $table->renderRow();
 
