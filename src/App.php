@@ -1091,8 +1091,8 @@ class App
                 if ($k === self::HEADER_STATUS_CODE) {
                     http_response_code($v);
                 } else {
-                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($m) {
-                        return strtoupper($m[0]);
+                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                        return strtoupper($matches[0]);
                     }, $k);
 
                     header($kCamelCase . ': ' . $v);

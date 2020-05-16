@@ -136,7 +136,7 @@ It's easy to create your own application styling. Here are some example UI:
 As of version 2.0 - Agile Toolkit offers support for User Actions. Those are easy to define in your Data Model declaration:
 
 ``` php
-$this->addAction('archive', function($m) { $m['is_archived'] = true; $this->saveAndUnload(); });
+$this->addAction('archive', function(Model $m) { $m->get('is_archived') = true; $this->saveAndUnload(); });
 ```
 
 User interface such as CRUD or Card will automatically recognize new action and offer user to execute it. You can also

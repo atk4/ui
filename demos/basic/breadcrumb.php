@@ -19,7 +19,7 @@ $m->setLimit(15);
 if ($id = $app->stickyGet('country_id')) {
     // perhaps we edit individual country?
     $m->load($id);
-    $crumb->addCrumb($m['name'], []);
+    $crumb->addCrumb($m->get('name'), []);
 
     // here we can check for additional criteria and display a deeper level on the crumb
 

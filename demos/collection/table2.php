@@ -43,8 +43,8 @@ $table = \atk4\ui\Table::addTo($app);
 $table->setModel($m, ['action']);
 
 // copy of amount through a PHP callback
-$m->addExpression('amount_copy', [function ($m) {
-    return $m['amount'];
+$m->addExpression('amount_copy', [function (atk4\data\Model $m) {
+    return $m->get('amount');
 }, 'type' => 'money']);
 
 // column with 2 decorators that stack. Money will use red ink and alignment, format will change text.

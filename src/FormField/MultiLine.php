@@ -370,7 +370,7 @@ class MultiLine extends Generic
                     $field = $m->getField($fieldName);
                     // Save field value only if the field was editable
                     if (!$field->read_only) {
-                        $m[$fieldName] = $this->app->ui_persistence->typecastLoadField($field, $value);
+                        $m ->set($fieldName, $this->app->ui_persistence->typecastLoadField($field, $value));
                     }
                 } catch (\atk4\core\Exception $e) {
                     $rowErrors[$rowId][] = ['field' => $fieldName, 'msg' => $e->getMessage()];

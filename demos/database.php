@@ -53,9 +53,9 @@ class Country extends \atk4\data\Model
         $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
         $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
 
-        $this->onHook('beforeSave', function ($m) {
-            if (!$m['sys_name']) {
-                $m['sys_name'] = mb_strtoupper($m['name']);
+        $this->onHook('beforeSave', function (atk4\data\Model $m) {
+            if (!$m->get('sys_name')) {
+                $m->set('sys_name', mb_strtoupper($m->get('name')));
             }
         });
     }
@@ -129,12 +129,12 @@ class Stat extends \atk4\data\Model
         $this->onHook('afterLoad', function ($m) {
             /* implementation for "intl"
             $locale='en-UK';
-            $fmt = new \NumberFormatter( $locale."@currency=".$m['currency'], NumberFormatter::CURRENCY );
-            $m['currency_symbol'] = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
+            $fmt = new \NumberFormatter( $locale."@currency=".$m->get('currency'), NumberFormatter::CURRENCY );
+            $m->set('currency_symbol', $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL));
              */
 
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
-            $m['currency_symbol'] = $map[$m['currency']] ?? '?';
+            $m->set('currency_symbol', $map[$m->get('currency')] ?? '?');
         });
 
         $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type' => 'money']);
