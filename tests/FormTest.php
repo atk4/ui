@@ -86,22 +86,22 @@ class FormTest extends AtkPhpunit\TestCase
         $this->assertSame('John', $f->model->get('name'));
 
         // fake some POST data
-        $this->assertSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function ($m) {
+        $this->assertSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function (Model $m) {
             // field has default, but form didn't send value back
-            $this->assertNull($m['name']);
+            $this->assertNull($m->get('name'));
 
-            $this->assertSame('john@yahoo.com', $m['email']);
+            $this->assertSame('john@yahoo.com', $m->get('email'));
 
             // security check, unspecified field must not be changed
-            $this->assertFalse($m['is_admin']);
+            $this->assertFalse($m->get('is_admin'));
         });
     }
 
     public function testTextArea()
     {
         $this->f->addField('TextArea');
-        $this->assertSubmit(['TextArea' => '0'], function ($m) {
-            $this->assertSame('0', $m['TextArea']);
+        $this->assertSubmit(['TextArea' => '0'], function (Model $m) {
+            $this->assertSame('0', $m->get('TextArea'));
         });
     }
 
