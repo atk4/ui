@@ -63,7 +63,6 @@ jobs:
           if [ "${{ matrix.type }}" != "Behat" ]; then composer remove --no-interaction --no-update 'behat/*' --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
-          (cd vendor/atk4 && rm -R data && git clone https://github.com/mvorisek/atk4_data.git data && cd data && git checkout origin/remove_model_arrayaccess)
 
       - name: Install JS dependencies (only for Behat)
         if: matrix.type == 'Behat'
