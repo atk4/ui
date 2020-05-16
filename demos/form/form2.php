@@ -48,7 +48,7 @@ $form->onSubmit(function (atk4\ui\Form $form) {
     if (mb_strlen($form->model->get('last_name')) < 5) {
         $errors[] = $form->error('last_name', 'too short');
     }
-    if (isset($form->model->isDirty('iso'))) { // restrict to change iso field value
+    if ($form->model->isDirty('iso')) { // restrict to change iso field value
         $errors[] = $form->error('iso', 'Field value should not be changed');
     }
 
