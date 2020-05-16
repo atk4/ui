@@ -55,7 +55,7 @@ class button extends Button
 {
     public function __construct($n)
     {
-        Icon::addTo(Button::addTo($this, ['Forks', 'blue']), ['fork']);
+        Icon::addTo(self::addTo($this, ['Forks', 'blue']), ['fork']);
         Label::addTo($this, [number_format($n), 'basic blue left pointing']);
         parent::__construct(null, 'labeled');
     }
