@@ -199,10 +199,8 @@ class Lookup extends Input
 
     /**
      * Renders the Lookup row depending on properties set.
-     *
-     * @return mixed
      */
-    public function renderRow(\atk4\data\Model $row)
+    public function renderRow(\atk4\data\Model $row): array
     {
         $renderRowFunction = is_callable($this->renderRowFunction) ? $this->renderRowFunction : [__CLASS__, 'defaultRenderRow'];
 
