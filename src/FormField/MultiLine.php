@@ -939,7 +939,7 @@ class MultiLine extends Generic
             case 'integer':
             case 'float':
                 // Value is 0 or the field value.
-                $value = $m->get($fieldName) !== '' ? $m->get($fieldName) : 0;
+                $value = $m->get($fieldName) ?: 0;
 
                 break;
             default:
