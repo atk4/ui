@@ -943,8 +943,7 @@ class MultiLine extends Generic
 
                 break;
             default:
-                // Value is "" or field value enclosed in bracket: "value"
-                $value = $m->get($fieldName) !== '' ? '"' . $m->get($fieldName) . '"' : '""';
+                $value = '"' . $m->get($fieldName) . '"';
         }
 
         return $value;
