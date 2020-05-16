@@ -2,6 +2,8 @@
 
 namespace atk4\ui\TableColumn;
 
+use atk4\data\Model;
+
 /**
  * Implements Column helper for grid.
  */
@@ -48,7 +50,7 @@ class Status extends Generic
         );
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         $cl = '';
 

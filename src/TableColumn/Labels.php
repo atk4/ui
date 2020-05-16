@@ -3,6 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
+use atk4\data\Model;
 
 /**
  * Class Labels.
@@ -18,12 +19,11 @@ class Labels extends Generic
     public $values;
 
     /**
-     * @param Model|array $row
-     * @param Field|null  $field
+     * @param Field|null $field
      *
      * @return array|void
      */
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         $values = $this->values ?? $field->values;
 

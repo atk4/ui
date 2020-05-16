@@ -3,6 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\core\FactoryTrait;
+use atk4\data\Model;
 
 /**
  * Formatting action buttons column.
@@ -155,7 +156,7 @@ class ActionButtons extends Generic
         return '<div class="ui buttons">' . $output . '</div>';
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

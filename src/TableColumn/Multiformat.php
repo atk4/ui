@@ -2,6 +2,8 @@
 
 namespace atk4\ui\TableColumn;
 
+use atk4\data\Model;
+
 /**
  * Swaps out column decorators based on logic.
  */
@@ -22,7 +24,7 @@ class Multiformat extends Generic
         $this->callback = $callback;
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         if (!$this->callback) {
             throw new \atk4\ui\Exception(['Must specify a callback for column', 'column' => $this]);

@@ -266,10 +266,10 @@ The tag will override model value. Here is example usage of :php:meth:`TableColu
             return '{$_expired}';
         }
 
-        function getHTMLTags($model)
+        function getHTMLTags(\atk4\data\Model $row)
         {
             return ['_expired'=>
-                $model['date'] < new \DateTime() ?
+                $row->get('date') < new \DateTime() ?
                 '<td class="danger">EXPIRED</td>' :
                 '<td></td>'
             ];

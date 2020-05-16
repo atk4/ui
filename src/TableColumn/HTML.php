@@ -3,6 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
+use atk4\data\Model;
 
 /**
  * Class HTML.
@@ -26,12 +27,12 @@ class HTML extends Generic
     /**
      * Replace parent method.
      *
-     * @param Model|array $row   link to row data
-     * @param Field|null  $field field being rendered
+     * @param Model      $row   link to row data
+     * @param Field|null $field field being rendered
      *
      * @return array associative array with tags and their HTML values
      */
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         return ['_' . $field->short_name => '<td>' . $row->get($field) . '</td>'];
     }

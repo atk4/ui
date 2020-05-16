@@ -7,6 +7,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\core\FactoryTrait;
+use atk4\data\Model;
 use atk4\ui\jQuery;
 use atk4\ui\jsChain;
 use atk4\ui\View;
@@ -177,7 +178,7 @@ class ActionMenu extends Generic
         return $s;
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

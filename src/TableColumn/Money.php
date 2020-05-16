@@ -2,6 +2,8 @@
 
 namespace atk4\ui\TableColumn;
 
+use atk4\data\Model;
+
 /**
  * Column for formatting money.
  */
@@ -33,7 +35,7 @@ class Money extends Generic
         );
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         if ($field->get() < 0) {
             return ['_' . $this->short_name . '_class' => 'negative'];
