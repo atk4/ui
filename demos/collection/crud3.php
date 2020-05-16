@@ -4,7 +4,7 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-class crud3 extends \atk4\data\Model
+class TestModel extends \atk4\data\Model
 {
     use ModelLockTrait;
 

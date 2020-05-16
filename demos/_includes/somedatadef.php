@@ -37,7 +37,7 @@ if (!class_exists('SomeData')) {
             //parent::__construct($opts);
 
             if (!$this->faker) {
-                $this->faker = Faker\Factory::create();
+                $this->faker = \Faker\Factory::create();
             }
         }
 

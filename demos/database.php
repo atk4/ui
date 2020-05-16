@@ -183,7 +183,7 @@ class File extends \atk4\data\Model
      */
     public function importFromFilesystem($path, $isSub = false)
     {
-        $dir = new DirectoryIterator($path);
+        $dir = new \DirectoryIterator($path);
         foreach ($dir as $fileinfo) {
             $name = $fileinfo->getFilename();
 

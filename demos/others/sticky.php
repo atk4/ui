@@ -11,7 +11,7 @@ require_once __DIR__ . '/../atk-init.php';
     'ui' => 'ignored info message',
 ]);
 
-class sticky extends \atk4\ui\Button
+class MyButton extends \atk4\ui\Button
 {
     public function renderView()
     {

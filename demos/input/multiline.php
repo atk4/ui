@@ -10,7 +10,7 @@ require_once __DIR__ . '/../atk-init.php';
 /**
  * Class Inventory Item.
  */
-class multiline extends \atk4\data\Model
+class InventoryItem extends \atk4\data\Model
 {
     public function init(): void
     {

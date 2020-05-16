@@ -5,7 +5,7 @@ namespace atk4\ui\demo;
 require_once __DIR__ . '/../atk-init.php';
 
 if (!class_exists('TestConsole')) {
-    class console extends \atk4\data\Model
+    class TestConsole extends \atk4\data\Model
     {
         use \atk4\core\DebugTrait;
         use \atk4\core\StaticAddToTrait;

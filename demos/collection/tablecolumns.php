@@ -4,7 +4,7 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-class tablecolumns extends \atk4\data\Model
+class ModelColor extends \atk4\data\Model
 {
     public function init(): void
     {

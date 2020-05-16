@@ -69,7 +69,7 @@ $form->onSubmit(function (\atk4\ui\Form $form) {
 
 // ======
 
-class form2 extends \atk4\data\Model
+class Person extends \atk4\data\Model
 {
     public $table = 'person';
 
