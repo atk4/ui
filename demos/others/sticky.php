@@ -2,9 +2,9 @@
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
-
 use atk4\ui\Button;
+
+require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\View::addTo($app, [
     'Sticky GET allows us to preserve some GET arguments',

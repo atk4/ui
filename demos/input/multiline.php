@@ -2,10 +2,10 @@
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
-
 use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
+
+require_once __DIR__ . '/../atk-init.php';
 
 /**
  * Class Inventory Item.

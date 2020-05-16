@@ -2,9 +2,9 @@
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
-
 use atk4\ui\jsReload;
+
+require_once __DIR__ . '/../atk-init.php';
 
 // Testing form.
 

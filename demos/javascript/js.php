@@ -2,11 +2,10 @@
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
-
 use atk4\ui\Button;
-use atk4\ui\Buttons;
 use atk4\ui\Header;
+
+require_once __DIR__ . '/../atk-init.php';
 
 // Demonstrates how to use interractive buttons.
 Header::addTo($app, ['Basic Button']);
