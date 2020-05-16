@@ -38,7 +38,7 @@ class Form extends Basic
             $this->form->setModel($this->action->owner, $this->action->fields);
         }
 
-        $this->form->onSubmit(function ($f) {
+        $this->form->onSubmit(function (\atk4\ui\Form $form) {
             return $this->jsExecute();
         });
     }

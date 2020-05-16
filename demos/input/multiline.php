@@ -17,8 +17,8 @@ class InventoryItem extends \atk4\data\Model
         $this->addField('item', ['required' => true, 'default' => 'item']);
         $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-        $this->addExpression('total', ['expr' => function ($row) {
-            return $row['qty'] * $row['box'];
+        $this->addExpression('total', ['expr' => function (atk4\data\Model $row) {
+            return $row->get('qty') * $row->get('box');
         }, 'type' => 'integer']);
     }
 }
@@ -67,7 +67,7 @@ $ml->onLineChange(function ($rows, $form) use ($f_total) {
 $ml->jsAfterAdd = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 $ml->jsAfterDelete = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 
-$f->onSubmit(function ($f) use ($ml) {
+$f->onSubmit(function (atk4\ui\Form $form) use ($ml) {
     $rows = $ml->saveRows()->getModel()->export();
 
     return new \atk4\ui\jsToast(json_encode(array_values($rows)));

@@ -64,9 +64,9 @@ class DropDownCascade extends DropDown
         foreach ($model as $k => $row) {
             if ($this->renderRowFunction && is_callable($this->renderRowFunction)) {
                 $res = call_user_func($this->renderRowFunction, $row, $k);
-                $values[] = ['value' => $res['value'], 'text' => $row['name'], 'name' => $res['title']];
+                $values[] = ['value' => $res['value'], 'text' => $row->get('name'), 'name' => $res['title']];
             } else {
-                $values[] = ['value' => $row[$model->id_field], 'text' => $row[$model->title_field], 'name' => $row[$model->title_field]];
+                $values[] = ['value' => $row->get($model->id_field), 'text' => $row->get($model->title_field), 'name' => $row->get($model->title_field)];
             }
         }
 

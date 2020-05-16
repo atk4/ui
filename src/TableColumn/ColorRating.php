@@ -3,6 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
+use atk4\data\Model;
 use atk4\ui\Exception;
 
 /**
@@ -194,7 +195,7 @@ class ColorRating extends Generic
         return $this->getTag('body', '{$' . $f->short_name . '}', $extra_tags);
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         $value = $field->get();
         if ($value === null) {

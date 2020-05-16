@@ -19,13 +19,13 @@ $m->setLimit(15);
 if ($id = $app->stickyGet('country_id')) {
     // perhaps we edit individual country?
     $m->load($id);
-    $crumb->addCrumb($m['name'], []);
+    $crumb->addCrumb($m->get('name'), []);
 
     // here we can check for additional criteria and display a deeper level on the crumb
 
     $f = \atk4\ui\Form::addTo($app);
     $f->setModel($m);
-    $f->onSubmit(function ($f) {
+    $f->onSubmit(function (atk4\ui\Form $form) {
         return new \atk4\ui\jsToast('Form Submitted! Data saving is not possible in demo!');
     });
 } else {

@@ -60,7 +60,7 @@ For example the next code will use some logic::
 
         // perhaps we edit individual user?
         $m->load($id);
-        $crumb->addCrumb($m['name'], []);
+        $crumb->addCrumb($m->get('name'), []);
 
 
         // here we can check for additional criteria and display a deeper level on the crumb

@@ -304,9 +304,9 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->jsSetSubmitBtn($modal, $f, $this->step);
         $this->jsSetPrevHandler($modal, $this->step);
 
-        $f->onSubmit(function ($f) use ($modal) {
+        $f->onSubmit(function (Form $form) use ($modal) {
             // collect arguments.
-            $this->actionData['args'] = $f->model->get();
+            $this->actionData['args'] = $form->model->get();
 
             return $this->jsStepSubmit($this->step);
         });
@@ -332,9 +332,9 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->jsSetPrevHandler($modal, $this->step);
 
         if (!$f->hookHasCallbacks('submit')) {
-            $f->onSubmit(function ($f) {
+            $f->onSubmit(function (Form $form) {
                 // collect fields.
-                $form_fields = $f->model->get();
+                $form_fields = $form->model->get();
                 foreach ($this->action->fields as $key => $field) {
                     $this->actionData['fields'][$field] = $form_fields[$field];
                 }

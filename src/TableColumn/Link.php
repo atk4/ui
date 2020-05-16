@@ -2,6 +2,8 @@
 
 namespace atk4\ui\TableColumn;
 
+use atk4\data\Model;
+
 /**
  * Implements Column helper for grid.
  * Use
@@ -142,7 +144,7 @@ class Link extends Generic
         return '<a href="{$c_' . $this->short_name . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         // Decide on the content
         if ($this->url) {
@@ -159,7 +161,7 @@ class Link extends Generic
             }
 
             if ($row->hasField($val)) {
-                $p[$key] = $row[$val];
+                $p[$key] = $row->get($val);
             }
         }
 

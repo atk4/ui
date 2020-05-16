@@ -22,10 +22,10 @@ $table->template->appendHTML('SubHead', '<tr class="center aligned"><th colspan=
 $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This is part of body, goes before other rows</td></tr>');
 
 // Hook can be used to display data before row. You can also inject and format extra rows.
-$table->onHook('beforeRow', function ($table) {
+$table->onHook('beforeRow', function (atk4\ui\Table $table) {
     if ($table->current_id === 2) {
-        $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row['action'] . ')</th></tr>');
-    } elseif ($table->current_row['action'] === 'Tax') {
+        $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row->get('action') . ')</th></tr>');
+    } elseif ($table->current_row->get('action') === 'Tax') {
         // renders current row
         $table->renderRow();
 
@@ -43,8 +43,8 @@ $table = \atk4\ui\Table::addTo($app);
 $table->setModel($m, ['action']);
 
 // copy of amount through a PHP callback
-$m->addExpression('amount_copy', [function ($m) {
-    return $m['amount'];
+$m->addExpression('amount_copy', [function (atk4\data\Model $m) {
+    return $m->get('amount');
 }, 'type' => 'money']);
 
 // column with 2 decorators that stack. Money will use red ink and alignment, format will change text.

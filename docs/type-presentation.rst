@@ -129,7 +129,7 @@ yet make it available when editing, you could create your own :php:class:`TableC
             return '**** **** **** {$mask}';
         }
 
-        public function getHTMLTags($row, $field)
+        public function getHTMLTags(\atk4\data\Model $row, $field)
         {
             return [
                 'mask' => substr($field->get(), -4) 

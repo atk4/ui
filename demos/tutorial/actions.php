@@ -207,8 +207,8 @@ $country->getAction('add')->enabled = false;
 $country->getAction('delete')->enabled = function() { return rand(1,2)>1; };
 $country->addAction('mail', [
     'scope'       => \atk4\data\UserAction\Generic::SINGLE_RECORD,
-    'preview'    => function($m) { return 'here is email preview for '.$m['name']; },
-    'callback'    => function($m) { return 'email sent to '.$m['name']; },
+    'preview'    => function($m) { return 'here is email preview for '.$m->get('name'); },
+    'callback'    => function($m) { return 'email sent to '.$m->get('name'); },
     'description' => 'Email testing',
     'ui'       => ['icon'=>'mail', 'button'=>[null, 'icon'=>'green mail']],
 ]);

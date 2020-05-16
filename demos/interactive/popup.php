@@ -228,14 +228,14 @@ $signup->set(function ($pop) {
 
         // popup handles callbacks properly, so dynamic element such as form works
         // perfectly inside a popup.
-        $f->onSubmit(function ($f) {
-            if ($f->model['password'] !== '123') {
-                return $f->error('password', 'Please use password "123"');
+        $f->onSubmit(function (atk4\ui\Form $form) {
+            if ($form->model->get('password') !== '123') {
+                return $form->error('password', 'Please use password "123"');
             }
 
             // refreshes entire page
-            return $f->app->jsRedirect(['logged' => $f->model['email']]);
-            //return new atk4\ui\jsExpression('alert([])', ['Thank you '.$f->model['email']]);
+            return $form->app->jsRedirect(['logged' => $form->model->get('email')]);
+            //return new atk4\ui\jsExpression('alert([])', ['Thank you ' . $f->model->get('email')]);
         });
     }
 });

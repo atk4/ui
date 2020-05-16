@@ -49,16 +49,16 @@ try {
     $f_group->addField('address', ['width' => 'twelve']);
     $f_group->addField('zip', ['width' => 'four']);
 
-    $f->onSubmit(function ($f) {
+    $f->onSubmit(function (atk4\ui\Form $form) {
         $errors = [];
 
         foreach (['first_name', 'last_name', 'address'] as $field) {
-            if (!$f->model[$field]) {
-                $errors[] = $f->error($field, 'Field ' . $field . ' is mandatory');
+            if (!$form->model->get($field)) {
+                $errors[] = $form->error($field, 'Field ' . $field . ' is mandatory');
             }
         }
 
-        return $errors ?: $f->success('No more errors', 'so we have saved everything into the database');
+        return $errors ?: $form->success('No more errors', 'so we have saved everything into the database');
     });
 
     $app->run();

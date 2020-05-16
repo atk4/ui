@@ -3,6 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
+use atk4\data\Model;
 use atk4\ui\Exception;
 
 /**
@@ -48,14 +49,13 @@ class KeyValue extends Generic
     }
 
     /**
-     * @param Model|array $row
-     * @param Field|null  $field
+     * @param Field|null $field
      *
      * @throws Exception
      *
      * @return array|void
      */
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         $values = $field->values;
 

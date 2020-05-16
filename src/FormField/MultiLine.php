@@ -370,7 +370,7 @@ class MultiLine extends Generic
                     $field = $m->getField($fieldName);
                     // Save field value only if the field was editable
                     if (!$field->read_only) {
-                        $m[$fieldName] = $this->app->ui_persistence->typecastLoadField($field, $value);
+                        $m->set($fieldName, $this->app->ui_persistence->typecastLoadField($field, $value));
                     }
                 } catch (\atk4\core\Exception $e) {
                     $rowErrors[$rowId][] = ['field' => $fieldName, 'msg' => $e->getMessage()];
@@ -410,7 +410,7 @@ class MultiLine extends Generic
 
         foreach ($this->rowData as $row) {
             if ($this->modelRef && $this->linkField) {
-                $model[$this->linkField] = $this->model->get('id');
+                $model->set($this->linkField, $this->model->get('id'));
             }
 
             foreach ($row as $fieldName => $value) {
@@ -824,7 +824,7 @@ class MultiLine extends Generic
             $value = $post[$fieldName] ?? null;
             if ($model->getField($fieldName)->isEditable()) {
                 try {
-                    $model[$fieldName] = $value;
+                    $model->set($fieldName, $value);
                 } catch (ValidationException $e) {
                     // Bypass validation at this point.
                 }
@@ -932,19 +932,18 @@ class MultiLine extends Generic
      *
      * @return int|mixed|string
      */
-    private function getValueForExpression($exprField, $fieldName, $model)
+    private function getValueForExpression($exprField, $fieldName, Model $m)
     {
         switch ($exprField->type) {
             case 'money':
             case 'integer':
             case 'float':
                 // Value is 0 or the field value.
-                $value = $model[$fieldName] ? $model[$fieldName] : 0;
+                $value = $m->get($fieldName) ?: 0;
 
                 break;
             default:
-                // Value is "" or field value enclosed in bracket: "value"
-                $value = $model[$fieldName] ? '"' . $model[$fieldName] . '"' : '""';
+                $value = '"' . $m->get($fieldName) . '"';
         }
 
         return $value;

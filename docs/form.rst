@@ -44,7 +44,7 @@ directly in PHP::
     $form->onSubmit(function($form) {
         // implement subscribe here
 
-        return "Subscribed ".$form->model['email']." to newsletter.";
+        return "Subscribed ".$form->model->get('email')." to newsletter.";
     });
 
 Form is a composite component and it relies on other components to render parts
@@ -304,11 +304,11 @@ example displays a registration form for a User::
 
     // submit event
     $form->onSubmit(function($form){
-        if ($form->model['password'] != $form->model['password_verify']) {
+        if ($form->model->get('password') != $form->model->get('password_verify')) {
             return $form->error('password_verify', 'Passwords do not match');
         }
 
-        if (!$form->model['accept_terms']) {
+        if (!$form->model->get('accept_terms')) {
             return $form->error('accept_terms', 'Read and accept terms');
         }
 
@@ -330,7 +330,7 @@ for you. Here is an example with date::
     $form->addField('date2', ['Calendar', 'type'=>'date']);
 
     $form->onSubmit(function($form) {
-        echo 'date1 = '.print_r($form->model['date1'], true).' and date2 = '.print_r($form->model['date2'], true);
+        echo 'date1 = '.print_r($form->model->get('date1'), true).' and date2 = '.print_r($form->model->get('date2'), true);
     });
 
 Field ``date1`` is defined inside a :php:class:`ProxyModel` as a date field and will
@@ -420,7 +420,7 @@ able to add them again in sub-layouts.
 Loading Values
 --------------
 
-Although you can set form fields individually using ``$form->model['field'] = $value``
+Although you can set form fields individually using ``$form->model->set('field', $value)``
 it's always nicer to load values for the database. Given a ``User`` model this is how
 you can create a form to change profile of a currently logged user::
 
@@ -552,7 +552,7 @@ but only if they have also accepted terms and conditions. I can define onSubmit 
 that would perform the check, display error or success message::
 
     $form->onSubmit(function($form) {
-        if (!$form->model['terms']) {
+        if (!$form->model->get('terms')) {
             return $form->error('terms', 'You must accept terms and conditions');
         }
 
@@ -569,11 +569,11 @@ to group errors with a message about terms and conditions::
     $form->onSubmit(function($form) {
         $errors = [];
 
-        if (!$form->model['name']) {
+        if (!$form->model->get('name')) {
             $errors[] = $form->error('name', 'Name must be specified');
         }
 
-        if (!$form->model['surname']) {
+        if (!$form->model->get('surname')) {
             $errors[] = $form->error('surname', 'Surname must be specified');
         }
 
@@ -581,7 +581,7 @@ to group errors with a message about terms and conditions::
             return $errors;
         }
 
-        if (!$form->model['terms']) {
+        if (!$form->model->get('terms')) {
             return $form->error('terms', 'You must accept terms and conditions');
         }
 

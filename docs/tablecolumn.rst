@@ -239,9 +239,9 @@ only on certain rows. For this you can use a 'Multiformat' decorator::
 
     $table->addColumn('amount', ['Multiformat', function($m) {
 
-        if ($m['is_invoiced'] > 0) {
+        if ($m->get('is_invoiced') > 0) {
             return ['Money', ['Link', 'invoice', ['invoice_id'=>'id']]];
-        } elseif (abs($m['is_refunded']) < 50) {
+        } elseif (abs($m->get('is_refunded')) < 50) {
             return [['Template', 'Amount was <b>refunded</b>']];
         }
 

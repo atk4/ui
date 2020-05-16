@@ -3,6 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
+use atk4\data\Model;
 use atk4\ui\Exception;
 
 /**
@@ -64,12 +65,12 @@ class Tooltip extends Generic
         ]);
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         // @TODO remove popup tooltip when null
-        $tooltip = $row->data[$this->tooltip_field];
+        $tooltip = $row->get($this->tooltip_field);
 
-        if ($tooltip === null || empty($tooltip)) {
+        if ($tooltip === null || $tooltip === '') {
             return [
                 '_' . $field->short_name . '_data_visible_class' => 'transition hidden',
                 '_' . $field->short_name . '_data_tooltip' => '',

@@ -27,7 +27,7 @@ $table->addColumn('date');
 $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 $table->addColumn('logo_url', [new \atk4\ui\TableColumn\Image()], ['caption' => 'Our Logo']);
 
-$table->onHook('getHTMLTags', function ($table, $row) {
+$table->onHook('getHTMLTags', function ($table, atk4\data\Model $row) {
     switch ($row->id) {
         case 1: $color = 'yellow';
 
@@ -42,7 +42,7 @@ break;
     }
     if ($color) {
         return [
-            'name' => $table->app->getTag('div', ['class' => 'ui ribbon ' . $color . ' label'], $row['name']),
+            'name' => $table->app->getTag('div', ['class' => 'ui ribbon ' . $color . ' label'], $row->get('name')),
         ];
     }
 });

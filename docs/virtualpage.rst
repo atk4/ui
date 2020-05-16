@@ -233,7 +233,7 @@ Next example will display DataTable, but will allow you to repalce data with a f
         $form->addField('year');
 
         $form->onSubmit(function($form) use ($loader) {
-            return new \atk4\ui\jsReload($loader, ['year'=>$form->model['year']]);
+            return new \atk4\ui\jsReload($loader, ['year'=>$form->model->get('year')]);
         });
     });
 

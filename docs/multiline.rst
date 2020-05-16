@@ -140,8 +140,8 @@ Lets use the example of demos/multiline.php::
             $this->addField('item', ['required' => true, 'default' => 'item']);
             $this->addField('qty', ['type' => 'number', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
             $this->addField('box', ['type' => 'number', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-            $this->addExpression('total', ['expr' => function ($row) {
-                return $row['qty'] * $row['box'];
+            $this->addExpression('total', ['expr' => function (Model $row) {
+                return $row->get('qty') * $row->get('box');
             }, 'type' => 'number']);
         }
     }

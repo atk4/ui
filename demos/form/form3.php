@@ -28,12 +28,12 @@ $form->setModel(
     ) : new Stat($db)
 )->tryLoadAny();
 
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (atk4\ui\Form $form) {
     $errors = [];
     foreach ($form->model->dirty as $field => $value) {
         // we should care only about editable fields
         if ($form->model->getField($field)->isEditable()) {
-            $errors[] = $form->error($field, 'Value was changed, ' . json_encode($value) . ' to ' . json_encode($form->model[$field]));
+            $errors[] = $form->error($field, 'Value was changed, ' . json_encode($value) . ' to ' . json_encode($form->model->get($field)));
         }
     }
 

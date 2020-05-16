@@ -81,7 +81,7 @@ into multiple Tabs or detach field groups or even create nested layouts::
     $form_page = Generic::addTo($tabs->addTab('Other Info'), ['form'=>$form]);
     $form_page->addField('age', new \atk4\ui\FormField\Line());
 
-    $form->onSubmit(function($f) {  return $f->model['name'].' has age '.$f->model['age']; });
+    $form->onSubmit(function($f) { return $f->model->get('name').' has age '.$f->model->get('age'); });
 
 This is further explained in documentation for :php:class:`atk4\\ui\\FormLayout\\Generic` class,
 however if you do plan on adding your own field types, it's important that you extend it

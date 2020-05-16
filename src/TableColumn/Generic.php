@@ -3,6 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
+use atk4\data\Model;
 use atk4\ui\Exception;
 use atk4\ui\jQuery;
 use atk4\ui\jsExpression;
@@ -409,12 +410,12 @@ class Generic
      * Return associative array of tags to be filled with pre-rendered HTML on
      * a column-basis. Will not be invoked if html-output is turned off for the table.
      *
-     * @param Model|array $row   link to row data
-     * @param Field|null  $field field being rendered
+     * @param Model      $row   link to row data
+     * @param Field|null $field field being rendered
      *
      * @return array associative array with tags and their HTML values
      */
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         return [];
     }
