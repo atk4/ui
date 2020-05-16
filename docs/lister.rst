@@ -97,7 +97,7 @@ Output is formatted using the standard :ref:`ui_persistence` routine, but you ca
 of your tags like this::
 
     $lister->onHook('beforeRow', function(\atk4\ui\Lister $lister){
-        $lister->current_row['iso']=strtolower($lister->current_row['iso']);
+        $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
     })
 
 Model vs Static Source

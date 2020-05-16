@@ -42,7 +42,7 @@ $lister_container = \atk4\ui\View::addTo($view, ['template' => $lister_template]
 $lister = \atk4\ui\Lister::addTo($lister_container, [], ['List']);
 $lister->onHook('beforeRow', function (atk4\ui\Lister $lister) {
     ++$lister->ipp;
-    $lister->current_row['iso'] = mb_strtolower($lister->current_row['iso']);
+    $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
     if ($lister->ipp === $lister->model->limit[0]) {
         $lister->t_row->setHtml('end', '<div class="ui circular basic label"> ...</div>');
     }

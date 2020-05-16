@@ -18,7 +18,7 @@ $view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div>
 
 $lister = \atk4\ui\Lister::addTo($view, [], ['List']);
 $lister->onHook('beforeRow', function (atk4\ui\Lister $lister) {
-    $lister->current_row['iso'] = mb_strtolower($lister->current_row['iso']);
+    $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 $lister->setModel(new Country($db))
     ->setLimit(20);
@@ -38,7 +38,7 @@ $view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div>
 
 $lister = \atk4\ui\Lister::addTo($view, [], ['List']);
 $lister->onHook('beforeRow', function (atk4\ui\Lister $lister) {
-    $lister->current_row['iso'] = mb_strtolower($lister->current_row['iso']);
+    $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 $lister->setModel(new Country($db))
     ->addCondition('id', -1); // no such records so model will be empty
@@ -55,7 +55,7 @@ $v = \atk4\ui\View::addTo($container, ['template' => new \atk4\ui\Template('<div
 
 $l = \atk4\ui\Lister::addTo($v, [], ['List']);
 $l->onHook('beforeRow', function (atk4\ui\Lister $lister) {
-    $lister->current_row['iso'] = mb_strtolower($lister->current_row['iso']);
+    $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 
 $m = $l->setModel(new Country($db))->setLimit(12);
