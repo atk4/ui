@@ -46,10 +46,10 @@ class FormTest extends AtkPhpunit\TestCase
         $_POST = $post_data;
         $_POST['atk_submit'] = 'ajax';
 
-        $this->f->onSubmit(function ($f) use (&$submit_called, $submit) {
+        $this->f->onSubmit(function (\atk4\ui\Form $form) use (&$submit_called, $submit) {
             $submit_called = true;
             if ($submit) {
-                call_user_func($submit, $f->model);
+                call_user_func($submit, $form->model);
             }
         });
 

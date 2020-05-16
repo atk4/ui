@@ -73,7 +73,7 @@ $panel_2->onOpen(function ($p) {
         ->set('1')
         ->onChange($p->owner->jsDisplayWarning(true));
 
-    $f->onSubmit(function ($f) use ($p) {
+    $f->onSubmit(function (\atk4\ui\Form $form) use ($p) {
         return [
             new \atk4\ui\jsToast('Saved, closing panel.'),
             $p->owner->jsDisplayWarning(false),

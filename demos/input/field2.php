@@ -114,8 +114,8 @@ $field = $form->addField('surname', new \atk4\ui\FormField\Line([
     )],
 ]));
 
-$form->onSubmit(function ($f) {
-    return $f->model->get('name');
+$form->onSubmit(function (\atk4\ui\Form $form) {
+    return $form->model->get('name');
 });
 
 \atk4\ui\Header::addTo($app, ['Multiple Form Layouts']);
@@ -130,8 +130,8 @@ $form_page->addField('name', new \atk4\ui\FormField\Line());
 $form_page = \atk4\ui\FormLayout\Generic::addTo($tabs->addTab('Other Info'), ['form' => $form]);
 $form_page->addField('age', new \atk4\ui\FormField\Line());
 
-$form->onSubmit(function ($f) {
-    return $f->model->get('name') . ' has age ' . $f->model->get('age');
+$form->onSubmit(function (\atk4\ui\Form $form) {
+    return $form->model->get('name') . ' has age ' . $form->model->get('age');
 });
 
 \atk4\ui\Header::addTo($app, ['onChange event', 'subHeader' => 'see in browser console']);
@@ -203,7 +203,7 @@ $g->addField('m_text_crlf', [new \atk4\ui\FormField\TextArea()], ['type' => 'tex
 $g->addField('m_text_cr', [new \atk4\ui\FormField\TextArea()], ['type' => 'text'])->set("First line\rSecond line");
 $g->addField('m_text_lf', [new \atk4\ui\FormField\TextArea()], ['type' => 'text'])->set("First line\nSecond line");
 
-$f->onSubmit(function ($form) {
+$f->onSubmit(function (\atk4\ui\Form $form) {
     // check what values are submitted
     echo "We're URL encoding submitted values to be able to see what line end is actually submitted.";
     foreach ($form->model->get() as $k => $v) {

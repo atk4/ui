@@ -53,9 +53,9 @@ class ArgumentForm extends Basic
 
         $this->form->buttonSave->set('Run');
 
-        $this->form->onSubmit(function ($f) {
+        $this->form->onSubmit(function (\atk4\ui\Form $form) {
             // set arguments from the model
-            $this->setArguments($f->model->get());
+            $this->setArguments($form->model->get());
 
             return $this->jsExecute();
             //return [$this->console->js()->show(), $this->console->sse];

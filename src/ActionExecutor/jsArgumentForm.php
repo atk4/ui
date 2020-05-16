@@ -48,8 +48,8 @@ class jsArgumentForm extends jsModal
 
             $form->hook('formInit');
 
-            $form->onSubmit(function ($f) {
-                $this->action->fields = array_keys($f->model->getFields('editable'));
+            $form->onSubmit(function (\atk4\ui\Form $form) {
+                $this->action->fields = array_keys($form->model->getFields('editable'));
                 $return = $this->action->execute();
 
                 $js = [

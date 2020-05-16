@@ -266,7 +266,7 @@ class Lookup extends Input
 
             $form->setModel($model->onlyFields($this->plus['fields'] ?? []));
 
-            $form->onSubmit(function ($form) {
+            $form->onSubmit(function (\atk4\ui\Form $form) {
                 $form->model->save();
 
                 $ret = [

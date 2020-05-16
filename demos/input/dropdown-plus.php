@@ -93,7 +93,7 @@ $form->addField(
     ]
 );
 
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     $echo = print_r($form->model->get('enum'), true) . ' / ';
     $echo .= print_r($form->model->get('values'), true) . ' / ';
     $echo .= print_r($form->model->get('icon'), true) . ' / ';

@@ -47,17 +47,17 @@ $f_p2 = $form->addGroup(['Set Position and Attach to:']);
 $f_p2->addField('position', ['width' => 'four']);
 $f_p2->addField('attach', ['width' => 'four']);
 
-$form->onSubmit(function ($f) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     $notifier = new \atk4\ui\jsNotify();
-    $notifier->setColor($f->model->get('color'))
-        ->setPosition($f->model->get('position'))
-        ->setWidth(rtrim($f->model->get('width'), '%'))
-        ->setContent($f->model->get('text'))
-        ->setTransition($f->model->get('transition'))
-        ->setIcon($f->model->get('icon'));
+    $notifier->setColor($form->model->get('color'))
+        ->setPosition($form->model->get('position'))
+        ->setWidth(rtrim($form->model->get('width'), '%'))
+        ->setContent($form->model->get('text'))
+        ->setTransition($form->model->get('transition'))
+        ->setIcon($form->model->get('icon'));
 
-    if ($f->model->get('attach') !== 'Body') {
-        $notifier->attachTo($f);
+    if ($form->model->get('attach') !== 'Body') {
+        $notifier->attachTo($form);
     }
 
     return $notifier;

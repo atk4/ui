@@ -39,17 +39,17 @@ $f_names->addField('middle_name', ['width' => 'three']);
 $f_names->addField('last_name', ['width' => 'five']);
 
 // form on submit
-$form->onSubmit(function ($f) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     // In-form validation
     $errors = [];
-    if (mb_strlen($f->model->get('first_name')) < 3) {
-        $errors[] = $f->error('first_name', 'too short, ' . $f->model->get('first_name'));
+    if (mb_strlen($form->model->get('first_name')) < 3) {
+        $errors[] = $form->error('first_name', 'too short, ' . $form->model->get('first_name'));
     }
-    if (mb_strlen($f->model->get('last_name')) < 5) {
-        $errors[] = $f->error('last_name', 'too short');
+    if (mb_strlen($form->model->get('last_name')) < 5) {
+        $errors[] = $form->error('last_name', 'too short');
     }
-    if (isset($f->model->dirty['iso'])) { // restrict to change iso field value
-        $errors[] = $f->error('iso', 'Field value should not be changed');
+    if (isset($form->model->dirty['iso'])) { // restrict to change iso field value
+        $errors[] = $form->error('iso', 'Field value should not be changed');
     }
 
     if ($errors) {
@@ -57,11 +57,11 @@ $form->onSubmit(function ($f) {
     }
 
     // Model will have some validation too
-    $f->model->save();
+    $form->model->save();
 
-    return $f->success(
+    return $form->success(
         'Record Added',
-        'there are now ' . $f->model->action('count')->getOne() . ' records in DB'
+        'there are now ' . $form->model->action('count')->getOne() . ' records in DB'
     );
 });
 

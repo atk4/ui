@@ -22,7 +22,7 @@ $tab = $tabs->addTab('Basic Use');
 
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email');
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     // implement subscribe here
 
     return $form->success('Subscribed ' . $form->model->get('email') . ' to newsletter.');
@@ -49,7 +49,7 @@ $form->addField('status_integer_required', ['DropDown'], ['type' => 'integer', '
 $form->addField('status_string_mandatory', ['DropDown'], ['type' => 'string', 'values' => $values, 'mandatory' => true]);
 $form->addField('status_integer_mandatory', ['DropDown'], ['type' => 'integer', 'values' => $values, 'mandatory' => true]);
 
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     return (new \atk4\ui\jsNotify(json_encode($form->model->get())))->setDuration(0);
 });
 
@@ -59,7 +59,7 @@ $form->addField('date1', null, ['type' => 'date']);
 $form->addField('date2', ['Calendar', 'type' => 'date']);
 $form->buttonSave->set('Compare Date');
 
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     echo 'date1 = ' . print_r($form->model->get('date1'), true) . ' and date2 = ' . print_r($form->model->get('date2'), true);
 });
 
@@ -70,7 +70,7 @@ $tab = $tabs->addTab('Handler Output');
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email1');
 $form->buttonSave->set('Save1');
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     return $form->error('email1', 'some error action ' . random_int(1, 100));
 });
 
@@ -78,7 +78,7 @@ $form->onSubmit(function ($form) {
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email2');
 $form->buttonSave->set('Save2');
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     return $form->success('form was successful');
 });
 
@@ -86,7 +86,7 @@ $form->onSubmit(function ($form) {
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email3');
 $form->buttonSave->set('Save3');
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
     $view->text->addParagraph('some text ' . random_int(1, 100));
@@ -98,7 +98,7 @@ $form->onSubmit(function ($form) {
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email4');
 $form->buttonSave->set('Save4');
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     $view = new \atk4\ui\Message('some header');
     $view->init();
     $view->text->addParagraph('some text ' . random_int(1, 100));
@@ -113,7 +113,7 @@ $form->onSubmit(function ($form) {
 $form = \atk4\ui\Form::addTo($tab);
 $field = $form->addField('email5');
 $form->buttonSave->set('Save5');
-$form->onSubmit(function ($form) use ($field) {
+$form->onSubmit(function (\atk4\ui\Form $form) use ($field) {
     return $field->jsInput()->val('random is ' . random_int(1, 100));
 });
 
@@ -124,7 +124,7 @@ $tab = $tabs->addTab('Handler Safety');
 
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email');
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     $o = new \StdClass();
 
     return $o['abc'];
@@ -134,7 +134,7 @@ $form->onSubmit(function ($form) {
 
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email');
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     echo 'some output here';
 });
 
@@ -142,7 +142,7 @@ $form->onSubmit(function ($form) {
 
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email');
-$form->onSubmit(function ($form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
 
     return 'somehow it did not crash';
@@ -152,7 +152,7 @@ $form->onSubmit(function ($form) {
     ->set(function ($p) {
         $form = \atk4\ui\Form::addTo($p);
         $form->addField('email');
-        $form->onSubmit(function ($form) {
+        $form->onSubmit(function (\atk4\ui\Form $form) {
             throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
 
             return 'somehow it did not crash';
@@ -173,14 +173,14 @@ $m_register->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => tr
 $f = \atk4\ui\Form::addTo($tab, ['segment' => true]);
 $f->setModel($m_register);
 
-$f->onSubmit(function ($f) {
-    if ($f->model['name'] !== 'John') {
-        return $f->error('name', 'Your name is not John! It is "' . $f->model->get('name') . '". It should be John. Pleeease!');
+$f->onSubmit(function (\atk4\ui\Form $form) {
+    if ($form->model['name'] !== 'John') {
+        return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
     }
 
     return [
-        $f->jsInput('email')->val('john@gmail.com'),
-        $f->jsField('is_accept_terms')->checkbox('set checked'),
+        $form->jsInput('email')->val('john@gmail.com'),
+        $form->jsField('is_accept_terms')->checkbox('set checked'),
     ];
 });
 
@@ -210,18 +210,18 @@ $gr->addField('first_name', ['width' => 'eight']);
 $gr->addField('middle_name', ['width' => 'three', 'disabled' => true]);
 $gr->addField('last_name', ['width' => 'five']);
 
-$f->onSubmit(function ($f) {
+$f->onSubmit(function (\atk4\ui\Form $form) {
     $errors = [];
 
-    foreach ($f->model->getFields() as $name => $ff) {
+    foreach ($form->model->getFields() as $name => $ff) {
         if ($name === 'id') {
             continue;
         }
 
-        if ($f->model->get($name) !== 'a') {
-            $errors[] = $f->error($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $f->model->get($name));
+        if ($form->model->get($name) !== 'a') {
+            $errors[] = $form->error($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $form->model->get($name));
         }
     }
 
-    return $errors ?: $f->success('No more errors', 'so we have saved everything into the database');
+    return $errors ?: $form->success('No more errors', 'so we have saved everything into the database');
 });
