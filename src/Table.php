@@ -625,13 +625,13 @@ class Table extends Lister
                 // closure support
                 // arguments - current value, key, \atk4\ui\Table object
                 if ($f instanceof \Closure) {
-                    $this->totals[$key] += ($f($this->model[$key], $key, $this) ?: 0);
+                    $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?: 0);
                 }
                 // built-in methods
                 elseif (is_string($f)) {
                     switch ($f) {
                         case 'sum':
-                            $this->totals[$key] += $this->model[$key];
+                            $this->totals[$key] += $this->model->get($key);
 
                             break;
                         case 'count':
@@ -639,14 +639,14 @@ class Table extends Lister
 
                             break;
                         case 'min':
-                            if ($this->model[$key] < $this->totals[$key]) {
-                                $this->totals[$key] = $this->model[$key];
+                            if ($this->model->get($key) < $this->totals[$key]) {
+                                $this->totals[$key] = $this->model->get($key);
                             }
 
                             break;
                         case 'max':
-                            if ($this->model[$key] > $this->totals[$key]) {
-                                $this->totals[$key] = $this->model[$key];
+                            if ($this->model¨->get($key) > $this->totals[$key]) {
+                                $this->totals[$key] = $this->model->get($key);
                             }
 
                             break;

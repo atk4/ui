@@ -174,7 +174,7 @@ $f = \atk4\ui\Form::addTo($tab, ['segment' => true]);
 $f->setModel($m_register);
 
 $f->onSubmit(function (atk4\ui\Form $form) {
-    if ($form->model['name'] !== 'John') {
+    if ($form->model->get('name') !== 'John') {
         return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
     }
 

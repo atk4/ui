@@ -99,7 +99,7 @@ The fileId is set to file name by default if omitted::
 
     $form->onSubmit(function ($form) {
         // implement submission here
-        return $form->success('Thanks for submitting file: '.$form->model['img']);
+        return $form->success('Thanks for submitting file: '.$form->model->get('img'));
     });
 
 onDelete

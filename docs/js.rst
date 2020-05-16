@@ -487,12 +487,12 @@ some feedback to the user. jsNotify can display a bar on top of the screen for s
         $form->addField('name', null, ['caption'=>'Add your name']);
 
         $form->onSubmit(function ($f) use ($modal) {
-            if (empty($f->model['name'])) {
+            if (empty($f->model->get('name'))) {
                 return $f->error('name', 'Please add a name!');
             } else {
                 return [
                     $modal->hide(),
-                    new \atk4\ui\jsNotify('Thank you '.$f->model['name'])
+                    new \atk4\ui\jsNotify('Thank you '.$f->model->get('name'))
                 ];
             }
         });
