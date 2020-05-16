@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 class Notifier extends \atk4\data\Model
@@ -47,7 +51,7 @@ $f_p2 = $form->addGroup(['Set Position and Attach to:']);
 $f_p2->addField('position', ['width' => 'four']);
 $f_p2->addField('attach', ['width' => 'four']);
 
-$form->onSubmit(function (atk4\ui\Form $form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     $notifier = new \atk4\ui\jsNotify();
     $notifier->setColor($form->model->get('color'))
         ->setPosition($form->model->get('position'))

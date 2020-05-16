@@ -1,4 +1,8 @@
 <?php
+
+
+namespace atk4\ui\demo;
+
 /**
  * Testing Columns.
  */

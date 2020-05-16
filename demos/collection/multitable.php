@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 // Re-usable component implementing counter
@@ -7,7 +11,7 @@ class Finder extends \atk4\ui\Columns
 {
     public $route = [];
 
-    public function setModel(atk4\data\Model $model, $route = [])
+    public function setModel(\atk4\data\Model $model, $route = [])
     {
         parent::setModel($model);
 

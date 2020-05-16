@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 // A very basic file that sets up Agile Data to be used in some demonstrations
 try {
     if (file_exists(__DIR__ . '/db.php')) {
@@ -53,7 +57,7 @@ class Country extends \atk4\data\Model
         $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
         $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
 
-        $this->onHook('beforeSave', function (atk4\data\Model $m) {
+        $this->onHook('beforeSave', function (\atk4\data\Model $m) {
             if (!$m->get('sys_name')) {
                 $m->set('sys_name', mb_strtoupper($m->get('name')));
             }
@@ -126,7 +130,7 @@ class Stat extends \atk4\data\Model
         $this->addField('is_commercial', ['type' => 'boolean']);
         $this->addField('currency', ['enum' => ['EUR', 'USD', 'GBP']]);
         $this->addField('currency_symbol', ['never_persist' => true]);
-        $this->onHook('afterLoad', function (atk4\data\Model $m) {
+        $this->onHook('afterLoad', function (\atk4\data\Model $m) {
             /* implementation for "intl"
             $locale='en-UK';
             $fmt = new \NumberFormatter( $locale."@currency=".$m->get('currency'), NumberFormatter::CURRENCY );

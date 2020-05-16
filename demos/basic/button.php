@@ -1,13 +1,17 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 // Demonstrates how to use buttons.
 
-use atk4\ui\Button;
-use atk4\ui\Icon;
-use atk4\ui\Label;
-use atk4\ui\Template;
+use \atk4\ui\Button;
+use \atk4\ui\Icon;
+use \atk4\ui\Label;
+use \atk4\ui\Template;
 
 \atk4\ui\Header::addTo($app, ['Basic Button', 'size' => 2]);
 

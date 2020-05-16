@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 /**
  * Setup Action file for Country model.
  */

@@ -1,4 +1,8 @@
 <?php
+
+
+namespace atk4\ui\demo;
+
 /**
  * Setup file - do not test.
  * Lookup that can not saved data.
@@ -24,7 +28,7 @@ class DemoLookup extends \atk4\ui\FormField\Lookup
 
         $defaultSeed = ['Button', 'disabled' => ($this->disabled || $this->readonly)];
 
-        $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed), null, 'atk4\ui');
+        $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed), null, '\atk4\ui');
 
         if ($this->form) {
             $vp = \atk4\ui\VirtualPage::addTo($this->form);
@@ -39,7 +43,7 @@ class DemoLookup extends \atk4\ui\FormField\Lookup
 
             $form->setModel($model->onlyFields($this->plus['fields'] ?? []));
 
-            $form->onSubmit(function (atk4\ui\Form $form) {
+            $form->onSubmit(function (\atk4\ui\Form $form) {
                 //Prevent from saving
                 // $form->model->save();
 

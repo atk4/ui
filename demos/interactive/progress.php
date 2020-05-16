@@ -1,4 +1,8 @@
 <?php
+
+
+namespace atk4\ui\demo;
+
 /**
  * Demonstrates how to use tabs.
  */

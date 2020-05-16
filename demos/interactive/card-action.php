@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['Card Deck', 'small right floated basic blue', 'iconRight' => 'right arrow'])

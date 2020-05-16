@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['Notify Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
@@ -13,7 +17,7 @@ $modal->set(function ($p) use ($modal) {
     $form = \atk4\ui\Form::addTo($p);
     $form->addField('name', null, ['caption' => 'Add your name']);
 
-    $form->onSubmit(function (atk4\ui\Form $form) use ($modal) {
+    $form->onSubmit(function (\atk4\ui\Form $form) use ($modal) {
         if (empty($form->model->get('name'))) {
             return $form->error('name', 'Please add a name!');
         }

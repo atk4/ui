@@ -1,8 +1,12 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
-use atk4\ui\jsReload;
+use \atk4\ui\jsReload;
 
 // Testing form.
 
@@ -28,7 +32,7 @@ $form->setModel(
     ) : new Stat($db)
 )->tryLoadAny();
 
-$form->onSubmit(function (atk4\ui\Form $form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     $errors = [];
     foreach ($form->model->dirty as $field => $value) {
         // we should care only about editable fields

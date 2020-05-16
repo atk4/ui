@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/Demo.php';
 require_once __DIR__ . '/../_includes/PromotionText.php';
@@ -136,7 +140,7 @@ class AtkDemoInvoice extends \atk4\data\Model {
 */
 
 session_start();
-$session = new atk4\data\Persistence\Array_($_SESSION['x']);
+$session = new \atk4\data\Persistence\Array_($_SESSION['x']);
 
 $form = \atk4\ui\Form::addTo($app);
 $form->setModel(new AtkDemoInvoice($session))
@@ -183,7 +187,7 @@ EOF
     Demo::addTo($page)->setCode(
         <<<'CODE'
 session_start();
-$session = new atk4\data\Persistence\Array_($_SESSION['x']);
+$session = new \atk4\data\Persistence\Array_($_SESSION['x']);
 
 $model = new AtkDemoInvoice($session);
 $model->tryLoad(1);

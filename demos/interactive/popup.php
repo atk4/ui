@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 /**
@@ -228,14 +232,14 @@ $signup->set(function ($pop) {
 
         // popup handles callbacks properly, so dynamic element such as form works
         // perfectly inside a popup.
-        $f->onSubmit(function (atk4\ui\Form $form) {
+        $f->onSubmit(function (\atk4\ui\Form $form) {
             if ($form->model->get('password') !== '123') {
                 return $form->error('password', 'Please use password "123"');
             }
 
             // refreshes entire page
             return $form->app->jsRedirect(['logged' => $form->model->get('email')]);
-            //return new atk4\ui\jsExpression('alert([])', ['Thank you ' . $f->model->get('email')]);
+            //return new \atk4\ui\jsExpression('alert([])', ['Thank you ' . $f->model->get('email')]);
         });
     }
 });

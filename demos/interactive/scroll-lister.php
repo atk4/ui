@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['Dynamic scroll in Table', 'small right floated basic blue', 'iconRight' => 'right arrow'])
@@ -15,7 +19,7 @@ $v = \atk4\ui\View::addTo($container, ['template' => new \atk4\ui\Template('
 {$Content}')]);
 
 $l = \atk4\ui\Lister::addTo($v, [], ['List']);
-$l->onHook('beforeRow', function (atk4\ui\Lister $lister) {
+$l->onHook('beforeRow', function (\atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 

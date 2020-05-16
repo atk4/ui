@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 if (!class_exists('SomeData')) {
     class SomeData extends \atk4\data\Model
     {

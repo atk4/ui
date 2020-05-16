@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['Actions from jsEvent', 'small right floated basic blue', 'iconRight' => 'right arrow'])
@@ -46,7 +50,7 @@ $f_action = $files->addAction(
         'args' => [
             'path' => '.',
         ],
-        'scope' => atk4\data\UserAction\Generic::NO_RECORDS,
+        'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
     ]
 );
 

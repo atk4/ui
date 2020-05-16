@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 $m = new CountryLock($db);
@@ -18,7 +22,7 @@ $g->onFormEdit(function ($form) {
 
 // callback for both model action edit and add.
 $g->onFormAddEdit(function ($form, $ex) {
-    $form->onSubmit(function (atk4\ui\Form $form) use ($ex) {
+    $form->onSubmit(function (\atk4\ui\Form $form) use ($ex) {
         return [$ex->hide(), new \atk4\ui\jsToast('Submit all right! This demo does not saved data.')];
     });
 });
@@ -64,9 +68,9 @@ $crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($cr
 $cc = $c->addColumn();
 \atk4\ui\Header::addTo($cc, ['Cutomizations']);
 
-class MyExecutor extends atk4\ui\ActionExecutor\UserAction
+class MyExecutor extends \atk4\ui\ActionExecutor\UserAction
 {
-    public function addFormTo(atk4\ui\View $view): atk4\ui\Form
+    public function addFormTo(\atk4\ui\View $view): \atk4\ui\Form
     {
         $columns = \atk4\ui\Columns::addTo($view);
         $left = $columns->addColumn();

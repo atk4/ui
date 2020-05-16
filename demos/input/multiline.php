@@ -1,9 +1,13 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
-use atk4\ui\jsExpression;
-use atk4\ui\jsFunction;
+use \atk4\ui\jsExpression;
+use \atk4\ui\jsFunction;
 
 /**
  * Class Inventory Item.
@@ -17,7 +21,7 @@ class InventoryItem extends \atk4\data\Model
         $this->addField('item', ['required' => true, 'default' => 'item']);
         $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-        $this->addExpression('total', ['expr' => function (atk4\data\Model $row) {
+        $this->addExpression('total', ['expr' => function (\atk4\data\Model $row) {
             return $row->get('qty') * $row->get('box');
         }, 'type' => 'integer']);
     }
@@ -67,7 +71,7 @@ $ml->onLineChange(function ($rows, $form) use ($f_total) {
 $ml->jsAfterAdd = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 $ml->jsAfterDelete = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 
-$f->onSubmit(function (atk4\ui\Form $form) use ($ml) {
+$f->onSubmit(function (\atk4\ui\Form $form) use ($ml) {
     $rows = $ml->saveRows()->getModel()->export();
 
     return new \atk4\ui\jsToast(json_encode(array_values($rows)));

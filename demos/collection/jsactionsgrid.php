@@ -1,5 +1,9 @@
 <?php
 
+
+
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/country_actions.php';
 
@@ -17,12 +21,12 @@ require_once __DIR__ . '/../_includes/country_actions.php';
 $g = \atk4\ui\Grid::addTo($app, ['menu' => false]);
 $g->setModel($country);
 
-$divider = $app->factory('View', ['id' => false, 'class' => ['divider'], 'content' => ''], 'atk4\ui');
+$divider = $app->factory('View', ['id' => false, 'class' => ['divider'], 'content' => ''], '\atk4\ui');
 
-$model_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'content' => 'Model Actions'], 'atk4\ui');
+$model_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'content' => 'Model Actions'], '\atk4\ui');
 \atk4\ui\Icon::addTo($model_header, ['content' => 'database']);
 
-$js_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'content' => 'Js Actions'], 'atk4\ui');
+$js_header = $app->factory('View', ['id' => false, 'class' => ['header'], 'content' => 'Js Actions'], '\atk4\ui');
 \atk4\ui\Icon::addTo($js_header, ['content' => 'file code']);
 
 $g->addActionMenuItem($js_header);
@@ -46,7 +50,7 @@ $g->addActionMenuItems(
     ]
 );
 
-$special_item = $app->factory('View', ['id' => false, 'class' => ['item'], 'content' => 'Multi Step'], 'atk4\ui');
+$special_item = $app->factory('View', ['id' => false, 'class' => ['item'], 'content' => 'Multi Step'], '\atk4\ui');
 \atk4\ui\Icon::addTo($special_item, ['content' => 'window maximize outline']);
 
 $g->addActionMenuItem($special_item, $country->getAction('multi_step'));

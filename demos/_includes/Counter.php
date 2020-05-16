@@ -1,4 +1,8 @@
 <?php
+
+
+namespace atk4\ui\demo;
+
 /**
  * Counter for certain demos file.
  */
