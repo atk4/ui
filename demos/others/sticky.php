@@ -1,19 +1,17 @@
 <?php
 
-
-
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-use \atk4\ui\Button;
+use atk4\ui\Button;
 
 \atk4\ui\View::addTo($app, [
     'Sticky GET allows us to preserve some GET arguments',
     'ui' => 'ignored info message',
 ]);
 
-class MyButton extends \atk4\ui\Button
+class sticky extends \atk4\ui\Button
 {
     public function renderView()
     {

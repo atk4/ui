@@ -1,18 +1,16 @@
 <?php
 
-
-
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-use \atk4\ui\jsExpression;
-use \atk4\ui\jsFunction;
+use atk4\ui\jsExpression;
+use atk4\ui\jsFunction;
 
 /**
  * Class Inventory Item.
  */
-class InventoryItem extends \atk4\data\Model
+class multiline extends \atk4\data\Model
 {
     public function init(): void
     {

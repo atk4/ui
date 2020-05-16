@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
@@ -71,7 +69,7 @@ $form->onSubmit(function (\atk4\ui\Form $form) {
 
 // ======
 
-class Person extends \atk4\data\Model
+class form2 extends \atk4\data\Model
 {
     public $table = 'person';
 

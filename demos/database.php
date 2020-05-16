@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace atk4\ui\demo;
 
 // A very basic file that sets up Agile Data to be used in some demonstrations

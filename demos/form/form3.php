@@ -1,12 +1,10 @@
 <?php
 
-
-
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-use \atk4\ui\jsReload;
+use atk4\ui\jsReload;
 
 // Testing form.
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace atk4\ui\demo;
 
 /**
@@ -66,7 +65,7 @@ $r = $c->addRow();
 /**
  * Example box component with some content, good for putting into columns.
  */
-class Box extends \atk4\ui\View
+class columns extends \atk4\ui\View
 {
     public $ui = 'segment';
     public $content = false;

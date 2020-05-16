@@ -1,17 +1,15 @@
 <?php
 
-
-
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
 // Demonstrates how to use buttons.
 
-use \atk4\ui\Button;
-use \atk4\ui\Icon;
-use \atk4\ui\Label;
-use \atk4\ui\Template;
+use atk4\ui\Button;
+use atk4\ui\Icon;
+use atk4\ui\Label;
+use atk4\ui\Template;
 
 \atk4\ui\Header::addTo($app, ['Basic Button', 'size' => 2]);
 
@@ -53,7 +51,7 @@ Button::addTo($bar, ['icon' => 'upload', 'disabled' => true]);
 \atk4\ui\Header::addTo($app, ['Forks Button Component', 'size' => 2]);
 
 // Creating your own button component example
-class ForkButton extends Button
+class button extends Button
 {
     public function __construct($n)
     {

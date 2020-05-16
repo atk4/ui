@@ -1,13 +1,11 @@
 <?php
 
-
-
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
 // Re-usable component implementing counter
-class Finder extends \atk4\ui\Columns
+class multitable extends \atk4\ui\Columns
 {
     public $route = [];
 

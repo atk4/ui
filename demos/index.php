@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace atk4\ui\demo;
 
 include_once __DIR__ . '/atk-init.php';
