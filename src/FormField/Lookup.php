@@ -200,11 +200,9 @@ class Lookup extends Input
     /**
      * Renders the Lookup row depending on properties set.
      *
-     * @param array $row
-     *
      * @return mixed
      */
-    public function renderRow($row)
+    public function renderRow(\atk4\data\Model $row)
     {
         $renderRowFunction = is_callable($this->renderRowFunction) ? $this->renderRowFunction : [__CLASS__, 'defaultRenderRow'];
 
@@ -214,21 +212,20 @@ class Lookup extends Input
     /**
      * Default callback for generating data row.
      *
-     * @param Lookup           $field
-     * @param \atk4\data\Model $row
-     * @param string           $key
+     * @param Lookup $field
+     * @param string $key
      *
      * @return string[]
      */
-    public static function defaultRenderRow($field, $row, $key = null)
+    public static function defaultRenderRow($field, \atk4\data\Model $row, $key = null)
     {
         $id_field = $field->id_field ?: $row->id_field;
         $title_field = $field->title_field ?: $row->title_field;
 
         // IMPORTANT: always convert data to string, otherwise numbers can be rounded by JS
         return [
-            'value' => (string) $row[$id_field],
-            'title' => (string) $row[$title_field],
+            'value' => (string) $row->get($id_field),
+            'title' => (string) $row->get($title_field),
         ];
     }
 
