@@ -48,7 +48,7 @@ $form->onSubmit(function ($f) {
     if (mb_strlen($f->model['last_name']) < 5) {
         $errors[] = $f->error('last_name', 'too short');
     }
-    if (isset($f->model->dirty['iso'])) { // restrict to change iso field value
+    if ($f->model->isDirty('iso')) { // restrict to change iso field value
         $errors[] = $f->error('iso', 'Field value should not be changed');
     }
 
