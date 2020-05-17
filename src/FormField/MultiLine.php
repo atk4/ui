@@ -72,6 +72,7 @@ use atk4\data\Model;
 use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
+use atk4\ui\Form;
 use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
 use atk4\ui\jsVueService;
