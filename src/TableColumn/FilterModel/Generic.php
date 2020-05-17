@@ -17,14 +17,14 @@ class Generic extends Model
     /**
      * The operator for defining a condition on a field.
      *
-     * @var
+     * @var Field
      */
     public $op;
 
     /**
      * The value for defining a condition on a field.
      *
-     * @var
+     * @var Field
      */
     public $value;
 
@@ -38,19 +38,16 @@ class Generic extends Model
     /**
      * The field where this filter need to query data.
      *
-     * @var null
+     * @var Field
      */
     public $lookupField;
 
     /**
      * Factory method that will return a FilerModel Type class.
      *
-     * @param Field       $field
-     * @param Persistence $persistence
-     *
-     * @return mixed
+     * @return FilterModel
      */
-    public static function factoryType($field)
+    public static function factoryType(Field $field)
     {
         $data = [];
         $persistence = new Persistence\Array_($data);
@@ -97,7 +94,7 @@ class Generic extends Model
     {
         $this->addField('name', ['default' => $this->lookupField->short_name, 'system' => true]);
 
-        if (isset($this->_sessionTrait) && $this->_sessionTrait) {
+        if (isset($this->_sessionTrait)) {
             // create a name for our filter model to save as session data.
             $this->name = 'filter_model_' . $this->lookupField->short_name;
 

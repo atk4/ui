@@ -36,7 +36,7 @@
     "php": ">=7.2.0",
     "ext-json": "*",
     "atk4/core": "dev-develop",
-    "atk4/data": "dev-develop",
+    "atk4/data": "dev-develop#2837b1029af4043b1cb8b30b7297ebfa0913d271",
     "fzaninotto/faker": "*"
   },
   "require-release": {
