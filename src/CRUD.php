@@ -152,7 +152,7 @@ class CRUD extends Grid
     protected function initActionExecutor(Generic $action)
     {
         $executor = $this->getExecutor($action);
-        $executor->onHook('afterExecute', function ($ex, $return, $id) use ($action) {
+        $executor->onHook(ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
             return $this->jsExecute($return, $action);
         });
 
@@ -250,7 +250,7 @@ class CRUD extends Grid
     /**
      * Return proper action executor base on model action.
      *
-     *@throws \atk4\core\Exception
+     * @throws \atk4\core\Exception
      *
      * @return object
      */
