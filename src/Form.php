@@ -8,7 +8,7 @@ use atk4\data\Reference\ContainsMany;
 /**
  * Implements a form.
  */
-class Form extends View //implements \ArrayAccess - temporarily so that our build script dont' complain
+class Form extends View
 {
     use \atk4\core\HookTrait;
 
