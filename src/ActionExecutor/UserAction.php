@@ -37,6 +37,9 @@ class UserAction extends Modal implements Interface_, jsInterface_
 {
     use HookTrait;
 
+    /** @const string */
+    public const HOOK_STEP = self::class . '@onStep';
+
     /**
      * @var jsExpressionable array|callable jsExpression to return if action was successful, e.g "new jsToast('Thank you')"
      */
@@ -539,7 +542,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         foreach ($fields as $k => $val) {
             $form->getField($k)->set($val);
         }
-        $this->hook('onStep', [$step, $form]);
+        $this->hook(self::HOOK_STEP, [$step, $form]);
 
         return $form;
     }
