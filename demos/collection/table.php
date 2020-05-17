@@ -27,7 +27,7 @@ $table->addColumn('date');
 $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 $table->addColumn('logo_url', [new \atk4\ui\TableColumn\Image()], ['caption' => 'Our Logo']);
 
-$table->onHook('getHTMLTags', function ($table, atk4\data\Model $row) {
+$table->onHook(\atk4\ui\TableColumn\Generic::HOOK_GET_HTML_TAGS, function ($table, atk4\data\Model $row) {
     switch ($row->id) {
         case 1: $color = 'yellow';
 
