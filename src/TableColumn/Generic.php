@@ -21,6 +21,9 @@ class Generic
     use \atk4\core\TrackableTrait;
     use \atk4\core\DIContainerTrait;
 
+    /** @const string */
+    public const HOOK_GET_HTML_TAGS = self::class . '@getHTMLTags';
+
     /**
      * Link back to the table, where column is used.
      *
