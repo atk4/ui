@@ -14,6 +14,12 @@ class Form extends View
 
     /** @const string Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';
+    /** @const string Executed when form is submitted */
+    public const HOOK_DISPLAY_ERROR = self::class . '@displayError';
+    /** @const string Executed when form is submitted */
+    public const HOOK_DISPLAY_SUCCESS = self::class . '@displaySuccess';
+    /** @const string Executed when self::loadPOST() method is called. */
+    public const HOOK_LOAD_POST = self::class . '@loadPOST';
 
     // {{{ Properties
 
@@ -279,8 +285,8 @@ class Form extends View
     public function error($fieldName, $str)
     {
         // by using this hook you can overwrite default behavior of this method
-        if ($this->hookHasCallbacks('displayError')) {
-            return $this->hook('displayError', [$fieldName, $str]);
+        if ($this->hookHasCallbacks(self::HOOK_DISPLAY_ERROR)) {
+            return $this->hook(self::HOOK_DISPLAY_ERROR, [$fieldName, $str]);
         }
 
         $jsError = [$this->js()->form('add prompt', $fieldName, $str)];
@@ -304,8 +310,8 @@ class Form extends View
     {
         $response = null;
         // by using this hook you can overwrite default behavior of this method
-        if ($this->hookHasCallbacks('displaySuccess')) {
-            return $this->hook('displaySuccess', [$success, $sub_header]);
+        if ($this->hookHasCallbacks(self::HOOK_DISPLAY_SUCCESS)) {
+            return $this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $sub_header]);
         }
 
         if ($success instanceof View) {
@@ -507,7 +513,7 @@ class Form extends View
     {
         $post = $_POST;
 
-        $this->hook('loadPOST', [&$post]);
+        $this->hook(self::HOOK_LOAD_POST, [&$post]);
         $errors = [];
 
         foreach ($this->fields as $key => $field) {

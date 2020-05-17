@@ -14,6 +14,9 @@ class jsArgumentForm extends jsModal
 {
     use HookTrait;
 
+    /** @const string not used, make it public if needed or drop it */
+    private const HOOK_FORM_INIT = self::class . '@formInit';
+
     public $vp;
     public $action;
     public $form;
@@ -46,7 +49,7 @@ class jsArgumentForm extends jsModal
             // TODO How do we know if argument is need over model field in action?
             $form->setModel($this->action->owner);
 
-            $form->hook('formInit');
+            $form->hook(self::HOOK_FORM_INIT);
 
             $form->onSubmit(function (\atk4\ui\Form $form) {
                 $this->action->fields = array_keys($form->model->getFields('editable'));

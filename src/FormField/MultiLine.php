@@ -254,7 +254,7 @@ class MultiLine extends Generic
         });
 
         // Change form error handling.
-        $this->form->onHook('displayError', function ($form, $fieldName, $str) {
+        $this->form->onHook(\atk4\ui\Form::HOOK_DISPLAY_ERROR, function ($form, $fieldName, $str) {
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
             if ($fieldName === $this->short_name) {
