@@ -126,7 +126,7 @@ class Stat extends \atk4\data\Model
         $this->addField('is_commercial', ['type' => 'boolean']);
         $this->addField('currency', ['enum' => ['EUR', 'USD', 'GBP']]);
         $this->addField('currency_symbol', ['never_persist' => true]);
-        $this->onHook('afterLoad', function (atk4\data\Model $m) {
+        $this->onHook(atk4\data\Model::HOOK_AFTER_LOAD, function (atk4\data\Model $m) {
             /* implementation for "intl"
             $locale='en-UK';
             $fmt = new \NumberFormatter( $locale."@currency=".$m->get('currency'), NumberFormatter::CURRENCY );
