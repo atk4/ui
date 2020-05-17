@@ -26,7 +26,7 @@ if ($app->catch_exceptions !== true) {
 }
 
 if (file_exists(__DIR__ . '/coverage.php')) {
-    $app->onHook('beforeExit', function () {
+    $app->onHook(atk4\ui\App::HOOK_BEFORE_EXIT, function () {
         coverage();
     });
 }
