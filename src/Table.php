@@ -501,7 +501,7 @@ class Table extends Lister
 
             ++$this->_rendered_rows_count;
 
-            if ($this->hook('afterRow') === false) {
+            if ($this->hook(self::HOOK_AFTER_ROW) === false) {
                 continue;
             }
         }

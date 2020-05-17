@@ -8,6 +8,8 @@ class Lister extends View
 
     /** @const string */
     public const HOOK_BEFORE_ROW = self::class . '@beforeRow';
+    /** @const string */
+    public const HOOK_AFTER_ROW = self::class . '@afterRow';
 
     /**
      * Lister repeats part of it's template. This property will contain
