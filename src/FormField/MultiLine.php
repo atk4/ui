@@ -244,7 +244,7 @@ class MultiLine extends Generic
         $this->cb = \atk4\ui\jsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->onHook('loadPOST', function ($form) {
+        $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form) {
             $this->rowData = json_decode($_POST[$this->short_name], true);
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
