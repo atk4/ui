@@ -11,6 +11,9 @@ class jsSSE extends jsCallback
 {
     use HookTrait;
 
+    /** @const string Executed when user aborted, or disconnect browser, when using this SSE. */
+    public const HOOK_ABORTED = self::class . '@connection_aborted';
+
     /** @var bool Allows us to fall-back to standard functionality of jsCallback if browser does not support SSE. */
     public $browserSupport = false;
 
@@ -34,14 +37,6 @@ class jsSSE extends jsCallback
             $this->browserSupport = true;
             $this->initSse();
         }
-    }
-
-    /**
-     * A function that get execute when user aborted, or disconnect browser, when using this sse.
-     */
-    public function onAborted(callable $fx)
-    {
-        $this->onHook('aborted', $fx);
     }
 
     public function jsRender()
@@ -130,7 +125,7 @@ class jsSSE extends jsCallback
     public function sendBlock(string $id, string $data, string $name = null): void
     {
         if (connection_aborted()) {
-            $this->hook('aborted');
+            $this->hook(self::HOOK_ABORTED);
 
             // stop execution when aborted if not keepAlive.
             if (!$this->keepAlive) {

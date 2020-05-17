@@ -12,6 +12,9 @@ class Form extends View
 {
     use \atk4\core\HookTrait;
 
+    /** @const string Executed when form is submitted */
+    public const HOOK_SUBMIT = self::class . '@submit';
+
     // {{{ Properties
 
     public $ui = 'form';
@@ -244,10 +247,12 @@ class Form extends View
 
     /**
      * Adds callback in submit hook.
+     *
+     * @return $this
      */
-    public function onSubmit(callable $callback)
+    public function onSubmit(\Closure $callback)
     {
-        $this->onHook('submit', $callback);
+        $this->onHook(self::HOOK_SUBMIT, $callback);
 
         return $this;
     }
@@ -580,7 +585,7 @@ class Form extends View
             try {
                 ob_start();
                 $this->loadPOST();
-                $response = $this->hook('submit');
+                $response = $this->hook(self::HOOK_SUBMIT);
                 $output = ob_get_clean();
 
                 if ($output) {

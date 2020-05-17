@@ -46,7 +46,7 @@ $crud = \atk4\ui\CRUD::addTo($cc, [
 // Condition on the model can be applied on a model
 $m = new CountryLock($db);
 $m->addCondition('numcode', '<', 200);
-$m->onHook('validate', function ($m2, $intent) {
+$m->onHook(atk4\data\Model::HOOK_VALIDATE, function ($m2, $intent) {
     $err = [];
     if ($m2->get('numcode') >= 200) {
         $err['numcode'] = 'Should be less than 200';
