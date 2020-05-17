@@ -489,7 +489,7 @@ class Table extends Lister
         $this->_rendered_rows_count = 0;
         foreach ($this->model as $this->current_id => $tmp) {
             $this->current_row = $this->model->get();
-            if ($this->hook('beforeRow') === false) {
+            if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                 continue;
             }
 
