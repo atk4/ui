@@ -93,9 +93,9 @@ class Generic extends Model
         // create a name for our filter model to save as session data.
         $this->table = 'filter_model_' . $this->lookupField->short_name;
 
-var_dump($this->table);
-$this->tryLoadAny();
-var_dump($_SESSION);
+        var_dump($this->table);
+        $this->tryLoadAny();
+        var_dump($_SESSION);
         // delete stored filter data
         if ($_GET['atk_clear_filter'] ?? false) {
             $this->clearData();
