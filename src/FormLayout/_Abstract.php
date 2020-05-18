@@ -33,7 +33,7 @@ abstract class _Abstract extends \atk4\ui\View
         }
 
         if (!$this->form->model) {
-            $this->form->model = new \atk4\ui\misc\ProxyModel();
+            $this->form->model = new \atk4\ui\Misc\ProxyModel();
         }
 
         if (is_string($field)) {
