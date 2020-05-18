@@ -2,6 +2,8 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
+use atk4\data\Model;
+
 class TypeBoolean extends Generic
 {
     public $noValueField = true;
@@ -14,7 +16,7 @@ class TypeBoolean extends Generic
         $this->op->default = 'true';
     }
 
-    public function setConditionForModel($model)
+    public function setConditionForModel(Model $model): Model
     {
         $filter = $this->tryLoadAny()->get();
         if (isset($filter['id'])) {

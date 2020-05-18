@@ -10,7 +10,7 @@ class TypeEnum extends Generic
     {
         //bypass parent init since we are not using op and value field but create them from
         //the lookup field value.
-        Model ::init();
+        Model::init();
         $this->afterInit();
 
         $this->op = null;
@@ -25,7 +25,7 @@ class TypeEnum extends Generic
         }
     }
 
-    public function setConditionForModel($model)
+    public function setConditionForModel(Model $model): Model
     {
         $filter = $this->tryLoadAny()->get();
         $values = [];

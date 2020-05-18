@@ -3,6 +3,8 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
+use atk4\data\Model;
+use atk4\ui\Button;
 use atk4\ui\Form;
 use atk4\ui\jQuery;
 use atk4\ui\jsReload;
@@ -72,7 +74,7 @@ class FilterPopup extends Popup
             return (new jQuery($this->triggerBy))->trigger('click');
         });
 
-        \atk4\ui\Button::addTo($this->form, ['Clear', 'clear '])->on('click', function ($f) use ($m) {
+        Button::addTo($this->form, ['Clear', 'clear '])->on('click', function ($f) use ($m) {
             $m->clearData();
 
             return [
@@ -90,25 +92,13 @@ class FilterPopup extends Popup
      */
     public function isFilterOn()
     {
-        return !empty($this->recallData());
-    }
-
-    /**
-     * Recall model data.
-     *
-     * @return mixed
-     */
-    public function recallData()
-    {
-        return $this->form->model->recallData();
+        return !empty($this->form->model->export());
     }
 
     /**
      * Set filter condition base on the field Type model use in this FilterPopup.
-     *
-     * @return mixed
      */
-    public function setFilterCondition($tableModel)
+    public function setFilterCondition(Model $tableModel): Model
     {
         return $this->form->model->setConditionForModel($tableModel);
     }

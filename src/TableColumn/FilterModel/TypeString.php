@@ -2,6 +2,8 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
+use atk4\data\Model;
+
 class TypeString extends Generic
 {
     public function init(): void
@@ -12,7 +14,7 @@ class TypeString extends Generic
         $this->op->default = 'is';
     }
 
-    public function setConditionForModel($model)
+    public function setConditionForModel(Model $model): Model
     {
         $filter = $this->tryLoadAny()->get();
         if (isset($filter['id'])) {

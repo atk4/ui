@@ -2,6 +2,8 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
+use atk4\data\Model;
+
 class TypeNumber extends Generic
 {
     public function init(): void
@@ -23,26 +25,26 @@ class TypeNumber extends Generic
         $this->addField('range', ['ui' => ['caption' => '', 'form' => ['Line', 'inputType' => 'number']]]);
     }
 
-    public function setConditionForModel($m)
+    public function setConditionForModel(Model $model): Model
     {
         $filter = $this->tryLoadAny()->get();
         if (isset($filter['id'])) {
             switch ($filter['op']) {
                 case 'between':
-                    $m->addCondition(
-                        $m->expr('[field] between [value] and [range]', ['field' => $m->getField($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
+                    $model->addCondition(
+                        $model->expr('[field] between [value] and [range]', ['field' => $model->getField($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
                     );
 
                     break;
                 default:
-                    $m->addCondition($filter['name'], $filter['op'], $filter['value']);
+                    $model->addCondition($filter['name'], $filter['op'], $filter['value']);
             }
         }
 
-        return $m;
+        return $model;
     }
 
-    public function getFormDisplayRules()
+    public function getFormDisplayRules(): array
     {
         return [
             'range' => ['op' => 'isExactly[between]'],

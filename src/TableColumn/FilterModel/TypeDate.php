@@ -2,6 +2,7 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
+use atk4\data\Model;
 use DateTime;
 
 class TypeDate extends Generic
@@ -63,41 +64,40 @@ class TypeDate extends Generic
      * Set model condition base on filter value.
      *
      * @throws \atk4\data\Exception
-     *
-     * @return mixed
      */
-    public function setConditionForModel($m)
+    public function setConditionForModel(Model $model): Model
     {
         $filter = $this->tryLoadAny()->get();
         if (isset($filter['id'])) {
             switch ($filter['op']) {
                 case 'empty':
-                    $m->addCondition($filter['name'], '=', null);
+                    $model->addCondition($filter['name'], '=', null);
 
                     break;
                 case 'not empty':
-                    $m->addCondition($filter['name'], '!=', null);
+                    $model->addCondition($filter['name'], '!=', null);
 
                     break;
                 case 'within':
                     $d1 = $this->getDate($filter['value']);
                     $d2 = $this->getDate($filter['range']);
+                    $field = $model->getField($filter['name']);
                     if ($d2 >= $d1) {
-                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
-                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
+                        $value = $model->persistence->typecastSaveField($field, $d1);
+                        $value2 = $model->persistence->typecastSaveField($field, $d2);
                     } else {
-                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
-                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
+                        $value = $model->persistence->typecastSaveField($field, $d2);
+                        $value2 = $model->persistence->typecastSaveField($field, $d1);
                     }
-                    $m->addCondition($m->expr('[field] between [value] and [value2]', ['field' => $m->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $model->addCondition($model->expr('[field] between [value] and [value2]', ['field' => $field, 'value' => $value, 'value2' => $value2]));
 
                     break;
                 default:
-                    $m->addCondition($filter['name'], $filter['op'], $this->getDate($filter['value']));
+                    $model->addCondition($filter['name'], $filter['op'], $this->getDate($filter['value']));
             }
         }
 
-        return $m;
+        return $model;
     }
 
     /**
@@ -105,10 +105,8 @@ class TypeDate extends Generic
      * Will construct and return a date object base on constructor string.
      *
      * @param string $dateModifier the string to pass to generated a date from
-     *
-     * @return DateTime
      */
-    public function getDate($dateModifier)
+    public function getDate(string $dateModifier): \DateTime
     {
         switch ($dateModifier) {
             case 'exact':
@@ -134,7 +132,7 @@ class TypeDate extends Generic
         return $date;
     }
 
-    public function getFormDisplayRules()
+    public function getFormDisplayRules(): array
     {
         return [
             'range' => ['op' => 'isExactly[within]'],
