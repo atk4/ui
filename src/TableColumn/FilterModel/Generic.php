@@ -54,8 +54,7 @@ class Generic extends Model
      */
     public static function factoryType($field)
     {
-        $data = [];
-        $persistence = new Persistence\Array_($data);
+        $persistence = new Persistence\Array_();
         $filterDomain = 'atk4\\ui\\TableColumn\\FilterModel\Type';
 
         // check if field as a type and use string as default
