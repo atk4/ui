@@ -2,7 +2,7 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
-use atk4\core\SessionTrait;
+//use atk4\core\SessionTrait;
 use atk4\data\Field;
 use atk4\data\Model;
 use atk4\data\Persistence;
@@ -12,7 +12,7 @@ use atk4\data\Persistence;
  */
 class Generic extends Model
 {
-    use SessionTrait;
+    //use SessionTrait;
 
     /**
      * The operator for defining a condition on a field.
@@ -49,8 +49,7 @@ class Generic extends Model
      */
     public static function factoryType(Field $field)
     {
-        $data = [];
-        $persistence = new Persistence\Array_($data);
+        $persistence = new Persistence\Session();
         $filterDomain = 'atk4\\ui\\TableColumn\\FilterModel\Type';
 
         // check if field as a type and use string as default
@@ -63,7 +62,7 @@ class Generic extends Model
          * You can set your own filter model condition by extending
          * Field class and setting your filter model class.
          */
-        if (!empty($field->filterModel) && isset($field->filterModel)) {
+        if (!empty($field->filterModel)) {
             if ($field->filterModel instanceof Model) {
                 return $field->filterModel;
             }
@@ -94,6 +93,15 @@ class Generic extends Model
     {
         $this->addField('name', ['default' => $this->lookupField->short_name, 'system' => true]);
 
+        // create a name for our filter model to save as session data.
+        $this->table = 'filter_model_' . $this->lookupField->short_name;
+
+        // delete stored filter data
+        if ($_GET['atk_clear_filter'] ?? false) {
+            $this->clearData();
+        }
+
+        /*
         if (isset($this->_sessionTrait)) {
             // create a name for our filter model to save as session data.
             $this->name = 'filter_model_' . $this->lookupField->short_name;
@@ -111,6 +119,7 @@ class Generic extends Model
                 $this->memorize('data', $m->get());
             });
         }
+        */
     }
 
     /**
@@ -118,18 +127,28 @@ class Generic extends Model
      *
      * @return array
      */
+    /*
     public function recallData()
     {
         return $this->recall('data');
     }
+    */
 
     /**
-     * Method that will set conditions on a model base on $op and $value value.
-     * Each FilterModel\TypeModel should override this method.
-     *
-     * @return mixed
+     * Clears all stored data of this model.
      */
-    public function setConditionForModel($model)
+    public function clearData()
+    {
+        foreach ($this as $junk) {
+            $this->delete();
+        }
+    }
+
+    /**
+     * Method that will set conditions on a model based on $op and $value value.
+     * Each FilterModel\TypeModel should override this method.
+     */
+    public function setConditionForModel(Model $model): Model
     {
         return $model;
     }
@@ -138,18 +157,10 @@ class Generic extends Model
      * Method that will set Field display condition in a form.
      * If form filter need to have a field display at certain condition, then
      * override this method in your FilterModel\TypeModel.
+     *
+     * @return array
      */
     public function getFormDisplayRules()
     {
-    }
-
-    /**
-     * Check if this model is using session or not.
-     *
-     * @return bool
-     */
-    public function clearData()
-    {
-        $this->forget();
     }
 }
