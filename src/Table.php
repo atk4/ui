@@ -185,7 +185,7 @@ class Table extends Lister
         }
 
         if (!$this->model) {
-            $this->model = new \atk4\ui\misc\ProxyModel();
+            $this->model = new \atk4\ui\Misc\ProxyModel();
         }
 
         // This code should be vaugely consistent with FormLayout\Generic::addField()
