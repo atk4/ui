@@ -342,7 +342,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function addField($name, $decorator = null, $field = null)
     {
         if (!$this->model) {
-            $this->model = new \atk4\ui\misc\ProxyModel();
+            $this->model = new \atk4\ui\Misc\ProxyModel();
         }
 
         return $this->layout->addField($name, $decorator, $field);
@@ -593,7 +593,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 }
 
                 if (!$response) {
-                    if (!$this->model instanceof \atk4\ui\misc\ProxyModel) {
+                    if (!$this->model instanceof \atk4\ui\Misc\ProxyModel) {
                         $this->model->save();
 
                         return $this->success('Form data has been saved');
