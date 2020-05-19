@@ -7,7 +7,7 @@ $view = \atk4\ui\View::addTo($app, ['ui' => 'basic segment']);
 $g = \atk4\ui\Grid::addTo($view);
 
 $m = new CountryLock($db);
-$m->addExpression('is_uk', 'if([iso] = "GB", 1, 0)')->type = 'boolean';
+$m->addExpression('is_uk', $m->expr('if([iso] = [country], 1, 0)', ['country' => 'GB']))->type = 'boolean';
 
 $g->setModel($m);
 $g->addFilterColumn();
