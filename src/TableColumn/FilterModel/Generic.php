@@ -2,6 +2,7 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
+use atk4\core\NameTrait;
 use atk4\core\SessionTrait;
 use atk4\data\Field;
 use atk4\data\Model;
@@ -13,6 +14,7 @@ use atk4\data\Persistence;
 class Generic extends Model
 {
     use SessionTrait;
+    use NameTrait; // needed for SessionTrait
 
     /**
      * The operator for defining a condition on a field.
