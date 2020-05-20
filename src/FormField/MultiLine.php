@@ -694,13 +694,7 @@ class MultiLine extends Generic
             return $field->values;
         } elseif ($field->reference) {
             $m = $field->reference->refModel()->setLimit($this->enumLimit);
-
-            $values = [];
-            foreach ($m->export([$m->id_field, $m->title_field]) as $item) {
-                $values[$item[$m->id_field]] = $item[$m->title_field];
-            }
-
-            return $values;
+            return $m->getTitles();
         }
 
         return [];
