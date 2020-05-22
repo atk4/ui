@@ -55,10 +55,10 @@ class CRUD extends Grid
     /** @var array Callback containers for model action. */
     public $onActions = [];
 
-    /** @var array Action name container that will reload Table after executing */
+    /** @var array Action name container that will reload Table after executing @deprecated Use action modifier instead. */
     public $reloadTableActions = [];
 
-    /** @var array Action name container that will remove the corresponding table row after executing */
+    /** @var array Action name container that will remove the corresponding table row after executing  @deprecated Use action modifier instead. */
     public $removeRowActions = [];
 
     public function init(): void
@@ -175,22 +175,50 @@ class CRUD extends Grid
      * depending on return type, model loaded and action scope.
      *
      * @throws \atk4\core\Exception
-     *
-     * @return array|object
      */
-    protected function jsExecute($return, $action)
+    protected function jsExecute($return, Generic $action): array
     {
-        if (is_string($return)) {
-            return  $this->getNotifier($return, $action);
-        } elseif (is_array($return) || $return instanceof jsExpressionable) {
-            return $return;
-        } elseif ($return instanceof Model) {
-            $msg = $return->loaded() ? $this->saveMsg : ($action->scope === Generic::SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
-
-            return $this->jsModelReturn($action, $msg);
+        $js = [];
+        if ($jsAction = $this->getJsGridAction($action)) {
+            $js[] = $jsAction;
         }
 
-        return $this->getNotifier($this->defaultMsg, $action);
+        // display msg return by action or depending on action modifier.
+        if (is_string($return)) {
+            $js[] = $this->getNotifier($return);
+        } else {
+            if ($action->modifier === Generic::MODIFIER_CREATE || $action->modifier === Generic::MODIFIER_UPDATE) {
+                $js[] = $this->getNotifier($this->saveMsg);
+            } elseif ($action->modifier === Generic::MODIFIER_DELETE) {
+                $js[] = $this->getNotifier($this->deleteMsg);
+            } else {
+                $js[] = $this->getNotifier($this->defaultMsg);
+            }
+        }
+
+        return $js;
+    }
+
+    /**
+     * Return proper js actions depending on action modifier type.
+     */
+    protected function getJsGridAction(Generic $action): ?jsExpressionable
+    {
+        switch ($action->modifier) {
+            case Generic::MODIFIER_UPDATE:
+            case Generic::MODIFIER_CREATE:
+                $js = $this->container->jsReload($this->_getReloadArgs());
+
+                break;
+            case Generic::MODIFIER_DELETE:
+                $js = (new jQuery())->closest('tr')->transition('fade left');
+
+                break;
+            default:
+                $js = null;
+        }
+
+        return $js;
     }
 
     /**
@@ -204,7 +232,7 @@ class CRUD extends Grid
      *
      * @return object
      */
-    protected function getNotifier($msg = null, $action = null)
+    protected function getNotifier(string $msg = null)
     {
         $notifier = $this->factory($this->notifyDefault, null, 'atk4\ui');
         if ($msg) {
@@ -212,27 +240,6 @@ class CRUD extends Grid
         }
 
         return $notifier;
-    }
-
-    /**
-     * js expression return when action afterHook executor return a Model.
-     *
-     * @param Generic $action
-     *
-     * @throws \atk4\core\Exception
-     */
-    protected function jsModelReturn(Generic $action = null, string $msg = 'Done!'): array
-    {
-        $js[] = $this->getNotifier($msg, $action);
-        if (in_array($action->short_name, $this->reloadTableActions, true)) {
-            $js[] = $this->container->jsReload($this->_getReloadArgs());
-        } elseif (in_array($action->short_name, $this->removeRowActions, true)) {
-            $js[] = (new jQuery())->closest('tr')->transition('fade left');
-        } else {
-            $js[] = $action->owner->loaded() ? $this->container->jsReload($this->_getReloadArgs()) : (new jQuery())->closest('tr')->transition('fade left');
-        }
-
-        return $js;
     }
 
     /**
