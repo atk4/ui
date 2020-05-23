@@ -55,6 +55,9 @@ class CRUD extends Grid
     /** @var array Callback containers for model action. */
     public $onActions = [];
 
+    /** @var Hold recently deleted record id. */
+    private $deletedId;
+
     /** @var array Action name container that will reload Table after executing @deprecated Use action modifier instead. */
     public $reloadTableActions = [];
 
@@ -105,6 +108,11 @@ class CRUD extends Grid
         }
 
         parent::setModel($m, $this->displayFields);
+
+        // Grab model id when using delete. Must be set before delete action execute.
+        $this->model->onHook('afterDelete', function ($m) {
+            $this->deletedId = $m->get($m->id_field);
+        });
 
         $this->model->unload();
 
@@ -211,7 +219,10 @@ class CRUD extends Grid
 
                 break;
             case Generic::MODIFIER_DELETE:
-                $js = (new jQuery())->closest('tr')->transition('fade left');
+                // use deleted record id to remove row, fallback to closest tr if id is not available.
+                $js = $this->deletedId ?
+                    (new jQuery('tr[data-id="' . $this->deletedId . '"]'))->transition('fade left') :
+                    (new jQuery())->closest('tr')->transition('fade left');
 
                 break;
             default:
