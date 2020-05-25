@@ -31,7 +31,7 @@ class FlyersForm extends Form
     {
         parent::init();
 
-        $this->addField('first_name', ['Line', 'caption' => 'Main traveller', 'placeholder' => 'First name'], ['required' => true]);
+        $this->addField('first_name', ['Line', 'caption' => 'Main passenger', 'placeholder' => 'First name'], ['required' => true]);
         $this->addField('last_name', ['Line', 'renderLabel' => false, 'placeholder' => 'Last name'], ['required' => true]);
         $this->addField('email', ['Line'], ['required' => true]);
 
@@ -55,7 +55,7 @@ class FlyersForm extends Form
             'placeholder' => 'Select your destination',
         ], ['required' => true]);
 
-        $ml = $this->addField('multi', ['MultiLine', 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional travellers:', 'renderLabel' => false]);
+        $ml = $this->addField('multi', ['MultiLine', 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional passengers:', 'renderLabel' => false]);
         $ml->setModel(new Flyers(new \atk4\data\Persistence\Array_($this->flyers)));
 
         $cards = $this->addField('cards', [new \atk4\ui\FormField\TreeItemSelector(['treeItems' => $this->cards]), 'caption' => 'Flyers program:'], ['type' => 'array', 'serialize' => 'json']);
