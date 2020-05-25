@@ -28,6 +28,9 @@ class Generic extends View
      */
     public $layoutWrap = true;
 
+    /** @var bool rendered or not input label in Generic layout template. */
+    public $renderLabel = true;
+
     public $width;
 
     /**
@@ -65,8 +68,6 @@ class Generic extends View
      * @var bool
      */
     public $readonly = false;
-
-    public $displayLabel = true;
 
     /**
      * Initialization.

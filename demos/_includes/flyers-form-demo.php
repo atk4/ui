@@ -32,16 +32,16 @@ class FlyersForm extends Form
         parent::init();
 
         $this->addField('first_name', ['Line', 'caption' => 'Main traveller', 'placeholder' => 'First name'], ['required' => true]);
-        $this->addField('last_name', ['Line', 'displayLabel' => false, 'placeholder' => 'Last name'], ['required' => true]);
+        $this->addField('last_name', ['Line', 'renderLabel' => false, 'placeholder' => 'Last name'], ['required' => true]);
         $this->addField('email', ['Line'], ['required' => true]);
 
         $this->addField('from', ['Calendar', 'caption' => 'Date:', 'placeholder' => 'From'], ['type' => 'date', 'required' => true]);
-        $this->addField('to', ['Calendar', 'displayLabel' => false, 'placeholder' => 'To'], ['type' => 'date', 'required' => true]);
+        $this->addField('to', ['Calendar', 'renderLabel' => false, 'placeholder' => 'To'], ['type' => 'date', 'required' => true]);
 
         $this->addField('contains', [
             'Line',
             'placeholder' => 'Search for country containing ...',
-            'displayLabel' => false,
+            'renderLabel' => false,
         ]);
 
         $this->addField('country', [
@@ -55,7 +55,7 @@ class FlyersForm extends Form
             'placeholder' => 'Select your destination',
         ], ['required' => true]);
 
-        $ml = $this->addField('multi', ['MultiLine', 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional travellers:', 'displayLabel' => false]);
+        $ml = $this->addField('multi', ['MultiLine', 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional travellers:', 'renderLabel' => false]);
         $ml->setModel(new Flyers(new \atk4\data\Persistence\Array_($this->flyers)));
 
         $cards = $this->addField('cards', [new \atk4\ui\FormField\TreeItemSelector(['treeItems' => $this->cards]), 'caption' => 'Flyers program:'], ['type' => 'array', 'serialize' => 'json']);

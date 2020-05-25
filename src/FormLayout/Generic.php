@@ -178,7 +178,7 @@ class Generic extends _Abstract
                 continue;
             }
 
-            $template = $el->displayLabel ? $field_input : $field_no_label;
+            $template = $el->renderLabel ? $field_input : $field_no_label;
             $label = $el->caption ?: $el->field->getCaption();
 
             // Anything but fields gets inserted directly
