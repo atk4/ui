@@ -80,13 +80,6 @@ use atk4\ui\Template;
 class MultiLine extends Generic
 {
     /**
-     * Layout view as is within form layout.
-     *
-     * @var bool
-     */
-    public $layoutWrap = false;
-
-    /**
      * The template needed for the multiline view.
      *
      * @var Template

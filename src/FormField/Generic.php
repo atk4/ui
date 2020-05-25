@@ -66,6 +66,8 @@ class Generic extends View
      */
     public $readonly = false;
 
+    public $displayLabel = true;
+
     /**
      * Initialization.
      */
