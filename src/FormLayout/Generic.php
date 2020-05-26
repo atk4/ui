@@ -3,6 +3,7 @@
 namespace atk4\ui\FormLayout;
 
 use atk4\ui\Form;
+use atk4\ui\Label;
 use atk4\ui\Template;
 
 /**
@@ -40,6 +41,9 @@ class Generic extends _Abstract
 
     /** @var Template Template holding input html. */
     public $inputTemplate;
+
+    /** @var array Seed for creating input hint View used in this layout. */
+    public $defaultHint = [Label::class, 'class' => ['pointing']];
 
     protected function _addField($decorator, $field)
     {
@@ -216,7 +220,8 @@ class Generic extends _Abstract
             }
 
             if ($el->hint && $template->hasTag('Hint')) {
-                $hint = new \atk4\ui\Label([null, 'pointing', 'id' => $el->id . '_hint']);
+                $hint = $this->factory($this->defaultHint);
+                $hint->id = $el->id . '_hint';
                 if (is_object($el->hint) || is_array($el->hint)) {
                     $hint->add($el->hint);
                 } else {
