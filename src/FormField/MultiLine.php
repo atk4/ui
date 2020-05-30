@@ -694,6 +694,7 @@ class MultiLine extends Generic
             return $field->values;
         } elseif ($field->reference) {
             $m = $field->reference->refModel()->setLimit($this->enumLimit);
+
             return $m->getTitles();
         }
 
