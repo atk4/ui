@@ -20,12 +20,18 @@ class App
     use InitializerTrait {
         init as _init;
     }
-
     use HookTrait;
     use DynamicMethodTrait;
     use FactoryTrait;
     use AppScopeTrait;
     use DIContainerTrait;
+
+    /** @const string */
+    public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
+    /** @const string */
+    public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
+    /** @const string not used, make it public if needed or drop it */
+    private const HOOK_BEFORE_OUTPUT = self::class . '@beforeOutput';
 
     /** @const string */
     protected const HEADER_STATUS_CODE = 'atk4-status-code';
@@ -220,7 +226,7 @@ class App
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
-            $this->hook('beforeExit');
+            $this->hook(self::HOOK_BEFORE_EXIT);
         }
 
         if ($for_shutdown) {
@@ -520,7 +526,7 @@ class App
         try {
             ob_start();
             $this->run_called = true;
-            $this->hook('beforeRender');
+            $this->hook(self::HOOK_BEFORE_RENDER);
             $this->is_rendering = true;
 
             // if no App layout set
@@ -532,7 +538,7 @@ class App
             $this->html->renderAll();
             $this->html->template->appendHTML('HEAD', $this->html->getJS());
             $this->is_rendering = false;
-            $this->hook('beforeOutput');
+            $this->hook(self::HOOK_BEFORE_OUTPUT);
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 $this->terminate(

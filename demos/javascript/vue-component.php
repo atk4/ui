@@ -40,7 +40,7 @@ $view = \atk4\ui\View::addTo($app);
 $search = \atk4\ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
 $lister_container = \atk4\ui\View::addTo($view, ['template' => $lister_template]);
 $lister = \atk4\ui\Lister::addTo($lister_container, [], ['List']);
-$lister->onHook('beforeRow', function (atk4\ui\Lister $lister) {
+$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (atk4\ui\Lister $lister) {
     ++$lister->ipp;
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
     if ($lister->ipp === $lister->model->limit[0]) {

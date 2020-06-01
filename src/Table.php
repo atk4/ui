@@ -500,7 +500,7 @@ class Table extends Lister
         $this->_rendered_rows_count = 0;
         foreach ($this->model as $this->current_id => $tmp) {
             $this->current_row = $this->model->get();
-            if ($this->hook('beforeRow') === false) {
+            if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                 continue;
             }
 
@@ -512,7 +512,7 @@ class Table extends Lister
 
             ++$this->_rendered_rows_count;
 
-            if ($this->hook('afterRow') === false) {
+            if ($this->hook(self::HOOK_AFTER_ROW) === false) {
                 continue;
             }
         }
@@ -547,7 +547,7 @@ class Table extends Lister
             // Prepare row-specific HTML tags.
             $html_tags = [];
 
-            foreach ($this->hook('getHTMLTags', [$this->model]) as $ret) {
+            foreach ($this->hook(TableColumn\Generic::HOOK_GET_HTML_TAGS, [$this->model]) as $ret) {
                 if (is_array($ret)) {
                     $html_tags = array_merge($html_tags, $ret);
                 }

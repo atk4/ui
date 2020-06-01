@@ -6,6 +6,11 @@ class Lister extends View
 {
     use \atk4\core\HookTrait;
 
+    /** @const string */
+    public const HOOK_BEFORE_ROW = self::class . '@beforeRow';
+    /** @const string */
+    public const HOOK_AFTER_ROW = self::class . '@afterRow';
+
     /**
      * Lister repeats part of it's template. This property will contain
      * the repeating part. Clones from {row}. If your template does not
@@ -137,7 +142,7 @@ class Lister extends View
         // Iterate data rows
         $this->_rendered_rows_count = 0;
         foreach ($this->model as $this->current_id => $this->current_row) {
-            if ($this->hook('beforeRow') === false) {
+            if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                 continue;
             }
 

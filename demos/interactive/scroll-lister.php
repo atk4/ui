@@ -15,7 +15,7 @@ $v = \atk4\ui\View::addTo($container, ['template' => new \atk4\ui\Template('
 {$Content}')]);
 
 $l = \atk4\ui\Lister::addTo($v, [], ['List']);
-$l->onHook('beforeRow', function (atk4\ui\Lister $lister) {
+$l->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 

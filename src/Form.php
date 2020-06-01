@@ -8,9 +8,18 @@ use atk4\data\Reference\ContainsMany;
 /**
  * Implements a form.
  */
-class Form extends View //implements \ArrayAccess - temporarily so that our build script dont' complain
+class Form extends View
 {
     use \atk4\core\HookTrait;
+
+    /** @const string Executed when form is submitted */
+    public const HOOK_SUBMIT = self::class . '@submit';
+    /** @const string Executed when form is submitted */
+    public const HOOK_DISPLAY_ERROR = self::class . '@displayError';
+    /** @const string Executed when form is submitted */
+    public const HOOK_DISPLAY_SUCCESS = self::class . '@displaySuccess';
+    /** @const string Executed when self::loadPOST() method is called. */
+    public const HOOK_LOAD_POST = self::class . '@loadPOST';
 
     // {{{ Properties
 
@@ -244,10 +253,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
     /**
      * Adds callback in submit hook.
+     *
+     * @return $this
      */
-    public function onSubmit(callable $callback)
+    public function onSubmit(\Closure $callback)
     {
-        $this->onHook('submit', $callback);
+        $this->onHook(self::HOOK_SUBMIT, $callback);
 
         return $this;
     }
@@ -274,8 +285,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function error($fieldName, $str)
     {
         // by using this hook you can overwrite default behavior of this method
-        if ($this->hookHasCallbacks('displayError')) {
-            return $this->hook('displayError', [$fieldName, $str]);
+        if ($this->hookHasCallbacks(self::HOOK_DISPLAY_ERROR)) {
+            return $this->hook(self::HOOK_DISPLAY_ERROR, [$fieldName, $str]);
         }
 
         $jsError = [$this->js()->form('add prompt', $fieldName, $str)];
@@ -299,8 +310,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     {
         $response = null;
         // by using this hook you can overwrite default behavior of this method
-        if ($this->hookHasCallbacks('displaySuccess')) {
-            return $this->hook('displaySuccess', [$success, $sub_header]);
+        if ($this->hookHasCallbacks(self::HOOK_DISPLAY_SUCCESS)) {
+            return $this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $sub_header]);
         }
 
         if ($success instanceof View) {
@@ -502,7 +513,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     {
         $post = $_POST;
 
-        $this->hook('loadPOST', [&$post]);
+        $this->hook(self::HOOK_LOAD_POST, [&$post]);
         $errors = [];
 
         foreach ($this->fields as $key => $field) {
@@ -580,7 +591,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             try {
                 ob_start();
                 $this->loadPOST();
-                $response = $this->hook('submit');
+                $response = $this->hook(self::HOOK_SUBMIT);
                 $output = ob_get_clean();
 
                 if ($output) {

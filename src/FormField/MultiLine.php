@@ -72,6 +72,7 @@ use atk4\data\Model;
 use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
+use atk4\ui\Form;
 use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
 use atk4\ui\jsVueService;
@@ -236,7 +237,7 @@ class MultiLine extends Generic
         $this->cb = \atk4\ui\jsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->onHook('loadPOST', function ($form) {
+        $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form) {
             $this->rowData = json_decode($_POST[$this->short_name], true);
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
@@ -247,7 +248,7 @@ class MultiLine extends Generic
         });
 
         // Change form error handling.
-        $this->form->onHook('displayError', function ($form, $fieldName, $str) {
+        $this->form->onHook(\atk4\ui\Form::HOOK_DISPLAY_ERROR, function ($form, $fieldName, $str) {
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
             if ($fieldName === $this->short_name) {

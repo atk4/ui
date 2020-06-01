@@ -166,13 +166,13 @@ class CRUD extends Grid
     protected function initActionExecutor(Generic $action)
     {
         $executor = $this->getExecutor($action);
-        $executor->onHook('afterExecute', function ($ex, $return, $id) use ($action) {
+        $executor->onHook(ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
             return $this->jsExecute($return, $action);
         });
 
         if ($executor instanceof UserAction) {
             foreach ($this->onActions as $k => $onAction) {
-                $executor->onHook('onStep', function ($ex, $step, $form) use ($onAction, $action) {
+                $executor->onHook(UserAction::HOOK_STEP, function ($ex, $step, $form) use ($onAction, $action) {
                     $key = key($onAction);
                     if ($key === $action->short_name && $step === 'fields') {
                         return call_user_func($onAction[$key], $form, $ex);
@@ -274,7 +274,7 @@ class CRUD extends Grid
     /**
      * Return proper action executor base on model action.
      *
-     *@throws \atk4\core\Exception
+     * @throws \atk4\core\Exception
      *
      * @return object
      */

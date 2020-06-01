@@ -88,7 +88,7 @@ class jsUserAction extends jsCallback implements Interface_
                 $return = $this->action->execute(...$args);
                 $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $return]) : $this->jsSuccess;
 
-                $js = $this->hook('afterExecute', [$return, $id]) ?: $success ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+                $js = $this->hook(Basic::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
             }
 
             return $js;

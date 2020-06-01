@@ -18,7 +18,7 @@ class Accordion extends \atk4\ui\Accordion
     {
         parent::init();
 
-        $this->form->onHook('displayError', function ($form, $fieldName, $str) {
+        $this->form->onHook(\atk4\ui\Form::HOOK_DISPLAY_ERROR, function ($form, $fieldName, $str) {
             // default behavior
             $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
 
