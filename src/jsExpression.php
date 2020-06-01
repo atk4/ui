@@ -128,7 +128,10 @@ class jsExpression implements jsExpressionable
             $string = '"' . $this->_safe_js_string($arg) . '"';
         } elseif (is_bool($arg)) {
             $string = json_encode($arg);
-        } elseif (is_numeric($arg)) {
+        } elseif (is_int($arg)) {
+            // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
+            $string = json_encode(abs($arg) < (1 << 53) ? $arg : (string) $arg);
+        } elseif (is_float($arg)) {
             $string = json_encode($arg);
         } elseif ($arg === null) {
             $string = json_encode($arg);
