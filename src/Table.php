@@ -329,7 +329,7 @@ class Table extends Lister
      *
      * @return mixed
      */
-    public function getColumn(string $name)
+    protected function getColumn(string $name)
     {
         // NOTE: It is not guaranteed that we will have only one element here. When adding decorators, the key will not
         // contain the column instance anymore but an array with column instance set at 0 indexes and the rest as decorators.
