@@ -3,6 +3,8 @@
 namespace atk4\ui\FormLayout;
 
 use atk4\ui\Form;
+use atk4\ui\Label;
+use atk4\ui\Template;
 
 /**
  * Generic Layout for a form.
@@ -11,6 +13,9 @@ class Generic extends _Abstract
 {
     /** {@inheritdoc} */
     public $defaultTemplate = 'formlayout/generic.html';
+
+    /** @var string Default input template file. */
+    public $defaultInputTemplate = 'formlayout/generic-input.html';
 
     /**
      * If specified will appear on top of the group. Can be string or Label object.
@@ -34,9 +39,24 @@ class Generic extends _Abstract
      */
     public $inline = false;
 
+    /** @var Template Template holding input html. */
+    public $inputTemplate;
+
+    /** @var array Seed for creating input hint View used in this layout. */
+    public $defaultHint = [Label::class, 'class' => ['pointing']];
+
     protected function _addField($decorator, $field)
     {
         return $this->_add($decorator, ['desired_name' => $field->short_name]);
+    }
+
+    public function init(): void
+    {
+        parent::init();
+
+        if (!$this->inputTemplate) {
+            $this->inputTemplate = $this->app->loadTemplate($this->defaultInputTemplate);
+        }
     }
 
     /**
@@ -118,10 +138,10 @@ class Generic extends _Abstract
      */
     public function recursiveRender()
     {
-        $field_input = $this->template->cloneRegion('InputField');
-        $field_no_label = $this->template->cloneRegion('InputNoLabel');
-        $labeled_group = $this->template->cloneRegion('LabeledGroup');
-        $no_label_group = $this->template->cloneRegion('NoLabelGroup');
+        $field_input = $this->inputTemplate->cloneRegion('InputField');
+        $field_no_label = $this->inputTemplate->cloneRegion('InputNoLabel');
+        $labeled_group = $this->inputTemplate->cloneRegion('LabeledGroup');
+        $no_label_group = $this->inputTemplate->cloneRegion('NoLabelGroup');
 
         $this->template->del('Content');
 
@@ -162,7 +182,7 @@ class Generic extends _Abstract
                 continue;
             }
 
-            $template = $field_input;
+            $template = $el->renderLabel ? $field_input : $field_no_label;
             $label = $el->caption ?: $el->field->getCaption();
 
             // Anything but fields gets inserted directly
@@ -200,7 +220,8 @@ class Generic extends _Abstract
             }
 
             if ($el->hint && $template->hasTag('Hint')) {
-                $hint = new \atk4\ui\Label([null, 'pointing', 'id' => $el->id . '_hint']);
+                $hint = $this->factory($this->defaultHint);
+                $hint->id = $el->id . '_hint';
                 if (is_object($el->hint) || is_array($el->hint)) {
                     $hint->add($el->hint);
                 } else {
@@ -211,7 +232,11 @@ class Generic extends _Abstract
                 $template->del('Hint');
             }
 
-            $this->template->appendHTML('Content', $template->render());
+            if ($this->template->hasTag($el->short_name)) {
+                $this->template->trySetHTML($el->short_name, $template->render());
+            } else {
+                $this->template->appendHTML('Content', $template->render());
+            }
         }
 
         // Now collect JS from everywhere

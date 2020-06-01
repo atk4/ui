@@ -1,0 +1,38 @@
+.ui.grid
+    .twelve.wide.column.centered
+        .ui.grid
+            .sixteen.wide.column
+                .ui.top.attached.secondary.segment Destination and date
+                .ui.attached.segment
+                    .ui.grid
+                        .row
+                            .eight.wide.column
+                                | {$from}
+                                | {$to}
+                            .eight.wide.column
+                                | {$country}
+                                | {$contains}
+            .sixteen.wide.column
+                .ui.top.attached.secondary.segment Passenger information
+                .ui.attached.segment
+                    .ui.internally.celled.grid
+                        .row
+                            .five.wide.column
+                                .ui.internally.celled.grid
+                                    .row
+                                        .sixteen.wide.column
+                                                | {$first_name}
+                                                | {$last_name}
+                                    .row
+                                        .sixteen.wide.column
+                                            | {$email}
+                                    .row
+                                        .sixteen.wide.column
+                                            | {$cards}
+                            .eleven.wide.column
+                                | {$multi}
+            .sixteen.wide.column
+                | {$Content}
+    .row.center.aligned
+        .column
+            | {$Buttons}

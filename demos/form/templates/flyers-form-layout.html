@@ -1,0 +1,54 @@
+
+<div class="ui grid">
+  <div class="twelve wide column centered">
+    <div class="ui grid">
+      <div class="sixteen wide column">
+        <div class="ui top attached secondary segment">Destination and date</div>
+        <div class="ui attached segment">
+          <div class="ui grid">
+            <div class="row">
+              <div class="eight wide column">
+                {$from}
+                {$to}
+              </div>
+              <div class="eight wide column">
+                {$country}
+                {$contains}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sixteen wide column">
+        <div class="ui top attached secondary segment">Passenger information</div>
+        <div class="ui attached segment">
+          <div class="ui internally celled grid">
+            <div class="row">
+              <div class="five wide column">
+                <div class="ui internally celled grid">
+                  <div class="row">
+                    <div class="sixteen wide column">
+                      {$first_name}
+                      {$last_name}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="sixteen wide column">{$email}</div>
+                  </div>
+                  <div class="row">
+                    <div class="sixteen wide column">{$cards}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="eleven wide column">{$multi}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sixteen wide column">{$Content}</div>
+    </div>
+  </div>
+  <div class="row center aligned">
+    <div class="column">{$Buttons}</div>
+  </div>
+</div>

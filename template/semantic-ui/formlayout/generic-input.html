@@ -1,0 +1,16 @@
+{LabeledGroup}
+<div class="{$field_class} field atk-form-group">
+  <label>{$label}</label>
+  <div class="{$width} {$class} fields">{$Content}</div>{$Hint}
+</div>{/}
+{NoLabelGroup}
+<div class="{$field_class} field atk-form-group">
+  <div class="{$width} {$class} fields">{$Content}</div>
+</div>{/}
+{InputField}
+<div class="{$field_class} field">
+  <label for="{$label_for}">{$label}</label>{$Input}
+  {$Hint}
+</div>{/}
+{InputNoLabel}
+<div class="{$field_class} field no-label">{$Input}{$Hint}</div>{/}
