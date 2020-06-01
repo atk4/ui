@@ -58,7 +58,10 @@ class CRUD extends Grid
     /** @var Hold recently deleted record id. */
     private $deletedId;
 
-    /** @var array Action name container that will reload Table after executing @deprecated Use action modifier instead. */
+    /**
+     * @var array Action name container that will reload Table after executing
+     * @deprecated Use action modifier instead.
+     */
     public $reloadTableActions = [];
 
     /** @var array Action name container that will remove the corresponding table row after executing  @deprecated Use action modifier instead. */
