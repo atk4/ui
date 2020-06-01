@@ -24,7 +24,7 @@ class Generic
     /** @const string */
     public const HOOK_GET_HTML_TAGS = self::class . '@getHTMLTags';
     /** @const string not used, make it public if needed or drop it */
-    private const HOOK_GET_HADER_CELL_HTML = self::class . '@getHeaderCellHTML';
+    private const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHTML';
 
     /**
      * Link back to the table, where column is used.
@@ -307,7 +307,7 @@ class Generic
             throw new \atk4\ui\Exception(['How $table could not be set??', 'field' => $field, 'value' => $value]);
         }
 
-        if ($tags = $this->table->hook(self::HOOK_GET_HADER_CELL_HTML, [$this, $field, $value])) {
+        if ($tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value])) {
             return reset($tags);
         }
 
