@@ -297,7 +297,7 @@ class Table extends Lister
      *
      * @return TableColumn\Generic
      */
-    public function addDecorator($name, $seed)
+    public function addDecorator(string $name, $seed)
     {
         if (!$this->columns[$name]) {
             throw new Exception(['No such column, cannot decorate', 'name' => $name]);
@@ -316,10 +316,8 @@ class Table extends Lister
      * Return array of column decorators for particular column.
      *
      * @param string $name Column name
-     *
-     * @return array
      */
-    public function getColumnDecorators($name)
+    public function getColumnDecorators(string $name): array
     {
         $dec = $this->columns[$name];
 
@@ -329,12 +327,13 @@ class Table extends Lister
     /**
      * Return column instance or first instance if using decorator.
      *
-     * @param $name
-     *
      * @return mixed
      */
-    public function getColumn($name)
+    public function getColumn(string $name)
     {
+        // NOTE: It is not guaranteed that we will have only one element here. When adding decorators, the key will not
+        // contain the column instance anymore but an array with column instance set at 0 indexes and the rest as decorators.
+        // This is enough for fixing this issue right now. We can work on unifying decorator API in a separate PR.
         return is_array($this->columns[$name]) ? $this->columns[$name][0] : $this->columns[$name];
     }
 
