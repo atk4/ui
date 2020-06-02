@@ -419,7 +419,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     protected function doFinal(View $modal)
     {
         foreach ($this->actionData['fields'] ?? [] as $field => $value) {
-            $this->action->owner[$field] = $value;
+            $this->action->owner->set($field, $value);
         }
 
         $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
