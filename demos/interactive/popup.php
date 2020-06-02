@@ -2,6 +2,8 @@
 
 namespace atk4\ui\demo;
 
+use atk4\ui\View;
+
 require_once __DIR__ . '/../atk-init.php';
 
 /**
@@ -12,7 +14,6 @@ require_once __DIR__ . '/../atk-init.php';
  */
 $cartClass = get_class(new class() extends \atk4\ui\Lister {
     use \atk4\core\SessionTrait;
-
     public $items = [];
 
     public $defaultTemplate = 'lister.html';
@@ -20,6 +21,13 @@ $cartClass = get_class(new class() extends \atk4\ui\Lister {
     public function init(): void
     {
         parent::init();
+
+        // Adding this for wiring demo properly.
+        // otherwise, name will get a different name on each reload
+        // which cause javascript and or session to fail.
+        $this->name = 'cart';
+        $this->id = 'cart';
+
         $this->items = $this->recall('items', []);
 
         // Clicking on any URL produced by this Lister will carry on an extra GET argument
@@ -81,6 +89,14 @@ $itemShelfClass = get_class(new class() extends \atk4\ui\View {
     public function init(): void
     {
         parent::init();
+
+        // Adding this for wiring demo properly.
+        // otherwise, name will get a different name on each reload
+        // which cause javascript to fail.
+        $this->name = 'shelf';
+        $this->id = 'shelf';
+
+
         $v = \atk4\ui\View::addTo($this, ['ui' => 'fluid']);
         $cols = \atk4\ui\Columns::addTo($v, ['ui' => 'relaxed divided grid']);
 
@@ -135,6 +151,7 @@ $browse = \atk4\ui\DropDown::addTo($m, ['Browse']);
 // Add cart item into the menu, with a popup inside
 $cart_item = $m->addItem([$cartClass, 'icon' => 'cart'])->set('Cart');
 
+
 $cart_popup = \atk4\ui\Popup::addTo($app, [$cart_item, 'position' => 'bottom left']);
 // Popup won't dissapear as you hover over it.
 $cart_popup->setHoverable();
@@ -159,7 +176,7 @@ $shelf = $itemShelfClass::addTo($app);
 // as i would be in the application. That's also impacts under which key 'memorize' is storing data - having
 // two different objects won't work, since they won't share session data.
 
-$cart = $cartClass::addTo($app);
+$cart = $cartClass::addTo($app, ['name' => 'cart_item']);
 
 // Next I am calling destroy. This won't actually destroy the cart, but it will remove it from the application.
 // If i add unset($cart) afterwards, garbage collector will trigger destructor. Instead I'm passing $cart
