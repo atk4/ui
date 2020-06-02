@@ -4,28 +4,25 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-if (!class_exists('TestConsole')) {
-    class TestConsole extends \atk4\data\Model
+$test_console = get_class(new class() extends \atk4\data\Model {
+    use \atk4\core\DebugTrait;
+    use \atk4\core\StaticAddToTrait;
+
+    public function generateReport()
     {
-        use \atk4\core\DebugTrait;
-        use \atk4\core\StaticAddToTrait;
+        $this->log('info', 'Console will automatically pick up output from all DebugTrait objects');
+        $this->debug('debug {foo}', ['foo' => 'bar']);
+        $this->emergency('emergency {foo}', ['foo' => 'bar']);
+        $this->alert('alert {foo}', ['foo' => 'bar']);
+        $this->critical('critical {foo}', ['foo' => 'bar']);
+        $this->error('error {foo}', ['foo' => 'bar']);
+        $this->warning('warning {foo}', ['foo' => 'bar']);
+        $this->notice('notice {foo}', ['foo' => 'bar']);
+        $this->info('info {foo}', ['foo' => 'bar']);
 
-        public function generateReport()
-        {
-            $this->log('info', 'Console will automatically pick up output from all DebugTrait objects');
-            $this->debug('debug {foo}', ['foo' => 'bar']);
-            $this->emergency('emergency {foo}', ['foo' => 'bar']);
-            $this->alert('alert {foo}', ['foo' => 'bar']);
-            $this->critical('critical {foo}', ['foo' => 'bar']);
-            $this->error('error {foo}', ['foo' => 'bar']);
-            $this->warning('warning {foo}', ['foo' => 'bar']);
-            $this->notice('notice {foo}', ['foo' => 'bar']);
-            $this->info('info {foo}', ['foo' => 'bar']);
-
-            return 123;
-        }
+        return 123;
     }
-}
+});
 
 $tt = \atk4\ui\Tabs::addTo($app);
 
@@ -45,13 +42,13 @@ $t = $tt->addTab('set()');
     throw new \atk4\core\Exception('BOOM - exceptions are caught');
 });
 
-$t = $tt->addTab('runMethod()', function ($t) {
+$t = $tt->addTab('runMethod()', function ($t) use ($test_console) {
     \atk4\ui\Header::addTo($t, [
         'icon' => 'terminal',
         'Non-interractive method invocation',
         'subHeader' => 'console can invoke a method, which normaly would be non-interractive and can still capture debug output',
     ]);
-    \atk4\ui\Console::addTo($t)->runMethod(TestConsole::addTo($t), 'generateReport');
+    \atk4\ui\Console::addTo($t)->runMethod($test_console::addTo($t), 'generateReport');
 });
 
 $t = $tt->addTab('exec() single', function ($t) {

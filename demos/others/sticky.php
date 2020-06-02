@@ -11,8 +11,7 @@ require_once __DIR__ . '/../atk-init.php';
     'ui' => 'ignored info message',
 ]);
 
-class MyButton extends \atk4\ui\Button
-{
+$my_button = get_class(new class() extends \atk4\ui\Button {
     public function renderView()
     {
         $this->link($this->content);
@@ -20,13 +19,13 @@ class MyButton extends \atk4\ui\Button
 
         return parent::renderView();
     }
-}
+});
 
 // Buttons
-MyButton::addTo($app, $app->url());
-MyButton::addTo($app, $app->url(['xx' => 'YEY']));
-MyButton::addTo($app, $app->url(['c' => 'OHO']));
-MyButton::addTo($app, $app->url(['xx' => 'YEY', 'c' => 'OHO']));
+$my_button::addTo($app, $app->url());
+$my_button::addTo($app, $app->url(['xx' => 'YEY']));
+$my_button::addTo($app, $app->url(['c' => 'OHO']));
+$my_button::addTo($app, $app->url(['xx' => 'YEY', 'c' => 'OHO']));
 
 // URLs presented by a blank app
 \atk4\ui\Header::addTo($app, ['URLs presented by a blank app']);
