@@ -14,6 +14,7 @@ steps:
   fix_sha:
     stage: clone
     title: Inject dependency SHA to bypass cache
+    image: alpine
     commands:
       - ./tools/inject-dependency-sha.sh
 
