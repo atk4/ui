@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../atk-init.php';
 
-class Switcher extends \atk4\ui\View
+class Recursive extends \atk4\ui\View
 {
     public function init(): void
     {
@@ -35,4 +35,4 @@ class Switcher extends \atk4\ui\View
 }
 
 $view = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
-$view->add(new Switcher());
+$view->add(new Recursive());
