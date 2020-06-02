@@ -67,7 +67,7 @@ $cartClass = get_class(new class() extends \atk4\ui\Lister {
 
         return parent::renderView();
     }
-}
+});
 
 /**
  * Implementation of a generic item shelf. Shows selection of products and allow to bind click event.
@@ -122,7 +122,7 @@ $itemShelfClass = get_class(new class() extends \atk4\ui\View {
             return $jsAction;
         }, [(new \atk4\ui\jQuery())->text()]);
     }
-}
+});
 
 \atk4\ui\Header::addTo($app)->set('Menu popup');
 $m = \atk4\ui\Menu::addTo($app);
