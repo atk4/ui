@@ -4,7 +4,7 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-$model = class($db) extends \atk4\data\Model {
+$model = new class($db) extends \atk4\data\Model {
     public $table = 'notifier';
 
     public function init(): void
