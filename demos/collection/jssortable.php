@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 $view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template(
@@ -12,7 +14,7 @@ $view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template(
 )]);
 
 $lister = \atk4\ui\Lister::addTo($view, [], ['List']);
-$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (atk4\ui\Lister $lister) {
+$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 $lister->setModel(new Country($db))

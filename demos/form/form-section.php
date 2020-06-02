@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['Accordion in Form', 'small right floated basic blue', 'iconRight' => 'right arrow'])
@@ -10,7 +12,7 @@ $m = new CountryLock($db);
 $m->loadAny();
 
 //Prevent form from saving
-$noSave = function (atk4\ui\Form $form) {
+$noSave = function (\atk4\ui\Form $form) {
     return new \atk4\ui\jsToast([
         'title' => 'POSTed field values',
         'message' => '<pre>' . json_encode($form->model->get(), JSON_PRETTY_PRINT) . '</pre>',

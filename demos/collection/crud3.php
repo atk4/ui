@@ -1,9 +1,10 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
-class TestModel extends \atk4\data\Model
-{
+$modelClass = get_class(new class() extends \atk4\data\Model {
     use ModelLockTrait;
 
     public $table = 'test';
@@ -18,7 +19,7 @@ class TestModel extends \atk4\data\Model
 
         $this->lock();
     }
-}
+});
 
 // Prepare Persistence and data Model
 $data = ['test' => [
@@ -33,7 +34,7 @@ $data = ['test' => [
     9 => ['id' => 9, 'name' => 'ABC1', 'code' => 19, 'country' => 'Latvia'],
 ]];
 $p = new \atk4\data\Persistence\Array_($data);
-$m = new TestModel($p);
+$m = new $modelClass($p);
 
 // add CRUD
 \atk4\ui\Header::addTo($app, ['CRUD with Array Persistence']);

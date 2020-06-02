@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
@@ -33,14 +35,14 @@ $subHeader = 'Searching will reload the list of countries below with matching re
 
 $m = new Country($db);
 
-$lister_template = new atk4\ui\Template('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{$end}{/}</div>');
+$lister_template = new \atk4\ui\Template('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{$end}{/}</div>');
 
 $view = \atk4\ui\View::addTo($app);
 
 $search = \atk4\ui\Component\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
 $lister_container = \atk4\ui\View::addTo($view, ['template' => $lister_template]);
 $lister = \atk4\ui\Lister::addTo($lister_container, [], ['List']);
-$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (atk4\ui\Lister $lister) {
+$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
     ++$lister->ipp;
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
     if ($lister->ipp === $lister->model->limit[0]) {

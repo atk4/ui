@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 class Demo extends \atk4\ui\Columns
 {
     public $left;

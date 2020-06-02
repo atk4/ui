@@ -1,15 +1,15 @@
 <?php
 
-require_once __DIR__ . '/../atk-init.php';
+namespace atk4\ui\demo;
 
 use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
 
-/**
- * Class Inventory Item.
- */
-class InventoryItem extends \atk4\data\Model
-{
+require_once __DIR__ . '/../atk-init.php';
+
+\atk4\ui\Header::addTo($app, ['MultiLine form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
+
+$inventoryItemClass = get_class(new class() extends \atk4\data\Model {
     public function init(): void
     {
         parent::init();
@@ -17,17 +17,14 @@ class InventoryItem extends \atk4\data\Model
         $this->addField('item', ['required' => true, 'default' => 'item']);
         $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
         $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['width' => 2]]]);
-        $this->addExpression('total', ['expr' => function (atk4\data\Model $row) {
+        $this->addExpression('total', ['expr' => function (\atk4\data\Model $row) {
             return $row->get('qty') * $row->get('box');
         }, 'type' => 'integer']);
     }
-}
-
-\atk4\ui\Header::addTo($app, ['MultiLine form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
+});
 
 $data = [];
-
-$inventory = new InventoryItem(new \atk4\data\Persistence\Array_($data));
+$inventory = new $inventoryItemClass(new \atk4\data\Persistence\Array_($data));
 
 // Populate some data.
 $total = 0;
@@ -67,7 +64,7 @@ $ml->onLineChange(function ($rows, $form) use ($f_total) {
 $ml->jsAfterAdd = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 $ml->jsAfterDelete = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 
-$f->onSubmit(function (atk4\ui\Form $form) use ($ml) {
+$f->onSubmit(function (\atk4\ui\Form $form) use ($ml) {
     $rows = $ml->saveRows()->getModel()->export();
 
     return new \atk4\ui\jsToast(json_encode(array_values($rows)));

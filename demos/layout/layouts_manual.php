@@ -1,7 +1,8 @@
 <?php
-/**
- * Demonstrates how to use layouts.
- */
+
+namespace atk4\ui\demo;
+
+// Demonstrates how to use layouts.
 chdir('..');
 include_once '../vendor/autoload.php';
 include_once '_includes/somedatadef.php';

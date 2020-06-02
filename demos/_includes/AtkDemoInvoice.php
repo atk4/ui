@@ -1,4 +1,7 @@
 <?php
+
+namespace atk4\ui\demo;
+
 /**
  * Invoice class for tutorial intro.
  */

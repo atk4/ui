@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 /**
@@ -8,8 +10,7 @@ require_once __DIR__ . '/../atk-init.php';
  * Cart will memorize and restore its items into session. Cart will also
  * render the items.
  */
-class Cart extends \atk4\ui\Lister
-{
+$cartClass = get_class(new class() extends \atk4\ui\Lister {
     use \atk4\core\SessionTrait;
 
     public $items = [];
@@ -66,7 +67,7 @@ class Cart extends \atk4\ui\Lister
 
         return parent::renderView();
     }
-}
+});
 
 /**
  * Implementation of a generic item shelf. Shows selection of products and allow to bind click event.
@@ -74,8 +75,7 @@ class Cart extends \atk4\ui\Lister
  * Method linkCart allow you to link ItemShelf with Cart. Clicking on a shelf item will place that
  * item inside a cart reloading it afterwards.
  */
-class ItemShelf extends \atk4\ui\View
-{
+$itemShelfClass = get_class(new class() extends \atk4\ui\View {
     public $ui = 'green segment';
 
     public function init(): void
@@ -114,7 +114,7 @@ class ItemShelf extends \atk4\ui\View
      *
      * Also - you can supply jsAction to execute when this happens.
      */
-    public function linkCart(Cart $cart, $jsAction = null)
+    public function linkCart($cart, $jsAction = null)
     {
         $this->on('click', '.item', function ($a, $b) use ($cart, $jsAction) {
             $cart->addItem($b);
@@ -122,7 +122,7 @@ class ItemShelf extends \atk4\ui\View
             return $jsAction;
         }, [(new \atk4\ui\jQuery())->text()]);
     }
-}
+});
 
 \atk4\ui\Header::addTo($app)->set('Menu popup');
 $m = \atk4\ui\Menu::addTo($app);
@@ -133,13 +133,13 @@ $m = \atk4\ui\Menu::addTo($app);
 $browse = \atk4\ui\DropDown::addTo($m, ['Browse']);
 
 // Add cart item into the menu, with a popup inside
-$cart_item = $m->addItem([Cart::class, 'icon' => 'cart']);
+$cart_item = $m->addItem([$cartClass, 'icon' => 'cart']);
 
 $cart_popup = \atk4\ui\Popup::addTo($app, [$cart_item, 'position' => 'bottom left']);
 // Popup won't dissapear as you hover over it.
 $cart_popup->setHoverable();
 
-$shelf = ItemShelf::addTo($app);
+$shelf = $itemShelfClass::addTo($app);
 
 // Here we are facing a pretty interesting problem. If you attempt to put "Cart" object inside a popup directly,
 // it won't work, because it will be located inside the menu item's DOM tree and, although hidden, will be
@@ -159,7 +159,7 @@ $shelf = ItemShelf::addTo($app);
 // as i would be in the application. That's also impacts under which key 'memorize' is storing data - having
 // two different objects won't work, since they won't share session data.
 
-$cart = Cart::addTo($app);
+$cart = $cartClass::addTo($app);
 
 // Next I am calling destroy. This won't actually destroy the cart, but it will remove it from the application.
 // If i add unset($cart) afterwards, garbage collector will trigger destructor. Instead I'm passing $cart
@@ -199,7 +199,7 @@ $shelf->linkCart($cart, [
 $pop = \atk4\ui\Popup::addTo($app, [$browse, 'position' => 'bottom left', 'minWidth' => '500px'])
     ->setHoverable()
     ->setOption('delay', ['show' => 100, 'hide' => 400]);
-$shelf2 = ItemShelf::addTo($pop);
+$shelf2 = $itemShelfClass::addTo($pop);
 //$shelf2->linkCart($cart, $cart_item->jsReload());
 
 //////////////////////////////////////////////////////////////////////////////
@@ -228,14 +228,14 @@ $signup->set(function ($pop) {
 
         // popup handles callbacks properly, so dynamic element such as form works
         // perfectly inside a popup.
-        $f->onSubmit(function (atk4\ui\Form $form) {
+        $f->onSubmit(function (\atk4\ui\Form $form) {
             if ($form->model->get('password') !== '123') {
                 return $form->error('password', 'Please use password "123"');
             }
 
             // refreshes entire page
             return $form->app->jsRedirect(['logged' => $form->model->get('email')]);
-            //return new atk4\ui\jsExpression('alert([])', ['Thank you ' . $f->model->get('email')]);
+            //return new \atk4\ui\jsExpression('alert([])', ['Thank you ' . $f->model->get('email')]);
         });
     }
 });

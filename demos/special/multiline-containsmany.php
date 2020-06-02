@@ -1,10 +1,12 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 // This demo require specific Database setup.
 
-class Client extends atk4\data\Model
+class Client extends \atk4\data\Model
 {
     public $table = 'client';
     public $caption = 'Client';
@@ -20,7 +22,7 @@ class Client extends atk4\data\Model
     }
 }
 
-class Account extends atk4\data\Model
+class Account extends \atk4\data\Model
 {
     public $caption = ' ';
 

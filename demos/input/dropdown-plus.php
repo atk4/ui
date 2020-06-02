@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/Demo.php';
 
@@ -93,7 +95,7 @@ $form->addField(
     ]
 );
 
-$form->onSubmit(function (atk4\ui\Form $form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     $echo = print_r($form->model->get('enum'), true) . ' / ';
     $echo .= print_r($form->model->get('values'), true) . ' / ';
     $echo .= print_r($form->model->get('icon'), true) . ' / ';

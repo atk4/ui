@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['Loader Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])

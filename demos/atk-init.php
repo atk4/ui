@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 date_default_timezone_set('UTC');
@@ -26,7 +28,7 @@ if ($app->catch_exceptions !== true) {
 }
 
 if (file_exists(__DIR__ . '/coverage.php')) {
-    $app->onHook(atk4\ui\App::HOOK_BEFORE_EXIT, function () {
+    $app->onHook(\atk4\ui\App::HOOK_BEFORE_EXIT, function () {
         coverage();
     });
 }

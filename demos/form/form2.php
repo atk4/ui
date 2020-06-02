@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 // Testing form.
@@ -39,7 +41,7 @@ $f_names->addField('middle_name', ['width' => 'three']);
 $f_names->addField('last_name', ['width' => 'five']);
 
 // form on submit
-$form->onSubmit(function (atk4\ui\Form $form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     // In-form validation
     $errors = [];
     if (mb_strlen($form->model->get('first_name')) < 3) {
@@ -67,8 +69,7 @@ $form->onSubmit(function (atk4\ui\Form $form) {
 
 // ======
 
-class Person extends \atk4\data\Model
-{
+$personClass = get_class(new class() extends \atk4\data\Model {
     public $table = 'person';
 
     public function init(): void
@@ -91,8 +92,8 @@ class Person extends \atk4\data\Model
 
         return $errors;
     }
-}
+});
 
 \atk4\ui\Form::addTo($app)
     ->addClass('segment')
-    ->setModel(new Person($db));
+    ->setModel(new $personClass($db));

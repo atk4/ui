@@ -1,10 +1,12 @@
 <?php
+
+namespace atk4\ui\demo;
+
 /**
  * Setup file - do not test.
  * Lookup that can not saved data.
  */
-class DemoLookup extends \atk4\ui\FormField\Lookup
-{
+$demoLookupClass = get_class(new class() extends \atk4\ui\FormField\Lookup {
     /**
      * Add button for new record.
      */
@@ -39,7 +41,7 @@ class DemoLookup extends \atk4\ui\FormField\Lookup
 
             $form->setModel($model->onlyFields($this->plus['fields'] ?? []));
 
-            $form->onSubmit(function (atk4\ui\Form $form) {
+            $form->onSubmit(function (\atk4\ui\Form $form) {
                 //Prevent from saving
                 // $form->model->save();
 
@@ -63,6 +65,6 @@ class DemoLookup extends \atk4\ui\FormField\Lookup
 
         $this->action->js('click', new \atk4\ui\jsModal($caption, $vp));
     }
-}
+});
 
-$demoLookup = new DemoLookup();
+$demoLookup = new $demoLookupClass();
