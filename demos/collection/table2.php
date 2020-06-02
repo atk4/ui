@@ -26,8 +26,8 @@ $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>T
 // Hook can be used to display data before row. You can also inject and format extra rows.
 $table->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Table $table) {
     if ($table->current_id === 2) {
-        $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row->get('action') . ')</th></tr>');
-    } elseif ($table->current_row->get('action') === 'Tax') {
+        $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row['action'] . ')</th></tr>');
+    } elseif ($table->current_row['action'] === 'Tax') {
         // renders current row
         $table->renderRow();
 
@@ -55,10 +55,10 @@ $table->addDecorator('amount', ['Template', 'Refunded: {$amount}']);
 
 // column which uses selective format depending on condition
 $table->addColumn('amount_copy', ['Multiformat', function ($a, $b) {
-    if ($a['amount_copy'] > 0) {
+    if ($a->get('amount_copy') > 0) {
         // Two formatters together
         return ['Link', 'Money'];
-    } elseif (abs($a['amount_copy']) < 50) {
+    } elseif (abs($a->get('amount_copy')) < 50) {
         // One formatter, but inject template and some attributes
         return [[
             'Template',

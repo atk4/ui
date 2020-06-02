@@ -66,4 +66,4 @@ class FlyersForm extends Form
             return new \atk4\ui\jsToast('Thank you!');
         });
     }
-});
+}
