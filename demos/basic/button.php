@@ -51,7 +51,7 @@ Button::addTo($bar, ['icon' => 'upload', 'disabled' => true]);
 \atk4\ui\Header::addTo($app, ['Forks Button Component', 'size' => 2]);
 
 // Creating your own button component example
-$forkButtonClass = get_class(new class() extends Button {
+$forkButtonClass = get_class(new class($n) extends Button {
     public function __construct($n)
     {
         Icon::addTo(Button::addTo($this, ['Forks', 'blue']), ['fork']);
