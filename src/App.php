@@ -1086,8 +1086,19 @@ class App
         $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
         $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
 
+        foreach (ob_get_status(true) as $status) {
+            if ($status['buffer_used'] !== 0) {
+                if (!headers_sent()) {
+                    http_response_code(500);
+                }
+                echo "\n" . '!! ATK4 UI ERROR: Unexpected output detected. !!' . "\n";
+                exit;
+            }
+        }
+
         if (count($headersNew) > 0 && headers_sent()) {
             echo "\n" . '!! ATK4 UI ERROR: Headers already sent, more headers can not be set at this stage. !!' . "\n";
+            exit;
         } else {
             foreach ($headersNew as $k => $v) {
                 if ($k === self::HEADER_STATUS_CODE) {
