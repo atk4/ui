@@ -542,7 +542,7 @@ class App
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 $this->terminate(
-                    "\n" . '!! ATK4 UI ERROR: Callback requested, but never reached. You may be missing some arguments in request URL. !!' . "\n",
+                    $this->buildLateErrorStr('Callback requested, but never reached. You may be missing some arguments in request URL.'),
                     ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => 500]
                 );
             }
@@ -1072,6 +1072,11 @@ class App
 
     // RESPONSES
 
+    private function buildLateErrorStr(string $msg): string
+    {
+        return "\n" . '!! ATK4 UI ERROR: ' . $msg . ' !!' . "\n";
+    }
+
     /** @var string[] */
     private static $_sentHeaders = [];
 
@@ -1086,9 +1091,24 @@ class App
         $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
         $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
 
-        if (count($headersNew) > 0 && headers_sent()) {
-            echo "\n" . '!! ATK4 UI ERROR: Headers already sent, more headers can not be set at this stage. !!' . "\n";
-        } else {
+        $lateErrorStr = null;
+        foreach (ob_get_status(true) as $status) {
+            if ($status['buffer_used'] !== 0) {
+                $lateErrorStr = $this->buildLateErrorStr('Unexpected output detected.');
+
+                break;
+            }
+        }
+
+        if ($lateErrorStr === null && count($headersNew) > 0 && headers_sent()) {
+            $lateErrorStr = $this->buildLateErrorStr('Headers already sent, more headers can not be set at this stage.');
+        }
+
+        if (!headers_sent()) {
+            if ($lateErrorStr !== null) {
+                $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => 500];
+            }
+
             foreach ($headersNew as $k => $v) {
                 if ($k === self::HEADER_STATUS_CODE) {
                     http_response_code($v);
@@ -1102,9 +1122,14 @@ class App
 
                 self::$_sentHeaders[$k] = $v;
             }
-
-            echo $data;
         }
+
+        if ($lateErrorStr !== null) {
+            echo $lateErrorStr;
+            exit;
+        }
+
+        echo $data;
     }
 
     /**
