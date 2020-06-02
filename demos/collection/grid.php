@@ -34,7 +34,7 @@ $g->addColumn(null, ['Template', 'hello<b>world</b>']);
 $g->addActionButton('test');
 
 $g->addActionButton('Say HI', function ($j, $id) use ($g) {
-    return 'Loaded "' . $g->model->load($id)['name'] . '" from ID=' . $id;
+    return 'Loaded "' . $g->model->load($id)->get('name') . '" from ID=' . $id;
 });
 
 $g->addModalAction(['icon' => 'external'], 'Modal Test', function ($p, $id) {
