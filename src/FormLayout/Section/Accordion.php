@@ -6,7 +6,7 @@ use atk4\ui\AccordionSection;
 
 class Accordion extends \atk4\ui\Accordion
 {
-    public $formLayout = 'FormLayout/Generic';
+    public $formLayout = \atk4\ui\FormLayout\Generic::class;
     public $form;
 
     /**
