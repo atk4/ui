@@ -2,7 +2,8 @@
 
 use atk4\ui\Form;
 
-$flyersClass = get_class(new class() extends \atk4\data\Model {
+class Flyers extends \atk4\data\Model
+{
     public function init(): void
     {
         parent::init();
@@ -11,12 +12,13 @@ $flyersClass = get_class(new class() extends \atk4\data\Model {
         $this->addField('last_name');
         $this->addField('age', ['values' => ['1' => 'From months to 2 years old', '2' => 'From 3 to 17 years old', '3' => '18 years or more']]);
     }
-});
+}
 
 /**
  * Flyers form form.
  */
-$flyersFormClass = get_class(new class() extends Form {
+class FlyersForm extends Form
+{
     public $db;
     public $flyers = [];
 

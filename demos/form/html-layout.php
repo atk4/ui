@@ -19,7 +19,7 @@ $tabs = Tabs::addTo($app);
 
 $tab = $tabs->addTab('Layout using field name');
 
-$f = $flyersFormClass::addTo($tab, ['db' => $db, 'layout' => [
+$f = FlyersForm::addTo($tab, ['db' => $db, 'layout' => [
     Generic::class, ['defaultTemplate' => __DIR__ . '/templates/flyers-form-layout.html'],
 ],
 ]);
@@ -33,7 +33,7 @@ $right = View::addTo($g_l, [], ['r1c1']);
 Header::addTo($right, ['Button on right']);
 
 $form = Form::addTo($right, ['layout' => [Generic::class, 'defaultTemplate' => __DIR__ . '/templates/form-button-right.html']]);
-$form->setModel(new $flyersClass(new \atk4\data\Persistence\Array_($data)));
+$form->setModel(new Flyers(new \atk4\data\Persistence\Array_($data)));
 $form->getField('last_name')->hint = 'Please enter your last name.';
 
 $left = View::addTo($g_l, [], ['r1c2']);
@@ -47,7 +47,7 @@ $form = Form::addTo($left, [
         ],
     ],
 ]);
-$form->setModel(new $flyersClass(new \atk4\data\Persistence\Array_($data)));
+$form->setModel(new Flyers(new \atk4\data\Persistence\Array_($data)));
 $form->getField('last_name')->hint = 'Please enter your last name.';
 
 ////////////////////////////////////////
