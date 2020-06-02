@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 $m = new CountryLock($db);
@@ -18,7 +20,7 @@ $g->onFormEdit(function ($form) {
 
 // callback for both model action edit and add.
 $g->onFormAddEdit(function ($form, $ex) {
-    $form->onSubmit(function (atk4\ui\Form $form) use ($ex) {
+    $form->onSubmit(function (\atk4\ui\Form $form) use ($ex) {
         return [$ex->hide(), new \atk4\ui\jsToast('Submit all right! This demo does not saved data.')];
     });
 });
@@ -46,7 +48,7 @@ $crud = \atk4\ui\CRUD::addTo($cc, [
 // Condition on the model can be applied on a model
 $m = new CountryLock($db);
 $m->addCondition('numcode', '<', 200);
-$m->onHook(atk4\data\Model::HOOK_VALIDATE, function ($m2, $intent) {
+$m->onHook(\atk4\data\Model::HOOK_VALIDATE, function ($m2, $intent) {
     $err = [];
     if ($m2->get('numcode') >= 200) {
         $err['numcode'] = 'Should be less than 200';
@@ -64,9 +66,8 @@ $crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($cr
 $cc = $c->addColumn();
 \atk4\ui\Header::addTo($cc, ['Cutomizations']);
 
-class MyExecutor extends atk4\ui\ActionExecutor\UserAction
-{
-    public function addFormTo(atk4\ui\View $view): atk4\ui\Form
+$myExecutorClass = get_class(new class() extends \atk4\ui\ActionExecutor\UserAction {
+    public function addFormTo(\atk4\ui\View $view): \atk4\ui\Form
     {
         $columns = \atk4\ui\Columns::addTo($view);
         $left = $columns->addColumn();
@@ -83,9 +84,10 @@ class MyExecutor extends atk4\ui\ActionExecutor\UserAction
 
         return $result;
     }
-}
+});
+
 $file = new FileLock($db);
-$file->getAction('edit')->ui['executor'] = MyExecutor::class;
+$file->getAction('edit')->ui['executor'] = $myExecutorClass;
 
 $crud = \atk4\ui\CRUD::addTo($cc, [
     'ipp' => 5,

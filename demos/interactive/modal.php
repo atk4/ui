@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/Session.php';
 require_once __DIR__ . '/../../tests/ViewTester.php';
@@ -67,7 +69,7 @@ $modal_vp1->set(function ($modal) use ($modal_vp2) {
     \atk4\ui\LoremIpsum::addTo($modal, ['size' => 2]);
     $form = \atk4\ui\Form::addTo($modal);
     $form->addField('color', null, ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
-    $form->onSubmit(function (atk4\ui\Form $form) use ($modal_vp2) {
+    $form->onSubmit(function (\atk4\ui\Form $form) use ($modal_vp2) {
         return $modal_vp2->show(['color' => $form->model->get('color')]);
     });
 });
@@ -184,7 +186,7 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
         $f = \atk4\ui\Form::addTo($modal, ['segment' => true]);
         $f->setModel($m_register);
 
-        $f->onSubmit(function (atk4\ui\Form $form) use ($next_action, $session) {
+        $f->onSubmit(function (\atk4\ui\Form $form) use ($next_action, $session) {
             if ($form->model->get('name') !== 'John') {
                 return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
             }

@@ -1,7 +1,8 @@
 <?php
-/**
- * Demonstrates how to use layouts.
- */
+
+namespace atk4\ui\demo;
+
+// Demonstrates how to use layouts.
 chdir('..');
 include_once '../vendor/autoload.php';
 
@@ -49,7 +50,7 @@ try {
     $f_group->addField('address', ['width' => 'twelve']);
     $f_group->addField('zip', ['width' => 'four']);
 
-    $f->onSubmit(function (atk4\ui\Form $form) {
+    $f->onSubmit(function (\atk4\ui\Form $form) {
         $errors = [];
 
         foreach (['first_name', 'last_name', 'address'] as $field) {

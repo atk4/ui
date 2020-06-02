@@ -50,7 +50,7 @@ You can do much more with AutoComplete field by passing dropdown settings::
         'settings'=>[
             'allowReselection' => true,
             'selectOnKeydown' => false,
-            'onChange'        => new atk4\ui\jsExpression('function(value,t,c){
+            'onChange'        => new \atk4\ui\jsExpression('function(value,t,c){
                                     if ($(this).data("value") !== value) {
                                     $(this).parents(".form").form("submit");
                                     $(this).data("value", value);

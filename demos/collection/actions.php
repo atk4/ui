@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['js Event Executor', 'small right floated basic blue', 'iconRight' => 'right arrow'])
@@ -23,11 +25,11 @@ $action = $files->addAction(
         'args' => [
             'path' => ['type' => 'string', 'required' => true],
         ],
-        'scope' => atk4\data\UserAction\Generic::NO_RECORDS,
+        'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
     ]
 );
 
-$files->addAction('download', function (atk4\data\Model $m) {
+$files->addAction('download', function (\atk4\data\Model $m) {
     $len = strlen(file_get_contents($m->get('name')));
 
     return "{$len} bytes downloaded..";

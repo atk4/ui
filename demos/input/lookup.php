@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/demo-lookup.php';
 
@@ -32,7 +34,7 @@ $form->addField('country3', [
     'search' => ['name', 'iso', 'iso3'],
 ]);
 
-$form->onSubmit(function (atk4\ui\Form $form) use ($db) {
+$form->onSubmit(function (\atk4\ui\Form $form) use ($db) {
     $str = $form->model->ref('country1')->get('name') . ' ' . $form->model->ref('country2')->get('name') . ' ' . (new Country($db))->tryLoad($form->model->get('country3'))->get('name');
     $view = new \atk4\ui\Message('Select:'); // need in behat test.
     $view->init();

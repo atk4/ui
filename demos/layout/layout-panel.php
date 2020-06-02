@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/country_actions.php';
 
@@ -73,7 +75,7 @@ $panel_2->onOpen(function ($p) {
         ->set('1')
         ->onChange($p->owner->jsDisplayWarning(true));
 
-    $f->onSubmit(function (atk4\ui\Form $form) use ($p) {
+    $f->onSubmit(function (\atk4\ui\Form $form) use ($p) {
         return [
             new \atk4\ui\jsToast('Saved, closing panel.'),
             $p->owner->jsDisplayWarning(false),

@@ -91,7 +91,7 @@ Example showing the onUpload callback on the UploadImg field::
         $img->setFileId('123456');
 
         // can also return a notifier.
-        return new atk4\ui\jsNotify(['content' => 'File is uploaded!', 'color' => 'green']);
+        return new \atk4\ui\jsNotify(['content' => 'File is uploaded!', 'color' => 'green']);
     });
 
 When user submit the form, the field data value that will be submitted is the fileId set during the onUpload callback.
@@ -122,7 +122,7 @@ Example showing the onDelete callback on the UploadImg field::
         //reset thumbanil
         $img->clearThumbnail('./images/default.png');
 
-        return new atk4\ui\jsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
+        return new \atk4\ui\jsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
     });
 
 

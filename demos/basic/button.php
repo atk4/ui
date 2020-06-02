@@ -1,13 +1,15 @@
 <?php
 
-require_once __DIR__ . '/../atk-init.php';
-
-// Demonstrates how to use buttons.
+namespace atk4\ui\demo;
 
 use atk4\ui\Button;
 use atk4\ui\Icon;
 use atk4\ui\Label;
 use atk4\ui\Template;
+
+require_once __DIR__ . '/../atk-init.php';
+
+// Demonstrates how to use buttons.
 
 \atk4\ui\Header::addTo($app, ['Basic Button', 'size' => 2]);
 
@@ -49,17 +51,16 @@ Button::addTo($bar, ['icon' => 'upload', 'disabled' => true]);
 \atk4\ui\Header::addTo($app, ['Forks Button Component', 'size' => 2]);
 
 // Creating your own button component example
-class ForkButton extends Button
-{
+$forkButtonClass = get_class(new class() extends Button {
     public function __construct($n)
     {
         Icon::addTo(Button::addTo($this, ['Forks', 'blue']), ['fork']);
         Label::addTo($this, [number_format($n), 'basic blue left pointing']);
         parent::__construct(null, 'labeled');
     }
-}
+});
 
-ForkButton::addTo($app, 1234 + random_int(1, 100));
+$forkButtonClass::addTo($app, 1234 + random_int(1, 100));
 
 \atk4\ui\Header::addTo($app, ['Custom Template', 'size' => 2]);
 

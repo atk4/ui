@@ -69,8 +69,8 @@ Even if model not explicitly set (see section below) each form has an underlying
 		'email' => 'some@email.com'
 	]);
 
-Form also relies on a ``atk4\ui\FormLayout`` class and displays fields through
-decorators defined at ``atk4\ui\FormField``. See dedicated documentation for:
+Form also relies on a ``\atk4\ui\FormLayout`` class and displays fields through
+decorators defined at ``\atk4\ui\FormField``. See dedicated documentation for:
 
  - :php:class:`FormLayout::Generic`
  - :php:class:`FormField::Generic`

@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 $img = 'https://raw.githubusercontent.com/atk4/ui/2.0.4/public/logo.png';

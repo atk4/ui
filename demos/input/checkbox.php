@@ -1,9 +1,11 @@
 <?php
 
-require_once __DIR__ . '/../atk-init.php';
+namespace atk4\ui\demo;
 
 use atk4\ui\FormField\CheckBox;
 use atk4\ui\View;
+
+require_once __DIR__ . '/../atk-init.php';
 
 // Testing fields.
 

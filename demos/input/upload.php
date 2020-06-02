@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
 $form = \atk4\ui\Form::addTo($app);
@@ -69,7 +71,7 @@ $field->onUpload(function ($files) use ($form, $field) {
     ]);
 });
 
-$form->onSubmit(function (atk4\ui\Form $form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     // implement submission here
     return $form->success('Thanks for submitting file: ' . $form->model->get('img') . ' / ' . $form->model->get('file'));
 });

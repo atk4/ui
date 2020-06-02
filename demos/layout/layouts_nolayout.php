@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 chdir('..');
 include_once '../vendor/autoload.php';
 
