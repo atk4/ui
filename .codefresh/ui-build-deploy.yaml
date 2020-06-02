@@ -16,7 +16,7 @@ steps:
     title: Inject dependency SHA to bypass cache
     image: alpine
     commands:
-      - apk add bash
+      - apk add bash jq
       - bash ./tools/inject-dependency-sha.sh
 
   build:
