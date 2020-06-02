@@ -45,7 +45,7 @@ $flyersFormClass = get_class(new class() extends Form {
 
         $this->addField('country', [
             'Lookup',
-            'model' => new Country($this->db),
+            'model' => new \atk4\ui\demo\Country($this->db),
             'dependency' => function ($model, $data) {
                 isset($data['contains']) ? $model->addCondition('name', 'like', '%' . $data['contains'] . '%') : null;
             },
