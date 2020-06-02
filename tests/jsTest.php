@@ -19,6 +19,22 @@ class jsTest extends AtkPhpunit\TestCase
         $this->assertSame('3+4', (new jsExpression('[]+[]', [3, 4]))->jsRender());
     }
 
+    public function testNumbers()
+    {
+        foreach ([
+            [10, '10'],
+            [9007199254740991, '9007199254740991'],
+            [9007199254740992, '"9007199254740992"'],
+            [-9007199254740991, '-9007199254740991'],
+            [-9007199254740992, '"-9007199254740992"'],
+            [1.5, '1.5'],
+            [false, 'false'],
+            [true, 'true'],
+        ] as [$in, $expected]) {
+            $this->assertSame($expected, (new jsExpression('[]', [$in]))->jsRender());
+        }
+    }
+
     public function testNestedExpressions()
     {
         $this->assertSame(

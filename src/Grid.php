@@ -12,6 +12,10 @@ use atk4\ui\ActionExecutor\Basic;
 class Grid extends View
 {
     use HookTrait;
+
+    /** @const string not used, make it public if needed or drop it */
+    private const HOOK_ON_USER_ACTION = self::class . '@onUserAction';
+
     /**
      * Will be initialized to Menu object, however you can set this to false to disable menu.
      *
@@ -574,7 +578,7 @@ class Grid extends View
         $this->addModalAction($button, $title, function ($page, $id) use ($action, $executor) {
             $page->add($executor);
 
-            $this->hook('onUserAction', [$page, $executor]);
+            $this->hook(self::HOOK_ON_USER_ACTION, [$page, $executor]);
 
             $action->owner->load($id);
 

@@ -37,6 +37,9 @@ class UserAction extends Modal implements Interface_, jsInterface_
 {
     use HookTrait;
 
+    /** @const string */
+    public const HOOK_STEP = self::class . '@onStep';
+
     /**
      * @var jsExpressionable array|callable jsExpression to return if action was successful, e.g "new jsToast('Thank you')"
      */
@@ -331,7 +334,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         $this->jsSetSubmitBtn($modal, $f, $this->step);
         $this->jsSetPrevHandler($modal, $this->step);
 
-        if (!$f->hookHasCallbacks('submit')) {
+        if (!$f->hookHasCallbacks(Form::HOOK_SUBMIT)) {
             $f->onSubmit(function (Form $form) {
                 // collect fields.
                 $form_fields = $form->model->get();
@@ -416,7 +419,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     protected function doFinal(View $modal)
     {
         foreach ($this->actionData['fields'] ?? [] as $field => $value) {
-            $this->action->owner[$field] = $value;
+            $this->action->owner->set($field, $value);
         }
 
         $return = $this->action->execute(...$this->_getActionArgs($this->actionData['args'] ?? []));
@@ -437,7 +440,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
         return [
             $this->hide(),
-            $this->hook('afterExecute', [$obj, $id]) ?:
+            $this->hook(Basic::HOOK_AFTER_EXECUTE, [$obj, $id]) ?:
             $success ?: new jsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
             $this->loader->jsClearStoreData(true),
         ];
@@ -539,7 +542,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
         foreach ($fields as $k => $val) {
             $form->getField($k)->set($val);
         }
-        $this->hook('onStep', [$step, $form]);
+        $this->hook(self::HOOK_STEP, [$step, $form]);
 
         return $form;
     }

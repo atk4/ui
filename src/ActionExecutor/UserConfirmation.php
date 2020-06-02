@@ -238,7 +238,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
             $this->hide(),
             $this->ok->js(true)->off(),
             $this->cancel->js(true)->off(),
-            $this->hook('afterExecute', [$obj, $id]) ?: $success ?: new jsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
+            $this->hook(Basic::HOOK_AFTER_EXECUTE, [$obj, $id]) ?: $success ?: new jsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
         ];
     }
 

@@ -185,7 +185,7 @@ class Table extends Lister
         }
 
         if (!$this->model) {
-            $this->model = new \atk4\ui\misc\ProxyModel();
+            $this->model = new \atk4\ui\Misc\ProxyModel();
         }
 
         // This code should be vaugely consistent with FormLayout\Generic::addField()
@@ -276,7 +276,7 @@ class Table extends Lister
 
         // create column popup.
         foreach ($cols as $colName) {
-            $col = $this->columns[$colName];
+            $col = $this->getColumn($colName);
             if ($col) {
                 $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
@@ -297,7 +297,7 @@ class Table extends Lister
      *
      * @return TableColumn\Generic
      */
-    public function addDecorator($name, $seed)
+    public function addDecorator(string $name, $seed)
     {
         if (!$this->columns[$name]) {
             throw new Exception(['No such column, cannot decorate', 'name' => $name]);
@@ -316,14 +316,25 @@ class Table extends Lister
      * Return array of column decorators for particular column.
      *
      * @param string $name Column name
-     *
-     * @return array
      */
-    public function getColumnDecorators($name)
+    public function getColumnDecorators(string $name): array
     {
         $dec = $this->columns[$name];
 
         return is_array($dec) ? $dec : [$dec];
+    }
+
+    /**
+     * Return column instance or first instance if using decorator.
+     *
+     * @return mixed
+     */
+    protected function getColumn(string $name)
+    {
+        // NOTE: It is not guaranteed that we will have only one element here. When adding decorators, the key will not
+        // contain the column instance anymore but an array with column instance set at 0 indexes and the rest as decorators.
+        // This is enough for fixing this issue right now. We can work on unifying decorator API in a separate PR.
+        return is_array($this->columns[$name]) ? $this->columns[$name][0] : $this->columns[$name];
     }
 
     /**
@@ -489,7 +500,7 @@ class Table extends Lister
         $this->_rendered_rows_count = 0;
         foreach ($this->model as $this->current_id => $tmp) {
             $this->current_row = $this->model->get();
-            if ($this->hook('beforeRow') === false) {
+            if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                 continue;
             }
 
@@ -501,7 +512,7 @@ class Table extends Lister
 
             ++$this->_rendered_rows_count;
 
-            if ($this->hook('afterRow') === false) {
+            if ($this->hook(self::HOOK_AFTER_ROW) === false) {
                 continue;
             }
         }
@@ -536,7 +547,7 @@ class Table extends Lister
             // Prepare row-specific HTML tags.
             $html_tags = [];
 
-            foreach ($this->hook('getHTMLTags', [$this->model]) as $ret) {
+            foreach ($this->hook(TableColumn\Generic::HOOK_GET_HTML_TAGS, [$this->model]) as $ret) {
                 if (is_array($ret)) {
                     $html_tags = array_merge($html_tags, $ret);
                 }

@@ -20,7 +20,6 @@ class App
     use InitializerTrait {
         init as _init;
     }
-
     use HookTrait;
     use DynamicMethodTrait;
     use FactoryTrait;
@@ -28,11 +27,18 @@ class App
     use DIContainerTrait;
 
     /** @const string */
+    public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
+    /** @const string */
+    public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
+    /** @const string not used, make it public if needed or drop it */
+    private const HOOK_BEFORE_OUTPUT = self::class . '@beforeOutput';
+
+    /** @const string */
     protected const HEADER_STATUS_CODE = 'atk4-status-code';
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
-        'atk' => 'https://ui.agiletoolkit.org/public/', // develop branch
+        'atk' => 'https://ui.agiletoolkit.org/public', // develop branch
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui' => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.4/dist',
@@ -220,7 +226,7 @@ class App
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
-            $this->hook('beforeExit');
+            $this->hook(self::HOOK_BEFORE_EXIT);
         }
 
         if ($for_shutdown) {
@@ -449,22 +455,18 @@ class App
     public function initIncludes()
     {
         // jQuery
-        $url = $this->cdn['jquery'] ?? '../public';
-        $this->requireJS($url . '/jquery.min.js');
+        $this->requireJS($this->cdn['jquery'] . '/jquery.min.js');
 
         // Semantic UI
-        $url = $this->cdn['semantic-ui'] ?? '../public';
-        $this->requireJS($url . '/semantic.min.js');
-        $this->requireCSS($url . '/semantic.min.css');
+        $this->requireJS($this->cdn['semantic-ui'] . '/semantic.min.js');
+        $this->requireCSS($this->cdn['semantic-ui'] . '/semantic.min.css');
 
         // Serialize Object
-        $url = $this->cdn['serialize-object'] ?? '../public';
-        $this->requireJS($url . '/jquery.serialize-object.min.js');
+        $this->requireJS($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
 
         // Agile UI
-        $url = $this->cdn['atk'] ?? '../public';
-        $this->requireJS($url . '/atkjs-ui.min.js');
-        $this->requireCSS($url . '/agileui.css');
+        $this->requireJS($this->cdn['atk'] . '/atkjs-ui.min.js');
+        $this->requireCSS($this->cdn['atk'] . '/agileui.css');
     }
 
     /**
@@ -481,14 +483,6 @@ class App
             throw new Exception(['App does not know how to add style']);
         }
         $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
-    }
-
-    /**
-     * Normalizes class name.
-     */
-    public function normalizeClassNameApp(string $name, string $prefix = null): ?string
-    {
-        return null;
     }
 
     /**
@@ -524,7 +518,7 @@ class App
         try {
             ob_start();
             $this->run_called = true;
-            $this->hook('beforeRender');
+            $this->hook(self::HOOK_BEFORE_RENDER);
             $this->is_rendering = true;
 
             // if no App layout set
@@ -536,11 +530,11 @@ class App
             $this->html->renderAll();
             $this->html->template->appendHTML('HEAD', $this->html->getJS());
             $this->is_rendering = false;
-            $this->hook('beforeOutput');
+            $this->hook(self::HOOK_BEFORE_OUTPUT);
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 $this->terminate(
-                    "\n" . '!! ATK4 UI ERROR: Callback requested, but never reached. You may be missing some arguments in request URL. !!' . "\n",
+                    $this->buildLateErrorStr('Callback requested, but never reached. You may be missing some arguments in request URL.'),
                     ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => 500]
                 );
             }
@@ -1070,6 +1064,11 @@ class App
 
     // RESPONSES
 
+    private function buildLateErrorStr(string $msg): string
+    {
+        return "\n" . '!! ATK4 UI ERROR: ' . $msg . ' !!' . "\n";
+    }
+
     /** @var string[] */
     private static $_sentHeaders = [];
 
@@ -1084,9 +1083,24 @@ class App
         $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
         $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
 
-        if (count($headersNew) > 0 && headers_sent()) {
-            echo "\n" . '!! ATK4 UI ERROR: Headers already sent, more headers can not be set at this stage. !!' . "\n";
-        } else {
+        $lateErrorStr = null;
+        foreach (ob_get_status(true) as $status) {
+            if ($status['buffer_used'] !== 0) {
+                $lateErrorStr = $this->buildLateErrorStr('Unexpected output detected.');
+
+                break;
+            }
+        }
+
+        if ($lateErrorStr === null && count($headersNew) > 0 && headers_sent()) {
+            $lateErrorStr = $this->buildLateErrorStr('Headers already sent, more headers can not be set at this stage.');
+        }
+
+        if (!headers_sent()) {
+            if ($lateErrorStr !== null) {
+                $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => 500];
+            }
+
             foreach ($headersNew as $k => $v) {
                 if ($k === self::HEADER_STATUS_CODE) {
                     http_response_code($v);
@@ -1100,9 +1114,14 @@ class App
 
                 self::$_sentHeaders[$k] = $v;
             }
-
-            echo $data;
         }
+
+        if ($lateErrorStr !== null) {
+            echo $lateErrorStr;
+            exit;
+        }
+
+        echo $data;
     }
 
     /**

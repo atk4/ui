@@ -28,7 +28,7 @@ if ($app->catch_exceptions !== true) {
 }
 
 if (file_exists(__DIR__ . '/coverage.php')) {
-    $app->onHook('beforeExit', function () {
+    $app->onHook(atk4\ui\App::HOOK_BEFORE_EXIT, function () {
         coverage();
     });
 }
@@ -78,7 +78,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Form Sections'], [$path . 'form-section'], $form);
     $layout->addMenuItem('Form Multi-column layout', [$path . 'form3'], $form);
     $layout->addMenuItem(['Integration with Columns'], [$path . 'form5'], $form);
-    $layout->addMenuItem(['Custom Layout'], [$path . 'form-custom-layout'], $form);
+    $layout->addMenuItem(['HTML Layout'], [$path . 'html-layout'], $form);
     $layout->addMenuItem(['Conditional Fields'], [$path . 'jscondform'], $form);
 
     $path = $demosUrl . 'input/';

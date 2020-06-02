@@ -3,6 +3,9 @@ language: php
 os:
     - linux
 
+dist:
+   - xenial
+
 php:
     # one version fo Behat is enought
     - '7.4'
@@ -60,7 +63,6 @@ before_script:
 
     - (cd js; npm install --loglevel=error; npm run build)
     - lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
-    - uglifyjs --compress -- public/agileui.js > public/agileui.min.js
     - composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
 script:

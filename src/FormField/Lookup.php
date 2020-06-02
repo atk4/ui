@@ -220,10 +220,9 @@ class Lookup extends Input
         $id_field = $field->id_field ?: $row->id_field;
         $title_field = $field->title_field ?: $row->title_field;
 
-        // IMPORTANT: always convert data to string, otherwise numbers can be rounded by JS
         return [
-            'value' => (string) $row->get($id_field),
-            'title' => (string) $row->get($title_field),
+            'value' => $row->get($id_field),
+            'title' => $row->get($title_field),
         ];
     }
 

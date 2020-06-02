@@ -21,6 +21,11 @@ class Generic
     use \atk4\core\TrackableTrait;
     use \atk4\core\DIContainerTrait;
 
+    /** @const string */
+    public const HOOK_GET_HTML_TAGS = self::class . '@getHTMLTags';
+    /** @const string not used, make it public if needed or drop it */
+    private const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHTML';
+
     /**
      * Link back to the table, where column is used.
      *
@@ -302,7 +307,7 @@ class Generic
             throw new \atk4\ui\Exception(['How $table could not be set??', 'field' => $field, 'value' => $value]);
         }
 
-        if ($tags = $this->table->hook('getColumnHeaderCell', [$this, $field, $value])) {
+        if ($tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value])) {
             return reset($tags);
         }
 
@@ -370,7 +375,7 @@ class Generic
      * will also be formatted before inserting, see UI Persistence formatting in the documentation.
      *
      * This method will be executed only once per table rendering, if you need to format data manually,
-     * you should use $this->table->onHook('formatRow');
+     * you should use $this->table->onHook('beforeRow' or 'afterRow', ...);
      *
      * @param Field $field
      * @param array $extra_tags
