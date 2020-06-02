@@ -486,14 +486,6 @@ class App
     }
 
     /**
-     * Normalizes class name.
-     */
-    public function normalizeClassNameApp(string $name, string $prefix = null): ?string
-    {
-        return null;
-    }
-
-    /**
      * Add a new object into the app. You will need to have Layout first.
      *
      * @param View|string|array $seed   New object to add
