@@ -29,11 +29,11 @@ $inventory = new $inventoryItemClass(new \atk4\data\Persistence\Array_($data));
 // Populate some data.
 $total = 0;
 for ($i = 1; $i < 3; ++$i) {
-    $inventory['id'] = $i;
-    $inventory['item'] = 'item_' . $i;
-    $inventory['qty'] = random_int(10, 100);
-    $inventory['box'] = random_int(1, 10);
-    $total = $total + ($inventory['qty'] * $inventory['box']);
+    $inventory->set('id', $i);
+    $inventory->set('item', 'item_' . $i);
+    $inventory->set('qty', random_int(10, 100));
+    $inventory->set('box', random_int(1, 10));
+    $total = $total + ($inventory->get('qty') * $inventory->get('box'));
     $inventory->saveAndUnload();
 }
 
