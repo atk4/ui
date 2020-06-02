@@ -17,9 +17,6 @@ WORKDIR /var/www/html/
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-ADD composer.json .
-RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv tmp composer.json \
-    && composer install --no-dev
 RUN npm install -g less clean-css
 
 COPY js js
@@ -27,6 +24,10 @@ COPY public public
 
 RUN (cd js && npm install && npm run build)
 RUN (cd public && lessc agileui.less agileui.css)
+
+ADD composer.json .
+RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv tmp composer.json \
+    && composer install --no-dev
 
 COPY index.php index.php
 COPY src src
