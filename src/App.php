@@ -1099,23 +1099,23 @@ class App
         if (count($headersNew) > 0 && headers_sent()) {
             echo "\n" . '!! ATK4 UI ERROR: Headers already sent, more headers can not be set at this stage. !!' . "\n";
             exit;
-        } else {
-            foreach ($headersNew as $k => $v) {
-                if ($k === self::HEADER_STATUS_CODE) {
-                    http_response_code($v);
-                } else {
-                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                        return strtoupper($matches[0]);
-                    }, $k);
+        }
 
-                    header($kCamelCase . ': ' . $v);
-                }
+        foreach ($headersNew as $k => $v) {
+            if ($k === self::HEADER_STATUS_CODE) {
+                http_response_code($v);
+            } else {
+                $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                    return strtoupper($matches[0]);
+                }, $k);
 
-                self::$_sentHeaders[$k] = $v;
+                header($kCamelCase . ': ' . $v);
             }
 
-            echo $data;
+            self::$_sentHeaders[$k] = $v;
         }
+
+        echo $data;
     }
 
     /**
