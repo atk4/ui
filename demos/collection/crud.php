@@ -84,7 +84,8 @@ $my_executor = new class() extends \atk4\ui\ActionExecutor\UserAction {
 
         return $result;
     }
-}
+};
+
 $file = new FileLock($db);
 $file->getAction('edit')->ui['executor'] = $my_executor;
 
