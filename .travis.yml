@@ -3,6 +3,9 @@ language: php
 os:
     - linux
 
+dist:
+   - xenial
+
 php:
     # one version fo Behat is enought
     - '7.4'
