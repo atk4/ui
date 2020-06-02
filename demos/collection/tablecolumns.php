@@ -4,9 +4,7 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-\atk4\ui\Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can be set from your model.']);
-
-$m = new class(new \atk4\data\Persistence\Static_([])) extends \atk4\data\Model {
+$modelClass = get_class(new class(new \atk4\data\Persistence\Static_([])) extends \atk4\data\Model {
     public function init(): void
     {
         parent::init();
@@ -96,7 +94,7 @@ $m = new class(new \atk4\data\Persistence\Static_([])) extends \atk4\data\Model 
 
         $this->addField('note', ['system' => true]);
     }
-};
+});
 
 $key_value_string = [
     1 => 'one',
@@ -104,6 +102,10 @@ $key_value_string = [
     'three',
     'four',
 ];
+
+\atk4\ui\Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can be set from your model.']);
+
+$m = new $modelClass(new \atk4\data\Persistence\Static_([]));
 
 foreach (range(1, 10) as $id) {
     $key_value = random_int(1, 4);

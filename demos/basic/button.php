@@ -51,16 +51,16 @@ Button::addTo($bar, ['icon' => 'upload', 'disabled' => true]);
 \atk4\ui\Header::addTo($app, ['Forks Button Component', 'size' => 2]);
 
 // Creating your own button component example
-$fork_button = new class() extends Button {
+$forkButtonClass = get_class(new class() extends Button {
     public function __construct($n)
     {
         Icon::addTo(Button::addTo($this, ['Forks', 'blue']), ['fork']);
         Label::addTo($this, [number_format($n), 'basic blue left pointing']);
         parent::__construct(null, 'labeled');
     }
-};
+});
 
-$fork_button::addTo($app, 1234 + random_int(1, 100));
+$forkButtonClass::addTo($app, 1234 + random_int(1, 100));
 
 \atk4\ui\Header::addTo($app, ['Custom Template', 'size' => 2]);
 

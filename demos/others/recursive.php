@@ -4,9 +4,7 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-$view = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
-
-$my_switcher = new class($view) extends \atk4\ui\View {
+$mySwitcherClass = get_class(new class() extends \atk4\ui\View {
     public function init(): void
     {
         parent::init();
@@ -35,6 +33,8 @@ $my_switcher = new class($view) extends \atk4\ui\View {
             break;
         }
     }
-};
+});
 
-$my_switcher::addTo($view);
+$view = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
+
+$mySwitcherClass::addTo($view);

@@ -12,8 +12,7 @@ require_once __DIR__ . '/../atk-init.php';
 /**
  * Class Inventory Item.
  */
-$data = [];
-$inventory = new class(new \atk4\data\Persistence\Array_($data)) extends \atk4\data\Model {
+$inventoryClass = get_class(new class() extends \atk4\data\Model {
     public function init(): void
     {
         parent::init();
@@ -25,7 +24,10 @@ $inventory = new class(new \atk4\data\Persistence\Array_($data)) extends \atk4\d
             return $row->get('qty') * $row->get('box');
         }, 'type' => 'integer']);
     }
-};
+});
+
+$data = [];
+$inventory = new $inventoryClass(new \atk4\data\Persistence\Array_($data));
 
 // Populate some data.
 $total = 0;
