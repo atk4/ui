@@ -66,8 +66,7 @@ $crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($cr
 $cc = $c->addColumn();
 \atk4\ui\Header::addTo($cc, ['Cutomizations']);
 
-class MyExecutor extends \atk4\ui\ActionExecutor\UserAction
-{
+$my_executor = new class() extends \atk4\ui\ActionExecutor\UserAction {
     public function addFormTo(\atk4\ui\View $view): \atk4\ui\Form
     {
         $columns = \atk4\ui\Columns::addTo($view);
@@ -87,7 +86,7 @@ class MyExecutor extends \atk4\ui\ActionExecutor\UserAction
     }
 }
 $file = new FileLock($db);
-$file->getAction('edit')->ui['executor'] = MyExecutor::class;
+$file->getAction('edit')->ui['executor'] = $my_executor;
 
 $crud = \atk4\ui\CRUD::addTo($cc, [
     'ipp' => 5,

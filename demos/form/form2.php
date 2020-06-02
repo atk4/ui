@@ -69,8 +69,7 @@ $form->onSubmit(function (\atk4\ui\Form $form) {
 
 // ======
 
-class Person extends \atk4\data\Model
-{
+$person = new class($db) extends \atk4\data\Model {
     public $table = 'person';
 
     public function init(): void
@@ -93,8 +92,8 @@ class Person extends \atk4\data\Model
 
         return $errors;
     }
-}
+};
 
 \atk4\ui\Form::addTo($app)
     ->addClass('segment')
-    ->setModel(new Person($db));
+    ->setModel($person);

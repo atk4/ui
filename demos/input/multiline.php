@@ -7,11 +7,13 @@ use atk4\ui\jsFunction;
 
 require_once __DIR__ . '/../atk-init.php';
 
+\atk4\ui\Header::addTo($app, ['MultiLine form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
+
 /**
  * Class Inventory Item.
  */
-class InventoryItem extends \atk4\data\Model
-{
+$data = [];
+$inventory = new class(new \atk4\data\Persistence\Array_($data)) extends \atk4\data\Model {
     public function init(): void
     {
         parent::init();
@@ -23,13 +25,7 @@ class InventoryItem extends \atk4\data\Model
             return $row->get('qty') * $row->get('box');
         }, 'type' => 'integer']);
     }
-}
-
-\atk4\ui\Header::addTo($app, ['MultiLine form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
-
-$data = [];
-
-$inventory = new InventoryItem(new \atk4\data\Persistence\Array_($data));
+};
 
 // Populate some data.
 $total = 0;
