@@ -5,7 +5,7 @@ namespace atk4\ui\demo;
 require_once __DIR__ . '/../atk-init.php';
 
 // Re-usable component implementing counter
-class Finder extends \atk4\ui\Columns
+$finder = new class() extends \atk4\ui\Columns
 {
     public $route = [];
 
@@ -65,7 +65,7 @@ class Finder extends \atk4\ui\Columns
 
         return $this->model;
     }
-}
+};
 
 $m = new File($db);
 $m->addCondition('parent_folder_id', null);
@@ -82,6 +82,6 @@ $vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($vp) use ($m) {
 
 \atk4\ui\Button::addTo($app, ['Re-Import From Filesystem', 'top attached'])->on('click', new \atk4\ui\jsModal('Now importing ... ', $vp));
 
-Finder::addTo($app, 'bottom attached')
+$finder::addTo($app, 'bottom attached')
     ->addClass('top attached segment')
     ->setModel($m->setLimit(5), ['SubFolder']);
