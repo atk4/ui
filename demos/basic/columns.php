@@ -65,8 +65,7 @@ $r = $c->addRow();
 /**
  * Example box component with some content, good for putting into columns.
  */
-class columns extends \atk4\ui\View
-{
+$boxClass = get_class(new class() extends \atk4\ui\View {
     public $ui = 'segment';
     public $content = false;
 
@@ -76,8 +75,8 @@ class columns extends \atk4\ui\View
         \atk4\ui\Table::addTo($this, ['header' => false])
             ->setSource(['One', 'Two', 'Three', 'Four']);
     }
-}
+});
 
 $c = \atk4\ui\Columns::addTo($page, ['width' => 4]);
-Box::addTo($c->addColumn(), [null, 'red']);
-Box::addTo($c->addColumn([null, null, 'right floated']), [null, 'blue']);
+$boxClass::addTo($c->addColumn(), [null, 'red']);
+$boxClass::addTo($c->addColumn([null, null, 'right floated']), [null, 'blue']);
