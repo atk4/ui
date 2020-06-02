@@ -1095,6 +1095,7 @@ class App
             if ($status['buffer_used'] !== 0) {
                 if (!headers_sent()) {
                     http_response_code(500);
+                    header('Content-Type: text/plain');
                 }
                 echo $this->buildLateErrorStr('Unexpected output detected.');
                 exit;
