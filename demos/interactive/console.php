@@ -77,6 +77,8 @@ $t = $tt->addTab('exec() chain', function ($t) {
     });
 });
 
+/******** THIS DEMO IS DISABLED FOR CLOUD USE
+ *
 $t = $tt->addTab('composer update', function ($t) {
     \atk4\ui\Header::addTo($t, [
         'icon' => 'terminal',
@@ -90,10 +92,11 @@ $t = $tt->addTab('composer update', function ($t) {
     $b = \atk4\ui\Button::addTo($w, ['I understand, proceed anyway', 'primary big']);
 
     $c = \atk4\ui\Console::addTo($t, ['event' => false]);
-    $c->exec('bash', ['-c', 'cd ..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
+    $c->exec('bash', ['-c', 'cd ../..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
 
     $b->on('click', $c->jsExecute());
 });
+ **************/
 
 $t = $tt->addTab('Use after form submit', function ($t) {
     \atk4\ui\Header::addTo($t, [
