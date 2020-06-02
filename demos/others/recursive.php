@@ -1,10 +1,9 @@
 <?php
 
-namespace atk4\ui\demo;
-
 require_once __DIR__ . '/../atk-init.php';
 
-$mySwitcherClass = get_class(new class() extends \atk4\ui\View {
+class recursive extends \atk4\ui\View
+{
     public function init(): void
     {
         parent::init();
@@ -19,22 +18,21 @@ $mySwitcherClass = get_class(new class() extends \atk4\ui\View {
         $buttons->on('click', '.button', new \atk4\ui\jsReload($this, [$this->name => (new \atk4\ui\jQuery())->data('id')]));
 
         switch ($this->app->stickyGet($this->name)) {
-        case 'yellow':
-            self::addTo(\atk4\ui\View::addTo($this, ['ui' => 'yellow segment']));
+            case 'yellow':
+                self::addTo(\atk4\ui\View::addTo($this, ['ui' => 'yellow segment']));
 
-            break;
-        case 'blue':
-            self::addTo(\atk4\ui\View::addTo($this, ['ui' => 'blue segment']));
+                break;
+            case 'blue':
+                self::addTo(\atk4\ui\View::addTo($this, ['ui' => 'blue segment']));
 
-            break;
-        case 'button':
-            \atk4\ui\Button::addTo(\atk4\ui\View::addTo($this, ['ui' => 'green segment']), ['Refresh page'])->link([]);
+                break;
+            case 'button':
+                \atk4\ui\Button::addTo(\atk4\ui\View::addTo($this, ['ui' => 'green segment']), ['Refresh page'])->link([]);
 
-            break;
+                break;
         }
     }
-});
+}
 
 $view = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
-
-$mySwitcherClass::addTo($view);
+$view->add(new recursive());
