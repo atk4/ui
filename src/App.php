@@ -542,7 +542,7 @@ class App
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 $this->terminate(
-                    "\n" . '!! ATK4 UI ERROR: Callback requested, but never reached. You may be missing some arguments in request URL. !!' . "\n",
+                    $this->buildLateErrorStr('Callback requested, but never reached. You may be missing some arguments in request URL.'),
                     ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => 500]
                 );
             }
@@ -1072,6 +1072,11 @@ class App
 
     // RESPONSES
 
+    private function buildLateErrorStr(string $msg): string
+    {
+        return "\n" . '!! ATK4 UI ERROR: ' . $msg . ' !!' . "\n";
+    }
+
     /** @var string[] */
     private static $_sentHeaders = [];
 
@@ -1091,13 +1096,13 @@ class App
                 if (!headers_sent()) {
                     http_response_code(500);
                 }
-                echo "\n" . '!! ATK4 UI ERROR: Unexpected output detected. !!' . "\n";
+                echo $this->buildLateErrorStr('Unexpected output detected.');
                 exit;
             }
         }
 
         if (count($headersNew) > 0 && headers_sent()) {
-            echo "\n" . '!! ATK4 UI ERROR: Headers already sent, more headers can not be set at this stage. !!' . "\n";
+            echo $this->buildLateErrorStr('Headers already sent, more headers can not be set at this stage.');
             exit;
         }
 
