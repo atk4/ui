@@ -35,4 +35,4 @@ class recursive extends \atk4\ui\View
 }
 
 $view = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
-$view->add(new Recursive());
+$view->add(new recursive());
