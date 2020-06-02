@@ -19,7 +19,7 @@ $view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div>
 </div>')]);
 
 $lister = \atk4\ui\Lister::addTo($view, [], ['List']);
-$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (atk4\ui\Lister $lister) {
+$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 $lister->setModel(new Country($db))
@@ -39,7 +39,7 @@ $view = \atk4\ui\View::addTo($app, ['template' => new \atk4\ui\Template('<div>
 </div>')]);
 
 $lister = \atk4\ui\Lister::addTo($view, [], ['List']);
-$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (atk4\ui\Lister $lister) {
+$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 $lister->setModel(new Country($db))
@@ -56,7 +56,7 @@ $v = \atk4\ui\View::addTo($container, ['template' => new \atk4\ui\Template('<div
 </ul>{$Content}</div>')]);
 
 $l = \atk4\ui\Lister::addTo($v, [], ['List']);
-$l->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (atk4\ui\Lister $lister) {
+$l->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 

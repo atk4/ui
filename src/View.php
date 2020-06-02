@@ -1132,7 +1132,7 @@ class View implements jsExpressionable
      *
      * @param string                   $event    JavaScript event
      * @param string                   $selector Optional jQuery-style selector
-     * @param jsChain|callable|Generic $action   code to execute or atk4\Data\UserAction
+     * @param jsChain|callable|Generic $action   code to execute or \atk4\Data\UserAction
      * @param array                    $defaults Options
      *
      * @throws Exception
