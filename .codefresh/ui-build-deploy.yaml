@@ -10,6 +10,13 @@ steps:
     stage: clone
     repo: atk4/ui
     revision: "${{CF_BRANCH}}"
+
+  fix_sha:
+    stage: clone
+    title: Inject dependency SHA to bypass cache
+    commands:
+      - ./tools/inject-dependency-sha.sh
+
   build:
     type: build
     stage: build
