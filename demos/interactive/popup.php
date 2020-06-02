@@ -176,7 +176,7 @@ $shelf = $itemShelfClass::addTo($app);
 // as i would be in the application. That's also impacts under which key 'memorize' is storing data - having
 // two different objects won't work, since they won't share session data.
 
-$cart = $cartClass::addTo($app, ['name' => 'cart_item']);
+$cart = $cartClass::addTo($app);
 
 // Next I am calling destroy. This won't actually destroy the cart, but it will remove it from the application.
 // If i add unset($cart) afterwards, garbage collector will trigger destructor. Instead I'm passing $cart
