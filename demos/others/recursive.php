@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../atk-init.php';
 
-class recursive extends \atk4\ui\View
+class Recursive extends \atk4\ui\View
 {
     public function init(): void
     {
