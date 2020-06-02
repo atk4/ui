@@ -1091,34 +1091,42 @@ class App
         $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
         $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
 
+        $lateErrorStr = null;
         foreach (ob_get_status(true) as $status) {
             if ($status['buffer_used'] !== 0) {
-                if (!headers_sent()) {
-                    http_response_code(500);
-                    header('Content-Type: text/plain');
+                $lateErrorStr = $this->buildLateErrorStr('Unexpected output detected.');
+
+                break;
+            }
+        }
+
+        if ($lateErrorStr === null && count($headersNew) > 0 && headers_sent()) {
+            $lateErrorStr = $this->buildLateErrorStr('Headers already sent, more headers can not be set at this stage.');
+        }
+
+        if (!headers_sent()) {
+            if ($lateErrorStr !== null) {
+                $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => 500];
+            }
+
+            foreach ($headersNew as $k => $v) {
+                if ($k === self::HEADER_STATUS_CODE) {
+                    http_response_code($v);
+                } else {
+                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                        return strtoupper($matches[0]);
+                    }, $k);
+
+                    header($kCamelCase . ': ' . $v);
                 }
-                echo $this->buildLateErrorStr('Unexpected output detected.');
-                exit;
+
+                self::$_sentHeaders[$k] = $v;
             }
         }
 
-        if (count($headersNew) > 0 && headers_sent()) {
-            echo $this->buildLateErrorStr('Headers already sent, more headers can not be set at this stage.');
+        if ($lateErrorStr !== null) {
+            echo $lateErrorStr;
             exit;
-        }
-
-        foreach ($headersNew as $k => $v) {
-            if ($k === self::HEADER_STATUS_CODE) {
-                http_response_code($v);
-            } else {
-                $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                    return strtoupper($matches[0]);
-                }, $k);
-
-                header($kCamelCase . ': ' . $v);
-            }
-
-            self::$_sentHeaders[$k] = $v;
         }
 
         echo $data;
