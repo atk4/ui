@@ -32,7 +32,7 @@ $m = new class($p) extends \atk4\data\Model {
 
         $this->lock();
     }
-}
+};
 
 // add CRUD
 \atk4\ui\Header::addTo($app, ['CRUD with Array Persistence']);
