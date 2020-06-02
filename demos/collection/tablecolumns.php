@@ -4,7 +4,7 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-$modelClass = get_class(new class(new \atk4\data\Persistence\Static_([])) extends \atk4\data\Model {
+$modelColorClass = get_class(new class() extends \atk4\data\Model {
     public function init(): void
     {
         parent::init();
@@ -105,7 +105,7 @@ $key_value_string = [
 
 \atk4\ui\Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can be set from your model.']);
 
-$m = new $modelClass(new \atk4\data\Persistence\Static_([]));
+$m = new $modelColorClass(new \atk4\data\Persistence\Static_([]));
 
 foreach (range(1, 10) as $id) {
     $key_value = random_int(1, 4);

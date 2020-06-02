@@ -4,7 +4,7 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-$modelClass = get_class(new class() extends \atk4\data\Model {
+$notifierClass = get_class(new class() extends \atk4\data\Model {
     public $table = 'notifier';
 
     public function init(): void
@@ -27,7 +27,7 @@ $head = \atk4\ui\Header::addTo($app, ['Notification Types']);
 $form = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Some of notification options that can be set.', 'top attached'], ['AboveFields']);
 $form->buttonSave->set('Show');
-$form->setModel(new $modelClass($db), false);
+$form->setModel(new $notifierClass($db), false);
 
 $f_p = $form->addGroup(['Set Text and Icon:']);
 $f_p->addField('text', ['width' => 'eight']);

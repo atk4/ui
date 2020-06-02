@@ -9,10 +9,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Header::addTo($app, ['MultiLine form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
-/**
- * Class Inventory Item.
- */
-$inventoryClass = get_class(new class() extends \atk4\data\Model {
+$inventoryItemClass = get_class(new class() extends \atk4\data\Model {
     public function init(): void
     {
         parent::init();
@@ -27,7 +24,7 @@ $inventoryClass = get_class(new class() extends \atk4\data\Model {
 });
 
 $data = [];
-$inventory = new $inventoryClass(new \atk4\data\Persistence\Array_($data));
+$inventory = new $inventoryItemClass(new \atk4\data\Persistence\Array_($data));
 
 // Populate some data.
 $total = 0;
