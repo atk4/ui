@@ -133,7 +133,7 @@ $m = \atk4\ui\Menu::addTo($app);
 $browse = \atk4\ui\DropDown::addTo($m, ['Browse']);
 
 // Add cart item into the menu, with a popup inside
-$cart_item = $m->addItem([$cartClass::class, 'icon' => 'cart']);
+$cart_item = $m->addItem([$cartClass, 'icon' => 'cart']);
 
 $cart_popup = \atk4\ui\Popup::addTo($app, [$cart_item, 'position' => 'bottom left']);
 // Popup won't dissapear as you hover over it.
