@@ -3,7 +3,7 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/ViewTester.php';
+require_once __DIR__ . '/../ViewTester.php';
 
 \atk4\ui\Button::addTo($app, ['Loader Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['loader2']);

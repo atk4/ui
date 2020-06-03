@@ -4,7 +4,7 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/Session.php';
-require_once __DIR__ . '/ViewTester.php';
+require_once __DIR__ . '/../ViewTester.php';
 
 \atk4\ui\Header::addTo($app, ['Modal View']);
 
