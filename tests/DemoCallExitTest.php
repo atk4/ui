@@ -80,9 +80,10 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
     public function testResponseError()
     {
+        $this->expectExceptionCode(500);
+
         $uri = 'layout/layouts_error.php';
-        $response = $this->getResponseFromRequestGET($uri);
-        $this->assertSame(500, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->getResponseFromRequestGET($uri); // will throw exception
     }
 
     /**
