@@ -423,7 +423,7 @@ class View implements jsExpressionable
                 $object[0] = self::class;
             }
 
-            $object = self::addToWithClassNameUnsafe($this, $object, [], true);
+            $object = self::addToWithClUnsafe($this, $object, [], true);
         }
 
         if (!$this->app) {
