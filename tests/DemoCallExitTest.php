@@ -43,7 +43,10 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         ];
 
         // File that need to be exclude.
-        $excludes = ['layouts_nolayout.php'];
+        $excludes = [
+            'layouts_nolayout.php',
+            'layouts_error.php',
+        ];
 
         $files = [];
         $base_path = dirname(__DIR__) . '/demos';
@@ -73,6 +76,12 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $response = $this->getResponseFromRequestGET($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+    }
+
+    public function testResponseError()
+    {
+        $this->expectExceptionCode(500);
+        $this->getResponseFromRequestGET('layout/layouts_error.php');
     }
 
     /**
