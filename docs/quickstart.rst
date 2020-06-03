@@ -209,7 +209,7 @@ Next we need to add Components that are capable of manipulating the data::
 
 .. rubric:: Clarifications
 
-.. [#] We wish to position Form and Table side-by-side, so we use 'Columns' component and
+.. [#] We wish to position Form and Table side-by-side, so we use `\atk4\ui\Columns` component and
     inject a Fomantic UI CSS class "divided" that will appear as a vertical separation line.
 
 .. [#] $col_reload is a special object which we call :ref:`js_action`. It represents a Browser-event

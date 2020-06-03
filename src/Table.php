@@ -20,8 +20,8 @@ class Table extends Lister
 
     /**
      * Column objects can service multiple columns. You can use it for your advantage by re-using the object
-     * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
-     * used.
+     * when you pass it to addColumn(). If you omit the argument, then a column of a type TableColumn\Generic
+     * will be used.
      *
      * @var TableColumn\Generic
      */
@@ -227,7 +227,7 @@ class Table extends Lister
             $columnDecorator = $this->decoratorFactory($field, ['columnData' => $name]);
         } elseif (is_object($columnDecorator)) {
             if (!$columnDecorator instanceof \atk4\ui\TableColumn\Generic) {
-                throw new Exception(['Column decorator must descend from \atk4\ui\TableColumn\Generic', 'columnDecorator' => $columnDecorator]);
+                throw new Exception(['Column decorator must descend from ' . \atk4\ui\TableColumn\Generic::class, 'columnDecorator' => $columnDecorator]);
             }
             $columnDecorator->table = $this;
             if (!$columnDecorator->columnData) {

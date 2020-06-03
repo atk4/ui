@@ -205,7 +205,7 @@ You can add a footer to Multiline FormField by adding a sublayout to it. In this
     $ml = $form->addField('ml', ['MultiLine', 'options' => ['color' => 'blue']]);
     $ml->setModel($inventory);
     // Add sublayout with total field.
-    $sub_layout = $f->layout->addSublayout('Columns');
+    $sub_layout = $f->layout->addSublayout(\atk4\ui\FormLayout\Section\Columns::class);
     $sub_layout->addColumn(12);
     $c = $sub_layout->addColumn(4);
     $f_total = $c->addField('total', ['readonly' => true])->set($total);

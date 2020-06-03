@@ -44,7 +44,7 @@ $ml = $f->addField('ml', ['MultiLine', 'options' => ['color' => 'blue'], 'rowLim
 $ml->setModel($inventory);
 
 // Add total field.
-$sub_layout = $f->layout->addSublayout('Columns');
+$sub_layout = $f->layout->addSublayout(\atk4\ui\FormLayout\Section\Columns::class);
 $sub_layout->addColumn(12);
 $c = $sub_layout->addColumn(4);
 $f_total = $c->addField('total', ['readonly' => true])->set($total);

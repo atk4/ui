@@ -97,7 +97,7 @@ $f_acc = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_acc, ['Work on section layouts too.', 'top attached'], ['AboveFields']);
 
 // Accordion
-$accordion_layout = $f_acc->layout->addSubLayout(['Accordion', 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
+$accordion_layout = $f_acc->layout->addSubLayout([\atk4\ui\FormLayout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
 
 // Section - business address
 $adr_section = $accordion_layout->addSection('Business Address');

@@ -171,11 +171,11 @@ class Form extends View
     protected function initLayout()
     {
         if ($this->layout === null) {
-            $this->layout = 'Generic';
+            $this->layout = \atk4\ui\FormLayout\Generic::class;
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
-            $this->layout = $this->factory($this->layout, ['form' => $this], 'atk4\ui\FormLayout');
+            $this->layout = $this->factory($this->layout, ['form' => $this]);
             $this->layout = $this->add($this->layout);
         } elseif (is_object($this->layout)) {
             $this->layout->form = $this;

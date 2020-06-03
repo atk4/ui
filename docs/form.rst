@@ -702,12 +702,12 @@ The following example will show how to organize fields using regular sub layout 
     $f = Form::addTo($app);
     $f->setModel($m, false);
 
-    $sub_layout = $f->layout->addSubLayout('Generic');
+    $sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
 
     Header::addTo($sub_layout, ['Accordion Section in Form']);
     $sub_layout->setModel($m, ['name']);
 
-    $accordion_layout = $f->layout->addSubLayout('Accordion');
+    $accordion_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Accordion::class);
 
     $a1 = $accordion_layout->addSection('Section 1');
     $a1->setModel($m, ['iso', 'iso3']);
