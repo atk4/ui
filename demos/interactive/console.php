@@ -76,7 +76,7 @@ $t = $tt->addTab('exec() chain', function ($t) {
     });
 });
 
-if (false) { // THIS DEMO IS DISABLED FOR CLOUD USE
+if (empty($_ENV['CLOUD_DEMO'])) { // THIS DEMO IS DISABLED FOR CLOUD USE
     $t = $tt->addTab('composer update', function ($t) {
         \atk4\ui\Header::addTo($t, [
             'icon' => 'terminal',
