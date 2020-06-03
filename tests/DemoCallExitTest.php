@@ -81,7 +81,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     public function testResponseError()
     {
         $this->expectExceptionCode(500);
-        $this->getResponseFromRequestGET('layout/layouts_error.php');
+        $this->getResponseFromRequest('layout/layouts_error.php');
     }
 
     /**
