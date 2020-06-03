@@ -77,12 +77,12 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
-    
+
     public function testResponseError()
     {
         $uri = 'layout/layouts_error.php';
         $response = $this->getResponseFromRequestGET($uri);
-        $this->assertEquals(500, $response->getStatusCode(), ' Status error on ' . $uri);
+        $this->assertSame(500, $response->getStatusCode(), ' Status error on ' . $uri);
     }
 
     /**
