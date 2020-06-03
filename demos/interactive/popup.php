@@ -238,7 +238,7 @@ $signup->set(function ($pop) {
     } else {
         $f = \atk4\ui\Form::addTo($pop);
         $f->addField('email', null, ['required' => true]);
-        $f->addField('password', ['Password'], ['required' => true]);
+        $f->addField('password', [\atk4\ui\FormField\Password::class], ['required' => true]);
         $f->buttonSave->set('Login');
 
         // popup handles callbacks properly, so dynamic element such as form works

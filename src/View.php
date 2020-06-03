@@ -413,13 +413,12 @@ class View implements jsExpressionable
             // later consider to accept strictly objects only
 
             // for BC:
-            // - allow relative class names from "atk4/ui" namespace
             // - use self/View class if no class name is defined in the seed
             if (is_string($object)) {
                 $object = [$object];
             }
             if (isset($object[0]) && is_string($object[0])) {
-                $object[0] = $this->normalizeClassName($object[0], 'atk4\ui');
+                $object[0] = $this->normalizeClassName($object[0]);
             } elseif (!isset($object[0])) {
                 $object[0] = self::class;
             }

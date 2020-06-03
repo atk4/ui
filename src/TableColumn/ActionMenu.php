@@ -114,7 +114,7 @@ class ActionMenu extends Generic
         }
 
         if (!is_object($item)) {
-            $item = $this->factory('View', ['id' => false, 'ui' => 'item', 'content' => $item], 'atk4\ui');
+            $item = $this->factory(\atk4\ui\View::class, ['id' => false, 'ui' => 'item', 'content' => $item]);
         }
 
         $this->items[] = $item;

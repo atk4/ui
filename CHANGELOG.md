@@ -8,7 +8,7 @@ In 1.7 we now rely on VueJS for new components and the first component to make u
 $f = \atk4\ui\Form::addTo($app);
 
 // Add multiline field and set model.
-$ml = $f->addField('ml', ['MultiLine', 'options' => ['color' => 'blue']]);
+$ml = $f->addField('ml', [\atk4\ui\FormField\MultiLine::class, 'options' => ['color' => 'blue']]);
 $ml->setModel($inventory);
 ```
 
@@ -106,7 +106,7 @@ part of AutoComplete.
 $form = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Add city', 'top attached'], ['AboveFields']);
 
-$l = $form->addField('city',['Lookup']);
+$l = $form->addField('city', [\atk4\ui\FormField\Lookup::class]);
 
 // will restraint possible city value in droddown base on country and/or language.
 $l->addFilter('country', 'Country');
@@ -165,7 +165,7 @@ and upgraded Fomantic-UI version.
 - Calendar form field on\('change'\) event handler not working [\#521](https://github.com/atk4/ui/issues/521)
 - Upload FormField: Setting placeholder via placeholder does not work [\#483](https://github.com/atk4/ui/issues/483)
 - Placeholder is not picked up from Model field ui\[placeholder\] property [\#468](https://github.com/atk4/ui/issues/468)
-- type='money' is no longer using 'Money' column decorarot [\#414](https://github.com/atk4/ui/issues/414)
+- type='money' is no longer using 'FormField\Money' column decorarot [\#414](https://github.com/atk4/ui/issues/414)
 
 **Merged pull requests:**
 

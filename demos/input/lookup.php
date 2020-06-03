@@ -28,7 +28,7 @@ $m->hasOne('country2', [new Country(), 'ui' => ['form' => [
 $form->setModel($m);
 
 $form->addField('country3', [
-    'Lookup',
+    \atk4\ui\FormField\Lookup::class,
     'model' => new Country($db),
     'placeholder' => 'Search for country by name or iso value',
     'search' => ['name', 'iso', 'iso3'],

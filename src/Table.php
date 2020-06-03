@@ -19,9 +19,9 @@ class Table extends Lister
     public $reload;
 
     /**
-     * Column objects can service multiple columns. You can use it for your advancage by re-using the object
-     * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
-     * used.
+     * Column objects can service multiple columns. You can use it for your advantage by re-using the object
+     * when you pass it to addColumn(). If you omit the argument, then a column of a type TableColumn\Generic
+     * will be used.
      *
      * @var TableColumn\Generic
      */
@@ -220,14 +220,14 @@ class Table extends Lister
 
         if ($field === null) {
             // column is not associated with any model field
-            $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this], 'atk4\ui\TableColumn'));
+            $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this]));
         } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, array_merge(['columnData' => $name], is_string($columnDecorator) ? [$columnDecorator] : $columnDecorator));
         } elseif (!$columnDecorator) {
             $columnDecorator = $this->decoratorFactory($field, ['columnData' => $name]);
         } elseif (is_object($columnDecorator)) {
             if (!$columnDecorator instanceof \atk4\ui\TableColumn\Generic) {
-                throw new Exception(['Column decorator must descend from \atk4\ui\TableColumn\Generic', 'columnDecorator' => $columnDecorator]);
+                throw new Exception(['Column decorator must descend from ' . \atk4\ui\TableColumn\Generic::class, 'columnDecorator' => $columnDecorator]);
             }
             $columnDecorator->table = $this;
             if (!$columnDecorator->columnData) {
@@ -302,7 +302,7 @@ class Table extends Lister
         if (!$this->columns[$name]) {
             throw new Exception(['No such column, cannot decorate', 'name' => $name]);
         }
-        $decorator = $this->_add($this->factory($seed, ['table' => $this], 'atk4\ui\TableColumn'));
+        $decorator = $this->_add($this->factory($seed, ['table' => $this]));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
@@ -352,17 +352,17 @@ class Table extends Lister
             $seed,
             $field->ui['table'] ?? null,
             $this->typeToDecorator[$field->type] ?? null,
-            [$this->default_column ? $this->default_column : 'Generic']
+            [$this->default_column ? $this->default_column : TableColumn\Generic::class]
         );
 
-        return $this->_add($this->factory($seed, ['table' => $this], 'atk4\ui\TableColumn'));
+        return $this->_add($this->factory($seed, ['table' => $this]));
     }
 
     protected $typeToDecorator = [
-        'password' => 'Password',
-        'money' => 'Money',
-        'text' => 'Text',
-        'boolean' => ['Status', ['positive' => [true], 'negative' => [false]]],
+        'password' => TableColumn\Password::class,
+        'money' => TableColumn\Money::class,
+        'text' => TableColumn\Text::class,
+        'boolean' => [TableColumn\Status::class, ['positive' => [true], 'negative' => [false]]],
     ];
 
     /**

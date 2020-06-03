@@ -13,7 +13,7 @@ $c = \atk4\ui\Columns::addTo($app);
 $grid = \atk4\ui\Grid::addTo($c->addColumn(), ['ipp' => 10, 'menu' => false]);
 $grid->setModel(new Country($db), ['name']);
 
-$country_loader = \atk4\ui\Loader::addTo($c->addColumn(), ['loadEvent' => false, 'shim' => ['Text', 'Select country on your left']]);
+$country_loader = \atk4\ui\Loader::addTo($c->addColumn(), ['loadEvent' => false, 'shim' => [\atk4\ui\Text::class, 'Select country on your left']]);
 
 $grid->table->onRowClick($country_loader->jsLoad(['id' => $grid->table->jsRow()->data('id')]));
 

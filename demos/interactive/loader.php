@@ -50,7 +50,7 @@ ViewTester::addTo($app);
 \atk4\ui\Loader::addTo($app, [
     'ui' => '',   // this will prevent "loading spinner" from showing
     'shim' => [   // shim is displayed while content is leaded
-        'Message',
+        \atk4\ui\Message::class,
         'Generating LoremIpsum, please wait...',
         'red',
     ],

@@ -58,7 +58,7 @@ class GridTest extends AtkPhpunit\TestCase
         $t = new Table();
         $t->init();
         $t->setModel($this->m, ['email']);
-        $t->addColumn(null, 'Delete');
+        $t->addColumn(null, \atk4\ui\TableColumn\Delete::class);
 
         $this->assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="delete"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHTML());
         $this->assertSame(

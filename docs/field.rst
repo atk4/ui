@@ -181,7 +181,7 @@ The rules are rather straightforward but may change in future versions of Agile 
 
 You always have an option to explicitly specify which field you would like to use::
 
-    $model->addField('long_text', ['ui'=>['Form'=>'TextArea']]);
+    $model->addField('long_text', ['ui'=>['rorm'=>\atk4\ui\FormField\TextArea::class]]);
 
 It is recommended however, that you use type when possible, because types will be universally supported
 by all components::
@@ -323,7 +323,7 @@ of records to display. DropDown renders all records when the paged is rendered, 
 :php:class:`Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
 
 To render a model field as DropDown, use the ui property of the field::
-    $model->addField('someField', ['ui' => ['form' =>['DropDown']]]);
+    $model->addField('someField', ['ui' => ['form' =>[\atk4\ui\FormField\DropDown::class]]]);
 
 ..  Customizing how a Model's records are displayed in DropDown
 As default, DropDown will use the `$model->id_field` as value, and `$model->title_field` as title for each menu item.
@@ -436,7 +436,7 @@ See this example from Model class init method::
         'serialize' => 'json',
         'ui' => [
             'form' => [
-                'DropDown',
+                \atk4\ui\FormField\DropDown::class,
                 'isMultiple' => true,
                 'model' => $expr_model,
             ],

@@ -27,8 +27,8 @@ require_once __DIR__ . '/../atk-init.php';
 
     \atk4\ui\Header::addTo($app, ['CheckBoxes in a form', 'size' => 2]);
 $form = \atk4\ui\Form::addTo($app);
-$form->addField('test', ['CheckBox']);
-$form->addField('test_checked', ['CheckBox'])->set(true);
+$form->addField('test', [\atk4\ui\FormField\CheckBox::class]);
+$form->addField('test_checked', [\atk4\ui\FormField\CheckBox::class])->set(true);
 $form->addField('also_checked', 'Hello World', 'boolean')->set(true);
 
     View::addTo($app, ['ui' => 'divider']);

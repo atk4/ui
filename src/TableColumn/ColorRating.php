@@ -10,7 +10,7 @@ use atk4\ui\Exception;
  * Class ColorRating
  * Can be defined like this :
  * [
- * 'ColorRating',
+ * ColorRating::class,
  *      [
  *      'min'     => 1,
  *      'max'     => 3,

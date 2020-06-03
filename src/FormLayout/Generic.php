@@ -68,7 +68,7 @@ class Generic extends _Abstract
      */
     public function addButton($seed)
     {
-        return $this->add($this->mergeSeeds(['Button'], $seed), 'Buttons');
+        return $this->add($this->mergeSeeds([\atk4\ui\Button::class], $seed), 'Buttons');
     }
 
     /**
@@ -119,9 +119,9 @@ class Generic extends _Abstract
      *
      * @return static
      */
-    public function addSubLayout($seed = 'Generic', $addDivider = true)
+    public function addSubLayout($seed = self::class, $addDivider = true)
     {
-        $v = $this->add($this->factory($seed, ['form' => $this->form], 'atk4\ui\FormLayout\Section'));
+        $v = $this->add($this->factory($seed, ['form' => $this->form]));
         if ($v instanceof \atk4\ui\FormLayout\Section\Generic) {
             $v = $v->addSection();
         }

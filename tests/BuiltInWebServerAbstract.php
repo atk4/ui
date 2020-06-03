@@ -109,14 +109,20 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         return new Client(['base_uri' => 'http://localhost:' . self::$port]);
     }
 
-    protected function getResponseFromRequestFormPOST($path, $data): ResponseInterface
+    protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
     {
-        return $this->getClient()->request('POST', $this->getPathWithAppVars($path), ['form_params' => $data]);
-    }
+        try {
+            return $this->getClient()->request(isset($options['form_params']) !== null ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
+        } catch (\GuzzleHttp\Exception\ServerException $ex) {
+            $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
+                public static function getResponseBodySummary(ResponseInterface $response)
+                {
+                    return $response->getBody()->getContents();
+                }
+            };
 
-    protected function getResponseFromRequestGET($path): ResponseInterface
-    {
-        return $this->getClient()->request('GET', $this->getPathWithAppVars($path));
+            throw $exFactoryWithFullBody->create($ex->getRequest(), $ex->getResponse());
+        }
     }
 
     private function getPathWithAppVars($path)
