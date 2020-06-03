@@ -417,9 +417,7 @@ class View implements jsExpressionable
             if (is_string($object)) {
                 $object = [$object];
             }
-            if (isset($object[0]) && is_string($object[0])) {
-                $object[0] = $this->normalizeClassName($object[0]);
-            } elseif (!isset($object[0])) {
+            if (!isset($object[0])) {
                 $object[0] = self::class;
             }
 
