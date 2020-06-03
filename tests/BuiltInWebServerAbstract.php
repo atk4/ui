@@ -109,14 +109,9 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         return new Client(['base_uri' => 'http://localhost:' . self::$port]);
     }
 
-    protected function getResponseFromRequestFormPOST($path, $data): ResponseInterface
+    protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
     {
-        return $this->getClient()->request('POST', $this->getPathWithAppVars($path), ['form_params' => $data]);
-    }
-
-    protected function getResponseFromRequestGET($path): ResponseInterface
-    {
-        return $this->getClient()->request('GET', $this->getPathWithAppVars($path));
+        return $this->getClient()->request(isset($options['form_params']) !== null ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
     }
 
     private function getPathWithAppVars($path)

@@ -73,7 +73,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
      */
     public function testDemoHTMLStatusAndResponse(string $uri)
     {
-        $response = $this->getResponseFromRequestGET($uri);
+        $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
@@ -89,7 +89,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
      */
     public function testDemoGet(string $uri)
     {
-        $response = $this->getResponseFromRequestGET($uri);
+        $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         $this->assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
         $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
@@ -107,18 +107,18 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
     public function testWizard()
     {
-        $response = $this->getResponseFromRequestFormPOST(
+        $response = $this->getResponseFromRequest(
             'interactive/wizard.php?atk_admin_wizard=1&atk_admin_wizard_form_submit=ajax&__atk_callback=1',
-            [
+            ['form_params' => [
                 'dsn' => 'mysql://root:root@db-host.example.com/atk4',
                 'atk_admin_wizard_form_submit' => 'submit',
-            ]
+            ]]
         );
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents());
 
-        $response = $this->getResponseFromRequestGET('interactive/wizard.php?atk_admin_wizard=2&name=Country');
+        $response = $this->getResponseFromRequest('interactive/wizard.php?atk_admin_wizard=2&name=Country');
         $this->assertSame(200, $response->getStatusCode());
         $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents());
     }
@@ -130,7 +130,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
      */
     public function testDemoAssertJSONResponse(string $uri)
     {
-        $response = $this->getResponseFromRequestGET($uri);
+        $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         if (!($this instanceof DemoCallExitExceptionTest)) { // content type is not set when App->call_exit equals to true
             $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
@@ -160,7 +160,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
      */
     public function testDemoAssertSSEResponse(string $uri)
     {
-        $response = $this->getResponseFromRequestGET($uri);
+        $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
 
         $output_rows = preg_split('~\r?\n|\r~', $response->getBody()->getContents());
@@ -202,9 +202,9 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     /**
      * @dataProvider JSONResponsePOSTDataProvider
      */
-    public function testDemoAssertJSONResponsePOST(string $uri, array $post_data)
+    public function testDemoAssertJSONResponsePOST(string $uri, array $postData)
     {
-        $response = $this->getResponseFromRequestFormPOST($uri, $post_data);
+        $response = $this->getResponseFromRequest($uri, ['form_params' => $postData]);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
