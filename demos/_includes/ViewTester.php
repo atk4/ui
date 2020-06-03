@@ -1,6 +1,6 @@
 <?php
 
-namespace atk4\ui\tests;
+namespace atk4\ui\demo;
 
 /**
  * This view is designed to verify various things about it's positioning, e.g.

@@ -4,7 +4,7 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 require_once __DIR__ . '/../_includes/Session.php';
-require_once __DIR__ . '/../../tests/ViewTester.php';
+require_once __DIR__ . '/../_includes/ViewTester.php';
 
 \atk4\ui\Header::addTo($app, ['Modal View']);
 
@@ -40,7 +40,7 @@ $scrolling->addScrolling();
 
 $modal_simple = \atk4\ui\Modal::addTo($app, ['title' => 'Simple modal']);
 \atk4\ui\Message::addTo($modal_simple)->set('Modal message here.');
-\atk4\ui\tests\ViewTester::addTo($modal_simple);
+ViewTester::addTo($modal_simple);
 
 $menu_bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 $b = \atk4\ui\Button::addTo($menu_bar)->set('Show Modal');
@@ -64,7 +64,7 @@ $modal_vp3->set(function ($modal) {
 
 //When $modal_vp1->show() is activate, it will dynamically add this content to it.
 $modal_vp1->set(function ($modal) use ($modal_vp2) {
-    \atk4\ui\tests\ViewTester::addTo($modal);
+    ViewTester::addTo($modal);
     \atk4\ui\View::addTo($modal, ['Showing lorem ipsum']); //need in behat test.
     \atk4\ui\LoremIpsum::addTo($modal, ['size' => 2]);
     $form = \atk4\ui\Form::addTo($modal);
@@ -76,7 +76,7 @@ $modal_vp1->set(function ($modal) use ($modal_vp2) {
 
 //When $modal_vp2->show() is activate, it will dynamically add this content to it.
 $modal_vp2->set(function ($modal) use ($modal_vp3) {
-    //\atk4\ui\tests\ViewTester::addTo($modal);
+    //ViewTester::addTo($modal);
     \atk4\ui\Message::addTo($modal, ['Message', @$_GET['color']])->text->addParagraph('This text is loaded using a second modal.');
     \atk4\ui\Button::addTo($modal)->set('Third modal')->on('click', $modal_vp3->show());
 });
