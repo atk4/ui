@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\demo;
+
 use atk4\ui\Form;
 
 class Flyers extends \atk4\data\Model
