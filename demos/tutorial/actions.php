@@ -9,8 +9,7 @@ require_once __DIR__ . '/../_includes/PromotionText.php';
 // require for embeded coded
 $app->db = $db;
 
-/** @var \atk4\ui\View $wizard */
-$wizard = $app->add('Wizard');
+$wizard = \atk4\ui\Wizard::addTo($app);
 $app->stickyGet($wizard->name);
 
 $wizard->addStep('Define User Action', function ($page) {
@@ -43,7 +42,7 @@ $country->addAction('send_message');
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
 Once defied - actions will be visualised in the Form, Grid, CRUD and CardDeck. Additionally add-ons will recognise
@@ -79,8 +78,7 @@ CODE
 });
 
 $wizard->addStep('UI Integration', function ($page) {
-    /** @var \atk4\ui\Text $t */
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
 Agile UI introduces a new set of views called "Action Executors". Their job is to recognise all that meta-information
@@ -99,7 +97,7 @@ $country->loadAny();
 CODE
     );
 
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
 It is not only the button, but any view can have "Action" passed as a second step of the on() call. Here the action
@@ -120,7 +118,7 @@ CODE
 });
 
 $wizard->addStep('Arguments', function ($page) {
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
 Next demo defines an action that requires arguments. You can specify action when the action is invoked, but if not
@@ -193,7 +191,7 @@ CODE
 */
 
 $wizard->addStep('CRUD integration', function ($page) {
-    $t = $page->add('Text');
+    $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
 Compared to 1.x versions CRUD implementation has became much more lightweight, however you retain all the same

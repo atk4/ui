@@ -376,7 +376,7 @@ There are a few things to note:
 
 2. formatting is always applied in same order as defined - in example above Money first, Link after.
 
-3. output of the 'Money' decorator is used into Link decorator as if it would be value of cell, however
+3. output of the \atk4\ui\TableColumn\Money decorator is used into Link decorator as if it would be value of cell, however
    decorators have access to original value also. Decorator implementation is usually aware of combinations.
 
 :php:meth:`TableColumn\\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
@@ -509,12 +509,12 @@ There are several ways to make your code more readable::
 
 Or if you wish to use factory, the syntax is::
 
-    $table->addColumn('name', 'Generic')
+    $table->addColumn('name', \atk4\ui\TableColumn\Generic::class)
         ->addClass('right aligned', 'all');
 
 For setting an attribute you can use setAttr() method::
 
-    $table->addColumn('name', 'Generic')
+    $table->addColumn('name', \atk4\ui\TableColumn\Generic::class)
         ->setAttr('colspan', 2, 'all');
 
 Setting a new value to the attribute will override previous value.

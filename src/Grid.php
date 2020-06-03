@@ -665,7 +665,7 @@ class Grid extends View
      */
     public function addSelection()
     {
-        $this->selection = $this->table->addColumn(null, 'CheckBox');
+        $this->selection = $this->table->addColumn(null, TableColumn\CheckBox::class);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));
@@ -681,7 +681,7 @@ class Grid extends View
      */
     public function addDragHandler()
     {
-        $handler = $this->table->addColumn(null, 'DragHandler');
+        $handler = $this->table->addColumn(null, TableColumn\DragHandler::class);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));

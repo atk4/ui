@@ -13,7 +13,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             'type' => 'string',
             'ui' => [
                 'table' => [
-                    atk4\ui\TableColumn\Tooltip::class,
+                    \atk4\ui\TableColumn\Tooltip::class,
                     [
                         'tooltip_field' => 'note',
                         'icon' => 'info circle blue',
@@ -44,7 +44,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             ],
             'ui' => [
                 'table' => [
-                    atk4\ui\TableColumn\KeyValue::class,
+                    \atk4\ui\TableColumn\KeyValue::class,
                 ],
             ],
         ]);
@@ -59,7 +59,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             ],
             'ui' => [
                 'table' => [
-                    atk4\ui\TableColumn\KeyValue::class,
+                    \atk4\ui\TableColumn\KeyValue::class,
                 ],
             ],
         ]);
@@ -77,7 +77,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             'type' => 'float',
             'ui' => [
                 'table' => [
-                    atk4\ui\TableColumn\ColorRating::class,
+                    \atk4\ui\TableColumn\ColorRating::class,
                     [
                         'min' => 1,
                         'max' => 3,
