@@ -3,7 +3,7 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../../tests/ViewTester.php';
+require_once __DIR__ . '/ViewTester.php';
 
 \atk4\ui\Button::addTo($app, ['Loader Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['loader2']);
@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../tests/ViewTester.php';
 \atk4\ui\View::addTo($app, ['ui' => 'clearing divider']);
 
 // ViewTester will perform callback to self.
-\atk4\ui\tests\ViewTester::addTo($app);
+ViewTester::addTo($app);
 
 // Example 1 - Basic usage of a Loader.
 \atk4\ui\Loader::addTo($app)->set(function ($p) {
@@ -21,7 +21,7 @@ require_once __DIR__ . '/../../tests/ViewTester.php';
     \atk4\ui\LoremIpsum::addTo($p, ['size' => 1]);
 
     // Any dynamic views can perform call-backs just fine
-    \atk4\ui\tests\ViewTester::addTo($p);
+    ViewTester::addTo($p);
 
     // Loader may be inside another loader, works fine.
     $loader = \atk4\ui\Loader::addTo($p);
@@ -36,7 +36,7 @@ require_once __DIR__ . '/../../tests/ViewTester.php';
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:
         $p->app->stickyGet('color');
-        \atk4\ui\tests\ViewTester::addTo($p);
+        ViewTester::addTo($p);
 
         // This loader takes 5s to load because it needs to go through 2 sleep statements.
     });
