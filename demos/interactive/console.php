@@ -76,26 +76,25 @@ $t = $tt->addTab('exec() chain', function ($t) {
     });
 });
 
-/* THIS DEMO IS DISABLED FOR CLOUD USE
- *
-$t = $tt->addTab('composer update', function ($t) {
-    \atk4\ui\Header::addTo($t, [
-        'icon' => 'terminal',
-        'Command execution',
-        'subHeader' => 'it is easy to run server-side commands and stream output through console',
-    ]);
+if (false) { // THIS DEMO IS DISABLED FOR CLOUD USE
+    $t = $tt->addTab('composer update', function ($t) {
+        \atk4\ui\Header::addTo($t, [
+            'icon' => 'terminal',
+            'Command execution',
+            'subHeader' => 'it is easy to run server-side commands and stream output through console',
+        ]);
 
-    $w = \atk4\ui\Message::addTo($t, ['This demo may not work', 'warning']);
-    $w->text->addParagraph('This demo requires you to have "bash" and "composer" installed and may display error if the process running PHP does not have write access to the "vendor" folder and "composer.*".');
+        $w = \atk4\ui\Message::addTo($t, ['This demo may not work', 'warning']);
+        $w->text->addParagraph('This demo requires you to have "bash" and "composer" installed and may display error if the process running PHP does not have write access to the "vendor" folder and "composer.*".');
 
-    $b = \atk4\ui\Button::addTo($w, ['I understand, proceed anyway', 'primary big']);
+        $b = \atk4\ui\Button::addTo($w, ['I understand, proceed anyway', 'primary big']);
 
-    $c = \atk4\ui\Console::addTo($t, ['event' => false]);
-    $c->exec('bash', ['-c', 'cd ../..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
+        $c = \atk4\ui\Console::addTo($t, ['event' => false]);
+        $c->exec('bash', ['-c', 'cd ../..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
 
-    $b->on('click', $c->jsExecute());
-});
- */
+        $b->on('click', $c->jsExecute());
+    });
+}
 
 $t = $tt->addTab('Use after form submit', function ($t) {
     \atk4\ui\Header::addTo($t, [
