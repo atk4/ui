@@ -294,7 +294,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
             if (isset($val['model'])) {
                 $val['model'] = $this->factory($val['model']);
-                $f->addField($key, ['Lookup'])->setModel($val['model']);
+                $f->addField($key, [\atk4\ui\FormField\Lookup::class])->setModel($val['model']);
             } else {
                 $f->addField($key, null, $val);
             }

@@ -31,14 +31,14 @@ form where you can enter new record details.
 The form save will re-use the model of your auto-complete, so be sure to set() defaults and
 addCondition()s::
 
-    $form->addField('test', ['AutoComplete', 'plus'=>true])->setModel(new Country($db));
+    $form->addField('test', [\atk4\ui\FormField\AutoComplete::class, 'plus'=>true])->setModel(new Country($db));
 
 Specifying in Model
 -------------------
 
 You can also specify that you prefer to use AutoComplete inside your model definition::
 
-    $model->hasOne('country_id', [new Country($db), 'ui'=>['form'=>['AutoComplete']]]);
+    $model->hasOne('country_id', [new Country($db), 'ui'=>['form'=>[\atk4\ui\FormField\AutoComplete::class]]]);
 
 Advanced Usage
 --------------
@@ -46,7 +46,7 @@ Advanced Usage
 You can do much more with AutoComplete field by passing dropdown settings::
 
     $form->addField('test', [
-        'AutoComplete', 
+        \atk4\ui\FormField\AutoComplete::class, 
         'settings'=>[
             'allowReselection' => true,
             'selectOnKeydown' => false,
@@ -69,7 +69,7 @@ use of Filters::
     $form = \atk4\ui\Form::addTo($app, ['segment']);
     \atk4\ui\Label::addTo($form, ['Add city', 'top attached'], ['AboveFields']);
 
-    $l = $form->addField('city',['Lookup']);
+    $l = $form->addField('city',[\atk4\ui\FormField\Lookup::class]);
 
     // will restraint possible city value in droddown base on country and/or language.
     $l->addFilter('country', 'Country');

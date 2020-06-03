@@ -52,7 +52,7 @@ $section_2 = $sub_accordion_layout->addSection('Delivery address');
 $section_2->addField('delivery_address', []);
 
 // Terms field
-$f->addField('term', ['CheckBox', 'caption' => 'Accept terms and conditions', null, 'slider']);
+$f->addField('term', [\atk4\ui\FormField\CheckBox::class, 'caption' => 'Accept terms and conditions', null, 'slider']);
 
 $accordion_layout->activate($contact_section);
 

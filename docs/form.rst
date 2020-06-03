@@ -162,7 +162,7 @@ Create a new field on a form::
 
     $form = Form::addTo($app);
     $form->addField('email');
-    $form->addField('gender', ['DropDown', 'values'=>['Female', 'Male']]);
+    $form->addField('gender', [\atk4\ui\FormField\DropDown::class, 'values'=>['Female', 'Male']]);
     $form->addField('terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']);
 
 Create a new field on a form using Model does not require you to describe each field.
@@ -185,7 +185,7 @@ Similar to :php:meth:`Form::addField()`, but allows to add multiple fields in on
     $form = Form::addTo($app);
     $form->addFields([
         'email',
-        ['gender', ['DropDown', 'values'=>['Female', 'Male']]],
+        ['gender', [\atk4\ui\FormField\DropDown::class, 'values'=>['Female', 'Male']]],
         ['terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']],
     ]);
 
@@ -228,8 +228,8 @@ For some examples see: https://ui.agiletoolkit.org/demos/form3.php
 
 Field Decorator can be passed to ``addField`` using 'string', :php:ref:`seed` or 'object'::
 
-    $form->addField('accept_terms', 'CheckBox');
-    $form->addField('gender', ['DropDown', 'values'=>['Female', 'Male']]);
+    $form->addField('accept_terms', \atk4\ui\FormField\CheckBox::class);
+    $form->addField('gender', [\atk4\ui\FormField\DropDown::class, 'values'=>['Female', 'Male']]);
 
     $calendar = new \atk4\ui\FormField\Calendar();
     $calendar->type = 'tyme';
@@ -251,7 +251,7 @@ Data field is the 3rd argument to ``Form::addField()``.
 
 There are 3 ways to define Data Field using 'string', 'array' or 'object'::
 
-    $form->addField('accept_terms', 'CheckBox', 'Accept Terms & Conditions');
+    $form->addField('accept_terms', \atk4\ui\FormField\CheckBox::class, 'Accept Terms & Conditions');
     $form->addField('gender', null, ['enum'=>['Female', 'Male']]);
 
     class MyBoolean extends \atk4\data\Field {
@@ -319,7 +319,7 @@ example displays a registration form for a User::
 Type vs Decorator Class
 -----------------------
 
-Sometimes you may wonder - should you pass decorator class ('CheckBox') or
+Sometimes you may wonder - should you pass decorator class (FormField\CheckBox) or
 a data field type (['type' => 'boolean']);
 
 It is always recommended to use data field type, because it will take care of type-casting
@@ -327,7 +327,7 @@ for you. Here is an example with date::
 
     $form = Form::addTo($app);
     $form->addField('date1', null, ['type'=>'date']);
-    $form->addField('date2', ['Calendar', 'type'=>'date']);
+    $form->addField('date2', [\atk4\ui\FormField\Calendar::class, 'type'=>'date']);
 
     $form->onSubmit(function($form) {
         echo 'date1 = '.print_r($form->model->get('date1'), true).' and date2 = '.print_r($form->model->get('date2'), true);
@@ -372,7 +372,7 @@ The seed for the UI will be combined with the default overriding :php:attr:`Form
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class::
 
-    $this->addField('birth_year', ['ui'=>['Calendar', 'type'=>'month']);
+    $this->addField('birth_year', ['ui'=>[\atk4\ui\FormField\Calendar::class, 'type'=>'month']);
 
 Without the data 'type' property, now the calendar selection will be stored as text.
 
@@ -786,11 +786,11 @@ Here is a more advanced example::
 
     $f_sub = Form::addTo($app);
     $f_sub->addField('name');
-    $f_sub->addField('subscribe', ['CheckBox', 'Subscribe to weekly newsletter', 'toggle']);
+    $f_sub->addField('subscribe', [\atk4\ui\FormField\CheckBox::class, 'Subscribe to weekly newsletter', 'toggle']);
     $f_sub->addField('email');
-    $f_sub->addField('gender', ['Radio'], ['enum'=>['Female', 'Male']])->set('Female');
-    $f_sub->addField('m_gift', ['DropDown', 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
-    $f_sub->addField('f_gift', ['DropDown', 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
+    $f_sub->addField('gender', [\atk4\ui\FormField\Radio::class], ['enum'=>['Female', 'Male']])->set('Female');
+    $f_sub->addField('m_gift', [\atk4\ui\FormField\DropDown::class, 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
+    $f_sub->addField('f_gift', [\atk4\ui\FormField\DropDown::class, 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
     // Show email and gender when subscribe is checked.
 
@@ -808,9 +808,9 @@ You may also define multiple conditions for the field to be visible if you wrap 
 
 
     $f_sub = Form::addTo($app);
-    $f_dog->addField('race', ['Line']);
+    $f_dog->addField('race', [\atk4\ui\FormField\Line::class]);
     $f_dog->addField('age');
-    $f_dog->addField('hair_cut', ['DropDown', 'values' => ['Short', 'Long']]);
+    $f_dog->addField('hair_cut', [\atk4\ui\FormField\DropDown::class, 'values' => ['Short', 'Long']]);
 
     // Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
     // OR
@@ -832,13 +832,13 @@ Instead of defining rules for fields individually you can hide/show entire group
     $g_basic->addField('middle_name', ['width' => 'three']);
     $g_basic->addField('last_name', ['width' => 'five']);
 
-    $f_group->addField('dev', ['CheckBox', 'caption' => 'I am a developper']);
+    $f_group->addField('dev', [\atk4\ui\FormField\CheckBox::class, 'caption' => 'I am a developper']);
 
     $g_code = $f_group->addGroup(['Check all language that apply']);
-    $g_code->addField('php', ['CheckBox']);
-    $g_code->addField('js', ['CheckBox']);
-    $g_code->addField('html', ['CheckBox']);
-    $g_code->addField('css', ['CheckBox']);
+    $g_code->addField('php', [\atk4\ui\FormField\CheckBox::class]);
+    $g_code->addField('js', [\atk4\ui\FormField\CheckBox::class]);
+    $g_code->addField('html', [\atk4\ui\FormField\CheckBox::class]);
+    $g_code->addField('css', [\atk4\ui\FormField\CheckBox::class]);
 
     $g_other = $f_group->addGroup(['Others']);
     $g_other->addField('language', ['width' => 'eight']);

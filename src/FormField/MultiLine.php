@@ -55,7 +55,7 @@
  * If your model contains a lot of records, you should handle their limit somehow.
  *
  * $f = \atk4\ui\Form::addTo($app);
- * $ml = $f->addField('ml', ['MultiLine']);
+ * $ml = $f->addField('ml', [\atk4\ui\FormField\MultiLine::class]);
  * $ml->setModel($user, ['name','is_vip']);
  *
  * $f->onSubmit(function($f) use ($ml) {

@@ -71,7 +71,7 @@ $txt->addParagraph('Try to change dropdown value and close without saving!');
 $panel_2->onOpen(function ($p) {
     $f = \atk4\ui\Form::addTo($p);
     $f->addHeader('Settings');
-    $f->addField('name', ['DropDown', 'values' => ['1' => 'Option 1', '2' => 'Option 2']])
+    $f->addField('name', [\atk4\ui\FormField\DropDown::class, 'values' => ['1' => 'Option 1', '2' => 'Option 2']])
         ->set('1')
         ->onChange($p->owner->jsDisplayWarning(true));
 

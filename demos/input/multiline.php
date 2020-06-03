@@ -40,7 +40,7 @@ for ($i = 1; $i < 3; ++$i) {
 $f = \atk4\ui\Form::addTo($app);
 $f->addField('test');
 // Add multiline field and set model.
-$ml = $f->addField('ml', ['MultiLine', 'options' => ['color' => 'blue'], 'rowLimit' => 10, 'addOnTab' => true]);
+$ml = $f->addField('ml', [\atk4\ui\FormField\MultiLine::class, 'options' => ['color' => 'blue'], 'rowLimit' => 10, 'addOnTab' => true]);
 $ml->setModel($inventory);
 
 // Add total field.

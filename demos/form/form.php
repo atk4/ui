@@ -39,17 +39,17 @@ $form = \atk4\ui\Form::addTo($tab);
 $g = $form->addGroup(['width' => 'three']);
 $g->addField('name');
 $g->addField('surname');
-$g->addField('gender', ['DropDown', 'values' => ['Female', 'Male']]);
+$g->addField('gender', [\atk4\ui\FormField\DropDown::class, 'values' => ['Female', 'Male']]);
 
 // testing 0 value
 $values = [0 => 'noob', 1 => 'pro', 2 => 'dev'];
-$form->addField('description', ['TextArea'])->set(0);
-$form->addField('no_description', ['TextArea'])->set(null);
-$form->addField('status_optional', ['DropDown', 'values' => $values]);
-$form->addField('status_string_required', ['DropDown'], ['type' => 'string', 'values' => $values, 'required' => true]);
-$form->addField('status_integer_required', ['DropDown'], ['type' => 'integer', 'values' => $values, 'required' => true]);
-$form->addField('status_string_mandatory', ['DropDown'], ['type' => 'string', 'values' => $values, 'mandatory' => true]);
-$form->addField('status_integer_mandatory', ['DropDown'], ['type' => 'integer', 'values' => $values, 'mandatory' => true]);
+$form->addField('description', [\atk4\ui\FormField\TextArea::class])->set(0);
+$form->addField('no_description', [\atk4\ui\FormField\TextArea::class])->set(null);
+$form->addField('status_optional', [\atk4\ui\FormField\DropDown::class, 'values' => $values]);
+$form->addField('status_string_required', [\atk4\ui\FormField\DropDown::class], ['type' => 'string', 'values' => $values, 'required' => true]);
+$form->addField('status_integer_required', [\atk4\ui\FormField\DropDown::class], ['type' => 'integer', 'values' => $values, 'required' => true]);
+$form->addField('status_string_mandatory', [\atk4\ui\FormField\DropDown::class], ['type' => 'string', 'values' => $values, 'mandatory' => true]);
+$form->addField('status_integer_mandatory', [\atk4\ui\FormField\DropDown::class], ['type' => 'integer', 'values' => $values, 'mandatory' => true]);
 
 $form->onSubmit(function (\atk4\ui\Form $form) {
     return (new \atk4\ui\jsNotify(json_encode($form->model->get())))->setDuration(0);
@@ -58,7 +58,7 @@ $form->onSubmit(function (\atk4\ui\Form $form) {
 \atk4\ui\Header::addTo($tab, ['Comparing Field type vs Decorator class']);
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('date1', null, ['type' => 'date']);
-$form->addField('date2', ['Calendar', 'type' => 'date']);
+$form->addField('date2', [\atk4\ui\FormField\Calendar::class, 'type' => 'date']);
 $form->buttonSave->set('Compare Date');
 
 $form->onSubmit(function (\atk4\ui\Form $form) {

@@ -22,7 +22,7 @@ $form = \atk4\ui\Form::addTo($demo->left);
 //standard with model: use id_field as Value, title_field as Title for each DropDown option
 $form->addField(
     'withModel',
-    ['DropDown',
+    [\atk4\ui\FormField\DropDown::class,
         'caption' => 'DropDown with data from Model',
         'model' => (new Country($db))->setLimit(25),
     ]
@@ -31,7 +31,7 @@ $form->addField(
 //custom callback: alter title
 $form->addField(
     'withModel2',
-    ['DropDown',
+    [\atk4\ui\FormField\DropDown::class,
         'caption' => 'DropDown with data from Model',
         'model' => (new Country($db))->setLimit(25),
         'renderRowFunction' => function ($row) {
@@ -46,7 +46,7 @@ $form->addField(
 //custom callback: add icon
 $form->addField(
     'withModel3',
-    ['DropDown',
+    [\atk4\ui\FormField\DropDown::class,
         'caption' => 'DropDown with data from Model',
         'model' => (new File($db))->setLimit(25),
         'renderRowFunction' => function ($row) {
@@ -61,7 +61,7 @@ $form->addField(
 
 $form->addField(
     'enum',
-    ['DropDown',
+    [\atk4\ui\FormField\DropDown::class,
         'caption' => 'Using Single Values',
         'values' => ['default', 'option1', 'option2', 'option3'],
     ]
@@ -69,7 +69,7 @@ $form->addField(
 
 $form->addField(
     'values',
-    ['DropDown',
+    [\atk4\ui\FormField\DropDown::class,
         'caption' => 'Using values with default text',
         'empty' => 'Choose an option',
         'values' => ['default' => 'Default', 'option1' => 'Option 1', 'option2' => 'Option 2', 'option3' => 'Option 3'],
@@ -78,7 +78,7 @@ $form->addField(
 
 $form->addField(
     'icon',
-    ['DropDown',
+    [\atk4\ui\FormField\DropDown::class,
         'caption' => 'Using icon',
         'empty' => 'Choose an icon',
         'values' => ['tag' => ['Tag', 'icon' => 'tag icon'], 'globe' => ['Globe', 'icon' => 'globe icon'], 'registered' => ['Registered', 'icon' => 'registered icon'], 'file' => ['File', 'icon' => 'file icon']],
@@ -87,7 +87,7 @@ $form->addField(
 
 $form->addField(
     'multi',
-    ['DropDown',
+    [\atk4\ui\FormField\DropDown::class,
         'caption' => 'Multiple selection',
         'empty' => 'Choose has many options needed',
         'isMultiple' => true,

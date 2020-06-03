@@ -110,7 +110,7 @@ If you want to edit them along with the user, Multiline is set up in a few lines
     //Add a form to UI to edit User record
     $user_form = \atk4\ui\Form::addTo($app);
     $user_form->setModel($user);
-    $ml = $user_form->addField('email_addresses', ['MultiLine']);
+    $ml = $user_form->addField('email_addresses', [\atk4\ui\FormField\MultiLine::class]);
     $ml->setModel($user->ref('Email'));
 
     //set up saving of Email on Form submit
@@ -202,7 +202,7 @@ Footer
 ------
 You can add a footer to Multiline FormField by adding a sublayout to it. In this example, we add a footer containing a read-only input which could get the value from ``onLineChange`` callback (see above)::
    
-    $ml = $form->addField('ml', ['MultiLine', 'options' => ['color' => 'blue']]);
+    $ml = $form->addField('ml', [\atk4\ui\FormField\MultiLine::class, 'options' => ['color' => 'blue']]);
     $ml->setModel($inventory);
     // Add sublayout with total field.
     $sub_layout = $f->layout->addSublayout(\atk4\ui\FormLayout\Section\Columns::class);

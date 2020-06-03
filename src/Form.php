@@ -450,19 +450,19 @@ class Form extends View
             throw new Exception(['Argument 1 for decoratorFactory must be \atk4\data\Field or null', 'f' => $f]);
         }
 
-        $fallback_seed = ['Line'];
+        $fallback_seed = [\atk4\ui\FormField\Line::class];
 
         if ($f->type === 'array' && $f->reference) {
             $limit = ($f->reference instanceof ContainsMany) ? 0 : 1;
             $model = $f->reference->refModel();
-            $fallback_seed = ['MultiLine', 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
+            $fallback_seed = [\atk4\ui\FormField\MultiLine::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
         } elseif ($f->type !== 'boolean') {
             if ($f->enum) {
-                $fallback_seed = ['DropDown', 'values' => array_combine($f->enum, $f->enum)];
+                $fallback_seed = [\atk4\ui\FormField\DropDown::class, 'values' => array_combine($f->enum, $f->enum)];
             } elseif ($f->values) {
-                $fallback_seed = ['DropDown', 'values' => $f->values];
+                $fallback_seed = [\atk4\ui\FormField\DropDown::class, 'values' => $f->values];
             } elseif (isset($f->reference)) {
-                $fallback_seed = ['Lookup', 'model' => $f->reference->refModel()];
+                $fallback_seed = [\atk4\ui\FormField\Lookup::class, 'model' => $f->reference->refModel()];
             }
         }
 
@@ -487,7 +487,7 @@ class Form extends View
             'short_name' => $f->short_name,
         ];
 
-        return $this->factory($seed, $defaults, 'atk4\ui\FormField');
+        return $this->factory($seed, $defaults);
     }
 
     /**

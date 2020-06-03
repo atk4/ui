@@ -115,7 +115,7 @@ class Stat extends \atk4\data\Model
             'their_field' => 'iso',
             'ui' => [
                 'display' => [
-                    'form' => 'Line',
+                    'form' => \atk4\ui\FormField\Line::class,
                 ],
             ],
         ])
@@ -146,7 +146,7 @@ class Stat extends \atk4\data\Model
         $this->addFields(['start_date', 'finish_date'], ['type' => 'date']);
         $this->addField('finish_time', ['type' => 'time']);
 
-        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => ['Line', 'disabled' => true]]]);
+        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => [\atk4\ui\FormField\Line::class, 'disabled' => true]]]);
     }
 }
 

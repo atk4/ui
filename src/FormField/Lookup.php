@@ -102,7 +102,7 @@ class Lookup extends Input
      *
      * For example, using this setting will automatically submit
      * form when field value is changes.
-     * $form->addField('field', ['Lookup', 'settings'=>['allowReselection' => true,
+     * $form->addField('field', [\atk4\ui\FormField\Lookup::class, 'settings'=>['allowReselection' => true,
      *                           'selectOnKeydown' => false,
      *                           'onChange'        => new atk4\ui\jsExpression('function(value,t,c){
      *                                                          if ($(this).data("value") !== value) {
