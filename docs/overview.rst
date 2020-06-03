@@ -117,7 +117,7 @@ clarifications::
 
     // Create Application object and initialize Admin Layout
     $app = new \atk4\ui\App('Offer tracking system');
-    $app->initLayout('Admin');
+    $app->initLayout(\atk4\ui\Layout\Admin::class);
 
     // Connect to database and place a fully-interactive CRUD
     $db = new \atk4\data\Persistence_SQL($dsn);
