@@ -33,6 +33,7 @@ COPY index.php index.php
 COPY src src
 COPY template template
 COPY demos demos
+COPY tests tests
 
 ADD demos/db.example.php demos/db.php
 RUN sed -E "s/\('.+'\);/(\$_ENV['DSN']);/g" -i demos/db.php
