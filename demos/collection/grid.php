@@ -29,7 +29,7 @@ $g->menu->addItem(['Add Country', 'icon' => 'add square'], new \atk4\ui\jsExpres
 $g->menu->addItem(['Re-Import', 'icon' => 'power'], new \atk4\ui\jsReload($g));
 $g->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
 
-$g->addColumn(null, ['Template', 'hello<b>world</b>']);
+$g->addColumn(null, [\atk4\ui\TableColumn\Template::class, 'hello<b>world</b>']);
 
 $g->addActionButton('test');
 

@@ -21,7 +21,7 @@ $seg = \atk4\ui\View::addTo($app, ['ui' => 'raised segment']);
 \atk4\ui\Button::addTo($buttons, ['Use Stat Model', 'icon' => 'arrow down'])
     ->on('click', new jsReload($seg, ['m' => 'stat']));
 
-$form = \atk4\ui\Form::addTo($seg, ['layout' => 'Columns']);
+$form = \atk4\ui\Form::addTo($seg, ['layout' => \atk4\ui\FormLayout\Columns::class]);
 $form->setModel(
     isset($_GET['m']) ? (
         $_GET['m'] === 'country' ? new Country($db) : (

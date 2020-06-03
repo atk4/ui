@@ -1,9 +1,10 @@
 <?php
 
+namespace atk4\ui\demo;
+
 require_once __DIR__ . '/../atk-init.php';
 
-class recursive extends \atk4\ui\View
-{
+$mySwitcherClass = get_class(new class() extends \atk4\ui\View {
     public function init(): void
     {
         parent::init();
@@ -32,7 +33,8 @@ class recursive extends \atk4\ui\View
                 break;
         }
     }
-}
+});
 
 $view = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
-$view->add(new recursive());
+
+$mySwitcherClass::addTo($view);

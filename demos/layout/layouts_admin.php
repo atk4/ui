@@ -9,11 +9,11 @@ include_once '../vendor/autoload.php';
 try {
     $app = new \atk4\ui\App('Agile Toolkit Demo App');
 
-    $app->initLayout('Admin');
+    $app->initLayout(\atk4\ui\Layout\Admin::class);
 
     $m_comp = $app->layout->menu->addMenu(['Layouts', 'icon' => 'puzzle']);
-    $m_comp->addItem('Centered');
-    $m_comp->addItem('Admin');
+    $m_comp->addItem(\atk4\ui\Layout\Centered::class);
+    $m_comp->addItem(\atk4\ui\Layout\Admin::class);
 
     $m_right = $app->layout->menuRight;
     $m_right->addItem(['Warning', 'red', 'icon' => 'red warning']);

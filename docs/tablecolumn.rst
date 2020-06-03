@@ -98,16 +98,16 @@ Link
 Put `<a href..` link over the value of the cell. The page property can be specified to constructor. There
 are two usage patterns. With the first you can specify full URL as a string::
 
-    $table->addColumn('name', ['Link', 'https://google.com/?q={$name}']);
+    $table->addColumn('name', [\atk4\ui\TableColumn\Link::class, 'https://google.com/?q={$name}']);
 
 The URL may also be specified as an array. It will be passed to App::url() which will encode arguments::
 
-    $table->addColumn('name', ['Link', ['details', 'id'=>123, 'q'=>$anything]]);
+    $table->addColumn('name', [\atk4\ui\TableColumn\Link::class, ['details', 'id'=>123, 'q'=>$anything]]);
 
 In this case even if `$anything = '{$name}'` the substitution will not take place for safety reasons. To
 pass on some values from your model, use second argument to constructor::
 
-    $table->addColumn('name', ['Link', ['details', 'id'=>123], ['q'=>'name']]);
+    $table->addColumn('name', [\atk4\ui\TableColumn\Link::class, ['details', 'id'=>123], ['q'=>'name']]);
 
 
 Money
@@ -235,17 +235,17 @@ Multiformat
 -----------
 
 Sometimes your formatting may change depending on value. For example you may want to place link
-only on certain rows. For this you can use a 'Multiformat' decorator::
+only on certain rows. For this you can use a \atk4\ui\TableColumn\Multiformat decorator::
 
-    $table->addColumn('amount', ['Multiformat', function($m) {
+    $table->addColumn('amount', [\atk4\ui\TableColumn\Multiformat::class, function($m) {
 
         if ($m->get('is_invoiced') > 0) {
-            return ['Money', ['Link', 'invoice', ['invoice_id'=>'id']]];
+            return [\atk4\ui\TableColumn\Money::class, [\atk4\ui\TableColumn\Link::class, 'invoice', ['invoice_id'=>'id']]];
         } elseif (abs($m->get('is_refunded')) < 50) {
-            return [['Template', 'Amount was <b>refunded</b>']];
+            return [[\atk4\ui\TableColumn\Template::class, 'Amount was <b>refunded</b>']];
         }
 
-        return 'Money';
+        return \atk4\ui\TableColumn\Money::class;
     }]);
 
 You supply a callback to the Multiformat decorator, which will then be used to determine
@@ -254,7 +254,7 @@ fields of your models and will conditionally add Link on top of Money formatting
 
 Your callback can return things in varous ways:
 
- - return array of seeds: [['Link'], 'Money'];
+ - return array of seeds: [[\atk4\ui\TableColumn\Link::class], \atk4\ui\TableColumn\Money::class];
  - if string or object is returned it is wrapped inside array automatically
 
 Multiple decorators will be created and merged.

@@ -34,7 +34,7 @@ if (isset($_GET['name'])) {
 
 $t = \atk4\ui\Table::addTo($app);
 $t->setSource(['Red', 'Green', 'Blue']);
-$t->addDecorator('name', ['Link', [], ['name']]);
+$t->addDecorator('name', [\atk4\ui\TableColumn\Link::class, [], ['name']]);
 
 $frame = \atk4\ui\View::addTo($app, ['ui' => 'green segment']);
 \atk4\ui\Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () {

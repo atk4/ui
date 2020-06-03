@@ -28,6 +28,6 @@ class Custom extends _Abstract
      */
     public function addButton($seed)
     {
-        return $this->add($this->mergeSeeds(['Button'], $seed), 'Buttons');
+        return $this->add($this->mergeSeeds([\atk4\ui\Button::class], $seed), 'Buttons');
     }
 }

@@ -41,9 +41,9 @@ $g->addField('d_disb', [new \atk4\ui\FormField\DropDown(['values' => $values]), 
 
 $g = $f->addGroup('Radio');
 
-$g->addField('radio_norm', ['Radio'], ['enum' => ['one', 'two', 'three']])->set('two');
-$g->addField('radio_read', ['Radio', 'readonly' => true], ['enum' => ['one', 'two', 'three']])->set('two');
-$g->addField('radio_disb', ['Radio', 'disabled' => true], ['enum' => ['one', 'two', 'three']])->set('two');
+$g->addField('radio_norm', [\atk4\ui\FormField\Radio::class], ['enum' => ['one', 'two', 'three']])->set('two');
+$g->addField('radio_read', [\atk4\ui\FormField\Radio::class, 'readonly' => true], ['enum' => ['one', 'two', 'three']])->set('two');
+$g->addField('radio_disb', [\atk4\ui\FormField\Radio::class, 'disabled' => true], ['enum' => ['one', 'two', 'three']])->set('two');
 
 $g = $f->addGroup('File upload');
 
@@ -52,15 +52,15 @@ $onDelete = function () {
 $onUpload = function () {
 };
 
-$field = $g->addField('file_norm', ['Upload', ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg');
+$field = $g->addField('file_norm', [\atk4\ui\FormField\Upload::class, ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg');
 $field->onDelete($onDelete);
 $field->onUpload($onUpload);
 
-$field = $g->addField('file_read', ['Upload', ['accept' => ['.png', '.jpg'], 'readonly' => true]])->set('readonly', 'readonly.jpg');
+$field = $g->addField('file_read', [\atk4\ui\FormField\Upload::class, ['accept' => ['.png', '.jpg'], 'readonly' => true]])->set('readonly', 'readonly.jpg');
 $field->onDelete($onDelete);
 $field->onUpload($onUpload);
 
-$field = $g->addField('file_disb', ['Upload', ['accept' => ['.png', '.jpg'], 'disabled' => true]])->set('disabled', 'disabled.jpg');
+$field = $g->addField('file_disb', [\atk4\ui\FormField\Upload::class, ['accept' => ['.png', '.jpg'], 'disabled' => true]])->set('disabled', 'disabled.jpg');
 $field->onDelete($onDelete);
 $field->onUpload($onUpload);
 
@@ -75,14 +75,14 @@ $g->addField('Lookup_norm', [
 ])->set($m->loadAny()->id);
 
 $g->addField('Lookup_read', [
-    'Lookup',
+    \atk4\ui\FormField\Lookup::class,
     'model' => new CountryLock($db),
     'plus' => true,
     'readonly' => true,
 ])->set($m->loadAny()->id);
 
 $g->addField('Lookup_disb', [
-    'Lookup',
+    \atk4\ui\FormField\Lookup::class,
     'model' => new CountryLock($db),
     'plus' => true,
     'disabled' => true,
@@ -90,9 +90,9 @@ $g->addField('Lookup_disb', [
 
 $g = $f->addGroup('Calendar');
 
-$g->addField('calendar_norm', ['Calendar', 'type' => 'date'])->set(date($app->ui_persistence->date_format));
-$g->addField('calendar_read', ['Calendar', 'type' => 'date', 'readonly' => true])->set(date($app->ui_persistence->date_format));
-$g->addField('calendar_disb', ['Calendar', 'type' => 'date', 'disabled' => true])->set(date($app->ui_persistence->date_format));
+$g->addField('calendar_norm', [\atk4\ui\FormField\Calendar::class, 'type' => 'date'])->set(date($app->ui_persistence->date_format));
+$g->addField('calendar_read', [\atk4\ui\FormField\Calendar::class, 'type' => 'date', 'readonly' => true])->set(date($app->ui_persistence->date_format));
+$g->addField('calendar_disb', [\atk4\ui\FormField\Calendar::class, 'type' => 'date', 'disabled' => true])->set(date($app->ui_persistence->date_format));
 
 \atk4\ui\Header::addTo($app, ['Stand Alone Line']);
 // you can pass values to button
@@ -108,11 +108,11 @@ $form = \atk4\ui\Form::addTo($app);
 
 $field = $form->addField('Title', null, ['values' => ['Mr', 'Mrs', 'Miss'], 'ui' => ['hint' => 'select one']]);
 
-$field = $form->addField('name', ['Line', 'hint' => 'this is sample hint that escapes <html> characters']);
+$field = $form->addField('name', [\atk4\ui\FormField\Line::class, 'hint' => 'this is sample hint that escapes <html> characters']);
 $field->set('value in a form');
 
 $field = $form->addField('surname', new \atk4\ui\FormField\Line([
-    'hint' => ['View', 'template' => new \atk4\ui\Template(
+    'hint' => [\atk4\ui\View::class, 'template' => new \atk4\ui\Template(
         'Click <a href="http://example.com/" target="_blank">here</a>'
     )],
 ]));

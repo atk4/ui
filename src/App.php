@@ -434,7 +434,7 @@ class App
      */
     public function initLayout($seed)
     {
-        $layout = $this->factory($seed, null, 'atk4\ui\Layout');
+        $layout = $this->factory($seed);
         $layout->app = $this;
 
         if (!$this->html) {
@@ -1016,7 +1016,7 @@ class App
      * to put it inside boilerplate HTML and output, e.g:.
      *
      *   $l = new \atk4\ui\App();
-     *   $l->initLayout('Centered');
+     *   $l->initLayout(\atk4\ui\Layout\Centered::class);
      *   $l->layout->template->setHTML('Content', $e->getHTML());
      *   $l->run();
      *   exit;

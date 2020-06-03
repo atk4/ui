@@ -38,7 +38,7 @@ Open a new file `index.php` and enter the following code::
     require_once __DIR__ . '/vendor/autoload.php'; // 2
 
     $app = new \atk4\ui\App('My First App');       // 3
-    $app->initLayout('Centered');                  // 4
+    $app->initLayout(\atk4\ui\Layout\Centered::class);                  // 4
 
     \atk4\ui\HelloWorld::addTo($app);                       // 5
 
@@ -51,7 +51,7 @@ Open a new file `index.php` and enter the following code::
 
 .. [#f3] The `App` class represents your web application. This line may change if you integrate Agile UI with another framework.
 
-.. [#f4] Specifies default page layout for your application. Try changing between 'Centered' and 'Admin'
+.. [#f4] Specifies default page layout for your application. Try changing between Layout\Centered and Layout\Centered.
 
 .. [#f5] Creates new component 'HelloWorld' and adds it into Application Layout.
 
@@ -105,7 +105,7 @@ create the application::
     require_once __DIR__ . '/vendor/autoload.php';
 
     $app = new \atk4\ui\App('ToDo List');
-    $app->initLayout('Centered');
+    $app->initLayout(\atk4\ui\Layout\Centered::class);
 
 All components of Agile Data are database-agnostic and will not concern themselves with the way how you store data.
 I will start the session and connect `persistence <https://agile-data.readthedocs.io/en/develop/persistence.html>`_
@@ -209,7 +209,7 @@ Next we need to add Components that are capable of manipulating the data::
 
 .. rubric:: Clarifications
 
-.. [#] We wish to position Form and Table side-by-side, so we use 'Columns' component and
+.. [#] We wish to position Form and Table side-by-side, so we use `\atk4\ui\Columns` component and
     inject a Fomantic UI CSS class "divided" that will appear as a vertical separation line.
 
 .. [#] $col_reload is a special object which we call :ref:`js_action`. It represents a Browser-event

@@ -102,7 +102,7 @@ class Lookup extends Input
      *
      * For example, using this setting will automatically submit
      * form when field value is changes.
-     * $form->addField('field', ['Lookup', 'settings'=>['allowReselection' => true,
+     * $form->addField('field', [\atk4\ui\FormField\Lookup::class, 'settings'=>['allowReselection' => true,
      *                           'selectOnKeydown' => false,
      *                           'onChange'        => new atk4\ui\jsExpression('function(value,t,c){
      *                                                          if ($(this).data("value") !== value) {
@@ -243,9 +243,9 @@ class Lookup extends Input
 
         $buttonSeed = is_string($buttonSeed) ? ['content' => $buttonSeed] : $buttonSeed;
 
-        $defaultSeed = ['Button', 'disabled' => ($this->disabled || $this->readonly)];
+        $defaultSeed = [\atk4\ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
 
-        $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed), null, 'atk4\ui');
+        $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed));
 
         if ($this->form) {
             $vp = \atk4\ui\VirtualPage::addTo($this->form);

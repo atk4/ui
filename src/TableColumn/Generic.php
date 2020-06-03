@@ -89,16 +89,15 @@ class Generic
      * Add popup to header.
      * Use ColumnName for better popup positioning.
      *
-     * @param Popup  $popup
-     * @param string $icon  the css class for filter icon
+     * @param string $icon CSS class for filter icon
      *
      * @return mixed
      */
-    public function addPopup($popup = null, $icon = 'table-filter-off')
+    public function addPopup(Popup $popup = null, $icon = 'table-filter-off')
     {
         $id = $this->name . '_ac';
 
-        $popup = $this->table->owner->add($popup ?: 'Popup')->setHoverable();
+        $popup = $this->table->owner->add($popup ?: Popup::class)->setHoverable();
 
         $this->setHeaderPopup($icon, $id);
 

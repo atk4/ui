@@ -68,7 +68,7 @@ class Form extends View
      *
      * @var Button|array|false Button object, seed or false to not show button at all
      */
-    public $buttonSave = ['Button', 'Save', 'primary'];
+    public $buttonSave = [Button::class, 'Save', 'primary'];
 
     /**
      * When form is submitted successfully, this template is used by method
@@ -171,11 +171,11 @@ class Form extends View
     protected function initLayout()
     {
         if ($this->layout === null) {
-            $this->layout = 'Generic';
+            $this->layout = \atk4\ui\FormLayout\Generic::class;
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
-            $this->layout = $this->factory($this->layout, ['form' => $this], 'atk4\ui\FormLayout');
+            $this->layout = $this->factory($this->layout, ['form' => $this]);
             $this->layout = $this->add($this->layout);
         } elseif (is_object($this->layout)) {
             $this->layout->form = $this;
@@ -450,19 +450,19 @@ class Form extends View
             throw new Exception(['Argument 1 for decoratorFactory must be \atk4\data\Field or null', 'f' => $f]);
         }
 
-        $fallback_seed = ['Line'];
+        $fallback_seed = [\atk4\ui\FormField\Line::class];
 
         if ($f->type === 'array' && $f->reference) {
             $limit = ($f->reference instanceof ContainsMany) ? 0 : 1;
             $model = $f->reference->refModel();
-            $fallback_seed = ['MultiLine', 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
+            $fallback_seed = [\atk4\ui\FormField\MultiLine::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
         } elseif ($f->type !== 'boolean') {
             if ($f->enum) {
-                $fallback_seed = ['DropDown', 'values' => array_combine($f->enum, $f->enum)];
+                $fallback_seed = [\atk4\ui\FormField\DropDown::class, 'values' => array_combine($f->enum, $f->enum)];
             } elseif ($f->values) {
-                $fallback_seed = ['DropDown', 'values' => $f->values];
+                $fallback_seed = [\atk4\ui\FormField\DropDown::class, 'values' => $f->values];
             } elseif (isset($f->reference)) {
-                $fallback_seed = ['Lookup', 'model' => $f->reference->refModel()];
+                $fallback_seed = [\atk4\ui\FormField\Lookup::class, 'model' => $f->reference->refModel()];
             }
         }
 
@@ -487,7 +487,7 @@ class Form extends View
             'short_name' => $f->short_name,
         ];
 
-        return $this->factory($seed, $defaults, 'atk4\ui\FormField');
+        return $this->factory($seed, $defaults);
     }
 
     /**
@@ -496,14 +496,14 @@ class Form extends View
      * @var array Describes how factory converts type to decorator seed
      */
     protected $typeToDecorator = [
-        'boolean' => 'CheckBox',
-        'text' => 'TextArea',
-        'string' => 'Line',
-        'password' => 'Password',
-        'datetime' => 'Calendar',
-        'date' => ['Calendar', 'type' => 'date'],
-        'time' => ['Calendar', 'type' => 'time', 'ampm' => false],
-        'money' => 'Money',
+        'boolean' => FormField\CheckBox::class,
+        'text' => FormField\TextArea::class,
+        'string' => FormField\Line::class,
+        'password' => FormField\Password::class,
+        'datetime' => FormField\Calendar::class,
+        'date' => [FormField\Calendar::class, 'type' => 'date'],
+        'time' => [FormField\Calendar::class, 'type' => 'time', 'ampm' => false],
+        'money' => FormField\Money::class,
     ];
 
     /**

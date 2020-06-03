@@ -274,7 +274,7 @@ class CardDeck extends View
      */
     protected function getNotifier($msg = null, $action = null)
     {
-        $notifier = $this->factory($this->notifyDefault, null, 'atk4\ui');
+        $notifier = $this->factory($this->notifyDefault);
         if ($msg) {
             $notifier->setMessage($msg);
         }
@@ -411,11 +411,11 @@ class CardDeck extends View
             if (is_string($button)) {
                 $button = [$button, 'ui' => 'button ' . $this->menuBtnStyle];
             }
-            $button = $this->factory('Button', $button, 'atk4\ui');
+            $button = $this->factory(Button::class, $button);
         }
 
         if ($button->icon && !is_object($button->icon)) {
-            $button->icon = $this->factory('Icon', [$button->icon], 'atk4\ui');
+            $button->icon = $this->factory(Icon::class, [$button->icon]);
         }
 
         if ($isDisabled) {

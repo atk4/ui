@@ -108,20 +108,18 @@ class Grid extends View
     public $defaultTemplate = 'grid.html';
 
     /**
-     * TableColumn\ActionButtons seed.
      * Defines which Table Decorator to use for ActionButtons.
      *
      * @var string
      */
-    protected $actionButtonsDecorator = 'ActionButtons';
+    protected $actionButtonsDecorator = TableColumn\ActionButtons::class;
 
     /**
-     * TableColumn\ActionMenu seed.
      * Defines which Table Decorator to use for ActionMenu.
      *
      * @var array
      */
-    protected $actionMenuDecorator = ['ActionMenu', 'label' => 'Actions...'];
+    protected $actionMenuDecorator = [TableColumn\ActionMenu::class, 'label' => 'Actions...'];
 
     public function init(): void
     {
@@ -135,14 +133,14 @@ class Grid extends View
 
         // if menu not disabled ot not already assigned as existing object
         if ($this->menu !== false && !is_object($this->menu)) {
-            $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu, 'atk4\ui'), 'Menu');
+            $this->menu = $this->add($this->factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        $this->table = $this->container->add($this->factory(['Table', 'very compact very basic striped single line', 'reload' => $this->container], $this->table, 'atk4\ui'), 'Table');
+        $this->table = $this->container->add($this->factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
 
         if ($this->paginator !== false) {
             $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
-            $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator, 'atk4\ui'));
+            $this->paginator = $seg->add($this->factory([Paginator::class, 'reload' => $this->container], $this->paginator));
             $this->app ? $this->app->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
         }
 
@@ -667,7 +665,7 @@ class Grid extends View
      */
     public function addSelection()
     {
-        $this->selection = $this->table->addColumn(null, 'CheckBox');
+        $this->selection = $this->table->addColumn(null, TableColumn\CheckBox::class);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));
@@ -683,7 +681,7 @@ class Grid extends View
      */
     public function addDragHandler()
     {
-        $handler = $this->table->addColumn(null, 'DragHandler');
+        $handler = $this->table->addColumn(null, TableColumn\DragHandler::class);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));

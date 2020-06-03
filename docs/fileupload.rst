@@ -51,7 +51,7 @@ Callbacks
 
 When adding an Upload or UploadImg field to a form, onUpload and onDelete callback must be defined::
 
-    $img = $form->addField('img', ['UploadImg', ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
+    $img = $form->addField('img', [\atk4\ui\FormField\UploadImg::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
 
     $img->onUpload(function ($files) {
         //callback action here...

@@ -17,7 +17,7 @@ $m->getField('amount')->type = 'money';
 
 $table = \atk4\ui\Table::addTo($app);
 $table->setModel($m, ['action']);
-$table->addColumn('amount', ['Money']);
+$table->addColumn('amount', [\atk4\ui\TableColumn\Money::class]);
 
 // Table template can be tweaked directly
 $table->template->appendHTML('SubHead', '<tr class="center aligned"><th colspan=2>This is sub-header, goes inside "thead" tag</th></tr>');
@@ -50,25 +50,25 @@ $m->addExpression('amount_copy', [function (\atk4\data\Model $m) {
 }, 'type' => 'money']);
 
 // column with 2 decorators that stack. Money will use red ink and alignment, format will change text.
-$table->addColumn('amount', ['Money']);
-$table->addDecorator('amount', ['Template', 'Refunded: {$amount}']);
+$table->addColumn('amount', [\atk4\ui\TableColumn\Money::class]);
+$table->addDecorator('amount', [\atk4\ui\TableColumn\Template::class, 'Refunded: {$amount}']);
 
 // column which uses selective format depending on condition
-$table->addColumn('amount_copy', ['Multiformat', function ($a, $b) {
+$table->addColumn('amount_copy', [\atk4\ui\TableColumn\Multiformat::class, function ($a, $b) {
     if ($a->get('amount_copy') > 0) {
         // Two formatters together
-        return ['Link', 'Money'];
+        return [\atk4\ui\TableColumn\Link::class, \atk4\ui\TableColumn\Money::class];
     } elseif (abs($a->get('amount_copy')) < 50) {
         // One formatter, but inject template and some attributes
         return [[
-            'Template',
+            \atk4\ui\TableColumn\Template::class,
             'too <b>little</b> to <u>matter</u>',
             'attr' => ['all' => ['class' => ['right aligned single line']]],
         ]];
     }
 
     // Short way is to simply return seed
-    return 'Money';
+    return \atk4\ui\TableColumn\Money::class;
 }, 'attr' => ['all' => ['class' => ['right aligned singel line']]]]);
 
 \atk4\ui\Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);

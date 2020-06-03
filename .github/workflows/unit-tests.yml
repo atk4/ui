@@ -102,7 +102,9 @@ jobs:
 
       - name: Check Coding Style (only for CodingStyle)
         if: matrix.type == 'CodingStyle'
-        run: vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --diff-format=udiff --verbose --show-progress=dots
+        run: |
+          if [ "$(find demos/ -name '*.php' -print0 | xargs -0 grep -L "namespace atk4\\\\ui\\\\demo;" | tee /dev/fd/2)" ]; then echo 'All demos/ files must have namespace declared' && (exit 1); fi
+          vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --diff-format=udiff --verbose --show-progress=dots
 
       - name: Upload coverage logs 1/2 (only for "latest" Phpunit)
         if: env.LOG_COVERAGE

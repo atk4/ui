@@ -62,8 +62,8 @@ $table = \atk4\ui\Table::addTo($app);
 $table->setSource($my_array, ['name']);
 
 //$table->addColumn('name');
-$table->addColumn('surname', ['Link', 'url' => 'table.php?id={$surname}']);
+$table->addColumn('surname', [\atk4\ui\TableColumn\Link::class, 'url' => 'table.php?id={$surname}']);
 $table->addColumn('birthdate', null, ['type' => 'date']);
-$table->addColumn('cv', ['HTML']);
+$table->addColumn('cv', [\atk4\ui\TableColumn\HTML::class]);
 
 $table->getColumnDecorators('name')[0]->addClass('disabled');

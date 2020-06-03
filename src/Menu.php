@@ -44,7 +44,7 @@ class Menu extends View
         if (!is_object($item)) {
             $item = (array) $item;
 
-            array_unshift($item, 'Item');
+            array_unshift($item, Item::class);
         }
 
         $item = $this->add($item)->setElement('a');
@@ -168,7 +168,7 @@ class Menu extends View
      */
     public function addDivider()
     {
-        return parent::add(['View', 'class' => ['divider']]);
+        return parent::add([View::class, 'class' => ['divider']]);
     }
 
     /*
