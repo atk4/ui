@@ -22,12 +22,6 @@ $cartClass = get_class(new class() extends \atk4\ui\Lister {
     {
         parent::init();
 
-        // Adding this for wiring demo properly.
-        // otherwise, name will get a different name on each reload
-        // which cause javascript and or session to fail.
-        $this->name = 'cart';
-        $this->id = 'cart';
-
         $this->items = $this->recall('items', []);
 
         // Clicking on any URL produced by this Lister will carry on an extra GET argument
@@ -89,12 +83,6 @@ $itemShelfClass = get_class(new class() extends \atk4\ui\View {
     public function init(): void
     {
         parent::init();
-
-        // Adding this for wiring demo properly.
-        // otherwise, name will get a different name on each reload
-        // which cause javascript to fail.
-        $this->name = 'shelf';
-        $this->id = 'shelf';
 
         $v = \atk4\ui\View::addTo($this, ['ui' => 'fluid']);
         $cols = \atk4\ui\Columns::addTo($v, ['ui' => 'relaxed divided grid']);
