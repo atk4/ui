@@ -18,14 +18,15 @@ class Tabs extends View
      *
      * @param string|Tab $name     Name of tab or Tab object
      * @param callable   $callback Callback action or URL (or array with url + parameters)
+     * @param array      $settings Tab setting
      *
-     * @throws Exception
+     *@throws Exception
      *
      * @return View
      */
-    public function addTab($name, $callback = null)
+    public function addTab($name, $callback = null, $settings = [])
     {
-        $item = $this->addTabMenuItem($name);
+        $item = $this->addTabMenuItem($name, $settings);
         $sub = $this->addSubView($item->name);
 
         // if there is callback action, then use VirtualPage
@@ -43,14 +44,15 @@ class Tabs extends View
      * Adds dynamic tab in tabs widget which will load a separate
      * page/url when activated.
      *
-     * @param string|Tab   $name Name of tab or Tab object
-     * @param string|array $url  URL to open inside a tab
+     * @param string|Tab   $name     Name of tab or Tab object
+     * @param string|array $url      URL to open inside a tab
+     * @param array        $settings Tab setting
      *
      * @throws Exception
      */
-    public function addTabURL($name, $url)
+    public function addTabURL($name, $url, $settings = [])
     {
-        $item = $this->addTabMenuItem($name);
+        $item = $this->addTabMenuItem($name, $settings);
         $this->addSubView($item->name);
 
         $item->setPath($url);
@@ -59,13 +61,14 @@ class Tabs extends View
     /**
      * Add a tab menu item.
      *
-     * @param string|Tab $name name of tab or Tab object
+     * @param string|Tab $name     name of tab or Tab object
+     * @param array      $settings Tab settings
      *
      * @throws Exception
      *
      * @return Tab|View tab menu item view
      */
-    protected function addTabMenuItem($name)
+    protected function addTabMenuItem($name, $settings)
     {
         if (is_object($name)) {
             $tab = $name;
@@ -73,7 +76,7 @@ class Tabs extends View
             $tab = new Tab($name);
         }
 
-        $tab = $this->add([$tab, 'class' => ['item']], 'Menu')
+        $tab = $this->add([$tab, 'class' => ['item'], 'settings' => $settings], 'Menu')
             ->setElement('a')
             ->setAttr('data-tab', $tab->name);
 
