@@ -12,7 +12,7 @@ class Tabs extends \atk4\ui\Tabs
      *
      * @param string|Tab $name     Name of tab or Tab object
      * @param callable   $callback Callback action or URL (or array with url + parameters)
-     * @param callable   $settings  Tab settings.
+     * @param callable   $settings tab settings
      *
      * @throws Exception
      *

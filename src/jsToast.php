@@ -20,12 +20,19 @@ class jsToast implements jsExpressionable
      */
     public $settings = [];
 
+    /** @var string default css class for toast */
+    public $defaultCss = 'success';
+
     public function __construct($settings = null)
     {
         if ($settings && is_array($settings)) {
             $this->settings = $settings;
         } elseif (is_string($settings)) {
             $this->settings['message'] = $settings;
+        }
+
+        if (!array_key_exists('class', $this->settings)) {
+            $this->settings['class'] = $this->defaultCss;
         }
     }
 
