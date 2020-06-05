@@ -2,6 +2,8 @@
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Button;
+
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['Card Deck', 'small right floated basic blue', 'iconRight' => 'right arrow'])
@@ -25,10 +27,10 @@ $notify = $client->addAction('Notify', [
     'args' => [
         'note' => ['type' => 'string', 'required' => true],
     ],
-    'callback' => function ($m) {
-        return 'Note to client is sent.';
+    'callback' => function ($m, $note) {
+        return 'Note to client is sent: ' . $note;
     },
 ]);
 $c->addSection('Client Country:', $client, ['iso', 'numcode', 'phonecode'], true);
 
-$c->addClickAction($notify, null, [$client->get('id')]);
+$c->addClickAction($notify, new Button(['Send Note']), [$client->get('id')]);

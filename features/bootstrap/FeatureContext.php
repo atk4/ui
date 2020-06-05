@@ -67,12 +67,45 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * @Then I press menu button :arg1 using class :arg2
+     */
+    public function iPressMenuButtonUsingClass($arg1, $arg2)
+    {
+        $menu = $this->getSession()->getPage()->find('css', '.ui.menu.' . $arg2);
+        if (!$menu) {
+            throw new \Exception('Unable to find a menu with class ' . $arg2);
+        }
+
+        $link = $menu->find('xpath', '//a[text()="' . $arg1 . '"]');
+        if (!$link) {
+            throw new \Exception('Unable to find menu with title ' . $arg1);
+        }
+
+        $script = '$("#' . $link->getAttribute('id') . '").click()';
+        $this->getSession()->executeScript($script);
+    }
+
+    /**
      * @Given I click link :arg1
      */
     public function iClickLink($arg1)
     {
         $link = $this->getSession()->getPage()->find('xpath', '//a[text()="' . $arg1 . '"]');
         $link->click();
+    }
+
+    /**
+     * @Then I click filter column name :arg1
+     */
+    public function iClickFilterColumnName($arg1)
+    {
+        $column = $this->getSession()->getPage()->find('css', "th[data-column='" . $arg1 . "']");
+        if (!$column) {
+            throw new \Exception('Unable to find a column ' . $arg1);
+        }
+        $icon = $column->find('css', 'i');
+        $script = '$("#' . $icon->getAttribute('id') . '").click()';
+        $this->getSession()->executeScript($script);
     }
 
     /**
@@ -179,6 +212,17 @@ class FeatureContext extends RawMinkContext implements Context
         $text = $modal->find('xpath', '//div[text()="' . $arg1 . '"]');
         if (!$text || $text->getText() !== $arg1) {
             throw new \Exception('No such text in modal');
+        }
+    }
+
+    /**
+     * @Then Active tab should be :arg1
+     */
+    public function activeTabShouldBe($arg1)
+    {
+        $tab = $this->getSession()->getPage()->find('css', '.ui.tabular.menu > .item.active');
+        if ($tab->getText() !== $arg1) {
+            throw new \Exception('Active tab is not ' . $arg1);
         }
     }
 
