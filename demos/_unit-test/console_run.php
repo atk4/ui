@@ -13,14 +13,14 @@ $testRun = get_class(new class() extends \atk4\data\Model {
     public function test()
     {
         $this->log('info', 'Console will automatically pick up output from all DebugTrait objects');
-        $this->debug('debug test');
-        $this->emergency('emergency {foo}', ['foo' => 'bar']);
-        $this->alert('alert {foo}', ['foo' => 'bar']);
-        $this->critical('critical {foo}', ['foo' => 'bar']);
-        $this->error('error {foo}', ['foo' => 'bar']);
-        $this->warning('warning {foo}', ['foo' => 'bar']);
-        $this->notice('notice {foo}', ['foo' => 'bar']);
-        $this->info('info {foo}', ['foo' => 'bar']);
+        $this->debug('debug');
+        $this->emergency('emergency');
+        $this->alert('alert');
+        $this->critical('critical');
+        $this->error('error');
+        $this->warning('warning');
+        $this->notice('notice');
+        $this->info('info');
 
         return 123;
     }
