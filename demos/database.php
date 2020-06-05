@@ -10,10 +10,9 @@ try {
         require_once __DIR__ . '/db.example.php';
     }
 } catch (PDOException $e) {
-    throw (new \atk4\ui\Exception([
-        'This demo requires access to the database. See "demos/database.php"',
-        // do not pass $e here unless you can secure DSN!
-    ]))->addMoreInfo('PDO error', $e->getMessage());
+    // do not pass $e unless you can secure DSN!
+    throw (new \atk4\ui\Exception('This demo requires access to the database. See "demos/database.php"'))
+        ->addMoreInfo('PDO error', $e->getMessage());
 }
 
 trait ModelLockTrait

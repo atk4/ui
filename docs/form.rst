@@ -596,7 +596,7 @@ you can use any 3rd party validation code.
 Callback function may raise exception. If Exception is based on ``\atk4\core\Exception``,
 then the parameter "field" can be used to associate error with specific field::
 
-    throw new \atk4\core\Exception(['Sample Exception', 'field'=>'surname']);
+    throw (new \atk4\core\Exception('Sample Exception'))->addMoreInfo('field', 'surname');
 
 If 'field' parameter is not set or any other exception is generated, then error will not be
 associated with a field. Only the main Exception message will be delivered to the user.
