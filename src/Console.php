@@ -108,11 +108,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
                 call_user_func($callback, $this);
             } catch (\Throwable $e) {
-                $lines = preg_split('~\r?\n|\r~', $this->app->renderExceptionHTMLText($e));
-
-                foreach ($lines as $line) {
-                    $this->outputHTML($line);
-                }
+                $this->outputHTML('{0}', [$this->app->renderExceptionHTML($e)]);
             }
 
             if (isset($this->app)) {
