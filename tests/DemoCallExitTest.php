@@ -106,7 +106,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     }
 
     public function testWizard()
-    {
+    {//@TODO
         $response = $this->getResponseFromRequest(
             'interactive/wizard.php?atk_admin_wizard=1&atk_admin_wizard_form_submit=ajax&__atk_callback=1',
             ['form_params' => [
