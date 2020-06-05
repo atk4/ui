@@ -171,7 +171,8 @@ class App
 
         /*
         if (is_array($defaults)) {
-            throw (new Exception('Constructor requires array argument'))->addMoreInfo('arg', $defaults);
+            throw (new Exception('Constructor requires array argument'))
+                ->addMoreInfo('arg', $defaults);
         }*/
         $this->setDefaults($defaults);
         /*
