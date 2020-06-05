@@ -114,12 +114,10 @@ class UI extends \atk4\data\Persistence
             try {
                 $new_value = $this->serializeLoadField($f, $value);
             } catch (\Exception $e) {
-                throw new Exception([
-                    'Value must be ' . $f->serialize,
-                    'serializator' => $f->serialize,
-                    'value' => $value,
-                    'field' => $f,
-                ]);
+                throw (new Exception('Value must be ' . $f->serialize))
+                    ->addMoreInfo('serializator', $f->serialize)
+                    ->addMoreInfo('value', $value)
+                    ->addMoreInfo('field', $f);
             }
             $value = $new_value;
         }
@@ -156,13 +154,19 @@ class UI extends \atk4\data\Persistence
             if ($f->type === 'datetime' && isset($f->persist_timezone)) {
                 $value = $dt_class::createFromFormat($format, $value, new $tz_class($f->persist_timezone));
                 if ($value === false) {
-                    throw new Exception(['Incorrectly formatted datetime', 'format' => $format, 'value' => $valueStr, 'field' => $f]);
+                    throw (new Exception('Incorrectly formatted datetime'))
+                        ->addMoreInfo('format', $format)
+                        ->addMoreInfo('value', $valueStr)
+                        ->addMoreInfo('field', $f);
                 }
                 $value->setTimeZone(new $tz_class(date_default_timezone_get()));
             } else {
                 $value = $dt_class::createFromFormat($format, $value);
                 if ($value === false) {
-                    throw new Exception(['Incorrectly formatted date/time', 'format' => $format, 'value' => $valueStr, 'field' => $f]);
+                    throw (new Exception('Incorrectly formatted date/time'))
+                        ->addMoreInfo('format', $format)
+                        ->addMoreInfo('value', $valueStr)
+                        ->addMoreInfo('field', $f);
                 }
             }
 

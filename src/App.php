@@ -481,7 +481,7 @@ class App
     public function addStyle($style)
     {
         if (!$this->html) {
-            throw new Exception(['App does not know how to add style']);
+            throw new Exception('App does not know how to add style');
         }
         $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
     }
@@ -524,7 +524,7 @@ class App
 
             // if no App layout set
             if (!isset($this->html)) {
-                throw new Exception(['App layout should be set.']);
+                throw new Exception('App layout should be set.');
             }
 
             $this->html->template->set('title', $this->title);
@@ -590,7 +590,9 @@ class App
             }
         }
 
-        throw new Exception(['Can not find template file', 'name' => $name, 'template_dir' => $this->template_dir]);
+        throw (new Exception('Can not find template file'))
+            ->addMoreInfo('name', $name)
+            ->addMoreInfo('template_dir', $this->template_dir);
     }
 
     /**

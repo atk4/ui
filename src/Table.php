@@ -213,7 +213,8 @@ class Table extends Lister
             $existingField->setDefaults($field);
             $field = $existingField;
         } elseif (is_object($field)) {
-            throw new Exception(['Duplicate field', 'name' => $name]);
+            throw (new Exception('Duplicate field'))
+                ->addMoreInfo('name', $name);
         } else {
             $field = $existingField;
         }
@@ -227,7 +228,8 @@ class Table extends Lister
             $columnDecorator = $this->decoratorFactory($field, ['columnData' => $name]);
         } elseif (is_object($columnDecorator)) {
             if (!$columnDecorator instanceof \atk4\ui\TableColumn\Generic) {
-                throw new Exception(['Column decorator must descend from ' . \atk4\ui\TableColumn\Generic::class, 'columnDecorator' => $columnDecorator]);
+                throw (new Exception('Column decorator must descend from ' . \atk4\ui\TableColumn\Generic::class))
+                    ->addMoreInfo('columnDecorator', $columnDecorator);
             }
             $columnDecorator->table = $this;
             if (!$columnDecorator->columnData) {
@@ -235,15 +237,18 @@ class Table extends Lister
             }
             $this->_add($columnDecorator);
         } else {
-            throw new Exception(['Value of $columnDecorator argument is incorrect', 'columnDecorator' => $columnDecorator]);
+            throw (new Exception('Value of $columnDecorator argument is incorrect'))
+                ->addMoreInfo('columnDecorator', $columnDecorator);
         }
 
         if ($name === null) {
             $this->columns[] = $columnDecorator;
         } elseif (!is_string($name)) {
-            throw new Exception(['Name must be a string', 'name' => $name]);
+            throw (new Exception('Name must be a string'))
+                ->addMoreInfo('name', $name);
         } elseif (isset($this->columns[$name])) {
-            throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name' => $name]);
+            throw (new Exception('Table already has column with $name. Try using addDecorator()'))
+                ->addMoreInfo('name', $name);
         } else {
             $this->columns[$name] = $columnDecorator;
         }
@@ -300,7 +305,8 @@ class Table extends Lister
     public function addDecorator(string $name, $seed)
     {
         if (!$this->columns[$name]) {
-            throw new Exception(['No such column, cannot decorate', 'name' => $name]);
+            throw (new Exception('No such column, cannot decorate'))
+                ->addMoreInfo('name', $name);
         }
         $decorator = $this->_add($this->factory($seed, ['table' => $this]));
 
@@ -477,7 +483,8 @@ class Table extends Lister
     public function renderView()
     {
         if (!$this->columns) {
-            throw new Exception(['Table does not have any columns defined', 'columns' => $this->columns]);
+            throw (new Exception('Table does not have any columns defined'))
+                ->addMoreInfo('columns', $this->columns);
         }
 
         if ($this->sortable) {
@@ -662,7 +669,8 @@ class Table extends Lister
 
                             break;
                         default:
-                            throw new Exception(['Aggregation method does not exist', 'method' => $f]);
+                            throw (new Exception('Aggregation method does not exist'))
+                                ->addMoreInfo('method', $f);
                     }
                 }
             }

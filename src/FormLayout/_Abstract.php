@@ -29,7 +29,7 @@ abstract class _Abstract extends \atk4\ui\View
     public function addField($name, $decorator = null, $field = null)
     {
         if (!is_string($name)) {
-            throw new Exception(['Format for addField now require first argument to be name']);
+            throw new Exception('Format for addField now require first argument to be name');
         }
 
         if (!$this->form->model) {
@@ -57,7 +57,8 @@ abstract class _Abstract extends \atk4\ui\View
                 $existingField->setDefaults($field);
                 $field = $existingField;
             } elseif (is_object($field)) {
-                throw new Exception(['Duplicate field', 'name' => $name]);
+                throw (new Exception('Duplicate field'))
+                    ->addMoreInfo('name', $name);
             } else {
                 $field = $existingField;
             }
@@ -70,15 +71,20 @@ abstract class _Abstract extends \atk4\ui\View
                 $decorator = $this->form->decoratorFactory($field);
             } elseif (is_object($decorator)) {
                 if (!$decorator instanceof \atk4\ui\FormField\Generic) {
-                    throw new Exception(['Field decorator must descend from ' . \atk4\ui\FormField\Generic::class, 'decorator' => $decorator]);
+                    throw (new Exception('Field decorator must descend from ' . \atk4\ui\FormField\Generic::class))
+                        ->addMoreInfo('decorator', $decorator);
                 }
                 $decorator->field = $field;
                 $decorator->form = $this->form;
             } else {
-                throw new Exception(['Value of $decorator argument is incorrect', 'decorator' => $decorator]);
+                throw (new Exception('Value of $decorator argument is incorrect'))
+                    ->addMoreInfo('decorator', $decorator);
             }
         } catch (\Throwable $e) {
-            throw new Exception(['Unable to add form field', 'name' => $name, 'decorator' => $decorator, 'field' => $field], 0, $e);
+            throw (new Exception('Unable to add form field', 0, $e))
+                ->addMoreInfo('name', $name)
+                ->addMoreInfo('decorator', $decorator)
+                ->addMoreInfo('field', $field);
         }
 
         return $this->_addField($decorator, $field);
@@ -152,7 +158,8 @@ abstract class _Abstract extends \atk4\ui\View
                 call_user_func_array([$this, 'addField'], $field);
             }
         } else {
-            throw new Exception(['Incorrect value for $fields', 'fields' => $add_fields]);
+            throw (new Exception('Incorrect value for $fields'))
+                ->addMoreInfo('fields', $add_fields);
         }
 
         return $model;
@@ -169,7 +176,8 @@ abstract class _Abstract extends \atk4\ui\View
     public function getField($name)
     {
         if (empty($this->form)) {
-            throw new Exception(['Incorrect value for $form', 'form' => $this->form]);
+            throw (new Exception('Incorrect value for $form'))
+                ->addMoreInfo('form', $this->form);
         }
 
         return $this->form->getField($name);

@@ -318,12 +318,16 @@ class Template implements \ArrayAccess
         }
 
         if (!$tag) {
-            throw new Exception(['Tag is not set', 'tag' => $tag, 'value' => $value]);
+            throw (new Exception('Tag is not set'))
+                ->addMoreInfo('tag', $tag)
+                ->addMoreInfo('value', $value);
         }
 
         // check value
         if (!is_scalar($value) && $value !== null) {
-            throw new Exception(['Value should be scalar', 'tag' => $tag, 'value' => $value]);
+            throw (new Exception('Value should be scalar'))
+                ->addMoreInfo('tag', $tag)
+                ->addMoreInfo('value', $value);
         }
 
         // encode value
@@ -650,11 +654,9 @@ class Template implements \ArrayAccess
             return $t;
         }
 
-        throw new Exception([
-            'Unable to read template from file',
-            'cwd' => getcwd(),
-            'file' => $filename,
-        ]);
+        throw (new Exception('Unable to read template from file'))
+            ->addMoreInfo('cwd', getcwd())
+            ->addMoreInfo('file', $filename);
     }
 
     /**

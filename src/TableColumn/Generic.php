@@ -303,7 +303,9 @@ class Generic
     public function getHeaderCellHTML(Field $field = null, $value = null)
     {
         if (!$this->table) {
-            throw new \atk4\ui\Exception(['How $table could not be set??', 'field' => $field, 'value' => $value]);
+            throw (new \atk4\ui\Exception('How $table could not be set??'))
+                ->addMoreInfo('field', $field)
+                ->addMoreInfo('value', $value);
         }
 
         if ($tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value])) {

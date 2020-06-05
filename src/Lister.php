@@ -59,7 +59,7 @@ class Lister extends View
     public function initChunks()
     {
         if (!$this->template) {
-            throw new Exception(['Lister does not have default template. Either supply your own HTML or use "defaultTemplate"=>"lister.html"']);
+            throw new Exception('Lister does not have default template. Either supply your own HTML or use "defaultTemplate"=>"lister.html"');
         }
 
         // empty row template
@@ -128,7 +128,7 @@ class Lister extends View
     public function renderView()
     {
         if (!$this->template) {
-            throw new Exception(['Lister requires you to specify template explicitly']);
+            throw new Exception('Lister requires you to specify template explicitly');
         }
 
         // if no model is set, don't show anything (even warning)

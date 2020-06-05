@@ -53,12 +53,10 @@ class VirtualPage extends View
         }
 
         if ($this->fx) {
-            throw new Exception([
-                'Callback for this Virtual Page is already defined',
-                'vp' => $this,
-                'old_fx' => $this->fx,
-                'new_fx' => $fx,
-            ]);
+            throw (new Exception('Callback for this Virtual Page is already defined'))
+                ->addMoreInfo('vp', $this)
+                ->addMoreInfo('old_fx', $this->fx)
+                ->addMoreInfo('new_fx', $fx);
         }
         $this->fx = $fx;
 

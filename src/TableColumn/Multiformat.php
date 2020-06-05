@@ -27,7 +27,8 @@ class Multiformat extends Generic
     public function getHTMLTags(Model $row, $field)
     {
         if (!$this->callback) {
-            throw new \atk4\ui\Exception(['Must specify a callback for column', 'column' => $this]);
+            throw (new \atk4\ui\Exception('Must specify a callback for column'))
+                ->addMoreInfo('column', $this);
         }
 
         $decorators = call_user_func($this->callback, $row, $field);

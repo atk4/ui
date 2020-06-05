@@ -19,7 +19,8 @@ class CardTable extends Table
         }
 
         if (!$m->loaded()) {
-            throw new Exception(['Model must be loaded', 'model' => $m]);
+            throw (new Exception('Model must be loaded'))
+                ->addMoreInfo('model', $m);
         }
 
         $data = [];
