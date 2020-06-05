@@ -70,7 +70,7 @@ abstract class _Abstract extends \atk4\ui\View
                 $decorator = $this->form->decoratorFactory($field);
             } elseif (is_object($decorator)) {
                 if (!$decorator instanceof \atk4\ui\FormField\Generic) {
-                    throw new Exception(['Field decorator must descend from ' . \atk4\ui\FormField\Generic::class, 'decorator' => $decorator]);
+                    throw new Exception(['Field decorator must descend from \atk4\ui\FormField\Generic', 'decorator' => $decorator]);
                 }
                 $decorator->field = $field;
                 $decorator->form = $this->form;

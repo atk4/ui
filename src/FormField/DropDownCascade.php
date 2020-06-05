@@ -41,7 +41,7 @@ class DropDownCascade extends DropDown
         $this->cascadeInput = is_string($this->cascadeFrom) ? $this->form->getField($this->cascadeFrom) : $this->cascadeFrom;
 
         if (!$this->cascadeInput instanceof Generic) {
-            throw new Exception('cascadeFrom property should be an instance of ' . Generic::class);
+            throw new Exception('cascadeFrom property should be an instance of atk4/ui/FormField/Generic');
         }
 
         $this->cascadeInputValue = $_POST[$this->cascadeInput->name] ?? $this->cascadeInput->field->get('value');
