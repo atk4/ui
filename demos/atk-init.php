@@ -47,9 +47,6 @@ if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
 $app->initLayout($app->stickyGET('layout') ?: \atk4\ui\Layout\Maestro::class);
 
 $layout = $app->layout;
-// Need for phpunit only for producing right url.
-$layout->name = 'atk_admin';
-$layout->id = $layout->name;
 
 if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
