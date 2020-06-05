@@ -15,7 +15,7 @@ class Wizard extends View
     /**
      * Callback, that triggers selection of a step.
      *
-     * @var callable
+     * @var callback
      */
     public $stepCallback;
 
@@ -60,7 +60,10 @@ class Wizard extends View
     public function init(): void
     {
         parent::init();
-        $this->stepCallback = Callback::addTo($this, ['urlTrigger' => $this->name]);
+
+        if (!$this->stepCallback) {
+            $this->stepCallback = Callback::addTo($this, ['urlTrigger' => $this->name]);
+        }
 
         $this->currentStep = (int) $this->stepCallback->triggered() ?: 0;
 

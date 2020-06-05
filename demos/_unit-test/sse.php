@@ -8,7 +8,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 $bar = \atk4\ui\ProgressBar::addTo($app);
 
-$button   = \atk4\ui\Button::addTo($app, ['Turn On']);
+$button = \atk4\ui\Button::addTo($app, ['Turn On']);
 $btn_stop = \atk4\ui\Button::addTo($app, ['Turn Off']);
 // non-SSE way
 //$button->on('click', $bar->js()->progress(['percent'=> 40]));
