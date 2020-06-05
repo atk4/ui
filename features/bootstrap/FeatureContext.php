@@ -104,6 +104,9 @@ class FeatureContext extends RawMinkContext implements Context
             throw new \Exception('Unable to find a column ' . $arg1);
         }
         $icon = $column->find('css', 'i');
+        if (!$icon) {
+            throw new \Exception('Column does not contain clickable icon.');
+        }
         $script = '$("#' . $icon->getAttribute('id') . '").click()';
         $this->getSession()->executeScript($script);
     }
