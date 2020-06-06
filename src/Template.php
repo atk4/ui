@@ -92,10 +92,8 @@ class Template implements \ArrayAccess
     public function exception($message = 'Undefined Exception', $code = 0): Exception
     {
         $ex = new Exception($message, $code);
-
         $ex->addMoreInfo('tags', implode(', ', array_keys($this->tags)));
         $ex->addMoreInfo('template', $this->template);
-
         if ($this->source) {
             $ex->addMoreInfo('source', $this->source);
         }
