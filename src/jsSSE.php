@@ -42,7 +42,7 @@ class jsSSE extends jsCallback
     public function jsRender()
     {
         if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
+            throw new Exception('Call-back must be part of a RenderTree');
         }
 
         $options = ['uri' => $this->getJSURL()];

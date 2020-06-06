@@ -51,11 +51,9 @@ class jsExpression implements jsExpressionable
                 }
 
                 if (!isset($this->args[$identifier])) {
-                    throw new Exception([
-                        'Tag not defined in template for jsExpression',
-                        'tag' => $identifier,
-                        'template' => $this->template,
-                    ]);
+                    throw (new Exception('Tag not defined in template for jsExpression'))
+                        ->addMoreInfo('tag', $identifier)
+                        ->addMoreInfo('template', $this->template);
                 }
 
                 $value = $this->args[$identifier];
@@ -103,7 +101,8 @@ class jsExpression implements jsExpressionable
                 return $result;
             }
 
-            throw new Exception(['Not sure how to represent this object in JSON', 'obj' => $arg]);
+            throw (new Exception('Not sure how to represent this object in JSON'))
+                ->addMoreInfo('obj', $arg);
         } elseif (is_array($arg)) {
             $array = [];
             // is array associative? (hash)
@@ -136,7 +135,8 @@ class jsExpression implements jsExpressionable
         } elseif ($arg === null) {
             $string = json_encode($arg);
         } else {
-            throw new Exception(['Unable to json_encode value - unknown type', 'arg' => var_export($arg, true)]);
+            throw (new Exception('Unable to json_encode value - unknown type'))
+                ->addMoreInfo('arg', var_export($arg, true));
         }
 
         return $string;

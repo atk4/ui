@@ -181,7 +181,8 @@ class Form extends View
             $this->layout->form = $this;
             $this->add($this->layout);
         } else {
-            throw new Exception(['Unsupported specification of form layout. Can be array, string or object', 'layout' => $this->layout]);
+            throw (new Exception('Unsupported specification of form layout. Can be array, string or object'))
+                ->addMoreInfo('layout', $this->layout);
         }
 
         // Add save button in layout
@@ -447,7 +448,8 @@ class Form extends View
     public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
         if ($f && !$f instanceof \atk4\data\Field) {
-            throw new Exception(['Argument 1 for decoratorFactory must be \atk4\data\Field or null', 'f' => $f]);
+            throw (new Exception('Argument 1 for decoratorFactory must be \atk4\data\Field or null'))
+                ->addMoreInfo('f', $f);
         }
 
         $fallback_seed = [\atk4\ui\FormField\Line::class];

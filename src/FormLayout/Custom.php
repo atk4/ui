@@ -2,6 +2,8 @@
 
 namespace atk4\ui\FormLayout;
 
+use atk4\ui\Exception;
+
 /**
  * Custom Layout for a form (user-defined HTML).
  */
@@ -15,7 +17,7 @@ class Custom extends _Abstract
         parent::init();
 
         if (!$this->template) {
-            throw new \atk4\ui\Exception(['You must specify template for FormLayout/Custom. Try [\'Custom\', \'defaultTemplate\'=>\'./yourform.html\']']);
+            throw new Exception('You must specify template for FormLayout/Custom. Try [\'Custom\', \'defaultTemplate\'=>\'./yourform.html\']');
         }
     }
 
