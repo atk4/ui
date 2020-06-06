@@ -114,7 +114,7 @@ class UI extends \atk4\data\Persistence
             try {
                 $new_value = $this->serializeLoadField($f, $value);
             } catch (\Exception $e) {
-                throw (new Exception('Value must be ' . $f->serialize))
+                throw (new Exception('Unable to serialize field value on load'))
                     ->addMoreInfo('serializator', $f->serialize)
                     ->addMoreInfo('value', $value)
                     ->addMoreInfo('field', $f);
