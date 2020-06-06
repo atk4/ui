@@ -10,6 +10,9 @@ class Tab extends Item
     /** @var string */
     public $path;
 
+    /** @var array Tab settings */
+    public $settings = [];
+
     /**
      * Sets path for tab.
      *
@@ -29,13 +32,19 @@ class Tab extends Item
      */
     public function renderView()
     {
+        // Must setting for Fomantic-Ui tab since 2.8.5
+        $this->settings = array_merge($this->settings, ['autoTabActivation' => false]);
+
         if ($this->path) {
-            $this->js(true)->tab(
-                ['cache' => false, 'auto' => true, 'path' => $this->path, 'apiSettings' => ['data' => ['__atk_tab' => 1]]]
-            );
-        } else {
-            $this->js(true)->tab();
+            $this->settings = array_merge_recursive($this->settings, [
+                'cache' => false,
+                'auto' => true,
+                'path' => $this->path,
+                'apiSettings' => ['data' => ['__atk_tab' => 1]],
+            ]);
         }
+
+        $this->js(true)->tab($this->settings);
 
         if ($this->owner->activeTabName === $this->name) {
             $this->js(true)->click();
