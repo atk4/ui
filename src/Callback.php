@@ -79,7 +79,7 @@ class Callback
         $this->_init();
 
         if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
+            throw new Exception('Call-back must be part of a RenderTree');
         }
 
         if (!$this->urlTrigger) {

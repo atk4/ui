@@ -199,7 +199,7 @@ class Grid extends View
     public function addButton($text)
     {
         if (!$this->menu) {
-            throw new Exception(['Unable to add Button without Menu']);
+            throw new Exception('Unable to add Button without Menu');
         }
 
         return Button::addTo($this->menu->addItem(), [$text]);
@@ -338,7 +338,7 @@ class Grid extends View
     public function addQuickSearch($fields = [], $hasAutoQuery = false)
     {
         if (!$this->model) {
-            throw new Exception(['Call setModel() before addQuickSearch()']);
+            throw new Exception('Call setModel() before addQuickSearch()');
         }
 
         if (!$fields) {
@@ -346,7 +346,7 @@ class Grid extends View
         }
 
         if (!$this->menu) {
-            throw new Exception(['Unable to add QuickSearch without Menu']);
+            throw new Exception('Unable to add QuickSearch without Menu');
         }
 
         $view = View::addTo($this->menu
@@ -469,7 +469,7 @@ class Grid extends View
     public function addFilterColumn($names = null)
     {
         if (!$this->menu) {
-            throw new Exception(['Unable to add Filter Column without Menu']);
+            throw new Exception('Unable to add Filter Column without Menu');
         }
         $this->menu->addItem(['Clear Filters'], new \atk4\ui\jsReload($this->table->reload, ['atk_clear_filter' => 1]));
         $this->table->setFilterColumn($names);

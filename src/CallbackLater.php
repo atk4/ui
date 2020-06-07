@@ -22,7 +22,7 @@ class CallbackLater extends Callback
     public function set($callback, $args = [])
     {
         if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
+            throw new Exception('Call-back must be part of a RenderTree');
         }
 
         if ($this->app->is_rendering) {

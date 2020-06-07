@@ -145,7 +145,8 @@ $form->onSubmit(function (\atk4\ui\Form $form) {
 $form = \atk4\ui\Form::addTo($tab);
 $form->addField('email');
 $form->onSubmit(function (\atk4\ui\Form $form) {
-    throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
+    throw (new \atk4\core\Exception('testing'))
+        ->addMoreInfo('arg1', 'val1');
 
     return 'somehow it did not crash';
 });
@@ -155,7 +156,8 @@ $form->onSubmit(function (\atk4\ui\Form $form) {
         $form = \atk4\ui\Form::addTo($p);
         $form->addField('email');
         $form->onSubmit(function (\atk4\ui\Form $form) {
-            throw new \atk4\core\Exception(['testing', 'arg1' => 'val1']);
+            throw (new \atk4\core\Exception('testing'))
+                ->addMoreInfo('arg1', 'val1');
 
             return 'somehow it did not crash';
         });

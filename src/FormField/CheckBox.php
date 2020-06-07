@@ -64,7 +64,8 @@ class CheckBox extends Generic
     public function set($value = null, $junk = null)
     {
         if (!is_bool($value)) {
-            throw new Exception(['Field\CheckBox::set() needs value to be a boolean', 'value' => $value]);
+            throw (new Exception('Field\CheckBox::set() needs value to be a boolean'))
+                ->addMoreInfo('value', $value);
         }
 
         parent::set($value);

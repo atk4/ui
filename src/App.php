@@ -41,7 +41,7 @@ class App
         'atk' => 'https://ui.agiletoolkit.org/public', // develop branch
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui' => 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.4/dist',
+        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.5',
     ];
 
     /** @var string Version of Agile UI */
@@ -171,7 +171,8 @@ class App
 
         /*
         if (is_array($defaults)) {
-            throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
+            throw (new Exception('Constructor requires array argument'))
+                ->addMoreInfo('arg', $defaults);
         }*/
         $this->setDefaults($defaults);
         /*
@@ -481,7 +482,7 @@ class App
     public function addStyle($style)
     {
         if (!$this->html) {
-            throw new Exception(['App does not know how to add style']);
+            throw new Exception('App does not know how to add style');
         }
         $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
     }
@@ -524,7 +525,7 @@ class App
 
             // if no App layout set
             if (!isset($this->html)) {
-                throw new Exception(['App layout should be set.']);
+                throw new Exception('App layout should be set.');
             }
 
             $this->html->template->set('title', $this->title);
@@ -590,7 +591,9 @@ class App
             }
         }
 
-        throw new Exception(['Can not find template file', 'name' => $name, 'template_dir' => $this->template_dir]);
+        throw (new Exception('Can not find template file'))
+            ->addMoreInfo('name', $name)
+            ->addMoreInfo('template_dir', $this->template_dir);
     }
 
     /**

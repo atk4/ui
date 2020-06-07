@@ -81,7 +81,7 @@ class Basic extends \atk4\ui\View implements Interface_
     public function recursiveRender()
     {
         if (!$this->action) {
-            throw new Exception(['Action is not set. Use setAction()']);
+            throw new Exception('Action is not set. Use setAction()');
         }
 
         // check action can be called
@@ -107,7 +107,8 @@ class Basic extends \atk4\ui\View implements Interface_
     {
         foreach ($this->action->args as $key => $val) {
             if (!isset($this->arguments[$key])) {
-                throw new Exception(['Argument is not provided', 'argument' => $key]);
+                throw (new Exception('Argument is not provided'))
+                    ->addMoreInfo('argument', $key);
             }
         }
 

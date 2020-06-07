@@ -6,7 +6,7 @@ use atk4\ui\jsSSE;
 
 require_once __DIR__ . '/../atk-init.php';
 
-$testRun = new class() extends \atk4\data\Model {
+$testRunClass = get_class(new class() extends \atk4\ui\View {
     use \atk4\core\DebugTrait;
 
     public function test()
@@ -23,10 +23,10 @@ $testRun = new class() extends \atk4\data\Model {
 
         return 123;
     }
-};
+});
 
 $sse = jsSSE::addTo($app);
 $sse->urlTrigger = 'console_test';
 
 $console = \atk4\ui\Console::addTo($app, ['sse' => $sse]);
-$console->runMethod($app->add($testRun), 'test');
+$console->runMethod($testRunClass::addTo($app), 'test');

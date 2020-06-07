@@ -59,7 +59,7 @@ class jsCallback extends Callback implements jsExpressionable
     public function jsRender()
     {
         if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
+            throw new Exception('Call-back must be part of a RenderTree');
         }
 
         return (new jQuery())->atkAjaxec([
@@ -195,7 +195,8 @@ class jsCallback extends Callback implements jsExpressionable
         } elseif ($response instanceof jsExpressionable) {
             $action = $response;
         } else {
-            throw new Exception(['Incorrect callback. Response must be of type jsExpressionable, View, or String.', 'r' => $response]);
+            throw (new Exception('Incorrect callback. Response must be of type jsExpressionable, View, or String.'))
+                ->addMoreInfo('r', $response);
         }
 
         return $action;

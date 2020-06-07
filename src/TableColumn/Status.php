@@ -31,7 +31,7 @@ class Status extends Generic
     public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
     {
         if ($f === null) {
-            throw new Exception(['Status can be used only with model field']);
+            throw new Exception('Status can be used only with model field');
         }
 
         $attr = $this->getTagAttributes('body');
