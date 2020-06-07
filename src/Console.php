@@ -246,7 +246,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $read = $pipes;
             $j1 = $j2 = null;
             if (stream_select($read, $j1, $j2, 2) === false) {
-                throw new Exception(['stream_select() returned false.']);
+                throw new Exception('stream_select() returned false.');
             }
 
             $stat = proc_get_status($proc);
@@ -283,7 +283,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
         // Escape arguments
         foreach ($args as $key => $val) {
             if (!is_scalar($val)) {
-                throw new Exception(['Arguments must be scalar', 'arg' => $val]);
+                throw (new Exception('Arguments must be scalar'))
+                    ->addMoreInfo('arg', $val);
             }
             $args[$key] = escapeshellarg($val);
         }
@@ -293,7 +294,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
         $pipes = null;
         $proc = proc_open($exec . ' ' . implode(' ', $args), $spec, $pipes);
         if (!is_resource($proc)) {
-            throw new Exception(['Command failed to execute', 'exec' => $exec, 'args' => $args]);
+            throw (new Exception('Command failed to execute'))
+                ->addMoreInfo('exec', $exec)
+                ->addMoreInfo('args', $args);
         }
 
         return [$proc, $pipes];
@@ -361,7 +364,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $this->output('--[ Executing ' . $static . ' ]--------------');
             $result = call_user_func_array($object . '::' . $method, $args);
         } else {
-            throw new Exception(['Incorrect value for an object', 'object' => $object]);
+            throw (new Exception('Incorrect value for an object'))
+                ->addMoreInfo('object', $object);
         }
         $this->output('--[ Result: ' . json_encode($result) . ' ]------------');
 

@@ -23,8 +23,8 @@ $t->addTab('Default Active Tab', function ($tab) {
 // dynamic tab
 $t->addTab('Dynamic Lorem Ipsum', function ($tab) {
     \atk4\ui\Message::addTo($tab, ['Every time you come to this tab, you will see a different text']);
-    \atk4\ui\LoremIpsum::addTo($tab, ['size' => 2]);
-});
+    \atk4\ui\LoremIpsum::addTo($tab, ['size' => (int) $_GET['size'] ?? 1]);
+}, ['apiSettings' => ['data' => ['size' => random_int(1, 4)]]]);
 
 // modal tab
 $t->addTab('Modal popup', function ($tab) {

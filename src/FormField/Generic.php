@@ -2,6 +2,7 @@
 
 namespace atk4\ui\FormField;
 
+use atk4\ui\Exception;
 use atk4\ui\Form;
 use atk4\ui\View;
 
@@ -78,7 +79,8 @@ class Generic extends View
 
         if ($this->form && $this->field) {
             if (isset($this->form->fields[$this->field->short_name])) {
-                throw new \atk4\ui\Exception(['Form already has a field with the same name', 'name' => $this->field->short_name]);
+                throw (new Exception('Form already has a field with the same name'))
+                    ->addMoreInfo('name', $this->field->short_name);
             }
             $this->form->fields[$this->field->short_name] = $this;
         }

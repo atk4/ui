@@ -123,10 +123,8 @@ class Popup extends View
             $this->owner instanceof DropDown ||
             $this->owner instanceof Button
         ) {
-            throw new Exception([
-                'Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"',
-                'owner' => $this->owner,
-            ]);
+            throw (new Exception('Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"'))
+                ->addMoreInfo('owner', $this->owner);
         }
 
         if (

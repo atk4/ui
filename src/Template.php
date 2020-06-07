@@ -88,25 +88,17 @@ class Template implements \ArrayAccess
 
     /**
      * Returns relevant exception class. Use this method with "throw".
-     *
-     * @param string $message Static text of exception
-     * @param int    $code    Optional error code
-     *
-     * @return Exception
      */
-    public function exception($message = 'Undefined Exception', $code = 0)
+    public function exception($message = 'Undefined Exception', $code = 0): Exception
     {
-        $arg = [
-            $message,
-            'tags' => implode(', ', array_keys($this->tags)),
-            'template' => $this->template,
-        ];
-
+        $ex = new Exception($message, $code);
+        $ex->addMoreInfo('tags', implode(', ', array_keys($this->tags)));
+        $ex->addMoreInfo('template', $this->template);
         if ($this->source) {
-            $arg['source'] = $this->source;
+            $ex->addMoreInfo('source', $this->source);
         }
 
-        return new Exception($arg, $code);
+        return $ex;
     }
 
     // }}}
@@ -318,12 +310,16 @@ class Template implements \ArrayAccess
         }
 
         if (!$tag) {
-            throw new Exception(['Tag is not set', 'tag' => $tag, 'value' => $value]);
+            throw (new Exception('Tag is not set'))
+                ->addMoreInfo('tag', $tag)
+                ->addMoreInfo('value', $value);
         }
 
         // check value
         if (!is_scalar($value) && $value !== null) {
-            throw new Exception(['Value should be scalar', 'tag' => $tag, 'value' => $value]);
+            throw (new Exception('Value should be scalar'))
+                ->addMoreInfo('tag', $tag)
+                ->addMoreInfo('value', $value);
         }
 
         // encode value
@@ -650,11 +646,9 @@ class Template implements \ArrayAccess
             return $t;
         }
 
-        throw new Exception([
-            'Unable to read template from file',
-            'cwd' => getcwd(),
-            'file' => $filename,
-        ]);
+        throw (new Exception('Unable to read template from file'))
+            ->addMoreInfo('cwd', getcwd())
+            ->addMoreInfo('file', $filename);
     }
 
     /**

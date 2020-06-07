@@ -44,7 +44,7 @@ class Tooltip extends Generic
     public function getDataCellHTML(Field $f = null, $extra_tags = [])
     {
         if ($f === null) {
-            throw new Exception(['Tooltip can be used only with model field']);
+            throw new Exception('Tooltip can be used only with model field');
         }
 
         $attr = $this->getTagAttributes('body');

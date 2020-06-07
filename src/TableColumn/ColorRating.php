@@ -189,7 +189,7 @@ class ColorRating extends Generic
     public function getDataCellHTML(Field $f = null, $extra_tags = [])
     {
         if ($f === null) {
-            throw new Exception(['ColorRating can be used only with model field']);
+            throw new Exception('ColorRating can be used only with model field');
         }
 
         return $this->getTag('body', '{$' . $f->short_name . '}', $extra_tags);

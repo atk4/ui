@@ -25,7 +25,7 @@ class Money extends Generic
     public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
     {
         if (!isset($f)) {
-            throw new Exception(['Money column requires a field']);
+            throw new Exception('Money column requires a field');
         }
 
         return $this->getTag(

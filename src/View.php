@@ -267,12 +267,10 @@ class View implements jsExpressionable
             return;
         }
 
-        throw new Exception([
-            'Unable to set property for the object',
-            'object' => $this,
-            'property' => $key,
-            'value' => $val,
-        ]);
+        throw (new Exception('Unable to set property for the object'))
+            ->addMoreInfo('object', $this)
+            ->addMoreInfo('property', $key)
+            ->addMoreInfo('value', $val);
     }
 
     /**
@@ -411,16 +409,6 @@ class View implements jsExpressionable
         if (!is_object($object)) {
             // for BC do not throw
             // later consider to accept strictly objects only
-
-            // for BC:
-            // - use self/View class if no class name is defined in the seed
-            if (is_string($object)) {
-                $object = [$object];
-            }
-            if (!isset($object[0])) {
-                $object[0] = self::class;
-            }
-
             $object = self::addToWithClUnsafe($this, $object, [], true);
         }
 
@@ -514,11 +502,9 @@ class View implements jsExpressionable
         }
 
         if ($arg2 !== null) {
-            throw new Exception([
-                'Second argument to set() can be only passed if the first one is a string',
-                'arg1' => $arg1,
-                'arg2' => $arg2,
-            ]);
+            throw (new Exception('Second argument to set() can be only passed if the first one is a string'))
+                ->addMoreInfo('arg1', $arg1)
+                ->addMoreInfo('arg2', $arg2);
         }
 
         if (is_scalar($arg1)) {
@@ -536,12 +522,10 @@ class View implements jsExpressionable
             return $this;
         }
 
-        throw new Exception([
-            'Not sure what to do with argument',
-            'this' => $this,
-            'arg1' => $arg1,
-            'arg2' => $arg2,
-        ]);
+        throw (new Exception('Not sure what to do with argument'))
+            ->addMoreInfo('this', $this)
+            ->addMoreInfo('arg1', $arg1)
+            ->addMoreInfo('arg2', $arg2);
     }
 
     /**
@@ -566,7 +550,9 @@ class View implements jsExpressionable
         }
 
         if (is_string($this->class)) {
-            throw new Exception(['Property $class should always be array', 'object' => $this, 'class' => $this->class]);
+            throw (new Exception('Property $class should always be array'))
+                ->addMoreInfo('object', $this)
+                ->addMoreInfo('class', $this->class);
         }
 
         $this->class = array_merge($this->class, explode(' ', $class));

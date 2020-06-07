@@ -36,7 +36,8 @@ class ArgumentForm extends Basic
 
         foreach ($this->action->args as $key => $val) {
             if (is_numeric($key)) {
-                throw new Exception(['Action arguments must be named', 'args' => $this->actions->args]);
+                throw (new Exception('Action arguments must be named'))
+                    ->addMoreInfo('args', $this->actions->args);
             }
 
             if ($val instanceof Model) {
