@@ -27,6 +27,7 @@ use atk4\data\Model;
 class Template implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
+    use \atk4\core\DIContainerTrait; // needed for StaticAddToTrait, removed once php7.2 support is dropped
     use \atk4\core\StaticAddToTrait;
 
     // {{{ Properties of a template
