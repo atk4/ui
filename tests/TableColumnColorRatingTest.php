@@ -5,6 +5,7 @@ namespace atk4\ui\tests;
 use atk4\core\AtkPhpunit;
 use atk4\ui\Table;
 use atk4\ui\TableColumn\ColorRating;
+use atk4\ui\TableColumn\Generic;
 
 class TableColumnColorRatingTest extends AtkPhpunit\TestCase
 {
@@ -40,7 +41,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
 
     public function testValueGreaterThanMax()
     {
-        $this->table->addDecorator('rating', [
+        $rating = $this->table->addDecorator('rating', [
             ColorRating::class,
             [
                 'min' => 0,
@@ -55,7 +56,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         ]);
 
         $this->assertSame(
-            '<td>{$name}</td><td>{$ref}</td><td style="{$_colorrating_color_rating}">{$rating}</td>',
+            '<td>{$name}</td><td>{$ref}</td><td style="{$' . $this->getColumnStyle($rating) . '}">{$rating}</td>',
             $this->table->getDataRowHTML()
         );
 
@@ -90,7 +91,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
 
     public function testValueLowerThanMin()
     {
-        $this->table->addDecorator('rating', [
+        $rating = $this->table->addDecorator('rating', [
             ColorRating::class,
             [
                 'min' => 4,
@@ -105,7 +106,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         ]);
 
         $this->assertSame(
-            '<td>{$name}</td><td>{$ref}</td><td style="{$_colorrating_color_rating}">{$rating}</td>',
+            '<td>{$name}</td><td>{$ref}</td><td style="{$' . $this->getColumnStyle($rating) . '}">{$rating}</td>',
             $this->table->getDataRowHTML()
         );
 
@@ -210,5 +211,13 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
                 ],
             ],
         ]);
+    }
+
+    /**
+     * return column template style name.
+     */
+    private function getColumnStyle(Generic $column): string
+    {
+        return '_' . $column->short_name . '_color_rating';
     }
 }

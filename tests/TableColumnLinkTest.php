@@ -3,6 +3,7 @@
 namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
+use atk4\ui\TableColumn\Generic;
 
 class TableColumnLinkTest extends AtkPhpunit\TestCase
 {
@@ -49,10 +50,10 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
     public function testTDLast()
     {
-        $this->table->addColumn('salary', new \atk4\ui\TableColumn\Money());
+        $salary = $this->table->addColumn('salary', new \atk4\ui\TableColumn\Money());
 
         $this->assertSame(
-            '<td>{$name}</td><td>{$ref}</td><td class="{$_money_class} right aligned single line">{$salary}</td>',
+            '<td>{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary) . '} right aligned single line">{$salary}</td>',
             $this->table->getDataRowHTML()
         );
 
@@ -64,11 +65,11 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
     public function testTDNotLast()
     {
-        $this->table->addColumn('salary', new \atk4\ui\TableColumn\Money());
+        $salary = $this->table->addColumn('salary', new \atk4\ui\TableColumn\Money());
         $this->table->addDecorator('salary', new \atk4\ui\TableColumn\Template('<b>{$salary}</b>'));
 
         $this->assertSame(
-            '<td>{$name}</td><td>{$ref}</td><td class="{$_money_class} right aligned single line"><b>{$salary}</b></td>',
+            '<td>{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary) . '} right aligned single line"><b>{$salary}</b></td>',
             $this->table->getDataRowHTML()
         );
 
@@ -80,12 +81,12 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
     public function testTwoMoneys()
     {
-        $this->table->addDecorator('name', new \atk4\ui\TableColumn\Money());
-        $this->table->addColumn('salary', new \atk4\ui\TableColumn\Money());
+        $salary_1 = $this->table->addDecorator('name', new \atk4\ui\TableColumn\Money());
+        $salary_2 = $this->table->addColumn('salary', new \atk4\ui\TableColumn\Money());
         $this->table->addDecorator('salary', new \atk4\ui\TableColumn\Template('<b>{$salary}</b>'));
 
         $this->assertSame(
-            '<td class="{$_money_class} right aligned single line">{$name}</td><td>{$ref}</td><td class="{$_money_2_class} right aligned single line"><b>{$salary}</b></td>',
+            '<td class="{$' . $this->getColumnClass($salary_1) . '} right aligned single line">{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary_2) . '} right aligned single line"><b>{$salary}</b></td>',
             $this->table->getDataRowHTML()
         );
 
@@ -142,10 +143,10 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
     public function testLink1()
     {
-        $this->table->addDecorator('name', new \atk4\ui\TableColumn\Link('example.php?id={$id}'));
+        $link = $this->table->addDecorator('name', new \atk4\ui\TableColumn\Link('example.php?id={$id}'));
 
         $this->assertSame(
-            '<td><a href="{$c_link}">{$name}</a></td><td>{$ref}</td>',
+            '<td><a href="{$' . $this->getColumnRef($link) . '}">{$name}</a></td><td>{$ref}</td>',
             $this->table->getDataRowHTML()
         );
 
@@ -157,10 +158,10 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
     public function testLink1a()
     {
-        $this->table->addDecorator('name', [\atk4\ui\TableColumn\Link::class, 'url' => 'example.php?id={$id}']);
+        $link = $this->table->addDecorator('name', [\atk4\ui\TableColumn\Link::class, 'url' => 'example.php?id={$id}']);
 
         $this->assertSame(
-            '<td><a href="{$c_link}">{$name}</a></td><td>{$ref}</td>',
+            '<td><a href="{$' . $this->getColumnRef($link) . '}">{$name}</a></td><td>{$ref}</td>',
             $this->table->getDataRowHTML()
         );
 
@@ -281,6 +282,22 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
             '<tr data-id="1"><td class=""> bar<span class="ui icon link " data-tooltip="ref123"><i class="ui icon info circle"></span></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
+    }
+
+    /**
+     * Return column template reference name.
+     */
+    private function getColumnRef(Generic $column): string
+    {
+        return 'c_' . $column->short_name;
+    }
+
+    /**
+     * Return column template class name.
+     */
+    private function getColumnClass(Generic $column): string
+    {
+        return '_' . $column->short_name . '_class';
     }
 
     /*
