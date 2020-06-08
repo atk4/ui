@@ -328,6 +328,45 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * @Then I search grid for :arg1
+     */
+    public function iSearchGridFor($arg1)
+    {
+        $search = $this->getSession()->getPage()->find('css', 'input.atk-grid-search');
+        if (!$search) {
+            throw new \Exception('Unable to find search input.');
+        }
+
+        $search->setValue($arg1);
+    }
+
+    /**
+     * @Then I click icon using css :arg1
+     */
+    public function iClickIconUsingCss($arg1)
+    {
+        $icon = $this->getSession()->getPage()->find('css', $arg1);
+        if (!$icon) {
+            throw new \Exception('Unable to find search remove icon.');
+        }
+
+        $icon->click();
+    }
+
+    /**
+     * Wait for an element, usually an auto trigger element, to show that loading has start"
+     * Example, when entering value in jsSearch for grid. We need to auto trigger to fire before
+     * doing waiting for callback.
+     * $arg1 should represent the element selector for jQuery.
+     *
+     * @Then I wait for loading to start in :arg1
+     */
+    public function iWaitForLoadingToStartIn($arg1)
+    {
+        $this->getSession()->wait(2000, '$("' . $arg1 . '").hasClass("loading")');
+    }
+
+    /**
      * @Then I test javascript
      */
     public function iTestJavascript()
