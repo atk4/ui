@@ -3,7 +3,7 @@ Feature: Grid
 
   Scenario: search
     Given I am on "collection/grid.php"
-    Then I search grid for "united"
+    Then I search grid for "kingdom"
 #    make sure auto query trigger
     And I wait for loading to start in "button.atk-search-button"
     And wait for callback
