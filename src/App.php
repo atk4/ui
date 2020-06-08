@@ -555,9 +555,9 @@ class App
      *
      * @return Template
      */
-    public function loadTemplate($name)
+    public function loadTemplate($name, /* DO NOT MERGE THIS CHANGE! */$cl = null)
     {
-        $template = new Template();
+        $template = $cl ?? new Template();
         $template->app = $this;
 
         if (in_array($name[0], ['.', '/', '\\'], true) || strpos($name, ':\\') !== false) {

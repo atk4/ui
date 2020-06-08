@@ -157,6 +157,28 @@ class Form extends View
      */
     public function init(): void
     {
+        // DEBUG FOR NESTED FORMS
+        // see https://github.com/atk4/ui/pull/1219
+        $this->template = $this->app->loadTemplate($this->defaultTemplate, new class() extends Template {
+            public $form;
+
+            protected function recursiveRender($template)
+            {
+                $out = parent::recursiveRender($template);
+
+                return $this->fixInnerHtml($out);
+            }
+
+            private function fixInnerHtml(string $str): string
+            {
+                $formName = $this->form->name/* . '__form'*/;
+                $str = preg_replace('~<(button|datalist|fieldset|input|keygen|label|legend|meter|optgroup|option|output|progress|select|textarea)~', '$0 form="' . $formName . '"', $str);
+
+                return $str;
+            }
+        });
+        $this->template->form = $this;
+
         parent::init();
 
         // Initialize layout, so when you call addField / setModel next time, form will know
