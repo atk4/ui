@@ -297,6 +297,14 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * @Then I wait for toast to hide
+     */
+    public function iWaitForToastToHide()
+    {
+        $this->getSession()->wait(20000, '$(".ui.toast-container").children().length === 0');
+    }
+
+    /**
      * @Then I select value :arg1 in lookup :arg2
      *
      * Select a value in a lookup field.

@@ -11,6 +11,7 @@ Feature: Grid
     Then I press button "Test"
     And wait for callback
     Then Toast display should contains text "United Kingdom"
+    Then I wait for toast to hide
 #    click search remove icon
     Then I click icon using css "i.atk-remove-icon"
     And wait for callback
