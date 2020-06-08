@@ -284,22 +284,6 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    /**
-     * Return column template reference name.
-     */
-    private function getColumnRef(Generic $column): string
-    {
-        return 'c_' . $column->short_name;
-    }
-
-    /**
-     * Return column template class name.
-     */
-    private function getColumnClass(Generic $column): string
-    {
-        return '_' . $column->short_name . '_class';
-    }
-
     /*
     function testLink1() {
 

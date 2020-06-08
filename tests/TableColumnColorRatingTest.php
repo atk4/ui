@@ -212,12 +212,4 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
             ],
         ]);
     }
-
-    /**
-     * return column template style name.
-     */
-    private function getColumnStyle(Generic $column): string
-    {
-        return '_' . $column->short_name . '_color_rating';
-    }
 }
