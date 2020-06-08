@@ -25,6 +25,9 @@ $notifierClass = get_class(new class() extends \atk4\data\Model {
 $head = \atk4\ui\Header::addTo($app, ['Notification Types']);
 
 $form = \atk4\ui\Form::addTo($app, ['segment']);
+// Unit test only.
+$form->name = 'notify';
+
 \atk4\ui\Label::addTo($form, ['Some of notification options that can be set.', 'top attached'], ['AboveFields']);
 $form->buttonSave->set('Show');
 $form->setModel(new $notifierClass($db), false);

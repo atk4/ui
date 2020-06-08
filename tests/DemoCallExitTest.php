@@ -227,6 +227,21 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
             ],
         ];
 
+        // Getting back jsNotify coverage.
+        $files[] = [
+            'obsolete/notify2.php?notify_submit=ajax&__atk_callback=1',
+            [
+                'text' => 'This text will appear in notification',
+                'icon' => 'warning sign',
+                'color' => 'green',
+                'transition' => 'jiggle',
+                'width' => '25%',
+                'position' => 'topRight',
+                'attach' => 'Body',
+                'notify_submit' => 'submit',
+            ],
+        ];
+
         return $files;
     }
 }
