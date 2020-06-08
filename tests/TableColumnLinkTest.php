@@ -3,7 +3,6 @@
 namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
-use atk4\ui\TableColumn\Generic;
 
 class TableColumnLinkTest extends AtkPhpunit\TestCase
 {

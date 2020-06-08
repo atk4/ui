@@ -5,7 +5,6 @@ namespace atk4\ui\tests;
 use atk4\core\AtkPhpunit;
 use atk4\ui\Table;
 use atk4\ui\TableColumn\ColorRating;
-use atk4\ui\TableColumn\Generic;
 
 class TableColumnColorRatingTest extends AtkPhpunit\TestCase
 {
