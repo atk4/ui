@@ -1015,12 +1015,12 @@ class App
         // replace large integers only, do not replace anything in JSON/JS strings
         $json = preg_replace_callback('~(?:"(?:[^"\\\\]+|\\\\.)*")?+\K|(?:\'(?:[^\'\\\\]+|\\\\.)*\')?+\K|(?:^|[{\[,:])'
             . '[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function ($matches) { // strlen(1 << 53) = 16
-            if ($matches[0] === '' || abs((int) $matches[0]) < (1 << 53)) {
-                return $matches[0];
-            }
+                if ($matches[0] === '' || abs((int) $matches[0]) < (1 << 53)) {
+                    return $matches[0];
+                }
 
-            return '"' . $matches[0] . '"';
-        }, $json);
+                return '"' . $matches[0] . '"';
+            }, $json);
 
         return $json;
     }
