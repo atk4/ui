@@ -7,7 +7,6 @@ import multiLine from '../components/multiline.component'
 import treeItemSelector from '../components/tree-item-selector/tree-item-selector.component';
 import atkClickOutside from '../directives/click-outside.directive';
 import VueQueryBuilder from 'vue-query-builder';
-import 'vue-query-builder/dist/VueQueryBuilder.css';
 import {focus} from '../directives/commons.directive';
 
 Vue.use(SuiVue);
