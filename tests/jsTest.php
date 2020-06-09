@@ -36,18 +36,18 @@ class jsTest extends AtkPhpunit\TestCase
             // test JSON renderer in App too
             // test extensively because of (possibly fragile) custom regex impl
             $app = new \atk4\ui\App();
+            $expectedRaw = json_decode($expected);
             foreach ([
-                [$expected, $in], // direct value
-                [[$expected => 'x'], [$in => 'x']], // as key
-                [[$expected], [$in]], // as value in JSON array
-                [['x' => $expected], ['x' => $in]], // as value in JSON object
+                [$expectedRaw, $in], // direct value
+                [[$expectedRaw => 'x'], [$in => 'x']], // as key
+                [[$expectedRaw], [$in]], // as value in JSON array
+                [['x' => $expectedRaw], ['x' => $in]], // as value in JSON object
             ] as [$expectedData, $inData]) {
-                $expectedDataJson = json_encode($expectedData);
-                $this->assertJsonStringEqualsJsonString($expectedDataJson, $app->encodeJson($inData));
+                $this->assertSame(json_encode($expectedData), preg_replace('~\s+~', '', $app->encodeJson($inData)));
 
                 // do not change any numbers to string in JSON/JS strings
                 $inDataJson = json_encode($inData);
-                $this->assertSame(json_encode(['x' => $inDataJson]), $app->encodeJson(['x' => $inDataJson]));
+                $this->assertSame(json_encode(['x' => $inDataJson]), preg_replace('~\s+~', '', $app->encodeJson(['x' => $inDataJson])));
             }
         }
     }
