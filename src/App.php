@@ -269,7 +269,7 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if (($this->isJsRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
+        if (($this->isJsUrlRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
                 && !isset($_GET['__atk_tab'])) {
             $this->outputResponseJSON([
                 'success' => false,
@@ -547,7 +547,7 @@ class App
         }
 
         $output = ob_get_clean();
-        if ($this->isJsRequest()) {
+        if ($this->isJsUrlRequest()) {
             $this->outputResponseJSON($output);
         } else {
             $this->outputResponseHTML($output);
@@ -753,7 +753,7 @@ class App
      *
      * @return bool
      */
-    public function isJsRequest()
+    public function isJsUrlRequest()
     {
         return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
     }
