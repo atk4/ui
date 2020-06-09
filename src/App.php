@@ -1012,7 +1012,8 @@ class App
         }
 
         // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
-        $json = preg_replace_callback('~(?:"(?:[^"\\\\]+|\\\\.)*")?+\K|(?:^|[{\[,:])[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function($matches) {
+        // replace large integers only, do not replace anything in JSON/JS strings
+        $json = preg_replace_callback('~(?:"(?:[^"\\\\]+|\\\\.)*")?+\K|(?:\'(?:[^\'\\\\]+|\\\\.)*\')?+\K|(?:^|[{\[,:])[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function ($matches) {
             if ($matches[0] === '' || abs((int) $matches[0]) < (1 << 53)) { // strlen(1 << 53) = 16
                 return $matches[0];
             }

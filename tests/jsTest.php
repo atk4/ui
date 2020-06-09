@@ -32,6 +32,23 @@ class jsTest extends AtkPhpunit\TestCase
             [true, 'true'],
         ] as [$in, $expected]) {
             $this->assertSame($expected, (new jsExpression('[]', [$in]))->jsRender());
+
+            // test JSON renderer in App too
+            // test extensively because of (possibly fragile) custom regex impl
+            $app = new \atk4\ui\App();
+            foreach ([
+                [$expected, $in], // direct value
+                [[$expected => 'x'], [$in => 'x']], // as key
+                [[$expected], [$in]], // as value in JSON array
+                [['x' => $expected], ['x' => $in]], // as value in JSON object
+            ] as [$expectedData, $inData]) {
+                $expectedDataJson = json_encode($expectedData);
+                $this->assertJsonStringEqualsJsonString($expectedDataJson, $app->encodeJson($inData));
+
+                // do not change any numbers to string in JSON/JS strings
+                $inDataJson = json_encode($inData);
+                $this->assertSame(json_encode(['x' => $inDataJson]), $app->encodeJson(['x' => $inDataJson]));
+            }
         }
     }
 
