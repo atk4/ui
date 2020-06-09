@@ -45,7 +45,7 @@ if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
 }
 
 // enable layout change.
-$layout = 'atk4\\ui\Layout\\' . $app->stickyGET('layout') ?: 'Maestro';
+$layout = '\\atk4\\ui\Layout\\' . ($app->stickyGET('layout') ?: 'Maestro');
 $app->initLayout(new $layout());
 
 $layout = $app->layout;
