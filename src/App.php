@@ -39,7 +39,7 @@ class App
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
         'atk' => 'https://ui.agiletoolkit.org/public', // develop branch
-        'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
+        'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.5',
     ];
@@ -1027,14 +1027,6 @@ class App
     public function renderExceptionHTML(\Throwable $exception): string
     {
         return (string) new \atk4\core\ExceptionRenderer\HTML($exception);
-    }
-
-    /**
-     * Similar to Exception::getColorfulText() but will use raw HTML for outputting colors.
-     */
-    public function renderExceptionHTMLText(\Throwable $exception): string
-    {
-        return (string) new \atk4\core\ExceptionRenderer\HTMLText($exception);
     }
 
     protected function setupAlwaysRun(): void

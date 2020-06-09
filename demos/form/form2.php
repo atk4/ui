@@ -86,7 +86,7 @@ $personClass = get_class(new class() extends \atk4\data\Model {
     {
         $errors = parent::validate();
 
-        if ($this['name'] === $this['surname']) {
+        if ($this->get('name') === $this->get('surname')) {
             $errors['surname'] = 'Your surname cannot be same as the name';
         }
 
