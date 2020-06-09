@@ -1029,14 +1029,6 @@ class App
         return (string) new \atk4\core\ExceptionRenderer\HTML($exception);
     }
 
-    /**
-     * Similar to Exception::getColorfulText() but will use raw HTML for outputting colors.
-     */
-    public function renderExceptionHTMLText(\Throwable $exception): string
-    {
-        return (string) new \atk4\core\ExceptionRenderer\HTMLText($exception);
-    }
-
     protected function setupAlwaysRun(): void
     {
         if ($this->_cwd_restore) {

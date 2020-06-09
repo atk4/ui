@@ -108,11 +108,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
                 call_user_func($callback, $this);
             } catch (\Throwable $e) {
-                $lines = preg_split('~\r?\n|\r~', $this->app->renderExceptionHTMLText($e));
-
-                foreach ($lines as $line) {
-                    $this->outputHTML($line);
-                }
+                $this->output('');
+                $this->outputHTML('<div class="ui segment" style="white-space: normal; font-family: Lato,\'Helvetica Neue\',Arial,Helvetica,sans-serif;">{0}</div>', [$this->app->renderExceptionHTML($e)]);
             }
 
             if (isset($this->app)) {
@@ -158,20 +155,16 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * @todo Use $message as template and fill values from $context in there.
      *
-     * @param string $message
-     * @param array  $context
-     *
      * @return $this
      */
-    public function outputHTML($message, $context = [])
+    public function outputHTML(string $message, array $context = [])
     {
         $message = preg_replace_callback('/{([a-z0-9_-]+)}/i', function ($match) use ($context) {
-            if (isset($context[$match[1]]) && is_string($context[$match[1]])) {
+            if (isset($context[$match[1]])) {
                 return $context[$match[1]];
             }
 
-            // don't change the original message
-            return '{' . $match[1] . '}';
+            return '{' . $match[1] . '}'; // don't change the original message
         }, $message);
 
         $this->_output_bypass = true;
@@ -382,7 +375,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function emergency($message, array $context = [])
     {
-        $this->outputHTML("<font color='pink'>" . htmlspecialchars($message) . '</font>', $context);
+        $this->outputHTML('<font color="pink">' . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -392,7 +385,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function alert($message, array $context = [])
     {
-        $this->outputHTML("<font color='pink'>" . htmlspecialchars($message) . '</font>', $context);
+        $this->outputHTML('<font color="pink">' . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -402,7 +395,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function critical($message, array $context = [])
     {
-        $this->outputHTML("<font color='pink'>" . htmlspecialchars($message) . '</font>', $context);
+        $this->outputHTML('<font color="pink">' . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -413,7 +406,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function error($message, array $context = [])
     {
-        $this->outputHTML("<font color='pink'>" . htmlspecialchars($message) . '</font>', $context);
+        $this->outputHTML('<font color="pink">' . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -423,7 +416,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function warning($message, array $context = [])
     {
-        $this->outputHTML("<font color='pink'>" . htmlspecialchars($message) . '</font>', $context);
+        $this->outputHTML('<font color="pink">' . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -433,7 +426,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function notice($message, array $context = [])
     {
-        $this->outputHTML("<font color='yellow'>" . htmlspecialchars($message) . '</font>', $context);
+        $this->outputHTML('<font color="yellow">' . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -443,7 +436,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function info($message, array $context = [])
     {
-        $this->outputHTML("<font color='gray'>" . htmlspecialchars($message) . '</font>', $context);
+        $this->outputHTML('<font color="gray">' . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
@@ -453,7 +446,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function debug($message, array $context = [])
     {
-        $this->outputHTML("<font color='cyan'>" . htmlspecialchars($message) . '</font>', $context);
+        $this->outputHTML('<font color="cyan">' . htmlspecialchars($message) . '</font>', $context);
     }
 
     /**
