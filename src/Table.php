@@ -505,7 +505,7 @@ class Table extends Lister
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
-        foreach ($this->model as $this->current_id => $ignore) {
+        foreach ($this->model as $ignore) {
             $this->current_row = $this->model;
             if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                 continue;
