@@ -269,7 +269,7 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if (($this->isJsRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
+        if (($this->isJsUrlRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
                 && !isset($_GET['__atk_tab'])) {
             $this->outputResponseJSON([
                 'success' => false,
@@ -547,7 +547,7 @@ class App
         }
 
         $output = ob_get_clean();
-        if ($this->isJsRequest()) {
+        if ($this->isJsUrlRequest()) {
             $this->outputResponseJSON($output);
         } else {
             $this->outputResponseHTML($output);
@@ -750,10 +750,8 @@ class App
 
     /**
      * Request was made using App::jsURL().
-     *
-     * @return bool
      */
-    public function isJsRequest()
+    public function isJsUrlRequest(): bool
     {
         return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
     }
@@ -1010,6 +1008,17 @@ class App
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new Exception('JSON encode error: ' . json_last_error_msg());
         }
+
+        // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
+        // replace large JSON integers only, do not replace anything in JSON/JS strings
+        $json = preg_replace_callback('~(?:"(?:[^"\\\\]+|\\\\.)*")?+\K|(?:\'(?:[^\'\\\\]+|\\\\.)*\')?+\K|(?:^|[{\[,:])'
+            . '[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function ($matches) {
+                if ($matches[0] === '' || abs((int) $matches[0]) < (1 << 53)) {
+                    return $matches[0];
+                }
+
+                return '"' . $matches[0] . '"';
+            }, $json);
 
         return $json;
     }
