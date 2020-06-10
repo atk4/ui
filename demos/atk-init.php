@@ -44,9 +44,8 @@ if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = $rootUrl . 'public';
 }
 
-// enable layout change.
-$layout = '\\atk4\\ui\Layout\\' . ($app->stickyGET('layout') ?: 'Maestro');
-$app->initLayout(new $layout());
+// allow custom layout override
+$app->initLayout($app->stickyGET('layout') ? 'atk4\ui\Layout\\' . $app->stickyGET('layout') : \atk4\ui\Layout\Maestro::class);
 
 $layout = $app->layout;
 // Need for phpunit only for producing right url.
