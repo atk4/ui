@@ -21,7 +21,7 @@ Feature: JS
   And I don't see button "Hide button C"
 
 #  wait for DOM to complete button hiding
-  And I wait 500
+  And I sleep "500" ms
 
   When I press button "Callback Test"
   And  wait for callback

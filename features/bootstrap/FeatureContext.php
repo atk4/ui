@@ -28,13 +28,13 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
-     * Wait for a certain time in ms.
+     * Sleep for a certain time in ms.
      *
-     * @Then I wait :arg1
+     * @Then I sleep :arg1 ms
      *
      * @param $arg1
      */
-    public function iWait($arg1)
+    public function iSleep($arg1)
     {
         $this->getSession()->wait($arg1);
     }
