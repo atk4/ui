@@ -215,7 +215,7 @@ class Grid extends View
      *
      * @throws Exception
      */
-    public function setIpp($ipp, $label = 'Item per pages:')
+    public function setIpp($ipp, $label = 'Items per page:')
     {
         if (is_array($ipp)) {
             $this->addItemsPerPageSelector($ipp, $label);
@@ -236,7 +236,7 @@ class Grid extends View
      *
      * @return $this
      */
-    public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Item per pages:')
+    public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Items per page:')
     {
         if ($ipp = $this->container->stickyGet('ipp')) {
             $this->ipp = $ipp;
