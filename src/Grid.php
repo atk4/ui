@@ -215,7 +215,7 @@ class Grid extends View
      *
      * @throws Exception
      */
-    public function setIpp($ipp, $label = 'Item per pages:')
+    public function setIpp($ipp, $label = 'Items per page:')
     {
         if (is_array($ipp)) {
             $this->addItemsPerPageSelector($ipp, $label);
