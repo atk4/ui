@@ -236,7 +236,7 @@ class Grid extends View
      *
      * @return $this
      */
-    public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Item per pages:')
+    public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Items per page:')
     {
         if ($ipp = $this->container->stickyGet('ipp')) {
             $this->ipp = $ipp;
