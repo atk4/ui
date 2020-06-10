@@ -16,14 +16,14 @@ class Button extends View
      *
      * @var string|array|Icon
      */
-    public $icon = null;
+    public $icon;
 
     /**
      * Additional icon that can appear on the right of the button.
      *
      * @var string|array|Icon
      */
-    public $iconRight = null;
+    public $iconRight;
 
     public function renderView()
     {
@@ -43,11 +43,9 @@ class Button extends View
 
         if ($this->iconRight) {
             if ($this->icon) {
-                throw new Exception([
-                    'Cannot use icon and iconRight simultaniously',
-                    'icon'      => $this->icon,
-                    'iconRight' => $this->iconRight,
-                ]);
+                throw (new Exception('Cannot use icon and iconRight simultaniously'))
+                    ->addMoreInfo('icon', $this->icon)
+                    ->addMoreInfo('iconRight', $this->iconRight);
             }
 
             if (!is_object($this->iconRight)) {

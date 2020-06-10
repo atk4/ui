@@ -31,12 +31,13 @@ class ArgumentForm extends Basic
 
         */
 
-        \atk4\ui\Header::addTo($this, [$this->action->caption, 'subHeader'=>$this->action->getDescription()]);
+        \atk4\ui\Header::addTo($this, [$this->action->caption, 'subHeader' => $this->action->getDescription()]);
         $this->form = Form::addTo($this);
 
-        foreach ($this->action->args as $key=>$val) {
+        foreach ($this->action->args as $key => $val) {
             if (is_numeric($key)) {
-                throw new Exception(['Action arguments must be named', 'args'=>$this->actions->args]);
+                throw (new Exception('Action arguments must be named'))
+                    ->addMoreInfo('args', $this->actions->args);
             }
 
             if ($val instanceof Model) {
@@ -45,7 +46,7 @@ class ArgumentForm extends Basic
 
             if (isset($val['model'])) {
                 $val['model'] = $this->factory($val['model']);
-                $this->form->addField($key, ['Lookup'])->setModel($val['model']);
+                $this->form->addField($key, [\atk4\ui\FormField\Lookup::class])->setModel($val['model']);
             } else {
                 $this->form->addField($key, null, $val);
             }
@@ -53,13 +54,11 @@ class ArgumentForm extends Basic
 
         $this->form->buttonSave->set('Run');
 
-        $this->form->onSubmit(function ($f) {
-
+        $this->form->onSubmit(function (Form $form) {
             // set arguments from the model
-            $this->setArguments($f->model->get());
+            $this->setArguments($form->model->get());
 
             return $this->jsExecute();
-
             //return [$this->console->js()->show(), $this->console->sse];
         });
 

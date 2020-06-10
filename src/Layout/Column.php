@@ -13,11 +13,10 @@ namespace atk4\ui\Layout;
  */
 class Column extends Generic
 {
-    // @inheritdoc
     public $defaultTemplate = 'layout/column.html';
 
-    public $menu = null;
+    public $menu;
 
-    public $leftColumn = null;
-    public $rightColumn = null;
+    public $leftColumn;
+    public $rightColumn;
 }

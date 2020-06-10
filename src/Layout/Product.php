@@ -8,6 +8,5 @@ namespace atk4\ui\Layout;
  */
 class Product extends Generic
 {
-    // @inheritdoc
     public $defaultTemplate = 'layout/product.html';
 }

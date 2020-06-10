@@ -14,7 +14,7 @@ class jsIntegrationTest extends AtkPhpunit\TestCase
         $html = $v->render();
         $this->assertNotNull($v->icon->id);
 
-        $this->assertNotEquals($v->id, $v->icon->id);
+        $this->assertNotSame($v->id, $v->icon->id);
     }
 
     public function testIDIntegrity2()
@@ -24,7 +24,7 @@ class jsIntegrationTest extends AtkPhpunit\TestCase
         $b2 = Button::addTo($v);
         $html = $v->render();
 
-        $this->assertNotEquals($b1->id, $b2->id);
+        $this->assertNotSame($b1->id, $b2->id);
     }
 
     /**
@@ -36,7 +36,7 @@ class jsIntegrationTest extends AtkPhpunit\TestCase
         $j = $v->js()->hide();
         $v->render();
 
-        $this->assertEquals('$("#b").hide()', $j->jsRender());
+        $this->assertSame('$("#b").hide()', $j->jsRender());
     }
 
     /**
@@ -48,7 +48,7 @@ class jsIntegrationTest extends AtkPhpunit\TestCase
         $j = $v->js(true)->hide();
         $v->getHTML();
 
-        $this->assertEquals('<script>
+        $this->assertSame('<script>
 $(function() {
   $("#b").hide();
 })</script>', $v->getJS());
@@ -63,7 +63,7 @@ $(function() {
         $v->js('click')->hide();
         $v->getHTML();
 
-        $this->assertEquals('<script>
+        $this->assertSame('<script>
 $(function() {
   $("#b").bind("click",function() {
     $("#b").hide();
@@ -83,7 +83,7 @@ $(function() {
         $b1->on('click', $b2->js()->hide());
         $bb->getHTML();
 
-        $this->assertEquals('<script>
+        $this->assertSame('<script>
 $(function() {
   $("#b1").on("click",function(event) {
     event.preventDefault();

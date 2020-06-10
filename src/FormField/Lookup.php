@@ -60,7 +60,7 @@ class Lookup extends Input
      * true = will use "Add new" label
      * string = will use your string
      *
-     * @var null|bool|string
+     * @var bool|string|null
      */
     public $plus = false;
 
@@ -102,7 +102,7 @@ class Lookup extends Input
      *
      * For example, using this setting will automatically submit
      * form when field value is changes.
-     * $form->addField('field', ['Lookup', 'settings'=>['allowReselection' => true,
+     * $form->addField('field', [\atk4\ui\FormField\Lookup::class, 'settings'=>['allowReselection' => true,
      *                           'selectOnKeydown' => false,
      *                           'onChange'        => new atk4\ui\jsExpression('function(value,t,c){
      *                                                          if ($(this).data("value") !== value) {
@@ -120,7 +120,7 @@ class Lookup extends Input
      * Define callback for generating the row data
      * If left empty default callback Lookup::defaultRenderRow is used.
      *
-     * @var null|callable
+     * @var callable|null
      */
     public $renderRowFunction;
 
@@ -138,7 +138,7 @@ class Lookup extends Input
         parent::init();
 
         $this->template->set([
-            'input_id'    => $this->name . '-ac',
+            'input_id' => $this->name . '-ac',
             'placeholder' => $this->placeholder,
         ]);
 
@@ -199,12 +199,8 @@ class Lookup extends Input
 
     /**
      * Renders the Lookup row depending on properties set.
-     *
-     * @param array $row
-     *
-     * @return mixed
      */
-    public function renderRow($row)
+    public function renderRow(\atk4\data\Model $row): array
     {
         $renderRowFunction = is_callable($this->renderRowFunction) ? $this->renderRowFunction : [__CLASS__, 'defaultRenderRow'];
 
@@ -214,21 +210,19 @@ class Lookup extends Input
     /**
      * Default callback for generating data row.
      *
-     * @param Lookup           $field
-     * @param \atk4\data\Model $row
-     * @param string           $key
+     * @param Lookup $field
+     * @param string $key
      *
      * @return string[]
      */
-    public static function defaultRenderRow($field, $row, $key = null)
+    public static function defaultRenderRow($field, \atk4\data\Model $row, $key = null)
     {
         $id_field = $field->id_field ?: $row->id_field;
         $title_field = $field->title_field ?: $row->title_field;
 
-        // IMPORTANT: always convert data to string, otherwise numbers can be rounded by JS
         return [
-            'value' => (string) $row[$id_field],
-            'title' => (string) $row[$title_field],
+            'value' => $row->get($id_field),
+            'title' => $row->get($title_field),
         ];
     }
 
@@ -249,9 +243,9 @@ class Lookup extends Input
 
         $buttonSeed = is_string($buttonSeed) ? ['content' => $buttonSeed] : $buttonSeed;
 
-        $defaultSeed = ['Button', 'disabled' => ($this->disabled || $this->readonly)];
+        $defaultSeed = [\atk4\ui\Button::class, 'disabled' => ($this->disabled || $this->readonly)];
 
-        $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed), null, 'atk4\ui');
+        $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed));
 
         if ($this->form) {
             $vp = \atk4\ui\VirtualPage::addTo($this->form);
@@ -266,7 +260,7 @@ class Lookup extends Input
 
             $form->setModel($model->onlyFields($this->plus['fields'] ?? []));
 
-            $form->onSubmit(function ($form) {
+            $form->onSubmit(function (\atk4\ui\Form $form) {
                 $form->model->save();
 
                 $ret = [
@@ -350,10 +344,10 @@ class Lookup extends Input
     public function getInput()
     {
         return $this->app->getTag('input', array_merge([
-            'name'     => $this->short_name,
-            'type'     => 'hidden',
-            'id'       => $this->id . '_input',
-            'value'    => $this->getValue(),
+            'name' => $this->short_name,
+            'type' => 'hidden',
+            'id' => $this->id . '_input',
+            'value' => $this->getValue(),
             'readonly' => $this->readonly ? 'readonly' : false,
             'disabled' => $this->disabled ? 'disabled' : false,
         ], $this->inputAttr));
@@ -381,7 +375,7 @@ class Lookup extends Input
     protected function initDropdown($chain)
     {
         $settings = array_merge([
-            'fields'      => ['name' => 'title'],
+            'fields' => ['name' => 'title'],
             'apiSettings' => array_merge(['url' => $this->getCallbackURL() . '&q={query}'], $this->apiConfig),
         ], $this->settings);
 
@@ -432,7 +426,7 @@ class Lookup extends Input
 
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
             } else {
-                $this->field->owner->data[$this->short_name] = null;
+                $this->field->setNull();
             }
         }
 

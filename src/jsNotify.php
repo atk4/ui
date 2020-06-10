@@ -10,7 +10,7 @@ class jsNotify implements jsExpressionable
     use \atk4\core\DIContainerTrait;
 
     public $options = [];
-    public $attachTo = null;
+    public $attachTo;
 
     public function __construct($options = null, $attachTo = null)
     {

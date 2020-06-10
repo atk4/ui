@@ -19,7 +19,8 @@ class CardTable extends Table
         }
 
         if (!$m->loaded()) {
-            throw new Exception(['Model must be loaded', 'model'=>$m]);
+            throw (new Exception('Model must be loaded'))
+                ->addMoreInfo('model', $m);
         }
 
         $data = [];
@@ -27,18 +28,18 @@ class CardTable extends Table
         $ui_values = $this->app ? $this->app->ui_persistence->typecastSaveRow($m, $m->get()) : $m->get();
 
         foreach ($m->get() as $key => $value) {
-            if (!$columndef || ($columndef && in_array($key, $columndef))) {
+            if (!$columndef || ($columndef && in_array($key, $columndef, true))) {
                 $data[] = [
-                    'id'   => $key,
-                    'field'=> $m->getField($key)->getCaption(),
-                    'value'=> $ui_values[$key],
+                    'id' => $key,
+                    'field' => $m->getField($key)->getCaption(),
+                    'value' => $ui_values[$key],
                 ];
             }
         }
 
         $this->_bypass = true;
         $mm = parent::setSource($data);
-        $this->addDecorator('value', ['Multiformat', function ($row, $field) use ($m) {
+        $this->addDecorator('value', [\atk4\ui\TableColumn\Multiformat::class, function ($row, $field) use ($m) {
             $field = $m->getField($row->data['id']);
             $ret = $this->decoratorFactory($field);
             if ($ret instanceof \atk4\ui\TableColumn\Money) {

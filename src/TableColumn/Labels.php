@@ -3,7 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
-use atk4\ui\Exception;
+use atk4\data\Model;
 
 /**
  * Class Labels.
@@ -15,23 +15,22 @@ use atk4\ui\Exception;
  */
 class Labels extends Generic
 {
-    /** @var array Array of allowed values. This have precedence over $field->values */
+    /** @var array Array of allowed values. This have precedence over->values */
     public $values;
 
     /**
-     * @param Model|array $row
-     * @param Field|null  $field
+     * @param Field|null $field
      *
      * @return array|void
      */
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         $values = $this->values ?? $field->values;
 
         $v = $field->get();
         $v = is_string($v) ? explode(',', $v) : $v;
 
-        $labels= [];
+        $labels = [];
         foreach ((array) $v as $id) {
             $id = trim($id);
 

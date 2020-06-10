@@ -9,7 +9,7 @@ class Paginator extends View
      *
      * @var int
      */
-    public $total = null;
+    public $total;
 
     /**
      * Override what is the current page. If not set, Paginator will look inside
@@ -17,7 +17,7 @@ class Paginator extends View
      *
      * @var int
      */
-    public $page = null;
+    public $page;
 
     /**
      * When there are more than $range*2+1 items, then current page will be surrounded by $range pages
@@ -32,9 +32,9 @@ class Paginator extends View
     /**
      * Set this if you want GET argument name to look beautifully.
      *
-     * @var null|string
+     * @var string|null
      */
-    public $urlTrigger = null;
+    public $urlTrigger;
 
     /**
      * If specified, must be instance of a view which will be reloaded on click.
@@ -42,7 +42,7 @@ class Paginator extends View
      *
      * @var View
      */
-    public $reload = null;
+    public $reload;
 
     /**
      * Add extra parameter to the reload view
@@ -147,7 +147,7 @@ class Paginator extends View
             $p[] = '...';
         }
 
-        for ($i = $start; $i <= $end; $i++) {
+        for ($i = $start; $i <= $end; ++$i) {
             $p[] = $i;
         }
 

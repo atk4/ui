@@ -8,9 +8,18 @@ use atk4\data\Reference\ContainsMany;
 /**
  * Implements a form.
  */
-class Form extends View //implements \ArrayAccess - temporarily so that our build script dont' complain
+class Form extends View
 {
     use \atk4\core\HookTrait;
+
+    /** @const string Executed when form is submitted */
+    public const HOOK_SUBMIT = self::class . '@submit';
+    /** @const string Executed when form is submitted */
+    public const HOOK_DISPLAY_ERROR = self::class . '@displayError';
+    /** @const string Executed when form is submitted */
+    public const HOOK_DISPLAY_SUCCESS = self::class . '@displaySuccess';
+    /** @const string Executed when self::loadPOST() method is called. */
+    public const HOOK_LOAD_POST = self::class . '@loadPOST';
 
     // {{{ Properties
 
@@ -42,7 +51,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * @var \atk4\ui\FormLayout\Generic
      */
-    public $layout = null;
+    public $layout;
 
     /**
      * List of fields currently registered with this form.
@@ -59,7 +68,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      *
      * @var Button|array|false Button object, seed or false to not show button at all
      */
-    public $buttonSave = ['Button', 'Save', 'primary'];
+    public $buttonSave = [Button::class, 'Save', 'primary'];
 
     /**
      * When form is submitted successfully, this template is used by method
@@ -162,17 +171,18 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     protected function initLayout()
     {
         if ($this->layout === null) {
-            $this->layout = 'Generic';
+            $this->layout = \atk4\ui\FormLayout\Generic::class;
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
-            $this->layout = $this->factory($this->layout, ['form'=>$this], 'atk4\ui\FormLayout');
+            $this->layout = $this->factory($this->layout, ['form' => $this]);
             $this->layout = $this->add($this->layout);
         } elseif (is_object($this->layout)) {
             $this->layout->form = $this;
             $this->add($this->layout);
         } else {
-            throw new Exception(['Unsupported specification of form layout. Can be array, string or object', 'layout' => $this->layout]);
+            throw (new Exception('Unsupported specification of form layout. Can be array, string or object'))
+                ->addMoreInfo('layout', $this->layout);
         }
 
         // Add save button in layout
@@ -225,12 +235,11 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * If $actualFields are not specified, then all "editable" fields
      * will be added.
      *
-     * @param \atk4\data\Model $model
-     * @param array            $fields
+     * @param array $fields
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $model, $fields = null)
+    public function setModel(Model $model, $fields = null)
     {
         // Model is set for the form and also for the current layout
         try {
@@ -246,11 +255,11 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     /**
      * Adds callback in submit hook.
      *
-     * @param callable $callback
+     * @return $this
      */
-    public function onSubmit($callback)
+    public function onSubmit(\Closure $callback)
     {
-        $this->onHook('submit', $callback);
+        $this->onHook(self::HOOK_SUBMIT, $callback);
 
         return $this;
     }
@@ -277,8 +286,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function error($fieldName, $str)
     {
         // by using this hook you can overwrite default behavior of this method
-        if ($this->hookHasCallbacks('displayError')) {
-            return $this->hook('displayError', [$fieldName, $str]);
+        if ($this->hookHasCallbacks(self::HOOK_DISPLAY_ERROR)) {
+            return $this->hook(self::HOOK_DISPLAY_ERROR, [$fieldName, $str]);
         }
 
         $jsError = [$this->js()->form('add prompt', $fieldName, $str)];
@@ -302,8 +311,8 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     {
         $response = null;
         // by using this hook you can overwrite default behavior of this method
-        if ($this->hookHasCallbacks('displaySuccess')) {
-            return $this->hook('displaySuccess', [$success, $sub_header]);
+        if ($this->hookHasCallbacks(self::HOOK_DISPLAY_SUCCESS)) {
+            return $this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $sub_header]);
         }
 
         if ($success instanceof View) {
@@ -320,7 +329,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
 
             $response = $this->js()->html($response->render());
         } else {
-            $response = new Message([$success, 'type'=>'success', 'icon'=>'check']);
+            $response = new Message([$success, 'type' => 'success', 'icon' => 'check']);
             $response->app = $this->app;
             $response->init();
             $response->text->addParagraph($sub_header);
@@ -345,7 +354,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function addField($name, $decorator = null, $field = null)
     {
         if (!$this->model) {
-            $this->model = new \atk4\ui\misc\ProxyModel();
+            $this->model = new \atk4\ui\Misc\ProxyModel();
         }
 
         return $this->layout->addField($name, $decorator, $field);
@@ -439,22 +448,23 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
         if ($f && !$f instanceof \atk4\data\Field) {
-            throw new Exception(['Argument 1 for decoratorFactory must be \atk4\data\Field or null', 'f' => $f]);
+            throw (new Exception('Argument 1 for decoratorFactory must be \atk4\data\Field or null'))
+                ->addMoreInfo('f', $f);
         }
 
-        $fallback_seed = ['Line'];
+        $fallback_seed = [\atk4\ui\FormField\Line::class];
 
         if ($f->type === 'array' && $f->reference) {
             $limit = ($f->reference instanceof ContainsMany) ? 0 : 1;
             $model = $f->reference->refModel();
-            $fallback_seed = ['MultiLine', 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
-        } elseif ($f->type != 'boolean') {
+            $fallback_seed = [\atk4\ui\FormField\MultiLine::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
+        } elseif ($f->type !== 'boolean') {
             if ($f->enum) {
-                $fallback_seed = ['DropDown', 'values' => array_combine($f->enum, $f->enum)];
+                $fallback_seed = [\atk4\ui\FormField\DropDown::class, 'values' => array_combine($f->enum, $f->enum)];
             } elseif ($f->values) {
-                $fallback_seed = ['DropDown', 'values' => $f->values];
+                $fallback_seed = [\atk4\ui\FormField\DropDown::class, 'values' => $f->values];
             } elseif (isset($f->reference)) {
-                $fallback_seed = ['Lookup', 'model' => $f->reference->refModel()];
+                $fallback_seed = [\atk4\ui\FormField\Lookup::class, 'model' => $f->reference->refModel()];
             }
         }
 
@@ -474,13 +484,12 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
         );
 
         $defaults = [
-            'form'       => $this,
-            'field'      => $f,
+            'form' => $this,
+            'field' => $f,
             'short_name' => $f->short_name,
         ];
 
-        /* @var TYPE_NAME $this */
-        return $this->factory($seed, $defaults, 'atk4\ui\FormField');
+        return $this->factory($seed, $defaults);
     }
 
     /**
@@ -489,14 +498,14 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
      * @var array Describes how factory converts type to decorator seed
      */
     protected $typeToDecorator = [
-        'boolean'  => 'CheckBox',
-        'text'     => 'TextArea',
-        'string'   => 'Line',
-        'password' => 'Password',
-        'datetime' => 'Calendar',
-        'date'     => ['Calendar', 'type' => 'date'],
-        'time'     => ['Calendar', 'type' => 'time', 'ampm' => false],
-        'money'    => 'Money',
+        'boolean' => FormField\CheckBox::class,
+        'text' => FormField\TextArea::class,
+        'string' => FormField\Line::class,
+        'password' => FormField\Password::class,
+        'datetime' => FormField\Calendar::class,
+        'date' => [FormField\Calendar::class, 'type' => 'date'],
+        'time' => [FormField\Calendar::class, 'type' => 'time', 'ampm' => false],
+        'money' => FormField\Money::class,
     ];
 
     /**
@@ -506,7 +515,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
     {
         $post = $_POST;
 
-        $this->hook('loadPOST', [&$post]);
+        $this->hook(self::HOOK_LOAD_POST, [&$post]);
         $errors = [];
 
         foreach ($this->fields as $key => $field) {
@@ -584,7 +593,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
             try {
                 ob_start();
                 $this->loadPOST();
-                $response = $this->hook('submit');
+                $response = $this->hook(self::HOOK_SUBMIT);
                 $output = ob_get_clean();
 
                 if ($output) {
@@ -597,7 +606,7 @@ class Form extends View //implements \ArrayAccess - temporarily so that our buil
                 }
 
                 if (!$response) {
-                    if (!$this->model instanceof \atk4\ui\misc\ProxyModel) {
+                    if (!$this->model instanceof \atk4\ui\Misc\ProxyModel) {
                         $this->model->save();
 
                         return $this->success('Form data has been saved');

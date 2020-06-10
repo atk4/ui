@@ -2,6 +2,8 @@
 
 namespace atk4\ui\TableColumn;
 
+use atk4\data\Model;
+
 /**
  * Class NoValue.
  *
@@ -27,11 +29,11 @@ class NoValue extends Generic
     /** @var string */
     public $no_value = ' --- ';
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         $actualValue = $field->get();
 
-        if (empty($actualValue) || is_null($actualValue)) {
+        if (empty($actualValue) || $actualValue === null) {
             return [$field->short_name => $this->no_value];
         }
 

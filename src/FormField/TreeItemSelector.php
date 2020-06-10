@@ -24,14 +24,14 @@ class TreeItemSelector extends Generic
      *
      * @var null
      */
-    public $itemSelectorTemplate = null;
+    public $itemSelectorTemplate;
 
     /**
      * The tree item selector View.
      *
-     * @var null|\atk4\ui\View
+     * @var \atk4\ui\View|null
      */
-    public $itemSelector = null;
+    public $itemSelector;
 
     /**
      * The css class selector for where to apply loading class name.
@@ -71,7 +71,7 @@ class TreeItemSelector extends Generic
      *
      * @var null | jsCallback
      */
-    private $cb = null;
+    private $cb;
 
     public function init(): void
     {
@@ -91,7 +91,7 @@ class TreeItemSelector extends Generic
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
      *
-     * @param callable $fx The function to execute when callback is fired.
+     * @param callable $fx the function to execute when callback is fired
      *
      * @throws \atk4\core\Exception
      * @throws \atk4\ui\Exception
@@ -135,10 +135,10 @@ class TreeItemSelector extends Generic
     public function getInput()
     {
         return $this->app->getTag('input', [
-            'name'        => $this->short_name,
-            'type'        => 'hidden',
-            'value'       => $this->getValue(),
-            'readonly'    => true,
+            'name' => $this->short_name,
+            'type' => 'hidden',
+            'value' => $this->getValue(),
+            'readonly' => true,
         ]);
     }
 
@@ -156,15 +156,15 @@ class TreeItemSelector extends Generic
         $this->itemSelector->vue(
             'atk-tree-item-selector',
             [
-                    'item'    => ['id' => 'atk-root', 'nodes' => $this->treeItems],
-                    'values'  => [], //need empty for Vue reactivity.
-                    'field'   => $this->short_name,
-                    'options' => [
-                        'mode'    => $this->allowMultiple ? 'multiple' : 'single',
-                        'url'     => $this->cb ? $this->cb->getJSURL() : null,
-                        'loader'  => $this->loaderCssName,
-                    ],
-                ]
+                'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],
+                'values' => [], //need empty for Vue reactivity.
+                'field' => $this->short_name,
+                'options' => [
+                    'mode' => $this->allowMultiple ? 'multiple' : 'single',
+                    'url' => $this->cb ? $this->cb->getJSURL() : null,
+                    'loader' => $this->loaderCssName,
+                ],
+            ]
         );
     }
 }

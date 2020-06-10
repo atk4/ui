@@ -12,7 +12,7 @@ class Template extends Generic
      *
      * @var string
      */
-    public $template = null;
+    public $template;
 
     /**
      * call new TableColumn\Template('{$name} {$surname}');.

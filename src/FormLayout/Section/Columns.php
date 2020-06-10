@@ -4,8 +4,8 @@ namespace atk4\ui\FormLayout\Section;
 
 class Columns extends \atk4\ui\Columns
 {
-    public $formLayout = 'FormLayout/Generic';
-    public $form = null;
+    public $formLayout = \atk4\ui\FormLayout\Generic::class;
+    public $form;
 
     /**
      * Add new vertical column.

@@ -16,7 +16,7 @@ class Radio extends Generic
      *
      * @var Lister
      */
-    public $lister = null;
+    public $lister;
 
     /**
      * List of values.
@@ -55,14 +55,14 @@ class Radio extends Generic
             $this->addClass('disabled');
         }
 
-        $this->lister->onHook('beforeRow', function ($lister) use ($value) {
+        $this->lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) use ($value) {
             if ($this->readonly) {
-                $lister->t_row->set('disabled', $value != $lister->model->id ? 'disabled="disabled"' : '');
+                $lister->t_row->set('disabled', $value !== (string) $lister->model->id ? 'disabled="disabled"' : '');
             } elseif ($this->disabled) {
                 $lister->t_row->set('disabled', 'disabled="disabled"');
             }
 
-            $lister->t_row->set('checked', $value == $lister->model->id ? 'checked' : '');
+            $lister->t_row->set('checked', $value === (string) $lister->model->id ? 'checked' : '');
         });
 
         return parent::renderView();

@@ -3,6 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\core\FactoryTrait;
+use atk4\data\Model;
 
 /**
  * Formatting action buttons column.
@@ -37,7 +38,7 @@ class ActionButtons extends Generic
      * Returns button object
      *
      * @param \atk4\ui\View|string                        $button
-     * @param null|callable|\atk4\data\UserAction\Generic $action
+     * @param callable|\atk4\data\UserAction\Generic|null $action
      * @param bool                                        $confirm
      * @param bool                                        $isDisabled
      *
@@ -76,11 +77,11 @@ class ActionButtons extends Generic
         }
 
         if (!is_object($button)) {
-            $button = $this->factory('Button', [$button, 'id' => false], 'atk4\ui');
+            $button = $this->factory(\atk4\ui\Button::class, [$button, 'id' => false]);
         }
 
         if ($button->icon && !is_object($button->icon)) {
-            $button->icon = $this->factory('Icon', [$button->icon, 'id' => false], 'atk4\ui');
+            $button->icon = $this->factory(\atk4\ui\Icon::class, [$button->icon, 'id' => false]);
         }
 
         $button->app = $this->table->app;
@@ -125,7 +126,7 @@ class ActionButtons extends Generic
             call_user_func($callback, $t, $this->app->stickyGet($this->name));
         });
 
-        return $this->addButton($button, $modal->show(array_merge([$this->name=>$this->owner->jsRow()->data('id')], $args)));
+        return $this->addButton($button, $modal->show(array_merge([$this->name => $this->owner->jsRow()->data('id')], $args)));
     }
 
     /**
@@ -155,7 +156,7 @@ class ActionButtons extends Generic
         return '<div class="ui buttons">' . $output . '</div>';
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

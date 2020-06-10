@@ -55,7 +55,7 @@ You can also use Table with Array data source like this::
     $table->setSource($my_array);
 
     $table->addColumn('name');
-    $table->addColumn('surname', ['Link', 'url'=>'details.php?surname={$surname}']);
+    $table->addColumn('surname', [\atk4\ui\TableColumn\Link::class, 'url'=>'details.php?surname={$surname}']);
     $table->addColumn('birthdate', null, ['type'=>'date']);
 
 .. warning:: I encourage you to seek appropriate Agile Data persistence instead of
@@ -184,8 +184,8 @@ the "total" column value (as above) but using PHP math instead of doing it insid
 
     $table->setModel($order, ['name', 'price', 'amount', 'status']);
     $table->addColumn('total', new \atk4\data\Field\Calculated(
-        function($row) {
-            return $row['price'] * $row['amount'];
+        function(Model $row) {
+            return $row->get('price') * $row->get('amount');
         }));
 
 If you execute this code, you'll notice that the "total" column is now displayed last. If you
@@ -196,8 +196,8 @@ wish to position it before status, you can use the final format of addColumn()::
 
     $table->setModel($order, ['name', 'price', 'amount']);
     $table->addColumn('total', new \atk4\data\Field\Calculated(
-        function($row) {
-            return $row['price'] * $row['amount'];
+        function(Model $row) {
+            return $row->get('price') * $row->get('amount');
         }));
     $table->addColumn('status');
 
@@ -266,10 +266,10 @@ The tag will override model value. Here is example usage of :php:meth:`TableColu
             return '{$_expired}';
         }
 
-        function getHTMLTags($model)
+        function getHTMLTags(\atk4\data\Model $row)
         {
             return ['_expired'=>
-                $model['date'] < new \DateTime() ?
+                $row->get('date') < new \DateTime() ?
                 '<td class="danger">EXPIRED</td>' :
                 '<td></td>'
             ];
@@ -376,7 +376,7 @@ There are a few things to note:
 
 2. formatting is always applied in same order as defined - in example above Money first, Link after.
 
-3. output of the 'Money' decorator is used into Link decorator as if it would be value of cell, however
+3. output of the \atk4\ui\TableColumn\Money decorator is used into Link decorator as if it would be value of cell, however
    decorators have access to original value also. Decorator implementation is usually aware of combinations.
 
 :php:meth:`TableColumn\\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
@@ -509,12 +509,12 @@ There are several ways to make your code more readable::
 
 Or if you wish to use factory, the syntax is::
 
-    $table->addColumn('name', 'Generic')
+    $table->addColumn('name', \atk4\ui\TableColumn\Generic::class)
         ->addClass('right aligned', 'all');
 
 For setting an attribute you can use setAttr() method::
 
-    $table->addColumn('name', 'Generic')
+    $table->addColumn('name', \atk4\ui\TableColumn\Generic::class)
         ->setAttr('colspan', 2, 'all');
 
 Setting a new value to the attribute will override previous value.

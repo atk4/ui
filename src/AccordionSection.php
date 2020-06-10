@@ -14,14 +14,14 @@ class AccordionSection extends View
      *
      * @var string|null
      */
-    public $title = null;
+    public $title;
 
     /**
      * The accordion item virtual page.
      *
-     * @var null|VirtualPage
+     * @var VirtualPage|null
      */
-    public $virtualPage = null;
+    public $virtualPage;
 
     public $icon = 'dropdown';
 

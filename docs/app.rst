@@ -15,7 +15,7 @@ will be automatically created if you execute `$component->init()` or `$component
 In most use-scenarios, however, you would create instance of an App class yourself before other components::
 
     $app = new \atk4\ui\App('My App');
-    $app->initLayout('Centered');
+    $app->initLayout(\atk4\ui\Layout\Centered::class);
     LoremIpsum::addTo($app);
 
 As you add one component into another, they will automatically inherit reference to App class. App
@@ -80,7 +80,7 @@ active. (See :ref:`system_pattern`)::
 
             // App class may be used for pages that do not require authentication
             if (!$auth) {
-                $this->initLayout('Centered');
+                $this->initLayout(\atk4\ui\Layout\Centered::class);
                 return;
             }
 
@@ -91,7 +91,7 @@ active. (See :ref:`system_pattern`)::
 
             // Make sure user is valid
             if(!$this->user->loaded()) {
-                $this->initLayout('Centered');
+                $this->initLayout(\atk4\ui\Layout\Centered::class);
                 Message::addTo($this, ['Login Required', 'error']);
                 Button::addTo($this, ['Login', 'primary'])->link('index.php');
                 exit;
@@ -100,7 +100,7 @@ active. (See :ref:`system_pattern`)::
             // Load company data (System) for present user
             $this->company = $this->user->ref('company_id');
 
-            $this->initLayout('Admin');
+            $this->initLayout(\atk4\ui\Layout\Admin::class);
 
             // Add more initialization here, such as a populating menu.
         }
@@ -158,7 +158,7 @@ Exception handling
 By default, App will also catch unhandled exceptions and will present them nicely to the user. If you have a
 better plan for exception, place your code inside a try-catch block.
 
-When Exception is caught, it's displayed using a 'Centered' layout and execution of original application is
+When Exception is caught, it's displayed using a Layout\Centered layout and execution of original application is
 terminated.
 
 Integration with other Frameworks
@@ -387,7 +387,7 @@ Adding the Layout
 
 Layout can be initialized through the app like this::
 
-    $app->initLayout('Centered');
+    $app->initLayout(\atk4\ui\Layout\Centered::class);
 
 This will initialize two new views inside the app::
 
@@ -397,7 +397,7 @@ This will initialize two new views inside the app::
 The first view is a HTML boilerplate - containing HEAD / BODY tags but not the body
 contents. It is a standard html5 doctype template.
 
-The layout will be selected based on your choice - 'Centered', 'Admin' etc. This will
+The layout will be selected based on your choice - Layout\Centered, Layout\Admin etc. This will
 not only change the overall page outline, but will also introduce some additional views.
 
 Each layout, depending on it's content, may come with several views that you can populate.
@@ -414,7 +414,7 @@ with top, left and right menu objects.
 
 Populating the left menu object is simply a matter of adding the right menu items to the layout menu::
 
-    $app->initLayout('Admin');
+    $app->initLayout(\atk4\ui\Layout\Admin::class);
     $layout = $app->layout;
 
     // Add item into menu

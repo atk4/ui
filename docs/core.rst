@@ -16,7 +16,7 @@ create this class explicitly, components generally will do it for you. The commo
 is::
 
     $app = new \atk4\ui\App('My App');
-    $app->initLayout('Centered');
+    $app->initLayout(\atk4\ui\Layout\Centered::class);
     LoremIpsum::addTo($app);
 
 .. toctree::

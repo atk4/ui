@@ -1,0 +1,25 @@
+| {LabeledGroup}
+div(class="{$field_class} field atk-form-group")
+    label {$label}
+    div(class="{$width} {$class} fields")
+        | {$Content}
+    | {$Hint}
+| {/}
+
+| {NoLabelGroup}
+div(class="{$field_class} field atk-form-group")
+    div(class="{$width} {$class} fields")
+        | {$Content}
+| {/}
+
+| {InputField}
+div(class="{$field_class} field")
+    label(for="{$label_for}") {$label}
+    | {$Input}
+    | {$Hint}
+| {/}
+
+| {InputNoLabel}
+div(class="{$field_class} field no-label")
+    | {$Input}{$Hint}
+| {/}

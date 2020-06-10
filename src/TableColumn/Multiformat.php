@@ -2,6 +2,11 @@
 
 namespace atk4\ui\TableColumn;
 
+use atk4\data\Field;
+use atk4\data\Model;
+use atk4\ui\Exception;
+use atk4\ui\Template;
+
 /**
  * Swaps out column decorators based on logic.
  */
@@ -10,9 +15,9 @@ class Multiformat extends Generic
     /**
      * @var callable Method to execute which will return array of seeds for decorators
      */
-    public $callback = null;
+    public $callback;
 
-    public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
+    public function getDataCellHTML(Field $f = null, $extra_tags = [])
     {
         return '{$c_' . $this->short_name . '}';
     }
@@ -22,10 +27,11 @@ class Multiformat extends Generic
         $this->callback = $callback;
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         if (!$this->callback) {
-            throw new \atk4\ui\Exception(['Must specify a callback for column', 'column'=>$this]);
+            throw (new Exception('Must specify a callback for column'))
+                ->addMoreInfo('column', $this);
         }
 
         $decorators = call_user_func($this->callback, $row, $field);
@@ -72,7 +78,7 @@ class Multiformat extends Generic
             $html_tags = array_merge($c->getHTMLTags($row, $field), $html_tags);
         }
 
-        $template = \atk4\ui\Template::addTo($this->owner, [$cell]);
+        $template = Template::addTo($this->owner, [$cell]);
         $template->set($row);
         $template->setHTML($html_tags);
 

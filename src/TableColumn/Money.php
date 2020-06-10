@@ -2,6 +2,8 @@
 
 namespace atk4\ui\TableColumn;
 
+use atk4\data\Model;
+
 /**
  * Column for formatting money.
  */
@@ -23,7 +25,7 @@ class Money extends Generic
     public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
     {
         if (!isset($f)) {
-            throw new Exception(['Money column requires a field']);
+            throw new Exception('Money column requires a field');
         }
 
         return $this->getTag(
@@ -33,11 +35,11 @@ class Money extends Generic
         );
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         if ($field->get() < 0) {
             return ['_' . $this->short_name . '_class' => 'negative'];
-        } elseif (!$this->show_zero_values && $field->get() == 0) {
+        } elseif (!$this->show_zero_values && (float) $field->get() === 0.0) {
             return ['_' . $this->short_name . '_class' => '', $field->short_name => '-'];
         }
 

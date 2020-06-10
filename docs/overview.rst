@@ -117,7 +117,7 @@ clarifications::
 
     // Create Application object and initialize Admin Layout
     $app = new \atk4\ui\App('Offer tracking system');
-    $app->initLayout('Admin');
+    $app->initLayout(\atk4\ui\Layout\Admin::class);
 
     // Connect to database and place a fully-interactive CRUD
     $db = new \atk4\data\Persistence_SQL($dsn);
@@ -282,7 +282,7 @@ Using App class will utilize a minimum of 2 templates:
 
 As you add more components, they will appear inside your layout.
 
-You'll also find that a layout class such as :php:class:`Layout\Admin` will initialize
+You'll also find that a layout class such as :php:class:`Layout\\Admin` will initialize
 some components on its own - sidebar menu, top menu.
 
 .. image:: images/admin-layout.png

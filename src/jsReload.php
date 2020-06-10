@@ -12,14 +12,14 @@ class jsReload implements jsExpressionable
      *
      * @var View
      */
-    public $view = null;
+    public $view;
 
     /**
      * A Js function to execute after reload is complete and onSuccess is execute.
      *
      * @var jsExpression
      */
-    public $afterSuccess = null;
+    public $afterSuccess;
 
     /**
      * If defined, they will be added at the end of your URL.
@@ -53,11 +53,11 @@ class jsReload implements jsExpressionable
         $final = (new jQuery($this->view))
             ->atkReloadView(
                 [
-                    'uri'          => $this->view->jsURL(['__atk_reload'=>$this->view->name]),
-                    'uri_options'  => !empty($this->args) ? $this->args : null,
+                    'uri' => $this->view->jsURL(['__atk_reload' => $this->view->name]),
+                    'uri_options' => !empty($this->args) ? $this->args : null,
                     'afterSuccess' => $this->afterSuccess ? $this->afterSuccess->jsRender() : null,
-                    'apiConfig'    => !empty($this->apiConfig) ? $this->apiConfig : null,
-                    'storeName'    => $this->includeStorage ? $this->view->name : null,
+                    'apiConfig' => !empty($this->apiConfig) ? $this->apiConfig : null,
+                    'storeName' => $this->includeStorage ? $this->view->name : null,
                 ]
             );
 

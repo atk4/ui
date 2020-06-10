@@ -24,8 +24,8 @@ class TableTest extends AtkPhpunit\TestCase
         // multiple ways to add column which doesn't exist in model
         $t->addColumn('five', new \atk4\ui\TableColumn\Link('test.php?id=1'));
         $t->addColumn('six', [new \atk4\ui\TableColumn\Link('test.php?id=2')]);
-        $t->addColumn('seven', ['Link', ['id' => 3]]);
-        $t->addColumn('eight', 'Link');
+        $t->addColumn('seven', [\atk4\ui\TableColumn\Link::class, ['id' => 3]]);
+        $t->addColumn('eight', \atk4\ui\TableColumn\Link::class);
         $t->addColumn('nine');
 
         $t->render();

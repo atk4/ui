@@ -68,9 +68,11 @@ class UI extends \atk4\data\Persistence
         switch ($f->type) {
         case 'boolean':
             $value = $value ? $this->yes : $this->no;
+
             break;
         case 'money':
             $value = ($this->currency ? $this->currency . ' ' : '') . number_format($value, $this->currency_decimals);
+
             break;
         case 'date':
         case 'datetime':
@@ -83,17 +85,19 @@ class UI extends \atk4\data\Persistence
                 $format = $f->persist_format ?: $formats[$f->type];
 
                 // datetime only - set to persisting timezone
-                if ($f->type == 'datetime' && isset($f->persist_timezone)) {
+                if ($f->type === 'datetime' && isset($f->persist_timezone)) {
                     $value = new $dt_class($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
                     $value->setTimezone(new $tz_class($f->persist_timezone));
                 }
                 $value = $value->format($format);
             }
+
             break;
         case 'array':
         case 'object':
             // don't encode if we already use some kind of serialization
             $value = $f->serialize ? $value : json_encode($value);
+
             break;
         }
 
@@ -110,12 +114,10 @@ class UI extends \atk4\data\Persistence
             try {
                 $new_value = $this->serializeLoadField($f, $value);
             } catch (\Exception $e) {
-                throw new Exception([
-                    'Value must be ' . $f->serialize,
-                    'serializator'=> $f->serialize,
-                    'value'       => $value,
-                    'field'       => $f,
-                ]);
+                throw (new Exception('Unable to serialize field value on load'))
+                    ->addMoreInfo('serializator', $f->serialize)
+                    ->addMoreInfo('value', $value)
+                    ->addMoreInfo('field', $f);
             }
             $value = $new_value;
         }
@@ -131,9 +133,11 @@ class UI extends \atk4\data\Persistence
             break;
         case 'boolean':
             $value = (bool) $value;
+
             break;
         case 'money':
             $value = str_replace(',', '', $value);
+
             break;
         case 'date':
         case 'datetime':
@@ -147,16 +151,22 @@ class UI extends \atk4\data\Persistence
 
             // datetime only - set from persisting timezone
             $valueStr = $value;
-            if ($f->type == 'datetime' && isset($f->persist_timezone)) {
+            if ($f->type === 'datetime' && isset($f->persist_timezone)) {
                 $value = $dt_class::createFromFormat($format, $value, new $tz_class($f->persist_timezone));
                 if ($value === false) {
-                    throw new Exception(['Incorrectly formatted datetime', 'format' => $format, 'value' => $valueStr, 'field' => $f]);
+                    throw (new Exception('Incorrectly formatted datetime'))
+                        ->addMoreInfo('format', $format)
+                        ->addMoreInfo('value', $valueStr)
+                        ->addMoreInfo('field', $f);
                 }
                 $value->setTimeZone(new $tz_class(date_default_timezone_get()));
             } else {
                 $value = $dt_class::createFromFormat($format, $value);
                 if ($value === false) {
-                    throw new Exception(['Incorrectly formatted date/time', 'format' => $format, 'value' => $valueStr, 'field' => $f]);
+                    throw (new Exception('Incorrectly formatted date/time'))
+                        ->addMoreInfo('format', $format)
+                        ->addMoreInfo('value', $valueStr)
+                        ->addMoreInfo('field', $f);
                 }
             }
 
@@ -187,7 +197,6 @@ class UI extends \atk4\data\Persistence
 
         $result = [];
         foreach ($row as $key => $value) {
-
             // Look up field object
             $f = $m->hasField($key);
 
@@ -198,6 +207,7 @@ class UI extends \atk4\data\Persistence
             // we will leave it as-is.
             if (!$f) {
                 $result[$field] = $value;
+
                 continue;
             }
 

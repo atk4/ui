@@ -2,6 +2,8 @@
 
 namespace atk4\ui\TableColumn;
 
+use atk4\data\Model;
+
 /**
  * Implements Column helper for grid.
  */
@@ -29,7 +31,7 @@ class Status extends Generic
     public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
     {
         if ($f === null) {
-            throw new Exception(['Status can be used only with model field']);
+            throw new Exception('Status can be used only with model field');
         }
 
         $attr = $this->getTagAttributes('body');
@@ -48,14 +50,15 @@ class Status extends Generic
         );
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         $cl = '';
 
         // search for a class
         foreach ($this->states as $class => $values) {
-            if (in_array($field->get(), $values)) {
+            if (in_array($field->get(), $values, true)) {
                 $cl = $class;
+
                 break;
             }
         }
@@ -67,21 +70,23 @@ class Status extends Generic
         switch ($cl) {
         case 'positive':
             $ic = 'checkmark';
+
             break;
         case 'negative':
             $ic = 'close';
+
             break;
         case 'default':
             $ic = 'question';
+
             break;
         default:
             $ic = '';
-
         }
 
         return [
             '_' . $field->short_name . '_status' => $cl . ' single line',
-            '_' . $field->short_name . '_icon'   => $ic,
+            '_' . $field->short_name . '_icon' => $ic,
         ];
     }
 }

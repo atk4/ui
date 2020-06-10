@@ -4,13 +4,67 @@
 /*---  Colors  ---*/
 /*---  Light Colors  ---*/
 /*---   Neutrals  ---*/
+/******* MAESTRO MENU *******/
+.atk-maestro-sidenav {
+  cursor: pointer;
+  color: white;
+}
+.atk-maestro-sidenav > .ui.grid > .atk-maestro-menu-items {
+  display: none;
+}
+.atk-maestro-sidenav > .ui.grid > .atk-maestro-menu-items.atk-visible {
+  display: flex;
+}
+/* Item without a group in menu */
+.ui.inverted.menu a.atk-maestro-sidenav.item {
+  margin-right: 8px;
+}
+.ui.inverted.menu a.atk-maestro-sidenav.item.active {
+  background-color: #2185D0;
+}
+.atk-maestro-sidenav .atk-submenu-toggle div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.atk-maestro-sidenav:not(active) .atk-submenu-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.atk-maestro-sidenav .ui.grid .row {
+  padding: 0px;
+}
+.atk-maestro-sidenav .ui.grid .column {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.atk-maestro-sidenav.active .atk-maestro-menu-title {
+  background-color: #2185D0;
+}
+.atk-maestro-sidenav > .ui.grid {
+  width: 260px;
+}
+.atk-sidenav-content {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.ui.vertical.menu > .atk-sidenav-content > .item:first-child::before {
+  display: initial !important;
+}
+/* A selected item in admin menu */
+.ui.sidebar.atk-sidenav .menu > .item.active {
+  background: none;
+}
+header.ui.fixed.horizontal.menu {
+  min-height: 48px;
+}
 .ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
   width: calc(100% -  260px );
 }
 .ui.visible.left.sidebar ~ .atk-mainContainer,
 .ui.visible.left.sidebar ~ footer.atk-footer {
   padding-left: 260px;
-  height: 50px;
 }
 .atk-dialog-content {
   min-height: 100px;
@@ -49,17 +103,7 @@ footer.atk-footer .ui.segment {
   margin: 0;
 }
 .ui.left.sidebar {
-  z-index: 103;
-}
-.ui.left.sidebar .item.atk-leftMenuClose {
-  display: none;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 999;
-}
-.ui.left.sidebar .item.atk-leftMenuClose i.icon {
-  margin-left: 0 !important;
+  z-index: 201;
 }
 .atk-right-panel {
   -webkit-transition: box-shadow 0.2s, right 0.2s;
@@ -75,7 +119,7 @@ footer.atk-footer .ui.segment {
   overflow-y: auto;
   position: fixed;
   width: 40%;
-  z-index: 1000;
+  z-index: 201;
 }
 .atk-right-panel.atk-visible {
   box-shadow: 0px 0 5px rgba(27, 28, 29, 0.2);
@@ -90,14 +134,13 @@ i.atk-panel-warning {
 i.atk-panel-warning.atk-visible {
   color: #F2711C;
 }
-.ui.left.sidebar.atk-admin-left-menu {
-  top: 47px;
+.ui.left.sidebar.atk-sidenav {
+  top: 48px;
 }
-.atk-admin-left-menu-content {
-  overflow: auto;
+.atk-sidenav-content {
   height: calc(100% -  98px );
 }
-.ui.left.sidebar.atk-admin-left-menu {
+.ui.left.sidebar.atk-sidenav {
   width: 260px;
 }
 .atk-table-dropdown {
@@ -165,9 +208,9 @@ i.atk-panel-warning.atk-visible {
   opacity: 0;
   pointer-events: none;
   position: fixed;
-  top: 47px;
+  top: 48px;
   width: 100%;
-  z-index: 102;
+  z-index: 101;
 }
 .atk-overlay.pushable .pusher:after {
   height: 100%;
@@ -191,21 +234,21 @@ i.atk-panel-warning.atk-visible {
     transform: translate3d(0, 0, 0);
     visibility: visible;
   }
-  body.atk-leftMenu-visible:after {
+  body.atk-sidenav-visible:after {
     left: 0;
     position: fixed;
     top: 0;
   }
-  body.atk-leftMenu-visible .ui.left.sidebar {
+  body.atk-sidenav-visible .ui.left.sidebar {
     opacity: 1;
     pointer-events: auto;
   }
-  body.atk-leftMenu-visible .ui.left.sidebar .atk-leftMenuClose {
+  body.atk-sidenav-visible .ui.left.sidebar .atk-leftMenuClose {
     display: block;
   }
 }
 @media (max-width: 991px) {
-  body.atk-leftMenu-visible .atk-overlay.pushable {
+  body.atk-sidenav-visible .atk-overlay.pushable {
     opacity: 1;
   }
 }

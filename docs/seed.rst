@@ -51,13 +51,13 @@ When calling :php:meth:`View::add()` not only your seed becomes an object, but i
 the :ref:`render tree`.
 
 Seed Components
-================
+===============
 
 For more information about seeds, merging seeds, factories and namespaces, see https://agile-core.readthedocs.io/.
 
 The most important points of a seed such as this one::
 
-    $seed = ['Button', 'hello', 'big red', 'icon'=>['book', 'red']];
+    $seed = [Button::class, 'hello', 'big red', 'icon'=>['book', 'red']];
 
 are:
 
@@ -85,11 +85,11 @@ Additional cases
 An individual object may add more ways to deal with seed. For example, when adding columns
 to your Table you can specify seed for the decorator: :php:class:`atk4\\ui\\TableColumn\\Generic`::
 
-    $table->addColumn('salary', 'Money');
+    $table->addColumn('salary', \atk4\ui\TableColumn\Money::class);
 
     // or
 
-    $table->addColumn('salary', ['Money']);
+    $table->addColumn('salary', [\atk4\ui\TableColumn\Money::class]);
 
     // or
 
@@ -99,7 +99,7 @@ to your Table you can specify seed for the decorator: :php:class:`atk4\\ui\\Tabl
 
     $table->addColumn('salary', [new \atk4\ui\TableColumn\Money()]);
 
-Note that addColumn uses default namespace of \atk4\ui\TableColumn when seeding objects. Some
+Note that addColumn uses default namespace of `\\atk4\\ui\\TableColumn` when seeding objects. Some
 other methods that use seeds are:
 
  - :php:meth:`Table::addColumn()`

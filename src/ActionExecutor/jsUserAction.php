@@ -34,7 +34,7 @@ class jsUserAction extends jsCallback implements Interface_
     /**
      * @var jsExpressionable array|callable jsExpression to return if action was successful, e.g "new jsToast('Thank you')"
      */
-    public $jsSuccess = null;
+    public $jsSuccess;
 
     /**
      * Set action to be execute.
@@ -53,9 +53,7 @@ class jsUserAction extends jsCallback implements Interface_
      * Note: Id can be set using a single value or a jsExpression, like:
      *      $ex->setAction($f_action, [$field->jsInput()->val(), 'path' => '.']);
      *
-     *
-     * @param Generic $action
-     * @param array   $urlArgs url Argument to pass when callback is trigger.
+     * @param array $urlArgs url Argument to pass when callback is trigger
      *
      * @throws Exception
      *
@@ -90,7 +88,7 @@ class jsUserAction extends jsCallback implements Interface_
                 $return = $this->action->execute(...$args);
                 $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $return]) : $this->jsSuccess;
 
-                $js = $this->hook('afterExecute', [$return, $id]) ?: $success ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+                $js = $this->hook(Basic::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
             }
 
             return $js;

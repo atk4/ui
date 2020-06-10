@@ -103,7 +103,7 @@ App class first and then continue with Layout initialization::
 Finally, if you prefer a more consise code, you can also use the following format::
 
     $app = new \atk4\ui\App('My App');
-    $top = $app->initLayout('View', ['ui'=>'segments']);
+    $top = $app->initLayout(\atk4\ui\View::class, ['ui'=>'segments']);
 
     $middle = View::addTo($top, ['ui'=>'segment', 'red']);
 

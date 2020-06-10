@@ -4,6 +4,7 @@ namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
 use atk4\ui\Table;
+use atk4\ui\TableColumn\ColorRating;
 
 class TableColumnColorRatingTest extends AtkPhpunit\TestCase
 {
@@ -14,14 +15,14 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
     public $table;
     public $column;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $arr = [
             'table' => [
                 1 => [
-                    'id'     => 1,
-                    'name'   => 'bar',
-                    'ref'    => 'ref123',
+                    'id' => 1,
+                    'name' => 'bar',
+                    'ref' => 'ref123',
                     'rating' => 3,
                 ],
             ],
@@ -40,11 +41,11 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
     public function testValueGreaterThanMax()
     {
         $this->table->addDecorator('rating', [
-            'ColorRating',
+            ColorRating::class,
             [
-                'min'    => 0,
-                'max'    => 2,
-                'steps'  => 3,
+                'min' => 0,
+                'max' => 2,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -53,12 +54,12 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
             ],
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             '<td>{$name}</td><td>{$ref}</td><td style="{$_colorrating_color_rating}">{$rating}</td>',
             $this->table->getDataRowHTML()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color:#00ff00;">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -67,11 +68,11 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
     public function testValueGreaterThanMaxNoColor()
     {
         $this->table->addDecorator('rating', [
-            'ColorRating',
+            ColorRating::class,
             [
-                'min'    => 0,
-                'max'    => 2,
-                'steps'  => 3,
+                'min' => 0,
+                'max' => 2,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -81,7 +82,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
             ],
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -90,11 +91,11 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
     public function testValueLowerThanMin()
     {
         $this->table->addDecorator('rating', [
-            'ColorRating',
+            ColorRating::class,
             [
-                'min'    => 4,
-                'max'    => 10,
-                'steps'  => 3,
+                'min' => 4,
+                'max' => 10,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -103,12 +104,12 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
             ],
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             '<td>{$name}</td><td>{$ref}</td><td style="{$_colorrating_color_rating}">{$rating}</td>',
             $this->table->getDataRowHTML()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color:#ff0000;">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -117,11 +118,11 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
     public function testValueLowerThanMinNoColor()
     {
         $this->table->addDecorator('rating', [
-            'ColorRating',
+            ColorRating::class,
             [
-                'min'    => 4,
-                'max'    => 10,
-                'steps'  => 3,
+                'min' => 4,
+                'max' => 10,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -131,7 +132,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
             ],
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -142,11 +143,11 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->expectException(\atk4\ui\Exception::class);
 
         $this->table->addDecorator('rating', [
-            'ColorRating',
+            ColorRating::class,
             [
-                'min'    => 3,
-                'max'    => 1,
-                'steps'  => 3,
+                'min' => 3,
+                'max' => 1,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -161,11 +162,11 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->expectException(\atk4\ui\Exception::class);
 
         $this->table->addDecorator('rating', [
-            'ColorRating',
+            ColorRating::class,
             [
-                'min'    => 3,
-                'max'    => 3,
-                'steps'  => 3,
+                'min' => 3,
+                'max' => 3,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -180,11 +181,11 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->expectException(\atk4\ui\Exception::class);
 
         $this->table->addDecorator('rating', [
-            'ColorRating',
+            ColorRating::class,
             [
-                'min'    => 1,
-                'max'    => 3,
-                'steps'  => 0,
+                'min' => 1,
+                'max' => 3,
+                'steps' => 0,
                 'colors' => [
                     '#FF0000',
                     '#FFFF00',
@@ -199,11 +200,11 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
         $this->expectException(\atk4\ui\Exception::class);
 
         $this->table->addDecorator('rating', [
-            'ColorRating',
+            ColorRating::class,
             [
-                'min'    => 1,
-                'max'    => 3,
-                'steps'  => 3,
+                'min' => 1,
+                'max' => 3,
+                'steps' => 3,
                 'colors' => [
                     '#FF0000',
                 ],

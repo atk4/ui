@@ -14,18 +14,18 @@ class Table extends Lister
     /**
      * If table is part of Grid or CRUD, we want to reload that instead of table.
      *
-     * @var View|null Ususally a Grid or Crud view that contains the table.
+     * @var View|null ususally a Grid or Crud view that contains the table
      */
-    public $reload = null;
+    public $reload;
 
     /**
-     * Column objects can service multiple columns. You can use it for your advancage by re-using the object
-     * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
-     * used.
+     * Column objects can service multiple columns. You can use it for your advantage by re-using the object
+     * when you pass it to addColumn(). If you omit the argument, then a column of a type TableColumn\Generic
+     * will be used.
      *
      * @var TableColumn\Generic
      */
-    public $default_column = null;
+    public $default_column;
 
     /**
      * Contains list of declared columns. Value will always be a column object.
@@ -96,9 +96,9 @@ class Table extends Lister
      * Set this if you want table to appear as sortable. This does not add any
      * mechanic of actual sorting - either implement manually or use Grid.
      *
-     * @var null|bool
+     * @var bool|null
      */
-    public $sortable = null;
+    public $sortable;
 
     /**
      * When $sortable is true, you can specify which column will appear to have
@@ -106,7 +106,7 @@ class Table extends Lister
      *
      * @var string
      */
-    public $sort_by = null;
+    public $sort_by;
 
     /**
      * When $sortable is true, and $sort_by is set, you can set this to
@@ -114,7 +114,7 @@ class Table extends Lister
      *
      * @var string
      */
-    public $sort_order = null;
+    public $sort_order;
 
     /**
      * Make action columns in table use
@@ -129,7 +129,7 @@ class Table extends Lister
     /**
      * Constructor.
      *
-     * @param null|string $class CSS class to add
+     * @param string|null $class CSS class to add
      */
     public function __construct($class = null)
     {
@@ -185,7 +185,7 @@ class Table extends Lister
         }
 
         if (!$this->model) {
-            $this->model = new \atk4\ui\misc\ProxyModel();
+            $this->model = new \atk4\ui\Misc\ProxyModel();
         }
 
         // This code should be vaugely consistent with FormLayout\Generic::addField()
@@ -213,21 +213,23 @@ class Table extends Lister
             $existingField->setDefaults($field);
             $field = $existingField;
         } elseif (is_object($field)) {
-            throw new Exception(['Duplicate field', 'name' => $name]);
+            throw (new Exception('Duplicate field'))
+                ->addMoreInfo('name', $name);
         } else {
             $field = $existingField;
         }
 
         if ($field === null) {
             // column is not associated with any model field
-            $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this], 'atk4\ui\TableColumn'));
+            $columnDecorator = $this->_add($this->factory($columnDecorator, ['table' => $this]));
         } elseif (is_array($columnDecorator) || is_string($columnDecorator)) {
             $columnDecorator = $this->decoratorFactory($field, array_merge(['columnData' => $name], is_string($columnDecorator) ? [$columnDecorator] : $columnDecorator));
         } elseif (!$columnDecorator) {
             $columnDecorator = $this->decoratorFactory($field, ['columnData' => $name]);
         } elseif (is_object($columnDecorator)) {
             if (!$columnDecorator instanceof \atk4\ui\TableColumn\Generic) {
-                throw new Exception(['Column decorator must descend from \atk4\ui\TableColumn\Generic', 'columnDecorator' => $columnDecorator]);
+                throw (new Exception('Column decorator must descend from ' . \atk4\ui\TableColumn\Generic::class))
+                    ->addMoreInfo('columnDecorator', $columnDecorator);
             }
             $columnDecorator->table = $this;
             if (!$columnDecorator->columnData) {
@@ -235,15 +237,18 @@ class Table extends Lister
             }
             $this->_add($columnDecorator);
         } else {
-            throw new Exception(['Value of $columnDecorator argument is incorrect', 'columnDecorator' => $columnDecorator]);
+            throw (new Exception('Value of $columnDecorator argument is incorrect'))
+                ->addMoreInfo('columnDecorator', $columnDecorator);
         }
 
-        if (is_null($name)) {
+        if ($name === null) {
             $this->columns[] = $columnDecorator;
         } elseif (!is_string($name)) {
-            throw new Exception(['Name must be a string', 'name' => $name]);
+            throw (new Exception('Name must be a string'))
+                ->addMoreInfo('name', $name);
         } elseif (isset($this->columns[$name])) {
-            throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name' => $name]);
+            throw (new Exception('Table already has column with $name. Try using addDecorator()'))
+                ->addMoreInfo('name', $name);
         } else {
             $this->columns[$name] = $columnDecorator;
         }
@@ -254,7 +259,7 @@ class Table extends Lister
     /**
      * Set Popup action for columns filtering.
      *
-     * @param array $cols An array with colomns name that need filtering.
+     * @param array $cols an array with colomns name that need filtering
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -268,7 +273,7 @@ class Table extends Lister
         // set filter to all column when null.
         if (!$cols) {
             foreach ($this->model->getFields() as $key => $field) {
-                if (! empty($this->columns[$key])) {
+                if (!empty($this->columns[$key])) {
                     $cols[] = $field->short_name;
                 }
             }
@@ -276,11 +281,11 @@ class Table extends Lister
 
         // create column popup.
         foreach ($cols as $colName) {
-            $col = $this->columns[$colName];
+            $col = $this->getColumn($colName);
             if ($col) {
                 $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
-                $pop->form->onSubmit(function ($f) use ($pop) {
+                $pop->form->onSubmit(function (Form $form) use ($pop) {
                     return new jsReload($this->reload);
                 });
                 //apply condition according to popup form.
@@ -297,12 +302,13 @@ class Table extends Lister
      *
      * @return TableColumn\Generic
      */
-    public function addDecorator($name, $seed)
+    public function addDecorator(string $name, $seed)
     {
         if (!$this->columns[$name]) {
-            throw new Exception(['No such column, cannot decorate', 'name' => $name]);
+            throw (new Exception('No such column, cannot decorate'))
+                ->addMoreInfo('name', $name);
         }
-        $decorator = $this->_add($this->factory($seed, ['table' => $this], 'atk4\ui\TableColumn'));
+        $decorator = $this->_add($this->factory($seed, ['table' => $this]));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
@@ -316,10 +322,8 @@ class Table extends Lister
      * Return array of column decorators for particular column.
      *
      * @param string $name Column name
-     *
-     * @return array
      */
-    public function getColumnDecorators($name)
+    public function getColumnDecorators(string $name): array
     {
         $dec = $this->columns[$name];
 
@@ -327,11 +331,24 @@ class Table extends Lister
     }
 
     /**
+     * Return column instance or first instance if using decorator.
+     *
+     * @return mixed
+     */
+    protected function getColumn(string $name)
+    {
+        // NOTE: It is not guaranteed that we will have only one element here. When adding decorators, the key will not
+        // contain the column instance anymore but an array with column instance set at 0 indexes and the rest as decorators.
+        // This is enough for fixing this issue right now. We can work on unifying decorator API in a separate PR.
+        return is_array($this->columns[$name]) ? $this->columns[$name][0] : $this->columns[$name];
+    }
+
+    /**
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param \atk4\data\Field $field    Data model field
-     * @param mixed            $seed Defaults to pass to factory() when decorator is initialized
+     * @param \atk4\data\Field $field Data model field
+     * @param mixed            $seed  Defaults to pass to factory() when decorator is initialized
      *
      * @return TableColumn\Generic
      */
@@ -341,17 +358,17 @@ class Table extends Lister
             $seed,
             $field->ui['table'] ?? null,
             $this->typeToDecorator[$field->type] ?? null,
-            [$this->default_column ? $this->default_column : 'Generic']
+            [$this->default_column ? $this->default_column : TableColumn\Generic::class]
         );
 
-        return $this->_add($this->factory($seed, ['table' => $this], 'atk4\ui\TableColumn'));
+        return $this->_add($this->factory($seed, ['table' => $this]));
     }
 
     protected $typeToDecorator = [
-        'password' => 'Password',
-        'money'    => 'Money',
-        'text'     => 'Text',
-        'boolean'  => ['Status', ['positive' => [true], 'negative' => [false]]],
+        'password' => TableColumn\Password::class,
+        'money' => TableColumn\Money::class,
+        'text' => TableColumn\Text::class,
+        'boolean' => [TableColumn\Status::class, ['positive' => [true], 'negative' => [false]]],
     ];
 
     /**
@@ -365,8 +382,7 @@ class Table extends Lister
      *       $columns = json_decode($w);
      *   });
      *
-     *
-     * @param callable $fx             A callback function with columns widths as parameter.
+     * @param callable $fx             a callback function with columns widths as parameter
      * @param int[]    $widths         An array of widths value, integer only. ex: [100,200,300,100]
      * @param array    $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
      *
@@ -379,7 +395,7 @@ class Table extends Lister
         $options = [];
         if ($fx && is_callable($fx)) {
             $cb = jsCallback::addTo($this);
-            $cb->set($fx, ['widths'=>'widths']);
+            $cb->set($fx, ['widths' => 'widths']);
             $options['uri'] = $cb->getJSURL();
         } elseif ($fx && is_array($fx)) {
             $widths = $fx;
@@ -401,8 +417,8 @@ class Table extends Lister
     /**
      * Add a dynamic paginator, i.e. when user is scrolling content.
      *
-     * @param int    $ipp          Number of item per page to start with.
-     * @param array  $options      An array with js Scroll plugin options.
+     * @param int    $ipp          number of item per page to start with
+     * @param array  $options      an array with js Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
      *
@@ -467,7 +483,8 @@ class Table extends Lister
     public function renderView()
     {
         if (!$this->columns) {
-            throw new Exception(['Table does not have any columns defined', 'columns' => $this->columns]);
+            throw (new Exception('Table does not have any columns defined'))
+                ->addMoreInfo('columns', $this->columns);
         }
 
         if ($this->sortable) {
@@ -490,7 +507,7 @@ class Table extends Lister
         $this->_rendered_rows_count = 0;
         foreach ($this->model as $this->current_id => $tmp) {
             $this->current_row = $this->model->get();
-            if ($this->hook('beforeRow') === false) {
+            if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                 continue;
             }
 
@@ -500,9 +517,9 @@ class Table extends Lister
 
             $this->renderRow();
 
-            $this->_rendered_rows_count++;
+            ++$this->_rendered_rows_count;
 
-            if ($this->hook('afterRow') === false) {
+            if ($this->hook(self::HOOK_AFTER_ROW) === false) {
                 continue;
             }
         }
@@ -515,7 +532,6 @@ class Table extends Lister
         } elseif ($this->totals_plan) {
             $this->t_totals->setHTML('cells', $this->getTotalsRowHTML());
             $this->template->appendHTML('Foot', $this->t_totals->render());
-        } else {
         }
 
         // stop jsPaginator if there are no more records to fetch
@@ -538,7 +554,7 @@ class Table extends Lister
             // Prepare row-specific HTML tags.
             $html_tags = [];
 
-            foreach ($this->hook('getHTMLTags', [$this->model]) as $ret) {
+            foreach ($this->hook(TableColumn\Generic::HOOK_GET_HTML_TAGS, [$this->model]) as $ret) {
                 if (is_array($ret)) {
                     $html_tags = array_merge($html_tags, $ret);
                 }
@@ -599,8 +615,8 @@ class Table extends Lister
     /**
      * Remove a row in table using javascript using a model id.
      *
-     * @param string $id         The model id where row need to be removed.
-     * @param string $transition The transition effect.
+     * @param string $id         the model id where row need to be removed
+     * @param string $transition the transition effect
      *
      * @return mixed
      */
@@ -615,7 +631,6 @@ class Table extends Lister
     public function updateTotals()
     {
         foreach ($this->totals_plan as $key => $val) {
-
             // if value is array, then we treat it as built-in or callable aggregate method
             if (is_array($val)) {
                 $f = $val[0]; // shortcut
@@ -628,29 +643,34 @@ class Table extends Lister
                 // closure support
                 // arguments - current value, key, \atk4\ui\Table object
                 if ($f instanceof \Closure) {
-                    $this->totals[$key] += ($f($this->model[$key], $key, $this) ?: 0);
+                    $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?: 0);
                 }
                 // built-in methods
                 elseif (is_string($f)) {
                     switch ($f) {
                         case 'sum':
-                            $this->totals[$key] += $this->model[$key];
+                            $this->totals[$key] += $this->model->get($key);
+
                             break;
                         case 'count':
-                            $this->totals[$key] += 1;
+                            ++$this->totals[$key];
+
                             break;
                         case 'min':
-                            if ($this->model[$key] < $this->totals[$key]) {
-                                $this->totals[$key] = $this->model[$key];
+                            if ($this->model->get($key) < $this->totals[$key]) {
+                                $this->totals[$key] = $this->model->get($key);
                             }
+
                             break;
                         case 'max':
-                            if ($this->model[$key] > $this->totals[$key]) {
-                                $this->totals[$key] = $this->model[$key];
+                            if ($this->model¨->get($key) > $this->totals[$key]) {
+                                $this->totals[$key] = $this->model->get($key);
                             }
+
                             break;
                         default:
-                            throw new Exception(['Aggregation method does not exist', 'method' => $f]);
+                            throw (new Exception('Aggregation method does not exist'))
+                                ->addMoreInfo('method', $f);
                     }
                 }
             }
@@ -667,7 +687,6 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-
             // If multiple formatters are defined, use the first for the header cell
             if (is_array($column)) {
                 $column = $column[0];
@@ -698,6 +717,7 @@ class Table extends Lister
             // if no totals plan, then show dash, but keep column formatting
             if (!isset($this->totals_plan[$name])) {
                 $output[] = $column->getTag('foot', '-');
+
                 continue;
             }
 
@@ -706,6 +726,7 @@ class Table extends Lister
                 // todo - format
                 $field = $this->model->getField($name);
                 $output[] = $column->getTotalsCellHTML($field, $this->totals[$name]);
+
                 continue;
             }
 
@@ -725,7 +746,6 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-
             // If multiple formatters are defined, use the first for the header cell
             $field = !is_int($name) ? $this->model->getField($name) : null;
 

@@ -21,21 +21,21 @@ class FilterPopup extends Popup
      *
      * @var Form
      */
-    public $form = null;
+    public $form;
 
     /**
      * The table field that need filtering.
      *
      * @var Field
      */
-    public $field = null;
+    public $field;
 
     /**
      * The view associate with this filter popup that need to be reload.
      *
      * @var View|null
      */
-    public $reload = null;
+    public $reload;
 
     /**
      * The Table Column triggering the poupup.
@@ -65,8 +65,8 @@ class FilterPopup extends Popup
         //load first and only record associate with this popup.
         $this->form->setModel($m->tryLoadAny());
 
-        $this->form->onSubmit(function ($f) {
-            $f->model->save();
+        $this->form->onSubmit(function (Form $form) {
+            $form->model->save();
             //trigger click action in order to close popup.
             //otherwise calling ->popup('hide') is not working as expected.
             return (new jQuery($this->triggerBy))->trigger('click');

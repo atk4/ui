@@ -18,9 +18,9 @@ class Centered extends Generic
     /**
      * @see \atk4\ui\App::$cdn
      *
-     * @var null|string
+     * @var string|null
      */
-    public $image = null;
+    public $image;
     public $image_alt = 'Logo';
 
     public function init(): void

@@ -57,7 +57,7 @@ class jsEvent implements jsExpressionable
      *
      * @var jsExpressionable
      */
-    public $jsSuccess = null;
+    public $jsSuccess;
 
     public function __construct(View $context = null, Generic $action = null, $modelId = null, array $args = [], $stateContext = null)
     {
@@ -141,7 +141,7 @@ class jsEvent implements jsExpressionable
                 $return = $this->action->execute(...$args);
                 $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
 
-                $js = $this->hook('afterExecute', [$return, $id]) ?: $success ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+                $js = $this->hook(Basic::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
             }
 
             return $js;
@@ -149,9 +149,9 @@ class jsEvent implements jsExpressionable
 
         $final = (new jQuery($this->context))
             ->atkAjaxec([
-                'uri'           => $this->cb->getJSURL(),
-                'uri_options'   => array_merge(['atk_event_id' => $this->modelId], $this->args),
-                'apiConfig'     => ['stateContext' => $this->stateContext],
+                'uri' => $this->cb->getJSURL(),
+                'uri_options' => array_merge(['atk_event_id' => $this->modelId], $this->args),
+                'apiConfig' => ['stateContext' => $this->stateContext],
             ]);
 
         return $final->jsRender();

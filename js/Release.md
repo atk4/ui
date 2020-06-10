@@ -1,5 +1,19 @@
 ## Release note
 
+### version 1.14.2 (2020-05-04)
+ - Build releases automatically on ui.agiletoolkit.org deploy
+
+### version 1.14.1 (2020-04-25)
+
+- add stop function to server-event.plugin;
+    You can now explicitly stop event.
+    Add option to close event on window beforeUnload
+
+### version 1.14.0 (2020-04-21)
+    
+- Add a jQuery plugin for layout that support side navigation.
+  - sidenav.plugin.js
+
 ### version 1.13.0 (2020-04-14)
     
 - New PanelService.

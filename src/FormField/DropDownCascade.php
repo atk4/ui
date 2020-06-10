@@ -8,7 +8,7 @@
  *       $f = Form::addTo($app);
  *       $f->addField('category_id', [DropDown::class, 'model' => new Category($db)])->set(3);
  *       $f->addField('sub_category_id', [DropDownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
- *       $f->addField('product_id', [DropDownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
+ *       $f->addField('product_id', [DropDownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);.
  */
 
 namespace atk4\ui\FormField;
@@ -18,17 +18,17 @@ use atk4\ui\Exception;
 
 class DropDownCascade extends DropDown
 {
-    /** @var null|string|Generic the form input to use for setting this dropdown list values from. */
-    public $cascadeFrom = null;
+    /** @var string|Generic|null the form input to use for setting this dropdown list values from. */
+    public $cascadeFrom;
 
-    /** @var null|string|Model the hasMany reference model that will generated value for this dropdown list.*/
-    public $reference = null;
+    /** @var string|Model|null the hasMany reference model that will generated value for this dropdown list. */
+    public $reference;
 
-    /** @var null The form input create by cascadeFrom field*/
-    protected $cascadeInput = null;
+    /** @var null The form input create by cascadeFrom field */
+    protected $cascadeInput;
 
     /** @var null The casacade input value. */
-    protected $cascadeInputValue = null;
+    protected $cascadeInputValue;
 
     public function init(): void
     {
@@ -41,7 +41,7 @@ class DropDownCascade extends DropDown
         $this->cascadeInput = is_string($this->cascadeFrom) ? $this->form->getField($this->cascadeFrom) : $this->cascadeFrom;
 
         if (!$this->cascadeInput instanceof Generic) {
-            throw new Exception('cascadeFrom property should be an instance of atk4/ui/FormField/Generic');
+            throw new Exception('cascadeFrom property should be an instance of ' . Generic::class);
         }
 
         $this->cascadeInputValue = $_POST[$this->cascadeInput->name] ?? $this->cascadeInput->field->get('value');
@@ -52,10 +52,6 @@ class DropDownCascade extends DropDown
     /**
      * Generate new dropdown values based on cascadeInput model selected id.
      * Return an empty value set if id is null.
-     *
-     * @param string $id
-     *
-     * @return array
      */
     public function getNewValues(string $id): array
     {
@@ -68,9 +64,9 @@ class DropDownCascade extends DropDown
         foreach ($model as $k => $row) {
             if ($this->renderRowFunction && is_callable($this->renderRowFunction)) {
                 $res = call_user_func($this->renderRowFunction, $row, $k);
-                $values[] = ['value' => $res['value'], 'text' => $row['name'], 'name' => $res['title']];
+                $values[] = ['value' => $res['value'], 'text' => $row->get('name'), 'name' => $res['title']];
             } else {
-                $values[] = ['value' => $row[$model->id_field], 'text' => $row[$model->title_field], 'name' => $row[$model->title_field]];
+                $values[] = ['value' => $row->get($model->id_field), 'text' => $row->get($model->title_field), 'name' => $row->get($model->title_field)];
             }
         }
 
@@ -81,16 +77,15 @@ class DropDownCascade extends DropDown
      *  Will mark current value as selected from a list
      *  of possible values.
      *
-     * @param $values    An array of possible values.
-     * @param $value     The current field value.
-     *
-     * @return array
+     * @param $values    an array of possible values
+     * @param $value     the current field value
      */
     private function getJsValues(array $values, string $value): array
     {
         foreach ($values as $k => $v) {
             if ($v['value'] === $value) {
                 $values[$k]['selected'] = true;
+
                 break;
             }
         }
@@ -99,9 +94,8 @@ class DropDownCascade extends DropDown
     }
 
     /**
-     * Call during parent::renderView()
+     * Call during parent::renderView().
      *
-     * @return array
      * @throws \atk4\core\Exception
      */
     protected function jsRenderDropdown(): array

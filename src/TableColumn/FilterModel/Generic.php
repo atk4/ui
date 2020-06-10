@@ -2,6 +2,7 @@
 
 namespace atk4\ui\TableColumn\FilterModel;
 
+use atk4\core\NameTrait;
 use atk4\core\SessionTrait;
 use atk4\data\Field;
 use atk4\data\Model;
@@ -13,6 +14,7 @@ use atk4\data\Persistence;
 class Generic extends Model
 {
     use SessionTrait;
+    use NameTrait; // needed for SessionTrait
 
     /**
      * The operator for defining a condition on a field.
@@ -40,7 +42,7 @@ class Generic extends Model
      *
      * @var null
      */
-    public $lookupField = null;
+    public $lookupField;
 
     /**
      * Factory method that will return a FilerModel Type class.
@@ -95,7 +97,7 @@ class Generic extends Model
      */
     public function afterInit()
     {
-        $this->addField('name', ['default'=> $this->lookupField->short_name, 'system' => true]);
+        $this->addField('name', ['default' => $this->lookupField->short_name, 'system' => true]);
 
         if (isset($this->_sessionTrait) && $this->_sessionTrait) {
             // create a name for our filter model to save as session data.
@@ -110,7 +112,7 @@ class Generic extends Model
             }
 
             // Add hook in order to persist data in session.
-            $this->onHook('afterSave', function ($m) {
+            $this->onHook(Model::HOOK_AFTER_SAVE, function ($m) {
                 $this->memorize('data', $m->get());
             });
         }
@@ -141,8 +143,6 @@ class Generic extends Model
      * Method that will set Field display condition in a form.
      * If form filter need to have a field display at certain condition, then
      * override this method in your FilterModel\TypeModel.
-     *
-     * @return null
      */
     public function getFormDisplayRules()
     {

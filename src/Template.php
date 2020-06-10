@@ -27,6 +27,7 @@ use atk4\data\Model;
 class Template implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
+    use \atk4\core\DIContainerTrait; // needed for StaticAddToTrait, removed once php7.2 support is dropped
     use \atk4\core\StaticAddToTrait;
 
     // {{{ Properties of a template
@@ -52,7 +53,7 @@ class Template implements \ArrayAccess
      *
      * @var string
      */
-    public $source = null;
+    public $source;
 
     /** @var string */
     public $default_exception = 'Exception_Template';
@@ -82,31 +83,23 @@ class Template implements \ArrayAccess
     {
         $this->template = unserialize(serialize($this->template));
 
-        unset($this->tags);
+        $this->tags = null;
         $this->rebuildTags();
     }
 
     /**
      * Returns relevant exception class. Use this method with "throw".
-     *
-     * @param string $message Static text of exception
-     * @param int    $code    Optional error code
-     *
-     * @return Exception
      */
-    public function exception($message = 'Undefined Exception', $code = 0)
+    public function exception($message = 'Undefined Exception', $code = 0): Exception
     {
-        $arg = [
-            $message,
-            'tags'     => implode(', ', array_keys($this->tags)),
-            'template' => $this->template,
-        ];
-
+        $ex = new Exception($message, $code);
+        $ex->addMoreInfo('tags', implode(', ', array_keys($this->tags)));
+        $ex->addMoreInfo('template', $this->template);
         if ($this->source) {
-            $arg['source'] = $this->source;
+            $ex->addMoreInfo('source', $this->source);
         }
 
-        return new Exception($arg, $code);
+        return $ex;
     }
 
     // }}}
@@ -124,7 +117,7 @@ class Template implements \ArrayAccess
      */
     public function isTopTag($tag)
     {
-        return $tag == '_top';
+        return $tag === '_top';
     }
 
     /**
@@ -318,12 +311,16 @@ class Template implements \ArrayAccess
         }
 
         if (!$tag) {
-            throw new Exception(['Tag is not set', 'tag' => $tag, 'value' => $value]);
+            throw (new Exception('Tag is not set'))
+                ->addMoreInfo('tag', $tag)
+                ->addMoreInfo('value', $value);
         }
 
         // check value
         if (!is_scalar($value) && $value !== null) {
-            throw new Exception(['Value should be scalar', 'tag' => $tag, 'value' => $value]);
+            throw (new Exception('Value should be scalar'))
+                ->addMoreInfo('tag', $tag)
+                ->addMoreInfo('value', $value);
         }
 
         // encode value
@@ -332,7 +329,7 @@ class Template implements \ArrayAccess
         }
 
         // if no value, then set respective conditional regions to empty string
-        if (substr($tag, -1) != '?' && ($value === false || !strlen((string) $value))) {
+        if (substr($tag, -1) !== '?' && ($value === false || !strlen((string) $value))) {
             $this->trySet($tag . '?', '');
         }
 
@@ -596,7 +593,7 @@ class Template implements \ArrayAccess
 
         // $tag should be string here
         $template = $this->getTagRefList($tag);
-        if ($template != $this->template) {
+        if ($template !== $this->template) {
             foreach ($template as $key => $templ) {
                 $ref = $tag . '#' . ($key + 1);
                 $this->tags[$tag][$key] = [call_user_func($callable, $this->recursiveRender($templ), $ref)];
@@ -621,7 +618,7 @@ class Template implements \ArrayAccess
             return clone $this;
         }
 
-        $cl = get_class($this);
+        $cl = static::class;
         $n = new $cl();
         $n->app = $this->app;
         $n->template = unserialize(serialize(['_top#1' => $this->get($tag)]));
@@ -650,11 +647,9 @@ class Template implements \ArrayAccess
             return $t;
         }
 
-        throw new Exception([
-            'Unable to read template from file',
-            'cwd'  => getcwd(),
-            'file' => $filename,
-        ]);
+        throw (new Exception('Unable to read template from file'))
+            ->addMoreInfo('cwd', getcwd())
+            ->addMoreInfo('file', $filename);
     }
 
     /**
@@ -693,7 +688,7 @@ class Template implements \ArrayAccess
         }
         $this->tag_cnt = [];
 
-        /* First expand self-closing tags {$tag} -> {tag}{/tag} */
+        // First expand self-closing tags {$tag} -> {tag}{/tag}
         $str = preg_replace('/{\$([-_:\w]+)}/', '{\1}{/\1}', $str);
 
         $this->parseTemplate($str);
@@ -756,8 +751,8 @@ class Template implements \ArrayAccess
                 // is closing TAG
                 case '/':
                     return substr($tag, 1);
-                break;
 
+                break;
                 // is TAG
                 case '$':
 
@@ -774,7 +769,6 @@ class Template implements \ArrayAccess
                     }
 
                 break;
-
                 // recurse
                 default:
 
@@ -880,7 +874,7 @@ class Template implements \ArrayAccess
 
         return $s;
     }
-    /*** TO BE REFACTORED ***/
+    /*** TO BE REFACTORED */
 
     /*
      * Output all tags
@@ -889,6 +883,6 @@ class Template implements \ArrayAccess
     {
         echo '"'.$this->_getDumpTags($this->template).'"';
     }
-    /*** TO BE REFACTORED ***/
+    /*** TO BE REFACTORED */
     // }}}
 }

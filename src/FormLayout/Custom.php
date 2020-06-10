@@ -2,20 +2,22 @@
 
 namespace atk4\ui\FormLayout;
 
+use atk4\ui\Exception;
+
 /**
  * Custom Layout for a form (user-defined HTML).
  */
 class Custom extends _Abstract
 {
     /** @var {@inheritdoc} */
-    public $defaultTemplate = null;
+    public $defaultTemplate;
 
     public function init(): void
     {
         parent::init();
 
         if (!$this->template) {
-            throw new \atk4\ui\Exception(['You must specify template for FormLayout/Custom. Try [\'Custom\', \'defaultTemplate\'=>\'./yourform.html\']']);
+            throw new Exception('You must specify template for FormLayout/Custom. Try [\'Custom\', \'defaultTemplate\'=>\'./yourform.html\']');
         }
     }
 
@@ -28,6 +30,6 @@ class Custom extends _Abstract
      */
     public function addButton($seed)
     {
-        return $this->add($this->mergeSeeds(['Button'], $seed), 'Buttons');
+        return $this->add($this->mergeSeeds([\atk4\ui\Button::class], $seed), 'Buttons');
     }
 }

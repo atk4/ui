@@ -11,7 +11,7 @@ use atk4\ui\Form;
 class Columns extends Generic
 {
     /** @var int count of columns */
-    public $col = null;
+    public $col;
 
     /** @var string size CSS class */
     public $size = '';
@@ -19,8 +19,7 @@ class Columns extends Generic
     /**
      * Sets form model and adds form fields.
      *
-     * @param \atk4\data\Model $model
-     * @param array|null       $fields
+     * @param array|null $fields
      *
      * @return \atk4\data\Model
      */

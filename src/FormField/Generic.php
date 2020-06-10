@@ -2,6 +2,7 @@
 
 namespace atk4\ui\FormField;
 
+use atk4\ui\Exception;
 use atk4\ui\Form;
 use atk4\ui\View;
 
@@ -24,11 +25,14 @@ class Generic extends View
     public $fieldClass = '';
 
     /**
-     * @var bool - Whether you need this field to be rendered wrap in a form layout or as his.
+     * @var bool - Whether you need this field to be rendered wrap in a form layout or as his
      */
     public $layoutWrap = true;
 
-    public $width = null;
+    /** @var bool rendered or not input label in Generic layout template. */
+    public $renderLabel = true;
+
+    public $width;
 
     /**
      * Caption is a text that must appear somewhere nearby the field. For a form with layout, this
@@ -40,15 +44,15 @@ class Generic extends View
      *
      * @var string
      */
-    public $caption = null;
+    public $caption;
 
     /**
      * Placed as a pointing label below the field. This only works when FormField appears in a form. You can also
-     * set this to object, such as 'Text' otherwise HTML characters are escaped.
+     * set this to object, such as \atk4\ui\Text otherwise HTML characters are escaped.
      *
      * @var string|\atk4\ui\View|array
      */
-    public $hint = null;
+    public $hint;
 
     /**
      * Is input field disabled?
@@ -75,7 +79,8 @@ class Generic extends View
 
         if ($this->form && $this->field) {
             if (isset($this->form->fields[$this->field->short_name])) {
-                throw new \atk4\ui\Exception(['Form already has a field with the same name', 'name' => $this->field->short_name]);
+                throw (new Exception('Form already has a field with the same name'))
+                    ->addMoreInfo('name', $this->field->short_name);
             }
             $this->form->fields[$this->field->short_name] = $this;
         }

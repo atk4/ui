@@ -33,35 +33,35 @@ class Card extends View
 
     public $defaultTemplate = 'card.html';
 
-    /** @var null|View A View that hold the image. */
-    public $imageContainer = null;
+    /** @var View|null A View that hold the image. */
+    public $imageContainer;
 
     /** @var string Card box type. */
     public $cardCss = 'segment';
 
-    /** @var null|string|Image A path to the image src or the image view. */
-    public $image = null;
+    /** @var string|Image|null A path to the image src or the image view. */
+    public $image;
 
-    /** @var null|CardSection The main card section of this card */
-    public $section = null;
+    /** @var CardSection|null The main card section of this card */
+    public $section;
 
     /** @var string The CardSection default class name. */
     public $cardSection = CardSection::class;
 
     /** @var null | View The extra content view container for the card. */
-    public $extraContainer = null;
+    public $extraContainer;
 
-    /** @var null|string|View A description inside the Card content. */
-    public $description = null;
+    /** @var string|View|null A description inside the Card content. */
+    public $description;
 
-    /** @var null|array|Button A button or an array of Buttons */
-    public $buttons = null;
+    /** @var array|Button|null A button or an array of Buttons */
+    public $buttons;
 
     /** @var bool How buttons are display inside button container */
     public $hasFluidButton = true;
 
-    /** @var null|View The button Container for Button */
-    public $btnContainer = null;
+    /** @var View|null The button Container for Button */
+    public $btnContainer;
 
     /** @var string Table css class */
     // public $tableClass = 'ui fixed small';
@@ -173,8 +173,6 @@ class Card extends View
     /**
      * Add Content to card.
      *
-     * @param View $view
-     *
      * @throws Exception
      *
      * @return View|null
@@ -190,8 +188,8 @@ class Card extends View
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
-     * @param \atk4\data\Model $m      The model.
-     * @param array|false      $fields An array of fields name to display in content.
+     * @param \atk4\data\Model $m      the model
+     * @param array|false      $fields an array of fields name to display in content
      *
      * @throws Exception
      * @throws \atk4\data\Exception
@@ -235,8 +233,6 @@ class Card extends View
     /**
      * Add actions from various model.
      *
-     * @param array $models
-     *
      * @throws Exception
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
@@ -250,8 +246,6 @@ class Card extends View
 
     /**
      * Add action from Model.
-     *
-     * @param Model $model
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -275,12 +269,6 @@ class Card extends View
 
     /**
      * Add a CardSection to this card.
-     *
-     * @param string|null $title
-     * @param Model|null  $model
-     * @param array|null  $fields
-     * @param bool        $useTable
-     * @param bool        $useLabel
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -332,8 +320,8 @@ class Card extends View
      * Add an Event action executor of type 'click' using a button
      * as target.
      *
-     * @param []      $args    The action argument
-     * @param string  $confirm The confirmation message.
+     * @param []     $args    The action argument
+     * @param string $confirm the confirmation message
      *
      * @throws Exception
      *
@@ -371,8 +359,8 @@ class Card extends View
      * Set extra content using model field.
      *
      * @param Model  $m      The model
-     * @param array  $fields An array of fields name.
-     * @param string $glue   A separator string between each field.
+     * @param array  $fields an array of fields name
+     * @param string $glue   a separator string between each field
      *
      * @throws Exception
      * @throws \atk4\data\Exception
@@ -388,7 +376,7 @@ class Card extends View
                 $extra .= $m->get($field) . $glue;
             }
             $extra = rtrim($extra, $glue);
-            $this->addExtraContent(new View([$extra, 'ui'=>'ui basic fitted segment']));
+            $this->addExtraContent(new View([$extra, 'ui' => 'ui basic fitted segment']));
         } else {
             foreach ($fields as $field) {
                 $this->addExtraContent(new View([$m->get($field), 'ui basic fitted segment']));
@@ -403,7 +391,7 @@ class Card extends View
      *
      * @throws Exception
      *
-     * @return View|string|null The description to add.
+     * @return View|string|null the description to add
      */
     public function addDescription($description)
     {
@@ -413,8 +401,6 @@ class Card extends View
     /**
      * Add Extra content to the Card.
      * Extra content is added at the bottom of the card.
-     *
-     * @param View $view
      *
      * @throws Exception
      *
@@ -448,8 +434,8 @@ class Card extends View
     /**
      * Add button to card.
      *
-     * @param Button $button  A Button.
-     * @param bool   $isFluid Make the buttons spread evenly in Card.
+     * @param Button $button  a Button
+     * @param bool   $isFluid make the buttons spread evenly in Card
      *
      * @throws Exception
      *
@@ -466,7 +452,7 @@ class Card extends View
         }
 
         $btn = $this->getButtonContainer()->add($button);
-        $this->btnCount++;
+        ++$this->btnCount;
 
         if ($this->hasFluidButton && $this->btnCount > 0) {
             $this->getButtonContainer()->addClass($this->words[$this->btnCount]);

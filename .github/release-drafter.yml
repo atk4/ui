@@ -1,4 +1,10 @@
 categories:
+  - title: "Breaking Changes"
+    labels:
+      - "BC-break"
+  - title: "Major Features"
+    labels:
+      - "MAJOR"
   - title: "Documentation enhancements"
     labels:
       - "Documentation :books:"

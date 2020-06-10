@@ -14,16 +14,16 @@ class ItemSearch extends View
     /**
      * View to be reload that contains data to be filtered.
      *
-     * @var View|string The atk4 View to be reload or a jquery id selector string.
+     * @var View|string the atk4 View to be reload or a jquery id selector string
      */
-    public $reload = null;
+    public $reload;
 
     /**
      * The initial query.
      *
      * @var string
      */
-    public $q = null;
+    public $q;
 
     /**
      * The css for the input field.
@@ -38,10 +38,10 @@ class ItemSearch extends View
      *
      * @var null
      */
-    public $context = null;
+    public $context;
 
-    /** @var null|string The URL argument name use for query. If null, then $this->>name will be assiged. */
-    public $queryArg = null;
+    /** @var string|null The URL argument name use for query. If null, then->>name will be assiged. */
+    public $queryArg;
 
     public $defaultTemplate = 'item-search.html';
 
@@ -70,10 +70,6 @@ class ItemSearch extends View
 
     /**
      * Set model condition base on search request.
-     *
-     * @param Model $m
-     *
-     * @return Model
      */
     public function setModelCondition(Model $m): Model
     {
@@ -102,11 +98,11 @@ class ItemSearch extends View
             '#' . $this->name,
             'atk-item-search',
             [
-                'reload'   => $reloadId,
+                'reload' => $reloadId,
                 'queryArg' => $this->queryArg,
-                'url'      => $this->reload->jsURL(),
-                'q'        => $this->q,
-                'context'  => $this->context,
+                'url' => $this->reload->jsURL(),
+                'q' => $this->q,
+                'context' => $this->context,
             ]
         ));
     }

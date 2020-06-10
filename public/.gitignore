@@ -1,7 +1,6 @@
 *
 !logo.png
-!agileui.js
 !agileui.less
-!agileui.css
-!atkjs-ui.min.js
 !.gitignore
+!atkjs-ui.min.js
+!agileui.css

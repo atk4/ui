@@ -55,7 +55,7 @@
  * If your model contains a lot of records, you should handle their limit somehow.
  *
  * $f = \atk4\ui\Form::addTo($app);
- * $ml = $f->addField('ml', ['MultiLine']);
+ * $ml = $f->addField('ml', [\atk4\ui\FormField\MultiLine::class]);
  * $ml->setModel($user, ['name','is_vip']);
  *
  * $f->onSubmit(function($f) use ($ml) {
@@ -72,6 +72,7 @@ use atk4\data\Model;
 use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
+use atk4\ui\Form;
 use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
 use atk4\ui\jsVueService;
@@ -80,25 +81,18 @@ use atk4\ui\Template;
 class MultiLine extends Generic
 {
     /**
-     * Layout view as is within form layout.
-     *
-     * @var bool
-     */
-    public $layoutWrap = false;
-
-    /**
      * The template needed for the multiline view.
      *
      * @var Template
      */
-    public $multiLineTemplate = null;
+    public $multiLineTemplate;
 
     /**
      * The multiline View. Assigned in init().
      *
      * @var View
      */
-    private $multiLine = null;
+    private $multiLine;
 
     /**
      * An array of options for sui-table property.
@@ -121,14 +115,14 @@ class MultiLine extends Generic
      *
      * @var array
      */
-    private $fieldDefs = null;
+    private $fieldDefs;
 
     /**
      * The JS callback.
      *
      * @var jsCallback
      */
-    private $cb = null;
+    private $cb;
 
     /**
      * The callback function which gets triggered when fields are changed or
@@ -136,7 +130,7 @@ class MultiLine extends Generic
      *
      * @var callable
      */
-    public $changeCb = null;
+    public $changeCb;
 
     /**
      * Array of field names that will trigger the change callback when those
@@ -144,42 +138,42 @@ class MultiLine extends Generic
      *
      * @var array
      */
-    public $eventFields = null;
+    public $eventFields;
 
     /**
      * Collection of field errors.
      *
      * @var array
      */
-    private $rowErrors = null;
+    private $rowErrors;
 
     /**
      * The model reference name used for Multiline input.
      *
      * @var string
      */
-    public $modelRef = null;
+    public $modelRef;
 
     /**
      * The link field used for reference.
      *
      * @var string
      */
-    public $linkField = null;
+    public $linkField;
 
     /**
      * The fields names used in each row.
      *
      * @var array
      */
-    public $rowFields = null;
+    public $rowFields;
 
     /**
      * The data sent for each row.
      *
      * @var array
      */
-    public $rowData = null;
+    public $rowData;
 
     /**
      * The max number of records that can be added to Multiline. 0 means no limit.
@@ -202,7 +196,7 @@ class MultiLine extends Generic
      *
      * @var string
      */
-    public $caption = null;
+    public $caption;
 
     /**
      * @var null | jsFunction
@@ -212,7 +206,7 @@ class MultiLine extends Generic
      * The function also receive the row vaue as an array.
      * ex: $jsAfterAdd = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
      */
-    public $jsAfterAdd = null;
+    public $jsAfterAdd;
 
     /**
      * @var null | jsFunction
@@ -222,7 +216,7 @@ class MultiLine extends Generic
      * The function also receive the row vaue as an array.
      * ex: $jsAfterDelete = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
      */
-    public $jsAfterDelete = null;
+    public $jsAfterDelete;
 
     public function init(): void
     {
@@ -243,7 +237,7 @@ class MultiLine extends Generic
         $this->cb = \atk4\ui\jsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
-        $this->form->onHook('loadPOST', function ($form) {
+        $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form) {
             $this->rowData = json_decode($_POST[$this->short_name], true);
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
@@ -254,7 +248,7 @@ class MultiLine extends Generic
         });
 
         // Change form error handling.
-        $this->form->onHook('displayError', function ($form, $fieldName, $str) {
+        $this->form->onHook(\atk4\ui\Form::HOOK_DISPLAY_ERROR, function ($form, $fieldName, $str) {
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
             if ($fieldName === $this->short_name) {
@@ -296,10 +290,10 @@ class MultiLine extends Generic
     public function getInput()
     {
         return $this->app->getTag('input', [
-            'name'        => $this->short_name,
-            'type'        => 'hidden',
-            'value'       => $this->getValue(),
-            'readonly'    => true,
+            'name' => $this->short_name,
+            'type' => 'hidden',
+            'value' => $this->getValue(),
+            'readonly' => true,
         ]);
     }
 
@@ -370,7 +364,7 @@ class MultiLine extends Generic
                     $field = $m->getField($fieldName);
                     // Save field value only if the field was editable
                     if (!$field->read_only) {
-                        $m[$fieldName] = $this->app->ui_persistence->typecastLoadField($field, $value);
+                        $m->set($fieldName, $this->app->ui_persistence->typecastLoadField($field, $value));
                     }
                 } catch (\atk4\core\Exception $e) {
                     $rowErrors[$rowId][] = ['field' => $fieldName, 'msg' => $e->getMessage()];
@@ -410,7 +404,7 @@ class MultiLine extends Generic
 
         foreach ($this->rowData as $row) {
             if ($this->modelRef && $this->linkField) {
-                $model[$this->linkField] = $this->model->get('id');
+                $model->set($this->linkField, $this->model->get('id'));
             }
 
             foreach ($row as $fieldName => $value) {
@@ -428,7 +422,7 @@ class MultiLine extends Generic
                 }
             }
             $id = $model->save()->get($model->id_field);
-            $k = array_search($id, $currentIds);
+            $k = array_search($id, $currentIds, true);
             if ($k > -1) {
                 unset($currentIds[$k]);
             }
@@ -474,6 +468,7 @@ class MultiLine extends Generic
         foreach ($row as $col => $value) {
             if ($col === '__atkml') {
                 $rowId = $value;
+
                 break;
             }
         }
@@ -511,7 +506,7 @@ class MultiLine extends Generic
      *
      * @return Model
      */
-    public function setModel(\atk4\data\Model $model, $fields = [], $modelRef = null, $linkField = null)
+    public function setModel(Model $model, $fields = [], $modelRef = null, $linkField = null)
     {
         // Remove Multiline field name from model
         if ($model->hasField($this->short_name)) {
@@ -550,10 +545,6 @@ class MultiLine extends Generic
      *
      * Depending on the component, additional data is set to fieldOptions
      * (dropdown needs values, input needs type)
-     *
-     * @param \atk4\data\Field $field
-     *
-     * @return array
      */
     public function getFieldDef(\atk4\data\Field $field): array
     {
@@ -580,15 +571,15 @@ class MultiLine extends Generic
         }
 
         return [
-            'field'       => $field->short_name,
-            'component'   => $component,
-            'caption'     => $field->getCaption(),
-            'default'     => $field->default,
-            'isExpr'      => isset($field->expr),
-            'isEditable'  => $field->isEditable(),
-            'isHidden'    => $field->isHidden(),
-            'isVisible'   => $field->isVisible(),
-            'fieldOptions'=> $this->_getFieldOptions($field, $component),
+            'field' => $field->short_name,
+            'component' => $component,
+            'caption' => $field->getCaption(),
+            'default' => $field->default,
+            'isExpr' => isset($field->expr),
+            'isEditable' => $field->isEditable(),
+            'isHidden' => $field->isHidden(),
+            'isVisible' => $field->isVisible(),
+            'fieldOptions' => $this->_getFieldOptions($field, $component),
         ];
     }
 
@@ -596,8 +587,6 @@ class MultiLine extends Generic
      * Maps into input, checkbox, dropdown or textarea, defaults into input.
      *
      * @param string|object $field_type
-     *
-     * @return string
      */
     protected function _mapComponent($field_type): string
     {
@@ -656,12 +645,14 @@ class MultiLine extends Generic
                 if (!isset($options['type'])) {
                     $options['type'] = $this->_addTypeOption($field);
                 }
+
                 break;
             // DropDown needs values set
             case 'dropdown':
                 if (!isset($options['values'])) {
                     $options['values'] = $this->_addValuesOption($field);
                 }
+
                 break;
         }
 
@@ -698,12 +689,7 @@ class MultiLine extends Generic
         } elseif ($field->reference) {
             $m = $field->reference->refModel()->setLimit($this->enumLimit);
 
-            $values = [];
-            foreach ($m->export([$m->id_field, $m->title_field]) as $item) {
-                $values[$item[$m->id_field]] = $item[$m->title_field];
-            }
-
-            return $values;
+            return $m->getTitles();
         }
 
         return [];
@@ -733,21 +719,21 @@ class MultiLine extends Generic
         $this->multiLine->vue(
             'atk-multiline',
             [
-                                  'data' => [
-                                      'linesField'  => $this->short_name,
-                                      'fields'      => $this->fieldDefs,
-                                      'idField'     => $this->getModel()->id_field,
-                                      'url'         => $this->cb->getJSURL(),
-                                      'eventFields' => $this->eventFields,
-                                      'hasChangeCb' => $this->changeCb ? true : false,
-                                      'options'     => $this->options,
-                                      'rowLimit'    => $this->rowLimit,
-                                      'caption'     => $this->caption,
-                                      'afterAdd'    => $this->jsAfterAdd,
-                                      'afterDelete' => $this->jsAfterDelete,
-                                      'addOnTab'    => $this->addOnTab,
-                                  ],
-                              ]
+                'data' => [
+                    'linesField' => $this->short_name,
+                    'fields' => $this->fieldDefs,
+                    'idField' => $this->getModel()->id_field,
+                    'url' => $this->cb->getJSURL(),
+                    'eventFields' => $this->eventFields,
+                    'hasChangeCb' => $this->changeCb ? true : false,
+                    'options' => $this->options,
+                    'rowLimit' => $this->rowLimit,
+                    'caption' => $this->caption,
+                    'afterAdd' => $this->jsAfterAdd,
+                    'afterDelete' => $this->jsAfterDelete,
+                    'addOnTab' => $this->addOnTab,
+                ],
+            ]
         );
     }
 
@@ -773,10 +759,12 @@ class MultiLine extends Generic
                 $m = $this->setDummyModelValue(clone $this->getModel());
                 $expressionValues = array_merge($this->getExpressionValues($m), $this->getCallbackValues($m));
                 $this->app->terminateJSON(array_merge($response, ['expressions' => $expressionValues]));
+
                 break;
             case 'on-change':
                 // Let regular callback render output.
                 return call_user_func_array($this->changeCb, [json_decode($_POST['rows'], true), $this->form]);
+
                 break;
         }
     }
@@ -825,7 +813,7 @@ class MultiLine extends Generic
             $value = $post[$fieldName] ?? null;
             if ($model->getField($fieldName)->isEditable()) {
                 try {
-                    $model[$fieldName] = $value;
+                    $model->set($fieldName, $value);
                 } catch (ValidationException $e) {
                     // Bypass validation at this point.
                 }
@@ -858,7 +846,7 @@ class MultiLine extends Generic
         if (!empty($dummyFields)) {
             $dummyModel = new Model($m->persistence, ['table' => $m->table]);
             foreach ($dummyFields as $f) {
-                $dummyModel->addExpression($f['name'], ['expr'=>$f['expr'], 'type' => $m->getField($f['name'])->type]);
+                $dummyModel->addExpression($f['name'], ['expr' => $f['expr'], 'type' => $m->getField($f['name'])->type]);
             }
             $values = $dummyModel->loadAny()->get();
             unset($values[$m->id_field]);
@@ -884,7 +872,7 @@ class MultiLine extends Generic
     {
         $fields = [];
         foreach ($model->getFields() as $f) {
-            if (!$f instanceof Field_SQL_Expression || !in_array($f->short_name, $this->rowFields)) {
+            if (!$f instanceof Field_SQL_Expression || !in_array($f->short_name, $this->rowFields, true)) {
                 continue;
             }
 
@@ -933,18 +921,18 @@ class MultiLine extends Generic
      *
      * @return int|mixed|string
      */
-    private function getValueForExpression($exprField, $fieldName, $model)
+    private function getValueForExpression($exprField, $fieldName, Model $m)
     {
         switch ($exprField->type) {
             case 'money':
             case 'integer':
             case 'float':
                 // Value is 0 or the field value.
-                $value = $model[$fieldName] ? $model[$fieldName] : 0;
+                $value = $m->get($fieldName) ?: 0;
+
                 break;
             default:
-                // Value is "" or field value enclosed in bracket: "value"
-                $value = $model[$fieldName] ? '"' . $model[$fieldName] . '"' : '""';
+                $value = '"' . $m->get($fieldName) . '"';
         }
 
         return $value;

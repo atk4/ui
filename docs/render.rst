@@ -53,7 +53,7 @@ Late initialization
 When you create an application and select a Layout, the layout is automatically initialized::
 
     $app = new \atk4\ui\App();
-    $app->initLayout('Centered');
+    $app->initLayout(\atk4\ui\Layout\Centered::class);
 
     echo $app->layout->name; // present, because layout is initialized!
 

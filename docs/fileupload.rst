@@ -51,7 +51,7 @@ Callbacks
 
 When adding an Upload or UploadImg field to a form, onUpload and onDelete callback must be defined::
 
-    $img = $form->addField('img', ['UploadImg', ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
+    $img = $form->addField('img', [\atk4\ui\FormField\UploadImg::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
 
     $img->onUpload(function ($files) {
         //callback action here...
@@ -91,7 +91,7 @@ Example showing the onUpload callback on the UploadImg field::
         $img->setFileId('123456');
 
         // can also return a notifier.
-        return new atk4\ui\jsNotify(['content' => 'File is uploaded!', 'color' => 'green']);
+        return new \atk4\ui\jsNotify(['content' => 'File is uploaded!', 'color' => 'green']);
     });
 
 When user submit the form, the field data value that will be submitted is the fileId set during the onUpload callback.
@@ -99,7 +99,7 @@ The fileId is set to file name by default if omitted::
 
     $form->onSubmit(function ($form) {
         // implement submission here
-        return $form->success('Thanks for submitting file: '.$form->model['img']);
+        return $form->success('Thanks for submitting file: '.$form->model->get('img'));
     });
 
 onDelete
@@ -122,7 +122,7 @@ Example showing the onDelete callback on the UploadImg field::
         //reset thumbanil
         $img->clearThumbnail('./images/default.png');
 
-        return new atk4\ui\jsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
+        return new \atk4\ui\jsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
     });
 
 

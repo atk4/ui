@@ -13,7 +13,7 @@ class Money extends Input
     {
         $v = $this->field ? $this->field->get() : ($this->content ?: null);
 
-        if (is_null($v)) {
+        if ($v === null) {
             return;
         }
 

@@ -17,7 +17,7 @@ jobs:
           echo "::set-env name=version::$v"
 
           git branch
-          sed -i "s|'https://cdn.jsdelivr.net/gh/atk4/ui.*|'https://cdn.jsdelivr.net/gh/atk4/ui@$v/public',|" src/App.php
+          sed -i "s|'https://ui.agiletoolkit.org/public.*|'https://cdn.jsdelivr.net/gh/atk4/ui@$v/public',|" src/App.php
           sed -i "s|public \$version.*|public \$version = '$v';|" src/App.php
 
       - uses: teaminkling/autocommit@master
@@ -54,10 +54,8 @@ jobs:
           npm install -g less-plugin-clean-css
           (cd js; npm install; npm run build; cd ..)
           lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
-          uglifyjs --compress -- public/agileui.js > public/agileui.min.js
           echo '!agileui.css' >> public/.gitignore
           echo '!agileui.css.map' >> public/.gitignore
-          echo '!agileui.min.js' >> public/.gitignore
           echo '!atkjs-ui.js' >> public/.gitignore
           echo '!atkjs-ui.min.js' >> public/.gitignore
           git add public

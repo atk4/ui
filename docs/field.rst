@@ -81,7 +81,7 @@ into multiple Tabs or detach field groups or even create nested layouts::
     $form_page = Generic::addTo($tabs->addTab('Other Info'), ['form'=>$form]);
     $form_page->addField('age', new \atk4\ui\FormField\Line());
 
-    $form->onSubmit(function($f) {  return $f->model['name'].' has age '.$f->model['age']; });
+    $form->onSubmit(function($f) { return $f->model->get('name').' has age '.$f->model->get('age'); });
 
 This is further explained in documentation for :php:class:`atk4\\ui\\FormLayout\\Generic` class,
 however if you do plan on adding your own field types, it's important that you extend it
@@ -165,7 +165,7 @@ To create a form, the following is sufficient::
     $form->setModel(new Country($db);
 
 The above will populate fields from model into the form automatically. You can use second
-argument to :php:meth:`atk4\ui\Form::setModel()` to indicate which fields to display
+argument to :php:meth:`\atk4\ui\Form::setModel()` to indicate which fields to display
 or rely on :ref:`field_visibility`.
 
 When Form fields are populated, then :php:meth:`\atk4\ui\Form::_decoratorFactory` is
@@ -181,7 +181,7 @@ The rules are rather straightforward but may change in future versions of Agile 
 
 You always have an option to explicitly specify which field you would like to use::
 
-    $model->addField('long_text', ['ui'=>['Form'=>'TextArea']]);
+    $model->addField('long_text', ['ui'=>['rorm'=>\atk4\ui\FormField\TextArea::class]]);
 
 It is recommended however, that you use type when possible, because types will be universally supported
 by all components::
@@ -323,7 +323,7 @@ of records to display. DropDown renders all records when the paged is rendered, 
 :php:class:`Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
 
 To render a model field as DropDown, use the ui property of the field::
-    $model->addField('someField', ['ui' => ['form' =>['DropDown']]]);
+    $model->addField('someField', ['ui' => ['form' =>[\atk4\ui\FormField\DropDown::class]]]);
 
 ..  Customizing how a Model's records are displayed in DropDown
 As default, DropDown will use the `$model->id_field` as value, and `$model->title_field` as title for each menu item.
@@ -436,7 +436,7 @@ See this example from Model class init method::
         'serialize' => 'json',
         'ui' => [
             'form' => [
-                'DropDown',
+                \atk4\ui\FormField\DropDown::class,
                 'isMultiple' => true,
                 'model' => $expr_model,
             ],

@@ -7,6 +7,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\core\FactoryTrait;
+use atk4\data\Model;
 use atk4\ui\jQuery;
 use atk4\ui\jsChain;
 use atk4\ui\View;
@@ -35,7 +36,7 @@ class ActionMenu extends Generic
      *
      * @var null
      */
-    public $label = null;
+    public $label;
 
     /**
      * Dropdown module css class name as per Formantic-ui.
@@ -76,8 +77,8 @@ class ActionMenu extends Generic
      * Add a menu item in Dropdown.
      *
      * @param View|string                                 $item
-     * @param null|callable|\atk4\data\UserAction\Generic $action
-     * @param null|string                                 $confirm
+     * @param callable|\atk4\data\UserAction\Generic|null $action
+     * @param string|null                                 $confirm
      * @param bool                                        $isDisabled
      *
      * @throws \atk4\core\Exception
@@ -113,7 +114,7 @@ class ActionMenu extends Generic
         }
 
         if (!is_object($item)) {
-            $item = $this->factory('View', ['id' => false, 'ui' => 'item', 'content' => $item], 'atk4\ui');
+            $item = $this->factory(\atk4\ui\View::class, ['id' => false, 'ui' => 'item', 'content' => $item]);
         }
 
         $this->items[] = $item;
@@ -141,10 +142,10 @@ class ActionMenu extends Generic
             array_merge(
                 $this->options,
                 [
-                    'direction'  => 'auto',  // direction need to be auto.
+                    'direction' => 'auto',  // direction need to be auto.
                     'transition' => 'none', // no transition.
-                    'onShow'     => (new jsChain('atk.tableDropdown.onShow')),
-                    'onHide'     => (new jsChain('atk.tableDropdown.onHide')),
+                    'onShow' => (new jsChain('atk.tableDropdown.onShow')),
+                    'onHide' => (new jsChain('atk.tableDropdown.onHide')),
                 ]
             )
         );
@@ -177,7 +178,7 @@ class ActionMenu extends Generic
         return $s;
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

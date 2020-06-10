@@ -13,14 +13,14 @@ namespace atk4\ui;
  */
 class VirtualPage extends View
 {
-    /** @var Callback */
-    public $cb = null;
+    /** @var callback */
+    public $cb;
 
     /** @var callable Optional callback function of virtual page */
-    public $fx = null;
+    public $fx;
 
     /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */
-    public $urlTrigger = null;
+    public $urlTrigger;
 
     /** @var string UI container class */
     public $ui = 'container';
@@ -32,8 +32,8 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = $this->_add([Callback::class, 'urlTrigger'=>$this->urlTrigger ?: $this->name]);
-        $this->app->stickyGet($this->name);
+        $this->cb = $this->_add([Callback::class, 'urlTrigger' => $this->urlTrigger ?: $this->name]);
+        $this->app->stickyGet($this->cb->urlTrigger);
     }
 
     /**
@@ -41,7 +41,7 @@ class VirtualPage extends View
      *
      * Note that only one callback function can be defined.
      *
-     * @param array $fx   Need this to be defined as arrayotherwise we get warning in PHP7
+     * @param array $fx   Need this to be defined as array otherwise we get warning in PHP7
      * @param mixed $junk
      *
      * @return $this
@@ -53,12 +53,10 @@ class VirtualPage extends View
         }
 
         if ($this->fx) {
-            throw new Exception([
-                'Callback for this Virtual Page is already defined',
-                'vp'     => $this,
-                'old_fx' => $this->fx,
-                'new_fx' => $fx,
-            ]);
+            throw (new Exception('Callback for this Virtual Page is already defined'))
+                ->addMoreInfo('vp', $this)
+                ->addMoreInfo('old_fx', $this->fx)
+                ->addMoreInfo('new_fx', $fx);
         }
         $this->fx = $fx;
 
@@ -108,10 +106,8 @@ class VirtualPage extends View
     public function getHTML()
     {
         $this->cb->set(function () {
-
             // if virtual page callback is triggered
             if ($type = $this->cb->triggered()) {
-
                 // process callback
                 if ($this->fx) {
                     call_user_func($this->fx, $this);
@@ -143,8 +139,17 @@ class VirtualPage extends View
 
             // Remove all elements from inside the Content
             foreach ($this->app->layout->elements as $key => $view) {
-                if ($view instanceof View && $view->region == 'Content') {
+                if ($view instanceof View && $view->region === 'Content') {
                     unset($this->app->layout->elements[$key]);
+                }
+            }
+
+            // Prepare modals in order to include them in VirtualPage.
+            $modalHtml = '';
+            foreach ($this->app->html !== null ? $this->app->html->elements : [] as $view) {
+                if ($view instanceof Modal) {
+                    $modalHtml .= $view->getHTML();
+                    $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $view->_js_actions);
                 }
             }
 
@@ -152,6 +157,8 @@ class VirtualPage extends View
             $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $this->_js_actions);
 
             $this->app->html->template->setHTML('Content', $this->app->layout->getHTML());
+            $this->app->html->template->setHTML('Modals', $modalHtml);
+
             $this->app->html->template->appendHTML('HEAD', $this->app->layout->getJS());
 
             $this->app->terminateHTML($this->app->html->template);

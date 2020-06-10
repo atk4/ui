@@ -13,7 +13,7 @@ class Form extends Basic
     /**
      * @var \atk4\ui\Form
      */
-    public $form = null;
+    public $form;
 
     /**
      * Initialization.
@@ -38,7 +38,7 @@ class Form extends Basic
             $this->form->setModel($this->action->owner, $this->action->fields);
         }
 
-        $this->form->onSubmit(function ($f) {
+        $this->form->onSubmit(function (\atk4\ui\Form $form) {
             return $this->jsExecute();
         });
     }
@@ -46,8 +46,6 @@ class Form extends Basic
     /**
      * Returns array of names of fields.
      * This includes all editable or visible fields of the model.
-     *
-     * @param \atk4\data\Model $model
      *
      * @return array
      */

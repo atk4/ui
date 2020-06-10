@@ -59,7 +59,7 @@ Create "index.php" file with:
 require_once __DIR__ . '/vendor/autoload.php';
 
 $app = new \atk4\ui\App();   // That's your UI application
-$app->initLayout('Centered');
+$app->initLayout(\atk4\ui\Layout\Centered::class);
 
 $form = \atk4\ui\Form::addTo($app); // Yeah, that's a form!
 
@@ -67,7 +67,7 @@ $form->addField('email');    // adds field
 $form->onSubmit(function ($form) {
     // implement subscribe here
 
-    return $form->success('Subscribed '.$form->model['email'].' to newsletter.');
+    return $form->success('Subscribed ' . $form->model->get('email') . ' to newsletter.');
 });
 
 // Decorate anything
@@ -91,7 +91,7 @@ To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe 
 
 ``` php
 $app = new \atk4\ui\App('hello world');
-$app->initLayout('Admin');
+$app->initLayout(\atk4\ui\Layout\Admin::class);
 $app->dbConnect('mysql://user:pass@localhost/atk')
 
 \atk4\ui\CRUD::addTo($app)->setModel(new User($app->db));
@@ -136,7 +136,7 @@ It's easy to create your own application styling. Here are some example UI:
 As of version 2.0 - Agile Toolkit offers support for User Actions. Those are easy to define in your Data Model declaration:
 
 ``` php
-$this->addAction('archive', function($m) { $m['is_archived'] = true; $this->saveAndUnload(); });
+$this->addAction('archive', function(Model $m) { $m->get('is_archived') = true; $this->saveAndUnload(); });
 ```
 
 User interface such as CRUD or Card will automatically recognize new action and offer user to execute it. You can also
@@ -193,7 +193,7 @@ It's really easy to put together a complex Admin system. Add this code to a new 
 <?php
 
 $app = new \atk4\ui\App('My App');
-$app->initLayout('Admin');
+$app->initLayout(\atk4\ui\Layout\Admin::class);
 $app->dbConnect('mysql://user:pass@localhost/yourdb');
 
 class User extends \atk4\data\Model {

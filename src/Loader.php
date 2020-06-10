@@ -43,7 +43,7 @@ class Loader extends View
         parent::init();
 
         if (!$this->shim) {
-            $this->shim = ['View', 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
+            $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
         }
 
         $this->cb = Callback::addTo($this, ['appSticky' => $this->appStickyCb]);
@@ -64,7 +64,7 @@ class Loader extends View
      *  $l1->set([$my_object, 'run_long_process']);
      *
      * NOTE: default values are like that due ot PHP 7.0 warning:
-     * Declaration of atk4\ui\Loader::set($fx, $args = Array) should be compatible with atk4\ui\View::set($arg1 = Array, $arg2 = NULL)
+     * Declaration of \atk4\ui\Loader::set($fx, $args = Array) should be compatible with \atk4\ui\View::set($arg1 = Array, $arg2 = NULL)
      *
      * @param callable $fx
      * @param array    $args
@@ -113,10 +113,10 @@ class Loader extends View
     public function jsLoad($args = [], $apiConfig = [], $storeName = null)
     {
         return $this->js()->atkReloadView([
-            'uri'         => $this->cb->getJSURL(),
+            'uri' => $this->cb->getJSURL(),
             'uri_options' => $args,
-            'apiConfig'   => !empty($apiConfig) ? $apiConfig : null,
-            'storeName'   => $storeName ? $storeName : null,
+            'apiConfig' => !empty($apiConfig) ? $apiConfig : null,
+            'storeName' => $storeName ? $storeName : null,
         ]);
     }
 }

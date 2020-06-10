@@ -34,9 +34,9 @@ class jsSortable extends jsCallback
      * The css class name of the handle element for dragging purpose.
      *   if null, the entire element become the dragging handle.
      *
-     * @var null|string
+     * @var string|null
      */
-    public $handleClass = null;
+    public $handleClass;
 
     /**
      * Whether callback will be fire automatically or not.
@@ -50,7 +50,7 @@ class jsSortable extends jsCallback
      *
      * @var null| \atk4\ui\View
      */
-    public $view = null;
+    public $view;
 
     public function init(): void
     {
@@ -61,20 +61,20 @@ class jsSortable extends jsCallback
         $this->app->requireJS('https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.5/lib/draggable.bundle.js');
 
         $this->view->js(true)->atkJsSortable([
-            'uri'         => $this->getJSURL(),
+            'uri' => $this->getJSURL(),
             'uri_options' => $this->args,
-            'container'   => $this->container,
-            'draggable'   => $this->draggable,
+            'container' => $this->container,
+            'draggable' => $this->draggable,
             'handleClass' => $this->handleClass,
-            'dataLabel'   => $this->dataLabel,
-            'autoFireCb'  => $this->autoFireCb,
+            'dataLabel' => $this->dataLabel,
+            'autoFireCb' => $this->autoFireCb,
         ]);
     }
 
     /**
      * Callback when container has been reorder.
      *
-     * @param null|callable $fx
+     * @param callable|null $fx
      */
     public function onReorder($fx = null)
     {
@@ -94,7 +94,7 @@ class jsSortable extends jsCallback
     /**
      * return js action to retrieve order.
      *
-     * @param null|array $uriOptions
+     * @param array|null $uriOptions
      *
      * @return mixed
      */

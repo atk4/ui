@@ -12,12 +12,16 @@ use atk4\ui\ActionExecutor\Basic;
 class Grid extends View
 {
     use HookTrait;
+
+    /** @const string not used, make it public if needed or drop it */
+    private const HOOK_ON_USER_ACTION = self::class . '@onUserAction';
+
     /**
      * Will be initialized to Menu object, however you can set this to false to disable menu.
      *
      * @var Menu|false
      */
-    public $menu = null;
+    public $menu;
 
     /**
      * Calling addQuickSearch will create a form with a field inside $menu to perform quick searches.
@@ -28,7 +32,7 @@ class Grid extends View
      *
      * @var array|FormField\Generic
      */
-    public $quickSearch = null;
+    public $quickSearch;
 
     /**
      * Paginator is automatically added below the table and will divide long tables into pages.
@@ -37,7 +41,7 @@ class Grid extends View
      *
      * @var Paginator|false
      */
-    public $paginator = null;
+    public $paginator;
 
     /**
      * Number of items per page to display.
@@ -52,7 +56,7 @@ class Grid extends View
      *
      * @var TableColumn\ActionButtons
      */
-    public $actionButtons = null;
+    public $actionButtons;
 
     /**
      * Calling addAction will add a new column inside $table with dropdown menu,
@@ -60,7 +64,7 @@ class Grid extends View
      *
      * @var null
      */
-    public $actionMenu = null;
+    public $actionMenu;
 
     /**
      * Calling addSelection will add a new column inside $table, containing checkboxes.
@@ -68,7 +72,7 @@ class Grid extends View
      *
      * @var TableColumn\CheckBox
      */
-    public $selection = null;
+    public $selection;
 
     /**
      * Grid can be sorted by clicking on column headers. This will be automatically enabled
@@ -76,21 +80,21 @@ class Grid extends View
      *
      * @var bool
      */
-    public $sortable = null;
+    public $sortable;
 
     /**
      * Set this if you want GET argument name to look beautifully for sorting.
      *
-     * @var null|string
+     * @var string|null
      */
-    public $sortTrigger = null;
+    public $sortTrigger;
 
     /**
      * Component that actually renders data rows / columns and possibly totals.
      *
      * @var Table|false
      */
-    public $table = null;
+    public $table;
 
     public $executor_class = Basic::class;
 
@@ -99,25 +103,23 @@ class Grid extends View
      *
      * @var View
      */
-    public $container = null;
+    public $container;
 
     public $defaultTemplate = 'grid.html';
 
     /**
-     * TableColumn\ActionButtons seed.
      * Defines which Table Decorator to use for ActionButtons.
      *
      * @var string
      */
-    protected $actionButtonsDecorator = 'ActionButtons';
+    protected $actionButtonsDecorator = TableColumn\ActionButtons::class;
 
     /**
-     * TableColumn\ActionMenu seed.
      * Defines which Table Decorator to use for ActionMenu.
      *
      * @var array
      */
-    protected $actionMenuDecorator = ['ActionMenu', 'label' => 'Actions...'];
+    protected $actionMenuDecorator = [TableColumn\ActionMenu::class, 'label' => 'Actions...'];
 
     public function init(): void
     {
@@ -131,14 +133,14 @@ class Grid extends View
 
         // if menu not disabled ot not already assigned as existing object
         if ($this->menu !== false && !is_object($this->menu)) {
-            $this->menu = $this->add($this->factory(['Menu', 'activate_on_click' => false], $this->menu, 'atk4\ui'), 'Menu');
+            $this->menu = $this->add($this->factory([Menu::class, 'activate_on_click' => false], $this->menu), 'Menu');
         }
 
-        $this->table = $this->container->add($this->factory(['Table', 'very compact very basic striped single line', 'reload' => $this->container], $this->table, 'atk4\ui'), 'Table');
+        $this->table = $this->container->add($this->factory([Table::class, 'very compact very basic striped single line', 'reload' => $this->container], $this->table), 'Table');
 
         if ($this->paginator !== false) {
             $seg = View::addTo($this->container, [], ['Paginator'])->addStyle('text-align', 'center');
-            $this->paginator = $seg->add($this->factory(['Paginator', 'reload' => $this->container], $this->paginator, 'atk4\ui'));
+            $this->paginator = $seg->add($this->factory([Paginator::class, 'reload' => $this->container], $this->paginator));
             $this->app ? $this->app->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
         }
 
@@ -197,7 +199,7 @@ class Grid extends View
     public function addButton($text)
     {
         if (!$this->menu) {
-            throw new Exception(['Unable to add Button without Menu']);
+            throw new Exception('Unable to add Button without Menu');
         }
 
         return Button::addTo($this->menu->addItem(), [$text]);
@@ -213,7 +215,7 @@ class Grid extends View
      *
      * @throws Exception
      */
-    public function setIpp($ipp, $label = 'Item per pages:')
+    public function setIpp($ipp, $label = 'Items per page:')
     {
         if (is_array($ipp)) {
             $this->addItemsPerPageSelector($ipp, $label);
@@ -227,14 +229,14 @@ class Grid extends View
     /**
      * Add ItemsPerPageSelector View in grid menu or paginator in order to dynamically setup number of item per page.
      *
-     * @param array  $items An array of item's per page value.
-     * @param string $label The memu item label.
+     * @param array  $items an array of item's per page value
+     * @param string $label the memu item label
      *
      * @throws \atk4\core\Exception
      *
      * @return $this
      */
-    public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Item per pages:')
+    public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Items per page:')
     {
         if ($ipp = $this->container->stickyGet('ipp')) {
             $this->ipp = $ipp;
@@ -268,8 +270,8 @@ class Grid extends View
     /**
      * Add dynamic scrolling paginator.
      *
-     * @param int    $ipp          Number of item per page to start with.
-     * @param array  $options      An array with js Scroll plugin options.
+     * @param int    $ipp          number of item per page to start with
+     * @param array  $options      an array with js Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
      *
@@ -299,9 +301,9 @@ class Grid extends View
      * Add dynamic scrolling paginator in container.
      * Use this to make table headers fixed.
      *
-     * @param int    $ipp             Number of item per page to start with.
-     * @param int    $containerHeight Number of pixel the table container should be.
-     * @param array  $options         An array with js Scroll plugin options.
+     * @param int    $ipp             number of item per page to start with
+     * @param int    $containerHeight number of pixel the table container should be
+     * @param array  $options         an array with js Scroll plugin options
      * @param View   $container       The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion    A specific template region to render. Render output is append to container html element.
      *
@@ -313,7 +315,7 @@ class Grid extends View
     {
         $this->table->hasCollapsingCssActionColumn = false;
         $options = array_merge($options, [
-            'hasFixTableHeader'    => true,
+            'hasFixTableHeader' => true,
             'tableContainerHeight' => $containerHeight,
         ]);
         //adding a state context to js scroll plugin.
@@ -327,8 +329,8 @@ class Grid extends View
      * By default, will query server when using Enter key on input search field.
      * You can change it to query server on each keystroke by passing $autoQuery true,.
      *
-     * @param array $fields       The list of fields to search for.
-     * @param bool  $hasAutoQuery Will query server on each key pressed.
+     * @param array $fields       the list of fields to search for
+     * @param bool  $hasAutoQuery will query server on each key pressed
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -336,7 +338,7 @@ class Grid extends View
     public function addQuickSearch($fields = [], $hasAutoQuery = false)
     {
         if (!$this->model) {
-            throw new Exception(['Call setModel() before addQuickSearch()']);
+            throw new Exception('Call setModel() before addQuickSearch()');
         }
 
         if (!$fields) {
@@ -344,7 +346,7 @@ class Grid extends View
         }
 
         if (!$this->menu) {
-            throw new Exception(['Unable to add QuickSearch without Menu']);
+            throw new Exception('Unable to add QuickSearch without Menu');
         }
 
         $view = View::addTo($this->menu
@@ -422,8 +424,6 @@ class Grid extends View
     /**
      * Add action menu item using an array.
      *
-     * @param array $actions
-     *
      * @throws Exception
      * @throws Exception\NoRenderTree
      */
@@ -438,7 +438,7 @@ class Grid extends View
      * Add action menu items using Model.
      * You may specify the scope of actions to be added.
      *
-     * @param string|null $scope The scope of model action.
+     * @param string|null $scope the scope of model action
      *
      * @throws Exception
      * @throws Exception\NoRenderTree
@@ -459,7 +459,7 @@ class Grid extends View
      * An array of column name where filter is needed.
      * Leave empty to include all column in grid.
      *
-     * @param array|null $names An array with the name of column.
+     * @param array|null $names an array with the name of column
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -469,7 +469,7 @@ class Grid extends View
     public function addFilterColumn($names = null)
     {
         if (!$this->menu) {
-            throw new Exception(['Unable to add Filter Column without Menu']);
+            throw new Exception('Unable to add Filter Column without Menu');
         }
         $this->menu->addItem(['Clear Filters'], new \atk4\ui\jsReload($this->table->reload, ['atk_clear_filter' => 1]));
         $this->table->setFilterColumn($names);
@@ -480,11 +480,11 @@ class Grid extends View
     /**
      * Add a dropdown menu to header column.
      *
-     * @param string   $columnName The name of column where to add dropdown.
-     * @param array    $items      The menu items to add.
-     * @param callable $fx         The callback function to execute when an item is selected.
-     * @param string   $icon       The icon.
-     * @param string   $menuId     The menu id return by callback.
+     * @param string   $columnName the name of column where to add dropdown
+     * @param array    $items      the menu items to add
+     * @param callable $fx         the callback function to execute when an item is selected
+     * @param string   $icon       the icon
+     * @param string   $menuId     the menu id return by callback
      *
      * @throws Exception
      */
@@ -506,9 +506,9 @@ class Grid extends View
     /**
      * Add a popup to header column.
      *
-     * @param string $columnName The name of column where to add popup.
-     * @param Popup  $popup      Popup view.
-     * @param string $icon       The icon.
+     * @param string $columnName the name of column where to add popup
+     * @param Popup  $popup      popup view
+     * @param string $icon       the icon
      *
      * @throws Exception
      *
@@ -531,7 +531,7 @@ class Grid extends View
      * @param string|array|View $button
      * @param string            $title
      * @param callable          $callback function($page){ . .}
-     * @param array             $args     Extra url argument for callback.
+     * @param array             $args     extra url argument for callback
      *
      * @return object
      */
@@ -547,7 +547,7 @@ class Grid extends View
     /**
      * Find out more about the nature of the action from the supplied object, use addAction().
      *
-     * @param Generic $action The generic action.
+     * @param Generic $action the generic action
      */
     public function addUserAction(Generic $action)
     {
@@ -576,7 +576,7 @@ class Grid extends View
         $this->addModalAction($button, $title, function ($page, $id) use ($action, $executor) {
             $page->add($executor);
 
-            $this->hook('onUserAction', [$page, $executor]);
+            $this->hook(self::HOOK_ON_USER_ACTION, [$page, $executor]);
 
             $action->owner->load($id);
 
@@ -587,7 +587,7 @@ class Grid extends View
     /**
      * Get sortBy value from url parameter.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getSortBy()
     {
@@ -610,7 +610,7 @@ class Grid extends View
         }
 
         $desc = false;
-        if ($sortBy && $sortBy[0] == '-') {
+        if ($sortBy && $sortBy[0] === '-') {
             $desc = true;
             $sortBy = substr($sortBy, 1);
         }
@@ -665,7 +665,7 @@ class Grid extends View
      */
     public function addSelection()
     {
-        $this->selection = $this->table->addColumn(null, 'CheckBox');
+        $this->selection = $this->table->addColumn(null, TableColumn\CheckBox::class);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));
@@ -681,7 +681,7 @@ class Grid extends View
      */
     public function addDragHandler()
     {
-        $handler = $this->table->addColumn(null, 'DragHandler');
+        $handler = $this->table->addColumn(null, TableColumn\DragHandler::class);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));

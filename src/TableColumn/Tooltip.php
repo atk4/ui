@@ -3,6 +3,7 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
+use atk4\data\Model;
 use atk4\ui\Exception;
 
 /**
@@ -43,7 +44,7 @@ class Tooltip extends Generic
     public function getDataCellHTML(Field $f = null, $extra_tags = [])
     {
         if ($f === null) {
-            throw new Exception(['Tooltip can be used only with model field']);
+            throw new Exception('Tooltip can be used only with model field');
         }
 
         $attr = $this->getTagAttributes('body');
@@ -56,7 +57,7 @@ class Tooltip extends Generic
 
         return $this->app->getTag('td', $extra_tags, [
             ' {$' . $f->short_name . '}' . $this->app->getTag('span', [
-                'class'        => 'ui icon link {$_' . $f->short_name . '_data_visible_class}',
+                'class' => 'ui icon link {$_' . $f->short_name . '_data_visible_class}',
                 'data-tooltip' => '{$_' . $f->short_name . '_data_tooltip}',
             ], [
                 ['i', ['class' => 'ui icon {$_' . $f->short_name . '_icon}']],
@@ -64,23 +65,23 @@ class Tooltip extends Generic
         ]);
     }
 
-    public function getHTMLTags($row, $field)
+    public function getHTMLTags(Model $row, $field)
     {
         // @TODO remove popup tooltip when null
-        $tooltip = $row->data[$this->tooltip_field];
+        $tooltip = $row->get($this->tooltip_field);
 
-        if (is_null($tooltip) || empty($tooltip)) {
+        if ($tooltip === null || $tooltip === '') {
             return [
                 '_' . $field->short_name . '_data_visible_class' => 'transition hidden',
-                '_' . $field->short_name . '_data_tooltip'       => '',
-                '_' . $field->short_name . '_icon'               => '',
+                '_' . $field->short_name . '_data_tooltip' => '',
+                '_' . $field->short_name . '_icon' => '',
             ];
         }
 
         return [
             '_' . $field->short_name . '_data_visible_class' => '',
-            '_' . $field->short_name . '_data_tooltip'       => $tooltip,
-            '_' . $field->short_name . '_icon'               => $this->icon,
+            '_' . $field->short_name . '_data_tooltip' => $tooltip,
+            '_' . $field->short_name . '_icon' => $this->icon,
         ];
     }
 }

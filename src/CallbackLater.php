@@ -22,14 +22,14 @@ class CallbackLater extends Callback
     public function set($callback, $args = [])
     {
         if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
+            throw new Exception('Call-back must be part of a RenderTree');
         }
 
         if ($this->app->is_rendering) {
             return parent::set($callback, $args);
         }
 
-        $this->app->onHook('beforeRender', function (...$args) use ($callback) {
+        $this->app->onHook(App::HOOK_BEFORE_RENDER, function (...$args) use ($callback) {
             array_shift($args); // Hook will have first argument pointing to the app. We don't need that.
             return parent::set($callback, $args);
         }, $args);

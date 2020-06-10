@@ -21,7 +21,7 @@ class Calendar extends Input
      * Set this to 'date', 'time', 'month' or 'year'. Leaving this blank
      * will show both date and time.
      */
-    public $type = null;
+    public $type;
 
     /**
      * Any other options you'd like to pass to calendar JS.
@@ -54,7 +54,7 @@ class Calendar extends Input
         }
 
         $typeFormat = $this->type . '_format';
-        if ($format = $this->app->ui_persistence->$typeFormat) {
+        if ($format = $this->app->ui_persistence->{$typeFormat}) {
             $formatter = 'function(date, settings){
                             if (!date) return;
                             return atk.phpDate([format], date);

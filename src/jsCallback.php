@@ -2,8 +2,6 @@
 
 namespace atk4\ui;
 
-use atk4\ui\Modal;
-
 class jsCallback extends Callback implements jsExpressionable
 {
     /**
@@ -18,21 +16,21 @@ class jsCallback extends Callback implements jsExpressionable
      *
      * @var string
      */
-    public $confirm = null;
+    public $confirm;
 
     /**
      * Use this apiConfig variable to pass API settings to Semantic UI in .api().
      *
      * @var array|null
      */
-    public $apiConfig = null;
+    public $apiConfig;
 
     /**
      * Include web storage data item (key) value to be include in the request.
      *
-     * @var null|string
+     * @var string|null
      */
-    public $storeName = null;
+    public $storeName;
 
     /**
      * When multiple jsExpressionable's are collected inside an array and may
@@ -61,15 +59,15 @@ class jsCallback extends Callback implements jsExpressionable
     public function jsRender()
     {
         if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
+            throw new Exception('Call-back must be part of a RenderTree');
         }
 
         return (new jQuery())->atkAjaxec([
-            'uri'         => $this->getJSURL(),
+            'uri' => $this->getJSURL(),
             'uri_options' => $this->args,
-            'confirm'     => $this->confirm,
-            'apiConfig'   => $this->apiConfig,
-            'storeName'   => $this->storeName,
+            'confirm' => $this->confirm,
+            'apiConfig' => $this->apiConfig,
+            'storeName' => $this->storeName,
         ])->jsRender();
     }
 
@@ -107,13 +105,13 @@ class jsCallback extends Callback implements jsExpressionable
 
                 $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
 
-                $this->terminate($ajaxec);
+                $this->terminateAjax($ajaxec);
             } catch (\atk4\data\ValidationException $e) {
                 // Validation exceptions will be presented to user in a friendly way
-                $m = new Message($e->getMessage());
-                $m->addClass('error');
+                $msg = new Message($e->getMessage());
+                $msg->addClass('error');
 
-                $this->terminate(null, $m->getHTML(), false);
+                $this->terminateAjax(null, $msg->getHTML(), false);
             }
         });
 
@@ -124,24 +122,25 @@ class jsCallback extends Callback implements jsExpressionable
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      *
-     * @param array|jsExpressionable $ajaxec Array of jsExpressionable
-     * @param string $msg General message, typically won't be displayed
-     * @param bool $success Was request successful or not
+     * @param array|jsExpressionable $ajaxec  Array of jsExpressionable
+     * @param string                 $msg     General message, typically won't be displayed
+     * @param bool                   $success Was request successful or not
      *
-     * @return void
      * @throws Exception\ExitApplicationException
      * @throws \atk4\core\Exception
      */
-    public function terminate($ajaxec, $msg = null, $success = true)
+    public function terminateAjax($ajaxec, $msg = null, $success = true)
     {
-        $this->app->terminateJSON(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+        if ($this->canTerminate()) {
+            $this->app->terminateJSON(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+        }
     }
 
     /**
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
      * @param array|jsExpressionable $response response from callbacks,
-     * @param string $chain JavaScript string
+     * @param string                 $chain    JavaScript string
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -196,7 +195,8 @@ class jsCallback extends Callback implements jsExpressionable
         } elseif ($response instanceof jsExpressionable) {
             $action = $response;
         } else {
-            throw new Exception(['Incorrect callback. Response must be of type jsExpressionable, View, or String.', 'r' => $response]);
+            throw (new Exception('Incorrect callback. Response must be of type jsExpressionable, View, or String.'))
+                ->addMoreInfo('r', $response);
         }
 
         return $action;
@@ -212,7 +212,7 @@ class jsCallback extends Callback implements jsExpressionable
         if ($response instanceof Modal) {
             $html = $response->getHTML();
         } else {
-            $modal = new Modal(['id' =>false]);
+            $modal = new Modal(['id' => false]);
             $modal->add($response);
             $html = $modal->getHTML();
         }

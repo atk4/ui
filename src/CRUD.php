@@ -14,16 +14,16 @@ use atk4\ui\ActionExecutor\UserAction;
 class CRUD extends Grid
 {
     /** @var array of fields to display in Grid */
-    public $displayFields = null;
+    public $displayFields;
 
-    /** @var null|array of fields to edit in Form for Model edit action */
-    public $editFields = null;
+    /** @var array|null of fields to edit in Form for Model edit action */
+    public $editFields;
 
-    /** @var null|array of fields to edit in Form for Model add action */
-    public $addFields = null;
+    /** @var array|null of fields to edit in Form for Model add action */
+    public $addFields;
 
     /** @var array Default notifier to perform when adding or editing is successful * */
-    public $notifyDefault = ['jsToast'];
+    public $notifyDefault = [jsToast::class];
 
     /** @var string default js action executor class in UI for model action. */
     public $jsExecutor = jsUserAction::class;
@@ -32,7 +32,7 @@ class CRUD extends Grid
     public $executor = UserAction::class;
 
     /** @var bool|null should we use table column drop-down menu to display user actions? */
-    public $useMenuActions = null;
+    public $useMenuActions;
 
     /** @var array Collection of NO_RECORDS Scope Model action menu item */
     private $menuItems = [];
@@ -55,10 +55,21 @@ class CRUD extends Grid
     /** @var array Callback containers for model action. */
     public $onActions = [];
 
-    /** @var array Action name container that will reload Table after executing */
+    /** @var Hold recently deleted record id. */
+    private $deletedId;
+
+    /**
+     * @var array Action name container that will reload Table after executing
+     *
+     * @deprecated use action modifier instead
+     */
     public $reloadTableActions = [];
 
-    /** @var array Action name container that will remove the corresponding table row after executing */
+    /**
+     * @var array Action name container that will remove the corresponding table row after executing
+     *
+     * @deprecated use action modifier instead
+     */
     public $removeRowActions = [];
 
     public function init(): void
@@ -93,15 +104,12 @@ class CRUD extends Grid
     /**
      * Sets data model of CRUD.
      *
-     * @param \atk4\data\Model $m
-     * @param null|array       $fields
+     * @param array|null $fields
      *
      * @throws \atk4\core\Exception
      * @throws Exception
-     *
-     * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $m, $fields = null): \atk4\data\Model
+    public function setModel(Model $m, $fields = null): Model
     {
         if ($fields !== null) {
             $this->displayFields = $fields;
@@ -109,9 +117,14 @@ class CRUD extends Grid
 
         parent::setModel($m, $this->displayFields);
 
+        // Grab model id when using delete. Must be set before delete action execute.
+        $this->model->onHook('afterDelete', function ($m) {
+            $this->deletedId = $m->get($m->id_field);
+        });
+
         $this->model->unload();
 
-        if (is_null($this->useMenuActions)) {
+        if ($this->useMenuActions === null) {
             $this->useMenuActions = count($m->getActions()) > 4;
         }
 
@@ -148,8 +161,6 @@ class CRUD extends Grid
      * can setup Input field via javascript prior to display form or change form submit event
      * handler.
      *
-     * @param Generic $action
-     *
      * @throws \atk4\core\Exception
      *
      * @return object
@@ -157,13 +168,13 @@ class CRUD extends Grid
     protected function initActionExecutor(Generic $action)
     {
         $executor = $this->getExecutor($action);
-        $executor->onHook('afterExecute', function ($ex, $return, $id) use ($action) {
+        $executor->onHook(ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
             return $this->jsExecute($return, $action);
         });
 
         if ($executor instanceof UserAction) {
             foreach ($this->onActions as $k => $onAction) {
-                $executor->onHook('onStep', function ($ex, $step, $form) use ($onAction, $action) {
+                $executor->onHook(UserAction::HOOK_STEP, function ($ex, $step, $form) use ($onAction, $action) {
                     $key = key($onAction);
                     if ($key === $action->short_name && $step === 'fields') {
                         return call_user_func($onAction[$key], $form, $ex);
@@ -180,67 +191,74 @@ class CRUD extends Grid
      * depending on return type, model loaded and action scope.
      *
      * @throws \atk4\core\Exception
-     *
-     * @return array|object
      */
-    protected function jsExecute($return, $action)
+    protected function jsExecute($return, Generic $action): array
     {
-        if (is_string($return)) {
-            return  $this->getNotifier($return, $action);
-        } elseif (is_array($return) || $return instanceof jsExpressionable) {
-            return $return;
-        } elseif ($return instanceof Model) {
-            $msg = $return->loaded() ? $this->saveMsg : ($action->scope === Generic::SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
-
-            return $this->jsModelReturn($action, $msg);
-        } else {
-            return $this->getNotifier($this->defaultMsg, $action);
+        $js = [];
+        if ($jsAction = $this->getJsGridAction($action)) {
+            $js[] = $jsAction;
         }
+
+        // display msg return by action or depending on action modifier.
+        if (is_string($return)) {
+            $js[] = $this->getNotifier($return);
+        } else {
+            if ($action->modifier === Generic::MODIFIER_CREATE || $action->modifier === Generic::MODIFIER_UPDATE) {
+                $js[] = $this->getNotifier($this->saveMsg);
+            } elseif ($action->modifier === Generic::MODIFIER_DELETE) {
+                $js[] = $this->getNotifier($this->deleteMsg);
+            } else {
+                $js[] = $this->getNotifier($this->defaultMsg);
+            }
+        }
+
+        return $js;
+    }
+
+    /**
+     * Return proper js actions depending on action modifier type.
+     */
+    protected function getJsGridAction(Generic $action): ?jsExpressionable
+    {
+        switch ($action->modifier) {
+            case Generic::MODIFIER_UPDATE:
+            case Generic::MODIFIER_CREATE:
+                $js = $this->container->jsReload($this->_getReloadArgs());
+
+                break;
+            case Generic::MODIFIER_DELETE:
+                // use deleted record id to remove row, fallback to closest tr if id is not available.
+                $js = $this->deletedId ?
+                    (new jQuery('tr[data-id="' . $this->deletedId . '"]'))->transition('fade left') :
+                    (new jQuery())->closest('tr')->transition('fade left');
+
+                break;
+            default:
+                $js = null;
+        }
+
+        return $js;
     }
 
     /**
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      *
-     * @param null|string  $msg    The message to display.
-     * @param null|Generic $action The model action.
+     * @param string|null  $msg    the message to display
+     * @param Generic|null $action the model action
      *
      * @throws \atk4\core\Exception
      *
      * @return object
      */
-    protected function getNotifier($msg = null, $action = null)
+    protected function getNotifier(string $msg = null)
     {
-        $notifier = $this->factory($this->notifyDefault, null, 'atk4\ui');
+        $notifier = $this->factory($this->notifyDefault);
         if ($msg) {
             $notifier->setMessage($msg);
         }
 
         return $notifier;
-    }
-
-    /**
-     * js expression return when action afterHook executor return a Model.
-     *
-     * @param Generic $action
-     * @param string  $msg
-     *
-     * @throws \atk4\core\Exception
-     *
-     * @return array
-     */
-    protected function jsModelReturn(Generic $action = null, string $msg = 'Done!'): array
-    {
-        $js[] = $this->getNotifier($msg, $action);
-        if (in_array($action->short_name, $this->reloadTableActions)) {
-            $js[] =  $this->container->jsReload($this->_getReloadArgs());
-        } elseif (in_array($action->short_name, $this->removeRowActions)) {
-            $js[] = (new jQuery())->closest('tr')->transition('fade left');
-        } else {
-            $js[] = $action->owner->loaded() ? $this->container->jsReload($this->_getReloadArgs()) : (new jQuery())->closest('tr')->transition('fade left');
-        }
-
-        return $js;
     }
 
     /**
@@ -258,9 +276,7 @@ class CRUD extends Grid
     /**
      * Return proper action executor base on model action.
      *
-     * @param Generic $action
-     *
-     *@throws \atk4\core\Exception
+     * @throws \atk4\core\Exception
      *
      * @return object
      */
@@ -304,12 +320,8 @@ class CRUD extends Grid
     /**
      * Return proper action need to setup menu or action column.
      *
-     * @param string $scope
-     *
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
-     *
-     * @return array
      */
     private function _getModelActions(string $scope): array
     {
@@ -333,8 +345,6 @@ class CRUD extends Grid
      * Set callback for edit action in CRUD.
      * Callback function will receive the Edit Form and Executor as param.
      *
-     * @param callable $fx
-     *
      * @throws Exception
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
@@ -347,8 +357,6 @@ class CRUD extends Grid
     /**
      * Set callback for add action in CRUD.
      * Callback function will receive the Add Form and Executor as param.
-     *
-     * @param callable $fx
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -363,8 +371,6 @@ class CRUD extends Grid
      * Set callback for both edit and add action form.
      * Callback function will receive Forms and Executor as param.
      *
-     * @param callable $fx
-     *
      * @throws Exception
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
@@ -378,14 +384,11 @@ class CRUD extends Grid
     /**
      * Set onActions.
      *
-     * @param callable $fx
-     * @param string   $actionName
-     *
      * @throws Exception
      * @throws \atk4\core\Exception
      * @throws \atk4\data\Exception
      *
-     * @return null|mixed
+     * @return mixed|null
      */
     public function setOnActions(string $actionName, callable $fx)
     {

@@ -69,8 +69,8 @@ Note that tab contents are refreshed including any values you put on the form::
         $f = Form::addTo($tab, ['segment'=>true]);
         $f->setModel($m_register);
         $f->onSubmit(function ($f) {
-            if ($f->model['name'] != 'John') {
-                return $f->error('name', 'Your name is not John! It is "'.$f->model['name'].'". It should be John. Pleeease!');
+            if ($f->model->get('name') !== 'John') {
+                return $f->error('name', 'Your name is not John! It is "'.$f->model->get('name').'". It should be John. Pleeease!');
             }
         });
     });

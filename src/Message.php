@@ -20,21 +20,21 @@ class Message extends View
      *
      * @var string
      */
-    public $type = null;
+    public $type;
 
     /**
      * Contains a text to be included below.
      *
      * @var Text|false
      */
-    public $text = null;
+    public $text;
 
     /**
      * Specify icon to be displayed.
      *
      * @var string
      */
-    public $icon = null;
+    public $icon;
 
     public $ui = 'message';
 

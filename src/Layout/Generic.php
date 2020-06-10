@@ -10,9 +10,6 @@ class Generic extends View
     /**
      * Add a loadable View.
      *
-     * @param Loadable $panel
-     *
-     * @return Loadable
      * @throws \atk4\core\Exception
      */
     public function addRightPanel(Loadable $panel): Loadable

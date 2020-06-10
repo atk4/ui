@@ -56,7 +56,7 @@ class Callback
      *
      * @var string|null
      */
-    public $urlTrigger = null;
+    public $urlTrigger;
 
     /** @var bool stick callback url argument to view or application. */
     public $appSticky = false;
@@ -79,7 +79,7 @@ class Callback
         $this->_init();
 
         if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
+            throw new Exception('Call-back must be part of a RenderTree');
         }
 
         if (!$this->urlTrigger) {
@@ -133,6 +133,27 @@ class Callback
     }
 
     /**
+     * Terminate this callback
+     * by rendering the owner view.
+     */
+    public function terminate()
+    {
+        if ($this->canTerminate()) {
+            $this->app->terminateJSON($this->owner);
+        }
+    }
+
+    /**
+     * Prevent callback from terminating during a reload.
+     */
+    protected function canTerminate(): bool
+    {
+        $reload = $_GET['__atk_reload'] ?? null;
+
+        return !$reload || $this->owner->name === $reload;
+    }
+
+    /**
      * Is callback triggered?
      *
      * @return bool
@@ -153,7 +174,7 @@ class Callback
      */
     public function getJSURL($mode = 'ajax')
     {
-        return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
+        return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback' => 1], (bool) $this->postTrigger);
     }
 
     /**
@@ -166,6 +187,6 @@ class Callback
      */
     public function getURL($mode = 'callback')
     {
-        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
+        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback' => 1], (bool) $this->postTrigger);
     }
 }

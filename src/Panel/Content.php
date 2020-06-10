@@ -5,25 +5,23 @@
 
 namespace atk4\ui\Panel;
 
-use atk4\ui\jsCallback;
+use atk4\ui\Callback;
 use atk4\ui\View;
 
 class Content extends View implements LoadableContent
 {
     public $defaultTemplate = 'panel/content.html';
-    public $cb = null;
+    public $cb;
 
     public function init(): void
     {
         parent::init();
         $this->addClass('atk-panel-content');
-        $this->setCb(new jsCallback(['appSticky' => true]));
+        $this->setCb(new Callback(['appSticky' => true]));
     }
 
     /**
      * Return callback url for panel options.
-     *
-     * @return string
      */
     public function getCallbackUrl(): string
     {
@@ -33,12 +31,11 @@ class Content extends View implements LoadableContent
     /**
      * Set callback for panel.
      *
-     * @param jsCallback $cb
+     * @throws \atk4\core\Exception
      *
      * @return mixed|void
-     * @throws \atk4\core\Exception
      */
-    public function setCb(jsCallback $cb)
+    public function setCb(Callback $cb)
     {
         $this->cb = $this->add($cb);
     }
@@ -54,7 +51,7 @@ class Content extends View implements LoadableContent
         $this->cb->set(function () use ($callback) {
             if ($this->cb->triggered()) {
                 call_user_func($callback, $this);
-                $this->app->terminateJSON($this);
+                $this->cb->terminate();
             }
         });
     }
@@ -62,8 +59,6 @@ class Content extends View implements LoadableContent
     /**
      * Return an array of css selector where content will be
      * cleared on reload.
-     *
-     * @return array
      */
     public function getClearSelector(): array
     {

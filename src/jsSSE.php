@@ -2,20 +2,32 @@
 
 namespace atk4\ui;
 
-/*
+use atk4\core\HookTrait;
+
+/**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
-
 class jsSSE extends jsCallback
 {
-    // Allows us to fall-back to standard functionality of jsCallback if browser does not support SSE
+    use HookTrait;
+
+    /** @const string Executed when user aborted, or disconnect browser, when using this SSE. */
+    public const HOOK_ABORTED = self::class . '@connection_aborted';
+
+    /** @var bool Allows us to fall-back to standard functionality of jsCallback if browser does not support SSE. */
     public $browserSupport = false;
+
+    /** @var bool Show Loader when doing sse. */
     public $showLoader = false;
 
-    /**
-     * @var callable - custom function for outputting (instead of echo)
-     */
-    public $echoFunction = null;
+    /** @var bool add window.beforeunload listener for closing js EventSource. Off by default. */
+    public $closeBeforeUnload = false;
+
+    /** @var bool Keep execution alive or not if connection is close by user. False mean that execution will stop on user aborted. */
+    public $keepAlive = false;
+
+    /** @var callable - custom function for outputting (instead of echo) */
+    public $echoFunction;
 
     public function init(): void
     {
@@ -30,35 +42,39 @@ class jsSSE extends jsCallback
     public function jsRender()
     {
         if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
+            throw new Exception('Call-back must be part of a RenderTree');
         }
 
         $options = ['uri' => $this->getJSURL()];
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
         }
+        if ($this->closeBeforeUnload) {
+            $options['closeBeforeUnload'] = $this->closeBeforeUnload;
+        }
 
         return (new jQuery())->atkServerEvent($options)->jsRender();
     }
 
+    /**
+     * Sending an sse action.
+     */
     public function send($action, $success = true)
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', $this->app->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'jsAction');
-        } else {
-            // ignore event
+            $this->sendEvent('js', $this->app->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'atk_sse_action');
         }
     }
 
-    public function terminate($ajaxec, $msg = null, $success = true)
+    public function terminateAjax($ajaxec, $msg = null, $success = true)
     {
         if ($this->browserSupport) {
             if ($ajaxec) {
                 $this->sendEvent(
                     'js',
                     $this->app->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
-                    'jsAction'
+                    'atk_sse_action'
                 );
             }
 
@@ -92,6 +108,7 @@ class jsSSE extends jsCallback
     {
         if ($this->echoFunction) {
             call_user_func($this->echoFunction, $content);
+
             return;
         }
 
@@ -107,6 +124,15 @@ class jsSSE extends jsCallback
      */
     public function sendBlock(string $id, string $data, string $name = null): void
     {
+        if (connection_aborted()) {
+            $this->hook(self::HOOK_ABORTED);
+
+            // stop execution when aborted if not keepAlive.
+            if (!$this->keepAlive) {
+                $this->app->callExit();
+            }
+        }
+
         $this->output('id: ' . $id . "\n");
         if (strlen($name) > 0) {
             $this->output('event: ' . $name . "\n");
@@ -125,9 +151,14 @@ class jsSSE extends jsCallback
         }, preg_split('~\r?\n|\r~', $string)));
     }
 
+    /**
+     * Initialise this sse.
+     * It will ignore user abort by default.
+     */
     protected function initSse()
     {
         @set_time_limit(0); // disable time limit
+        ignore_user_abort(true);
 
         $this->app->setResponseHeader('content-type', 'text/event-stream');
 

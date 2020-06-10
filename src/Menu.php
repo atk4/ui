@@ -35,7 +35,7 @@ class Menu extends View
      * $seed can also be name here.
      *
      * @param string|array|Item $item
-     * @param string|array $action
+     * @param string|array      $action
      *
      * @return Item
      */
@@ -44,7 +44,7 @@ class Menu extends View
         if (!is_object($item)) {
             $item = (array) $item;
 
-            array_unshift($item, 'Item');
+            array_unshift($item, Item::class);
         }
 
         $item = $this->add($item)->setElement('a');
@@ -115,11 +115,13 @@ class Menu extends View
      *
      * @param string|array $name
      *
+     * @throws \atk4\core\Exception
+     *
      * @return Menu
      */
-    public function addGroup($name)
+    public function addGroup($name, string $template = 'menugroup.html')
     {
-        $group = (self::class)::addTo($this, ['defaultTemplate' => 'menugroup.html', 'ui' => false]);
+        $group = (self::class)::addTo($this, ['defaultTemplate' => $template, 'ui' => false]);
 
         $name = (array) $name;
 
@@ -166,7 +168,7 @@ class Menu extends View
      */
     public function addDivider()
     {
-        return parent::add(['View', 'class' => ['divider']]);
+        return parent::add([View::class, 'class' => ['divider']]);
     }
 
     /*
@@ -196,7 +198,7 @@ class Menu extends View
      */
     public function renderView()
     {
-        if ($this->activate_on_click && $this->ui == 'menu') {
+        if ($this->activate_on_click && $this->ui === 'menu') {
             // Semantic UI need some JS magic
             $this->on('click', 'a.item', $this->js()->find('.active')->removeClass('active'), ['preventDefault' => false, 'stopPropagation' => false]);
             $this->on('click', 'a.item', null, ['preventDefault' => false, 'stopPropagation' => false])->addClass('active');
