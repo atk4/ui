@@ -43,20 +43,47 @@
 // Variables
 @leftMenuWidth: 260px;
 @maestroSpace: 8px;
+@maestroItemsLeftMargin: 10px;
 @desktopWidth: 992px;
 @tabletWidth: 768px;
 @adminMenuHeight: 48px;
 @atkFooterHeight : 50px;
+@menuBorder: 1px solid rgba(255,255,255,0.10);
 
 @atkSlidePanelColor: @offWhite;
 
 // z-index
-@rightPanelIndex: 201;
+@topMenuIndex: 201;
+@rightPanelIndex: 301;
 @pushableIndex: 101;
-@sideNavIndex: 201;
+@sideNavIndex: 200;
 
+/******* ADMIN TOP MENU *******/
 
-/******* MAESTRO MENU *******/
+.ui.inverted.fixed.atk-admin-top-menu {
+  border: @menuBorder;
+  z-index: @topMenuIndex;
+}
+
+/******* ADMIN SIDENAV MENU *******/
+
+.atk-maestro-sidenav > .ui.grid {
+  width: @leftMenuWidth;
+}
+
+.atk-sidenav-content {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* A selected item in admin menu */
+.ui.sidebar.atk-sidenav {
+  .menu > .item.active {
+    background: none;
+  }
+}
+
+/******* MAESTRO SIDENAV MENU *******/
 
 .atk-maestro-sidenav {
   cursor: pointer;
@@ -72,7 +99,10 @@
 
 /* Item without a group in menu */
 .ui.inverted.menu a.atk-maestro-sidenav.item {
-  margin-right: @maestroSpace;
+  padding-left: 34px;
+  i {
+    margin-right: 2px;
+  }
   &.active {
     background-color: @blue;
   }
@@ -101,31 +131,17 @@
       padding-top: @maestroSpace;
       padding-bottom: @maestroSpace;
     }
+    .atk-maestro-menu-title header {
+      margin-left: -@maestroItemsLeftMargin;
+    }
+    .atk-maestro-menu-items .menu {
+      margin-left: @maestroItemsLeftMargin;
+    }
   }
 }
 
 .atk-maestro-sidenav.active .atk-maestro-menu-title {
   background-color: @blue;
-}
-
-.atk-maestro-sidenav > .ui.grid {
-  width: @leftMenuWidth;
-}
-
-.atk-sidenav-content {
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.ui.vertical.menu > .atk-sidenav-content > .item:first-child::before {
-  display: initial !important;
-}
-
-/* A selected item in admin menu */
-.ui.sidebar.atk-sidenav {
-  .menu > .item.active {
-    background: none;
-  }
 }
 
 // Layout
