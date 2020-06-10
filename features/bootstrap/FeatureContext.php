@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\behat;
+
 use Behat\Behat\Context\Context;
 use Behat\MinkExtension\Context\RawMinkContext;
 
@@ -22,7 +24,7 @@ class FeatureContext extends RawMinkContext implements Context
     /** @var null Temporary store button id when press. Use in js callback test. */
     protected $buttonId;
 
-    public function getSession($name = null): Behat\Mink\Session
+    public function getSession($name = null): \Behat\Mink\Session
     {
         return $this->getMink()->getSession($name);
     }
