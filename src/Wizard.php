@@ -15,7 +15,7 @@ class Wizard extends View
     /**
      * Callback, that triggers selection of a step.
      *
-     * @var callback
+     * @var Callback
      */
     public $stepCallback;
 
