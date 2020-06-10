@@ -750,10 +750,8 @@ class App
 
     /**
      * Request was made using App::jsURL().
-     *
-     * @return bool
      */
-    public function isJsUrlRequest()
+    public function isJsUrlRequest(): bool
     {
         return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
     }
