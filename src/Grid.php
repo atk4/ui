@@ -335,17 +335,18 @@ class Grid extends View
      * Adds a new button into the action column on the right. For CRUD this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array|View         $button  Label text, object or seed for the Button
-     * @param jsExpressionable|callable $action  JavaScript action or callback
-     * @param bool|string               $confirm Should we display confirmation "Are you sure?"
+     * @param string|array|View         $button     Label text, object or seed for the Button
+     * @param jsExpressionable|callable $action     JavaScript action or callback
+     * @param bool|string               $confirm    Should we display confirmation "Are you sure?"
+     * @param bool|callable             $isDisabled Is action disabled?
      */
-    public function addAction($button, $action, $confirm = false)
+    public function addAction($button, $action, $confirm = false, $isDisabled = false)
     {
         if (!$this->actions) {
             $this->actions = $this->table->addColumn(null, $this->actionDecorator);
         }
 
-        return $this->actions->addAction($button, $action, $confirm);
+        return $this->actions->addAction($button, $action, $confirm, $isDisabled);
     }
 
     /**
