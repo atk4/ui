@@ -2,6 +2,8 @@
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Button;
+
 require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Button::addTo($app, ['js Event Executor', 'small right floated basic blue', 'iconRight' => 'right arrow'])
@@ -39,13 +41,13 @@ $files->addAction('download', function (\atk4\data\Model $m) {
 
 $app->add($grid = new \atk4\ui\GridLayout(['columns' => 3]));
 
-$grid->add($executor = new \atk4\ui\ActionExecutor\Basic(), 'r1c1');
+$grid->add($executor = new \atk4\ui\ActionExecutor\Basic(['executorButton' => [Button::class, 'Import', 'primary']]), 'r1c1');
 $executor->setAction($action);
 $executor->ui = 'segment';
 $executor->description = 'Execute action using "Basic" executor and path="." argument';
 $executor->setArguments(['path' => '.']);
-$executor->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \atk4\ui\jsToast('Files imported: ' . $ret);
+$executor->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($x) {
+    return new \atk4\ui\jsToast('Done!');
 });
 
 $grid->add($executor = new \atk4\ui\ActionExecutor\ArgumentForm(), 'r1c2');
@@ -53,7 +55,7 @@ $executor->setAction($action);
 $executor->description = 'ArgumentForm executor will ask user about arguments';
 $executor->ui = 'segment';
 $executor->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \atk4\ui\jsToast('Files imported: ' . $ret);
+    return new \atk4\ui\jsToast('Imported!');
 });
 
 $grid->add($executor = new \atk4\ui\ActionExecutor\Preview(), 'r1c3');
@@ -63,7 +65,7 @@ $executor->previewType = 'console';
 $executor->description = 'Displays preview in console prior to executing';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \atk4\ui\jsToast('Files imported: ' . $ret);
+    return new \atk4\ui\jsToast('Confirm!');
 });
 
 \atk4\ui\CRUD::addTo($app, ['ipp' => 5])->setModel($files);

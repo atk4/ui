@@ -2,7 +2,7 @@ default:
   suites:
     my_suite:
       contexts:
-        - FeatureContext
+        - atk4\ui\behat\FeatureContext
         - Behat\MinkExtension\Context\MinkContext
   extensions:
     Behat\MinkExtension:

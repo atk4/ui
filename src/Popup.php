@@ -57,7 +57,7 @@ class Popup extends View
     /**
      * The callback use to generate dynamic content.
      *
-     * @var callback|null
+     * @var Callback|null
      */
     public $cb;
 

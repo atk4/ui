@@ -46,7 +46,9 @@ class Loader extends View
             $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
         }
 
-        $this->cb = Callback::addTo($this, ['appSticky' => $this->appStickyCb]);
+        if (!$this->cb) {
+            $this->cb = Callback::addTo($this, ['appSticky' => $this->appStickyCb]);
+        }
     }
 
     /**
