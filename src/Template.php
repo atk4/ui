@@ -6,23 +6,9 @@ use atk4\data\Model;
 
 /**
  * This class is a lightweight template engine. It's based around operating with
- * chunks of HTML code and the main aims are:.
- *
+ * chunks of HTML code and the main aims are:
  *  - completely remove any logic from templates
- *  - speed up template parsing and manipulation speed
- *
- * @author      Romans <romans@agiletoolkit.org>
- * @copyright   MIT
- *
- * @version     3.0
- *
- * ==[ Version History ]=======================================================
- * 1.0          First public version (released with AModules3 alpha)
- * 1.1          Added support for "_top" tag
- *              Removed support for permanent tags
- *              Much more comments and other fixes
- * 2.0          Reimplemented template parsing, now doing it with regexps
- * 3.0          Re-integrated as part of Agile UI under MIT license
+ *  - speed up template parsing and manipulation speed.
  */
 class Template implements \ArrayAccess
 {

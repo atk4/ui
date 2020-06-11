@@ -219,8 +219,6 @@ class App
 
     /**
      * @param bool $for_shutdown if true will not pass in caughtException method
-     *
-     * @throws ExitApplicationException
      */
     public function callExit($for_shutdown = false)
     {
@@ -248,8 +246,6 @@ class App
 
     /**
      * Catch exception.
-     *
-     * @throws ExitApplicationException
      *
      * @return bool
      */
@@ -342,8 +338,6 @@ class App
      *
      * @param string|array $output  Array type is supported only for JSON response
      * @param string[]     $headers content-type header must be always set or consider using App::terminateHTML() or App::terminateJSON() methods
-     *
-     * @throws ExitApplicationException
      */
     public function terminate($output = '', array $headers = []): void
     {
@@ -500,8 +494,6 @@ class App
 
     /**
      * Runs app and echo rendered template.
-     *
-     * @throws ExitApplicationException
      */
     public function run()
     {
@@ -775,8 +767,6 @@ class App
      * A convenient wrapper for sending user to another page.
      *
      * @param array|string $page Destination page
-     *
-     * @throws ExitApplicationException
      */
     public function redirect($page, bool $permanent = false): void
     {

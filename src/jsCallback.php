@@ -125,8 +125,6 @@ class jsCallback extends Callback implements jsExpressionable
      * @param array|jsExpressionable $ajaxec  Array of jsExpressionable
      * @param string                 $msg     General message, typically won't be displayed
      * @param bool                   $success Was request successful or not
-     *
-     * @throws Exception\ExitApplicationException
      */
     public function terminateAjax($ajaxec, $msg = null, $success = true)
     {
