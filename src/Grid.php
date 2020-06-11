@@ -144,7 +144,7 @@ class Grid extends View
             $this->app ? $this->app->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
         }
 
-        $this->stickyGet('_q');
+        $this->app ? $this->app->stickyGet('_q') : $this->stickyGet('_q');
     }
 
     /**

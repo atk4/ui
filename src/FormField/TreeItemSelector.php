@@ -69,7 +69,7 @@ class TreeItemSelector extends Generic
     /**
      * Callback for onTreeChange.
      *
-     * @var null | jsCallback
+     * @var jsCallback|null
      */
     private $cb;
 

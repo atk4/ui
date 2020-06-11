@@ -2,11 +2,10 @@
 
 namespace atk4\ui\tests;
 
-use atk4\core\AtkPhpunit;
 use atk4\ui\Table;
 use atk4\ui\TableColumn\Template;
 
-class GridTest extends AtkPhpunit\TestCase
+class GridTest extends \atk4\core\AtkPhpunit\TestCase
 {
     use Concerns\HandlesTable;
 
@@ -58,11 +57,11 @@ class GridTest extends AtkPhpunit\TestCase
         $t = new Table();
         $t->init();
         $t->setModel($this->m, ['email']);
-        $t->addColumn(null, \atk4\ui\TableColumn\Delete::class);
+        $del = $t->addColumn(null, \atk4\ui\TableColumn\Delete::class);
 
-        $this->assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="delete"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHTML());
+        $this->assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="' . $del->short_name . '"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHTML());
         $this->assertSame(
-            '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="delete"><i class="ui red trash icon"></i>Delete</a></td></tr>',
+            '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="' . $del->short_name . '"><i class="ui red trash icon"></i>Delete</a></td></tr>',
             $this->extractTableRow($t)
         );
     }

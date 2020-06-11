@@ -1,5 +1,7 @@
 <?php
 
+namespace atk4\ui\behat;
+
 use Behat\Behat\Context\Context;
 use Behat\MinkExtension\Context\RawMinkContext;
 
@@ -22,19 +24,19 @@ class FeatureContext extends RawMinkContext implements Context
     /** @var null Temporary store button id when press. Use in js callback test. */
     protected $buttonId;
 
-    public function getSession($name = null)
+    public function getSession($name = null): \Behat\Mink\Session
     {
         return $this->getMink()->getSession($name);
     }
 
     /**
-     * Wait for a certain time in ms.
+     * Sleep for a certain time in ms.
      *
-     * @Then I wait :arg1
+     * @Then I sleep :arg1 ms
      *
      * @param $arg1
      */
-    public function iWait($arg1)
+    public function iSleep($arg1)
     {
         $this->getSession()->wait($arg1);
     }
@@ -67,12 +69,48 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * @Then I press menu button :arg1 using class :arg2
+     */
+    public function iPressMenuButtonUsingClass($arg1, $arg2)
+    {
+        $menu = $this->getSession()->getPage()->find('css', '.ui.menu.' . $arg2);
+        if (!$menu) {
+            throw new \Exception('Unable to find a menu with class ' . $arg2);
+        }
+
+        $link = $menu->find('xpath', '//a[text()="' . $arg1 . '"]');
+        if (!$link) {
+            throw new \Exception('Unable to find menu with title ' . $arg1);
+        }
+
+        $script = '$("#' . $link->getAttribute('id') . '").click()';
+        $this->getSession()->executeScript($script);
+    }
+
+    /**
      * @Given I click link :arg1
      */
     public function iClickLink($arg1)
     {
         $link = $this->getSession()->getPage()->find('xpath', '//a[text()="' . $arg1 . '"]');
         $link->click();
+    }
+
+    /**
+     * @Then I click filter column name :arg1
+     */
+    public function iClickFilterColumnName($arg1)
+    {
+        $column = $this->getSession()->getPage()->find('css', "th[data-column='" . $arg1 . "']");
+        if (!$column) {
+            throw new \Exception('Unable to find a column ' . $arg1);
+        }
+        $icon = $column->find('css', 'i');
+        if (!$icon) {
+            throw new \Exception('Column does not contain clickable icon.');
+        }
+        $script = '$("#' . $icon->getAttribute('id') . '").click()';
+        $this->getSession()->executeScript($script);
     }
 
     /**
@@ -183,6 +221,17 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * @Then Active tab should be :arg1
+     */
+    public function activeTabShouldBe($arg1)
+    {
+        $tab = $this->getSession()->getPage()->find('css', '.ui.tabular.menu > .item.active');
+        if ($tab->getText() !== $arg1) {
+            throw new \Exception('Active tab is not ' . $arg1);
+        }
+    }
+
+    /**
      * @Then Modal is showing text :arg1 inside tag :arg2
      *
      * @param $arg1
@@ -250,6 +299,14 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     /**
+     * @Then I wait for toast to hide
+     */
+    public function iWaitForToastToHide()
+    {
+        $this->getSession()->wait(20000, '$(".ui.toast-container").children().length === 0');
+    }
+
+    /**
      * @Then I select value :arg1 in lookup :arg2
      *
      * Select a value in a lookup field.
@@ -278,6 +335,45 @@ class FeatureContext extends RawMinkContext implements Context
         $script = '$("#' . $lookup->getAttribute('id') . '").dropdown("hide");';
         $script .= '$("#' . $lookup->getAttribute('id') . '").dropdown("set selected", ' . $value->getAttribute('data-value') . ');';
         $this->getSession()->executeScript($script);
+    }
+
+    /**
+     * @Then I search grid for :arg1
+     */
+    public function iSearchGridFor($arg1)
+    {
+        $search = $this->getSession()->getPage()->find('css', 'input.atk-grid-search');
+        if (!$search) {
+            throw new \Exception('Unable to find search input.');
+        }
+
+        $search->setValue($arg1);
+    }
+
+    /**
+     * @Then I click icon using css :arg1
+     */
+    public function iClickIconUsingCss($arg1)
+    {
+        $icon = $this->getSession()->getPage()->find('css', $arg1);
+        if (!$icon) {
+            throw new \Exception('Unable to find search remove icon.');
+        }
+
+        $icon->click();
+    }
+
+    /**
+     * Wait for an element, usually an auto trigger element, to show that loading has start"
+     * Example, when entering value in jsSearch for grid. We need to auto trigger to fire before
+     * doing waiting for callback.
+     * $arg1 should represent the element selector for jQuery.
+     *
+     * @Then I wait for loading to start in :arg1
+     */
+    public function iWaitForLoadingToStartIn($arg1)
+    {
+        $this->getSession()->wait(2000, '$("' . $arg1 . '").hasClass("loading")');
     }
 
     /**
