@@ -594,7 +594,7 @@ class Template implements \ArrayAccess
         $template = $this->getTagRefList($tag);
         if ($template != $this->template) {
             foreach ($template as $key => $templ) {
-                $ref = $tag . '#' . ($key + 1);
+                $ref = $tag.'#'.($key + 1);
                 $this->tags[$tag][$key] = [call_user_func($callable, $this->recursiveRender($templ), $ref)];
             }
         } else {
@@ -622,7 +622,7 @@ class Template implements \ArrayAccess
         $n->app = $this->app;
         $n->template = unserialize(serialize(['_top#1' => $this->get($tag)]));
         $n->rebuildTags();
-        $n->source = 'clone (' . $tag . ') of template ' . $this->source;
+        $n->source = 'clone ('.$tag.') of template '.$this->source;
 
         return $n;
     }
@@ -664,7 +664,7 @@ class Template implements \ArrayAccess
     {
         if (is_readable($filename) && is_file($filename)) {
             $this->loadTemplateFromString(file_get_contents($filename));
-            $this->source = 'loaded from file: ' . $filename;
+            $this->source = 'loaded from file: '.$filename;
 
             return $this;
         }
@@ -681,7 +681,7 @@ class Template implements \ArrayAccess
      */
     public function loadTemplateFromString($str)
     {
-        $this->source = 'string: ' . $str;
+        $this->source = 'string: '.$str;
         $this->template = $this->tags = [];
         if (!$str) {
             return;
@@ -722,7 +722,7 @@ class Template implements \ArrayAccess
             $this->tag_cnt[$tag] = 0;
         }
 
-        return $tag . '#' . (++$this->tag_cnt[$tag]);
+        return $tag.'#'.(++$this->tag_cnt[$tag]);
     }
 
     /**

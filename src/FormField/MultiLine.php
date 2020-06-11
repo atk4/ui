@@ -567,9 +567,8 @@ class MultiLine extends Generic
         $this->multiLine->template->setHTML('Input', $this->getInput());
         parent::renderView();
 
-        $this->multiLine->vue(
-            'atk-multiline',
-            [
+        $this->multiLine->vue('atk-multiline',
+                              [
                                   'data' => [
                                       'linesField'  => $this->short_name,
                                       'fields'      => $this->fieldDefs,
@@ -579,8 +578,7 @@ class MultiLine extends Generic
                                       'hasChangeCb' => $this->changeCb ? true : false,
                                       'options'     => $this->options,
                                   ],
-                              ]
-        );
+                              ]);
     }
 
     /**
@@ -785,7 +783,7 @@ class MultiLine extends Generic
                 break;
             default:
                 //Value is "" or field value enclosed in bracket: "value"
-                $value = $model[$fieldName] ? '"' . $model[$fieldName] . '"' : '""';
+                $value = $model[$fieldName] ? '"'.$model[$fieldName].'"' : '""';
         }
 
         return $value;

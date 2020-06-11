@@ -52,7 +52,7 @@ class ItemSearch extends View
         }
 
         if (!$this->queryArg) {
-            $this->queryArg = 'q_' . $this->name;
+            $this->queryArg = 'q_'.$this->name;
         }
     }
 
@@ -61,7 +61,7 @@ class ItemSearch extends View
      */
     public function getQuery()
     {
-        $arg = 'q_' . $this->name;
+        $arg = 'q_'.$this->name;
 
         return $_GET[$arg] ? $_GET[$arg] : null;
     }
@@ -77,7 +77,7 @@ class ItemSearch extends View
     {
         $q = $this->getQuery();
         if ($q && ($_GET['__atk_reload'] ? $_GET['__atk_reload'] : null) === $this->reload->name) {
-            $m->addCondition('name', 'like', '%' . $q . '%');
+            $m->addCondition('name', 'like', '%'.$q.'%');
         }
 
         return $m;
@@ -97,12 +97,9 @@ class ItemSearch extends View
             $reloadId = $this->reload;
         }
 
-        $this->js(
-            true,
-            (new jsVueService())->createAtkVue(
-            '#' . $this->name,
-            'atk-item-search',
-            [
+        $this->js(true, (new jsVueService())->createAtkVue('#'.$this->name,
+                                                      'atk-item-search',
+                                                      [
                                                           'reload'   => $reloadId,
                                                           'queryArg' => $this->queryArg,
                                                           'url'      => $this->reload->jsURL(),

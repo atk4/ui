@@ -71,7 +71,7 @@ class jsCallback extends Callback implements jsExpressionable
 
         foreach ($args as $key => $val) {
             if (is_numeric($key)) {
-                $key = 'c' . $key;
+                $key = 'c'.$key;
             }
             $this->args[$key] = $val;
         }
@@ -131,9 +131,9 @@ class jsCallback extends Callback implements jsExpressionable
 
         if ($response instanceof View) {
             $response = new jsExpression('$([html]).modal("show")', [
-                        'html' => '<div class="ui fullscreen modal"> <i class="close icon"></i>  <div class="content"> ' .
+                        'html' => '<div class="ui fullscreen modal"> <i class="close icon"></i>  <div class="content"> '.
                         $response->render()
-                        . ' </div> </div>',
+                        .' </div> </div>',
                     ]);
         }
 

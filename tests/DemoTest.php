@@ -20,7 +20,7 @@ class DemoTest extends \atk4\core\PHPUnit_AgileTestCase
 
     public function inc($f)
     {
-        $_SERVER['REQUEST_URI'] = '/ui/' . $f;
+        $_SERVER['REQUEST_URI'] = '/ui/'.$f;
         include $f;
 
         return $app;

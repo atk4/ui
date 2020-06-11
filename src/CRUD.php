@@ -136,9 +136,9 @@ class CRUD extends Grid
             if (!$this->menu) {
                 throw new Exception('Can not add create button without menu');
             }
-            $this->itemCreate = $this->menu->addItem(['Add new ' . $this->model->getModelCaption(), 'icon' => 'plus']);
+            $this->itemCreate = $this->menu->addItem(['Add new '.$this->model->getModelCaption(), 'icon' => 'plus']);
         }
-        $this->itemCreate->on('click.atk_CRUD', new jsModal('Add new', $this->pageCreate, [$this->name . '_sort' => $this->getSortBy()]));
+        $this->itemCreate->on('click.atk_CRUD', new jsModal('Add new', $this->pageCreate, [$this->name.'_sort' => $this->getSortBy()]));
 
         // setting callback for the page
         $this->pageCreate->set(function () {
@@ -152,7 +152,7 @@ class CRUD extends Grid
             $this->formCreate->setModel($this->model, $this->fieldsCreate ?: $this->fieldsDefault);
 
             if ($sortBy = $this->getSortBy()) {
-                $this->formCreate->stickyGet($this->name . '_sort', $sortBy);
+                $this->formCreate->stickyGet($this->name.'_sort', $sortBy);
             }
 
             // set save handler with reload trigger
@@ -177,14 +177,11 @@ class CRUD extends Grid
         if ($this->getSortBy() && $this->itemCreate) {
             //Remove previous click handler to Add new Item button and attach new one using sort argument.
             $this->container->js(true, $this->itemCreate->js()->off('click.atk_CRUD'));
-            $this->container->js(
-                true,
-                $this->itemCreate->js()->on(
-                                     'click.atk_CRUD',
-                                     new jsFunction([
-                                     new jsModal('Add new', $this->pageCreate, [$this->name . '_sort' => $this->getSortBy()]),
-                                 ])
-                                 )
+            $this->container->js(true,
+                                 $this->itemCreate->js()->on('click.atk_CRUD',
+                                 new jsFunction([
+                                     new jsModal('Add new', $this->pageCreate, [$this->name.'_sort' => $this->getSortBy()]),
+                                 ]))
             );
         }
     }
@@ -207,7 +204,7 @@ class CRUD extends Grid
      */
     public function initUpdate()
     {
-        $this->addAction(['icon' => 'edit'], new jsModal('Edit', $this->pageUpdate, [$this->name => $this->jsRow()->data('id'), $this->name . '_sort' => $this->getSortBy()]));
+        $this->addAction(['icon' => 'edit'], new jsModal('Edit', $this->pageUpdate, [$this->name => $this->jsRow()->data('id'), $this->name.'_sort' => $this->getSortBy()]));
 
         $this->pageUpdate->set(function () {
             $this->model->load($this->app->stickyGet($this->name));
@@ -220,7 +217,7 @@ class CRUD extends Grid
             $this->formUpdate->setModel($this->model, $this->fieldsUpdate ?: $this->fieldsDefault);
 
             if ($sortBy = $this->getSortBy()) {
-                $this->formUpdate->stickyGet($this->name . '_sort', $sortBy);
+                $this->formUpdate->stickyGet($this->name.'_sort', $sortBy);
             }
 
             // set save handler with reload trigger
@@ -263,7 +260,7 @@ class CRUD extends Grid
             $this->factory($notifier),
 
             // reload Grid Container.
-            $this->container->jsReload([$this->name . '_sort' => $this->getSortBy()]),
+            $this->container->jsReload([$this->name.'_sort' => $this->getSortBy()]),
         ];
     }
 

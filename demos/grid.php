@@ -18,17 +18,16 @@ $g->addColumn(null, ['Template', 'hello<b>world</b>']);
 $g->addColumn(null, 'Delete');
 
 $g->addAction('Say HI', function ($j, $id) use ($g) {
-    return 'Loaded "' . $g->model->load($id)['name'] . '" from ID=' . $id;
+    return 'Loaded "'.$g->model->load($id)['name'].'" from ID='.$id;
 });
 
 $g->addModalAction(['icon'=>'external'], 'Modal Test', function ($p, $id) {
-    $p->add(['Message', 'Clicked on ID=' . $id]);
+    $p->add(['Message', 'Clicked on ID='.$id]);
 });
 
 $sel = $g->addSelection();
 $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
-    'alert("Selected: "+[])',
-    [$sel->jsChecked()]
+    'alert("Selected: "+[])', [$sel->jsChecked()]
 ));
 
 //Setting ipp with an array will add an ItemPerPageSelector to paginator.

@@ -88,14 +88,14 @@ class Link extends Generic
 
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        return '<a href="{$c_' . $this->short_name . '}">' . ($f ? ('{$' . $f->short_name . '}') : '[Link]') . '</a>';
+        return '<a href="{$c_'.$this->short_name.'}">'.($f ? ('{$'.$f->short_name.'}') : '[Link]').'</a>';
     }
 
     public function getHTMLTags($row, $field)
     {
         // Decide on the content
         if ($this->url) {
-            return ['c_' . $this->short_name => $this->url->set($row->get())->render()];
+            return ['c_'.$this->short_name => $this->url->set($row->get())->render()];
         }
 
         $p = $this->page ?: [];
@@ -110,6 +110,6 @@ class Link extends Generic
             }
         }
 
-        return ['c_' . $this->short_name => $this->table->url($p)];
+        return ['c_'.$this->short_name => $this->table->url($p)];
     }
 }

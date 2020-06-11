@@ -38,9 +38,8 @@ class TypeDatetime extends Generic
         ];
 
         // The range value field use when within is select.
-        $this->addField(
-            'range',
-            ['ui'     => ['caption' => ''],
+        $this->addField('range',
+                        ['ui'     => ['caption' => ''],
                          'values' => [
                              '-1 week'      => 'The past week',
                              '-1 month'     => 'The past month',
@@ -50,8 +49,7 @@ class TypeDatetime extends Generic
                              '+1 year'      => 'The next year',
                              'x_day_before' => 'The next numbers of days before',
                              'x_day_after'  => 'The next number of days after',
-                         ], ]
-        );
+                         ], ]);
 
         // The exact date field input when exact is select as input value.
         $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
@@ -138,11 +136,11 @@ class TypeDatetime extends Generic
                 break;
             case 'x_day_ago':
             case 'x_day_before':
-                $date = new DateTime('-' . $this->data['number_days'] . ' days');
+                $date = new DateTime('-'.$this->data['number_days'].' days');
                 break;
             case 'x_day_now':
             case 'x_day_after':
-                $date = new DateTime('+' . $this->data['number_days'] . ' days');
+                $date = new DateTime('+'.$this->data['number_days'].' days');
                 break;
             default:
                 $date = new DateTime($dateModifier);

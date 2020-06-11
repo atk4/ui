@@ -40,7 +40,7 @@ class Actions extends Generic
      */
     public function addAction($button, $callback, $confirm = false, $isDisabled = false)
     {
-        $name = $this->name . '_action_' . (count($this->actions) + 1);
+        $name = $this->name.'_action_'.(count($this->actions) + 1);
 
         if (!is_object($button)) {
             $button = new Button($button);
@@ -55,7 +55,7 @@ class Actions extends Generic
             $this->callbacks[$name] = $isDisabled;
         }
 
-        $this->table->on('click', '.b_' . $name, $callback, [$this->table->jsRow()->data('id'), 'confirm' => $confirm]);
+        $this->table->on('click', '.b_'.$name, $callback, [$this->table->jsRow()->data('id'), 'confirm' => $confirm]);
 
         return $button;
     }
@@ -104,7 +104,7 @@ class Actions extends Generic
             $output .= $action->getHTML();
         }
 
-        return '<div class="ui buttons">' . $output . '</div>';
+        return '<div class="ui buttons">'.$output.'</div>';
     }
 
     public function getHTMLTags(Model $row, $field)
