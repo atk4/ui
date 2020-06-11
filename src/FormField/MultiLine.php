@@ -320,9 +320,9 @@ class MultiLine extends Generic
                     foreach ($this->rowFields as $fieldName) {
                         $field = $m->getField($fieldName);
                         if ($field->isEditable()) {
-                            $value = $row->get($field);
+                            $value = $row->get($field->short_name);
                         } else {
-                            $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field));
+                            $value = $this->app->ui_persistence->_typecastSaveField($field, $row->get($field->short_name));
                         }
                         $d_row[$fieldName] = $value;
                     }
