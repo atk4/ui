@@ -148,7 +148,7 @@ class Generic extends View
             $default['stopPropagation'] = $default;
         }
 
-        $this->on('change', '#'.$this->id.'_input', $expr, $default);
+        $this->on('change', '#' . $this->id . '_input', $expr, $default);
     }
 
     /**

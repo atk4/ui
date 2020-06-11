@@ -25,6 +25,6 @@ class Image extends \atk4\ui\TableColumn\Generic
     {
         $caption = $f ? $f->getCaption() : $this->short_name;
 
-        return '<img src="'.parent::getDataCellTemplate($f).'" alt="'.$caption.'" border="0" />';
+        return '<img src="' . parent::getDataCellTemplate($f) . '" alt="' . $caption . '" border="0" />';
     }
 }

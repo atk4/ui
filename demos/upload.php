@@ -16,11 +16,11 @@ $field = $form->addField('file', ['Upload', ['accept' => ['.png', '.jpg']]]);
 $img->onDelete(function ($fileId) use ($img) {
     $img->clearThumbnail('./images/default.png');
 
-    return new atk4\ui\jsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
+    return new atk4\ui\jsNotify(['content' => $fileId . ' has been removed!', 'color' => 'green']);
 });
 
 $field->onDelete(function ($fileId) {
-    return new atk4\ui\jsNotify(['content' => $fileId.' has been removed!', 'color' => 'green']);
+    return new atk4\ui\jsNotify(['content' => $fileId . ' has been removed!', 'color' => 'green']);
 });
 
 $img->onUpload(function ($files) use ($form, $img) {
@@ -29,7 +29,7 @@ $img->onUpload(function ($files) use ($form, $img) {
     }
 
     $img->setThumbnailSrc('./images/logo.png');
-    $img->set('123456', $files['name'].' (token: 123456)');
+    $img->set('123456', $files['name'] . ' (token: 123456)');
 
     //Do file processing here...
 
@@ -55,5 +55,5 @@ $field->onUpload(function ($files) use ($form, $field) {
 
 $form->onSubmit(function ($form) {
     // implement submission here
-    return $form->success('Thanks for submitting file: '.$form->model['img'].' / '.$form->model['file']);
+    return $form->success('Thanks for submitting file: ' . $form->model['img'] . ' / ' . $form->model['file']);
 });

@@ -66,7 +66,7 @@ class jsExpression implements jsExpressionable
                 }
 
                 if (is_object($value) && $value instanceof jsExpressionable) {
-                    $value = '('.$value->jsRender().')';
+                    $value = '(' . $value->jsRender() . ')';
                 } elseif (is_object($value)) {
                     $value = $this->_json_encode($value->toString());
                 } else {
@@ -115,17 +115,17 @@ class jsExpression implements jsExpressionable
                 if (!$assoc) {
                     $array[] = $value;
                 } else {
-                    $array[] = $key.':'.$value;
+                    $array[] = $key . ':' . $value;
                 }
             }
 
             if ($assoc) {
-                $string = '{'.implode(',', $array).'}';
+                $string = '{' . implode(',', $array) . '}';
             } else {
-                $string = '['.implode(',', $array).']';
+                $string = '[' . implode(',', $array) . ']';
             }
         } elseif (is_string($arg)) {
-            $string = '"'.$this->_safe_js_string($arg).'"';
+            $string = '"' . $this->_safe_js_string($arg) . '"';
         } elseif (is_bool($arg)) {
             $string = json_encode($arg);
         } elseif (is_numeric($arg)) {
@@ -164,7 +164,7 @@ class jsExpression implements jsExpressionable
                 case '>':
                 case '&':
                 case '\\':
-                    $ret .= '\x'.dechex(ord($str[$i]));
+                    $ret .= '\x' . dechex(ord($str[$i]));
                     break;
                 default:
                     $ret .= $str[$i];

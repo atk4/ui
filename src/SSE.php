@@ -121,7 +121,7 @@ class SSE
         //header('Content-Encoding: none;');
         header('Pragma: no-cache');
 
-        echo 'retry: '.$this->clientReconnect * 1000 ."\n";
+        echo 'retry: ' . $this->clientReconnect * 1000 . "\n";
 
         $this->sendBlock('1000', $this->view->renderJSON(), null);
         $this->flush();
@@ -159,7 +159,7 @@ class SSE
         if (strlen($name) && $name !== null) {
             $this->send("event: {$name}\n");
         }
-        $this->send($this->wrapData($data)."\n\n");
+        $this->send($this->wrapData($data) . "\n\n");
     }
 
     /**
@@ -171,7 +171,7 @@ class SSE
      */
     private function wrapData($string)
     {
-        return 'data:'.str_replace("\n", "\ndata: ", $string);
+        return 'data:' . str_replace("\n", "\ndata: ", $string);
     }
 
     /**

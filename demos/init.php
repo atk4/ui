@@ -16,7 +16,7 @@ if (file_exists('coverage.php')) {
     });
 }
 
-$app->title = 'Agile UI Demo v'.$app->version;
+$app->title = 'Agile UI Demo v' . $app->version;
 
 if (file_exists('../public/atkjs-ui.min.js')) {
     $app->cdn['atk'] = '../public';
@@ -95,7 +95,7 @@ if (isset($layout->leftMenu)) {
 
     // Would be nice if this would be a link.
     $layout->menu->addItem()->add(['Button', 'View Source', 'teal', 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url.$f]));
+        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url . $f]));
 
     $img = 'https://raw.githubusercontent.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
 }

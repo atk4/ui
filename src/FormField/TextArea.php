@@ -19,16 +19,19 @@ class TextArea extends Input
      */
     public function getInput()
     {
-        return $this->app->getTag('textarea', [
+        return $this->app->getTag(
+            'textarea',
+            [
             'name'        => $this->short_name,
             'type'        => $this->inputType,
             'rows'        => $this->rows,
             'placeholder' => $this->placeholder,
-            'id'          => $this->id.'_input',
+            'id'          => $this->id . '_input',
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
-        ], isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: ''
-    );
+        ],
+            isset($this->field) ? $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get()) : $this->content ?: ''
+        );
         //return '<input name="'.$this->short_name.'" type="'.$this->inputType.'" placeholder="'.$this->placeholder.'" id="'.$this->id.'_input"/>';
     }
 }

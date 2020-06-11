@@ -115,7 +115,7 @@ class DropDown extends Input
         return $this->app->getTag('input', [
             'name'        => $this->short_name,
             'type'        => $this->inputType,
-            'id'          => $this->id.'_input',
+            'id'          => $this->id . '_input',
             'value'       => $value,
             'readonly'    => $this->readonly ? 'readonly' : false,
             'disabled'    => $this->disabled ? 'disabled' : false,
@@ -149,7 +149,7 @@ class DropDown extends Input
     public function renderView()
     {
         if ($this->isMultiple) {
-            $this->defaultClass = $this->defaultClass.' multiple';
+            $this->defaultClass = $this->defaultClass . ' multiple';
         }
 
         $this->addClass($this->defaultClass);

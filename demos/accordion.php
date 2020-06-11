@@ -35,7 +35,7 @@ $i3 = $accordion->addSection('Dynamic Form', function ($v) {
     $f = $v->add(['Form']);
     $f->addField('Email');
     $f->onSubmit(function ($form) {
-        return $form->success('Subscribed '.$form->model['Email'].' to newsletter.');
+        return $form->success('Subscribed ' . $form->model['Email'] . ' to newsletter.');
     });
 });
 

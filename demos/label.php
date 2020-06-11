@@ -16,7 +16,7 @@ $del = $app->add(['Label', 'Zoe', 'image' => 'https://semantic-ui.com/images/ava
 $del->on('click', '.delete', $del->js()->fadeOut());
 
 $val = isset($_GET['toggle']) && $_GET['toggle'];
-$toggle = $app->add(['Label', 'icon' => 'toggle '.($val ? 'on' : 'off')])->set('Value: '.$val);
+$toggle = $app->add(['Label', 'icon' => 'toggle ' . ($val ? 'on' : 'off')])->set('Value: ' . $val);
 $toggle->on('click', new \atk4\ui\jsReload($toggle, ['toggle' => $val ? null : 1]));
 
 $m = $app->add('Menu');

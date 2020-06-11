@@ -33,6 +33,6 @@ class DragHandler extends Generic
 
     public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        return $this->app->getTag($this->tag, ['class' => $this->class.' atk-handle', 'style'=>'cursor:pointer; color: #bcbdbd']);
+        return $this->app->getTag($this->tag, ['class' => $this->class . ' atk-handle', 'style'=>'cursor:pointer; color: #bcbdbd']);
     }
 }

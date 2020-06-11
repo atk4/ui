@@ -20,13 +20,13 @@ if (isset($_GET['name'])) {
 
     // nested interractive elemetns will respect lockal sticky get
     $frame->add(['Button', 'Triggering callback here will inherit color'])->on('click', function () {
-        return new \atk4\ui\jsNotify('Color was = '.$_GET['name']);
+        return new \atk4\ui\jsNotify('Color was = ' . $_GET['name']);
     });
 
     // Next we have loader, which will dynamically load console which will dynamically output "success" message.
     $frame->add('Loader')->set(function ($page) {
         $page->add('Console')->set(function ($console) {
-            $console->output('success!, color is still '.$_GET['name']);
+            $console->output('success!, color is still ' . $_GET['name']);
         });
     });
 }
@@ -37,7 +37,7 @@ $t->addDecorator('name', ['Link', [], ['name']]);
 
 $frame = $app->add(['ui'=>'green segment']);
 $frame->add(['Button', 'does not inherit sticky get'])->on('click', function () {
-    return new \atk4\ui\jsNotify('$_GET = '.json_encode($_GET));
+    return new \atk4\ui\jsNotify('$_GET = ' . json_encode($_GET));
 });
 
 $app->add(['Header', 'Use of View::url()']);

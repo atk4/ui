@@ -648,7 +648,7 @@ class View implements jsExpressionable
             array_walk(
                 $style,
                 function (&$item, $key) {
-                    $item = $key.':'.$item;
+                    $item = $key . ':' . $item;
                 }
             );
             $this->template->append('style', implode(';', $style));
@@ -673,7 +673,7 @@ class View implements jsExpressionable
         if ($this->attr) {
             $tmp = [];
             foreach ($this->attr as $attr => $val) {
-                $tmp[] = $attr.'="'.$this->app->encodeAttribute($val).'"';
+                $tmp[] = $attr . '="' . $this->app->encodeAttribute($val) . '"';
             }
             $this->template->setHTML('attributes', implode(' ', $tmp));
         }
@@ -733,7 +733,7 @@ class View implements jsExpressionable
         $this->renderAll();
 
         return
-            $this->getJS($force_echo).
+            $this->getJS($force_echo) .
             $this->template->render();
     }
 
@@ -763,12 +763,12 @@ class View implements jsExpressionable
             if ($exception instanceof \atk4\core\Exception) {
                 $l->template->setHTML('Content', $exception->getHTML());
             } elseif ($exception instanceof \Error) {
-                $l->add(new self(['ui' => 'message', get_class($exception).': '.
-                                                            $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
+                $l->add(new self(['ui' => 'message', get_class($exception) . ': ' .
+                                                            $exception->getMessage() . ' (in ' . $exception->getFile() . ':' . $exception->getLine() . ')',
                     'error', ]));
                 $l->add(new Text())->set(nl2br($exception->getTraceAsString()));
             } else {
-                $l->add(new self(['ui' => 'message', get_class($exception).': '.$exception->getMessage(), 'error']));
+                $l->add(new self(['ui' => 'message', get_class($exception) . ': ' . $exception->getMessage(), 'error']));
             }
 
             return json_encode(['success' => false,
@@ -908,7 +908,7 @@ class View implements jsExpressionable
     public function vue($component, $initData = [], $componentDefinition = null, $selector = null)
     {
         if (!$selector) {
-            $selector = '#'.$this->name;
+            $selector = '#' . $this->name;
         }
 
         if ($componentDefinition) {
@@ -1080,8 +1080,9 @@ class View implements jsExpressionable
             if (isset($cb)) {
                 $cb->setConfirm($defaults['confirm']);
             } else {
-                array_unshift($actions,
-                              new jsExpression('if(!confirm([])){return;}', [$defaults['confirm']])
+                array_unshift(
+                    $actions,
+                    new jsExpression('if(!confirm([])){return;}', [$defaults['confirm']])
                 );
             }
         }
@@ -1110,7 +1111,7 @@ class View implements jsExpressionable
             throw new Exception('Render tree must be initialized before materializing jsChains.');
         }
 
-        return json_encode('#'.$this->id);
+        return json_encode('#' . $this->id);
     }
 
     /**
@@ -1149,8 +1150,8 @@ class View implements jsExpressionable
 
         $ready = new jsFunction($actions);
 
-        return "<script>\n".
-            (new jQuery($ready))->jsRender().
+        return "<script>\n" .
+            (new jQuery($ready))->jsRender() .
             '</script>';
     }
 

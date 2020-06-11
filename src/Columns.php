@@ -50,7 +50,7 @@ class Columns extends View
         $this->add($column);
 
         if ($size && isset($this->sizes[$size])) {
-            $column->addClass($this->sizes[$size].' wide');
+            $column->addClass($this->sizes[$size] . ' wide');
             $this->calculated_width = false;
         } elseif ($this->calculated_width !== false) {
             $this->calculated_width++;
@@ -80,7 +80,7 @@ class Columns extends View
         }
 
         if (isset($this->sizes[$width])) {
-            $this->addClass($this->sizes[$width].' column');
+            $this->addClass($this->sizes[$width] . ' column');
         }
 
         parent::renderView();

@@ -164,7 +164,7 @@ if (!class_exists('Country')) {
             ]);
 
                 if ($fileinfo->isDir()) {
-                    $this->ref('SubFolder')->importFromFilesystem($path.'/'.$fileinfo->getFilename());
+                    $this->ref('SubFolder')->importFromFilesystem($path . '/' . $fileinfo->getFilename());
                 }
             }
         }

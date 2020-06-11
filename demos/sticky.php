@@ -35,7 +35,7 @@ $app->add(new Button($app->url(['b' => 2, 'c' => null])));
 $app->add(new Button($app->url(['b' => 2, 'c' => 'abc'])));
 
 // Sticky for xx=
-$app->add(new \atk4\ui\Header('Now add sticky for xx='.$app->stickyGET('xx')));
+$app->add(new \atk4\ui\Header('Now add sticky for xx=' . $app->stickyGET('xx')));
 $app->add(new Button($app->url()));
 $app->add(new Button($app->url(['b' => 2])));
 $app->add(new Button($app->url(['b' => 2, 'c' => false])));
@@ -43,7 +43,7 @@ $app->add(new Button($app->url(['b' => 2, 'c' => null])));
 $app->add(new Button($app->url(['b' => 2, 'c' => 'abc'])));
 
 // Sticky for c=
-$app->add(new \atk4\ui\Header('Now also add sticky for c='.$app->stickyGET('c')));
+$app->add(new \atk4\ui\Header('Now also add sticky for c=' . $app->stickyGET('c')));
 $app->add(new Button($app->url()));
 $app->add(new Button($app->url(['b' => 2])));
 $app->add(new Button($app->url(['b' => 2, 'c' => false])));

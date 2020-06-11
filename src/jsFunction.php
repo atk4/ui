@@ -65,15 +65,15 @@ class jsFunction implements jsExpressionable
 
         if ($this->preventDefault) {
             $this->fx_args = ['event'];
-            $pre .= "\n".$this->indent.'  event.preventDefault();';
+            $pre .= "\n" . $this->indent . '  event.preventDefault();';
         }
 
         if ($this->stopPropagation) {
             $this->fx_args = ['event'];
-            $pre .= "\n".$this->indent.'  event.stopPropagation();';
+            $pre .= "\n" . $this->indent . '  event.stopPropagation();';
         }
 
-        $output = 'function('.implode(',', $this->fx_args).') {';
+        $output = 'function(' . implode(',', $this->fx_args) . ') {';
         $output .= $pre;
         foreach ($this->fx_statements as $statement) {
             if (!$statement) {
@@ -92,10 +92,10 @@ class jsFunction implements jsExpressionable
                 throw new Exception(['Incorrect statement for jsFunction.', 'statement' => $statement]);
             }
 
-            $output .= "\n".$this->indent.'  '.$statement.';';
+            $output .= "\n" . $this->indent . '  ' . $statement . ';';
         }
 
-        $output .= "\n".$this->indent.'}';
+        $output .= "\n" . $this->indent . '}';
 
         return $output;
     }
