@@ -214,8 +214,6 @@ class ScopeBuilder extends Generic
     /**
      * Input field collecting output of builder.
      *
-     * @throws \atk4\core\Exception
-     *
      * @return string
      */
     public function getInput()
@@ -230,9 +228,6 @@ class ScopeBuilder extends Generic
 
     /**
      * Set the model to build scope for.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      *
      * @return Model
      */
@@ -487,8 +482,6 @@ class ScopeBuilder extends Generic
 
     /**
      * Converts a Condition to VueQueryBuilder query array.
-     *
-     * @throws Exception
      */
     public static function conditionToQuery(Condition $condition): array
     {
