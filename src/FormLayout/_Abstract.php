@@ -20,18 +20,13 @@ abstract class _Abstract extends \atk4\ui\View
      * Places field inside a layout somewhere. Should be called
      * through $form->addField().
      *
-     * @param string                   $name
      * @param array|string|object|null $decorator
      * @param array|string|object|null $field
      *
      * @return \atk4\ui\FormField\Generic
      */
-    public function addField($name, $decorator = null, $field = null)
+    public function addField(string $name, $decorator = null, $field = null)
     {
-        if (!is_string($name)) {
-            throw new Exception('Format for addField now require first argument to be name');
-        }
-
         if (!$this->form->model) {
             $this->form->model = new \atk4\ui\Misc\ProxyModel();
         }
@@ -40,27 +35,27 @@ abstract class _Abstract extends \atk4\ui\View
             $field = ['type' => $field];
         }
 
-        if ($name) {
-            $existingField = $this->form->model->hasField($name);
-        }
-
         try {
-            if (!$existingField) {
+            if (!$this->form->model->hasField($name)) {
                 // Add missing field
                 if ($field) {
                     $field = $this->form->model->addField($name, $field);
                 } else {
                     $field = $this->form->model->addField($name);
                 }
-            } elseif (is_array($field)) {
-                // Add properties to existing field
-                $existingField->setDefaults($field);
-                $field = $existingField;
-            } elseif (is_object($field)) {
-                throw (new Exception('Duplicate field'))
-                    ->addMoreInfo('name', $name);
             } else {
-                $field = $existingField;
+                $existingField = $this->form->model->getField($name);
+
+                if (is_array($field)) {
+                    // Add properties to existing field
+                    $existingField->setDefaults($field);
+                    $field = $existingField;
+                } elseif (is_object($field)) {
+                    throw (new Exception('Duplicate field'))
+                        ->addMoreInfo('name', $name);
+                } else {
+                    $field = $existingField;
+                }
             }
 
             if (is_string($decorator)) {

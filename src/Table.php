@@ -178,7 +178,7 @@ class Table extends Lister
      *
      * @return TableColumn\Generic
      */
-    public function addColumn($name, $columnDecorator = null, $field = null)
+    public function addColumn(?string $name, $columnDecorator = null, $field = null)
     {
         if (!$this->_initialized) {
             throw new Exception\NoRenderTree($this, 'addColumn()');
@@ -195,12 +195,12 @@ class Table extends Lister
         }
 
         if (is_string($name) && $name) {
-            $existingField = $this->model->hasField($name);
+            $existingField = $this->model->hasField($name) ? $this->model->getField($name) : null;
         } else {
-            $existingField = null;
+            $existingField = false;
         }
 
-        if ($existingField === null) {
+        if ($existingField === false) {
             // table column without respective field in model
             $field = null;
         } elseif (!$existingField) {
@@ -557,7 +557,7 @@ class Table extends Lister
                 if (!is_array($columns)) {
                     $columns = [$columns];
                 }
-                $field = $this->model->hasField($name);
+                $field = $this->model->hasField($name) ? $this->model->getField($name) : null;
                 foreach ($columns as $column) {
                     if (!method_exists($column, 'getHTMLTags')) {
                         continue;
