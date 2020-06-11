@@ -23,6 +23,8 @@
  */
 const webpack = require('webpack');
 const path = require('path');
+// VUe file loader.
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const packageVersion = require("./package.json").version;
 
@@ -63,6 +65,20 @@ module.exports = env => {
           test: /(\.jsx|\.js)$/,
           loader: 'babel-loader',
           exclude: /(node_modules|bower_components)/
+        },
+        // load .vue file
+        {
+          test: /\.vue$/,
+          loader: 'vue-loader'
+        },
+        // this will apply to both plain `.css` files
+        // AND `<style>` blocks in `.vue` files
+        {
+          test: /\.css$/,
+          use: [
+            'vue-style-loader',
+            'css-loader'
+          ]
         }
       ]
     },
@@ -81,7 +97,8 @@ module.exports = env => {
     plugins: [
       new webpack.DefinePlugin({
         _ATKVERSION_ : JSON.stringify(packageVersion)
-      })
+      }),
+      new VueLoaderPlugin(),
     ]
   };
 };
