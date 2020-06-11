@@ -2,13 +2,13 @@
 
 namespace atk4\ui\FormField;
 
-use atk4\data\Model;
-use atk4\ui\Exception;
-use atk4\ui\Template;
 use atk4\data\Field;
+use atk4\data\Model;
+use atk4\data\Model\Scope\AbstractScope;
 use atk4\data\Model\Scope\Condition;
 use atk4\data\Model\Scope\Scope;
-use atk4\data\Model\Scope\AbstractScope;
+use atk4\ui\Exception;
+use atk4\ui\Template;
 
 class ScopeBuilder extends Generic
 {
@@ -19,19 +19,19 @@ class ScopeBuilder extends Generic
      */
     public $options = [
         'enum' => [
-            'limit' => 250
-        ]
+            'limit' => 250,
+        ],
     ];
     /**
      * Max depth of nested conditions allowed.
-     * Corresponds to VueQueryBulder maxDepth
+     * Corresponds to VueQueryBulder maxDepth.
      *
-     * @var integer
+     * @var int
      */
     public $maxDepth = 10;
 
     /**
-     * Fields to use for creating the rules
+     * Fields to use for creating the rules.
      *
      * @var array
      */
@@ -45,7 +45,7 @@ class ScopeBuilder extends Generic
     public $scopeBuilderTemplate;
 
     /**
-     * List of delimiters for auto-detection in order of priority
+     * List of delimiters for auto-detection in order of priority.
      *
      * @var array
      */
@@ -92,7 +92,7 @@ class ScopeBuilder extends Generic
     protected const OPERATOR_NOT_EMPTY = 'is not empty';
 
     /**
-     * VueQueryBulder => Condition map of operators
+     * VueQueryBulder => Condition map of operators.
      *
      * @var array
      */
@@ -143,7 +143,7 @@ class ScopeBuilder extends Generic
                 self::OPERATOR_NOT_IN,
                 self::OPERATOR_MATCHES_REGEX,
                 self::OPERATOR_DOESNOT_MATCH_REGEX,
-            ]
+            ],
         ],
         'enum' => [
             'type' => 'select',
@@ -151,7 +151,7 @@ class ScopeBuilder extends Generic
                 self::OPERATOR_EQUALS,
                 self::OPERATOR_DOESNOT_EQUAL,
             ],
-            'choices' => [__CLASS__, 'getChoices']
+            'choices' => [__CLASS__, 'getChoices'],
         ],
         'numeric' => [
             'type' => 'text',
@@ -162,7 +162,7 @@ class ScopeBuilder extends Generic
                 self::OPERATOR_GREATER_EQUAL,
                 self::OPERATOR_LESS,
                 self::OPERATOR_LESS_EQUAL,
-            ]
+            ],
         ],
         'boolean' => [
             'type' => 'radio',
@@ -170,7 +170,7 @@ class ScopeBuilder extends Generic
             'choices' => [
                 ['label' => 'Yes', 'value' => 1],
                 ['label' => 'No', 'value' => 0],
-            ]
+            ],
         ],
         'date' => [
             'type' => 'text',
@@ -184,7 +184,7 @@ class ScopeBuilder extends Generic
                 self::OPERATOR_LESS_EQUAL,
                 self::OPERATOR_EMPTY,
                 self::OPERATOR_NOT_EMPTY,
-            ]
+            ],
         ],
         'datetime' => 'date',
         'integer' => 'numeric',
@@ -221,17 +221,15 @@ class ScopeBuilder extends Generic
     public function getInput()
     {
         return $this->app->getTag('input', [
-            'name'         => $this->short_name,
-            'type'         => 'hidden',
-            ':value'       => 'JSON.stringify(this.initData.query, null, 2)',
-            'readonly'     => true,
+            'name' => $this->short_name,
+            'type' => 'hidden',
+            ':value' => 'JSON.stringify(this.initData.query, null, 2)',
+            'readonly' => true,
         ]);
     }
 
     /**
      * Set the model to build scope for.
-     *
-     * @param Model $model
      *
      * @throws Exception
      * @throws \atk4\core\Exception
@@ -259,19 +257,15 @@ class ScopeBuilder extends Generic
 
     /**
      * Add the field rules to use in VueQueryBuilder.
-     *
-     * @param Field $field
-     *
-     * @return self
      */
     protected function addFieldRule(Field $field): self
     {
         $type = ($field->enum || $field->values || $field->reference) ? 'enum' : $field->type;
 
         $this->rules[] = self::getRule($type, array_merge([
-            'id'        => $field->short_name,
-            'label'     => $field->getCaption(),
-            'options'   => $this->options[strtolower($type)] ?? [],
+            'id' => $field->short_name,
+            'label' => $field->getCaption(),
+            'options' => $this->options[strtolower($type)] ?? [],
         ], $field->ui['scopebuilder'] ?? []), $field);
 
         return $this;
@@ -279,18 +273,14 @@ class ScopeBuilder extends Generic
 
     /**
      * Add rules on the referenced model fields.
-     *
-     * @param Field $field
-     *
-     * @return self
      */
     protected function addReferenceRules(Field $field): self
     {
         if ($reference = $field->reference) {
             // add the number of records rule
             $this->rules[] = self::getRule('numeric', [
-                'id'        => $reference->link . '/#',
-                'label'     => $field->getCaption() . ' number of records ',
+                'id' => $reference->link . '/#',
+                'label' => $field->getCaption() . ' number of records ',
             ]);
 
             $refModel = $reference->getModel();
@@ -299,7 +289,7 @@ class ScopeBuilder extends Generic
             foreach ($refModel->getFields() as $refField) {
                 $refField->ui['scopebuilder'] = [
                     'id' => $reference->link . '/' . $refField->short_name,
-                    'label' => $field->getCaption() . ' is set to record where ' . $refField->getCaption()
+                    'label' => $field->getCaption() . ' is set to record where ' . $refField->getCaption(),
                 ];
 
                 $this->addFieldRule($refField);
@@ -336,16 +326,12 @@ class ScopeBuilder extends Generic
 
     /**
      * Returns the choises array for the field rule.
-     *
-     * @param Field $field
-     *
-     * @return array
      */
     protected static function getChoices(Field $field, $options = []): array
     {
-        $choices= [];
+        $choices = [];
         if ($field->enum) {
-            $choices= array_combine($field->enum, $field->enum);
+            $choices = array_combine($field->enum, $field->enum);
         }
         if ($field->values && is_array($field->values)) {
             $choices = $field->values;
@@ -392,11 +378,7 @@ class ScopeBuilder extends Generic
     }
 
     /**
-     * Converts an VueQueryBuilder query array to Condition or Scope
-     *
-     * @param array $query
-     *
-     * @return AbstractScope
+     * Converts an VueQueryBuilder query array to Condition or Scope.
      */
     public static function queryToScope(array $query): AbstractScope
     {
@@ -406,19 +388,18 @@ class ScopeBuilder extends Generic
         switch ($type) {
             case 'query-builder-group':
                 $components = array_map([static::class, 'queryToScope'], $query['children']);
-                $junction = $query['logicalOperator'] == 'all' ? Scope::AND : Scope::OR;
+                $junction = $query['logicalOperator'] === 'all' ? Scope::AND : Scope::OR;
 
                 $scope = Scope::create($components, $junction);
 
                 break;
-
             case 'query-builder-rule':
                 $scope = self::queryToCondition($query);
 
                 break;
-
             default:
                 $scope = Scope::create();
+
             break;
         }
 
@@ -426,11 +407,7 @@ class ScopeBuilder extends Generic
     }
 
     /**
-     * Converts an VueQueryBuilder rule array to Condition or Scope
-     *
-     * @param array $query
-     *
-     * @return Condition
+     * Converts an VueQueryBuilder rule array to Condition or Scope.
      */
     public static function queryToCondition(array $query): Condition
     {
@@ -442,26 +419,27 @@ class ScopeBuilder extends Generic
             case self::OPERATOR_EMPTY:
             case self::OPERATOR_NOT_EMPTY:
                 $value = null;
-            break;
 
+            break;
             case self::OPERATOR_BEGINS_WITH:
             case self::OPERATOR_DOESNOT_BEGIN_WITH:
                 $value = $value . '%';
-            break;
 
+            break;
             case self::OPERATOR_ENDS_WITH:
             case self::OPERATOR_DOESNOT_END_WITH:
                 $value = '%' . $value;
-            break;
 
+            break;
             case self::OPERATOR_CONTAINS:
             case self::OPERATOR_DOESNOT_CONTAIN:
                 $value = '%' . $value . '%';
-            break;
 
+            break;
             case self::OPERATOR_IN:
             case self::OPERATOR_NOT_IN:
                 $value = explode(self::detectDelimiter($value), $value);
+
                 break;
             default:
 
@@ -475,10 +453,6 @@ class ScopeBuilder extends Generic
 
     /**
      * Converts Scope or Condition to VueQueryBuilder query array.
-     *
-     * @param AbstractScope $scope
-     *
-     * @return array
      */
     public static function scopeToQuery(AbstractScope $scope): array
     {
@@ -487,11 +461,10 @@ class ScopeBuilder extends Generic
             case Condition::class:
                 $query = [
                     'type' => 'query-builder-rule',
-                    'query' => self::conditionToQuery($scope)
+                    'query' => self::conditionToQuery($scope),
                 ];
 
             break;
-
             case Scope::class:
                 $children = [];
                 foreach ($scope->getActiveComponents() as $component) {
@@ -502,9 +475,10 @@ class ScopeBuilder extends Generic
                     'type' => 'query-builder-group',
                     'query' => [
                         'logicalOperator' => $scope->all() ? 'all' : 'any',
-                        'children' => $children
-                    ]
+                        'children' => $children,
+                    ],
                 ] : [];
+
             break;
         }
 
@@ -514,11 +488,7 @@ class ScopeBuilder extends Generic
     /**
      * Converts a Condition to VueQueryBuilder query array.
      *
-     * @param Condition $condition
-     *
      * @throws Exception
-     *
-     * @return array
      */
     public static function conditionToQuery(Condition $condition): array
     {
@@ -537,9 +507,9 @@ class ScopeBuilder extends Generic
             // no %
             $match = 0;
             // % at the beginning
-            $match += substr($value, 0, 1) == '%' ? 1 : 0;
+            $match += substr($value, 0, 1) === '%' ? 1 : 0;
             // % at the end
-            $match += substr($value, -1) == '%' ? 2 : 0;
+            $match += substr($value, -1) === '%' ? 2 : 0;
 
             $map = [
                 'LIKE' => [
@@ -553,7 +523,7 @@ class ScopeBuilder extends Generic
                     self::OPERATOR_DOESNOT_BEGIN_WITH,
                     self::OPERATOR_DOESNOT_END_WITH,
                     self::OPERATOR_DOESNOT_CONTAIN,
-                ]
+                ],
             ];
 
             $operator = $map[strtoupper($operator)][$match];
@@ -563,19 +533,19 @@ class ScopeBuilder extends Generic
             if (is_array($value)) {
                 $map = [
                     '=' => 'IN',
-                    '!=' => 'NOT IN'
+                    '!=' => 'NOT IN',
                 ];
                 $value = implode(',', $value);
                 $operator = $map[$operator] ?? 'IN';
             }
-            $operator = array_search(strtoupper($operator), self::$operators) ?: self::OPERATOR_EQUALS;
+            $operator = array_search(strtoupper($operator), self::$operators, true) ?: self::OPERATOR_EQUALS;
         }
 
         return compact('rule', 'operator', 'value');
     }
 
     /**
-     * Auto-detects a string delimiter based on list of predefined values in ScopeBuilder::$listDelimiters in order of priority
+     * Auto-detects a string delimiter based on list of predefined values in ScopeBuilder::$listDelimiters in order of priority.
      *
      * @param string $value
      *
@@ -588,7 +558,7 @@ class ScopeBuilder extends Generic
             $matches[$delimiter] = substr_count($value, $delimiter);
         }
 
-        $max = array_keys($matches, max($matches));
+        $max = array_keys($matches, max($matches), true);
 
         return reset($max) ?: reset(self::$listDelimiters);
     }
