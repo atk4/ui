@@ -203,7 +203,7 @@ class ScopeBuilder extends Generic
         $this->scopeBuilderView = \atk4\ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
 
         if ($this->form) {
-            $this->form->onHook('loadPOST', function ($form, &$post) {
+            $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form, &$post) {
                 $key = $this->field->short_name;
 
                 $post[$key] = $this->queryToScope(json_decode($post[$key], true));
