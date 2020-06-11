@@ -80,10 +80,10 @@ class ScopeBuilder extends Generic
     protected const OPERATOR_LESS_EQUAL = 'is less or equal to';
     protected const OPERATOR_CONTAINS = 'contains';
     protected const OPERATOR_DOESNOT_CONTAIN = 'does not contain';
-    protected const OPERATOR_BEGINS = 'begins with';
-    protected const OPERATOR_DOESNOT_BEGIN = 'does not begin with';
-    protected const OPERATOR_ENDS = 'begins with';
-    protected const OPERATOR_DOESNOT_END = 'does not begin with';
+    protected const OPERATOR_BEGINS_WITH = 'begins with';
+    protected const OPERATOR_DOESNOT_BEGIN_WITH = 'does not begin with';
+    protected const OPERATOR_ENDS_WITH = 'begins with';
+    protected const OPERATOR_DOESNOT_END_WITH = 'does not begin with';
     protected const OPERATOR_IN = 'is in';
     protected const OPERATOR_NOT_IN = 'is not in';
     protected const OPERATOR_MATCHES_REGEX = 'matches regular expression';
@@ -105,10 +105,10 @@ class ScopeBuilder extends Generic
         self::OPERATOR_LESS_EQUAL => '<=',
         self::OPERATOR_CONTAINS => 'LIKE',
         self::OPERATOR_DOESNOT_CONTAIN => 'NOT LIKE',
-        self::OPERATOR_BEGINS => 'LIKE',
-        self::OPERATOR_DOESNOT_BEGIN => 'NOT LIKE',
-        self::OPERATOR_ENDS => 'LIKE',
-        self::OPERATOR_DOESNOT_END => 'NOT LIKE',
+        self::OPERATOR_BEGINS_WITH => 'LIKE',
+        self::OPERATOR_DOESNOT_BEGIN_WITH => 'NOT LIKE',
+        self::OPERATOR_ENDS_WITH => 'LIKE',
+        self::OPERATOR_DOESNOT_END_WITH => 'NOT LIKE',
         self::OPERATOR_IN => 'IN',
         self::OPERATOR_NOT_IN => 'NOT IN',
         self::OPERATOR_MATCHES_REGEX => 'REGEXP',
@@ -135,10 +135,10 @@ class ScopeBuilder extends Generic
                 self::OPERATOR_LESS_EQUAL,
                 self::OPERATOR_CONTAINS,
                 self::OPERATOR_DOESNOT_CONTAIN,
-                self::OPERATOR_BEGINS,
-                self::OPERATOR_DOESNOT_BEGIN,
-                self::OPERATOR_ENDS,
-                self::OPERATOR_DOESNOT_END,
+                self::OPERATOR_BEGINS_WITH,
+                self::OPERATOR_DOESNOT_BEGIN_WITH,
+                self::OPERATOR_ENDS_WITH,
+                self::OPERATOR_DOESNOT_END_WITH,
                 self::OPERATOR_IN,
                 self::OPERATOR_NOT_IN,
                 self::OPERATOR_MATCHES_REGEX,
@@ -444,13 +444,13 @@ class ScopeBuilder extends Generic
                 $value = null;
             break;
 
-            case self::OPERATOR_BEGINS:
-            case self::OPERATOR_DOESNOT_BEGIN:
+            case self::OPERATOR_BEGINS_WITH:
+            case self::OPERATOR_DOESNOT_BEGIN_WITH:
                 $value = $value . '%';
             break;
 
-            case self::OPERATOR_ENDS:
-            case self::OPERATOR_DOESNOT_END:
+            case self::OPERATOR_ENDS_WITH:
+            case self::OPERATOR_DOESNOT_END_WITH:
                 $value = '%' . $value;
             break;
 
@@ -544,14 +544,14 @@ class ScopeBuilder extends Generic
             $map = [
                 'LIKE' => [
                     self::OPERATOR_EQUALS,
-                    self::OPERATOR_BEGINS,
-                    self::OPERATOR_ENDS,
+                    self::OPERATOR_BEGINS_WITH,
+                    self::OPERATOR_ENDS_WITH,
                     self::OPERATOR_CONTAINS,
                 ],
                 'NOT LIKE' => [
                     self::OPERATOR_DOESNOT_EQUAL,
-                    self::OPERATOR_DOESNOT_BEGIN,
-                    self::OPERATOR_DOESNOT_END,
+                    self::OPERATOR_DOESNOT_BEGIN_WITH,
+                    self::OPERATOR_DOESNOT_END_WITH,
                     self::OPERATOR_DOESNOT_CONTAIN,
                 ]
             ];
