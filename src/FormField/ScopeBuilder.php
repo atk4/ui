@@ -90,7 +90,7 @@ class ScopeBuilder extends Generic
     protected const OPERATOR_DOESNOT_MATCH_REGEX = 'does not match regular expression';
     protected const OPERATOR_EMPTY = 'is empty';
     protected const OPERATOR_NOT_EMPTY = 'is not empty';
-    
+
     /**
      * VueQueryBulder => Condition map of operators
      *
@@ -181,7 +181,7 @@ class ScopeBuilder extends Generic
                 self::OPERATOR_GREATER,
                 self::OPERATOR_GREATER_EQUAL,
                 self::OPERATOR_LESS,
-                self::OPERATOR_LESS_EQUAL,                
+                self::OPERATOR_LESS_EQUAL,
                 self::OPERATOR_EMPTY,
                 self::OPERATOR_NOT_EMPTY,
             ]
