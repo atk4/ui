@@ -72,30 +72,49 @@ class ScopeBuilder extends Generic
      */
     protected $query = [];
 
+    protected const OPERATOR_EQUALS = 'equals';
+    protected const OPERATOR_DOESNOT_EQUAL = 'does not equal';
+    protected const OPERATOR_GREATER = 'is greater than';
+    protected const OPERATOR_GREATER_EQUAL = 'is greater or equal to';
+    protected const OPERATOR_LESS = 'is less than';
+    protected const OPERATOR_LESS_EQUAL = 'is less or equal to';
+    protected const OPERATOR_CONTAINS = 'contains';
+    protected const OPERATOR_DOESNOT_CONTAIN = 'does not contain';
+    protected const OPERATOR_BEGINS = 'begins with';
+    protected const OPERATOR_DOESNOT_BEGIN = 'does not begin with';
+    protected const OPERATOR_ENDS = 'begins with';
+    protected const OPERATOR_DOESNOT_END = 'does not begin with';
+    protected const OPERATOR_IN = 'is in';
+    protected const OPERATOR_NOT_IN = 'is not in';
+    protected const OPERATOR_MATCHES_REGEX = 'matches regular expression';
+    protected const OPERATOR_DOESNOT_MATCH_REGEX = 'does not match regular expression';
+    protected const OPERATOR_EMPTY = 'is empty';
+    protected const OPERATOR_NOT_EMPTY = 'is not empty';
+    
     /**
      * VueQueryBulder => Condition map of operators
      *
      * @var array
      */
     protected static $operators = [
-        'equals' => '=',
-        'does not equal' => '!=',
-        'is greater than' => '>',
-        'is greater or equal to' => '>=',
-        'is less than' => '<',
-        'is less or equal to' => '<=',
-        'contains' => 'LIKE',
-        'does not contain' => 'NOT LIKE',
-        'begins with' => 'LIKE',
-        'does not begin with' => 'NOT LIKE',
-        'ends with' => 'LIKE',
-        'does not end with' => 'NOT LIKE',
-        'is in' => 'IN',
-        'is not in' => 'NOT IN',
-        'matches regular expression' => 'REGEXP',
-        'does not match regular expression' => 'NOT REGEXP',
-        'is empty' => '=',
-        'is not empty' => '!=',
+        self::OPERATOR_EQUALS => '=',
+        self::OPERATOR_DOESNOT_EQUAL => '!=',
+        self::OPERATOR_GREATER => '>',
+        self::OPERATOR_GREATER_EQUAL => '>=',
+        self::OPERATOR_LESS => '<',
+        self::OPERATOR_LESS_EQUAL => '<=',
+        self::OPERATOR_CONTAINS => 'LIKE',
+        self::OPERATOR_DOESNOT_CONTAIN => 'NOT LIKE',
+        self::OPERATOR_BEGINS => 'LIKE',
+        self::OPERATOR_DOESNOT_BEGIN => 'NOT LIKE',
+        self::OPERATOR_ENDS => 'LIKE',
+        self::OPERATOR_DOESNOT_END => 'NOT LIKE',
+        self::OPERATOR_IN => 'IN',
+        self::OPERATOR_NOT_IN => 'NOT IN',
+        self::OPERATOR_MATCHES_REGEX => 'REGEXP',
+        self::OPERATOR_DOESNOT_MATCH_REGEX => 'NOT REGEXP',
+        self::OPERATOR_EMPTY => '=',
+        self::OPERATOR_NOT_EMPTY => '!=',
     ];
 
     /**
@@ -108,41 +127,41 @@ class ScopeBuilder extends Generic
         'text' => [
             'type' => 'text',
             'operators' => [
-                'equals',
-                'does not equal',
-                'is greater than',
-                'is greater or equal to',
-                'is less than',
-                'is less or equal to',
-                'contains',
-                'does not contain',
-                'begins with',
-                'does not begin with',
-                'ends with',
-                'does not end with',
-                'is in',
-                'is not in',
-                'matches regular expression',
-                'does not match regular expression',
+                self::OPERATOR_EQUALS,
+                self::OPERATOR_DOESNOT_EQUAL,
+                self::OPERATOR_GREATER,
+                self::OPERATOR_GREATER_EQUAL,
+                self::OPERATOR_LESS,
+                self::OPERATOR_LESS_EQUAL,
+                self::OPERATOR_CONTAINS,
+                self::OPERATOR_DOESNOT_CONTAIN,
+                self::OPERATOR_BEGINS,
+                self::OPERATOR_DOESNOT_BEGIN,
+                self::OPERATOR_ENDS,
+                self::OPERATOR_DOESNOT_END,
+                self::OPERATOR_IN,
+                self::OPERATOR_NOT_IN,
+                self::OPERATOR_MATCHES_REGEX,
+                self::OPERATOR_DOESNOT_MATCH_REGEX,
             ]
         ],
         'enum' => [
             'type' => 'select',
             'operators' => [
-                'equals',
-                'does not equal',
+                self::OPERATOR_EQUALS,
+                self::OPERATOR_DOESNOT_EQUAL,
             ],
             'choices' => [__CLASS__, 'getChoices']
         ],
         'numeric' => [
             'type' => 'text',
             'operators' => [
-                'equals',
-                'does not equal',
-                'is greater than',
-                'is greater or equal to',
-                'is less than',
-                'is less or equal to',
+                self::OPERATOR_EQUALS,
+                self::OPERATOR_DOESNOT_EQUAL,
+                self::OPERATOR_GREATER,
+                self::OPERATOR_GREATER_EQUAL,
+                self::OPERATOR_LESS,
+                self::OPERATOR_LESS_EQUAL,
             ]
         ],
         'boolean' => [
@@ -157,14 +176,14 @@ class ScopeBuilder extends Generic
             'type' => 'text',
             'inputType' => 'date',
             'operators' => [
-                'equals',
-                'does not equal',
-                'is greater than',
-                'is greater or equal to',
-                'is less than',
-                'is less or equal to',
-                'is empty' ,
-                'is not empty',
+                self::OPERATOR_EQUALS,
+                self::OPERATOR_DOESNOT_EQUAL,
+                self::OPERATOR_GREATER,
+                self::OPERATOR_GREATER_EQUAL,
+                self::OPERATOR_LESS,
+                self::OPERATOR_LESS_EQUAL,                
+                self::OPERATOR_EMPTY,
+                self::OPERATOR_NOT_EMPTY,
             ]
         ],
         'datetime' => 'date',
@@ -420,28 +439,28 @@ class ScopeBuilder extends Generic
         $value = $query['value'] ?? null;
 
         switch ($operator) {
-            case 'is empty':
-            case 'is not empty':
+            case self::OPERATOR_EMPTY:
+            case self::OPERATOR_NOT_EMPTY:
                 $value = null;
             break;
 
-            case 'begins with':
-            case 'does not begin with':
+            case self::OPERATOR_BEGINS:
+            case self::OPERATOR_DOESNOT_BEGIN:
                 $value = $value . '%';
             break;
 
-            case 'ends with':
-            case 'does not end with':
+            case self::OPERATOR_ENDS:
+            case self::OPERATOR_DOESNOT_END:
                 $value = '%' . $value;
             break;
 
-            case 'contains':
-            case 'does not contain':
+            case self::OPERATOR_CONTAINS:
+            case self::OPERATOR_DOESNOT_CONTAIN:
                 $value = '%' . $value . '%';
             break;
 
-            case 'is in':
-            case 'is not in':
+            case self::OPERATOR_IN:
+            case self::OPERATOR_NOT_IN:
                 $value = explode(self::detectDelimiter($value), $value);
                 break;
             default:
@@ -524,16 +543,16 @@ class ScopeBuilder extends Generic
 
             $map = [
                 'LIKE' => [
-                    'equals',
-                    'begins with',
-                    'ends with',
-                    'contains'
+                    self::OPERATOR_EQUALS,
+                    self::OPERATOR_BEGINS,
+                    self::OPERATOR_ENDS,
+                    self::OPERATOR_CONTAINS,
                 ],
                 'NOT LIKE' => [
-                    'does not equal',
-                    'does not begin with',
-                    'does not end with',
-                    'does not contain'
+                    self::OPERATOR_DOESNOT_EQUAL,
+                    self::OPERATOR_DOESNOT_BEGIN,
+                    self::OPERATOR_DOESNOT_END,
+                    self::OPERATOR_DOESNOT_CONTAIN,
                 ]
             ];
 
@@ -549,7 +568,7 @@ class ScopeBuilder extends Generic
                 $value = implode(',', $value);
                 $operator = $map[$operator] ?? 'IN';
             }
-            $operator = array_search(strtoupper($operator), self::$operators) ?: 'equals';
+            $operator = array_search(strtoupper($operator), self::$operators) ?: self::OPERATOR_EQUALS;
         }
 
         return compact('rule', 'operator', 'value');
