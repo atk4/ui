@@ -260,9 +260,6 @@ class Table extends Lister
      * Set Popup action for columns filtering.
      *
      * @param array $cols an array with colomns name that need filtering
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     public function setFilterColumn($cols = null)
     {
@@ -386,8 +383,6 @@ class Table extends Lister
      * @param int[]    $widths         An array of widths value, integer only. ex: [100,200,300,100]
      * @param array    $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
      *
-     * @throws Exception
-     *
      * @return $this
      */
     public function resizableColumn($fx = null, $widths = null, $resizerOptions = null)
@@ -421,8 +416,6 @@ class Table extends Lister
      * @param array  $options      an array with js Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
-     *
-     * @throws Exception
      *
      * @return $this|void
      */

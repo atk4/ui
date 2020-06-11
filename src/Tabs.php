@@ -20,8 +20,6 @@ class Tabs extends View
      * @param callable   $callback Callback action or URL (or array with url + parameters)
      * @param array      $settings Tab setting
      *
-     *@throws Exception
-     *
      * @return View
      */
     public function addTab($name, $callback = null, $settings = [])
@@ -47,8 +45,6 @@ class Tabs extends View
      * @param string|Tab   $name     Name of tab or Tab object
      * @param string|array $url      URL to open inside a tab
      * @param array        $settings Tab setting
-     *
-     * @throws Exception
      */
     public function addTabURL($name, $url, $settings = [])
     {
@@ -63,8 +59,6 @@ class Tabs extends View
      *
      * @param string|Tab $name     name of tab or Tab object
      * @param array      $settings Tab settings
-     *
-     * @throws Exception
      *
      * @return Tab|View tab menu item view
      */
@@ -91,8 +85,6 @@ class Tabs extends View
      * Add sub view to tab.
      *
      * @param string $name name of view
-     *
-     * @throws Exception
      *
      * @return TabsSubView
      */

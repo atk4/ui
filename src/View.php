@@ -180,8 +180,6 @@ class View implements jsExpressionable
      *
      * @param array|string $label
      * @param array|string $class
-     *
-     * @throws Exception
      */
     public function __construct($label = null, $class = null)
     {
@@ -233,8 +231,6 @@ class View implements jsExpressionable
      * @param array $data   Array of data
      * @param array $fields Limit model to particular fields
      *
-     * @throws \atk4\data\Exception
-     *
      * @return Model
      */
     public function setSource(array $data, $fields = null)
@@ -247,8 +243,6 @@ class View implements jsExpressionable
      *
      * @param string $key
      * @param mixed  $val
-     *
-     * @throws Exception
      */
     protected function setMissingProperty($key, $val)
     {
@@ -318,8 +312,6 @@ class View implements jsExpressionable
     /**
      * Called when view becomes part of render tree. You can override it but avoid
      * placing any "heavy processing" here.
-     *
-     * @throws Exception
      */
     public function init(): void
     {
@@ -391,8 +383,6 @@ class View implements jsExpressionable
      *
      * @param View              $object
      * @param string|array|null $region
-     *
-     * @throws \atk4\core\Exception
      *
      * @return View
      */
@@ -488,8 +478,6 @@ class View implements jsExpressionable
      * @param string|array $arg1
      * @param string|null  $arg2
      *
-     * @throws Exception
-     *
      * @return $this
      */
     public function set($arg1 = null, $arg2 = null)
@@ -534,8 +522,6 @@ class View implements jsExpressionable
      * string or array of class names.
      *
      * @param string|array $class CSS class name or array of class names
-     *
-     * @throws Exception
      *
      * @return $this
      */
@@ -751,8 +737,6 @@ class View implements jsExpressionable
     /**
      * Render everything recursively, render ourselves but don't return
      * anything just yet.
-     *
-     * @throws Exception
      */
     public function renderAll()
     {
@@ -773,8 +757,6 @@ class View implements jsExpressionable
      * view and grab HTML himself.
      *
      * @param bool $force_echo
-     *
-     * @throws Exception
      *
      * @return string
      */
@@ -806,8 +788,6 @@ class View implements jsExpressionable
      * @param bool   $force_echo
      * @param string $region     a specific template region to render
      *
-     * @throws Exception
-     *
      * @return string
      */
     public function renderJSON($force_echo = true, $region = null)
@@ -826,9 +806,6 @@ class View implements jsExpressionable
     /**
      * Created for recursive rendering or when you want to only get HTML of
      * this object (not javascript).
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      *
      * @return string
      */
@@ -893,8 +870,6 @@ class View implements jsExpressionable
      * @param string|bool|null $when     Event when chain will be executed
      * @param jsExpression     $action   JavaScript action
      * @param string           $selector If you wish to override jQuery($selector)
-     *
-     * @throws Exception
      *
      * @return jQuery
      */
@@ -1024,8 +999,6 @@ class View implements jsExpressionable
      *
      * @param bool $useSession
      *
-     * @throws \atk4\ui\Exception
-     *
      * @return mixed
      */
     public function jsClearStoreData($useSession = false)
@@ -1051,8 +1024,6 @@ class View implements jsExpressionable
      *  Final store value will be: ['args' => ['path' => '/'], 'fields' => ['name' => 'test']];
      *
      * @param bool $useSession
-     *
-     * @throws \atk4\ui\Exception
      *
      * @return mixed
      */
@@ -1117,9 +1088,6 @@ class View implements jsExpressionable
      * @param string                   $selector Optional jQuery-style selector
      * @param jsChain|callable|Generic $action   code to execute or \atk4\Data\UserAction
      * @param array                    $defaults Options
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      *
      * @return jQuery
      */
@@ -1260,8 +1228,6 @@ class View implements jsExpressionable
     /**
      * Convert View into a value in case it happens to be inside our json_encode (as argument to jsChain).
      *
-     * @throws Exception
-     *
      * @return string
      */
     public function jsRender()
@@ -1293,8 +1259,6 @@ class View implements jsExpressionable
      * Get JavaScript objects from this render tree.
      *
      * @param bool $force_echo
-     *
-     * @throws Exception
      *
      * @return string
      */

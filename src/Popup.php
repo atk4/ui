@@ -155,8 +155,6 @@ class Popup extends View
      * for adding content to it.
      *
      * @param callable $fx
-     *
-     * @throws Exception
      */
     public function set($fx = null, $arg2 = null)
     {

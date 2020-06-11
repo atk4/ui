@@ -267,8 +267,6 @@ class MultiLine extends Generic
      *
      * @param callable $fx
      * @param array    $fields
-     *
-     * @throws Exception
      */
     public function onLineChange($fx, $fields)
     {
@@ -282,8 +280,6 @@ class MultiLine extends Generic
 
     /**
      * Input field collecting multiple rows of data.
-     *
-     * @throws \atk4\core\Exception
      *
      * @return string
      */
@@ -300,8 +296,6 @@ class MultiLine extends Generic
     /**
      * Get Multiline initial field value. Value is based on model set and will
      * output data rows as json string value.
-     *
-     * @throws \atk4\core\Exception
      *
      * @return false|string
      */
@@ -344,8 +338,6 @@ class MultiLine extends Generic
     /**
      * Validate each row and return errors if found.
      *
-     * @throws \atk4\core\Exception
-     *
      * @return array|null
      */
     public function validate(array $rows)
@@ -380,10 +372,6 @@ class MultiLine extends Generic
 
     /**
      * Save rows.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
      */
     public function saveRows()
     {
@@ -480,8 +468,6 @@ class MultiLine extends Generic
      * Will return a model reference if reference was set in setModel.
      * Otherwise, will return main model.
      *
-     * @throws \atk4\core\Exception
-     *
      * @return Model
      */
     public function getModel()
@@ -500,9 +486,6 @@ class MultiLine extends Generic
      *
      * @param Model $m
      * @param array $fields
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      *
      * @return Model
      */
@@ -741,10 +724,6 @@ class MultiLine extends Generic
      * For javascript use - changing these methods may brake JS functionality.
      *
      * Render callback.
-     *
-     * @throws ValidationException
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
      */
     private function renderCallback()
     {
@@ -828,9 +807,6 @@ class MultiLine extends Generic
      *
      * Return values associated to field expression.
      *
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
-     *
      * @return array
      */
     private function getExpressionValues($m)
@@ -888,8 +864,6 @@ class MultiLine extends Generic
      * Return expression where fields are replace with their current or default value.
      * Ex: total field expression = [qty] * [price] will return 4 * 100
      * where qty and price current value are 4 and 100 respectively.
-     *
-     * @throws \atk4\core\Exception
      *
      * @return mixed
      */

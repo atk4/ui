@@ -99,8 +99,6 @@ class Basic extends \atk4\ui\View implements Interface_
     /**
      * Check if all argument values have been provided.
      *
-     * @throws Exception
-     *
      * @return true
      */
     public function hasAllArguments()
@@ -134,8 +132,6 @@ class Basic extends \atk4\ui\View implements Interface_
     /**
      * Will call $action->execute() with the correct arguments.
      *
-     * @throws \atk4\core\Exception
-     *
      * @return mixed
      */
     public function jsExecute()
@@ -155,8 +151,6 @@ class Basic extends \atk4\ui\View implements Interface_
 
     /**
      * Will add header if set.
-     *
-     * @throws \atk4\core\Exception
      */
     public function addHeader()
     {

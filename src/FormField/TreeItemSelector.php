@@ -93,9 +93,6 @@ class TreeItemSelector extends Generic
      *
      * @param callable $fx the function to execute when callback is fired
      *
-     * @throws \atk4\core\Exception
-     * @throws \atk4\ui\Exception
-     *
      * @return $this
      */
     public function onItem($fx)
@@ -127,8 +124,6 @@ class TreeItemSelector extends Generic
 
     /**
      * Input field.
-     *
-     * @throws \atk4\core\Exception
      *
      * @return string
      */

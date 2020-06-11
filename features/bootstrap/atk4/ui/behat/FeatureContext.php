@@ -117,8 +117,6 @@ class FeatureContext extends RawMinkContext implements Context
      * @Given I click tab with title :arg1
      *
      * @param $arg1
-     *
-     * @throws Exception
      */
     public function iClickTabWithTitle($arg1)
     {
@@ -184,8 +182,6 @@ class FeatureContext extends RawMinkContext implements Context
      * @Then I press Modal button :arg
      *
      * @param $arg
-     *
-     * @throws Exception
      */
     public function iPressModalButton($arg)
     {
@@ -236,8 +232,6 @@ class FeatureContext extends RawMinkContext implements Context
      *
      * @param $arg1
      * @param $arg2
-     *
-     * @throws Exception
      */
     public function modalIsShowingText($arg1, $arg2)
     {
@@ -277,8 +271,6 @@ class FeatureContext extends RawMinkContext implements Context
      * @Then Toast display should contains text :arg1
      *
      * @param $arg1
-     *
-     * @throws Exception
      */
     public function toastDisplayShouldContainText($arg1)
     {
