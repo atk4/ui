@@ -31,8 +31,6 @@ class Content extends View implements LoadableContent
     /**
      * Set callback for panel.
      *
-     * @throws \atk4\core\Exception
-     *
      * @return mixed|void
      */
     public function setCb(Callback $cb)

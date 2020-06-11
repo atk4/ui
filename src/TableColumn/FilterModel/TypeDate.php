@@ -62,8 +62,6 @@ class TypeDate extends Generic
     /**
      * Set model condition base on filter value.
      *
-     * @throws \atk4\data\Exception
-     *
      * @return mixed
      */
     public function setConditionForModel($m)

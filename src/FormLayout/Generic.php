@@ -114,9 +114,6 @@ class Generic extends _Abstract
      * @param mixed $seed
      * @param bool  $addDivider Should we add divider after this section
      *
-     * @throws \atk4\core\Exception
-     * @throws \atk4\ui\Exception
-     *
      * @return static
      */
     public function addSubLayout($seed = self::class, $addDivider = true)

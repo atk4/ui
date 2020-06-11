@@ -302,9 +302,6 @@ class Form extends View
      * @param string      $sub_header  Sub-header
      * @param bool        $useTemplate Backward compatibility
      *
-     * @throws Exception
-     * @throws \atk4\core\Exception
-     *
      * @return jsChain
      */
     public function success($success = 'Success', $sub_header = null, $useTemplate = true)

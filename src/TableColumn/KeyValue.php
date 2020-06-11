@@ -51,8 +51,6 @@ class KeyValue extends Generic
     /**
      * @param Field|null $field
      *
-     * @throws Exception
-     *
      * @return array|void
      */
     public function getHTMLTags(Model $row, $field)

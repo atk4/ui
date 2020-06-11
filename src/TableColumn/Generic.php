@@ -153,8 +153,6 @@ class Generic
      * @param callable    $fx
      * @param string      $icon
      * @param string|null $menuId the menu name
-     *
-     * @throws Exception
      */
     public function addDropdown($items, $fx, $icon = 'caret square down', $menuId = null)
     {
@@ -174,8 +172,6 @@ class Generic
      * Setup dropdown header action.
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
-     *
-     * @throws Exception
      *
      * @return \atk4\ui\jsCallback
      */

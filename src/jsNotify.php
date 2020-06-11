@@ -159,8 +159,6 @@ class jsNotify implements jsExpressionable
      *
      * note: notifier is attach to 'body' element by default.
      *
-     * @throws Exception
-     *
      * @return $this
      */
     public function attachTo($to)
