@@ -92,8 +92,6 @@ class Generic extends Model
 
     /**
      * Perform further initialisation.
-     *
-     * @throws \atk4\core\Exception
      */
     public function afterInit()
     {

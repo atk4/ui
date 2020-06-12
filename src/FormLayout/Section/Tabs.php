@@ -14,8 +14,6 @@ class Tabs extends \atk4\ui\Tabs
      * @param callable   $callback Callback action or URL (or array with url + parameters)
      * @param callable   $settings tab settings
      *
-     * @throws Exception
-     *
      * @return \atk4\ui\FormLayout\Generic
      */
     public function addTab($name, $callback = null, $settings = [])

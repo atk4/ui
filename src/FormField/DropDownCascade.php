@@ -95,8 +95,6 @@ class DropDownCascade extends DropDown
 
     /**
      * Call during parent::renderView().
-     *
-     * @throws \atk4\core\Exception
      */
     protected function jsRenderDropdown(): array
     {

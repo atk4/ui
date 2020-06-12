@@ -42,9 +42,6 @@ class ActionButtons extends Generic
      * @param bool                                        $confirm
      * @param bool                                        $isDisabled
      *
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
-     *
      * @return \atk4\ui\View
      */
     public function addButton($button, $action = null, $confirm = false, $isDisabled = false)

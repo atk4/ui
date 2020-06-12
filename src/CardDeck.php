@@ -114,8 +114,6 @@ class CardDeck extends View
 
     /**
      * Add menu bar view to CardDeck.
-     *
-     * @throws \atk4\core\Exception
      */
     protected function addMenuBar()
     {
@@ -134,8 +132,6 @@ class CardDeck extends View
 
     /**
      * Add Paginator view to card deck.
-     *
-     * @throws \atk4\core\Exception
      */
     protected function addPaginator()
     {
@@ -193,9 +189,6 @@ class CardDeck extends View
     /**
      * Reset Menu button js event when reloading occur in order
      * to have their arguments always in sync after container reload.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     protected function applyReload()
     {
@@ -216,8 +209,6 @@ class CardDeck extends View
      * Single record scope action use jsSuccess instead of afterExecute hook
      * because hook will keep adding for every cards, thus repeating jsExecute multiple time,
      * i.e. once for each card, unless hook is break.
-     *
-     * @throws \atk4\core\Exception
      *
      * @return object
      */
@@ -241,8 +232,6 @@ class CardDeck extends View
     /**
      * Return proper js statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
-     *
-     * @throws \atk4\core\Exception
      *
      * @return array|object
      */
@@ -268,8 +257,6 @@ class CardDeck extends View
      * @param string|null  $msg    the message to display
      * @param Generic|null $action the model action
      *
-     * @throws \atk4\core\Exception
-     *
      * @return object
      */
     protected function getNotifier($msg = null, $action = null)
@@ -286,8 +273,6 @@ class CardDeck extends View
      * js expression return when action afterHook executor return a Model.
      *
      * @param Generic $action
-     *
-     * @throws \atk4\core\Exception
      */
     protected function jsModelReturn(Generic $action = null, string $msg = 'Done!'): array
     {
@@ -311,8 +296,6 @@ class CardDeck extends View
      * Or when adding a new one.
      * Therefore if card, that was just save, is not present in db result set or deck then return null
      * otherwise return Card view.
-     *
-     * @throws \atk4\data\Exception
      *
      * @return mixed|null
      */
@@ -359,9 +342,6 @@ class CardDeck extends View
      * @param Generic|jsExpressionable|callable|null $callback   an model action, js expression or callback function
      * @param string|array                           $confirm    A confirmation string or View::on method defaults when passed has an array,
      * @param bool                                   $isDisabled
-     *
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
      *
      * @return mixed
      */
@@ -431,8 +411,6 @@ class CardDeck extends View
     /**
      * Return proper action executor base on model action.
      *
-     * @throws \atk4\core\Exception
-     *
      * @return object
      */
     protected function getExecutor(Generic $action)
@@ -460,9 +438,6 @@ class CardDeck extends View
 
     /**
      * Return proper action need to setup menu or action column.
-     *
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
      */
     private function _getModelActions(string $scope): array
     {
@@ -484,9 +459,6 @@ class CardDeck extends View
 
     /**
      * Will set model limit according to paginator value.
-     *
-     * @throws \atk4\data\Exception
-     * @throws \atk4\dsql\Exception
      */
     protected function initPaginator()
     {

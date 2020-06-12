@@ -81,9 +81,6 @@ class ActionMenu extends Generic
      * @param string|null                                 $confirm
      * @param bool                                        $isDisabled
      *
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
-     *
      * @return object|string
      */
     public function addActionMenuItem($item, $action = null, $confirm = null, $isDisabled = false)
