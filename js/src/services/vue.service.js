@@ -6,7 +6,6 @@ import itemSearch from '../components/item-search.component';
 import multiLine from '../components/multiline.component'
 import treeItemSelector from '../components/tree-item-selector/tree-item-selector.component';
 import atkClickOutside from '../directives/click-outside.directive';
-// import VueQueryBuilder from 'vue-query-builder';
 import VueQueryBuilder from '../components/query-builder/query-builder.component.vue';
 import {focus} from '../directives/commons.directive';
 

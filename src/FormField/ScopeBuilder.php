@@ -62,15 +62,17 @@ class ScopeBuilder extends Generic
      * Definition of VueQueryBuilder rules.
      *
      * @var array
+     * todo setback to protected after testing.
      */
-    protected $rules = [];
+    public $rules = [];
 
     /**
      * Default VueQueryBuilder query.
      *
      * @var array
+     * todo reset to empty after testing.
      */
-    protected $query = [];
+    protected $query = ['logicalOperator' => 'all', 'children' => []];
 
     protected const OPERATOR_EQUALS = 'equals';
     protected const OPERATOR_DOESNOT_EQUAL = 'does not equal';
@@ -197,7 +199,7 @@ class ScopeBuilder extends Generic
         parent::init();
 
         if (!$this->scopeBuilderTemplate) {
-            $this->scopeBuilderTemplate = new Template('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData" v-model="initData.query"></atk-query-builder><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->scopeBuilderTemplate = new Template('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData"></atk-query-builder><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
         $this->scopeBuilderView = \atk4\ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
@@ -352,22 +354,25 @@ class ScopeBuilder extends Generic
 
     public function renderView()
     {
-        $this->app->addStyle('
-            .vue-query-builder select,input {
-                width: auto !important;
-            }
-        ');
+//        $this->app->addStyle('
+//            .vue-query-builder select,input {
+//                width: auto !important;
+//            }
+//        ');
 
-        $this->scopeBuilderView->template->trySetHTML('Input', $this->getInput());
+//        $this->scopeBuilderView->template->trySetHTML('Input', $this->getInput());
 
         parent::renderView();
 
         $this->scopeBuilderView->vue(
             'atk-query-builder',
             [
-                'rules' => $this->rules,
-                'maxDepth' => $this->maxDepth,
-                'query' => $this->query,
+                'data' => [
+                    'rules' => $this->rules,
+                    'maxDepth' => $this->maxDepth,
+                    'query' => $this->query,
+                    'name'  => $this->short_name,
+                ]
             ]
         );
     }

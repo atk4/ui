@@ -1,12 +1,13 @@
 <template>
     <div class="">
+        <input :name="name" type="hidden">
         <vue-query-builder :rules="rules" v-model="query">
             <template v-slot:default="slotProps">
                 <query-builder-group v-bind="slotProps" :query.sync="query"/>
             </template>
         </vue-query-builder>
 
-        <div class="my-6">---</div>
+        <div>---</div>
 
         <p>Generated output:</p>
 
@@ -25,13 +26,19 @@
       QueryBuilderGroup
     },
     props : {
-      data : {Object}
+      data: Object,
     },
     data() {
       return {
-        rules: this.data.rules,
         query: this.data.query ? this.data.query : {},
-        maxDepth: this.data.maxDepth ? this.data.maxDepth : 3,
+        rules: this.data.rules ? this.data.rules : [],
+        name: this.data.name ? this.data.name : '',
+        maxDepth: this.data.maxDepth ? this.data.maxDepth : 1,
+      }
+    },
+    computed: {
+      value: function() {
+        return JSON.stringify(this.query, null, 2);
       }
     }
   };
