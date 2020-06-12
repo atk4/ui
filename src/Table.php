@@ -198,17 +198,14 @@ class Table extends Lister
             // table column without respective field in model
             $field = null;
         } elseif (!$this->model->hasField($name)) {
-            // Add missing field
-            $field = $this->model->addField($name, $field ?: []);
+            $field = $this->model->addField($name, $field);
 
             $field->never_persist = true;
         } else {
             $existingField = $this->model->getField($name);
 
             if (is_array($field)) {
-                // Add properties to existing field
-                $existingField->setDefaults($field);
-                $field = $existingField;
+                $field = $existingField->setDefaults($field);
             } elseif (is_object($field)) {
                 throw (new Exception('Duplicate field'))
                     ->addMoreInfo('name', $name);

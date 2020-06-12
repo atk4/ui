@@ -37,19 +37,12 @@ abstract class _Abstract extends \atk4\ui\View
 
         try {
             if (!$this->form->model->hasField($name)) {
-                // Add missing field
-                if ($field) {
-                    $field = $this->form->model->addField($name, $field);
-                } else {
-                    $field = $this->form->model->addField($name);
-                }
+                $field = $this->form->model->addField($name, $field);
             } else {
                 $existingField = $this->form->model->getField($name);
 
                 if (is_array($field)) {
-                    // Add properties to existing field
-                    $existingField->setDefaults($field);
-                    $field = $existingField;
+                    $field = $existingField->setDefaults($field);
                 } elseif (is_object($field)) {
                     throw (new Exception('Duplicate field'))
                         ->addMoreInfo('name', $name);
