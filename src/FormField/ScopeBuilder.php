@@ -62,7 +62,7 @@ class ScopeBuilder extends Generic
      * Definition of VueQueryBuilder rules.
      *
      * @var array
-     * todo setback to protected after testing.
+     *            todo setback to protected after testing
      */
     public $rules = [];
 
@@ -70,7 +70,7 @@ class ScopeBuilder extends Generic
      * Default VueQueryBuilder query.
      *
      * @var array
-     * todo reset to empty after testing.
+     *            todo reset to empty after testing
      */
     protected $query = ['logicalOperator' => 'all', 'children' => []];
 
@@ -371,8 +371,8 @@ class ScopeBuilder extends Generic
                     'rules' => $this->rules,
                     'maxDepth' => $this->maxDepth,
                     'query' => $this->query,
-                    'name'  => $this->short_name,
-                ]
+                    'name' => $this->short_name,
+                ],
             ]
         );
     }

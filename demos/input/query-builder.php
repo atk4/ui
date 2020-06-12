@@ -6,17 +6,17 @@ $rules = [
     [
         'type' => 'text',
         'id' => 'vegetable',
-        'label' => 'Vegetable'
+        'label' => 'Vegetable',
     ],
     [
         'type' => 'radio',
         'id' => 'fruit',
         'label' => 'Fruit',
         'choices' => [
-            ['label' => "Apple", 'value' => 'apple'],
-            ['label' => 'Banana', 'value' => 'banana']
-        ]
-    ]
+            ['label' => 'Apple', 'value' => 'apple'],
+            ['label' => 'Banana', 'value' => 'banana'],
+        ],
+    ],
 ];
 
 $f = \atk4\ui\Form::addTo($app);
