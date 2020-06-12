@@ -109,8 +109,6 @@ class Card extends View
     /**
      * Get main section of this card.
      *
-     * @throws Exception
-     *
      * @return CardSection|View|null
      */
     public function getSection()
@@ -124,8 +122,6 @@ class Card extends View
 
     /**
      * Get the image container of this card.
-     *
-     * @throws Exception
      *
      * @return View|null
      */
@@ -141,8 +137,6 @@ class Card extends View
     /**
      * Get the ExtraContainer of this card.
      *
-     * @throws Exception
-     *
      * @return View|null
      */
     public function getExtraContainer()
@@ -157,8 +151,6 @@ class Card extends View
     /**
      * Get the button container of this card.
      *
-     * @throws Exception
-     *
      * @return View|null
      */
     public function getButtonContainer()
@@ -172,8 +164,6 @@ class Card extends View
 
     /**
      * Add Content to card.
-     *
-     * @throws Exception
      *
      * @return View|null
      */
@@ -190,9 +180,6 @@ class Card extends View
      *
      * @param \atk4\data\Model $m      the model
      * @param array|false      $fields an array of fields name to display in content
-     *
-     * @throws Exception
-     * @throws \atk4\data\Exception
      *
      * @return \atk4\data\Model|void
      */
@@ -232,10 +219,6 @@ class Card extends View
 
     /**
      * Add actions from various model.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
      */
     public function addModelsActions(array $models)
     {
@@ -246,10 +229,6 @@ class Card extends View
 
     /**
      * Add action from Model.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
      */
     public function addModelActions(Model $model)
     {
@@ -270,10 +249,6 @@ class Card extends View
     /**
      * Add a CardSection to this card.
      *
-     * @throws Exception
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
-     *
      * @return View
      */
     public function addSection(string $title = null, Model $model = null, array $fields = null, bool $useTable = false, bool $useLabel = false)
@@ -293,8 +268,6 @@ class Card extends View
 
     /**
      * Add action executor to card.
-     *
-     * @throws Exception
      */
     public function addAction($action, $executor, $button = null)
     {
@@ -322,8 +295,6 @@ class Card extends View
      *
      * @param []     $args    The action argument
      * @param string $confirm the confirmation message
-     *
-     * @throws Exception
      *
      * @return Card
      */
@@ -361,9 +332,6 @@ class Card extends View
      * @param Model  $m      The model
      * @param array  $fields an array of fields name
      * @param string $glue   a separator string between each field
-     *
-     * @throws Exception
-     * @throws \atk4\data\Exception
      */
     public function addExtraFields($m, $fields, $glue = null)
     {
@@ -389,8 +357,6 @@ class Card extends View
      *
      * @param string|View $description
      *
-     * @throws Exception
-     *
      * @return View|string|null the description to add
      */
     public function addDescription($description)
@@ -401,8 +367,6 @@ class Card extends View
     /**
      * Add Extra content to the Card.
      * Extra content is added at the bottom of the card.
-     *
-     * @throws Exception
      *
      * @return View
      */
@@ -415,8 +379,6 @@ class Card extends View
      * Add image to card.
      *
      * @param string|Image $img
-     *
-     * @throws Exception
      *
      * @return View|null
      */
@@ -436,8 +398,6 @@ class Card extends View
      *
      * @param Button $button  a Button
      * @param bool   $isFluid make the buttons spread evenly in Card
-     *
-     * @throws Exception
      *
      * @return View|null
      */
@@ -463,8 +423,6 @@ class Card extends View
 
     /**
      * Add a series of buttons to this card.
-     *
-     * @throws Exception
      *
      * @return View|null
      */

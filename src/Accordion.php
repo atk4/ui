@@ -51,8 +51,6 @@ class Accordion extends View
      * @param callable|null $callback
      * @param string        $icon
      *
-     * @throws Exception
-     *
      * @return AccordionSection
      */
     public function addSection($title, $callback = null, $icon = 'dropdown')

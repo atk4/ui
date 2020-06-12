@@ -39,8 +39,6 @@ class Accordion extends \atk4\ui\Accordion
      * @param callable|null $callback
      * @param string        $icon
      *
-     * @throws \atk4\ui\Exception
-     *
      * @return \atk4\ui\FormLayout\Generic
      */
     public function addSection($title, $callback = null, $icon = 'dropdown')

@@ -219,9 +219,6 @@ class App
 
     /**
      * @param bool $for_shutdown if true will not pass in caughtException method
-     *
-     * @throws ExitApplicationException
-     * @throws \atk4\core\Exception
      */
     public function callExit($for_shutdown = false)
     {
@@ -249,9 +246,6 @@ class App
 
     /**
      * Catch exception.
-     *
-     * @throws \atk4\core\Exception
-     * @throws ExitApplicationException
      *
      * @return bool
      */
@@ -344,9 +338,6 @@ class App
      *
      * @param string|array $output  Array type is supported only for JSON response
      * @param string[]     $headers content-type header must be always set or consider using App::terminateHTML() or App::terminateJSON() methods
-     *
-     * @throws \atk4\core\Exception
-     * @throws ExitApplicationException
      */
     public function terminate($output = '', array $headers = []): void
     {
@@ -429,8 +420,6 @@ class App
      *
      * @param string|Layout\Generic|array $seed
      *
-     * @throws \atk4\core\Exception
-     *
      * @return $this
      */
     public function initLayout($seed)
@@ -476,8 +465,6 @@ class App
      * and use file include instead.
      *
      * @param string $style CSS rules, like ".foo { background: red }".
-     *
-     * @throws Exception
      */
     public function addStyle($style)
     {
@@ -493,8 +480,6 @@ class App
      * @param View|string|array $seed   New object to add
      * @param string|array|null $region
      *
-     * @throws \atk4\core\Exception
-     *
      * @return View
      */
     public function add($seed, $region = null)
@@ -509,9 +494,6 @@ class App
 
     /**
      * Runs app and echo rendered template.
-     *
-     * @throws \atk4\core\Exception
-     * @throws ExitApplicationException
      */
     public function run()
     {
@@ -571,8 +553,6 @@ class App
      *
      * @param string $name
      *
-     * @throws Exception
-     *
      * @return Template
      */
     public function loadTemplate($name)
@@ -603,9 +583,6 @@ class App
      * @param string $user
      * @param string $password
      * @param array  $args
-     *
-     * @throws \atk4\data\Exception
-     * @throws \atk4\dsql\Exception
      *
      * @return Persistence
      */
@@ -790,9 +767,6 @@ class App
      * A convenient wrapper for sending user to another page.
      *
      * @param array|string $page Destination page
-     *
-     * @throws \atk4\core\Exception
-     * @throws ExitApplicationException
      */
     public function redirect($page, bool $permanent = false): void
     {
@@ -1163,8 +1137,6 @@ class App
 
     /**
      * Generated html and js for modals attached to $html view.
-     *
-     * @throws \atk4\core\Exception
      */
     public function getRenderedModals(): array
     {

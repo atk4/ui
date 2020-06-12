@@ -55,8 +55,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 
     /**
      * Properly set element id for this modal.
-     *
-     * @throws \atk4\core\Exception
      */
     public function afterActionInit(Generic $action)
     {
@@ -86,8 +84,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /**
      * Return js expression that will trigger action executor.
      *
-     * @throws Exception
-     *
      * @return mixed
      */
     public function jsExecute(array $urlArgs)
@@ -101,10 +97,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 
     /**
      * Will associate executor with the action.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
      *
      * @return UserConfirmation
      */
@@ -125,9 +117,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 
     /**
      * Perform this action steps.
-     *
-     * @throws Exception
-     * @throws \atk4\data\Exception
      */
     public function doSteps()
     {
@@ -148,8 +137,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 
     /**
      * Reset button state.
-     *
-     * @throws \atk4\core\Exception
      */
     protected function jsSetBtnState(View $view)
     {
@@ -161,9 +148,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /**
      * Set modal for displaying confirmation message.
      * Also apply proper javascript to each button.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     public function doConfirmation(View $modal)
     {
@@ -202,8 +186,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 
     /**
      * Add confirmation message to modal.
-     *
-     * @throws \atk4\core\Exception
      */
     protected function addConfirmation(View $view)
     {
@@ -212,8 +194,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 
     /**
      * Execute action when all step are completed.
-     *
-     * @throws \atk4\core\Exception
      */
     protected function doFinal(View $modal)
     {
@@ -227,8 +207,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
      *
      * @param $obj
      * @param $id
-     *
-     * @throws \atk4\core\Exception
      */
     protected function jsGetExecute($obj, $id): array
     {
@@ -246,8 +224,6 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
      * Create a sequence of js statement for a view.
      *
      * @param array|jsExpressionable $js
-     *
-     * @throws \atk4\core\Exception
      */
     private function _jsSequencer(View $view, $js)
     {

@@ -115,8 +115,6 @@ class Menu extends View
      *
      * @param string|array $name
      *
-     * @throws \atk4\core\Exception
-     *
      * @return Menu
      */
     public function addGroup($name, string $template = 'menugroup.html')

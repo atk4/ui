@@ -59,8 +59,6 @@ class Right extends View implements Loadable
 
     /**
      * Set the dynamic content of this view.
-     *
-     * @throws \atk4\core\Exception
      */
     public function addDynamicContent(LoadableContent $content)
     {
@@ -132,9 +130,6 @@ class Right extends View implements Loadable
      * @param $msg
      * @param null $okBtn
      * @param null $cancelBtn
-     *
-     * @throws \atk4\core\Exception
-     * @throws \atk4\ui\Exception
      */
     public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okBtn = null, string $cancelBtn = null)
     {

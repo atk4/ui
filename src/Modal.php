@@ -66,8 +66,6 @@ class Modal extends View
      * @param array|string $fx
      * @param array|string $arg2
      *
-     * @throws Exception
-     *
      * @return $this
      */
     public function set($fx = [], $arg2 = null)

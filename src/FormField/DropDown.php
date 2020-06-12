@@ -227,8 +227,6 @@ class DropDown extends Input
     /**
      * Render js for dropdown.
      *
-     * @throws \atk4\core\Exception
-     *
      * @return mixed
      */
     protected function jsRenderDropdown()

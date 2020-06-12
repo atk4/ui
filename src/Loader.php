@@ -71,8 +71,6 @@ class Loader extends View
      * @param callable $fx
      * @param array    $args
      *
-     * @throws Exception
-     *
      * @return $this
      */
     public function set($fx = [], $args = null)
