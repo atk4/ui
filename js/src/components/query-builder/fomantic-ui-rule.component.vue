@@ -25,7 +25,7 @@
                             </div>
                             <div class="item">
                                 <!-- text input -->
-                                <template v-if="rule.inputType === 'text'">
+                                <template v-if="getInputType === 'text'">
                                     <div class="ui small input atk-qb" >
                                         <input
                                                 v-model="query.value"
@@ -35,7 +35,7 @@
                                     </div>
                                 </template>
                                 <!-- Radio input -->
-                                <template v-if="rule.inputType === 'radio'">
+                                <template v-if="getInputType === 'radio'">
                                     <div class="inline fields atk-qb">
                                         <div class="field">
                                             <div class="ui radio checkbox" v-for="choice in rule.choices" :key="choice.value">
@@ -71,7 +71,16 @@
   import QueryBuilderRule from "vue-query-builder/dist/rule/QueryBuilderRule.umd.js";
 
   export default {
-    extends: QueryBuilderRule
+    extends: QueryBuilderRule,
+    computed: {
+      // temp until more type are supported.
+      getInputType: function() {
+        if (this.rule.inputType === 'radio') {
+          return 'radio';
+        }
+        return 'text';
+      }
+    }
   };
 </script>
 
@@ -86,9 +95,6 @@
     .inline.fields.atk-qb, .ui.form .inline.fields.atk-qb {
         margin: 0px;
     }
-    /*.vqb-rule.ui.segment {*/
-    /*    padding: 6px 10px;*/
-    /*}*/
     .ui.card.vqb-rule > .content {
         padding-bottom: 0.5em;
         padding-top: 0.5em;

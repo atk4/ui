@@ -46,9 +46,8 @@
 
                         </div>
                     </div>
-                    <div class="item">
+                    <div class="item"  v-if="depth < maxDepth">
                         <button
-                                v-if="depth < maxDepth"
                                 type="button"
                                 class="ui mini primary button"
                                 @click="addGroup"
