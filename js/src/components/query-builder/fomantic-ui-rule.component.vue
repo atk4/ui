@@ -86,7 +86,12 @@
     .inline.fields.atk-qb, .ui.form .inline.fields.atk-qb {
         margin: 0px;
     }
-    .vqb-rule.ui.segment {
-        padding: 6px 10px;
+    /*.vqb-rule.ui.segment {*/
+    /*    padding: 6px 10px;*/
+    /*}*/
+    .ui.card.vqb-rule > .content {
+        padding-bottom: 0.5em;
+        padding-top: 0.5em;
+        background-color: #f3f4f5;
     }
 </style>
