@@ -423,16 +423,7 @@ class View implements jsExpressionable
                     ->addMoreInfo('region_type', gettype($region));
             }
 
-            if (isset($object->_DIContainerTrait)) {
-                $object->setDefaults(['region' => $region]);
-            } else {
-                if (!property_exists($object, 'region')) {
-                    throw (new Exception('Region property is not defined'))
-                        ->addMoreInfo('object_class', get_class($object));
-                }
-
-                $object->region = $region;
-            }
+            $object->setDefaults(['region' => $region]);
         }
 
         // will call init() of the object
