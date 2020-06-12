@@ -1,6 +1,9 @@
 ## Release note
-### version 1.14.3 (2020-06-10)
+### version 1.15.0 (2020-06-10)
  - update package dependency
+ - configure webpack in order to load and bundle .vue file.
+ - add query builder component for ScopeBuilder form field
+   - extends Vue Query Builder default to work with Fomantic ui.
 
 ### version 1.14.2 (2020-05-04)
  - Build releases automatically on ui.agiletoolkit.org deploy
