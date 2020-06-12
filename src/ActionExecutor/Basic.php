@@ -98,8 +98,6 @@ class Basic extends \atk4\ui\View implements Interface_
 
     /**
      * Check if all argument values have been provided.
-     *
-     * @return true
      */
     public function hasAllArguments()
     {

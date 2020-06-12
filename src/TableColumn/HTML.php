@@ -34,6 +34,6 @@ class HTML extends Generic
      */
     public function getHTMLTags(Model $row, $field)
     {
-        return ['_' . $field->short_name => '<td>' . $row->get($field) . '</td>'];
+        return ['_' . $field->short_name => '<td>' . $row->get($field->short_name) . '</td>'];
     }
 }
