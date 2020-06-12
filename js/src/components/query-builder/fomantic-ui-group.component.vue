@@ -1,6 +1,6 @@
 <template>
-    <div class="vqb-group relative" :class="'depth-' + depth.toString()">
-        <div class="vqb-group-heading ui basic inverted segment" :class="getLevel">
+    <div class="vqb-group ui fluid card" :class="'depth-' + depth.toString()">
+        <div class="vb-group-heading content">
             <div class="ui grid">
                 <div class="middle aligned row">
                     <div class="fourteen wide column">
@@ -27,46 +27,41 @@
                     </div>
                 </div>
             </div>
-            <div class="ui top attached segment">
-                <div class="ui two column grid">
-                    <div class="six wide column">
-                    </div>
-                    <div class="ten wide right aligned column">
-                        <div class="ui horizontal divided list">
-                            <div class="item">
-                                <div class="ui horizontal list">
-                                    <div class=" item">
-                                        <select v-model="selectedRule" class="atk-qb-select">
-                                            <option v-for="rule in rules" :key="rule.id" :value="rule">{{ rule.label }}</option>
-                                        </select>
-                                    </div>
-                                    <div class=" item">
-                                        <button
-                                                type="button"
-                                                class="ui mini primary button"
-                                                @click="addRule"
-                                        >{{ labels.addRule }}</button>
-                                    </div>
-
-                                </div>
+        </div>
+        <div class="vb-group-body content">
+            <div class="rule actions ui basic segment right aligned">
+                <div class="ui horizontal divided list">
+                    <div class="item">
+                        <div class="ui horizontal list">
+                            <div class=" item">
+                                <select v-model="selectedRule" class="atk-qb-select">
+                                    <option v-for="rule in rules" :key="rule.id" :value="rule">{{ rule.label }}</option>
+                                </select>
                             </div>
-                            <div class="item">
+                            <div class=" item">
                                 <button
-                                        v-if="depth < maxDepth"
                                         type="button"
                                         class="ui mini primary button"
-                                        @click="addGroup"
-                                >{{ labels.addGroup }}</button>
+                                        @click="addRule"
+                                >{{ labels.addRule }}</button>
                             </div>
+
                         </div>
+                    </div>
+                    <div class="item">
+                        <button
+                                v-if="depth < maxDepth"
+                                type="button"
+                                class="ui mini primary button"
+                                @click="addGroup"
+                        >{{ labels.addGroup }}</button>
                     </div>
                 </div>
             </div>
-            <div class="vqb-group-body ui attached segment">
-                <query-builder-children v-bind="$props"/>
-            </div>
+            <query-builder-children v-bind="$props"/>
         </div>
     </div>
+
 </template>
 
 <script>
