@@ -14,7 +14,6 @@ Agile UI is quickest way for building back-end UI, admin interfaces, data manage
 [![Build Status](https://travis-ci.org/atk4/ui.png?branch=develop)](https://travis-ci.org/atk4/ui)
 ![Build](https://github.com/atk4/ui/workflows/Unit%20Testing/badge.svg)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
-[![StyleCI](https://styleci.io/repos/68417565/shield)](https://styleci.io/repos/68417565)
 [![codecov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
 [![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](CHANGELOG.md)
 [![Codefresh build status](https://g.codefresh.io/api/badges/pipeline/romaninsh/atk4%2Fui.agiletoolkit.org?type=cf-1)](https://g.codefresh.io/public/accounts/romaninsh/pipelines/new/5e0496e57ab3a7bb752ed818)
