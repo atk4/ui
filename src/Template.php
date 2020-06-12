@@ -207,10 +207,8 @@ class Template implements \ArrayAccess
      * If multiple tags are passed in as array, then return true if all of them exist.
      *
      * @param string|array $tag
-     *
-     * @return bool
      */
-    public function hasTag($tag)
+    public function hasTag($tag): bool
     {
         // check if all tags exist
         if (is_array($tag)) {

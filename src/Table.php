@@ -178,7 +178,7 @@ class Table extends Lister
      *
      * @return TableColumn\Generic
      */
-    public function addColumn($name, $columnDecorator = null, $field = null)
+    public function addColumn(?string $name, $columnDecorator = null, $field = null)
     {
         if (!$this->_initialized) {
             throw new Exception\NoRenderTree($this, 'addColumn()');
@@ -194,29 +194,24 @@ class Table extends Lister
             $field = ['type' => $field];
         }
 
-        if (is_string($name) && $name) {
-            $existingField = $this->model->hasField($name);
-        } else {
-            $existingField = null;
-        }
-
-        if ($existingField === null) {
+        if ($name === null) {
             // table column without respective field in model
             $field = null;
-        } elseif (!$existingField) {
-            // Add missing field
-            $field = $this->model->addField($name, $field ?: []);
+        } elseif (!$this->model->hasField($name)) {
+            $field = $this->model->addField($name, $field);
 
             $field->never_persist = true;
-        } elseif (is_array($field)) {
-            // Add properties to existing field
-            $existingField->setDefaults($field);
-            $field = $existingField;
-        } elseif (is_object($field)) {
-            throw (new Exception('Duplicate field'))
-                ->addMoreInfo('name', $name);
         } else {
-            $field = $existingField;
+            $existingField = $this->model->getField($name);
+
+            if (is_array($field)) {
+                $field = $existingField->setDefaults($field);
+            } elseif (is_object($field)) {
+                throw (new Exception('Duplicate field'))
+                    ->addMoreInfo('name', $name);
+            } else {
+                $field = $existingField;
+            }
         }
 
         if ($field === null) {
@@ -557,7 +552,7 @@ class Table extends Lister
                 if (!is_array($columns)) {
                     $columns = [$columns];
                 }
-                $field = $this->model->hasField($name);
+                $field = $this->model->hasField($name) ? $this->model->getField($name) : null;
                 foreach ($columns as $column) {
                     if (!method_exists($column, 'getHTMLTags')) {
                         continue;

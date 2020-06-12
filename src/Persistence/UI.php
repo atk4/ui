@@ -197,21 +197,18 @@ class UI extends \atk4\data\Persistence
 
         $result = [];
         foreach ($row as $key => $value) {
-            // Look up field object
-            $f = $m->hasField($key);
-
             // Figure out the name of the destination field
             $field = $key;
 
             // We have no knowledge of the field, it wasn't defined, so
             // we will leave it as-is.
-            if (!$f) {
+            if (!$m->hasField($key)) {
                 $result[$field] = $value;
 
                 continue;
             }
 
-            $value = $this->typecastSaveField($f, $value);
+            $value = $this->typecastSaveField($m->getField($key), $value);
 
             // store converted value
             $result[$field] = $value;

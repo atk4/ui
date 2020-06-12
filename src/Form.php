@@ -342,13 +342,12 @@ class Form extends View
     /**
      * Add field into current layout. If no layout, create one. If no model, create blank one.
      *
-     * @param string|null              $name
      * @param array|string|object|null $decorator
      * @param array|string|object|null $field
      *
      * @return FormField\Generic
      */
-    public function addField($name, $decorator = null, $field = null)
+    public function addField(?string $name, $decorator = null, $field = null)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\Misc\ProxyModel();
