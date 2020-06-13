@@ -9,6 +9,18 @@ $rules = [
         'label' => 'Vegetable',
     ],
     [
+        'type' => 'text',
+        'inputType' => 'date',
+        'id' => 'date',
+        'label' => 'Date',
+    ],
+    [
+        'type' => 'numeric',
+        'inputType' => 'number',
+        'id' => 'count',
+        'label' => 'Count',
+    ],
+    [
         'type' => 'radio',
         'id' => 'fruit',
         'label' => 'Fruit',
@@ -20,7 +32,7 @@ $rules = [
 ];
 
 $f = \atk4\ui\Form::addTo($app);
-$qb = $f->addField('qb', [\atk4\ui\FormField\ScopeBuilder::class]);
+$qb = $f->addField('qb', [\atk4\ui\FormField\ScopeBuilder::class, 'renderLabel' => false]);
 $qb->rules = $rules;
 
 $f->onSubmit(function($f) {

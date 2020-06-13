@@ -25,34 +25,22 @@
                             </div>
                             <div class="item">
                                 <!-- text input -->
-                                <template v-if="getInputType === 'text'">
+                                <template v-if="isInput">
                                     <div class="ui small input atk-qb" >
                                         <input
                                                 v-model="query.value"
-                                                type="text"
+                                                :type="rule.inputType"
                                                 :placeholder="labels.textInputPlaceholder"
                                         >
                                     </div>
                                 </template>
                                 <!-- Radio input -->
                                 <template v-if="getInputType === 'radio'">
-                                    <div class="inline fields atk-qb">
-                                        <div class="field">
-                                            <div class="ui radio checkbox" v-for="choice in rule.choices" :key="choice.value">
-                                                <input
-                                                        :id="'depth' + depth + '-' + rule.id + '-' + index + '-' + choice.value"
-                                                        v-model="query.value"
-                                                        type="radio"
-                                                        :value="choice.value"
-                                                >
-                                                <label style="color:black"
-                                                       :for="'depth' + depth + '-' + rule.id + '-' + index + '-' + choice.value"
-                                                >
-                                                    {{choice.label}}
-                                                </label>
-                                            </div>
+                                    <sui-form-fields inline class="atk-qb">
+                                        <div v-for="choice in rule.choices" :key="choice.value">
+                                            <sui-checkbox :label="choice.label" radio :value="choice.value" v-model="query.value"></sui-checkbox>
                                         </div>
-                                    </div>
+                                    </sui-form-fields>
                                 </template>
                             </div>
                         </div>
@@ -73,6 +61,9 @@
   export default {
     extends: QueryBuilderRule,
     computed: {
+      isInput: function() {
+        return this.rule.type === 'text' || this.rule.type === 'numeric';
+      },
       // temp until more type are supported.
       getInputType: function() {
         if (this.rule.inputType === 'radio') {

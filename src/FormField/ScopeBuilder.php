@@ -157,6 +157,7 @@ class ScopeBuilder extends Generic
         ],
         'numeric' => [
             'type' => 'text',
+            'inputType' => 'number',
             'operators' => [
                 self::OPERATOR_EQUALS,
                 self::OPERATOR_DOESNOT_EQUAL,
@@ -199,7 +200,7 @@ class ScopeBuilder extends Generic
         parent::init();
 
         if (!$this->scopeBuilderTemplate) {
-            $this->scopeBuilderTemplate = new Template('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData"></atk-query-builder><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->scopeBuilderTemplate = new Template('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData"></atk-query-builder></div>');
         }
 
         $this->scopeBuilderView = \atk4\ui\View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
