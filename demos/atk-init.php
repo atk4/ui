@@ -15,7 +15,7 @@ date_default_timezone_set('UTC');
 
 // START - PHPUNIT & COVERAGE SETUP
 if (file_exists(__DIR__ . '/coverage.php')) {
-    include_once __DIR__ . '/coverage.php';
+    require_once __DIR__ . '/coverage.php';
 }
 
 require_once __DIR__ . '/database.php';
