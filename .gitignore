@@ -17,6 +17,7 @@ cache
 /public/semantic
 /demos/db.php
 /phpunit.xml
+/phpunit-*.xml
 /behat.yml
 
 /config.codekit
