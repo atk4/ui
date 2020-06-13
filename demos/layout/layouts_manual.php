@@ -3,7 +3,7 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-include_once '_includes/somedatadef.php';
+include_once __DIR__ . '/../_includes/somedatadef.php';
 
 date_default_timezone_set('UTC');
 
