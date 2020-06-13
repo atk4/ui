@@ -66,8 +66,6 @@ class Modal extends View
      * @param array|string $fx
      * @param array|string $arg2
      *
-     * @throws Exception
-     *
      * @return $this
      */
     public function set($fx = [], $arg2 = null)
@@ -91,7 +89,9 @@ class Modal extends View
     {
         $this->cb_view = View::addTo($this);
         $this->cb_view->stickyGet('__atk_m', $this->name);
-        $this->cb = CallbackLater::addTo($this->cb_view, ['appSticky' => $this->appStickyCb]);
+        if (!$this->cb) {
+            $this->cb = CallbackLater::addTo($this->cb_view, ['appSticky' => $this->appStickyCb]);
+        }
 
         $this->cb->set(function () {
             if ($this->cb->triggered() && $this->fx) {

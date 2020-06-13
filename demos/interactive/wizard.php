@@ -2,6 +2,7 @@
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Callback;
 use atk4\ui\Wizard;
 
 require_once __DIR__ . '/../atk-init.php';
@@ -9,8 +10,7 @@ require_once __DIR__ . '/../atk-init.php';
 /**
  * Demonstrates how to use a wizard.
  */
-$t = Wizard::addTo($app);
-
+$t = Wizard::addTo($app, ['stepCallback' => Callback::addTo($app, ['urlTrigger' => 'demo_wizard'])]);
 // First step will automatcally be active when you open page first. It
 // will contain the 'Next' button with a link.
 $t->addStep('Welcome', function (Wizard $w) {
@@ -26,6 +26,8 @@ $t->addStep('Welcome', function (Wizard $w) {
 // to store wizard-specific variables
 $t->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connection String'], function (Wizard $w) {
     $f = \atk4\ui\Form::addTo($w);
+    // IMPORTANT - needed for php_unit Wizard test.
+    $f->name = 'w_form';
 
     $f->addField('dsn', 'Connect DSN', ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
     $f->onSubmit(function (\atk4\ui\Form $form) use ($w) {

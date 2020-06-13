@@ -69,7 +69,7 @@ class TreeItemSelector extends Generic
     /**
      * Callback for onTreeChange.
      *
-     * @var null | jsCallback
+     * @var jsCallback|null
      */
     private $cb;
 
@@ -92,9 +92,6 @@ class TreeItemSelector extends Generic
      * when allowMultiple is true or a single value when false.
      *
      * @param callable $fx the function to execute when callback is fired
-     *
-     * @throws \atk4\core\Exception
-     * @throws \atk4\ui\Exception
      *
      * @return $this
      */
@@ -127,8 +124,6 @@ class TreeItemSelector extends Generic
 
     /**
      * Input field.
-     *
-     * @throws \atk4\core\Exception
      *
      * @return string
      */

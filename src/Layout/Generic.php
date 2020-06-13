@@ -9,8 +9,6 @@ class Generic extends View
 {
     /**
      * Add a loadable View.
-     *
-     * @throws \atk4\core\Exception
      */
     public function addRightPanel(Loadable $panel): Loadable
     {

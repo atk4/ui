@@ -144,7 +144,7 @@ class Grid extends View
             $this->app ? $this->app->stickyGet($this->paginator->name) : $this->stickyGet($this->paginator->name);
         }
 
-        $this->stickyGet('_q');
+        $this->app ? $this->app->stickyGet('_q') : $this->stickyGet('_q');
     }
 
     /**
@@ -212,8 +212,6 @@ class Grid extends View
      *
      * @param int|array $ipp
      * @param string    $label
-     *
-     * @throws Exception
      */
     public function setIpp($ipp, $label = 'Items per page:')
     {
@@ -231,8 +229,6 @@ class Grid extends View
      *
      * @param array  $items an array of item's per page value
      * @param string $label the memu item label
-     *
-     * @throws \atk4\core\Exception
      *
      * @return $this
      */
@@ -275,8 +271,6 @@ class Grid extends View
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
      *
-     * @throws Exception
-     *
      * @return $this
      */
     public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
@@ -307,8 +301,6 @@ class Grid extends View
      * @param View   $container       The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion    A specific template region to render. Render output is append to container html element.
      *
-     * @throws Exception
-     *
      * @return $this
      */
     public function addJsPaginatorInContainer($ipp, $containerHeight, $options = [], $container = null, $scrollRegion = 'Body')
@@ -331,9 +323,6 @@ class Grid extends View
      *
      * @param array $fields       the list of fields to search for
      * @param bool  $hasAutoQuery will query server on each key pressed
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     public function addQuickSearch($fields = [], $hasAutoQuery = false)
     {
@@ -386,10 +375,6 @@ class Grid extends View
      * @param jsExpressionable|callable $action  JavaScript action or callback
      * @param bool|string               $confirm Should we display confirmation "Are you sure?"
      *
-     * @throws Exception
-     * @throws Exception\NoRenderTree
-     * @throws \atk4\core\Exception
-     *
      * @return object
      */
     public function addActionButton($button, $action = null, $confirm = false, $isDisabled = false)
@@ -407,9 +392,6 @@ class Grid extends View
      *
      * @param View $view
      *
-     * @throws Exception
-     * @throws Exception\NoRenderTree
-     *
      * @return mixed
      */
     public function addActionMenuItem($view, $action = null, bool $confirm = false, bool $isDisabled = false)
@@ -423,9 +405,6 @@ class Grid extends View
 
     /**
      * Add action menu item using an array.
-     *
-     * @throws Exception
-     * @throws Exception\NoRenderTree
      */
     public function addActionMenuItems(array $actions = [])
     {
@@ -439,10 +418,6 @@ class Grid extends View
      * You may specify the scope of actions to be added.
      *
      * @param string|null $scope the scope of model action
-     *
-     * @throws Exception
-     * @throws Exception\NoRenderTree
-     * @throws \atk4\core\Exception
      */
     public function addActionMenuFromModel(string $scope = null)
     {
@@ -460,9 +435,6 @@ class Grid extends View
      * Leave empty to include all column in grid.
      *
      * @param array|null $names an array with the name of column
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      *
      * @return $this
      */
@@ -485,8 +457,6 @@ class Grid extends View
      * @param callable $fx         the callback function to execute when an item is selected
      * @param string   $icon       the icon
      * @param string   $menuId     the menu id return by callback
-     *
-     * @throws Exception
      */
     public function addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
     {
@@ -509,8 +479,6 @@ class Grid extends View
      * @param string $columnName the name of column where to add popup
      * @param Popup  $popup      popup view
      * @param string $icon       the icon
-     *
-     * @throws Exception
      *
      * @return mixed
      */
@@ -617,11 +585,7 @@ class Grid extends View
 
         $this->table->sortable = true;
 
-        if (
-            $sortBy
-            && isset($this->table->columns[$sortBy])
-            && $this->model->hasField($sortBy)
-        ) {
+        if ($sortBy && isset($this->table->columns[$sortBy]) && $this->model->hasField($sortBy)) {
             $this->model->setOrder($sortBy, $desc);
             $this->table->sort_by = $sortBy;
             $this->table->sort_order = $desc ? 'descending' : 'ascending';
@@ -691,9 +655,6 @@ class Grid extends View
 
     /**
      * Will set model limit according to paginator value.
-     *
-     * @throws \atk4\data\Exception
-     * @throws \atk4\dsql\Exception
      */
     private function setModelLimitFromPaginator()
     {

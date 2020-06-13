@@ -115,9 +115,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
      * Since User action can be added via callbacks, we need
      * to make sure that view id is properly set for loader and button
      * js action to run properly.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     public function afterActionInit(Generic $action)
     {
@@ -147,9 +144,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * Will associate executor with the action.
      *
-     * @throws \atk4\core\Exception
-     * @throws \atk4\data\Exception
-     *
      * @return UserAction
      */
     public function setAction(Generic $action): View
@@ -177,8 +171,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Perform action steps.
-     *
-     * @throws \atk4\data\Exception
      */
     public function doSteps()
     {
@@ -224,9 +216,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
      * If action require steps, it will automatically initialize
      * proper step to execute first.
      *
-     * @throws Exception
-     * @throws \atk4\core\Exception
-     *
      * @return View
      */
     public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', $selector = null)
@@ -255,8 +244,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * Generate js for triggering action.
      *
-     * @throws Exception
-     *
      * @return array
      */
     public function jsExecute(array $urlArgs = [])
@@ -274,9 +261,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
      * Do action args step.
      *
      * Will ask user to fill in arguments.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     protected function doArgs(View $modal)
     {
@@ -318,9 +302,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Do action Fields step.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     protected function doFields(View $modal)
     {
@@ -350,9 +331,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Do action preview step.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     protected function doPreview(View $modal)
     {
@@ -414,8 +392,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Execute action when all step are completed.
-     *
-     * @throws \atk4\core\Exception
      */
     protected function doFinal(View $modal)
     {
@@ -430,8 +406,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Return proper js statement need after action execution.
-     *
-     * @throws \atk4\core\Exception
      *
      * @return array
      */
@@ -535,8 +509,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Will add field into form based on $fields array.
-     *
-     * @throws \atk4\core\Exception
      */
     protected function setFormField(Form $form, array $fields, string $step): Form
     {
@@ -550,8 +522,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Get proper js after submitting a form in step.
-     *
-     * @throws \atk4\core\Exception
      *
      * @return array
      */
@@ -587,8 +557,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Generate js for setting Buttons state based on current step.
-     *
-     * @throws \atk4\core\Exception
      */
     protected function jsSetBtnState(View $view, string $step)
     {
@@ -647,9 +615,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Determine which button is responsible for submitting form on a specific step.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     protected function jsSetSubmitBtn(View $view, Form $form, string $step)
     {
@@ -663,9 +628,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Generate js function for Previous button.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     protected function jsSetPrevHandler(View $view, string $step)
     {
@@ -682,8 +644,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * Utility for setting form in each step.
      *
-     * @throws \atk4\core\Exception
-     *
      * @return Form |null
      */
     protected function addFormTo(View $view): Form
@@ -696,8 +656,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Utility for setting Title for each step.
-     *
-     * @throws \atk4\core\Exception
      */
     private function _addStepTitle(View $view, string $step)
     {
@@ -740,8 +698,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
      * Create a sequence of js statement for a view.
      *
      * @param array|jsExpressionable $js
-     *
-     * @throws \atk4\core\Exception
      */
     private function _jsSequencer(View $view, $js)
     {
@@ -756,9 +712,6 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Handle exception.
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     private function _handleException($e, $view, $step)
     {

@@ -43,6 +43,9 @@ class Lister extends View
      */
     public $ipp;
 
+    /** @var Model */
+    public $current_row;
+
     /**
      * Initialization.
      */
@@ -87,8 +90,6 @@ class Lister extends View
      * @param array  $options      an array with js Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
-     *
-     * @throws Exception
      *
      * @return $this|void
      */
@@ -141,7 +142,8 @@ class Lister extends View
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
-        foreach ($this->model as $this->current_id => $this->current_row) {
+        foreach ($this->model as $ignore) {
+            $this->current_row = $this->model;
             if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                 continue;
             }
@@ -180,8 +182,8 @@ class Lister extends View
         $this->t_row->trySet($this->current_row);
 
         $this->t_row->trySet('_title', $this->model->getTitle());
-        $this->t_row->trySet('_href', $this->url(['id' => $this->current_id]));
-        $this->t_row->trySet('_id', $this->current_id);
+        $this->t_row->trySet('_href', $this->url(['id' => $this->current_row->id]));
+        $this->t_row->trySet('_id', $this->current_row->id);
 
         $html = $this->t_row->render();
         if ($this->template->hasTag('rows')) {

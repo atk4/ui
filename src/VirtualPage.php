@@ -13,7 +13,7 @@ namespace atk4\ui;
  */
 class VirtualPage extends View
 {
-    /** @var callback */
+    /** @var Callback */
     public $cb;
 
     /** @var callable Optional callback function of virtual page */

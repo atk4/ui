@@ -21,6 +21,11 @@ return PhpCsFixer\Config::create()
         ],
 
         // disable some too strict rules
+        'phpdoc_types' => [
+            // keep enabled, but without "alias" group to not fix
+            // "Callback" to "callback" in phpdoc
+            'groups' => ['simple', 'meta']
+        ],
         'phpdoc_types_order' => [
             'null_adjustment' => 'always_last',
             'sort_algorithm' => 'none',
@@ -49,6 +54,9 @@ return PhpCsFixer\Config::create()
         'phpdoc_add_missing_param_annotation' => false,
         'return_assignment' => false,
         'comment_to_phpdoc' => false,
+        'general_phpdoc_annotation_remove' => [
+            'annotations' => ['author', 'copyright', 'throws'],
+        ],
         'nullable_type_declaration_for_default_null_value' => [
             'use_nullable_type_declaration' => false,
         ],

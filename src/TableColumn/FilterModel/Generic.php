@@ -92,30 +92,26 @@ class Generic extends Model
 
     /**
      * Perform further initialisation.
-     *
-     * @throws \atk4\core\Exception
      */
     public function afterInit()
     {
         $this->addField('name', ['default' => $this->lookupField->short_name, 'system' => true]);
 
-        if (isset($this->_sessionTrait) && $this->_sessionTrait) {
-            // create a name for our filter model to save as session data.
-            $this->name = 'filter_model_' . $this->lookupField->short_name;
+        // create a name for our filter model to save as session data.
+        $this->name = 'filter_model_' . $this->lookupField->short_name;
 
-            if ($_GET['atk_clear_filter'] ?? false) {
-                $this->forget();
-            }
-
-            if ($data = $this->recallData()) {
-                $this->persistence->data['data'][] = $data;
-            }
-
-            // Add hook in order to persist data in session.
-            $this->onHook(Model::HOOK_AFTER_SAVE, function ($m) {
-                $this->memorize('data', $m->get());
-            });
+        if ($_GET['atk_clear_filter'] ?? false) {
+            $this->forget();
         }
+
+        if ($data = $this->recallData()) {
+            $this->persistence->data['data'][] = $data;
+        }
+
+        // Add hook in order to persist data in session.
+        $this->onHook(Model::HOOK_AFTER_SAVE, function ($m) {
+            $this->memorize('data', $m->get());
+        });
     }
 
     /**

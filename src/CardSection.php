@@ -28,8 +28,6 @@ class CardSection extends View
      *
      * @param string|View $description
      *
-     * @throws Exception
-     *
      * @return View|string|null the description to add
      */
     public function addDescription($description)
@@ -50,9 +48,6 @@ class CardSection extends View
      *
      * @param bool $useLabel
      * @param bool $useTable
-     *
-     * @throws Exception
-     * @throws \atk4\data\Exception
      */
     public function addFields(Model $m, array $fields, $useLabel = false, $useTable = false)
     {
@@ -71,9 +66,6 @@ class CardSection extends View
      * Add fields label and value to section.
      *
      * @param bool $useLabel
-     *
-     * @throws Exception
-     * @throws \atk4\data\Exception
      */
     private function addSectionFields(Model $m, array $fields, $useLabel = false)
     {
@@ -90,8 +82,6 @@ class CardSection extends View
 
     /**
      * Add field into section using a CardTable View.
-     *
-     * @throws Exception
      */
     private function addTableSection(Model $m, array $fields)
     {

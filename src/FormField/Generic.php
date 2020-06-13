@@ -140,8 +140,6 @@ class Generic extends View
      *
      * @param string|jsExpression|array|callable $expr
      * @param array|bool                         $default
-     *
-     * @throws \atk4\ui\Exception
      */
     public function onChange($expr, $default = [])
     {

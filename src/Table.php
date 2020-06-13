@@ -178,7 +178,7 @@ class Table extends Lister
      *
      * @return TableColumn\Generic
      */
-    public function addColumn($name, $columnDecorator = null, $field = null)
+    public function addColumn(?string $name, $columnDecorator = null, $field = null)
     {
         if (!$this->_initialized) {
             throw new Exception\NoRenderTree($this, 'addColumn()');
@@ -194,29 +194,24 @@ class Table extends Lister
             $field = ['type' => $field];
         }
 
-        if (is_string($name) && $name) {
-            $existingField = $this->model->hasField($name);
-        } else {
-            $existingField = null;
-        }
-
-        if ($existingField === null) {
+        if ($name === null) {
             // table column without respective field in model
             $field = null;
-        } elseif (!$existingField) {
-            // Add missing field
-            $field = $this->model->addField($name, $field ?: []);
+        } elseif (!$this->model->hasField($name)) {
+            $field = $this->model->addField($name, $field);
 
             $field->never_persist = true;
-        } elseif (is_array($field)) {
-            // Add properties to existing field
-            $existingField->setDefaults($field);
-            $field = $existingField;
-        } elseif (is_object($field)) {
-            throw (new Exception('Duplicate field'))
-                ->addMoreInfo('name', $name);
         } else {
-            $field = $existingField;
+            $existingField = $this->model->getField($name);
+
+            if (is_array($field)) {
+                $field = $existingField->setDefaults($field);
+            } elseif (is_object($field)) {
+                throw (new Exception('Duplicate field'))
+                    ->addMoreInfo('name', $name);
+            } else {
+                $field = $existingField;
+            }
         }
 
         if ($field === null) {
@@ -260,9 +255,6 @@ class Table extends Lister
      * Set Popup action for columns filtering.
      *
      * @param array $cols an array with colomns name that need filtering
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     public function setFilterColumn($cols = null)
     {
@@ -386,8 +378,6 @@ class Table extends Lister
      * @param int[]    $widths         An array of widths value, integer only. ex: [100,200,300,100]
      * @param array    $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
      *
-     * @throws Exception
-     *
      * @return $this
      */
     public function resizableColumn($fx = null, $widths = null, $resizerOptions = null)
@@ -421,8 +411,6 @@ class Table extends Lister
      * @param array  $options      an array with js Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
      * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
-     *
-     * @throws Exception
      *
      * @return $this|void
      */
@@ -505,8 +493,8 @@ class Table extends Lister
 
         // Iterate data rows
         $this->_rendered_rows_count = 0;
-        foreach ($this->model as $this->current_id => $tmp) {
-            $this->current_row = $this->model->get();
+        foreach ($this->model as $ignore) {
+            $this->current_row = $this->model;
             if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                 continue;
             }
@@ -564,7 +552,7 @@ class Table extends Lister
                 if (!is_array($columns)) {
                     $columns = [$columns];
                 }
-                $field = $this->model->hasField($name);
+                $field = $this->model->hasField($name) ? $this->model->getField($name) : null;
                 foreach ($columns as $column) {
                     if (!method_exists($column, 'getHTMLTags')) {
                         continue;

@@ -42,8 +42,6 @@ class DropDown extends Lister
      *      });.
      *
      * @param callable $fx the Handler function where new selected Item value is passed too
-     *
-     * @throws Exception
      */
     public function onChange($fx)
     {

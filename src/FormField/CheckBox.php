@@ -58,8 +58,6 @@ class CheckBox extends Generic
      *
      * @param bool  $value
      * @param mixed $junk
-     *
-     * @throws Exception
      */
     public function set($value = null, $junk = null)
     {

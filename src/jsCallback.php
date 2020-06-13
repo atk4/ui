@@ -125,9 +125,6 @@ class jsCallback extends Callback implements jsExpressionable
      * @param array|jsExpressionable $ajaxec  Array of jsExpressionable
      * @param string                 $msg     General message, typically won't be displayed
      * @param bool                   $success Was request successful or not
-     *
-     * @throws Exception\ExitApplicationException
-     * @throws \atk4\core\Exception
      */
     public function terminateAjax($ajaxec, $msg = null, $success = true)
     {
@@ -141,9 +138,6 @@ class jsCallback extends Callback implements jsExpressionable
      *
      * @param array|jsExpressionable $response response from callbacks,
      * @param string                 $chain    JavaScript string
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     public function getAjaxec($response, $chain = null): string
     {
@@ -181,9 +175,6 @@ class jsCallback extends Callback implements jsExpressionable
      * Transform response into proper js Action and return it.
      *
      * @param View|string|jsExpressionable $response
-     *
-     * @throws Exception
-     * @throws \atk4\core\Exception
      */
     private function _getProperAction($response): jsExpressionable
     {
@@ -204,8 +195,6 @@ class jsCallback extends Callback implements jsExpressionable
 
     /**
      * Render View into modal.
-     *
-     * @throws \atk4\core\Exception
      */
     private function _jsRenderIntoModal(View $response): jsExpressionable
     {

@@ -81,7 +81,10 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $this->event = $event;
         }
 
-        $this->sse = jsSSE::addTo($this);
+        if (!$this->sse) {
+            $this->sse = jsSSE::addTo($this);
+        }
+
         $this->sse->set(function () use ($callback) {
             $this->sseInProgress = true;
 
