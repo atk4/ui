@@ -37,14 +37,10 @@ class jsNotify implements jsExpressionable
 
     /**
      * Set notifier option by specifying option name.
-     *
-     * @return $this
      */
-    public function setMissingProperty($option, $value)
+    public function setMissingProperty(string $propertyName, $value): void
     {
-        $this->options[$option] = $value;
-
-        return $this;
+        $this->options[$propertyName] = $value;
     }
 
     /**
