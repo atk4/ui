@@ -2,9 +2,7 @@
 
 namespace atk4\ui\demo;
 
-// Demonstrates how to use layouts.
-chdir('..');
-include_once '../vendor/autoload.php';
+require_once __DIR__ . '/../atk-init.php';
 
 try {
     $app = new \atk4\ui\App('Agile Toolkit Demo App');

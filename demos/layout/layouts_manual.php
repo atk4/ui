@@ -2,9 +2,7 @@
 
 namespace atk4\ui\demo;
 
-// Demonstrates how to use layouts.
-chdir('..');
-include_once '../vendor/autoload.php';
+require_once __DIR__ . '/../atk-init.php';
 include_once '_includes/somedatadef.php';
 
 date_default_timezone_set('UTC');
