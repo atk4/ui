@@ -241,7 +241,7 @@ class View implements jsExpressionable
     /**
      * @param mixed $value
      */
-    protected function setMissingProperty(string $propertyName, $value)
+    protected function setMissingProperty(string $propertyName, $value): void
     {
         if (is_bool($value)) {
             if ($value) {
