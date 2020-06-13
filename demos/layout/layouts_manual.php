@@ -7,7 +7,7 @@ require_once __DIR__ . '/../_includes/somedatadef.php';
 
 date_default_timezone_set('UTC');
 
-$layout = new \atk4\ui\Layout\Generic(['defaultTemplate' => './templates/layout1.html']);
+$layout = new \atk4\ui\Layout\Generic(['defaultTemplate' => __DIR__ . '/../templates/layout1.html']);
 
 try {
     \atk4\ui\Lister::addTo($layout, [], ['Report'])
