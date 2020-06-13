@@ -239,32 +239,21 @@ class View implements jsExpressionable
     }
 
     /**
-     * TODO: move into trait because it's used so often.
-     *
-     * @param string $key
-     * @param mixed  $val
+     * @param mixed $value
      */
-    protected function setMissingProperty($key, $val)
+    protected function setMissingProperty(string $propertyName, $value)
     {
-        if (is_numeric($key)) {
-            $key = $val;
-            $val = true;
-        }
-
-        if ($val === true) {
-            $this->addClass($key);
-
-            return;
-        } elseif ($val === false) {
-            $this->removeClass($key);
+        if (is_bool($value)) {
+            if ($value) {
+                $this->addClass($propertyName);
+            } else {
+                $this->removeClass($propertyName);
+            }
 
             return;
         }
 
-        throw (new Exception('Unable to set property for the object'))
-            ->addMoreInfo('object', $this)
-            ->addMoreInfo('property', $key)
-            ->addMoreInfo('value', $val);
+        $this->_setMissingProperty($propertyName, $value);
     }
 
     /**
