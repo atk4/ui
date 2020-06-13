@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <input :name="name" type="hidden">
+        <input :name="name" type="hidden" :value="value">
         <vue-query-builder :rules="rules" v-model="query">
             <template v-slot:default="slotProps">
                 <query-builder-group v-bind="slotProps" :query.sync="query"/>
@@ -38,7 +38,7 @@
     },
     computed: {
       value: function() {
-        return JSON.stringify(this.query, null, 2);
+        return JSON.stringify(this.query, null);
       }
     }
   };

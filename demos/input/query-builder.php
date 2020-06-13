@@ -22,3 +22,7 @@ $rules = [
 $f = \atk4\ui\Form::addTo($app);
 $qb = $f->addField('qb', [\atk4\ui\FormField\ScopeBuilder::class]);
 $qb->rules = $rules;
+
+$f->onSubmit(function($f) {
+   echo  '<pre>' . json_encode($f->model->get('qb'), JSON_PRETTY_PRINT) . '</pre>';
+});

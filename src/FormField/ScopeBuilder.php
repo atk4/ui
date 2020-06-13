@@ -207,25 +207,11 @@ class ScopeBuilder extends Generic
         if ($this->form) {
             $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form, &$post) {
                 $key = $this->field->short_name;
-
-                $post[$key] = $this->queryToScope(json_decode($post[$key], true));
+                // todo only for testing
+                $post[$key] = json_decode($post[$key], true);
+//                $post[$key] = $this->queryToScope(json_decode($post[$key], true));
             });
         }
-    }
-
-    /**
-     * Input field collecting output of builder.
-     *
-     * @return string
-     */
-    public function getInput()
-    {
-        return $this->app->getTag('input', [
-            'name' => $this->short_name,
-            'type' => 'hidden',
-            ':value' => 'JSON.stringify(this.initData.query, null, 2)',
-            'readonly' => true,
-        ]);
     }
 
     /**
