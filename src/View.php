@@ -484,6 +484,7 @@ class View implements jsExpressionable
         if (is_array($arg1)) {
             if (isset($arg1[0])) {
                 $this->content = $arg1[0];
+                unset($arg1[0]);
             }
             $this->setDefaults($arg1);
 
