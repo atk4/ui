@@ -54,8 +54,7 @@ class Generic extends Model
      */
     public static function factoryType($field)
     {
-        $data = [];
-        $persistence = new Persistence\Array_($data);
+        $persistence = new Persistence\Array_();
         $filterDomain = 'atk4\\ui\\TableColumn\\FilterModel\Type';
 
         // check if field as a type and use string as default
@@ -102,10 +101,6 @@ class Generic extends Model
 
         if ($_GET['atk_clear_filter'] ?? false) {
             $this->forget();
-        }
-
-        if ($data = $this->recallData()) {
-            $this->persistence->data['data'][] = $data;
         }
 
         // Add hook in order to persist data in session.

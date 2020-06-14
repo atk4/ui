@@ -51,8 +51,7 @@ This means that the addresses are not stored into a separate database table but 
     }
 
     //Create some sample record of user Model
-    $user_data = [];
-    $user = new User(new \atk4\data\Persistence\Array_($user_data));
+    $user = new User(new \atk4\data\Persistence\Array_());
     $user->set('firstname', 'Hans');
     $user->set('lastname', 'Test');
     $user->save();
@@ -100,8 +99,7 @@ Now when we use a Form for User records, it won't automatically add a Multiline 
 If you want to edit them along with the user, Multiline is set up in a few lines::
 
     //Create some sample record of user Model
-    $user_data = [];
-    $user = new User(new \atk4\data\Persistence\Array_($user_data));
+    $user = new User(new \atk4\data\Persistence\Array_());
     $user->id = 1;
     $user->set('firstname', 'Hans');
     $user->set('lastname', 'Test');

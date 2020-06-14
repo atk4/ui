@@ -179,8 +179,7 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
         $modal->js(true, $prev_action->js()->addClass('disabled'));
         $modal->js(true, $next_action->js(true)->removeClass('disabled'));
     } elseif ($page === 2) {
-        $a = [];
-        $m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_($a));
+        $m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
         $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
 
         $f = \atk4\ui\Form::addTo($modal, ['segment' => true]);

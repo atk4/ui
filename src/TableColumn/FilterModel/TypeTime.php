@@ -25,7 +25,7 @@ class TypeTime extends Generic
 
     public function setConditionForModel($m)
     {
-        $filter = $this->tryLoadAny()->get();
+        $filter = $this->recalData();
         if (isset($filter['id'])) {
             switch ($filter['op']) {
                 case 'between':
