@@ -103,10 +103,6 @@ class Generic extends Model
             $this->forget();
         }
 
-        if ($data = $this->recallData()) {
-            $this->persistence->data['data'][] = $data;
-        }
-
         // Add hook in order to persist data in session.
         $this->onHook(Model::HOOK_AFTER_SAVE, function ($m) {
             $this->memorize('data', $m->get());

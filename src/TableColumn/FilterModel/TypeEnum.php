@@ -27,7 +27,7 @@ class TypeEnum extends Generic
 
     public function setConditionForModel($model)
     {
-        $filter = $this->tryLoadAny()->get();
+        $filter = $this->recallData();
         $values = [];
         foreach ($filter as $key => $isSet) {
             if ($isSet === true) {

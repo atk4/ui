@@ -3,11 +3,13 @@
 namespace atk4\ui\TableColumn;
 
 use atk4\data\Field;
+use atk4\data\Persistence\Array_;
 use atk4\ui\Form;
 use atk4\ui\jQuery;
 use atk4\ui\jsReload;
 use atk4\ui\Popup;
 use atk4\ui\TableColumn\FilterModel\Generic;
+use atk4\ui\TableColumn\FilterModel\TypeString;
 
 /**
  * Implement a filterPopup in a table column.
@@ -62,8 +64,11 @@ class FilterPopup extends Popup
 
         $this->form->setFieldsDisplayRules($m->getFormDisplayRules());
 
-        //load first and only record associate with this popup.
-        $this->form->setModel($m->tryLoadAny());
+        //load data associated with this popup.
+        if ($data = $m->recallData()) {
+            $m->set($data);
+        }
+        $this->form->setModel($m);
 
         $this->form->onSubmit(function (Form $form) {
             $form->model->save();
