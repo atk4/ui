@@ -32,7 +32,7 @@ $rules = [
 ];
 
 $f = \atk4\ui\Form::addTo($app);
-$qb = $f->addField('qb', [\atk4\ui\FormField\ScopeBuilder::class, 'renderLabel' => false]);
+$qb = $f->addField('qb', [\atk4\ui\FormField\ScopeBuilder::class]);
 $qb->rules = $rules;
 
 $f->onSubmit(function($f) {

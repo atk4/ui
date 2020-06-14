@@ -12,6 +12,9 @@ use atk4\ui\Template;
 
 class ScopeBuilder extends Generic
 {
+
+    public $renderLabel = false;
+
     /**
      * Field type specific options.
      *
