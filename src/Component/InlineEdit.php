@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * A Simple inline editable text Vue component.
  */

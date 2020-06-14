@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
 // A very basic file that sets up Agile Data to be used in some demonstrations

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\FormField;
 
 use atk4\ui\Exception;

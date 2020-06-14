@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\FormLayout\Section;
 
 class Columns extends \atk4\ui\Columns

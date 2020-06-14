@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * A Search input field that will reload View
  * using the view->url with a _q arguments attach to url.

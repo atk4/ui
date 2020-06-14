@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php'; // default lister

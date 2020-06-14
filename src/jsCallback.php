@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 class jsCallback extends Callback implements jsExpressionable

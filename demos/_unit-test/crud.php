@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * For Behat testing only.
  * Will test for Add, Edit and delete button using quicksearch.

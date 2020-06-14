@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\FormLayout\Section;
 
 class Generic extends \atk4\ui\View
