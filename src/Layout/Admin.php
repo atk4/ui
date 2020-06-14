@@ -48,7 +48,11 @@ class Admin extends Generic implements Navigable
         parent::init();
 
         if ($this->menu === null) {
-            $this->menu = Menu::addTo($this, ['inverted fixed horizontal', 'element' => 'header'], ['TopMenu']);
+            $this->menu = Menu::addTo(
+                $this,
+                ['inverted fixed horizontal atk-admin-top-menu', 'element' => 'header'],
+                ['TopMenu']
+            );
             $this->burger = $this->menu->addItem(['class' => ['icon']]);
             $this->burger->on('click', [
                 (new jQuery('.atk-sidenav'))->toggleClass('visible'),

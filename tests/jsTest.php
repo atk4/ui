@@ -35,7 +35,7 @@ class jsTest extends AtkPhpunit\TestCase
 
             // test JSON renderer in App too
             // test extensively because of (possibly fragile) custom regex impl
-            $app = new \atk4\ui\App();
+            $app = (new \ReflectionClass(\atk4\ui\App::class))->newInstanceWithoutConstructor();
             $expectedRaw = json_decode($expected);
             foreach ([
                 [$expectedRaw, $in], // direct value

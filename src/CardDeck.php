@@ -395,7 +395,7 @@ class CardDeck extends View
         }
 
         if ($button->icon && !is_object($button->icon)) {
-            $button->icon = $this->factory(Icon::class, [$button->icon]);
+            $button->icon = $this->factory(Icon::class, $button->icon);
         }
 
         if ($isDisabled) {

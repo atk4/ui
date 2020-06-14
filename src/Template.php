@@ -630,7 +630,6 @@ class Template implements \ArrayAccess
         }
 
         throw (new Exception('Unable to read template from file'))
-            ->addMoreInfo('cwd', getcwd())
             ->addMoreInfo('file', $filename);
     }
 

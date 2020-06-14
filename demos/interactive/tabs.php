@@ -37,7 +37,7 @@ $t->addTab('Modal popup', function ($tab) {
 $t->addTab('Dynamic Form', function ($tab) {
     \atk4\ui\Message::addTo($tab, ['It takes 2 seconds for this tab to load', 'warning']);
     sleep(2);
-    $m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_($a));
+    $m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
     $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
 
     $f = \atk4\ui\Form::addTo($tab, ['segment' => true]);

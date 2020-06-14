@@ -239,32 +239,21 @@ class View implements jsExpressionable
     }
 
     /**
-     * TODO: move into trait because it's used so often.
-     *
-     * @param string $key
-     * @param mixed  $val
+     * @param mixed $value
      */
-    protected function setMissingProperty($key, $val)
+    protected function setMissingProperty(string $propertyName, $value): void
     {
-        if (is_numeric($key)) {
-            $key = $val;
-            $val = true;
-        }
-
-        if ($val === true) {
-            $this->addClass($key);
-
-            return;
-        } elseif ($val === false) {
-            $this->removeClass($key);
+        if (is_bool($value)) {
+            if ($value) {
+                $this->addClass($propertyName);
+            } else {
+                $this->removeClass($propertyName);
+            }
 
             return;
         }
 
-        throw (new Exception('Unable to set property for the object'))
-            ->addMoreInfo('object', $this)
-            ->addMoreInfo('property', $key)
-            ->addMoreInfo('value', $val);
+        $this->_setMissingProperty($propertyName, $value);
     }
 
     /**
@@ -423,16 +412,7 @@ class View implements jsExpressionable
                     ->addMoreInfo('region_type', gettype($region));
             }
 
-            if (isset($object->_DIContainerTrait)) {
-                $object->setDefaults(['region' => $region]);
-            } else {
-                if (!property_exists($object, 'region')) {
-                    throw (new Exception('Region property is not defined'))
-                        ->addMoreInfo('object_class', get_class($object));
-                }
-
-                $object->region = $region;
-            }
+            $object->setDefaults(['region' => $region]);
         }
 
         // will call init() of the object
@@ -504,6 +484,7 @@ class View implements jsExpressionable
         if (is_array($arg1)) {
             if (isset($arg1[0])) {
                 $this->content = $arg1[0];
+                unset($arg1[0]);
             }
             $this->setDefaults($arg1);
 

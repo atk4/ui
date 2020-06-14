@@ -408,7 +408,7 @@ class Card extends View
         }
 
         if (!is_object($button)) {
-            $button = $this->factory(Button::class, [$button]);
+            $button = $this->factory(Button::class, $button);
         }
 
         $btn = $this->getButtonContainer()->add($button);

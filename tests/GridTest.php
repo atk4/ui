@@ -13,10 +13,10 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
 
     protected function setUp(): void
     {
-        $a = [];
-        $a[1] = ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'];
-        $a[2] = ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'];
-
+        $a = [
+            1 => ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'],
+            2 => ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'],
+        ];
         $this->m = new MyModel(new \atk4\data\Persistence\Array_($a));
     }
 

@@ -101,9 +101,6 @@ class App
     public $exit_called = false;
 
     /** @var bool */
-    public $_cwd_restore = true;
-
-    /** @var bool */
     public $is_rendering = false;
 
     /** @var UI */
@@ -1014,16 +1011,8 @@ class App
 
     protected function setupAlwaysRun(): void
     {
-        if ($this->_cwd_restore) {
-            $this->_cwd_restore = getcwd();
-        }
-
         register_shutdown_function(
             function () {
-                if (is_string($this->_cwd_restore)) {
-                    chdir($this->_cwd_restore);
-                }
-
                 if (!$this->run_called) {
                     try {
                         $this->run();
