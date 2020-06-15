@@ -3,7 +3,6 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/demo-lookup.php';
 
 // create header
 \atk4\ui\Header::addTo($app, ['Lookup Input']);
@@ -21,7 +20,7 @@ $m->hasOne('country1', new Country());
 
 // With Lookup
 $m->hasOne('country2', [new Country(), 'ui' => ['form' => [
-    $demoLookup,  // Special Lookup field that can't save data.
+    new DemoLookup(),
     'plus' => true,
 ]]]);
 

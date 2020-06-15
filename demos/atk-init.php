@@ -2,24 +2,20 @@
 
 namespace atk4\ui\demo;
 
-if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
-    require_once __DIR__ . '/../vendor/autoload.php';
-} else {
-    require_once __DIR__ . '/../../../../vendor/autoload.php';
-    if (!class_exists(\atk4\ui\tests\ViewTest::class)) {
-        throw new \Error('Demos can be run only if atk4/ui is a main composer project or if dev files are autoloaded');
-    }
-}
-
 date_default_timezone_set('UTC');
+
+/** @var \Composer\Autoload\ClassLoader $loader */
+$loader = require dirname(__DIR__, file_exists(__DIR__ . '/../vendor/autoload.php') ? 1 : 4) . '/vendor/autoload.php';
+if (!class_exists(\atk4\ui\tests\ViewTest::class)) {
+    throw new \Error('Demos can be run only if atk4/ui is a main composer project or if dev files are autoloaded');
+}
+$loader->setPsr4('atk4\ui\demo\\', __DIR__ . '/_includes');
+unset($loader);
 
 // START - PHPUNIT & COVERAGE SETUP
 if (file_exists(__DIR__ . '/coverage.php')) {
     require_once __DIR__ . '/coverage.php';
 }
-
-require_once __DIR__ . '/database.php';
-require_once __DIR__ . '/_includes/somedatadef.php';
 
 $app = new \atk4\ui\App([
     'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
@@ -40,6 +36,8 @@ if (file_exists(__DIR__ . '/coverage.php')) {
     });
 }
 // END - PHPUNIT & COVERAGE SETUP
+
+require_once __DIR__ . '/database.php';
 
 $app->db = $db;
 $app->title = 'Agile UI Demo v' . $app->version;

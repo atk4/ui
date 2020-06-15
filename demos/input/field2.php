@@ -6,7 +6,6 @@ namespace atk4\ui\demo;
  * Demonstrates how to use fields with form.
  */
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/demo-lookup.php';
 
 \atk4\ui\Header::addTo($app, ['Disabled and read only form fields (normal / readonly / disabled)']);
 
@@ -69,7 +68,7 @@ $g = $f->addGroup('Lookup');
 $m = new Country($db);
 
 $g->addField('Lookup_norm', [
-    $demoLookup,  // Special Lookup field that can't save data.
+    new DemoLookup(),
     'model' => new CountryLock($db),
     'plus' => true,
 ])->set($m->loadAny()->id);

@@ -3,7 +3,10 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/country_actions.php';
+
+$country = new CountryLock($db);
+$country->tryLoadAny();
+DemoActionsUtil::setupDemoActions($country);
 
 \atk4\ui\Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);
 
@@ -101,11 +104,11 @@ foreach ($country as $ct) {
     $c->on('click', $panel_3->jsOpen(['id'], 'orange'));
 }
 
-$panel_3->onOpen(function ($p) use ($c_actions, $country, $c_id) {
+$panel_3->onOpen(function ($p) use ($country, $c_id) {
     $seg = \atk4\ui\View::addTo($p, ['ui' => 'basic segment center aligned']);
     \atk4\ui\Header::addTo($seg, [$country->load($c_id)->getTitle()]);
     $buttons = \atk4\ui\View::addTo($seg, ['ui' => 'vertical basic buttons']);
-    foreach ($c_actions as $action) {
+    foreach ($country->getActions() as $action) {
         $b = \atk4\ui\Button::addTo($buttons, [$action->getDescription()]);
         $b->on('click', $action, ['args' => ['id' => $c_id]]);
     }
