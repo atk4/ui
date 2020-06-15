@@ -9,6 +9,7 @@ use atk4\ui\Icon;
 use atk4\ui\Label;
 use atk4\ui\Template;
 
+/** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../atk-init.php';
 
 // Demonstrates how to use buttons.

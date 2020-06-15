@@ -6,6 +6,7 @@ namespace atk4\ui\demo;
 
 use atk4\ui\jsSSE;
 
+/** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../atk-init.php';
 
 $testRunClass = get_class(new class() extends \atk4\ui\View {

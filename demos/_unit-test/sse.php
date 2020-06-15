@@ -7,6 +7,7 @@ namespace atk4\ui\demo;
 use atk4\ui\jsExpression;
 use atk4\ui\View;
 
+/** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../atk-init.php';
 
 $v = View::addTo($app)->set('This will trigger a network request for testing sse...');

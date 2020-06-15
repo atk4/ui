@@ -9,6 +9,7 @@ use atk4\ui\Callback;
 use atk4\ui\jsReload;
 use atk4\ui\View;
 
+/** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../atk-init.php';
 
 $v = View::addTo($app, ['ui' => 'segment']);
