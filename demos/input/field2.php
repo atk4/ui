@@ -6,7 +6,6 @@ namespace atk4\ui\demo;
  * Demonstrates how to use fields with form.
  */
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/DemoLookup.php';
 
 \atk4\ui\Header::addTo($app, ['Disabled and read only form fields (normal / readonly / disabled)']);
 

@@ -3,7 +3,6 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/DemoActionsUtil.php';
 
 $country = new CountryLock($db);
 $country->tryLoadAny();

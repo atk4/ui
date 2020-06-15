@@ -3,9 +3,6 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/Demo.php';
-require_once __DIR__ . '/../_includes/PromotionText.php';
-require_once __DIR__ . '/../_includes/DemoInvoice.php';
 
 $wizard = \atk4\ui\Wizard::addTo($app);
 

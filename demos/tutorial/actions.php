@@ -3,8 +3,6 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/Demo.php';
-require_once __DIR__ . '/../_includes/PromotionText.php';
 
 // require for embeded coded
 $app->db = $db;

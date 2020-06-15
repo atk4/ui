@@ -3,7 +3,6 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/DemoLookup.php';
 
 // create header
 \atk4\ui\Header::addTo($app, ['Lookup Input']);

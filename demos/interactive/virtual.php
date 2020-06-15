@@ -3,7 +3,6 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/Counter.php';
 
 // Demonstrate the use of Virtual Page.
 
@@ -38,7 +37,6 @@ $vp = \atk4\ui\VirtualPage::addTo($app); // this page will not be visible unless
 \atk4\ui\Header::addTo($vp, ['Contens of your pop-up here']);
 \atk4\ui\LoremIpsum::addTo($vp, ['size' => 2]);
 
-// Add counter from '_includes/Counter.php'
 Counter::addTo($vp);
 \atk4\ui\View::addTo($vp, ['ui' => 'hidden divider']);
 \atk4\ui\Button::addTo($vp, ['Back', 'icon' => 'left arrow'])->link('virtual.php');
