@@ -36,7 +36,7 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new CountryLock($app->db);
+$country = new \atk4\ui\demo\CountryLock($app->db);
 
 $country->addAction('send_message');
 CODE
@@ -62,7 +62,7 @@ EOF
     $page->add(new Demo())->setCode(
         <<<'CODE'
 
-$country = new CountryLock($app->db);
+$country = new \atk4\ui\demo\CountryLock($app->db);
 
 $country->addAction('send_message', function() {
     return 'sent';
@@ -89,7 +89,7 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new CountryLock($app->db);
+$country = new \atk4\ui\demo\CountryLock($app->db);
 $country->loadAny();
 
 \atk4\ui\Button::addTo($app, 'Edit some country'])
@@ -107,7 +107,7 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new CountryLock($app->db);
+$country = new \atk4\ui\demo\CountryLock($app->db);
 $country->loadAny();
 
 $menu = $app->add('Menu');
@@ -202,7 +202,7 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new CountryLock($app->db);
+$country = new \atk4\ui\demo\CountryLock($app->db);
 $country->getAction('add')->enabled = false;
 $country->getAction('delete')->enabled = function() { return rand(1,2)>1; };
 $country->addAction('mail', [
