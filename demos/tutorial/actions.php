@@ -213,7 +213,8 @@ $country->addAction('mail', [
     'ui'       => ['icon'=>'mail', 'button'=>[null, 'icon'=>'green mail']],
 ]);
 
-\atk4\ui\CRUD::addTo($app, ['ipp'=>5])->setModel($country, ['name','iso']);
+\atk4\ui\CRUD::addTo($app, ['ipp' => 5])
+    ->setModel($country, ['name','iso']);
 CODE
     );
 });
