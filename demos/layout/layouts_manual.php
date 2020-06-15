@@ -8,7 +8,7 @@ $layout = new \atk4\ui\Layout\Generic(['defaultTemplate' => __DIR__ . '/../templ
 
 try {
     \atk4\ui\Lister::addTo($layout, [], ['Report'])
-        ->setModel(new Somedata());
+        ->setModel(new SomeData());
 
     echo $layout->render();
 } catch (\atk4\core\Exception $e) {
