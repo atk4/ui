@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
-$m = new CountryLock($db);
+$m = new CountryLock($app->db);
 
 $g = \atk4\ui\CRUD::addTo($app, ['ipp' => 10]);
 
@@ -48,7 +49,7 @@ $crud = \atk4\ui\CRUD::addTo($cc, [
     'table' => ['class' => ['red inverted']],
 ]);
 // Condition on the model can be applied on a model
-$m = new CountryLock($db);
+$m = new CountryLock($app->db);
 $m->addCondition('numcode', '<', 200);
 $m->onHook(\atk4\data\Model::HOOK_VALIDATE, function ($m2, $intent) {
     $err = [];
@@ -88,7 +89,7 @@ $myExecutorClass = get_class(new class() extends \atk4\ui\ActionExecutor\UserAct
     }
 });
 
-$file = new FileLock($db);
+$file = new FileLock($app->db);
 $file->getAction('edit')->ui['executor'] = $myExecutorClass;
 
 $crud = \atk4\ui\CRUD::addTo($cc, [

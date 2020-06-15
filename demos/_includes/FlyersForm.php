@@ -8,7 +8,6 @@ use atk4\ui\Form;
 
 class FlyersForm extends Form
 {
-    public $db;
     public $flyers = [];
 
     public $cards = [
@@ -36,7 +35,7 @@ class FlyersForm extends Form
 
         $this->addField('country', [
             \atk4\ui\FormField\Lookup::class,
-            'model' => new \atk4\ui\demo\Country($this->db),
+            'model' => new \atk4\ui\demo\Country($this->app->db),
             'dependency' => function ($model, $data) {
                 isset($data['contains']) ? $model->addCondition('name', 'like', '%' . $data['contains'] . '%') : null;
             },

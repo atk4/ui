@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Header::addTo($app, ['Table column may contains popup or dropdown menu.']);
 
@@ -44,7 +45,7 @@ $col_title->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
 
 //Table in Grid are already inside a container.
 $g = \atk4\ui\Grid::addTo($app);
-$g->setModel(new Country($db));
+$g->setModel(new Country($app->db));
 $g->ipp = 5;
 
 //Adding a dropdown menu to the column 'name'.

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 // create header
 \atk4\ui\Header::addTo($app, ['Lookup Input']);
@@ -15,7 +16,7 @@ require_once __DIR__ . '/../atk-init.php';
 $form = \atk4\ui\Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Lookup countries', 'top attached'], ['AboveFields']);
 
-$m = new \atk4\data\Model($db, 'test');
+$m = new \atk4\data\Model($app->db, 'test');
 
 // Without Lookup
 $m->hasOne('country1', new Country());
@@ -30,13 +31,13 @@ $form->setModel($m);
 
 $form->addField('country3', [
     \atk4\ui\FormField\Lookup::class,
-    'model' => new Country($db),
+    'model' => new Country($app->db),
     'placeholder' => 'Search for country by name or iso value',
     'search' => ['name', 'iso', 'iso3'],
 ]);
 
-$form->onSubmit(function (\atk4\ui\Form $form) use ($db) {
-    $str = $form->model->ref('country1')->get('name') . ' ' . $form->model->ref('country2')->get('name') . ' ' . (new Country($db))->tryLoad($form->model->get('country3'))->get('name');
+$form->onSubmit(function (\atk4\ui\Form $form) {
+    $str = $form->model->ref('country1')->get('name') . ' ' . $form->model->ref('country2')->get('name') . ' ' . (new Country($form->app->db))->tryLoad($form->model->get('country3'))->get('name');
     $view = new \atk4\ui\Message('Select:'); // need in behat test.
     $view->init();
     $view->text->addParagraph($str);
@@ -47,7 +48,7 @@ $form->onSubmit(function (\atk4\ui\Form $form) use ($db) {
 \atk4\ui\Header::addTo($app, ['Lookup input using label']);
 
 // from seed
-\atk4\ui\FormField\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])->setModel(new Country($db));
+\atk4\ui\FormField\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])->setModel(new Country($app->db));
 
 // through constructor
 \atk4\ui\FormField\Lookup::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new \atk4\ui\Label(['kg', 'basic'])]);

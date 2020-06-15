@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 if ($id = $_GET['id'] ?? null) {
     $app->layout->js(true, new \atk4\ui\jsToast('Details link is in simulation mode.'));

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
-$country = new CountryLock($db);
+$country = new CountryLock($app->db);
 $country->tryLoadAny();
 DemoActionsUtil::setupDemoActions($country);
 

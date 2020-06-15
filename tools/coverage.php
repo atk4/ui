@@ -5,18 +5,33 @@ declare(strict_types=1);
 // log coverage for test-suite
 
 use SebastianBergmann\CodeCoverage\CodeCoverage;
+use SebastianBergmann\CodeCoverage\Report;
 
-$coverage = new CodeCoverage();
-$coverage->filter()->addDirectoryToWhitelist(__DIR__ . '/../src');
-
-function coverage()
+final class CoverageUtil
 {
-    global $coverage;
-    $coverage->stop();
+    /** @var CodeCoverage */
+    private static $coverage;
 
-    $writer = new \SebastianBergmann\CodeCoverage\Report\PHP();
+    private function __construct()
+    {
+        // zeroton
+    }
 
-    $writer->process($coverage, dirname(realpath(__FILE__)) . '/../coverage/' . basename($_SERVER['SCRIPT_NAME'], '.php') . '-' . uniqid() . '.cov');
+    public static function start()
+    {
+        if (self::$coverage !== null) {
+            throw new \Error('Coverage already started');
+        }
+
+        self::$coverage = new CodeCoverage();
+        self::$coverage->filter()->addDirectoryToWhitelist(__DIR__ . '/../src');
+        self::$coverage->start($_SERVER['SCRIPT_NAME']);
+    }
+
+    public static function saveData()
+    {
+        self::$coverage->stop();
+        $writer = new Report\PHP();
+        $writer->process(self::$coverage, dirname(__DIR__) . '/coverage/' . basename($_SERVER['SCRIPT_NAME'], '.php') . '-' . uniqid() . '.cov');
+    }
 }
-
-$coverage->start($_SERVER['SCRIPT_NAME']);

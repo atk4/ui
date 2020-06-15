@@ -7,7 +7,8 @@ namespace atk4\ui\demo;
 /**
  * Demonstrates how to use menu.
  */
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 $m = \atk4\ui\Menu::addTo($app);
 $m->addItem('foo', 'foo.php');

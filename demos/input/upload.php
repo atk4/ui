@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 $form = \atk4\ui\Form::addTo($app);
 $img = $form->addField('img', [\atk4\ui\FormField\UploadImg::class, ['defaultSrc' => '../images/default.png', 'placeholder' => 'Click to add an image.']]);

@@ -7,7 +7,8 @@ namespace atk4\ui\demo;
 /**
  * Testing fields.
  */
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Header::addTo($app, ['Types', 'size' => 2]);
 

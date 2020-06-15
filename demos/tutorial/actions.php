@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
-
-// require for embeded coded
-$app->db = $db;
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 $wizard = \atk4\ui\Wizard::addTo($app);
 $app->stickyGet($wizard->name);

@@ -139,7 +139,7 @@ Relationship with Model
 
 In the examples above, we looked at how to create Field Decorator object explicitly.
 The most common use-case in large application is the use with Models. You would need a model, such as
-`Country` model (see demos/database.php) as well as
+`Country` model as well as
 `Persistence $db <https://agile-data.readthedocs.io/en/develop/persistence.html>`_::
 
     class Country extends \atk4\data\Model
