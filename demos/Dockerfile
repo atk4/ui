@@ -38,4 +38,4 @@ COPY template template
 COPY demos demos
 
 ADD demos/db.example.php demos/db.php
-RUN sed -E "s/\('.+'\);/(\$_ENV['DSN']);/g" -i demos/db.php
+RUN sed -E "s/\('.+'\);/(\$_ENV['DSN'] ?? 'sqlite:');/g" -i demos/db.php
