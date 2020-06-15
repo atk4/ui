@@ -4,8 +4,6 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-date_default_timezone_set('UTC');
-
 $layout = new \atk4\ui\Layout\Generic(['defaultTemplate' => __DIR__ . '/../templates/layout1.html']);
 
 try {
