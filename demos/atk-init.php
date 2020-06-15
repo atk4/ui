@@ -13,11 +13,12 @@ if (!$isRootProject && !class_exists(\atk4\ui\tests\ViewTest::class)) {
     throw new \Error('Demos can be run only if atk4/ui is a root composer project or if dev files are autoloaded');
 }
 $loader->setPsr4('atk4\ui\demo\\', __DIR__ . '/_includes');
-unset($loader);
+unset($isRootProject, $loader);
 
-// START - PHPUNIT & COVERAGE SETUP
+// collect coverage for HTTP tests 1/2
 if (file_exists(__DIR__ . '/coverage.php')) {
     require_once __DIR__ . '/coverage.php';
+    \CoverageUtil::start();
 }
 
 $app = new \atk4\ui\App([
@@ -33,12 +34,12 @@ if ($app->catch_exceptions !== true) {
     $app->stickyGet('APP_CATCH_EXCEPTIONS');
 }
 
+// collect coverage for HTTP tests 2/2
 if (file_exists(__DIR__ . '/coverage.php')) {
     $app->onHook(\atk4\ui\App::HOOK_BEFORE_EXIT, function () {
-        coverage();
+        \CoverageUtil::saveData();
     });
 }
-// END - PHPUNIT & COVERAGE SETUP
 
 try {
     require_once __DIR__ . '/database.php';
