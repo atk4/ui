@@ -5,7 +5,7 @@ namespace atk4\ui\demo;
 /**
  * Invoice class for tutorial intro.
  */
-class AtkDemoInvoice extends \atk4\data\Model
+class DemoInvoice extends \atk4\data\Model
 {
     public $title_field = 'reference';
 
