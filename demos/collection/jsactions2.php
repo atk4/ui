@@ -3,12 +3,15 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/country_actions.php';
+require_once __DIR__ . '/../_includes/DemoActionsUtil.php';
 
 /*
  * Demo for Model action
- * Action definition for Country model is located in counrty_actions.php
  */
+
+$country = new CountryLock($db);
+$country->tryLoadAny();
+DemoActionsUtil::setupDemoActions($country);
 
 \atk4\ui\Button::addTo($app, ['Actions in Grid', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['jsactionsgrid']);
@@ -28,8 +31,9 @@ $buttons = \atk4\ui\View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2'
 
 $country->unload();
 
-// assign a button to every action from country_actions.php file.
-foreach ($c_actions as $action) {
+// assign a button to every action
+$c_id = $country->tryLoadAny()->get('id');
+foreach ($country->getActions() as $action) {
     $b = \atk4\ui\Button::addTo($buttons, [$action->getDescription()]);
-    $b->on('click', $action, ['args' => ['id' => $id]]);
+    $b->on('click', $action, ['args' => ['id' => $c_id]]);
 }
