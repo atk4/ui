@@ -58,7 +58,7 @@ $b->on('click', function ($b) {
 
 Header::addTo($app, ['Callbacks on HTML element', 'subHeader' => 'Click on label below.']);
 
-$label = \atk4\ui\Label::addTo($layout, ['Test']);
+$label = \atk4\ui\Label::addTo($app->layout, ['Test']);
 
 $label->on('click', function ($j, $arg1) {
     return 'width is ' . $arg1;

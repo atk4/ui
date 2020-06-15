@@ -44,10 +44,10 @@ if (file_exists(__DIR__ . '/coverage.php')) {
 
 try {
     require_once __DIR__ . '/database.php';
+    $app->db = $db;
 } catch (\Throwable $e) {
     throw new \atk4\ui\Exception('Database error: ' . $e->getMessage());
 }
-$app->db = $db;
 
 [$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
 $demosUrl = $rootUrl . 'demos/';
@@ -60,95 +60,95 @@ if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
 $app->initLayout($app->stickyGET('layout') ? 'atk4\ui\Layout\\' . $app->stickyGET('layout') : \atk4\ui\Layout\Maestro::class);
 
 $layout = $app->layout;
-
 if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
 
     $path = $demosUrl . 'layout/';
-    $ly = $layout->addMenuGroup(['Layout', 'icon' => 'object group']);
-    $layout->addMenuItem(['Layouts'], [$path . 'layouts'], $ly);
-    $layout->addMenuItem(['Panel'], [$path . 'layout-panel'], $ly);
+    $menu = $layout->addMenuGroup(['Layout', 'icon' => 'object group']);
+    $layout->addMenuItem(['Layouts'], [$path . 'layouts'], $menu);
+    $layout->addMenuItem(['Panel'], [$path . 'layout-panel'], $menu);
 
     $path = $demosUrl . 'basic/';
-    $basic = $layout->addMenuGroup(['Basics', 'icon' => 'cubes']);
-    $layout->addMenuItem('View', [$path . 'view'], $basic);
-    $layout->addMenuItem('Button', [$path . 'button'], $basic);
-    $layout->addMenuItem('Header', [$path . 'header'], $basic);
-    $layout->addMenuItem('Message', [$path . 'message'], $basic);
-    $layout->addMenuItem('Labels', [$path . 'label'], $basic);
-    $layout->addMenuItem('Menu', [$path . 'menu'], $basic);
-    $layout->addMenuItem('BreadCrumb', [$path . 'breadcrumb'], $basic);
-    $layout->addMenuItem(['Columns'], [$path . 'columns'], $basic);
-    $layout->addMenuItem(['Grid Layout'], [$path . 'grid-layout'], $basic);
+    $menu = $layout->addMenuGroup(['Basics', 'icon' => 'cubes']);
+    $layout->addMenuItem('View', [$path . 'view'], $menu);
+    $layout->addMenuItem('Button', [$path . 'button'], $menu);
+    $layout->addMenuItem('Header', [$path . 'header'], $menu);
+    $layout->addMenuItem('Message', [$path . 'message'], $menu);
+    $layout->addMenuItem('Labels', [$path . 'label'], $menu);
+    $layout->addMenuItem('Menu', [$path . 'menu'], $menu);
+    $layout->addMenuItem('BreadCrumb', [$path . 'breadcrumb'], $menu);
+    $layout->addMenuItem(['Columns'], [$path . 'columns'], $menu);
+    $layout->addMenuItem(['Grid Layout'], [$path . 'grid-layout'], $menu);
 
     $path = $demosUrl . 'form/';
-    $form = $layout->addMenuGroup(['Form', 'icon' => 'edit']);
-    $layout->addMenuItem('Basics and Layouting', [$path . 'form'], $form);
-    $layout->addMenuItem('Data Integration', [$path . 'form2'], $form);
-    $layout->addMenuItem(['Form Sections'], [$path . 'form-section'], $form);
-    $layout->addMenuItem('Form Multi-column layout', [$path . 'form3'], $form);
-    $layout->addMenuItem(['Integration with Columns'], [$path . 'form5'], $form);
-    $layout->addMenuItem(['HTML Layout'], [$path . 'html-layout'], $form);
-    $layout->addMenuItem(['Conditional Fields'], [$path . 'jscondform'], $form);
+    $menu = $layout->addMenuGroup(['Form', 'icon' => 'edit']);
+    $layout->addMenuItem('Basics and Layouting', [$path . 'form'], $menu);
+    $layout->addMenuItem('Data Integration', [$path . 'form2'], $menu);
+    $layout->addMenuItem(['Form Sections'], [$path . 'form-section'], $menu);
+    $layout->addMenuItem('Form Multi-column layout', [$path . 'form3'], $menu);
+    $layout->addMenuItem(['Integration with Columns'], [$path . 'form5'], $menu);
+    $layout->addMenuItem(['HTML Layout'], [$path . 'html-layout'], $menu);
+    $layout->addMenuItem(['Conditional Fields'], [$path . 'jscondform'], $menu);
 
     $path = $demosUrl . 'input/';
-    $in = $layout->addMenuGroup(['Input', 'icon' => 'keyboard outline']);
-    $layout->addMenuItem(['Input Fields'], [$path . 'field2'], $in);
-    $layout->addMenuItem('Input Field Decoration', [$path . 'field'], $in);
-    $layout->addMenuItem(['Checkboxes'], [$path . 'checkbox'], $in);
-    $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $in);
-    $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $in);
-    $layout->addMenuItem(['Lookup Dependency'], [$path . 'lookup-dep'], $in);
-    $layout->addMenuItem(['DropDown'], [$path . 'dropdown-plus'], $in);
-    $layout->addMenuItem(['File Upload'], [$path . 'upload'], $in);
-    $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $in);
-    $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $in);
+    $menu = $layout->addMenuGroup(['Input', 'icon' => 'keyboard outline']);
+    $layout->addMenuItem(['Input Fields'], [$path . 'field2'], $menu);
+    $layout->addMenuItem('Input Field Decoration', [$path . 'field'], $menu);
+    $layout->addMenuItem(['Checkboxes'], [$path . 'checkbox'], $menu);
+    $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $menu);
+    $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $menu);
+    $layout->addMenuItem(['Lookup Dependency'], [$path . 'lookup-dep'], $menu);
+    $layout->addMenuItem(['DropDown'], [$path . 'dropdown-plus'], $menu);
+    $layout->addMenuItem(['File Upload'], [$path . 'upload'], $menu);
+    $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $menu);
+    $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $menu);
 
     $path = $demosUrl . 'collection/';
-    $g_t = $layout->addMenuGroup(['Data Collection', 'icon' => 'table']);
-    $layout->addMenuItem(['Actions - Integration Examples'], [$path . 'actions'], $g_t);
-    $layout->addMenuItem('Data table with formatted columns', [$path . 'table'], $g_t);
-    $layout->addMenuItem(['Advanced table examples'], [$path . 'table2'], $g_t);
-    $layout->addMenuItem('Table interractions', [$path . 'multitable'], $g_t);
-    $layout->addMenuItem(['Column Menus'], [$path . 'tablecolumnmenu'], $g_t);
-    $layout->addMenuItem(['Column Filters'], [$path . 'tablefilter'], $g_t);
-    $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', [$path . 'grid'], $g_t);
-    $layout->addMenuItem('CRUD - Full editing solution', [$path . 'crud'], $g_t);
-    $layout->addMenuItem(['CRUD with Array Persistence'], [$path . 'crud3'], $g_t);
-    $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $g_t);
-    $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $g_t);
-    $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $g_t);
+    $menu = $layout->addMenuGroup(['Data Collection', 'icon' => 'table']);
+    $layout->addMenuItem(['Actions - Integration Examples'], [$path . 'actions'], $menu);
+    $layout->addMenuItem('Data table with formatted columns', [$path . 'table'], $menu);
+    $layout->addMenuItem(['Advanced table examples'], [$path . 'table2'], $menu);
+    $layout->addMenuItem('Table interractions', [$path . 'multitable'], $menu);
+    $layout->addMenuItem(['Column Menus'], [$path . 'tablecolumnmenu'], $menu);
+    $layout->addMenuItem(['Column Filters'], [$path . 'tablefilter'], $menu);
+    $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', [$path . 'grid'], $menu);
+    $layout->addMenuItem('CRUD - Full editing solution', [$path . 'crud'], $menu);
+    $layout->addMenuItem(['CRUD with Array Persistence'], [$path . 'crud3'], $menu);
+    $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $menu);
+    $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $menu);
+    $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);
 
     $path = $demosUrl . 'interactive/';
-    $adv = $layout->addMenuGroup(['Interactive', 'icon' => 'talk']);
-    $layout->addMenuItem('Tabs', [$path . 'tabs'], $adv);
-    $layout->addMenuItem('Card', [$path . 'card'], $adv);
-    $layout->addMenuItem(['Accordion'], [$path . 'accordion'], $adv);
-    $layout->addMenuItem(['Wizard'], [$path . 'wizard'], $adv);
-    $layout->addMenuItem(['Virtual Page'], [$path . 'virtual'], $adv);
-    $layout->addMenuItem('Modal', [$path . 'modal'], $adv);
-    $layout->addMenuItem(['Loader'], [$path . 'loader'], $adv);
-    $layout->addMenuItem(['Console'], [$path . 'console'], $adv);
-    $layout->addMenuItem(['Dynamic scroll'], [$path . 'scroll-lister'], $adv);
-    $layout->addMenuItem(['Background PHP Jobs (SSE)'], [$path . 'sse'], $adv);
-    $layout->addMenuItem(['Progress Bar'], [$path . 'progress'], $adv);
-    $layout->addMenuItem(['Pop-up'], [$path . 'popup'], $adv);
-    $layout->addMenuItem(['Toast'], [$path . 'toast'], $adv);
-    $layout->addMenuItem('Paginator', [$path . 'paginator'], $adv);
+    $menu = $layout->addMenuGroup(['Interactive', 'icon' => 'talk']);
+    $layout->addMenuItem('Tabs', [$path . 'tabs'], $menu);
+    $layout->addMenuItem('Card', [$path . 'card'], $menu);
+    $layout->addMenuItem(['Accordion'], [$path . 'accordion'], $menu);
+    $layout->addMenuItem(['Wizard'], [$path . 'wizard'], $menu);
+    $layout->addMenuItem(['Virtual Page'], [$path . 'virtual'], $menu);
+    $layout->addMenuItem('Modal', [$path . 'modal'], $menu);
+    $layout->addMenuItem(['Loader'], [$path . 'loader'], $menu);
+    $layout->addMenuItem(['Console'], [$path . 'console'], $menu);
+    $layout->addMenuItem(['Dynamic scroll'], [$path . 'scroll-lister'], $menu);
+    $layout->addMenuItem(['Background PHP Jobs (SSE)'], [$path . 'sse'], $menu);
+    $layout->addMenuItem(['Progress Bar'], [$path . 'progress'], $menu);
+    $layout->addMenuItem(['Pop-up'], [$path . 'popup'], $menu);
+    $layout->addMenuItem(['Toast'], [$path . 'toast'], $menu);
+    $layout->addMenuItem('Paginator', [$path . 'paginator'], $menu);
 
     $path = $demosUrl . 'javascript/';
-    $js = $layout->addMenuGroup(['Javascript', 'icon' => 'code']);
-    $layout->addMenuItem('Events', [$path . 'js'], $js);
-    $layout->addMenuItem('Element Reloading', [$path . 'reloading'], $js);
-    $layout->addMenuItem('Vue Integration', [$path . 'vue-component'], $js);
+    $menu = $layout->addMenuGroup(['Javascript', 'icon' => 'code']);
+    $layout->addMenuItem('Events', [$path . 'js'], $menu);
+    $layout->addMenuItem('Element Reloading', [$path . 'reloading'], $menu);
+    $layout->addMenuItem('Vue Integration', [$path . 'vue-component'], $menu);
 
     $path = $demosUrl . 'others/';
-    $other = $layout->addMenuGroup(['Others', 'icon' => 'plus']);
-    $layout->addMenuItem('Sticky GET', [$path . 'sticky'], $other);
-    $layout->addMenuItem('More Sticky', [$path . 'sticky2'], $other);
-    $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $other);
+    $menu = $layout->addMenuGroup(['Others', 'icon' => 'plus']);
+    $layout->addMenuItem('Sticky GET', [$path . 'sticky'], $menu);
+    $layout->addMenuItem('More Sticky', [$path . 'sticky2'], $menu);
+    $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $menu);
 
     // view demo source page on Github
     \atk4\ui\Button::addTo($layout->menu->addItem()->addClass('aligned right'), ['View Source', 'teal', 'icon' => 'github'])
         ->on('click', $app->jsRedirect('https://github.com/atk4/ui/blob/develop/' . $relUrl, true));
 }
+unset($layout, $rootUrl, $relUrl, $demosUrl, $path, $menu);
