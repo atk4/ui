@@ -8,7 +8,7 @@ use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
 
 /** @var \atk4\ui\App $app */
-require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Header::addTo($app, ['MultiLine form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 

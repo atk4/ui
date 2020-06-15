@@ -7,7 +7,7 @@ namespace atk4\ui\demo;
 use atk4\ui\CallbackLater;
 
 /** @var \atk4\ui\App $app */
-require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../init-app.php';
 
 // JUST TO TEST Exceptions and Error throws
 

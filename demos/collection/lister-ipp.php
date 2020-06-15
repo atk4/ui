@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 /** @var \atk4\ui\App $app */
-require_once __DIR__ . '/../atk-init.php'; // default lister
+require_once __DIR__ . '/../init-app.php'; // default lister
 
 \atk4\ui\Header::addTo($app)->set('Default lister');
 \atk4\ui\Lister::addTo($app, ['defaultTemplate' => 'lister.html'])->setSource([

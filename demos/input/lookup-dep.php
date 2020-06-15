@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 /** @var \atk4\ui\App $app */
-require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Header::addTo($app, ['Lookup dependency']);
 

@@ -7,7 +7,7 @@ namespace atk4\ui\demo;
 use atk4\ui\Button;
 
 /** @var \atk4\ui\App $app */
-require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Button::addTo($app, ['Card Deck', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['card-deck']);

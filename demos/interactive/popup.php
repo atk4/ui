@@ -7,7 +7,7 @@ namespace atk4\ui\demo;
 use atk4\ui\View;
 
 /** @var \atk4\ui\App $app */
-require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../init-app.php';
 
 /**
  * Example implementation of a dynamic view which support session.

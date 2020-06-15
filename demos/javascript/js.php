@@ -8,7 +8,7 @@ use atk4\ui\Button;
 use atk4\ui\Header;
 
 /** @var \atk4\ui\App $app */
-require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../init-app.php';
 
 // Demonstrates how to use interractive buttons.
 Header::addTo($app, ['Basic Button']);

@@ -8,7 +8,7 @@ use atk4\ui\Form;
 use atk4\ui\jsToast;
 
 /** @var \atk4\ui\App $app */
-require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../init-app.php';
 
 $f = Form::addTo($app);
 $f->name = 'test_form';

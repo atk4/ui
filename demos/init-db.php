@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-// A very basic file that sets up Agile Data to be used in some demonstrations
 try {
     if (file_exists(__DIR__ . '/db.php')) {
         require_once __DIR__ . '/db.php';
@@ -16,6 +15,8 @@ try {
     throw (new \atk4\ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
 }
+
+// a very basic file that sets up Agile Data to be used in some demonstrations
 
 trait ModelLockTrait
 {

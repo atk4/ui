@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 /** @var \atk4\ui\App $app */
-require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Button::addTo($app, ['Dynamic scroll in Table', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['scroll-table']);
