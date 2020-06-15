@@ -20,9 +20,8 @@ $tabs = Tabs::addTo($app);
 
 $tab = $tabs->addTab('Layout using field name');
 
-$f = FlyersForm::addTo($tab, ['db' => $db, 'layout' => [
-    Generic::class, ['defaultTemplate' => __DIR__ . '/templates/flyers-form-layout.html'],
-],
+$f = FlyersForm::addTo($tab, [
+    'layout' => [Generic::class, ['defaultTemplate' => __DIR__ . '/templates/flyers-form-layout.html']],
 ]);
 
 ////////////////////////////////////////

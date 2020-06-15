@@ -25,6 +25,7 @@ $app = new \atk4\ui\App([
     'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
     'catch_exceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
 ]);
+$app->title = 'Agile UI Demo v' . $app->version;
 
 if ($app->call_exit !== true) {
     $app->stickyGet('APP_CALL_EXIT');
@@ -46,9 +47,7 @@ try {
 } catch (\Throwable $e) {
     throw new \atk4\ui\Exception('Database error: ' . $e->getMessage());
 }
-
 $app->db = $db;
-$app->title = 'Agile UI Demo v' . $app->version;
 
 [$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
 $demosUrl = $rootUrl . 'demos/';
