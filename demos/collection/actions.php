@@ -16,7 +16,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 // Actions can be added easily to the model
 
-$files = new FileLock($db);
+$files = new FileLock($app->db);
 
 // This action must appear on top of the CRUD
 $action = $files->addAction(

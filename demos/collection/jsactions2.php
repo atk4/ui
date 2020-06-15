@@ -8,7 +8,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 // Demo for Model action
 
-$country = new CountryLock($db);
+$country = new CountryLock($app->db);
 $country->tryLoadAny();
 DemoActionsUtil::setupDemoActions($country);
 

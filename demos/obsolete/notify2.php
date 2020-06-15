@@ -32,7 +32,7 @@ $form->name = 'notify';
 
 \atk4\ui\Label::addTo($form, ['Some of notification options that can be set.', 'top attached'], ['AboveFields']);
 $form->buttonSave->set('Show');
-$form->setModel(new $notifierClass($db), false);
+$form->setModel(new $notifierClass($app->db), false);
 
 $f_p = $form->addGroup(['Set Text and Icon:']);
 $f_p->addField('text', ['width' => 'eight']);

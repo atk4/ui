@@ -15,7 +15,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Header::addTo($app, ['Extensions to ATK Data Actions', 'subHeader' => 'Model action can be trigger using js Event']);
 
-$country = new Country($db);
+$country = new Country($app->db);
 
 $c_action = $country->addAction('Email', function ($m) {
     return 'Email to Kristy in ' . $m->get('name') . ' has been sent!';
@@ -42,7 +42,7 @@ $card->addClickAction($c_action);
 
 \atk4\ui\Header::addTo($app, ['Action can ask for confirmation before executing', 'size' => 4]);
 
-$files = new File($db);
+$files = new File($app->db);
 $f_action = $files->addAction(
     'import_from_filesystem',
     [

@@ -19,7 +19,7 @@ $lister = \atk4\ui\Lister::addTo($view, [], ['List']);
 $lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
-$lister->setModel(new Country($db))
+$lister->setModel(new Country($app->db))
     ->setLimit(20);
 
 $sortable = \atk4\ui\jsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
@@ -40,7 +40,7 @@ $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 \atk4\ui\Header::addTo($app, ['Add Drag n drop to Grid']);
 
 $g = \atk4\ui\Grid::addTo($app, ['paginator' => false]);
-$g->setModel((new Country($db))->setLimit(6));
+$g->setModel((new Country($app->db))->setLimit(6));
 
 $dragHandler = $g->addDragHandler();
 $dragHandler->onReorder(function ($order) {

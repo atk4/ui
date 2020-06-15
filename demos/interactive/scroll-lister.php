@@ -23,7 +23,7 @@ $l->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) 
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 
-$m = $l->setModel(new Country($db));
+$m = $l->setModel(new Country($app->db));
 //$m->addCondition('name','like','A%');
 
 // add dynamic scrolling.

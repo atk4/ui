@@ -16,7 +16,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
 
-$stats = new Stat($db);
+$stats = new Stat($app->db);
 $stats->loadAny();
 
 $c = \atk4\ui\Card::addTo($app);

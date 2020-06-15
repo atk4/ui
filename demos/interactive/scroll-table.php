@@ -16,7 +16,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 $table = \atk4\ui\Table::addTo($app);
 
-$m = $table->setModel(new Country($db));
+$m = $table->setModel(new Country($app->db));
 //$m->addCondition('name','like','A%');
 
 $table->addJsPaginator(30);

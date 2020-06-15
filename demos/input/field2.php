@@ -67,24 +67,24 @@ $field->onUpload($onUpload);
 
 $g = $f->addGroup('Lookup');
 
-$m = new Country($db);
+$m = new Country($app->db);
 
 $g->addField('Lookup_norm', [
     new DemoLookup(),
-    'model' => new CountryLock($db),
+    'model' => new CountryLock($app->db),
     'plus' => true,
 ])->set($m->loadAny()->id);
 
 $g->addField('Lookup_read', [
     \atk4\ui\FormField\Lookup::class,
-    'model' => new CountryLock($db),
+    'model' => new CountryLock($app->db),
     'plus' => true,
     'readonly' => true,
 ])->set($m->loadAny()->id);
 
 $g->addField('Lookup_disb', [
     \atk4\ui\FormField\Lookup::class,
-    'model' => new CountryLock($db),
+    'model' => new CountryLock($app->db),
     'plus' => true,
     'disabled' => true,
 ])->set($m->loadAny()->id);

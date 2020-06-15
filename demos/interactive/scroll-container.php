@@ -26,7 +26,7 @@ $l = \atk4\ui\Lister::addTo($lister_container, [], ['List']);
 $l->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
-$l->setModel(new Country($db));
+$l->setModel(new Country($app->db));
 
 //add dynamic scrolling.
 $l->addJsPaginator(20, ['stateContext' => '.atk-scroller'], $scroll_container);

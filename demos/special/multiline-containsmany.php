@@ -39,4 +39,4 @@ class Account extends \atk4\data\Model
     }
 }
 
-\atk4\ui\CRUD::addTo($app)->setModel(new Client($db));
+\atk4\ui\CRUD::addTo($app)->setModel(new Client($app->db));

@@ -11,7 +11,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 //****** Inline Edit *****************************
 
-$m = new Country($db);
+$m = new Country($app->db);
 $m->loadAny();
 
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
@@ -35,7 +35,7 @@ $inline_edit->onChange(function ($value) {
 $subHeader = 'Searching will reload the list of countries below with matching result.';
 \atk4\ui\Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader]);
 
-$m = new Country($db);
+$m = new Country($app->db);
 
 $lister_template = new \atk4\ui\Template('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{$end}{/}</div>');
 

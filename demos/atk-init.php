@@ -45,6 +45,7 @@ if (file_exists(__DIR__ . '/coverage.php')) {
 try {
     require_once __DIR__ . '/database.php';
     $app->db = $db;
+    unset($db);
 } catch (\Throwable $e) {
     throw new \atk4\ui\Exception('Database error: ' . $e->getMessage());
 }

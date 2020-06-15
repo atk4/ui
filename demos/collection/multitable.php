@@ -68,7 +68,7 @@ $finderClass = get_class(new class() extends \atk4\ui\Columns {
     }
 });
 
-$m = new File($db);
+$m = new File($app->db);
 $m->addCondition('parent_folder_id', null);
 $m->setOrder('is_folder desc, name');
 

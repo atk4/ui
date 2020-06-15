@@ -25,7 +25,7 @@ $form->addField(
     'withModel',
     [\atk4\ui\FormField\DropDown::class,
         'caption' => 'DropDown with data from Model',
-        'model' => (new Country($db))->setLimit(25),
+        'model' => (new Country($app->db))->setLimit(25),
     ]
 );
 
@@ -34,7 +34,7 @@ $form->addField(
     'withModel2',
     [\atk4\ui\FormField\DropDown::class,
         'caption' => 'DropDown with data from Model',
-        'model' => (new Country($db))->setLimit(25),
+        'model' => (new Country($app->db))->setLimit(25),
         'renderRowFunction' => function ($row) {
             return [
                 'value' => $row->id,
@@ -49,7 +49,7 @@ $form->addField(
     'withModel3',
     [\atk4\ui\FormField\DropDown::class,
         'caption' => 'DropDown with data from Model',
-        'model' => (new File($db))->setLimit(25),
+        'model' => (new File($app->db))->setLimit(25),
         'renderRowFunction' => function ($row) {
             return [
                 'value' => $row->id,

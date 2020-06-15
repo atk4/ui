@@ -11,7 +11,7 @@ namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
 
-$m = new CountryLock($db);
+$m = new CountryLock($app->db);
 $edit = $m->getAction('edit');
 $edit->ui = ['execButton' => [\atk4\ui\Button::class, 'EditMe', 'blue']];
 $edit->description = 'edit';

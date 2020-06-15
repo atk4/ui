@@ -44,7 +44,7 @@ $col_title->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
 
 //Table in Grid are already inside a container.
 $g = \atk4\ui\Grid::addTo($app);
-$g->setModel(new Country($db));
+$g->setModel(new Country($app->db));
 $g->ipp = 5;
 
 //Adding a dropdown menu to the column 'name'.

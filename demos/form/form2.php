@@ -18,7 +18,7 @@ $form = \atk4\ui\Form::addTo($app, ['segment']);
 //$form = \atk4\ui\Form::addTo($app, ['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
 \atk4\ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveFields']);
 
-$form->setModel(new Country($db), false);
+$form->setModel(new Country($app->db), false);
 
 // form basic field group
 $f_address = $form->addGroup('Basic Country Information');
@@ -98,4 +98,4 @@ $personClass = get_class(new class() extends \atk4\data\Model {
 
 \atk4\ui\Form::addTo($app)
     ->addClass('segment')
-    ->setModel(new $personClass($db));
+    ->setModel(new $personClass($app->db));

@@ -31,7 +31,7 @@ $form->addField('contains', [
 
 $lookup = $form->addField('country', [
     \atk4\ui\FormField\Lookup::class,
-    'model' => new Country($db),
+    'model' => new Country($app->db),
     'dependency' => function ($model, $data) {
         $conditions = [];
         foreach (explode(',', $data['starts_with'] ?? '') as $letter) {
@@ -70,7 +70,7 @@ $form->addField('ends_with', [
 
 $lookup = $form->addField('country', [
     \atk4\ui\FormField\Lookup::class,
-    'model' => new Country($db),
+    'model' => new Country($app->db),
     'dependency' => function ($model, $data) {
         isset($data['ends_with']) ? $model->addCondition('name', 'like', '%' . $data['ends_with']) : null;
     },

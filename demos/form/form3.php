@@ -26,10 +26,10 @@ $seg = \atk4\ui\View::addTo($app, ['ui' => 'raised segment']);
 $form = \atk4\ui\Form::addTo($seg, ['layout' => \atk4\ui\FormLayout\Columns::class]);
 $form->setModel(
     isset($_GET['m']) ? (
-        $_GET['m'] === 'country' ? new Country($db) : (
-            $_GET['m'] === 'file' ? new File($db) : new Stat($db)
+        $_GET['m'] === 'country' ? new Country($app->db) : (
+            $_GET['m'] === 'file' ? new File($app->db) : new Stat($app->db)
         )
-    ) : new Stat($db)
+    ) : new Stat($app->db)
 )->tryLoadAny();
 
 $form->onSubmit(function (\atk4\ui\Form $form) {
