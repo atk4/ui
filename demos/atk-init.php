@@ -38,7 +38,11 @@ if (file_exists(__DIR__ . '/coverage.php')) {
 }
 // END - PHPUNIT & COVERAGE SETUP
 
-require_once __DIR__ . '/database.php';
+try {
+    require_once __DIR__ . '/database.php';
+} catch (\Throwable $e) {
+    throw new \atk4\ui\Exception('Database error: ' . $e->getMessage());
+}
 
 $app->db = $db;
 $app->title = 'Agile UI Demo v' . $app->version;
