@@ -43,7 +43,7 @@ if (file_exists(__DIR__ . '/coverage.php')) {
 }
 
 try {
-    require_once __DIR__ . '/database.php';
+    require_once __DIR__ . '/init-db.php';
     $app->db = $db;
     unset($db);
 } catch (\Throwable $e) {

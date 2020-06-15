@@ -13,7 +13,7 @@ try {
     }
 } catch (PDOException $e) {
     // do not pass $e unless you can secure DSN!
-    throw (new \atk4\ui\Exception('This demo requires access to the database. See "demos/database.php"'))
+    throw (new \atk4\ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
 }
 
