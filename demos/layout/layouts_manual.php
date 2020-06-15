@@ -3,7 +3,8 @@
 namespace atk4\ui\demo;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/somedatadef.php';
+require_once __DIR__ . '/../_includes/Persistence_Faker.php';
+require_once __DIR__ . '/../_includes/SomeData.php';
 
 date_default_timezone_set('UTC');
 

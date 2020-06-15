@@ -19,7 +19,8 @@ if (file_exists(__DIR__ . '/coverage.php')) {
 }
 
 require_once __DIR__ . '/database.php';
-require_once __DIR__ . '/_includes/somedatadef.php';
+require_once __DIR__ . '/_includes/Persistence_Faker.php';
+require_once __DIR__ . '/_includes/SomeData.php';
 
 $app = new \atk4\ui\App([
     'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
