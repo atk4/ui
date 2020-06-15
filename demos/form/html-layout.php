@@ -11,7 +11,8 @@ use atk4\ui\Tabs;
 use atk4\ui\View;
 
 require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/flyers-form-demo.php';
+require_once __DIR__ . '/../_includes/Flyers.php';
+require_once __DIR__ . '/../_includes/FlyersForm.php';
 
 Header::addTo($app, ['Display form using Html template', 'subHeader' => 'Fully control how to display fields.']);
 
