@@ -52,7 +52,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $cb = \atk4\ui\Callback::addTo($app);
 
         // simulate triggering
-        $_GET[$cb->name] = true;
+        $_GET[$cb->name] = '1';
 
         $cb->set(function ($x) use (&$var) {
             $var = $x;
@@ -104,7 +104,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $cb = \atk4\ui\CallbackLater::addTo($app);
 
         // simulate triggering
-        $_GET[$cb->name] = true;
+        $_GET[$cb->name] = '1';
 
         $cb->set(function ($x) use (&$var) {
             $var = $x;
@@ -127,8 +127,8 @@ class CallbackTest extends AtkPhpunit\TestCase
         $cb = \atk4\ui\CallbackLater::addTo($app);
 
         // simulate triggering
-        $_GET[$cb->name] = true;
-        $_GET[$cb->name . '_2'] = true;
+        $_GET[$cb->name] = '1';
+        $_GET[$cb->name . '_2'] = '1';
 
         $cb->set(function ($x) use (&$var, $app, &$cbname) {
             $cb2 = \atk4\ui\CallbackLater::addTo($app);
@@ -179,7 +179,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         });
 
         // simulate triggering
-        $_GET[$vp->name] = true;
+        $_GET[$vp->name] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $app->run();
@@ -198,7 +198,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         });
 
         // simulate triggering
-        $_GET['bah'] = true;
+        $_GET['bah'] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $app->run();
@@ -222,7 +222,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $vp->set([$this, 'callPull230']);
 
         // simulate triggering
-        $_GET[$vp->name] = true;
+        $_GET[$vp->name] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');
         $app->run();

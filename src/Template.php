@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 use atk4\data\Model;
@@ -308,6 +310,8 @@ class Template implements \ArrayAccess
         }
 
         // encode value
+        $value = (string) $value; // TODO, better to remove later in favor of strong string type
+
         if ($encode) {
             $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
         }

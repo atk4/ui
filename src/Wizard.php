@@ -105,7 +105,7 @@ class Wizard extends View
         $this->steps[] = $this->add($step, 'Step');
 
         if (!$this->stepCallback->triggered()) {
-            $_GET[$this->stepCallback->urlTrigger] = 0;
+            $_GET[$this->stepCallback->urlTrigger] = '0';
         }
 
         if ($step->sequence === $this->currentStep) {

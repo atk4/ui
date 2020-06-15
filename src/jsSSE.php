@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 use atk4\core\HookTrait;
@@ -166,9 +168,9 @@ class jsSSE extends jsCallback
         $this->app->setResponseHeader('x-accel-buffering', 'no');
 
         // disable compression
-        @ini_set('zlib.output_compression', 0);
+        @ini_set('zlib.output_compression', '0');
         if (function_exists('apache_setenv')) {
-            @apache_setenv('no-gzip', 1);
+            @apache_setenv('no-gzip', '1');
         }
 
         // prevent buffering
