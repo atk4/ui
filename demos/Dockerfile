@@ -37,5 +37,5 @@ COPY src src
 COPY template template
 COPY demos demos
 
-ADD demos/db.example.php demos/db.php
-RUN sed -E "s/\('.+'\);/(\$_ENV['DSN'] ?? 'sqlite:');/g" -i demos/db.php
+COPY demos/db*.php demos
+RUN sed -E "s/\('.+'\);/(\$_ENV['DSN'] ?? 'sqlite:');/g" -i demos/db.example.php
