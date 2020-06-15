@@ -138,13 +138,13 @@ class DemoInvoice extends \atk4\data\Model {
 
 session_start();
 
-$_SESSION['x'] = $_SESSION['x'] ?? [];
+$model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
 
-$session = new \atk4\data\Persistence\Array_($_SESSION['x']);
+$model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($m) {
+    $_SESSION['x'][$m->id] = $m->get();
+});
 
-$form = \atk4\ui\Form::addTo($app);
-$form->setModel(new \atk4\ui\demo\DemoInvoice($session))
-    ->tryLoad(1);
+\atk4\ui\Form::addTo($app)->setModel($model)->tryLoad(1);
 
 \atk4\ui\View::addTo($app, ['ui'=>'divider']);
 \atk4\ui\Button::addTo($app, ['Refresh', 'icon'=>'refresh'])
@@ -188,9 +188,7 @@ EOF
         <<<'CODE'
 session_start();
 
-$_SESSION['x'] = $_SESSION['x'] ?? [];
-
-$session = new \atk4\data\Persistence\Array_($_SESSION['x']);
+$session = new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []);
 
 $model = new \atk4\ui\demo\DemoInvoice($session);
 $model->tryLoad(1);
