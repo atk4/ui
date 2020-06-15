@@ -8,11 +8,11 @@ require_once __DIR__ . '/../atk-init.php';
 
 // buttons configuration: [page, title]
 $buttons = [
-    ['page' => ['layouts_nolayout'],               'title' => 'HTML without layout'],
-    ['page' => ['layouts_manual'],                 'title' => 'Manual layout'],
-    ['page' => ['/demos/basic/header', 'layout' => \atk4\ui\Layout\Centered::class], 'title' => 'Centered layout'],
-    ['page' => ['layouts_admin'],                  'title' => 'Admin Layout'],
-    ['page' => ['layouts_error'],                  'title' => 'Exception Error'],
+    ['page' => ['layouts_nolayout'],                        'title' => 'HTML without layout'],
+    ['page' => ['layouts_manual'],                          'title' => 'Manual layout'],
+    ['page' => ['../basic/header', 'layout' => 'Centered'], 'title' => 'Centered layout'],
+    ['page' => ['layouts_admin'],                           'title' => 'Admin Layout'],
+    ['page' => ['layouts_error'],                           'title' => 'Exception Error'],
 ];
 
 // layout
