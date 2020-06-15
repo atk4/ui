@@ -137,11 +137,14 @@ class DemoInvoice extends \atk4\data\Model {
 */
 
 session_start();
-$session = new \atk4\data\Persistence\Array_($_SESSION['x']);
 
-$form = \atk4\ui\Form::addTo($app);
-$form->setModel(new DemoInvoice($session))
-    ->tryLoad(1);
+$model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
+$model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($m) {
+    $_SESSION['x'][$m->id] = $m->get();
+});
+
+\atk4\ui\Form::addTo($app)
+    ->setModel($model)->tryLoad(1);
 
 \atk4\ui\View::addTo($app, ['ui'=>'divider']);
 \atk4\ui\Button::addTo($app, ['Refresh', 'icon'=>'refresh'])
@@ -184,9 +187,12 @@ EOF
     Demo::addTo($page)->setCode(
         <<<'CODE'
 session_start();
-$session = new \atk4\data\Persistence\Array_($_SESSION['x']);
 
-$model = new DemoInvoice($session);
+$model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
+$model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($m) {
+    $_SESSION['x'][$m->id] = $m->get();
+});
+
 $model->tryLoad(1);
 \atk4\ui\Card::addTo($app)->setModel($model, ['date']);
 

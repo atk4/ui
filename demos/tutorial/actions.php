@@ -36,7 +36,7 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new CountryLock($app->db);
+$country = new \atk4\ui\demo\CountryLock($app->db);
 
 $country->addAction('send_message');
 CODE
@@ -62,14 +62,14 @@ EOF
     $page->add(new Demo())->setCode(
         <<<'CODE'
 
-$country = new CountryLock($app->db);
+$country = new \atk4\ui\demo\CountryLock($app->db);
 
 $country->addAction('send_message', function() {
     return 'sent';
 });
 $country->tryLoadAny();
 
-$card = $app->add('Card');
+$card = \atk4\ui\Card::addTo($app);
 $card->setModel($country, ['iso']);
 $card->addClickAction($country->getAction('send_message'));
 
@@ -89,10 +89,10 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new CountryLock($app->db);
+$country = new \atk4\ui\demo\CountryLock($app->db);
 $country->loadAny();
 
-\atk4\ui\Button::addTo($app, 'Edit some country'])
+\atk4\ui\Button::addTo($app, ['Edit some country'])
     ->on('click', $country->getAction('edit'));
 CODE
     );
@@ -107,10 +107,10 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new CountryLock($app->db);
+$country = new \atk4\ui\demo\CountryLock($app->db);
 $country->loadAny();
 
-$menu = $app->add('Menu');
+$menu = \atk4\ui\Menu::addTo($app);
 $menu->addItem('Hello');
 $menu->addItem('World', $country->getAction('edit'));
 CODE
@@ -161,9 +161,9 @@ $app->add(new \atk4\ui\FormField\Line([
     'action' => $model->getAction('greet'),
 ]));
 
-$app->add(['ui'=>'divider']);
+\atk4\ui\View::addTo($app, ['ui'=>'divider']);
 
-\atk4\ui\Button::addTo($app, 'Ask Age'])
+\atk4\ui\Button::addTo($app, ['Ask Age'])
     ->on('click', $model->getAction('ask_age'));
 CODE
     );
@@ -202,7 +202,7 @@ EOF
 
     $page->add(new Demo())->setCode(
         <<<'CODE'
-$country = new CountryLock($app->db);
+$country = new \atk4\ui\demo\CountryLock($app->db);
 $country->getAction('add')->enabled = false;
 $country->getAction('delete')->enabled = function() { return rand(1,2)>1; };
 $country->addAction('mail', [
@@ -212,8 +212,9 @@ $country->addAction('mail', [
     'description' => 'Email testing',
     'ui'       => ['icon'=>'mail', 'button'=>[null, 'icon'=>'green mail']],
 ]);
-$crud = $app->add(['CRUD', 'ipp'=>5]);
-$crud->setModel($country, ['name','iso']);
+
+\atk4\ui\CRUD::addTo($app, ['ipp' => 5])
+    ->setModel($country, ['name','iso']);
 CODE
     );
 });
