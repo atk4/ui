@@ -17,8 +17,6 @@ if (file_exists(__DIR__ . '/coverage.php')) {
     require_once __DIR__ . '/coverage.php';
 }
 
-require_once __DIR__ . '/database.php';
-
 $app = new \atk4\ui\App([
     'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
     'catch_exceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
@@ -38,6 +36,8 @@ if (file_exists(__DIR__ . '/coverage.php')) {
     });
 }
 // END - PHPUNIT & COVERAGE SETUP
+
+require_once __DIR__ . '/database.php';
 
 $app->db = $db;
 $app->title = 'Agile UI Demo v' . $app->version;
