@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * A js action executor that require a form.
  */

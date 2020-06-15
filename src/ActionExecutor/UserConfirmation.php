@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Modal executor for action that required a confirmation.
  */

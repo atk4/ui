@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
 use atk4\ui\View;
@@ -25,7 +27,7 @@ $cartClass = get_class(new class() extends \atk4\ui\Lister {
         $this->items = $this->recall('items', []);
 
         // Clicking on any URL produced by this Lister will carry on an extra GET argument.
-        $this->stickyGet($this->name . '_remove', true);
+        $this->stickyGet($this->name . '_remove', '1');
 
         // Set default description for our row template. Normally this is replaced by the 'descr' field
         // of a model, but we don't have it, so it will stay like this.

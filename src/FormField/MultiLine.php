@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Creates a Multiline field within a table, which allows adding/editing multiple
  * data rows.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\FormLayout;
 
 use atk4\ui\Form;
@@ -60,7 +62,7 @@ class Columns extends Generic
 
         $c = \atk4\ui\Columns::addTo($this);
 
-        $chunks = array_chunk($fields, ceil($cnt / $col));
+        $chunks = array_chunk($fields, (int) ceil($cnt / $col));
         foreach ($chunks as $chunk) {
             $cc = $c->addColumn();
             Generic::addTo($cc, ['form' => $this->form])->setModel($model, $chunk);

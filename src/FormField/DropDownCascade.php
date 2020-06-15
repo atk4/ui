@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Dropdown form field that will based it's list value
  * according to another input value.

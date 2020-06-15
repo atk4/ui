@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 use atk4\core\AppScopeTrait;
@@ -969,8 +971,8 @@ class View implements jsExpressionable
      */
     public function jsGetStoreData()
     {
-        $data['local'] = json_decode($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? null, true);
-        $data['session'] = json_decode($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? null, true);
+        $data['local'] = json_decode($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null', true);
+        $data['session'] = json_decode($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null', true);
 
         return $data;
     }
@@ -1281,10 +1283,10 @@ class View implements jsExpressionable
 
     // {{{ Sticky URLs
 
-    /** @var array stickyGet arguments */
+    /** @var string[] stickyGet arguments */
     public $stickyArgs = [];
 
-    /** @var array Cached stickyGet arguments */
+    /** @var string[] Cached stickyGet arguments */
     public $_stickyArgsCached;
 
     /**
@@ -1351,11 +1353,8 @@ class View implements jsExpressionable
      *
      * If GET argument is not presently set you can specify a 2nd argument
      * to forge-set the GET argument for current view and it's sub-views.
-     *
-     * @param string $name
-     * @param string $newValue
      */
-    public function stickyGet($name, $newValue = null): ?string
+    public function stickyGet(string $name, string $newValue = null): ?string
     {
         $this->stickyArgs[$name] = $newValue ?? $_GET[$name] ?? null;
 

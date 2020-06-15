@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 class Paginator extends View
@@ -73,13 +75,9 @@ class Paginator extends View
 
     /**
      * Set total number of pages.
-     *
-     * @param int $total
      */
-    public function setTotal($total)
+    public function setTotal(int $total)
     {
-        $this->total = (int) $total;
-
         if ($this->total < 1) {
             $this->total = 1;
         }
@@ -97,7 +95,7 @@ class Paginator extends View
      */
     public function getCurrentPage(): int
     {
-        return $_GET[$this->urlTrigger] ?? 1;
+        return (int) ($_GET[$this->urlTrigger] ?? 1);
     }
 
     /**

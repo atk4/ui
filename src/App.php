@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 use atk4\core\AppScopeTrait;
@@ -305,7 +307,7 @@ class App
      */
     public function setResponseStatusCode(int $statusCode): self
     {
-        $this->setResponseHeader(self::HEADER_STATUS_CODE, $statusCode);
+        $this->setResponseHeader(self::HEADER_STATUS_CODE, (string) $statusCode);
 
         return $this;
     }
@@ -767,7 +769,7 @@ class App
      */
     public function redirect($page, bool $permanent = false): void
     {
-        $this->terminateHTML('', ['location' => $this->url($page), self::HEADER_STATUS_CODE => $permanent ? 301 : 302]);
+        $this->terminateHTML('', ['location' => $this->url($page), self::HEADER_STATUS_CODE => $permanent ? '301' : '302']);
     }
 
     /**
@@ -947,7 +949,7 @@ class App
      */
     public function encodeAttribute($val)
     {
-        return htmlspecialchars($val);
+        return htmlspecialchars((string) $val);
     }
 
     /**
@@ -1067,12 +1069,12 @@ class App
 
         if (!headers_sent()) {
             if ($lateErrorStr !== null) {
-                $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => 500];
+                $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
             }
 
             foreach ($headersNew as $k => $v) {
                 if ($k === self::HEADER_STATUS_CODE) {
-                    http_response_code($v);
+                    http_response_code($v === (string) (int) $v ? (int) $v : 500);
                 } else {
                     $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
                         return strtoupper($matches[0]);
