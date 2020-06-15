@@ -143,7 +143,7 @@ $_SESSION['x'] = $_SESSION['x'] ?? [];
 $session = new \atk4\data\Persistence\Array_($_SESSION['x']);
 
 $form = \atk4\ui\Form::addTo($app);
-$form->setModel(new DemoInvoice($session))
+$form->setModel(new \atk4\ui\demo\DemoInvoice($session))
     ->tryLoad(1);
 
 \atk4\ui\View::addTo($app, ['ui'=>'divider']);
@@ -192,7 +192,7 @@ $_SESSION['x'] = $_SESSION['x'] ?? [];
 
 $session = new \atk4\data\Persistence\Array_($_SESSION['x']);
 
-$model = new DemoInvoice($session);
+$model = new \atk4\ui\demo\DemoInvoice($session);
 $model->tryLoad(1);
 \atk4\ui\Card::addTo($app)->setModel($model, ['date']);
 
