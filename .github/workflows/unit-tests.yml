@@ -81,10 +81,6 @@ jobs:
           # lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
           lessc public/agileui.less public/agileui.css
 
-          # app js
-          # ignored from git - check syntax only
-          uglifyjs --compress -- public/agileui.js > public/agileui.min.js
-
       - name: Init
         run: |
           mkdir -p build/logs
