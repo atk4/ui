@@ -73,9 +73,10 @@ class ScopeBuilder extends Generic
      * Default VueQueryBuilder query.
      *
      * @var array
+     *            todo reset to protected after testing
      *            todo reset to empty after testing
      */
-    protected $query = ['logicalOperator' => 'all', 'children' => []];
+    public $query = ['logicalOperator' => 'all', 'children' => []];
 
     protected const OPERATOR_EQUALS = 'equals';
     protected const OPERATOR_DOESNOT_EQUAL = 'does not equal';
@@ -179,7 +180,7 @@ class ScopeBuilder extends Generic
             ],
         ],
         'date' => [
-            'type' => 'text',
+            'type' => 'date',
             'inputType' => 'date',
             'operators' => [
                 self::OPERATOR_EQUALS,

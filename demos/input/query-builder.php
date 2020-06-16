@@ -1,6 +1,30 @@
 <?php
 
-require_once __DIR__ . '/../atk-init.php';
+require_once __DIR__ . '/../init-app.php';
+
+$query = [
+    'logicalOperator' => 'all',
+    'children' => [
+        [
+            'type' => 'query-builder-rule',
+            'query' => [
+                'rule' => 'date',
+                'operator' => '=',
+                'operand' => 'Date',
+                'value' => '2020-06-18'
+            ],
+        ],
+        [
+            'type' => 'query-builder-rule',
+            'query' => [
+                'rule' => 'vegetable',
+                'operator' => 'contains',
+                'operand' => 'Vegetable',
+                'value' => null
+            ],
+        ]
+    ]
+];
 
 $rules = [
     [
@@ -9,10 +33,14 @@ $rules = [
         'label' => 'Vegetable',
     ],
     [
-        'type' => 'text',
+        'type' => 'custom-component',
+        'component' => 'DatePicker',
         'inputType' => 'date',
         'id' => 'date',
         'label' => 'Date',
+        'operators' => ['=', '<', '>'],
+        'default' => null,
+        'format' => $app->ui_persistence->date_format,
     ],
     [
         'type' => 'numeric',
@@ -34,6 +62,7 @@ $rules = [
 $f = \atk4\ui\Form::addTo($app);
 $qb = $f->addField('qb', [\atk4\ui\FormField\ScopeBuilder::class]);
 $qb->rules = $rules;
+$qb->query = $query;
 
 $f->onSubmit(function($f) {
    echo  '<pre>' . json_encode($f->model->get('qb'), JSON_PRETTY_PRINT) . '</pre>';

@@ -34,8 +34,19 @@
                                         >
                                     </div>
                                 </template>
+                                <!-- Date input -->
+                                <template v-if="isDatePicker">
+                                    <div class="ui small input atk-qb">
+                                        <v-date-picker
+                                                :input-props="{class: 'atk-qb-date-picker'}"
+                                                v-model="dateValue"
+                                                :masks="dateMask"
+                                                :popover="{ placement: 'bottom', visibility: 'click' }"
+                                                ref="dateRef"></v-date-picker>
+                                    </div>
+                                </template>
                                 <!-- Radio input -->
-                                <template v-if="getInputType === 'radio'">
+                                <template v-if="isRadio">
                                     <sui-form-fields inline class="atk-qb">
                                         <div v-for="choice in rule.choices" :key="choice.value">
                                             <sui-checkbox :label="choice.label" radio :value="choice.value" v-model="query.value"></sui-checkbox>
@@ -60,23 +71,47 @@
 
   export default {
     extends: QueryBuilderRule,
+    component: {
+    },
+    data: function() {
+      return {
+        dateMask: {input: "YYYY-MM-DD"},
+        dateString: this.isDatePicker ? this.query.value : null,
+      }
+    },
     computed: {
       isInput: function() {
         return this.rule.type === 'text' || this.rule.type === 'numeric';
       },
-      // temp until more type are supported.
-      getInputType: function() {
-        if (this.rule.inputType === 'radio') {
-          return 'radio';
+      isDatePicker: function() {
+        return this.rule.type === 'custom-component' && this.rule.component === 'DatePicker';
+      },
+      isRadio: function() {
+        return this.rule.type === 'radio';
+      },
+      dateValue: {
+        get: function() {
+          if (this.dateString) {
+            return new Date(this.dateString);
+          }
+          return new Date();
+        },
+        set: function(date){
+          this.query.value =  atk.phpDate("Y-m-d", date);
         }
-        return 'text';
       }
+    },
+    methods: {
+      onDateChange: function(e) {
+        console.log('change', e);
+      },
+
     }
   };
 </script>
 
 <style>
-    .ui.input.atk-qb > input, .ui.form .input.atk-qb {
+    .ui.input.atk-qb > input, .ui.input.atk-qb > span > input, .ui.form .input.atk-qb {
         padding: 6px;
     }
     .ui.grid > .row.atk-qb {
@@ -85,6 +120,12 @@
     }
     .inline.fields.atk-qb, .ui.form .inline.fields.atk-qb {
         margin: 0px;
+    }
+    .atk-qb-date-picker {
+        border: 1px solid rgba(34, 36, 38, 0.15);
+    }
+    input[type=input].atk-qb-date-picker:focus {
+        border-color: #85b7d9;
     }
     .ui.card.vqb-rule > .content {
         padding-bottom: 0.5em;

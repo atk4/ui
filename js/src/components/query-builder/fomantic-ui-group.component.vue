@@ -71,30 +71,6 @@
       QueryBuilderRule: QueryBuilderRule
     },
     computed: {
-      getLevel() {
-        let level;
-        switch (this.depth) {
-          case 2:
-            level = 'secondary';
-            break;
-            case 3:
-              level = 'tertiary';
-              break;
-        }
-        return level;
-      },
-      getOptions() {
-        return [
-          {
-            text: 'Male',
-            value: 1,
-          },
-          {
-            text: 'Female',
-            value: 2,
-          },
-        ];
-      }
     },
     extends: QueryBuilderGroup
   };
