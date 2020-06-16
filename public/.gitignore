@@ -4,3 +4,7 @@
 !.gitignore
 !atkjs-ui.min.js
 !agileui.css
+!agileui.css
+!agileui.css.map
+!atkjs-ui.js
+!atkjs-ui.min.js
