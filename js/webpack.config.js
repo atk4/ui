@@ -25,7 +25,7 @@ const webpack = require('webpack');
 const path = require('path');
 // VUe file loader.
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const packageVersion = require("./package.json").version;
 
 module.exports = env => {
@@ -57,7 +57,7 @@ module.exports = env => {
       umdNamedDefine: true,
     },
     optimization: {
-      minimizer: [new UglifyJsPlugin()]
+      minimizer: [new TerserPlugin()]
     },
     module: {
       rules: [

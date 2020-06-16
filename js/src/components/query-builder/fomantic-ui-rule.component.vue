@@ -38,6 +38,7 @@
                                 <template v-if="isDatePicker">
                                     <div class="ui small input atk-qb">
                                         <v-date-picker
+                                                :locale='dateLocale'
                                                 :input-props="{class: 'atk-qb-date-picker'}"
                                                 v-model="dateValue"
                                                 :masks="dateMask"
@@ -75,8 +76,9 @@
     },
     data: function() {
       return {
-        dateMask: {input: "YYYY-MM-DD"},
+        dateMask: {input:  this.rule.format ? this.rule.format : 'YYYY-MM-DD'},
         dateString: this.isDatePicker ? this.query.value : null,
+        dateLocale: this.rule.locale ? this.rule.locale : 'en-En'
       }
     },
     computed: {

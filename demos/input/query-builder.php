@@ -40,7 +40,8 @@ $rules = [
         'label' => 'Date',
         'operators' => ['=', '<', '>'],
         'default' => null,
-        'format' => $app->ui_persistence->date_format,
+//        'format' => "YYYY-MMM-DD", // extra component option
+//        'locale' => 'fr-FR'        // extra component option
     ],
     [
         'type' => 'numeric',

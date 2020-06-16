@@ -2,7 +2,7 @@
     <div class="vqb-group ui fluid card" :class="'depth-' + depth.toString()">
         <div class="vbq-group-heading content" :class="'depth-' + depth.toString()">
             <div class="ui grid">
-                <div class="fourteen wide column">
+                <div class="six wide column">
                     <div class="ui horizontal list">
                         <div class="item">
                             <h4 class="ui inline">{{ labels.matchType }}</h4>
@@ -21,44 +21,37 @@
                         </div>
                     </div>
                 </div>
+                <div class="eight wide right aligned column">
+                    <div class="rule-actions ">
+                        <div class="ui buttons">
+                            <sui-dropdown
+                                    :text="labels.addRule"
+                                    button
+                                    pointing
+                                    class="mini"
+                                    :options="dropdownRules"
+                            >
+                                <sui-dropdown-menu>
+                                    <sui-dropdown-item @click="addNewRule(rule.id)" v-for="rule in rules" :key="rule.id" :value="rule">{{ rule.label }}</sui-dropdown-item>
+                                </sui-dropdown-menu>
+                            </sui-dropdown>
+                            <button v-if="depth < maxDepth"
+                                    type="button"
+                                    class="ui mini button"
+                                    @click="addGroup"
+                            >{{ labels.addGroup }}</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="two wide right aligned column">
                     <i v-if="depth > 1" style="cursor: pointer" class="icon times" @click="remove"></i>
                 </div>
             </div>
         </div>
         <div class="vbq-group-body content">
-            <div class="rule-actions ui basic vertically fitted segment right aligned">
-                <div class="ui horizontal divided list">
-                    <div class="item">
-                        <div class="ui horizontal list">
-                            <div class=" item">
-                                <select v-model="selectedRule" class="atk-qb-select">
-                                    <option v-for="rule in rules" :key="rule.id" :value="rule">{{ rule.label }}</option>
-                                </select>
-                            </div>
-                            <div class=" item">
-                                <button
-                                        type="button"
-                                        class="ui mini primary button"
-                                        @click="addRule"
-                                >{{ labels.addRule }}</button>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="item"  v-if="depth < maxDepth">
-                        <button
-                                type="button"
-                                class="ui mini primary button"
-                                @click="addGroup"
-                        >{{ labels.addGroup }}</button>
-                    </div>
-                </div>
-            </div>
             <query-builder-children v-bind="$props"/>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -70,7 +63,37 @@
     components: {
       QueryBuilderRule: QueryBuilderRule
     },
+    data: function() {
+      return {
+        selectedSuiRule: null
+      };
+    },
+    methods: {
+      /**
+       * Add a new rule via Dropdown item.
+       */
+      addNewRule: function(ruleId) {
+        this.selectedRule = this.rules.filter(rule => rule.id === ruleId)[0];
+        if (this.selectedRule) {
+          this.addRule();
+        }
+      },
+    },
     computed: {
+      /**
+       * Map rules to SUI Dropdown.
+       *
+       * @returns {*}
+       */
+      dropdownRules: function() {
+        return this.rules.map( rule => {
+           return {
+             key: rule.id,
+             text: rule.label,
+             value: rule.id
+           };
+        });
+      }
     },
     extends: QueryBuilderGroup
   };
@@ -84,12 +107,13 @@
         padding-bottom: 0.5em;
         padding-top: 0.5em;
     }
+    .vue-query-builder .ui.card {
+        margin-top: 0em;
+        margin-bottom: 0em;
+    }
     .ui.card > .vbq-group-heading.content {
         background-color: #f3f4f5;
     }
-
-
-
     .vue-query-builder .vqb-group.depth-1 .vqb-rule,
     .vue-query-builder .vqb-group.depth-2 {
         border-left: 2px solid #8bc34a;

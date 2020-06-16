@@ -13,6 +13,7 @@ use atk4\ui\Template;
 class ScopeBuilder extends Generic
 {
 
+    /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
     /**
@@ -28,10 +29,11 @@ class ScopeBuilder extends Generic
     /**
      * Max depth of nested conditions allowed.
      * Corresponds to VueQueryBulder maxDepth.
+     * Maximum support by js component is 5.
      *
      * @var int
      */
-    public $maxDepth = 10;
+    public $maxDepth = 3;
 
     /**
      * Fields to use for creating the rules.
@@ -68,6 +70,14 @@ class ScopeBuilder extends Generic
      *            todo setback to protected after testing
      */
     public $rules = [];
+
+    /**
+     * Set Labels for Vue-Query-Builder
+     * see https://dabernathy89.github.io/vue-query-builder/configuration.html#labels
+     *
+     * @var array
+     */
+    public $labels = [];
 
     /**
      * Default VueQueryBuilder query.
@@ -180,7 +190,8 @@ class ScopeBuilder extends Generic
             ],
         ],
         'date' => [
-            'type' => 'date',
+            'type' => 'custom-component',
+            'component' => 'DatePicker',
             'inputType' => 'date',
             'operators' => [
                 self::OPERATOR_EQUALS,
@@ -363,6 +374,7 @@ class ScopeBuilder extends Generic
                     'maxDepth' => $this->maxDepth,
                     'query' => $this->query,
                     'name' => $this->short_name,
+                    'labels' => $this->labels ?? null,
                 ],
             ]
         );
