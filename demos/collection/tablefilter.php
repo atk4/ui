@@ -13,7 +13,7 @@ $view = \atk4\ui\View::addTo($app, ['ui' => 'basic segment']);
 $g = \atk4\ui\Grid::addTo($view, ['menu' => ['class' => ['atk-grid-menu']]]);
 
 $m = new CountryLock($app->db);
-$m->addExpression('is_uk', $m->expr('if([iso] = [country], 1, 0)', ['country' => 'GB']))->type = 'boolean';
+$m->addExpression('is_uk', $m->expr('case when [iso] = [country] THEN 1 ELSE 0 END', ['country' => 'GB']))->type = 'boolean';
 
 $g->setModel($m);
 $g->addFilterColumn();

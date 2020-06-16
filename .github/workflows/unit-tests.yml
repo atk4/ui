@@ -26,15 +26,6 @@ jobs:
             type: 'CodingStyle'
     env:
       LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == 'latest' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: atk4_pass
-          MYSQL_USER: atk4_test
-          MYSQL_PASSWORD: atk4_pass
-          MYSQL_DATABASE: atk4_test__ui
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -80,8 +71,7 @@ jobs:
       - name: Init
         run: |
           mkdir -p build/logs
-          mysql -uatk4_test -patk4_pass -h mysql atk4_test__ui < demos/atk4.sql
-          cp demos/db.example.php demos/db.php
+          php demos/_demo-data/create-sqlite-db.php
 
       - name: "Run tests: Phpunit (only for Phpunit)"
         if: matrix.type == 'Phpunit'
