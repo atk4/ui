@@ -8,7 +8,7 @@ try {
     if (file_exists(__DIR__ . '/db.php')) {
         require_once __DIR__ . '/db.php';
     } else {
-        require_once __DIR__ . '/db.example.php';
+        require_once __DIR__ . '/db.default.php';
     }
 } catch (PDOException $e) {
     // do not pass $e unless you can secure DSN!
