@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
 use atk4\ui\Button;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Button::addTo($app, ['Card Deck', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['card-deck']);
@@ -14,7 +17,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
 
-$stats = new Stat($db);
+$stats = new Stat($app->db);
 $stats->loadAny();
 
 $c = \atk4\ui\Card::addTo($app);

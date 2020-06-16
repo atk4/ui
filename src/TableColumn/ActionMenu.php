@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Table column action menu.
  * Will create a dropdown menu within table column.

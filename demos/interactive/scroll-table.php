@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Button::addTo($app, ['Dynamic scroll in Lister', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['scroll-lister']);
@@ -14,7 +17,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 $table = \atk4\ui\Table::addTo($app);
 
-$m = $table->setModel(new Country($db));
+$m = $table->setModel(new Country($app->db));
 //$m->addCondition('name','like','A%');
 
 $table->addJsPaginator(30);

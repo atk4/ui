@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Modal executor for action.
  * These are special modal that will divide a model action into steps

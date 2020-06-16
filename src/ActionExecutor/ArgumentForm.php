@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\ActionExecutor;
 
 use atk4\data\Model;

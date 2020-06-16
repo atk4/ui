@@ -27,6 +27,7 @@ RUN (cd public && lessc agileui.less agileui.css)
 
 ADD composer.json .
 RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv tmp composer.json \
+    && composer require --no-update fzaninotto/faker \
     && composer install --no-dev
 
 RUN echo 'disable_functions = pcntl_exec,exec,passthru,proc_open,shell_exec,system,popen/g' >> "$PHP_INI_DIR/php.ini"
@@ -37,4 +38,4 @@ COPY template template
 COPY demos demos
 
 ADD demos/db.example.php demos/db.php
-RUN sed -E "s/\('.+'\);/(\$_ENV['DSN']);/g" -i demos/db.php
+RUN sed -E "s/\('.+'\);/(\$_ENV['DSN'] ?? 'sqlite:');/g" -i demos/db.php

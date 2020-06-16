@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/Counter.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 // Demonstrate the use of Virtual Page.
 
 // define virtual page.
-$vp = \atk4\ui\VirtualPage::addTo($layout);
+$vp = \atk4\ui\VirtualPage::addTo($app->layout);
 $vp->cb->urlTrigger = 'in';
 
 // Add content to virtual page.
@@ -38,7 +40,6 @@ $vp = \atk4\ui\VirtualPage::addTo($app); // this page will not be visible unless
 \atk4\ui\Header::addTo($vp, ['Contens of your pop-up here']);
 \atk4\ui\LoremIpsum::addTo($vp, ['size' => 2]);
 
-// Add counter from '_includes/Counter.php'
 Counter::addTo($vp);
 \atk4\ui\View::addTo($vp, ['ui' => 'hidden divider']);
 \atk4\ui\Button::addTo($vp, ['Back', 'icon' => 'left arrow'])->link('virtual.php');

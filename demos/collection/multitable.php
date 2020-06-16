@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 // Re-usable component implementing counter
 $finderClass = get_class(new class() extends \atk4\ui\Columns {
@@ -66,7 +69,7 @@ $finderClass = get_class(new class() extends \atk4\ui\Columns {
     }
 });
 
-$m = new File($db);
+$m = new File($app->db);
 $m->addCondition('parent_folder_id', null);
 $m->setOrder('is_folder desc, name');
 

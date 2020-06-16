@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * A collection of Card set from a model.
  */
@@ -40,7 +42,7 @@ class CardDeck extends View
     /** @var View The view containing Cards. */
     public $cardHolder = [View::class, 'ui' => 'cards'];
 
-    /** @var View|null The paginator view. */
+    /** @var Paginator|null The paginator view. */
     public $paginator = [Paginator::class];
 
     /** @var int The number of cards to be displayed per page. */
@@ -465,7 +467,7 @@ class CardDeck extends View
         $count = $this->model->action('count')->getOne();
         if ($this->paginator) {
             if ($count > 0) {
-                $this->paginator->setTotal(ceil($count / $this->ipp));
+                $this->paginator->setTotal((int) ceil($count / $this->ipp));
                 $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
             } else {
                 $this->paginator->destroy();

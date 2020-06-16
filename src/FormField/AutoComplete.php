@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @deprecated Backward compatibility.
  * This class may be remove in future release.

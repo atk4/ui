@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/country_actions.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
-/*
- * Demo for Model action in Grid
- * Action definition for Country model is located in country_actions.php
- */
+// Demo for Model action in Grid
+
+$country = new CountryLock($app->db);
+$country->tryLoadAny();
+DemoActionsUtil::setupDemoActions($country);
 
 \atk4\ui\Button::addTo($app, ['Actions from jsEvent', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['jsactions2']);

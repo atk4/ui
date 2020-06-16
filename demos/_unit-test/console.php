@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
 use atk4\ui\jsSSE;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 $sse = jsSSE::addTo($app);
 $sse->urlTrigger = 'console_test';

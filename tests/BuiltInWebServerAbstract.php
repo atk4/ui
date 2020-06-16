@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
@@ -68,7 +70,7 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         // execute the command and start the process
         self::$process->start();
 
-        usleep(0.25e6);
+        usleep(250 * 1000);
     }
 
     public static function tearDownAfterClass(): void

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
 use atk4\ui\Button;
@@ -7,7 +9,8 @@ use atk4\ui\Callback;
 use atk4\ui\jsReload;
 use atk4\ui\View;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 $v = View::addTo($app, ['ui' => 'segment']);
 $v->set('Test');

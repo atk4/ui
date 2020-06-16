@@ -49,7 +49,7 @@ before_script:
     - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
     #- "wget --no-verbose http://selenium-release.storage.googleapis.com/3.0-beta3/selenium-server-standalone-3.0.0-beta3.jar -O selenium-server-standalone.jar && sudo mv selenium-server-standalone.jar /usr/local/bin"
     #- "wget --no-verbose http://chromedriver.storage.googleapis.com/2.23/chromedriver_linux64.zip -O chromedriver.zip && unzip chromedriver.zip && sudo mv chromedriver /usr/local/bin"
-    #- "java  -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver  -jar /usr/local/bin/selenium-server-standalone.jar &"
+    #- "java -Dwebdriver.chrome.driver=/usr/local/bin/chromedriver -jar /usr/local/bin/selenium-server-standalone.jar &"
     #- sleep 3
     #- sudo whereis google-chrome
 
@@ -62,7 +62,7 @@ before_script:
     - cp demos/db.example.php demos/db.php
 
     - (cd js; npm install --loglevel=error; npm run build)
-    - lessc public/agileui.less public/agileui.css  --clean-css="--s1 --advanced --compatibility=ie8" --source-map
+    - lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
     - composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
 script:
@@ -72,7 +72,7 @@ script:
     - vendor/bin/behat --config behat-travis.yml || exit -1
     #- killall -s SIGINT --wait php # flush coverage files for Behat
     #- ls -l coverage/ | wc -l
-    #- vendor/bin/phpcov  merge coverage/ --clover clover.xml
+    #- vendor/bin/phpcov merge coverage/ --clover clover.xml
 
 cache:
   directories:

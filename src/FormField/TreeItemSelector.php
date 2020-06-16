@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Display items in a hierarchical (tree) view structure.
  *

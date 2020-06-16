@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * An Admin layout with enhance left menu.
  * This layout use jQuery plugin atk-sidenav.plugin.js

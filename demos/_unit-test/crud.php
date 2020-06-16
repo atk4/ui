@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * For Behat testing only.
  * Will test for Add, Edit and delete button using quicksearch.
@@ -7,9 +9,10 @@
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
-$m = new CountryLock($db);
+$m = new CountryLock($app->db);
 $edit = $m->getAction('edit');
 $edit->ui = ['execButton' => [\atk4\ui\Button::class, 'EditMe', 'blue']];
 $edit->description = 'edit';

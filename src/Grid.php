@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 use atk4\core\HookTrait;
@@ -343,7 +345,7 @@ class Grid extends View
 
         $this->quickSearch = jsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
 
-        $q = trim($this->stickyGet('_q'));
+        $q = trim($this->stickyGet('_q') ?? '');
         if ($q !== '') {
             $cond = [];
             foreach ($fields as $field) {
@@ -658,7 +660,7 @@ class Grid extends View
      */
     private function setModelLimitFromPaginator()
     {
-        $this->paginator->setTotal(ceil($this->model->action('count')->getOne() / $this->ipp));
+        $this->paginator->setTotal((int) ceil($this->model->action('count')->getOne() / $this->ipp));
         $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
     }
 

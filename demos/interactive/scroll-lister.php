@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Button::addTo($app, ['Dynamic scroll in Table', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['scroll-table']);
@@ -21,7 +24,7 @@ $l->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) 
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 
-$m = $l->setModel(new Country($db));
+$m = $l->setModel(new Country($app->db));
 //$m->addCondition('name','like','A%');
 
 // add dynamic scrolling.

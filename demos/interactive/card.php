@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Button::addTo($app, ['Card Model', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['card-action']);
@@ -45,7 +48,7 @@ $deck = \atk4\ui\View::addTo($app, ['ui' => 'cards']);
 
 $card_s = \atk4\ui\Card::addTo($deck, ['useTable' => true]);
 $card_s->addContent(new \atk4\ui\Header(['Project Info']));
-$stats = (new Stat($db))->tryLoadAny();
+$stats = (new Stat($app->db))->tryLoadAny();
 
 $card_s->setModel($stats, ['project_name', 'project_code', 'client_name', 'start_date']);
 
@@ -53,7 +56,7 @@ $btn = $card_s->addButton(new \atk4\ui\Button(['Email Client']));
 
 $card_s = \atk4\ui\Card::addTo($deck, ['useLabel' => true]);
 $card_s->addContent(new \atk4\ui\Header(['Project Info']));
-$stats = (new Stat($db))->tryLoadAny();
+$stats = (new Stat($app->db))->tryLoadAny();
 
 $card_s->setModel($stats, ['project_name', 'project_code', 'client_name', 'start_date']);
 

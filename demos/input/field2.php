@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
 /**
  * Demonstrates how to use fields with form.
  */
-require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/demo-lookup.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Header::addTo($app, ['Disabled and read only form fields (normal / readonly / disabled)']);
 
@@ -66,24 +68,24 @@ $field->onUpload($onUpload);
 
 $g = $f->addGroup('Lookup');
 
-$m = new Country($db);
+$m = new Country($app->db);
 
 $g->addField('Lookup_norm', [
-    $demoLookup,  // Special Lookup field that can't save data.
-    'model' => new CountryLock($db),
+    new DemoLookup(),
+    'model' => new CountryLock($app->db),
     'plus' => true,
 ])->set($m->loadAny()->id);
 
 $g->addField('Lookup_read', [
     \atk4\ui\FormField\Lookup::class,
-    'model' => new CountryLock($db),
+    'model' => new CountryLock($app->db),
     'plus' => true,
     'readonly' => true,
 ])->set($m->loadAny()->id);
 
 $g->addField('Lookup_disb', [
     \atk4\ui\FormField\Lookup::class,
-    'model' => new CountryLock($db),
+    'model' => new CountryLock($app->db),
     'plus' => true,
     'disabled' => true,
 ])->set($m->loadAny()->id);

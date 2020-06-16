@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui;
 
 use atk4\ui\TableColumn\FilterPopup;
@@ -552,7 +554,7 @@ class Table extends Lister
                 if (!is_array($columns)) {
                     $columns = [$columns];
                 }
-                $field = $this->model->hasField($name) ? $this->model->getField($name) : null;
+                $field = !is_int($name) && $this->model->hasField($name) ? $this->model->getField($name) : null;
                 foreach ($columns as $column) {
                     if (!method_exists($column, 'getHTMLTags')) {
                         continue;

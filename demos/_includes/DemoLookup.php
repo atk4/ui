@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
 /**
  * Setup file - do not test.
  * Lookup that can not saved data.
  */
-$demoLookupClass = get_class(new class() extends \atk4\ui\FormField\Lookup {
+class DemoLookup extends \atk4\ui\FormField\Lookup
+{
     /**
      * Add button for new record.
      */
@@ -65,6 +68,4 @@ $demoLookupClass = get_class(new class() extends \atk4\ui\FormField\Lookup {
 
         $this->action->js('click', new \atk4\ui\jsModal($caption, $vp));
     }
-});
-
-$demoLookup = new $demoLookupClass();
+}

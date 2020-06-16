@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/Demo.php';
-require_once __DIR__ . '/../_includes/PromotionText.php';
-require_once __DIR__ . '/../_includes/AtkDemoInvoice.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 $wizard = \atk4\ui\Wizard::addTo($app);
 
@@ -126,7 +126,7 @@ EOF
     Demo::addTo($page)->setCode(
         <<<'CODE'
 /* Showing Class definition.
-class AtkDemoInvoice extends \atk4\data\Model {
+class DemoInvoice extends \atk4\data\Model {
     public $title_field = 'reference';
     function init(): void {
         parent::init();
@@ -138,11 +138,14 @@ class AtkDemoInvoice extends \atk4\data\Model {
 */
 
 session_start();
-$session = new \atk4\data\Persistence\Array_($_SESSION['x']);
 
-$form = \atk4\ui\Form::addTo($app);
-$form->setModel(new AtkDemoInvoice($session))
-    ->tryLoad(1);
+$model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
+$model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($m) {
+    $_SESSION['x'][$m->id] = $m->get();
+});
+
+\atk4\ui\Form::addTo($app)
+    ->setModel($model)->tryLoad(1);
 
 \atk4\ui\View::addTo($app, ['ui'=>'divider']);
 \atk4\ui\Button::addTo($app, ['Refresh', 'icon'=>'refresh'])
@@ -185,9 +188,12 @@ EOF
     Demo::addTo($page)->setCode(
         <<<'CODE'
 session_start();
-$session = new \atk4\data\Persistence\Array_($_SESSION['x']);
 
-$model = new AtkDemoInvoice($session);
+$model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
+$model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($m) {
+    $_SESSION['x'][$m->id] = $m->get();
+});
+
 $model->tryLoad(1);
 \atk4\ui\Card::addTo($app)->setModel($model, ['date']);
 

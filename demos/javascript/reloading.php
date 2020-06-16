@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/Counter.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 // Test 1 - Basic reloading
 \atk4\ui\Header::addTo($app, ['Button reloading segment']);
@@ -27,7 +29,7 @@ $b3->js('click', new \atk4\ui\jsReload($b4));
 \atk4\ui\Header::addTo($app, ['Make sure nested JS bindings are applied too']);
 $seg = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
 
-// Add 3 counters from '_includes/Counter.php'
+// add 3 counters
 Counter::addTo($seg);
 Counter::addTo($seg, '40');
 Counter::addTo($seg, '-20');

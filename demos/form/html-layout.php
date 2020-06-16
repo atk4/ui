@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\demo;
 
 use atk4\ui\Form;
@@ -10,8 +12,8 @@ use atk4\ui\Header;
 use atk4\ui\Tabs;
 use atk4\ui\View;
 
-require_once __DIR__ . '/../atk-init.php';
-require_once __DIR__ . '/../_includes/flyers-form-demo.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Display form using Html template', 'subHeader' => 'Fully control how to display fields.']);
 
@@ -19,9 +21,8 @@ $tabs = Tabs::addTo($app);
 
 $tab = $tabs->addTab('Layout using field name');
 
-$f = FlyersForm::addTo($tab, ['db' => $db, 'layout' => [
-    Generic::class, ['defaultTemplate' => __DIR__ . '/templates/flyers-form-layout.html'],
-],
+$f = FlyersForm::addTo($tab, [
+    'layout' => [Generic::class, ['defaultTemplate' => __DIR__ . '/templates/flyers-form-layout.html']],
 ]);
 
 ////////////////////////////////////////
@@ -54,7 +55,7 @@ $form->getField('last_name')->hint = 'Please enter your last name.';
 $tab = $tabs->addTab('Custom layout class');
 
 $form = Form::addTo($tab, ['layout' => [Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);
-$form->setModel(new \atk4\ui\demo\CountryLock($db))->loadAny();
+$form->setModel(new \atk4\ui\demo\CountryLock($app->db))->loadAny();
 
 $form->onSubmit(function ($f) {
     return new \atk4\ui\jsToast('Saving is disabled');
