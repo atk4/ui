@@ -40,7 +40,7 @@ class App
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
-        'atk' => 'https://ui.agiletoolkit.org/public', // develop branch
+        'atk' => 'https://cdn.jsdelivr.net/gh/atk4/ui@2.1.0/public',
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
         'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.5',
