@@ -464,7 +464,7 @@ class ScopeBuilder extends Generic
                 $query = $children ? [
                     'type' => 'query-builder-group',
                     'query' => [
-                        'logicalOperator' => $scope->all() ? 'all' : 'any',
+                        'logicalOperator' => $scope->isAnd() ? 'all' : 'any',
                         'children' => $children,
                     ],
                 ] : [];
