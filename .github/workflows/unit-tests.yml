@@ -74,12 +74,8 @@ jobs:
       - name: Build JS files (only for Behat)
         if: matrix.type == 'Behat'
         run: |
-          # atk js
           (cd js && npm run build)
-
-          # release command:
-          # lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
-          lessc public/agileui.less public/agileui.css
+          lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
 
       - name: Init
         run: |
