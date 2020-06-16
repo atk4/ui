@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php'; // default lister
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php'; // default lister
 
 \atk4\ui\Header::addTo($app)->set('Default lister');
 \atk4\ui\Lister::addTo($app, ['defaultTemplate' => 'lister.html'])->setSource([
@@ -24,7 +25,7 @@ $lister = \atk4\ui\Lister::addTo($view, [], ['List']);
 $lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
-$lister->setModel(new Country($db))
+$lister->setModel(new Country($app->db))
     ->setLimit(20);
 
 \atk4\ui\View::addTo($app, ['ui' => 'clearing divider']);
@@ -44,7 +45,7 @@ $lister = \atk4\ui\Lister::addTo($view, [], ['List']);
 $lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
-$lister->setModel(new Country($db))
+$lister->setModel(new Country($app->db))
     ->addCondition('id', -1); // no such records so model will be empty
 
 \atk4\ui\View::addTo($app, ['ui' => 'clearing divider']);
@@ -62,7 +63,7 @@ $l->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) 
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 
-$m = $l->setModel(new Country($db))->setLimit(12);
+$m = $l->setModel(new Country($app->db))->setLimit(12);
 
 $ipp = \atk4\ui\ItemsPerPageSelector::addTo($v, ['label' => 'Select how many countries:', 'pageLengthItems' => [12, 24, 36]], ['Content']);
 

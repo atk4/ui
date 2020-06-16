@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Button::addTo($app, ['Card Model', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['card-action']);
@@ -12,7 +13,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 \atk4\ui\Header::addTo($app, ['Card Deck', 'size' => 1, 'subHeader' => 'Card can be display in a deck, also using model action.']);
 
-$countries = new Country($db);
+$countries = new Country($app->db);
 $countries->addCalculatedField('Cost', function ($m) {
     return '$ ' . number_format(random_int(500, 1500));
 });
@@ -39,7 +40,7 @@ $info_action = $countries->addAction('request_info', [
 
 $info_action->args = [
     'email' => ['type' => 'email', 'required' => true, 'caption' => 'Please let us know your email address:'],
-    'country' => ['required' => true, 'ui' => ['form' => [\atk4\ui\FormField\Lookup::class, 'model' => new Country($db), 'placeholder' => 'Please select a country.']]],
+    'country' => ['required' => true, 'ui' => ['form' => [\atk4\ui\FormField\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
 ];
 
 $deck = \atk4\ui\CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);

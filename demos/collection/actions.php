@@ -6,7 +6,8 @@ namespace atk4\ui\demo;
 
 use atk4\ui\Button;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Button::addTo($app, ['js Event Executor', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['jsactions']);
@@ -16,7 +17,7 @@ require_once __DIR__ . '/../atk-init.php';
 
 // Actions can be added easily to the model
 
-$files = new FileLock($db);
+$files = new FileLock($app->db);
 
 // This action must appear on top of the CRUD
 $action = $files->addAction(

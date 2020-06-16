@@ -7,7 +7,8 @@ namespace atk4\ui\demo;
 /**
  * Demonstrates how to use tabs.
  */
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 $p = \atk4\ui\ProgressBar::addTo($app, [20]);
 

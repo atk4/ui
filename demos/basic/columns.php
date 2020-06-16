@@ -7,7 +7,8 @@ namespace atk4\ui\demo;
 /**
  * Testing Columns.
  */
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 // some custom style needed for our "highlight" to work. You don't need this on
 // your page and it's bad style to include CSS like this!

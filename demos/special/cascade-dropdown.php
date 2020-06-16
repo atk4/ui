@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 // This demo require spefic Database setup.
 // MODEL
@@ -53,7 +54,7 @@ class Product extends \atk4\data\Model
 
 $f = \atk4\ui\Form::addTo($app);
 
-$f->addField('category_id', [\atk4\ui\FormField\DropDown::class, 'model' => new Category($db)]);
+$f->addField('category_id', [\atk4\ui\FormField\DropDown::class, 'model' => new Category($app->db)]);
 $f->addField('sub_category_id', [\atk4\ui\FormField\DropDownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
 $f->addField('product_id', [\atk4\ui\FormField\DropDownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
 

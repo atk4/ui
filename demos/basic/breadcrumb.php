@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-require_once __DIR__ . '/../atk-init.php';
+/** @var \atk4\ui\App $app */
+require_once __DIR__ . '/../init-app.php';
 
 /**
  * Demonstrates how to use BreadCrumb.
@@ -17,7 +18,7 @@ $crumb->addCrumb('BreadCrumb Demo', ['breadcrumb']);
 
 $crumb->addCrumb('Countries', []);
 
-$m = new CountryLock($db);
+$m = new CountryLock($app->db);
 $m->setLimit(15);
 
 if ($id = $app->stickyGet('country_id')) {
