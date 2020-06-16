@@ -8,7 +8,7 @@ $srcFile = __DIR__ . '/dump.sql';
 $destFile = __DIR__ . '/db.sqlite';
 
 if (file_exists($destFile)) {
-    unset($destFile);
+    unlink($destFile);
 }
 $db = new \SQLite3($destFile);
 
@@ -21,7 +21,7 @@ foreach (preg_split('~;\s*(\n\s*|$)~', file_get_contents($srcFile)) as $query) {
             $row = preg_replace('~ ENUM\((.+?)\)~is', ' TEXT', $row);
 
             if (!preg_match('~^(PRIMARY )?KEY ~is', $row)) {
-                $createRows[] = $row;
+                $createRows[] = $row . ' COLLATE NOCASE';
             }
         }
 
