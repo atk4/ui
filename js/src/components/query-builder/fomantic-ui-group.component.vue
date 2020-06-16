@@ -26,7 +26,7 @@
                                             :text="labels.addRule"
                                             button
                                             pointing
-                                            class="mini"
+                                            class="mini basic"
                                             :options="dropdownRules"
                                     >
                                         <sui-dropdown-menu>
@@ -35,7 +35,7 @@
                                     </sui-dropdown>
                                     <button v-if="depth < maxDepth"
                                             type="button"
-                                            class="ui mini button"
+                                            class="ui mini basic button"
                                             @click="addGroup"
                                     >{{ labels.addGroup }}</button>
                                 </div>
