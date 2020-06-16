@@ -2,7 +2,7 @@
     <div class="vqb-group ui fluid card" :class="'depth-' + depth.toString()">
         <div class="vbq-group-heading content" :class="'depth-' + depth.toString()">
             <div class="ui grid">
-                <div class="six wide column">
+                <div class="fourteen wide column">
                     <div class="ui horizontal list">
                         <div class="item">
                             <h4 class="ui inline">{{ labels.matchType }}</h4>
@@ -19,27 +19,27 @@
                                 >{{ label.label }}</option>
                             </select>
                         </div>
-                    </div>
-                </div>
-                <div class="eight wide right aligned column">
-                    <div class="rule-actions ">
-                        <div class="ui buttons">
-                            <sui-dropdown
-                                    :text="labels.addRule"
-                                    button
-                                    pointing
-                                    class="mini"
-                                    :options="dropdownRules"
-                            >
-                                <sui-dropdown-menu>
-                                    <sui-dropdown-item @click="addNewRule(rule.id)" v-for="rule in rules" :key="rule.id" :value="rule">{{ rule.label }}</sui-dropdown-item>
-                                </sui-dropdown-menu>
-                            </sui-dropdown>
-                            <button v-if="depth < maxDepth"
-                                    type="button"
-                                    class="ui mini button"
-                                    @click="addGroup"
-                            >{{ labels.addGroup }}</button>
+                        <div class="item">
+                            <div class="rule-actions ">
+                                <div class="ui buttons">
+                                    <sui-dropdown
+                                            :text="labels.addRule"
+                                            button
+                                            pointing
+                                            class="mini"
+                                            :options="dropdownRules"
+                                    >
+                                        <sui-dropdown-menu>
+                                            <sui-dropdown-item @click="addNewRule(rule.id)" v-for="rule in rules" :key="rule.id" :value="rule">{{ rule.label }}</sui-dropdown-item>
+                                        </sui-dropdown-menu>
+                                    </sui-dropdown>
+                                    <button v-if="depth < maxDepth"
+                                            type="button"
+                                            class="ui mini button"
+                                            @click="addGroup"
+                                    >{{ labels.addGroup }}</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
