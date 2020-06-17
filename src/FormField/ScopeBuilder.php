@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\ui\FormField;
 
 use atk4\data\Field;
@@ -12,7 +14,6 @@ use atk4\ui\Template;
 
 class ScopeBuilder extends Generic
 {
-
     /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
@@ -73,7 +74,7 @@ class ScopeBuilder extends Generic
 
     /**
      * Set Labels for Vue-Query-Builder
-     * see https://dabernathy89.github.io/vue-query-builder/configuration.html#labels
+     * see https://dabernathy89.github.io/vue-query-builder/configuration.html#labels.
      *
      * @var array
      */

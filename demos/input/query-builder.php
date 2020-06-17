@@ -16,7 +16,7 @@ $query = [
                 'rule' => 'date',
                 'operator' => '=',
                 'operand' => 'Date',
-                'value' => '2020-06-18'
+                'value' => '2020-06-18',
             ],
         ],
         [
@@ -25,10 +25,10 @@ $query = [
                 'rule' => 'vegetable',
                 'operator' => 'contains',
                 'operand' => 'Vegetable',
-                'value' => null
+                'value' => null,
             ],
-        ]
-    ]
+        ],
+    ],
 ];
 
 $rules = [
@@ -45,8 +45,8 @@ $rules = [
         'label' => 'Date',
         'operators' => ['=', '<', '>'],
         'default' => null,
-//        'format' => "YYYY-MMM-DD", // extra component option
-//        'locale' => 'fr-FR'        // extra component option
+        //        'format' => "YYYY-MMM-DD", // extra component option
+        //        'locale' => 'fr-FR'        // extra component option
     ],
     [
         'type' => 'numeric',
@@ -70,6 +70,6 @@ $qb = $f->addField('qb', [\atk4\ui\FormField\ScopeBuilder::class]);
 $qb->rules = $rules;
 $qb->query = $query;
 
-$f->onSubmit(function($f) {
-   echo  '<pre>' . json_encode($f->model->get('qb'), JSON_PRETTY_PRINT) . '</pre>';
+$f->onSubmit(function ($f) {
+    echo  '<pre>' . json_encode($f->model->get('qb'), JSON_PRETTY_PRINT) . '</pre>';
 });

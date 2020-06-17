@@ -30,7 +30,6 @@ install:
 
 before_install:
     - npm install -g npm
-    - npm -v
     - npm install -g less less-plugin-clean-css
 
 before_script:
@@ -55,7 +54,7 @@ before_script:
 
     - php demos/_demo-data/create-sqlite-db.php
 
-    - (cd js; npm clean install --loglevel=error; npm run build)
+    - (cd js; npm install --loglevel=error; npm run build)
     - lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
     - composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
