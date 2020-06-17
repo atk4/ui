@@ -24,10 +24,8 @@
                                 <div class="ui buttons">
                                     <sui-dropdown
                                             :text="labels.addRule"
-                                            button
-                                            pointing
-                                            class="mini basic"
-                                            :options="dropdownRules"
+                                            class="ui mini basic button"
+                                            selection
                                     >
                                         <sui-dropdown-menu>
                                             <sui-dropdown-item @click="addNewRule(rule.id)" v-for="rule in rules" :key="rule.id" :value="rule">{{ rule.label }}</sui-dropdown-item>

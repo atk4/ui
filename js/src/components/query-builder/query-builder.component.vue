@@ -61,7 +61,7 @@
           addGroup: "Add Group",
           removeGroup: "small icon times",
           textInputPlaceholder: "value",
-          spaceRule: "fitted", // can be compact or padded
+          spaceRule: "fitted", // can be fitted, compact or padded
         }, labels);
       },
     }
