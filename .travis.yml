@@ -29,6 +29,7 @@ install:
   - Xvfb :99 -screen 0 1280x1024x16 +extension RANDR > /dev/null 2>&1 &
 
 before_install:
+    - npm install -g npm
     - npm get prefix
     - npm install -g less less-plugin-clean-css uglify-js
 

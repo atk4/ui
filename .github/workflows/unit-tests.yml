@@ -58,7 +58,7 @@ jobs:
       - name: Install JS dependencies (only for Behat)
         if: matrix.type == 'Behat'
         run: |
-          apk add --update npm
+          apk add npm
           npm install --loglevel=error -g less less-plugin-clean-css uglify-js
           (cd js && npm install --loglevel=error)
 
