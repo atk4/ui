@@ -49,7 +49,7 @@
                                 <!-- Radio input -->
                                 <template v-if="isRadio">
                                     <sui-form-fields inline class="atk-qb">
-                                        <div v-for="choice in rule.choices" :key="choice.value">
+                                        <div class="field" v-for="choice in rule.choices" :key="choice.value">
                                             <sui-checkbox :label="choice.label" radio :value="choice.value" v-model="query.value"></sui-checkbox>
                                         </div>
                                     </sui-form-fields>
