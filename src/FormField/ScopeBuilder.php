@@ -68,9 +68,8 @@ class ScopeBuilder extends Generic
      * Definition of VueQueryBuilder rules.
      *
      * @var array
-     *            todo setback to protected after testing
      */
-    public $rules = [];
+    protected $rules = [];
 
     /**
      * Set Labels for Vue-Query-Builder
@@ -84,10 +83,8 @@ class ScopeBuilder extends Generic
      * Default VueQueryBuilder query.
      *
      * @var array
-     *            todo reset to protected after testing
-     *            todo reset to empty after testing
      */
-    public $query = ['logicalOperator' => 'all', 'children' => []];
+    protected $query = [];
 
     protected const OPERATOR_EQUALS = 'equals';
     protected const OPERATOR_DOESNOT_EQUAL = 'does not equal';
@@ -224,9 +221,7 @@ class ScopeBuilder extends Generic
         if ($this->form) {
             $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form, &$post) {
                 $key = $this->field->short_name;
-                // todo only for testing
-                $post[$key] = json_decode($post[$key], true);
-//                $post[$key] = $this->queryToScope(json_decode($post[$key], true));
+                $post[$key] = $this->queryToScope(json_decode($post[$key], true));
             });
         }
     }
@@ -250,7 +245,7 @@ class ScopeBuilder extends Generic
             $this->addReferenceRules($field);
         }
 
-        $this->query = $this->scopeToQuery($model->scope())['query'] ?? [];
+        $this->query = $this->scopeToQuery($model->scope())['query'];
 
         return $model;
     }
@@ -265,7 +260,7 @@ class ScopeBuilder extends Generic
         $this->rules[] = self::getRule($type, array_merge([
             'id' => $field->short_name,
             'label' => $field->getCaption(),
-            'options' => $this->options[strtolower($type)] ?? [],
+            'options' => $this->options[strtolower((string) $type)] ?? [],
         ], $field->ui['scopebuilder'] ?? []), $field);
 
         return $this;
@@ -301,7 +296,7 @@ class ScopeBuilder extends Generic
 
     protected static function getRule($type, array $defaults = [], Field $field = null): array
     {
-        $rule = self::$ruleTypes[strtolower($type)] ?? self::$ruleTypes['default'];
+        $rule = self::$ruleTypes[strtolower((string) $type)] ?? self::$ruleTypes['default'];
 
         // when $rule is an alias
         if (is_string($rule)) {
@@ -343,7 +338,7 @@ class ScopeBuilder extends Generic
             }
 
             foreach ($model as $item) {
-                $choices[$item[$model->id_field]] = $item[$model->title_field];
+                $choices[$item->get($model->id_field)] = $item->get($model->title_field);
             }
         }
 
@@ -392,7 +387,7 @@ class ScopeBuilder extends Generic
 
         switch ($type) {
             case 'query-builder-group':
-                $components = array_map([static::class, 'queryToScope'], $query['children']);
+                $components = array_map([static::class, 'queryToScope'], (array) $query['children']);
                 $junction = $query['logicalOperator'] === 'all' ? Scope::AND : Scope::OR;
 
                 $scope = Scope::create($components, $junction);
@@ -417,7 +412,7 @@ class ScopeBuilder extends Generic
     public static function queryToCondition(array $query): Condition
     {
         $key = $query['rule'] ?? null;
-        $operator = $query['operator'] ?? null;
+        $operator = (string) ($query['operator'] ?? null);
         $value = $query['value'] ?? null;
 
         switch ($operator) {
@@ -443,7 +438,7 @@ class ScopeBuilder extends Generic
             break;
             case self::OPERATOR_IN:
             case self::OPERATOR_NOT_IN:
-                $value = explode(self::detectDelimiter($value), $value);
+                $value = explode(self::detectDelimiter($value), (string) $value);
 
                 break;
             default:
@@ -476,13 +471,13 @@ class ScopeBuilder extends Generic
                     $children[] = self::scopeToQuery($component);
                 }
 
-                $query = $children ? [
+                $query = [
                     'type' => 'query-builder-group',
                     'query' => [
                         'logicalOperator' => $scope->isAnd() ? 'all' : 'any',
                         'children' => $children,
                     ],
-                ] : [];
+                ];
 
             break;
         }
@@ -558,7 +553,7 @@ class ScopeBuilder extends Generic
     {
         $matches = [];
         foreach (self::$listDelimiters as $delimiter) {
-            $matches[$delimiter] = substr_count($value, $delimiter);
+            $matches[$delimiter] = substr_count((string) $value, $delimiter);
         }
 
         $max = array_keys($matches, max($matches), true);
