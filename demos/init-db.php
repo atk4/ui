@@ -190,12 +190,14 @@ class File extends \atk4\data\Model
             }
 
             if ($fileinfo->getFilename() === 'src' || $fileinfo->getFilename() === 'demos' || $isSub) {
+                /* Disabling saving file in db
                 $this->unload();
                 $this->save([
                     'name' => $fileinfo->getFilename(),
                     'is_folder' => $fileinfo->isDir(),
                     'type' => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
                 ]);
+                */
 
                 if ($fileinfo->isDir()) {
                     $this->ref('SubFolder')->importFromFilesystem($path . '/' . $fileinfo->getFilename(), true);
