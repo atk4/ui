@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace atk4\ui\tests;
 
-use atk4\core\AtkPhpunit;
 use GuzzleHttp\Client;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Process\Process;
 
-abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
+/**
+ * Same as DemosTest, but using native HTTP to check if output and shutdown handlers work correctly.
+ *
+ * @group demosHttp
+ */
+class DemosHttpTest extends DemosTest
 {
-    protected static $process;
-    private static $processSessionDir;
-
-    protected static $host = '127.0.0.1';
-    protected static $port = 9687;
+    private static $_process;
+    private static $_processSessionDir;
 
     /** @var bool set the app->call_exit in demo */
     protected static $app_def_call_exit = true;
@@ -23,7 +23,25 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
     /** @var bool set the app->caught_exception in demo */
     protected static $app_def_caught_exception = true;
 
+    protected static $host = '127.0.0.1';
+    protected static $port = 9687;
+
     protected static $webserver_root = 'demos/';
+
+    public static function tearDownAfterClass(): void
+    {
+        if (file_exists($file = self::getPackagePath('demos', 'coverage.php'))) {
+            unlink($file);
+        }
+
+        // cleanup session storage
+        foreach (scandir(self::$_processSessionDir) as $f) {
+            if (!in_array($f, ['.', '..'], true)) {
+                unlink(self::$_processSessionDir . '/' . $f);
+            }
+        }
+        rmdir(self::$_processSessionDir);
+    }
 
     public static function setUpBeforeClass(): void
     {
@@ -48,54 +66,35 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         }
 
         // setup session storage
-        self::$processSessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
-        if (!file_exists(self::$processSessionDir)) {
-            mkdir(self::$processSessionDir);
+        self::$_processSessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
+        if (!file_exists(self::$_processSessionDir)) {
+            mkdir(self::$_processSessionDir);
         }
 
         $cmdArgs = [
             '-S', static::$host . ':' . static::$port,
             '-t', self::getPackagePath(),
-            '-d', 'session.save_path=' . self::$processSessionDir,
+            '-d', 'session.save_path=' . self::$_processSessionDir,
         ];
         if (!empty(ini_get('open_basedir'))) {
             $cmdArgs[] = '-d';
             $cmdArgs[] = 'open_basedir=' . ini_get('open_basedir');
         }
-        self::$process = Process::fromShellCommandline('php  ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
+        self::$_process = Process::fromShellCommandline('php  ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
 
         // disabling the output, otherwise the process might hang after too much output
-        self::$process->disableOutput();
+        self::$_process->disableOutput();
 
         // execute the command and start the process
-        self::$process->start();
+        self::$_process->start();
 
         usleep(250 * 1000);
     }
 
-    public static function tearDownAfterClass(): void
-    {
-        if (file_exists($file = self::getPackagePath('demos', 'coverage.php'))) {
-            unlink($file);
-        }
-
-        // cleanup session storage
-        foreach (scandir(self::$processSessionDir) as $f) {
-            if (!in_array($f, ['.', '..'], true)) {
-                unlink(self::$processSessionDir . '/' . $f);
-            }
-        }
-        rmdir(self::$processSessionDir);
-    }
-
     /**
-     * Generates absolute file or directory path based on package root directory
-     * Returns absolute path to package root durectory if no arguments.
-     *
-     * @param string $directory
-     * @param string $_
+     * TODO remove this or replace with better impl.
      */
-    private static function getPackagePath($directory = null, $_ = null): string
+    protected static function getPackagePath($directory = null, $_ = null): string
     {
         $route = func_get_args();
         $baseDir = realpath(__DIR__ . \DIRECTORY_SEPARATOR . '..');
@@ -104,30 +103,14 @@ abstract class BuiltInWebServerAbstract extends AtkPhpunit\TestCase
         return implode(\DIRECTORY_SEPARATOR, $route);
     }
 
-    private function getClient(): Client
+    protected function getClient(): Client
     {
         // Creating a Guzzle Client with the base_uri, so we can use a relative
         // path for the requests.
         return new Client(['base_uri' => 'http://localhost:' . self::$port]);
     }
 
-    protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
-    {
-        try {
-            return $this->getClient()->request(isset($options['form_params']) !== null ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
-        } catch (\GuzzleHttp\Exception\ServerException $ex) {
-            $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
-                public static function getResponseBodySummary(ResponseInterface $response)
-                {
-                    return $response->getBody()->getContents();
-                }
-            };
-
-            throw $exFactoryWithFullBody->create($ex->getRequest(), $ex->getResponse());
-        }
-    }
-
-    private function getPathWithAppVars($path)
+    protected function getPathWithAppVars($path)
     {
         $path .= strpos($path, '?') === false ? '?' : '&';
         $path .= 'APP_CALL_EXIT=' . ((int) static::$app_def_call_exit) . '&APP_CATCH_EXCEPTIONS=' . ((int) static::$app_def_caught_exception);

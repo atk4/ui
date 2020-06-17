@@ -76,11 +76,12 @@ jobs:
       - name: "Run tests: Phpunit (only for Phpunit)"
         if: matrix.type == 'Phpunit'
         run: |
+          vendor/bin/phpunit --no-coverage -v
           if [ -n "$LOG_COVERAGE" ]; then
-            vendor/bin/phpunit --coverage-text -v
+            vendor/bin/phpunit --group demosHttp --coverage-text -v
             ls -l coverage | wc -l && mv coverage/* build/logs
           else
-            vendor/bin/phpunit --no-coverage -v
+            vendor/bin/phpunit --group demosHttp --no-coverage -v
           fi
 
 #      - name: "Run tests: Behat (only for Behat)"

@@ -4,66 +4,76 @@ declare(strict_types=1);
 
 namespace atk4\ui\tests;
 
+use atk4\core\AtkPhpunit;
+use Psr\Http\Message\ResponseInterface;
+
 /**
- * Making sure demo pages don't throw exceptions and coverage is
- * handled.
+ * @group debugdebug
  */
-class DemoCallExitTest extends BuiltInWebServerAbstract
+abstract class DemosTest extends AtkPhpunit\TestCase
 {
-    private $regexHTML = '/^..DOCTYPE/';
-    private $regexJSON = '
-  /
-  (?(DEFINE)
-     (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
-     (?<boolean>   true | false | null )
-     (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt\/] | \\\\ u [0-9a-f]{4} )* " )
-     (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
-     (?<pair>      \s* (?&string) \s* : (?&json)  )
-     (?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
-     (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
-  )
-  \A (?&json) \Z
-  /six
-';
+    /** @var string */
+    protected $demosDir = __DIR__ . '/../demos';
 
-    private $regexSSE = '/^[data|id|event].*$/m';
-
-    public function casesDemoFilesdataProvider()
+    protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
     {
-        // set demo directory that need to be scanned.
-        $directories = [
-            'basic',
-            'collection',
-            'form',
-            'input',
-            'interactive',
-            'javascript',
-            'layout',
-            'others',
-        ];
+        try {
+            return $this->getClient()->request(isset($options['form_params']) !== null ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
+        } catch (\GuzzleHttp\Exception\ServerException $ex) {
+            $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
+                public static function getResponseBodySummary(ResponseInterface $response)
+                {
+                    return $response->getBody()->getContents();
+                }
+            };
 
-        // File that need to be exclude.
-        $excludes = [
-            'layouts_nolayout.php',
-            'layouts_error.php',
-        ];
+            throw $exFactoryWithFullBody->create($ex->getRequest(), $ex->getResponse());
+        }
+    }
+
+    protected function getPathWithAppVars($path)
+    {
+        return self::$webserver_root . $path; // TODO do we need a basepatch then?
+    }
+
+    protected $regexHtml = '~^..DOCTYPE~';
+    protected $regexJson = '~
+        (?(DEFINE)
+           (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
+           (?<boolean>   true | false | null )
+           (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt/] | \\\\ u [0-9a-f]{4} )* " )
+           (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
+           (?<pair>      \s* (?&string) \s* : (?&json)  )
+           (?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
+           (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
+        )
+        \A (?&json) \Z
+        ~six';
+    protected $regexSse = '~^(id|event|data).*$~m';
+
+    /**
+     * Test all demos/files.
+     */
+    public function casesDemoFilesdataProvider(): array
+    {
+        $excludeDirs = ['_demo-data', '_includes', '_unit-test', 'special'];
+        $excludeFiles = ['layout/layouts_error.php'];
 
         $files = [];
-        $base_path = dirname(__DIR__) . '/demos';
-        foreach ($directories as $dir) {
-            $dir_path = $base_path . '/' . $dir;
+        $files[] = ['index.php'];
+        foreach (array_diff(scandir($this->demosDir), ['.', '..'], $excludeDirs) as $dir) {
+            if (!is_dir($this->demosDir . '/' . $dir)) {
+                continue;
+            }
 
-            foreach (scandir($dir_path) as $f) {
-                if (substr($f, -4) !== '.php' || is_dir($f) || in_array($f, $excludes, true)) {
+            foreach (scandir($this->demosDir . '/' . $dir) as $f) {
+                if (substr($f, -4) !== '.php' || in_array($dir . '/' . $f, $excludeFiles, true)) {
                     continue;
                 }
 
                 $files[] = [$dir . '/' . $f];
             }
         }
-
-        // add index.
-        $files[] = ['index.php'];
 
         return $files;
     }
@@ -75,7 +85,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     public function testResponseError()
@@ -92,7 +102,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
         $this->assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     public function casesDemoGETDataProvider()
@@ -116,11 +126,11 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents());
+        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
 
         $response = $this->getResponseFromRequest('interactive/wizard.php?atk_admin_wizard=2&name=Country');
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertMatchesRegularExpression($this->regexHTML, $response->getBody()->getContents());
+        $this->assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
     /**
@@ -130,10 +140,10 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        if (!($this instanceof DemoCallExitExceptionTest)) { // content type is not set when App->call_exit equals to true
+        if (!($this instanceof DemosHttpNoExitTest)) { // content type is not set when App->call_exit equals to true
             $this->assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')), ' Content type error on ' . $uri);
         }
-        $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     /**
@@ -174,7 +184,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
 
             $matches = [];
 
-            preg_match_all('/^(id|event|data).*$/m', $sse_line, $matches);
+            preg_match_all($this->regexSse, $sse_line, $matches);
 
             $format_match_string = implode('', $matches[0] ?? ['error']);
 
@@ -196,7 +206,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
         $files = [];
         $files[] = ['_unit-test/sse.php?see_test=ajax&__atk_callback=1&__atk_sse=1'];
         $files[] = ['_unit-test/console.php?console_test=ajax&__atk_callback=1&__atk_sse=1'];
-        if (!($this instanceof DemoCallExitExceptionTest)) { // ignore content type mismatch when App->call_exit equals to true
+        if (!($this instanceof DemosHttpNoExitTest)) { // ignore content type mismatch when App->call_exit equals to true
             $files[] = ['_unit-test/console_run.php?console_test=ajax&__atk_callback=1&__atk_sse=1'];
             $files[] = ['_unit-test/console_exec.php?console_test=ajax&__atk_callback=1&__atk_sse=1'];
         }
@@ -211,7 +221,7 @@ class DemoCallExitTest extends BuiltInWebServerAbstract
     {
         $response = $this->getResponseFromRequest($uri, ['form_params' => $postData]);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
-        $this->assertMatchesRegularExpression($this->regexJSON, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
+        $this->assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents(), ' RegExp error on ' . $uri);
     }
 
     public function JSONResponsePOSTDataProvider()
