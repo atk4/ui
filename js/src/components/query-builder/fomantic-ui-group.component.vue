@@ -1,5 +1,5 @@
 <template>
-    <div class="vqb-group ui fluid card" :class="'depth-' + depth.toString()">
+    <div class="vqb-group ui fluid card" :class="[labels.spaceRule , 'depth-' + depth.toString()]">
         <div class="vbq-group-heading content" :class="'depth-' + depth.toString()">
             <div class="ui grid">
                 <div class="fourteen wide column">
@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="two wide right aligned column">
-                    <i v-if="depth > 1" style="cursor: pointer" class="icon times" @click="remove"></i>
+                    <i v-if="depth > 1" class="atk-qb-remove" :class="labels.removeGroup" @click="remove"></i>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
     },
     data: function() {
       return {
-        selectedSuiRule: null
+        selectedSuiRule: null,
       };
     },
     methods: {
@@ -103,13 +103,25 @@
     .atk-qb-select, .ui.form select.atk-qb-select {
        padding: 2px 6px 4px 4px;
     }
+    .atk-qb-remove {
+        cursor: pointer;
+        color: rgba(0,0,0,0.6);
+    }
     .vbq-group-heading > .ui.grid > .column:not(.row) {
         padding-bottom: 0.5em;
         padding-top: 0.5em;
     }
-    .vue-query-builder .ui.card {
+    .vue-query-builder .ui.card.compact {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+    .vue-query-builder .ui.card.fitted {
         margin-top: 0em;
         margin-bottom: 0em;
+    }
+    .vue-query-builder .ui.card.padded {
+        margin-top: 1em;
+        margin-bottom: 1em;
     }
     .ui.card > .vbq-group-heading.content {
         background-color: #f3f4f5;

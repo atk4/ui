@@ -41,20 +41,27 @@
       }
     },
     methods: {
+      /**
+       * Return default label and option.
+       *
+       * @param labels
+       * @returns {any}
+       */
       getLabels: function(labels) {
         labels = labels ? labels : {};
 
         return Object.assign({
-          "matchType": "Match Type",
-          "matchTypes": [
-            {"id": "all", "label": "And"},
-            {"id": "any", "label": "Or"}
+          matchType: "Match Type",
+          matchTypes: [
+            {id: "all", label: "And"},
+            {id: "any", label: "Or"}
           ],
-          "addRule": "Add Rule",
-          "removeRule": "&times;",
-          "addGroup": "Add Group",
-          "removeGroup": "&times;",
-          "textInputPlaceholder": "value",
+          addRule: "Add Rule",
+          removeRule: "small icon times",
+          addGroup: "Add Group",
+          removeGroup: "small icon times",
+          textInputPlaceholder: "value",
+          spaceRule: "fitted", // can be compact or padded
         }, labels);
       },
     }

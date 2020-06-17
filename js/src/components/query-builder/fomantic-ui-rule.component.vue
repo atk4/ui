@@ -1,6 +1,6 @@
 <template>
     <!-- eslint-disable vue/no-v-html -->
-    <div class="vqb-rule ui fluid card">
+    <div class="vqb-rule ui fluid card" :class="labels.spaceRule">
         <div class="content">
             <div class="ui grid">
                 <div class="middle aligned row atk-qb">
@@ -59,7 +59,7 @@
                     </div>
                     <div class="right aligned three wide column">
                         <!-- Remove rule button -->
-                        <i class="icon times" @click="remove" style="cursor: pointer"></i>
+                        <i :class="labels.removeRule" @click="remove" class="atk-qb-remove"></i>
                     </div>
                 </div>
             </div>
@@ -97,6 +97,7 @@
       dateValue: {
         get: function() {
           if (this.dateString) {
+            console.log('date', this.dateString);
             return new Date(this.dateString);
           }
           return new Date();
