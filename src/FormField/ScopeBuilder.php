@@ -376,7 +376,7 @@ class ScopeBuilder extends Generic
                     'query' => $this->query,
                     'name' => $this->short_name,
                     'labels' => $this->labels ?? null,
-                    'debug' => false,
+                    'debug' => false, // todo remove once done. Set it to true to see the query live on the page.
                 ],
             ]
         );
