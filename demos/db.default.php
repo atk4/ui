@@ -15,3 +15,4 @@ if (!file_exists($sqliteFile)) {
     throw new \Exception('Sqlite database does not exist, create it first.');
 }
 $db = new \atk4\data\Persistence\SQL('sqlite:' . $sqliteFile);
+unset($sqliteFile);

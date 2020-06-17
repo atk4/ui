@@ -219,7 +219,7 @@ class App
     /**
      * @param bool $for_shutdown if true will not pass in caughtException method
      */
-    public function callExit($for_shutdown = false)
+    public function callExit($for_shutdown = false): void
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
@@ -1000,11 +1000,11 @@ class App
      * Return exception message using HTML block and Semantic UI formatting. It's your job
      * to put it inside boilerplate HTML and output, e.g:.
      *
-     *   $l = new \atk4\ui\App();
-     *   $l->initLayout(\atk4\ui\Layout\Centered::class);
-     *   $l->layout->template->setHTML('Content', $e->getHTML());
-     *   $l->run();
-     *   exit;
+     *   $app = new \atk4\ui\App();
+     *   $app->initLayout(\atk4\ui\Layout\Centered::class);
+     *   $app->layout->template->setHTML('Content', $e->getHTML());
+     *   $app->run();
+     *   $app->callExit(true);
      */
     public function renderExceptionHTML(\Throwable $exception): string
     {
@@ -1089,7 +1089,7 @@ class App
 
         if ($lateErrorStr !== null) {
             echo $lateErrorStr;
-            exit;
+            exit(1);
         }
 
         echo $data;
