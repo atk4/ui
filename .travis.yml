@@ -1,5 +1,8 @@
 language: php
 
+node_js:
+    - "12"
+
 os:
     - linux
 
