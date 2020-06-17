@@ -1,9 +1,9 @@
-####################################################################
-# # build command:                                                 #
-# docker build -f Dockerfile ..                                    #
-# # run command:                                                   #
-# docker run --rm -p 80:80 -it $(docker build -q -f Dockerfile ..) #
-####################################################################
+###################################################
+## # build command:                              ##
+## docker build -f Dockerfile .. -t atk4_ui_demo ##
+## # run command:                                ##
+## docker run --rm -p 80:80 -it atk4_ui_demo     ##
+###################################################
 
 FROM php:apache
 
@@ -37,5 +37,6 @@ COPY src src
 COPY template template
 COPY demos demos
 
-ADD demos/db.example.php demos/db.php
-RUN sed -E "s/\('.+'\);/(\$_ENV['DSN'] ?? 'sqlite:');/g" -i demos/db.php
+COPY demos/db.default.php demos
+RUN php demos/_demo-data/create-sqlite-db.php
+RUN sed -E "s/\(('sqlite:.+')\);/(\$_ENV['DSN'] ?? \\1);/g" -i demos/db.default.php

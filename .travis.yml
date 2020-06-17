@@ -11,7 +11,6 @@ php:
     - '7.4'
 
 services:
-    - mysql
     - xvfb
 
 env:
@@ -25,8 +24,6 @@ addons:
   apt:
     update: true
     chrome: stable
-  hosts:
-    - mysql
 
 install:
   - Xvfb :99 -screen 0 1280x1024x16 +extension RANDR > /dev/null 2>&1 &
@@ -55,11 +52,7 @@ before_script:
 
     - php -S localhost:8888 > /dev/null 2>&1&
 
-    - mysql -e "CREATE DATABASE atk4_test__ui;"
-    - mysql -e "CREATE USER 'atk4_test'@'127.0.0.1' IDENTIFIED BY 'atk4_pass';"
-    - mysql -e "GRANT ALL ON atk4_test__ui.* TO 'atk4_test'@'127.0.0.1';"
-    - mysql -uatk4_test -patk4_pass -h mysql atk4_test__ui < demos/atk4.sql
-    - cp demos/db.example.php demos/db.php
+    - php demos/_demo-data/create-sqlite-db.php
 
     - (cd js; npm install --loglevel=error; npm run build)
     - lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map

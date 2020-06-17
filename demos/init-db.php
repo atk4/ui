@@ -8,7 +8,7 @@ try {
     if (file_exists(__DIR__ . '/db.php')) {
         require_once __DIR__ . '/db.php';
     } else {
-        require_once __DIR__ . '/db.example.php';
+        require_once __DIR__ . '/db.default.php';
     }
 } catch (PDOException $e) {
     // do not pass $e unless you can secure DSN!
@@ -190,12 +190,14 @@ class File extends \atk4\data\Model
             }
 
             if ($fileinfo->getFilename() === 'src' || $fileinfo->getFilename() === 'demos' || $isSub) {
+                /* Disabling saving file in db
                 $this->unload();
                 $this->save([
                     'name' => $fileinfo->getFilename(),
                     'is_folder' => $fileinfo->isDir(),
                     'type' => pathinfo($fileinfo->getFilename(), PATHINFO_EXTENSION),
                 ]);
+                */
 
                 if ($fileinfo->isDir()) {
                     $this->ref('SubFolder')->importFromFilesystem($path . '/' . $fileinfo->getFilename(), true);

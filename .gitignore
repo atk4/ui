@@ -16,6 +16,7 @@ cache
 /public/jquery
 /public/semantic
 /demos/db.php
+/demos/_demo-data/db.sqlite
 /phpunit.xml
 /phpunit-*.xml
 /behat.yml
