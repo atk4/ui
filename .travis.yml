@@ -29,6 +29,7 @@ install:
   - Xvfb :99 -screen 0 1280x1024x16 +extension RANDR > /dev/null 2>&1 &
 
 before_install:
+    - apt-get -y install curl
     - curl -sL https://deb.nodesource.com/setup_12.x  | bash -
     - apt-get -y install nodejs
     - npm install -g npm
