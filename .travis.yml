@@ -7,7 +7,7 @@ dist:
    - xenial
 
 php:
-    # one version fo Behat is enought
+    # one version fo Behat is enough
     - '7.4'
 
 services:
