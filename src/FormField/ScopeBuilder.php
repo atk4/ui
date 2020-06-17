@@ -30,7 +30,7 @@ class ScopeBuilder extends Generic
     /**
      * Max depth of nested conditions allowed.
      * Corresponds to VueQueryBulder maxDepth.
-     * Maximum support by js component is 5.
+     * Maximum support by js component is 10.
      *
      * @var int
      */
@@ -376,6 +376,7 @@ class ScopeBuilder extends Generic
                     'query' => $this->query,
                     'name' => $this->short_name,
                     'labels' => $this->labels ?? null,
+                    'debug' => false,
                 ],
             ]
         );

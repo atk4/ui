@@ -45,8 +45,8 @@ $rules = [
         'label' => 'Date',
         'operators' => ['=', '<', '>'],
         'default' => null,
-        //        'format' => "YYYY-MMM-DD", // extra component option
-        //        'locale' => 'fr-FR'        // extra component option
+        //        'format' => "YYYY-MMM-DD", // extra component option based on v-date-picker date format
+        //        'locale' => 'fr-FR'        // extra component option based on v-date-picker locale
     ],
     [
         'type' => 'numeric',
@@ -58,6 +58,15 @@ $rules = [
         'type' => 'radio',
         'id' => 'fruit',
         'label' => 'Fruit',
+        'choices' => [
+            ['label' => 'Apple', 'value' => 'apple'],
+            ['label' => 'Banana', 'value' => 'banana'],
+        ],
+    ],
+    [
+        'type' => 'checkbox',
+        'id' => 'check',
+        'label' => 'Check',
         'choices' => [
             ['label' => 'Apple', 'value' => 'apple'],
             ['label' => 'Banana', 'value' => 'banana'],

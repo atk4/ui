@@ -6,12 +6,9 @@
                 <query-builder-group v-bind="slotProps" :query.sync="query"/>
             </template>
         </vue-query-builder>
-
-        <div>---</div>
-
-        <p>Generated output:</p>
-
-        <pre>{{ JSON.stringify(this.query, null, 2) }}</pre>
+        <template v-if="debug">
+            <pre>{{ JSON.stringify(this.query, null, 2) }}</pre>
+        </template>
     </div>
 </template>
 
@@ -33,8 +30,9 @@
         query: this.data.query ? this.data.query : {},
         rules: this.data.rules ? this.data.rules : [],
         name: this.data.name ? this.data.name : '',
-        maxDepth: this.data.maxDepth ? ((this.data.maxDepth <= 5) ? this.data.maxDepth : 5 ): 1,
+        maxDepth: this.data.maxDepth ? ((this.data.maxDepth <= 10) ? this.data.maxDepth : 10 ): 1,
         labels: this.getLabels(this.data.labels),
+        debug: this.data.debug ? this.data.debug : false,
       }
     },
     computed: {

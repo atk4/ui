@@ -46,11 +46,11 @@
                                                 ref="dateRef"></v-date-picker>
                                     </div>
                                 </template>
-                                <!-- Radio input -->
-                                <template v-if="isRadio">
+                                <!-- Checkbox or Radio input -->
+                                <template v-if="isCheckbox">
                                     <sui-form-fields inline class="atk-qb">
                                         <div class="field" v-for="choice in rule.choices" :key="choice.value">
-                                            <sui-checkbox :label="choice.label" radio :value="choice.value" v-model="query.value"></sui-checkbox>
+                                            <sui-checkbox :label="choice.label" :radio="isRadio" :value="choice.value" v-model="query.value"></sui-checkbox>
                                         </div>
                                     </sui-form-fields>
                                 </template>
@@ -90,6 +90,9 @@
       },
       isRadio: function() {
         return this.rule.type === 'radio';
+      },
+      isCheckbox: function() {
+        return this.rule.type === 'checkbox' || this.isRadio;
       },
       dateValue: {
         get: function() {
