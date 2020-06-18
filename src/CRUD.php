@@ -79,7 +79,7 @@ class CRUD extends Grid
         parent::init();
 
         if ($sortBy = $this->getSortBy()) {
-            $this->app ? $this->app->stickyGet($this->name . '_sort', $sortBy) : $this->stickyGet($this->name . '_sort', $sortBy);
+            $this->app ? $this->app->stickyGet($this->name . '_sort') : $this->stickyGet($this->name . '_sort', $sortBy);
         }
     }
 
