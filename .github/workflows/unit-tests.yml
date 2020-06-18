@@ -77,10 +77,12 @@ jobs:
         if: matrix.type == 'Phpunit'
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
-            vendor/bin/phpunit --coverage-text -v
+            cp tools/coverage.php demos
+            mkdir coverage
+            vendor/bin/phpunit --exclude-group none --coverage-text -v
             ls -l coverage | wc -l && mv coverage/* build/logs
           else
-            vendor/bin/phpunit --no-coverage -v
+            vendor/bin/phpunit --exclude-group none --no-coverage -v
           fi
 
 #      - name: "Run tests: Behat (only for Behat)"

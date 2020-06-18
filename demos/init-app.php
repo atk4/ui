@@ -16,7 +16,7 @@ $loader->setPsr4('atk4\ui\demo\\', __DIR__ . '/_includes');
 unset($isRootProject, $loader);
 
 // collect coverage for HTTP tests 1/2
-if (file_exists(__DIR__ . '/coverage.php')) {
+if (file_exists(__DIR__ . '/coverage.php') && !class_exists(\PHPUnit\Framework\TestCase::class, false)) {
     require_once __DIR__ . '/coverage.php';
     \CoverageUtil::start();
 }
@@ -36,7 +36,7 @@ if ($app->catch_exceptions !== true) {
 }
 
 // collect coverage for HTTP tests 2/2
-if (file_exists(__DIR__ . '/coverage.php')) {
+if (file_exists(__DIR__ . '/coverage.php') && !class_exists(\PHPUnit\Framework\TestCase::class, false)) {
     $app->onHook(\atk4\ui\App::HOOK_BEFORE_EXIT, function () {
         \CoverageUtil::saveData();
     });
