@@ -18,7 +18,7 @@ class ScopeBuilder extends Generic
     public $renderLabel = false;
 
     /**
-     * Field type specific options.
+     * General or field type specific options.
      *
      * @var array
      */
@@ -26,6 +26,7 @@ class ScopeBuilder extends Generic
         'enum' => [
             'limit' => 250,
         ],
+        'debug' => false, // displays query output live on the page if set to true
     ];
     /**
      * Max depth of nested conditions allowed.
@@ -86,47 +87,81 @@ class ScopeBuilder extends Generic
      */
     protected $query = [];
 
+    protected const OPERATOR_TEXT_EQUALS = 'is exactly';
+    protected const OPERATOR_TEXT_DOESNOT_EQUAL = 'does not equal';
+    protected const OPERATOR_TEXT_GREATER = 'is alphabetically equal or after';
+    protected const OPERATOR_TEXT_GREATER_EQUAL = 'is alphabetically equal or after';
+    protected const OPERATOR_TEXT_LESS = 'is alphabetically before';
+    protected const OPERATOR_TEXT_LESS_EQUAL = 'is alphabetically equal or before';
+    protected const OPERATOR_TEXT_CONTAINS = 'contains';
+    protected const OPERATOR_TEXT_DOESNOT_CONTAIN = 'does not contain';
+    protected const OPERATOR_TEXT_BEGINS_WITH = 'begins with';
+    protected const OPERATOR_TEXT_DOESNOT_BEGIN_WITH = 'does not begin with';
+    protected const OPERATOR_TEXT_ENDS_WITH = 'ends with';
+    protected const OPERATOR_TEXT_DOESNOT_END_WITH = 'does not end with';
+    protected const OPERATOR_TEXT_MATCHES_REGEX = 'matches regular expression';
+    protected const OPERATOR_TEXT_DOESNOT_MATCH_REGEX = 'does not match regular expression';
+    protected const OPERATOR_SIGN_EQUALS = '=';
+    protected const OPERATOR_SIGN_DOESNOT_EQUAL = '<>';
+    protected const OPERATOR_SIGN_GREATER = '>';
+    protected const OPERATOR_SIGN_GREATER_EQUAL = '>=';
+    protected const OPERATOR_SIGN_LESS = '<';
+    protected const OPERATOR_SIGN_LESS_EQUAL = '<=';
+    protected const OPERATOR_TIME_EQUALS = 'is on';
+    protected const OPERATOR_TIME_DOESNOT_EQUAL = 'is not on';
+    protected const OPERATOR_TIME_GREATER = 'is after';
+    protected const OPERATOR_TIME_GREATER_EQUAL = 'is on or after';
+    protected const OPERATOR_TIME_LESS = 'is before';
+    protected const OPERATOR_TIME_LESS_EQUAL = 'is on or before';
     protected const OPERATOR_EQUALS = 'equals';
     protected const OPERATOR_DOESNOT_EQUAL = 'does not equal';
-    protected const OPERATOR_GREATER = 'is greater than';
-    protected const OPERATOR_GREATER_EQUAL = 'is greater or equal to';
-    protected const OPERATOR_LESS = 'is less than';
-    protected const OPERATOR_LESS_EQUAL = 'is less or equal to';
-    protected const OPERATOR_CONTAINS = 'contains';
-    protected const OPERATOR_DOESNOT_CONTAIN = 'does not contain';
-    protected const OPERATOR_BEGINS_WITH = 'begins with';
-    protected const OPERATOR_DOESNOT_BEGIN_WITH = 'does not begin with';
-    protected const OPERATOR_ENDS_WITH = 'ends with';
-    protected const OPERATOR_DOESNOT_END_WITH = 'does not ends with';
     protected const OPERATOR_IN = 'is in';
-    protected const OPERATOR_NOT_IN = 'is not in';
-    protected const OPERATOR_MATCHES_REGEX = 'matches regular expression';
-    protected const OPERATOR_DOESNOT_MATCH_REGEX = 'does not match regular expression';
+    protected const OPERATOR_NOT_IN = 'is not in';    
     protected const OPERATOR_EMPTY = 'is empty';
     protected const OPERATOR_NOT_EMPTY = 'is not empty';
 
     /**
      * VueQueryBulder => Condition map of operators.
+     * 
+     * Operator map supports also inputType specific operators in sub maps
      *
      * @var array
      */
-    protected static $operators = [
+    protected static $operatorsMap = [
+        'number' => [
+            self::OPERATOR_SIGN_EQUALS => '=',
+            self::OPERATOR_SIGN_DOESNOT_EQUAL => '!=',
+            self::OPERATOR_SIGN_GREATER => '>',
+            self::OPERATOR_SIGN_GREATER_EQUAL => '>=',
+            self::OPERATOR_SIGN_LESS => '<',
+            self::OPERATOR_SIGN_LESS_EQUAL => '<=',
+        ],
+        'date' => [
+            self::OPERATOR_TIME_EQUALS => '=',
+            self::OPERATOR_TIME_DOESNOT_EQUAL => '!=',
+            self::OPERATOR_TIME_GREATER => '>',
+            self::OPERATOR_TIME_GREATER_EQUAL => '>=',
+            self::OPERATOR_TIME_LESS => '<',
+            self::OPERATOR_TIME_LESS_EQUAL => '<=',
+        ],
+        self::OPERATOR_TEXT_EQUALS => '=',
+        self::OPERATOR_TEXT_DOESNOT_EQUAL => '!=',
+        self::OPERATOR_TEXT_GREATER => '>',
+        self::OPERATOR_TEXT_GREATER_EQUAL => '>=',
+        self::OPERATOR_TEXT_LESS => '<',
+        self::OPERATOR_TEXT_LESS_EQUAL => '<=',
+        self::OPERATOR_TEXT_CONTAINS => 'LIKE',
+        self::OPERATOR_TEXT_DOESNOT_CONTAIN => 'NOT LIKE',
+        self::OPERATOR_TEXT_BEGINS_WITH => 'LIKE',
+        self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH => 'NOT LIKE',
+        self::OPERATOR_TEXT_ENDS_WITH => 'LIKE',
+        self::OPERATOR_TEXT_DOESNOT_END_WITH => 'NOT LIKE',
         self::OPERATOR_EQUALS => '=',
         self::OPERATOR_DOESNOT_EQUAL => '!=',
-        self::OPERATOR_GREATER => '>',
-        self::OPERATOR_GREATER_EQUAL => '>=',
-        self::OPERATOR_LESS => '<',
-        self::OPERATOR_LESS_EQUAL => '<=',
-        self::OPERATOR_CONTAINS => 'LIKE',
-        self::OPERATOR_DOESNOT_CONTAIN => 'NOT LIKE',
-        self::OPERATOR_BEGINS_WITH => 'LIKE',
-        self::OPERATOR_DOESNOT_BEGIN_WITH => 'NOT LIKE',
-        self::OPERATOR_ENDS_WITH => 'LIKE',
-        self::OPERATOR_DOESNOT_END_WITH => 'NOT LIKE',
         self::OPERATOR_IN => 'IN',
         self::OPERATOR_NOT_IN => 'NOT IN',
-        self::OPERATOR_MATCHES_REGEX => 'REGEXP',
-        self::OPERATOR_DOESNOT_MATCH_REGEX => 'NOT REGEXP',
+        self::OPERATOR_TEXT_MATCHES_REGEX => 'REGEXP',
+        self::OPERATOR_TEXT_DOESNOT_MATCH_REGEX => 'NOT REGEXP',
         self::OPERATOR_EMPTY => '=',
         self::OPERATOR_NOT_EMPTY => '!=',
     ];
@@ -141,22 +176,22 @@ class ScopeBuilder extends Generic
         'text' => [
             'type' => 'text',
             'operators' => [
-                self::OPERATOR_EQUALS,
-                self::OPERATOR_DOESNOT_EQUAL,
-                self::OPERATOR_GREATER,
-                self::OPERATOR_GREATER_EQUAL,
-                self::OPERATOR_LESS,
-                self::OPERATOR_LESS_EQUAL,
-                self::OPERATOR_CONTAINS,
-                self::OPERATOR_DOESNOT_CONTAIN,
-                self::OPERATOR_BEGINS_WITH,
-                self::OPERATOR_DOESNOT_BEGIN_WITH,
-                self::OPERATOR_ENDS_WITH,
-                self::OPERATOR_DOESNOT_END_WITH,
+                self::OPERATOR_TEXT_EQUALS,
+                self::OPERATOR_TEXT_DOESNOT_EQUAL,
+                self::OPERATOR_TEXT_GREATER,
+                self::OPERATOR_TEXT_GREATER_EQUAL,
+                self::OPERATOR_TEXT_LESS,
+                self::OPERATOR_TEXT_LESS_EQUAL,
+                self::OPERATOR_TEXT_CONTAINS,
+                self::OPERATOR_TEXT_DOESNOT_CONTAIN,
+                self::OPERATOR_TEXT_BEGINS_WITH,
+                self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH,
+                self::OPERATOR_TEXT_ENDS_WITH,
+                self::OPERATOR_TEXT_DOESNOT_END_WITH,
+                self::OPERATOR_TEXT_MATCHES_REGEX,
+                self::OPERATOR_TEXT_DOESNOT_MATCH_REGEX,
                 self::OPERATOR_IN,
-                self::OPERATOR_NOT_IN,
-                self::OPERATOR_MATCHES_REGEX,
-                self::OPERATOR_DOESNOT_MATCH_REGEX,
+                self::OPERATOR_NOT_IN,                
             ],
         ],
         'enum' => [
@@ -171,12 +206,12 @@ class ScopeBuilder extends Generic
             'type' => 'text',
             'inputType' => 'number',
             'operators' => [
-                self::OPERATOR_EQUALS,
-                self::OPERATOR_DOESNOT_EQUAL,
-                self::OPERATOR_GREATER,
-                self::OPERATOR_GREATER_EQUAL,
-                self::OPERATOR_LESS,
-                self::OPERATOR_LESS_EQUAL,
+                self::OPERATOR_SIGN_EQUALS,
+                self::OPERATOR_SIGN_DOESNOT_EQUAL,
+                self::OPERATOR_SIGN_GREATER,
+                self::OPERATOR_SIGN_GREATER_EQUAL,
+                self::OPERATOR_SIGN_LESS,
+                self::OPERATOR_SIGN_LESS_EQUAL,
             ],
         ],
         'boolean' => [
@@ -192,12 +227,12 @@ class ScopeBuilder extends Generic
             'component' => 'DatePicker',
             'inputType' => 'date',
             'operators' => [
-                self::OPERATOR_EQUALS,
-                self::OPERATOR_DOESNOT_EQUAL,
-                self::OPERATOR_GREATER,
-                self::OPERATOR_GREATER_EQUAL,
-                self::OPERATOR_LESS,
-                self::OPERATOR_LESS_EQUAL,
+                self::OPERATOR_TIME_EQUALS,
+                self::OPERATOR_TIME_DOESNOT_EQUAL,
+                self::OPERATOR_TIME_GREATER,
+                self::OPERATOR_TIME_GREATER_EQUAL,
+                self::OPERATOR_TIME_LESS,
+                self::OPERATOR_TIME_LESS_EQUAL,
                 self::OPERATOR_EMPTY,
                 self::OPERATOR_NOT_EMPTY,
             ],
@@ -244,8 +279,12 @@ class ScopeBuilder extends Generic
 
             $this->addReferenceRules($field);
         }
+        
+        // build a ruleId => inputType map
+        // this is used when selecting proper operator for the inputType (see self::$operatorsMap)
+        $inputsMap = array_column($this->rules, 'inputType', 'id');
 
-        $this->query = $this->scopeToQuery($model->scope())['query'];
+        $this->query = $this->scopeToQuery($model->scope(), $inputsMap)['query'];
 
         return $model;
     }
@@ -352,14 +391,6 @@ class ScopeBuilder extends Generic
 
     public function renderView()
     {
-//        $this->app->addStyle('
-//            .vue-query-builder select,input {
-//                width: auto !important;
-//            }
-//        ');
-
-//        $this->scopeBuilderView->template->trySetHTML('Input', $this->getInput());
-
         parent::renderView();
 
         $this->scopeBuilderView->vue(
@@ -371,7 +402,7 @@ class ScopeBuilder extends Generic
                     'query' => $this->query,
                     'name' => $this->short_name,
                     'labels' => $this->labels ?? null,
-                    'debug' => true, // todo remove once done. Set it to true to see the query live on the page.
+                    'debug' => $this->options['debug'] ?? false,
                 ],
             ]
         );
@@ -421,18 +452,18 @@ class ScopeBuilder extends Generic
                 $value = null;
 
             break;
-            case self::OPERATOR_BEGINS_WITH:
-            case self::OPERATOR_DOESNOT_BEGIN_WITH:
+            case self::OPERATOR_TEXT_BEGINS_WITH:
+            case self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH:
                 $value = $value . '%';
 
             break;
-            case self::OPERATOR_ENDS_WITH:
-            case self::OPERATOR_DOESNOT_END_WITH:
+            case self::OPERATOR_TEXT_ENDS_WITH:
+            case self::OPERATOR_TEXT_DOESNOT_END_WITH:
                 $value = '%' . $value;
 
             break;
-            case self::OPERATOR_CONTAINS:
-            case self::OPERATOR_DOESNOT_CONTAIN:
+            case self::OPERATOR_TEXT_CONTAINS:
+            case self::OPERATOR_TEXT_DOESNOT_CONTAIN:
                 $value = '%' . $value . '%';
 
             break;
@@ -446,7 +477,7 @@ class ScopeBuilder extends Generic
             break;
         }
 
-        $operator = $operator ? (self::$operators[strtolower($operator)] ?? '=') : null;
+        $operator = $operator ? (self::$operatorsMap[strtolower($operator)] ?? '=') : null;
 
         return Condition::create($key, $operator, $value);
     }
@@ -454,21 +485,21 @@ class ScopeBuilder extends Generic
     /**
      * Converts Scope or Condition to VueQueryBuilder query array.
      */
-    public static function scopeToQuery(AbstractScope $scope): array
+    public static function scopeToQuery(AbstractScope $scope, $inputsMap = []): array
     {
         $query = [];
         switch (get_class($scope)) {
             case Condition::class:
                 $query = [
                     'type' => 'query-builder-rule',
-                    'query' => self::conditionToQuery($scope),
+                    'query' => self::conditionToQuery($scope, $inputsMap),
                 ];
 
             break;
             case Scope::class:
                 $children = [];
                 foreach ($scope->getActiveComponents() as $component) {
-                    $children[] = self::scopeToQuery($component);
+                    $children[] = self::scopeToQuery($component, $inputsMap);
                 }
 
                 $query = [
@@ -488,7 +519,7 @@ class ScopeBuilder extends Generic
     /**
      * Converts a Condition to VueQueryBuilder query array.
      */
-    public static function conditionToQuery(Condition $condition): array
+    public static function conditionToQuery(Condition $condition, $inputsMap = []): array
     {
         if (is_string($condition->key)) {
             $rule = $condition->key;
@@ -511,16 +542,16 @@ class ScopeBuilder extends Generic
 
             $map = [
                 'LIKE' => [
-                    self::OPERATOR_EQUALS,
-                    self::OPERATOR_BEGINS_WITH,
-                    self::OPERATOR_ENDS_WITH,
-                    self::OPERATOR_CONTAINS,
+                    self::OPERATOR_TEXT_EQUALS,
+                    self::OPERATOR_TEXT_BEGINS_WITH,
+                    self::OPERATOR_TEXT_ENDS_WITH,
+                    self::OPERATOR_TEXT_CONTAINS,
                 ],
                 'NOT LIKE' => [
-                    self::OPERATOR_DOESNOT_EQUAL,
-                    self::OPERATOR_DOESNOT_BEGIN_WITH,
-                    self::OPERATOR_DOESNOT_END_WITH,
-                    self::OPERATOR_DOESNOT_CONTAIN,
+                    self::OPERATOR_TEXT_DOESNOT_EQUAL,
+                    self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH,
+                    self::OPERATOR_TEXT_DOESNOT_END_WITH,
+                    self::OPERATOR_TEXT_DOESNOT_CONTAIN,
                 ],
             ];
 
@@ -536,7 +567,12 @@ class ScopeBuilder extends Generic
                 $value = implode(',', $value);
                 $operator = $map[$operator] ?? 'IN';
             }
-            $operator = array_search(strtoupper($operator), self::$operators, true) ?: self::OPERATOR_EQUALS;
+
+            $inputType = $inputsMap[$rule] ?? 'text';
+            
+            $operatorsMap = array_merge(self::$operatorsMap[$inputType] ?? [], self::$operatorsMap);
+
+            $operator = array_search(strtoupper($operator), $operatorsMap, true) ?: self::OPERATOR_EQUALS;
         }
 
         return compact('rule', 'operator', 'value');
