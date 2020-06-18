@@ -54,6 +54,14 @@
                                         </div>
                                     </sui-form-fields>
                                 </template>
+                                <!-- Select input -->
+                                <template v-if="canDisplay('select')">
+                                    <select v-model="query.value" class="atk-qb-select">
+                                        <option v-for="choice in rule.choices" :key="choice.value" :value="choice.label">
+                                            {{choice.label}}
+                                        </option>
+                                    </select>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -78,7 +86,7 @@
       return {
         dateMask: {input:  this.rule.format ? this.rule.format : 'YYYY-MM-DD'},
         dateString: this.isDatePicker ? this.query.value : null,
-        dateLocale: this.rule.locale ? this.rule.locale : 'en-En'
+        dateLocale: this.rule.locale ? this.rule.locale : 'en-En',
       }
     },
     computed: {
@@ -93,6 +101,9 @@
       },
       isCheckbox: function() {
         return this.rule.type === 'checkbox' || this.isRadio;
+      },
+      isSelect: function() {
+        return this.rule.type === 'select';
       },
       dateValue: {
         get: function() {
@@ -125,6 +136,7 @@
           case 'input': return this.isInput;
           case 'date' : return this.isDatePicker;
           case 'checkbox' : return this.isCheckbox;
+          case 'select' : return this.isSelect;
           default: return false;
         }
       },
