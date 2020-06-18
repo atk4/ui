@@ -7,7 +7,7 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$model = new Stat($app->db);
+$model = new Stat($app->db, ['caption' => 'Demo Stat']);
 
 $form = \atk4\ui\Form::addTo($app);
 
