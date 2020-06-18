@@ -61,7 +61,8 @@
           addGroup: "Add Group",
           removeGroup: "small icon times",
           textInputPlaceholder: "value",
-          spaceRule: "fitted", // can be fitted, compact or padded
+          spaceRule: "fitted", // can be fitted, compact or padded.
+          hiddenOperator: ['is empty', 'is not empty'], // a list of operators that when select, will hide user input.
         }, labels);
       },
     }

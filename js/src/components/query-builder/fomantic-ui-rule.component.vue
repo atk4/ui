@@ -25,7 +25,7 @@
                             </div>
                             <div class="item">
                                 <!-- text input -->
-                                <template v-if="isInput">
+                                <template v-if="canDisplay('input')">
                                     <div class="ui small input atk-qb" >
                                         <input
                                                 v-model="query.value"
@@ -35,7 +35,7 @@
                                     </div>
                                 </template>
                                 <!-- Date input -->
-                                <template v-if="isDatePicker">
+                                <template v-if="canDisplay('date')">
                                     <div class="ui small input atk-qb">
                                         <v-date-picker
                                                 :locale='dateLocale'
@@ -47,7 +47,7 @@
                                     </div>
                                 </template>
                                 <!-- Checkbox or Radio input -->
-                                <template v-if="isCheckbox">
+                                <template v-if="canDisplay('checkbox')">
                                     <sui-form-fields inline class="atk-qb">
                                         <div class="field" v-for="choice in rule.choices" :key="choice.value">
                                             <sui-checkbox :label="choice.label" :radio="isRadio" :value="choice.value" v-model="query.value"></sui-checkbox>
@@ -108,10 +108,26 @@
       }
     },
     methods: {
-      onDateChange: function(e) {
-        console.log('change', e);
-      },
+      /**
+       * Check if an input can be display in regards to:
+       * it's operator and then it's type.
+       *
+       * @param type
+       * @returns {boolean|*}
+       */
+      canDisplay: function(type) {
 
+        if (this.labels.hiddenOperator.includes(this.query.operator)) {
+          return false;
+        }
+
+        switch (type) {
+          case 'input': return this.isInput;
+          case 'date' : return this.isDatePicker;
+          case 'checkbox' : return this.isCheckbox;
+          default: return false;
+        }
+      },
     }
   };
 </script>
