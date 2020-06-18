@@ -116,13 +116,13 @@ class ScopeBuilder extends Generic
     protected const OPERATOR_EQUALS = 'equals';
     protected const OPERATOR_DOESNOT_EQUAL = 'does not equal';
     protected const OPERATOR_IN = 'is in';
-    protected const OPERATOR_NOT_IN = 'is not in';    
+    protected const OPERATOR_NOT_IN = 'is not in';
     protected const OPERATOR_EMPTY = 'is empty';
     protected const OPERATOR_NOT_EMPTY = 'is not empty';
 
     /**
      * VueQueryBulder => Condition map of operators.
-     * 
+     *
      * Operator map supports also inputType specific operators in sub maps
      *
      * @var array
@@ -165,7 +165,7 @@ class ScopeBuilder extends Generic
             self::OPERATOR_TEXT_DOESNOT_MATCH_REGEX => 'NOT REGEXP',
             self::OPERATOR_EMPTY => '=',
             self::OPERATOR_NOT_EMPTY => '!=',
-        ]
+        ],
     ];
 
     /**
@@ -193,7 +193,7 @@ class ScopeBuilder extends Generic
                 self::OPERATOR_TEXT_MATCHES_REGEX,
                 self::OPERATOR_TEXT_DOESNOT_MATCH_REGEX,
                 self::OPERATOR_IN,
-                self::OPERATOR_NOT_IN,                
+                self::OPERATOR_NOT_IN,
             ],
         ],
         'enum' => [
@@ -281,7 +281,7 @@ class ScopeBuilder extends Generic
 
             $this->addReferenceRules($field);
         }
-        
+
         // build a ruleId => inputType map
         // this is used when selecting proper operator for the inputType (see self::$operatorsMap)
         $inputsMap = array_column($this->rules, 'inputType', 'id');
@@ -478,8 +478,8 @@ class ScopeBuilder extends Generic
 
             break;
         }
-        
-        $operatorsMap = array_merge(... array_values(self::$operatorsMap));
+
+        $operatorsMap = array_merge(...array_values(self::$operatorsMap));
 
         $operator = $operator ? ($operatorsMap[strtolower($operator)] ?? '=') : null;
 
@@ -573,7 +573,7 @@ class ScopeBuilder extends Generic
             }
 
             $inputType = $inputsMap[$rule] ?? 'text';
-            
+
             $operatorsMap = array_merge(self::$operatorsMap[$inputType] ?? [], self::$operatorsMap['text']);
 
             $operator = array_search(strtoupper($operator), $operatorsMap, true) ?: self::OPERATOR_EQUALS;
