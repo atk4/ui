@@ -78,9 +78,7 @@ class Paginator extends View
      */
     public function setTotal(int $total)
     {
-        if ($this->total < 1) {
-            $this->total = 1;
-        }
+        $this->total = $total < 1 ? 1 : $total;
 
         if ($this->page < 1) {
             $this->page = 1;
