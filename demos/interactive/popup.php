@@ -15,6 +15,8 @@ require_once __DIR__ . '/../init-app.php';
  * Cart will memorize and restore its items into session. Cart will also
  * render the items.
  */
+
+/** @var \atk4\ui\Lister $cartClass */
 $cartClass = get_class(new class() extends \atk4\ui\Lister {
     use \atk4\core\SessionTrait;
     public $items = [];
@@ -80,6 +82,8 @@ $cartClass = get_class(new class() extends \atk4\ui\Lister {
  * Method linkCart allow you to link ItemShelf with Cart. Clicking on a shelf item will place that
  * item inside a cart reloading it afterwards.
  */
+
+/** @var \atk4\ui\View $itemShelfClass */
 $itemShelfClass = get_class(new class() extends \atk4\ui\View {
     public $ui = 'green segment';
 

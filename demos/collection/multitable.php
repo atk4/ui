@@ -8,6 +8,8 @@ namespace atk4\ui\demo;
 require_once __DIR__ . '/../init-app.php';
 
 // Re-usable component implementing counter
+
+/** @var \atk4\ui\Columns $finderClass */
 $finderClass = get_class(new class() extends \atk4\ui\Columns {
     public $route = [];
 
