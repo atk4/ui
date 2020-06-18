@@ -219,7 +219,7 @@ class App
     /**
      * @param bool $for_shutdown if true will not pass in caughtException method
      */
-    public function callExit($for_shutdown = false)
+    public function callExit($for_shutdown = false): void
     {
         if (!$this->exit_called) {
             $this->exit_called = true;
@@ -1000,11 +1000,11 @@ class App
      * Return exception message using HTML block and Semantic UI formatting. It's your job
      * to put it inside boilerplate HTML and output, e.g:.
      *
-     *   $l = new \atk4\ui\App();
-     *   $l->initLayout(\atk4\ui\Layout\Centered::class);
-     *   $l->layout->template->setHTML('Content', $e->getHTML());
-     *   $l->run();
-     *   exit;
+     *   $app = new \atk4\ui\App();
+     *   $app->initLayout(\atk4\ui\Layout\Centered::class);
+     *   $app->layout->template->setHTML('Content', $e->getHTML());
+     *   $app->run();
+     *   $app->callExit(true);
      */
     public function renderExceptionHTML(\Throwable $exception): string
     {
@@ -1054,33 +1054,37 @@ class App
         $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
         $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
 
+        $isCli = \PHP_SAPI === 'cli'; // for phpunit
+
         $lateErrorStr = null;
         foreach (ob_get_status(true) as $status) {
-            if ($status['buffer_used'] !== 0) {
+            if ($status['buffer_used'] !== 0 && !$isCli) {
                 $lateErrorStr = $this->buildLateErrorStr('Unexpected output detected.');
 
                 break;
             }
         }
 
-        if ($lateErrorStr === null && count($headersNew) > 0 && headers_sent()) {
+        if ($lateErrorStr === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
             $lateErrorStr = $this->buildLateErrorStr('Headers already sent, more headers can not be set at this stage.');
         }
 
-        if (!headers_sent()) {
+        if (!headers_sent() || $isCli) {
             if ($lateErrorStr !== null) {
                 $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
             }
 
             foreach ($headersNew as $k => $v) {
-                if ($k === self::HEADER_STATUS_CODE) {
-                    http_response_code($v === (string) (int) $v ? (int) $v : 500);
-                } else {
-                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                        return strtoupper($matches[0]);
-                    }, $k);
+                if (!$isCli) {
+                    if ($k === self::HEADER_STATUS_CODE) {
+                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
+                    } else {
+                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                            return strtoupper($matches[0]);
+                        }, $k);
 
-                    header($kCamelCase . ': ' . $v);
+                        header($kCamelCase . ': ' . $v);
+                    }
                 }
 
                 self::$_sentHeaders[$k] = $v;
@@ -1089,7 +1093,7 @@ class App
 
         if ($lateErrorStr !== null) {
             echo $lateErrorStr;
-            exit;
+            exit(1);
         }
 
         echo $data;

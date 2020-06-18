@@ -13,8 +13,19 @@
     <testsuites>
         <testsuite name="tests">
             <directory>tests</directory>
+            <file>tests/DemosTest.php</file>
+            <file>tests/DemosHttpTest.php</file>
+            <file>tests/DemosHttpNoExitTest.php</file>
+            <exclude>tests/DemosTest.php</exclude>
+            <exclude>tests/DemosHttpTest.php</exclude>
+            <exclude>tests/DemosHttpNoExitTest.php</exclude>
         </testsuite>
     </testsuites>
+    <groups>
+        <exclude>
+            <group>demos_http</group>
+        </exclude>
+    </groups>
     <logging>
         <log type="coverage-php" target="build/logs/clover.cov"/>
     </logging>
