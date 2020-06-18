@@ -144,26 +144,28 @@ class ScopeBuilder extends Generic
             self::OPERATOR_TIME_LESS => '<',
             self::OPERATOR_TIME_LESS_EQUAL => '<=',
         ],
-        self::OPERATOR_TEXT_EQUALS => '=',
-        self::OPERATOR_TEXT_DOESNOT_EQUAL => '!=',
-        self::OPERATOR_TEXT_GREATER => '>',
-        self::OPERATOR_TEXT_GREATER_EQUAL => '>=',
-        self::OPERATOR_TEXT_LESS => '<',
-        self::OPERATOR_TEXT_LESS_EQUAL => '<=',
-        self::OPERATOR_TEXT_CONTAINS => 'LIKE',
-        self::OPERATOR_TEXT_DOESNOT_CONTAIN => 'NOT LIKE',
-        self::OPERATOR_TEXT_BEGINS_WITH => 'LIKE',
-        self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH => 'NOT LIKE',
-        self::OPERATOR_TEXT_ENDS_WITH => 'LIKE',
-        self::OPERATOR_TEXT_DOESNOT_END_WITH => 'NOT LIKE',
-        self::OPERATOR_EQUALS => '=',
-        self::OPERATOR_DOESNOT_EQUAL => '!=',
-        self::OPERATOR_IN => 'IN',
-        self::OPERATOR_NOT_IN => 'NOT IN',
-        self::OPERATOR_TEXT_MATCHES_REGEX => 'REGEXP',
-        self::OPERATOR_TEXT_DOESNOT_MATCH_REGEX => 'NOT REGEXP',
-        self::OPERATOR_EMPTY => '=',
-        self::OPERATOR_NOT_EMPTY => '!=',
+        'text' => [
+            self::OPERATOR_TEXT_EQUALS => '=',
+            self::OPERATOR_TEXT_DOESNOT_EQUAL => '!=',
+            self::OPERATOR_TEXT_GREATER => '>',
+            self::OPERATOR_TEXT_GREATER_EQUAL => '>=',
+            self::OPERATOR_TEXT_LESS => '<',
+            self::OPERATOR_TEXT_LESS_EQUAL => '<=',
+            self::OPERATOR_TEXT_CONTAINS => 'LIKE',
+            self::OPERATOR_TEXT_DOESNOT_CONTAIN => 'NOT LIKE',
+            self::OPERATOR_TEXT_BEGINS_WITH => 'LIKE',
+            self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH => 'NOT LIKE',
+            self::OPERATOR_TEXT_ENDS_WITH => 'LIKE',
+            self::OPERATOR_TEXT_DOESNOT_END_WITH => 'NOT LIKE',
+            self::OPERATOR_EQUALS => '=',
+            self::OPERATOR_DOESNOT_EQUAL => '!=',
+            self::OPERATOR_IN => 'IN',
+            self::OPERATOR_NOT_IN => 'NOT IN',
+            self::OPERATOR_TEXT_MATCHES_REGEX => 'REGEXP',
+            self::OPERATOR_TEXT_DOESNOT_MATCH_REGEX => 'NOT REGEXP',
+            self::OPERATOR_EMPTY => '=',
+            self::OPERATOR_NOT_EMPTY => '!=',
+        ]
     ];
 
     /**
@@ -476,8 +478,10 @@ class ScopeBuilder extends Generic
 
             break;
         }
+        
+        $operatorsMap = array_merge(... array_values(self::$operatorsMap));
 
-        $operator = $operator ? (self::$operatorsMap[strtolower($operator)] ?? '=') : null;
+        $operator = $operator ? ($operatorsMap[strtolower($operator)] ?? '=') : null;
 
         return Condition::create($key, $operator, $value);
     }
@@ -570,7 +574,7 @@ class ScopeBuilder extends Generic
 
             $inputType = $inputsMap[$rule] ?? 'text';
             
-            $operatorsMap = array_merge(self::$operatorsMap[$inputType] ?? [], self::$operatorsMap);
+            $operatorsMap = array_merge(self::$operatorsMap[$inputType] ?? [], self::$operatorsMap['text']);
 
             $operator = array_search(strtoupper($operator), $operatorsMap, true) ?: self::OPERATOR_EQUALS;
         }
