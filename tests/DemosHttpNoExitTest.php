@@ -7,7 +7,7 @@ namespace atk4\ui\tests;
 /**
  * Same as DemosHttpTest, only App::call_exit is set to false.
  *
- * @group demosHttp
+ * @group demos_http
  */
 class DemosHttpNoExitTest extends DemosHttpTest
 {

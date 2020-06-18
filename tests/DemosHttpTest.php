@@ -10,7 +10,7 @@ use Symfony\Component\Process\Process;
 /**
  * Same as DemosTest, but using native HTTP to check if output and shutdown handlers work correctly.
  *
- * @group demosHttp
+ * @group demos_http
  */
 class DemosHttpTest extends DemosTest
 {
@@ -80,7 +80,7 @@ class DemosHttpTest extends DemosTest
             $cmdArgs[] = '-d';
             $cmdArgs[] = 'open_basedir=' . ini_get('open_basedir');
         }
-        self::$_process = Process::fromShellCommandline('php  ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
+        self::$_process = Process::fromShellCommandline('php ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
 
         // disabling the output, otherwise the process might hang after too much output
         self::$_process->disableOutput();
@@ -105,16 +105,14 @@ class DemosHttpTest extends DemosTest
 
     protected function getClient(): Client
     {
-        // Creating a Guzzle Client with the base_uri, so we can use a relative
-        // path for the requests.
         return new Client(['base_uri' => 'http://localhost:' . self::$port]);
     }
 
-    protected function getPathWithAppVars($path)
+    protected function getPathWithAppVars(string $path): string
     {
         $path .= strpos($path, '?') === false ? '?' : '&';
         $path .= 'APP_CALL_EXIT=' . ((int) static::$app_def_call_exit) . '&APP_CATCH_EXCEPTIONS=' . ((int) static::$app_def_caught_exception);
 
-        return self::$webserver_root . $path;
+        return 'demos/' . $path;
     }
 }

@@ -17,7 +17,7 @@
     </testsuites>
     <groups>
         <exclude>
-            <group>demosHttp</group>
+            <group>demos_http</group>
         </exclude>
     </groups>
     <logging>

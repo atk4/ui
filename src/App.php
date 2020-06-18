@@ -1054,33 +1054,37 @@ class App
         $headersAll = array_merge($this->response_headers, $this->normalizeHeaders($headers));
         $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
 
+        $isCli = \PHP_SAPI === 'cli'; // for phpunit
+
         $lateErrorStr = null;
         foreach (ob_get_status(true) as $status) {
-            if ($status['buffer_used'] !== 0) {
+            if ($status['buffer_used'] !== 0 && !$isCli) {
                 $lateErrorStr = $this->buildLateErrorStr('Unexpected output detected.');
 
                 break;
             }
         }
 
-        if ($lateErrorStr === null && count($headersNew) > 0 && headers_sent()) {
+        if ($lateErrorStr === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
             $lateErrorStr = $this->buildLateErrorStr('Headers already sent, more headers can not be set at this stage.');
         }
 
-        if (!headers_sent()) {
+        if (!headers_sent() || $isCli) {
             if ($lateErrorStr !== null) {
                 $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
             }
 
             foreach ($headersNew as $k => $v) {
-                if ($k === self::HEADER_STATUS_CODE) {
-                    http_response_code($v === (string) (int) $v ? (int) $v : 500);
-                } else {
-                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                        return strtoupper($matches[0]);
-                    }, $k);
+                if (!$isCli) {
+                    if ($k === self::HEADER_STATUS_CODE) {
+                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
+                    } else {
+                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                            return strtoupper($matches[0]);
+                        }, $k);
 
-                    header($kCamelCase . ': ' . $v);
+                        header($kCamelCase . ': ' . $v);
+                    }
                 }
 
                 self::$_sentHeaders[$k] = $v;
