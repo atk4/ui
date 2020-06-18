@@ -63,7 +63,12 @@ class DemosTest extends AtkPhpunit\TestCase
     protected function setSuperglobalsFromRequest(RequestInterface $request): void
     {
         $_SERVER = [
+            'REQUEST_METHOD' => $request->getMethod(),
+            'HTTP_HOST' => $request->getUri()->getHost(),
             'REQUEST_URI' => (string) $request->getUri(),
+            'QUERY_STRING' => $request->getUri()->getQuery(),
+            'DOCUMENT_ROOT' => dirname(__DIR__),
+            'SCRIPT_FILENAME' => dirname(__DIR__) . $request->getUri()->getPath(),
         ];
 
         $_GET = [];
@@ -78,6 +83,7 @@ class DemosTest extends AtkPhpunit\TestCase
             $_POST[$k] = $v;
         }
 
+        $_REQUEST = [];
         $_FILES = [];
         $_COOKIE = [];
         $_SESSION = [];
