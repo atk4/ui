@@ -18,6 +18,9 @@ class Template implements \ArrayAccess
     use \atk4\core\DIContainerTrait; // needed for StaticAddToTrait, removed once php7.2 support is dropped
     use \atk4\core\StaticAddToTrait;
 
+    /** @var array */
+    private static $_filesCache = [];
+
     // {{{ Properties of a template
 
     /**
@@ -644,17 +647,21 @@ class Template implements \ArrayAccess
      *
      * @return $this|false
      */
-    public function tryLoad($filename)
+    public function tryLoad(string $filename)
     {
-        if (is_readable($filename) && is_file($filename)) {
-            $str = preg_replace('~(?:\r\n?|\n)$~s', '', file_get_contents($filename)); // load file and trim end NL
-            $this->loadTemplateFromString($str);
-            $this->source = 'loaded from file: ' . $filename;
-
-            return $this;
+        if (!isset(self::$_filesCache[$filename])) {
+            self::$_filesCache[$filename] = is_file($filename) ? file_get_contents($filename) : false;
         }
 
-        return false;
+        if (self::$_filesCache[$filename] === false) {
+            return false;
+        }
+
+        $str = preg_replace('~(?:\r\n?|\n)$~s', '', self::$_filesCache[$filename]); // always trim end NL
+        $this->loadTemplateFromString($str);
+        $this->source = 'loaded from file: ' . $filename;
+
+        return $this;
     }
 
     /**
