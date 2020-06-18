@@ -28,10 +28,10 @@ class DemosHttpTest extends DemosTest
 
     public static function tearDownAfterClass(): void
     {
-        $coverageFile = static::DEMOS_DIR . '/coverage.php';
-        if (file_exists($coverageFile)) {
-            unlink($coverageFile);
-        }
+        // stop the test server
+        usleep(250 * 1000);
+        self::$_process->stop(1); // TODO we may need to add pcntl_async_signals/pcntl_signal to coverage.php
+        self::$_process = null;
 
         // cleanup session storage
         foreach (scandir(self::$_processSessionDir) as $f) {
@@ -40,33 +40,29 @@ class DemosHttpTest extends DemosTest
             }
         }
         rmdir(self::$_processSessionDir);
+        self::$_processSessionDir = null;
     }
 
-    public static function setUpBeforeClass(): void
+    protected function setUp(): void
     {
-        if (extension_loaded('xdebug') || isset($this) && $this->getResult()->getCodeCoverage() !== null) { // dirty way to skip coverage for phpunit with disabled coverage
-            $coverageDir = static::ROOT_DIR . '/coverage';
-            if (!file_exists($coverageDir)) {
-                mkdir($coverageDir, 0777, true);
+        if (self::$_process === null) {
+            if (\PHP_SAPI !== 'cli') {
+                throw new \Error('Builtin webserver can be started only from CLI');
             }
 
-            $coverageFile = static::DEMOS_DIR . '/coverage.php';
-            if (!file_exists($coverageFile)) {
-                file_put_contents($coverageFile, file_get_contents(static::ROOT_DIR . '/tools/coverage.php'));
-            }
+            $this->setupWebserver();
         }
+    }
 
-        // spin up the test server
-        if (\PHP_SAPI !== 'cli') {
-            throw new \Error('Builtin web server can we started only from CLI'); // prevent to start a process if tests are not run from CLI
-        }
-
+    private function setupWebserver(): void
+    {
         // setup session storage
         self::$_processSessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
         if (!file_exists(self::$_processSessionDir)) {
             mkdir(self::$_processSessionDir);
         }
 
+        // spin up the test server
         $cmdArgs = [
             '-S', static::$host . ':' . static::$port,
             '-t', static::ROOT_DIR,
@@ -77,13 +73,8 @@ class DemosHttpTest extends DemosTest
             $cmdArgs[] = 'open_basedir=' . ini_get('open_basedir');
         }
         self::$_process = Process::fromShellCommandline('php ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
-
-        // disabling the output, otherwise the process might hang after too much output
         self::$_process->disableOutput();
-
-        // execute the command and start the process
         self::$_process->start();
-
         usleep(250 * 1000);
     }
 
