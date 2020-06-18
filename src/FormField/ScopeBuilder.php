@@ -183,8 +183,8 @@ class ScopeBuilder extends Generic
             'type' => 'radio',
             'operators' => [],
             'choices' => [
-                ['label' => 'Yes', 'value' => 1],
-                ['label' => 'No', 'value' => 0],
+                ['label' => 'Yes', 'value' => '1'],
+                ['label' => 'No', 'value' => '0'],
             ],
         ],
         'date' => [
@@ -371,7 +371,7 @@ class ScopeBuilder extends Generic
                     'query' => $this->query,
                     'name' => $this->short_name,
                     'labels' => $this->labels ?? null,
-                    'debug' => false, // todo remove once done. Set it to true to see the query live on the page.
+                    'debug' => true, // todo remove once done. Set it to true to see the query live on the page.
                 ],
             ]
         );
