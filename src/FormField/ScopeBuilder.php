@@ -96,8 +96,8 @@ class ScopeBuilder extends Generic
     protected const OPERATOR_DOESNOT_CONTAIN = 'does not contain';
     protected const OPERATOR_BEGINS_WITH = 'begins with';
     protected const OPERATOR_DOESNOT_BEGIN_WITH = 'does not begin with';
-    protected const OPERATOR_ENDS_WITH = 'begins with';
-    protected const OPERATOR_DOESNOT_END_WITH = 'does not begin with';
+    protected const OPERATOR_ENDS_WITH = 'ends with';
+    protected const OPERATOR_DOESNOT_END_WITH = 'does not ends with';
     protected const OPERATOR_IN = 'is in';
     protected const OPERATOR_NOT_IN = 'is not in';
     protected const OPERATOR_MATCHES_REGEX = 'matches regular expression';
