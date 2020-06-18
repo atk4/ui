@@ -232,8 +232,6 @@ class DemosTest extends AtkPhpunit\TestCase
 
                 $files[] = [$dir . '/' . $f];
             }
-
-            break; // debug only!
         }
 
         return $files;
