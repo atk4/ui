@@ -18,13 +18,13 @@ class DemosHttpTest extends DemosTest
     private static $_processSessionDir;
 
     /** @var bool set the app->call_exit in demo */
-    protected static $app_call_exit = true;
+    protected $app_call_exit = true;
 
     /** @var bool set the app->catch_exceptions in demo */
-    protected static $app_catch_exceptions = true;
+    protected $app_catch_exceptions = true;
 
-    protected static $host = '127.0.0.1';
-    protected static $port = 9687;
+    protected $host = '127.0.0.1';
+    protected $port = 9687;
 
     public static function tearDownAfterClass(): void
     {
@@ -64,7 +64,7 @@ class DemosHttpTest extends DemosTest
 
         // spin up the test server
         $cmdArgs = [
-            '-S', static::$host . ':' . static::$port,
+            '-S', $this->host . ':' . $this->port,
             '-t', static::ROOT_DIR,
             '-d', 'session.save_path=' . self::$_processSessionDir,
         ];
@@ -80,13 +80,13 @@ class DemosHttpTest extends DemosTest
 
     protected function getClient(): Client
     {
-        return new Client(['base_uri' => 'http://localhost:' . self::$port]);
+        return new Client(['base_uri' => 'http://localhost:' . $this->port]);
     }
 
     protected function getPathWithAppVars(string $path): string
     {
         $path .= strpos($path, '?') === false ? '?' : '&';
-        $path .= 'APP_CALL_EXIT=' . ((int) static::$app_call_exit) . '&APP_CATCH_EXCEPTIONS=' . ((int) static::$app_catch_exceptions);
+        $path .= 'APP_CALL_EXIT=' . ((int) $this->app_call_exit) . '&APP_CATCH_EXCEPTIONS=' . ((int) $this->app_catch_exceptions);
 
         return parent::getPathWithAppVars($path);
     }

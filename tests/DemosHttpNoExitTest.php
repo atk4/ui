@@ -12,5 +12,5 @@ namespace atk4\ui\tests;
 class DemosHttpNoExitTest extends DemosHttpTest
 {
     /** @var bool set the app->call_exit in demo */
-    protected static $app_call_exit = false;
+    protected $app_call_exit = false;
 }
