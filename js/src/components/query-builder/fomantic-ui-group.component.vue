@@ -21,13 +21,13 @@
                         </div>
                         <div class="item">
                             <div class="rule-actions ">
-                                <div class="ui buttons">
+                                <div>
                                     <sui-dropdown
                                             :text="labels.addRule"
-                                            class="ui mini basic button"
+                                            class="ui mini basic button atk-qb-rule-select"
                                             selection
                                     >
-                                        <sui-dropdown-menu>
+                                        <sui-dropdown-menu class="atk-qb-rule-select-menu">
                                             <sui-dropdown-item @click="addNewRule(rule.id)" v-for="rule in rules" :key="rule.id" :value="rule">{{ rule.label }}</sui-dropdown-item>
                                         </sui-dropdown-menu>
                                     </sui-dropdown>
@@ -104,6 +104,13 @@
     .atk-qb-remove {
         cursor: pointer;
         color: rgba(0,0,0,0.6);
+    }
+    .ui.selection.dropdown.atk-qb-rule-select {
+        background-color: rgba(0,0,0,0);
+    }
+    .ui.selection.dropdown .atk-qb-rule-select-menu {
+        width: max-content;
+        z-index: 1000;
     }
     .vbq-group-heading > .ui.grid > .column:not(.row) {
         padding-bottom: 0.5em;
