@@ -68,6 +68,8 @@ $r = $c->addRow();
 /**
  * Example box component with some content, good for putting into columns.
  */
+
+/** @var \atk4\ui\View $boxClass */
 $boxClass = get_class(new class() extends \atk4\ui\View {
     public $ui = 'segment';
     public $content = false;
