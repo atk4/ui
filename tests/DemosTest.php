@@ -35,7 +35,6 @@ class DemosTest extends AtkPhpunit\TestCase
     public static function tearDownAfterClass(): void
     {
         $_SERVER = self::$_serverSuperglobalBackup;
-        self::$_db = null;
     }
 
     protected function setUp(): void
@@ -253,9 +252,7 @@ class DemosTest extends AtkPhpunit\TestCase
     public function testResponseError(): void
     {
         if (static::class === self::class) { // TODO
-            $this->assertTrue(true);
-
-            return;
+            $this->markTestIncomplete('Not supported yet');
         }
 
         $this->expectExceptionCode(500);
@@ -324,9 +321,7 @@ class DemosTest extends AtkPhpunit\TestCase
     public function testDemoAssertJsonResponse(string $uri): void
     {
         if (static::class === self::class) { // TODO
-            $this->assertTrue(true);
-
-            return;
+            $this->markTestIncomplete('Not supported yet');
         }
 
         $response = $this->getResponseFromRequest($uri);

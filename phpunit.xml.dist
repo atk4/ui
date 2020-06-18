@@ -13,6 +13,10 @@
     <testsuites>
         <testsuite name="tests">
             <directory>tests</directory>
+            <file>tests/DemosHttpTest.php</file>
+            <file>tests/DemosHttpNoExitTest.php</file>
+            <exclude>tests/DemosHttpTest.php</exclude>
+            <exclude>tests/DemosHttpNoExitTest.php</exclude>
         </testsuite>
     </testsuites>
     <groups>
