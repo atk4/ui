@@ -18,18 +18,32 @@ use Psr\Http\Message\ResponseInterface;
  */
 class DemosTest extends AtkPhpunit\TestCase
 {
+    /** @var array */
+    private static $_serverSuperglobalBackup;
+
     /** @var App Initialized App instance with working DB connection */
     private static $_db;
 
     /** @var string */
     protected $demosDir = __DIR__ . '/../demos';
 
+    public static function setUpBeforeClass(): void
+    {
+        self::$_serverSuperglobalBackup = $_SERVER;
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        $_SERVER = self::$_serverSuperglobalBackup;
+        self::$_db = null;
+    }
+
     protected function setUp(): void
     {
         if (self::$_db === null) {
             // load demos config
             $initVars = get_defined_vars();
-            $this->resetSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/'));
+            $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/'));
 
             /** @var App $app */
             require_once $this->demosDir . '/init-app.php';
@@ -46,12 +60,7 @@ class DemosTest extends AtkPhpunit\TestCase
         }
     }
 
-    public static function tearDownAfterClass(): void
-    {
-        self::$_db = null;
-    }
-
-    private function resetSuperglobalsFromRequest(RequestInterface $request): void
+    protected function setSuperglobalsFromRequest(RequestInterface $request): void
     {
         $_SERVER = [
             'REQUEST_URI' => (string) $request->getUri(),
@@ -78,7 +87,7 @@ class DemosTest extends AtkPhpunit\TestCase
         }, null, App::class)();
     }
 
-    private function createTestingApp(): App
+    protected function createTestingApp(): App
     {
         $app = new class() extends App {
             protected function setupAlwaysRun(): void
@@ -105,7 +114,7 @@ class DemosTest extends AtkPhpunit\TestCase
     {
         $handler = function (RequestInterface $request) {
             // emulate request
-            $this->resetSuperglobalsFromRequest($request);
+            $this->setSuperglobalsFromRequest($request);
             $localPath = __DIR__ . '/../' . $request->getUri()->getPath();
 
             ob_start();
