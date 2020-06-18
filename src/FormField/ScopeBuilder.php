@@ -89,7 +89,7 @@ class ScopeBuilder extends Generic
 
     protected const OPERATOR_TEXT_EQUALS = 'is exactly';
     protected const OPERATOR_TEXT_DOESNOT_EQUAL = 'does not equal';
-    protected const OPERATOR_TEXT_GREATER = 'is alphabetically equal or after';
+    protected const OPERATOR_TEXT_GREATER = 'is alphabetically after';
     protected const OPERATOR_TEXT_GREATER_EQUAL = 'is alphabetically equal or after';
     protected const OPERATOR_TEXT_LESS = 'is alphabetically before';
     protected const OPERATOR_TEXT_LESS_EQUAL = 'is alphabetically equal or before';

@@ -85,8 +85,13 @@
     data: function() {
       return {
         dateMask: {input:  this.rule.format ? this.rule.format : 'YYYY-MM-DD'},
-        dateString: this.isDatePicker ? this.query.value : null,
+        dateString: null,
         dateLocale: this.rule.locale ? this.rule.locale : 'en-En',
+      }
+    },
+    mounted() {
+      if (this.isDatePicker) {
+        this.dateString = this.query.value;
       }
     },
     computed: {
@@ -108,13 +113,17 @@
       dateValue: {
         get: function() {
           if (this.dateString) {
-            console.log('date', this.dateString);
-            return new Date(this.dateString);
+            // fix date parsing for different time zone if time is not supply.
+            if(this.dateString.match(/^[0-9]{4}[\/\-\.][0-9]{2}[\/\-\.][0-9]{2}$/)){
+              this.dateString += ' 00:00:00';
+            }
+            return Date.parse(this.dateString);
+          } else {
+            return new Date();
           }
-          return new Date();
         },
         set: function(date){
-          this.query.value =  atk.phpDate("Y-m-d", date);
+          this.query.value =  date ? atk.phpDate("Y-m-d", date) : '';
         }
       }
     },
