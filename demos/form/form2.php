@@ -72,6 +72,7 @@ $form->onSubmit(function (\atk4\ui\Form $form) {
 
 // ======
 
+/** @var \atk4\data\Model $personClass */
 $personClass = get_class(new class() extends \atk4\data\Model {
     public $table = 'person';
 

@@ -69,6 +69,7 @@ $crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($cr
 $cc = $c->addColumn();
 \atk4\ui\Header::addTo($cc, ['Cutomizations']);
 
+/** @var \atk4\ui\ActionExecutor\UserAction $myExecutorClass */
 $myExecutorClass = get_class(new class() extends \atk4\ui\ActionExecutor\UserAction {
     public function addFormTo(\atk4\ui\View $view): \atk4\ui\Form
     {

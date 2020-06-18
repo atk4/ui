@@ -12,6 +12,7 @@ require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Header::addTo($app, ['MultiLine form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
+/** @var \atk4\data\Model $inventoryItemClass */
 $inventoryItemClass = get_class(new class() extends \atk4\data\Model {
     public function init(): void
     {

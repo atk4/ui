@@ -7,6 +7,7 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
+/** @var \atk4\ui\View $testRunClass */
 $testRunClass = get_class(new class() extends \atk4\ui\View {
     use \atk4\core\DebugTrait;
 
