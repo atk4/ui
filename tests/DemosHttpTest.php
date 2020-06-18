@@ -18,20 +18,19 @@ class DemosHttpTest extends DemosTest
     private static $_processSessionDir;
 
     /** @var bool set the app->call_exit in demo */
-    protected static $app_def_call_exit = true;
+    protected static $app_call_exit = true;
 
-    /** @var bool set the app->caught_exception in demo */
-    protected static $app_def_caught_exception = true;
+    /** @var bool set the app->catch_exceptions in demo */
+    protected static $app_catch_exceptions = true;
 
     protected static $host = '127.0.0.1';
     protected static $port = 9687;
 
-    protected static $webserver_root = 'demos/';
-
     public static function tearDownAfterClass(): void
     {
-        if (file_exists($file = self::getPackagePath('demos', 'coverage.php'))) {
-            unlink($file);
+        $coverageFile = static::DEMOS_DIR . '/coverage.php';
+        if (file_exists($coverageFile)) {
+            unlink($coverageFile);
         }
 
         // cleanup session storage
@@ -46,17 +45,14 @@ class DemosHttpTest extends DemosTest
     public static function setUpBeforeClass(): void
     {
         if (extension_loaded('xdebug') || isset($this) && $this->getResult()->getCodeCoverage() !== null) { // dirty way to skip coverage for phpunit with disabled coverage
-            $coverage = self::getPackagePath('coverage');
-            if (!file_exists($coverage)) {
-                mkdir($coverage, 0777, true);
+            $coverageDir = static::ROOT_DIR . '/coverage';
+            if (!file_exists($coverageDir)) {
+                mkdir($coverageDir, 0777, true);
             }
 
-            $demosCoverage = self::getPackagePath('demos', 'coverage.php');
-            if (!file_exists($demosCoverage)) {
-                file_put_contents(
-                    $demosCoverage,
-                    file_get_contents(self::getPackagePath('tools', 'coverage.php'))
-                );
+            $coverageFile = static::DEMOS_DIR . '/coverage.php';
+            if (!file_exists($coverageFile)) {
+                file_put_contents($coverageFile, file_get_contents(static::ROOT_DIR . '/tools/coverage.php'));
             }
         }
 
@@ -73,7 +69,7 @@ class DemosHttpTest extends DemosTest
 
         $cmdArgs = [
             '-S', static::$host . ':' . static::$port,
-            '-t', self::getPackagePath(),
+            '-t', static::ROOT_DIR,
             '-d', 'session.save_path=' . self::$_processSessionDir,
         ];
         if (!empty(ini_get('open_basedir'))) {
@@ -91,18 +87,6 @@ class DemosHttpTest extends DemosTest
         usleep(250 * 1000);
     }
 
-    /**
-     * TODO remove this or replace with better impl.
-     */
-    protected static function getPackagePath($directory = null, $_ = null): string
-    {
-        $route = func_get_args();
-        $baseDir = realpath(__DIR__ . \DIRECTORY_SEPARATOR . '..');
-        array_unshift($route, $baseDir);
-
-        return implode(\DIRECTORY_SEPARATOR, $route);
-    }
-
     protected function getClient(): Client
     {
         return new Client(['base_uri' => 'http://localhost:' . self::$port]);
@@ -111,8 +95,8 @@ class DemosHttpTest extends DemosTest
     protected function getPathWithAppVars(string $path): string
     {
         $path .= strpos($path, '?') === false ? '?' : '&';
-        $path .= 'APP_CALL_EXIT=' . ((int) static::$app_def_call_exit) . '&APP_CATCH_EXCEPTIONS=' . ((int) static::$app_def_caught_exception);
+        $path .= 'APP_CALL_EXIT=' . ((int) static::$app_call_exit) . '&APP_CATCH_EXCEPTIONS=' . ((int) static::$app_catch_exceptions);
 
-        return 'demos/' . $path;
+        return parent::getPathWithAppVars($path);
     }
 }
