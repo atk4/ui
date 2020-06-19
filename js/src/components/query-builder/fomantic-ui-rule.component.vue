@@ -117,7 +117,7 @@
             if(this.dateString.match(/^[0-9]{4}[\/\-\.][0-9]{2}[\/\-\.][0-9]{2}$/)){
               this.dateString += ' 00:00:00';
             }
-            return Date.parse(this.dateString);
+            return new Date(this.dateString);
           } else {
             return new Date();
           }
