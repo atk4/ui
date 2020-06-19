@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --env.production",
     "dev": "webpack --progress --colors --watch --env.development",
-    "profile" : "webpack  --env.production --profile --json > profile.json",
+    "profile" : "webpack  --env.production --profile --json > ./profile/atkjs-bundle-profile.json",
+    "analyze-profile": "webpack-bundle-analyzer ./profile/atkjs-bundle-profile.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
