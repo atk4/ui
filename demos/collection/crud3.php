@@ -12,7 +12,7 @@ $modelClass = get_class(new class() extends \atk4\data\Model {
     use ModelLockTrait;
 
     public $table = 'test';
-    
+
     public $caption = 'Country';
 
     public function init(): void
