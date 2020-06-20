@@ -13,6 +13,7 @@ use atk4\core\InitializerTrait;
 use atk4\core\StaticAddToTrait;
 use atk4\core\TrackableTrait;
 use atk4\data\Model;
+use atk4\data\Model\Action;
 use atk4\data\Persistence\Static_;
 use atk4\ui\ActionExecutor\Interface_;
 use atk4\ui\ActionExecutor\jsInterface_;
