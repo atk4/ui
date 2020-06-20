@@ -69,7 +69,7 @@ $country->tryLoadAny();
 
 $card = \atk4\ui\Card::addTo($app);
 $card->setModel($country, ['iso']);
-$card->addClickAction($country->getAction('send_message'));
+$card->addClickAction($country->getUserAction('send_message'));
 
 CODE
     );
@@ -91,7 +91,7 @@ $country = new \atk4\ui\demo\CountryLock($app->db);
 $country->loadAny();
 
 \atk4\ui\Button::addTo($app, ['Edit some country'])
-    ->on('click', $country->getAction('edit'));
+    ->on('click', $country->getUserAction('edit'));
 CODE
     );
 
@@ -110,7 +110,7 @@ $country->loadAny();
 
 $menu = \atk4\ui\Menu::addTo($app);
 $menu->addItem('Hello');
-$menu->addItem('World', $country->getAction('edit'));
+$menu->addItem('World', $country->getUserAction('edit'));
 CODE
     );
 });
@@ -130,7 +130,7 @@ EOF
 $model = new \atk4\data\Model($app->db, 'test');
 
 $model->addAction('greet', [
-    'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
+    'scope' => \atk4\data\Model\UserAction::SCOPE_NONE,
     'args'=> [
         'age'=>[
             'type'=>'string'
@@ -143,7 +143,7 @@ $model->addAction('greet', [
 ]);
 
 $model->addAction('ask_age', [
-    'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
+    'scope' => \atk4\data\Model\UserAction::SCOPE_NONE,
     'args'=> [
         'age'=>[
             'type'=>'integer',
@@ -156,13 +156,13 @@ $model->addAction('ask_age', [
 ]);
 
 $app->add(new \atk4\ui\FormField\Line([
-    'action' => $model->getAction('greet'),
+    'action' => $model->getUserAction('greet'),
 ]));
 
 \atk4\ui\View::addTo($app, ['ui'=>'divider']);
 
 \atk4\ui\Button::addTo($app, ['Ask Age'])
-    ->on('click', $model->getAction('ask_age'));
+    ->on('click', $model->getUserAction('ask_age'));
 CODE
     );
 });
@@ -201,10 +201,10 @@ EOF
     $page->add(new Demo())->setCode(
         <<<'CODE'
 $country = new \atk4\ui\demo\CountryLock($app->db);
-$country->getAction('add')->enabled = false;
-$country->getAction('delete')->enabled = function() { return rand(1,2)>1; };
-$country->addAction('mail', [
-    'scope'       => \atk4\data\UserAction\Generic::SINGLE_RECORD,
+$country->getUserAction('add')->enabled = false;
+$country->getUserAction('delete')->enabled = function() { return rand(1,2)>1; };
+$country->getUserAction('mail', [
+    'scope'       => \atk4\data\Model\UserAction:SCOPE_SINGLE,
     'preview'    => function($m) { return 'here is email preview for '.$m->get('name'); },
     'callback'    => function($m) { return 'email sent to '.$m->get('name'); },
     'description' => 'Email testing',

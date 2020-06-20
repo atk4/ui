@@ -54,6 +54,6 @@ $g->addActionMenuItems(
 $special_item = $app->factory(\atk4\ui\View::class, ['id' => false, 'class' => ['item'], 'content' => 'Multi Step']);
 \atk4\ui\Icon::addTo($special_item, ['content' => 'window maximize outline']);
 
-$g->addActionMenuItem($special_item, $country->getAction('multi_step'));
+$g->addActionMenuItem($special_item, $country->getUserAction('multi_step'));
 
 $g->ipp = 10;

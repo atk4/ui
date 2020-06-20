@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\data\Model;
-use atk4\data\UserAction\Generic;
 use atk4\ui\ActionExecutor\jsInterface_;
 use atk4\ui\ActionExecutor\jsUserAction;
 use atk4\ui\ActionExecutor\UserAction;
@@ -36,7 +35,7 @@ class CRUD extends Grid
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
-    /** @var array Collection of NO_RECORDS Scope Model action menu item */
+    /** @var array Collection of SCOPE_NONE Scope Model action menu item */
     private $menuItems = [];
 
     /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty. */
@@ -57,7 +56,7 @@ class CRUD extends Grid
     /** @var array Callback containers for model action. */
     public $onActions = [];
 
-    /** @var Hold recently deleted record id. */
+    /** @var mixed recently deleted record id. */
     private $deletedId;
 
     /**
@@ -124,10 +123,10 @@ class CRUD extends Grid
         $this->model->unload();
 
         if ($this->useMenuActions === null) {
-            $this->useMenuActions = count($m->getActions()) > 4;
+            $this->useMenuActions = count($m->getUserActions()) > 4;
         }
 
-        foreach ($this->_getModelActions(Generic::SINGLE_RECORD) as $action) {
+        foreach ($this->_getModelActions(Model\UserAction::SCOPE_SINGLE) as $action) {
             $action->ui['executor'] = $this->initActionExecutor($action);
             if ($this->useMenuActions) {
                 $this->addActionMenuItem($action);
@@ -137,7 +136,7 @@ class CRUD extends Grid
         }
 
         if ($this->menu) {
-            foreach ($this->_getModelActions(Generic::NO_RECORDS) as $k => $action) {
+            foreach ($this->_getModelActions(Model\UserAction::SCOPE_NONE) as $k => $action) {
                 if ($action->enabled) {
                     $action->ui['executor'] = $this->initActionExecutor($action);
                     $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
@@ -162,7 +161,7 @@ class CRUD extends Grid
      *
      * @return object
      */
-    protected function initActionExecutor(Generic $action)
+    protected function initActionExecutor(Model\UserAction $action)
     {
         $executor = $this->getExecutor($action);
         $executor->onHook(ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
@@ -187,7 +186,7 @@ class CRUD extends Grid
      * Return proper js statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      */
-    protected function jsExecute($return, Generic $action): array
+    protected function jsExecute($return, Model\UserAction $action): array
     {
         $js = [];
         if ($jsAction = $this->getJsGridAction($action)) {
@@ -198,9 +197,9 @@ class CRUD extends Grid
         if (is_string($return)) {
             $js[] = $this->getNotifier($return);
         } else {
-            if ($action->modifier === Generic::MODIFIER_CREATE || $action->modifier === Generic::MODIFIER_UPDATE) {
+            if ($action->modifier === Model\UserAction::MODIFIER_CREATE || $action->modifier === Model\UserAction::MODIFIER_UPDATE) {
                 $js[] = $this->getNotifier($this->saveMsg);
-            } elseif ($action->modifier === Generic::MODIFIER_DELETE) {
+            } elseif ($action->modifier === Model\UserAction::MODIFIER_DELETE) {
                 $js[] = $this->getNotifier($this->deleteMsg);
             } else {
                 $js[] = $this->getNotifier($this->defaultMsg);
@@ -213,15 +212,15 @@ class CRUD extends Grid
     /**
      * Return proper js actions depending on action modifier type.
      */
-    protected function getJsGridAction(Generic $action): ?jsExpressionable
+    protected function getJsGridAction(Model\UserAction $action): ?jsExpressionable
     {
         switch ($action->modifier) {
-            case Generic::MODIFIER_UPDATE:
-            case Generic::MODIFIER_CREATE:
+            case Model\UserAction::MODIFIER_UPDATE:
+            case Model\UserAction::MODIFIER_CREATE:
                 $js = $this->container->jsReload($this->_getReloadArgs());
 
                 break;
-            case Generic::MODIFIER_DELETE:
+            case Model\UserAction::MODIFIER_DELETE:
                 // use deleted record id to remove row, fallback to closest tr if id is not available.
                 $js = $this->deletedId ?
                     (new jQuery('tr[data-id="' . $this->deletedId . '"]'))->transition('fade left') :
@@ -239,8 +238,7 @@ class CRUD extends Grid
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      *
-     * @param string|null  $msg    the message to display
-     * @param Generic|null $action the model action
+     * @param string|null $msg the message to display
      *
      * @return object
      */
@@ -269,7 +267,7 @@ class CRUD extends Grid
      *
      * @return object
      */
-    protected function getExecutor(Generic $action)
+    protected function getExecutor(Model\UserAction $action)
     {
         if (isset($action->ui['executor'])) {
             return $this->factory($action->ui['executor']);
@@ -312,16 +310,16 @@ class CRUD extends Grid
     private function _getModelActions(string $scope): array
     {
         $actions = [];
-        if ($scope === Generic::SINGLE_RECORD && !empty($this->singleScopeActions)) {
+        if ($scope === Model\UserAction::SCOPE_SINGLE && !empty($this->singleScopeActions)) {
             foreach ($this->singleScopeActions as $action) {
-                $actions[] = $this->model->getAction($action);
+                $actions[] = $this->model->getUserAction($action);
             }
-        } elseif ($scope === Generic::NO_RECORDS && !empty($this->noRecordScopeActions)) {
+        } elseif ($scope === Model\UserAction::SCOPE_NONE && !empty($this->noRecordScopeActions)) {
             foreach ($this->noRecordScopeActions as $action) {
-                $actions[] = $this->model->getAction($action);
+                $actions[] = $this->model->getUserAction($action);
             }
         } else {
-            $actions = $this->model->getActions($scope);
+            $actions = $this->model->getUserActions($scope);
         }
 
         return $actions;

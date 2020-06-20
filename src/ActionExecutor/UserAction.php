@@ -23,7 +23,6 @@ namespace atk4\ui\ActionExecutor;
 
 use atk4\core\HookTrait;
 use atk4\data\Model;
-use atk4\data\UserAction\Generic;
 use atk4\data\ValidationException;
 use atk4\ui\Button;
 use atk4\ui\Exception;
@@ -56,7 +55,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * The action to execute.
      *
-     * @var Generic
+     * @var Model\UserAction
      */
     public $action;
 
@@ -118,7 +117,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      * to make sure that view id is properly set for loader and button
      * js action to run properly.
      */
-    public function afterActionInit(Generic $action)
+    public function afterActionInit(Model\UserAction $action)
     {
         $getTableName = function ($arr) {
             foreach ($arr as $k => $v) {
@@ -148,7 +147,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
      *
      * @return UserAction
      */
-    public function setAction(Generic $action): View
+    public function setAction(Model\UserAction $action): View
     {
         $this->action = $action;
         $this->afterActionInit($action);
@@ -425,10 +424,8 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
     /**
      * Get how many steps is required for this action.
-     *
-     * @param Generic $action the Model action
      */
-    protected function getSteps(Generic $action): ?array
+    protected function getSteps(Model\UserAction $action): ?array
     {
         $steps = null;
         if ($action->args) {

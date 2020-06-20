@@ -30,7 +30,7 @@ $action = $files->addAction(
         'args' => [
             'path' => ['type' => 'string', 'required' => true],
         ],
-        'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
+        'scope' => \atk4\data\Model\UserAction::SCOPE_NONE,
     ]
 );
 
@@ -40,7 +40,7 @@ $files->addAction('download', function (\atk4\data\Model $m) {
     return "{$len} bytes downloaded..";
 });
 
-//$files->getAction('download')->system = true;
+//$files->getUserAction('download')->system = true;
 
 $app->add($grid = new \atk4\ui\GridLayout(['columns' => 3]));
 

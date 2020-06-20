@@ -14,7 +14,6 @@ use atk4\core\StaticAddToTrait;
 use atk4\core\TrackableTrait;
 use atk4\data\Model;
 use atk4\data\Persistence\Static_;
-use atk4\data\UserAction\Generic;
 use atk4\ui\ActionExecutor\Interface_;
 use atk4\ui\ActionExecutor\jsInterface_;
 use atk4\ui\ActionExecutor\jsUserAction;
@@ -1067,10 +1066,10 @@ class View implements jsExpressionable
      *
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string                   $event    JavaScript event
-     * @param string                   $selector Optional jQuery-style selector
-     * @param jsChain|callable|Generic $action   code to execute or \atk4\Data\UserAction
-     * @param array                    $defaults Options
+     * @param string                  $event    JavaScript event
+     * @param string                  $selector Optional jQuery-style selector
+     * @param jsChain|callable|Model\UserAction $action   code to execute or \atk4\Data\UserAction
+     * @param array                   $defaults Options
      *
      * @return jQuery
      */
@@ -1133,7 +1132,7 @@ class View implements jsExpressionable
             }, $arguments);
 
             $actions[] = $cb;
-        } elseif ($action instanceof Generic) {
+        } elseif ($action instanceof Model\UserAction) {
             // Setup UserAction executor.
             if (isset($action->ui['executor'])) {
                 $class = $action->ui['executor'];

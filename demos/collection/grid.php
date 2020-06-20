@@ -21,7 +21,7 @@ $ex->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function () {
         new \atk4\ui\jsToast('Simulating delete in demo mode.'),
     ];
 });
-$m->getAction('delete')->ui['executor'] = $ex;
+$m->getUserAction('delete')->ui['executor'] = $ex;
 
 $g->setModel($m);
 
@@ -44,7 +44,7 @@ $g->addModalAction(['icon' => 'external'], 'Modal Test', function ($p, $id) {
     \atk4\ui\Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 
-$g->addActionButton(['icon' => 'delete'], $m->getAction('delete'));
+    $g->addActionButton(['icon' => 'delete'], $m->getUserAction('delete'));
 
 $sel = $g->addSelection();
 $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(

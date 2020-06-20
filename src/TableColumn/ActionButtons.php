@@ -39,10 +39,10 @@ class ActionButtons extends Generic
      *
      * Returns button object
      *
-     * @param \atk4\ui\View|string                        $button
-     * @param callable|\atk4\data\UserAction\Generic|null $action
-     * @param bool                                        $confirm
-     * @param bool                                        $isDisabled
+     * @param \atk4\ui\View|string                  $button
+     * @param callable|Model\UserAction|null $action
+     * @param bool                                  $confirm
+     * @param bool                                  $isDisabled
      *
      * @return \atk4\ui\View
      */
@@ -51,8 +51,8 @@ class ActionButtons extends Generic
         // If action is not specified, perhaps it is defined in the model
         if (!$action) {
             if (is_string($button)) {
-                $action = $this->table->model->getAction($button);
-            } elseif ($button instanceof \atk4\data\UserAction\Generic) {
+                $action = $this->table->model->getUserAction($button);
+            } elseif ($button instanceof Model\UserAction) {
                 $action = $button;
             }
 
@@ -63,7 +63,7 @@ class ActionButtons extends Generic
 
         $name = $this->name . '_button_' . (count($this->buttons) + 1);
 
-        if ($action instanceof \atk4\data\UserAction\Generic) {
+        if ($action instanceof Model\UserAction) {
             $button = $action->ui['button'] ?? $button;
 
             $confirm = $action->ui['confirm'] ?? $confirm;

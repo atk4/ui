@@ -78,10 +78,10 @@ class ActionMenu extends Generic
     /**
      * Add a menu item in Dropdown.
      *
-     * @param View|string                                 $item
-     * @param callable|\atk4\data\UserAction\Generic|null $action
-     * @param string|null                                 $confirm
-     * @param bool                                        $isDisabled
+     * @param View|string                           $item
+     * @param callable|Model\UserAction|null $action
+     * @param string|null                           $confirm
+     * @param bool                                  $isDisabled
      *
      * @return object|string
      */
@@ -90,8 +90,8 @@ class ActionMenu extends Generic
         // If action is not specified, perhaps it is defined in the model
         if (!$action) {
             if (is_string($item)) {
-                $action = $this->table->model->getAction($item);
-            } elseif ($item instanceof \atk4\data\UserAction\Generic) {
+                $action = $this->table->model->getUserAction($item);
+            } elseif ($item instanceof Model\UserAction) {
                 $action = $item;
             }
 
@@ -102,7 +102,7 @@ class ActionMenu extends Generic
 
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
-        if ($action instanceof \atk4\data\UserAction\Generic) {
+        if ($action instanceof Model\UserAction) {
             $confirm = $action->ui['confirm'] ?? $confirm;
 
             $isDisabled = !$action->enabled;

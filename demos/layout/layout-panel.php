@@ -111,7 +111,7 @@ $panel_3->onOpen(function ($p) use ($country, $c_id) {
     $seg = \atk4\ui\View::addTo($p, ['ui' => 'basic segment center aligned']);
     \atk4\ui\Header::addTo($seg, [$country->load($c_id)->getTitle()]);
     $buttons = \atk4\ui\View::addTo($seg, ['ui' => 'vertical basic buttons']);
-    foreach ($country->getActions() as $action) {
+    foreach ($country->getUserActions() as $action) {
         $b = \atk4\ui\Button::addTo($buttons, [$action->getDescription()]);
         $b->on('click', $action, ['args' => ['id' => $c_id]]);
     }
