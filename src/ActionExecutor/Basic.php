@@ -18,7 +18,7 @@ class Basic extends \atk4\ui\View implements Interface_
     public const HOOK_AFTER_EXECUTE = self::class . '@afterExecute';
 
     /**
-     * @var \atk4\data\UserAction\Generic
+     * @var \atk4\data\Model\UserAction
      */
     public $action;
 
@@ -65,7 +65,7 @@ class Basic extends \atk4\ui\View implements Interface_
     /**
      * Associate executor with action.
      */
-    public function setAction(\atk4\data\UserAction\Generic $action): void
+    public function setAction(\atk4\data\Model\UserAction $action): void
     {
         $this->action = $action;
     }

@@ -91,7 +91,7 @@ $myExecutorClass = get_class(new class() extends \atk4\ui\ActionExecutor\UserAct
 });
 
 $file = new FileLock($app->db);
-$file->getAction('edit')->ui['executor'] = [$myExecutorClass];
+$file->getUserAction('edit')->ui['executor'] = [$myExecutorClass];
 
 $crud = \atk4\ui\CRUD::addTo($cc, [
     'ipp' => 5,

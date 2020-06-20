@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace atk4\ui\ActionExecutor;
 
 use atk4\core\HookTrait;
-use atk4\data\UserAction\Generic;
+use atk4\data\Model;
 use atk4\ui\Button;
 use atk4\ui\Exception;
 use atk4\ui\jsExpressionable;
@@ -23,7 +23,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
 {
     use HookTrait;
 
-    /** @var Generic|null Action to execute */
+    /** @var Model\UserAction|null Action to execute */
     public $action;
 
     /** @var Loader|null Loader to add content to modal. */
@@ -58,7 +58,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
     /**
      * Properly set element id for this modal.
      */
-    public function afterActionInit(Generic $action)
+    public function afterActionInit(Model\UserAction $action)
     {
         $getTableName = function ($arr) {
             foreach ($arr as $k => $v) {
@@ -102,7 +102,7 @@ class UserConfirmation extends Modal implements jsInterface_, Interface_
      *
      * @return UserConfirmation
      */
-    public function setAction(Generic $action): Modal
+    public function setAction(Model\UserAction $action): Modal
     {
         $this->action = $action;
         $this->afterActionInit($action);

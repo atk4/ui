@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\core\HookTrait;
-use atk4\data\UserAction\Generic;
+use atk4\data\Model;
 use atk4\ui\ActionExecutor\Basic;
 
 /**
@@ -427,7 +427,7 @@ class Grid extends View
             throw new Exception('Error: Model not set. Set model prior to add item.');
         }
 
-        foreach ($this->model->getActions($scope) as $action) {
+        foreach ($this->model->getUserActions($scope) as $action) {
             $this->addActionMenuItem($action);
         }
     }
@@ -516,10 +516,8 @@ class Grid extends View
 
     /**
      * Find out more about the nature of the action from the supplied object, use addAction().
-     *
-     * @param Generic $action the generic action
      */
-    public function addUserAction(Generic $action)
+    public function addUserAction(Model\UserAction $action)
     {
         $executor = null;
         $args = [];

@@ -51,7 +51,7 @@ $f_action = $files->addAction(
         'args' => [
             'path' => '.',
         ],
-        'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
+        'scope' => \atk4\data\Model\UserAction::SCOPE_NONE,
     ]
 );
 
@@ -83,4 +83,4 @@ $country->addAction('greet', [
     },
 ]);
 
-\atk4\ui\Form\Control\Line::addTo($app, ['action' => $country->getAction('greet')]);
+\atk4\ui\Form\Control\Line::addTo($app, ['action' => $country->getUserAction('greet')]);

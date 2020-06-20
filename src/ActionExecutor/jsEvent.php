@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace atk4\ui\ActionExecutor;
 
 use atk4\core\HookTrait;
-use atk4\data\UserAction\Generic;
+use atk4\data\Model;
 use atk4\ui\Exception;
 use atk4\ui\jQuery;
 use atk4\ui\jsCallback;
@@ -61,7 +61,7 @@ class jsEvent implements jsExpressionable
      */
     public $jsSuccess;
 
-    public function __construct(View $context = null, Generic $action = null, $modelId = null, array $args = [], $stateContext = null)
+    public function __construct(View $context = null, Model\UserAction $action = null, $modelId = null, array $args = [], $stateContext = null)
     {
         $this->setContext($context);
         if ($action) {
@@ -84,7 +84,7 @@ class jsEvent implements jsExpressionable
         }
     }
 
-    public function setAction(Generic $action)
+    public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
 

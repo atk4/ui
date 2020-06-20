@@ -25,7 +25,6 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\data\Model;
-use atk4\data\UserAction\Generic;
 use atk4\ui\ActionExecutor\Event;
 use atk4\ui\ActionExecutor\UserAction;
 
@@ -234,14 +233,14 @@ class Card extends View
      */
     public function addModelActions(Model $model)
     {
-        if ($singleActions = $model->getActions(Generic::SINGLE_RECORD)) {
+        if ($singleActions = $model->getUserActions(Model\UserAction::SCOPE_SINGLE)) {
             $this->setModel($model);
             foreach ($singleActions as $action) {
                 $this->addAction($action, $this->executor);
             }
         }
 
-        if ($noRecordAction = $model->getActions(GENERIC::NO_RECORDS)) {
+        if ($noRecordAction = $model->getUserActions(Model\UserAction::SCOPE_NONE)) {
             foreach ($noRecordAction as $action) {
                 $this->addAction($action, $this->executor);
             }
@@ -300,7 +299,7 @@ class Card extends View
      *
      * @return Card
      */
-    public function addClickAction(Generic $action, $button = null, $args = [], $confirm = null)
+    public function addClickAction(Model\UserAction $action, $button = null, $args = [], $confirm = null)
     {
         $defaults = [];
         if (!$button) {

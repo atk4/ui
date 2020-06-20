@@ -8,10 +8,10 @@ declare(strict_types=1);
  *
  * Usage:
  * When use with View::on method, then jsUserAction executor is automatically create.
- *  $btn->on('click', $model->getAction('delete') , [4, 'confirm'=> 'This will delete record with id 4. Are you sure?']);
+ *  $btn->on('click', $model->getUserAction('delete') , [4, 'confirm'=> 'This will delete record with id 4. Are you sure?']);
  *
  * Manual setup.
- * $action = $model->getAction('delete')
+ * $action = $model->getUserAction('delete')
  * $ex = jsUserAction::addTo($app)->setAction($action, [4])
  * $btn->on('click', $ex, ['confirm'=> 'This will delete record with id 4. Are you sure?']);
  */
@@ -19,7 +19,7 @@ declare(strict_types=1);
 namespace atk4\ui\ActionExecutor;
 
 use atk4\core\HookTrait;
-use atk4\data\UserAction\Generic;
+use atk4\data\Model;
 use atk4\ui\Exception;
 use atk4\ui\jsCallback;
 use atk4\ui\jsExpressionable;
@@ -30,7 +30,7 @@ class jsUserAction extends jsCallback implements Interface_
 {
     use HookTrait;
 
-    /** @var @var Generic The model user action */
+    /** @var Model\UserAction The model user action */
     public $action;
 
     /**
@@ -59,7 +59,7 @@ class jsUserAction extends jsCallback implements Interface_
      *
      * @return $this
      */
-    public function setAction(Generic $action, $urlArgs = [])
+    public function setAction(Model\UserAction $action, $urlArgs = [])
     {
         if (!$this->_initialized) {
             throw new Exception('Error: Make sure jsUserAction is properly initialized prior to call setAction()');

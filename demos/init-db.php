@@ -24,14 +24,14 @@ trait ModelLockTrait
 {
     public function lock(): void
     {
-        $this->getAction('add')->callback = function ($m) {
+        $this->getUserAction('add')->callback = function ($m) {
             return 'Form Submit! Data are not save in demo mode.';
         };
-        $this->getAction('edit')->callback = function ($m) {
+        $this->getUserAction('edit')->callback = function ($m) {
             return 'Form Submit! Data are not save in demo mode.';
         };
 
-        $delete = $this->getAction('delete');
+        $delete = $this->getUserAction('delete');
         $delete->confirmation = 'Please go ahead. Demo mode does not really delete data.';
 
         $delete->callback = function ($m) {
