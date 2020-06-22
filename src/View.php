@@ -390,7 +390,19 @@ class View implements jsExpressionable
         if (!is_object($object)) {
             // for BC do not throw
             // later consider to accept strictly objects only
-            $object = self::addToWithClUnsafe($this, $object, [], true);
+
+            // for BC:
+            // - use self/View class if no class name is defined in the seed
+            if (is_string($object)) {
+                $object = [$object];
+            }
+            if (isset($object[0]) && is_string($object[0])) {
+                $object[0] = $this->normalizeClassName($object[0]);
+            } elseif (!isset($object[0])) {
+                $object[0] = self::class;
+            }
+
+            $object = self::addToWithClassNameUnsafe($this, $object, [], true);
         }
 
         if (!$this->app) {

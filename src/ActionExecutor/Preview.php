@@ -44,7 +44,7 @@ class Preview extends Basic
                 break;
         }
 
-        \atk4\ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
+        \atk4\ui\Button::addToWithClassName($this, $this->executorButton)->on('click', function () {
             return $this->jsExecute();
         });
     }
