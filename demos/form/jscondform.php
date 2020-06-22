@@ -7,10 +7,12 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
+use atk4\ui\Form;
+
 //////////////////////////////////////////////////////////
 \atk4\ui\Header::addTo($app, ['Phone', 'size' => 2]);
 
-$f_phone = \atk4\ui\Form::addTo($app, ['segment']);
+$f_phone = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_phone, ['Add other phone field input. Note: phone1 required a number of at least 5 char.', 'top attached'], ['AboveFields']);
 
 $f_phone->addField('phone1');
@@ -28,15 +30,15 @@ $f_phone->setFieldsDisplayRules([
 //////////////////////////////////////////////////////////
 \atk4\ui\Header::addTo($app, ['Optional subscription', 'size' => 2]);
 
-$f_sub = \atk4\ui\Form::addTo($app, ['segment']);
+$f_sub = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_sub, ['Click on subscribe and add email to receive your gift.', 'top attached'], ['AboveFields']);
 
 $f_sub->addField('name');
-$f_sub->addField('subscribe', [\atk4\ui\FormField\CheckBox::class, 'Subscribe to weekly newsletter', 'toggle']);
+$f_sub->addField('subscribe', [Form\Field\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
 $f_sub->addField('email');
-$f_sub->addField('gender', [\atk4\ui\FormField\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
-$f_sub->addField('m_gift', [\atk4\ui\FormField\DropDown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
-$f_sub->addField('f_gift', [\atk4\ui\FormField\DropDown::class, 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
+$f_sub->addField('gender', [Form\Field\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
+$f_sub->addField('m_gift', [Form\Field\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
+$f_sub->addField('f_gift', [Form\Field\Dropdown::class, 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
 // Show email and gender when subscribe is checked.
 // Show m_gift when gender is exactly equal to 'male' and subscribe is checked.
@@ -51,11 +53,11 @@ $f_sub->setFieldsDisplayRules([
 //////////////////////////////////////////////////////////
 \atk4\ui\Header::addTo($app, ['Dog registration', 'size' => 2]);
 
-$f_dog = \atk4\ui\Form::addTo($app, ['segment']);
+$f_dog = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_dog, ['You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race is exactly "bichon".', 'top attached'], ['AboveFields']);
-$f_dog->addField('race', [\atk4\ui\FormField\Line::class]);
+$f_dog->addField('race', [Form\Field\Line::class]);
 $f_dog->addField('age');
-$f_dog->addField('hair_cut', [\atk4\ui\FormField\DropDown::class, 'values' => ['Short', 'Long']]);
+$f_dog->addField('hair_cut', [Form\Field\Dropdown::class, 'values' => ['Short', 'Long']]);
 
 // Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
 // OR
@@ -67,7 +69,7 @@ $f_dog->setFieldsDisplayRules([
 //////////////////////////////////////////////////////////
 \atk4\ui\Header::addTo($app, ['Hide or show group', 'size' => 2]);
 
-$f_group = \atk4\ui\Form::addTo($app, ['segment']);
+$f_group = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveFields']);
 
 $g_basic = $f_group->addGroup(['Basic Information']);
@@ -75,13 +77,13 @@ $g_basic->addField('first_name', ['width' => 'eight']);
 $g_basic->addField('middle_name', ['width' => 'three']);
 $g_basic->addField('last_name', ['width' => 'five']);
 
-$f_group->addField('dev', [\atk4\ui\FormField\CheckBox::class, 'caption' => 'I am a developper']);
+$f_group->addField('dev', [Form\Field\Checkbox::class, 'caption' => 'I am a developper']);
 
 $g_code = $f_group->addGroup(['Check all language that apply']);
-$g_code->addField('php', [\atk4\ui\FormField\CheckBox::class]);
-$g_code->addField('js', [\atk4\ui\FormField\CheckBox::class]);
-$g_code->addField('html', [\atk4\ui\FormField\CheckBox::class]);
-$g_code->addField('css', [\atk4\ui\FormField\CheckBox::class]);
+$g_code->addField('php', [Form\Field\Checkbox::class]);
+$g_code->addField('js', [Form\Field\Checkbox::class]);
+$g_code->addField('html', [Form\Field\Checkbox::class]);
+$g_code->addField('css', [Form\Field\Checkbox::class]);
 
 $g_other = $f_group->addGroup(['Others']);
 $g_other->addField('language', ['width' => 'eight']);
@@ -96,11 +98,11 @@ $f_group->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language' => ['d
 /*
 \atk4\ui\Header::addTo($app, ['Hide or show accordion section', 'size'=>2]);
 
-$f_acc = \atk4\ui\Form::addTo($app, ['segment']);
+$f_acc = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_acc, ['Work on section layouts too.', 'top attached'], ['AboveFields']);
 
 // Accordion
-$accordion_layout = $f_acc->layout->addSubLayout([\atk4\ui\FormLayout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
+$accordion_layout = $f_acc->layout->addSubLayout([Form\Layout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
 
 // Section - business address
 $adr_section = $accordion_layout->addSection('Business Address');
@@ -114,7 +116,7 @@ $gr->addField('state1', ['width' => 'six']);
 $gr->addField('country1', ['width' => 'six']);
 $gr->addField('postal1', ['width' => 'four']);
 
-$adr_section->addField('custom_shipping', [\atk4\ui\FormField\CheckBox::class, 'caption'=>'Different Shipping Address']);
+$adr_section->addField('custom_shipping', [Form\Field\Checkbox::class, 'caption'=>'Different Shipping Address']);
 
 // Section - shipping address
 $ship_section = $accordion_layout->addSection('Shipping address');

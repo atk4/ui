@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\FormField;
 
-use atk4\ui\Form;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Use atk4\ui\Form\Field\Hidden instead', E_USER_DEPRECATED);
+}
 
 /**
- * Input element for a form field.
+ * @deprecated will be removed jun-2021
  */
-class Hidden extends Input
+class Hidden extends \atk4\ui\Form\Field\Hidden
 {
-    public $ui = '';
-    public $layoutWrap = false;
-    public $inputType = 'hidden';
 }

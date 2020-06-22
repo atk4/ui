@@ -280,7 +280,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
             if (isset($val['model'])) {
                 $val['model'] = $this->factory($val['model']);
-                $f->addField($key, [\atk4\ui\FormField\Lookup::class])->setModel($val['model']);
+                $f->addField($key, [\atk4\ui\Form\Field\Lookup::class])->setModel($val['model']);
             } else {
                 $f->addField($key, null, $val);
             }

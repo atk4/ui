@@ -7,44 +7,46 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
+use atk4\ui\Form;
+
 \atk4\ui\Button::addTo($app, ['Form Sections', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['form-section']);
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$f = \atk4\ui\Form::addTo($app);
+$form = Form::addTo($app);
 
-$sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
+$sub_layout = $form->layout->addSubLayout(Form\Layout\Section::class);
 \atk4\ui\Header::addTo($sub_layout, ['Please fill all form sections!', 'size' => 4]);
 
 $sub_layout->addField('company_name');
 
 // Accordion
-$accordion_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
+$accordion_layout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
 
 // Section #1
 $contact_section = $accordion_layout->addSection('Contact');
 
-$gr = $contact_section->addGroup('Name');
-$gr->addField('first_name', ['width' => 'eight'], ['required' => true]);
-$gr->addField('last_name', ['width' => 'eight']);
+$group = $contact_section->addGroup('Name');
+$group->addField('first_name', ['width' => 'eight'], ['required' => true]);
+$group->addField('last_name', ['width' => 'eight']);
 
-$gr = $contact_section->addGroup('Email');
-$gr->addField('email', ['width' => 'sixteen'], ['caption' => 'yourEmail@domain.com']);
+$group = $contact_section->addGroup('Email');
+$group->addField('email', ['width' => 'sixteen'], ['caption' => 'yourEmail@domain.com']);
 
 // Section #2
 $adr_section = $accordion_layout->addSection('Address');
 
-$gr = $adr_section->addGroup('Street and City');
-$gr->addField('address1', ['width' => 'eight'], ['required' => true]);
-$gr->addField('city', ['width' => 'eight']);
+$group = $adr_section->addGroup('Street and City');
+$group->addField('address1', ['width' => 'eight'], ['required' => true]);
+$group->addField('city', ['width' => 'eight']);
 
-$gr = $adr_section->addGroup('State, Country and Postal Code');
-$gr->addField('state', ['width' => 'six']);
-$gr->addField('country', ['width' => 'six']);
-$gr->addField('postal', ['width' => 'four']);
+$group = $adr_section->addGroup('State, Country and Postal Code');
+$group->addField('state', ['width' => 'six']);
+$group->addField('country', ['width' => 'six']);
+$group->addField('postal', ['width' => 'four']);
 
 // Sub-Accordion
-$sub_accordion_layout = $adr_section->addSubLayout([\atk4\ui\FormLayout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
+$sub_accordion_layout = $adr_section->addSubLayout([Form\Layout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
 
 // Sub-Section #1
 $section_1 = $sub_accordion_layout->addSection('Business address');
@@ -55,10 +57,10 @@ $section_2 = $sub_accordion_layout->addSection('Delivery address');
 $section_2->addField('delivery_address', []);
 
 // Terms field
-$f->addField('term', [\atk4\ui\FormField\CheckBox::class, 'caption' => 'Accept terms and conditions', null, 'slider']);
+$form->addField('term', [Form\Field\Checkbox::class, 'caption' => 'Accept terms and conditions', null, 'slider']);
 
 $accordion_layout->activate($contact_section);
 
-$f->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (Form $form) {
     return $form->success('Yey!', 'You did well by filling out this form');
 });

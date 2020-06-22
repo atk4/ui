@@ -72,7 +72,7 @@ class Modal extends View
      */
     public function set($fx = [], $arg2 = null)
     {
-        if (!is_object($fx) && !($fx instanceof Closure)) {
+        if (!is_object($fx) && !($fx instanceof \Closure)) {
             throw new Exception('Error: Need to pass a function to Modal::set()');
         }
         $this->fx = [$fx];

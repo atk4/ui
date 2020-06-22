@@ -48,7 +48,7 @@ class ArgumentFormExecutor extends BasicExecutor
 
             if (isset($val['model'])) {
                 $val['model'] = $this->factory($val['model']);
-                $this->form->addField($key, [\atk4\ui\FormField\Lookup::class])->setModel($val['model']);
+                $this->form->addField($key, [\atk4\ui\Form\Field\Lookup::class])->setModel($val['model']);
             } else {
                 $this->form->addField($key, null, $val);
             }

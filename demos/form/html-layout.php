@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Form;
-use atk4\ui\FormLayout\Custom;
-use atk4\ui\FormLayout\Generic;
 use atk4\ui\GridLayout;
 use atk4\ui\Header;
 use atk4\ui\Tabs;
@@ -21,8 +19,8 @@ $tabs = Tabs::addTo($app);
 
 $tab = $tabs->addTab('Layout using field name');
 
-$f = FlyersForm::addTo($tab, [
-    'layout' => [Generic::class, ['defaultTemplate' => __DIR__ . '/templates/flyers-form-layout.html']],
+$form = FlyersForm::addTo($tab, [
+    'layout' => [Form\Layout::class, ['defaultTemplate' => __DIR__ . '/templates/flyers-form-layout.html']],
 ]);
 
 ////////////////////////////////////////
@@ -33,7 +31,7 @@ $g_l = GridLayout::addTo($tab, ['rows' => 1, 'columns' => 2])->addClass('interna
 $right = View::addTo($g_l, [], ['r1c1']);
 Header::addTo($right, ['Button on right']);
 
-$form = Form::addTo($right, ['layout' => [Generic::class, 'defaultTemplate' => __DIR__ . '/templates/form-button-right.html']]);
+$form = Form::addTo($right, ['layout' => [Form\Layout::class, 'defaultTemplate' => __DIR__ . '/templates/form-button-right.html']]);
 $form->setModel(new Flyers(new \atk4\data\Persistence\Array_()));
 $form->getField('last_name')->hint = 'Please enter your last name.';
 
@@ -42,7 +40,7 @@ Header::addTo($left, ['Hint placement']);
 
 $form = Form::addTo($left, [
     'layout' => [
-        Generic::class,
+        Form\Layout::class,
         ['defaultInputTemplate' => __DIR__ . '/templates/input.html',
             'defaultHint' => [\atk4\ui\Label::class, 'class' => ['pointing', 'below']],
         ],
@@ -54,7 +52,7 @@ $form->getField('last_name')->hint = 'Please enter your last name.';
 ////////////////////////////////////////
 $tab = $tabs->addTab('Custom layout class');
 
-$form = Form::addTo($tab, ['layout' => [Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);
+$form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);
 $form->setModel(new \atk4\ui\demo\CountryLock($app->db))->loadAny();
 
 $form->onSubmit(function ($f) {
