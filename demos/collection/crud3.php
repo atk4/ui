@@ -13,6 +13,8 @@ $modelClass = get_class(new class() extends \atk4\data\Model {
 
     public $table = 'test';
 
+    public $caption = 'Country';
+
     public function init(): void
     {
         parent::init();
