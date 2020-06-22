@@ -33,7 +33,8 @@ $f->addField('five', new \atk4\ui\FormField\CheckBox())->set(true);
 // Objects still accept seed
 $f->addField('six', new \atk4\ui\FormField\CheckBox(['caption' => 'Caption3']));
 
-$m = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
+$a = [];
+$m = new \atk4\data\Model(new \atk4\data\Persistence\Array_($a));
 
 // model field uses regular line form field by default
 $m->addField('one');

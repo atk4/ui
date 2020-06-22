@@ -26,7 +26,8 @@ $inventoryItemClass = get_class(new class() extends \atk4\data\Model {
     }
 });
 
-$inventory = new $inventoryItemClass(new \atk4\data\Persistence\Array_());
+$data = [];
+$inventory = new $inventoryItemClass(new \atk4\data\Persistence\Array_($data));
 
 // Populate some data.
 $total = 0;

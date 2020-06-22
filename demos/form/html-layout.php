@@ -15,6 +15,8 @@ use atk4\ui\View;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
+$data = [];
+
 Header::addTo($app, ['Display form using Html template', 'subHeader' => 'Fully control how to display fields.']);
 
 $tabs = Tabs::addTo($app);
@@ -34,7 +36,7 @@ $right = View::addTo($g_l, [], ['r1c1']);
 Header::addTo($right, ['Button on right']);
 
 $form = Form::addTo($right, ['layout' => [Generic::class, 'defaultTemplate' => __DIR__ . '/templates/form-button-right.html']]);
-$form->setModel(new Flyers(new \atk4\data\Persistence\Array_()));
+$form->setModel(new Flyers(new \atk4\data\Persistence\Array_($data)));
 $form->getField('last_name')->hint = 'Please enter your last name.';
 
 $left = View::addTo($g_l, [], ['r1c2']);
@@ -48,7 +50,7 @@ $form = Form::addTo($left, [
         ],
     ],
 ]);
-$form->setModel(new Flyers(new \atk4\data\Persistence\Array_()));
+$form->setModel(new Flyers(new \atk4\data\Persistence\Array_($data)));
 $form->getField('last_name')->hint = 'Please enter your last name.';
 
 ////////////////////////////////////////

@@ -18,7 +18,7 @@ class TypeBoolean extends Generic
 
     public function setConditionForModel($model)
     {
-        $filter = $this->recallData();
+        $filter = $this->tryLoadAny()->get();
         if (isset($filter['id'])) {
             $model->addCondition($filter['name'], $filter['op'] === 'true');
         }

@@ -27,7 +27,7 @@ class TypeNumber extends Generic
 
     public function setConditionForModel($m)
     {
-        $filter = $this->recallData();
+        $filter = $this->tryLoadAny()->get();
         if (isset($filter['id'])) {
             switch ($filter['op']) {
                 case 'between':

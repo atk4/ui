@@ -171,7 +171,8 @@ $tab = $tabs->addTab('Complex Examples');
 
 \atk4\ui\Header::addTo($tab, ['Conditional response']);
 
-$m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
+$a = [];
+$m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_($a));
 $m_register->addField('name');
 $m_register->addField('email');
 $m_register->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);

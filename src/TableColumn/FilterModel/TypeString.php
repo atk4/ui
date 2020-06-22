@@ -16,7 +16,7 @@ class TypeString extends Generic
 
     public function setConditionForModel($model)
     {
-        $filter = $this->recallData();
+        $filter = $this->tryLoadAny()->get();
         if (isset($filter['id'])) {
             switch ($filter['op']) {
                 case 'is':

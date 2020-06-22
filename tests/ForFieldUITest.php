@@ -31,7 +31,8 @@ class ForFieldUITest extends AtkPhpunit\TestCase
 
     protected function setUp(): void
     {
-        $p = new Persistence\Array_();
+        $a = [];
+        $p = new Persistence\Array_($a);
         $this->m = new MyTestModel($p);
     }
 

@@ -64,11 +64,8 @@ class FilterPopup extends Popup
 
         $this->form->setFieldsDisplayRules($m->getFormDisplayRules());
 
-        //load data associated with this popup.
-        if ($data = $m->recallData()) {
-            $m->set($data);
-        }
-        $this->form->setModel($m);
+        //load first and only record associate with this popup.
+        $this->form->setModel($m->tryLoadAny());
 
         $this->form->onSubmit(function (Form $form) {
             $form->model->save();
