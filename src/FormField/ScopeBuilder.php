@@ -271,7 +271,16 @@ class ScopeBuilder extends Generic
     public function setModel(Model $model)
     {
         $model = parent::setModel($model);
+        $this->buildQuery($model);
 
+        return $model;
+    }
+
+    /**
+     * Build query from model scope.
+     */
+    protected function buildQuery(Model $model)
+    {
         $this->fields = $this->fields ?: array_keys($model->getFields());
 
         foreach ($this->fields as $fieldName) {
@@ -287,8 +296,6 @@ class ScopeBuilder extends Generic
         $inputsMap = array_column($this->rules, 'inputType', 'id');
 
         $this->query = $this->scopeToQuery($model->scope(), $inputsMap)['query'];
-
-        return $model;
     }
 
     /**
