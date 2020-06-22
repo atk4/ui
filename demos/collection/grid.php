@@ -14,8 +14,8 @@ $m->addAction('test', function ($m) {
 });
 
 // Delete is already prevent by our lock Model, just simulating it.
-$ex = new \atk4\ui\ActionExecutor\jsUserAction();
-$ex->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function () {
+$ex = new \atk4\ui\UserAction\JsCallbackExecutor();
+$ex->onHook(\atk4\ui\UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return [
         (new \atk4\ui\jQuery())->closest('tr')->transition('fade left'),
         new \atk4\ui\jsToast('Simulating delete in demo mode.'),

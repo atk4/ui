@@ -6,7 +6,6 @@ namespace atk4\ui;
 
 use atk4\core\HookTrait;
 use atk4\data\Model;
-use atk4\ui\ActionExecutor\Basic;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -98,7 +97,7 @@ class Grid extends View
      */
     public $table;
 
-    public $executor_class = Basic::class;
+    public $executor_class = UserAction\BasicExecutor::class;
 
     /**
      * The container for table and paginator.
@@ -610,7 +609,7 @@ class Grid extends View
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $model, $columns = null)
+    public function setModel(Model $model, $columns = null)
     {
         $this->model = $this->table->setModel($model, $columns);
 
