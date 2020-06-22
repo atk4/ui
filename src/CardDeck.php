@@ -8,9 +8,6 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\data\Model;
-use atk4\ui\ActionExecutor\jsInterface_;
-use atk4\ui\ActionExecutor\jsUserAction;
-use atk4\ui\ActionExecutor\UserAction;
 use atk4\ui\Component\ItemSearch;
 
 class CardDeck extends View
@@ -60,10 +57,10 @@ class CardDeck extends View
     public $menuBtnStyle = 'primary';
 
     /** @var string Default executor class. */
-    public $executor = UserAction::class;
+    public $executor = UserAction\ModalExecutor::class;
 
     /** @var string Default jsExecutor class. */
-    public $jsExecutor = jsUserAction::class;
+    public $jsExecutor = UserAction\JsCallbackExecutor::class;
 
     /** @var array Default notifier to perform when model action is successful * */
     public $notifyDefault = [jsToast::class, 'settings' => ['displayTime' => 5000]];
@@ -163,7 +160,7 @@ class CardDeck extends View
                         $id_arg = [];
                         foreach ($singleActions as $action) {
                             $action->ui['executor'] = $this->initActionExecutor($action);
-                            if ($action->ui['executor'] instanceof jsUserAction) {
+                            if ($action->ui['executor'] instanceof UserAction\JsCallbackExecutor) {
                                 $id_arg[0] = (new jQuery())->parents('.atk-card')->data('id');
                             }
                             $c->addClickAction($action, null, array_merge($id_arg, $args));
@@ -193,9 +190,9 @@ class CardDeck extends View
      */
     protected function applyReload()
     {
-        foreach ($this->menuActions as $k => $menuAction) {
+        foreach ($this->menuActions as $menuAction) {
             $ex = $menuAction['action']->ui['executor'];
-            if ($ex instanceof jsInterface_) {
+            if ($ex instanceof UserAction\JsExecutorInterface) {
                 $this->container->js(true, $menuAction['btn']->js()->off('click'));
                 $this->container->js(true, $menuAction['btn']->js()->on('click', new jsFunction($ex->jsExecute($this->_getReloadArgs()))));
             }
@@ -222,7 +219,7 @@ class CardDeck extends View
                 return $this->jsExecute($return, $action);
             };
         } else {
-            $executor->onHook(ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
+            $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
                 return $this->jsExecute($return, $action);
             });
         }
@@ -255,7 +252,7 @@ class CardDeck extends View
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      *
-     * @param string|null $msg    the message to display
+     * @param string|null           $msg    the message to display
      * @param Model\UserAction|null $action the model action
      *
      * @return object
@@ -339,8 +336,8 @@ class CardDeck extends View
      *
      * @param Button|string|Model\UserAction                  $button     a button object, a model action or a string representing a model action
      * @param Model\UserAction|jsExpressionable|callable|null $callback   an model action, js expression or callback function
-     * @param string|array                          $confirm    A confirmation string or View::on method defaults when passed has an array,
-     * @param bool                                  $isDisabled
+     * @param string|array                                    $confirm    A confirmation string or View::on method defaults when passed has an array,
+     * @param bool                                            $isDisabled
      *
      * @return mixed
      */

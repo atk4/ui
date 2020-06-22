@@ -25,8 +25,6 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\data\Model;
-use atk4\ui\ActionExecutor\Event;
-use atk4\ui\ActionExecutor\UserAction;
 
 class Card extends View
 {
@@ -74,7 +72,7 @@ class Card extends View
     public $useLabel = false;
 
     /** @var string Default executor class. */
-    public $executor = UserAction::class;
+    public $executor = UserAction\ModalExecutor::class;
 
     /** @var array Array of columns css wide classes */
     protected $words = [

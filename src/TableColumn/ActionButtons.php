@@ -39,10 +39,10 @@ class ActionButtons extends Generic
      *
      * Returns button object
      *
-     * @param \atk4\ui\View|string                  $button
+     * @param \atk4\ui\View|string           $button
      * @param callable|Model\UserAction|null $action
-     * @param bool                                  $confirm
-     * @param bool                                  $isDisabled
+     * @param bool                           $confirm
+     * @param bool                           $isDisabled
      *
      * @return \atk4\ui\View
      */

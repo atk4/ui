@@ -13,12 +13,7 @@ use atk4\core\InitializerTrait;
 use atk4\core\StaticAddToTrait;
 use atk4\core\TrackableTrait;
 use atk4\data\Model;
-use atk4\data\Model\Action;
 use atk4\data\Persistence\Static_;
-use atk4\ui\ActionExecutor\Interface_;
-use atk4\ui\ActionExecutor\jsInterface_;
-use atk4\ui\ActionExecutor\jsUserAction;
-use atk4\ui\ActionExecutor\UserAction;
 
 /**
  * Implements a most core view, which all of the other components descend
@@ -1067,10 +1062,10 @@ class View implements jsExpressionable
      *
      * @see http://agile-ui.readthedocs.io/en/latest/js.html
      *
-     * @param string                  $event    JavaScript event
-     * @param string                  $selector Optional jQuery-style selector
+     * @param string                            $event    JavaScript event
+     * @param string                            $selector Optional jQuery-style selector
      * @param jsChain|callable|Model\UserAction $action   code to execute or \atk4\Data\UserAction
-     * @param array                   $defaults Options
+     * @param array                             $defaults Options
      *
      * @return jQuery
      */
@@ -1140,12 +1135,12 @@ class View implements jsExpressionable
             } elseif (isset($defaults['executor'])) {
                 $class = $defaults['executor'];
             } elseif (!$action->args && !$action->fields && !$action->preview) {
-                $class = jsUserAction::class;
+                $class = UserAction\JsCallbackExecutor::class;
             } else {
-                $class = UserAction::class;
+                $class = UserAction\ModalExecutor::class;
             }
             $ex = $this->factory($class);
-            if ($ex instanceof self && $ex instanceof Interface_ && $ex instanceof jsInterface_) {
+            if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
                 //Executor may already had been add to layout. Like in CardDeck.
                 if (!isset($this->app->html->elements[$ex->short_name])) {
                     $ex = $this->app->html->add($ex, 'Modals')->setAction($action);
@@ -1167,7 +1162,7 @@ class View implements jsExpressionable
                 } else {
                     $actions[] = $ex_actions;
                 }
-            } elseif ($ex instanceof jsUserAction) {
+            } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
                 $ex = $this->add($ex)->setAction($action, $arguments);
                 if ($conf = $action->getConfirmation()) {
                     $defaults['confirm'] = $conf;
@@ -1177,7 +1172,7 @@ class View implements jsExpressionable
                 }
                 $actions[] = $ex;
             } else {
-                throw new \atk4\ui\Exception('Executor class must be of type jsUserAction or extends View and implement both Interface_ and jsInterface_');
+                throw new \atk4\ui\Exception('Executor must be of type UserAction\JsCallbackExecutor or extend View and implement UserAction\JsExecutorInterface');
             }
         } elseif (is_array($action)) {
             $actions = array_merge($actions, $action);
@@ -1321,8 +1316,6 @@ class View implements jsExpressionable
      * Needed for tracking which view in a render tree called url().
      *
      * @internal
-     *
-     * @var [type]
      */
     public $_triggerBy;
 

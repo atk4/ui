@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\data\Model;
-use atk4\ui\ActionExecutor\jsInterface_;
-use atk4\ui\ActionExecutor\jsUserAction;
-use atk4\ui\ActionExecutor\UserAction;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -27,10 +24,10 @@ class CRUD extends Grid
     public $notifyDefault = [jsToast::class];
 
     /** @var string default js action executor class in UI for model action. */
-    public $jsExecutor = jsUserAction::class;
+    public $jsExecutor = UserAction\JsCallbackExecutor::class;
 
     /** @var string default action executor class in UI for model action. */
-    public $executor = UserAction::class;
+    public $executor = UserAction\ModalExecutor::class;
 
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
@@ -90,11 +87,11 @@ class CRUD extends Grid
         parent::applySort();
 
         if ($this->getSortBy() && !empty($this->menuItems)) {
-            foreach ($this->menuItems as $k => $item) {
+            foreach ($this->menuItems as $item) {
                 //Remove previous click handler and attach new one using sort argument.
                 $this->container->js(true, $item['item']->js()->off('click.atk_crud_item'));
                 $ex = $item['action']->ui['executor'];
-                if ($ex instanceof jsInterface_) {
+                if ($ex instanceof UserAction\JsExecutorInterface) {
                     $ex->stickyGet($this->name . '_sort', $this->getSortBy());
                     $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new jsFunction($ex->jsExecute())));
                 }
@@ -164,13 +161,13 @@ class CRUD extends Grid
     protected function initActionExecutor(Model\UserAction $action)
     {
         $executor = $this->getExecutor($action);
-        $executor->onHook(ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
+        $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
             return $this->jsExecute($return, $action);
         });
 
-        if ($executor instanceof UserAction) {
-            foreach ($this->onActions as $k => $onAction) {
-                $executor->onHook(UserAction::HOOK_STEP, function ($ex, $step, $form) use ($onAction, $action) {
+        if ($executor instanceof UserAction\ModalExecutor) {
+            foreach ($this->onActions as $onAction) {
+                $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, function ($ex, $step, $form) use ($onAction, $action) {
                     $key = key($onAction);
                     if ($key === $action->short_name && $step === 'fields') {
                         return call_user_func($onAction[$key], $form, $ex);

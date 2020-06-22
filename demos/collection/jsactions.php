@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\UserAction;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -56,9 +58,9 @@ $f_action = $files->addAction(
 );
 
 $btn = \atk4\ui\Button::addTo($app, ['Import File']);
-$executor = \atk4\ui\ActionExecutor\jsUserAction::addTo($app);
+$executor = UserAction\JsCallbackExecutor::addTo($app);
 $executor->setAction($f_action, ['path' => '.']);
-$executor->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($t, $m) {
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');
 });
 
@@ -77,7 +79,7 @@ $country->addAction('greet', [
             'required' => true,
         ],
     ],
-    'ui' => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
+    'ui' => ['executor' => UserAction\JsCallbackExecutor::class],
     'callback' => function ($m, $name) {
         return 'Hello ' . $name;
     },
