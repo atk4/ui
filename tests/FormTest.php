@@ -38,8 +38,8 @@ class FormTest extends AtkPhpunit\TestCase
         $f = $this->f;
         $f->addField('test');
 
-        $this->assertTrue($f->getField('test') instanceof \atk4\ui\FormField\Generic);
-        $this->assertInstanceOf(\atk4\ui\FormField\Generic::class, $f->layout->getField('test'));
+        $this->assertTrue($f->getField('test') instanceof \atk4\ui\Form\Field);
+        $this->assertInstanceOf(\atk4\ui\Form\Field::class, $f->layout->getField('test'));
     }
 
     public function assertSubmit(array $post_data, callable $submit = null, callable $check_expected_error = null)

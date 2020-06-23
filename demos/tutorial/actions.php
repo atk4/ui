@@ -155,7 +155,7 @@ $model->addAction('ask_age', [
     }
 ]);
 
-$app->add(new \atk4\ui\FormField\Line([
+$app->add(new \atk4\ui\Form\Field\Line([
     'action' => $model->getAction('greet'),
 ]));
 

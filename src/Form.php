@@ -51,14 +51,14 @@ class Form extends View
     /**
      * A current layout of a form, needed if you call $form->addField().
      *
-     * @var \atk4\ui\FormLayout\Generic
+     * @var \atk4\ui\Form\Layout
      */
     public $layout;
 
     /**
      * List of fields currently registered with this form.
      *
-     * @var array Array of FormField objects
+     * @var array Array of Form\Field objects
      */
     public $fields = [];
 
@@ -173,7 +173,7 @@ class Form extends View
     protected function initLayout()
     {
         if ($this->layout === null) {
-            $this->layout = \atk4\ui\FormLayout\Generic::class;
+            $this->layout = Form\Layout::class;
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
@@ -272,7 +272,7 @@ class Form extends View
      *
      * @param string $name Name of the field
      */
-    public function getField($name): FormField\Generic
+    public function getField($name): Form\Field
     {
         return $this->fields[$name];
     }
@@ -347,7 +347,7 @@ class Form extends View
      * @param array|string|object|null $decorator
      * @param array|string|object|null $field
      *
-     * @return FormField\Generic
+     * @return Form\Field
      */
     public function addField(?string $name, $decorator = null, $field = null)
     {
@@ -379,7 +379,7 @@ class Form extends View
      *
      * @param string $title
      *
-     * @return \atk4\ui\FormLayout\Generic
+     * @return Form\Layout
      */
     public function addHeader($title = null)
     {
@@ -391,7 +391,7 @@ class Form extends View
      *
      * @param string|array $title
      *
-     * @return \atk4\ui\FormLayout\Generic
+     * @return Form\Layout
      */
     public function addGroup($title = null)
     {
@@ -436,12 +436,12 @@ class Form extends View
      * 1. The $seed argument is evaluated
      * 2. $f->ui['form'] is evaluated if present
      * 3. $f->type is converted into seed and evaluated
-     * 4. lastly, falling back to Line, DropDown (based on $reference and $enum)
+     * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
      * @param \atk4\data\Field $f    Data model field
      * @param array            $seed Defaults to pass to factory() when decorator is initialized
      *
-     * @return FormField\Generic
+     * @return Form\Field
      */
     public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
@@ -450,19 +450,19 @@ class Form extends View
                 ->addMoreInfo('f', $f);
         }
 
-        $fallback_seed = [\atk4\ui\FormField\Line::class];
+        $fallback_seed = [Form\Field\Line::class];
 
         if ($f->type === 'array' && $f->reference) {
             $limit = ($f->reference instanceof ContainsMany) ? 0 : 1;
             $model = $f->reference->refModel();
-            $fallback_seed = [\atk4\ui\FormField\MultiLine::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
+            $fallback_seed = [Form\Field\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
         } elseif ($f->type !== 'boolean') {
             if ($f->enum) {
-                $fallback_seed = [\atk4\ui\FormField\DropDown::class, 'values' => array_combine($f->enum, $f->enum)];
+                $fallback_seed = [Form\Field\Dropdown::class, 'values' => array_combine($f->enum, $f->enum)];
             } elseif ($f->values) {
-                $fallback_seed = [\atk4\ui\FormField\DropDown::class, 'values' => $f->values];
+                $fallback_seed = [Form\Field\Dropdown::class, 'values' => $f->values];
             } elseif (isset($f->reference)) {
-                $fallback_seed = [\atk4\ui\FormField\Lookup::class, 'model' => $f->reference->refModel()];
+                $fallback_seed = [Form\Field\Lookup::class, 'model' => $f->reference->refModel()];
             }
         }
 
@@ -496,14 +496,14 @@ class Form extends View
      * @var array Describes how factory converts type to decorator seed
      */
     protected $typeToDecorator = [
-        'boolean' => FormField\CheckBox::class,
-        'text' => FormField\TextArea::class,
-        'string' => FormField\Line::class,
-        'password' => FormField\Password::class,
-        'datetime' => FormField\Calendar::class,
-        'date' => [FormField\Calendar::class, 'type' => 'date'],
-        'time' => [FormField\Calendar::class, 'type' => 'time', 'ampm' => false],
-        'money' => FormField\Money::class,
+        'boolean' => Form\Field\Checkbox::class,
+        'text' => Form\Field\Textarea::class,
+        'string' => Form\Field\Line::class,
+        'password' => Form\Field\Password::class,
+        'datetime' => Form\Field\Calendar::class,
+        'date' => [Form\Field\Calendar::class, 'type' => 'date'],
+        'time' => [Form\Field\Calendar::class, 'type' => 'time', 'ampm' => false],
+        'money' => Form\Field\Money::class,
     ];
 
     /**

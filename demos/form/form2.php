@@ -7,16 +7,18 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
+use atk4\ui\Form;
+
 // Testing form.
 
 // create header
 \atk4\ui\Header::addTo($app, ['Database-driven form with an enjoyable layout']);
 
 // create form
-$form = \atk4\ui\Form::addTo($app, ['segment']);
-//$form = \atk4\ui\Form::addTo($app, ['segment', 'buttonSave'=>false]);
-//$form = \atk4\ui\Form::addTo($app, ['segment', 'buttonSave'=>new \atk4\ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]);
-//$form = \atk4\ui\Form::addTo($app, ['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
+$form = Form::addTo($app, ['segment']);
+//$form = Form::addTo($app, ['segment', 'buttonSave'=>false]);
+//$form = Form::addTo($app, ['segment', 'buttonSave'=>new \atk4\ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]);
+//$form = Form::addTo($app, ['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
 \atk4\ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveFields']);
 
 $form->setModel(new Country($app->db), false);
@@ -44,7 +46,7 @@ $f_names->addField('middle_name', ['width' => 'three']);
 $f_names->addField('last_name', ['width' => 'five']);
 
 // form on submit
-$form->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (Form $form) {
     // In-form validation
     $errors = [];
     if (mb_strlen($form->model->get('first_name')) < 3) {
@@ -83,7 +85,7 @@ $personClass = get_class(new class() extends \atk4\data\Model {
         $this->addField('surname', ['ui' => ['placeholder' => 'e.g. Smith']]);
         $this->addField('gender', ['enum' => ['M', 'F']]);
         $this->hasOne('country_lookup_id', new Country()); // this works fast
-        $this->hasOne('country_dropdown_id', [new Country(), 'ui' => ['form' => new \atk4\ui\FormField\DropDown()]]); // this works slow
+        $this->hasOne('country_dropdown_id', [new Country(), 'ui' => ['form' => new Form\Field\Dropdown()]]); // this works slow
     }
 
     public function validate($intent = null)
@@ -98,6 +100,6 @@ $personClass = get_class(new class() extends \atk4\data\Model {
     }
 });
 
-\atk4\ui\Form::addTo($app)
+Form::addTo($app)
     ->addClass('segment')
     ->setModel(new $personClass($app->db));

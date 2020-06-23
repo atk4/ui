@@ -7,6 +7,8 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
+use atk4\ui\Form;
+
 \atk4\ui\Button::addTo($app, ['Nested accordions', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['accordion-nested']);
 \atk4\ui\View::addTo($app, ['ui' => 'clearing divider']);
@@ -37,9 +39,9 @@ $i2 = $accordion->addSection('Dynamic Text', function ($v) {
 // dynamic section - form view
 $i3 = $accordion->addSection('Dynamic Form', function ($v) {
     \atk4\ui\Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
-    $f = \atk4\ui\Form::addTo($v);
+    $f = Form::addTo($v);
     $f->addField('Email');
-    $f->onSubmit(function (\atk4\ui\Form $form) {
+    $f->onSubmit(function (Form $form) {
         return $form->success('Subscribed ' . $form->model->get('Email') . ' to newsletter.');
     });
 });

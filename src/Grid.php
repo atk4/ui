@@ -32,7 +32,7 @@ class Grid extends View
      * setModel() QuickSearch object will be created automatically and these model fields will be used
      * for filtering.
      *
-     * @var array|FormField\Generic
+     * @var array|Form\Field
      */
     public $quickSearch;
 

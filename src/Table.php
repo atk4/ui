@@ -190,7 +190,7 @@ class Table extends Lister
             $this->model = new \atk4\ui\Misc\ProxyModel();
         }
 
-        // This code should be vaugely consistent with FormLayout\Generic::addField()
+        // This code should be vaugely consistent with Form\Layout::addField()
 
         if (is_string($field)) {
             $field = ['type' => $field];

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\FormField;
 
-use atk4\ui\Form;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Use atk4\ui\Form\Field\Password instead', E_USER_DEPRECATED);
+}
 
 /**
- * Password input element for a form field.
+ * @deprecated will be removed jun-2021
  */
-class Password extends Line
+class Password extends \atk4\ui\Form\Field\Password
 {
-    public $inputType = 'password';
 }

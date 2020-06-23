@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Form;
 use atk4\ui\jsExpression;
-use atk4\ui\jsFunction;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
+
+use atk4\ui\jsFunction;
 
 \atk4\ui\Header::addTo($app, ['MultiLine form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
@@ -40,14 +42,14 @@ for ($i = 1; $i < 3; ++$i) {
     $inventory->saveAndUnload();
 }
 
-$f = \atk4\ui\Form::addTo($app);
-$f->addField('test');
+$form = Form::addTo($app);
+$form->addField('test');
 // Add multiline field and set model.
-$ml = $f->addField('ml', [\atk4\ui\FormField\MultiLine::class, 'options' => ['color' => 'blue'], 'rowLimit' => 10, 'addOnTab' => true]);
+$ml = $form->addField('ml', [Form\Field\MultiLine::class, 'options' => ['color' => 'blue'], 'rowLimit' => 10, 'addOnTab' => true]);
 $ml->setModel($inventory);
 
 // Add total field.
-$sub_layout = $f->layout->addSublayout(\atk4\ui\FormLayout\Section\Columns::class);
+$sub_layout = $form->layout->addSublayout(Form\Layout\Section\Columns::class);
 $sub_layout->addColumn(12);
 $c = $sub_layout->addColumn(4);
 $f_total = $c->addField('total', ['readonly' => true])->set($total);
@@ -67,7 +69,7 @@ $ml->onLineChange(function ($rows, $form) use ($f_total) {
 $ml->jsAfterAdd = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 $ml->jsAfterDelete = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 
-$f->onSubmit(function (\atk4\ui\Form $form) use ($ml) {
+$form->onSubmit(function (Form $form) use ($ml) {
     $rows = $ml->saveRows()->getModel()->export();
 
     return new \atk4\ui\jsToast(json_encode(array_values($rows)));

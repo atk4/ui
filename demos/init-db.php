@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Form;
+
 try {
     if (file_exists(__DIR__ . '/db.php')) {
         require_once __DIR__ . '/db.php';
     } else {
         require_once __DIR__ . '/db.default.php';
     }
-} catch (PDOException $e) {
+} catch (\PDOException $e) {
     // do not pass $e unless you can secure DSN!
     throw (new \atk4\ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
@@ -109,13 +111,13 @@ class Stat extends \atk4\data\Model
         $this->title_field = 'project_name';
         $this->addField('description', ['type' => 'text']);
         $this->addField('client_name', ['type' => 'string']);
-        $this->addField('client_address', ['type' => 'text', 'ui' => ['form' => [new \atk4\ui\FormField\TextArea(), 'rows' => 4]]]);
+        $this->addField('client_address', ['type' => 'text', 'ui' => ['form' => [new Form\Field\TextArea(), 'rows' => 4]]]);
 
         $this->hasOne('client_country_iso', [
             new Country(),
             'their_field' => 'iso',
             'ui' => [
-                'form' => \atk4\ui\FormField\Line::class,
+                'form' => Form\Field\Line::class,
             ],
         ])
             ->addField('client_country', 'name');
@@ -145,7 +147,7 @@ class Stat extends \atk4\data\Model
         $this->addFields(['start_date', 'finish_date'], ['type' => 'date']);
         $this->addField('finish_time', ['type' => 'time']);
 
-        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => [\atk4\ui\FormField\Line::class, 'disabled' => true]]]);
+        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => [Form\Field\Line::class, 'disabled' => true]]]);
     }
 }
 
@@ -182,14 +184,14 @@ class File extends \atk4\data\Model
         foreach ($dir as $fileinfo) {
             $name = $fileinfo->getFilename();
 
-            if ($fileinfo->getFilename() === '.') {
+            if ($name === '.') {
                 continue;
             }
-            if ($fileinfo->getFilename()[0] === '.') {
+            if ($name[0] === '.') {
                 continue;
             }
 
-            if ($fileinfo->getFilename() === 'src' || $fileinfo->getFilename() === 'demos' || $isSub) {
+            if ($name === 'src' || $name === 'demos' || $isSub) {
                 /* Disabling saving file in db
                 $this->unload();
                 $this->save([
@@ -200,7 +202,7 @@ class File extends \atk4\data\Model
                 */
 
                 if ($fileinfo->isDir()) {
-                    $this->ref('SubFolder')->importFromFilesystem($path . '/' . $fileinfo->getFilename(), true);
+                    $this->ref('SubFolder')->importFromFilesystem($path . '/' . $name, true);
                 }
             }
         }
