@@ -154,7 +154,7 @@ class Upload extends Input
     /**
      * Add a js action to be return to server on callback.
      */
-    public function addJSAction($action)
+    public function addJsAction($action)
     {
         if (is_array($action)) {
             $this->jsActions = array_merge($action, $this->jsActions);

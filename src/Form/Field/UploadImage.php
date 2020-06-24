@@ -60,7 +60,7 @@ class UploadImage extends Upload
         $this->thumbnail->setAttr(['src' => $src]);
         $action = $this->thumbnail->js();
         $action->attr('src', $src);
-        $this->addJSAction($action);
+        $this->addJsAction($action);
     }
 
     /**
@@ -75,6 +75,6 @@ class UploadImage extends Upload
         } else {
             $action->removeAttr('src');
         }
-        $this->addJSAction($action);
+        $this->addJsAction($action);
     }
 }
