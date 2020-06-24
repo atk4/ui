@@ -156,7 +156,7 @@ class Input extends Form\Field
         if (!is_object($button)) {
             $button = new Button($button);
         }
-        if ($button instanceof \atk4\data\Model\Action) {
+        if ($button instanceof \atk4\data\UserAction\Generic) {
             $action = $button;
             $button = Button::addTo($this, [$action->caption], [$spot]);
             $this->addClass('action');
