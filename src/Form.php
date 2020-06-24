@@ -49,6 +49,13 @@ class Form extends View
     public $canLeave = true;
 
     /**
+     * HTML <form> element, all inner form controls/elements are linked to it.
+     *
+     * @var View
+     */
+    public $formElement;
+
+    /**
      * A current layout of a form, needed if you call $form->addControl().
      *
      * @var \atk4\ui\Form\Layout
@@ -177,6 +184,8 @@ class Form extends View
         if ($this->template->hasTag('AboveFields')) {
             throw new Exception('AboveFields region has be deprecated. Use AboveControls instead');
         }
+
+        $this->formElement = View::addTo($this, ['element' => 'form', 'short_name' => 'form'], ['AboveControls']);
 
         // Initialize layout, so when you call addControl / setModel next time, form will know
         // where to add your fields.
