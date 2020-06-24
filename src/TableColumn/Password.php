@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\TableColumn;
 
-/**
- * Implements Column helper for grid.
- */
-class Password extends Generic
-{
-    public $sortable = false;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Use atk4\ui\Table\Column\Password instead', E_USER_DEPRECATED);
+}
 
-    public function getDataCellTemplate(\atk4\data\Field $f = null)
-    {
-        return '***';
-    }
+/**
+ * @deprecated will be removed jun-2021
+ */
+class Password extends \atk4\ui\Table\Column\Password
+{
 }

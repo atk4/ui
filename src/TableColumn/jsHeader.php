@@ -4,27 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\TableColumn;
 
-use atk4\ui\jsCallback;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Use atk4\ui\Table\Column\JsHeader instead', E_USER_DEPRECATED);
+}
 
 /**
- * Implement a callback for a column header dropdown menu.
+ * @deprecated will be removed jun-2021
  */
-class jsHeader extends jsCallback
+class jsHeader extends \atk4\ui\Table\Column\JsHeader
 {
-    /**
-     * Function to call when header menu item is select.
-     *
-     * @param callable $fx
-     */
-    public function onSelectItem($fx)
-    {
-        if (is_callable($fx)) {
-            if ($this->triggered()) {
-                $param = [$_GET['id'],  $_GET['item'] ?? null];
-                $this->set(function () use ($fx, $param) {
-                    return call_user_func_array($fx, $param);
-                });
-            }
-        }
-    }
 }

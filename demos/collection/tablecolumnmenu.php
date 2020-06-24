@@ -23,7 +23,7 @@ $col_surname = $table->addColumn('surname');
 $col_title = $table->addColumn('title');
 
 $table->addColumn('date');
-$table->addColumn('salary', new \atk4\ui\TableColumn\Money());
+$table->addColumn('salary', new \atk4\ui\Table\Column\Money());
 
 //regular popup setup
 \atk4\ui\Text::addTo($col_name->addPopup())->set('Name popup');

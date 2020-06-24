@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Table;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -21,18 +23,18 @@ $bb->on('click', $table->js()->reload());
 
 $table->setModel(new SomeData(), false);
 
-$table->addColumn('name', new \atk4\ui\TableColumn\Link(['table', 'id' => '{$id}']));
-$table->addColumn('surname', new \atk4\ui\TableColumn\Template('{$surname}'))->addClass('warning');
-$table->addColumn('title', new \atk4\ui\TableColumn\Status([
+$table->addColumn('name', new Table\Column\Link(['table', 'id' => '{$id}']));
+$table->addColumn('surname', new Table\Column\Template('{$surname}'))->addClass('warning');
+$table->addColumn('title', new Table\Column\Status([
     'positive' => ['Prof.'],
     'negative' => ['Dr.'],
 ]));
 
 $table->addColumn('date');
-$table->addColumn('salary', new \atk4\ui\TableColumn\Money());
-$table->addColumn('logo_url', [new \atk4\ui\TableColumn\Image()], ['caption' => 'Our Logo']);
+$table->addColumn('salary', new Table\Column\Money());
+$table->addColumn('logo_url', [new Table\Column\Image()], ['caption' => 'Our Logo']);
 
-$table->onHook(\atk4\ui\TableColumn\Generic::HOOK_GET_HTML_TAGS, function ($table, \atk4\data\Model $row) {
+$table->onHook(Table\Column::HOOK_GET_HTML_TAGS, function ($table, \atk4\data\Model $row) {
     switch ($row->id) {
         case 1: $color = 'yellow';
 
@@ -65,8 +67,8 @@ $table = \atk4\ui\Table::addTo($app);
 $table->setSource($my_array, ['name']);
 
 //$table->addColumn('name');
-$table->addColumn('surname', [\atk4\ui\TableColumn\Link::class, 'url' => 'table.php?id={$surname}']);
+$table->addColumn('surname', [Table\Column\Link::class, 'url' => 'table.php?id={$surname}']);
 $table->addColumn('birthdate', null, ['type' => 'date']);
-$table->addColumn('cv', [\atk4\ui\TableColumn\HTML::class]);
+$table->addColumn('cv', [Table\Column\Html::class]);
 
 $table->getColumnDecorators('name')[0]->addClass('disabled');

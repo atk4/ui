@@ -14,4 +14,4 @@ $m->getAction('delete')->system = true;
 
 $g = \atk4\ui\CRUD::addTo($app, ['paginator' => false]);
 $g->setModel($m);
-$g->addDecorator('project_code', [\atk4\ui\TableColumn\Link::class]);
+$g->addDecorator('project_code', [\atk4\ui\Table\Column\Link::class]);

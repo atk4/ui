@@ -9,7 +9,7 @@ Table
 
 .. php:class:: Table
 
-.. important:: For columns, see :php:class:`TableColumn\\Generic`. For DIV-based lists, see :php:class:`Lister`. For an
+.. important:: For columns, see :php:class:`Table\\Column`. For DIV-based lists, see :php:class:`Lister`. For an
     interractive features see :php:class:`Grid` and :php:class:`CRUD`.
 
 Table is the simplest way to output multiple records of structured, static data. For Un-structure output
@@ -55,7 +55,7 @@ You can also use Table with Array data source like this::
     $table->setSource($my_array);
 
     $table->addColumn('name');
-    $table->addColumn('surname', [\atk4\ui\TableColumn\Link::class, 'url'=>'details.php?surname={$surname}']);
+    $table->addColumn('surname', [\atk4\ui\Table\Column\Link::class, 'url'=>'details.php?surname={$surname}']);
     $table->addColumn('birthdate', null, ['type'=>'date']);
 
 .. warning:: I encourage you to seek appropriate Agile Data persistence instead of
@@ -140,7 +140,7 @@ display values of specific model Field.
 
 .. php:method:: columnFactory(\atk4\data\Field $f)
 
-If the value of the field can be displayed by :php:class:`TableColumn\\Generic` then :php:class:`Table` will
+If the value of the field can be displayed by :php:class:`Table\\Column` then :php:class:`Table` will
 respord with object of this class. Since the default column does not contain any customization,
 then to save memory Table will re-use the same objects for all generic fields.
 
@@ -166,10 +166,10 @@ it will automatically delete the corresponding record.
 
 You have probably noticed, that I have omitted the name for this column. If name is not specified
 (null) then the Column object will not be associated with any model field in
-:php:meth:`TableColumn\\Generic::getHeaderCellHTML`, :php:meth:`TableColumn\\Generic::getTotalsCellHTML` and
-:php:meth:`TableColumn\\Generic::getDataCellHTML`.
+:php:meth:`Table\\Column::getHeaderCellHTML`, :php:meth:`Table\\Column::getTotalsCellHTML` and
+:php:meth:`Table\\Column::getDataCellHTML`.
 
-Some columns require name, such as :php:class:`TableColumn\\Generic` will
+Some columns require name, such as :php:class:`Table\\Column` will
 not be able to cope with this situations, but many other column types are perfectly fine with this.
 
 Some column classes will be able to take some information from a specified column, but will work
@@ -212,7 +212,7 @@ your convenience there is a way to add multiple columns efficiently.
 
 As a final note in this section - you can re-use column objects multiple times::
 
-    $c_gap = new \atk4\ui\TableColumn\Template('<td> ... <td>');
+    $c_gap = new \atk4\ui\Table\Column\Template('<td> ... <td>');
 
     $table->addColumn($c_gap);
     $table->setModel(new Order($db), ['name', 'price', 'amount']);
@@ -257,10 +257,10 @@ For more information see https://github.com/kylefox/jquery-tablesort
 Injecting HTML
 --------------
 
-The tag will override model value. Here is example usage of :php:meth:`TableColumn\\Generic::getHTMLTags`::
+The tag will override model value. Here is example usage of :php:meth:`Table\\Column::getHTMLTags`::
 
 
-    class ExpiredColumn extends \atk4\ui\TableColumn\Generic
+    class ExpiredColumn extends \atk4\ui\Table\Column
         public function getDataCellHTML()
         {
             return '{$_expired}';
@@ -359,8 +359,8 @@ nicer especially inside a table.
 
 One column may have several decorators::
 
-    $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
-    $table->addDecorator('salary', new \atk4\ui\TableColumn\Link(['page2']));
+    $table->addColumn('salary', new \atk4\ui\Table\Column\Money());
+    $table->addDecorator('salary', new \atk4\ui\Table\Column\Link(['page2']));
 
 In this case the first decorator will take care of tr/td tags but second decorator will compliment
 it. Result is that table will output 'salary' as a currency (align and red ink) and also decorate
@@ -376,11 +376,11 @@ There are a few things to note:
 
 2. formatting is always applied in same order as defined - in example above Money first, Link after.
 
-3. output of the \atk4\ui\TableColumn\Money decorator is used into Link decorator as if it would be value of cell, however
+3. output of the \atk4\ui\\Table\\Column\Money decorator is used into Link decorator as if it would be value of cell, however
    decorators have access to original value also. Decorator implementation is usually aware of combinations.
 
-:php:meth:`TableColumn\\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
-without the <td> cell itself. Subsequently :php:meth:`TableColumn\\Link::getDataCellTemplate` is called
+:php:meth:`Table\\Column\\\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
+without the <td> cell itself. Subsequently :php:meth:`Table\\Column\\\Link::getDataCellTemplate` is called
 and the '{$salary}' tag from this link is replaced by output from Money column resulting in this
 template::
 
@@ -486,7 +486,7 @@ See also :ref:`js`.
 Static Attributes and classes
 -----------------------------
 
-.. php:class:: TableColumn\\Generic
+.. php:class:: Table\\Column
 
 .. php:method:: addClass($class, $scope = 'body');
 
@@ -496,31 +496,31 @@ Static Attributes and classes
 The following code will make sure that contens of the column appear on a single line by
 adding class "single line" to all body cells::
 
-    $table->addColumn('name', (new \atk4\ui\TableColumn\Generic()->addClass('single line')));
+    $table->addColumn('name', (new \atk4\ui\Table\Column()->addClass('single line')));
 
 If you wish to add a class to 'head' or 'foot' or 'all' cells, you can pass 2nd argument to addClass::
 
-    $table->addColumn('name', (new \atk4\ui\TableColumn\Generic()->addClass('right aligned', 'all')));
+    $table->addColumn('name', (new \atk4\ui\Table\Column()->addClass('right aligned', 'all')));
 
 There are several ways to make your code more readable::
 
-    $table->addColumn('name', new \atk4\ui\TableColumn\Generic())
+    $table->addColumn('name', new \atk4\ui\Table\Column())
         ->addClass('right aligned', 'all');
 
 Or if you wish to use factory, the syntax is::
 
-    $table->addColumn('name', [\atk4\ui\TableColumn\Generic::class])
+    $table->addColumn('name', [\atk4\ui\Table\Column::class])
         ->addClass('right aligned', 'all');
 
 For setting an attribute you can use setAttr() method::
 
-    $table->addColumn('name', [\atk4\ui\TableColumn\Generic::class])
+    $table->addColumn('name', [\atk4\ui\Table\Column::class])
         ->setAttr('colspan', 2, 'all');
 
 Setting a new value to the attribute will override previous value.
 
-Please note that if you are redefining :php:meth:`TableColumn\\Generic::getHeaderCellHTML`,
-:php:meth:`TableColumn\\Generic::getTotalsCellHTML` or :php:meth:`TableColumn\\Generic::getDataCellHTML`
+Please note that if you are redefining :php:meth:`Table\\Column::getHeaderCellHTML`,
+:php:meth:`Table\\Column::getTotalsCellHTML` or :php:meth:`Table\\Column::getDataCellHTML`
 and you wish to preserve functionality of setting custom attributes and
 classes, you should generate your TD/TH tag through getTag method.
 
@@ -540,10 +540,10 @@ You can add column to a table that does not link with field::
 Using dynamic values
 --------------------
 
-Body attributes will be embedded into the template by the default :php:meth:`TableColumn\\Generic::getDataCellHTML`,
+Body attributes will be embedded into the template by the default :php:meth:`Table\\Column::getDataCellHTML`,
 but if you specify attribute (or class) value as a tag, then it will be auto-filled
 with row value or injected HTML.
 
-For further examples of and advanced usage, see implementation of :php:class:`TableColumn\\Status`.
+For further examples of and advanced usage, see implementation of :php:class:`Table\\Column\\Status`.
 
 

@@ -30,7 +30,7 @@ $g->onFormAddEdit(function ($form, $ex) {
 
 $g->setModel($m);
 
-$g->addDecorator($m->title_field, [\atk4\ui\TableColumn\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => 'id']]);
+$g->addDecorator($m->title_field, [\atk4\ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => 'id']]);
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 

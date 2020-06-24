@@ -4,29 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\TableColumn;
 
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Use atk4\ui\Table\Column\Image instead', E_USER_DEPRECATED);
+}
+
 /**
- * Column for formatting image.
+ * @deprecated will be removed jun-2021
  */
-class Image extends \atk4\ui\TableColumn\Generic
+class Image extends \atk4\ui\Table\Column\Image
 {
-    /**
-     * Overrides custom attributes that will be applied on head, body or foot.
-     *
-     * @var array
-     */
-    public $attr = ['all' => ['class' => ['center aligned single line']]];
-
-    /**
-     * Extend parent method.
-     *
-     * @param \atk4\data\Field $f
-     *
-     * @return string
-     */
-    public function getDataCellTemplate(\atk4\data\Field $f = null)
-    {
-        $caption = $f ? $f->getCaption() : $this->short_name;
-
-        return '<img src="' . parent::getDataCellTemplate($f) . '" alt="' . $caption . '" border="0" />';
-    }
 }
