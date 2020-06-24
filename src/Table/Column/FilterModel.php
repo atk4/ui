@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column\Filter;
+namespace atk4\ui\Table\Column;
 
 use atk4\core\NameTrait;
 use atk4\core\SessionTrait;
@@ -10,9 +10,9 @@ use atk4\data\Field;
 use atk4\data\Persistence;
 
 /**
- * Implement a generic Type model for filtering data.
+ * Implement a generic filter model for filtering column data.
  */
-class Model extends \atk4\data\Model
+class FilterModel extends \atk4\data\Model
 {
     use SessionTrait;
     use NameTrait; // needed for SessionTrait
@@ -46,7 +46,7 @@ class Model extends \atk4\data\Model
     public $lookupField;
 
     /**
-     * Factory method that will return a FilerModel Type class.
+     * Factory method that will return a FilterModel Type class.
      *
      * @param Field       $field
      * @param Persistence $persistence
@@ -56,7 +56,7 @@ class Model extends \atk4\data\Model
     public static function factoryType($field)
     {
         $persistence = new Persistence\Array_();
-        $filterDomain = 'atk4\\ui\\Table\\Column\\Filter\\Type';
+        $filterDomain = self::class . '\\Type';
 
         // check if field as a type and use string as default
         if (empty($type = $field->type)) {

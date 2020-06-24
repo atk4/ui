@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column\Filter;
+namespace atk4\ui\Table\Column\FilterModel;
 
 use atk4\data\Model;
+use atk4\ui\Table\Column;
 
-class TypeEnum extends Model
+class TypeEnum extends Column\FilterModel
 {
     public function init(): void
     {
         //bypass parent init since we are not using op and value field but create them from
         //the lookup field value.
-        Model ::init();
+        Model::init();
         $this->afterInit();
 
         $this->op = null;

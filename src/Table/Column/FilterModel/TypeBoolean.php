@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column\Filter;
+namespace atk4\ui\Table\Column\FilterModel;
 
-class TypeBoolean extends Model
+use atk4\ui\Table\Column;
+
+class TypeBoolean extends Column\FilterModel
 {
     public $noValueField = true;
 
