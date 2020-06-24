@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column\Filter;
+namespace atk4\ui\Table\Column\FilterModel;
 
-class TypeNumber extends Model
+use atk4\ui\Table\Column;
+
+class TypeNumber extends Column\FilterModel
 {
     public function init(): void
     {

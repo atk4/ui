@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Table\Column\Filter;
+namespace atk4\ui\Table\Column\FilterModel;
 
+use atk4\ui\Table\Column;
 use DateTime;
 
-class TypeDate extends Model
+class TypeDate extends Column\FilterModel
 {
     public function init(): void
     {
