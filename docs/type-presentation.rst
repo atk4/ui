@@ -24,7 +24,7 @@ Calendar (DatePicker) or enable field icon to indicate currency.
 
 Presentation in Agile Toolkit is handled by :php:class:`Persistence\\UI`.
 
-Decoration is performed by helper classes, such as :php:class:`FormField\\Calendar` or
+Decoration is performed by helper classes, such as :php:class:`Form\\Field\\Calendar` or
 :php:class:`TableColumn\\Money`. The decorator is in control of the final output, so it can decide if
 it uses the value from presentation or do some decoration on its own.
 
@@ -50,7 +50,7 @@ of your integration.
  3. Create your new decorator.
 
   Such as use drop-down to select currency from a pre-defined list inside your specific class
-  while extending :php:class:`FormField\\Input` class. Make sure it can interpret input correctly.
+  while extending :php:class:`Form\\Field\\Input` class. Make sure it can interpret input correctly.
   The process is explained further down in this chapter.
 
  4. Associate the types with your decorator.
@@ -70,14 +70,14 @@ of the field does not seem compatible::
 
     // or
 
-    $form->addField('field_name', new \atk4\ui\FormField\Password());
+    $form->addField('field_name', new \atk4\ui\Form\Field\Password());
 
 Selecting the decorator is done in the following order:
 
  - specified in second argument to UI `addColumn()` or `addField()` (as shown above)
  - specified using `ui` property of :php:class:`\atk4\data\Field`::
 
-    $field->ui['form'] = new \atk4\ui\FormField\Password();
+    $field->ui['form'] = new \atk4\ui\Form\Field\Password();
 
  - fallback to :php:meth:`Form::_fieldFactory`
 

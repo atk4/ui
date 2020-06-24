@@ -69,11 +69,11 @@ Even if model not explicitly set (see section below) each form has an underlying
 		'email' => 'some@email.com'
 	]);
 
-Form also relies on a ``\atk4\ui\FormLayout`` class and displays fields through
-decorators defined at ``\atk4\ui\FormField``. See dedicated documentation for:
+Form also relies on a ``\atk4\ui\Form::Layout`` class and displays fields through
+decorators defined at ``\atk4\ui\Form::Field``. See dedicated documentation for:
 
- - :php:class:`FormLayout::Generic`
- - :php:class:`FormField::Generic`
+ - :php:class:`Form::Layout`
+ - :php:class:`Form::Field`
 
 To tweak the UI properties of an input field use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field::
 
@@ -97,12 +97,12 @@ The basic 2-line syntax will extract all the required logic from the Model inclu
 
  - Fields defined for this Model will be displayed
  - Display of default values in the form
- - Depending on field type, a decorator will be selected from FormField/Generic
- - Using :php:class:`FormLayout::Columns` can make form more compact by splitting it into columns
+ - Depending on field type, a decorator will be selected from Form\Field class
+ - Using :php:class:`Form\Layout\Columns` can make form more compact by splitting it into columns
  - Field captions, placeholders, hints and other elements defined in Field::ui are respected (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
  - Fields that are not editable by default will not appear on the form (https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
  - Field typecasting will be invoked such as for converting dates
- - Reference fields (https://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as DropDown
+ - Reference fields (https://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as Dropdown
  - Booleans are displayed as checkboxes but stored as defined by the model field
  - Mandatory and Required fields will be visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$mandatory)
  - Validation will be performed and errors will appear on the form (NEED LINK)
@@ -162,7 +162,7 @@ Create a new field on a form::
 
     $form = Form::addTo($app);
     $form->addField('email');
-    $form->addField('gender', [\atk4\ui\FormField\DropDown::class, 'values'=>['Female', 'Male']]);
+    $form->addField('gender', [\atk4\ui\Form\Field\Dropdown::class, 'values'=>['Female', 'Male']]);
     $form->addField('terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']);
 
 Create a new field on a form using Model does not require you to describe each field.
@@ -173,10 +173,10 @@ specific field type::
     $form->setModel(new User($db), ['email', 'gender', 'terms']);
 
 Field Decorator does not have to be added directly into the form. You can use a separate
-:php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`FormField\Generic::$form`::
+:php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`Form\Field::$form`::
 
     $myview = View::addTo($form, ['defaultTemplate'=>'./mytemplate.html']);
-    FormField\DropDown::addTo($myview, ['form'=>$form]);
+    Form\Field\Dropdown::addTo($myview, ['form'=>$form]);
 
 .. php:method:: addFields($fields)
 
@@ -185,7 +185,7 @@ Similar to :php:meth:`Form::addField()`, but allows to add multiple fields in on
     $form = Form::addTo($app);
     $form->addFields([
         'email',
-        ['gender', [\atk4\ui\FormField\DropDown::class, 'values'=>['Female', 'Male']]],
+        ['gender', [\atk4\ui\Form\Field\Dropdown::class, 'values'=>['Female', 'Male']]],
         ['terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']],
     ]);
 
@@ -212,13 +212,13 @@ is documented here: https://agile-data.readthedocs.io/en/develop/fields.html
 
 Form uses a small UI component to visualize HTML input fields associated with
 the respective Model Field. We call this object "Field Decorator". All field
-decorators extend from class :php:class:`FormField::Generic`.
+decorators extend from class :php:class:`Form::Field`.
 
 Agile UI comes with at least the following decorators:
 
 - Input (also extends into Line, Password, Hidden)
-- DropDown
-- CheckBox
+- Dropdown
+- Checkbox
 - Radio
 - Calendar
 - Radio
@@ -228,16 +228,16 @@ For some examples see: https://ui.agiletoolkit.org/demos/form3.php
 
 Field Decorator can be passed to ``addField`` using 'string', :php:ref:`seed` or 'object'::
 
-    $form->addField('accept_terms', \atk4\ui\FormField\CheckBox::class);
-    $form->addField('gender', [\atk4\ui\FormField\DropDown::class, 'values'=>['Female', 'Male']]);
+    $form->addField('accept_terms', \atk4\ui\Form\Field\Checkbox::class);
+    $form->addField('gender', [\atk4\ui\Form\Field\Dropdown::class, 'values'=>['Female', 'Male']]);
 
-    $calendar = new \atk4\ui\FormField\Calendar();
+    $calendar = new \atk4\ui\Form\Field\Calendar();
     $calendar->type = 'tyme';
     $calendar->options['ampm'] = true;
     $form->addField('time', $calendar);
 
 For more information on default decorators as well as examples on how to create
-your own see documentation on :php:class:`FormField::Generic`.
+your own see documentation on :php:class:`Form::Field`.
 
 .. php:method:: decoratorFactory(\atk4\data\Field $f, $defaults = [])
 
@@ -251,7 +251,7 @@ Data field is the 3rd argument to ``Form::addField()``.
 
 There are 3 ways to define Data Field using 'string', 'array' or 'object'::
 
-    $form->addField('accept_terms', \atk4\ui\FormField\CheckBox::class, 'Accept Terms & Conditions');
+    $form->addField('accept_terms', \atk4\ui\Form\Field\Checkbox::class, 'Accept Terms & Conditions');
     $form->addField('gender', null, ['enum'=>['Female', 'Male']]);
 
     class MyBoolean extends \atk4\data\Field {
@@ -299,7 +299,7 @@ example displays a registration form for a User::
     $form->setModel(new User($db));
 
     // add password verification field
-    $form->addField('password_verify', \atk4\ui\FormField\Password::class, 'Type password again');
+    $form->addField('password_verify', \atk4\ui\Form\Field\Password::class, 'Type password again');
     $form->addField('accept_terms', null, ['type'=>'boolean']);
 
     // submit event
@@ -319,7 +319,7 @@ example displays a registration form for a User::
 Type vs Decorator Class
 -----------------------
 
-Sometimes you may wonder - should you pass decorator class (FormField\CheckBox) or
+Sometimes you may wonder - should you pass decorator class (Form\Field\Checkbox) or
 a data field type (['type' => 'boolean']);
 
 It is always recommended to use data field type, because it will take care of type-casting
@@ -327,7 +327,7 @@ for you. Here is an example with date::
 
     $form = Form::addTo($app);
     $form->addField('date1', null, ['type'=>'date']);
-    $form->addField('date2', [\atk4\ui\FormField\Calendar::class, 'type'=>'date']);
+    $form->addField('date2', [\atk4\ui\Form\Field\Calendar::class, 'type'=>'date']);
 
     $form->onSubmit(function($form) {
         echo 'date1 = '.print_r($form->model->get('date1'), true).' and date2 = '.print_r($form->model->get('date2'), true);
@@ -368,11 +368,11 @@ You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model f
         }
     }
 
-The seed for the UI will be combined with the default overriding :php:attr:`FormField\\Calendar::type`
+The seed for the UI will be combined with the default overriding :php:attr:`Form\\Field\\Calendar::type`
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class::
 
-    $this->addField('birth_year', ['ui'=>[\atk4\ui\FormField\Calendar::class, 'type'=>'month']);
+    $this->addField('birth_year', ['ui'=>[\atk4\ui\Form\Field\Calendar::class, 'type'=>'month']);
 
 Without the data 'type' property, now the calendar selection will be stored as text.
 
@@ -468,7 +468,7 @@ Here are a few questions:
 
 As far as form is concerned:
 
-- Decorators must be able to parse entered values. For instance DropDown will make sure that
+- Decorators must be able to parse entered values. For instance Dropdown will make sure that
   value entered is one of the available values (by key)
 
 - Form will rely on Agile Data Typecasting (https://agile-data.readthedocs.io/en/develop/typecasting.html)
@@ -787,11 +787,11 @@ Here is a more advanced example::
 
     $f_sub = Form::addTo($app);
     $f_sub->addField('name');
-    $f_sub->addField('subscribe', [\atk4\ui\FormField\CheckBox::class, 'Subscribe to weekly newsletter', 'toggle']);
+    $f_sub->addField('subscribe', [\atk4\ui\Form\Field\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
     $f_sub->addField('email');
-    $f_sub->addField('gender', [\atk4\ui\FormField\Radio::class], ['enum'=>['Female', 'Male']])->set('Female');
-    $f_sub->addField('m_gift', [\atk4\ui\FormField\DropDown::class, 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
-    $f_sub->addField('f_gift', [\atk4\ui\FormField\DropDown::class, 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
+    $f_sub->addField('gender', [\atk4\ui\Form\Field\Radio::class], ['enum'=>['Female', 'Male']])->set('Female');
+    $f_sub->addField('m_gift', [\atk4\ui\Form\Field\Dropdown::class, 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
+    $f_sub->addField('f_gift', [\atk4\ui\Form\Field\Dropdown::class, 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
     // Show email and gender when subscribe is checked.
 
@@ -809,9 +809,9 @@ You may also define multiple conditions for the field to be visible if you wrap 
 
 
     $f_sub = Form::addTo($app);
-    $f_dog->addField('race', [\atk4\ui\FormField\Line::class]);
+    $f_dog->addField('race', [\atk4\ui\Form\Field\Line::class]);
     $f_dog->addField('age');
-    $f_dog->addField('hair_cut', [\atk4\ui\FormField\DropDown::class, 'values' => ['Short', 'Long']]);
+    $f_dog->addField('hair_cut', [\atk4\ui\Form\Field\Dropdown::class, 'values' => ['Short', 'Long']]);
 
     // Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
     // OR
@@ -833,13 +833,13 @@ Instead of defining rules for fields individually you can hide/show entire group
     $g_basic->addField('middle_name', ['width' => 'three']);
     $g_basic->addField('last_name', ['width' => 'five']);
 
-    $f_group->addField('dev', [\atk4\ui\FormField\CheckBox::class, 'caption' => 'I am a developper']);
+    $f_group->addField('dev', [\atk4\ui\Form\Field\Checkbox::class, 'caption' => 'I am a developper']);
 
     $g_code = $f_group->addGroup(['Check all language that apply']);
-    $g_code->addField('php', [\atk4\ui\FormField\CheckBox::class]);
-    $g_code->addField('js', [\atk4\ui\FormField\CheckBox::class]);
-    $g_code->addField('html', [\atk4\ui\FormField\CheckBox::class]);
-    $g_code->addField('css', [\atk4\ui\FormField\CheckBox::class]);
+    $g_code->addField('php', [\atk4\ui\Form\Field\Checkbox::class]);
+    $g_code->addField('js', [\atk4\ui\Form\Field\Checkbox::class]);
+    $g_code->addField('html', [\atk4\ui\Form\Field\Checkbox::class]);
+    $g_code->addField('css', [\atk4\ui\Form\Field\Checkbox::class]);
 
     $g_other = $f_group->addGroup(['Others']);
     $g_other->addField('language', ['width' => 'eight']);

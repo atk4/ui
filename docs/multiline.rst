@@ -1,12 +1,12 @@
 
-.. php:namespace:: atk4\ui\FormField
+.. php:namespace:: atk4\ui\Form\Field
 
-.. php:class:: MultiLine
+.. php:class:: Multiline
 
 
-=====
+====================
 Multiline Form Field
-=====
+====================
 
 
 The Multiline Form Field is not a single field, but is used to edit several Model records.
@@ -74,7 +74,7 @@ You can also check LINK_TO_DEMO/multiline.php for this example
 Manually setting up Multiline
 =============================
 
-Multiline FormField is used by default if a Model `containsMany()` or `containsOne()` other Model, but you can set up the multiline component manually. For example, if you wish to edit
+Multiline form field is used by default if a Model `containsMany()` or `containsOne()` other Model, but you can set up the multiline component manually. For example, if you wish to edit
 a `hasMany()` relation of a Model along with the Model itself. (In contrary to containsMany(), the records of the related Model are stored in a separate table). Lets say a User can have many email addresses,
 but you want to store them in a separate table. Uncomment the line `//$this->hasMany('Email', [Email::class]);` in User Model to use it::
 
@@ -108,7 +108,7 @@ If you want to edit them along with the user, Multiline is set up in a few lines
     //Add a form to UI to edit User record
     $user_form = \atk4\ui\Form::addTo($app);
     $user_form->setModel($user);
-    $ml = $user_form->addField('email_addresses', [\atk4\ui\FormField\MultiLine::class]);
+    $ml = $user_form->addField('email_addresses', [\atk4\ui\Form\Field\Multiline::class]);
     $ml->setModel($user->ref('Email'));
 
     //set up saving of Email on Form submit
@@ -120,7 +120,7 @@ If you want to edit them along with the user, Multiline is set up in a few lines
     });
 
 
-Now, there is another MultiLine FormField to add, edit or delete the users email addresses:
+Now, there is another Multiline form field to add, edit or delete the users email addresses:
 
 .. image:: images/multiline_email_address.png
 
@@ -198,9 +198,9 @@ Note: There is no option available for textarea.
 
 Footer
 ------
-You can add a footer to Multiline FormField by adding a sublayout to it. In this example, we add a footer containing a read-only input which could get the value from ``onLineChange`` callback (see above)::
+You can add a footer to Multiline form field by adding a sublayout to it. In this example, we add a footer containing a read-only input which could get the value from ``onLineChange`` callback (see above)::
    
-    $ml = $form->addField('ml', [\atk4\ui\FormField\MultiLine::class, 'options' => ['color' => 'blue']]);
+    $ml = $form->addField('ml', [\atk4\ui\FormField\Multiline::class, 'options' => ['color' => 'blue']]);
     $ml->setModel($inventory);
     // Add sublayout with total field.
     $sub_layout = $f->layout->addSublayout(\atk4\ui\FormLayout\Section\Columns::class);
