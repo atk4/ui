@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Form;
-
 use atk4\ui\jsReload;
 
 /** @var \atk4\ui\App $app */
