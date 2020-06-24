@@ -44,7 +44,7 @@ class FlyersForm extends Form
             'placeholder' => 'Select your destination',
         ], ['required' => true]);
 
-        $ml = $this->addField('multi', [Form\Field\MultiLine::class, 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional passengers:', 'renderLabel' => false]);
+        $ml = $this->addField('multi', [Form\Field\Multiline::class, 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional passengers:', 'renderLabel' => false]);
         $ml->setModel(new Flyers(new \atk4\data\Persistence\Array_($this->flyers)));
 
         $cards = $this->addField('cards', [new Form\Field\TreeItemSelector(['treeItems' => $this->cards]), 'caption' => 'Flyers program:'], ['type' => 'array', 'serialize' => 'json']);

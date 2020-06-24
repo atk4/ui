@@ -23,9 +23,9 @@ $group->addField('line_read', ['readonly' => true])->set('read only');
 $group->addField('line_disb', ['disabled' => true])->set('disabled');
 
 $group = $form->addGroup('Text Area');
-$group->addField('text_norm', [new Form\Field\TextArea()])->set('editable');
-$group->addField('text_read', [new Form\Field\TextArea(), 'readonly' => true])->set('read only');
-$group->addField('text_disb', [new Form\Field\TextArea(), 'disabled' => true])->set('disabled');
+$group->addField('text_norm', [new Form\Field\Textarea()])->set('editable');
+$group->addField('text_read', [new Form\Field\Textarea(), 'readonly' => true])->set('read only');
+$group->addField('text_disb', [new Form\Field\Textarea(), 'disabled' => true])->set('disabled');
 
 $group = $form->addGroup('Checkbox');
 $group->addField('c_norm', [new Form\Field\Checkbox()])->set(true);
@@ -197,18 +197,18 @@ $r1 = $group->addField('r1', new Form\Field\Radio(['values' => [
 ]));
 $r1->onChange('console.log("radio changed")');
 
-\atk4\ui\Header::addTo($app, ['Line ends of TextArea']);
+\atk4\ui\Header::addTo($app, ['Line ends of Textarea']);
 
 $form = Form::addTo($app);
 $group = $form->addGroup('Without model');
-$group->addField('text_crlf', [new Form\Field\TextArea()])->set("First line\r\nSecond line");
-$group->addField('text_cr', [new Form\Field\TextArea()])->set("First line\rSecond line");
-$group->addField('text_lf', [new Form\Field\TextArea()])->set("First line\nSecond line");
+$group->addField('text_crlf', [new Form\Field\Textarea()])->set("First line\r\nSecond line");
+$group->addField('text_cr', [new Form\Field\Textarea()])->set("First line\rSecond line");
+$group->addField('text_lf', [new Form\Field\Textarea()])->set("First line\nSecond line");
 
 $group = $form->addGroup('With model');
-$group->addField('m_text_crlf', [new Form\Field\TextArea()], ['type' => 'text'])->set("First line\r\nSecond line");
-$group->addField('m_text_cr', [new Form\Field\TextArea()], ['type' => 'text'])->set("First line\rSecond line");
-$group->addField('m_text_lf', [new Form\Field\TextArea()], ['type' => 'text'])->set("First line\nSecond line");
+$group->addField('m_text_crlf', [new Form\Field\Textarea()], ['type' => 'text'])->set("First line\r\nSecond line");
+$group->addField('m_text_cr', [new Form\Field\Textarea()], ['type' => 'text'])->set("First line\rSecond line");
+$group->addField('m_text_lf', [new Form\Field\Textarea()], ['type' => 'text'])->set("First line\nSecond line");
 
 $form->onSubmit(function (Form $form) {
     // check what values are submitted

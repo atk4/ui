@@ -12,7 +12,7 @@ require_once __DIR__ . '/../init-app.php';
 
 use atk4\ui\jsFunction;
 
-\atk4\ui\Header::addTo($app, ['MultiLine form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
+\atk4\ui\Header::addTo($app, ['Multiline form field', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
 
 /** @var \atk4\data\Model $inventoryItemClass */
 $inventoryItemClass = get_class(new class() extends \atk4\data\Model {
@@ -45,7 +45,7 @@ for ($i = 1; $i < 3; ++$i) {
 $form = Form::addTo($app);
 $form->addField('test');
 // Add multiline field and set model.
-$ml = $form->addField('ml', [Form\Field\MultiLine::class, 'options' => ['color' => 'blue'], 'rowLimit' => 10, 'addOnTab' => true]);
+$ml = $form->addField('ml', [Form\Field\Multiline::class, 'options' => ['color' => 'blue'], 'rowLimit' => 10, 'addOnTab' => true]);
 $ml->setModel($inventory);
 
 // Add total field.

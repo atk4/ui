@@ -48,8 +48,8 @@ $group->addField('gender', [Form\Field\Dropdown::class, 'values' => ['Female', '
 
 // testing 0 value
 $values = [0 => 'noob', 1 => 'pro', 2 => 'dev'];
-$form->addField('description', [Form\Field\TextArea::class])->set(0);
-$form->addField('no_description', [Form\Field\TextArea::class])->set(null);
+$form->addField('description', [Form\Field\Textarea::class])->set(0);
+$form->addField('no_description', [Form\Field\Textarea::class])->set(null);
 $form->addField('status_optional', [Form\Field\Dropdown::class, 'values' => $values]);
 $form->addField('status_string_required', [Form\Field\Dropdown::class], ['type' => 'string', 'values' => $values, 'required' => true]);
 $form->addField('status_integer_required', [Form\Field\Dropdown::class], ['type' => 'integer', 'values' => $values, 'required' => true]);
