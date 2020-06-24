@@ -53,7 +53,7 @@ class FilterPopup extends Popup
         $this->setOption('delay', ['hide' => 1500]);
         $this->setHoverable();
 
-        $m = Filter\Model::factoryType($this->field);
+        $m = FilterModel::factoryType($this->field);
 
         $this->form = Form::addTo($this)->addClass('');
         $this->form->buttonSave->addClass('');
