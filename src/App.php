@@ -516,11 +516,7 @@ class App
             $this->hook(self::HOOK_BEFORE_OUTPUT);
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
-                $this->setResponseStatusCode(500);
-                $this->terminate(
-                    $this->buildLateErrorStr('Callback requested, but never reached. You may be missing some arguments in request URL.'),
-                    ['content-type' => 'text/plain']
-                );
+                throw new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.');
             }
             echo $this->html->template->render();
         } catch (ExitApplicationException $e) {
@@ -1035,11 +1031,6 @@ class App
 
     // RESPONSES
 
-    private function buildLateErrorStr(string $msg): string
-    {
-        return "\n" . '!! ATK4 UI ERROR: ' . $msg . ' !!' . "\n";
-    }
-
     /** @var string[] */
     private static $_sentHeaders = [];
 
@@ -1056,21 +1047,21 @@ class App
 
         $isCli = \PHP_SAPI === 'cli'; // for phpunit
 
-        $lateErrorStr = null;
+        $lateError = null;
         foreach (ob_get_status(true) as $status) {
             if ($status['buffer_used'] !== 0 && !$isCli) {
-                $lateErrorStr = $this->buildLateErrorStr('Unexpected output detected.');
+                $lateError = 'Unexpected output detected.';
 
                 break;
             }
         }
 
-        if ($lateErrorStr === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
-            $lateErrorStr = $this->buildLateErrorStr('Headers already sent, more headers can not be set at this stage.');
+        if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
+            $lateError = 'Headers already sent, more headers can not be set at this stage.';
         }
 
         if (!headers_sent() || $isCli) {
-            if ($lateErrorStr !== null) {
+            if ($lateError !== null) {
                 $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
             }
 
@@ -1091,8 +1082,8 @@ class App
             }
         }
 
-        if ($lateErrorStr !== null) {
-            echo $lateErrorStr;
+        if ($lateError !== null) {
+            echo "\n" . '!! ATK4 UI ERROR: ' . $lateError . ' !!' . "\n";
             exit(1);
         }
 
