@@ -27,17 +27,23 @@ $tab = $tabs->addTab('Basic Use');
 
 \atk4\ui\Header::addTo($tab, ['Very simple form']);
 
-$form = Form::addTo($tab);
+$form = \atk4\ui\Form::addTo($tab);
 $form->addControl('email');
-$form->onSubmit(function (Form $form) {
-    // implement subscribe here
-
+$form->onSubmit(function (\atk4\ui\Form $form) {
     return $form->success('Subscribed ' . $form->model->get('email') . ' to newsletter.');
 });
-
-$form->buttonSave->set('Subscribe');
+$form->buttonSave->set('Subscribe - regular');
 $form->buttonSave->icon = 'mail';
 
+$form = \atk4\ui\Form::addTo($tab, ['style' => ['margin-top' => '50px']]);
+$form->addField('email');
+$form->onSubmit(function (\atk4\ui\Form $form) {
+    throw new \atk4\data\ValidationException(['email' => 'test']);
+});
+$form->buttonSave->set('Subscribe - will add field error');
+$form->buttonSave->icon = 'mail';
+
+/*
 \atk4\ui\Header::addTo($tab, ['But very flexible']);
 
 $form = Form::addTo($tab);
@@ -230,3 +236,4 @@ $form->onSubmit(function (Form $form) {
 
     return $errors ?: $form->success('No more errors', 'so we have saved everything into the database');
 });
+*/
