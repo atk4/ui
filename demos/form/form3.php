@@ -6,10 +6,10 @@ namespace atk4\ui\demo;
 
 use atk4\ui\Form;
 
+use atk4\ui\jsReload;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
-
-use atk4\ui\jsReload;
 
 // Testing form.
 

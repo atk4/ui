@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Form;
+
 /**
  * Demonstrates how to use fields with form.
  */
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
-
-use atk4\ui\Form;
 
 \atk4\ui\Header::addTo($app, ['Disabled and read only form fields (normal / readonly / disabled)']);
 
