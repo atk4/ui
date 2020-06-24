@@ -37,7 +37,7 @@ if ($id = $app->stickyGet('country_id')) {
     // display list of countries
     $table = \atk4\ui\Table::addTo($app);
     $table->setModel($m);
-    $table->addDecorator('name', [\atk4\ui\TableColumn\Link::class, [], ['country_id' => 'id']]);
+    $table->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [], ['country_id' => 'id']]);
 }
 
 $crumb->popTitle();

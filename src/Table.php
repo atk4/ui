@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-use atk4\ui\TableColumn\FilterPopup;
-
 class Table extends Lister
 {
     // Overrides
@@ -22,10 +20,10 @@ class Table extends Lister
 
     /**
      * Column objects can service multiple columns. You can use it for your advantage by re-using the object
-     * when you pass it to addColumn(). If you omit the argument, then a column of a type TableColumn\Generic
+     * when you pass it to addColumn(). If you omit the argument, then a column of a type Table\Column
      * will be used.
      *
-     * @var TableColumn\Generic
+     * @var Table\Column
      */
     public $default_column;
 
@@ -178,7 +176,7 @@ class Table extends Lister
      * @param array|string|object|null $columnDecorator
      * @param array|string|object|null $field
      *
-     * @return TableColumn\Generic
+     * @return Table\Column
      */
     public function addColumn(?string $name, $columnDecorator = null, $field = null)
     {
@@ -224,8 +222,8 @@ class Table extends Lister
         } elseif (!$columnDecorator) {
             $columnDecorator = $this->decoratorFactory($field, ['columnData' => $name]);
         } elseif (is_object($columnDecorator)) {
-            if (!$columnDecorator instanceof \atk4\ui\TableColumn\Generic) {
-                throw (new Exception('Column decorator must descend from ' . \atk4\ui\TableColumn\Generic::class))
+            if (!$columnDecorator instanceof Table\Column) {
+                throw (new Exception('Column decorator must descend from ' . Table\Column::class))
                     ->addMoreInfo('columnDecorator', $columnDecorator);
             }
             $columnDecorator->table = $this;
@@ -277,7 +275,7 @@ class Table extends Lister
         foreach ($cols as $colName) {
             $col = $this->getColumn($colName);
             if ($col) {
-                $pop = $col->addPopup(new FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
+                $pop = $col->addPopup(new Table\Column\FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
                 $pop->form->onSubmit(function (Form $form) use ($pop) {
                     return new jsReload($this->reload);
@@ -294,7 +292,7 @@ class Table extends Lister
      * @param string $name Column name
      * @param mixed  $seed Defaults to pass to factory() when decorator is initialized
      *
-     * @return TableColumn\Generic
+     * @return Table\Column
      */
     public function addDecorator(string $name, $seed)
     {
@@ -344,7 +342,7 @@ class Table extends Lister
      * @param \atk4\data\Field $field Data model field
      * @param mixed            $seed  Defaults to pass to factory() when decorator is initialized
      *
-     * @return TableColumn\Generic
+     * @return Table\Column
      */
     public function decoratorFactory(\atk4\data\Field $field, $seed = [])
     {
@@ -352,17 +350,17 @@ class Table extends Lister
             $seed,
             $field->ui['table'] ?? null,
             $this->typeToDecorator[$field->type] ?? null,
-            [$this->default_column ? $this->default_column : TableColumn\Generic::class]
+            [$this->default_column ? $this->default_column : Table\Column::class]
         );
 
         return $this->_add($this->factory($seed, ['table' => $this]));
     }
 
     protected $typeToDecorator = [
-        'password' => TableColumn\Password::class,
-        'money' => TableColumn\Money::class,
-        'text' => TableColumn\Text::class,
-        'boolean' => [TableColumn\Status::class, ['positive' => [true], 'negative' => [false]]],
+        'password' => Table\Column\Password::class,
+        'money' => Table\Column\Money::class,
+        'text' => Table\Column\Text::class,
+        'boolean' => [Table\Column\Status::class, ['positive' => [true], 'negative' => [false]]],
     ];
 
     /**
@@ -544,7 +542,7 @@ class Table extends Lister
             // Prepare row-specific HTML tags.
             $html_tags = [];
 
-            foreach ($this->hook(TableColumn\Generic::HOOK_GET_HTML_TAGS, [$this->model]) as $ret) {
+            foreach ($this->hook(Table\Column::HOOK_GET_HTML_TAGS, [$this->model]) as $ret) {
                 if (is_array($ret)) {
                     $html_tags = array_merge($html_tags, $ret);
                 }

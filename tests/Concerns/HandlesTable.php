@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace atk4\ui\tests\Concerns;
 
 use atk4\ui\Table;
-use atk4\ui\TableColumn\Generic;
 
 trait HandlesTable
 {
@@ -28,7 +27,7 @@ trait HandlesTable
     /**
      * Return column template reference name.
      */
-    protected function getColumnRef(Generic $column): string
+    protected function getColumnRef(Table\Column $column): string
     {
         return 'c_' . $column->short_name;
     }
@@ -36,7 +35,7 @@ trait HandlesTable
     /**
      * Return column template class name.
      */
-    protected function getColumnClass(Generic $column): string
+    protected function getColumnClass(Table\Column $column): string
     {
         return '_' . $column->short_name . '_class';
     }
@@ -44,7 +43,7 @@ trait HandlesTable
     /**
      * return column template style name.
      */
-    protected function getColumnStyle(Generic $column): string
+    protected function getColumnStyle(Table\Column $column): string
     {
         return '_' . $column->short_name . '_color_rating';
     }

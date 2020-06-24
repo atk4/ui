@@ -15,7 +15,7 @@ This is in contrast to :php:class:`View` and :php:class:`Lister` which do not
 use Table/Cell and therefore Column decorator is not required.
 
 
-All column decorators in Agile UI have a base class :php:class:`TableColumn\\Generic`. Decorators will often
+All column decorators in Agile UI have a base class :php:class:`Table\\Column`. Decorators will often
 look at the content of the associated value, for example :php:class:`Money` will add cell class `negative`
 only if monetary value is less than zero. The value is taken from Model's Field object.
 
@@ -31,15 +31,15 @@ but if record is already archived, use a template "Archived on {$archive_date}".
 Generic Column Decorator
 ========================
 
-.. php:namespace:: atk4\ui\TableColumn
+.. php:namespace:: atk4\ui\Table\Column
 .. php:class:: Generic
 
     Generic description of a column for :php:class:`atk4\\ui\\Table`
 
-Table object relies on a separate class: \atk4\ui\TableColumn\Generic to present most of the values. The goals
+Table object relies on a separate class: `\\atk4\\ui\\Table\\Column` to present most of the values. The goals
 of the column object is to format anything around the actual values. The type = 'money' will result in
 a custom formatting of the value, but will also require column to be right-aligned. To simplify this,
-type = 'money' will use a different column class - :php:class:`TableColumn\Money`. There are several others,
+type = 'money' will use a different column class - :php:class:`Table\\Column\\Money`. There are several others,
 but first we need to look at the generic column and understand it's base capabilities:
 
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
@@ -88,32 +88,32 @@ Return array of HTML tags that will be injected into the row template. See
 Decorators for data types
 =========================
 
-In addition to :php:class:`TableColumn\Generic`, Agile UI includes several column implementations.
+In addition to :php:class:`Table\\Column`, Agile UI includes several column implementations.
 
 Link
 ----
 
-.. php:class:: TableColumn\Link
+.. php:class:: Table\Column\Link
 
 Put `<a href..` link over the value of the cell. The page property can be specified to constructor. There
 are two usage patterns. With the first you can specify full URL as a string::
 
-    $table->addColumn('name', [\atk4\ui\TableColumn\Link::class, 'https://google.com/?q={$name}']);
+    $table->addColumn('name', [\atk4\ui\Table\Column\Link::class, 'https://google.com/?q={$name}']);
 
 The URL may also be specified as an array. It will be passed to App::url() which will encode arguments::
 
-    $table->addColumn('name', [\atk4\ui\TableColumn\Link::class, ['details', 'id'=>123, 'q'=>$anything]]);
+    $table->addColumn('name', [\atk4\ui\Table\Column\Link::class, ['details', 'id'=>123, 'q'=>$anything]]);
 
 In this case even if `$anything = '{$name}'` the substitution will not take place for safety reasons. To
 pass on some values from your model, use second argument to constructor::
 
-    $table->addColumn('name', [\atk4\ui\TableColumn\Link::class, ['details', 'id'=>123], ['q'=>'name']]);
+    $table->addColumn('name', [\atk4\ui\Table\Column\Link::class, ['details', 'id'=>123], ['q'=>'name']]);
 
 
 Money
 -----
 
-.. php:class:: TableColumn\Money
+.. php:class:: Table\Column\Money
 
 Helps decorating monetary values. Will align value to the right and if value is less than zero will also
 use red text (td class "negative" for Fomantic ui). The money cells are not wrapped.
@@ -123,7 +123,7 @@ For the actual number formatting, see :ref:`ui_persistence`
 Status
 ------
 
-.. php:class:: TableColumn\Status
+.. php:class:: Table\Column\Status
 
 Allow you to set highlight class and icon based on column value. This is most suitable for columns that
 contain pre-defined values.
@@ -134,7 +134,7 @@ to use different icons and colors to emphasise status::
 
     $states = [ 'positive'=>['paid', 'archived'], 'negative'=>['declined'] ];
 
-    $table->addColumn('status', new \atk4\ui\TableColumn\Status($states));
+    $table->addColumn('status', new \atk4\ui\Table\Column\Status($states));
 
 Current list of states supported:
 
@@ -147,14 +147,14 @@ Current list of states supported:
 Template
 --------
 
-.. php:class:: TableColumn\Template
+.. php:class:: Table\Column\Template
 
 This column is suitable if you wish to have custom cell formatting but do not wish to go through
 the trouble of setting up your own class.
 
 If you wish to display movie rating "4 out of 10" based around the column "rating", you can use::
 
-    $table->addColumn('rating', new \atk4\ui\TableColumn\Template('{$rating} out of 10'));
+    $table->addColumn('rating', new \atk4\ui\Table\Column\Template('{$rating} out of 10'));
 
 Template may incorporate values from multiple fields in a data row, but current implementation
 will only work if you asign it to a primary column (by passing 1st argument to addColumn).
@@ -164,11 +164,11 @@ will only work if you asign it to a primary column (by passing 1st argument to a
 Image
 -----
 
-.. php:class:: TableColumn\Image
+.. php:class:: Table\Column\Image
 
 This column is suitable if you wish to have image in your table cell::
 
-    $table->addColumn('image_url', new \atk4\ui\TableColumn\Image);
+    $table->addColumn('image_url', new \atk4\ui\Table\Column\Image);
 
 
 Interactive Decorators
@@ -214,7 +214,7 @@ Note that in this case ID is automatically passed to your call-back.
 CheckBox
 --------
 
-.. php:class:: TableColumn\CheckBox
+.. php:class:: Table\Column\Checkbox
 
 .. php:method:: jsChecked()
 
@@ -223,7 +223,7 @@ CheckBox column provides you with a handy jsChecked() method, which you can use 
 current item selection. The next code will allow you to select the checkboxes, and when you
 click on the button, it will reload $segment component while passing all the id's::
 
-    $box = $table->addColumn(new \atk4\ui\TableColumn\CheckBox());
+    $box = $table->addColumn(new \atk4\ui\Table\Column\CheckBox());
 
     $button->on('click', new jsReload($segment, ['ids'=>$box->jsChecked()]));
 
@@ -235,17 +235,17 @@ Multiformat
 -----------
 
 Sometimes your formatting may change depending on value. For example you may want to place link
-only on certain rows. For this you can use a \atk4\ui\TableColumn\Multiformat decorator::
+only on certain rows. For this you can use an `\\atk4\ui\\Table\\Column\\Multiformat` decorator::
 
-    $table->addColumn('amount', [\atk4\ui\TableColumn\Multiformat::class, function($m) {
+    $table->addColumn('amount', [\atk4\ui\Table\Column\Multiformat::class, function($m) {
 
         if ($m->get('is_invoiced') > 0) {
-            return [\atk4\ui\TableColumn\Money::class, [\atk4\ui\TableColumn\Link::class, 'invoice', ['invoice_id'=>'id']]];
+            return [\atk4\ui\Table\Column\Money::class, [\atk4\ui\Table\Column\Link::class, 'invoice', ['invoice_id'=>'id']]];
         } elseif (abs($m->get('is_refunded')) < 50) {
-            return [[\atk4\ui\TableColumn\Template::class, 'Amount was <b>refunded</b>']];
+            return [[\atk4\ui\Table\Column\Template::class, 'Amount was <b>refunded</b>']];
         }
 
-        return \atk4\ui\TableColumn\Money::class;
+        return \atk4\ui\Table\Column\Money::class;
     }]);
 
 You supply a callback to the Multiformat decorator, which will then be used to determine
@@ -254,7 +254,7 @@ fields of your models and will conditionally add Link on top of Money formatting
 
 Your callback can return things in varous ways:
 
- - return array of seeds: [[\atk4\ui\TableColumn\Link::class], \atk4\ui\TableColumn\Money::class];
+ - return array of seeds: [[\atk4\ui\Table\Column\Link::class], \atk4\ui\Table\Column\Money::class];
  - if string or object is returned it is wrapped inside array automatically
 
 Multiple decorators will be created and merged.
@@ -282,7 +282,7 @@ The simplest way to use Menus and Popups is through a wrappers: :php:meth:`atk4\
         return $item;
     });
 
-Those wrappers will invoke methods :php:meth:`TableColumn::addDropdown` and :php:meth:`TableColmun::addPopup` for
+Those wrappers will invoke methods :php:meth:`Table\\Column::addDropdown` and :php:meth:`Table\\Colmun::addPopup` for
 a specified column, which are documented below.
 
 

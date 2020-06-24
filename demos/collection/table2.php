@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Table;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -20,14 +22,14 @@ $m->getField('amount')->type = 'money';
 
 $table = \atk4\ui\Table::addTo($app);
 $table->setModel($m, ['action']);
-$table->addColumn('amount', [\atk4\ui\TableColumn\Money::class]);
+$table->addColumn('amount', [Table\Column\Money::class]);
 
 // Table template can be tweaked directly
 $table->template->appendHTML('SubHead', '<tr class="center aligned"><th colspan=2>This is sub-header, goes inside "thead" tag</th></tr>');
 $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This is part of body, goes before other rows</td></tr>');
 
 // Hook can be used to display data before row. You can also inject and format extra rows.
-$table->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Table $table) {
+$table->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (Table $table) {
     if ($table->current_row->id === 2) {
         $table->template->appendHTML('Body', '<tr class="center aligned"><td colspan=2>This goes above row with ID=2 (' . $table->current_row->get('action') . ')</th></tr>');
     } elseif ($table->current_row->get('action') === 'Tax') {
@@ -53,25 +55,25 @@ $m->addExpression('amount_copy', [function (\atk4\data\Model $m) {
 }, 'type' => 'money']);
 
 // column with 2 decorators that stack. Money will use red ink and alignment, format will change text.
-$table->addColumn('amount', [\atk4\ui\TableColumn\Money::class]);
-$table->addDecorator('amount', [\atk4\ui\TableColumn\Template::class, 'Refunded: {$amount}']);
+$table->addColumn('amount', [Table\Column\Money::class]);
+$table->addDecorator('amount', [Table\Column\Template::class, 'Refunded: {$amount}']);
 
 // column which uses selective format depending on condition
-$table->addColumn('amount_copy', [\atk4\ui\TableColumn\Multiformat::class, function ($a, $b) {
+$table->addColumn('amount_copy', [Table\Column\Multiformat::class, function ($a, $b) {
     if ($a->get('amount_copy') > 0) {
         // Two formatters together
-        return [\atk4\ui\TableColumn\Link::class, \atk4\ui\TableColumn\Money::class];
+        return [Table\Column\Link::class, Table\Column\Money::class];
     } elseif (abs($a->get('amount_copy')) < 50) {
         // One formatter, but inject template and some attributes
         return [[
-            \atk4\ui\TableColumn\Template::class,
+            Table\Column\Template::class,
             'too <b>little</b> to <u>matter</u>',
             'attr' => ['all' => ['class' => ['right aligned single line']]],
         ]];
     }
 
     // Short way is to simply return seed
-    return \atk4\ui\TableColumn\Money::class;
+    return Table\Column\Money::class;
 }, 'attr' => ['all' => ['class' => ['right aligned singel line']]]]);
 
 \atk4\ui\Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);

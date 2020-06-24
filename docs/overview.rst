@@ -388,7 +388,7 @@ have a basic understanding of "code" and some familiarity with the PHP language.
  - Components - Reference for UI component classes
 
    - Button, Label, Header, Message, Menu, Column
-   - Table and TableColumn
+   - Table and Table\Column
    - Form and Field
    - Grid and CRUD
    - Paginator

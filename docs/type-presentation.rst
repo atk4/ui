@@ -25,7 +25,7 @@ Calendar (DatePicker) or enable field icon to indicate currency.
 Presentation in Agile Toolkit is handled by :php:class:`Persistence\\UI`.
 
 Decoration is performed by helper classes, such as :php:class:`Form\\Field\\Calendar` or
-:php:class:`TableColumn\\Money`. The decorator is in control of the final output, so it can decide if
+:php:class:`Table\\Column\\\Money`. The decorator is in control of the final output, so it can decide if
 it uses the value from presentation or do some decoration on its own.
 
 Extending Data Types
@@ -66,7 +66,7 @@ Manually Specifying Decorators
 When working with components, they allow to specify decorators manually, even if the type
 of the field does not seem compatible::
 
-    $table->addColumn('field_name', new \atk4\ui\TableColumn\Password());
+    $table->addColumn('field_name', new \atk4\ui\Table\Column\Password());
 
     // or
 
@@ -114,15 +114,15 @@ hidden when presented. To hide it from Table::
     $m = new User($app->db);
     
     $table->setModel($m);
-    $m->addDecorator('account_number', new \atk4\ui\TableColumn\Password());
+    $m->addDecorator('account_number', new \atk4\ui\Table\Column\Password());
 
 Create a decorator for hiding credit card number
 ------------------------------------------------
 
 If you happen to store card numbers and you only want to display the last digits in tables,
-yet make it available when editing, you could create your own :php:class:`TableColumn` decorator::
+yet make it available when editing, you could create your own :php:class:`Table\\Column` decorator::
 
-    class Masker extends \atk4\ui\TableColumn\Generic
+    class Masker extends \atk4\ui\Table\Column
     {
         public function getDataCellTemplate(\atk4\data\Field $f = null)
         {
