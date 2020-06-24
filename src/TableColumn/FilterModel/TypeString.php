@@ -4,44 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\TableColumn\FilterModel;
 
-class TypeString extends Generic
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Use atk4\ui\Table\Column\FilterModel\TypeString instead', E_USER_DEPRECATED);
+}
+
+/**
+ * @deprecated will be removed jun-2021
+ */
+class TypeString extends \atk4\ui\Table\Column\FilterModel\TypeString
 {
-    public function init(): void
-    {
-        parent::init();
-
-        $this->op->values = ['is' => 'Is', 'contains' => 'Contains', 'start' => 'Start with', 'end' => 'End with'];
-        $this->op->default = 'is';
-    }
-
-    public function setConditionForModel($model)
-    {
-        $filter = $this->recallData();
-        if (isset($filter['id'])) {
-            switch ($filter['op']) {
-                case 'is':
-                    $model->addCondition($filter['name'], $filter['value']);
-
-                    break;
-                case 'is not':
-                    $model->addCondition($filter['name'], '!=', $filter['value']);
-
-                    break;
-                case 'contains':
-                    $model->addCondition($filter['name'], 'LIKE', '%' . $filter['value'] . '%');
-
-                    break;
-                case 'start':
-                    $model->addCondition($filter['name'], 'LIKE', $filter['value'] . '%');
-
-                    break;
-                case 'end':
-                    $model->addCondition($filter['name'], 'LIKE', '%' . $filter['value']);
-
-                    break;
-            }
-        }
-
-        return $model;
-    }
 }
