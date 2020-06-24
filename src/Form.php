@@ -217,8 +217,8 @@ class Form extends View
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
-            $this->buttonSave->on('click', $this->js()->form('submit'));
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#' . $this->name]));
+            $this->buttonSave->on('click', $this->js(null, null, $this->formElement)->form('submit'));
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#' . $this->formElement->name]));
         }
     }
 
@@ -720,10 +720,10 @@ class Form extends View
             }
         });
 
-        //var_dump($cb->getUrl());
-        $this->js(true)
-            ->api(array_merge(['url' => $cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
-            ->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
+        $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
+
+        $this->js(true, null, $this->formElement)
+            ->api(array_merge(['url' => $cb->getJSURL(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
 
         $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new JsExpression('$(this).attr("name")')));
 
