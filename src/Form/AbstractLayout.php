@@ -23,7 +23,7 @@ abstract class AbstractLayout extends \atk4\ui\View
      */
     public function addField(string $name, $decorator = null, $field = null)
     {
-        @trigger_error('Method is deprecated. Use AbstractLayout::addControl instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use AbstractLayout::addControl instead', E_USER_DEPRECATED);
 
         return $this->addControl(...func_get_args());
     }
@@ -100,7 +100,7 @@ abstract class AbstractLayout extends \atk4\ui\View
      */
     public function addFields($fields)
     {
-        @trigger_error('Method is deprecated. Use AbstractLayout::addControls instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use AbstractLayout::addControls instead', E_USER_DEPRECATED);
 
         return $this->addControls(...func_get_args());
     }
@@ -178,7 +178,7 @@ abstract class AbstractLayout extends \atk4\ui\View
      */
     public function getField($name)
     {
-        @trigger_error('Method is deprecated. Use AbstractLayout::getControl instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use AbstractLayout::getControl instead', E_USER_DEPRECATED);
 
         return $this->getControl(...func_get_args());
     }

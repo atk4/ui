@@ -178,7 +178,7 @@ class Control extends View
      */
     public function getFieldClass()
     {
-        @trigger_error('Method is deprecated. Use Control::getControlClass instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use Control::getControlClass instead', E_USER_DEPRECATED);
 
         return $this->getControlClass();
     }

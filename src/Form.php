@@ -211,7 +211,7 @@ class Form extends View
      */
     public function setFieldsDisplayRules($rules = [])
     {
-        @trigger_error('Method is deprecated. Use Form::setControlDisplayRules instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use Form::setControlDisplayRules instead', E_USER_DEPRECATED);
 
         return $this->setControlDisplayRules(...func_get_args());
     }
@@ -291,7 +291,7 @@ class Form extends View
      */
     public function getField($name): Form\Control
     {
-        @trigger_error('Method is deprecated. Use Form::getControl instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use Form::getControl instead', E_USER_DEPRECATED);
 
         return $this->getControl($name);
     }
@@ -375,7 +375,7 @@ class Form extends View
      */
     public function addField(?string $name, $decorator = null, $field = null)
     {
-        @trigger_error('Method is deprecated. Use Form::addControl instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use Form::addControl instead', E_USER_DEPRECATED);
 
         return $this->addControl(...func_get_args());
     }
@@ -402,7 +402,7 @@ class Form extends View
      */
     public function addFields($fields)
     {
-        @trigger_error('Method is deprecated. Use Form::addControls instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use Form::addControls instead', E_USER_DEPRECATED);
 
         return $this->addControls(...func_get_args());
     }
@@ -465,7 +465,7 @@ class Form extends View
      */
     public function jsField($name)
     {
-        @trigger_error('Method is deprecated. Use Form::jsControl instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use Form::jsControl instead', E_USER_DEPRECATED);
 
         return $this->jsControl(...func_get_args());
     }
@@ -492,7 +492,7 @@ class Form extends View
      */
     public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
-        @trigger_error('Method is deprecated. Use Form::controlFactory instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use Form::controlFactory instead', E_USER_DEPRECATED);
 
         return $this->controlFactory(...func_get_args());
     }
