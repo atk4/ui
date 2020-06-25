@@ -32,12 +32,12 @@ abstract class AbstractLayout extends \atk4\ui\View
      * Places element inside a layout somewhere. Should be called
      * through $form->addControl().
      *
-     * @param array|string|object|null $decorator
+     * @param array|string|object|null $control
      * @param array|string|object|null $field
      *
      * @return \atk4\ui\Form\Control
      */
-    public function addControl(string $name, $decorator = null, $field = null)
+    public function addControl(string $name, $control = null, $field = null)
     {
         if (!$this->form->model) {
             $this->form->model = new \atk4\ui\Misc\ProxyModel();
@@ -63,31 +63,31 @@ abstract class AbstractLayout extends \atk4\ui\View
                 }
             }
 
-            if (is_string($decorator)) {
-                $decorator = $this->form->decoratorFactory($field, ['caption' => $decorator]);
-            } elseif (is_array($decorator)) {
-                $decorator = $this->form->decoratorFactory($field, $decorator);
-            } elseif (!$decorator) {
-                $decorator = $this->form->decoratorFactory($field);
-            } elseif (is_object($decorator)) {
-                if (!$decorator instanceof \atk4\ui\Form\Control) {
+            if (is_string($control)) {
+                $control = $this->form->controlFactory($field, ['caption' => $control]);
+            } elseif (is_array($control)) {
+                $control = $this->form->controlFactory($field, $control);
+            } elseif (!$control) {
+                $control = $this->form->controlFactory($field);
+            } elseif (is_object($control)) {
+                if (!$control instanceof \atk4\ui\Form\Control) {
                     throw (new Exception('Field decorator must descend from ' . \atk4\ui\Form\Control::class))
-                        ->addMoreInfo('decorator', $decorator);
+                        ->addMoreInfo('control', $control);
                 }
-                $decorator->field = $field;
-                $decorator->form = $this->form;
+                $control->field = $field;
+                $control->form = $this->form;
             } else {
                 throw (new Exception('Value of $decorator argument is incorrect'))
-                    ->addMoreInfo('decorator', $decorator);
+                    ->addMoreInfo('decorator', $control);
             }
         } catch (\Throwable $e) {
             throw (new Exception('Unable to add form field', 0, $e))
                 ->addMoreInfo('name', $name)
-                ->addMoreInfo('decorator', $decorator)
+                ->addMoreInfo('control', $control)
                 ->addMoreInfo('field', $field);
         }
 
-        return $this->addControlElement($decorator, $field);
+        return $this->addControlElement($control, $field);
     }
 
     protected function addControlElement($decorator, $field)

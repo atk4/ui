@@ -383,18 +383,18 @@ class Form extends View
     /**
      * Add form control into current layout. If no layout, create one. If no model, create blank one.
      *
-     * @param array|string|object|null $decorator
+     * @param array|string|object|null $control
      * @param array|string|object|null $field
      *
      * @return Form\Control
      */
-    public function addControl(?string $name, $decorator = null, $field = null)
+    public function addControl(?string $name, $control = null, $field = null)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\Misc\ProxyModel();
         }
 
-        return $this->layout->addControl($name, $decorator, $field);
+        return $this->layout->addControl($name, $control, $field);
     }
 
     /**
@@ -467,7 +467,7 @@ class Form extends View
     {
         @trigger_error('Method is deprecated. Use Form::jsControl instead', E_USER_DEPRECATED);
 
-        return $this->layout->getControl(...func_get_args());
+        return $this->jsControl(...func_get_args());
     }
 
     /**
@@ -488,8 +488,18 @@ class Form extends View
     // {{{ Internals
 
     /**
+     * @deprecated use Form::controlFactory - will be removed in dec-2020
+     */
+    public function decoratorFactory(\atk4\data\Field $f, $seed = [])
+    {
+        @trigger_error('Method is deprecated. Use Form::controlFactory instead', E_USER_DEPRECATED);
+
+        return $this->controlFactory(...func_get_args());
+    }
+
+    /**
      * Provided with a Agile Data Model Field, this method have to decide
-     * and create instance of a View that will act as a form-field. It takes
+     * and create instance of a View that will act as a form-control. It takes
      * various input and looks for hints as to which class to use:.
      *
      * 1. The $seed argument is evaluated
@@ -497,64 +507,64 @@ class Form extends View
      * 3. $f->type is converted into seed and evaluated
      * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
-     * @param \atk4\data\Field $f    Data model field
-     * @param array            $seed Defaults to pass to factory() when decorator is initialized
+     * @param \atk4\data\Field $field Data model field
+     * @param array            $seed  Defaults to pass to factory() when control object is initialized
      *
      * @return Form\Control
      */
-    public function decoratorFactory(\atk4\data\Field $f, $seed = [])
+    public function controlFactory(\atk4\data\Field $field, $seed = [])
     {
-        if ($f && !$f instanceof \atk4\data\Field) {
-            throw (new Exception('Argument 1 for decoratorFactory must be \atk4\data\Field or null'))
-                ->addMoreInfo('f', $f);
+        if ($field && !$field instanceof \atk4\data\Field) {
+            throw (new Exception('Argument 1 for controlFactory must be \atk4\data\Field or null'))
+                ->addMoreInfo('field', $field);
         }
 
-        $fallback_seed = [Form\Control\Line::class];
+        $fallbackSeed = [Form\Control\Line::class];
 
-        if ($f->type === 'array' && $f->reference) {
-            $limit = ($f->reference instanceof ContainsMany) ? 0 : 1;
-            $model = $f->reference->refModel();
-            $fallback_seed = [Form\Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
-        } elseif ($f->type !== 'boolean') {
-            if ($f->enum) {
-                $fallback_seed = [Form\Control\Dropdown::class, 'values' => array_combine($f->enum, $f->enum)];
-            } elseif ($f->values) {
-                $fallback_seed = [Form\Control\Dropdown::class, 'values' => $f->values];
-            } elseif (isset($f->reference)) {
-                $fallback_seed = [Form\Control\Lookup::class, 'model' => $f->reference->refModel()];
+        if ($field->type === 'array' && $field->reference) {
+            $limit = ($field->reference instanceof ContainsMany) ? 0 : 1;
+            $model = $field->reference->refModel();
+            $fallbackSeed = [Form\Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
+        } elseif ($field->type !== 'boolean') {
+            if ($field->enum) {
+                $fallbackSeed = [Form\Control\Dropdown::class, 'values' => array_combine($field->enum, $field->enum)];
+            } elseif ($field->values) {
+                $fallbackSeed = [Form\Control\Dropdown::class, 'values' => $field->values];
+            } elseif (isset($field->reference)) {
+                $fallbackSeed = [Form\Control\Lookup::class, 'model' => $field->reference->refModel()];
             }
         }
 
-        if (isset($f->ui['hint'])) {
-            $fallback_seed['hint'] = $f->ui['hint'];
+        if (isset($field->ui['hint'])) {
+            $fallbackSeed['hint'] = $field->ui['hint'];
         }
 
-        if (isset($f->ui['placeholder'])) {
-            $fallback_seed['placeholder'] = $f->ui['placeholder'];
+        if (isset($field->ui['placeholder'])) {
+            $fallbackSeed['placeholder'] = $field->ui['placeholder'];
         }
 
         $seed = $this->mergeSeeds(
             $seed,
-            $f->ui['form'] ?? null,
-            $this->typeToDecorator[$f->type] ?? null,
-            $fallback_seed
+            $field->ui['form'] ?? null,
+            $this->typeToControl[$field->type] ?? null,
+            $fallbackSeed
         );
 
         $defaults = [
             'form' => $this,
-            'field' => $f,
-            'short_name' => $f->short_name,
+            'field' => $field,
+            'short_name' => $field->short_name,
         ];
 
         return $this->factory($seed, $defaults);
     }
 
     /**
-     * Provides decorator seeds for most common types.
+     * Provides control seeds for most common types.
      *
-     * @var array Describes how factory converts type to decorator seed
+     * @var array Describes how factory converts type to control seed
      */
-    protected $typeToDecorator = [
+    protected $typeToControl = [
         'boolean' => Form\Control\Checkbox::class,
         'text' => Form\Control\Textarea::class,
         'string' => Form\Control\Line::class,

@@ -168,7 +168,7 @@ The above will populate fields from model into the form automatically. You can u
 argument to :php:meth:`\atk4\ui\Form::setModel()` to indicate which fields to display
 or rely on :ref:`field_visibility`.
 
-When Form fields are populated, then :php:meth:`\atk4\ui\Form::_decoratorFactory` is
+When Form fields are populated, then :php:meth:`\atk4\ui\Form::controlFactory` is
 consulted to make a decision on how to translate
 `Model Field <https://agile-data.readthedocs.io/en/develop/fields.html>`_ into
 Form Field Decorator.

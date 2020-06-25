@@ -238,10 +238,10 @@ Field Decorator can be passed to ``addControl`` using 'string', :php:ref:`seed` 
 For more information on default decorators as well as examples on how to create
 your own see documentation on :php:class:`Form::Field`.
 
-.. php:method:: decoratorFactory(\atk4\data\Field $f, $defaults = [])
+.. php:method:: controlFactory(\atk4\data\Field $field, $defaults = [])
 
 If control class is not specified (``null``) then it will be determined from
-the type of the Data control with ``decoratorFactory`` method.
+the type of the Data control with ``controlFactory`` method.
 
 Data Field
 ----------
