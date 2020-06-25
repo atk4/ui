@@ -83,6 +83,11 @@ class Form extends View
     public $successTemplate = 'form-success.html';
 
     /**
+     * @deprecated use controlDisplayRules - will be removed in dec-2020
+     */
+    public $fieldsDisplayRules = [];
+
+    /**
      * Collection of field's conditions for displaying a target field on the form.
      *
      * Specifying a condition for showing a target field required the name of the target field
@@ -105,14 +110,19 @@ class Form extends View
      *
      * @var array
      */
-    public $fieldsDisplayRules = [];
+    public $controlDisplayRules = [];
+
+    /**
+     * @deprecated use controlDisplaySelector - will be removed in dec-2020
+     */
+    public $fieldDisplaySelector = '';
 
     /**
      * Default selector for jsConditionalForm.
      *
      * @var string
      */
-    public $fieldDisplaySelector = '.field';
+    public $controlDisplaySelector = '.control';
 
     /**
      * Use this apiConfig variable to pass API settings to Semantic UI in .api().
@@ -197,15 +207,25 @@ class Form extends View
     }
 
     /**
-     * Setter for field display rules.
+     * @deprecated use Form::setControlDisplayRules - will be removed in dec-2020
+     */
+    public function setFieldsDisplayRules($rules = [])
+    {
+        @trigger_error('Method is deprecated. Use Form::setControlDisplayRules instead', E_USER_DEPRECATED);
+
+        return $this->setControlDisplayRules(...func_get_args());
+    }
+
+    /**
+     * Setter for control display rules.
      *
      * @param array $rules
      *
      * @return $this
      */
-    public function setFieldsDisplayRules($rules = [])
+    public function setControlDisplayRules($rules = [])
     {
-        $this->fieldsDisplayRules = $rules;
+        $this->controlDisplayRules = $rules;
 
         return $this;
     }
@@ -224,8 +244,8 @@ class Form extends View
             $selector = '#' . $selector->name;
         }
 
-        $this->fieldsDisplayRules = $rules;
-        $this->fieldDisplaySelector = $selector;
+        $this->controlDisplayRules = $rules;
+        $this->controlDisplaySelector = $selector;
 
         return $this;
     }
@@ -577,8 +597,9 @@ class Form extends View
     public function renderView()
     {
         $this->ajaxSubmit();
-        if (!empty($this->fieldsDisplayRules)) {
-            $this->js(true, new jsConditionalForm($this, $this->fieldsDisplayRules, $this->fieldDisplaySelector));
+        if (!empty($this->controlDisplayRules)) {
+            // backward compatibility for fieldsDisplayRules and fieldDisplaySelector
+            $this->js(true, new jsConditionalForm($this, $this->fieldsDisplayRules ?: $this->controlDisplayRules, $this->fieldDisplaySelector ?: $this->controlDisplaySelector));
         }
 
         return parent::renderView();
