@@ -71,17 +71,17 @@ abstract class AbstractLayout extends \atk4\ui\View
                 $control = $this->form->controlFactory($field);
             } elseif (is_object($control)) {
                 if (!$control instanceof \atk4\ui\Form\Control) {
-                    throw (new Exception('Field decorator must descend from ' . \atk4\ui\Form\Control::class))
+                    throw (new Exception('Form control must descend from ' . \atk4\ui\Form\Control::class))
                         ->addMoreInfo('control', $control);
                 }
                 $control->field = $field;
                 $control->form = $this->form;
             } else {
-                throw (new Exception('Value of $decorator argument is incorrect'))
-                    ->addMoreInfo('decorator', $control);
+                throw (new Exception('Value of $control argument is incorrect'))
+                    ->addMoreInfo('control', $control);
             }
         } catch (\Throwable $e) {
-            throw (new Exception('Unable to add form field', 0, $e))
+            throw (new Exception('Unable to add form control', 0, $e))
                 ->addMoreInfo('name', $name)
                 ->addMoreInfo('control', $control)
                 ->addMoreInfo('field', $field);
