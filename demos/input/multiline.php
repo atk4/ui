@@ -48,7 +48,8 @@ $ml = $form->addControl('ml', [Form\Control\Multiline::class, 'options' => ['col
 $ml->setModel($inventory);
 
 // Add total field.
-$sub_layout = $form->layout->addSublayout(Form\Layout\Section\Columns::class);
+$sub_layout = $form->layout->addSublayout([Form\Layout\Section\Columns::class]);
+
 $sub_layout->addColumn(12);
 $c = $sub_layout->addColumn(4);
 $f_total = $c->addControl('total', ['readonly' => true])->set($total);

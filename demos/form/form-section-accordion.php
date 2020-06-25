@@ -15,7 +15,8 @@ require_once __DIR__ . '/../init-app.php';
 
 $form = Form::addTo($app);
 
-$sub_layout = $form->layout->addSubLayout(Form\Layout\Section::class);
+$sub_layout = $form->layout->addSubLayout([\atk4\ui\Form\Layout\Section::class]);
+
 \atk4\ui\Header::addTo($sub_layout, ['Please fill all form sections!', 'size' => 4]);
 
 $sub_layout->addControl('company_name');

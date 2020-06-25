@@ -227,7 +227,7 @@ For some examples see: https://ui.agiletoolkit.org/demos/form3.php
 
 Field Decorator can be passed to ``addControl`` using 'string', :php:ref:`seed` or 'object'::
 
-    $form->addControl('accept_terms', \atk4\ui\Form\Control\Checkbox::class);
+    $form->addControl('accept_terms', [\atk4\ui\Form\Control\Checkbox::class]);
     $form->addControl('gender', [\atk4\ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]);
 
     $calendar = new \atk4\ui\Form\Control\Calendar();
@@ -250,7 +250,7 @@ Data field is the 3rd argument to ``Form::addControl()``.
 
 There are 3 ways to define Data form control using 'string', 'array' or 'object'::
 
-    $form->addControl('accept_terms', \atk4\ui\Form\Control\Checkbox::class, 'Accept Terms & Conditions');
+    $form->addControl('accept_terms', [\atk4\ui\Form\Control\Checkbox::class], 'Accept Terms & Conditions');
     $form->addControl('gender', null, ['enum'=>['Female', 'Male']]);
 
     class MyBoolean extends \atk4\data\Field {
@@ -298,7 +298,8 @@ example displays a registration form for a User::
     $form->setModel(new User($db));
 
     // add password verification field
-    $form->addControl('password_verify', \atk4\ui\Form\Control\Password::class, 'Type password again');
+
+    $form->addControl('password_verify', [\atk4\ui\Form\Control\Password::class], 'Type password again');
     $form->addControl('accept_terms', null, ['type'=>'boolean']);
 
     // submit event
@@ -702,12 +703,12 @@ The following example will show how to organize fields using regular sub layout 
     $f = Form::addTo($app);
     $f->setModel($m, false);
 
-    $sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
+    $sub_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Generic::class]);
 
     Header::addTo($sub_layout, ['Accordion Section in Form']);
     $sub_layout->setModel($m, ['name']);
 
-    $accordion_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Accordion::class);
+    $accordion_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Accordion::class]);
 
     $a1 = $accordion_layout->addSection('Section 1');
     $a1->setModel($m, ['iso', 'iso3']);

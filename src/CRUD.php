@@ -28,10 +28,10 @@ class CRUD extends Grid
     public $notifyDefault = [jsToast::class];
 
     /** @var string default js action executor class in UI for model action. */
-    public $jsExecutor = jsUserAction::class;
+    public $jsExecutor = [jsUserAction::class];
 
     /** @var string default action executor class in UI for model action. */
-    public $executor = UserAction::class;
+    public $executor = [UserAction::class];
 
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;

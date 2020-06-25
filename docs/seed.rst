@@ -85,7 +85,7 @@ Additional cases
 An individual object may add more ways to deal with seed. For example, when adding columns
 to your Table you can specify seed for the decorator: :php:class:`atk4\\ui\\TableColumn\\Generic`::
 
-    $table->addColumn('salary', \atk4\ui\TableColumn\Money::class);
+    $table->addColumn('salary', [\atk4\ui\TableColumn\Money::class]);
 
     // or
 
