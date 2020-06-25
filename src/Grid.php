@@ -114,7 +114,7 @@ class Grid extends View
      *
      * @var string
      */
-    protected $actionButtonsDecorator = Table\Column\ActionButtons::class];
+    protected $actionButtonsDecorator = [Table\Column\ActionButtons::class];
 
     /**
      * Defines which Table Decorator to use for ActionMenu.
