@@ -84,7 +84,6 @@ class Generic
      */
     public function __construct($defaults = [])
     {
-        $t = self::HOOK_GET_HTML_TAGS;
         $this->setDefaults($defaults);
     }
 
