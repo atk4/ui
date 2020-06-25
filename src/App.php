@@ -255,7 +255,7 @@ class App
         // just replace layout to avoid any extended App->_construct problems
         // it will maintain everything as in the original app StickyGet, logger, Events
         $this->html = null;
-        $this->initLayout(Centered::class);
+        $this->initLayout([Centered::class]);
 
         $this->layout->template->setHTML('Content', $this->renderExceptionHTML($exception));
 
@@ -997,7 +997,7 @@ class App
      * to put it inside boilerplate HTML and output, e.g:.
      *
      *   $app = new \atk4\ui\App();
-     *   $app->initLayout(\atk4\ui\Layout\Centered::class);
+     *   $app->initLayout([\atk4\ui\Layout\Centered::class]);
      *   $app->layout->template->setHTML('Content', $e->getHTML());
      *   $app->run();
      *   $app->callExit(true);

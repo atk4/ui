@@ -29,12 +29,12 @@ $noSave = function (\atk4\ui\Form $form) {
 $f = \atk4\ui\Form::addTo($app);
 $f->setModel($m, false);
 
-$sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
+$sub_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Generic::class]);
 
 \atk4\ui\Header::addTo($sub_layout, ['Column Section in Form']);
 $sub_layout->setModel($m, ['name']);
 
-$cols_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Columns::class);
+$cols_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Columns::class]);
 
 $c1 = $cols_layout->addColumn();
 $c1->setModel($m, ['iso', 'iso3']);
@@ -53,12 +53,12 @@ $f->onSubmit($noSave);
 $f = \atk4\ui\Form::addTo($app);
 $f->setModel($m, false);
 
-$sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
+$sub_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Generic::class]);
 
 \atk4\ui\Header::addTo($sub_layout, ['Accordion Section in Form']);
 $sub_layout->setModel($m, ['name']);
 
-$accordion_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Accordion::class);
+$accordion_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Accordion::class]);
 
 $a1 = $accordion_layout->addSection('Section 1');
 $a1->setModel($m, ['iso', 'iso3']);
@@ -75,12 +75,12 @@ $f->onSubmit($noSave);
 $f = \atk4\ui\Form::addTo($app);
 $f->setModel($m, false);
 
-$sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
+$sub_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Generic::class]);
 
 \atk4\ui\Header::addTo($sub_layout, ['Tabs in Form']);
 $sub_layout->setModel($m, ['name']);
 
-$tabs_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Tabs::class);
+$tabs_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Tabs::class]);
 
 $t1 = $tabs_layout->addTab('Tab 1');
 $t1->addGroup('In Group')->setModel($m, ['iso', 'iso3']);
@@ -105,7 +105,7 @@ $sub_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Generic::cla
 $sub_layout->setModel($m, ['name']);
 
 $sub_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Generic::class, 'ui' => 'segment teal inverted']);
-$cols_layout = $sub_layout->addSubLayout(\atk4\ui\FormLayout\Section\Columns::class);
+$cols_layout = $sub_layout->addSubLayout([\atk4\ui\FormLayout\Section\Columns::class]);
 
 $c1 = $cols_layout->addColumn();
 $c1->setModel($m, ['iso', 'iso3']);

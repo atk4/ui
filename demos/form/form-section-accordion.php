@@ -13,7 +13,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $f = \atk4\ui\Form::addTo($app);
 
-$sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
+$sub_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Generic::class]);
 \atk4\ui\Header::addTo($sub_layout, ['Please fill all form sections!', 'size' => 4]);
 
 $sub_layout->addField('company_name');

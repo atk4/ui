@@ -13,6 +13,6 @@ $layout = new \atk4\ui\Layout\Generic(['defaultTemplate' => __DIR__ . '/template
     ->setModel(new SomeData());
 
 $app->html = null;
-$app->initLayout(\atk4\ui\Layout\Generic::class);
+$app->initLayout([\atk4\ui\Layout\Generic::class]);
 
 \atk4\ui\Text::addTo($app->layout)->addHTML($layout->render());
