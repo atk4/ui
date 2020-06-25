@@ -1,13 +1,13 @@
 
 .. _field:
 
-=====================
-Form Field Decorators
-=====================
+=============
+Form Controls
+=============
 
-.. php:namespace:: atk4\ui\FormField
+.. php:namespace:: atk4\ui\Form\Control
 
-Agile UI dedicates a separate namespace for the Form Field Decorator. Those are
+Agile UI dedicates a separate namespace for the Form Controls. Those are
 quite simple components that present themselves as input controls: line, select, checkbox.
 
 Relationship with Form
@@ -27,7 +27,7 @@ Add any form control to your application like this::
 
     $control = Line::addTo($app);
 
-You can set default value and interact with a control using JavaScript::
+You can set default value and interact with a form control using JavaScript::
 
     $control->set('hello world');
 
@@ -99,7 +99,7 @@ Hints
 When Field appears in a Form, then you can specify a Hint also. It appears below the field and
 although it intends to be "extra info" or "extra help" due to current limitation of Fomantic UI
 the only way we can display hint is using a gray bubble. In the future version of Agile UI we
-will update to use a more suitable control.
+will update to use a more suitable form control.
 
 Hint can be specified either inside field decorator seed or inside the Field::ui attribute::
 

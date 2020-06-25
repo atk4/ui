@@ -47,7 +47,7 @@ will be allowed.
 Basic Usage
 ===========
 
-Adding a TreeItemSelector control to a Form::
+Adding a TreeItemSelector form control to a Form::
 
     $items = [
         [
@@ -98,6 +98,6 @@ set by the user.::
 Note
 ====
 
-This control component is made to collect id's of end item only, i.e. item with no children nodes, and will be working in recursive selection
+This form control component is made to collect id's of end item only, i.e. item with no children nodes, and will be working in recursive selection
 mode when allowMultiple is set to true. Recursive selection mean that when user click on a group, it will automatically select or unselect children
 of that group depending on the state of the group when clicked. Be aware of this when building your item tree.

@@ -1,15 +1,15 @@
 
 .. _autocomplete:
 
-====================
-AutoComplete Control
-====================
+=========================
+AutoComplete Form Control
+=========================
 
 .. php:namespace:: atk4\ui\Form\Control
 .. php:class:: AutoComplete
 
 Agile UI uses "Form\\Control\\Dropdown" by default on the form, but there is also implementation
-for AutoComplete control. Although they look similar, there are some differences:
+for AutoComplete form control. Although they look similar, there are some differences:
 
  - AutoComplete will perform callback to fetch values.
  - AutoComplete can use callback to format options (both keys and values).
@@ -43,7 +43,7 @@ You can also specify that you prefer to use AutoComplete inside your model defin
 Advanced Usage
 --------------
 
-You can do much more with AutoComplete control by passing dropdown settings::
+You can do much more with AutoComplete form control by passing dropdown settings::
 
     $form->addControl('test', [
         \atk4\ui\Form\Control\AutoComplete::class, 
@@ -59,10 +59,10 @@ You can do much more with AutoComplete control by passing dropdown settings::
     ])->setModel(new Country($db));
 
 
-Lookup Control
-==============
+Lookup From Control
+===================
 
-In 1.6 we have introduced Lookup control, which is identical to AutoComplete but additionally allows
+In 1.6 we have introduced Lookup form control, which is identical to AutoComplete but additionally allows
 use of Filters::
 
 

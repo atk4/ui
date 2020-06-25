@@ -17,13 +17,13 @@ implements the following 4 major features:
 
     .. image:: images/form.png
 
-- Controls are automatically populated based on your existing data model with special treatment
+- Form controls are automatically populated based on your existing data model with special treatment
   for date/time, auto-complete and even file upload.
 
 - Loading data from database and storing it back. Any persistence (SQL, NoSQL) supported by
   ATK Data (https://agile-data.readthedocs.io/en/develop/persistence.html) can be used.
 
-- Support for Events and Actions on controls, buttons and form callback. (:ref:`js`) Automatic
+- Support for Events and Actions on form controls, buttons and form callback. (:ref:`js`) Automatic
   execution of PHP-based Submit Handler passing all the collected data (:ref:`callback`)
 
 So if looking for a PHP Form class, ATK Form has the most complete implementation which does
@@ -57,7 +57,7 @@ or you can tweak it when you create form like this::
 
     $form = Form::addTo($app, ['buttonSave'=>[null, 'Subscribe', 'icon'=>'mail']]);
 
-To set the default values in the controls of the form you can use the model property of the form.
+To set the default values in the form controls you can use the model property of the form.
 Even if model not explicitly set (see section below) each form has an underlying model which is automatically generated::
 
 	// single field
@@ -75,7 +75,7 @@ decorators defined at ``\atk4\ui\Form::Control``. See dedicated documentation fo
  - :php:class:`Form::Layout`
  - :php:class:`Form::Control`
 
-To tweak the UI properties of an control input use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field::
+To tweak the UI properties of an form control input use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field::
 
 	$form = $this->add(new \atk4\ui\Form);
 	$form->setModel($m);
@@ -97,37 +97,37 @@ The basic 2-line syntax will extract all the required logic from the Model inclu
 
  - Fields defined for this Model will be displayed
  - Display of default values in the form
- - Depending on field type, a control will be selected from Form\Control class
+ - Depending on the field type, a form control will be selected from Form\Control namespace
  - Using :php:class:`Form\Layout\Columns` can make form more compact by splitting it into columns
- - Control captions, placeholders, hints and other elements defined in Field::ui are respected (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
+ - Form control captions, placeholders, hints and other elements defined in Field::ui are respected (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
  - Fields that are not editable by default will not appear on the form (https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
  - Field typecasting will be invoked such as for converting dates
  - Reference fields (https://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as Dropdown
  - Booleans are displayed as checkboxes but stored as defined by the model field
- - Mandatory and Required fields will have controls visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$mandatory)
+ - Mandatory and Required fields will have form controls visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$mandatory)
  - Validation will be performed and errors will appear on the form (NEED LINK)
  - Unless you specify a submission handler, form will save the model ``User`` into ``$db`` on successful submission.
 
 All of the above works auto-magically, but you can tweak it even more:
 
  - Provide custom submission handler
- - Specify which controls and in which order to display on the form
- - Override labels, control classes
- - Group controls or use custom layout template
+ - Specify which form controls and in which order to display on the form
+ - Override labels, form control classes
+ - Group form controls or use custom layout template
  - Mix standard model fields with your own
  - Add JS Actions around fields
  - Split up form into multiple tabs
 
 If your form is NOT associated with a model, then Form will automatically create a :php:class:`ProxyModel`
-and associate it with your Form. As you add controls respective fields will also be added into ProxyModel.
+and associate it with your Form. As you add form controls respective fields will also be added into ProxyModel.
 
 Extensions
 ----------
 
 Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some extensions like:
 
- - Captcha control
- - File Upload control (see https://github.com/atk4/filestore)
+ - Captcha form control
+ - File Upload form control (see https://github.com/atk4/filestore)
  - Multi-record form
 
 If you develop such a feature please let me know so that I can include it in the documentation
@@ -141,12 +141,12 @@ a View layout for it in order to create their html element. In other words, layo
 is responsible of rendering html for fields.
 
 When Form is first initialized, it will provide and set a default Generic layout within the form.
-Then using :php:meth:`Form::addControl()` will rely on that layout to add control View to it and render it properly.
+Then using :php:meth:`Form::addControl()` will rely on that layout to add form control to it and render it properly.
 You may also supply your own layout when creating your form.
 
 Form layout may contain sub layouts. Each sub layout being just another layout view, it is possible
 to nest them, by adding other sub layout to them. This allows for great flexibility on how to place
-your controls within Form.
+your form controls within Form.
 
 Each sub layout may also contain specific section layout like Accordion, Columns or Tabs.
 
@@ -171,7 +171,7 @@ specific field type::
     $form = Form::addTo($app);
     $form->setModel(new User($db), ['email', 'gender', 'terms']);
 
-Control does not have to be added directly into the form. You can use a separate
+Form control does not have to be added directly into the form. You can use a separate
 :php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`Form\Control::$form`::
 
     $myview = View::addTo($form, ['defaultTemplate'=>'./mytemplate.html']);
@@ -179,7 +179,7 @@ Control does not have to be added directly into the form. You can use a separate
 
 .. php:method:: addControls($fields)
 
-Similar to :php:meth:`Form::addControl()`, but allows to add multiple controls in one method call::
+Similar to :php:meth:`Form::addControl()`, but allows to add multiple form controls in one method call::
 
     $form = Form::addTo($app);
     $form->addControls([
@@ -191,7 +191,7 @@ Similar to :php:meth:`Form::addControl()`, but allows to add multiple controls i
 Adding new controls
 -------------------
 
-First argument to addControl is the name of the control. You cannot have multiple controls
+First argument to addControl is the name of the form control. You cannot have multiple controls
 with the same name.
 
 If a field exists inside associated model, then model field definition will be used as
@@ -203,17 +203,17 @@ association with field. This will not work with regular fields, but you can add
 custom control such as CAPTCHA, which does not really need association with a
 field.
 
-Field Control
--------------
+Form Control
+------------
 
 To avoid term miss-use, we use "Field" to refer to ``\atk4\data\Field``. This class
 is documented here: https://agile-data.readthedocs.io/en/develop/fields.html
 
 Form uses a small UI component to visualize HTML input fields associated with
-the respective Model Field. We call this object "Field Control". All field
+the respective Model Field. We call this object "Form Control". All form
 controls extend from class :php:class:`Form::Control`.
 
-Agile UI comes with at least the following controls:
+Agile UI comes with at least the following form controls:
 
 - Input (also extends into Line, Password, Hidden)
 - Dropdown
@@ -235,12 +235,12 @@ Field Decorator can be passed to ``addControl`` using 'string', :php:ref:`seed` 
     $calendar->options['ampm'] = true;
     $form->addControl('time', $calendar);
 
-For more information on default decorators as well as examples on how to create
-your own see documentation on :php:class:`Form::Field`.
+For more information on default form controls as well as examples on how to create
+your own see documentation on :php:class:`Form::Control`.
 
 .. php:method:: controlFactory(\atk4\data\Field $field, $defaults = [])
 
-If control class is not specified (``null``) then it will be determined from
+If form control class is not specified (``null``) then it will be determined from
 the type of the Data control with ``controlFactory`` method.
 
 Data Field
@@ -248,7 +248,7 @@ Data Field
 
 Data field is the 3rd argument to ``Form::addControl()``.
 
-There are 3 ways to define Data control using 'string', 'array' or 'object'::
+There are 3 ways to define Data form control using 'string', 'array' or 'object'::
 
     $form->addControl('accept_terms', \atk4\ui\Form\Control\Checkbox::class, 'Accept Terms & Conditions');
     $form->addControl('gender', null, ['enum'=>['Female', 'Male']]);
@@ -315,10 +315,10 @@ example displays a registration form for a User::
         return $form->success('Thank you. Check your email now');
     });
 
-Field Type vs Control Class
----------------------------
+Field Type vs Form Control
+--------------------------
 
-Sometimes you may wonder - should you pass control class (Form\Control\Checkbox) or
+Sometimes you may wonder - should you pass form control class (Form\Control\Checkbox) or
 a data field type (['type' => 'boolean']);
 
 It is always recommended to use data field type, because it will take care of type-casting
@@ -342,8 +342,8 @@ The above code result in the following output::
 
     date1 = DateTime Object ( [date] => 2017-09-03 00:00:00 .. ) and date2 = September 3, 2017
 
-Seeding Control from Model
---------------------------
+Seeding Form Control from Model
+-------------------------------
 
 In large projects you most likely won't be setting individual fields for each Form. Instead
 you can simply use ``setModel()`` to populate all defined fields inside a model. Form does
@@ -388,13 +388,13 @@ needs a bit more info:
 Associate fields with existing model object and import all editable fields
 in the order in which they were defined inside model's init() method.
 
-You can specify which controls to import and their order by simply listing
+You can specify which form controls to import and their order by simply listing
 field names through second argument.
 
 Specifying "false" or empty array as a second argument will import no fields,
-so you can then use :php:meth:`Form::addControl` to import controls individually.
+so you can then use :php:meth:`Form::addControl` to import form controls individually.
 
-Note that :php:meth:`Form::setModel` also delegates adding control to the form layout
+Note that :php:meth:`Form::setModel` also delegates adding form control to the form layout
 by using `Form->layout->setModel()` internally.
 
 See also: https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable
@@ -402,7 +402,7 @@ See also: https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEdit
 Using setModel() on a sub layout
 --------------------------------
 
-You may add controls to sub layout directly using setModel method on the sub layout itself.::
+You may add form controls to sub layout directly using setModel method on the sub layout itself.::
 
     $f = Form::addTo($app);
     $f->setModel($m, false);
@@ -604,13 +604,13 @@ Core Exceptions may contain some sensitive information in parameters or back-tra
 will not be included in response for security reasons.
 
 
-Form Layout and sub layout
+Form Layout and Sub-layout
 --------------------------
 
-As stated above, when you create a Form object and start adding controls through either :php:meth:`addControl()`
-or :php:meth:`setModel()`, they will appear one under each-other. This arrangement of controls as
-well as display of labels and structure around the controls themselves is not done by a form,
-but another object - "Form Layout". This object is responsible for the control flow, presence
+As stated above, when you create a Form object and start adding form controls through either :php:meth:`addControl()`
+or :php:meth:`setModel()`, they will appear one under each-other. This arrangement of form controls as
+well as display of labels and structure around the form controls themselves is not done by a form,
+but another object - "Form Layout". This object is responsible for the form control flow, presence
 of labels etc.
 
 .. php:method:: initLayout(FormLayout\Generic $layout)
@@ -646,34 +646,34 @@ of labels etc.
     Same as :php:class:`Form::addControl()` but will place a field inside this specific layout
     or sub-layout.
 
-Control group layout and sub layout
------------------------------------
+Form Control Group Layout and Sub-layout
+----------------------------------------
 
 Controls can be organized in groups, using method `addGroup()` or as sub section using `addSubLayout()` method.
 
-Using group
+Using Group
 -----------
 
-Group will create a sub layout for you where controls added to the group will be placed side by side in one line
+Group will create a sub layout for you where form controls added to the group will be placed side by side in one line
 and where you can setup specific width for each field.
 
 My next example will add multiple controls on the same line::
 
-    $form->setModel(new User($db), false);  // will not populate any controls automatically
+    $form->setModel(new User($db), false);  // will not populate any form controls automatically
 
     $form->addControls(['name', 'surname']);
 
     $gr = $form->addGroup('Address');
-    $gr->addControls(['address', 'city', 'country']); // grouped controls, will appear on the same line
+    $gr->addControls(['address', 'city', 'country']); // grouped form controls, will appear on the same line
 
-By default grouped controls will appear with fixed width. To distribute space you can either specify
+By default grouped form controls will appear with fixed width. To distribute space you can either specify
 proportions manually::
 
     $gr = $f->addGroup('Address');
     $gr->addControl('address', ['width'=>'twelve']);
     $gr->addControl('code', ['Post Code', 'width'=>'four']);
 
-or you can divide space equally between controls. Header is also omitted for this group::
+or you can divide space equally between form controls. Header is also omitted for this group::
 
     $gr = $f->addGroup(['width'=>'two']);
     $gr->addControls(['city', 'country']);
@@ -686,7 +686,7 @@ the error messages appearing on the right from the control::
     $gr->addControl('middle_name', ['width'=>'three', 'disabled'=>true]);
     $gr->addControl('last_name', ['width'=>'five']);
 
-Using Sub layout
+Using Sub-layout
 ----------------
 
 There are four specific sub layout views that you can add to your existing form layout: Generic, Accordion, Tabs and Columns.
@@ -715,23 +715,23 @@ The following example will show how to organize fields using regular sub layout 
     $a2 = $accordion_layout->addSection('Section 2');
     $a2->setModel($m, ['numcode', 'phonecode']);
 
-In the example above, we first add a Generic sub layout to the existing layout of the form where one
-control, name, is added to this sub layout.
+In the example above, we first add a Generic sub layout to the existing layout of the form where one form
+control ('name') is added to this sub layout.
 
 Then we add another layout to the form layout. In this case it's specific Accordion layout. This sub layout
-is further separated in two accordion sections and controls are added to each section::
+is further separated in two accordion sections and form controls are added to each section::
 
     $a1->setModel($m, ['iso', 'iso3']);
     $a2->setModel($m, ['numcode', 'phonecode']);
 
-Sub layout gives you greater control on how to display controls within your form. For more examples on
+Sub layout gives you greater control on how to display form controls within your form. For more examples on
 sub layouts please visit demo page: https://github.com/atk4/ui/blob/develop/demos/form-section.php
 
-Fomantic UI modifiers
+Fomantic UI Modifiers
 ---------------------
 
 There are many other classes Fomantic UI allow you to use on a form. The next code will produce
-form inside a segment (outline) and will make controls appear smaller::
+form inside a segment (outline) and will make form controls appear smaller::
 
     $f = new \atk4\ui\Form(['small segment']));
 
@@ -762,7 +762,7 @@ Conditional Form
 
 .. php:method:: setControlDisplayRules()
 
-So far we had to present form with a set of controls while initializing. Sometimes
+So far we had to present form with a set of form controls while initializing. Sometimes
 you would want to hide/display controls while user enters the data.
 
 The logic is based around passing a declarative array::
@@ -804,7 +804,7 @@ Here is a more advanced example::
        'f_gift'=> ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
     ]);
 
-You may also define multiple conditions for the control to be visible if you wrap them inside and array::
+You may also define multiple conditions for the form control to be visible if you wrap them inside and array::
 
 
     $f_sub = Form::addTo($app);
@@ -822,7 +822,7 @@ You may also define multiple conditions for the control to be visible if you wra
 Hiding / Showing group of field
 -------------------------------
 
-Instead of defining rules for controls individually you can hide/show entire group::
+Instead of defining rules for form controls individually you can hide/show entire group::
 
     $f_group = Form::addTo($app, ['segment']);
     Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveFields']);

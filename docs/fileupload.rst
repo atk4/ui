@@ -5,7 +5,7 @@ File Upload
 
 .. figure:: images/fileupload.png
 
-Upload (and UploadImage) classes implement form control that can be used to upload files or images.
+Upload (and UploadImage) classes implement form controls that can be used to upload files or images.
 Implementation of :php:class:`Form` in Agile UI submits data using JavaScript request and
 therefore files should be uploaded before form submission. Process used can be described
 in steps:
@@ -34,7 +34,7 @@ Upload control has the following properties:
 
 .. php:attr:: accept
 
-An array of string containing the file type accepted by the control, default is empty.
+An array of string containing the file type accepted by the form control, default is empty.
 Example would be: `['application/pdf', 'images/*']`.
 
 .. php:attr:: hasFocusEnable
@@ -94,7 +94,7 @@ Example showing the onUpload callback on the UploadImage field::
         return new \atk4\ui\jsNotify(['content' => 'File is uploaded!', 'color' => 'green']);
     });
 
-When user submit the form, the control data value that will be submitted is the fileId set during the onUpload callback.
+When user submit the form, the form control data value that will be submitted is the fileId set during the onUpload callback.
 The fileId is set to file name by default if omitted::
 
     $form->onSubmit(function ($form) {
@@ -133,11 +133,11 @@ Similar to Upload, this is a control implementation for uploading images. Here a
 
 .. php:class:: UploadImage
 
-UploadImage control inherits all of the Upload properties plus these ones:
+UploadImage form control inherits all of the Upload properties plus these ones:
 
 .. php:attr:: thumbnail
 
-The thumbnail view associated with the control.
+The thumbnail view associated with the form control.
 
 .. php:attr:: thumnailRegion
 
