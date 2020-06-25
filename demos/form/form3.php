@@ -26,7 +26,6 @@ $seg = \atk4\ui\View::addTo($app, ['ui' => 'raised segment']);
     ->on('click', new jsReload($seg, ['m' => 'stat']));
 
 $form = Form::addTo($seg, ['layout' => [Form\Layout\Columns::class]]);
-
 $form->setModel(
     isset($_GET['m']) ? (
         $_GET['m'] === 'country' ? new Country($app->db) : (

@@ -298,7 +298,6 @@ example displays a registration form for a User::
     $form->setModel(new User($db));
 
     // add password verification field
-
     $form->addControl('password_verify', [\atk4\ui\Form\Control\Password::class], 'Type password again');
     $form->addControl('accept_terms', null, ['type'=>'boolean']);
 
