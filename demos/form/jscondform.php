@@ -34,11 +34,11 @@ $f_sub = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_sub, ['Click on subscribe and add email to receive your gift.', 'top attached'], ['AboveFields']);
 
 $f_sub->addField('name');
-$f_sub->addField('subscribe', [Form\Field\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
+$f_sub->addField('subscribe', [Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
 $f_sub->addField('email');
-$f_sub->addField('gender', [Form\Field\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
-$f_sub->addField('m_gift', [Form\Field\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
-$f_sub->addField('f_gift', [Form\Field\Dropdown::class, 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
+$f_sub->addField('gender', [Form\Control\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
+$f_sub->addField('m_gift', [Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
+$f_sub->addField('f_gift', [Form\Control\Dropdown::class, 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
 // Show email and gender when subscribe is checked.
 // Show m_gift when gender is exactly equal to 'male' and subscribe is checked.
@@ -55,9 +55,9 @@ $f_sub->setFieldsDisplayRules([
 
 $f_dog = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($f_dog, ['You can select type of hair cut only with race that contains "poodle" AND age no more than 5 year OR your dog race is exactly "bichon".', 'top attached'], ['AboveFields']);
-$f_dog->addField('race', [Form\Field\Line::class]);
+$f_dog->addField('race', [Form\Control\Line::class]);
 $f_dog->addField('age');
-$f_dog->addField('hair_cut', [Form\Field\Dropdown::class, 'values' => ['Short', 'Long']]);
+$f_dog->addField('hair_cut', [Form\Control\Dropdown::class, 'values' => ['Short', 'Long']]);
 
 // Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
 // OR
@@ -77,13 +77,13 @@ $g_basic->addField('first_name', ['width' => 'eight']);
 $g_basic->addField('middle_name', ['width' => 'three']);
 $g_basic->addField('last_name', ['width' => 'five']);
 
-$f_group->addField('dev', [Form\Field\Checkbox::class, 'caption' => 'I am a developper']);
+$f_group->addField('dev', [Form\Control\Checkbox::class, 'caption' => 'I am a developper']);
 
 $g_code = $f_group->addGroup(['Check all language that apply']);
-$g_code->addField('php', [Form\Field\Checkbox::class]);
-$g_code->addField('js', [Form\Field\Checkbox::class]);
-$g_code->addField('html', [Form\Field\Checkbox::class]);
-$g_code->addField('css', [Form\Field\Checkbox::class]);
+$g_code->addField('php', [Form\Control\Checkbox::class]);
+$g_code->addField('js', [Form\Control\Checkbox::class]);
+$g_code->addField('html', [Form\Control\Checkbox::class]);
+$g_code->addField('css', [Form\Control\Checkbox::class]);
 
 $g_other = $f_group->addGroup(['Others']);
 $g_other->addField('language', ['width' => 'eight']);
@@ -116,7 +116,7 @@ $gr->addField('state1', ['width' => 'six']);
 $gr->addField('country1', ['width' => 'six']);
 $gr->addField('postal1', ['width' => 'four']);
 
-$adr_section->addField('custom_shipping', [Form\Field\Checkbox::class, 'caption'=>'Different Shipping Address']);
+$adr_section->addField('custom_shipping', [Form\Control\Checkbox::class, 'caption'=>'Different Shipping Address']);
 
 // Section - shipping address
 $ship_section = $accordion_layout->addSection('Shipping address');

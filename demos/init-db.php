@@ -111,13 +111,13 @@ class Stat extends \atk4\data\Model
         $this->title_field = 'project_name';
         $this->addField('description', ['type' => 'text']);
         $this->addField('client_name', ['type' => 'string']);
-        $this->addField('client_address', ['type' => 'text', 'ui' => ['form' => [new Form\Field\Textarea(), 'rows' => 4]]]);
+        $this->addField('client_address', ['type' => 'text', 'ui' => ['form' => [new Form\Control\Textarea(), 'rows' => 4]]]);
 
         $this->hasOne('client_country_iso', [
             new Country(),
             'their_field' => 'iso',
             'ui' => [
-                'form' => Form\Field\Line::class,
+                'form' => Form\Control\Line::class,
             ],
         ])
             ->addField('client_country', 'name');
@@ -147,7 +147,7 @@ class Stat extends \atk4\data\Model
         $this->addFields(['start_date', 'finish_date'], ['type' => 'date']);
         $this->addField('finish_time', ['type' => 'time']);
 
-        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => [Form\Field\Line::class, 'disabled' => true]]]);
+        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => [Form\Control\Line::class, 'disabled' => true]]]);
     }
 }
 

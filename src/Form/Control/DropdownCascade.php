@@ -8,12 +8,12 @@ declare(strict_types=1);
  * For example:
  *  - you need to narrow product base on Category and sub category
  *       $f = Form::addTo($app);
- *       $f->addField('category_id', [Dropdown::class, 'model' => new Category($db)])->set(3);
- *       $f->addField('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
- *       $f->addField('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);.
+ *       $f->addControl('category_id', [Dropdown::class, 'model' => new Category($db)])->set(3);
+ *       $f->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
+ *       $f->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);.
  */
 
-namespace atk4\ui\Form\Field;
+namespace atk4\ui\Form\Control;
 
 use atk4\data\Field;
 use atk4\data\Model;
@@ -41,7 +41,7 @@ class DropdownCascade extends Dropdown
             throw new Exception('cascadeFrom property is not set.');
         }
 
-        $this->cascadeInput = is_string($this->cascadeFrom) ? $this->form->getField($this->cascadeFrom) : $this->cascadeFrom;
+        $this->cascadeInput = is_string($this->cascadeFrom) ? $this->form->getElement($this->cascadeFrom) : $this->cascadeFrom;
 
         if (!$this->cascadeInput instanceof Field) {
             throw new Exception('cascadeFrom property should be an instance of ' . Field::class);

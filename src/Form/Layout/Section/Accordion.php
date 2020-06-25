@@ -28,7 +28,7 @@ class Accordion extends \atk4\ui\Accordion
             $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
 
             // if field is part of an accordion section, will open that section.
-            $section = $form->getClosestOwner($form->getField($fieldName), AccordionSection::class);
+            $section = $form->getClosestOwner($form->getElement($fieldName), AccordionSection::class);
             if ($section) {
                 $jsError[] = $section->owner->jsOpen($section);
             }

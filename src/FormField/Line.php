@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace atk4\ui\FormField;
 
 if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
-    'trigger_error'('Use atk4\ui\Form\Field\Line instead', E_USER_DEPRECATED);
+    'trigger_error'('Use atk4\ui\Form\Control\Line instead', E_USER_DEPRECATED);
 }
 
 /**
  * @deprecated will be removed jun-2021
  */
-class Line extends \atk4\ui\Form\Field\Line
+class Line extends \atk4\ui\Form\Control\Line
 {
 }

@@ -46,7 +46,7 @@ class Layout extends AbstractLayout
     /** @var array Seed for creating input hint View used in this layout. */
     public $defaultHint = [Label::class, 'class' => ['pointing']];
 
-    protected function _addField($decorator, $field)
+    protected function addControlElement($decorator, $field)
     {
         return $this->_add($decorator, ['desired_name' => $field->short_name]);
     }
@@ -173,8 +173,8 @@ class Layout extends AbstractLayout
                 continue;
             }
 
-            // Anything but fields or explicitly defined fields gets inserted directly
-            if (!$el instanceof Field || !$el->layoutWrap) {
+            // Anything but controls or explicitly defined controls get inserted directly
+            if (!$el instanceof Control || !$el->layoutWrap) {
                 $this->template->appendHTML('Content', $el->getHTML());
 
                 continue;
@@ -184,7 +184,7 @@ class Layout extends AbstractLayout
             $label = $el->caption ?: $el->field->getCaption();
 
             // Anything but fields gets inserted directly
-            if ($el instanceof \atk4\ui\Form\Field\Checkbox) {
+            if ($el instanceof \atk4\ui\Form\Control\Checkbox) {
                 $template = $field_no_label;
                 $el->template->set('Content', $label);
                 /*

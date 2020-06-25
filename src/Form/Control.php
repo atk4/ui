@@ -11,7 +11,7 @@ use atk4\ui\View;
 /**
  * Provides generic functionality for a form field.
  */
-class Field extends View
+class Control extends View
 {
     /**
      * @var Form - to which this field belongs
@@ -23,8 +23,11 @@ class Field extends View
      */
     public $field;
 
-    /** @var string Field class */
+    /** @deprecated use controlClass instead - will be removed in dec-2020 */
     public $fieldClass = '';
+
+    /** @var string control class */
+    public $controlClass = '';
 
     /**
      * @var bool - Whether you need this field to be rendered wrap in a form layout or as his
@@ -49,7 +52,7 @@ class Field extends View
     public $caption;
 
     /**
-     * Placed as a pointing label below the field. This only works when Form\Field appears in a form. You can also
+     * Placed as a pointing label below the field. This only works when Form\Control appears in a form. You can also
      * set this to object, such as \atk4\ui\Text otherwise HTML characters are escaped.
      *
      * @var string|\atk4\ui\View|array
@@ -80,11 +83,11 @@ class Field extends View
         parent::init();
 
         if ($this->form && $this->field) {
-            if (isset($this->form->fields[$this->field->short_name])) {
+            if (isset($this->form->controls[$this->field->short_name])) {
                 throw (new Exception('Form already has a field with the same name'))
                     ->addMoreInfo('name', $this->field->short_name);
             }
-            $this->form->fields[$this->field->short_name] = $this;
+            $this->form->controls[$this->field->short_name] = $this;
         }
     }
 
@@ -171,12 +174,23 @@ class Field extends View
     }
 
     /**
-     * Return field class.
-     *
-     * @return string
+     * @deprecated use Control::getControlClass instead - will be removed in dec-2020
      */
     public function getFieldClass()
     {
-        return $this->fieldClass;
+        @trigger_error('Method is deprecated. Use Control::getControlClass instead', E_USER_DEPRECATED);
+
+        return $this->getControlClass();
+    }
+
+    /**
+     * Return control class.
+     *
+     * @return string
+     */
+    public function getControlClass()
+    {
+        // use of fieldClass for backward compatibility - will be removed in dec-2020
+        return $this->controlClass ?: $this->fieldClass;
     }
 }

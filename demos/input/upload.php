@@ -10,12 +10,12 @@ use atk4\ui\Form;
 require_once __DIR__ . '/../init-app.php';
 
 $form = Form::addTo($app);
-$img = $form->addField('img', [Form\Field\UploadImage::class, ['defaultSrc' => '../images/default.png', 'placeholder' => 'Click to add an image.']]);
+$img = $form->addField('img', [Form\Control\UploadImage::class, ['defaultSrc' => '../images/default.png', 'placeholder' => 'Click to add an image.']]);
 $img->cb->appSticky = true;
 //$img->set('a_new_token', 'an-img-file-name');
 //$img->setThumbnailSrc('./images/logo.png');
 
-$field = $form->addField('file', [Form\Field\Upload::class, ['accept' => ['.png', '.jpg']]]);
+$field = $form->addField('file', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]]);
 
 //$field->set('a_generated_token', 'a-file-name');
 //$field->set('a_generated_token');

@@ -26,7 +26,7 @@ $form = Form::addTo($demo->left);
 //standard with model: use id_field as Value, title_field as Title for each Dropdown option
 $form->addField(
     'withModel',
-    [Form\Field\Dropdown::class,
+    [Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
         'model' => (new Country($app->db))->setLimit(25),
     ]
@@ -35,7 +35,7 @@ $form->addField(
 //custom callback: alter title
 $form->addField(
     'withModel2',
-    [Form\Field\Dropdown::class,
+    [Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
         'model' => (new Country($app->db))->setLimit(25),
         'renderRowFunction' => function ($row) {
@@ -50,7 +50,7 @@ $form->addField(
 //custom callback: add icon
 $form->addField(
     'withModel3',
-    [Form\Field\Dropdown::class,
+    [Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
         'model' => (new File($app->db))->setLimit(25),
         'renderRowFunction' => function ($row) {
@@ -65,7 +65,7 @@ $form->addField(
 
 $form->addField(
     'enum',
-    [Form\Field\Dropdown::class,
+    [Form\Control\Dropdown::class,
         'caption' => 'Using Single Values',
         'values' => ['default', 'option1', 'option2', 'option3'],
     ]
@@ -73,7 +73,7 @@ $form->addField(
 
 $form->addField(
     'values',
-    [Form\Field\Dropdown::class,
+    [Form\Control\Dropdown::class,
         'caption' => 'Using values with default text',
         'empty' => 'Choose an option',
         'values' => ['default' => 'Default', 'option1' => 'Option 1', 'option2' => 'Option 2', 'option3' => 'Option 3'],
@@ -82,7 +82,7 @@ $form->addField(
 
 $form->addField(
     'icon',
-    [Form\Field\Dropdown::class,
+    [Form\Control\Dropdown::class,
         'caption' => 'Using icon',
         'empty' => 'Choose an icon',
         'values' => ['tag' => ['Tag', 'icon' => 'tag icon'], 'globe' => ['Globe', 'icon' => 'globe icon'], 'registered' => ['Registered', 'icon' => 'registered icon'], 'file' => ['File', 'icon' => 'file icon']],
@@ -91,7 +91,7 @@ $form->addField(
 
 $form->addField(
     'multi',
-    [Form\Field\Dropdown::class,
+    [Form\Control\Dropdown::class,
         'caption' => 'Multiple selection',
         'empty' => 'Choose has many options needed',
         'isMultiple' => true,

@@ -281,9 +281,9 @@ class UserAction extends Modal implements Interface_, jsInterface_
 
             if (isset($val['model'])) {
                 $val['model'] = $this->factory($val['model']);
-                $f->addField($key, [\atk4\ui\FormField\Lookup::class])->setModel($val['model']);
+                $f->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
             } else {
-                $f->addField($key, null, $val);
+                $f->addControl($key, null, $val);
             }
         }
 
@@ -515,7 +515,7 @@ class UserAction extends Modal implements Interface_, jsInterface_
     protected function setFormField(Form $form, array $fields, string $step): Form
     {
         foreach ($fields as $k => $val) {
-            $form->getField($k)->set($val);
+            $form->getControl($k)->set($val);
         }
         $this->hook(self::HOOK_STEP, [$step, $form]);
 

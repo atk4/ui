@@ -14,13 +14,13 @@ declare(strict_types=1);
  * see demos/tree-item-selector.php to see how tree items are build.
  */
 
-namespace atk4\ui\Form\Field;
+namespace atk4\ui\Form\Control;
 
 use atk4\ui\Form;
 use atk4\ui\jsCallback;
 use atk4\ui\Template;
 
-class TreeItemSelector extends Form\Field
+class TreeItemSelector extends Form\Control
 {
     /**
      * Template for the item selector view.

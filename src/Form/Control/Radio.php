@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Field;
+namespace atk4\ui\Form\Control;
 
 use atk4\ui\Form;
 
 /**
  * Input element for a form field.
  */
-class Radio extends Form\Field
+class Radio extends Form\Control
 {
     public $ui = false;
 

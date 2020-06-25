@@ -12,7 +12,7 @@ require_once __DIR__ . '/../init-app.php';
 // create header
 \atk4\ui\Header::addTo($app, ['Lookup Input']);
 
-Form\Field\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])->setModel(new Country($app->db));
+Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])->setModel(new Country($app->db));
 
 // create form
 $form = Form::addTo($app, ['segment']);
@@ -32,7 +32,7 @@ $m->hasOne('country2', [new Country(), 'ui' => ['form' => [
 $form->setModel($m);
 
 $form->addField('country3', [
-    Form\Field\Lookup::class,
+    Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'placeholder' => 'Search for country by name or iso value',
     'search' => ['name', 'iso', 'iso3'],
@@ -50,13 +50,13 @@ $form->onSubmit(function (Form $form) {
 \atk4\ui\Header::addTo($app, ['Lookup input using label']);
 
 // from seed
-Form\Field\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])->setModel(new Country($app->db));
+Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])->setModel(new Country($app->db));
 
 // through constructor
-Form\Field\Lookup::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new \atk4\ui\Label(['kg', 'basic'])]);
-Form\Field\Lookup::addTo($app, ['label' => '$', 'labelRight' => new \atk4\ui\Label(['.00', 'basic'])]);
+Form\Control\Lookup::addTo($app, ['placeholder' => 'Weight', 'labelRight' => new \atk4\ui\Label(['kg', 'basic'])]);
+Form\Control\Lookup::addTo($app, ['label' => '$', 'labelRight' => new \atk4\ui\Label(['.00', 'basic'])]);
 
-Form\Field\Lookup::addTo($app, [
+Form\Control\Lookup::addTo($app, [
     'iconLeft' => 'tags',
     'labelRight' => new \atk4\ui\Label(['Add Tag', 'tag']),
 ]);
@@ -66,14 +66,14 @@ $label = new \atk4\ui\Label();
 $label->addClass('left corner');
 \atk4\ui\Icon::addTo($label, ['asterisk']);
 
-Form\Field\Lookup::addTo($app, [
+Form\Control\Lookup::addTo($app, [
     'label' => $label,
 ])->addClass('left corner');
 
 \atk4\ui\Header::addTo($app, ['Lookup input inside modal']);
 
 $modal = \atk4\ui\Modal::addTo($app)->set(function ($p) {
-    $a = Form\Field\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country: ']);
+    $a = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country: ']);
     $a->setModel(new Country($p->app->db));
 });
 \atk4\ui\Button::addTo($app, ['Open Lookup on a Modal window'])->on('click', $modal->show());

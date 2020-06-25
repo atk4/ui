@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Field;
+namespace atk4\ui\Form\Control;
 
 use atk4\ui\Exception;
 use atk4\ui\Form;
@@ -10,7 +10,7 @@ use atk4\ui\Form;
 /**
  * Input element for a form field.
  */
-class Checkbox extends Form\Field
+class Checkbox extends Form\Control
 {
     public $ui = 'checkbox';
 

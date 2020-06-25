@@ -56,9 +56,9 @@ class Product extends \atk4\data\Model
 
 $f = Form::addTo($app);
 
-$f->addField('category_id', [Form\Field\Dropdown::class, 'model' => new Category($app->db)]);
-$f->addField('sub_category_id', [Form\Field\DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
-$f->addField('product_id', [Form\Field\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
+$f->addField('category_id', [Form\Control\Dropdown::class, 'model' => new Category($app->db)]);
+$f->addField('sub_category_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
+$f->addField('product_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
 
 $f->onSubmit(function (Form $form) {
     echo print_r($form->model->get(), true);

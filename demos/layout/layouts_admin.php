@@ -22,7 +22,7 @@ $m_user->addItem('Logout');
 
 $m_comp = $layout->menu->addMenu(['Component Demo', 'icon' => 'puzzle']);
 $m_form = $m_comp->addMenu('Forms');
-$m_form->addItem('Form Elements');
+$m_form->addItem('Form Controls');
 $m_form->addItem('Form Layouts');
 $m_comp->addItem('CRUD');
 

@@ -48,9 +48,9 @@ class ArgumentForm extends Basic
 
             if (isset($val['model'])) {
                 $val['model'] = $this->factory($val['model']);
-                $this->form->addField($key, [\atk4\ui\FormField\Lookup::class])->setModel($val['model']);
+                $this->form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
             } else {
-                $this->form->addField($key, null, $val);
+                $this->form->addControl($key, null, $val);
             }
         }
 

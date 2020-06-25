@@ -44,7 +44,7 @@ for ($i = 1; $i < 3; ++$i) {
 $form = Form::addTo($app);
 $form->addField('test');
 // Add multiline field and set model.
-$ml = $form->addField('ml', [Form\Field\Multiline::class, 'options' => ['color' => 'blue'], 'rowLimit' => 10, 'addOnTab' => true]);
+$ml = $form->addField('ml', [Form\Control\Multiline::class, 'options' => ['color' => 'blue'], 'rowLimit' => 10, 'addOnTab' => true]);
 $ml->setModel($inventory);
 
 // Add total field.

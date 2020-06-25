@@ -31,12 +31,12 @@ $sm->addItem('two');
 $m = \atk4\ui\Menu::addTo($app, ['vertical pointing']);
 $m->addItem(['Inbox', 'label' => ['123', 'teal left pointing']]);
 $m->addItem('Spam');
-\atk4\ui\Form\Field\Input::addTo($m->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
+\atk4\ui\Form\Control\Input::addTo($m->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
 
 $m = \atk4\ui\Menu::addTo($app, ['secondary vertical pointing']);
 $m->addItem(['Inbox', 'label' => ['123', 'teal left pointing']]);
 $m->addItem('Spam');
-\atk4\ui\Form\Field\Input::addTo($m->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
+\atk4\ui\Form\Control\Input::addTo($m->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
 $m = \atk4\ui\Menu::addTo($app, ['vertical']);
 $gr = $m->addGroup('Products');
 $gr->addItem('Enterprise');

@@ -57,7 +57,7 @@ declare(strict_types=1);
  * If your model contains a lot of records, you should handle their limit somehow.
  *
  * $f = \atk4\ui\Form::addTo($app);
- * $ml = $f->addField('ml', [\atk4\ui\Form\Field\Multiline::class]);
+ * $ml = $f->addField('ml', [\atk4\ui\Form\Control\Multiline::class]);
  * $ml->setModel($user, ['name','is_vip']);
  *
  * $f->onSubmit(function($f) use ($ml) {
@@ -66,7 +66,7 @@ declare(strict_types=1);
  * });
  */
 
-namespace atk4\ui\Form\Field;
+namespace atk4\ui\Form\Control;
 
 use atk4\data\Field\Callback;
 use atk4\data\Field_SQL_Expression;
@@ -78,7 +78,7 @@ use atk4\ui\Form;
 use atk4\ui\jsVueService;
 use atk4\ui\Template;
 
-class Multiline extends Form\Field
+class Multiline extends Form\Control
 {
     /**
      * The template needed for the multiline view.

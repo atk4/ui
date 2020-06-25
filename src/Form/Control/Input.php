@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Field;
+namespace atk4\ui\Form\Control;
 
 use atk4\ui\Button;
 use atk4\ui\Form;
@@ -12,7 +12,7 @@ use atk4\ui\Label;
 /**
  * Input element for a form field.
  */
-class Input extends Form\Field
+class Input extends Form\Control
 {
     public $ui = 'input';
 

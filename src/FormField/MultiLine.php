@@ -14,7 +14,7 @@ declare(strict_types=1);
  * // Add Form fields
  *
  * // Add Multiline field and set model for it.
- * $ml = $f->addField('ml', ['Multiline']);
+ * $ml = $f->addElement('ml', ['Multiline']);
  *
  * // Set model using hasMany reference of Invoice.
  * $ml->setModel($invoice, ['item','cat','qty','price', 'total'], 'Items', 'invoice_id');
@@ -57,7 +57,7 @@ declare(strict_types=1);
  * If your model contains a lot of records, you should handle their limit somehow.
  *
  * $f = \atk4\ui\Form::addTo($app);
- * $ml = $f->addField('ml', [\atk4\ui\FormField\MultiLine::class]);
+ * $ml = $f->addElement('ml', [\atk4\ui\FormField\MultiLine::class]);
  * $ml->setModel($user, ['name','is_vip']);
  *
  * $f->onSubmit(function($f) use ($ml) {
@@ -69,12 +69,12 @@ declare(strict_types=1);
 namespace atk4\ui\FormField;
 
 if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
-    'trigger_error'('Use atk4\ui\Form\Field\Multiline instead', E_USER_DEPRECATED);
+    'trigger_error'('Use atk4\ui\Form\Control\Multiline instead', E_USER_DEPRECATED);
 }
 
 /**
  * @deprecated will be removed jun-2021
  */
-class MultiLine extends \atk4\ui\Form\Field\Multiline
+class MultiLine extends \atk4\ui\Form\Control\Multiline
 {
 }

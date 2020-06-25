@@ -15,7 +15,7 @@ $form = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveFields']);
 
 $form->addField('starts_with', [
-    Form\Field\Dropdown::class,
+    Form\Control\Dropdown::class,
     'values' => [
         'a' => 'Letter A',
         'b' => 'Letter B',
@@ -27,13 +27,13 @@ $form->addField('starts_with', [
 ]);
 
 $form->addField('contains', [
-    Form\Field\Line::class,
+    Form\Control\Line::class,
     'hint' => 'Select string that lookup selection of Country will depend on.',
     'placeholder' => 'Search for country containing ...',
 ]);
 
 $lookup = $form->addField('country', [
-    Form\Field\Lookup::class,
+    Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'dependency' => function ($model, $data) {
         $conditions = [];
@@ -61,7 +61,7 @@ $form = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveFields']);
 
 $form->addField('ends_with', [
-    Form\Field\Dropdown::class,
+    Form\Control\Dropdown::class,
     'values' => [
         'a' => 'Letter A',
         'e' => 'Letter E',
@@ -72,7 +72,7 @@ $form->addField('ends_with', [
 ]);
 
 $lookup = $form->addField('country', [
-    Form\Field\Lookup::class,
+    Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'dependency' => function ($model, $data) {
         isset($data['ends_with']) ? $model->addCondition('name', 'like', '%' . $data['ends_with']) : null;

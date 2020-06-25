@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace atk4\ui\FormField;
 
 if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
-    'trigger_error'('Use atk4\ui\Form\Field\Input instead', E_USER_DEPRECATED);
+    'trigger_error'('Use atk4\ui\Form\Control\Input instead', E_USER_DEPRECATED);
 }
 
 /**
  * @deprecated will be removed jun-2021
  */
-class Input extends \atk4\ui\Form\Field\Input
+class Input extends \atk4\ui\Form\Control\Input
 {
 }

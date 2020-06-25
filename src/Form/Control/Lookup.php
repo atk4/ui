@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Field;
+namespace atk4\ui\Form\Control;
 
 use atk4\ui\jQuery;
 use atk4\ui\jsExpression;
@@ -14,7 +14,7 @@ class Lookup extends Input
     public $ui = 'input';
 
     /**
-     * Declare this property so Lookup is consistent as decorator to replace Form\Field\Dropdown.
+     * Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown.
      *
      * @var array
      */
@@ -104,7 +104,7 @@ class Lookup extends Input
      *
      * For example, using this setting will automatically submit
      * form when field value is changes.
-     * $form->addField('field', [\atk4\ui\Form\Field\Lookup::class, 'settings'=>['allowReselection' => true,
+     * $form->addControl('field', [\atk4\ui\Form\Control\Lookup::class, 'settings'=>['allowReselection' => true,
      *                           'selectOnKeydown' => false,
      *                           'onChange'        => new atk4\ui\jsExpression('function(value,t,c){
      *                                                          if ($(this).data("value") !== value) {
@@ -442,7 +442,7 @@ class Lookup extends Input
      *
      * {@inheritdoc}
      *
-     * @see \atk4\ui\Form\Field::set()
+     * @see \atk4\ui\Form\Control::set()
      */
     public function set($value = null, $junk = null)
     {

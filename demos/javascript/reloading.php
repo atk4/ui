@@ -46,5 +46,5 @@ $v = \atk4\ui\View::addTo($app, ['ui' => 'segment'])->set($_GET['val'] ?? 'No va
 \atk4\ui\Button::addTo($app, ['Set value to "hello"'])->js('click', new \atk4\ui\jsReload($v, ['val' => 'hello']));
 \atk4\ui\Button::addTo($app, ['Set value to "world"'])->js('click', new \atk4\ui\jsReload($v, ['val' => 'world']));
 
-$val = \atk4\ui\Form\Field\Line::addTo($app, ['']);
+$val = \atk4\ui\Form\Control\Line::addTo($app, ['']);
 $val->addAction('Set Custom Value')->js('click', new \atk4\ui\jsReload($v, ['val' => $val->jsInput()->val()], $val->jsInput()->focus()));

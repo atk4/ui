@@ -36,7 +36,7 @@ use atk4\ui\Exception;
  *      3 => __('paid'),
  *  ],
  *  'ui'      => [
- *      'form' => [\atk4\ui\Form\Field\DropDown::class],
+ *      'form' => [\atk4\ui\Form\Control\DropDown::class],
  *      'table' => ['KeyValue'],
  *  ],
  * ]);

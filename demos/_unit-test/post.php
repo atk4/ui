@@ -13,7 +13,7 @@ require_once __DIR__ . '/../init-app.php';
 $f = Form::addTo($app);
 $f->name = 'test_form';
 
-$f->addField('f1')->set('v1');
+$f->addControl('f1')->set('v1');
 
 $f->onSubmit(function ($f) {
     return new jsToast('Post ok');

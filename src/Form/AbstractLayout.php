@@ -19,15 +19,25 @@ abstract class AbstractLayout extends \atk4\ui\View
     public $form;
 
     /**
-     * Places field inside a layout somewhere. Should be called
-     * through $form->addField().
+     * @deprecated use AbstractLayout::addControl instead - will be removed in dec-2020
+     */
+    public function addField(string $name, $decorator = null, $field = null)
+    {
+        @trigger_error('Method is deprecated. Use AbstractLayout::addControl instead', E_USER_DEPRECATED);
+
+        return $this->addControl(...func_get_args());
+    }
+
+    /**
+     * Places element inside a layout somewhere. Should be called
+     * through $form->addControl().
      *
      * @param array|string|object|null $decorator
      * @param array|string|object|null $field
      *
-     * @return \atk4\ui\Form\Field
+     * @return \atk4\ui\Form\Control
      */
-    public function addField(string $name, $decorator = null, $field = null)
+    public function addControl(string $name, $decorator = null, $field = null)
     {
         if (!$this->form->model) {
             $this->form->model = new \atk4\ui\Misc\ProxyModel();
@@ -60,8 +70,8 @@ abstract class AbstractLayout extends \atk4\ui\View
             } elseif (!$decorator) {
                 $decorator = $this->form->decoratorFactory($field);
             } elseif (is_object($decorator)) {
-                if (!$decorator instanceof \atk4\ui\Form\Field) {
-                    throw (new Exception('Field decorator must descend from ' . \atk4\ui\Form\Field::class))
+                if (!$decorator instanceof \atk4\ui\Form\Control) {
+                    throw (new Exception('Field decorator must descend from ' . \atk4\ui\Form\Control::class))
                         ->addMoreInfo('decorator', $decorator);
                 }
                 $decorator->field = $field;
@@ -77,25 +87,35 @@ abstract class AbstractLayout extends \atk4\ui\View
                 ->addMoreInfo('field', $field);
         }
 
-        return $this->_addField($decorator, $field);
+        return $this->addControlElement($decorator, $field);
     }
 
-    protected function _addField($decorator, $field)
+    protected function addControlElement($decorator, $field)
     {
         return $this->add($decorator, $this->template->hasTag($field->short_name) ? $field->short_name : null);
     }
 
     /**
-     * Add more than one field in one shot.
-     *
-     * @param array $fields
-     *
-     * @return $this
+     * @deprecated use AbstractLayout::addControls instead - will be removed in dec-2020
      */
     public function addFields($fields)
     {
-        foreach ($fields as $field) {
-            $this->addField(...(array) $field);
+        @trigger_error('Method is deprecated. Use AbstractLayout::addControls instead', E_USER_DEPRECATED);
+
+        return $this->addControls(...func_get_args());
+    }
+
+    /**
+     * Add more than one control in one shot.
+     *
+     * @param array $controls
+     *
+     * @return $this
+     */
+    public function addControls($controls)
+    {
+        foreach ($controls as $control) {
+            $this->addControl(...(array) $control);
         }
 
         return $this;
@@ -131,46 +151,52 @@ abstract class AbstractLayout extends \atk4\ui\View
             $fields = $this->getModelFields($model);
         }
 
-        // prepare array of fields - check if fields are editable or read_only/disabled
-        $add_fields = [];
+        // prepare array of controls - check if fields are editable or read_only/disabled
+        $controls = [];
         foreach ($fields as $field) {
             $f = $model->getField($field);
 
             if ($f->isEditable()) {
-                $add_fields[] = [$f->short_name];
+                $controls[] = [$f->short_name];
             } elseif ($f->isVisible()) {
-                $add_fields[] = [$f->short_name, ['readonly' => true]];
+                $controls[] = [$f->short_name, ['readonly' => true]];
             }
         }
 
-        if (is_array($add_fields)) {
-            foreach ($add_fields as $field) {
-                call_user_func_array([$this, 'addField'], $field);
-            }
+        if (is_array($controls)) {
+            $this->addControls($controls);
         } else {
             throw (new Exception('Incorrect value for $fields'))
-                ->addMoreInfo('fields', $add_fields);
+                ->addMoreInfo('controls', $controls);
         }
 
         return $model;
     }
 
     /**
+     * @deprecated use AbstractLayout::getControl instead - will be removed in dec-2020
+     */
+    public function getField($name)
+    {
+        @trigger_error('Method is deprecated. Use AbstractLayout::getControl instead', E_USER_DEPRECATED);
+
+        return $this->getControl(...func_get_args());
+    }
+
+    /**
      * Return Field decorator associated with
      * the form's field.
      *
-     * @param string $name
-     *
-     * @return \atk4\ui\Form\Field
+     * @return \atk4\ui\Form\Control
      */
-    public function getField($name)
+    public function getControl(string $name): Control
     {
         if (empty($this->form)) {
             throw (new Exception('Incorrect value for $form'))
                 ->addMoreInfo('form', $this->form);
         }
 
-        return $this->form->getField($name);
+        return $this->form->getControl($name);
     }
 
     /**

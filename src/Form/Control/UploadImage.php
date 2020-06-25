@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\Form\Field;
+namespace atk4\ui\Form\Control;
 
 use atk4\ui\View;
 

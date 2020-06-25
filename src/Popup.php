@@ -264,7 +264,7 @@ class Popup extends View
         $name = $this->triggerBy;
         if (!is_string($this->triggerBy)) {
             $name = '#' . $this->triggerBy->name;
-            if ($this->triggerBy instanceof Form\Field) {
+            if ($this->triggerBy instanceof Form\Control) {
                 $name = '#' . $this->triggerBy->name . '_input';
             }
         }

@@ -7,7 +7,7 @@ namespace atk4\ui\demo;
 /**
  * Counter for certain demos file.
  */
-class Counter extends \atk4\ui\Form\Field\Line
+class Counter extends \atk4\ui\Form\Control\Line
 {
     public $content = 20; // default
 

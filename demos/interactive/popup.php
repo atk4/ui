@@ -234,7 +234,7 @@ $signup->set(function ($pop) {
     } else {
         $f = Form::addTo($pop);
         $f->addField('email', null, ['required' => true]);
-        $f->addField('password', [Form\Field\Password::class], ['required' => true]);
+        $f->addField('password', [Form\Control\Password::class], ['required' => true]);
         $f->buttonSave->set('Login');
 
         // popup handles callbacks properly, so dynamic element such as form works
@@ -262,7 +262,7 @@ $b_pop = \atk4\ui\Popup::addTo($app, [$button]);
 \atk4\ui\Header::addTo($b_pop)->set('Using click events');
 \atk4\ui\View::addTo($b_pop)->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
 
-$input = Form\Field\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'circular search link']);
+$input = Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'circular search link']);
 
 $i_pop = \atk4\ui\Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
 \atk4\ui\View::addTo($i_pop)->set('You can use this field to search data.');
@@ -270,4 +270,4 @@ $i_pop = \atk4\ui\Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
 $button = \atk4\ui\Button::addTo($app, [null, 'icon' => 'volume down']);
 $b_pop = \atk4\ui\Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();
 
-Form\Field\Checkbox::addTo($b_pop, ['Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
+Form\Control\Checkbox::addTo($b_pop, ['Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
