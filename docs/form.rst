@@ -228,7 +228,7 @@ For some examples see: https://ui.agiletoolkit.org/demos/form3.php
 
 Field Decorator can be passed to ``addField`` using 'string', :php:ref:`seed` or 'object'::
 
-    $form->addField('accept_terms', \atk4\ui\FormField\CheckBox::class);
+    $form->addField('accept_terms', [\atk4\ui\FormField\CheckBox::class]);
     $form->addField('gender', [\atk4\ui\FormField\DropDown::class, 'values'=>['Female', 'Male']]);
 
     $calendar = new \atk4\ui\FormField\Calendar();
@@ -251,7 +251,7 @@ Data field is the 3rd argument to ``Form::addField()``.
 
 There are 3 ways to define Data Field using 'string', 'array' or 'object'::
 
-    $form->addField('accept_terms', \atk4\ui\FormField\CheckBox::class, 'Accept Terms & Conditions');
+    $form->addField('accept_terms', [\atk4\ui\FormField\CheckBox::class], 'Accept Terms & Conditions');
     $form->addField('gender', null, ['enum'=>['Female', 'Male']]);
 
     class MyBoolean extends \atk4\data\Field {
@@ -299,7 +299,7 @@ example displays a registration form for a User::
     $form->setModel(new User($db));
 
     // add password verification field
-    $form->addField('password_verify', \atk4\ui\FormField\Password::class, 'Type password again');
+    $form->addField('password_verify', [\atk4\ui\FormField\Password::class], 'Type password again');
     $form->addField('accept_terms', null, ['type'=>'boolean']);
 
     // submit event
