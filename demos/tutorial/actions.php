@@ -139,7 +139,7 @@ $model->addAction('greet', [
     'callback'=>function ($m, $name) {
         return 'Hi '.$name;
     },
-    'ui' => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
+    'ui' => ['executor' => [\atk4\ui\ActionExecutor\jsUserAction::class]],
 ]);
 
 $model->addAction('ask_age', [

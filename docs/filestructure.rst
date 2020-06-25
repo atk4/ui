@@ -172,14 +172,14 @@ If you want to write an app with a backend, create a file called "admin.php"::
   <?php
   $rootdir = "../";
   require_once __DIR__ . "init.php";
-  $app->initLayout(\atk4\ui\Layout\Admin::class);
+  $app->initLayout([\atk4\ui\Layout\Admin::class]);
 
 If you want to write an app with a frontend, create a file called "index.php"::
 
   <?php
   $rootdir = "../";
   require_once __DIR__ . "init.php";
-  $app->initLayout(\atk4\ui\Layout\Centered::class);
+  $app->initLayout([\atk4\ui\Layout\Centered::class]);
 
 
 Create your own classes

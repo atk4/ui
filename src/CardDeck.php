@@ -61,10 +61,10 @@ class CardDeck extends View
     public $menuBtnStyle = 'primary';
 
     /** @var string Default executor class. */
-    public $executor = UserAction::class;
+    public $executor = [UserAction::class];
 
     /** @var string Default jsExecutor class. */
-    public $jsExecutor = jsUserAction::class;
+    public $jsExecutor = [jsUserAction::class];
 
     /** @var array Default notifier to perform when model action is successful * */
     public $notifyDefault = [jsToast::class, 'settings' => ['displayTime' => 5000]];
@@ -393,11 +393,11 @@ class CardDeck extends View
             if (is_string($button)) {
                 $button = [$button, 'ui' => 'button ' . $this->menuBtnStyle];
             }
-            $button = $this->factory(Button::class, $button);
+            $button = $this->factory([Button::class], $button);
         }
 
         if ($button->icon && !is_object($button->icon)) {
-            $button->icon = $this->factory(Icon::class, $button->icon);
+            $button->icon = $this->factory([Icon::class], $button->icon);
         }
 
         if ($isDisabled) {
