@@ -117,7 +117,7 @@ class Stat extends \atk4\data\Model
             new Country(),
             'their_field' => 'iso',
             'ui' => [
-                'form' => Form\Field\Line::class,
+                'form' => [Form\Field\Line::class],
             ],
         ])
             ->addField('client_country', 'name');

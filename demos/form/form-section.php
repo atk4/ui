@@ -31,12 +31,12 @@ $noSave = function (Form $form) {
 $form = Form::addTo($app);
 $form->setModel($m, false);
 
-$sub_layout = $form->layout->addSubLayout(Form\Layout\Section::class);
+$sub_layout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 \atk4\ui\Header::addTo($sub_layout, ['Column Section in Form']);
 $sub_layout->setModel($m, ['name']);
 
-$cols_layout = $form->layout->addSubLayout(Form\Layout\Section\Columns::class);
+$cols_layout = $form->layout->addSubLayout([Form\Layout\Section\Columns::class]);
 
 $c1 = $cols_layout->addColumn();
 $c1->setModel($m, ['iso', 'iso3']);
@@ -55,12 +55,12 @@ $form->onSubmit($noSave);
 $form = Form::addTo($app);
 $form->setModel($m, false);
 
-$sub_layout = $form->layout->addSubLayout(Form\Layout\Section::class);
+$sub_layout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 \atk4\ui\Header::addTo($sub_layout, ['Accordion Section in Form']);
 $sub_layout->setModel($m, ['name']);
 
-$accordion_layout = $form->layout->addSubLayout(Form\Layout\Section\Accordion::class);
+$accordion_layout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class]);
 
 $a1 = $accordion_layout->addSection('Section 1');
 $a1->setModel($m, ['iso', 'iso3']);
@@ -77,12 +77,12 @@ $form->onSubmit($noSave);
 $form = Form::addTo($app);
 $form->setModel($m, false);
 
-$sub_layout = $form->layout->addSubLayout(Form\Layout\Section::class);
+$sub_layout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 \atk4\ui\Header::addTo($sub_layout, ['Tabs in Form']);
 $sub_layout->setModel($m, ['name']);
 
-$tabs_layout = $form->layout->addSubLayout(Form\Layout\Section\Tabs::class);
+$tabs_layout = $form->layout->addSubLayout([Form\Layout\Section\Tabs::class]);
 
 $t1 = $tabs_layout->addTab('Tab 1');
 $t1->addGroup('In Group')->setModel($m, ['iso', 'iso3']);
@@ -107,7 +107,7 @@ $sub_layout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => '
 $sub_layout->setModel($m, ['name']);
 
 $sub_layout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment teal inverted']);
-$cols_layout = $sub_layout->addSubLayout(Form\Layout\Section\Columns::class);
+$cols_layout = $sub_layout->addSubLayout([Form\Layout\Section\Columns::class]);
 
 $c1 = $cols_layout->addColumn();
 $c1->setModel($m, ['iso', 'iso3']);

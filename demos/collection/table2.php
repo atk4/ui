@@ -62,7 +62,7 @@ $table->addDecorator('amount', [Table\Column\Template::class, 'Refunded: {$amoun
 $table->addColumn('amount_copy', [Table\Column\Multiformat::class, function ($a, $b) {
     if ($a->get('amount_copy') > 0) {
         // Two formatters together
-        return [Table\Column\Link::class, Table\Column\Money::class];
+        return [[Table\Column\Link::class], [Table\Column\Money::class]];
     } elseif (abs($a->get('amount_copy')) < 50) {
         // One formatter, but inject template and some attributes
         return [[

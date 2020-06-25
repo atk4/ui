@@ -40,7 +40,7 @@ $g->addActionButton('Say HI', function ($j, $id) use ($g) {
     return 'Loaded "' . $g->model->load($id)->get('name') . '" from ID=' . $id;
 });
 
-$g->addModalAction(['icon' => 'external'], 'Modal Test', function ($p, $id) {
+$g->addModalAction(['icon' => ['external']], 'Modal Test', function ($p, $id) {
     \atk4\ui\Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 

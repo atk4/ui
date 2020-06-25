@@ -38,7 +38,7 @@ Open a new file `index.php` and enter the following code::
     require_once __DIR__ . '/vendor/autoload.php'; // 2
 
     $app = new \atk4\ui\App('My First App');       // 3
-    $app->initLayout(\atk4\ui\Layout\Centered::class);                  // 4
+    $app->initLayout([\atk4\ui\Layout\Centered::class]);                  // 4
 
     \atk4\ui\HelloWorld::addTo($app);                       // 5
 
@@ -105,7 +105,7 @@ create the application::
     require_once __DIR__ . '/vendor/autoload.php';
 
     $app = new \atk4\ui\App('ToDo List');
-    $app->initLayout(\atk4\ui\Layout\Centered::class);
+    $app->initLayout([\atk4\ui\Layout\Centered::class]);
 
 All components of Agile Data are database-agnostic and will not concern themselves with the way how you store data.
 I will start the session and connect `persistence <https://agile-data.readthedocs.io/en/develop/persistence.html>`_

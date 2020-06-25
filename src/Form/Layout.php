@@ -117,7 +117,7 @@ class Layout extends AbstractLayout
      *
      * @return static
      */
-    public function addSubLayout($seed = self::class, $addDivider = true)
+    public function addSubLayout($seed = [self::class], $addDivider = true)
     {
         $v = $this->add($this->factory($seed, ['form' => $this->form]));
         if ($v instanceof \atk4\ui\Form\Layout\Section) {

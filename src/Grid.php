@@ -114,7 +114,7 @@ class Grid extends View
      *
      * @var string
      */
-    protected $actionButtonsDecorator = Table\Column\ActionButtons::class;
+    protected $actionButtonsDecorator = [Table\Column\ActionButtons::class];
 
     /**
      * Defines which Table Decorator to use for ActionMenu.
@@ -631,7 +631,7 @@ class Grid extends View
      */
     public function addSelection()
     {
-        $this->selection = $this->table->addColumn(null, Table\Column\Checkbox::class);
+        $this->selection = $this->table->addColumn(null, [Table\Column\Checkbox::class]);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));
@@ -647,7 +647,7 @@ class Grid extends View
      */
     public function addDragHandler()
     {
-        $handler = $this->table->addColumn(null, Table\Column\DragHandler::class);
+        $handler = $this->table->addColumn(null, [Table\Column\DragHandler::class]);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));

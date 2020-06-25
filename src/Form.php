@@ -173,7 +173,7 @@ class Form extends View
     protected function initLayout()
     {
         if ($this->layout === null) {
-            $this->layout = Form\Layout::class;
+            $this->layout = [Form\Layout::class];
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
@@ -496,14 +496,14 @@ class Form extends View
      * @var array Describes how factory converts type to decorator seed
      */
     protected $typeToDecorator = [
-        'boolean' => Form\Field\Checkbox::class,
-        'text' => Form\Field\Textarea::class,
-        'string' => Form\Field\Line::class,
-        'password' => Form\Field\Password::class,
-        'datetime' => Form\Field\Calendar::class,
+        'boolean' => [Form\Field\Checkbox::class],
+        'text' => [Form\Field\Textarea::class],
+        'string' => [Form\Field\Line::class],
+        'password' => [Form\Field\Password::class],
+        'datetime' => [Form\Field\Calendar::class],
         'date' => [Form\Field\Calendar::class, 'type' => 'date'],
         'time' => [Form\Field\Calendar::class, 'type' => 'time', 'ampm' => false],
-        'money' => Form\Field\Money::class,
+        'money' => [Form\Field\Money::class],
     ];
 
     /**

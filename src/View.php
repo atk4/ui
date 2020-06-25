@@ -1140,9 +1140,9 @@ class View implements jsExpressionable
             } elseif (isset($defaults['executor'])) {
                 $class = $defaults['executor'];
             } elseif (!$action->args && !$action->fields && !$action->preview) {
-                $class = jsUserAction::class;
+                $class = [jsUserAction::class];
             } else {
-                $class = UserAction::class;
+                $class = [UserAction::class];
             }
             $ex = $this->factory($class);
             if ($ex instanceof self && $ex instanceof Interface_ && $ex instanceof jsInterface_) {

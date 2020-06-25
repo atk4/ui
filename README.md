@@ -57,7 +57,7 @@ Create "index.php" file with:
 require_once __DIR__ . '/vendor/autoload.php';
 
 $app = new \atk4\ui\App();   // That's your UI application
-$app->initLayout(\atk4\ui\Layout\Centered::class);
+$app->initLayout([\atk4\ui\Layout\Centered::class]);
 
 $form = \atk4\ui\Form::addTo($app); // Yeah, that's a form!
 
@@ -89,7 +89,7 @@ To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe 
 
 ``` php
 $app = new \atk4\ui\App('hello world');
-$app->initLayout(\atk4\ui\Layout\Admin::class);
+$app->initLayout([\atk4\ui\Layout\Admin::class]);
 $app->dbConnect('mysql://user:pass@localhost/atk')
 
 \atk4\ui\CRUD::addTo($app)->setModel(new User($app->db));
@@ -191,7 +191,7 @@ It's really easy to put together a complex Admin system. Add this code to a new 
 <?php
 
 $app = new \atk4\ui\App('My App');
-$app->initLayout(\atk4\ui\Layout\Admin::class);
+$app->initLayout([\atk4\ui\Layout\Admin::class]);
 $app->dbConnect('mysql://user:pass@localhost/yourdb');
 
 class User extends \atk4\data\Model {

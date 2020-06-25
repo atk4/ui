@@ -509,12 +509,12 @@ There are several ways to make your code more readable::
 
 Or if you wish to use factory, the syntax is::
 
-    $table->addColumn('name', \atk4\ui\Table\Column::class)
+    $table->addColumn('name', [\atk4\ui\Table\Column::class])
         ->addClass('right aligned', 'all');
 
 For setting an attribute you can use setAttr() method::
 
-    $table->addColumn('name', \atk4\ui\Table\Column::class)
+    $table->addColumn('name', [\atk4\ui\Table\Column::class])
         ->setAttr('colspan', 2, 'all');
 
 Setting a new value to the attribute will override previous value.
