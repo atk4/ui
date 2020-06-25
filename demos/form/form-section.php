@@ -44,7 +44,7 @@ $c1->setModel($m, ['iso', 'iso3']);
 $c2 = $cols_layout->addColumn();
 $c2->setModel($m, ['numcode'/*, 'phonecode'*/]);
 
-$form->addField('phonecode');
+$form->addControl('phonecode');
 
 $form->onSubmit($noSave);
 

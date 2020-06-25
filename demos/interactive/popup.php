@@ -233,8 +233,8 @@ $signup->set(function ($pop) {
             ->link($pop->app->url());
     } else {
         $f = Form::addTo($pop);
-        $f->addField('email', null, ['required' => true]);
-        $f->addField('password', [Form\Control\Password::class], ['required' => true]);
+        $f->addControl('email', null, ['required' => true]);
+        $f->addControl('password', [Form\Control\Password::class], ['required' => true]);
         $f->buttonSave->set('Login');
 
         // popup handles callbacks properly, so dynamic element such as form works

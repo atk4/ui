@@ -37,14 +37,14 @@ $items = [
 \atk4\ui\Header::addTo($app, ['Tree item selector']);
 
 $form = Form::addTo($app);
-$field = $form->addField('tree', [new Form\Control\TreeItemSelector(['treeItems' => $items]), 'caption' => 'Multiple selection:'], ['type' => 'array', 'serialize' => 'json']);
+$field = $form->addControl('tree', [new Form\Control\TreeItemSelector(['treeItems' => $items]), 'caption' => 'Multiple selection:'], ['type' => 'array', 'serialize' => 'json']);
 $field->set(json_encode([201, 301, 503]));
 
 //$field->onItem(function($value) {
 //    return new \atk4\ui\jsToast(json_encode($value));
 //});
 
-$field1 = $form->addField('tree1', [new Form\Control\TreeItemSelector(['treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']), ['type' => 'array']]);
+$field1 = $form->addControl('tree1', [new Form\Control\TreeItemSelector(['treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']), ['type' => 'array']]);
 $field1->set(502);
 
 //$field1->onItem(function($tree) {

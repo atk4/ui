@@ -30,9 +30,9 @@ Form\Control\Checkbox::addTo($app, ['Custom setting?'])->js(true)->checkbox('set
 
 \atk4\ui\Header::addTo($app, ['CheckBoxes in a form', 'size' => 2]);
 $form = Form::addTo($app);
-$form->addField('test', [Form\Control\Checkbox::class]);
-$form->addField('test_checked', [Form\Control\Checkbox::class])->set(true);
-$form->addField('also_checked', 'Hello World', 'boolean')->set(true);
+$form->addControl('test', [Form\Control\Checkbox::class]);
+$form->addControl('test_checked', [Form\Control\Checkbox::class])->set(true);
+$form->addControl('also_checked', 'Hello World', 'boolean')->set(true);
 
 View::addTo($app, ['ui' => 'divider']);
 $c = new Form\Control\Checkbox('Selected checkbox by default');
