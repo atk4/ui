@@ -104,7 +104,7 @@ class DemoActionsUtil
             [
                 'caption' => 'Confirm action ',
                 'description' => 'User Confirmation',
-                'ui' => ['executor' => \atk4\ui\ActionExecutor\UserConfirmation::class],
+                'ui' => ['executor' => [\atk4\ui\ActionExecutor\UserConfirmation::class]],
                 'confirmation' => function ($a) {
                     return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->get('iso3') . ')</b>';
                 },

@@ -15,7 +15,7 @@ will be automatically created if you execute `$component->init()` or `$component
 In most use-scenarios, however, you would create instance of an App class yourself before other components::
 
     $app = new \atk4\ui\App('My App');
-    $app->initLayout(\atk4\ui\Layout\Centered::class);
+    $app->initLayout([\atk4\ui\Layout\Centered::class]);
     LoremIpsum::addTo($app);
 
 As you add one component into another, they will automatically inherit reference to App class. App
@@ -80,7 +80,7 @@ active. (See :ref:`system_pattern`)::
 
             // App class may be used for pages that do not require authentication
             if (!$auth) {
-                $this->initLayout(\atk4\ui\Layout\Centered::class);
+                $this->initLayout([\atk4\ui\Layout\Centered::class]);
                 return;
             }
 
@@ -91,7 +91,7 @@ active. (See :ref:`system_pattern`)::
 
             // Make sure user is valid
             if(!$this->user->loaded()) {
-                $this->initLayout(\atk4\ui\Layout\Centered::class);
+                $this->initLayout([\atk4\ui\Layout\Centered::class]);
                 Message::addTo($this, ['Login Required', 'error']);
                 Button::addTo($this, ['Login', 'primary'])->link('index.php');
                 exit;
@@ -100,7 +100,7 @@ active. (See :ref:`system_pattern`)::
             // Load company data (System) for present user
             $this->company = $this->user->ref('company_id');
 
-            $this->initLayout(\atk4\ui\Layout\Admin::class);
+            $this->initLayout([\atk4\ui\Layout\Admin::class]);
 
             // Add more initialization here, such as a populating menu.
         }
@@ -387,7 +387,7 @@ Adding the Layout
 
 Layout can be initialized through the app like this::
 
-    $app->initLayout(\atk4\ui\Layout\Centered::class);
+    $app->initLayout([\atk4\ui\Layout\Centered::class]);
 
 This will initialize two new views inside the app::
 
@@ -414,7 +414,7 @@ with top, left and right menu objects.
 
 Populating the left menu object is simply a matter of adding the right menu items to the layout menu::
 
-    $app->initLayout(\atk4\ui\Layout\Admin::class);
+    $app->initLayout([\atk4\ui\Layout\Admin::class]);
     $layout = $app->layout;
 
     // Add item into menu

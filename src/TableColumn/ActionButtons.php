@@ -76,11 +76,15 @@ class ActionButtons extends Generic
         }
 
         if (!is_object($button)) {
-            $button = $this->factory(\atk4\ui\Button::class, $this->mergeSeeds($button, ['id' => false]));
+            if (is_string($button)) {
+                $button = [$button];
+            }
+
+            $button = $this->factory([\atk4\ui\Button::class], $this->mergeSeeds($button, ['id' => false]));
         }
 
         if ($button->icon && !is_object($button->icon)) {
-            $button->icon = $this->factory(\atk4\ui\Icon::class, $this->mergeSeeds($button->icon, ['id' => false]));
+            $button->icon = $this->factory([\atk4\ui\Icon::class], $this->mergeSeeds($button->icon, ['id' => false]));
         }
 
         $button->app = $this->table->app;
