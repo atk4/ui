@@ -59,7 +59,7 @@ You can do much more with AutoComplete form control by passing dropdown settings
     ])->setModel(new Country($db));
 
 
-Lookup From Control
+Lookup Form Control
 ===================
 
 In 1.6 we have introduced Lookup form control, which is identical to AutoComplete but additionally allows
