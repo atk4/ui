@@ -51,7 +51,7 @@ $ml->setModel($inventory);
 $sub_layout = $form->layout->addSublayout(Form\Layout\Section\Columns::class);
 $sub_layout->addColumn(12);
 $c = $sub_layout->addColumn(4);
-$f_total = $c->addField('total', ['readonly' => true])->set($total);
+$f_total = $c->addControl('total', ['readonly' => true])->set($total);
 
 // Update total when qty and box value in any row has changed.
 $ml->onLineChange(function ($rows, $form) use ($f_total) {

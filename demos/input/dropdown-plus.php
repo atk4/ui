@@ -24,7 +24,7 @@ $btn = \atk4\ui\Button::addTo($v, ['DropdownCascade Class'])
 $form = Form::addTo($demo->left);
 
 //standard with model: use id_field as Value, title_field as Title for each Dropdown option
-$form->addField(
+$form->addControl(
     'withModel',
     [Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
@@ -33,7 +33,7 @@ $form->addField(
 );
 
 //custom callback: alter title
-$form->addField(
+$form->addControl(
     'withModel2',
     [Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
@@ -48,7 +48,7 @@ $form->addField(
 );
 
 //custom callback: add icon
-$form->addField(
+$form->addControl(
     'withModel3',
     [Form\Control\Dropdown::class,
         'caption' => 'Dropdown with data from Model',
@@ -63,7 +63,7 @@ $form->addField(
     ]
 );
 
-$form->addField(
+$form->addControl(
     'enum',
     [Form\Control\Dropdown::class,
         'caption' => 'Using Single Values',
@@ -71,7 +71,7 @@ $form->addField(
     ]
 );
 
-$form->addField(
+$form->addControl(
     'values',
     [Form\Control\Dropdown::class,
         'caption' => 'Using values with default text',
@@ -80,7 +80,7 @@ $form->addField(
     ]
 );
 
-$form->addField(
+$form->addControl(
     'icon',
     [Form\Control\Dropdown::class,
         'caption' => 'Using icon',
@@ -89,7 +89,7 @@ $form->addField(
     ]
 );
 
-$form->addField(
+$form->addControl(
     'multi',
     [Form\Control\Dropdown::class,
         'caption' => 'Multiple selection',

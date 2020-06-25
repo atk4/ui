@@ -38,7 +38,7 @@ $form->addControl('six', new Form\Control\Checkbox(['caption' => 'Caption3']));
 $model = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
 
 // model field uses regular line form field by default
-$model->addControl('one');
+$model->addField('one');
 
 // caption is a top-level property of a field
 $model->addField('two', ['caption' => 'Caption']);

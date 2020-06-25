@@ -31,7 +31,7 @@ $m->hasOne('country2', [new Country(), 'ui' => ['form' => [
 
 $form->setModel($m);
 
-$form->addField('country3', [
+$form->addControl('country3', [
     Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'placeholder' => 'Search for country by name or iso value',

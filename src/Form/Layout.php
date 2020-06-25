@@ -207,7 +207,7 @@ class Layout extends AbstractLayout
             $template->setHTML('Input', $el->getHTML());
             $template->trySet('label', $label);
             $template->trySet('label_for', $el->id . '_input');
-            $template->set('field_class', $el->getFieldClass());
+            $template->set('field_class', $el->getControlClass());
 
             if ($el->field->required) {
                 $template->append('field_class', 'required ');

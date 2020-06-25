@@ -14,7 +14,7 @@ require_once __DIR__ . '/../init-app.php';
 $form = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveFields']);
 
-$form->addField('starts_with', [
+$form->addControl('starts_with', [
     Form\Control\Dropdown::class,
     'values' => [
         'a' => 'Letter A',
@@ -26,13 +26,13 @@ $form->addField('starts_with', [
     'placeholder' => 'Search for country starting with ...',
 ]);
 
-$form->addField('contains', [
+$form->addControl('contains', [
     Form\Control\Line::class,
     'hint' => 'Select string that lookup selection of Country will depend on.',
     'placeholder' => 'Search for country containing ...',
 ]);
 
-$lookup = $form->addField('country', [
+$lookup = $form->addControl('country', [
     Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'dependency' => function ($model, $data) {
@@ -60,7 +60,7 @@ $form->onSubmit(function (Form $form) {
 $form = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveFields']);
 
-$form->addField('ends_with', [
+$form->addControl('ends_with', [
     Form\Control\Dropdown::class,
     'values' => [
         'a' => 'Letter A',
@@ -71,7 +71,7 @@ $form->addField('ends_with', [
     'placeholder' => 'Search for country ending with ...',
 ]);
 
-$lookup = $form->addField('country', [
+$lookup = $form->addControl('country', [
     Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'dependency' => function ($model, $data) {
