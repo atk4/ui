@@ -67,9 +67,9 @@ class Popup extends View
      * The dynamic View to load inside the popup
      * when dynamic content is use.
      *
-     * @var View|string
+     * @var View|array
      */
-    public $dynamicContent = View::class;
+    public $dynamicContent = [View::class];
 
     /**
      * Whether or not dynamic content is cache.
