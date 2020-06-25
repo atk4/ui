@@ -109,7 +109,7 @@ class DemosTest extends AtkPhpunit\TestCase
                 throw new DemosTestExitException();
             }
         };
-        $app->initLayout(\atk4\ui\Layout\Maestro::class);
+        $app->initLayout([\atk4\ui\Layout\Maestro::class]);
 
         // clone DB (mainly because all Models remains attached now, TODO can be removed once they are GCed)
         $app->db = clone self::$_db;

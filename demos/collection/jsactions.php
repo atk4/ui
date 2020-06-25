@@ -77,7 +77,7 @@ $country->addAction('greet', [
             'required' => true,
         ],
     ],
-    'ui' => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
+    'ui' => ['executor' => [\atk4\ui\ActionExecutor\jsUserAction::class]],
     'callback' => function ($m, $name) {
         return 'Hello ' . $name;
     },

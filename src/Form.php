@@ -183,7 +183,7 @@ class Form extends View
     protected function initLayout()
     {
         if ($this->layout === null) {
-            $this->layout = Form\Layout::class;
+            $this->layout = [Form\Layout::class];
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
@@ -565,14 +565,14 @@ class Form extends View
      * @var array Describes how factory converts type to control seed
      */
     protected $typeToControl = [
-        'boolean' => Form\Control\Checkbox::class,
-        'text' => Form\Control\Textarea::class,
-        'string' => Form\Control\Line::class,
-        'password' => Form\Control\Password::class,
-        'datetime' => Form\Control\Calendar::class,
+        'boolean' => [Form\Control\Checkbox::class],
+        'text' => [Form\Control\Textarea::class],
+        'string' => [Form\Control\Line::class],
+        'password' => [Form\Control\Password::class],
+        'datetime' => [Form\Control\Calendar::class],
         'date' => [Form\Control\Calendar::class, 'type' => 'date'],
         'time' => [Form\Control\Calendar::class, 'type' => 'time', 'ampm' => false],
-        'money' => Form\Control\Money::class,
+        'money' => [Form\Control\Money::class],
     ];
 
     /**
