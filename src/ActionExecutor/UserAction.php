@@ -81,9 +81,9 @@ class UserAction extends Modal implements Interface_, jsInterface_
     /**
      * A form for action argument and fields user entry.
      *
-     * @var string
+     * @var array
      */
-    public $form = Form::class;
+    public $form = [Form::class];
 
     /**
      * @var string can be "console", "text", or "html"
