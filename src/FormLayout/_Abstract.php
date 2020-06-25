@@ -9,7 +9,7 @@ if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
 }
 
 /**
- * @deprecated will be removed jun-2021
+ * @deprecated will be removed dec-2020
  */
 abstract class _Abstract extends \atk4\ui\Form\AbstractLayout
 {
