@@ -1,15 +1,15 @@
 
-.. php:namespace:: atk4\ui\Form\Field
+.. php:namespace:: atk4\ui\Form\Control
 
 .. php:class:: Multiline
 
 
-====================
-Multiline Form Field
-====================
+======================
+Multiline Form Control
+======================
 
 
-The Multiline Form Field is not a single field, but is used to edit several Model records.
+The Multiline Form control is not a single field, but is used to edit several Model records.
 A good example is a user who can have many addresses. In this example, the Model `User` containsMany `Addresses`.
 This means that the addresses are not stored into a separate database table but into the field `addresses` of user table::
 
@@ -108,7 +108,7 @@ If you want to edit them along with the user, Multiline is set up in a few lines
     //Add a form to UI to edit User record
     $user_form = \atk4\ui\Form::addTo($app);
     $user_form->setModel($user);
-    $ml = $user_form->addField('email_addresses', [\atk4\ui\Form\Field\Multiline::class]);
+    $ml = $user_form->addField('email_addresses', [\atk4\ui\Form\Control\Multiline::class]);
     $ml->setModel($user->ref('Email'));
 
     //set up saving of Email on Form submit
@@ -120,14 +120,14 @@ If you want to edit them along with the user, Multiline is set up in a few lines
     });
 
 
-Now, there is another Multiline form field to add, edit or delete the users email addresses:
+Now, there is another Multiline form contol to add, edit or delete the users email addresses:
 
 .. image:: images/multiline_email_address.png
 
 
 Multiline and Expressions
 =========================
-If a Model has Expressions, they automatically get updated when a field value is changed. A loading icon on the ``+`` sign indicates that the expression values are updated.
+If a Model has Expressions, they automatically get updated when a control value is changed. A loading icon on the ``+`` sign indicates that the expression values are updated.
 Lets use the example of demos/multiline.php::
 
     class InventoryItem extends \atk4\data\Model
@@ -147,8 +147,8 @@ Lets use the example of demos/multiline.php::
 The 'total' expression will get updated on each field change automatically when InventoryItem is set as model to Multiline.
 
 
-Manually adding actions on a field value change
-===============================================
+Manually adding actions on a control value change
+=================================================
 If you want to define a callback which gets executed if a field value is changed, you can do so using the ``onLineChange()`` method. The first parameter is the callback, the second one an array including the field names which trigger the callback when changed. You can return a single jsExpressionable or an array of jsExpressionables which then will be sent to the browser. In this case we display a Toast with some message::
 
     $multiline->onLineChange(function ($rows, $form) {
@@ -181,13 +181,13 @@ If you want to change how single inputs are displayed in the multiline, you can 
         ['description', 'type' => 'string', 'ui' => ['multiline' => ['textarea']]],
     ]);
     
-This above will display a name, value and description field within a multiline form field. The value field input will use the html attribute type set to number and the
-description field will be display as a textarea input.
+This above will display a 'name', 'value' and 'description' controls within a multiline form control. The 'value' control input will use the html attribute type set to number and the
+'description' control will be displayed as a textarea input.
 
-The `$ui['multiline']` property can be set using an array. The first element of the array is the field type to render as html in multiline form field and should contains a string value. The supported field type are input, textarea, dropdown or checkbox.
+The `$ui['multiline']` property can be set using an array. The first element of the array is the field type to render as html in multiline form control and should contain a string value. The supported control types are input, textarea, dropdown or checkbox.
 The second element of the array represent the options associated with the field type and should contains an array.
-Since Multiline form field used some of Semantic-ui Vue component to render the field type in html, the options accepted
-are based on Semantic-ui vue supported property. For example, input field type, or component in Semantic-ui Vue can have it's html type attribute set using the type option, like the value field set above.
+Since Multiline form control used some of Semantic-ui Vue component to render the field type in html, the options accepted
+are based on Semantic-ui vue supported property. For example, input control type, or component in Semantic-ui Vue can have its html type attribute set using the type option, like the 'value' control set above.
 
 You may see each option you can use by looking at Semantic-ui vue component property:
 - `input <https://semantic-ui-vue.github.io/#/elements/input>`_
@@ -198,12 +198,12 @@ Note: There is no option available for textarea.
 
 Footer
 ------
-You can add a footer to Multiline form field by adding a sublayout to it. In this example, we add a footer containing a read-only input which could get the value from ``onLineChange`` callback (see above)::
+You can add a footer to Multiline form control by adding a sublayout to it. In this example, we add a footer containing a read-only input which could get the value from ``onLineChange`` callback (see above)::
    
-    $ml = $form->addField('ml', [\atk4\ui\FormField\Multiline::class, 'options' => ['color' => 'blue']]);
+    $ml = $form->addControl('ml', [\atk4\ui\FormField\Multiline::class, 'options' => ['color' => 'blue']]);
     $ml->setModel($inventory);
-    // Add sublayout with total field.
+    // Add sublayout with total control.
     $sub_layout = $f->layout->addSublayout(\atk4\ui\FormLayout\Section\Columns::class);
     $sub_layout->addColumn(12);
     $c = $sub_layout->addColumn(4);
-    $f_total = $c->addField('total', ['readonly' => true])->set($total);
+    $f_total = $c->addControl('total', ['readonly' => true])->set($total);

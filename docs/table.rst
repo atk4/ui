@@ -86,7 +86,7 @@ You can also add individual column to your table::
     $table->addColumn('price');
 
 When invoking addColumn, you have a great control over the field properties and decoration. The format
-of addColumn() is very similar to :php:meth:`Form::addField`.
+of addColumn() is very similar to :php:meth:`Form::addControl`.
 
 Calculations
 ============
@@ -317,7 +317,7 @@ For most applications, however, you would be probably using internally defined m
 data stored inside your own database. Either way, several principles apply to the way how Table works.
 
 Table Rendering Steps
---------------------
+---------------------
 
 Once model is specified to the Table it will keep the object until render process will begin. Table
 columns can be defined anytime and will be stored in the :php:attr:`Table::columns` property. Columns

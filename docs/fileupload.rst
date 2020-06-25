@@ -5,7 +5,7 @@ File Upload
 
 .. figure:: images/fileupload.png
 
-Upload (and UploadImage) classes implement Form Field that can be used to upload files or images.
+Upload (and UploadImage) classes implement form control that can be used to upload files or images.
 Implementation of :php:class:`Form` in Agile UI submits data using JavaScript request and
 therefore files should be uploaded before form submission. Process used can be described
 in steps:
@@ -19,27 +19,27 @@ in steps:
  7. :php:meth:`\atk4\ui\Form::onSubmit()` receives "file_id"
 
 Currently only one file can be uploaded at a time. If file is uploaded incorrectly,
-it can be removed. Both Upload and UploadImage fields contain an upload button which would
+it can be removed. Both Upload and UploadImage controls contain an upload button which would
 open a File Selection dialog. UploadImage also implements image preview icon.
 During upload, a progress bar will appear.
 
-.. php:namespace:: atk4\ui\FormField
+.. php:namespace:: atk4\ui\Form\Control
 
 .. php:class:: Upload
 
 Attributes
 ==========
 
-Upload field has the following properties:
+Upload control has the following properties:
 
 .. php:attr:: accept
 
-An array of string containing the file type accept by the field, default is empty.
+An array of string containing the file type accepted by the control, default is empty.
 Example would be: `['application/pdf', 'images/*']`.
 
 .. php:attr:: hasFocusEnable
 
-Whether file open dialog will show by clicking the input field, default to true.
+Whether file open dialog will show by clicking the control input, default to true.
 
 .. php:attr:: action
 
@@ -51,7 +51,7 @@ Callbacks
 
 When adding an Upload or UploadImage field to a form, onUpload and onDelete callback must be defined::
 
-    $img = $form->addField('img', [\atk4\ui\Form\Field\UploadImage::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
+    $img = $form->addControl('img', [\atk4\ui\Form\Control\UploadImage::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
 
     $img->onUpload(function ($files) {
         //callback action here...
@@ -94,7 +94,7 @@ Example showing the onUpload callback on the UploadImage field::
         return new \atk4\ui\jsNotify(['content' => 'File is uploaded!', 'color' => 'green']);
     });
 
-When user submit the form, the field data value that will be submitted is the fileId set during the onUpload callback.
+When user submit the form, the control data value that will be submitted is the fileId set during the onUpload callback.
 The fileId is set to file name by default if omitted::
 
     $form->onSubmit(function ($form) {
@@ -129,15 +129,15 @@ Example showing the onDelete callback on the UploadImage field::
 UploadImage
 ===========
 
-Similar to Upload, this is a field implementation for uploading images. Here are additional properties:
+Similar to Upload, this is a control implementation for uploading images. Here are additional properties:
 
 .. php:class:: UploadImage
 
-UploadImage field inherits all of the Upload properties plus these ones:
+UploadImage control inherits all of the Upload properties plus these ones:
 
 .. php:attr:: thumbnail
 
-The thumbnail view associate with the field.
+The thumbnail view associated with the control.
 
 .. php:attr:: thumnailRegion
 

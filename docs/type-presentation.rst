@@ -20,11 +20,11 @@ field will use same format on the :php:class:`Form`, :php:class:`Table` and even
 custom HTML template specified into generic :php:class:`View`. 
 
 When it comes to decoration, the method is very dependent on the context. A form may present
-Calendar (DatePicker) or enable field icon to indicate currency.
+Calendar (DatePicker) or enable control icon to indicate currency.
 
 Presentation in Agile Toolkit is handled by :php:class:`Persistence\\UI`.
 
-Decoration is performed by helper classes, such as :php:class:`Form\\Field\\Calendar` or
+Decoration is performed by helper classes, such as :php:class:`Form\\Control\\Calendar` or
 :php:class:`TableColumn\\Money`. The decorator is in control of the final output, so it can decide if
 it uses the value from presentation or do some decoration on its own.
 
@@ -50,7 +50,7 @@ of your integration.
  3. Create your new decorator.
 
   Such as use drop-down to select currency from a pre-defined list inside your specific class
-  while extending :php:class:`Form\\Field\\Input` class. Make sure it can interpret input correctly.
+  while extending :php:class:`Form\\Control\\Input` class. Make sure it can interpret input correctly.
   The process is explained further down in this chapter.
 
  4. Associate the types with your decorator.
@@ -70,14 +70,14 @@ of the field does not seem compatible::
 
     // or
 
-    $form->addField('field_name', new \atk4\ui\Form\Field\Password());
+    $form->addControl('field_name', new \atk4\ui\Form\Control\Password());
 
 Selecting the decorator is done in the following order:
 
- - specified in second argument to UI `addColumn()` or `addField()` (as shown above)
+ - specified in second argument to UI `addColumn()` or `addControl()` (as shown above)
  - specified using `ui` property of :php:class:`\atk4\data\Field`::
 
-    $field->ui['form'] = new \atk4\ui\Form\Field\Password();
+    $field->ui['form'] = new \atk4\ui\Form\Control\Password();
 
  - fallback to :php:meth:`Form::_fieldFactory`
 
@@ -99,7 +99,7 @@ Normally password is presented as asterisks on the Grid and Form. But what if yo
 show it without masking just for the admin? Change type in-line for the model field::
 
     $m = new User($app->db);
-    $m->getElement('password')->type = 'string';
+    $m->getField('password')->type = 'string';
 
     $crud->setModel($m);
 

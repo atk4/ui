@@ -23,20 +23,20 @@ Stand-alone use
 .. php:method:: set()
 .. php:method:: jsInput()
 
-Add any field decorator to your application like this::
+Add any form control to your application like this::
 
-    $field = Line::addTo($app);
+    $control = Line::addTo($app);
 
-You can set default value and ineract with a field using JavaScript::
+You can set default value and interact with a control using JavaScript::
 
-    $field->set('hello world');
+    $control->set('hello world');
 
 
     $button = \atk4\ui\Button::addTo($app, ['check value']);
-    $button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [$field->jsInput()->val()]));
+    $button->on('click', new \atk4\ui\jsExpression('alert("control value is: "+[])', [$control->jsInput()->val()]));
 
 
-When used stand-alone, Form\Fields will produce a basic HTML (I have omitted id=)::
+When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
 
     <div class="ui  input">
         <input name="line" type="text" placeholder="" value="hello world"/>
@@ -49,7 +49,7 @@ Using in-form
 Field can also be used inside a form like this::
 
     $form = \atk4\ui\Form::addTo($app);
-    $field = $form->addField('name', new \atk4\ui\Form\Field\Line());
+    $control = $form->addControl('name', new \atk4\ui\Form\Control\Line());
 
 If you execute this exmple, you'll notice that Feld now has a label, it uses full width of the
 page and the following HTML is now produced::
@@ -76,10 +76,10 @@ into multiple Tabs or detach field groups or even create nested layouts::
     \atk4\ui\View::addTo($form, ['ui'=>'divider'], ['AboveFields']);
 
     $form_page = Generic::addTo($tabs->addTab('Basic Info'), ['form'=>$form]);
-    $form_page->addField('name', new \atk4\ui\Form\Field\Line());
+    $form_page->addControl('name', new \atk4\ui\Form\Control\Line());
 
     $form_page = Generic::addTo($tabs->addTab('Other Info'), ['form'=>$form]);
-    $form_page->addField('age', new \atk4\ui\Form\Field\Line());
+    $form_page->addControl('age', new \atk4\ui\Form\Control\Line());
 
     $form->onSubmit(function($f) { return $f->model->get('name').' has age '.$f->model->get('age'); });
 
@@ -104,19 +104,19 @@ will update to use a more suitable control.
 Hint can be specified either inside field decorator seed or inside the Field::ui attribute::
 
 
-    $form->addField('title', null, ['values'=>['Mr', 'Mrs', 'Miss'], 'hint'=>'select one']);
+    $form->addControl('title', null, ['values'=>['Mr', 'Mrs', 'Miss'], 'hint'=>'select one']);
 
-    $form->addField('name', ['hint'=>'Full Name Only']);
+    $form->addControl('name', ['hint'=>'Full Name Only']);
 
 Text will have HTML characters escaped. You may also specify hint value as an object::
 
-    $form->addField('name', ['hint'=>new \atk4\ui\Text(
+    $form->addControl('name', ['hint'=>new \atk4\ui\Text(
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]);
 
 or you can inject a view with a custom template::
 
-    $form->addField('name', ['hint'=>['template'=>new \atk4\ui\Template(
+    $form->addControl('name', ['hint'=>['template'=>new \atk4\ui\Template(
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]]);
 
@@ -181,7 +181,7 @@ The rules are rather straightforward but may change in future versions of Agile 
 
 You always have an option to explicitly specify which field you would like to use::
 
-    $model->addField('long_text', ['ui'=>['rorm'=>\atk4\ui\Form\Field\TextArea::class]]);
+    $model->addField('long_text', ['ui'=>['rorm'=>\atk4\ui\Form\Control\TextArea::class]]);
 
 It is recommended however, that you use type when possible, because types will be universally supported
 by all components::
@@ -225,7 +225,7 @@ Here are few ways to specify `icon` to an Input::
     Line::addTo($page, ['icon'=>'search']);
 
     // Type-hinting friendly
-    $line = new \atk4\ui\Form\Field\Line();
+    $line = new \atk4\ui\Form\Control\Line();
     $line->icon='search';
     $page->add($line);
 
@@ -273,7 +273,7 @@ To see various examples of fields and their attributes see `demos/field.php`.
 Integration with Form
 ---------------------
 
-When you use :php:class:`form::addField()` it will create 'Field Decorator'
+When you use :php:class:`form::addControl()` it will create 'Field Decorator'
 
 JavaScript on Input
 -------------------
@@ -283,7 +283,7 @@ JavaScript on Input
 Input class implements method jsInput which is identical to :php:meth:`View::js`, except
 that it would target the INPUT element rather then the whole field::
 
-    $field->jsInput(true)->val(123);
+    $control->jsInput(true)->val(123);
 
 onChange event
 --------------
@@ -294,15 +294,15 @@ It's prefferable to use this short-hand version of on('change', 'input', $expres
 $expression argument can be string, jsExpression, array of jsExpressions or even PHP callback function.
 
     // simple string
-    $f1 = $f->addField('f1');
+    $f1 = $f->addControl('f1');
     $f1->onChange('console.log("f1 changed")');
 
     // callback
-    $f2 = $f->addField('f2');
+    $f2 = $f->addControl('f2');
     $f2->onChange(function(){return new \atk4\ui\jsExpression('console.log("f2 changed")');});
 
     // Calendar field - wraps in function call with arguments date, text and mode
-    $c1 = $f->addField('c1', new \atk4\ui\Form\Field\Calendar(['type'=>'date']));
+    $c1 = $f->addControl('c1', new \atk4\ui\Form\Control\Calendar(['type'=>'date']));
     $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
 
 
@@ -323,7 +323,7 @@ of records to display. Dropdown renders all records when the paged is rendered, 
 :php:class:`Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
 
 To render a model field as Dropdown, use the ui property of the field::
-    $model->addField('someField', ['ui' => ['form' =>[\atk4\ui\Form\Field\Dropdown::class]]]);
+    $model->addField('someField', ['ui' => ['form' =>[\atk4\ui\Form\Control\Dropdown::class]]]);
 
 ..  Customizing how a Model's records are displayed in Dropdown
 As default, Dropdown will use the `$model->id_field` as value, and `$model->title_field` as title for each menu item.
@@ -436,7 +436,7 @@ See this example from Model class init method::
         'serialize' => 'json',
         'ui' => [
             'form' => [
-                \atk4\ui\Form\Field\Dropdown::class,
+                \atk4\ui\Form\Control\Dropdown::class,
                 'isMultiple' => true,
                 'model' => $expr_model,
             ],
@@ -469,9 +469,9 @@ input model.
 Assume that each data model are defined and model Category has many Sub-Category and Sub-Category has many Product::
 
     $f = \atk4\ui\Form::addTo($app);
-    $f->addField('category_id', [Dropdown::class, 'model' => new Category($db)]);
-    $f->addField('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
-    $f->addField('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
+    $f->addControl('category_id', [Dropdown::class, 'model' => new Category($db)]);
+    $f->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
+    $f->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
 
 
 Lookup
