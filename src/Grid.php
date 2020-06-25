@@ -56,7 +56,7 @@ class Grid extends View
      * Calling addActionButton will add a new column inside $table, and will be re-used
      * for next addActionButton().
      *
-     * @var TableColumn\ActionButtons
+     * @var Table\Column\ActionButtons
      */
     public $actionButtons;
 
@@ -72,7 +72,7 @@ class Grid extends View
      * Calling addSelection will add a new column inside $table, containing checkboxes.
      * This column will be stored here, in case you want to access it.
      *
-     * @var TableColumn\CheckBox
+     * @var Table\Column\Checkbox
      */
     public $selection;
 
@@ -114,14 +114,14 @@ class Grid extends View
      *
      * @var string
      */
-    protected $actionButtonsDecorator = [TableColumn\ActionButtons::class];
+    protected $actionButtonsDecorator = [Table\Column\ActionButtons::class];
 
     /**
      * Defines which Table Decorator to use for ActionMenu.
      *
      * @var array
      */
-    protected $actionMenuDecorator = [TableColumn\ActionMenu::class, 'label' => 'Actions...'];
+    protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
     public function init(): void
     {
@@ -150,7 +150,7 @@ class Grid extends View
     }
 
     /**
-     * Set TableColumn\Actions seed.
+     * Set Table\Column\Actions seed.
      */
     public function setActionDecorator($seed)
     {
@@ -158,7 +158,7 @@ class Grid extends View
     }
 
     /**
-     * Set TableColumn\ActionMenu seed.
+     * Set Table\Column\ActionMenu seed.
      */
     public function setActionMenuDecorator($seed)
     {
@@ -173,7 +173,7 @@ class Grid extends View
      * @param array|string|object|null $columnDecorator
      * @param array|string|object|null $field
      *
-     * @return TableColumn\Generic
+     * @return Table\Column
      */
     public function addColumn($name, $columnDecorator = null, $field = null)
     {
@@ -183,8 +183,8 @@ class Grid extends View
     /**
      * Add additional decorator for existing column.
      *
-     * @param string                    $name      Column name
-     * @param TableColumn\Generic|array $decorator Seed or object of the decorator
+     * @param string             $name      Column name
+     * @param Table\Column|array $decorator Seed or object of the decorator
      */
     public function addDecorator($name, $decorator)
     {
@@ -627,11 +627,11 @@ class Grid extends View
      * Makes rows of this grid selectable by creating new column on the left with
      * checkboxes.
      *
-     * @return TableColumn\CheckBox
+     * @return Table\Column\Checkbox
      */
     public function addSelection()
     {
-        $this->selection = $this->table->addColumn(null, [TableColumn\CheckBox::class]);
+        $this->selection = $this->table->addColumn(null, [Table\Column\Checkbox::class]);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));
@@ -643,11 +643,11 @@ class Grid extends View
      * Add column with drag handler on each row.
      * Drag handler allow to reorder table via drag n drop.
      *
-     * @return TableColumn\Generic
+     * @return Table\Column
      */
     public function addDragHandler()
     {
-        $handler = $this->table->addColumn(null, [TableColumn\DragHandler::class]);
+        $handler = $this->table->addColumn(null, [Table\Column\DragHandler::class]);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));

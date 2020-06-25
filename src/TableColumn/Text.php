@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\TableColumn;
 
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Use atk4\ui\Table\Column\Text instead', E_USER_DEPRECATED);
+}
+
 /**
- * Implements Column helper for grid.
+ * @deprecated will be removed jun-2021
  */
-class Text extends Generic
+class Text extends \atk4\ui\Table\Column\Text
 {
-    public $attr = ['all' => ['class' => ['atk-cell-expanded']]];
 }

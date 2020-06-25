@@ -4,37 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\TableColumn;
 
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Use atk4\ui\Table\Column\Template instead', E_USER_DEPRECATED);
+}
+
 /**
- * Implements Column helper for grid.
+ * @deprecated will be removed jun-2021
  */
-class Template extends Generic
+class Template extends \atk4\ui\Table\Column\Template
 {
-    /**
-     * User-defined template for this Column.
-     *
-     * @var string
-     */
-    public $template;
-
-    /**
-     * call new TableColumn\Template('{$name} {$surname}');.
-     *
-     * @param string $template Template with {$tags}
-     */
-    public function __construct($template)
-    {
-        $this->template = $template;
-        /*
-        if (is_array($template) && isset($template[0])) {
-            $this->template = $template[0];
-        } elseif (is_string($template)) {
-            $this->template = $template;
-        }
-         */
-    }
-
-    public function getDataCellTemplate(\atk4\data\Field $f = null)
-    {
-        return $this->template;
-    }
 }
