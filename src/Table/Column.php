@@ -99,7 +99,7 @@ class Column
     {
         $id = $this->name . '_ac';
 
-        $popup = $this->table->owner->add($popup ?: Popup::class)->setHoverable();
+        $popup = $this->table->owner->add($popup ?: [Popup::class])->setHoverable();
 
         $this->setHeaderPopup($icon, $id);
 
