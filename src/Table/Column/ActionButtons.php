@@ -80,7 +80,7 @@ class ActionButtons extends Table\Column
             if (is_string($button)) {
                 $button = [$button];
             }
-            
+
             $button = $this->factory([\atk4\ui\Button::class], $this->mergeSeeds($button, ['id' => false]));
         }
 

@@ -23,8 +23,8 @@ class TypeNumber extends Column\FilterModel
         ];
         $this->op->default = '=';
 
-        $this->value->ui['form'] = [\atk4\ui\Form\Field\Line::class, 'inputType' => 'number'];
-        $this->addField('range', ['ui' => ['caption' => '', 'form' => [\atk4\ui\Form\Field\Line::class, 'inputType' => 'number']]]);
+        $this->value->ui['form'] = [\atk4\ui\Form\Control\Line::class, 'inputType' => 'number'];
+        $this->addField('range', ['ui' => ['caption' => '', 'form' => [\atk4\ui\Form\Control\Line::class, 'inputType' => 'number']]]);
     }
 
     public function setConditionForModel($m)

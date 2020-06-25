@@ -37,7 +37,7 @@ use atk4\ui\Table;
  *      3 => __('paid'),
  *  ],
  *  'ui'      => [
- *      'form' => [\atk4\ui\Form\Field\Dropdown::class],
+ *      'form' => [\atk4\ui\Form\Control\Dropdown::class],
  *      'table' => ['KeyValue'],
  *  ],
  * ]);
