@@ -24,7 +24,7 @@ $g1->addQuickSearch(['name', 'iso']);
 $g1->addModalAction(['icon' => ['cogs']], 'Details', function ($p, $id) use ($g1) {
     \atk4\ui\Card::addTo($p)->setModel($g1->model->load($id));
 });
-$g1->addActionButton(['red'], function ($js) {
+$g1->addActionButton('red', function ($js) {
     return $js->closest('tr')->css('color', 'red');
 });
 // THIS SHOULD GO AFTER YOU CALL addAction() !!!
