@@ -25,8 +25,8 @@ class Generic
 
     /** @const string */
     public const HOOK_GET_HTML_TAGS = self::class . '@getHTMLTags';
-    /** @const string not used, make it public if needed or drop it */
-    private const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHTML';
+    /** @const string */
+    public const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHTML';
 
     /**
      * Link back to the table, where column is used.
@@ -84,6 +84,7 @@ class Generic
      */
     public function __construct($defaults = [])
     {
+        $t = self::HOOK_GET_HTML_TAGS;
         $this->setDefaults($defaults);
     }
 
