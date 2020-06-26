@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form;
 
+use atk4\ui\Exception;
 use atk4\ui\Label;
 use atk4\ui\Template;
 
@@ -209,8 +210,10 @@ class Layout extends AbstractLayout
             $template->trySet('label_for', $el->id . '_input');
             $template->set('control_class', $el->getControlClass());
 
-            // backward compatibility - will be removed in dec-2020
-            $template->trySet('field_class', $el->getControlClass());
+            // BC-break exception
+            if ($template->hasTag('field_class')) {
+                throw new Exception('field_class region has be deprecated. Use control_class instead');
+            }
 
             if ($el->field->required) {
                 $template->append('control_class', 'required ');
