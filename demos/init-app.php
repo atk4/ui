@@ -92,9 +92,9 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Conditional Fields'], [$path . 'jscondform'], $menu);
 
     $path = $demosUrl . 'form-control/';
-    $menu = $layout->addMenuGroup(['Input', 'icon' => 'keyboard outline']);
-    $layout->addMenuItem(['Input Fields'], [$path . 'field2'], $menu);
-    $layout->addMenuItem('Input Field Decoration', [$path . 'field'], $menu);
+    $menu = $layout->addMenuGroup(['Form Controls', 'icon' => 'keyboard outline']);
+    $layout->addMenuItem(['Input'], [$path . 'input2'], $menu);
+    $layout->addMenuItem('Input Decoration', [$path . 'input'], $menu);
     $layout->addMenuItem(['Checkboxes'], [$path . 'checkbox'], $menu);
     $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $menu);
     $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $menu);
