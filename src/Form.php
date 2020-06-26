@@ -120,7 +120,7 @@ class Form extends View
     /**
      * Default css selector for jsConditionalForm.
      * Should match the css class name of the control.
-     * Fomantic-UI use the class name "field"
+     * Fomantic-UI use the class name "field".
      *
      * @var string
      */
