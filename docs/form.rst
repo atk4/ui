@@ -69,7 +69,7 @@ Even if model not explicitly set (see section below) each form has an underlying
 		'email' => 'some@email.com'
 	]);
 
-Form also relies on a ``\atk4\ui\Form::Layout`` class and displays fields through
+Form also relies on a ``\atk4\ui\Form::Layout`` class and displays form controls through
 decorators defined at ``\atk4\ui\Form::Control``. See dedicated documentation for:
 
  - :php:class:`Form::Layout`
@@ -527,7 +527,7 @@ Form Submit Handling
 
 .. php:method:: error($field, $message)
 
-    Create and return :php:class:`jsChain` action that will indicate error on a field.
+    Create and return :php:class:`jsChain` action that will indicate error on a form control.
 
 .. php:method:: success($title, [$sub_title])
 
@@ -643,7 +643,7 @@ of labels etc.
 
 .. php:method:: addControl()
 
-    Same as :php:class:`Form::addControl()` but will place a field inside this specific layout
+    Same as :php:class:`Form::addControl()` but will place a form control inside this specific layout
     or sub-layout.
 
 Form Control Group Layout and Sub-layout
@@ -825,7 +825,7 @@ Hiding / Showing group of field
 Instead of defining rules for form controls individually you can hide/show entire group::
 
     $f_group = Form::addTo($app, ['segment']);
-    Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveFields']);
+    Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveControls']);
 
     $g_basic = $f_group->addGroup(['Basic Information']);
     $g_basic->addControl('first_name', ['width' => 'eight']);

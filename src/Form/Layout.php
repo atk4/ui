@@ -136,10 +136,10 @@ class Layout extends AbstractLayout
      */
     public function recursiveRender()
     {
-        $field_input = $this->inputTemplate->cloneRegion('InputField');
-        $field_no_label = $this->inputTemplate->cloneRegion('InputNoLabel');
-        $labeled_group = $this->inputTemplate->cloneRegion('LabeledGroup');
-        $no_label_group = $this->inputTemplate->cloneRegion('NoLabelGroup');
+        $labeledInput = $this->inputTemplate->cloneRegion('LabeledInput');
+        $noLabelInput = $this->inputTemplate->cloneRegion('NoLabelInput');
+        $labeledGroup = $this->inputTemplate->cloneRegion('LabeledGroup');
+        $noLabelGroup = $this->inputTemplate->cloneRegion('NoLabelGroup');
 
         $this->template->del('Content');
 
@@ -153,10 +153,10 @@ class Layout extends AbstractLayout
 
             if ($el instanceof self) {
                 if ($el->label && !$el->inline) {
-                    $template = $labeled_group;
+                    $template = $labeledGroup;
                     $template->set('label', $el->label);
                 } else {
-                    $template = $no_label_group;
+                    $template = $noLabelGroup;
                 }
 
                 if ($el->width) {
@@ -180,12 +180,12 @@ class Layout extends AbstractLayout
                 continue;
             }
 
-            $template = $el->renderLabel ? $field_input : $field_no_label;
+            $template = $el->renderLabel ? $labeledInput : $noLabelInput;
             $label = $el->caption ?: $el->field->getCaption();
 
-            // Anything but fields gets inserted directly
+            // Anything but form controls gets inserted directly
             if ($el instanceof \atk4\ui\Form\Control\Checkbox) {
-                $template = $field_no_label;
+                $template = $noLabelInput;
                 $el->template->set('Content', $label);
                 /*
                 $el->addClass('field');
@@ -199,7 +199,7 @@ class Layout extends AbstractLayout
                 $label = $this->label;
                 $this->label = null;
             } elseif ($this->label || $this->inline) {
-                $template = $field_no_label;
+                $template = $noLabelInput;
                 $el->placeholder = $label;
             }
 
@@ -207,14 +207,17 @@ class Layout extends AbstractLayout
             $template->setHTML('Input', $el->getHTML());
             $template->trySet('label', $label);
             $template->trySet('label_for', $el->id . '_input');
-            $template->set('field_class', $el->getControlClass());
+            $template->set('control_class', $el->getControlClass());
+
+            // backward compatibility - will be removed in dec-2020
+            $template->trySet('field_class', $el->getControlClass());
 
             if ($el->field->required) {
-                $template->append('field_class', 'required ');
+                $template->append('control_class', 'required ');
             }
 
             if (isset($el->width)) {
-                $template->append('field_class', $el->width . ' wide ');
+                $template->append('control_class', $el->width . ' wide ');
             }
 
             if ($el->hint && $template->hasTag('Hint')) {

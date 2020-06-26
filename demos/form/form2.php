@@ -19,7 +19,7 @@ $form = Form::addTo($app, ['segment']);
 //$form = Form::addTo($app, ['segment', 'buttonSave'=>false]);
 //$form = Form::addTo($app, ['segment', 'buttonSave'=>new \atk4\ui\Button(['Import', 'secondary', 'iconRight'=>'list'])]);
 //$form = Form::addTo($app, ['segment', 'buttonSave'=>[null, 'Import', 'secondary', 'iconRight'=>'list']]);
-\atk4\ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveFields']);
+\atk4\ui\Label::addTo($form, ['Input new country information here', 'top attached'], ['AboveControls']);
 
 $form->setModel(new Country($app->db), false);
 

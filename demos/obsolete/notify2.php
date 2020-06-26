@@ -32,7 +32,7 @@ $form = \atk4\ui\Form::addTo($app, ['segment']);
 // Unit test only.
 $form->name = 'notify';
 
-\atk4\ui\Label::addTo($form, ['Some of notification options that can be set.', 'top attached'], ['AboveFields']);
+\atk4\ui\Label::addTo($form, ['Some of notification options that can be set.', 'top attached'], ['AboveControls']);
 $form->buttonSave->set('Show');
 $form->setModel(new $notifierClass($app->db), false);
 

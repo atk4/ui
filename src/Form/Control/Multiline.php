@@ -567,14 +567,14 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Maps into input, checkbox, dropdown or textarea, defaults into input.
+     * Maps field type to form control (input, checkbox, dropdown or textarea), defaults to input.
      *
-     * @param string|object $field_type
+     * @param string|object $fieldType
      */
-    protected function _mapComponent($field_type): string
+    protected function _mapComponent($fieldType): string
     {
-        if (is_string($field_type)) {
-            switch (strtolower($field_type)) {
+        if (is_string($fieldType)) {
+            switch (strtolower($fieldType)) {
                 case 'dropdown':
                 case 'enum':
                     return 'dropdown';
@@ -589,8 +589,8 @@ class Multiline extends Form\Control
         }
 
         // If an object was passed, use its classname as string
-        elseif (is_object($field_type)) {
-            return $this->_mapComponent((new \ReflectionClass($field_type))->getShortName());
+        elseif (is_object($fieldType)) {
+            return $this->_mapComponent((new \ReflectionClass($fieldType))->getShortName());
         }
 
         return 'input';

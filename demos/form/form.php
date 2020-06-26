@@ -60,7 +60,7 @@ $form->onSubmit(function (Form $form) {
     return (new \atk4\ui\jsNotify(json_encode($form->model->get())))->setDuration(0);
 });
 
-\atk4\ui\Header::addTo($tab, ['Comparing Field type vs Decorator class']);
+\atk4\ui\Header::addTo($tab, ['Comparing Field type vs Form control class']);
 $form = Form::addTo($tab);
 $form->addControl('date1', null, ['type' => 'date']);
 $form->addControl('date2', [Form\Control\Calendar::class, 'type' => 'date']);
