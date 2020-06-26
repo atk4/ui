@@ -4,41 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\TableColumn;
 
-use atk4\data\Model;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Use atk4\ui\Table\Column\NoValue instead', E_USER_DEPRECATED);
+}
 
 /**
- * Class NoValue.
- *
- * sometime we need null values in db
- *
- * when we display values we have holes
- * with NoValue decorator we can show a display value for column null value
- *
- * @usage   :
- *
- * $this->addField('field', [
- *  [...]
- *  'ui' => [
- *          [...]
- *          'table' => [
- *              'NoValue', ' if empty display this value '
- *          ]
- *      ]
- * ]);
+ * @deprecated will be removed dec-2020
  */
-class NoValue extends Generic
+class NoValue extends \atk4\ui\Table\Column\NoValue
 {
-    /** @var string */
-    public $no_value = ' --- ';
-
-    public function getHTMLTags(Model $row, $field)
-    {
-        $actualValue = $field->get();
-
-        if (empty($actualValue) || $actualValue === null) {
-            return [$field->short_name => $this->no_value];
-        }
-
-        return parent::getHTMLTags($row, $field);
-    }
 }

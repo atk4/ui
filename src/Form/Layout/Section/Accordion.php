@@ -7,7 +7,7 @@ namespace atk4\ui\Form\Layout\Section;
 use atk4\ui\AccordionSection;
 
 /**
- * Represents form fields in accordion.
+ * Represents form controls in accordion.
  */
 class Accordion extends \atk4\ui\Accordion
 {

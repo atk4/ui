@@ -635,7 +635,7 @@ of labels etc.
 
 .. php:class:: FormLayout\Generic
 
-    Renders HTML outline encasing form fields.
+    Renders HTML outline encasing form controls.
 
 .. php:attr:: form
 

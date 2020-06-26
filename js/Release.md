@@ -146,7 +146,7 @@ the last column and last row.
 
 ### version 1.6.5
 
- - Add multiline component for MultiLine form field.
+ - Add multiline component for MultiLine form control.
 
 ### version 1.6.4
 

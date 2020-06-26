@@ -41,10 +41,10 @@ class CardTable extends Table
 
         $this->_bypass = true;
         $mm = parent::setSource($data);
-        $this->addDecorator('value', [\atk4\ui\TableColumn\Multiformat::class, function ($row, $field) use ($m) {
+        $this->addDecorator('value', [Table\Column\Multiformat::class, function ($row, $field) use ($m) {
             $field = $m->getField($row->data['id']);
             $ret = $this->decoratorFactory($field);
-            if ($ret instanceof \atk4\ui\TableColumn\Money) {
+            if ($ret instanceof Table\Column\Money) {
                 $ret->attr['all']['class'] = ['single line'];
             }
 

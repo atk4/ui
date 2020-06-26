@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Form\Layout\Section;
 
 /**
- * Represents form fields in columns.
+ * Represents form controls in columns.
  */
 class Columns extends \atk4\ui\Columns
 {

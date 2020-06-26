@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Table;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -17,7 +19,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             'type' => 'string',
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\Tooltip::class,
+                    Table\Column\Tooltip::class,
                     [
                         'tooltip_field' => 'note',
                         'icon' => 'info circle blue',
@@ -30,7 +32,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             'type' => 'string',
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\NoValue::class,
+                    Table\Column\NoValue::class,
                     [
                         'no_value' => ' no value ',
                     ],
@@ -48,7 +50,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             ],
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\KeyValue::class,
+                    Table\Column\KeyValue::class,
                 ],
             ],
         ]);
@@ -63,7 +65,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             ],
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\KeyValue::class,
+                    Table\Column\KeyValue::class,
                 ],
             ],
         ]);
@@ -72,7 +74,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             'type' => 'string',
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\Labels::class,
+                    Table\Column\Labels::class,
                 ],
             ],
         ]);
@@ -81,7 +83,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             'type' => 'float',
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\ColorRating::class,
+                    Table\Column\ColorRating::class,
                     [
                         'min' => 1,
                         'max' => 3,

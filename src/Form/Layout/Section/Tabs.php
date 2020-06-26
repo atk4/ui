@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Form\Layout\Section;
 
 /**
- * Represents form fields in tabs.
+ * Represents form controls in tabs.
  */
 class Tabs extends \atk4\ui\Tabs
 {

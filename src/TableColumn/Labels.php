@@ -4,48 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\TableColumn;
 
-use atk4\data\Field;
-use atk4\data\Model;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Use atk4\ui\Table\Column\Labels instead', E_USER_DEPRECATED);
+}
 
 /**
- * Class Labels.
- *
- * Take the field value as string in CSV format or array of IDs and transforms into SemanticUI labels.
- * If model field values property is set, then will use titles instead of IDs as label text.
- *
- * from => label1,label2 | to => div.ui.label[label1] div.ui.label[label2]
+ * @deprecated will be removed dec-2020
  */
-class Labels extends Generic
+class Labels extends \atk4\ui\Table\Column\Labels
 {
-    /** @var array Array of allowed values. This have precedence over->values */
-    public $values;
-
-    /**
-     * @param Field|null $field
-     *
-     * @return array|void
-     */
-    public function getHTMLTags(Model $row, $field)
-    {
-        $values = $this->values ?? $field->values;
-
-        $v = $field->get();
-        $v = is_string($v) ? explode(',', $v) : $v;
-
-        $labels = [];
-        foreach ((array) $v as $id) {
-            $id = trim($id);
-
-            // if field values is set, then use titles instead of IDs
-            $id = $values[$id] ?? $id;
-
-            if (!empty($id)) {
-                $labels[] = $this->app->getTag('div', ['class' => 'ui label'], $id);
-            }
-        }
-
-        $labels = implode('', $labels);
-
-        return [$field->short_name => $labels];
-    }
 }

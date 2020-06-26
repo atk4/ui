@@ -8,7 +8,7 @@
 TreeItemSelector Form Control
 =============================
 
-TreeItemSelector Form Field will display a list of items in a hierarchical (tree) structure. It allow for a user to select multiple
+TreeItemSelector Form Control will display a list of items in a hierarchical (tree) structure. It allow for a user to select multiple
 or single item within a tree like list structure.
 
 Attributes

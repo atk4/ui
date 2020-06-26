@@ -83,23 +83,23 @@ Additional cases
 ----------------
 
 An individual object may add more ways to deal with seed. For example, when adding columns
-to your Table you can specify seed for the decorator: :php:class:`atk4\\ui\\TableColumn\\Generic`::
+to your Table you can specify seed for the decorator: :php:class:`atk4\\ui\\\Table\\Column`::
 
-    $table->addColumn('salary', [\atk4\ui\TableColumn\Money::class]);
-
-    // or
-
-    $table->addColumn('salary', [\atk4\ui\TableColumn\Money::class]);
+    $table->addColumn('salary', [\atk4\ui\Table\Column\Money::class]);
 
     // or
 
-    $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
+    $table->addColumn('salary', [\atk4\ui\Table\Column\Money::class]);
 
     // or
 
-    $table->addColumn('salary', [new \atk4\ui\TableColumn\Money()]);
+    $table->addColumn('salary', new \atk4\ui\Table\Column\Money());
 
-Note that addColumn uses default namespace of `\\atk4\\ui\\TableColumn` when seeding objects. Some
+    // or
+
+    $table->addColumn('salary', [new \atk4\ui\Table\Column\Money()]);
+
+Note that addColumn uses default namespace of `\\atk4\\ui\\Table\\Column` when seeding objects. Some
 other methods that use seeds are:
 
  - :php:meth:`Table::addColumn()`

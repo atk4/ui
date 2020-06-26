@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace atk4\ui\tests;
 
 use atk4\ui\Table;
-use atk4\ui\TableColumn\Template;
 
 class GridTest extends \atk4\core\AtkPhpunit\TestCase
 {
@@ -29,7 +28,7 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
         $t->setModel($this->m, false);
 
         $t->addColumn('email');
-        $t->addColumn(null, new Template('password={$password}'));
+        $t->addColumn(null, new Table\Column\Template('password={$password}'));
 
         $this->assertSame('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHTML());
         $this->assertSame(
@@ -59,7 +58,7 @@ class GridTest extends \atk4\core\AtkPhpunit\TestCase
         $t = new Table();
         $t->init();
         $t->setModel($this->m, ['email']);
-        $del = $t->addColumn(null, [\atk4\ui\TableColumn\Delete::class]);
+        $del = $t->addColumn(null, [Table\Column\Delete::class]);
 
         $this->assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="' . $del->short_name . '"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHTML());
         $this->assertSame(

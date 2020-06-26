@@ -74,7 +74,7 @@ You can also check LINK_TO_DEMO/multiline.php for this example
 Manually setting up Multiline
 =============================
 
-Multiline form field is used by default if a Model `containsMany()` or `containsOne()` other Model, but you can set up the multiline component manually. For example, if you wish to edit
+Multiline form control is used by default if a Model `containsMany()` or `containsOne()` other Model, but you can set up the multiline component manually. For example, if you wish to edit
 a `hasMany()` relation of a Model along with the Model itself. (In contrary to containsMany(), the records of the related Model are stored in a separate table). Lets say a User can have many email addresses,
 but you want to store them in a separate table. Uncomment the line `//$this->hasMany('Email', [Email::class]);` in User Model to use it::
 

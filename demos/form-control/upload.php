@@ -44,7 +44,7 @@ $img->onUpload(function ($files) use ($form, $img) {
     //new Blabla();
 
     // js Action can be return.
-    //if using form, can return an error to form field directly.
+    //if using form, can return an error to form control directly.
     //return $form->error('file', 'Unable to upload file.');
 
     // can also return a notifier.

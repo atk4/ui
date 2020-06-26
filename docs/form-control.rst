@@ -1,5 +1,5 @@
 
-.. _field:
+.. _form-control:
 
 =============
 Form Controls
@@ -13,8 +13,8 @@ quite simple components that present themselves as input controls: line, select,
 Relationship with Form
 ======================
 
-All Field Decorators can be integrated with :php:class:`atk4\\ui\\Form` which will
-facilitate collection and processing of data in a form. Field decorators can also
+All Form Control Decorators can be integrated with :php:class:`atk4\\ui\\Form` which will
+facilitate collection and processing of data in a form. Form Control decorators can also
 be used as stand-alone controls.
 
 Stand-alone use
@@ -46,7 +46,7 @@ When used stand-alone, Form\Controls will produce a basic HTML (I have omitted i
 Using in-form
 -------------
 
-Field can also be used inside a form like this::
+Form Control can also be used inside a form like this::
 
     $form = \atk4\ui\Form::addTo($app);
     $control = $form->addControl('name', new \atk4\ui\Form\Control\Line());
@@ -62,14 +62,14 @@ page and the following HTML is now produced::
     </div>
 
 The markup that surronds the button which includes Label and formatting is produced by
-:php:class:`atk4\\ui\\FormLayout\\Generic`, which does draw some of the information from the Field
+:php:class:`atk4\\ui\\Form\\Layout`, which does draw some of the information from the Form Control
 itself.
 
 Using in Form Layouts
 ---------------------
 
 Form may have multiple Form Layouts and that's very useful if you need to split up form
-into multiple Tabs or detach field groups or even create nested layouts::
+into multiple Tabs or detach form control groups or even create nested layouts::
 
     $form = \atk4\ui\Form::addTo($app);
     $tabs = \atk4\ui\Tabs::addTo($form, [], ['AboveFields']);
@@ -84,24 +84,24 @@ into multiple Tabs or detach field groups or even create nested layouts::
     $form->onSubmit(function($f) { return $f->model->get('name').' has age '.$f->model->get('age'); });
 
 This is further explained in documentation for :php:class:`atk4\\ui\\FormLayout\\Generic` class,
-however if you do plan on adding your own field types, it's important that you extend it
+however if you do plan on adding your own form control types, it's important that you extend it
 properly:
 
- - Generic (abstract, extends View) - Use this if field is NOT based on `<input>`
+ - Generic (abstract, extends View) - Use this if form control is NOT based on `<input>`
  - Input (abstract, extends Generic) - Easiest since it alrady implements `<input>` and various
-   ways to attach button to the input with markup of Fomantic UI field.
+   ways to attach button to the input with markup of Fomantic UI form control.
 
 Hints
 -----
 
 .. php:attr: hint
 
-When Field appears in a Form, then you can specify a Hint also. It appears below the field and
+When Form Control appears in a Form, then you can specify a Hint also. It appears below the form control and
 although it intends to be "extra info" or "extra help" due to current limitation of Fomantic UI
 the only way we can display hint is using a gray bubble. In the future version of Agile UI we
 will update to use a more suitable form control.
 
-Hint can be specified either inside field decorator seed or inside the Field::ui attribute::
+Hint can be specified either inside Form Control decorator seed or inside the Field::ui attribute::
 
 
     $form->addControl('title', null, ['values'=>['Mr', 'Mrs', 'Miss'], 'hint'=>'select one']);
@@ -120,24 +120,24 @@ or you can inject a view with a custom template::
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]]);
 
-Read only and disabled fields
+Read only and disabled form controls
 -----------------------------
 
 .. php:attr: readonly
 
-Read only fields can be seen in form, can be focused and will be submitted, but we don't allow to
+Read only form controls can be seen in form, can be focused and will be submitted, but we don't allow to
 change their value.
 
 .. php:attr: disabled
 
-Disabled fields can be  seend in form, can not be focused and will not be submitted. And of course we
-don't allow to change their value. Disabled form fields are used for read only model fields for example.
+Disabled form controls can be  seend in form, can not be focused and will not be submitted. And of course we
+don't allow to change their value. Disabled form controls are used for read only model fields for example.
 
 
 Relationship with Model
 =======================
 
-In the examples above, we looked at how to create Field Decorator object explicitly.
+In the examples above, we looked at how to create Form Control Decorator object explicitly.
 The most common use-case in large application is the use with Models. You would need a model, such as
 `Country` model as well as
 `Persistence $db <https://agile-data.readthedocs.io/en/develop/persistence.html>`_::
@@ -168,10 +168,10 @@ The above will populate fields from model into the form automatically. You can u
 argument to :php:meth:`\atk4\ui\Form::setModel()` to indicate which fields to display
 or rely on :ref:`field_visibility`.
 
-When Form fields are populated, then :php:meth:`\atk4\ui\Form::controlFactory` is
+When Form controls are populated, then :php:meth:`\atk4\ui\Form::controlFactory` is
 consulted to make a decision on how to translate
 `Model Field <https://agile-data.readthedocs.io/en/develop/fields.html>`_ into
-Form Field Decorator.
+Form Control Decorator.
 
 The rules are rather straightforward but may change in future versions of Agile UI:
 
@@ -189,7 +189,7 @@ by all components::
     $model->addField('long_text', ['type'=>'text']);
 
 .. note:: All forms will be associted with a model. If form is not explicitly linked with a model, it will create
-    a ProxyModel and all fields will be created automatically in that model. As a result, all Field Decorators
+    a ProxyModel and all form controls will be created automatically in that model. As a result, all Form Control Decorators
     will be linked with Model Fields.
 
 Link to Model Field
@@ -202,12 +202,12 @@ the value of the field would be read from `$decorator->field->get()`.
 
 
 
-Line Input Field
+Line Input Form control
 ================
 
 .. php:class:: Input
 
-    Implements View for presenting Input fields. Based around https://fomantic-ui.com/elements/input.html.
+    Implements View for presenting Input form controls. Based around https://fomantic-ui.com/elements/input.html.
 
 Similar to other views, Input has various properties that you can specify directly
 or inject through constructor. Those properties will affect the look of the input
@@ -216,7 +216,7 @@ element. For example, `icon` property:
 .. php:attr: icon
 .. php:attr: iconLeft
 
-    Adds icon into the input field. Default - `icon` will appear on the right, while `leftIcon`
+    Adds icon into the input form control. Default - `icon` will appear on the right, while `leftIcon`
     will display icon on the left.
 
 Here are few ways to specify `icon` to an Input::
@@ -261,19 +261,19 @@ To see how Icon interprets `new Icon(['search', 'big'])`, refer to :php:class:`I
 .. php:attr:: label
 .. php:attr:: labelRight
 
-    Convert text into :php:class:`Label` and insert it into the field.
+    Convert text into :php:class:`Label` and insert it into the form control.
 
 .. php:attr:: action
 .. php:attr:: actionLeft
 
-    Convert text into :php:class:`Button` and insert it into the field.
+    Convert text into :php:class:`Button` and insert it into the form control.
 
-To see various examples of fields and their attributes see `demos/field.php`.
+To see various examples of form controls and their attributes see `demos/form-control/`.
 
 Integration with Form
 ---------------------
 
-When you use :php:class:`form::addControl()` it will create 'Field Decorator'
+When you use :php:class:`form::addControl()` it will create 'Form Control Decorator'
 
 JavaScript on Input
 -------------------
@@ -281,7 +281,7 @@ JavaScript on Input
 .. php:method:: jsInput([$event, [$other_action]])
 
 Input class implements method jsInput which is identical to :php:meth:`View::js`, except
-that it would target the INPUT element rather then the whole field::
+that it would target the INPUT element rather then the whole form control::
 
     $control->jsInput(true)->val(123);
 
@@ -301,7 +301,7 @@ $expression argument can be string, jsExpression, array of jsExpressions or even
     $f2 = $f->addControl('f2');
     $f2->onChange(function(){return new \atk4\ui\jsExpression('console.log("f2 changed")');});
 
-    // Calendar field - wraps in function call with arguments date, text and mode
+    // Calendar form control - wraps in function call with arguments date, text and mode
     $c1 = $f->addControl('c1', new \atk4\ui\Form\Control\Calendar(['type'=>'date']));
     $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
 
@@ -317,7 +317,7 @@ Dropdown uses Fomantic UI Dropdown (https://fomantic-ui.com/modules/dropdown.htm
 
 Usage with a Model
 ------------------
-A Dropdown is not used as default Form Field decorator (`$model->hasOne()` uses :php:class:`Lookup`), but in your Model, you can define that
+A Dropdown is not used as default Form Control decorator (`$model->hasOne()` uses :php:class:`Lookup`), but in your Model, you can define that
 UI should render a Field as Dropdown. For example, this makes sense when a `hasOne()` relationship only has a very limited amount (like 20)
 of records to display. Dropdown renders all records when the paged is rendered, while Lookup always sends an additional request to the server.
 :php:class:`Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
@@ -457,8 +457,8 @@ user category selection. Same with product list values based on sub category sel
 
 .. php:attr:: cascadeFrom
 
-This property represent an input field, mostly another Dropdown or DropdownCascade field.
-The list values of this field will be build base off the selected value of cascadeFrom input.
+This property represent an input form control, mostly another Dropdown or DropdownCascade form control.
+The list values of this form control will be build base off the selected value of cascadeFrom input.
 
 .. php:attr:: reference
 
@@ -482,6 +482,6 @@ Lookup
 Lookup input is also based on Fomantic-UI dropdown module but with ability to dynamically request server for data it's
 data value.
 
-When clicking on a Lookup field, it will send a query to server and start building it's list value. Typing into the
-input field will reload list value according to search criteria.
+When clicking on a Lookup form control, it will send a query to server and start building it's list value. Typing into the
+input form control will reload list value according to search criteria.
 

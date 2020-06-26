@@ -7,7 +7,7 @@ namespace atk4\ui\Form\Control;
 use atk4\ui\Form;
 
 /**
- * Input element for a form field.
+ * Input element for a form control.
  */
 class Radio extends Form\Control
 {

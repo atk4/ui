@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * Dropdown form field that will based it's list value
+ * Dropdown form control that will based it's list value
  * according to another input value.
  * Also possible to cascade value from another cascade field.
  * For example:

@@ -8,7 +8,7 @@ use atk4\ui\Exception;
 use atk4\ui\Form;
 
 /**
- * Input element for a form field.
+ * Input element for a form control.
  */
 class Checkbox extends Form\Control
 {
