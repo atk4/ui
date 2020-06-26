@@ -9,19 +9,19 @@ declare(strict_types=1);
  * model is a reference to your form's model, the form model should be saved prior
  * to calling saveRows().
  *
- * $f = \atk4\ui\Form::addTo($app);
- * $f->setModel($invoice, false);
+ * $form = \atk4\ui\Form::addTo($app);
+ * $form->setModel($invoice, false);
  * // Add form controls
  *
- * // Add Multiline field and set model for it.
- * $ml = $f->addField('ml', ['Multiline']);
+ * // Add Multiline form control and set model for it.
+ * $ml = $form->addControl('ml', ['Multiline']);
  *
  * // Set model using hasMany reference of Invoice.
  * $ml->setModel($invoice, ['item','cat','qty','price', 'total'], 'Items', 'invoice_id');
  *
- * $f->onSubmit(function($f) use ($ml) {
+ * $form->onSubmit(function($form) use ($ml) {
  *     // Save Form model and then Multiline model
- *     $f->model->save();
+ *     $form->model->save();
  *     $ml->saveRows();
  *     return new \atk4\ui\jsToast('Saved!');
  * });
@@ -38,7 +38,7 @@ declare(strict_types=1);
  * You can use the returned data to update other related areas of the form.
  * For example, ypdating Grand Total field of all invoice items.
  *
- * $ml->onChange(function($rows) use ($f) {
+ * $ml->onChange(function($rows) use ($form) {
  *     $grand_total = 0;
  *     foreach ($rows as $row => $cols) {
  *         foreach ($cols as $col) {
@@ -49,18 +49,18 @@ declare(strict_types=1);
  *          }
  *     }
  *
- *   return $f->js(true, null, 'input[name="grand_total"]')->val(number_format($grand_total, 2));
+ *   return $form->js(true, null, 'input[name="grand_total"]')->val(number_format($grand_total, 2));
  * }, ['qty', 'price']);
  *
  * Finally, it's also possible to use Multiline for quickly adding records to a
  * model. Be aware that in the example below all User records will be displayed.
  * If your model contains a lot of records, you should handle their limit somehow.
  *
- * $f = \atk4\ui\Form::addTo($app);
- * $ml = $f->addField('ml', [\atk4\ui\Form\Control\Multiline::class]);
+ * $form = \atk4\ui\Form::addTo($app);
+ * $ml = $form->addControl('ml', [\atk4\ui\Form\Control\Multiline::class]);
  * $ml->setModel($user, ['name','is_vip']);
  *
- * $f->onSubmit(function($f) use ($ml) {
+ * $form->onSubmit(function($form) use ($ml) {
  *     $ml->saveRows();
  *     return new \atk4\ui\jsToast('Saved!');
  * });
