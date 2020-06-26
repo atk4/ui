@@ -187,27 +187,23 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->loader->set(function ($modal) {
             $this->jsSetBtnState($modal, $this->step);
 
-            try {
-                switch ($this->step) {
-                    case 'args':
-                        $this->doArgs($modal);
+            switch ($this->step) {
+                case 'args':
+                    $this->doArgs($modal);
 
-                        break;
-                    case 'fields':
-                        $this->doFields($modal);
+                    break;
+                case 'fields':
+                    $this->doFields($modal);
 
-                        break;
-                    case 'preview':
-                        $this->doPreview($modal);
+                    break;
+                case 'preview':
+                    $this->doPreview($modal);
 
-                        break;
-                    case 'final':
-                        $this->doFinal($modal);
+                    break;
+                case 'final':
+                    $this->doFinal($modal);
 
-                        break;
-                }
-            } catch (\Exception $e) {
-                $this->_handleException($e, $modal, $this->step);
+                    break;
             }
         });
     }
@@ -708,25 +704,6 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             }
         } else {
             $view->js(true, $js);
-        }
-    }
-
-    /**
-     * Handle exception.
-     */
-    private function _handleException($e, $view, $step)
-    {
-        $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
-        $msg->text->addParagraph($e->getMessage());
-        $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
-        if (!$this->isFirstStep($step)) {
-            $this->jsSetPrevHandler($view, $step);
-        }
-        if ($this->isLastStep($step)) {
-            $view->js(true, $this->execActionBtn->js()->addClass('disabled'));
-        }
-        if ($step === 'final') {
-            $this->jsSetPrevHandler($view, $this->steps[count($this->steps) - 1]);
         }
     }
 }
