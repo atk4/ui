@@ -21,7 +21,7 @@ $f_phone->addControl('phone3');
 $f_phone->addControl('phone4');
 
 // Show phoneX when previous phone is visible and has a number with at least 5 char.
-$f_phone->setControlDisplayRules([
+$f_phone->setControlsDisplayRules([
     'phone2' => ['phone1' => ['number', 'minLength[5]']],
     'phone3' => ['phone2' => ['number', 'minLength[5]'], 'phone1' => ['number', 'minLength[5]']],
     'phone4' => ['phone3' => ['number', 'minLength[5]'], 'phone2' => ['number', 'minLength[5]'], 'phone1' => ['number', 'minLength[5]']],
@@ -43,7 +43,7 @@ $f_sub->addControl('f_gift', [Form\Control\Dropdown::class, 'caption' => 'Gift f
 // Show email and gender when subscribe is checked.
 // Show m_gift when gender is exactly equal to 'male' and subscribe is checked.
 // Show f_gift when gender is exactly equal to 'female' and subscribe is checked.
-$f_sub->setControlDisplayRules([
+$f_sub->setControlsDisplayRules([
     'email' => ['subscribe' => 'checked'],
     'gender' => ['subscribe' => 'checked'],
     'm_gift' => ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
@@ -62,7 +62,7 @@ $f_dog->addControl('hair_cut', [Form\Control\Dropdown::class, 'values' => ['Shor
 // Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
 // OR
 // Show 'hair_cut' when race contains exactly the word 'bichon'
-$f_dog->setControlDisplayRules([
+$f_dog->setControlsDisplayRules([
     'hair_cut' => [['race' => 'contains[poodle]', 'age' => 'integer[1..5]'], ['race' => 'isExactly[bichon]']],
 ]);
 
