@@ -91,7 +91,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['HTML Layout'], [$path . 'html-layout'], $menu);
     $layout->addMenuItem(['Conditional Fields'], [$path . 'jscondform'], $menu);
 
-    $path = $demosUrl . 'input/';
+    $path = $demosUrl . 'form-control/';
     $menu = $layout->addMenuGroup(['Input', 'icon' => 'keyboard outline']);
     $layout->addMenuItem(['Input Fields'], [$path . 'field2'], $menu);
     $layout->addMenuItem('Input Field Decoration', [$path . 'field'], $menu);
