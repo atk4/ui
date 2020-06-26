@@ -15,10 +15,10 @@ $img->cb->appSticky = true;
 //$img->set('a_new_token', 'an-img-file-name');
 //$img->setThumbnailSrc('./images/logo.png');
 
-$field = $form->addControl('file', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]]);
+$control = $form->addControl('file', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]]);
 
-//$field->set('a_generated_token', 'a-file-name');
-//$field->set('a_generated_token');
+//$control->set('a_generated_token', 'a-file-name');
+//$control->set('a_generated_token');
 
 $img->onDelete(function ($fileId) use ($img) {
     $img->clearThumbnail('./images/default.png');
@@ -55,7 +55,7 @@ $img->onUpload(function ($files) use ($form, $img) {
     ]);
 });
 
-$field->onDelete(function ($fileId) {
+$control->onDelete(function ($fileId) {
     return new \atk4\ui\jsToast([
         'title' => 'Delete successfully',
         'message' => $fileId . ' has been removed',
@@ -63,11 +63,11 @@ $field->onDelete(function ($fileId) {
     ]);
 });
 
-$field->onUpload(function ($files) use ($form, $field) {
+$control->onUpload(function ($files) use ($form, $control) {
     if ($files === 'error') {
         return $form->error('file', 'Error uploading file.');
     }
-    $field->setFileId('a_token');
+    $control->setFileId('a_token');
 
     return new \atk4\ui\jsToast([
         'title' => 'Upload success',

@@ -56,17 +56,17 @@ $onDelete = function () {
 $onUpload = function () {
 };
 
-$field = $group->addControl('file_norm', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg');
-$field->onDelete($onDelete);
-$field->onUpload($onUpload);
+$control = $group->addControl('file_norm', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg');
+$control->onDelete($onDelete);
+$control->onUpload($onUpload);
 
-$field = $group->addControl('file_read', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'readonly' => true]])->set('readonly', 'readonly.jpg');
-$field->onDelete($onDelete);
-$field->onUpload($onUpload);
+$control = $group->addControl('file_read', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'readonly' => true]])->set('readonly', 'readonly.jpg');
+$control->onDelete($onDelete);
+$control->onUpload($onUpload);
 
-$field = $group->addControl('file_disb', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'disabled' => true]])->set('disabled', 'disabled.jpg');
-$field->onDelete($onDelete);
-$field->onUpload($onUpload);
+$control = $group->addControl('file_disb', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'disabled' => true]])->set('disabled', 'disabled.jpg');
+$control->onDelete($onDelete);
+$control->onUpload($onUpload);
 
 $group = $form->addGroup('Lookup');
 
@@ -100,22 +100,22 @@ $group->addControl('calendar_disb', [Form\Control\Calendar::class, 'type' => 'da
 
 \atk4\ui\Header::addTo($app, ['Stand Alone Line']);
 // you can pass values to button
-$field = Form\Control\Line::addTo($app);
+$control = Form\Control\Line::addTo($app);
 
-$field->set('hello world');
+$control->set('hello world');
 
-$button = $field->addAction('check value');
-$button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [$field->jsInput()->val()]));
+$button = $control->addAction('check value');
+$button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [$control->jsInput()->val()]));
 
 \atk4\ui\Header::addTo($app, ['Line in a Form']);
 $form = Form::addTo($app);
 
-$field = $form->addControl('Title', null, ['values' => ['Mr', 'Mrs', 'Miss'], 'ui' => ['hint' => 'select one']]);
+$control = $form->addControl('Title', null, ['values' => ['Mr', 'Mrs', 'Miss'], 'ui' => ['hint' => 'select one']]);
 
-$field = $form->addControl('name', [Form\Control\Line::class, 'hint' => 'this is sample hint that escapes <html> characters']);
-$field->set('value in a form');
+$control = $form->addControl('name', [Form\Control\Line::class, 'hint' => 'this is sample hint that escapes <html> characters']);
+$control->set('value in a form');
 
-$field = $form->addControl('surname', new Form\Control\Line([
+$control = $form->addControl('surname', new Form\Control\Line([
     'hint' => [\atk4\ui\View::class, 'template' => new \atk4\ui\Template(
         'Click <a href="http://example.com/" target="_blank">here</a>'
     )],
