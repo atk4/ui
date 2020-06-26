@@ -118,11 +118,13 @@ class Form extends View
     public $fieldDisplaySelector = '';
 
     /**
-     * Default selector for jsConditionalForm.
+     * Default css selector for jsConditionalForm.
+     * Should match the css class name of the control.
+     * Fomantic-UI use the class name "field"
      *
      * @var string
      */
-    public $controlDisplaySelector = '.control';
+    public $controlDisplaySelector = '.field';
 
     /**
      * Use this apiConfig variable to pass API settings to Semantic UI in .api().
