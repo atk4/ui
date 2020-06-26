@@ -89,15 +89,15 @@ abstract class AbstractLayout extends \atk4\ui\View
 
         if (method_exists($this, '_addField')) {
             // backward compatibility - will be removed in dec-2020
-            'trigger_error'('Method _addField is deprecated. Override addControlElement method instead', E_USER_DEPRECATED);
+            'trigger_error'('Method _addField is deprecated. Override _addControl method instead', E_USER_DEPRECATED);
 
             return $this->_addField($control, $field);
         }
 
-        return $this->addControlElement($control, $field);
+        return $this->_addControl($control, $field);
     }
 
-    protected function addControlElement($decorator, $field)
+    protected function _addControl($decorator, $field)
     {
         return $this->add($decorator, $this->template->hasTag($field->short_name) ? $field->short_name : null);
     }
