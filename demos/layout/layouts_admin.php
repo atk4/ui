@@ -22,7 +22,7 @@ $m_user->addItem('Logout');
 
 $m_comp = $layout->menu->addMenu(['Component Demo', 'icon' => 'puzzle']);
 $m_form = $m_comp->addMenu('Forms');
-$m_form->addItem('Form Elements');
+$m_form->addItem('Form Controls');
 $m_form->addItem('Form Layouts');
 $m_comp->addItem('CRUD');
 
@@ -40,13 +40,13 @@ $f = \atk4\ui\Form::addTo($layout, ['segment']);
 $f->setModel(new \atk4\data\Model());
 
 $f_group = $f->addGroup('Name');
-$f_group->addField('first_name', ['width' => 'eight']);
-$f_group->addField('middle_name', ['width' => 'three']);
-$f_group->addField('last_name', ['width' => 'five']);
+$f_group->addControl('first_name', ['width' => 'eight']);
+$f_group->addControl('middle_name', ['width' => 'three']);
+$f_group->addControl('last_name', ['width' => 'five']);
 
 $f_group = $f->addGroup('Address');
-$f_group->addField('address', ['width' => 'twelve']);
-$f_group->addField('zip', ['width' => 'four']);
+$f_group->addControl('address', ['width' => 'twelve']);
+$f_group->addControl('zip', ['width' => 'four']);
 
 $f->onSubmit(function (\atk4\ui\Form $form) {
     $errors = [];

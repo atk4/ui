@@ -37,17 +37,17 @@ $form->buttonSave->set('Show');
 $form->setModel(new $notifierClass($app->db), false);
 
 $f_p = $form->addGroup(['Set Text and Icon:']);
-$f_p->addField('text', ['width' => 'eight']);
-$f_p->addField('icon', ['width' => 'four']);
+$f_p->addControl('text', ['width' => 'eight']);
+$f_p->addControl('icon', ['width' => 'four']);
 
 $f_p1 = $form->addGroup(['Set Color, Transition and Width:']);
-$f_p1->addField('color', ['width' => 'four']);
-$f_p1->addField('transition', ['width' => 'four']);
-$f_p1->addField('width', ['width' => 'four']);
+$f_p1->addControl('color', ['width' => 'four']);
+$f_p1->addControl('transition', ['width' => 'four']);
+$f_p1->addControl('width', ['width' => 'four']);
 
 $f_p2 = $form->addGroup(['Set Position and Attach to:']);
-$f_p2->addField('position', ['width' => 'four']);
-$f_p2->addField('attach', ['width' => 'four']);
+$f_p2->addControl('position', ['width' => 'four']);
+$f_p2->addControl('attach', ['width' => 'four']);
 
 $form->onSubmit(function (\atk4\ui\Form $form) {
     $notifier = new \atk4\ui\jsNotify();

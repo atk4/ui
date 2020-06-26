@@ -160,7 +160,7 @@ class Popup extends View
      */
     public function set($fx = null, $arg2 = null)
     {
-        if (!is_object($fx) && !($fx instanceof Closure)) {
+        if (!is_object($fx) && !($fx instanceof \Closure)) {
             throw new Exception('Error: Need to pass a function to Popup::set()');
         }
 
@@ -264,7 +264,7 @@ class Popup extends View
         $name = $this->triggerBy;
         if (!is_string($this->triggerBy)) {
             $name = '#' . $this->triggerBy->name;
-            if ($this->triggerBy instanceof FormField\Generic) {
+            if ($this->triggerBy instanceof Form\Control) {
                 $name = '#' . $this->triggerBy->name . '_input';
             }
         }

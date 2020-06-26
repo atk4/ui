@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Form;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$form = \atk4\ui\Form::addTo($app);
-$img = $form->addField('img', [\atk4\ui\FormField\UploadImg::class, ['defaultSrc' => '../images/default.png', 'placeholder' => 'Click to add an image.']]);
+$form = Form::addTo($app);
+$img = $form->addControl('img', [Form\Control\UploadImage::class, ['defaultSrc' => '../images/default.png', 'placeholder' => 'Click to add an image.']]);
 $img->cb->appSticky = true;
 //$img->set('a_new_token', 'an-img-file-name');
 //$img->setThumbnailSrc('./images/logo.png');
 
-$field = $form->addField('file', [\atk4\ui\FormField\Upload::class, ['accept' => ['.png', '.jpg']]]);
+$control = $form->addControl('file', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]]);
 
-//$field->set('a_generated_token', 'a-file-name');
-//$field->set('a_generated_token');
+//$control->set('a_generated_token', 'a-file-name');
+//$control->set('a_generated_token');
 
 $img->onDelete(function ($fileId) use ($img) {
     $img->clearThumbnail('./images/default.png');
@@ -53,7 +55,7 @@ $img->onUpload(function ($files) use ($form, $img) {
     ]);
 });
 
-$field->onDelete(function ($fileId) {
+$control->onDelete(function ($fileId) {
     return new \atk4\ui\jsToast([
         'title' => 'Delete successfully',
         'message' => $fileId . ' has been removed',
@@ -61,11 +63,11 @@ $field->onDelete(function ($fileId) {
     ]);
 });
 
-$field->onUpload(function ($files) use ($form, $field) {
+$control->onUpload(function ($files) use ($form, $control) {
     if ($files === 'error') {
         return $form->error('file', 'Error uploading file.');
     }
-    $field->setFileId('a_token');
+    $control->setFileId('a_token');
 
     return new \atk4\ui\jsToast([
         'title' => 'Upload success',
@@ -74,7 +76,7 @@ $field->onUpload(function ($files) use ($form, $field) {
     ]);
 });
 
-$form->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (Form $form) {
     // implement submission here
     return $form->success('Thanks for submitting file: ' . $form->model->get('img') . ' / ' . $form->model->get('file'));
 });

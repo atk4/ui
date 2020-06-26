@@ -30,7 +30,7 @@ class jsSearch extends View
     /**
      * The input field.
      *
-     * @var FormField\Line
+     * @var Form\Control\Line
      */
     public $placeHolder = 'Search';
 
@@ -74,7 +74,7 @@ class jsSearch extends View
     {
         parent::init();
 
-        //$this->input = FormField\Line::addTo($this, ['iconLeft' => 'filter',  'action' => new \atk4\ui\Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
+        //$this->input = Form\Control\Line::addTo($this, ['iconLeft' => 'filter',  'action' => new Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
     }
 
     public function renderView()

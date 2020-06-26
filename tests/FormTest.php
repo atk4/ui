@@ -36,10 +36,10 @@ class FormTest extends AtkPhpunit\TestCase
     public function testGetField()
     {
         $f = $this->f;
-        $f->addField('test');
+        $f->addControl('test');
 
-        $this->assertTrue($f->getField('test') instanceof \atk4\ui\FormField\Generic);
-        $this->assertInstanceOf(\atk4\ui\FormField\Generic::class, $f->layout->getField('test'));
+        $this->assertTrue($f->getControl('test') instanceof Form\Control);
+        $this->assertInstanceOf(Form\Control::class, $f->layout->getControl('test'));
     }
 
     public function assertSubmit(array $post_data, callable $submit = null, callable $check_expected_error = null)
@@ -101,7 +101,7 @@ class FormTest extends AtkPhpunit\TestCase
 
     public function testTextArea()
     {
-        $this->f->addField('TextArea');
+        $this->f->addControl('TextArea');
         $this->assertSubmit(['TextArea' => '0'], function (Model $m) {
             $this->assertSame('0', $m->get('TextArea'));
         });

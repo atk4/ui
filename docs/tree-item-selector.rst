@@ -1,12 +1,12 @@
 
-.. php:namespace:: atk4\ui\FormField
+.. php:namespace:: atk4\ui\Form\Control
 
 .. php:class:: TreeItemSelector
 
 
-=====
-TreeItemSelector Form Field
-=====
+=============================
+TreeItemSelector Form Control
+=============================
 
 TreeItemSelector Form Field will display a list of items in a hierarchical (tree) structure. It allow for a user to select multiple
 or single item within a tree like list structure.
@@ -47,7 +47,7 @@ will be allowed.
 Basic Usage
 ===========
 
-Adding a TreeItemSelector Field to a Form::
+Adding a TreeItemSelector form control to a Form::
 
     $items = [
         [
@@ -76,8 +76,8 @@ Adding a TreeItemSelector Field to a Form::
 
 
     $f = \atk4\ui\Form::addTo($app);
-    $field = $f->addField('tree', [new TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'array', 'serialize' => 'json']);
-    $field->set([201, 301, 503]);
+    $control = $f->addControl('tree', [new TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'array', 'serialize' => 'json']);
+    $control->set([201, 301, 503]);
 
 Please note that when using TreeItemSelector in multiple mode, you need to specify field attribute type to 'array' and serialize attribute to json
 because in multiple mode, it will collect item value as an array type.
@@ -91,13 +91,13 @@ Callback Usage
 It is possible to run a callback function every time an item is select on the list. The callback function will receive the selected item
 set by the user.::
 
-    $field->onItem(function($value) {
+    $control->onItem(function($value) {
         return new \atk4\ui\jsToast(json_encode($value));
     });
 
 Note
 ====
 
-This field component is made to collect id's of end item only, i.e. item with no children nodes, and will be working in recursive selection
+This form control component is made to collect id's of end item only, i.e. item with no children nodes, and will be working in recursive selection
 mode when allowMultiple is set to true. Recursive selection mean that when user click on a group, it will automatically select or unselect children
 of that group depending on the state of the group when clicked. Be aware of this when building your item tree.

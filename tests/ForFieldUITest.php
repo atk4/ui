@@ -45,7 +45,7 @@ class ForFieldUITest extends AtkPhpunit\TestCase
         $f = new \atk4\ui\Form();
         $f->init();
         $f->setModel($this->m);
-        $this->assertFalse($f->getField('regular_field')->readonly);
+        $this->assertFalse($f->getControl('regular_field')->readonly);
     }
 
     public function testJustDataField()
@@ -53,7 +53,7 @@ class ForFieldUITest extends AtkPhpunit\TestCase
         $f = new \atk4\ui\Form();
         $f->init();
         $f->setModel($this->m, ['just_for_data']);
-        $this->assertTrue($f->getField('just_for_data')->readonly);
+        $this->assertTrue($f->getControl('just_for_data')->readonly);
     }
 
     public function testShowInUi()
@@ -61,6 +61,6 @@ class ForFieldUITest extends AtkPhpunit\TestCase
         $f = new \atk4\ui\Form();
         $f->init();
         $f->setModel($this->m);
-        $this->assertFalse($f->getField('no_persist_but_show_in_ui')->readonly);
+        $this->assertFalse($f->getControl('no_persist_but_show_in_ui')->readonly);
     }
 }

@@ -13,12 +13,12 @@ $g = \atk4\ui\CRUD::addTo($app, ['ipp' => 10]);
 
 // callback for model action add form.
 $g->onFormAdd(function ($form, $t) {
-    $form->js(true, $form->getField('name')->jsInput()->val('Entering value via javascript'));
+    $form->js(true, $form->getControl('name')->jsInput()->val('Entering value via javascript'));
 });
 
 // callback for model action edit form.
 $g->onFormEdit(function ($form) {
-    $form->js(true, $form->getField('name')->jsInput()->attr('readonly', true));
+    $form->js(true, $form->getControl('name')->jsInput()->attr('readonly', true));
 });
 
 // callback for both model action edit and add.

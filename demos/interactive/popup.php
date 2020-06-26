@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Form;
 use atk4\ui\View;
 
 /** @var \atk4\ui\App $app */
@@ -231,14 +232,14 @@ $signup->set(function ($pop) {
         \atk4\ui\Button::addTo($pop, ['Logout', 'primary', 'icon' => 'sign out'])
             ->link($pop->app->url());
     } else {
-        $f = \atk4\ui\Form::addTo($pop);
-        $f->addField('email', null, ['required' => true]);
-        $f->addField('password', [\atk4\ui\FormField\Password::class], ['required' => true]);
+        $f = Form::addTo($pop);
+        $f->addControl('email', null, ['required' => true]);
+        $f->addControl('password', [Form\Control\Password::class], ['required' => true]);
         $f->buttonSave->set('Login');
 
         // popup handles callbacks properly, so dynamic element such as form works
         // perfectly inside a popup.
-        $f->onSubmit(function (\atk4\ui\Form $form) {
+        $f->onSubmit(function (Form $form) {
             if ($form->model->get('password') !== '123') {
                 return $form->error('password', 'Please use password "123"');
             }
@@ -261,7 +262,7 @@ $b_pop = \atk4\ui\Popup::addTo($app, [$button]);
 \atk4\ui\Header::addTo($b_pop)->set('Using click events');
 \atk4\ui\View::addTo($b_pop)->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
 
-$input = \atk4\ui\FormField\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'circular search link']);
+$input = Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'circular search link']);
 
 $i_pop = \atk4\ui\Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
 \atk4\ui\View::addTo($i_pop)->set('You can use this field to search data.');
@@ -269,4 +270,4 @@ $i_pop = \atk4\ui\Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
 $button = \atk4\ui\Button::addTo($app, [null, 'icon' => 'volume down']);
 $b_pop = \atk4\ui\Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();
 
-\atk4\ui\FormField\CheckBox::addTo($b_pop, ['Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
+Form\Control\Checkbox::addTo($b_pop, ['Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));

@@ -8,7 +8,7 @@ namespace atk4\ui\demo;
  * Setup file - do not test.
  * Lookup that can not saved data.
  */
-class DemoLookup extends \atk4\ui\FormField\Lookup
+class DemoLookup extends \atk4\ui\Form\Control\Lookup
 {
     /**
      * Add button for new record.

@@ -1,15 +1,15 @@
 
 .. _autocomplete:
 
-=================
-AutoComplete Field
-=================
+=========================
+AutoComplete Form Control
+=========================
 
-.. php:namespace:: atk4\ui\FormField
+.. php:namespace:: atk4\ui\Form\Control
 .. php:class:: AutoComplete
 
-Agile UI uses "FormField\\Dropdown" by default on the form, but there is also implementation
-for AutoComplete field. Although they look similar, there are some differences:
+Agile UI uses "Form\\Control\\Dropdown" by default on the form, but there is also implementation
+for AutoComplete form control. Although they look similar, there are some differences:
 
  - AutoComplete will perform callback to fetch values.
  - AutoComplete can use callback to format options (both keys and values).
@@ -19,7 +19,7 @@ for AutoComplete field. Although they look similar, there are some differences:
  - AutoComplete has additional feature called "Plus"
  - AutoComplete only works with models. Won't work for pre-defined value lists.
 
-AutoComplete can be a drop-in replacement for DropDown. 
+AutoComplete can be a drop-in replacement for Dropdown. 
 
 Using Plus mode
 ---------------
@@ -31,22 +31,22 @@ form where you can enter new record details.
 The form save will re-use the model of your auto-complete, so be sure to set() defaults and
 addCondition()s::
 
-    $form->addField('test', [\atk4\ui\FormField\AutoComplete::class, 'plus'=>true])->setModel(new Country($db));
+    $form->addControl('test', [\atk4\ui\Form\Control\AutoComplete::class, 'plus'=>true])->setModel(new Country($db));
 
 Specifying in Model
 -------------------
 
 You can also specify that you prefer to use AutoComplete inside your model definition::
 
-    $model->hasOne('country_id', [new Country($db), 'ui'=>['form'=>[\atk4\ui\FormField\AutoComplete::class]]]);
+    $model->hasOne('country_id', [new Country($db), 'ui'=>['form'=>[\atk4\ui\Form\Control\AutoComplete::class]]]);
 
 Advanced Usage
 --------------
 
-You can do much more with AutoComplete field by passing dropdown settings::
+You can do much more with AutoComplete form control by passing dropdown settings::
 
-    $form->addField('test', [
-        \atk4\ui\FormField\AutoComplete::class, 
+    $form->addControl('test', [
+        \atk4\ui\Form\Control\AutoComplete::class, 
         'settings'=>[
             'allowReselection' => true,
             'selectOnKeydown' => false,
@@ -59,17 +59,17 @@ You can do much more with AutoComplete field by passing dropdown settings::
     ])->setModel(new Country($db));
 
 
-Lookup Field
-============
+Lookup Form Control
+===================
 
-In 1.6 we have introduced Lookup field, which is identical to AutoComplete but additionally allows
+In 1.6 we have introduced Lookup form control, which is identical to AutoComplete but additionally allows
 use of Filters::
 
 
     $form = \atk4\ui\Form::addTo($app, ['segment']);
     \atk4\ui\Label::addTo($form, ['Add city', 'top attached'], ['AboveFields']);
 
-    $l = $form->addField('city',[\atk4\ui\FormField\Lookup::class]);
+    $l = $form->addControl('city',[\atk4\ui\Form\Control\Lookup::class]);
 
     // will restraint possible city value in droddown base on country and/or language.
     $l->addFilter('country', 'Country');

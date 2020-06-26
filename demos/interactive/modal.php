@@ -69,7 +69,7 @@ $modal_vp1->set(function ($modal) use ($modal_vp2) {
     \atk4\ui\View::addTo($modal, ['Showing lorem ipsum']); //need in behat test.
     \atk4\ui\LoremIpsum::addTo($modal, ['size' => 2]);
     $form = \atk4\ui\Form::addTo($modal);
-    $form->addField('color', null, ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
+    $form->addControl('color', null, ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
     $form->onSubmit(function (\atk4\ui\Form $form) use ($modal_vp2) {
         return $modal_vp2->show(['color' => $form->model->get('color')]);
     });

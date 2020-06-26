@@ -49,18 +49,18 @@ class Form extends View
     public $canLeave = true;
 
     /**
-     * A current layout of a form, needed if you call $form->addField().
+     * A current layout of a form, needed if you call $form->addControl().
      *
-     * @var \atk4\ui\FormLayout\Generic
+     * @var \atk4\ui\Form\Layout
      */
     public $layout;
 
     /**
-     * List of fields currently registered with this form.
+     * List of form controls currently registered with this form.
      *
-     * @var array Array of FormField objects
+     * @var array Array of Form\Control objects
      */
-    public $fields = [];
+    public $controls = [];
 
     public $content = false;
 
@@ -81,6 +81,11 @@ class Form extends View
      * @var string
      */
     public $successTemplate = 'form-success.html';
+
+    /**
+     * @deprecated use controlDisplayRules - will be removed in dec-2020
+     */
+    public $fieldsDisplayRules = [];
 
     /**
      * Collection of field's conditions for displaying a target field on the form.
@@ -105,14 +110,19 @@ class Form extends View
      *
      * @var array
      */
-    public $fieldsDisplayRules = [];
+    public $controlDisplayRules = [];
+
+    /**
+     * @deprecated use controlDisplaySelector - will be removed in dec-2020
+     */
+    public $fieldDisplaySelector = '';
 
     /**
      * Default selector for jsConditionalForm.
      *
      * @var string
      */
-    public $fieldDisplaySelector = '.field';
+    public $controlDisplaySelector = '.control';
 
     /**
      * Use this apiConfig variable to pass API settings to Semantic UI in .api().
@@ -161,7 +171,7 @@ class Form extends View
     {
         parent::init();
 
-        // Initialize layout, so when you call addField / setModel next time, form will know
+        // Initialize layout, so when you call addControl / setModel next time, form will know
         // where to add your fields.
         $this->initLayout();
     }
@@ -173,7 +183,7 @@ class Form extends View
     protected function initLayout()
     {
         if ($this->layout === null) {
-            $this->layout = [\atk4\ui\FormLayout\Generic::class];
+            $this->layout = [Form\Layout::class];
         }
 
         if (is_string($this->layout) || is_array($this->layout)) {
@@ -197,15 +207,25 @@ class Form extends View
     }
 
     /**
-     * Setter for field display rules.
+     * @deprecated use Form::setControlsDisplayRules - will be removed in dec-2020
+     */
+    public function setFieldsDisplayRules($rules = [])
+    {
+        'trigger_error'('Method is deprecated. Use Form::setControlsDisplayRules instead', E_USER_DEPRECATED);
+
+        return $this->setControlsDisplayRules(...func_get_args());
+    }
+
+    /**
+     * Setter for control display rules.
      *
      * @param array $rules
      *
      * @return $this
      */
-    public function setFieldsDisplayRules($rules = [])
+    public function setControlsDisplayRules($rules = [])
     {
-        $this->fieldsDisplayRules = $rules;
+        $this->controlDisplayRules = $rules;
 
         return $this;
     }
@@ -224,8 +244,8 @@ class Form extends View
             $selector = '#' . $selector->name;
         }
 
-        $this->fieldsDisplayRules = $rules;
-        $this->fieldDisplaySelector = $selector;
+        $this->controlDisplayRules = $rules;
+        $this->controlDisplaySelector = $selector;
 
         return $this;
     }
@@ -267,14 +287,23 @@ class Form extends View
     }
 
     /**
-     * Return Field decorator associated with
-     * the field.
-     *
-     * @param string $name Name of the field
+     * @deprecated use Form::getControl - will be removed in dec-2020
      */
-    public function getField($name): FormField\Generic
+    public function getField($name): Form\Control
     {
-        return $this->fields[$name];
+        'trigger_error'('Method is deprecated. Use Form::getControl instead', E_USER_DEPRECATED);
+
+        return $this->getControl($name);
+    }
+
+    /**
+     * Return form control associated with the field.
+     *
+     * @param string $name Name of the control
+     */
+    public function getControl(string $name): Form\Control
+    {
+        return $this->controls[$name];
     }
 
     /**
@@ -342,33 +371,53 @@ class Form extends View
     // {{{ Layout Manipulation
 
     /**
-     * Add field into current layout. If no layout, create one. If no model, create blank one.
-     *
-     * @param array|string|object|null $decorator
-     * @param array|string|object|null $field
-     *
-     * @return FormField\Generic
+     * @deprecated - use Form::addControl instead - will be removed in dec-2020
      */
     public function addField(?string $name, $decorator = null, $field = null)
+    {
+        'trigger_error'('Method is deprecated. Use Form::addControl instead', E_USER_DEPRECATED);
+
+        return $this->addControl(...func_get_args());
+    }
+
+    /**
+     * Add form control into current layout. If no layout, create one. If no model, create blank one.
+     *
+     * @param array|string|object|null $control
+     * @param array|string|object|null $field
+     *
+     * @return Form\Control
+     */
+    public function addControl(?string $name, $control = null, $field = null)
     {
         if (!$this->model) {
             $this->model = new \atk4\ui\Misc\ProxyModel();
         }
 
-        return $this->layout->addField($name, $decorator, $field);
+        return $this->layout->addControl($name, $control, $field);
+    }
+
+    /**
+     * @deprecated - use Form::addControls instead - will be removed in dec-2020
+     */
+    public function addFields($fields)
+    {
+        'trigger_error'('Method is deprecated. Use Form::addControls instead', E_USER_DEPRECATED);
+
+        return $this->addControls(...func_get_args());
     }
 
     /**
      * Add more than one field in one shot.
      *
-     * @param array $fields
+     * @param array $controls
      *
      * @return $this
      */
-    public function addFields($fields)
+    public function addControls($controls)
     {
-        foreach ($fields as $field) {
-            $this->addField(...(array) $field);
+        foreach ($controls as $control) {
+            $this->addControl(...(array) $control);
         }
 
         return $this;
@@ -379,7 +428,7 @@ class Form extends View
      *
      * @param string $title
      *
-     * @return \atk4\ui\FormLayout\Generic
+     * @return Form\Layout
      */
     public function addHeader($title = null)
     {
@@ -391,7 +440,7 @@ class Form extends View
      *
      * @param string|array $title
      *
-     * @return \atk4\ui\FormLayout\Generic
+     * @return Form\Layout
      */
     public function addGroup($title = null)
     {
@@ -402,26 +451,36 @@ class Form extends View
      * Returns JS Chain that targets INPUT element of a specified field. This method is handy
      * if you wish to set a value to a certain field.
      *
-     * @param string $name Name of element
+     * @param string $name Name of control
      *
      * @return jsChain
      */
     public function jsInput($name)
     {
-        return $this->layout->getElement($name)->js()->find('input');
+        return $this->layout->getControl($name)->js()->find('input');
     }
 
     /**
-     * Returns JS Chain that targets INPUT element of a specified field. This method is handy
-     * if you wish to set a value to a certain field.
-     *
-     * @param string $name Name of element
-     *
-     * @return jsChain
+     * @deprecated - use Form::jsControl instead - will be removed in dec-2020
      */
     public function jsField($name)
     {
-        return $this->layout->getElement($name)->js();
+        'trigger_error'('Method is deprecated. Use Form::jsControl instead', E_USER_DEPRECATED);
+
+        return $this->jsControl(...func_get_args());
+    }
+
+    /**
+     * Returns JS Chain that targets INPUT of a specified element. This method is handy
+     * if you wish to set a value to a certain field.
+     *
+     * @param string $name Name of control
+     *
+     * @return jsChain
+     */
+    public function jsControl($name)
+    {
+        return $this->layout->getControl($name)->js();
     }
 
     // }}}
@@ -429,81 +488,91 @@ class Form extends View
     // {{{ Internals
 
     /**
+     * @deprecated use Form::controlFactory - will be removed in dec-2020
+     */
+    public function decoratorFactory(\atk4\data\Field $f, $seed = [])
+    {
+        'trigger_error'('Method is deprecated. Use Form::controlFactory instead', E_USER_DEPRECATED);
+
+        return $this->controlFactory(...func_get_args());
+    }
+
+    /**
      * Provided with a Agile Data Model Field, this method have to decide
-     * and create instance of a View that will act as a form-field. It takes
+     * and create instance of a View that will act as a form-control. It takes
      * various input and looks for hints as to which class to use:.
      *
      * 1. The $seed argument is evaluated
      * 2. $f->ui['form'] is evaluated if present
      * 3. $f->type is converted into seed and evaluated
-     * 4. lastly, falling back to Line, DropDown (based on $reference and $enum)
+     * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
-     * @param \atk4\data\Field $f    Data model field
-     * @param array            $seed Defaults to pass to factory() when decorator is initialized
+     * @param \atk4\data\Field $field Data model field
+     * @param array            $seed  Defaults to pass to factory() when control object is initialized
      *
-     * @return FormField\Generic
+     * @return Form\Control
      */
-    public function decoratorFactory(\atk4\data\Field $f, $seed = [])
+    public function controlFactory(\atk4\data\Field $field, $seed = [])
     {
-        if ($f && !$f instanceof \atk4\data\Field) {
-            throw (new Exception('Argument 1 for decoratorFactory must be \atk4\data\Field or null'))
-                ->addMoreInfo('f', $f);
+        if ($field && !$field instanceof \atk4\data\Field) {
+            throw (new Exception('Argument 1 for controlFactory must be \atk4\data\Field or null'))
+                ->addMoreInfo('field', $field);
         }
 
-        $fallback_seed = [\atk4\ui\FormField\Line::class];
+        $fallbackSeed = [Form\Control\Line::class];
 
-        if ($f->type === 'array' && $f->reference) {
-            $limit = ($f->reference instanceof ContainsMany) ? 0 : 1;
-            $model = $f->reference->refModel();
-            $fallback_seed = [\atk4\ui\FormField\MultiLine::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
-        } elseif ($f->type !== 'boolean') {
-            if ($f->enum) {
-                $fallback_seed = [\atk4\ui\FormField\DropDown::class, 'values' => array_combine($f->enum, $f->enum)];
-            } elseif ($f->values) {
-                $fallback_seed = [\atk4\ui\FormField\DropDown::class, 'values' => $f->values];
-            } elseif (isset($f->reference)) {
-                $fallback_seed = [\atk4\ui\FormField\Lookup::class, 'model' => $f->reference->refModel()];
+        if ($field->type === 'array' && $field->reference) {
+            $limit = ($field->reference instanceof ContainsMany) ? 0 : 1;
+            $model = $field->reference->refModel();
+            $fallbackSeed = [Form\Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
+        } elseif ($field->type !== 'boolean') {
+            if ($field->enum) {
+                $fallbackSeed = [Form\Control\Dropdown::class, 'values' => array_combine($field->enum, $field->enum)];
+            } elseif ($field->values) {
+                $fallbackSeed = [Form\Control\Dropdown::class, 'values' => $field->values];
+            } elseif (isset($field->reference)) {
+                $fallbackSeed = [Form\Control\Lookup::class, 'model' => $field->reference->refModel()];
             }
         }
 
-        if (isset($f->ui['hint'])) {
-            $fallback_seed['hint'] = $f->ui['hint'];
+        if (isset($field->ui['hint'])) {
+            $fallbackSeed['hint'] = $field->ui['hint'];
         }
 
-        if (isset($f->ui['placeholder'])) {
-            $fallback_seed['placeholder'] = $f->ui['placeholder'];
+        if (isset($field->ui['placeholder'])) {
+            $fallbackSeed['placeholder'] = $field->ui['placeholder'];
         }
 
         $seed = $this->mergeSeeds(
             $seed,
-            $f->ui['form'] ?? null,
-            $this->typeToDecorator[$f->type] ?? null,
-            $fallback_seed
+            $field->ui['form'] ?? null,
+            $this->typeToControl[$field->type] ?? null,
+            $fallbackSeed
         );
 
         $defaults = [
             'form' => $this,
-            'field' => $f,
-            'short_name' => $f->short_name,
+            'field' => $field,
+            'short_name' => $field->short_name,
         ];
 
         return $this->factory($seed, $defaults);
     }
 
     /**
-     * Provides decorator seeds for most common types.
+     * Provides control seeds for most common types.
      *
-     * @var array Describes how factory converts type to decorator seed
+     * @var array Describes how factory converts type to control seed
      */
-    protected $typeToDecorator = [
-        'boolean' => [FormField\CheckBox::class],
-        'text' => [FormField\TextArea::class],
-        'string' => [FormField\Line::class],
-        'password' => [FormField\Password::class],
-        'datetime' => [FormField\Calendar::class],
-        'date' => [FormField\Calendar::class, 'type' => 'date'],
-        'time' => [FormField\Calendar::class, 'type' => 'time', 'ampm' => false],
-        'money' => [FormField\Money::class],
+    protected $typeToControl = [
+        'boolean' => [Form\Control\Checkbox::class],
+        'text' => [Form\Control\Textarea::class],
+        'string' => [Form\Control\Line::class],
+        'password' => [Form\Control\Password::class],
+        'datetime' => [Form\Control\Calendar::class],
+        'date' => [Form\Control\Calendar::class, 'type' => 'date'],
+        'time' => [Form\Control\Calendar::class, 'type' => 'time', 'ampm' => false],
+        'money' => [Form\Control\Money::class],
     ];
 
     /**
@@ -516,7 +585,7 @@ class Form extends View
         $this->hook(self::HOOK_LOAD_POST, [&$post]);
         $errors = [];
 
-        foreach ($this->fields as $key => $field) {
+        foreach ($this->controls as $key => $field) {
             try {
                 // save field value only if field was editable in form at all
                 if (!$field->readonly && !$field->disabled) {
@@ -538,8 +607,9 @@ class Form extends View
     public function renderView()
     {
         $this->ajaxSubmit();
-        if (!empty($this->fieldsDisplayRules)) {
-            $this->js(true, new jsConditionalForm($this, $this->fieldsDisplayRules, $this->fieldDisplaySelector));
+        if (!empty($this->controlDisplayRules)) {
+            // backward compatibility for fieldsDisplayRules and fieldDisplaySelector
+            $this->js(true, new jsConditionalForm($this, $this->fieldsDisplayRules ?: $this->controlDisplayRules, $this->fieldDisplaySelector ?: $this->controlDisplaySelector));
         }
 
         return parent::renderView();

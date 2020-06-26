@@ -1,13 +1,13 @@
 
 .. _field:
 
-=====================
-Form Field Decorators
-=====================
+=============
+Form Controls
+=============
 
-.. php:namespace:: atk4\ui\FormField
+.. php:namespace:: atk4\ui\Form\Control
 
-Agile UI dedicates a separate namespace for the Form Field Decorator. Those are
+Agile UI dedicates a separate namespace for the Form Controls. Those are
 quite simple components that present themselves as input controls: line, select, checkbox.
 
 Relationship with Form
@@ -23,20 +23,20 @@ Stand-alone use
 .. php:method:: set()
 .. php:method:: jsInput()
 
-Add any field decorator to your application like this::
+Add any form control to your application like this::
 
-    $field = Line::addTo($app);
+    $control = Line::addTo($app);
 
-You can set default value and ineract with a field using JavaScript::
+You can set default value and interact with a form control using JavaScript::
 
-    $field->set('hello world');
+    $control->set('hello world');
 
 
     $button = \atk4\ui\Button::addTo($app, ['check value']);
-    $button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [$field->jsInput()->val()]));
+    $button->on('click', new \atk4\ui\jsExpression('alert("control value is: "+[])', [$control->jsInput()->val()]));
 
 
-When used stand-alone, FormFields will produce a basic HTML (I have omitted id=)::
+When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
 
     <div class="ui  input">
         <input name="line" type="text" placeholder="" value="hello world"/>
@@ -49,7 +49,7 @@ Using in-form
 Field can also be used inside a form like this::
 
     $form = \atk4\ui\Form::addTo($app);
-    $field = $form->addField('name', new \atk4\ui\FormField\Line());
+    $control = $form->addControl('name', new \atk4\ui\Form\Control\Line());
 
 If you execute this exmple, you'll notice that Feld now has a label, it uses full width of the
 page and the following HTML is now produced::
@@ -76,10 +76,10 @@ into multiple Tabs or detach field groups or even create nested layouts::
     \atk4\ui\View::addTo($form, ['ui'=>'divider'], ['AboveFields']);
 
     $form_page = Generic::addTo($tabs->addTab('Basic Info'), ['form'=>$form]);
-    $form_page->addField('name', new \atk4\ui\FormField\Line());
+    $form_page->addControl('name', new \atk4\ui\Form\Control\Line());
 
     $form_page = Generic::addTo($tabs->addTab('Other Info'), ['form'=>$form]);
-    $form_page->addField('age', new \atk4\ui\FormField\Line());
+    $form_page->addControl('age', new \atk4\ui\Form\Control\Line());
 
     $form->onSubmit(function($f) { return $f->model->get('name').' has age '.$f->model->get('age'); });
 
@@ -99,24 +99,24 @@ Hints
 When Field appears in a Form, then you can specify a Hint also. It appears below the field and
 although it intends to be "extra info" or "extra help" due to current limitation of Fomantic UI
 the only way we can display hint is using a gray bubble. In the future version of Agile UI we
-will update to use a more suitable control.
+will update to use a more suitable form control.
 
 Hint can be specified either inside field decorator seed or inside the Field::ui attribute::
 
 
-    $form->addField('title', null, ['values'=>['Mr', 'Mrs', 'Miss'], 'hint'=>'select one']);
+    $form->addControl('title', null, ['values'=>['Mr', 'Mrs', 'Miss'], 'hint'=>'select one']);
 
-    $form->addField('name', ['hint'=>'Full Name Only']);
+    $form->addControl('name', ['hint'=>'Full Name Only']);
 
 Text will have HTML characters escaped. You may also specify hint value as an object::
 
-    $form->addField('name', ['hint'=>new \atk4\ui\Text(
+    $form->addControl('name', ['hint'=>new \atk4\ui\Text(
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]);
 
 or you can inject a view with a custom template::
 
-    $form->addField('name', ['hint'=>['template'=>new \atk4\ui\Template(
+    $form->addControl('name', ['hint'=>['template'=>new \atk4\ui\Template(
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]]);
 
@@ -168,20 +168,20 @@ The above will populate fields from model into the form automatically. You can u
 argument to :php:meth:`\atk4\ui\Form::setModel()` to indicate which fields to display
 or rely on :ref:`field_visibility`.
 
-When Form fields are populated, then :php:meth:`\atk4\ui\Form::_decoratorFactory` is
+When Form fields are populated, then :php:meth:`\atk4\ui\Form::controlFactory` is
 consulted to make a decision on how to translate
 `Model Field <https://agile-data.readthedocs.io/en/develop/fields.html>`_ into
 Form Field Decorator.
 
 The rules are rather straightforward but may change in future versions of Agile UI:
 
- - if `enum <https://agile-data.readthedocs.io/en/develop/fields.html#Field::$enum>`_ is defined, use :php:class:`DropDown`
+ - if `enum <https://agile-data.readthedocs.io/en/develop/fields.html#Field::$enum>`_ is defined, use :php:class:`Dropdown`
  - consult :php:attr:`\atk4\ui\Form::$typeToDecorator` property for type-to-seed association
  - type=password will use :php:class:`Password`
 
 You always have an option to explicitly specify which field you would like to use::
 
-    $model->addField('long_text', ['ui'=>['rorm'=>\atk4\ui\FormField\TextArea::class]]);
+    $model->addField('long_text', ['ui'=>['rorm'=>\atk4\ui\Form\Control\TextArea::class]]);
 
 It is recommended however, that you use type when possible, because types will be universally supported
 by all components::
@@ -225,7 +225,7 @@ Here are few ways to specify `icon` to an Input::
     Line::addTo($page, ['icon'=>'search']);
 
     // Type-hinting friendly
-    $line = new \atk4\ui\FormField\Line();
+    $line = new \atk4\ui\Form\Control\Line();
     $line->icon='search';
     $page->add($line);
 
@@ -273,7 +273,7 @@ To see various examples of fields and their attributes see `demos/field.php`.
 Integration with Form
 ---------------------
 
-When you use :php:class:`form::addField()` it will create 'Field Decorator'
+When you use :php:class:`form::addControl()` it will create 'Field Decorator'
 
 JavaScript on Input
 -------------------
@@ -283,7 +283,7 @@ JavaScript on Input
 Input class implements method jsInput which is identical to :php:meth:`View::js`, except
 that it would target the INPUT element rather then the whole field::
 
-    $field->jsInput(true)->val(123);
+    $control->jsInput(true)->val(123);
 
 onChange event
 --------------
@@ -294,40 +294,40 @@ It's prefferable to use this short-hand version of on('change', 'input', $expres
 $expression argument can be string, jsExpression, array of jsExpressions or even PHP callback function.
 
     // simple string
-    $f1 = $f->addField('f1');
+    $f1 = $f->addControl('f1');
     $f1->onChange('console.log("f1 changed")');
 
     // callback
-    $f2 = $f->addField('f2');
+    $f2 = $f->addControl('f2');
     $f2->onChange(function(){return new \atk4\ui\jsExpression('console.log("f2 changed")');});
 
     // Calendar field - wraps in function call with arguments date, text and mode
-    $c1 = $f->addField('c1', new \atk4\ui\FormField\Calendar(['type'=>'date']));
+    $c1 = $f->addControl('c1', new \atk4\ui\Form\Control\Calendar(['type'=>'date']));
     $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
 
 
 
 
 
-DropDown
+Dropdown
 ========
-DropDown uses Fomantic UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A DropDown can be used in two ways:
-1) Set a Model to $model property. The DropDown will render all records of the model that matchs the model's conditions.
-2) You can define $values property to create custom DropDown items.
+Dropdown uses Fomantic UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A Dropdown can be used in two ways:
+1) Set a Model to $model property. The Dropdown will render all records of the model that matchs the model's conditions.
+2) You can define $values property to create custom Dropdown items.
 
 Usage with a Model
 ------------------
-A DropDown is not used as default Form Field decorator (`$model->hasOne()` uses :php:class:`Lookup`), but in your Model, you can define that
-UI should render a Field as DropDown. For example, this makes sense when a `hasOne()` relationship only has a very limited amount (like 20)
-of records to display. DropDown renders all records when the paged is rendered, while Lookup always sends an additional request to the server.
+A Dropdown is not used as default Form Field decorator (`$model->hasOne()` uses :php:class:`Lookup`), but in your Model, you can define that
+UI should render a Field as Dropdown. For example, this makes sense when a `hasOne()` relationship only has a very limited amount (like 20)
+of records to display. Dropdown renders all records when the paged is rendered, while Lookup always sends an additional request to the server.
 :php:class:`Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
 
-To render a model field as DropDown, use the ui property of the field::
-    $model->addField('someField', ['ui' => ['form' =>[\atk4\ui\FormField\DropDown::class]]]);
+To render a model field as Dropdown, use the ui property of the field::
+    $model->addField('someField', ['ui' => ['form' =>[\atk4\ui\Form\Control\Dropdown::class]]]);
 
-..  Customizing how a Model's records are displayed in DropDown
-As default, DropDown will use the `$model->id_field` as value, and `$model->title_field` as title for each menu item.
-If you want to customize how a record is displayed and/or add an icon, DropDown has the :php:meth:`Form::renderRowFunction()` to do this.
+..  Customizing how a Model's records are displayed in Dropdown
+As default, Dropdown will use the `$model->id_field` as value, and `$model->title_field` as title for each menu item.
+If you want to customize how a record is displayed and/or add an icon, Dropdown has the :php:meth:`Form::renderRowFunction()` to do this.
 This function is called with each model record and needs to return an array::
     $dropdown->renderRowFunction = function($record) {
         return [
@@ -345,9 +345,9 @@ You can also use this function to add an Icon to a record::
         ];
     }
 
-If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the DropDown class and create your own template with the complex HTML::
+If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the Dropdown class and create your own template with the complex HTML::
 
-    class MyDropDown extends \atk4\ui\DropDown {
+    class MyDropdown extends \atk4\ui\DropDown {
         
         public $defaultTemplate = 'my_dropdown.html';
         
@@ -382,8 +382,8 @@ Of course, the tags `value`, `title`, `icon`, `someOtherField` and `SomeOtherFie
 
 
 Usage with $values property
-------------------
-If not used with a model, you can define the DropDown values in $values array. The pattern is value => title::
+---------------------------
+If not used with a model, you can define the Dropdown values in $values array. The pattern is value => title::
     $dropdown->values = [
         'decline'   => 'No thanks',
         'postprone' => 'Maybe later',
@@ -408,9 +408,9 @@ If you use it, use the second parameter as well, its the array key::
     }
 
 
-DropDown Settings
+Dropdown Settings
 -----------------
-There's a bunch of settings to influence DropDown behaviour:
+There's a bunch of settings to influence Dropdown behaviour:
 
 .. php:attr:: empty
 Define a string for the empty option (no selection). Standard is non-breaking space symbol.
@@ -420,14 +420,14 @@ Whether or not this dropdown requires a value. When set to true, $empty is shown
 
 ..php:attr:: dropdownOptions
 Here you can pass an array of Fomantic UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
-    $dropdown = new DropDown(['dropdownOptions' => [
+    $dropdown = new Dropdown(['dropdownOptions' => [
         'selectOnKeydown' => false,
     ]]);
     
  ..php:attr:: isMultiple
- If set to true, multiple items can be selected in DropDown. They will be sent comma seperated (value1,value2,value3) on form submit.
+ If set to true, multiple items can be selected in Dropdown. They will be sent comma seperated (value1,value2,value3) on form submit.
 
-By default DropDown will save values as comma-separated string value in data model, but it also supports model fields with array type.
+By default Dropdown will save values as comma-separated string value in data model, but it also supports model fields with array type.
 See this example from Model class init method::
     $expr_model = $this->ref('Expressions');
     $this->addField('expressions', [
@@ -436,7 +436,7 @@ See this example from Model class init method::
         'serialize' => 'json',
         'ui' => [
             'form' => [
-                \atk4\ui\FormField\DropDown::class,
+                \atk4\ui\Form\Control\Dropdown::class,
                 'isMultiple' => true,
                 'model' => $expr_model,
             ],
@@ -447,17 +447,17 @@ See this example from Model class init method::
         ],
     ]);
 
-DropDownCascade
+DropdownCascade
 ===============
 
-DropDownCascade input are extend from DropDown input. They rely on `cascadeFrom` and `reference` property.
+DropdownCascade input are extend from Dropdown input. They rely on `cascadeFrom` and `reference` property.
 For example, it could be useful when you need to narrow a product selection base on a category and a sub category.
 User will select a Category from a list, then sub category input will automatically load sub category values based on
 user category selection. Same with product list values based on sub category selection and etc.
 
 .. php:attr:: cascadeFrom
 
-This property represent an input field, mostly another DropDown or DropDownCascade field.
+This property represent an input field, mostly another Dropdown or DropdownCascade field.
 The list values of this field will be build base off the selected value of cascadeFrom input.
 
 .. php:attr:: reference
@@ -469,9 +469,9 @@ input model.
 Assume that each data model are defined and model Category has many Sub-Category and Sub-Category has many Product::
 
     $f = \atk4\ui\Form::addTo($app);
-    $f->addField('category_id', [DropDown::class, 'model' => new Category($db)]);
-    $f->addField('sub_category_id', [DropDownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
-    $f->addField('product_id', [DropDownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
+    $f->addControl('category_id', [Dropdown::class, 'model' => new Category($db)]);
+    $f->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
+    $f->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
 
 
 Lookup

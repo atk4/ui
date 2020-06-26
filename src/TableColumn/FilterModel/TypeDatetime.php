@@ -58,7 +58,7 @@ class TypeDatetime extends Generic
         $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
 
         // The integer field to generate a date when x day selector is used.
-        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [\atk4\ui\FormField\Line::class, 'inputType' => 'number']]]);
+        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [\atk4\ui\Form\Control\Line::class, 'inputType' => 'number']]]);
     }
 
     /**

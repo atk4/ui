@@ -99,7 +99,7 @@ Type Presentation
 
 Several components are too complex to be implemented in a single class. :php:class:`Table`, for example,
 has the ability to format columns by utilizing type-specific column classes. Another example is :php:class:`Form`
-which relies on Field-specific FormField component.
+which relies on Field-specific Form\Control component.
 
 Agile UI uses a specific pattern for those definitions, which makes the overall structure more extensible
 by having the ability to introduce new types with consistent support throughout the UI.

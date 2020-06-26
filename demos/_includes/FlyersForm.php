@@ -20,21 +20,21 @@ class FlyersForm extends Form
     {
         parent::init();
 
-        $this->addField('first_name', [\atk4\ui\FormField\Line::class, 'caption' => 'Main passenger', 'placeholder' => 'First name'], ['required' => true]);
-        $this->addField('last_name', [\atk4\ui\FormField\Line::class, 'renderLabel' => false, 'placeholder' => 'Last name'], ['required' => true]);
-        $this->addField('email', [\atk4\ui\FormField\Line::class], ['required' => true]);
+        $this->addControl('first_name', [Form\Control\Line::class, 'caption' => 'Main passenger', 'placeholder' => 'First name'], ['required' => true]);
+        $this->addControl('last_name', [Form\Control\Line::class, 'renderLabel' => false, 'placeholder' => 'Last name'], ['required' => true]);
+        $this->addControl('email', [Form\Control\Line::class], ['required' => true]);
 
-        $this->addField('from', [\atk4\ui\FormField\Calendar::class, 'caption' => 'Date:', 'placeholder' => 'From'], ['type' => 'date', 'required' => true]);
-        $this->addField('to', [\atk4\ui\FormField\Calendar::class, 'renderLabel' => false, 'placeholder' => 'To'], ['type' => 'date', 'required' => true]);
+        $this->addControl('from', [Form\Control\Calendar::class, 'caption' => 'Date:', 'placeholder' => 'From'], ['type' => 'date', 'required' => true]);
+        $this->addControl('to', [Form\Control\Calendar::class, 'renderLabel' => false, 'placeholder' => 'To'], ['type' => 'date', 'required' => true]);
 
-        $this->addField('contains', [
-            \atk4\ui\FormField\Line::class,
+        $this->addControl('contains', [
+            Form\Control\Line::class,
             'placeholder' => 'Search for country containing ...',
             'renderLabel' => false,
         ]);
 
-        $this->addField('country', [
-            \atk4\ui\FormField\Lookup::class,
+        $this->addControl('country', [
+            Form\Control\Lookup::class,
             'model' => new \atk4\ui\demo\Country($this->app->db),
             'dependency' => function ($model, $data) {
                 isset($data['contains']) ? $model->addCondition('name', 'like', '%' . $data['contains'] . '%') : null;
@@ -44,10 +44,10 @@ class FlyersForm extends Form
             'placeholder' => 'Select your destination',
         ], ['required' => true]);
 
-        $ml = $this->addField('multi', [\atk4\ui\FormField\MultiLine::class, 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional passengers:', 'renderLabel' => false]);
+        $ml = $this->addControl('multi', [Form\Control\Multiline::class, 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional passengers:', 'renderLabel' => false]);
         $ml->setModel(new Flyers(new \atk4\data\Persistence\Array_($this->flyers)));
 
-        $cards = $this->addField('cards', [new \atk4\ui\FormField\TreeItemSelector(['treeItems' => $this->cards]), 'caption' => 'Flyers program:'], ['type' => 'array', 'serialize' => 'json']);
+        $cards = $this->addControl('cards', [new Form\Control\TreeItemSelector(['treeItems' => $this->cards]), 'caption' => 'Flyers program:'], ['type' => 'array', 'serialize' => 'json']);
         $cards->set(json_encode([]));
 
         $this->onSubmit(function ($f) {

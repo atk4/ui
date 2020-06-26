@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\FormField;
 
-use atk4\ui\Form;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Use atk4\ui\Form\Control\Line instead', E_USER_DEPRECATED);
+}
 
 /**
- * Input element for a form field.
+ * @deprecated will be removed dec-2020
  */
-class Line extends Input
+class Line extends \atk4\ui\Form\Control\Line
 {
 }

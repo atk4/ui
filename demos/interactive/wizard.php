@@ -32,7 +32,7 @@ $t->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connec
     // IMPORTANT - needed for php_unit Wizard test.
     $f->name = 'w_form';
 
-    $f->addField('dsn', 'Connect DSN', ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
+    $f->addControl('dsn', 'Connect DSN', ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
     $f->onSubmit(function (\atk4\ui\Form $form) use ($w) {
         $w->memorize('dsn', $form->model->get('dsn'));
 

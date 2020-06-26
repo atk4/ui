@@ -40,7 +40,7 @@ function addAccordion($view, $max_depth = 2, $level = 0)
     $i3 = $accordion->addSection('Dynamic Form', function ($v) use ($max_depth, $level) {
         \atk4\ui\Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
         $f = \atk4\ui\Form::addTo($v);
-        $f->addField('Email');
+        $f->addControl('Email');
         $f->onSubmit(function (\atk4\ui\Form $form) {
             return $form->success('Subscribed ' . $form->model->get('Email') . ' to newsletter.');
         });

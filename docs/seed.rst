@@ -103,5 +103,5 @@ Note that addColumn uses default namespace of `\\atk4\\ui\\TableColumn` when see
 other methods that use seeds are:
 
  - :php:meth:`Table::addColumn()`
- - :php:meth:`Form::addField()`
+ - :php:meth:`Form::addControl()`
 

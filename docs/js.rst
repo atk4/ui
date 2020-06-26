@@ -484,7 +484,7 @@ some feedback to the user. jsNotify can display a bar on top of the screen for s
 
     $modal->set(function ($p) use ($modal) {
         $form = \atk4\ui\Form::addTo($p);
-        $form->addField('name', null, ['caption'=>'Add your name']);
+        $form->addControl('name', null, ['caption'=>'Add your name']);
 
         $form->onSubmit(function ($f) use ($modal) {
             if (empty($f->model->get('name'))) {
