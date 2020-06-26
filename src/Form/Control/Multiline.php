@@ -630,7 +630,7 @@ class Multiline extends Form\Control
                 }
 
                 break;
-            // DropDown needs values set
+            // Dropdown needs values set
             case 'dropdown':
                 if (!isset($options['values'])) {
                     $options['values'] = $this->_addValuesOption($field);

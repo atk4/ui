@@ -99,11 +99,11 @@ class FormTest extends AtkPhpunit\TestCase
         });
     }
 
-    public function testTextArea()
+    public function testTextarea()
     {
-        $this->f->addControl('TextArea');
-        $this->assertSubmit(['TextArea' => '0'], function (Model $m) {
-            $this->assertSame('0', $m->get('TextArea'));
+        $this->f->addControl('Textarea');
+        $this->assertSubmit(['Textarea' => '0'], function (Model $m) {
+            $this->assertSame('0', $m->get('Textarea'));
         });
     }
 
