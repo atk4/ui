@@ -140,7 +140,7 @@ abstract class AbstractLayout extends \atk4\ui\View
     }
 
     /**
-     * Sets form model and adds form fields.
+     * Sets form model and adds form controls.
      *
      * @param array|null $fields
      *

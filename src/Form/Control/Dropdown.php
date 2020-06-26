@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
-use atk4\ui\Form;
 use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
 
 /**
- * Input element for a form field.
+ * Input element for a form control.
  */
 class Dropdown extends Input
 {

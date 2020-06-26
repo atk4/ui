@@ -10,7 +10,7 @@ use atk4\ui\Icon;
 use atk4\ui\Label;
 
 /**
- * Input element for a form field.
+ * Input element for a form control.
  */
 class Input extends Form\Control
 {

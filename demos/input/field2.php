@@ -12,7 +12,7 @@ use atk4\ui\Form;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Header::addTo($app, ['Disabled and read only form fields (normal / readonly / disabled)']);
+\atk4\ui\Header::addTo($app, ['Disabled and read only form controls (normal / readonly / disabled)']);
 
 $form = Form::addTo($app);
 

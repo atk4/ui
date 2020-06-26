@@ -42,7 +42,7 @@ of your integration.
 
   You need to define how to output your data as well as read it.
 
- 2. Try your new type with a standard Form field.
+ 2. Try your new type with a standard Form control.
 
   The value you output should read and stored back correctly.
   This ensures that standard UI will work with your new data type.

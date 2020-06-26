@@ -131,7 +131,7 @@ change their value.
 .. php:attr: disabled
 
 Disabled fields can be  seend in form, can not be focused and will not be submitted. And of course we
-don't allow to change their value. Disabled form fields are used for read only model fields for example.
+don't allow to change their value. Disabled form controls are used for read only model fields for example.
 
 
 Relationship with Model
@@ -168,10 +168,10 @@ The above will populate fields from model into the form automatically. You can u
 argument to :php:meth:`\atk4\ui\Form::setModel()` to indicate which fields to display
 or rely on :ref:`field_visibility`.
 
-When Form fields are populated, then :php:meth:`\atk4\ui\Form::controlFactory` is
+When Form controls are populated, then :php:meth:`\atk4\ui\Form::controlFactory` is
 consulted to make a decision on how to translate
 `Model Field <https://agile-data.readthedocs.io/en/develop/fields.html>`_ into
-Form Field Decorator.
+Form Control Decorator.
 
 The rules are rather straightforward but may change in future versions of Agile UI:
 
@@ -317,7 +317,7 @@ Dropdown uses Fomantic UI Dropdown (https://fomantic-ui.com/modules/dropdown.htm
 
 Usage with a Model
 ------------------
-A Dropdown is not used as default Form Field decorator (`$model->hasOne()` uses :php:class:`Lookup`), but in your Model, you can define that
+A Dropdown is not used as default Form Control decorator (`$model->hasOne()` uses :php:class:`Lookup`), but in your Model, you can define that
 UI should render a Field as Dropdown. For example, this makes sense when a `hasOne()` relationship only has a very limited amount (like 20)
 of records to display. Dropdown renders all records when the paged is rendered, while Lookup always sends an additional request to the server.
 :php:class:`Lookup` on the other hand is the better choice if there is lots of records (like more than 50).

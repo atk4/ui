@@ -227,7 +227,7 @@ click on the button, it will reload $segment component while passing all the id'
 
     $button->on('click', new jsReload($segment, ['ids'=>$box->jsChecked()]));
 
-jsChecked expression represents a JavaScript string which you can place inside a form field,
+jsChecked expression represents a JavaScript string which you can place inside a form control,
 use as argument etc.
 
 

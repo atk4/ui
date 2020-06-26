@@ -11,7 +11,7 @@ declare(strict_types=1);
  *
  * $f = \atk4\ui\Form::addTo($app);
  * $f->setModel($invoice, false);
- * // Add Form fields
+ * // Add form controls
  *
  * // Add Multiline field and set model for it.
  * $ml = $f->addField('ml', ['Multiline']);

@@ -9,7 +9,7 @@ use atk4\ui\Form;
 use atk4\ui\View;
 
 /**
- * Provides generic functionality for a form field.
+ * Provides generic functionality for a form control.
  */
 class Control extends View
 {

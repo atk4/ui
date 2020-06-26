@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
-use atk4\ui\Form;
-
 /**
- * Password input element for a form field.
+ * Password input element for a form control.
  */
 class Password extends Line
 {

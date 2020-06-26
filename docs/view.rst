@@ -433,7 +433,7 @@ If role is unspecified then 'view' will be used. The main benefit here is to hav
 allocation of all the IDs througout the render-tree ensuring that those ID's are consistent
 between page requests.
 
-It is also possible to set the "last" bit of the ID postfix. When Form fields are populated,
+It is also possible to set the "last" bit of the ID postfix. When Form controls are populated,
 the name of the field will be used instead of the role. This is done by setting 'name' propoerty.
 
 
