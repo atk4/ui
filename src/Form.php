@@ -207,13 +207,13 @@ class Form extends View
     }
 
     /**
-     * @deprecated use Form::setControlDisplayRules - will be removed in dec-2020
+     * @deprecated use Form::setControlsDisplayRules - will be removed in dec-2020
      */
     public function setFieldsDisplayRules($rules = [])
     {
-        'trigger_error'('Method is deprecated. Use Form::setControlDisplayRules instead', E_USER_DEPRECATED);
+        'trigger_error'('Method is deprecated. Use Form::setControlsDisplayRules instead', E_USER_DEPRECATED);
 
-        return $this->setControlDisplayRules(...func_get_args());
+        return $this->setControlsDisplayRules(...func_get_args());
     }
 
     /**
@@ -223,7 +223,7 @@ class Form extends View
      *
      * @return $this
      */
-    public function setControlDisplayRules($rules = [])
+    public function setControlsDisplayRules($rules = [])
     {
         $this->controlDisplayRules = $rules;
 
