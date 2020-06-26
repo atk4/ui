@@ -46,7 +46,7 @@ class Layout extends AbstractLayout
     /** @var array Seed for creating input hint View used in this layout. */
     public $defaultHint = [Label::class, 'class' => ['pointing']];
 
-    protected function addControlElement($decorator, $field)
+    protected function _addControl($decorator, $field)
     {
         return $this->_add($decorator, ['desired_name' => $field->short_name]);
     }
