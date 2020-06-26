@@ -61,7 +61,7 @@ class FilterPopup extends Popup
 
         $this->form->buttonSave->set('Set');
 
-        $this->form->setControlDisplayRules($m->getFormDisplayRules());
+        $this->form->setControlsDisplayRules($m->getFormDisplayRules());
 
         //load data associated with this popup.
         if ($data = $m->recallData()) {

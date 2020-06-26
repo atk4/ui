@@ -760,7 +760,7 @@ numeric field, if zero must be a permitted entry, use "mandatory=true" instead.
 Conditional Form
 ================
 
-.. php:method:: setControlDisplayRules()
+.. php:method:: setControlsDisplayRules()
 
 So far we had to present form with a set of form controls while initializing. Sometimes
 you would want to hide/display controls while user enters the data.
@@ -773,7 +773,7 @@ The logic is based around passing a declarative array::
     $form->addControl('phone3');
     $form->addControl('phone4');
 
-    $form->setControlDisplayRules([
+    $form->setControlsDisplayRules([
         'phone2'=>['phone1'=>'empty'],
         'phone3'=>['phone1'=>'empty', 'phone2'=>'empty'],
         'phone4'=>['phone1'=>'empty', 'phone2'=>'empty', 'phone3'=>'empty'],
@@ -797,7 +797,7 @@ Here is a more advanced example::
     // Show m_gift when gender is exactly equal to 'male' and subscribe is checked.
     // Show f_gift when gender is exactly equal to 'female' and subscribe is checked.
 
-    $f_sub->setControlDisplayRules([
+    $f_sub->setControlsDisplayRules([
        'email' => ['subscribe' => 'checked'],
        'gender'=> ['subscribe' => 'checked'],
        'm_gift'=> ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
@@ -815,7 +815,7 @@ You may also define multiple conditions for the form control to be visible if yo
     // Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
     // OR
     // Show 'hair_cut' when race contains exactly the word 'bichon'
-    $f_dog->setControlDisplayRules([
+    $f_dog->setControlsDisplayRules([
         'hair_cut' => [['race' => 'contains[poodle]', 'age'=>'integer[1..5]'], ['race' => 'isExactly[bichon]']],
     ]);
 

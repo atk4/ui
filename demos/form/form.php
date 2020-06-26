@@ -118,10 +118,10 @@ $form->onSubmit(function (Form $form) {
 
 \atk4\ui\Header::addTo($tab, ['jsAction can be used too']);
 $form = Form::addTo($tab);
-$field = $form->addControl('email5');
+$control = $form->addControl('email5');
 $form->buttonSave->set('Save5');
-$form->onSubmit(function (Form $form) use ($field) {
-    return $field->jsInput()->val('random is ' . random_int(1, 100));
+$form->onSubmit(function (Form $form) use ($control) {
+    return $control->jsInput()->val('random is ' . random_int(1, 100));
 });
 
 /////////////////////////////////////////////////////////////////////

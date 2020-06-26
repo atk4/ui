@@ -37,17 +37,17 @@ $items = [
 \atk4\ui\Header::addTo($app, ['Tree item selector']);
 
 $form = Form::addTo($app);
-$field = $form->addControl('tree', [new Form\Control\TreeItemSelector(['treeItems' => $items]), 'caption' => 'Multiple selection:'], ['type' => 'array', 'serialize' => 'json']);
-$field->set(json_encode([201, 301, 503]));
+$control = $form->addControl('tree', [new Form\Control\TreeItemSelector(['treeItems' => $items]), 'caption' => 'Multiple selection:'], ['type' => 'array', 'serialize' => 'json']);
+$control->set(json_encode([201, 301, 503]));
 
-//$field->onItem(function($value) {
+//$control->onItem(function($value) {
 //    return new \atk4\ui\jsToast(json_encode($value));
 //});
 
-$field1 = $form->addControl('tree1', [new Form\Control\TreeItemSelector(['treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']), ['type' => 'array']]);
-$field1->set(502);
+$control = $form->addControl('tree1', [new Form\Control\TreeItemSelector(['treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']), ['type' => 'array']]);
+$control->set(502);
 
-//$field1->onItem(function($tree) {
+//$control->onItem(function($tree) {
 //    return new jsToast('Received 1');
 //});
 
