@@ -252,8 +252,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
 
             foreach ($read as $f) {
-                $data = (string) fgets($f);
-                $data = rtrim($data);
+                $data = rtrim((string) fgets($f));
                 if ($data === '') {
                     continue;
                 }
