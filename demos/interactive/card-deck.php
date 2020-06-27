@@ -35,7 +35,7 @@ $info_action = $countries->addAction('request_info', [
         return 'Your request for information was sent to email: ' . $email;
     },
     'scope' => 'none',
-    'ui' => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => ['mail']]],
+    'ui' => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => [\atk4\ui\Icon::class, 'mail']]],
 ]);
 
 $info_action->args = [
