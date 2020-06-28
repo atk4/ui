@@ -23,14 +23,14 @@ $group->addControl('line_read', ['readonly' => true])->set('read only');
 $group->addControl('line_disb', ['disabled' => true])->set('disabled');
 
 $group = $form->addGroup('Text Area');
-$group->addControl('text_norm', [new Form\Control\Textarea()])->set('editable');
-$group->addControl('text_read', [new Form\Control\Textarea(), 'readonly' => true])->set('read only');
-$group->addControl('text_disb', [new Form\Control\Textarea(), 'disabled' => true])->set('disabled');
+$group->addControl('text_norm', [Form\Control\Textarea::class])->set('editable');
+$group->addControl('text_read', [Form\Control\Textarea::class, 'readonly' => true])->set('read only');
+$group->addControl('text_disb', [Form\Control\Textarea::class, 'disabled' => true])->set('disabled');
 
 $group = $form->addGroup('Checkbox');
-$group->addControl('c_norm', [new Form\Control\Checkbox()])->set(true);
-$group->addControl('c_read', [new Form\Control\Checkbox(), 'readonly' => true])->set(true); // allows to change value
-$group->addControl('c_disb', [new Form\Control\Checkbox(), 'disabled' => true])->set(true); // input is not disabled
+$group->addControl('c_norm', [Form\Control\Checkbox::class])->set(true);
+$group->addControl('c_read', [Form\Control\Checkbox::class, 'readonly' => true])->set(true); // allows to change value
+$group->addControl('c_disb', [Form\Control\Checkbox::class, 'disabled' => true])->set(true); // input is not disabled
 
 $group = $form->addGroup('Dropdown');
 $values = [
@@ -39,9 +39,9 @@ $values = [
     'registered' => ['Registered', 'icon' => 'registered icon'],
     'file' => ['File', 'icon' => 'file icon'],
 ];
-$group->addControl('d_norm', [new Form\Control\Dropdown(['values' => $values]), 'width' => 'three'])->set('globe');
-$group->addControl('d_read', [new Form\Control\Dropdown(['values' => $values]), 'readonly' => true, 'width' => 'three'])->set('globe'); // allows to change value
-$group->addControl('d_disb', [new Form\Control\Dropdown(['values' => $values]), 'disabled' => true, 'width' => 'three'])->set('globe'); // css disabled, but can focus with Tab and change value
+$group->addControl('d_norm', [Form\Control\Dropdown::class, 'values' => $values, 'width' => 'three'])->set('globe');
+$group->addControl('d_read', [Form\Control\Dropdown::class, 'values' => $values, 'readonly' => true, 'width' => 'three'])->set('globe'); // allows to change value
+$group->addControl('d_disb', [Form\Control\Dropdown::class, 'values' => $values, 'disabled' => true, 'width' => 'three'])->set('globe'); // css disabled, but can focus with Tab and change value
 
 $group = $form->addGroup('Radio');
 
@@ -73,7 +73,7 @@ $group = $form->addGroup('Lookup');
 $m = new Country($app->db);
 
 $group->addControl('Lookup_norm', [
-    new DemoLookup(),
+    DemoLookup::class,
     'model' => new CountryLock($app->db),
     'plus' => true,
 ])->set($m->loadAny()->id);
@@ -201,14 +201,14 @@ $r1->onChange('console.log("radio changed")');
 
 $form = Form::addTo($app);
 $group = $form->addGroup('Without model');
-$group->addControl('text_crlf', [new Form\Control\Textarea()])->set("First line\r\nSecond line");
-$group->addControl('text_cr', [new Form\Control\Textarea()])->set("First line\rSecond line");
-$group->addControl('text_lf', [new Form\Control\Textarea()])->set("First line\nSecond line");
+$group->addControl('text_crlf', [Form\Control\Textarea::class])->set("First line\r\nSecond line");
+$group->addControl('text_cr', [Form\Control\Textarea::class])->set("First line\rSecond line");
+$group->addControl('text_lf', [Form\Control\Textarea::class])->set("First line\nSecond line");
 
 $group = $form->addGroup('With model');
-$group->addControl('m_text_crlf', [new Form\Control\Textarea()], ['type' => 'text'])->set("First line\r\nSecond line");
-$group->addControl('m_text_cr', [new Form\Control\Textarea()], ['type' => 'text'])->set("First line\rSecond line");
-$group->addControl('m_text_lf', [new Form\Control\Textarea()], ['type' => 'text'])->set("First line\nSecond line");
+$group->addControl('m_text_crlf', [Form\Control\Textarea::class], ['type' => 'text'])->set("First line\r\nSecond line");
+$group->addControl('m_text_cr', [Form\Control\Textarea::class], ['type' => 'text'])->set("First line\rSecond line");
+$group->addControl('m_text_lf', [Form\Control\Textarea::class], ['type' => 'text'])->set("First line\nSecond line");
 
 $form->onSubmit(function (Form $form) {
     // check what values are submitted

@@ -72,7 +72,7 @@ class Tabs extends View
             $tab = new Tab($name);
         }
 
-        $tab = $this->add([$tab, 'class' => ['item'], 'settings' => $settings], 'Menu')
+        $tab = $this->add($this->mergeSeeds(['class' => ['item'], 'settings' => $settings], $tab), 'Menu')
             ->setElement('a')
             ->setAttr('data-tab', $tab->name);
 

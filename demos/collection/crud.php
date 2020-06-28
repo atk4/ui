@@ -62,7 +62,7 @@ $m->onHook(\atk4\data\Model::HOOK_VALIDATE, function ($m2, $intent) {
 $crud->setModel($m);
 
 // Because CRUD inherits Grid, you can also define custom actions
-$crud->addModalAction(['icon' => ['cogs']], 'Details', function ($p, $id) use ($crud) {
+$crud->addModalAction(['icon' => [\atk4\ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {
     \atk4\ui\Message::addTo($p, ['Details for: ' . $crud->model->load($id)['name'] . ' (id: ' . $id . ')']);
 });
 
