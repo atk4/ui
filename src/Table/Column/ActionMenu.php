@@ -80,7 +80,7 @@ class ActionMenu extends Table\Column
      * Add a menu item in Dropdown.
      *
      * @param View|string                                 $item
-     * @param callable|\atk4\data\UserAction\Generic|null $action
+     * @param callable|Model\UserAction|null $action
      * @param string|null                                 $confirm
      * @param bool                                        $isDisabled
      *
@@ -92,7 +92,7 @@ class ActionMenu extends Table\Column
         if (!$action) {
             if (is_string($item)) {
                 $action = $this->table->model->getAction($item);
-            } elseif ($item instanceof \atk4\data\UserAction\Generic) {
+            } elseif ($item instanceof Model\UserAction) {
                 $action = $item;
             }
 
@@ -103,7 +103,7 @@ class ActionMenu extends Table\Column
 
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
-        if ($action instanceof \atk4\data\UserAction\Generic) {
+        if ($action instanceof Model\UserAction) {
             $confirm = $action->ui['confirm'] ?? $confirm;
 
             $isDisabled = !$action->enabled;

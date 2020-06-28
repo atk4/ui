@@ -174,7 +174,7 @@ $wizard->addStep('More Ways', function ($page) {
 $m = new Stat($app->db);
 $m->addAction('mail', [
     'fields'      => ['currency_field'],
-    'scope'       => \atk4\data\UserAction\Generic::SINGLE_RECORD,
+    'scope'       => \atk4\data\Model\UserAction::SCOPE_SINGLE,
     'callback'    => function() { return 'testing'; },
     'description' => 'Email testing',
 ]);

@@ -41,7 +41,7 @@ class ActionButtons extends Table\Column
      * Returns button object
      *
      * @param \atk4\ui\View|string                        $button
-     * @param callable|\atk4\data\UserAction\Generic|null $action
+     * @param callable|Model\UserAction|null $action
      * @param bool                                        $confirm
      * @param bool                                        $isDisabled
      *
@@ -53,7 +53,7 @@ class ActionButtons extends Table\Column
         if (!$action) {
             if (is_string($button)) {
                 $action = $this->table->model->getAction($button);
-            } elseif ($button instanceof \atk4\data\UserAction\Generic) {
+            } elseif ($button instanceof Model\UserAction) {
                 $action = $button;
             }
 
@@ -64,7 +64,7 @@ class ActionButtons extends Table\Column
 
         $name = $this->name . '_button_' . (count($this->buttons) + 1);
 
-        if ($action instanceof \atk4\data\UserAction\Generic) {
+        if ($action instanceof Model\UserAction) {
             $button = $action->ui['button'] ?? $button;
 
             $confirm = $action->ui['confirm'] ?? $confirm;
