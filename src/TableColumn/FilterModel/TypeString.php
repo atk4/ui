@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\TableColumn\FilterModel;
 
 if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
-    'trigger_error'('Use atk4\ui\Table\Column\FilterModel\TypeString instead', E_USER_DEPRECATED);
+    'trigger_error'('Class atk4\ui\TableColumn\FilterModel\TypeString is deprecated. Use atk4\ui\Table\Column\FilterModel\TypeString instead', E_USER_DEPRECATED);
 }
 
 /**
