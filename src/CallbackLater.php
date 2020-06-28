@@ -33,6 +33,7 @@ class CallbackLater extends Callback
 
         $this->app->onHook(App::HOOK_BEFORE_RENDER, function (...$args) use ($callback) {
             array_shift($args); // Hook will have first argument pointing to the app. We don't need that.
+
             return parent::set($callback, $args);
         }, $args);
     }
