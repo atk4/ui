@@ -210,7 +210,7 @@ class Layout extends AbstractLayout
             $template->trySet('label_for', $element->id . '_input');
             $template->set('control_class', $element->getControlClass());
 
-            // BC-break exception
+            // BC-break exception - will be removed dec-2020
             if ($template->hasTag('field_class')) {
                 throw new Exception('field_class region has be deprecated. Use control_class instead');
             }
