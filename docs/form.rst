@@ -631,25 +631,11 @@ of labels etc.
     Creates a sub-layout, returning new instance of a :php:class:`Form\\Layout` object. You
     can also specify a header.
 
-.. todo:: MOVE THIS TO SEPARATE FILE
-
-.. php:class:: Form\\Layout
-
-    Renders HTML outline encasing form controls.
-
-.. php:attr:: form
-
-    Form layout objects are always associated with a Form object.
-
-.. php:method:: addControl()
-
-    Same as :php:class:`Form::addControl()` but will place a form control inside this specific layout
-    or sub-layout.
 
 Form Control Group Layout and Sub-layout
 ----------------------------------------
 
-Controls can be organized in groups, using method `addGroup()` or as sub section using `addSubLayout()` method.
+Controls can be organized in groups, using method `Form::addGroup()` or as sub section using `Form\\Layout::addSubLayout()` method.
 
 Using Group
 -----------
@@ -852,3 +838,18 @@ Instead of defining rules for form controls individually you can hide/show entir
         'php' => ['dev' => 'checked'],
         'language'=>['dev'=>'checked']
     ]);
+
+.. todo:: MOVE THIS TO SEPARATE FILE
+
+.. php:class:: Form\\Layout
+
+    Renders HTML outline encasing form controls.
+
+.. php:attr:: form
+
+    Form layout objects are always associated with a Form object.
+
+.. php:method:: addControl()
+
+    Same as :php:class:`Form::addControl()` but will place a form control inside this specific layout
+    or sub-layout.
