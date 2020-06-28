@@ -67,7 +67,7 @@ use of Filters::
 
 
     $form = \atk4\ui\Form::addTo($app, ['segment']);
-    \atk4\ui\Label::addTo($form, ['Add city', 'top attached'], ['AboveFields']);
+    \atk4\ui\Label::addTo($form, ['Add city', 'top attached'], ['AboveControls']);
 
     $l = $form->addControl('city',[\atk4\ui\Form\Control\Lookup::class]);
 

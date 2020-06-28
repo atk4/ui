@@ -99,11 +99,11 @@ class FormTest extends AtkPhpunit\TestCase
         });
     }
 
-    public function testTextArea()
+    public function testTextarea()
     {
-        $this->f->addControl('TextArea');
-        $this->assertSubmit(['TextArea' => '0'], function (Model $m) {
-            $this->assertSame('0', $m->get('TextArea'));
+        $this->f->addControl('Textarea');
+        $this->assertSubmit(['Textarea' => '0'], function (Model $m) {
+            $this->assertSame('0', $m->get('Textarea'));
         });
     }
 
@@ -112,26 +112,26 @@ class FormTest extends AtkPhpunit\TestCase
         $this->assertSubmit($post, null, $error_callback);
     }
 
-    public function assertFieldError(string $field, string $error)
+    public function assertFormControlError(string $field, string $error)
     {
         $matched = false;
 
         preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($error, $field, &$matched) {
             if ($matches[1] === $field) {
-                $this->assertStringContainsString($error, $matches[2], 'Regarding field ' . $field . ' error message');
+                $this->assertStringContainsString($error, $matches[2], 'Regarding control ' . $field . ' error message');
 
                 $matched = true;
             }
         }, $this->f_error);
 
-        $this->assertTrue($matched, 'Field ' . $field . ' did not produce error');
+        $this->assertTrue($matched, 'Form control ' . $field . ' did not produce error');
     }
 
-    public function assertFieldNoErrors(string $field)
+    public function assertFromControlNoErrors(string $field)
     {
         preg_replace_callback('/form\("add prompt","([^"]*)","([^"]*)"\)/', function ($matches) use ($field, &$matched) {
             if ($matches[1] === $field) {
-                $this->fail('Field ' . $field . ' unexpected error: ' . $matches[2]);
+                $this->fail('Form control ' . $field . ' unexpected error: ' . $matches[2]);
             }
         }, $this->f_error);
     }
@@ -151,21 +151,21 @@ class FormTest extends AtkPhpunit\TestCase
         $this->f->setModel($m);
         $this->assertSubmitError(['opt1' => '2', 'opt3' => '', 'opt3_zerotest' => '0'], function ($error) {
             // dropdown validates to make sure option is proper
-            $this->assertFieldError('opt1', 'not one of the allowed values');
+            $this->assertFormControlError('opt1', 'not one of the allowed values');
 
             // user didn't select any option here
-            $this->assertFieldNoErrors('opt2');
+            $this->assertFromControlNoErrors('opt2');
 
             // dropdown insists for value to be there
-            $this->assertFieldError('opt3', 'Must not be empty');
+            $this->assertFormControlError('opt3', 'Must not be empty');
 
             // value with '0' is valid selection
             // TODO: currently fails!! See https://github.com/atk4/ui/issues/781
-            //$this->assertFieldNoErrors('opt3_zerotest');
+            //$this->assertFromControlNoErrors('opt3_zerotest');
 
             // mandatory will error during save(), but form does not care about it. This is normal
             // as there may be further changes to this field on beforeSave hook...
-            $this->assertFieldNoErrors('opt4');
+            $this->assertFromControlNoErrors('opt4');
         });
     }
 }

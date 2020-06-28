@@ -72,8 +72,8 @@ Form may have multiple Form Layouts and that's very useful if you need to split 
 into multiple Tabs or detach form control groups or even create nested layouts::
 
     $form = \atk4\ui\Form::addTo($app);
-    $tabs = \atk4\ui\Tabs::addTo($form, [], ['AboveFields']);
-    \atk4\ui\View::addTo($form, ['ui'=>'divider'], ['AboveFields']);
+    $tabs = \atk4\ui\Tabs::addTo($form, [], ['AboveControls']);
+    \atk4\ui\View::addTo($form, ['ui'=>'divider'], ['AboveControls']);
 
     $form_page = Generic::addTo($tabs->addTab('Basic Info'), ['form'=>$form]);
     $form_page->addControl('name', new \atk4\ui\Form\Control\Line());
@@ -83,7 +83,7 @@ into multiple Tabs or detach form control groups or even create nested layouts::
 
     $form->onSubmit(function($f) { return $f->model->get('name').' has age '.$f->model->get('age'); });
 
-This is further explained in documentation for :php:class:`atk4\\ui\\FormLayout\\Generic` class,
+This is further explained in documentation for :php:class:`atk4\\ui\\Form\\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
 properly:
 
@@ -121,7 +121,7 @@ or you can inject a view with a custom template::
     )]]);
 
 Read only and disabled form controls
------------------------------
+------------------------------------
 
 .. php:attr: readonly
 
@@ -203,7 +203,7 @@ the value of the field would be read from `$decorator->field->get()`.
 
 
 Line Input Form control
-================
+=======================
 
 .. php:class:: Input
 

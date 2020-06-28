@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form;
 
+use atk4\ui\Exception;
 use atk4\ui\Label;
 use atk4\ui\Template;
 
@@ -136,37 +137,37 @@ class Layout extends AbstractLayout
      */
     public function recursiveRender()
     {
-        $field_input = $this->inputTemplate->cloneRegion('InputField');
-        $field_no_label = $this->inputTemplate->cloneRegion('InputNoLabel');
-        $labeled_group = $this->inputTemplate->cloneRegion('LabeledGroup');
-        $no_label_group = $this->inputTemplate->cloneRegion('NoLabelGroup');
+        $labeledControl = $this->inputTemplate->cloneRegion('LabeledControl');
+        $noLabelControl = $this->inputTemplate->cloneRegion('NoLabelControl');
+        $labeledGroup = $this->inputTemplate->cloneRegion('LabeledGroup');
+        $noLabelGroup = $this->inputTemplate->cloneRegion('NoLabelGroup');
 
         $this->template->del('Content');
 
-        foreach ($this->elements as $el) {
+        foreach ($this->elements as $element) {
             // Buttons go under Button section
-            if ($el instanceof \atk4\ui\Button) {
-                $this->template->appendHTML('Buttons', $el->getHTML());
+            if ($element instanceof \atk4\ui\Button) {
+                $this->template->appendHTML('Buttons', $element->getHTML());
 
                 continue;
             }
 
-            if ($el instanceof self) {
-                if ($el->label && !$el->inline) {
-                    $template = $labeled_group;
-                    $template->set('label', $el->label);
+            if ($element instanceof self) {
+                if ($element->label && !$element->inline) {
+                    $template = $labeledGroup;
+                    $template->set('label', $element->label);
                 } else {
-                    $template = $no_label_group;
+                    $template = $noLabelGroup;
                 }
 
-                if ($el->width) {
-                    $template->set('width', $el->width);
+                if ($element->width) {
+                    $template->set('width', $element->width);
                 }
 
-                if ($el->inline) {
+                if ($element->inline) {
                     $template->set('class', 'inline');
                 }
-                $template->setHTML('Content', $el->getHTML());
+                $template->setHTML('Content', $element->getHTML());
 
                 $this->template->appendHTML('Content', $template->render());
 
@@ -174,73 +175,78 @@ class Layout extends AbstractLayout
             }
 
             // Anything but controls or explicitly defined controls get inserted directly
-            if (!$el instanceof Control || !$el->layoutWrap) {
-                $this->template->appendHTML('Content', $el->getHTML());
+            if (!$element instanceof Control || !$element->layoutWrap) {
+                $this->template->appendHTML('Content', $element->getHTML());
 
                 continue;
             }
 
-            $template = $el->renderLabel ? $field_input : $field_no_label;
-            $label = $el->caption ?: $el->field->getCaption();
+            $template = $element->renderLabel ? $labeledControl : $noLabelControl;
+            $label = $element->caption ?: $element->field->getCaption();
 
-            // Anything but fields gets inserted directly
-            if ($el instanceof \atk4\ui\Form\Control\Checkbox) {
-                $template = $field_no_label;
-                $el->template->set('Content', $label);
+            // Anything but form controls gets inserted directly
+            if ($element instanceof \atk4\ui\Form\Control\Checkbox) {
+                $template = $noLabelControl;
+                $element->template->set('Content', $label);
                 /*
-                $el->addClass('field');
-                $this->template->appendHTML('Fields', '<div class="field">'.$el->getHTML().'</div>');
+                $element->addClass('field');
+                $this->template->appendHTML('Fields', '<div class="field">'.$element->getHTML().'</div>');
                 continue;
                  */
             }
 
             if ($this->label && $this->inline) {
-                $el->placeholder = $label;
+                $element->placeholder = $label;
                 $label = $this->label;
                 $this->label = null;
             } elseif ($this->label || $this->inline) {
-                $template = $field_no_label;
-                $el->placeholder = $label;
+                $template = $noLabelControl;
+                $element->placeholder = $label;
             }
 
             // Fields get extra pampering
-            $template->setHTML('Input', $el->getHTML());
+            $template->setHTML('Input', $element->getHTML());
             $template->trySet('label', $label);
-            $template->trySet('label_for', $el->id . '_input');
-            $template->set('field_class', $el->getControlClass());
+            $template->trySet('label_for', $element->id . '_input');
+            $template->set('control_class', $element->getControlClass());
 
-            if ($el->field->required) {
-                $template->append('field_class', 'required ');
+            // BC-break exception - will be removed dec-2020
+            if ($template->hasTag('field_class')) {
+                throw new Exception('field_class region has be deprecated. Use control_class instead');
             }
 
-            if (isset($el->width)) {
-                $template->append('field_class', $el->width . ' wide ');
+            if ($element->field->required) {
+                $template->append('control_class', 'required ');
             }
 
-            if ($el->hint && $template->hasTag('Hint')) {
+            if (isset($element->width)) {
+                $template->append('control_class', $element->width . ' wide ');
+            }
+
+            if ($element->hint && $template->hasTag('Hint')) {
                 $hint = $this->factory($this->defaultHint);
-                $hint->id = $el->id . '_hint';
-                if (is_object($el->hint) || is_array($el->hint)) {
-                    $hint->add($el->hint);
+                $hint->id = $element->id . '_hint';
+                if (is_object($element->hint) || is_array($element->hint)) {
+                    $hint->add($element->hint);
                 } else {
-                    $hint->set($el->hint);
+                    $hint->set($element->hint);
                 }
                 $template->setHTML('Hint', $hint->getHTML());
             } elseif ($template->hasTag('Hint')) {
                 $template->del('Hint');
             }
 
-            if ($this->template->hasTag($el->short_name)) {
-                $this->template->trySetHTML($el->short_name, $template->render());
+            if ($this->template->hasTag($element->short_name)) {
+                $this->template->trySetHTML($element->short_name, $template->render());
             } else {
                 $this->template->appendHTML('Content', $template->render());
             }
         }
 
         // Now collect JS from everywhere
-        foreach ($this->elements as $el) {
-            if ($el->_js_actions) {
-                $this->_js_actions = array_merge_recursive($this->_js_actions, $el->_js_actions);
+        foreach ($this->elements as $element) {
+            if ($element->_js_actions) {
+                $this->_js_actions = array_merge_recursive($this->_js_actions, $element->_js_actions);
             }
         }
     }

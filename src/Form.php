@@ -173,6 +173,11 @@ class Form extends View
     {
         parent::init();
 
+        // BC-break warning - will be removed dec-2020
+        if ($this->template->hasTag('AboveFields')) {
+            'trigger_error'('AboveFields region has be deprecated. Use AboveControls instead', E_USER_DEPRECATED);
+        }
+
         // Initialize layout, so when you call addControl / setModel next time, form will know
         // where to add your fields.
         $this->initLayout();

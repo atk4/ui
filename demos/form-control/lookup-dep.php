@@ -12,7 +12,7 @@ require_once __DIR__ . '/../init-app.php';
 \atk4\ui\Header::addTo($app, ['Lookup dependency']);
 
 $form = Form::addTo($app, ['segment']);
-\atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveFields']);
+\atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
 
 $form->addControl('starts_with', [
     Form\Control\Dropdown::class,
@@ -58,7 +58,7 @@ $form->onSubmit(function (Form $form) {
 \atk4\ui\Header::addTo($app, ['Lookup multiple values']);
 
 $form = Form::addTo($app, ['segment']);
-\atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveFields']);
+\atk4\ui\Label::addTo($form, ['Input information here', 'top attached'], ['AboveControls']);
 
 $form->addControl('ends_with', [
     Form\Control\Dropdown::class,

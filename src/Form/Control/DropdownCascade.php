@@ -41,7 +41,7 @@ class DropdownCascade extends Dropdown
             throw new Exception('cascadeFrom property is not set.');
         }
 
-        $this->cascadeInput = is_string($this->cascadeFrom) ? $this->form->getElement($this->cascadeFrom) : $this->cascadeFrom;
+        $this->cascadeInput = is_string($this->cascadeFrom) ? $this->form->getControl($this->cascadeFrom) : $this->cascadeFrom;
 
         if (!$this->cascadeInput instanceof Field) {
             throw new Exception('cascadeFrom property should be an instance of ' . Field::class);

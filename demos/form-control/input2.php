@@ -128,8 +128,8 @@ $form->onSubmit(function (Form $form) {
 \atk4\ui\Header::addTo($app, ['Multiple Form Layouts']);
 
 $form = Form::addTo($app);
-$tabs = \atk4\ui\Tabs::addTo($form, [], ['AboveFields']);
-\atk4\ui\View::addTo($form, ['ui' => 'divider'], ['AboveFields']);
+$tabs = \atk4\ui\Tabs::addTo($form, [], ['AboveControls']);
+\atk4\ui\View::addTo($form, ['ui' => 'divider'], ['AboveControls']);
 
 $form_page = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form' => $form]);
 $form_page->addControl('name', new Form\Control\Line());

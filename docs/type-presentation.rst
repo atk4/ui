@@ -55,7 +55,7 @@ of your integration.
 
  4. Associate the types with your decorator.
 
-  This happens in :php:meth:`Form::_fieldFactory` and :php:meth:`Table::_columnFactory`.
+  This happens in :php:meth:`Form::controlFactory` and :php:meth:`Table::decoratorFactory`.
 
 For the third party add-ons it is only possible to provide decorators. They must rely on one of
 the standard types, unless they also offer a dedicated model.
@@ -79,7 +79,7 @@ Selecting the decorator is done in the following order:
 
     $field->ui['form'] = new \atk4\ui\Form\Control\Password();
 
- - fallback to :php:meth:`Form::_fieldFactory`
+ - fallback to :php:meth:`Form::controlFactory`
 
 .. note:: When talking about "fields": you need to know what kind of field you are talking about (Data or UI).
     Both **models** (Data) as well as some **views** (UI: form) use fields. They are not the same.

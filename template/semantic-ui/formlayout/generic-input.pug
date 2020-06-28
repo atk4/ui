@@ -1,5 +1,5 @@
 | {LabeledGroup}
-div(class="{$field_class} field atk-form-group")
+div(class="{$control_class} field atk-form-group")
     label {$label}
     div(class="{$width} {$class} fields")
         | {$Content}
@@ -7,19 +7,19 @@ div(class="{$field_class} field atk-form-group")
 | {/}
 
 | {NoLabelGroup}
-div(class="{$field_class} field atk-form-group")
+div(class="{$control_class} field atk-form-group")
     div(class="{$width} {$class} fields")
         | {$Content}
 | {/}
 
-| {InputField}
-div(class="{$field_class} field")
+| {LabeledControl}
+div(class="{$control_class} field")
     label(for="{$label_for}") {$label}
     | {$Input}
     | {$Hint}
 | {/}
 
-| {InputNoLabel}
-div(class="{$field_class} field no-label")
+| {NoLabelControl}
+div(class="{$control_class} field no-label")
     | {$Input}{$Hint}
 | {/}
