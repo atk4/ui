@@ -25,7 +25,7 @@ $m->hasOne('country1', new Country());
 
 // With Lookup
 $m->hasOne('country2', [new Country(), 'ui' => ['form' => [
-    new DemoLookup(),
+    DemoLookup::class,
     'plus' => true,
 ]]]);
 

@@ -32,7 +32,7 @@ $table->addColumn('title', new Table\Column\Status([
 
 $table->addColumn('date');
 $table->addColumn('salary', new Table\Column\Money());
-$table->addColumn('logo_url', [new Table\Column\Image()], ['caption' => 'Our Logo']);
+$table->addColumn('logo_url', [Table\Column\Image::class, 'caption' => 'Our Logo']);
 
 $table->onHook(Table\Column::HOOK_GET_HTML_TAGS, function ($table, \atk4\data\Model $row) {
     switch ($row->id) {

@@ -47,7 +47,7 @@ class FlyersForm extends Form
         $ml = $this->addControl('multi', [Form\Control\Multiline::class, 'rowLimit' => 4, 'addOnTab' => true, 'caption' => 'Additional passengers:', 'renderLabel' => false]);
         $ml->setModel(new Flyers(new \atk4\data\Persistence\Array_($this->flyers)));
 
-        $cards = $this->addControl('cards', [new Form\Control\TreeItemSelector(['treeItems' => $this->cards]), 'caption' => 'Flyers program:'], ['type' => 'array', 'serialize' => 'json']);
+        $cards = $this->addControl('cards', [Form\Control\TreeItemSelector::class, 'treeItems' => $this->cards, 'caption' => 'Flyers program:'], ['type' => 'array', 'serialize' => 'json']);
         $cards->set(json_encode([]));
 
         $this->onSubmit(function ($f) {
