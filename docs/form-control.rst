@@ -83,7 +83,7 @@ into multiple Tabs or detach form control groups or even create nested layouts::
 
     $form->onSubmit(function($f) { return $f->model->get('name').' has age '.$f->model->get('age'); });
 
-This is further explained in documentation for :php:class:`atk4\\ui\\FormLayout\\Generic` class,
+This is further explained in documentation for :php:class:`atk4\\ui\\Form\\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
 properly:
 
