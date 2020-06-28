@@ -175,7 +175,7 @@ class Form extends View
 
         // BC-break warning - will be removed dec-2020
         if ($this->template->hasTag('AboveFields')) {
-            'trigger_error'('AboveFields region has be deprecated. Use AboveControls instead', E_USER_DEPRECATED);
+            throw new Exception('AboveFields region has be deprecated. Use AboveControls instead');
         }
 
         // Initialize layout, so when you call addControl / setModel next time, form will know
