@@ -12,14 +12,14 @@ div(class="{$control_class} field atk-form-group")
         | {$Content}
 | {/}
 
-| {LabeledInput}
+| {LabeledControl}
 div(class="{$control_class} field")
         label(for="{$label_for}") {$label}
             span(style="float: right") {$Hint}
         | {$Input}
 | {/}
 
-| {NoLabelInput}
+| {NoLabelControl}
 div(class="{$control_class} field no-label")
     | {$Input}{$Hint}
 | {/}
