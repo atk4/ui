@@ -137,8 +137,8 @@ class Layout extends AbstractLayout
      */
     public function recursiveRender()
     {
-        $labeledInput = $this->inputTemplate->cloneRegion('LabeledInput');
-        $noLabelInput = $this->inputTemplate->cloneRegion('NoLabelInput');
+        $labeledControl = $this->inputTemplate->cloneRegion('LabeledControl');
+        $noLabelControl = $this->inputTemplate->cloneRegion('NoLabelControl');
         $labeledGroup = $this->inputTemplate->cloneRegion('LabeledGroup');
         $noLabelGroup = $this->inputTemplate->cloneRegion('NoLabelGroup');
 
@@ -181,12 +181,12 @@ class Layout extends AbstractLayout
                 continue;
             }
 
-            $template = $element->renderLabel ? $labeledInput : $noLabelInput;
+            $template = $element->renderLabel ? $labeledControl : $noLabelControl;
             $label = $element->caption ?: $element->field->getCaption();
 
             // Anything but form controls gets inserted directly
             if ($element instanceof \atk4\ui\Form\Control\Checkbox) {
-                $template = $noLabelInput;
+                $template = $noLabelControl;
                 $element->template->set('Content', $label);
                 /*
                 $element->addClass('field');
@@ -200,7 +200,7 @@ class Layout extends AbstractLayout
                 $label = $this->label;
                 $this->label = null;
             } elseif ($this->label || $this->inline) {
-                $template = $noLabelInput;
+                $template = $noLabelControl;
                 $element->placeholder = $label;
             }
 
