@@ -155,7 +155,7 @@ class CardDeck extends View
                     $c->addExtraFields($m, $extra, $this->extraGlue);
                 }
                 if ($this->useAction) {
-                    if ($singleActions = $this->_getModelActions(Model\UserAction::SCOPE_SINGLE)) {
+                    if ($singleActions = $this->_getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
                         $args = $this->_getReloadArgs();
                         $id_arg = [];
                         foreach ($singleActions as $action) {
@@ -174,7 +174,7 @@ class CardDeck extends View
 
         // add no record scope action to menu
         if ($this->useAction && $this->menu) {
-            foreach ($this->_getModelActions(Model\UserAction::SCOPE_NONE) as $k => $action) {
+            foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 $action->ui['executor'] = $this->initActionExecutor($action);
                 $this->menuActions[$k]['btn'] = $this->addMenuButton($action, null, false, $this->_getReloadArgs());
                 $this->menuActions[$k]['action'] = $action;
@@ -214,7 +214,7 @@ class CardDeck extends View
     {
         $action->fields = $this->editFields ?? $action->fields;
         $executor = $this->getExecutor($action);
-        if ($action->scope === Model\UserAction::SCOPE_SINGLE) {
+        if ($action->scope === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
             $executor->jsSuccess = function ($x, $m, $id, $return) use ($action) {
                 return $this->jsExecute($return, $action);
             };
@@ -240,7 +240,7 @@ class CardDeck extends View
         } elseif (is_array($return) || $return instanceof jsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
-            $msg = $return->loaded() ? $this->saveMsg : ($action->scope === Model\UserAction::SCOPE_SINGLE ? $this->deleteMsg : $this->defaultMsg);
+            $msg = $return->loaded() ? $this->saveMsg : ($action->scope === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
             return $this->jsModelReturn($action, $msg);
         }
@@ -438,11 +438,11 @@ class CardDeck extends View
     private function _getModelActions(string $scope): array
     {
         $actions = [];
-        if ($scope === Model\UserAction::SCOPE_SINGLE && !empty($this->singleScopeActions)) {
+        if ($scope === Model\UserAction::APPLIES_TO_SINGLE_RECORD && !empty($this->singleScopeActions)) {
             foreach ($this->singleScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }
-        } elseif ($scope === Model\UserAction::SCOPE_NONE && !empty($this->noRecordScopeActions)) {
+        } elseif ($scope === Model\UserAction::APPLIES_TO_NO_RECORDS && !empty($this->noRecordScopeActions)) {
             foreach ($this->noRecordScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }

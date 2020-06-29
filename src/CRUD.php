@@ -32,7 +32,7 @@ class CRUD extends Grid
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
-    /** @var array Collection of SCOPE_NONE Scope Model action menu item */
+    /** @var array Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
     private $menuItems = [];
 
     /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty. */
@@ -123,7 +123,7 @@ class CRUD extends Grid
             $this->useMenuActions = count($m->getUserActions()) > 4;
         }
 
-        foreach ($this->_getModelActions(Model\UserAction::SCOPE_SINGLE) as $action) {
+        foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
             $action->ui['executor'] = $this->initActionExecutor($action);
             if ($this->useMenuActions) {
                 $this->addActionMenuItem($action);
@@ -133,7 +133,7 @@ class CRUD extends Grid
         }
 
         if ($this->menu) {
-            foreach ($this->_getModelActions(Model\UserAction::SCOPE_NONE) as $k => $action) {
+            foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 if ($action->enabled) {
                     $action->ui['executor'] = $this->initActionExecutor($action);
                     $this->menuItems[$k]['item'] = $this->menu->addItem([$action->getDescription(), 'icon' => 'plus']);
@@ -307,11 +307,11 @@ class CRUD extends Grid
     private function _getModelActions(string $scope): array
     {
         $actions = [];
-        if ($scope === Model\UserAction::SCOPE_SINGLE && !empty($this->singleScopeActions)) {
+        if ($scope === Model\UserAction::APPLIES_TO_SINGLE_RECORD && !empty($this->singleScopeActions)) {
             foreach ($this->singleScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }
-        } elseif ($scope === Model\UserAction::SCOPE_NONE && !empty($this->noRecordScopeActions)) {
+        } elseif ($scope === Model\UserAction::APPLIES_TO_NO_RECORDS && !empty($this->noRecordScopeActions)) {
             foreach ($this->noRecordScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }

@@ -31,7 +31,7 @@ $action = $files->addAction(
         'args' => [
             'path' => ['type' => 'string', 'required' => true],
         ],
-        'scope' => \atk4\data\Model\UserAction::SCOPE_NONE,
+        'scope' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     ]
 );
 

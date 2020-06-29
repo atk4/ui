@@ -231,14 +231,14 @@ class Card extends View
      */
     public function addModelActions(Model $model)
     {
-        if ($singleActions = $model->getUserActions(Model\UserAction::SCOPE_SINGLE)) {
+        if ($singleActions = $model->getUserActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
             $this->setModel($model);
             foreach ($singleActions as $action) {
                 $this->addAction($action, $this->executor);
             }
         }
 
-        if ($noRecordAction = $model->getUserActions(Model\UserAction::SCOPE_NONE)) {
+        if ($noRecordAction = $model->getUserActions(Model\UserAction::APPLIES_TO_NO_RECORDS)) {
             foreach ($noRecordAction as $action) {
                 $this->addAction($action, $this->executor);
             }
