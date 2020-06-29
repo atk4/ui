@@ -9,7 +9,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $g = \atk4\ui\Grid::addTo($app);
 $m = new CountryLock($app->db);
-$m->addAction('test', function ($m) {
+$m->addUserAction('test', function ($m) {
     return 'test from ' . $m->getTitle() . ' was successful!';
 });
 

@@ -20,7 +20,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $country = new Country($app->db);
 
-$c_action = $country->addAction('Email', function ($m) {
+$c_action = $country->addUserAction('Email', function ($m) {
     return 'Email to Kristy in ' . $m->get('name') . ' has been sent!';
 });
 
@@ -46,7 +46,7 @@ $card->addClickAction($c_action);
 \atk4\ui\Header::addTo($app, ['Action can ask for confirmation before executing', 'size' => 4]);
 
 $files = new File($app->db);
-$f_action = $files->addAction(
+$f_action = $files->addUserAction(
     'import_from_filesystem',
     [
         'callback' => 'importFromFilesystem',
@@ -72,7 +72,7 @@ $btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are 
 
 // Note here that we explicitly required a jsUserAction executor because we want to use the input value
 // as the action args.
-$country->addAction('greet', [
+$country->addUserAction('greet', [
     'args' => [
         'name' => [
             'type' => 'string',

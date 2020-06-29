@@ -26,7 +26,7 @@ $c->setModel($stats, ['client_name', 'description']);
 $c->addSection('Project: ', $stats, ['start_date', 'finish_date'], true);
 
 $client = $stats->ref('client_country_iso')->loadAny();
-$notify = $client->addAction('Notify', [
+$notify = $client->addUserAction('Notify', [
     'args' => [
         'note' => ['type' => 'string', 'required' => true],
     ],

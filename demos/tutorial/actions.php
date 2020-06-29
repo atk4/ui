@@ -36,7 +36,7 @@ EOF
         <<<'CODE'
 $country = new \atk4\ui\demo\CountryLock($app->db);
 
-$country->addAction('send_message');
+$country->addUserAction('send_message');
 CODE
     );
 
@@ -62,7 +62,7 @@ EOF
 
 $country = new \atk4\ui\demo\CountryLock($app->db);
 
-$country->addAction('send_message', function() {
+$country->addUserAction('send_message', function() {
     return 'sent';
 });
 $country->tryLoadAny();
@@ -129,7 +129,7 @@ EOF
         <<<'CODE'
 $model = new \atk4\data\Model($app->db, 'test');
 
-$model->addAction('greet', [
+$model->addUserAction('greet', [
     'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     'args'=> [
         'age'=>[
@@ -142,7 +142,7 @@ $model->addAction('greet', [
     'ui' => ['executor' => [\atk4\ui\UserAction\JsCallbackExecutor::class]],
 ]);
 
-$model->addAction('ask_age', [
+$model->addUserAction('ask_age', [
     'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     'args'=> [
         'age'=>[
@@ -172,7 +172,7 @@ $wizard->addStep('More Ways', function ($page) {
     $page->add(new Demo(['left_width'=>5, 'right_width'=>11]))->setCode(
         <<<'CODE'
 $m = new Stat($app->db);
-$m->addAction('mail', [
+$m->addUserAction('mail', [
     'fields'      => ['currency_field'],
     'appliesTo'       => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
     'callback'    => function() { return 'testing'; },

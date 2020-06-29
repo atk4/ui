@@ -91,7 +91,7 @@ class ActionMenu extends Table\Column
         // If action is not specified, perhaps it is defined in the model
         if (!$action) {
             if (is_string($item)) {
-                $action = $this->table->model->getAction($item);
+                $action = $this->table->model->getUserAction($item);
             } elseif ($item instanceof Model\UserAction) {
                 $action = $item;
             }

@@ -52,7 +52,7 @@ class ActionButtons extends Table\Column
         // If action is not specified, perhaps it is defined in the model
         if (!$action) {
             if (is_string($button)) {
-                $action = $this->table->model->getAction($button);
+                $action = $this->table->model->getUserAction($button);
             } elseif ($button instanceof Model\UserAction) {
                 $action = $button;
             }

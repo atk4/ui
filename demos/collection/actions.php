@@ -21,7 +21,7 @@ require_once __DIR__ . '/../init-app.php';
 $files = new FileLock($app->db);
 
 // This action must appear on top of the CRUD
-$action = $files->addAction(
+$action = $files->addUserAction(
     'import_from_filesystem',
     [
         'callback' => 'importFromFilesystem',
@@ -35,7 +35,7 @@ $action = $files->addAction(
     ]
 );
 
-$files->addAction('download', function (\atk4\data\Model $m) {
+$files->addUserAction('download', function (\atk4\data\Model $m) {
     $len = strlen(file_get_contents($m->get('name')));
 
     return "{$len} bytes downloaded..";
