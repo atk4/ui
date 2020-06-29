@@ -8,7 +8,7 @@ class DemoActionsUtil
 {
     public static function setupDemoActions(CountryLock $country): void
     {
-        $country->addAction(
+        $country->addUserAction(
             'callback',
             ['description' => 'Callback',
                 'callback' => function ($m) {
@@ -17,7 +17,7 @@ class DemoActionsUtil
             ]
         );
 
-        $country->addAction(
+        $country->addUserAction(
             'preview',
             [
                 'description' => 'Preview',
@@ -30,7 +30,7 @@ class DemoActionsUtil
             ]
         );
 
-        $country->addAction(
+        $country->addUserAction(
             'disabled_action',
             [
                 'description' => 'Disabled',
@@ -41,7 +41,7 @@ class DemoActionsUtil
             ]
         );
 
-        $country->addAction(
+        $country->addUserAction(
             'edit_argument',
             [
                 'description' => 'Argument',
@@ -60,7 +60,7 @@ class DemoActionsUtil
             ]
         );
 
-        $country->addAction(
+        $country->addUserAction(
             'edit_argument_prev',
             [
                 'description' => 'Argument/Preview',
@@ -74,7 +74,7 @@ class DemoActionsUtil
             ]
         );
 
-        $country->addAction(
+        $country->addUserAction(
             'edit_iso',
             [
                 'description' => 'Edit ISO3 only',
@@ -85,7 +85,7 @@ class DemoActionsUtil
             ]
         );
 
-        $country->addAction(
+        $country->addUserAction(
             'Ouch',
             [
                 'description' => 'Exception',
@@ -99,12 +99,12 @@ class DemoActionsUtil
             ]
         );
 
-        $country->addAction(
+        $country->addUserAction(
             'confirm',
             [
                 'caption' => 'Confirm action ',
                 'description' => 'User Confirmation',
-                'ui' => ['executor' => [\atk4\ui\ActionExecutor\UserConfirmation::class]],
+                'ui' => ['executor' => [\atk4\ui\UserAction\ConfirmationExecutor::class]],
                 'confirmation' => function ($a) {
                     return 'Are you sure you want to perform this action on: <b>' . $a->getModel()->getTitle() . ' (' . $a->getModel()->get('iso3') . ')</b>';
                 },
@@ -114,7 +114,7 @@ class DemoActionsUtil
             ]
         );
 
-        $country->addAction(
+        $country->addUserAction(
             'multi_step',
             [
                 'description' => 'Argument/Field/Preview',

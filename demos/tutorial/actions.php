@@ -36,7 +36,7 @@ EOF
         <<<'CODE'
 $country = new \atk4\ui\demo\CountryLock($app->db);
 
-$country->addAction('send_message');
+$country->addUserAction('send_message');
 CODE
     );
 
@@ -62,14 +62,14 @@ EOF
 
 $country = new \atk4\ui\demo\CountryLock($app->db);
 
-$country->addAction('send_message', function() {
+$country->addUserAction('send_message', function() {
     return 'sent';
 });
 $country->tryLoadAny();
 
 $card = \atk4\ui\Card::addTo($app);
 $card->setModel($country, ['iso']);
-$card->addClickAction($country->getAction('send_message'));
+$card->addClickAction($country->getUserAction('send_message'));
 
 CODE
     );
@@ -91,7 +91,7 @@ $country = new \atk4\ui\demo\CountryLock($app->db);
 $country->loadAny();
 
 \atk4\ui\Button::addTo($app, ['Edit some country'])
-    ->on('click', $country->getAction('edit'));
+    ->on('click', $country->getUserAction('edit'));
 CODE
     );
 
@@ -110,7 +110,7 @@ $country->loadAny();
 
 $menu = \atk4\ui\Menu::addTo($app);
 $menu->addItem('Hello');
-$menu->addItem('World', $country->getAction('edit'));
+$menu->addItem('World', $country->getUserAction('edit'));
 CODE
     );
 });
@@ -129,8 +129,8 @@ EOF
         <<<'CODE'
 $model = new \atk4\data\Model($app->db, 'test');
 
-$model->addAction('greet', [
-    'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
+$model->addUserAction('greet', [
+    'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     'args'=> [
         'age'=>[
             'type'=>'string'
@@ -139,11 +139,11 @@ $model->addAction('greet', [
     'callback'=>function ($m, $name) {
         return 'Hi '.$name;
     },
-    'ui' => ['executor' => [\atk4\ui\ActionExecutor\jsUserAction::class]],
+    'ui' => ['executor' => [\atk4\ui\UserAction\JsCallbackExecutor::class]],
 ]);
 
-$model->addAction('ask_age', [
-    'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
+$model->addUserAction('ask_age', [
+    'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     'args'=> [
         'age'=>[
             'type'=>'integer',
@@ -156,13 +156,13 @@ $model->addAction('ask_age', [
 ]);
 
 $app->add(new \atk4\ui\Form\Control\Line([
-    'action' => $model->getAction('greet'),
+    'action' => $model->getUserAction('greet'),
 ]));
 
 \atk4\ui\View::addTo($app, ['ui'=>'divider']);
 
 \atk4\ui\Button::addTo($app, ['Ask Age'])
-    ->on('click', $model->getAction('ask_age'));
+    ->on('click', $model->getUserAction('ask_age'));
 CODE
     );
 });
@@ -172,9 +172,9 @@ $wizard->addStep('More Ways', function ($page) {
     $page->add(new Demo(['left_width'=>5, 'right_width'=>11]))->setCode(
         <<<'CODE'
 $m = new Stat($app->db);
-$m->addAction('mail', [
+$m->addUserAction('mail', [
     'fields'      => ['currency_field'],
-    'scope'       => \atk4\data\UserAction\Generic::SINGLE_RECORD,
+    'appliesTo'       => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
     'callback'    => function() { return 'testing'; },
     'description' => 'Email testing',
 ]);
@@ -201,10 +201,10 @@ EOF
     $page->add(new Demo())->setCode(
         <<<'CODE'
 $country = new \atk4\ui\demo\CountryLock($app->db);
-$country->getAction('add')->enabled = false;
-$country->getAction('delete')->enabled = function() { return rand(1,2)>1; };
-$country->addAction('mail', [
-    'scope'       => \atk4\data\UserAction\Generic::SINGLE_RECORD,
+$country->getUserAction('add')->enabled = false;
+$country->getUserAction('delete')->enabled = function() { return rand(1,2)>1; };
+$country->getUserAction('mail', [
+    'appliesTo'       => \atk4\data\Model\UserAction:APPLIES_TO_SINGLE_RECORD,
     'preview'    => function($m) { return 'here is email preview for '.$m->get('name'); },
     'callback'    => function($m) { return 'email sent to '.$m->get('name'); },
     'description' => 'Email testing',

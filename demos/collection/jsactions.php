@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\UserAction;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -18,7 +20,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $country = new Country($app->db);
 
-$c_action = $country->addAction('Email', function ($m) {
+$c_action = $country->addUserAction('Email', function ($m) {
     return 'Email to Kristy in ' . $m->get('name') . ' has been sent!';
 });
 
@@ -44,21 +46,21 @@ $card->addClickAction($c_action);
 \atk4\ui\Header::addTo($app, ['Action can ask for confirmation before executing', 'size' => 4]);
 
 $files = new File($app->db);
-$f_action = $files->addAction(
+$f_action = $files->addUserAction(
     'import_from_filesystem',
     [
         'callback' => 'importFromFilesystem',
         'args' => [
             'path' => '.',
         ],
-        'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
+        'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     ]
 );
 
 $btn = \atk4\ui\Button::addTo($app, ['Import File']);
-$executor = \atk4\ui\ActionExecutor\jsUserAction::addTo($app);
+$executor = UserAction\JsCallbackExecutor::addTo($app);
 $executor->setAction($f_action, ['path' => '.']);
-$executor->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($t, $m) {
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');
 });
 
@@ -70,17 +72,17 @@ $btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are 
 
 // Note here that we explicitly required a jsUserAction executor because we want to use the input value
 // as the action args.
-$country->addAction('greet', [
+$country->addUserAction('greet', [
     'args' => [
         'name' => [
             'type' => 'string',
             'required' => true,
         ],
     ],
-    'ui' => ['executor' => [\atk4\ui\ActionExecutor\jsUserAction::class]],
+    'ui' => ['executor' => [UserAction\JsCallbackExecutor::class]],
     'callback' => function ($m, $name) {
         return 'Hello ' . $name;
     },
 ]);
 
-\atk4\ui\Form\Control\Line::addTo($app, ['action' => $country->getAction('greet')]);
+\atk4\ui\Form\Control\Line::addTo($app, ['action' => $country->getUserAction('greet')]);

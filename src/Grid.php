@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\core\HookTrait;
-use atk4\data\UserAction\Generic;
-use atk4\ui\ActionExecutor\Basic;
+use atk4\data\Model;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -98,7 +97,7 @@ class Grid extends View
      */
     public $table;
 
-    public $executor_class = Basic::class;
+    public $executor_class = UserAction\BasicExecutor::class;
 
     /**
      * The container for table and paginator.
@@ -419,15 +418,15 @@ class Grid extends View
      * Add action menu items using Model.
      * You may specify the scope of actions to be added.
      *
-     * @param string|null $scope the scope of model action
+     * @param string|null $appliesTo the scope of model action
      */
-    public function addActionMenuFromModel(string $scope = null)
+    public function addActionMenuFromModel(string $appliesTo = null)
     {
         if (!$this->model) {
             throw new Exception('Error: Model not set. Set model prior to add item.');
         }
 
-        foreach ($this->model->getActions($scope) as $action) {
+        foreach ($this->model->getUserActions($appliesTo) as $action) {
             $this->addActionMenuItem($action);
         }
     }
@@ -516,10 +515,8 @@ class Grid extends View
 
     /**
      * Find out more about the nature of the action from the supplied object, use addAction().
-     *
-     * @param Generic $action the generic action
      */
-    public function addUserAction(Generic $action)
+    public function addUserAction(Model\UserAction $action)
     {
         $executor = null;
         $args = [];
@@ -612,7 +609,7 @@ class Grid extends View
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $model, $columns = null)
+    public function setModel(Model $model, $columns = null)
     {
         $this->model = $this->table->setModel($model, $columns);
 

@@ -25,9 +25,6 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\data\Model;
-use atk4\data\UserAction\Generic;
-use atk4\ui\ActionExecutor\Event;
-use atk4\ui\ActionExecutor\UserAction;
 
 class Card extends View
 {
@@ -75,7 +72,7 @@ class Card extends View
     public $useLabel = false;
 
     /** @var string Default executor class. */
-    public $executor = UserAction::class;
+    public $executor = UserAction\ModalExecutor::class;
 
     /** @var array Array of columns css wide classes */
     protected $words = [
@@ -234,14 +231,14 @@ class Card extends View
      */
     public function addModelActions(Model $model)
     {
-        if ($singleActions = $model->getActions(Generic::SINGLE_RECORD)) {
+        if ($singleActions = $model->getUserActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
             $this->setModel($model);
             foreach ($singleActions as $action) {
                 $this->addAction($action, $this->executor);
             }
         }
 
-        if ($noRecordAction = $model->getActions(GENERIC::NO_RECORDS)) {
+        if ($noRecordAction = $model->getUserActions(Model\UserAction::APPLIES_TO_NO_RECORDS)) {
             foreach ($noRecordAction as $action) {
                 $this->addAction($action, $this->executor);
             }
@@ -300,7 +297,7 @@ class Card extends View
      *
      * @return Card
      */
-    public function addClickAction(Generic $action, $button = null, $args = [], $confirm = null)
+    public function addClickAction(Model\UserAction $action, $button = null, $args = [], $confirm = null)
     {
         $defaults = [];
         if (!$button) {

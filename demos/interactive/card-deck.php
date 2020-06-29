@@ -18,7 +18,7 @@ $countries->addCalculatedField('Cost', function ($m) {
     return '$ ' . number_format(random_int(500, 1500));
 });
 
-$action = $countries->addAction('book', [
+$action = $countries->addUserAction('book', [
     'callback' => function ($m, $email, $city) {
         return 'Your request to visit ' . ucwords($city) . ' in ' . $m->get('name') . ' was sent to: ' . $email;
     },
@@ -30,11 +30,11 @@ $action->args = [
     'city' => ['type' => 'string', 'required' => true, 'caption' => 'Arrive at which city:'],
 ];
 
-$info_action = $countries->addAction('request_info', [
+$info_action = $countries->addUserAction('request_info', [
     'callback' => function ($m, $email) {
         return 'Your request for information was sent to email: ' . $email;
     },
-    'scope' => 'none',
+    'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     'ui' => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => [\atk4\ui\Icon::class, 'mail']]],
 ]);
 

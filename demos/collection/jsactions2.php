@@ -33,7 +33,7 @@ $country->unload();
 
 // assign a button to every action
 $c_id = $country->tryLoadAny()->get('id');
-foreach ($country->getActions() as $action) {
+foreach ($country->getUserActions() as $action) {
     $b = \atk4\ui\Button::addTo($buttons, [$action->getDescription()]);
     $b->on('click', $action, ['args' => ['id' => $c_id]]);
 }

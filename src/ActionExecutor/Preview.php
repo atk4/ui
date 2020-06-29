@@ -4,59 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\ActionExecutor;
 
-use atk4\ui\View;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Class atk4\ui\ActionExecutor\Preview is deprecated. Use atk4\ui\UserAction\PreviewExecutor instead', E_USER_DEPRECATED);
+}
 
-class Preview extends Basic
+/**
+ * @deprecated will be removed in dec-2020
+ */
+class Preview extends \atk4\ui\UserAction\PreviewExecutor
 {
-    /** @var View */
-    public $preview;
-
-    /**
-     * @var string can be "console", "text", or "html"
-     */
-    public $previewType = 'console';
-
-    public function initPreview()
-    {
-        if (!$this->hasAllArguments()) {
-            \atk4\ui\Message::addTo($this, ['type' => 'error', 'Insufficient arguments']);
-
-            return;
-        }
-
-        $text = $this->executePreview();
-
-        switch ($this->previewType) {
-            case 'console':
-                $this->preview = View::addTo($this, ['ui' => 'inverted black segment', 'element' => 'pre']);
-                $this->preview->set($text);
-
-                break;
-            case 'text':
-                $this->preview = View::addTo($this, ['ui' => 'segment']);
-                $this->preview->set($text);
-
-                break;
-            case 'html':
-                $this->preview = View::addTo($this, ['ui' => 'segment']);
-                $this->preview->template->setHTML('Content', $text);
-
-                break;
-        }
-
-        \atk4\ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
-            return $this->jsExecute();
-        });
-    }
-
-    public function executePreview()
-    {
-        $args = [];
-
-        foreach ($this->action->args as $key => $val) {
-            $args[] = $this->arguments[$key];
-        }
-
-        return $this->action->preview(...$args);
-    }
 }

@@ -8,9 +8,9 @@ namespace atk4\ui\demo;
 require_once __DIR__ . '/../init-app.php';
 
 $m = new Stat($app->db);
-$m->getAction('add')->system = true;
-$m->getAction('edit')->system = true;
-$m->getAction('delete')->system = true;
+$m->getUserAction('add')->system = true;
+$m->getUserAction('edit')->system = true;
+$m->getUserAction('delete')->system = true;
 
 $g = \atk4\ui\CRUD::addTo($app, ['paginator' => false]);
 $g->setModel($m);

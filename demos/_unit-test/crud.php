@@ -13,15 +13,15 @@ namespace atk4\ui\demo;
 require_once __DIR__ . '/../init-app.php';
 
 $m = new CountryLock($app->db);
-$edit = $m->getAction('edit');
+$edit = $m->getUserAction('edit');
 $edit->ui = ['execButton' => [\atk4\ui\Button::class, 'EditMe', 'blue']];
 $edit->description = 'edit';
 
-$delete = $m->getAction('delete');
+$delete = $m->getUserAction('delete');
 $delete->ui = [];
 $delete->description = 'delete';
 
-$add = $m->getAction('add');
+$add = $m->getUserAction('add');
 $add->ui = ['execButton' => [\atk4\ui\Button::class, 'AddMe', 'blue']];
 $add->description = 'Add';
 

@@ -9,19 +9,19 @@ require_once __DIR__ . '/../init-app.php';
 
 $g = \atk4\ui\Grid::addTo($app);
 $m = new CountryLock($app->db);
-$m->addAction('test', function ($m) {
+$m->addUserAction('test', function ($m) {
     return 'test from ' . $m->getTitle() . ' was successful!';
 });
 
 // Delete is already prevent by our lock Model, just simulating it.
-$ex = new \atk4\ui\ActionExecutor\jsUserAction();
-$ex->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function () {
+$ex = new \atk4\ui\UserAction\JsCallbackExecutor();
+$ex->onHook(\atk4\ui\UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return [
         (new \atk4\ui\jQuery())->closest('tr')->transition('fade left'),
         new \atk4\ui\jsToast('Simulating delete in demo mode.'),
     ];
 });
-$m->getAction('delete')->ui['executor'] = $ex;
+$m->getUserAction('delete')->ui['executor'] = $ex;
 
 $g->setModel($m);
 
@@ -44,7 +44,7 @@ $g->addModalAction(['icon' => [\atk4\ui\Icon::class, 'external']], 'Modal Test',
     \atk4\ui\Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 
-$g->addActionButton(['icon' => 'delete'], $m->getAction('delete'));
+    $g->addActionButton(['icon' => 'delete'], $m->getUserAction('delete'));
 
 $sel = $g->addSelection();
 $g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(

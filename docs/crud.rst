@@ -49,7 +49,7 @@ Disabling Actions
 By default CRUD allows all four operations - creating, reading, updating and deleting. These action is set by default in model
 action. It is possible to disable these default actions by setting their system property to true in your model::
 
-    $eu_countries->getAction('edit')->sytem = true;
+    $eu_countries->getUserAction('edit')->sytem = true;
 
 Model action using system property set to true, will not be display in Crud. Note that action must be setup prior to use
 `$crud->setModel($eu_countries)`

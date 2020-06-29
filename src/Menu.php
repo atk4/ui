@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-use atk4\data\UserAction\Generic;
+use atk4\data\Model;
 
 /**
  * Place menu.
@@ -63,7 +63,7 @@ class Menu extends View
             $item->js('click', $action);
         }
 
-        if ($action instanceof Generic) {
+        if ($action instanceof Model\UserAction) {
             $item->on('click', $action);
         }
 
