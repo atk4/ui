@@ -111,7 +111,7 @@ class Stat extends \atk4\data\Model
         $this->title_field = 'project_name';
         $this->addField('description', ['type' => 'text']);
         $this->addField('client_name', ['type' => 'string']);
-        $this->addField('client_address', ['type' => 'text', 'ui' => ['form' => [new Form\Control\Textarea(), 'rows' => 4]]]);
+        $this->addField('client_address', ['type' => 'text', 'ui' => ['form' => [Form\Control\Textarea::class, 'rows' => 4]]]);
 
         $this->hasOne('client_country_iso', [
             new Country(),

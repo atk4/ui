@@ -133,8 +133,8 @@ Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some
 If you develop such a feature please let me know so that I can include it in the documentation
 and give you credit.
 
-Layout and Fields
-=================
+Layout and Form Controls
+========================
 
 Although Form extends the View class, controls are not added into Form directly but rather use
 a View layout for it in order to create their html element. In other words, layout attached to the form
@@ -172,7 +172,7 @@ specific field type::
     $form->setModel(new User($db), ['email', 'gender', 'terms']);
 
 Form control does not have to be added directly into the form. You can use a separate
-:php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`Form\Control::$form`::
+:php:class:`Form\\Layout` or even a regular view. Simply specify property :php:meth:`Form\\Control::$form`::
 
     $myview = View::addTo($form, ['defaultTemplate'=>'./mytemplate.html']);
     Form\Control\Dropdown::addTo($myview, ['form'=>$form]);
@@ -238,7 +238,7 @@ Field Decorator can be passed to ``addControl`` using 'string', :php:ref:`seed` 
 For more information on default form controls as well as examples on how to create
 your own see documentation on :php:class:`Form::Control`.
 
-.. php:method:: controlFactory(\atk4\data\Field $field, $defaults = [])
+.. php:method:: controlFactory(\\atk4\\data\\Field $field, $defaults = [])
 
 If form control class is not specified (``null``) then it will be determined from
 the type of the Data control with ``controlFactory`` method.
@@ -275,13 +275,13 @@ existing field properties. This example make email field mandatory for the form:
 
     $form->addControl('email', null, ['required'=>true]);
 
-addField into Existing Model
-----------------------------
+addControl into Form with Existing Model
+----------------------------------------
 
-If your form is using a model and you add additional field, then it will automatically
-be marked as "never_persist" (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$never_persist).
+If your form is using a model and you add an additional control, then the underlying model field will be created but it will
+be set as "never_persist" (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$never_persist).
 
-This is to make sure that custom fields wouldn't go directly into database. Next
+This is to make sure that data from custom form controls wouldn't go directly into the database. Next
 example displays a registration form for a User::
 
     class User extends \atk4\data\Model {
@@ -345,9 +345,9 @@ The above code result in the following output::
 Seeding Form Control from Model
 -------------------------------
 
-In large projects you most likely won't be setting individual fields for each Form. Instead
-you can simply use ``setModel()`` to populate all defined fields inside a model. Form does
-have a pretty good guess about Decorator based on their data field type, but what if you want to
+In large projects you most likely won't be setting individual form controls for each Form. Instead
+you can simply use ``setModel()`` to populate all form controls from fields defined inside a model. Form does
+have a pretty good guess about form control decorator based on the data field type, but what if you want to
 use a custom decorator?
 
 This is where ``$field->ui`` comes in (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui).
@@ -385,14 +385,14 @@ needs a bit more info:
 
 .. php:method:: setModel($model, [$fields])
 
-Associate fields with existing model object and import all editable fields
+Associate form controls with existing model object and import all editable fields
 in the order in which they were defined inside model's init() method.
 
-You can specify which form controls to import and their order by simply listing
-field names through second argument.
+You can specify which form controls to import from model fields and their order by simply listing model
+field names in an array as a second argument.
 
-Specifying "false" or empty array as a second argument will import no fields,
-so you can then use :php:meth:`Form::addControl` to import form controls individually.
+Specifying "false" or empty array as a second argument will import no model fields as form controls,
+so you can then use :php:meth:`Form::addControl` to import form controls from model fields individually.
 
 Note that :php:meth:`Form::setModel` also delegates adding form control to the form layout
 by using `Form->layout->setModel()` internally.
@@ -546,9 +546,9 @@ All available parameters can be found here: https://fomantic-ui.com/behaviors/ap
 
     Name of the template which will be used to render success message.
 
-To continue with my example, I'd like to add new Person record into the database
-but only if they have also accepted terms and conditions. I can define onSubmit handler
-that would perform the check, display error or success message::
+To continue with the example, a new Person record can be added into the database
+but only if they have also accepted terms and conditions. An onSubmit handler 
+that would perform the check can be defined displaying error or success messages::
 
     $form->onSubmit(function($form) {
         if (!$form->model->get('terms')) {
@@ -562,8 +562,8 @@ that would perform the check, display error or success message::
 
 Callback function can return one or multiple JavaScript actions. Methods such as
 :php:meth:`error()` or :php:meth:`success()` will help initialize those actions for your form.
-Here is a code that can be used to output multiple errors at once. I intentionally didn't want
-to group errors with a message about terms and conditions::
+Here is a code that can be used to output multiple errors at once. Errors were intentionally not grouped
+with a message about failure to accept of terms and conditions::
 
     $form->onSubmit(function($form) {
         $errors = [];
@@ -589,8 +589,8 @@ to group errors with a message about terms and conditions::
         return $form->success('Registration Successful', 'We will call you soon.');
     });
 
-At the time of writing, Agile UI / Agile Data does not come with a validation library, but
-you can use any 3rd party validation code.
+So far Agile UI / Agile Data does not come with a validation library but
+it supports usage of 3rd party validation libraries.
 
 Callback function may raise exception. If Exception is based on ``\atk4\core\Exception``,
 then the parameter "field" can be used to associate error with specific field::
@@ -607,16 +607,16 @@ will not be included in response for security reasons.
 Form Layout and Sub-layout
 --------------------------
 
-As stated above, when you create a Form object and start adding form controls through either :php:meth:`addControl()`
-or :php:meth:`setModel()`, they will appear one under each-other. This arrangement of form controls as
+As stated above, when a Form object is created and form controls are added through either :php:meth:`addControl()`
+or :php:meth:`setModel()`, the form controls will appear one under each-other. This arrangement of form controls as
 well as display of labels and structure around the form controls themselves is not done by a form,
 but another object - "Form Layout". This object is responsible for the form control flow, presence
 of labels etc.
 
-.. php:method:: initLayout(FormLayout\Generic $layout)
+.. php:method:: initLayout(Form\\Layout $layout)
 
-    Sets a custom FormLayout object for a form. If not specified then form will automatically
-    use FormLayout\Generic.
+    Sets a custom Form\Layout object for a form. If not specified then form will automatically
+    use Form\Layout class.
 
 .. php:attr:: layout
 
@@ -628,28 +628,14 @@ of labels etc.
 
 .. php:method:: addGroup($header)
 
-    Creates a sub-layout, returning new instance of a :php:class:`FormLayout\\Generic` object. You
+    Creates a sub-layout, returning new instance of a :php:class:`Form\\Layout` object. You
     can also specify a header.
 
-.. todo:: MOVE THIS TO SEPARATE FILE
-
-.. php:class:: FormLayout\Generic
-
-    Renders HTML outline encasing form controls.
-
-.. php:attr:: form
-
-    Form layout objects are always associated with a Form object.
-
-.. php:method:: addControl()
-
-    Same as :php:class:`Form::addControl()` but will place a form control inside this specific layout
-    or sub-layout.
 
 Form Control Group Layout and Sub-layout
 ----------------------------------------
 
-Controls can be organized in groups, using method `addGroup()` or as sub section using `addSubLayout()` method.
+Controls can be organized in groups, using method `Form::addGroup()` or as sub section using `Form\\Layout::addSubLayout()` method.
 
 Using Group
 -----------
@@ -692,7 +678,7 @@ Using Sub-layout
 There are four specific sub layout views that you can add to your existing form layout: Generic, Accordion, Tabs and Columns.
 
 Generic sub layout is simply another layout view added to your existing form layout view. You add fields
-the same way as you would do for :php:class:`FormLayout\Generic`.
+the same way as you would do for :php:class:`Form\\Layout`.
 
 Sub layout section like Accordion, Tabs or Columns will create layout specific section where you can
 organize fields in either accordion, tabs or columns.
@@ -702,12 +688,12 @@ The following example will show how to organize fields using regular sub layout 
     $f = Form::addTo($app);
     $f->setModel($m, false);
 
-    $sub_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Generic::class]);
+    $sub_layout = $f->layout->addSubLayout([\atk4\ui\Form\Layout\Section::class]);
 
     Header::addTo($sub_layout, ['Accordion Section in Form']);
     $sub_layout->setModel($m, ['name']);
 
-    $accordion_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Accordion::class]);
+    $accordion_layout = $f->layout->addSubLayout([\atk4\ui\Form\Layout\Section\Accordion::class]);
 
     $a1 = $accordion_layout->addSection('Section 1');
     $a1->setModel($m, ['iso', 'iso3']);
@@ -852,3 +838,18 @@ Instead of defining rules for form controls individually you can hide/show entir
         'php' => ['dev' => 'checked'],
         'language'=>['dev'=>'checked']
     ]);
+
+.. todo:: MOVE THIS TO SEPARATE FILE
+
+.. php:class:: Form\\Layout
+
+    Renders HTML outline encasing form controls.
+
+.. php:attr:: form
+
+    Form layout objects are always associated with a Form object.
+
+.. php:method:: addControl()
+
+    Same as :php:class:`Form::addControl()` but will place a form control inside this specific layout
+    or sub-layout.
