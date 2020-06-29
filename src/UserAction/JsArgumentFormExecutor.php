@@ -8,6 +8,7 @@ use atk4\core\HookTrait;
 use atk4\ui\jsExpression;
 use atk4\ui\jsModal;
 use atk4\ui\jsToast;
+use atk4\data\Model;
 
 /**
  * A js action executor that require a form.
@@ -44,7 +45,7 @@ class JsArgumentFormExecutor extends jsModal
 
             $id = $p->stickyGet('atk_event_id');
 
-            if ($id && $this->action->scope === 'single') {
+            if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                 $this->action->owner->tryLoad($id);
             }
 

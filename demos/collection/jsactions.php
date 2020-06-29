@@ -53,7 +53,7 @@ $f_action = $files->addAction(
         'args' => [
             'path' => '.',
         ],
-        'scope' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+        'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     ]
 );
 

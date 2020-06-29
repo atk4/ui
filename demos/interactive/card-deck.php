@@ -34,7 +34,7 @@ $info_action = $countries->addAction('request_info', [
     'callback' => function ($m, $email) {
         return 'Your request for information was sent to email: ' . $email;
     },
-    'scope' => 'none',
+    'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     'ui' => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => [\atk4\ui\Icon::class, 'mail']]],
 ]);
 

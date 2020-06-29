@@ -214,7 +214,7 @@ class CardDeck extends View
     {
         $action->fields = $this->editFields ?? $action->fields;
         $executor = $this->getExecutor($action);
-        if ($action->scope === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
+        if ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
             $executor->jsSuccess = function ($x, $m, $id, $return) use ($action) {
                 return $this->jsExecute($return, $action);
             };
@@ -240,7 +240,7 @@ class CardDeck extends View
         } elseif (is_array($return) || $return instanceof jsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
-            $msg = $return->loaded() ? $this->saveMsg : ($action->scope === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
+            $msg = $return->loaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
             return $this->jsModelReturn($action, $msg);
         }
@@ -435,19 +435,19 @@ class CardDeck extends View
     /**
      * Return proper action need to setup menu or action column.
      */
-    private function _getModelActions(string $scope): array
+    private function _getModelActions(string $appliesTo): array
     {
         $actions = [];
-        if ($scope === Model\UserAction::APPLIES_TO_SINGLE_RECORD && !empty($this->singleScopeActions)) {
+        if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && !empty($this->singleScopeActions)) {
             foreach ($this->singleScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }
-        } elseif ($scope === Model\UserAction::APPLIES_TO_NO_RECORDS && !empty($this->noRecordScopeActions)) {
+        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && !empty($this->noRecordScopeActions)) {
             foreach ($this->noRecordScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }
         } else {
-            $actions = $this->model->getUserActions($scope);
+            $actions = $this->model->getUserActions($appliesTo);
         }
 
         return $actions;

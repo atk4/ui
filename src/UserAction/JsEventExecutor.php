@@ -128,7 +128,7 @@ class JsEventExecutor implements jsExpressionable
         $this->cb->set(function () {
             $id = $_POST['atk_event_id'] ?? null;
 
-            if ($id && $this->action->scope === 'single') {
+            if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                 $this->action->owner->tryLoad($id);
             }
 

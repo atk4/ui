@@ -418,15 +418,15 @@ class Grid extends View
      * Add action menu items using Model.
      * You may specify the scope of actions to be added.
      *
-     * @param string|null $scope the scope of model action
+     * @param string|null $appliesTo the scope of model action
      */
-    public function addActionMenuFromModel(string $scope = null)
+    public function addActionMenuFromModel(string $appliesTo = null)
     {
         if (!$this->model) {
             throw new Exception('Error: Model not set. Set model prior to add item.');
         }
 
-        foreach ($this->model->getUserActions($scope) as $action) {
+        foreach ($this->model->getUserActions($appliesTo) as $action) {
             $this->addActionMenuItem($action);
         }
     }

@@ -304,19 +304,19 @@ class CRUD extends Grid
     /**
      * Return proper action need to setup menu or action column.
      */
-    private function _getModelActions(string $scope): array
+    private function _getModelActions(string $appliesTo): array
     {
         $actions = [];
-        if ($scope === Model\UserAction::APPLIES_TO_SINGLE_RECORD && !empty($this->singleScopeActions)) {
+        if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && !empty($this->singleScopeActions)) {
             foreach ($this->singleScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }
-        } elseif ($scope === Model\UserAction::APPLIES_TO_NO_RECORDS && !empty($this->noRecordScopeActions)) {
+        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && !empty($this->noRecordScopeActions)) {
             foreach ($this->noRecordScopeActions as $action) {
                 $actions[] = $this->model->getUserAction($action);
             }
         } else {
-            $actions = $this->model->getUserActions($scope);
+            $actions = $this->model->getUserActions($appliesTo);
         }
 
         return $actions;

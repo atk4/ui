@@ -176,7 +176,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public function doSteps()
     {
         $id = $this->stickyGet($this->name);
-        if ($id && $this->action->scope === 'single') {
+        if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
             $this->action->owner->tryLoad($id);
         }
 

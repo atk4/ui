@@ -130,7 +130,7 @@ EOF
 $model = new \atk4\data\Model($app->db, 'test');
 
 $model->addAction('greet', [
-    'scope' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+    'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     'args'=> [
         'age'=>[
             'type'=>'string'
@@ -143,7 +143,7 @@ $model->addAction('greet', [
 ]);
 
 $model->addAction('ask_age', [
-    'scope' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+    'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     'args'=> [
         'age'=>[
             'type'=>'integer',
@@ -174,7 +174,7 @@ $wizard->addStep('More Ways', function ($page) {
 $m = new Stat($app->db);
 $m->addAction('mail', [
     'fields'      => ['currency_field'],
-    'scope'       => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+    'appliesTo'       => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
     'callback'    => function() { return 'testing'; },
     'description' => 'Email testing',
 ]);
@@ -204,7 +204,7 @@ $country = new \atk4\ui\demo\CountryLock($app->db);
 $country->getUserAction('add')->enabled = false;
 $country->getUserAction('delete')->enabled = function() { return rand(1,2)>1; };
 $country->getUserAction('mail', [
-    'scope'       => \atk4\data\Model\UserAction:APPLIES_TO_SINGLE_RECORD,
+    'appliesTo'       => \atk4\data\Model\UserAction:APPLIES_TO_SINGLE_RECORD,
     'preview'    => function($m) { return 'here is email preview for '.$m->get('name'); },
     'callback'    => function($m) { return 'email sent to '.$m->get('name'); },
     'description' => 'Email testing',
