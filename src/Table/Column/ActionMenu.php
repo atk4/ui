@@ -79,10 +79,10 @@ class ActionMenu extends Table\Column
     /**
      * Add a menu item in Dropdown.
      *
-     * @param View|string                                 $item
+     * @param View|string                    $item
      * @param callable|Model\UserAction|null $action
-     * @param string|null                                 $confirm
-     * @param bool                                        $isDisabled
+     * @param string|null                    $confirm
+     * @param bool                           $isDisabled
      *
      * @return object|string
      */

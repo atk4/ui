@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace atk4\ui\UserAction;
 
 use atk4\core\HookTrait;
+use atk4\data\Model;
 use atk4\ui\jsExpression;
 use atk4\ui\jsModal;
 use atk4\ui\jsToast;
-use atk4\data\Model;
 
 /**
  * A js action executor that require a form.
