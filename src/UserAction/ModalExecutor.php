@@ -82,7 +82,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      *
      * @var string
      */
-    public $form = Form::class;
+    public $form = [Form::class];
 
     /**
      * @var string can be "console", "text", or "html"
