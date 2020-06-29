@@ -84,10 +84,6 @@ class ActionButtons extends Table\Column
             $button = $this->factory([\atk4\ui\Button::class], $this->mergeSeeds($button, ['id' => false]));
         }
 
-        if ($button->icon && !is_object($button->icon)) {
-            $button->icon = $this->factory([\atk4\ui\Icon::class], $this->mergeSeeds($button->icon, ['id' => false]));
-        }
-
         $button->app = $this->table->app;
 
         $this->buttons[$name] = $button->addClass('{$_' . $name . '_disabled} compact b_' . $name);
