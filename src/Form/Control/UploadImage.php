@@ -26,7 +26,7 @@ class UploadImage extends Upload
     /**
      * The default thumbnail source.
      *
-     * @var null
+     * @var string
      */
     public $defaultSrc;
 

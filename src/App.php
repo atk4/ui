@@ -605,7 +605,7 @@ class App
     }
 
     /**
-     * @var null
+     * @var string|null
      */
     public $page;
 

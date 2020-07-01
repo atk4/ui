@@ -62,7 +62,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * The action steps.
      *
-     * @var null
+     * @var string[]
      */
     private $steps;
     private $step;
@@ -70,7 +70,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * The action step button.
      *
-     * @var null
+     * @var Button
      */
     private $prevStepBtn;
     private $nextStepBtn;
@@ -99,7 +99,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * The Loader that will execute all action step.
      *
-     * @var null
+     * @var \atk4\ui\Loader
      */
     public $loader;
     public $loaderUi = 'ui basic segment';

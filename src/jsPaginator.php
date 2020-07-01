@@ -29,7 +29,7 @@ class jsPaginator extends jsCallback
      *  - tableContainerHeight: int Fixed height of table container in pixels.
      *  - tableHeaderColor: int|string HTML color for header.
      *
-     * @var null
+     * @var array
      */
     public $options = [];
 

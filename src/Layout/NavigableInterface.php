@@ -22,10 +22,6 @@ interface NavigableInterface
     /**
      * Add items to left menu.
      *  Will place item in a group if supply.
-     *
-     * @param $name
-     * @param null $action
-     * @param null $group
      */
     public function addMenuItem($name, $action = null, $group = null): Item;
 }

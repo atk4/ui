@@ -50,7 +50,7 @@ class jsSortable extends jsCallback
     /**
      * The View that need reordering.
      *
-     * @var null| \atk4\ui\View
+     * @var View|null
      */
     public $view;
 

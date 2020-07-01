@@ -16,7 +16,7 @@ class jsConditionalForm implements jsExpressionable
     /**
      * The form where rules should apply.
      *
-     * @var null
+     * @var Form
      */
     public $form;
 
@@ -38,7 +38,7 @@ class jsConditionalForm implements jsExpressionable
 
     // {{{ Base Methods
 
-    public function __construct($form, $rules = null, $selector = '.field')
+    public function __construct(Form $form, $rules = null, $selector = '.field')
     {
         $this->form = $form;
         $this->fieldRules = $rules;

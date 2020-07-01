@@ -37,7 +37,7 @@ class ActionMenu extends Table\Column
      * Dropdown label.
      * Note: In Grid::class, this value is set by ActionMenuDecorator property.
      *
-     * @var null
+     * @var string
      */
     public $label;
 

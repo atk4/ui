@@ -29,7 +29,7 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
     public $hasHeader = true;
 
     /**
-     * @var null header description
+     * @var string header description
      */
     public $description;
 

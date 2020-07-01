@@ -10,7 +10,6 @@ namespace atk4\ui\Component;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
 use atk4\ui\jsToast;
-use atk4\ui\jsVueService;
 use atk4\ui\View;
 
 class InlineEdit extends View
@@ -20,14 +19,14 @@ class InlineEdit extends View
     /**
      * jsCallback for saving data.
      *
-     * @var null
+     * @var \atk4\ui\jsCallback
      */
     public $cb;
 
     /**
      * Input initial value.
      *
-     * @var null
+     * @var mixed
      */
     public $initValue;
 
@@ -77,7 +76,7 @@ class InlineEdit extends View
      * A default one is supply if this is null.
      * It receive the error ($e) as parameter.
      *
-     * @var null | callable
+     * @var callable|null
      */
     public $formatErrorMsg;
 
@@ -94,7 +93,7 @@ class InlineEdit extends View
             $this->formatErrorMsg = function ($e, $value) {
                 $caption = $this->model->getField($this->field)->getCaption();
 
-                return "{$caption} - {$e->getMessage()}. <br>Trying to set this value: '{$value}'";
+                return $caption . ' - ' . $e->getMessage() . '. <br>Trying to set this value: "' . $value . '"';
             };
         }
     }

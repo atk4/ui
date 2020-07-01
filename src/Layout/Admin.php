@@ -89,10 +89,6 @@ class Admin extends \atk4\ui\Layout implements NavigableInterface
 
     /**
      * Add items to left menu.
-     *
-     * @param $name
-     * @param null $action
-     * @param null $group
      */
     public function addMenuItem($name, $action = null, $group = null): Item
     {
