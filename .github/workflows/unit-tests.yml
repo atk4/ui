@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.2', '7.3', 'latest']
+        php: ['7.2', '7.3', 'latest', '8.0']
         type: ['Phpunit']
         include:
           - php: 'latest'
@@ -53,6 +53,7 @@ jobs:
           if [ "${{ matrix.type }}" != "Phpunit" ]; then composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev ; fi
           if [ "${{ matrix.type }}" != "Behat" ]; then composer remove --no-interaction --no-update 'behat/*' --dev ; fi
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev ; fi
+          if [ "${{ matrix.php }}" == "8.0" ]; then composer config platform.php 7.4.5 ; fi
           composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
       - name: Install JS dependencies (only for Behat)
