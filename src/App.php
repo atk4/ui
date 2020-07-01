@@ -415,7 +415,7 @@ class App
     /**
      * Initializes layout.
      *
-     * @param string|Layout\Generic|array $seed
+     * @param string|Layout|array $seed
      *
      * @return $this
      */
