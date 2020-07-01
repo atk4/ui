@@ -82,11 +82,10 @@ class ActionMenu extends Table\Column
      * @param View|string                    $item
      * @param callable|Model\UserAction|null $action
      * @param string|null                    $confirm
-     * @param bool                           $isDisabled
      *
      * @return object|string
      */
-    public function addActionMenuItem($item, $action = null, $confirm = null, $isDisabled = false)
+    public function addActionMenuItem($item, $action = null, $confirm = null, bool $isDisabled = false)
     {
         // If action is not specified, perhaps it is defined in the model
         if (!$action) {

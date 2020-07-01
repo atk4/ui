@@ -371,11 +371,10 @@ class Template implements \ArrayAccess
      *
      * @param string|array|Model $tag
      * @param string             $value
-     * @param bool               $encode
      *
      * @return $this
      */
-    public function trySet($tag, $value = null, $encode = true)
+    public function trySet($tag, $value = null, bool $encode = true)
     {
         return $this->_setOrAppend($tag, $value, $encode, false, false);
     }
@@ -413,11 +412,10 @@ class Template implements \ArrayAccess
      *
      * @param string|array|Model $tag
      * @param string             $value
-     * @param bool               $encode
      *
      * @return $this
      */
-    public function append($tag, $value, $encode = true)
+    public function append($tag, $value, bool $encode = true)
     {
         return $this->_setOrAppend($tag, $value, $encode, true, true);
     }
@@ -428,11 +426,10 @@ class Template implements \ArrayAccess
      *
      * @param string|array|Model $tag
      * @param string             $value
-     * @param bool               $encode
      *
      * @return $this
      */
-    public function tryAppend($tag, $value, $encode = true)
+    public function tryAppend($tag, $value, bool $encode = true)
     {
         return $this->_setOrAppend($tag, $value, $encode, true, false);
     }

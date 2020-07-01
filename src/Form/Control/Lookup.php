@@ -171,11 +171,9 @@ class Lookup extends Input
     /**
      * Generate Lookup data.
      *
-     * @param bool $limit
-     *
-     * @return array
+     * @param int|bool $limit
      */
-    public function getData($limit = true)
+    public function getData($limit = true): array
     {
         if (!$this->model) {
             return [['value' => '-1', 'title' => 'Model must be set for Lookup']];
