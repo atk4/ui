@@ -75,10 +75,10 @@ into multiple Tabs or detach form control groups or even create nested layouts::
     $tabs = \atk4\ui\Tabs::addTo($form, [], ['AboveControls']);
     \atk4\ui\View::addTo($form, ['ui'=>'divider'], ['AboveControls']);
 
-    $form_page = Generic::addTo($tabs->addTab('Basic Info'), ['form'=>$form]);
+    $form_page = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form'=>$form]);
     $form_page->addControl('name', new \atk4\ui\Form\Control\Line());
 
-    $form_page = Generic::addTo($tabs->addTab('Other Info'), ['form'=>$form]);
+    $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form'=>$form]);
     $form_page->addControl('age', new \atk4\ui\Form\Control\Line());
 
     $form->onSubmit(function($f) { return $f->model->get('name').' has age '.$f->model->get('age'); });
