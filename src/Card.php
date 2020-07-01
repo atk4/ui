@@ -47,7 +47,7 @@ class Card extends View
     /** @var string The CardSection default class name. */
     public $cardSection = CardSection::class;
 
-    /** @var null | View The extra content view container for the card. */
+    /** @var View|null The extra content view container for the card. */
     public $extraContainer;
 
     /** @var string|View|null A description inside the Card content. */

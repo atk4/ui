@@ -63,7 +63,7 @@ class Grid extends View
      * Calling addAction will add a new column inside $table with dropdown menu,
      * and will be re-used for next addActionMenuItem().
      *
-     * @var null
+     * @var Table\Column
      */
     public $actionMenu;
 

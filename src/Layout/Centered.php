@@ -11,7 +11,7 @@ namespace atk4\ui\Layout;
  * Bevel will use some padding and will contain your Content.
  * This layout is handy for a simple and single-purpose applications.
  */
-class Centered extends Generic
+class Centered extends \atk4\ui\Layout
 {
     use \atk4\core\DebugTrait;
 

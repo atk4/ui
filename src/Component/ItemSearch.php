@@ -38,7 +38,7 @@ class ItemSearch extends View
      * The jquery selector where you need to add the semantic-ui 'loading' class.
      * Default to reload selector.
      *
-     * @var null
+     * @var View
      */
     public $context;
 

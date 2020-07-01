@@ -15,7 +15,7 @@ class Upload extends Input
     /**
      * The action button to open file browser dialog.
      *
-     * @var null
+     * @var View
      */
     public $action;
 
@@ -25,7 +25,7 @@ class Upload extends Input
      * If not set, will default to file name.
      * file id is also sent with onDelete Callback.
      *
-     * @var null
+     * @var string
      */
     public $fileId;
 
@@ -48,10 +48,9 @@ class Upload extends Input
     public $defaultTemplate = 'formfield/upload.html';
 
     /**
-     * The jsCallback.
-     * Same callback is use for onUpload or onDelete.
+     * Callback is use for onUpload or onDelete.
      *
-     * @var null
+     * @var \atk4\ui\jsCallback
      */
     public $cb;
 

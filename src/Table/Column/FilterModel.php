@@ -41,7 +41,7 @@ class FilterModel extends \atk4\data\Model
     /**
      * The field where this filter need to query data.
      *
-     * @var null
+     * @var Field
      */
     public $lookupField;
 

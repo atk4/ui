@@ -45,7 +45,7 @@ class JsEventExecutor implements jsExpressionable
     /** @var Model\UserAction The model user action */
     public $action;
 
-    /** @var null The model id to load */
+    /** @var mixed The model id to load */
     public $modelId;
 
     /** @var array The action arguments */

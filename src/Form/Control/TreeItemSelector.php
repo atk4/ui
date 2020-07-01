@@ -25,7 +25,7 @@ class TreeItemSelector extends Form\Control
     /**
      * Template for the item selector view.
      *
-     * @var null
+     * @var Template
      */
     public $itemSelectorTemplate;
 

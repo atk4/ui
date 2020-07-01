@@ -54,7 +54,7 @@ class Dropdown extends Input
      *  Note: dropdown icon is show on the right side of the menu
      *  while other icon are usually display on the left side.
      *
-     * @var null
+     * @var string|null
      */
     public $dropIcon;
 

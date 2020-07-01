@@ -199,7 +199,7 @@ class Multiline extends Form\Control
     public $caption;
 
     /**
-     * @var null | jsFunction
+     * @var jsFunction|null
      *
      * A jsFunction to execute when Multiline add(+) button is clicked.
      * The function is execute after mulitline component finish adding a row of fields.
@@ -209,7 +209,7 @@ class Multiline extends Form\Control
     public $jsAfterAdd;
 
     /**
-     * @var null | jsFunction
+     * @var jsFunction|null
      *
      * A jsFunction to execute when Multiline delete button is clicked.
      * The function is execute after mulitline component finish deleting rows.
