@@ -12,7 +12,7 @@ use atk4\core\HookTrait;
 use atk4\core\InitializerTrait;
 use atk4\data\Persistence;
 use atk4\ui\Exception\ExitApplicationException;
-use atk4\ui\Persistence\UI;
+use atk4\ui\Persistence\UI as UiPersistence;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -103,7 +103,7 @@ class App
     /** @var bool */
     public $is_rendering = false;
 
-    /** @var UI */
+    /** @var UiPersistence */
     public $ui_persistence;
 
     /** @var View For internal use */
@@ -210,7 +210,7 @@ class App
 
         // Set up UI persistence
         if (!isset($this->ui_persistence)) {
-            $this->ui_persistence = new UI();
+            $this->ui_persistence = new UiPersistence();
         }
     }
 
