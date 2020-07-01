@@ -22,7 +22,7 @@ class Right extends View implements Loadable
 {
     public $defaultTemplate = 'panel/right.html';
 
-    /** @var null */
+    /** @var Modal */
     public $closeModal;
     /** @var array Confirmation Modal default */
     public $defaultModal = [Modal::class, 'class' => ['mini']];
@@ -128,10 +128,6 @@ class Right extends View implements Loadable
      * Attach confirmation modal view to display.
      * js flyoutService will prevent closing of Flyout if a confirmation modal
      * is attached to it and flyoutService detect that the current open flyoutContent has warning on.
-     *
-     * @param $msg
-     * @param null $okBtn
-     * @param null $cancelBtn
      */
     public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okBtn = null, string $cancelBtn = null)
     {

@@ -42,7 +42,7 @@ class jsSearch extends View
      * Make sure the model results set match the initial value.
      * Mostly use when not using ajax reload.
      *
-     * @var null
+     * @var string
      */
     public $initValue;
 

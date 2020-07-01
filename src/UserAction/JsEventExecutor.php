@@ -42,10 +42,10 @@ class JsEventExecutor implements jsExpressionable
      */
     public $stateContext;
 
-    /** @var @var Generic The model user action */
+    /** @var Model\UserAction Generic The model user action */
     public $action;
 
-    /** @var null The model id to load */
+    /** @var mixed The model id to load */
     public $modelId;
 
     /** @var array The action arguments */

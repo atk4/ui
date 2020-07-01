@@ -12,8 +12,6 @@ use atk4\core\HookTrait;
 use atk4\core\InitializerTrait;
 use atk4\data\Persistence;
 use atk4\ui\Exception\ExitApplicationException;
-use atk4\ui\Layout\Centered;
-use atk4\ui\Layout\Generic;
 use atk4\ui\Persistence\UI;
 use Psr\Log\LoggerInterface;
 
@@ -52,7 +50,7 @@ class App
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
 
-    /** @var Generic */
+    /** @var Layout */
     public $layout; // the top-most view object
 
     /**
@@ -255,7 +253,7 @@ class App
         // just replace layout to avoid any extended App->_construct problems
         // it will maintain everything as in the original app StickyGet, logger, Events
         $this->html = null;
-        $this->initLayout([Centered::class]);
+        $this->initLayout([Layout\Centered::class]);
 
         $this->layout->template->setHTML('Content', $this->renderExceptionHTML($exception));
 
@@ -417,7 +415,7 @@ class App
     /**
      * Initializes layout.
      *
-     * @param string|Layout\Generic|array $seed
+     * @param string|Layout|array $seed
      *
      * @return $this
      */
@@ -607,7 +605,7 @@ class App
     }
 
     /**
-     * @var null
+     * @var string|null
      */
     public $page;
 

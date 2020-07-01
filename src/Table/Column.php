@@ -59,7 +59,7 @@ class Column
     /**
      * The data-column attribute value for Table th tag.
      *
-     * @var null
+     * @var string|null
      */
     public $columnData;
 
