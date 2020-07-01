@@ -31,8 +31,7 @@ but if record is already archived, use a template "Archived on {$archive_date}".
 Generic Column Decorator
 ========================
 
-.. php:namespace:: atk4\ui\Table\Column
-.. php:class:: Generic
+.. php:class:: Table\\Column
 
     Generic description of a column for :php:class:`atk4\\ui\\Table`
 
@@ -45,17 +44,17 @@ but first we need to look at the generic column and understand it's base capabil
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
 when constructing HTML:
 
-.. php:method:: getHeaderCellHTML(\atk4\data\Field $f)
+.. php:method:: getHeaderCellHTML(\atk4\data\Field $field)
 
 Must respond with HTML for the header cell (`<th>`) and an appropriate caption. If necessary
 will include "sorting" icons or any other controls that go in the header of the table.
 
-.. php:method:: getTotalsCellHTML(\atk4\data\Field $f, $value)
+.. php:method:: getTotalsCellHTML(\atk4\data\Field $field, $value)
 
 Provided with the field and the value, format the cell for the footer "totals" row. Table
 can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
 
-.. php:method:: getDataCellHTML(\atk4\data\Field f)
+.. php:method:: getDataCellHTML(\atk4\data\Field $field)
 
 Provided with a field, this method will respond with HTML **template**. In order to keep
 performance of Web Application at the maximum, Table will execute getDataCellHTML for all the
@@ -84,6 +83,69 @@ Sometimes you do want to inject HTML instead of using row values:
 Return array of HTML tags that will be injected into the row template. See
 :php:ref:`table_html` for further example.
 
+Column Menus and Popups
+=======================
+
+Table column may have a menu as seen in https://ui.agiletoolkit.org/demos/tablecolumnmenu.php. Menu is added
+into table column and can be linked with Popup or Menu.
+
+Basic Use
+---------
+
+The simplest way to use Menus and Popups is through a wrappers: :php:meth:`atk4\\ui\\Grid::addDropdown` and :php:meth:`atk4\\ui\\Grid::addPopup`::
+
+    View::addTo($grid->addPopup('iso'))
+        ->set('Grid column popup text');
+
+    // OR
+
+    $grid->addDropdown('name', ['Sort A-Z', 'Sort by Relevance'], function ($item) {
+        return $item;
+    });
+
+Those wrappers will invoke methods :php:meth:`Table\\Column::addDropdown` and :php:meth:`Table\\Colmun::addPopup` for
+a specified column, which are documented below.
+
+Popups
+------
+
+.. php:method:: addPopup()
+
+To create a popup, you need to get the column decorator object. This must be the first decorator, which
+is responsible for rendering of the TH box. If you are adding column manually, :php:meth:`atk4\\ui\\Table::addColumn()`
+will return it. When using model, use :php:meth:`atk4\\ui\\Table::getColumnDecorators`::
+
+
+    $table = Table::addTo($app, ['celled' => true]);
+    $table->setModel(new Country($app->db));
+
+    $name_column = $table->getColumnDecorators('name');
+    LoremIpsum::addTo($name_column[0]->addPopup());
+
+.. important:: If content of a pop-up is too large, it may not be possible to display it on-screen. Watch for warning.
+
+You may also use :php:meth:`atk4\\ui\\Popup::set` method to dynamically load the content::
+
+
+    $table = Table::addTo($app, ['celled' => true]);
+    $table->setModel(new Country($app->db));
+
+    $name_column = $table->getColumnDecorators('name');
+    $name_column[0]->addPopup()->set(function($p) {
+        HelloWorld::addTo($p);
+    });
+
+Dropdown Menus
+--------------
+
+.. php:method:: addDropdown()
+
+Menus will show item selection and will trigger a callback when user selects one of them::
+
+    $some_column->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
+        return 'Title item: '.$item;
+    });
+
 
 Decorators for data types
 =========================
@@ -93,7 +155,7 @@ In addition to :php:class:`Table\\Column`, Agile UI includes several column impl
 Link
 ----
 
-.. php:class:: Table\Column\Link
+.. php:class:: Table\\Column\\Link
 
 Put `<a href..` link over the value of the cell. The page property can be specified to constructor. There
 are two usage patterns. With the first you can specify full URL as a string::
@@ -113,7 +175,7 @@ pass on some values from your model, use second argument to constructor::
 Money
 -----
 
-.. php:class:: Table\Column\Money
+.. php:class:: Table\\Column\\Money
 
 Helps decorating monetary values. Will align value to the right and if value is less than zero will also
 use red text (td class "negative" for Fomantic ui). The money cells are not wrapped.
@@ -123,7 +185,7 @@ For the actual number formatting, see :ref:`ui_persistence`
 Status
 ------
 
-.. php:class:: Table\Column\Status
+.. php:class:: Table\\Column\\Status
 
 Allow you to set highlight class and icon based on column value. This is most suitable for columns that
 contain pre-defined values.
@@ -147,7 +209,7 @@ Current list of states supported:
 Template
 --------
 
-.. php:class:: Table\Column\Template
+.. php:class:: Table\\Column\\Template
 
 This column is suitable if you wish to have custom cell formatting but do not wish to go through
 the trouble of setting up your own class.
@@ -164,7 +226,7 @@ will only work if you asign it to a primary column (by passing 1st argument to a
 Image
 -----
 
-.. php:class:: Table\Column\Image
+.. php:class:: Table\\Column\\Image
 
 This column is suitable if you wish to have image in your table cell::
 
@@ -174,18 +236,18 @@ This column is suitable if you wish to have image in your table cell::
 Interactive Decorators
 ======================
 
-Actions
--------
+ActionButtons
+-------------
 
-.. php:class:: Actions
+.. php:class:: Table\\Column\\ActionButtons
 
-Can be used to add "action" column to your table::
+Can be used to add "action buttons" column to your table::
 
-    $action = $table->addColumn(null, 'Actions');
+    $action = $table->addColumn(null, [Table\Column\ActionButtons::class]);
 
 If you want to have label above the action column, then::
 
-    $action = $table->addColumn(null, ['Actions', 'caption'=>'User Actions']);
+    $action = $table->addColumn(null, [Table\Column\ActionButtons::class, 'caption'=>'User Actions']);
 
 .. php:method:: addAction($button, $action, $confirm = false)
 
@@ -211,10 +273,10 @@ Triggers a modal dialog when you click on the button. See description on :php:me
 
 Note that in this case ID is automatically passed to your call-back.
 
-CheckBox
+Checkbox
 --------
 
-.. php:class:: Table\Column\Checkbox
+.. php:class:: Table\\Column\\Checkbox
 
 .. php:method:: jsChecked()
 
@@ -260,69 +322,4 @@ Your callback can return things in varous ways:
 Multiple decorators will be created and merged.
 
 .. note:: If you are operating with large tables, code your own decorator, which would be more CPU-efficient.
-
-
-Column Menus and Popups
-=======================
-
-Table column may have a menu as seen in https://ui.agiletoolkit.org/demos/tablecolumnmenu.php. Menu is added
-into table column and can be linked with Popup or Menu.
-
-Basic Use
----------
-
-The simplest way to use Menus and Popups is through a wrappers: :php:meth:`atk4\\ui\\Grid::addDropdown` and :php:meth:`atk4\\ui\\Grid::addPopup`::
-
-    View::addTo($grid->addPopup('iso'))
-        ->set('Grid column popup text');
-
-    // OR
-
-    $grid->addDropdown('name', ['Sort A-Z', 'Sort by Relevance'], function ($item) {
-        return $item;
-    });
-
-Those wrappers will invoke methods :php:meth:`Table\\Column::addDropdown` and :php:meth:`Table\\Colmun::addPopup` for
-a specified column, which are documented below.
-
-
-Popups
-------
-
-.. php:method:: addPopup()
-
-To create a popup, you need to get the column decorator object. This must be the first decorator, which
-is responsible for rendering of the TH box. If you are adding column manually, :php:meth:`atk4\\ui\\Table::addColumn()`
-will return it. When using model, use :php:meth:`atk4\\ui\\Table::getColumnDecorators`::
-
-
-    $table = Table::addTo($app, ['celled' => true]);
-    $table->setModel(new Country($app->db));
-
-    $name_column = $table->getColumnDecorators('name');
-    LoremIpsum::addTo($name_column[0]->addPopup());
-
-.. important:: If content of a pop-up is too large, it may not be possible to display it on-screen. Watch for warning.
-
-You may also use :php:meth:`atk4\\ui\\Popup::set` method to dynamically load the content::
-
-
-    $table = Table::addTo($app, ['celled' => true]);
-    $table->setModel(new Country($app->db));
-
-    $name_column = $table->getColumnDecorators('name');
-    $name_column[0]->addPopup()->set(function($p) {
-        HelloWorld::addTo($p);
-    });
-
-Dropdown Menus
---------------
-
-.. php:method:: addDropdown()
-
-Menus will show item selection and will trigger a callback when user selects one of them::
-
-    $some_column->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
-        return 'Title item: '.$item;
-    });
 
