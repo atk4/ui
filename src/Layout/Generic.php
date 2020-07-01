@@ -4,16 +4,10 @@ declare(strict_types=1);
 
 namespace atk4\ui\Layout;
 
-use atk4\ui\Panel\Loadable;
-use atk4\ui\View;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Class atk4\ui\Layout\Generic is deprecated. Use atk4\ui\Layout instead', E_USER_DEPRECATED);
+}
 
-class Generic extends View
+class Generic extends \atk4\ui\Layout
 {
-    /**
-     * Add a loadable View.
-     */
-    public function addRightPanel(Loadable $panel): Loadable
-    {
-        return $this->owner->add($panel, 'RightPanel');
-    }
 }

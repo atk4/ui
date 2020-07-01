@@ -12,6 +12,6 @@ $a = new \atk4\ui\LoremIpsum();
 $text = $a->generateLorem(150);
 
 $app->html = null;
-$app->initLayout([\atk4\ui\Layout\Generic::class]);
+$app->initLayout([\atk4\ui\Layout::class]);
 
 \atk4\ui\Text::addTo($app->layout)->addParagraph($text);

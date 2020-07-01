@@ -13,7 +13,7 @@ namespace atk4\ui\Layout;
  *
  * Sticky top-bar for simple navigation and three flexible areas for flexible use.
  */
-class Column extends Generic
+class Column extends \atk4\ui\Layout
 {
     public $defaultTemplate = 'layout/column.html';
 
