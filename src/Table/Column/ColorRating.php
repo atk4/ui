@@ -177,7 +177,7 @@ class ColorRating extends Table\Column
             $HexRGB['g'] = sprintf('%02x', ($RGB['g']));
             $HexRGB['b'] = sprintf('%02x', ($RGB['b']));
 
-            $gradients[] = '#' . implode(null, $HexRGB);
+            $gradients[] = '#' . implode('', $HexRGB);
         }
     }
 
