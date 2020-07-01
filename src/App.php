@@ -243,10 +243,8 @@ class App
 
     /**
      * Catch exception.
-     *
-     * @return bool
      */
-    public function caughtException(\Throwable $exception)
+    public function caughtException(\Throwable $exception): void
     {
         $this->catch_runaway_callbacks = false;
 
@@ -274,8 +272,6 @@ class App
         // Process is already in shutdown/stop
         // no need of call exit function
         $this->callExit(true);
-
-        return true;
     }
 
     /**

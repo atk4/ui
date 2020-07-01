@@ -103,10 +103,8 @@ class Template implements \ArrayAccess
      * Since Agile Toolkit 4.3 this tag is always called _top.
      *
      * @param string $tag
-     *
-     * @return bool
      */
-    public function isTopTag($tag)
+    public function isTopTag($tag): bool
     {
         return $tag === '_top';
     }

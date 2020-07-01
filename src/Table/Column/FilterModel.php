@@ -142,10 +142,8 @@ class FilterModel extends \atk4\data\Model
 
     /**
      * Check if this model is using session or not.
-     *
-     * @return bool
      */
-    public function clearData()
+    public function clearData(): void
     {
         $this->forget();
     }
