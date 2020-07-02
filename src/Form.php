@@ -665,11 +665,12 @@ class Form extends View
             ->setStyle(['display' => 'none']);
 
         $cb->set(function () {
+            ob_start();
+
             try {
-                ob_start();
                 $this->loadPOST();
                 $response = $this->hook(self::HOOK_SUBMIT);
-                $output = ob_get_clean();
+                $output = ob_get_contents();
 
                 if ($output) {
                     $message = new Message('Direct Output Detected');
@@ -692,13 +693,14 @@ class Form extends View
 
                 return $response;
             } catch (\atk4\data\ValidationException $val) {
-                ob_get_clean(); // not close output buffer on exceptions
                 $response = [];
                 foreach ($val->errors as $field => $error) {
                     $response[] = $this->error($field, $error);
                 }
 
                 return $response;
+            } finally {
+                ob_get_flush();
             }
         });
 
