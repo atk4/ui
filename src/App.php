@@ -98,7 +98,7 @@ class App
      *
      * @var bool
      */
-    public $exit_called = false;
+    private $exit_called = false;
 
     /** @var bool */
     public $is_rendering = false;
@@ -522,10 +522,12 @@ class App
             $isExitException = true;
         }
 
-        if ($this->isJsUrlRequest()) {
-            $this->outputResponseJSON($output);
-        } else {
-            $this->outputResponseHTML($output);
+        if (!$this->exit_called) { // output already send by terminate()
+            if ($this->isJsUrlRequest()) {
+                $this->outputResponseJSON($output);
+            } else {
+                $this->outputResponseHTML($output);
+            }
         }
 
         if ($isExitException) {
