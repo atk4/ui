@@ -29,6 +29,9 @@ class DemosTest extends AtkPhpunit\TestCase
     /** @var App Initialized App instance with working DB connection */
     private static $_db;
 
+    /** @var array */
+    private static $_failedParentTests = [];
+
     public static function setUpBeforeClass(): void
     {
         self::$_serverSuperglobalBackup = $_SERVER;
@@ -59,6 +62,23 @@ class DemosTest extends AtkPhpunit\TestCase
             // prevent $app to run on shutdown
             $app->run_called = true;
         }
+    }
+
+    protected function onNotSuccessfulTest(\Throwable $t): void
+    {
+        if (!in_array($this->getStatus(), [
+            \PHPUnit\Runner\BaseTestRunner::STATUS_PASSED,
+            \PHPUnit\Runner\BaseTestRunner::STATUS_SKIPPED,
+            \PHPUnit\Runner\BaseTestRunner::STATUS_INCOMPLETE,
+        ], true)) {
+            if (!isset(self::$_failedParentTests[$this->getName()])) {
+                self::$_failedParentTests[$this->getName()] = $this->getStatus();
+            } else {
+                $this->markTestIncomplete('Test failed, but parent non-HTTP test failed too. Fix it first.');
+            }
+        }
+
+        throw $t;
     }
 
     protected function setSuperglobalsFromRequest(RequestInterface $request): void
