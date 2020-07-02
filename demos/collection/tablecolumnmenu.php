@@ -44,15 +44,15 @@ $col_title->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
 \atk4\ui\Header::addTo($app, ['Grid column may contains popup or dropdown menu.']);
 
 //Table in Grid are already inside a container.
-$g = \atk4\ui\Grid::addTo($app);
-$g->setModel(new Country($app->db));
-$g->ipp = 5;
+$grid = \atk4\ui\Grid::addTo($app);
+$grid->setModel(new Country($app->db));
+$grid->ipp = 5;
 
 //Adding a dropdown menu to the column 'name'.
-$g->addDropdown('name', ['Rename', 'Delete'], function ($item) {
+$grid->addDropdown('name', ['Rename', 'Delete'], function ($item) {
     return $item;
 });
 
 //Adding a popup view to the column 'iso'
-$pop = $g->addPopup('iso');
+$pop = $grid->addPopup('iso');
 \atk4\ui\Text::addTo($pop)->set('Grid column popup');

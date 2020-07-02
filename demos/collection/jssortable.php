@@ -40,10 +40,10 @@ $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 \atk4\ui\Header::addTo($app, ['Add Drag n drop to Grid']);
 
-$g = \atk4\ui\Grid::addTo($app, ['paginator' => false]);
-$g->setModel((new Country($app->db))->setLimit(6));
+$grid = \atk4\ui\Grid::addTo($app, ['paginator' => false]);
+$grid->setModel((new Country($app->db))->setLimit(6));
 
-$dragHandler = $g->addDragHandler();
+$dragHandler = $grid->addDragHandler();
 $dragHandler->onReorder(function ($order) {
     return new \atk4\ui\jsToast('New order: ' . implode(' - ', $order));
 });

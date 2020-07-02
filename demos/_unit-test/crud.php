@@ -25,7 +25,7 @@ $add = $model->getUserAction('add');
 $add->ui = ['execButton' => [\atk4\ui\Button::class, 'AddMe', 'blue']];
 $add->description = 'Add';
 
-$g = \atk4\ui\CRUD::addTo($app, ['ipp' => 10, 'menu' => ['class' => ['atk-grid-menu']]]);
-$g->setModel($model);
+$crud = \atk4\ui\CRUD::addTo($app, ['ipp' => 10, 'menu' => ['class' => ['atk-grid-menu']]]);
+$crud->setModel($model);
 
-$g->addQuickSearch(['name'], true);
+$crud->addQuickSearch(['name'], true);
