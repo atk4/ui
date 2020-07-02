@@ -43,7 +43,7 @@ class DropdownCascade extends Dropdown
 
         $this->cascadeInput = is_string($this->cascadeFrom) ? $this->form->getControl($this->cascadeFrom) : $this->cascadeFrom;
 
-        if (!$this->cascadeInput instanceof Field) {
+        if (!$this->cascadeInput->field instanceof Field) {
             throw new Exception('cascadeFrom property should be an instance of ' . Field::class);
         }
 
