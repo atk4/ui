@@ -139,9 +139,9 @@ class Control extends View
      * Otherwise, change handler will not be propagate to all handlers.
      *
      * Examples:
-     * $field->onChange('console.log("changed")');
-     * $field->onChange(new \atk4\ui\jsExpression('console.log("changed")'));
-     * $field->onChange('$(this).parents(".form").form("submit")');
+     * $control->onChange('console.log("changed")');
+     * $control->onChange(new \atk4\ui\jsExpression('console.log("changed")'));
+     * $control->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|\atk4\ui\jsExpression|array|callable $expr
      * @param array|bool                                  $default

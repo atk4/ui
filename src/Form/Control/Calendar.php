@@ -87,9 +87,9 @@ class Calendar extends Input
      * If $expr is string or jsExpression, then it will execute it instantly.
      *
      * Examples:
-     * $field->onChange('console.log(date, text, mode)');
-     * $field->onChange(new \atk4\ui\jsExpression('console.log(date, text, mode)'));
-     * $field->onChange('$(this).parents(".form").form("submit")');
+     * $control->onChange('console.log(date, text, mode)');
+     * $control->onChange(new \atk4\ui\jsExpression('console.log(date, text, mode)'));
+     * $control->onChange('$(this).parents(".form").form("submit")');
      *
      * @param string|jsExpression|array $expr
      * @param array|bool                $default

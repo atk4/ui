@@ -80,12 +80,12 @@ class Radio extends Form\Control
      * If $expr is callback method, then it'll make additional request to webserver.
      *
      * Examples:
-     * $field->onChange('console.log("changed")');
-     * $field->onChange(new \atk4\ui\jsExpression('console.log("changed")'));
-     * $field->onChange('$(this).parents(".form").form("submit")');
+     * $control->onChange('console.log("changed")');
+     * $control->onChange(new \atk4\ui\jsExpression('console.log("changed")'));
+     * $control->onChange('$(this).parents(".form").form("submit")');
      *
-     * @param string|jsExpression|array|callable $expr
-     * @param array|bool                         $default
+     * @param string|\atk4\ui\jsExpression|array|callable $expr
+     * @param array|bool                                  $default
      */
     public function onChange($expr, $default = [])
     {
