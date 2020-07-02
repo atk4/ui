@@ -144,11 +144,11 @@ $menu = \atk4\ui\Menu::addTo($app);
 $browse = \atk4\ui\DropDown::addTo($menu, ['Browse']);
 
 // Add cart item into the menu, with a popup inside
-$cart_item = $menu->addItem([$cartClass, 'icon' => 'cart'])->set('Cart');
+$cartItem = $menu->addItem([$cartClass, 'icon' => 'cart'])->set('Cart');
 
-$cart_popup = \atk4\ui\Popup::addTo($app, [$cart_item, 'position' => 'bottom left']);
+$cartPopup = \atk4\ui\Popup::addTo($app, [$cartItem, 'position' => 'bottom left']);
 // Popup won't dissapear as you hover over it.
-$cart_popup->setHoverable();
+$cartPopup->setHoverable();
 
 $shelf = $itemShelfClass::addTo($app);
 
@@ -179,19 +179,19 @@ $cart->destroy();
 
 // Label now can be added referencing Cart's items. Init() was colled when I added it into app, so the
 // item property is populated.
-$cart_outter_label = \atk4\ui\Label::addTo($cart_item, [count($cart->items), 'floating red ']);
+$cartOutterLabel = \atk4\ui\Label::addTo($cartItem, [count($cart->items), 'floating red ']);
 if (!$cart->items) {
-    $cart_outter_label->addStyle('display', 'none');
+    $cartOutterLabel->addStyle('display', 'none');
 }
 
-$cart_popup->set(function ($popup) use ($shelf, $cart_outter_label, $cart) {
-    $cart_inner_label = \atk4\ui\Label::addTo($popup, ['Number of items:']);
+$cartPopup->set(function ($popup) use ($shelf, $cartOutterLabel, $cart) {
+    $cartInnerLabel = \atk4\ui\Label::addTo($popup, ['Number of items:']);
 
     // cart is already initialized, so init() is not called again. However, cart will be rendered
     // as a child of a pop-up now.
     $cart = $popup->add($cart);
 
-    $cart_inner_label->detail = count($cart->items);
+    $cartInnerLabel->detail = count($cart->items);
     \atk4\ui\Item::addTo($popup)->setElement('hr');
     \atk4\ui\Button::addTo($popup, ['Checkout', 'primary small']);
 });
@@ -199,7 +199,7 @@ $cart_popup->set(function ($popup) use ($shelf, $cart_outter_label, $cart) {
 // Add item shelf below menu and link it with the cart
 $shelf->linkCart($cart, [
     // array is a valid js action. Will relad cart item (along with drop-down and label)
-    $cart_outter_label->jsReload(),
+    $cartOutterLabel->jsReload(),
 
     // also will hide current item from the shelf
     (new \atk4\ui\jQuery())->hide(),
@@ -211,17 +211,17 @@ $pop = \atk4\ui\Popup::addTo($app, [$browse, 'position' => 'bottom left', 'minWi
     ->setHoverable()
     ->setOption('delay', ['show' => 100, 'hide' => 400]);
 $shelf2 = $itemShelfClass::addTo($pop);
-//$shelf2->linkCart($cart, $cart_item->jsReload());
+//$shelf2->linkCart($cart, $cartItem->jsReload());
 
 //////////////////////////////////////////////////////////////////////////////
 
-$um = \atk4\ui\Menu::addTo($menu, ['ui' => false], ['RightMenu'])
+$userMenu = \atk4\ui\Menu::addTo($menu, ['ui' => false], ['RightMenu'])
     ->addClass('right menu')->removeClass('item');
-$m_right = $um->addMenu(['', 'icon' => 'user']);
+$rightMenu = $userMenu->addMenu(['', 'icon' => 'user']);
 
 // If you add popup right inside the view, it will link itself with the element. If you are adding it into other container,
 // you can still manually link it and specify an event.
-$signup = \atk4\ui\Popup::addTo($app, [$m_right, 'position' => 'bottom right'])->setHoverable();
+$signup = \atk4\ui\Popup::addTo($app, [$rightMenu, 'position' => 'bottom right'])->setHoverable();
 
 // This popup will be dynamically loaded.
 $signup->stickyGet('logged');
@@ -257,17 +257,17 @@ $signup->set(function ($pop) {
 
 $button = \atk4\ui\Button::addTo($app, ['Click Me', 'primary']);
 
-$b_pop = \atk4\ui\Popup::addTo($app, [$button]);
+$buttonPopup = \atk4\ui\Popup::addTo($app, [$button]);
 
-\atk4\ui\Header::addTo($b_pop)->set('Using click events');
-\atk4\ui\View::addTo($b_pop)->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
+\atk4\ui\Header::addTo($buttonPopup)->set('Using click events');
+\atk4\ui\View::addTo($buttonPopup)->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
 
 $input = Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'circular search link']);
 
-$i_pop = \atk4\ui\Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
-\atk4\ui\View::addTo($i_pop)->set('You can use this field to search data.');
+$inputPopup = \atk4\ui\Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
+\atk4\ui\View::addTo($inputPopup)->set('You can use this field to search data.');
 
 $button = \atk4\ui\Button::addTo($app, [null, 'icon' => 'volume down']);
-$b_pop = \atk4\ui\Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();
+$buttonPopup = \atk4\ui\Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();
 
-Form\Control\Checkbox::addTo($b_pop, ['Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
+Form\Control\Checkbox::addTo($buttonPopup, ['Just On/Off', 'slider'])->on('change', $button->js()->find('.icon')->toggleClass('up down'));

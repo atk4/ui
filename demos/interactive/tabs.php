@@ -40,11 +40,11 @@ $tabs->addTab('Modal popup', function ($tab) {
 $tabs->addTab('Dynamic Form', function ($tab) {
     \atk4\ui\Message::addTo($tab, ['It takes 2 seconds for this tab to load', 'warning']);
     sleep(2);
-    $m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
-    $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
+    $modelRegister = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
+    $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
     $form = \atk4\ui\Form::addTo($tab, ['segment' => true]);
-    $form->setModel($m_register);
+    $form->setModel($modelRegister);
     $form->onSubmit(function (\atk4\ui\Form $form) {
         if ($form->model->get('name') !== 'John') {
             return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');

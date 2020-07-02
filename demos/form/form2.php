@@ -24,8 +24,8 @@ $form = Form::addTo($app, ['segment']);
 $form->setModel(new Country($app->db), false);
 
 // form basic field group
-$f_address = $form->addGroup('Basic Country Information');
-$f_address->addControl('name', ['width' => 'sixteen'])
+$formAddress = $form->addGroup('Basic Country Information');
+$formAddress->addControl('name', ['width' => 'sixteen'])
     ->addAction(['Check Duplicate', 'iconRight' => 'search'])
     ->on('click', function ($val) {
         // We can't get the value until https://github.com/atk4/ui/issues/77
@@ -33,17 +33,17 @@ $f_address->addControl('name', ['width' => 'sixteen'])
     });
 
 // form codes field group
-$f_codes = $form->addGroup(['Codes']);
-$f_codes->addControl('iso', ['width' => 'four'])->iconLeft = 'flag';
-$f_codes->addControl('iso3', ['width' => 'four'])->iconLeft = 'flag';
-$f_codes->addControl('numcode', ['width' => 'four'])->iconLeft = 'flag';
-$f_codes->addControl('phonecode', ['width' => 'four'])->iconLeft = 'flag';
+$formCodes = $form->addGroup(['Codes']);
+$formCodes->addControl('iso', ['width' => 'four'])->iconLeft = 'flag';
+$formCodes->addControl('iso3', ['width' => 'four'])->iconLeft = 'flag';
+$formCodes->addControl('numcode', ['width' => 'four'])->iconLeft = 'flag';
+$formCodes->addControl('phonecode', ['width' => 'four'])->iconLeft = 'flag';
 
 // form names field group
-$f_names = $form->addGroup(['More Information about you']);
-$f_names->addControl('first_name', ['width' => 'eight']);
-$f_names->addControl('middle_name', ['width' => 'three']);
-$f_names->addControl('last_name', ['width' => 'five']);
+$formNames = $form->addGroup(['More Information about you']);
+$formNames->addControl('first_name', ['width' => 'eight']);
+$formNames->addControl('middle_name', ['width' => 'three']);
+$formNames->addControl('last_name', ['width' => 'five']);
 
 // form on submit
 $form->onSubmit(function (Form $form) {

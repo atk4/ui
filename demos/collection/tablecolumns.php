@@ -102,7 +102,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
     }
 });
 
-$key_value_string = [
+$keyValueString = [
     1 => 'one',
     'two',
     'three',
@@ -120,7 +120,7 @@ foreach (range(1, 10) as $id) {
         'id' => $id,
         'name' => 'name ' . $id,
         'key_value' => $key_value,
-        'key_value_string' => $key_value_string[$key_value],
+        'key_value_string' => $keyValueString[$key_value],
         'value_not_always_present' => random_int(0, 100) > 50 ? 'have value' : '',
         'interests' => '1st label, 2nd label',
         'rating' => random_int(100, 300) / 100,

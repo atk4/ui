@@ -31,17 +31,17 @@ $noSave = function (Form $form) {
 $form = Form::addTo($app);
 $form->setModel($model, false);
 
-$sub_layout = $form->layout->addSubLayout([Form\Layout\Section::class]);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
-\atk4\ui\Header::addTo($sub_layout, ['Column Section in Form']);
-$sub_layout->setModel($model, ['name']);
+\atk4\ui\Header::addTo($sublayout, ['Column Section in Form']);
+$sublayout->setModel($model, ['name']);
 
-$cols_layout = $form->layout->addSubLayout([Form\Layout\Section\Columns::class]);
+$colsLayout = $form->layout->addSubLayout([Form\Layout\Section\Columns::class]);
 
-$c1 = $cols_layout->addColumn();
+$c1 = $colsLayout->addColumn();
 $c1->setModel($model, ['iso', 'iso3']);
 
-$c2 = $cols_layout->addColumn();
+$c2 = $colsLayout->addColumn();
 $c2->setModel($model, ['numcode'/*, 'phonecode'*/]);
 
 $form->addControl('phonecode');
@@ -55,17 +55,17 @@ $form->onSubmit($noSave);
 $form = Form::addTo($app);
 $form->setModel($model, false);
 
-$sub_layout = $form->layout->addSubLayout([Form\Layout\Section::class]);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
-\atk4\ui\Header::addTo($sub_layout, ['Accordion Section in Form']);
-$sub_layout->setModel($model, ['name']);
+\atk4\ui\Header::addTo($sublayout, ['Accordion Section in Form']);
+$sublayout->setModel($model, ['name']);
 
-$accordion_layout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class]);
+$accordionLayout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class]);
 
-$a1 = $accordion_layout->addSection('Section 1');
+$a1 = $accordionLayout->addSection('Section 1');
 $a1->setModel($model, ['iso', 'iso3']);
 
-$a2 = $accordion_layout->addSection('Section 2');
+$a2 = $accordionLayout->addSection('Section 2');
 $a2->setModel($model, ['numcode', 'phonecode']);
 
 $form->onSubmit($noSave);
@@ -77,18 +77,18 @@ $form->onSubmit($noSave);
 $form = Form::addTo($app);
 $form->setModel($model, false);
 
-$sub_layout = $form->layout->addSubLayout([Form\Layout\Section::class]);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
-\atk4\ui\Header::addTo($sub_layout, ['Tabs in Form']);
-$sub_layout->setModel($model, ['name']);
+\atk4\ui\Header::addTo($sublayout, ['Tabs in Form']);
+$sublayout->setModel($model, ['name']);
 
-$tabs_layout = $form->layout->addSubLayout([Form\Layout\Section\Tabs::class]);
+$tabsLayout = $form->layout->addSubLayout([Form\Layout\Section\Tabs::class]);
 
-$t1 = $tabs_layout->addTab('Tab 1');
-$t1->addGroup('In Group')->setModel($model, ['iso', 'iso3']);
+$tab1 = $tabsLayout->addTab('Tab 1');
+$tab1->addGroup('In Group')->setModel($model, ['iso', 'iso3']);
 
-$t2 = $tabs_layout->addTab('Tab 2');
-$t2->setModel($model, ['numcode', 'phonecode']);
+$tab2 = $tabsLayout->addTab('Tab 2');
+$tab2->setModel($model, ['numcode', 'phonecode']);
 
 $form->onSubmit($noSave);
 
@@ -101,18 +101,18 @@ $form->onSubmit($noSave);
 $form = Form::addTo($app);
 $form->setModel($model, false);
 
-$sub_layout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment red inverted'], false);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment red inverted'], false);
 
-\atk4\ui\Header::addTo($sub_layout, ['This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
-$sub_layout->setModel($model, ['name']);
+\atk4\ui\Header::addTo($sublayout, ['This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
+$sublayout->setModel($model, ['name']);
 
-$sub_layout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment teal inverted']);
-$cols_layout = $sub_layout->addSubLayout([Form\Layout\Section\Columns::class]);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment teal inverted']);
+$colsLayout = $sublayout->addSubLayout([Form\Layout\Section\Columns::class]);
 
-$c1 = $cols_layout->addColumn();
+$c1 = $colsLayout->addColumn();
 $c1->setModel($model, ['iso', 'iso3']);
 
-$c2 = $cols_layout->addColumn();
+$c2 = $colsLayout->addColumn();
 $c2->setModel($model, ['numcode', 'phonecode']);
 
 $form->onSubmit($noSave);

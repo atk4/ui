@@ -30,7 +30,7 @@ $action->args = [
     'city' => ['type' => 'string', 'required' => true, 'caption' => 'Arrive at which city:'],
 ];
 
-$info_action = $countries->addUserAction('request_info', [
+$infoAction = $countries->addUserAction('request_info', [
     'callback' => function ($model, $email) {
         return 'Your request for information was sent to email: ' . $email;
     },
@@ -38,7 +38,7 @@ $info_action = $countries->addUserAction('request_info', [
     'ui' => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => [\atk4\ui\Icon::class, 'mail']]],
 ]);
 
-$info_action->args = [
+$infoAction->args = [
     'email' => ['type' => 'email', 'required' => true, 'caption' => 'Please let us know your email address:'],
     'country' => ['required' => true, 'ui' => ['form' => [\atk4\ui\Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
 ];

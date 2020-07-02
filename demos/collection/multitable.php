@@ -30,11 +30,11 @@ $finderClass = get_class(new class() extends \atk4\ui\Columns {
         }
 
         $path = [];
-        $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
+        $jsReload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
             $path ? (implode(',', $path) . ',') : '',
             new \atk4\ui\jsExpression('$(this).data("id")'),
         ])]);
-        $table->on('click', 'tr', $js_reload);
+        $table->on('click', 'tr', $jsReload);
 
         while ($selections && $id = array_shift($selections)) {
             $path[] = $id;
@@ -60,11 +60,11 @@ $finderClass = get_class(new class() extends \atk4\ui\Columns {
                 $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
             }
 
-            $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
+            $jsReload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
                 $path ? (implode(',', $path) . ',') : '',
                 new \atk4\ui\jsExpression('$(this).data("id")'),
             ])]);
-            $table->on('click', 'tr', $js_reload);
+            $table->on('click', 'tr', $jsReload);
         }
 
         return $this->model;

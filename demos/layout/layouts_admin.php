@@ -9,22 +9,22 @@ require_once __DIR__ . '/../init-app.php';
 
 $layout = \atk4\ui\Layout\Admin::addTo($app);
 
-$m_comp = $layout->menu->addMenu(['Layouts', 'icon' => 'puzzle']);
-$m_comp->addItem(\atk4\ui\Layout\Centered::class);
-$m_comp->addItem(\atk4\ui\Layout\Admin::class);
+$menu = $layout->menu->addMenu(['Layouts', 'icon' => 'puzzle']);
+$menu->addItem(\atk4\ui\Layout\Centered::class);
+$menu->addItem(\atk4\ui\Layout\Admin::class);
 
-$m_right = $layout->menuRight;
-$m_right->addItem(['Warning', 'red', 'icon' => 'red warning']);
-$m_user = $m_right->addMenu('John Smith');
-$m_user->addItem('Profile');
-$m_user->addDivider();
-$m_user->addItem('Logout');
+$menuRight = $layout->menuRight;
+$menuRight->addItem(['Warning', 'red', 'icon' => 'red warning']);
+$menuUser = $menuRight->addMenu('John Smith');
+$menuUser->addItem('Profile');
+$menuUser->addDivider();
+$menuUser->addItem('Logout');
 
-$m_comp = $layout->menu->addMenu(['Component Demo', 'icon' => 'puzzle']);
-$m_form = $m_comp->addMenu('Forms');
-$m_form->addItem('Form Controls');
-$m_form->addItem('Form Layouts');
-$m_comp->addItem('CRUD');
+$menu = $layout->menu->addMenu(['Component Demo', 'icon' => 'puzzle']);
+$menuForm = $menu->addMenu('Forms');
+$menuForm->addItem('Form Controls');
+$menuForm->addItem('Form Layouts');
+$menu->addItem('CRUD');
 
 $layout->menuLeft->addItem(['Home', 'icon' => 'home']);
 $layout->menuLeft->addItem(['Topics', 'icon' => 'block layout']);
@@ -39,14 +39,14 @@ $layout->template['Footer'] = 'ATK is awesome';
 $form = \atk4\ui\Form::addTo($layout, ['segment']);
 $form->setModel(new \atk4\data\Model());
 
-$f_group = $form->addGroup('Name');
-$f_group->addControl('first_name', ['width' => 'eight']);
-$f_group->addControl('middle_name', ['width' => 'three']);
-$f_group->addControl('last_name', ['width' => 'five']);
+$formGroup = $form->addGroup('Name');
+$formGroup->addControl('first_name', ['width' => 'eight']);
+$formGroup->addControl('middle_name', ['width' => 'three']);
+$formGroup->addControl('last_name', ['width' => 'five']);
 
-$f_group = $form->addGroup('Address');
-$f_group->addControl('address', ['width' => 'twelve']);
-$f_group->addControl('zip', ['width' => 'four']);
+$formGroup = $form->addGroup('Address');
+$formGroup->addControl('address', ['width' => 'twelve']);
+$formGroup->addControl('zip', ['width' => 'four']);
 
 $form->onSubmit(function (\atk4\ui\Form $form) {
     $errors = [];

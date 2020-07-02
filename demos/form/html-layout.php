@@ -26,16 +26,16 @@ $form = FlyersForm::addTo($tab, [
 ////////////////////////////////////////
 $tab = $tabs->addTab('Template samples');
 
-$g_l = GridLayout::addTo($tab, ['rows' => 1, 'columns' => 2])->addClass('internally celled');
+$gridLayout = GridLayout::addTo($tab, ['rows' => 1, 'columns' => 2])->addClass('internally celled');
 
-$right = View::addTo($g_l, [], ['r1c1']);
+$right = View::addTo($gridLayout, [], ['r1c1']);
 Header::addTo($right, ['Button on right']);
 
 $form = Form::addTo($right, ['layout' => [Form\Layout::class, 'defaultTemplate' => __DIR__ . '/templates/form-button-right.html']]);
 $form->setModel(new Flyers(new \atk4\data\Persistence\Array_()));
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
-$left = View::addTo($g_l, [], ['r1c2']);
+$left = View::addTo($gridLayout, [], ['r1c2']);
 Header::addTo($left, ['Hint placement']);
 
 $form = Form::addTo($left, [

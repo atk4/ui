@@ -15,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Header::addTo($app, ['Nested accordions']);
 
-function addAccordion($view, $max_depth = 2, $level = 0)
+function addAccordion($view, $maxDepth = 2, $level = 0)
 {
     $accordion = \atk4\ui\Accordion::addTo($view, ['type' => ['styled', 'fluid']]);
 
@@ -23,21 +23,21 @@ function addAccordion($view, $max_depth = 2, $level = 0)
     $i1 = $accordion->addSection('Static Text');
     \atk4\ui\Message::addTo($i1, ['This content is added on page loaded', 'ui' => 'tiny message']);
     \atk4\ui\LoremIpsum::addTo($i1, ['size' => 1]);
-    if ($level < $max_depth) {
-        addAccordion($i1, $max_depth, $level + 1);
+    if ($level < $maxDepth) {
+        addAccordion($i1, $maxDepth, $level + 1);
     }
 
     // dynamic section - simple view
-    $i2 = $accordion->addSection('Dynamic Text', function ($v) use ($max_depth, $level) {
+    $i2 = $accordion->addSection('Dynamic Text', function ($v) use ($maxDepth, $level) {
         \atk4\ui\Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
         \atk4\ui\LoremIpsum::addTo($v, ['size' => 2]);
-        if ($level < $max_depth) {
-            addAccordion($v, $max_depth, $level + 1);
+        if ($level < $maxDepth) {
+            addAccordion($v, $maxDepth, $level + 1);
         }
     });
 
     // dynamic section - form view
-    $i3 = $accordion->addSection('Dynamic Form', function ($v) use ($max_depth, $level) {
+    $i3 = $accordion->addSection('Dynamic Form', function ($v) use ($maxDepth, $level) {
         \atk4\ui\Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
         $form = \atk4\ui\Form::addTo($v);
         $form->addControl('Email');
@@ -45,8 +45,8 @@ function addAccordion($view, $max_depth = 2, $level = 0)
             return $form->success('Subscribed ' . $form->model->get('Email') . ' to newsletter.');
         });
 
-        if ($level < $max_depth) {
-            addAccordion($v, $max_depth, $level + 1);
+        if ($level < $maxDepth) {
+            addAccordion($v, $maxDepth, $level + 1);
         }
     });
 }

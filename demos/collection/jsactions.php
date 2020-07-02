@@ -46,7 +46,7 @@ $card->addClickAction($countryAction);
 \atk4\ui\Header::addTo($app, ['Action can ask for confirmation before executing', 'size' => 4]);
 
 $files = new File($app->db);
-$f_action = $files->addUserAction(
+$importFileAction = $files->addUserAction(
     'import_from_filesystem',
     [
         'callback' => 'importFromFilesystem',
@@ -59,7 +59,7 @@ $f_action = $files->addUserAction(
 
 $btn = \atk4\ui\Button::addTo($app, ['Import File']);
 $executor = UserAction\JsCallbackExecutor::addTo($app);
-$executor->setAction($f_action, ['path' => '.']);
+$executor->setAction($importFileAction, ['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');
 });

@@ -173,13 +173,13 @@ $tab = $tabs->addTab('Complex Examples');
 
 \atk4\ui\Header::addTo($tab, ['Conditional response']);
 
-$m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
-$m_register->addField('name');
-$m_register->addField('email');
-$m_register->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
+$modelRegister = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
+$modelRegister->addField('name');
+$modelRegister->addField('email');
+$modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
 
 $form = Form::addTo($tab, ['segment' => true]);
-$form->setModel($m_register);
+$form->setModel($modelRegister);
 
 $form->onSubmit(function (Form $form) {
     if ($form->model->get('name') !== 'John') {
