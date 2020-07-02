@@ -137,7 +137,7 @@ Agile UI will automatically pass your $app class to all the views.
 Integration with Agile Data
 ===========================
 
-.. php:method:: setModel($m)
+.. php:method:: setModel($model)
 
     Associate current view with a domain model.
 

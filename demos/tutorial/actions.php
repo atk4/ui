@@ -136,7 +136,7 @@ $model->addUserAction('greet', [
             'type'=>'string'
         ]
     ],
-    'callback'=>function ($m, $name) {
+    'callback'=>function ($model, $name) {
         return 'Hi '.$name;
     },
     'ui' => ['executor' => [\atk4\ui\UserAction\JsCallbackExecutor::class]],
@@ -150,7 +150,7 @@ $model->addUserAction('ask_age', [
             'required' => true
         ]
     ],
-    'callback'=>function ($m, $age) {
+    'callback'=>function ($model, $age) {
         return 'Age is '.$age;
     }
 ]);
@@ -171,8 +171,8 @@ CODE
 $wizard->addStep('More Ways', function ($page) {
     $page->add(new Demo(['left_width'=>5, 'right_width'=>11]))->setCode(
         <<<'CODE'
-$m = new Stat($app->db);
-$m->addUserAction('mail', [
+$model = new Stat($app->db);
+$model->addUserAction('mail', [
     'fields'      => ['currency_field'],
     'appliesTo'       => \atk4\data\Model\UserAction::APPLIES_TO_SINGLE_RECORD,
     'callback'    => function() { return 'testing'; },
@@ -180,7 +180,7 @@ $m->addUserAction('mail', [
 ]);
 $app->add('CardDeck')
     ->setModel(
-        $m,
+        $model,
         ['description']
     );
 CODE
@@ -205,8 +205,8 @@ $country->getUserAction('add')->enabled = false;
 $country->getUserAction('delete')->enabled = function() { return rand(1,2)>1; };
 $country->getUserAction('mail', [
     'appliesTo'       => \atk4\data\Model\UserAction:APPLIES_TO_SINGLE_RECORD,
-    'preview'    => function($m) { return 'here is email preview for '.$m->get('name'); },
-    'callback'    => function($m) { return 'email sent to '.$m->get('name'); },
+    'preview'    => function($model) { return 'here is email preview for '.$model->get('name'); },
+    'callback'    => function($model) { return 'email sent to '.$model->get('name'); },
     'description' => 'Email testing',
     'ui'       => ['icon'=>'mail', 'button'=>[null, 'icon'=>'green mail']],
 ]);

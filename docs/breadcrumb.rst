@@ -54,24 +54,24 @@ For example the next code will use some logic::
     $crumb = BreadCrumb::addTo($app);
     $crumb->addCrumb('Users', []);
 
-    $m = new User($app->db);
+    $model = new User($app->db);
 
     if ($id = $app->stickyGet('user_id')) {
 
         // perhaps we edit individual user?
-        $m->load($id);
-        $crumb->addCrumb($m->get('name'), []);
+        $model->load($id);
+        $crumb->addCrumb($model->get('name'), []);
 
 
         // here we can check for additional criteria and display a deeper level on the crumb
 
 
-        Form::addTo($app)->setModel($m);
+        Form::addTo($app)->setModel($model);
     } else {
 
         // display list of users
         $table = Table::addTo($app);
-        $table->setModel($m);
+        $table->setModel($model);
         $table->addDecorator(['name', [\atk4\ui\Table\Column\Link::class, [], ['user_id'=>'id']);
     }
 

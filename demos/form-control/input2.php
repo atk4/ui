@@ -70,27 +70,27 @@ $control->onUpload($onUpload);
 
 $group = $form->addGroup('Lookup');
 
-$m = new Country($app->db);
+$model = new Country($app->db);
 
 $group->addControl('Lookup_norm', [
     DemoLookup::class,
     'model' => new CountryLock($app->db),
     'plus' => true,
-])->set($m->loadAny()->id);
+])->set($model->loadAny()->id);
 
 $group->addControl('Lookup_read', [
     Form\Control\Lookup::class,
     'model' => new CountryLock($app->db),
     'plus' => true,
     'readonly' => true,
-])->set($m->loadAny()->id);
+])->set($model->loadAny()->id);
 
 $group->addControl('Lookup_disb', [
     Form\Control\Lookup::class,
     'model' => new CountryLock($app->db),
     'plus' => true,
     'disabled' => true,
-])->set($m->loadAny()->id);
+])->set($model->loadAny()->id);
 
 $group = $form->addGroup('Calendar');
 
@@ -131,11 +131,11 @@ $form = Form::addTo($app);
 $tabs = \atk4\ui\Tabs::addTo($form, [], ['AboveControls']);
 \atk4\ui\View::addTo($form, ['ui' => 'divider'], ['AboveControls']);
 
-$form_page = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form' => $form]);
-$form_page->addControl('name', new Form\Control\Line());
+$formPage = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form' => $form]);
+$formPage->addControl('name', new Form\Control\Line());
 
-$form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
-$form_page->addControl('age', new Form\Control\Line());
+$formPage = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
+$formPage->addControl('age', new Form\Control\Line());
 
 $form->onSubmit(function (Form $form) {
     return $form->model->get('name') . ' has age ' . $form->model->get('age');

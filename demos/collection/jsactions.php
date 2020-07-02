@@ -20,8 +20,8 @@ require_once __DIR__ . '/../init-app.php';
 
 $country = new Country($app->db);
 
-$c_action = $country->addUserAction('Email', function ($m) {
-    return 'Email to Kristy in ' . $m->get('name') . ' has been sent!';
+$countryAction = $country->addUserAction('Email', function ($model) {
+    return 'Email to Kristy in ' . $model->get('name') . ' has been sent!';
 });
 
 $country->tryLoadAny();
@@ -29,7 +29,7 @@ $card = \atk4\ui\Card::addTo($app);
 $content = new \atk4\ui\View(['class' => ['content']]);
 $content->add($img = new \atk4\ui\Image(['../images/kristy.png']));
 $img->addClass('right floated mini ui image');
-$content->add($header = new \atk4\ui\Header(['Kristy']));
+$content->add(new \atk4\ui\Header(['Kristy']));
 
 $card->addContent($content);
 $card->addDescription('Kristy is a friend of Mully.');
@@ -37,7 +37,7 @@ $card->addDescription('Kristy is a friend of Mully.');
 $s = $card->addSection('Country');
 $s->addFields($country->loadAny(), ['name', 'iso']);
 
-$card->addClickAction($c_action);
+$card->addClickAction($countryAction);
 
 ///////////////////////////////////////////
 
@@ -46,7 +46,7 @@ $card->addClickAction($c_action);
 \atk4\ui\Header::addTo($app, ['Action can ask for confirmation before executing', 'size' => 4]);
 
 $files = new File($app->db);
-$f_action = $files->addUserAction(
+$importFileAction = $files->addUserAction(
     'import_from_filesystem',
     [
         'callback' => 'importFromFilesystem',
@@ -59,7 +59,7 @@ $f_action = $files->addUserAction(
 
 $btn = \atk4\ui\Button::addTo($app, ['Import File']);
 $executor = UserAction\JsCallbackExecutor::addTo($app);
-$executor->setAction($f_action, ['path' => '.']);
+$executor->setAction($importFileAction, ['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m) {
     return new \atk4\ui\jsToast('Files imported');
 });
@@ -80,7 +80,7 @@ $country->addUserAction('greet', [
         ],
     ],
     'ui' => ['executor' => [UserAction\JsCallbackExecutor::class]],
-    'callback' => function ($m, $name) {
+    'callback' => function ($model, $name) {
         return 'Hello ' . $name;
     },
 ]);

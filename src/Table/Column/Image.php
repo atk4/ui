@@ -21,14 +21,12 @@ class Image extends Table\Column
     /**
      * Extend parent method.
      *
-     * @param \atk4\data\Field $f
-     *
      * @return string
      */
-    public function getDataCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(\atk4\data\Field $field = null)
     {
-        $caption = $f ? $f->getCaption() : $this->short_name;
+        $caption = $field ? $field->getCaption() : $this->short_name;
 
-        return '<img src="' . parent::getDataCellTemplate($f) . '" alt="' . $caption . '" border="0" />';
+        return '<img src="' . parent::getDataCellTemplate($field) . '" alt="' . $caption . '" border="0" />';
     }
 }

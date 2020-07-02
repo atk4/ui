@@ -18,18 +18,18 @@ Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 
 $form = Form::addTo($app, ['segment']);
 \atk4\ui\Label::addTo($form, ['Lookup countries', 'top attached'], ['AboveControls']);
 
-$m = new \atk4\data\Model($app->db, 'test');
+$model = new \atk4\data\Model($app->db, 'test');
 
 // Without Lookup
-$m->hasOne('country1', new Country());
+$model->hasOne('country1', new Country());
 
 // With Lookup
-$m->hasOne('country2', [new Country(), 'ui' => ['form' => [
+$model->hasOne('country2', [new Country(), 'ui' => ['form' => [
     DemoLookup::class,
     'plus' => true,
 ]]]);
 
-$form->setModel($m);
+$form->setModel($model);
 
 $form->addControl('country3', [
     Form\Control\Lookup::class,

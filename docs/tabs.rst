@@ -66,11 +66,11 @@ Note that tab contents are refreshed including any values you put on the form::
         $m_register = new \atk4\data\Model(new \atk4\data\Persistence_Array($a));
         $m_register->addField('name', ['caption'=>'Please enter your name (John)']);
 
-        $f = Form::addTo($tab, ['segment'=>true]);
-        $f->setModel($m_register);
-        $f->onSubmit(function ($f) {
-            if ($f->model->get('name') !== 'John') {
-                return $f->error('name', 'Your name is not John! It is "'.$f->model->get('name').'". It should be John. Pleeease!');
+        $form = Form::addTo($tab, ['segment'=>true]);
+        $form->setModel($m_register);
+        $form->onSubmit(function ($form) {
+            if ($form->model->get('name') !== 'John') {
+                return $form->error('name', 'Your name is not John! It is "'.$form->model->get('name').'". It should be John. Pleeease!');
             }
         });
     });

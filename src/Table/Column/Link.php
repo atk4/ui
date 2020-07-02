@@ -123,7 +123,7 @@ class Link extends Table\Column
         }
     }
 
-    public function getDataCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(\atk4\data\Field $field = null)
     {
         $download = $this->force_download ? ' download="true" ' : '';
         $external = $this->target ? ' target="' . $this->target . '" ' : '';
@@ -136,7 +136,7 @@ class Link extends Table\Column
 
         $label = '';
         if ($this->use_label) {
-            $label = $f ? ('{$' . $f->short_name . '}') : '[Link]';
+            $label = $field ? ('{$' . $field->short_name . '}') : '[Link]';
         }
 
         $class = '';

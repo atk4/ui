@@ -51,16 +51,16 @@ class CardSection extends View
      * @param bool $useLabel
      * @param bool $useTable
      */
-    public function addFields(Model $m, array $fields, $useLabel = false, $useTable = false)
+    public function addFields(Model $model, array $fields, $useLabel = false, $useTable = false)
     {
-        if (!$m->loaded()) {
+        if (!$model->loaded()) {
             throw new Exception('Model need to be loaded.');
         }
 
         if ($useTable) {
-            $this->addTableSection($m, $fields);
+            $this->addTableSection($model, $fields);
         } else {
-            $this->addSectionFields($m, $fields, $useLabel);
+            $this->addSectionFields($model, $fields, $useLabel);
         }
     }
 
@@ -69,11 +69,11 @@ class CardSection extends View
      *
      * @param bool $useLabel
      */
-    private function addSectionFields(Model $m, array $fields, $useLabel = false)
+    private function addSectionFields(Model $model, array $fields, $useLabel = false)
     {
         foreach ($fields as $field) {
-            $label = $m->getField($field)->getCaption();
-            $value = $this->app ? $this->app->ui_persistence->typecastSaveField($m->getField($field), $m->get($field)) : $m->get($field);
+            $label = $model->getField($field)->getCaption();
+            $value = $this->app ? $this->app->ui_persistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
             if ($useLabel) {
                 $value = $label . $this->glue . $value;
             }
@@ -85,11 +85,11 @@ class CardSection extends View
     /**
      * Add field into section using a CardTable View.
      */
-    private function addTableSection(Model $m, array $fields)
+    private function addTableSection(Model $model, array $fields)
     {
-        $c = new CardTable(['class' => $this->tableClass]);
-        $c->init();
-        $m = $c->setModel($m, $fields);
-        $this->add($c);
+        $cardTable = new CardTable(['class' => $this->tableClass]);
+        $cardTable->init();
+        $model = $cardTable->setModel($model, $fields);
+        $this->add($cardTable);
     }
 }

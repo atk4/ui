@@ -31,15 +31,15 @@ class Status extends Table\Column
         $this->states = $states;
     }
 
-    public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
+    public function getDataCellHTML(\atk4\data\Field $field = null, $extra_tags = [])
     {
-        if ($f === null) {
+        if ($field === null) {
             throw new \atk4\ui\Exception('Status can be used only with model field');
         }
 
         $attr = $this->getTagAttributes('body');
 
-        $extra_tags = array_merge_recursive($attr, $extra_tags, ['class' => '{$_' . $f->short_name . '_status}']);
+        $extra_tags = array_merge_recursive($attr, $extra_tags, ['class' => '{$_' . $field->short_name . '_status}']);
 
         if (isset($extra_tags['class']) && is_array($extra_tags['class'])) {
             $extra_tags['class'] = implode(' ', $extra_tags['class']);
@@ -48,8 +48,8 @@ class Status extends Table\Column
         return $this->app->getTag(
             'td',
             $extra_tags,
-            [$this->app->getTag('i', ['class' => 'icon {$_' . $f->short_name . '_icon}'], '') .
-            ' {$' . $f->short_name . '}', ]
+            [$this->app->getTag('i', ['class' => 'icon {$_' . $field->short_name . '_icon}'], '') .
+            ' {$' . $field->short_name . '}', ]
         );
     }
 

@@ -25,9 +25,9 @@ $val = isset($_GET['toggle']) && $_GET['toggle'];
 $toggle = \atk4\ui\Label::addTo($app, ['icon' => 'toggle ' . ($val ? 'on' : 'off')])->set('Value: ' . $val);
 $toggle->on('click', new \atk4\ui\jsReload($toggle, ['toggle' => $val ? null : 1]));
 
-$m = \atk4\ui\Menu::addTo($app);
-\atk4\ui\Label::addTo($m->addItem('Inbox'), ['20', 'floating red']);
-\atk4\ui\Label::addTo($m->addMenu('Others')->addItem('Draft'), ['10', 'floating blue']);
+$menu = \atk4\ui\Menu::addTo($app);
+\atk4\ui\Label::addTo($menu->addItem('Inbox'), ['20', 'floating red']);
+\atk4\ui\Label::addTo($menu->addMenu('Others')->addItem('Draft'), ['10', 'floating blue']);
 
 $seg = \atk4\ui\View::addTo($app, ['ui' => 'segment']);
 \atk4\ui\Header::addTo($seg, ['Label Group']);

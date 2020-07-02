@@ -30,7 +30,7 @@ $notify = $client->addUserAction('Notify', [
     'args' => [
         'note' => ['type' => 'string', 'required' => true],
     ],
-    'callback' => function ($m, $note) {
+    'callback' => function ($model, $note) {
         return 'Note to client is sent: ' . $note;
     },
 ]);

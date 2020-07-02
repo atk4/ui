@@ -13,11 +13,11 @@ require_once __DIR__ . '/../init-app.php';
 /**
  * Demonstrates how to use a wizard.
  */
-$t = Wizard::addTo($app, ['stepCallback' => Callback::addTo($app, ['urlTrigger' => 'demo_wizard'])]);
+$wizard = Wizard::addTo($app, ['stepCallback' => Callback::addTo($app, ['urlTrigger' => 'demo_wizard'])]);
 // First step will automatcally be active when you open page first. It
 // will contain the 'Next' button with a link.
-$t->addStep('Welcome', function (Wizard $w) {
-    \atk4\ui\Message::addTo($w, ['Welcome to wizard demonstration'])->text
+$wizard->addStep('Welcome', function (Wizard $wizard) {
+    \atk4\ui\Message::addTo($wizard, ['Welcome to wizard demonstration'])->text
         ->addParagraph('Use button "Next" to advance')
         ->addParagraph('You can specify your existing database connection string which will be used
         to create a table for model of your choice');
@@ -27,64 +27,64 @@ $t->addStep('Welcome', function (Wizard $w) {
 // form on "Next" button click, performing validation and submission. You do not need
 // to return any action from form's onSubmit callback. You may also use memorize()
 // to store wizard-specific variables
-$t->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connection String'], function (Wizard $w) {
-    $f = \atk4\ui\Form::addTo($w);
+$wizard->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connection String'], function (Wizard $wizard) {
+    $form = \atk4\ui\Form::addTo($wizard);
     // IMPORTANT - needed for php_unit Wizard test.
-    $f->name = 'w_form';
+    $form->name = 'w_form';
 
-    $f->addControl('dsn', 'Connect DSN', ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
-    $f->onSubmit(function (\atk4\ui\Form $form) use ($w) {
-        $w->memorize('dsn', $form->model->get('dsn'));
+    $form->addControl('dsn', 'Connect DSN', ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
+    $form->onSubmit(function (\atk4\ui\Form $form) use ($wizard) {
+        $wizard->memorize('dsn', $form->model->get('dsn'));
 
-        return $w->jsNext();
+        return $wizard->jsNext();
     });
 });
 
 // Alternatvely, you may access buttonNext , buttonPrev properties of a wizard
 // and set a custom js action or even set a different link. You can use recall()
 // to access some values that were recorded on another steps.
-$t->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon' => 'table'], function (Wizard $w) {
+$wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon' => 'table'], function (Wizard $wizard) {
     if (isset($_GET['name'])) {
-        $w->memorize('model', $_GET['name']);
-        $w->app->redirect($w->urlNext());
+        $wizard->memorize('model', $_GET['name']);
+        $wizard->app->redirect($wizard->urlNext());
     }
 
-    $c = \atk4\ui\Columns::addTo($w);
+    $columns = \atk4\ui\Columns::addTo($wizard);
 
-    $t = \atk4\ui\Grid::addTo($c->addColumn(), ['paginator' => false, 'menu' => false]);
-    \atk4\ui\Message::addTo($c->addColumn(), ['Information', 'info'])->text
+    $grid = \atk4\ui\Grid::addTo($columns->addColumn(), ['paginator' => false, 'menu' => false]);
+    \atk4\ui\Message::addTo($columns->addColumn(), ['Information', 'info'])->text
         ->addParagraph('Selecting which model you would like to import into your DSN. If corresponding table already exist, we might add extra fields into it. No tables, columns or rows will be deleted.');
 
-    $t->setSource(['Country', 'Stat']);
+    $grid->setSource(['Country', 'Stat']);
 
     // should work after url() fix
-    $t->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [], ['name']]);
+    $grid->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [], ['name']]);
 
-    //$t->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [$w->stepCallback->name=>$w->currentStep], ['name']]);
+    //$t->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [$wizard->stepCallback->name=>$wizard->currentStep], ['name']]);
 
-    $w->buttonNext->addClass('disabled');
+    $wizard->buttonNext->addClass('disabled');
 });
 
 // Steps may contain interractive elements. You can disable navigational buttons
 // and enable them as you see fit. Use handy js method to trigger advancement to
 // the next step.
-$t->addStep(['Migration', 'description' => 'Create or update table', 'icon' => 'database'], function (Wizard $w) {
-    $c = \atk4\ui\Console::addTo($w);
-    $w->buttonFinish->addClass('disabled');
+$wizard->addStep(['Migration', 'description' => 'Create or update table', 'icon' => 'database'], function (Wizard $wizard) {
+    $console = \atk4\ui\Console::addTo($wizard);
+    $wizard->buttonFinish->addClass('disabled');
 
-    $c->set(function ($c) use ($w) {
-        $dsn = $w->recall('dsn');
-        $model = $w->recall('model');
+    $console->set(function ($console) use ($wizard) {
+        $dsn = $wizard->recall('dsn');
+        $model = $wizard->recall('model');
 
-        $c->output('please wait');
+        $console->output('please wait');
         sleep(1);
-        $c->output('connecting to "' . $dsn . '" (well not really, this is only a demo)');
+        $console->output('connecting to "' . $dsn . '" (well not really, this is only a demo)');
         sleep(2);
-        $c->output('initializing table for model "' . $model . '" (again - tricking you)');
+        $console->output('initializing table for model "' . $model . '" (again - tricking you)');
         sleep(1);
-        $c->output('DONE');
+        $console->output('DONE');
 
-        $c->send($w->buttonFinish->js()->removeClass('disabled'));
+        $console->send($wizard->buttonFinish->js()->removeClass('disabled'));
     });
 });
 
@@ -92,6 +92,6 @@ $t->addStep(['Migration', 'description' => 'Create or update table', 'icon' => '
 // will be displayed when you click the "Finish". Finish will not add any buttons
 // because you shouldn't be able to navigate wizard back without restarting it.
 // Only one finish can be added.
-$t->addFinish(function (Wizard $w) {
-    \atk4\ui\Header::addTo($w, ['You are DONE', 'huge centered']);
+$wizard->addFinish(function (Wizard $wizard) {
+    \atk4\ui\Header::addTo($wizard, ['You are DONE', 'huge centered']);
 });

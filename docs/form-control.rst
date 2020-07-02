@@ -81,7 +81,7 @@ into multiple Tabs or detach form control groups or even create nested layouts::
     $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form'=>$form]);
     $form_page->addControl('age', new \atk4\ui\Form\Control\Line());
 
-    $form->onSubmit(function($f) { return $f->model->get('name').' has age '.$f->model->get('age'); });
+    $form->onSubmit(function($form) { return $form->model->get('name').' has age '.$form->model->get('age'); });
 
 This is further explained in documentation for :php:class:`atk4\\ui\\Form\\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
@@ -294,15 +294,15 @@ It's prefferable to use this short-hand version of on('change', 'input', $expres
 $expression argument can be string, jsExpression, array of jsExpressions or even PHP callback function.
 
     // simple string
-    $f1 = $f->addControl('f1');
+    $f1 = $form->addControl('f1');
     $f1->onChange('console.log("f1 changed")');
 
     // callback
-    $f2 = $f->addControl('f2');
+    $f2 = $form->addControl('f2');
     $f2->onChange(function(){return new \atk4\ui\jsExpression('console.log("f2 changed")');});
 
     // Calendar form control - wraps in function call with arguments date, text and mode
-    $c1 = $f->addControl('c1', new \atk4\ui\Form\Control\Calendar(['type'=>'date']));
+    $c1 = $form->addControl('c1', new \atk4\ui\Form\Control\Calendar(['type'=>'date']));
     $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
 
 
@@ -468,10 +468,10 @@ input model.
 
 Assume that each data model are defined and model Category has many Sub-Category and Sub-Category has many Product::
 
-    $f = \atk4\ui\Form::addTo($app);
-    $f->addControl('category_id', [Dropdown::class, 'model' => new Category($db)]);
-    $f->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
-    $f->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
+    $form = \atk4\ui\Form::addTo($app);
+    $form->addControl('category_id', [Dropdown::class, 'model' => new Category($db)]);
+    $form->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
+    $form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
 
 
 Lookup

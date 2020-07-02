@@ -67,30 +67,30 @@ class TypeDatetime extends Column\FilterModel
      *
      * @return mixed
      */
-    public function setConditionForModel($m)
+    public function setConditionForModel($model)
     {
         $filter = $this->recallData();
         if (isset($filter['id'])) {
             switch ($filter['op']) {
                 case 'empty':
-                    $m->addCondition($filter['name'], '=', null);
+                    $model->addCondition($filter['name'], '=', null);
 
                     break;
                 case 'not empty':
-                    $m->addCondition($filter['name'], '!=', null);
+                    $model->addCondition($filter['name'], '!=', null);
 
                     break;
                 case 'within':
                     $d1 = $this->getDatetime($filter['value'])->setTime(0, 0, 0);
                     $d2 = $this->getDatetime($filter['range'])->setTime(23, 59, 59);
                     if ($d2 >= $d1) {
-                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
-                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
+                        $value = $model->persistence->typecastSaveField($model->getField($filter['name']), $d1);
+                        $value2 = $model->persistence->typecastSaveField($model->getField($filter['name']), $d2);
                     } else {
-                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
-                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
+                        $value = $model->persistence->typecastSaveField($model->getField($filter['name']), $d2);
+                        $value2 = $model->persistence->typecastSaveField($model->getField($filter['name']), $d1);
                     }
-                    $m->addCondition($m->expr('[field] between [value] and [value2]', ['field' => $m->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $model->addCondition($model->expr('[field] between [value] and [value2]', ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
 
                     break;
                 case '!=':
@@ -98,32 +98,32 @@ class TypeDatetime extends Column\FilterModel
                     $d1 = clone $this->getDatetime($filter['value'])->setTime(0, 0, 0);
                     $d2 = $this->getDatetime($filter['value'])->setTime(23, 59, 59);
                     if ($d2 >= $d1) {
-                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
-                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
+                        $value = $model->persistence->typecastSaveField($model->getField($filter['name']), $d1);
+                        $value2 = $model->persistence->typecastSaveField($model->getField($filter['name']), $d2);
                     } else {
-                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
-                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
+                        $value = $model->persistence->typecastSaveField($model->getField($filter['name']), $d2);
+                        $value2 = $model->persistence->typecastSaveField($model->getField($filter['name']), $d1);
                     }
                     $between_condition = $filter['op'] === '!=' ? 'not between' : 'between';
-                    $m->addCondition($m->expr("[field] {$between_condition} [value] and [value2]", ['field' => $m->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $model->addCondition($model->expr("[field] {$between_condition} [value] and [value2]", ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
 
                     break;
                 case '>':
                 case '<=':
-                    $m->addCondition($filter['name'], $filter['op'], $this->getDatetime($filter['value'])->setTime(23, 59, 59));
+                    $model->addCondition($filter['name'], $filter['op'], $this->getDatetime($filter['value'])->setTime(23, 59, 59));
 
                     break;
                 case '<':
                 case '>=':
-                    $m->addCondition($filter['name'], $filter['op'], $this->getDatetime($filter['value'])->setTime(0, 0, 0));
+                    $model->addCondition($filter['name'], $filter['op'], $this->getDatetime($filter['value'])->setTime(0, 0, 0));
 
                     break;
                 default:
-                    $m->addCondition($filter['name'], $filter['op'], $this->getDatetime($filter['value']));
+                    $model->addCondition($filter['name'], $filter['op'], $this->getDatetime($filter['value']));
             }
         }
 
-        return $m;
+        return $model;
     }
 
     /**

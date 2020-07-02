@@ -75,8 +75,8 @@ Adding a TreeItemSelector form control to a Form::
     ];
 
 
-    $f = \atk4\ui\Form::addTo($app);
-    $control = $f->addControl('tree', [new TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'array', 'serialize' => 'json']);
+    $form = \atk4\ui\Form::addTo($app);
+    $control = $form->addControl('tree', [new TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'array', 'serialize' => 'json']);
     $control->set([201, 301, 503]);
 
 Please note that when using TreeItemSelector in multiple mode, you need to specify field attribute type to 'array' and serialize attribute to json

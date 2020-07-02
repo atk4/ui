@@ -37,9 +37,9 @@ class DropDown extends Lister
      * Handle callback when user select a new item value in dropdown.
      * Callback is fire only when selecting a different item value then the current item value.
      * ex:
-     *      $d = DropDown::addTo($m, ['menu', 'js' => ['on' => 'hover']]);
-     *      $d->setModel($menuItems);
-     *      $d->onChange(function($item) {
+     *      $dropdown = DropDown::addTo($menu, ['menu', 'js' => ['on' => 'hover']]);
+     *      $dropdown->setModel($menuItems);
+     *      $dropdown->onChange(function($item) {
      *          return 'New seleced item: '.$item;
      *      });.
      *

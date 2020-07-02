@@ -191,7 +191,7 @@ class UI extends \atk4\data\Persistence
      *  - any validation for the "saving" or output is ignored.
      *  - handling of all sorts of expressions is disabled
      */
-    public function typecastSaveRow(Model $m, $row)
+    public function typecastSaveRow(Model $model, $row)
     {
         if (!$row) {
             return $row;
@@ -204,13 +204,13 @@ class UI extends \atk4\data\Persistence
 
             // We have no knowledge of the field, it wasn't defined, so
             // we will leave it as-is.
-            if (!$m->hasField($key)) {
+            if (!$model->hasField($key)) {
                 $result[$field] = $value;
 
                 continue;
             }
 
-            $value = $this->typecastSaveField($m->getField($key), $value);
+            $value = $this->typecastSaveField($model->getField($key), $value);
 
             // store converted value
             $result[$field] = $value;

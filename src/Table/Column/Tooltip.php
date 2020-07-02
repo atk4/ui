@@ -44,26 +44,26 @@ class Tooltip extends Table\Column
         }
     }
 
-    public function getDataCellHTML(Field $f = null, $extra_tags = [])
+    public function getDataCellHTML(Field $field = null, $extra_tags = [])
     {
-        if ($f === null) {
+        if ($field === null) {
             throw new Exception('Tooltip can be used only with model field');
         }
 
         $attr = $this->getTagAttributes('body');
 
-        $extra_tags = array_merge_recursive($attr, $extra_tags, ['class' => '{$_' . $f->short_name . '_tooltip}']);
+        $extra_tags = array_merge_recursive($attr, $extra_tags, ['class' => '{$_' . $field->short_name . '_tooltip}']);
 
         if (isset($extra_tags['class']) && is_array($extra_tags['class'])) {
             $extra_tags['class'] = implode(' ', $extra_tags['class']);
         }
 
         return $this->app->getTag('td', $extra_tags, [
-            ' {$' . $f->short_name . '}' . $this->app->getTag('span', [
-                'class' => 'ui icon link {$_' . $f->short_name . '_data_visible_class}',
-                'data-tooltip' => '{$_' . $f->short_name . '_data_tooltip}',
+            ' {$' . $field->short_name . '}' . $this->app->getTag('span', [
+                'class' => 'ui icon link {$_' . $field->short_name . '_data_visible_class}',
+                'data-tooltip' => '{$_' . $field->short_name . '_data_tooltip}',
             ], [
-                ['i', ['class' => 'ui icon {$_' . $f->short_name . '_icon}']],
+                ['i', ['class' => 'ui icon {$_' . $field->short_name . '_icon}']],
             ]),
         ]);
     }

@@ -10,12 +10,12 @@ require_once __DIR__ . '/../init-app.php';
 //For popup positioning to work correctly, table need to be inside a view segment.
 $view = \atk4\ui\View::addTo($app, ['ui' => 'basic segment']);
 // Important: menu class added for Behat testing.
-$g = \atk4\ui\Grid::addTo($view, ['menu' => ['class' => ['atk-grid-menu']]]);
+$grid = \atk4\ui\Grid::addTo($view, ['menu' => ['class' => ['atk-grid-menu']]]);
 
-$m = new CountryLock($app->db);
-$m->addExpression('is_uk', $m->expr('case when [iso] = [country] THEN 1 ELSE 0 END', ['country' => 'GB']))->type = 'boolean';
+$model = new CountryLock($app->db);
+$model->addExpression('is_uk', $model->expr('case when [iso] = [country] THEN 1 ELSE 0 END', ['country' => 'GB']))->type = 'boolean';
 
-$g->setModel($m);
-$g->addFilterColumn();
+$grid->setModel($model);
+$grid->addFilterColumn();
 
-$g->ipp = 20;
+$grid->ipp = 20;

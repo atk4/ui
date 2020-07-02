@@ -497,7 +497,7 @@ class Form extends View
     /**
      * @deprecated use Form::controlFactory - will be removed in dec-2020
      */
-    public function decoratorFactory(\atk4\data\Field $f, $seed = [])
+    public function decoratorFactory(\atk4\data\Field $field, $seed = [])
     {
         'trigger_error'('Method is deprecated. Use Form::controlFactory instead', E_USER_DEPRECATED);
 
