@@ -177,19 +177,19 @@ class Card extends View
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
-     * @param \atk4\data\Model $m      the model
+     * @param \atk4\data\Model $model  the model
      * @param array|false      $fields an array of fields name to display in content
      *
      * @return \atk4\data\Model|void
      */
-    public function setModel(Model $m, $fields = null)
+    public function setModel(Model $model, $fields = null)
     {
-        if (!$m->loaded()) {
+        if (!$model->loaded()) {
             throw new Exception('Model need to be loaded.');
         }
 
         if (!$this->model) {
-            $m = parent::setModel($m);
+            $model = parent::setModel($model);
         }
 
         if ($fields === null) {
@@ -201,11 +201,11 @@ class Card extends View
         $this->setDataId($this->model->get($this->model->id_field));
 
         if ($fields && is_array($fields)) {
-            View::addTo($this->getSection(), [$m->getTitle(), ['class' => 'header']]);
-            $this->getSection()->addFields($m, $fields, $this->useLabel, $this->useTable);
+            View::addTo($this->getSection(), [$model->getTitle(), ['class' => 'header']]);
+            $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
         }
 
-        return $m;
+        return $model;
     }
 
     /**
@@ -268,7 +268,7 @@ class Card extends View
     /**
      * Add action executor to card.
      */
-    public function addAction($action, $executor, $button = null)
+    public function addAction(Model\UserAction $action, $executor, $button = null)
     {
         if (!$button) {
             $button = new Button([$action->caption]);
@@ -328,25 +328,25 @@ class Card extends View
     /**
      * Set extra content using model field.
      *
-     * @param Model  $m      The model
+     * @param Model  $model  The model
      * @param array  $fields an array of fields name
      * @param string $glue   a separator string between each field
      */
-    public function addExtraFields($m, $fields, $glue = null)
+    public function addExtraFields(Model $model, $fields, $glue = null)
     {
-        $this->setModel($m, false);
+        $this->setModel($model, false);
 
         // display extra field in line.
         if ($glue) {
             $extra = '';
             foreach ($fields as $field) {
-                $extra .= $m->get($field) . $glue;
+                $extra .= $model->get($field) . $glue;
             }
             $extra = rtrim($extra, $glue);
             $this->addExtraContent(new View([$extra, 'ui' => 'ui basic fitted segment']));
         } else {
             foreach ($fields as $field) {
-                $this->addExtraContent(new View([$m->get($field), 'ui basic fitted segment']));
+                $this->addExtraContent(new View([$model->get($field), 'ui basic fitted segment']));
             }
         }
     }
