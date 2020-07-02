@@ -665,21 +665,9 @@ class Form extends View
             ->setStyle(['display' => 'none']);
 
         $cb->set(function () {
-            ob_start();
-
             try {
                 $this->loadPOST();
                 $response = $this->hook(self::HOOK_SUBMIT);
-                $output = ob_get_contents();
-
-                if ($output) {
-                    $message = new Message('Direct Output Detected');
-                    $message->init();
-                    $message->addClass('error');
-                    $message->text->set($output);
-
-                    return $message;
-                }
 
                 if (!$response) {
                     if (!$this->model instanceof \atk4\ui\Misc\ProxyModel) {
@@ -699,8 +687,6 @@ class Form extends View
                 }
 
                 return $response;
-            } finally {
-                ob_get_flush();
             }
         });
 

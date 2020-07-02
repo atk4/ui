@@ -1081,7 +1081,7 @@ class App
         }
 
         if ($lateError !== null) {
-            echo "\n" . '!! ATK4 UI ERROR: ' . $lateError . ' !!' . "\n";
+            echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
             exit(1);
         }
 
