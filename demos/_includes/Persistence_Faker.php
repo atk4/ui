@@ -60,8 +60,8 @@ class Persistence_Faker extends \atk4\data\Persistence
             $data[] = $row;
         }
 
-        return array_map(function ($r) use ($model) {
-            return $this->typecastLoadRow($model, $r);
+        return array_map(function ($row) use ($model) {
+            return $this->typecastLoadRow($model, $row);
         }, $data);
     }
 }

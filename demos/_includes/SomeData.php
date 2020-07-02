@@ -8,9 +8,9 @@ class SomeData extends \atk4\data\Model
 {
     public function __construct()
     {
-        $persistence = new Persistence_Faker();
+        $fakerPersistence = new Persistence_Faker();
 
-        parent::__construct($persistence);
+        parent::__construct($fakerPersistence);
     }
 
     public function init(): void
