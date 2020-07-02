@@ -14,13 +14,13 @@ require_once __DIR__ . '/../init-app.php';
 \atk4\ui\Header::addTo($app, ['Card Deck', 'size' => 1, 'subHeader' => 'Card can be display in a deck, also using model action.']);
 
 $countries = new Country($app->db);
-$countries->addCalculatedField('Cost', function ($m) {
+$countries->addCalculatedField('Cost', function ($model) {
     return '$ ' . number_format(random_int(500, 1500));
 });
 
 $action = $countries->addUserAction('book', [
-    'callback' => function ($m, $email, $city) {
-        return 'Your request to visit ' . ucwords($city) . ' in ' . $m->get('name') . ' was sent to: ' . $email;
+    'callback' => function ($model, $email, $city) {
+        return 'Your request to visit ' . ucwords($city) . ' in ' . $model->get('name') . ' was sent to: ' . $email;
     },
     'ui' => ['button' => [null, 'icon' => 'plane']],
 ]);
@@ -31,7 +31,7 @@ $action->args = [
 ];
 
 $info_action = $countries->addUserAction('request_info', [
-    'callback' => function ($m, $email) {
+    'callback' => function ($model, $email) {
         return 'Your request for information was sent to email: ' . $email;
     },
     'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,

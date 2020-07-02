@@ -150,7 +150,7 @@ $model->addUserAction('ask_age', [
             'required' => true
         ]
     ],
-    'callback'=>function ($m, $age) {
+    'callback'=>function ($model, $age) {
         return 'Age is '.$age;
     }
 ]);

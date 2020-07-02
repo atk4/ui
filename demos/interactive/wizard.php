@@ -16,8 +16,8 @@ require_once __DIR__ . '/../init-app.php';
 $wizard = Wizard::addTo($app, ['stepCallback' => Callback::addTo($app, ['urlTrigger' => 'demo_wizard'])]);
 // First step will automatcally be active when you open page first. It
 // will contain the 'Next' button with a link.
-$wizard->addStep('Welcome', function (Wizard $w) {
-    \atk4\ui\Message::addTo($w, ['Welcome to wizard demonstration'])->text
+$wizard->addStep('Welcome', function (Wizard $wizard) {
+    \atk4\ui\Message::addTo($wizard, ['Welcome to wizard demonstration'])->text
         ->addParagraph('Use button "Next" to advance')
         ->addParagraph('You can specify your existing database connection string which will be used
         to create a table for model of your choice');
@@ -60,7 +60,7 @@ $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon'
     // should work after url() fix
     $grid->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [], ['name']]);
 
-    //$t->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [$w->stepCallback->name=>$w->currentStep], ['name']]);
+    //$t->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [$wizard->stepCallback->name=>$wizard->currentStep], ['name']]);
 
     $wizard->buttonNext->addClass('disabled');
 });
@@ -92,6 +92,6 @@ $wizard->addStep(['Migration', 'description' => 'Create or update table', 'icon'
 // will be displayed when you click the "Finish". Finish will not add any buttons
 // because you shouldn't be able to navigate wizard back without restarting it.
 // Only one finish can be added.
-$wizard->addFinish(function (Wizard $w) {
-    \atk4\ui\Header::addTo($w, ['You are DONE', 'huge centered']);
+$wizard->addFinish(function (Wizard $wizard) {
+    \atk4\ui\Header::addTo($wizard, ['You are DONE', 'huge centered']);
 });

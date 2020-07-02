@@ -80,7 +80,7 @@ $country->addUserAction('greet', [
         ],
     ],
     'ui' => ['executor' => [UserAction\JsCallbackExecutor::class]],
-    'callback' => function ($m, $name) {
+    'callback' => function ($model, $name) {
         return 'Hello ' . $name;
     },
 ]);
