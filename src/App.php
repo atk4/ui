@@ -494,7 +494,7 @@ class App
      */
     public function run()
     {
-        $is_exit_exception = false;
+        $isExitException = false;
 
         try {
             ob_start();
@@ -518,7 +518,7 @@ class App
             }
             echo $this->html->template->render();
         } catch (ExitApplicationException $e) {
-            $is_exit_exception = true;
+            $isExitException = true;
         }
 
         $output = ob_get_clean();
@@ -528,7 +528,7 @@ class App
             $this->outputResponseHTML($output);
         }
 
-        if ($is_exit_exception) {
+        if ($isExitException) {
             $this->callExit();
         }
     }

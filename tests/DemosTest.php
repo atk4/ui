@@ -144,8 +144,7 @@ class DemosTest extends AtkPhpunit\TestCase
                     throw $e;
                 }
             } finally {
-                $body = ob_get_contents();
-                ob_end_clean();
+                $body = ob_get_clean();
             }
 
             [$statusCode, $headers] = \Closure::bind(function () {
