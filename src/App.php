@@ -497,7 +497,6 @@ class App
         $isExitException = false;
 
         try {
-            ob_start();
             $this->run_called = true;
             $this->hook(self::HOOK_BEFORE_RENDER);
             $this->is_rendering = true;
@@ -516,12 +515,13 @@ class App
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 throw new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.');
             }
-            echo $this->html->template->render();
+
+            $output = $this->html->template->render();
         } catch (ExitApplicationException $e) {
+            $output = '';
             $isExitException = true;
         }
 
-        $output = ob_get_clean();
         if ($this->isJsUrlRequest()) {
             $this->outputResponseJSON($output);
         } else {
