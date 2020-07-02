@@ -33,13 +33,13 @@
     "sort-packages": true
   },
   "require": {
-    "php": ">=7.2.0",
+    "php": ">=7.3.0",
     "ext-json": "*",
     "atk4/core": "dev-develop",
     "atk4/data": "dev-develop"
   },
   "require-release": {
-    "php": ">=7.2.0",
+    "php": ">=7.3.0",
     "ext-json": "*",
     "atk4/core": "^2.0",
     "atk4/data": "^2.0"
@@ -52,7 +52,7 @@
     "fzaninotto/faker": "*",
     "guzzlehttp/guzzle": "^6.3",
     "phpunit/phpcov": "*",
-    "phpunit/phpunit": ">=8.0",
+    "phpunit/phpunit": ">=9.0",
     "symfony/process": "^4.3 || ^5.0"
   },
   "autoload": {
