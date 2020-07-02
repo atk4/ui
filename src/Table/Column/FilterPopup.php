@@ -53,7 +53,7 @@ class FilterPopup extends Popup
         $this->setOption('delay', ['hide' => 1500]);
         $this->setHoverable();
 
-        $m = FilterModel::factoryType($this->field);
+        $model = FilterModel::factoryType($this->field);
 
         $this->form = Form::addTo($this)->addClass('');
         $this->form->buttonSave->addClass('');
@@ -61,13 +61,13 @@ class FilterPopup extends Popup
 
         $this->form->buttonSave->set('Set');
 
-        $this->form->setControlsDisplayRules($m->getFormDisplayRules());
+        $this->form->setControlsDisplayRules($model->getFormDisplayRules());
 
         //load data associated with this popup.
-        if ($data = $m->recallData()) {
-            $m->set($data);
+        if ($data = $model->recallData()) {
+            $model->set($data);
         }
-        $this->form->setModel($m);
+        $this->form->setModel($model);
 
         $this->form->onSubmit(function (Form $form) {
             $form->model->save();
@@ -76,8 +76,8 @@ class FilterPopup extends Popup
             return (new jQuery($this->triggerBy))->trigger('click');
         });
 
-        \atk4\ui\Button::addTo($this->form, ['Clear', 'clear '])->on('click', function ($f) use ($m) {
-            $m->clearData();
+        \atk4\ui\Button::addTo($this->form, ['Clear', 'clear '])->on('click', function ($f) use ($model) {
+            $model->clearData();
 
             return [
                 $this->form->js()->form('reset'),

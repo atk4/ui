@@ -20,8 +20,8 @@ require_once __DIR__ . '/../init-app.php';
 
 $country = new Country($app->db);
 
-$c_action = $country->addUserAction('Email', function ($m) {
-    return 'Email to Kristy in ' . $m->get('name') . ' has been sent!';
+$countryAction = $country->addUserAction('Email', function ($model) {
+    return 'Email to Kristy in ' . $model->get('name') . ' has been sent!';
 });
 
 $country->tryLoadAny();
@@ -29,7 +29,7 @@ $card = \atk4\ui\Card::addTo($app);
 $content = new \atk4\ui\View(['class' => ['content']]);
 $content->add($img = new \atk4\ui\Image(['../images/kristy.png']));
 $img->addClass('right floated mini ui image');
-$content->add($header = new \atk4\ui\Header(['Kristy']));
+$content->add(new \atk4\ui\Header(['Kristy']));
 
 $card->addContent($content);
 $card->addDescription('Kristy is a friend of Mully.');
@@ -37,7 +37,7 @@ $card->addDescription('Kristy is a friend of Mully.');
 $s = $card->addSection('Country');
 $s->addFields($country->loadAny(), ['name', 'iso']);
 
-$card->addClickAction($c_action);
+$card->addClickAction($countryAction);
 
 ///////////////////////////////////////////
 

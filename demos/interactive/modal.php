@@ -44,8 +44,8 @@ $modal_simple = \atk4\ui\Modal::addTo($app, ['title' => 'Simple modal']);
 ViewTester::addTo($modal_simple);
 
 $menu_bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-$b = \atk4\ui\Button::addTo($menu_bar)->set('Show Modal');
-$b->on('click', $modal_simple->show());
+$button = \atk4\ui\Button::addTo($menu_bar)->set('Show Modal');
+$button->on('click', $modal_simple->show());
 
 // DYNAMIC
 
@@ -83,8 +83,8 @@ $modal_vp2->set(function ($modal) use ($modal_vp3) {
 });
 
 $bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-$b = \atk4\ui\Button::addTo($bar)->set('Open Lorem Ipsum');
-$b->on('click', $modal_vp1->show());
+$button = \atk4\ui\Button::addTo($bar)->set('Open Lorem Ipsum');
+$button->on('click', $modal_vp1->show());
 
 // ANIMATION
 
@@ -134,8 +134,8 @@ $modal_da->addApproveAction('Yes', new \atk4\ui\jsExpression('function(){window.
 $modal_da->notClosable();
 
 $menu_bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-$b = \atk4\ui\Button::addTo($menu_bar)->set('Show Deny/Approve');
-$b->on('click', $modal_da->show());
+$button = \atk4\ui\Button::addTo($menu_bar)->set('Show Deny/Approve');
+$button->on('click', $modal_da->show());
 
 // MULTI STEP
 
@@ -183,10 +183,10 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
         $m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
         $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $f = \atk4\ui\Form::addTo($modal, ['segment' => true]);
-        $f->setModel($m_register);
+        $form = \atk4\ui\Form::addTo($modal, ['segment' => true]);
+        $form->setModel($m_register);
 
-        $f->onSubmit(function (\atk4\ui\Form $form) use ($next_action, $session) {
+        $form->onSubmit(function (\atk4\ui\Form $form) use ($next_action, $session) {
             if ($form->model->get('name') !== 'John') {
                 return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
             }
@@ -222,5 +222,5 @@ $prev_action->on('click', $modal_step->js()->atkReloadView(
 
 //Bind display modal to page display button.
 $menu_bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-$b = \atk4\ui\Button::addTo($menu_bar)->set('Multi Step Modal');
-$b->on('click', $modal_step->show());
+$button = \atk4\ui\Button::addTo($menu_bar)->set('Multi Step Modal');
+$button->on('click', $modal_step->show());

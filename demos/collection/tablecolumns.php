@@ -111,12 +111,12 @@ $key_value_string = [
 
 \atk4\ui\Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can be set from your model.']);
 
-$m = new $modelColorClass(new \atk4\data\Persistence\Static_([]));
+$model = new $modelColorClass(new \atk4\data\Persistence\Static_([]));
 
 foreach (range(1, 10) as $id) {
     $key_value = random_int(1, 4);
 
-    $m->insert([
+    $model->insert([
         'id' => $id,
         'name' => 'name ' . $id,
         'key_value' => $key_value,
@@ -129,4 +129,4 @@ foreach (range(1, 10) as $id) {
 }
 
 $table = \atk4\ui\Table::addTo($app);
-$table->setModel($m);
+$table->setModel($model);

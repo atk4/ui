@@ -443,17 +443,16 @@ class Table extends Lister
      * visible model fields. If $columns is set to false, then will not add
      * columns at all.
      *
-     * @param \atk4\data\Model $m       Data model
-     * @param array|bool       $columns
+     * @param array|bool $columns
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $m, $columns = null)
+    public function setModel(\atk4\data\Model $model, $columns = null)
     {
-        parent::setModel($m);
+        parent::setModel($model);
 
         if ($columns === null) {
-            $columns = array_keys($m->getFields('visible'));
+            $columns = array_keys($model->getFields('visible'));
         } elseif ($columns === false) {
             return $this->model;
         }

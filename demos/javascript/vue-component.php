@@ -12,14 +12,14 @@ require_once __DIR__ . '/../init-app.php';
 
 //****** Inline Edit *****************************
 
-$m = new Country($app->db);
-$m->loadAny();
+$model = new Country($app->db);
+$model->loadAny();
 
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
 \atk4\ui\Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
 $inline_edit = \atk4\ui\Component\InlineEdit::addTo($app);
-$inline_edit->setModel($m);
+$inline_edit->setModel($model);
 
 $inline_edit->onChange(function ($value) {
     $view = new \atk4\ui\Message();
@@ -36,7 +36,7 @@ $inline_edit->onChange(function ($value) {
 $subHeader = 'Searching will reload the list of countries below with matching result.';
 \atk4\ui\Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader]);
 
-$m = new Country($app->db);
+$model = new Country($app->db);
 
 $lister_template = new \atk4\ui\Template('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>{$end}{/}</div>');
 
@@ -54,7 +54,7 @@ $lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lis
 });
 
 $search->reload = $lister_container;
-$lister->setModel($search->setModelCondition($m))->setLimit(50);
+$lister->setModel($search->setModelCondition($model))->setLimit(50);
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 

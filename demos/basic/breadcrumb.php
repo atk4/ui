@@ -18,25 +18,25 @@ $crumb->addCrumb('BreadCrumb Demo', ['breadcrumb']);
 
 $crumb->addCrumb('Countries', []);
 
-$m = new CountryLock($app->db);
-$m->setLimit(15);
+$model = new CountryLock($app->db);
+$model->setLimit(15);
 
 if ($id = $app->stickyGet('country_id')) {
     // perhaps we edit individual country?
-    $m->load($id);
-    $crumb->addCrumb($m->get('name'), []);
+    $model->load($id);
+    $crumb->addCrumb($model->get('name'), []);
 
     // here we can check for additional criteria and display a deeper level on the crumb
 
-    $f = \atk4\ui\Form::addTo($app);
-    $f->setModel($m);
-    $f->onSubmit(function (\atk4\ui\Form $form) {
+    $form = \atk4\ui\Form::addTo($app);
+    $form->setModel($model);
+    $form->onSubmit(function (\atk4\ui\Form $form) {
         return new \atk4\ui\jsToast('Form Submitted! Data saving is not possible in demo!');
     });
 } else {
     // display list of countries
     $table = \atk4\ui\Table::addTo($app);
-    $table->setModel($m);
+    $table->setModel($model);
     $table->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [], ['country_id' => 'id']]);
 }
 

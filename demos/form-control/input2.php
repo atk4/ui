@@ -70,27 +70,27 @@ $control->onUpload($onUpload);
 
 $group = $form->addGroup('Lookup');
 
-$m = new Country($app->db);
+$model = new Country($app->db);
 
 $group->addControl('Lookup_norm', [
     DemoLookup::class,
     'model' => new CountryLock($app->db),
     'plus' => true,
-])->set($m->loadAny()->id);
+])->set($model->loadAny()->id);
 
 $group->addControl('Lookup_read', [
     Form\Control\Lookup::class,
     'model' => new CountryLock($app->db),
     'plus' => true,
     'readonly' => true,
-])->set($m->loadAny()->id);
+])->set($model->loadAny()->id);
 
 $group->addControl('Lookup_disb', [
     Form\Control\Lookup::class,
     'model' => new CountryLock($app->db),
     'plus' => true,
     'disabled' => true,
-])->set($m->loadAny()->id);
+])->set($model->loadAny()->id);
 
 $group = $form->addGroup('Calendar');
 

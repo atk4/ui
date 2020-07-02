@@ -8,21 +8,21 @@ class SomeData extends \atk4\data\Model
 {
     public function __construct()
     {
-        $p = new Persistence_Faker();
+        $persistence = new Persistence_Faker();
 
-        parent::__construct($p);
+        parent::__construct($persistence);
     }
 
     public function init(): void
     {
         parent::init();
-        $m = $this;
+        $model = $this;
 
-        $m->addField('title');
-        $m->addField('name');
-        $m->addField('surname', ['actual' => 'name']);
-        $m->addField('date', ['type' => 'date']);
-        $m->addField('salary', ['type' => 'money', 'actual' => 'randomNumber']);
-        $m->addField('logo_url');
+        $model->addField('title');
+        $model->addField('name');
+        $model->addField('surname', ['actual' => 'name']);
+        $model->addField('date', ['type' => 'date']);
+        $model->addField('salary', ['type' => 'money', 'actual' => 'randomNumber']);
+        $model->addField('logo_url');
     }
 }

@@ -25,15 +25,15 @@ class Money extends Table\Column
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
+    public function getDataCellHTML(\atk4\data\Field $field = null, $extra_tags = [])
     {
-        if (!isset($f)) {
+        if (!isset($field)) {
             throw new \atk4\ui\Exception('Money column requires a field');
         }
 
         return $this->getTag(
             'body',
-            '{$' . $f->short_name . '}',
+            '{$' . $field->short_name . '}',
             $extra_tags
         );
     }

@@ -215,11 +215,9 @@ class View implements jsExpressionable
      *
      * @return Model
      */
-    public function setModel(Model $m)
+    public function setModel(Model $model)
     {
-        $this->model = $m;
-
-        return $m;
+        return $this->model = $model;
     }
 
     /**

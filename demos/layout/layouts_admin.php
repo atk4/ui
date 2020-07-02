@@ -36,19 +36,19 @@ $layout->template['Footer'] = 'ATK is awesome';
 
 \atk4\ui\Header::addTo($layout, ['Basic Form Example']);
 
-$f = \atk4\ui\Form::addTo($layout, ['segment']);
-$f->setModel(new \atk4\data\Model());
+$form = \atk4\ui\Form::addTo($layout, ['segment']);
+$form->setModel(new \atk4\data\Model());
 
-$f_group = $f->addGroup('Name');
+$f_group = $form->addGroup('Name');
 $f_group->addControl('first_name', ['width' => 'eight']);
 $f_group->addControl('middle_name', ['width' => 'three']);
 $f_group->addControl('last_name', ['width' => 'five']);
 
-$f_group = $f->addGroup('Address');
+$f_group = $form->addGroup('Address');
 $f_group->addControl('address', ['width' => 'twelve']);
 $f_group->addControl('zip', ['width' => 'four']);
 
-$f->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (\atk4\ui\Form $form) {
     $errors = [];
 
     foreach (['first_name', 'last_name', 'address'] as $field) {

@@ -107,8 +107,8 @@ $t = $tt->addTab('Use after form submit', function ($t) {
 
     session_start();
 
-    $f = \atk4\ui\Form::addTo($t);
-    $f->addControls(['foo', 'bar']);
+    $form = \atk4\ui\Form::addTo($t);
+    $form->addControls(['foo', 'bar']);
 
     $c = \atk4\ui\Console::addTo($t, ['event' => false]);
     $c->set(function ($c) {
@@ -122,7 +122,7 @@ $t = $tt->addTab('Use after form submit', function ($t) {
     });
     $c->js(true)->hide();
 
-    $f->onSubmit(function (\atk4\ui\Form $form) use ($c) {
+    $form->onSubmit(function (\atk4\ui\Form $form) use ($c) {
         $_SESSION['data'] = $form->model; // only option is to store model in session here in demo
 
         return [

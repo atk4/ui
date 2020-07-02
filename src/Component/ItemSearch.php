@@ -73,13 +73,13 @@ class ItemSearch extends View
     /**
      * Set model condition base on search request.
      */
-    public function setModelCondition(Model $m): Model
+    public function setModelCondition(Model $model): Model
     {
         if ($q = $this->getQuery()) {
-            $m->addCondition('name', 'like', '%' . $q . '%');
+            $model->addCondition('name', 'like', '%' . $q . '%');
         }
 
-        return $m;
+        return $model;
     }
 
     public function renderView()

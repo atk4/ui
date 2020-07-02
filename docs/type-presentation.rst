@@ -98,10 +98,10 @@ Display password in plain-text for Admin
 Normally password is presented as asterisks on the Grid and Form. But what if you want to
 show it without masking just for the admin? Change type in-line for the model field::
 
-    $m = new User($app->db);
-    $m->getField('password')->type = 'string';
+    $model = new User($app->db);
+    $model->getField('password')->type = 'string';
 
-    $crud->setModel($m);
+    $crud->setModel($model);
 
 .. note:: Changing element's type to string will certainly not perform any password encryption.
 
@@ -111,10 +111,10 @@ Hide account_number in specific Table
 This is reverse scenario. Field `account_number` needs to be stored as-is but should be
 hidden when presented. To hide it from Table::
 
-    $m = new User($app->db);
+    $model = new User($app->db);
     
-    $table->setModel($m);
-    $m->addDecorator('account_number', new \atk4\ui\Table\Column\Password());
+    $table->setModel($model);
+    $model->addDecorator('account_number', new \atk4\ui\Table\Column\Password());
 
 Create a decorator for hiding credit card number
 ------------------------------------------------
@@ -124,7 +124,7 @@ yet make it available when editing, you could create your own :php:class:`Table\
 
     class Masker extends \atk4\ui\Table\Column
     {
-        public function getDataCellTemplate(\atk4\data\Field $f = null)
+        public function getDataCellTemplate(\atk4\data\Field $field = null)
         {
             return '**** **** **** {$mask}';
         }
@@ -150,23 +150,23 @@ extending :php:class:`Persistence\\UI`::
     class MyPersistence extends \atk4\ui\Persistence\UI
     {
 
-        public function _typecastSaveField(\atk4\data\Field $f, $value)
+        public function _typecastSaveField(\atk4\data\Field $field, $value)
         {
-            switch ($f->type) {
+            switch ($field->type) {
             case 'card':
                 $parts = str_split($value, 4);
                 return join(' ', $parts);
             }
-            return parent::_typecastSaveField($f, $value);
+            return parent::_typecastSaveField($field, $value);
         }
 
-        public function _typecastLoadField(\atk4\data\Field $f, $value)
+        public function _typecastLoadField(\atk4\data\Field $field, $value)
         {
-            switch ($f->type) {
+            switch ($field->type) {
             case 'card':
                 return str_replace(' ', '', $value);
             }
-            return parent::_typecastLoadField($f, $value);
+            return parent::_typecastLoadField($field, $value);
         }
     }
 

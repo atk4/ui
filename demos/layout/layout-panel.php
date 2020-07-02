@@ -75,13 +75,13 @@ $txt->addParagraph('This panel can only be closed via it\'s close icon at top ri
 $txt->addParagraph('Try to change dropdown value and close without saving!');
 
 $panel_2->onOpen(function ($p) {
-    $f = \atk4\ui\Form::addTo($p);
-    $f->addHeader('Settings');
-    $f->addControl('name', [\atk4\ui\Form\Control\Dropdown::class, 'values' => ['1' => 'Option 1', '2' => 'Option 2']])
+    $form = \atk4\ui\Form::addTo($p);
+    $form->addHeader('Settings');
+    $form->addControl('name', [\atk4\ui\Form\Control\Dropdown::class, 'values' => ['1' => 'Option 1', '2' => 'Option 2']])
         ->set('1')
         ->onChange($p->owner->jsDisplayWarning(true));
 
-    $f->onSubmit(function (\atk4\ui\Form $form) use ($p) {
+    $form->onSubmit(function (\atk4\ui\Form $form) use ($p) {
         return [
             new \atk4\ui\jsToast('Saved, closing panel.'),
             $p->owner->jsDisplayWarning(false),

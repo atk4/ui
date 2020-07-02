@@ -7,7 +7,7 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$m = new CountryLock($app->db);
+$model = new CountryLock($app->db);
 
 $g = \atk4\ui\CRUD::addTo($app, ['ipp' => 10]);
 
@@ -28,9 +28,9 @@ $g->onFormAddEdit(function ($form, $ex) {
     });
 });
 
-$g->setModel($m);
+$g->setModel($model);
 
-$g->addDecorator($m->title_field, [\atk4\ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => 'id']]);
+$g->addDecorator($model->title_field, [\atk4\ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => 'id']]);
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
@@ -49,17 +49,17 @@ $crud = \atk4\ui\CRUD::addTo($cc, [
     'table' => ['class' => ['red inverted']],
 ]);
 // Condition on the model can be applied on a model
-$m = new CountryLock($app->db);
-$m->addCondition('numcode', '<', 200);
-$m->onHook(\atk4\data\Model::HOOK_VALIDATE, function ($m2, $intent) {
+$model = new CountryLock($app->db);
+$model->addCondition('numcode', '<', 200);
+$model->onHook(\atk4\data\Model::HOOK_VALIDATE, function ($model, $intent) {
     $err = [];
-    if ($m2->get('numcode') >= 200) {
+    if ($model->get('numcode') >= 200) {
         $err['numcode'] = 'Should be less than 200';
     }
 
     return $err;
 });
-$crud->setModel($m);
+$crud->setModel($model);
 
 // Because CRUD inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => [\atk4\ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {

@@ -19,17 +19,17 @@ class Persistence_Faker extends \atk4\data\Persistence
         }
     }
 
-    public function prepareIterator($m)
+    public function prepareIterator($model)
     {
-        foreach ($this->export($m) as $row) {
+        foreach ($this->export($model) as $row) {
             yield $row;
         }
     }
 
-    public function export($m, $fields = [])
+    public function export($model, $fields = [])
     {
         if (!$fields) {
-            foreach ($m->getFields() as $name => $e) {
+            foreach ($model->getFields() as $name => $e) {
                 $fields[] = $name;
             }
         }
@@ -40,13 +40,13 @@ class Persistence_Faker extends \atk4\data\Persistence
             foreach ($fields as $field) {
                 $type = $field;
 
-                if ($field === $m->id_field) {
+                if ($field === $model->id_field) {
                     $row[$field] = $i + 1;
 
                     continue;
                 }
 
-                $actual = $m->getField($field)->actual;
+                $actual = $model->getField($field)->actual;
                 if ($actual) {
                     $type = $actual;
                 }
@@ -60,8 +60,8 @@ class Persistence_Faker extends \atk4\data\Persistence
             $data[] = $row;
         }
 
-        return array_map(function ($r) use ($m) {
-            return $this->typecastLoadRow($m, $r);
+        return array_map(function ($r) use ($model) {
+            return $this->typecastLoadRow($model, $r);
         }, $data);
     }
 }

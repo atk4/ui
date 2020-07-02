@@ -35,7 +35,7 @@ class Template extends Table\Column
          */
     }
 
-    public function getDataCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(\atk4\data\Field $field = null)
     {
         return $this->template;
     }

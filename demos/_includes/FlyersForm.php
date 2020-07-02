@@ -50,7 +50,7 @@ class FlyersForm extends Form
         $cards = $this->addControl('cards', [Form\Control\TreeItemSelector::class, 'treeItems' => $this->cards, 'caption' => 'Flyers program:'], ['type' => 'array', 'serialize' => 'json']);
         $cards->set(json_encode([]));
 
-        $this->onSubmit(function ($f) {
+        $this->onSubmit(function ($form) {
             return new \atk4\ui\jsToast('Thank you!');
         });
     }

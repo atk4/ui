@@ -10,11 +10,11 @@ use atk4\ui\jsToast;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$f = Form::addTo($app);
-$f->name = 'test_form';
+$form = Form::addTo($app);
+$form->name = 'test_form';
 
-$f->addControl('f1')->set('v1');
+$form->addControl('f1')->set('v1');
 
-$f->onSubmit(function ($f) {
+$form->onSubmit(function ($form) {
     return new jsToast('Post ok');
 });

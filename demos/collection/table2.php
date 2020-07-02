@@ -15,13 +15,13 @@ $data = [
     ['id' => 3, 'action' => 'Tax', 'amount' => -40],
 ];
 
-$m = new \atk4\data\Model(new \atk4\data\Persistence\Static_($data));
-$m->getField('amount')->type = 'money';
+$model = new \atk4\data\Model(new \atk4\data\Persistence\Static_($data));
+$model->getField('amount')->type = 'money';
 
 \atk4\ui\Header::addTo($app, ['Table with various headers', 'subHeader' => 'Demonstrates how you can add subheaders, footnotes and other insertions into your data table', 'icon' => 'table']);
 
 $table = \atk4\ui\Table::addTo($app);
-$table->setModel($m, ['action']);
+$table->setModel($model, ['action']);
 $table->addColumn('amount', [Table\Column\Money::class]);
 
 // Table template can be tweaked directly
@@ -47,11 +47,11 @@ $table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
 \atk4\ui\Header::addTo($app, ['Columns with multiple formats', 'subHeader' => 'Single column can use logic to swap out formatters', 'icon' => 'table']);
 
 $table = \atk4\ui\Table::addTo($app);
-$table->setModel($m, ['action']);
+$table->setModel($model, ['action']);
 
 // copy of amount through a PHP callback
-$m->addExpression('amount_copy', [function (\atk4\data\Model $m) {
-    return $m->get('amount');
+$model->addExpression('amount_copy', [function (\atk4\data\Model $model) {
+    return $model->get('amount');
 }, 'type' => 'money']);
 
 // column with 2 decorators that stack. Money will use red ink and alignment, format will change text.
@@ -79,5 +79,5 @@ $table->addColumn('amount_copy', [Table\Column\Multiformat::class, function ($a,
 \atk4\ui\Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);
 
 $table = \atk4\ui\Table::addTo($app);
-$table->setModel($m);
+$table->setModel($model);
 $table->addClass('celled')->resizableColumn();

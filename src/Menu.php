@@ -171,13 +171,6 @@ class Menu extends View
         return parent::add([View::class, 'class' => ['divider']]);
     }
 
-    /*
-    function setModel($m) {
-        foreach ($m as $m) {
-        }
-    }
-    */
-
     /**
      * {@inheritdoc}
      */

@@ -604,8 +604,7 @@ class Grid extends View
      * visible model fields. If $columns is set to false, then will not add
      * columns at all.
      *
-     * @param \atk4\data\Model $m       Data model
-     * @param array|bool       $columns
+     * @param array|bool $columns
      *
      * @return \atk4\data\Model
      */

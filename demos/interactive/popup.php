@@ -136,15 +136,15 @@ $itemShelfClass = get_class(new class() extends \atk4\ui\View {
 });
 
 \atk4\ui\Header::addTo($app)->set('Menu popup');
-$m = \atk4\ui\Menu::addTo($app);
+$menu = \atk4\ui\Menu::addTo($app);
 
 // You may add popup on top of menu items or dropdowns. Dropdowns have a slightly different
 // look, with that triangle on the right. You don't have to add pop-up right away, it can be
 // added later.
-$browse = \atk4\ui\DropDown::addTo($m, ['Browse']);
+$browse = \atk4\ui\DropDown::addTo($menu, ['Browse']);
 
 // Add cart item into the menu, with a popup inside
-$cart_item = $m->addItem([$cartClass, 'icon' => 'cart'])->set('Cart');
+$cart_item = $menu->addItem([$cartClass, 'icon' => 'cart'])->set('Cart');
 
 $cart_popup = \atk4\ui\Popup::addTo($app, [$cart_item, 'position' => 'bottom left']);
 // Popup won't dissapear as you hover over it.
@@ -193,7 +193,7 @@ $cart_popup->set(function ($popup) use ($shelf, $cart_outter_label, $cart) {
 
     $cart_inner_label->detail = count($cart->items);
     \atk4\ui\Item::addTo($popup)->setElement('hr');
-    $btn = \atk4\ui\Button::addTo($popup, ['Checkout', 'primary small']);
+    \atk4\ui\Button::addTo($popup, ['Checkout', 'primary small']);
 });
 
 // Add item shelf below menu and link it with the cart
@@ -215,7 +215,7 @@ $shelf2 = $itemShelfClass::addTo($pop);
 
 //////////////////////////////////////////////////////////////////////////////
 
-$um = \atk4\ui\Menu::addTo($m, ['ui' => false], ['RightMenu'])
+$um = \atk4\ui\Menu::addTo($menu, ['ui' => false], ['RightMenu'])
     ->addClass('right menu')->removeClass('item');
 $m_right = $um->addMenu(['', 'icon' => 'user']);
 
@@ -232,21 +232,21 @@ $signup->set(function ($pop) {
         \atk4\ui\Button::addTo($pop, ['Logout', 'primary', 'icon' => 'sign out'])
             ->link($pop->app->url());
     } else {
-        $f = Form::addTo($pop);
-        $f->addControl('email', null, ['required' => true]);
-        $f->addControl('password', [Form\Control\Password::class], ['required' => true]);
-        $f->buttonSave->set('Login');
+        $form = Form::addTo($pop);
+        $form->addControl('email', null, ['required' => true]);
+        $form->addControl('password', [Form\Control\Password::class], ['required' => true]);
+        $form->buttonSave->set('Login');
 
         // popup handles callbacks properly, so dynamic element such as form works
         // perfectly inside a popup.
-        $f->onSubmit(function (Form $form) {
+        $form->onSubmit(function (Form $form) {
             if ($form->model->get('password') !== '123') {
                 return $form->error('password', 'Please use password "123"');
             }
 
             // refreshes entire page
             return $form->app->jsRedirect(['logged' => $form->model->get('email')]);
-            //return new \atk4\ui\jsExpression('alert([])', ['Thank you ' . $f->model->get('email')]);
+            //return new \atk4\ui\jsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
         });
     }
 });

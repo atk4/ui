@@ -45,17 +45,17 @@ but first we need to look at the generic column and understand it's base capabil
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
 when constructing HTML:
 
-.. php:method:: getHeaderCellHTML(\atk4\data\Field $f)
+.. php:method:: getHeaderCellHTML(\atk4\data\Field $field)
 
 Must respond with HTML for the header cell (`<th>`) and an appropriate caption. If necessary
 will include "sorting" icons or any other controls that go in the header of the table.
 
-.. php:method:: getTotalsCellHTML(\atk4\data\Field $f, $value)
+.. php:method:: getTotalsCellHTML(\atk4\data\Field $field, $value)
 
 Provided with the field and the value, format the cell for the footer "totals" row. Table
 can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
 
-.. php:method:: getDataCellHTML(\atk4\data\Field f)
+.. php:method:: getDataCellHTML(\atk4\data\Field $field)
 
 Provided with a field, this method will respond with HTML **template**. In order to keep
 performance of Web Application at the maximum, Table will execute getDataCellHTML for all the
@@ -237,11 +237,11 @@ Multiformat
 Sometimes your formatting may change depending on value. For example you may want to place link
 only on certain rows. For this you can use an `\\atk4\ui\\Table\\Column\\Multiformat` decorator::
 
-    $table->addColumn('amount', [\atk4\ui\Table\Column\Multiformat::class, function($m) {
+    $table->addColumn('amount', [\atk4\ui\Table\Column\Multiformat::class, function($model) {
 
-        if ($m->get('is_invoiced') > 0) {
+        if ($model->get('is_invoiced') > 0) {
             return [\atk4\ui\Table\Column\Money::class, [\atk4\ui\Table\Column\Link::class, 'invoice', ['invoice_id'=>'id']]];
-        } elseif (abs($m->get('is_refunded')) < 50) {
+        } elseif (abs($model->get('is_refunded')) < 50) {
             return [[\atk4\ui\Table\Column\Template::class, 'Amount was <b>refunded</b>']];
         }
 

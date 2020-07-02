@@ -87,7 +87,7 @@ specify your own form behavior using a callback for action::
 
     // callback for both model action edit and add.
     $g->onFormAddEdit(function ($form, $ex) {
-        $form->onSubmit(function ($f) use ($ex) {
+        $form->onSubmit(function ($form) use ($ex) {
             return [$ex->hide(), new \atk4\ui\jsToast('Submit all right! This demo does not saved data.')];
         });
     });

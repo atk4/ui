@@ -24,17 +24,17 @@ trait ModelLockTrait
 {
     public function lock(): void
     {
-        $this->getUserAction('add')->callback = function ($m) {
+        $this->getUserAction('add')->callback = function ($model) {
             return 'Form Submit! Data are not save in demo mode.';
         };
-        $this->getUserAction('edit')->callback = function ($m) {
+        $this->getUserAction('edit')->callback = function ($model) {
             return 'Form Submit! Data are not save in demo mode.';
         };
 
         $delete = $this->getUserAction('delete');
         $delete->confirmation = 'Please go ahead. Demo mode does not really delete data.';
 
-        $delete->callback = function ($m) {
+        $delete->callback = function ($model) {
             return 'Only simulating delete when in demo mode.';
         };
     }
@@ -55,9 +55,9 @@ class Country extends \atk4\data\Model
         $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
         $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
 
-        $this->onHook(\atk4\data\Model::HOOK_BEFORE_SAVE, function (\atk4\data\Model $m) {
-            if (!$m->get('sys_name')) {
-                $m->set('sys_name', mb_strtoupper($m->get('name')));
+        $this->onHook(\atk4\data\Model::HOOK_BEFORE_SAVE, function (\atk4\data\Model $model) {
+            if (!$model->get('sys_name')) {
+                $model->set('sys_name', mb_strtoupper($model->get('name')));
             }
         });
     }
@@ -125,15 +125,15 @@ class Stat extends \atk4\data\Model
         $this->addField('is_commercial', ['type' => 'boolean']);
         $this->addField('currency', ['enum' => ['EUR', 'USD', 'GBP']]);
         $this->addField('currency_symbol', ['never_persist' => true]);
-        $this->onHook(\atk4\data\Model::HOOK_AFTER_LOAD, function (\atk4\data\Model $m) {
+        $this->onHook(\atk4\data\Model::HOOK_AFTER_LOAD, function (\atk4\data\Model $model) {
             /* implementation for "intl"
             $locale='en-UK';
-            $fmt = new \NumberFormatter( $locale."@currency=".$m->get('currency'), NumberFormatter::CURRENCY );
-            $m->set('currency_symbol', $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL));
+            $fmt = new \NumberFormatter( $locale."@currency=".$model->get('currency'), NumberFormatter::CURRENCY );
+            $model->set('currency_symbol', $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL));
              */
 
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
-            $m->set('currency_symbol', $map[$m->get('currency')] ?? '?');
+            $model->set('currency_symbol', $map[$model->get('currency')] ?? '?');
         });
 
         $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type' => 'money']);

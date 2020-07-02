@@ -178,10 +178,10 @@ $m_register->addField('name');
 $m_register->addField('email');
 $m_register->addField('is_accept_terms', ['type' => 'boolean', 'mandatory' => true]);
 
-$f = Form::addTo($tab, ['segment' => true]);
-$f->setModel($m_register);
+$form = Form::addTo($tab, ['segment' => true]);
+$form->setModel($m_register);
 
-$f->onSubmit(function (Form $form) {
+$form->onSubmit(function (Form $form) {
     if ($form->model->get('name') !== 'John') {
         return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
     }
@@ -197,28 +197,28 @@ $tab = $tabs->addTab('Layout Control');
 
 \atk4\ui\Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
-$f = Form::addTo($tab, ['segment']);
-$f->setModel(new \atk4\data\Model());
+$form = Form::addTo($tab, ['segment']);
+$form->setModel(new \atk4\data\Model());
 
-$f->addHeader('Example fields added one-by-one');
-$f->addControl('name');
-$f->addControl('email');
+$form->addHeader('Example fields added one-by-one');
+$form->addControl('name');
+$form->addControl('email');
 
-$f->addHeader('Example of field grouping');
-$gr = $f->addGroup('Address with label');
-$gr->addControl('address', ['width' => 'twelve']);
-$gr->addControl('code', ['width' => 'four'], ['caption' => 'Post Code']);
+$form->addHeader('Example of field grouping');
+$group = $form->addGroup('Address with label');
+$group->addControl('address', ['width' => 'twelve']);
+$group->addControl('code', ['width' => 'four'], ['caption' => 'Post Code']);
 
-$gr = $f->addGroup(['width' => 'two']);
-$gr->addControl('city');
-$gr->addControl('country');
+$group = $form->addGroup(['width' => 'two']);
+$group->addControl('city');
+$group->addControl('country');
 
-$gr = $f->addGroup(['Name', 'inline' => true]);
-$gr->addControl('first_name', ['width' => 'eight']);
-$gr->addControl('middle_name', ['width' => 'three', 'disabled' => true]);
-$gr->addControl('last_name', ['width' => 'five']);
+$group = $form->addGroup(['Name', 'inline' => true]);
+$group->addControl('first_name', ['width' => 'eight']);
+$group->addControl('middle_name', ['width' => 'three', 'disabled' => true]);
+$group->addControl('last_name', ['width' => 'five']);
 
-$f->onSubmit(function (Form $form) {
+$form->onSubmit(function (Form $form) {
     $errors = [];
 
     foreach ($form->model->getFields() as $name => $ff) {
