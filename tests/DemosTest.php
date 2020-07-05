@@ -45,22 +45,40 @@ class DemosTest extends AtkPhpunit\TestCase
     protected function setUp(): void
     {
         if (self::$_db === null) {
-            // load demos config
-            $initVars = get_defined_vars();
-            $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/?APP_CALL_EXIT=0&APP_CATCH_EXCEPTIONS=0&APP_ALWAYS_RUN=0'));
+            (function () use (&$mem) {
+                // load demos config
+                $initVars = get_defined_vars();
+                $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/?APP_CALL_EXIT=0&APP_CATCH_EXCEPTIONS=0&APP_ALWAYS_RUN=0'));
 
-            /** @var App $app */
-            require_once static::DEMOS_DIR . '/init-app.php';
-            $initVars = array_diff_key(get_defined_vars(), $initVars + ['initVars' => true]);
+                /** @var App $app */
+                require_once static::DEMOS_DIR . '/init-app.php';
+                $initVars = array_diff_key(get_defined_vars(), $initVars + ['initVars' => true]);
 
-            if (array_keys($initVars) !== ['app']) {
-                throw new \atk4\ui\Exception('Demos init must setup only $app variable');
+                if (array_keys($initVars) !== ['app']) {
+                    throw new \atk4\ui\Exception('Demos init must setup only $app variable');
+                }
+
+                self::$_db = $app->db;
+
+                // prevent $app to run on shutdown
+                $app->run_called = true;
+
+                gc_collect_cycles();
+                $mem = memory_get_usage();
+
+                $app->largedata = str_repeat('abcdefgh', 1024 * 1024 / 8);
+            })();
+
+            gc_collect_cycles();
+            $mem2 = memory_get_usage();
+
+            if ($mem2 > $mem) {
+                var_dump($mem);
+                var_dump($mem2);
+
+                echo 'Memory init leak!' . "\n";
+                exit;
             }
-
-            self::$_db = $app->db;
-
-            // prevent $app to run on shutdown
-            $app->run_called = true;
         }
     }
 
@@ -139,25 +157,43 @@ class DemosTest extends AtkPhpunit\TestCase
 
             ob_start();
 
-            try {
-                $app = $this->createTestingApp();
-                require $localPath;
+            (function () use ($localPath, &$mem, &$body) {
+                try {
+                    $app = $this->createTestingApp();
+                    require $localPath;
 
-                if (!$app->run_called) {
-                    $app->run();
-                }
-            } catch (\Throwable $e) {
-                // session_start() or ini_set() functions can be used only with native HTTP tests
-                // override test expectation here to finish there tests cleanly (TODO better to make the code testable without calling these functions)
-                if ($e instanceof \ErrorException && preg_match('~^(session_start|ini_set)\(\).* headers already sent$~', $e->getMessage())) {
-                    $this->expectExceptionObject($e);
+                    if (!$app->run_called) {
+                        $app->run();
+                    }
+                } catch (\Throwable $e) {
+                    // session_start() or ini_set() functions can be used only with native HTTP tests
+                    // override test expectation here to finish there tests cleanly (TODO better to make the code testable without calling these functions)
+                    if ($e instanceof \ErrorException && preg_match('~^(session_start|ini_set)\(\).* headers already sent$~', $e->getMessage())) {
+                        $this->expectExceptionObject($e);
+                    }
+
+                    if (!($e instanceof DemosTestExitException)) {
+                        throw $e;
+                    }
+                } finally {
+                    $body = ob_get_clean();
                 }
 
-                if (!($e instanceof DemosTestExitException)) {
-                    throw $e;
-                }
-            } finally {
-                $body = ob_get_clean();
+                gc_collect_cycles();
+                $mem = memory_get_usage();
+
+                $app->largedata = str_repeat('abcdefgh', 1024 * 1024 / 8);
+            })();
+
+            gc_collect_cycles();
+            $mem2 = memory_get_usage();
+
+            if ($mem2 > $mem) {
+                var_dump($mem);
+                var_dump($mem2);
+
+                echo 'Memory demo leak!' . "\n";
+                exit;
             }
 
             [$statusCode, $headers] = \Closure::bind(function () {
