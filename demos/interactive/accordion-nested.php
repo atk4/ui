@@ -15,8 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Header::addTo($app, ['Nested accordions']);
 
-function addAccordion($view, $maxDepth = 2, $level = 0)
-{
+$addAccordionFunc = function ($view, $maxDepth = 2, $level = 0) use (&$addAccordionFunc) {
     $accordion = \atk4\ui\Accordion::addTo($view, ['type' => ['styled', 'fluid']]);
 
     // static section
@@ -24,7 +23,7 @@ function addAccordion($view, $maxDepth = 2, $level = 0)
     \atk4\ui\Message::addTo($i1, ['This content is added on page loaded', 'ui' => 'tiny message']);
     \atk4\ui\LoremIpsum::addTo($i1, ['size' => 1]);
     if ($level < $maxDepth) {
-        addAccordion($i1, $maxDepth, $level + 1);
+        $addAccordionFunc($i1, $maxDepth, $level + 1);
     }
 
     // dynamic section - simple view
@@ -32,7 +31,7 @@ function addAccordion($view, $maxDepth = 2, $level = 0)
         \atk4\ui\Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
         \atk4\ui\LoremIpsum::addTo($v, ['size' => 2]);
         if ($level < $maxDepth) {
-            addAccordion($v, $maxDepth, $level + 1);
+            $addAccordionFunc($v, $maxDepth, $level + 1);
         }
     });
 
@@ -46,10 +45,10 @@ function addAccordion($view, $maxDepth = 2, $level = 0)
         });
 
         if ($level < $maxDepth) {
-            addAccordion($v, $maxDepth, $level + 1);
+            $addAccordionFunc($v, $maxDepth, $level + 1);
         }
     });
-}
+};
 
 // add accordion structure
-$a = addAccordion($app);
+$a = $addAccordionFunc($app);

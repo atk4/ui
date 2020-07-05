@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
+use atk4\data\Persistence;
 use atk4\ui\App;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
@@ -26,7 +27,7 @@ class DemosTest extends AtkPhpunit\TestCase
     /** @var array */
     private static $_serverSuperglobalBackup;
 
-    /** @var App Initialized App instance with working DB connection */
+    /** @var Persistence Initialized DB connection */
     private static $_db;
 
     /** @var array */
@@ -47,7 +48,7 @@ class DemosTest extends AtkPhpunit\TestCase
         if (self::$_db === null) {
             // load demos config
             $initVars = get_defined_vars();
-            $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/'));
+            $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/?APP_CALL_EXIT=0&APP_CATCH_EXCEPTIONS=0&APP_ALWAYS_RUN=0'));
 
             /** @var App $app */
             require_once static::DEMOS_DIR . '/init-app.php';
@@ -116,16 +117,9 @@ class DemosTest extends AtkPhpunit\TestCase
 
     protected function createTestingApp(): App
     {
-        $app = new class() extends App {
-            protected function setupAlwaysRun(): void
-            {
-                // no register_shutdown_function
-            }
-
+        $app = new class(['call_exit' => false, 'catch_exceptions' => false, 'always_run' => false]) extends App {
             public function callExit($for_shutdown = false): void
             {
-                // TODO is the shutdown hook called somewhere?
-
                 throw new DemosTestExitException();
             }
         };
@@ -239,6 +233,12 @@ class DemosTest extends AtkPhpunit\TestCase
         $excludeDirs = ['_demo-data', '_includes', '_unit-test', 'special'];
         $excludeFiles = ['layout/layouts_error.php'];
 
+        // these tests require SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
+        if (static::class === self::class) {
+            $excludeFiles[] = 'collection/tablefilter.php';
+            $excludeFiles[] = 'interactive/popup.php';
+        }
+
         $files = [];
         $files[] = ['index.php'];
         foreach (array_diff(scandir(static::DEMOS_DIR), ['.', '..'], $excludeDirs) as $dir) {
@@ -303,6 +303,13 @@ class DemosTest extends AtkPhpunit\TestCase
 
     public function testWizard(): void
     {
+        // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
+        if (static::class === self::class) {
+            $this->assertTrue(true);
+
+            return;
+        }
+
         $response = $this->getResponseFromRequest(
             'interactive/wizard.php?demo_wizard=1&w_form_submit=ajax&__atk_callback=1',
             ['form_params' => [
@@ -376,6 +383,13 @@ class DemosTest extends AtkPhpunit\TestCase
      */
     public function testDemoAssertSseResponse(string $uri): void
     {
+        // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
+        if (static::class === self::class) {
+            $this->assertTrue(true);
+
+            return;
+        }
+
         $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
 

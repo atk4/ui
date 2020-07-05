@@ -24,6 +24,7 @@ if (file_exists(__DIR__ . '/coverage.php') && !class_exists(\PHPUnit\Framework\T
 $app = new \atk4\ui\App([
     'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
     'catch_exceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
+    'always_run' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
 ]);
 $app->title = 'Agile UI Demo v' . $app->version;
 

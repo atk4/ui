@@ -145,7 +145,7 @@ class App
      *
      * @var int
      */
-    protected $catch_error_types = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED;
+    protected $catch_error_types = E_ALL & ~E_NOTICE;
 
     /**
      * Constructor.
