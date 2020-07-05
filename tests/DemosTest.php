@@ -239,6 +239,12 @@ class DemosTest extends AtkPhpunit\TestCase
         $excludeDirs = ['_demo-data', '_includes', '_unit-test', 'special'];
         $excludeFiles = ['layout/layouts_error.php'];
 
+        // these tests require SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
+        if (static::class === self::class) {
+            $excludeFiles[] = 'collection/tablefilter.php';
+            $excludeFiles[] = 'interactive/popup.php';
+        }
+
         $files = [];
         $files[] = ['index.php'];
         foreach (array_diff(scandir(static::DEMOS_DIR), ['.', '..'], $excludeDirs) as $dir) {
@@ -303,6 +309,13 @@ class DemosTest extends AtkPhpunit\TestCase
 
     public function testWizard(): void
     {
+        // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
+        if (static::class === self::class) {
+            $this->assertTrue(true);
+
+            return;
+        }
+
         $response = $this->getResponseFromRequest(
             'interactive/wizard.php?demo_wizard=1&w_form_submit=ajax&__atk_callback=1',
             ['form_params' => [
@@ -376,6 +389,13 @@ class DemosTest extends AtkPhpunit\TestCase
      */
     public function testDemoAssertSseResponse(string $uri): void
     {
+        // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
+        if (static::class === self::class) {
+            $this->assertTrue(true);
+
+            return;
+        }
+
         $response = $this->getResponseFromRequest($uri);
         $this->assertSame(200, $response->getStatusCode(), ' Status error on ' . $uri);
 
