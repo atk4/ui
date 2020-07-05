@@ -26,7 +26,7 @@ class DemosTest extends AtkPhpunit\TestCase
     /** @var array */
     private static $_serverSuperglobalBackup;
 
-    /** @var App Initialized App instance with working DB connection */
+    /** @var Persistence Initialized DB connection */
     private static $_db;
 
     /** @var array */
