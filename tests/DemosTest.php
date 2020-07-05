@@ -47,7 +47,7 @@ class DemosTest extends AtkPhpunit\TestCase
         if (self::$_db === null) {
             // load demos config
             $initVars = get_defined_vars();
-            $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/'));
+            $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/?APP_CALL_EXIT=0&APP_CATCH_EXCEPTIONS=0&APP_ALWAYS_RUN=0'));
 
             /** @var App $app */
             require_once static::DEMOS_DIR . '/init-app.php';
@@ -116,16 +116,9 @@ class DemosTest extends AtkPhpunit\TestCase
 
     protected function createTestingApp(): App
     {
-        $app = new class() extends App {
-            protected function setupAlwaysRun(): void
-            {
-                // no register_shutdown_function
-            }
-
+        $app = new class(['call_exit' => false, 'catch_exceptions' => false, 'always_run' => false]) extends App {
             public function callExit($for_shutdown = false): void
             {
-                // TODO is the shutdown hook called somewhere?
-
                 throw new DemosTestExitException();
             }
         };
