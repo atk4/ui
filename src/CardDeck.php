@@ -176,7 +176,7 @@ class CardDeck extends View
         if ($this->useAction && $this->menu) {
             foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 $action->ui['executor'] = $this->initActionExecutor($action);
-                $this->menuActions[$k]['btn'] = $this->addMenuButton($action, null, false, $this->_getReloadArgs());
+                $this->menuActions[$k]['btn'] = $this->addMenuButton($action, null, false, false, $this->_getReloadArgs());
                 $this->menuActions[$k]['action'] = $action;
             }
         }
