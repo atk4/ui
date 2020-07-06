@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Layout;
 
-use atk4\ui\Form\Layout;
+use atk4\ui\Form;
 
 /**
  * Layout that automatically arranges itself into multiple columns.
  * Well suitable for large number of fields on a form.
  */
-class Columns extends Layout
+class Columns extends Form\Layout
 {
     /** @var int count of columns */
     public $col;
@@ -65,7 +65,7 @@ class Columns extends Layout
         $chunks = array_chunk($fields, (int) ceil($cnt / $col));
         foreach ($chunks as $chunk) {
             $cc = $c->addColumn();
-            Layout::addTo($cc, ['form' => $this->form])->setModel($model, $chunk);
+            Form\Layout::addTo($cc, ['form' => $this->form])->setModel($model, $chunk);
         }
 
         \atk4\ui\View::addTo($this, ['ui' => 'clearing hidden divider']);

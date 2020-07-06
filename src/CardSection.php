@@ -47,11 +47,8 @@ class CardSection extends View
 
     /**
      * Add Model fields to a card section.
-     *
-     * @param bool $useLabel
-     * @param bool $useTable
      */
-    public function addFields(Model $model, array $fields, $useLabel = false, $useTable = false)
+    public function addFields(Model $model, array $fields, bool $useLabel = false, bool $useTable = false)
     {
         if (!$model->loaded()) {
             throw new Exception('Model need to be loaded.');
@@ -66,10 +63,8 @@ class CardSection extends View
 
     /**
      * Add fields label and value to section.
-     *
-     * @param bool $useLabel
      */
-    private function addSectionFields(Model $model, array $fields, $useLabel = false)
+    private function addSectionFields(Model $model, array $fields, bool $useLabel = false)
     {
         foreach ($fields as $field) {
             $label = $model->getField($field)->getCaption();

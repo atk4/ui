@@ -42,12 +42,10 @@ class ActionButtons extends Table\Column
      *
      * @param \atk4\ui\View|string           $button
      * @param callable|Model\UserAction|null $action
-     * @param bool                           $confirm
-     * @param bool                           $isDisabled
      *
      * @return \atk4\ui\View
      */
-    public function addButton($button, $action = null, $confirm = false, $isDisabled = false)
+    public function addButton($button, $action = null, bool $confirm = false, bool $isDisabled = false)
     {
         // If action is not specified, perhaps it is defined in the model
         if (!$action) {

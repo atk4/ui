@@ -67,8 +67,6 @@ class VirtualPage extends View
 
     /**
      * Is virtual page active?
-     *
-     * @return bool
      */
     public function triggered()
     {
