@@ -176,7 +176,7 @@ class CardDeck extends View
         if ($this->useAction && $this->menu) {
             foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 $action->ui['executor'] = $this->initActionExecutor($action);
-                $this->menuActions[$k]['btn'] = $this->addMenuButton($action, null, false, $this->_getReloadArgs());
+                $this->menuActions[$k]['btn'] = $this->addMenuButton($action, null, false, false, $this->_getReloadArgs());
                 $this->menuActions[$k]['action'] = $action;
             }
         }
@@ -334,14 +334,13 @@ class CardDeck extends View
     /**
      * Add button to menu bar on top of deck card.
      *
-     * @param Button|string|Model\UserAction                  $button     a button object, a model action or a string representing a model action
-     * @param Model\UserAction|jsExpressionable|callable|null $callback   an model action, js expression or callback function
-     * @param string|array                                    $confirm    A confirmation string or View::on method defaults when passed has an array,
-     * @param bool                                            $isDisabled
+     * @param Button|string|Model\UserAction                  $button   a button object, a model action or a string representing a model action
+     * @param Model\UserAction|jsExpressionable|callable|null $callback an model action, js expression or callback function
+     * @param string|array                                    $confirm  A confirmation string or View::on method defaults when passed has an array,
      *
      * @return mixed
      */
-    public function addMenuButton($button, $callback = null, $confirm = null, $isDisabled = false, $args = null)
+    public function addMenuButton($button, $callback = null, $confirm = null, bool $isDisabled = false, $args = null)
     {
         $defaults = [];
 

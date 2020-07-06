@@ -157,8 +157,6 @@ class Callback
 
     /**
      * Is callback triggered?
-     *
-     * @return bool
      */
     public function triggered()
     {

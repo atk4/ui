@@ -734,11 +734,9 @@ class View implements jsExpressionable
      * This method is for those cases when developer want to simply render his
      * view and grab HTML himself.
      *
-     * @param bool $force_echo
-     *
      * @return string
      */
-    public function render($force_echo = true)
+    public function render(bool $force_echo = true)
     {
         $this->renderAll();
 
@@ -763,12 +761,11 @@ class View implements jsExpressionable
     /**
      * Render View using json format.
      *
-     * @param bool   $force_echo
-     * @param string $region     a specific template region to render
+     * @param string $region a specific template region to render
      *
      * @return string
      */
-    public function renderJSON($force_echo = true, $region = null)
+    public function renderJSON(bool $force_echo = true, $region = null)
     {
         $this->renderAll();
 
@@ -975,11 +972,9 @@ class View implements jsExpressionable
     /**
      * Clear Web storage data associated with this view.
      *
-     * @param bool $useSession
-     *
      * @return mixed
      */
-    public function jsClearStoreData($useSession = false)
+    public function jsClearStoreData(bool $useSession = false)
     {
         $type = $useSession ? 'session' : 'local';
 
@@ -1001,11 +996,9 @@ class View implements jsExpressionable
      *
      *  Final store value will be: ['args' => ['path' => '/'], 'fields' => ['name' => 'test']];
      *
-     * @param bool $useSession
-     *
      * @return mixed
      */
-    public function jsAddStoreData(array $data, $useSession = false)
+    public function jsAddStoreData(array $data, bool $useSession = false)
     {
         $type = $useSession ? 'session' : 'local';
 
@@ -1236,11 +1229,9 @@ class View implements jsExpressionable
     /**
      * Get JavaScript objects from this render tree.
      *
-     * @param bool $force_echo
-     *
      * @return string
      */
-    public function getJS($force_echo = false)
+    public function getJS(bool $force_echo = false)
     {
         $actions = [];
 

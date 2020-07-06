@@ -217,11 +217,9 @@ class Popup extends View
     /**
      * Whether popup stay open when user hover on it or not.
      *
-     * @param bool $isOverable
-     *
      * @return $this
      */
-    public function setHoverable($isOverable = true)
+    public function setHoverable(bool $isOverable = true)
     {
         $this->popOptions['hoverable'] = $isOverable;
 
