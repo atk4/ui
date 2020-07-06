@@ -135,7 +135,7 @@ class ActionMenu extends Table\Column
     /**
      * {@inheritdoc}
      */
-    public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
+    public function getHeaderCellHTML(\atk4\data\Field $field = null, $value = null)
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown(
             array_merge(
@@ -149,13 +149,13 @@ class ActionMenu extends Table\Column
             )
         );
 
-        return parent::getHeaderCellHTML($f, $value);
+        return parent::getHeaderCellHTML($field, $value);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDataCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(\atk4\data\Field $field = null)
     {
         if (!$this->items) {
             return '';

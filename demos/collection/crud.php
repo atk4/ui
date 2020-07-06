@@ -7,39 +7,39 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$m = new CountryLock($app->db);
+$model = new CountryLock($app->db);
 
-$g = \atk4\ui\CRUD::addTo($app, ['ipp' => 10]);
+$crud = \atk4\ui\CRUD::addTo($app, ['ipp' => 10]);
 
 // callback for model action add form.
-$g->onFormAdd(function ($form, $t) {
+$crud->onFormAdd(function ($form, $t) {
     $form->js(true, $form->getControl('name')->jsInput()->val('Entering value via javascript'));
 });
 
 // callback for model action edit form.
-$g->onFormEdit(function ($form) {
+$crud->onFormEdit(function ($form) {
     $form->js(true, $form->getControl('name')->jsInput()->attr('readonly', true));
 });
 
 // callback for both model action edit and add.
-$g->onFormAddEdit(function ($form, $ex) {
+$crud->onFormAddEdit(function ($form, $ex) {
     $form->onSubmit(function (\atk4\ui\Form $form) use ($ex) {
         return [$ex->hide(), new \atk4\ui\jsToast('Submit all right! This demo does not saved data.')];
     });
 });
 
-$g->setModel($m);
+$crud->setModel($model);
 
-$g->addDecorator($m->title_field, [\atk4\ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => 'id']]);
+$crud->addDecorator($model->title_field, [\atk4\ui\Table\Column\Link::class, ['test' => false, 'path' => 'interfaces/page'], ['_id' => 'id']]);
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
-$c = \atk4\ui\Columns::addTo($app);
-$cc = $c->addColumn(0, 'ui blue segment');
+$columns = \atk4\ui\Columns::addTo($app);
+$column = $columns->addColumn(0, 'ui blue segment');
 
 // CRUD can operate with various fields
-\atk4\ui\Header::addTo($cc, ['Configured CRUD']);
-$crud = \atk4\ui\CRUD::addTo($cc, [
+\atk4\ui\Header::addTo($column, ['Configured CRUD']);
+$crud = \atk4\ui\CRUD::addTo($column, [
     //'fieldsCreate' => ['name', 'iso', 'iso3', 'numcode', 'phonecode'], // when creating then show more fields
     'displayFields' => ['name'], // when updating then only allow to update name
     'editFields' => ['name', 'iso', 'iso3'],
@@ -49,25 +49,25 @@ $crud = \atk4\ui\CRUD::addTo($cc, [
     'table' => ['class' => ['red inverted']],
 ]);
 // Condition on the model can be applied on a model
-$m = new CountryLock($app->db);
-$m->addCondition('numcode', '<', 200);
-$m->onHook(\atk4\data\Model::HOOK_VALIDATE, function ($m2, $intent) {
+$model = new CountryLock($app->db);
+$model->addCondition('numcode', '<', 200);
+$model->onHook(\atk4\data\Model::HOOK_VALIDATE, function ($model, $intent) {
     $err = [];
-    if ($m2->get('numcode') >= 200) {
+    if ($model->get('numcode') >= 200) {
         $err['numcode'] = 'Should be less than 200';
     }
 
     return $err;
 });
-$crud->setModel($m);
+$crud->setModel($model);
 
 // Because CRUD inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => [\atk4\ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {
     \atk4\ui\Message::addTo($p, ['Details for: ' . $crud->model->load($id)['name'] . ' (id: ' . $id . ')']);
 });
 
-$cc = $c->addColumn();
-\atk4\ui\Header::addTo($cc, ['Cutomizations']);
+$column = $columns->addColumn();
+\atk4\ui\Header::addTo($column, ['Cutomizations']);
 
 /** @var \atk4\ui\UserAction\ModalExecutor $myExecutorClass */
 $myExecutorClass = get_class(new class() extends \atk4\ui\UserAction\ModalExecutor {
@@ -93,7 +93,7 @@ $myExecutorClass = get_class(new class() extends \atk4\ui\UserAction\ModalExecut
 $file = new FileLock($app->db);
 $file->getUserAction('edit')->ui['executor'] = [$myExecutorClass];
 
-$crud = \atk4\ui\CRUD::addTo($cc, [
+$crud = \atk4\ui\CRUD::addTo($column, [
     'ipp' => 5,
 ]);
 

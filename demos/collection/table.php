@@ -56,7 +56,7 @@ break;
 
 $table->addTotals(['name' => 'Totals:', 'salary' => ['sum']]);
 
-$my_array = [
+$myArray = [
     ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => '1973-02-03', 'cv' => 'I am <strong>BIG</strong> Vinny'],
     ['name' => 'Zoe', 'surname' => 'Shatwell', 'birthdate' => '1958-08-21', 'cv' => null],
     ['name' => 'Darcy', 'surname' => 'Wild', 'birthdate' => '1968-11-01', 'cv' => 'I like <i style="color:orange">icecream</i>'],
@@ -64,7 +64,7 @@ $my_array = [
 ];
 
 $table = \atk4\ui\Table::addTo($app);
-$table->setSource($my_array, ['name']);
+$table->setSource($myArray, ['name']);
 
 //$table->addColumn('name');
 $table->addColumn('surname', [Table\Column\Link::class, 'url' => 'table.php?id={$surname}']);

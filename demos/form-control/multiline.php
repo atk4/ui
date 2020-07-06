@@ -44,17 +44,17 @@ for ($i = 1; $i < 3; ++$i) {
 $form = Form::addTo($app);
 $form->addControl('test');
 // Add multiline field and set model.
-$ml = $form->addControl('ml', [Form\Control\Multiline::class, 'options' => ['color' => 'blue'], 'rowLimit' => 10, 'addOnTab' => true]);
-$ml->setModel($inventory);
+$multiline = $form->addControl('ml', [Form\Control\Multiline::class, 'options' => ['color' => 'blue'], 'rowLimit' => 10, 'addOnTab' => true]);
+$multiline->setModel($inventory);
 
 // Add total field.
-$sub_layout = $form->layout->addSublayout([Form\Layout\Section\Columns::class]);
-$sub_layout->addColumn(12);
-$c = $sub_layout->addColumn(4);
-$f_total = $c->addControl('total', ['readonly' => true])->set($total);
+$sublayout = $form->layout->addSublayout([Form\Layout\Section\Columns::class]);
+$sublayout->addColumn(12);
+$column = $sublayout->addColumn(4);
+$controlTotal = $column->addControl('total', ['readonly' => true])->set($total);
 
 // Update total when qty and box value in any row has changed.
-$ml->onLineChange(function ($rows, $form) use ($f_total) {
+$multiline->onLineChange(function ($rows, $form) use ($controlTotal) {
     $total = 0;
     foreach ($rows as $row => $cols) {
         $qty = array_column($cols, 'qty')[0];
@@ -62,14 +62,14 @@ $ml->onLineChange(function ($rows, $form) use ($f_total) {
         $total = $total + ($qty * $box);
     }
 
-    return $f_total->jsInput()->val($total);
+    return $controlTotal->jsInput()->val($total);
 }, ['qty', 'box']);
 
-$ml->jsAfterAdd = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
-$ml->jsAfterDelete = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
+$multiline->jsAfterAdd = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
+$multiline->jsAfterDelete = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
 
-$form->onSubmit(function (Form $form) use ($ml) {
-    $rows = $ml->saveRows()->getModel()->export();
+$form->onSubmit(function (Form $form) use ($multiline) {
+    $rows = $multiline->saveRows()->getModel()->export();
 
     return new \atk4\ui\jsToast(json_encode(array_values($rows)));
 });

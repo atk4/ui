@@ -35,18 +35,18 @@ class Checkbox extends Table\Column
         }
     }
 
-    public function getHeaderCellHTML(Field $f = null, $value = null)
+    public function getHeaderCellHTML(Field $field = null, $value = null)
     {
-        if (isset($f)) {
+        if (isset($field)) {
             throw (new Exception('Checkbox must be placed in an empty column. Don\'t specify any field.'))
-                ->addMoreInfo('field', $f);
+                ->addMoreInfo('field', $field);
         }
         $this->table->js(true)->find('.' . $this->class)->checkbox();
 
-        return parent::getHeaderCellHTML($f);
+        return parent::getHeaderCellHTML($field);
     }
 
-    public function getDataCellTemplate(Field $f = null)
+    public function getDataCellTemplate(Field $field = null)
     {
         return $this->app->getTag('div', ['class' => 'ui checkbox ' . $this->class], [['input', ['type' => 'checkbox']]]);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Table\Column\FilterModel;
 
+use atk4\data\Model;
 use atk4\ui\Table\Column;
 use DateTime;
 
@@ -67,38 +68,38 @@ class TypeDate extends Column\FilterModel
      *
      * @return mixed
      */
-    public function setConditionForModel($m)
+    public function setConditionForModel($model)
     {
         $filter = $this->recallData();
         if (isset($filter['id'])) {
             switch ($filter['op']) {
                 case 'empty':
-                    $m->addCondition($filter['name'], '=', null);
+                    $model->addCondition($filter['name'], '=', null);
 
                     break;
                 case 'not empty':
-                    $m->addCondition($filter['name'], '!=', null);
+                    $model->addCondition($filter['name'], '!=', null);
 
                     break;
                 case 'within':
                     $d1 = $this->getDate($filter['value']);
                     $d2 = $this->getDate($filter['range']);
                     if ($d2 >= $d1) {
-                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
-                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
+                        $value = $model->persistence->typecastSaveField($model->getField($filter['name']), $d1);
+                        $value2 = $model->persistence->typecastSaveField($model->getField($filter['name']), $d2);
                     } else {
-                        $value = $m->persistence->typecastSaveField($m->getField($filter['name']), $d2);
-                        $value2 = $m->persistence->typecastSaveField($m->getField($filter['name']), $d1);
+                        $value = $model->persistence->typecastSaveField($model->getField($filter['name']), $d2);
+                        $value2 = $model->persistence->typecastSaveField($model->getField($filter['name']), $d1);
                     }
-                    $m->addCondition($m->expr('[field] between [value] and [value2]', ['field' => $m->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $model->addCondition($model->expr('[field] between [value] and [value2]', ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
 
                     break;
                 default:
-                    $m->addCondition($filter['name'], $filter['op'], $this->getDate($filter['value']));
+                    $model->addCondition($filter['name'], $filter['op'], $this->getDate($filter['value']));
             }
         }
 
-        return $m;
+        return $model;
     }
 
     /**

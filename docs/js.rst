@@ -486,13 +486,13 @@ some feedback to the user. jsNotify can display a bar on top of the screen for s
         $form = \atk4\ui\Form::addTo($p);
         $form->addControl('name', null, ['caption'=>'Add your name']);
 
-        $form->onSubmit(function ($f) use ($modal) {
-            if (empty($f->model->get('name'))) {
-                return $f->error('name', 'Please add a name!');
+        $form->onSubmit(function ($form) use ($modal) {
+            if (empty($form->model->get('name'))) {
+                return $form->error('name', 'Please add a name!');
             } else {
                 return [
                     $modal->hide(),
-                    new \atk4\ui\jsNotify('Thank you '.$f->model->get('name'))
+                    new \atk4\ui\jsNotify('Thank you '.$form->model->get('name'))
                 ];
             }
         });
@@ -530,14 +530,14 @@ other view::
 
     $m_book = new Book($db);
 
-    $f = \atk4\ui\Form::addTo($app);
-    $t = \atk4\ui\Table::addTo($app);
+    $form = \atk4\ui\Form::addTo($app);
+    $table = \atk4\ui\Table::addTo($app);
 
-    $f->setModel($m_book);
+    $form->setModel($m_book);
 
-    $f->onSubmit(function($f) use($t) {
-        $f->model->save();
-        return new \atk4\ui\jsReload($t);
+    $form->onSubmit(function($form) use($table) {
+        $form->model->save();
+        return new \atk4\ui\jsReload($table);
     });
 
     $t->setModel($m_book);
@@ -563,15 +563,15 @@ needed:
 The following will **not** work::
 
     $app = new myApp;
-    $m = new myModel;
+    $model = new myModel;
 
     // jsModal requires its contents to be put into a Virtual Page
     $vp = \atk4\ui\VirtualPage::addTo($app);
     $form = \atk4\ui\Form::addTo($vp);
-    $form->setModel(clone $m);
+    $form->setModel(clone $model);
 
     $table = \atk4\ui\Table::addTo($app);
-    $table->setModel(clone $m));
+    $table->setModel(clone $model));
 
     $button = \atk4\ui\Button::addTo($app, ['Add Item', 'icon'=>'plus']);
     $button->on('click', new \atk4\ui\jsModal('JSModal Title', $vp));
@@ -587,15 +587,15 @@ The following will **not** work::
 Table needs to be first! The following works::
 
     $app = new myApp;
-    $m = new myModel;
+    $model = new myModel;
 
     // This needs to be first
     $table = \atk4\ui\Table::addTo($app);
-    $table->setModel(clone $m));
+    $table->setModel(clone $model));
 
     $vp = \atk4\ui\VirtualPage::addTo($app);
     $form = \atk4\ui\Form::addTo($vp);
-    $form->setModel(clone $m);
+    $form->setModel(clone $model);
 
     $button = \atk4\ui\Button::addTo($app, ['Add Item', 'icon'=>'plus']);
     $button->on('click', new \atk4\ui\jsModal('JSModal Title', $vp));
@@ -614,12 +614,12 @@ Since VirtualPage is special, when asked to be rendered and it gets triggered, r
 VirtualPage content is rendered. To force yourself to put things in order you can write the above like this::
 
     $table = \atk4\ui\Table::addTo($app);
-    $table->setModel($m);
+    $table->setModel($model);
 
     $vp = \atk4\ui\VirtualPage::addTo($app);
-    $vp->set(function($p) use ($table, $m) {
+    $vp->set(function($p) use ($table, $model) {
         $form = \atk4\ui\Form::addTo($p);
-        $form->setModel(clone $m);
+        $form->setModel(clone $model);
         $form->onSubmit(function($form) use($table) {
             $form->model->save();
             return [

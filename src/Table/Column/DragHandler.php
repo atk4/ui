@@ -36,7 +36,7 @@ class DragHandler extends Table\Column
         $this->cb->onReorder($fx);
     }
 
-    public function getDataCellTemplate(\atk4\data\Field $f = null)
+    public function getDataCellTemplate(\atk4\data\Field $field = null)
     {
         return $this->app->getTag($this->tag, ['class' => $this->class . ' atk-handle', 'style' => 'cursor:pointer; color: #bcbdbd']);
     }

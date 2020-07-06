@@ -65,7 +65,7 @@ class Columns extends Form\Layout
         $chunks = array_chunk($fields, (int) ceil($cnt / $col));
         foreach ($chunks as $chunk) {
             $cc = $c->addColumn();
-            Layout::addTo($cc, ['form' => $this->form])->setModel($model, $chunk);
+            Form\Layout::addTo($cc, ['form' => $this->form])->setModel($model, $chunk);
         }
 
         \atk4\ui\View::addTo($this, ['ui' => 'clearing hidden divider']);

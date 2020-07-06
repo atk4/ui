@@ -78,7 +78,7 @@ decorators defined at ``\atk4\ui\Form::Control``. See dedicated documentation fo
 To tweak the UI properties of an form control input use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field::
 
 	$form = $this->add(new \atk4\ui\Form);
-	$form->setModel($m);
+	$form->setModel($model);
 	$form->getControl('name')->setInputAttr('maxlength', 20);
 
 The rest of this chapter will focus on Form mechanics, such as submission,
@@ -404,11 +404,11 @@ Using setModel() on a sub layout
 
 You may add form controls to sub layout directly using setModel method on the sub layout itself.::
 
-    $f = Form::addTo($app);
-    $f->setModel($m, false);
+    $form = Form::addTo($app);
+    $form->setModel($model, false);
 
-    $sub_layout = $f->layout->addSubLayout();
-    $sub_layout->setModel($m, ['first_name', 'last_name']);
+    $sub_layout = $form->layout->addSubLayout();
+    $sub_layout->setModel($model, ['first_name', 'last_name']);
 
 
 When using setModel() on a sub layout to add controls per sub layout instead of entire layout,
@@ -649,28 +649,28 @@ My next example will add multiple controls on the same line::
 
     $form->addControls(['name', 'surname']);
 
-    $gr = $form->addGroup('Address');
-    $gr->addControls(['address', 'city', 'country']); // grouped form controls, will appear on the same line
+    $group = $form->addGroup('Address');
+    $group->addControls(['address', 'city', 'country']); // grouped form controls, will appear on the same line
 
 By default grouped form controls will appear with fixed width. To distribute space you can either specify
 proportions manually::
 
-    $gr = $f->addGroup('Address');
-    $gr->addControl('address', ['width'=>'twelve']);
-    $gr->addControl('code', ['Post Code', 'width'=>'four']);
+    $group = $form->addGroup('Address');
+    $group->addControl('address', ['width'=>'twelve']);
+    $group->addControl('code', ['Post Code', 'width'=>'four']);
 
 or you can divide space equally between form controls. Header is also omitted for this group::
 
-    $gr = $f->addGroup(['width'=>'two']);
-    $gr->addControls(['city', 'country']);
+    $group = $form->addGroup(['width'=>'two']);
+    $group->addControls(['city', 'country']);
 
 You can also use in-line form groups. Controls in such a group will display header on the left and
 the error messages appearing on the right from the control::
 
-    $gr = $f->addGroup(['Name', 'inline'=>true]);
-    $gr->addControl('first_name', ['width'=>'eight']);
-    $gr->addControl('middle_name', ['width'=>'three', 'disabled'=>true]);
-    $gr->addControl('last_name', ['width'=>'five']);
+    $group = $form->addGroup(['Name', 'inline'=>true]);
+    $group->addControl('first_name', ['width'=>'eight']);
+    $group->addControl('middle_name', ['width'=>'three', 'disabled'=>true]);
+    $group->addControl('last_name', ['width'=>'five']);
 
 Using Sub-layout
 ----------------
@@ -685,21 +685,21 @@ organize fields in either accordion, tabs or columns.
 
 The following example will show how to organize fields using regular sub layout and accordion sections::
 
-    $f = Form::addTo($app);
-    $f->setModel($m, false);
+    $form = Form::addTo($app);
+    $form->setModel($model, false);
 
-    $sub_layout = $f->layout->addSubLayout([\atk4\ui\Form\Layout\Section::class]);
+    $sub_layout = $form->layout->addSubLayout([\atk4\ui\Form\Layout\Section::class]);
 
     Header::addTo($sub_layout, ['Accordion Section in Form']);
-    $sub_layout->setModel($m, ['name']);
+    $sub_layout->setModel($model, ['name']);
 
-    $accordion_layout = $f->layout->addSubLayout([\atk4\ui\Form\Layout\Section\Accordion::class]);
+    $accordion_layout = $form->layout->addSubLayout([\atk4\ui\Form\Layout\Section\Accordion::class]);
 
     $a1 = $accordion_layout->addSection('Section 1');
-    $a1->setModel($m, ['iso', 'iso3']);
+    $a1->setModel($model, ['iso', 'iso3']);
 
     $a2 = $accordion_layout->addSection('Section 2');
-    $a2->setModel($m, ['numcode', 'phonecode']);
+    $a2->setModel($model, ['numcode', 'phonecode']);
 
 In the example above, we first add a Generic sub layout to the existing layout of the form where one form
 control ('name') is added to this sub layout.
@@ -707,8 +707,8 @@ control ('name') is added to this sub layout.
 Then we add another layout to the form layout. In this case it's specific Accordion layout. This sub layout
 is further separated in two accordion sections and form controls are added to each section::
 
-    $a1->setModel($m, ['iso', 'iso3']);
-    $a2->setModel($m, ['numcode', 'phonecode']);
+    $a1->setModel($model, ['iso', 'iso3']);
+    $a2->setModel($model, ['numcode', 'phonecode']);
 
 Sub layout gives you greater control on how to display form controls within your form. For more examples on
 sub layouts please visit demo page: https://github.com/atk4/ui/blob/develop/demos/form-section.php
@@ -719,7 +719,7 @@ Fomantic UI Modifiers
 There are many other classes Fomantic UI allow you to use on a form. The next code will produce
 form inside a segment (outline) and will make form controls appear smaller::
 
-    $f = new \atk4\ui\Form(['small segment']));
+    $form = new \atk4\ui\Form(['small segment']));
 
 For further styling see documentation on :php:class:`View`.
 

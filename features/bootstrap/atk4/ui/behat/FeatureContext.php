@@ -282,7 +282,7 @@ class FeatureContext extends RawMinkContext implements Context
      */
     public function iHideJsModal()
     {
-        $script = '$(".modal.atk-callback-response").modal("hide")';
+        $script = '$(".modal.active.front").modal("hide")';
         $this->getSession()->executeScript($script);
     }
 

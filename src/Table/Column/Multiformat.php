@@ -20,7 +20,7 @@ class Multiformat extends Table\Column
      */
     public $callback;
 
-    public function getDataCellHTML(Field $f = null, $extra_tags = [])
+    public function getDataCellHTML(Field $field = null, $extra_tags = [])
     {
         return '{$c_' . $this->short_name . '}';
     }

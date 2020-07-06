@@ -104,23 +104,23 @@ class CRUD extends Grid
      *
      * @param array|null $fields
      */
-    public function setModel(Model $m, $fields = null): Model
+    public function setModel(Model $model, $fields = null): Model
     {
         if ($fields !== null) {
             $this->displayFields = $fields;
         }
 
-        parent::setModel($m, $this->displayFields);
+        parent::setModel($model, $this->displayFields);
 
         // Grab model id when using delete. Must be set before delete action execute.
-        $this->model->onHook('afterDelete', function ($m) {
-            $this->deletedId = $m->get($m->id_field);
+        $this->model->onHook('afterDelete', function ($model) {
+            $this->deletedId = $model->get($model->id_field);
         });
 
         $this->model->unload();
 
         if ($this->useMenuActions === null) {
-            $this->useMenuActions = count($m->getUserActions()) > 4;
+            $this->useMenuActions = count($model->getUserActions()) > 4;
         }
 
         foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {

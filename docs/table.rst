@@ -65,7 +65,7 @@ You can also use Table with Array data source like this::
 Adding Columns
 --------------
 
-.. php:method:: setModel(\atk4\data\Model $m, $fields = null)
+.. php:method:: setModel(\atk4\data\Model $model, $fields = null)
 
 .. php:method:: addColumn($name, $columnDecorator = null, $field = null)
 
@@ -138,7 +138,7 @@ Advanced Column Denifitions
 Table defines a method `columnFactory`, which returns Column object which is to be used to
 display values of specific model Field.
 
-.. php:method:: columnFactory(\atk4\data\Field $f)
+.. php:method:: columnFactory(\atk4\data\Field $field)
 
 If the value of the field can be displayed by :php:class:`Table\\Column` then :php:class:`Table` will
 respord with object of this class. Since the default column does not contain any customization,

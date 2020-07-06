@@ -15,27 +15,27 @@ $table = \atk4\ui\Table::addTo($container, ['celled' => true]);
 $table->setModel(new SomeData(), false);
 
 //will add popup to this column.
-$col_name = $table->addColumn('name');
+$colName = $table->addColumn('name');
 
 //will add dropdown menu to this colum.
-$col_surname = $table->addColumn('surname');
+$colSurname = $table->addColumn('surname');
 
-$col_title = $table->addColumn('title');
+$colTitle = $table->addColumn('title');
 
 $table->addColumn('date');
 $table->addColumn('salary', new \atk4\ui\Table\Column\Money());
 
 //regular popup setup
-\atk4\ui\Text::addTo($col_name->addPopup())->set('Name popup');
+\atk4\ui\Text::addTo($colName->addPopup())->set('Name popup');
 
 //dynamic popup setup
 //This popup will add content using the callback function.
-$col_surname->addPopup()->set(function ($pop) {
+$colSurname->addPopup()->set(function ($pop) {
     \atk4\ui\Text::addTo($pop)->set('This popup is loaded dynamically');
 });
 
 //Another dropdown menu.
-$col_title->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
+$colTitle->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
     return 'Title item: ' . $item;
 });
 
@@ -44,15 +44,15 @@ $col_title->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
 \atk4\ui\Header::addTo($app, ['Grid column may contains popup or dropdown menu.']);
 
 //Table in Grid are already inside a container.
-$g = \atk4\ui\Grid::addTo($app);
-$g->setModel(new Country($app->db));
-$g->ipp = 5;
+$grid = \atk4\ui\Grid::addTo($app);
+$grid->setModel(new Country($app->db));
+$grid->ipp = 5;
 
 //Adding a dropdown menu to the column 'name'.
-$g->addDropdown('name', ['Rename', 'Delete'], function ($item) {
+$grid->addDropdown('name', ['Rename', 'Delete'], function ($item) {
     return $item;
 });
 
 //Adding a popup view to the column 'iso'
-$pop = $g->addPopup('iso');
+$pop = $grid->addPopup('iso');
 \atk4\ui\Text::addTo($pop)->set('Grid column popup');

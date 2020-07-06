@@ -98,7 +98,7 @@ class App
      *
      * @var bool
      */
-    public $exit_called = false;
+    private $exit_called = false;
 
     /** @var bool */
     public $is_rendering = false;
@@ -145,7 +145,7 @@ class App
      *
      * @var int
      */
-    protected $catch_error_types = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED;
+    protected $catch_error_types = E_ALL & ~E_NOTICE;
 
     /**
      * Constructor.
@@ -490,10 +490,9 @@ class App
      */
     public function run()
     {
-        $is_exit_exception = false;
+        $isExitException = false;
 
         try {
-            ob_start();
             $this->run_called = true;
             $this->hook(self::HOOK_BEFORE_RENDER);
             $this->is_rendering = true;
@@ -512,19 +511,22 @@ class App
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
                 throw new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.');
             }
-            echo $this->html->template->render();
+
+            $output = $this->html->template->render();
         } catch (ExitApplicationException $e) {
-            $is_exit_exception = true;
+            $output = '';
+            $isExitException = true;
         }
 
-        $output = ob_get_clean();
-        if ($this->isJsUrlRequest()) {
-            $this->outputResponseJSON($output);
-        } else {
-            $this->outputResponseHTML($output);
+        if (!$this->exit_called) { // output already send by terminate()
+            if ($this->isJsUrlRequest()) {
+                $this->outputResponseJSON($output);
+            } else {
+                $this->outputResponseHTML($output);
+            }
         }
 
-        if ($is_exit_exception) {
+        if ($isExitException) {
             $this->callExit();
         }
     }
@@ -976,7 +978,7 @@ class App
         // replace large JSON integers only, do not replace anything in JSON/JS strings
         $json = preg_replace_callback('~(?:"(?:[^"\\\\]+|\\\\.)*")?+\K|(?:\'(?:[^\'\\\\]+|\\\\.)*\')?+\K|(?:^|[{\[,:])'
             . '[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function ($matches) {
-                if ($matches[0] === '' || abs((int) $matches[0]) < (1 << 53)) {
+                if ($matches[0] === '' || abs((int) $matches[0]) < (2 ** 53)) {
                     return $matches[0];
                 }
 
@@ -1077,7 +1079,7 @@ class App
         }
 
         if ($lateError !== null) {
-            echo "\n" . '!! ATK4 UI ERROR: ' . $lateError . ' !!' . "\n";
+            echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
             exit(1);
         }
 

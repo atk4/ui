@@ -299,11 +299,11 @@ Multiformat
 Sometimes your formatting may change depending on value. For example you may want to place link
 only on certain rows. For this you can use an `\\atk4\ui\\Table\\Column\\Multiformat` decorator::
 
-    $table->addColumn('amount', [\atk4\ui\Table\Column\Multiformat::class, function($m) {
+    $table->addColumn('amount', [\atk4\ui\Table\Column\Multiformat::class, function($model) {
 
-        if ($m->get('is_invoiced') > 0) {
+        if ($model->get('is_invoiced') > 0) {
             return [\atk4\ui\Table\Column\Money::class, [\atk4\ui\Table\Column\Link::class, 'invoice', ['invoice_id'=>'id']]];
-        } elseif (abs($m->get('is_refunded')) < 50) {
+        } elseif (abs($model->get('is_refunded')) < 50) {
             return [[\atk4\ui\Table\Column\Template::class, 'Amount was <b>refunded</b>']];
         }
 

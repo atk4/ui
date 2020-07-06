@@ -301,7 +301,7 @@ class Multiline extends Form\Control
      */
     public function getValue()
     {
-        $m = null;
+        $model = null;
         // Will load data when using containsMany.
         $data = $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
 
@@ -310,15 +310,15 @@ class Multiline extends Form\Control
         if (empty($data)) {
             // Set model according to model reference if set, or simply the model passed to it.
             if ($this->model->loaded() && $this->modelRef) {
-                $m = $this->model->ref($this->modelRef);
+                $model = $this->model->ref($this->modelRef);
             } elseif (!$this->modelRef) {
-                $m = $this->model;
+                $model = $this->model;
             }
-            if ($m) {
-                foreach ($m as $row) {
+            if ($model) {
+                foreach ($model as $row) {
                     $d_row = [];
                     foreach ($this->rowFields as $fieldName) {
-                        $field = $m->getField($fieldName);
+                        $field = $model->getField($fieldName);
                         if ($field->isEditable()) {
                             $value = $row->get($field->short_name);
                         } else {
@@ -343,26 +343,26 @@ class Multiline extends Form\Control
     public function validate(array $rows)
     {
         $rowErrors = [];
-        $m = $this->getModel();
+        $model = $this->getModel();
 
-        foreach ($rows as $row => $cols) {
+        foreach ($rows as $cols) {
             $rowId = $this->getMlRowId($cols);
             foreach ($cols as $fieldName => $value) {
-                if ($fieldName === '__atkml' || $fieldName === $m->id_field) {
+                if ($fieldName === '__atkml' || $fieldName === $model->id_field) {
                     continue;
                 }
 
                 try {
-                    $field = $m->getField($fieldName);
+                    $field = $model->getField($fieldName);
                     // Save field value only if the field was editable
                     if (!$field->read_only) {
-                        $m->set($fieldName, $this->app->ui_persistence->typecastLoadField($field, $value));
+                        $model->set($fieldName, $this->app->ui_persistence->typecastLoadField($field, $value));
                     }
                 } catch (\atk4\core\Exception $e) {
                     $rowErrors[$rowId][] = ['field' => $fieldName, 'msg' => $e->getMessage()];
                 }
             }
-            $rowErrors = $this->addModelValidateErrors($rowErrors, $rowId, $m);
+            $rowErrors = $this->addModelValidateErrors($rowErrors, $rowId, $model);
         }
 
         if ($rowErrors) {
@@ -435,8 +435,8 @@ class Multiline extends Form\Control
     {
         $e = $model->validate();
         if ($e) {
-            foreach ($e as $f => $msg) {
-                $errors[$rowId][] = ['field' => $f, 'msg' => $msg];
+            foreach ($e as $field => $msg) {
+                $errors[$rowId][] = ['field' => $field, 'msg' => $msg];
             }
         }
 
@@ -472,19 +472,18 @@ class Multiline extends Form\Control
      */
     public function getModel()
     {
-        $m = $this->model;
+        $model = $this->model;
         if ($this->modelRef) {
-            $m = $m->ref($this->modelRef);
+            $model = $model->ref($this->modelRef);
         }
 
-        return $m;
+        return $model;
     }
 
     /**
      * Set view model.
      * If modelRef is used then getModel will return proper model.
      *
-     * @param Model $m
      * @param array $fields
      *
      * @return Model
@@ -495,7 +494,7 @@ class Multiline extends Form\Control
         if ($model->hasField($this->short_name)) {
             $model->getField($this->short_name)->never_persist = true;
         }
-        $m = parent::setModel($model);
+        $model = parent::setModel($model);
 
         if ($modelRef) {
             if (!$linkField) {
@@ -503,19 +502,19 @@ class Multiline extends Form\Control
             }
             $this->linkField = $linkField;
             $this->modelRef = $modelRef;
-            $m = $m->ref($modelRef);
+            $model = $model->ref($modelRef);
         }
 
         if (!$fields) {
-            $fields = array_keys($m->getFields('not system'));
+            $fields = array_keys($model->getFields('not system'));
         }
-        $this->rowFields = array_merge([$m->id_field], $fields);
+        $this->rowFields = array_merge([$model->id_field], $fields);
 
         foreach ($this->rowFields as $fieldName) {
-            $this->fieldDefs[] = $this->getFieldDef($m->getField($fieldName));
+            $this->fieldDefs[] = $this->getFieldDef($model->getField($fieldName));
         }
 
-        return $m;
+        return $model;
     }
 
     /**
@@ -670,9 +669,9 @@ class Multiline extends Form\Control
         if ($field->values && is_array($field->values)) {
             return $field->values;
         } elseif ($field->reference) {
-            $m = $field->reference->refModel()->setLimit($this->enumLimit);
+            $model = $field->reference->refModel()->setLimit($this->enumLimit);
 
-            return $m->getTitles();
+            return $model->getTitles();
         }
 
         return [];
@@ -735,8 +734,8 @@ class Multiline extends Form\Control
 
         switch ($action) {
             case 'update-row':
-                $m = $this->setDummyModelValue(clone $this->getModel());
-                $expressionValues = array_merge($this->getExpressionValues($m), $this->getCallbackValues($m));
+                $model = $this->setDummyModelValue(clone $this->getModel());
+                $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
                 $this->app->terminateJSON(array_merge($response, ['expressions' => $expressionValues]));
 
                 break;
@@ -809,26 +808,26 @@ class Multiline extends Form\Control
      *
      * @return array
      */
-    private function getExpressionValues($m)
+    private function getExpressionValues($model)
     {
         $dummyFields = [];
         $formatValues = [];
 
-        foreach ($this->getExpressionFields($m) as $k => $field) {
+        foreach ($this->getExpressionFields($model) as $k => $field) {
             $dummyFields[$k]['name'] = $field->short_name;
-            $dummyFields[$k]['expr'] = $this->getDummyExpression($field, $m);
+            $dummyFields[$k]['expr'] = $this->getDummyExpression($field, $model);
         }
 
         if (!empty($dummyFields)) {
-            $dummyModel = new Model($m->persistence, ['table' => $m->table]);
-            foreach ($dummyFields as $f) {
-                $dummyModel->addExpression($f['name'], ['expr' => $f['expr'], 'type' => $m->getField($f['name'])->type]);
+            $dummyModel = new Model($model->persistence, ['table' => $model->table]);
+            foreach ($dummyFields as $field) {
+                $dummyModel->addExpression($field['name'], ['expr' => $f['expr'], 'type' => $model->getField($field['name'])->type]);
             }
             $values = $dummyModel->loadAny()->get();
-            unset($values[$m->id_field]);
+            unset($values[$model->id_field]);
 
             foreach ($values as $f => $value) {
-                $field = $m->getField($f);
+                $field = $model->getField($f);
                 $formatValues[$f] = $this->app->ui_persistence->_typecastSaveField($field, $value);
             }
         }
@@ -847,12 +846,12 @@ class Multiline extends Form\Control
     private function getExpressionFields($model)
     {
         $fields = [];
-        foreach ($model->getFields() as $f) {
-            if (!$f instanceof Field_SQL_Expression || !in_array($f->short_name, $this->rowFields, true)) {
+        foreach ($model->getFields() as $field) {
+            if (!$field instanceof Field_SQL_Expression || !in_array($field->short_name, $this->rowFields, true)) {
                 continue;
             }
 
-            $fields[] = $f;
+            $fields[] = $field;
         }
 
         return $fields;
@@ -895,18 +894,18 @@ class Multiline extends Form\Control
      *
      * @return int|mixed|string
      */
-    private function getValueForExpression($exprField, $fieldName, Model $m)
+    private function getValueForExpression($exprField, $fieldName, Model $model)
     {
         switch ($exprField->type) {
             case 'money':
             case 'integer':
             case 'float':
                 // Value is 0 or the field value.
-                $value = $m->get($fieldName) ?: 0;
+                $value = $model->get($fieldName) ?: 0;
 
                 break;
             default:
-                $value = '"' . $m->get($fieldName) . '"';
+                $value = '"' . $model->get($fieldName) . '"';
         }
 
         return $value;

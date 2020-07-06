@@ -140,8 +140,8 @@ class DemoInvoice extends \atk4\data\Model {
 session_start();
 
 $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
-$model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($m) {
-    $_SESSION['x'][$m->id] = $m->get();
+$model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
+    $_SESSION['x'][$model->id] = $model->get();
 });
 
 \atk4\ui\Form::addTo($app)
@@ -190,8 +190,8 @@ EOF
 session_start();
 
 $model = new \atk4\ui\demo\DemoInvoice(new \atk4\data\Persistence\Array_($_SESSION['x'] ?? []));
-$model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($m) {
-    $_SESSION['x'][$m->id] = $m->get();
+$model->onHook(\atk4\data\Model::HOOK_AFTER_SAVE, function ($model) {
+    $_SESSION['x'][$model->id] = $model->get();
 });
 
 $model->tryLoad(1);

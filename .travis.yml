@@ -56,6 +56,9 @@ before_script:
 
     - (cd js; npm install --loglevel=error; npm run build)
     - lessc public/agileui.less public/agileui.css --clean-css="--s1 --advanced" --source-map
+
+    - composer remove --no-interaction --no-update phpunit/phpunit phpunit/phpcov --dev
+    - composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
     - composer install --no-suggest --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
 script:

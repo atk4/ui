@@ -15,19 +15,19 @@ require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Header::addTo($app, ['Dynamic scroll in Container']);
 
-$v = \atk4\ui\View::addTo($app)->addClass('ui basic segment atk-scroller');
+$view = \atk4\ui\View::addTo($app)->addClass('ui basic segment atk-scroller');
 
-$scroll_container = \atk4\ui\View::addTo($v)->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
+$scrollContainer = \atk4\ui\View::addTo($view)->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
 
-$lister_template = '<div id="{$_id}">{List}<div id="{$_id}" class="ui segment" style="height: 60px"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</div>{/}{$Content}</div>';
+$listerTemplate = '<div id="{$_id}">{List}<div id="{$_id}" class="ui segment" style="height: 60px"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</div>{/}{$Content}</div>';
 
-$lister_container = \atk4\ui\View::addTo($scroll_container, ['template' => new \atk4\ui\Template($lister_template)]);
+$listerContainer = \atk4\ui\View::addTo($scrollContainer, ['template' => new \atk4\ui\Template($listerTemplate)]);
 
-$l = \atk4\ui\Lister::addTo($lister_container, [], ['List']);
-$l->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
+$lister = \atk4\ui\Lister::addTo($listerContainer, [], ['List']);
+$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
-$l->setModel(new Country($app->db));
+$lister->setModel(new Country($app->db));
 
 //add dynamic scrolling.
-$l->addJsPaginator(20, ['stateContext' => '.atk-scroller'], $scroll_container);
+$lister->addJsPaginator(20, ['stateContext' => '.atk-scroller'], $scrollContainer);

@@ -27,23 +27,23 @@ class TypeNumber extends Column\FilterModel
         $this->addField('range', ['ui' => ['caption' => '', 'form' => [\atk4\ui\Form\Control\Line::class, 'inputType' => 'number']]]);
     }
 
-    public function setConditionForModel($m)
+    public function setConditionForModel($model)
     {
         $filter = $this->recallData();
         if (isset($filter['id'])) {
             switch ($filter['op']) {
                 case 'between':
-                    $m->addCondition(
-                        $m->expr('[field] between [value] and [range]', ['field' => $m->getField($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
+                    $model->addCondition(
+                        $model->expr('[field] between [value] and [range]', ['field' => $model->getField($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
                     );
 
                     break;
                 default:
-                    $m->addCondition($filter['name'], $filter['op'], $filter['value']);
+                    $model->addCondition($filter['name'], $filter['op'], $filter['value']);
             }
         }
 
-        return $m;
+        return $model;
     }
 
     public function getFormDisplayRules()

@@ -497,7 +497,7 @@ class Form extends View
     /**
      * @deprecated use Form::controlFactory - will be removed in dec-2020
      */
-    public function decoratorFactory(\atk4\data\Field $f, $seed = [])
+    public function decoratorFactory(\atk4\data\Field $field, $seed = [])
     {
         'trigger_error'('Method is deprecated. Use Form::controlFactory instead', E_USER_DEPRECATED);
 
@@ -666,19 +666,8 @@ class Form extends View
 
         $cb->set(function () {
             try {
-                ob_start();
                 $this->loadPOST();
                 $response = $this->hook(self::HOOK_SUBMIT);
-                $output = ob_get_clean();
-
-                if ($output) {
-                    $message = new Message('Direct Output Detected');
-                    $message->init();
-                    $message->addClass('error');
-                    $message->text->set($output);
-
-                    return $message;
-                }
 
                 if (!$response) {
                     if (!$this->model instanceof \atk4\ui\Misc\ProxyModel) {
@@ -692,7 +681,6 @@ class Form extends View
 
                 return $response;
             } catch (\atk4\data\ValidationException $val) {
-                ob_get_clean(); // not close output buffer on exceptions
                 $response = [];
                 foreach ($val->errors as $field => $error) {
                     $response[] = $this->error($field, $error);

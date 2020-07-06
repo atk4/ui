@@ -7,11 +7,11 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$m = new Stat($app->db);
-$m->getUserAction('add')->system = true;
-$m->getUserAction('edit')->system = true;
-$m->getUserAction('delete')->system = true;
+$model = new Stat($app->db);
+$model->getUserAction('add')->system = true;
+$model->getUserAction('edit')->system = true;
+$model->getUserAction('delete')->system = true;
 
-$g = \atk4\ui\CRUD::addTo($app, ['paginator' => false]);
-$g->setModel($m);
-$g->addDecorator('project_code', [\atk4\ui\Table\Column\Link::class]);
+$grid = \atk4\ui\CRUD::addTo($app, ['paginator' => false]);
+$grid->setModel($model);
+$grid->addDecorator('project_code', [\atk4\ui\Table\Column\Link::class]);

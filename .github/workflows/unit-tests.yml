@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.2', '7.3', 'latest', '8.0']
+        php: ['7.3', 'latest', '8.0']
         type: ['Phpunit']
         include:
           - php: 'latest'

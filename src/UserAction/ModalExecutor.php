@@ -307,18 +307,18 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function doFields(View $modal)
     {
         $this->_addStepTitle($modal, $this->step);
-        $f = $this->addFormTo($modal);
+        $form = $this->addFormTo($modal);
 
-        $f->setModel($this->action->owner, $this->action->fields);
+        $form->setModel($this->action->owner, $this->action->fields);
         // set Fields value if set from another step.
-        $this->setFormField($f, $this->actionData['fields'] ?? [], $this->step);
+        $this->setFormField($form, $this->actionData['fields'] ?? [], $this->step);
 
         // setup exec, next and prev button handler for this step.
-        $this->jsSetSubmitBtn($modal, $f, $this->step);
+        $this->jsSetSubmitBtn($modal, $form, $this->step);
         $this->jsSetPrevHandler($modal, $this->step);
 
-        if (!$f->hookHasCallbacks(Form::HOOK_SUBMIT)) {
-            $f->onSubmit(function (Form $form) {
+        if (!$form->hookHasCallbacks(Form::HOOK_SUBMIT)) {
+            $form->onSubmit(function (Form $form) {
                 // collect fields.
                 $form_fields = $form->model->get();
                 foreach ($this->action->fields as $field) {

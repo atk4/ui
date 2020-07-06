@@ -35,8 +35,8 @@ $action = $files->addUserAction(
     ]
 );
 
-$files->addUserAction('download', function (\atk4\data\Model $m) {
-    $len = strlen(file_get_contents($m->get('name')));
+$files->addUserAction('download', function (\atk4\data\Model $model) {
+    $len = strlen(file_get_contents($model->get('name')));
 
     return "{$len} bytes downloaded..";
 });

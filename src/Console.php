@@ -95,22 +95,22 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 $this->app->logger = $this;
             }
 
+            ob_start(function ($content) {
+                if ($this->_output_bypass) {
+                    return $content;
+                }
+
+                $output = '';
+                $this->sse->echoFunction = function ($str) use (&$output) {
+                    $output .= $str;
+                };
+                $this->output($content);
+                $this->sse->echoFunction = false;
+
+                return $output;
+            }, 1);
+
             try {
-                ob_start(function ($content) {
-                    if ($this->_output_bypass) {
-                        return $content;
-                    }
-
-                    $output = '';
-                    $this->sse->echoFunction = function ($str) use (&$output) {
-                        $output .= $str;
-                    };
-                    $this->output($content);
-                    $this->sse->echoFunction = false;
-
-                    return $output;
-                }, 2);
-
                 call_user_func($callback, $this);
             } catch (\Throwable $e) {
                 $this->output('');

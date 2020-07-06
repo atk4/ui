@@ -36,18 +36,18 @@ $form->name = 'notify';
 $form->buttonSave->set('Show');
 $form->setModel(new $notifierClass($app->db), false);
 
-$f_p = $form->addGroup(['Set Text and Icon:']);
-$f_p->addControl('text', ['width' => 'eight']);
-$f_p->addControl('icon', ['width' => 'four']);
+$formGroup = $form->addGroup(['Set Text and Icon:']);
+$formGroup->addControl('text', ['width' => 'eight']);
+$formGroup->addControl('icon', ['width' => 'four']);
 
-$f_p1 = $form->addGroup(['Set Color, Transition and Width:']);
-$f_p1->addControl('color', ['width' => 'four']);
-$f_p1->addControl('transition', ['width' => 'four']);
-$f_p1->addControl('width', ['width' => 'four']);
+$formGroup1 = $form->addGroup(['Set Color, Transition and Width:']);
+$formGroup1->addControl('color', ['width' => 'four']);
+$formGroup1->addControl('transition', ['width' => 'four']);
+$formGroup1->addControl('width', ['width' => 'four']);
 
-$f_p2 = $form->addGroup(['Set Position and Attach to:']);
-$f_p2->addControl('position', ['width' => 'four']);
-$f_p2->addControl('attach', ['width' => 'four']);
+$formGroup2 = $form->addGroup(['Set Position and Attach to:']);
+$formGroup2->addControl('position', ['width' => 'four']);
+$formGroup2->addControl('attach', ['width' => 'four']);
 
 $form->onSubmit(function (\atk4\ui\Form $form) {
     $notifier = new \atk4\ui\jsNotify();

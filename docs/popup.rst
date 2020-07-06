@@ -31,14 +31,14 @@ to that element. The above example will automatically bind "click" event of a bu
 
 When added into a menu, pop-up will appear on hover::
 
-    $m = Menu::addTo($app);
-    $item = $m->addItem('HoverMe')
+    $menu = Menu::addTo($app);
+    $item = $menu->addItem('HoverMe')
     Text::addTo(Popup::addTo($app, [$item]))->set('Appears when you hover a menu item');
 
 Like many other Views of ATK, popup is an interractive element. It can load it's contents when opened::
 
-    $m = Menu::addTo($app);
-    $item = $m->addItem('HoverMe');
+    $menu = Menu::addTo($app);
+    $item = $menu->addItem('HoverMe');
     Popup::addTo($app, [$item])->set(function($popup) {
         Text::addTo($popup)->set('Appears when you hover a menu item');
         Label::addTo($popup, ['Random value', 'detail'=>rand(1,100)]);

@@ -30,11 +30,11 @@ $finderClass = get_class(new class() extends \atk4\ui\Columns {
         }
 
         $path = [];
-        $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
+        $jsReload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
             $path ? (implode(',', $path) . ',') : '',
             new \atk4\ui\jsExpression('$(this).data("id")'),
         ])]);
-        $table->on('click', 'tr', $js_reload);
+        $table->on('click', 'tr', $jsReload);
 
         while ($selections && $id = array_shift($selections)) {
             $path[] = $id;
@@ -60,26 +60,26 @@ $finderClass = get_class(new class() extends \atk4\ui\Columns {
                 $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
             }
 
-            $js_reload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
+            $jsReload = new \atk4\ui\jsReload($this, [$this->name => new \atk4\ui\jsExpression('[]+[]', [
                 $path ? (implode(',', $path) . ',') : '',
                 new \atk4\ui\jsExpression('$(this).data("id")'),
             ])]);
-            $table->on('click', 'tr', $js_reload);
+            $table->on('click', 'tr', $jsReload);
         }
 
         return $this->model;
     }
 });
 
-$m = new File($app->db);
-$m->addCondition('parent_folder_id', null);
-$m->setOrder('is_folder desc, name');
+$model = new File($app->db);
+$model->addCondition('parent_folder_id', null);
+$model->setOrder('is_folder desc, name');
 
 \atk4\ui\Header::addTo($app, ['MacOS File Finder', 'subHeader' => 'Component built around Table, Columns and jsReload']);
 
-$vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($vp) use ($m) {
-    $m->action('delete')->execute();
-    $m->importFromFilesystem(dirname(__DIR__));
+$vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($vp) use ($model) {
+    $model->action('delete')->execute();
+    $model->importFromFilesystem(dirname(__DIR__));
     \atk4\ui\Button::addTo($vp, ['Import Complete', 'big green fluid'])->link('multitable.php');
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });
@@ -88,4 +88,4 @@ $vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($vp) use ($m) {
 
 $finderClass::addTo($app, 'bottom attached')
     ->addClass('top attached segment')
-    ->setModel($m->setLimit(5), ['SubFolder']);
+    ->setModel($model->setLimit(5), ['SubFolder']);

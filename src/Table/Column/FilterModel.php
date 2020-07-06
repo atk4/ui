@@ -105,8 +105,8 @@ class FilterModel extends \atk4\data\Model
         }
 
         // Add hook in order to persist data in session.
-        $this->onHook(self::HOOK_AFTER_SAVE, function ($m) {
-            $this->memorize('data', $m->get());
+        $this->onHook(self::HOOK_AFTER_SAVE, function ($model) {
+            $this->memorize('data', $model->get());
         });
     }
 

@@ -15,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 
 \atk4\ui\Header::addTo($app, ['Dynamic scroll in Grid']);
 
-$g = \atk4\ui\Grid::addTo($app, ['menu' => false]);
-$m = $g->setModel(new Country($app->db));
+$grid = \atk4\ui\Grid::addTo($app, ['menu' => false]);
+$model = $grid->setModel(new Country($app->db));
 
-$g->addJsPaginator(30);
+$grid->addJsPaginator(30);
