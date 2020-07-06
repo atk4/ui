@@ -23,6 +23,9 @@ class jsTest extends AtkPhpunit\TestCase
 
     public function testNumbers()
     {
+        if (PHP_INT_SIZE === 4) {
+            $this->markTestIncomplete('Test is not supported on 32bit platform');
+        }
         foreach ([
             [10, '10'],
             [9007199254740991, '9007199254740991'],
@@ -45,11 +48,11 @@ class jsTest extends AtkPhpunit\TestCase
                 [[$expectedRaw], [$in]], // as value in JSON array
                 [['x' => $expectedRaw], ['x' => $in]], // as value in JSON object
             ] as [$expectedData, $inData]) {
-                $this->assertSame(json_encode($expectedData, JSON_PRESERVE_ZERO_FRACTION), preg_replace('~\s+~', '', $app->encodeJson($inData)));
+                $this->assertSame(json_encode($expectedData), preg_replace('~\s+~', '', $app->encodeJson($inData)));
 
                 // do not change any numbers to string in JSON/JS strings
                 $inDataJson = json_encode($inData);
-                $this->assertSame(json_encode(['x' => $inDataJson], JSON_PRESERVE_ZERO_FRACTION), preg_replace('~\s+~', '', $app->encodeJson(['x' => $inDataJson])));
+                $this->assertSame(json_encode(['x' => $inDataJson]), preg_replace('~\s+~', '', $app->encodeJson(['x' => $inDataJson])));
             }
         }
     }

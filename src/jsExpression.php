@@ -131,12 +131,9 @@ class jsExpression implements jsExpressionable
             $string = json_encode($arg);
         } elseif (is_int($arg)) {
             // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
-            //$string = json_encode(abs($arg) < (2 ** 53) ? $arg : (string) $arg);
-            $string = json_encode(abs($arg) < (2 ** 53) ? $arg : sprintf('%0f', $arg));
+            $string = json_encode(abs($arg) < (2 ** 53) ? $arg : (string) $arg);
         } elseif (is_float($arg)) {
-            //$string = json_encode($arg);
-            // IMPORTANT: always convert large floats to string, otherwise numbers can be rounded by JS
-            $string = json_encode(abs($arg) < (2 ** 53) ? $arg : sprintf('%0.0f', $arg));
+            $string = json_encode($arg);
         } elseif ($arg === null) {
             $string = json_encode($arg);
         } else {
