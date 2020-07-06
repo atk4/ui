@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Form;
+use atk4\ui\jsToast;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -29,6 +30,6 @@ $form->addControl('six', [Form\Control\Radio::class], ['values' => [5 => 'female
 $form->addControl('seven', null, ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 $form->addControl('eight', [Form\Control\Radio::class], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 
-$form->onSubmit(function (Form $form) {
-    echo json_encode($form->model->get());
+$form->onSubmit(function (Form $form) use ($app) {
+    return new jsToast($app->encodeJson($form->model->get()));
 });

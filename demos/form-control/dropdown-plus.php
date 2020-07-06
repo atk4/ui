@@ -99,11 +99,12 @@ $form->addControl(
     ]
 );
 
-$form->onSubmit(function (Form $form) {
-    $echo = print_r($form->model->get('enum'), true) . ' / ';
-    $echo .= print_r($form->model->get('values'), true) . ' / ';
-    $echo .= print_r($form->model->get('icon'), true) . ' / ';
-    $echo .= print_r($form->model->get('multi'), true);
+$form->onSubmit(function (Form $form) use ($app) {
+    $message = $app->encodeJson($form->model->get());
 
-    echo $echo;
+    $view = new \atk4\ui\Message('Values: ');
+    $view->init();
+    $view->text->addParagraph($message);
+
+    return $view;
 });
