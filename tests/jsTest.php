@@ -24,8 +24,9 @@ class jsTest extends AtkPhpunit\TestCase
     public function testNumbers()
     {
         if (PHP_INT_SIZE === 4) {
-            $this->markTestIncomplete('Test is not supported on 32bit platform');
+            $this->markTestIncomplete('Test is not supported on 32bit php');
         }
+
         foreach ([
             [10, '10'],
             [9007199254740991, '9007199254740991'],
