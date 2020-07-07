@@ -10,7 +10,7 @@ namespace atk4\ui\Table\Column;
 
 use atk4\core\FactoryTrait;
 use atk4\data\Model;
-use atk4\ui\jQuery;
+use atk4\ui\Jquery;
 use atk4\ui\jsChain;
 use atk4\ui\Table;
 use atk4\ui\View;
@@ -124,7 +124,7 @@ class ActionMenu extends Table\Column
         }
 
         // set executor context.
-        $context = (new jQuery())->closest('.ui.button');
+        $context = (new Jquery())->closest('.ui.button');
 
         $this->table->on('click', '.i_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirmMsg, 'apiConfig' => ['stateContext' => $context]]);
 

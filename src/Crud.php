@@ -220,8 +220,8 @@ class Crud extends Grid
             case Model\UserAction::MODIFIER_DELETE:
                 // use deleted record id to remove row, fallback to closest tr if id is not available.
                 $js = $this->deletedId ?
-                    (new jQuery('tr[data-id="' . $this->deletedId . '"]'))->transition('fade left') :
-                    (new jQuery())->closest('tr')->transition('fade left');
+                    (new Jquery('tr[data-id="' . $this->deletedId . '"]'))->transition('fade left') :
+                    (new Jquery())->closest('tr')->transition('fade left');
 
                 break;
             default:

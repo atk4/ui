@@ -846,11 +846,11 @@ class View implements jsExpressionable
      * @param jsExpression     $action   JavaScript action
      * @param string           $selector If you wish to override jQuery($selector)
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function js($when = null, $action = null, $selector = null)
     {
-        $chain = new jQuery($selector ?: $this);
+        $chain = new Jquery($selector ?: $this);
 
         // Substitute $when to make it better work as a array key
         if ($when === true) {
@@ -868,7 +868,7 @@ class View implements jsExpressionable
         }
 
         // next - binding on a specific event
-        $action = (new jQuery($this))
+        $action = (new Jquery($this))
             ->bind($when, new jsFunction([$chain, $action]));
 
         $this->_js_actions[$when][] = $action;
@@ -1060,7 +1060,7 @@ class View implements jsExpressionable
      * @param jsChain|callable|Model\UserAction $action   code to execute or \atk4\Data\UserAction
      * @param array                             $defaults Options
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function on($event, $selector = null, $action = null, $defaults = null)
     {
@@ -1068,7 +1068,7 @@ class View implements jsExpressionable
 
         $cb = null;
         $actions = [];
-        $chain = new jQuery();
+        $chain = new Jquery();
         $actions[] = $chain;
 
         // second argument may be omitted
@@ -1115,7 +1115,7 @@ class View implements jsExpressionable
 
             $cb->set(function () use ($action) {
                 $args = func_get_args();
-                $args[0] = new jQuery(new jsExpression('this'));
+                $args[0] = new Jquery(new jsExpression('this'));
 
                 return call_user_func_array($action, $args);
             }, $arguments);
@@ -1261,7 +1261,7 @@ class View implements jsExpressionable
         $ready = new jsFunction($actions);
 
         return "<script>\n" .
-            (new jQuery($ready))->jsRender() .
+            (new Jquery($ready))->jsRender() .
             '</script>';
     }
 

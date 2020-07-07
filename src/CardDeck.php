@@ -161,7 +161,7 @@ class CardDeck extends View
                         foreach ($singleActions as $action) {
                             $action->ui['executor'] = $this->initActionExecutor($action);
                             if ($action->ui['executor'] instanceof UserAction\JsCallbackExecutor) {
-                                $id_arg[0] = (new jQuery())->parents('.atk-card')->data('id');
+                                $id_arg[0] = (new Jquery())->parents('.atk-card')->data('id');
                             }
                             $c->addClickAction($action, null, array_merge($id_arg, $args));
                         }

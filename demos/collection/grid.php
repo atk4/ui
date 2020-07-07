@@ -17,7 +17,7 @@ $model->addUserAction('test', function ($model) {
 $ex = new \atk4\ui\UserAction\JsCallbackExecutor();
 $ex->onHook(\atk4\ui\UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return [
-        (new \atk4\ui\jQuery())->closest('tr')->transition('fade left'),
+        (new \atk4\ui\Jquery())->closest('tr')->transition('fade left'),
         new \atk4\ui\jsToast('Simulating delete in demo mode.'),
     ];
 });

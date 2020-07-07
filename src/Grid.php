@@ -592,7 +592,7 @@ class Grid extends View
         $this->table->on(
             'click',
             'thead>tr>th.sortable',
-            new jsReload($this->container, [$this->sortTrigger => (new jQuery())->data('sort')])
+            new jsReload($this->container, [$this->sortTrigger => (new Jquery())->data('sort')])
         );
     }
 
@@ -694,7 +694,7 @@ class Grid extends View
     /**
      * Proxy function for Table::jsRow().
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsRow()
     {

@@ -52,7 +52,7 @@ class jsReload implements jsExpressionable
 
     public function jsRender()
     {
-        $final = (new jQuery($this->view))
+        $final = (new Jquery($this->view))
             ->atkReloadView(
                 [
                     'uri' => $this->view->jsUrl(['__atk_reload' => $this->view->name]),

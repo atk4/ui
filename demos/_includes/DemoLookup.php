@@ -50,11 +50,11 @@ class DemoLookup extends \atk4\ui\Form\Control\Lookup
 
                 $ret = [
                     new \atk4\ui\jsToast('Form submit!. Demo can not saved data.'),
-                    (new \atk4\ui\jQuery('.atk-modal'))->modal('hide'),
+                    (new \atk4\ui\Jquery('.atk-modal'))->modal('hide'),
                 ];
 
                 if ($row = $this->renderRow($form->model)) {
-                    $chain = new \atk4\ui\jQuery('#' . $this->name . '-ac');
+                    $chain = new \atk4\ui\Jquery('#' . $this->name . '-ac');
                     $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
 
                     $ret[] = $chain;

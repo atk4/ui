@@ -8,7 +8,7 @@ namespace atk4\ui;
  * Implements a transparent mapper that will actually translate into JavaScript code. Used
  * as a GLUE between Views and your actual JavaScript code.
  *
- * IMPORTANT: extend first. see jQuery.php for example.
+ * IMPORTANT: extend first. see Jquery.php for example.
  *
  * IMPORTANT: don't write any JavaScript logic in PHP, only bind.
  *

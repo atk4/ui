@@ -7,42 +7,42 @@ namespace atk4\ui;
 /**
  * Implements mapper for jQuery library. Following mappings are just to keep PhpStorm happy.
  *
- * @method jQuery append()
- * @method jQuery appendTo()
- * @method jQuery bind(...$args)
- * @method jQuery click()
- * @method jQuery on($a=null,$b=null,$c=null)
- * @method jQuery attr()
- * @method jQuery val()
- * @method jQuery prop()
- * @method jQuery data($a=null,$b=null)
- * @method jQuery confirm()
- * @method jQuery submit()
- * @method jQuery find()
- * @method jQuery select()
- * @method jQuery focus()
- * @method jQuery css()
- * @method jQuery change()
- * @method jQuery trigger()
- * @method jQuery location()
- * @method jQuery closest()
- * @method jQuery show()
- * @method jQuery hide()
- * @method jQuery toggle()
- * @method jQuery parent()
- * @method jQuery addClass()
- * @method jQuery removeClass()
- * @method jQuery toggleClass()
- * @method jQuery position()
- * @method jQuery text($t=null)
- * @method jQuery html($t=null)
+ * @method Jquery append()
+ * @method Jquery appendTo()
+ * @method Jquery bind(...$args)
+ * @method Jquery click()
+ * @method Jquery on($a=null,$b=null,$c=null)
+ * @method Jquery attr()
+ * @method Jquery val()
+ * @method Jquery prop()
+ * @method Jquery data($a=null,$b=null)
+ * @method Jquery confirm()
+ * @method Jquery submit()
+ * @method Jquery find()
+ * @method Jquery select()
+ * @method Jquery focus()
+ * @method Jquery css()
+ * @method Jquery change()
+ * @method Jquery trigger()
+ * @method Jquery location()
+ * @method Jquery closest()
+ * @method Jquery show()
+ * @method Jquery hide()
+ * @method Jquery toggle()
+ * @method Jquery parent()
+ * @method Jquery addClass()
+ * @method Jquery removeClass()
+ * @method Jquery toggleClass()
+ * @method Jquery position()
+ * @method Jquery text($t=null)
+ * @method Jquery html($t=null)
  *
  * Extensions by SemanticUI
- * @method jQuery form($a=null)
- * @method jQuery api($a=null)
- * @method jQuery visibility()
+ * @method Jquery form($a=null)
+ * @method Jquery api($a=null)
+ * @method Jquery visibility()
  */
-class jQuery extends jsChain
+class Jquery extends jsChain
 {
     public $_include = 'jquery.min.js';
     public $_version = '3.1.1';
@@ -69,6 +69,6 @@ class jQuery extends jsChain
 
     public function univ()
     {
-        return new jUniv($this);
+        return new Juniv($this);
     }
 }

@@ -64,7 +64,7 @@ class jsCallback extends Callback implements jsExpressionable
             throw new Exception('Call-back must be part of a RenderTree');
         }
 
-        return (new jQuery())->atkAjaxec([
+        return (new Jquery())->atkAjaxec([
             'uri' => $this->getJsUrl(),
             'uri_options' => $this->args,
             'confirm' => $this->confirm,
@@ -96,7 +96,7 @@ class jsCallback extends Callback implements jsExpressionable
 
         parent::set(function () use ($callback) {
             try {
-                $chain = new jQuery(new jsExpression('this'));
+                $chain = new Jquery(new jsExpression('this'));
 
                 $values = [];
                 foreach ($this->args as $key => $value) {

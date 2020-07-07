@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
-use atk4\ui\jQuery;
+use atk4\ui\Jquery;
 use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
 
@@ -264,11 +264,11 @@ class Lookup extends Input
                 $form->model->save();
 
                 $ret = [
-                    (new jQuery('.atk-modal'))->modal('hide'),
+                    (new Jquery('.atk-modal'))->modal('hide'),
                 ];
 
                 if ($row = $this->renderRow($form->model)) {
-                    $chain = new jQuery('#' . $this->name . '-ac');
+                    $chain = new Jquery('#' . $this->name . '-ac');
                     $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
 
                     $ret[] = $chain;
@@ -370,7 +370,7 @@ class Lookup extends Input
     /**
      * Override this method if you want to add more logic to the initialization of the auto-complete field.
      *
-     * @param jQuery
+     * @param Jquery
      */
     protected function initDropdown($chain)
     {
@@ -412,7 +412,7 @@ class Lookup extends Input
             ], $this->apiConfig['data'] ?? []);
         }
 
-        $chain = new jQuery('#' . $this->name . '-ac');
+        $chain = new Jquery('#' . $this->name . '-ac');
 
         $this->initDropdown($chain);
 

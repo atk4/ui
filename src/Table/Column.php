@@ -7,7 +7,7 @@ namespace atk4\ui\Table;
 use atk4\data\Field;
 use atk4\data\Model;
 use atk4\ui\Exception;
-use atk4\ui\jQuery;
+use atk4\ui\Jquery;
 use atk4\ui\jsExpression;
 use atk4\ui\Popup;
 
@@ -203,7 +203,7 @@ class Column
                             );
                      }";
 
-        $chain = new jQuery('#' . $id);
+        $chain = new Jquery('#' . $id);
         $chain->dropdown([
             'action' => 'hide',
             'values' => $items,

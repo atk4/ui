@@ -577,7 +577,7 @@ class Table extends Lister
      *
      * @param jsChain|callable|jsExpressionable $action Code to execute
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function onRowClick($action)
     {
@@ -588,15 +588,15 @@ class Table extends Lister
     }
 
     /**
-     * Use this to quickly access the <tr> and wrap in jQuery.
+     * Use this to quickly access the <tr> and wrap in Jquery.
      *
      * $this->jsRow()->data('id');
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsRow()
     {
-        return (new jQuery(new jsExpression('this')))->closest('tr');
+        return (new Jquery(new jsExpression('this')))->closest('tr');
     }
 
     /**

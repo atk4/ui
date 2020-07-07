@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\tests;
 
 use atk4\core\AtkPhpunit;
-use atk4\ui\jQuery;
+use atk4\ui\Jquery;
 use atk4\ui\jsChain;
 use atk4\ui\jsExpression;
 use atk4\ui\jsFunction;
@@ -91,9 +91,9 @@ class jsTest extends AtkPhpunit\TestCase
         $this->assertSame('$myInput.getTextInRange(getStart(),"end")', $c->jsRender());
     }
 
-    public function testjQuery()
+    public function testJquery()
     {
-        $c = new jQuery('.mytag');
+        $c = new Jquery('.mytag');
         $c->find('li')->first()->hide();
 
         $this->assertSame('$(".mytag").find("li").first().hide()', $c->jsRender());
@@ -101,8 +101,8 @@ class jsTest extends AtkPhpunit\TestCase
 
     public function testArgs()
     {
-        $c = new jQuery('.mytag');
-        $c->val((new jQuery('.othertag'))->val());
+        $c = new Jquery('.mytag');
+        $c->val((new Jquery('.othertag'))->val());
 
         $this->assertSame('$(".mytag").val($(".othertag").val())', $c->jsRender());
     }
@@ -110,10 +110,10 @@ class jsTest extends AtkPhpunit\TestCase
     public function testComplex1()
     {
         // binding that maintains same height on
-        $b1 = new jQuery('.box1');
-        $b2 = new jQuery('.box2');
+        $b1 = new Jquery('.box1');
+        $b2 = new Jquery('.box2');
 
-        $doc = new jQuery(new jsExpression('document'));
+        $doc = new Jquery(new jsExpression('document'));
         $fx = $doc->ready(new jsFunction(null, [
             $b1->height($b2->height()),
         ]));

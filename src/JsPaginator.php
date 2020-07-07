@@ -55,7 +55,7 @@ class jsPaginator extends jsCallback
      *
      * @param int $page
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsNextPage($page)
     {
@@ -65,7 +65,7 @@ class jsPaginator extends jsCallback
     /**
      * Set jsPagiantor in idle mode.
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsIdle()
     {

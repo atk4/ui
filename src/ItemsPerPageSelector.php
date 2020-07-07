@@ -61,7 +61,7 @@ class ItemsPerPageSelector extends View
     /**
      * Set label using js action.
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsSetLabel($ipp)
     {

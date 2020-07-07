@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace atk4\ui\Panel;
 
 use atk4\ui\Button;
-use atk4\ui\jQuery;
+use atk4\ui\Jquery;
 use atk4\ui\jsExpression;
 use atk4\ui\Modal;
 use atk4\ui\View;
@@ -97,7 +97,7 @@ class Right extends View implements Loadable
     public function jsOpen(array $args = [], string $activeCss = null, jsExpression $jsTrigger = null): jsExpression
     {
         return $this->service()->openPanel([
-            'triggered' => $jsTrigger ?? new jQuery(),
+            'triggered' => $jsTrigger ?? new Jquery(),
             'reloadArgs' => $args,
             'openId' => $this->name,
             'activeCSS' => $activeCss,
@@ -160,11 +160,11 @@ class Right extends View implements Loadable
      *
      * @param string $selector
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsDisplayWarning(bool $state = true): jsExpression
     {
-        $chain = new jQuery('#' . $this->name . ' ' . $this->warningSelector);
+        $chain = new Jquery('#' . $this->name . ' ' . $this->warningSelector);
 
         return $state ? $chain->addClass($this->warningTrigger) : $chain->removeClass($this->warningTrigger);
     }
@@ -172,11 +172,11 @@ class Right extends View implements Loadable
     /**
      * Toggle warning sign.
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsToggleWarning(): jsExpression
     {
-        return (new jQuery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
+        return (new Jquery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
     }
 
     /**

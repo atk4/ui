@@ -113,7 +113,7 @@ Agile UI builds upon the concepts of actions and events in the following ways:
 
  - jsChain provides Action extension for JavaScript frameworks:
 
-   - jQuery is implementation of jQuery binding through jsChain,
+   - Jquery is implementation of jQuery binding through jsChain,
    - various 3rd party extensions can integrate other frameworks,
    - any jQuery plugin will work out-of-the-box.
 
@@ -160,14 +160,14 @@ JavaScript Chain Building
 
 .. php:class:: jsChain
 
-    Base class jsChain can be extended by other classes such as jQuery to provide transparent
+    Base class jsChain can be extended by other classes such as Jquery to provide transparent
     mappers for any JavaScript framework.
 
 Chain is a PHP object that represents one or several actions that are to be executed on the
-client side. The jsChain objects themselves are generic, so in these examples we'll be using jQuery which
+client side. The jsChain objects themselves are generic, so in these examples we'll be using Jquery which
 is a descendant of jsChain::
 
-    $chain = new jQuery('#the-box-id');
+    $chain = new Jquery('#the-box-id');
 
     $chain->dropdown();
 
@@ -305,13 +305,13 @@ get around this, you can use jsExpression::
 This time `2+2` is no longer escaped and will be used as plain JavaScript code. Another example
 shows how you can use global variables::
 
-    echo (new jQuery('document'))->find('h1')->hide()->jsRender();
+    echo (new Jquery('document'))->find('h1')->hide()->jsRender();
 
     // produces $('document').find('h1').hide();
     // does not hide anything because document is treated as string selector!
 
     $expr = new jsExpression('document');
-    echo (new jQuery($expr))->find('h1')->hide()->jsRender();
+    echo (new Jquery($expr))->find('h1')->hide()->jsRender();
 
     // produces $(document).find('h1').hide();
     // works correctly!!

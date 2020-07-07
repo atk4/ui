@@ -7,27 +7,27 @@ namespace atk4\ui;
 /**
  * Various helper functions for Agile UI.
  *
- * @method jQuery_Chain atkAjaxec()
- * @method jQuery_Chain successMessage()
- * @method jQuery_Chain errorMessage()
- * @method jQuery_Chain consoleError()
- * @method jQuery_Chain dialog()
- * @method jQuery_Chain dialogError()
- * @method jQuery_Chain closeDialog()
- * @method jQuery_Chain frameURL()
- * @method jQuery_Chain atk4_checkboxes()
- * @method jQuery_Chain atk4_expander()
- * @method jQuery_Chain atk4_uploader()
- * @method jQuery_Chain atk4_loader()
- * @method jQuery_Chain atk4_load()
- * @method jQuery_Chain selectmenu()
- * @method jQuery_Chain datepicker()
- * @method jQuery_Chain button()
- * @method jQuery_Chain slider()
- * @method jQuery_Chain atkSpinner()
- * @method jQuery_Chain tabs()
+ * @method Jquery atkAjaxec()
+ * @method Jquery successMessage()
+ * @method Jquery errorMessage()
+ * @method Jquery consoleError()
+ * @method Jquery dialog()
+ * @method Jquery dialogError()
+ * @method Jquery closeDialog()
+ * @method Jquery frameURL()
+ * @method Jquery atk4_checkboxes()
+ * @method Jquery atk4_expander()
+ * @method Jquery atk4_uploader()
+ * @method Jquery atk4_loader()
+ * @method Jquery atk4_load()
+ * @method Jquery selectmenu()
+ * @method Jquery datepicker()
+ * @method Jquery button()
+ * @method Jquery slider()
+ * @method Jquery atkSpinner()
+ * @method Jquery tabs()
  */
-class jUniv extends jsChain
+class Juniv extends jsChain
 {
     public $_include = 'univ.min.js';
     public $_version = '2.0.0';

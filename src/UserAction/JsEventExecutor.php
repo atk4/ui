@@ -7,7 +7,7 @@ namespace atk4\ui\UserAction;
 use atk4\core\HookTrait;
 use atk4\data\Model;
 use atk4\ui\Exception;
-use atk4\ui\jQuery;
+use atk4\ui\Jquery;
 use atk4\ui\jsCallback;
 use atk4\ui\jsExpressionable;
 use atk4\ui\jsToast;
@@ -149,7 +149,7 @@ class JsEventExecutor implements jsExpressionable
             return $js;
         });
 
-        $final = (new jQuery($this->context))
+        $final = (new Jquery($this->context))
             ->atkAjaxec([
                 'uri' => $this->cb->getJsUrl(),
                 'uri_options' => array_merge(['atk_event_id' => $this->modelId], $this->args),

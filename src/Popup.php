@@ -255,7 +255,7 @@ class Popup extends View
      * When a grid is reloading, this method can be call
      * in order to display the popup once again.
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsPopup()
     {
@@ -266,7 +266,7 @@ class Popup extends View
                 $name = '#' . $this->triggerBy->name . '_input';
             }
         }
-        $chain = new jQuery($name);
+        $chain = new Jquery($name);
         $chain->popup($this->popOptions);
         if ($this->stopClickEvent) {
             $chain->on('click', new jsExpression('function(e){e.stopPropagation();}'));

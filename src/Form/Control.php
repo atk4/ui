@@ -166,7 +166,7 @@ class Control extends View
      *
      * $field->jsInput(true)->val(123);
      *
-     * @return \atk4\ui\jQuery
+     * @return \atk4\ui\Jquery
      */
     public function jsInput($when = null, $action = null)
     {

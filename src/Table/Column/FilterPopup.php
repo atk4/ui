@@ -6,7 +6,7 @@ namespace atk4\ui\Table\Column;
 
 use atk4\data\Field;
 use atk4\ui\Form;
-use atk4\ui\jQuery;
+use atk4\ui\Jquery;
 use atk4\ui\jsReload;
 use atk4\ui\Popup;
 
@@ -73,7 +73,7 @@ class FilterPopup extends Popup
             $form->model->save();
             //trigger click action in order to close popup.
             //otherwise calling ->popup('hide') is not working as expected.
-            return (new jQuery($this->triggerBy))->trigger('click');
+            return (new Jquery($this->triggerBy))->trigger('click');
         });
 
         \atk4\ui\Button::addTo($this->form, ['Clear', 'clear '])->on('click', function ($f) use ($model) {
@@ -82,7 +82,7 @@ class FilterPopup extends Popup
             return [
                 $this->form->js()->form('reset'),
                 new jsReload($this->reload),
-                (new jQuery($this->colTrigger))->trigger('click'),
+                (new Jquery($this->colTrigger))->trigger('click'),
             ];
         });
     }

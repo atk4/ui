@@ -478,7 +478,7 @@ demonstrates how various standard column types are relying on this property::
 
     $table->on('click', 'td', new jsExpression(
         'document.location=page.php?id=[]',
-        [(new jQuery())->closest('tr')->data('id')]
+        [(new Jquery())->closest('tr')->data('id')]
     ));
 
 See also :ref:`js`.

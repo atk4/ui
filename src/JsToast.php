@@ -51,6 +51,6 @@ class jsToast implements jsExpressionable
 
     public function jsRender()
     {
-        return (new jQuery('body'))->toast($this->settings)->jsRender();
+        return (new Jquery('body'))->toast($this->settings)->jsRender();
     }
 }

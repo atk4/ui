@@ -131,7 +131,7 @@ $itemShelfClass = get_class(new class() extends \atk4\ui\View {
             $cart->addItem($b);
 
             return $jsAction;
-        }, [(new \atk4\ui\jQuery())->text()]);
+        }, [(new \atk4\ui\Jquery())->text()]);
     }
 });
 
@@ -202,7 +202,7 @@ $shelf->linkCart($cart, [
     $cartOutterLabel->jsReload(),
 
     // also will hide current item from the shelf
-    (new \atk4\ui\jQuery())->hide(),
+    (new \atk4\ui\Jquery())->hide(),
 ]);
 
 // label placed on top of menu item, not in the popup
