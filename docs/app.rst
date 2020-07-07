@@ -16,7 +16,7 @@ In most use-scenarios, however, you would create instance of an App class yourse
 
     $app = new \atk4\ui\App('My App');
     $app->initLayout([\atk4\ui\Layout\Centered::class]);
-    Loremipsum::addTo($app);
+    LoremIpsum::addTo($app);
 
 As you add one component into another, they will automatically inherit reference to App class. App
 class is an ideal place to have all your environment configured and all the dependencies defined that
@@ -120,7 +120,7 @@ Quick Usage and Page pattern
 A lot of the documentation for Agile UI uses a principle of initializing App object first, then, manually
 add the UI elements using a procedural approach::
 
-    Helloworld::addTo($app);
+    HelloWorld::addTo($app);
 
 There is another approach in which your application will determine which Page class should be used for
 executing the request, subsequently creating setting it up and letting it populate UI (This behavior is
@@ -141,7 +141,7 @@ App also does certain actions to simplify handling of the application. For insta
 render itself automatically at the end of the application, so you can safely add objects into the `App`
 without actually triggering a global execution process::
 
-    Helloworld::addTo($app);
+    HelloWorld::addTo($app);
 
     // Next line is optional
     $app->run();

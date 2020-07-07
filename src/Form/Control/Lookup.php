@@ -248,9 +248,9 @@ class Lookup extends Input
         $this->action = $this->factory(array_merge($defaultSeed, (array) $buttonSeed));
 
         if ($this->form) {
-            $vp = \atk4\ui\Virtualpage::addTo($this->form);
+            $vp = \atk4\ui\VirtualPage::addTo($this->form);
         } else {
-            $vp = \atk4\ui\Virtualpage::addTo($this->owner);
+            $vp = \atk4\ui\VirtualPage::addTo($this->owner);
         }
 
         $vp->set(function ($page) {

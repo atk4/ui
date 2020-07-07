@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 /**
- * Class implements Progressbar.
+ * Class implements ProgressBar.
  *
- * $bar = Progressbar::addTo($app, [
+ * $bar = ProgressBar::addTo($app, [
  *  10,
  *  'label' => 'Processing files',
  *  ]);
  */
-class Progressbar extends View
+class ProgressBar extends View
 {
     /**
      * Contains a text label to display under the bar. Null/false will disable the label.
@@ -27,7 +27,7 @@ class Progressbar extends View
 
     /**
      * Value that appears on a progress bar. Set it through constructor, e.g.
-     * Progressbar::addTo($app, [20]);.
+     * ProgressBar::addTo($app, [20]);.
      *
      * @var int
      */

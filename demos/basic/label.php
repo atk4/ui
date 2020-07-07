@@ -42,10 +42,10 @@ $c = $columns->addColumn();
 $seg = \atk4\ui\View::addTo($c, ['ui' => 'raised segment']);
 \atk4\ui\Label::addTo($seg, ['Left Column', 'top attached', 'icon' => 'book']);
 \atk4\ui\Label::addTo($seg, ['Lorem', 'red ribbon', 'icon' => 'cut']);
-\atk4\ui\Loremipsum::addTo($seg, ['size' => 1]);
+\atk4\ui\LoremIpsum::addTo($seg, ['size' => 1]);
 
 $c = $columns->addColumn();
 $seg = \atk4\ui\View::addTo($c, ['ui' => 'raised segment']);
 \atk4\ui\Label::addTo($seg, ['Right Column', 'top attached', 'icon' => 'book']);
-\atk4\ui\Loremipsum::addTo($seg, ['size' => 1]);
+\atk4\ui\LoremIpsum::addTo($seg, ['size' => 1]);
 \atk4\ui\Label::addTo($seg, ['Ipsum', 'orange bottom right attached', 'icon' => 'cut']);

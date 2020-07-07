@@ -8,7 +8,7 @@ namespace atk4\ui\demo;
 require_once __DIR__ . '/../init-app.php';
 
 // nothing to do with Agile UI - will not use any Layout
-$a = new \atk4\ui\Loremipsum();
+$a = new \atk4\ui\LoremIpsum();
 $text = $a->generateLorem(150);
 
 $app->html = null;

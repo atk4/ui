@@ -168,15 +168,15 @@ Here is example of JsReload::
 
     $button->on('click', new \atk4\ui\JsReload($view));
 
-    \atk4\ui\Loremipsum::addTo($view);
+    \atk4\ui\LoremIpsum::addTo($view);
 
 
-NOTE: that we can't perform JsReload on Loremipsum directly, because it's a text, it needs to be inside
+NOTE: that we can't perform JsReload on LoremIpsum directly, because it's a text, it needs to be inside
 a container. When JsReload is created, it transparently creates a 'CallbackLater' object inside
 `$view`. On the JavaScript side, it will execute this new route which will respond with a NEW content
 for the $view object.
 
-Should JsReload use regular 'Callback', then it wouldn't know that $view must contain Loremipsum text.
+Should JsReload use regular 'Callback', then it wouldn't know that $view must contain LoremIpsum text.
 
 JsReload existance is only possible thanks to CallbackLater implementation.
 

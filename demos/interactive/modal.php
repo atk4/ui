@@ -17,18 +17,18 @@ $session = new Session();
 $bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 
 $modal = \atk4\ui\Modal::addTo($app, ['title' => 'Add a name']);
-\atk4\ui\Loremipsum::addTo($modal);
+\atk4\ui\LoremIpsum::addTo($modal);
 \atk4\ui\Button::addTo($modal, ['Hide'])->on('click', $modal->hide());
 
 $noTitle = \atk4\ui\Modal::addTo($app, ['title' => false]);
-\atk4\ui\Loremipsum::addTo($noTitle);
+\atk4\ui\LoremIpsum::addTo($noTitle);
 \atk4\ui\Button::addTo($noTitle, ['Hide'])->on('click', $noTitle->hide());
 
 $scrolling = \atk4\ui\Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
 $scrolling->addScrolling();
-\atk4\ui\Loremipsum::addTo($scrolling);
-\atk4\ui\Loremipsum::addTo($scrolling);
-\atk4\ui\Loremipsum::addTo($scrolling);
+\atk4\ui\LoremIpsum::addTo($scrolling);
+\atk4\ui\LoremIpsum::addTo($scrolling);
+\atk4\ui\LoremIpsum::addTo($scrolling);
 \atk4\ui\Button::addTo($scrolling, ['Hide'])->on('click', $scrolling->hide());
 
 \atk4\ui\Button::addTo($bar, ['Show'])->on('click', $modal->show());
@@ -60,14 +60,14 @@ $vp2Modal = \atk4\ui\Modal::addTo($app, ['title' => 'Text message load dynamical
 $vp3Modal = \atk4\ui\Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
 $vp3Modal->set(function ($modal) {
     \atk4\ui\Text::addTo($modal)->set('This is yet another modal');
-    \atk4\ui\Loremipsum::addTo($modal, ['size' => 2]);
+    \atk4\ui\LoremIpsum::addTo($modal, ['size' => 2]);
 });
 
 //When $vp1Modal->show() is activate, it will dynamically add this content to it.
 $vp1Modal->set(function ($modal) use ($vp2Modal) {
     ViewTester::addTo($modal);
     \atk4\ui\View::addTo($modal, ['Showing lorem ipsum']); //need in behat test.
-    \atk4\ui\Loremipsum::addTo($modal, ['size' => 2]);
+    \atk4\ui\LoremIpsum::addTo($modal, ['size' => 2]);
     $form = \atk4\ui\Form::addTo($modal);
     $form->addControl('color', null, ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
     $form->onSubmit(function (\atk4\ui\Form $form) use ($vp2Modal) {

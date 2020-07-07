@@ -17,14 +17,14 @@ When you add new component to the page it will typically consume 100% width of i
 will break down width into chunks that can be used by other elements::
 
     $c = Columns::addTo($page);
-    Loremipsum::addTo($c->addColumn(), [1]);
-    Loremipsum::addTo($c->addColumn(), [1]);
+    LoremIpsum::addTo($c->addColumn(), [1]);
+    LoremIpsum::addTo($c->addColumn(), [1]);
 
 By default width is equally divided by columns. You may specify a custom width expressed as fraction of 16::
 
     $c = Columns::addTo($page);
-    Loremipsum::addTo($c->addColumn(6), [1]);
-    Loremipsum::addTo($c->addColumn(10), [2]);  // wider column, more filler
+    LoremIpsum::addTo($c->addColumn(6), [1]);
+    LoremIpsum::addTo($c->addColumn(10), [2]);  // wider column, more filler
 
 You can specify how many columns are expected in a grid, but if you do you can't specify widths of individual
 columns. This seem like a limitation of Fomantic UI::
@@ -43,12 +43,12 @@ row. To improve and controll the flow of rows better, you can specify addRow()::
 
     $r = $c->addRow();
     Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
-    Loremipsum::addTo($r->addColumn(12), [1]);
+    LoremIpsum::addTo($r->addColumn(12), [1]);
     Icon::addTo($r->addColumn(2), ['huge trash']);
 
     $r = $c->addRow();
     Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
-    Loremipsum::addTo($r->addColumn(12), [1]);
+    LoremIpsum::addTo($r->addColumn(12), [1]);
     Icon::addTo($r->addColumn(2), ['huge trash']);
 
 This example also uses custom class for Columns ('internally celled') that adds dividers between columns and rows.

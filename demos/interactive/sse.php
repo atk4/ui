@@ -7,9 +7,9 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Header::addTo($app, ['SSE with Progressbar']);
+\atk4\ui\Header::addTo($app, ['SSE with ProgressBar']);
 
-$bar = \atk4\ui\Progressbar::addTo($app);
+$bar = \atk4\ui\ProgressBar::addTo($app);
 
 $button = \atk4\ui\Button::addTo($app, ['Turn On']);
 $buttonStop = \atk4\ui\Button::addTo($app, ['Turn Off']);

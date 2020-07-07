@@ -77,7 +77,7 @@ $model->setOrder('is_folder desc, name');
 
 \atk4\ui\Header::addTo($app, ['MacOS File Finder', 'subHeader' => 'Component built around Table, Columns and JsReload']);
 
-$vp = \atk4\ui\Virtualpage::addTo($app)->set(function ($vp) use ($model) {
+$vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($vp) use ($model) {
     $model->action('delete')->execute();
     $model->importFromFilesystem(dirname(__DIR__));
     \atk4\ui\Button::addTo($vp, ['Import Complete', 'big green fluid'])->link('multitable.php');

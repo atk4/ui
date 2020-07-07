@@ -102,7 +102,7 @@ Based on Fomantic UI documentation, you can add more classes to your labels::
     Label::addTo($col, ['Lorem', 'red ribbon', 'icon'=>'cut']);
 
     // add some content inside column
-    Loremipsum::addTo($col, ['size'=>1]);
+    LoremIpsum::addTo($col, ['size'=>1]);
 
     $c = $columns->addColumn();
     $col = View::addTo($c, ['ui'=>'raised segment']);
@@ -111,7 +111,7 @@ Based on Fomantic UI documentation, you can add more classes to your labels::
     Label::addTo($col, ['Right Column', 'top attached', 'icon'=>'book']);
 
     // some content
-    Loremipsum::addTo($col, ['size'=>1]);
+    LoremIpsum::addTo($col, ['size'=>1]);
 
     // right bottom corner label
     Label::addTo($col, ['Ipsum', 'orange bottom right attached', 'icon'=>'cut']);

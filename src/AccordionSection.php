@@ -21,7 +21,7 @@ class AccordionSection extends View
     /**
      * The accordion item virtual page.
      *
-     * @var Virtualpage|null
+     * @var VirtualPage|null
      */
     public $virtualPage;
 

@@ -1,58 +1,58 @@
 
-Virtualpage Introduction
+VirtualPage Introduction
 ------------------------
 
-Before learning about Virtualpage, Loader and other ways of dynamic content loading, you should fully
+Before learning about VirtualPage, Loader and other ways of dynamic content loading, you should fully
 understand :ref:`callback`.
 
 
-.. php:class:: Virtualpage
+.. php:class:: VirtualPage
 
-Unlike any of the Callback classes, Virtualpage is a legit :php:class:`View`, but it's behaviour is a little
-"different". In normal circumstances, rendering Virtualpage will result in empty string. Adding Virtualpage
+Unlike any of the Callback classes, VirtualPage is a legit :php:class:`View`, but it's behaviour is a little
+"different". In normal circumstances, rendering VirtualPage will result in empty string. Adding VirtualPage
 anywhere inside your :ref:`render_tree` simply won't have any visible effect::
 
-    $vp = \atk4\ui\Virtualpage::addTo($layout);
-    \atk4\ui\Loremipsum::addTo($vp);
+    $vp = \atk4\ui\VirtualPage::addTo($layout);
+    \atk4\ui\LoremIpsum::addTo($vp);
 
-However, Virtualpage has a special trigger argument. If found, then Virtualpage will interrupt normal rendering
+However, VirtualPage has a special trigger argument. If found, then VirtualPage will interrupt normal rendering
 progress and output HTML of itself and any other Components you added to that page.
 
-To help you understand when to use Virtualpage here is the example:
+To help you understand when to use VirtualPage here is the example:
 
  - Create a :php:class:`Button`
- - Add Virtualpage inside a button.
- - Add Form inside Virtualpage.
- - Clicking the Button would dynamically load contents of Virtualpage inside a Modal window.
+ - Add VirtualPage inside a button.
+ - Add Form inside VirtualPage.
+ - Clicking the Button would dynamically load contents of VirtualPage inside a Modal window.
 
 This pattern is very easy to implement and is used by many components to transparently provide dynamic functionality.
 Next is an example where :php:class:`Tabs` has support for call-back for generating dynamic content for the tab::
 
     $tabs->addTab('Dynamic Tab Content', function($vp) {
-        \atk4\ui\Loremipsum::addTo($vp);
+        \atk4\ui\LoremIpsum::addTo($vp);
     });
 
-Using Virtualpage inside your component can significantly enhance usability without introducing any complexity
+Using VirtualPage inside your component can significantly enhance usability without introducing any complexity
 for developers.
 
-(For situations when Component does not natively support Virtualpage, you can still use :php:class:`Loader`, documented
+(For situations when Component does not natively support VirtualPage, you can still use :php:class:`Loader`, documented
 below).
 
 .. php:attr:: $cb
 
 VirtuaPage relies on :php:class:`CallbackLater` object, which is stored in a property $cb. If the Calllback is triggered
-through a GET argument, then Virtualpage will change it's rendering technique. Lets examine it in more detail::
+through a GET argument, then VirtualPage will change it's rendering technique. Lets examine it in more detail::
 
-    $vp = \atk4\ui\Virtualpage::addTo($layout);
-    \atk4\ui\Loremipsum::addTo($vp);
+    $vp = \atk4\ui\VirtualPage::addTo($layout);
+    \atk4\ui\LoremIpsum::addTo($vp);
 
     $label = \atk4\ui\Label::addTo($layout);
 
     $label->detail = $vp->cb->getUrl();
     $label->link($vp->cb->getUrl());
 
-This code will only show the link containing a URL, but will not show Loremipsum text.  If you do follow the link, you'll
-see only the 'Loremipsum' text.
+This code will only show the link containing a URL, but will not show LoremIpsum text.  If you do follow the link, you'll
+see only the 'LoremIpsum' text.
 
 .. php:attr:: $urlTrigger
 
@@ -64,8 +64,8 @@ Output Modes
 
 .. php:method:: getUrl($mode = 'callback')
 
-Virtualpage can be used to provide you either with RAW HTML content or wrap it into boilerplate HTML.
-As you may know, :php:meth:`Callback::getUrl()` accepts an argument, and Virtualpage gives this argument meaning:
+VirtualPage can be used to provide you either with RAW HTML content or wrap it into boilerplate HTML.
+As you may know, :php:meth:`Callback::getUrl()` accepts an argument, and VirtualPage gives this argument meaning:
 
 - getUrl('cut') gives you URL which will return ONLY the HTML of virtual page, no Layout or boilerplate.
 - getUrl('popup') gives you URL which will return a very minimalistic layout inside a valid HTML boilerplate, suitable for iframes or popup windows.
@@ -80,11 +80,11 @@ Setting Callback
 
 .. php:method:: set($callback)
 
-Although Virtualpage can work without defining a callback, using one is more reliable and is always recommended::
+Although VirtualPage can work without defining a callback, using one is more reliable and is always recommended::
 
-    $vp = \atk4\ui\Virtualpage::addTo($layout);
+    $vp = \atk4\ui\VirtualPage::addTo($layout);
     $vp->set(function($vp){
-        \atk4\ui\Loremipsum::addTo($vp);
+        \atk4\ui\LoremIpsum::addTo($vp);
     });
 
     $label = \atk4\ui\Label::addTo($layout);
@@ -92,16 +92,16 @@ Although Virtualpage can work without defining a callback, using one is more rel
     $label->detail = $vp->cb->getUrl();
     $label->link($vp->cb->getUrl());
 
-This code will perform identically as the previous example, however 'Loremipsum' will never be initialized
-unless you are requesting Virtualpage specifically, saving some CPU time. Capability of defining callback
-also makes it possible for Virtualpage to be embedded into any :ref:`component` quite reliably.
+This code will perform identically as the previous example, however 'LoremIpsum' will never be initialized
+unless you are requesting VirtualPage specifically, saving some CPU time. Capability of defining callback
+also makes it possible for VirtualPage to be embedded into any :ref:`component` quite reliably.
 
-To illustrate, see how :php:class:`Tabs` component rely on Virtualpage, the following code::
+To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the following code::
 
     $t = \atk4\ui\Tabs::addTo($layout);
 
-    \atk4\ui\Loremipsum::addTo($t->addTab('Tab1')); // regular tab
-    $t->addTab('Tab2', function($p){ \atk4\ui\Loremipsum::addTo($p); }); // dynamic tab
+    \atk4\ui\LoremIpsum::addTo($t->addTab('Tab1')); // regular tab
+    $t->addTab('Tab2', function($p){ \atk4\ui\LoremIpsum::addTo($p); }); // dynamic tab
 
 .. php:method:: getUrl($html_wrapping)
 
@@ -112,8 +112,8 @@ To illustrate, see how :php:class:`Tabs` component rely on Virtualpage, the foll
 When using 'popup' mode, the output appears inside a `<div class="ui container">`. If you want to change this
 class, you can set $ui property to something else. Try::
 
-    $vp = \atk4\ui\Virtualpage::addTo($layout);
-    \atk4\ui\Loremipsum::addTo($vp);
+    $vp = \atk4\ui\VirtualPage::addTo($layout);
+    \atk4\ui\LoremIpsum::addTo($vp);
     $vp->ui = 'red inverted segment';
 
     $label = \atk4\ui\Label::addTo($layout);
@@ -135,10 +135,10 @@ Loader
 Loader is designed to delay some slow-loading content by loading it dynamically, after main
 page is rendered.
 
-Comparing to Virtualpage which is a D.Y.I. solution - Loader can be used out of the box.
-Loader extends Virtualpage and is quite similar to it.
+Comparing to VirtualPage which is a D.Y.I. solution - Loader can be used out of the box.
+Loader extends VirtualPage and is quite similar to it.
 
-Like with a Virtualpage - you should use `set()` to define content that will be loaded dynamically,
+Like with a VirtualPage - you should use `set()` to define content that will be loaded dynamically,
 while a spinner is shown to a user::
 
     $loader = \atk4\ui\Loader::addTo($app);
@@ -146,12 +146,12 @@ while a spinner is shown to a user::
 
         // Simulate slow-loading component
         sleep(2);
-        \atk4\ui\Loremipsum::addTo($p);
+        \atk4\ui\LoremIpsum::addTo($p);
 
     });
 
 
-A good use-case example would be a dashboard graph. Unlike Virtualpage which is not visible to a regular render,
+A good use-case example would be a dashboard graph. Unlike VirtualPage which is not visible to a regular render,
 Loader needs to occupy some space.
 
 .. php:attr:: $shim
@@ -159,12 +159,12 @@ Loader needs to occupy some space.
 By default it will display a white segment with 7em height, but you can specify any other view thorugh $shim
 property::
 
-    $loader = \atk4\ui\Loader::addTo($app, ['shim'=>['Message', 'Please wait until we load Loremipsum...', 'red']]);
+    $loader = \atk4\ui\Loader::addTo($app, ['shim'=>['Message', 'Please wait until we load LoremIpsum...', 'red']]);
     $loader->set(function($p) {
 
         // Simulate slow-loading component
         sleep(2);
-        \atk4\ui\Loremipsum::addTo($p);
+        \atk4\ui\LoremIpsum::addTo($p);
 
     });
 
@@ -199,7 +199,7 @@ To indicate how custom binding works::
     $loader = \atk4\ui\Loader::addTo($app, ['loadEvent' => 'kaboom']);
 
     $loader->set(function($p){
-        \atk4\ui\Loremipsum::addTo($p);
+        \atk4\ui\LoremIpsum::addTo($p);
     });
 
 
@@ -263,7 +263,7 @@ You can notify user about this progress through a simple code::
         $p->setProgress(0.75);
         sleep(1);
 
-        \atk4\ui\Loremipsum::addTo($p);
+        \atk4\ui\LoremIpsum::addTo($p);
 
     });
 

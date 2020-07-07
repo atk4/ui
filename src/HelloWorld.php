@@ -7,7 +7,7 @@ namespace atk4\ui;
 /**
  * Implements Hello World. Add this view anywhere!
  */
-class Helloworld extends View
+class HelloWorld extends View
 {
     public function init(): void
     {

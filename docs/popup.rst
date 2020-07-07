@@ -12,7 +12,7 @@ Popup
 Implements a popup::
 
     $button = Button::addTo($app, ['Click me']);
-    Helloworld::addTo(Popup::addTo($app, [$button]));
+    HelloWorld::addTo(Popup::addTo($app, [$button]));
 
 .. php:method:: set($callback)
 

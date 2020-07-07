@@ -421,7 +421,7 @@ producing content of your dialog::
 
     $modal = \atk4\ui\Modal::addTo($app, ['Modal Title']);
     $modal->set(function ($p) use ($modal) {
-        \atk4\ui\Loremipsum::addTo($p);
+        \atk4\ui\LoremIpsum::addTo($p);
         \atk4\ui\Button::addTo($p, ['Hide'])->on('click', $modal->hide());
     });
 
@@ -430,7 +430,7 @@ producing content of your dialog::
 Modal will render as a HTML `<div>` block but will be hidden. Alternatively you can use Modal without loadable content::
 
     $modal = \atk4\ui\Modal::addTo($app, ['Modal Title']);
-    \atk4\ui\Loremipsum::addTo($modal);
+    \atk4\ui\LoremIpsum::addTo($modal);
     \atk4\ui\Button::addTo($modal, ['Hide'])->on('click', $modal->hide());
 
     \atk4\ui\Button::addTo($app, ['Show'])->on('click', $modal->show());
@@ -450,8 +450,8 @@ when the need to open a dialog box is not known in advance. This class is not
 a component, but rather an Action so you **must not** add it to the Render Tree.
 To accomplish that, use a :ref:`virtualpage`::
 
-    $vp = \atk4\ui\Virtualpage::addTo($app);
-    \atk4\ui\Loremipsum::addTo($vp, ['size' => 2]);
+    $vp = \atk4\ui\VirtualPage::addTo($app);
+    \atk4\ui\LoremIpsum::addTo($vp, ['size' => 2]);
 
     \atk4\ui\Button::addTo($app, ['Dynamic Modal'])
         ->on('click', new \atk4\ui\JsModal('My Popup Title', $vp->getUrl('cut')));
@@ -566,7 +566,7 @@ The following will **not** work::
     $model = new myModel;
 
     // JsModal requires its contents to be put into a Virtual Page
-    $vp = \atk4\ui\Virtualpage::addTo($app);
+    $vp = \atk4\ui\VirtualPage::addTo($app);
     $form = \atk4\ui\Form::addTo($vp);
     $form->setModel(clone $model);
 
@@ -593,7 +593,7 @@ Table needs to be first! The following works::
     $table = \atk4\ui\Table::addTo($app);
     $table->setModel(clone $model));
 
-    $vp = \atk4\ui\Virtualpage::addTo($app);
+    $vp = \atk4\ui\VirtualPage::addTo($app);
     $form = \atk4\ui\Form::addTo($vp);
     $form->setModel(clone $model);
 
@@ -608,15 +608,15 @@ Table needs to be first! The following works::
       ];
     });
 
-The first will not work because of how the render tree is called and because Virtualpage is special.
+The first will not work because of how the render tree is called and because VirtualPage is special.
 While rendering, if a reload is caught, the rendering process stops and only renders what was asked to be reloaded.
-Since Virtualpage is special, when asked to be rendered and it gets triggered, rendering stops and only the
-Virtualpage content is rendered. To force yourself to put things in order you can write the above like this::
+Since VirtualPage is special, when asked to be rendered and it gets triggered, rendering stops and only the
+VirtualPage content is rendered. To force yourself to put things in order you can write the above like this::
 
     $table = \atk4\ui\Table::addTo($app);
     $table->setModel($model);
 
-    $vp = \atk4\ui\Virtualpage::addTo($app);
+    $vp = \atk4\ui\VirtualPage::addTo($app);
     $vp->set(function($p) use ($table, $model) {
         $form = \atk4\ui\Form::addTo($p);
         $form->setModel(clone $model);
@@ -695,4 +695,4 @@ This class implements ability for your PHP code to send messages to the browser 
 
     }));
 
-The JsSse component plays a crucial role in some high-level components such as :php:class:`Console` and :php:class:`Progressbar`.
+The JsSse component plays a crucial role in some high-level components such as :php:class:`Console` and :php:class:`ProgressBar`.

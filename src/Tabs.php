@@ -29,9 +29,9 @@ class Tabs extends View
         $item = $this->addTabMenuItem($name, $settings);
         $sub = $this->addSubView($item->name);
 
-        // if there is callback action, then use Virtualpage
+        // if there is callback action, then use VirtualPage
         if ($callback) {
-            $vp = Virtualpage::addTo($sub, ['ui' => '']);
+            $vp = VirtualPage::addTo($sub, ['ui' => '']);
             $item->setPath($vp->getJsUrl('cut'));
 
             $vp->set($callback);

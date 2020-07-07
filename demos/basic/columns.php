@@ -28,9 +28,9 @@ $page = \atk4\ui\View::addTo($app, ['id' => 'example']);
 \atk4\ui\Header::addTo($page, ['Basic Usage']);
 
 $c = \atk4\ui\Columns::addTo($page);
-\atk4\ui\Loremipsum::addTo($c->addColumn(), [1]);
-\atk4\ui\Loremipsum::addTo($c->addColumn(), [1]);
-\atk4\ui\Loremipsum::addTo($c->addColumn(), [1]);
+\atk4\ui\LoremIpsum::addTo($c->addColumn(), [1]);
+\atk4\ui\LoremIpsum::addTo($c->addColumn(), [1]);
+\atk4\ui\LoremIpsum::addTo($c->addColumn(), [1]);
 
 \atk4\ui\Header::addTo($page, ['Specifying widths, using rows or automatic flow']);
 
@@ -55,12 +55,12 @@ $c = \atk4\ui\Columns::addTo($page, ['internally celled']);
 
 $r = $c->addRow();
 \atk4\ui\Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
-\atk4\ui\Loremipsum::addTo($r->addColumn(12), [1]);
+\atk4\ui\LoremIpsum::addTo($r->addColumn(12), [1]);
 \atk4\ui\Icon::addTo($r->addColumn(2), ['huge trash']);
 
 $r = $c->addRow();
 \atk4\ui\Icon::addTo($r->addColumn([2, 'right aligned']), ['huge home']);
-\atk4\ui\Loremipsum::addTo($r->addColumn(12), [1]);
+\atk4\ui\LoremIpsum::addTo($r->addColumn(12), [1]);
 \atk4\ui\Icon::addTo($r->addColumn(2), ['huge trash']);
 
 \atk4\ui\Header::addTo($page, ['Add elements into columns and using classes']);

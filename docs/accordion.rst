@@ -23,7 +23,7 @@ Once you create an Accordion container you can then mix and match static and dyn
 
 Adding a static content section is pretty simple::
 
-    Loremipsum::addTo($acc->addSection('Static Tab'));
+    LoremIpsum::addTo($acc->addSection('Static Tab'));
 
 You can add multiple elements into a single accordion section, like any other view.
 
@@ -31,7 +31,7 @@ You can add multiple elements into a single accordion section, like any other vi
 
 Use addSection() method to add more section in an Accordion view. First parameter is a title of the section.
 
-Section can be static or dynamic. Dynamic sections use :php:class:`Virtualpage` implementation mentioned above.
+Section can be static or dynamic. Dynamic sections use :php:class:`VirtualPage` implementation mentioned above.
 You should pass callable action as a second parameter.
 
 Example::
@@ -39,24 +39,24 @@ Example::
     $t = Accordion::addTo($layout);
 
     // add static section
-    Helloworld::addTo($t->addSection('Static Content'));
+    HelloWorld::addTo($t->addSection('Static Content'));
 
     // add dynamic section
     $t->addSection('Dynamically Loading', function ($section) {
-        Loremipsum::addTo($section);
+        LoremIpsum::addTo($section);
     });
 
 Dynamic Accordion Section
 =========================
 
-Dynamic sections are based around implementation of :php:class:`Virtualpage` and allow you
+Dynamic sections are based around implementation of :php:class:`VirtualPage` and allow you
 to pass a call-back which will be triggered when user clicks on the section title.::
 
     $acc = Accordion::addTo($app);
 
     // dynamic section
     $acc->addSection('Dynamic Lorem Ipsum', function ($section) {
-        Loremipsum::addTo($section, ['size'=>2]);
+        LoremIpsum::addTo($section, ['size'=>2]);
     });
 
 Controlling Accordion Section via Javascript
@@ -73,8 +73,8 @@ For example, you can set a button that, when clicked, will toggle an accordion s
     $btn = Button::addTo($bar, ['Toggle Section 1']);
 
     $acc = Accordion::addTo($app, ['type' => ['styled', 'fluid']]);
-    $section1 = Loremipsum::addTo($acc->addSection('Static Text'));
-    $section2 = Loremipsum::addTo($acc->addSection('Static Text'));
+    $section1 = LoremIpsum::addTo($acc->addSection('Static Text'));
+    $section2 = LoremIpsum::addTo($acc->addSection('Static Text'));
 
     $btn->on('click', $acc->jsToggle($section_1));
 

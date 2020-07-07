@@ -494,7 +494,7 @@ class Grid extends View
 
     /**
      * Similar to addAction but when button is clicked, modal is displayed
-     * with the $title and $callback is executed through Virtualpage.
+     * with the $title and $callback is executed through VirtualPage.
      *
      * @param string|array|View $button
      * @param string            $title

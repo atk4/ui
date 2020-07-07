@@ -28,12 +28,12 @@ $accordion = \atk4\ui\Accordion::addTo($app, ['type' => ['styled', 'fluid']/*, '
 // static section
 $i1 = $accordion->addSection('Static Text');
 \atk4\ui\Message::addTo($i1, ['This content is added on page loaded', 'ui' => 'tiny message']);
-\atk4\ui\Loremipsum::addTo($i1, ['size' => 1]);
+\atk4\ui\LoremIpsum::addTo($i1, ['size' => 1]);
 
 // dynamic section - simple view
 $i2 = $accordion->addSection('Dynamic Text', function ($v) {
     \atk4\ui\Message::addTo($v, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
-    \atk4\ui\Loremipsum::addTo($v, ['size' => 2]);
+    \atk4\ui\LoremIpsum::addTo($v, ['size' => 2]);
 });
 
 // dynamic section - form view
