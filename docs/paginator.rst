@@ -32,7 +32,7 @@ After initializing paginator you can use it's properties to determine current pa
 to display current page BEFORE the paginator on your page::
 
     $h = Header::addTo($page);
-    LoremIpsum::addTo($page); // some content here
+    Loremipsum::addTo($page); // some content here
 
     $p = Paginator::addTo($page);
     $h->set('Page '.$p->page.' from '.$p->total);

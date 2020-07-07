@@ -78,7 +78,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem('Message', [$path . 'message'], $menu);
     $layout->addMenuItem('Labels', [$path . 'label'], $menu);
     $layout->addMenuItem('Menu', [$path . 'menu'], $menu);
-    $layout->addMenuItem('BreadCrumb', [$path . 'breadcrumb'], $menu);
+    $layout->addMenuItem('Breadcrumb', [$path . 'breadcrumb'], $menu);
     $layout->addMenuItem(['Columns'], [$path . 'columns'], $menu);
     $layout->addMenuItem(['Grid Layout'], [$path . 'grid-layout'], $menu);
 
@@ -100,7 +100,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $menu);
     $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $menu);
     $layout->addMenuItem(['Lookup Dependency'], [$path . 'lookup-dep'], $menu);
-    $layout->addMenuItem(['DropDown'], [$path . 'dropdown-plus'], $menu);
+    $layout->addMenuItem(['Dropdown'], [$path . 'dropdown-plus'], $menu);
     $layout->addMenuItem(['File Upload'], [$path . 'upload'], $menu);
     $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $menu);
     $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $menu);

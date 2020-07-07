@@ -10,14 +10,14 @@ require_once __DIR__ . '/../init-app.php';
 // Demonstrate the use of Virtual Page.
 
 // define virtual page.
-$virtualPage = \atk4\ui\VirtualPage::addTo($app->layout);
+$virtualPage = \atk4\ui\Virtualpage::addTo($app->layout);
 $virtualPage->cb->urlTrigger = 'in';
 
 // Add content to virtual page.
 if (isset($_GET['p_id'])) {
     \atk4\ui\Header::addTo($virtualPage, [$_GET['p_id']]);
 }
-\atk4\ui\LoremIpsum::addTo($virtualPage, ['size' => 1]);
+\atk4\ui\Loremipsum::addTo($virtualPage, ['size' => 1]);
 $virtualPageButton = \atk4\ui\Button::addTo($virtualPage, ['Back', 'icon' => 'left arrow']);
 $virtualPageButton->link('virtual.php');
 $virtualPage->ui = 'grey inverted segment';
@@ -36,9 +36,9 @@ $btn->link($virtualPage->cb->getUrl() . '&p_id=Bike');
 // Test 1 - Basic reloading
 \atk4\ui\Header::addTo($app, ['Virtual Page Logic']);
 
-$virtualPage = \atk4\ui\VirtualPage::addTo($app); // this page will not be visible unless you trigger it specifically
+$virtualPage = \atk4\ui\Virtualpage::addTo($app); // this page will not be visible unless you trigger it specifically
 \atk4\ui\Header::addTo($virtualPage, ['Contens of your pop-up here']);
-\atk4\ui\LoremIpsum::addTo($virtualPage, ['size' => 2]);
+\atk4\ui\Loremipsum::addTo($virtualPage, ['size' => 2]);
 
 Counter::addTo($virtualPage);
 \atk4\ui\View::addTo($virtualPage, ['ui' => 'hidden divider']);
@@ -67,7 +67,7 @@ $text->addParagraph('Can also be trigger from a js event, like clicking on a tab
 $table = \atk4\ui\Table::addTo($app, ['celled' => true]);
 $table->setModel(new SomeData());
 
-$frame = \atk4\ui\VirtualPage::addTo($app);
+$frame = \atk4\ui\Virtualpage::addTo($app);
 $frame->set(function ($frame) {
     \atk4\ui\Header::addTo($frame, ['Clicked row with ID = ' . $_GET['id']]);
 });

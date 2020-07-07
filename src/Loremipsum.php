@@ -7,7 +7,7 @@ namespace atk4\ui;
 /**
  * Provides a handy object that generates some amount of random text-filler.
  */
-class LoremIpsum extends Text
+class Loremipsum extends Text
 {
     /**
      * Specifies amount of filler you need. This value affects number of
@@ -25,7 +25,7 @@ class LoremIpsum extends Text
     public $words = 50;
 
     /**
-     * Returns string of LoremIpsum text.
+     * Returns string of Loremipsum text.
      *
      * @param int $words Amount of words to generate
      *

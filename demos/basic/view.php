@@ -55,7 +55,7 @@ $plane->template->set('num', random_int(5, 20));
 \atk4\ui\Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new \atk4\ui\JsReload($plane));
 
 \atk4\ui\Header::addTo($app, ['Can be on a Virtual Page']);
-$vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($page) use ($plane) {
+$vp = \atk4\ui\Virtualpage::addTo($app)->set(function ($page) use ($plane) {
     $page->add($plane);
     \atk4\ui\Label::addTo($page, ['Plane ID: ', 'bottom attached', 'detail' => $plane->name]);
 });

@@ -275,7 +275,7 @@ class Card extends View
         }
         $btn = $this->addButton($button);
 
-        $vp = VirtualPage::addTo($this)->set(function ($page) use ($executor, $action) {
+        $vp = Virtualpage::addTo($this)->set(function ($page) use ($executor, $action) {
             $id = $this->stickyGet($this->name);
 
             $page->add($executor = new $executor());

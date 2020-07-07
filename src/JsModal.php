@@ -16,7 +16,7 @@ class JsModal extends JsExpression
      */
     public function __construct($title, $url, array $args = [], string $dataType = 'json')
     {
-        if ($url instanceof VirtualPage) {
+        if ($url instanceof Virtualpage) {
             $url = $url->getJsUrl('cut');
         }
 

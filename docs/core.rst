@@ -17,7 +17,7 @@ is::
 
     $app = new \atk4\ui\App('My App');
     $app->initLayout([\atk4\ui\Layout\Centered::class]);
-    LoremIpsum::addTo($app);
+    Loremipsum::addTo($app);
 
 .. toctree::
     app
@@ -167,21 +167,21 @@ Once the concept is established, it can even be used on a higher level, for exam
 
 .. _virtualpage:
 
-VirtualPage
+Virtualpage
 ===========
 
-Building on the foundation of :ref:`callback`, components :php:class:`VirtualPage` and :php:class:`Loader`
+Building on the foundation of :ref:`callback`, components :php:class:`Virtualpage` and :php:class:`Loader`
 exist to enhance other Components with dynamically loadable content. Here is example for :php:class:`Tabs`::
 
     $tabs = Tabs::addTo($app);
-    LoremIpsum::addTo($tabs->addTab('First tab is static'));
+    Loremipsum::addTo($tabs->addTab('First tab is static'));
 
     $tabs->addTab('Second tab is dynamic', function($vp) {
-        LoremIpsum::addTo($vp);
+        Loremipsum::addTo($vp);
     });
 
 As you switch between those two tabs, you'll notice that the :php:class:`Button` label on the "Second tab"
-reloads every time. :php:class:`Tabs` implements this by using :php:class:`VirtualPage`, read further to
+reloads every time. :php:class:`Tabs` implements this by using :php:class:`Virtualpage`, read further to
 find out how:
 
 

@@ -132,4 +132,4 @@ name. Ultimately, you can create a View that uses it's name to store some inform
         }
     }
 
-This quality of Agile UI objects is further explored through :php:class:`Callback` and :php:class:`VirtualPage`
+This quality of Agile UI objects is further explored through :php:class:`Callback` and :php:class:`Virtualpage`

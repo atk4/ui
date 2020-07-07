@@ -7,7 +7,7 @@ namespace atk4\ui;
 /**
  * One Sub view of Tabs widget.
  */
-class TabsSubView extends View
+class TabsSubview extends View
 {
     public $class = ['ui tab'];
 

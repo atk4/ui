@@ -29,9 +29,9 @@ class Tabs extends View
         $item = $this->addTabMenuItem($name, $settings);
         $sub = $this->addSubView($item->name);
 
-        // if there is callback action, then use VirtualPage
+        // if there is callback action, then use Virtualpage
         if ($callback) {
-            $vp = VirtualPage::addTo($sub, ['ui' => '']);
+            $vp = Virtualpage::addTo($sub, ['ui' => '']);
             $item->setPath($vp->getJsUrl('cut'));
 
             $vp->set($callback);
@@ -88,11 +88,11 @@ class Tabs extends View
      *
      * @param string $name name of view
      *
-     * @return TabsSubView
+     * @return TabsSubview
      */
     protected function addSubView($name)
     {
-        return TabsSubView::addTo($this, ['dataTabName' => $name], ['Tabs']);
+        return TabsSubview::addTo($this, ['dataTabName' => $name], ['Tabs']);
     }
 
     /**

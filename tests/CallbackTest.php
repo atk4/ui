@@ -167,13 +167,13 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertNull($var);
     }
 
-    public function testVirtualPage()
+    public function testVirtualpage()
     {
         $var = null;
 
         $app = $this->app;
 
-        $vp = \atk4\ui\VirtualPage::addTo($app);
+        $vp = \atk4\ui\Virtualpage::addTo($app);
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
@@ -186,13 +186,13 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertSame(25, $var);
     }
 
-    public function testVirtualPageCustomTrigger()
+    public function testVirtualpageCustomTrigger()
     {
         $var = null;
 
         $app = $this->app;
 
-        $vp = \atk4\ui\VirtualPage::addTo($app, ['urlTrigger' => 'bah']);
+        $vp = \atk4\ui\Virtualpage::addTo($app, ['urlTrigger' => 'bah']);
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
@@ -218,7 +218,7 @@ class CallbackTest extends AtkPhpunit\TestCase
 
         $app = $this->app;
 
-        $vp = \atk4\ui\VirtualPage::addTo($app);
+        $vp = \atk4\ui\Virtualpage::addTo($app);
         $vp->set([$this, 'callPull230']);
 
         // simulate triggering

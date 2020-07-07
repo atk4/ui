@@ -13,10 +13,10 @@ require_once __DIR__ . '/../init-app.php';
 $tabs = \atk4\ui\Tabs::addTo($app);
 
 // static tab
-\atk4\ui\HelloWorld::addTo($tabs->addTab('Hello'));
+\atk4\ui\Helloworld::addTo($tabs->addTab('Hello'));
 $tab = $tabs->addTab('Static Tab');
 \atk4\ui\Message::addTo($tab, ['Content of this tab will refresh only if you reload entire page']);
-\atk4\ui\LoremIpsum::addTo($tab);
+\atk4\ui\Loremipsum::addTo($tab);
 
 // set the default active tab
 $tabs->addTab('Default Active Tab', function ($tab) {
@@ -26,13 +26,13 @@ $tabs->addTab('Default Active Tab', function ($tab) {
 // dynamic tab
 $tabs->addTab('Dynamic Lorem Ipsum', function ($tab) {
     \atk4\ui\Message::addTo($tab, ['Every time you come to this tab, you will see a different text']);
-    \atk4\ui\LoremIpsum::addTo($tab, ['size' => (int) $_GET['size'] ?? 1]);
+    \atk4\ui\Loremipsum::addTo($tab, ['size' => (int) $_GET['size'] ?? 1]);
 }, ['apiSettings' => ['data' => ['size' => random_int(1, 4)]]]);
 
 // modal tab
 $tabs->addTab('Modal popup', function ($tab) {
     \atk4\ui\Button::addTo($tab, ['Load Lorem'])->on('click', \atk4\ui\Modal::addTo($tab)->set(function ($p) {
-        \atk4\ui\LoremIpsum::addTo($p, ['size' => 2]);
+        \atk4\ui\Loremipsum::addTo($p, ['size' => 2]);
     })->show());
 });
 

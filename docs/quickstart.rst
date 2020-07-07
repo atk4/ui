@@ -40,7 +40,7 @@ Open a new file `index.php` and enter the following code::
     $app = new \atk4\ui\App('My First App');       // 3
     $app->initLayout([\atk4\ui\Layout\Centered::class]);                  // 4
 
-    \atk4\ui\HelloWorld::addTo($app);                       // 5
+    \atk4\ui\Helloworld::addTo($app);                       // 5
 
 .. rubric:: Clarifications
 
@@ -53,7 +53,7 @@ Open a new file `index.php` and enter the following code::
 
 .. [#f4] Specifies default page layout for your application. Try changing between Layout\Centered and Layout\Centered.
 
-.. [#f5] Creates new component 'HelloWorld' and adds it into Application Layout.
+.. [#f5] Creates new component 'Helloworld' and adds it into Application Layout.
 
 You should see the following output:
 

@@ -20,7 +20,7 @@ ViewTester::addTo($app);
     //set your time expensive function here.
     sleep(2);
     \atk4\ui\Header::addTo($p, ['Loader #1']);
-    \atk4\ui\LoremIpsum::addTo($p, ['size' => 1]);
+    \atk4\ui\Loremipsum::addTo($p, ['size' => 1]);
 
     // Any dynamic views can perform call-backs just fine
     ViewTester::addTo($p);
@@ -34,7 +34,7 @@ ViewTester::addTo($app);
         // You may pass arguments to the loader, in this case it's "color"
         sleep(3);
         \atk4\ui\Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
-        \atk4\ui\LoremIpsum::addTo(\atk4\ui\View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
+        \atk4\ui\Loremipsum::addTo(\atk4\ui\View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:
         $p->app->stickyGet('color');
@@ -53,10 +53,10 @@ ViewTester::addTo($app);
     'ui' => '',   // this will prevent "loading spinner" from showing
     'shim' => [   // shim is displayed while content is leaded
         \atk4\ui\Message::class,
-        'Generating LoremIpsum, please wait...',
+        'Generating Loremipsum, please wait...',
         'red',
     ],
 ])->set(function ($p) {
     sleep(1);
-    \atk4\ui\LoremIpsum::addTo($p, ['size' => 2]);
+    \atk4\ui\Loremipsum::addTo($p, ['size' => 2]);
 });

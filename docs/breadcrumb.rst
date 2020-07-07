@@ -2,13 +2,13 @@
 .. _breadcrumb:
 
 ==========
-BreadCrumb
+Breadcrumb
 ==========
 
 .. php:namespace:: atk4\ui
-.. php:class:: BreadCrumb
+.. php:class:: Breadcrumb
 
-Implement navigational BreadCrumb, by using https://fomantic-ui.com/collections/breadcrumb.html
+Implement navigational Breadcrumb, by using https://fomantic-ui.com/collections/breadcrumb.html
 
 Basic Usage
 ===========
@@ -18,7 +18,7 @@ Basic Usage
 
 Here is a simple usage::
 
-    $crumb = BreadCrumb::addTo($app);
+    $crumb = Breadcrumb::addTo($app);
     $crumb->addCrumb('User', ['user']);
     $crumb->addCrumb('Preferences', ['user_preferences']);
     $crumb->set('Change Password');
@@ -48,10 +48,10 @@ Calling addCrumb adds more elements into the $path property. Each element there 
  - link - where to go if clicked
  - divider - which divider to use after the crumb
 
-By default `divider` is set to :php:attr:`BreadCrumb::dividerClass`. You may also manipulate $path array yourself.
+By default `divider` is set to :php:attr:`Breadcrumb::dividerClass`. You may also manipulate $path array yourself.
 For example the next code will use some logic::
 
-    $crumb = BreadCrumb::addTo($app);
+    $crumb = Breadcrumb::addTo($app);
     $crumb->addCrumb('Users', []);
 
     $model = new User($app->db);

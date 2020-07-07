@@ -129,7 +129,7 @@ to populate a content::
         // $id of the record which was clicked
         // $grid->model->load($id);
 
-        LoremIpsum::addTo($p);
+        Loremipsum::addTo($p);
     });
 
 Calling this method multiple times will add button into same action column.

@@ -1,13 +1,13 @@
 
 .. php:namespace:: atk4\ui
 
-.. php:class:: ProgressBar
+.. php:class:: Progressbar
 
 ===========
-ProgressBar
+Progressbar
 ===========
 
-ProgressBar is actually a quite simple element, but it can be made quite interractive along with
+Progressbar is actually a quite simple element, but it can be made quite interractive along with
 :php:class:`JsSse`.
 
 Demo: https://ui.agiletoolkit.org/demos/progressbar.php
@@ -21,10 +21,10 @@ Basic Usage
 After adding a console to your :ref:`render_tree`, you just need to set a call-back::
 
     // Add progressbar showing 0 (out of 100)
-    $bar = ProgressBar::addTo($app);
+    $bar = Progressbar::addTo($app);
 
     // Add with some other value of 20% and label
-    $bar2 = ProgressBar::addTo($app, [20, '% Battery']);
+    $bar2 = Progressbar::addTo($app, [20, '% Battery']);
 
 The value of the progress bar can be changed either before rendering, inside PHP, or after rendering
 with JavaScript::

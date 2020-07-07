@@ -122,7 +122,7 @@ class Popup extends View
         if (
             $this->owner instanceof Item ||
             $this->owner instanceof Menu ||
-            $this->owner instanceof DropDown ||
+            $this->owner instanceof Dropdown ||
             $this->owner instanceof Button
         ) {
             throw (new Exception('Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"'))
@@ -132,7 +132,7 @@ class Popup extends View
         if (
             ($this->triggerBy instanceof Item ||
             $this->triggerBy instanceof Menu ||
-            $this->triggerBy instanceof DropDown) && $this->triggerOn === null
+            $this->triggerBy instanceof Dropdown) && $this->triggerOn === null
         ) {
             $this->triggerOn = 'hover';
         }
