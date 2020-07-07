@@ -33,7 +33,7 @@ $jsHeader = $app->factory([\atk4\ui\View::class], ['id' => false, 'class' => ['h
 $grid->addActionMenuItem($jsHeader);
 $grid->addActionMenuItem('Js Callback', function () {
     return (new \atk4\ui\View())->set('Js Callback done!');
-});
+}, 'Are you sure?');
 
 $grid->addActionMenuItem($divider);
 
