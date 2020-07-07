@@ -22,7 +22,7 @@ class Html extends Table\Column
      *
      * @return string
      */
-    public function getDataCellHTML(Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, $extra_tags = [])
     {
         return '{$_' . $field->short_name . '}';
     }
@@ -35,7 +35,7 @@ class Html extends Table\Column
      *
      * @return array associative array with tags and their HTML values
      */
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         return ['_' . $field->short_name => '<td>' . $row->get($field->short_name) . '</td>'];
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-class jsCallback extends Callback implements jsExpressionable
+class JsCallback extends Callback implements JsExpressionable
 {
     /**
      * Holds information about arguments passed in to the callback.
@@ -35,7 +35,7 @@ class jsCallback extends Callback implements jsExpressionable
     public $storeName;
 
     /**
-     * When multiple jsExpressionable's are collected inside an array and may
+     * When multiple JsExpressionable's are collected inside an array and may
      * have some degree of nesting, convert it into a one-dimensional array,
      * so that it's easier for us to wrap it into a function body.
      *
@@ -64,8 +64,8 @@ class jsCallback extends Callback implements jsExpressionable
             throw new Exception('Call-back must be part of a RenderTree');
         }
 
-        return (new jQuery())->atkAjaxec([
-            'uri' => $this->getJSURL(),
+        return (new Jquery())->atkAjaxec([
+            'uri' => $this->getJsUrl(),
             'uri_options' => $this->args,
             'confirm' => $this->confirm,
             'apiConfig' => $this->apiConfig,
@@ -96,7 +96,7 @@ class jsCallback extends Callback implements jsExpressionable
 
         parent::set(function () use ($callback) {
             try {
-                $chain = new jQuery(new jsExpression('this'));
+                $chain = new Jquery(new JsExpression('this'));
 
                 $values = [];
                 foreach ($this->args as $key => $value) {
@@ -113,7 +113,7 @@ class jsCallback extends Callback implements jsExpressionable
                 $msg = new Message($e->getMessage());
                 $msg->addClass('error');
 
-                $this->terminateAjax(null, $msg->getHTML(), false);
+                $this->terminateAjax(null, $msg->getHtml(), false);
             }
         });
 
@@ -124,21 +124,21 @@ class jsCallback extends Callback implements jsExpressionable
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      *
-     * @param array|jsExpressionable $ajaxec  Array of jsExpressionable
+     * @param array|JsExpressionable $ajaxec  Array of JsExpressionable
      * @param string                 $msg     General message, typically won't be displayed
      * @param bool                   $success Was request successful or not
      */
     public function terminateAjax($ajaxec, $msg = null, $success = true)
     {
         if ($this->canTerminate()) {
-            $this->app->terminateJSON(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+            $this->app->terminateJson(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
         }
     }
 
     /**
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
-     * @param array|jsExpressionable $response response from callbacks,
+     * @param array|JsExpressionable $response response from callbacks,
      * @param string                 $chain    JavaScript string
      */
     public function getAjaxec($response, $chain = null): string
@@ -161,34 +161,34 @@ class jsCallback extends Callback implements jsExpressionable
             $actions[] = $this->_getProperAction($response);
         }
 
-        $ajaxec = implode(";\n", array_map(function (jsExpressionable $r) {
+        $ajaxec = implode(";\n", array_map(function (JsExpressionable $r) {
             return $r->jsRender();
         }, $actions));
 
         return $ajaxec;
     }
 
-    public function getURL($mode = 'callback')
+    public function getUrl($mode = 'callback')
     {
-        throw new Exception('Do not use getURL on jsCallback, use getJSURL()');
+        throw new Exception('Do not use getUrl on JsCallback, use getJsUrl()');
     }
 
     /**
      * Transform response into proper js Action and return it.
      *
-     * @param View|string|jsExpressionable $response
+     * @param View|string|JsExpressionable $response
      */
-    private function _getProperAction($response): jsExpressionable
+    private function _getProperAction($response): JsExpressionable
     {
         $action = null;
         if ($response instanceof View) {
             $action = $this->_jsRenderIntoModal($response);
         } elseif (is_string($response)) {
-            $action = new jsExpression('alert([])', [$response]);
-        } elseif ($response instanceof jsExpressionable) {
+            $action = new JsExpression('alert([])', [$response]);
+        } elseif ($response instanceof JsExpressionable) {
             $action = $response;
         } else {
-            throw (new Exception('Incorrect callback. Response must be of type jsExpressionable, View, or String.'))
+            throw (new Exception('Incorrect callback. Response must be of type JsExpressionable, View, or String.'))
                 ->addMoreInfo('r', $response);
         }
 
@@ -198,16 +198,16 @@ class jsCallback extends Callback implements jsExpressionable
     /**
      * Render View into modal.
      */
-    private function _jsRenderIntoModal(View $response): jsExpressionable
+    private function _jsRenderIntoModal(View $response): JsExpressionable
     {
         if ($response instanceof Modal) {
-            $html = $response->getHTML();
+            $html = $response->getHtml();
         } else {
             $modal = new Modal(['id' => false]);
             $modal->add($response);
-            $html = $modal->getHTML();
+            $html = $modal->getHtml();
         }
 
-        return new jsExpression('$([html]).modal("show").data("needRemove", true).addClass("atk-callback-response")', ['html' => $html]);
+        return new JsExpression('$([html]).modal("show").data("needRemove", true).addClass("atk-callback-response")', ['html' => $html]);
     }
 }

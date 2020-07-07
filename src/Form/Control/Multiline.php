@@ -23,7 +23,7 @@ declare(strict_types=1);
  *     // Save Form model and then Multiline model
  *     $form->model->save();
  *     $ml->saveRows();
- *     return new \atk4\ui\jsToast('Saved!');
+ *     return new \atk4\ui\JsToast('Saved!');
  * });
  *
  * If Multiline's model contains expressions, these will be evaluated on the fly
@@ -62,20 +62,20 @@ declare(strict_types=1);
  *
  * $form->onSubmit(function($form) use ($ml) {
  *     $ml->saveRows();
- *     return new \atk4\ui\jsToast('Saved!');
+ *     return new \atk4\ui\JsToast('Saved!');
  * });
  */
 
 namespace atk4\ui\Form\Control;
 
 use atk4\data\Field\Callback;
-use atk4\data\Field_SQL_Expression;
+use atk4\data\FieldSqlExpression;
 use atk4\data\Model;
 use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
 use atk4\ui\Form;
-use atk4\ui\jsVueService;
+use atk4\ui\JsVueService;
 use atk4\ui\Template;
 
 class Multiline extends Form\Control
@@ -120,7 +120,7 @@ class Multiline extends Form\Control
     /**
      * The JS callback.
      *
-     * @var \atk4\ui\jsCallback
+     * @var \atk4\ui\JsCallback
      */
     private $cb;
 
@@ -199,22 +199,22 @@ class Multiline extends Form\Control
     public $caption;
 
     /**
-     * @var jsFunction|null
+     * @var JsFunction|null
      *
-     * A jsFunction to execute when Multiline add(+) button is clicked.
+     * A JsFunction to execute when Multiline add(+) button is clicked.
      * The function is execute after mulitline component finish adding a row of fields.
      * The function also receive the row vaue as an array.
-     * ex: $jsAfterAdd = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
+     * ex: $jsAfterAdd = new JsFunction(['value'],[new JsExpression('console.log(value)')]);
      */
     public $jsAfterAdd;
 
     /**
-     * @var jsFunction|null
+     * @var JsFunction|null
      *
-     * A jsFunction to execute when Multiline delete button is clicked.
+     * A JsFunction to execute when Multiline delete button is clicked.
      * The function is execute after mulitline component finish deleting rows.
      * The function also receive the row vaue as an array.
-     * ex: $jsAfterDelete = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
+     * ex: $jsAfterDelete = new JsFunction(['value'],[new JsExpression('console.log(value)')]);
      */
     public $jsAfterDelete;
 
@@ -234,7 +234,7 @@ class Multiline extends Form\Control
 
         $this->multiLine = \atk4\ui\View::addTo($this, ['template' => $this->multiLineTemplate]);
 
-        $this->cb = \atk4\ui\jsCallback::addTo($this);
+        $this->cb = \atk4\ui\JsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
         $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form) {
@@ -252,7 +252,7 @@ class Multiline extends Form\Control
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
             if ($fieldName === $this->short_name) {
-                $jsError = [(new jsVueService())->emitEvent('atkml-row-error', ['id' => $this->multiLine->name, 'errors' => $this->rowErrors])];
+                $jsError = [(new JsVueService())->emitEvent('atkml-row-error', ['id' => $this->multiLine->name, 'errors' => $this->rowErrors])];
             } else {
                 $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
             }
@@ -688,14 +688,14 @@ class Multiline extends Form\Control
                 try {
                     return $this->renderCallback();
                 } catch (\atk4\Core\Exception $e) {
-                    $this->app->terminateJSON(['success' => false, 'error' => $e->getMessage()]);
+                    $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
                 } catch (\Error $e) {
-                    $this->app->terminateJSON(['success' => false, 'error' => $e->getMessage()]);
+                    $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
                 }
             });
         }
 
-        $this->multiLine->template->trySetHTML('Input', $this->getInput());
+        $this->multiLine->template->trySetHtml('Input', $this->getInput());
         parent::renderView();
 
         $this->multiLine->vue(
@@ -705,7 +705,7 @@ class Multiline extends Form\Control
                     'linesField' => $this->short_name,
                     'fields' => $this->fieldDefs,
                     'idField' => $this->getModel()->id_field,
-                    'url' => $this->cb->getJSURL(),
+                    'url' => $this->cb->getJsUrl(),
                     'eventFields' => $this->eventFields,
                     'hasChangeCb' => $this->onChangeFunction ? true : false,
                     'options' => $this->options,
@@ -736,7 +736,7 @@ class Multiline extends Form\Control
             case 'update-row':
                 $model = $this->setDummyModelValue(clone $this->getModel());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
-                $this->app->terminateJSON(array_merge($response, ['expressions' => $expressionValues]));
+                $this->app->terminateJson(array_merge($response, ['expressions' => $expressionValues]));
 
                 break;
             case 'on-change':
@@ -847,7 +847,7 @@ class Multiline extends Form\Control
     {
         $fields = [];
         foreach ($model->getFields() as $field) {
-            if (!$field instanceof Field_SQL_Expression || !in_array($field->short_name, $this->rowFields, true)) {
+            if (!$field instanceof FieldSqlExpression || !in_array($field->short_name, $this->rowFields, true)) {
                 continue;
             }
 
@@ -876,7 +876,7 @@ class Multiline extends Form\Control
         foreach ($matches[0] as $match) {
             $fieldName = substr($match, 1, -1);
             $field = $model->getField($fieldName);
-            if ($field instanceof Field_SQL_Expression) {
+            if ($field instanceof FieldSqlExpression) {
                 $expr = str_replace($match, $this->getDummyExpression($field, $model), $expr);
             } else {
                 $expr = str_replace($match, $this->getValueForExpression($exprField, $fieldName, $model), $expr);

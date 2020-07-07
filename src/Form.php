@@ -20,8 +20,8 @@ class Form extends View
     public const HOOK_DISPLAY_ERROR = self::class . '@displayError';
     /** @const string Executed when form is submitted */
     public const HOOK_DISPLAY_SUCCESS = self::class . '@displaySuccess';
-    /** @const string Executed when self::loadPOST() method is called. */
-    public const HOOK_LOAD_POST = self::class . '@loadPOST';
+    /** @const string Executed when self::loadPost() method is called. */
+    public const HOOK_LOAD_POST = self::class . '@loadPost';
 
     // {{{ Properties
 
@@ -118,7 +118,7 @@ class Form extends View
     public $fieldDisplaySelector = '';
 
     /**
-     * Default css selector for jsConditionalForm.
+     * Default css selector for JsConditionalForm.
      * Should match the css class name of the control.
      * Fomantic-UI use the class name "field".
      *
@@ -209,7 +209,7 @@ class Form extends View
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
             $this->buttonSave->on('click', $this->js()->form('submit'));
-            $this->buttonSave->on('keypress', new jsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#' . $this->name]));
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#' . $this->name]));
         }
     }
 
@@ -319,7 +319,7 @@ class Form extends View
      * @param string $fieldName Field name
      * @param string $str       Error message
      *
-     * @return jsChain|array
+     * @return JsChain|array
      */
     public function error($fieldName, $str)
     {
@@ -340,7 +340,7 @@ class Form extends View
      * @param string      $sub_header  Sub-header
      * @param bool        $useTemplate Backward compatibility
      *
-     * @return jsChain
+     * @return JsChain
      */
     public function success($success = 'Success', $sub_header = null, $useTemplate = true)
     {
@@ -460,7 +460,7 @@ class Form extends View
      *
      * @param string $name Name of control
      *
-     * @return jsChain
+     * @return JsChain
      */
     public function jsInput($name)
     {
@@ -483,7 +483,7 @@ class Form extends View
      *
      * @param string $name Name of control
      *
-     * @return jsChain
+     * @return JsChain
      */
     public function jsControl($name)
     {
@@ -585,7 +585,7 @@ class Form extends View
     /**
      * Looks inside the POST of the request and loads it into a current model.
      */
-    public function loadPOST()
+    protected function loadPost()
     {
         $post = $_POST;
 
@@ -616,7 +616,7 @@ class Form extends View
         $this->ajaxSubmit();
         if (!empty($this->controlDisplayRules)) {
             // backward compatibility for fieldsDisplayRules and fieldDisplaySelector
-            $this->js(true, new jsConditionalForm($this, $this->fieldsDisplayRules ?: $this->controlDisplayRules, $this->fieldDisplaySelector ?: $this->controlDisplaySelector));
+            $this->js(true, new JsConditionalForm($this, $this->fieldsDisplayRules ?: $this->controlDisplayRules, $this->fieldDisplaySelector ?: $this->controlDisplaySelector));
         }
 
         return parent::renderView();
@@ -657,7 +657,7 @@ class Form extends View
      */
     public function ajaxSubmit()
     {
-        $this->_add($cb = new jsCallback(), ['desired_name' => 'submit', 'postTrigger' => true]);
+        $this->_add($cb = new JsCallback(), ['desired_name' => 'submit', 'postTrigger' => true]);
 
         View::addTo($this, ['element' => 'input'])
             ->setAttr('name', $cb->postTrigger)
@@ -666,7 +666,7 @@ class Form extends View
 
         $cb->set(function () {
             try {
-                $this->loadPOST();
+                $this->loadPost();
                 $response = $this->hook(self::HOOK_SUBMIT);
 
                 if (!$response) {
@@ -676,7 +676,7 @@ class Form extends View
                         return $this->success('Form data has been saved');
                     }
 
-                    return new jsExpression('console.log([])', ['Form submission is not handled']);
+                    return new JsExpression('console.log([])', ['Form submission is not handled']);
                 }
 
                 return $response;
@@ -690,15 +690,15 @@ class Form extends View
             }
         });
 
-        //var_dump($cb->getURL());
+        //var_dump($cb->getUrl());
         $this->js(true)
-            ->api(array_merge(['url' => $cb->getJSURL(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
+            ->api(array_merge(['url' => $cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
             ->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
-        $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));
+        $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new JsExpression('$(this).attr("name")')));
 
         if (!$this->canLeave) {
-            $this->js(true, (new jsChain('atk.formService'))->preventFormLeave($this->name));
+            $this->js(true, (new JsChain('atk.formService'))->preventFormLeave($this->name));
         }
     }
 

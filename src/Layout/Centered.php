@@ -46,7 +46,7 @@ class Centered extends \atk4\ui\Layout
     public function renderView()
     {
         if ($this->image) {
-            $this->template->trySetHTML('HeaderImage', '<img class="ui image" src="' . $this->image . '" alt="' . $this->image_alt . '" />');
+            $this->template->trySetHtml('HeaderImage', '<img class="ui image" src="' . $this->image . '" alt="' . $this->image_alt . '" />');
         }
         parent::renderView();
     }

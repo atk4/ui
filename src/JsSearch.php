@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-class jsSearch extends View
+class JsSearch extends View
 {
     /**
-     * The View to reload using this jsSearch.
+     * The View to reload using this JsSearch.
      *
      * @var View
      */
@@ -20,7 +20,7 @@ class jsSearch extends View
     public $args = [];
 
     /**
-     * Whether or not jsSearch will query server on each keystroke.
+     * Whether or not JsSearch will query server on each keystroke.
      * Default is with using Enter key.
      *
      * @var bool
@@ -93,7 +93,7 @@ class jsSearch extends View
         $this->template->set('BtnRemoveIcon', $this->btnRemoveIcon);
 
         $this->js(true)->atkJsSearch([
-            'uri' => $this->reload->jsURL(),
+            'uri' => $this->reload->jsUrl(),
             'uri_options' => array_merge(['__atk_reload' => $this->reload->name], $this->args),
             'autoQuery' => $this->autoQuery,
             'q' => $this->initValue,

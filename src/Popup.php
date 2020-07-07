@@ -122,7 +122,7 @@ class Popup extends View
         if (
             $this->owner instanceof Item ||
             $this->owner instanceof Menu ||
-            $this->owner instanceof DropDown ||
+            $this->owner instanceof Dropdown ||
             $this->owner instanceof Button
         ) {
             throw (new Exception('Although it may be tempting to add pop-up into Button/Menu/Item, this may cause some random issues. Add elsewhere and use "triggerBy"'))
@@ -132,7 +132,7 @@ class Popup extends View
         if (
             ($this->triggerBy instanceof Item ||
             $this->triggerBy instanceof Menu ||
-            $this->triggerBy instanceof DropDown) && $this->triggerOn === null
+            $this->triggerBy instanceof Dropdown) && $this->triggerOn === null
         ) {
             $this->triggerOn = 'hover';
         }
@@ -184,7 +184,7 @@ class Popup extends View
             $this->cb->set($fx, [$content]);
             //only render our content view.
             //PopupService will replace content with this one.
-            $this->app->terminateJSON($content);
+            $this->app->terminateJson($content);
         }
     }
 
@@ -255,7 +255,7 @@ class Popup extends View
      * When a grid is reloading, this method can be call
      * in order to display the popup once again.
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsPopup()
     {
@@ -266,10 +266,10 @@ class Popup extends View
                 $name = '#' . $this->triggerBy->name . '_input';
             }
         }
-        $chain = new jQuery($name);
+        $chain = new Jquery($name);
         $chain->popup($this->popOptions);
         if ($this->stopClickEvent) {
-            $chain->on('click', new jsExpression('function(e){e.stopPropagation();}'));
+            $chain->on('click', new JsExpression('function(e){e.stopPropagation();}'));
         }
 
         return $chain;
@@ -282,7 +282,7 @@ class Popup extends View
         }
 
         if ($this->cb) {
-            $this->setAttr('data-uri', $this->cb->getJSURL());
+            $this->setAttr('data-uri', $this->cb->getJsUrl());
             $this->setAttr('data-cache', $this->useCache ? 'true' : 'false');
         }
 

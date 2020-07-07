@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 /**
- * Implements a more sophisticated and interractive Data-Table component.
+ * Implements a more sophisticated and interactive Data-Table component.
  */
-class BreadCrumb extends Lister
+class Breadcrumb extends Lister
 {
     /** @var array */
     public $path = [];

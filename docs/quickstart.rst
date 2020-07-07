@@ -164,10 +164,10 @@ single ToDo item::
 
 As you might have noted already, Persistence and Model are defined independently from each-other.
 
-Instantiate App using DIContainerTrait (Dependency Injection)
+Instantiate App using DiContainerTrait (Dependency Injection)
 =============================================================
 
-Class App use `DIContainerTrait` which allow us to inject dependency directly in constructor::
+Class App use `DiContainerTrait` which allow us to inject dependency directly in constructor::
 
     use Monolog\Logger;
     use Monolog\Handler\StreamHandler;
@@ -188,13 +188,13 @@ Class App use `DIContainerTrait` which allow us to inject dependency directly in
 
 
 
-Form and CRUD Components
+Form and Crud Components
 ========================
 
 Next we need to add Components that are capable of manipulating the data::
 
     $col = \atk4\ui\Columns::addTo($app, ['divided']);               // 10
-    $col_reload = new \atk4\ui\jsReload($col);              // 11
+    $col_reload = new \atk4\ui\JsReload($col);              // 11
 
     $form = \atk4\ui\Form::addTo($col->addColumn());                 // 12
     $form->setModel(new ToDoItem($s));                      // 13
@@ -235,19 +235,19 @@ Next we need to add Components that are capable of manipulating the data::
 It is time to test our application in action. Use the form to add new record data. Saving the form
 will cause table to also reload revealing new records.
 
-Grid and CRUD
+Grid and Crud
 =============
 
 As mentioned before, UI Components in Agile Toolkit are often interchangeable, you can swap one for
 another. In our example replace right column (label 17) with the following code::
 
-    $grid = \atk4\ui\CRUD::addTo($col->addColumn(), ['paginator'=>false, // 18
+    $grid = \atk4\ui\Crud::addTo($col->addColumn(), ['paginator'=>false, // 18
         'canCreate'=>false, 'canDelete'=>false                  // 19
     ]);
     $grid->setModel(new ToDoItem($s));
 
     $grid->menu->addItem('Complete Selected',                   // 20
-        new \atk4\ui\jsReload($grid->table, [                   // 21
+        new \atk4\ui\JsReload($grid->table, [                   // 21
             'delete'=>$grid->addSelection()->jsChecked()        // 22
         ])
     );
@@ -260,7 +260,7 @@ another. In our example replace right column (label 17) with the following code:
 
 .. rubric:: Clarifications
 
-.. [#] We replace 'Table' with a 'CRUD'. This is much more advanced component, that wraps
+.. [#] We replace 'Table' with a 'Crud'. This is much more advanced component, that wraps
     'Table' component by providing support for editing operations and other features like
     pagination, quick-search, etc.
 
@@ -268,7 +268,7 @@ another. In our example replace right column (label 17) with the following code:
 
 .. [#] Grid comes with menu, where we can add items.
 
-.. [#] You are already familiar with jsReload action. This time we only wish to reload Grid's Table as
+.. [#] You are already familiar with JsReload action. This time we only wish to reload Grid's Table as
     we wouldn't want to lose any form content.
 
 .. [#] Grid's `addSelection` method will add checkbox column. Implemented through `Table\\Column\\\Checkbox`

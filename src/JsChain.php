@@ -8,13 +8,13 @@ namespace atk4\ui;
  * Implements a transparent mapper that will actually translate into JavaScript code. Used
  * as a GLUE between Views and your actual JavaScript code.
  *
- * IMPORTANT: extend first. see jQuery.php for example.
+ * IMPORTANT: extend first. see Jquery.php for example.
  *
  * IMPORTANT: don't write any JavaScript logic in PHP, only bind.
  *
  * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping.
  */
-class jsChain extends jsExpression
+class JsChain extends JsExpression
 {
     /**
      * Name of the include file where this library is implemented.
@@ -147,7 +147,7 @@ class jsChain extends jsExpression
     {
         return '(' .
             implode(',', array_map(function ($arg) {
-                if ($arg instanceof jsExpressionable) {
+                if ($arg instanceof JsExpressionable) {
                     return $arg->jsRender();
                 }
 

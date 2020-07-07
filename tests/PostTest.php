@@ -25,7 +25,7 @@ class PostTest extends AtkPhpunit\TestCase
      */
     public function testPost()
     {
-        $p = new \atk4\ui\Persistence\POST();
+        $p = new \atk4\ui\Persistence\Post();
 
         $this->model->set('surname', 'DefSurname');
 

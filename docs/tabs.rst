@@ -79,11 +79,11 @@ Note that tab contents are refreshed including any values you put on the form::
 URL Tabs
 ========
 
-.. php:method:: addTabURL($name, $url)
+.. php:method:: addTabUrl($name, $url)
 
 Tab can load external URL or a different page if you prefer that instead of VirtualPage. This works similar to iframe::
 
     $t = Tabs::addTo($app);
 
-    $t->addTabURL('Terms and Condition', 'terms.html');
+    $t->addTabUrl('Terms and Condition', 'terms.html');
 

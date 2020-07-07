@@ -78,7 +78,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem('Message', [$path . 'message'], $menu);
     $layout->addMenuItem('Labels', [$path . 'label'], $menu);
     $layout->addMenuItem('Menu', [$path . 'menu'], $menu);
-    $layout->addMenuItem('BreadCrumb', [$path . 'breadcrumb'], $menu);
+    $layout->addMenuItem('Breadcrumb', [$path . 'breadcrumb'], $menu);
     $layout->addMenuItem(['Columns'], [$path . 'columns'], $menu);
     $layout->addMenuItem(['Grid Layout'], [$path . 'grid-layout'], $menu);
 
@@ -100,7 +100,7 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $menu);
     $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $menu);
     $layout->addMenuItem(['Lookup Dependency'], [$path . 'lookup-dep'], $menu);
-    $layout->addMenuItem(['DropDown'], [$path . 'dropdown-plus'], $menu);
+    $layout->addMenuItem(['Dropdown'], [$path . 'dropdown-plus'], $menu);
     $layout->addMenuItem(['File Upload'], [$path . 'upload'], $menu);
     $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $menu);
     $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $menu);
@@ -114,8 +114,8 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Column Menus'], [$path . 'tablecolumnmenu'], $menu);
     $layout->addMenuItem(['Column Filters'], [$path . 'tablefilter'], $menu);
     $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', [$path . 'grid'], $menu);
-    $layout->addMenuItem('CRUD - Full editing solution', [$path . 'crud'], $menu);
-    $layout->addMenuItem(['CRUD with Array Persistence'], [$path . 'crud3'], $menu);
+    $layout->addMenuItem('Crud - Full editing solution', [$path . 'crud'], $menu);
+    $layout->addMenuItem(['Crud with Array Persistence'], [$path . 'crud3'], $menu);
     $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $menu);
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $menu);
     $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);

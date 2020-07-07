@@ -39,7 +39,7 @@ Specifying Links and Actions
 Menu items can use links and actions::
 
     $menu->addItem('foo', 'test.php');
-    $menu->addItem('bar', new jsModal('Test'));
+    $menu->addItem('bar', new JsModal('Test'));
 
 Creating sub-menus
 ==================

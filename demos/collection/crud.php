@@ -9,7 +9,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $model = new CountryLock($app->db);
 
-$crud = \atk4\ui\CRUD::addTo($app, ['ipp' => 10]);
+$crud = \atk4\ui\Crud::addTo($app, ['ipp' => 10]);
 
 // callback for model action add form.
 $crud->onFormAdd(function ($form, $t) {
@@ -24,7 +24,7 @@ $crud->onFormEdit(function ($form) {
 // callback for both model action edit and add.
 $crud->onFormAddEdit(function ($form, $ex) {
     $form->onSubmit(function (\atk4\ui\Form $form) use ($ex) {
-        return [$ex->hide(), new \atk4\ui\jsToast('Submit all right! This demo does not saved data.')];
+        return [$ex->hide(), new \atk4\ui\JsToast('Submit all right! This demo does not saved data.')];
     });
 });
 
@@ -37,9 +37,9 @@ $crud->addDecorator($model->title_field, [\atk4\ui\Table\Column\Link::class, ['t
 $columns = \atk4\ui\Columns::addTo($app);
 $column = $columns->addColumn(0, 'ui blue segment');
 
-// CRUD can operate with various fields
-\atk4\ui\Header::addTo($column, ['Configured CRUD']);
-$crud = \atk4\ui\CRUD::addTo($column, [
+// Crud can operate with various fields
+\atk4\ui\Header::addTo($column, ['Configured Crud']);
+$crud = \atk4\ui\Crud::addTo($column, [
     //'fieldsCreate' => ['name', 'iso', 'iso3', 'numcode', 'phonecode'], // when creating then show more fields
     'displayFields' => ['name'], // when updating then only allow to update name
     'editFields' => ['name', 'iso', 'iso3'],
@@ -61,7 +61,7 @@ $model->onHook(\atk4\data\Model::HOOK_VALIDATE, function ($model, $intent) {
 });
 $crud->setModel($model);
 
-// Because CRUD inherits Grid, you can also define custom actions
+// Because Crud inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => [\atk4\ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($crud) {
     \atk4\ui\Message::addTo($p, ['Details for: ' . $crud->model->load($id)['name'] . ' (id: ' . $id . ')']);
 });
@@ -93,7 +93,7 @@ $myExecutorClass = get_class(new class() extends \atk4\ui\UserAction\ModalExecut
 $file = new FileLock($app->db);
 $file->getUserAction('edit')->ui['executor'] = [$myExecutorClass];
 
-$crud = \atk4\ui\CRUD::addTo($column, [
+$crud = \atk4\ui\Crud::addTo($column, [
     'ipp' => 5,
 ]);
 

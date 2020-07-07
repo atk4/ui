@@ -129,8 +129,8 @@ foreach ($menuItems as $key => $items) {
 
 $denyApproveModal = \atk4\ui\Modal::addTo($app, ['title' => 'Deny / Approve actions']);
 \atk4\ui\Message::addTo($denyApproveModal)->set('This modal is only closable via the green button');
-$denyApproveModal->addDenyAction('No', new \atk4\ui\jsExpression('function(){window.alert("Can\'t do that."); return false;}'));
-$denyApproveModal->addApproveAction('Yes', new \atk4\ui\jsExpression('function(){window.alert("You\'re good to go!");}'));
+$denyApproveModal->addDenyAction('No', new \atk4\ui\JsExpression('function(){window.alert("Can\'t do that."); return false;}'));
+$denyApproveModal->addApproveAction('Yes', new \atk4\ui\JsExpression('function(){window.alert("You\'re good to go!");}'));
 $denyApproveModal->notClosable();
 
 $menuBar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
@@ -212,12 +212,12 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
 
 //Bind next action to modal next button.
 $nextAction->on('click', $stepModal->js()->atkReloadView(
-    ['uri' => $stepModal->cb->getJSURL(), 'uri_options' => ['move' => 'next']]
+    ['uri' => $stepModal->cb->getJsUrl(), 'uri_options' => ['move' => 'next']]
 ));
 
 //Bin prev action to modal previous button.
 $prevAction->on('click', $stepModal->js()->atkReloadView(
-    ['uri' => $stepModal->cb->getJSURL(), 'uri_options' => ['move' => 'prev']]
+    ['uri' => $stepModal->cb->getJsUrl(), 'uri_options' => ['move' => 'prev']]
 ));
 
 //Bind display modal to page display button.

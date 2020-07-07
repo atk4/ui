@@ -363,7 +363,7 @@ class DemosTest extends AtkPhpunit\TestCase
     }
 
     /**
-     * Test jsSSE and Console.
+     * Test JsSse and Console.
      */
     public function sseResponseProvider(): array
     {
@@ -425,7 +425,7 @@ class DemosTest extends AtkPhpunit\TestCase
             ],
         ];
 
-        // for jsNotify coverage
+        // for JsNotify coverage
         $files[] = [
             'obsolete/notify2.php?notify_submit=ajax&__atk_callback=1',
             [

@@ -44,7 +44,7 @@ class Tooltip extends Table\Column
         }
     }
 
-    public function getDataCellHTML(Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, $extra_tags = [])
     {
         if ($field === null) {
             throw new Exception('Tooltip can be used only with model field');
@@ -68,7 +68,7 @@ class Tooltip extends Table\Column
         ]);
     }
 
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         // @TODO remove popup tooltip when null
         $tooltip = $row->get($this->tooltip_field);

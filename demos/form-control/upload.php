@@ -23,7 +23,7 @@ $control = $form->addControl('file', [Form\Control\Upload::class, ['accept' => [
 $img->onDelete(function ($fileId) use ($img) {
     $img->clearThumbnail('./images/default.png');
 
-    return new \atk4\ui\jsToast([
+    return new \atk4\ui\JsToast([
         'title' => 'Delete successfully',
         'message' => $fileId . ' has been removed',
         'class' => 'success',
@@ -40,7 +40,7 @@ $img->onUpload(function ($files) use ($form, $img) {
 
     //Do file processing here...
 
-    // This will get caught by jsCallback and show via modal.
+    // This will get caught by JsCallback and show via modal.
     //new Blabla();
 
     // js Action can be return.
@@ -48,7 +48,7 @@ $img->onUpload(function ($files) use ($form, $img) {
     //return $form->error('file', 'Unable to upload file.');
 
     // can also return a notifier.
-    return new \atk4\ui\jsToast([
+    return new \atk4\ui\JsToast([
         'title' => 'Upload success',
         'message' => 'Image is uploaded!',
         'class' => 'success',
@@ -56,7 +56,7 @@ $img->onUpload(function ($files) use ($form, $img) {
 });
 
 $control->onDelete(function ($fileId) {
-    return new \atk4\ui\jsToast([
+    return new \atk4\ui\JsToast([
         'title' => 'Delete successfully',
         'message' => $fileId . ' has been removed',
         'class' => 'success',
@@ -69,7 +69,7 @@ $control->onUpload(function ($files) use ($form, $control) {
     }
     $control->setFileId('a_token');
 
-    return new \atk4\ui\jsToast([
+    return new \atk4\ui\JsToast([
         'title' => 'Upload success',
         'message' => 'File is uploaded!',
         'class' => 'success',

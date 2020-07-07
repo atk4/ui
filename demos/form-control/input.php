@@ -31,7 +31,7 @@ Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'inve
 Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'label' => 'http://']);
 
 // dropdown example
-$dd = new \atk4\ui\DropDown('.com');
+$dd = new \atk4\ui\Dropdown('.com');
 $dd->setSource(['.com', '.net', '.org']);
 Form\Control\Line::addTo($app, [
     'placeholder' => 'Find Domain',
@@ -73,12 +73,12 @@ Form\Control\Line::addTo($app, ['actionLeft' => new \atk4\ui\Button([
 
 Form\Control\Line::addTo($app, ['iconLeft' => 'search',  'action' => 'Search']);
 
-$dd = new \atk4\ui\DropDownButton(['This Page', 'basic']);
+$dd = new \atk4\ui\DropdownButton(['This Page', 'basic']);
 $dd->setSource(['This Organisation', 'Entire Site']);
 Form\Control\Line::addTo($app, ['iconLeft' => 'search',  'action' => $dd]);
 
 // double actions are not supported but you can add them yourself
-$dd = new \atk4\ui\DropDown(['Articles', 'compact selection']);
+$dd = new \atk4\ui\Dropdown(['Articles', 'compact selection']);
 $dd->setSource(['All', 'Services', 'Products']);
 \atk4\ui\Button::addTo(Form\Control\Line::addTo($app, ['iconLeft' => 'search',  'action' => $dd]), ['Search'], ['AfterAfterInput']);
 

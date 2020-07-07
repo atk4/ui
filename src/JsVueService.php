@@ -8,21 +8,21 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-class jsVueService
+class JsVueService
 {
     /**
      * The atk vue service to talk too.
      *
-     * @var jsChain
+     * @var JsChain
      */
     public $service;
 
     /**
-     * jsVueService constructor.
+     * JsVueService constructor.
      */
     public function __construct()
     {
-        $this->service = new jsChain('atk.vueService');
+        $this->service = new JsChain('atk.vueService');
     }
 
     /**

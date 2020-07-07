@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-use atk4\core\DIContainerTrait;
+use atk4\core\DiContainerTrait;
 
 /**
- * Class jsToast
+ * Class JsToast
  * Generate a Fomantic-ui toast module command in js.
  *  $('body').toast({options}).
  */
-class jsToast implements jsExpressionable
+class JsToast implements JsExpressionable
 {
-    use DIContainerTrait;
+    use DiContainerTrait;
 
     /**
      * Various setting options as per Fomantic ui toast module.
@@ -51,6 +51,6 @@ class jsToast implements jsExpressionable
 
     public function jsRender()
     {
-        return (new jQuery('body'))->toast($this->settings)->jsRender();
+        return (new Jquery('body'))->toast($this->settings)->jsRender();
     }
 }

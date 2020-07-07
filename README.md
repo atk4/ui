@@ -85,14 +85,14 @@ ATK UI relies on https://fomantic-ui.com CSS framework to render the form beauti
 
 To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe your business models such as "User" or "Purchase". When you define models, you can start using some more advanced components:
 
-[CRUD](https://ui.agiletoolkit.org/demos/crud.php) is a fully-interractive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
+[Crud](https://ui.agiletoolkit.org/demos/crud.php) is a fully-interractive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
 
 ``` php
 $app = new \atk4\ui\App('hello world');
 $app->initLayout([\atk4\ui\Layout\Admin::class]);
 $app->dbConnect('mysql://user:pass@localhost/atk')
 
-\atk4\ui\CRUD::addTo($app)->setModel(new User($app->db));
+\atk4\ui\Crud::addTo($app)->setModel(new User($app->db));
 ```
 
 ATK Data allows you to set up relations between models:
@@ -109,14 +109,14 @@ class User extends Model {
 }
 ```
 
-Conventional CRUD works only with a single model, but with add-on you can take advantage this relationship information: https://github.com/atk4/mastercrud
+Conventional Crud works only with a single model, but with add-on you can take advantage this relationship information: https://github.com/atk4/mastercrud
 
 ``` php
-use \atk4\mastercrud\MasterCRUD;
+use \atk4\mastercrud\MasterCrud;
 
 // set up $app here
 
-$master_crud = MasterCRUD::addTo($app);
+$master_crud = MasterCrud::addTo($app);
 $master_crud->setModel(new User($app->db), [
   'Purchases'=>[]
 ]);
@@ -137,7 +137,7 @@ As of version 2.0 - Agile Toolkit offers support for User Actions. Those are eas
 $this->addAction('archive', function(Model $m) { $m->get('is_archived') = true; $this->saveAndUnload(); });
 ```
 
-User interface such as CRUD or Card will automatically recognize new action and offer user to execute it. You can also
+User interface such as Crud or Card will automatically recognize new action and offer user to execute it. You can also
 control who has permission to execute actions through our ACL system.
 
 # Agile UI Feature highlights
@@ -155,7 +155,7 @@ $tabs = \atk4\ui\Tabs::addTo($app);
 $tabs->addTab('Users', function($p) use($app) {
 
     // This tab is loaded dynamically, but also contains dynamic component
-    \atk4\ui\CRUD::addTo($p)->setModel(new User($app->db));
+    \atk4\ui\Crud::addTo($p)->setModel(new User($app->db));
 });
 
 $tabs->addTab('Settings', function($p) use($app) {
@@ -205,7 +205,7 @@ class User extends \atk4\data\Model {
     }
 }
 
-\atk4\ui\CRUD::addTo($app)->setModel(new User($app->db));
+\atk4\ui\Crud::addTo($app)->setModel(new User($app->db));
 ```
 
 The result is here:
@@ -232,7 +232,7 @@ Agile UI comes with many built-in components:
 | [Modal](https://ui.agiletoolkit.org/demos/modal.php)         | Modal dialog with dynamically loaded content.                | 1.1        |
 | [Reloading](https://ui.agiletoolkit.org/demos/reloading.php)  | Dynamically re-render part of the UI.                        | 1.1        |
 | [Actions](https://ui.agiletoolkit.org/demos/reloading.php)   | Extended buttons with various interactions                   | 1.1        |
-| [CRUD](https://ui.agiletoolkit.org/demos/crud.php)            | Create, List, Edit and Delete records (based on Advanced Grid) | 1.1        |
+| [Crud](https://ui.agiletoolkit.org/demos/crud.php)            | Create, List, Edit and Delete records (based on Advanced Grid) | 1.1        |
 | [Tabs](https://ui.agiletoolkit.org/demos/tabs.php)           | 4 Responsive: Admin, Centered, Site, Wide.                   | 1.2        |
 | [Loader](https://ui.agiletoolkit.org/demos/loader.php)        | Dynamically load itself and contained components inside.     | 1.3        |
 | [Modal View](https://ui.agiletoolkit.org/demos/modal2.php)    | Open/Load contained components in a dialog.                  | 1.3        |
@@ -248,7 +248,7 @@ Agile UI comes with many built-in components:
 
 Add-ons:
 
--   [MasterCRUD](https://github.com/atk4/mastercrud) - Create multi-level CRUD system with BreadCrumb
+-   [MasterCrud](https://github.com/atk4/mastercrud) - Create multi-level Crud system with Breadcrumb
 -   [Filestore](https://github.com/atk4/filestore) - Integrate your Form with Flysystem, uploading and storing files
 -   [User Authentication and ACL](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
 -   [Charts add-on](https://github.com/atk4/chart) - Modern looking and free charts with [chartJS](https://www.chartjs.org/)

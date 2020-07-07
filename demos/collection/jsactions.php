@@ -61,7 +61,7 @@ $btn = \atk4\ui\Button::addTo($app, ['Import File']);
 $executor = UserAction\JsCallbackExecutor::addTo($app);
 $executor->setAction($importFileAction, ['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m) {
-    return new \atk4\ui\jsToast('Files imported');
+    return new \atk4\ui\JsToast('Files imported');
 });
 
 $btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);

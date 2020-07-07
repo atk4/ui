@@ -59,7 +59,7 @@ class Menu extends View
             $item->setAttr('href', $action);
         }
 
-        if ($action instanceof jsExpressionable) {
+        if ($action instanceof JsExpressionable) {
             $item->js('click', $action);
         }
 
@@ -174,7 +174,7 @@ class Menu extends View
     /**
      * {@inheritdoc}
      */
-    public function getHTML()
+    public function getHtml()
     {
         // if menu don't have a single element or content, then destroy it
         if (empty($this->elements) && !$this->content) {
@@ -183,7 +183,7 @@ class Menu extends View
             return '';
         }
 
-        return parent::getHTML();
+        return parent::getHtml();
     }
 
     /**

@@ -10,8 +10,8 @@ namespace atk4\ui\Table\Column;
 
 use atk4\core\FactoryTrait;
 use atk4\data\Model;
-use atk4\ui\jQuery;
-use atk4\ui\jsChain;
+use atk4\ui\Jquery;
+use atk4\ui\JsChain;
 use atk4\ui\Table;
 use atk4\ui\View;
 
@@ -124,7 +124,7 @@ class ActionMenu extends Table\Column
         }
 
         // set executor context.
-        $context = (new jQuery())->closest('.ui.button');
+        $context = (new Jquery())->closest('.ui.button');
 
         $this->table->on('click', '.i_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirmMsg, 'apiConfig' => ['stateContext' => $context]]);
 
@@ -134,7 +134,7 @@ class ActionMenu extends Table\Column
     /**
      * {@inheritdoc}
      */
-    public function getHeaderCellHTML(\atk4\data\Field $field = null, $value = null)
+    public function getHeaderCellHtml(\atk4\data\Field $field = null, $value = null)
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown(
             array_merge(
@@ -142,13 +142,13 @@ class ActionMenu extends Table\Column
                 [
                     'direction' => 'auto',  // direction need to be auto.
                     'transition' => 'none', // no transition.
-                    'onShow' => (new jsChain('atk.tableDropdown.onShow')),
-                    'onHide' => (new jsChain('atk.tableDropdown.onHide')),
+                    'onShow' => (new JsChain('atk.tableDropdown.onShow')),
+                    'onHide' => (new JsChain('atk.tableDropdown.onHide')),
                 ]
             )
         );
 
-        return parent::getHeaderCellHTML($field, $value);
+        return parent::getHeaderCellHtml($field, $value);
     }
 
     /**
@@ -163,7 +163,7 @@ class ActionMenu extends Table\Column
         // render our menus
         $output = '';
         foreach ($this->items as $item) {
-            $output .= $item->getHTML();
+            $output .= $item->getHtml();
         }
 
         $s = '<div class="' . $this->ui . ' atk-action-menu">';
@@ -176,7 +176,7 @@ class ActionMenu extends Table\Column
         return $s;
     }
 
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

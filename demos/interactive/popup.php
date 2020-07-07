@@ -131,7 +131,7 @@ $itemShelfClass = get_class(new class() extends \atk4\ui\View {
             $cart->addItem($b);
 
             return $jsAction;
-        }, [(new \atk4\ui\jQuery())->text()]);
+        }, [(new \atk4\ui\Jquery())->text()]);
     }
 });
 
@@ -141,7 +141,7 @@ $menu = \atk4\ui\Menu::addTo($app);
 // You may add popup on top of menu items or dropdowns. Dropdowns have a slightly different
 // look, with that triangle on the right. You don't have to add pop-up right away, it can be
 // added later.
-$browse = \atk4\ui\DropDown::addTo($menu, ['Browse']);
+$browse = \atk4\ui\Dropdown::addTo($menu, ['Browse']);
 
 // Add cart item into the menu, with a popup inside
 $cartItem = $menu->addItem([$cartClass, 'icon' => 'cart'])->set('Cart');
@@ -202,7 +202,7 @@ $shelf->linkCart($cart, [
     $cartOutterLabel->jsReload(),
 
     // also will hide current item from the shelf
-    (new \atk4\ui\jQuery())->hide(),
+    (new \atk4\ui\Jquery())->hide(),
 ]);
 
 // label placed on top of menu item, not in the popup
@@ -246,7 +246,7 @@ $signup->set(function ($pop) {
 
             // refreshes entire page
             return $form->app->jsRedirect(['logged' => $form->model->get('email')]);
-            //return new \atk4\ui\jsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
+            //return new \atk4\ui\JsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
         });
     }
 });

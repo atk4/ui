@@ -7,9 +7,9 @@ namespace atk4\ui;
 /**
  * Implements conditions for displaying fields on form.
  */
-class jsConditionalForm implements jsExpressionable
+class JsConditionalForm implements JsExpressionable
 {
-    use \atk4\core\DIContainerTrait;
+    use \atk4\core\DiContainerTrait;
 
     // {{{ Properties
 
@@ -57,7 +57,7 @@ class jsConditionalForm implements jsExpressionable
 
     public function jsRender()
     {
-        $chain = (new jQuery($this->form))
+        $chain = (new Jquery($this->form))
             ->atkConditionalForm([
                 'fieldRules' => $this->fieldRules,
                 'selector' => $this->selector,

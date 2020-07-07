@@ -293,13 +293,13 @@ Any view has the ability to render itself. Once executed, render will perform th
  - returns ``<script>`` with on-dom-ready instructions along with rendering of a current view.
 
 You must not override render() in your objects. If you are integrating Agile UI into your
-framework you shouldn't even use ``render()``, but instead use ``getHTML`` and ``getJS``.
+framework you shouldn't even use ``render()``, but instead use ``getHtml`` and ``getJs``.
 
-.. php:method:: getHTML()
+.. php:method:: getHtml()
 
     Returns HTML for this View as well as all the child views.
 
-.. php:method:: getJS()
+.. php:method:: getJs()
 
     Return array of JS chains that was assigned to current element or it's children.
 
@@ -442,24 +442,13 @@ the name of the field will be used instead of the role. This is done by setting 
     Specify a name for the element. If container already has object with specified name, exception
     will be thrown.
 
-.. php:method:: getJSID
-
-    Return a unique ID for a given element based on owner's ID and our name.
-
-Example::
-
-    $layout = new \atk4\ui\Layout(['id'=>'foo'])
-    $butt = Button::addTo($layout, ['name'=>'bar']);
-
-    echo $butt->getJSID();  // foo_bar
-
 
 Reloading a View
 ================
 
-.. php:method:: jsReload($get_arguments)
+.. php:method:: JsReload($get_arguments)
 
-Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::jsReload(),
+Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::JsReload(),
 which will respond with JavaScript Action for reloading the view::
 
     $b1 = Button::addTo($app, ['Click me']);
@@ -468,7 +457,7 @@ which will respond with JavaScript Action for reloading the view::
     $b1->on('click', $b2->jsReload());
 
     // Previously:
-    // $b1->on('click', new \atk4\ui\jsReload($b2));
+    // $b1->on('click', new \atk4\ui\JsReload($b2));
 
 
 

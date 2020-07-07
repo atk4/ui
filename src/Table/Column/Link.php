@@ -147,7 +147,7 @@ class Link extends Table\Column
         return '<a href="{$c_' . $this->short_name . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
     }
 
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         // Decide on the content
         if ($this->url) {

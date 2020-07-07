@@ -28,9 +28,9 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         $this->table->setModel($m, ['name', 'ref']);
     }
 
-    public function testgetDataRowHTML()
+    public function testgetDataRowHtml()
     {
-        $this->assertSame('<td>{$name}</td><td>{$ref}</td>', $this->table->getDataRowHTML());
+        $this->assertSame('<td>{$name}</td><td>{$ref}</td>', $this->table->getDataRowHtml());
 
         $this->assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td></tr>',
@@ -42,7 +42,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
     {
         $this->table->addDecorator('name', new Table\Column\Template('<b>{$name}</b>'));
 
-        $this->assertSame('<td><b>{$name}</b></td><td>{$ref}</td>', $this->table->getDataRowHTML());
+        $this->assertSame('<td><b>{$name}</b></td><td>{$ref}</td>', $this->table->getDataRowHtml());
 
         $this->assertSame(
             '<tr data-id="1"><td><b>bar</b></td><td>ref123</td></tr>',
@@ -50,13 +50,13 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testTDLast()
+    public function testTdLast()
     {
         $salary = $this->table->addColumn('salary', new Table\Column\Money());
 
         $this->assertSame(
             '<td>{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary) . '} right aligned single line">{$salary}</td>',
-            $this->table->getDataRowHTML()
+            $this->table->getDataRowHtml()
         );
 
         $this->assertSame(
@@ -65,14 +65,14 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testTDNotLast()
+    public function testTdNotLast()
     {
         $salary = $this->table->addColumn('salary', new Table\Column\Money());
         $this->table->addDecorator('salary', new Table\Column\Template('<b>{$salary}</b>'));
 
         $this->assertSame(
             '<td>{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary) . '} right aligned single line"><b>{$salary}</b></td>',
-            $this->table->getDataRowHTML()
+            $this->table->getDataRowHtml()
         );
 
         $this->assertSame(
@@ -89,7 +89,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
         $this->assertSame(
             '<td class="{$' . $this->getColumnClass($salary_1) . '} right aligned single line">{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary_2) . '} right aligned single line"><b>{$salary}</b></td>',
-            $this->table->getDataRowHTML()
+            $this->table->getDataRowHtml()
         );
 
         $this->assertSame(
@@ -106,7 +106,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
         $this->assertSame(
             '<td><u><b>{$name}</b></u></td><td>{$ref}</td>',
-            $this->table->getDataRowHTML()
+            $this->table->getDataRowHtml()
         );
 
         $this->assertSame(
@@ -134,7 +134,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
         $this->assertSame(
             '<td>{$name}</td><td>{$ref}</td><td>hello<b>world</b></td>',
-            $this->table->getDataRowHTML()
+            $this->table->getDataRowHtml()
         );
 
         $this->assertSame(
@@ -149,7 +149,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
         $this->assertSame(
             '<td><a href="{$' . $this->getColumnRef($link) . '}">{$name}</a></td><td>{$ref}</td>',
-            $this->table->getDataRowHTML()
+            $this->table->getDataRowHtml()
         );
 
         $this->assertSame(
@@ -164,7 +164,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
         $this->assertSame(
             '<td><a href="{$' . $this->getColumnRef($link) . '}">{$name}</a></td><td>{$ref}</td>',
-            $this->table->getDataRowHTML()
+            $this->table->getDataRowHtml()
         );
 
         $this->assertSame(
@@ -294,7 +294,7 @@ class TableColumnLinkTest extends AtkPhpunit\TestCase
 
         $this->assertEquals(
             '<td><u><b>{$name}</b></u></td><td>{$ref}</td>',
-            $this->table->getDataRowHTML()
+            $this->table->getDataRowHtml()
         );
     }
      */

@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace atk4\ui\Panel;
 
 use atk4\ui\Button;
-use atk4\ui\jQuery;
-use atk4\ui\jsExpression;
+use atk4\ui\Jquery;
+use atk4\ui\JsExpression;
 use atk4\ui\Modal;
 use atk4\ui\View;
 
@@ -80,9 +80,9 @@ class Right extends View implements Loadable
      *
      * @return mixed
      */
-    public function service(): jsExpression
+    public function service(): JsExpression
     {
-        return new \atk4\ui\jsChain('atk.panelService');
+        return new \atk4\ui\JsChain('atk.panelService');
     }
 
     /**
@@ -90,14 +90,14 @@ class Right extends View implements Loadable
      *
      * @param array        $args      the data attribute name to include in reload from the triggering element
      * @param string|null  $activeCss the css class name to apply on triggering element when panel is open
-     * @param jsExpression $jsTrigger jsExpression that trigger panel to open. Default = $(this).
+     * @param JsExpression $jsTrigger JsExpression that trigger panel to open. Default = $(this).
      *
      * @return mixed
      */
-    public function jsOpen(array $args = [], string $activeCss = null, jsExpression $jsTrigger = null): jsExpression
+    public function jsOpen(array $args = [], string $activeCss = null, JsExpression $jsTrigger = null): JsExpression
     {
         return $this->service()->openPanel([
-            'triggered' => $jsTrigger ?? new jQuery(),
+            'triggered' => $jsTrigger ?? new Jquery(),
             'reloadArgs' => $args,
             'openId' => $this->name,
             'activeCSS' => $activeCss,
@@ -109,7 +109,7 @@ class Right extends View implements Loadable
      *
      * @return mixed
      */
-    public function jsPanelReload(array $args = []): jsExpression
+    public function jsPanelReload(array $args = []): JsExpression
     {
         return $this->service()->reloadPanel($this->name, $args);
     }
@@ -119,7 +119,7 @@ class Right extends View implements Loadable
      *
      * @return mixed
      */
-    public function jsClose(): jsExpression
+    public function jsClose(): JsExpression
     {
         return $this->service()->closePanel($this->name);
     }
@@ -160,11 +160,11 @@ class Right extends View implements Loadable
      *
      * @param string $selector
      *
-     * @return jQuery
+     * @return Jquery
      */
-    public function jsDisplayWarning(bool $state = true): jsExpression
+    public function jsDisplayWarning(bool $state = true): JsExpression
     {
-        $chain = new jQuery('#' . $this->name . ' ' . $this->warningSelector);
+        $chain = new Jquery('#' . $this->name . ' ' . $this->warningSelector);
 
         return $state ? $chain->addClass($this->warningTrigger) : $chain->removeClass($this->warningTrigger);
     }
@@ -172,11 +172,11 @@ class Right extends View implements Loadable
     /**
      * Toggle warning sign.
      *
-     * @return jQuery
+     * @return Jquery
      */
-    public function jsToggleWarning(): jsExpression
+    public function jsToggleWarning(): JsExpression
     {
-        return (new jQuery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
+        return (new Jquery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
     }
 
     /**

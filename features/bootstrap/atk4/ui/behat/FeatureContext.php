@@ -196,7 +196,7 @@ class FeatureContext extends RawMinkContext implements Context
     /**
      * @Then Label changes to a number
      */
-    public function labelChangesToANumber()
+    public function labelChangesToNumber()
     {
         $this->getSession()->wait(5000, '!$("#' . $this->buttonId . '").hasClass("loading")');
         $element = $this->getSession()->getPage()->findById($this->buttonId);
@@ -385,7 +385,7 @@ class FeatureContext extends RawMinkContext implements Context
 
     /**
      * Wait for an element, usually an auto trigger element, to show that loading has start"
-     * Example, when entering value in jsSearch for grid. We need to auto trigger to fire before
+     * Example, when entering value in JsSearch for grid. We need to auto trigger to fire before
      * doing waiting for callback.
      * $arg1 should represent the element selector for jQuery.
      *

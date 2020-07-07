@@ -57,7 +57,7 @@ class ProgressBar extends View
     /**
      * Return js action for incrementing progress by one.
      *
-     * @return jsExpressionable
+     * @return JsExpressionable
      */
     public function jsIncrement()
     {
@@ -69,7 +69,7 @@ class ProgressBar extends View
      *
      * @param int $value new value
      *
-     * @return jsExpressionable
+     * @return JsExpressionable
      */
     public function jsValue($value)
     {

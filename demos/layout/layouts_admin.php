@@ -24,7 +24,7 @@ $menu = $layout->menu->addMenu(['Component Demo', 'icon' => 'puzzle']);
 $menuForm = $menu->addMenu('Forms');
 $menuForm->addItem('Form Controls');
 $menuForm->addItem('Form Layouts');
-$menu->addItem('CRUD');
+$menu->addItem('Crud');
 
 $layout->menuLeft->addItem(['Home', 'icon' => 'home']);
 $layout->menuLeft->addItem(['Topics', 'icon' => 'block layout']);

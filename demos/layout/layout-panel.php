@@ -47,13 +47,13 @@ $panel1->onOpen(function ($p) use ($view) {
     \atk4\ui\Message::addTo($panel, ['Panel 1', 'text' => $panelText]);
 
     $reloadPanelButton = \atk4\ui\Button::addTo($panel, ['Reload Myself']);
-    $reloadPanelButton->on('click', new \atk4\ui\jsReload($panel));
+    $reloadPanelButton->on('click', new \atk4\ui\JsReload($panel));
 
     \atk4\ui\View::addTo($panel, ['ui' => 'divider']);
     $panelButton = \atk4\ui\Button::addTo($panel, ['Complete']);
     $panelButton->on('click', [
         $p->owner->jsClose(),
-        new \atk4\ui\jsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
+        new \atk4\ui\JsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
     ]);
 });
 
@@ -83,7 +83,7 @@ $panel2->onOpen(function ($p) {
 
     $form->onSubmit(function (\atk4\ui\Form $form) use ($p) {
         return [
-            new \atk4\ui\jsToast('Saved, closing panel.'),
+            new \atk4\ui\JsToast('Saved, closing panel.'),
             $p->owner->jsDisplayWarning(false),
             $p->owner->jsClose(),
         ];

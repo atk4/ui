@@ -17,7 +17,7 @@ use atk4\ui\Exception;
  *
  * You may want to localize some of the output.
  */
-class UI extends \atk4\data\Persistence
+class Ui extends \atk4\data\Persistence
 {
     public $date_format = 'M d, Y';
 

@@ -7,7 +7,7 @@ namespace atk4\ui;
 /**
  * Paginate content using scroll event in JS.
  */
-class jsPaginator extends jsCallback
+class JsPaginator extends JsCallback
 {
     /**
      * The View that trigger scrolling event.
@@ -42,7 +42,7 @@ class jsPaginator extends jsCallback
         }
 
         $this->view->js(true)->atkScroll([
-            'uri' => $this->getJSURL(),
+            'uri' => $this->getJsUrl(),
             'uri_options' => $this->args,
             'options' => $this->options,
         ]);
@@ -55,7 +55,7 @@ class jsPaginator extends jsCallback
      *
      * @param int $page
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsNextPage($page)
     {
@@ -65,7 +65,7 @@ class jsPaginator extends jsCallback
     /**
      * Set jsPagiantor in idle mode.
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsIdle()
     {

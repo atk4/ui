@@ -6,7 +6,7 @@ namespace atk4\ui\demo;
 
 use atk4\ui\Button;
 use atk4\ui\Callback;
-use atk4\ui\jsReload;
+use atk4\ui\JsReload;
 use atk4\ui\View;
 
 /** @var \atk4\ui\App $app */
@@ -17,7 +17,7 @@ $v->set('Test');
 $v->name = 'reload';
 
 $b = Button::addTo($app)->set('Reload');
-$b->on('click', new jsReload($v));
+$b->on('click', new JsReload($v));
 
 $cb = Callback::addTo($app);
 $cb->urlTrigger = 'c_reload';
