@@ -7,7 +7,7 @@ namespace atk4\ui;
 /**
  * Paginate content using scroll event in JS.
  */
-class jsPaginator extends jsCallback
+class JsPaginator extends JsCallback
 {
     /**
      * The View that trigger scrolling event.

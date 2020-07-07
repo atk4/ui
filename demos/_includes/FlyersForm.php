@@ -51,7 +51,7 @@ class FlyersForm extends Form
         $cards->set(json_encode([]));
 
         $this->onSubmit(function ($form) {
-            return new \atk4\ui\jsToast('Thank you!');
+            return new \atk4\ui\JsToast('Thank you!');
         });
     }
 }

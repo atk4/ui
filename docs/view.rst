@@ -446,9 +446,9 @@ the name of the field will be used instead of the role. This is done by setting 
 Reloading a View
 ================
 
-.. php:method:: jsReload($get_arguments)
+.. php:method:: JsReload($get_arguments)
 
-Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::jsReload(),
+Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::JsReload(),
 which will respond with JavaScript Action for reloading the view::
 
     $b1 = Button::addTo($app, ['Click me']);
@@ -457,7 +457,7 @@ which will respond with JavaScript Action for reloading the view::
     $b1->on('click', $b2->jsReload());
 
     // Previously:
-    // $b1->on('click', new \atk4\ui\jsReload($b2));
+    // $b1->on('click', new \atk4\ui\JsReload($b2));
 
 
 

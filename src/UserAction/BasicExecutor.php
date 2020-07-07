@@ -8,8 +8,8 @@ use atk4\core\HookTrait;
 use atk4\data\Model;
 use atk4\ui\Button;
 use atk4\ui\Exception;
-use atk4\ui\jsExpressionable;
-use atk4\ui\jsToast;
+use atk4\ui\JsExpressionable;
+use atk4\ui\JsToast;
 
 class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
 {
@@ -59,7 +59,7 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
     protected $validArguments = [];
 
     /**
-     * @var jsExpressionable array|callable jsExpression to return if action was successful, e.g "new jsToast('Thank you')"
+     * @var JsExpressionable array|callable JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
      */
     protected $jsSuccess;
 
@@ -147,7 +147,7 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
 
         $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner]) : $this->jsSuccess;
 
-        return ($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) ?: $success) ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+        return ($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) ?: $success) ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
     }
 
     /**

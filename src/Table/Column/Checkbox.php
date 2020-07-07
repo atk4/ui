@@ -6,7 +6,7 @@ namespace atk4\ui\Table\Column;
 
 use atk4\data\Field;
 use atk4\ui\Exception;
-use atk4\ui\jsExpression;
+use atk4\ui\JsExpression;
 use atk4\ui\Table;
 
 /**
@@ -23,7 +23,7 @@ class Checkbox extends Table\Column
      */
     public function jsChecked()
     {
-        return new jsExpression(' $(' . $this->table->jsRender() . ").find('.checked." . $this->class . "').closest('tr').map(function(){ " .
+        return new JsExpression(' $(' . $this->table->jsRender() . ").find('.checked." . $this->class . "').closest('tr').map(function(){ " .
             "return $(this).data('id');}).get().join(',')");
     }
 

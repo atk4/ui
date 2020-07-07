@@ -18,7 +18,7 @@ class Counter extends \atk4\ui\Form\Control\Line
         $this->actionLeft = new \atk4\ui\Button(['icon' => 'minus']);
         $this->action = new \atk4\ui\Button(['icon' => 'plus']);
 
-        $this->actionLeft->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])-1', [$this->jsInput()->val()])));
-        $this->action->js('click', $this->jsInput()->val(new \atk4\ui\jsExpression('parseInt([])+1', [$this->jsInput()->val()])));
+        $this->actionLeft->js('click', $this->jsInput()->val(new \atk4\ui\JsExpression('parseInt([])-1', [$this->jsInput()->val()])));
+        $this->action->js('click', $this->jsInput()->val(new \atk4\ui\JsExpression('parseInt([])+1', [$this->jsInput()->val()])));
     }
 }

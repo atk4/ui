@@ -7,7 +7,7 @@ namespace atk4\ui\Table\Column;
 use atk4\data\Field;
 use atk4\ui\Form;
 use atk4\ui\Jquery;
-use atk4\ui\jsReload;
+use atk4\ui\JsReload;
 use atk4\ui\Popup;
 
 /**
@@ -81,7 +81,7 @@ class FilterPopup extends Popup
 
             return [
                 $this->form->js()->form('reset'),
-                new jsReload($this->reload),
+                new JsReload($this->reload),
                 (new Jquery($this->colTrigger))->trigger('click'),
             ];
         });

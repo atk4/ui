@@ -278,7 +278,7 @@ class Table extends Lister
                 $pop = $col->addPopup(new Table\Column\FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
                 $pop->isFilterOn() ? $col->setHeaderPopupIcon('table-filter-on') : null;
                 $pop->form->onSubmit(function (Form $form) use ($pop) {
-                    return new jsReload($this->reload);
+                    return new JsReload($this->reload);
                 });
                 //apply condition according to popup form.
                 $this->model = $pop->setFilterCondition($this->model);
@@ -384,7 +384,7 @@ class Table extends Lister
     {
         $options = [];
         if ($fx && is_callable($fx)) {
-            $cb = jsCallback::addTo($this);
+            $cb = JsCallback::addTo($this);
             $cb->set($fx, ['widths' => 'widths']);
             $options['uri'] = $cb->getJsUrl();
         } elseif ($fx && is_array($fx)) {
@@ -521,7 +521,7 @@ class Table extends Lister
             $this->template->appendHtml('Foot', $this->t_totals->render());
         }
 
-        // stop jsPaginator if there are no more records to fetch
+        // stop JsPaginator if there are no more records to fetch
         if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
             $this->jsPaginator->jsIdle();
         }
@@ -575,7 +575,7 @@ class Table extends Lister
      * click outside of the body. Additionally when you move cursor over the
      * rows, pointer will be used and rows will be highlighted as you hover.
      *
-     * @param jsChain|callable|jsExpressionable $action Code to execute
+     * @param JsChain|callable|JsExpressionable $action Code to execute
      *
      * @return Jquery
      */
@@ -596,7 +596,7 @@ class Table extends Lister
      */
     public function jsRow()
     {
-        return (new Jquery(new jsExpression('this')))->closest('tr');
+        return (new Jquery(new JsExpression('this')))->closest('tr');
     }
 
     /**

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Component;
 
 use atk4\data\Model;
-use atk4\ui\jsVueService;
+use atk4\ui\JsVueService;
 use atk4\ui\View;
 
 /**
@@ -96,7 +96,7 @@ class ItemSearch extends View
             $reloadId = $this->reload;
         }
 
-        $this->js(true, (new jsVueService())->createAtkVue(
+        $this->js(true, (new JsVueService())->createAtkVue(
             '#' . $this->name,
             'atk-item-search',
             [

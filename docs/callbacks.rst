@@ -151,50 +151,50 @@ the $label->detail is assigned at the very end, yet callback is able to access t
     $label->detail = $cb->getUrl();
     $label->link($cb->getUrl());
 
-CallbackLater is used by several actions in Agile UI, such as jsReload(), and ensures that the component
+CallbackLater is used by several actions in Agile UI, such as JsReload(), and ensures that the component
 you are reloading are fully rendered by the time callback is executed.
 
-Given our knowledge of Callbacks, lets take a closer look at how jsReload actually works. So what do we
-know about :php:class:`jsReload` already?
+Given our knowledge of Callbacks, lets take a closer look at how JsReload actually works. So what do we
+know about :php:class:`JsReload` already?
 
- - jsReload is class implementing jsExpressionable
- - you must specify a view to jsReload
+ - JsReload is class implementing JsExpressionable
+ - you must specify a view to JsReload
  - when triggered, the view will refresh itself on the screen.
 
-Here is example of jsReload::
+Here is example of JsReload::
 
     $view = \atk4\ui\View::addTo($app, ['ui'=>'tertiary green inverted segment']);
     $button = \atk4\ui\Button::addTo($app, ['Reload Lorem']);
 
-    $button->on('click', new \atk4\ui\jsReload($view));
+    $button->on('click', new \atk4\ui\JsReload($view));
 
     \atk4\ui\LoremIpsum::addTo($view);
 
 
-NOTE: that we can't perform jsReload on LoremIpsum directly, because it's a text, it needs to be inside
-a container. When jsReload is created, it transparently creates a 'CallbackLater' object inside
+NOTE: that we can't perform JsReload on LoremIpsum directly, because it's a text, it needs to be inside
+a container. When JsReload is created, it transparently creates a 'CallbackLater' object inside
 `$view`. On the JavaScript side, it will execute this new route which will respond with a NEW content
 for the $view object.
 
-Should jsReload use regular 'Callback', then it wouldn't know that $view must contain LoremIpsum text.
+Should JsReload use regular 'Callback', then it wouldn't know that $view must contain LoremIpsum text.
 
-jsReload existance is only possible thanks to CallbackLater implementation.
+JsReload existance is only possible thanks to CallbackLater implementation.
 
 
-jsCallback
+JsCallback
 ----------
 
-.. php:class:: jsCallback
+.. php:class:: JsCallback
 
 So far, the return value of callback handler was pretty much insignificant. But wouldn't it be great if this
 value was meaningful in some way?
 
-jsCallback implements exactly that. When you specify a handler for jsCallback, it can return one or multiple :ref:`js_action`
+JsCallback implements exactly that. When you specify a handler for JsCallback, it can return one or multiple :ref:`js_action`
 which will be rendered into JavaScript in response to triggering callback's URL. Let's bring up our older example, but will
-use jsCallback class now::
+use JsCallback class now::
 
     $label = \atk4\ui\Label::addTo($app, ['Callback URL:']);
-    $cb = \atk4\ui\jsCallback::addTo($label);
+    $cb = \atk4\ui\JsCallback::addTo($label);
 
     $cb->set(function() {
         return 'ok';
@@ -207,16 +207,16 @@ When you trigger callback, you'll see the output::
 
     {"success":true,"message":"Success","eval":"alert(\"ok\")"}
 
-This is how jsCallback renders actions and sends them back to the browser. In order to retrieve and execute actions,
-you'll need a JavaScript routine. Luckily jsCallback also implements jsExpressionable, so it, in itself is an action.
+This is how JsCallback renders actions and sends them back to the browser. In order to retrieve and execute actions,
+you'll need a JavaScript routine. Luckily JsCallback also implements JsExpressionable, so it, in itself is an action.
 
-Let me try this again. jsCallback is an :ref:`js_action` which will execute request towards a callback-URL that will
+Let me try this again. JsCallback is an :ref:`js_action` which will execute request towards a callback-URL that will
 execute PHP method returning one or more :ref:`js_action` which will be received and executed by the original action.
 
 To fully use jsAction above, here is a modified code::
 
     $label = \atk4\ui\Label::addTo($app, ['Callback URL:']);
-    $cb = \atk4\ui\jsCallback::addTo($label);
+    $cb = \atk4\ui\JsCallback::addTo($label);
 
     $cb->set(function() {
         return 'ok';
@@ -236,7 +236,7 @@ Now, that is pretty long. For your convenience, there is a shorter mechanism::
 User Confirmation
 ^^^^^^^^^^^^^^^^^
 
-The implementation perfectly hides existence of callback route, javascript action and jsCallback. The jsCallback
+The implementation perfectly hides existence of callback route, javascript action and JsCallback. The JsCallback
 is based on 'Callback' therefore code after :php:meth:`View::on()` will not be executed during triggering.
 
 .. php:attr:: confirm
@@ -244,7 +244,7 @@ is based on 'Callback' therefore code after :php:meth:`View::on()` will not be e
 If you set `confirm` property action will ask for user's confirmation before sending a callback::
 
     $label = \atk4\ui\Label::addTo($app, ['Callback URL:']);
-    $cb = \atk4\ui\jsCallback::addTo($label);
+    $cb = \atk4\ui\JsCallback::addTo($label);
 
     $cb->confirm = 'sure?';
 
@@ -269,15 +269,15 @@ JavaScript arguments
 
 .. php:method:: set($callback, $arguments = [])
 
-It is possible to modify expression of jsCallback to pass additional arguments to it's callback. The next example
+It is possible to modify expression of JsCallback to pass additional arguments to it's callback. The next example
 will send browser screen width back to the callback::
 
     $label = \atk4\ui\Label::addTo($app);
-    $cb = \atk4\ui\jsCallback::addTo($label);
+    $cb = \atk4\ui\JsCallback::addTo($label);
 
     $cb->set(function($j, $arg1){
         return 'width is '.$arg1;
-    }, [new \atk4\ui\jsExpression( '$(window).width()' )]);
+    }, [new \atk4\ui\JsExpression( '$(window).width()' )]);
 
     $label->detail = $cb->getUrl();
     $label->js('click', $cb);
@@ -290,7 +290,7 @@ also supports argument passing::
 
     $label->on('click', function($j, $arg1) {
         return 'width is '.$arg1;
-    }, ['confirm'=>'sure?', 'args'=>[new \atk4\ui\jsExpression( '$(window).width()' )]]);
+    }, ['confirm'=>'sure?', 'args'=>[new \atk4\ui\JsExpression( '$(window).width()' )]]);
 
 If you do not need to specify confirm, you can actually pass arguments in a key-less array too::
 
@@ -298,13 +298,13 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
 
     $label->on('click', function($j, $arg1) {
         return 'width is '.$arg1;
-    }, [new \atk4\ui\jsExpression( '$(window).width()' )]);
+    }, [new \atk4\ui\JsExpression( '$(window).width()' )]);
 
 
 Refering to event origin
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-You might have noticed that jsCallback now passes first argument ($j) which so far, we have ignored. This argument is a
+You might have noticed that JsCallback now passes first argument ($j) which so far, we have ignored. This argument is a
 jQuery chain for the element which received the event. We can change the response to do something with this element.
 Instead of `return` use::
 
@@ -312,6 +312,6 @@ Instead of `return` use::
 
 Now instead of showing an alert box, label content will be changed to display window width.
 
-There are many other applications for jsCallback, for example, it's used in :php:meth:`Form::onSubmit()`.
+There are many other applications for JsCallback, for example, it's used in :php:meth:`Form::onSubmit()`.
 
 

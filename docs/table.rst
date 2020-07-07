@@ -437,12 +437,12 @@ Toolbar, Quick-search and Paginator
 
 See :php:class:`Grid`
 
-jsPaginator
+JsPaginator
 -----------
 
 .. php:method:: addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
 
-jsPaginator will load table content dynamically when user scroll down the table window on screen.
+JsPaginator will load table content dynamically when user scroll down the table window on screen.
 
     $table->addJsPaginator(30);
 
@@ -476,7 +476,7 @@ Column attributes and classes
 By default Table will include ID for each row: `<tr data-id="123">`. The following code example
 demonstrates how various standard column types are relying on this property::
 
-    $table->on('click', 'td', new jsExpression(
+    $table->on('click', 'td', new JsExpression(
         'document.location=page.php?id=[]',
         [(new Jquery())->closest('tr')->data('id')]
     ));

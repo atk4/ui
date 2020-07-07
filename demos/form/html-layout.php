@@ -56,5 +56,5 @@ $form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTempl
 $form->setModel(new \atk4\ui\demo\CountryLock($app->db))->loadAny();
 
 $form->onSubmit(function ($form) {
-    return new \atk4\ui\jsToast('Saving is disabled');
+    return new \atk4\ui\JsToast('Saving is disabled');
 });

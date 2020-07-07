@@ -49,17 +49,17 @@ $bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 \atk4\ui\Button::addTo($bar)->set('On a blank page')->link($virtualPage->getUrl('popup'));
 \atk4\ui\Button::addTo($bar)->set('No layout at all')->link($virtualPage->getUrl('cut'));
 
-\atk4\ui\Header::addTo($app, ['Inside Modal', 'subHeader' => 'Virtual page content can be display using jsModal Class.']);
+\atk4\ui\Header::addTo($app, ['Inside Modal', 'subHeader' => 'Virtual page content can be display using JsModal Class.']);
 
 $bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-\atk4\ui\Button::addTo($bar)->set('Load in Modal')->on('click', new \atk4\ui\jsModal('My Popup Title', $virtualPage->getJsUrl('cut')));
+\atk4\ui\Button::addTo($bar)->set('Load in Modal')->on('click', new \atk4\ui\JsModal('My Popup Title', $virtualPage->getJsUrl('cut')));
 
-\atk4\ui\Button::addTo($bar)->set('Simulate slow load')->on('click', new \atk4\ui\jsModal('My Popup Title', $virtualPage->getJsUrl('cut') . '&slow=true'));
+\atk4\ui\Button::addTo($bar)->set('Simulate slow load')->on('click', new \atk4\ui\JsModal('My Popup Title', $virtualPage->getJsUrl('cut') . '&slow=true'));
 if (isset($_GET['slow'])) {
     sleep(1);
 }
 
-\atk4\ui\Button::addTo($bar)->set('No title')->on('click', new \atk4\ui\jsModal(null, $virtualPage->getJsUrl('cut')));
+\atk4\ui\Button::addTo($bar)->set('No title')->on('click', new \atk4\ui\JsModal(null, $virtualPage->getJsUrl('cut')));
 
 \atk4\ui\View::addTo($app, ['ui' => 'hidden divider']);
 $text = \atk4\ui\Text::addTo($app);
@@ -72,4 +72,4 @@ $frame->set(function ($frame) {
     \atk4\ui\Header::addTo($frame, ['Clicked row with ID = ' . $_GET['id']]);
 });
 
-$table->onRowClick(new \atk4\ui\jsModal('Row Clicked', $frame, ['id' => $table->jsRow()->data('id')]));
+$table->onRowClick(new \atk4\ui\JsModal('Row Clicked', $frame, ['id' => $table->jsRow()->data('id')]));

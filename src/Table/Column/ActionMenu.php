@@ -11,7 +11,7 @@ namespace atk4\ui\Table\Column;
 use atk4\core\FactoryTrait;
 use atk4\data\Model;
 use atk4\ui\Jquery;
-use atk4\ui\jsChain;
+use atk4\ui\JsChain;
 use atk4\ui\Table;
 use atk4\ui\View;
 
@@ -142,8 +142,8 @@ class ActionMenu extends Table\Column
                 [
                     'direction' => 'auto',  // direction need to be auto.
                     'transition' => 'none', // no transition.
-                    'onShow' => (new jsChain('atk.tableDropdown.onShow')),
-                    'onHide' => (new jsChain('atk.tableDropdown.onHide')),
+                    'onShow' => (new JsChain('atk.tableDropdown.onShow')),
+                    'onHide' => (new JsChain('atk.tableDropdown.onHide')),
                 ]
             )
         );

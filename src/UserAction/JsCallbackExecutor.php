@@ -7,9 +7,9 @@ namespace atk4\ui\UserAction;
 use atk4\core\HookTrait;
 use atk4\data\Model;
 use atk4\ui\Exception;
-use atk4\ui\jsCallback;
-use atk4\ui\jsExpressionable;
-use atk4\ui\jsToast;
+use atk4\ui\JsCallback;
+use atk4\ui\JsExpressionable;
+use atk4\ui\JsToast;
 use atk4\ui\View;
 
 /**
@@ -26,7 +26,7 @@ use atk4\ui\View;
  * $ex = JsCallbackExecutor::addTo($app)->setAction($action, [4])
  * $btn->on('click', $ex, ['confirm'=> 'This will delete record with id 4. Are you sure?']);
  */
-class JsCallbackExecutor extends jsCallback implements ExecutorInterface
+class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 {
     use HookTrait;
 
@@ -34,7 +34,7 @@ class JsCallbackExecutor extends jsCallback implements ExecutorInterface
     public $action;
 
     /**
-     * @var jsExpressionable array|callable jsExpression to return if action was successful, e.g "new jsToast('Thank you')"
+     * @var JsExpressionable array|callable JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
      */
     public $jsSuccess;
 
@@ -52,7 +52,7 @@ class JsCallbackExecutor extends jsCallback implements ExecutorInterface
      *      $btn->on('click', $ex, ['confirm'=> 'This will import a lot of file. Are you sure?']);
      *
      *
-     * Note: Id can be set using a single value or a jsExpression, like:
+     * Note: Id can be set using a single value or a JsExpression, like:
      *      $ex->setAction($f_action, [$field->jsInput()->val(), 'path' => '.']);
      *
      * @param array $urlArgs url Argument to pass when callback is trigger
@@ -78,7 +78,7 @@ class JsCallbackExecutor extends jsCallback implements ExecutorInterface
             }
 
             if ($errors = $this->_hasAllArguments()) {
-                $js = new jsToast(['title' => 'Error', 'message' => 'Missing Arguments: ' . implode(', ', $errors), 'class' => 'error']);
+                $js = new JsToast(['title' => 'Error', 'message' => 'Missing Arguments: ' . implode(', ', $errors), 'class' => 'error']);
             } else {
                 $args = [];
                 foreach ($this->action->args as $key => $val) {
@@ -88,7 +88,7 @@ class JsCallbackExecutor extends jsCallback implements ExecutorInterface
                 $return = $this->action->execute(...$args);
                 $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $return]) : $this->jsSuccess;
 
-                $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+                $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
             }
 
             return $js;

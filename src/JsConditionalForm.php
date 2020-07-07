@@ -7,7 +7,7 @@ namespace atk4\ui;
 /**
  * Implements conditions for displaying fields on form.
  */
-class jsConditionalForm implements jsExpressionable
+class JsConditionalForm implements JsExpressionable
 {
     use \atk4\core\DiContainerTrait;
 

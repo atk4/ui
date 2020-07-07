@@ -48,7 +48,7 @@ class Paginator extends View
 
     /**
      * Add extra parameter to the reload view
-     * as jsReload uri_options.
+     * as JsReload uri_options.
      *
      * @var array
      */
@@ -172,7 +172,7 @@ class Paginator extends View
 
     /**
      * Add extra argument to the reload view.
-     * These arguments will be set as uri_options to jsReload.
+     * These arguments will be set as uri_options to JsReload.
      *
      * @param array $args
      */
@@ -221,7 +221,7 @@ class Paginator extends View
         }
 
         if ($this->reload) {
-            $this->on('click', '.item', new jsReload($this->reload, array_merge([$this->urlTrigger => new jsExpression('$(this).data("page")')], $this->reloadArgs)));
+            $this->on('click', '.item', new JsReload($this->reload, array_merge([$this->urlTrigger => new JsExpression('$(this).data("page")')], $this->reloadArgs)));
         }
 
         parent::renderView();

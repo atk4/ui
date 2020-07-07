@@ -23,7 +23,7 @@ $del->on('click', '.delete', $del->js()->fadeOut());
 
 $val = isset($_GET['toggle']) && $_GET['toggle'];
 $toggle = \atk4\ui\Label::addTo($app, ['icon' => 'toggle ' . ($val ? 'on' : 'off')])->set('Value: ' . $val);
-$toggle->on('click', new \atk4\ui\jsReload($toggle, ['toggle' => $val ? null : 1]));
+$toggle->on('click', new \atk4\ui\JsReload($toggle, ['toggle' => $val ? null : 1]));
 
 $menu = \atk4\ui\Menu::addTo($app);
 \atk4\ui\Label::addTo($menu->addItem('Inbox'), ['20', 'floating red']);

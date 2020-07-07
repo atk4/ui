@@ -112,7 +112,7 @@ class ItemsPerPageSelector extends View
 
         $this->js(true)->dropdown([
             'values' => $menuItems,
-            'onChange' => new jsExpression($function),
+            'onChange' => new JsExpression($function),
         ]);
         parent::renderView();
     }

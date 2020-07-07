@@ -177,7 +177,7 @@ class Wizard extends View
      */
     public function jsNext()
     {
-        return new jsExpression('document.location = []', [$this->urlNext()]);
+        return new JsExpression('document.location = []', [$this->urlNext()]);
     }
 
     public function recursiveRender()

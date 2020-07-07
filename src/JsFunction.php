@@ -7,7 +7,7 @@ namespace atk4\ui;
 /**
  * Implements structure for js closure.
  */
-class jsFunction implements jsExpressionable
+class JsFunction implements JsExpressionable
 {
     /** @var array Array of arguments */
     public $fx_args;
@@ -80,15 +80,15 @@ class jsFunction implements jsExpressionable
                 continue;
             }
 
-            if ($statement instanceof jsChain && !$statement->_chain) {
+            if ($statement instanceof JsChain && !$statement->_chain) {
                 // chain contains no statements, so probably is useless
                 continue;
             }
 
-            if ($statement instanceof jsExpressionable) {
+            if ($statement instanceof JsExpressionable) {
                 $statement = $statement->jsRender();
             } else {
-                throw (new Exception('Incorrect statement for jsFunction.'))
+                throw (new Exception('Incorrect statement for JsFunction.'))
                     ->addMoreInfo('statement', $statement);
             }
 

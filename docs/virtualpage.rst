@@ -210,7 +210,7 @@ This approach allow you to trigger loader from inside JavaScript easily. See als
 Reloading
 ^^^^^^^^^
 
-If you execute :php:class:`jsReload` action on the Loader, it will return to original state.
+If you execute :php:class:`JsReload` action on the Loader, it will return to original state.
 
 
 Inline Editing Example
@@ -233,7 +233,7 @@ Next example will display DataTable, but will allow you to repalce data with a f
         $form->addControl('year');
 
         $form->onSubmit(function($form) use ($loader) {
-            return new \atk4\ui\jsReload($loader, ['year'=>$form->model->get('year')]);
+            return new \atk4\ui\JsReload($loader, ['year'=>$form->model->get('year')]);
         });
     });
 

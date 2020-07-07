@@ -42,7 +42,7 @@ namespace atk4\ui;
  * @method Jquery api($a=null)
  * @method Jquery visibility()
  */
-class Jquery extends jsChain
+class Jquery extends JsChain
 {
     public $_include = 'jquery.min.js';
     public $_version = '3.1.1';
@@ -51,7 +51,7 @@ class Jquery extends jsChain
 
     /**
      * Params for this constructior will be passed on to jQuery() in JavaScript.
-     * Start with: jsExpressionable|View|string $selector such as '.myclass' or $view.
+     * Start with: JsExpressionable|View|string $selector such as '.myclass' or $view.
      * Second argument would be $context. See jQuery manual for more info.
      *
      * @param array $constructorArgs - passes $selector and $context to jQuery(..)
@@ -61,7 +61,7 @@ class Jquery extends jsChain
         parent::__construct();
 
         if (count($constructorArgs) === 0) {
-            $constructorArgs = [new jsExpression('this')];
+            $constructorArgs = [new JsExpression('this')];
         }
 
         $this->_constructorArgs = $constructorArgs;

@@ -7,10 +7,10 @@ namespace atk4\ui;
 /**
  * This class generates action, that will be able to loop-back to the callback method.
  */
-class jsModal extends jsExpression
+class JsModal extends JsExpression
 {
     /**
-     * jsModal constructor.
+     * JsModal constructor.
      *
      * @param string $title when empty, header will be remove in modal
      */
@@ -28,7 +28,7 @@ class jsModal extends jsExpression
     }
 
     /**
-     * Set additionnal option for this jsModal.
+     * Set additionnal option for this JsModal.
      *
      * Valuable option are headerCss and label:
      *  'headerCss' -> customize css class name for the header.

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace atk4\ui\Form\Control;
 
 use atk4\ui\Jquery;
-use atk4\ui\jsExpression;
-use atk4\ui\jsFunction;
+use atk4\ui\JsExpression;
+use atk4\ui\JsFunction;
 
 class Lookup extends Input
 {
@@ -106,7 +106,7 @@ class Lookup extends Input
      * form when field value is changes.
      * $form->addControl('field', [\atk4\ui\Form\Control\Lookup::class, 'settings'=>['allowReselection' => true,
      *                           'selectOnKeydown' => false,
-     *                           'onChange'        => new atk4\ui\jsExpression('function(value,t,c){
+     *                           'onChange'        => new atk4\ui\JsExpression('function(value,t,c){
      *                                                          if ($(this).data("value") !== value) {
      *                                                            $(this).parents(".form").form("submit");
      *                                                            $(this).data("value", value);
@@ -280,7 +280,7 @@ class Lookup extends Input
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
 
-        $this->action->js('click', new \atk4\ui\jsModal($caption, $vp));
+        $this->action->js('click', new \atk4\ui\JsModal($caption, $vp));
     }
 
     /**
@@ -402,13 +402,13 @@ class Lookup extends Input
             $this->settings['showOnFocus'] = false;
             $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
-            $this->settings['onShow'] = new jsFunction([new jsExpression('return false')]);
+            $this->settings['onShow'] = new JsFunction([new JsExpression('return false')]);
             $this->template->set('readonly', 'readonly');
         }
 
         if ($this->dependency) {
             $this->apiConfig['data'] = array_merge([
-                'form' => new jsFunction([new jsExpression('return []', [$this->js()->closest('form')->serialize()])]),
+                'form' => new JsFunction([new JsExpression('return []', [$this->js()->closest('form')->serialize()])]),
             ], $this->apiConfig['data'] ?? []);
         }
 

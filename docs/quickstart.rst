@@ -194,7 +194,7 @@ Form and Crud Components
 Next we need to add Components that are capable of manipulating the data::
 
     $col = \atk4\ui\Columns::addTo($app, ['divided']);               // 10
-    $col_reload = new \atk4\ui\jsReload($col);              // 11
+    $col_reload = new \atk4\ui\JsReload($col);              // 11
 
     $form = \atk4\ui\Form::addTo($col->addColumn());                 // 12
     $form->setModel(new ToDoItem($s));                      // 13
@@ -247,7 +247,7 @@ another. In our example replace right column (label 17) with the following code:
     $grid->setModel(new ToDoItem($s));
 
     $grid->menu->addItem('Complete Selected',                   // 20
-        new \atk4\ui\jsReload($grid->table, [                   // 21
+        new \atk4\ui\JsReload($grid->table, [                   // 21
             'delete'=>$grid->addSelection()->jsChecked()        // 22
         ])
     );
@@ -268,7 +268,7 @@ another. In our example replace right column (label 17) with the following code:
 
 .. [#] Grid comes with menu, where we can add items.
 
-.. [#] You are already familiar with jsReload action. This time we only wish to reload Grid's Table as
+.. [#] You are already familiar with JsReload action. This time we only wish to reload Grid's Table as
     we wouldn't want to lose any form content.
 
 .. [#] Grid's `addSelection` method will add checkbox column. Implemented through `Table\\Column\\\Checkbox`

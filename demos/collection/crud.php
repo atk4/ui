@@ -24,7 +24,7 @@ $crud->onFormEdit(function ($form) {
 // callback for both model action edit and add.
 $crud->onFormAddEdit(function ($form, $ex) {
     $form->onSubmit(function (\atk4\ui\Form $form) use ($ex) {
-        return [$ex->hide(), new \atk4\ui\jsToast('Submit all right! This demo does not saved data.')];
+        return [$ex->hide(), new \atk4\ui\JsToast('Submit all right! This demo does not saved data.')];
     });
 });
 

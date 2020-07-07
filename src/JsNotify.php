@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 /**
- * Class jsNotify.
+ * Class JsNotify.
  */
-class jsNotify implements jsExpressionable
+class JsNotify implements JsExpressionable
 {
     use \atk4\core\DiContainerTrait;
 
@@ -180,7 +180,7 @@ class jsNotify implements jsExpressionable
         if ($this->attachTo) {
             $final = $this->attachTo->js();
         } else {
-            $final = new jsChain();
+            $final = new JsChain();
         }
 
         $final->atkNotify($this->options);

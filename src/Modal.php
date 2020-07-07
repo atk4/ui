@@ -20,8 +20,8 @@ namespace atk4\ui;
  *
  * Modal can use semantic-ui predefine method onApprove or onDeny by passing
  * a jsAction to Modal::addDenyAction or Modal::addApproveAction method. It will not close until the jsAction return true.
- *  $modal->addDenyAction('No', new \atk4\ui\jsExpression('function(){window.alert("Can\'t do that."); return false;}'));
- *  $modal->addApproveAction('Yes', new \atk4\ui\jsExpression('function(){window.alert("You\'re good to go!");}'));
+ *  $modal->addDenyAction('No', new \atk4\ui\JsExpression('function(){window.alert("Can\'t do that."); return false;}'));
+ *  $modal->addApproveAction('Yes', new \atk4\ui\JsExpression('function(){window.alert("You\'re good to go!");}'));
  *
  * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
  *
@@ -231,7 +231,7 @@ class Modal extends View
     /**
      * Add a deny action to modal.
      *
-     * @param jsExpressionable $jsAction javascript action that will run when deny is click
+     * @param JsExpressionable $jsAction javascript action that will run when deny is click
      *
      * @return $this
      */
@@ -248,7 +248,7 @@ class Modal extends View
     /**
      * Add an approve action button to modal.
      *
-     * @param jsExpressionable $jsAction javascript action that will run when deny is click
+     * @param JsExpressionable $jsAction javascript action that will run when deny is click
      *
      * @return $this
      */

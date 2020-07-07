@@ -7,7 +7,7 @@ namespace atk4\ui;
 /**
  * This class generates action, that will be able to loop-back to the callback method.
  */
-class jsReload implements jsExpressionable
+class JsReload implements JsExpressionable
 {
     /**
      * Specifies which view to reload. Use constructor to set.
@@ -19,13 +19,13 @@ class jsReload implements jsExpressionable
     /**
      * A Js function to execute after reload is complete and onSuccess is execute.
      *
-     * @var jsExpression
+     * @var JsExpression
      */
     public $afterSuccess;
 
     /**
      * If defined, they will be added at the end of your URL.
-     * Value in ARG can be either string or jsExpressionable.
+     * Value in ARG can be either string or JsExpressionable.
      *
      * @var array
      */

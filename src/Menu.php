@@ -59,7 +59,7 @@ class Menu extends View
             $item->setAttr('href', $action);
         }
 
-        if ($action instanceof jsExpressionable) {
+        if ($action instanceof JsExpressionable) {
             $item->js('click', $action);
         }
 

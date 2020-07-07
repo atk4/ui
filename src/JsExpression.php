@@ -7,7 +7,7 @@ namespace atk4\ui;
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
-class jsExpression implements jsExpressionable
+class JsExpression implements JsExpressionable
 {
     use \atk4\core\DiContainerTrait;
 
@@ -53,7 +53,7 @@ class jsExpression implements jsExpressionable
                 }
 
                 if (!isset($this->args[$identifier])) {
-                    throw (new Exception('Tag not defined in template for jsExpression'))
+                    throw (new Exception('Tag not defined in template for JsExpression'))
                         ->addMoreInfo('tag', $identifier)
                         ->addMoreInfo('template', $this->template);
                 }
@@ -65,7 +65,7 @@ class jsExpression implements jsExpressionable
                     return $value;
                 }
 
-                if (is_object($value) && $value instanceof jsExpressionable) {
+                if (is_object($value) && $value instanceof JsExpressionable) {
                     $value = '(' . $value->jsRender() . ')';
                 } elseif (is_object($value)) {
                     $value = $this->_json_encode($value->toString());
@@ -82,7 +82,7 @@ class jsExpression implements jsExpressionable
     }
 
     /**
-     * Provides replacement for json_encode that will respect jsExpressionable objects
+     * Provides replacement for json_encode that will respect JsExpressionable objects
      * and call jsRender() for them instead of escaping.
      *
      * @param mixed $arg anything
@@ -93,11 +93,11 @@ class jsExpression implements jsExpressionable
     {
         /*
          * This function is very similar to json_encode, however it will traverse array
-         * before encoding in search of jsExpressionable objects. Those would
+         * before encoding in search of JsExpressionable objects. Those would
          * be replaced with their jsRendering.
          */
         if (is_object($arg)) {
-            if ($arg instanceof jsExpressionable) {
+            if ($arg instanceof JsExpressionable) {
                 $result = $arg->jsRender();
 
                 return $result;

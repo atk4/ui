@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
-use atk4\ui\jsExpression;
-use atk4\ui\jsFunction;
+use atk4\ui\JsExpression;
+use atk4\ui\JsFunction;
 
 /**
  * Input element for a form control.
@@ -292,7 +292,7 @@ class Dropdown extends Input
 
         if ($this->readonly) {
             $this->setDropdownOption('allowTab', false);
-            $this->setDropdownOption('onShow', new jsFunction([new jsExpression('return false')]));
+            $this->setDropdownOption('onShow', new JsFunction([new JsExpression('return false')]));
         }
 
         if ($this->dropIcon) {

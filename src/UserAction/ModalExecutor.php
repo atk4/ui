@@ -10,9 +10,9 @@ use atk4\data\ValidationException;
 use atk4\ui\Button;
 use atk4\ui\Exception;
 use atk4\ui\Form;
-use atk4\ui\jsExpressionable;
-use atk4\ui\jsFunction;
-use atk4\ui\jsToast;
+use atk4\ui\JsExpressionable;
+use atk4\ui\JsFunction;
+use atk4\ui\JsToast;
 use atk4\ui\Message;
 use atk4\ui\Modal;
 use atk4\ui\View;
@@ -42,7 +42,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public const HOOK_STEP = self::class . '@onStep';
 
     /**
-     * @var jsExpressionable array|callable jsExpression to return if action was successful, e.g "new jsToast('Thank you')"
+     * @var JsExpressionable array|callable JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
      */
     public $jsSuccess;
 
@@ -347,7 +347,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
                 $this->name => $this->action->owner->get('id'),
             ], ['method' => 'post'], $this->loader->name);
 
-            $modal->js(true, $this->prevStepBtn->js()->on('click', new jsFunction([$chain])));
+            $modal->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([$chain])));
         }
 
         // setup executor button to perform action.
@@ -355,7 +355,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             true,
             $this->execActionBtn->js()->on(
                 'click',
-                new jsFunction(
+                new JsFunction(
                     [
                         $this->loader->jsload(
                             [
@@ -417,7 +417,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         return [
             $this->hide(),
             $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?:
-            $success ?: new jsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
+            $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
             $this->loader->jsClearStoreData(true),
         ];
     }
@@ -581,7 +581,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * Generate js for Next btn state.
      */
-    protected function jsSetNextState(string $step): jsExpressionable
+    protected function jsSetNextState(string $step): JsExpressionable
     {
         if ($this->isLastStep($step)) {
             return $this->nextStepBtn->js(true)->hide();
@@ -593,7 +593,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * Generated js for Prev btn state.
      */
-    protected function jsSetPrevState(string $step): jsExpressionable
+    protected function jsSetPrevState(string $step): JsExpressionable
     {
         if ($this->isFirstStep($step)) {
             return $this->prevStepBtn->js(true)->hide();
@@ -605,7 +605,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * Generate js for Exec button state.
      */
-    protected function jsSetExecState(string $step): jsExpressionable
+    protected function jsSetExecState(string $step): JsExpressionable
     {
         if ($this->isLastStep($step)) {
             return $this->execActionBtn->js(true)->show();
@@ -620,10 +620,10 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function jsSetSubmitBtn(View $view, Form $form, string $step)
     {
         if ($this->isLastStep($step)) {
-            $view->js(true, $this->execActionBtn->js()->on('click', new jsFunction([$form->js()->form('submit')])));
+            $view->js(true, $this->execActionBtn->js()->on('click', new JsFunction([$form->js()->form('submit')])));
         } else {
             // submit on next
-            $view->js(true, $this->nextStepBtn->js()->on('click', new jsFunction([$form->js()->form('submit')])));
+            $view->js(true, $this->nextStepBtn->js()->on('click', new JsFunction([$form->js()->form('submit')])));
         }
     }
 
@@ -638,7 +638,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
                 $this->name => $this->action->owner->get('id'),
             ], ['method' => 'post'], $this->loader->name);
 
-            $view->js(true, $this->prevStepBtn->js()->on('click', new jsFunction([$chain])));
+            $view->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([$chain])));
         }
     }
 
@@ -698,7 +698,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * Create a sequence of js statement for a view.
      *
-     * @param array|jsExpressionable $js
+     * @param array|JsExpressionable $js
      */
     private function _jsSequencer(View $view, $js)
     {

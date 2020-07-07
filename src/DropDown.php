@@ -13,7 +13,7 @@ class DropDown extends Lister
     /**
      * Callback when a new value is selected in Dropdown.
      *
-     * @var jsCallback|null
+     * @var JsCallback|null
      */
     public $cb;
 
@@ -29,7 +29,7 @@ class DropDown extends Lister
         parent::init();
 
         if (!$this->cb) {
-            $this->cb = jsCallback::addTo($this, ['postTrigger' => 'item']);
+            $this->cb = JsCallback::addTo($this, ['postTrigger' => 'item']);
         }
     }
 
@@ -51,8 +51,8 @@ class DropDown extends Lister
             throw new Exception('Error: onChange require a callable function.');
         }
         // setting dropdown option for using callback url.
-        $this->js['onChange'] = new jsFunction(['name', 'value', 't'], [
-            new jsExpression(
+        $this->js['onChange'] = new JsFunction(['name', 'value', 't'], [
+            new JsExpression(
                 "if($(this).data('currentValue') != value){\$(this).atkAjaxec({uri:[uri], uri_options:{item:value}});$(this).data('currentValue', value)}",
                 ['uri' => $this->cb->getJsUrl()]
             ), ]);

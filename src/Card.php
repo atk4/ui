@@ -285,7 +285,7 @@ class Card extends View
             $executor->setAction($action);
         });
 
-        $btn->on('click', new jsModal($action->caption, $vp, [$this->name => (new Jquery())->parents('.atk-card')->data('id')]));
+        $btn->on('click', new JsModal($action->caption, $vp, [$this->name => (new Jquery())->parents('.atk-card')->data('id')]));
     }
 
     /**

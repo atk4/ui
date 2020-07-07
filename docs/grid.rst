@@ -25,7 +25,7 @@ To make your grid look nicer, you might want to add some buttons and enable quic
     $grid->setModel(new Country($db));
 
     $grid->addQuickSearch();
-    $grid->menu->addItem('Reload Grid', new \atk4\ui\jsReload($grid));
+    $grid->menu->addItem('Reload Grid', new \atk4\ui\JsReload($grid));
 
 Adding Menu Items
 =================
@@ -85,12 +85,12 @@ You can use $ipp property to specify different number of items per page::
 
     $grid->ipp = 10;
 
-jsPaginator
+JsPaginator
 -----------
 
 .. php:method:: addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
 
-jsPaginator will load table content dynamically when user scroll down the table window on screen.
+JsPaginator will load table content dynamically when user scroll down the table window on screen.
 
     $table->addJsPaginator(30);
 
@@ -155,7 +155,7 @@ additionally place this column before any other column inside a grid. You can us
 method to reference value of selected checkboxes inside any :ref:`js_action`::
 
     $sel = $grid->addSelection();
-    $grid->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
+    $grid->menu->addItem('show selection')->on('click', new \atk4\ui\JsExpression(
         'alert("Selected: "+[])', [$sel->jsChecked()]
     ));
 

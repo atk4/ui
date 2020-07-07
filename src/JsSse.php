@@ -9,14 +9,14 @@ use atk4\core\HookTrait;
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
-class jsSse extends jsCallback
+class JsSse extends JsCallback
 {
     use HookTrait;
 
     /** @const string Executed when user aborted, or disconnect browser, when using this SSE. */
     public const HOOK_ABORTED = self::class . '@connection_aborted';
 
-    /** @var bool Allows us to fall-back to standard functionality of jsCallback if browser does not support SSE. */
+    /** @var bool Allows us to fall-back to standard functionality of JsCallback if browser does not support SSE. */
     public $browserSupport = false;
 
     /** @var bool Show Loader when doing sse. */

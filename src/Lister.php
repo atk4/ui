@@ -34,12 +34,12 @@ class Lister extends View
     /**
      * A dynamic paginator attach to window scroll event.
      *
-     * @var jsPaginator|null
+     * @var JsPaginator|null
      */
     public $jsPaginator;
 
     /**
-     * The number of item per page for jsPaginator.
+     * The number of item per page for JsPaginator.
      *
      * @var int|null
      */
@@ -98,7 +98,7 @@ class Lister extends View
     public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = null)
     {
         $this->ipp = $ipp;
-        $this->jsPaginator = jsPaginator::addTo($this, ['view' => $container, 'options' => $options]);
+        $this->jsPaginator = JsPaginator::addTo($this, ['view' => $container, 'options' => $options]);
 
         // set initial model limit. can be overwritten by onScroll
         $this->model->setLimit($ipp);
@@ -125,7 +125,7 @@ class Lister extends View
         return $this;
     }
 
-    /** @var int This will count how many rows are rendered. Needed for jsPaginator for example. */
+    /** @var int This will count how many rows are rendered. Needed for JsPaginator for example. */
     protected $_rendered_rows_count = 0;
 
     public function renderView()
@@ -167,7 +167,7 @@ class Lister extends View
             }
         }
 
-        // stop jsPaginator if there are no more records to fetch
+        // stop JsPaginator if there are no more records to fetch
         if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
             $this->jsPaginator->jsIdle();
         }

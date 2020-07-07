@@ -34,14 +34,14 @@ class Console extends View implements \Psr\Log\LoggerInterface
     protected $sseInProgress = false;
 
     /**
-     * Stores object jsSse which is used for communication.
+     * Stores object JsSse which is used for communication.
      *
-     * @var jsSse
+     * @var JsSse
      */
     public $sse;
 
     /**
-     * Bypass is used internally to capture and wrap direct output, but prevent jsSse from
+     * Bypass is used internally to capture and wrap direct output, but prevent JsSse from
      * triggering output recursively.
      *
      * @var bool
@@ -84,7 +84,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
         }
 
         if (!$this->sse) {
-            $this->sse = jsSse::addTo($this);
+            $this->sse = JsSse::addTo($this);
         }
 
         $this->sse->set(function () use ($callback) {
@@ -134,7 +134,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * Return JavaScript expression to execute console.
      *
-     * @return jsExpressionable
+     * @return JsExpressionable
      */
     public function jsExecute()
     {
@@ -189,7 +189,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * Executes a JavaScript action.
      *
-     * @param jsExpressionable $js
+     * @param JsExpressionable $js
      *
      * @return $this
      */

@@ -14,7 +14,7 @@ namespace atk4\ui;
  *
  * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping.
  */
-class jsChain extends jsExpression
+class JsChain extends JsExpression
 {
     /**
      * Name of the include file where this library is implemented.
@@ -147,7 +147,7 @@ class jsChain extends jsExpression
     {
         return '(' .
             implode(',', array_map(function ($arg) {
-                if ($arg instanceof jsExpressionable) {
+                if ($arg instanceof JsExpressionable) {
                     return $arg->jsRender();
                 }
 

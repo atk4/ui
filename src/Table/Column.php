@@ -8,7 +8,7 @@ use atk4\data\Field;
 use atk4\data\Model;
 use atk4\ui\Exception;
 use atk4\ui\Jquery;
-use atk4\ui\jsExpression;
+use atk4\ui\JsExpression;
 use atk4\ui\Popup;
 
 /**
@@ -175,7 +175,7 @@ class Column
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @return \atk4\ui\jsCallback
+     * @return \atk4\ui\JsCallback
      */
     public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null)
     {
@@ -207,11 +207,11 @@ class Column
         $chain->dropdown([
             'action' => 'hide',
             'values' => $items,
-            'onChange' => new jsExpression($function),
+            'onChange' => new JsExpression($function),
         ]);
 
         //will stop grid column from being sorted.
-        $chain->on('click', new jsExpression('function(e){e.stopPropagation();}'));
+        $chain->on('click', new JsExpression('function(e){e.stopPropagation();}'));
 
         $this->table->js(true, $chain);
 

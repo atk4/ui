@@ -63,4 +63,4 @@ $label = \atk4\ui\Label::addTo($app->layout, ['Test']);
 
 $label->on('click', function ($j, $arg1) {
     return 'width is ' . $arg1;
-}, [new \atk4\ui\jsExpression('$(window).width()')]);
+}, [new \atk4\ui\JsExpression('$(window).width()')]);

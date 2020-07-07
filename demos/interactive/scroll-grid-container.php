@@ -20,7 +20,7 @@ $g1 = \atk4\ui\Crud::addTo($c1);
 $m1 = $g1->setModel(new Country($app->db)); //, ['name', 'iso']);
 $g1->addQuickSearch(['name', 'iso']);
 
-// demo for additional action buttons in Crud + jsPaginator
+// demo for additional action buttons in Crud + JsPaginator
 $g1->addModalAction(['icon' => [\atk4\ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($g1) {
     \atk4\ui\Card::addTo($p)->setModel($g1->model->load($id));
 });

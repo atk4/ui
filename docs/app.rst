@@ -429,7 +429,7 @@ Populating the left menu object is simply a matter of adding the right menu item
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
     Button::addTo($layout->menu->addItem(), ['View Source', 'teal', 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url.$f]));
+        ->setAttr('target', '_blank')->on('click', new \atk4\ui\JsExpression('document.location=[];', [$url.$f]));
 
 .. php:attr:: menuRight
 

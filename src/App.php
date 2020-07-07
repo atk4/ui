@@ -326,7 +326,7 @@ class App
 
     /**
      * Will perform a preemptive output and terminate. Do not use this
-     * directly, instead call it form Callback, jsCallback or similar
+     * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
      * @param string|array $output  Array type is supported only for JSON response
@@ -769,9 +769,9 @@ class App
      *
      * @param string|array $page Destination URL or page/arguments
      */
-    public function jsRedirect($page, bool $newWindow = false): jsExpression
+    public function jsRedirect($page, bool $newWindow = false): JsExpression
     {
-        return new jsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
+        return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
 
     /**

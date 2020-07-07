@@ -246,7 +246,7 @@ $signup->set(function ($pop) {
 
             // refreshes entire page
             return $form->app->jsRedirect(['logged' => $form->model->get('email')]);
-            //return new \atk4\ui\jsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
+            //return new \atk4\ui\JsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
         });
     }
 });

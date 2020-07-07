@@ -105,7 +105,7 @@ $control = Form\Control\Line::addTo($app);
 $control->set('hello world');
 
 $button = $control->addAction('check value');
-$button->on('click', new \atk4\ui\jsExpression('alert("field value is: "+[])', [$control->jsInput()->val()]));
+$button->on('click', new \atk4\ui\JsExpression('alert("field value is: "+[])', [$control->jsInput()->val()]));
 
 \atk4\ui\Header::addTo($app, ['Line in a Form']);
 $form = Form::addTo($app);
@@ -151,10 +151,10 @@ $c2 = $group->addControl('c2', new Form\Control\Calendar(['type' => 'date']));
 $c3 = $group->addControl('c3', new Form\Control\Calendar(['type' => 'date']));
 
 $c1->onChange('console.log("c1 changed: "+date+","+text+","+mode)');
-$c2->onChange(new \atk4\ui\jsExpression('console.log("c2 changed: "+date+","+text+","+mode)'));
+$c2->onChange(new \atk4\ui\JsExpression('console.log("c2 changed: "+date+","+text+","+mode)'));
 $c3->onChange([
-    new \atk4\ui\jsExpression('console.log("c3 changed: "+date+","+text+","+mode)'),
-    new \atk4\ui\jsExpression('console.log("c3 really changed: "+date+","+text+","+mode)'),
+    new \atk4\ui\JsExpression('console.log("c3 changed: "+date+","+text+","+mode)'),
+    new \atk4\ui\JsExpression('console.log("c3 really changed: "+date+","+text+","+mode)'),
 ]);
 
 $group = $form->addGroup('Line');
@@ -164,13 +164,13 @@ $f3 = $group->addControl('f3');
 $f4 = $group->addControl('f4');
 
 $f1->onChange('console.log("f1 changed")');
-$f2->onChange(new \atk4\ui\jsExpression('console.log("f2 changed")'));
+$f2->onChange(new \atk4\ui\JsExpression('console.log("f2 changed")'));
 $f3->onChange([
-    new \atk4\ui\jsExpression('console.log("f3 changed")'),
-    new \atk4\ui\jsExpression('console.log("f3 really changed")'),
+    new \atk4\ui\JsExpression('console.log("f3 changed")'),
+    new \atk4\ui\JsExpression('console.log("f3 really changed")'),
 ]);
 $f4->onChange(function () {
-    return new \atk4\ui\jsExpression('console.log("f4 changed")');
+    return new \atk4\ui\JsExpression('console.log("f4 changed")');
 });
 
 $group = $form->addGroup('CheckBox');

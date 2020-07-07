@@ -287,7 +287,7 @@ click on the button, it will reload $segment component while passing all the id'
 
     $box = $table->addColumn(new \atk4\ui\Table\Column\CheckBox());
 
-    $button->on('click', new jsReload($segment, ['ids'=>$box->jsChecked()]));
+    $button->on('click', new JsReload($segment, ['ids'=>$box->jsChecked()]));
 
 jsChecked expression represents a JavaScript string which you can place inside a form control,
 use as argument etc.

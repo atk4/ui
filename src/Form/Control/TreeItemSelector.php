@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace atk4\ui\Form\Control;
 
 use atk4\ui\Form;
-use atk4\ui\jsCallback;
+use atk4\ui\JsCallback;
 use atk4\ui\Template;
 
 class TreeItemSelector extends Form\Control
@@ -72,7 +72,7 @@ class TreeItemSelector extends Form\Control
     /**
      * Callback for onTreeChange.
      *
-     * @var jsCallback|null
+     * @var JsCallback|null
      */
     private $cb;
 
@@ -104,7 +104,7 @@ class TreeItemSelector extends Form\Control
             throw new \atk4\ui\Exception('Function is required for onTreeChange event.');
         }
 
-        $this->cb = jsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
+        $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
             $value = $this->allowMultiple ? json_decode($data, true) : json_decode($data, true)[0];
 
             return call_user_func($fx, $value);

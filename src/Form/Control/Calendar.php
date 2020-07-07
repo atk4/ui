@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\Form\Control;
 
-use atk4\ui\jsExpression;
-use atk4\ui\jsFunction;
+use atk4\ui\JsExpression;
+use atk4\ui\JsFunction;
 
 /**
  * Input element for a form control.
@@ -51,7 +51,7 @@ class Calendar extends Input
         }
 
         if ($this->readonly) {
-            $this->options['onShow'] = new jsFunction([new jsExpression('return false')]);
+            $this->options['onShow'] = new JsFunction([new JsExpression('return false')]);
         }
 
         $typeFormat = $this->type . '_format';
@@ -60,7 +60,7 @@ class Calendar extends Input
                             if (!date) return;
                             return atk.phpDate([format], date);
                         }';
-            $this->options['formatter'][$this->type] = new jsExpression($formatter, ['format' => $format]);
+            $this->options['formatter'][$this->type] = new JsExpression($formatter, ['format' => $format]);
         }
 
         $this->options['type'] = $this->type;
@@ -84,20 +84,20 @@ class Calendar extends Input
      * Shorthand method for on('change') event.
      * Some input fields, like Calendar, could call this differently.
      *
-     * If $expr is string or jsExpression, then it will execute it instantly.
+     * If $expr is string or JsExpression, then it will execute it instantly.
      *
      * Examples:
      * $control->onChange('console.log(date, text, mode)');
-     * $control->onChange(new \atk4\ui\jsExpression('console.log(date, text, mode)'));
+     * $control->onChange(new \atk4\ui\JsExpression('console.log(date, text, mode)'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
-     * @param string|jsExpression|array $expr
+     * @param string|JsExpression|array $expr
      * @param array|bool                $default
      */
     public function onChange($expr, $default = [])
     {
         if (is_string($expr)) {
-            $expr = new \atk4\ui\jsExpression($expr);
+            $expr = new \atk4\ui\JsExpression($expr);
         }
         if (!is_array($expr)) {
             $expr = [$expr];
@@ -109,6 +109,6 @@ class Calendar extends Input
         }
 
         // Semantic-UI Calendar have different approach for on change event
-        $this->options['onChange'] = new \atk4\ui\jsFunction(['date', 'text', 'mode'], $expr, $default);
+        $this->options['onChange'] = new \atk4\ui\JsFunction(['date', 'text', 'mode'], $expr, $default);
     }
 }

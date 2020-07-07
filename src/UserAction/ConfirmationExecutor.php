@@ -8,9 +8,9 @@ use atk4\core\HookTrait;
 use atk4\data\Model;
 use atk4\ui\Button;
 use atk4\ui\Exception;
-use atk4\ui\jsExpressionable;
-use atk4\ui\jsFunction;
-use atk4\ui\jsToast;
+use atk4\ui\JsExpressionable;
+use atk4\ui\JsFunction;
+use atk4\ui\JsToast;
 use atk4\ui\Loader;
 use atk4\ui\Modal;
 use atk4\ui\Text;
@@ -33,7 +33,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     public $loaderUi = 'ui basic segment';
     /** @var array|View|null Loader shim object or seed. */
     public $loaderShim;
-    /** @var jsExpressionable */
+    /** @var JsExpressionable */
     public $jsSuccess;
 
     /** @var string css class for modal size. */
@@ -159,7 +159,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             true,
             $this->ok->js()->on(
                 'click',
-                new jsFunction(
+                new JsFunction(
                     [
                         $this->loader->jsload(
                             [
@@ -177,7 +177,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             true,
             $this->cancel->js()->on(
                 'click',
-                new jsFunction(
+                new JsFunction(
                     [
                         $this->hide(),
                     ]
@@ -218,14 +218,14 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             $this->hide(),
             $this->ok->js(true)->off(),
             $this->cancel->js(true)->off(),
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?: $success ?: new jsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
+            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?: $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
         ];
     }
 
     /**
      * Create a sequence of js statement for a view.
      *
-     * @param array|jsExpressionable $js
+     * @param array|JsExpressionable $js
      */
     private function _jsSequencer(View $view, $js)
     {

@@ -23,7 +23,7 @@ declare(strict_types=1);
  *     // Save Form model and then Multiline model
  *     $form->model->save();
  *     $ml->saveRows();
- *     return new \atk4\ui\jsToast('Saved!');
+ *     return new \atk4\ui\JsToast('Saved!');
  * });
  *
  * If Multiline's model contains expressions, these will be evaluated on the fly
@@ -62,7 +62,7 @@ declare(strict_types=1);
  *
  * $form->onSubmit(function($form) use ($ml) {
  *     $ml->saveRows();
- *     return new \atk4\ui\jsToast('Saved!');
+ *     return new \atk4\ui\JsToast('Saved!');
  * });
  */
 
@@ -75,7 +75,7 @@ use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
 use atk4\ui\Form;
-use atk4\ui\jsVueService;
+use atk4\ui\JsVueService;
 use atk4\ui\Template;
 
 class Multiline extends Form\Control
@@ -120,7 +120,7 @@ class Multiline extends Form\Control
     /**
      * The JS callback.
      *
-     * @var \atk4\ui\jsCallback
+     * @var \atk4\ui\JsCallback
      */
     private $cb;
 
@@ -199,22 +199,22 @@ class Multiline extends Form\Control
     public $caption;
 
     /**
-     * @var jsFunction|null
+     * @var JsFunction|null
      *
-     * A jsFunction to execute when Multiline add(+) button is clicked.
+     * A JsFunction to execute when Multiline add(+) button is clicked.
      * The function is execute after mulitline component finish adding a row of fields.
      * The function also receive the row vaue as an array.
-     * ex: $jsAfterAdd = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
+     * ex: $jsAfterAdd = new JsFunction(['value'],[new JsExpression('console.log(value)')]);
      */
     public $jsAfterAdd;
 
     /**
-     * @var jsFunction|null
+     * @var JsFunction|null
      *
-     * A jsFunction to execute when Multiline delete button is clicked.
+     * A JsFunction to execute when Multiline delete button is clicked.
      * The function is execute after mulitline component finish deleting rows.
      * The function also receive the row vaue as an array.
-     * ex: $jsAfterDelete = new jsFunction(['value'],[new jsExpression('console.log(value)')]);
+     * ex: $jsAfterDelete = new JsFunction(['value'],[new JsExpression('console.log(value)')]);
      */
     public $jsAfterDelete;
 
@@ -234,7 +234,7 @@ class Multiline extends Form\Control
 
         $this->multiLine = \atk4\ui\View::addTo($this, ['template' => $this->multiLineTemplate]);
 
-        $this->cb = \atk4\ui\jsCallback::addTo($this);
+        $this->cb = \atk4\ui\JsCallback::addTo($this);
 
         // load the data associated with this input and validate it.
         $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form) {
@@ -252,7 +252,7 @@ class Multiline extends Form\Control
             // When errors are coming from this Multiline field, then notify Multiline component about them.
             // Otherwise use normal field error.
             if ($fieldName === $this->short_name) {
-                $jsError = [(new jsVueService())->emitEvent('atkml-row-error', ['id' => $this->multiLine->name, 'errors' => $this->rowErrors])];
+                $jsError = [(new JsVueService())->emitEvent('atkml-row-error', ['id' => $this->multiLine->name, 'errors' => $this->rowErrors])];
             } else {
                 $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
             }

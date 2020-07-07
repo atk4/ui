@@ -49,7 +49,7 @@ class DemoLookup extends \atk4\ui\Form\Control\Lookup
                 // $form->model->save();
 
                 $ret = [
-                    new \atk4\ui\jsToast('Form submit!. Demo can not saved data.'),
+                    new \atk4\ui\JsToast('Form submit!. Demo can not saved data.'),
                     (new \atk4\ui\Jquery('.atk-modal'))->modal('hide'),
                 ];
 
@@ -66,6 +66,6 @@ class DemoLookup extends \atk4\ui\Form\Control\Lookup
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
 
-        $this->action->js('click', new \atk4\ui\jsModal($caption, $vp));
+        $this->action->js('click', new \atk4\ui\JsModal($caption, $vp));
     }
 }

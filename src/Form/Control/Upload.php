@@ -50,7 +50,7 @@ class Upload extends Input
     /**
      * Callback is use for onUpload or onDelete.
      *
-     * @var \atk4\ui\jsCallback
+     * @var \atk4\ui\JsCallback
      */
     public $cb;
 
@@ -89,7 +89,7 @@ class Upload extends Input
 
         //$this->inputType = 'hidden';
 
-        $this->cb = \atk4\ui\jsCallback::addTo($this);
+        $this->cb = \atk4\ui\JsCallback::addTo($this);
 
         if (!$this->action) {
             $this->action = new \atk4\ui\Button(['icon' => 'upload', 'disabled' => ($this->disabled || $this->readonly)]);

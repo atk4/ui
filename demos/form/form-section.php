@@ -18,7 +18,7 @@ $model->loadAny();
 
 //Prevent form from saving
 $noSave = function (Form $form) {
-    return new \atk4\ui\jsToast([
+    return new \atk4\ui\JsToast([
         'title' => 'POSTed field values',
         'message' => '<pre>' . json_encode($form->model->get(), JSON_PRETTY_PRINT) . '</pre>',
         'class' => 'success',

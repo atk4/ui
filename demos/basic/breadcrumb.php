@@ -31,7 +31,7 @@ if ($id = $app->stickyGet('country_id')) {
     $form = \atk4\ui\Form::addTo($app);
     $form->setModel($model);
     $form->onSubmit(function (\atk4\ui\Form $form) {
-        return new \atk4\ui\jsToast('Form Submitted! Data saving is not possible in demo!');
+        return new \atk4\ui\JsToast('Form Submitted! Data saving is not possible in demo!');
     });
 } else {
     // display list of countries

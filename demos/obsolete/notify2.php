@@ -50,7 +50,7 @@ $formGroup2->addControl('position', ['width' => 'four']);
 $formGroup2->addControl('attach', ['width' => 'four']);
 
 $form->onSubmit(function (\atk4\ui\Form $form) {
-    $notifier = new \atk4\ui\jsNotify();
+    $notifier = new \atk4\ui\JsNotify();
     $notifier->setColor($form->model->get('color'))
         ->setPosition($form->model->get('position'))
         ->setWidth(rtrim($form->model->get('width'), '%'))

@@ -33,7 +33,7 @@ You can set default value and interact with a form control using JavaScript::
 
 
     $button = \atk4\ui\Button::addTo($app, ['check value']);
-    $button->on('click', new \atk4\ui\jsExpression('alert("control value is: "+[])', [$control->jsInput()->val()]));
+    $button->on('click', new \atk4\ui\JsExpression('alert("control value is: "+[])', [$control->jsInput()->val()]));
 
 
 When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
@@ -291,7 +291,7 @@ onChange event
 .. php:method:: onChange($expression)
 
 It's prefferable to use this short-hand version of on('change', 'input', $expression) method.
-$expression argument can be string, jsExpression, array of jsExpressions or even PHP callback function.
+$expression argument can be string, JsExpression, array of JsExpressions or even PHP callback function.
 
     // simple string
     $f1 = $form->addControl('f1');
@@ -299,7 +299,7 @@ $expression argument can be string, jsExpression, array of jsExpressions or even
 
     // callback
     $f2 = $form->addControl('f2');
-    $f2->onChange(function(){return new \atk4\ui\jsExpression('console.log("f2 changed")');});
+    $f2->onChange(function(){return new \atk4\ui\JsExpression('console.log("f2 changed")');});
 
     // Calendar form control - wraps in function call with arguments date, text and mode
     $c1 = $form->addControl('c1', new \atk4\ui\Form\Control\Calendar(['type'=>'date']));

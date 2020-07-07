@@ -9,7 +9,7 @@ namespace atk4\ui\Component;
 
 use atk4\data\ValidationException;
 use atk4\ui\Exception;
-use atk4\ui\jsToast;
+use atk4\ui\JsToast;
 use atk4\ui\View;
 
 class InlineEdit extends View
@@ -17,9 +17,9 @@ class InlineEdit extends View
     public $defaultTemplate = 'inline-edit.html';
 
     /**
-     * jsCallback for saving data.
+     * JsCallback for saving data.
      *
-     * @var \atk4\ui\jsCallback
+     * @var \atk4\ui\JsCallback
      */
     public $cb;
 
@@ -86,7 +86,7 @@ class InlineEdit extends View
     public function init(): void
     {
         parent::init();
-        $this->cb = \atk4\ui\jsCallback::addTo($this);
+        $this->cb = \atk4\ui\JsCallback::addTo($this);
 
         // Set default validation error handler.
         if (!$this->formatErrorMsg || !is_callable($this->formatErrorMsg)) {
@@ -155,11 +155,11 @@ class InlineEdit extends View
      *
      * @param string $message
      *
-     * @return \atk4\ui\jsToast
+     * @return \atk4\ui\JsToast
      */
     public function jsSuccess($message)
     {
-        return new jsToast([
+        return new JsToast([
             'title' => 'Success',
             'message' => $message,
             'class' => 'success',
@@ -171,11 +171,11 @@ class InlineEdit extends View
      *
      * @param string $message
      *
-     * @return \atk4\ui\jsToast
+     * @return \atk4\ui\JsToast
      */
     public function jsError($message)
     {
-        return new jsToast([
+        return new JsToast([
             'title' => 'Validation error:',
             'displayTime' => 8000,
             'showIcon' => 'exclamation',
@@ -216,7 +216,7 @@ class InlineEdit extends View
             'saveOnBlur' => $this->saveOnBlur,
         ]);
 
-//        $this->js(true, (new jsVueService())->createAtkVue(
+//        $this->js(true, (new JsVueService())->createAtkVue(
 //            '#'.$this->name,
 //            'atk-inline-edit',
 //            [

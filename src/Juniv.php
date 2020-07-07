@@ -27,7 +27,7 @@ namespace atk4\ui;
  * @method Jquery atkSpinner()
  * @method Jquery tabs()
  */
-class Juniv extends jsChain
+class Juniv extends JsChain
 {
     public $_include = 'univ.min.js';
     public $_version = '2.0.0';

@@ -21,7 +21,7 @@ class Crud extends Grid
     public $addFields;
 
     /** @var array Default notifier to perform when adding or editing is successful * */
-    public $notifyDefault = [jsToast::class];
+    public $notifyDefault = [JsToast::class];
 
     /** @var string default js action executor class in UI for model action. */
     public $jsExecutor = [UserAction\JsCallbackExecutor::class];
@@ -93,7 +93,7 @@ class Crud extends Grid
                 $ex = $item['action']->ui['executor'];
                 if ($ex instanceof UserAction\JsExecutorInterface) {
                     $ex->stickyGet($this->name . '_sort', $this->getSortBy());
-                    $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new jsFunction($ex->jsExecute())));
+                    $this->container->js(true, $item['item']->js()->on('click.atk_crud_item', new JsFunction($ex->jsExecute())));
                 }
             }
         }
@@ -209,7 +209,7 @@ class Crud extends Grid
     /**
      * Return proper js actions depending on action modifier type.
      */
-    protected function getJsGridAction(Model\UserAction $action): ?jsExpressionable
+    protected function getJsGridAction(Model\UserAction $action): ?JsExpressionable
     {
         switch ($action->modifier) {
             case Model\UserAction::MODIFIER_UPDATE:

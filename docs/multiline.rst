@@ -116,7 +116,7 @@ If you want to edit them along with the user, Multiline is set up in a few lines
         $form->model->save();
         $ml->saveRows();
         //show saved data for testing purposes
-        return new jsToast(var_export($ml->model->export(), true));
+        return new JsToast(var_export($ml->model->export(), true));
     });
 
 
@@ -149,7 +149,7 @@ The 'total' expression will get updated on each field change automatically when 
 
 Manually adding actions on a form control value change
 ======================================================
-If you want to define a callback which gets executed if a field value is changed, you can do so using the ``onLineChange()`` method. The first parameter is the callback, the second one an array including the field names which trigger the callback when changed. You can return a single jsExpressionable or an array of jsExpressionables which then will be sent to the browser. In this case we display a Toast with some message::
+If you want to define a callback which gets executed if a field value is changed, you can do so using the ``onLineChange()`` method. The first parameter is the callback, the second one an array including the field names which trigger the callback when changed. You can return a single JsExpressionable or an array of JsExpressionables which then will be sent to the browser. In this case we display a Toast with some message::
 
     $multiline->onLineChange(function ($rows, $form) {
         $total = 0;
@@ -158,7 +158,7 @@ If you want to define a callback which gets executed if a field value is changed
             $box = array_column($cols, 'box')[0];
             $total = $total + ($qty * $box);
         }
-        return new jsToast('The new Total is '.number_format($total, 2));
+        return new JsToast('The new Total is '.number_format($total, 2));
     }, ['field1', 'field2']);
 
 

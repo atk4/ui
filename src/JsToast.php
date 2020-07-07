@@ -7,11 +7,11 @@ namespace atk4\ui;
 use atk4\core\DiContainerTrait;
 
 /**
- * Class jsToast
+ * Class JsToast
  * Generate a Fomantic-ui toast module command in js.
  *  $('body').toast({options}).
  */
-class jsToast implements jsExpressionable
+class JsToast implements JsExpressionable
 {
     use DiContainerTrait;
 
