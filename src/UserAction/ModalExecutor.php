@@ -620,10 +620,10 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function jsSetSubmitBtn(View $view, Form $form, string $step)
     {
         if ($this->isLastStep($step)) {
-            $view->js(true, $this->execActionBtn->js()->on('click', new JsFunction([$form->js()->form('submit')])));
+            $view->js(true, $this->execActionBtn->js()->on('click', new JsFunction([$form->js(null, null, $form->formElement)->form('submit')])));
         } else {
             // submit on next
-            $view->js(true, $this->nextStepBtn->js()->on('click', new JsFunction([$form->js()->form('submit')])));
+            $view->js(true, $this->nextStepBtn->js()->on('click', new JsFunction([$form->js(null, null, $form->formElement)->form('submit')])));
         }
     }
 
