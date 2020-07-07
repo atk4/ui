@@ -527,11 +527,11 @@ Form Submit Handling
 
 .. php:method:: error($field, $message)
 
-    Create and return :php:class:`jsChain` action that will indicate error on a form control.
+    Create and return :php:class:`JsChain` action that will indicate error on a form control.
 
 .. php:method:: success($title, [$sub_title])
 
-    Create and return :php:class:`jsChain` action, that will replace form with a success message.
+    Create and return :php:class:`JsChain` action, that will replace form with a success message.
 
 .. php:method:: setApiConfing($config)
 

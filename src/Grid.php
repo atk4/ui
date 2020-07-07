@@ -252,7 +252,7 @@ class Grid extends View
             $this->ipp = $ipp;
             $this->setModelLimitFromPaginator();
             //add ipp to quicksearch
-            if ($this->quickSearch instanceof jsSearch) {
+            if ($this->quickSearch instanceof JsSearch) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
             }
             $this->applySort();
@@ -342,7 +342,7 @@ class Grid extends View
         $view = View::addTo($this->menu
             ->addMenuRight()->addItem()->setElement('div'));
 
-        $this->quickSearch = jsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
+        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
 
         $q = trim($this->stickyGet('_q') ?? '');
         if ($q !== '') {
@@ -358,33 +358,32 @@ class Grid extends View
      * Returns JS for reloading View.
      *
      * @param array             $args
-     * @param jsExpression|null $afterSuccess
+     * @param JsExpression|null $afterSuccess
      * @param array             $apiConfig
      *
-     * @return \atk4\ui\jsReload
+     * @return \atk4\ui\JsReload
      */
     public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
     {
-        return new jsReload($this->container, $args, $afterSuccess, $apiConfig);
+        return new JsReload($this->container, $args, $afterSuccess, $apiConfig);
     }
 
     /**
-     * Adds a new button into the action column on the right. For CRUD this
+     * Adds a new button into the action column on the right. For Crud this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array|View         $button  Label text, object or seed for the Button
-     * @param jsExpressionable|callable $action  JavaScript action or callback
-     * @param bool|string               $confirm Should we display confirmation "Are you sure?"
+     * @param string|array|View         $button Label text, object or seed for the Button
+     * @param JsExpressionable|callable $action JavaScript action or callback
      *
      * @return object
      */
-    public function addActionButton($button, $action = null, $confirm = false, $isDisabled = false)
+    public function addActionButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
         if (!$this->actionButtons) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actionButtons->addButton($button, $action, $confirm, $isDisabled);
+        return $this->actionButtons->addButton($button, $action, $confirmMsg, $isDisabled);
     }
 
     /**
@@ -395,13 +394,13 @@ class Grid extends View
      *
      * @return mixed
      */
-    public function addActionMenuItem($view, $action = null, bool $confirm = false, bool $isDisabled = false)
+    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', bool $isDisabled = false)
     {
         if (!$this->actionMenu) {
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
         }
 
-        return $this->actionMenu->addActionMenuItem($view, $action, $confirm, $isDisabled);
+        return $this->actionMenu->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
     }
 
     /**
@@ -444,7 +443,7 @@ class Grid extends View
         if (!$this->menu) {
             throw new Exception('Unable to add Filter Column without Menu');
         }
-        $this->menu->addItem(['Clear Filters'], new \atk4\ui\jsReload($this->table->reload, ['atk_clear_filter' => 1]));
+        $this->menu->addItem(['Clear Filters'], new \atk4\ui\JsReload($this->table->reload, ['atk_clear_filter' => 1]));
         $this->table->setFilterColumn($names);
 
         return $this;
@@ -593,7 +592,7 @@ class Grid extends View
         $this->table->on(
             'click',
             'thead>tr>th.sortable',
-            new jsReload($this->container, [$this->sortTrigger => (new jQuery())->data('sort')])
+            new JsReload($this->container, [$this->sortTrigger => (new Jquery())->data('sort')])
         );
     }
 
@@ -683,7 +682,7 @@ class Grid extends View
             $this->setModelLimitFromPaginator();
         }
 
-        if ($this->quickSearch instanceof jsSearch) {
+        if ($this->quickSearch instanceof JsSearch) {
             if ($sortBy = $this->getSortBy()) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->sortTrigger, $sortBy]));
             }
@@ -695,7 +694,7 @@ class Grid extends View
     /**
      * Proxy function for Table::jsRow().
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsRow()
     {

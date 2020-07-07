@@ -12,7 +12,7 @@ use atk4\ui\Callback;
 interface LoadableContent
 {
     /**
-     * Add jsCallback.
+     * Add JsCallback.
      *
      * @return mixed
      */

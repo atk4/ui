@@ -57,7 +57,7 @@ $form->addControl('status_string_mandatory', [Form\Control\Dropdown::class], ['t
 $form->addControl('status_integer_mandatory', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'mandatory' => true]);
 
 $form->onSubmit(function (Form $form) use ($app) {
-    return new \atk4\ui\jsToast($app->encodeJson($form->model->get()));
+    return new \atk4\ui\JsToast($app->encodeJson($form->model->get()));
 });
 
 \atk4\ui\Header::addTo($tab, ['Comparing Field type vs Form control class']);

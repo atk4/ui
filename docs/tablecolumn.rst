@@ -44,20 +44,20 @@ but first we need to look at the generic column and understand it's base capabil
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
 when constructing HTML:
 
-.. php:method:: getHeaderCellHTML(\atk4\data\Field $field)
+.. php:method:: getHeaderCellHtml(\atk4\data\Field $field)
 
 Must respond with HTML for the header cell (`<th>`) and an appropriate caption. If necessary
 will include "sorting" icons or any other controls that go in the header of the table.
 
-.. php:method:: getTotalsCellHTML(\atk4\data\Field $field, $value)
+.. php:method:: getTotalsCellHtml(\atk4\data\Field $field, $value)
 
 Provided with the field and the value, format the cell for the footer "totals" row. Table
 can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
 
-.. php:method:: getDataCellHTML(\atk4\data\Field $field)
+.. php:method:: getDataCellHtml(\atk4\data\Field $field)
 
 Provided with a field, this method will respond with HTML **template**. In order to keep
-performance of Web Application at the maximum, Table will execute getDataCellHTML for all the
+performance of Web Application at the maximum, Table will execute getDataCellHtml for all the
 fields once. When iterating, a combined template will be used to display the values.
 
 The template must not incorporate field values (simply because related model will not be
@@ -78,7 +78,7 @@ values or if it doesn't contain any values at all.
 
 Sometimes you do want to inject HTML instead of using row values:
 
-.. php:method:: getHTMLTags($model, $field = null)
+.. php:method:: getHtmlTags($model, $field = null)
 
 Return array of HTML tags that will be injected into the row template. See
 :php:ref:`table_html` for further example.
@@ -287,7 +287,7 @@ click on the button, it will reload $segment component while passing all the id'
 
     $box = $table->addColumn(new \atk4\ui\Table\Column\CheckBox());
 
-    $button->on('click', new jsReload($segment, ['ids'=>$box->jsChecked()]));
+    $button->on('click', new JsReload($segment, ['ids'=>$box->jsChecked()]));
 
 jsChecked expression represents a JavaScript string which you can place inside a form control,
 use as argument etc.

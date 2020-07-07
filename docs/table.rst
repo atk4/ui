@@ -10,14 +10,14 @@ Table
 .. php:class:: Table
 
 .. important:: For columns, see :php:class:`Table\\Column`. For DIV-based lists, see :php:class:`Lister`. For an
-    interractive features see :php:class:`Grid` and :php:class:`CRUD`.
+    interractive features see :php:class:`Grid` and :php:class:`Crud`.
 
 Table is the simplest way to output multiple records of structured, static data. For Un-structure output
 please see :php:class:`Lister`
 
     .. image:: images/table.png
 
-Various composite components use Table as a building block, see :php:class:`Grid` and :php:class:`CRUD`.
+Various composite components use Table as a building block, see :php:class:`Grid` and :php:class:`Crud`.
 Main features of Table class are:
 
  - Tabular rendering using column headers on top of markup of https://fomantic-ui.com/collections/table.html.
@@ -166,8 +166,8 @@ it will automatically delete the corresponding record.
 
 You have probably noticed, that I have omitted the name for this column. If name is not specified
 (null) then the Column object will not be associated with any model field in
-:php:meth:`Table\\Column::getHeaderCellHTML`, :php:meth:`Table\\Column::getTotalsCellHTML` and
-:php:meth:`Table\\Column::getDataCellHTML`.
+:php:meth:`Table\\Column::getHeaderCellHtml`, :php:meth:`Table\\Column::getTotalsCellHtml` and
+:php:meth:`Table\\Column::getDataCellHtml`.
 
 Some columns require name, such as :php:class:`Table\\Column` will
 not be able to cope with this situations, but many other column types are perfectly fine with this.
@@ -257,16 +257,16 @@ For more information see https://github.com/kylefox/jquery-tablesort
 Injecting HTML
 --------------
 
-The tag will override model value. Here is example usage of :php:meth:`Table\\Column::getHTMLTags`::
+The tag will override model value. Here is example usage of :php:meth:`Table\\Column::getHtmlTags`::
 
 
     class ExpiredColumn extends \atk4\ui\Table\Column
-        public function getDataCellHTML()
+        public function getDataCellHtml()
         {
             return '{$_expired}';
         }
 
-        function getHTMLTags(\atk4\data\Model $row)
+        function getHtmlTags(\atk4\data\Model $row)
         {
             return ['_expired'=>
                 $row->get('date') < new \DateTime() ?
@@ -333,8 +333,8 @@ During the render process (see :php:meth:`View::renderView`) Table will perform 
     3.2 Update Totals if :php:meth:`Table::addTotals` was used.
     3.3 Insert row values into :php:attr:`Table::t_row`
         3.3.1 Template relies on :ref:`ui_persistence` for formatting values
-    3.4 Collect HTML tags from 'getHTMLTags' hook.
-    3.5 Collect getHTMLTags() from columns objects
+    3.4 Collect HTML tags from 'getHtmlTags' hook.
+    3.5 Collect getHtmlTags() from columns objects
     3.6 Inject HTML into :php:attr:`Table::t_row` template
     3.7 Render and append row template to Table Body ({$Body})
     3.8 Clear HTML tag values from template.
@@ -422,8 +422,8 @@ Redefining
 ----------
 
 If you are defining your own column, you may want to re-define getDataCellTemplate. The
-getDataCellHTML can be left as-is and will be handled correctly. If you have overriden
-getDataCellHTML only, then your column will still work OK provided that it's used as a
+getDataCellHtml can be left as-is and will be handled correctly. If you have overriden
+getDataCellHtml only, then your column will still work OK provided that it's used as a
 last decorator.
 
 Advanced Usage
@@ -437,12 +437,12 @@ Toolbar, Quick-search and Paginator
 
 See :php:class:`Grid`
 
-jsPaginator
+JsPaginator
 -----------
 
 .. php:method:: addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
 
-jsPaginator will load table content dynamically when user scroll down the table window on screen.
+JsPaginator will load table content dynamically when user scroll down the table window on screen.
 
     $table->addJsPaginator(30);
 
@@ -476,9 +476,9 @@ Column attributes and classes
 By default Table will include ID for each row: `<tr data-id="123">`. The following code example
 demonstrates how various standard column types are relying on this property::
 
-    $table->on('click', 'td', new jsExpression(
+    $table->on('click', 'td', new JsExpression(
         'document.location=page.php?id=[]',
-        [(new jQuery())->closest('tr')->data('id')]
+        [(new Jquery())->closest('tr')->data('id')]
     ));
 
 See also :ref:`js`.
@@ -519,8 +519,8 @@ For setting an attribute you can use setAttr() method::
 
 Setting a new value to the attribute will override previous value.
 
-Please note that if you are redefining :php:meth:`Table\\Column::getHeaderCellHTML`,
-:php:meth:`Table\\Column::getTotalsCellHTML` or :php:meth:`Table\\Column::getDataCellHTML`
+Please note that if you are redefining :php:meth:`Table\\Column::getHeaderCellHtml`,
+:php:meth:`Table\\Column::getTotalsCellHtml` or :php:meth:`Table\\Column::getDataCellHtml`
 and you wish to preserve functionality of setting custom attributes and
 classes, you should generate your TD/TH tag through getTag method.
 
@@ -540,7 +540,7 @@ You can add column to a table that does not link with field::
 Using dynamic values
 --------------------
 
-Body attributes will be embedded into the template by the default :php:meth:`Table\\Column::getDataCellHTML`,
+Body attributes will be embedded into the template by the default :php:meth:`Table\\Column::getDataCellHtml`,
 but if you specify attribute (or class) value as a tag, then it will be auto-filled
 with row value or injected HTML.
 

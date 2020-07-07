@@ -17,7 +17,7 @@ Agile Toolkit base package includes:
 EOF
         );
 
-        $t->addHTML(
+        $t->addHtml(
             <<< 'HTML'
 <ul>
 <li>Over 40 ready-to-use and nicely styled UI components</li>

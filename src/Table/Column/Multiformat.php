@@ -20,7 +20,7 @@ class Multiformat extends Table\Column
      */
     public $callback;
 
-    public function getDataCellHTML(Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, $extra_tags = [])
     {
         return '{$c_' . $this->short_name . '}';
     }
@@ -30,7 +30,7 @@ class Multiformat extends Table\Column
         $this->callback = $callback;
     }
 
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         if (!$this->callback) {
             throw (new Exception('Must specify a callback for column'))
@@ -62,7 +62,7 @@ class Multiformat extends Table\Column
                 $td_attr = $c->getTagAttributes('body', $td_attr);
             } else {
                 // Last formatter, ask it to give us whole rendering
-                $html = $c->getDataCellHTML($field, $td_attr);
+                $html = $c->getDataCellHtml($field, $td_attr);
             }
 
             if ($cell) {
@@ -75,15 +75,15 @@ class Multiformat extends Table\Column
             } else {
                 $cell = $html;
             }
-            if (!method_exists($c, 'getHTMLTags')) {
+            if (!method_exists($c, 'getHtmlTags')) {
                 continue;
             }
-            $html_tags = array_merge($c->getHTMLTags($row, $field), $html_tags);
+            $html_tags = array_merge($c->getHtmlTags($row, $field), $html_tags);
         }
 
         $template = Template::addTo($this->owner, [$cell]);
         $template->set($row);
-        $template->setHTML($html_tags);
+        $template->setHtml($html_tags);
 
         $val = $template->render();
 

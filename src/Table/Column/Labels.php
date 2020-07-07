@@ -26,7 +26,7 @@ class Labels extends Table\Column
      *
      * @return array|void
      */
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         $values = $this->values ?? $field->values;
 

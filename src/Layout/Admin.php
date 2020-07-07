@@ -7,7 +7,7 @@ namespace atk4\ui\Layout;
 use atk4\ui\Header;
 use atk4\ui\Icon;
 use atk4\ui\Item;
-use atk4\ui\jQuery;
+use atk4\ui\Jquery;
 use atk4\ui\Menu;
 
 /**
@@ -57,8 +57,8 @@ class Admin extends \atk4\ui\Layout implements NavigableInterface
             );
             $this->burger = $this->menu->addItem(['class' => ['icon']]);
             $this->burger->on('click', [
-                (new jQuery('.atk-sidenav'))->toggleClass('visible'),
-                (new jQuery('body'))->toggleClass('atk-sidenav-visible'),
+                (new Jquery('.atk-sidenav'))->toggleClass('visible'),
+                (new Jquery('body'))->toggleClass('atk-sidenav-visible'),
             ]);
             Icon::addTo($this->burger, ['content']);
 

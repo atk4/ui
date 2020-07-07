@@ -61,7 +61,7 @@ $lister->setModel($search->setModelCondition($model))->setLimit(50);
 //****** CREATING CUSTOM VUE USING EXTERNAL COMPONENT *****************************
 \atk4\ui\Header::addTo($app, ['External Component', 'subHeader' => 'Creating component using an external component definition.']);
 
-$app->requireJS('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min');
+$app->requireJs('https://unpkg.com/vue-clock2@1.1.5/dist/vue-clock.min');
 
 // Injecting template but normally you would create a template file.
 $clock_template = new \atk4\ui\Template('

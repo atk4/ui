@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Form;
-use atk4\ui\jsExpression;
-use atk4\ui\jsFunction;
+use atk4\ui\JsExpression;
+use atk4\ui\JsFunction;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -65,11 +65,11 @@ $multiline->onLineChange(function ($rows, $form) use ($controlTotal) {
     return $controlTotal->jsInput()->val($total);
 }, ['qty', 'box']);
 
-$multiline->jsAfterAdd = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
-$multiline->jsAfterDelete = new jsFunction(['value'], [new jsExpression('console.log(value)')]);
+$multiline->jsAfterAdd = new JsFunction(['value'], [new JsExpression('console.log(value)')]);
+$multiline->jsAfterDelete = new JsFunction(['value'], [new JsExpression('console.log(value)')]);
 
 $form->onSubmit(function (Form $form) use ($multiline) {
     $rows = $multiline->saveRows()->getModel()->export();
 
-    return new \atk4\ui\jsToast(json_encode(array_values($rows)));
+    return new \atk4\ui\JsToast(json_encode(array_values($rows)));
 });

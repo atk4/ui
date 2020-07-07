@@ -48,8 +48,8 @@ through a GET argument, then VirtualPage will change it's rendering technique. L
 
     $label = \atk4\ui\Label::addTo($layout);
 
-    $label->detail = $vp->cb->getURL();
-    $label->link($vp->cb->getURL());
+    $label->detail = $vp->cb->getUrl();
+    $label->link($vp->cb->getUrl());
 
 This code will only show the link containing a URL, but will not show LoremIpsum text.  If you do follow the link, you'll
 see only the 'LoremIpsum' text.
@@ -62,18 +62,18 @@ See :php:attr:`Callback::urlTrigger`.
 Output Modes
 ^^^^^^^^^^^^
 
-.. php:method:: getURL($mode = 'callback')
+.. php:method:: getUrl($mode = 'callback')
 
 VirtualPage can be used to provide you either with RAW HTML content or wrap it into boilerplate HTML.
-As you may know, :php:meth:`Callback::getURL()` accepts an argument, and VirtualPage gives this argument meaning:
+As you may know, :php:meth:`Callback::getUrl()` accepts an argument, and VirtualPage gives this argument meaning:
 
-- getURL('cut') gives you URL which will return ONLY the HTML of virtual page, no Layout or boilerplate.
-- getURL('popup') gives you URL which will return a very minimalistic layout inside a valid HTML boilerplate, suitable for iframes or popup windows.
+- getUrl('cut') gives you URL which will return ONLY the HTML of virtual page, no Layout or boilerplate.
+- getUrl('popup') gives you URL which will return a very minimalistic layout inside a valid HTML boilerplate, suitable for iframes or popup windows.
 
 You can experement with::
 
-    $label->detail = $vp->cb->getURL('popup');
-    $label->link($vp->cb->getURL('popup'));
+    $label->detail = $vp->cb->getUrl('popup');
+    $label->link($vp->cb->getUrl('popup'));
 
 Setting Callback
 ^^^^^^^^^^^^^^^^
@@ -89,8 +89,8 @@ Although VirtualPage can work without defining a callback, using one is more rel
 
     $label = \atk4\ui\Label::addTo($layout);
 
-    $label->detail = $vp->cb->getURL();
-    $label->link($vp->cb->getURL());
+    $label->detail = $vp->cb->getUrl();
+    $label->link($vp->cb->getUrl());
 
 This code will perform identically as the previous example, however 'LoremIpsum' will never be initialized
 unless you are requesting VirtualPage specifically, saving some CPU time. Capability of defining callback
@@ -103,9 +103,9 @@ To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the foll
     \atk4\ui\LoremIpsum::addTo($t->addTab('Tab1')); // regular tab
     $t->addTab('Tab2', function($p){ \atk4\ui\LoremIpsum::addTo($p); }); // dynamic tab
 
-.. php:method:: getURL($html_wrapping)
+.. php:method:: getUrl($html_wrapping)
 
-    You can use this shortcut method instead of $vp->cb->getURL().
+    You can use this shortcut method instead of $vp->cb->getUrl().
 
 .. php:attr:: $ui
 
@@ -118,8 +118,8 @@ class, you can set $ui property to something else. Try::
 
     $label = \atk4\ui\Label::addTo($layout);
 
-    $label->detail = $vp->cb->getURL('popup');
-    $label->link($vp->cb->getURL('popup'));
+    $label->detail = $vp->cb->getUrl('popup');
+    $label->link($vp->cb->getUrl('popup'));
 
 
 
@@ -180,7 +180,7 @@ Sometimes you want to control the event.
 Returns JS action which will trigger loading. The action will be carried out in 2 steps:
 
 - loading indicator will be displayed
-- JS will request content from $this->getURL() and provided by set()
+- JS will request content from $this->getUrl() and provided by set()
 - Content will be placed inside Loader's DIV replacing shiv (or previously loaded content)
 - loading indicator will is hidden
 
@@ -210,7 +210,7 @@ This approach allow you to trigger loader from inside JavaScript easily. See als
 Reloading
 ^^^^^^^^^
 
-If you execute :php:class:`jsReload` action on the Loader, it will return to original state.
+If you execute :php:class:`JsReload` action on the Loader, it will return to original state.
 
 
 Inline Editing Example
@@ -233,7 +233,7 @@ Next example will display DataTable, but will allow you to repalce data with a f
         $form->addControl('year');
 
         $form->onSubmit(function($form) use ($loader) {
-            return new \atk4\ui\jsReload($loader, ['year'=>$form->model->get('year')]);
+            return new \atk4\ui\JsReload($loader, ['year'=>$form->model->get('year')]);
         });
     });
 

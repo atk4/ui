@@ -2,13 +2,13 @@
 .. _crud:
 
 ====
-CRUD
+Crud
 ====
 
 .. php:namespace:: atk4\ui
-.. php:class:: CRUD
+.. php:class:: Crud
 
-CRUD class offers a very usable extension to :php:class:`Grid` class, which automatically adds actions for deleting,
+Crud class offers a very usable extension to :php:class:`Grid` class, which automatically adds actions for deleting,
 updating and adding records as well as linking them with corresponding Model actions.
 
 .. important:: If you only wish to display a non-interractive table use :php:class:`Table` class. If you need to
@@ -16,15 +16,15 @@ updating and adding records as well as linking them with corresponding Model act
     mechanism (such as edit data on separate page, not inside a modal), use :php:class:`Grid`
 
 
-.. important:: ATK Addon - MasterCRUD implements a higher-level multi-model management solution, that takes
-    advantage of model relations and traversal to create multiple levels of CRUDs: https://github.com/atk4/mastercrud
+.. important:: ATK Addon - MasterCrud implements a higher-level multi-model management solution, that takes
+    advantage of model relations and traversal to create multiple levels of Cruds: https://github.com/atk4/mastercrud
 
-Using CRUD
+Using Crud
 ==========
 
-The basic usage of CRUD is::
+The basic usage of Crud is::
 
-    CRUD::addTo($app)->setModel(new Country($app->db));
+    Crud::addTo($app)->setModel(new Country($app->db));
 
 Users are now able to fully interract with the table. There are ways to restrict which "rows" and which "columns" user
 can access. First we can only allow user to read, manage and delete only countries that are part of European Union::
@@ -32,7 +32,7 @@ can access. First we can only allow user to read, manage and delete only countri
     $eu_countries = new Country($app->db);
     $eu_countries->addCondition('is_eu', true);
 
-    CRUD::addTo($app)->setModel($eu_countries);
+    Crud::addTo($app)->setModel($eu_countries);
 
 After that column `is_eu` will not be editable to the user anymore as it will be marked `system` by `addCondition`.
 
@@ -41,12 +41,12 @@ You can also specify which columns you would like to see on the grid::
     $crud->setModel($eu_countries, ['name']);
 
 This restriction will apply to both viewing and editing, but you can fine-tune that by specifying one of many
-parameters to CRUD.
+parameters to Crud.
 
 Disabling Actions
 =================
 
-By default CRUD allows all four operations - creating, reading, updating and deleting. These action is set by default in model
+By default Crud allows all four operations - creating, reading, updating and deleting. These action is set by default in model
 action. It is possible to disable these default actions by setting their system property to true in your model::
 
     $eu_countries->getUserAction('edit')->sytem = true;
@@ -72,7 +72,7 @@ will be used.
 Custom Form Behavior
 ====================
 
-:php:class:`Form` in Agile UI allows you to use many different things, such as custom layouts. With CRUD you can
+:php:class:`Form` in Agile UI allows you to use many different things, such as custom layouts. With Crud you can
 specify your own form behavior using a callback for action::
 
     // callback for model action add form.
@@ -88,7 +88,7 @@ specify your own form behavior using a callback for action::
     // callback for both model action edit and add.
     $g->onFormAddEdit(function ($form, $ex) {
         $form->onSubmit(function ($form) use ($ex) {
-            return [$ex->hide(), new \atk4\ui\jsToast('Submit all right! This demo does not saved data.')];
+            return [$ex->hide(), new \atk4\ui\JsToast('Submit all right! This demo does not saved data.')];
         });
     });
 

@@ -147,7 +147,7 @@ class Layout extends AbstractLayout
         foreach ($this->elements as $element) {
             // Buttons go under Button section
             if ($element instanceof \atk4\ui\Button) {
-                $this->template->appendHTML('Buttons', $element->getHTML());
+                $this->template->appendHtml('Buttons', $element->getHtml());
 
                 continue;
             }
@@ -167,16 +167,16 @@ class Layout extends AbstractLayout
                 if ($element->inline) {
                     $template->set('class', 'inline');
                 }
-                $template->setHTML('Content', $element->getHTML());
+                $template->setHtml('Content', $element->getHtml());
 
-                $this->template->appendHTML('Content', $template->render());
+                $this->template->appendHtml('Content', $template->render());
 
                 continue;
             }
 
             // Anything but controls or explicitly defined controls get inserted directly
             if (!$element instanceof Control || !$element->layoutWrap) {
-                $this->template->appendHTML('Content', $element->getHTML());
+                $this->template->appendHtml('Content', $element->getHtml());
 
                 continue;
             }
@@ -190,7 +190,7 @@ class Layout extends AbstractLayout
                 $element->template->set('Content', $label);
                 /*
                 $element->addClass('field');
-                $this->template->appendHTML('Fields', '<div class="field">'.$element->getHTML().'</div>');
+                $this->template->appendHtml('Fields', '<div class="field">'.$element->getHtml().'</div>');
                 continue;
                  */
             }
@@ -205,7 +205,7 @@ class Layout extends AbstractLayout
             }
 
             // Fields get extra pampering
-            $template->setHTML('Input', $element->getHTML());
+            $template->setHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
             $template->trySet('label_for', $element->id . '_input');
             $template->set('control_class', $element->getControlClass());
@@ -231,15 +231,15 @@ class Layout extends AbstractLayout
                 } else {
                     $hint->set($element->hint);
                 }
-                $template->setHTML('Hint', $hint->getHTML());
+                $template->setHtml('Hint', $hint->getHtml());
             } elseif ($template->hasTag('Hint')) {
                 $template->del('Hint');
             }
 
             if ($this->template->hasTag($element->short_name)) {
-                $this->template->trySetHTML($element->short_name, $template->render());
+                $this->template->trySetHtml($element->short_name, $template->render());
             } else {
-                $this->template->appendHTML('Content', $template->render());
+                $this->template->appendHtml('Content', $template->render());
             }
         }
 

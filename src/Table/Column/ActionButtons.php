@@ -45,7 +45,7 @@ class ActionButtons extends Table\Column
      *
      * @return \atk4\ui\View
      */
-    public function addButton($button, $action = null, bool $confirm = false, bool $isDisabled = false)
+    public function addButton($button, $action = null, string $confirmMsg = '', bool $isDisabled = false)
     {
         // If action is not specified, perhaps it is defined in the model
         if (!$action) {
@@ -65,7 +65,7 @@ class ActionButtons extends Table\Column
         if ($action instanceof Model\UserAction) {
             $button = $action->ui['button'] ?? $button;
 
-            $confirm = $action->ui['confirm'] ?? $confirm;
+            $confirmMsg = $action->ui['confirm'] ?? $confirmMsg;
 
             $isDisabled = !$action->enabled;
 
@@ -89,7 +89,7 @@ class ActionButtons extends Table\Column
         if ($isDisabled) {
             $button->addClass('disabled');
         }
-        $this->table->on('click', '.b_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirm]);
+        $this->table->on('click', '.b_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirmMsg]);
 
         return $button;
     }
@@ -148,13 +148,13 @@ class ActionButtons extends Table\Column
         // render our buttons
         $output = '';
         foreach ($this->buttons as $button) {
-            $output .= $button->getHTML();
+            $output .= $button->getHtml();
         }
 
         return '<div class="ui buttons">' . $output . '</div>';
     }
 
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

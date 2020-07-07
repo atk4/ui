@@ -32,7 +32,7 @@ class NoValue extends Table\Column
     /** @var string */
     public $no_value = ' --- ';
 
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         $actualValue = $field->get();
 
@@ -40,6 +40,6 @@ class NoValue extends Table\Column
             return [$field->short_name => $this->no_value];
         }
 
-        return parent::getHTMLTags($row, $field);
+        return parent::getHtmlTags($row, $field);
     }
 }

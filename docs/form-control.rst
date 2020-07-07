@@ -33,7 +33,7 @@ You can set default value and interact with a form control using JavaScript::
 
 
     $button = \atk4\ui\Button::addTo($app, ['check value']);
-    $button->on('click', new \atk4\ui\jsExpression('alert("control value is: "+[])', [$control->jsInput()->val()]));
+    $button->on('click', new \atk4\ui\JsExpression('alert("control value is: "+[])', [$control->jsInput()->val()]));
 
 
 When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
@@ -291,7 +291,7 @@ onChange event
 .. php:method:: onChange($expression)
 
 It's prefferable to use this short-hand version of on('change', 'input', $expression) method.
-$expression argument can be string, jsExpression, array of jsExpressions or even PHP callback function.
+$expression argument can be string, JsExpression, array of JsExpressions or even PHP callback function.
 
     // simple string
     $f1 = $form->addControl('f1');
@@ -299,7 +299,7 @@ $expression argument can be string, jsExpression, array of jsExpressions or even
 
     // callback
     $f2 = $form->addControl('f2');
-    $f2->onChange(function(){return new \atk4\ui\jsExpression('console.log("f2 changed")');});
+    $f2->onChange(function(){return new \atk4\ui\JsExpression('console.log("f2 changed")');});
 
     // Calendar form control - wraps in function call with arguments date, text and mode
     $c1 = $form->addControl('c1', new \atk4\ui\Form\Control\Calendar(['type'=>'date']));
@@ -347,7 +347,7 @@ You can also use this function to add an Icon to a record::
 
 If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the Dropdown class and create your own template with the complex HTML::
 
-    class MyDropdown extends \atk4\ui\DropDown {
+    class MyDropdown extends \atk4\ui\Dropdown {
         
         public $defaultTemplate = 'my_dropdown.html';
         
@@ -362,7 +362,7 @@ If you'd like to even further adjust How each item is displayed (e.g. complex HT
             $this->_tItem->set('someOtherField', $res['someOtherField]);
             $this->_tItem->set('someOtherField2', $res['someOtherField2]);
             //add item to template
-            $this->template->appendHTML('Item', $this->_tItem->render());
+            $this->template->appendHtml('Item', $this->_tItem->render());
        }
    }
 

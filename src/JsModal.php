@@ -7,17 +7,17 @@ namespace atk4\ui;
 /**
  * This class generates action, that will be able to loop-back to the callback method.
  */
-class jsModal extends jsExpression
+class JsModal extends JsExpression
 {
     /**
-     * jsModal constructor.
+     * JsModal constructor.
      *
      * @param string $title when empty, header will be remove in modal
      */
     public function __construct($title, $url, array $args = [], string $dataType = 'json')
     {
         if ($url instanceof VirtualPage) {
-            $url = $url->getJSURL('cut');
+            $url = $url->getJsUrl('cut');
         }
 
         parent::__construct('$(this).atkCreateModal([arg])', ['arg' => ['uri' => $url, 'title' => $title, 'data_type' => $dataType, 'uri_options' => $args]]);
@@ -28,7 +28,7 @@ class jsModal extends jsExpression
     }
 
     /**
-     * Set additionnal option for this jsModal.
+     * Set additionnal option for this JsModal.
      *
      * Valuable option are headerCss and label:
      *  'headerCss' -> customize css class name for the header.

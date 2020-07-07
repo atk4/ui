@@ -22,7 +22,7 @@ custom HTML template specified into generic :php:class:`View`.
 When it comes to decoration, the method is very dependent on the context. A form may present
 Calendar (DatePicker) or enable control icon to indicate currency.
 
-Presentation in Agile Toolkit is handled by :php:class:`Persistence\\UI`.
+Presentation in Agile Toolkit is handled by :php:class:`Persistence\\Ui`.
 
 Decoration is performed by helper classes, such as :php:class:`Form\\Control\\Calendar` or
 :php:class:`Table\\Column\\\Money`. The decorator is in control of the final output, so it can decide if
@@ -129,7 +129,7 @@ yet make it available when editing, you could create your own :php:class:`Table\
             return '**** **** **** {$mask}';
         }
 
-        public function getHTMLTags(\atk4\data\Model $row, $field)
+        public function getHtmlTags(\atk4\data\Model $row, $field)
         {
             return [
                 'mask' => substr($field->get(), -4) 
@@ -145,9 +145,9 @@ Display credit card number with spaces
 --------------------------------------
 If we always have to display card numbers with spaces, e.g. "1234 1234 1234 1234" but have
 the database store them without spaces, then this is a data formatting task best done by
-extending :php:class:`Persistence\\UI`::
+extending :php:class:`Persistence\\Ui`::
 
-    class MyPersistence extends \atk4\ui\Persistence\UI
+    class MyPersistence extends \atk4\ui\Persistence\Ui
     {
 
         public function _typecastSaveField(\atk4\data\Field $field, $value)

@@ -20,7 +20,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $files = new FileLock($app->db);
 
-// This action must appear on top of the CRUD
+// This action must appear on top of the Crud
 $action = $files->addUserAction(
     'import_from_filesystem',
     [
@@ -51,7 +51,7 @@ $executor->ui = 'segment';
 $executor->description = 'Execute action using "BasicExecutor" and path="." argument';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x) {
-    return new \atk4\ui\jsToast('Done!');
+    return new \atk4\ui\JsToast('Done!');
 });
 
 $grid->add($executor = new UserAction\ArgumentFormExecutor(), 'r1c2');
@@ -59,7 +59,7 @@ $executor->setAction($action);
 $executor->description = 'ArgumentFormExecutor will ask user about arguments';
 $executor->ui = 'segment';
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \atk4\ui\jsToast('Imported!');
+    return new \atk4\ui\JsToast('Imported!');
 });
 
 $grid->add($executor = new \atk4\ui\UserAction\PreviewExecutor(), 'r1c3');
@@ -69,7 +69,7 @@ $executor->previewType = 'console';
 $executor->description = 'Displays preview in console prior to executing';
 $executor->setArguments(['path' => '.']);
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \atk4\ui\jsToast('Confirm!');
+    return new \atk4\ui\JsToast('Confirm!');
 });
 
-\atk4\ui\CRUD::addTo($app, ['ipp' => 5])->setModel($files);
+\atk4\ui\Crud::addTo($app, ['ipp' => 5])->setModel($files);

@@ -317,7 +317,7 @@ Changing template contents
     Escapes and inserts value inside a tag. If passed a hash, then each
     key is used as a tag, and corresponding value is inserted.
 
-.. php:method:: setHTML(tag, value)
+.. php:method:: setHtml(tag, value)
 
     Identical but will not escape. Will also accept hash similar to set()
 
@@ -329,11 +329,11 @@ Changing template contents
 
     Attempts to append value to existing but will do nothing if tag does not exist.
 
-.. php:method:: appendHTML(tag, value)
+.. php:method:: appendHtml(tag, value)
 
     Similar to append, but will not escape.
 
-.. php:method:: tryAppendHTML(tag, value)
+.. php:method:: tryAppendHtml(tag, value)
 
     Attempts to append non-escaped value, but will do nothing if tag does not exist.
 
@@ -344,7 +344,7 @@ Example::
     $template->loadTemplateFromString('Hello, {name}world{/}');
 
     $template->set('name', 'John');
-    $template->appendHTML('name', '&nbsp;<i class="icon-heart"></i>');
+    $template->appendHtml('name', '&nbsp;<i class="icon-heart"></i>');
 
     echo $template->render();
 

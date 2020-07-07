@@ -6,7 +6,7 @@ namespace atk4\ui\Persistence;
 
 use atk4\data\Model;
 
-class POST extends \atk4\data\Persistence
+class Post extends \atk4\data\Persistence
 {
     public function load(Model $model, $id = 0)
     {

@@ -21,14 +21,14 @@ class Delete extends Table\Column
 
             $reload = $this->table->reload ?: $this->table;
 
-            $this->table->app->terminateJSON($reload);
+            $this->table->app->terminateJson($reload);
         });
     }
 
     public function getDataCellTemplate(\atk4\data\Field $field = null)
     {
-        $this->table->on('click', 'a.' . $this->short_name, null, ['confirm' => (new \atk4\ui\jQuery())->attr('title')])->atkAjaxec([
-            'uri' => $this->vp->getJSURL(),
+        $this->table->on('click', 'a.' . $this->short_name, null, ['confirm' => (new \atk4\ui\Jquery())->attr('title')])->atkAjaxec([
+            'uri' => $this->vp->getJsUrl(),
             'uri_options' => [$this->name => $this->table->jsRow()->data('id')],
         ]);
 

@@ -43,7 +43,7 @@ CODE
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
-Once defied - actions will be visualised in the Form, Grid, CRUD and CardDeck. Additionally add-ons will recognise
+Once defied - actions will be visualised in the Form, Grid, Crud and CardDeck. Additionally add-ons will recognise
 your actions - for example 'Login' add-on introduces ACL system capable of enabling/disabling fields or actions
 on per-user basis.
 EOF
@@ -188,11 +188,11 @@ CODE
 });
 */
 
-$wizard->addStep('CRUD integration', function ($page) {
+$wizard->addStep('Crud integration', function ($page) {
     $t = \atk4\ui\Text::addTo($page);
     $t->addParagraph(
         <<< 'EOF'
-Compared to 1.x versions CRUD implementation has became much more lightweight, however you retain all the same
+Compared to 1.x versions Crud implementation has became much more lightweight, however you retain all the same
 functionality and more. Next example shows how you can disable action (add) entirely, or on per-row basis (delete)
 and how you could add your own action with a custom trigger button and even a preview.
 EOF
@@ -211,7 +211,7 @@ $country->getUserAction('mail', [
     'ui'       => ['icon'=>'mail', 'button'=>[null, 'icon'=>'green mail']],
 ]);
 
-\atk4\ui\CRUD::addTo($app, ['ipp' => 5])
+\atk4\ui\Crud::addTo($app, ['ipp' => 5])
     ->setModel($country, ['name','iso']);
 CODE
     );

@@ -10,14 +10,14 @@ use atk4\ui\Table;
 require_once __DIR__ . '/../init-app.php';
 
 if ($id = $_GET['id'] ?? null) {
-    $app->layout->js(true, new \atk4\ui\jsToast('Details link is in simulation mode.'));
+    $app->layout->js(true, new \atk4\ui\JsToast('Details link is in simulation mode.'));
 }
 
 $bb = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
 
 $table = \atk4\ui\Table::addTo($app, ['celled' => true]);
 \atk4\ui\Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
-    ->on('click', new \atk4\ui\jsReload($table));
+    ->on('click', new \atk4\ui\JsReload($table));
 
 $bb->on('click', $table->js()->reload());
 

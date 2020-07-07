@@ -7,7 +7,7 @@ namespace atk4\ui;
 /**
  * This class generates action, that will be able to loop-back to the callback method.
  */
-class jsReload implements jsExpressionable
+class JsReload implements JsExpressionable
 {
     /**
      * Specifies which view to reload. Use constructor to set.
@@ -19,13 +19,13 @@ class jsReload implements jsExpressionable
     /**
      * A Js function to execute after reload is complete and onSuccess is execute.
      *
-     * @var jsExpression
+     * @var JsExpression
      */
     public $afterSuccess;
 
     /**
      * If defined, they will be added at the end of your URL.
-     * Value in ARG can be either string or jsExpressionable.
+     * Value in ARG can be either string or JsExpressionable.
      *
      * @var array
      */
@@ -52,10 +52,10 @@ class jsReload implements jsExpressionable
 
     public function jsRender()
     {
-        $final = (new jQuery($this->view))
+        $final = (new Jquery($this->view))
             ->atkReloadView(
                 [
-                    'uri' => $this->view->jsURL(['__atk_reload' => $this->view->name]),
+                    'uri' => $this->view->jsUrl(['__atk_reload' => $this->view->name]),
                     'uri_options' => !empty($this->args) ? $this->args : null,
                     'afterSuccess' => $this->afterSuccess ? $this->afterSuccess->jsRender() : null,
                     'apiConfig' => !empty($this->apiConfig) ? $this->apiConfig : null,

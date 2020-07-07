@@ -7,10 +7,10 @@ namespace atk4\ui\UserAction;
 use atk4\core\HookTrait;
 use atk4\data\Model;
 use atk4\ui\Exception;
-use atk4\ui\jQuery;
-use atk4\ui\jsCallback;
-use atk4\ui\jsExpressionable;
-use atk4\ui\jsToast;
+use atk4\ui\Jquery;
+use atk4\ui\JsCallback;
+use atk4\ui\JsExpressionable;
+use atk4\ui\JsToast;
 use atk4\ui\View;
 
 /**
@@ -25,7 +25,7 @@ use atk4\ui\View;
  *
  * $btn->on('click', new UserAction\JsEventExecutor($btn, $action, $actionArgs), ['confirm' => 'Sure?']);
  */
-class JsEventExecutor implements jsExpressionable
+class JsEventExecutor implements JsExpressionable
 {
     use HookTrait;
 
@@ -51,13 +51,13 @@ class JsEventExecutor implements jsExpressionable
     /** @var array The action arguments */
     public $args;
 
-    /** @var jsCallback */
+    /** @var JsCallback */
     public $cb;
 
     /**
      * js executable to run after action successfully execute.
      *
-     * @var jsExpressionable
+     * @var JsExpressionable
      */
     public $jsSuccess;
 
@@ -80,7 +80,7 @@ class JsEventExecutor implements jsExpressionable
                 throw new Exception('Context must be part of a render tree. Missing app property.');
             }
 
-            $this->cb = jsCallback::addTo($this->context);
+            $this->cb = JsCallback::addTo($this->context);
         }
     }
 
@@ -133,7 +133,7 @@ class JsEventExecutor implements jsExpressionable
             }
 
             if ($errors = $this->hasAllArguments()) {
-                $js = new jsToast(['title' => 'Error', 'message' => 'Missing Arguments: ' . implode(', ', $errors), 'class' => 'error']);
+                $js = new JsToast(['title' => 'Error', 'message' => 'Missing Arguments: ' . implode(', ', $errors), 'class' => 'error']);
             } else {
                 $args = [];
                 foreach ($this->action->args as $key => $val) {
@@ -143,15 +143,15 @@ class JsEventExecutor implements jsExpressionable
                 $return = $this->action->execute(...$args);
                 $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
 
-                $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+                $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
             }
 
             return $js;
         });
 
-        $final = (new jQuery($this->context))
+        $final = (new Jquery($this->context))
             ->atkAjaxec([
-                'uri' => $this->cb->getJSURL(),
+                'uri' => $this->cb->getJsUrl(),
                 'uri_options' => array_merge(['atk_event_id' => $this->modelId], $this->args),
                 'apiConfig' => ['stateContext' => $this->stateContext],
             ]);

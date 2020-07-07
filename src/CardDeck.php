@@ -63,7 +63,7 @@ class CardDeck extends View
     public $jsExecutor = [UserAction\JsCallbackExecutor::class];
 
     /** @var array Default notifier to perform when model action is successful * */
-    public $notifyDefault = [jsToast::class, 'settings' => ['displayTime' => 5000]];
+    public $notifyDefault = [JsToast::class, 'settings' => ['displayTime' => 5000]];
 
     /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty. */
     public $singleScopeActions = [];
@@ -161,7 +161,7 @@ class CardDeck extends View
                         foreach ($singleActions as $action) {
                             $action->ui['executor'] = $this->initActionExecutor($action);
                             if ($action->ui['executor'] instanceof UserAction\JsCallbackExecutor) {
-                                $id_arg[0] = (new jQuery())->parents('.atk-card')->data('id');
+                                $id_arg[0] = (new Jquery())->parents('.atk-card')->data('id');
                             }
                             $c->addClickAction($action, null, array_merge($id_arg, $args));
                         }
@@ -194,7 +194,7 @@ class CardDeck extends View
             $ex = $menuAction['action']->ui['executor'];
             if ($ex instanceof UserAction\JsExecutorInterface) {
                 $this->container->js(true, $menuAction['btn']->js()->off('click'));
-                $this->container->js(true, $menuAction['btn']->js()->on('click', new jsFunction($ex->jsExecute($this->_getReloadArgs()))));
+                $this->container->js(true, $menuAction['btn']->js()->on('click', new JsFunction($ex->jsExecute($this->_getReloadArgs()))));
             }
         }
     }
@@ -237,7 +237,7 @@ class CardDeck extends View
     {
         if (is_string($return)) {
             return  $this->getNotifier($return, $action);
-        } elseif (is_array($return) || $return instanceof jsExpressionable) {
+        } elseif (is_array($return) || $return instanceof JsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
             $msg = $return->loaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
@@ -335,7 +335,7 @@ class CardDeck extends View
      * Add button to menu bar on top of deck card.
      *
      * @param Button|string|Model\UserAction                  $button   a button object, a model action or a string representing a model action
-     * @param Model\UserAction|jsExpressionable|callable|null $callback an model action, js expression or callback function
+     * @param Model\UserAction|JsExpressionable|callable|null $callback an model action, js expression or callback function
      * @param string|array                                    $confirm  A confirmation string or View::on method defaults when passed has an array,
      *
      * @return mixed

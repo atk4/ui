@@ -13,7 +13,7 @@ class DragHandler extends Table\Column
 {
     public $class;
     public $tag = 'i';
-    /** @var \atk4\ui\jsCallback */
+    /** @var \atk4\ui\JsCallback */
     public $cb;
 
     public function init(): void
@@ -23,7 +23,7 @@ class DragHandler extends Table\Column
         if (!$this->class) {
             $this->class = 'content icon';
         }
-        $this->cb = \atk4\ui\jsSortable::addTo($this->table, ['handleClass' => 'atk-handle']);
+        $this->cb = \atk4\ui\JsSortable::addTo($this->table, ['handleClass' => 'atk-handle']);
     }
 
     /**

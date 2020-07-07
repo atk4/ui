@@ -56,7 +56,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
 
         $this->assertSame(
             '<td>{$name}</td><td>{$ref}</td><td style="{$' . $this->getColumnStyle($rating) . '}">{$rating}</td>',
-            $this->table->getDataRowHTML()
+            $this->table->getDataRowHtml()
         );
 
         $this->assertSame(
@@ -106,7 +106,7 @@ class TableColumnColorRatingTest extends AtkPhpunit\TestCase
 
         $this->assertSame(
             '<td>{$name}</td><td>{$ref}</td><td style="{$' . $this->getColumnStyle($rating) . '}">{$rating}</td>',
-            $this->table->getDataRowHTML()
+            $this->table->getDataRowHtml()
         );
 
         $this->assertSame(

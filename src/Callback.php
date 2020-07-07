@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\core\AppScopeTrait;
-use atk4\core\DIContainerTrait;
+use atk4\core\DiContainerTrait;
 use atk4\core\InitializerTrait;
 use atk4\core\StaticAddToTrait;
 use atk4\core\TrackableTrait;
@@ -20,7 +20,7 @@ use atk4\core\TrackableTrait;
  *          ->set(function(){
  *              do_something();
  *          })
- *          ->getURL()
+ *          ->getUrl()
  *  );
  *
  * @property View $owner
@@ -29,7 +29,7 @@ class Callback
 {
     use TrackableTrait;
     use AppScopeTrait;
-    use DIContainerTrait;
+    use DiContainerTrait;
     use InitializerTrait {
         init as _init;
     }
@@ -47,7 +47,7 @@ class Callback
      * Contains either false if callback wasn't triggered or the value passed
      * as an argument to a call-back.
      *
-     * e.g. following URL of getURL('test') will result in $triggered = 'test';
+     * e.g. following URL of getUrl('test') will result in $triggered = 'test';
      *
      * @var string|false
      */
@@ -141,7 +141,7 @@ class Callback
     public function terminate()
     {
         if ($this->canTerminate()) {
-            $this->app->terminateJSON($this->owner);
+            $this->app->terminateJson($this->owner);
         }
     }
 
@@ -166,26 +166,26 @@ class Callback
     /**
      * Return URL that will trigger action on this call-back. If you intend to request
      * the URL direcly in your browser (as iframe, new tab, or document location), you
-     * should use getURL instead.
+     * should use getUrl instead.
      *
      * @param string $mode
      *
      * @return string
      */
-    public function getJSURL($mode = 'ajax')
+    public function getJsUrl($mode = 'ajax')
     {
-        return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback' => 1], (bool) $this->postTrigger);
+        return $this->owner->jsUrl([$this->urlTrigger => $mode, '__atk_callback' => 1], (bool) $this->postTrigger);
     }
 
     /**
      * Return URL that will trigger action on this call-back. If you intend to request
-     * the URL loading from inside JavaScript, it's always advised to use getJSURL instead.
+     * the URL loading from inside JavaScript, it's always advised to use getJsUrl instead.
      *
      * @param string $mode
      *
      * @return string
      */
-    public function getURL($mode = 'callback')
+    public function getUrl($mode = 'callback')
     {
         return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback' => 1], (bool) $this->postTrigger);
     }

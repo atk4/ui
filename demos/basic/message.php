@@ -22,14 +22,14 @@ $msg = \atk4\ui\Message::addTo($seg, [
 ]);
 $msg->text->addParagraph('You can add some more text here for your messages');
 
-$barType->on('click', '.button', new \atk4\ui\jsReload($seg, ['type' => (new \atk4\ui\jQuery())->text()]));
+$barType->on('click', '.button', new \atk4\ui\JsReload($seg, ['type' => (new \atk4\ui\Jquery())->text()]));
 \atk4\ui\Button::addTo($barType, ['success']);
 \atk4\ui\Button::addTo($barType, ['error']);
 \atk4\ui\Button::addTo($barType, ['info']);
 \atk4\ui\Button::addTo($barType, ['warning']);
 
 $barIcon = \atk4\ui\View::addTo($seg, ['ui' => ' basic buttons']);
-$barIcon->on('click', '.button', new \atk4\ui\jsReload($seg, ['icon' => (new \atk4\ui\jQuery())->find('i')->attr('class')]));
+$barIcon->on('click', '.button', new \atk4\ui\JsReload($seg, ['icon' => (new \atk4\ui\Jquery())->find('i')->attr('class')]));
 \atk4\ui\Button::addTo($barIcon, ['icon' => 'book']);
 \atk4\ui\Button::addTo($barIcon, ['icon' => 'check circle outline']);
 \atk4\ui\Button::addTo($barIcon, ['icon' => 'pointing right']);

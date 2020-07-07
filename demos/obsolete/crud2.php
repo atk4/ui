@@ -12,6 +12,6 @@ $model->getUserAction('add')->system = true;
 $model->getUserAction('edit')->system = true;
 $model->getUserAction('delete')->system = true;
 
-$grid = \atk4\ui\CRUD::addTo($app, ['paginator' => false]);
+$grid = \atk4\ui\Crud::addTo($app, ['paginator' => false]);
 $grid->setModel($model);
 $grid->addDecorator('project_code', [\atk4\ui\Table\Column\Link::class]);

@@ -131,7 +131,7 @@ class Control extends View
      * Shorthand method for on('change') event.
      * Some input fields, like Calendar, could call this differently.
      *
-     * If $expr is string or jsExpression, then it will execute it instantly.
+     * If $expr is string or JsExpression, then it will execute it instantly.
      * If $expr is callback method, then it'll make additional request to webserver.
      *
      * Could be preferable to set useDefault to false. For example when
@@ -140,16 +140,16 @@ class Control extends View
      *
      * Examples:
      * $control->onChange('console.log("changed")');
-     * $control->onChange(new \atk4\ui\jsExpression('console.log("changed")'));
+     * $control->onChange(new \atk4\ui\JsExpression('console.log("changed")'));
      * $control->onChange('$(this).parents(".form").form("submit")');
      *
-     * @param string|\atk4\ui\jsExpression|array|callable $expr
+     * @param string|\atk4\ui\JsExpression|array|callable $expr
      * @param array|bool                                  $default
      */
     public function onChange($expr, $default = [])
     {
         if (is_string($expr)) {
-            $expr = new \atk4\ui\jsExpression($expr);
+            $expr = new \atk4\ui\JsExpression($expr);
         }
 
         if (is_bool($default)) {
@@ -166,7 +166,7 @@ class Control extends View
      *
      * $field->jsInput(true)->val(123);
      *
-     * @return \atk4\ui\jQuery
+     * @return \atk4\ui\Jquery
      */
     public function jsInput($when = null, $action = null)
     {

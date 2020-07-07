@@ -6,14 +6,14 @@ namespace atk4\ui\UserAction;
 
 use atk4\core\HookTrait;
 use atk4\data\Model;
-use atk4\ui\jsExpression;
-use atk4\ui\jsModal;
-use atk4\ui\jsToast;
+use atk4\ui\JsExpression;
+use atk4\ui\JsModal;
+use atk4\ui\JsToast;
 
 /**
  * A js action executor that require a form.
  */
-class JsArgumentFormExecutor extends jsModal
+class JsArgumentFormExecutor extends JsModal
 {
     use HookTrait;
 
@@ -59,8 +59,8 @@ class JsArgumentFormExecutor extends jsModal
                 $return = $this->action->execute();
 
                 $js = [
-                    new jsExpression('$(".atk-dialog-content").trigger("close")'),
-                    $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return]) ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : '')),
+                    new JsExpression('$(".atk-dialog-content").trigger("close")'),
+                    $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return]) ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : '')),
                 ];
 
                 return $js;
