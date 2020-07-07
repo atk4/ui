@@ -34,7 +34,7 @@ $grid->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
 
 $grid->addColumn(null, [\atk4\ui\Table\Column\Template::class, 'hello<b>world</b>']);
 
-$grid->addActionButton('test', null, 'Are you sure?');
+$grid->addActionButton('test');
 
 $grid->addActionButton('Say HI', function ($j, $id) use ($grid) {
     return 'Loaded "' . $grid->model->load($id)->get('name') . '" from ID=' . $id;
