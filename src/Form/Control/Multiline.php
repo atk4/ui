@@ -125,20 +125,20 @@ class Multiline extends Form\Control
     private $cb;
 
     /**
-     * The callback function which gets triggered when fields are changed or
+     * The function that gets execute when fields are changed or
      * rows get deleted.
      *
      * @var callable
      */
-    public $changeCb;
+    protected $onChangeFunction;
 
     /**
-     * Array of field names that will trigger the change callback when those
+     * Array of field names that will trigger the onChange function when those
      * fields are changed.
      *
      * @var array
      */
-    public $eventFields;
+    protected $eventFields;
 
     /**
      * Collection of field errors.
@@ -275,7 +275,7 @@ class Multiline extends Form\Control
         }
         $this->eventFields = $fields;
 
-        $this->changeCb = $fx;
+        $this->onChangeFunction = $fx;
     }
 
     /**
@@ -707,7 +707,7 @@ class Multiline extends Form\Control
                     'idField' => $this->getModel()->id_field,
                     'url' => $this->cb->getJSURL(),
                     'eventFields' => $this->eventFields,
-                    'hasChangeCb' => $this->changeCb ? true : false,
+                    'hasChangeCb' => $this->onChangeFunction ? true : false,
                     'options' => $this->options,
                     'rowLimit' => $this->rowLimit,
                     'caption' => $this->caption,
@@ -741,7 +741,7 @@ class Multiline extends Form\Control
                 break;
             case 'on-change':
                 // Let regular callback render output.
-                return call_user_func_array($this->changeCb, [json_decode($_POST['rows'], true), $this->form]);
+                return call_user_func_array($this->onChangeFunction, [json_decode($_POST['rows'], true), $this->form]);
 
                 break;
         }
@@ -821,7 +821,7 @@ class Multiline extends Form\Control
         if (!empty($dummyFields)) {
             $dummyModel = new Model($model->persistence, ['table' => $model->table]);
             foreach ($dummyFields as $field) {
-                $dummyModel->addExpression($field['name'], ['expr' => $f['expr'], 'type' => $model->getField($field['name'])->type]);
+                $dummyModel->addExpression($field['name'], ['expr' => $field['expr'], 'type' => $model->getField($field['name'])->type]);
             }
             $values = $dummyModel->loadAny()->get();
             unset($values[$model->id_field]);
