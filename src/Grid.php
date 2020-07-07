@@ -372,19 +372,18 @@ class Grid extends View
      * Adds a new button into the action column on the right. For CRUD this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array|View         $button  Label text, object or seed for the Button
-     * @param jsExpressionable|callable $action  JavaScript action or callback
-     * @param bool|string               $confirm Should we display confirmation "Are you sure?"
+     * @param string|array|View         $button     Label text, object or seed for the Button
+     * @param jsExpressionable|callable $action     JavaScript action or callback
      *
      * @return object
      */
-    public function addActionButton($button, $action = null, $confirm = false, $isDisabled = false)
+    public function addActionButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
         if (!$this->actionButtons) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actionButtons->addButton($button, $action, $confirm, $isDisabled);
+        return $this->actionButtons->addButton($button, $action, $confirmMsg, $isDisabled);
     }
 
     /**
@@ -395,13 +394,13 @@ class Grid extends View
      *
      * @return mixed
      */
-    public function addActionMenuItem($view, $action = null, bool $confirm = false, bool $isDisabled = false)
+    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', bool $isDisabled = false)
     {
         if (!$this->actionMenu) {
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
         }
 
-        return $this->actionMenu->addActionMenuItem($view, $action, $confirm, $isDisabled);
+        return $this->actionMenu->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
     }
 
     /**

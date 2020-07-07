@@ -81,11 +81,10 @@ class ActionMenu extends Table\Column
      *
      * @param View|string                    $item
      * @param callable|Model\UserAction|null $action
-     * @param string|null                    $confirm
      *
      * @return object|string
      */
-    public function addActionMenuItem($item, $action = null, $confirm = null, bool $isDisabled = false)
+    public function addActionMenuItem($item, $action = null, string $confirmMsg = '', bool $isDisabled = false)
     {
         // If action is not specified, perhaps it is defined in the model
         if (!$action) {
@@ -103,7 +102,7 @@ class ActionMenu extends Table\Column
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
         if ($action instanceof Model\UserAction) {
-            $confirm = $action->ui['confirm'] ?? $confirm;
+            $confirmMsg = $action->ui['confirm'] ?? $confirmMsg;
 
             $isDisabled = !$action->enabled;
 
@@ -127,7 +126,7 @@ class ActionMenu extends Table\Column
         // set executor context.
         $context = (new jQuery())->closest('.ui.button');
 
-        $this->table->on('click', '.i_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirm, 'apiConfig' => ['stateContext' => $context]]);
+        $this->table->on('click', '.i_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirmMsg, 'apiConfig' => ['stateContext' => $context]]);
 
         return $item;
     }
