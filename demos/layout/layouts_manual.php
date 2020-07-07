@@ -15,4 +15,4 @@ $layout = new \atk4\ui\Layout(['defaultTemplate' => __DIR__ . '/templates/layout
 $app->html = null;
 $app->initLayout([\atk4\ui\Layout::class]);
 
-\atk4\ui\Text::addTo($app->layout)->addHTML($layout->render());
+\atk4\ui\Text::addTo($app->layout)->addHtml($layout->render());

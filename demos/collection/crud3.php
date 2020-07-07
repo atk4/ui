@@ -42,7 +42,7 @@ $data = ['test' => [
 $p = new \atk4\data\Persistence\Array_($data);
 $model = new $modelClass($p);
 
-// add CRUD
-\atk4\ui\Header::addTo($app, ['CRUD with Array Persistence']);
-$c = \atk4\ui\CRUD::addTo($app, ['ipp' => 5]);
+// add Crud
+\atk4\ui\Header::addTo($app, ['Crud with Array Persistence']);
+$c = \atk4\ui\Crud::addTo($app, ['ipp' => 5]);
 $c->setModel($model);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-use atk4\core\DIContainerTrait;
+use atk4\core\DiContainerTrait;
 
 /**
  * Class jsToast
@@ -13,7 +13,7 @@ use atk4\core\DIContainerTrait;
  */
 class jsToast implements jsExpressionable
 {
-    use DIContainerTrait;
+    use DiContainerTrait;
 
     /**
      * Various setting options as per Fomantic ui toast module.

@@ -21,12 +21,12 @@ class Column
     use \atk4\core\AppScopeTrait;
     use \atk4\core\InitializerTrait;
     use \atk4\core\TrackableTrait;
-    use \atk4\core\DIContainerTrait;
+    use \atk4\core\DiContainerTrait;
 
     /** @const string */
-    public const HOOK_GET_HTML_TAGS = self::class . '@getHTMLTags';
+    public const HOOK_GET_HTML_TAGS = self::class . '@getHtmlTags';
     /** @const string */
-    public const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHTML';
+    public const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHtml';
 
     /**
      * Link back to the table, where column is used.
@@ -197,7 +197,7 @@ class Column
                             $(this)
                             .api({
                                 on:'now',
-                                url:'{$cb->getJSURL()}',
+                                url:'{$cb->getJsUrl()}',
                                 data:{item:value, id:$(this).data('menu-id')}
                                 }
                             );
@@ -298,7 +298,7 @@ class Column
      *
      * @return string
      */
-    public function getHeaderCellHTML(Field $field = null, $value = null)
+    public function getHeaderCellHtml(Field $field = null, $value = null)
     {
         if (!$this->table) {
             throw (new Exception('How $table could not be set??'))
@@ -359,7 +359,7 @@ class Column
      *
      * @return string
      */
-    public function getTotalsCellHTML(Field $field, $value)
+    public function getTotalsCellHtml(Field $field, $value)
     {
         return $this->getTag('foot', $this->app->ui_persistence->typecastSaveField($field, $value));
     }
@@ -381,7 +381,7 @@ class Column
      *
      * @return string
      */
-    public function getDataCellHTML(Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(Field $field = null, $extra_tags = [])
     {
         return $this->getTag('body', [$this->getDataCellTemplate($field)], $extra_tags);
     }
@@ -419,7 +419,7 @@ class Column
      *
      * @return array associative array with tags and their HTML values
      */
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         return [];
     }

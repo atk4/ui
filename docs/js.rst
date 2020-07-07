@@ -127,7 +127,7 @@ Including JS/CSS
 ----------------
 
 Sometimes you need to include an additional .js or .css file for your code
-to work. See :php:meth:`App:requireJS()` and :php:meth:`App::requireCSS()`
+to work. See :php:meth:`App:requireJs()` and :php:meth:`App::requireCss()`
 for details.
 
 
@@ -454,7 +454,7 @@ To accomplish that, use a :ref:`virtualpage`::
     \atk4\ui\LoremIpsum::addTo($vp, ['size' => 2]);
 
     \atk4\ui\Button::addTo($app, ['Dynamic Modal'])
-        ->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getURL('cut')));
+        ->on('click', new \atk4\ui\jsModal('My Popup Title', $vp->getUrl('cut')));
 
 Note that this element is always destroyed as opposed to :php:class:`Modal`,
 where it is only hidden.
@@ -659,15 +659,15 @@ The most basic approach is::
 
     });
 
-However, it would be nice if the user was aware of the progress of your process, which is when `Server Sent Event (jsSSE)`_
+However, it would be nice if the user was aware of the progress of your process, which is when `Server Sent Event (jsSse)`_
 comes into play.
 
 .. _sse:
 
-Server Sent Event (jsSSE)
+Server Sent Event (jsSse)
 -------------------------
 
-.. php:class:: jsSSE
+.. php:class:: jsSse
 
 .. php:method:: send(action)
 
@@ -675,7 +675,7 @@ This class implements ability for your PHP code to send messages to the browser 
 
     $button = \atk4\ui\Button::addTo($app, ['Process Image']);
 
-    $sse = \atk4\ui\jsSSE::addTo($app);
+    $sse = \atk4\ui\jsSse::addTo($app);
 
     $button->on('click', $sse->set(function() use($sse, $button, $image) {
 
@@ -695,4 +695,4 @@ This class implements ability for your PHP code to send messages to the browser 
 
     }));
 
-The jsSSE component plays a crucial role in some high-level components such as :php:class:`Console` and :php:class:`ProgressBar`.
+The jsSse component plays a crucial role in some high-level components such as :php:class:`Console` and :php:class:`ProgressBar`.

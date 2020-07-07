@@ -196,7 +196,7 @@ class FeatureContext extends RawMinkContext implements Context
     /**
      * @Then Label changes to a number
      */
-    public function labelChangesToANumber()
+    public function labelChangesToNumber()
     {
         $this->getSession()->wait(5000, '!$("#' . $this->buttonId . '").hasClass("loading")');
         $element = $this->getSession()->getPage()->findById($this->buttonId);

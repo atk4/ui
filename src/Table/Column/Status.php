@@ -31,7 +31,7 @@ class Status extends Table\Column
         $this->states = $states;
     }
 
-    public function getDataCellHTML(\atk4\data\Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(\atk4\data\Field $field = null, $extra_tags = [])
     {
         if ($field === null) {
             throw new \atk4\ui\Exception('Status can be used only with model field');
@@ -53,7 +53,7 @@ class Status extends Table\Column
         );
     }
 
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         $cl = '';
 

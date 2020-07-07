@@ -118,7 +118,7 @@ class TemplateTest extends AtkPhpunit\TestCase
     /**
      * Conditional tag usage example - VAT usage.
      */
-    public function testConditionalTagsVAT()
+    public function testConditionalTagsVat()
     {
         $s = '{vat_applied?}VAT is {$vat}%{/?}' .
              '{vat_zero?}VAT is zero{/?}' .
@@ -239,7 +239,7 @@ class TemplateTest extends AtkPhpunit\TestCase
     }
 
     /**
-     * Test set, append, tryAppend, tryAppendHTML, del, tryDel.
+     * Test set, append, tryAppend, tryAppendHtml, del, tryDel.
      */
     public function testSetAppendDel()
     {
@@ -256,16 +256,16 @@ class TemplateTest extends AtkPhpunit\TestCase
         // set and append tests
         $t->set('foo', 'Hello');
         $t->set('foo', 'Hi'); // overwrites
-        $t->setHTML('foo', '<b>Hi</b>'); // overwrites
+        $t->setHtml('foo', '<b>Hi</b>'); // overwrites
         $t->trySet('qwe', 'ignore this'); // ignores
-        $t->trySetHTML('qwe', '<b>ignore</b> this'); // ignores
+        $t->trySetHtml('qwe', '<b>ignore</b> this'); // ignores
 
         $t->append('foo', ' and'); // appends
-        $t->appendHTML('foo', ' <b>welcome</b> my'); // appends
+        $t->appendHtml('foo', ' <b>welcome</b> my'); // appends
         $t->tryAppend('foo', ' dear'); // appends
         $t->tryAppend('qwe', 'ignore this'); // ignores
-        $t->tryAppendHTML('foo', ' and <b>smart</b>'); // appends html
-        $t->tryAppendHTML('qwe', '<b>ignore</b> this'); // ignores
+        $t->tryAppendHtml('foo', ' and <b>smart</b>'); // appends html
+        $t->tryAppendHtml('qwe', '<b>ignore</b> this'); // ignores
 
         $this->assertSame('<b>Hi</b> and <b>welcome</b> my dear and <b>smart</b> guys', $t->render());
     }

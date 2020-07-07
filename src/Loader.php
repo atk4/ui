@@ -83,7 +83,7 @@ class Loader extends View
 
         $this->cb->set(function () use ($fx) {
             call_user_func($fx, $this);
-            $this->app->terminateJSON($this);
+            $this->app->terminateJson($this);
         });
 
         return $this;
@@ -115,7 +115,7 @@ class Loader extends View
     public function jsLoad($args = [], $apiConfig = [], $storeName = null)
     {
         return $this->js()->atkReloadView([
-            'uri' => $this->cb->getJSURL(),
+            'uri' => $this->cb->getJsUrl(),
             'uri_options' => $args,
             'apiConfig' => !empty($apiConfig) ? $apiConfig : null,
             'storeName' => $storeName ? $storeName : null,

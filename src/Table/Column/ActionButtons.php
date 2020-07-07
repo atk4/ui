@@ -148,13 +148,13 @@ class ActionButtons extends Table\Column
         // render our buttons
         $output = '';
         foreach ($this->buttons as $button) {
-            $output .= $button->getHTML();
+            $output .= $button->getHtml();
         }
 
         return '<div class="ui buttons">' . $output . '</div>';
     }
 
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

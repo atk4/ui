@@ -102,7 +102,7 @@ class ItemSearch extends View
             [
                 'reload' => $reloadId,
                 'queryArg' => $this->queryArg,
-                'url' => $this->reload->jsURL(),
+                'url' => $this->reload->jsUrl(),
                 'q' => $this->q,
                 'context' => $this->context,
             ]

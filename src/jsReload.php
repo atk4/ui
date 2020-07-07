@@ -55,7 +55,7 @@ class jsReload implements jsExpressionable
         $final = (new jQuery($this->view))
             ->atkReloadView(
                 [
-                    'uri' => $this->view->jsURL(['__atk_reload' => $this->view->name]),
+                    'uri' => $this->view->jsUrl(['__atk_reload' => $this->view->name]),
                     'uri_options' => !empty($this->args) ? $this->args : null,
                     'afterSuccess' => $this->afterSuccess ? $this->afterSuccess->jsRender() : null,
                     'apiConfig' => !empty($this->apiConfig) ? $this->apiConfig : null,

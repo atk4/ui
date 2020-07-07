@@ -24,7 +24,7 @@ class MyTestModel extends Model
  * Test is designed to verify that field which is explicitly editable should appear and be editable
  * even if 'never_persist' is set to true.
  */
-class ForFieldUITest extends AtkPhpunit\TestCase
+class ForFieldUiTest extends AtkPhpunit\TestCase
 {
     /** @var Model */
     public $m;

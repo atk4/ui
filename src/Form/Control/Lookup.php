@@ -152,9 +152,9 @@ class Lookup extends Input
     /**
      * Returns URL which would respond with first 50 matching records.
      */
-    public function getCallbackURL()
+    protected function getCallbackUrl()
     {
-        return $this->callback->getJSURL();
+        return $this->callback->getJsUrl();
     }
 
     /**
@@ -162,7 +162,7 @@ class Lookup extends Input
      */
     public function outputApiResponse()
     {
-        $this->app->terminateJSON([
+        $this->app->terminateJson([
             'success' => true,
             'results' => $this->getData(),
         ]);
@@ -376,7 +376,7 @@ class Lookup extends Input
     {
         $settings = array_merge([
             'fields' => ['name' => 'title'],
-            'apiSettings' => array_merge(['url' => $this->getCallbackURL() . '&q={query}'], $this->apiConfig),
+            'apiSettings' => array_merge(['url' => $this->getCallbackUrl() . '&q={query}'], $this->apiConfig),
         ], $this->settings);
 
         $chain->dropdown($settings);

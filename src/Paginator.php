@@ -165,7 +165,7 @@ class Paginator extends View
      *
      * @return string
      */
-    public function getPageURL($page)
+    protected function getPageUrl($page)
     {
         return $this->url([$this->urlTrigger => $page]);
     }
@@ -191,12 +191,12 @@ class Paginator extends View
     {
         if ($page) {
             $t->trySet('page', (string) $page);
-            $t->trySet('link', $this->getPageURL($page));
+            $t->trySet('link', $this->getPageUrl($page));
 
             $t->trySet('active', $page === $this->page ? 'active' : '');
         }
 
-        $this->template->appendHTML('rows', $t->render());
+        $this->template->appendHtml('rows', $t->render());
     }
 
     public function renderView()

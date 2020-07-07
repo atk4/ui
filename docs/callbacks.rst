@@ -33,7 +33,7 @@ traits:
 
  - `TrackableTrait <https://agile-core.readthedocs.io/en/develop/container.html?highlight=trackable#trackable-trait>`_
  - `AppScopeTrait <https://agile-core.readthedocs.io/en/develop/appscope.html>`_
- - `DIContainerTrait <https://agile-core.readthedocs.io/en/develop/di.html>`_
+ - `DiContainerTrait <https://agile-core.readthedocs.io/en/develop/di.html>`_
 
 To create a new callback, do this::
 
@@ -43,7 +43,7 @@ To create a new callback, do this::
 Because 'Callback' is not a View, it won't be rendered. The reason we are adding into :ref:`render_tree`
 is for it to establish a unique name which will be used to generate callback URL:
 
-.. php:method:: getURL($val)
+.. php:method:: getUrl($val)
 
 .. php:method:: set
 
@@ -51,8 +51,8 @@ The following example code generates unique URL::
 
     $label = \atk4\ui\Label::addTo($app, ['Callback URL:']);
     $cb = \atk4\ui\Callback::addTo($label);
-    $label->detail = $cb->getURL();
-    $label->link($cb->getURL());
+    $label->detail = $cb->getUrl();
+    $label->link($cb->getUrl());
 
 I have assigned generated URL to the label, so that if you click it, your browser will visit
 callback URL triggering a special action. We haven't set that action yet, so I'll do it next with
@@ -69,7 +69,7 @@ To illustrate how callbacks work, let's imagine the following workflow:
  - your application with the above code resides in file 'test.php`
  - when user opens 'test.php' in the browser, first 4 lines of code execute
    but the set() will not execute "terminate". Execution will continue as normal.
- - getURL() will provide link e.g. `test.php?app_callback=callback`
+ - getUrl() will provide link e.g. `test.php?app_callback=callback`
 
 When page renders, the user can click on a label. If they do, the browser will send
 another request to the server:
@@ -89,8 +89,8 @@ returns any value, the set() will return it too::
 
     $label = \atk4\ui\Label::addTo($app, ['Callback URL:']);
     $cb = \atk4\ui\Callback::addTo($label);
-    $label->detail = $cb->getURL();
-    $label->link($cb->getURL());
+    $label->detail = $cb->getUrl();
+    $label->link($cb->getUrl());
 
     if($cb->set(function(){ return true; })) {
         $label->addClass('red');
@@ -108,8 +108,8 @@ the label regardless of the callback function::
 
     $label = \atk4\ui\Label::addTo($app, ['Callback URL:']);
     $cb = \atk4\ui\Callback::addTo($label);
-    $label->detail = $cb->getURL();
-    $label->link($cb->getURL());
+    $label->detail = $cb->getUrl();
+    $label->link($cb->getUrl());
 
     $cb->set(function(){ echo 123; });
 
@@ -148,8 +148,8 @@ the $label->detail is assigned at the very end, yet callback is able to access t
         $app->terminate('Label detail is '.$label->detail);
     });
 
-    $label->detail = $cb->getURL();
-    $label->link($cb->getURL());
+    $label->detail = $cb->getUrl();
+    $label->link($cb->getUrl());
 
 CallbackLater is used by several actions in Agile UI, such as jsReload(), and ensures that the component
 you are reloading are fully rendered by the time callback is executed.
@@ -200,8 +200,8 @@ use jsCallback class now::
         return 'ok';
     });
 
-    $label->detail = $cb->getURL();
-    $label->link($cb->getURL());
+    $label->detail = $cb->getUrl();
+    $label->link($cb->getUrl());
 
 When you trigger callback, you'll see the output::
 
@@ -222,7 +222,7 @@ To fully use jsAction above, here is a modified code::
         return 'ok';
     });
 
-    $label->detail = $cb->getURL();
+    $label->detail = $cb->getUrl();
     $label->on('click', $cb);
 
 Now, that is pretty long. For your convenience, there is a shorter mechanism::
@@ -252,7 +252,7 @@ If you set `confirm` property action will ask for user's confirmation before sen
         return 'ok';
     });
 
-    $label->detail = $cb->getURL();
+    $label->detail = $cb->getUrl();
     $label->on('click', $cb);
 
 This is used with delete operations. When using :php:meth:`View::on()` you can pass extra argument to set the 'confirm'
@@ -279,7 +279,7 @@ will send browser screen width back to the callback::
         return 'width is '.$arg1;
     }, [new \atk4\ui\jsExpression( '$(window).width()' )]);
 
-    $label->detail = $cb->getURL();
+    $label->detail = $cb->getUrl();
     $label->js('click', $cb);
 
 In here you see that I'm using a 2nd argument to $cb->set() to specify arguments, which, I'd like to fetch from the

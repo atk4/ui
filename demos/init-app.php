@@ -114,8 +114,8 @@ if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Column Menus'], [$path . 'tablecolumnmenu'], $menu);
     $layout->addMenuItem(['Column Filters'], [$path . 'tablefilter'], $menu);
     $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', [$path . 'grid'], $menu);
-    $layout->addMenuItem('CRUD - Full editing solution', [$path . 'crud'], $menu);
-    $layout->addMenuItem(['CRUD with Array Persistence'], [$path . 'crud3'], $menu);
+    $layout->addMenuItem('Crud - Full editing solution', [$path . 'crud'], $menu);
+    $layout->addMenuItem(['Crud with Array Persistence'], [$path . 'crud3'], $menu);
     $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $menu);
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $menu);
     $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);

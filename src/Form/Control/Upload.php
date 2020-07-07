@@ -249,7 +249,7 @@ class Upload extends Input
 
         //$value = $this->field ? $this->field->get() : $this->content;
         $this->js(true)->atkFileUpload([
-            'uri' => $this->cb->getJSURL(),
+            'uri' => $this->cb->getJsUrl(),
             'action' => $this->action->name,
             'file' => ['id' => $this->fileId ?: $this->field->get(), 'name' => $this->getInputValue()],
             'hasFocus' => $this->hasFocusEnable,

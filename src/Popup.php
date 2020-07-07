@@ -184,7 +184,7 @@ class Popup extends View
             $this->cb->set($fx, [$content]);
             //only render our content view.
             //PopupService will replace content with this one.
-            $this->app->terminateJSON($content);
+            $this->app->terminateJson($content);
         }
     }
 
@@ -282,7 +282,7 @@ class Popup extends View
         }
 
         if ($this->cb) {
-            $this->setAttr('data-uri', $this->cb->getJSURL());
+            $this->setAttr('data-uri', $this->cb->getJsUrl());
             $this->setAttr('data-cache', $this->useCache ? 'true' : 'false');
         }
 

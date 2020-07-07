@@ -151,7 +151,7 @@ class JsEventExecutor implements jsExpressionable
 
         $final = (new jQuery($this->context))
             ->atkAjaxec([
-                'uri' => $this->cb->getJSURL(),
+                'uri' => $this->cb->getJsUrl(),
                 'uri_options' => array_merge(['atk_event_id' => $this->modelId], $this->args),
                 'apiConfig' => ['stateContext' => $this->stateContext],
             ]);

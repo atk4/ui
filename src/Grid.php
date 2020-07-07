@@ -369,7 +369,7 @@ class Grid extends View
     }
 
     /**
-     * Adds a new button into the action column on the right. For CRUD this
+     * Adds a new button into the action column on the right. For Crud this
      * column will already contain "delete" and "edit" buttons.
      *
      * @param string|array|View         $button  Label text, object or seed for the Button

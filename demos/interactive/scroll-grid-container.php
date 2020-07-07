@@ -7,7 +7,7 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\atk4\ui\Button::addTo($app, ['Dynamic scroll in CRUD and Grid', 'small left floated basic blue', 'icon' => 'left arrow'])
+\atk4\ui\Button::addTo($app, ['Dynamic scroll in Crud and Grid', 'small left floated basic blue', 'icon' => 'left arrow'])
     ->link(['scroll-grid']);
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
@@ -16,11 +16,11 @@ require_once __DIR__ . '/../init-app.php';
 $c = \atk4\ui\Columns::addTo($app);
 
 $c1 = $c->addColumn();
-$g1 = \atk4\ui\CRUD::addTo($c1);
+$g1 = \atk4\ui\Crud::addTo($c1);
 $m1 = $g1->setModel(new Country($app->db)); //, ['name', 'iso']);
 $g1->addQuickSearch(['name', 'iso']);
 
-// demo for additional action buttons in CRUD + jsPaginator
+// demo for additional action buttons in Crud + jsPaginator
 $g1->addModalAction(['icon' => [\atk4\ui\Icon::class, 'cogs']], 'Details', function ($p, $id) use ($g1) {
     \atk4\ui\Card::addTo($p)->setModel($g1->model->load($id));
 });

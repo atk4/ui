@@ -362,7 +362,7 @@ If you'd like to even further adjust How each item is displayed (e.g. complex HT
             $this->_tItem->set('someOtherField', $res['someOtherField]);
             $this->_tItem->set('someOtherField2', $res['someOtherField2]);
             //add item to template
-            $this->template->appendHTML('Item', $this->_tItem->render());
+            $this->template->appendHtml('Item', $this->_tItem->render());
        }
    }
 

@@ -135,7 +135,7 @@ class ActionMenu extends Table\Column
     /**
      * {@inheritdoc}
      */
-    public function getHeaderCellHTML(\atk4\data\Field $field = null, $value = null)
+    public function getHeaderCellHtml(\atk4\data\Field $field = null, $value = null)
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown(
             array_merge(
@@ -149,7 +149,7 @@ class ActionMenu extends Table\Column
             )
         );
 
-        return parent::getHeaderCellHTML($field, $value);
+        return parent::getHeaderCellHtml($field, $value);
     }
 
     /**
@@ -164,7 +164,7 @@ class ActionMenu extends Table\Column
         // render our menus
         $output = '';
         foreach ($this->items as $item) {
-            $output .= $item->getHTML();
+            $output .= $item->getHtml();
         }
 
         $s = '<div class="' . $this->ui . ' atk-action-menu">';
@@ -177,7 +177,7 @@ class ActionMenu extends Table\Column
         return $s;
     }
 
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {

@@ -27,7 +27,7 @@ class Content extends View implements LoadableContent
      */
     public function getCallbackUrl(): string
     {
-        return $this->cb->getJSURL();
+        return $this->cb->getJsUrl();
     }
 
     /**

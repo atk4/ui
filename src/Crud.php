@@ -9,7 +9,7 @@ use atk4\data\Model;
 /**
  * Implements a more sophisticated and interactive Data-Table component.
  */
-class CRUD extends Grid
+class Crud extends Grid
 {
     /** @var array of fields to display in Grid */
     public $displayFields;
@@ -100,7 +100,7 @@ class CRUD extends Grid
     }
 
     /**
-     * Sets data model of CRUD.
+     * Sets data model of Crud.
      *
      * @param array|null $fields
      */
@@ -270,12 +270,12 @@ class CRUD extends Grid
             return $this->factory($action->ui['executor']);
         }
 
-        // prioritize CRUD addFields over action->fields for Model add action.
+        // prioritize Crud addFields over action->fields for Model add action.
         if ($action->short_name === 'add' && $this->addFields) {
             $action->fields = $this->addFields;
         }
 
-        // prioritize CRUD editFields over action->fields for Model edit action.
+        // prioritize Crud editFields over action->fields for Model edit action.
         if ($action->short_name === 'edit' && $this->editFields) {
             $action->fields = $this->editFields;
         }
@@ -287,7 +287,7 @@ class CRUD extends Grid
     }
 
     /**
-     * Return reload argument based on CRUD condition.
+     * Return reload argument based on Crud condition.
      *
      * @return mixed
      */
@@ -323,7 +323,7 @@ class CRUD extends Grid
     }
 
     /**
-     * Set callback for edit action in CRUD.
+     * Set callback for edit action in Crud.
      * Callback function will receive the Edit Form and Executor as param.
      */
     public function onFormEdit(callable $fx)
@@ -332,7 +332,7 @@ class CRUD extends Grid
     }
 
     /**
-     * Set callback for add action in CRUD.
+     * Set callback for add action in Crud.
      * Callback function will receive the Add Form and Executor as param.
      */
     public function onFormAdd(callable $fx)

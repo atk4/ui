@@ -25,7 +25,7 @@ class Money extends Table\Column
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHTML(\atk4\data\Field $field = null, $extra_tags = [])
+    public function getDataCellHtml(\atk4\data\Field $field = null, $extra_tags = [])
     {
         if (!isset($field)) {
             throw new \atk4\ui\Exception('Money column requires a field');
@@ -38,7 +38,7 @@ class Money extends Table\Column
         );
     }
 
-    public function getHTMLTags(Model $row, $field)
+    public function getHtmlTags(Model $row, $field)
     {
         if ($field->get() < 0) {
             return ['_' . $this->short_name . '_class' => 'negative'];

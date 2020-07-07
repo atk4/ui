@@ -6,7 +6,7 @@ namespace atk4\ui;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\ContainerTrait;
-use atk4\core\DIContainerTrait;
+use atk4\core\DiContainerTrait;
 use atk4\core\Exception;
 use atk4\core\FactoryTrait;
 use atk4\core\InitializerTrait;
@@ -32,7 +32,7 @@ class View implements jsExpressionable
     use TrackableTrait;
     use AppScopeTrait;
     use FactoryTrait;
-    use DIContainerTrait {
+    use DiContainerTrait {
         setMissingProperty as _setMissingProperty;
     }
     use StaticAddToTrait;
@@ -685,7 +685,7 @@ class View implements jsExpressionable
             foreach ($this->attr as $attr => $val) {
                 $tmp[] = $attr . '="' . $this->app->encodeAttribute($val) . '"';
             }
-            $this->template->setHTML('attributes', implode(' ', $tmp));
+            $this->template->setHtml('attributes', implode(' ', $tmp));
         }
     }
 
@@ -700,7 +700,7 @@ class View implements jsExpressionable
                 continue;
             }
 
-            $this->template->appendHTML($view->region, $view->getHTML());
+            $this->template->appendHtml($view->region, $view->getHtml());
 
             if ($view->_js_actions) {
                 $this->_js_actions = array_merge_recursive($this->_js_actions, $view->_js_actions);
@@ -741,7 +741,7 @@ class View implements jsExpressionable
         $this->renderAll();
 
         return
-            $this->getJS($force_echo) .
+            $this->getJs($force_echo) .
             $this->template->render();
     }
 
@@ -765,14 +765,14 @@ class View implements jsExpressionable
      *
      * @return string
      */
-    public function renderJSON(bool $force_echo = true, $region = null)
+    public function renderJson(bool $force_echo = true, $region = null)
     {
         $this->renderAll();
 
         return json_encode([
             'success' => true,
             'message' => 'Success',
-            'atkjs' => $this->getJS($force_echo),
+            'atkjs' => $this->getJs($force_echo),
             'html' => $this->template->render($region),
             'id' => $this->name,
         ]);
@@ -784,10 +784,10 @@ class View implements jsExpressionable
      *
      * @return string
      */
-    public function getHTML()
+    public function getHtml()
     {
         if (isset($_GET['__atk_reload']) && $_GET['__atk_reload'] === $this->name) {
-            $this->app->terminateJSON($this);
+            $this->app->terminateJson($this);
         }
 
         $this->renderAll();
@@ -1231,7 +1231,7 @@ class View implements jsExpressionable
      *
      * @return string
      */
-    public function getJS(bool $force_echo = false)
+    public function getJs(bool $force_echo = false)
     {
         $actions = [];
 
@@ -1284,9 +1284,9 @@ class View implements jsExpressionable
      *
      * @return string
      */
-    public function jsURL($page = [])
+    public function jsUrl($page = [])
     {
-        return $this->app->jsURL($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
+        return $this->app->jsUrl($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
     }
 
     /**

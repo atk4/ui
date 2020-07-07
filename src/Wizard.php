@@ -75,13 +75,13 @@ class Wizard extends View
         // add buttons
         if ($this->currentStep) {
             $this->buttonPrev = Button::addTo($this, ['Back', 'basic'], ['Left']);
-            $this->buttonPrev->link($this->stepCallback->getURL($this->currentStep - 1));
+            $this->buttonPrev->link($this->stepCallback->getUrl($this->currentStep - 1));
         }
 
         $this->buttonNext = Button::addTo($this, ['Next', 'primary'], ['Right']);
         $this->buttonFinish = Button::addTo($this, ['Finish', 'primary'], ['Right']);
 
-        $this->buttonNext->link($this->stepCallback->getURL($this->currentStep + 1));
+        $this->buttonNext->link($this->stepCallback->getUrl($this->currentStep + 1));
     }
 
     /**
@@ -132,7 +132,7 @@ class Wizard extends View
     public function addFinish($callback)
     {
         if (count($this->steps) === $this->currentStep + 1) {
-            $this->buttonFinish->link($this->stepCallback->getURL(count($this->steps)));
+            $this->buttonFinish->link($this->stepCallback->getUrl(count($this->steps)));
         } elseif ($this->currentStep === count($this->steps)) {
             $this->buttonPrev->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
@@ -167,7 +167,7 @@ class Wizard extends View
      */
     public function urlNext()
     {
-        return $this->stepCallback->getURL($this->currentStep + 1);
+        return $this->stepCallback->getUrl($this->currentStep + 1);
     }
 
     /**

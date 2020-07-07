@@ -109,7 +109,7 @@ class Lister extends View
             $this->model->setLimit($ipp, ($p - 1) * $ipp);
 
             // render this View (it will count rendered records !)
-            $json = $this->renderJSON(true, $scrollRegion);
+            $json = $this->renderJson(true, $scrollRegion);
 
             // if there will be no more pages, then replace message=Success to let JS know that there are no more records
             if ($this->_rendered_rows_count < $ipp) {
@@ -119,7 +119,7 @@ class Lister extends View
             }
 
             // return json response
-            $this->app->terminateJSON($json);
+            $this->app->terminateJson($json);
         });
 
         return $this;
@@ -160,9 +160,9 @@ class Lister extends View
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
                 $empty = isset($this->t_empty) ? $this->t_empty->render() : '';
                 if ($this->template->hasTag('rows')) {
-                    $this->template->appendHTML('rows', $empty);
+                    $this->template->appendHtml('rows', $empty);
                 } else {
-                    $this->template->appendHTML('_top', $empty);
+                    $this->template->appendHtml('_top', $empty);
                 }
             }
         }
@@ -189,9 +189,9 @@ class Lister extends View
 
         $html = $this->t_row->render();
         if ($this->template->hasTag('rows')) {
-            $this->template->appendHTML('rows', $html);
+            $this->template->appendHtml('rows', $html);
         } else {
-            $this->template->appendHTML('_top', $html);
+            $this->template->appendHtml('_top', $html);
         }
     }
 }

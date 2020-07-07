@@ -20,7 +20,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $files = new FileLock($app->db);
 
-// This action must appear on top of the CRUD
+// This action must appear on top of the Crud
 $action = $files->addUserAction(
     'import_from_filesystem',
     [
@@ -72,4 +72,4 @@ $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $r
     return new \atk4\ui\jsToast('Confirm!');
 });
 
-\atk4\ui\CRUD::addTo($app, ['ipp' => 5])->setModel($files);
+\atk4\ui\Crud::addTo($app, ['ipp' => 5])->setModel($files);

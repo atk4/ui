@@ -20,8 +20,8 @@ class Form extends View
     public const HOOK_DISPLAY_ERROR = self::class . '@displayError';
     /** @const string Executed when form is submitted */
     public const HOOK_DISPLAY_SUCCESS = self::class . '@displaySuccess';
-    /** @const string Executed when self::loadPOST() method is called. */
-    public const HOOK_LOAD_POST = self::class . '@loadPOST';
+    /** @const string Executed when self::loadPost() method is called. */
+    public const HOOK_LOAD_POST = self::class . '@loadPost';
 
     // {{{ Properties
 
@@ -585,7 +585,7 @@ class Form extends View
     /**
      * Looks inside the POST of the request and loads it into a current model.
      */
-    public function loadPOST()
+    protected function loadPost()
     {
         $post = $_POST;
 
@@ -666,7 +666,7 @@ class Form extends View
 
         $cb->set(function () {
             try {
-                $this->loadPOST();
+                $this->loadPost();
                 $response = $this->hook(self::HOOK_SUBMIT);
 
                 if (!$response) {
@@ -690,9 +690,9 @@ class Form extends View
             }
         });
 
-        //var_dump($cb->getURL());
+        //var_dump($cb->getUrl());
         $this->js(true)
-            ->api(array_merge(['url' => $cb->getJSURL(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
+            ->api(array_merge(['url' => $cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
             ->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
         $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new jsExpression('$(this).attr("name")')));

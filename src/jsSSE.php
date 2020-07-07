@@ -9,7 +9,7 @@ use atk4\core\HookTrait;
 /**
  * Implements a class that can be mapped into arbitrary JavaScript expression.
  */
-class jsSSE extends jsCallback
+class jsSse extends jsCallback
 {
     use HookTrait;
 
@@ -47,7 +47,7 @@ class jsSSE extends jsCallback
             throw new Exception('Call-back must be part of a RenderTree');
         }
 
-        $options = ['uri' => $this->getJSURL()];
+        $options = ['uri' => $this->getJsUrl()];
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
         }
@@ -84,7 +84,7 @@ class jsSSE extends jsCallback
             $this->app->terminate();
         }
 
-        $this->app->terminateJSON(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]);
+        $this->app->terminateJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]);
     }
 
     /**

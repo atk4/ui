@@ -149,7 +149,7 @@ class TreeItemSelector extends Form\Control
     {
         parent::renderView();
 
-        $this->itemSelector->template->trySetHTML('Input', $this->getInput());
+        $this->itemSelector->template->trySetHtml('Input', $this->getInput());
 
         $this->itemSelector->vue(
             'atk-tree-item-selector',
@@ -159,7 +159,7 @@ class TreeItemSelector extends Form\Control
                 'field' => $this->short_name,
                 'options' => [
                     'mode' => $this->allowMultiple ? 'multiple' : 'single',
-                    'url' => $this->cb ? $this->cb->getJSURL() : null,
+                    'url' => $this->cb ? $this->cb->getJsUrl() : null,
                     'loader' => $this->loaderCssName,
                 ],
             ]

@@ -65,7 +65,7 @@ class jsCallback extends Callback implements jsExpressionable
         }
 
         return (new jQuery())->atkAjaxec([
-            'uri' => $this->getJSURL(),
+            'uri' => $this->getJsUrl(),
             'uri_options' => $this->args,
             'confirm' => $this->confirm,
             'apiConfig' => $this->apiConfig,
@@ -113,7 +113,7 @@ class jsCallback extends Callback implements jsExpressionable
                 $msg = new Message($e->getMessage());
                 $msg->addClass('error');
 
-                $this->terminateAjax(null, $msg->getHTML(), false);
+                $this->terminateAjax(null, $msg->getHtml(), false);
             }
         });
 
@@ -131,7 +131,7 @@ class jsCallback extends Callback implements jsExpressionable
     public function terminateAjax($ajaxec, $msg = null, $success = true)
     {
         if ($this->canTerminate()) {
-            $this->app->terminateJSON(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+            $this->app->terminateJson(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
         }
     }
 
@@ -168,9 +168,9 @@ class jsCallback extends Callback implements jsExpressionable
         return $ajaxec;
     }
 
-    public function getURL($mode = 'callback')
+    public function getUrl($mode = 'callback')
     {
-        throw new Exception('Do not use getURL on jsCallback, use getJSURL()');
+        throw new Exception('Do not use getUrl on jsCallback, use getJsUrl()');
     }
 
     /**
@@ -201,11 +201,11 @@ class jsCallback extends Callback implements jsExpressionable
     private function _jsRenderIntoModal(View $response): jsExpressionable
     {
         if ($response instanceof Modal) {
-            $html = $response->getHTML();
+            $html = $response->getHtml();
         } else {
             $modal = new Modal(['id' => false]);
             $modal->add($response);
-            $html = $modal->getHTML();
+            $html = $modal->getHtml();
         }
 
         return new jsExpression('$([html]).modal("show").data("needRemove", true).addClass("atk-callback-response")', ['html' => $html]);

@@ -101,7 +101,7 @@ class Modal extends View
             }
             $modalName = $_GET['__atk_m'] ?? null;
             if ($modalName === $this->name) {
-                $this->app->terminateJSON($this->cb_view);
+                $this->app->terminateJson($this->cb_view);
             }
         });
     }
@@ -109,13 +109,9 @@ class Modal extends View
     /**
      * Add CSS classes to "content" div.
      */
-    public function addContentCSS($class)
+    public function addContentCss($class)
     {
-        if (is_string($class)) {
-            $this->contentCSS = array_merge($this->contentCSS, [$class]);
-        } elseif (is_array($class)) {
-            $this->contentCSS = array_merge($this->contentCSS, $class);
-        }
+        $this->contentCSS = array_merge($this->contentCSS, is_string($class) ? [$class] : $class);
     }
 
     /**
@@ -195,7 +191,7 @@ class Modal extends View
      */
     public function addScrolling()
     {
-        $this->addContentCSS('scrolling');
+        $this->addContentCss('scrolling');
 
         return $this;
     }
@@ -306,7 +302,7 @@ class Modal extends View
         }
 
         if (!empty($this->fx)) {
-            $data['uri'] = $this->cb->getJSURL();
+            $data['uri'] = $this->cb->getJsUrl();
         }
 
         if (!$this->showActions) {

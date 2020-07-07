@@ -45,21 +45,21 @@ Counter::addTo($virtualPage);
 \atk4\ui\Button::addTo($virtualPage, ['Back', 'icon' => 'left arrow'])->link('virtual.php');
 
 $bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-\atk4\ui\Button::addTo($bar)->set('Inside current layout')->link($virtualPage->getURL());
-\atk4\ui\Button::addTo($bar)->set('On a blank page')->link($virtualPage->getURL('popup'));
-\atk4\ui\Button::addTo($bar)->set('No layout at all')->link($virtualPage->getURL('cut'));
+\atk4\ui\Button::addTo($bar)->set('Inside current layout')->link($virtualPage->getUrl());
+\atk4\ui\Button::addTo($bar)->set('On a blank page')->link($virtualPage->getUrl('popup'));
+\atk4\ui\Button::addTo($bar)->set('No layout at all')->link($virtualPage->getUrl('cut'));
 
 \atk4\ui\Header::addTo($app, ['Inside Modal', 'subHeader' => 'Virtual page content can be display using jsModal Class.']);
 
 $bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-\atk4\ui\Button::addTo($bar)->set('Load in Modal')->on('click', new \atk4\ui\jsModal('My Popup Title', $virtualPage->getJSURL('cut')));
+\atk4\ui\Button::addTo($bar)->set('Load in Modal')->on('click', new \atk4\ui\jsModal('My Popup Title', $virtualPage->getJsUrl('cut')));
 
-\atk4\ui\Button::addTo($bar)->set('Simulate slow load')->on('click', new \atk4\ui\jsModal('My Popup Title', $virtualPage->getJSURL('cut') . '&slow=true'));
+\atk4\ui\Button::addTo($bar)->set('Simulate slow load')->on('click', new \atk4\ui\jsModal('My Popup Title', $virtualPage->getJsUrl('cut') . '&slow=true'));
 if (isset($_GET['slow'])) {
     sleep(1);
 }
 
-\atk4\ui\Button::addTo($bar)->set('No title')->on('click', new \atk4\ui\jsModal(null, $virtualPage->getJSURL('cut')));
+\atk4\ui\Button::addTo($bar)->set('No title')->on('click', new \atk4\ui\jsModal(null, $virtualPage->getJsUrl('cut')));
 
 \atk4\ui\View::addTo($app, ['ui' => 'hidden divider']);
 $text = \atk4\ui\Text::addTo($app);

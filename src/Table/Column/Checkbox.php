@@ -35,7 +35,7 @@ class Checkbox extends Table\Column
         }
     }
 
-    public function getHeaderCellHTML(Field $field = null, $value = null)
+    public function getHeaderCellHtml(Field $field = null, $value = null)
     {
         if (isset($field)) {
             throw (new Exception('Checkbox must be placed in an empty column. Don\'t specify any field.'))
@@ -43,7 +43,7 @@ class Checkbox extends Table\Column
         }
         $this->table->js(true)->find('.' . $this->class)->checkbox();
 
-        return parent::getHeaderCellHTML($field);
+        return parent::getHeaderCellHtml($field);
     }
 
     public function getDataCellTemplate(Field $field = null)

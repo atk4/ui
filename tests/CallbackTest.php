@@ -77,7 +77,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertNull($var);
     }
 
-    public function testCallbackPOST()
+    public function testCallbackPost()
     {
         $var = null;
 

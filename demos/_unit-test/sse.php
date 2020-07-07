@@ -12,7 +12,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $v = View::addTo($app)->set('This will trigger a network request for testing sse...');
 
-$sse = \atk4\ui\jsSSE::addTo($app);
+$sse = \atk4\ui\jsSse::addTo($app);
 // url trigger must match php_unit test in sse provider.
 $sse->urlTrigger = 'see_test';
 

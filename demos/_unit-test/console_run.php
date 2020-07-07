@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-use atk4\ui\jsSSE;
+use atk4\ui\jsSse;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -29,7 +29,7 @@ $testRunClass = get_class(new class() extends \atk4\ui\View {
     }
 });
 
-$sse = jsSSE::addTo($app);
+$sse = jsSse::addTo($app);
 $sse->urlTrigger = 'console_test';
 
 $console = \atk4\ui\Console::addTo($app, ['sse' => $sse]);

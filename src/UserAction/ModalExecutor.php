@@ -385,7 +385,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
                 break;
             case 'html':
                 $preview = View::addTo($modal, ['ui' => 'basic segment']);
-                $preview->template->setHTML('Content', $text);
+                $preview->template->setHtml('Content', $text);
 
                 break;
         }
@@ -550,7 +550,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         } catch (\Throwable $e) {
             $msg = new Message('Error executing ' . $this->action->caption, 'red');
             $msg->init();
-            $msg->text->content = $this->app->renderExceptionHTML($e);
+            $msg->text->content = $this->app->renderExceptionHtml($e);
 
             return $msg;
         }

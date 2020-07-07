@@ -117,7 +117,7 @@ class InlineEdit extends View
 
                         return $this->jsSuccess('Update successfully');
                     } catch (ValidationException $e) {
-                        $this->app->terminateJSON([
+                        $this->app->terminateJson([
                             'success' => true,
                             'hasValidationError' => true,
                             'atkjs' => $this->jsError(call_user_func($this->formatErrorMsg, $e, $value))->jsRender(),
@@ -212,7 +212,7 @@ class InlineEdit extends View
 
         $this->vue('atk-inline-edit', [
             'initValue' => $initValue,
-            'url' => $this->cb->getJSURL(),
+            'url' => $this->cb->getJsUrl(),
             'saveOnBlur' => $this->saveOnBlur,
         ]);
 
@@ -221,7 +221,7 @@ class InlineEdit extends View
 //            'atk-inline-edit',
 //            [
 //                'initValue'     => $initValue,
-//                'url'           => $this->cb->getJSURL(),
+//                'url'           => $this->cb->getJsUrl(),
 //                'saveOnBlur'    => $this->saveOnBlur,
 //            ]
 //        ));

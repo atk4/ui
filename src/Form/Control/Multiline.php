@@ -69,7 +69,7 @@ declare(strict_types=1);
 namespace atk4\ui\Form\Control;
 
 use atk4\data\Field\Callback;
-use atk4\data\Field_SQL_Expression;
+use atk4\data\FieldSqlExpression;
 use atk4\data\Model;
 use atk4\data\Reference\HasOne;
 use atk4\data\ValidationException;
@@ -688,14 +688,14 @@ class Multiline extends Form\Control
                 try {
                     return $this->renderCallback();
                 } catch (\atk4\Core\Exception $e) {
-                    $this->app->terminateJSON(['success' => false, 'error' => $e->getMessage()]);
+                    $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
                 } catch (\Error $e) {
-                    $this->app->terminateJSON(['success' => false, 'error' => $e->getMessage()]);
+                    $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
                 }
             });
         }
 
-        $this->multiLine->template->trySetHTML('Input', $this->getInput());
+        $this->multiLine->template->trySetHtml('Input', $this->getInput());
         parent::renderView();
 
         $this->multiLine->vue(
@@ -705,7 +705,7 @@ class Multiline extends Form\Control
                     'linesField' => $this->short_name,
                     'fields' => $this->fieldDefs,
                     'idField' => $this->getModel()->id_field,
-                    'url' => $this->cb->getJSURL(),
+                    'url' => $this->cb->getJsUrl(),
                     'eventFields' => $this->eventFields,
                     'hasChangeCb' => $this->changeCb ? true : false,
                     'options' => $this->options,
@@ -736,7 +736,7 @@ class Multiline extends Form\Control
             case 'update-row':
                 $model = $this->setDummyModelValue(clone $this->getModel());
                 $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
-                $this->app->terminateJSON(array_merge($response, ['expressions' => $expressionValues]));
+                $this->app->terminateJson(array_merge($response, ['expressions' => $expressionValues]));
 
                 break;
             case 'on-change':
@@ -847,7 +847,7 @@ class Multiline extends Form\Control
     {
         $fields = [];
         foreach ($model->getFields() as $field) {
-            if (!$field instanceof Field_SQL_Expression || !in_array($field->short_name, $this->rowFields, true)) {
+            if (!$field instanceof FieldSqlExpression || !in_array($field->short_name, $this->rowFields, true)) {
                 continue;
             }
 
@@ -876,7 +876,7 @@ class Multiline extends Form\Control
         foreach ($matches[0] as $match) {
             $fieldName = substr($match, 1, -1);
             $field = $model->getField($fieldName);
-            if ($field instanceof Field_SQL_Expression) {
+            if ($field instanceof FieldSqlExpression) {
                 $expr = str_replace($match, $this->getDummyExpression($field, $model), $expr);
             } else {
                 $expr = str_replace($match, $this->getValueForExpression($exprField, $fieldName, $model), $expr);

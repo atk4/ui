@@ -9,7 +9,7 @@ namespace atk4\ui;
  */
 class jsConditionalForm implements jsExpressionable
 {
-    use \atk4\core\DIContainerTrait;
+    use \atk4\core\DiContainerTrait;
 
     // {{{ Properties
 

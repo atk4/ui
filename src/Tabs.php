@@ -32,7 +32,7 @@ class Tabs extends View
         // if there is callback action, then use VirtualPage
         if ($callback) {
             $vp = VirtualPage::addTo($sub, ['ui' => '']);
-            $item->setPath($vp->getJSURL('cut'));
+            $item->setPath($vp->getJsUrl('cut'));
 
             $vp->set($callback);
         }
@@ -48,7 +48,7 @@ class Tabs extends View
      * @param string|array $url      URL to open inside a tab
      * @param array        $settings Tab setting
      */
-    public function addTabURL($name, $url, $settings = [])
+    public function addTabUrl($name, $url, $settings = [])
     {
         $item = $this->addTabMenuItem($name, $settings);
         $this->addSubView($item->name);

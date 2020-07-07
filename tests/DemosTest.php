@@ -363,7 +363,7 @@ class DemosTest extends AtkPhpunit\TestCase
     }
 
     /**
-     * Test jsSSE and Console.
+     * Test jsSse and Console.
      */
     public function sseResponseProvider(): array
     {

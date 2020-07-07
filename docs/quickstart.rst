@@ -164,10 +164,10 @@ single ToDo item::
 
 As you might have noted already, Persistence and Model are defined independently from each-other.
 
-Instantiate App using DIContainerTrait (Dependency Injection)
+Instantiate App using DiContainerTrait (Dependency Injection)
 =============================================================
 
-Class App use `DIContainerTrait` which allow us to inject dependency directly in constructor::
+Class App use `DiContainerTrait` which allow us to inject dependency directly in constructor::
 
     use Monolog\Logger;
     use Monolog\Handler\StreamHandler;
@@ -188,7 +188,7 @@ Class App use `DIContainerTrait` which allow us to inject dependency directly in
 
 
 
-Form and CRUD Components
+Form and Crud Components
 ========================
 
 Next we need to add Components that are capable of manipulating the data::
@@ -235,13 +235,13 @@ Next we need to add Components that are capable of manipulating the data::
 It is time to test our application in action. Use the form to add new record data. Saving the form
 will cause table to also reload revealing new records.
 
-Grid and CRUD
+Grid and Crud
 =============
 
 As mentioned before, UI Components in Agile Toolkit are often interchangeable, you can swap one for
 another. In our example replace right column (label 17) with the following code::
 
-    $grid = \atk4\ui\CRUD::addTo($col->addColumn(), ['paginator'=>false, // 18
+    $grid = \atk4\ui\Crud::addTo($col->addColumn(), ['paginator'=>false, // 18
         'canCreate'=>false, 'canDelete'=>false                  // 19
     ]);
     $grid->setModel(new ToDoItem($s));
@@ -260,7 +260,7 @@ another. In our example replace right column (label 17) with the following code:
 
 .. rubric:: Clarifications
 
-.. [#] We replace 'Table' with a 'CRUD'. This is much more advanced component, that wraps
+.. [#] We replace 'Table' with a 'Crud'. This is much more advanced component, that wraps
     'Table' component by providing support for editing operations and other features like
     pagination, quick-search, etc.
 

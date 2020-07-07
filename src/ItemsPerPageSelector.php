@@ -85,7 +85,7 @@ class ItemsPerPageSelector extends View
                     $this->set($ipp);
                     $reload = call_user_func($fx, $ipp);
                     if ($reload) {
-                        $this->app->terminateJSON($reload);
+                        $this->app->terminateJson($reload);
                     }
                 });
             }
@@ -104,7 +104,7 @@ class ItemsPerPageSelector extends View
                             $(this)
                             .api({
                                 on:'now',
-                                url:'{$this->cb->getURL()}',
+                                url:'{$this->cb->getUrl()}',
                                 data:{ipp:value}
                                 }
                             );

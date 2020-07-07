@@ -81,9 +81,9 @@ class VirtualPage extends View
      *
      * @return string
      */
-    public function getURL($mode = 'callback')
+    public function getUrl($mode = 'callback')
     {
-        return $this->cb->getURL($mode);
+        return $this->cb->getUrl($mode);
     }
 
     /**
@@ -94,16 +94,16 @@ class VirtualPage extends View
      *
      * @return string
      */
-    public function getJSURL($mode = 'callback')
+    public function getJsUrl($mode = 'callback')
     {
-        return $this->cb->getJSURL($mode);
+        return $this->cb->getJsUrl($mode);
     }
 
     /**
      * VirtualPage is not rendered normally. It's invisible. Only when
      * it is triggered, it will exclusively output it's content.
      */
-    public function getHTML()
+    public function getHtml()
     {
         $this->cb->set(function () {
             // if virtual page callback is triggered
@@ -116,24 +116,24 @@ class VirtualPage extends View
                 // special treatment for popup
                 if ($type === 'popup') {
                     $this->app->html->template->set('title', $this->app->title);
-                    $this->app->html->template->setHTML('Content', parent::getHTML());
-                    $this->app->html->template->appendHTML('HEAD', $this->getJS());
+                    $this->app->html->template->setHtml('Content', parent::getHtml());
+                    $this->app->html->template->appendHtml('HEAD', $this->getJs());
 
-                    $this->app->terminateHTML($this->app->html->template);
+                    $this->app->terminateHtml($this->app->html->template);
                 }
 
                 // render and terminate
                 if (isset($_GET['__atk_json'])) {
-                    $this->app->terminateJSON($this);
+                    $this->app->terminateJson($this);
                 }
 
                 if (isset($_GET['__atk_tab'])) {
-                    $this->app->terminateHTML($this->renderTab());
+                    $this->app->terminateHtml($this->renderTab());
                 }
 
                 // do not terminate if callback supplied (no cutting)
                 if ($type !== 'callback') {
-                    $this->app->terminateHTML($this);
+                    $this->app->terminateHtml($this);
                 }
             }
 
@@ -148,20 +148,20 @@ class VirtualPage extends View
             $modalHtml = '';
             foreach ($this->app->html !== null ? $this->app->html->elements : [] as $view) {
                 if ($view instanceof Modal) {
-                    $modalHtml .= $view->getHTML();
+                    $modalHtml .= $view->getHtml();
                     $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $view->_js_actions);
                 }
             }
 
-            $this->app->layout->template->setHTML('Content', parent::getHTML());
+            $this->app->layout->template->setHtml('Content', parent::getHtml());
             $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $this->_js_actions);
 
-            $this->app->html->template->setHTML('Content', $this->app->layout->getHTML());
-            $this->app->html->template->setHTML('Modals', $modalHtml);
+            $this->app->html->template->setHtml('Content', $this->app->layout->getHtml());
+            $this->app->html->template->setHtml('Modals', $modalHtml);
 
-            $this->app->html->template->appendHTML('HEAD', $this->app->layout->getJS());
+            $this->app->html->template->appendHtml('HEAD', $this->app->layout->getJs());
 
-            $this->app->terminateHTML($this->app->html->template);
+            $this->app->terminateHtml($this->app->html->template);
         });
     }
 }

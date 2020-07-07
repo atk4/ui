@@ -10,7 +10,7 @@ use atk4\ui\View;
 
 class jsIntegrationTest extends AtkPhpunit\TestCase
 {
-    public function testIDIntegrity1()
+    public function testIdIntegrity1()
     {
         $v = new Button(['icon' => 'pencil']);
         $html = $v->render();
@@ -19,7 +19,7 @@ class jsIntegrationTest extends AtkPhpunit\TestCase
         $this->assertNotSame($v->id, $v->icon->id);
     }
 
-    public function testIDIntegrity2()
+    public function testIdIntegrity2()
     {
         $v = new View(['ui' => 'buttons']);
         $b1 = Button::addTo($v);
@@ -48,12 +48,12 @@ class jsIntegrationTest extends AtkPhpunit\TestCase
     {
         $v = new Button(['id' => 'b']);
         $j = $v->js(true)->hide();
-        $v->getHTML();
+        $v->getHtml();
 
         $this->assertSame('<script>
 $(function() {
   $("#b").hide();
-})</script>', $v->getJS());
+})</script>', $v->getJs());
     }
 
     /**
@@ -63,14 +63,14 @@ $(function() {
     {
         $v = new Button(['id' => 'b']);
         $v->js('click')->hide();
-        $v->getHTML();
+        $v->getHtml();
 
         $this->assertSame('<script>
 $(function() {
   $("#b").bind("click",function() {
     $("#b").hide();
   });
-})</script>', $v->getJS());
+})</script>', $v->getJs());
     }
 
     /**
@@ -83,7 +83,7 @@ $(function() {
         $b2 = Button::addTo($bb, ['id' => 'b2']);
 
         $b1->on('click', $b2->js()->hide());
-        $bb->getHTML();
+        $bb->getHtml();
 
         $this->assertSame('<script>
 $(function() {
@@ -92,6 +92,6 @@ $(function() {
     event.stopPropagation();
     $("#b2").hide();
   });
-})</script>', $bb->getJS());
+})</script>', $bb->getJs());
     }
 }

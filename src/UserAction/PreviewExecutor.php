@@ -39,7 +39,7 @@ class PreviewExecutor extends BasicExecutor
                 break;
             case 'html':
                 $this->preview = View::addTo($this, ['ui' => 'segment']);
-                $this->preview->template->setHTML('Content', $text);
+                $this->preview->template->setHtml('Content', $text);
 
                 break;
         }
