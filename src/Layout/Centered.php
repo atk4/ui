@@ -43,7 +43,7 @@ class Centered extends \atk4\ui\Layout
         $this->template->trySet('title', $this->app->title);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->image) {
             $this->template->trySetHtml('HeaderImage', '<img class="ui image" src="' . $this->image . '" alt="' . $this->image_alt . '" />');

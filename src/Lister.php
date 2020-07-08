@@ -109,17 +109,15 @@ class Lister extends View
             $this->model->setLimit($ipp, ($p - 1) * $ipp);
 
             // render this View (it will count rendered records !)
-            $json = $this->renderJson(true, $scrollRegion);
+            $jsonArr = $this->renderToJsonArr(true, $scrollRegion);
 
             // if there will be no more pages, then replace message=Success to let JS know that there are no more records
             if ($this->_rendered_rows_count < $ipp) {
-                $json = json_decode($json, true);
-                $json['message'] = 'Done'; // Done status means - no more requests from JS side
-                $json = json_encode($json);
+                $jsonArr['message'] = 'Done'; // Done status means - no more requests from JS side
             }
 
             // return json response
-            $this->app->terminateJson($json);
+            $this->app->terminateJson($jsonArr);
         });
 
         return $this;
@@ -128,7 +126,7 @@ class Lister extends View
     /** @var int This will count how many rows are rendered. Needed for JsPaginator for example. */
     protected $_rendered_rows_count = 0;
 
-    public function renderView()
+    protected function renderView(): void
     {
         if (!$this->template) {
             throw new Exception('Lister requires you to specify template explicitly');
@@ -136,7 +134,9 @@ class Lister extends View
 
         // if no model is set, don't show anything (even warning)
         if (!$this->model) {
-            return parent::renderView();
+            parent::renderView();
+
+            return;
         }
 
         // Generate template for data row
@@ -172,7 +172,7 @@ class Lister extends View
             $this->jsPaginator->jsIdle();
         }
 
-        return parent::renderView(); //$this->template->render();
+        parent::renderView();
     }
 
     /**

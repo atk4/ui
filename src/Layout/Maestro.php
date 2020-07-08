@@ -36,7 +36,7 @@ class Maestro extends Admin
         return $i;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         parent::renderView();
 

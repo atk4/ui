@@ -399,7 +399,7 @@ class App
     public function terminateJson($output, array $headers = []): void
     {
         if ($output instanceof View) {
-            $output = $output->renderJson();
+            $output = $output->renderToJsonArr();
         }
 
         $this->terminate(

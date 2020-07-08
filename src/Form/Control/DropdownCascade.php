@@ -131,7 +131,7 @@ class DropdownCascade extends Dropdown
     {
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         // can't be multiple selection.
         $this->isMultiple = false;

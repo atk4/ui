@@ -202,7 +202,7 @@ class Right extends View implements Loadable
         return $panel_options;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $this->template->trySet('WarningIcon', $this->warningIcon);
         $this->template->trySet('CloseIcon', $this->closeIcon);

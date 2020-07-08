@@ -222,10 +222,7 @@ class Upload extends Input
         }
     }
 
-    /**
-     * Rendering view.
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         //need before parent rendering.
         if ($this->disabled) {

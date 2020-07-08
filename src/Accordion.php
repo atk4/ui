@@ -156,7 +156,7 @@ class Accordion extends View
     /**
      * {@inheritdoc}
      */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->type) {
             $this->addClass($this->type);

@@ -382,7 +382,7 @@ class Lookup extends Input
         $chain->dropdown($settings);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $this->callback = \atk4\ui\Callback::addTo($this);
         $this->callback->set([$this, 'outputApiResponse']);

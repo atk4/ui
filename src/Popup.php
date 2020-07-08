@@ -275,7 +275,7 @@ class Popup extends View
         return $chain;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->triggerBy) {
             $this->js(true, $this->jsPopup());

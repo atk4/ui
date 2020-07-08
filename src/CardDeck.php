@@ -419,7 +419,7 @@ class CardDeck extends View
         return $this->factory($executor);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if (($this->menu && count($this->menuActions) > 0) || $this->search !== false) {
             View::addTo($this, ['ui' => 'divider'], ['Divider']);

@@ -74,7 +74,7 @@ class Checkbox extends Form\Control
     /**
      * Render view.
      */
-    public function renderView()
+    protected function renderView(): void
     {
         $this->template['label'] = $this->label ?: $this->caption;
 
@@ -100,7 +100,7 @@ class Checkbox extends Form\Control
 
         $this->content = null; // no content again
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**

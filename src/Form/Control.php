@@ -118,7 +118,7 @@ class Control extends View
      * It only makes sense to have "name" property inside a field if
      * it was used inside a form.
      */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->form) {
             $this->template->trySet('name', $this->short_name);

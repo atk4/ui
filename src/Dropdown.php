@@ -62,7 +62,7 @@ class Dropdown extends Lister
         }, ['item' => 'value']);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if (isset($this->js)) {
             $this->js(true)->dropdown($this->js);
@@ -70,6 +70,6 @@ class Dropdown extends Lister
             $this->js(true)->dropdown();
         }
 
-        return parent::renderView();
+        parent::renderView();
     }
 }

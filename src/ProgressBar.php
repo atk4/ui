@@ -47,11 +47,11 @@ class ProgressBar extends View
         parent::__construct($label, $class);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $this->js(true)->progress(['percent' => $this->value]);
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**

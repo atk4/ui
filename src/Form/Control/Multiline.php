@@ -677,7 +677,7 @@ class Multiline extends Form\Control
         return [];
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if (!$this->getModel()) {
             throw new Exception('Multiline field needs to have it\'s model setup.');

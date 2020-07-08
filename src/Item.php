@@ -23,7 +23,7 @@ class Item extends View
      */
     public $icon;
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->label) {
             Label::addTo($this, [$this->label]);

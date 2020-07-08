@@ -199,7 +199,7 @@ class Paginator extends View
         $this->template->appendHtml('rows', $t->render());
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $t_item = $this->template->cloneRegion('Item');
         $t_first = $this->template->hasTag('FirstItem') ? $this->template->cloneRegion('FirstItem') : $t_item;

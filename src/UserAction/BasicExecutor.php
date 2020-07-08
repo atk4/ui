@@ -81,7 +81,7 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
         $this->arguments = array_merge($this->arguments, $arguments);
     }
 
-    public function recursiveRender()
+    protected function recursiveRender(): void
     {
         if (!$this->action) {
             throw new Exception('Action is not set. Use setAction()');

@@ -608,10 +608,7 @@ class Form extends View
         }
     }
 
-    /**
-     * Renders view.
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         $this->ajaxSubmit();
         if (!empty($this->controlDisplayRules)) {
@@ -619,7 +616,7 @@ class Form extends View
             $this->js(true, new JsConditionalForm($this, $this->fieldsDisplayRules ?: $this->controlDisplayRules, $this->fieldDisplaySelector ?: $this->controlDisplaySelector));
         }
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**

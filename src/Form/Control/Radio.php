@@ -40,10 +40,7 @@ class Radio extends Form\Control
         $this->lister->t_row['_name'] = $this->short_name;
     }
 
-    /**
-     * Renders view.
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         if (!$this->model) {
             $p = new \atk4\data\Persistence\Static_($this->values);
@@ -69,7 +66,7 @@ class Radio extends Form\Control
             $lister->t_row->set('checked', $value === (string) $lister->model->id ? 'checked' : '');
         });
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**

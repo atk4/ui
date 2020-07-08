@@ -186,10 +186,7 @@ class Menu extends View
         return parent::getHtml();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->activate_on_click && $this->ui === 'menu') {
             // Semantic UI need some JS magic
