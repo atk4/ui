@@ -628,6 +628,30 @@ class Form extends View
         parent::renderView();
     }
 
+    protected function renderTemplateToHtml(string $region = null): string
+    {
+        $output = parent::renderTemplateToHtml();
+
+        $innerFormTags = ['button',
+            'datalist',
+            'fieldset',
+            'input',
+            'keygen',
+            'label',
+            'legend',
+            'meter',
+            'optgroup',
+            'option',
+            'output',
+            'progress',
+            'select',
+            'textarea'
+        ];
+        $output = preg_replace('~<(' . implode('|', $innerFormTags) . ')(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $output);
+
+        return $output;
+    }
+
     /**
      * Set Semantic-ui Api settings to use with form. A complete list is here:
      * https://semantic-ui.com/behaviors/api.html#/settings.
