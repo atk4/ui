@@ -12,7 +12,7 @@ use atk4\data\Model;
  *  - completely remove any logic from templates
  *  - speed up template parsing and manipulation speed.
  */
-class TemplateOld implements \ArrayAccess
+class Template implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
     use \atk4\core\DiContainerTrait; // needed for StaticAddToTrait, removed once php7.2 support is dropped
@@ -252,11 +252,6 @@ class TemplateOld implements \ArrayAccess
 
         if ($encode) {
             $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
-        }
-
-        // if no value, then set respective conditional regions to empty string
-        if (substr($tag, -1) !== '?' && ($value === false || !strlen((string) $value))) {
-            $this->trySet($tag . '?', '');
         }
 
         // ignore not existent tags

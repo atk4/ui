@@ -17,7 +17,7 @@ if (class_exists(Template::class)) {
  *  - completely remove any logic from templates
  *  - speed up template parsing and manipulation speed.
  */
-class Template implements \ArrayAccess
+class TemplateX implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
     use \atk4\core\DiContainerTrait; // needed for StaticAddToTrait, removed once php7.2 support is dropped
