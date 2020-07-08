@@ -760,20 +760,18 @@ class View implements JsExpressionable
      * Render View using json format.
      *
      * @param string $region a specific template region to render
-     *
-     * @return string
      */
-    public function renderJson(bool $forceReturn = true, $region = null)
+    public function renderToJsonArr(bool $forceReturn = true, $region = null): array
     {
         $this->renderAll();
 
-        return json_encode([
+        return [
             'success' => true,
             'message' => 'Success',
             'atkjs' => $this->getJs($forceReturn),
             'html' => $this->template->render($region),
             'id' => $this->name,
-        ]);
+        ];
     }
 
     /**
