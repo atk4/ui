@@ -56,18 +56,23 @@ $form->addControl('status_integer_required', [Form\Control\Dropdown::class], ['t
 $form->addControl('status_string_mandatory', [Form\Control\Dropdown::class], ['type' => 'string', 'values' => $values, 'mandatory' => true]);
 $form->addControl('status_integer_mandatory', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'mandatory' => true]);
 
-$form->onSubmit(function (Form $form) {
-    return (new \atk4\ui\JsNotify(json_encode($form->model->get())))->setDuration(0);
+$form->onSubmit(function (Form $form) use ($app) {
+    return new \atk4\ui\JsToast($app->encodeJson($form->model->get()));
 });
 
 \atk4\ui\Header::addTo($tab, ['Comparing Field type vs Form control class']);
 $form = Form::addTo($tab);
-$form->addControl('date1', null, ['type' => 'date']);
-$form->addControl('date2', [Form\Control\Calendar::class, 'type' => 'date']);
+$form->addControl('field', null, ['type' => 'date', 'caption' => 'Date using model field:']);
+$form->addControl('control', [Form\Control\Calendar::class, 'type' => 'date', 'caption' => 'Date using form control: ']);
 $form->buttonSave->set('Compare Date');
 
-$form->onSubmit(function (Form $form) {
-    echo 'date1 = ' . print_r($form->model->get('date1'), true) . ' and date2 = ' . print_r($form->model->get('date2'), true);
+$form->onSubmit(function (Form $form) use ($app) {
+    $message = 'field = ' . print_r($form->model->get('field'), true) . '; <br> control = ' . print_r($form->model->get('control'), true);
+    $view = new \atk4\ui\Message('Date field vs control:');
+    $view->init();
+    $view->text->addHTML($message);
+
+    return $view;
 });
 
 ////////////////////////////////////////////////////////////
@@ -135,14 +140,6 @@ $form->onSubmit(function (Form $form) {
     $o = new \StdClass();
 
     return $o['abc'];
-});
-
-\atk4\ui\Header::addTo($tab, ['Form handles random output', 'size' => 2]);
-
-$form = Form::addTo($tab);
-$form->addControl('email');
-$form->onSubmit(function (Form $form) {
-    echo 'some output here';
 });
 
 \atk4\ui\Header::addTo($tab, ['Form shows Agile exceptions', 'size' => 2]);

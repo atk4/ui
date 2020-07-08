@@ -10,7 +10,7 @@ Scenario: test form response
 
   And I press button "Compare Date"
   And form submits
-  Then I should see "Unexpected output detected"
+  Then I should see "Date field vs control:"
   Then I hide js modal
 
   And I click tab with title "Handler Output"

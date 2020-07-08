@@ -41,7 +41,7 @@ class App
         'atk' => 'https://ui.agiletoolkit.org/public', // develop branch
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.5',
+        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6',
     ];
 
     /** @var string Version of Agile UI */
