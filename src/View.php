@@ -336,7 +336,7 @@ class View implements JsExpressionable
         }
 
         // add default objects
-        foreach ($this->_add_later as list($object, $region)) {
+        foreach ($this->_add_later as [$object, $region]) {
             $this->add($object, $region);
         }
 

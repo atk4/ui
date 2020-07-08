@@ -232,7 +232,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             return;
         }
 
-        list($proc, $pipes) = $this->execRaw($exec, $args);
+        [$proc, $pipes] = $this->execRaw($exec, $args);
 
         stream_set_blocking($pipes[1], false);
         stream_set_blocking($pipes[2], false);
