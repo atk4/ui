@@ -708,7 +708,7 @@ under ``$template->template`::
     // template property:
     array (
       0 => 'Hello ',
-      'subject#1' => array (
+      'subject#0' => array (
         0 => 'world',
       ),
       1 => '!!',
@@ -718,7 +718,7 @@ Property tags would contain::
 
     array (
       'subject'=> array( &array ),
-      'subject#1'=> array( &array )
+      'subject#0'=> array( &array )
     )
 
 As a result each tag will be stored under it's actual name and the name with
