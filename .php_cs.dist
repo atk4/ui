@@ -14,6 +14,7 @@ return PhpCsFixer\Config::create()
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' =>true,
         '@PHP71Migration:risky' => true,
+        '@PHP73Migration' => true,
 
         // required by PSR-12
         'concat_space' => [
@@ -53,6 +54,7 @@ return PhpCsFixer\Config::create()
         'phpdoc_add_missing_param_annotation' => false,
         'return_assignment' => false,
         'comment_to_phpdoc' => false,
+        'list_syntax' => ['syntax' => 'short'],
         'general_phpdoc_annotation_remove' => [
             'annotations' => ['author', 'copyright', 'throws'],
         ],

@@ -13,20 +13,20 @@ class PromotionText extends \atk4\ui\View
         $t = \atk4\ui\Text::addTo($this);
         $t->addParagraph(
             <<< 'EOF'
-Agile Toolkit base package includes:
-EOF
+                Agile Toolkit base package includes:
+                EOF
         );
 
         $t->addHtml(
             <<< 'HTML'
-<ul>
-<li>Over 40 ready-to-use and nicely styled UI components</li>
-<li>Over 10 ways to build interraction</li>
-<li>Over 10 configurable field types, relations, aggregation and much more</li>
-<li>Over 5 SQL and some NoSQL vendors fully supported</li>
-</ul>
+                <ul>
+                <li>Over 40 ready-to-use and nicely styled UI components</li>
+                <li>Over 10 ways to build interraction</li>
+                <li>Over 10 configurable field types, relations, aggregation and much more</li>
+                <li>Over 5 SQL and some NoSQL vendors fully supported</li>
+                </ul>
 
-HTML
+                HTML
         );
 
         $gl = \atk4\ui\GridLayout::addTo($this, [null, 'stackable divided', 'columns' => 4]);
