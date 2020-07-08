@@ -731,6 +731,15 @@ class View implements JsExpressionable
     }
 
     /**
+     * To be overrided only to further update template render output if needed,
+     * do not call this method from your code.
+     */
+    protected function renderTemplateToHtml(string $region = null): string
+    {
+        return $this->template->render($region);
+    }
+
+    /**
      * This method is for those cases when developer want to simply render his
      * view and grab HTML himself.
      */
@@ -738,9 +747,8 @@ class View implements JsExpressionable
     {
         $this->renderAll();
 
-        return
-            $this->getJs($forceReturn) .
-            $this->template->render();
+        return $this->getJs($forceReturn)
+            . $this->renderTemplateToHtml();
     }
 
     /**
@@ -752,7 +760,7 @@ class View implements JsExpressionable
 
         return [
             'atkjs' => $this->getJsRenderActions(),
-            'html' => $this->template->render(),
+            'html' => $this->renderTemplateToHtml(),
         ];
     }
 
@@ -769,7 +777,7 @@ class View implements JsExpressionable
             'success' => true,
             'message' => 'Success',
             'atkjs' => $this->getJs($forceReturn),
-            'html' => $this->template->render($region),
+            'html' => $this->renderTemplateToHtml($region),
             'id' => $this->name,
         ];
     }
@@ -788,7 +796,7 @@ class View implements JsExpressionable
 
         $this->renderAll();
 
-        return $this->template->render();
+        return $this->renderTemplateToHtml();
     }
 
     // }}}
