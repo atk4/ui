@@ -180,7 +180,7 @@ class Wizard extends View
         return new JsExpression('document.location = []', [$this->urlNext()]);
     }
 
-    public function recursiveRender()
+    protected function recursiveRender(): void
     {
         if (!$this->steps) {
             $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function ($p) {
@@ -195,7 +195,7 @@ class Wizard extends View
         parent::recursiveRender();
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         // Set proper width to the wizard
         $c = count($this->steps);

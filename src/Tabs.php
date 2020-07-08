@@ -95,10 +95,7 @@ class Tabs extends View
         return TabsSubview::addTo($this, ['dataTabName' => $name], ['Tabs']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         // use content as class name
         if ($this->content) {

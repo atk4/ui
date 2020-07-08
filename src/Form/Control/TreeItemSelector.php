@@ -145,7 +145,7 @@ class TreeItemSelector extends Form\Control
         return $this->app->ui_persistence->typecastSaveField($this->field, $this->field->get());
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         parent::renderView();
 

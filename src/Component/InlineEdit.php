@@ -187,7 +187,7 @@ class InlineEdit extends View
     /**
      * Renders View.
      */
-    public function renderView()
+    protected function renderView(): void
     {
         parent::renderView();
 

@@ -176,10 +176,7 @@ class Input extends Form\Control
         return $button;
     }
 
-    /**
-     * Renders view.
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         // TODO: I don't think we need the loading state at all.
         if ($this->loading) {

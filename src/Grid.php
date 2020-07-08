@@ -660,22 +660,20 @@ class Grid extends View
     }
 
     /**
-     * Renders view.
-     *
      * Before rendering take care of data sorting.
      */
-    public function renderView()
+    protected function renderView(): void
     {
         // take care of sorting
         $this->applySort();
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**
      * Recursively renders view.
      */
-    public function recursiveRender()
+    protected function recursiveRender(): void
     {
         // bind with paginator
         if ($this->paginator) {
@@ -688,7 +686,7 @@ class Grid extends View
             }
         }
 
-        return parent::recursiveRender();
+        parent::recursiveRender();
     }
 
     /**

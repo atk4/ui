@@ -67,13 +67,13 @@ $cartClass = get_class(new class() extends \atk4\ui\Lister {
     /**
      * renders as a regular lister, but source is the items.
      */
-    public function renderView()
+    protected function renderView(): void
     {
         // memorize items
 
         $this->setSource($this->items);
 
-        return parent::renderView();
+        parent::renderView();
     }
 });
 

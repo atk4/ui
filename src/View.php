@@ -647,7 +647,7 @@ class View implements JsExpressionable
      * NOTE: maybe in the future, SemanticUI-related stuff needs to go into
      * a separate class.
      */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->class) {
             $this->template->append('class', implode(' ', $this->class));
@@ -693,7 +693,7 @@ class View implements JsExpressionable
      * Recursively render all children, placing their
      * output in our template.
      */
-    public function recursiveRender()
+    protected function recursiveRender(): void
     {
         foreach ($this->elements as $view) {
             if (!$view instanceof self) {
@@ -716,7 +716,7 @@ class View implements JsExpressionable
      * Render everything recursively, render ourselves but don't return
      * anything just yet.
      */
-    public function renderAll()
+    public function renderAll(): void
     {
         if (!$this->_initialized) {
             $this->init();
@@ -733,22 +733,20 @@ class View implements JsExpressionable
     /**
      * This method is for those cases when developer want to simply render his
      * view and grab HTML himself.
-     *
-     * @return string
      */
-    public function render(bool $force_echo = true)
+    public function render(bool $forceReturn = true): string
     {
         $this->renderAll();
 
         return
-            $this->getJs($force_echo) .
+            $this->getJs($forceReturn) .
             $this->template->render();
     }
 
     /**
      * This method is to render view to place inside a Fomantic-UI Tab.
      */
-    public function renderTab()
+    public function renderTab(): array
     {
         $this->renderAll();
 
@@ -765,14 +763,14 @@ class View implements JsExpressionable
      *
      * @return string
      */
-    public function renderJson(bool $force_echo = true, $region = null)
+    public function renderJson(bool $forceReturn = true, $region = null)
     {
         $this->renderAll();
 
         return json_encode([
             'success' => true,
             'message' => 'Success',
-            'atkjs' => $this->getJs($force_echo),
+            'atkjs' => $this->getJs($forceReturn),
             'html' => $this->template->render($region),
             'id' => $this->name,
         ]);
@@ -1231,7 +1229,7 @@ class View implements JsExpressionable
      *
      * @return string
      */
-    public function getJs(bool $force_echo = false)
+    public function getJs(bool $forceReturn = false)
     {
         $actions = [];
 
@@ -1247,7 +1245,7 @@ class View implements JsExpressionable
 
         $actions['indent'] = '';
 
-        if (!$force_echo && $this->app && $this->app->hasMethod('jsReady')) {
+        if (!$forceReturn && $this->app && $this->app->hasMethod('jsReady')) {
             $this->app->jsReady($actions);
 
             return '';

@@ -20,7 +20,7 @@ class Money extends Input
         return number_format($v, $this->app->ui_persistence->currency_decimals);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->label === null) {
             $this->label = $this->app->ui_persistence->currency;

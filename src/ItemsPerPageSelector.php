@@ -92,7 +92,7 @@ class ItemsPerPageSelector extends View
         }
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $menuItems = [];
         foreach ($this->pageLengthItems as $key => $item) {

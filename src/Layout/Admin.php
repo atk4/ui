@@ -99,10 +99,7 @@ class Admin extends \atk4\ui\Layout implements NavigableInterface
         return $this->menuLeft->addItem($name, $action);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->menuLeft) {
             if (count($this->menuLeft->elements) === 0) {

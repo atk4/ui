@@ -135,7 +135,7 @@ class Layout extends AbstractLayout
     /**
      * Recursively renders this view.
      */
-    public function recursiveRender()
+    protected function recursiveRender(): void
     {
         $labeledControl = $this->inputTemplate->cloneRegion('LabeledControl');
         $noLabelControl = $this->inputTemplate->cloneRegion('NoLabelControl');

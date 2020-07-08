@@ -317,7 +317,8 @@ of this view.
 
 You should override this method when necessary and don't forget to execute parent::renderView()::
 
-    function renderView() {
+    protected function renderView(): void
+    {
         if (str_len($this->info) > 100) {
              $this->addClass('tiny');
         }
@@ -368,7 +369,8 @@ Here is a best practice for using custom template::
 
         public $title = 'Default Title';
 
-        function renderView() {
+        protected function renderView(): void
+        {
             parent::renderView();
             $this->template['title'] = $this->title;
         }
