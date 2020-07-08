@@ -746,7 +746,7 @@ class View implements JsExpressionable
     /**
      * This method is to render view to place inside a Fomantic-UI Tab.
      */
-    public function renderTab(): array
+    public function renderToTab(): array
     {
         $this->renderAll();
 

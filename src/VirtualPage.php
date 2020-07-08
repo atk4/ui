@@ -128,7 +128,7 @@ class VirtualPage extends View
                 }
 
                 if (isset($_GET['__atk_tab'])) {
-                    $this->app->terminateHtml($this->renderTab());
+                    $this->app->terminateHtml($this->renderToTab());
                 }
 
                 // do not terminate if callback supplied (no cutting)
