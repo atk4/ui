@@ -633,21 +633,8 @@ class Form extends View
     {
         $output = parent::renderTemplateToHtml();
 
-        $innerFormTags = ['button',
-            'datalist',
-            'fieldset',
-            'input',
-            'keygen',
-            'label',
-            'legend',
-            'meter',
-            'optgroup',
-            'option',
-            'output',
-            'progress',
-            'select',
-            'textarea'
-        ];
+        $innerFormTags = ['button', 'datalist', 'fieldset', 'input', 'keygen', 'label', 'legend',
+            'meter', 'optgroup', 'option', 'output', 'progress', 'select', 'textarea', ];
         $output = preg_replace('~<(' . implode('|', $innerFormTags) . ')(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $output);
 
         return $output;
