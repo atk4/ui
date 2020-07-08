@@ -273,6 +273,8 @@ class Template implements \ArrayAccess
             }
         }
 
+        $this->rebuildTagsIndex();
+
         return;
     }
 
@@ -455,6 +457,8 @@ class Template implements \ArrayAccess
         foreach ($template as &$ref) {
             $ref = [];
         }
+
+        $this->rebuildTagsIndex();
 
         return $this;
     }
