@@ -17,7 +17,7 @@ if (class_exists(Template::class)) {
  *  - completely remove any logic from templates
  *  - speed up template parsing and manipulation speed.
  */
-class TemplateX implements \ArrayAccess
+class Template implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
     use \atk4\core\DiContainerTrait; // needed for StaticAddToTrait, removed once php7.2 support is dropped
@@ -263,14 +263,23 @@ class TemplateX implements \ArrayAccess
             return;
         }
 
+        $emptyValFunc = function(&$ref) use (&$emptyValFunc) {
+            if (is_array($ref)) {
+                foreach ($ref as &$r) {
+                    $emptyValFunc($r);
+                }
+            } else {
+                $ref = '';
+            }
+        };
+
         // set or append value
         $template = $this->getTagRefs($tag);
         foreach ($template as &$ref) {
-            if ($append) {
-                $ref[] = $value;
-            } else {
-                $ref = [$value];
+            if (!$append) {
+                $emptyValFunc($ref);
             }
+            $ref[] = $value;
         }
 
         $this->rebuildTagsIndex();
@@ -453,9 +462,20 @@ class TemplateX implements \ArrayAccess
             return $this;
         }
 
+
+        $emptyValFunc = function(&$ref) use (&$emptyValFunc) {
+            if (is_array($ref)) {
+                foreach ($ref as &$r) {
+                    $emptyValFunc($r);
+                }
+            } else {
+                $ref = '';
+            }
+        };
+
         $template = $this->getTagRefs($tag);
         foreach ($template as &$ref) {
-            $ref = [];
+            $emptyValFunc($ref);
         }
 
         $this->rebuildTagsIndex();

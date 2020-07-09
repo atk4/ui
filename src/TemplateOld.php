@@ -12,7 +12,7 @@ use atk4\data\Model;
  *  - completely remove any logic from templates
  *  - speed up template parsing and manipulation speed.
  */
-class Template implements \ArrayAccess
+class TemplateOld implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
     use \atk4\core\DiContainerTrait; // needed for StaticAddToTrait, removed once php7.2 support is dropped
