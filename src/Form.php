@@ -186,7 +186,7 @@ class Form extends View
             throw new Exception('AboveFields region has be deprecated. Use AboveControls instead');
         }
 
-        $this->formElement = View::addTo($this, ['element' => 'form', 'short_name' => 'form'], ['AboveControls']);
+        $this->formElement = View::addTo($this, ['element' => 'form', 'short_name' => 'form'], ['FormElementOnly']);
 
         // Initialize layout, so when you call addControl / setModel next time, form will know
         // where to add your fields.
