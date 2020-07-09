@@ -27,6 +27,9 @@ class VirtualPage extends View
     /** @var string UI container class */
     public $ui = 'container';
 
+    /** @var bool Make callback url argument stick to application or view. */
+    public $appStickyCb = true;
+
     /**
      * Initialization.
      */
@@ -34,7 +37,7 @@ class VirtualPage extends View
     {
         parent::init();
 
-        $this->cb = $this->_add([Callback::class, 'urlTrigger' => $this->urlTrigger ?: $this->name]);
+        $this->cb = $this->_add([Callback::class, 'urlTrigger' => $this->urlTrigger ?: $this->name, 'appSticky' => $this->appStickyCb]);
         $this->app->stickyGet($this->cb->urlTrigger);
     }
 
@@ -156,7 +159,7 @@ class VirtualPage extends View
             $this->app->layout->template->setHtml('Content', parent::getHtml());
             $this->app->layout->_js_actions = array_merge($this->app->layout->_js_actions, $this->_js_actions);
 
-            $this->app->html->template->setHtml('Content', $this->app->layout->getHtml());
+            $this->app->html->template->setHtml('Content', $this->app->layout->template->render());
             $this->app->html->template->setHtml('Modals', $modalHtml);
 
             $this->app->html->template->appendHtml('HEAD', $this->app->layout->getJs());
