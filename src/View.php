@@ -122,7 +122,7 @@ class View implements JsExpressionable
      * a new Template will be generated during init() based on the
      * value of $defaultTemplate.
      *
-     * @var Template
+     * @var TemplateNew
      */
     public $template;
 

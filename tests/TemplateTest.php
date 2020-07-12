@@ -47,15 +47,15 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testGetTagRefException()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template('{foo}hello{/}');
+        $this->expectException(Exception::class);
         $this->callProtected($t, 'getTagRef', 'bar'); // not existent tag
     }
 
     /**
      * Test getTagRefs().
      */
-    public function testGetTagRefList()
+    public function testGetTagRefs()
     {
         // top tag
         $t = new \atk4\ui\Template('{foo}hello{/}, cruel {bar}world{/}. {foo}hello2{/}');
@@ -84,8 +84,8 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testBadTemplate1()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template();
+        $this->expectException(Exception::class);
         $t->load('bad_template_file');
     }
 
@@ -101,10 +101,10 @@ class TemplateTest extends AtkPhpunit\TestCase
     /**
      * Exception in getTagRefs().
      */
-    public function testGetTagRefListException()
+    public function testGetTagRefsException()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template('{foo}hello{/}');
+        $this->expectException(Exception::class);
         $this->callProtected($t, 'getTagRefs', 'bar'); // not existent tag
     }
 
@@ -123,8 +123,8 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testSetException1()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template('{foo}hello{/} guys');
+        $this->expectException(Exception::class);
         $t->set('qwe', 'Hello'); // not existent tag
     }
 
@@ -133,8 +133,8 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testSetException2()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template('{foo}hello{/} guys');
+        $this->expectException(Exception::class);
         $t->set('foo', new \StdClass()); // bad value
     }
 
@@ -232,8 +232,8 @@ class TemplateTest extends AtkPhpunit\TestCase
      */
     public function testLoadException()
     {
-        $this->expectException(Exception::class);
         $t = new \atk4\ui\Template();
+        $this->expectException(Exception::class);
         $t->load('such-file-does-not-exist.txt');
     }
 

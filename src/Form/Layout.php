@@ -204,7 +204,7 @@ class Layout extends AbstractLayout
                 $element->placeholder = $label;
             }
 
-            // Fields get extra pampering
+            // Controls get extra pampering
             $template->setHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
             $template->trySet('label_for', $element->id . '_input');

@@ -1080,7 +1080,7 @@ class App
 
         if ($lateError !== null) {
             echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
-            exit(1);
+//            exit(1);
         }
 
         echo $data;
