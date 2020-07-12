@@ -76,7 +76,7 @@ class Checkbox extends Form\Control
      */
     protected function renderView(): void
     {
-        // $this->template['label'] = $this->label ?: $this->caption;
+        $this->template['label'] = $this->label ?: $this->caption;
 
         if ($this->field ? $this->field->get() : $this->content) {
             $this->template->set('checked', 'checked');
