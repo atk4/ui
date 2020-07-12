@@ -94,7 +94,19 @@ class GridLayout extends View
         // @TODO replace later, the only use of direct template property access
         $t = $this;
         \Closure::bind(function () use ($t, $tmp) {
-            $t->template->template['rows#0'] = $tmp->template['rows#0'];
+            // $t->template->template['rows#0'] = $tmp->template['rows#0'];
+
+            // because of limitaion references in parallel rendering we have to set
+            // that also in old template
+            $templateTree = $tmp->template['rows#0'];
+            $tOld = $t->template->told;
+            $tNew = $t->template->tnew;
+            \Closure::bind(function () use ($tOld, $templateTree) {
+                $tOld->template['rows#0'] = $templateTree;
+            }, null, TemplateOld::class)();
+            \Closure::bind(function () use ($tNew, $templateTree) {
+                $tNew->template['rows#0'] = $templateTree;
+            }, null, TemplateNew::class)();
 
             $t->template->rebuildTagsIndex();
         }, null, Template::class)();

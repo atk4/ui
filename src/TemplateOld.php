@@ -99,7 +99,7 @@ class TemplateOld implements \ArrayAccess
         }
 
         $tag = explode('#', $tag, 2)[0];
-        if (!isset($this->tags[$tag])) {
+        if (!isset($this->tags[$tag])) {$v = [];return $v;
             throw $this->exceptionAddMoreInfo(
                 (new Exception('Tag not found in template'))
                     ->addMoreInfo('tag', $tag)
@@ -132,7 +132,7 @@ class TemplateOld implements \ArrayAccess
         }
 
         if (strpos($tag, '#') === false) {
-            if (!isset($this->tags[$tag])) {
+            if (!isset($this->tags[$tag])) {return [];
                 throw $this->exceptionAddMoreInfo(
                     (new Exception('Tag not found in template'))
                         ->addMoreInfo('tag', $tag)
