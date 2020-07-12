@@ -279,8 +279,6 @@ class TemplateNew implements \ArrayAccess
             }
             $ref[] = $value;
         }
-
-        return;
     }
 
     /**

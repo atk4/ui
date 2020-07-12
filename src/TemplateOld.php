@@ -99,7 +99,11 @@ class TemplateOld implements \ArrayAccess
         }
 
         $tag = explode('#', $tag, 2)[0];
-        if (!isset($this->tags[$tag])) {$v = [];return $v;
+        if (!isset($this->tags[$tag])) {
+            $v = [];
+
+            return $v;
+
             throw $this->exceptionAddMoreInfo(
                 (new Exception('Tag not found in template'))
                     ->addMoreInfo('tag', $tag)
@@ -132,7 +136,9 @@ class TemplateOld implements \ArrayAccess
         }
 
         if (strpos($tag, '#') === false) {
-            if (!isset($this->tags[$tag])) {return [];
+            if (!isset($this->tags[$tag])) {
+                return [];
+
                 throw $this->exceptionAddMoreInfo(
                     (new Exception('Tag not found in template'))
                         ->addMoreInfo('tag', $tag)
@@ -268,8 +274,6 @@ class TemplateOld implements \ArrayAccess
                 $ref = [$value];
             }
         }
-
-        return;
     }
 
     /**
@@ -672,8 +676,6 @@ class TemplateOld implements \ArrayAccess
      */
     protected function parseTemplate(string $str): void
     {
-
-
         // expand self-closing tags {$tag} -> {tag}{/tag}
         $str = preg_replace('~\{\$([-_:\w]+)\}~', '{\1}{/\1}', $str);
 

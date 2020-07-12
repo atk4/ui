@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace atk4\ui;
+
 //require_once __DIR__ . '/TemplateNew.php';class Template extends TemplateNew{}return;
 class Template implements \ArrayAccess
 {
@@ -14,35 +15,54 @@ class Template implements \ArrayAccess
     public const TOP_TAG = '_top';
 
     // must be declared because of ArrayAccess interface
-    public function offsetExists($name) { return $this->__call('offsetExists', func_get_args()); }
-    public function offsetGet($name) { return $this->__call('offsetGet', func_get_args()); }
-    public function offsetSet($name, $val) { $this->__call('offsetSet', func_get_args()); }
-    public function offsetUnset($name) { $this->__call('offsetUnset', func_get_args()); }
+    public function offsetExists($name)
+    {
+        return $this->__call('offsetExists', func_get_args());
+    }
+
+    public function offsetGet($name)
+    {
+        return $this->__call('offsetGet', func_get_args());
+    }
+
+    public function offsetSet($name, $val)
+    {
+        $this->__call('offsetSet', func_get_args());
+    }
+
+    public function offsetUnset($name)
+    {
+        $this->__call('offsetUnset', func_get_args());
+    }
 
     /** @var TemplateNew */
     private $tnew;
     /** @var TemplateOld */
     private $told;
 
-    public function __construct(string $template = '') {
+    public function __construct(string $template = '')
+    {
         $this->tnew = new TemplateNew();
         $this->told = new TemplateOld();
 
         $this->loadTemplateFromString($template);
     }
 
-    public function __clone() {
+    public function __clone()
+    {
         $this->tnew = clone $this->tnew;
         $this->told = clone $this->told;
 
         $this->diffAfter();
     }
 
-    private function getImpl(): object {
+    private function getImpl(): object
+    {
         return $this->tnew;
     }
 
-    private function getImpl2(): object {
+    private function getImpl2(): object
+    {
         return $this->told;
     }
 
@@ -95,6 +115,7 @@ class Template implements \ArrayAccess
     }
 
     private static $cloningFlag = false;
+
     public function &__call($name, $args)
     {
         // set app
@@ -127,6 +148,7 @@ class Template implements \ArrayAccess
 
         if (!self::$cloningFlag && $res instanceof TemplateNew || $res instanceof TemplateOld) {
             self::$cloningFlag = true;
+
             try {
                 $origRes = $res;
                 $res = new static();
@@ -145,14 +167,15 @@ class Template implements \ArrayAccess
         return $res;
     }
 
-    private function diffAfter() {
+    private function diffAfter()
+    {
         // compare state with new refactored template
         $tnew = $this->tnew;
-        $tnewTemplate = \Closure::bind(function() use($tnew) { return $tnew->template; }, null, TemplateNew::class)();
-        $tnewTagsIndex = \Closure::bind(function() use($tnew) { return $tnew->tagsIndex; }, null, TemplateNew::class)();
+        $tnewTemplate = \Closure::bind(function () use ($tnew) { return $tnew->template; }, null, TemplateNew::class)();
+        $tnewTagsIndex = \Closure::bind(function () use ($tnew) { return $tnew->tagsIndex; }, null, TemplateNew::class)();
         $told = $this->told;
-        $toldTemplate = \Closure::bind(function() use($told) { return $told->template; }, null, TemplateOld::class)();
-        $toldTags = \Closure::bind(function() use($told) { return $told->tags; }, null, TemplateOld::class)();
+        $toldTemplate = \Closure::bind(function () use ($told) { return $told->template; }, null, TemplateOld::class)();
+        $toldTags = \Closure::bind(function () use ($told) { return $told->tags; }, null, TemplateOld::class)();
 
         $tnewTags = [];
         foreach ($tnewTagsIndex as $tag => $paths) {
@@ -175,7 +198,7 @@ class Template implements \ArrayAccess
         }
 
         if ($tnew->render() !== $told->render()) {
-            echo trim($tnew->render()) . "\n" . trim($told->render()) ."\n\n\n"  ;
+            echo trim($tnew->render()) . "\n" . trim($told->render()) . "\n\n\n";
 
             var_dump($tnew->render());
             var_dump($told->render());
@@ -185,13 +208,17 @@ class Template implements \ArrayAccess
                 print_r($tnewTemplate);
                 echo 'old template' . "\n";
                 print_r($toldTemplate);
-                throw new \Error();exit;//echo (new Exception ('Template mismatch'))->getHtml();ob_end_flush(); ob_start(function() { exit; }); echo 'x'; ob_end_flush(); // exit immediatelly
+
+                throw new \Error();
+                exit; //echo (new Exception ('Template mismatch'))->getHtml();ob_end_flush(); ob_start(function() { exit; }); echo 'x'; ob_end_flush(); // exit immediatelly
             }
 
             if ($tnewTags !== $toldTags) {
                 print_r($tnewTags);
                 print_r($toldTags);
-                throw new \Error();exit;//echo (new Exception ('Template mismatch'))->getHtml();ob_end_flush(); ob_start(function() { exit; }); echo 'x'; ob_end_flush(); // exit immediatelly
+
+                throw new \Error();
+                exit; //echo (new Exception ('Template mismatch'))->getHtml();ob_end_flush(); ob_start(function() { exit; }); echo 'x'; ob_end_flush(); // exit immediatelly
             }
         }
     }
