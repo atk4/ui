@@ -20,7 +20,7 @@ class Input extends Form\Control
 
     public $placeholder = '';
 
-    public $defaultTemplate = 'formfield/input.html';
+    public $defaultTemplate = 'form/control/input.html';
 
     public $icon;
 

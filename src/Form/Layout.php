@@ -14,10 +14,10 @@ use atk4\ui\Template;
 class Layout extends AbstractLayout
 {
     /** {@inheritdoc} */
-    public $defaultTemplate = 'formlayout/generic.html';
+    public $defaultTemplate = 'form/layout/generic.html';
 
     /** @var string Default input template file. */
-    public $defaultInputTemplate = 'formlayout/generic-input.html';
+    public $defaultInputTemplate = 'form/layout/generic-input.html';
 
     /**
      * If specified will appear on top of the group. Can be string or Label object.
