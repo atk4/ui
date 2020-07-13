@@ -713,8 +713,6 @@ class Form extends View
                 return $response;
             }
         });
-        $this->formConfig['debug'] = true;
-        $this->formConfig['keyboardShortcuts'] = true;
 
         $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
