@@ -120,7 +120,7 @@ class TemplateNew implements \ArrayAccess
             // we must always return an array
             // very dirty hack for deleted tags because of https://github.com/atk4/ui/blob/ddcd70e37bd126cf998c21f4bb10a9aa85a59625/src/Template.php#L322
             if (!isset($vRef[$k]) && is_array($vRef)) {
-                $vRef[$k] = [''];
+                $vRef[$k] = [];
             }
 
             $vRef = &$vRef[$k];
@@ -209,14 +209,14 @@ class TemplateNew implements \ArrayAccess
 
     // {{{ Manipulating contents of tags
 
-    protected function _emptyRef(&$ref): void
+    protected function _emptyRef(array &$ref): void
     {
-        if (is_array($ref)) {
-            foreach ($ref as &$r) {
-                $this->_emptyRef($r);
+        foreach ($ref as $k => $v) {
+            if (is_array($v)) {
+                $this->_emptyRef($ref[$k]);
+            } else {
+                unset($ref[$k]);
             }
-        } else {
-            $ref = '';
         }
     }
 
@@ -608,9 +608,7 @@ class TemplateNew implements \ArrayAccess
         $this->tagsIndex = [];
         $this->tagCnt = [];
 
-        if ($str !== '') {
-            $this->parseTemplate($str);
-        }
+        $this->parseTemplate($str);
 
         return $this;
     }

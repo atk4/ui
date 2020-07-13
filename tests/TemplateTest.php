@@ -180,7 +180,7 @@ class TemplateTest extends AtkPhpunit\TestCase
         $this->assertTrue(isset($t['foo']));
 
         $t['foo'] = 'Hi';
-        $this->assertSame(['Hi'], $t['foo']);
+        $this->assertSame([1 => 'Hi'], $t['foo']); // 1 index instead of 0 because of https://bugs.php.net/bug.php?id=79844
 
         unset($t['foo']);
         $this->assertSame([], $t['foo']);
