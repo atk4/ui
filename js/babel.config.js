@@ -10,9 +10,12 @@ const presets = [
     {
       targets: "> 1% , not dead",
       "corejs": { version: '3.6', proposals: true },
-      "useBuiltIns": "usage"
+      "useBuiltIns": "usage",
     },
   ],
+  {
+    "plugins" : ["@babel/plugin-transform-runtime"]
+  }
 ];
 
 module.exports = { presets };
