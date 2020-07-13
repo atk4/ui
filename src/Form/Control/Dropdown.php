@@ -39,7 +39,7 @@ class Dropdown extends Input
      *
      * @var string
      */
-    public $defaultTemplate = 'formfield/dropdown.html';
+    public $defaultTemplate = 'form/control/dropdown.html';
 
     /**
      * The css class associate with this dropdown.

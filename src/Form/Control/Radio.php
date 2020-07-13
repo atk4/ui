@@ -13,7 +13,7 @@ class Radio extends Form\Control
 {
     public $ui = false;
 
-    public $defaultTemplate = 'formfield/radio.html';
+    public $defaultTemplate = 'form/control/radio.html';
 
     /**
      * Contains a lister that will render individual radio buttons.
