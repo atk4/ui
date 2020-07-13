@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\UserAction;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -18,8 +20,8 @@ require_once __DIR__ . '/../init-app.php';
 
 $country = new Country($app->db);
 
-$c_action = $country->addAction('Email', function ($m) {
-    return 'Email to Kristy in ' . $m->get('name') . ' has been sent!';
+$countryAction = $country->addUserAction('Email', function ($model) {
+    return 'Email to Kristy in ' . $model->get('name') . ' has been sent!';
 });
 
 $country->tryLoadAny();
@@ -27,7 +29,7 @@ $card = \atk4\ui\Card::addTo($app);
 $content = new \atk4\ui\View(['class' => ['content']]);
 $content->add($img = new \atk4\ui\Image(['../images/kristy.png']));
 $img->addClass('right floated mini ui image');
-$content->add($header = new \atk4\ui\Header(['Kristy']));
+$content->add(new \atk4\ui\Header(['Kristy']));
 
 $card->addContent($content);
 $card->addDescription('Kristy is a friend of Mully.');
@@ -35,7 +37,7 @@ $card->addDescription('Kristy is a friend of Mully.');
 $s = $card->addSection('Country');
 $s->addFields($country->loadAny(), ['name', 'iso']);
 
-$card->addClickAction($c_action);
+$card->addClickAction($countryAction);
 
 ///////////////////////////////////////////
 
@@ -44,22 +46,22 @@ $card->addClickAction($c_action);
 \atk4\ui\Header::addTo($app, ['Action can ask for confirmation before executing', 'size' => 4]);
 
 $files = new File($app->db);
-$f_action = $files->addAction(
+$importFileAction = $files->addUserAction(
     'import_from_filesystem',
     [
         'callback' => 'importFromFilesystem',
         'args' => [
             'path' => '.',
         ],
-        'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
+        'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     ]
 );
 
 $btn = \atk4\ui\Button::addTo($app, ['Import File']);
-$executor = \atk4\ui\ActionExecutor\jsUserAction::addTo($app);
-$executor->setAction($f_action, ['path' => '.']);
-$executor->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($t, $m) {
-    return new \atk4\ui\jsToast('Files imported');
+$executor = UserAction\JsCallbackExecutor::addTo($app);
+$executor->setAction($importFileAction, ['path' => '.']);
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($t, $m) {
+    return new \atk4\ui\JsToast('Files imported');
 });
 
 $btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
@@ -70,17 +72,17 @@ $btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are 
 
 // Note here that we explicitly required a jsUserAction executor because we want to use the input value
 // as the action args.
-$country->addAction('greet', [
+$country->addUserAction('greet', [
     'args' => [
         'name' => [
             'type' => 'string',
             'required' => true,
         ],
     ],
-    'ui' => ['executor' => \atk4\ui\ActionExecutor\jsUserAction::class],
-    'callback' => function ($m, $name) {
+    'ui' => ['executor' => [UserAction\JsCallbackExecutor::class]],
+    'callback' => function ($model, $name) {
         return 'Hello ' . $name;
     },
 ]);
 
-\atk4\ui\FormField\Line::addTo($app, ['action' => $country->getAction('greet')]);
+\atk4\ui\Form\Control\Line::addTo($app, ['action' => $country->getUserAction('greet')]);

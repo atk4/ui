@@ -26,19 +26,19 @@ Pop-up should be added into a viewport which will define boundaries of a pop-up,
 be positioned relative to the $button. Popup remains invisible until it's triggered by event of $button.
 
 If second argument in the :ref:`seed` is of class :php:class:`Button`, :php:class:`Menu`,
-:php:class:`Item` or :php:class:`DropDown` (note - NOT FormField!), pop-up will also bind itself
+:php:class:`Item` or :php:class:`Dropdown` (note - NOT Form\Control!), pop-up will also bind itself
 to that element. The above example will automatically bind "click" event of a button to open a pop-up.
 
 When added into a menu, pop-up will appear on hover::
 
-    $m = Menu::addTo($app);
-    $item = $m->addItem('HoverMe')
+    $menu = Menu::addTo($app);
+    $item = $menu->addItem('HoverMe')
     Text::addTo(Popup::addTo($app, [$item]))->set('Appears when you hover a menu item');
 
 Like many other Views of ATK, popup is an interractive element. It can load it's contents when opened::
 
-    $m = Menu::addTo($app);
-    $item = $m->addItem('HoverMe');
+    $menu = Menu::addTo($app);
+    $item = $menu->addItem('HoverMe');
     Popup::addTo($app, [$item])->set(function($popup) {
         Text::addTo($popup)->set('Appears when you hover a menu item');
         Label::addTo($popup, ['Random value', 'detail'=>rand(1,100)]);

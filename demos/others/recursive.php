@@ -20,7 +20,7 @@ $mySwitcherClass = get_class(new class() extends \atk4\ui\View {
         \atk4\ui\Button::addTo($buttons, ['Blue'])->setAttr('data-id', 'blue');
         \atk4\ui\Button::addTo($buttons, ['Button'])->setAttr('data-id', 'button');
 
-        $buttons->on('click', '.button', new \atk4\ui\jsReload($this, [$this->name => (new \atk4\ui\jQuery())->data('id')]));
+        $buttons->on('click', '.button', new \atk4\ui\JsReload($this, [$this->name => (new \atk4\ui\Jquery())->data('id')]));
 
         switch ($this->app->stickyGet($this->name)) {
             case 'yellow':

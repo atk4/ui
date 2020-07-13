@@ -17,13 +17,13 @@ implements the following 4 major features:
 
     .. image:: images/form.png
 
-- Fields are automatically populated based on your existing data model with special treatment
+- Form controls are automatically populated based on your existing data model with special treatment
   for date/time, auto-complete and even file upload.
 
 - Loading data from database and storing it back. Any persistence (SQL, NoSQL) supported by
   ATK Data (https://agile-data.readthedocs.io/en/develop/persistence.html) can be used.
 
-- Support for Events and Actions on fields, buttons and form callback. (:ref:`js`) Automatic
+- Support for Events and Actions on form controls, buttons and form callback. (:ref:`js`) Automatic
   execution of PHP-based Submit Handler passing all the collected data (:ref:`callback`)
 
 So if looking for a PHP Form class, ATK Form has the most complete implementation which does
@@ -36,7 +36,7 @@ Basic Usage
 It only takes 2 PHP lines to create a fully working form::
 
     $form = Form::addTo($app);
-    $form->addField('email');
+    $form->addControl('email');
 
 The form component can be further tweaked by setting a custom call-back handler
 directly in PHP::
@@ -57,7 +57,7 @@ or you can tweak it when you create form like this::
 
     $form = Form::addTo($app, ['buttonSave'=>[null, 'Subscribe', 'icon'=>'mail']]);
 
-To set the default values in the fields of the form you can use the model property of the form.
+To set the default values in the form controls you can use the model property of the form.
 Even if model not explicitly set (see section below) each form has an underlying model which is automatically generated::
 
 	// single field
@@ -69,17 +69,17 @@ Even if model not explicitly set (see section below) each form has an underlying
 		'email' => 'some@email.com'
 	]);
 
-Form also relies on a ``\atk4\ui\FormLayout`` class and displays fields through
-decorators defined at ``\atk4\ui\FormField``. See dedicated documentation for:
+Form also relies on a ``\atk4\ui\Form::Layout`` class and displays form controls through
+decorators defined at ``\atk4\ui\Form::Control``. See dedicated documentation for:
 
- - :php:class:`FormLayout::Generic`
- - :php:class:`FormField::Generic`
+ - :php:class:`Form::Layout`
+ - :php:class:`Form::Control`
 
-To tweak the UI properties of an input field use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field::
+To tweak the UI properties of an form control input use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field::
 
 	$form = $this->add(new \atk4\ui\Form);
-	$form->setModel($m);
-	$form->getField('name')->setInputAttr('maxlength', 20);
+	$form->setModel($model);
+	$form->getControl('name')->setInputAttr('maxlength', 20);
 
 The rest of this chapter will focus on Form mechanics, such as submission,
 integration with front-end, integration with Model, error handling etc.
@@ -97,128 +97,127 @@ The basic 2-line syntax will extract all the required logic from the Model inclu
 
  - Fields defined for this Model will be displayed
  - Display of default values in the form
- - Depending on field type, a decorator will be selected from FormField/Generic
- - Using :php:class:`FormLayout::Columns` can make form more compact by splitting it into columns
- - Field captions, placeholders, hints and other elements defined in Field::ui are respected (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
+ - Depending on the field type, a form control will be selected from Form\Control namespace
+ - Using :php:class:`Form\Layout\Columns` can make form more compact by splitting it into columns
+ - Form control captions, placeholders, hints and other elements defined in Field::ui are respected (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
  - Fields that are not editable by default will not appear on the form (https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
  - Field typecasting will be invoked such as for converting dates
- - Reference fields (https://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as DropDown
+ - Reference fields (https://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as Dropdown
  - Booleans are displayed as checkboxes but stored as defined by the model field
- - Mandatory and Required fields will be visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$mandatory)
+ - Mandatory and Required fields will have form controls visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$mandatory)
  - Validation will be performed and errors will appear on the form (NEED LINK)
  - Unless you specify a submission handler, form will save the model ``User`` into ``$db`` on successful submission.
 
 All of the above works auto-magically, but you can tweak it even more:
 
  - Provide custom submission handler
- - Specify which fields and in which order to display on the form
- - Override labels, decorator classes
- - Group fields or use custom layout template
+ - Specify which form controls and in which order to display on the form
+ - Override labels, form control classes
+ - Group form controls or use custom layout template
  - Mix standard model fields with your own
  - Add JS Actions around fields
  - Split up form into multiple tabs
 
 If your form is NOT associated with a model, then Form will automatically create a :php:class:`ProxyModel`
-and associate it with your Form. As you add fields, they will also be added into ProxyModel.
+and associate it with your Form. As you add form controls respective fields will also be added into ProxyModel.
 
 Extensions
 ----------
 
 Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some extensions like:
 
- - Captcha decorator
- - File Upload field (see https://github.com/atk4/filestore)
+ - Captcha form control
+ - File Upload form control (see https://github.com/atk4/filestore)
  - Multi-record form
- - Multi-tab form
 
 If you develop such a feature please let me know so that I can include it in the documentation
 and give you credit.
 
-Layout and Fields
-=================
+Layout and Form Controls
+========================
 
-Although Form extends the View class, fields are not added into Form directly but rather use
+Although Form extends the View class, controls are not added into Form directly but rather use
 a View layout for it in order to create their html element. In other words, layout attached to the form
 is responsible of rendering html for fields.
 
 When Form is first initialized, it will provide and set a default Generic layout within the form.
-Then using :php:meth:`Form::addField()` will rely on that layout to add field View to it and render it properly.
+Then using :php:meth:`Form::addControl()` will rely on that layout to add form control to it and render it properly.
 You may also supply your own layout when creating your form.
 
 Form layout may contain sub layouts. Each sub layout being just another layout view, it is possible
 to nest them, by adding other sub layout to them. This allows for great flexibility on how to place
-your fields within Form.
+your form controls within Form.
 
 Each sub layout may also contain specific section layout like Accordion, Columns or Tabs.
 
 More on Form layout and sub layout below.
 
-Adding Fields
-=============
+Adding Controls
+===============
 
-.. php:method:: addField($name, $decorator = null, $field = null)
+.. php:method:: addControl($name, $decorator = null, $field = null)
 
-Create a new field on a form::
+Create a new control on a form::
 
     $form = Form::addTo($app);
-    $form->addField('email');
-    $form->addField('gender', [\atk4\ui\FormField\DropDown::class, 'values'=>['Female', 'Male']]);
-    $form->addField('terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']);
+    $form->addControl('email');
+    $form->addControl('gender', [\atk4\ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]);
+    $form->addControl('terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']);
 
-Create a new field on a form using Model does not require you to describe each field.
+Create a new control on a form using Model does not require you to describe each control.
 Form will rely on Model Field Definition and UI meta-values to decide on the best way to handle
 specific field type::
 
     $form = Form::addTo($app);
     $form->setModel(new User($db), ['email', 'gender', 'terms']);
 
-Field Decorator does not have to be added directly into the form. You can use a separate
-:php:class:`FormLayout` or even a regular view. Simply specify property :php:meth:`FormField\Generic::$form`::
+Form control does not have to be added directly into the form. You can use a separate
+:php:class:`Form\\Layout` or even a regular view. Simply specify property :php:meth:`Form\\Control::$form`::
 
     $myview = View::addTo($form, ['defaultTemplate'=>'./mytemplate.html']);
-    FormField\DropDown::addTo($myview, ['form'=>$form]);
+    Form\Control\Dropdown::addTo($myview, ['form'=>$form]);
 
-.. php:method:: addFields($fields)
+.. php:method:: addControls($fields)
 
-Similar to :php:meth:`Form::addField()`, but allows to add multiple fields in one method call::
+Similar to :php:meth:`Form::addControl()`, but allows to add multiple form controls in one method call::
 
     $form = Form::addTo($app);
-    $form->addFields([
+    $form->addControls([
         'email',
-        ['gender', [\atk4\ui\FormField\DropDown::class, 'values'=>['Female', 'Male']]],
+        ['gender', [\atk4\ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]],
         ['terms', null, ['type'=>'boolean', 'caption'=>'Agree to Terms & Conditions']],
     ]);
 
-Adding new fields
------------------
+Adding new controls
+-------------------
 
-First argument to addField is the name of the field. You cannot have multiple fields
+First argument to addControl is the name of the form control. You cannot have multiple controls
 with the same name.
 
-If field exist inside associated model, then model field definition will be used as
+If a field exists inside associated model, then model field definition will be used as
 a base, otherwise you can specify field definition through 3rd argument. I explain
 that below in more detail.
 
-You can specify first argument ``null`` in which case decorator will be added without
+You can specify first argument ``null`` in which case control will be added without
 association with field. This will not work with regular fields, but you can add
-custom decorators such as CAPTCHA, which does not really need association with a
+custom control such as CAPTCHA, which does not really need association with a
 field.
 
-Field Decorator
----------------
+Form Control
+------------
 
 To avoid term miss-use, we use "Field" to refer to ``\atk4\data\Field``. This class
 is documented here: https://agile-data.readthedocs.io/en/develop/fields.html
 
 Form uses a small UI component to visualize HTML input fields associated with
-the respective Model Field. We call this object "Field Decorator". All field
-decorators extend from class :php:class:`FormField::Generic`.
+the respective Model Field. We call this object "Form Control". All form
+controls extend from class :php:class:`Form::Control`.
 
-Agile UI comes with at least the following decorators:
+Agile UI comes with at least the following form controls:
 
 - Input (also extends into Line, Password, Hidden)
-- DropDown
-- CheckBox
+- Dropdown
+- Checkbox
 - Radio
 - Calendar
 - Radio
@@ -226,39 +225,39 @@ Agile UI comes with at least the following decorators:
 
 For some examples see: https://ui.agiletoolkit.org/demos/form3.php
 
-Field Decorator can be passed to ``addField`` using 'string', :php:ref:`seed` or 'object'::
+Field Decorator can be passed to ``addControl`` using 'string', :php:ref:`seed` or 'object'::
 
-    $form->addField('accept_terms', \atk4\ui\FormField\CheckBox::class);
-    $form->addField('gender', [\atk4\ui\FormField\DropDown::class, 'values'=>['Female', 'Male']]);
+    $form->addControl('accept_terms', [\atk4\ui\Form\Control\Checkbox::class]);
+    $form->addControl('gender', [\atk4\ui\Form\Control\Dropdown::class, 'values'=>['Female', 'Male']]);
 
-    $calendar = new \atk4\ui\FormField\Calendar();
+    $calendar = new \atk4\ui\Form\Control\Calendar();
     $calendar->type = 'tyme';
     $calendar->options['ampm'] = true;
-    $form->addField('time', $calendar);
+    $form->addControl('time', $calendar);
 
-For more information on default decorators as well as examples on how to create
-your own see documentation on :php:class:`FormField::Generic`.
+For more information on default form controls as well as examples on how to create
+your own see documentation on :php:class:`Form::Control`.
 
-.. php:method:: decoratorFactory(\atk4\data\Field $f, $defaults = [])
+.. php:method:: controlFactory(\\atk4\\data\\Field $field, $defaults = [])
 
-If Decorator is not specified (``null``) then it's class will be determined from
-the type of the Data Field with ``decoratorFactory`` method.
+If form control class is not specified (``null``) then it will be determined from
+the type of the Data control with ``controlFactory`` method.
 
 Data Field
 ----------
 
-Data field is the 3rd argument to ``Form::addField()``.
+Data field is the 3rd argument to ``Form::addControl()``.
 
-There are 3 ways to define Data Field using 'string', 'array' or 'object'::
+There are 3 ways to define Data form control using 'string', 'array' or 'object'::
 
-    $form->addField('accept_terms', \atk4\ui\FormField\CheckBox::class, 'Accept Terms & Conditions');
-    $form->addField('gender', null, ['enum'=>['Female', 'Male']]);
+    $form->addControl('accept_terms', [\atk4\ui\Form\Control\Checkbox::class], 'Accept Terms & Conditions');
+    $form->addControl('gender', null, ['enum'=>['Female', 'Male']]);
 
     class MyBoolean extends \atk4\data\Field {
         public $type = 'boolean';
         public $enum = ['N', 'Y'];
     }
-    $form->addField('test2', null, new MyBoolean());
+    $form->addControl('test2', null, new MyBoolean());
 
 String will be converted into ``['caption' => $string]`` a short way to give
 field a custom label. Without a custom label, Form will clean up the name (1st
@@ -274,15 +273,15 @@ existing field properties. This example make email field mandatory for the form:
     $form = Form::addTo($app);
     $form->setModel(new User($db), false);
 
-    $form->addField('email', null, ['required'=>true]);
+    $form->addControl('email', null, ['required'=>true]);
 
-addField into Existing Model
-----------------------------
+addControl into Form with Existing Model
+----------------------------------------
 
-If your form is using a model and you add additional field, then it will automatically
-be marked as "never_persist" (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$never_persist).
+If your form is using a model and you add an additional control, then the underlying model field will be created but it will
+be set as "never_persist" (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$never_persist).
 
-This is to make sure that custom fields wouldn't go directly into database. Next
+This is to make sure that data from custom form controls wouldn't go directly into the database. Next
 example displays a registration form for a User::
 
     class User extends \atk4\data\Model {
@@ -299,8 +298,8 @@ example displays a registration form for a User::
     $form->setModel(new User($db));
 
     // add password verification field
-    $form->addField('password_verify', \atk4\ui\FormField\Password::class, 'Type password again');
-    $form->addField('accept_terms', null, ['type'=>'boolean']);
+    $form->addControl('password_verify', [\atk4\ui\Form\Control\Password::class], 'Type password again');
+    $form->addControl('accept_terms', null, ['type'=>'boolean']);
 
     // submit event
     $form->onSubmit(function($form){
@@ -316,18 +315,18 @@ example displays a registration form for a User::
         return $form->success('Thank you. Check your email now');
     });
 
-Type vs Decorator Class
------------------------
+Field Type vs Form Control
+--------------------------
 
-Sometimes you may wonder - should you pass decorator class (FormField\CheckBox) or
+Sometimes you may wonder - should you pass form control class (Form\Control\Checkbox) or
 a data field type (['type' => 'boolean']);
 
 It is always recommended to use data field type, because it will take care of type-casting
 for you. Here is an example with date::
 
     $form = Form::addTo($app);
-    $form->addField('date1', null, ['type'=>'date']);
-    $form->addField('date2', [\atk4\ui\FormField\Calendar::class, 'type'=>'date']);
+    $form->addControl('date1', null, ['type'=>'date']);
+    $form->addControl('date2', [\atk4\ui\Form\Control\Calendar::class, 'type'=>'date']);
 
     $form->onSubmit(function($form) {
         echo 'date1 = '.print_r($form->model->get('date1'), true).' and date2 = '.print_r($form->model->get('date2'), true);
@@ -343,12 +342,12 @@ The above code result in the following output::
 
     date1 = DateTime Object ( [date] => 2017-09-03 00:00:00 .. ) and date2 = September 3, 2017
 
-Seeding Decorator from Model
-----------------------------
+Seeding Form Control from Model
+-------------------------------
 
-In large projects you most likely won't be setting individual fields for each Form. Instead
-you can simply use ``setModel()`` to populate all defined fields inside a model. Form does
-have a pretty good guess about Decorator based on their data field type, but what if you want to
+In large projects you most likely won't be setting individual form controls for each Form. Instead
+you can simply use ``setModel()`` to populate all form controls from fields defined inside a model. Form does
+have a pretty good guess about form control decorator based on the data field type, but what if you want to
 use a custom decorator?
 
 This is where ``$field->ui`` comes in (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui).
@@ -368,11 +367,11 @@ You can specify ``'ui'=>['form' => $decorator_seed]`` when defining your model f
         }
     }
 
-The seed for the UI will be combined with the default overriding :php:attr:`FormField\\Calendar::type`
+The seed for the UI will be combined with the default overriding :php:attr:`Form\\Control\\Calendar::type`
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class::
 
-    $this->addField('birth_year', ['ui'=>[\atk4\ui\FormField\Calendar::class, 'type'=>'month']);
+    $this->addField('birth_year', ['ui'=>[\atk4\ui\Form\Control\Calendar::class, 'type'=>'month']);
 
 Without the data 'type' property, now the calendar selection will be stored as text.
 
@@ -386,16 +385,16 @@ needs a bit more info:
 
 .. php:method:: setModel($model, [$fields])
 
-Associate fields with existing model object and import all editable fields
+Associate form controls with existing model object and import all editable fields
 in the order in which they were defined inside model's init() method.
 
-You can specify which fields to import and their order by simply listing
-field names through second argument.
+You can specify which form controls to import from model fields and their order by simply listing model
+field names in an array as a second argument.
 
-Specifying "false" or empty array as a second argument will import no fields,
-so you can then use :php:meth:`Form::addField` to import fields individually.
+Specifying "false" or empty array as a second argument will import no model fields as form controls,
+so you can then use :php:meth:`Form::addControl` to import form controls from model fields individually.
 
-Note that :php:meth:`Form::setModel` also delegate adding field to the form layout
+Note that :php:meth:`Form::setModel` also delegates adding form control to the form layout
 by using `Form->layout->setModel()` internally.
 
 See also: https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable
@@ -403,16 +402,16 @@ See also: https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEdit
 Using setModel() on a sub layout
 --------------------------------
 
-You may add field to sub layout directly using setModel method on the sub layout itself.::
+You may add form controls to sub layout directly using setModel method on the sub layout itself.::
 
-    $f = Form::addTo($app);
-    $f->setModel($m, false);
+    $form = Form::addTo($app);
+    $form->setModel($model, false);
 
-    $sub_layout = $f->layout->addSubLayout();
-    $sub_layout->setModel($m, ['first_name', 'last_name']);
+    $sub_layout = $form->layout->addSubLayout();
+    $sub_layout->setModel($model, ['first_name', 'last_name']);
 
 
-When using setModel() on a sub layout to add fields per sub layout instead of entire layout,
+When using setModel() on a sub layout to add controls per sub layout instead of entire layout,
 make sure you pass false as second argument when setting the model on the Form itself, like above.
 Otherwise all model fields will be automatically added in Forms main layout and you will not be
 able to add them again in sub-layouts.
@@ -420,12 +419,12 @@ able to add them again in sub-layouts.
 Loading Values
 --------------
 
-Although you can set form fields individually using ``$form->model->set('field', $value)``
+Although you can set form control values individually using ``$form->model->set('field', $value)``
 it's always nicer to load values for the database. Given a ``User`` model this is how
 you can create a form to change profile of a currently logged user::
 
     $user = new User($db);
-    $user->getElement('password')->never_persist = true; // ignore password field
+    $user->getControl('password')->never_persist = true; // ignore password field
     $user->load($current_user);
 
     // Display all fields (except password) and values
@@ -433,7 +432,7 @@ you can create a form to change profile of a currently logged user::
     $form->setModel($user);
 
 Submitting this form will automatically store values back to the database. Form uses
-POST data to submit itself and will re-use the querystring, so you can also safely
+POST data to submit itself and will re-use the query string, so you can also safely
 use any GET arguments for passing record $id. You may also perform model load after
 record association. This gives the benefit of not loading any other fields, unless
 they're marked as System (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$system),
@@ -468,7 +467,7 @@ Here are a few questions:
 
 As far as form is concerned:
 
-- Decorators must be able to parse entered values. For instance DropDown will make sure that
+- Decorators must be able to parse entered values. For instance Dropdown will make sure that
   value entered is one of the available values (by key)
 
 - Form will rely on Agile Data Typecasting (https://agile-data.readthedocs.io/en/develop/typecasting.html)
@@ -507,14 +506,14 @@ Example use of Model's validate() method::
     }
 
 
-We can now populate form fields based around the data fields defined in the model::
+We can now populate form controls based around the data fields defined in the model::
 
     Form::addTo($app)
         ->setModel(new Person($db));
 
 This should display a following form::
 
-    $form->addField(
+    $form->addControl(
         'terms',
         ['type'=>'boolean', 'ui'=>['caption'=>'Accept Terms and Conditions']]
     );
@@ -528,11 +527,11 @@ Form Submit Handling
 
 .. php:method:: error($field, $message)
 
-    Create and return :php:class:`jsChain` action that will indicate error on a field.
+    Create and return :php:class:`JsChain` action that will indicate error on a form control.
 
 .. php:method:: success($title, [$sub_title])
 
-    Create and return :php:class:`jsChain` action, that will replace form with a success message.
+    Create and return :php:class:`JsChain` action, that will replace form with a success message.
 
 .. php:method:: setApiConfing($config)
 
@@ -547,9 +546,9 @@ All available parameters can be found here: https://fomantic-ui.com/behaviors/ap
 
     Name of the template which will be used to render success message.
 
-To continue with my example, I'd like to add new Person record into the database
-but only if they have also accepted terms and conditions. I can define onSubmit handler
-that would perform the check, display error or success message::
+To continue with the example, a new Person record can be added into the database
+but only if they have also accepted terms and conditions. An onSubmit handler 
+that would perform the check can be defined displaying error or success messages::
 
     $form->onSubmit(function($form) {
         if (!$form->model->get('terms')) {
@@ -563,8 +562,8 @@ that would perform the check, display error or success message::
 
 Callback function can return one or multiple JavaScript actions. Methods such as
 :php:meth:`error()` or :php:meth:`success()` will help initialize those actions for your form.
-Here is a code that can be used to output multiple errors at once. I intentionally didn't want
-to group errors with a message about terms and conditions::
+Here is a code that can be used to output multiple errors at once. Errors were intentionally not grouped
+with a message about failure to accept of terms and conditions::
 
     $form->onSubmit(function($form) {
         $errors = [];
@@ -590,8 +589,8 @@ to group errors with a message about terms and conditions::
         return $form->success('Registration Successful', 'We will call you soon.');
     });
 
-At the time of writing, Agile UI / Agile Data does not come with a validation library, but
-you can use any 3rd party validation code.
+So far Agile UI / Agile Data does not come with a validation library but
+it supports usage of 3rd party validation libraries.
 
 Callback function may raise exception. If Exception is based on ``\atk4\core\Exception``,
 then the parameter "field" can be used to associate error with specific field::
@@ -605,19 +604,19 @@ Core Exceptions may contain some sensitive information in parameters or back-tra
 will not be included in response for security reasons.
 
 
-Form Layout and sub layout
+Form Layout and Sub-layout
 --------------------------
 
-As stated above, when you create a Form object and start adding fields through either :php:meth:`addField()`
-or :php:meth:`setModel()`, they will appear one under each-other. This arrangement of fields as
-well as display of labels and structure around the fields themselves is not done by a form,
-but another object - "Form Layout". This object is responsible for the field flow, presence
+As stated above, when a Form object is created and form controls are added through either :php:meth:`addControl()`
+or :php:meth:`setModel()`, the form controls will appear one under each-other. This arrangement of form controls as
+well as display of labels and structure around the form controls themselves is not done by a form,
+but another object - "Form Layout". This object is responsible for the form control flow, presence
 of labels etc.
 
-.. php:method:: initLayout(FormLayout\Generic $layout)
+.. php:method:: initLayout(Form\\Layout $layout)
 
-    Sets a custom FormLayout object for a form. If not specified then form will automatically
-    use FormLayout\Generic.
+    Sets a custom Form\Layout object for a form. If not specified then form will automatically
+    use Form\Layout class.
 
 .. php:attr:: layout
 
@@ -629,112 +628,98 @@ of labels etc.
 
 .. php:method:: addGroup($header)
 
-    Creates a sub-layout, returning new instance of a :php:class:`FormLayout\\Generic` object. You
+    Creates a sub-layout, returning new instance of a :php:class:`Form\\Layout` object. You
     can also specify a header.
 
-.. todo:: MOVE THIS TO SEPARATE FILE
 
-.. php:class:: FormLayout\Generic
+Form Control Group Layout and Sub-layout
+----------------------------------------
 
-    Renders HTML outline encasing form fields.
+Controls can be organized in groups, using method `Form::addGroup()` or as sub section using `Form\\Layout::addSubLayout()` method.
 
-.. php:attr:: form
-
-    Form layout objects are always associated with a Form object.
-
-.. php:method:: addField()
-
-    Same as :php:class:`Form::addField()` but will place a field inside this specific layout
-    or sub-layout.
-
-Form group layout and sub layout
---------------------------------
-
-Fields can be organized in groups, using method `addGroup()` or as sub section using `addSubLayout()` method.
-
-Using group
+Using Group
 -----------
 
-Group will create a sub layout for you where fields added to the group will be placed side by side in one line
+Group will create a sub layout for you where form controls added to the group will be placed side by side in one line
 and where you can setup specific width for each field.
 
-My next example will add multiple fields on the same line::
+My next example will add multiple controls on the same line::
 
-    $form->setModel(new User($db), false);  // will not populate any fields automatically
+    $form->setModel(new User($db), false);  // will not populate any form controls automatically
 
-    $form->addFields(['name', 'surname']);
+    $form->addControls(['name', 'surname']);
 
-    $gr = $form->addGroup('Address');
-    $gr->addFields(['address', 'city', 'country']); // grouped fields, will appear on the same line
+    $group = $form->addGroup('Address');
+    $group->addControls(['address', 'city', 'country']); // grouped form controls, will appear on the same line
 
-By default grouped fields will appear with fixed width. To distribute space you can either specify
+By default grouped form controls will appear with fixed width. To distribute space you can either specify
 proportions manually::
 
-    $gr = $f->addGroup('Address');
-    $gr->addField('address', ['width'=>'twelve']);
-    $gr->addField('code', ['Post Code', 'width'=>'four']);
+    $group = $form->addGroup('Address');
+    $group->addControl('address', ['width'=>'twelve']);
+    $group->addControl('code', ['Post Code', 'width'=>'four']);
 
-or you can divide space equally between fields. I am also omitting header for this group::
+or you can divide space equally between form controls. Header is also omitted for this group::
 
-    $gr = $f->addGroup(['width'=>'two']);
-    $gr->addFields(['city', 'country']);
+    $group = $form->addGroup(['width'=>'two']);
+    $group->addControls(['city', 'country']);
 
-You can also use in-line form groups. Fields in such a group will display header on the left and
-the error messages appearing on the right from the field::
+You can also use in-line form groups. Controls in such a group will display header on the left and
+the error messages appearing on the right from the control::
 
-    $gr = $f->addGroup(['Name', 'inline'=>true]);
-    $gr->addField('first_name', ['width'=>'eight']);
-    $gr->addField('middle_name', ['width'=>'three', 'disabled'=>true]);
-    $gr->addField('last_name', ['width'=>'five']);
+    $group = $form->addGroup(['Name', 'inline'=>true]);
+    $group->addControl('first_name', ['width'=>'eight']);
+    $group->addControl('middle_name', ['width'=>'three', 'disabled'=>true]);
+    $group->addControl('last_name', ['width'=>'five']);
 
-Using Sub layout
+Using Sub-layout
 ----------------
 
 There are four specific sub layout views that you can add to your existing form layout: Generic, Accordion, Tabs and Columns.
 
 Generic sub layout is simply another layout view added to your existing form layout view. You add fields
-the same way as you would do for :php:class:`FormLayout\Generic`.
+the same way as you would do for :php:class:`Form\\Layout`.
 
 Sub layout section like Accordion, Tabs or Columns will create layout specific section where you can
 organize fields in either accordion, tabs or columns.
 
 The following example will show how to organize fields using regular sub layout and accordion sections::
 
-    $f = Form::addTo($app);
-    $f->setModel($m, false);
+    $form = Form::addTo($app);
+    $form->setModel($model, false);
 
-    $sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
+    $sub_layout = $form->layout->addSubLayout([\atk4\ui\Form\Layout\Section::class]);
 
     Header::addTo($sub_layout, ['Accordion Section in Form']);
-    $sub_layout->setModel($m, ['name']);
+    $sub_layout->setModel($model, ['name']);
 
-    $accordion_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Accordion::class);
+    $accordion_layout = $form->layout->addSubLayout([\atk4\ui\Form\Layout\Section\Accordion::class]);
 
     $a1 = $accordion_layout->addSection('Section 1');
-    $a1->setModel($m, ['iso', 'iso3']);
+    $a1->setModel($model, ['iso', 'iso3']);
 
     $a2 = $accordion_layout->addSection('Section 2');
-    $a2->setModel($m, ['numcode', 'phonecode']);
+    $a2->setModel($model, ['numcode', 'phonecode']);
 
-In the example above, we first add a Generic sub layout to the existing layout of the form where one
-field, name, is added to this sub layout.
+In the example above, we first add a Generic sub layout to the existing layout of the form where one form
+control ('name') is added to this sub layout.
 
 Then we add another layout to the form layout. In this case it's specific Accordion layout. This sub layout
-is further separated in two accordion sections and fields are added to each section::
+is further separated in two accordion sections and form controls are added to each section::
 
-    $a1->setModel($m, ['iso', 'iso3']);
-    $a2->setModel($m, ['numcode', 'phonecode']);
+    $a1->setModel($model, ['iso', 'iso3']);
+    $a2->setModel($model, ['numcode', 'phonecode']);
 
-Sub layout gives you greater control on how to display fields within your form. For more examples on
+Sub layout gives you greater control on how to display form controls within your form. For more examples on
 sub layouts please visit demo page: https://github.com/atk4/ui/blob/develop/demos/form-section.php
 
-Fomantic UI modifiers
+Fomantic UI Modifiers
 ---------------------
 
 There are many other classes Fomantic UI allow you to use on a form. The next code will produce
-form inside a segment (outline) and will make fields appear smaller::
+form inside a segment (outline) and will make form controls appear smaller::
 
-    $f = new \atk4\ui\Form(['small segment']));
+    $form = new \atk4\ui\Form(['small segment']));
 
 For further styling see documentation on :php:class:`View`.
 
@@ -761,20 +746,20 @@ numeric field, if zero must be a permitted entry, use "mandatory=true" instead.
 Conditional Form
 ================
 
-.. php:method:: setFieldsDisplayRules()
+.. php:method:: setControlsDisplayRules()
 
-So far we had to present form with a set of fields while initializing. Sometimes
-you would want to hide/display fields while user enters the data.
+So far we had to present form with a set of form controls while initializing. Sometimes
+you would want to hide/display controls while user enters the data.
 
 The logic is based around passing a declarative array::
 
     $form = Form::addTo($app);
-    $form->addField('phone1');
-    $form->addField('phone2');
-    $form->addField('phone3');
-    $form->addField('phone4');
+    $form->addControl('phone1');
+    $form->addControl('phone2');
+    $form->addControl('phone3');
+    $form->addControl('phone4');
 
-    $form->setFieldsDisplayRules([
+    $form->setControlsDisplayRules([
         'phone2'=>['phone1'=>'empty'],
         'phone3'=>['phone1'=>'empty', 'phone2'=>'empty'],
         'phone4'=>['phone1'=>'empty', 'phone2'=>'empty', 'phone3'=>'empty'],
@@ -786,64 +771,64 @@ https://fomantic-ui.com/behaviors/form.html, so you can use any of the condition
 Here is a more advanced example::
 
     $f_sub = Form::addTo($app);
-    $f_sub->addField('name');
-    $f_sub->addField('subscribe', [\atk4\ui\FormField\CheckBox::class, 'Subscribe to weekly newsletter', 'toggle']);
-    $f_sub->addField('email');
-    $f_sub->addField('gender', [\atk4\ui\FormField\Radio::class], ['enum'=>['Female', 'Male']])->set('Female');
-    $f_sub->addField('m_gift', [\atk4\ui\FormField\DropDown::class, 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
-    $f_sub->addField('f_gift', [\atk4\ui\FormField\DropDown::class, 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
+    $f_sub->addControl('name');
+    $f_sub->addControl('subscribe', [\atk4\ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'toggle']);
+    $f_sub->addControl('email');
+    $f_sub->addControl('gender', [\atk4\ui\Form\Control\Radio::class], ['enum'=>['Female', 'Male']])->set('Female');
+    $f_sub->addControl('m_gift', [\atk4\ui\Form\Control\Dropdown::class, 'caption'=>'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
+    $f_sub->addControl('f_gift', [\atk4\ui\Form\Control\Dropdown::class, 'caption'=>'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
     // Show email and gender when subscribe is checked.
 
     // Show m_gift when gender is exactly equal to 'male' and subscribe is checked.
     // Show f_gift when gender is exactly equal to 'female' and subscribe is checked.
 
-    $f_sub->setFieldsDisplayRules([
+    $f_sub->setControlsDisplayRules([
        'email' => ['subscribe' => 'checked'],
        'gender'=> ['subscribe' => 'checked'],
        'm_gift'=> ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
        'f_gift'=> ['gender' => 'isExactly[Female]', 'subscribe' => 'checked'],
     ]);
 
-You may also define multiple conditions for the field to be visible if you wrap them inside and array::
+You may also define multiple conditions for the form control to be visible if you wrap them inside and array::
 
 
     $f_sub = Form::addTo($app);
-    $f_dog->addField('race', [\atk4\ui\FormField\Line::class]);
-    $f_dog->addField('age');
-    $f_dog->addField('hair_cut', [\atk4\ui\FormField\DropDown::class, 'values' => ['Short', 'Long']]);
+    $f_dog->addControl('race', [\atk4\ui\Form\Control\Line::class]);
+    $f_dog->addControl('age');
+    $f_dog->addControl('hair_cut', [\atk4\ui\Form\Control\Dropdown::class, 'values' => ['Short', 'Long']]);
 
     // Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
     // OR
     // Show 'hair_cut' when race contains exactly the word 'bichon'
-    $f_dog->setFieldsDisplayRules([
+    $f_dog->setControlsDisplayRules([
         'hair_cut' => [['race' => 'contains[poodle]', 'age'=>'integer[1..5]'], ['race' => 'isExactly[bichon]']],
     ]);
 
 Hiding / Showing group of field
 -------------------------------
 
-Instead of defining rules for fields individually you can hide/show entire group::
+Instead of defining rules for form controls individually you can hide/show entire group::
 
     $f_group = Form::addTo($app, ['segment']);
-    Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveFields']);
+    Label::addTo($f_group, ['Work on form group too.', 'top attached'], ['AboveControls']);
 
     $g_basic = $f_group->addGroup(['Basic Information']);
-    $g_basic->addField('first_name', ['width' => 'eight']);
-    $g_basic->addField('middle_name', ['width' => 'three']);
-    $g_basic->addField('last_name', ['width' => 'five']);
+    $g_basic->addControl('first_name', ['width' => 'eight']);
+    $g_basic->addControl('middle_name', ['width' => 'three']);
+    $g_basic->addControl('last_name', ['width' => 'five']);
 
-    $f_group->addField('dev', [\atk4\ui\FormField\CheckBox::class, 'caption' => 'I am a developper']);
+    $f_group->addControl('dev', [\atk4\ui\Form\Control\Checkbox::class, 'caption' => 'I am a developper']);
 
     $g_code = $f_group->addGroup(['Check all language that apply']);
-    $g_code->addField('php', [\atk4\ui\FormField\CheckBox::class]);
-    $g_code->addField('js', [\atk4\ui\FormField\CheckBox::class]);
-    $g_code->addField('html', [\atk4\ui\FormField\CheckBox::class]);
-    $g_code->addField('css', [\atk4\ui\FormField\CheckBox::class]);
+    $g_code->addControl('php', [\atk4\ui\Form\Control\Checkbox::class]);
+    $g_code->addControl('js', [\atk4\ui\Form\Control\Checkbox::class]);
+    $g_code->addControl('html', [\atk4\ui\Form\Control\Checkbox::class]);
+    $g_code->addControl('css', [\atk4\ui\Form\Control\Checkbox::class]);
 
     $g_other = $f_group->addGroup(['Others']);
-    $g_other->addField('language', ['width' => 'eight']);
-    $g_other->addField('favorite_pet', ['width' => 'four']);
+    $g_other->addControl('language', ['width' => 'eight']);
+    $g_other->addControl('favorite_pet', ['width' => 'four']);
 
     //To hide-show group simply select a field in that group.
     // Show group where 'php' belong when dev is checked.
@@ -853,3 +838,18 @@ Instead of defining rules for fields individually you can hide/show entire group
         'php' => ['dev' => 'checked'],
         'language'=>['dev'=>'checked']
     ]);
+
+.. todo:: MOVE THIS TO SEPARATE FILE
+
+.. php:class:: Form\\Layout
+
+    Renders HTML outline encasing form controls.
+
+.. php:attr:: form
+
+    Form layout objects are always associated with a Form object.
+
+.. php:method:: addControl()
+
+    Same as :php:class:`Form::addControl()` but will place a form control inside this specific layout
+    or sub-layout.

@@ -32,25 +32,25 @@ $form = \atk4\ui\Form::addTo($app, ['segment']);
 // Unit test only.
 $form->name = 'notify';
 
-\atk4\ui\Label::addTo($form, ['Some of notification options that can be set.', 'top attached'], ['AboveFields']);
+\atk4\ui\Label::addTo($form, ['Some of notification options that can be set.', 'top attached'], ['AboveControls']);
 $form->buttonSave->set('Show');
 $form->setModel(new $notifierClass($app->db), false);
 
-$f_p = $form->addGroup(['Set Text and Icon:']);
-$f_p->addField('text', ['width' => 'eight']);
-$f_p->addField('icon', ['width' => 'four']);
+$formGroup = $form->addGroup(['Set Text and Icon:']);
+$formGroup->addControl('text', ['width' => 'eight']);
+$formGroup->addControl('icon', ['width' => 'four']);
 
-$f_p1 = $form->addGroup(['Set Color, Transition and Width:']);
-$f_p1->addField('color', ['width' => 'four']);
-$f_p1->addField('transition', ['width' => 'four']);
-$f_p1->addField('width', ['width' => 'four']);
+$formGroup1 = $form->addGroup(['Set Color, Transition and Width:']);
+$formGroup1->addControl('color', ['width' => 'four']);
+$formGroup1->addControl('transition', ['width' => 'four']);
+$formGroup1->addControl('width', ['width' => 'four']);
 
-$f_p2 = $form->addGroup(['Set Position and Attach to:']);
-$f_p2->addField('position', ['width' => 'four']);
-$f_p2->addField('attach', ['width' => 'four']);
+$formGroup2 = $form->addGroup(['Set Position and Attach to:']);
+$formGroup2->addControl('position', ['width' => 'four']);
+$formGroup2->addControl('attach', ['width' => 'four']);
 
 $form->onSubmit(function (\atk4\ui\Form $form) {
-    $notifier = new \atk4\ui\jsNotify();
+    $notifier = new \atk4\ui\JsNotify();
     $notifier->setColor($form->model->get('color'))
         ->setPosition($form->model->get('position'))
         ->setWidth(rtrim($form->model->get('width'), '%'))

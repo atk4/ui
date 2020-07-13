@@ -16,12 +16,12 @@ require_once __DIR__ . '/../init-app.php';
 
 /** @var \atk4\ui\Button $myButtonClass */
 $myButtonClass = get_class(new class() extends \atk4\ui\Button {
-    public function renderView()
+    protected function renderView(): void
     {
         $this->link($this->content);
         $this->addClass('green');
 
-        return parent::renderView();
+        parent::renderView();
     }
 });
 

@@ -52,7 +52,7 @@ $plane->template->set('num', random_int(5, 20));
 \atk4\ui\Button::addTo($app, ['Hide plane', 'icon' => 'down arrow'])->on('click', $plane->js()->hide());
 \atk4\ui\Button::addTo($app, ['Show plane', 'icon' => 'up arrow'])->on('click', $plane->js()->show());
 \atk4\ui\Button::addTo($app, ['Jiggle plane', 'icon' => 'expand'])->on('click', $plane->js()->transition('jiggle'));
-\atk4\ui\Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new \atk4\ui\jsReload($plane));
+\atk4\ui\Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new \atk4\ui\JsReload($plane));
 
 \atk4\ui\Header::addTo($app, ['Can be on a Virtual Page']);
 $vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($page) use ($plane) {
@@ -60,7 +60,7 @@ $vp = \atk4\ui\VirtualPage::addTo($app)->set(function ($page) use ($plane) {
     \atk4\ui\Label::addTo($page, ['Plane ID: ', 'bottom attached', 'detail' => $plane->name]);
 });
 
-\atk4\ui\Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])->on('click', new \atk4\ui\jsModal('Plane Box', $vp));
+\atk4\ui\Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])->on('click', new \atk4\ui\JsModal('Plane Box', $vp));
 
 \atk4\ui\Header::addTo($app, ['All components extend View (even paginator)']);
 $columns = \atk4\ui\Columns::addTo($app);

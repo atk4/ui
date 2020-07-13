@@ -7,50 +7,50 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$g = \atk4\ui\Grid::addTo($app);
-$m = new CountryLock($app->db);
-$m->addAction('test', function ($m) {
-    return 'test from ' . $m->getTitle() . ' was successful!';
+$grid = \atk4\ui\Grid::addTo($app);
+$model = new CountryLock($app->db);
+$model->addUserAction('test', function ($model) {
+    return 'test from ' . $model->getTitle() . ' was successful!';
 });
 
 // Delete is already prevent by our lock Model, just simulating it.
-$ex = new \atk4\ui\ActionExecutor\jsUserAction();
-$ex->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function () {
+$ex = new \atk4\ui\UserAction\JsCallbackExecutor();
+$ex->onHook(\atk4\ui\UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return [
-        (new \atk4\ui\jQuery())->closest('tr')->transition('fade left'),
-        new \atk4\ui\jsToast('Simulating delete in demo mode.'),
+        (new \atk4\ui\Jquery())->closest('tr')->transition('fade left'),
+        new \atk4\ui\JsToast('Simulating delete in demo mode.'),
     ];
 });
-$m->getAction('delete')->ui['executor'] = $ex;
+$model->getUserAction('delete')->ui['executor'] = $ex;
 
-$g->setModel($m);
+$grid->setModel($model);
 
 //Adding Quicksearch on Name field using auto query.
-$g->addQuickSearch(['name'], true);
+$grid->addQuickSearch(['name'], true);
 
-$g->menu->addItem(['Add Country', 'icon' => 'add square'], new \atk4\ui\jsExpression('alert(123)'));
-$g->menu->addItem(['Re-Import', 'icon' => 'power'], new \atk4\ui\jsReload($g));
-$g->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
+$grid->menu->addItem(['Add Country', 'icon' => 'add square'], new \atk4\ui\JsExpression('alert(123)'));
+$grid->menu->addItem(['Re-Import', 'icon' => 'power'], new \atk4\ui\JsReload($grid));
+$grid->menu->addItem(['Delete All', 'icon' => 'trash', 'red active']);
 
-$g->addColumn(null, [\atk4\ui\TableColumn\Template::class, 'hello<b>world</b>']);
+$grid->addColumn(null, [\atk4\ui\Table\Column\Template::class, 'hello<b>world</b>']);
 
-$g->addActionButton('test');
+$grid->addActionButton('test');
 
-$g->addActionButton('Say HI', function ($j, $id) use ($g) {
-    return 'Loaded "' . $g->model->load($id)->get('name') . '" from ID=' . $id;
+$grid->addActionButton('Say HI', function ($j, $id) use ($grid) {
+    return 'Loaded "' . $grid->model->load($id)->get('name') . '" from ID=' . $id;
 });
 
-$g->addModalAction(['icon' => 'external'], 'Modal Test', function ($p, $id) {
+$grid->addModalAction(['icon' => [\atk4\ui\Icon::class, 'external']], 'Modal Test', function ($p, $id) {
     \atk4\ui\Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 
-$g->addActionButton(['icon' => 'delete'], $m->getAction('delete'));
+    $grid->addActionButton(['icon' => 'delete'], $model->getUserAction('delete'));
 
-$sel = $g->addSelection();
-$g->menu->addItem('show selection')->on('click', new \atk4\ui\jsExpression(
+$sel = $grid->addSelection();
+$grid->menu->addItem('show selection')->on('click', new \atk4\ui\JsExpression(
     'alert("Selected: "+[])',
     [$sel->jsChecked()]
 ));
 
 //Setting ipp with an array will add an ItemPerPageSelector to paginator.
-$g->setIpp([10, 25, 50, 100]);
+$grid->setIpp([10, 25, 50, 100]);

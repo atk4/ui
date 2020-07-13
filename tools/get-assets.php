@@ -9,7 +9,7 @@ class GetAssets extends \atk4\ui\App
     public $always_run = false;
     public $catch_exceptions = false;
 
-    public function requireJS($path)
+    public function requireJs($path)
     {
         $file = 'public/' . basename($path);
         echo "Downloading {$path} into {$file}..\n";
@@ -20,9 +20,9 @@ class GetAssets extends \atk4\ui\App
         }
     }
 
-    public function requireCSS($path)
+    public function requireCss($path)
     {
-        return $this->requireJS($path);
+        return $this->requireJs($path);
     }
 }
 

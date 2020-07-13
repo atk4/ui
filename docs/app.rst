@@ -15,7 +15,7 @@ will be automatically created if you execute `$component->init()` or `$component
 In most use-scenarios, however, you would create instance of an App class yourself before other components::
 
     $app = new \atk4\ui\App('My App');
-    $app->initLayout(\atk4\ui\Layout\Centered::class);
+    $app->initLayout([\atk4\ui\Layout\Centered::class]);
     LoremIpsum::addTo($app);
 
 As you add one component into another, they will automatically inherit reference to App class. App
@@ -50,7 +50,7 @@ You may use App class hook to impact behavior of your application:
  - using hooks to globally impact object initialization
  - override methods to create different behavior, for example url() method may use advanced router logic
    to create beautiful URLs.
- - you may re-define set-up of :php:class:`Persistence\UI` and affect how data is loaded from UI.
+ - you may re-define set-up of :php:class:`Persistence\Ui` and affect how data is loaded from UI.
  - load templates from different files
  - use a different CDN settings for static files
 
@@ -80,7 +80,7 @@ active. (See :ref:`system_pattern`)::
 
             // App class may be used for pages that do not require authentication
             if (!$auth) {
-                $this->initLayout(\atk4\ui\Layout\Centered::class);
+                $this->initLayout([\atk4\ui\Layout\Centered::class]);
                 return;
             }
 
@@ -91,7 +91,7 @@ active. (See :ref:`system_pattern`)::
 
             // Make sure user is valid
             if(!$this->user->loaded()) {
-                $this->initLayout(\atk4\ui\Layout\Centered::class);
+                $this->initLayout([\atk4\ui\Layout\Centered::class]);
                 Message::addTo($this, ['Login Required', 'error']);
                 Button::addTo($this, ['Login', 'primary'])->link('index.php');
                 exit;
@@ -100,7 +100,7 @@ active. (See :ref:`system_pattern`)::
             // Load company data (System) for present user
             $this->company = $this->user->ref('company_id');
 
-            $this->initLayout(\atk4\ui\Layout\Admin::class);
+            $this->initLayout([\atk4\ui\Layout\Admin::class]);
 
             // Add more initialization here, such as a populating menu.
         }
@@ -110,7 +110,7 @@ After declaring your Application class like this, you can use it conveniently an
 
     include'vendor/autoload.php';
     $app = new Warehouse();
-    CRUD::addTo($app)
+    Crud::addTo($app)
         ->setModel($app->system->ref('Order'));
 
 
@@ -167,27 +167,27 @@ If you use Agile UI in conjunction with another framework, then you may be using
 that implements tighter integration with the host application or full-stack framework.
 
 
-.. php:method:: requireJS()
+.. php:method:: requireJs()
 
 Method to include additional JavaScript file in page::
 
-    $app->requireJS('https://code.jquery.com/jquery-3.1.1.js');
-    $app->requireJS('https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.7.4/semantic.min.js');
+    $app->requireJs('https://code.jquery.com/jquery-3.1.1.js');
+    $app->requireJs('https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.7.4/semantic.min.js');
 
 Using of CDN servers is always better than storing external libraries locally.
 Most of the time CDN servers are faster (cached) and more reliable.
 
-.. php:method:: requireCSS($url)
+.. php:method:: requireCss($url)
 
 Method to include additional CSS stylesheet in page::
 
-    $app->requireCSS('//fomantic-ui.com/dist/semantic.css');
+    $app->requireCss('//fomantic-ui.com/dist/semantic.css');
 
 .. php:method:: initIncludes()
 
 Initializes all includes required by Agile UI. You may extend this class to add more includes.
 
-.. php:method:: getRequestURI()
+.. php:method:: getRequestUrl()
 
 Decodes current request without any arguments. If you are changing URL generation pattern, you
 probably need to change this method to properly identify the current page. See :php:class:`App::url()`
@@ -211,7 +211,7 @@ App provides various utilities that are used by other components.
 
 .. php:method:: getTag()
 .. php:method:: encodeAttribute()
-.. php:method:: encodeHTML()
+.. php:method:: encodeHtml()
 
 Apart from basic utility, App class provides several mechanisms that are helpful for components.
 
@@ -222,15 +222,15 @@ Sticky GET Arguments
 .. php:method:: stickyForget()
 
 Problem: sometimes certain PHP code will only be executed when GET arguments are passed. For example,
-you may have a file `detail.php` which expects `order_id` parameter and would contain a `CRUD` component.
+you may have a file `detail.php` which expects `order_id` parameter and would contain a `Crud` component.
 
-Since the `CRUD` component is interactive, it may want to generate requests to itself, but it must also
+Since the `Crud` component is interactive, it may want to generate requests to itself, but it must also
 include `order_id` otherwise the scope will be incomplete. Agile UI solves that with StickyGet arguments::
 
     $order_id = $app->stickyGet('order_id');
     $crud->setModel($order->load($order_id)->ref('Payment'));
 
-This make sure that pagination, editing, addition or any other operation that CRUD implements will always
+This make sure that pagination, editing, addition or any other operation that Crud implements will always
 address same model scope.
 
 If you need to generate URL that respects stickyGet arguments, use :php:meth:`App::url()`.
@@ -312,9 +312,9 @@ through :ref:`page_manager`.
 The url() method will automatically append values of arguments mentioned to `stickyGet()`,
 but if you need URL to drop any sticky value, specify value explicitly as `false`.
 
-.. php:method:: jsURL(callback_page)
+.. php:method:: jsUrl(callback_page)
 
-Use jsURL for creating callback, which return non-HTML output. This may be routed differently
+Use jsUrl for creating callback, which return non-HTML output. This may be routed differently
 by a host framework (https://github.com/atk4/ui/issues/369).
 
 
@@ -322,7 +322,7 @@ by a host framework (https://github.com/atk4/ui/issues/369).
 Includes
 --------
 
-.. php:method:: requireJS($url)
+.. php:method:: requireJs($url)
 
 Includes header into the <head> class that will load JavaScript file from a specified URL.
 This will be used by components that rely on external JavaScript libraries.
@@ -387,7 +387,7 @@ Adding the Layout
 
 Layout can be initialized through the app like this::
 
-    $app->initLayout(\atk4\ui\Layout\Centered::class);
+    $app->initLayout([\atk4\ui\Layout\Centered::class]);
 
 This will initialize two new views inside the app::
 
@@ -414,7 +414,7 @@ with top, left and right menu objects.
 
 Populating the left menu object is simply a matter of adding the right menu items to the layout menu::
 
-    $app->initLayout(\atk4\ui\Layout\Admin::class);
+    $app->initLayout([\atk4\ui\Layout\Admin::class]);
     $layout = $app->layout;
 
     // Add item into menu
@@ -429,7 +429,7 @@ Populating the left menu object is simply a matter of adding the right menu item
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
     Button::addTo($layout->menu->addItem(), ['View Source', 'teal', 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \atk4\ui\jsExpression('document.location=[];', [$url.$f]));
+        ->setAttr('target', '_blank')->on('click', new \atk4\ui\JsExpression('document.location=[];', [$url.$f]));
 
 .. php:attr:: menuRight
 

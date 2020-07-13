@@ -57,7 +57,7 @@ class Header extends View
 
     public $defaultTemplate = 'header.html';
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->size) {
             if (is_numeric($this->size)) {
@@ -92,6 +92,6 @@ class Header extends View
             $this->template->set('title', $this->content);
         }
 
-        return parent::renderView();
+        parent::renderView();
     }
 }

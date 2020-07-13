@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-use atk4\ui\jsReload;
+use atk4\ui\Form;
+use atk4\ui\JsReload;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -18,13 +19,13 @@ $buttons = \atk4\ui\View::addTo($app, ['ui' => 'green basic buttons']);
 $seg = \atk4\ui\View::addTo($app, ['ui' => 'raised segment']);
 
 \atk4\ui\Button::addTo($buttons, ['Use Country Model', 'icon' => 'arrow down'])
-    ->on('click', new jsReload($seg, ['m' => 'country']));
+    ->on('click', new JsReload($seg, ['m' => 'country']));
 \atk4\ui\Button::addTo($buttons, ['Use File Model', 'icon' => 'arrow down'])
-    ->on('click', new jsReload($seg, ['m' => 'file']));
+    ->on('click', new JsReload($seg, ['m' => 'file']));
 \atk4\ui\Button::addTo($buttons, ['Use Stat Model', 'icon' => 'arrow down'])
-    ->on('click', new jsReload($seg, ['m' => 'stat']));
+    ->on('click', new JsReload($seg, ['m' => 'stat']));
 
-$form = \atk4\ui\Form::addTo($seg, ['layout' => \atk4\ui\FormLayout\Columns::class]);
+$form = Form::addTo($seg, ['layout' => [Form\Layout\Columns::class]]);
 $form->setModel(
     isset($_GET['m']) ? (
         $_GET['m'] === 'country' ? new Country($app->db) : (
@@ -33,7 +34,7 @@ $form->setModel(
     ) : new Stat($app->db)
 )->tryLoadAny();
 
-$form->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (Form $form) {
     $errors = [];
     foreach ($form->model->dirty as $field => $value) {
         // we should care only about editable fields

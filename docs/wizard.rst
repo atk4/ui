@@ -120,7 +120,7 @@ Wizard has few methods to help you to navigate between steps.
 Methods starting with `url` will return a URL towards the next step. jsNext() method returns javascript action
 which will take you to the next step.
 
-If you wish to to go to specific step, you can use `$wizard->stepCallback->getURL($step);`
+If you wish to to go to specific step, you can use `$wizard->stepCallback->getUrl($step);`
 
 Finally you can get url of the current step with `$wizard->url()` (see :php:meth:`View::url`)
 

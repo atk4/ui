@@ -24,7 +24,7 @@ if (isset($_GET['name'])) {
 
     // nested interractive elemetns will respect lockal sticky get
     \atk4\ui\Button::addTo($frame, ['Triggering callback here will inherit color'])->on('click', function () {
-        return new \atk4\ui\jsNotify('Color was = ' . $_GET['name']);
+        return new \atk4\ui\JsNotify('Color was = ' . $_GET['name']);
     });
 
     // Next we have loader, which will dynamically load console which will dynamically output "success" message.
@@ -37,11 +37,11 @@ if (isset($_GET['name'])) {
 
 $t = \atk4\ui\Table::addTo($app);
 $t->setSource(['Red', 'Green', 'Blue']);
-$t->addDecorator('name', [\atk4\ui\TableColumn\Link::class, [], ['name']]);
+$t->addDecorator('name', [\atk4\ui\Table\Column\Link::class, [], ['name']]);
 
 $frame = \atk4\ui\View::addTo($app, ['ui' => 'green segment']);
 \atk4\ui\Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () {
-    return new \atk4\ui\jsNotify('$_GET = ' . json_encode($_GET));
+    return new \atk4\ui\JsNotify('$_GET = ' . json_encode($_GET));
 });
 
 \atk4\ui\Header::addTo($app, ['Use of View::url()']);
@@ -53,7 +53,7 @@ $b1->set($b1->url());
     $b2 = \atk4\ui\Button::addTo($page);
     $b2->set($b2->url());
 
-    $b2->on('click', new \atk4\ui\jsReload($b1));
+    $b2->on('click', new \atk4\ui\JsReload($b1));
 });
 
 $b3 = \atk4\ui\Button::addTo($app);

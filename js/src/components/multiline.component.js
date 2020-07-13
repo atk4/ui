@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-      linesField: this.data.linesField, //form field where to set multiline content value.
+      linesField: this.data.linesField, // form control where to set multiline content value.
       rows: [],
       fieldData: this.data.fields,
       idField: this.data.idField,

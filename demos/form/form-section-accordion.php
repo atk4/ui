@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Form;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -11,54 +13,55 @@ require_once __DIR__ . '/../init-app.php';
     ->link(['form-section']);
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$f = \atk4\ui\Form::addTo($app);
+$form = Form::addTo($app);
 
-$sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
-\atk4\ui\Header::addTo($sub_layout, ['Please fill all form sections!', 'size' => 4]);
+$sublayout = $form->layout->addSubLayout([\atk4\ui\Form\Layout\Section::class]);
 
-$sub_layout->addField('company_name');
+\atk4\ui\Header::addTo($sublayout, ['Please fill all form sections!', 'size' => 4]);
+
+$sublayout->addControl('company_name');
 
 // Accordion
-$accordion_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
+$accordionLayout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
 
 // Section #1
-$contact_section = $accordion_layout->addSection('Contact');
+$contactSection = $accordionLayout->addSection('Contact');
 
-$gr = $contact_section->addGroup('Name');
-$gr->addField('first_name', ['width' => 'eight'], ['required' => true]);
-$gr->addField('last_name', ['width' => 'eight']);
+$group = $contactSection->addGroup('Name');
+$group->addControl('first_name', ['width' => 'eight'], ['required' => true]);
+$group->addControl('last_name', ['width' => 'eight']);
 
-$gr = $contact_section->addGroup('Email');
-$gr->addField('email', ['width' => 'sixteen'], ['caption' => 'yourEmail@domain.com']);
+$group = $contactSection->addGroup('Email');
+$group->addControl('email', ['width' => 'sixteen'], ['caption' => 'yourEmail@domain.com']);
 
 // Section #2
-$adr_section = $accordion_layout->addSection('Address');
+$addressSection = $accordionLayout->addSection('Address');
 
-$gr = $adr_section->addGroup('Street and City');
-$gr->addField('address1', ['width' => 'eight'], ['required' => true]);
-$gr->addField('city', ['width' => 'eight']);
+$group = $addressSection->addGroup('Street and City');
+$group->addControl('address1', ['width' => 'eight'], ['required' => true]);
+$group->addControl('city', ['width' => 'eight']);
 
-$gr = $adr_section->addGroup('State, Country and Postal Code');
-$gr->addField('state', ['width' => 'six']);
-$gr->addField('country', ['width' => 'six']);
-$gr->addField('postal', ['width' => 'four']);
+$group = $addressSection->addGroup('State, Country and Postal Code');
+$group->addControl('state', ['width' => 'six']);
+$group->addControl('country', ['width' => 'six']);
+$group->addControl('postal', ['width' => 'four']);
 
 // Sub-Accordion
-$sub_accordion_layout = $adr_section->addSubLayout([\atk4\ui\FormLayout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
+$sublayoutAccordion = $addressSection->addSubLayout([Form\Layout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
 
 // Sub-Section #1
-$section_1 = $sub_accordion_layout->addSection('Business address');
-$section_1->addField('business_address');
+$section1 = $sublayoutAccordion->addSection('Business address');
+$section1->addControl('business_address');
 
 // Sub-Section #2
-$section_2 = $sub_accordion_layout->addSection('Delivery address');
-$section_2->addField('delivery_address', []);
+$section2 = $sublayoutAccordion->addSection('Delivery address');
+$section2->addControl('delivery_address', []);
 
 // Terms field
-$f->addField('term', [\atk4\ui\FormField\CheckBox::class, 'caption' => 'Accept terms and conditions', null, 'slider']);
+$form->addControl('term', [Form\Control\Checkbox::class, 'caption' => 'Accept terms and conditions', null, 'slider']);
 
-$accordion_layout->activate($contact_section);
+$accordionLayout->activate($contactSection);
 
-$f->onSubmit(function (\atk4\ui\Form $form) {
+$form->onSubmit(function (Form $form) {
     return $form->success('Yey!', 'You did well by filling out this form');
 });

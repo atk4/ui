@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Form;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -52,12 +54,18 @@ class Product extends \atk4\data\Model
     }
 }
 
-$f = \atk4\ui\Form::addTo($app);
+$form = Form::addTo($app);
 
-$f->addField('category_id', [\atk4\ui\FormField\DropDown::class, 'model' => new Category($app->db)]);
-$f->addField('sub_category_id', [\atk4\ui\FormField\DropDownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
-$f->addField('product_id', [\atk4\ui\FormField\DropDownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
+$form->addControl('category_id', [Form\Control\Dropdown::class, 'model' => new Category($app->db)]);
+$form->addControl('sub_category_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => 'SubCategories']);
+$form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => 'Products']);
 
-$f->onSubmit(function (\atk4\ui\Form $form) {
-    echo print_r($form->model->get(), true);
+$form->onSubmit(function (Form $form) use ($app) {
+    $message = $app->encodeJson($form->model->get());
+
+    $view = new \atk4\ui\Message('Values: ');
+    $view->init();
+    $view->text->addParagraph($message);
+
+    return $view;
 });

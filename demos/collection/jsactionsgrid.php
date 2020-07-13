@@ -19,26 +19,26 @@ DemoActionsUtil::setupDemoActions($country);
 
 \atk4\ui\Header::addTo($app, ['Model Custom Actions', 'subHeader' => 'Model custom action can be execute from Grid.']);
 
-$g = \atk4\ui\Grid::addTo($app, ['menu' => false]);
-$g->setModel($country);
+$grid = \atk4\ui\Grid::addTo($app, ['menu' => false]);
+$grid->setModel($country);
 
-$divider = $app->factory(\atk4\ui\View::class, ['id' => false, 'class' => ['divider'], 'content' => '']);
+$divider = $app->factory([\atk4\ui\View::class], ['id' => false, 'class' => ['divider'], 'content' => '']);
 
-$model_header = $app->factory(\atk4\ui\View::class, ['id' => false, 'class' => ['header'], 'content' => 'Model Actions']);
-\atk4\ui\Icon::addTo($model_header, ['content' => 'database']);
+$modelHeader = $app->factory([\atk4\ui\View::class], ['id' => false, 'class' => ['header'], 'content' => 'Model Actions']);
+\atk4\ui\Icon::addTo($modelHeader, ['content' => 'database']);
 
-$js_header = $app->factory(\atk4\ui\View::class, ['id' => false, 'class' => ['header'], 'content' => 'Js Actions']);
-\atk4\ui\Icon::addTo($js_header, ['content' => 'file code']);
+$jsHeader = $app->factory([\atk4\ui\View::class], ['id' => false, 'class' => ['header'], 'content' => 'Js Actions']);
+\atk4\ui\Icon::addTo($jsHeader, ['content' => 'file code']);
 
-$g->addActionMenuItem($js_header);
-$g->addActionMenuItem('Js Callback', function () {
+$grid->addActionMenuItem($jsHeader);
+$grid->addActionMenuItem('Js Callback', function () {
     return (new \atk4\ui\View())->set('Js Callback done!');
-});
+}, 'Are you sure?');
 
-$g->addActionMenuItem($divider);
+$grid->addActionMenuItem($divider);
 
-$g->addActionMenuItem($model_header);
-$g->addActionMenuItems(
+$grid->addActionMenuItem($modelHeader);
+$grid->addActionMenuItems(
     [
         'callback',
         'preview',
@@ -51,9 +51,9 @@ $g->addActionMenuItems(
     ]
 );
 
-$special_item = $app->factory(\atk4\ui\View::class, ['id' => false, 'class' => ['item'], 'content' => 'Multi Step']);
-\atk4\ui\Icon::addTo($special_item, ['content' => 'window maximize outline']);
+$specialItem = $app->factory([\atk4\ui\View::class], ['id' => false, 'class' => ['item'], 'content' => 'Multi Step']);
+\atk4\ui\Icon::addTo($specialItem, ['content' => 'window maximize outline']);
 
-$g->addActionMenuItem($special_item, $country->getAction('multi_step'));
+$grid->addActionMenuItem($specialItem, $country->getUserAction('multi_step'));
 
-$g->ipp = 10;
+$grid->ipp = 10;

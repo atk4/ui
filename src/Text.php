@@ -11,12 +11,12 @@ class Text extends View
 {
     public $defaultTemplate = false;
 
-    public function render($force_echo = true)
+    public function render($forceReturn = true): string
     {
         return $this->content;
     }
 
-    public function getHTML()
+    public function getHtml()
     {
         return $this->content;
     }
@@ -42,7 +42,7 @@ class Text extends View
      *
      * @return $this
      */
-    public function addHTML(string $html)
+    public function addHtml(string $html)
     {
         $this->content .= $html;
 

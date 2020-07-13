@@ -24,6 +24,7 @@ if (file_exists(__DIR__ . '/coverage.php') && !class_exists(\PHPUnit\Framework\T
 $app = new \atk4\ui\App([
     'call_exit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
     'catch_exceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
+    'always_run' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
 ]);
 $app->title = 'Agile UI Demo v' . $app->version;
 
@@ -58,10 +59,10 @@ if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
 }
 
 // allow custom layout override
-$app->initLayout($app->stickyGET('layout') ? 'atk4\ui\Layout\\' . $app->stickyGET('layout') : \atk4\ui\Layout\Maestro::class);
+$app->initLayout([$app->stickyGET('layout') ?? \atk4\ui\Layout\Maestro::class]);
 
 $layout = $app->layout;
-if ($layout instanceof \atk4\ui\Layout\Navigable) {
+if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
     $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
 
     $path = $demosUrl . 'layout/';
@@ -77,7 +78,7 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem('Message', [$path . 'message'], $menu);
     $layout->addMenuItem('Labels', [$path . 'label'], $menu);
     $layout->addMenuItem('Menu', [$path . 'menu'], $menu);
-    $layout->addMenuItem('BreadCrumb', [$path . 'breadcrumb'], $menu);
+    $layout->addMenuItem('Breadcrumb', [$path . 'breadcrumb'], $menu);
     $layout->addMenuItem(['Columns'], [$path . 'columns'], $menu);
     $layout->addMenuItem(['Grid Layout'], [$path . 'grid-layout'], $menu);
 
@@ -91,15 +92,15 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['HTML Layout'], [$path . 'html-layout'], $menu);
     $layout->addMenuItem(['Conditional Fields'], [$path . 'jscondform'], $menu);
 
-    $path = $demosUrl . 'input/';
-    $menu = $layout->addMenuGroup(['Input', 'icon' => 'keyboard outline']);
-    $layout->addMenuItem(['Input Fields'], [$path . 'field2'], $menu);
-    $layout->addMenuItem('Input Field Decoration', [$path . 'field'], $menu);
+    $path = $demosUrl . 'form-control/';
+    $menu = $layout->addMenuGroup(['Form Controls', 'icon' => 'keyboard outline']);
+    $layout->addMenuItem(['Input'], [$path . 'input2'], $menu);
+    $layout->addMenuItem('Input Decoration', [$path . 'input'], $menu);
     $layout->addMenuItem(['Checkboxes'], [$path . 'checkbox'], $menu);
     $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $menu);
     $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $menu);
     $layout->addMenuItem(['Lookup Dependency'], [$path . 'lookup-dep'], $menu);
-    $layout->addMenuItem(['DropDown'], [$path . 'dropdown-plus'], $menu);
+    $layout->addMenuItem(['Dropdown'], [$path . 'dropdown-plus'], $menu);
     $layout->addMenuItem(['File Upload'], [$path . 'upload'], $menu);
     $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $menu);
     $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $menu);
@@ -114,8 +115,8 @@ if ($layout instanceof \atk4\ui\Layout\Navigable) {
     $layout->addMenuItem(['Column Menus'], [$path . 'tablecolumnmenu'], $menu);
     $layout->addMenuItem(['Column Filters'], [$path . 'tablefilter'], $menu);
     $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', [$path . 'grid'], $menu);
-    $layout->addMenuItem('CRUD - Full editing solution', [$path . 'crud'], $menu);
-    $layout->addMenuItem(['CRUD with Array Persistence'], [$path . 'crud3'], $menu);
+    $layout->addMenuItem('Crud - Full editing solution', [$path . 'crud'], $menu);
+    $layout->addMenuItem(['Crud with Array Persistence'], [$path . 'crud3'], $menu);
     $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $menu);
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $menu);
     $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);

@@ -32,7 +32,7 @@ class Tabs extends View
         // if there is callback action, then use VirtualPage
         if ($callback) {
             $vp = VirtualPage::addTo($sub, ['ui' => '']);
-            $item->setPath($vp->getJSURL('cut'));
+            $item->setPath($vp->getJsUrl('cut'));
 
             $vp->set($callback);
         }
@@ -48,7 +48,7 @@ class Tabs extends View
      * @param string|array $url      URL to open inside a tab
      * @param array        $settings Tab setting
      */
-    public function addTabURL($name, $url, $settings = [])
+    public function addTabUrl($name, $url, $settings = [])
     {
         $item = $this->addTabMenuItem($name, $settings);
         $this->addSubView($item->name);
@@ -72,7 +72,7 @@ class Tabs extends View
             $tab = new Tab($name);
         }
 
-        $tab = $this->add([$tab, 'class' => ['item'], 'settings' => $settings], 'Menu')
+        $tab = $this->add($this->mergeSeeds(['class' => ['item'], 'settings' => $settings], $tab), 'Menu')
             ->setElement('a')
             ->setAttr('data-tab', $tab->name);
 
@@ -88,17 +88,14 @@ class Tabs extends View
      *
      * @param string $name name of view
      *
-     * @return TabsSubView
+     * @return TabsSubview
      */
     protected function addSubView($name)
     {
-        return TabsSubView::addTo($this, ['dataTabName' => $name], ['Tabs']);
+        return TabsSubview::addTo($this, ['dataTabName' => $name], ['Tabs']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         // use content as class name
         if ($this->content) {

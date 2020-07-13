@@ -14,13 +14,13 @@ require_once __DIR__ . '/../init-app.php';
 \atk4\ui\Header::addTo($app, ['Card Deck', 'size' => 1, 'subHeader' => 'Card can be display in a deck, also using model action.']);
 
 $countries = new Country($app->db);
-$countries->addCalculatedField('Cost', function ($m) {
+$countries->addCalculatedField('Cost', function ($model) {
     return '$ ' . number_format(random_int(500, 1500));
 });
 
-$action = $countries->addAction('book', [
-    'callback' => function ($m, $email, $city) {
-        return 'Your request to visit ' . ucwords($city) . ' in ' . $m->get('name') . ' was sent to: ' . $email;
+$action = $countries->addUserAction('book', [
+    'callback' => function ($model, $email, $city) {
+        return 'Your request to visit ' . ucwords($city) . ' in ' . $model->get('name') . ' was sent to: ' . $email;
     },
     'ui' => ['button' => [null, 'icon' => 'plane']],
 ]);
@@ -30,17 +30,17 @@ $action->args = [
     'city' => ['type' => 'string', 'required' => true, 'caption' => 'Arrive at which city:'],
 ];
 
-$info_action = $countries->addAction('request_info', [
-    'callback' => function ($m, $email) {
+$infoAction = $countries->addUserAction('request_info', [
+    'callback' => function ($model, $email) {
         return 'Your request for information was sent to email: ' . $email;
     },
-    'scope' => 'none',
-    'ui' => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => 'mail']],
+    'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
+    'ui' => ['button' => ['Request Info', 'ui' => 'button primary', 'icon' => [\atk4\ui\Icon::class, 'mail']]],
 ]);
 
-$info_action->args = [
+$infoAction->args = [
     'email' => ['type' => 'email', 'required' => true, 'caption' => 'Please let us know your email address:'],
-    'country' => ['required' => true, 'ui' => ['form' => [\atk4\ui\FormField\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
+    'country' => ['required' => true, 'ui' => ['form' => [\atk4\ui\Form\Control\Lookup::class, 'model' => new Country($app->db), 'placeholder' => 'Please select a country.']]],
 ];
 
 $deck = \atk4\ui\CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);

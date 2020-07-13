@@ -19,15 +19,12 @@ declare(strict_types=1);
  * Multiple model can be used to display various content on each card section.
  * When using model or models, the first model that get set via setModel method
  * will have it's id_field set as data-id html attribute for the card. Thus making
- * the id available via javascript (new jQuery())->data('id')
+ * the id available via javascript (new Jquery())->data('id')
  */
 
 namespace atk4\ui;
 
 use atk4\data\Model;
-use atk4\data\UserAction\Generic;
-use atk4\ui\ActionExecutor\Event;
-use atk4\ui\ActionExecutor\UserAction;
 
 class Card extends View
 {
@@ -50,7 +47,7 @@ class Card extends View
     /** @var string The CardSection default class name. */
     public $cardSection = CardSection::class;
 
-    /** @var null | View The extra content view container for the card. */
+    /** @var View|null The extra content view container for the card. */
     public $extraContainer;
 
     /** @var string|View|null A description inside the Card content. */
@@ -75,7 +72,7 @@ class Card extends View
     public $useLabel = false;
 
     /** @var string Default executor class. */
-    public $executor = UserAction::class;
+    public $executor = UserAction\ModalExecutor::class;
 
     /** @var array Array of columns css wide classes */
     protected $words = [
@@ -180,19 +177,19 @@ class Card extends View
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
-     * @param \atk4\data\Model $m      the model
+     * @param \atk4\data\Model $model  the model
      * @param array|false      $fields an array of fields name to display in content
      *
      * @return \atk4\data\Model|void
      */
-    public function setModel(Model $m, $fields = null)
+    public function setModel(Model $model, $fields = null)
     {
-        if (!$m->loaded()) {
+        if (!$model->loaded()) {
             throw new Exception('Model need to be loaded.');
         }
 
         if (!$this->model) {
-            $m = parent::setModel($m);
+            $model = parent::setModel($model);
         }
 
         if ($fields === null) {
@@ -204,11 +201,11 @@ class Card extends View
         $this->setDataId($this->model->get($this->model->id_field));
 
         if ($fields && is_array($fields)) {
-            View::addTo($this->getSection(), [$m->getTitle(), ['class' => 'header']]);
-            $this->getSection()->addFields($m, $fields, $this->useLabel, $this->useTable);
+            View::addTo($this->getSection(), [$model->getTitle(), ['class' => 'header']]);
+            $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
         }
 
-        return $m;
+        return $model;
     }
 
     /**
@@ -234,14 +231,14 @@ class Card extends View
      */
     public function addModelActions(Model $model)
     {
-        if ($singleActions = $model->getActions(Generic::SINGLE_RECORD)) {
+        if ($singleActions = $model->getUserActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
             $this->setModel($model);
             foreach ($singleActions as $action) {
                 $this->addAction($action, $this->executor);
             }
         }
 
-        if ($noRecordAction = $model->getActions(GENERIC::NO_RECORDS)) {
+        if ($noRecordAction = $model->getUserActions(Model\UserAction::APPLIES_TO_NO_RECORDS)) {
             foreach ($noRecordAction as $action) {
                 $this->addAction($action, $this->executor);
             }
@@ -271,7 +268,7 @@ class Card extends View
     /**
      * Add action executor to card.
      */
-    public function addAction($action, $executor, $button = null)
+    public function addAction(Model\UserAction $action, $executor, $button = null)
     {
         if (!$button) {
             $button = new Button([$action->caption]);
@@ -288,7 +285,7 @@ class Card extends View
             $executor->setAction($action);
         });
 
-        $btn->on('click', new jsModal($action->caption, $vp, [$this->name => (new jQuery())->parents('.atk-card')->data('id')]));
+        $btn->on('click', new JsModal($action->caption, $vp, [$this->name => (new Jquery())->parents('.atk-card')->data('id')]));
     }
 
     /**
@@ -300,7 +297,7 @@ class Card extends View
      *
      * @return Card
      */
-    public function addClickAction(Generic $action, $button = null, $args = [], $confirm = null)
+    public function addClickAction(Model\UserAction $action, $button = null, $args = [], $confirm = null)
     {
         $defaults = [];
         if (!$button) {
@@ -331,25 +328,25 @@ class Card extends View
     /**
      * Set extra content using model field.
      *
-     * @param Model  $m      The model
+     * @param Model  $model  The model
      * @param array  $fields an array of fields name
      * @param string $glue   a separator string between each field
      */
-    public function addExtraFields($m, $fields, $glue = null)
+    public function addExtraFields(Model $model, $fields, $glue = null)
     {
-        $this->setModel($m, false);
+        $this->setModel($model, false);
 
         // display extra field in line.
         if ($glue) {
             $extra = '';
             foreach ($fields as $field) {
-                $extra .= $m->get($field) . $glue;
+                $extra .= $model->get($field) . $glue;
             }
             $extra = rtrim($extra, $glue);
             $this->addExtraContent(new View([$extra, 'ui' => 'ui basic fitted segment']));
         } else {
             foreach ($fields as $field) {
-                $this->addExtraContent(new View([$m->get($field), 'ui basic fitted segment']));
+                $this->addExtraContent(new View([$model->get($field), 'ui basic fitted segment']));
             }
         }
     }
@@ -410,7 +407,7 @@ class Card extends View
         }
 
         if (!is_object($button)) {
-            $button = $this->factory(Button::class, $button);
+            $button = $this->factory([Button::class], $button);
         }
 
         $btn = $this->getButtonContainer()->add($button);

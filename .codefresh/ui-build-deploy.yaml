@@ -23,7 +23,9 @@ steps:
     type: build
     stage: build
     image_name: atk4/ui-demo
+    registry: atk4
     dockerfile: demos/Dockerfile
+
   push:
     type: push
     stage: push

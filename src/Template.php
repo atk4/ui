@@ -15,7 +15,7 @@ use atk4\data\Model;
 class Template implements \ArrayAccess
 {
     use \atk4\core\AppScopeTrait;
-    use \atk4\core\DIContainerTrait; // needed for StaticAddToTrait, removed once php7.2 support is dropped
+    use \atk4\core\DiContainerTrait; // needed for StaticAddToTrait, removed once php7.2 support is dropped
     use \atk4\core\StaticAddToTrait;
 
     /** @var array */
@@ -103,10 +103,8 @@ class Template implements \ArrayAccess
      * Since Agile Toolkit 4.3 this tag is always called _top.
      *
      * @param string $tag
-     *
-     * @return bool
      */
-    public function isTopTag($tag)
+    public function isTopTag($tag): bool
     {
         return $tag === '_top';
     }
@@ -373,11 +371,10 @@ class Template implements \ArrayAccess
      *
      * @param string|array|Model $tag
      * @param string             $value
-     * @param bool               $encode
      *
      * @return $this
      */
-    public function trySet($tag, $value = null, $encode = true)
+    public function trySet($tag, $value = null, bool $encode = true)
     {
         return $this->_setOrAppend($tag, $value, $encode, false, false);
     }
@@ -391,13 +388,13 @@ class Template implements \ArrayAccess
      *
      * @return $this
      */
-    public function setHTML($tag, $value = null)
+    public function setHtml($tag, $value = null)
     {
         return $this->_setOrAppend($tag, $value, false, false, true);
     }
 
     /**
-     * See setHTML() but won't generate exception for non-existing
+     * See setHtml() but won't generate exception for non-existing
      * $tag.
      *
      * @param string|array|Model $tag
@@ -405,7 +402,7 @@ class Template implements \ArrayAccess
      *
      * @return $this
      */
-    public function trySetHTML($tag, $value = null)
+    public function trySetHtml($tag, $value = null)
     {
         return $this->_setOrAppend($tag, $value, false, false, false);
     }
@@ -415,11 +412,10 @@ class Template implements \ArrayAccess
      *
      * @param string|array|Model $tag
      * @param string             $value
-     * @param bool               $encode
      *
      * @return $this
      */
-    public function append($tag, $value, $encode = true)
+    public function append($tag, $value, bool $encode = true)
     {
         return $this->_setOrAppend($tag, $value, $encode, true, true);
     }
@@ -430,11 +426,10 @@ class Template implements \ArrayAccess
      *
      * @param string|array|Model $tag
      * @param string             $value
-     * @param bool               $encode
      *
      * @return $this
      */
-    public function tryAppend($tag, $value, $encode = true)
+    public function tryAppend($tag, $value, bool $encode = true)
     {
         return $this->_setOrAppend($tag, $value, $encode, true, false);
     }
@@ -448,7 +443,7 @@ class Template implements \ArrayAccess
      *
      * @return $this
      */
-    public function appendHTML($tag, $value)
+    public function appendHtml($tag, $value)
     {
         return $this->_setOrAppend($tag, $value, false, true, true);
     }
@@ -462,7 +457,7 @@ class Template implements \ArrayAccess
      *
      * @return $this
      */
-    public function tryAppendHTML($tag, $value)
+    public function tryAppendHtml($tag, $value)
     {
         return $this->_setOrAppend($tag, $value, false, true, false);
     }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Form;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -11,12 +13,12 @@ require_once __DIR__ . '/../init-app.php';
     ->link(['form-section-accordion']);
 \atk4\ui\View::addTo($app, ['ui' => 'ui clearing divider']);
 
-$m = new CountryLock($app->db);
-$m->loadAny();
+$model = new CountryLock($app->db);
+$model->loadAny();
 
 //Prevent form from saving
-$noSave = function (\atk4\ui\Form $form) {
-    return new \atk4\ui\jsToast([
+$noSave = function (Form $form) {
+    return new \atk4\ui\JsToast([
         'title' => 'POSTed field values',
         'message' => '<pre>' . json_encode($form->model->get(), JSON_PRETTY_PRINT) . '</pre>',
         'class' => 'success',
@@ -26,69 +28,69 @@ $noSave = function (\atk4\ui\Form $form) {
 
 ////////////////////////////////
 
-$f = \atk4\ui\Form::addTo($app);
-$f->setModel($m, false);
+$form = Form::addTo($app);
+$form->setModel($model, false);
 
-$sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
-\atk4\ui\Header::addTo($sub_layout, ['Column Section in Form']);
-$sub_layout->setModel($m, ['name']);
+\atk4\ui\Header::addTo($sublayout, ['Column Section in Form']);
+$sublayout->setModel($model, ['name']);
 
-$cols_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Columns::class);
+$colsLayout = $form->layout->addSubLayout([Form\Layout\Section\Columns::class]);
 
-$c1 = $cols_layout->addColumn();
-$c1->setModel($m, ['iso', 'iso3']);
+$c1 = $colsLayout->addColumn();
+$c1->setModel($model, ['iso', 'iso3']);
 
-$c2 = $cols_layout->addColumn();
-$c2->setModel($m, ['numcode'/*, 'phonecode'*/]);
+$c2 = $colsLayout->addColumn();
+$c2->setModel($model, ['numcode'/*, 'phonecode'*/]);
 
-$f->addField('phonecode');
+$form->addControl('phonecode');
 
-$f->onSubmit($noSave);
-
-\atk4\ui\View::addTo($app, ['ui' => 'divider']);
-
-////////////////////////////////
-
-$f = \atk4\ui\Form::addTo($app);
-$f->setModel($m, false);
-
-$sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
-
-\atk4\ui\Header::addTo($sub_layout, ['Accordion Section in Form']);
-$sub_layout->setModel($m, ['name']);
-
-$accordion_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Accordion::class);
-
-$a1 = $accordion_layout->addSection('Section 1');
-$a1->setModel($m, ['iso', 'iso3']);
-
-$a2 = $accordion_layout->addSection('Section 2');
-$a2->setModel($m, ['numcode', 'phonecode']);
-
-$f->onSubmit($noSave);
+$form->onSubmit($noSave);
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
 ////////////////////////////////
 
-$f = \atk4\ui\Form::addTo($app);
-$f->setModel($m, false);
+$form = Form::addTo($app);
+$form->setModel($model, false);
 
-$sub_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Generic::class);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
-\atk4\ui\Header::addTo($sub_layout, ['Tabs in Form']);
-$sub_layout->setModel($m, ['name']);
+\atk4\ui\Header::addTo($sublayout, ['Accordion Section in Form']);
+$sublayout->setModel($model, ['name']);
 
-$tabs_layout = $f->layout->addSubLayout(\atk4\ui\FormLayout\Section\Tabs::class);
+$accordionLayout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class]);
 
-$t1 = $tabs_layout->addTab('Tab 1');
-$t1->addGroup('In Group')->setModel($m, ['iso', 'iso3']);
+$a1 = $accordionLayout->addSection('Section 1');
+$a1->setModel($model, ['iso', 'iso3']);
 
-$t2 = $tabs_layout->addTab('Tab 2');
-$t2->setModel($m, ['numcode', 'phonecode']);
+$a2 = $accordionLayout->addSection('Section 2');
+$a2->setModel($model, ['numcode', 'phonecode']);
 
-$f->onSubmit($noSave);
+$form->onSubmit($noSave);
+
+\atk4\ui\View::addTo($app, ['ui' => 'divider']);
+
+////////////////////////////////
+
+$form = Form::addTo($app);
+$form->setModel($model, false);
+
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
+
+\atk4\ui\Header::addTo($sublayout, ['Tabs in Form']);
+$sublayout->setModel($model, ['name']);
+
+$tabsLayout = $form->layout->addSubLayout([Form\Layout\Section\Tabs::class]);
+
+$tab1 = $tabsLayout->addTab('Tab 1');
+$tab1->addGroup('In Group')->setModel($model, ['iso', 'iso3']);
+
+$tab2 = $tabsLayout->addTab('Tab 2');
+$tab2->setModel($model, ['numcode', 'phonecode']);
+
+$form->onSubmit($noSave);
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 
@@ -96,23 +98,23 @@ $f->onSubmit($noSave);
 
 \atk4\ui\Header::addTo($app, ['Color in form']);
 
-$f = \atk4\ui\Form::addTo($app);
-$f->setModel($m, false);
+$form = Form::addTo($app);
+$form->setModel($model, false);
 
-$sub_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Generic::class, 'ui' => 'segment red inverted'], false);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment red inverted'], false);
 
-\atk4\ui\Header::addTo($sub_layout, ['This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
-$sub_layout->setModel($m, ['name']);
+\atk4\ui\Header::addTo($sublayout, ['This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
+$sublayout->setModel($model, ['name']);
 
-$sub_layout = $f->layout->addSubLayout([\atk4\ui\FormLayout\Section\Generic::class, 'ui' => 'segment teal inverted']);
-$cols_layout = $sub_layout->addSubLayout(\atk4\ui\FormLayout\Section\Columns::class);
+$sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment teal inverted']);
+$colsLayout = $sublayout->addSubLayout([Form\Layout\Section\Columns::class]);
 
-$c1 = $cols_layout->addColumn();
-$c1->setModel($m, ['iso', 'iso3']);
+$c1 = $colsLayout->addColumn();
+$c1->setModel($model, ['iso', 'iso3']);
 
-$c2 = $cols_layout->addColumn();
-$c2->setModel($m, ['numcode', 'phonecode']);
+$c2 = $colsLayout->addColumn();
+$c2->setModel($model, ['numcode', 'phonecode']);
 
-$f->onSubmit($noSave);
+$form->onSubmit($noSave);
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);

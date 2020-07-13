@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\Component;
 
 use atk4\data\Model;
-use atk4\ui\jsVueService;
+use atk4\ui\JsVueService;
 use atk4\ui\View;
 
 /**
@@ -38,7 +38,7 @@ class ItemSearch extends View
      * The jquery selector where you need to add the semantic-ui 'loading' class.
      * Default to reload selector.
      *
-     * @var null
+     * @var View
      */
     public $context;
 
@@ -73,16 +73,16 @@ class ItemSearch extends View
     /**
      * Set model condition base on search request.
      */
-    public function setModelCondition(Model $m): Model
+    public function setModelCondition(Model $model): Model
     {
         if ($q = $this->getQuery()) {
-            $m->addCondition('name', 'like', '%' . $q . '%');
+            $model->addCondition('name', 'like', '%' . $q . '%');
         }
 
-        return $m;
+        return $model;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $this->class = [];
         $this->template->set('inputCss', $this->inputCss);
@@ -96,13 +96,13 @@ class ItemSearch extends View
             $reloadId = $this->reload;
         }
 
-        $this->js(true, (new jsVueService())->createAtkVue(
+        $this->js(true, (new JsVueService())->createAtkVue(
             '#' . $this->name,
             'atk-item-search',
             [
                 'reload' => $reloadId,
                 'queryArg' => $this->queryArg,
-                'url' => $this->reload->jsURL(),
+                'url' => $this->reload->jsUrl(),
                 'q' => $this->q,
                 'context' => $this->context,
             ]

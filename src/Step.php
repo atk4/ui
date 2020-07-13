@@ -51,7 +51,7 @@ class Step extends View
         $this->title = $title;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $this->template->set('title', $this->title);
         $this->template->set('description', $this->description);

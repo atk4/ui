@@ -30,7 +30,7 @@ class AccordionSection extends View
     /**
      * {@inheritdoc}
      */
-    public function renderView()
+    protected function renderView(): void
     {
         parent::renderView();
 
@@ -42,7 +42,7 @@ class AccordionSection extends View
 
         if ($this->virtualPage) {
             $this->template->set('item_id', $this->virtualPage->name);
-            $this->template->set('path', $this->virtualPage->getJSURL('cut'));
+            $this->template->set('path', $this->virtualPage->getJsUrl('cut'));
         }
     }
 }

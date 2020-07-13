@@ -61,7 +61,7 @@ class ItemsPerPageSelector extends View
     /**
      * Set label using js action.
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsSetLabel($ipp)
     {
@@ -85,14 +85,14 @@ class ItemsPerPageSelector extends View
                     $this->set($ipp);
                     $reload = call_user_func($fx, $ipp);
                     if ($reload) {
-                        $this->app->terminateJSON($reload);
+                        $this->app->terminateJson($reload);
                     }
                 });
             }
         }
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         $menuItems = [];
         foreach ($this->pageLengthItems as $key => $item) {
@@ -104,7 +104,7 @@ class ItemsPerPageSelector extends View
                             $(this)
                             .api({
                                 on:'now',
-                                url:'{$this->cb->getURL()}',
+                                url:'{$this->cb->getUrl()}',
                                 data:{ipp:value}
                                 }
                             );
@@ -112,7 +112,7 @@ class ItemsPerPageSelector extends View
 
         $this->js(true)->dropdown([
             'values' => $menuItems,
-            'onChange' => new jsExpression($function),
+            'onChange' => new JsExpression($function),
         ]);
         parent::renderView();
     }
