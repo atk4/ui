@@ -191,6 +191,9 @@ class Form extends View
         // Initialize layout, so when you call addControl / setModel next time, form will know
         // where to add your fields.
         $this->initLayout();
+
+        // set css loader for this form
+        $this->setApiConfig(['stateContext' => '#' . $this->name]);
     }
 
     /**
@@ -707,6 +710,8 @@ class Form extends View
                 return $response;
             }
         });
+        $this->formConfig['debug'] = true;
+        $this->formConfig['keyboardShortcuts'] = true;
 
         $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
