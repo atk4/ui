@@ -63,9 +63,9 @@ if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
 
 // allow custom layout override
 $layout = $app->stickyGET('layout');
-if ($layout && $layout === 'Layout' ) {
+if ($layout && $layout === 'Layout') {
     $app->initLayout([Layout::class]);
-} else if ($layout) {
+} elseif ($layout) {
     $app->initLayout(['\\atk4\ui\Layout\\' . $layout]);
 } else {
     $app->initLayout([Maestro::class]);
