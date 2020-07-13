@@ -187,6 +187,7 @@ class Layout extends AbstractLayout
             // Anything but form controls gets inserted directly
             if ($element instanceof \atk4\ui\Form\Control\Checkbox) {
                 $template = $noLabelControl;
+                $element->template->set('Content', $label);
             }
 
             if ($this->label && $this->inline) {
