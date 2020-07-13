@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\ui\FormField;
+namespace atk4\ui\Form\Control;
 
 use atk4\data\Field;
 use atk4\data\Model;
@@ -10,9 +10,10 @@ use atk4\data\Model\Scope\AbstractScope;
 use atk4\data\Model\Scope\Condition;
 use atk4\data\Model\Scope\Scope;
 use atk4\ui\Exception;
+use atk4\ui\Form\Control;
 use atk4\ui\Template;
 
-class ScopeBuilder extends Generic
+class ScopeBuilder extends Control
 {
     /** @var bool Do not render label for this input. */
     public $renderLabel = false;
@@ -398,7 +399,7 @@ class ScopeBuilder extends Generic
         return $ret;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         parent::renderView();
 

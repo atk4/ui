@@ -11,7 +11,7 @@ $model = new Stat($app->db, ['caption' => 'Demo Stat']);
 
 $form = \atk4\ui\Form::addTo($app);
 
-$form->addField('qb', [\atk4\ui\FormField\ScopeBuilder::class, 'model' => $model, 'options' => ['debug' => true]]);
+$form->addControl('qb', [\atk4\ui\Form\Control\ScopeBuilder::class, 'model' => $model, 'options' => ['debug' => true]]);
 
 $form->onSubmit(function ($form) use ($model) {
     return "Scope selected:\n\n" . $form->model->get('qb')->on($model)->toWords();
