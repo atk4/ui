@@ -4,10 +4,10 @@ os:
     - linux
 
 dist:
-   - xenial
+    - bionic
 
 php:
-    # one version fo Behat is enought
+    # one version fo Behat is enough
     - '7.4'
 
 services:
@@ -29,8 +29,8 @@ install:
   - Xvfb :99 -screen 0 1280x1024x16 +extension RANDR > /dev/null 2>&1 &
 
 before_install:
-    - npm get prefix
-    - npm install -g less less-plugin-clean-css uglify-js
+    - npm install -g npm
+    - npm install -g less less-plugin-clean-css
 
 before_script:
     # Setup selenium

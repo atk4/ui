@@ -13,6 +13,10 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install intl \
     && docker-php-ext-install pdo pdo_mysql
 
+RUN curl -sL https://deb.nodesource.com/setup_12.x  | bash - \
+    && apt-get update && apt-get -y install nodejs \
+    && npm install -g npm
+
 WORKDIR /var/www/html/
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
