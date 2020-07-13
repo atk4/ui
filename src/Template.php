@@ -466,7 +466,11 @@ class Template implements \ArrayAccess
     public function tryDel($tag)
     {
         if (is_array($tag)) {
-            return $this->tryDel($tag);
+            foreach ($tag as $t) {
+                $this->tryDel($t);
+            }
+
+            return $this;
         }
 
         return $this->hasTag($tag) ? $this->del($tag) : $this;
