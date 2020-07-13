@@ -265,7 +265,7 @@ If your `App` needs a DB connection, set this property to an instance of `Persis
 
     Example:
 
-    $app->db = Persistence::connect('mysql://user:pass@localhost/atk');
+    $app->db = \atk4\data\Persistence::connect('mysql://user:pass@localhost/atk');
 
 See `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`
 
