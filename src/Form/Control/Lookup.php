@@ -10,7 +10,7 @@ use atk4\ui\JsFunction;
 
 class Lookup extends Input
 {
-    public $defaultTemplate = 'formfield/lookup.html';
+    public $defaultTemplate = 'form/control/lookup.html';
     public $ui = 'input';
 
     /**

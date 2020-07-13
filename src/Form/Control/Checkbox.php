@@ -14,7 +14,7 @@ class Checkbox extends Form\Control
 {
     public $ui = 'checkbox';
 
-    public $defaultTemplate = 'formfield/checkbox.html';
+    public $defaultTemplate = 'form/control/checkbox.html';
 
     /**
      * Label appears to the right of the checkbox. If label is not set specifically

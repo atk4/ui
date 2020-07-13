@@ -45,7 +45,7 @@ class Upload extends Input
      *
      * @var string
      */
-    public $defaultTemplate = 'formfield/upload.html';
+    public $defaultTemplate = 'form/control/upload.html';
 
     /**
      * Callback is use for onUpload or onDelete.

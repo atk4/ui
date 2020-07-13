@@ -259,16 +259,15 @@ No much magic in these methods.
 Database Connection
 -------------------
 
-.. php:method:: dbConnect(dsn, $user = null, $password = null, $args = [])
+.. php:property:: db
 
-(Arguments are identical to `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`_.
+If your `App` needs a DB connection, set this property to an instance of `Persistence`.
 
-This method should be used instead of manually calling Persistence::connect. This will
-properly propagate Persistence's "api" property to $this, so that you can refrence::
+    Example:
 
-    $this->app->...
+    $app->db = \atk4\data\Persistence::connect('mysql://user:pass@localhost/atk');
 
-inside your model code.
+See `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`
 
 Execution Termination
 ---------------------

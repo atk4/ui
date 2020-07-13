@@ -23,7 +23,9 @@
  */
 const webpack = require('webpack');
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// VUe file loader.
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const packageVersion = require("./package.json").version;
 
 module.exports = env => {
@@ -55,7 +57,7 @@ module.exports = env => {
       umdNamedDefine: true,
     },
     optimization: {
-      minimizer: [new UglifyJsPlugin()]
+      minimizer: [new TerserPlugin()]
     },
     module: {
       rules: [
@@ -63,6 +65,20 @@ module.exports = env => {
           test: /(\.jsx|\.js)$/,
           loader: 'babel-loader',
           exclude: /(node_modules|bower_components)/
+        },
+        // load .vue file
+        {
+          test: /\.vue$/,
+          loader: 'vue-loader'
+        },
+        // this will apply to both plain `.css` files
+        // AND `<style>` blocks in `.vue` files
+        {
+          test: /\.css$/,
+          use: [
+            'vue-style-loader',
+            'css-loader'
+          ]
         }
       ]
     },
@@ -81,7 +97,8 @@ module.exports = env => {
     plugins: [
       new webpack.DefinePlugin({
         _ATKVERSION_ : JSON.stringify(packageVersion)
-      })
+      }),
+      new VueLoaderPlugin(),
     ]
   };
 };
