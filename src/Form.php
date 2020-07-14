@@ -722,7 +722,7 @@ class Form extends View
         $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new JsExpression('$(this).attr("name")')));
 
         if (!$this->canLeave) {
-            $this->js(true, (new JsChain('atk.formService'))->preventFormLeave($this->name), $this->formElement);
+            $this->js(true, (new JsChain('atk.formService'))->preventFormLeave($this->name));
         }
     }
 
