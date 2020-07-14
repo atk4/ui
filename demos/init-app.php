@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
-use atk4\ui\Layout;
-use atk4\ui\Layout\Maestro;
-
 date_default_timezone_set('UTC');
 
 $isRootProject = file_exists(__DIR__ . '/../vendor/autoload.php');
@@ -62,14 +59,7 @@ if (file_exists(__DIR__ . '/../public/atkjs-ui.min.js')) {
 }
 
 // allow custom layout override
-$layout = $app->stickyGET('layout');
-if ($layout && $layout === 'Layout') {
-    $app->initLayout([Layout::class]);
-} elseif ($layout) {
-    $app->initLayout(['\\atk4\ui\Layout\\' . $layout]);
-} else {
-    $app->initLayout([Maestro::class]);
-}
+$app->initLayout([$app->stickyGET('layout') ?? \atk4\ui\Layout\Maestro::class]);
 
 $layout = $app->layout;
 if ($layout instanceof \atk4\ui\Layout\NavigableInterface) {
