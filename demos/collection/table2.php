@@ -37,7 +37,9 @@ $table->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (Table $table) {
         $table->renderRow();
 
         // adjusts data for next render
-        $table->model->set(['action' => 'manually injected row after Tax', 'amount' => -0.02]);
+        $table->model
+            ->set('action', 'manually injected row after Tax')
+            ->set('amount', -0.02);
     }
 });
 
