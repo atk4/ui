@@ -49,6 +49,14 @@ class Form extends View
     public $canLeave = true;
 
     /**
+     * Html <form> element, all inner form controls are linked to it on render
+     * with html form="form_id" attribute.
+     *
+     * @var View
+     */
+    public $formElement;
+
+    /**
      * A current layout of a form, needed if you call $form->addControl().
      *
      * @var \atk4\ui\Form\Layout
@@ -178,9 +186,14 @@ class Form extends View
             throw new Exception('AboveFields region has be deprecated. Use AboveControls instead');
         }
 
+        $this->formElement = View::addTo($this, ['element' => 'form', 'short_name' => 'form'], ['FormElementOnly']);
+
         // Initialize layout, so when you call addControl / setModel next time, form will know
         // where to add your fields.
         $this->initLayout();
+
+        // set css loader for this form
+        $this->setApiConfig(['stateContext' => '#' . $this->name]);
     }
 
     /**
@@ -204,12 +217,15 @@ class Form extends View
                 ->addMoreInfo('layout', $this->layout);
         }
 
+        // allow to submit by pressing an enter key when child control is focused
+        $this->on('submit', new JsExpression('if (event.target === this) { $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
+
         // Add save button in layout
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
-            $this->buttonSave->on('click', $this->js()->form('submit'));
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){$([name]).form("submit");}', ['name' => '#' . $this->name]));
+            $this->buttonSave->on('click', $this->js(null, null, $this->formElement)->form('submit'));
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){ $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
         }
     }
 
@@ -619,6 +635,17 @@ class Form extends View
         parent::renderView();
     }
 
+    protected function renderTemplateToHtml(string $region = null): string
+    {
+        $output = parent::renderTemplateToHtml();
+
+        $innerFormTags = ['button', 'datalist', 'fieldset', 'input', 'keygen', 'label', 'legend',
+            'meter', 'optgroup', 'option', 'output', 'progress', 'select', 'textarea', ];
+        $output = preg_replace('~<(' . implode('|', $innerFormTags) . ')(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $output);
+
+        return $output;
+    }
+
     /**
      * Set Semantic-ui Api settings to use with form. A complete list is here:
      * https://semantic-ui.com/behaviors/api.html#/settings.
@@ -687,10 +714,10 @@ class Form extends View
             }
         });
 
-        //var_dump($cb->getUrl());
-        $this->js(true)
-            ->api(array_merge(['url' => $cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig))
-            ->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
+        $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
+
+        $this->js(true, null, $this->formElement)
+            ->api(array_merge(['url' => $cb->getJSURL(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
 
         $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new JsExpression('$(this).attr("name")')));
 
