@@ -27,7 +27,6 @@
     {"name": "Alex Cicovic", "homepage": "https://alexcicovic.com/"},
     {"name": "Georgi Hristov", "homepage": "https://xsystems.io/"}
   ],
-  "version": "dev-develop",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {
