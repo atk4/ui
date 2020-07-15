@@ -62,7 +62,7 @@ class Country extends \atk4\data\Model
         });
     }
 
-    public function validate($intent = null)
+    public function validate($intent = null): array
     {
         $errors = parent::validate($intent);
 

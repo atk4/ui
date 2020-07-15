@@ -191,12 +191,8 @@ class Ui extends \atk4\data\Persistence
      *  - any validation for the "saving" or output is ignored.
      *  - handling of all sorts of expressions is disabled
      */
-    public function typecastSaveRow(Model $model, $row)
+    public function typecastSaveRow(Model $model, array $row): array
     {
-        if (!$row) {
-            return $row;
-        }
-
         $result = [];
         foreach ($row as $key => $value) {
             // Figure out the name of the destination field
