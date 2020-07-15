@@ -65,7 +65,7 @@ class FilterPopup extends Popup
 
         //load data associated with this popup.
         if ($data = $model->recallData()) {
-            $model->set($data);
+            $model->setMulti($data);
         }
         $this->form->setModel($model);
 

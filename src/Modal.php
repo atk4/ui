@@ -237,9 +237,9 @@ class Modal extends View
      */
     public function addDenyAction($label, $jsAction)
     {
-        $b = new Button();
-        $b->set($label)->addClass('red cancel');
-        $this->addButtonAction($b);
+        $button = new Button();
+        $button->set($label)->addClass('red cancel');
+        $this->addButtonAction($button);
         $this->options['modal_option']['onDeny'] = $jsAction;
 
         return $this;
