@@ -91,9 +91,13 @@ class GridLayout extends View
         $this->t_wrap->appendHtml('rows', '{/rows}');
         $tmp = new Template($this->t_wrap->render());
 
-        $this->template->template['rows#1'] = $tmp->template['rows#1'];
+        // TODO replace later, the only use of direct template property access
+        $t = $this;
+        \Closure::bind(function () use ($t, $tmp) {
+            $t->template->template['rows#0'] = $tmp->template['rows#0'];
+            $t->template->rebuildTagsIndex();
+        }, null, Template::class)();
 
-        $this->template->rebuildTags();
         $this->addClass($this->words[$this->columns] . ' column');
     }
 }

@@ -54,9 +54,9 @@ class Modal extends View
      */
     public $contentCSS = ['img', 'content', 'atk-dialog-content'];
 
-    /*
+    /**
      * if true, the <div class="actions"> at the bottom of the modal is
-     * shown. Automatically set to true if any actions are added
+     * shown. Automatically set to true if any actions are added.
      *
      * @var bool
      */
