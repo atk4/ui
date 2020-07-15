@@ -493,7 +493,7 @@ Example use of Model's validate() method::
             $this->addField('gender', ['enum' => ['M', 'F']]);
         }
 
-        public function validate()
+        public function validate(): array
         {
             $errors = parent::validate();
 
