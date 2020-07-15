@@ -338,7 +338,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->_addStepTitle($modal, $this->step);
 
         if ($fields = $this->actionData['fields'] ?? null) {
-            $this->action->getModel()->set($fields);
+            $this->action->getModel()->setMulti($fields);
         }
 
         if ($prev = $this->getPreviousStep($this->step)) {
