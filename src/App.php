@@ -567,6 +567,24 @@ class App
             ->addMoreInfo('template_dir', $this->template_dir);
     }
 
+    /**
+     * Connects database.
+     *
+     * @param string $dsn      Format as PDO DSN or use "mysql://user:pass@host/db;option=blah", leaving user and password arguments = null
+     * @param string $user
+     * @param string $password
+     * @param array  $args
+     *
+     * @return Persistence
+     */
+    public function dbConnect($dsn, $user = null, $password = null, $args = [])
+    {
+        $this->db = Persistence::connect($dsn, $user, $password, $args);
+        $this->db->app = $this;
+
+        return $this->db;
+    }
+
     protected function getRequestUrl()
     {
         if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
