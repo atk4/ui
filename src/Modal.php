@@ -54,9 +54,9 @@ class Modal extends View
      */
     public $contentCSS = ['img', 'content', 'atk-dialog-content'];
 
-    /*
+    /**
      * if true, the <div class="actions"> at the bottom of the modal is
-     * shown. Automatically set to true if any actions are added
+     * shown. Automatically set to true if any actions are added.
      *
      * @var bool
      */
@@ -237,9 +237,9 @@ class Modal extends View
      */
     public function addDenyAction($label, $jsAction)
     {
-        $b = new Button();
-        $b->set($label)->addClass('red cancel');
-        $this->addButtonAction($b);
+        $button = new Button();
+        $button->set($label)->addClass('red cancel');
+        $this->addButtonAction($button);
         $this->options['modal_option']['onDeny'] = $jsAction;
 
         return $this;

@@ -118,4 +118,4 @@ For production, simply use the "build" script supply in package.json.
     npm run build
 ```
 
-This command will output the atkjs-ui.min.js file, also in /public folder. 
+This command will output the atkjs-ui.min.js file, also in /public folder.

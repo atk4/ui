@@ -408,7 +408,7 @@ class Lookup extends Input
 
         if ($this->dependency) {
             $this->apiConfig['data'] = array_merge([
-                'form' => new JsFunction([new JsExpression('return []', [$this->js()->closest('form')->serialize()])]),
+                'form' => new JsFunction([new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
             ], $this->apiConfig['data'] ?? []);
         }
 

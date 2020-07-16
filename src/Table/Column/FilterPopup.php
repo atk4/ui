@@ -65,7 +65,7 @@ class FilterPopup extends Popup
 
         //load data associated with this popup.
         if ($data = $model->recallData()) {
-            $model->set($data);
+            $model->setMulti($data);
         }
         $this->form->setModel($model);
 
@@ -80,7 +80,7 @@ class FilterPopup extends Popup
             $model->clearData();
 
             return [
-                $this->form->js()->form('reset'),
+                $this->form->js(null, null, $this->form->formElement)->form('reset'),
                 new JsReload($this->reload),
                 (new Jquery($this->colTrigger))->trigger('click'),
             ];

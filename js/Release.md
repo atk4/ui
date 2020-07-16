@@ -6,6 +6,9 @@
  - add query builder component for ScopeBuilder form field
    - extends Vue Query Builder default to work with Fomantic ui.
 
+### version 1.14.3 (2020-07-13)
+ - Update dependencies.
+ 
 ### version 1.14.2 (2020-05-04)
  - Build releases automatically on ui.agiletoolkit.org deploy
 

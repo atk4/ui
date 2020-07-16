@@ -337,10 +337,8 @@ class Multiline extends Form\Control
 
     /**
      * Validate each row and return errors if found.
-     *
-     * @return array|null
      */
-    public function validate(array $rows)
+    public function validate(array $rows): array
     {
         $rowErrors = [];
         $model = $this->getModel();
@@ -365,9 +363,7 @@ class Multiline extends Form\Control
             $rowErrors = $this->addModelValidateErrors($rowErrors, $rowId, $model);
         }
 
-        if ($rowErrors) {
-            return $rowErrors;
-        }
+        return $rowErrors;
     }
 
     /**

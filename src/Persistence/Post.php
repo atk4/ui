@@ -8,7 +8,7 @@ use atk4\data\Model;
 
 class Post extends \atk4\data\Persistence
 {
-    public function load(Model $model, $id = 0)
+    public function load(Model $model, $id = 0): array
     {
         // carefully copy stuff from $_POST into the model
         $data = [];

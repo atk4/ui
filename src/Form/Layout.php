@@ -188,11 +188,6 @@ class Layout extends AbstractLayout
             if ($element instanceof \atk4\ui\Form\Control\Checkbox) {
                 $template = $noLabelControl;
                 $element->template->set('Content', $label);
-                /*
-                $element->addClass('field');
-                $this->template->appendHtml('Fields', '<div class="field">'.$element->getHtml().'</div>');
-                continue;
-                 */
             }
 
             if ($this->label && $this->inline) {
@@ -204,7 +199,7 @@ class Layout extends AbstractLayout
                 $element->placeholder = $label;
             }
 
-            // Fields get extra pampering
+            // Controls get extra pampering
             $template->setHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
             $template->trySet('label_for', $element->id . '_input');

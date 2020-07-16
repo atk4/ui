@@ -731,8 +731,7 @@ class View implements JsExpressionable
     }
 
     /**
-     * To be overrided only to further update template render output if needed,
-     * do not call this method from your code.
+     * For Form::renderTemplateToHtml() only.
      */
     protected function renderTemplateToHtml(string $region = null): string
     {
