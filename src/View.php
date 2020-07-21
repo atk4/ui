@@ -1027,6 +1027,14 @@ class View implements JsExpressionable
     }
 
     /**
+     * Return JS for reloading View with prerendered content.
+     */
+    public function jsDirectReload(): Jquery
+    {
+        return $this->js(true)->html($this->render());
+    }
+
+    /**
      * Views in Agile Toolkit can assign javascript actions to themselves. This
      * is done by calling $view->js() or $view->on().
      *
