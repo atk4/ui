@@ -514,7 +514,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function setFormField(Form $form, array $fields, string $step): Form
     {
         foreach ($fields as $k => $val) {
-            $form->getField($k)->set($val);
+            $form->getControl($k)->set($val);
         }
         $this->hook(self::HOOK_STEP, [$step, $form]);
 
