@@ -790,8 +790,6 @@ class View implements JsExpressionable
     public function getHtml()
     {
         if (isset($_GET['__atk_reload']) && $_GET['__atk_reload'] === $this->name) {
-            // prevent from looping if this get render again, i.e. part of a Modal View.
-            $_GET['__atk_reload'] = null;
             $this->app->terminateJson($this);
         }
 
