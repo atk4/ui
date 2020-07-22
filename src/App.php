@@ -1104,6 +1104,9 @@ class App
      */
     public function getRenderedModals(): array
     {
+        // prevent looping (calling App::terminateJson() recursively) if JsReload is used in Modal
+        unset($_GET['__atk_reload']);
+
         $modals = [];
         foreach ($this->html !== null ? $this->html->elements : [] as $view) {
             if ($view instanceof Modal) {
