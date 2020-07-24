@@ -39,56 +39,56 @@ $scrolling->addScrolling();
 
 // REGULAR
 
-$modal_simple = \atk4\ui\Modal::addTo($app, ['title' => 'Simple modal']);
-\atk4\ui\Message::addTo($modal_simple)->set('Modal message here.');
-ViewTester::addTo($modal_simple);
+$simpleModal = \atk4\ui\Modal::addTo($app, ['title' => 'Simple modal']);
+\atk4\ui\Message::addTo($simpleModal)->set('Modal message here.');
+ViewTester::addTo($simpleModal);
 
-$menu_bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-$b = \atk4\ui\Button::addTo($menu_bar)->set('Show Modal');
-$b->on('click', $modal_simple->show());
+$menuBar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
+$button = \atk4\ui\Button::addTo($menuBar)->set('Show Modal');
+$button->on('click', $simpleModal->show());
 
 // DYNAMIC
 
 \atk4\ui\Header::addTo($app, ['Three levels of Modal loading dynamic content via callback']);
 
-//modal_vp1 will be render into page but hide until $modal_vp1->show() is activate.
-$modal_vp1 = \atk4\ui\Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
+//vp1Modal will be render into page but hide until $vp1Modal->show() is activate.
+$vp1Modal = \atk4\ui\Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
 
-//modal_vp2 will be render into page but hide until $modal_vp1->show() is activate.
-$modal_vp2 = \atk4\ui\Modal::addTo($app, ['title' => 'Text message load dynamically'])->addClass('small');
+//vp2Modal will be render into page but hide until $vp1Modal->show() is activate.
+$vp2Modal = \atk4\ui\Modal::addTo($app, ['title' => 'Text message load dynamically'])->addClass('small');
 
-$modal_vp3 = \atk4\ui\Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
-$modal_vp3->set(function ($modal) {
+$vp3Modal = \atk4\ui\Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
+$vp3Modal->set(function ($modal) {
     \atk4\ui\Text::addTo($modal)->set('This is yet another modal');
     \atk4\ui\LoremIpsum::addTo($modal, ['size' => 2]);
 });
 
-//When $modal_vp1->show() is activate, it will dynamically add this content to it.
-$modal_vp1->set(function ($modal) use ($modal_vp2) {
+//When $vp1Modal->show() is activate, it will dynamically add this content to it.
+$vp1Modal->set(function ($modal) use ($vp2Modal) {
     ViewTester::addTo($modal);
     \atk4\ui\View::addTo($modal, ['Showing lorem ipsum']); //need in behat test.
     \atk4\ui\LoremIpsum::addTo($modal, ['size' => 2]);
     $form = \atk4\ui\Form::addTo($modal);
-    $form->addField('color', null, ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
-    $form->onSubmit(function (\atk4\ui\Form $form) use ($modal_vp2) {
-        return $modal_vp2->show(['color' => $form->model->get('color')]);
+    $form->addControl('color', null, ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
+    $form->onSubmit(function (\atk4\ui\Form $form) use ($vp2Modal) {
+        return $vp2Modal->show(['color' => $form->model->get('color')]);
     });
 });
 
-//When $modal_vp2->show() is activate, it will dynamically add this content to it.
-$modal_vp2->set(function ($modal) use ($modal_vp3) {
+//When $vp2Modal->show() is activate, it will dynamically add this content to it.
+$vp2Modal->set(function ($modal) use ($vp3Modal) {
     //ViewTester::addTo($modal);
     \atk4\ui\Message::addTo($modal, ['Message', @$_GET['color']])->text->addParagraph('This text is loaded using a second modal.');
-    \atk4\ui\Button::addTo($modal)->set('Third modal')->on('click', $modal_vp3->show());
+    \atk4\ui\Button::addTo($modal)->set('Third modal')->on('click', $vp3Modal->show());
 });
 
 $bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-$b = \atk4\ui\Button::addTo($bar)->set('Open Lorem Ipsum');
-$b->on('click', $modal_vp1->show());
+$button = \atk4\ui\Button::addTo($bar)->set('Open Lorem Ipsum');
+$button->on('click', $vp1Modal->show());
 
 // ANIMATION
 
-$menu_items = [
+$menuItems = [
     'scale' => [],
     'flip' => ['horizontal flip', 'vertical flip'],
     'fade' => ['fade up', 'fade down', 'fade left', 'fade right'],
@@ -102,24 +102,24 @@ $menu_items = [
 
 \atk4\ui\Header::addTo($app, ['Modal Animation']);
 
-$modal_transition = \atk4\ui\Modal::addTo($app, ['title' => 'Animated modal']);
-\atk4\ui\Message::addTo($modal_transition)->set('A lot of animated transition available');
-$modal_transition->duration(1000);
+$transitionModal = \atk4\ui\Modal::addTo($app, ['title' => 'Animated modal']);
+\atk4\ui\Message::addTo($transitionModal)->set('A lot of animated transition available');
+$transitionModal->duration(1000);
 
-$menu_bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-$main = \atk4\ui\Menu::addTo($menu_bar);
-$tm = $main->addMenu('Select Transition');
+$menuBar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
+$main = \atk4\ui\Menu::addTo($menuBar);
+$transitionMenu = $main->addMenu('Select Transition');
 
-foreach ($menu_items as $key => $items) {
+foreach ($menuItems as $key => $items) {
     if (!empty($items)) {
-        $sm = $tm->addMenu($key);
+        $sm = $transitionMenu->addMenu($key);
         foreach ($items as $item) {
             $smi = $sm->addItem($item);
-            $smi->on('click', $modal_transition->js()->modal('setting', 'transition', $smi->js()->text())->modal('show'));
+            $smi->on('click', $transitionModal->js()->modal('setting', 'transition', $smi->js()->text())->modal('show'));
         }
     } else {
-        $mi = $tm->addItem($key);
-        $mi->on('click', $modal_transition->js()->modal('setting', 'transition', $mi->js()->text())->modal('show'));
+        $mi = $transitionMenu->addItem($key);
+        $mi->on('click', $transitionModal->js()->modal('setting', 'transition', $mi->js()->text())->modal('show'));
     }
 }
 
@@ -127,36 +127,36 @@ foreach ($menu_items as $key => $items) {
 
 \atk4\ui\Header::addTo($app, ['Modal Options']);
 
-$modal_da = \atk4\ui\Modal::addTo($app, ['title' => 'Deny / Approve actions']);
-\atk4\ui\Message::addTo($modal_da)->set('This modal is only closable via the green button');
-$modal_da->addDenyAction('No', new \atk4\ui\jsExpression('function(){window.alert("Can\'t do that."); return false;}'));
-$modal_da->addApproveAction('Yes', new \atk4\ui\jsExpression('function(){window.alert("You\'re good to go!");}'));
-$modal_da->notClosable();
+$denyApproveModal = \atk4\ui\Modal::addTo($app, ['title' => 'Deny / Approve actions']);
+\atk4\ui\Message::addTo($denyApproveModal)->set('This modal is only closable via the green button');
+$denyApproveModal->addDenyAction('No', new \atk4\ui\JsExpression('function(){window.alert("Can\'t do that."); return false;}'));
+$denyApproveModal->addApproveAction('Yes', new \atk4\ui\JsExpression('function(){window.alert("You\'re good to go!");}'));
+$denyApproveModal->notClosable();
 
-$menu_bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-$b = \atk4\ui\Button::addTo($menu_bar)->set('Show Deny/Approve');
-$b->on('click', $modal_da->show());
+$menuBar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
+$button = \atk4\ui\Button::addTo($menuBar)->set('Show Deny/Approve');
+$button->on('click', $denyApproveModal->show());
 
 // MULTI STEP
 
 \atk4\ui\Header::addTo($app, ['Multiple page modal']);
 
 //Add modal to layout.
-$modal_step = \atk4\ui\Modal::addTo($app, ['title' => 'Multi step actions']);
-$modal_step->setOption('observeChanges', true);
+$stepModal = \atk4\ui\Modal::addTo($app, ['title' => 'Multi step actions']);
+$stepModal->setOption('observeChanges', true);
 
 //Add buttons to modal for next and previous actions.
 $action = new \atk4\ui\View(['ui' => 'buttons']);
-$prev_action = new \atk4\ui\Button(['Prev', 'labeled', 'icon' => 'left arrow']);
-$next_action = new \atk4\ui\Button(['Next', 'iconRight' => 'right arrow']);
+$prevAction = new \atk4\ui\Button(['Prev', 'labeled', 'icon' => 'left arrow']);
+$nextAction = new \atk4\ui\Button(['Next', 'iconRight' => 'right arrow']);
 
-$action->add($prev_action);
-$action->add($next_action);
+$action->add($prevAction);
+$action->add($nextAction);
 
-$modal_step->addButtonAction($action);
+$stepModal->addButtonAction($action);
 
 //Set modal functionality. Will changes content according to page being displayed.
-$modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $next_action) {
+$stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextAction) {
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
     if (isset($_GET['move'])) {
@@ -175,18 +175,18 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
     if ($page === 1) {
         \atk4\ui\Message::addTo($modal)->set('Thanks for choosing us. We will be asking some questions along the way.');
         $session->memorize('success', true);
-        $modal->js(true, $prev_action->js(true)->show());
-        $modal->js(true, $next_action->js(true)->show());
-        $modal->js(true, $prev_action->js()->addClass('disabled'));
-        $modal->js(true, $next_action->js(true)->removeClass('disabled'));
+        $modal->js(true, $prevAction->js(true)->show());
+        $modal->js(true, $nextAction->js(true)->show());
+        $modal->js(true, $prevAction->js()->addClass('disabled'));
+        $modal->js(true, $nextAction->js(true)->removeClass('disabled'));
     } elseif ($page === 2) {
-        $m_register = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
-        $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
+        $modelRegister = new \atk4\data\Model(new \atk4\data\Persistence\Array_());
+        $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $f = \atk4\ui\Form::addTo($modal, ['segment' => true]);
-        $f->setModel($m_register);
+        $form = \atk4\ui\Form::addTo($modal, ['segment' => true]);
+        $form->setModel($modelRegister);
 
-        $f->onSubmit(function (\atk4\ui\Form $form) use ($next_action, $session) {
+        $form->onSubmit(function (\atk4\ui\Form $form) use ($nextAction, $session) {
             if ($form->model->get('name') !== 'John') {
                 return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
             }
@@ -194,33 +194,33 @@ $modal_step->set(function ($modal) use ($modal_step, $session, $prev_action, $ne
             $session->memorize('success', true);
             $session->memorize('name', $form->model->get('name'));
             $js[] = $form->success('Thank you, ' . $form->model->get('name') . ' you can go on!');
-            $js[] = $next_action->js()->removeClass('disabled');
+            $js[] = $nextAction->js()->removeClass('disabled');
 
             return $js;
         });
-        $modal->js(true, $prev_action->js()->removeClass('disabled'));
-        $modal->js(true, $next_action->js(true)->addClass('disabled'));
+        $modal->js(true, $prevAction->js()->removeClass('disabled'));
+        $modal->js(true, $nextAction->js(true)->addClass('disabled'));
     } elseif ($page === 3) {
         $name = $session->recall('name');
         \atk4\ui\Message::addTo($modal)->set("Thank you {$name} for visiting us! We will be in touch");
         $session->memorize('success', true);
-        $modal->js(true, $prev_action->js(true)->hide());
-        $modal->js(true, $next_action->js(true)->hide());
+        $modal->js(true, $prevAction->js(true)->hide());
+        $modal->js(true, $nextAction->js(true)->hide());
     }
-    $modal_step->js(true)->modal('refresh');
+    $stepModal->js(true)->modal('refresh');
 });
 
 //Bind next action to modal next button.
-$next_action->on('click', $modal_step->js()->atkReloadView(
-    ['uri' => $modal_step->cb->getJSURL(), 'uri_options' => ['move' => 'next']]
+$nextAction->on('click', $stepModal->js()->atkReloadView(
+    ['uri' => $stepModal->cb->getJsUrl(), 'uri_options' => ['move' => 'next']]
 ));
 
 //Bin prev action to modal previous button.
-$prev_action->on('click', $modal_step->js()->atkReloadView(
-    ['uri' => $modal_step->cb->getJSURL(), 'uri_options' => ['move' => 'prev']]
+$prevAction->on('click', $stepModal->js()->atkReloadView(
+    ['uri' => $stepModal->cb->getJsUrl(), 'uri_options' => ['move' => 'prev']]
 ));
 
 //Bind display modal to page display button.
-$menu_bar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
-$b = \atk4\ui\Button::addTo($menu_bar)->set('Multi Step Modal');
-$b->on('click', $modal_step->show());
+$menuBar = \atk4\ui\View::addTo($app, ['ui' => 'buttons']);
+$button = \atk4\ui\Button::addTo($menuBar)->set('Multi Step Modal');
+$button->on('click', $stepModal->show());

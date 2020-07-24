@@ -4,38 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\TableColumn;
 
-use atk4\data\Field;
-use atk4\data\Model;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Class atk4\ui\TableColumn\HTML is deprecated. Use atk4\ui\Table\Column\Html instead', E_USER_DEPRECATED);
+}
 
 /**
- * Class HTML.
- *
- * Use this decorator if you have HTML code that you just want to put into the table cell.
+ * @deprecated will be removed dec-2020
  */
-class HTML extends Generic
+class HTML extends \atk4\ui\Table\Column\Html
 {
-    /**
-     * Replace parent method.
-     *
-     * @param Field $field
-     *
-     * @return string
-     */
-    public function getDataCellHTML(Field $field = null, $extra_tags = [])
-    {
-        return '{$_' . $field->short_name . '}';
-    }
-
-    /**
-     * Replace parent method.
-     *
-     * @param Model      $row   link to row data
-     * @param Field|null $field field being rendered
-     *
-     * @return array associative array with tags and their HTML values
-     */
-    public function getHTMLTags(Model $row, $field)
-    {
-        return ['_' . $field->short_name => '<td>' . $row->get($field->short_name) . '</td>'];
-    }
 }

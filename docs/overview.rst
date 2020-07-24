@@ -117,11 +117,11 @@ clarifications::
 
     // Create Application object and initialize Admin Layout
     $app = new \atk4\ui\App('Offer tracking system');
-    $app->initLayout(\atk4\ui\Layout\Admin::class);
+    $app->initLayout([\atk4\ui\Layout\Admin::class]);
 
-    // Connect to database and place a fully-interactive CRUD
+    // Connect to database and place a fully-interactive Crud
     $db = new \atk4\data\Persistence_SQL($dsn);
-    \atk4\ui\CRUD::addTo($app)
+    \atk4\ui\Crud::addTo($app)
         ->setModel(new Offer($db));
 
 Through the course of this example, We are performing several core actions:
@@ -154,17 +154,17 @@ Through the course of this example, We are performing several core actions:
     Model object represents a data-set for specific persistence and conditions.
 
     In our example, the object is created representing all our offer records that is then
-    passed into the CRUD :ref:`component`.
+    passed into the Crud :ref:`component`.
 
     For a :ref:`component`, the Model represents information about the structure
     and offers a mechanism to retrieve, store, and delete date from `$db` persistence.
 
 
-  - `CRUD` is a :ref:`component` class. Particularly CRUD is bundled with Agile UI
+  - `Crud` is a :ref:`component` class. Particularly Crud is bundled with Agile UI
     and implements out-of-the-box interface for displaying data in a table format
     with operations to add, delete, or edit the record.
 
-    Although it's not obvious from the code, CRUD relies on multiple other components
+    Although it's not obvious from the code, Crud relies on multiple other components
     such as :php:class:`Grid`, :php:class:`Form`, :php:class:`Menu`, :php:class:`Paginator`,
     and :php:class:`Button`.
 
@@ -210,7 +210,7 @@ flexibility. The next example adds a "Cancel" button to a form::
     ])->link('dashboard.php');
 
 :php:class:`Button` and :php:class:`Icon` are some of the most basic components in
-Agile UI. You will find CRUD / Form / Grid components much more useful:
+Agile UI. You will find Crud / Form / Grid components much more useful:
 
 .. figure:: images/all-atk-classes.png
 
@@ -220,7 +220,7 @@ Using Components
 Look above at the :ref:`overview_example`, component `GRID` was made part
 of application layout with a line::
 
-    \atk4\ui\CRUD::addTo($app);
+    \atk4\ui\Crud::addTo($app);
 
 
 To render a component individually and get the HTML and JavaScript use this format::
@@ -305,7 +305,7 @@ Non-PHP dependencies
 --------------------
 Your component may depend on additional JavaScript libraries, CSS, or other files.
 At the present time you have to make them available through a CDN and HTTPS.
-See: :php:meth:`App::requireJS`
+See: :php:meth:`App::requireJs`
 
 
 Events and Actions
@@ -388,9 +388,9 @@ have a basic understanding of "code" and some familiarity with the PHP language.
  - Components - Reference for UI component classes
 
    - Button, Label, Header, Message, Menu, Column
-   - Table and TableColumn
+   - Table and Table\Column
    - Form and Field
-   - Grid and CRUD
+   - Grid and Crud
    - Paginator
 
  - Advanced Topics

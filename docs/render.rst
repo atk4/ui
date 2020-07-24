@@ -53,7 +53,7 @@ Late initialization
 When you create an application and select a Layout, the layout is automatically initialized::
 
     $app = new \atk4\ui\App();
-    $app->initLayout(\atk4\ui\Layout\Centered::class);
+    $app->initLayout([\atk4\ui\Layout\Centered::class]);
 
     echo $app->layout->name; // present, because layout is initialized!
 
@@ -93,7 +93,7 @@ Agile UI sometimes uses the following approach to render element on the outside:
 1. Create new instance of $sub_view.
 2. Set $sub_view->id = false;
 3. Calls $view->_add($sub_view);
-4. executes $sub_view->renderHTML()
+4. executes $sub_view->renderHtml()
 
 This returns a HTML that's stripped of any ID values, still linked to the main application but will not become part of the
 render tree. This approach is useful when it's necessary to manipulate HTML and inject it directly into the template for

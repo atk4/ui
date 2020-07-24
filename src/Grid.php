@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\core\HookTrait;
-use atk4\data\UserAction\Generic;
-use atk4\ui\ActionExecutor\Basic;
+use atk4\data\Model;
 
 /**
  * Implements a more sophisticated and interactive Data-Table component.
@@ -32,7 +31,7 @@ class Grid extends View
      * setModel() QuickSearch object will be created automatically and these model fields will be used
      * for filtering.
      *
-     * @var array|FormField\Generic
+     * @var array|Form\Control
      */
     public $quickSearch;
 
@@ -56,7 +55,7 @@ class Grid extends View
      * Calling addActionButton will add a new column inside $table, and will be re-used
      * for next addActionButton().
      *
-     * @var TableColumn\ActionButtons
+     * @var Table\Column\ActionButtons
      */
     public $actionButtons;
 
@@ -64,7 +63,7 @@ class Grid extends View
      * Calling addAction will add a new column inside $table with dropdown menu,
      * and will be re-used for next addActionMenuItem().
      *
-     * @var null
+     * @var Table\Column
      */
     public $actionMenu;
 
@@ -72,7 +71,7 @@ class Grid extends View
      * Calling addSelection will add a new column inside $table, containing checkboxes.
      * This column will be stored here, in case you want to access it.
      *
-     * @var TableColumn\CheckBox
+     * @var Table\Column\Checkbox
      */
     public $selection;
 
@@ -98,7 +97,7 @@ class Grid extends View
      */
     public $table;
 
-    public $executor_class = Basic::class;
+    public $executor_class = UserAction\BasicExecutor::class;
 
     /**
      * The container for table and paginator.
@@ -114,14 +113,14 @@ class Grid extends View
      *
      * @var string
      */
-    protected $actionButtonsDecorator = TableColumn\ActionButtons::class;
+    protected $actionButtonsDecorator = [Table\Column\ActionButtons::class];
 
     /**
      * Defines which Table Decorator to use for ActionMenu.
      *
      * @var array
      */
-    protected $actionMenuDecorator = [TableColumn\ActionMenu::class, 'label' => 'Actions...'];
+    protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
     public function init(): void
     {
@@ -150,7 +149,7 @@ class Grid extends View
     }
 
     /**
-     * Set TableColumn\Actions seed.
+     * Set Table\Column\Actions seed.
      */
     public function setActionDecorator($seed)
     {
@@ -158,7 +157,7 @@ class Grid extends View
     }
 
     /**
-     * Set TableColumn\ActionMenu seed.
+     * Set Table\Column\ActionMenu seed.
      */
     public function setActionMenuDecorator($seed)
     {
@@ -173,7 +172,7 @@ class Grid extends View
      * @param array|string|object|null $columnDecorator
      * @param array|string|object|null $field
      *
-     * @return TableColumn\Generic
+     * @return Table\Column
      */
     public function addColumn($name, $columnDecorator = null, $field = null)
     {
@@ -183,8 +182,8 @@ class Grid extends View
     /**
      * Add additional decorator for existing column.
      *
-     * @param string                    $name      Column name
-     * @param TableColumn\Generic|array $decorator Seed or object of the decorator
+     * @param string             $name      Column name
+     * @param Table\Column|array $decorator Seed or object of the decorator
      */
     public function addDecorator($name, $decorator)
     {
@@ -253,7 +252,7 @@ class Grid extends View
             $this->ipp = $ipp;
             $this->setModelLimitFromPaginator();
             //add ipp to quicksearch
-            if ($this->quickSearch instanceof jsSearch) {
+            if ($this->quickSearch instanceof JsSearch) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', ['ipp', $this->ipp]));
             }
             $this->applySort();
@@ -343,7 +342,7 @@ class Grid extends View
         $view = View::addTo($this->menu
             ->addMenuRight()->addItem()->setElement('div'));
 
-        $this->quickSearch = jsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
+        $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
 
         $q = trim($this->stickyGet('_q') ?? '');
         if ($q !== '') {
@@ -359,33 +358,32 @@ class Grid extends View
      * Returns JS for reloading View.
      *
      * @param array             $args
-     * @param jsExpression|null $afterSuccess
+     * @param JsExpression|null $afterSuccess
      * @param array             $apiConfig
      *
-     * @return \atk4\ui\jsReload
+     * @return \atk4\ui\JsReload
      */
     public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
     {
-        return new jsReload($this->container, $args, $afterSuccess, $apiConfig);
+        return new JsReload($this->container, $args, $afterSuccess, $apiConfig);
     }
 
     /**
-     * Adds a new button into the action column on the right. For CRUD this
+     * Adds a new button into the action column on the right. For Crud this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array|View         $button  Label text, object or seed for the Button
-     * @param jsExpressionable|callable $action  JavaScript action or callback
-     * @param bool|string               $confirm Should we display confirmation "Are you sure?"
+     * @param string|array|View         $button Label text, object or seed for the Button
+     * @param JsExpressionable|callable $action JavaScript action or callback
      *
      * @return object
      */
-    public function addActionButton($button, $action = null, $confirm = false, $isDisabled = false)
+    public function addActionButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
         if (!$this->actionButtons) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
         }
 
-        return $this->actionButtons->addButton($button, $action, $confirm, $isDisabled);
+        return $this->actionButtons->addButton($button, $action, $confirmMsg, $isDisabled);
     }
 
     /**
@@ -396,13 +394,13 @@ class Grid extends View
      *
      * @return mixed
      */
-    public function addActionMenuItem($view, $action = null, bool $confirm = false, bool $isDisabled = false)
+    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', bool $isDisabled = false)
     {
         if (!$this->actionMenu) {
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
         }
 
-        return $this->actionMenu->addActionMenuItem($view, $action, $confirm, $isDisabled);
+        return $this->actionMenu->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
     }
 
     /**
@@ -419,15 +417,15 @@ class Grid extends View
      * Add action menu items using Model.
      * You may specify the scope of actions to be added.
      *
-     * @param string|null $scope the scope of model action
+     * @param string|null $appliesTo the scope of model action
      */
-    public function addActionMenuFromModel(string $scope = null)
+    public function addActionMenuFromModel(string $appliesTo = null)
     {
         if (!$this->model) {
             throw new Exception('Error: Model not set. Set model prior to add item.');
         }
 
-        foreach ($this->model->getActions($scope) as $action) {
+        foreach ($this->model->getUserActions($appliesTo) as $action) {
             $this->addActionMenuItem($action);
         }
     }
@@ -445,7 +443,7 @@ class Grid extends View
         if (!$this->menu) {
             throw new Exception('Unable to add Filter Column without Menu');
         }
-        $this->menu->addItem(['Clear Filters'], new \atk4\ui\jsReload($this->table->reload, ['atk_clear_filter' => 1]));
+        $this->menu->addItem(['Clear Filters'], new \atk4\ui\JsReload($this->table->reload, ['atk_clear_filter' => 1]));
         $this->table->setFilterColumn($names);
 
         return $this;
@@ -516,10 +514,8 @@ class Grid extends View
 
     /**
      * Find out more about the nature of the action from the supplied object, use addAction().
-     *
-     * @param Generic $action the generic action
      */
-    public function addUserAction(Generic $action)
+    public function addUserAction(Model\UserAction $action)
     {
         $executor = null;
         $args = [];
@@ -596,7 +592,7 @@ class Grid extends View
         $this->table->on(
             'click',
             'thead>tr>th.sortable',
-            new jsReload($this->container, [$this->sortTrigger => (new jQuery())->data('sort')])
+            new JsReload($this->container, [$this->sortTrigger => (new Jquery())->data('sort')])
         );
     }
 
@@ -607,12 +603,11 @@ class Grid extends View
      * visible model fields. If $columns is set to false, then will not add
      * columns at all.
      *
-     * @param \atk4\data\Model $m       Data model
-     * @param array|bool       $columns
+     * @param array|bool $columns
      *
      * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $model, $columns = null)
+    public function setModel(Model $model, $columns = null)
     {
         $this->model = $this->table->setModel($model, $columns);
 
@@ -627,11 +622,11 @@ class Grid extends View
      * Makes rows of this grid selectable by creating new column on the left with
      * checkboxes.
      *
-     * @return TableColumn\CheckBox
+     * @return Table\Column\Checkbox
      */
     public function addSelection()
     {
-        $this->selection = $this->table->addColumn(null, TableColumn\CheckBox::class);
+        $this->selection = $this->table->addColumn(null, [Table\Column\Checkbox::class]);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));
@@ -643,11 +638,11 @@ class Grid extends View
      * Add column with drag handler on each row.
      * Drag handler allow to reorder table via drag n drop.
      *
-     * @return TableColumn\Generic
+     * @return Table\Column
      */
     public function addDragHandler()
     {
-        $handler = $this->table->addColumn(null, TableColumn\DragHandler::class);
+        $handler = $this->table->addColumn(null, [Table\Column\DragHandler::class]);
 
         // Move last column to the beginning in table column array.
         array_unshift($this->table->columns, array_pop($this->table->columns));
@@ -665,41 +660,39 @@ class Grid extends View
     }
 
     /**
-     * Renders view.
-     *
      * Before rendering take care of data sorting.
      */
-    public function renderView()
+    protected function renderView(): void
     {
         // take care of sorting
         $this->applySort();
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**
      * Recursively renders view.
      */
-    public function recursiveRender()
+    protected function recursiveRender(): void
     {
         // bind with paginator
         if ($this->paginator) {
             $this->setModelLimitFromPaginator();
         }
 
-        if ($this->quickSearch instanceof jsSearch) {
+        if ($this->quickSearch instanceof JsSearch) {
             if ($sortBy = $this->getSortBy()) {
                 $this->container->js(true, $this->quickSearch->js()->atkJsSearch('setUrlArgs', [$this->sortTrigger, $sortBy]));
             }
         }
 
-        return parent::recursiveRender();
+        parent::recursiveRender();
     }
 
     /**
      * Proxy function for Table::jsRow().
      *
-     * @return jQuery
+     * @return Jquery
      */
     public function jsRow()
     {

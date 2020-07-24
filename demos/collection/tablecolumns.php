@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Table;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -17,7 +19,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             'type' => 'string',
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\Tooltip::class,
+                    Table\Column\Tooltip::class,
                     [
                         'tooltip_field' => 'note',
                         'icon' => 'info circle blue',
@@ -30,7 +32,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             'type' => 'string',
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\NoValue::class,
+                    Table\Column\NoValue::class,
                     [
                         'no_value' => ' no value ',
                     ],
@@ -48,7 +50,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             ],
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\KeyValue::class,
+                    Table\Column\KeyValue::class,
                 ],
             ],
         ]);
@@ -63,7 +65,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             ],
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\KeyValue::class,
+                    Table\Column\KeyValue::class,
                 ],
             ],
         ]);
@@ -72,7 +74,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             'type' => 'string',
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\Labels::class,
+                    Table\Column\Labels::class,
                 ],
             ],
         ]);
@@ -81,7 +83,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
             'type' => 'float',
             'ui' => [
                 'table' => [
-                    \atk4\ui\TableColumn\ColorRating::class,
+                    Table\Column\ColorRating::class,
                     [
                         'min' => 1,
                         'max' => 3,
@@ -100,7 +102,7 @@ $modelColorClass = get_class(new class() extends \atk4\data\Model {
     }
 });
 
-$key_value_string = [
+$keyValueString = [
     1 => 'one',
     'two',
     'three',
@@ -109,16 +111,16 @@ $key_value_string = [
 
 \atk4\ui\Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can be set from your model.']);
 
-$m = new $modelColorClass(new \atk4\data\Persistence\Static_([]));
+$model = new $modelColorClass(new \atk4\data\Persistence\Static_([]));
 
 foreach (range(1, 10) as $id) {
     $key_value = random_int(1, 4);
 
-    $m->insert([
+    $model->insert([
         'id' => $id,
         'name' => 'name ' . $id,
         'key_value' => $key_value,
-        'key_value_string' => $key_value_string[$key_value],
+        'key_value_string' => $keyValueString[$key_value],
         'value_not_always_present' => random_int(0, 100) > 50 ? 'have value' : '',
         'interests' => '1st label, 2nd label',
         'rating' => random_int(100, 300) / 100,
@@ -127,4 +129,4 @@ foreach (range(1, 10) as $id) {
 }
 
 $table = \atk4\ui\Table::addTo($app);
-$table->setModel($m);
+$table->setModel($model);

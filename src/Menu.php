@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
-use atk4\data\UserAction\Generic;
+use atk4\data\Model;
 
 /**
  * Place menu.
@@ -59,11 +59,11 @@ class Menu extends View
             $item->setAttr('href', $action);
         }
 
-        if ($action instanceof jsExpressionable) {
+        if ($action instanceof JsExpressionable) {
             $item->js('click', $action);
         }
 
-        if ($action instanceof Generic) {
+        if ($action instanceof Model\UserAction) {
             $item->on('click', $action);
         }
 
@@ -171,17 +171,10 @@ class Menu extends View
         return parent::add([View::class, 'class' => ['divider']]);
     }
 
-    /*
-    function setModel($m) {
-        foreach ($m as $m) {
-        }
-    }
-    */
-
     /**
      * {@inheritdoc}
      */
-    public function getHTML()
+    public function getHtml()
     {
         // if menu don't have a single element or content, then destroy it
         if (empty($this->elements) && !$this->content) {
@@ -190,13 +183,10 @@ class Menu extends View
             return '';
         }
 
-        return parent::getHTML();
+        return parent::getHtml();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->activate_on_click && $this->ui === 'menu') {
             // Semantic UI need some JS magic

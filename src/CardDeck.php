@@ -8,10 +8,6 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\data\Model;
-use atk4\data\UserAction\Generic;
-use atk4\ui\ActionExecutor\jsInterface_;
-use atk4\ui\ActionExecutor\jsUserAction;
-use atk4\ui\ActionExecutor\UserAction;
 use atk4\ui\Component\ItemSearch;
 
 class CardDeck extends View
@@ -61,13 +57,13 @@ class CardDeck extends View
     public $menuBtnStyle = 'primary';
 
     /** @var string Default executor class. */
-    public $executor = UserAction::class;
+    public $executor = [UserAction\ModalExecutor::class];
 
     /** @var string Default jsExecutor class. */
-    public $jsExecutor = jsUserAction::class;
+    public $jsExecutor = [UserAction\JsCallbackExecutor::class];
 
     /** @var array Default notifier to perform when model action is successful * */
-    public $notifyDefault = [jsToast::class, 'settings' => ['displayTime' => 5000]];
+    public $notifyDefault = [JsToast::class, 'settings' => ['displayTime' => 5000]];
 
     /** @var array Model single scope action to include in table action column. Will include all single scope actions if empty. */
     public $singleScopeActions = [];
@@ -159,13 +155,13 @@ class CardDeck extends View
                     $c->addExtraFields($m, $extra, $this->extraGlue);
                 }
                 if ($this->useAction) {
-                    if ($singleActions = $this->_getModelActions(Generic::SINGLE_RECORD)) {
+                    if ($singleActions = $this->_getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
                         $args = $this->_getReloadArgs();
                         $id_arg = [];
                         foreach ($singleActions as $action) {
                             $action->ui['executor'] = $this->initActionExecutor($action);
-                            if ($action->ui['executor'] instanceof jsUserAction) {
-                                $id_arg[0] = (new jQuery())->parents('.atk-card')->data('id');
+                            if ($action->ui['executor'] instanceof UserAction\JsCallbackExecutor) {
+                                $id_arg[0] = (new Jquery())->parents('.atk-card')->data('id');
                             }
                             $c->addClickAction($action, null, array_merge($id_arg, $args));
                         }
@@ -178,9 +174,9 @@ class CardDeck extends View
 
         // add no record scope action to menu
         if ($this->useAction && $this->menu) {
-            foreach ($this->_getModelActions(Generic::NO_RECORDS) as $k => $action) {
+            foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 $action->ui['executor'] = $this->initActionExecutor($action);
-                $this->menuActions[$k]['btn'] = $this->addMenuButton($action, null, false, $this->_getReloadArgs());
+                $this->menuActions[$k]['btn'] = $this->addMenuButton($action, null, false, false, $this->_getReloadArgs());
                 $this->menuActions[$k]['action'] = $action;
             }
         }
@@ -194,11 +190,11 @@ class CardDeck extends View
      */
     protected function applyReload()
     {
-        foreach ($this->menuActions as $k => $menuAction) {
+        foreach ($this->menuActions as $menuAction) {
             $ex = $menuAction['action']->ui['executor'];
-            if ($ex instanceof jsInterface_) {
+            if ($ex instanceof UserAction\JsExecutorInterface) {
                 $this->container->js(true, $menuAction['btn']->js()->off('click'));
-                $this->container->js(true, $menuAction['btn']->js()->on('click', new jsFunction($ex->jsExecute($this->_getReloadArgs()))));
+                $this->container->js(true, $menuAction['btn']->js()->on('click', new JsFunction($ex->jsExecute($this->_getReloadArgs()))));
             }
         }
     }
@@ -214,16 +210,16 @@ class CardDeck extends View
      *
      * @return object
      */
-    protected function initActionExecutor(Generic $action)
+    protected function initActionExecutor(Model\UserAction $action)
     {
         $action->fields = $this->editFields ?? $action->fields;
         $executor = $this->getExecutor($action);
-        if ($action->scope === Generic::SINGLE_RECORD) {
+        if ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
             $executor->jsSuccess = function ($x, $m, $id, $return) use ($action) {
                 return $this->jsExecute($return, $action);
             };
         } else {
-            $executor->onHook(ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
+            $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
                 return $this->jsExecute($return, $action);
             });
         }
@@ -241,10 +237,10 @@ class CardDeck extends View
     {
         if (is_string($return)) {
             return  $this->getNotifier($return, $action);
-        } elseif (is_array($return) || $return instanceof jsExpressionable) {
+        } elseif (is_array($return) || $return instanceof JsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
-            $msg = $return->loaded() ? $this->saveMsg : ($action->scope === Generic::SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
+            $msg = $return->loaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
             return $this->jsModelReturn($action, $msg);
         }
@@ -256,8 +252,8 @@ class CardDeck extends View
      * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      *
-     * @param string|null  $msg    the message to display
-     * @param Generic|null $action the model action
+     * @param string|null           $msg    the message to display
+     * @param Model\UserAction|null $action the model action
      *
      * @return object
      */
@@ -273,10 +269,8 @@ class CardDeck extends View
 
     /**
      * js expression return when action afterHook executor return a Model.
-     *
-     * @param Generic $action
      */
-    protected function jsModelReturn(Generic $action = null, string $msg = 'Done!'): array
+    protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
     {
         $js[] = $this->getNotifier($msg, $action);
         if ($action->owner->loaded() && $card = $this->findCard($action->owner)) {
@@ -340,14 +334,13 @@ class CardDeck extends View
     /**
      * Add button to menu bar on top of deck card.
      *
-     * @param Button|string|Generic                  $button     a button object, a model action or a string representing a model action
-     * @param Generic|jsExpressionable|callable|null $callback   an model action, js expression or callback function
-     * @param string|array                           $confirm    A confirmation string or View::on method defaults when passed has an array,
-     * @param bool                                   $isDisabled
+     * @param Button|string|Model\UserAction                  $button   a button object, a model action or a string representing a model action
+     * @param Model\UserAction|JsExpressionable|callable|null $callback an model action, js expression or callback function
+     * @param string|array                                    $confirm  A confirmation string or View::on method defaults when passed has an array,
      *
      * @return mixed
      */
-    public function addMenuButton($button, $callback = null, $confirm = null, $isDisabled = false, $args = null)
+    public function addMenuButton($button, $callback = null, $confirm = null, bool $isDisabled = false, $args = null)
     {
         $defaults = [];
 
@@ -361,7 +354,7 @@ class CardDeck extends View
 
         // If action is not specified, perhaps it is defined in the model
         if (!$callback && is_string($button)) {
-            $model_action = $this->model->getAction($button);
+            $model_action = $this->model->getUserAction($button);
             if ($model_action) {
                 $isDisabled = !$model_action->enabled;
                 $callback = $model_action;
@@ -370,7 +363,7 @@ class CardDeck extends View
                     $defaults['confirm'] = $model_action->ui['confirm'];
                 }
             }
-        } elseif (!$callback && $button instanceof \atk4\data\UserAction\Generic) {
+        } elseif (!$callback && $button instanceof Model\UserAction) {
             $isDisabled = !$button->enabled;
             if ($button->ui['confirm'] ?? null) {
                 $defaults['confirm'] = $button->ui['confirm'];
@@ -379,7 +372,7 @@ class CardDeck extends View
             $button = $button->caption;
         }
 
-        if ($callback instanceof \atk4\data\UserAction\Generic) {
+        if ($callback instanceof Model\UserAction) {
             if (isset($callback->ui['button'])) {
                 $button = $callback->ui['button'];
             }
@@ -393,11 +386,11 @@ class CardDeck extends View
             if (is_string($button)) {
                 $button = [$button, 'ui' => 'button ' . $this->menuBtnStyle];
             }
-            $button = $this->factory(Button::class, $button);
+            $button = $this->factory([Button::class], $button);
         }
 
         if ($button->icon && !is_object($button->icon)) {
-            $button->icon = $this->factory(Icon::class, $button->icon);
+            $button->icon = $this->factory([Icon::class], $button->icon);
         }
 
         if ($isDisabled) {
@@ -415,7 +408,7 @@ class CardDeck extends View
      *
      * @return object
      */
-    protected function getExecutor(Generic $action)
+    protected function getExecutor(Model\UserAction $action)
     {
         if (isset($action->ui['executor'])) {
             return $this->factory($action->ui['executor']);
@@ -426,7 +419,7 @@ class CardDeck extends View
         return $this->factory($executor);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if (($this->menu && count($this->menuActions) > 0) || $this->search !== false) {
             View::addTo($this, ['ui' => 'divider'], ['Divider']);
@@ -441,19 +434,19 @@ class CardDeck extends View
     /**
      * Return proper action need to setup menu or action column.
      */
-    private function _getModelActions(string $scope): array
+    private function _getModelActions(string $appliesTo): array
     {
         $actions = [];
-        if ($scope === Generic::SINGLE_RECORD && !empty($this->singleScopeActions)) {
+        if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && !empty($this->singleScopeActions)) {
             foreach ($this->singleScopeActions as $action) {
-                $actions[] = $this->model->getAction($action);
+                $actions[] = $this->model->getUserAction($action);
             }
-        } elseif ($scope === Generic::NO_RECORDS && !empty($this->noRecordScopeActions)) {
+        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && !empty($this->noRecordScopeActions)) {
             foreach ($this->noRecordScopeActions as $action) {
-                $actions[] = $this->model->getAction($action);
+                $actions[] = $this->model->getUserAction($action);
             }
         } else {
-            $actions = $this->model->getActions($scope);
+            $actions = $this->model->getUserActions($appliesTo);
         }
 
         return $actions;

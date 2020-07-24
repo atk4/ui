@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Form;
+
 try {
     if (file_exists(__DIR__ . '/db.php')) {
         require_once __DIR__ . '/db.php';
     } else {
         require_once __DIR__ . '/db.default.php';
     }
-} catch (PDOException $e) {
+} catch (\PDOException $e) {
     // do not pass $e unless you can secure DSN!
     throw (new \atk4\ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
@@ -22,17 +24,17 @@ trait ModelLockTrait
 {
     public function lock(): void
     {
-        $this->getAction('add')->callback = function ($m) {
+        $this->getUserAction('add')->callback = function ($model) {
             return 'Form Submit! Data are not save in demo mode.';
         };
-        $this->getAction('edit')->callback = function ($m) {
+        $this->getUserAction('edit')->callback = function ($model) {
             return 'Form Submit! Data are not save in demo mode.';
         };
 
-        $delete = $this->getAction('delete');
+        $delete = $this->getUserAction('delete');
         $delete->confirmation = 'Please go ahead. Demo mode does not really delete data.';
 
-        $delete->callback = function ($m) {
+        $delete->callback = function ($model) {
             return 'Only simulating delete when in demo mode.';
         };
     }
@@ -53,14 +55,14 @@ class Country extends \atk4\data\Model
         $this->addField('numcode', ['caption' => 'ISO Numeric Code', 'type' => 'number', 'required' => true]);
         $this->addField('phonecode', ['caption' => 'Phone Prefix', 'type' => 'number', 'required' => true]);
 
-        $this->onHook(\atk4\data\Model::HOOK_BEFORE_SAVE, function (\atk4\data\Model $m) {
-            if (!$m->get('sys_name')) {
-                $m->set('sys_name', mb_strtoupper($m->get('name')));
+        $this->onHook(\atk4\data\Model::HOOK_BEFORE_SAVE, function (\atk4\data\Model $model) {
+            if (!$model->get('sys_name')) {
+                $model->set('sys_name', mb_strtoupper($model->get('name')));
             }
         });
     }
 
-    public function validate($intent = null)
+    public function validate($intent = null): array
     {
         $errors = parent::validate($intent);
 
@@ -109,13 +111,13 @@ class Stat extends \atk4\data\Model
         $this->title_field = 'project_name';
         $this->addField('description', ['type' => 'text']);
         $this->addField('client_name', ['type' => 'string']);
-        $this->addField('client_address', ['type' => 'text', 'ui' => ['form' => [new \atk4\ui\FormField\TextArea(), 'rows' => 4]]]);
+        $this->addField('client_address', ['type' => 'text', 'ui' => ['form' => [Form\Control\Textarea::class, 'rows' => 4]]]);
 
         $this->hasOne('client_country_iso', [
             new Country(),
             'their_field' => 'iso',
             'ui' => [
-                'form' => \atk4\ui\FormField\Line::class,
+                'form' => [Form\Control\Line::class],
             ],
         ])
             ->addField('client_country', 'name');
@@ -123,15 +125,15 @@ class Stat extends \atk4\data\Model
         $this->addField('is_commercial', ['type' => 'boolean']);
         $this->addField('currency', ['enum' => ['EUR', 'USD', 'GBP']]);
         $this->addField('currency_symbol', ['never_persist' => true]);
-        $this->onHook(\atk4\data\Model::HOOK_AFTER_LOAD, function (\atk4\data\Model $m) {
+        $this->onHook(\atk4\data\Model::HOOK_AFTER_LOAD, function (\atk4\data\Model $model) {
             /* implementation for "intl"
             $locale='en-UK';
-            $fmt = new \NumberFormatter( $locale."@currency=".$m->get('currency'), NumberFormatter::CURRENCY );
-            $m->set('currency_symbol', $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL));
+            $fmt = new \NumberFormatter( $locale."@currency=".$model->get('currency'), NumberFormatter::CURRENCY );
+            $model->set('currency_symbol', $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL));
              */
 
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
-            $m->set('currency_symbol', $map[$m->get('currency')] ?? '?');
+            $model->set('currency_symbol', $map[$model->get('currency')] ?? '?');
         });
 
         $this->addFields(['project_budget', 'project_invoiced', 'project_paid', 'project_hour_cost'], ['type' => 'money']);
@@ -145,7 +147,7 @@ class Stat extends \atk4\data\Model
         $this->addFields(['start_date', 'finish_date'], ['type' => 'date']);
         $this->addField('finish_time', ['type' => 'time']);
 
-        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => [\atk4\ui\FormField\Line::class, 'disabled' => true]]]);
+        $this->addFields(['created', 'updated'], ['type' => 'datetime', 'ui' => ['form' => [Form\Control\Line::class, 'disabled' => true]]]);
     }
 }
 
@@ -182,14 +184,14 @@ class File extends \atk4\data\Model
         foreach ($dir as $fileinfo) {
             $name = $fileinfo->getFilename();
 
-            if ($fileinfo->getFilename() === '.') {
+            if ($name === '.') {
                 continue;
             }
-            if ($fileinfo->getFilename()[0] === '.') {
+            if ($name[0] === '.') {
                 continue;
             }
 
-            if ($fileinfo->getFilename() === 'src' || $fileinfo->getFilename() === 'demos' || $isSub) {
+            if ($name === 'src' || $name === 'demos' || $isSub) {
                 /* Disabling saving file in db
                 $this->unload();
                 $this->save([
@@ -200,7 +202,7 @@ class File extends \atk4\data\Model
                 */
 
                 if ($fileinfo->isDir()) {
-                    $this->ref('SubFolder')->importFromFilesystem($path . '/' . $fileinfo->getFilename(), true);
+                    $this->ref('SubFolder')->importFromFilesystem($path . '/' . $name, true);
                 }
             }
         }

@@ -4,47 +4,13 @@ declare(strict_types=1);
 
 namespace atk4\ui\TableColumn;
 
-use atk4\data\Model;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Class atk4\ui\TableColumn\Money is deprecated. Use atk4\ui\Table\Column\Money instead', E_USER_DEPRECATED);
+}
 
 /**
- * Column for formatting money.
+ * @deprecated will be removed dec-2020
  */
-class Money extends Generic
+class Money extends \atk4\ui\Table\Column\Money
 {
-    /** @var bool Should we show zero values in cells? */
-    public $show_zero_values = true;
-
-    // overrides
-    public $attr = ['all' => ['class' => ['right aligned single line']]];
-
-    public function getTagAttributes($position, $attr = [])
-    {
-        $attr = array_merge_recursive($attr, ['class' => ['{$_' . $this->short_name . '_class}']]);
-
-        return parent::getTagAttributes($position, $attr);
-    }
-
-    public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
-    {
-        if (!isset($f)) {
-            throw new Exception('Money column requires a field');
-        }
-
-        return $this->getTag(
-            'body',
-            '{$' . $f->short_name . '}',
-            $extra_tags
-        );
-    }
-
-    public function getHTMLTags(Model $row, $field)
-    {
-        if ($field->get() < 0) {
-            return ['_' . $this->short_name . '_class' => 'negative'];
-        } elseif (!$this->show_zero_values && (float) $field->get() === 0.0) {
-            return ['_' . $this->short_name . '_class' => '', $field->short_name => '-'];
-        }
-
-        return ['_' . $this->short_name . '_class' => ''];
-    }
 }

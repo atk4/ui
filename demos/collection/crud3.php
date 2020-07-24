@@ -40,9 +40,9 @@ $data = ['test' => [
     9 => ['id' => 9, 'name' => 'ABC1', 'code' => 19, 'country' => 'Latvia'],
 ]];
 $p = new \atk4\data\Persistence\Array_($data);
-$m = new $modelClass($p);
+$model = new $modelClass($p);
 
-// add CRUD
-\atk4\ui\Header::addTo($app, ['CRUD with Array Persistence']);
-$c = \atk4\ui\CRUD::addTo($app, ['ipp' => 5]);
-$c->setModel($m);
+// add Crud
+\atk4\ui\Header::addTo($app, ['Crud with Array Persistence']);
+$c = \atk4\ui\Crud::addTo($app, ['ipp' => 5]);
+$c->setModel($model);

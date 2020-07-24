@@ -1,69 +1,16 @@
 <?php
 
 declare(strict_types=1);
-/**
- * A js action executor that require a form.
- */
 
 namespace atk4\ui\ActionExecutor;
 
-use atk4\core\HookTrait;
-use atk4\ui\jsExpression;
-use atk4\ui\jsModal;
-use atk4\ui\jsToast;
+if (!class_exists(\SebastianBergmann\CodeCoverage\CodeCoverage::class, false)) {
+    'trigger_error'('Class atk4\ui\ActionExecutor\jsArgumentForm is deprecated. Use atk4\ui\UserAction\JsArgumentFormExecutor instead', E_USER_DEPRECATED);
+}
 
-class jsArgumentForm extends jsModal
+/**
+ * @deprecated will be removed in dec-2020
+ */
+class jsArgumentForm extends \atk4\ui\UserAction\JsArgumentFormExecutor
 {
-    use HookTrait;
-
-    /** @const string not used, make it public if needed or drop it */
-    private const HOOK_FORM_INIT = self::class . '@formInit';
-
-    public $vp;
-    public $action;
-    public $form;
-
-    public function __construct($action, $page, $modelId = null, $form = null)
-    {
-        $this->vp = $page;
-        $this->action = $action;
-        $this->form = $form;
-
-        parent::__construct($action->caption, $page, ['atk_event_id' => $modelId]);
-
-        $this->initVp();
-    }
-
-    public function initVp()
-    {
-        $this->vp->set(function ($p) {
-            $form = null;
-            if (!is_object($this->form) || !$this->form->_initialized) {
-                $form = $p->add($this->form ?: 'Form');
-            }
-
-            $id = $p->stickyGet('atk_event_id');
-
-            if ($id && $this->action->scope === 'single') {
-                $this->action->owner->tryLoad($id);
-            }
-
-            // TODO How do we know if argument is need over model field in action?
-            $form->setModel($this->action->owner);
-
-            $form->hook(self::HOOK_FORM_INIT);
-
-            $form->onSubmit(function (\atk4\ui\Form $form) {
-                $this->action->fields = array_keys($form->model->getFields('editable'));
-                $return = $this->action->execute();
-
-                $js = [
-                    new jsExpression('$(".atk-dialog-content").trigger("close")'),
-                    $this->hook(Basic::HOOK_AFTER_EXECUTE, [$return]) ?: new jsToast('Success' . (is_string($return) ? (': ' . $return) : '')),
-                ];
-
-                return $js;
-            });
-        });
-    }
 }

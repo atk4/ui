@@ -27,7 +27,7 @@ class Button extends View
      */
     public $iconRight;
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->icon) {
             if (!is_object($this->icon)) {

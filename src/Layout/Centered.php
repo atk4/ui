@@ -11,7 +11,7 @@ namespace atk4\ui\Layout;
  * Bevel will use some padding and will contain your Content.
  * This layout is handy for a simple and single-purpose applications.
  */
-class Centered extends Generic
+class Centered extends \atk4\ui\Layout
 {
     use \atk4\core\DebugTrait;
 
@@ -43,10 +43,10 @@ class Centered extends Generic
         $this->template->trySet('title', $this->app->title);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->image) {
-            $this->template->trySetHTML('HeaderImage', '<img class="ui image" src="' . $this->image . '" alt="' . $this->image_alt . '" />');
+            $this->template->trySetHtml('HeaderImage', '<img class="ui image" src="' . $this->image . '" alt="' . $this->image_alt . '" />');
         }
         parent::renderView();
     }

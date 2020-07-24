@@ -35,8 +35,8 @@ class CallbackTest extends AtkPhpunit\TestCase
 
     protected function setUp(): void
     {
-        $this->app = new AppMock(['always_run' => false]);
-        $this->app->initLayout(\atk4\ui\Layout\Centered::class);
+        $this->app = new AppMock(['always_run' => false, 'catch_exceptions' => false]);
+        $this->app->initLayout([\atk4\ui\Layout\Centered::class]);
 
         // reset var, between tests
         $_GET = [];
@@ -77,7 +77,7 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertNull($var);
     }
 
-    public function testCallbackPOST()
+    public function testCallbackPost()
     {
         $var = null;
 

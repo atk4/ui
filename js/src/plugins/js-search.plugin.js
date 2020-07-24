@@ -2,7 +2,7 @@ import $ from 'jquery';
 import atkPlugin from './atk.plugin';
 import debounce from 'debounce';
 
-export default class jsSearch extends atkPlugin {
+export default class JsSearch extends atkPlugin {
 
   main() {
     this.urlArgs = {};
@@ -227,7 +227,7 @@ export default class jsSearch extends atkPlugin {
   }
 }
 
-jsSearch.DEFAULTS = {
+JsSearch.DEFAULTS = {
   uri: null,
   uri_options: {},
   q: null,

@@ -13,20 +13,20 @@ class PromotionText extends \atk4\ui\View
         $t = \atk4\ui\Text::addTo($this);
         $t->addParagraph(
             <<< 'EOF'
-Agile Toolkit base package includes:
-EOF
+                Agile Toolkit base package includes:
+                EOF
         );
 
-        $t->addHTML(
+        $t->addHtml(
             <<< 'HTML'
-<ul>
-<li>Over 40 ready-to-use and nicely styled UI components</li>
-<li>Over 10 ways to build interraction</li>
-<li>Over 10 configurable field types, relations, aggregation and much more</li>
-<li>Over 5 SQL and some NoSQL vendors fully supported</li>
-</ul>
+                <ul>
+                <li>Over 40 ready-to-use and nicely styled UI components</li>
+                <li>Over 10 ways to build interraction</li>
+                <li>Over 10 configurable field types, relations, aggregation and much more</li>
+                <li>Over 5 SQL and some NoSQL vendors fully supported</li>
+                </ul>
 
-HTML
+                HTML
         );
 
         $gl = \atk4\ui\GridLayout::addTo($this, [null, 'stackable divided', 'columns' => 4]);
@@ -42,6 +42,6 @@ HTML
         \atk4\ui\View::addTo($this, ['ui' => 'divider']);
 
         \atk4\ui\Message::addTo($this, ['Cool fact!', 'info', 'icon' => 'book'])->text
-            ->addParagraph('This entire demo is coded in Agile Toolkit and takes up less than 300 lines of very simple code code!');
+            ->addParagraph('This entire demo is coded in Agile Toolkit and takes up less than 300 lines of very simple code!');
     }
 }

@@ -7,7 +7,7 @@ namespace atk4\ui\Layout;
 use atk4\ui\Header;
 use atk4\ui\Icon;
 use atk4\ui\Item;
-use atk4\ui\jQuery;
+use atk4\ui\Jquery;
 use atk4\ui\Menu;
 
 /**
@@ -32,7 +32,7 @@ use atk4\ui\Menu;
  *
  *  - Content
  */
-class Admin extends Generic implements Navigable
+class Admin extends \atk4\ui\Layout implements NavigableInterface
 {
     public $menuLeft;    // vertical menu
     public $menu;        // horizontal menu
@@ -57,8 +57,8 @@ class Admin extends Generic implements Navigable
             );
             $this->burger = $this->menu->addItem(['class' => ['icon']]);
             $this->burger->on('click', [
-                (new jQuery('.atk-sidenav'))->toggleClass('visible'),
-                (new jQuery('body'))->toggleClass('atk-sidenav-visible'),
+                (new Jquery('.atk-sidenav'))->toggleClass('visible'),
+                (new Jquery('body'))->toggleClass('atk-sidenav-visible'),
             ]);
             Icon::addTo($this->burger, ['content']);
 
@@ -89,10 +89,6 @@ class Admin extends Generic implements Navigable
 
     /**
      * Add items to left menu.
-     *
-     * @param $name
-     * @param null $action
-     * @param null $group
      */
     public function addMenuItem($name, $action = null, $group = null): Item
     {
@@ -103,10 +99,7 @@ class Admin extends Generic implements Navigable
         return $this->menuLeft->addItem($name, $action);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->menuLeft) {
             if (count($this->menuLeft->elements) === 0) {

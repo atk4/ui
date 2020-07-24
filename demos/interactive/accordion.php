@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui\demo;
 
+use atk4\ui\Form;
+
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
@@ -37,9 +39,9 @@ $i2 = $accordion->addSection('Dynamic Text', function ($v) {
 // dynamic section - form view
 $i3 = $accordion->addSection('Dynamic Form', function ($v) {
     \atk4\ui\Message::addTo($v, ['Loading a form dynamically.', 'ui' => 'tiny message']);
-    $f = \atk4\ui\Form::addTo($v);
-    $f->addField('Email');
-    $f->onSubmit(function (\atk4\ui\Form $form) {
+    $form = Form::addTo($v);
+    $form->addControl('Email');
+    $form->onSubmit(function (Form $form) {
         return $form->success('Subscribed ' . $form->model->get('Email') . ' to newsletter.');
     });
 });

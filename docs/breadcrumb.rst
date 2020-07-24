@@ -2,13 +2,13 @@
 .. _breadcrumb:
 
 ==========
-BreadCrumb
+Breadcrumb
 ==========
 
 .. php:namespace:: atk4\ui
-.. php:class:: BreadCrumb
+.. php:class:: Breadcrumb
 
-Implement navigational BreadCrumb, by using https://fomantic-ui.com/collections/breadcrumb.html
+Implement navigational Breadcrumb, by using https://fomantic-ui.com/collections/breadcrumb.html
 
 Basic Usage
 ===========
@@ -18,7 +18,7 @@ Basic Usage
 
 Here is a simple usage::
 
-    $crumb = BreadCrumb::addTo($app);
+    $crumb = Breadcrumb::addTo($app);
     $crumb->addCrumb('User', ['user']);
     $crumb->addCrumb('Preferences', ['user_preferences']);
     $crumb->set('Change Password');
@@ -48,31 +48,31 @@ Calling addCrumb adds more elements into the $path property. Each element there 
  - link - where to go if clicked
  - divider - which divider to use after the crumb
 
-By default `divider` is set to :php:attr:`BreadCrumb::dividerClass`. You may also manipulate $path array yourself.
+By default `divider` is set to :php:attr:`Breadcrumb::dividerClass`. You may also manipulate $path array yourself.
 For example the next code will use some logic::
 
-    $crumb = BreadCrumb::addTo($app);
+    $crumb = Breadcrumb::addTo($app);
     $crumb->addCrumb('Users', []);
 
-    $m = new User($app->db);
+    $model = new User($app->db);
 
     if ($id = $app->stickyGet('user_id')) {
 
         // perhaps we edit individual user?
-        $m->load($id);
-        $crumb->addCrumb($m->get('name'), []);
+        $model->load($id);
+        $crumb->addCrumb($model->get('name'), []);
 
 
         // here we can check for additional criteria and display a deeper level on the crumb
 
 
-        Form::addTo($app)->setModel($m);
+        Form::addTo($app)->setModel($model);
     } else {
 
         // display list of users
         $table = Table::addTo($app);
-        $table->setModel($m);
-        $table->addDecorator(['name', [\atk4\ui\TableColumn\Link::class, [], ['user_id'=>'id']);
+        $table->setModel($model);
+        $table->addDecorator(['name', [\atk4\ui\Table\Column\Link::class, [], ['user_id'=>'id']);
     }
 
     $crumb->popTitle();

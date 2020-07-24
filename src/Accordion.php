@@ -147,10 +147,8 @@ class Accordion extends View
 
     /**
      * Check if accordion section is dynamic.
-     *
-     * @return bool
      */
-    public function isDynamicSection()
+    public function isDynamicSection(): bool
     {
         return isset($_GET['__atk-dyn-section']);
     }
@@ -158,7 +156,7 @@ class Accordion extends View
     /**
      * {@inheritdoc}
      */
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->type) {
             $this->addClass($this->type);

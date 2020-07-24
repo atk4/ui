@@ -53,22 +53,22 @@ $lister->setModel(new Country($app->db))
 
 $container = \atk4\ui\View::addTo($app);
 
-$v = \atk4\ui\View::addTo($container, ['template' => new \atk4\ui\Template('<div>
+$view = \atk4\ui\View::addTo($container, ['template' => new \atk4\ui\Template('<div>
 <ul>
 {List}<li class="ui icon label"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</li>{/}
 </ul>{$Content}</div>')]);
 
-$l = \atk4\ui\Lister::addTo($v, [], ['List']);
-$l->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
+$lister = \atk4\ui\Lister::addTo($view, [], ['List']);
+$lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lister) {
     $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
 });
 
-$m = $l->setModel(new Country($app->db))->setLimit(12);
+$model = $lister->setModel(new Country($app->db))->setLimit(12);
 
-$ipp = \atk4\ui\ItemsPerPageSelector::addTo($v, ['label' => 'Select how many countries:', 'pageLengthItems' => [12, 24, 36]], ['Content']);
+$ipp = \atk4\ui\ItemsPerPageSelector::addTo($view, ['label' => 'Select how many countries:', 'pageLengthItems' => [12, 24, 36]], ['Content']);
 
-$ipp->onPageLengthSelect(function ($ipp) use ($m, $container) {
-    $m->setLimit($ipp);
+$ipp->onPageLengthSelect(function ($ipp) use ($model, $container) {
+    $model->setLimit($ipp);
 
     return $container;
 });

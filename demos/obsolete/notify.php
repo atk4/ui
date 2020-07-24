@@ -10,7 +10,7 @@ require_once __DIR__ . '/../init-app.php';
 \atk4\ui\Button::addTo($app, ['Notify Examples - Page 2', 'small right floated basic blue', 'iconRight' => 'right arrow'])
     ->link(['notify2']);
 
-\atk4\ui\Button::addTo($app, ['Test'])->on('click', (new \atk4\ui\jsNotify('Not yet implemented'))->setColor('red'));
+\atk4\ui\Button::addTo($app, ['Test'])->on('click', (new \atk4\ui\JsNotify('Not yet implemented'))->setColor('red'));
 
 $modal = \atk4\ui\Modal::addTo($app, ['Modal Title']);
 
@@ -25,7 +25,7 @@ $modal->set(function ($p) use ($modal) {
 
         return [
             $modal->hide(),
-            new \atk4\ui\jsNotify('Thank you ' . $form->model->get('name')),
+            new \atk4\ui\JsNotify('Thank you ' . $form->model->get('name')),
         ];
     });
 });

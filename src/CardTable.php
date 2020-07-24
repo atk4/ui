@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace atk4\ui;
 
+use atk4\data\Model;
+
 /**
  * Card class displays a single record data.
  *
@@ -14,26 +16,26 @@ class CardTable extends Table
 {
     protected $_bypass = false;
 
-    public function setModel(\atk4\data\Model $m, $columndef = null)
+    public function setModel(Model $model, $columndef = null)
     {
         if ($this->_bypass) {
-            return parent::setModel($m);
+            return parent::setModel($model);
         }
 
-        if (!$m->loaded()) {
+        if (!$model->loaded()) {
             throw (new Exception('Model must be loaded'))
-                ->addMoreInfo('model', $m);
+                ->addMoreInfo('model', $model);
         }
 
         $data = [];
 
-        $ui_values = $this->app ? $this->app->ui_persistence->typecastSaveRow($m, $m->get()) : $m->get();
+        $ui_values = $this->app ? $this->app->ui_persistence->typecastSaveRow($model, $model->get()) : $model->get();
 
-        foreach ($m->get() as $key => $value) {
+        foreach ($model->get() as $key => $value) {
             if (!$columndef || ($columndef && in_array($key, $columndef, true))) {
                 $data[] = [
                     'id' => $key,
-                    'field' => $m->getField($key)->getCaption(),
+                    'field' => $model->getField($key)->getCaption(),
                     'value' => $ui_values[$key],
                 ];
             }
@@ -41,10 +43,10 @@ class CardTable extends Table
 
         $this->_bypass = true;
         $mm = parent::setSource($data);
-        $this->addDecorator('value', [\atk4\ui\TableColumn\Multiformat::class, function ($row, $field) use ($m) {
-            $field = $m->getField($row->data['id']);
+        $this->addDecorator('value', [Table\Column\Multiformat::class, function ($row, $field) use ($model) {
+            $field = $model->getField($row->data['id']);
             $ret = $this->decoratorFactory($field);
-            if ($ret instanceof \atk4\ui\TableColumn\Money) {
+            if ($ret instanceof Table\Column\Money) {
                 $ret->attr['all']['class'] = ['single line'];
             }
 

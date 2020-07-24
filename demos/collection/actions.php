@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Button;
+use atk4\ui\UserAction;
 
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -19,8 +20,8 @@ require_once __DIR__ . '/../init-app.php';
 
 $files = new FileLock($app->db);
 
-// This action must appear on top of the CRUD
-$action = $files->addAction(
+// This action must appear on top of the Crud
+$action = $files->addUserAction(
     'import_from_filesystem',
     [
         'callback' => 'importFromFilesystem',
@@ -30,45 +31,45 @@ $action = $files->addAction(
         'args' => [
             'path' => ['type' => 'string', 'required' => true],
         ],
-        'scope' => \atk4\data\UserAction\Generic::NO_RECORDS,
+        'appliesTo' => \atk4\data\Model\UserAction::APPLIES_TO_NO_RECORDS,
     ]
 );
 
-$files->addAction('download', function (\atk4\data\Model $m) {
-    $len = strlen(file_get_contents($m->get('name')));
+$files->addUserAction('download', function (\atk4\data\Model $model) {
+    $len = strlen(file_get_contents($model->get('name')));
 
     return "{$len} bytes downloaded..";
 });
 
-//$files->getAction('download')->system = true;
+//$files->getUserAction('download')->system = true;
 
 $app->add($grid = new \atk4\ui\GridLayout(['columns' => 3]));
 
-$grid->add($executor = new \atk4\ui\ActionExecutor\Basic(['executorButton' => [Button::class, 'Import', 'primary']]), 'r1c1');
+$grid->add($executor = new UserAction\BasicExecutor(['executorButton' => [Button::class, 'Import', 'primary']]), 'r1c1');
 $executor->setAction($action);
 $executor->ui = 'segment';
-$executor->description = 'Execute action using "Basic" executor and path="." argument';
+$executor->description = 'Execute action using "BasicExecutor" and path="." argument';
 $executor->setArguments(['path' => '.']);
-$executor->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($x) {
-    return new \atk4\ui\jsToast('Done!');
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x) {
+    return new \atk4\ui\JsToast('Done!');
 });
 
-$grid->add($executor = new \atk4\ui\ActionExecutor\ArgumentForm(), 'r1c2');
+$grid->add($executor = new UserAction\ArgumentFormExecutor(), 'r1c2');
 $executor->setAction($action);
-$executor->description = 'ArgumentForm executor will ask user about arguments';
+$executor->description = 'ArgumentFormExecutor will ask user about arguments';
 $executor->ui = 'segment';
-$executor->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \atk4\ui\jsToast('Imported!');
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
+    return new \atk4\ui\JsToast('Imported!');
 });
 
-$grid->add($executor = new \atk4\ui\ActionExecutor\Preview(), 'r1c3');
+$grid->add($executor = new \atk4\ui\UserAction\PreviewExecutor(), 'r1c3');
 $executor->setAction($action);
 $executor->ui = 'segment';
 $executor->previewType = 'console';
 $executor->description = 'Displays preview in console prior to executing';
 $executor->setArguments(['path' => '.']);
-$executor->onHook(\atk4\ui\ActionExecutor\Basic::HOOK_AFTER_EXECUTE, function ($x, $ret) {
-    return new \atk4\ui\jsToast('Confirm!');
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($x, $ret) {
+    return new \atk4\ui\JsToast('Confirm!');
 });
 
-\atk4\ui\CRUD::addTo($app, ['ipp' => 5])->setModel($files);
+\atk4\ui\Crud::addTo($app, ['ipp' => 5])->setModel($files);

@@ -23,14 +23,14 @@ $lister->onHook(\atk4\ui\Lister::HOOK_BEFORE_ROW, function (\atk4\ui\Lister $lis
 $lister->setModel(new Country($app->db))
     ->setLimit(20);
 
-$sortable = \atk4\ui\jsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
+$sortable = \atk4\ui\JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
 $sortable->onReorder(function ($order, $src, $pos, $oldPos) {
     if (@$_GET['btn']) {
-        return new \atk4\ui\jsToast(implode(' - ', $order));
+        return new \atk4\ui\JsToast(implode(' - ', $order));
     }
 
-    return new \atk4\ui\jsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
+    return new \atk4\ui\JsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
 });
 
 $button = \atk4\ui\Button::addTo($app)->set('Get countries order');
@@ -40,10 +40,10 @@ $button->js('click', $sortable->jsGetOrders(['btn' => '1']));
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 \atk4\ui\Header::addTo($app, ['Add Drag n drop to Grid']);
 
-$g = \atk4\ui\Grid::addTo($app, ['paginator' => false]);
-$g->setModel((new Country($app->db))->setLimit(6));
+$grid = \atk4\ui\Grid::addTo($app, ['paginator' => false]);
+$grid->setModel((new Country($app->db))->setLimit(6));
 
-$dragHandler = $g->addDragHandler();
+$dragHandler = $grid->addDragHandler();
 $dragHandler->onReorder(function ($order) {
-    return new \atk4\ui\jsToast('New order: ' . implode(' - ', $order));
+    return new \atk4\ui\JsToast('New order: ' . implode(' - ', $order));
 });

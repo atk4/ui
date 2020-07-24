@@ -34,12 +34,12 @@ class Lister extends View
     /**
      * A dynamic paginator attach to window scroll event.
      *
-     * @var jsPaginator|null
+     * @var JsPaginator|null
      */
     public $jsPaginator;
 
     /**
-     * The number of item per page for jsPaginator.
+     * The number of item per page for JsPaginator.
      *
      * @var int|null
      */
@@ -98,7 +98,7 @@ class Lister extends View
     public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = null)
     {
         $this->ipp = $ipp;
-        $this->jsPaginator = jsPaginator::addTo($this, ['view' => $container, 'options' => $options]);
+        $this->jsPaginator = JsPaginator::addTo($this, ['view' => $container, 'options' => $options]);
 
         // set initial model limit. can be overwritten by onScroll
         $this->model->setLimit($ipp);
@@ -109,26 +109,24 @@ class Lister extends View
             $this->model->setLimit($ipp, ($p - 1) * $ipp);
 
             // render this View (it will count rendered records !)
-            $json = $this->renderJSON(true, $scrollRegion);
+            $jsonArr = $this->renderToJsonArr(true, $scrollRegion);
 
             // if there will be no more pages, then replace message=Success to let JS know that there are no more records
             if ($this->_rendered_rows_count < $ipp) {
-                $json = json_decode($json, true);
-                $json['message'] = 'Done'; // Done status means - no more requests from JS side
-                $json = json_encode($json);
+                $jsonArr['message'] = 'Done'; // Done status means - no more requests from JS side
             }
 
             // return json response
-            $this->app->terminateJSON($json);
+            $this->app->terminateJson($jsonArr);
         });
 
         return $this;
     }
 
-    /** @var int This will count how many rows are rendered. Needed for jsPaginator for example. */
+    /** @var int This will count how many rows are rendered. Needed for JsPaginator for example. */
     protected $_rendered_rows_count = 0;
 
-    public function renderView()
+    protected function renderView(): void
     {
         if (!$this->template) {
             throw new Exception('Lister requires you to specify template explicitly');
@@ -136,7 +134,9 @@ class Lister extends View
 
         // if no model is set, don't show anything (even warning)
         if (!$this->model) {
-            return parent::renderView();
+            parent::renderView();
+
+            return;
         }
 
         // Generate template for data row
@@ -160,19 +160,19 @@ class Lister extends View
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
                 $empty = isset($this->t_empty) ? $this->t_empty->render() : '';
                 if ($this->template->hasTag('rows')) {
-                    $this->template->appendHTML('rows', $empty);
+                    $this->template->appendHtml('rows', $empty);
                 } else {
-                    $this->template->appendHTML('_top', $empty);
+                    $this->template->appendHtml('_top', $empty);
                 }
             }
         }
 
-        // stop jsPaginator if there are no more records to fetch
+        // stop JsPaginator if there are no more records to fetch
         if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
             $this->jsPaginator->jsIdle();
         }
 
-        return parent::renderView(); //$this->template->render();
+        parent::renderView();
     }
 
     /**
@@ -189,9 +189,9 @@ class Lister extends View
 
         $html = $this->t_row->render();
         if ($this->template->hasTag('rows')) {
-            $this->template->appendHTML('rows', $html);
+            $this->template->appendHtml('rows', $html);
         } else {
-            $this->template->appendHTML('_top', $html);
+            $this->template->appendHtml('_top', $html);
         }
     }
 }

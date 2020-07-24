@@ -12,11 +12,11 @@ require_once __DIR__ . '/../init-app.php';
 $bar = \atk4\ui\ProgressBar::addTo($app);
 
 $button = \atk4\ui\Button::addTo($app, ['Turn On']);
-$btn_stop = \atk4\ui\Button::addTo($app, ['Turn Off']);
+$buttonStop = \atk4\ui\Button::addTo($app, ['Turn Off']);
 // non-SSE way
 //$button->on('click', $bar->js()->progress(['percent'=> 40]));
 
-$sse = \atk4\ui\jsSSE::addTo($app, ['showLoader' => true]);
+$sse = \atk4\ui\JsSse::addTo($app, ['showLoader' => true]);
 
 $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     $sse->send($button->js()->addClass('disabled'));
@@ -37,12 +37,12 @@ $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     ];
 }));
 
-$btn_stop->on('click', [$button->js()->atkServerEvent('stop'), $button->js()->removeClass('disabled')]);
+$buttonStop->on('click', [$button->js()->atkServerEvent('stop'), $button->js()->removeClass('disabled')]);
 
 \atk4\ui\View::addTo($app, ['ui' => 'divider']);
 \atk4\ui\Header::addTo($app, ['SSE operation with user confirmation']);
 
-$sse = \atk4\ui\jsSSE::addTo($app);
+$sse = \atk4\ui\JsSse::addTo($app);
 $button = \atk4\ui\Button::addTo($app, ['Click me to change my text']);
 
 $button->on('click', $sse->set(function ($jsChain) use ($sse, $button) {

@@ -34,9 +34,9 @@ class Demo extends \atk4\ui\Columns
     public function highLightCode()
     {
         if (!self::$isInitialized) {
-            $this->app->requireCSS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/' . $this->highlightDefaultStyle . '.min.css');
-            $this->app->requireJS('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js');
-            $this->js(true, (new \atk4\ui\jsChain('hljs'))->initHighlighting());
+            $this->app->requireCss('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/' . $this->highlightDefaultStyle . '.min.css');
+            $this->app->requireJs('//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js');
+            $this->js(true, (new \atk4\ui\JsChain('hljs'))->initHighlighting());
             self::$isInitialized = true;
         }
     }

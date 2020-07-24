@@ -6,6 +6,9 @@
  - add query builder component for ScopeBuilder form field
    - extends Vue Query Builder default to work with Fomantic ui.
 
+### version 1.14.3 (2020-07-13)
+ - Update dependencies.
+ 
 ### version 1.14.2 (2020-05-04)
  - Build releases automatically on ui.agiletoolkit.org deploy
 
@@ -152,7 +155,7 @@ the last column and last row.
 
 ### version 1.6.5
 
- - Add multiline component for MultiLine form field.
+ - Add multiline component for MultiLine form control.
 
 ### version 1.6.4
 
@@ -239,8 +242,8 @@ Maintenance release.
 
 ### version 1.3.4
 
-  - Allow jsSearch to load using already set input value.
-  - Allow to set input filter in jsSearch using setFilter(text) function.
+  - Allow JsSearch to load using already set input value.
+  - Allow to set input filter in JsSearch using setFilter(text) function.
 
 ### version 1.3.3
 
@@ -252,7 +255,7 @@ Maintenance release.
 
 ### version 1.3.1
 
-  - Add more generic method jsSearch::setUrlArgs(arg, value) in favor of deprecared setSortArgs method.
+  - Add more generic method JsSearch::setUrlArgs(arg, value) in favor of deprecared setSortArgs method.
   
 ### version 1.3.0
 
@@ -266,7 +269,7 @@ Maintenance release.
 
 ### version 1.2.0
 
-  - add plugin, jsSortable, to allow reordering of list element via drap n drop.
+  - add plugin, JsSortable, to allow reordering of list element via drap n drop.
 
 ### version 1.1.0
 

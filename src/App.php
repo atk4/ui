@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace atk4\ui;
 
 use atk4\core\AppScopeTrait;
-use atk4\core\DIContainerTrait;
+use atk4\core\DiContainerTrait;
 use atk4\core\DynamicMethodTrait;
 use atk4\core\FactoryTrait;
 use atk4\core\HookTrait;
 use atk4\core\InitializerTrait;
 use atk4\data\Persistence;
 use atk4\ui\Exception\ExitApplicationException;
-use atk4\ui\Layout\Centered;
-use atk4\ui\Layout\Generic;
-use atk4\ui\Persistence\UI;
+use atk4\ui\Persistence\Ui as UiPersistence;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -26,7 +24,7 @@ class App
     use DynamicMethodTrait;
     use FactoryTrait;
     use AppScopeTrait;
-    use DIContainerTrait;
+    use DiContainerTrait;
 
     /** @const string */
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
@@ -43,7 +41,7 @@ class App
         'atk' => 'https://ui.agiletoolkit.org/public', // develop branch
         'jquery' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1',
         'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.5',
+        'semantic-ui' => 'https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6',
     ];
 
     /** @var string Version of Agile UI */
@@ -52,7 +50,7 @@ class App
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
 
-    /** @var Generic */
+    /** @var Layout */
     public $layout; // the top-most view object
 
     /**
@@ -100,12 +98,12 @@ class App
      *
      * @var bool
      */
-    public $exit_called = false;
+    private $exit_called = false;
 
     /** @var bool */
     public $is_rendering = false;
 
-    /** @var UI */
+    /** @var UiPersistence */
     public $ui_persistence;
 
     /** @var View For internal use */
@@ -147,7 +145,7 @@ class App
      *
      * @var int
      */
-    protected $catch_error_types = E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_DEPRECATED;
+    protected $catch_error_types = E_ALL & ~E_NOTICE;
 
     /**
      * Constructor.
@@ -212,7 +210,7 @@ class App
 
         // Set up UI persistence
         if (!isset($this->ui_persistence)) {
-            $this->ui_persistence = new UI();
+            $this->ui_persistence = new UiPersistence();
         }
     }
 
@@ -245,26 +243,24 @@ class App
 
     /**
      * Catch exception.
-     *
-     * @return bool
      */
-    public function caughtException(\Throwable $exception)
+    public function caughtException(\Throwable $exception): void
     {
         $this->catch_runaway_callbacks = false;
 
         // just replace layout to avoid any extended App->_construct problems
         // it will maintain everything as in the original app StickyGet, logger, Events
         $this->html = null;
-        $this->initLayout(Centered::class);
+        $this->initLayout([Layout\Centered::class]);
 
-        $this->layout->template->setHTML('Content', $this->renderExceptionHTML($exception));
+        $this->layout->template->setHtml('Content', $this->renderExceptionHtml($exception));
 
         // remove header
         $this->layout->template->tryDel('Header');
 
         if (($this->isJsUrlRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
                 && !isset($_GET['__atk_tab'])) {
-            $this->outputResponseJSON([
+            $this->outputResponseJson([
                 'success' => false,
                 'message' => $this->layout->getHtml(),
             ]);
@@ -276,8 +272,6 @@ class App
         // Process is already in shutdown/stop
         // no need of call exit function
         $this->callExit(true);
-
-        return true;
     }
 
     /**
@@ -332,11 +326,11 @@ class App
 
     /**
      * Will perform a preemptive output and terminate. Do not use this
-     * directly, instead call it form Callback, jsCallback or similar
+     * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
      * @param string|array $output  Array type is supported only for JSON response
-     * @param string[]     $headers content-type header must be always set or consider using App::terminateHTML() or App::terminateJSON() methods
+     * @param string[]     $headers content-type header must be always set or consider using App::terminateHtml() or App::terminateJson() methods
      */
     public function terminate($output = '', array $headers = []): void
     {
@@ -358,7 +352,7 @@ class App
             }
             $output['modals'] = $this->getRenderedModals();
 
-            $this->outputResponseJSON($output, $headers);
+            $this->outputResponseJson($output, $headers);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
             // because fomantic ui tab only deal with html and not JSON
@@ -377,9 +371,9 @@ class App
             }
             $output = '<script>jQuery(function() {' . $remove_function . $output['atkjs'] . '});</script>' . $output['html'];
 
-            $this->outputResponseHTML($output, $headers);
+            $this->outputResponseHtml($output, $headers);
         } elseif ($type === 'text/html') {
-            $this->outputResponseHTML($output, $headers);
+            $this->outputResponseHtml($output, $headers);
         } else {
             $this->outputResponse($output, $headers);
         }
@@ -388,7 +382,7 @@ class App
         $this->callExit();
     }
 
-    public function terminateHTML($output, array $headers = []): void
+    public function terminateHtml($output, array $headers = []): void
     {
         if ($output instanceof View) {
             $output = $output->render();
@@ -402,10 +396,10 @@ class App
         );
     }
 
-    public function terminateJSON($output, array $headers = []): void
+    public function terminateJson($output, array $headers = []): void
     {
         if ($output instanceof View) {
-            $output = $output->renderJSON();
+            $output = $output->renderToJsonArr();
         }
 
         $this->terminate(
@@ -417,7 +411,7 @@ class App
     /**
      * Initializes layout.
      *
-     * @param string|Layout\Generic|array $seed
+     * @param string|Layout|array $seed
      *
      * @return $this
      */
@@ -445,18 +439,18 @@ class App
     public function initIncludes()
     {
         // jQuery
-        $this->requireJS($this->cdn['jquery'] . '/jquery.min.js');
+        $this->requireJs($this->cdn['jquery'] . '/jquery.min.js');
 
         // Semantic UI
-        $this->requireJS($this->cdn['semantic-ui'] . '/semantic.min.js');
-        $this->requireCSS($this->cdn['semantic-ui'] . '/semantic.min.css');
+        $this->requireJs($this->cdn['semantic-ui'] . '/semantic.min.js');
+        $this->requireCss($this->cdn['semantic-ui'] . '/semantic.min.css');
 
         // Serialize Object
-        $this->requireJS($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
+        $this->requireJs($this->cdn['serialize-object'] . '/jquery.serialize-object.min.js');
 
         // Agile UI
-        $this->requireJS($this->cdn['atk'] . '/atkjs-ui.min.js');
-        $this->requireCSS($this->cdn['atk'] . '/agileui.css');
+        $this->requireJs($this->cdn['atk'] . '/atkjs-ui.min.js');
+        $this->requireCss($this->cdn['atk'] . '/agileui.css');
     }
 
     /**
@@ -470,7 +464,7 @@ class App
         if (!$this->html) {
             throw new Exception('App does not know how to add style');
         }
-        $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
+        $this->html->template->appendHtml('HEAD', $this->getTag('style', $style));
     }
 
     /**
@@ -496,10 +490,9 @@ class App
      */
     public function run()
     {
-        $is_exit_exception = false;
+        $isExitException = false;
 
         try {
-            ob_start();
             $this->run_called = true;
             $this->hook(self::HOOK_BEFORE_RENDER);
             $this->is_rendering = true;
@@ -511,30 +504,29 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->appendHTML('HEAD', $this->html->getJS());
+            $this->html->template->appendHtml('HEAD', $this->html->getJs());
             $this->is_rendering = false;
             $this->hook(self::HOOK_BEFORE_OUTPUT);
 
             if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
-                $this->setResponseStatusCode(500);
-                $this->terminate(
-                    $this->buildLateErrorStr('Callback requested, but never reached. You may be missing some arguments in request URL.'),
-                    ['content-type' => 'text/plain']
-                );
+                throw new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.');
             }
-            echo $this->html->template->render();
+
+            $output = $this->html->template->render();
         } catch (ExitApplicationException $e) {
-            $is_exit_exception = true;
+            $output = '';
+            $isExitException = true;
         }
 
-        $output = ob_get_clean();
-        if ($this->isJsUrlRequest()) {
-            $this->outputResponseJSON($output);
-        } else {
-            $this->outputResponseHTML($output);
+        if (!$this->exit_called) { // output already send by terminate()
+            if ($this->isJsUrlRequest()) {
+                $this->outputResponseJson($output);
+            } else {
+                $this->outputResponseHtml($output);
+            }
         }
 
-        if ($is_exit_exception) {
+        if ($isExitException) {
             $this->callExit();
         }
     }
@@ -575,25 +567,7 @@ class App
             ->addMoreInfo('template_dir', $this->template_dir);
     }
 
-    /**
-     * Connects database.
-     *
-     * @param string $dsn      Format as PDO DSN or use "mysql://user:pass@host/db;option=blah", leaving user and password arguments = null
-     * @param string $user
-     * @param string $password
-     * @param array  $args
-     *
-     * @return Persistence
-     */
-    public function dbConnect($dsn, $user = null, $password = null, $args = [])
-    {
-        $this->db = Persistence::connect($dsn, $user, $password, $args);
-        $this->db->app = $this;
-
-        return $this->db;
-    }
-
-    protected function getRequestURI()
+    protected function getRequestUrl()
     {
         if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
             $request_uri = $_SERVER['HTTP_X_REWRITE_URL'];
@@ -611,7 +585,7 @@ class App
     }
 
     /**
-     * @var null
+     * @var string|null
      */
     public $page;
 
@@ -657,7 +631,7 @@ class App
         }
 
         if ($this->page === null) {
-            $requestUrl = $this->getRequestURI();
+            $requestUrl = $this->getRequestUrl();
             if (substr($requestUrl, -1, 1) === '/') {
                 $this->page = 'index';
             } else {
@@ -716,7 +690,7 @@ class App
      *
      * @return string
      */
-    public function jsURL($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
+    public function jsUrl($page = [], $needRequestUri = false, $extraRequestUriArgs = [])
     {
         // append to the end but allow override
         $extraRequestUriArgs = array_merge($extraRequestUriArgs, ['__atk_json' => 1], $extraRequestUriArgs);
@@ -725,7 +699,7 @@ class App
     }
 
     /**
-     * Request was made using App::jsURL().
+     * Request was made using App::jsUrl().
      */
     public function isJsUrlRequest(): bool
     {
@@ -741,9 +715,9 @@ class App
      *
      * @return $this
      */
-    public function requireJS($url, $isAsync = false, $isDefer = false)
+    public function requireJs($url, $isAsync = false, $isDefer = false)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
+        $this->html->template->appendHtml('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
 
         return $this;
     }
@@ -755,9 +729,9 @@ class App
      *
      * @return $this
      */
-    public function requireCSS($url)
+    public function requireCss($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
+        $this->html->template->appendHtml('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
 
         return $this;
     }
@@ -769,7 +743,7 @@ class App
      */
     public function redirect($page, bool $permanent = false): void
     {
-        $this->terminateHTML('', ['location' => $this->url($page), self::HEADER_STATUS_CODE => $permanent ? '301' : '302']);
+        $this->terminateHtml('', ['location' => $this->url($page), self::HEADER_STATUS_CODE => $permanent ? '301' : '302']);
     }
 
     /**
@@ -777,9 +751,9 @@ class App
      *
      * @param string|array $page Destination URL or page/arguments
      */
-    public function jsRedirect($page, bool $newWindow = false): jsExpression
+    public function jsRedirect($page, bool $newWindow = false): JsExpression
     {
-        return new jsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
+        return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
 
     /**
@@ -906,7 +880,7 @@ class App
                 } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
                     $result[] = $v;
                 } else {
-                    $result[] = $this->encodeHTML($v);
+                    $result[] = $this->encodeHtml($v);
                 }
             }
             $value = implode('', $result);
@@ -955,7 +929,7 @@ class App
     /**
      * Encodes string - removes HTML entities.
      */
-    public function encodeHTML(string $val): string
+    public function encodeHtml(string $val): string
     {
         return htmlentities($val);
     }
@@ -986,7 +960,7 @@ class App
         // replace large JSON integers only, do not replace anything in JSON/JS strings
         $json = preg_replace_callback('~(?:"(?:[^"\\\\]+|\\\\.)*")?+\K|(?:\'(?:[^\'\\\\]+|\\\\.)*\')?+\K|(?:^|[{\[,:])'
             . '[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function ($matches) {
-                if ($matches[0] === '' || abs((int) $matches[0]) < (1 << 53)) {
+                if ($matches[0] === '' || abs((int) $matches[0]) < (2 ** 53)) {
                     return $matches[0];
                 }
 
@@ -1001,14 +975,14 @@ class App
      * to put it inside boilerplate HTML and output, e.g:.
      *
      *   $app = new \atk4\ui\App();
-     *   $app->initLayout(\atk4\ui\Layout\Centered::class);
-     *   $app->layout->template->setHTML('Content', $e->getHTML());
+     *   $app->initLayout([\atk4\ui\Layout\Centered::class]);
+     *   $app->layout->template->setHtml('Content', $e->getHtml());
      *   $app->run();
      *   $app->callExit(true);
      */
-    public function renderExceptionHTML(\Throwable $exception): string
+    public function renderExceptionHtml(\Throwable $exception): string
     {
-        return (string) new \atk4\core\ExceptionRenderer\HTML($exception);
+        return (string) new \atk4\core\ExceptionRenderer\Html($exception);
     }
 
     protected function setupAlwaysRun(): void
@@ -1035,11 +1009,6 @@ class App
 
     // RESPONSES
 
-    private function buildLateErrorStr(string $msg): string
-    {
-        return "\n" . '!! ATK4 UI ERROR: ' . $msg . ' !!' . "\n";
-    }
-
     /** @var string[] */
     private static $_sentHeaders = [];
 
@@ -1056,21 +1025,21 @@ class App
 
         $isCli = \PHP_SAPI === 'cli'; // for phpunit
 
-        $lateErrorStr = null;
+        $lateError = null;
         foreach (ob_get_status(true) as $status) {
             if ($status['buffer_used'] !== 0 && !$isCli) {
-                $lateErrorStr = $this->buildLateErrorStr('Unexpected output detected.');
+                $lateError = 'Unexpected output detected.';
 
                 break;
             }
         }
 
-        if ($lateErrorStr === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
-            $lateErrorStr = $this->buildLateErrorStr('Headers already sent, more headers can not be set at this stage.');
+        if ($lateError === null && count($headersNew) > 0 && headers_sent() && !$isCli) {
+            $lateError = 'Headers already sent, more headers can not be set at this stage.';
         }
 
         if (!headers_sent() || $isCli) {
-            if ($lateErrorStr !== null) {
+            if ($lateError !== null) {
                 $headersNew = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
             }
 
@@ -1091,8 +1060,8 @@ class App
             }
         }
 
-        if ($lateErrorStr !== null) {
-            echo $lateErrorStr;
+        if ($lateError !== null) {
+            echo "\n" . '!! FATAL UI ERROR: ' . $lateError . ' !!' . "\n";
             exit(1);
         }
 
@@ -1104,7 +1073,7 @@ class App
      *
      * @param string[] $headers
      */
-    private function outputResponseHTML(string $data, array $headers = []): void
+    private function outputResponseHtml(string $data, array $headers = []): void
     {
         $this->outputResponse(
             $data,
@@ -1118,7 +1087,7 @@ class App
      * @param string|array $data
      * @param string[]     $headers
      */
-    private function outputResponseJSON($data, array $headers = []): void
+    private function outputResponseJson($data, array $headers = []): void
     {
         if (!is_string($data)) {
             $data = $this->encodeJson($data);
@@ -1135,10 +1104,13 @@ class App
      */
     public function getRenderedModals(): array
     {
+        // prevent looping (calling App::terminateJson() recursively) if JsReload is used in Modal
+        unset($_GET['__atk_reload']);
+
         $modals = [];
         foreach ($this->html !== null ? $this->html->elements : [] as $view) {
             if ($view instanceof Modal) {
-                $modals[$view->name]['html'] = $view->getHTML();
+                $modals[$view->name]['html'] = $view->getHtml();
                 $modals[$view->name]['js'] = $view->getJsRenderActions();
             }
         }

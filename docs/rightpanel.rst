@@ -64,4 +64,4 @@ This method may take up to three arguments.
     to the trigger element as long as the panel remains open. This help visualize, which element has trigger the
     panel opening.
 
-    $jsTrigger: a jsExpression that represent the jQuery object where the data property reside. Default to $(this).
+    $jsTrigger: a JsExpression that represent the jQuery object where the data property reside. Default to $(this).

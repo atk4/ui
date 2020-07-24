@@ -103,7 +103,7 @@ App class first and then continue with Layout initialization::
 Finally, if you prefer a more consise code, you can also use the following format::
 
     $app = new \atk4\ui\App('My App');
-    $top = $app->initLayout(\atk4\ui\View::class, ['ui'=>'segments']);
+    $top = $app->initLayout([\atk4\ui\View::class, 'ui'=>'segments']);
 
     $middle = View::addTo($top, ['ui'=>'segment', 'red']);
 
@@ -137,7 +137,7 @@ Agile UI will automatically pass your $app class to all the views.
 Integration with Agile Data
 ===========================
 
-.. php:method:: setModel($m)
+.. php:method:: setModel($model)
 
     Associate current view with a domain model.
 
@@ -293,13 +293,13 @@ Any view has the ability to render itself. Once executed, render will perform th
  - returns ``<script>`` with on-dom-ready instructions along with rendering of a current view.
 
 You must not override render() in your objects. If you are integrating Agile UI into your
-framework you shouldn't even use ``render()``, but instead use ``getHTML`` and ``getJS``.
+framework you shouldn't even use ``render()``, but instead use ``getHtml`` and ``getJs``.
 
-.. php:method:: getHTML()
+.. php:method:: getHtml()
 
     Returns HTML for this View as well as all the child views.
 
-.. php:method:: getJS()
+.. php:method:: getJs()
 
     Return array of JS chains that was assigned to current element or it's children.
 
@@ -317,7 +317,8 @@ of this view.
 
 You should override this method when necessary and don't forget to execute parent::renderView()::
 
-    function renderView() {
+    protected function renderView(): void
+    {
         if (str_len($this->info) > 100) {
              $this->addClass('tiny');
         }
@@ -368,7 +369,8 @@ Here is a best practice for using custom template::
 
         public $title = 'Default Title';
 
-        function renderView() {
+        protected function renderView(): void
+        {
             parent::renderView();
             $this->template['title'] = $this->title;
         }
@@ -433,7 +435,7 @@ If role is unspecified then 'view' will be used. The main benefit here is to hav
 allocation of all the IDs througout the render-tree ensuring that those ID's are consistent
 between page requests.
 
-It is also possible to set the "last" bit of the ID postfix. When Form fields are populated,
+It is also possible to set the "last" bit of the ID postfix. When Form controls are populated,
 the name of the field will be used instead of the role. This is done by setting 'name' propoerty.
 
 
@@ -442,24 +444,13 @@ the name of the field will be used instead of the role. This is done by setting 
     Specify a name for the element. If container already has object with specified name, exception
     will be thrown.
 
-.. php:method:: getJSID
-
-    Return a unique ID for a given element based on owner's ID and our name.
-
-Example::
-
-    $layout = new \atk4\ui\Layout(['id'=>'foo'])
-    $butt = Button::addTo($layout, ['name'=>'bar']);
-
-    echo $butt->getJSID();  // foo_bar
-
 
 Reloading a View
 ================
 
-.. php:method:: jsReload($get_arguments)
+.. php:method:: JsReload($get_arguments)
 
-Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::jsReload(),
+Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::JsReload(),
 which will respond with JavaScript Action for reloading the view::
 
     $b1 = Button::addTo($app, ['Click me']);
@@ -468,7 +459,7 @@ which will respond with JavaScript Action for reloading the view::
     $b1->on('click', $b2->jsReload());
 
     // Previously:
-    // $b1->on('click', new \atk4\ui\jsReload($b2));
+    // $b1->on('click', new \atk4\ui\JsReload($b2));
 
 
 

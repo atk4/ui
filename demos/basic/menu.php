@@ -10,44 +10,44 @@ namespace atk4\ui\demo;
 /** @var \atk4\ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$m = \atk4\ui\Menu::addTo($app);
-$m->addItem('foo', 'foo.php');
-$m->addItem('bar');
-$m->addItem('baz');
-$d = \atk4\ui\DropDown::addTo($m, ['With Callback', 'js' => ['on' => 'hover']]);
-$d->setSource(['a', 'b', 'c']);
-$d->onChange(function ($item) {
+$menu = \atk4\ui\Menu::addTo($app);
+$menu->addItem('foo', 'foo.php');
+$menu->addItem('bar');
+$menu->addItem('baz');
+$dropdown = \atk4\ui\Dropdown::addTo($menu, ['With Callback', 'js' => ['on' => 'hover']]);
+$dropdown->setSource(['a', 'b', 'c']);
+$dropdown->onChange(function ($item) {
     return 'New seleced item: ' . $item;
 });
 
-$sm = $m->addMenu('Sub-menu');
-$sm->addItem('one', 'one.php');
-$sm->addItem(['two', 'label' => 'VIP', 'disabled']);
+$submenu = $menu->addMenu('Sub-menu');
+$submenu->addItem('one', 'one.php');
+$submenu->addItem(['two', 'label' => 'VIP', 'disabled']);
 
-$sm = $sm->addMenu('Sub-menu');
-$sm->addItem('one');
-$sm->addItem('two');
+$submenu = $submenu->addMenu('Sub-menu');
+$submenu->addItem('one');
+$submenu->addItem('two');
 
-$m = \atk4\ui\Menu::addTo($app, ['vertical pointing']);
-$m->addItem(['Inbox', 'label' => ['123', 'teal left pointing']]);
-$m->addItem('Spam');
-\atk4\ui\FormField\Input::addTo($m->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
+$menu = \atk4\ui\Menu::addTo($app, ['vertical pointing']);
+$menu->addItem(['Inbox', 'label' => ['123', 'teal left pointing']]);
+$menu->addItem('Spam');
+\atk4\ui\Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
 
-$m = \atk4\ui\Menu::addTo($app, ['secondary vertical pointing']);
-$m->addItem(['Inbox', 'label' => ['123', 'teal left pointing']]);
-$m->addItem('Spam');
-\atk4\ui\FormField\Input::addTo($m->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
-$m = \atk4\ui\Menu::addTo($app, ['vertical']);
-$gr = $m->addGroup('Products');
-$gr->addItem('Enterprise');
-$gr->addItem('Consumer');
+$menu = \atk4\ui\Menu::addTo($app, ['secondary vertical pointing']);
+$menu->addItem(['Inbox', 'label' => ['123', 'teal left pointing']]);
+$menu->addItem('Spam');
+\atk4\ui\Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
+$menu = \atk4\ui\Menu::addTo($app, ['vertical']);
+$group = $menu->addGroup('Products');
+$group->addItem('Enterprise');
+$group->addItem('Consumer');
 
-$gr = $m->addGroup('Hosting');
-$gr->addItem('Shared');
-$gr->addItem('Dedicated');
+$group = $menu->addGroup('Hosting');
+$group->addItem('Shared');
+$group->addItem('Dedicated');
 
-$m = \atk4\ui\Menu::addTo($app, ['vertical']);
-$i = $m->addItem();
+$menu = \atk4\ui\Menu::addTo($app, ['vertical']);
+$i = $menu->addItem();
 \atk4\ui\Header::addTo($i, ['size' => 4])->set('Promotions');
 \atk4\ui\View::addTo($i, ['element' => 'P'])->set('Check out our promotions');
 

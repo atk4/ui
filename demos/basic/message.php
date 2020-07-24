@@ -13,7 +13,7 @@ $img = 'https://github.com/atk4/ui/raw/07208a0af84109f0d6e3553e242720d8aeedb784/
 
 $seg = \atk4\ui\View::addTo($app, ['ui' => 'raised segment']);
 
-$bar_type = \atk4\ui\View::addTo($seg, ['ui' => ' basic buttons']);
+$barType = \atk4\ui\View::addTo($seg, ['ui' => ' basic buttons']);
 
 $msg = \atk4\ui\Message::addTo($seg, [
     'This is a title of your message',
@@ -22,16 +22,16 @@ $msg = \atk4\ui\Message::addTo($seg, [
 ]);
 $msg->text->addParagraph('You can add some more text here for your messages');
 
-$bar_type->on('click', '.button', new \atk4\ui\jsReload($seg, ['type' => (new \atk4\ui\jQuery())->text()]));
-\atk4\ui\Button::addTo($bar_type, ['success']);
-\atk4\ui\Button::addTo($bar_type, ['error']);
-\atk4\ui\Button::addTo($bar_type, ['info']);
-\atk4\ui\Button::addTo($bar_type, ['warning']);
+$barType->on('click', '.button', new \atk4\ui\JsReload($seg, ['type' => (new \atk4\ui\Jquery())->text()]));
+\atk4\ui\Button::addTo($barType, ['success']);
+\atk4\ui\Button::addTo($barType, ['error']);
+\atk4\ui\Button::addTo($barType, ['info']);
+\atk4\ui\Button::addTo($barType, ['warning']);
 
-$bar_icon = \atk4\ui\View::addTo($seg, ['ui' => ' basic buttons']);
-$bar_icon->on('click', '.button', new \atk4\ui\jsReload($seg, ['icon' => (new \atk4\ui\jQuery())->find('i')->attr('class')]));
-\atk4\ui\Button::addTo($bar_icon, ['icon' => 'book']);
-\atk4\ui\Button::addTo($bar_icon, ['icon' => 'check circle outline']);
-\atk4\ui\Button::addTo($bar_icon, ['icon' => 'pointing right']);
-\atk4\ui\Button::addTo($bar_icon, ['icon' => 'asterisk loading']);
-\atk4\ui\Button::addTo($bar_icon, ['icon' => 'vertically flipped cloud']);
+$barIcon = \atk4\ui\View::addTo($seg, ['ui' => ' basic buttons']);
+$barIcon->on('click', '.button', new \atk4\ui\JsReload($seg, ['icon' => (new \atk4\ui\Jquery())->find('i')->attr('class')]));
+\atk4\ui\Button::addTo($barIcon, ['icon' => 'book']);
+\atk4\ui\Button::addTo($barIcon, ['icon' => 'check circle outline']);
+\atk4\ui\Button::addTo($barIcon, ['icon' => 'pointing right']);
+\atk4\ui\Button::addTo($barIcon, ['icon' => 'asterisk loading']);
+\atk4\ui\Button::addTo($barIcon, ['icon' => 'vertically flipped cloud']);
