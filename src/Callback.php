@@ -36,32 +36,18 @@ class Callback
     use StaticAddToTrait;
 
     /**
-     * Will look for trigger in the POST data. Will not care about URL, but
-     * $_POST[$this->postTrigger] must be set.
+     * Whether urlTrigger is set via Post or Get (default).
      *
-     * @var string|bool
+     * @var bool
      */
-    public $postTrigger = false;
+    public $isPostTriggered;
 
     /**
-     * Contains either false if callback wasn't triggered or the value passed
-     * as an argument to a call-back.
-     *
-     * e.g. following URL of getUrl('test') will result in $triggered = 'test';
-     *
-     * @var string|false
-     */
-    public $triggered = false;
-
-    /**
-     * Specify a custom GET trigger here.
+     * Specify a custom GET or POST trigger here.
      *
      * @var string|null
      */
-    public $urlTrigger;
-
-    /** @var bool stick callback url argument to view or application. */
-    public $appSticky = false;
+    private $urlTrigger;
 
     /**
      * Initialize object and set default properties.
@@ -88,11 +74,18 @@ class Callback
             $this->urlTrigger = $this->name;
         }
 
-        if ($this->postTrigger === true) {
-            $this->postTrigger = $this->name;
-        }
+        $this->app->stickyGet($this->urlTrigger);
+    }
 
-        $this->appSticky ? $this->app->stickyGet($this->urlTrigger) : $this->owner->stickyGet($this->urlTrigger);
+    public function setUrlTrigger(string $trigger)
+    {
+        $this->urlTrigger = $trigger;
+        $this->app->stickyGet($this->urlTrigger);
+    }
+
+    public function getUrlTrigger(): string
+    {
+        return $this->urlTrigger;
     }
 
     /**
@@ -105,43 +98,29 @@ class Callback
      */
     public function set($callback, $args = [])
     {
-        if ($this->postTrigger) {
-            if (isset($_POST[$this->postTrigger])) {
-                $this->app->catch_runaway_callbacks = false;
-                $this->triggered = $_POST[$this->postTrigger];
+        if ($this->isTriggered()) {
+            $this->app->catch_runaway_callbacks = false;
+            $t = $this->app->run_called;
+            $this->app->run_called = true;
+            $ret = call_user_func_array($callback, $args);
+            $this->app->run_called = $t;
 
-                $t = $this->app->run_called;
-                $this->app->run_called = true;
-                $ret = call_user_func_array($callback, $args);
-                $this->app->run_called = $t;
-
-                return $ret;
-            }
-        } else {
-            if (isset($_GET[$this->urlTrigger])) {
-                $this->app->catch_runaway_callbacks = false;
-                $this->triggered = $_GET[$this->urlTrigger];
-
-                $t = $this->app->run_called;
-                $this->app->run_called = true;
-                $this->owner->stickyGet($this->urlTrigger);
-                $ret = call_user_func_array($callback, $args);
-                //$this->app->stickyForget($this->name);
-                $this->app->run_called = $t;
-
-                return $ret;
-            }
+            return $ret;
         }
     }
 
     /**
      * Terminate this callback
-     * by rendering the owner view.
+     * by rendering the owner view by default.
      */
-    public function terminate()
+    public function terminateJson(View $view = null)
     {
+        if (!$view) {
+            $view = $this->owner;
+        }
+
         if ($this->canTerminate()) {
-            $this->app->terminateJson($this->owner);
+            $this->app->terminateJson($view);
         }
     }
 
@@ -155,12 +134,25 @@ class Callback
         return !$reload || $this->owner->name === $reload;
     }
 
-    /**
-     * Is callback triggered?
-     */
-    public function triggered()
+    public function isTriggered(): bool
     {
-        return $_GET[$this->urlTrigger] ?? false;
+        if ($this->isPostTriggered) {
+            return isset($_POST[$this->urlTrigger]);
+        }
+
+        return isset($_GET[$this->urlTrigger]);
+    }
+
+    /**
+     * Return this callback mode.
+     */
+    public function getMode(): string
+    {
+        if ($this->isPostTriggered) {
+            return  $_POST[$this->urlTrigger] ?? '';
+        }
+
+        return $_GET[$this->urlTrigger] ?? '';
     }
 
     /**
@@ -174,7 +166,7 @@ class Callback
      */
     public function getJsUrl($mode = 'ajax')
     {
-        return $this->owner->jsUrl([$this->urlTrigger => $mode, '__atk_callback' => 1], (bool) $this->postTrigger);
+        return $this->owner->jsUrl([$this->urlTrigger => $mode, '__atk_callback' => 1]);
     }
 
     /**
@@ -187,6 +179,6 @@ class Callback
      */
     public function getUrl($mode = 'callback')
     {
-        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback' => 1], (bool) $this->postTrigger);
+        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback' => 1]);
     }
 }

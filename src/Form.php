@@ -681,10 +681,10 @@ class Form extends View
      */
     public function ajaxSubmit()
     {
-        $this->_add($cb = new JsCallback(), ['desired_name' => 'submit', 'postTrigger' => true]);
+        $this->_add($cb = new JsCallback(), ['desired_name' => 'submit', 'isPostTriggered' => true]);
 
         View::addTo($this, ['element' => 'input'])
-            ->setAttr('name', $cb->postTrigger)
+            ->setAttr('name', $cb->getUrlTrigger())
             ->setAttr('value', 'submit')
             ->setStyle(['display' => 'none']);
 

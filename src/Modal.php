@@ -41,9 +41,6 @@ class Modal extends View
     public $cb_view;
     public $args = [];
 
-    /** @var bool Make callback url argument stick to application or view. */
-    public $appStickyCb = false;
-
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
 
@@ -64,6 +61,8 @@ class Modal extends View
 
     /**
      * Set callback function for this modal.
+     * $fx is set as an array in order to comply with View::set().
+     * TODO Rename this function and break BC?
      *
      * @param array|string $fx
      * @param array|string $arg2
@@ -92,16 +91,16 @@ class Modal extends View
         $this->cb_view = View::addTo($this);
         $this->cb_view->stickyGet('__atk_m', $this->name);
         if (!$this->cb) {
-            $this->cb = CallbackLater::addTo($this->cb_view, ['appSticky' => $this->appStickyCb]);
+            $this->cb = CallbackLater::addTo($this->cb_view);
         }
 
         $this->cb->set(function () {
-            if ($this->cb->triggered() && $this->fx) {
+            if ($this->cb->isTriggered() && $this->fx) {
                 $this->fx[0]($this->cb_view);
             }
             $modalName = $_GET['__atk_m'] ?? null;
             if ($modalName === $this->name) {
-                $this->app->terminateJson($this->cb_view);
+                $this->cb->terminateJson($this->cb_view);
             }
         });
     }

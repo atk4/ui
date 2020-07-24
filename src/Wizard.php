@@ -67,7 +67,7 @@ class Wizard extends View
             $this->stepCallback = Callback::addTo($this, ['urlTrigger' => $this->name]);
         }
 
-        $this->currentStep = (int) $this->stepCallback->triggered() ?: 0;
+        $this->currentStep = (int) $this->stepCallback->getMode() ?: 0;
 
         $this->stepTemplate = $this->template->cloneRegion('Step');
         $this->template->del('Step');
@@ -104,8 +104,8 @@ class Wizard extends View
         // add tabs menu item
         $this->steps[] = $this->add($step, 'Step');
 
-        if (!$this->stepCallback->triggered()) {
-            $_GET[$this->stepCallback->urlTrigger] = '0';
+        if (!$this->stepCallback->isTriggered()) {
+            $_GET[$this->stepCallback->getUrlTrigger()] = '0';
         }
 
         if ($step->sequence === $this->currentStep) {

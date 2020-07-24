@@ -90,12 +90,10 @@ class JsPaginator extends JsCallback
     public function onScroll($fx = null)
     {
         if (is_callable($fx)) {
-            if ($this->triggered()) {
                 $page = $this->getPage();
                 $this->set(function () use ($fx, $page) {
                     return call_user_func_array($fx, [$page]);
                 });
-            }
         }
     }
 }

@@ -78,7 +78,6 @@ class ItemsPerPageSelector extends View
     public function onPageLengthSelect($fx = null)
     {
         if (is_callable($fx)) {
-            if ($this->cb->triggered()) {
                 $this->cb->set(function () use ($fx) {
                     $ipp = $_GET['ipp'] ?? null;
                     //$this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
@@ -88,7 +87,6 @@ class ItemsPerPageSelector extends View
                         $this->app->terminateJson($reload);
                     }
                 });
-            }
         }
     }
 
