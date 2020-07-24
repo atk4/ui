@@ -1,5 +1,5 @@
 ## Release note
-### version 1.15.0 (2020-06-10)
+### version 1.15.0 (2020-07-16)
  - update package dependency
  - configure webpack in order to load and bundle .vue file.
     - now use terser plugin instead of uglify js for minimizing js.
