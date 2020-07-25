@@ -166,8 +166,7 @@ class Upload extends Input
     public function onUpload(\Closure $fx)
     {
         $this->hasUploadCb = true;
-        $action = $_POST['action'] ?? null;
-        if ($action === 'upload') {
+        if (($_POST['action'] ?? null) === 'upload') {
             $this->cb->set(function () use ($fx) {
                 $this->_isCbRunning = true;
 
@@ -212,8 +211,7 @@ class Upload extends Input
     public function onDelete(\Closure $fx)
     {
         $this->hasDeleteCb = true;
-        $action = $_POST['action'] ?? null;
-        if ($action === 'delete') {
+        if (($_POST['action'] ?? null) === 'delete') {
             $this->cb->set(function () use ($fx) {
                 $this->_isCbRunning = true;
 
