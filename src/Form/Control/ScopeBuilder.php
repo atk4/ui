@@ -193,6 +193,8 @@ class ScopeBuilder extends Control
                 self::OPERATOR_TEXT_DOESNOT_MATCH_REGEX,
                 self::OPERATOR_IN,
                 self::OPERATOR_NOT_IN,
+                self::OPERATOR_EMPTY,
+                self::OPERATOR_NOT_EMPTY,
             ],
         ],
         'enum' => [
@@ -200,6 +202,8 @@ class ScopeBuilder extends Control
             'operators' => [
                 self::OPERATOR_EQUALS,
                 self::OPERATOR_DOESNOT_EQUAL,
+                self::OPERATOR_EMPTY,
+                self::OPERATOR_NOT_EMPTY,
             ],
             'choices' => [__CLASS__, 'getChoices'],
         ],
@@ -213,6 +217,8 @@ class ScopeBuilder extends Control
                 self::OPERATOR_SIGN_GREATER_EQUAL,
                 self::OPERATOR_SIGN_LESS,
                 self::OPERATOR_SIGN_LESS_EQUAL,
+                self::OPERATOR_EMPTY,
+                self::OPERATOR_NOT_EMPTY,
             ],
         ],
         'boolean' => [
@@ -538,7 +544,7 @@ class ScopeBuilder extends Control
         $operator = $condition->operator;
         $value = $condition->value;
 
-        if (stripos($operator, 'like') !== false) {
+        if (in_array($operator, ['LIKE', 'NOT LIKE'], true)) {
             // no %
             $match = 0;
             // % at the beginning
