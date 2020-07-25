@@ -171,7 +171,7 @@ class Upload extends Input
                 $this->_isCbRunning = true;
 
                 $postFiles = [];
-                for ($i = 0;; $i++) {
+                for ($i = 0;; ++$i) {
                     $k = 'file' . ($i > 0 ? '-' . $i : '');
                     if (!isset($_FILES[$k])) {
                         break;
@@ -234,6 +234,7 @@ class Upload extends Input
         if (!$this->_isCbRunning && (!$this->hasUploadCb || !$this->hasDeleteCb)) {
             throw new Exception('onUpload and onDelete callback must be called to use file upload. Missing one or both of them.');
         }
+
         if (!empty($this->accept)) {
             $this->template->trySet('accept', implode(',', $this->accept));
         }
