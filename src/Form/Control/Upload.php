@@ -171,25 +171,31 @@ class Upload extends Input
             $this->cb->set(function () use ($fx) {
                 $this->_isCbRunning = true;
 
-                $files = [];
+                $postFiles = [];
                 for ($i = 0;; $i++) {
                     $k = 'file' . ($i > 0 ? '-' . $i : '');
                     if (!isset($_FILES[$k])) {
                         break;
                     }
-                    $files[] = $_FILES[$k];
+
+                    $postFile = $_FILES[$k];
+                    if ($postFile['error'] !== 0) {
+                        // unset all details on upload error
+                        $postFile = array_intersect_key($postFile, array_flip('error', 'name'));
+                    }
+                    $postFiles[] = $postFile;
                 }
 
-                if (count($files) > 0) {
+                if (count($postFiles) > 0) {
                     //set fileId to file name as default.
-                    $this->fileId = reset($files)['name'];
+                    $this->fileId = reset($postFiles)['name'];
                     // display file name to user as default.
                     $this->setInput($this->fileId);
                 }
 
-                $this->addJsAction($fx(...$files));
+                $this->addJsAction($fx(...$postFiles));
 
-                if (count($files) > 0 && reset($files)['error'] === 0) {
+                if (count($postFiles) > 0 && reset($postFiles)['error'] === 0) {
                     $this->addJsAction([
                         $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
                     ]);
