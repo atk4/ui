@@ -106,7 +106,7 @@ class VirtualPage extends View
     {
         $this->cb->set(function () {
             // if virtual page callback is triggered
-            if ($mode = $this->cb->getMode()) {
+            if ($mode = $this->cb->getTriggeredValue()) {
                 // process callback
                 if ($this->fx) {
                     call_user_func($this->fx, $this);

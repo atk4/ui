@@ -67,7 +67,7 @@ class Wizard extends View
             $this->stepCallback = Callback::addTo($this, ['urlTrigger' => $this->name]);
         }
 
-        $this->currentStep = (int) $this->stepCallback->getMode() ?: 0;
+        $this->currentStep = (int) $this->stepCallback->getTriggeredValue() ?: 0;
 
         $this->stepTemplate = $this->template->cloneRegion('Step');
         $this->template->del('Step');
@@ -75,13 +75,13 @@ class Wizard extends View
         // add buttons
         if ($this->currentStep) {
             $this->buttonPrev = Button::addTo($this, ['Back', 'basic'], ['Left']);
-            $this->buttonPrev->link($this->stepCallback->getUrl($this->currentStep - 1));
+            $this->buttonPrev->link($this->stepCallback->getUrl((string) ($this->currentStep - 1)));
         }
 
         $this->buttonNext = Button::addTo($this, ['Next', 'primary'], ['Right']);
         $this->buttonFinish = Button::addTo($this, ['Finish', 'primary'], ['Right']);
 
-        $this->buttonNext->link($this->stepCallback->getUrl($this->currentStep + 1));
+        $this->buttonNext->link($this->stepCallback->getUrl((string) ($this->currentStep + 1)));
     }
 
     /**

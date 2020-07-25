@@ -168,7 +168,7 @@ class JsCallback extends Callback implements JsExpressionable
         return $ajaxec;
     }
 
-    public function getUrl($mode = 'callback')
+    public function getUrl(string $mode = 'callback'): string
     {
         throw new Exception('Do not use getUrl on JsCallback, use getJsUrl()');
     }

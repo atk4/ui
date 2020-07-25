@@ -19,12 +19,10 @@ class JsHeader extends JsCallback
     public function onSelectItem($fx)
     {
         if (is_callable($fx)) {
-            if ($this->triggered()) {
-                $param = [$_GET['id'],  $_GET['item'] ?? null];
-                $this->set(function () use ($fx, $param) {
-                    return call_user_func_array($fx, $param);
-                });
-            }
+            $param = [$_GET['id'] ?? null,  $_GET['item'] ?? null];
+            $this->set(function () use ($fx, $param) {
+                return call_user_func_array($fx, $param);
+            });
         }
     }
 }

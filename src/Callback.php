@@ -74,13 +74,23 @@ class Callback
             $this->urlTrigger = $this->name;
         }
 
-        $this->app->stickyGet($this->urlTrigger);
+        $this->setAppSticky();
     }
 
     public function setUrlTrigger(string $trigger)
     {
         $this->urlTrigger = $trigger;
-        $this->app->stickyGet($this->urlTrigger);
+        $this->setAppSticky();
+    }
+
+    /**
+     * Set app sticky argument only when using GET method.
+     */
+    public function setAppSticky()
+    {
+        if (!$this->isPostTriggered) {
+            $this->app->stickyGet($this->urlTrigger);
+        }
     }
 
     public function getUrlTrigger(): string
@@ -115,12 +125,8 @@ class Callback
      */
     public function terminateJson(View $view = null)
     {
-        if (!$view) {
-            $view = $this->owner;
-        }
-
         if ($this->canTerminate()) {
-            $this->app->terminateJson($view);
+            $this->app->terminateJson($view ?: $this->owner);
         }
     }
 
@@ -144,9 +150,9 @@ class Callback
     }
 
     /**
-     * Return this callback mode.
+     * Return callback triggered value.
      */
-    public function getMode(): string
+    public function getTriggeredValue(): string
     {
         if ($this->isPostTriggered) {
             return  $_POST[$this->urlTrigger] ?? '';
@@ -159,26 +165,32 @@ class Callback
      * Return URL that will trigger action on this call-back. If you intend to request
      * the URL direcly in your browser (as iframe, new tab, or document location), you
      * should use getUrl instead.
-     *
-     * @param string $mode
-     *
-     * @return string
      */
-    public function getJsUrl($mode = 'ajax')
+    public function getJsUrl(string $value = 'ajax'): string
     {
-        return $this->owner->jsUrl([$this->urlTrigger => $mode, '__atk_callback' => 1]);
+        return $this->owner->jsUrl($this->getUrlArguments($value));
     }
 
     /**
      * Return URL that will trigger action on this call-back. If you intend to request
      * the URL loading from inside JavaScript, it's always advised to use getJsUrl instead.
      *
-     * @param string $mode
-     *
-     * @return string
      */
-    public function getUrl($mode = 'callback')
+    public function getUrl(string $value = 'callback'): string
     {
-        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback' => 1]);
+        return $this->owner->url($this->getUrlArguments($value));
+    }
+
+    /**
+     * Return proper url argument for this callback.
+     */
+    private function getUrlArguments(string $value): array
+    {
+        $args = ['__atk_callback' => 1];
+        if (!$this->isPostTriggered) {
+            $args[$this->urlTrigger] = $value;
+        }
+
+        return $args;
     }
 }

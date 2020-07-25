@@ -679,17 +679,15 @@ class Multiline extends Form\Control
             throw new Exception('Multiline field needs to have it\'s model setup.');
         }
 
-        if ($this->cb->triggered()) {
-            $this->cb->set(function () {
-                try {
-                    return $this->renderCallback();
-                } catch (\atk4\Core\Exception $e) {
-                    $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
-                } catch (\Error $e) {
-                    $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
-                }
-            });
-        }
+        $this->cb->set(function () {
+            try {
+                return $this->renderCallback();
+            } catch (\atk4\Core\Exception $e) {
+                $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
+            } catch (\Error $e) {
+                $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
+            }
+        });
 
         $this->multiLine->template->trySetHtml('Input', $this->getInput());
         parent::renderView();

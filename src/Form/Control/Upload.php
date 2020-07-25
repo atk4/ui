@@ -80,9 +80,6 @@ class Upload extends Input
 
     public $jsActions = [];
 
-    /** @var bool check if callback is trigger by one of the action. */
-    private $_isCbRunning = false;
-
     public function init(): void
     {
         parent::init();
@@ -171,8 +168,7 @@ class Upload extends Input
         if (is_callable($fx)) {
             $this->hasDeleteCb = true;
             $action = $_POST['action'] ?? null;
-            if ($this->cb->triggered() && $action === 'delete') {
-                $this->_isCbRunning = true;
+            if ($action === 'delete') {
                 $fileName = $_POST['f_name'] ?? null;
                 $this->cb->set(function () use ($fx, $fileName) {
                     $this->addJsAction(call_user_func_array($fx, [$fileName]));
@@ -193,31 +189,28 @@ class Upload extends Input
     {
         if (is_callable($fx)) {
             $this->hasUploadCb = true;
-            if ($this->cb->triggered()) {
-                $this->_isCbRunning = true;
-                $action = $_POST['action'] ?? null;
-                $files = $_FILES ?? null;
-                if ($files) {
-                    //set fileId to file name as default.
-                    $this->fileId = $files['file']['name'];
-                    // display file name to user as default.
-                    $this->setInput($this->fileId);
-                }
-                if ($action === 'upload' && !$files['file']['error']) {
-                    $this->cb->set(function () use ($fx, $files) {
-                        $this->addJsAction(call_user_func_array($fx, $files));
-                        //$value = $this->field ? $this->field->get() : $this->content;
-                        $this->addJsAction([
-                            $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
-                        ]);
+            $action = $_POST['action'] ?? null;
+            $files = $_FILES ?? null;
+            if ($files) {
+                //set fileId to file name as default.
+                $this->fileId = $files['file']['name'];
+                // display file name to user as default.
+                $this->setInput($this->fileId);
+            }
+            if ($action === 'upload' && !$files['file']['error']) {
+                $this->cb->set(function () use ($fx, $files) {
+                    $this->addJsAction(call_user_func_array($fx, $files));
+                    //$value = $this->field ? $this->field->get() : $this->content;
+                    $this->addJsAction([
+                        $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
+                    ]);
 
-                        return $this->jsActions;
-                    });
-                } elseif ($action === null || isset($files['file']['error'])) {
-                    $this->cb->set(function () use ($fx, $files) {
-                        return call_user_func($fx, 'error');
-                    });
-                }
+                    return $this->jsActions;
+                });
+            } elseif ($action === null || isset($files['file']['error'])) {
+                $this->cb->set(function () use ($fx, $files) {
+                    return call_user_func($fx, 'error');
+                });
             }
         }
     }
@@ -230,7 +223,7 @@ class Upload extends Input
         }
         parent::renderView();
 
-        if (!$this->_isCbRunning && (!$this->hasUploadCb || !$this->hasDeleteCb)) {
+        if (!$this->hasUploadCb || !$this->hasDeleteCb) {
             throw new Exception('onUpload and onDelete callback must be called to use file upload. Missing one or both of them.');
         }
         if (!empty($this->accept)) {
