@@ -674,7 +674,7 @@ class App
         }
 
         // put URL together
-        $pageQuery = http_build_query($args);
+        $pageQuery = http_build_query($args, '', '&', PHP_QUERY_RFC3986);
         $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
 
         return $url;
