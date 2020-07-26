@@ -18,7 +18,7 @@ Feature: Crud
     Then Toast display should contains text "Form Submit"
 
   Scenario: search
-    Then I search grid for "kingdom"
+    Then I search grid for "united kingdom"
 #    make sure auto query trigger
     And I wait for loading to start in "button.atk-search-button"
     And wait for callback
