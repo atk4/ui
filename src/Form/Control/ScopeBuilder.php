@@ -7,6 +7,7 @@ namespace atk4\ui\Form\Control;
 use atk4\data\Field;
 use atk4\data\Model;
 use atk4\data\Model\Scope;
+use atk4\data\Model\Scope\Condition;
 use atk4\ui\Exception;
 use atk4\ui\Form\Control;
 use atk4\ui\Template;
@@ -34,7 +35,7 @@ class ScopeBuilder extends Control
      *
      * @var int
      */
-    public $maxDepth = 3;
+    public $maxDepth = 5;
 
     /**
      * Fields to use for creating the rules.
@@ -128,42 +129,42 @@ class ScopeBuilder extends Control
      */
     protected static $operatorsMap = [
         'number' => [
-            self::OPERATOR_SIGN_EQUALS => '=',
-            self::OPERATOR_SIGN_DOESNOT_EQUAL => '!=',
-            self::OPERATOR_SIGN_GREATER => '>',
-            self::OPERATOR_SIGN_GREATER_EQUAL => '>=',
-            self::OPERATOR_SIGN_LESS => '<',
-            self::OPERATOR_SIGN_LESS_EQUAL => '<=',
+            self::OPERATOR_SIGN_EQUALS => Condition::OPERATOR_EQUALS,
+            self::OPERATOR_SIGN_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
+            self::OPERATOR_SIGN_GREATER => Condition::OPERATOR_GREATER,
+            self::OPERATOR_SIGN_GREATER_EQUAL => Condition::OPERATOR_GREATER_EQUAL,
+            self::OPERATOR_SIGN_LESS => Condition::OPERATOR_LESS,
+            self::OPERATOR_SIGN_LESS_EQUAL => Condition::OPERATOR_LESS_EQUAL,
         ],
         'date' => [
-            self::OPERATOR_TIME_EQUALS => '=',
-            self::OPERATOR_TIME_DOESNOT_EQUAL => '!=',
-            self::OPERATOR_TIME_GREATER => '>',
-            self::OPERATOR_TIME_GREATER_EQUAL => '>=',
-            self::OPERATOR_TIME_LESS => '<',
-            self::OPERATOR_TIME_LESS_EQUAL => '<=',
+            self::OPERATOR_TIME_EQUALS => Condition::OPERATOR_EQUALS,
+            self::OPERATOR_TIME_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
+            self::OPERATOR_TIME_GREATER => Condition::OPERATOR_GREATER,
+            self::OPERATOR_TIME_GREATER_EQUAL => Condition::OPERATOR_GREATER_EQUAL,
+            self::OPERATOR_TIME_LESS => Condition::OPERATOR_LESS,
+            self::OPERATOR_TIME_LESS_EQUAL => Condition::OPERATOR_LESS_EQUAL,
         ],
         'text' => [
-            self::OPERATOR_TEXT_EQUALS => '=',
-            self::OPERATOR_TEXT_DOESNOT_EQUAL => '!=',
-            self::OPERATOR_TEXT_GREATER => '>',
-            self::OPERATOR_TEXT_GREATER_EQUAL => '>=',
-            self::OPERATOR_TEXT_LESS => '<',
-            self::OPERATOR_TEXT_LESS_EQUAL => '<=',
-            self::OPERATOR_TEXT_CONTAINS => 'LIKE',
-            self::OPERATOR_TEXT_DOESNOT_CONTAIN => 'NOT LIKE',
-            self::OPERATOR_TEXT_BEGINS_WITH => 'LIKE',
-            self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH => 'NOT LIKE',
-            self::OPERATOR_TEXT_ENDS_WITH => 'LIKE',
-            self::OPERATOR_TEXT_DOESNOT_END_WITH => 'NOT LIKE',
-            self::OPERATOR_EQUALS => '=',
-            self::OPERATOR_DOESNOT_EQUAL => '!=',
-            self::OPERATOR_IN => 'IN',
-            self::OPERATOR_NOT_IN => 'NOT IN',
-            self::OPERATOR_TEXT_MATCHES_REGEX => 'REGEXP',
-            self::OPERATOR_TEXT_DOESNOT_MATCH_REGEX => 'NOT REGEXP',
-            self::OPERATOR_EMPTY => '=',
-            self::OPERATOR_NOT_EMPTY => '!=',
+            self::OPERATOR_TEXT_EQUALS => Condition::OPERATOR_EQUALS,
+            self::OPERATOR_TEXT_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
+            self::OPERATOR_TEXT_GREATER => Condition::OPERATOR_GREATER,
+            self::OPERATOR_TEXT_GREATER_EQUAL => Condition::OPERATOR_GREATER_EQUAL,
+            self::OPERATOR_TEXT_LESS => Condition::OPERATOR_LESS,
+            self::OPERATOR_TEXT_LESS_EQUAL => Condition::OPERATOR_LESS_EQUAL,
+            self::OPERATOR_TEXT_CONTAINS => Condition::OPERATOR_LIKE,
+            self::OPERATOR_TEXT_DOESNOT_CONTAIN => Condition::OPERATOR_NOT_LIKE,
+            self::OPERATOR_TEXT_BEGINS_WITH => Condition::OPERATOR_LIKE,
+            self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH => Condition::OPERATOR_NOT_LIKE,
+            self::OPERATOR_TEXT_ENDS_WITH => Condition::OPERATOR_LIKE,
+            self::OPERATOR_TEXT_DOESNOT_END_WITH => Condition::OPERATOR_NOT_LIKE,
+            self::OPERATOR_EQUALS => Condition::OPERATOR_EQUALS,
+            self::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_DOESNOT_EQUAL,
+            self::OPERATOR_IN => Condition::OPERATOR_IN,
+            self::OPERATOR_NOT_IN => Condition::OPERATOR_NOT_IN,
+            self::OPERATOR_TEXT_MATCHES_REGEX => Condition::OPERATOR_REGEXP,
+            self::OPERATOR_TEXT_DOESNOT_MATCH_REGEX => Condition::OPERATOR_NOT_REGEXP,
+            self::OPERATOR_EMPTY => Condition::OPERATOR_EQUALS,
+            self::OPERATOR_NOT_EMPTY => Condition::OPERATOR_DOESNOT_EQUAL,
         ],
     ];
 
@@ -545,7 +546,7 @@ class ScopeBuilder extends Control
         $operator = $condition->operator;
         $value = $condition->value;
 
-        if (in_array($operator, ['LIKE', 'NOT LIKE'], true)) {
+        if (in_array($operator, [Condition::OPERATOR_LIKE, Condition::OPERATOR_NOT_LIKE], true)) {
             // no %
             $match = 0;
             // % at the beginning
@@ -554,13 +555,13 @@ class ScopeBuilder extends Control
             $match += substr($value, -1) === '%' ? 2 : 0;
 
             $map = [
-                'LIKE' => [
+                Condition::OPERATOR_LIKE => [
                     self::OPERATOR_TEXT_EQUALS,
                     self::OPERATOR_TEXT_BEGINS_WITH,
                     self::OPERATOR_TEXT_ENDS_WITH,
                     self::OPERATOR_TEXT_CONTAINS,
                 ],
-                'NOT LIKE' => [
+                Condition::OPERATOR_NOT_LIKE => [
                     self::OPERATOR_TEXT_DOESNOT_EQUAL,
                     self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH,
                     self::OPERATOR_TEXT_DOESNOT_END_WITH,
@@ -574,11 +575,11 @@ class ScopeBuilder extends Control
         } else {
             if (is_array($value)) {
                 $map = [
-                    '=' => 'IN',
-                    '!=' => 'NOT IN',
+                    Condition::OPERATOR_EQUALS => Condition::OPERATOR_IN,
+                    Condition::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_NOT_IN,
                 ];
                 $value = implode(',', $value);
-                $operator = $map[$operator] ?? 'IN';
+                $operator = $map[$operator] ?? Condition::OPERATOR_NOT_IN;
             }
 
             $inputType = $inputsMap[$rule] ?? 'text';
