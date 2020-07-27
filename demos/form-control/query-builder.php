@@ -14,5 +14,5 @@ $form = \atk4\ui\Form::addTo($app);
 $form->addControl('qb', [\atk4\ui\Form\Control\ScopeBuilder::class, 'model' => $model, 'options' => ['debug' => true]]);
 
 $form->onSubmit(function ($form) use ($model) {
-    return "Scope selected:\n\n" . $form->model->get('qb')->on($model)->toWords();
+    return "Scope selected:\n\n" . $form->model->get('qb')->toWords($model);
 });
