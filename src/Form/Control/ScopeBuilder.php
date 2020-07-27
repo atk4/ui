@@ -6,9 +6,7 @@ namespace atk4\ui\Form\Control;
 
 use atk4\data\Field;
 use atk4\data\Model;
-use atk4\data\Model\Scope\AbstractScope;
-use atk4\data\Model\Scope\Condition;
-use atk4\data\Model\Scope\Scope;
+use atk4\data\Model\Scope;
 use atk4\ui\Exception;
 use atk4\ui\Form\Control;
 use atk4\ui\Template;
@@ -195,6 +193,8 @@ class ScopeBuilder extends Control
                 self::OPERATOR_TEXT_DOESNOT_MATCH_REGEX,
                 self::OPERATOR_IN,
                 self::OPERATOR_NOT_IN,
+                self::OPERATOR_EMPTY,
+                self::OPERATOR_NOT_EMPTY,
             ],
         ],
         'enum' => [
@@ -202,6 +202,8 @@ class ScopeBuilder extends Control
             'operators' => [
                 self::OPERATOR_EQUALS,
                 self::OPERATOR_DOESNOT_EQUAL,
+                self::OPERATOR_EMPTY,
+                self::OPERATOR_NOT_EMPTY,
             ],
             'choices' => [__CLASS__, 'getChoices'],
         ],
@@ -215,6 +217,8 @@ class ScopeBuilder extends Control
                 self::OPERATOR_SIGN_GREATER_EQUAL,
                 self::OPERATOR_SIGN_LESS,
                 self::OPERATOR_SIGN_LESS_EQUAL,
+                self::OPERATOR_EMPTY,
+                self::OPERATOR_NOT_EMPTY,
             ],
         ],
         'boolean' => [
@@ -259,7 +263,7 @@ class ScopeBuilder extends Control
         if ($this->form) {
             $this->form->onHook(\atk4\ui\Form::HOOK_LOAD_POST, function ($form, &$post) {
                 $key = $this->field->short_name;
-                $post[$key] = $this->queryToScope(json_decode($post[$key], true));
+                $post[$key] = $this->queryToScope($this->app->decodeJson($post[$key] ?? '{}'));
             });
         }
     }
@@ -272,6 +276,7 @@ class ScopeBuilder extends Control
     public function setModel(Model $model)
     {
         $model = parent::setModel($model);
+
         $this->buildQuery($model);
 
         return $model;
@@ -296,7 +301,7 @@ class ScopeBuilder extends Control
         // this is used when selecting proper operator for the inputType (see self::$operatorsMap)
         $inputsMap = array_column($this->rules, 'inputType', 'id');
 
-        $this->query = $this->scopeToQuery($model->scope(), $inputsMap);
+        $this->query = $this->scopeToQuery($model->scope(), $inputsMap)['query'];
     }
 
     /**
@@ -422,7 +427,7 @@ class ScopeBuilder extends Control
     /**
      * Converts an VueQueryBuilder query array to Condition or Scope.
      */
-    public static function queryToScope(array $query): AbstractScope
+    public static function queryToScope(array $query): Scope\AbstractScope
     {
         $type = $query['type'] ?? 'query-builder-group';
         $query = $query['query'] ?? $query;
@@ -430,9 +435,7 @@ class ScopeBuilder extends Control
         switch ($type) {
             case 'query-builder-group':
                 $components = array_map([static::class, 'queryToScope'], (array) $query['children']);
-                $junction = $query['logicalOperator'] === 'all' ? Scope::AND : Scope::OR;
-
-                $scope = Scope::create($components, $junction);
+                $scope = $query['logicalOperator'] === 'all' ? Scope::createAnd(...$components) : Scope::createOr(...$components);
 
                 break;
             case 'query-builder-rule':
@@ -440,9 +443,9 @@ class ScopeBuilder extends Control
 
                 break;
             default:
-                $scope = Scope::create();
+                $scope = Scope::createAnd();
 
-            break;
+                break;
         }
 
         return $scope;
@@ -451,7 +454,7 @@ class ScopeBuilder extends Control
     /**
      * Converts an VueQueryBuilder rule array to Condition or Scope.
      */
-    public static function queryToCondition(array $query): Condition
+    public static function queryToCondition(array $query): Scope\Condition
     {
         $key = $query['rule'] ?? null;
         $operator = (string) ($query['operator'] ?? null);
@@ -462,22 +465,22 @@ class ScopeBuilder extends Control
             case self::OPERATOR_NOT_EMPTY:
                 $value = null;
 
-            break;
+                break;
             case self::OPERATOR_TEXT_BEGINS_WITH:
             case self::OPERATOR_TEXT_DOESNOT_BEGIN_WITH:
                 $value = $value . '%';
 
-            break;
+                break;
             case self::OPERATOR_TEXT_ENDS_WITH:
             case self::OPERATOR_TEXT_DOESNOT_END_WITH:
                 $value = '%' . $value;
 
-            break;
+                break;
             case self::OPERATOR_TEXT_CONTAINS:
             case self::OPERATOR_TEXT_DOESNOT_CONTAIN:
                 $value = '%' . $value . '%';
 
-            break;
+                break;
             case self::OPERATOR_IN:
             case self::OPERATOR_NOT_IN:
                 $value = explode(self::detectDelimiter($value), (string) $value);
@@ -485,49 +488,42 @@ class ScopeBuilder extends Control
                 break;
             default:
 
-            break;
+                break;
         }
 
         $operatorsMap = array_merge(...array_values(self::$operatorsMap));
 
         $operator = $operator ? ($operatorsMap[strtolower($operator)] ?? '=') : null;
 
-        return Condition::create($key, $operator, $value);
+        return new Scope\Condition($key, $operator, $value);
     }
 
     /**
      * Converts Scope or Condition to VueQueryBuilder query array.
      */
-    public static function scopeToQuery(AbstractScope $scope, $inputsMap = []): array
+    public static function scopeToQuery(Scope\AbstractScope $scope, $inputsMap = []): array
     {
-        switch (get_class($scope)) {
-            case Condition::class:
-                $query = [
-                    'type' => 'query-builder-rule',
-                    'query' => self::conditionToQuery($scope, $inputsMap),
-                ];
+        $query = [];
+        if ($scope instanceof Scope\Condition) {
+            $query = [
+                'type' => 'query-builder-rule',
+                'query' => self::conditionToQuery($scope, $inputsMap),
+            ];
+        }
 
-            break;
-            case Scope::class:
-                $children = [];
-                foreach ($scope->getActiveComponents() as $component) {
-                    $children[] = self::scopeToQuery($component, $inputsMap);
-                }
+        if ($scope instanceof Scope) {
+            $children = [];
+            foreach ($scope->getNestedConditions() as $nestedCondition) {
+                $children[] = self::scopeToQuery($nestedCondition, $inputsMap);
+            }
 
-                $query = [
-                    'type' => 'query-builder-group',
-                    'query' => [
-                        'logicalOperator' => $scope->isAnd() ? 'all' : 'any',
-                        'children' => $children,
-                    ],
-                ];
-
-            break;
-            default:
-                $query = [
-                    'logicalOperator' => 'all',
-                    'children' => []
-                ];
+            $query = [
+                'type' => 'query-builder-group',
+                'query' => [
+                    'logicalOperator' => $scope->isAnd() ? 'all' : 'any',
+                    'children' => $children,
+                ],
+            ];
         }
 
         return $query;
@@ -536,7 +532,7 @@ class ScopeBuilder extends Control
     /**
      * Converts a Condition to VueQueryBuilder query array.
      */
-    public static function conditionToQuery(Condition $condition, $inputsMap = []): array
+    public static function conditionToQuery(Scope\Condition $condition, $inputsMap = []): array
     {
         if (is_string($condition->key)) {
             $rule = $condition->key;
@@ -549,7 +545,7 @@ class ScopeBuilder extends Control
         $operator = $condition->operator;
         $value = $condition->value;
 
-        if (stripos($operator, 'like') !== false) {
+        if (in_array($operator, ['LIKE', 'NOT LIKE'], true)) {
             // no %
             $match = 0;
             // % at the beginning
