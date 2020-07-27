@@ -296,7 +296,7 @@ class ScopeBuilder extends Control
         // this is used when selecting proper operator for the inputType (see self::$operatorsMap)
         $inputsMap = array_column($this->rules, 'inputType', 'id');
 
-        $this->query = $this->scopeToQuery($model->scope(), $inputsMap)['query'];
+        $this->query = $this->scopeToQuery($model->scope(), $inputsMap);
     }
 
     /**
@@ -412,6 +412,7 @@ class ScopeBuilder extends Control
                     'query' => $this->query,
                     'name' => $this->short_name,
                     'labels' => $this->labels ?? null,
+                    'form' => $this->form->name . '_form',
                     'debug' => $this->options['debug'] ?? false,
                 ],
             ]
@@ -499,7 +500,6 @@ class ScopeBuilder extends Control
      */
     public static function scopeToQuery(AbstractScope $scope, $inputsMap = []): array
     {
-        $query = [];
         switch (get_class($scope)) {
             case Condition::class:
                 $query = [
@@ -523,6 +523,11 @@ class ScopeBuilder extends Control
                 ];
 
             break;
+            default:
+                $query = [
+                    'logicalOperator' => 'all',
+                    'children' => []
+                ];
         }
 
         return $query;

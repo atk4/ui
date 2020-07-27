@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <input :name="name" type="hidden" :value="value">
+        <input :form="form" :name="name" type="hidden" :value="value">
         <vue-query-builder :rules="rules" v-model="query" :maxDepth="maxDepth" :labels="labels">
             <template v-slot:default="slotProps">
                 <query-builder-group v-bind="slotProps" :query.sync="query"/>
@@ -32,6 +32,7 @@
         name: this.data.name ? this.data.name : '',
         maxDepth: this.data.maxDepth ? ((this.data.maxDepth <= 10) ? this.data.maxDepth : 10 ): 1,
         labels: this.getLabels(this.data.labels),
+        form: this.data.form,
         debug: this.data.debug ? this.data.debug : false,
       }
     },
