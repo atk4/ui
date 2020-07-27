@@ -417,7 +417,7 @@ class ScopeBuilder extends Control
                     'query' => $this->query,
                     'name' => $this->short_name,
                     'labels' => $this->labels ?? null,
-                    'form' => $this->form->name . '_form',
+                    'form' => $this->form->formElement->name,
                     'debug' => $this->options['debug'] ?? false,
                 ],
             ]
