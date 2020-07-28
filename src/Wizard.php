@@ -132,7 +132,7 @@ class Wizard extends View
     public function addFinish($callback)
     {
         if (count($this->steps) === $this->currentStep + 1) {
-            $this->buttonFinish->link($this->stepCallback->getUrl(count($this->steps)));
+            $this->buttonFinish->link($this->stepCallback->getUrl((string) (count($this->steps))));
         } elseif ($this->currentStep === count($this->steps)) {
             $this->buttonPrev->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
@@ -167,7 +167,7 @@ class Wizard extends View
      */
     public function urlNext()
     {
-        return $this->stepCallback->getUrl($this->currentStep + 1);
+        return $this->stepCallback->getUrl((string) ($this->currentStep + 1));
     }
 
     /**

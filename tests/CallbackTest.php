@@ -77,24 +77,6 @@ class CallbackTest extends AtkPhpunit\TestCase
         $this->assertNull($var);
     }
 
-    public function testCallbackPost()
-    {
-        $var = null;
-
-        $app = $this->app;
-
-        $cb = \atk4\ui\Callback::addTo($app, ['postTrigger' => 'go']);
-
-        // simulate triggering
-        $_POST['go'] = true;
-
-        $cb->set(function ($x) use (&$var) {
-            $var = $x;
-        }, [34]);
-
-        $this->assertSame(34, $var);
-    }
-
     public function testCallbackLater()
     {
         $var = null;

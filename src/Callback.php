@@ -36,18 +36,11 @@ class Callback
     use StaticAddToTrait;
 
     /**
-     * Whether urlTrigger is set via Post or Get (default).
-     *
-     * @var bool
-     */
-    public $isPostTriggered;
-
-    /**
-     * Specify a custom GET or POST trigger here.
+     * Specify a custom GET trigger here.
      *
      * @var string|null
      */
-    private $urlTrigger;
+    protected $urlTrigger;
 
     /**
      * Initialize object and set default properties.
@@ -73,25 +66,13 @@ class Callback
         if (!$this->urlTrigger) {
             $this->urlTrigger = $this->name;
         }
-
-        $this->setAppSticky();
     }
 
     public function setUrlTrigger(string $trigger)
     {
         $this->urlTrigger = $trigger;
-        $this->setAppSticky();
     }
 
-    /**
-     * Set app sticky argument only when using GET method.
-     */
-    public function setAppSticky()
-    {
-        if (!$this->isPostTriggered) {
-            $this->app->stickyGet($this->urlTrigger);
-        }
-    }
 
     public function getUrlTrigger(): string
     {
@@ -109,6 +90,7 @@ class Callback
     public function set($callback, $args = [])
     {
         if ($this->isTriggered()) {
+            $this->owner->stickyGet($this->urlTrigger);
             $this->app->catch_runaway_callbacks = false;
             $t = $this->app->run_called;
             $this->app->run_called = true;
@@ -142,10 +124,6 @@ class Callback
 
     public function isTriggered(): bool
     {
-        if ($this->isPostTriggered) {
-            return isset($_POST[$this->urlTrigger]);
-        }
-
         return isset($_GET[$this->urlTrigger]);
     }
 
@@ -154,10 +132,6 @@ class Callback
      */
     public function getTriggeredValue(): string
     {
-        if ($this->isPostTriggered) {
-            return  $_POST[$this->urlTrigger] ?? '';
-        }
-
         return $_GET[$this->urlTrigger] ?? '';
     }
 
@@ -186,11 +160,6 @@ class Callback
      */
     private function getUrlArguments(string $value): array
     {
-        $args = ['__atk_callback' => 1];
-        if (!$this->isPostTriggered) {
-            $args[$this->urlTrigger] = $value;
-        }
-
-        return $args;
+        return ['__atk_callback' => 1, $this->urlTrigger => $value];
     }
 }
