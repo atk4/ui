@@ -23,7 +23,7 @@ Feature: UserAction
     Given I am on "collection/jsactions2.php"
     And I press button "User Confirmation"
     And wait for callback
-    Then I press button "Ok"
+    And I press Modal button "Ok"
     And wait for callback
     Then Toast display should contains text "Confirm country"
 

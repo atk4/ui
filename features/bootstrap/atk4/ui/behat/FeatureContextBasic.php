@@ -137,6 +137,15 @@ class FeatureContextBasic extends RawMinkContext implements Context
     }
 
     /**
+     * @Then I click first card on page
+     */
+    public function iClickFirstCardOnPage()
+    {
+        $script = '$(".atk-card")[0].click()';
+        $this->getSession()->executeScript($script);
+    }
+
+    /**
      * @Then I see button :arg1
      */
     public function iSee($arg1)
