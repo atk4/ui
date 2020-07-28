@@ -682,9 +682,7 @@ class Multiline extends Form\Control
         $this->cb->set(function () {
             try {
                 return $this->renderCallback();
-            } catch (\atk4\Core\Exception $e) {
-                $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
-            } catch (\Error $e) {
+            } catch (\atk4\Core\Exception | \Error $e) {
                 $this->app->terminateJson(['success' => false, 'error' => $e->getMessage()]);
             }
         });
