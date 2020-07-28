@@ -139,10 +139,10 @@ class InlineEdit extends View
     public function onChange($fx)
     {
         if (is_callable($fx) && !$this->autoSave) {
-                $value = $_POST['value'] ? $_POST['value'] : null;
-                $this->cb->set(function () use ($fx, $value) {
-                    return call_user_func($fx, $value);
-                });
+            $value = $_POST['value'] ?? null;
+            $this->cb->set(function () use ($fx, $value) {
+                return call_user_func($fx, $value);
+            });
         }
     }
 

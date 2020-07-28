@@ -49,8 +49,8 @@ class Content extends View implements LoadableContent
     public function onLoad($callback)
     {
         $this->cb->set(function () use ($callback) {
-                call_user_func($callback, $this);
-                $this->cb->terminateJson();
+            call_user_func($callback, $this);
+            $this->cb->terminateJson();
         });
     }
 

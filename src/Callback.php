@@ -73,7 +73,6 @@ class Callback
         $this->urlTrigger = $trigger;
     }
 
-
     public function getUrlTrigger(): string
     {
         return $this->urlTrigger;
@@ -148,7 +147,6 @@ class Callback
     /**
      * Return URL that will trigger action on this call-back. If you intend to request
      * the URL loading from inside JavaScript, it's always advised to use getJsUrl instead.
-     *
      */
     public function getUrl(string $value = 'callback'): string
     {
