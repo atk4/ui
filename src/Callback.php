@@ -35,12 +35,11 @@ class Callback
     }
     use StaticAddToTrait;
 
-    /**
-     * Specify a custom GET trigger here.
-     *
-     * @var string|null
-     */
+    /** @var string Specify a custom GET trigger. */
     protected $urlTrigger;
+
+    /** @var bool Create app sticky trigger. */
+    public $isSticky = false;
 
     /**
      * Initialize object and set default properties.
@@ -64,13 +63,18 @@ class Callback
         }
 
         if (!$this->urlTrigger) {
-            $this->urlTrigger = $this->name;
+           $this->setUrlTrigger($this->name);
         }
     }
 
     public function setUrlTrigger(string $trigger)
     {
         $this->urlTrigger = $trigger;
+        if ($this->isSticky) {
+            $this->app->stickyGet($this->urlTrigger);
+        }
+
+        $this->owner->stickyGet($this->urlTrigger);
     }
 
     public function getUrlTrigger(): string
@@ -95,7 +99,6 @@ class Callback
             $this->app->run_called = true;
             $ret = call_user_func_array($callback, $args);
             $this->app->run_called = $t;
-
             return $ret;
         }
     }
