@@ -45,7 +45,7 @@ class App
     ];
 
     /** @var string Version of Agile UI */
-    public $version = '2.1.0';
+    public $version = '2.2.0';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
