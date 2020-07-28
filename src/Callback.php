@@ -63,7 +63,7 @@ class Callback
         }
 
         if (!$this->urlTrigger) {
-           $this->setUrlTrigger($this->name);
+            $this->setUrlTrigger($this->name);
         }
     }
 
@@ -73,8 +73,6 @@ class Callback
         if ($this->isSticky) {
             $this->app->stickyGet($this->urlTrigger);
         }
-
-        $this->owner->stickyGet($this->urlTrigger);
     }
 
     public function getUrlTrigger(): string
@@ -99,6 +97,7 @@ class Callback
             $this->app->run_called = true;
             $ret = call_user_func_array($callback, $args);
             $this->app->run_called = $t;
+
             return $ret;
         }
     }

@@ -681,7 +681,7 @@ class Form extends View
      */
     public function ajaxSubmit()
     {
-        $this->_add($cb = new JsCallback(), ['desired_name' => 'submit']);
+        $this->add($cb = new JsCallback(), ['desired_name' => 'submit']);
 
         $cb->set(function () {
             try {
