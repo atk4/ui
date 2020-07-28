@@ -314,7 +314,6 @@ class DemosTest extends AtkPhpunit\TestCase
             'interactive/wizard.php?demo_wizard=1&w_form_submit=ajax&__atk_callback=1',
             ['form_params' => [
                 'dsn' => 'mysql://root:root@db-host.example.com/atk4',
-                'w_form_submit' => 'submit',
             ]]
         );
 
@@ -421,7 +420,6 @@ class DemosTest extends AtkPhpunit\TestCase
             '_unit-test/post.php?test_form_submit=ajax&__atk_callback=1',
             [
                 'f1' => 'v1',
-                'test_form_submit' => 'submit',
             ],
         ];
 
@@ -436,7 +434,6 @@ class DemosTest extends AtkPhpunit\TestCase
                 'width' => '25%',
                 'position' => 'topRight',
                 'attach' => 'Body',
-                'notify_submit' => 'submit',
             ],
         ];
 

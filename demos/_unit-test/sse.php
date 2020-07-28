@@ -14,7 +14,7 @@ $v = View::addTo($app)->set('This will trigger a network request for testing sse
 
 $sse = \atk4\ui\JsSse::addTo($app);
 // url trigger must match php_unit test in sse provider.
-$sse->urlTrigger = 'see_test';
+$sse->setUrlTrigger('see_test');
 
 $v->js(true, $sse->set(function () use ($sse) {
     $sse->send(new JsExpression('console.log("test")'));
