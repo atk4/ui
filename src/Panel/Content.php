@@ -19,7 +19,7 @@ class Content extends View implements LoadableContent
     {
         parent::init();
         $this->addClass('atk-panel-content');
-        $this->setCb(new Callback(['isSticky' => true]));
+        $this->setCb(new Callback());
     }
 
     /**

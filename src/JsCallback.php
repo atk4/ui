@@ -35,6 +35,16 @@ class JsCallback extends Callback implements JsExpressionable
     public $storeName;
 
     /**
+     * Usually JsCallback should not allow to trigger during a reload.
+     * Consider reloading a form, if triggering is allowed during the reload process
+     * then $form->model could be saved during that reload which can lead to unexpected result
+     * if model id is not properly handled.
+     *
+     * @var bool
+     */
+    public $triggerOnReload = false;
+
+    /**
      * When multiple JsExpressionable's are collected inside an array and may
      * have some degree of nesting, convert it into a one-dimensional array,
      * so that it's easier for us to wrap it into a function body.

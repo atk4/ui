@@ -39,7 +39,10 @@ class Callback
     protected $urlTrigger;
 
     /** @var bool Create app sticky trigger. */
-    public $isSticky = false;
+    public $isSticky = true;
+
+    /** @var bool Allow this callback to trigger during a reload. */
+    public $triggerOnReload = true;
 
     /**
      * Initialize object and set default properties.
@@ -62,14 +65,12 @@ class Callback
             throw new Exception('Call-back must be part of a RenderTree');
         }
 
-        if (!$this->urlTrigger) {
-            $this->setUrlTrigger($this->name);
-        }
+        $this->setUrlTrigger();
     }
 
-    public function setUrlTrigger(string $trigger)
+    public function setUrlTrigger(string $trigger = null)
     {
-        $this->urlTrigger = $trigger;
+        $this->urlTrigger = $trigger ?: $this->name;
         if ($this->isSticky) {
             $this->app->stickyGet($this->urlTrigger);
         }
@@ -90,8 +91,7 @@ class Callback
      */
     public function set($callback, $args = [])
     {
-        if ($this->isTriggered()) {
-            $this->owner->stickyGet($this->urlTrigger);
+        if ($this->canTrigger()) {
             $this->app->catch_runaway_callbacks = false;
             $t = $this->app->run_called;
             $this->app->run_called = true;
@@ -114,16 +114,26 @@ class Callback
     }
 
     /**
-     * Prevent callback from terminating during a reload.
+     * Only current callback can terminate.
      */
-    protected function canTerminate(): bool
+    public function canTerminate(): bool
     {
-        $reload = $_GET['__atk_reload'] ?? null;
-
-        return !$reload || $this->owner->name === $reload;
+        return $this->urlTrigger === ($_GET['__atk_callback'] ?? null);
     }
 
-    public function isTriggered(): bool
+    /**
+     * Allow callback to be triggered or not.
+     */
+    public function canTrigger(): bool
+    {
+        if ($this->triggerOnReload) {
+            return isset($_GET[$this->urlTrigger]);
+        }
+
+        return isset($_GET[$this->urlTrigger]) && !($_GET['__atk_reload'] ?? null);
+    }
+
+    public function isTriggered()
     {
         return isset($_GET[$this->urlTrigger]);
     }
@@ -160,6 +170,6 @@ class Callback
      */
     private function getUrlArguments(string $value): array
     {
-        return ['__atk_callback' => 1, $this->urlTrigger => $value];
+        return ['__atk_callback' => $this->urlTrigger, $this->urlTrigger => $value];
     }
 }

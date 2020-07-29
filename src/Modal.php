@@ -95,13 +95,8 @@ class Modal extends View
         }
 
         $this->cb->set(function () {
-            if ($this->cb->isTriggered() && $this->fx) {
-                $this->fx[0]($this->cb_view);
-            }
-            $modalName = $_GET['__atk_m'] ?? null;
-            if ($modalName === $this->name) {
-                $this->cb->terminateJson($this->cb_view);
-            }
+            $this->fx[0]($this->cb_view);
+            $this->cb->terminateJson($this->cb_view);
         });
     }
 
