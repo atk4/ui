@@ -14,6 +14,9 @@ use atk4\core\TrackableTrait;
  * Add this object to your render tree and it will expose a unique URL which, when
  * executed directly will perform a PHP callback that you set().
  *
+ * Callback function run when triggered, i.e. when it's urlTrigger param value is present in the $_GET request.
+ * The current callback will be set within the $_GET['__atk_callback'] and will be set to urlTrigger as well.
+ *
  * $button = Button::addTo($layout);
  * $button->set('Click to do something')->link(
  *      Callback::addTo($button)
