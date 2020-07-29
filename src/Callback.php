@@ -130,12 +130,15 @@ class Callback
     public function canTrigger(): bool
     {
         if ($this->triggerOnReload) {
-            return isset($_GET[$this->urlTrigger]);
+            return $this->isTriggered();
         }
 
-        return isset($_GET[$this->urlTrigger]) && !($_GET['__atk_reload'] ?? null);
+        return $this->isTriggered() && !($_GET['__atk_reload'] ?? null);
     }
 
+    /**
+     * Return true if urlTrigger is part of the request.
+     */
     public function isTriggered()
     {
         return isset($_GET[$this->urlTrigger]);

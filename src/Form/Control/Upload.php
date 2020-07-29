@@ -80,6 +80,9 @@ class Upload extends Input
 
     public $jsActions = [];
 
+    public const UPLOAD_ACTION = 'upload';
+    public const DELETE_ACTION = 'delete';
+
     /** @var bool check if callback is trigger by one of the action. */
     private $_isCbRunning = false;
 
@@ -171,10 +174,9 @@ class Upload extends Input
         if (is_callable($fx)) {
             $this->hasDeleteCb = true;
             $action = $_POST['action'] ?? null;
-            if ($action === 'delete') {
+            if ($action === self::DELETE_ACTION) {
                 $fileName = $_POST['f_name'] ?? null;
                 $this->cb->set(function () use ($fx, $fileName) {
-                    $this->_isCbRunning = true;
                     $this->addJsAction(call_user_func_array($fx, [$fileName]));
 
                     return $this->jsActions;
@@ -201,11 +203,9 @@ class Upload extends Input
                 // display file name to user as default.
                 $this->setInput($this->fileId);
             }
-            if ($action === 'upload' && !$files['file']['error']) {
+            if ($action === self::UPLOAD_ACTION && !$files['file']['error']) {
                 $this->cb->set(function () use ($fx, $files) {
-                    $this->_isCbRunning = true;
                     $this->addJsAction(call_user_func_array($fx, $files));
-                    //$value = $this->field ? $this->field->get() : $this->content;
                     $this->addJsAction([
                         $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
                     ]);
@@ -228,8 +228,14 @@ class Upload extends Input
         }
         parent::renderView();
 
-        if (!$this->_isCbRunning && !isset($_GET['__atk_reload']) && (!$this->hasUploadCb || !$this->hasDeleteCb)) {
-            throw new Exception('onUpload and onDelete callback must be called to use file upload. Missing one or both of them.');
+        if ($this->cb->canTerminate()) {
+            $action = $_POST['action'] ?? null;
+            if (!$this->hasUploadCb && ($action === self::UPLOAD_ACTION)) {
+                throw new Exception('Missing onUpload callback.');
+            }
+            if (!$this->hasDeleteCb && ($action === self::DELETE_ACTION)) {
+                throw new Exception('Missing onDelete callback.');
+            }
         }
 
         if (!empty($this->accept)) {
