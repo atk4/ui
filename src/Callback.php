@@ -65,7 +65,7 @@ class Callback
             throw new Exception('Call-back must be part of a RenderTree');
         }
 
-        $this->setUrlTrigger();
+        $this->setUrlTrigger($this->urlTrigger ?: $this->name);
     }
 
     public function setUrlTrigger(string $trigger = null)

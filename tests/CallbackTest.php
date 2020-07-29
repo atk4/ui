@@ -156,11 +156,12 @@ class CallbackTest extends AtkPhpunit\TestCase
         $app = $this->app;
 
         $vp = \atk4\ui\VirtualPage::addTo($app);
+        // simulate triggering
+
         $vp->set(function ($p) use (&$var) {
             $var = 25;
         });
 
-        // simulate triggering
         $_GET[$vp->name] = '1';
 
         $this->expectOutputRegex('/^..DOCTYPE/');
