@@ -136,22 +136,6 @@ class Callback
     }
 
     /**
-     * Only current callback can terminate.
-     */
-    public function canTerminate(): bool
-    {
-        return isset($_GET['__atk_callback']) && $_GET['__atk_callback'] === $this->urlTrigger;
-    }
-
-    /**
-     * Allow callback to be triggered or not.
-     */
-    public function canTrigger(): bool
-    {
-        return $this->triggerOnReload || empty($_GET['__atk_reload']);
-    }
-
-    /**
      * Return true if urlTrigger is part of the request.
      */
     public function isTriggered()
@@ -165,6 +149,22 @@ class Callback
     public function getTriggeredValue(): string
     {
         return $_GET[$this->urlTrigger] ?? '';
+    }
+
+    /**
+     * Only current callback can terminate.
+     */
+    public function canTerminate(): bool
+    {
+        return isset($_GET['__atk_callback']) && $_GET['__atk_callback'] === $this->urlTrigger;
+    }
+
+    /**
+     * Allow callback to be triggered or not.
+     */
+    public function canTrigger(): bool
+    {
+        return $this->triggerOnReload || empty($_GET['__atk_reload']);
     }
 
     /**
