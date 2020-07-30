@@ -146,6 +146,24 @@ class FeatureContextBasic extends RawMinkContext implements Context
     }
 
     /**
+     * @Then I click first element using class :arg1
+     */
+    public function iClickFirstElementUsingClass($arg1)
+    {
+        $script = '$("' . $arg1 . '")[0].click()';
+        $this->getSession()->executeScript($script);
+    }
+
+    /**
+     * @Then I click paginator page :arg1
+     */
+    public function iClickPaginatorPage($arg1)
+    {
+        $script = '$("a.item[data-page=' . $arg1 . ']").click()';
+        $this->getSession()->executeScript($script);
+    }
+
+    /**
      * @Then I see button :arg1
      */
     public function iSee($arg1)
