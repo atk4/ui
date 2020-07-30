@@ -1,17 +1,17 @@
 Feature: Callback
   Testing callbacks
 
-#  Scenario:
-#    Given I am on "_unit-test/callback_1.php"
-#    Then I click first element using class ".ui.atk-test.button"
-#    And wait for callback
-#    Then I sleep 500 ms
-#    Then I should see "TestName"
-#    And I press button "Save"
-#    And wait for callback
-#    Then Toast display should contains text "Save"
-#    Then I sleep 500 ms
-#    Then I should not see "TestName"
+  Scenario:
+    Given I am on "_unit-test/callback_1.php"
+    Then I press button "First"
+    And wait for callback
+    Then I sleep 500 ms
+    Then I should see "TestName"
+    And I press button "Save"
+    And wait for callback
+    Then Toast display should contains text "Save"
+    Then I sleep 500 ms
+    Then I should not see "TestName"
 
   Scenario:
     Given I am on "_unit-test/callback_2.php"

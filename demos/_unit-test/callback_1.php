@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace atk4\ui\demo;
 
 use atk4\ui\Button;
+use atk4\ui\Form;
 use atk4\ui\Jquery;
 use atk4\ui\JsToast;
 
@@ -20,14 +21,14 @@ $m = (new CountryLock($app->db))->setLimit(5);
 $vp = $app->add(new \atk4\ui\VirtualPage());
 $vp->cb->triggerOnReload = false;
 
-$form = $vp->add(new \atk4\ui\Form());
+$form = Form::addTo($vp);
 $form->setModel($m->tryLoadAny(), ['name']);
 $form->getControl('name')->caption = 'TestName';
 
 $table = $app->add(new \atk4\ui\Table());
 $table->setModel($m);
 
-$button = Button::addTo($app, ['EditFirst', ['ui' => 'atk-test']]);
+$button = Button::addTo($app, ['First', ['ui' => 'atk-test']]);
 $button->on('click', new \atk4\ui\jsModal('Edit First Record', $vp));
 
 $form->onSubmit(function ($form) use ($table) {
