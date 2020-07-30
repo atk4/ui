@@ -66,18 +66,18 @@ class Country extends \atk4\data\Model
     {
         $errors = parent::validate($intent);
 
-        if (mb_strlen($this['iso']) !== 2) {
+        if (mb_strlen($this->get('iso')) !== 2) {
             $errors['iso'] = 'Must be exactly 2 characters';
         }
 
-        if (mb_strlen($this['iso3']) !== 3) {
+        if (mb_strlen($this->get('iso3')) !== 3) {
             $errors['iso3'] = 'Must be exactly 3 characters';
         }
 
         // look if name is unique
         $c = clone $this;
         $c->unload();
-        $c->tryLoadBy('name', $this['name']);
+        $c->tryLoadBy('name', $this->get('name'));
         if ($c->loaded() && $c->id !== $this->id) {
             $errors['name'] = 'Country name must be unique';
         }
