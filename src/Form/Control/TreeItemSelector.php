@@ -94,20 +94,14 @@ class TreeItemSelector extends Form\Control
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
      *
-     * @param callable $fx the function to execute when callback is fired
-     *
      * @return $this
      */
-    public function onItem($fx)
+    public function onItem(\Closure $fx)
     {
-        if (!is_callable($fx)) {
-            throw new \atk4\ui\Exception('Function is required for onTreeChange event.');
-        }
-
         $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
             $value = $this->allowMultiple ? json_decode($data, true) : json_decode($data, true)[0];
 
-            return call_user_func($fx, $value);
+            return $fx($value);
         }, ['data' => 'value']);
 
         return $this;

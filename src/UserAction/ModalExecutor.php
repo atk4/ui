@@ -42,7 +42,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public const HOOK_STEP = self::class . '@onStep';
 
     /**
-     * @var JsExpressionable array|callable JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
+     * @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
      */
     public $jsSuccess;
 
@@ -412,7 +412,9 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id)
     {
-        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $obj]) : $this->jsSuccess;
+        $success = $this->jsSuccess instanceof \Closure
+            ? ($this->jsSuccess)($this, $this->action->owner, $id, $obj)
+            : $this->jsSuccess;
 
         return [
             $this->hide(),

@@ -28,7 +28,7 @@ class JsSse extends JsCallback
     /** @var bool Keep execution alive or not if connection is close by user. False mean that execution will stop on user aborted. */
     public $keepAlive = false;
 
-    /** @var callable - custom function for outputting (instead of echo) */
+    /** @var \Closure custom function for outputting (instead of echo) */
     public $echoFunction;
 
     public function init(): void
@@ -109,7 +109,7 @@ class JsSse extends JsCallback
     private function output(string $content): void
     {
         if ($this->echoFunction) {
-            call_user_func($this->echoFunction, $content);
+            ($this->echoFunction)($content);
 
             return;
         }

@@ -16,7 +16,7 @@ use atk4\ui\Template;
 class Multiformat extends Table\Column
 {
     /**
-     * @var callable Method to execute which will return array of seeds for decorators
+     * @var \Closure Method to execute which will return array of seeds for decorators
      */
     public $callback;
 
@@ -37,7 +37,7 @@ class Multiformat extends Table\Column
                 ->addMoreInfo('column', $this);
         }
 
-        $decorators = call_user_func($this->callback, $row, $field);
+        $decorators = ($this->callback)($row, $field);
         if (is_string($decorators)) {
             $decorators = [[$decorators]];
         }

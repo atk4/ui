@@ -64,16 +64,18 @@ class Modal extends View
      * $fx is set as an array in order to comply with View::set().
      * TODO Rename this function and break BC?
      *
-     * @param array|string $fx
-     * @param array|string $arg2
+     * @param \Closure $fx
      *
      * @return $this
      */
-    public function set($fx = [], $arg2 = null)
+    public function set($fx = [], $ignore = null)
     {
-        if (!is_object($fx) && !($fx instanceof \Closure)) {
-            throw new Exception('Error: Need to pass a function to Modal::set()');
+        if (!($fx instanceof \Closure)) {
+            throw new Exception('Need to pass a function to Modal::set()');
+        } elseif (func_num_args() > 1) {
+            throw new Exception('Only one argument is needed by Modal::set()');
         }
+
         $this->fx = [$fx];
         $this->enableCallback();
 

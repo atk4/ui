@@ -67,7 +67,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * While inside a callback you may execute runCommand or setModel multiple times.
      *
-     * @param callable    $callback callback which will be executed while displaying output inside console
+     * @param \Closure    $callback callback which will be executed while displaying output inside console
      * @param bool|string $event    "true" would mean to execute on page load, string would indicate
      *                              js event. See first argument for View::js()
      *
@@ -75,7 +75,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     public function set($callback = null, $event = null)
     {
-        if (!$callback) {
+        if (!($callback instanceof \Closure)) {
             throw new Exception('Please specify the $callback argument');
         }
 
@@ -111,7 +111,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }, 1);
 
             try {
-                call_user_func($callback, $this);
+                $callback($this);
             } catch (\Throwable $e) {
                 $this->output('');
                 $this->outputHtml('<div class="ui segment" style="white-space: normal; font-family: Lato,\'Helvetica Neue\',Arial,Helvetica,sans-serif;">{0}</div>', [$this->app->renderExceptionHtml($e)]);
@@ -327,13 +327,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * for the $user_model automatically, but for any nested objects you would have
      * to pass on the property.
      *
-     * @param object          $object
-     * @param string|callable $method
-     * @param array           $args
+     * @param object|string $object
      *
      * @return $this
      */
-    public function runMethod($object, $method, $args = [])
+    public function runMethod($object, string $method, array $args = [])
     {
         if (!$this->sseInProgress) {
             $this->set(function () use ($object, $method, $args) {
@@ -343,16 +341,29 @@ class Console extends View implements \Psr\Log\LoggerInterface
             return $this;
         }
 
-        // temporarily override app logging
-        if (isset($object->app)) {
-            $old_logger = $object->app->logger;
-            $object->app->logger = $this;
-        }
-
         if (is_object($object)) {
+            // temporarily override app logging
+            if (isset($object->app)) {
+                $loggerBak = $object->app->logger;
+                $object->app->logger = $this;
+            }
+            if (isset($object->_debugTrait)) {
+                $debugBak = $object->debug;
+                $object->debug = true;
+            }
+
             $this->output('--[ Executing ' . get_class($object) . '->' . $method . ' ]--------------');
-            $object->debug = true;
-            $result = call_user_func_array([$object, $method], $args);
+
+            try {
+                $result = call_user_func_array([$object, $method], $args);
+            } finally {
+                if (isset($object->app)) {
+                    $object->app->logger = $loggerBak;
+                }
+                if (isset($object->_debugTrait)) {
+                    $object->debug = $debugBak;
+                }
+            }
         } elseif (is_string($object)) {
             $static = $object . '::' . $method;
             $this->output('--[ Executing ' . $static . ' ]--------------');
@@ -362,10 +373,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 ->addMoreInfo('object', $object);
         }
         $this->output('--[ Result: ' . json_encode($result) . ' ]------------');
-
-        if (isset($object->app)) {
-            $object->app->logger = $old_logger;
-        }
 
         return $this;
     }

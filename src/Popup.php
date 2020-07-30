@@ -156,15 +156,13 @@ class Popup extends View
      * Callback will receive a view attach to this popup
      * for adding content to it.
      *
-     * @param callable $fx
+     * @param \Closure $fx
      */
-    public function set($fx = null, $arg2 = null)
+    public function set($fx = null, $ignore = null)
     {
-        if (!is_object($fx) && !($fx instanceof \Closure)) {
-            throw new Exception('Error: Need to pass a function to Popup::set()');
-        }
-
-        if ($arg2) {
+        if (!($fx instanceof \Closure)) {
+            throw new Exception('Need to pass a function to Popup::set()');
+        } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Popup::set()');
         }
 

@@ -34,7 +34,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     public $action;
 
     /**
-     * @var JsExpressionable array|callable JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
+     * @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')"
      */
     public $jsSuccess;
 
@@ -62,7 +62,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     public function setAction(Model\UserAction $action, $urlArgs = [])
     {
         if (!$this->_initialized) {
-            throw new Exception('Error: Make sure JsCallbackExecutor is properly initialized prior to call setAction()');
+            throw new Exception('JsCallbackExecutor must be initialized prior to call setAction()');
         }
 
         $this->action = $action;
@@ -86,7 +86,9 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                 }
 
                 $return = $this->action->execute(...$args);
-                $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $return]) : $this->jsSuccess;
+                $success = $this->jsSuccess instanceof \Closure
+                    ? ($this->jsSuccess)($this, $this->action->owner, $id, $return)
+                    : $this->jsSuccess;
 
                 $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
             }
@@ -100,7 +102,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /**
      * Set jsSuccess property.
      *
-     * @param array|callable $fx
+     * @param array|\Closure $fx
      *
      * @return $this
      */

@@ -54,7 +54,7 @@ class Tooltip extends Table\Column
 
         $extra_tags = array_merge_recursive($attr, $extra_tags, ['class' => '{$_' . $field->short_name . '_tooltip}']);
 
-        if (isset($extra_tags['class']) && is_array($extra_tags['class'])) {
+        if (is_array($extra_tags['class'] ?? null)) {
             $extra_tags['class'] = implode(' ', $extra_tags['class']);
         }
 
