@@ -111,7 +111,7 @@ class Callback
      */
     public function set($callback, $args = [])
     {
-        if ($this->canTrigger()) {
+        if ($this->isTriggered() && $this->canTrigger()) {
             $this->callWithAppStickyTrigger(function () use ($callback, $args) {
                 $this->app->catch_runaway_callbacks = false;
                 $t = $this->app->run_called;
@@ -140,7 +140,7 @@ class Callback
      */
     public function canTerminate(): bool
     {
-        return $this->urlTrigger === ($_GET['__atk_callback'] ?? null);
+        return isset($_GET['__atk_callback']) && $_GET['__atk_callback'] === $this->urlTrigger;
     }
 
     /**
@@ -148,11 +148,7 @@ class Callback
      */
     public function canTrigger(): bool
     {
-        if ($this->triggerOnReload) {
-            return $this->isTriggered();
-        }
-
-        return $this->isTriggered() && !($_GET['__atk_reload'] ?? null);
+        return $this->triggerOnReload || empty($_GET['__atk_reload']);
     }
 
     /**
