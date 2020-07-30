@@ -3,7 +3,7 @@ Feature: Callback
 
   Scenario: No Trigger on Reload
     Given I am on "_unit-test/callback_1.php"
-    And I press button "Edit First"
+    And I press button "EditFirst"
     And wait for callback
     Then I sleep 500 ms
     Then I should see "TestName"
