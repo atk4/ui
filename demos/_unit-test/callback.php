@@ -29,7 +29,7 @@ $table = $app->add(new \atk4\ui\Table());
 $table->setModel($m);
 
 $button = Button::addTo($app, ['First', ['ui' => 'atk-test']]);
-$button->on('click', new \atk4\ui\jsModal('Edit First Record', $vp));
+$button->on('click', new \atk4\ui\JsModal('Edit First Record', $vp));
 
 $form->onSubmit(function ($form) use ($table) {
     $form->model->save();
