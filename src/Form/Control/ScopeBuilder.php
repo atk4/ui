@@ -56,7 +56,7 @@ class ScopeBuilder extends Control
      *
      * @var array
      */
-    public static $listDelimiters = [';', ',', '|'];
+    public static $listDelimiters = [';', ','];
 
     /**
      * The scopebuilder View. Assigned in init().
