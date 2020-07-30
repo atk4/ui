@@ -2,7 +2,8 @@ Feature: Callback
   Testing callbacks
 
   Scenario:
-    Given I am on "_unit-test/callback_1.php"
+    Given I am on "_unit-test/callback.php"
+    Then I sleep 500 ms
     Then I press button "First"
     And wait for callback
     Then I sleep 500 ms
