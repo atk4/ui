@@ -42,7 +42,7 @@ class FormTest extends AtkPhpunit\TestCase
         $this->assertInstanceOf(Form\Control::class, $f->layout->getControl('test'));
     }
 
-    public function assertSubmit(array $post_data, callable $submit = null, callable $check_expected_error = null)
+    public function assertSubmit(array $post_data, \Closure $submit = null, \Closure $check_expected_error = null)
     {
         $submit_called = false;
         $_POST = $post_data;
@@ -51,7 +51,7 @@ class FormTest extends AtkPhpunit\TestCase
         $this->f->onSubmit(function (Form $form) use (&$submit_called, $submit) {
             $submit_called = true;
             if ($submit) {
-                call_user_func($submit, $form->model);
+                $submit($form->model);
             }
         });
 
@@ -63,7 +63,7 @@ class FormTest extends AtkPhpunit\TestCase
             $this->assertNotSame('', $res['atkjs']); // will output useful error
             $this->f_error = $res['atkjs'];
 
-            call_user_func($check_expected_error, $res['atkjs']);
+            $check_expected_error($res['atkjs']);
         } else {
             $this->assertTrue($submit_called, 'Expected submission to be successful but it failed');
             $this->assertSame('', $res['atkjs']); // will output useful error
@@ -107,7 +107,7 @@ class FormTest extends AtkPhpunit\TestCase
         });
     }
 
-    public function assertSubmitError(array $post, callable $error_callback)
+    public function assertSubmitError(array $post, \Closure $error_callback)
     {
         $this->assertSubmit($post, null, $error_callback);
     }

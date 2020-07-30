@@ -373,7 +373,7 @@ class Grid extends View
      * column will already contain "delete" and "edit" buttons.
      *
      * @param string|array|View         $button Label text, object or seed for the Button
-     * @param JsExpressionable|callable $action JavaScript action or callback
+     * @param JsExpressionable|\Closure $action JavaScript action or callback
      *
      * @return object
      */
@@ -422,7 +422,7 @@ class Grid extends View
     public function addActionMenuFromModel(string $appliesTo = null)
     {
         if (!$this->model) {
-            throw new Exception('Error: Model not set. Set model prior to add item.');
+            throw new Exception('Model not set, set it prior to add item.');
         }
 
         foreach ($this->model->getUserActions($appliesTo) as $action) {
@@ -454,11 +454,11 @@ class Grid extends View
      *
      * @param string   $columnName the name of column where to add dropdown
      * @param array    $items      the menu items to add
-     * @param callable $fx         the callback function to execute when an item is selected
+     * @param \Closure $fx         the callback function to execute when an item is selected
      * @param string   $icon       the icon
      * @param string   $menuId     the menu id return by callback
      */
-    public function addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
+    public function addDropdown($columnName, $items, \Closure $fx, $icon = 'caret square down', $menuId = null)
     {
         $column = $this->table->columns[$columnName];
         if (!isset($column)) {
@@ -469,7 +469,7 @@ class Grid extends View
         }
 
         $column->addDropdown($items, function ($item) use ($fx) {
-            return call_user_func($fx, [$item]);
+            return $fx([$item]);
         }, $icon, $menuId);
     }
 
@@ -498,12 +498,12 @@ class Grid extends View
      *
      * @param string|array|View $button
      * @param string            $title
-     * @param callable          $callback function($page){ . .}
+     * @param \Closure          $callback function($page) {...
      * @param array             $args     extra url argument for callback
      *
      * @return object
      */
-    public function addModalAction($button, $title, $callback, $args = [])
+    public function addModalAction($button, $title, \Closure $callback, $args = [])
     {
         if (!$this->actionButtons) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
@@ -611,7 +611,7 @@ class Grid extends View
     {
         $this->model = $this->table->setModel($model, $columns);
 
-        if ($this->quickSearch && is_array($this->quickSearch)) {
+        if (is_array($this->quickSearch)) {
             $this->addQuickSearch($this->quickSearch);
         }
 

@@ -1060,7 +1060,7 @@ class View implements JsExpressionable
      *
      * @param string                            $event    JavaScript event
      * @param string                            $selector Optional jQuery-style selector
-     * @param JsChain|callable|Model\UserAction $action   code to execute or \atk4\Data\UserAction
+     * @param JsChain|\Closure|Model\UserAction $action   code to execute or \atk4\Data\UserAction
      * @param array                             $defaults Options
      *
      * @return Jquery
@@ -1100,7 +1100,7 @@ class View implements JsExpressionable
         $event_stmts['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
         // Dealing with callback action.
-        if (is_callable($action) || (is_array($action) && isset($action[0]) && is_callable($action[0]))) {
+        if ($action instanceof \Closure || (is_array($action) && ($action[0] ?? null) instanceof \Closure)) {
             if (is_array($action)) {
                 $urlData = $action;
                 unset($urlData[0]);
@@ -1120,7 +1120,7 @@ class View implements JsExpressionable
                 $args = func_get_args();
                 $args[0] = new Jquery(new JsExpression('this'));
 
-                return call_user_func_array($action, $args);
+                return $action(...$args);
             }, $arguments);
 
             $actions[] = $cb;

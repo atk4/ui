@@ -32,7 +32,7 @@ You can add multiple elements into a single accordion section, like any other vi
 Use addSection() method to add more section in an Accordion view. First parameter is a title of the section.
 
 Section can be static or dynamic. Dynamic sections use :php:class:`VirtualPage` implementation mentioned above.
-You should pass callable action as a second parameter.
+You should pass Closure action as a second parameter.
 
 Example::
 

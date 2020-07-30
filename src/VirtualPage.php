@@ -18,7 +18,7 @@ class VirtualPage extends View
     /** @var Callback */
     public $cb;
 
-    /** @var callable Optional callback function of virtual page */
+    /** @var \Closure Optional callback function of virtual page */
     public $fx;
 
     /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */
@@ -113,7 +113,7 @@ class VirtualPage extends View
             if ($type = $this->cb->triggered()) {
                 // process callback
                 if ($this->fx) {
-                    call_user_func($this->fx, $this);
+                    ($this->fx)($this);
                 }
 
                 // special treatment for popup

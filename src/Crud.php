@@ -170,7 +170,7 @@ class Crud extends Grid
                 $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, function ($ex, $step, $form) use ($onAction, $action) {
                     $key = key($onAction);
                     if ($key === $action->short_name && $step === 'fields') {
-                        return call_user_func($onAction[$key], $form, $ex);
+                        return $onAction[$key]($form, $ex);
                     }
                 });
             }
@@ -326,7 +326,7 @@ class Crud extends Grid
      * Set callback for edit action in Crud.
      * Callback function will receive the Edit Form and Executor as param.
      */
-    public function onFormEdit(callable $fx)
+    public function onFormEdit(\Closure $fx)
     {
         $this->setOnActions('edit', $fx);
     }
@@ -335,7 +335,7 @@ class Crud extends Grid
      * Set callback for add action in Crud.
      * Callback function will receive the Add Form and Executor as param.
      */
-    public function onFormAdd(callable $fx)
+    public function onFormAdd(\Closure $fx)
     {
         $this->setOnActions('add', $fx);
     }
@@ -344,7 +344,7 @@ class Crud extends Grid
      * Set callback for both edit and add action form.
      * Callback function will receive Forms and Executor as param.
      */
-    public function onFormAddEdit(callable $fx)
+    public function onFormAddEdit(\Closure $fx)
     {
         $this->onFormEdit($fx);
         $this->onFormAdd($fx);
@@ -355,7 +355,7 @@ class Crud extends Grid
      *
      * @return mixed|null
      */
-    public function setOnActions(string $actionName, callable $fx)
+    public function setOnActions(string $actionName, \Closure $fx)
     {
         $this->onActions[] = [$actionName => $fx];
     }

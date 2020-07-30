@@ -145,7 +145,9 @@ class BasicExecutor extends \atk4\ui\View implements ExecutorInterface
 
         $return = $this->action->execute(...$args);
 
-        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner]) : $this->jsSuccess;
+        $success = $this->jsSuccess instanceof \Closure
+            ? ($this->jsSuccess)($this, $this->action->owner)
+            : $this->jsSuccess;
 
         return ($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) ?: $success) ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
     }

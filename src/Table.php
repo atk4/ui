@@ -374,7 +374,7 @@ class Table extends Lister
      *       $columns = json_decode($w);
      *   });
      *
-     * @param callable $fx             a callback function with columns widths as parameter
+     * @param \Closure $fx             a callback function with columns widths as parameter
      * @param int[]    $widths         An array of widths value, integer only. ex: [100,200,300,100]
      * @param array    $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
      *
@@ -383,11 +383,11 @@ class Table extends Lister
     public function resizableColumn($fx = null, $widths = null, $resizerOptions = null)
     {
         $options = [];
-        if ($fx && is_callable($fx)) {
+        if ($fx instanceof \Closure) {
             $cb = JsCallback::addTo($this);
             $cb->set($fx, ['widths' => 'widths']);
             $options['uri'] = $cb->getJsUrl();
-        } elseif ($fx && is_array($fx)) {
+        } elseif (is_array($fx)) {
             $widths = $fx;
         }
 
@@ -572,7 +572,7 @@ class Table extends Lister
      * click outside of the body. Additionally when you move cursor over the
      * rows, pointer will be used and rows will be highlighted as you hover.
      *
-     * @param JsChain|callable|JsExpressionable $action Code to execute
+     * @param JsChain|\Closure|JsExpressionable $action Code to execute
      *
      * @return Jquery
      */

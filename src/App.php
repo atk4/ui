@@ -176,9 +176,9 @@ class App
 
         foreach ($defaults as $key => $val) {
             if (is_array($val)) {
-                $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
-            } elseif (!is_null($val)) {
-                $this->$key = $val;
+                $this->{$key} = array_merge(is_array($this->{$key} ?? null) ? $this->{$key} : [], $val);
+            } elseif ($val !== null) {
+                $this->{$key} = $val;
             }
         }
          */

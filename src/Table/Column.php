@@ -151,12 +151,10 @@ class Column
     /**
      * Add a dropdown header menu.
      *
-     * @param array       $items
-     * @param callable    $fx
      * @param string      $icon
      * @param string|null $menuId the menu name
      */
-    public function addDropdown($items, $fx, $icon = 'caret square down', $menuId = null)
+    public function addDropdown(array $items, \Closure $fx, $icon = 'caret square down', $menuId = null)
     {
         $menuItems = [];
         foreach ($items as $key => $item) {
@@ -166,7 +164,7 @@ class Column
         $cb = $this->setHeaderDropdown($menuItems, $icon, $menuId);
 
         $cb->onSelectItem(function ($menu, $item) use ($fx) {
-            return call_user_func($fx, $item, $menu);
+            return $fx($item, $menu);
         });
     }
 

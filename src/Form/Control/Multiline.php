@@ -128,7 +128,7 @@ class Multiline extends Form\Control
      * The function that gets execute when fields are changed or
      * rows get deleted.
      *
-     * @var callable
+     * @var \Closure
      */
     protected $onChangeFunction;
 
@@ -265,14 +265,10 @@ class Multiline extends Form\Control
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
      *
-     * @param callable $fx
-     * @param array    $fields
+     * @param array $fields
      */
-    public function onLineChange($fx, $fields)
+    public function onLineChange(\Closure $fx, $fields)
     {
-        if (!is_callable($fx)) {
-            throw new Exception('Function is required for onLineChange event.');
-        }
         $this->eventFields = $fields;
 
         $this->onChangeFunction = $fx;
@@ -596,19 +592,19 @@ class Multiline extends Form\Control
         $options = [];
 
         // If additional options are defined for field, add them.
-        if (isset($field->ui['multiline']) && is_array($field->ui['multiline'])) {
+        if (is_array($field->ui['multiline'] ?? null)) {
             $add_options = $field->ui['multiline'];
             if (isset($add_options[0])) {
                 if (is_array($add_options[0])) {
                     $options = array_merge($options, $add_options[0]);
                 }
-                if (isset($add_options[1]) && is_array($add_options[1])) {
+                if (is_array($add_options[1] ?? null)) {
                     $options = array_merge($options, $add_options[1]);
                 }
             } else {
                 $options = array_merge($options, $add_options);
             }
-        } elseif (isset($field->ui['form']) && is_array($field->ui['form'])) {
+        } elseif (is_array($field->ui['form'] ?? null)) {
             $add_options = $field->ui['form'];
             if (isset($add_options[0])) {
                 unset($add_options[0]);
@@ -662,7 +658,7 @@ class Multiline extends Form\Control
         if ($field->enum) {
             return array_combine($field->enum, $field->enum);
         }
-        if ($field->values && is_array($field->values)) {
+        if (is_array($field->values)) {
             return $field->values;
         } elseif ($field->reference) {
             $model = $field->reference->refModel()->setLimit($this->enumLimit);
@@ -737,7 +733,7 @@ class Multiline extends Form\Control
                 break;
             case 'on-change':
                 // Let regular callback render output.
-                return call_user_func_array($this->onChangeFunction, [json_decode($_POST['rows'], true), $this->form]);
+                return ($this->onChangeFunction)(json_decode($_POST['rows'], true), $this->form);
 
                 break;
         }
@@ -760,7 +756,7 @@ class Multiline extends Form\Control
             }
             $field = $model->getField($fieldName);
             if ($field instanceof Callback) {
-                $value = call_user_func($field->expr, $model);
+                $value = ($field->expr)($model);
                 $values[$fieldName] = $this->app->ui_persistence->_typecastSaveField($field, $value);
             }
         }

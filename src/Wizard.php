@@ -127,9 +127,9 @@ class Wizard extends View
      * Adds an extra screen to show user when he goes beyond last step.
      * There won't be "back" button on this step anymore.
      *
-     * @param callable $callback Virtual page
+     * @param \Closure $callback Virtual page
      */
-    public function addFinish($callback)
+    public function addFinish(\Closure $callback)
     {
         if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonFinish->link($this->stepCallback->getUrl(count($this->steps)));
@@ -139,7 +139,7 @@ class Wizard extends View
             $this->buttonFinish->destroy();
 
             $this->app->catch_runaway_callbacks = false;
-            call_user_func($callback, $this);
+            $callback($this);
         } else {
             $this->buttonFinish->destroy();
         }
