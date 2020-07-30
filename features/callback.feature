@@ -20,6 +20,7 @@ Feature: Callback
     Then I should see "Loader-1"
     Then I press button "Load2"
     Then wait for callback
+    # Loader 2 automatically trigger 3, so wait for it.
     Then wait for callback
     Then I should see "Loader-2"
     Then I should see "Loader-3"
