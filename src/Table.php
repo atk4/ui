@@ -383,11 +383,11 @@ class Table extends Lister
     public function resizableColumn($fx = null, $widths = null, $resizerOptions = null)
     {
         $options = [];
-        if ($fx && is_callable($fx)) {
+        if ($fx instanceof \Closure) {
             $cb = JsCallback::addTo($this);
             $cb->set($fx, ['widths' => 'widths']);
             $options['uri'] = $cb->getJsUrl();
-        } elseif ($fx && is_array($fx)) {
+        } elseif (is_array($fx)) {
             $widths = $fx;
         }
 

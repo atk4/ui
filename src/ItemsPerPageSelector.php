@@ -72,24 +72,18 @@ class ItemsPerPageSelector extends View
      * Run callback when an item is select via dropdown menu.
      * The callback should return a View to be reload after an item
      * has been select.
-     *
-     * @param callable $fx
      */
-    public function onPageLengthSelect($fx = null)
+    public function onPageLengthSelect(\Closure $fx)
     {
-        if (is_callable($fx)) {
-            if ($this->cb->triggered()) {
-                $this->cb->set(function () use ($fx) {
-                    $ipp = $_GET['ipp'] ?? null;
-                    //$this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
-                    $this->set($ipp);
-                    $reload = call_user_func($fx, $ipp);
-                    if ($reload) {
-                        $this->app->terminateJson($reload);
-                    }
-                });
+        $this->cb->set(function () use ($fx) {
+            $ipp = $_GET['ipp'] ?? null;
+            //$this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
+            $this->set($ipp);
+            $reload = call_user_func($fx, $ipp);
+            if ($reload) {
+                $this->app->terminateJson($reload);
             }
-        }
+        });
     }
 
     protected function renderView(): void

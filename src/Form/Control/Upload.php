@@ -161,63 +161,53 @@ class Upload extends Input
     }
 
     /**
-     * onDelete callback.
      * Call when user is removing an already upload file.
-     *
-     * @param callable $fx
      */
-    public function onDelete($fx = null)
+    public function onDelete(\Closure $fx)
     {
-        if (is_callable($fx)) {
-            $this->hasDeleteCb = true;
-            $action = $_POST['action'] ?? null;
-            if ($this->cb->triggered() && $action === 'delete') {
-                $this->_isCbRunning = true;
-                $fileName = $_POST['f_name'] ?? null;
-                $this->cb->set(function () use ($fx, $fileName) {
-                    $this->addJsAction(call_user_func_array($fx, [$fileName]));
+        $this->hasDeleteCb = true;
+        $action = $_POST['action'] ?? null;
+        if ($this->cb->triggered() && $action === 'delete') {
+            $this->_isCbRunning = true;
+            $fileName = $_POST['f_name'] ?? null;
+            $this->cb->set(function () use ($fx, $fileName) {
+                $this->addJsAction(call_user_func_array($fx, [$fileName]));
 
-                    return $this->jsActions;
-                });
-            }
+                return $this->jsActions;
+            });
         }
     }
 
     /**
-     * onUpload callback.
      * Call when user is uploading a file.
-     *
-     * @param callable $fx
      */
-    public function onUpload($fx = null)
+    public function onUpload(\Closure $fx)
     {
-        if (is_callable($fx)) {
-            $this->hasUploadCb = true;
-            if ($this->cb->triggered()) {
-                $this->_isCbRunning = true;
-                $action = $_POST['action'] ?? null;
-                $files = $_FILES ?? null;
-                if ($files) {
-                    //set fileId to file name as default.
-                    $this->fileId = $files['file']['name'];
-                    // display file name to user as default.
-                    $this->setInput($this->fileId);
-                }
-                if ($action === 'upload' && !$files['file']['error']) {
-                    $this->cb->set(function () use ($fx, $files) {
-                        $this->addJsAction(call_user_func_array($fx, $files));
-                        //$value = $this->field ? $this->field->get() : $this->content;
-                        $this->addJsAction([
-                            $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
-                        ]);
+        $this->hasUploadCb = true;
+        if ($this->cb->triggered()) {
+            $this->_isCbRunning = true;
+            $action = $_POST['action'] ?? null;
+            $files = $_FILES ?? null;
+            if ($files) {
+                //set fileId to file name as default.
+                $this->fileId = $files['file']['name'];
+                // display file name to user as default.
+                $this->setInput($this->fileId);
+            }
+            if ($action === 'upload' && !$files['file']['error']) {
+                $this->cb->set(function () use ($fx, $files) {
+                    $this->addJsAction(call_user_func_array($fx, $files));
+                    //$value = $this->field ? $this->field->get() : $this->content;
+                    $this->addJsAction([
+                        $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
+                    ]);
 
-                        return $this->jsActions;
-                    });
-                } elseif ($action === null || isset($files['file']['error'])) {
-                    $this->cb->set(function () use ($fx, $files) {
-                        return call_user_func($fx, 'error');
-                    });
-                }
+                    return $this->jsActions;
+                });
+            } elseif ($action === null || isset($files['file']['error'])) {
+                $this->cb->set(function () use ($fx, $files) {
+                    return call_user_func($fx, 'error');
+                });
             }
         }
     }
