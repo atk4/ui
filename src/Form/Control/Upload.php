@@ -196,7 +196,7 @@ class Upload extends Input
         }
         if ($action === self::UPLOAD_ACTION && !$files['file']['error']) {
             $this->cb->set(function () use ($fx, $files) {
-                $this->addJsAction($fx(...$files));
+                $this->addJsAction($fx($files['file']));
                 $this->addJsAction([
                     $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
                 ]);
