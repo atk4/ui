@@ -3,7 +3,7 @@ Feature: Callback
 
   Scenario: No Trigger on Reload
     Given I am on "_unit-test/callback_1.php"
-    And I press button "EditFirst"
+    Then I click first element using class ".ui.atk-test.button"
     And wait for callback
     Then I sleep 500 ms
     Then I should see "TestName"

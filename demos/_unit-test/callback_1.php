@@ -27,7 +27,7 @@ $form->getControl('name')->caption = 'TestName';
 $table = $app->add(new \atk4\ui\Table());
 $table->setModel($m);
 
-$button = Button::addTo($app, ['EditFirst']);
+$button = Button::addTo($app, ['EditFirst', ['ui' => 'atk-test']]);
 $button->on('click', new \atk4\ui\jsModal('Edit First Record', $vp));
 
 $form->onSubmit(function ($form) use ($table) {
