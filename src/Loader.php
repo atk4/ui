@@ -37,7 +37,7 @@ class Loader extends View
     /** @var bool Make callback url argument stick to application or view. */
     public $appStickyCb = false;
 
-    /** @var callable for triggering */
+    /** @var Callback for triggering */
     protected $cb;
 
     public function init(): void

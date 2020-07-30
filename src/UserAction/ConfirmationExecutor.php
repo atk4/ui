@@ -212,7 +212,9 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id): array
     {
-        $success = is_callable($this->jsSuccess) ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id]) : $this->jsSuccess;
+        $success = $this->jsSuccess instanceof \Closure
+            ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id])
+            : $this->jsSuccess;
 
         return [
             $this->hide(),

@@ -572,7 +572,7 @@ class Table extends Lister
      * click outside of the body. Additionally when you move cursor over the
      * rows, pointer will be used and rows will be highlighted as you hover.
      *
-     * @param JsChain|callable|JsExpressionable $action Code to execute
+     * @param JsChain|\Closure|JsExpressionable $action Code to execute
      *
      * @return Jquery
      */

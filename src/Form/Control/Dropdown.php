@@ -116,7 +116,7 @@ class Dropdown extends Input
      *     ];
      * }
      *
-     * @var callable
+     * @var \Closure|null
      */
     public $renderRowFunction;
 
@@ -249,22 +249,22 @@ class Dropdown extends Input
 
         //model set? use this, else values property
         if (isset($this->model)) {
-            if (!is_callable($this->renderRowFunction)) {
-                //for standard model rendering, only load id and title field
-                $this->model->only_fields = [$this->model->title_field, $this->model->id_field];
-                $this->_renderItemsForModel();
-            } else {
+            if ($this->renderRowFunction) {
                 foreach ($this->model as $row) {
                     $this->_addCallBackRow($row);
                 }
+            } else {
+                //for standard model rendering, only load id and title field
+                $this->model->only_fields = [$this->model->title_field, $this->model->id_field];
+                $this->_renderItemsForModel();
             }
         } else {
-            if (!is_callable($this->renderRowFunction)) {
-                $this->_renderItemsForValues();
-            } else {
+            if ($this->renderRowFunction) {
                 foreach ($this->values as $key => $value) {
                     $this->_addCallBackRow($value, $key);
                 }
+            } else {
+                $this->_renderItemsForValues();
             }
         }
     }

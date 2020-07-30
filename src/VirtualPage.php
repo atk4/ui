@@ -18,7 +18,7 @@ class VirtualPage extends View
     /** @var Callback */
     public $cb;
 
-    /** @var callable Optional callback function of virtual page */
+    /** @var \Closure Optional callback function of virtual page */
     public $fx;
 
     /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */

@@ -42,7 +42,7 @@ class FormTest extends AtkPhpunit\TestCase
         $this->assertInstanceOf(Form\Control::class, $f->layout->getControl('test'));
     }
 
-    public function assertSubmit(array $post_data, callable $submit = null, callable $check_expected_error = null)
+    public function assertSubmit(array $post_data, \Closure $submit = null, \Closure $check_expected_error = null)
     {
         $submit_called = false;
         $_POST = $post_data;
@@ -107,7 +107,7 @@ class FormTest extends AtkPhpunit\TestCase
         });
     }
 
-    public function assertSubmitError(array $post, callable $error_callback)
+    public function assertSubmitError(array $post, \Closure $error_callback)
     {
         $this->assertSubmit($post, null, $error_callback);
     }

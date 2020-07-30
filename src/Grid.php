@@ -373,7 +373,7 @@ class Grid extends View
      * column will already contain "delete" and "edit" buttons.
      *
      * @param string|array|View         $button Label text, object or seed for the Button
-     * @param JsExpressionable|callable $action JavaScript action or callback
+     * @param JsExpressionable|\Closure $action JavaScript action or callback
      *
      * @return object
      */
@@ -454,11 +454,11 @@ class Grid extends View
      *
      * @param string   $columnName the name of column where to add dropdown
      * @param array    $items      the menu items to add
-     * @param callable $fx         the callback function to execute when an item is selected
+     * @param \Closure $fx         the callback function to execute when an item is selected
      * @param string   $icon       the icon
      * @param string   $menuId     the menu id return by callback
      */
-    public function addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
+    public function addDropdown($columnName, $items, \Closure $fx, $icon = 'caret square down', $menuId = null)
     {
         $column = $this->table->columns[$columnName];
         if (!isset($column)) {
@@ -498,12 +498,12 @@ class Grid extends View
      *
      * @param string|array|View $button
      * @param string            $title
-     * @param callable          $callback function($page){ . .}
+     * @param \Closure          $callback function($page) {...
      * @param array             $args     extra url argument for callback
      *
      * @return object
      */
-    public function addModalAction($button, $title, $callback, $args = [])
+    public function addModalAction($button, $title, \Closure $callback, $args = [])
     {
         if (!$this->actionButtons) {
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);

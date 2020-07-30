@@ -16,7 +16,7 @@ class CallbackLater extends Callback
      * Executes user-specified action before rendering or if App is
      * already in rendering state, then before output.
      *
-     * @param callable $callback
+     * @param \Closure $callback
      * @param array    $args
      *
      * @return mixed|null

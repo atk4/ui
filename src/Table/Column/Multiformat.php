@@ -16,7 +16,7 @@ use atk4\ui\Template;
 class Multiformat extends Table\Column
 {
     /**
-     * @var callable Method to execute which will return array of seeds for decorators
+     * @var \Closure Method to execute which will return array of seeds for decorators
      */
     public $callback;
 

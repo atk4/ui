@@ -128,7 +128,7 @@ class Multiline extends Form\Control
      * The function that gets execute when fields are changed or
      * rows get deleted.
      *
-     * @var callable
+     * @var \Closure
      */
     protected $onChangeFunction;
 
@@ -265,14 +265,10 @@ class Multiline extends Form\Control
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
      *
-     * @param callable $fx
-     * @param array    $fields
+     * @param array $fields
      */
-    public function onLineChange($fx, $fields)
+    public function onLineChange(\Closure $fx, $fields)
     {
-        if (!is_callable($fx)) {
-            throw new Exception('Function is required for onLineChange event.');
-        }
         $this->eventFields = $fields;
 
         $this->onChangeFunction = $fx;

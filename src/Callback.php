@@ -98,7 +98,7 @@ class Callback
     /**
      * Executes user-specified action when call-back is triggered.
      *
-     * @param callable $callback
+     * @param \Closure $callback
      * @param array    $args
      *
      * @return mixed|null

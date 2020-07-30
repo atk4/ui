@@ -52,7 +52,7 @@ class Lookup extends Input
      * with dependency
      * Then model of the 'state' field can be limited to states of the currently selected 'country'.
      *
-     * @var callable
+     * @var \Closure
      */
     public $dependency;
 
@@ -122,7 +122,7 @@ class Lookup extends Input
      * Define callback for generating the row data
      * If left empty default callback Lookup::defaultRenderRow is used.
      *
-     * @var callable|null
+     * @var \Closure|null
      */
     public $renderRowFunction;
 
@@ -202,7 +202,7 @@ class Lookup extends Input
      */
     public function renderRow(\atk4\data\Model $row): array
     {
-        $renderRowFunction = is_callable($this->renderRowFunction) ? $this->renderRowFunction : [__CLASS__, 'defaultRenderRow'];
+        $renderRowFunction = $this->renderRowFunction ?? \Closure::fromCallable([static::class, 'defaultRenderRow']);
 
         return call_user_func($renderRowFunction, $this, $row);
     }
@@ -322,7 +322,7 @@ class Lookup extends Input
      */
     protected function applyDependencyConditions()
     {
-        if (!is_callable($this->dependency)) {
+        if (!($this->dependency instanceof \Closure)) {
             return;
         }
 

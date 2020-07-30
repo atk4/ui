@@ -42,11 +42,8 @@ class Content extends View implements LoadableContent
 
     /**
      * Will load content into callback.
-     * Callable will receive this view as first parameter.
-     *
-     * @param $callback
      */
-    public function onLoad($callback)
+    public function onLoad(\Closure $callback)
     {
         $this->cb->set(function () use ($callback) {
             if ($this->cb->triggered()) {
