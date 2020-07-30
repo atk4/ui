@@ -333,16 +333,16 @@ class ScopeBuilder extends Control
                 'label' => $field->getCaption() . ' number of records ',
             ]);
 
-            $refModel = $reference->getModel();
+            $theirModel = $reference->getTheirModel();
 
             // add rules on all fields of the referenced model
-            foreach ($refModel->getFields() as $refField) {
-                $refField->ui['scopebuilder'] = [
-                    'id' => $reference->link . '/' . $refField->short_name,
-                    'label' => $field->getCaption() . ' is set to record where ' . $refField->getCaption(),
+            foreach ($theirModel->getFields() as $theirField) {
+                $theirField->ui['scopebuilder'] = [
+                    'id' => $reference->link . '/' . $theirField->short_name,
+                    'label' => $field->getCaption() . ' is set to record where ' . $theirField->getCaption(),
                 ];
 
-                $this->addFieldRule($refField);
+                $this->addFieldRule($theirField);
             }
         }
 
