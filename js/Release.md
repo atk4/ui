@@ -1,4 +1,10 @@
 ## Release note
+### version 1.15.0 (2020-07-16)
+ - update package dependency
+ - configure webpack in order to load and bundle .vue file.
+    - now use terser plugin instead of uglify js for minimizing js.
+ - add query builder component for ScopeBuilder form field
+   - extends Vue Query Builder default to work with Fomantic ui.
 
 ### version 1.14.3 (2020-07-13)
  - Update dependencies.
