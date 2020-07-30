@@ -166,31 +166,37 @@ class Upload extends Input
     public function onUpload(\Closure $fx)
     {
         $this->hasUploadCb = true;
-        if ($this->cb->triggered()) {
-            $this->_isCbRunning = true;
-            $action = $_POST['action'] ?? null;
-            $files = $_FILES ?? null;
-            if ($files) {
-                //set fileId to file name as default.
-                $this->fileId = $files['file']['name'];
-                // display file name to user as default.
-                $this->setInput($this->fileId);
-            }
-            if ($action === 'upload' && !$files['file']['error']) {
-                $this->cb->set(function () use ($fx, $files) {
-                    $this->addJsAction($fx(...$files));
-                    //$value = $this->field ? $this->field->get() : $this->content;
+        $action = $_POST['action'] ?? null;
+        if ($action === 'upload') {
+            $this->cb->set(function () use ($fx) {
+                $this->_isCbRunning = true;
+
+                $files = [];
+                for ($i = 0;; $i++) {
+                    $k = 'file' . ($i > 0 ? '-' . $i : '');
+                    if (!isset($_FILES[$k])) {
+                        break;
+                    }
+                    $files[] = $_FILES[$k];
+                }
+
+                if (count($files) > 0) {
+                    //set fileId to file name as default.
+                    $this->fileId = reset($files)['name'];
+                    // display file name to user as default.
+                    $this->setInput($this->fileId);
+                }
+
+                $this->addJsAction($fx(...$files));
+
+                if (count($files) > 0 && reset($files)['error'] === 0) {
                     $this->addJsAction([
                         $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
                     ]);
+                }
 
-                    return $this->jsActions;
-                });
-            } elseif ($action === null || isset($files['file']['error'])) {
-                $this->cb->set(function () use ($fx, $files) {
-                    return $fx('error');
-                });
-            }
+                return $this->jsActions;
+            });
         }
     }
 
@@ -201,10 +207,11 @@ class Upload extends Input
     {
         $this->hasDeleteCb = true;
         $action = $_POST['action'] ?? null;
-        if ($this->cb->triggered() && $action === 'delete') {
-            $this->_isCbRunning = true;
-            $fileName = $_POST['f_name'] ?? null;
-            $this->cb->set(function () use ($fx, $fileName) {
+        if ($action === 'delete') {
+            $this->cb->set(function () use ($fx) {
+                $this->_isCbRunning = true;
+
+                $fileName = $_POST['f_name'] ?? null;
                 $this->addJsAction($fx($fileName));
 
                 return $this->jsActions;
