@@ -170,7 +170,7 @@ class Crud extends Grid
                 $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, function ($ex, $step, $form) use ($onAction, $action) {
                     $key = key($onAction);
                     if ($key === $action->short_name && $step === 'fields') {
-                        return call_user_func($onAction[$key], $form, $ex);
+                        return $onAction[$key]($form, $ex);
                     }
                 });
             }

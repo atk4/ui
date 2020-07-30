@@ -1120,7 +1120,7 @@ class View implements JsExpressionable
                 $args = func_get_args();
                 $args[0] = new Jquery(new JsExpression('this'));
 
-                return call_user_func_array($action, $args);
+                return $action(...$args);
             }, $arguments);
 
             $actions[] = $cb;

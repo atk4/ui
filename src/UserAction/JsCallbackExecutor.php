@@ -87,7 +87,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 
                 $return = $this->action->execute(...$args);
                 $success = $this->jsSuccess instanceof \Closure
-                    ? call_user_func_array($this->jsSuccess, [$this, $this->action->owner, $id, $return])
+                    ? ($this->jsSuccess)($this, $this->action->owner, $id, $return)
                     : $this->jsSuccess;
 
                 $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) ?: $success ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));

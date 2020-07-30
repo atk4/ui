@@ -164,7 +164,7 @@ class Column
         $cb = $this->setHeaderDropdown($menuItems, $icon, $menuId);
 
         $cb->onSelectItem(function ($menu, $item) use ($fx) {
-            return call_user_func($fx, $item, $menu);
+            return $fx($item, $menu);
         });
     }
 

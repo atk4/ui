@@ -55,7 +55,7 @@ class Dropdown extends Lister
             ), ]);
 
         $this->cb->set(function ($j, $item) use ($fx) {
-            return call_user_func($fx, $item);
+            return $fx($item);
         }, ['item' => 'value']);
     }
 

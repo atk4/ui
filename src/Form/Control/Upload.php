@@ -171,7 +171,7 @@ class Upload extends Input
             $this->_isCbRunning = true;
             $fileName = $_POST['f_name'] ?? null;
             $this->cb->set(function () use ($fx, $fileName) {
-                $this->addJsAction(call_user_func_array($fx, [$fileName]));
+                $this->addJsAction($fx($fileName));
 
                 return $this->jsActions;
             });
@@ -196,7 +196,7 @@ class Upload extends Input
             }
             if ($action === 'upload' && !$files['file']['error']) {
                 $this->cb->set(function () use ($fx, $files) {
-                    $this->addJsAction(call_user_func_array($fx, $files));
+                    $this->addJsAction($fx(...$files));
                     //$value = $this->field ? $this->field->get() : $this->content;
                     $this->addJsAction([
                         $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()]),
@@ -206,7 +206,7 @@ class Upload extends Input
                 });
             } elseif ($action === null || isset($files['file']['error'])) {
                 $this->cb->set(function () use ($fx, $files) {
-                    return call_user_func($fx, 'error');
+                    return $fx('error');
                 });
             }
         }

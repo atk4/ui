@@ -43,11 +43,11 @@ class Content extends View implements LoadableContent
     /**
      * Will load content into callback.
      */
-    public function onLoad(\Closure $callback)
+    public function onLoad(\Closure $fx)
     {
-        $this->cb->set(function () use ($callback) {
+        $this->cb->set(function () use ($fx) {
             if ($this->cb->triggered()) {
-                call_user_func($callback, $this);
+                $fx($this);
                 $this->cb->terminate();
             }
         });

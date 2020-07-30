@@ -112,7 +112,7 @@ class Callback
 
                 $t = $this->app->run_called;
                 $this->app->run_called = true;
-                $ret = call_user_func_array($callback, $args);
+                $ret = $callback(...$args);
                 $this->app->run_called = $t;
 
                 return $ret;
@@ -125,7 +125,7 @@ class Callback
                 $t = $this->app->run_called;
                 $this->app->run_called = true;
                 $this->owner->stickyGet($this->urlTrigger);
-                $ret = call_user_func_array($callback, $args);
+                $ret = $callback(...$args);
                 //$this->app->stickyForget($this->name);
                 $this->app->run_called = $t;
 

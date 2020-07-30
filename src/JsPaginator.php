@@ -89,7 +89,7 @@ class JsPaginator extends JsCallback
     {
         $page = $this->getPage();
         $this->set(function () use ($fx, $page) {
-            return call_user_func_array($fx, [$page]);
+            return $fx($page);
         });
     }
 }

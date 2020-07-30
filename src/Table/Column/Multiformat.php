@@ -37,7 +37,7 @@ class Multiformat extends Table\Column
                 ->addMoreInfo('column', $this);
         }
 
-        $decorators = call_user_func($this->callback, $row, $field);
+        $decorators = ($this->callback)($row, $field);
         if (is_string($decorators)) {
             $decorators = [[$decorators]];
         }

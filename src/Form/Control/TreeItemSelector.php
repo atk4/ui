@@ -101,7 +101,7 @@ class TreeItemSelector extends Form\Control
         $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
             $value = $this->allowMultiple ? json_decode($data, true) : json_decode($data, true)[0];
 
-            return call_user_func($fx, $value);
+            return $fx($value);
         }, ['data' => 'value']);
 
         return $this;

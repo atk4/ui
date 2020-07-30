@@ -522,7 +522,7 @@ class Template implements \ArrayAccess
         }
 
         foreach ($this->getTagRefs($tag) as $ref => &$vRef) {
-            $vRef = [(string) call_user_func($fx, $this->renderRegion($vRef), $tag . '#' . $ref)];
+            $vRef = [(string) $fx($this->renderRegion($vRef), $tag . '#' . $ref)];
         }
 
         return $this;

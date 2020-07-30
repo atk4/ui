@@ -120,7 +120,7 @@ class InlineEdit extends View
                         $this->app->terminateJson([
                             'success' => true,
                             'hasValidationError' => true,
-                            'atkjs' => $this->jsError(call_user_func($this->formatErrorMsg, $e, $value))->jsRender(),
+                            'atkjs' => $this->jsError(($this->formatErrorMsg)($e, $value))->jsRender(),
                         ]);
                     }
                 });
@@ -141,7 +141,7 @@ class InlineEdit extends View
         if (!$this->autoSave) {
             $value = $_POST['value'] ?? null;
             $this->cb->set(function () use ($fx, $value) {
-                return call_user_func($fx, $value);
+                return $fx($value);
             });
         }
     }

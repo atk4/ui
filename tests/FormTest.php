@@ -51,7 +51,7 @@ class FormTest extends AtkPhpunit\TestCase
         $this->f->onSubmit(function (Form $form) use (&$submit_called, $submit) {
             $submit_called = true;
             if ($submit) {
-                call_user_func($submit, $form->model);
+                $submit($form->model);
             }
         });
 
@@ -63,7 +63,7 @@ class FormTest extends AtkPhpunit\TestCase
             $this->assertNotSame('', $res['atkjs']); // will output useful error
             $this->f_error = $res['atkjs'];
 
-            call_user_func($check_expected_error, $res['atkjs']);
+            $check_expected_error($res['atkjs']);
         } else {
             $this->assertTrue($submit_called, 'Expected submission to be successful but it failed');
             $this->assertSame('', $res['atkjs']); // will output useful error

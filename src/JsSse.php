@@ -109,7 +109,7 @@ class JsSse extends JsCallback
     private function output(string $content): void
     {
         if ($this->echoFunction) {
-            call_user_func($this->echoFunction, $content);
+            ($this->echoFunction)($content);
 
             return;
         }

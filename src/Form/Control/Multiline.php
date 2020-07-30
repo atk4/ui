@@ -733,7 +733,7 @@ class Multiline extends Form\Control
                 break;
             case 'on-change':
                 // Let regular callback render output.
-                return call_user_func_array($this->onChangeFunction, [json_decode($_POST['rows'], true), $this->form]);
+                return ($this->onChangeFunction)(json_decode($_POST['rows'], true), $this->form);
 
                 break;
         }
@@ -756,7 +756,7 @@ class Multiline extends Form\Control
             }
             $field = $model->getField($fieldName);
             if ($field instanceof Callback) {
-                $value = call_user_func($field->expr, $model);
+                $value = ($field->expr)($model);
                 $values[$fieldName] = $this->app->ui_persistence->_typecastSaveField($field, $value);
             }
         }

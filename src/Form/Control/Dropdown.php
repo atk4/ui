@@ -347,7 +347,7 @@ class Dropdown extends Input
      */
     protected function _addCallBackRow($row, $key = null)
     {
-        $res = call_user_func($this->renderRowFunction, $row, $key);
+        $res = ($this->renderRowFunction)($row, $key);
         $this->_tItem->set('value', (string) $res['value']);
         $this->_tItem->set('title', $res['title']);
 

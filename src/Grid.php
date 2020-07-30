@@ -469,7 +469,7 @@ class Grid extends View
         }
 
         $column->addDropdown($items, function ($item) use ($fx) {
-            return call_user_func($fx, [$item]);
+            return $fx([$item]);
         }, $icon, $menuId);
     }
 

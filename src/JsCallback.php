@@ -102,7 +102,7 @@ class JsCallback extends Callback implements JsExpressionable
                     $values[] = $_POST[$key] ?? null;
                 }
 
-                $response = call_user_func_array($callback, array_merge([$chain], $values));
+                $response = $callback(...array_merge([$chain], $values));
 
                 $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
 

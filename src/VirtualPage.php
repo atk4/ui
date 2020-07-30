@@ -113,7 +113,7 @@ class VirtualPage extends View
             if ($type = $this->cb->triggered()) {
                 // process callback
                 if ($this->fx) {
-                    call_user_func($this->fx, $this);
+                    ($this->fx)($this);
                 }
 
                 // special treatment for popup

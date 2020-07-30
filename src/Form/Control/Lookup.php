@@ -204,7 +204,7 @@ class Lookup extends Input
     {
         $renderRowFunction = $this->renderRowFunction ?? \Closure::fromCallable([static::class, 'defaultRenderRow']);
 
-        return call_user_func($renderRowFunction, $this, $row);
+        return $renderRowFunction($this, $row);
     }
 
     /**
@@ -335,7 +335,7 @@ class Lookup extends Input
             return;
         }
 
-        call_user_func($this->dependency, $this->model, $data);
+        ($this->dependency)($this->model, $data);
     }
 
     /**

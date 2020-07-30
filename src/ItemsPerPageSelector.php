@@ -79,7 +79,7 @@ class ItemsPerPageSelector extends View
             $ipp = $_GET['ipp'] ?? null;
             //$this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
             $this->set($ipp);
-            $reload = call_user_func($fx, $ipp);
+            $reload = $fx($ipp);
             if ($reload) {
                 $this->app->terminateJson($reload);
             }

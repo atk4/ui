@@ -120,7 +120,7 @@ class ActionButtons extends Table\Column
         $modal->observeChanges(); // adds scrollbar if needed
 
         $modal->set(function ($t) use ($callback) {
-            call_user_func($callback, $t, $this->app->stickyGet($this->name));
+            $callback($t, $this->app->stickyGet($this->name));
         });
 
         return $this->addButton($button, $modal->show(array_merge([$this->name => $this->owner->jsRow()->data('id')], $args)));
@@ -158,7 +158,7 @@ class ActionButtons extends Table\Column
         $tags = [];
         foreach ($this->callbacks as $name => $callback) {
             // if action is enabled then do not set disabled class
-            if (call_user_func($callback, $row)) {
+            if ($callback($row)) {
                 continue;
             }
 
