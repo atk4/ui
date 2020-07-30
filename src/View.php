@@ -1100,7 +1100,7 @@ class View implements JsExpressionable
         $event_stmts['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
         // Dealing with callback action.
-        if (is_callable($action) || (is_array($action) && isset($action[0]) && is_callable($action[0]))) {
+        if (is_callable($action) || (is_array($action) && is_callable($action[0] ?? null))) {
             if (is_array($action)) {
                 $urlData = $action;
                 unset($urlData[0]);

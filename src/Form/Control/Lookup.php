@@ -306,7 +306,7 @@ class Lookup extends Input
 
         if ($this->search instanceof \Closure) {
             $this->search($this->model, $_GET['q']);
-        } elseif ($this->search && is_array($this->search)) {
+        } elseif (is_array($this->search)) {
             $this->model->addCondition(array_map(function ($field) {
                 return [$field, 'like', '%' . $_GET['q'] . '%'];
             }, $this->search));

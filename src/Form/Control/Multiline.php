@@ -596,19 +596,19 @@ class Multiline extends Form\Control
         $options = [];
 
         // If additional options are defined for field, add them.
-        if (isset($field->ui['multiline']) && is_array($field->ui['multiline'])) {
+        if (is_array($field->ui['multiline'] ?? null)) {
             $add_options = $field->ui['multiline'];
             if (isset($add_options[0])) {
                 if (is_array($add_options[0])) {
                     $options = array_merge($options, $add_options[0]);
                 }
-                if (isset($add_options[1]) && is_array($add_options[1])) {
+                if (is_array($add_options[1] ?? null)) {
                     $options = array_merge($options, $add_options[1]);
                 }
             } else {
                 $options = array_merge($options, $add_options);
             }
-        } elseif (isset($field->ui['form']) && is_array($field->ui['form'])) {
+        } elseif (is_array($field->ui['form'] ?? null)) {
             $add_options = $field->ui['form'];
             if (isset($add_options[0])) {
                 unset($add_options[0]);
@@ -662,7 +662,7 @@ class Multiline extends Form\Control
         if ($field->enum) {
             return array_combine($field->enum, $field->enum);
         }
-        if ($field->values && is_array($field->values)) {
+        if (is_array($field->values)) {
             return $field->values;
         } elseif ($field->reference) {
             $model = $field->reference->refModel()->setLimit($this->enumLimit);

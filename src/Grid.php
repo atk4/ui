@@ -611,7 +611,7 @@ class Grid extends View
     {
         $this->model = $this->table->setModel($model, $columns);
 
-        if ($this->quickSearch && is_array($this->quickSearch)) {
+        if (is_array($this->quickSearch)) {
             $this->addQuickSearch($this->quickSearch);
         }
 

@@ -65,7 +65,7 @@ class DropdownCascade extends Dropdown
         $model = $this->cascadeControl->model->load($id)->ref($this->reference);
         $values = [];
         foreach ($model as $k => $row) {
-            if ($this->renderRowFunction && is_callable($this->renderRowFunction)) {
+            if (is_callable($this->renderRowFunction)) {
                 $res = call_user_func($this->renderRowFunction, $row, $k);
                 $values[] = ['value' => $res['value'], 'text' => $row->get('name'), 'name' => $res['title']];
             } else {

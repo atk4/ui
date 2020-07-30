@@ -374,7 +374,7 @@ class Table extends Lister
      *       $columns = json_decode($w);
      *   });
      *
-     * @param callable $fx             a callback function with columns widths as parameter
+     * @param \Closure $fx             a callback function with columns widths as parameter
      * @param int[]    $widths         An array of widths value, integer only. ex: [100,200,300,100]
      * @param array    $resizerOptions An array of column-resizer module options. see https://www.npmjs.com/package/column-resizer
      *
