@@ -70,15 +70,16 @@ class Loader extends View
      * NOTE: default values are like that due ot PHP 7.0 warning:
      * Declaration of \atk4\ui\Loader::set($fx, $args = Array) should be compatible with \atk4\ui\View::set($arg1 = Array, $arg2 = NULL)
      *
-     * @param callable $fx
-     * @param array    $args
+     * @param \Closure $fx
      *
      * @return $this
      */
-    public function set($fx = [], $args = null)
+    public function set($fx = [], $ignore = null)
     {
-        if (!is_callable($fx)) {
-            throw new Exception('Error: Need to pass a callable function to Loader::set()');
+        if (!($fx instanceof \Closure)) {
+            throw new Exception('Need to pass a function to Loader::set()');
+        } elseif (func_num_args() > 1) {
+            throw new Exception('Only one argument is needed by Loader::set()');
         }
 
         $this->cb->set(function () use ($fx) {

@@ -62,7 +62,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     public function setAction(Model\UserAction $action, $urlArgs = [])
     {
         if (!$this->_initialized) {
-            throw new Exception('Error: Make sure JsCallbackExecutor is properly initialized prior to call setAction()');
+            throw new Exception('JsCallbackExecutor must be initialized prior to call setAction()');
         }
 
         $this->action = $action;
