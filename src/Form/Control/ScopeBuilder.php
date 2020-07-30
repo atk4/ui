@@ -436,7 +436,7 @@ class ScopeBuilder extends Control
         switch ($type) {
             case 'query-builder-group':
                 $components = array_map([static::class, 'queryToScope'], (array) $query['children']);
-                $scope = $query['logicalOperator'] === 'all' ? Scope::createAnd(...$components) : Scope::createOr(...$components);
+                $scope = new Scope($components, $query['logicalOperator']);
 
                 break;
             case 'query-builder-rule':
@@ -521,7 +521,7 @@ class ScopeBuilder extends Control
             $query = [
                 'type' => 'query-builder-group',
                 'query' => [
-                    'logicalOperator' => $scope->isAnd() ? 'all' : 'any',
+                    'logicalOperator' => $scope->getJunction(),
                     'children' => $children,
                 ],
             ];

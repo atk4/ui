@@ -54,8 +54,8 @@
         return Object.assign({
           matchType: "Match Type",
           matchTypes: [
-            {id: "all", label: "And"},
-            {id: "any", label: "Or"}
+            {id: "AND", label: "And"},
+            {id: "OR", label: "Or"}
           ],
           addRule: "Add Rule",
           removeRule: "small icon times",
