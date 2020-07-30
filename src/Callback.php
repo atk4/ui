@@ -65,15 +65,18 @@ class Callback
         $this->_init();
 
         if (!$this->app) {
-            throw new Exception('Callback must be part of a render tree');
+            throw new Exception('Call-back must be part of a RenderTree');
         }
 
-        $this->setUrlTrigger($this->urlTrigger);
+        $this->setUrlTrigger($this->urlTrigger ?: $this->name);
     }
 
     public function setUrlTrigger(string $trigger = null)
     {
-        $this->urlTrigger = $trigger ?? $this->name;
+        $this->urlTrigger = $trigger ?: $this->name;
+        if ($this->isSticky) {
+            $this->app->stickyGet($this->urlTrigger);
+        }
     }
 
     public function getUrlTrigger(): string
@@ -81,46 +84,24 @@ class Callback
         return $this->urlTrigger;
     }
 
-    private function callWithAppStickyTrigger(\Closure $fx)
-    {
-        $app = $this->app;
-        $appStickyArgsBak = \Closure::bind(function () use ($app) {
-            return $app->sticky_get_arguments;
-        }, null, App::class)();
-
-        try {
-            if ($this->isSticky) {
-                $app->stickyGet($this->urlTrigger);
-            }
-
-            return $fx();
-        } finally {
-            \Closure::bind(function () use ($app, $appStickyArgsBak) {
-                $app->sticky_get_arguments = $appStickyArgsBak;
-            }, null, App::class)();
-        }
-    }
-
     /**
      * Executes user-specified action when call-back is triggered.
      *
-     * @param \Closure $callback
+     * @param callable $callback
      * @param array    $args
      *
      * @return mixed|null
      */
     public function set($callback, $args = [])
     {
-        if ($this->isTriggered() && $this->canTrigger()) {
-            $this->callWithAppStickyTrigger(function () use ($callback, $args) {
-                $this->app->catch_runaway_callbacks = false;
-                $t = $this->app->run_called;
-                $this->app->run_called = true;
-                $ret = $callback(...$args);
-                $this->app->run_called = $t;
+        if ($this->canTrigger()) {
+            $this->app->catch_runaway_callbacks = false;
+            $t = $this->app->run_called;
+            $this->app->run_called = true;
+            $ret = call_user_func_array($callback, $args);
+            $this->app->run_called = $t;
 
-                return $ret;
-            });
+            return $ret;
         }
     }
 
@@ -128,11 +109,31 @@ class Callback
      * Terminate this callback
      * by rendering the owner view by default.
      */
-    public function terminateJson(View $view = null): void
+    public function terminateJson(View $view = null)
     {
         if ($this->canTerminate()) {
-            $this->app->terminateJson($view ?? $this->owner);
+            $this->app->terminateJson($view ?: $this->owner);
         }
+    }
+
+    /**
+     * Only current callback can terminate.
+     */
+    public function canTerminate(): bool
+    {
+        return $this->urlTrigger === ($_GET['__atk_callback'] ?? null);
+    }
+
+    /**
+     * Allow callback to be triggered or not.
+     */
+    public function canTrigger(): bool
+    {
+        if ($this->triggerOnReload) {
+            return $this->isTriggered();
+        }
+
+        return $this->isTriggered() && !($_GET['__atk_reload'] ?? null);
     }
 
     /**
@@ -149,22 +150,6 @@ class Callback
     public function getTriggeredValue(): string
     {
         return $_GET[$this->urlTrigger] ?? '';
-    }
-
-    /**
-     * Only current callback can terminate.
-     */
-    public function canTerminate(): bool
-    {
-        return isset($_GET['__atk_callback']) && $_GET['__atk_callback'] === $this->urlTrigger;
-    }
-
-    /**
-     * Allow callback to be triggered or not.
-     */
-    public function canTrigger(): bool
-    {
-        return $this->triggerOnReload || empty($_GET['__atk_reload']);
     }
 
     /**
