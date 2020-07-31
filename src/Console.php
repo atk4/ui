@@ -355,7 +355,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $this->output('--[ Executing ' . get_class($object) . '->' . $method . ' ]--------------');
 
             try {
-                $result = call_user_func_array([$object, $method], $args);
+                $result = $object->{$method}(...$args);
             } finally {
                 if (isset($object->app)) {
                     $object->app->logger = $loggerBak;
@@ -365,9 +365,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 }
             }
         } elseif (is_string($object)) {
-            $static = $object . '::' . $method;
-            $this->output('--[ Executing ' . $static . ' ]--------------');
-            $result = call_user_func_array($object . '::' . $method, $args);
+            $this->output('--[ Executing ' . $object . '::' . $method . ' ]--------------');
+
+            $result = $object::{$method}(...$args);
         } else {
             throw (new Exception('Incorrect value for an object'))
                 ->addMoreInfo('object', $object);
