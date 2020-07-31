@@ -164,23 +164,6 @@ class Upload extends Input
     }
 
     /**
-     * Call when user is removing an already upload file.
-     */
-    public function onDelete(\Closure $fx)
-    {
-        $this->hasDeleteCb = true;
-        $action = $_POST['action'] ?? null;
-        if ($action === self::DELETE_ACTION) {
-            $fileName = $_POST['f_name'] ?? null;
-            $this->cb->set(function () use ($fx, $fileName) {
-                $this->addJsAction($fx($fileName));
-
-                return $this->jsActions;
-            });
-        }
-    }
-
-    /**
      * Call when user is uploading a file.
      */
     public function onUpload(\Closure $fx)
@@ -206,6 +189,23 @@ class Upload extends Input
         } elseif ($action === null || isset($files['file']['error'])) {
             $this->cb->set(function () use ($fx) {
                 return $fx('error');
+            });
+        }
+    }
+
+    /**
+     * Call when user is removing an already upload file.
+     */
+    public function onDelete(\Closure $fx)
+    {
+        $this->hasDeleteCb = true;
+        $action = $_POST['action'] ?? null;
+        if ($action === self::DELETE_ACTION) {
+            $fileName = $_POST['f_name'] ?? null;
+            $this->cb->set(function () use ($fx, $fileName) {
+                $this->addJsAction($fx($fileName));
+
+                return $this->jsActions;
             });
         }
     }
